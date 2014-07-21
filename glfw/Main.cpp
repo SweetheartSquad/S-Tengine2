@@ -53,7 +53,7 @@ int main(void)
 	  /* Problem: glewInit failed, something is seriously wrong. */
 	  fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 	}
-
+	
 	game = new Game(true);
 
 	while (game->isRunning)
@@ -61,6 +61,7 @@ int main(void)
 		game->update();
 		game->draw();
 		game->isRunning = !glfwWindowShouldClose(window);
+		GLUtils::checkForError(0,"main",0);
 	}
 
 	glfwDestroyWindow(window);

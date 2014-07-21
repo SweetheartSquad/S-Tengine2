@@ -7,17 +7,20 @@ int nbFrames = 0;
 //Cube *cube;
 
 GLfloat verts[] ={
-    -0.5f, -0.5f, 0.0f,
-	0.5f,  -0.5f, 0.0f,
-	0.0f,  0.5f,  0.0f
+    0.5f, 0.5f, 0.f,
+	0.75f,  0.75f, 0.f,
+	0.0f,  0.75f,  0.f
 };
 VertexBuffer* vertexBuffer;
 
 Game::Game(bool isRunning)
 {
+	GLUtils::checkForError(true,__FILE__,__LINE__);
 	this->isRunning = isRunning;
 	this->glfwWindow = glfwGetCurrentContext();
+	GLUtils::checkForError(true,__FILE__,__LINE__);
 	this->renderSystem = &RenderSystem::getInstance();
+	GLUtils::checkForError(true,__FILE__,__LINE__);
 	//cube = new Cube(gmtl::Vec3f(0.f, 0.f, 0.f),1);
 
 	vertexBuffer = new VertexBuffer(verts, sizeof(verts), GL_STATIC_DRAW, 3, sizeof(GLfloat)*3);

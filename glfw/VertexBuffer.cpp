@@ -5,10 +5,13 @@ VertexBuffer::VertexBuffer(const GLvoid* data, GLsizeiptr size, GLenum drawMode,
 	this->drawMode = drawMode;
 	this->vertCount = vertCount;
 	this->dataSize = dataSize;
-
+	
+	GLUtils::checkForError(true,__FILE__,__LINE__);
 	glGenBuffers(1, &vertexBufferId);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
 	glBufferData(GL_ARRAY_BUFFER, size, data, drawMode);
+	
+	GLUtils::checkForError(true,__FILE__,__LINE__);
 }
 
 VertexBuffer::~VertexBuffer(void)

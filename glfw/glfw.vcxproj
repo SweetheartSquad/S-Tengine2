@@ -92,6 +92,7 @@
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FileUtils.cpp" />
+    <ClCompile Include="GLUtils.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="ShaderInterface.cpp" />
@@ -104,6 +105,7 @@
     <ClInclude Include="Cube.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="FileUtils.h" />
+    <ClInclude Include="GLUtils.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="ShaderInterface.h" />
     <ClInclude Include="ShaderLoader.h" />

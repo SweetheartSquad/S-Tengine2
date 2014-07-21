@@ -15,7 +15,9 @@ char*FileUtils::voxReadFile(const char* filename){
 	//Here we read the file
 	fread(contents, 1, fileLength, fp);
 	//Denote the end of the string
-	contents[fileLength+1] = '\0';
+	contents[fileLength-6] = '\0';
 	fclose(fp);
+
+	std::cout << contents << std::endl;
 	return contents;
 }

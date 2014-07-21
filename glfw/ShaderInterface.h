@@ -1,8 +1,10 @@
 #pragma once
 
+#include <iostream>
+
 #include "ShaderLoader.h"
 #include "FileUtils.h"
-#include <iostream>
+#include "GLUtils.h"
 
 class ShaderInterface
 {
