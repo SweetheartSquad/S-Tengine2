@@ -61,7 +61,7 @@ void RenderSystem::render(VertexBuffer *vertexBuffer)
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 	glUseProgram(shader->getProgramId());
 	GLUtils::checkForError(0,__FILE__,__LINE__);
-	glUniform4f(0,0.f,1.f,0.f,1.f);
+	glUniform4f(glGetUniformLocation(shader->getProgramId(), "uColor"),0.f,1.f,0.f,1.f);
 
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 	vertexBuffer->configureVertexAttributes(0);
