@@ -42,16 +42,8 @@ Cube::Cube(gmtl::Vec3f center, float size){
 	vertices->push_back(new gmtl::Vec3f(1.f, -1.f, -1.f));
 	vertices->push_back(new gmtl::Vec3f(1.f, -1.f, 1.f));
 	
-	float *verts = static_cast<float*>(malloc(vertices->size()*sizeof(float)*3));
-	int track = 0;
-	for(int i=0; i<vertices->size(); i++){
-		verts[track] = vertices->at(i)->getData()[0];
-		verts[track+1] = vertices->at(i)->getData()[1];
-		verts[track+2] = vertices->at(i)->getData()[2];
-		track+=3;
-	}
-	vertexBuffer = new VertexBuffer(verts, sizeof(verts), GL_QUADS, 24, sizeof(GLfloat)*3);
-	std::free(verts);
+	float *verts = vertsToFloatArray();
+	vertexBuffer = new VertexBuffer(verts, 3*sizeof(float)*vertices->size(), GL_STATIC_DRAW, 24, sizeof(GLfloat)*3);
 }
 
 Cube::~Cube(void)

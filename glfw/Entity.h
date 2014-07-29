@@ -50,5 +50,7 @@ public:
 
 	void rotate(gmtl::Quatf rotation);
 	void rotate(float w, float x, float y, float z);
+	
+	float* vertsToFloatArray();
 };
 

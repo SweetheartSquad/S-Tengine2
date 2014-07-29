@@ -99,3 +99,15 @@ void Entity::rotate(float w, float x, float y, float z){
 	gmtl::set(r, gmtl::AxisAnglef(w/180*3.1415926,x,y,z));
 	rotate(r);
 }
+
+float* Entity::vertsToFloatArray(){	
+	int track = 0;
+	float *verts = new float[vertices->size()*3]();
+	for(int i=0; i<vertices->size(); i++){
+		verts[track] = vertices->at(i)->getData()[0];
+		verts[track+1] = vertices->at(i)->getData()[1];
+		verts[track+2] = vertices->at(i)->getData()[2];
+		track+=3;
+	}
+	return verts;
+}
