@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BoidsCinder", "BoidsCinder.vcxproj", "{36E4AA55-13BE-4088-8FE9-6C0460D792CE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{36E4AA55-13BE-4088-8FE9-6C0460D792CE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{36E4AA55-13BE-4088-8FE9-6C0460D792CE}.Debug|Win32.Build.0 = Debug|Win32
+		{36E4AA55-13BE-4088-8FE9-6C0460D792CE}.Release|Win32.ActiveCfg = Release|Win32
+		{36E4AA55-13BE-4088-8FE9-6C0460D792CE}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
