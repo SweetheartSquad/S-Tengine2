@@ -1,13 +1,25 @@
 #include "ShaderLoader.h"
 
-ShaderLoader::ShaderLoader(const char* vertexShaderSource, const char* fragmentShaderSource)
+ShaderLoader::ShaderLoader(std::string vertexShaderSource, std::string fragmentShaderSource)
 {
+	//vert
+	char * v = new char[vertexShaderSource.size() + 1];
+	int vl = vertexShaderSource.length();
+    memcpy(v, vertexShaderSource.c_str(), vertexShaderSource.size() + 1);
 	GLUtils::checkForError(true,__FILE__,__LINE__);
-	GLuint vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderSource);
-	GLUtils::checkForError(true,__FILE__,__LINE__);
-	GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	GLuint vertexShader = compileShader(GL_VERTEX_SHADER, v, vl);
+	delete v;
 	
+	//frag
+	char * f = new char[fragmentShaderSource.size() + 1];
+	int fl = fragmentShaderSource.length();
+    memcpy(f, fragmentShaderSource.c_str(), fragmentShaderSource.size() + 1);
+	GLUtils::checkForError(true,__FILE__,__LINE__);
+	GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, f, fl);
+	delete f;
+	
+	GLUtils::checkForError(true,__FILE__,__LINE__);
+
 	programId = glCreateProgram();
 	glAttachShader(programId, vertexShader);
 	GLUtils::checkForError(true,__FILE__,__LINE__);
@@ -53,10 +65,10 @@ GLuint ShaderLoader::getProgramId(){
 	return programId;
 }
 
-GLuint ShaderLoader::compileShader(GLenum shaderType, const char* source){
+GLuint ShaderLoader::compileShader(GLenum shaderType, const char* source, int length){
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	GLuint shaderId = glCreateShader(shaderType);
-	glShaderSource(shaderId, 1, &source, nullptr);
+	glShaderSource(shaderId, 1, &source, &length);
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	glCompileShader(shaderId);
 	GLUtils::checkForError(true,__FILE__,__LINE__);
@@ -66,7 +78,7 @@ GLuint ShaderLoader::compileShader(GLenum shaderType, const char* source){
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &status);
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	if(status == GL_FALSE){
-		std::cout << "ERROR: Shader could not be compiled." << std::endl << std::endl << source << std::endl << std::endl;
+		std::cout << "\tERROR: Shader could not be compiled." << std::endl << std::endl << source << std::endl << std::endl;
 		GLint maxLength = 0;
         glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &maxLength);
  

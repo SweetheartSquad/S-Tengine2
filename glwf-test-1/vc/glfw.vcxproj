@@ -120,6 +120,8 @@
   <ItemGroup>
     <None Include="..\assets\ColourShader.fsh" />
     <None Include="..\assets\ColourShader.vsh" />
+    <None Include="..\assets\junkdata.frag" />
+    <None Include="..\assets\junkdata.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

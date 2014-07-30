@@ -109,5 +109,11 @@
     <None Include="..\assets\ColourShader.vsh">
       <Filter>Resource Files\shaders</Filter>
     </None>
+    <None Include="..\assets\junkdata.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\junkdata.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

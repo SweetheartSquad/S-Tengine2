@@ -12,10 +12,10 @@ class ShaderLoader
 {
 private:
 	GLuint programId;
-	GLuint compileShader(GLenum shaderType, const char *source);
+	GLuint compileShader(GLenum shaderType, const char *source, int length);
 
 public:
-	ShaderLoader(const char* vertexShaderSource, const char* fragmentShaderSource);
+	ShaderLoader(std::string vertexShaderSource, std::string fragmentShaderSource);
 	~ShaderLoader(void);
 
 	GLuint getProgramId();
