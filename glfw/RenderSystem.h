@@ -5,6 +5,7 @@
 #include "VertexBuffer.h"
 #include "ShaderInterface.h"
 #include <vector>
+#include "Entity.h"
 
 class RenderSystem
 {
@@ -19,6 +20,6 @@ public:
 	static RenderSystem& getInstance();
 	static void destroyRenderSystem();
 
-	void render(VertexBuffer *vertexBuffer);
+	void render(std::vector<Entity*> *renderChildren);
 };
 

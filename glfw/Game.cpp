@@ -21,8 +21,11 @@ Game::Game(bool isRunning)
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	this->renderSystem = &RenderSystem::getInstance();
 	GLUtils::checkForError(true,__FILE__,__LINE__);
-	cube = new Cube(gmtl::Vec3f(0.f, 0.f, 0.f),0.2f);
-
+	this->children = new std::vector<Entity*>();
+	cube = new Cube(gmtl::Vec3f(0.f, 0.f, 0.5f),0.2f);
+	Cube* cube2 = new Cube(gmtl::Vec3f(-0.2f, 0.5f, 0.5f), 0.1f);
+	children->push_back(cube);
+	children->push_back(cube2);
 	//vertexBuffer = new VertexBuffer(verts, sizeof(verts), GL_STATIC_DRAW, 3, sizeof(GLfloat)*3);
 }
 
@@ -38,7 +41,7 @@ void Game::update(void)
 
 void Game::draw(void)
 {
-	renderSystem->render(cube->vertexBuffer);
+	renderSystem->render(children);
 }
 
 void Game::printFps(){

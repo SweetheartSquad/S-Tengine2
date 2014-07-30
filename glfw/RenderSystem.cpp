@@ -33,7 +33,7 @@ RenderSystem& RenderSystem::getInstance(){
 	return *renderSystem;
 }
 
-void RenderSystem::render(VertexBuffer *vertexBuffer)
+void RenderSystem::render(std::vector<Entity*> *renderChildren)
 {
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 	float ratio;
@@ -51,7 +51,7 @@ void RenderSystem::render(VertexBuffer *vertexBuffer)
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 	glLoadIdentity();
 	GLUtils::checkForError(0,__FILE__,__LINE__);
-	glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -100.f);
+	glFrustum(-ratio, ratio, -1, 1, 0.1, 100);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 	glMatrixMode(GL_MODELVIEW);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
@@ -62,12 +62,16 @@ void RenderSystem::render(VertexBuffer *vertexBuffer)
 	glUseProgram(shader->getProgramId());
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 	glUniform4f(glGetUniformLocation(shader->getProgramId(), "uColor"),0.f,1.f,0.f,1.f);
-
 	GLUtils::checkForError(0,__FILE__,__LINE__);
-	vertexBuffer->configureVertexAttributes(0);
-	GLUtils::checkForError(0,__FILE__,__LINE__);
-	vertexBuffer->renderVertexBuffer();
-
+	std::vector<Entity*>::iterator it = renderChildren->begin();
+	while(it!=renderChildren->end()){
+		glPushMatrix();
+		(*it)->draw();
+		(*it)->vertexBuffer->configureVertexAttributes(0);
+		(*it)->vertexBuffer->renderVertexBuffer();
+		glPopMatrix();
+		it++;
+	}
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 	glfwSwapBuffers(glfwWindow);
 	GLUtils::checkForError(0,__FILE__,__LINE__);

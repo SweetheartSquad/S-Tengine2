@@ -17,21 +17,16 @@ Entity::~Entity(void)
 
 void Entity::draw()
 {	
-	glPushMatrix();
-
 	float* trans = translationVector->getData(); 
 	glTranslatef(trans[0], trans[1], trans[2]);
 	gmtl::AxisAnglef r;
 	gmtl::set(r, *rotation);
 	glRotatef(r.getAngle()*180/3.1415926, r.getAxis().getData()[0], r.getAxis().getData()[1], r.getAxis().getData()[2]);
 	glScalef(scaleVector->getData()[0], scaleVector->getData()[1], scaleVector->getData()[2]);
-
-	glPopMatrix();
 }
 
 void Entity::update()
 {
-
 }
 
 void Entity::scale(float scaleX, float scaleY, float scaleZ)

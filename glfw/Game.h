@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "RenderSystem.h"
+#include "Entity.h"
 
 class Game
 {
@@ -17,6 +18,8 @@ public:
 	bool isRunning;
 	GLFWwindow *glfwWindow;
 	RenderSystem *renderSystem;
+
+	std::vector<Entity*> *children;
 
 	void update(void);
 	void draw(void);

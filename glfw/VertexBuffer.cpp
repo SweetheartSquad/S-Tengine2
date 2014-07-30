@@ -27,7 +27,7 @@ GLuint VertexBuffer::getVertexBufferId()
 
 void VertexBuffer::renderVertexBuffer()
 {
-	glDrawArrays(GL_TRIANGLES, 0, vertCount);
+	glDrawArrays(GL_QUADS, 0, vertCount);
 }
 
 void VertexBuffer::configureVertexAttributes(GLint vertexHandle)

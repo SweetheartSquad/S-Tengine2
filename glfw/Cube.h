@@ -1,6 +1,7 @@
 #pragma once
 #include "vector3.h"
 #include "Entity.h"
+#include <iostream>
 class Cube:public Entity
 {
 public:
@@ -9,5 +10,6 @@ public:
 
 	void draw(void);
 	void update(void);
+
 };
 
