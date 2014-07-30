@@ -53,7 +53,7 @@ GLuint ShaderLoader::getProgramId(){
 	return programId;
 }
 
-GLuint ShaderLoader::compileShader(GLenum shaderType, const char *source){
+GLuint ShaderLoader::compileShader(GLenum shaderType, const char* source){
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	GLuint shaderId = glCreateShader(shaderType);
 	glShaderSource(shaderId, 1, &source, nullptr);
@@ -66,6 +66,7 @@ GLuint ShaderLoader::compileShader(GLenum shaderType, const char *source){
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &status);
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	if(status == GL_FALSE){
+		std::cout << "ERROR: Shader could not be compiled." << std::endl << std::endl << source << std::endl << std::endl;
 		GLint maxLength = 0;
         glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &maxLength);
  
@@ -74,6 +75,7 @@ GLuint ShaderLoader::compileShader(GLenum shaderType, const char *source){
         glGetShaderInfoLog(shaderId, maxLength, &maxLength, &errorLog[0]);
  
         //Provide the infolog in whatever manner you deem best.
+		std::cout << "\t";
 		for(int i = 0; i < errorLog.size(); ++i){
 			std::cout << errorLog.at(i);
 		}
@@ -81,6 +83,8 @@ GLuint ShaderLoader::compileShader(GLenum shaderType, const char *source){
         //Exit with failure.
         glDeleteShader(shaderId); //Don't leak the shader.
         return -1;
+	}else{
+		std::cout << "Shader compiled succesfully." << std::endl << std::endl << source << std::endl << std::endl;
 	}
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	

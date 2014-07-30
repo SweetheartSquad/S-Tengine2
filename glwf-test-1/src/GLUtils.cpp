@@ -16,6 +16,6 @@ void GLUtils::checkForError(bool printSuccess = false, std::string file = "", in
             case GL_INVALID_FRAMEBUFFER_OPERATION:  errString="INVALID_FRAMEBUFFER_OPERATION";  break;
 			default: errString = "dunno";break;
 		}
-		std::cout << "File: " << file.c_str() <<", Line: "<<line << ", Error: " << errString.c_str() << std::endl;
+		std::cout << "File: " << file.c_str() <<", Line: "<<line << ", ERROR: " << errString.c_str() << std::endl;
 	}
 }

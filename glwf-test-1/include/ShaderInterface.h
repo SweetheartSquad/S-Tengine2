@@ -13,8 +13,8 @@ private:
 	GLint aPositionVertex;
 	GLint uColour;
 
-	char *vertexShaderString;
-	char *fragmentShaderString;
+	//const char* vertexShaderString;
+	//const char* fragmentShaderString;
 
 public:
 	ShaderInterface(const char *vertexShaderShource, const char *fragmentShaderSource);

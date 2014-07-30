@@ -1,7 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include <stdio.h>
+#include <fstream>
+#include <string>
+//#include <stdio.h>
 
 #define READ "r"
 #define WRTIE "w"
@@ -9,5 +11,5 @@
 
 class FileUtils{
 public:
-	static char*voxReadFile(const char* filename);
+	static std::string voxReadFile(const char* filename);
 };

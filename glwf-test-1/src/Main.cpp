@@ -51,7 +51,7 @@ int main(void)
 	if (GLEW_OK != err)
 	{
 	  /* Problem: glewInit failed, something is seriously wrong. */
-	  fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+	  fprintf(stderr, "ERROR: %s\n", glewGetErrorString(err));
 	}
 	
 	game = new Game(true);

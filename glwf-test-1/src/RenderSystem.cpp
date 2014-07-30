@@ -1,26 +1,22 @@
 #include "RenderSystem.h"
 ShaderInterface *shader; 
-RenderSystem::RenderSystem()
-{
-	
+RenderSystem::RenderSystem(){
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	shaderArray = new std::vector<ShaderInterface*>;
 	
 	GLUtils::checkForError(true,__FILE__,__LINE__);
-	shader = new ShaderInterface("ColourShader.vsh","ColourShader.fsh");
+	shader = new ShaderInterface("../assets/ColourShader.vsh","../assets/ColourShader.fsh");
 	
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	glfwWindow = glfwGetCurrentContext();
 }
 
-RenderSystem::~RenderSystem(void)
-{
+RenderSystem::~RenderSystem(void){
 	delete shaderArray->at(0);
 	delete shaderArray;
 }
 
-void RenderSystem::destroyRenderSystem()
-{
+void RenderSystem::destroyRenderSystem(){
 	RenderSystem *renderSystem = &getInstance();
 	delete renderSystem;
 }
@@ -33,8 +29,7 @@ RenderSystem& RenderSystem::getInstance(){
 	return *renderSystem;
 }
 
-void RenderSystem::render(VertexBuffer *vertexBuffer)
-{
+void RenderSystem::render(VertexBuffer *vertexBuffer){
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 	float ratio;
 	int width, height;
@@ -73,6 +68,5 @@ void RenderSystem::render(VertexBuffer *vertexBuffer)
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 	glfwPollEvents();
 	GLUtils::checkForError(0,__FILE__,__LINE__);
-	
 }
  
