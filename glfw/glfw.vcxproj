@@ -105,6 +105,7 @@
     <ClInclude Include="Cube.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="FileUtils.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="GLUtils.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="ShaderInterface.h" />
