@@ -1,11 +1,12 @@
 #include "VertexBuffer.h"
 
-VertexBuffer::VertexBuffer(const GLvoid* data, GLsizeiptr size, GLenum drawMode, GLsizei vertCount, GLsizei dataSize)
+VertexBuffer::VertexBuffer(const GLvoid* data, GLsizeiptr size, GLenum polygonalDrawMode, GLenum drawMode, GLsizei vertCount, GLsizei dataSize)
 {
 	this->drawMode = drawMode;
 	this->vertCount = vertCount;
 	this->dataSize = dataSize;
-	
+	this->polygonalDrawMode = polygonalDrawMode;
+
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	glGenBuffers(1, &vertexBufferId);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
@@ -27,7 +28,7 @@ GLuint VertexBuffer::getVertexBufferId()
 
 void VertexBuffer::renderVertexBuffer()
 {
-	glDrawArrays(GL_QUADS, 0, vertCount);
+	glDrawArrays(polygonalDrawMode, 0, vertCount);
 }
 
 void VertexBuffer::configureVertexAttributes(GLint vertexHandle)

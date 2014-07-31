@@ -43,7 +43,7 @@ Cube::Cube(gmtl::Vec3f center, float size){
 	vertices->push_back(new gmtl::Vec3f(1.f, -1.f, 1.f));
 	
 	float *verts = vertsToFloatArray();
-	vertexBuffer = new VertexBuffer(verts, 3*sizeof(float)*vertices->size(), GL_STATIC_DRAW, 24, sizeof(GLfloat)*3);
+	vertexBuffer = new VertexBuffer(verts, 3*sizeof(float)*vertices->size(), GL_QUADS, GL_STATIC_DRAW, 24, sizeof(GLfloat)*3);
 }
 
 Cube::~Cube(void)

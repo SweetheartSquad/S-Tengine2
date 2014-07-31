@@ -13,9 +13,10 @@ private:
 	GLenum drawMode;
 	GLsizei vertCount;
 	GLsizei dataSize;
+	GLenum polygonalDrawMode;
 
 public:
-	VertexBuffer(const GLvoid *data, GLsizeiptr size, GLenum drawMode, GLsizei vertCount, GLsizei dataSize);
+	VertexBuffer(const GLvoid *data, GLsizeiptr size, GLenum polygonalDrawMode, GLenum drawMode, GLsizei vertCount, GLsizei dataSize);
 	~VertexBuffer(void);
 
 	GLuint getVertexBufferId();
