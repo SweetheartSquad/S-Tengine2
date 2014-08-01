@@ -9,6 +9,7 @@ Entity::Entity(void){
 	this->translationVector = new gmtl::Vec3f(0.0f,0.0f,0.0f);
 	this->scaleVector = new gmtl::Vec3f(1.f,1.f,1.f);
 	this->rotation = new gmtl::Quatf();
+	this->children = new std::vector<Entity*>();
 }
 
 Entity::~Entity(void)

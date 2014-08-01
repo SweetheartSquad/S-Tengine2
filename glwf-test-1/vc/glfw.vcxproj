@@ -104,6 +104,7 @@
     <ClCompile Include="..\src\ShaderLoader.cpp" />
     <ClCompile Include="..\src\vector3.cpp" />
     <ClCompile Include="..\src\VertexBuffer.cpp" />
+    <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h" />
@@ -116,6 +117,7 @@
     <ClInclude Include="..\include\ShaderLoader.h" />
     <ClInclude Include="..\include\vector3.h" />
     <ClInclude Include="..\include\VertexBuffer.h" />
+    <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\ColourShader.fsh" />

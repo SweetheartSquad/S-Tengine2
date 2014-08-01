@@ -28,6 +28,8 @@ public:
 	gmtl::Vec3f *scaleVector;
 	std::vector<gmtl::Vec<float,3>*> *vertices;
 	VertexBuffer *vertexBuffer;
+	std::vector<Entity*> *children;
+	Entity *parent;
 
 	Entity(void);
 	//Entity(float x, float y, float z);
