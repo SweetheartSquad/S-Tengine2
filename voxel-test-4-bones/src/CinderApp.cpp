@@ -72,21 +72,30 @@ public:
 		return b + (g << 8) + (r << 16);
 	};
 protected:
-	//! our camera
-	MayaCamUI		camMayaPersp;
+	//! our cameras
+	MayaCamUI camMayaPersp;
+	CameraOrtho camTop;
+	CameraOrtho camRight;
+	CameraOrtho camFront;
 
 	//! our Phong shader, which supports multiple targets
 	gl::GlslProg	mPhongShader;
 
-	//! our main framebuffer (AA, containing 2 color buffers)
-	gl::Fbo			fboPersp;
 	//! our little picking framebuffer (non-AA) 
 	gl::Fbo			mPickingFboVoxel;
 	gl::Fbo			mPickingFboFace;
 	
+	//framebuffers for cameras
 	gl::Fbo fboTop;
 	gl::Fbo fboRight;
 	gl::Fbo fboFront;
+	gl::Fbo	fboPersp; //! our main framebuffer (AA, containing 2 color buffers)
+	
+	//area definitions for cameras
+	Area areaTop;
+	Area areaRight;
+	Area areaFront;
+	Area areaPersp;
 
 	//! keeping track of our cursor position
 	Vec2i			mMousePos;
@@ -106,9 +115,6 @@ protected:
 	Bone * selectedBone;
 
 	
-	CameraOrtho camTop;
-	CameraOrtho camRight;
-	CameraOrtho camFront;
 };
 
 void CinderApp::prepareSettings(Settings *settings){
@@ -129,7 +135,7 @@ void CinderApp::setup(){
 
 	// load shaders
 	loadShaders();
-
+	
 	// load font
 	mFont = Font(loadAsset("font/b2sq.ttf"), 32);	
 
@@ -148,13 +154,21 @@ void CinderApp::resize(){
 	cam.setPerspective( 60.0f, getWindowAspectRatio(), 0.1f, 10000.0f );
 	camMayaPersp.setCurrentCam( cam );
 	
+	float w = getWindowWidth()/2;
+	float h = getWindowHeight()/2;
+	
+	areaTop.set(0,0,w,h);
+	areaRight.set(w,0,w*2,h);
+	areaFront.set(0,h,w,h*2);
+	areaPersp.set(w,h,w*2,h*2);
+
 	camTop.setOrtho(-1000, 1000, -1000, 1000, -10000, 10000);
 	camRight.setOrtho(-1000, 1000, -1000, 1000, -10000, 10000);
 	camFront.setOrtho(-1000, 1000, -1000, 1000, -10000, 10000);
 	
 	camTop.setViewDirection(Vec3f(0,1,0));
-	camRight.setViewDirection(Vec3f(0,0,1));
-	camFront.setViewDirection(Vec3f(1,0,0));
+	camRight.setViewDirection(Vec3f(1,0,0));
+	camFront.setViewDirection(Vec3f(0,0,1));
 
 	// create or resize framebuffer if needed
 	if(!fboPersp || fboPersp.getWidth() != getWindowWidth() || fboPersp.getHeight() != getWindowHeight()) {
@@ -217,24 +231,18 @@ void CinderApp::draw(){
 	// draw the scene
 	gl::color( Color::white() );
 
-	Rectf windowBounds = Rectf(getWindowBounds());
-	windowBounds.x2 /= 2;
-	windowBounds.y2 /= 2;
-	gl::draw( fboTop.getTexture(0), windowBounds );
+	gl::draw( fboTop.getTexture(0), areaTop );
+	gl::drawStrokedRect(areaTop);
 	
-	windowBounds.x1 += windowBounds.x2;
-	windowBounds.x2 += windowBounds.x2;
-	gl::draw( fboRight.getTexture(0), windowBounds );
+	gl::draw( fboRight.getTexture(0), areaRight );
+	gl::drawStrokedRect(areaRight);
 	
-	windowBounds.x2 -= windowBounds.x1;
-	windowBounds.x1 -= windowBounds.x1;
-	windowBounds.y1 += windowBounds.y2;
-	windowBounds.y2 += windowBounds.y2;
-	gl::draw( fboFront.getTexture(0), windowBounds );
+	gl::draw( fboFront.getTexture(0), areaFront );
+	gl::drawStrokedRect(areaFront);
 	
-	windowBounds.x1 += windowBounds.x2;
-	windowBounds.x2 += windowBounds.x2;
-	gl::draw( fboPersp.getTexture(0), windowBounds );
+	gl::draw( fboPersp.getTexture(0), areaPersp );
+	gl::drawStrokedRect(areaPersp);
+
 
 	// draw the colour channels in the upper left corner
 	/*windowBounds *=  0.2f;
@@ -258,13 +266,14 @@ void CinderApp::draw(){
 
 void CinderApp::render(const Camera & cam){
 	
-
 	// clear background
 	gl::clear( mColorBackground );
 
 	// specify the camera matrices
 	gl::pushMatrices();
 	gl::setMatrices(cam);
+
+		drawGrid();
 
 		// setup the light
 		gl::Light light( gl::Light::POINT, 0 );
@@ -309,7 +318,7 @@ void CinderApp::mouseMove( MouseEvent event )
 	mMousePos = event.getPos();
 	if(selectedBone != NULL){
 		if(selectedBone->building){
-			selectedBone->end = Vec3d(mMousePos.x,mMousePos.y,0);
+			selectedBone->end = Vec3d(-mMousePos.x, -mMousePos.y, 0);
 		}
 	}
 }
@@ -433,10 +442,18 @@ void CinderApp::initFbo(gl::Fbo & _fbo, Area _area){
 	_fbo.getTexture(0).setFlipped(true);
 }
 
+void CinderApp::drawGrid(float size, float step){
+	gl::color( Colorf(0.2f, 0.2f, 0.2f) );
+	for(float i=-size;i<=size;i+=step) {
+		gl::drawLine( Vec3f(i, 0.0f, -size), Vec3f(i, 0.0f, size) );
+		gl::drawLine( Vec3f(-size, 0.0f, i), Vec3f(size, 0.0f, i) );
+	}
+}
+
 void CinderApp::newBone(Bone * parent){
 	Bone * b = new Bone();
-	b->start = Vec3d(mMousePos.x,mMousePos.y,0);
-	b->end = Vec3d(mMousePos.x,mMousePos.y,0);
+	b->start = Vec3d(-mMousePos.x, -mMousePos.y, 0);
+	b->end = Vec3d(-mMousePos.x, -mMousePos.y, 0);
 	if(parent != NULL){
 		parent->building = false;
 		b->parent = selectedBone;
