@@ -36,7 +36,7 @@ public:
 	void resize();
 
 	//! renders the scene
-	void render();
+	void render(const Camera & cam);
 	//! loads an OBJ file, writes it to a much faster binary file and loads the mesh
 	void loadMesh( const std::string &objFile, const std::string &meshFile, TriMesh *mesh);
 	//! loads the shaders
@@ -73,16 +73,20 @@ public:
 	};
 protected:
 	//! our camera
-	MayaCamUI		mCamera;
+	MayaCamUI		camMayaPersp;
 
 	//! our Phong shader, which supports multiple targets
 	gl::GlslProg	mPhongShader;
 
 	//! our main framebuffer (AA, containing 2 color buffers)
-	gl::Fbo			mFbo;
+	gl::Fbo			fboPersp;
 	//! our little picking framebuffer (non-AA) 
 	gl::Fbo			mPickingFboVoxel;
 	gl::Fbo			mPickingFboFace;
+	
+	gl::Fbo fboTop;
+	gl::Fbo fboRight;
+	gl::Fbo fboFront;
 
 	//! keeping track of our cursor position
 	Vec2i			mMousePos;
@@ -100,17 +104,20 @@ protected:
 	
 	std::vector<Bone *> bones;
 	Bone * selectedBone;
+
+	
+	CameraOrtho camTop;
+	CameraOrtho camRight;
+	CameraOrtho camFront;
 };
 
-void CinderApp::prepareSettings(Settings *settings)
-{
+void CinderApp::prepareSettings(Settings *settings){
 	settings->setWindowSize(900, 600);
 	settings->setFrameRate(100.0f);
 	settings->setTitle("Picking using multiple targets and color coding");
 }
 
-void CinderApp::setup()
-{
+void CinderApp::setup(){
 	// note: we will setup our camera in the 'resize' function,
 	//  because it is called anyway so we don't have to set it up twice
 
@@ -134,8 +141,53 @@ void CinderApp::setup()
 	selectedBone = NULL;
 }
 
-void CinderApp::shutdown()
-{
+
+void CinderApp::resize(){
+	// setup the camera
+	CameraPersp cam = camMayaPersp.getCamera();
+	cam.setPerspective( 60.0f, getWindowAspectRatio(), 0.1f, 10000.0f );
+	camMayaPersp.setCurrentCam( cam );
+	
+	camTop.setOrtho(-1000, 1000, -1000, 1000, -10000, 10000);
+	camRight.setOrtho(-1000, 1000, -1000, 1000, -10000, 10000);
+	camFront.setOrtho(-1000, 1000, -1000, 1000, -10000, 10000);
+	
+	camTop.setViewDirection(Vec3f(0,1,0));
+	camRight.setViewDirection(Vec3f(0,0,1));
+	camFront.setViewDirection(Vec3f(1,0,0));
+
+	// create or resize framebuffer if needed
+	if(!fboPersp || fboPersp.getWidth() != getWindowWidth() || fboPersp.getHeight() != getWindowHeight()) {
+		gl::Fbo::Format fmt;
+
+		// we create multiple color targets:
+		//  -one for the scene as we will view it
+		//  -one to contain a color coded version of the scene that we can use for picking
+		fmt.enableColorBuffer( true, 3 );
+
+		// enable multi-sampling for better quality 
+		//  (if this sample does not work on your computer, try lowering the number of samples to 2 or 0)
+		fmt.setSamples(4);
+
+		// create the buffer
+		fboPersp = gl::Fbo( getWindowWidth(), getWindowHeight(), fmt );
+
+		// work-around for an old Cinder issue
+		fboPersp.getTexture(0).setFlipped(true);
+		fboPersp.getTexture(1).setFlipped(true);
+		fboPersp.getTexture(2).setFlipped(true);
+	}
+
+	if(!fboTop || fboTop.getWidth() != getWindowWidth() || fboTop.getHeight() != getWindowHeight()){
+		initFbo(fboTop, getWindowBounds());
+	}if(!fboRight || fboRight.getWidth() != getWindowWidth() || fboRight.getHeight() != getWindowHeight()){
+		initFbo(fboRight, getWindowBounds());
+	}if(!fboFront || fboFront.getWidth() != getWindowWidth() || fboFront.getHeight() != getWindowHeight()){
+		initFbo(fboFront, getWindowBounds());
+	}
+}
+
+void CinderApp::shutdown(){
 	for(int i = 0; i < bones.size(); ++i){
 		delete bones.at(i);
 	}
@@ -143,33 +195,56 @@ void CinderApp::shutdown()
 	selectedBone = NULL;
 }
 
-void CinderApp::update()
-{
-}
+void CinderApp::update(){}
 
-void CinderApp::draw()
-{
-	// bind framebuffer
-	mFbo.bindFramebuffer();
+void CinderApp::draw(){
+	fboPersp.bindFramebuffer();
+	render(camMayaPersp.getCamera());
+	fboPersp.unbindFramebuffer();
+	
+	fboTop.bindFramebuffer();
+	render(camTop);
+	fboTop.unbindFramebuffer();
 
-	// render the scene
-	render();
-	// unbind framebuffer
-	mFbo.unbindFramebuffer();
+	fboRight.bindFramebuffer();
+	render(camRight);
+	fboRight.unbindFramebuffer();
+
+	fboFront.bindFramebuffer();
+	render(camFront);
+	fboFront.unbindFramebuffer();
 
 	// draw the scene
-	Rectf windowBounds = Rectf(getWindowBounds());
 	gl::color( Color::white() );
-	gl::draw( mFbo.getTexture(channel), windowBounds );
-	// draw the colour channels in the upper left corner
-	/*windowBounds *=  0.2f;
-	gl::draw( mFbo.getTexture(0), windowBounds);
+
+	Rectf windowBounds = Rectf(getWindowBounds());
+	windowBounds.x2 /= 2;
+	windowBounds.y2 /= 2;
+	gl::draw( fboTop.getTexture(0), windowBounds );
+	
+	windowBounds.x1 += windowBounds.x2;
+	windowBounds.x2 += windowBounds.x2;
+	gl::draw( fboRight.getTexture(0), windowBounds );
+	
+	windowBounds.x2 -= windowBounds.x1;
+	windowBounds.x1 -= windowBounds.x1;
 	windowBounds.y1 += windowBounds.y2;
 	windowBounds.y2 += windowBounds.y2;
-	gl::draw( mFbo.getTexture(1), windowBounds);
+	gl::draw( fboFront.getTexture(0), windowBounds );
+	
+	windowBounds.x1 += windowBounds.x2;
+	windowBounds.x2 += windowBounds.x2;
+	gl::draw( fboPersp.getTexture(0), windowBounds );
+
+	// draw the colour channels in the upper left corner
+	/*windowBounds *=  0.2f;
+	gl::draw( fboPersp.getTexture(0), windowBounds);
+	windowBounds.y1 += windowBounds.y2;
+	windowBounds.y2 += windowBounds.y2;
+	gl::draw( fboPersp.getTexture(1), windowBounds);
 	windowBounds.y2 += windowBounds.y1;
 	windowBounds.y1 += windowBounds.y1;
-	gl::draw( mFbo.getTexture(2), windowBounds);*/
+	gl::draw( fboPersp.getTexture(2), windowBounds);*/
 
 	// draw the picking framebuffer in the upper right corner
 	/*Rectf rct = (Rectf) mPickingFboVoxel.getBounds() * 5.0f;
@@ -179,6 +254,54 @@ void CinderApp::draw()
 	}if(mPickingFboVoxel){
 		gl::draw( mPickingFboFace.getTexture(), Rectf(rct.x1, rct.y1+rct.y2, rct.x2, rct.y2+rct.y2) );
 	}*/
+}
+
+void CinderApp::render(const Camera & cam){
+	
+
+	// clear background
+	gl::clear( mColorBackground );
+
+	// specify the camera matrices
+	gl::pushMatrices();
+	gl::setMatrices(cam);
+
+		// setup the light
+		gl::Light light( gl::Light::POINT, 0 );
+		light.setAmbient( Color::white()/*black()*/ );
+		light.setDiffuse( Color::white() );
+		light.setSpecular( Color::white() );
+		light.setPosition( camMayaPersp.getCamera().getEyePoint() );
+
+		// specify render states
+		glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT | GL_DEPTH_BUFFER_BIT );
+		gl::enableDepthRead();
+		gl::enableDepthWrite();
+
+		// bind phong shader, which renders to both our color targets.
+		//  See 'shaders/phong.frag'
+		//mPhongShader.bind();
+
+		// draw meshes:
+		gl::color( Color::white() );
+
+		// -each mesh should have a unique picking color that we can use to 
+		//  find out which object is under the cursor. 
+		boneMaterial.apply();
+		for(Bone * b : bones){
+			b->draw();
+		}
+
+		// unbind shader
+		//mPhongShader.unbind();
+	
+		gl::drawColorCube(Vec3f(0,0,0),Vec3f(5,5,5));
+
+	// restore matrices
+	gl::popMatrices();
+
+	// restore render states
+	glPopAttrib();
 }
 
 void CinderApp::mouseMove( MouseEvent event )
@@ -194,7 +317,7 @@ void CinderApp::mouseMove( MouseEvent event )
 void CinderApp::mouseDown( MouseEvent event )
 {
 	// handle the camera
-	mCamera.mouseDown( event.getPos() );
+	camMayaPersp.mouseDown( event.getPos() );
 
 	if(!event.isAltDown() && event.isLeft()){
 		if(selectedBone != NULL){
@@ -215,7 +338,7 @@ void CinderApp::mouseDrag( MouseEvent event )
 
 	// move the camera
 	if(event.isAltDown()){
-		mCamera.mouseDrag( event.getPos(), event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
+		camMayaPersp.mouseDrag( event.getPos(), event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
 	}else{
 		
 	}
@@ -243,6 +366,9 @@ void CinderApp::keyDown( KeyEvent event )
 	case KeyEvent::KEY_3:
 		channel = 2;
 		break;
+	case KeyEvent::KEY_4:
+		channel = 3;
+		break;
 	case KeyEvent::KEY_RETURN:
 		if(selectedBone != NULL){
 			if(selectedBone->building){
@@ -255,84 +381,6 @@ void CinderApp::keyDown( KeyEvent event )
 
 void CinderApp::keyUp( KeyEvent event )
 {
-}
-
-void CinderApp::resize()
-{
-	// setup the camera
-	CameraPersp cam = mCamera.getCamera();
-	cam.setPerspective( 60.0f, getWindowAspectRatio(), 0.1f, 10000.0f );
-	mCamera.setCurrentCam( cam );
-
-	// create or resize framebuffer if needed
-	if(!mFbo || mFbo.getWidth() != getWindowWidth() || mFbo.getHeight() != getWindowHeight()) {
-		gl::Fbo::Format fmt;
-
-		// we create multiple color targets:
-		//  -one for the scene as we will view it
-		//  -one to contain a color coded version of the scene that we can use for picking
-		fmt.enableColorBuffer( true, 3 );
-
-		// enable multi-sampling for better quality 
-		//  (if this sample does not work on your computer, try lowering the number of samples to 2 or 0)
-		fmt.setSamples(4);
-
-		// create the buffer
-		mFbo = gl::Fbo( getWindowWidth(), getWindowHeight(), fmt );
-
-		// work-around for an old Cinder issue
-		mFbo.getTexture(0).setFlipped(true);
-		mFbo.getTexture(1).setFlipped(true);
-		mFbo.getTexture(2).setFlipped(true);
-	}
-}
-
-//
-
-void CinderApp::render(){
-	// clear background
-	gl::clear( mColorBackground );
-
-	// specify the camera matrices
-	gl::pushMatrices();
-	gl::setMatrices( mCamera.getCamera() );
-
-		// setup the light
-		gl::Light light( gl::Light::POINT, 0 );
-		light.setAmbient( Color::white()/*black()*/ );
-		light.setDiffuse( Color::white() );
-		light.setSpecular( Color::white() );
-		light.setPosition( mCamera.getCamera().getEyePoint() );
-
-		// specify render states
-		glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT | GL_DEPTH_BUFFER_BIT );
-		gl::enableDepthRead();
-		gl::enableDepthWrite();
-
-		// bind phong shader, which renders to both our color targets.
-		//  See 'shaders/phong.frag'
-		//mPhongShader.bind();
-
-		// draw meshes:
-		gl::color( Color::white() );
-
-		// -each mesh should have a unique picking color that we can use to 
-		//  find out which object is under the cursor. 
-		boneMaterial.apply();
-		for(Bone * b : bones){
-			b->draw();
-		}
-
-		// unbind shader
-		//mPhongShader.unbind();
-	
-
-
-	// restore matrices
-	gl::popMatrices();
-
-	// restore render states
-	glPopAttrib();
 }
 
 void CinderApp::loadMesh(const std::string &objFile, const std::string &meshFile, TriMesh *mesh){
