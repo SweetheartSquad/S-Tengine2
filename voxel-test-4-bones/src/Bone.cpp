@@ -40,9 +40,9 @@ void Bone::draw(){
 	gl::pushModelView();
 		gl::translate(start);
 		gl::rotate(orientation);
-		gl::drawSolidTriangle(Vec2f(15,0),Vec2f(-15,0),Vec2f(0,(start-end).length()));
+		gl::drawSolidTriangle(Vec2f(0.05,0),Vec2f(-0.05,0),Vec2f(0,(start-end).length()));
 		gl::rotate(Vec3f(0,90,0));
-		gl::drawSolidTriangle(Vec2f(15,0),Vec2f(-15,0),Vec2f(0,(start-end).length()));
+		gl::drawSolidTriangle(Vec2f(0.05,0),Vec2f(-0.05,0),Vec2f(0,(start-end).length()));
 	gl::popModelView();
 
 	//gl::drawSphere(end, 25, 4);

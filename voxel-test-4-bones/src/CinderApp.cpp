@@ -46,7 +46,8 @@ public:
 	//! draws a grid on the floor
 	void drawGrid(float size=100.0f, float step=10.0f);
 
-	void newBone(Bone * parent = NULL);
+	void newBone(Vec3d pos, Bone * parent = NULL);
+	Vec3d getCameraCorrectedPos();
 
 public:
 	// utility functions to translate colors to and from ints or chars 
@@ -91,11 +92,11 @@ protected:
 	gl::Fbo fboFront;
 	gl::Fbo	fboPersp; //! our main framebuffer (AA, containing 2 color buffers)
 	
-	//area definitions for cameras
-	Area areaTop;
-	Area areaRight;
-	Area areaFront;
-	Area areaPersp;
+	//rect definitions for cameras sizes
+	Rectf rectTop;
+	Rectf rectRight;
+	Rectf rectFront;
+	Rectf rectPersp;
 
 	//! keeping track of our cursor position
 	Vec2i			mMousePos;
@@ -157,14 +158,14 @@ void CinderApp::resize(){
 	float w = getWindowWidth()/2;
 	float h = getWindowHeight()/2;
 	
-	areaTop.set(0,0,w,h);
-	areaRight.set(w,0,w*2,h);
-	areaFront.set(0,h,w,h*2);
-	areaPersp.set(w,h,w*2,h*2);
+	rectTop.set(0,0,w,h);
+	rectRight.set(w,0,w*2,h);
+	rectFront.set(0,h,w,h*2);
+	rectPersp.set(w,h,w*2,h*2);
 
-	camTop.setOrtho(-1000, 1000, -1000, 1000, -10000, 10000);
-	camRight.setOrtho(-1000, 1000, -1000, 1000, -10000, 10000);
-	camFront.setOrtho(-1000, 1000, -1000, 1000, -10000, 10000);
+	camTop.setOrtho(-1, 1, -h/w, h/w, -10000, 10000);
+	camRight.setOrtho(-1, 1, -h/w, h/w, -10000, 10000);
+	camFront.setOrtho(-1, 1, -h/w, h/w, -10000, 10000);
 	
 	camTop.setViewDirection(Vec3f(0,1,0));
 	camRight.setViewDirection(Vec3f(1,0,0));
@@ -231,17 +232,17 @@ void CinderApp::draw(){
 	// draw the scene
 	gl::color( Color::white() );
 
-	gl::draw( fboTop.getTexture(0), areaTop );
-	gl::drawStrokedRect(areaTop);
+	gl::draw( fboTop.getTexture(0), rectTop );
+	gl::drawStrokedRect(rectTop);
 	
-	gl::draw( fboRight.getTexture(0), areaRight );
-	gl::drawStrokedRect(areaRight);
+	gl::draw( fboRight.getTexture(0), rectRight );
+	gl::drawStrokedRect(rectRight);
 	
-	gl::draw( fboFront.getTexture(0), areaFront );
-	gl::drawStrokedRect(areaFront);
+	gl::draw( fboFront.getTexture(0), rectFront );
+	gl::drawStrokedRect(rectFront);
 	
-	gl::draw( fboPersp.getTexture(0), areaPersp );
-	gl::drawStrokedRect(areaPersp);
+	gl::draw( fboPersp.getTexture(0), rectPersp );
+	gl::drawStrokedRect(rectPersp);
 
 
 	// draw the colour channels in the upper left corner
@@ -273,7 +274,7 @@ void CinderApp::render(const Camera & cam){
 	gl::pushMatrices();
 	gl::setMatrices(cam);
 
-		drawGrid();
+		drawGrid(10,1);
 
 		// setup the light
 		gl::Light light( gl::Light::POINT, 0 );
@@ -304,7 +305,7 @@ void CinderApp::render(const Camera & cam){
 		// unbind shader
 		//mPhongShader.unbind();
 	
-		gl::drawColorCube(Vec3f(0,0,0),Vec3f(5,5,5));
+		//gl::drawColorCube(Vec3f(0,0,0),Vec3f(5,5,5));
 
 	// restore matrices
 	gl::popMatrices();
@@ -318,25 +319,26 @@ void CinderApp::mouseMove( MouseEvent event )
 	mMousePos = event.getPos();
 	if(selectedBone != NULL){
 		if(selectedBone->building){
-			selectedBone->end = Vec3d(-mMousePos.x, -mMousePos.y, 0);
+			selectedBone->end = getCameraCorrectedPos();
 		}
 	}
 }
 
-void CinderApp::mouseDown( MouseEvent event )
-{
+void CinderApp::mouseDown( MouseEvent event ){
 	// handle the camera
 	camMayaPersp.mouseDown( event.getPos() );
 
 	if(!event.isAltDown() && event.isLeft()){
+		Vec3d pos = getCameraCorrectedPos();
+		
 		if(selectedBone != NULL){
 			if(selectedBone->building){
-				newBone(selectedBone);
+				newBone(pos, selectedBone);
 			}else{
-				newBone();
+				newBone(pos);
 			}
 		}else{
-			newBone();
+			newBone(pos);
 		}
 	}
 }
@@ -450,10 +452,9 @@ void CinderApp::drawGrid(float size, float step){
 	}
 }
 
-void CinderApp::newBone(Bone * parent){
+void CinderApp::newBone(Vec3d pos, Bone * parent){
 	Bone * b = new Bone();
-	b->start = Vec3d(-mMousePos.x, -mMousePos.y, 0);
-	b->end = Vec3d(-mMousePos.x, -mMousePos.y, 0);
+	b->start = b->end = pos;
 	if(parent != NULL){
 		parent->building = false;
 		b->parent = selectedBone;
@@ -461,6 +462,42 @@ void CinderApp::newBone(Bone * parent){
 	}
 	selectedBone = b;
 	bones.push_back(b);
+}
+
+Vec2d fromRectToRect(Vec2d _p, Rectf _r1, Rectf _r2){
+	Vec2d res;
+	res.x = ((_p.x-_r1.x1)/_r1.getWidth())*_r2.getWidth() + _r2.x1;
+	res.y = ((_p.y-_r1.y1)/_r1.getHeight())*_r2.getHeight() + _r2.y1;
+	return res;
+}
+
+Vec3d CinderApp::getCameraCorrectedPos(){
+	Vec3d res;
+	float w = getWindowWidth();
+	float h = getWindowHeight();
+	float x = (mMousePos.x);
+	float y = (mMousePos.y);
+	if(rectTop.contains(mMousePos)){
+		Vec2d t = fromRectToRect(Vec2f(x,y), rectTop, Rectf(-1, h/w, 1, -h/w));
+		res.x = t.x;
+		res.y = 0;
+		res.z = t.y;
+	}else if(rectRight.contains(mMousePos)){
+		Vec2d t = fromRectToRect(Vec2f(x,y), rectRight, Rectf(-1, h/w, 1, -h/w));
+		res.x = 0;
+		res.y = t.y;
+		res.z = t.x;
+	}else if(rectFront.contains(mMousePos)){
+		Vec2d t = fromRectToRect(Vec2f(x,y), rectFront, Rectf(1, h/w, -1, -h/w));
+		res.x = t.x;
+		res.y = t.y;
+		res.z = 0;
+	}else if(rectPersp.contains(mMousePos)){
+		res.x = 0;
+		res.y = 0;
+		res.z = 0;
+	}
+	return res;
 }
 
 CINDER_APP_BASIC( CinderApp, RendererGl )
