@@ -21,10 +21,12 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
@@ -47,7 +49,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\include;D:\Program Files\cinder_0.8.5_vc2010\include;D:\Program Files\cinder_0.8.5_vc2010\boost</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;D:\Program Files\cinder_0.8.5_vc2012\include;D:\Program Files\cinder_0.8.5_vc2012\boost</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -62,7 +64,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>cinder_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>D:\Program Files\cinder_0.8.5_vc2010\lib;D:\Program Files\cinder_0.8.5_vc2010\lib\msw</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Program Files\cinder_0.8.5_vc2012\lib;D:\Program Files\cinder_0.8.5_vc2012\lib\msw</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -73,7 +75,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\include;"..\..\..\cinder_0.8.5_vc2010\include";"..\..\..\cinder_0.8.5_vc2010\boost"</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;D:\Program Files\cinder_0.8.5_vc2012\include;D:\Program Files\cinder_0.8.5_vc2012\boost</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader />
@@ -89,7 +91,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>cinder.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>"..\..\..\cinder_0.8.5_vc2010\lib";"..\..\..\cinder_0.8.5_vc2010\lib\msw"</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Program Files\cinder_0.8.5_vc2012\lib;D:\Program Files\cinder_0.8.5_vc2012\lib\msw</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
       <SubSystem>Windows</SubSystem>
@@ -101,17 +103,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Bone.cpp" />
     <ClCompile Include="..\src\CinderApp.cpp" />
-    <ClCompile Include="..\src\Voxel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\phong.frag" />
     <None Include="..\assets\shaders\phong.vert" />
-    <None Include="..\resources\shaders\depththingy.frag" />
-    <None Include="..\resources\shaders\depththingy.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Voxel.h" />
+    <ClInclude Include="..\include\Bone.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

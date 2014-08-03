@@ -628,7 +628,7 @@ void CinderApp::loadMesh(const std::string &objFile, const std::string &meshFile
 void CinderApp::loadShaders()
 {
 	try {
-		mPhongShader = gl::GlslProg( loadAsset("shaders/phong.vert"), loadAsset("shaders/phong.frag") );
+		mPhongShader = gl::GlslProg( loadFile("../assets/shaders/phong.vert"), loadFile("../assets/shaders/phong.frag") );
 	}
 	catch( const std::exception &e ) {
 		console() << e.what() << std::endl;
