@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Cube.h"
 
+
 double lastTime = glfwGetTime();
 int nbFrames = 0;
 
@@ -11,17 +12,18 @@ GLfloat verts[] ={
 	0.75f,  0.75f, 0.f,
 	0.0f,  0.75f,  0.f
 };
-//VertexBuffer* vertexBuffer;
 
 Game::Game(bool isRunning)
 {
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	this->isRunning = isRunning;
 	this->glfwWindow = glfwGetCurrentContext();
-	GLUtils::checkForError(true,__FILE__,__LINE__);
 	this->renderSystem = &RenderSystem::getInstance();
-	GLUtils::checkForError(true,__FILE__,__LINE__);
 	this->children = new std::vector<Entity*>();
+	this->scenes = new std::map<std::string, Scene*>();
+	
+	scenes->insert(std::make_pair("main_scene", new Scene()));
+	
 	cube = new Cube(gmtl::Vec3f(0.f, 0.f, 0.5f),0.2f);
 	Cube* cube2 = new Cube(gmtl::Vec3f(-0.2f, 0.5f, 0.5f), 0.1f);
 	children->push_back(cube);

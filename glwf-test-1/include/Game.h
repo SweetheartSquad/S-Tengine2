@@ -5,6 +5,8 @@
 #include <GLFW/glfw3.h>
 #include "RenderSystem.h"
 #include "Entity.h"
+#include "Scene.h"
+#include <map>
 
 class Game
 {
@@ -18,9 +20,9 @@ public:
 	bool isRunning;
 	GLFWwindow *glfwWindow;
 	RenderSystem *renderSystem;
-
+	std::string s;
 	std::vector<Entity*> *children;
-
+	std::map<std::string, Scene*> *scenes;
 	void update(void);
 	void draw(void);
 };

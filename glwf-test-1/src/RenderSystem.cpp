@@ -44,8 +44,7 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren)
 	glLoadIdentity();
 	glRotatef(static_cast<float>(glfwGetTime()) * 50.f, 0.f, 1.f, 0.f);
 	glUseProgram(shader->getProgramId());
-	glUniform4f(glGetUniformLocation(shader->getProgramId(), "uColor"),0.f,1.f,0.f,1.f);
-	
+	glUniform4f(glGetUniformLocation(shader->getProgramId(), "uColor"),0.f,1.f,0.f,1.f);	
 	std::vector<Entity*>::iterator it = renderChildren->begin();
 	while(it!=renderChildren->end()){
 		glPushMatrix();

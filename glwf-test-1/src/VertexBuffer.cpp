@@ -1,10 +1,10 @@
 #include "VertexBuffer.h"
 
-VertexBuffer::VertexBuffer(const GLvoid* data, GLsizeiptr size, GLenum polygonalDrawMode, GLenum drawMode, GLsizei vertCount, GLsizei dataSize)
+VertexBuffer::VertexBuffer(const GLvoid* data, GLsizeiptr size, GLenum polygonalDrawMode, GLenum drawMode, GLsizei vertCount, GLsizei stride)
 {
 	this->drawMode = drawMode;
 	this->vertCount = vertCount;
-	this->dataSize = dataSize;
+	this->stride = stride;
 	this->polygonalDrawMode = polygonalDrawMode;
 
 	GLUtils::checkForError(true,__FILE__,__LINE__);
@@ -36,6 +36,6 @@ void VertexBuffer::configureVertexAttributes(GLint vertexHandle)
 	if (vertexHandle != -1)
 	{
 		glEnableVertexAttribArray(vertexHandle);
-		glVertexAttribPointer(vertexHandle, 3, GL_FLOAT, GL_FALSE, dataSize, nullptr);
+		glVertexAttribPointer(vertexHandle, 3, GL_FLOAT, GL_FALSE, stride, nullptr);
 	}
 }
