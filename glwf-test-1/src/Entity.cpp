@@ -5,7 +5,7 @@ Entity::Entity(void){
 	x = 0;
 	y = 0;
 	z = 0;
-	this->vertices = new std::vector<gmtl::Vec<float,3>*>;
+	this->vertices = new std::vector<gmtl::Vec<float,6>*>;
 	this->translationVector = new gmtl::Vec3f(0.0f,0.0f,0.0f);
 	this->scaleVector = new gmtl::Vec3f(1.f,1.f,1.f);
 	this->rotation = new gmtl::Quatf();
@@ -98,12 +98,27 @@ void Entity::rotate(float w, float x, float y, float z){
 
 float* Entity::vertsToFloatArray(){	
 	int track = 0;
-	float *verts = new float[vertices->size()*3]();
+	float *verts = new float[vertices->size()*6]();
 	for(int i=0; i<vertices->size(); i++){
 		verts[track] = vertices->at(i)->getData()[0];
 		verts[track+1] = vertices->at(i)->getData()[1];
 		verts[track+2] = vertices->at(i)->getData()[2];
-		track+=3;
+		verts[track+3] = vertices->at(i)->getData()[3];
+		verts[track+4] = vertices->at(i)->getData()[4];
+		verts[track+5] = vertices->at(i)->getData()[5];
+		track+=6;
 	}
 	return verts;
+}
+
+gmtl::Vec<float, 6>* Entity::vec6f(float one, float two, float three, float four, float five, float six)
+{
+	gmtl::Vec<float, 6>* v = new gmtl::Vec<float, 6>();
+	v->mData[0] = one;
+	v->mData[1] = two;
+	v->mData[2] = three;
+	v->mData[3] = four;
+	v->mData[4] = five;
+	v->mData[5] = six;
+	return v;
 }

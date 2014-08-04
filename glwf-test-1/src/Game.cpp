@@ -8,9 +8,9 @@ int nbFrames = 0;
 Cube *cube;
 
 GLfloat verts[] ={
-    0.5f, 0.5f, 0.f,
-	0.75f,  0.75f, 0.f,
-	0.0f,  0.75f,  0.f
+    0.5f, 0.5f, 0.f, 0.5f, 0.5f, 0.f,
+	0.75f, 0.75f, 0.f, 0.5f, 0.5f, 0.f,
+	0.0f, 0.75f,  0.f, 0.75f,  0.75f, 0.f
 };
 
 Game::Game(bool isRunning)
@@ -29,7 +29,7 @@ Game::Game(bool isRunning)
 	children->push_back(cube);
 	children->push_back(cube2);
 	Entity *tri = new Entity();
-	tri->vertexBuffer = new VertexBuffer(verts, sizeof(verts), GL_TRIANGLES, GL_STATIC_DRAW, 3, sizeof(GLfloat)*3);
+	tri->vertexBuffer = new VertexBuffer(verts, sizeof(verts), GL_TRIANGLES, GL_STATIC_DRAW, 3, sizeof(GLfloat)*6);
 	tri->translateZ(0.2f);
 	children->push_back(tri);
 }

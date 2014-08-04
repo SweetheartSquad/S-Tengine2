@@ -30,7 +30,7 @@ RenderSystem& RenderSystem::getInstance(){
 }
 void RenderSystem::render(std::vector<Entity*> *renderChildren)
 {
-	//GLUtils::checkForError(0,__FILE__,__LINE__);
+
 	float ratio;
 	int width, height;
 	glfwGetFramebufferSize(glfwWindow, &width, &height);
@@ -39,22 +39,31 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+	glCullFace(GL_FRONT);
+	glEnable(GL_DEPTH_TEST);
 	glOrtho(-ratio, ratio, -1, 1, -1, 100);
 	glMatrixMode(GL_MODELVIEW);
+	glCullFace(GL_FRONT);
 	glLoadIdentity();
 	glRotatef(static_cast<float>(glfwGetTime()) * 50.f, 0.f, 1.f, 0.f);
 	glUseProgram(shader->getProgramId());
-	glUniform4f(glGetUniformLocation(shader->getProgramId(), "uColor"),0.f,1.f,0.f,1.f);	
+	//glUniform4f(glGetUniformLocation(shader->getProgramId(), "uColor"),0.f,1.f,0.f,1.f);	
 	std::vector<Entity*>::iterator it = renderChildren->begin();
 	while(it!=renderChildren->end()){
 		glPushMatrix();
 		glBindBuffer(GL_ARRAY_BUFFER, (*it)->vertexBuffer->getVertexBufferId());
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 		(*it)->draw();
-		(*it)->vertexBuffer->configureVertexAttributes(shader->get_aPositionVertex());
+		(*it)->vertexBuffer->configureVertexAttributes(shader->get_aPositionVertex(), 0);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+		(*it)->vertexBuffer->configureVertexAttributes(shader->get_aFragColor(), 3*sizeof(float));
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 		(*it)->vertexBuffer->renderVertexBuffer();
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 		glPopMatrix();
-		it++;
+		++it;
 	}
+	GLUtils::checkForError(0,__FILE__,__LINE__);
 	glfwSwapBuffers(glfwWindow);
 	glfwPollEvents();
 }

@@ -1,6 +1,10 @@
-uniform vec4 uColor;
+#version 150
+
+in vec3 inColor;
+
+out vec4 outColor;
 
 void main()
 {
-    gl_FragColor = uColor;
+    outColor = vec4(inColor, 1.0);
 }

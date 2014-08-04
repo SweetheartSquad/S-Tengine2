@@ -1,5 +1,7 @@
 #include "VertexBuffer.h"
 
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
 VertexBuffer::VertexBuffer(const GLvoid* data, GLsizeiptr size, GLenum polygonalDrawMode, GLenum drawMode, GLsizei vertCount, GLsizei stride)
 {
 	this->drawMode = drawMode;
@@ -31,11 +33,11 @@ void VertexBuffer::renderVertexBuffer()
 	glDrawArrays(polygonalDrawMode, 0, vertCount);
 }
 
-void VertexBuffer::configureVertexAttributes(GLint vertexHandle)
+void VertexBuffer::configureVertexAttributes(GLint vertexHandle, int bufferOffset)
 {
 	if (vertexHandle != -1)
 	{
 		glEnableVertexAttribArray(vertexHandle);
-		glVertexAttribPointer(vertexHandle, 3, GL_FLOAT, GL_FALSE, stride, nullptr);
+		glVertexAttribPointer(vertexHandle, 3, GL_FLOAT, GL_FALSE, stride, (void*)(bufferOffset));
 	}
 }

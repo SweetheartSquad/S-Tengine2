@@ -26,14 +26,14 @@ public:
 	gmtl::Vec3f *translationVector;
 	gmtl::Quatf *rotation;
 	gmtl::Vec3f *scaleVector;
-	std::vector<gmtl::Vec<float,3>*> *vertices;
+	std::vector<gmtl::Vec<float, 6>*> *vertices;
 	VertexBuffer *vertexBuffer;
 	std::vector<Entity*> *children;
 	Entity *parent;
 
 	Entity(void);
 	//Entity(float x, float y, float z);
-	~Entity(void);
+	virtual ~Entity(void);
 
 	virtual void draw();
 	virtual void update();
@@ -54,5 +54,6 @@ public:
 	void rotate(float w, float x, float y, float z);
 	
 	float* vertsToFloatArray();
+	gmtl::Vec<float, 6>*vec6f(float one, float two, float three, float four, float five, float six);
 };
 
