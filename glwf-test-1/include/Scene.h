@@ -11,8 +11,10 @@ public:
 
 	std::vector<Entity*> *children;
 	RenderSystem *renderSystem;
-
+	
 	void update(void);
 	void draw(void);
+	void addChild(Entity* child);
+	void removeChildAtIndex(int index);
 };
 
