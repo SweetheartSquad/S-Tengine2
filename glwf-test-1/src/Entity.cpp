@@ -96,6 +96,16 @@ void Entity::rotate(float w, float x, float y, float z){
 	rotate(r);
 }
 
+void Entity::addChild(Entity* child)
+{
+	children->push_back(child);
+}
+
+void Entity::removeChildAtIndex(int index)
+{
+	children->erase(children->begin()+index-1);
+}
+
 float* Entity::vertsToFloatArray(){	
 	int track = 0;
 	float *verts = new float[vertices->size()*6]();

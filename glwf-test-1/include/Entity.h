@@ -13,6 +13,7 @@
 #include <iostream>
 #include <gmtl\Generate.h>
 #include "VertexBuffer.h"
+#include "ShaderInterface.h"
 
 class Entity
 {
@@ -30,9 +31,9 @@ public:
 	VertexBuffer *vertexBuffer;
 	std::vector<Entity*> *children;
 	Entity *parent;
+	ShaderInterface *shader;
 
 	Entity(void);
-	//Entity(float x, float y, float z);
 	virtual ~Entity(void);
 
 	virtual void draw();
@@ -53,6 +54,9 @@ public:
 	void rotate(gmtl::Quatf rotation);
 	void rotate(float w, float x, float y, float z);
 	
+	void addChild(Entity* child);
+	void removeChildAtIndex(int index);
+
 	float* vertsToFloatArray();
 	gmtl::Vec<float, 6>*vec6f(float one, float two, float three, float four, float five, float six);
 };

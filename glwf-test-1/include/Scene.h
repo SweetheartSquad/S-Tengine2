@@ -1,20 +1,20 @@
 #pragma once
+
 #include <iostream>
 #include "Entity.h"
 #include "RenderSystem.h"
 
-class Scene
+class Scene:public Entity
 {
+
 public:
 	Scene(void);
 	~Scene(void);
 
-	std::vector<Entity*> *children;
 	RenderSystem *renderSystem;
 	
-	void update(void);
-	void draw(void);
-	void addChild(Entity* child);
-	void removeChildAtIndex(int index);
+	void update(void) override;
+	void draw(void) override;
+
 };
 

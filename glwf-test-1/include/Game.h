@@ -14,16 +14,20 @@ private:
 	void printFps();
 
 public:
-	Game(bool running);
-	~Game(void);
+	
+	explicit Game(bool running);
+	virtual ~Game(void);
 
 	bool isRunning;
+	bool printFPS;
 	GLFWwindow *glfwWindow;
 	RenderSystem *renderSystem;
 	std::string s;
 	std::vector<Entity*> *children;
 	std::map<std::string, Scene*> *scenes;
-	void update(void);
-	void draw(void);
+	Scene *currentScene;
+	
+	virtual void update(void);
+	virtual void draw(void);
 };
 

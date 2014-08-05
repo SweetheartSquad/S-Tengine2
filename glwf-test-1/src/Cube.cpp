@@ -1,5 +1,4 @@
 #include "Cube.h"
-#include "VertexBuffer.h"
 
 Cube::Cube(gmtl::Vec3f center, float size){
 	

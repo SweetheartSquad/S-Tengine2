@@ -38,6 +38,6 @@ void VertexBuffer::configureVertexAttributes(GLint vertexHandle, int bufferOffse
 	if (vertexHandle != -1)
 	{
 		glEnableVertexAttribArray(vertexHandle);
-		glVertexAttribPointer(vertexHandle, 3, GL_FLOAT, GL_FALSE, stride, (void*)(bufferOffset));
+		glVertexAttribPointer(vertexHandle, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void*>(bufferOffset));
 	}
 }

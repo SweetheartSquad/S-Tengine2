@@ -1,11 +1,9 @@
 #include "Game.h"
-#include "Cube.h"
-
+#include <MainScene.h>
 
 double lastTime = glfwGetTime();
 int nbFrames = 0;
 
-Cube *cube;
 
 GLfloat verts[] ={
     0.5f, 0.5f, 0.f, 0.5f, 0.5f, 0.f,
@@ -15,23 +13,12 @@ GLfloat verts[] ={
 
 Game::Game(bool isRunning)
 {
-	GLUtils::checkForError(true,__FILE__,__LINE__);
 	this->isRunning = isRunning;
 	this->glfwWindow = glfwGetCurrentContext();
 	this->renderSystem = &RenderSystem::getInstance();
 	this->children = new std::vector<Entity*>();
 	this->scenes = new std::map<std::string, Scene*>();
-	
-	scenes->insert(std::make_pair("main_scene", new Scene()));
-	
-	cube = new Cube(gmtl::Vec3f(0.f, 0.f, 0.5f),0.2f);
-	Cube* cube2 = new Cube(gmtl::Vec3f(-0.2f, 0.5f, 0.5f), 0.1f);
-	children->push_back(cube);
-	children->push_back(cube2);
-	Entity *tri = new Entity();
-	tri->vertexBuffer = new VertexBuffer(verts, sizeof(verts), GL_TRIANGLES, GL_STATIC_DRAW, 3, sizeof(GLfloat)*6);
-	tri->translateZ(0.2f);
-	children->push_back(tri);
+	this->printFPS = true;
 }
 
 Game::~Game(void)
@@ -41,15 +28,18 @@ Game::~Game(void)
 
 void Game::update(void)
 {
-	printFps();
+	if(printFPS){
+		printFps();
+	}
 }
 
 void Game::draw(void)
 {
-	renderSystem->render(children);
+	currentScene->draw();
 }
 
 void Game::printFps(){
+	currentScene->update();
 	// Measure speed
 	double currentTime = glfwGetTime();
 	nbFrames++;

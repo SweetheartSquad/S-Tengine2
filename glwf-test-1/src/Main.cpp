@@ -11,8 +11,9 @@
 #include <gmtl/gmtl.h>
 #include <gmtl/Vec.h>
 #include "Game.h"
+#include <TestGame.h>
 
-Game *game;
+TestGame *game;
 
 static void error_callback(int error, const char* description)
 {
@@ -50,7 +51,6 @@ int main(void)
 
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, key_callback);
-
 	glewExperimental = GL_TRUE; 
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
@@ -59,14 +59,13 @@ int main(void)
 	  fprintf(stderr, "\tERROR: %s\n", glewGetErrorString(err));
 	}
 	
-	game = new Game(true);
+	game = new TestGame(true);
 
 	while (game->isRunning)
 	{
 		game->update();
 		game->draw();
 		game->isRunning = !glfwWindowShouldClose(window);
-		GLUtils::checkForError(0,"main",0);
 	}
 
 	glfwDestroyWindow(window);
