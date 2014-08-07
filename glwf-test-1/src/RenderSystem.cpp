@@ -42,11 +42,10 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren)
 	std::vector<Entity*>::iterator it = renderChildren->begin();
 	while(it!=renderChildren->end()){
 		glUseProgram((*it)->shader->getProgramId());
-		glPushMatrix();
 		glBindBuffer(GL_ARRAY_BUFFER, (*it)->vertexBuffer->getVertexBufferId());
+		glPushMatrix();
 		(*it)->draw();
 		(*it)->vertexBuffer->renderVertexBuffer();
-		(*it)->rotate(2.f,0.f,1,0);
 		glPopMatrix();
 		++it;
 	}

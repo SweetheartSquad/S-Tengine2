@@ -58,6 +58,6 @@ public:
 	void removeChildAtIndex(int index);
 
 	float* vertsToFloatArray();
-	gmtl::Vec<float, 6>*vec6f(float one, float two, float three, float four, float five, float six);
+	void pushVert(float one, float two, float three, float four, float five, float six);
 };
 

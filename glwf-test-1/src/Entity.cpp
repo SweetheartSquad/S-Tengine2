@@ -121,14 +121,14 @@ float* Entity::vertsToFloatArray(){
 	return verts;
 }
 
-gmtl::Vec<float, 6>* Entity::vec6f(float one, float two, float three, float four, float five, float six)
+void Entity::pushVert(float x, float y, float z, float red, float green, float blue)
 {
 	gmtl::Vec<float, 6>* v = new gmtl::Vec<float, 6>();
-	v->mData[0] = one;
-	v->mData[1] = two;
-	v->mData[2] = three;
-	v->mData[3] = four;
-	v->mData[4] = five;
-	v->mData[5] = six;
-	return v;
+	v->mData[0] = x;
+	v->mData[1] = y;
+	v->mData[2] = z;
+	v->mData[3] = red;
+	v->mData[4] = green;
+	v->mData[5] = blue;
+	vertices->push_back(v);
 }
