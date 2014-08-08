@@ -5,6 +5,7 @@ Scene::Scene(void)
 {
 	this->children = new std::vector<Entity*>();
 	this->renderSystem = &RenderSystem::getInstance();
+	this->keyboard = &Keyboard::getInstance();
 }
 
 Scene::~Scene(void)

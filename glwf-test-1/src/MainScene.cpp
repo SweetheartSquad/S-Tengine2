@@ -18,7 +18,11 @@ MainScene::~MainScene()
 void MainScene::update()
 {
 	Scene::update();
-	cube->rotate(2,0,1,0);
+	if(keyboard->keyDown(GLFW_KEY_A))
+	{
+		cube->rotate(2,0,-1,0);
+	}
+	
 }
 
 void MainScene::draw()

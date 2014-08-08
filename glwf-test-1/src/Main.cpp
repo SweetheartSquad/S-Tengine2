@@ -19,18 +19,20 @@ static void error_callback(int error, const char* description)
 {
 	fputs(description, stderr);
 }
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+
+static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
-		glfwSetWindowShouldClose(window, GL_TRUE);
-	}
-	if(key == GLFW_KEY_RIGHT){
-	
-	}
-	if(key == GLFW_KEY_LEFT){
-	
+	Keyboard *keyboard = &Keyboard::getInstance();
+
+	if(action == GLFW_PRESS)
+	{
+		keyboard->keyDownListener(key);	
+	}else if(action == GLFW_RELEASE)
+	{
+		keyboard->keyUpListener(key);	
 	}
 }
+
 int main(void)
 {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -50,7 +52,7 @@ int main(void)
 	}
 
 	glfwMakeContextCurrent(window);
-	glfwSetKeyCallback(window, key_callback);
+	glfwSetKeyCallback(window, keyCallback);
 	glewExperimental = GL_TRUE; 
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
@@ -63,8 +65,10 @@ int main(void)
 
 	while (game->isRunning)
 	{
+		glfwPollEvents();
 		game->update();
 		game->draw();
+		game->manageInput();
 		game->isRunning = !glfwWindowShouldClose(window);
 	}
 

@@ -7,6 +7,7 @@
 #include "Entity.h"
 #include "Scene.h"
 #include <map>
+#include "Keyboard.h"
 
 class Game
 {
@@ -20,14 +21,19 @@ public:
 
 	bool isRunning;
 	bool printFPS;
+
 	GLFWwindow *glfwWindow;
 	RenderSystem *renderSystem;
-	std::string s;
+
 	std::vector<Entity*> *children;
+	
 	std::map<std::string, Scene*> *scenes;
 	Scene *currentScene;
 	
+	Keyboard *keyboard;
+
 	virtual void update(void);
 	virtual void draw(void);
+	void manageInput(void);
 };
 

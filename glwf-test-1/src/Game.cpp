@@ -12,6 +12,7 @@ Game::Game(bool isRunning)
 	this->children = new std::vector<Entity*>();
 	this->scenes = new std::map<std::string, Scene*>();
 	this->printFPS = true;
+	this->keyboard = &Keyboard::getInstance();
 }
 
 Game::~Game(void)
@@ -30,6 +31,11 @@ void Game::update(void)
 void Game::draw(void)
 {
 	currentScene->draw();
+}
+
+void Game::manageInput()
+{
+	keyboard->update();
 }
 
 void Game::printFps()

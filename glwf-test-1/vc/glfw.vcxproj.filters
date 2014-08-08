@@ -40,6 +40,12 @@
     <Filter Include="Header Files\TestGame">
       <UniqueIdentifier>{33658aa7-c89d-477b-80fe-5d5e950eed80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\input">
+      <UniqueIdentifier>{160824dc-2881-44c5-a369-19a38521d0c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\input">
+      <UniqueIdentifier>{92af4ccb-67a0-48ae-a3e0-b9785d71c2f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Cube.cpp">
@@ -84,6 +90,9 @@
     <ClCompile Include="..\src\TestGame.cpp">
       <Filter>Source Files\TestGame</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Keyboard.cpp">
+      <Filter>Source Files\input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -124,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="..\include\TestGame.h">
       <Filter>Header Files\TestGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Keyboard.h">
+      <Filter>Header Files\input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

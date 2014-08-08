@@ -51,7 +51,6 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren)
 	}
 
 	glfwSwapBuffers(glfwWindow);
-	glfwPollEvents();
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 }
  

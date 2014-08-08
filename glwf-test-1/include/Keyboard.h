@@ -7,11 +7,9 @@
 class Keyboard
 {
 public:
-	Keyboard();
-	~Keyboard();
-
-	bool isKeyDown(int glfwKeyCode);
+	bool keyDown(int glfwKeyCode);
 	bool keyJustUp(int glfwKeyCode);
+	bool keyJustDown(int glfwKeyCode);
 	void update();
 
 	void keyDownListener(int glfwKeyCode);
@@ -20,6 +18,8 @@ public:
 	static Keyboard& getInstance();
 
 private:
+	Keyboard();
+	~Keyboard();
 
 	std::map<int, int> *pressedKeys;
 	std::map<int, int> *justPressedKeys;

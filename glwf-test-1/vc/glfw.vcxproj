@@ -98,6 +98,7 @@
     <ClCompile Include="..\src\FileUtils.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\GLUtils.cpp" />
+    <ClCompile Include="..\src\Keyboard.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="..\src\MainScene.cpp" />
     <ClCompile Include="..\src\RenderSystem.cpp" />
@@ -114,6 +115,7 @@
     <ClInclude Include="..\include\FileUtils.h" />
     <ClInclude Include="..\include\Game.h" />
     <ClInclude Include="..\include\GLUtils.h" />
+    <ClInclude Include="..\include\Keyboard.h" />
     <ClInclude Include="..\include\TestGame.h" />
     <ClInclude Include="..\include\MainScene.h" />
     <ClInclude Include="..\include\RenderSystem.h" />
