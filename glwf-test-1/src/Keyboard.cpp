@@ -38,6 +38,11 @@ void Keyboard::keyUpListener(int glfwKeyCode)
 	{
 		pressedKeys->erase(glfwKeyCode);
 	}
+
+	if(justPressedKeys->find(glfwKeyCode)!=justPressedKeys->end())
+	{
+		justPressedKeys->erase(glfwKeyCode);
+	}
 }
 
 void Keyboard::update()

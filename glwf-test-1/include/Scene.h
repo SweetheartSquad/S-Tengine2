@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "RenderSystem.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 
 class Scene:public Entity
 {
@@ -14,6 +15,7 @@ public:
 
 	RenderSystem *renderSystem;
 	Keyboard* keyboard;
+	Mouse* mouse;
 
 	void update(void) override;
 	void draw(void) override;

@@ -93,6 +93,9 @@
     <ClCompile Include="..\src\Keyboard.cpp">
       <Filter>Source Files\input</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Mouse.cpp">
+      <Filter>Source Files\input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -135,6 +138,9 @@
       <Filter>Header Files\TestGame</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Keyboard.h">
+      <Filter>Header Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Mouse.h">
       <Filter>Header Files\input</Filter>
     </ClInclude>
   </ItemGroup>

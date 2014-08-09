@@ -12,6 +12,7 @@
 #include <gmtl/Vec.h>
 #include "Game.h"
 #include <TestGame.h>
+#include "Mouse.h"
 
 TestGame *game;
 
@@ -31,6 +32,25 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	{
 		keyboard->keyUpListener(key);	
 	}
+}
+
+static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	Mouse *mouse = &Mouse::getInstance();
+
+	if(action == GLFW_PRESS)
+	{
+		mouse->mouseDownListener(button);
+	}else if(action == GLFW_RELEASE)
+	{
+		mouse->mouseUpListener(button);	
+	}
+}
+
+static void mousePostionCallback(GLFWwindow *window, double x, double y)
+{
+	Mouse *mouse = &Mouse::getInstance();
+	mouse->mousePositionListener(x, y);
 }
 
 int main(void)
@@ -53,6 +73,9 @@ int main(void)
 
 	glfwMakeContextCurrent(window);
 	glfwSetKeyCallback(window, keyCallback);
+	glfwSetMouseButtonCallback(window, mouseButtonCallback);
+	glfwSetCursorPosCallback(window, mousePostionCallback);
+
 	glewExperimental = GL_TRUE; 
 	GLenum err = glewInit();
 	if (GLEW_OK != err)

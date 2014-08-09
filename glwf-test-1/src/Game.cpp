@@ -13,6 +13,7 @@ Game::Game(bool isRunning)
 	this->scenes = new std::map<std::string, Scene*>();
 	this->printFPS = true;
 	this->keyboard = &Keyboard::getInstance();
+	this->mouse = &Mouse::getInstance();
 }
 
 Game::~Game(void)
@@ -36,6 +37,7 @@ void Game::draw(void)
 void Game::manageInput()
 {
 	keyboard->update();
+	mouse->update();
 }
 
 void Game::printFps()

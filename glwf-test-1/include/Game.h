@@ -8,6 +8,7 @@
 #include "Scene.h"
 #include <map>
 #include "Keyboard.h"
+#include "Mouse.h"
 
 class Game
 {
@@ -31,6 +32,7 @@ public:
 	Scene *currentScene;
 	
 	Keyboard *keyboard;
+	Mouse *mouse;
 
 	virtual void update(void);
 	virtual void draw(void);
