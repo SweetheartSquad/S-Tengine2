@@ -1,6 +1,6 @@
 #include "Cube.h"
 
-Cube::Cube(gmtl::Vec3f center, float size){
+Cube::Cube(glm::vec3 center, float size){
 	
 	scale(size, size, size);
 	translate(center);

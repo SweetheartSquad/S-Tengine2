@@ -9,7 +9,7 @@
 class Cube:public Entity
 {
 public:
-	Cube(gmtl::Vec3f center, float size);
+	Cube(glm::vec3 center, float size);
 	~Cube(void);
 
 	void draw(void) override;
