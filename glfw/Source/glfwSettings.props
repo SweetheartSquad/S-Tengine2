@@ -2,9 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <GLEW_DIR>D:\Program Files\GL Development\glew-1.10.0</GLEW_DIR>
-    <GLFW_DIR>D:\Program Files\GL Development\glfw-3.0.4.bin.WIN32</GLFW_DIR>
-    <GMTL_DIR>D:\Program Files\GL Development\gmtl-0.6.1</GMTL_DIR>
+    <GLEW_DIR>C:\DevelopmentLibs\C-C++\glew-1.10.0</GLEW_DIR>
+    <GLFW_DIR>C:\DevelopmentLibs\C-C++\glfw-3.0.4.bin.WIN32</GLFW_DIR>
+    <GMTL_DIR>C:\DevelopmentLibs\C-C++\ggt-code-1288-trunk</GMTL_DIR>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup />
