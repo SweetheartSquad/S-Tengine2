@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <CINDER_DIR_2012>D:\Program Files\cinder_0.8.5_vc2012</CINDER_DIR_2012>
+    <CINDER_DIR_2012>C:\cinder_0.8.5_vc2012</CINDER_DIR_2012>
     <CINDER_DIR_2010>D:\Program Files\cinder_0.8.5_vc2010</CINDER_DIR_2010>
   </PropertyGroup>
   <ItemDefinitionGroup />

@@ -1,4 +1,3 @@
-#include "cinder/ObjLoader.h"
 #include "cinder/MayaCamUI.h"
 #include "cinder/TriMesh.h"
 #include "cinder/app/AppBasic.h"
@@ -148,22 +147,26 @@ void CinderApp::setup(){
 
 
 void CinderApp::resize(){
+	unsigned int w = max(1, getWindowWidth());
+	unsigned int h = max(1, getWindowHeight());
+	double r = getWindowAspectRatio();
+	Area b = getWindowBounds();
 	// setup the camera
 	CameraPersp cam = camMayaPersp.getCamera();
-	cam.setPerspective( 60.0f, getWindowAspectRatio(), 0.1f, 10000.0f );
+	cam.setPerspective( 60.0f, r, 0.1f, 10000.0f );
 	camMayaPersp.setCurrentCam( cam );
 	
-	float w = getWindowWidth()/2;
-	float h = getWindowHeight()/2;
+	float w2 = w/2;
+	float h2 = h/2;
 	
-	rectTop.set(0,0,w,h);
-	rectRight.set(w,0,w*2,h);
-	rectFront.set(0,h,w,h*2);
-	rectPersp.set(w,h,w*2,h*2);
-
-	boundsTop.set(-1, -h/w, 1, h/w);
-	boundsRight.set(-1, -h/w, 1, h/w);
-	boundsFront.set(-1, -h/w, 1, h/w);
+	rectTop.set(0,0,w2,h2);
+	rectRight.set(w2,0,w2*2,h2);
+	rectFront.set(0,h2,w2,h2*2);
+	rectPersp.set(w2,h2,w2*2,h2*2);
+	
+	boundsTop.set(-r/0.9, -1, r, 1/0.9);
+	boundsRight.set(-r, -0.9, r, 0.9);
+	boundsFront.set(-r, -1, r, 1);
 	//boundsPersp.set(-1, -h/w, 1, h/w);
 
 	camTop.setOrtho(boundsTop.x1, boundsTop.x2, boundsTop.y1, boundsTop.y2, -10000, 10000);
@@ -175,7 +178,7 @@ void CinderApp::resize(){
 	camFront.setViewDirection(Vec3f(0,0,-1));
 
 	// create or resize framebuffer if needed
-	if(!fboPersp || fboPersp.getWidth() != getWindowWidth() || fboPersp.getHeight() != getWindowHeight()) {
+	if(!fboPersp || fboPersp.getWidth() != w || fboPersp.getHeight() != h) {
 		gl::Fbo::Format fmt;
 
 		// we create multiple color targets:
@@ -188,7 +191,7 @@ void CinderApp::resize(){
 		fmt.setSamples(4);
 
 		// create the buffer
-		fboPersp = gl::Fbo( getWindowWidth(), getWindowHeight(), fmt );
+		fboPersp = gl::Fbo( w, h, fmt );
 
 		// work-around for an old Cinder issue
 		fboPersp.getTexture(0).setFlipped(true);
@@ -196,12 +199,13 @@ void CinderApp::resize(){
 		fboPersp.getTexture(2).setFlipped(true);
 	}
 
-	if(!fboTop || fboTop.getWidth() != getWindowWidth() || fboTop.getHeight() != getWindowHeight()){
-		initFbo(fboTop, getWindowBounds());
-	}if(!fboRight || fboRight.getWidth() != getWindowWidth() || fboRight.getHeight() != getWindowHeight()){
-		initFbo(fboRight, getWindowBounds());
-	}if(!fboFront || fboFront.getWidth() != getWindowWidth() || fboFront.getHeight() != getWindowHeight()){
-		initFbo(fboFront, getWindowBounds());
+
+	if(!fboTop || fboTop.getWidth() != w || fboTop.getHeight() != h){
+		initFbo(fboTop, b);
+	}if(!fboRight || fboRight.getWidth() != w || fboRight.getHeight() != h){
+		initFbo(fboRight, b);
+	}if(!fboFront || fboFront.getWidth() != w || fboFront.getHeight() != h){
+		initFbo(fboFront, b);
 	}
 }
 
@@ -234,7 +238,7 @@ void CinderApp::draw(){
 
 	// draw the scene
 	gl::color( Color::white() );
-
+	
 	gl::draw( fboTop.getTexture(0), rectTop );
 	gl::drawStrokedRect(rectTop);
 	
@@ -397,30 +401,6 @@ void CinderApp::keyUp( KeyEvent event )
 {
 }
 
-void CinderApp::loadMesh(const std::string &objFile, const std::string &meshFile, TriMesh *mesh){
-	try{
-		// try to load a binary mesh file - sadly the following line does not work:
-		// mMesh.read( loadAsset(meshfile) );
-
-		// note: instead of throwing an exception, Cinder crashes if the
-		//   file does not exist. Hopefully this will be changed in future versions.
-		DataSourceRef file = loadAsset(meshFile);
-		if(!file->createStream()) throw std::exception();
-
-		mesh->read( file );
-	}catch( ... ){
-		// if it failed or didn't exist, load an obj file...
-		DataSourceRef file = loadAsset(objFile);
-		if(file->createStream()) {
-			ObjLoader obj( file );
-			// ...create a mesh...
-			obj.load( mesh, true, true, true );
-			// ...and write it to a binary mesh file for future use
-			mesh->write( writeFile( getAssetPath("") / meshFile ) );
-		}
-	}
-}
-
 void CinderApp::loadShaders()
 {
 	try{
@@ -440,8 +420,10 @@ void CinderApp::initFbo(gl::Fbo & _fbo, Area _area){
 	// you can omit these lines if you don't intent to display the picking framebuffer
 	fmt.setMagFilter(GL_NEAREST);
 	fmt.setMinFilter(GL_LINEAR);
-
-	_fbo = gl::Fbo(_area.getWidth(), _area.getHeight(), fmt);
+	
+	unsigned int w = max(1, _area.getWidth());
+	unsigned int h = max(1, _area.getHeight());
+	_fbo = gl::Fbo(w, h, fmt);
 
 	// work-around for an old Cinder issue
 	_fbo.getTexture(0).setFlipped(true);
@@ -471,6 +453,7 @@ Vec2d fromRectToRect(Vec2d _p, Rectf _r1, Rectf _r2){
 	Vec2d res;
 	res.x = ((_p.x-_r1.x1)/_r1.getWidth())*_r2.getWidth() + _r2.x1;
 	res.y = ((_p.y-_r1.y1)/_r1.getHeight())*_r2.getHeight() + _r2.y1;
+	console() << _p << std::endl << _r1 << std::endl << _r2 << std::endl << res << std::endl;
 	return res;
 }
 
@@ -486,11 +469,14 @@ Vec3d CinderApp::getCameraCorrectedPos(){
 		res.y = 0;
 		res.z = t.y;
 	}else if(rectRight.contains(mMousePos)){
+		x = rectRight.x2 - x + rectRight.x1;
+		y = rectRight.y2 - y + rectRight.y1;
 		Vec2d t = fromRectToRect(Vec2f(x,y), rectRight, boundsRight);
 		res.x = 0;
 		res.y = t.y;
 		res.z = t.x;
 	}else if(rectFront.contains(mMousePos)){
+		y = rectFront.y2 - y + rectFront.y1;
 		Vec2d t = fromRectToRect(Vec2f(x,y), rectFront, boundsFront);
 		res.x = t.x;
 		res.y = t.y;
