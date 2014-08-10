@@ -160,18 +160,25 @@ void CinderApp::resize(){
 	float h2 = h/2;
 	
 	rectTop.set(0,0,w2,h2);
-	rectRight.set(w2,0,w2*2,h2);
-	rectFront.set(0,h2,w2,h2*2);
-	rectPersp.set(w2,h2,w2*2,h2*2);
+	rectRight.set(w2,0,w,h2);
+	rectFront.set(0,h2,w2,h);
+	rectPersp.set(w2,h2,w,h);
 	
-	boundsTop.set(-r/0.9, -1, r, 1/0.9);
-	boundsRight.set(-r, -0.9, r, 0.9);
+	boundsTop.set(-r, -1, r, 1);
+	boundsRight.set(-r, -1, r, 1);
 	boundsFront.set(-r, -1, r, 1);
+	//boundsFront.set(-1, -1, 1, 1);
 	//boundsPersp.set(-1, -h/w, 1, h/w);
-
+	
 	camTop.setOrtho(boundsTop.x1, boundsTop.x2, boundsTop.y1, boundsTop.y2, -10000, 10000);
 	camRight.setOrtho(boundsRight.x1, boundsRight.x2, boundsRight.y1, boundsRight.y2, -10000, 10000);
 	camFront.setOrtho(boundsFront.x1, boundsFront.x2, boundsFront.y1, boundsFront.y2, -10000, 10000);
+	/*camTop.setAspectRatio(r);
+	camRight.setAspectRatio(r);
+	camFront.setAspectRatio(r);*/
+	camTop.setEyePoint(Vec3f(0,0,0));
+	camRight.setEyePoint(Vec3f(0,0,0));
+	camFront.setEyePoint(Vec3f(0,0,0));
 	
 	camTop.setViewDirection(Vec3f(0,-1,0));
 	camRight.setViewDirection(Vec3f(-1,0,0));
