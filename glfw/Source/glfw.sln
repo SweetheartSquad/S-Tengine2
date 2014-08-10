@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glfw", "glfw.vcxproj", "{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A445FC11-3045-4268-B44D-959EDDFB3B94}"
 	ProjectSection(SolutionItems) = preProject
-		Performance1.psess = Performance1.psess
+		glfwSettings.props = glfwSettings.props
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glfw-test-1", "glfw-test-1\VC Project\glfw.vcxproj", "{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
