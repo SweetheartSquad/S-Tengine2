@@ -1,0 +1,42 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{33827FDD-F292-44C6-8221-C3BF06FD4A26}"
+	ProjectSection(SolutionItems) = preProject
+		CinderSettings.props = CinderSettings.props
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "voxel-test-2", "voxel-test-2-drawing-test\VC Project\BoidsCinder.vcxproj", "{D309A02F-15E8-4876-BB78-F5473F16E665}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "voxel-test-1", "voxel-test-1-rotating-cube\VC Project\voxel-test.vcxproj", "{36E4AA55-13BE-4088-8FE9-6C0460D792CE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "voxel-test-3", "voxel-test-3-color-picking\VC Project\voxel-test-3.vcxproj", "{E79DAF9B-7B6D-4B25-8085-C577D0FF4B92}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "voxel-test-4-bones", "voxel-test-4-bones\VC Project\voxel-test-4-bones.vcxproj", "{B8B5D88C-E497-4FF7-8220-8A9D619D5DD7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D309A02F-15E8-4876-BB78-F5473F16E665}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D309A02F-15E8-4876-BB78-F5473F16E665}.Debug|Win32.Build.0 = Debug|Win32
+		{D309A02F-15E8-4876-BB78-F5473F16E665}.Release|Win32.ActiveCfg = Release|Win32
+		{D309A02F-15E8-4876-BB78-F5473F16E665}.Release|Win32.Build.0 = Release|Win32
+		{36E4AA55-13BE-4088-8FE9-6C0460D792CE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{36E4AA55-13BE-4088-8FE9-6C0460D792CE}.Debug|Win32.Build.0 = Debug|Win32
+		{36E4AA55-13BE-4088-8FE9-6C0460D792CE}.Release|Win32.ActiveCfg = Release|Win32
+		{36E4AA55-13BE-4088-8FE9-6C0460D792CE}.Release|Win32.Build.0 = Release|Win32
+		{E79DAF9B-7B6D-4B25-8085-C577D0FF4B92}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E79DAF9B-7B6D-4B25-8085-C577D0FF4B92}.Debug|Win32.Build.0 = Debug|Win32
+		{E79DAF9B-7B6D-4B25-8085-C577D0FF4B92}.Release|Win32.ActiveCfg = Release|Win32
+		{E79DAF9B-7B6D-4B25-8085-C577D0FF4B92}.Release|Win32.Build.0 = Release|Win32
+		{B8B5D88C-E497-4FF7-8220-8A9D619D5DD7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B8B5D88C-E497-4FF7-8220-8A9D619D5DD7}.Debug|Win32.Build.0 = Debug|Win32
+		{B8B5D88C-E497-4FF7-8220-8A9D619D5DD7}.Release|Win32.ActiveCfg = Release|Win32
+		{B8B5D88C-E497-4FF7-8220-8A9D619D5DD7}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
