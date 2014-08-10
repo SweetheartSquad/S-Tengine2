@@ -106,9 +106,6 @@ protected:
 	//! keeping track of our cursor position
 	Vec2i			mMousePos;
 
-	//! fancy font fizzle
-	Font			mFont;
-
 	//! background color
 	Color			mColorBackground;
 
@@ -119,7 +116,6 @@ protected:
 	
 	std::vector<Bone *> bones;
 	Bone * selectedBone;
-
 	
 };
 
@@ -141,9 +137,6 @@ void CinderApp::setup(){
 
 	// load shaders
 	loadShaders();
-	
-	// load font
-	mFont = Font(loadAsset("font/b2sq.ttf"), 32);	
 
 	// set background color
 	mColorBackground = Color(0.1f, 0.1f, 0.1f);
