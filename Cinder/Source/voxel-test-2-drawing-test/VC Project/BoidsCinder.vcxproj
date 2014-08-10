@@ -48,14 +48,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>$(ProjectName)-d</TargetName>
-    <SourcePath>..\src;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
-    <LibraryPath>$(CINDER_DIR_2010)\lib;$(CINDER_DIR_2010)\lib\msw;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
-    <IncludePath>..\include;$(CINDER_DIR_2010)\include;$(CINDER_DIR_2010)\boost;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
+    <SourcePath>..\src;$(SourcePath)</SourcePath>
+    <LibraryPath>$(CINDER_DIR_2010)\lib;$(CINDER_DIR_2010)\lib\msw;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\include;$(CINDER_DIR_2010)\include;$(CINDER_DIR_2010)\boost;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <SourcePath>..\src;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
-    <LibraryPath>$(CINDER_DIR_2010)\lib;$(CINDER_DIR_2010)\lib\msw;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
-    <IncludePath>..\include;$(CINDER_DIR_2010)\include;$(CINDER_DIR_2010)\boost;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
+    <SourcePath>..\src;$(SourcePath)</SourcePath>
+    <LibraryPath>$(CINDER_DIR_2010)\lib;$(CINDER_DIR_2010)\lib\msw;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\include;$(CINDER_DIR_2010)\include;$(CINDER_DIR_2010)\boost;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

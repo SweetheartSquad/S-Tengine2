@@ -63,14 +63,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>$(ProjectName)-d</TargetName>
-    <LibraryPath>$(CINDER_DIR_2012)\lib;$(CINDER_DIR_2012)\lib\msw;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSDK_LibraryPath_x86);</LibraryPath>
-    <IncludePath>..\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
-    <SourcePath>..\src;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
+    <LibraryPath>$(CINDER_DIR_2012)\lib;$(CINDER_DIR_2012)\lib\msw;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath)</IncludePath>
+    <SourcePath>..\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSDK_IncludePath);</IncludePath>
-    <LibraryPath>$(CINDER_DIR_2012)\lib;$(CINDER_DIR_2012)\lib\msw;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSDK_LibraryPath_x86);</LibraryPath>
-    <SourcePath>..\src;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
+    <IncludePath>..\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath)</IncludePath>
+    <LibraryPath>$(CINDER_DIR_2012)\lib;$(CINDER_DIR_2012)\lib\msw;$(LibraryPath)</LibraryPath>
+    <SourcePath>..\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
