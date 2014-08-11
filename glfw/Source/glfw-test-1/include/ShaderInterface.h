@@ -11,7 +11,7 @@ class ShaderInterface
 private:
 	ShaderLoader *shader;
 	GLint aPositionVertex;
-	GLint uColour;
+	GLint aFragColor;
 
 	//const char* vertexShaderString;
 	//const char* fragmentShaderString;
@@ -22,6 +22,6 @@ public:
 
 	GLuint getProgramId();
 	GLint get_aPositionVertex();
-	GLint get_uColourShader();
+	GLint get_aFragColor();
 };
 

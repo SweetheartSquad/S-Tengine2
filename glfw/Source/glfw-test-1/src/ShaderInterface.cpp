@@ -13,7 +13,7 @@ ShaderInterface::ShaderInterface(const char *vertexShaderSource, const char *fra
 
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	aPositionVertex = glGetAttribLocation(getProgramId(), "aPositionVertex");
-	uColour = glGetUniformLocation(getProgramId(), "uColour");
+	aFragColor = glGetAttribLocation(getProgramId(), "aFragColor");
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 }
 
@@ -32,7 +32,7 @@ GLint ShaderInterface::get_aPositionVertex()
 	return aPositionVertex;
 }
 
-GLint ShaderInterface::get_uColourShader()
+GLint ShaderInterface::get_aFragColor()
 {
-	return uColour;
+	return aFragColor;
 }
