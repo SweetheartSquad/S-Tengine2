@@ -128,7 +128,6 @@
     <ClInclude Include="..\include\VertexBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-
     <ClInclude Include="..\include\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
