@@ -25,7 +25,6 @@ ShaderLoader::ShaderLoader(std::string vertexShaderSource, std::string fragmentS
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	glAttachShader(programId, fragmentShader);
 	GLUtils::checkForError(true,__FILE__,__LINE__);
-	
 	glLinkProgram(programId);
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	

@@ -11,27 +11,55 @@
 #include <gmtl/gmtl.h>
 #include <gmtl/Vec.h>
 #include "Game.h"
+#include <TestGame.h>
+#include "Mouse.h"
 
-Game *game;
+TestGame *game;
 
 static void error_callback(int error, const char* description)
 {
 	fputs(description, stderr);
 }
-static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+
+static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
-		glfwSetWindowShouldClose(window, GL_TRUE);
-	}
-	if(key == GLFW_KEY_RIGHT){
-	
-	}
-	if(key == GLFW_KEY_LEFT){
-	
+	Keyboard *keyboard = &Keyboard::getInstance();
+
+	if(action == GLFW_PRESS)
+	{
+		keyboard->keyDownListener(key);	
+	}else if(action == GLFW_RELEASE)
+	{
+		keyboard->keyUpListener(key);	
 	}
 }
+
+static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
+	Mouse *mouse = &Mouse::getInstance();
+
+	if(action == GLFW_PRESS)
+	{
+		mouse->mouseDownListener(button);
+	}else if(action == GLFW_RELEASE)
+	{
+		mouse->mouseUpListener(button);	
+	}
+}
+
+static void mousePostionCallback(GLFWwindow *window, double x, double y)
+{
+	Mouse *mouse = &Mouse::getInstance();
+	mouse->mousePositionListener(x, y);
+}
+
 int main(void)
 {
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	
 	GLFWwindow* window;
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit())
@@ -44,7 +72,9 @@ int main(void)
 	}
 
 	glfwMakeContextCurrent(window);
-	glfwSetKeyCallback(window, key_callback);
+	glfwSetKeyCallback(window, keyCallback);
+	glfwSetMouseButtonCallback(window, mouseButtonCallback);
+	glfwSetCursorPosCallback(window, mousePostionCallback);
 
 	glewExperimental = GL_TRUE; 
 	GLenum err = glewInit();
@@ -54,14 +84,15 @@ int main(void)
 	  fprintf(stderr, "\tERROR: %s\n", glewGetErrorString(err));
 	}
 	
-	game = new Game(true);
+	game = new TestGame(true);
 
 	while (game->isRunning)
 	{
+		glfwPollEvents();
 		game->update();
 		game->draw();
+		game->manageInput();
 		game->isRunning = !glfwWindowShouldClose(window);
-		GLUtils::checkForError(0,"main",0);
 	}
 
 	glfwDestroyWindow(window);

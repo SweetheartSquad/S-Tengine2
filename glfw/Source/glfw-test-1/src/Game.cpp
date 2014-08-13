@@ -1,35 +1,19 @@
 #include "Game.h"
-#include "Cube.h"
+#include <MainScene.h>
 
 double lastTime = glfwGetTime();
 int nbFrames = 0;
 
-Cube *cube;
-
-GLfloat verts[] ={
-    0.5f, 0.5f, 0.f,
-	0.75f,  0.75f, 0.f,
-	0.0f,  0.75f,  0.f
-};
-//VertexBuffer* vertexBuffer;
-
 Game::Game(bool isRunning)
 {
-	GLUtils::checkForError(true,__FILE__,__LINE__);
 	this->isRunning = isRunning;
 	this->glfwWindow = glfwGetCurrentContext();
-	GLUtils::checkForError(true,__FILE__,__LINE__);
 	this->renderSystem = &RenderSystem::getInstance();
-	GLUtils::checkForError(true,__FILE__,__LINE__);
 	this->children = new std::vector<Entity*>();
-	cube = new Cube(gmtl::Vec3f(0.f, 0.f, 0.5f),0.2f);
-	Cube* cube2 = new Cube(gmtl::Vec3f(-0.2f, 0.5f, 0.5f), 0.1f);
-	children->push_back(cube);
-	children->push_back(cube2);
-	Entity *tri = new Entity();
-	tri->vertexBuffer = new VertexBuffer(verts, sizeof(verts), GL_TRIANGLES, GL_STATIC_DRAW, 3, sizeof(GLfloat)*3);
-	tri->translateZ(0.2f);
-	children->push_back(tri);
+	this->scenes = new std::map<std::string, Scene*>();
+	this->printFPS = true;
+	this->keyboard = &Keyboard::getInstance();
+	this->mouse = &Mouse::getInstance();
 }
 
 Game::~Game(void)
@@ -39,19 +23,31 @@ Game::~Game(void)
 
 void Game::update(void)
 {
-	printFps();
+	if (printFPS)
+	{
+		printFps();
+	}
 }
 
 void Game::draw(void)
 {
-	renderSystem->render(children);
+	currentScene->draw();
 }
 
-void Game::printFps(){
+void Game::manageInput()
+{
+	keyboard->update();
+	mouse->update();
+}
+
+void Game::printFps()
+{
+	currentScene->update();
 	// Measure speed
 	double currentTime = glfwGetTime();
 	nbFrames++;
-	if ( currentTime - lastTime >= 1.0 ){ 
+	if (currentTime - lastTime >= 1.0)
+	{
 		// If last prinf() was more than 1 sec ago
 		// printf and reset timer
 		printf("%f FPS\n", double(nbFrames));
@@ -59,4 +55,3 @@ void Game::printFps(){
 		lastTime += 1.0;
 	}
 }
-

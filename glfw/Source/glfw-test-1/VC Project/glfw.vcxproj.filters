@@ -34,6 +34,18 @@
     <Filter Include="Header Files\maths">
       <UniqueIdentifier>{78d6d65a-770e-4c23-9e2f-3eb95c9ec967}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\TestGame">
+      <UniqueIdentifier>{40908594-3aea-4682-ae22-ddaca988a7ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TestGame">
+      <UniqueIdentifier>{33658aa7-c89d-477b-80fe-5d5e950eed80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\input">
+      <UniqueIdentifier>{160824dc-2881-44c5-a369-19a38521d0c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\input">
+      <UniqueIdentifier>{92af4ccb-67a0-48ae-a3e0-b9785d71c2f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Cube.cpp">
@@ -69,6 +81,21 @@
     <ClCompile Include="..\src\VertexBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MainScene.cpp">
+      <Filter>Source Files\TestGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TestGame.cpp">
+      <Filter>Source Files\TestGame</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Keyboard.cpp">
+      <Filter>Source Files\input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Mouse.cpp">
+      <Filter>Source Files\input</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -100,6 +127,22 @@
     </ClInclude>
     <ClInclude Include="..\include\VertexBuffer.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+
+    <ClInclude Include="..\include\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\MainScene.h">
+      <Filter>Header Files\TestGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\TestGame.h">
+      <Filter>Header Files\TestGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Keyboard.h">
+      <Filter>Header Files\input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Mouse.h">
+      <Filter>Header Files\input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

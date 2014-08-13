@@ -12,7 +12,7 @@ private:
 	GLuint vertexBufferId;
 	GLenum drawMode;
 	GLsizei vertCount;
-	GLsizei dataSize;
+	GLsizei stride;
 	GLenum polygonalDrawMode;
 
 public:
@@ -21,6 +21,6 @@ public:
 
 	GLuint getVertexBufferId();
 	void renderVertexBuffer();
-	void configureVertexAttributes(GLint vertexHandle);
+	void configureVertexAttributes(GLint vertexHandle, int bufferOffset);
 };
 
