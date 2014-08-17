@@ -17,9 +17,9 @@ public:
 	Keyboard *keyboard;
 	Mouse *mouse;
 
-	glm::vec3 position;
-	glm::vec3 direction;
-	glm::vec3 upVector;
+	glm::vec3 *position;
+	glm::vec3 *direction;
+	glm::vec3 *upVector;
 	
 	float fieldOfView;
 	float verticalAngle;
@@ -27,8 +27,12 @@ public:
 
 	float speed;
 	float mouseSpeed;
-	
+
 	glm::mat4 getViewMatrix();
 	glm::mat4 getProjectionMatrix();
 
+private :
+	double lastMouseX;
+	double lasMouseY;
+	
 };

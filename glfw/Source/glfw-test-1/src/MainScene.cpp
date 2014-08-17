@@ -29,12 +29,13 @@ void MainScene::update()
 {
 	Scene::update();
 
-	camera->update();
-
+	//if(keyboard->keyDown(GLFW_KEY_LEFT_ALT))
+	//{
+		camera->update();
+	//}
 	if(keyboard->keyDown(GLFW_KEY_A))
 	{
-		//cube->rotate(2, 0, -1, 0);
-		camera->update();
+		cube->rotate(2, 0, -1, 0);
 	}
 	if(keyboard->keyDown(GLFW_KEY_D))
 	{
@@ -68,18 +69,12 @@ void MainScene::update()
 		cube->scale(0.9, 0.9, 0.9);
 	}
 
-	glfwSetCursorPos(glfwGetCurrentContext(), 320, 240);
+	//glfwSetCursorPos(glfwGetCurrentContext(), 320, 240);
 }
 
 void MainScene::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 {
-	Scene::draw(projectionMatrix, viewMatrix);
-	if(keyboard->keyDown(GLFW_KEY_A))
-	{
-		std::cout<<"true";
+
 		Scene::draw(projectionMatrix, viewMatrix);
-	}else
-	{
-		Scene::draw(glm::mat4(1), glm::mat4(1));
-	}
+	
 }

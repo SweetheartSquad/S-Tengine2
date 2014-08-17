@@ -90,6 +90,12 @@ int main(void)
 	  fprintf(stderr, "\tERROR: %s\n", glewGetErrorString(err));
 	}
 	
+	int *screenHeight = new int();
+	int *screenWidth = new int();
+
+	glfwGetWindowSize(glfwGetCurrentContext(), screenWidth, screenHeight);
+	glfwSetCursorPos(window, static_cast<int>(*screenWidth)/2, static_cast<int>(*screenHeight)/2);
+
 	game = new TestGame(true);
 
 	while (game->isRunning)
