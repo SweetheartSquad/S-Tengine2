@@ -9,6 +9,9 @@ MainScene::MainScene():Scene()
 	cube->shader = new ShaderInterface("../assets/ColourShader.vsh","../assets/ColourShader.fsh");
 	cube->vertexBuffer->configureVertexAttributes(cube->shader->get_aPositionVertex(), 0);
 	cube->vertexBuffer->configureVertexAttributes(cube->shader->get_aFragColor(),sizeof(float)*3);
+
+	cube->setColour(1,0,0,1);
+	cube->translateZ(2);
 }
 
 MainScene::~MainScene()

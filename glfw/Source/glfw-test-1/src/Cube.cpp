@@ -52,6 +52,46 @@ void Cube::draw(void){
 	Entity::draw();
 }
 
+void Cube::setColour(float red, float green, float blue, float alpha)
+{
+	for(int i=0; i<24; i++)
+	{
+		vertices->at(i).red = red;
+		vertices->at(i).green = green;
+		vertices->at(i).blue = blue;
+		vertices->at(i).alpha = alpha;	
+	}
+}
+
+void Cube::setLeftColour(float red, float green, float blue, float alpha)
+{
+
+}
+
+void Cube::setRightColour(float red, float green, float blue, float alpha)
+{
+}
+
+void Cube::setTopColour(float red, float green, float blue, float alpha)
+{
+}
+
+void Cube::setBottomColour(float red, float green, float blue, float alpha)
+{
+}
+
+void Cube::setFronColour(float red, float green, float blue, float alpha)
+{
+}
+
+void Cube::setBackColour(float red, float green, float blue, float alpha)
+{
+}
+
+void Cube::setVertexColour(int index, float red, float green, float blue, float alpha)
+{
+}
+
 void Cube::update(void)
 {
 

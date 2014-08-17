@@ -17,12 +17,18 @@ Entity::~Entity(void)
 
 void Entity::draw()
 {	
-	glTranslatef(translationVector->x, translationVector->y, translationVector->z);
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices->size(), vertices->data(), GL_STATIC_DRAW);
+
+	//glTranslatef(translationVector->x, translationVector->y, translationVector->z);
 	//gmtl::AxisAnglef r;
 	//gmtl::set(r, *rotationVector);
 	glm::quat rotationT = glm::angleAxis(rotationVector->w, glm::vec3(rotationVector->x, rotationVector->y, rotationVector->z));
 	//glRotatef(rotationT.w, rotationT.x, rotationT.y, rotationT.z);
-	glScalef(scaleVector->x, scaleVector->y, scaleVector->z);
+	//glScalef(scaleVector->x, scaleVector->y, scaleVector->z);
+	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramId(), "MVP"), 1, GL_FALSE, &getModelViewMatrix()[0][0]);
+
+	vertexBuffer->renderVertexBuffer();
 }
 
 void Entity::update()
@@ -31,7 +37,6 @@ void Entity::update()
 
 void Entity::scale(float scaleX, float scaleY, float scaleZ)
 {
-
 	scaleVector->x *= scaleX;
 	scaleVector->y *= scaleY;
 	scaleVector->z *= scaleZ;
@@ -101,6 +106,11 @@ glm::mat4 Entity::getScaleMatrix()
 glm::mat4 Entity::getRotationMatrix()
 {
 	return glm::rotate(rotationVector->w, glm::vec3(rotationVector->x, rotationVector->y, rotationVector->z));
+}
+
+glm::mat4 Entity::getModelViewMatrix()
+{
+	return glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f) * glm::lookAt(glm::vec3(0,0,0), glm::vec3(0,0,0), glm::vec3(0,0,0)) * (getTranslationMatrix() * glm::mat4(1) * glm::mat4(1));
 }
 
 void Entity::rotate(float w, float x, float y, float z){

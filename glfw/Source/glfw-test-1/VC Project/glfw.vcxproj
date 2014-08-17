@@ -139,6 +139,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\ShaderLoader.h" />
     <ClInclude Include="..\include\vector3.h" />
     <ClInclude Include="..\include\VertexBuffer.h" />
+    <ClInclude Include="..\src\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\ColourShader.fsh" />

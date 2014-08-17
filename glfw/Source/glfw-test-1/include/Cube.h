@@ -15,5 +15,13 @@ public:
 	void draw(void) override;
 	void update(void) override;
 
+	void setColour(float red, float green, float blue, float alpha);
+	void setLeftColour(float red, float green, float blue, float alpha);
+	void setRightColour(float red, float green, float blue, float alpha);
+	void setTopColour(float red, float green, float blue, float alpha);
+	void setBottomColour(float red, float green, float blue, float alpha);
+	void setFronColour(float red, float green, float blue, float alpha);
+	void setBackColour(float red, float green, float blue, float alpha);
+	void setVertexColour(int index, float red, float green, float blue, float alpha);
 };
 
