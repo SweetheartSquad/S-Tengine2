@@ -27,13 +27,9 @@ class Entity
 
 public:
 
-	float x;
-	float y;
-	float z;
-
 	glm::vec3 *translationVector;
 	glm::vec3 *scaleVector;
-	glm::quat *rotationVector;
+	glm::quat *orientation;
 
 	VertexBuffer *vertexBuffer;
 	std::vector<Entity*> *children;
@@ -45,7 +41,7 @@ public:
 	Entity(void);
 	virtual ~Entity(void);
 
-	virtual void draw();
+	virtual void draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 	virtual void update();
 	
 	void scale(float scaleX, float scaleY, float scaleZ);
@@ -66,8 +62,7 @@ public:
 	glm::mat4 getTranslationMatrix();
 	glm::mat4 getScaleMatrix();
 	glm::mat4 getRotationMatrix();
-	glm::mat4 getModelViewMatrix();
-
+	glm::mat4 getModelMatrix();
 
 	void addChild(Entity* child);
 	void removeChildAtIndex(int index);

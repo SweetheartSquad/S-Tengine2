@@ -1,5 +1,6 @@
 #include "MainScene.h"
 
+
 Cube *cube;
 
 MainScene::MainScene():Scene()
@@ -8,10 +9,15 @@ MainScene::MainScene():Scene()
 	addChild(cube);
 	cube->shader = new ShaderInterface("../assets/ColourShader.vsh","../assets/ColourShader.fsh");
 	cube->vertexBuffer->configureVertexAttributes(cube->shader->get_aPositionVertex(), 0);
-	cube->vertexBuffer->configureVertexAttributes(cube->shader->get_aFragColor(),sizeof(float)*3);
-
-	cube->setColour(1,0,0,1);
-	cube->translateZ(2);
+	cube->vertexBuffer->configureVertexAttributes(cube->shader->get_aFragColor(), sizeof(float)*3);
+	
+	cube->setFrontColour(1,0,0,1);
+	cube->setLeftColour(0,1,0,1);
+	cube->setBackColour(0,0,1,1);
+	cube->setBottomColour(1,1,0,1);
+	cube->setTopColour(1,0,1,1);
+	cube->setRightColour(0,1,1,1);
+	cube->translateX(0.5);
 }
 
 MainScene::~MainScene()
@@ -23,9 +29,12 @@ void MainScene::update()
 {
 	Scene::update();
 
+	camera->update();
+
 	if(keyboard->keyDown(GLFW_KEY_A))
 	{
-		cube->rotate(2, 0, -1, 0);
+		//cube->rotate(2, 0, -1, 0);
+		camera->update();
 	}
 	if(keyboard->keyDown(GLFW_KEY_D))
 	{
@@ -45,21 +54,32 @@ void MainScene::update()
 	}
 	if(keyboard->keyDown(GLFW_KEY_E))
 	{
-		cube->rotate(2, 0, 0, 1);
+		cube->translate(0.001,0,0);
 	}
 
 	if(mouse->leftDown())
 	{
-		cube->scale(1.1, 1.1, 1.1);
+		glm::quat r = glm::angleAxis(1.f, glm::vec3(0.f,0.f,1.f));
+		cube->rotate(r);
 	}
 
 	if(mouse->rightDown())
 	{
 		cube->scale(0.9, 0.9, 0.9);
 	}
+
+	glfwSetCursorPos(glfwGetCurrentContext(), 320, 240);
 }
 
-void MainScene::draw()
+void MainScene::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 {
-	Scene::draw();
+	Scene::draw(projectionMatrix, viewMatrix);
+	if(keyboard->keyDown(GLFW_KEY_A))
+	{
+		std::cout<<"true";
+		Scene::draw(projectionMatrix, viewMatrix);
+	}else
+	{
+		Scene::draw(glm::mat4(1), glm::mat4(1));
+	}
 }

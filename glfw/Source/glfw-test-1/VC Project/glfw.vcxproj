@@ -106,6 +106,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Camera.cpp" />
     <ClCompile Include="..\src\Cube.cpp" />
     <ClCompile Include="..\src\Entity.cpp" />
     <ClCompile Include="..\src\FileUtils.cpp" />
@@ -139,6 +140,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\ShaderLoader.h" />
     <ClInclude Include="..\include\vector3.h" />
     <ClInclude Include="..\include\VertexBuffer.h" />
+    <ClInclude Include="..\src\Camera.h" />
     <ClInclude Include="..\src\Vertex.h" />
   </ItemGroup>
   <ItemGroup>

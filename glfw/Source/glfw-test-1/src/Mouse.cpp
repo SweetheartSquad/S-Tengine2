@@ -44,12 +44,12 @@ bool Mouse::rightDown()
 	return pressedKeys->find(GLFW_MOUSE_BUTTON_RIGHT) != pressedKeys->end();
 }
 
-bool Mouse::mouseX()
+double Mouse::mouseX()
 {
 	return x;
 }
 
-bool Mouse::mouseY()
+double Mouse::mouseY()
 {
 	return y;
 }
@@ -86,6 +86,13 @@ void Mouse::mousePositionListener(double x, double y)
 	this->x = x;
 	this->y = y;
 }
+
+void Mouse::setMousePositionListener(double x, double y)
+{
+	this->x = x;
+	this->y = y;
+}
+
 
 Mouse& Mouse::getInstance()
 {

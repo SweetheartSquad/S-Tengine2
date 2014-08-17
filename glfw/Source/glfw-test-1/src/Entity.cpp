@@ -1,12 +1,9 @@
 #include "Entity.h"
 
 Entity::Entity(void){
-	x = 0;
-	y = 0;
-	z = 0;
 	this->translationVector = new glm::vec3(0.0f,0.0f,0.0f);
 	this->scaleVector = new glm::vec3(1.f,1.f,1.f);
-	this->rotationVector = new glm::quat();
+	this->orientation = new glm::quat(1,0,0,0);
 	this->children = new std::vector<Entity*>();
 	this->vertices = new std::vector<Vertex>();
 }
@@ -15,18 +12,13 @@ Entity::~Entity(void)
 {
 }
 
-void Entity::draw()
+void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 {	
-
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices->size(), vertices->data(), GL_STATIC_DRAW);
 
-	//glTranslatef(translationVector->x, translationVector->y, translationVector->z);
-	//gmtl::AxisAnglef r;
-	//gmtl::set(r, *rotationVector);
-	glm::quat rotationT = glm::angleAxis(rotationVector->w, glm::vec3(rotationVector->x, rotationVector->y, rotationVector->z));
-	//glRotatef(rotationT.w, rotationT.x, rotationT.y, rotationT.z);
-	//glScalef(scaleVector->x, scaleVector->y, scaleVector->z);
-	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramId(), "MVP"), 1, GL_FALSE, &getModelViewMatrix()[0][0]);
+	glm::mat4 mvp = projectionMatrix * viewMatrix * getModelMatrix(); 
+
+	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramId(), "MVP"), 1, GL_FALSE, &mvp[0][0]);
 
 	vertexBuffer->renderVertexBuffer();
 }
@@ -90,7 +82,11 @@ void Entity::translateZ(float translateZ)
 }
 
 void Entity::rotate(glm::quat rotation){
-	*this->rotationVector = rotation*(*this->rotationVector);
+	*this->orientation = rotation * *this->orientation;
+}
+
+void Entity::rotate(float angle, float x, float y, float z){
+	this->rotate(glm::quat(glm::angleAxis(angle, glm::vec3(x,y,z))));
 }
 
 glm::mat4 Entity::getTranslationMatrix()
@@ -105,18 +101,12 @@ glm::mat4 Entity::getScaleMatrix()
 
 glm::mat4 Entity::getRotationMatrix()
 {
-	return glm::rotate(rotationVector->w, glm::vec3(rotationVector->x, rotationVector->y, rotationVector->z));
+	return glm::toMat4(*orientation);
 }
 
-glm::mat4 Entity::getModelViewMatrix()
+glm::mat4 Entity::getModelMatrix()
 {
-	return glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f) * glm::lookAt(glm::vec3(0,0,0), glm::vec3(0,0,0), glm::vec3(0,0,0)) * (getTranslationMatrix() * glm::mat4(1) * glm::mat4(1));
-}
-
-void Entity::rotate(float w, float x, float y, float z){
-	glm::quat r;
-	r = glm::rotate(r, w, glm::vec3(x,y,z));
-	rotate(r);
+	return getTranslationMatrix() * getRotationMatrix() * getScaleMatrix();
 }
 
 void Entity::addChild(Entity* child)

@@ -2,7 +2,7 @@
 
 in vec3 aPositionVertex;
 in vec3 aFragColor;
-in mat4 MVP;
+uniform mat4 MVP;
 
 
 out vec3 inColor;

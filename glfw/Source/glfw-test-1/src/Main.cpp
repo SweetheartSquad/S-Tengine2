@@ -53,6 +53,12 @@ static void mousePostionCallback(GLFWwindow *window, double x, double y)
 	mouse->mousePositionListener(x, y);
 }
 
+static void setMousePostionCallback(GLFWwindow *window, double x, double y)
+{
+	Mouse *mouse = &Mouse::getInstance();
+	mouse->mousePositionListener(x, y);
+}
+
 int main(void)
 {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
