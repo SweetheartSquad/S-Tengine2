@@ -31,9 +31,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\assets\shaders\phong.vert">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="..\assets\shaders\depththingy.frag">
       <Filter>Shaders</Filter>
     </None>
@@ -41,6 +38,9 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="..\assets\shaders\phong.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="..\assets\shaders\phong.vert">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

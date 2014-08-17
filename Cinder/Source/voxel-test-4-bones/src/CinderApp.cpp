@@ -8,7 +8,7 @@
 
 #include <sstream>
 
-#include "Bone.h"
+#include "Joint.h"
 
 
 using namespace ci;
@@ -45,8 +45,10 @@ public:
 	//! draws a grid on the floor
 	void drawGrid(float size=100.0f, float step=10.0f);
 
-	void newBone(Vec3d pos, Bone * parent = NULL);
+	void newJoint(Vec3d pos, Joint * parent = NULL);
 	Vec3d getCameraCorrectedPos();
+
+	void pickJoint(const Vec2i &pos);
 
 public:
 	// utility functions to translate colors to and from ints or chars 
@@ -79,17 +81,20 @@ protected:
 	CameraOrtho camFront;
 
 	//! our Phong shader, which supports multiple targets
-	gl::GlslProg	mPhongShader;
+	gl::GlslProg	jointShader;
 
 	//! our little picking framebuffer (non-AA) 
-	gl::Fbo			mPickingFboVoxel;
-	gl::Fbo			mPickingFboFace;
+	//gl::Fbo			mPickingFboVoxel;
+	//gl::Fbo			mPickingFboFace;
 	
 	//framebuffers for cameras
 	gl::Fbo fboTop;
 	gl::Fbo fboRight;
 	gl::Fbo fboFront;
 	gl::Fbo	fboPersp; //! our main framebuffer (AA, containing 2 color buffers)
+
+	//framebuffer for selecting joints
+	gl::Fbo mPickingFboJoint;
 	
 	//rect definitions for cameras sizes
 	Rectf rectTop;
@@ -111,10 +116,15 @@ protected:
 	//! colour channel to draw to the main viewport
 	unsigned long int channel;
 	
-	gl::Material boneMaterial;
+	gl::Material JointMaterial;
 	
-	std::vector<Bone *> bones;
-	Bone * selectedBone;
+	std::vector<Joint *> Joints;
+	Joint * selectedJoint;
+
+	enum UImode{
+		CREATE,
+		SELECT
+	} mode;
 	
 };
 
@@ -129,10 +139,10 @@ void CinderApp::setup(){
 	//  because it is called anyway so we don't have to set it up twice
 
 	// create materials
-	boneMaterial.setAmbient(Color::black());
-	boneMaterial.setDiffuse(Color::white());
-	boneMaterial.setSpecular(Color::white());
-	boneMaterial.setShininess( 20.0f );
+	JointMaterial.setAmbient(Color::white());
+	JointMaterial.setDiffuse(Color::black());
+	JointMaterial.setSpecular(Color::black());
+	JointMaterial.setShininess( 0.0f );
 
 	// load shaders
 	loadShaders();
@@ -142,7 +152,10 @@ void CinderApp::setup(){
 	
 	channel = 0;
 
-	selectedBone = NULL;
+	selectedJoint = NULL;
+	
+
+	mode = CREATE;
 }
 
 
@@ -217,11 +230,11 @@ void CinderApp::resize(){
 }
 
 void CinderApp::shutdown(){
-	for(int i = 0; i < bones.size(); ++i){
-		delete bones.at(i);
+	for(int i = 0; i < Joints.size(); ++i){
+		delete Joints.at(i);
 	}
-	bones.clear();
-	selectedBone = NULL;
+	Joints.clear();
+	selectedJoint = NULL;
 }
 
 void CinderApp::update(){}
@@ -255,9 +268,20 @@ void CinderApp::draw(){
 	gl::draw( fboFront.getTexture(0), rectFront );
 	gl::drawStrokedRect(rectFront);
 	
-	gl::draw( fboPersp.getTexture(0), rectPersp );
+	gl::draw( fboPersp.getTexture(channel), rectPersp );
 	gl::drawStrokedRect(rectPersp);
 
+	// draw the picking framebuffer in the upper right corner
+	try{
+	if(mPickingFboJoint){
+		Rectf rct = (Rectf) mPickingFboJoint.getBounds() * 5.0f;
+	rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0) );
+		gl::draw( mPickingFboJoint.getTexture(), Rectf(rct.x1, rct.y1+rct.y2, rct.x2, rct.y2+rct.y2) );
+	}
+	}catch(Exception e){
+		app::console() << e.what() << std::endl;
+		quit();
+	}
 
 	// draw the colour channels in the upper left corner
 	/*windowBounds *=  0.2f;
@@ -269,14 +293,7 @@ void CinderApp::draw(){
 	windowBounds.y1 += windowBounds.y1;
 	gl::draw( fboPersp.getTexture(2), windowBounds);*/
 
-	// draw the picking framebuffer in the upper right corner
-	/*Rectf rct = (Rectf) mPickingFboVoxel.getBounds() * 5.0f;
-	rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0) );
-	if(mPickingFboVoxel){
-		gl::draw( mPickingFboVoxel.getTexture(), Rectf(rct.x1, rct.y1, rct.x2, rct.y2) );
-	}if(mPickingFboVoxel){
-		gl::draw( mPickingFboFace.getTexture(), Rectf(rct.x1, rct.y1+rct.y2, rct.x2, rct.y2+rct.y2) );
-	}*/
+	
 }
 
 void CinderApp::render(const Camera & cam){
@@ -288,7 +305,7 @@ void CinderApp::render(const Camera & cam){
 	gl::pushMatrices();
 	gl::setMatrices(cam);
 
-		drawGrid(10,1);
+		drawGrid(10, 1);
 
 		// setup the light
 		gl::Light light( gl::Light::POINT, 0 );
@@ -304,20 +321,16 @@ void CinderApp::render(const Camera & cam){
 
 		// bind phong shader, which renders to both our color targets.
 		//  See 'shaders/phong.frag'
-		//mPhongShader.bind();
+		jointShader.bind();
 
-		// draw meshes:
-		gl::color( Color::white() );
-
-		// -each mesh should have a unique picking color that we can use to 
-		//  find out which object is under the cursor. 
-		boneMaterial.apply();
-		for(Bone * b : bones){
-			b->draw();
+		// draw joints:
+		for(Joint * j : Joints){
+			jointShader.uniform("pickingColor", j->color);
+			j->draw();
 		}
 
 		// unbind shader
-		//mPhongShader.unbind();
+		jointShader.unbind();
 	
 		//gl::drawColorCube(Vec3f(0,0,0),Vec3f(5,5,5));
 
@@ -331,11 +344,8 @@ void CinderApp::render(const Camera & cam){
 void CinderApp::mouseMove( MouseEvent event )
 {
 	mMousePos = event.getPos();
-	if(selectedBone != NULL){
-		if(selectedBone->building){
-			selectedBone->end = getCameraCorrectedPos();
-		}
-	}
+
+	pickJoint(mMousePos);
 }
 
 void CinderApp::mouseDown( MouseEvent event ){
@@ -343,16 +353,29 @@ void CinderApp::mouseDown( MouseEvent event ){
 	camMayaPersp.mouseDown( event.getPos() );
 
 	if(!event.isAltDown() && event.isLeft()){
-		Vec3d pos = getCameraCorrectedPos();
 		
-		if(selectedBone != NULL){
-			if(selectedBone->building){
-				newBone(pos, selectedBone);
+		if(mode == CREATE){
+			Vec3d pos = getCameraCorrectedPos();
+		
+			if(selectedJoint != NULL){
+				if(selectedJoint->building){
+					newJoint(pos, selectedJoint);
+				}else{
+					newJoint(pos);
+				}
 			}else{
-				newBone(pos);
+				newJoint(pos);
 			}
+		}else if(mode == SELECT){
+			pickJoint(mMousePos);
+		}
+	}
+
+	if(event.isRight()){
+		if(mode == CREATE){
+			mode = SELECT;
 		}else{
-			newBone(pos);
+			mode = CREATE;
 		}
 	}
 }
@@ -365,7 +388,11 @@ void CinderApp::mouseDrag( MouseEvent event )
 	if(event.isAltDown()){
 		camMayaPersp.mouseDrag( event.getPos(), event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
 	}else{
-		
+		if(selectedJoint != NULL){
+			if(selectedJoint->building){
+				selectedJoint->pos = getCameraCorrectedPos();
+			}
+		}
 	}
 }
 
@@ -395,9 +422,9 @@ void CinderApp::keyDown( KeyEvent event )
 		channel = 3;
 		break;
 	case KeyEvent::KEY_RETURN:
-		if(selectedBone != NULL){
-			if(selectedBone->building){
-				selectedBone->building = false;
+		if(selectedJoint != NULL){
+			if(selectedJoint->building){
+				selectedJoint->building = false;
 			}
 		}
 		break;
@@ -411,7 +438,7 @@ void CinderApp::keyUp( KeyEvent event )
 void CinderApp::loadShaders()
 {
 	try{
-		mPhongShader = gl::GlslProg( loadFile("../assets/shaders/phong.vert"), loadFile("../assets/shaders/phong.frag") );
+		jointShader = gl::GlslProg( loadFile("../assets/shaders/joint.vert"), loadFile("../assets/shaders/joint.frag") );
 	}catch( const std::exception &e ) {
 		console() << e.what() << std::endl;
 		quit();
@@ -444,16 +471,19 @@ void CinderApp::drawGrid(float size, float step){
 	}
 }
 
-void CinderApp::newBone(Vec3d pos, Bone * parent){
-	Bone * b = new Bone();
-	b->start = b->end = pos;
+void CinderApp::newJoint(Vec3d pos, Joint * parent){
+	Joint * b;
 	if(parent != NULL){
+		b = new Joint(parent);
+		b->parent = parent;
 		parent->building = false;
-		b->parent = selectedBone;
-		selectedBone->children.push_back(b);
+		parent->children.push_back(b);
+	}else{	
+		b = new Joint();
 	}
-	selectedBone = b;
-	bones.push_back(b);
+	b->pos = pos;
+	selectedJoint = b;
+	Joints.push_back(b);
 }
 
 Vec2d fromRectToRect(Vec2d _p, Rectf _r1, Rectf _r2){
@@ -494,6 +524,103 @@ Vec3d CinderApp::getCameraCorrectedPos(){
 		res.z = 0;
 	}
 	return res;
+}
+
+
+void CinderApp::pickJoint( const Vec2i &pos ){
+	// this is the main section of the demo:
+	//  here we sample the second color target to find out
+	//  which color is under the cursor.
+	gl::Fbo * sourceFbo;
+	Rectf * sourceRect;
+	if(rectTop.contains(pos)){
+		sourceFbo = &fboTop;
+		sourceRect = &rectTop;
+	}else if(rectRight.contains(pos)){
+		sourceFbo = &fboRight;
+		sourceRect = &rectRight;
+	}else if(rectFront.contains(pos)){
+		sourceFbo = &fboFront;
+		sourceRect = &rectFront;
+	}else if(rectPersp.contains(pos)){
+		sourceFbo = &fboPersp;
+		sourceRect = &rectPersp;
+	}else{
+		return;
+	}
+
+
+	// first, specify a small region around the current cursor position 
+	float scaleX = sourceFbo->getWidth() / (float) sourceRect->getWidth();
+	float scaleY = sourceFbo->getHeight() / (float) sourceRect->getHeight();
+	Vec2i	pixel((int)((sourceRect->x1 + pos.x - sourceRect->x2) * scaleX), (int)((sourceRect->y2 - pos.y) * scaleY));
+
+	//pixel = fromRectToRect(pixel, sourceFbo->getBounds(), *sourceRect);
+
+	Area	area(pixel.x-5, pixel.y-5, pixel.x+5, pixel.y+5);
+
+	// next, we need to copy this region to a non-anti-aliased framebuffer
+	//  because sadly we can not sample colors from an anti-aliased one. However,
+	//  this also simplifies the glReadPixels statement, so no harm done.
+	//  Here, we create that non-AA buffer if it does not yet exist.
+	if(!mPickingFboJoint) {
+		initFbo(mPickingFboJoint, area);
+	}
+
+	// (Cinder does not yet provide a way to handle multiple color targets in the blitTo function, 
+	//  so we have to make sure the correct target is selected before calling it)
+	glBindFramebufferEXT( GL_READ_FRAMEBUFFER_EXT, sourceFbo->getId() );
+	glBindFramebufferEXT( GL_DRAW_FRAMEBUFFER_EXT, mPickingFboJoint.getId() );
+	glReadBuffer(GL_COLOR_ATTACHMENT1_EXT);
+	glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
+
+	sourceFbo->blitTo(mPickingFboJoint, area, mPickingFboJoint.getBounds());
+
+	// bind the picking framebuffer, so we can read its pixels
+	mPickingFboJoint.bindFramebuffer();
+
+	// read pixel value(s) in the area
+	GLubyte buffer[400]; // make sure this is large enough to hold 4 bytes for every pixel!
+	glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
+	glReadPixels(0, 0, mPickingFboJoint.getWidth(), mPickingFboJoint.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, (void*)buffer);
+
+	// unbind the picking framebuffer
+	mPickingFboJoint.unbindFramebuffer();
+
+	// calculate the total number of pixels
+	unsigned int total = (mPickingFboJoint.getWidth() * mPickingFboJoint.getHeight());
+
+	// now that we have the color information, count each occuring color
+	unsigned int color;
+
+	std::map<unsigned int, unsigned int> occurences;
+	for(size_t i=0;i<total;++i) {
+		color = charToInt( buffer[(i*4)+0], buffer[(i*4)+1], buffer[(i*4)+2] );
+		occurences[color]++;
+	}
+
+	// find the most occuring color
+	unsigned int max = 0;
+	std::map<unsigned int, unsigned int>::const_iterator itr;
+	for(itr=occurences.begin();itr!=occurences.end();++itr) {
+		if(itr->second > max) {
+			color = itr->first;
+			max = itr->second;
+		}
+	}
+
+	// if this color is present in at least 50% of the pixels, 
+	//  we can safely assume that it is indeed belonging to one object
+	if(max >= (total / 2)) {
+		if(Joint::jointMap.count(color) == 1){
+			selectedJoint = Joint::jointMap.at(color);
+		}else{
+			selectedJoint = nullptr;
+		}
+	}else{
+		// we can't be sure about the color, we probably are on an object's edge
+		selectedJoint = nullptr;
+	}
 }
 
 CINDER_APP_BASIC( CinderApp, RendererGl )

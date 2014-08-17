@@ -106,6 +106,7 @@ protected:
 	gl::Fbo			mPickingFboVoxel;
 	gl::Fbo			mPickingFboFace;
 
+
 	//! framebuffer for UI elements
 	gl::Fbo			mUIFbo;
 
@@ -152,7 +153,7 @@ void CinderApp::setup()
 	loadShaders();
 
 	// load font
-	mFont = Font(loadAsset("font/b2sq.ttf"), 32);	
+	//mFont = Font(loadAsset("font/b2sq.ttf"), 32);	
 
 	// set background color
 	mColorBackground = Color(0.1f, 0.1f, 0.1f);
