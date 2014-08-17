@@ -34,6 +34,8 @@ Joint::Joint(Joint * _parent){
 Joint::~Joint(){}
 
 void Joint::draw(){
+	//gl::enableWireframe();
+
 	//colour
 	if(depth%3 == 0){
 		gl::color(Color(0,1,1));
@@ -42,8 +44,6 @@ void Joint::draw(){
 	}else{
 		gl::color(Color(1,1,0));
 	}
-
-	//gl::enableWireframe();
 
 	//draw joint
 	gl::pushModelView();
