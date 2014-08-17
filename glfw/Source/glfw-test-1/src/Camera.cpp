@@ -31,8 +31,22 @@ Camera::~Camera()
 
 void Camera::update()
 {
-	horizontalAngle += mouseSpeed * float(lastMouseX - mouse->mouseX());
-	verticalAngle += mouseSpeed * float(lasMouseY - mouse->mouseY());
+	float xOffset = 0.0f;
+	float yOffset = 0.0f;
+
+	if(abs(lastMouseX - mouse->mouseX()) > 0.01)
+	{
+		xOffset = float(320 - mouse->mouseX());	
+	}
+
+	if(abs(lasMouseY - mouse->mouseY()) > 0.01)
+	{
+		yOffset = float(240 - mouse->mouseY());	
+	}
+
+
+	horizontalAngle += mouseSpeed * xOffset;
+	verticalAngle += mouseSpeed * yOffset;
 
 	lastMouseX = mouse->mouseX();
 	lasMouseY = mouse->mouseY();
@@ -68,11 +82,11 @@ void Camera::update()
 		*position -= right * speed;
 	}
 
-	//int *screenHeight = new int();
-	//int *screenWidth = new int();
+	int *screenHeight = new int();
+	int *screenWidth = new int();
 	
-	//glfwGetWindowSize(glfwGetCurrentContext(), screenWidth, screenHeight);
-	//glfwSetCursorPos(glfwGetCurrentContext(), *screenWidth/2, *screenHeight/2);
+	glfwGetWindowSize(glfwGetCurrentContext(), screenWidth, screenHeight);
+	glfwSetCursorPos(glfwGetCurrentContext(), *screenWidth/2, *screenHeight/2);
 }
 
 glm::mat4 Camera::getViewMatrix()

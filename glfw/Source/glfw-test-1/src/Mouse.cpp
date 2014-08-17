@@ -5,6 +5,8 @@ Mouse::Mouse()
 	pressedKeys = new std::map<int, int>();
 	justPressedKeys = new std::map<int, int>();
 	justReleasedKeys = new std::map<int, int>();
+	x = 320;
+	y = 240;
 }
 
 Mouse::~Mouse()
