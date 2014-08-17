@@ -7,7 +7,7 @@ std::map<uint32_t, Joint*> Joint::jointMap;
 void Joint::init(){
 	depth = 0;
 	pos = ci::Vec3d(0,0,0);
-	rotation = ci::Quatd(0,0,0,1);
+	orientation = ci::Quatd(0,0,0,1);
 	building = true;
 	parent = NULL;
 
@@ -31,9 +31,31 @@ Joint::Joint(Joint * _parent){
 	}
 }
 
+void Joint::setPos(Vec3d _pos, bool _relative){
+	if(_relative){
+		Joint * _parent = parent;
+		while(_parent != nullptr){
+			_pos -= _parent->pos;
+			_parent = _parent->parent;
+		}
+	}
+	pos = _pos;
+}
+Vec3d Joint::getPos(bool _relative){
+	Vec3d res = pos;
+	if(!_relative){
+		Joint * _parent = parent;
+		while(_parent != nullptr){
+			res += _parent->pos;
+			_parent = _parent->parent;
+		}
+	}
+	return res;
+}
+
 Joint::~Joint(){}
 
-void Joint::draw(){
+void Joint::draw(gl::GlslProg * _shader){
 	//colour
 	if(depth%3 == 0){
 		gl::color(Color(0,1,1));
@@ -43,26 +65,33 @@ void Joint::draw(){
 		gl::color(Color(1,1,0));
 	}
 
+	_shader->uniform("pickingColor", color);
+
 	//gl::enableWireframe();
 
 	//draw joint
 	gl::pushModelView();
 		gl::translate(pos);
-		gl::rotate(rotation);
-		gl::drawSphere(Vec3f(0,0,0), 0.05);
-	gl::popModelView();
+
+		gl::pushMatrices();
+			gl::rotate(orientation);
+			gl::drawSphere(Vec3f(0,0,0), 0.05);
+		gl::popMatrices();
 
 	//draw bones
 	for(Joint * child : children){
-		Quatd orientation(Vec3d(0,1,0), child->pos-pos);
-		gl::pushModelView();
-			gl::translate(pos);
-			gl::rotate(orientation);
-			gl::drawSolidTriangle(Vec2f(0.05,0),Vec2f(-0.05,0),Vec2f(0,(pos-child->pos).length()));
+		child->pos;
+		Quatd boneDir(Vec3d(0,1,0), child->pos);
+		gl::pushMatrices();
+			gl::rotate(boneDir);
+			gl::drawSolidTriangle(Vec2f(0.05, 0), Vec2f(-0.05, 0), Vec2f(0, child->pos.length()));
 			gl::rotate(Vec3f(0,90,0));
-			gl::drawSolidTriangle(Vec2f(0.05,0),Vec2f(-0.05,0),Vec2f(0,(pos-child->pos).length()));
-		gl::popModelView();
+			gl::drawSolidTriangle(Vec2f(0.05, 0), Vec2f(-0.05, 0), Vec2f(0, child->pos.length()));
+		gl::popMatrices();
+
+		child->draw(_shader);
 	}
+	gl::popModelView();
 
 	//gl::disableWireframe();
 }
