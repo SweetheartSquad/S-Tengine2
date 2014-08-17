@@ -5,6 +5,7 @@
 #include "cinder/gl/GlslProg.h"
 #include "cinder/gl/Light.h"
 #include "cinder/gl/Material.h"
+#include "cinder/params/Params.h"
 
 #include <sstream>
 
@@ -40,8 +41,11 @@ public:
 	void loadMesh( const std::string &objFile, const std::string &meshFile, TriMesh *mesh);
 	//! loads the shaders
 	void loadShaders();
-	//! initializes empty fbos
+	//! initializes empty single channel fbos
 	void initFbo(gl::Fbo & _fbo, Area _area);
+	//! initializes empty 3-channel fbos
+	void initMultiChannelFbo(gl::Fbo & _fbo, Area _area);
+
 	//! draws a grid on the floor
 	void drawGrid(float size=100.0f, float step=10.0f);
 
@@ -49,6 +53,7 @@ public:
 	Vec3d getCameraCorrectedPos();
 
 	void pickJoint(const Vec2i &pos);
+	void switchMode();
 
 public:
 	// utility functions to translate colors to and from ints or chars 
@@ -74,6 +79,10 @@ public:
 		return b + (g << 8) + (r << 16);
 	};
 protected:
+	//params
+	bool drawParams;
+	params::InterfaceGlRef params;
+
 	//! our cameras
 	MayaCamUI camMayaPersp;
 	CameraOrtho camTop;
@@ -135,6 +144,10 @@ void CinderApp::prepareSettings(Settings *settings){
 }
 
 void CinderApp::setup(){
+	drawParams = true;
+	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 200, 400 ) ) );
+	params->addButton( "Switch Mode", std::bind( &CinderApp::switchMode, this ) );
+	params->addText( "Interaction Mode", "label=`CREATE`" );
 	// note: we will setup our camera in the 'resize' function,
 	//  because it is called anyway so we don't have to set it up twice
 
@@ -180,15 +193,12 @@ void CinderApp::resize(){
 	boundsTop.set(-r, -1, r, 1);
 	boundsRight.set(-r, -1, r, 1);
 	boundsFront.set(-r, -1, r, 1);
-	//boundsFront.set(-1, -1, 1, 1);
 	//boundsPersp.set(-1, -h/w, 1, h/w);
 	
 	camTop.setOrtho(boundsTop.x1, boundsTop.x2, boundsTop.y1, boundsTop.y2, -10000, 10000);
 	camRight.setOrtho(boundsRight.x1, boundsRight.x2, boundsRight.y1, boundsRight.y2, -10000, 10000);
 	camFront.setOrtho(boundsFront.x1, boundsFront.x2, boundsFront.y1, boundsFront.y2, -10000, 10000);
-	/*camTop.setAspectRatio(r);
-	camRight.setAspectRatio(r);
-	camFront.setAspectRatio(r);*/
+	
 	camTop.setEyePoint(Vec3f(0,0,0));
 	camRight.setEyePoint(Vec3f(0,0,0));
 	camFront.setEyePoint(Vec3f(0,0,0));
@@ -199,33 +209,13 @@ void CinderApp::resize(){
 
 	// create or resize framebuffer if needed
 	if(!fboPersp || fboPersp.getWidth() != w || fboPersp.getHeight() != h) {
-		gl::Fbo::Format fmt;
-
-		// we create multiple color targets:
-		//  -one for the scene as we will view it
-		//  -one to contain a color coded version of the scene that we can use for picking
-		fmt.enableColorBuffer( true, 3 );
-
-		// enable multi-sampling for better quality 
-		//  (if this sample does not work on your computer, try lowering the number of samples to 2 or 0)
-		fmt.setSamples(4);
-
-		// create the buffer
-		fboPersp = gl::Fbo( w, h, fmt );
-
-		// work-around for an old Cinder issue
-		fboPersp.getTexture(0).setFlipped(true);
-		fboPersp.getTexture(1).setFlipped(true);
-		fboPersp.getTexture(2).setFlipped(true);
-	}
-
-
-	if(!fboTop || fboTop.getWidth() != w || fboTop.getHeight() != h){
-		initFbo(fboTop, b);
+		initMultiChannelFbo(fboPersp, b);
+	}if(!fboTop || fboTop.getWidth() != w || fboTop.getHeight() != h){
+		initMultiChannelFbo(fboTop, b);
 	}if(!fboRight || fboRight.getWidth() != w || fboRight.getHeight() != h){
-		initFbo(fboRight, b);
+		initMultiChannelFbo(fboRight, b);
 	}if(!fboFront || fboFront.getWidth() != w || fboFront.getHeight() != h){
-		initFbo(fboFront, b);
+		initMultiChannelFbo(fboFront, b);
 	}
 }
 
@@ -259,30 +249,29 @@ void CinderApp::draw(){
 	// draw the scene
 	gl::color( Color::white() );
 	
-	gl::draw( fboTop.getTexture(0), rectTop );
+	gl::draw( fboTop.getTexture(channel), rectTop );
 	gl::drawStrokedRect(rectTop);
 	
-	gl::draw( fboRight.getTexture(0), rectRight );
+	gl::draw( fboRight.getTexture(channel), rectRight );
 	gl::drawStrokedRect(rectRight);
 	
-	gl::draw( fboFront.getTexture(0), rectFront );
+	gl::draw( fboFront.getTexture(channel), rectFront );
 	gl::drawStrokedRect(rectFront);
 	
 	gl::draw( fboPersp.getTexture(channel), rectPersp );
 	gl::drawStrokedRect(rectPersp);
 
 	// draw the picking framebuffer in the upper right corner
-	try{
 	if(mPickingFboJoint){
 		Rectf rct = (Rectf) mPickingFboJoint.getBounds() * 5.0f;
-	rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0) );
-		gl::draw( mPickingFboJoint.getTexture(), Rectf(rct.x1, rct.y1+rct.y2, rct.x2, rct.y2+rct.y2) );
-	}
-	}catch(Exception e){
-		app::console() << e.what() << std::endl;
-		quit();
+		rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0) );
+		gl::draw( mPickingFboJoint.getTexture(), Rectf(rct.x1, rct.y1, rct.x2, rct.y2) );
+		gl::drawStrokedRect(Rectf(rct.x1, rct.y1, rct.x2, rct.y2));
 	}
 
+	if(drawParams){
+		params->draw();
+	}
 	// draw the colour channels in the upper left corner
 	/*windowBounds *=  0.2f;
 	gl::draw( fboPersp.getTexture(0), windowBounds);
@@ -325,8 +314,12 @@ void CinderApp::render(const Camera & cam){
 
 		// draw joints:
 		for(Joint * j : Joints){
-			jointShader.uniform("pickingColor", j->color);
-			j->draw();
+			if(j->parent == nullptr){
+				j->draw(&jointShader);
+			}
+			if(selectedJoint == j){
+				gl::drawColorCube(j->getPos(false), Vec3f(0.1,0.1,0.1));
+			}
 		}
 
 		// unbind shader
@@ -345,7 +338,7 @@ void CinderApp::mouseMove( MouseEvent event )
 {
 	mMousePos = event.getPos();
 
-	pickJoint(mMousePos);
+	//pickJoint(mMousePos);
 }
 
 void CinderApp::mouseDown( MouseEvent event ){
@@ -370,14 +363,6 @@ void CinderApp::mouseDown( MouseEvent event ){
 			pickJoint(mMousePos);
 		}
 	}
-
-	if(event.isRight()){
-		if(mode == CREATE){
-			mode = SELECT;
-		}else{
-			mode = CREATE;
-		}
-	}
 }
 
 void CinderApp::mouseDrag( MouseEvent event )
@@ -390,7 +375,7 @@ void CinderApp::mouseDrag( MouseEvent event )
 	}else{
 		if(selectedJoint != NULL){
 			if(selectedJoint->building){
-				selectedJoint->pos = getCameraCorrectedPos();
+				selectedJoint->setPos(getCameraCorrectedPos());
 			}
 		}
 	}
@@ -408,6 +393,9 @@ void CinderApp::keyDown( KeyEvent event )
 		break;
 	case KeyEvent::KEY_f:
 		setFullScreen( !isFullScreen() );
+		break;
+	case KeyEvent::KEY_F1:
+		drawParams = !drawParams;
 		break;
 	case KeyEvent::KEY_1:
 		channel = 0;
@@ -463,6 +451,29 @@ void CinderApp::initFbo(gl::Fbo & _fbo, Area _area){
 	_fbo.getTexture(0).setFlipped(true);
 }
 
+void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area){
+	gl::Fbo::Format fmt;
+
+	// we create multiple color targets:
+	//  -one for the scene as we will view it
+	//  -one to contain a color coded version of the scene that we can use for picking
+	fmt.enableColorBuffer( true, 3 );
+
+	// enable multi-sampling for better quality 
+	//  (if this sample does not work on your computer, try lowering the number of samples to 2 or 0)
+	fmt.setSamples(4);
+
+	// create the buffer
+	unsigned int w = max(1, _area.getWidth());
+	unsigned int h = max(1, _area.getHeight());
+	_fbo = gl::Fbo( w, h, fmt );
+
+	// work-around for an old Cinder issue
+	_fbo.getTexture(0).setFlipped(true);
+	_fbo.getTexture(1).setFlipped(true);
+	_fbo.getTexture(2).setFlipped(true);
+}
+
 void CinderApp::drawGrid(float size, float step){
 	gl::color( Colorf(0.2f, 0.2f, 0.2f) );
 	for(float i=-size;i<=size;i+=step) {
@@ -481,7 +492,7 @@ void CinderApp::newJoint(Vec3d pos, Joint * parent){
 	}else{	
 		b = new Joint();
 	}
-	b->pos = pos;
+	b->setPos(pos);
 	selectedJoint = b;
 	Joints.push_back(b);
 }
@@ -553,7 +564,7 @@ void CinderApp::pickJoint( const Vec2i &pos ){
 	// first, specify a small region around the current cursor position 
 	float scaleX = sourceFbo->getWidth() / (float) sourceRect->getWidth();
 	float scaleY = sourceFbo->getHeight() / (float) sourceRect->getHeight();
-	Vec2i	pixel((int)((sourceRect->x1 + pos.x - sourceRect->x2) * scaleX), (int)((sourceRect->y2 - pos.y) * scaleY));
+	Vec2i	pixel((int)((pos.x - sourceRect->x1) * scaleX), (int)((sourceRect->y2 - pos.y) * scaleY));
 
 	//pixel = fromRectToRect(pixel, sourceFbo->getBounds(), *sourceRect);
 
@@ -566,6 +577,10 @@ void CinderApp::pickJoint( const Vec2i &pos ){
 	if(!mPickingFboJoint) {
 		initFbo(mPickingFboJoint, area);
 	}
+	
+	// bind the picking framebuffer, so we can clear it and then read its pixels later
+	mPickingFboJoint.bindFramebuffer();
+	gl::clear();
 
 	// (Cinder does not yet provide a way to handle multiple color targets in the blitTo function, 
 	//  so we have to make sure the correct target is selected before calling it)
@@ -576,8 +591,6 @@ void CinderApp::pickJoint( const Vec2i &pos ){
 
 	sourceFbo->blitTo(mPickingFboJoint, area, mPickingFboJoint.getBounds());
 
-	// bind the picking framebuffer, so we can read its pixels
-	mPickingFboJoint.bindFramebuffer();
 
 	// read pixel value(s) in the area
 	GLubyte buffer[400]; // make sure this is large enough to hold 4 bytes for every pixel!
@@ -614,12 +627,23 @@ void CinderApp::pickJoint( const Vec2i &pos ){
 	if(max >= (total / 2)) {
 		if(Joint::jointMap.count(color) == 1){
 			selectedJoint = Joint::jointMap.at(color);
+			selectedJoint->building = true;
 		}else{
 			selectedJoint = nullptr;
 		}
 	}else{
 		// we can't be sure about the color, we probably are on an object's edge
 		selectedJoint = nullptr;
+	}
+}
+
+void CinderApp::switchMode(){
+	if(mode == CREATE){
+		mode = SELECT;
+		params->setOptions( "Interaction Mode", "label=`SELECT`" );
+	}else{
+		mode = CREATE;
+		params->setOptions( "Interaction Mode", "label=`CREATE`" );
 	}
 }
 
