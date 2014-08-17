@@ -29,10 +29,6 @@ void MainScene::update()
 {
 	Scene::update();
 
-	//if(keyboard->keyDown(GLFW_KEY_LEFT_ALT))
-	//{
-		camera->update();
-	//}
 	if(keyboard->keyDown(GLFW_KEY_A))
 	{
 		cube->rotate(2, 0, -1, 0);
@@ -68,13 +64,9 @@ void MainScene::update()
 	{
 		cube->scale(0.9, 0.9, 0.9);
 	}
-
-	//glfwSetCursorPos(glfwGetCurrentContext(), 320, 240);
 }
 
 void MainScene::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 {
-
-		Scene::draw(projectionMatrix, viewMatrix);
-	
+	Scene::draw(projectionMatrix, viewMatrix);
 }

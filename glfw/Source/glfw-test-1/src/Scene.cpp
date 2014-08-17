@@ -17,6 +17,8 @@ void Scene::update(void){
 }
 
 void Scene::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
+	
+	camera->update();
 	renderSystem->render(children, camera->getProjectionMatrix(), camera->getViewMatrix());
 }
 

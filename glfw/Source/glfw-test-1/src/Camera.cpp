@@ -67,6 +67,12 @@ void Camera::update()
 	if (keyboard->keyDown(GLFW_KEY_LEFT)){
 		*position -= right * speed;
 	}
+
+	//int *screenHeight = new int();
+	//int *screenWidth = new int();
+	
+	//glfwGetWindowSize(glfwGetCurrentContext(), screenWidth, screenHeight);
+	//glfwSetCursorPos(glfwGetCurrentContext(), *screenWidth/2, *screenHeight/2);
 }
 
 glm::mat4 Camera::getViewMatrix()
