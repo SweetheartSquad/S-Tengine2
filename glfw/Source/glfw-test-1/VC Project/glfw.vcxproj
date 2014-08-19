@@ -120,18 +120,22 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\Scene.cpp" />
     <ClCompile Include="..\src\ShaderInterface.cpp" />
     <ClCompile Include="..\src\ShaderLoader.cpp" />
+    <ClCompile Include="..\src\System.cpp" />
     <ClCompile Include="..\src\TestGame.cpp" />
     <ClCompile Include="..\src\vector3.cpp" />
     <ClCompile Include="..\src\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\Camera.h" />
     <ClInclude Include="..\include\Cube.h" />
+    <ClInclude Include="..\include\Dimension.h" />
     <ClInclude Include="..\include\Entity.h" />
     <ClInclude Include="..\include\FileUtils.h" />
     <ClInclude Include="..\include\Game.h" />
     <ClInclude Include="..\include\GLUtils.h" />
     <ClInclude Include="..\include\Keyboard.h" />
     <ClInclude Include="..\include\Mouse.h" />
+    <ClInclude Include="..\include\System.h" />
     <ClInclude Include="..\include\TestGame.h" />
     <ClInclude Include="..\include\MainScene.h" />
     <ClInclude Include="..\include\RenderSystem.h" />
@@ -139,9 +143,8 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\ShaderInterface.h" />
     <ClInclude Include="..\include\ShaderLoader.h" />
     <ClInclude Include="..\include\vector3.h" />
+    <ClInclude Include="..\include\Vertex.h" />
     <ClInclude Include="..\include\VertexBuffer.h" />
-    <ClInclude Include="..\src\Camera.h" />
-    <ClInclude Include="..\src\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\ColourShader.fsh" />

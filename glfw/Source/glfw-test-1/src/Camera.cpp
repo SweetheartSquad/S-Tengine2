@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include <glm/gtc/matrix_transform.inl>
+
 
 Camera::Camera()
 {
@@ -7,19 +7,16 @@ Camera::Camera()
 	direction = new glm::vec3(0.f, 0.f, 0.f);
 	upVector = new glm::vec3(0.f, 0.f, 0.f);
 	
-	fieldOfView = 65.0f;
+	fieldOfView = 45.0f;
 	horizontalAngle = 3.14f;
 	verticalAngle = 0.0f;
 	speed = 0.1f;
 	mouseSpeed = 0.005f;
 
-	int *screenHeight = new int();
-	int *screenWidth = new int();
-
-	glfwGetWindowSize(glfwGetCurrentContext(), screenWidth, screenHeight);
+	Dimension screenDimensions = System::getScreenDimensions();
 	
-	lasMouseY = *screenHeight/2;
-	lastMouseX = *screenWidth/2;
+	lasMouseY = screenDimensions.height/2;
+	lastMouseX = screenDimensions.width/2;
 
 	mouse = &Mouse::getInstance();
 	keyboard = &Keyboard::getInstance();
@@ -31,19 +28,20 @@ Camera::~Camera()
 
 void Camera::update()
 {
+	Dimension screenDimensions = System::getScreenDimensions();
+
 	float xOffset = 0.0f;
 	float yOffset = 0.0f;
 
 	if(abs(lastMouseX - mouse->mouseX()) > 0.01)
 	{
-		xOffset = float(320 - mouse->mouseX());	
+		xOffset = float(screenDimensions.width*0.5 - mouse->mouseX());	
 	}
 
 	if(abs(lasMouseY - mouse->mouseY()) > 0.01)
 	{
-		yOffset = float(240 - mouse->mouseY());	
+		yOffset = float(screenDimensions.height*0.5 - mouse->mouseY());	
 	}
-
 
 	horizontalAngle += mouseSpeed * xOffset;
 	verticalAngle += mouseSpeed * yOffset;
@@ -57,7 +55,7 @@ void Camera::update()
 		cos(verticalAngle) * cos(horizontalAngle)
 	);
 
-		// Right vector
+	// Right vector
 	glm::vec3 right = glm::vec3(
 		sin(horizontalAngle - 3.14f/2.0f),
 		0,
@@ -81,12 +79,7 @@ void Camera::update()
 	if (keyboard->keyDown(GLFW_KEY_LEFT)){
 		*position -= right * speed;
 	}
-
-	int *screenHeight = new int();
-	int *screenWidth = new int();
-	
-	glfwGetWindowSize(glfwGetCurrentContext(), screenWidth, screenHeight);
-	glfwSetCursorPos(glfwGetCurrentContext(), *screenWidth/2, *screenHeight/2);
+	glfwSetCursorPos(glfwGetCurrentContext(), screenDimensions.width/2, screenDimensions.height/2);
 }
 
 glm::mat4 Camera::getViewMatrix()

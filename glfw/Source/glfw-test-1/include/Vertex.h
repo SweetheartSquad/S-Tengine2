@@ -1,4 +1,4 @@
-typedef struct Vertex
+struct Vertex
 {
 	float x,y,z;
 	float red,green,blue,alpha;
