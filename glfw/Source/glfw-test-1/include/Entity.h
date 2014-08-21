@@ -66,6 +66,7 @@ public:
 
 	void addChild(Entity* child);
 	void removeChildAtIndex(int index);
+	void setParent(Entity *parent);
 
 	void Entity::pushVert(Vertex vertex);
 };

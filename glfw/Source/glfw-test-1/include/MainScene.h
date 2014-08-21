@@ -8,7 +8,7 @@ class MainScene:public Scene
 {
 public:
 	MainScene();
-	~MainScene() override;
+	~MainScene();
 	void update() override;
-	void draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix) override;
+	void draw() override;
 };

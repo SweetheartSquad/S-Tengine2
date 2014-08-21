@@ -14,12 +14,15 @@ Scene::~Scene(void)
 }
 
 void Scene::update(void){
+	camera->update();
 }
 
-void Scene::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
-	
-	camera->update();
+void Scene::draw(){
 	renderSystem->render(children, camera->getProjectionMatrix(), camera->getViewMatrix());
 }
 
+void Scene::addChild(Entity* child)
+{
+	children->push_back(child);
+}
 

@@ -34,7 +34,7 @@ void Game::update(void)
 
 void Game::draw(void)
 {
-	currentScene->draw(glm::mat4(1), glm::mat4(1));
+	currentScene->draw();
 }
 
 void Game::manageInput()

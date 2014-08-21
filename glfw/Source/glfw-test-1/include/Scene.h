@@ -7,21 +7,25 @@
 #include "Mouse.h"
 #include "Camera.h"
 
-class Scene:public Entity
+class Scene
 {
 
 public:
 	Scene(void);
-	~Scene(void);
+	virtual ~Scene(void);
 
 	RenderSystem *renderSystem;
 	Keyboard* keyboard;
 	Mouse* mouse;
+	std::vector<Entity*> *children;
 
 	Camera *camera;
 
-	void update(void) override;
-	void draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix) override;
+	virtual void update(void);
+	virtual void draw();
+
+	void addChild(Entity *child);
+
 
 };
 
