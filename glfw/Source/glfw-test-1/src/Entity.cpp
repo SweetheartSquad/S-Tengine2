@@ -15,7 +15,6 @@ Entity::~Entity(void)
 
 void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 {		
-	glUseProgram(shader->getProgramId());
 
 	for(int i = 0; i<children->size(); i++)
 	{
@@ -23,10 +22,12 @@ void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 	}
 
 	glm::mat4 mvp = projectionMatrix * viewMatrix * getModelMatrix(); 
-	
+
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices->size(), vertices->data(), GL_STATIC_DRAW);
 
 	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramId(), "MVP"), 1, GL_FALSE, &mvp[0][0]);
+
+	glUseProgram(shader->getProgramId());
 
 	vertexBuffer->renderVertexBuffer();
 }
@@ -71,7 +72,7 @@ void Entity::translate(float translateX, float translateY, float translateZ)
 
 void Entity::translate(glm::vec3 translate)
 {
-	*translationVector += translate.x;
+	*translationVector += translate;
 }
 
 void Entity::translateX(float translateX)
@@ -116,19 +117,7 @@ glm::mat4 Entity::getModelMatrix()
 {
 	if(parent)
 	{   
-		*translationVector += *parent->translationVector;
-		*scaleVector += *parent->scaleVector;
-
-		glm::quat cpy = *orientation;
-
-		*orientation *= *parent->orientation;
-
-		glm::mat4 mat = (getTranslationMatrix() * getRotationMatrix() * getScaleMatrix()) * parent->getModelMatrix();
-
-		*translationVector -= *parent->translationVector;
-		*scaleVector -= *parent->scaleVector;
-		*orientation = cpy;
-		return mat;
+		return parent->getModelMatrix() * (getTranslationMatrix() * getRotationMatrix() * getScaleMatrix());
 	}else{
 		return getTranslationMatrix() * getRotationMatrix() * getScaleMatrix();	
 	}

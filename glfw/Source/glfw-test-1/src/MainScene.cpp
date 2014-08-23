@@ -20,11 +20,12 @@ MainScene::MainScene():Scene()
 	cube->setRightColour(0,1,1,1);
 	cube->translateX(0.5);
 
+
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
 	cube2->shader = new ShaderInterface("../assets/ColourShader.vsh","../assets/ColourShader.fsh");
 	cube2->vertexBuffer->configureVertexAttributes(cube2->shader->get_aPositionVertex(), 0);
-	//cube2->vertexBuffer->configureVertexAttributes(cube2->shader->get_aFragColor(), sizeof(float)*3);
+	cube2->vertexBuffer->configureVertexAttributes(cube2->shader->get_aFragColor(), sizeof(float)*3);
 	
 	cube2->setFrontColour(1,0,0,1);
 	cube2->setLeftColour(0,1,0,1);
@@ -32,13 +33,13 @@ MainScene::MainScene():Scene()
 	cube2->setBottomColour(1,1,0,1);
 	cube2->setTopColour(1,0,1,1);
 	cube2->setRightColour(0,1,1,1);
-	//cube2->translateX(0.5);
+	cube2->translateX(0.5);
 
 	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->addChild(cube3);
 	cube3->shader = new ShaderInterface("../assets/ColourShader.vsh","../assets/ColourShader.fsh");
-	cube3->vertexBuffer->configureVertexAttributes(cube2->shader->get_aPositionVertex(), 0);
-	//cube2->vertexBuffer->configureVertexAttributes(cube2->shader->get_aFragColor(), sizeof(float)*3);
+	cube3->vertexBuffer->configureVertexAttributes(cube3->shader->get_aPositionVertex(), 0);
+	cube2->vertexBuffer->configureVertexAttributes(cube2->shader->get_aFragColor(), sizeof(float)*3);
 	
 	cube3->setFrontColour(1,0,0,1);
 	cube3->setLeftColour(0,1,0,1);
@@ -46,7 +47,8 @@ MainScene::MainScene():Scene()
 	cube3->setBottomColour(1,1,0,1);
 	cube3->setTopColour(1,0,1,1);
 	cube3->setRightColour(0,1,1,1);
-	//cube2->translateX(0.5);
+	cube2->translateX(0.5);
+
 }
 
 MainScene::~MainScene()
@@ -63,7 +65,8 @@ void MainScene::update()
 	}
 	if(keyboard->keyDown(GLFW_KEY_D))
 	{
-		cube2->rotate(2, 0, 1, 0);
+		cube2->translateX(0.02);
+		cube2->rotate(2, 0, -1, 0);
 	}
 	if(keyboard->keyDown(GLFW_KEY_S))
 	{
@@ -75,7 +78,8 @@ void MainScene::update()
 	}
 	if(keyboard->keyDown(GLFW_KEY_Q))
 	{
-		cube->rotate(2, 0, 0, -1);
+		cube3->translateX(0.02);
+		cube3->rotate(2, 0, -1, 0);
 	}
 	if(keyboard->keyDown(GLFW_KEY_E))
 	{
