@@ -18,7 +18,7 @@
     <ClCompile Include="..\src\CinderApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Joint.cpp">
+    <ClCompile Include="..\..\..\..\Shared Code\src\Joint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -31,7 +31,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Joint.h">
+    <ClInclude Include="..\..\..\..\Shared Code\include\Joint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

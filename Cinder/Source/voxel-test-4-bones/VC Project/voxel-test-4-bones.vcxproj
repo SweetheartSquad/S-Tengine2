@@ -43,18 +43,18 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath)</IncludePath>
     <LibraryPath>$(CINDER_DIR_2012)\lib;$(CINDER_DIR_2012)\lib\msw;$(LibraryPath)</LibraryPath>
-    <SourcePath>..\src;$(SourcePath)</SourcePath>
+    <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)-d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath)</IncludePath>
     <LibraryPath>$(CINDER_DIR_2012)\lib;$(CINDER_DIR_2012)\lib\msw;$(LibraryPath)</LibraryPath>
-    <SourcePath>..\src;$(SourcePath)</SourcePath>
+    <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -95,15 +95,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Joint.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\src\Joint.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\Joint.cpp" />
     <ClCompile Include="..\src\CinderApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag" />
     <None Include="..\assets\shaders\joint.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Joint.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

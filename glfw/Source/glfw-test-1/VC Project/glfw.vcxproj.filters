@@ -102,7 +102,7 @@
     <ClCompile Include="..\src\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Transform.cpp">
+    <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Node.cpp">
@@ -167,7 +167,7 @@
     <ClInclude Include="..\include\Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Transform.h">
+    <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Node.h">

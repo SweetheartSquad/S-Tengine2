@@ -51,13 +51,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetName>$(ProjectName)-d</TargetName>
     <LibraryPath>$(CINDER_DIR_2012)\lib;$(CINDER_DIR_2012)\lib\msw;$(LibraryPath)</LibraryPath>
-    <IncludePath>..\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath)</IncludePath>
-    <SourcePath>..\src;$(SourcePath)</SourcePath>
+    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath)</IncludePath>
+    <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>..\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath)</IncludePath>
     <LibraryPath>$(CINDER_DIR_2012)\lib;$(CINDER_DIR_2012)\lib\msw;$(LibraryPath)</LibraryPath>
-    <SourcePath>..\src;$(SourcePath)</SourcePath>
+    <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
