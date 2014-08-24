@@ -13,17 +13,13 @@
 #include <gmtl/gmtl.h>
 #include <iostream>
 #include <gmtl\Generate.h>
-#include "VertexBuffer.h"
-#include "ShaderInterface.h"
 
 #include <glm/gtx/quaternion.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
-#include "Vertex.h"
 
-
-class Transformable
+class Transform
 {
 public:
 
@@ -31,13 +27,12 @@ public:
 	glm::vec3 *scaleVector;
 	glm::quat *orientation;
 
-	std::vector<Transformable*> *children;
-	Transformable *parent;
+	std::vector<Transform*> *children;
+	Transform *parent;
 
-	std::vector<Vertex>*vertices;
 
-	Transformable(void);
-	virtual ~Transformable(void);
+	Transform(void);
+	virtual ~Transform(void);
 
 	virtual void draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 	virtual void update();
@@ -62,9 +57,7 @@ public:
 	glm::mat4 getRotationMatrix();
 	glm::mat4 getModelMatrix();
 
-	void addChild(Transformable* child);
-	void removeChildAtIndex(int index);
-	void setParent(Transformable *parent);
-
-	void Transformable::pushVert(Vertex vertex);
+	void addChild(Transform* child);
+	virtual void removeChildAtIndex(int index);
+	void setParent(Transform *parent);
 };

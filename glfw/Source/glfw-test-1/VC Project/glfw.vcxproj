@@ -122,6 +122,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\ShaderLoader.cpp" />
     <ClCompile Include="..\src\System.cpp" />
     <ClCompile Include="..\src\TestGame.cpp" />
+    <ClCompile Include="..\src\Transform.cpp" />
     <ClCompile Include="..\src\vector3.cpp" />
     <ClCompile Include="..\src\VertexBuffer.cpp" />
   </ItemGroup>
@@ -145,6 +146,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\vector3.h" />
     <ClInclude Include="..\include\Vertex.h" />
     <ClInclude Include="..\include\VertexBuffer.h" />
+    <ClInclude Include="..\src\Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\ColourShader.fsh" />
