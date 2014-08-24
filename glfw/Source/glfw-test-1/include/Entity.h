@@ -35,7 +35,7 @@ public:
 	std::vector<Entity*> *children;
 	Entity *parent;
 	ShaderInterface *shader;
-
+	
 	std::vector<Vertex>*vertices;
 
 	Entity(void);
@@ -67,7 +67,8 @@ public:
 	void addChild(Entity* child);
 	void removeChildAtIndex(int index);
 	void setParent(Entity *parent);
-
+	
 	void Entity::pushVert(Vertex vertex);
+	void Entity::setNormal(unsigned long int _vertId, float _x, float _y, float _z);
 };
 

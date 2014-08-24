@@ -9,36 +9,60 @@ Cube::Cube(glm::vec3 center, float size){
 	pushVert(Vertex(-1.f, 1.f, -1.f));
 	pushVert(Vertex(1.f, 1.f, -1.f));
 	pushVert(Vertex(1.f, 1.f, 1.f));
+	setNormal(0, 0.0, 1.0, 0.0);
+	setNormal(1, 0.0, 1.0, 0.0);
+	setNormal(2, 0.0, 1.0, 0.0);
+	setNormal(3, 0.0, 1.0, 0.0);
 	
 	//Bottom
 	pushVert(Vertex(-1.f, -1.f, 1.f));
 	pushVert(Vertex(1.f, -1.f, 1.f));
 	pushVert(Vertex(1.f, -1.f, -1.f));
 	pushVert(Vertex(-1.f, -1.f, -1.f));
+	setNormal(4, 0.0, -1.0, 0.0);
+	setNormal(5, 0.0, -1.0, 0.0);
+	setNormal(6, 0.0, -1.0, 0.0);
+	setNormal(7, 0.0, -1.0, 0.0);
 
 	//Front
 	pushVert(Vertex(-1.f, 1.f, 1.f));
 	pushVert(Vertex(1.f, 1.f, 1.f));
 	pushVert(Vertex(1.f, -1.f, 1.f));
 	pushVert(Vertex(-1.f, -1.f, 1.f));
+	setNormal(8, 1.0, 0.0, 0.0);
+	setNormal(9, 1.0, 0.0, 0.0);
+	setNormal(10, 1.0, 0.0, 0.0);
+	setNormal(11, 1.0, 0.0, 0.0);
 
 	//Back
 	pushVert(Vertex(-1.f, 1.f, -1.f));
 	pushVert(Vertex(1.f, 1.f, -1.f));
 	pushVert(Vertex(1.f, -1.f, -1.f));
 	pushVert(Vertex(-1.f, -1.f, -1.f));
+	setNormal(12, -1.0, 0.0, 0.0);
+	setNormal(13, -1.0, 0.0, 0.0);
+	setNormal(14, -1.0, 0.0, 0.0);
+	setNormal(15, -1.0, 0.0, 0.0);
 
 	//Left
 	pushVert(Vertex(-1.f, 1.f, 1.f));
 	pushVert(Vertex(-1.f, 1.f, -1.f));
 	pushVert(Vertex(-1.f, -1.f, -1.f));
 	pushVert(Vertex(-1.f, -1.f, 1.f));
+	setNormal(16, 0.0, 0.0, 1.0);
+	setNormal(17, 0.0, 0.0, 1.0);
+	setNormal(18, 0.0, 0.0, 1.0);
+	setNormal(19, 0.0, 0.0, 1.0);
 
 	//Right
 	pushVert(Vertex(1.f, 1.f, 1.f));
 	pushVert(Vertex(1.f, 1.f, -1.f));
 	pushVert(Vertex(1.f, -1.f, -1.f));
 	pushVert(Vertex(1.f, -1.f, 1.f));
+	setNormal(20, 0.0, 0.0, -1.0);
+	setNormal(21, 0.0, 0.0, -1.0);
+	setNormal(22, 0.0, 0.0, -1.0);
+	setNormal(23, 0.0, 0.0, -1.0);
 	
 	Vertex *vertsPtr = vertices->data();
 	vertexBuffer = new VertexBuffer(vertsPtr, sizeof(Vertex)*vertices->size(), GL_QUADS, GL_STATIC_DRAW, 24, sizeof(Vertex));

@@ -12,6 +12,7 @@ private:
 	ShaderLoader *shader;
 	GLint aPositionVertex;
 	GLint aFragColor;
+	GLint aVertexNormals;
 
 	//const char* vertexShaderString;
 	//const char* fragmentShaderString;
@@ -23,5 +24,6 @@ public:
 	GLuint getProgramId();
 	GLint get_aPositionVertex();
 	GLint get_aFragColor();
+	GLint get_aVertexNormals();
 };
 

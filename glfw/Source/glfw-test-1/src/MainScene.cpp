@@ -9,23 +9,26 @@ MainScene::MainScene():Scene()
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
 	addChild(cube);
 	cube->shader = new ShaderInterface("../assets/ColourShader.vsh","../assets/ColourShader.fsh");
-	cube->vertexBuffer->configureVertexAttributes(cube->shader->get_aPositionVertex(), 0);
-	cube->vertexBuffer->configureVertexAttributes(cube->shader->get_aFragColor(), sizeof(float)*3);
+	cube->vertexBuffer->configureVertexAttributes(cube->shader->get_aPositionVertex(), 3, 0);
+	cube->vertexBuffer->configureVertexAttributes(cube->shader->get_aFragColor(), 4, sizeof(float)*3);
+	cube->vertexBuffer->configureVertexAttributes(cube->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 	
-	cube->setFrontColour(1,0,0,1);
-	cube->setLeftColour(0,1,0,1);
-	cube->setBackColour(0,0,1,1);
-	cube->setBottomColour(1,1,0,1);
-	cube->setTopColour(1,0,1,1);
-	cube->setRightColour(0,1,1,1);
+	cube->setFrontColour(1,0,0, 1);
+	cube->setLeftColour(0,1,0, 1);
+	cube->setBackColour(0,0,1, 1);
+	cube->setBottomColour(1,1,0, 1);
+	cube->setTopColour(1,0,1, 1);
+	cube->setRightColour(0,1,1, 1);
+
 	cube->translateX(0.5);
 
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
-	cube2->shader = new ShaderInterface("../assets/ColourShader.vsh","../assets/ColourShader.fsh");
-	cube2->vertexBuffer->configureVertexAttributes(cube2->shader->get_aPositionVertex(), 0);
-	cube2->vertexBuffer->configureVertexAttributes(cube2->shader->get_aFragColor(), sizeof(float)*3);
+	cube2->shader = new ShaderInterface("../assets/junkdata.vert","../assets/junkdata.frag");
+	cube2->vertexBuffer->configureVertexAttributes(cube2->shader->get_aPositionVertex(), 0, 3);
+	cube2->vertexBuffer->configureVertexAttributes(cube2->shader->get_aFragColor(), 4, sizeof(float)*3);
+	cube2->vertexBuffer->configureVertexAttributes(cube2->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 	
 	cube2->setFrontColour(1,0,0,1);
 	cube2->setLeftColour(0,1,0,1);
@@ -38,8 +41,9 @@ MainScene::MainScene():Scene()
 	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->addChild(cube3);
 	cube3->shader = new ShaderInterface("../assets/ColourShader.vsh","../assets/ColourShader.fsh");
-	cube3->vertexBuffer->configureVertexAttributes(cube3->shader->get_aPositionVertex(), 0);
-	cube2->vertexBuffer->configureVertexAttributes(cube2->shader->get_aFragColor(), sizeof(float)*3);
+	cube3->vertexBuffer->configureVertexAttributes(cube3->shader->get_aPositionVertex(), 3, 0);
+	cube3->vertexBuffer->configureVertexAttributes(cube3->shader->get_aFragColor(), 4, sizeof(float)*3);
+	cube3->vertexBuffer->configureVertexAttributes(cube3->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 	
 	cube3->setFrontColour(1,0,0,1);
 	cube3->setLeftColour(0,1,0,1);

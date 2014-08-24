@@ -21,6 +21,6 @@ public:
 
 	GLuint getVertexBufferId();
 	void renderVertexBuffer();
-	void configureVertexAttributes(GLint vertexHandle, int bufferOffset);
+	void configureVertexAttributes(GLint vertexHandle, unsigned long int _arity, int bufferOffset);
 };
 

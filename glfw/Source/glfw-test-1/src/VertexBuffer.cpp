@@ -33,11 +33,10 @@ void VertexBuffer::renderVertexBuffer()
 	glDrawArrays(polygonalDrawMode, 0, vertCount);
 }
 
-void VertexBuffer::configureVertexAttributes(GLint vertexHandle, int bufferOffset)
-{
-	if (vertexHandle != -1)
-	{
+void VertexBuffer::configureVertexAttributes(GLint vertexHandle, unsigned long int _arity, int bufferOffset){
+	std::cout << "vertexHandle: " << vertexHandle << std::endl;
+	if (vertexHandle != -1){
 		glEnableVertexAttribArray(vertexHandle);
-		glVertexAttribPointer(vertexHandle, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<void*>(bufferOffset));
+		glVertexAttribPointer(vertexHandle, _arity, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(bufferOffset));
 	}
 }
