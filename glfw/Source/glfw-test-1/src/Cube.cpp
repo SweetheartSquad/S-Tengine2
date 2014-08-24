@@ -2,8 +2,8 @@
 
 Cube::Cube(glm::vec3 center, float size){
 	
-	scale(size, size, size);
-	translate(center);
+	transform->scale(size, size, size);
+	transform->translate(center);
 	//Top
 	pushVert(Vertex(-1.f, 1.f, 1.f));
 	pushVert(Vertex(-1.f, 1.f, -1.f));
