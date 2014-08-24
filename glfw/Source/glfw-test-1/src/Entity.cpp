@@ -1,28 +1,35 @@
 #include "Entity.h"
 
 Entity::Entity(void){
-	x = 0;
-	y = 0;
-	z = 0;
 	this->translationVector = new glm::vec3(0.0f,0.0f,0.0f);
 	this->scaleVector = new glm::vec3(1.f,1.f,1.f);
-	this->rotationVector = new glm::quat();
+	this->orientation = new glm::quat(1,0,0,0);
 	this->children = new std::vector<Entity*>();
 	this->vertices = new std::vector<Vertex>();
+	this->parent = nullptr;
 }
 
 Entity::~Entity(void)
 {
 }
 
-void Entity::draw()
-{	
-	glTranslatef(translationVector->x, translationVector->y, translationVector->z);
-	//gmtl::AxisAnglef r;
-	//gmtl::set(r, *rotationVector);
-	glm::quat rotationT = glm::angleAxis(rotationVector->w, glm::vec3(rotationVector->x, rotationVector->y, rotationVector->z));
-	//glRotatef(rotationT.w, rotationT.x, rotationT.y, rotationT.z);
-	glScalef(scaleVector->x, scaleVector->y, scaleVector->z);
+void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
+{		
+
+	for(int i = 0; i<children->size(); i++)
+	{
+		children->at(i)->draw(projectionMatrix, viewMatrix);
+	}
+
+	glm::mat4 mvp = projectionMatrix * viewMatrix * getModelMatrix(); 
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices->size(), vertices->data(), GL_STATIC_DRAW);
+
+	glUniformMatrix4fv(glGetUniformLocation(shader->getProgramId(), "MVP"), 1, GL_FALSE, &mvp[0][0]);
+
+	glUseProgram(shader->getProgramId());
+
+	vertexBuffer->renderVertexBuffer();
 }
 
 void Entity::update()
@@ -31,7 +38,6 @@ void Entity::update()
 
 void Entity::scale(float scaleX, float scaleY, float scaleZ)
 {
-
 	scaleVector->x *= scaleX;
 	scaleVector->y *= scaleY;
 	scaleVector->z *= scaleZ;
@@ -66,7 +72,7 @@ void Entity::translate(float translateX, float translateY, float translateZ)
 
 void Entity::translate(glm::vec3 translate)
 {
-	*translationVector += translate.x;
+	*translationVector += translate;
 }
 
 void Entity::translateX(float translateX)
@@ -85,7 +91,11 @@ void Entity::translateZ(float translateZ)
 }
 
 void Entity::rotate(glm::quat rotation){
-	*this->rotationVector = rotation*(*this->rotationVector);
+	*this->orientation = rotation * *this->orientation;
+}
+
+void Entity::rotate(float angle, float x, float y, float z){
+	this->rotate(glm::quat(glm::angleAxis(angle, glm::vec3(x,y,z))));
 }
 
 glm::mat4 Entity::getTranslationMatrix()
@@ -100,23 +110,33 @@ glm::mat4 Entity::getScaleMatrix()
 
 glm::mat4 Entity::getRotationMatrix()
 {
-	return glm::rotate(rotationVector->w, glm::vec3(rotationVector->x, rotationVector->y, rotationVector->z));
+	return glm::toMat4(*orientation);
 }
 
-void Entity::rotate(float w, float x, float y, float z){
-	glm::quat r;
-	r = glm::rotate(r, w, glm::vec3(x,y,z));
-	rotate(r);
+glm::mat4 Entity::getModelMatrix()
+{
+	if(parent)
+	{   
+		return parent->getModelMatrix() * (getTranslationMatrix() * getRotationMatrix() * getScaleMatrix());
+	}else{
+		return getTranslationMatrix() * getRotationMatrix() * getScaleMatrix();	
+	}
 }
 
 void Entity::addChild(Entity* child)
 {
+	child->setParent(this);
 	children->push_back(child);
 }
 
 void Entity::removeChildAtIndex(int index)
 {
 	children->erase(children->begin()+index-1);
+}
+
+void Entity::setParent(Entity* parent)
+{
+	this->parent = parent;
 }
 
 void Entity::pushVert(Vertex vertex)

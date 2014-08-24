@@ -22,7 +22,7 @@ RenderSystem& RenderSystem::getInstance(){
 	}
 	return *renderSystem;
 }
-void RenderSystem::render(std::vector<Entity*> *renderChildren)
+void RenderSystem::render(std::vector<Entity*> *renderChildren, glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
 {
 	float ratio;
 	int width, height;
@@ -30,29 +30,19 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren)
 	ratio = width / static_cast<float>(height);
 	glViewport(0, 0, width, height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
 	glCullFace(GL_FRONT);
 	glEnable(GL_DEPTH_TEST);
-	glOrtho(-ratio, ratio, -1, 1, -1, 100);
-	glMatrixMode(GL_MODELVIEW);
 	glCullFace(GL_FRONT);
 	glLoadIdentity();
-	GLUtils::checkForError(0,__FILE__,__LINE__);
 
 	std::vector<Entity*>::iterator it = renderChildren->begin();
 	while(it!=renderChildren->end()){
-		glUseProgram((*it)->shader->getProgramId());
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 		glBindBuffer(GL_ARRAY_BUFFER, (*it)->vertexBuffer->getVertexBufferId());
-		GLUtils::checkForError(0,__FILE__,__LINE__);
-		glPushMatrix();
 			GLUtils::checkForError(0,__FILE__,__LINE__);
-		(*it)->draw();
+		(*it)->draw(projectionMatrix, viewMatrix);
 			GLUtils::checkForError(0,__FILE__,__LINE__);
-		(*it)->vertexBuffer->renderVertexBuffer();
 		GLUtils::checkForError(0,__FILE__,__LINE__);
-		glPopMatrix();
 		++it;
 	}
 

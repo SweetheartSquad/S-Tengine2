@@ -53,6 +53,12 @@ static void mousePostionCallback(GLFWwindow *window, double x, double y)
 	mouse->mousePositionListener(x, y);
 }
 
+static void setMousePostionCallback(GLFWwindow *window, double x, double y)
+{
+	Mouse *mouse = &Mouse::getInstance();
+	mouse->mousePositionListener(x, y);
+}
+
 int main(void)
 {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -84,6 +90,12 @@ int main(void)
 	  fprintf(stderr, "\tERROR: %s\n", glewGetErrorString(err));
 	}
 	
+	int *screenHeight = new int();
+	int *screenWidth = new int();
+
+	glfwGetWindowSize(glfwGetCurrentContext(), screenWidth, screenHeight);
+	glfwSetCursorPos(window, static_cast<int>(*screenWidth)/2, static_cast<int>(*screenHeight)/2);
+
 	game = new TestGame(true);
 
 	while (game->isRunning)

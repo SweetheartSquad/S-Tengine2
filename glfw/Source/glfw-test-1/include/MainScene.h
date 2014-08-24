@@ -8,7 +8,7 @@ class MainScene:public Scene
 {
 public:
 	MainScene();
-	~MainScene() override;
+	~MainScene();
 	void update() override;
 	void draw() override;
 };

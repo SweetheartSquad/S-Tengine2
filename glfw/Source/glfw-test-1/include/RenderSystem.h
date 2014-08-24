@@ -20,6 +20,6 @@ public:
 	static RenderSystem& getInstance();
 	static void destroyRenderSystem();
 
-	void render(std::vector<Entity*> *renderChildren);
+	void render(std::vector<Entity*> *renderChildren, glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 };
 

@@ -1,5 +1,4 @@
 #include "Game.h"
-#include <MainScene.h>
 
 double lastTime = glfwGetTime();
 int nbFrames = 0;
@@ -26,6 +25,10 @@ void Game::update(void)
 	if (printFPS)
 	{
 		printFps();
+	}
+	if(keyboard->keyDown(GLFW_KEY_ESCAPE))
+	{
+		glfwSetWindowShouldClose(glfwWindow, true);
 	}
 }
 

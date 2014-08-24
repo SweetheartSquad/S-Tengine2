@@ -5,20 +5,27 @@
 #include "RenderSystem.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "Camera.h"
 
-class Scene:public Entity
+class Scene
 {
 
 public:
 	Scene(void);
-	~Scene(void);
+	virtual ~Scene(void);
 
 	RenderSystem *renderSystem;
 	Keyboard* keyboard;
 	Mouse* mouse;
+	std::vector<Entity*> *children;
 
-	void update(void) override;
-	void draw(void) override;
+	Camera *camera;
+
+	virtual void update(void);
+	virtual void draw();
+
+	void addChild(Entity *child);
+
 
 };
 
