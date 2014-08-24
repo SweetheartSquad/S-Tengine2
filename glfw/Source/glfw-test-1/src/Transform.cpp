@@ -1,6 +1,6 @@
 #include "Transform.h"
 
-Transform::Transform(void){
+Transform::Transform(void):Node(){
 	this->translationVector = new glm::vec3(0.0f,0.0f,0.0f);
 	this->scaleVector = new glm::vec3(1.f,1.f,1.f);
 	this->orientation = new glm::quat(1,0,0,0);

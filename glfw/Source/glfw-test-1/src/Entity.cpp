@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity(void){
+Entity::Entity(void):Node(){
 	this->children = new std::vector<Entity*>();
 	this->vertices = new std::vector<Vertex>();
 	this->parent = nullptr;

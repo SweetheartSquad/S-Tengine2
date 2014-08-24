@@ -19,7 +19,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
-class Transform
+#include "Node.h"
+
+class Transform: public Node
 {
 public:
 

@@ -4,8 +4,9 @@
 #include "Vertex.h"
 #include "VertexBuffer.h"
 #include "ShaderInterface.h"
+#include "Node.h"
 
-class Entity{
+class Entity:public Node{
 
 public:
 	VertexBuffer *vertexBuffer;
