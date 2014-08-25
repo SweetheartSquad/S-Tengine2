@@ -50,12 +50,16 @@ void CinderApp::setup(){
 	b1->pos = Vec3f(-1.0666666666666667,0.00000000000000000,0.31333333333333324);
 	Joint * b2 = new Joint();
 	b2->pos = Vec3f(-1.0733333333333333,0.00000000000000000,-0.83999999999999997);
+	b2->parent = b1;
 	Joint * b3 = new Joint();
 	b3->pos = Vec3f(0.99333333333333318,0.00000000000000000,-0.82000000000000006);
+	b3->parent = b2;
 	Joint * b4 = new Joint();
 	b4->pos = Vec3f(0.99333333333333318,0.00000000000000000,0.82666666666666666);
+	b4->parent = b3;
 	Joint * b5 = new Joint();
 	b5->pos = Vec3f(-1.0800000000000001,0.00000000000000000,0.46666666666666656);
+	b5->parent = b4;
 
 	m_joints.push_back(b1);
 	m_joints.push_back(b2);
@@ -65,6 +69,8 @@ void CinderApp::setup(){
 
 	console() << "setup" << endl;
 	s = new SkeletonData();
+	s->setDirectory("C:/");
+	s->setFileName("BONES.txt");
 	console() << "saveSkeleton" << endl;
 	s->SaveSkeleton(m_joints);
 }
