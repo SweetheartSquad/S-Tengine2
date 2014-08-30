@@ -11,24 +11,21 @@ Entity::~Entity(void){
 }
 
 void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){	
+	
+	vox::pushMatrix( transform->getModelMatrix());
+
 	for(int i = 0; i<children->size(); i++){
 		children->at(i)->draw(projectionMatrix, viewMatrix);
 	}
-	GLUtils::checkForError(0,__FILE__,__LINE__);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->getVertexBufferId());
-	GLUtils::checkForError(0,__FILE__,__LINE__);
 	glUseProgram(shader->getProgramId());	
-	GLUtils::checkForError(0,__FILE__,__LINE__);
-	glm::mat4 mvp = projectionMatrix * viewMatrix * transform->getModelMatrix();  
-	GLUtils::checkForError(0,__FILE__,__LINE__);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices->size(), vertices->data(), GL_STATIC_DRAW);
-	GLUtils::checkForError(0,__FILE__,__LINE__);
-	
+	glm::mat4 mvp = projectionMatrix * viewMatrix * vox::modelMatrix();  	
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices->size(), vertices->data(), GL_STATIC_DRAW);	
 	GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
-	GLUtils::checkForError(0,__FILE__,__LINE__);
 	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
-	GLUtils::checkForError(0,__FILE__,__LINE__);
 	vertexBuffer->renderVertexBuffer();
+	
+	vox::popMatrix();
 }
 
 void Entity::update(){

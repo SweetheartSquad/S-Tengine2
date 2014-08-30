@@ -13,7 +13,7 @@ Transform::~Transform(void)
 }
 
 void Transform::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
-{		
+{
 	for(int i = 0; i<children->size(); i++)
 	{
 		children->at(i)->draw(projectionMatrix, viewMatrix);
@@ -103,12 +103,7 @@ glm::mat4 Transform::getRotationMatrix()
 
 glm::mat4 Transform::getModelMatrix()
 {
-	if(parent)
-	{   
-		return parent->getModelMatrix() * (getTranslationMatrix() * getRotationMatrix() * getScaleMatrix());
-	}else{
-		return getTranslationMatrix() * getRotationMatrix() * getScaleMatrix();	
-	}
+	return getTranslationMatrix() * getRotationMatrix() * getScaleMatrix();	
 }
 
 void Transform::addChild(Transform* child)

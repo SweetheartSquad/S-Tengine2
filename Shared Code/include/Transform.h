@@ -20,6 +20,7 @@
 #include <glm/gtx/transform.hpp>
 
 #include "Node.h"
+#include "Vox.h"
 
 class Transform: public Node
 {

@@ -5,6 +5,7 @@
 #include "VertexBuffer.h"
 #include "ShaderInterface.h"
 #include "Node.h"
+#include "Vox.h"
 
 class Entity:public Node{
 
