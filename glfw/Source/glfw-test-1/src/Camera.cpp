@@ -33,12 +33,12 @@ void Camera::update()
 	float xOffset = 0.0f;
 	float yOffset = 0.0f;
 
-	if(abs(lastMouseX - mouse->mouseX()) > 0.01)
+	if(abs(lastMouseX - mouse->mouseX()) > 0.000001)
 	{
 		xOffset = float(screenDimensions.width*0.5 - mouse->mouseX());	
 	}
 
-	if(abs(lasMouseY - mouse->mouseY()) > 0.01)
+	if(abs(lasMouseY - mouse->mouseY()) > 0.00001)
 	{
 		yOffset = float(screenDimensions.height*0.5 - mouse->mouseY());	
 	}

@@ -34,7 +34,6 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren, glm::mat4 projec
 	glEnable(GL_DEPTH_TEST);
 	glCullFace(GL_FRONT);
 	glLoadIdentity();
-
 	std::vector<Entity*>::iterator it = renderChildren->begin();
 	while(it!=renderChildren->end()){
 		GLUtils::checkForError(0,__FILE__,__LINE__);
@@ -45,7 +44,6 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren, glm::mat4 projec
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 		++it;
 	}
-
 	glfwSwapBuffers(glfwWindow);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 }

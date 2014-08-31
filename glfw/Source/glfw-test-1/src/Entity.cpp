@@ -12,15 +12,14 @@ Entity::~Entity(void){
 
 void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){	
 	
-	vox::pushMatrix(transform->getModelMatrix() );
-
+	vox::pushMatrix();
+	vox::applyMatrix(transform->getModelMatrix());
 	for(int i = 0; i<children->size(); i++){
 		children->at(i)->draw(projectionMatrix, viewMatrix);
 	}
-
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer->getVertexBufferId());
 	glUseProgram(shader->getProgramId());	
-	glm::mat4 mvp = projectionMatrix * viewMatrix * vox::modelMatrix();  	
+	glm::mat4 mvp = projectionMatrix * viewMatrix * vox::getCurrentMatrix();  	
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices->size(), vertices->data(), GL_STATIC_DRAW);	
 	GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
 	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);

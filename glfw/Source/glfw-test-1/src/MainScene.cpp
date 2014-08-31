@@ -21,7 +21,6 @@ MainScene::MainScene():Scene()
 
 	cube->transform->translateX(0.5);
 
-
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
 
