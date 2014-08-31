@@ -3,6 +3,7 @@
 Cube *cube;
 Cube *cube2;
 Cube *cube3;
+Cube *cube4;
 MainScene::MainScene():Scene()
 {
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
@@ -37,7 +38,7 @@ MainScene::MainScene():Scene()
 	cube2->setTopColour(1,0,1,1);
 	cube2->setRightColour(0,1,1,1);
 	cube2->transform->translateX(0.5);
-
+	
 	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->addChild(cube3);
 	cube3->shader = new ShaderInterface("../assets/ColourShader.vsh","../assets/ColourShader.fsh");
@@ -52,6 +53,22 @@ MainScene::MainScene():Scene()
 	cube3->setTopColour(1,0,1,1);
 	cube3->setRightColour(0,1,1,1);
 	cube3->transform->translateX(0.5);
+
+	
+	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
+	addChild(cube4);
+	cube4->shader = new ShaderInterface("../assets/ColourShader.vsh","../assets/ColourShader.fsh");
+	cube4->vertexBuffer->configureVertexAttributes(cube4->shader->get_aPositionVertex(), 3, 0);
+	cube4->vertexBuffer->configureVertexAttributes(cube4->shader->get_aFragColor(), 4, sizeof(float)*3);
+	cube4->vertexBuffer->configureVertexAttributes(cube4->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	
+	cube4->setFrontColour(1,0,0,1);
+	cube4->setLeftColour(0,1,0,1);
+	cube4->setBackColour(0,0,1,1);
+	cube4->setBottomColour(1,1,0,1);
+	cube4->setTopColour(1,0,1,1);
+	cube4->setRightColour(0,1,1,1);
+	cube4->transform->scale(50.0,50.0,50.0);
 }
 
 MainScene::~MainScene()

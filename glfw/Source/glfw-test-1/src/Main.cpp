@@ -45,7 +45,6 @@ static void mouseButtonCallback(GLFWwindow* window, int button, int action, int 
 }
 
 static void mousePostionCallback(GLFWwindow *window, double x, double y){
-	std::cout << "\t" << x << " " << y << std::endl;
 	Mouse *mouse = &Mouse::getInstance();
 	mouse->mousePositionListener(x, y);
 }
