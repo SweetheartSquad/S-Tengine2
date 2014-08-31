@@ -32,7 +32,7 @@
     <ClCompile Include="..\src\SkeletonData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\voxel-test-4-bones\src\Joint.cpp">
+    <ClCompile Include="..\..\..\..\Shared Code\src\Joint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -40,7 +40,7 @@
     <ClInclude Include="..\include\SkeletonData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\voxel-test-4-bones\include\Joint.h">
+    <ClInclude Include="..\..\..\..\Shared Code\include\Joint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
