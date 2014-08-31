@@ -34,27 +34,23 @@ static void keyCallback(GLFWwindow* window, int key, int scancode, int action, i
 	}
 }
 
-static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
-{
-	Mouse *mouse = &Mouse::getInstance();
+static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods){
+	Mouse * mouse = &Mouse::getInstance();
 
-	if(action == GLFW_PRESS)
-	{
+	if(action == GLFW_PRESS){
 		mouse->mouseDownListener(button);
-	}else if(action == GLFW_RELEASE)
-	{
+	}else if(action == GLFW_RELEASE){
 		mouse->mouseUpListener(button);	
 	}
 }
 
-static void mousePostionCallback(GLFWwindow *window, double x, double y)
-{
+static void mousePostionCallback(GLFWwindow *window, double x, double y){
+	std::cout << "\t" << x << " " << y << std::endl;
 	Mouse *mouse = &Mouse::getInstance();
 	mouse->mousePositionListener(x, y);
 }
 
-static void setMousePostionCallback(GLFWwindow *window, double x, double y)
-{
+static void setMousePostionCallback(GLFWwindow *window, double x, double y){
 	Mouse *mouse = &Mouse::getInstance();
 	mouse->mousePositionListener(x, y);
 }

@@ -22,8 +22,7 @@ Camera::Camera()
 	keyboard = &Keyboard::getInstance();
 }
 
-Camera::~Camera()
-{
+Camera::~Camera(){
 }
 
 void Camera::update()
@@ -33,14 +32,16 @@ void Camera::update()
 	float xOffset = 0.0f;
 	float yOffset = 0.0f;
 
-	if(abs(lastMouseX - mouse->mouseX()) > 0.01)
-	{
-		xOffset = float(screenDimensions.width*0.5 - mouse->mouseX());	
+	if(abs(screenDimensions.width*0.5 - mouse->mouseX()) < 0.01){
+		xOffset = 0;
+	}else{
+		xOffset = screenDimensions.width*0.5 - mouse->mouseX();
 	}
-
-	if(abs(lasMouseY - mouse->mouseY()) > 0.01)
-	{
-		yOffset = float(screenDimensions.height*0.5 - mouse->mouseY());	
+	
+	if(abs(screenDimensions.height*0.5 - mouse->mouseY()) < 0.01){
+		yOffset = 0;
+	}else{
+		yOffset = screenDimensions.height*0.5 - mouse->mouseY();
 	}
 
 	horizontalAngle += mouseSpeed * xOffset;
@@ -79,7 +80,13 @@ void Camera::update()
 	if (keyboard->keyDown(GLFW_KEY_LEFT)){
 		*position -= right * speed;
 	}
+	std::cout << mouse->mouseX() << " " << mouse->mouseY() << std::endl;
 	glfwSetCursorPos(glfwGetCurrentContext(), screenDimensions.width/2, screenDimensions.height/2);
+
+	double x, y;
+	glfwGetCursorPos(glfwGetCurrentContext(), &x, &y);
+
+	std::cout << x << " " << y << std::endl << std::endl;
 }
 
 glm::mat4 Camera::getViewMatrix()
