@@ -93,10 +93,8 @@ void CinderApp::setup(){
 
 void CinderApp::saveSkeleton() {
 	try{
-		s->setDirectory(directory);
-		s->setFileName(fileName);
 		console() << "saveSkeleton" << endl;
-		s->SaveSkeleton(m_joints);
+		s->SaveSkeleton(directory,fileName,m_joints);
 		message = "Saved skeleton";
 	}catch (exception ex){
 		message = string(ex.what());

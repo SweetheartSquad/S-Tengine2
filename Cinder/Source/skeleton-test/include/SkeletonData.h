@@ -12,6 +12,7 @@
 
 #include <filesystem>
 #include <regex>
+#include <json.h>
 
 using namespace std;
 
@@ -19,13 +20,15 @@ class SkeletonData
 {
 public:
 	SkeletonData(void);
-	void setDirectory(string dir);
-	void setFileName(string flnm);
-	void SaveSkeleton(vector<Joint*> &m_joints);
+	
+	void SaveSkeleton(string directory, string fileName, vector<Joint*> &m_joints);
+	vector<Joint*> LoadSkeleton(string filePath);
+
+	void validateDirectory(string dir);
+	void validateFileName(string flnm);
+
 	~SkeletonData(void);
 
 protected:
-	string directory;
-	string fileName;
 };
 

@@ -5,66 +5,90 @@ SkeletonData::SkeletonData(void)
 {
 }
 
-void SkeletonData::SaveSkeleton(vector<Joint *> &m_joints) {
-	//Create dir
-	if( PathFileExistsA(directory.c_str()) == TRUE)  { 
-		app::console() << "dir created/exists" << endl;
-		ofstream boneFile;
-		try {
-			boneFile.open(directory.append(fileName));
-			std::stringstream json = std::stringstream();
+void SkeletonData::SaveSkeleton(string directory, string fileName, vector<Joint *> &m_joints) {
+	try{
+		//Validate directory
+		validateDirectory(directory);
 
-			boneFile << "{" << endl;
-			for(Joint * b : m_joints)
-			{ 
+		//Validate filename
+		validateFileName(fileName);
 
-				//json << "{" << endl;
-				boneFile << " {" << endl;
-				boneFile << "  \"id\":" << b->id << "," << endl;
-				if (b->parent != NULL) {
-					boneFile << "  \"parent_id\":" << b->parent->id << "," << endl;
+		//Create dir
+		if( PathFileExistsA(directory.c_str()) == TRUE)  { 
+			app::console() << "dir created/exists" << endl;
+			ofstream boneFile;
+			try {
+				boneFile.open(directory.append(fileName));
+				std::stringstream json = std::stringstream();
+
+				boneFile << "{" << endl;
+				for(Joint * b : m_joints)
+				{ 
+
+					//json << "{" << endl;
+					boneFile << " {" << endl;
+					boneFile << "  \"id\":" << b->id << "," << endl;
+					if (b->parent != NULL) {
+						boneFile << "  \"parent_id\":" << b->parent->id << "," << endl;
+					}
+					boneFile << "  \"pos\":"<< "{\"x:\"" << b->getPos().x << ", \"y\":" << b->getPos().y << ", \"z:\"" << b->getPos().z << "}," << endl;
+					boneFile << "  \"orientation\":"<< "{\"x\":" << b->orientation.v.x << ", \"y\":" << b->orientation.v.y << ", \"z\":" << b->orientation.v.z << ", \"w\":" << b->orientation.w << "}" << endl;
+					boneFile << " }";
+					if (b->id != m_joints.back()->id) {
+						boneFile << ",";
+					}
+					boneFile << endl;
 				}
-				boneFile << "  \"pos\":"<< "{\"x:\"" << b->getPos().x << ", \"y\":" << b->getPos().y << ", \"z:\"" << b->getPos().z << "}," << endl;
-				boneFile << "  \"orientation\":"<< "{\"x\":" << b->orientation.v.x << ", \"y\":" << b->orientation.v.y << ", \"z\":" << b->orientation.v.z << ", \"w\":" << b->orientation.w << "}" << endl;
-				boneFile << " }";
-				if (b->id != m_joints.back()->id) {
-					boneFile << ",";
+				boneFile << "}" << endl;
+				boneFile.close();
+			}catch (exception ex){
+				if(boneFile != NULL){
+					if (boneFile.is_open()){
+						boneFile.close();
+					}
 				}
-				boneFile << endl;
+				throw ex;
 			}
-			boneFile << "}" << endl;
-			boneFile.close();
-		}catch (exception ex){
-			if(boneFile != NULL){
-				if (boneFile.is_open()){
-					boneFile.close();
-				}
-			}
-			throw ex;
+		}else{
+				app::console() << "Does Not exist!\n" << endl;
+				throw exception("Directory does not exist!");
 		}
-    }else{
-            app::console() << "Does Not exist!\n" << endl;
-			throw exception("Directory does not exist!");
-    }
+	}catch(exception ex){
+		throw ex;
+	}
 }
 
-void SkeletonData::setDirectory(string directory) {
+vector<Joint*> SkeletonData::LoadSkeleton(string filePath) {
+	try{
+		ifstream boneFile(filePath);
+		if (boneFile.good())
+		{
+			// read away
+		}else{
+			throw exception("File does not exist.");
+		}
+	}catch (exception ex){
+		throw ex;
+	}
+}
+
+void SkeletonData::validateDirectory(string directory) {
 	if( PathFileExistsA(directory.c_str()) == TRUE)  { 
 		if ( directory.back() != (char)"/") {
 			directory += "/";
 		}
-		this->directory = directory;
+		//this->directory = directory;
+		// directory ok!
 	}else{
 		app::console() << "Directory does not exist!" << endl;
 		throw exception("Directory does not exist!");
 	}
 }
 
-void SkeletonData::setFileName(string fileName) {
+void SkeletonData::validateFileName(string fileName) {
 	
 	regex rgx_name("[\\\\/<>\|\":\?\*]+");
 	regex rgx_ext("^.*\..*$");
-	//regex rgx_fmt("^.+\..*$");
 	try{
 		if(fileName.empty()){
 			throw exception("Filename is empty");
@@ -76,7 +100,8 @@ void SkeletonData::setFileName(string fileName) {
 			app::console() << "Missing extension" << endl;
 			fileName.append(".txt");
 		}
-		this->fileName = fileName;
+		//this->fileName = fileName;
+		// fileName ok!
 	}catch(exception ex){
 		throw ex;
 	}
