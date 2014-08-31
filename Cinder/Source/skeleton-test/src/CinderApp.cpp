@@ -38,9 +38,11 @@ protected:
 	//! our Phong shader, which supports multiple targets
 	gl::GlslProg	mPhongShader;
 
+
 	params::InterfaceGlRef params;
 	string directory;
 	string fileName;
+	string message;
 };
 
 void CinderApp::prepareSettings(Settings *settings){
@@ -85,18 +87,35 @@ void CinderApp::setup(){
 	params->addParam("Directory", &directory);
 	params->addParam("File Name", &fileName);
 	params->addButton("Save", std::bind( &CinderApp::saveSkeleton, this ), "min=100");
+	params->addSeparator();
+	params->addParam("Message", &message, "", true);
 }
 
 void CinderApp::saveSkeleton() {
-	s->setDirectory(directory);
-	s->setFileName(fileName);
-	console() << "saveSkeleton" << endl;
-	s->SaveSkeleton(m_joints);
+	try{
+		s->setDirectory(directory);
+		s->setFileName(fileName);
+		console() << "saveSkeleton" << endl;
+		s->SaveSkeleton(m_joints);
+		message = "Saved skeleton";
+	}catch (exception ex){
+		message = string(ex.what());
+	}
 }
 
 void CinderApp::update(){}
 
 void CinderApp::draw(){
+
+	gl::clear();
+	gl::color(Color(1.0, 1.0, 1.0));
+
+	/*
+	for (Joint j : m_joints) {
+		j.draw();
+	}
+	*/
+
 	params->draw();
 	
 }
