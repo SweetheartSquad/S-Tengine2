@@ -108,6 +108,9 @@
     <ClCompile Include="..\src\Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Vox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -173,7 +176,7 @@
     <ClInclude Include="..\include\Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Vox.h">
+    <ClInclude Include="..\include\Vox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

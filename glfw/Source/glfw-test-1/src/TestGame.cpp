@@ -11,12 +11,11 @@ TestGame::~TestGame()
 {
 }
 
-void TestGame::update()
-{
+void TestGame::update(){
 	Game::update();
+
 }
 
-void TestGame::draw()
-{
+void TestGame::draw(){
 	Game::draw();
 }

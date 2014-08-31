@@ -9,7 +9,7 @@
 #include <map>
 #include "Keyboard.h"
 #include "Mouse.h"
-
+#include "Vox.h"
 
 class Game
 {

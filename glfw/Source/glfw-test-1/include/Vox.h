@@ -1,59 +1,30 @@
 #pragma once
 
+#ifndef FPS
+#define FPS 60
+#endif
+
 #include <iostream>
 #include <vector>
 #include <glm/glm.hpp>
-#include "Vox.h"
+#include <GLFW/glfw3.h>
 
-namespace  vox
+namespace vox
 {
 	
-static std::vector<glm::mat4> *matrixStack;
-static glm::mat4 currentModelMatrix;
+extern std::vector<glm::mat4> *matrixStack;
+extern glm::mat4 currentModelMatrix;
+extern double lastTimestamp;
+extern double deltaTimeCorrection;
 
-static void calculateModelMatrix()
-{
-	if(!matrixStack){
-		matrixStack = new std::vector<glm::mat4>();
-	}
+void calculateModelMatrix();
+void pushMatrix(glm::mat4 modelMatrix);
+void popMatrix();
+glm::mat4 modelMatrix();
+void clearMatrixStack();
 
-	glm::mat4 returnMatrix = glm::mat4(1);
-	for(glm::mat4 m : *matrixStack){
-		returnMatrix = returnMatrix * m;
-	}
-	currentModelMatrix = returnMatrix;
-}
+void calculateDeltaTimeCorrection();
 
-static void pushMatrix(glm::mat4 modelMatrix)
-{
-	if(!matrixStack){
-		matrixStack = new std::vector<glm::mat4>();
-	}
-	matrixStack->push_back(modelMatrix);
-	calculateModelMatrix();
-}
-
-static void popMatrix()
-{
-	if(!matrixStack){
-		matrixStack = new std::vector<glm::mat4>();
-	}
-	if(matrixStack->size() > 0){
-		matrixStack->pop_back();	
-		calculateModelMatrix();
-	}
-}
-
-static glm::mat4 modelMatrix(){
-	return currentModelMatrix;
-}
-
-static void clearMatrixStack(){
-	matrixStack->clear();
-}
-
-static void destruct(){
-	delete matrixStack;
-}
+void destruct();
 
 }

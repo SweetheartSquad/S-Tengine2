@@ -1,6 +1,5 @@
 #include "MainScene.h"
 
-
 Cube *cube;
 Cube *cube2;
 Cube *cube3;
@@ -62,7 +61,6 @@ MainScene::~MainScene()
 void MainScene::update()
 {
 	Scene::update();
-
 	if(keyboard->keyDown(GLFW_KEY_A))
 	{
 		cube->transform->rotate(2, 0, -1, 0);
@@ -74,7 +72,7 @@ void MainScene::update()
 	}
 	if(keyboard->keyDown(GLFW_KEY_S))
 	{
-		cube->transform->rotate(2, 1, 0, 0);
+		cube->transform->rotate(2 * vox::deltaTimeCorrection , 1, 0, 0);
 	}
 	if(keyboard->keyDown(GLFW_KEY_W))
 	{
@@ -87,7 +85,7 @@ void MainScene::update()
 	}
 	if(keyboard->keyDown(GLFW_KEY_E))
 	{
-		cube->transform->translate(0.001,0,0);
+		cube->transform->translate(vox::deltaTimeCorrection * 0.001,0,0);
 	}
 
 	if(mouse->leftDown())

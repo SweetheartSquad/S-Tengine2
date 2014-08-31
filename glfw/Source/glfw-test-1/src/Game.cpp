@@ -22,14 +22,16 @@ Game::~Game(void)
 
 void Game::update(void)
 {
+	vox::calculateDeltaTimeCorrection();
 	if (printFPS)
 	{
-		printFps();
+		//printFps();
 	}
 	if(keyboard->keyDown(GLFW_KEY_ESCAPE))
 	{
 		glfwSetWindowShouldClose(glfwWindow, true);
 	}
+	currentScene->update();
 }
 
 void Game::draw(void)
@@ -45,7 +47,6 @@ void Game::manageInput()
 
 void Game::printFps()
 {
-	currentScene->update();
 	// Measure speed
 	double currentTime = glfwGetTime();
 	nbFrames++;

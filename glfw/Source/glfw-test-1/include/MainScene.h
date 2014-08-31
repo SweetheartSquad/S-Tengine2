@@ -3,6 +3,7 @@
 #include<iostream>
 #include"Scene.h"
 #include"Cube.h"
+#include "Vox.h"
 
 class MainScene:public Scene
 {
