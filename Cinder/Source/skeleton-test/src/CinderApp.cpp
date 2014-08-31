@@ -5,7 +5,9 @@
 #include "cinder/gl/GlslProg.h"
 #include "cinder/gl/Light.h"
 #include "cinder/gl/Material.h"
+#include "cinder/params/Params.h"
 
+#include "string.h"
 #include <sstream>
 
 #include "SkeletonData.h"
@@ -23,6 +25,8 @@ public:
 	void update();
 	void draw();
 
+	void saveSkeleton();
+
 	//! loads the shaders
 	void loadShaders();
 	
@@ -33,7 +37,10 @@ protected:
 
 	//! our Phong shader, which supports multiple targets
 	gl::GlslProg	mPhongShader;
-	
+
+	params::InterfaceGlRef params;
+	string directory;
+	string fileName;
 };
 
 void CinderApp::prepareSettings(Settings *settings){
@@ -69,8 +76,20 @@ void CinderApp::setup(){
 
 	console() << "setup" << endl;
 	s = new SkeletonData();
-	s->setDirectory("C:/");
+	/*s->setDirectory("C:/");
 	s->setFileName("BONES.txt");
+	console() << "saveSkeleton" << endl;
+	s->SaveSkeleton(m_joints);*/
+	
+	params = params::InterfaceGl::create("Save File", Vec2i(300,150));
+	params->addParam("Directory", &directory);
+	params->addParam("File Name", &fileName);
+	params->addButton("Save", std::bind( &CinderApp::saveSkeleton, this ), "min=100");
+}
+
+void CinderApp::saveSkeleton() {
+	s->setDirectory(directory);
+	s->setFileName(fileName);
 	console() << "saveSkeleton" << endl;
 	s->SaveSkeleton(m_joints);
 }
@@ -78,7 +97,7 @@ void CinderApp::setup(){
 void CinderApp::update(){}
 
 void CinderApp::draw(){
-	
+	params->draw();
 	
 }
 
