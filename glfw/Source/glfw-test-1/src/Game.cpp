@@ -5,7 +5,6 @@ int nbFrames = 0;
 
 Game::Game(bool isRunning){
 	this->isRunning = isRunning;
-	this->glfwWindow = glfwGetCurrentContext();
 	this->renderSystem = &RenderSystem::getInstance();
 	this->children = new std::vector<Entity*>();
 	this->scenes = new std::map<std::string, Scene*>();
@@ -24,7 +23,7 @@ void Game::update(void){
 		printFps();
 	}
 	if(keyboard->keyDown(GLFW_KEY_ESCAPE)){
-		glfwSetWindowShouldClose(glfwWindow, true);
+		glfwSetWindowShouldClose(vox::currentContext, true);
 	}
 	currentScene->update();
 }

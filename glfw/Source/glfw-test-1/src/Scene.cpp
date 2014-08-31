@@ -1,7 +1,6 @@
 #include "Scene.h"
 
-Scene::Scene(void)
-{
+Scene::Scene(void){
 	this->children = new std::vector<Entity*>();
 	this->renderSystem = &RenderSystem::getInstance();
 	this->keyboard = &Keyboard::getInstance();
@@ -9,8 +8,7 @@ Scene::Scene(void)
 	this->camera = new Camera();
 }
 
-Scene::~Scene(void)
-{
+Scene::~Scene(void){
 }
 
 void Scene::update(void){
@@ -21,8 +19,6 @@ void Scene::draw(){
 	renderSystem->render(children, camera->getProjectionMatrix(), camera->getViewMatrix());
 }
 
-void Scene::addChild(Entity* child)
-{
+void Scene::addChild(Entity* child){
 	children->push_back(child);
 }
-

@@ -3,6 +3,8 @@
 #include <GLFW/glfw3.h>
 #include "Dimension.h"
 
+#include "Vox.h"
+
 class System
 {
 private:

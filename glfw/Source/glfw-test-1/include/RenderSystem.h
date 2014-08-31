@@ -7,8 +7,9 @@
 #include <vector>
 #include "Entity.h"
 
-class RenderSystem
-{
+#include "Vox.h"
+
+class RenderSystem{
 private:
 	RenderSystem(void);
 	~RenderSystem(void);

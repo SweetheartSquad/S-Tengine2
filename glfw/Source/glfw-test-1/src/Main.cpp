@@ -14,22 +14,20 @@
 #include <TestGame.h>
 #include "Mouse.h"
 
+#include "Vox.h"
+
 TestGame *game;
 
-static void error_callback(int error, const char* description)
-{
+static void error_callback(int error, const char* description){
 	fputs(description, stderr);
 }
 
-static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
+static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	Keyboard *keyboard = &Keyboard::getInstance();
 
-	if(action == GLFW_PRESS)
-	{
+	if(action == GLFW_PRESS){
 		keyboard->keyDownListener(key);	
-	}else if(action == GLFW_RELEASE)
-	{
+	}else if(action == GLFW_RELEASE){
 		keyboard->keyUpListener(key);	
 	}
 }
@@ -54,20 +52,18 @@ static void setMousePostionCallback(GLFWwindow *window, double x, double y){
 	mouse->mousePositionListener(x, y);
 }
 
-int main(void)
-{
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+int main(void){
+	vox::setGlfwWindowHints();
 
 	
 	GLFWwindow* window;
 	glfwSetErrorCallback(error_callback);
-	if (!glfwInit())
+	if (!glfwInit()){
 		exit(EXIT_FAILURE);
+	}
 	window = glfwCreateWindow(640, 480, "Simple example", nullptr, nullptr);
-	if (!window)
-	{
+	vox::currentContext = window;
+	if (!window){
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
@@ -79,8 +75,7 @@ int main(void)
 
 	glewExperimental = GL_TRUE; 
 	GLenum err = glewInit();
-	if (GLEW_OK != err)
-	{
+	if (GLEW_OK != err){
 	  /* Problem: glewInit failed, something is seriously wrong. */
 	  fprintf(stderr, "\tERROR: %s\n", glewGetErrorString(err));
 	}
@@ -88,21 +83,20 @@ int main(void)
 	int *screenHeight = new int();
 	int *screenWidth = new int();
 
-	glfwGetWindowSize(glfwGetCurrentContext(), screenWidth, screenHeight);
+	glfwGetWindowSize(window, screenWidth, screenHeight);
 	glfwSetCursorPos(window, static_cast<int>(*screenWidth)/2, static_cast<int>(*screenHeight)/2);
 
 	game = new TestGame(true);
 
-	while (game->isRunning)
-	{
+	while (game->isRunning){
 		glfwPollEvents();
 		game->update();
 		game->draw();
 		game->manageInput();
-		game->isRunning = !glfwWindowShouldClose(window);
+		game->isRunning = !glfwWindowShouldClose(vox::currentContext);
 	}
 
-	glfwDestroyWindow(window);
+	glfwDestroyWindow(vox::currentContext);
 	glfwTerminate();
 	exit(EXIT_SUCCESS);
 }

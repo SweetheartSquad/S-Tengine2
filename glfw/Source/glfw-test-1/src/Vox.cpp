@@ -6,6 +6,15 @@ glm::mat4 vox::currentModelMatrix = glm::mat4(1);
 double vox::lastTimestamp = 0;
 double vox::deltaTimeCorrection = 1;
 
+GLFWwindow * vox::currentContext = nullptr;
+bool vox::fullscreen = false;
+
+void vox::setGlfwWindowHints(){
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+}
+
 /////////// Matrix Stack Begin //////////////
 
 void vox::calculateModelMatrix()

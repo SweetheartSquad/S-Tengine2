@@ -52,9 +52,9 @@ void Camera::update(){
 	float deltaY = lastMouseY - offsetY;
 
 	if(deltaX != 0 || deltaY != 0){
-		horizontalAngle = mouseSpeed * offsetX;
-		verticalAngle = mouseSpeed * offsetY;
-	
+		horizontalAngle = mouseSpeed * vox::deltaTimeCorrection * offsetX;
+		verticalAngle = mouseSpeed * vox::deltaTimeCorrection * offsetY;
+		
 		*transform->orientation = glm::rotate(*transform->orientation, verticalAngle, *rightVectorLocal);
 		*transform->orientation = glm::rotate(*transform->orientation, horizontalAngle, *upVectorLocal);
 		
@@ -64,21 +64,21 @@ void Camera::update(){
 	}
 
 	if (keyboard->keyDown(GLFW_KEY_UP)){
-		*transform->translationVector += (*forwardVectorRotated) * speed;
+		transform->translate((*forwardVectorRotated) * speed);
 	}
 	// Move backward
 	if (keyboard->keyDown(GLFW_KEY_DOWN)){
-		*transform->translationVector -= (*forwardVectorRotated) * speed;
+		transform->translate((*forwardVectorRotated) * -speed);
 	}
 	// Strafe right
 	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
-		*transform->translationVector += (*rightVectorRotated) * speed;
+		transform->translate((*rightVectorRotated) * speed);
 	}
 	// Strafe left
 	if (keyboard->keyDown(GLFW_KEY_LEFT)){
-		*transform->translationVector -= (*rightVectorRotated) * speed;
+		transform->translate((*rightVectorRotated) * -speed);
 	}
-	glfwSetCursorPos(glfwGetCurrentContext(), screenDimensions.width/2, screenDimensions.height/2);
+	glfwSetCursorPos(vox::currentContext, screenDimensions.width/2, screenDimensions.height/2);
 
 	this->lastMouseX = offsetX;
 	this->lastMouseY = offsetY;

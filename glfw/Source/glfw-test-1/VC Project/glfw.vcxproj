@@ -48,7 +48,7 @@
     <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\$(Configuration)\$(Platform);$(GLFW_DIR)\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(GLEW_DIR)\lib\$(Configuration)\$(Platform);$(GLFW_DIR)\lib-msvc110;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -153,8 +153,8 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Vox.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\assets\ColourShader.fsh" />
-    <None Include="..\assets\ColourShader.vsh" />
+    <None Include="..\assets\ColourShader.frag" />
+    <None Include="..\assets\ColourShader.vert" />
     <None Include="..\assets\junkdata.frag" />
     <None Include="..\assets\junkdata.vert" />
   </ItemGroup>

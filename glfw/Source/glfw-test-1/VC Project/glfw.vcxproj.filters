@@ -181,16 +181,16 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\assets\ColourShader.fsh">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="..\assets\ColourShader.vsh">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
     <None Include="..\assets\junkdata.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="..\assets\junkdata.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\ColourShader.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\ColourShader.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

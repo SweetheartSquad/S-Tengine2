@@ -2,7 +2,6 @@
 ShaderInterface *shader; 
 RenderSystem::RenderSystem(){
 	shaderArray = new std::vector<ShaderInterface*>;
-	glfwWindow = glfwGetCurrentContext();
 }
 
 RenderSystem::~RenderSystem(void){
@@ -22,21 +21,30 @@ RenderSystem& RenderSystem::getInstance(){
 	}
 	return *renderSystem;
 }
-void RenderSystem::render(std::vector<Entity*> *renderChildren, glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
-{
+void RenderSystem::render(std::vector<Entity*> *renderChildren, glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 	float ratio;
 	int width, height;
-	glfwGetFramebufferSize(glfwWindow, &width, &height);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+	glfwGetFramebufferSize(vox::currentContext, &width, &height);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 	ratio = width / static_cast<float>(height);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 	glViewport(0, 0, width, height);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 	glCullFace(GL_FRONT);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 	glEnable(GL_DEPTH_TEST);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 	glCullFace(GL_FRONT);
-	glLoadIdentity();
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+	//glLoadIdentity();
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 
 	std::vector<Entity*>::iterator it = renderChildren->begin();
 	while(it!=renderChildren->end()){
+		std::cout << "test" << std::endl;
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 		glBindBuffer(GL_ARRAY_BUFFER, (*it)->vertexBuffer->getVertexBufferId());
 			GLUtils::checkForError(0,__FILE__,__LINE__);
@@ -46,7 +54,7 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren, glm::mat4 projec
 		++it;
 	}
 
-	glfwSwapBuffers(glfwWindow);
+	glfwSwapBuffers(vox::currentContext);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 }
  
