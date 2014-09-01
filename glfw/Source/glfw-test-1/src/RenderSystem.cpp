@@ -38,10 +38,22 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren, glm::mat4 projec
 	glEnable(GL_DEPTH_TEST);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	//glLoadIdentity();
-		GLUtils::checkForError(0,__FILE__,__LINE__);
+	//	GLUtils::checkForError(0,__FILE__,__LINE__);
 
 	std::vector<Entity*>::iterator it = renderChildren->begin();
 	while(it!=renderChildren->end()){
+
+		
+	//bind VAO, VBO, IBO
+	/*glBindVertexArray((*it)->vertexInterface->vaoId);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+	glBindBuffer(GL_ARRAY_BUFFER, (*it)->vertexInterface->vboId);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->vertexInterface->iboId);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+	//update verts in VAO/VBO
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*((*it)->vertices->size()), (*it)->vertices->data(), GL_STATIC_DRAW);*/
+
 		(*it)->draw(projectionMatrix, viewMatrix);
 		++it;
 			GLUtils::checkForError(0,__FILE__,__LINE__);

@@ -25,12 +25,15 @@ void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 		children->at(i)->draw(projectionMatrix, viewMatrix);
 	}
 
-	//bind VAO
+	//bind VAO, VBO, IBO
 	glBindVertexArray(vertexInterface->vaoId);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexInterface->vboId);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexInterface->iboId);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+	//update verts in VAO/VBO
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*(vertices->size()), vertices->data(), GL_STATIC_DRAW);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 
 	//specify shader attributes
@@ -41,12 +44,8 @@ void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 
-	//update verts in VAO/VBO
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*(vertices->size()), vertices->data(), GL_STATIC_DRAW);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
 
 	//draw
-		std::cout << indices->size() << std::endl;
 	glDrawRangeElements(vertexInterface->polygonalDrawMode, 0, vertexInterface->vertCount, indices->size(), GL_UNSIGNED_BYTE, 0);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 

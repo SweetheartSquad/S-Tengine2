@@ -23,7 +23,7 @@ MainScene::MainScene():Scene()
 	cube->transform->translateX(0.5);
 
 
-	/*cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
+	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
 
 	cube2->shader = new ShaderInterface("../assets/junkdata");
@@ -37,22 +37,31 @@ MainScene::MainScene():Scene()
 	cube2->setBottomColour(1,1,0,1);
 	cube2->setTopColour(1,0,1,1);
 	cube2->setRightColour(0,1,1,1);
-	cube2->transform->translateX(0.5);*/
+	cube2->transform->translateX(0.5);
 	
-	/*cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
+	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->addChild(cube3);
 	cube3->shader = new ShaderInterface("../assets/ColourShader");
+	
+	cube3->vertices->pop_back();
+	cube3->vertices->pop_back();
+	cube3->vertices->pop_back();
+	cube3->vertices->pop_back();
+
 	cube3->vertexInterface->configureVertexAttributes(cube3->shader->get_aPositionVertex(), 3, 0);
 	cube3->vertexInterface->configureVertexAttributes(cube3->shader->get_aFragColor(), 4, sizeof(float)*3);
 	cube3->vertexInterface->configureVertexAttributes(cube3->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 	
-	cube3->setFrontColour(1,0,0,1);
-	cube3->setLeftColour(0,1,0,1);
-	cube3->setBackColour(0,0,1,1);
-	cube3->setBottomColour(1,1,0,1);
-	cube3->setTopColour(1,0,1,1);
-	cube3->setRightColour(0,1,1,1);
-	cube3->transform->translateX(0.5);*/
+	cube3->setFrontColour(0.1,0,0,1);
+	cube3->setLeftColour(0,0.1,0,1);
+	cube3->setBackColour(0,0,0.1,1);
+	cube3->setBottomColour(0.1,0.1,0,1);
+	cube3->setTopColour(0.1,0,0.1,1);
+	//cube3->setRightColour(0,0.1,0.1,1);
+
+	cube3->vertices->at(3).x += 0.5;
+
+	cube3->transform->translateX(0.5);
 
 	
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
@@ -88,19 +97,13 @@ void MainScene::update(){
 
 			w = mode->width;
 			h = mode->height;
-			w = 25;
-			h = 25;
-			//glfwSetWindowPos(glfwGetCurrentContext(), 0, 0);
+			w = 50;
+			h = 50;
 		}
-
-		//glfwSetWindowSize(glfwGetCurrentContext(), w, h);
-		//return;
 
 		// Close the current window.
 		std::cout << std::endl << glfwGetCurrentContext() << std::endl;
 		
-		//glfwSetWindowShouldClose(vox::currentContext, true);
-		//
 		// Renew calls to glfwOpenWindowHint.
 		// (Hints get reset after the call to glfwOpenWindow.)
 		vox::setGlfwWindowHints();
@@ -118,20 +121,9 @@ void MainScene::update(){
 			exit(EXIT_FAILURE);
 		}
 
-		
+		vox::initWindow();
 
-		glfwMakeContextCurrent(vox::currentContext);
 		std::cout << glfwGetCurrentContext() << std::endl;
-
-
-		for(Entity * e : *children){
-			delete e->vertexInterface;
-			e->vertexInterface = new VertexInterface(e->vertices->data(), e->indices->data(), sizeof(Vertex)*e->vertices->size(), sizeof(GLubyte)*e->indices->size(), GL_QUADS, GL_STATIC_DRAW, e->vertices->size(), sizeof(Vertex));
-
-			e->vertexInterface->configureVertexAttributes(e->shader->get_aPositionVertex(), 3, 0);
-			e->vertexInterface->configureVertexAttributes(e->shader->get_aFragColor(), 4, sizeof(float)*3);
-			e->vertexInterface->configureVertexAttributes(e->shader->get_aVertexNormals(), 3, sizeof(float)*7);
-		}
 
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	}
