@@ -4,8 +4,7 @@
 void GLUtils::checkForError(bool printSuccess = false, std::string file = "", int line = 0){
 	GLenum err;
 	std::string errString;
-	do{
-		err = glGetError();
+	while ((err = glGetError()) != GL_NO_ERROR) {
 		if(printSuccess || err != GL_NO_ERROR){
 			switch(err) {
 				case GL_NO_ERROR:						errString="NO_ERROR"; break;
@@ -18,5 +17,5 @@ void GLUtils::checkForError(bool printSuccess = false, std::string file = "", in
 			}
 			std::cout << "\tFile: " << file.c_str() <<", Line: "<<line << ", Log: " << errString.c_str() << std::endl;
 		}
-	}while(err != GL_NO_ERROR);
+	}
 }

@@ -17,54 +17,50 @@ Entity::~Entity(void){
 }
 
 void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){	
-	
+	//push transform
 	vox::pushMatrix(transform->getModelMatrix() );
-			GLUtils::checkForError(0,__FILE__,__LINE__);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 
 	for(int i = 0; i<children->size(); i++){
 		children->at(i)->draw(projectionMatrix, viewMatrix);
 	}
 
-	glBindBuffer(GL_ARRAY_BUFFER, vertexInterface->getVertexInterfaceId());
-	glUseProgram(shader->getProgramId());
-	glm::mat4 mvp = projectionMatrix * viewMatrix * vox::modelMatrix();  	
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices->size(), vertices->data(), GL_STATIC_DRAW);	
-	GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
-	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
-	vertexInterface->renderVertexInterface();
-	
-	/*glBindBuffer(GL_ARRAY_BUFFER, vertexInterface->getVertexInterfaceId());
-			GLUtils::checkForError(0,__FILE__,__LINE__);
-	glUseProgram(shader->getProgramId());
-			GLUtils::checkForError(0,__FILE__,__LINE__);
-	glm::mat4 mvp = projectionMatrix * viewMatrix * vox::modelMatrix();  	
-			GLUtils::checkForError(0,__FILE__,__LINE__);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices->size(), vertices->data(), GL_STATIC_DRAW);
-			GLUtils::checkForError(0,__FILE__,__LINE__);
-	GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
-			GLUtils::checkForError(0,__FILE__,__LINE__);
-	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
-	vertexInterface->renderVertexInterface();
-		GLUtils::checkForError(0,__FILE__,__LINE__);*/
-	
-	
-	// Render the Buffers
-	
-	/*glBindVertexArray(vertexInterface->vaoId);
+	//bind VAO
+	glBindVertexArray(vertexInterface->vaoId);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
-	glDrawRangeElements(vertexInterface->polygonalDrawMode, 0, vertexInterface->vertCount, indices->size(), GL_UNSIGNED_BYTE, indices->data());
+	glBindBuffer(GL_ARRAY_BUFFER, vertexInterface->vboId);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
-	glBindVertexArray(0);
-		GLUtils::checkForError(0,__FILE__,__LINE__);*/
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexInterface->iboId);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 
+	//specify shader attributes
+	glUseProgram(shader->getProgramId());
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+	glm::mat4 mvp = projectionMatrix * viewMatrix * vox::modelMatrix();  	
+	GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
+	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+
+	//update verts in VAO/VBO
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*(vertices->size()), vertices->data(), GL_STATIC_DRAW);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+
+	//draw
+		std::cout << indices->size() << std::endl;
+	glDrawRangeElements(vertexInterface->polygonalDrawMode, 0, vertexInterface->vertCount, indices->size(), GL_UNSIGNED_BYTE, 0);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+
+	//disable VAO
+	//glBindVertexArray(0);
+
+	//pop transform
 	vox::popMatrix();
 }
 
 void Entity::update(){
 }
 
-void Entity::addChild(Entity* child)
-{
+void Entity::addChild(Entity* child){
 	child->setParent(this);
 	children->push_back(child);
 

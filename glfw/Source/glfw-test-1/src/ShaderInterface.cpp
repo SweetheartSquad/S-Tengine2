@@ -19,7 +19,6 @@ void ShaderInterface::init(const char *vertexShaderSource, const char *fragmentS
 	std::string vertexShaderString = FileUtils::voxReadFile(vertexShaderSource);
 	std::string fragmentShaderString = FileUtils::voxReadFile(fragmentShaderSource);
 	
-
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	shader = new ShaderLoader(vertexShaderString, fragmentShaderString);
 

@@ -37,20 +37,14 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren, glm::mat4 projec
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	glEnable(GL_DEPTH_TEST);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
-	glCullFace(GL_FRONT);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
 	//glLoadIdentity();
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 
 	std::vector<Entity*>::iterator it = renderChildren->begin();
 	while(it!=renderChildren->end()){
-		std::cout << "test" << std::endl;
-			GLUtils::checkForError(0,__FILE__,__LINE__);
-		glBindBuffer(GL_ARRAY_BUFFER, (*it)->vertexInterface->getVertexInterfaceId());
-			GLUtils::checkForError(0,__FILE__,__LINE__);
 		(*it)->draw(projectionMatrix, viewMatrix);
-			GLUtils::checkForError(0,__FILE__,__LINE__);
 		++it;
+			GLUtils::checkForError(0,__FILE__,__LINE__);
 	}
 
 	glfwSwapBuffers(vox::currentContext);

@@ -4,7 +4,7 @@ Camera::Camera(){
 	
 	this->transform = new Transform();
 
-	transform->translateZ(5);
+	transform->translateX(-5);
 	forwardVectorLocal		= new glm::vec3(1.f, 0.f, 0.f);
 	forwardVectorRotated	= new glm::vec3(1.f, 0.f, 0.f);
 	upVectorLocal			= new glm::vec3(0.f, 1.f, 0.f);

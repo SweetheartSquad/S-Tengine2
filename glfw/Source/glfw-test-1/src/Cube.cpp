@@ -70,9 +70,7 @@ Cube::Cube(glm::vec3 center, float size){
 	setNormal(22, 0.0, 0.0, -1.0);
 	setNormal(23, 0.0, 0.0, -1.0);
 	
-	Vertex *vertsPtr = vertices->data();
-	GLubyte *indexPtr = indices->data();
-	vertexInterface = new VertexInterface(vertsPtr, indexPtr, sizeof(Vertex)*vertices->size(), sizeof(GLubyte)*indices->size(), GL_QUADS, GL_STATIC_DRAW, vertices->size(), sizeof(Vertex));
+	vertexInterface = new VertexInterface(vertices->data(), indices->data(), sizeof(Vertex)*vertices->size(), sizeof(GLubyte)*indices->size(), GL_QUADS, GL_STATIC_DRAW, vertices->size(), sizeof(Vertex));
 }
 
 Cube::~Cube(void){

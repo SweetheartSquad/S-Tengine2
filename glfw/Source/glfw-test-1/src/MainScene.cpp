@@ -26,7 +26,7 @@ MainScene::MainScene():Scene()
 	/*cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
 
-	cube2->shader = new ShaderInterface("../assets/junkdata.vert","../assets/junkdata.frag");
+	cube2->shader = new ShaderInterface("../assets/junkdata");
 	cube2->vertexInterface->configureVertexAttributes(cube2->shader->get_aPositionVertex(), 0, 3);
 	cube2->vertexInterface->configureVertexAttributes(cube2->shader->get_aFragColor(), 4, sizeof(float)*3);
 	cube2->vertexInterface->configureVertexAttributes(cube2->shader->get_aVertexNormals(), 3, sizeof(float)*7);
@@ -41,7 +41,7 @@ MainScene::MainScene():Scene()
 	
 	/*cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->addChild(cube3);
-	cube3->shader = new ShaderInterface("../assets/ColourShader.vert","../assets/ColourShader.frag");
+	cube3->shader = new ShaderInterface("../assets/ColourShader");
 	cube3->vertexInterface->configureVertexAttributes(cube3->shader->get_aPositionVertex(), 3, 0);
 	cube3->vertexInterface->configureVertexAttributes(cube3->shader->get_aFragColor(), 4, sizeof(float)*3);
 	cube3->vertexInterface->configureVertexAttributes(cube3->shader->get_aVertexNormals(), 3, sizeof(float)*7);
@@ -57,7 +57,7 @@ MainScene::MainScene():Scene()
 	
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	addChild(cube4);
-	cube4->shader = new ShaderInterface("../assets/ColourShader.vert","../assets/ColourShader.frag");
+	cube4->shader = new ShaderInterface("../assets/ColourShader");
 	cube4->vertexInterface->configureVertexAttributes(cube4->shader->get_aPositionVertex(), 3, 0);
 	cube4->vertexInterface->configureVertexAttributes(cube4->shader->get_aFragColor(), 4, sizeof(float)*3);
 	cube4->vertexInterface->configureVertexAttributes(cube4->shader->get_aVertexNormals(), 3, sizeof(float)*7);
@@ -68,7 +68,7 @@ MainScene::MainScene():Scene()
 	cube4->setBottomColour(1,1,0,1);
 	cube4->setTopColour(1,0,1,1);
 	cube4->setRightColour(0,1,1,1);
-	cube4->transform->scale(50.0,50.0,50.0);
+	cube4->transform->scale(15.0, 15.0, 15.0);
 }
 
 MainScene::~MainScene(){
@@ -122,6 +122,16 @@ void MainScene::update(){
 
 		glfwMakeContextCurrent(vox::currentContext);
 		std::cout << glfwGetCurrentContext() << std::endl;
+
+
+		for(Entity * e : *children){
+			delete e->vertexInterface;
+			e->vertexInterface = new VertexInterface(e->vertices->data(), e->indices->data(), sizeof(Vertex)*e->vertices->size(), sizeof(GLubyte)*e->indices->size(), GL_QUADS, GL_STATIC_DRAW, e->vertices->size(), sizeof(Vertex));
+
+			e->vertexInterface->configureVertexAttributes(e->shader->get_aPositionVertex(), 3, 0);
+			e->vertexInterface->configureVertexAttributes(e->shader->get_aFragColor(), 4, sizeof(float)*3);
+			e->vertexInterface->configureVertexAttributes(e->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+		}
 
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	}
