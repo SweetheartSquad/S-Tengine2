@@ -2,7 +2,7 @@
 
 #include "vector3.h"
 #include "Entity.h"
-#include "VertexBuffer.h"
+#include "VertexInterface.h"
 
 #include <iostream>
 

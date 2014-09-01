@@ -9,6 +9,7 @@ Cube::Cube(glm::vec3 center, float size){
 	pushVert(Vertex(-1.f, 1.f, -1.f));
 	pushVert(Vertex(1.f, 1.f, -1.f));
 	pushVert(Vertex(1.f, 1.f, 1.f));
+	pushQuad(0,1,2,3);
 	setNormal(0, 0.0, 1.0, 0.0);
 	setNormal(1, 0.0, 1.0, 0.0);
 	setNormal(2, 0.0, 1.0, 0.0);
@@ -19,6 +20,7 @@ Cube::Cube(glm::vec3 center, float size){
 	pushVert(Vertex(1.f, -1.f, 1.f));
 	pushVert(Vertex(1.f, -1.f, -1.f));
 	pushVert(Vertex(-1.f, -1.f, -1.f));
+	pushQuad(4,5,6,7);
 	setNormal(4, 0.0, -1.0, 0.0);
 	setNormal(5, 0.0, -1.0, 0.0);
 	setNormal(6, 0.0, -1.0, 0.0);
@@ -29,6 +31,7 @@ Cube::Cube(glm::vec3 center, float size){
 	pushVert(Vertex(1.f, 1.f, 1.f));
 	pushVert(Vertex(1.f, -1.f, 1.f));
 	pushVert(Vertex(-1.f, -1.f, 1.f));
+	pushQuad(8,9,10,11);
 	setNormal(8, 1.0, 0.0, 0.0);
 	setNormal(9, 1.0, 0.0, 0.0);
 	setNormal(10, 1.0, 0.0, 0.0);
@@ -39,6 +42,7 @@ Cube::Cube(glm::vec3 center, float size){
 	pushVert(Vertex(1.f, 1.f, -1.f));
 	pushVert(Vertex(1.f, -1.f, -1.f));
 	pushVert(Vertex(-1.f, -1.f, -1.f));
+	pushQuad(12,13,14,15);
 	setNormal(12, -1.0, 0.0, 0.0);
 	setNormal(13, -1.0, 0.0, 0.0);
 	setNormal(14, -1.0, 0.0, 0.0);
@@ -49,6 +53,7 @@ Cube::Cube(glm::vec3 center, float size){
 	pushVert(Vertex(-1.f, 1.f, -1.f));
 	pushVert(Vertex(-1.f, -1.f, -1.f));
 	pushVert(Vertex(-1.f, -1.f, 1.f));
+	pushQuad(16,17,18,19);
 	setNormal(16, 0.0, 0.0, 1.0);
 	setNormal(17, 0.0, 0.0, 1.0);
 	setNormal(18, 0.0, 0.0, 1.0);
@@ -59,27 +64,26 @@ Cube::Cube(glm::vec3 center, float size){
 	pushVert(Vertex(1.f, 1.f, -1.f));
 	pushVert(Vertex(1.f, -1.f, -1.f));
 	pushVert(Vertex(1.f, -1.f, 1.f));
+	pushQuad(20,21,22,23);
 	setNormal(20, 0.0, 0.0, -1.0);
 	setNormal(21, 0.0, 0.0, -1.0);
 	setNormal(22, 0.0, 0.0, -1.0);
 	setNormal(23, 0.0, 0.0, -1.0);
 	
 	Vertex *vertsPtr = vertices->data();
-	vertexBuffer = new VertexBuffer(vertsPtr, sizeof(Vertex)*vertices->size(), GL_QUADS, GL_STATIC_DRAW, 24, sizeof(Vertex));
+	GLubyte *indexPtr = indices->data();
+	vertexInterface = new VertexInterface(vertsPtr, indexPtr, sizeof(Vertex)*vertices->size(), sizeof(GLubyte)*indices->size(), GL_QUADS, GL_STATIC_DRAW, vertices->size(), sizeof(Vertex));
 }
 
-Cube::~Cube(void)
-{
+Cube::~Cube(void){
 }
 
 void Cube::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 	Entity::draw(projectionMatrix, viewMatrix);
 }
 
-void Cube::setColour(float red, float green, float blue, float alpha)
-{
-	for(int i=0; i<24; i++)
-	{
+void Cube::setColour(float red, float green, float blue, float alpha){
+	for(int i=0; i<24; i++){
 		vertices->at(i).red = red;
 		vertices->at(i).green = green;
 		vertices->at(i).blue = blue;

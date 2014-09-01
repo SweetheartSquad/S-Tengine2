@@ -1,0 +1,71 @@
+#include "VertexInterface.h"
+
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
+VertexInterface::VertexInterface(const GLvoid* vertexData, const GLvoid* indexData, GLsizeiptr vertexDataSize, GLsizeiptr indexDataSize, GLenum polygonalDrawMode, GLenum drawMode, GLsizei vertCount, GLsizei stride){
+	this->drawMode = drawMode;
+	this->vertCount = vertCount;
+	this->stride = stride;
+	this->polygonalDrawMode = polygonalDrawMode;
+
+
+	//index buffer object (IBO)
+	/*glGenBuffers(1, &iboId);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexDataSize, indexData, drawMode);*/
+
+
+	// Generate the Vertex Array Objects (VAO).
+	/*glGenVertexArrays(1, &array);
+	glBindVertexArray(array);
+	glBindBuffer(GL_ARRAY_BUFFER, vbuf);
+	// Set the Vertex Attribute Pointer.
+	glVertexAttribPointer(0, 4, GL_DOUBLE, GL_FALSE, 
+			sizeof(GLdouble)*4, offset(0));
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibuf);*/
+
+
+	//vertex array object (VAO)
+	/*glGenVertexArrays (1, &vaoId);
+	glBindVertexArray (vaoId);
+	glBindBuffer (GL_ARRAY_BUFFER, vboId);*/
+	// Set the Vertex Attribute Pointer.
+	//glVertexAttribPointer(0, 4, GL_DOUBLE, GL_FALSE, 
+	//		sizeof(GLdouble)*4, offset(0));
+	//glEnableVertexAttribArray(0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
+
+
+	//vertex buffer object (VBO)
+	glGenBuffers(1, &vboId);
+	glBindBuffer(GL_ARRAY_BUFFER, vboId);
+	glBufferData(GL_ARRAY_BUFFER, vertexDataSize, vertexData, drawMode);
+	
+	//glBindVertexArray (0);
+	GLUtils::checkForError(true,__FILE__,__LINE__);
+}
+
+VertexInterface::~VertexInterface(void){
+	glDeleteVertexArrays(1, &vaoId);
+	glDeleteBuffers(1, &vboId);
+	vboId = 0;
+}
+
+GLuint VertexInterface::getVertexInterfaceId(){
+	return vboId;
+}
+
+void VertexInterface::renderVertexInterface(){
+	glDrawArrays(polygonalDrawMode, 0, vertCount);
+}
+
+void VertexInterface::configureVertexAttributes(GLint vertexHandle, unsigned long int _arity, int bufferOffset){
+	std::cout << "vertexHandle: " << vertexHandle << std::endl;
+	if (vertexHandle != -1){
+		//glBindVertexArray (vaoId);
+		glEnableVertexAttribArray(vertexHandle);
+		glVertexAttribPointer(vertexHandle, _arity, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(bufferOffset));
+		//glBindVertexArray (0);
+	}
+}

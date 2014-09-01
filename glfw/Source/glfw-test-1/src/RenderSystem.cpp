@@ -45,16 +45,15 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren, glm::mat4 projec
 	std::vector<Entity*>::iterator it = renderChildren->begin();
 	while(it!=renderChildren->end()){
 		std::cout << "test" << std::endl;
-		GLUtils::checkForError(0,__FILE__,__LINE__);
-		glBindBuffer(GL_ARRAY_BUFFER, (*it)->vertexBuffer->getVertexBufferId());
+			GLUtils::checkForError(0,__FILE__,__LINE__);
+		glBindBuffer(GL_ARRAY_BUFFER, (*it)->vertexInterface->getVertexInterfaceId());
 			GLUtils::checkForError(0,__FILE__,__LINE__);
 		(*it)->draw(projectionMatrix, viewMatrix);
 			GLUtils::checkForError(0,__FILE__,__LINE__);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
 		++it;
 	}
 
 	glfwSwapBuffers(vox::currentContext);
-	GLUtils::checkForError(0,__FILE__,__LINE__);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 }
  
