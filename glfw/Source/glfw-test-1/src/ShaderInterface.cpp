@@ -1,7 +1,19 @@
 #include "ShaderInterface.h"
 
-ShaderInterface::ShaderInterface(const char *vertexShaderSource, const char *fragmentShaderSource)
-{
+ShaderInterface::ShaderInterface(const char *shaderSource){
+	std::string vertexShaderSource = shaderSource;
+	vertexShaderSource += ".vert";
+	std::string fragShaderSource = shaderSource;
+	fragShaderSource += ".frag";
+	
+	init(vertexShaderSource.c_str(), fragShaderSource.c_str());
+}
+
+ShaderInterface::ShaderInterface(const char *vertexShaderSource, const char *fragmentShaderSource){
+	init(vertexShaderSource, fragmentShaderSource);
+}
+
+void ShaderInterface::init(const char *vertexShaderSource, const char *fragmentShaderSource){
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 
 	std::string vertexShaderString = FileUtils::voxReadFile(vertexShaderSource);
@@ -13,9 +25,9 @@ ShaderInterface::ShaderInterface(const char *vertexShaderSource, const char *fra
 
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 
-	aPositionVertex = glGetAttribLocation(getProgramId(), "aPositionVertex");
-	aFragColor = glGetAttribLocation(getProgramId(), "aFragColor");
-	aVertexNormals = glGetAttribLocation(getProgramId(), "aVertexNormals");
+	aPositionVertex		= glGetAttribLocation(getProgramId(), "aPositionVertex");
+	aFragColor			= glGetAttribLocation(getProgramId(), "aFragColor");
+	aVertexNormals		= glGetAttribLocation(getProgramId(), "aVertexNormals");
 
 	/*aPositionVertex = 0;
 	aFragColor = 1;

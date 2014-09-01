@@ -16,8 +16,9 @@ private:
 
 	//const char* vertexShaderString;
 	//const char* fragmentShaderString;
-
+	void init(const char *vertexShaderShource, const char *fragmentShaderSource);
 public:
+	ShaderInterface(const char *shaderShource);
 	ShaderInterface(const char *vertexShaderShource, const char *fragmentShaderSource);
 	~ShaderInterface(void);
 
