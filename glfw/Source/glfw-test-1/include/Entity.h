@@ -25,6 +25,7 @@ public:
 	Entity(void);
 	virtual ~Entity(void);
 
+	virtual void clean();
 	virtual void render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 	virtual void draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 	virtual void update();

@@ -18,11 +18,7 @@ Entity::~Entity(void){
 	delete transform;
 }
 
-void Entity::render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
-	//bind VAO, VBO, IBO
-
-	std::cout << vertexInterface->vaoId << std::endl;
-
+void Entity::clean(){
 	if(dirty){
 		glBindBuffer(GL_ARRAY_BUFFER, vertexInterface->vboId);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*(vertices->size()), vertices->data(), GL_STATIC_DRAW);
@@ -32,7 +28,11 @@ void Entity::render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 		dirty = false;
 	}
-
+}
+void Entity::render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
+	
+	std::cout << vertexInterface->vaoId << std::endl;
+	//bind VAO
 	glBindVertexArray(vertexInterface->vaoId);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 		//update verts in VAO/VBO
@@ -40,17 +40,18 @@ void Entity::render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 
 	//specify shader attributes
 	glUseProgram(shader->getProgramId());
-		GLUtils::checkForError(0,__FILE__,__LINE__);
+	GLUtils::checkForError(0,__FILE__,__LINE__);
 	glm::mat4 mvp = projectionMatrix * viewMatrix * vox::modelMatrix();  	
 	GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
 	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
+	GLUtils::checkForError(0,__FILE__,__LINE__);
 
 
 	//draw
-		std::cout << indices->size() << std::endl;
-		glDrawRangeElements(vertexInterface->polygonalDrawMode, 0, vertices->size(), indices->size(), GL_UNSIGNED_BYTE, 0);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
+	std::cout << indices->size() << std::endl;
+	std::cout << vertices->size() << std::endl;
+	glDrawRangeElements(vertexInterface->polygonalDrawMode, 0, vertices->size()/3, indices->size(), GL_UNSIGNED_BYTE, 0);
+	GLUtils::checkForError(0,__FILE__,__LINE__);
 
 	//disable VAO
 	glBindVertexArray(0);
@@ -61,6 +62,7 @@ void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 	vox::pushMatrix(transform->getModelMatrix() );
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 
+	clean();
 	render(projectionMatrix, viewMatrix);
 
 	for(int i = 0; i<children->size(); i++){

@@ -36,6 +36,7 @@ VertexInterface::~VertexInterface(void){
 	vaoId = 0;
 	vboId = 0;
 	iboId = 0;
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 }
 
 void VertexInterface::renderVertexInterface(){
@@ -46,15 +47,11 @@ void VertexInterface::configureVertexAttributes(GLint vertexHandle, unsigned lon
 	std::cout << "vertexHandle: " << vertexHandle << std::endl;
 	if (vertexHandle != -1){
 		glBindVertexArray(vaoId);//bind VAO, VBO, IBO
-		GLUtils::checkForError(0,__FILE__,__LINE__);
-		/*glBindBuffer(GL_ARRAY_BUFFER, vboId);
-		GLUtils::checkForError(0,__FILE__,__LINE__);*/
 
 		glEnableVertexAttribArray(vertexHandle);
 		glVertexAttribPointer(vertexHandle, _arity, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(bufferOffset));
 		
-		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
 		glBindVertexArray(0);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 	}
 }

@@ -27,21 +27,26 @@ MainScene::MainScene():Scene()
 	//cube->setRightColour(0,1,1, 1);
 
 	cube->transform->translateX(0.5);
-
+	
 	cube->vertices->at(3).y += 1.5;
+	cube->vertices->at(0).y += 1.5;
 	
 	cube->pushQuad(2,1,5,7);
 	//cube->pushQuad(4,3,8,1);
 
-	/*cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
+	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
 
-	cube2->shader = new ShaderInterface("../assets/junkdata");
+	//uncomment this to see it break
+	/*cube2->shader = new ShaderInterface("../assets/junkdata");
 	cube2->vertexInterface->configureVertexAttributes(cube2->shader->get_aPositionVertex(), 0, 3);
 	cube2->vertexInterface->configureVertexAttributes(cube2->shader->get_aFragColor(), 4, sizeof(float)*3);
 	cube2->vertexInterface->configureVertexAttributes(cube2->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 	
-	cube2->setFrontColour(1,0,0,1);
+	cube2->pushQuad(2,1,5,7);
+	cube2->pushQuad(2,1,5,8);*/
+
+	/*cube2->setFrontColour(1,0,0,1);
 	cube2->setLeftColour(0,1,0,1);
 	cube2->setBackColour(0,0,1,1);
 	cube2->setBottomColour(1,1,0,1);
@@ -123,8 +128,6 @@ void MainScene::update(){
 
 		window = glfwCreateWindow(w, h, "Simple example",  /*vox::fullscreen ? glfwGetPrimaryMonitor() : */nullptr, vox::currentContext);
 		
-		//glfwDestroyWindow(vox::currentContext);
-
 		vox::currentContext = window;
 		if (!window){
 			glfwTerminate();
