@@ -99,8 +99,8 @@ void MainScene::update(){
 			h = mode->height;
 
 			//test values
-			w = 50;
-			h = 50;
+			w = 250;
+			h = 250;
 		}
 
 		// Close the current window.
@@ -112,16 +112,28 @@ void MainScene::update(){
 
 		// Create the new window.
 		GLFWwindow* window;
-
 		window = glfwCreateWindow(w, h, "Simple example",  /*vox::fullscreen ? glfwGetPrimaryMonitor() : */nullptr, vox::currentContext);
-		
-		vox::currentContext = window;
-		if (!window){
+		if(!window){
 			glfwTerminate();
 			exit(EXIT_FAILURE);
 		}
 
-		vox::initWindow();
+		vox::initWindow(window);
+		vox::currentContext = window;
+		glfwMakeContextCurrent(window);
+
+		for(Entity * child : *children){
+			child->vertexInterface->loaded = false;
+			child->vertexInterface->dirty = true;
+
+			child->vertexInterface->load();
+
+			child->shader = new ShaderInterface("../assets/ColourShader");
+
+			child->vertexInterface->configureVertexAttributes(child->shader->get_aPositionVertex(), 3, 0);
+			child->vertexInterface->configureVertexAttributes(child->shader->get_aFragColor(), 4, sizeof(float)*3);
+			child->vertexInterface->configureVertexAttributes(child->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+		}
 
 		std::cout << glfwGetCurrentContext() << std::endl;
 

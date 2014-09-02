@@ -26,6 +26,7 @@ void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 	vox::pushMatrix();
 	vox::applyMatrix(transform->getModelMatrix());
 
+	vertexInterface->load();
 	vertexInterface->clean();
 	vertexInterface->render(shader, projectionMatrix, viewMatrix);
 

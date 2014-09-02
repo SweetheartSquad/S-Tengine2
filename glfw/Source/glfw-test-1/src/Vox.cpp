@@ -36,11 +36,14 @@ static void mousePostionCallback(GLFWwindow *window, double x, double y){
 	Mouse *mouse = &Mouse::getInstance();
 	mouse->mousePositionListener(x, y);
 }
-void vox::initWindow(){
-	glfwMakeContextCurrent(currentContext);
-	glfwSetKeyCallback(currentContext, keyCallback);
-	glfwSetMouseButtonCallback(currentContext, mouseButtonCallback);
-	glfwSetCursorPosCallback(currentContext, mousePostionCallback);
+void vox::initWindow(GLFWwindow * w){
+	if(w == nullptr){
+		w = currentContext;
+	}
+	//glfwMakeContextCurrent(currentContext);
+	glfwSetKeyCallback(w, keyCallback);
+	glfwSetMouseButtonCallback(w, mouseButtonCallback);
+	glfwSetCursorPosCallback(w, mousePostionCallback);
 }
 
 /////////// Matrix Stack Begin //////////////

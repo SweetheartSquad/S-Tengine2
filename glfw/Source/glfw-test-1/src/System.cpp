@@ -1,25 +1,20 @@
 #include "System.h"
 
-System::System()
-{
+System::System(){
 }
 
-System::~System()
-{
+System::~System(){
 }
 
-int System::getScreenWidth()
-{
+int System::getScreenWidth(){
 	return getScreenDimensions().height;
 }
 
-int System::getScreenHeight()
-{
+int System::getScreenHeight(){
 	return getScreenDimensions().width;
 }
 
-Dimension System::getScreenDimensions()
-{
+Dimension System::getScreenDimensions(){
 	int *screenHeight = new int();
 	int *screenWidth = new int();
 

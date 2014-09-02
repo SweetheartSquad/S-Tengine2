@@ -5,27 +5,16 @@
 VertexInterface::VertexInterface(GLenum polygonalDrawMode, GLenum drawMode){
 	this->drawMode = drawMode;
 	this->polygonalDrawMode = polygonalDrawMode;
-
+	
 	vertices = new std::vector<Vertex>();
 	indices = new std::vector<GLubyte>();
 
-	//vertex array object (VAO)
-	glGenVertexArrays(1, &vaoId);
-	glBindVertexArray(vaoId);
+	loaded = false;
+	dirty = true;
 
-	//vertex buffer object (VBO)
-	glGenBuffers(1, &vboId);
-	glBindBuffer(GL_ARRAY_BUFFER, vboId);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices->size(), vertices->data(), drawMode);
-	
-	//index buffer object (IBO)
-	glGenBuffers(1, &iboId);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*indices->size(), indices->data(), drawMode);
+	load();
+	clean();
 
-	//disable VAO
-	glBindVertexArray(0);
-	GLUtils::checkForError(true,__FILE__,__LINE__);
 }
 
 VertexInterface::~VertexInterface(void){
@@ -51,6 +40,28 @@ GLsizei VertexInterface::getVertCount(){
 	return vertices->size();
 }
 
+void VertexInterface::load(){
+	if(!loaded){
+		//vertex array object (VAO)
+		glGenVertexArrays(1, &vaoId);
+		glBindVertexArray(vaoId);
+
+		//vertex buffer object (VBO)
+		glGenBuffers(1, &vboId);
+		glBindBuffer(GL_ARRAY_BUFFER, vboId);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices->size(), vertices->data(), drawMode);
+	
+		//index buffer object (IBO)
+		glGenBuffers(1, &iboId);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*indices->size(), indices->data(), drawMode);
+
+		//disable VAO
+		glBindVertexArray(0);
+		GLUtils::checkForError(true,__FILE__,__LINE__);
+		loaded = true;
+	}
+}
 void VertexInterface::clean(){
 	if(dirty){
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);

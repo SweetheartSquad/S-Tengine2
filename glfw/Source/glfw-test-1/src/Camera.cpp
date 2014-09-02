@@ -78,6 +78,7 @@ void Camera::update(){
 	if (keyboard->keyDown(GLFW_KEY_LEFT)){
 		transform->translate((*rightVectorRotated) * -speed);
 	}
+	
 	glfwSetCursorPos(vox::currentContext, screenDimensions.width/2, screenDimensions.height/2);
 
 	this->lastMouseX = offsetX;
