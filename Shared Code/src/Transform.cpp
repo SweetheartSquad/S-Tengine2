@@ -12,69 +12,56 @@ Transform::~Transform(void)
 {
 }
 
-void Transform::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix)
-{
-	for(int i = 0; i<children->size(); i++)
-	{
+void Transform::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
+	for(int i = 0; i<children->size(); i++){
 		children->at(i)->draw(projectionMatrix, viewMatrix);
 	}
 }
 
-void Transform::update()
-{
+void Transform::update(){
 }
 
-void Transform::scale(float scaleX, float scaleY, float scaleZ)
-{
+void Transform::scale(float scaleX, float scaleY, float scaleZ){
 	scaleVector->x *= scaleX;
 	scaleVector->y *= scaleY;
 	scaleVector->z *= scaleZ;
 }
 
-void Transform::scale(glm::vec3 scale)
-{
+void Transform::scale(glm::vec3 scale){
 	*scaleVector *= scale;
 }
 
-void Transform::scaleX(float scaleX)
-{
+void Transform::scaleX(float scaleX){
 	scaleVector->x *= scaleX;
 }
 
-void Transform::scaleY(float scaleY)
-{
+void Transform::scaleY(float scaleY){
 	scaleVector->y *= scaleY;
 }
 
-void Transform::scaleZ(float scaleZ)
-{
+void Transform::scaleZ(float scaleZ){
 	scaleVector->z *= scaleZ;
 }
 
-void Transform::translate(float translateX, float translateY, float translateZ)
-{
+void Transform::translate(float translateX, float translateY, float translateZ){
 	translationVector->x += translateX;
 	translationVector->y += translateY;
 	translationVector->z += translateZ;
 }
 
-void Transform::translate(glm::vec3 translate)
-{
+void Transform::translate(glm::vec3 translate){
 	*translationVector += translate;
 }
 
-void Transform::translateX(float translateX)
-{
+void Transform::translateX(float translateX){
 	translationVector->x += translateX;
 }
 
-void Transform::translateY(float translateY)
-{
+void Transform::translateY(float translateY){
 	translationVector->y += translateY;
 }
 
-void Transform::translateZ(float translateZ)
-{
+void Transform::translateZ(float translateZ){
 	translationVector->z += translateZ;
 }
 
@@ -86,38 +73,31 @@ void Transform::rotate(float angle, float x, float y, float z){
 	this->rotate(glm::quat(glm::angleAxis(angle, glm::vec3(x,y,z))));
 }
 
-glm::mat4 Transform::getTranslationMatrix()
-{
+glm::mat4 Transform::getTranslationMatrix(){
 	return glm::translate(*translationVector);
 }
 
-glm::mat4 Transform::getScaleMatrix()
-{
+glm::mat4 Transform::getScaleMatrix(){
 	return glm::scale(*scaleVector);
 }
 
-glm::mat4 Transform::getRotationMatrix()
-{
+glm::mat4 Transform::getRotationMatrix(){
 	return glm::toMat4(*orientation);
 }
 
-glm::mat4 Transform::getModelMatrix()
-{
+glm::mat4 Transform::getModelMatrix(){
 	return getTranslationMatrix() * getRotationMatrix() * getScaleMatrix();	
 }
 
-void Transform::addChild(Transform* child)
-{
+void Transform::addChild(Transform* child){
 	child->setParent(this);
 	children->push_back(child);
 }
 
-void Transform::removeChildAtIndex(int index)
-{
+void Transform::removeChildAtIndex(int index){
 	children->erase(children->begin()+index-1);
 }
 
-void Transform::setParent(Transform* parent)
-{
+void Transform::setParent(Transform* parent){
 	this->parent = parent;
 }
