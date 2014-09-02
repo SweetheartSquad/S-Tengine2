@@ -1,6 +1,7 @@
 #include "Cube.h"
 
 Cube::Cube(glm::vec3 center, float size){
+	vertexInterface = new VertexInterface(GL_QUADS, GL_STATIC_DRAW);
 	
 	transform->scale(size, size, size);
 	transform->translate(center);
@@ -71,7 +72,6 @@ Cube::Cube(glm::vec3 center, float size){
 	setNormal(22, 0.0, 0.0, -1.0);
 	setNormal(23, 0.0, 0.0, -1.0);
 	
-	vertexInterface = new VertexInterface(vertices->data(), indices->data(), sizeof(Vertex)*vertices->size(), sizeof(GLubyte)*indices->size(), GL_QUADS, GL_STATIC_DRAW, vertices->size(), sizeof(Vertex));
 }
 
 Cube::~Cube(void){
@@ -83,90 +83,75 @@ void Cube::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 
 void Cube::setColour(float red, float green, float blue, float alpha){
 	for(int i=0; i<24; i++){
-		vertices->at(i).red = red;
-		vertices->at(i).green = green;
-		vertices->at(i).blue = blue;
-		vertices->at(i).alpha = alpha;	
+		vertexInterface->vertices->at(i).red = red;
+		vertexInterface->vertices->at(i).green = green;
+		vertexInterface->vertices->at(i).blue = blue;
+		vertexInterface->vertices->at(i).alpha = alpha;	
 	}
 }
 
-void Cube::setLeftColour(float red, float green, float blue, float alpha)
-{
+void Cube::setLeftColour(float red, float green, float blue, float alpha){
 
-	for(int i=16; i<20; i++)
-	{
-		vertices->at(i).red = red;
-		vertices->at(i).green = green;
-		vertices->at(i).blue = blue;
-		vertices->at(i).alpha = alpha;	
+	for(int i=16; i<20; i++){
+		vertexInterface->vertices->at(i).red = red;
+		vertexInterface->vertices->at(i).green = green;
+		vertexInterface->vertices->at(i).blue = blue;
+		vertexInterface->vertices->at(i).alpha = alpha;	
 	}
 
 }
 
-void Cube::setRightColour(float red, float green, float blue, float alpha)
-{
-	for(int i=20; i<24; i++)
-	{
-		vertices->at(i).red = red;
-		vertices->at(i).green = green;
-		vertices->at(i).blue = blue;
-		vertices->at(i).alpha = alpha;	
+void Cube::setRightColour(float red, float green, float blue, float alpha){
+	for(int i=20; i<24; i++){
+		vertexInterface->vertices->at(i).red = red;
+		vertexInterface->vertices->at(i).green = green;
+		vertexInterface->vertices->at(i).blue = blue;
+		vertexInterface->vertices->at(i).alpha = alpha;	
 	}
 }
 
-void Cube::setTopColour(float red, float green, float blue, float alpha)
-{
-	for(int i=0; i<4; i++)
-	{
-		vertices->at(i).red = red;
-		vertices->at(i).green = green;
-		vertices->at(i).blue = blue;
-		vertices->at(i).alpha = alpha;	
+void Cube::setTopColour(float red, float green, float blue, float alpha){
+	for(int i=0; i<4; i++){
+		vertexInterface->vertices->at(i).red = red;
+		vertexInterface->vertices->at(i).green = green;
+		vertexInterface->vertices->at(i).blue = blue;
+		vertexInterface->vertices->at(i).alpha = alpha;	
 	}
 }
 
-void Cube::setBottomColour(float red, float green, float blue, float alpha)
-{
-	for(int i=0; i<8; i++)
-	{
-		vertices->at(i).red = red;
-		vertices->at(i).green = green;
-		vertices->at(i).blue = blue;
-		vertices->at(i).alpha = alpha;	
+void Cube::setBottomColour(float red, float green, float blue, float alpha){
+	for(int i=0; i<8; i++){
+		vertexInterface->vertices->at(i).red = red;
+		vertexInterface->vertices->at(i).green = green;
+		vertexInterface->vertices->at(i).blue = blue;
+		vertexInterface->vertices->at(i).alpha = alpha;	
 	}
 }
 
-void Cube::setFrontColour(float red, float green, float blue, float alpha)
-{
-	for(int i=8; i<12; i++)
-	{
-		vertices->at(i).red = red;
-		vertices->at(i).green = green;
-		vertices->at(i).blue = blue;
-		vertices->at(i).alpha = alpha;	
+void Cube::setFrontColour(float red, float green, float blue, float alpha){
+	for(int i=8; i<12; i++){
+		vertexInterface->vertices->at(i).red = red;
+		vertexInterface->vertices->at(i).green = green;
+		vertexInterface->vertices->at(i).blue = blue;
+		vertexInterface->vertices->at(i).alpha = alpha;	
 	}
 }
 
-void Cube::setBackColour(float red, float green, float blue, float alpha)
-{
-	for(int i=12; i<16; i++)
-	{
-		vertices->at(i).red = red;
-		vertices->at(i).green = green;
-		vertices->at(i).blue = blue;
-		vertices->at(i).alpha = alpha;	
+void Cube::setBackColour(float red, float green, float blue, float alpha){
+	for(int i=12; i<16; i++){
+		vertexInterface->vertices->at(i).red = red;
+		vertexInterface->vertices->at(i).green = green;
+		vertexInterface->vertices->at(i).blue = blue;
+		vertexInterface->vertices->at(i).alpha = alpha;	
 	}
 }
 
-void Cube::setVertexColour(int index, float red, float green, float blue, float alpha)
-{
-	vertices->at(index).red = red;
-	vertices->at(index).green = green;
-	vertices->at(index).blue = blue;
-	vertices->at(index).alpha = alpha;
+void Cube::setVertexColour(int index, float red, float green, float blue, float alpha){
+	vertexInterface->vertices->at(index).red = red;
+	vertexInterface->vertices->at(index).green = green;
+	vertexInterface->vertices->at(index).blue = blue;
+	vertexInterface->vertices->at(index).alpha = alpha;
 }
 
-void Cube::update(void)
-{
-
+void Cube::update(void){
 }

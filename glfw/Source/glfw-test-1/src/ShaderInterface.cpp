@@ -1,23 +1,10 @@
 #include "ShaderInterface.h"
 
-ShaderInterface::ShaderInterface(const char *shaderSource){
-	std::string vertexShaderSource = shaderSource;
-	vertexShaderSource += ".vert";
-	std::string fragShaderSource = shaderSource;
-	fragShaderSource += ".frag";
-	
-	init(vertexShaderSource.c_str(), fragShaderSource.c_str());
-}
-
-ShaderInterface::ShaderInterface(const char *vertexShaderSource, const char *fragmentShaderSource){
-	init(vertexShaderSource, fragmentShaderSource);
-}
-
 void ShaderInterface::init(const char *vertexShaderSource, const char *fragmentShaderSource){
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 
-	std::string vertexShaderString = FileUtils::voxReadFile(vertexShaderSource);
-	std::string fragmentShaderString = FileUtils::voxReadFile(fragmentShaderSource);
+	std::string vertexShaderString		= FileUtils::voxReadFile(vertexShaderSource);
+	std::string fragmentShaderString	= FileUtils::voxReadFile(fragmentShaderSource);
 	
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	shader = new ShaderLoader(vertexShaderString, fragmentShaderString);
@@ -37,8 +24,22 @@ void ShaderInterface::init(const char *vertexShaderSource, const char *fragmentS
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 }
 
+ShaderInterface::ShaderInterface(const char *shaderSource){
+	std::string vertexShaderSource	= shaderSource;
+	std::string fragShaderSource	= shaderSource;
+	vertexShaderSource	+= ".vert";
+	fragShaderSource	+= ".frag";
+	
+	init(vertexShaderSource.c_str(), fragShaderSource.c_str());
+}
+
+ShaderInterface::ShaderInterface(const char *vertexShaderSource, const char *fragmentShaderSource){
+	init(vertexShaderSource, fragmentShaderSource);
+}
+
 ShaderInterface::~ShaderInterface(void){
 	delete shader;
+	shader = nullptr;
 }
 
 GLuint ShaderInterface::getProgramId(){

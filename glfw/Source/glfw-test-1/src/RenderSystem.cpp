@@ -42,38 +42,14 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren, glm::mat4 projec
 	glFrontFace (GL_CW); // GL_CCW for counter clock-wise
 		GLUtils::checkForError(0,__FILE__,__LINE__);*/
 
+	//not needed because we aren't actually using the glTranslate/Rotate/Scale functions
 	//glLoadIdentity();
-	//	GLUtils::checkForError(0,__FILE__,__LINE__);
 
-
-		for(Entity * e : *renderChildren){
-			e->draw(projectionMatrix, viewMatrix);
-		}
-
-	/*std::vector<Entity*>::iterator it = renderChildren->begin();
-	while(it!=renderChildren->end()){
-
-		
-	//bind VAO, VBO, IBO
-	/*glBindVertexArray((*it)->vertexInterface->vaoId);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
-	glBindBuffer(GL_ARRAY_BUFFER, (*it)->vertexInterface->vboId);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (*it)->vertexInterface->iboId);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
-	//update verts in VAO/VBO
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*((*it)->vertices->size()), (*it)->vertices->data(), GL_STATIC_DRAW);*/
-/*
-		(*it)->draw(projectionMatrix, viewMatrix);
-		++it;
-			GLUtils::checkForError(0,__FILE__,__LINE__);
-
-			for(unsigned long int i = 0; i < (*it)->children->size(); ++i){
-				(*it)->children->at(i)->draw(projectionMatrix, viewMatrix);
-			}
+	for(Entity * e : *renderChildren){
+		e->draw(projectionMatrix, viewMatrix);
 	}
-	*/
+
 	glfwSwapBuffers(vox::currentContext);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
+	GLUtils::checkForError(0,__FILE__,__LINE__);
 }
  

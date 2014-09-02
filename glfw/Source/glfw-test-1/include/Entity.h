@@ -8,19 +8,12 @@
 #include "Vox.h"
 
 class Entity:public Node{
-private:
-	bool dirty;
-	virtual void clean();
-	virtual void render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 public:
 
 	VertexInterface * vertexInterface;
 	std::vector<Entity*> *children;
 	Entity *parent;
 	ShaderInterface *shader;
-	
-	std::vector<Vertex>*vertices;
-	std::vector<GLubyte>*indices;
 
 	Transform *transform;
 

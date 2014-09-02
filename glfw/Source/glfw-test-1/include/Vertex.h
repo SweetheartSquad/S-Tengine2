@@ -39,6 +39,7 @@ struct Vertex{
 		this->v = 0.0f;
 	}
 
+	//will generate random vertex colours
 	Vertex(float x, float y, float z){
 		this->x = x;
 		this->y = y;
