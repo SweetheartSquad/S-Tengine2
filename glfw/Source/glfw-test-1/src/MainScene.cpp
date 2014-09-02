@@ -34,11 +34,11 @@ MainScene::MainScene():Scene()
 	cube->pushQuad(2,1,5,7);
 	//cube->pushQuad(4,3,8,1);
 
-	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
+	//uncomment this to see it break
+	/*cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
 
-	//uncomment this to see it break
-	/*cube2->shader = new ShaderInterface("../assets/junkdata");
+	cube2->shader = new ShaderInterface("../assets/junkdata");
 	cube2->vertexInterface->configureVertexAttributes(cube2->shader->get_aPositionVertex(), 0, 3);
 	cube2->vertexInterface->configureVertexAttributes(cube2->shader->get_aFragColor(), 4, sizeof(float)*3);
 	cube2->vertexInterface->configureVertexAttributes(cube2->shader->get_aVertexNormals(), 3, sizeof(float)*7);
