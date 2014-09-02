@@ -4,6 +4,7 @@ Cube::Cube(glm::vec3 center, float size){
 	
 	transform->scale(size, size, size);
 	transform->translate(center);
+	
 	//Top
 	pushVert(Vertex(-1.f, 1.f, 1.f));
 	pushVert(Vertex(-1.f, 1.f, -1.f));
@@ -42,7 +43,7 @@ Cube::Cube(glm::vec3 center, float size){
 	pushVert(Vertex(1.f, 1.f, -1.f));
 	pushVert(Vertex(1.f, -1.f, -1.f));
 	pushVert(Vertex(-1.f, -1.f, -1.f));
-	pushQuad(12,13,14,15);
+	pushQuad(15,14,13,12);
 	setNormal(12, -1.0, 0.0, 0.0);
 	setNormal(13, -1.0, 0.0, 0.0);
 	setNormal(14, -1.0, 0.0, 0.0);
@@ -53,7 +54,7 @@ Cube::Cube(glm::vec3 center, float size){
 	pushVert(Vertex(-1.f, 1.f, -1.f));
 	pushVert(Vertex(-1.f, -1.f, -1.f));
 	pushVert(Vertex(-1.f, -1.f, 1.f));
-	pushQuad(16,17,18,19);
+	pushQuad(19,18,17,16);
 	setNormal(16, 0.0, 0.0, 1.0);
 	setNormal(17, 0.0, 0.0, 1.0);
 	setNormal(18, 0.0, 0.0, 1.0);

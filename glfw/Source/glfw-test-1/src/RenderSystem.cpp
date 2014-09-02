@@ -33,10 +33,15 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren, glm::mat4 projec
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
-	glCullFace(GL_FRONT);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
 	glEnable(GL_DEPTH_TEST);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
+
+	//Back-face culling
+	/*glEnable (GL_CULL_FACE); // cull face
+	glCullFace (GL_BACK); // cull back face
+	glFrontFace (GL_CW); // GL_CCW for counter clock-wise
+		GLUtils::checkForError(0,__FILE__,__LINE__);*/
+
 	//glLoadIdentity();
 	//	GLUtils::checkForError(0,__FILE__,__LINE__);
 

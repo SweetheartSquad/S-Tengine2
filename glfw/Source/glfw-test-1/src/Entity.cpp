@@ -6,6 +6,8 @@ Entity::Entity(void):Node(){
 	this->indices = new std::vector<GLubyte>();
 	this->parent = nullptr;
 	this->transform = new Transform();
+
+	dirty = false;
 }
 
 Entity::~Entity(void){
@@ -16,24 +18,24 @@ Entity::~Entity(void){
 	delete transform;
 }
 
-void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){	
-	//push transform
-	vox::pushMatrix(transform->getModelMatrix() );
-		GLUtils::checkForError(0,__FILE__,__LINE__);
+void Entity::render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
+	//bind VAO, VBO, IBO
 
-	for(int i = 0; i<children->size(); i++){
-		children->at(i)->draw(projectionMatrix, viewMatrix);
+	std::cout << vertexInterface->vaoId << std::endl;
+
+	if(dirty){
+		glBindBuffer(GL_ARRAY_BUFFER, vertexInterface->vboId);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*(vertices->size()), vertices->data(), GL_STATIC_DRAW);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexInterface->iboId);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*(indices->size()), indices->data(), GL_STATIC_DRAW);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+		dirty = false;
 	}
 
-	//bind VAO, VBO, IBO
 	glBindVertexArray(vertexInterface->vaoId);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexInterface->vboId);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertexInterface->iboId);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
-	//update verts in VAO/VBO
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*(vertices->size()), vertices->data(), GL_STATIC_DRAW);
+		//update verts in VAO/VBO
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 
 	//specify shader attributes
@@ -46,11 +48,24 @@ void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 
 
 	//draw
-	glDrawRangeElements(vertexInterface->polygonalDrawMode, 0, vertexInterface->vertCount, indices->size(), GL_UNSIGNED_BYTE, 0);
+		std::cout << indices->size() << std::endl;
+		glDrawRangeElements(vertexInterface->polygonalDrawMode, 0, vertices->size(), indices->size(), GL_UNSIGNED_BYTE, 0);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 
 	//disable VAO
-	//glBindVertexArray(0);
+	glBindVertexArray(0);
+}
+
+void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){	
+	//push transform
+	vox::pushMatrix(transform->getModelMatrix() );
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+
+	render(projectionMatrix, viewMatrix);
+
+	for(int i = 0; i<children->size(); i++){
+		children->at(i)->draw(projectionMatrix, viewMatrix);
+	}
 
 	//pop transform
 	vox::popMatrix();
@@ -79,15 +94,28 @@ void Entity::setParent(Entity* parent){
 
 void Entity::pushVert(Vertex vertex){
 	vertices->push_back(vertex);
+
+	dirty = true;
+}
+void Entity::pushTri(GLubyte v0, GLubyte v1, GLubyte v2){
+	indices->push_back(v0);
+	indices->push_back(v1);
+	indices->push_back(v2);
+
+	dirty = true;
 }
 void Entity::pushQuad(GLubyte v0, GLubyte v1, GLubyte v2, GLubyte v3){
 	indices->push_back(v0);
 	indices->push_back(v1);
 	indices->push_back(v2);
 	indices->push_back(v3);
+
+	dirty = true;
 }
 void Entity::setNormal(unsigned long int _vertId, float _x, float _y, float _z){
 	vertices->at(_vertId).nx = _x;
 	vertices->at(_vertId).ny = _y;
 	vertices->at(_vertId).nz = _z;
+
+	dirty = true;
 }

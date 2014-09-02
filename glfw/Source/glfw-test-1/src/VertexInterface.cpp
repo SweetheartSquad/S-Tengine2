@@ -45,11 +45,16 @@ void VertexInterface::renderVertexInterface(){
 void VertexInterface::configureVertexAttributes(GLint vertexHandle, unsigned long int _arity, int bufferOffset){
 	std::cout << "vertexHandle: " << vertexHandle << std::endl;
 	if (vertexHandle != -1){
-		glBindVertexArray(vaoId);
+		glBindVertexArray(vaoId);//bind VAO, VBO, IBO
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+		/*glBindBuffer(GL_ARRAY_BUFFER, vboId);
+		GLUtils::checkForError(0,__FILE__,__LINE__);*/
 
 		glEnableVertexAttribArray(vertexHandle);
 		glVertexAttribPointer(vertexHandle, _arity, GL_FLOAT, GL_FALSE, stride, BUFFER_OFFSET(bufferOffset));
-
+		
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
 		glBindVertexArray(0);
 	}
 }

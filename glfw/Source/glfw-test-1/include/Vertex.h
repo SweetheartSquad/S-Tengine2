@@ -1,5 +1,6 @@
-struct Vertex
-{
+#pragma once
+
+struct Vertex{
 	float x,y,z;
 	float red,green,blue,alpha;
 	float nx, ny, nz;
@@ -7,8 +8,7 @@ struct Vertex
 	Vertex(float x, float y, float z, 
 					  float red, float green, float blue, float alpha, 
 					  float normalX, float normalY, float normalZ, 
-					  float u, float v)
-	{
+					  float u, float v){
 		this->x = x;
 		this->y = y;
 		this->z = z;
@@ -24,8 +24,7 @@ struct Vertex
 	}
 
 	Vertex(float x, float y, float z, 
-				float red, float green, float blue, float alpha)
-	{
+				float red, float green, float blue, float alpha){
 		this->x = x;
 		this->y = y;
 		this->z = z;
@@ -33,26 +32,28 @@ struct Vertex
 		this->green = green;
 		this->blue = blue;
 		this->alpha = alpha;
-		this->nx = 0;
-		this->ny = 0;
-		this->nz = 0;
-		this->u = 0;
-		this->v = 0;
+		this->nx = 0.0f;
+		this->ny = 0.0f;
+		this->nz = 0.0f;
+		this->u = 0.0f;
+		this->v = 0.0f;
 	}
 
-	Vertex(float x, float y, float z)
-	{
+	Vertex(float x, float y, float z){
 		this->x = x;
 		this->y = y;
 		this->z = z;
-		this->red = 1.0f;
-		this->green = 1.0f;
-		this->blue = 1.0f;
+		this->red = (float)(std::rand()%255)/255.f;
+		this->green = (float)(std::rand()%255)/255.f;
+		this->blue = (float)(std::rand()%255)/255.f;
+
+		std::cout << red << " " << green << " " << blue << std::endl;
+
 		this->alpha = 1.0f;
-		this->nx = 0;
-		this->ny = 0;
-		this->nz = 0;
-		this->u = 0;
-		this->v = 0;
+		this->nx = 0.0f;
+		this->ny = 0.0f;
+		this->nz = 0.0f;
+		this->u = 0.0f;
+		this->v = 0.0f;
 	}
 };
