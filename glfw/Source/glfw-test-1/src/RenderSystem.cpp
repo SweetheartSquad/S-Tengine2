@@ -45,7 +45,12 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren, glm::mat4 projec
 	//glLoadIdentity();
 	//	GLUtils::checkForError(0,__FILE__,__LINE__);
 
-	std::vector<Entity*>::iterator it = renderChildren->begin();
+
+		for(Entity * e : *renderChildren){
+			e->draw(projectionMatrix, viewMatrix);
+		}
+
+	/*std::vector<Entity*>::iterator it = renderChildren->begin();
 	while(it!=renderChildren->end()){
 
 		
@@ -58,12 +63,16 @@ void RenderSystem::render(std::vector<Entity*> *renderChildren, glm::mat4 projec
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	//update verts in VAO/VBO
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*((*it)->vertices->size()), (*it)->vertices->data(), GL_STATIC_DRAW);*/
-
+/*
 		(*it)->draw(projectionMatrix, viewMatrix);
 		++it;
 			GLUtils::checkForError(0,__FILE__,__LINE__);
-	}
 
+			for(unsigned long int i = 0; i < (*it)->children->size(); ++i){
+				(*it)->children->at(i)->draw(projectionMatrix, viewMatrix);
+			}
+	}
+	*/
 	glfwSwapBuffers(vox::currentContext);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 }

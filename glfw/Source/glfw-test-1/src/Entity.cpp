@@ -34,9 +34,7 @@ void Entity::render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 	std::cout << vertexInterface->vaoId << std::endl;
 	//bind VAO
 	glBindVertexArray(vertexInterface->vaoId);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
-		//update verts in VAO/VBO
-		GLUtils::checkForError(0,__FILE__,__LINE__);
+	GLUtils::checkForError(0,__FILE__,__LINE__);
 
 	//specify shader attributes
 	glUseProgram(shader->getProgramId());
@@ -46,11 +44,10 @@ void Entity::render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 
-
 	//draw
 	std::cout << indices->size() << std::endl;
 	std::cout << vertices->size() << std::endl;
-	glDrawRangeElements(vertexInterface->polygonalDrawMode, 0, vertices->size()/3, indices->size(), GL_UNSIGNED_BYTE, 0);
+	glDrawRangeElements(vertexInterface->polygonalDrawMode, 0, vertices->size(), indices->size(), GL_UNSIGNED_BYTE, 0);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 
 	//disable VAO
@@ -60,13 +57,12 @@ void Entity::render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){	
 	//push transform
 	vox::pushMatrix(transform->getModelMatrix() );
-		GLUtils::checkForError(0,__FILE__,__LINE__);
 
 	clean();
 	render(projectionMatrix, viewMatrix);
 
-	for(int i = 0; i<children->size(); i++){
-		children->at(i)->draw(projectionMatrix, viewMatrix);
+	for(Entity * child : *children){
+		child->draw(projectionMatrix, viewMatrix);
 	}
 
 	//pop transform

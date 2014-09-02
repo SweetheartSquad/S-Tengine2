@@ -46,9 +46,6 @@ struct Vertex{
 		this->red = (float)(std::rand()%255)/255.f;
 		this->green = (float)(std::rand()%255)/255.f;
 		this->blue = (float)(std::rand()%255)/255.f;
-
-		std::cout << red << " " << green << " " << blue << std::endl;
-
 		this->alpha = 1.0f;
 		this->nx = 0.0f;
 		this->ny = 0.0f;

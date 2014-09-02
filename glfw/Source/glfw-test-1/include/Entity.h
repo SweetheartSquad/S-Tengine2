@@ -8,9 +8,11 @@
 #include "Vox.h"
 
 class Entity:public Node{
-
-public:
+private:
 	bool dirty;
+	virtual void clean();
+	virtual void render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
+public:
 
 	VertexInterface * vertexInterface;
 	std::vector<Entity*> *children;
@@ -25,8 +27,6 @@ public:
 	Entity(void);
 	virtual ~Entity(void);
 
-	virtual void clean();
-	virtual void render(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 	virtual void draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 	virtual void update();
 	
