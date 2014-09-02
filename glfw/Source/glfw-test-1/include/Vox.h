@@ -14,7 +14,7 @@
 
 namespace vox
 {
-	
+
 extern std::vector<glm::mat4> *matrixStack;
 extern glm::mat4 currentModelMatrix;
 extern double lastTimestamp;
@@ -29,10 +29,15 @@ void setGlfwWindowHints();
 void initWindow();
 
 void calculateModelMatrix();
-void pushMatrix(glm::mat4 modelMatrix);
+void pushMatrix();
 void popMatrix();
-glm::mat4 modelMatrix();
+glm::mat4 getCurrentMatrix();
 void clearMatrixStack();
+
+void scale(glm::mat4 scaleMatrix);
+void rotate(glm::mat4 rotationMatrix);
+void translate(glm::mat4 translationMatrix);
+void applyMatrix(glm::mat4 modelMatrix);
 
 void calculateDeltaTimeCorrection();
 
