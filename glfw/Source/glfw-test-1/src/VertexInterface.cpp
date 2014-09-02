@@ -70,7 +70,7 @@ void VertexInterface::render(ShaderInterface *shader, glm::mat4 projectionMatrix
 	//specify shader attributes
 	glUseProgram(shader->getProgramId());
 	GLUtils::checkForError(0,__FILE__,__LINE__);
-	glm::mat4 mvp = projectionMatrix * viewMatrix * vox::currentModelMatrix;  	
+	glm::mat4 mvp = projectionMatrix * viewMatrix * vox::modelMatrix();  	
 	GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
 	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
 	GLUtils::checkForError(0,__FILE__,__LINE__);

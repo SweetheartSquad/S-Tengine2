@@ -44,43 +44,32 @@ void vox::initWindow(){
 }
 
 /////////// Matrix Stack Begin //////////////
-void vox::popMatrix(){
-	if(matrixStack->size() > 0){	
-		if(matrixStack->size()>0){
-			currentModelMatrix = matrixStack->at(matrixStack->size()-1);
-			matrixStack->pop_back();
-		}else{
-			currentModelMatrix = glm::mat4(1);
-			throw;
-		}
-	}else{
-		currentModelMatrix = glm::mat4(1);
-		throw;
+
+void vox::calculateModelMatrix()
+{
+	glm::mat4 returnMatrix = glm::mat4(1);
+	for(glm::mat4 m : *matrixStack){
+		returnMatrix = returnMatrix * m;
+	}
+	currentModelMatrix = returnMatrix;
+}
+
+void vox::pushMatrix(glm::mat4 modelMatrix)
+{
+	matrixStack->push_back(modelMatrix);
+	calculateModelMatrix();
+}
+
+void vox::popMatrix()
+{
+	if(matrixStack->size() > 0){
+		matrixStack->pop_back();	
+		calculateModelMatrix();
 	}
 }
 
-void vox::pushMatrix(){
-	matrixStack->push_back(currentModelMatrix);
-}
-
-glm::mat4 vox::getCurrentMatrix(){
+glm::mat4 vox::modelMatrix(){
 	return currentModelMatrix;
-}
-
-void vox::scale(glm::mat4 scaleMatrix){
-	currentModelMatrix = currentModelMatrix * scaleMatrix;
-}
-
-void vox::rotate(glm::mat4 rotationMatrix){
-	currentModelMatrix = currentModelMatrix * rotationMatrix;
-}
-
-void vox::translate(glm::mat4 translationMatrix){
-	currentModelMatrix = currentModelMatrix * translationMatrix;
-}
-
-void vox::applyMatrix(glm::mat4 modelMatrix){
-	currentModelMatrix = currentModelMatrix * modelMatrix;
 }
 
 void vox::clearMatrixStack(){
@@ -88,6 +77,7 @@ void vox::clearMatrixStack(){
 }
 
 /////////// Delta Time Begin //////////////
+
 void vox::calculateDeltaTimeCorrection(){
 	double targetFrameDuration = static_cast<double>(1)/FPS;
 	double time = glfwGetTime();
