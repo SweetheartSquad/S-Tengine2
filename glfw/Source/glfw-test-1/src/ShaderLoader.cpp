@@ -1,7 +1,6 @@
 #include "ShaderLoader.h"
 
-ShaderLoader::ShaderLoader(std::string vertexShaderSource, std::string fragmentShaderSource)
-{
+ShaderLoader::ShaderLoader(std::string vertexShaderSource, std::string fragmentShaderSource){
 	//vert
 	char * v = new char[vertexShaderSource.size() + 1];
 	int vl = vertexShaderSource.length();
@@ -31,8 +30,7 @@ ShaderLoader::ShaderLoader(std::string vertexShaderSource, std::string fragmentS
 	//check for error with glLinkProgram
 	GLint isLinked = 0;
 	glGetProgramiv(programId, GL_LINK_STATUS, &isLinked);
-	if(isLinked == GL_FALSE)
-	{
+	if(isLinked == GL_FALSE){
 			GLint maxLength = 0;
 			glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &maxLength);
  

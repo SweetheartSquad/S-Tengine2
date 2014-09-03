@@ -22,8 +22,8 @@
 #include "Node.h"
 #include "Vox.h"
 
-class Transform: public Node
-{
+//a generic transform node
+class Transform: public Node{
 public:
 
 	glm::vec3 *translationVector;

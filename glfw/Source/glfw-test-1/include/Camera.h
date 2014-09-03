@@ -17,6 +17,7 @@ public:
 	Camera();
 	~Camera();
 
+	//tracks the changes in mouse position and uses them to rotate the camera
 	void update();
 	
 	Keyboard *keyboard;

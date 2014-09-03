@@ -5,8 +5,7 @@
 #include"Cube.h"
 #include "Vox.h"
 
-class MainScene:public Scene
-{
+class MainScene : public Scene{
 public:
 	MainScene();
 	~MainScene();
