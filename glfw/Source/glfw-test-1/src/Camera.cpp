@@ -1,7 +1,13 @@
 #include "Camera.h"
 
-Camera::Camera(){
-	
+Camera::Camera():
+	forwardVectorLocal(1.f, 0.f, 0.f),
+	forwardVectorRotated(1.f, 0.f, 0.f),
+	upVectorLocal(0.f, 1.f, 0.f),
+	upVectorRotated(0.f, 1.f, 0.f),
+	rightVectorLocal(0.f, 0.f, 1.f),
+	rightVectorRotated(0.f, 0.f, 1.f)
+{
 	this->transform = new Transform();
 
 	transform->translateX(-5);
