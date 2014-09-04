@@ -1,11 +1,12 @@
 #include "Entity.h"
 
 
-Entity::Entity(MeshInterface * _mesh, Transform * _transform, ShaderInterface * _shader, Entity * _parent):Node(){
-	mesh = _mesh;
-	transform = _transform;
-	shader = _shader;
-	parent = _parent;
+Entity::Entity(MeshInterface * _mesh, Transform * _transform, ShaderInterface * _shader, Entity * _parent):
+	mesh(_mesh),
+	transform(_transform),
+	shader(_shader),
+	parent(_parent)
+{
 }
 
 Entity::~Entity(void){

@@ -1,11 +1,11 @@
 #include "Transform.h"
 
 Transform::Transform(void):
-	Node(),
-	translationVector(0.0f, 0.0f, 0.0f),
+	translationVector(0.f, 0.f, 0.f),
 	scaleVector(1.f, 1.f, 1.f),
-	orientation(1.0f, 0.0f, 0.0f, 0.0f){
-	this->parent = nullptr;
+	orientation(1.f, 0.f, 0.f, 0.f),
+	parent(nullptr)
+{
 }
 
 Transform::~Transform(void){

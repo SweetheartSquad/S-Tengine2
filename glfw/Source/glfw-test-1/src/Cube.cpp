@@ -1,8 +1,8 @@
 #include "Cube.h"
 
-Cube::Cube(glm::vec3 center, float size){
-	mesh = new QuadMesh(GL_QUADS, GL_STATIC_DRAW), new Transform();
-	transform = new Transform();
+Cube::Cube(glm::vec3 center, float size):
+	Entity(new QuadMesh(GL_QUADS, GL_STATIC_DRAW), new Transform())
+{
 	QuadMesh * m = (QuadMesh *)mesh;
 
 	transform->scale(size, size, size);

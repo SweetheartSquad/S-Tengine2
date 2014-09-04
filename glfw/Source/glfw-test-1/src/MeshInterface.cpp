@@ -2,13 +2,12 @@
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
-MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode){
-	this->drawMode = drawMode;
-	this->polygonalDrawMode = polygonalDrawMode;
-	
-	loaded = false;
-	dirty = true;
-
+MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
+	drawMode(drawMode),
+	polygonalDrawMode(polygonalDrawMode),
+	loaded(false),
+	dirty(true)
+{
 	load();
 	clean();
 }

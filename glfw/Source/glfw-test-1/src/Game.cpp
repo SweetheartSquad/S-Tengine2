@@ -1,16 +1,18 @@
 #include "Game.h"
 
+//these shouldn't be global
 double lastTime = glfwGetTime();
 int nbFrames = 0;
 
-Game::Game(bool isRunning){
-	this->isRunning = isRunning;
-	this->renderSystem = &RenderSystem::getInstance();
-	this->children = new std::vector<Entity*>();
-	this->scenes = new std::map<std::string, Scene*>();
-	this->printFPS = true;
-	this->keyboard = &Keyboard::getInstance();
-	this->mouse = &Mouse::getInstance();
+Game::Game(bool isRunning):
+	isRunning(isRunning),
+	renderSystem(&RenderSystem::getInstance()),
+	children(new std::vector<Entity *>()),
+	scenes(new std::map<std::string, Scene *>()),
+	printFPS(true),
+	keyboard(&Keyboard::getInstance()),
+	mouse(&Mouse::getInstance())
+{
 }
 
 Game::~Game(void){

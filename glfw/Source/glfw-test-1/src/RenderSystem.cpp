@@ -1,7 +1,8 @@
 #include "RenderSystem.h"
 
-RenderSystem::RenderSystem(){
-	shaderArray = new std::vector<ShaderInterface*>;
+RenderSystem::RenderSystem():
+	shaderArray(new std::vector<ShaderInterface*>)
+{
 }
 
 RenderSystem::~RenderSystem(void){

@@ -4,7 +4,9 @@ Cube *cube;
 Cube *cube2;
 Cube *cube3;
 Cube *cube4;
-MainScene::MainScene():Scene(){
+MainScene::MainScene():
+	Scene()
+{
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
 	addChild(cube);
 	cube->shader = new ShaderInterface("../assets/ColourShader");

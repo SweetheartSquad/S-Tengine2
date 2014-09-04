@@ -6,24 +6,20 @@ Camera::Camera():
 	upVectorLocal(0.f, 1.f, 0.f),
 	upVectorRotated(0.f, 1.f, 0.f),
 	rightVectorLocal(0.f, 0.f, 1.f),
-	rightVectorRotated(0.f, 0.f, 1.f)
+	rightVectorRotated(0.f, 0.f, 1.f),
+	transform(new Transform()),
+	fieldOfView(45.0f),
+	horizontalAngle(3.14f),
+	verticalAngle(0.0f),
+	speed(0.1f),
+	mouseSpeed(0.05f),
+	mouse(&Mouse::getInstance())
 {
-	this->transform = new Transform();
-
 	transform->translateX(-5);
-	
-	fieldOfView = 45.0f;
-	horizontalAngle = 3.14f;
-	verticalAngle = 0.0f;
-	speed = 0.1f;
-	mouseSpeed = 0.05f;
 
 	Dimension screenDimensions = System::getScreenDimensions();
-	
 	lastMouseY	= screenDimensions.height/2;
 	lastMouseX	= screenDimensions.width/2;
-
-	mouse = &Mouse::getInstance();
 }
 
 Camera::~Camera(){
@@ -32,27 +28,25 @@ Camera::~Camera(){
 void Camera::update(){
 	Dimension screenDimensions = System::getScreenDimensions();
 
-	float offsetX = 0.0f;
-	float offsetY = 0.0f;
+	double centerX = (double)screenDimensions.width*0.5;
+	double centerY = (double)screenDimensions.height*0.5;
 
-	if(abs(screenDimensions.width*0.5 - mouse->mouseX()) < 0.01){
-		offsetX = 0;
-	}else{
-		offsetX = screenDimensions.width*0.5 - mouse->mouseX();
+	double offsetX = 0.;
+	double offsetY = 0.;
+
+	if(abs(centerX - mouse->mouseX()) > 0.01){
+		offsetX = centerX - mouse->mouseX();
 	}
-	
-	if(abs(screenDimensions.height*0.5 - mouse->mouseY()) < 0.01){
-		offsetY = 0;
-	}else{
-		offsetY = screenDimensions.height*0.5 - mouse->mouseY();
+	if(abs(centerY - mouse->mouseY()) > 0.01){
+		offsetY = centerY - mouse->mouseY();
 	}
 
-	float deltaX = lastMouseX - offsetX;
-	float deltaY = lastMouseY - offsetY;
+	double deltaX = lastMouseX - offsetX;
+	double deltaY = lastMouseY - offsetY;
 
 	if(deltaX != 0 || deltaY != 0){
-		horizontalAngle	= mouseSpeed * vox::deltaTimeCorrection * offsetX;
-		verticalAngle	= mouseSpeed * vox::deltaTimeCorrection * offsetY;
+		horizontalAngle	= mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetX;
+		verticalAngle	= mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetY;
 		
 		transform->orientation = glm::rotate(transform->orientation, verticalAngle, rightVectorLocal);
 		transform->orientation = glm::rotate(transform->orientation, horizontalAngle, upVectorLocal);
@@ -62,10 +56,10 @@ void Camera::update(){
 		rightVectorRotated		= transform->orientation * rightVectorLocal;
 	}
 
-	glfwSetCursorPos(vox::currentContext, screenDimensions.width/2, screenDimensions.height/2);
+	glfwSetCursorPos(vox::currentContext, centerX, centerY);
 
-	this->lastMouseX = offsetX;
-	this->lastMouseY = offsetY;
+	lastMouseX = offsetX;
+	lastMouseY = offsetY;
 }
 
 glm::mat4 Camera::getViewMatrix(){

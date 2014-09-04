@@ -41,6 +41,6 @@ public:
 	glm::mat4 getProjectionMatrix();
 
 private :
-	float lastMouseX;
-	float lastMouseY;
+	double lastMouseX;
+	double lastMouseY;
 };
