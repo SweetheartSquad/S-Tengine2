@@ -1,18 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <vector>
-#include <gmtl/Vec.h>
-#include <gmtl/AxisAngle.h>
-#include <gmtl/VecBase.h>
-#include <gmtl/VecExprMeta.h>
-#include <gmtl/VecOps.h>
-#include <gmtl/QuatOps.h>
-#include <gmtl/gmtl.h>
 #include <iostream>
-#include <gmtl\Generate.h>
 
 #include <glm/gtx/quaternion.hpp>
 #include <glm/glm.hpp>
@@ -20,7 +10,6 @@
 #include <glm/gtx/transform.hpp>
 
 #include "Node.h"
-#include "Vox.h"
 
 class Transform: public Node
 {

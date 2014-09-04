@@ -3,6 +3,7 @@
 #include "cinder\Vector.h"
 #include "cinder\gl\gl.h"
 #include "cinder/gl/GlslProg.h"
+#include "Transform.h"
 #include <map>
 
 using namespace ci;
@@ -12,8 +13,6 @@ public:
 	static uint32_t nextColor;
 	static unsigned long int nextId;
 	static std::map<uint32_t, Joint *> jointMap;
-
-	Quatd orientation;
 	Color color;
 
 	unsigned long int depth;
@@ -24,7 +23,8 @@ public:
 	
 	Joint * parent;
 	std::vector<Joint *> children;
-	
+	Transform *transform;
+
 	Joint();
 	Joint(Joint * _parent);
 	~Joint();
@@ -35,6 +35,5 @@ public:
 	void draw(gl::GlslProg * _shader);
 private:
 	void init();
-	Vec3d pos;
 };
 typedef std::pair<uint32_t, Joint*> JointPair;
