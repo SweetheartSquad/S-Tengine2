@@ -1,8 +1,9 @@
 #include "Cube.h"
 
 Cube::Cube(glm::vec3 center, float size){
-	QuadMesh * m = new QuadMesh(GL_QUADS, GL_STATIC_DRAW);
-	mesh = m;
+	mesh = new QuadMesh(GL_QUADS, GL_STATIC_DRAW), new Transform();
+	transform = new Transform();
+	QuadMesh * m = (QuadMesh *)mesh;
 
 	transform->scale(size, size, size);
 	transform->translate(center);
@@ -91,14 +92,12 @@ void Cube::setColour(float red, float green, float blue, float alpha){
 }
 
 void Cube::setLeftColour(float red, float green, float blue, float alpha){
-
 	for(int i=16; i<20; i++){
 		mesh->vertices.at(i).red = red;
 		mesh->vertices.at(i).green = green;
 		mesh->vertices.at(i).blue = blue;
 		mesh->vertices.at(i).alpha = alpha;	
 	}
-
 }
 
 void Cube::setRightColour(float red, float green, float blue, float alpha){

@@ -5,12 +5,6 @@ Camera::Camera(){
 	this->transform = new Transform();
 
 	transform->translateX(-5);
-	forwardVectorLocal		= new glm::vec3(1.f, 0.f, 0.f);
-	forwardVectorRotated	= new glm::vec3(1.f, 0.f, 0.f);
-	upVectorLocal			= new glm::vec3(0.f, 1.f, 0.f);
-	upVectorRotated			= new glm::vec3(0.f, 1.f, 0.f);
-	rightVectorLocal		= new glm::vec3(0.f, 0.f, 1.f);
-	rightVectorRotated		= new glm::vec3(0.f, 0.f, 1.f);
 	
 	fieldOfView = 45.0f;
 	horizontalAngle = 3.14f;
@@ -24,7 +18,6 @@ Camera::Camera(){
 	lastMouseX	= screenDimensions.width/2;
 
 	mouse = &Mouse::getInstance();
-	keyboard = &Keyboard::getInstance();
 }
 
 Camera::~Camera(){
@@ -52,33 +45,17 @@ void Camera::update(){
 	float deltaY = lastMouseY - offsetY;
 
 	if(deltaX != 0 || deltaY != 0){
-		horizontalAngle = mouseSpeed * vox::deltaTimeCorrection * offsetX;
-		verticalAngle = mouseSpeed * vox::deltaTimeCorrection * offsetY;
+		horizontalAngle	= mouseSpeed * vox::deltaTimeCorrection * offsetX;
+		verticalAngle	= mouseSpeed * vox::deltaTimeCorrection * offsetY;
 		
-		transform->orientation = glm::rotate(transform->orientation, verticalAngle, *rightVectorLocal);
-		transform->orientation = glm::rotate(transform->orientation, horizontalAngle, *upVectorLocal);
+		transform->orientation = glm::rotate(transform->orientation, verticalAngle, rightVectorLocal);
+		transform->orientation = glm::rotate(transform->orientation, horizontalAngle, upVectorLocal);
 		
-		*forwardVectorRotated = (transform->orientation * (*forwardVectorLocal));
-		*upVectorRotated = (transform->orientation * (*upVectorLocal));
-		*rightVectorRotated = (transform->orientation * (*rightVectorLocal));
+		forwardVectorRotated	= transform->orientation * forwardVectorLocal;
+		upVectorRotated			= transform->orientation * upVectorLocal;
+		rightVectorRotated		= transform->orientation * rightVectorLocal;
 	}
 
-	if (keyboard->keyDown(GLFW_KEY_UP)){
-		transform->translate((*forwardVectorRotated) * speed);
-	}
-	// Move backward
-	if (keyboard->keyDown(GLFW_KEY_DOWN)){
-		transform->translate((*forwardVectorRotated) * -speed);
-	}
-	// Strafe right
-	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
-		transform->translate((*rightVectorRotated) * speed);
-	}
-	// Strafe left
-	if (keyboard->keyDown(GLFW_KEY_LEFT)){
-		transform->translate((*rightVectorRotated) * -speed);
-	}
-	
 	glfwSetCursorPos(vox::currentContext, screenDimensions.width/2, screenDimensions.height/2);
 
 	this->lastMouseX = offsetX;
@@ -88,8 +65,8 @@ void Camera::update(){
 glm::mat4 Camera::getViewMatrix(){
 	return glm::lookAt(
 		transform->translationVector,	// Camera is here        
-		transform->translationVector + (*forwardVectorRotated), // and looks here : at the same position, plus "direction"
-		*upVectorRotated				// Head is up (set to 0,-1,0 to look upside-down)
+		transform->translationVector + forwardVectorRotated, // and looks here : at the same position, plus "direction"
+		upVectorRotated				// Head is up (set to 0,-1,0 to look upside-down)
 	);
 }
 

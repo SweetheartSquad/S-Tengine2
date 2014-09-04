@@ -42,7 +42,7 @@ ShaderLoader::ShaderLoader(std::string vertexShaderSource, std::string fragmentS
 			glDeleteProgram(programId);
  
 			//Provide the infolog in whatever manor you deem best.
-			for(int i = 0; i < infoLog.size(); ++i){
+			for(unsigned long int i = 0; i < infoLog.size(); ++i){
 				std::cout << infoLog.at(i);
 			}
 			//Exit with failure.

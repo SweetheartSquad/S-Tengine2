@@ -1,39 +1,25 @@
 #include "ShaderInterface.h"
 
-void ShaderInterface::init(const char *vertexShaderSource, const char *fragmentShaderSource){
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+void ShaderInterface::init(std::string vertexShaderFile, std::string fragmentShaderFile){
 
-	std::string vertexShaderString		= FileUtils::voxReadFile(vertexShaderSource);
-	std::string fragmentShaderString	= FileUtils::voxReadFile(fragmentShaderSource);
-	
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	//read source files into strings
+	std::string vertexShaderString		= FileUtils::voxReadFile(vertexShaderFile);
+	std::string fragmentShaderString	= FileUtils::voxReadFile(fragmentShaderFile);
+
 	shader = new ShaderLoader(vertexShaderString, fragmentShaderString);
-
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 
-	aPositionVertex		= glGetAttribLocation(getProgramId(), "aPositionVertex");
-	aFragColor			= glGetAttribLocation(getProgramId(), "aFragColor");
+	aVertexPosition		= glGetAttribLocation(getProgramId(), "aVertexPosition");
+	aVertexColor		= glGetAttribLocation(getProgramId(), "aVertexColor");
 	aVertexNormals		= glGetAttribLocation(getProgramId(), "aVertexNormals");
-
-	/*aPositionVertex = 0;
-	aFragColor = 1;
-	aVertexNormals = 2;
-	glBindAttribLocation(getProgramId(), aPositionVertex, "aPositionVertex");
-	glBindAttribLocation(getProgramId(), aFragColor, "aFragColor");
-	glBindAttribLocation(getProgramId(), aVertexNormals, "aVertexNormals");*/
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 }
 
-ShaderInterface::ShaderInterface(const char *shaderSource){
-	std::string vertexShaderSource	= shaderSource;
-	std::string fragShaderSource	= shaderSource;
-	vertexShaderSource	+= ".vert";
-	fragShaderSource	+= ".frag";
-	
-	init(vertexShaderSource.c_str(), fragShaderSource.c_str());
+ShaderInterface::ShaderInterface(std::string shaderSource){
+	init(shaderSource+".vert", shaderSource+".frag");
 }
 
-ShaderInterface::ShaderInterface(const char *vertexShaderSource, const char *fragmentShaderSource){
+ShaderInterface::ShaderInterface(std::string vertexShaderSource, std::string fragmentShaderSource){
 	init(vertexShaderSource, fragmentShaderSource);
 }
 
@@ -46,12 +32,12 @@ GLuint ShaderInterface::getProgramId(){
 	return shader->getProgramId();
 }
 
-GLint ShaderInterface::get_aPositionVertex(){
-	return aPositionVertex;
+GLint ShaderInterface::get_aVertexPosition(){
+	return aVertexPosition;
 }
 
-GLint ShaderInterface::get_aFragColor(){
-	return aFragColor;
+GLint ShaderInterface::get_aVertexColor(){
+	return aVertexColor;
 }
 
 GLint ShaderInterface::get_aVertexNormals(){

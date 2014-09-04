@@ -14,8 +14,8 @@ MainScene::MainScene():Scene(){
 	cube->mesh->vertices.pop_back();
 	cube->mesh->vertices.pop_back();
 
-	cube->mesh->configureVertexAttributes(cube->shader->get_aPositionVertex(), 3, 0);
-	cube->mesh->configureVertexAttributes(cube->shader->get_aFragColor(), 4, sizeof(float)*3);
+	cube->mesh->configureVertexAttributes(cube->shader->get_aVertexPosition(), 3, 0);
+	cube->mesh->configureVertexAttributes(cube->shader->get_aVertexColor(), 4, sizeof(float)*3);
 	cube->mesh->configureVertexAttributes(cube->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 	
 	cube->setFrontColour(1,0,0, 1);
@@ -33,8 +33,8 @@ MainScene::MainScene():Scene(){
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
 	cube2->shader = new ShaderInterface("../assets/junkdata");
-	cube2->mesh->configureVertexAttributes(cube2->shader->get_aPositionVertex(), 3, 0);
-	cube2->mesh->configureVertexAttributes(cube2->shader->get_aFragColor(), 4, sizeof(float)*3);
+	cube2->mesh->configureVertexAttributes(cube2->shader->get_aVertexPosition(), 3, 0);
+	cube2->mesh->configureVertexAttributes(cube2->shader->get_aVertexColor(), 4, sizeof(float)*3);
 	cube2->mesh->configureVertexAttributes(cube2->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 	
 	cube2->setFrontColour(1,0,0,1);
@@ -49,8 +49,8 @@ MainScene::MainScene():Scene(){
 	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->addChild(cube3);
 	cube3->shader = new ShaderInterface("../assets/ColourShader");
-	cube3->mesh->configureVertexAttributes(cube3->shader->get_aPositionVertex(), 3, 0);
-	cube3->mesh->configureVertexAttributes(cube3->shader->get_aFragColor(), 4, sizeof(float)*3);
+	cube3->mesh->configureVertexAttributes(cube3->shader->get_aVertexPosition(), 3, 0);
+	cube3->mesh->configureVertexAttributes(cube3->shader->get_aVertexColor(), 4, sizeof(float)*3);
 	cube3->mesh->configureVertexAttributes(cube3->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 	
 	cube3->setFrontColour(0.5,0,0,1);
@@ -67,8 +67,8 @@ MainScene::MainScene():Scene(){
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	addChild(cube4);
 	cube4->shader = new ShaderInterface("../assets/ColourShader");
-	cube4->mesh->configureVertexAttributes(cube4->shader->get_aPositionVertex(), 3, 0);
-	cube4->mesh->configureVertexAttributes(cube4->shader->get_aFragColor(), 4, sizeof(float)*3);
+	cube4->mesh->configureVertexAttributes(cube4->shader->get_aVertexPosition(), 3, 0);
+	cube4->mesh->configureVertexAttributes(cube4->shader->get_aVertexColor(), 4, sizeof(float)*3);
 	cube4->mesh->configureVertexAttributes(cube4->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 	
 	/*cube4->setFrontColour(1,0,0,1);
@@ -130,8 +130,8 @@ void MainScene::update(){
 
 			child->shader = new ShaderInterface("../assets/ColourShader");
 
-			child->mesh->configureVertexAttributes(child->shader->get_aPositionVertex(), 3, 0);
-			child->mesh->configureVertexAttributes(child->shader->get_aFragColor(), 4, sizeof(float)*3);
+			child->mesh->configureVertexAttributes(child->shader->get_aVertexPosition(), 3, 0);
+			child->mesh->configureVertexAttributes(child->shader->get_aVertexColor(), 4, sizeof(float)*3);
 			child->mesh->configureVertexAttributes(child->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 		}
 
@@ -140,33 +140,50 @@ void MainScene::update(){
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		cube->transform->rotate(2, 0, -1, 0);
+		cube->transform->rotate(2.f, 0.f, -1.f, 0.f);
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		cube2->transform->translateX(0.02);
-		cube2->transform->rotate(2, 0, -1, 0);
+		cube2->transform->translateX(0.02f);
+		cube2->transform->rotate(2.f, 0.f, -1.f, 0.f);
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
-		cube->transform->rotate(2 * vox::deltaTimeCorrection , 1, 0, 0);
+		cube->transform->rotate(2.f * (float)vox::deltaTimeCorrection , 1.f, 0.f, 0.f);
 	}
 	if(keyboard->keyDown(GLFW_KEY_W)){
-		cube->transform->rotate(2, -1, 0, 0);
+		cube->transform->rotate(2.f, -1.f, 0.f, 0.f);
 	}
 	if(keyboard->keyDown(GLFW_KEY_Q)){
-		cube3->transform->translateX(0.02);
-		cube3->transform->rotate(2, 0, -1, 0);
+		cube3->transform->translateX(0.02f);
+		cube3->transform->rotate(2.f, 0.f, -1.f, 0.f);
 	}
 	if(keyboard->keyDown(GLFW_KEY_E)){
-		cube->transform->translate(vox::deltaTimeCorrection * 0.001,0,0);
+		cube->transform->translate((float)vox::deltaTimeCorrection * 0.001f, 0.f, 0.f);
 	}
 
 	if(mouse->leftDown()){
-		glm::quat r = glm::angleAxis(1.f, glm::vec3(0.f,0.f,1.f));
+		glm::quat r = glm::angleAxis(1.f, glm::vec3(0.f, 0.f, 1.f));
 		cube->transform->rotate(r);
 	}
 
 	if(mouse->rightDown()){
-		cube->transform->scale(0.9, 0.9, 0.9);
+		cube->transform->scale(0.9f, 0.9f, 0.9f);
+	}
+
+	//camera controls
+	if (keyboard->keyDown(GLFW_KEY_UP)){
+		camera->transform->translate((camera->forwardVectorRotated) * camera->speed);
+	}
+	// Move backward
+	if (keyboard->keyDown(GLFW_KEY_DOWN)){
+		camera->transform->translate((camera->forwardVectorRotated) * -camera->speed);
+	}
+	// Strafe right
+	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
+		camera->transform->translate((camera->rightVectorRotated) * camera->speed);
+	}
+	// Strafe left
+	if (keyboard->keyDown(GLFW_KEY_LEFT)){
+		camera->transform->translate((camera->rightVectorRotated) * -camera->speed);
 	}
 }
 

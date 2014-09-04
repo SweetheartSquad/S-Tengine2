@@ -1,6 +1,6 @@
 #include "FileUtils.h"
 
-std::string FileUtils::voxReadFile(const char* filename){
+std::string FileUtils::voxReadFile(std::string filename){
 	std::ifstream file;
 	std::stringstream contents;
 

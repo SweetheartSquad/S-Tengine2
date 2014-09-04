@@ -2,13 +2,17 @@
 
 Scene::Scene(void){
 	this->children = new std::vector<Entity*>();
+	this->camera = new Camera();
+
+	//singletons
 	this->renderSystem = &RenderSystem::getInstance();
 	this->keyboard = &Keyboard::getInstance();
 	this->mouse = &Mouse::getInstance();
-	this->camera = new Camera();
 }
 
 Scene::~Scene(void){
+	delete children;
+	delete camera;
 }
 
 void Scene::update(void){

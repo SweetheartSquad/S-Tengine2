@@ -1,5 +1,5 @@
 #include "RenderSystem.h"
-ShaderInterface *shader; 
+
 RenderSystem::RenderSystem(){
 	shaderArray = new std::vector<ShaderInterface*>;
 }
@@ -16,12 +16,12 @@ void RenderSystem::destroyRenderSystem(){
 
 RenderSystem& RenderSystem::getInstance(){
 	static RenderSystem *renderSystem;
-	if(renderSystem == 0){
+	if(renderSystem == nullptr){
 		renderSystem = new RenderSystem();
 	}
 	return *renderSystem;
 }
-void RenderSystem::render(std::vector<Entity*> *renderChildren, glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
+void RenderSystem::render(std::vector<Entity *> * renderChildren, glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 	float ratio;
 	int width, height;
 		GLUtils::checkForError(0,__FILE__,__LINE__);

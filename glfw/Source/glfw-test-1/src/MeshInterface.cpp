@@ -54,9 +54,12 @@ void MeshInterface::load(){
 }
 void MeshInterface::clean(){
 	if(dirty){
+		//vertex buffer object (VBO)
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*(vertices.size()), vertices.data(), GL_STATIC_DRAW);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
+
+		//index buffer object (IBO)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*(indices.size()), indices.data(), GL_STATIC_DRAW);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
@@ -87,7 +90,7 @@ void MeshInterface::render(ShaderInterface *shader, glm::mat4 projectionMatrix, 
 void MeshInterface::configureVertexAttributes(GLint vertexHandle, unsigned long int _arity, int bufferOffset){
 	std::cout << "vertexHandle: " << vertexHandle << std::endl;
 	if (vertexHandle != -1){
-		glBindVertexArray(vaoId);//bind VAO, VBO, IBO
+		glBindVertexArray(vaoId);
 
 		glEnableVertexAttribArray(vertexHandle);
 		glVertexAttribPointer(vertexHandle, _arity, GL_FLOAT, GL_FALSE, getStride(), BUFFER_OFFSET(bufferOffset));

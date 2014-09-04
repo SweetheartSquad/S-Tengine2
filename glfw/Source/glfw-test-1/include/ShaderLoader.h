@@ -8,8 +8,7 @@
 
 #include "GLUtils.h"
 
-class ShaderLoader
-{
+class ShaderLoader{
 private:
 	GLuint programId;
 	GLuint compileShader(GLenum shaderType, const char *source, int length);
