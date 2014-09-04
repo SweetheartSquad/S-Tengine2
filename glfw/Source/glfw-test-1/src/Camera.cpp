@@ -55,12 +55,12 @@ void Camera::update(){
 		horizontalAngle = mouseSpeed * vox::deltaTimeCorrection * offsetX;
 		verticalAngle = mouseSpeed * vox::deltaTimeCorrection * offsetY;
 		
-		*transform->orientation = glm::rotate(*transform->orientation, verticalAngle, *rightVectorLocal);
-		*transform->orientation = glm::rotate(*transform->orientation, horizontalAngle, *upVectorLocal);
+		transform->orientation = glm::rotate(transform->orientation, verticalAngle, *rightVectorLocal);
+		transform->orientation = glm::rotate(transform->orientation, horizontalAngle, *upVectorLocal);
 		
-		*forwardVectorRotated = ((*transform->orientation) * (*forwardVectorLocal));
-		*upVectorRotated = ((*transform->orientation) * (*upVectorLocal));
-		*rightVectorRotated = ((*transform->orientation) * (*rightVectorLocal));
+		*forwardVectorRotated = (transform->orientation * (*forwardVectorLocal));
+		*upVectorRotated = (transform->orientation * (*upVectorLocal));
+		*rightVectorRotated = (transform->orientation * (*rightVectorLocal));
 	}
 
 	if (keyboard->keyDown(GLFW_KEY_UP)){
@@ -87,8 +87,8 @@ void Camera::update(){
 
 glm::mat4 Camera::getViewMatrix(){
 	return glm::lookAt(
-		*transform->translationVector,	// Camera is here        
-		*transform->translationVector + (*forwardVectorRotated), // and looks here : at the same position, plus "direction"
+		transform->translationVector,	// Camera is here        
+		transform->translationVector + (*forwardVectorRotated), // and looks here : at the same position, plus "direction"
 		*upVectorRotated				// Head is up (set to 0,-1,0 to look upside-down)
 	);
 }

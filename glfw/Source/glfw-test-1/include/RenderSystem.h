@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "VertexInterface.h"
+#include "MeshInterface.h"
 #include "ShaderInterface.h"
 #include <vector>
 #include "Entity.h"

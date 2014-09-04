@@ -1,14 +1,16 @@
 #pragma once
 
-#include "vector3.h"
-#include "Entity.h"
-#include "VertexInterface.h"
-
 #include <iostream>
 
-class Cube:public Entity
-{
+#include "vector3.h"
+#include "Entity.h"
+
+class Cube:public Entity{
 public:
+	virtual char * getTypename(){
+		return "Cube";
+	}
+
 	Cube(glm::vec3 center, float size);
 	~Cube(void);
 

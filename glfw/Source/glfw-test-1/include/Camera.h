@@ -12,7 +12,6 @@
 #include "System.h"
 
 class Camera : public Node{
-
 public:
 	Camera();
 	~Camera();

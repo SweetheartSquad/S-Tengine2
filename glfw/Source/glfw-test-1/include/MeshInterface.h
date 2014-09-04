@@ -12,20 +12,22 @@
 #include "Vertex.h"
 #include "GLUtils.h"
 
-class VertexInterface{
+
+class MeshInterface{
 public:
 	bool loaded;	//whether the vao, vbo, and ibo have been generated and initialized
 	bool dirty;		//whether the vbo and ibo contain up-to-date vertex and index data
-	std::vector<Vertex>*vertices; //vertex data for the vbo
-	std::vector<GLubyte>*indices; //index data for the ibo
+	std::vector<Vertex> vertices; //vertex data for the vbo
+	std::vector<GLubyte> indices; //index data for the ibo
 public:
 	GLuint vaoId;	//ID of the vertex array object
 	GLuint vboId;	//ID of the vertex buffer object
 	GLuint iboId;	//ID of the index buffer object
 	
 	/* OpenGL memory hint; possible values: 
-		GL_STATIC_DRAW - contents will be modified once; used many times as source for GL drawing commands
-		GL_DYNAMIC_DRAW - contents will be modified repeatedly; used many times as source for GL drawing commands
+		STATIC - The user will set the data once
+		DYNAMIC - The user will set the data occasionally
+		STREAM - The user will be changing the data after every use(or almost every use)
 	*/
 	GLenum drawMode;
 
@@ -50,8 +52,8 @@ public:
 
 	
 	
-	VertexInterface(GLenum polygonalDrawMode, GLenum drawMode);
-	~VertexInterface(void);
+	MeshInterface(GLenum polygonalDrawMode, GLenum drawMode);
+	~MeshInterface(void);
 	
 	//if unloaded, generates the VAO, VBO, IBO and flags as loaded
 	void load();
@@ -61,5 +63,20 @@ public:
 	void render(ShaderInterface *shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 	//configures shader attributes (?)
 	void configureVertexAttributes(GLint vertexHandle, unsigned long int _arity, int bufferOffset);
+
+	
+	void setNormal(unsigned long int _vertId, float _x, float _y, float _z);
+	void pushVert(Vertex vertex);
 };
 
+class TriMesh : public MeshInterface{
+public:
+	void pushTri(GLubyte v0, GLubyte v1, GLubyte v2);
+	TriMesh(GLenum polygonalDrawMode, GLenum drawMode):MeshInterface(polygonalDrawMode, drawMode){};
+};
+
+class QuadMesh : public MeshInterface{
+public:
+	void pushQuad(GLubyte v0, GLubyte v1, GLubyte v2, GLubyte v3);
+	QuadMesh(GLenum polygonalDrawMode, GLenum drawMode):MeshInterface(polygonalDrawMode, drawMode){};
+};

@@ -9,14 +9,14 @@ MainScene::MainScene():Scene(){
 	addChild(cube);
 	cube->shader = new ShaderInterface("../assets/ColourShader");
 	
-	cube->vertexInterface->vertices->pop_back();
-	cube->vertexInterface->vertices->pop_back();
-	cube->vertexInterface->vertices->pop_back();
-	cube->vertexInterface->vertices->pop_back();
+	cube->mesh->vertices.pop_back();
+	cube->mesh->vertices.pop_back();
+	cube->mesh->vertices.pop_back();
+	cube->mesh->vertices.pop_back();
 
-	cube->vertexInterface->configureVertexAttributes(cube->shader->get_aPositionVertex(), 3, 0);
-	cube->vertexInterface->configureVertexAttributes(cube->shader->get_aFragColor(), 4, sizeof(float)*3);
-	cube->vertexInterface->configureVertexAttributes(cube->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	cube->mesh->configureVertexAttributes(cube->shader->get_aPositionVertex(), 3, 0);
+	cube->mesh->configureVertexAttributes(cube->shader->get_aFragColor(), 4, sizeof(float)*3);
+	cube->mesh->configureVertexAttributes(cube->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 	
 	cube->setFrontColour(1,0,0, 1);
 	cube->setLeftColour(0,1,0, 1);
@@ -26,16 +26,16 @@ MainScene::MainScene():Scene(){
 	//cube->setRightColour(0,1,1, 1);
 
 	cube->transform->translateX(0.5);
-	cube->vertexInterface->vertices->at(3).y += 1.5;
-	cube->vertexInterface->vertices->at(0).y += 1.5;
-	cube->pushQuad(2,1,5,7);
+	cube->mesh->vertices.at(3).y += 1.5;
+	cube->mesh->vertices.at(0).y += 1.5;
+	((QuadMesh *)cube->mesh)->pushQuad(2,1,5,7);
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
 	cube2->shader = new ShaderInterface("../assets/junkdata");
-	cube2->vertexInterface->configureVertexAttributes(cube2->shader->get_aPositionVertex(), 3, 0);
-	cube2->vertexInterface->configureVertexAttributes(cube2->shader->get_aFragColor(), 4, sizeof(float)*3);
-	cube2->vertexInterface->configureVertexAttributes(cube2->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	cube2->mesh->configureVertexAttributes(cube2->shader->get_aPositionVertex(), 3, 0);
+	cube2->mesh->configureVertexAttributes(cube2->shader->get_aFragColor(), 4, sizeof(float)*3);
+	cube2->mesh->configureVertexAttributes(cube2->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 	
 	cube2->setFrontColour(1,0,0,1);
 	cube2->setLeftColour(0,1,0,1);
@@ -49,9 +49,9 @@ MainScene::MainScene():Scene(){
 	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->addChild(cube3);
 	cube3->shader = new ShaderInterface("../assets/ColourShader");
-	cube3->vertexInterface->configureVertexAttributes(cube3->shader->get_aPositionVertex(), 3, 0);
-	cube3->vertexInterface->configureVertexAttributes(cube3->shader->get_aFragColor(), 4, sizeof(float)*3);
-	cube3->vertexInterface->configureVertexAttributes(cube3->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	cube3->mesh->configureVertexAttributes(cube3->shader->get_aPositionVertex(), 3, 0);
+	cube3->mesh->configureVertexAttributes(cube3->shader->get_aFragColor(), 4, sizeof(float)*3);
+	cube3->mesh->configureVertexAttributes(cube3->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 	
 	cube3->setFrontColour(0.5,0,0,1);
 	cube3->setLeftColour(0,0.5,0,1);
@@ -60,16 +60,16 @@ MainScene::MainScene():Scene(){
 	cube3->setTopColour(0.5,0,0.5,1);
 	cube3->setRightColour(0,0.5,0.5,1);
 
-	cube3->vertexInterface->vertices->at(3).x += 0.5;
+	cube3->mesh->vertices.at(3).x += 0.5;
 	cube3->transform->translateX(0.5);
 
 	
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	addChild(cube4);
 	cube4->shader = new ShaderInterface("../assets/ColourShader");
-	cube4->vertexInterface->configureVertexAttributes(cube4->shader->get_aPositionVertex(), 3, 0);
-	cube4->vertexInterface->configureVertexAttributes(cube4->shader->get_aFragColor(), 4, sizeof(float)*3);
-	cube4->vertexInterface->configureVertexAttributes(cube4->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	cube4->mesh->configureVertexAttributes(cube4->shader->get_aPositionVertex(), 3, 0);
+	cube4->mesh->configureVertexAttributes(cube4->shader->get_aFragColor(), 4, sizeof(float)*3);
+	cube4->mesh->configureVertexAttributes(cube4->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 	
 	/*cube4->setFrontColour(1,0,0,1);
 	cube4->setLeftColour(0,1,0,1);
@@ -123,16 +123,16 @@ void MainScene::update(){
 		glfwMakeContextCurrent(window);
 
 		for(Entity * child : *children){
-			child->vertexInterface->loaded = false;
-			child->vertexInterface->dirty = true;
+			child->mesh->loaded = false;
+			child->mesh->dirty = true;
 
-			child->vertexInterface->load();
+			child->mesh->load();
 
 			child->shader = new ShaderInterface("../assets/ColourShader");
 
-			child->vertexInterface->configureVertexAttributes(child->shader->get_aPositionVertex(), 3, 0);
-			child->vertexInterface->configureVertexAttributes(child->shader->get_aFragColor(), 4, sizeof(float)*3);
-			child->vertexInterface->configureVertexAttributes(child->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+			child->mesh->configureVertexAttributes(child->shader->get_aPositionVertex(), 3, 0);
+			child->mesh->configureVertexAttributes(child->shader->get_aFragColor(), 4, sizeof(float)*3);
+			child->mesh->configureVertexAttributes(child->shader->get_aVertexNormals(), 3, sizeof(float)*7);
 		}
 
 		std::cout << glfwGetCurrentContext() << std::endl;
