@@ -25,8 +25,8 @@ extern bool fullscreen; //whether the main window is fullscreen or not
 
 //sets the window properties that need to be initialized before window creation
 void setGlfwWindowHints();
-//sets the window properties that need to be initialized after window creation
-void initWindow();
+//sets the window properties that need to be initialized after window creation (uses currentContext if null)
+void initWindow(GLFWwindow * w = nullptr);
 
 void calculateModelMatrix();
 void pushMatrix();

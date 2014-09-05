@@ -44,6 +44,7 @@ int main(void){
 	}
 
 	vox::initWindow();
+	glfwMakeContextCurrent(window);
 
 	glewExperimental = GL_TRUE; 
 	GLenum err = glewInit();

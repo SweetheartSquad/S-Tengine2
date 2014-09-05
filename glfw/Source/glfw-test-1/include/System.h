@@ -5,8 +5,7 @@
 
 #include "Vox.h"
 
-class System
-{
+class System{
 private:
 	System();
 	~System();

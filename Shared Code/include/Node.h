@@ -2,9 +2,8 @@
 
 #include <iostream>
 
-class Node
-{
+//abstract node
+class Node{
 public:
-	Node();
-	virtual ~Node();
+	virtual ~Node() = 0;
 };

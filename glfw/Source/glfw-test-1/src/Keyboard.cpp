@@ -1,58 +1,49 @@
 #include "Keyboard.h"
 
-Keyboard::Keyboard()
+Keyboard::Keyboard():
+	pressedKeys(new std::map<int, int>()),
+	justPressedKeys(new std::map<int, int>()),
+	justReleasedKeys(new std::map<int, int>())
 {
-	pressedKeys = new std::map<int, int>();
-	justPressedKeys = new std::map<int, int>();
-	justReleasedKeys = new std::map<int, int>();
 }
 
-Keyboard::~Keyboard()
-{
+Keyboard::~Keyboard(){
 	delete pressedKeys;
 	delete justPressedKeys;
 	delete justReleasedKeys;
 }
 
-bool Keyboard::keyJustUp(int glfwKeyCode)
-{
-	return justReleasedKeys->find(glfwKeyCode)!=justReleasedKeys->end();
+bool Keyboard::keyJustUp(int glfwKeyCode){
+	return justReleasedKeys->find(glfwKeyCode) != justReleasedKeys->end();
 }
 
-bool Keyboard::keyJustDown(int glfwKeyCode)
-{
-	return justPressedKeys->find(glfwKeyCode)!=justPressedKeys->end();
+bool Keyboard::keyJustDown(int glfwKeyCode){
+	return justPressedKeys->find(glfwKeyCode) != justPressedKeys->end();
 }
 
-void Keyboard::keyDownListener(int glfwKeyCode)
-{
+void Keyboard::keyDownListener(int glfwKeyCode){
 	justPressedKeys->insert(std::make_pair(glfwKeyCode, glfwKeyCode));
 	pressedKeys->insert(std::make_pair(glfwKeyCode, glfwKeyCode));
 }
 
-void Keyboard::keyUpListener(int glfwKeyCode)
-{
+void Keyboard::keyUpListener(int glfwKeyCode){
 	justReleasedKeys->insert(std::make_pair(glfwKeyCode, glfwKeyCode));
 
-	if(pressedKeys->find(glfwKeyCode)!=pressedKeys->end())
-	{
+	if(pressedKeys->find(glfwKeyCode) != pressedKeys->end()){
 		pressedKeys->erase(glfwKeyCode);
 	}
 
-	if(justPressedKeys->find(glfwKeyCode)!=justPressedKeys->end())
-	{
+	if(justPressedKeys->find(glfwKeyCode) != justPressedKeys->end()){
 		justPressedKeys->erase(glfwKeyCode);
 	}
 }
 
-void Keyboard::update()
-{
+void Keyboard::update(){
 	justPressedKeys->clear();
 	justReleasedKeys->clear();
 }
 
-Keyboard& Keyboard::getInstance()
-{
+Keyboard& Keyboard::getInstance(){
 	static Keyboard *keyboard;
 	if(keyboard == 0){
 		keyboard= new Keyboard();
@@ -60,7 +51,6 @@ Keyboard& Keyboard::getInstance()
 	return *keyboard;
 }
 
-bool Keyboard::keyDown(int glfwKeyCode)
-{
+bool Keyboard::keyDown(int glfwKeyCode){
 	return justPressedKeys->find(glfwKeyCode) != justPressedKeys->end() || pressedKeys->find(glfwKeyCode) != pressedKeys->end();
 }

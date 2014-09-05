@@ -7,25 +7,22 @@
 #include "Mouse.h"
 #include "Camera.h"
 
-class Scene
-{
-
+class Scene{
 public:
 	Scene(void);
 	virtual ~Scene(void);
 
-	RenderSystem *renderSystem;
-	Keyboard* keyboard;
-	Mouse* mouse;
-	std::vector<Entity*> *children;
+	std::vector<Entity *> * children;
+	Camera * camera;
 
-	Camera *camera;
+	//singletons
+	RenderSystem * renderSystem;	//
+	Keyboard * keyboard;
+	Mouse * mouse;
 
 	virtual void update(void);
 	virtual void draw();
 
-	void addChild(Entity *child);
-
-
+	void addChild(Entity * child);
 };
 

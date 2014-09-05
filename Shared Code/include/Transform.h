@@ -11,16 +11,15 @@
 
 #include "Node.h"
 
-class Transform: public Node
-{
+//a generic transform node
+class Transform: public Node{
 public:
+	glm::vec3 translationVector;
+	glm::vec3 scaleVector;
+	glm::quat orientation;
 
-	glm::vec3 *translationVector;
-	glm::vec3 *scaleVector;
-	glm::quat *orientation;
-
-	std::vector<Transform*> *children;
-	Transform *parent;
+	std::vector<Transform *> children;
+	Transform * parent;
 
 
 	Transform(void);
@@ -49,7 +48,7 @@ public:
 	glm::mat4 getRotationMatrix();
 	glm::mat4 getModelMatrix();
 
-	void addChild(Transform* child);
+	void addChild(Transform * child);
 	virtual void removeChildAtIndex(int index);
-	void setParent(Transform *parent);
+	void setParent(Transform * parent);
 };

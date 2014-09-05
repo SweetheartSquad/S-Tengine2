@@ -1,14 +1,19 @@
 #include "Scene.h"
 
-Scene::Scene(void){
-	this->children = new std::vector<Entity*>();
-	this->renderSystem = &RenderSystem::getInstance();
-	this->keyboard = &Keyboard::getInstance();
-	this->mouse = &Mouse::getInstance();
-	this->camera = new Camera();
+Scene::Scene(void):
+	children(new std::vector<Entity *>()),
+	camera(new Camera()),
+
+	//singletons
+	renderSystem(&RenderSystem::getInstance()),
+	keyboard(&Keyboard::getInstance()),
+	mouse(&Mouse::getInstance())
+{
 }
 
 Scene::~Scene(void){
+	delete children;
+	delete camera;
 }
 
 void Scene::update(void){

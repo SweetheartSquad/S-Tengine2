@@ -105,7 +105,7 @@
     <ClCompile Include="..\src\Vox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\VertexInterface.cpp">
+    <ClCompile Include="..\src\MeshInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp">
@@ -173,7 +173,7 @@
     <ClInclude Include="..\include\Vox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\VertexInterface.h">
+    <ClInclude Include="..\include\MeshInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\Node.h">

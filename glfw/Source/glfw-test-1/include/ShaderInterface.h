@@ -9,19 +9,20 @@
 class ShaderInterface{
 private:
 	ShaderLoader *shader;
-	GLint aPositionVertex;
-	GLint aFragColor;
+	GLint aVertexPosition;
+	GLint aVertexColor;
 	GLint aVertexNormals;
 
-	void init(const char *vertexShaderShource, const char *fragmentShaderSource);
+	void init(std::string vertexShaderFile, std::string fragmentShaderFile);
 public:
-	ShaderInterface(const char *shaderShource);
-	ShaderInterface(const char *vertexShaderShource, const char *fragmentShaderSource);
+	//Creates shader using "shaderFile.vert" and "shaderFile.frag"
+	ShaderInterface(std::string shaderFile);
+	//Creates shader using "vertexShaderFile" and "fragmentShaderFile"
+	ShaderInterface(std::string vertexShaderFile, std::string fragmentShaderFile);
 	~ShaderInterface(void);
 
 	GLuint getProgramId();
-	GLint get_aPositionVertex();
-	GLint get_aFragColor();
+	GLint get_aVertexPosition();
+	GLint get_aVertexColor();
 	GLint get_aVertexNormals();
 };
-
