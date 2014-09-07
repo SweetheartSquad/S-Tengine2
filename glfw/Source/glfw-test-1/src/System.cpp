@@ -15,10 +15,10 @@ int System::getScreenHeight(){
 }
 
 Dimension System::getScreenDimensions(){
-	int *screenHeight = new int();
-	int *screenWidth = new int();
+	int screenHeight;
+	int screenWidth;
 
-	glfwGetWindowSize(vox::currentContext, screenWidth, screenHeight);
+	glfwGetWindowSize(vox::currentContext, &screenWidth, &screenHeight);
 
-	return Dimension(*screenWidth, *screenHeight);
+	return Dimension(screenWidth, screenHeight);
 }

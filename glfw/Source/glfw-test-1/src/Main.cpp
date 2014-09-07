@@ -30,21 +30,20 @@ static void setMousePostionCallback(GLFWwindow *window, double x, double y){
 int main(void){
 	vox::setGlfwWindowHints();
 
-	
 	GLFWwindow* window;
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit()){
 		exit(EXIT_FAILURE);
 	}
 	window = glfwCreateWindow(640, 480, "Simple example", nullptr, nullptr);
-	vox::currentContext = window;
 	if (!window){
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
 
-	vox::initWindow();
+	vox::initWindow(window);
 	glfwMakeContextCurrent(window);
+	vox::currentContext = window;
 
 	glewExperimental = GL_TRUE; 
 	GLenum err = glewInit();
@@ -57,15 +56,18 @@ int main(void){
 	int *screenWidth = new int();
 
 	glfwGetWindowSize(window, screenWidth, screenHeight);
-	glfwSetCursorPos(window, static_cast<int>(*screenWidth)/2, static_cast<int>(*screenHeight)/2);
+	glfwSetCursorPos(window, (*screenWidth)/2, (*screenHeight)/2);
 
 	game = new TestGame(true);
 
 	while (game->isRunning){
 		glfwPollEvents();
+		
 		game->update();
 		game->draw();
+		glfwSwapBuffers(vox::currentContext);
 		game->manageInput();
+
 		game->isRunning = !glfwWindowShouldClose(vox::currentContext);
 	}
 

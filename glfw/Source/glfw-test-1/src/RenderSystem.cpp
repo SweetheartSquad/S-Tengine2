@@ -22,11 +22,14 @@ RenderSystem& RenderSystem::getInstance(){
 	}
 	return *renderSystem;
 }
-void RenderSystem::render(std::vector<Entity *> * renderChildren, glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
+void RenderSystem::render(GLFWwindow * context, std::vector<Entity *> * renderChildren, glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
+	glfwMakeContextCurrent(context);
+	
+	
 	float ratio;
 	int width, height;
 		GLUtils::checkForError(0,__FILE__,__LINE__);
-	glfwGetFramebufferSize(vox::currentContext, &width, &height);
+	glfwGetFramebufferSize(context, &width, &height);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	ratio = width / static_cast<float>(height);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
@@ -50,7 +53,6 @@ void RenderSystem::render(std::vector<Entity *> * renderChildren, glm::mat4 proj
 		e->draw(projectionMatrix, viewMatrix);
 	}
 
-	glfwSwapBuffers(vox::currentContext);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 }
  

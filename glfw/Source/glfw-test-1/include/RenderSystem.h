@@ -21,6 +21,6 @@ public:
 	static RenderSystem& getInstance();
 	static void destroyRenderSystem();
 
-	void render(std::vector<Entity*> *renderChildren, glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
+	void render(GLFWwindow * context, std::vector<Entity*> *renderChildren, glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 };
 

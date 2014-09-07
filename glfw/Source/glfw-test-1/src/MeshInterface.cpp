@@ -31,6 +31,8 @@ GLsizei MeshInterface::getVertCount(){
 
 void MeshInterface::load(){
 	if(!loaded){
+		glBindVertexArray(0);
+
 		//vertex array object (VAO)
 		glGenVertexArrays(1, &vaoId);
 		glBindVertexArray(vaoId);
@@ -51,6 +53,22 @@ void MeshInterface::load(){
 		loaded = true;
 	}
 }
+
+void MeshInterface::unload(){
+	if(loaded){
+		glDeleteBuffers(1, &iboId);
+		glDeleteBuffers(1, &vboId);
+		glDeleteVertexArrays(1, &vaoId);
+
+		iboId = 0;
+		vboId = 0;
+		vaoId = 0;
+
+		loaded = false;
+		dirty = true;
+	}
+}
+
 void MeshInterface::clean(){
 	if(dirty){
 		//vertex buffer object (VBO)
@@ -65,25 +83,40 @@ void MeshInterface::clean(){
 		dirty = false;
 	}
 }
-void MeshInterface::render(ShaderInterface *shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
-	//bind VAO
-	glBindVertexArray(vaoId);
-	GLUtils::checkForError(0,__FILE__,__LINE__);
 
-	//specify shader attributes
-	glUseProgram(shader->getProgramId());
-	GLUtils::checkForError(0,__FILE__,__LINE__);
-	glm::mat4 mvp = projectionMatrix * viewMatrix * vox::currentModelMatrix;  	
-	GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
-	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
-	GLUtils::checkForError(0,__FILE__,__LINE__);
+void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
+	if(glIsVertexArray(vaoId) == GL_TRUE){
+		if(glIsBuffer(vboId) == GL_TRUE){
+			if(glIsBuffer(iboId) == GL_TRUE){
+				GLUtils::checkForError(0,__FILE__,__LINE__);
+				//bind VAO
+				glBindVertexArray(vaoId);
+				GLUtils::checkForError(0,__FILE__,__LINE__);
+				
+				//specify shader attributes
+				glUseProgram(shader->getProgramId());
+				GLUtils::checkForError(0,__FILE__,__LINE__);
+				glm::mat4 mvp = projectionMatrix * viewMatrix * vox::currentModelMatrix;  	
+				GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
+				glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
+				GLUtils::checkForError(0,__FILE__,__LINE__);
+		
+				//draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
+				glDrawRangeElements(polygonalDrawMode, 0, vertices.size(), indices.size(), GL_UNSIGNED_BYTE, 0);
+				GLUtils::checkForError(0,__FILE__,__LINE__);
 
-	//draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
-	glDrawRangeElements(polygonalDrawMode, 0, vertices.size(), indices.size(), GL_UNSIGNED_BYTE, 0);
-	GLUtils::checkForError(0,__FILE__,__LINE__);
+				//disable VAO
+				glBindVertexArray(0);
 
-	//disable VAO
-	glBindVertexArray(0);
+			}else{
+				std::cout << "ibo bad" << std::endl << std::endl;
+			}
+		}else{
+			std::cout << "vbo bad" << std::endl << std::endl;
+		}
+	}else{
+		std::cout << "vao bad" << std::endl << std::endl;
+	}
 }
 
 void MeshInterface::configureVertexAttributes(GLint vertexHandle, unsigned long int _arity, int bufferOffset){

@@ -57,3 +57,31 @@ void Entity::setParent(Entity* parent){
 	this->parent = parent;
 	transform->setParent(parent->transform);
 }
+
+
+void Entity::unload(){
+	for(Entity * e : children){
+		e->unload();
+	}
+
+	mesh->unload();
+}
+
+void Entity::reset(){
+	for(Entity * e : children){
+		e->reset();
+	}
+
+	mesh->load();
+	mesh->clean();
+
+	mesh->configureVertexAttributes(shader->get_aVertexPosition(), 3, 0);
+	mesh->configureVertexAttributes(shader->get_aVertexColor(), 4, sizeof(float)*3);
+	mesh->configureVertexAttributes(shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	
+	std::string shaderVertSrc = shader->vertName;
+	std::string shaderFragSrc = shader->fragName;
+
+	delete shader;
+	shader = new ShaderInterface(shaderVertSrc, shaderFragSrc);
+}

@@ -1,11 +1,9 @@
 #include "FileUtils.h"
 
 std::string FileUtils::voxReadFile(std::string filename){
-	std::ifstream file;
+	std::ifstream file(filename, std::ios::in);
 	std::stringstream contents;
 
-	//Open file
-	file.open(filename, std::ios::in);
 	if(file.is_open()){
 		std::cout << "File \"" << filename << "\" opened for reading." << std::endl;
 		contents << file.rdbuf();
