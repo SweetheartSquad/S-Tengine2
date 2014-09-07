@@ -1,6 +1,8 @@
 #include "ShaderInterface.h"
 
 void ShaderInterface::init(std::string vertexShaderFile, std::string fragmentShaderFile){
+	vertName = vertexShaderFile;
+	fragName = fragmentShaderFile;
 
 	//read source files into strings
 	std::string vertexShaderString		= FileUtils::voxReadFile(vertexShaderFile);

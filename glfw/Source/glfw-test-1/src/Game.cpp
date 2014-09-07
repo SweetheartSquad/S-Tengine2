@@ -25,7 +25,7 @@ void Game::update(void){
 		printFps();
 	}
 	if(keyboard->keyDown(GLFW_KEY_ESCAPE)){
-		glfwSetWindowShouldClose(vox::currentContext, true);
+		glfwSetWindowShouldClose(glfwGetCurrentContext(), true);
 	}
 	currentScene->update();
 }

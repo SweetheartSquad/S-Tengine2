@@ -57,6 +57,8 @@ public:
 	
 	//if unloaded, generates the VAO, VBO, IBO and flags as loaded
 	void load();
+	//if loaded, deletes the VAO, VBO, IBO and flags as not loaded and dirty
+	void unload();
 	//if dirty, copies data from vertices and indices to VBO and IBO and flags as clean
 	void clean();
 	//renders the vao using the given shader and model-view-projection
@@ -64,7 +66,6 @@ public:
 	//configures shader attributes (?)
 	void configureVertexAttributes(GLint vertexHandle, unsigned long int _arity, int bufferOffset);
 
-	
 	void setNormal(unsigned long int _vertId, float _x, float _y, float _z);
 	void pushVert(Vertex vertex);
 };

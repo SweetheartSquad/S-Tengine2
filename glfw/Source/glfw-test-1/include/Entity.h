@@ -26,5 +26,9 @@ public:
 	void addChild(Entity* child);
 	void removeChildAtIndex(int index);
 	void setParent(Entity *parent);
+
+	//calls unload on all children and on mesh
+	void unload();
+	void reset();
 };
 

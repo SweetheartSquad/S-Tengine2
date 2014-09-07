@@ -6,8 +6,10 @@ glm::mat4 vox::currentModelMatrix = glm::mat4(1);
 double vox::lastTimestamp = 0;
 double vox::deltaTimeCorrection = 1;
 
-GLFWwindow * vox::currentContext = nullptr;
 bool vox::fullscreen = false;
+
+
+std::vector<GLFWwindow *> vox::contexts;
 
 void vox::setGlfwWindowHints(){
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -37,13 +39,12 @@ static void mousePostionCallback(GLFWwindow *window, double x, double y){
 	mouse->mousePositionListener(x, y);
 }
 void vox::initWindow(GLFWwindow * w){
-	if(w == nullptr){
-		w = currentContext;
+	if(w != nullptr){
+		//glfwMakeContextCurrent(currentContext);
+		glfwSetKeyCallback(w, keyCallback);
+		glfwSetMouseButtonCallback(w, mouseButtonCallback);
+		glfwSetCursorPosCallback(w, mousePostionCallback);
 	}
-	//glfwMakeContextCurrent(currentContext);
-	glfwSetKeyCallback(w, keyCallback);
-	glfwSetMouseButtonCallback(w, mouseButtonCallback);
-	glfwSetCursorPosCallback(w, mousePostionCallback);
 }
 
 /////////// Matrix Stack Begin //////////////
