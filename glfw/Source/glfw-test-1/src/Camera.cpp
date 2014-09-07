@@ -25,6 +25,9 @@ Camera::Camera():
 Camera::~Camera(){
 }
 
+float pitch = 0;
+float yaw = 0;
+
 void Camera::update(){
 	Dimension screenDimensions = System::getScreenDimensions();
 
@@ -45,15 +48,40 @@ void Camera::update(){
 	double deltaY = lastMouseY - offsetY;
 
 	if(deltaX != 0 || deltaY != 0){
-		horizontalAngle	= mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetX;
-		verticalAngle	= mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetY;
+
+		horizontalAngle	= mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetY;
+		verticalAngle	= mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetX;
 		
-		transform->orientation = glm::rotate(transform->orientation, verticalAngle, rightVectorLocal);
-		transform->orientation = glm::rotate(transform->orientation, horizontalAngle, upVectorLocal);
+		pitch += verticalAngle;
+		yaw += horizontalAngle;
+
+		if(yaw > 360.0f){
+			yaw -= 360.0f;
+		} 
+		if(yaw < -360.0f){
+			yaw += 360.0f;
+		}
+
+		if (pitch > 90 && pitch< 270 || (pitch < -90 && pitch > -270)) {
+			yaw -= horizontalAngle;
+		} else {
+			yaw += horizontalAngle;
+		}
 		
+		if(pitch > 360.0f){
+			pitch -= 360.0f;
+		}
+		if(pitch < -360.0f){
+			pitch += 360.0f;
+		}
+
+		transform->orientation = glm::quat();
+		transform->orientation = glm::rotate(transform->orientation, yaw, rightVectorLocal);
+		transform->orientation = glm::rotate(transform->orientation, pitch, upVectorLocal);	
+
 		forwardVectorRotated	= transform->orientation * forwardVectorLocal;
-		upVectorRotated			= transform->orientation * upVectorLocal;
 		rightVectorRotated		= transform->orientation * rightVectorLocal;
+		upVectorRotated			= transform->orientation *  upVectorLocal;
 	}
 
 	glfwSetCursorPos(vox::currentContext, centerX, centerY);
