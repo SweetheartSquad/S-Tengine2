@@ -26,6 +26,7 @@ public:
 	void draw();
 
 	void saveSkeleton();
+	void loadSkeleton();
 
 	//! loads the shaders
 	void loadShaders();
@@ -42,6 +43,7 @@ protected:
 	params::InterfaceGlRef params;
 	string directory;
 	string fileName;
+	string filePath;
 	string message;
 };
 
@@ -83,12 +85,19 @@ void CinderApp::setup(){
 	console() << "saveSkeleton" << endl;
 	s->SaveSkeleton(m_joints);*/
 	
-	params = params::InterfaceGl::create("Save File", Vec2i(300,150));
+	params = params::InterfaceGl::create("Save File", Vec2i(300,200));
 	params->addParam("Directory", &directory);
 	params->addParam("File Name", &fileName);
-	params->addButton("Save", std::bind( &CinderApp::saveSkeleton, this ), "min=100");
+	params->addButton("Save", std::bind( &CinderApp::saveSkeleton, this ));
+	params->addSeparator();
+	params->addParam("Bones File", &filePath);
+	params->addButton("Load", std::bind(&CinderApp::loadSkeleton, this));
 	params->addSeparator();
 	params->addParam("Message", &message, "", true);
+
+	directory = "C:/";
+	fileName = "bones";
+	filePath = "C:/bones.json";
 }
 
 void CinderApp::saveSkeleton() {
@@ -96,6 +105,16 @@ void CinderApp::saveSkeleton() {
 		console() << "saveSkeleton" << endl;
 		s->SaveSkeleton(directory,fileName,m_joints);
 		message = "Saved skeleton";
+	}catch (exception ex){
+		message = string(ex.what());
+	}
+}
+
+void CinderApp::loadSkeleton() {
+	try{
+		console() << "loadSkeleton" << endl;
+		s->LoadSkeletonJson(filePath);
+		message = "Loaded skeleton";
 	}catch (exception ex){
 		message = string(ex.what());
 	}

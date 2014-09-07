@@ -9,12 +9,18 @@
 #include <sstream>
 #include <fstream>
 #include <cstring>
+#include <cerrno>
 
 #include <filesystem>
 #include <regex>
-#include <json.h>
+
+#include <rapidjson/document.h>
+#include <rapidjson/filereadstream.h>
+#include "cinder/Json.h"
 
 using namespace std;
+using namespace rapidjson;
+using namespace ci;
 
 class SkeletonData
 {
@@ -23,12 +29,14 @@ public:
 	
 	void SaveSkeleton(string directory, string fileName, vector<Joint*> &m_joints);
 	vector<Joint*> LoadSkeleton(string filePath);
+	vector<Joint*> LoadSkeletonJson(string filePath);
 
-	void validateDirectory(string dir);
-	void validateFileName(string flnm);
+	void validateDirectory(string &directory);
+	void validateFileName(string &fileName);
 
 	~SkeletonData(void);
 
 protected:
+	string boneJson(Joint* b);
 };
 

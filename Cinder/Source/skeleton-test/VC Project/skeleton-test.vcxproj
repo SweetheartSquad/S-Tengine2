@@ -43,7 +43,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath);C:\DevelopmentLibs\C-C++\rapidjson-master\include</IncludePath>
     <LibraryPath>$(CINDER_DIR_2012)\lib;$(CINDER_DIR_2012)\lib\msw;$(LibraryPath)</LibraryPath>
     <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
