@@ -97,12 +97,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\assets\shaders\depththingy.frag" />
-    <None Include="..\assets\shaders\depththingy.vert" />
-    <None Include="..\assets\shaders\phong.frag" />
-    <None Include="..\assets\shaders\phong.vert" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\..\..\Shared Code\src\Joint.cpp" />
     <ClCompile Include="..\src\CinderApp.cpp" />
     <ClCompile Include="..\src\SkeletonData.cpp" />
@@ -110,6 +104,14 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Shared Code\include\Joint.h" />
     <ClInclude Include="..\include\SkeletonData.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\voxel-test-4-bones\assets\shaders\joint.frag">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\voxel-test-4-bones\assets\shaders\joint.vert">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

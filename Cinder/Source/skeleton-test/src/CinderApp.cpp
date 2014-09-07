@@ -37,7 +37,7 @@ protected:
 	SkeletonData * s;
 
 	//! our Phong shader, which supports multiple targets
-	gl::GlslProg	mPhongShader;
+	gl::GlslProg	jointShader;
 
 
 	params::InterfaceGlRef params;
@@ -81,10 +81,9 @@ void CinderApp::setup(){
 
 	console() << "setup" << endl;
 	s = new SkeletonData();
-	/*s->setDirectory("C:/");
-	s->setFileName("BONES.txt");
-	console() << "saveSkeleton" << endl;
-	s->SaveSkeleton(m_joints);*/
+
+	// load shaders
+	loadShaders();
 	
 	params = params::InterfaceGl::create("Save File", Vec2i(300,200));
 	params->addParam("Directory", &directory);
@@ -114,10 +113,23 @@ void CinderApp::saveSkeleton() {
 void CinderApp::loadSkeleton() {
 	try{
 		console() << "loadSkeleton" << endl;
-		s->LoadSkeletonJson(filePath);
+		m_joints.clear();
+
+		m_joints = s->LoadSkeleton(filePath);
 		message = "Loaded skeleton";
+
 	}catch (exception ex){
 		message = string(ex.what());
+	}
+}
+
+void CinderApp::loadShaders()
+{
+	try{
+		jointShader = gl::GlslProg( loadFile("../assets/shaders/joint.vert"), loadFile("../assets/shaders/joint.frag") );
+	}catch( const std::exception &e ) {
+		console() << e.what() << std::endl;
+		quit();
 	}
 }
 
@@ -128,24 +140,24 @@ void CinderApp::draw(){
 	gl::clear();
 	gl::color(Color(1.0, 1.0, 1.0));
 
-	/*
-	for (Joint j : m_joints) {
-		j.draw();
-	}
-	*/
+	// bind phong shader, which renders to both our color targets.
+	//  See 'shaders/phong.frag'
+	jointShader.bind();
+
+	// draw joints:
+	/*for(Joint * j : m_joints){
+		if(j->parent == nullptr){
+			j->draw(&jointShader);
+		}
+	}*/
+
+	// unbind shader
+	jointShader.unbind();
+	
+	
 
 	params->draw();
 	
-}
-
-void CinderApp::loadShaders()
-{
-	try{
-		mPhongShader = gl::GlslProg( loadFile("../assets/shaders/phong.vert"), loadFile("../assets/shaders/phong.frag") );
-	}catch( const std::exception &e ) {
-		console() << e.what() << std::endl;
-		quit();
-	}
 }
 
 
