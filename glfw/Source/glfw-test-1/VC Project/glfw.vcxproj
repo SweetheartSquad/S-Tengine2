@@ -48,7 +48,7 @@
     <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\$(Configuration)\$(Platform);$(GLFW_DIR)\lib-msvc120;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(GLEW_DIR)\lib\$(Configuration)\$(Platform);$(GLFW_DIR)\lib-msvc110;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>

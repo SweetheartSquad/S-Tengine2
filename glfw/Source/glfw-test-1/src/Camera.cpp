@@ -9,11 +9,12 @@ Camera::Camera():
 	rightVectorRotated(0.f, 0.f, 1.f),
 	transform(new Transform()),
 	fieldOfView(45.0f),
-	horizontalAngle(3.14f),
-	verticalAngle(0.0f),
+	yaw(3.14f),
+	pitch(0.0f),
 	speed(0.1f),
 	mouseSpeed(0.05f),
-	mouse(&Mouse::getInstance())
+	mouse(&Mouse::getInstance()),
+	lastOrientation(1.f, 0.f, 0.f, 0.f)
 {
 	transform->translateX(-5);
 
@@ -25,10 +26,9 @@ Camera::Camera():
 Camera::~Camera(){
 }
 
-float pitch = 0;
-float yaw = 0;
-
 void Camera::update(){
+	lastOrientation = transform->orientation;
+
 	Dimension screenDimensions = System::getScreenDimensions();
 
 	double centerX = (double)screenDimensions.width*0.5;
@@ -47,42 +47,23 @@ void Camera::update(){
 	double deltaX = lastMouseX - offsetX;
 	double deltaY = lastMouseY - offsetY;
 
-	if(deltaX != 0 || deltaY != 0){
-
-		horizontalAngle	= mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetY;
-		verticalAngle	= mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetX;
-		
-		pitch += verticalAngle;
-		yaw += horizontalAngle;
-
-		if(yaw > 360.0f){
-			yaw -= 360.0f;
-		} 
-		if(yaw < -360.0f){
-			yaw += 360.0f;
-		}
-
-		if (pitch > 90 && pitch< 270 || (pitch < -90 && pitch > -270)) {
-			yaw -= horizontalAngle;
-		} else {
-			yaw += horizontalAngle;
-		}
-		
-		if(pitch > 360.0f){
-			pitch -= 360.0f;
-		}
-		if(pitch < -360.0f){
-			pitch += 360.0f;
-		}
-
-		transform->orientation = glm::quat();
-		transform->orientation = glm::rotate(transform->orientation, yaw, rightVectorLocal);
-		transform->orientation = glm::rotate(transform->orientation, pitch, upVectorLocal);	
-
-		forwardVectorRotated	= transform->orientation * forwardVectorLocal;
-		rightVectorRotated		= transform->orientation * rightVectorLocal;
-		upVectorRotated			= transform->orientation *  upVectorLocal;
+	if(deltaX != 0){
+		yaw += mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetY;
 	}
+
+	if(deltaY != 0){
+		pitch += mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetX;
+	}
+
+	transform->orientation = glm::quat(1.f, 0.f, 0.f, 0.f);
+	transform->orientation = glm::rotate(transform->orientation, pitch, upVectorLocal);	
+	transform->orientation = glm::rotate(transform->orientation, yaw, rightVectorLocal);
+	
+	transform->orientation = glm::slerp(lastOrientation, transform->orientation, 0.15f);
+
+	forwardVectorRotated	= transform->orientation * forwardVectorLocal;
+	rightVectorRotated		= transform->orientation * rightVectorLocal;
+	upVectorRotated			= transform->orientation *  upVectorLocal;
 
 	glfwSetCursorPos(vox::currentContext, centerX, centerY);
 

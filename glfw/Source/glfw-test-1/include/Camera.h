@@ -31,11 +31,13 @@ public:
 	glm::vec3 rightVectorRotated; //direction the camera's right side is pointing at (local * orientation)
 	
 	float fieldOfView;
-	float verticalAngle;
-	float horizontalAngle;
+	float pitch;
+	float yaw;
 
 	float speed;
 	float mouseSpeed;
+
+	glm::quat lastOrientation;
 
 	glm::mat4 getViewMatrix();
 	glm::mat4 getProjectionMatrix();
