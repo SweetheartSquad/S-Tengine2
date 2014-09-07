@@ -35,7 +35,13 @@ int main(void){
 	if (!glfwInit()){
 		exit(EXIT_FAILURE);
 	}
-	window = glfwCreateWindow(640, 480, "Simple example", nullptr, nullptr);
+
+	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	
+	int w = mode->width;
+	int	h = mode->height;
+
+	window = glfwCreateWindow(w/2, h/2, "Simple example", nullptr, nullptr);
 	if (!window){
 		glfwTerminate();
 		exit(EXIT_FAILURE);
@@ -52,11 +58,11 @@ int main(void){
 	  fprintf(stderr, "\tERROR: %s\n", glewGetErrorString(err));
 	}
 	
-	int *screenHeight = new int();
-	int *screenWidth = new int();
+	int screenHeight;
+	int screenWidth;
 
-	glfwGetWindowSize(window, screenWidth, screenHeight);
-	glfwSetCursorPos(window, (*screenWidth)/2, (*screenHeight)/2);
+	glfwGetWindowSize(window, &screenWidth, &screenHeight);
+	glfwSetCursorPos(window, screenWidth/2, screenHeight/2);
 
 	game = new TestGame(true);
 

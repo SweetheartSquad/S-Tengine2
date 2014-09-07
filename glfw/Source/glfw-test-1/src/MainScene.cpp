@@ -101,12 +101,19 @@ void MainScene::update(){
 		vox::fullscreen = !vox::fullscreen;
 
 		//get size
-		int w = 640, h = 480;
-		if(vox::fullscreen){
+		int w, h;
+		//if(vox::fullscreen){
 			const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
 			w = mode->width;
 			h = mode->height;
+
+			std::cout << w << " " << h << std::endl;
+		//}
+
+		if(!vox::fullscreen){
+			w /= 2;
+			h /= 2;
 		}
 
 		// Renew calls to glfwOpenWindowHint.
@@ -128,7 +135,8 @@ void MainScene::update(){
 
 		for(Entity * e : *children){
 			e->unload();
-		}for(Entity * e : *children){
+		}
+		for(Entity * e : *children){
 			e->reset();
 		}
 

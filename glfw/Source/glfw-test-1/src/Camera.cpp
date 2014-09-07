@@ -8,8 +8,8 @@ Camera::Camera():
 	rightVectorLocal(0.f, 0.f, 1.f),
 	rightVectorRotated(0.f, 0.f, 1.f),
 	transform(new Transform()),
-	fieldOfView(45.0f),
-	yaw(3.14f),
+	fieldOfView(60.0f),
+	yaw(-30.f),
 	pitch(0.0f),
 	speed(0.1f),
 	mouseSpeed(0.05f),
@@ -17,6 +17,7 @@ Camera::Camera():
 	lastOrientation(1.f, 0.f, 0.f, 0.f)
 {
 	transform->translateX(-5);
+	transform->translateY(3);
 
 	Dimension screenDimensions = System::getScreenDimensions();
 	lastMouseY	= screenDimensions.height/2;
@@ -48,16 +49,21 @@ void Camera::update(){
 	double deltaY = lastMouseY - offsetY;
 
 	if(deltaX != 0){
-		yaw += mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetY;
+		pitch += mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetY;
+	}if(deltaY != 0){
+		yaw += mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetX;
 	}
 
-	if(deltaY != 0){
-		pitch += mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetX;
+	//restriction
+	if(pitch < -80.f){
+		pitch = -80.f;
+	}else if(pitch > 80.f){
+		pitch = 80.f;
 	}
 
 	transform->orientation = glm::quat(1.f, 0.f, 0.f, 0.f);
-	transform->orientation = glm::rotate(transform->orientation, pitch, upVectorLocal);	
-	transform->orientation = glm::rotate(transform->orientation, yaw, rightVectorLocal);
+	transform->orientation = glm::rotate(transform->orientation, yaw, upVectorLocal);	
+	transform->orientation = glm::rotate(transform->orientation, pitch, rightVectorLocal);
 	
 	transform->orientation = glm::slerp(lastOrientation, transform->orientation, 0.15f);
 
@@ -80,6 +86,7 @@ glm::mat4 Camera::getViewMatrix(){
 }
 
 glm::mat4 Camera::getProjectionMatrix(){
-	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-	return glm::perspective(fieldOfView, 4.0f / 3.0f, 0.1f, 100.0f);
+	Dimension screenDimensions = System::getScreenDimensions();
+	// Projection matrix : 45° Field of View, ratio, near-far clip : 0.1 unit <-> 100 units
+	return glm::perspective(fieldOfView, (float)screenDimensions.width/(float)screenDimensions.height, 0.1f, 100.0f);
 }
