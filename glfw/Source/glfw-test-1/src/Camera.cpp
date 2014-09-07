@@ -56,7 +56,7 @@ void Camera::update(){
 		rightVectorRotated		= transform->orientation * rightVectorLocal;
 	}
 
-	glfwSetCursorPos(glfwGetCurrentContext(), centerX, centerY);
+	glfwSetCursorPos(vox::currentContext, centerX, centerY);
 
 	lastMouseX = offsetX;
 	lastMouseY = offsetY;

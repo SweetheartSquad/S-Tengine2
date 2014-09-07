@@ -21,13 +21,7 @@ void Scene::update(void){
 }
 
 void Scene::draw(){
-	//renderSystem->render(vox::contexts.at(0), children, camera->getProjectionMatrix(), camera->getViewMatrix());
-	/*for(GLFWwindow * context : vox::contexts){
-		renderSystem->render(context, children, camera->getProjectionMatrix(), camera->getViewMatrix());
-	}*/
-	
-	renderSystem->render(vox::contexts.at(vox::contexts.size()-1), children, camera->getProjectionMatrix(), camera->getViewMatrix());
-	
+	renderSystem->render(vox::currentContext, children, camera->getProjectionMatrix(), camera->getViewMatrix());
 }
 
 void Scene::addChild(Entity* child){

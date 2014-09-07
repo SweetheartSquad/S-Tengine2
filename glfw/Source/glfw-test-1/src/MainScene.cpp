@@ -109,33 +109,28 @@ void MainScene::update(){
 			h = mode->height;
 		}
 
-		std::cout << std::endl << glfwGetCurrentContext() << std::endl;
-		
 		// Renew calls to glfwOpenWindowHint.
 		//vox::setGlfwWindowHints();
 
 		// Create the new window.
 		GLFWwindow* window;
-		window = glfwCreateWindow(w, h, "Simple example 2",  vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, /*glfwGetCurrentContext()*/nullptr);
+		window = glfwCreateWindow(w, h, "Simple example 2",  vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 		if(!window){
 			glfwTerminate();
 			exit(EXIT_FAILURE);
 		}
 		vox::initWindow(window);
 
-		vox::contexts.pop_back();
-		glfwDestroyWindow(glfwGetCurrentContext());
+		glfwDestroyWindow(vox::currentContext);
 
-		vox::contexts.push_back(window);
 		glfwMakeContextCurrent(window);
+		vox::currentContext = window;
 
 		for(Entity * e : *children){
 			e->unload();
 		}for(Entity * e : *children){
 			e->reset();
 		}
-
-		std::cout << glfwGetCurrentContext() << std::endl;
 
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	}
@@ -187,7 +182,6 @@ void MainScene::update(){
 	}
 }
 
-void MainScene::draw()
-{
+void MainScene::draw(){
 	Scene::draw();
 }

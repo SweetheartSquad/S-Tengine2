@@ -36,7 +36,6 @@ int main(void){
 		exit(EXIT_FAILURE);
 	}
 	window = glfwCreateWindow(640, 480, "Simple example", nullptr, nullptr);
-	vox::contexts.push_back(window);
 	if (!window){
 		glfwTerminate();
 		exit(EXIT_FAILURE);
@@ -44,6 +43,7 @@ int main(void){
 
 	vox::initWindow(window);
 	glfwMakeContextCurrent(window);
+	vox::currentContext = window;
 
 	glewExperimental = GL_TRUE; 
 	GLenum err = glewInit();
@@ -65,13 +65,13 @@ int main(void){
 		
 		game->update();
 		game->draw();
-		glfwSwapBuffers(glfwGetCurrentContext());
+		glfwSwapBuffers(vox::currentContext);
 		game->manageInput();
 
-		game->isRunning = !glfwWindowShouldClose(glfwGetCurrentContext());
+		game->isRunning = !glfwWindowShouldClose(vox::currentContext);
 	}
 
-	glfwDestroyWindow(glfwGetCurrentContext());
+	glfwDestroyWindow(vox::currentContext);
 	glfwTerminate();
 	exit(EXIT_SUCCESS);
 }

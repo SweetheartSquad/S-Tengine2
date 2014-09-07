@@ -9,7 +9,7 @@ double vox::deltaTimeCorrection = 1;
 bool vox::fullscreen = false;
 
 
-std::vector<GLFWwindow *> vox::contexts;
+GLFWwindow * vox::currentContext = nullptr;
 
 void vox::setGlfwWindowHints(){
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);

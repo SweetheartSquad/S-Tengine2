@@ -20,7 +20,7 @@ extern glm::mat4 currentModelMatrix;
 extern double lastTimestamp;
 extern double deltaTimeCorrection;
 
-extern std::vector<GLFWwindow *> contexts; //stores a reference to the main window
+extern GLFWwindow * currentContext; //stores a reference to the main window
 extern bool fullscreen; //whether the main window is fullscreen or not
 
 //sets the window properties that need to be initialized before window creation
