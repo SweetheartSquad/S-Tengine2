@@ -16,6 +16,7 @@ void GLUtils::checkForError(bool printSuccess = false, std::string file = "", in
 				default: errString = "dunno, but something went wrong?";	break;
 			}
 			std::cout << "\tFile: " << file.c_str() <<", Line: "<<line << ", Log: " << errString.c_str() << std::endl;
+			//std::cout << glewGetErrorString(err) << std::endl;
 		}
 	}
 }

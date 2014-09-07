@@ -50,7 +50,6 @@ void RenderSystem::render(std::vector<Entity *> * renderChildren, glm::mat4 proj
 		e->draw(projectionMatrix, viewMatrix);
 	}
 
-	glfwSwapBuffers(vox::currentContext);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 }
  

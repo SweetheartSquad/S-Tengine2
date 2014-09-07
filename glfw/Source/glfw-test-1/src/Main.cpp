@@ -30,7 +30,6 @@ static void setMousePostionCallback(GLFWwindow *window, double x, double y){
 int main(void){
 	vox::setGlfwWindowHints();
 
-	
 	GLFWwindow* window;
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit()){
@@ -57,15 +56,18 @@ int main(void){
 	int *screenWidth = new int();
 
 	glfwGetWindowSize(window, screenWidth, screenHeight);
-	glfwSetCursorPos(window, static_cast<int>(*screenWidth)/2, static_cast<int>(*screenHeight)/2);
+	glfwSetCursorPos(window, (*screenWidth)/2, (*screenHeight)/2);
 
 	game = new TestGame(true);
 
 	while (game->isRunning){
 		glfwPollEvents();
+		
 		game->update();
 		game->draw();
+		glfwSwapBuffers(vox::currentContext);
 		game->manageInput();
+
 		game->isRunning = !glfwWindowShouldClose(vox::currentContext);
 	}
 

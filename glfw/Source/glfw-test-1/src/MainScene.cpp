@@ -87,8 +87,9 @@ MainScene::~MainScene(){
 
 void MainScene::update(){
 	Scene::update();
-	
+
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
+
 		// Toggle fullscreen flag.
 		vox::fullscreen = !vox::fullscreen;
 
@@ -105,37 +106,115 @@ void MainScene::update(){
 			h = 250;
 		}
 
-		// Close the current window.
 		std::cout << std::endl << glfwGetCurrentContext() << std::endl;
 		
+		glfwDefaultWindowHints();
+		glfwDestroyWindow(vox::currentContext);
+		//glfwTerminate();
+		/*if(!glfwInit()){
+			exit(EXIT_FAILURE);
+		}*/
+		
 		// Renew calls to glfwOpenWindowHint.
-		// (Hints get reset after the call to glfwOpenWindow.)
 		vox::setGlfwWindowHints();
 
 		// Create the new window.
 		GLFWwindow* window;
-		window = glfwCreateWindow(w, h, "Simple example",  /*vox::fullscreen ? glfwGetPrimaryMonitor() : */nullptr, vox::currentContext);
+		window = glfwCreateWindow(w, h, "Simple example 2",  /*vox::fullscreen ? glfwGetPrimaryMonitor() : */nullptr, /*vox::currentContext*/nullptr);
 		if(!window){
 			glfwTerminate();
 			exit(EXIT_FAILURE);
 		}
-
 		vox::initWindow(window);
 		vox::currentContext = window;
 		glfwMakeContextCurrent(window);
 
-		for(Entity * child : *children){
-			child->mesh->loaded = false;
-			child->mesh->dirty = true;
-
-			child->mesh->load();
-
-			child->shader = new ShaderInterface("../assets/ColourShader");
-
-			child->mesh->configureVertexAttributes(child->shader->get_aVertexPosition(), 3, 0);
-			child->mesh->configureVertexAttributes(child->shader->get_aVertexColor(), 4, sizeof(float)*3);
-			child->mesh->configureVertexAttributes(child->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+		glewExperimental = GL_TRUE; 
+		GLenum err = glewInit();
+		if (GLEW_OK != err){
+		  /* Problem: glewInit failed, something is seriously wrong. */
+		  fprintf(stderr, "\tERROR: %s\n", glewGetErrorString(err));
 		}
+
+
+		
+	children->clear();
+
+
+	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
+	addChild(cube);
+	cube->shader = new ShaderInterface("../assets/ColourShader");
+	
+	cube->mesh->vertices.pop_back();
+	cube->mesh->vertices.pop_back();
+	cube->mesh->vertices.pop_back();
+	cube->mesh->vertices.pop_back();
+
+	cube->mesh->configureVertexAttributes(cube->shader->get_aVertexPosition(), 3, 0);
+	cube->mesh->configureVertexAttributes(cube->shader->get_aVertexColor(), 4, sizeof(float)*3);
+	cube->mesh->configureVertexAttributes(cube->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	
+	cube->setFrontColour(1,0,0, 1);
+	cube->setLeftColour(0,1,0, 1);
+	cube->setBackColour(0,0,1, 1);
+	cube->setBottomColour(1,1,0, 1);
+	cube->setTopColour(1,0,1, 1);
+	//cube->setRightColour(0,1,1, 1);
+
+	cube->transform->translateX(0.5);
+	cube->mesh->vertices.at(3).y += 1.5;
+	cube->mesh->vertices.at(0).y += 1.5;
+	((QuadMesh *)cube->mesh)->pushQuad(2,1,5,7);
+
+
+	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
+	cube->addChild(cube2);
+	cube2->shader = new ShaderInterface("../assets/junkdata");
+	cube2->mesh->configureVertexAttributes(cube2->shader->get_aVertexPosition(), 3, 0);
+	cube2->mesh->configureVertexAttributes(cube2->shader->get_aVertexColor(), 4, sizeof(float)*3);
+	cube2->mesh->configureVertexAttributes(cube2->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	
+	cube2->setFrontColour(1,0,0,1);
+	cube2->setLeftColour(0,1,0,1);
+	cube2->setBackColour(0,0,1,1);
+	cube2->setBottomColour(1,1,0,1);
+	cube2->setTopColour(1,0,1,1);
+	cube2->setRightColour(0,1,1,1);
+
+	cube2->transform->translateX(0.5);
+	
+	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
+	cube2->addChild(cube3);
+	cube3->shader = new ShaderInterface("../assets/ColourShader");
+	cube3->mesh->configureVertexAttributes(cube3->shader->get_aVertexPosition(), 3, 0);
+	cube3->mesh->configureVertexAttributes(cube3->shader->get_aVertexColor(), 4, sizeof(float)*3);
+	cube3->mesh->configureVertexAttributes(cube3->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	
+	cube3->setFrontColour(0.5,0,0,1);
+	cube3->setLeftColour(0,0.5,0,1);
+	cube3->setBackColour(0,0,0.5,1);
+	cube3->setBottomColour(0.5,0.5,0,1);
+	cube3->setTopColour(0.5,0,0.5,1);
+	cube3->setRightColour(0,0.5,0.5,1);
+
+	cube3->mesh->vertices.at(3).x += 0.5;
+	cube3->transform->translateX(0.5);
+
+	
+	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
+	addChild(cube4);
+	cube4->shader = new ShaderInterface("../assets/ColourShader");
+	cube4->mesh->configureVertexAttributes(cube4->shader->get_aVertexPosition(), 3, 0);
+	cube4->mesh->configureVertexAttributes(cube4->shader->get_aVertexColor(), 4, sizeof(float)*3);
+	cube4->mesh->configureVertexAttributes(cube4->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	
+	/*cube4->setFrontColour(1,0,0,1);
+	cube4->setLeftColour(0,1,0,1);
+	cube4->setBackColour(0,0,1,1);
+	cube4->setBottomColour(1,1,0,1);
+	cube4->setTopColour(1,0,1,1);
+	cube4->setRightColour(0,1,1,1);*/
+	cube4->transform->scale(15.0, 15.0, 15.0);
 
 		std::cout << glfwGetCurrentContext() << std::endl;
 

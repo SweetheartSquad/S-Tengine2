@@ -78,7 +78,6 @@ void MeshInterface::render(ShaderInterface *shader, glm::mat4 projectionMatrix, 
 	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 
-	//draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
 	glDrawRangeElements(polygonalDrawMode, 0, vertices.size(), indices.size(), GL_UNSIGNED_BYTE, 0);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 
