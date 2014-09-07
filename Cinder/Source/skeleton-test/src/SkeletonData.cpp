@@ -24,7 +24,7 @@ void SkeletonData::SaveSkeleton(string directory, string fileName, vector<Joint 
 				boneFile << "{\"bones\":[" << endl;
 				for(Joint * b : m_joints)
 				{ 
-					boneFile << boneJson(b);
+					boneFile << writeJoint(b);
 					if (b->id != m_joints.back()->id) {
 						boneFile << ",";
 					}
@@ -49,7 +49,7 @@ void SkeletonData::SaveSkeleton(string directory, string fileName, vector<Joint 
 	}
 }
 
-string SkeletonData::boneJson(Joint* b) {
+string SkeletonData::writeJoint(Joint* b) {
 	std::stringstream json;
 	json << " {" << endl;
 	json << "  \"id\":" << b->id << "," << endl;
@@ -58,15 +58,17 @@ string SkeletonData::boneJson(Joint* b) {
 	}
 	json << "  \"pos\":"<< "{\"x\":" << b->getPos().x << ", \"y\":" << b->getPos().y << ", \"z\":" << b->getPos().z << "}," << endl;
 	json << "  \"orientation\":" << "{\"x\":" << b->orientation.v.x << ", \"y\":" << b->orientation.v.y << ", \"z\":" << b->orientation.v.z << ", \"w\":" << b->orientation.w << "}," << endl;
+	
 	json << "  \"children\":" << "[" << endl;
 	for(Joint * c : b->children) {
-		json << boneJson(c);
-		if (c->id != c->children.back()->id) {
+		json << writeJoint(c);
+		if (b->children.size() != 0 && c->id != b->children.back()->id) {
 			json << ",";
 		}
 	}
 	
 	json << "]" << endl;
+	
 	json << " }" << endl;
 
 	return json.str();
@@ -127,23 +129,11 @@ vector<Joint*> SkeletonData::LoadSkeletonJson(string filePath) {
 		try{
 			JsonTree doc = JsonTree(loadFile(filePath));
 
-			JsonTree bones = doc.getChild( "bones" );
+			JsonTree jointsJson = doc.getChild( "bones" );
 			Joint * parent = NULL;
-			for( JsonTree::ConstIter bone = bones.begin(); bone != bones.end(); ++bone ) {
-				Joint * j;
-				if (parent != NULL){
-					j = new Joint(parent);
-				}else{
-					j = new Joint();
-				}
-					
-				j->id = bone->getChild( "id" ).getValue<int>();
-
-				JsonTree pos = bone->getChild("pos");
-				j->setPos(Vec3f(pos.getChild("x").getValue<float>(),pos.getChild("y").getValue<float>(),pos.getChild("z").getValue<float>()));
-
-				JsonTree orientation = bone->getChild("orientation");
-				j->orientation = Quatd(orientation.getChild("x").getValue<float>(),orientation.getChild("y").getValue<float>(),orientation.getChild("z").getValue<float>(),orientation.getChild("w").getValue<float>());
+			for( JsonTree::ConstIter joint = jointsJson.begin(); joint != jointsJson.end(); ++joint ) {
+				JsonTree cJson = jointsJson.getChild(joint->getKey());
+				Joint * j = readJoint(cJson);
 
 				joints.push_back(j);
 
@@ -164,6 +154,29 @@ vector<Joint*> SkeletonData::LoadSkeletonJson(string filePath) {
 	}
 	return joints;
 	//throw(errno);
+}
+
+Joint* SkeletonData::readJoint(JsonTree joint, Joint * parent) {
+	
+	Joint * j = new Joint();
+	vector<Joint*> children;
+
+	j->parent = parent;
+	j->id = joint.getChild( "id" ).getValue<int>();
+	JsonTree pos = joint.getChild("pos");
+	j->setPos(Vec3f(pos.getChild("x").getValue<float>(),pos.getChild("y").getValue<float>(),pos.getChild("z").getValue<float>()));
+	JsonTree orientation = joint.getChild("orientation");
+	j->orientation = Quatd(orientation.getChild("x").getValue<float>(),orientation.getChild("y").getValue<float>(),orientation.getChild("z").getValue<float>(),orientation.getChild("w").getValue<float>());
+
+	JsonTree childrenJson = joint.getChild("children");
+	for( JsonTree::ConstIter child = childrenJson.begin(); child != childrenJson.end(); ++child ) {
+		JsonTree cJson = childrenJson.getChild(child->getKey());
+		Joint * c = readJoint(cJson, j);
+		children.push_back(c);
+	}
+	j->children = children;
+
+	return j;
 }
 
 void SkeletonData::validateDirectory(string &directory) {

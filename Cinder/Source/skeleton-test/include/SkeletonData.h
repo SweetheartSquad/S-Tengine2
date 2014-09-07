@@ -37,6 +37,7 @@ public:
 	~SkeletonData(void);
 
 protected:
-	string boneJson(Joint* b);
+	string writeJoint(Joint* b);
+	Joint* readJoint(JsonTree joint, Joint * parent = nullptr);
 };
 

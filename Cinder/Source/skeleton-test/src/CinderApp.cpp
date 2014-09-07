@@ -72,11 +72,12 @@ void CinderApp::setup(){
 	b5->setPos(Vec3f(-1.0800000000000001,0.00000000000000000,0.46666666666666656));
 	b5->parent = b4;
 
+	b1->children.push_back(b2);
+	b2->children.push_back(b3);
+	b3->children.push_back(b4);
+	b4->children.push_back(b5);
+
 	m_joints.push_back(b1);
-	m_joints.push_back(b2);
-	m_joints.push_back(b3);
-	m_joints.push_back(b4);
-	m_joints.push_back(b5);
 
 	console() << "setup" << endl;
 	s = new SkeletonData();
