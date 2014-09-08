@@ -8,11 +8,7 @@ MainScene::MainScene():
 	Scene()
 {
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
-	cube->shader = new ShaderInterface("../assets/ColourShader");
-
-	cube->mesh->configureVertexAttributes(cube->shader->get_aVertexPosition(), 3, 0);
-	cube->mesh->configureVertexAttributes(cube->shader->get_aVertexColor(), 4, sizeof(float)*3);
-	cube->mesh->configureVertexAttributes(cube->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	cube->setShader(new ShaderInterface("../assets/ColourShader"), true);
 	
 	cube->mesh->vertices.pop_back();
 	cube->mesh->vertices.pop_back();
@@ -24,18 +20,14 @@ MainScene::MainScene():
 	cube->setBackColour(0,0,1, 1);
 	cube->setBottomColour(1,1,0, 1);
 	cube->setTopColour(1,0,1, 1);
-	//cube->setRightColour(0,1,1, 1);
 
 	cube->transform->translateX(0.5);
 	cube->mesh->vertices.at(3).y += 1.5;
 	cube->mesh->vertices.at(0).y += 1.5;
-	((QuadMesh *)cube->mesh)->pushQuad(2,1,5,7);
+	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
-	cube2->shader = new ShaderInterface("../assets/junkdata");
-	cube2->mesh->configureVertexAttributes(cube2->shader->get_aVertexPosition(), 3, 0);
-	cube2->mesh->configureVertexAttributes(cube2->shader->get_aVertexColor(), 4, sizeof(float)*3);
-	cube2->mesh->configureVertexAttributes(cube2->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	cube2->setShader(new ShaderInterface("../assets/junkdata"), true);
 	
 	cube2->setFrontColour(1,0,0,1);
 	cube2->setLeftColour(0,1,0,1);
@@ -49,10 +41,7 @@ MainScene::MainScene():
 	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
 	cube2->addChild(cube3);
-	cube3->shader = new ShaderInterface("../assets/ColourShader");
-	cube3->mesh->configureVertexAttributes(cube3->shader->get_aVertexPosition(), 3, 0);
-	cube3->mesh->configureVertexAttributes(cube3->shader->get_aVertexColor(), 4, sizeof(float)*3);
-	cube3->mesh->configureVertexAttributes(cube3->shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	cube3->setShader(new ShaderInterface("../assets/ColourShader"), true);
 	
 	cube3->setFrontColour(0.5,0,0,1);
 	cube3->setLeftColour(0,0.5,0,1);
@@ -64,25 +53,13 @@ MainScene::MainScene():
 	cube3->mesh->vertices.at(3).x += 0.5;
 	cube3->transform->translateX(0.5);
 
-
-	
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	addChild(cube);
 	addChild(cube4);
-	cube4->shader = new ShaderInterface("../assets/ColourShader");
-	cube4->mesh->configureVertexAttributes(cube4->shader->get_aVertexPosition(), 3, 0);
-	cube4->mesh->configureVertexAttributes(cube4->shader->get_aVertexColor(), 4, sizeof(float)*3);
-	cube4->mesh->configureVertexAttributes(cube4->shader->get_aVertexNormals(), 3, sizeof(float)*7);
-	
-	/*cube4->setFrontColour(1,0,0,1);
-	cube4->setLeftColour(0,1,0,1);
-	cube4->setBackColour(0,0,1,1);
-	cube4->setBottomColour(1,1,0,1);
-	cube4->setTopColour(1,0,1,1);
-	cube4->setRightColour(0,1,1,1);*/
+	cube4->setShader(new ShaderInterface("../assets/ColourShader"), true);
+
 	cube4->transform->scale(15.0, 15.0, 15.0);
 
-	
 	cube->mesh->dirty = true;
 	cube2->mesh->dirty = true;
 	cube3->mesh->dirty = true;

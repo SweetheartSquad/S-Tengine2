@@ -18,8 +18,6 @@ Entity::~Entity(void){
 	shader = nullptr;
 }
 
-
-
 void Entity::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix){
 	//push transform
 	vox::pushMatrix();
@@ -58,6 +56,12 @@ void Entity::setParent(Entity* _parent){
 	transform->setParent(_parent->transform);
 }
 
+void Entity::setShader(ShaderInterface* _shader, bool _confiugreDefaultAttributes){
+	shader = _shader;
+	if(_confiugreDefaultAttributes){
+		mesh->configureDefaultVertexAttributes(shader);	
+	}
+}
 
 void Entity::unload(){
 	for(Entity * e : children){

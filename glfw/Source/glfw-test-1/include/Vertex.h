@@ -44,9 +44,9 @@ struct Vertex{
 		this->x = x;
 		this->y = y;
 		this->z = z;
-		this->red = (float)(std::rand()%255)/255.f;
-		this->green = (float)(std::rand()%255)/255.f;
-		this->blue = (float)(std::rand()%255)/255.f;
+		this->red = static_cast<float>(std::rand()%255)/255.f;
+		this->green = static_cast<float>(std::rand()%255)/255.f;
+		this->blue = static_cast<float>(std::rand()%255)/255.f;
 		this->alpha = 1.0f;
 		this->nx = 0.0f;
 		this->ny = 0.0f;

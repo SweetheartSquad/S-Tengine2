@@ -120,7 +120,6 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 }
 
 void MeshInterface::configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset){
-	std::cout << "_vertexHandle: " << _vertexHandle << std::endl;
 	if (_vertexHandle != -1){
 		glBindVertexArray(vaoId);
 
@@ -130,6 +129,12 @@ void MeshInterface::configureVertexAttributes(GLint _vertexHandle, unsigned long
 		glBindVertexArray(0);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	}
+}
+
+void MeshInterface::configureDefaultVertexAttributes(ShaderInterface *_shader){
+	configureVertexAttributes(_shader->get_aVertexPosition(), 3, 0);
+	configureVertexAttributes(_shader->get_aVertexColor(), 4, sizeof(float)*3);
+	configureVertexAttributes(_shader->get_aVertexNormals(), 3, sizeof(float)*7);
 }
 
 void MeshInterface::pushVert(Vertex _vertex){

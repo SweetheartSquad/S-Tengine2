@@ -25,7 +25,7 @@ public:
 	void addChild(Entity* child);
 	void removeChildAtIndex(int index);
 	void setParent(Entity *parent);
-
+	void setShader(ShaderInterface* _shader, bool _confiugreDefaultAttributes);
 	//calls unload on all children and on mesh
 	void unload();
 	void reset();

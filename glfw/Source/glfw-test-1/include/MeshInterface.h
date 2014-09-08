@@ -49,8 +49,6 @@ public:
 	GLsizei getVertCount();
 	//returns sizeof(Vertex)
 	GLsizei getStride();
-
-	
 	
 	MeshInterface(GLenum polygonalDrawMode, GLenum drawMode);
 	~MeshInterface(void);
@@ -65,6 +63,8 @@ public:
 	void render(ShaderInterface *shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
 	//configures shader attributes (?)
 	void configureVertexAttributes(GLint vertexHandle, unsigned long int _arity, int bufferOffset);
+	//A helper method to configure all the starndard vertex attributes - Position, Colours, Normals
+	void configureDefaultVertexAttributes(ShaderInterface *_shader);
 
 	void setNormal(unsigned long int _vertId, float _x, float _y, float _z);
 	void pushVert(Vertex vertex);
