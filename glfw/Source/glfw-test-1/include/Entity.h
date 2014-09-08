@@ -16,7 +16,6 @@ public:
 	Entity * parent;
 	std::vector<Entity *> children;
 
-
 	Entity(MeshInterface * _mesh = nullptr, Transform * _transform = nullptr, ShaderInterface * _shader = nullptr, Entity * _parent = nullptr);
 	virtual ~Entity(void);
 

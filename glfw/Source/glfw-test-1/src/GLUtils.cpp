@@ -1,11 +1,11 @@
 #include "GLUtils.h"
 
 // check OpenGL error
-void GLUtils::checkForError(bool printSuccess = false, std::string file = "", int line = 0){
+void GLUtils::checkForError(bool _printSuccess = false, std::string _file = "", int _line = 0){
 	GLenum err;
 	std::string errString;
 	while ((err = glGetError()) != GL_NO_ERROR) {
-		if(printSuccess || err != GL_NO_ERROR){
+		if(_printSuccess || err != GL_NO_ERROR){
 			switch(err) {
 				case GL_NO_ERROR:						errString="NO_ERROR"; break;
 				case GL_INVALID_OPERATION:				errString="INVALID_OPERATION"; break;
@@ -15,7 +15,7 @@ void GLUtils::checkForError(bool printSuccess = false, std::string file = "", in
 				case GL_INVALID_FRAMEBUFFER_OPERATION:  errString="INVALID_FRAMEBUFFER_OPERATION"; break;
 				default: errString = "dunno, but something went wrong?";	break;
 			}
-			std::cout << "\tFile: " << file.c_str() <<", Line: "<<line << ", Log: " << errString.c_str() << std::endl;
+			std::cout << "\tFile: " << _file.c_str() <<", Line: "<<_line << ", Log: " << errString.c_str() << std::endl;
 			//std::cout << glewGetErrorString(err) << std::endl;
 		}
 	}

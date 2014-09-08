@@ -124,7 +124,6 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\ShaderLoader.cpp" />
     <ClCompile Include="..\src\System.cpp" />
     <ClCompile Include="..\src\TestGame.cpp" />
-    <ClCompile Include="..\src\vector3.cpp" />
     <ClCompile Include="..\src\MeshInterface.cpp" />
     <ClCompile Include="..\src\Vox.cpp" />
   </ItemGroup>

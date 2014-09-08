@@ -32,8 +32,8 @@ void Camera::update(){
 
 	Dimension screenDimensions = System::getScreenDimensions();
 
-	double centerX = (double)screenDimensions.width*0.5;
-	double centerY = (double)screenDimensions.height*0.5;
+	double centerX = static_cast<double>(screenDimensions.width)*0.5;
+	double centerY = static_cast<double>(screenDimensions.height)*0.5;
 
 	double offsetX = 0.;
 	double offsetY = 0.;
@@ -49,9 +49,9 @@ void Camera::update(){
 	double deltaY = lastMouseY - offsetY;
 
 	if(deltaX != 0){
-		pitch += mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetY;
+		pitch += mouseSpeed * static_cast<float>(vox::deltaTimeCorrection) * static_cast<float>(offsetY);
 	}if(deltaY != 0){
-		yaw += mouseSpeed * (float)vox::deltaTimeCorrection * (float)offsetX;
+		yaw += mouseSpeed * static_cast<float>(vox::deltaTimeCorrection) * static_cast<float>(offsetX);
 	}
 
 	//restriction
@@ -88,5 +88,5 @@ glm::mat4 Camera::getViewMatrix(){
 glm::mat4 Camera::getProjectionMatrix(){
 	Dimension screenDimensions = System::getScreenDimensions();
 	// Projection matrix : 45° Field of View, ratio, near-far clip : 0.1 unit <-> 100 units
-	return glm::perspective(fieldOfView, (float)screenDimensions.width/(float)screenDimensions.height, 0.1f, 100.0f);
+	return glm::perspective(fieldOfView, static_cast<float>(screenDimensions.width)/static_cast<float>(screenDimensions.height), 0.1f, 100.0f);
 }

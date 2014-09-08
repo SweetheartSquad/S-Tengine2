@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\maths">
-      <UniqueIdentifier>{692ba53b-fedf-420b-8710-07b5629293ee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{52d6d784-931d-49a9-b5fa-465d78bdc1a5}</UniqueIdentifier>
     </Filter>
@@ -50,9 +47,6 @@
   <ItemGroup>
     <ClCompile Include="..\src\Cube.cpp">
       <Filter>Source Files\geo</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\vector3.cpp">
-      <Filter>Source Files\maths</Filter>
     </ClCompile>
     <ClCompile Include="..\src\FileUtils.cpp">
       <Filter>Source Files\utils</Filter>

@@ -18,13 +18,13 @@
 
 TestGame *game;
 
-static void error_callback(int error, const char* description){
-	fputs(description, stderr);
+static void error_callback(int _error, const char* _description){
+	fputs(_description, stderr);
 }
 
-static void setMousePostionCallback(GLFWwindow *window, double x, double y){
+static void setMousePostionCallback(GLFWwindow *_window, double _x, double _y){
 	Mouse *mouse = &Mouse::getInstance();
-	mouse->mousePositionListener(x, y);
+	mouse->mousePositionListener(_x, _y);
 }
 
 int main(void){

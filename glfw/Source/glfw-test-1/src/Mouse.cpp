@@ -52,31 +52,31 @@ void Mouse::update(){
 	justReleasedKeys->clear();
 }
 
-void Mouse::mouseDownListener(int glfwMouseCode){
-	justPressedKeys->insert(std::make_pair(glfwMouseCode, glfwMouseCode));
-	pressedKeys->insert(std::make_pair(glfwMouseCode, glfwMouseCode));
+void Mouse::mouseDownListener(int _glfwMouseCode){
+	justPressedKeys->insert(std::make_pair(_glfwMouseCode, _glfwMouseCode));
+	pressedKeys->insert(std::make_pair(_glfwMouseCode, _glfwMouseCode));
 }
 
-void Mouse::mouseUpListener(int glfwMouseCode){
-	justReleasedKeys->insert(std::make_pair(glfwMouseCode, glfwMouseCode));
+void Mouse::mouseUpListener(int _glfwMouseCode){
+	justReleasedKeys->insert(std::make_pair(_glfwMouseCode, _glfwMouseCode));
 	
-	if(pressedKeys->find(glfwMouseCode) != pressedKeys->end()){
-		pressedKeys->erase(glfwMouseCode);
+	if(pressedKeys->find(_glfwMouseCode) != pressedKeys->end()){
+		pressedKeys->erase(_glfwMouseCode);
 	}
 	
-	if(justPressedKeys->find(glfwMouseCode) != justPressedKeys->end()){
-		justPressedKeys->erase(glfwMouseCode);
+	if(justPressedKeys->find(_glfwMouseCode) != justPressedKeys->end()){
+		justPressedKeys->erase(_glfwMouseCode);
 	}
 }
 
-void Mouse::mousePositionListener(double x, double y){
-	this->x = x;
-	this->y = y;
+void Mouse::mousePositionListener(double _x, double _y){
+	this->x = _x;
+	this->y = _y;
 }
 
-void Mouse::setMousePositionListener(double x, double y){
-	this->x = x;
-	this->y = y;
+void Mouse::setMousePositionListener(double _x, double _y){
+	this->x = _x;
+	this->y = _y;
 }
 
 

@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include "vector3.h"
 #include "Entity.h"
 
 class Cube:public Entity{

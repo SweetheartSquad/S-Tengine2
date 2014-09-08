@@ -18,32 +18,32 @@ void vox::setGlfwWindowHints(){
 }
 
 
-static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods){
+static void keyCallback(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods){
 	Keyboard *keyboard = &Keyboard::getInstance();
-	if(action == GLFW_PRESS){
-		keyboard->keyDownListener(key);	
-	}else if(action == GLFW_RELEASE){
-		keyboard->keyUpListener(key);	
+	if(_action == GLFW_PRESS){
+		keyboard->keyDownListener(_key);	
+	}else if(_action == GLFW_RELEASE){
+		keyboard->keyUpListener(_key);	
 	}
 }
-static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods){
+static void mouseButtonCallback(GLFWwindow* _window, int _button, int _action, int _mods){
 	Mouse * mouse = &Mouse::getInstance();
-	if(action == GLFW_PRESS){
-		mouse->mouseDownListener(button);
-	}else if(action == GLFW_RELEASE){
-		mouse->mouseUpListener(button);	
+	if(_action == GLFW_PRESS){
+		mouse->mouseDownListener(_button);
+	}else if(_action == GLFW_RELEASE){
+		mouse->mouseUpListener(_button);	
 	}
 }
-static void mousePostionCallback(GLFWwindow *window, double x, double y){
+static void mousePostionCallback(GLFWwindow *_window, double _x, double _y){
 	Mouse *mouse = &Mouse::getInstance();
-	mouse->mousePositionListener(x, y);
+	mouse->mousePositionListener(_x, _y);
 }
-void vox::initWindow(GLFWwindow * w){
-	if(w != nullptr){
+void vox::initWindow(GLFWwindow * _w){
+	if(_w != nullptr){
 		//glfwMakeContextCurrent(currentContext);
-		glfwSetKeyCallback(w, keyCallback);
-		glfwSetMouseButtonCallback(w, mouseButtonCallback);
-		glfwSetCursorPosCallback(w, mousePostionCallback);
+		glfwSetKeyCallback(_w, keyCallback);
+		glfwSetMouseButtonCallback(_w, mouseButtonCallback);
+		glfwSetCursorPosCallback(_w, mousePostionCallback);
 	}
 }
 
@@ -71,20 +71,20 @@ glm::mat4 vox::getCurrentMatrix(){
 	return currentModelMatrix;
 }
 
-void vox::scale(glm::mat4 scaleMatrix){
-	currentModelMatrix = currentModelMatrix * scaleMatrix;
+void vox::scale(glm::mat4 _scaleMatrix){
+	currentModelMatrix = currentModelMatrix * _scaleMatrix;
 }
 
-void vox::rotate(glm::mat4 rotationMatrix){
-	currentModelMatrix = currentModelMatrix * rotationMatrix;
+void vox::rotate(glm::mat4 _rotationMatrix){
+	currentModelMatrix = currentModelMatrix * _rotationMatrix;
 }
 
-void vox::translate(glm::mat4 translationMatrix){
-	currentModelMatrix = currentModelMatrix * translationMatrix;
+void vox::translate(glm::mat4 _translationMatrix){
+	currentModelMatrix = currentModelMatrix * _translationMatrix;
 }
 
-void vox::applyMatrix(glm::mat4 modelMatrix){
-	currentModelMatrix = currentModelMatrix * modelMatrix;
+void vox::applyMatrix(glm::mat4 _modelMatrix){
+	currentModelMatrix = currentModelMatrix * _modelMatrix;
 }
 
 void vox::clearMatrixStack(){

@@ -13,28 +13,28 @@ Keyboard::~Keyboard(){
 	delete justReleasedKeys;
 }
 
-bool Keyboard::keyJustUp(int glfwKeyCode){
-	return justReleasedKeys->find(glfwKeyCode) != justReleasedKeys->end();
+bool Keyboard::keyJustUp(int _glfwKeyCode){
+	return justReleasedKeys->find(_glfwKeyCode) != justReleasedKeys->end();
 }
 
-bool Keyboard::keyJustDown(int glfwKeyCode){
-	return justPressedKeys->find(glfwKeyCode) != justPressedKeys->end();
+bool Keyboard::keyJustDown(int _glfwKeyCode){
+	return justPressedKeys->find(_glfwKeyCode) != justPressedKeys->end();
 }
 
-void Keyboard::keyDownListener(int glfwKeyCode){
-	justPressedKeys->insert(std::make_pair(glfwKeyCode, glfwKeyCode));
-	pressedKeys->insert(std::make_pair(glfwKeyCode, glfwKeyCode));
+void Keyboard::keyDownListener(int _glfwKeyCode){
+	justPressedKeys->insert(std::make_pair(_glfwKeyCode, _glfwKeyCode));
+	pressedKeys->insert(std::make_pair(_glfwKeyCode, _glfwKeyCode));
 }
 
-void Keyboard::keyUpListener(int glfwKeyCode){
-	justReleasedKeys->insert(std::make_pair(glfwKeyCode, glfwKeyCode));
+void Keyboard::keyUpListener(int _glfwKeyCode){
+	justReleasedKeys->insert(std::make_pair(_glfwKeyCode, _glfwKeyCode));
 
-	if(pressedKeys->find(glfwKeyCode) != pressedKeys->end()){
-		pressedKeys->erase(glfwKeyCode);
+	if(pressedKeys->find(_glfwKeyCode) != pressedKeys->end()){
+		pressedKeys->erase(_glfwKeyCode);
 	}
 
-	if(justPressedKeys->find(glfwKeyCode) != justPressedKeys->end()){
-		justPressedKeys->erase(glfwKeyCode);
+	if(justPressedKeys->find(_glfwKeyCode) != justPressedKeys->end()){
+		justPressedKeys->erase(_glfwKeyCode);
 	}
 }
 
@@ -51,6 +51,6 @@ Keyboard& Keyboard::getInstance(){
 	return *keyboard;
 }
 
-bool Keyboard::keyDown(int glfwKeyCode){
-	return justPressedKeys->find(glfwKeyCode) != justPressedKeys->end() || pressedKeys->find(glfwKeyCode) != pressedKeys->end();
+bool Keyboard::keyDown(int _glfwKeyCode){
+	return justPressedKeys->find(_glfwKeyCode) != justPressedKeys->end() || pressedKeys->find(_glfwKeyCode) != pressedKeys->end();
 }

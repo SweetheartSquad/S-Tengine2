@@ -33,11 +33,11 @@ void MeshInterface::load(){
 	if(!loaded){
 		glBindVertexArray(0);
 
-		//vertex array object (VAO)
+		//_vertex array object (VAO)
 		glGenVertexArrays(1, &vaoId);
 		glBindVertexArray(vaoId);
 
-		//vertex buffer object (VBO)
+		//_vertex buffer object (VBO)
 		glGenBuffers(1, &vboId);
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices.size(), vertices.data(), drawMode);
@@ -71,7 +71,7 @@ void MeshInterface::unload(){
 
 void MeshInterface::clean(){
 	if(dirty){
-		//vertex buffer object (VBO)
+		//_vertex buffer object (VBO)
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*(vertices.size()), vertices.data(), GL_STATIC_DRAW);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
@@ -119,21 +119,21 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 	}
 }
 
-void MeshInterface::configureVertexAttributes(GLint vertexHandle, unsigned long int _arity, int bufferOffset){
-	std::cout << "vertexHandle: " << vertexHandle << std::endl;
-	if (vertexHandle != -1){
+void MeshInterface::configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset){
+	std::cout << "_vertexHandle: " << _vertexHandle << std::endl;
+	if (_vertexHandle != -1){
 		glBindVertexArray(vaoId);
 
-		glEnableVertexAttribArray(vertexHandle);
-		glVertexAttribPointer(vertexHandle, _arity, GL_FLOAT, GL_FALSE, getStride(), BUFFER_OFFSET(bufferOffset));
+		glEnableVertexAttribArray(_vertexHandle);
+		glVertexAttribPointer(_vertexHandle, _arity, GL_FLOAT, GL_FALSE, getStride(), BUFFER_OFFSET(_bufferOffset));
 		
 		glBindVertexArray(0);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	}
 }
 
-void MeshInterface::pushVert(Vertex vertex){
-	vertices.push_back(vertex);
+void MeshInterface::pushVert(Vertex _vertex){
+	vertices.push_back(_vertex);
 
 	dirty = true;
 }
@@ -144,18 +144,18 @@ void MeshInterface::setNormal(unsigned long int _vertId, float _x, float _y, flo
 
 	dirty = true;
 }
-void TriMesh::pushTri(GLubyte v0, GLubyte v1, GLubyte v2){
-	indices.push_back(v0);
-	indices.push_back(v1);
-	indices.push_back(v2);
+void TriMesh::pushTri(GLubyte _v0, GLubyte _v1, GLubyte _v2){
+	indices.push_back(_v0);
+	indices.push_back(_v1);
+	indices.push_back(_v2);
 
 	dirty = true;
 }
-void QuadMesh::pushQuad(GLubyte v0, GLubyte v1, GLubyte v2, GLubyte v3){
-	indices.push_back(v0);
-	indices.push_back(v1);
-	indices.push_back(v2);
-	indices.push_back(v3);
+void QuadMesh::pushQuad(GLubyte _v0, GLubyte _v1, GLubyte _v2, GLubyte _v3){
+	indices.push_back(_v0);
+	indices.push_back(_v1);
+	indices.push_back(_v2);
+	indices.push_back(_v3);
 
 	dirty = true;
 }

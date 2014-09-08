@@ -24,6 +24,6 @@ void Scene::draw(){
 	renderSystem->render(vox::currentContext, children, camera->getProjectionMatrix(), camera->getViewMatrix());
 }
 
-void Scene::addChild(Entity* child){
-	children->push_back(child);
+void Scene::addChild(Entity* _child){
+	children->push_back(_child);
 }

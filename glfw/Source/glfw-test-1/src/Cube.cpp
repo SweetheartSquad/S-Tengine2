@@ -1,12 +1,12 @@
 #include "Cube.h"
 
-Cube::Cube(glm::vec3 center, float size):
+Cube::Cube(glm::vec3 _center, float _size):
 	Entity(new QuadMesh(GL_QUADS, GL_STATIC_DRAW), new Transform())
 {
-	QuadMesh * m = (QuadMesh *)mesh;
+	QuadMesh * m = static_cast<QuadMesh *>(mesh);
 
-	transform->scale(size, size, size);
-	transform->translate(center);
+	transform->scale(_size, _size, _size);
+	transform->translate(_center);
 	
 	//Top
 	m->pushVert(Vertex(-1.f, 1.f, 1.f));
@@ -78,8 +78,8 @@ Cube::Cube(glm::vec3 center, float size):
 Cube::~Cube(void){
 }
 
-void Cube::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
-	Entity::draw(projectionMatrix, viewMatrix);
+void Cube::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix){
+	Entity::draw(_projectionMatrix, _viewMatrix);
 }
 
 void Cube::setColour(float red, float green, float blue, float alpha){
@@ -91,39 +91,39 @@ void Cube::setColour(float red, float green, float blue, float alpha){
 	}
 }
 
-void Cube::setLeftColour(float red, float green, float blue, float alpha){
+void Cube::setLeftColour(float _red, float _green, float _blue, float _alpha){
 	for(int i=16; i<20; i++){
-		mesh->vertices.at(i).red = red;
-		mesh->vertices.at(i).green = green;
-		mesh->vertices.at(i).blue = blue;
-		mesh->vertices.at(i).alpha = alpha;	
+		mesh->vertices.at(i).red = _red;
+		mesh->vertices.at(i).green = _green;
+		mesh->vertices.at(i).blue = _blue;
+		mesh->vertices.at(i).alpha = _alpha;	
 	}
 }
 
-void Cube::setRightColour(float red, float green, float blue, float alpha){
+void Cube::setRightColour(float _red, float _green, float _blue, float _alpha){
 	for(int i=20; i<24; i++){
-		mesh->vertices.at(i).red = red;
-		mesh->vertices.at(i).green = green;
-		mesh->vertices.at(i).blue = blue;
-		mesh->vertices.at(i).alpha = alpha;	
+		mesh->vertices.at(i).red = _red;
+		mesh->vertices.at(i).green = _green;
+		mesh->vertices.at(i).blue = _blue;
+		mesh->vertices.at(i).alpha = _alpha;	
 	}
 }
 
-void Cube::setTopColour(float red, float green, float blue, float alpha){
+void Cube::setTopColour(float _red, float _green, float _blue, float _alpha){
 	for(int i=0; i<4; i++){
-		mesh->vertices.at(i).red = red;
-		mesh->vertices.at(i).green = green;
-		mesh->vertices.at(i).blue = blue;
-		mesh->vertices.at(i).alpha = alpha;	
+		mesh->vertices.at(i).red = _red;
+		mesh->vertices.at(i).green = _green;
+		mesh->vertices.at(i).blue = _blue;
+		mesh->vertices.at(i).alpha = _alpha;	
 	}
 }
 
-void Cube::setBottomColour(float red, float green, float blue, float alpha){
+void Cube::setBottomColour(float _red, float _green, float _blue, float _alpha){
 	for(int i=0; i<8; i++){
-		mesh->vertices.at(i).red = red;
-		mesh->vertices.at(i).green = green;
-		mesh->vertices.at(i).blue = blue;
-		mesh->vertices.at(i).alpha = alpha;	
+		mesh->vertices.at(i).red = _red;
+		mesh->vertices.at(i).green = _green;
+		mesh->vertices.at(i).blue = _blue;
+		mesh->vertices.at(i).alpha = _alpha;	
 	}
 }
 

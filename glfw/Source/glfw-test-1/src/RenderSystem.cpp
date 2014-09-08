@@ -22,14 +22,14 @@ RenderSystem& RenderSystem::getInstance(){
 	}
 	return *renderSystem;
 }
-void RenderSystem::render(GLFWwindow * context, std::vector<Entity *> * renderChildren, glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
-	glfwMakeContextCurrent(context);
+void RenderSystem::render(GLFWwindow * _context, std::vector<Entity *> * _renderChildren, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix){
+	glfwMakeContextCurrent(_context);
 	
 	
 	float ratio;
 	int width, height;
 		GLUtils::checkForError(0,__FILE__,__LINE__);
-	glfwGetFramebufferSize(context, &width, &height);
+	glfwGetFramebufferSize(_context, &width, &height);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	ratio = width / static_cast<float>(height);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
@@ -49,8 +49,8 @@ void RenderSystem::render(GLFWwindow * context, std::vector<Entity *> * renderCh
 	//not needed because we aren't actually using the glTranslate/Rotate/Scale functions
 	//glLoadIdentity();
 
-	for(Entity * e : *renderChildren){
-		e->draw(projectionMatrix, viewMatrix);
+	for(Entity * e : *_renderChildren){
+		e->draw(_projectionMatrix, _viewMatrix);
 	}
 
 	GLUtils::checkForError(0,__FILE__,__LINE__);

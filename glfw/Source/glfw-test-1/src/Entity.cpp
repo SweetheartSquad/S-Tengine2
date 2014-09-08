@@ -20,17 +20,17 @@ Entity::~Entity(void){
 
 
 
-void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
+void Entity::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix){
 	//push transform
 	vox::pushMatrix();
 	vox::applyMatrix(transform->getModelMatrix());
 
 	mesh->load();
 	mesh->clean();
-	mesh->render(shader, projectionMatrix, viewMatrix);
+	mesh->render(shader, _projectionMatrix, _viewMatrix);
 
 	for(Entity * child : children){
-		child->draw(projectionMatrix, viewMatrix);
+		child->draw(_projectionMatrix, _viewMatrix);
 	}
 
 	//pop transform
@@ -40,22 +40,22 @@ void Entity::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 void Entity::update(){
 }
 
-void Entity::addChild(Entity* child){
-	child->setParent(this);
-	children.push_back(child);
+void Entity::addChild(Entity* _child){
+	_child->setParent(this);
+	children.push_back(_child);
 
-	child->transform->setParent(this->transform);
-	transform->children.push_back(child->transform);
+	_child->transform->setParent(this->transform);
+	transform->children.push_back(_child->transform);
 }
 
-void Entity::removeChildAtIndex(int index){
-	children.erase(children.begin()+index-1);
-	transform->children.erase(transform->children.begin()+index-1);
+void Entity::removeChildAtIndex(int _index){
+	children.erase(children.begin()+_index-1);
+	transform->children.erase(transform->children.begin()+_index-1);
 }
 
-void Entity::setParent(Entity* parent){
-	this->parent = parent;
-	transform->setParent(parent->transform);
+void Entity::setParent(Entity* _parent){
+	this->parent = _parent;
+	transform->setParent(_parent->transform);
 }
 
 

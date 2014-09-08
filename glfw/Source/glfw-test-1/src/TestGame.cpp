@@ -1,8 +1,8 @@
 #include "TestGame.h"
 #include "MainScene.h"
 
-TestGame::TestGame(bool running):
-	Game(running)
+TestGame::TestGame(bool _running):
+	Game(_running)
 {
 	scenes->insert(std::make_pair("main_scene", new MainScene()));
 	currentScene = scenes->at("main_scene");

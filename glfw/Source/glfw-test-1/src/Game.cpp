@@ -4,8 +4,8 @@
 double lastTime = glfwGetTime();
 int nbFrames = 0;
 
-Game::Game(bool isRunning):
-	isRunning(isRunning),
+Game::Game(bool _isRunning):
+	isRunning(_isRunning),
 	renderSystem(&RenderSystem::getInstance()),
 	children(new std::vector<Entity *>()),
 	scenes(new std::map<std::string, Scene *>()),
