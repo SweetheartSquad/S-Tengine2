@@ -7,5 +7,5 @@
 
 class FileUtils{
 public:
-	static std::string voxReadFile(std::string filename);
+	static std::string voxReadFile(std::string _filename);
 };

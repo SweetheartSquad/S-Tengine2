@@ -5,5 +5,5 @@
 
 class GLUtils{
 public:
-	static void checkForError(bool printSuccess, std::string file, int line);
+	static void checkForError(bool _printSuccess, std::string _file, int _line);
 };

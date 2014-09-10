@@ -37,7 +37,7 @@ int main(void){
 	}
 
 	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	
+
 	int w = mode->width;
 	int	h = mode->height;
 
@@ -51,13 +51,13 @@ int main(void){
 	glfwMakeContextCurrent(window);
 	vox::currentContext = window;
 
-	glewExperimental = GL_TRUE; 
+	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
 	if (GLEW_OK != err){
-	  /* Problem: glewInit failed, something is seriously wrong. */
-	  fprintf(stderr, "\tERROR: %s\n", glewGetErrorString(err));
+		/* Problem: glewInit failed, something is seriously wrong. */
+		fprintf(stderr, "\tERROR: %s\n", glewGetErrorString(err));
 	}
-	
+
 	int screenHeight;
 	int screenWidth;
 
@@ -68,7 +68,7 @@ int main(void){
 
 	while (game->isRunning){
 		glfwPollEvents();
-		
+
 		game->update();
 		game->draw();
 		glfwSwapBuffers(vox::currentContext);

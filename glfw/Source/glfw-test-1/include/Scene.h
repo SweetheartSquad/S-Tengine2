@@ -16,7 +16,7 @@ public:
 	Camera * camera;
 
 	//singletons
-	RenderSystem * renderSystem;	//
+	RenderSystem * renderSystem;
 	Keyboard * keyboard;
 	Mouse * mouse;
 
@@ -25,4 +25,3 @@ public:
 
 	void addChild(Entity * child);
 };
-

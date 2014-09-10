@@ -7,7 +7,7 @@ Cube::Cube(glm::vec3 _center, float _size):
 
 	transform->scale(_size, _size, _size);
 	transform->translate(_center);
-	
+
 	//Top
 	m->pushVert(Vertex(-1.f, 1.f, 1.f));
 	m->pushVert(Vertex(-1.f, 1.f, -1.f));
@@ -18,7 +18,7 @@ Cube::Cube(glm::vec3 _center, float _size):
 	m->setNormal(1, 0.0, 1.0, 0.0);
 	m->setNormal(2, 0.0, 1.0, 0.0);
 	m->setNormal(3, 0.0, 1.0, 0.0);
-	
+
 	//Bottom
 	m->pushVert(Vertex(-1.f, -1.f, 1.f));
 	m->pushVert(Vertex(1.f, -1.f, 1.f));
@@ -87,7 +87,7 @@ void Cube::setColour(float red, float green, float blue, float alpha){
 		mesh->vertices.at(i).red = red;
 		mesh->vertices.at(i).green = green;
 		mesh->vertices.at(i).blue = blue;
-		mesh->vertices.at(i).alpha = alpha;	
+		mesh->vertices.at(i).alpha = alpha;
 	}
 }
 
@@ -96,7 +96,7 @@ void Cube::setLeftColour(float _red, float _green, float _blue, float _alpha){
 		mesh->vertices.at(i).red = _red;
 		mesh->vertices.at(i).green = _green;
 		mesh->vertices.at(i).blue = _blue;
-		mesh->vertices.at(i).alpha = _alpha;	
+		mesh->vertices.at(i).alpha = _alpha;
 	}
 }
 
@@ -105,7 +105,7 @@ void Cube::setRightColour(float _red, float _green, float _blue, float _alpha){
 		mesh->vertices.at(i).red = _red;
 		mesh->vertices.at(i).green = _green;
 		mesh->vertices.at(i).blue = _blue;
-		mesh->vertices.at(i).alpha = _alpha;	
+		mesh->vertices.at(i).alpha = _alpha;
 	}
 }
 
@@ -114,7 +114,7 @@ void Cube::setTopColour(float _red, float _green, float _blue, float _alpha){
 		mesh->vertices.at(i).red = _red;
 		mesh->vertices.at(i).green = _green;
 		mesh->vertices.at(i).blue = _blue;
-		mesh->vertices.at(i).alpha = _alpha;	
+		mesh->vertices.at(i).alpha = _alpha;
 	}
 }
 
@@ -123,7 +123,7 @@ void Cube::setBottomColour(float _red, float _green, float _blue, float _alpha){
 		mesh->vertices.at(i).red = _red;
 		mesh->vertices.at(i).green = _green;
 		mesh->vertices.at(i).blue = _blue;
-		mesh->vertices.at(i).alpha = _alpha;	
+		mesh->vertices.at(i).alpha = _alpha;
 	}
 }
 
@@ -132,7 +132,7 @@ void Cube::setFrontColour(float red, float green, float blue, float alpha){
 		mesh->vertices.at(i).red = red;
 		mesh->vertices.at(i).green = green;
 		mesh->vertices.at(i).blue = blue;
-		mesh->vertices.at(i).alpha = alpha;	
+		mesh->vertices.at(i).alpha = alpha;
 	}
 }
 
@@ -141,7 +141,7 @@ void Cube::setBackColour(float red, float green, float blue, float alpha){
 		mesh->vertices.at(i).red = red;
 		mesh->vertices.at(i).green = green;
 		mesh->vertices.at(i).blue = blue;
-		mesh->vertices.at(i).alpha = alpha;	
+		mesh->vertices.at(i).alpha = alpha;
 	}
 }
 

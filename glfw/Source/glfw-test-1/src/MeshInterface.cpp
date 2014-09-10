@@ -41,7 +41,7 @@ void MeshInterface::load(){
 		glGenBuffers(1, &vboId);
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices.size(), vertices.data(), drawMode);
-	
+
 		//index buffer object (IBO)
 		glGenBuffers(1, &iboId);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
@@ -92,22 +92,21 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 				//bind VAO
 				glBindVertexArray(vaoId);
 				GLUtils::checkForError(0,__FILE__,__LINE__);
-				
+
 				//specify shader attributes
 				glUseProgram(shader->getProgramId());
 				GLUtils::checkForError(0,__FILE__,__LINE__);
-				glm::mat4 mvp = projectionMatrix * viewMatrix * vox::currentModelMatrix;  	
+				glm::mat4 mvp = projectionMatrix * viewMatrix * vox::currentModelMatrix;
 				GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
 				glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
 				GLUtils::checkForError(0,__FILE__,__LINE__);
-		
+
 				//draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
 				glDrawRangeElements(polygonalDrawMode, 0, vertices.size(), indices.size(), GL_UNSIGNED_BYTE, 0);
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 
 				//disable VAO
 				glBindVertexArray(0);
-
 			}else{
 				std::cout << "ibo bad" << std::endl << std::endl;
 			}
@@ -125,7 +124,7 @@ void MeshInterface::configureVertexAttributes(GLint _vertexHandle, unsigned long
 
 		glEnableVertexAttribArray(_vertexHandle);
 		glVertexAttribPointer(_vertexHandle, _arity, GL_FLOAT, GL_FALSE, getStride(), BUFFER_OFFSET(_bufferOffset));
-		
+
 		glBindVertexArray(0);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 	}

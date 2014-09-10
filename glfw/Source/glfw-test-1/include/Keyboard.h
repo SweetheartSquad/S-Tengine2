@@ -1,20 +1,19 @@
-#pragma once 
+#pragma once
 
 #include <iostream>
 #include <GLFW/glfw3.h>
 #include <map>
 
-
 class Keyboard
 {
 public:
-	bool keyDown(int glfwKeyCode);
-	bool keyJustUp(int glfwKeyCode);
-	bool keyJustDown(int glfwKeyCode);
+	bool keyDown(int _glfwKeyCode);
+	bool keyJustUp(int _glfwKeyCode);
+	bool keyJustDown(int _glfwKeyCode);
 	void update();
 
-	void keyDownListener(int glfwKeyCode);
-	void keyUpListener(int glfwKeyCode);
+	void keyDownListener(int _glfwKeyCode);
+	void keyUpListener(int _glfwKeyCode);
 
 	static Keyboard& getInstance();
 

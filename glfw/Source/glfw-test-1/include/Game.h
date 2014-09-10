@@ -17,8 +17,8 @@ private:
 	void printFps();
 
 public:
-	
-	explicit Game(bool running);
+
+	explicit Game(bool _running);
 	virtual ~Game(void);
 
 	bool isRunning;
@@ -28,10 +28,10 @@ public:
 	RenderSystem *renderSystem;
 
 	std::vector<Entity*> *children;
-	
+
 	std::map<std::string, Scene*> *scenes;
 	Scene *currentScene;
-	
+
 	Keyboard *keyboard;
 	Mouse *mouse;
 
@@ -39,4 +39,3 @@ public:
 	virtual void draw(void);
 	void manageInput(void);
 };
-

@@ -21,34 +21,33 @@ public:
 	std::vector<Transform *> children;
 	Transform * parent;
 
-
 	Transform(void);
 	virtual ~Transform(void);
 
-	virtual void draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix);
+	virtual void draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
 	virtual void update();
-	
-	void scale(float scaleX, float scaleY, float scaleZ);
-	void scale(glm::vec3 scale);
-	void scaleX(float scaleX);
-	void scaleY(float scaleY);
-	void scaleZ(float scaleZ);
-	
-	void translate(float translateX, float translateY, float translateZ);
-	void translate(glm::vec3 translate);
-	void translateX(float translateX);
-	void translateY(float translateY);
-	void translateZ(float translateZ);
 
-	void rotate(glm::quat rotation);
-	void rotate(float w, float x, float y, float z);
-	
+	void scale(float _scaleX, float _scaleY, float _scaleZ);
+	void scale(glm::vec3 _scale);
+	void scaleX(float _scaleX);
+	void scaleY(float _scaleY);
+	void scaleZ(float _scaleZ);
+
+	void translate(float _translateX, float _translateY, float _translateZ);
+	void translate(glm::vec3 _translate);
+	void translateX(float _translateX);
+	void translateY(float _translateY);
+	void translateZ(float _translateZ);
+
+	void rotate(glm::quat _rotation);
+	void rotate(float _w, float _x, float _y, float _z);
+
 	glm::mat4 getTranslationMatrix();
 	glm::mat4 getScaleMatrix();
 	glm::mat4 getRotationMatrix();
 	glm::mat4 getModelMatrix();
 
-	void addChild(Transform * child);
-	virtual void removeChildAtIndex(int index);
-	void setParent(Transform * parent);
+	void addChild(Transform * _child);
+	virtual void removeChildAtIndex(int _index);
+	void setParent(Transform * _parent);
 };

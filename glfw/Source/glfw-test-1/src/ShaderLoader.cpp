@@ -4,19 +4,19 @@ ShaderLoader::ShaderLoader(std::string _vertexShaderSource, std::string _fragmen
 	//vert
 	char * v = new char[_vertexShaderSource.size() + 1];
 	int vl = _vertexShaderSource.length();
-    memcpy(v, _vertexShaderSource.c_str(), _vertexShaderSource.size() + 1);
+	memcpy(v, _vertexShaderSource.c_str(), _vertexShaderSource.size() + 1);
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	GLuint vertexShader = compileShader(GL_VERTEX_SHADER, v, vl);
 	delete v;
-	
+
 	//frag
 	char * f = new char[_fragmentShaderSource.size() + 1];
 	int fl = _fragmentShaderSource.length();
-    memcpy(f, _fragmentShaderSource.c_str(), _fragmentShaderSource.size() + 1);
+	memcpy(f, _fragmentShaderSource.c_str(), _fragmentShaderSource.size() + 1);
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, f, fl);
 	delete f;
-	
+
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 
 	programId = glCreateProgram();
@@ -26,34 +26,32 @@ ShaderLoader::ShaderLoader(std::string _vertexShaderSource, std::string _fragmen
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	glLinkProgram(programId);
 	GLUtils::checkForError(true,__FILE__,__LINE__);
-	
+
 	//check for error with glLinkProgram
 	GLint isLinked = 0;
 	glGetProgramiv(programId, GL_LINK_STATUS, &isLinked);
 	if(isLinked == GL_FALSE){
-			GLint maxLength = 0;
-			glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &maxLength);
- 
-			//The maxLength includes the NULL character
-			std::vector<GLchar> infoLog(maxLength+1);
-			glGetProgramInfoLog(programId, maxLength, &maxLength, &infoLog[0]);
- 
-			//The program is useless now. So delete it.
-			glDeleteProgram(programId);
- 
-			//Provide the infolog in whatever manor you deem best.
-			for(unsigned long int i = 0; i < infoLog.size(); ++i){
-				std::cout << infoLog.at(i);
-			}
-			//Exit with failure.
+		GLint maxLength = 0;
+		glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &maxLength);
+
+		//The maxLength includes the NULL character
+		std::vector<GLchar> infoLog(maxLength+1);
+		glGetProgramInfoLog(programId, maxLength, &maxLength, &infoLog[0]);
+
+		//The program is useless now. So delete it.
+		glDeleteProgram(programId);
+
+		//Provide the infolog in whatever manor you deem best.
+		for(unsigned long int i = 0; i < infoLog.size(); ++i){
+			std::cout << infoLog.at(i);
+		}
+		//Exit with failure.
 	}
 	GLUtils::checkForError(true,__FILE__,__LINE__);
-	
-	
+
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 	GLUtils::checkForError(true,__FILE__,__LINE__);
-	
 }
 
 ShaderLoader::~ShaderLoader(void){}
@@ -69,7 +67,7 @@ GLuint ShaderLoader::compileShader(GLenum _shaderType, const char* _source, int 
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	glCompileShader(shaderId);
 	GLUtils::checkForError(true,__FILE__,__LINE__);
-	
+
 	GLint status = 0;
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &status);
@@ -77,25 +75,25 @@ GLuint ShaderLoader::compileShader(GLenum _shaderType, const char* _source, int 
 	if(status == GL_FALSE){
 		std::cout << "\tERROR: Shader could not be compiled." << std::endl << std::endl << _source << std::endl << std::endl;
 		GLint maxLength = 0;
-        glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &maxLength);
- 
-        //The maxLength includes the NULL character
-        std::vector<char> errorLog(maxLength+1);
-        glGetShaderInfoLog(shaderId, maxLength, &maxLength, &errorLog[0]);
- 
-        //Provide the infolog in whatever manner you deem best.
+		glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &maxLength);
+
+		//The maxLength includes the NULL character
+		std::vector<char> errorLog(maxLength+1);
+		glGetShaderInfoLog(shaderId, maxLength, &maxLength, &errorLog[0]);
+
+		//Provide the infolog in whatever manner you deem best.
 		std::cout << "\t";
 		for(int i = 0; i < errorLog.size(); ++i){
 			std::cout << errorLog.at(i);
 		}
 		std::cout << std::endl;
-        //Exit with failure.
-        glDeleteShader(shaderId); //Don't leak the shader.
-        return -1;
+		//Exit with failure.
+		glDeleteShader(shaderId); //Don't leak the shader.
+		return -1;
 	}else{
 		std::cout << "Shader compiled succesfully." << std::endl << std::endl << _source << std::endl << std::endl;
 	}
 	GLUtils::checkForError(true,__FILE__,__LINE__);
-	
+
 	return shaderId;
 }

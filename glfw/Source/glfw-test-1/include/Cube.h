@@ -13,16 +13,15 @@ public:
 	Cube(glm::vec3 center, float size);
 	~Cube(void);
 
-	void draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix) override;
+	void draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix) override;
 	void update(void) override;
 
-	void setColour(float red, float green, float blue, float alpha);
-	void setLeftColour(float red, float green, float blue, float alpha);
-	void setRightColour(float red, float green, float blue, float alpha);
-	void setTopColour(float red, float green, float blue, float alpha);
-	void setBottomColour(float red, float green, float blue, float alpha);
-	void setFrontColour(float red, float green, float blue, float alpha);
-	void setBackColour(float red, float green, float blue, float alpha);
-	void setVertexColour(int index, float red, float green, float blue, float alpha);
+	void setColour(float _red, float _green, float _blue, float _alpha);
+	void setLeftColour(float _red, float _green, float _blue, float _alpha);
+	void setRightColour(float _red, float _green, float _blue, float _alpha);
+	void setTopColour(float _red, float _green, float _blue, float _alpha);
+	void setBottomColour(float _red, float _green, float _blue, float _alpha);
+	void setFrontColour(float _red, float _green, float _blue, float _alpha);
+	void setBackColour(float _red, float _green, float _blue, float _alpha);
+	void setVertexColour(int _index, float _red, float _green, float _blue, float _alpha);
 };
-

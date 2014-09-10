@@ -4,17 +4,18 @@ Cube * cube;
 Cube * cube2;
 Cube * cube3;
 Cube * cube4;
+
 MainScene::MainScene():
 	Scene()
 {
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
 	cube->setShader(new ShaderInterface("../assets/ColourShader"), true);
-	
+
 	cube->mesh->vertices.pop_back();
 	cube->mesh->vertices.pop_back();
 	cube->mesh->vertices.pop_back();
 	cube->mesh->vertices.pop_back();
-	
+
 	cube->setFrontColour(1,0,0, 1);
 	cube->setLeftColour(0,1,0, 1);
 	cube->setBackColour(0,0,1, 1);
@@ -28,7 +29,7 @@ MainScene::MainScene():
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->setShader(new ShaderInterface("../assets/junkdata"), true);
-	
+
 	cube2->setFrontColour(1,0,0,1);
 	cube2->setLeftColour(0,1,0,1);
 	cube2->setBackColour(0,0,1,1);
@@ -37,12 +38,12 @@ MainScene::MainScene():
 	cube2->setRightColour(0,1,1,1);
 
 	cube2->transform->translateX(0.5);
-	
+
 	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
 	cube2->addChild(cube3);
 	cube3->setShader(new ShaderInterface("../assets/ColourShader"), true);
-	
+
 	cube3->setFrontColour(0.5,0,0,1);
 	cube3->setLeftColour(0,0.5,0,1);
 	cube3->setBackColour(0,0,0.5,1);
@@ -73,19 +74,18 @@ void MainScene::update(){
 	Scene::update();
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
-
 		// Toggle fullscreen flag.
 		vox::fullscreen = !vox::fullscreen;
 
 		//get size
 		int w, h;
 		//if(vox::fullscreen){
-			const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-			w = mode->width;
-			h = mode->height;
+		w = mode->width;
+		h = mode->height;
 
-			std::cout << w << " " << h << std::endl;
+		std::cout << w << " " << h << std::endl;
 		//}
 
 		if(!vox::fullscreen){

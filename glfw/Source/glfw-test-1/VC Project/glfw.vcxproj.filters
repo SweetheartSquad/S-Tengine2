@@ -28,9 +28,6 @@
     <Filter Include="Header Files\geo">
       <UniqueIdentifier>{4ba3dee6-0fa3-43ca-886d-f785d17c6859}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\maths">
-      <UniqueIdentifier>{78d6d65a-770e-4c23-9e2f-3eb95c9ec967}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\TestGame">
       <UniqueIdentifier>{40908594-3aea-4682-ae22-ddaca988a7ad}</UniqueIdentifier>
     </Filter>
@@ -109,9 +106,6 @@
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
       <Filter>Header Files\geo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\vector3.h">
-      <Filter>Header Files\maths</Filter>
     </ClInclude>
     <ClInclude Include="..\include\FileUtils.h">
       <Filter>Header Files\utils</Filter>

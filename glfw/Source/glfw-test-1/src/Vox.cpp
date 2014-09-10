@@ -8,22 +8,20 @@ double vox::deltaTimeCorrection = 1;
 
 bool vox::fullscreen = false;
 
-
 GLFWwindow * vox::currentContext = nullptr;
 
 void vox::setGlfwWindowHints(){
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
-
 
 static void keyCallback(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods){
 	Keyboard *keyboard = &Keyboard::getInstance();
 	if(_action == GLFW_PRESS){
-		keyboard->keyDownListener(_key);	
+		keyboard->keyDownListener(_key);
 	}else if(_action == GLFW_RELEASE){
-		keyboard->keyUpListener(_key);	
+		keyboard->keyUpListener(_key);
 	}
 }
 static void mouseButtonCallback(GLFWwindow* _window, int _button, int _action, int _mods){
@@ -31,7 +29,7 @@ static void mouseButtonCallback(GLFWwindow* _window, int _button, int _action, i
 	if(_action == GLFW_PRESS){
 		mouse->mouseDownListener(_button);
 	}else if(_action == GLFW_RELEASE){
-		mouse->mouseUpListener(_button);	
+		mouse->mouseUpListener(_button);
 	}
 }
 static void mousePostionCallback(GLFWwindow *_window, double _x, double _y){
@@ -49,7 +47,7 @@ void vox::initWindow(GLFWwindow * _w){
 
 /////////// Matrix Stack Begin //////////////
 void vox::popMatrix(){
-	if(matrixStack->size() > 0){	
+	if(matrixStack->size() > 0){
 		if(matrixStack->size()>0){
 			currentModelMatrix = matrixStack->at(matrixStack->size()-1);
 			matrixStack->pop_back();

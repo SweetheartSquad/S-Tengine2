@@ -5,45 +5,45 @@ struct Vertex{
 	float red,green,blue,alpha;
 	float nx, ny, nz;
 	float u,v;
-	Vertex(float x, float y, float z, 
-					  float red, float green, float blue, float alpha, 
-					  float normalX, float normalY, float normalZ, 
-					  float u, float v){
-		this->x = x;
-		this->y = y;
-		this->z = z;
-		this->red = red;
-		this->green = green;
-		this->blue = blue;
-		this->alpha = alpha;
-		this->nx = normalX;
-		this->ny = normalY;
-		this->nz = normalZ;
-		this->u = u;
-		this->v = v;
+	Vertex(float _x, float _y, float _z,
+		float _red, float _green, float _blue, float _alpha,
+		float _normalX, float _normalY, float _normalZ,
+		float _u, float _v){
+			this->x = _x;
+			this->y = _y;
+			this->z = _z;
+			this->red = _red;
+			this->green = _green;
+			this->blue = _blue;
+			this->alpha = _alpha;
+			this->nx = _normalX;
+			this->ny = _normalY;
+			this->nz = _normalZ;
+			this->u = _u;
+			this->v = _v;
 	}
 
-	Vertex(float x, float y, float z, 
-				float red, float green, float blue, float alpha){
-		this->x = x;
-		this->y = y;
-		this->z = z;
-		this->red = red;
-		this->green = green;
-		this->blue = blue;
-		this->alpha = alpha;
-		this->nx = 0.0f;
-		this->ny = 0.0f;
-		this->nz = 0.0f;
-		this->u = 0.0f;
-		this->v = 0.0f;
+	Vertex(float _x, float _y, float _z,
+		float _red, float _green, float _blue, float _alpha){
+			this->x = _x;
+			this->y = _y;
+			this->z = _z;
+			this->red = _red;
+			this->green = _green;
+			this->blue = _blue;
+			this->alpha = _alpha;
+			this->nx = 0.0f;
+			this->ny = 0.0f;
+			this->nz = 0.0f;
+			this->u = 0.0f;
+			this->v = 0.0f;
 	}
 
-	//will generate random vertex colours
-	Vertex(float x, float y, float z){
-		this->x = x;
-		this->y = y;
-		this->z = z;
+	//will generate random verte_x colours
+	Vertex(float _x, float _y, float _z){
+		this->x = _x;
+		this->y = _y;
+		this->z = _z;
 		this->red = static_cast<float>(std::rand()%255)/255.f;
 		this->green = static_cast<float>(std::rand()%255)/255.f;
 		this->blue = static_cast<float>(std::rand()%255)/255.f;

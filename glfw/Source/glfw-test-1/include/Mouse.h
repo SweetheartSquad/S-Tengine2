@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include <iostream>
 #include <GLFW/glfw3.h>
@@ -7,7 +7,7 @@
 class Mouse
 {
 public:
-	
+
 	bool leftJustPressed();
 	bool lefJustReleased();
 	bool leftDown();
@@ -19,10 +19,10 @@ public:
 
 	void update();
 
-	void mouseDownListener(int glfwMouseCode);
-	void mouseUpListener(int glfwMouseCode);
-	void mousePositionListener(double x, double y);
-	void setMousePositionListener(double x, double y);
+	void mouseDownListener(int _glfwMouseCode);
+	void mouseUpListener(int _glfwMouseCode);
+	void mousePositionListener(double _x, double _y);
+	void setMousePositionListener(double _x, double _y);
 
 	static Mouse& getInstance();
 

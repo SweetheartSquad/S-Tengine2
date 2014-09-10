@@ -1,6 +1,5 @@
 #include "Entity.h"
 
-
 Entity::Entity(MeshInterface * _mesh, Transform * _transform, ShaderInterface * _shader, Entity * _parent):
 	mesh(_mesh),
 	transform(_transform),
@@ -59,7 +58,9 @@ void Entity::setParent(Entity* _parent){
 void Entity::setShader(ShaderInterface* _shader, bool _confiugreDefaultAttributes){
 	shader = _shader;
 	if(_confiugreDefaultAttributes){
-		mesh->configureDefaultVertexAttributes(shader);	
+		if(mesh != nullptr){
+			mesh->configureDefaultVertexAttributes(shader);
+		}
 	}
 }
 
@@ -82,7 +83,7 @@ void Entity::reset(){
 	mesh->configureVertexAttributes(shader->get_aVertexPosition(), 3, 0);
 	mesh->configureVertexAttributes(shader->get_aVertexColor(), 4, sizeof(float)*3);
 	mesh->configureVertexAttributes(shader->get_aVertexNormals(), 3, sizeof(float)*7);
-	
+
 	std::string shaderVertSrc = shader->vertName;
 	std::string shaderFragSrc = shader->fragName;
 

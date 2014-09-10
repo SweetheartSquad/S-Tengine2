@@ -94,7 +94,7 @@ glm::mat4 Transform::getRotationMatrix(){
 }
 
 glm::mat4 Transform::getModelMatrix(){
-	return getTranslationMatrix() * getRotationMatrix() * getScaleMatrix();	
+	return getTranslationMatrix() * getRotationMatrix() * getScaleMatrix();
 }
 
 void Transform::addChild(Transform* _child){

@@ -14,7 +14,6 @@ TestGame::~TestGame()
 
 void TestGame::update(){
 	Game::update();
-
 }
 
 void TestGame::draw(){

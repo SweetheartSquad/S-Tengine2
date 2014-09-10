@@ -59,11 +59,11 @@ void Mouse::mouseDownListener(int _glfwMouseCode){
 
 void Mouse::mouseUpListener(int _glfwMouseCode){
 	justReleasedKeys->insert(std::make_pair(_glfwMouseCode, _glfwMouseCode));
-	
+
 	if(pressedKeys->find(_glfwMouseCode) != pressedKeys->end()){
 		pressedKeys->erase(_glfwMouseCode);
 	}
-	
+
 	if(justPressedKeys->find(_glfwMouseCode) != justPressedKeys->end()){
 		justPressedKeys->erase(_glfwMouseCode);
 	}
@@ -79,7 +79,6 @@ void Mouse::setMousePositionListener(double _x, double _y){
 	this->y = _y;
 }
 
-
 Mouse& Mouse::getInstance(){
 	static Mouse *mouse;
 	if(mouse == 0){
@@ -87,4 +86,3 @@ Mouse& Mouse::getInstance(){
 	}
 	return *mouse;
 }
-
