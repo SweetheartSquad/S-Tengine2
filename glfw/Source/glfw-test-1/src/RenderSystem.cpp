@@ -1,30 +1,10 @@
 #include "RenderSystem.h"
 
-RenderSystem::RenderSystem():
-	shaderArray(new std::vector<ShaderInterface*>)
-{
-}
+RenderSystem::RenderSystem(){}
+RenderSystem::~RenderSystem(void){}
 
-RenderSystem::~RenderSystem(void){
-	delete shaderArray->at(0);
-	delete shaderArray;
-}
-
-void RenderSystem::destroyRenderSystem(){
-	RenderSystem *renderSystem = &getInstance();
-	delete renderSystem;
-}
-
-RenderSystem& RenderSystem::getInstance(){
-	static RenderSystem *renderSystem;
-	if(renderSystem == nullptr){
-		renderSystem = new RenderSystem();
-	}
-	return *renderSystem;
-}
 void RenderSystem::render(GLFWwindow * _context, std::vector<Entity *> * _renderChildren, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix){
 	glfwMakeContextCurrent(_context);
-
 	float ratio;
 	int width, height;
 	GLUtils::checkForError(0,__FILE__,__LINE__);
@@ -40,13 +20,9 @@ void RenderSystem::render(GLFWwindow * _context, std::vector<Entity *> * _render
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 
 	//Back-face culling
-	/*glEnable (GL_CULL_FACE); // cull face
-	glCullFace (GL_BACK); // cull back face
-	glFrontFace (GL_CW); // GL_CCW for counter clock-wise
-	GLUtils::checkForError(0,__FILE__,__LINE__);*/
-
-	//not needed because we aren't actually using the glTranslate/Rotate/Scale functions
-	//glLoadIdentity();
+	//glEnable (GL_CULL_FACE); // cull face
+	//glCullFace (GL_BACK); // cull back face
+	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise
 
 	for(Entity * e : *_renderChildren){
 		e->draw(_projectionMatrix, _viewMatrix);

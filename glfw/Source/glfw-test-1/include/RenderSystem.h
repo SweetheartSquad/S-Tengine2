@@ -14,12 +14,6 @@ private:
 	RenderSystem(void);
 	~RenderSystem(void);
 
-	GLFWwindow *glfwWindow;
-	std::vector<ShaderInterface *> *shaderArray;
-
 public:
-	static RenderSystem& getInstance();
-	static void destroyRenderSystem();
-
-	void render(GLFWwindow * _context, std::vector<Entity*> *_renderChildren, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
+	static void render(GLFWwindow * _context, std::vector<Entity*> *_renderChildren, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
 };

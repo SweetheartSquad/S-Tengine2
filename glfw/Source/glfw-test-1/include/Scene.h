@@ -16,7 +16,6 @@ public:
 	Camera * camera;
 
 	//singletons
-	RenderSystem * renderSystem;
 	Keyboard * keyboard;
 	Mouse * mouse;
 

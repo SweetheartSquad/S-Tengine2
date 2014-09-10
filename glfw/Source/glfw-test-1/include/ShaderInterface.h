@@ -19,7 +19,7 @@ public:
 	std::string fragName;
 
 	//Creates shader using "shaderFile.vert" and "shaderFile.frag"
-	ShaderInterface(std::string _shaderFile);
+	explicit ShaderInterface(std::string _shaderFile);
 	//Creates shader using "vertexShaderFile" and "fragmentShaderFile"
 	ShaderInterface(std::string _vertexShaderFile, std::string _fragmentShaderFile);
 	~ShaderInterface(void);

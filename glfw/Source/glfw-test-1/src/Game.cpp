@@ -6,7 +6,6 @@ int nbFrames = 0;
 
 Game::Game(bool _isRunning):
 	isRunning(_isRunning),
-	renderSystem(&RenderSystem::getInstance()),
 	children(new std::vector<Entity *>()),
 	scenes(new std::map<std::string, Scene *>()),
 	printFPS(true),
@@ -16,7 +15,6 @@ Game::Game(bool _isRunning):
 }
 
 Game::~Game(void){
-	RenderSystem::destroyRenderSystem();
 }
 
 void Game::update(void){

@@ -4,8 +4,7 @@ Scene::Scene(void):
 	children(new std::vector<Entity *>()),
 	camera(new Camera()),
 
-	//singletons
-	renderSystem(&RenderSystem::getInstance()),
+	//Singletons
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance())
 {
@@ -21,7 +20,7 @@ void Scene::update(void){
 }
 
 void Scene::draw(){
-	renderSystem->render(vox::currentContext, children, camera->getProjectionMatrix(), camera->getViewMatrix());
+	RenderSystem::render(vox::currentContext, children, camera->getProjectionMatrix(), camera->getViewMatrix());
 }
 
 void Scene::addChild(Entity* _child){
