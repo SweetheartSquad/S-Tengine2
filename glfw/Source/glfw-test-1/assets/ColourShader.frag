@@ -1,10 +1,12 @@
 #version 150
 
-in vec4 colorForFrag;
+//in vec4 colorForFrag;
+in vec2 outUV;
 
-out vec4 outColor;
+out vec3 outColor;
+uniform sampler2D tex;
 
 void main()
 {
-    outColor = colorForFrag;
+     outColor = texture(tex, outUV).rgb;
 }

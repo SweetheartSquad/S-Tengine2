@@ -8,6 +8,7 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	loaded(false),
 	dirty(true)
 {
+	textures = std::vector<GLuint>();
 	load();
 	clean();
 }
@@ -95,6 +96,14 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 
 				//specify shader attributes
 				glUseProgram(shader->getProgramId());
+
+				//Bind texture
+				if(textures.size() > 0){
+					glUniform1i(glGetUniformLocation(shader->getProgramId(), "tex"), 0);
+					glActiveTexture(GL_TEXTURE0);
+					glBindTexture(GL_TEXTURE_2D, textures.at(textures.size()-1));
+				}
+
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 				glm::mat4 mvp = projectionMatrix * viewMatrix * vox::currentModelMatrix;
 				GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
@@ -134,13 +143,23 @@ void MeshInterface::configureDefaultVertexAttributes(ShaderInterface *_shader){
 	configureVertexAttributes(_shader->get_aVertexPosition(), 3, 0);
 	configureVertexAttributes(_shader->get_aVertexColor(), 4, sizeof(float)*3);
 	configureVertexAttributes(_shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	configureVertexAttributes(_shader->get_aVertexUVs(), 2, sizeof(float)*10);
 }
 
 void MeshInterface::pushVert(Vertex _vertex){
 	vertices.push_back(_vertex);
-
 	dirty = true;
 }
+
+void MeshInterface::pushTextrue2D(unsigned char* _imageData, int _width, int _height){
+	GLuint tex;
+	glGenTextures(1, &tex);
+	textures.push_back(tex);
+	glBindTexture(GL_TEXTURE_2D, tex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, _imageData);
+	glGenerateMipmap(GL_TEXTURE_2D);
+}
+
 void MeshInterface::setNormal(unsigned long int _vertId, float _x, float _y, float _z){
 	vertices.at(_vertId).nx = _x;
 	vertices.at(_vertId).ny = _y;
@@ -148,6 +167,12 @@ void MeshInterface::setNormal(unsigned long int _vertId, float _x, float _y, flo
 
 	dirty = true;
 }
+
+void MeshInterface::setUV(unsigned long _vertId, float _x, float _y){
+	vertices.at(_vertId).u = _x;
+	vertices.at(_vertId).v = _y;
+}
+
 void TriMesh::pushTri(GLubyte _v0, GLubyte _v1, GLubyte _v2){
 	indices.push_back(_v0);
 	indices.push_back(_v1);
