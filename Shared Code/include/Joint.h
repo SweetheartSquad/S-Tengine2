@@ -1,10 +1,12 @@
 #pragma once
 
-#include "cinder\Vector.h"
-#include "cinder\gl\gl.h"
-#include "cinder/gl/GlslProg.h"
-#include "Transform.h"
 #include <map>
+
+#include <cinder\Vector.h>
+#include <cinder\gl\gl.h>
+#include <cinder\gl\GlslProg.h>
+
+#include "Transform.h"
 
 using namespace ci;
 

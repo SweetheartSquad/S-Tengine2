@@ -43,7 +43,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath);C:\DevelopmentLibs\C-C++\rapidjson-master\include</IncludePath>
+    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(GLM_DIR);$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath);C:\DevelopmentLibs\C-C++\rapidjson-master\include</IncludePath>
     <LibraryPath>$(CINDER_DIR_2012)\lib;$(CINDER_DIR_2012)\lib\msw;$(LibraryPath)</LibraryPath>
     <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
@@ -52,7 +52,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(GLM_DIR);$(CINDER_DIR_2012)\include;$(CINDER_DIR_2012)\boost;$(IncludePath)</IncludePath>
     <LibraryPath>$(CINDER_DIR_2012)\lib;$(CINDER_DIR_2012)\lib\msw;$(LibraryPath)</LibraryPath>
     <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
@@ -67,7 +67,6 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Users\ecthu_000\Documents\Visual Studio 2012\Projects\voxel-engine-thing\Cinder\Source\voxel-test-4-bones\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -85,7 +84,6 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Users\ecthu_000\Documents\Visual Studio 2012\Projects\voxel-engine-thing\Cinder\Source\voxel-test-4-bones\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

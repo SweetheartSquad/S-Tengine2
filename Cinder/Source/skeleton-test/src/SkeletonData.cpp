@@ -83,7 +83,7 @@ string SkeletonData::writeJoint(Joint* j) {
 		json << "  \"parent_id\":" << j->parent->id << "," << endl;
 	}
 	json << "  \"pos\":"<< "{\"x\":" << j->getPos().x << ", \"y\":" << j->getPos().y << ", \"z\":" << j->getPos().z << "}," << endl;
-	json << "  \"orientation\":" << "{\"x\":" << j->orientation.v.x << ", \"y\":" << j->orientation.v.y << ", \"z\":" << j->orientation.v.z << ", \"w\":" << j->orientation.w << "}," << endl;
+	json << "  \"orientation\":" << "{\"x\":" << j->transform->orientation.x << ", \"y\":" << j->transform->orientation.y << ", \"z\":" << j->transform->orientation.z << ", \"w\":" << j->transform->orientation.w << "}," << endl;
 	
 	json << "  \"children\":" << "[" << endl;
 	for(Joint * c : j->children) {
@@ -110,7 +110,7 @@ Joint* SkeletonData::readJoint(JsonTree joint, Joint * parent) {
 	JsonTree pos = joint.getChild("pos");
 	j->setPos(Vec3f(pos.getChild("x").getValue<float>(),pos.getChild("y").getValue<float>(),pos.getChild("z").getValue<float>()));
 	JsonTree orientation = joint.getChild("orientation");
-	j->orientation = Quatd(orientation.getChild("x").getValue<float>(),orientation.getChild("y").getValue<float>(),orientation.getChild("z").getValue<float>(),orientation.getChild("w").getValue<float>());
+	j->transform->orientation = glm::quat(orientation.getChild("x").getValue<float>(), orientation.getChild("y").getValue<float>(), orientation.getChild("z").getValue<float>(), orientation.getChild("w").getValue<float>());
 
 	JsonTree childrenJson = joint.getChild("children");
 	for( JsonTree::ConstIter child = childrenJson.begin(); child != childrenJson.end(); ++child ) {

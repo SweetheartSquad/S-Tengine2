@@ -4,8 +4,8 @@
 #include <vector>
 #include <iostream>
 
-#include <glm/gtx/quaternion.hpp>
 #include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
@@ -21,8 +21,8 @@ public:
 	std::vector<Transform *> children;
 	Transform * parent;
 
-	Transform(void);
-	virtual ~Transform(void);
+	Transform();
+	virtual ~Transform();
 
 	virtual void draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
 	virtual void update();

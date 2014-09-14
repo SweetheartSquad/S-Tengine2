@@ -14,7 +14,7 @@ void Joint::init(){
 	id = nextId;
 	nextId += 1;
 	transform = new Transform();
-	transform->orientation = new glm::quat(0,0,0,1);
+	transform->orientation = glm::quat(0.f, 0.f, 0.f, 1.f);
 }
 
 Joint::Joint(){
@@ -35,18 +35,18 @@ void Joint::setPos(Vec3d _pos, bool _relative){
 	if(_relative){
 		Joint * _parent = parent;
 		while(_parent != nullptr){
-			glmPos -= *_parent->transform->translationVector;
+			glmPos -= _parent->transform->translationVector;
 			_parent = _parent->parent;
 		}
 	}
-	*transform->translationVector = glmPos;
+	transform->translationVector = glmPos;
 }
 Vec3d Joint::getPos(bool _relative){
-	glm::vec3 res = *transform->translationVector;
+	glm::vec3 res = transform->translationVector;
 	if(!_relative){
 		Joint * _parent = parent;
 		while(_parent != nullptr){
-			res += *_parent->transform->translationVector;
+			res += _parent->transform->translationVector;
 			_parent = _parent->parent;
 		}
 	}
@@ -60,38 +60,40 @@ void Joint::draw(gl::GlslProg * _shader){
 	_shader->uniform("pickingColor", color);
 	//colour
 	if(depth%3 == 0){
-		gl::color(Color(0,1,1));
+		gl::color(Color(0, 1, 1));
 	}else if(depth%3 == 1){
-		gl::color(Color(1,0,1));
+		gl::color(Color(1, 0, 1));
 	}else{
-		gl::color(Color(1,1,0));
+		gl::color(Color(1, 1, 0));
 	}
 	
 	//draw joint
 	gl::pushModelView();
-		gl::translate(Vec3d(transform->translationVector->x,
-							transform->translationVector->y,
-							transform->translationVector->z));
+		gl::translate(transform->translationVector.x,
+							transform->translationVector.y,
+							transform->translationVector.z);
 
 		gl::pushMatrices();
-			gl::rotate(Quatd(transform->orientation->w,
-							 transform->orientation->x,
-							 transform->orientation->y,
-							 transform->orientation->z));
-			gl::drawSphere(Vec3f(0,0,0), 0.05);
+			gl::rotate(Quatd(transform->orientation.w,
+							 transform->orientation.x,
+							 transform->orientation.y,
+							 transform->orientation.z));
+			gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 		gl::popMatrices();
 
 	//draw bones
 	for(Joint * child : children){
-		Vec3d cinderTrans = Vec3d (child->transform->translationVector->x,
-							       child->transform->translationVector->y,
-							       child->transform->translationVector->z);
-		Quatd boneDir(Vec3d(0,1,0), cinderTrans);
+		Vec3d cinderTrans(
+			child->transform->translationVector.x,
+			child->transform->translationVector.y,
+			child->transform->translationVector.z
+		);
+		Quatd boneDir(Vec3d(0.0, 1.0, 0.0), cinderTrans);
 		gl::pushMatrices();
 			gl::rotate(boneDir);
-			gl::drawSolidTriangle(Vec2f(0.05, 0), Vec2f(-0.05, 0), Vec2f(0, cinderTrans.length()));
-			gl::rotate(Vec3f(0,90,0));
-			gl::drawSolidTriangle(Vec2f(0.05, 0), Vec2f(-0.05, 0), Vec2f(0, cinderTrans.length()));
+			gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
+			gl::rotate(Vec3f(0.f, 90.f, 0.f));
+			gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
 		gl::popMatrices();
 
 		child->draw(_shader);
