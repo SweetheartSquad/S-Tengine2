@@ -26,6 +26,7 @@ MeshInterface::~MeshInterface(void){
 GLsizei MeshInterface::getStride(){
 	return sizeof(Vertex);
 }
+
 GLsizei MeshInterface::getVertCount(){
 	return vertices.size();
 }
@@ -172,7 +173,6 @@ void MeshInterface::setUV(unsigned long _vertId, float _x, float _y){
 	vertices.at(_vertId).u = _x;
 	vertices.at(_vertId).v = _y;
 }
-
 void TriMesh::pushTri(GLubyte _v0, GLubyte _v1, GLubyte _v2){
 	indices.push_back(_v0);
 	indices.push_back(_v1);
