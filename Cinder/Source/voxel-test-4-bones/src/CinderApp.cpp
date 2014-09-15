@@ -37,7 +37,7 @@ public:
 
 	//! renders the scene
 	void renderScene(const Camera & cam);
-	void renderUI(const Camera & cam);
+	void renderUI(const Camera & cam, const Rectf & rect);
 
 	//! loads the shaders
 	void loadShaders();
@@ -251,44 +251,22 @@ void CinderApp::draw(){
 	renderScene(camFront);
 	fboFront.unbindFramebuffer();
 
-	gl::Fbo temp(fboUI.getWidth(), fboUI.getHeight(), true);
-	temp.getTexture(0).setFlipped(true);
 	fboUI.bindFramebuffer();
 		gl::enableDepthRead();
 		gl::enableDepthWrite();
 		gl::enableAlphaBlending();
 
 		gl::clear(ColorA(0.f, 0.f, 0.f, 0.f));
+	fboUI.unbindFramebuffer();
 		
-		temp.bindFramebuffer();
-		renderUI(camMayaPersp.getCamera());
-		temp.unbindFramebuffer();
-		fboUI.bindFramebuffer();
-		gl::draw(temp.getTexture(0), rectPersp);
-		fboUI.unbindFramebuffer();
-
-		temp.bindFramebuffer();
-		renderUI(camTop);
-		temp.unbindFramebuffer();
-		fboUI.bindFramebuffer();
-		gl::draw(temp.getTexture(0), rectTop);
-		fboUI.unbindFramebuffer();
+	renderUI(camMayaPersp.getCamera(), rectPersp);
+	renderUI(camTop, rectTop);
+	renderUI(camRight, rectRight);
+	renderUI(camFront, rectFront);
 		
-		temp.bindFramebuffer();
-		renderUI(camRight);
-		temp.unbindFramebuffer();
-		fboUI.bindFramebuffer();
-		gl::draw(temp.getTexture(0), rectRight);
-		fboUI.unbindFramebuffer();
-
-		temp.bindFramebuffer();
-		renderUI(camFront);
-		temp.unbindFramebuffer();
-		fboUI.bindFramebuffer();
-		gl::draw(temp.getTexture(0), rectFront);
-
+	fboUI.bindFramebuffer();
 		params->draw();
-
+		
 		gl::disableAlphaBlending();
 		gl::disableDepthRead();
 		gl::disableDepthWrite();
@@ -383,7 +361,12 @@ void CinderApp::renderScene(const Camera & cam){
 	glPopAttrib();
 }
 
-void CinderApp::renderUI(const Camera &cam){
+void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
+	gl::Fbo temp(fboUI.getWidth(), fboUI.getHeight(), true);
+	temp.getTexture(0).setFlipped(true);
+
+	temp.bindFramebuffer();
+
 	gl::enableDepthRead();
 	gl::enableDepthWrite();
 	gl::enableAlphaBlending();
@@ -408,6 +391,11 @@ void CinderApp::renderUI(const Camera &cam){
 	gl::disableAlphaBlending();
 	gl::disableDepthRead();
 	gl::disableDepthWrite();
+
+	temp.unbindFramebuffer();
+	fboUI.bindFramebuffer();
+	gl::draw(temp.getTexture(0), rect);
+	fboUI.unbindFramebuffer();
 }
 
 void CinderApp::mouseMove( MouseEvent event ){
