@@ -68,8 +68,7 @@ vector<Joint*> SkeletonData::LoadSkeleton(string filePath) {
 		}catch (exception ex) {
 			throw ex;
 		}
-	}
-	else {
+	}else{
 		throw new exception("File does not exist!");
 	}
 	return joints;

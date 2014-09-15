@@ -59,11 +59,11 @@ public:
 
 	//! renders the scene
 	void render();
+
 	//! samples the color buffer to determine which object is under the mouse
 	void pickVoxel( const Vec2i &position );
 	void pickFace( const Vec2i &position );
-	//! loads an OBJ file, writes it to a much faster binary file and loads the mesh
-	void loadMesh( const std::string &objFile, const std::string &meshFile, TriMesh *mesh);
+
 	//! loads the shaders
 	void loadShaders();
 	//! initializes empty fbos
@@ -512,8 +512,7 @@ void CinderApp::pickVoxel( const Vec2i &position ){
 	}
 }
 
-void CinderApp::pickFace( const Vec2i &position )
-{
+void CinderApp::pickFace( const Vec2i &position ){
 	// this is the main section of the demo:
 	//  here we sample the second color target to find out
 	//  which color is under the cursor.
@@ -600,38 +599,10 @@ void CinderApp::pickFace( const Vec2i &position )
 
 
 
-void CinderApp::loadMesh(const std::string &objFile, const std::string &meshFile, TriMesh *mesh)
-{
-	try {
-		// try to load a binary mesh file - sadly the following line does not work:
-		// mMesh.read( loadAsset(meshfile) );
-
-		// note: instead of throwing an exception, Cinder crashes if the
-		//   file does not exist. Hopefully this will be changed in future versions.
-		DataSourceRef file = loadAsset(meshFile);
-		if(!file->createStream()) throw std::exception();
-
-		mesh->read( file );
-	}
-	catch( ... ) {
-		// if it failed or didn't exist, load an obj file...
-		DataSourceRef file = loadAsset(objFile);
-		if(file->createStream()) {
-			ObjLoader obj( file );
-			// ...create a mesh...
-			obj.load( mesh, true, true, true );
-			// ...and write it to a binary mesh file for future use
-			mesh->write( writeFile( getAssetPath("") / meshFile ) );
-		}
-	}
-}
-
-void CinderApp::loadShaders()
-{
-	try {
+void CinderApp::loadShaders(){
+	try{
 		mPhongShader = gl::GlslProg( loadFile("../assets/shaders/phong.vert"), loadFile("../assets/shaders/phong.frag") );
-	}
-	catch( const std::exception &e ) {
+	}catch( const std::exception &e ) {
 		console() << e.what() << std::endl;
 	}
 }

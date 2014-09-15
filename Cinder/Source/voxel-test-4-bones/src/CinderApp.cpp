@@ -36,9 +36,9 @@ public:
 	void resize();
 
 	//! renders the scene
-	void render(const Camera & cam);
-	//! loads an OBJ file, writes it to a much faster binary file and loads the mesh
-	void loadMesh( const std::string &objFile, const std::string &meshFile, TriMesh *mesh);
+	void renderScene(const Camera & cam);
+	void renderUI(const Camera & cam);
+
 	//! loads the shaders
 	void loadShaders();
 	//! initializes empty single channel fbos
@@ -102,6 +102,8 @@ protected:
 	gl::Fbo fboFront;
 	gl::Fbo	fboPersp; //! our main framebuffer (AA, containing 2 color buffers)
 
+	gl::Fbo	fboUI; //! our main framebuffer (AA, containing 2 color buffers)
+
 	//framebuffer for selecting joints
 	gl::Fbo mPickingFboJoint;
 	
@@ -145,7 +147,7 @@ void CinderApp::prepareSettings(Settings *settings){
 
 void CinderApp::setup(){
 	drawParams = true;
-	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 200, 400 ) ) );
+	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 150, 100 ) ) );
 	params->addButton( "Switch Mode", std::bind( &CinderApp::switchMode, this ) );
 	params->addText( "Interaction Mode", "label=`CREATE`" );
 	// note: we will setup our camera in the 'resize' function,
@@ -167,7 +169,6 @@ void CinderApp::setup(){
 
 	selectedJoint = NULL;
 	
-
 	mode = CREATE;
 }
 
@@ -216,6 +217,8 @@ void CinderApp::resize(){
 		initMultiChannelFbo(fboRight, b);
 	}if(!fboFront || fboFront.getWidth() != w || fboFront.getHeight() != h){
 		initMultiChannelFbo(fboFront, b);
+	}if(!fboUI || fboUI.getWidth() != w || fboUI.getHeight() != h){
+		initFbo(fboUI, b);
 	}
 }
 
@@ -227,27 +230,75 @@ void CinderApp::shutdown(){
 	selectedJoint = NULL;
 }
 
-void CinderApp::update(){}
+void CinderApp::update(){
+	
+}
 
 void CinderApp::draw(){
 	fboPersp.bindFramebuffer();
-	render(camMayaPersp.getCamera());
+	renderScene(camMayaPersp.getCamera());
 	fboPersp.unbindFramebuffer();
 	
 	fboTop.bindFramebuffer();
-	render(camTop);
+	renderScene(camTop);
 	fboTop.unbindFramebuffer();
 
 	fboRight.bindFramebuffer();
-	render(camRight);
+	renderScene(camRight);
 	fboRight.unbindFramebuffer();
 
 	fboFront.bindFramebuffer();
-	render(camFront);
+	renderScene(camFront);
 	fboFront.unbindFramebuffer();
 
+	gl::Fbo temp(fboUI.getWidth(), fboUI.getHeight(), true);
+	temp.getTexture(0).setFlipped(true);
+	fboUI.bindFramebuffer();
+		gl::enableDepthRead();
+		gl::enableDepthWrite();
+		gl::enableAlphaBlending();
+
+		gl::clear(ColorA(0.f, 0.f, 0.f, 0.f));
+		
+		temp.bindFramebuffer();
+		renderUI(camMayaPersp.getCamera());
+		temp.unbindFramebuffer();
+		fboUI.bindFramebuffer();
+		gl::draw(temp.getTexture(0), rectPersp);
+		fboUI.unbindFramebuffer();
+
+		temp.bindFramebuffer();
+		renderUI(camTop);
+		temp.unbindFramebuffer();
+		fboUI.bindFramebuffer();
+		gl::draw(temp.getTexture(0), rectTop);
+		fboUI.unbindFramebuffer();
+		
+		temp.bindFramebuffer();
+		renderUI(camRight);
+		temp.unbindFramebuffer();
+		fboUI.bindFramebuffer();
+		gl::draw(temp.getTexture(0), rectRight);
+		fboUI.unbindFramebuffer();
+
+		temp.bindFramebuffer();
+		renderUI(camFront);
+		temp.unbindFramebuffer();
+		fboUI.bindFramebuffer();
+		gl::draw(temp.getTexture(0), rectFront);
+
+		params->draw();
+
+		gl::disableAlphaBlending();
+		gl::disableDepthRead();
+		gl::disableDepthWrite();
+	fboUI.unbindFramebuffer();
+	
+
 	// draw the scene
-	gl::color( Color::white() );
+	gl::enableAlphaBlending();
+
+	gl::color( ColorA(1.f, 1.f, 1.f, 1.f) );
 	
 	gl::draw( fboTop.getTexture(channel), rectTop );
 	gl::drawStrokedRect(rectTop);
@@ -260,18 +311,19 @@ void CinderApp::draw(){
 	
 	gl::draw( fboPersp.getTexture(channel), rectPersp );
 	gl::drawStrokedRect(rectPersp);
+	
+	gl::draw( fboUI.getTexture(0), getWindowBounds() );
 
 	// draw the picking framebuffer in the upper right corner
 	if(mPickingFboJoint){
-		Rectf rct = (Rectf) mPickingFboJoint.getBounds() * 5.0f;
+		Rectf rct((Rectf)mPickingFboJoint.getBounds() * 5.0f);
 		rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0) );
 		gl::draw( mPickingFboJoint.getTexture(), Rectf(rct.x1, rct.y1, rct.x2, rct.y2) );
 		gl::drawStrokedRect(Rectf(rct.x1, rct.y1, rct.x2, rct.y2));
 	}
 
-	if(drawParams){
-		params->draw();
-	}
+	//if(drawParams){
+	//}
 	// draw the colour channels in the upper left corner
 	/*windowBounds *=  0.2f;
 	gl::draw( fboPersp.getTexture(0), windowBounds);
@@ -285,7 +337,7 @@ void CinderApp::draw(){
 	
 }
 
-void CinderApp::render(const Camera & cam){
+void CinderApp::renderScene(const Camera & cam){
 	
 	// clear background
 	gl::clear( mColorBackground );
@@ -317,9 +369,6 @@ void CinderApp::render(const Camera & cam){
 			if(j->parent == nullptr){
 				j->draw(&jointShader);
 			}
-			if(selectedJoint == j){
-				gl::drawColorCube(j->getPos(false), Vec3f(0.1,0.1,0.1));
-			}
 		}
 
 		// unbind shader
@@ -334,8 +383,34 @@ void CinderApp::render(const Camera & cam){
 	glPopAttrib();
 }
 
-void CinderApp::mouseMove( MouseEvent event )
-{
+void CinderApp::renderUI(const Camera &cam){
+	gl::enableDepthRead();
+	gl::enableDepthWrite();
+	gl::enableAlphaBlending();
+
+	gl::clear(ColorA(0.f, 0.f, 0.f, 0.f));
+
+	gl::pushMatrices();
+	gl::setMatrices(cam);
+	
+		gl::color(ColorA(1, 1, 1, 1));
+		//gl::drawSolidCircle(Vec2f(50, 50), 50);
+		if(selectedJoint != nullptr){
+			gl::drawColorCube(selectedJoint->getPos(false), Vec3f(0.1f, 0.1f, 0.1f));
+		}		
+		/*gl::drawVector(j->getPos(false), j->getPos(false)+Vec3f(1.f, 0.f, 0.f));
+		gl::drawVector(j->getPos(false), j->getPos(false)+Vec3f(0.f, 1.f, 0.f));
+		gl::drawVector(j->getPos(false), j->getPos(false)+Vec3f(0.f, 0.f, 1.f));*/
+
+	// restore matrices
+	gl::popMatrices();
+
+	gl::disableAlphaBlending();
+	gl::disableDepthRead();
+	gl::disableDepthWrite();
+}
+
+void CinderApp::mouseMove( MouseEvent event ){
 	mMousePos = event.getPos();
 
 	//pickJoint(mMousePos);
@@ -385,8 +460,7 @@ void CinderApp::mouseUp( MouseEvent event )
 {
 }
 
-void CinderApp::keyDown( KeyEvent event )
-{
+void CinderApp::keyDown( KeyEvent event ){
 	switch( event.getCode() ) {
 	case KeyEvent::KEY_ESCAPE:
 		quit();
@@ -396,7 +470,11 @@ void CinderApp::keyDown( KeyEvent event )
 		break;
 	case KeyEvent::KEY_F1:
 		drawParams = !drawParams;
-		break;
+		if(drawParams){
+			params->show();
+		}else{
+			params->hide();
+		}
 	case KeyEvent::KEY_1:
 		channel = 0;
 		break;

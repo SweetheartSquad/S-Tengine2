@@ -7,7 +7,7 @@
 #include "cinder/gl/Material.h"
 #include "cinder/params/Params.h"
 
-#include "string.h"
+#include <string.h>
 #include <sstream>
 
 #include "SkeletonData.h"
