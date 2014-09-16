@@ -8,7 +8,6 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	loaded(false),
 	dirty(true)
 {
-	textures = std::vector<GLuint>();
 	load();
 	clean();
 }
@@ -49,6 +48,11 @@ void MeshInterface::load(){
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*indices.size(), indices.data(), drawMode);
 
+		//Initialize textures
+		for (Texture texture : textures){
+			texture.init();
+		}
+
 		//disable VAO
 		glBindVertexArray(0);
 		GLUtils::checkForError(true,__FILE__,__LINE__);
@@ -58,6 +62,9 @@ void MeshInterface::load(){
 
 void MeshInterface::unload(){
 	if(loaded){
+		for (Texture texture : textures){
+			texture.unload();
+		}
 		glDeleteBuffers(1, &iboId);
 		glDeleteBuffers(1, &vboId);
 		glDeleteVertexArrays(1, &vaoId);
@@ -102,7 +109,7 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 				if(textures.size() > 0){
 					glUniform1i(glGetUniformLocation(shader->getProgramId(), "tex"), 0);
 					glActiveTexture(GL_TEXTURE0);
-					glBindTexture(GL_TEXTURE_2D, textures.at(textures.size()-1));
+					glBindTexture(GL_TEXTURE_2D, textures.at(textures.size()-1).textureId);
 				}
 
 				GLUtils::checkForError(0,__FILE__,__LINE__);
@@ -152,13 +159,8 @@ void MeshInterface::pushVert(Vertex _vertex){
 	dirty = true;
 }
 
-void MeshInterface::pushTextrue2D(unsigned char* _imageData, int _width, int _height){
-	GLuint tex;
-	glGenTextures(1, &tex);
-	textures.push_back(tex);
-	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, _imageData);
-	glGenerateMipmap(GL_TEXTURE_2D);
+void MeshInterface::pushTextrue2D(const char* _src, int _width, int _height){
+	textures.push_back(Texture(_src, _width, _height, false));
 }
 
 void MeshInterface::setNormal(unsigned long int _vertId, float _x, float _y, float _z){
@@ -169,9 +171,9 @@ void MeshInterface::setNormal(unsigned long int _vertId, float _x, float _y, flo
 	dirty = true;
 }
 
-void MeshInterface::setUV(unsigned long _vertId, float _x, float _y){
-	vertices.at(_vertId).u = _x;
-	vertices.at(_vertId).v = _y;
+void MeshInterface::setUV(unsigned long _vertId, float _u, float _v){
+	vertices.at(_vertId).u = _u;
+	vertices.at(_vertId).v = _v;
 }
 void TriMesh::pushTri(GLubyte _v0, GLubyte _v1, GLubyte _v2){
 	indices.push_back(_v0);
