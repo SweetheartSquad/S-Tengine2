@@ -10,7 +10,6 @@ Texture::Texture(const char* _src, int _width, int _height, bool _storeData):
 }
 
 Texture::~Texture(){
-	unload();
 }
 
 void Texture::init(){
