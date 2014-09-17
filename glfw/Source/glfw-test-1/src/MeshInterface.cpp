@@ -62,13 +62,12 @@ void MeshInterface::load(){
 
 void MeshInterface::unload(){
 	if(loaded){
-		for (Texture texture : textures){
-			texture.unload();
-		}
 		glDeleteBuffers(1, &iboId);
 		glDeleteBuffers(1, &vboId);
 		glDeleteVertexArrays(1, &vaoId);
-
+		for (Texture texture : textures){
+			texture.unload();
+		}
 		iboId = 0;
 		vboId = 0;
 		vaoId = 0;
@@ -160,7 +159,7 @@ void MeshInterface::pushVert(Vertex _vertex){
 }
 
 void MeshInterface::pushTextrue2D(const char* _src, int _width, int _height){
-	textures.push_back(Texture(_src, _width, _height, false));
+	textures.push_back(Texture(_src, _width, _height, true));
 }
 
 void MeshInterface::setNormal(unsigned long int _vertId, float _x, float _y, float _z){
