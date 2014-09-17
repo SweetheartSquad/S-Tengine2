@@ -36,7 +36,7 @@ public:
 	void resize();
 
 	//! renders the scene
-	void renderScene(const Camera & cam);
+	void renderScene(gl::Fbo & fbo, const Camera & cam);
 	void renderUI(const Camera & cam, const Rectf & rect);
 
 	//! loads the shaders
@@ -209,6 +209,17 @@ void CinderApp::resize(){
 	camFront.setViewDirection(Vec3f(0,0,-1));
 
 	// create or resize framebuffer if needed
+	if(!fboUI || fboUI.getWidth() != w || fboUI.getHeight() != h){
+		initFbo(fboUI, b);
+	}
+	
+	w /= 2;
+	h /= 2;
+	b.x1 /= 2;
+	b.x2 /= 2;
+	b.y1 /= 2;
+	b.y2 /= 2;
+
 	if(!fboPersp || fboPersp.getWidth() != w || fboPersp.getHeight() != h) {
 		initMultiChannelFbo(fboPersp, b);
 	}if(!fboTop || fboTop.getWidth() != w || fboTop.getHeight() != h){
@@ -217,8 +228,6 @@ void CinderApp::resize(){
 		initMultiChannelFbo(fboRight, b);
 	}if(!fboFront || fboFront.getWidth() != w || fboFront.getHeight() != h){
 		initMultiChannelFbo(fboFront, b);
-	}if(!fboUI || fboUI.getWidth() != w || fboUI.getHeight() != h){
-		initFbo(fboUI, b);
 	}
 }
 
@@ -235,23 +244,14 @@ void CinderApp::update(){
 }
 
 void CinderApp::draw(){
-	fboPersp.bindFramebuffer();
-	renderScene(camMayaPersp.getCamera());
-	fboPersp.unbindFramebuffer();
-	
-	fboTop.bindFramebuffer();
-	renderScene(camTop);
-	fboTop.unbindFramebuffer();
-
-	fboRight.bindFramebuffer();
-	renderScene(camRight);
-	fboRight.unbindFramebuffer();
-
-	fboFront.bindFramebuffer();
-	renderScene(camFront);
-	fboFront.unbindFramebuffer();
+	renderScene(fboPersp, camMayaPersp.getCamera());
+	renderScene(fboTop, camTop);
+	renderScene(fboRight, camRight);
+	renderScene(fboFront, camFront);
 
 	fboUI.bindFramebuffer();
+		// set viewport to the size of the FBO
+		gl::setViewport( fboUI.getBounds() );
 		gl::enableDepthRead();
 		gl::enableDepthWrite();
 		gl::enableAlphaBlending();
@@ -264,6 +264,7 @@ void CinderApp::draw(){
 	renderUI(camRight, rectRight);
 	renderUI(camFront, rectFront);
 		
+
 	fboUI.bindFramebuffer();
 		params->draw();
 		
@@ -271,6 +272,7 @@ void CinderApp::draw(){
 		gl::disableDepthRead();
 		gl::disableDepthWrite();
 	fboUI.unbindFramebuffer();
+
 	
 
 	// draw the scene
@@ -278,16 +280,16 @@ void CinderApp::draw(){
 
 	gl::color( ColorA(1.f, 1.f, 1.f, 1.f) );
 	
-	gl::draw( fboTop.getTexture(channel), rectTop );
+	gl::draw( fboTop.getTexture(channel), fboTop.getBounds(), rectTop );
 	gl::drawStrokedRect(rectTop);
 	
-	gl::draw( fboRight.getTexture(channel), rectRight );
+	gl::draw( fboRight.getTexture(channel), fboRight.getBounds(), rectRight );
 	gl::drawStrokedRect(rectRight);
 	
-	gl::draw( fboFront.getTexture(channel), rectFront );
+	gl::draw( fboFront.getTexture(channel), fboFront.getBounds(), rectFront );
 	gl::drawStrokedRect(rectFront);
 	
-	gl::draw( fboPersp.getTexture(channel), rectPersp );
+	gl::draw( fboPersp.getTexture(channel), fboPersp.getBounds(), rectPersp );
 	gl::drawStrokedRect(rectPersp);
 	
 	gl::draw( fboUI.getTexture(0), getWindowBounds() );
@@ -315,14 +317,18 @@ void CinderApp::draw(){
 	
 }
 
-void CinderApp::renderScene(const Camera & cam){
-	
+void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
+	fbo.bindFramebuffer();
+
 	// clear background
 	gl::clear( mColorBackground );
 
 	// specify the camera matrices
 	gl::pushMatrices();
 	gl::setMatrices(cam);
+
+		// set viewport to the size of the FBO
+		gl::setViewport( fbo.getBounds() );
 
 		drawGrid(10, 1);
 
@@ -359,13 +365,18 @@ void CinderApp::renderScene(const Camera & cam){
 
 	// restore render states
 	glPopAttrib();
+
+	fbo.unbindFramebuffer();
 }
 
 void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
-	gl::Fbo temp(fboUI.getWidth(), fboUI.getHeight(), true);
+	gl::Fbo temp;
+	initFbo(temp, Area(fboUI.getBounds().x1/2, fboUI.getBounds().y1/2, fboUI.getBounds().x2/2, fboUI.getBounds().y2/2));
+	//(fboUI.getWidth(), fboUI.getHeight(), true);
 	temp.getTexture(0).setFlipped(true);
 
 	temp.bindFramebuffer();
+
 
 	gl::enableDepthRead();
 	gl::enableDepthWrite();
@@ -374,6 +385,10 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 	gl::clear(ColorA(0.f, 0.f, 0.f, 0.f));
 
 	gl::pushMatrices();
+
+	// set viewport to the size of the FBO
+	gl::setViewport( temp.getBounds() );
+
 	gl::setMatrices(cam);
 	
 		gl::color(ColorA(1, 1, 1, 1));
@@ -394,7 +409,9 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 
 	temp.unbindFramebuffer();
 	fboUI.bindFramebuffer();
-	gl::draw(temp.getTexture(0), rect);
+	// set viewport to the size of the FBO
+	gl::setViewport( fboUI.getBounds() );
+	gl::draw(temp.getTexture(0), temp.getBounds(), rect);
 	fboUI.unbindFramebuffer();
 }
 
@@ -428,8 +445,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 	}
 }
 
-void CinderApp::mouseDrag( MouseEvent event )
-{
+void CinderApp::mouseDrag( MouseEvent event ){
 	mMousePos = event.getPos();
 
 	// move the camera
@@ -444,8 +460,7 @@ void CinderApp::mouseDrag( MouseEvent event )
 	}
 }
 
-void CinderApp::mouseUp( MouseEvent event )
-{
+void CinderApp::mouseUp( MouseEvent event ){
 }
 
 void CinderApp::keyDown( KeyEvent event ){
@@ -485,12 +500,10 @@ void CinderApp::keyDown( KeyEvent event ){
 	}
 }
 
-void CinderApp::keyUp( KeyEvent event )
-{
+void CinderApp::keyUp( KeyEvent event ){
 }
 
-void CinderApp::loadShaders()
-{
+void CinderApp::loadShaders(){
 	try{
 		jointShader = gl::GlslProg( loadFile("../assets/shaders/joint.vert"), loadFile("../assets/shaders/joint.frag") );
 	}catch( const std::exception &e ) {
@@ -506,8 +519,8 @@ void CinderApp::initFbo(gl::Fbo & _fbo, Area _area){
 	fmt.setCoverageSamples(0);
 
 	// you can omit these lines if you don't intent to display the picking framebuffer
-	fmt.setMagFilter(GL_NEAREST);
-	fmt.setMinFilter(GL_LINEAR);
+	//fmt.setMagFilter(GL_NEAREST);
+	//fmt.setMinFilter(GL_LINEAR);
 	
 	unsigned int w = max(1, _area.getWidth());
 	unsigned int h = max(1, _area.getHeight());
@@ -525,9 +538,9 @@ void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area){
 	//  -one to contain a color coded version of the scene that we can use for picking
 	fmt.enableColorBuffer( true, 3 );
 
-	// enable multi-sampling for better quality 
-	//  (if this sample does not work on your computer, try lowering the number of samples to 2 or 0)
-	fmt.setSamples(4);
+	// anti-aliasing samples
+	fmt.setSamples(0);
+	fmt.setCoverageSamples(0);
 
 	// create the buffer
 	unsigned int w = max(1, _area.getWidth());
