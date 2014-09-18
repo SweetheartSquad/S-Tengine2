@@ -63,6 +63,7 @@ MainScene::MainScene():
 
 	cube4->transform->scale(15.0, 15.0, 15.0);
 	cube4->mesh->pushTextrue2D("../assets/img_test.bmp", 256, 256);
+	cube4->mesh->pushTextrue2D("../assets/img_cheryl.jpg", 256, 256);
 
 	cube->mesh->dirty = true;
 	cube2->mesh->dirty = true;

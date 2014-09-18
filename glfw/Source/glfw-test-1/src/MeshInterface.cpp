@@ -1,6 +1,7 @@
 #include "MeshInterface.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
+#include <algorithm>
 
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	drawMode(drawMode),
@@ -104,11 +105,10 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 				//specify shader attributes
 				glUseProgram(shader->getProgramId());
 
-				//Bind texture
-				if(textures.size() > 0){
-					glUniform1i(glGetUniformLocation(shader->getProgramId(), "tex"), 0);
-					glActiveTexture(GL_TEXTURE0);
-					glBindTexture(GL_TEXTURE_2D, textures.at(textures.size()-1).textureId);
+				for(int i = 0; i < textures.size(); i++){
+					glUniform1i(glGetUniformLocation(shader->getProgramId(), "textureSampler"), i);
+					glActiveTexture(GL_TEXTURE0 + i);
+					glBindTexture(GL_TEXTURE_2D, textures.at(i).textureId);
 				}
 
 				GLUtils::checkForError(0,__FILE__,__LINE__);
