@@ -105,6 +105,10 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 				//specify shader attributes
 				glUseProgram(shader->getProgramId());
 
+				//Pass the shader the number of textures
+				glUniform1i(glGetUniformLocation(shader->getProgramId(), "numTextures"), textures.size());
+
+				//Bind each texture to the texture sampler array in the frag shader
 				for(int i = 0; i < textures.size(); i++){
 					glUniform1i(glGetUniformLocation(shader->getProgramId(), "textureSampler"), i);
 					glActiveTexture(GL_TEXTURE0 + i);
