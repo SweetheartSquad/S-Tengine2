@@ -162,7 +162,7 @@ void MeshInterface::pushVert(Vertex _vertex){
 	dirty = true;
 }
 
-void MeshInterface::pushTextrue2D(const char* _src, int _width, int _height){
+void MeshInterface::pushTexture2D(const char* _src, int _width, int _height){
 	textures.push_back(Texture(_src, _width, _height, true));
 }
 

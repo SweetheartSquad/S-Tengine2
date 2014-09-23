@@ -23,7 +23,7 @@ public:
 	//OpenGL Texture ID
 	GLuint textureId;
 
-	/*Wether or not to store the image data in memory
+	/*Whether or not to store the image data in memory
 	If you we are going to be re biniding the data a lot this may be useful*/
 	bool storeData;
 
