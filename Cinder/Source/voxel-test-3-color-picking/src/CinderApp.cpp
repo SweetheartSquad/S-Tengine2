@@ -167,21 +167,18 @@ void CinderApp::setup()
 	channel = 0;
 }
 
-void CinderApp::shutdown()
-{
-	for(int i = 0; i < voxels.size(); ++i){
+void CinderApp::shutdown(){
+	for(unsigned long int i = 0; i < voxels.size(); ++i){
 		delete voxels.at(i);
 	}
 	voxels.clear();
 	Voxel::voxelMap.clear();
 }
 
-void CinderApp::update()
-{
+void CinderApp::update(){
 }
 
-void CinderApp::draw()
-{
+void CinderApp::draw(){
 	// bind framebuffer
 	mFbo.bindFramebuffer();
 
@@ -275,7 +272,7 @@ void CinderApp::mouseDrag( MouseEvent event )
 				//face is uncertain
 			}
 		}else{
-			pos = Vec3f(mMousePos.x, 0, -mMousePos.y);
+			pos = Vec3i(mMousePos.x, 0, -mMousePos.y);
 		}
 		Voxel * t = new Voxel(pos, false);
 		voxels.push_back(t);
