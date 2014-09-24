@@ -53,6 +53,7 @@ public:
 	Vec3d getCameraCorrectedPos();
 
 	void handleUI(const Vec2i &pos);
+
 	void pickJoint(const Vec2i &pos);
 	void switchMode();
 
@@ -133,6 +134,10 @@ protected:
 	
 	std::vector<Joint *> Joints;
 	Joint * selectedJoint;
+
+	Vec3i dir;
+	Vec2i mouseAxis;
+	Vec2i oldMousePos;
 
 	enum UImode{
 		CREATE,
@@ -391,8 +396,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 void CinderApp::mouseMove( MouseEvent event ){
 	mMousePos = event.getPos();
 
-	pickJoint(mMousePos);
-	handleUI(mMousePos);
+	//pickJoint(mMousePos);
+	//handleUI(mMousePos);
 }
 
 void CinderApp::mouseDown( MouseEvent event ){
@@ -401,7 +406,9 @@ void CinderApp::mouseDown( MouseEvent event ){
 	// handle the camera
 	camMayaPersp.mouseDown( mMousePos );
 
-	//handleUI(event.getPos());
+	if(event.isRight()){
+		handleUI(mMousePos);
+	}
 
 	if(!event.isAltDown() && event.isLeft()){
 		
@@ -430,9 +437,24 @@ void CinderApp::mouseDrag( MouseEvent event ){
 	if(event.isAltDown()){
 		camMayaPersp.mouseDrag( mMousePos, event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
 	}else{
-		if(selectedJoint != NULL){
-			if(selectedJoint->building){
-				selectedJoint->setPos(getCameraCorrectedPos());
+		if(event.isLeft()){
+			if(selectedJoint != nullptr){
+				if(selectedJoint->building){
+					selectedJoint->setPos(getCameraCorrectedPos());
+				}
+			}
+		}else{
+			if(selectedJoint != nullptr){
+
+				Vec2i delta = mMousePos - oldMousePos;
+
+				float dif = delta.dot(mouseAxis);
+
+				dif /= sqrt(getWindowHeight()*getWindowHeight() + getWindowWidth()*getWindowWidth());
+
+				selectedJoint->transform->translate(glm::vec3(dir.x*dif/100.f, dir.y*dif/100.f, dir.z*dif/100.f));
+				
+				oldMousePos = mMousePos;
 			}
 		}
 	}
@@ -601,21 +623,23 @@ void CinderApp::handleUI( const Vec2i &pos ){
 	//  which color is under the cursor.
 	gl::Fbo * sourceFbo = &fboUI;
 	Rectf * sourceRect;
-	/*if(rectTop.contains(pos)){
-		sourceFbo = &fboTop;
+	const Camera * sourceCam;
+	if(rectTop.contains(pos)){
+		sourceCam = &camTop;
 		sourceRect = &rectTop;
 	}else if(rectRight.contains(pos)){
-		sourceFbo = &fboRight;
+		sourceCam = &camRight;
 		sourceRect = &rectRight;
 	}else if(rectFront.contains(pos)){
-		sourceFbo = &fboFront;
+		sourceCam = &camFront;
 		sourceRect = &rectFront;
 	}else if(rectPersp.contains(pos)){
-		sourceFbo = &fboPersp;
+		sourceCam = &camMayaPersp.getCamera();
 		sourceRect = &rectPersp;
 	}else{
 		return;
-	}*/
+	}
+
 
 
 	// first, specify a small region around the current cursor position 
@@ -679,26 +703,40 @@ void CinderApp::handleUI( const Vec2i &pos ){
 		}
 	}
 
-	// if this color is present in at least 50% of the pixels, 
-	//  we can safely assume that it is indeed belonging to one object
+	// if this color is present in at least 50% of the pixels, we can safely assume that it is indeed belonging to one object
 	if(max >= (total / 2)) {
 		console() << color << std::endl;
-		/*if(Joint::jointMap.count(color) == 1){
-			selectedJoint = Joint::jointMap.at(color);
-			selectedJoint->building = true;
-		}else{
-			selectedJoint = nullptr;
-		}*/
+		
+		
+		dir.set(Vec3i(0,0,0));
+
+		switch(color){
+			case 16711680: dir.x -= 10; break;	//r
+			case 65280: dir.y -= 10; break;		//g
+			case 255: dir.z -= 10; break;		//b
+			case 65535: dir.x += 10; break;		//m
+			case 16711935: dir.y += 10; break;	//c
+			case 16776960: dir.z += 10; break;	//y
+		}
+
+		if(selectedJoint != nullptr){
+			oldMousePos = mMousePos;
+
+			Vec2i start = sourceCam->worldToScreen(selectedJoint->getPos(false), sourceRect->getWidth(), sourceRect->getHeight());
+			Vec2i end = sourceCam->worldToScreen(selectedJoint->getPos(false) + dir, sourceRect->getWidth(), sourceRect->getHeight());
+
+			mouseAxis = end - start;
+
+			console() << dir << " " << mouseAxis << std::endl;
+		}
 	}else{
 		// we can't be sure about the color, we probably are on an object's edge
-		//selectedJoint = nullptr;
+		
 	}
 }
 
 void CinderApp::pickJoint( const Vec2i &pos ){
-	// this is the main section of the demo:
-	//  here we sample the second color target to find out
-	//  which color is under the cursor.
+	// get the corresponding camera and screen area
 	gl::Fbo * sourceFbo;
 	Rectf * sourceRect;
 	if(rectTop.contains(pos)){
