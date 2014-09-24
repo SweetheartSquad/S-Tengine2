@@ -3,6 +3,9 @@
 #include <SOIL.h>
 #include <string>
 #include <regex>
+#include <sstream>
+#include <iostream>
+#include <glm/glm.hpp>
 
 class Resource
 {

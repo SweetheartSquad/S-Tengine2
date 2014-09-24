@@ -1,6 +1,7 @@
 #include "Resource.h"
 #include <FileUtils.h>
 
+
 Resource::Resource(){}
 Resource::~Resource(){}
 
@@ -12,48 +13,67 @@ void Resource::freeImageData(unsigned char* _image){
 	SOIL_free_image_data(_image);
 }
 
-void Resource::loadMeshFromObj(std::string _objSrc){
+void Resource::loadMeshFromObj(std::string _objSrc){	
 	std::string fileSrc = FileUtils::voxReadFile(_objSrc);
-	std::regex regex("\\n?([v]{1})\\s*([-]?\\d*[\\.]{1}\\d*)\\s([-]?\\d*[\\.]{1}\\d)*\\s*([-]?\\d*[\\.]{1}\\d)*|"
-		"\\n?([v]{1}[n]{1})\\s*([-]?\\d*[\\.]{1}\\d*)\\s([-]?\\d*[\\.]{1}\\d)*\\s*([-]?\\d*[\\.]{1}\\d)*|"
-		"\\n?([v]{1}[t]{1})\\s*([-]?\\d*[\\.]{1}\\d*)\\s([-]?\\d*[\\.]{1}\\d)*|"
-		"\\n?([f]{1})\\s*(\\d*)[/]?(\\d*)[/]?(\\d*)\\s*(\\d*)[/]?(\\d*)[/]*(\\d*)\\s*(\\d*)[/]?(\\d*)[/]*(\\d*)\\s*");
-
+	std::istringstream stream(fileSrc);
 	std::smatch match;
 
-	std::vector<double> verts;
-	std::vector<double> normals;
-	std::vector<double> uvs;
-	std::vector<double> faces;
-	int count = 0;
-	std::regex_search (fileSrc, match, regex);
-	while (std::regex_search (fileSrc, match, regex)) {
-		for(int i=0; i<match.size(); i++){
-			if(static_cast<std::string>(match[i]).compare("v") == 0){
-				verts.push_back(atof(static_cast<std::string>(match[i + 1]).c_str()));
-				verts.push_back(atof(static_cast<std::string>(match[i + 2]).c_str()));
-				verts.push_back(atof(static_cast<std::string>(match[i + 3]).c_str()));
-			}else if(static_cast<std::string>(match[i]).compare("vn") == 0){
-				normals.push_back(atof(static_cast<std::string>(match[i + 1]).c_str()));
-				normals.push_back(atof(static_cast<std::string>(match[i + 2]).c_str()));
-				normals.push_back(atof(static_cast<std::string>(match[i + 3]).c_str()));
-			}else if(static_cast<std::string>(match[i]).compare("vt") == 0){
-				uvs.push_back(atof(static_cast<std::string>(match[i + 1]).c_str()));
-				uvs.push_back(atof(static_cast<std::string>(match[i + 2]).c_str()));
-			}else if(static_cast<std::string>(match[i]).compare("f") == 0){
-				faces.push_back(atof(static_cast<std::string>(match[i + 1]).c_str()));
-				faces.push_back(atof(static_cast<std::string>(match[i + 2]).c_str()));
-				faces.push_back(atof(static_cast<std::string>(match[i + 3]).c_str()));
-				faces.push_back(atof(static_cast<std::string>(match[i + 4]).c_str()));
-				faces.push_back(atof(static_cast<std::string>(match[i + 5]).c_str()));
-				faces.push_back(atof(static_cast<std::string>(match[i + 6]).c_str()));
-				faces.push_back(atof(static_cast<std::string>(match[i + 7]).c_str()));
-				faces.push_back(atof(static_cast<std::string>(match[i + 8]).c_str()));
-				faces.push_back(atof(static_cast<std::string>(match[i + 9]).c_str()));
-			}
-			count++;
+	std::vector<glm::vec3> verts;
+	std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> uvs;
+	std::vector<glm::vec3> faces;
+
+	std::regex vertRegex    ("([v]{1})\\s{1}([-]?\\d*[\\.]{1}\\d*)\\s([-]?\\d*[\\.]{1}\\d*)\\s{1}([-]?\\d*[\\.]{1}\\d*)");
+	std::regex normalRegex  ("([v]{1}[n]{1})\\s{1}([-]?\\d*[\\.]{1}\\d*)\\s([-]?\\d*[\\.]{1}\\d*)\\s{1}([-]?\\d*[\\.]{1}\\d*)");
+	std::regex uvRegex      ("([v]{1}[t]{1})\\s{1}([-]?\\d*[\\.]{1}\\d*)\\s([-]?\\d*[\\.]{1}\\d*)");
+	std::regex faceRegex    ("([f]{1})\\s{1}(\\d*)[/]{1}(\\d*)[/]{1}(\\d*)\\s{1}(\\d*)[/]{1}(\\d*)[/]{1}(\\d*)\\s{1}(\\d*)[/]{1}(\\d*)[/]{1}(\\d*)");
+
+	std::string line;    
+    /*while (std::getline(stream, line)) { 
+		if(std::regex_search(line, match, vertRegex)){
+			verts.push_back(glm::vec3(atof(static_cast<std::string>(match[1]).c_str()),
+							atof(static_cast<std::string>(match[2]).c_str()),
+							atof(static_cast<std::string>(match[3]).c_str())));
+		}else if(std::regex_search(line, match, normalRegex)){
+			normals.push_back(glm::vec3(atof(static_cast<std::string>(match[1]).c_str()),
+							atof(static_cast<std::string>(match[2]).c_str()),
+							atof(static_cast<std::string>(match[3]).c_str())));	
+		}else if(std::regex_search(line, match, uvRegex)){
+			uvs.push_back(glm::vec2(atof(static_cast<std::string>(match[1]).c_str()),
+							atof(static_cast<std::string>(match[2]).c_str())));	
+		}else if(std::regex_search(line, match, faceRegex)){
+			faces.push_back(glm::vec3(atof(static_cast<std::string>(match[1]).c_str()),
+							atof(static_cast<std::string>(match[2]).c_str()),
+							atof(static_cast<std::string>(match[3]).c_str())));
+			faces.push_back(glm::vec3(atof(static_cast<std::string>(match[4]).c_str()),
+							atof(static_cast<std::string>(match[5]).c_str()),
+							atof(static_cast<std::string>(match[6]).c_str())));
+			faces.push_back(glm::vec3(atof(static_cast<std::string>(match[7]).c_str()),
+							atof(static_cast<std::string>(match[8]).c_str()),
+							atof(static_cast<std::string>(match[9]).c_str())));
 		}
-		fileSrc = match.suffix().str();
-	}
+    }*/
+
+	while (std::getline(stream, line)) { 
+		char* lineId = new char[line.size()];
+		sscanf(line.c_str(), "%s", lineId);
+		std::string lineIdStr(lineId);
+		if(lineIdStr.compare("v") == 0){
+			glm::vec3 tempVert;
+			sscanf(line.c_str(), "%f %f %f", &tempVert.x, &tempVert.y, &tempVert.z);
+			verts.push_back(tempVert);
+		}else if(lineIdStr.compare("vn") == 0){
+			glm::vec3 tempNorm;
+			sscanf(line.c_str(), "%f %f %f", &tempNorm.x, &tempNorm.y, &tempNorm.z);
+			normals.push_back(tempNorm);
+		}else if(lineIdStr.compare("vt") == 0){
+			glm::vec2 tempUv;
+			sscanf(line.c_str(), "%f %f", &tempUv.x, &tempUv.y);
+			uvs.push_back(tempUv);		
+		}else if(lineIdStr.compare("f") == 0){
+		
+		}
+    }
+
 	std::cout<<"asd";
 }
