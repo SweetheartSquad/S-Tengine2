@@ -27,5 +27,4 @@ public:
 	//Free image data memory
 	static void freeImageData(unsigned char* _image);
 	static void loadMeshFromObj(std::string _objSrc);
-
 };
