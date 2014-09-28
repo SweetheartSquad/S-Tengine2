@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <GLEW_DIR></GLEW_DIR>
+    <GLFW_DIR></GLFW_DIR>
+    <GLM_DIR></GLM_DIR>
+    <SOIL_DIR></SOIL_DIR>
+    <FREETYPE_DIR></FREETYPE_DIR>
+    <FREETYPE_VER>250</FREETYPE_VER>
+  </PropertyGroup>
+  <ItemDefinitionGroup />
+  <ItemGroup />
+</Project>

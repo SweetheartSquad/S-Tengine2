@@ -14,6 +14,8 @@ void ShaderInterface::init(std::string _vertexShaderFile, std::string _fragmentS
 	aVertexPosition		= glGetAttribLocation(getProgramId(), "aVertexPosition");
 	aVertexColor		= glGetAttribLocation(getProgramId(), "aVertexColor");
 	aVertexNormals		= glGetAttribLocation(getProgramId(), "aVertexNormals");
+	aVertexUVs			= glGetAttribLocation(getProgramId(), "aVertexUVs");
+
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 }
 
@@ -44,4 +46,8 @@ GLint ShaderInterface::get_aVertexColor(){
 
 GLint ShaderInterface::get_aVertexNormals(){
 	return aVertexNormals;
+}
+
+GLint ShaderInterface::get_aVertexUVs(){
+	return aVertexUVs;
 }

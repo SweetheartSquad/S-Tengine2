@@ -39,6 +39,40 @@ struct Vertex{
 			this->v = 0.0f;
 	}
 
+	Vertex(glm::vec3 _vert){
+		this->x = _vert.x;
+		this->y = _vert.y;
+		this->z = _vert.z;
+	}
+
+	Vertex(glm::vec3 _vert, glm::vec2 _uvs){
+		this->x = _vert.x;
+		this->y = _vert.y;
+		this->z = _vert.z;
+		this->u = _uvs.x;
+		this->v = _uvs.y;
+	}
+
+	Vertex(glm::vec3 _vert, glm::vec3 _normal){
+		this->x = _vert.x;
+		this->y = _vert.y;
+		this->z = _vert.z;
+		this->nx = _normal.x;
+		this->ny = _normal.y;
+		this->nz = _normal.z;
+	}
+
+	Vertex(glm::vec3 _vert, glm::vec2 _uvs, glm::vec3 _normal){
+		this->x = _vert.x;
+		this->y = _vert.y;
+		this->z = _vert.z;
+		this->u = _uvs.x;
+		this->v = _uvs.y;
+		this->nx = _normal.x;
+		this->ny = _normal.y;
+		this->nz = _normal.z;
+	}
+
 	//will generate random verte_x colours
 	Vertex(float _x, float _y, float _z){
 		this->x = _x;

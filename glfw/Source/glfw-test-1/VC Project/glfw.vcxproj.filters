@@ -1,185 +1,63 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Source Files\utils">
-      <UniqueIdentifier>{52d6d784-931d-49a9-b5fa-465d78bdc1a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\geo">
-      <UniqueIdentifier>{60fe33d1-1791-4794-89f9-852f516a981f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\shaders">
-      <UniqueIdentifier>{b08bc618-aa74-4407-b892-edbd4042eb90}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\utils">
-      <UniqueIdentifier>{2059a7e1-2c8e-4b0e-b7c4-83d6e971753c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\geo">
-      <UniqueIdentifier>{4ba3dee6-0fa3-43ca-886d-f785d17c6859}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\TestGame">
-      <UniqueIdentifier>{40908594-3aea-4682-ae22-ddaca988a7ad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\TestGame">
-      <UniqueIdentifier>{33658aa7-c89d-477b-80fe-5d5e950eed80}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\input">
-      <UniqueIdentifier>{160824dc-2881-44c5-a369-19a38521d0c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\input">
-      <UniqueIdentifier>{92af4ccb-67a0-48ae-a3e0-b9785d71c2f2}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
+    <ClCompile Include="..\src\Camera.cpp" />
+    <ClCompile Include="..\src\Cube.cpp" />
+    <ClCompile Include="..\src\Entity.cpp" />
+    <ClCompile Include="..\src\FileUtils.cpp" />
+    <ClCompile Include="..\src\Game.cpp" />
+    <ClCompile Include="..\src\GLUtils.cpp" />
+    <ClCompile Include="..\src\Keyboard.cpp" />
+    <ClCompile Include="..\src\Light.cpp" />
+    <ClCompile Include="..\src\Main.cpp" />
+    <ClCompile Include="..\src\MainScene.cpp" />
+    <ClCompile Include="..\src\Mouse.cpp" />
+    <ClCompile Include="..\src\RenderSystem.cpp" />
+    <ClCompile Include="..\src\Resource.cpp" />
+    <ClCompile Include="..\src\Scene.cpp" />
+    <ClCompile Include="..\src\ShaderInterface.cpp" />
+    <ClCompile Include="..\src\ShaderLoader.cpp" />
+    <ClCompile Include="..\src\System.cpp" />
+    <ClCompile Include="..\src\TestGame.cpp" />
+    <ClCompile Include="..\src\MeshInterface.cpp" />
+    <ClCompile Include="..\src\Texture.cpp" />
+    <ClCompile Include="..\src\Vox.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\Cube.cpp">
-      <Filter>Source Files\geo</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\FileUtils.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\GLUtils.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\RenderSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ShaderInterface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ShaderLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\MainScene.cpp">
-      <Filter>Source Files\TestGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TestGame.cpp">
-      <Filter>Source Files\TestGame</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Keyboard.cpp">
-      <Filter>Source Files\input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Mouse.cpp">
-      <Filter>Source Files\input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\System.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Vox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\MeshInterface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Node.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />
+    <ClInclude Include="..\include\Camera.h" />
+    <ClInclude Include="..\include\Cube.h" />
+    <ClInclude Include="..\include\Dimension.h" />
+    <ClInclude Include="..\include\Entity.h" />
+    <ClInclude Include="..\include\FileUtils.h" />
+    <ClInclude Include="..\include\Game.h" />
+    <ClInclude Include="..\include\GLUtils.h" />
+    <ClInclude Include="..\include\Keyboard.h" />
+    <ClInclude Include="..\include\Light.h" />
+    <ClInclude Include="..\include\Mouse.h" />
+    <ClInclude Include="..\include\Resource.h" />
+    <ClInclude Include="..\include\System.h" />
+    <ClInclude Include="..\include\TestGame.h" />
+    <ClInclude Include="..\include\MainScene.h" />
+    <ClInclude Include="..\include\RenderSystem.h" />
+    <ClInclude Include="..\include\Scene.h" />
+    <ClInclude Include="..\include\ShaderInterface.h" />
+    <ClInclude Include="..\include\ShaderLoader.h" />
+    <ClInclude Include="..\include\Texture.h" />
+    <ClInclude Include="..\include\Vertex.h" />
+    <ClInclude Include="..\include\MeshInterface.h" />
+    <ClInclude Include="..\include\Vox.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\include\Cube.h">
-      <Filter>Header Files\geo</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\FileUtils.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\GLUtils.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\RenderSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ShaderInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ShaderLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\MainScene.h">
-      <Filter>Header Files\TestGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\TestGame.h">
-      <Filter>Header Files\TestGame</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Keyboard.h">
-      <Filter>Header Files\input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Mouse.h">
-      <Filter>Header Files\input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\System.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Dimension.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Vertex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Vox.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\MeshInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\Node.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\assets\junkdata.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="..\assets\junkdata.vert">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="..\assets\ColourShader.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="..\assets\ColourShader.vert">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
+    <None Include="..\assets\ColourShader.frag" />
+    <None Include="..\assets\ColourShader.vert" />
+    <None Include="..\assets\diffuse.frag" />
+    <None Include="..\assets\diffuse.vert" />
+    <None Include="..\assets\cube.vox" />
+    <None Include="..\assets\junkdata.frag" />
+    <None Include="..\assets\junkdata.vert" />
   </ItemGroup>
 </Project>
