@@ -13,7 +13,7 @@ Cube::Cube(glm::vec3 _center, float _size):
 	m->pushVert(Vertex(-1.f, 1.f, -1.f));
 	m->pushVert(Vertex(1.f, 1.f, -1.f));
 	m->pushVert(Vertex(1.f, 1.f, 1.f));
-	m->pushQuad(3, 2, 1, 0);
+	m->pushQuad(0, 1, 2, 3);
 	m->setNormal(0, 0.0, 1.0, 0.0);
 	m->setNormal(1, 0.0, 1.0, 0.0);
 	m->setNormal(2, 0.0, 1.0, 0.0);
@@ -21,14 +21,14 @@ Cube::Cube(glm::vec3 _center, float _size):
 	m->setUV(0, 0.0, 0.0);
 	m->setUV(1, 0.0, 1.0);
 	m->setUV(2, 1.0, 1.0);
-	m->setUV(3, 0.0, 1.0);
+	m->setUV(3, 1.0, 0.0);
 
 	//Bottom
 	m->pushVert(Vertex(-1.f, -1.f, 1.f));
 	m->pushVert(Vertex(1.f, -1.f, 1.f));
 	m->pushVert(Vertex(1.f, -1.f, -1.f));
 	m->pushVert(Vertex(-1.f, -1.f, -1.f));
-	m->pushQuad(7, 6, 5, 4);
+	m->pushQuad(4, 5, 6, 7);
 	m->setNormal(4, 0.0, -1.0, 0.0);
 	m->setNormal(5, 0.0, -1.0, 0.0);
 	m->setNormal(6, 0.0, -1.0, 0.0);
@@ -36,14 +36,14 @@ Cube::Cube(glm::vec3 _center, float _size):
 	m->setUV(4, 0.0, 0.0);
 	m->setUV(5, 0.0, 1.0);
 	m->setUV(6, 1.0, 1.0);
-	m->setUV(7, 0.0, 1.0);
+	m->setUV(7, 1.0, 0.0);
 
 	//Front
 	m->pushVert(Vertex(-1.f, 1.f, 1.f));
 	m->pushVert(Vertex(1.f, 1.f, 1.f));
 	m->pushVert(Vertex(1.f, -1.f, 1.f));
 	m->pushVert(Vertex(-1.f, -1.f, 1.f));
-	m->pushQuad(11, 10, 9, 8);
+	m->pushQuad(8, 9, 10, 11);
 	m->setNormal(8, 1.0, 0.0, 0.0);
 	m->setNormal(9, 1.0, 0.0, 0.0);
 	m->setNormal(10, 1.0, 0.0, 0.0);
@@ -51,14 +51,14 @@ Cube::Cube(glm::vec3 _center, float _size):
 	m->setUV(8, 0.0, 0.0);
 	m->setUV(9, 0.0, 1.0);
 	m->setUV(10, 1.0, 1.0);
-	m->setUV(11, 0.0, 1.0);
+	m->setUV(11, 1.0, 0.0);
 
 	//Back
-	m->pushVert(Vertex(-1.f, 1.f, -1.f));
 	m->pushVert(Vertex(1.f, 1.f, -1.f));
-	m->pushVert(Vertex(1.f, -1.f, -1.f));
+	m->pushVert(Vertex(-1.f, 1.f, -1.f));
 	m->pushVert(Vertex(-1.f, -1.f, -1.f));
-	m->pushQuad(15,14,13,12);
+	m->pushVert(Vertex(1.f, -1.f, -1.f));
+	m->pushQuad(12,13,14,15);
 	m->setNormal(12, -1.0, 0.0, 0.0);
 	m->setNormal(13, -1.0, 0.0, 0.0);
 	m->setNormal(14, -1.0, 0.0, 0.0);
@@ -66,14 +66,14 @@ Cube::Cube(glm::vec3 _center, float _size):
 	m->setUV(12, 0.0, 0.0);
 	m->setUV(13, 0.0, 1.0);
 	m->setUV(14, 1.0, 1.0);
-	m->setUV(15, 0.0, 1.0);
+	m->setUV(15, 1.0, 0.0);
 
 	//Left
-	m->pushVert(Vertex(-1.f, 1.f, 1.f));
 	m->pushVert(Vertex(-1.f, 1.f, -1.f));
-	m->pushVert(Vertex(-1.f, -1.f, -1.f));
+	m->pushVert(Vertex(-1.f, 1.f, 1.f));
 	m->pushVert(Vertex(-1.f, -1.f, 1.f));
-	m->pushQuad(19,18,17,16);
+	m->pushVert(Vertex(-1.f, -1.f, -1.f));
+	m->pushQuad(16,17,18,19);
 	m->setNormal(16, 0.0, 0.0, 1.0);
 	m->setNormal(17, 0.0, 0.0, 1.0);
 	m->setNormal(18, 0.0, 0.0, 1.0);
@@ -81,14 +81,14 @@ Cube::Cube(glm::vec3 _center, float _size):
 	m->setUV(16, 0.0, 0.0);
 	m->setUV(17, 0.0, 1.0);
 	m->setUV(18, 1.0, 1.0);
-	m->setUV(19, 0.0, 1.0);
+	m->setUV(19, 1.0, 0.0);
 
 	//Right
 	m->pushVert(Vertex(1.f, 1.f, 1.f));
 	m->pushVert(Vertex(1.f, 1.f, -1.f));
 	m->pushVert(Vertex(1.f, -1.f, -1.f));
 	m->pushVert(Vertex(1.f, -1.f, 1.f));
-	m->pushQuad(23, 22, 21, 20);
+	m->pushQuad(20, 21, 22, 23);
 	m->setNormal(20, 0.0, 0.0, -1.0);
 	m->setNormal(21, 0.0, 0.0, -1.0);
 	m->setNormal(22, 0.0, 0.0, -1.0);
@@ -96,7 +96,7 @@ Cube::Cube(glm::vec3 _center, float _size):
 	m->setUV(20, 0.0, 0.0);
 	m->setUV(21, 0.0, 1.0);
 	m->setUV(22, 1.0, 1.0);
-	m->setUV(23, 0.0, 1.0);
+	m->setUV(23, 1.0, 0.0);
 }
 
 Cube::~Cube(void){

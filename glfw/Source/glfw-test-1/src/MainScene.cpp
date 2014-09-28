@@ -28,6 +28,8 @@ MainScene::MainScene():
 	cube->mesh->vertices.at(0).y += 1.5;
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
+	cube->mesh->pushTexture2D("../assets/img_cheryl.jpg", 256, 256);
+
 	Transform *t = new Transform();
 
 	cube->addChild(new Entity(Resource::loadMeshFromObj("../assets/cube.vox"),
@@ -68,7 +70,7 @@ MainScene::MainScene():
 
 	cube4->transform->scale(15.0, 15.0, 15.0);
 	cube4->mesh->pushTexture2D("../assets/img_cheryl.jpg", 256, 256);
-	cube4->mesh->pushTexture2D("../assets/img_cheryl.jpg", 256, 256);
+	cube4->mesh->pushTexture2D("../assets/img_test.bmp", 256, 256);
 
 	cube->mesh->dirty = true;
 	cube2->mesh->dirty = true;
