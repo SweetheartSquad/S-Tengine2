@@ -80,9 +80,7 @@ void Entity::reset(){
 	mesh->load();
 	mesh->clean();
 
-	mesh->configureVertexAttributes(shader->get_aVertexPosition(), 3, 0);
-	mesh->configureVertexAttributes(shader->get_aVertexColor(), 4, sizeof(float)*3);
-	mesh->configureVertexAttributes(shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	mesh->configureDefaultVertexAttributes(shader);
 
 	std::string shaderVertSrc = shader->vertName;
 	std::string shaderFragSrc = shader->fragName;

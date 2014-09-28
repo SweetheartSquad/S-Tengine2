@@ -22,7 +22,7 @@ void RenderSystem::render(GLFWwindow * _context, std::vector<Entity *> * _render
 	//Back-face culling
 	//glEnable (GL_CULL_FACE); // cull face
 	//glCullFace (GL_BACK); // cull back face
-	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise
+	glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
 	for(Entity * e : *_renderChildren){
 		e->draw(_projectionMatrix, _viewMatrix);

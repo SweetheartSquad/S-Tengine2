@@ -44,19 +44,21 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GMTL_DIR);$(GLM_DIR);$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GMTL_DIR);$(GLM_DIR);$(FREETYPE_DIR)\include;$(IncludePath)</IncludePath>
     <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\$(Configuration)\$(Platform);$(GLFW_DIR)\lib-msvc110;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(GLEW_DIR)\lib\$(Configuration)\$(Platform);$(GLFW_DIR)\lib-msvc110;$(FREETYPE_DIR)\objs\win32\vc2010;$(SOIL_DIR)\projects\VC9\$(Configuration);$(LibraryPath)</LibraryPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GMTL_DIR);$(GLM_DIR);$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GMTL_DIR);$(GLM_DIR);$(FREETYPE_DIR)\include;$(IncludePath)</IncludePath>
     <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\$(Configuration)\$(Platform);$(GLFW_DIR)\lib-msvc110;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(GLEW_DIR)\lib\$(Configuration)\$(Platform);$(GLFW_DIR)\lib-msvc110;$(FREETYPE_DIR)\objs\win32\vc2010;$(SOIL_DIR)\projects\VC9\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -66,14 +68,16 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
+      <EnablePREfast>false</EnablePREfast>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;glew32d.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;freetype$(FREETYPE_VER).lib;SOIL.lib;glew32d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <PerUserRedirection>true</PerUserRedirection>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -98,7 +102,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;freetype$(FREETYPE_VER).lib;SOIL.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>copy /Y "$(GLEW_DIR)\bin\$(Configuration)\$(Platform)\glew32.dll" "$(TargetDir)\glew32.dll"
@@ -120,12 +124,14 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\MainScene.cpp" />
     <ClCompile Include="..\src\Mouse.cpp" />
     <ClCompile Include="..\src\RenderSystem.cpp" />
+    <ClCompile Include="..\src\Resource.cpp" />
     <ClCompile Include="..\src\Scene.cpp" />
     <ClCompile Include="..\src\ShaderInterface.cpp" />
     <ClCompile Include="..\src\ShaderLoader.cpp" />
     <ClCompile Include="..\src\System.cpp" />
     <ClCompile Include="..\src\TestGame.cpp" />
     <ClCompile Include="..\src\MeshInterface.cpp" />
+    <ClCompile Include="..\src\Texture.cpp" />
     <ClCompile Include="..\src\Vox.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +147,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Keyboard.h" />
     <ClInclude Include="..\include\Light.h" />
     <ClInclude Include="..\include\Mouse.h" />
+    <ClInclude Include="..\include\Resource.h" />
     <ClInclude Include="..\include\System.h" />
     <ClInclude Include="..\include\TestGame.h" />
     <ClInclude Include="..\include\MainScene.h" />
@@ -148,6 +155,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Scene.h" />
     <ClInclude Include="..\include\ShaderInterface.h" />
     <ClInclude Include="..\include\ShaderLoader.h" />
+    <ClInclude Include="..\include\Texture.h" />
     <ClInclude Include="..\include\Vertex.h" />
     <ClInclude Include="..\include\MeshInterface.h" />
     <ClInclude Include="..\include\Vox.h" />
@@ -157,6 +165,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <None Include="..\assets\ColourShader.vert" />
     <None Include="..\assets\diffuse.frag" />
     <None Include="..\assets\diffuse.vert" />
+    <None Include="..\assets\cube.vox" />
     <None Include="..\assets\junkdata.frag" />
     <None Include="..\assets\junkdata.vert" />
   </ItemGroup>

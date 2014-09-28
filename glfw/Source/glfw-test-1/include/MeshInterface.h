@@ -12,6 +12,7 @@
 #include "Vertex.h"
 #include "Light.h"
 #include "GLUtils.h"
+#include "Texture.h"
 
 class MeshInterface{
 public:
@@ -19,6 +20,8 @@ public:
 	bool dirty;		//whether the vbo and ibo contain up-to-date vertex and index data
 	std::vector<Vertex> vertices; //vertex data for the vbo
 	std::vector<GLubyte> indices; //index data for the ibo
+	std::vector<Texture *> textures; //Textures
+
 public:
 	GLuint vaoId;	//ID of the vertex array object
 	GLuint vboId;	//ID of the vertex buffer object
@@ -67,7 +70,9 @@ public:
 	void configureDefaultVertexAttributes(ShaderInterface *_shader);
 
 	void setNormal(unsigned long int _vertId, float _x, float _y, float _z);
+	void setUV(unsigned long int _vertId, float _x, float _y);
 	void pushVert(Vertex _vertex);
+	void pushTexture2D(const char* _src, int _width, int _height);
 };
 
 class TriMesh : public MeshInterface{

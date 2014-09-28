@@ -40,6 +40,12 @@
     <Filter Include="Source Files\input">
       <UniqueIdentifier>{92af4ccb-67a0-48ae-a3e0-b9785d71c2f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\textures">
+      <UniqueIdentifier>{f7fe7845-75d9-410a-b305-cd808fae3df8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\objects">
+      <UniqueIdentifier>{64b0d5f8-5e48-454c-86d6-b6f53b87473a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Cube.cpp">
@@ -103,6 +109,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Light.cpp">
+    <ClCompile Include="..\src\Resource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -171,6 +181,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Light.h">
+    <ClInclude Include="..\include\Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -192,6 +206,8 @@
     </None>
     <None Include="..\assets\diffuse.frag">
       <Filter>Resource Files\shaders</Filter>
+    <None Include="..\assets\cube.vox">
+      <Filter>Resource Files\objects</Filter>
     </None>
   </ItemGroup>
 </Project>
