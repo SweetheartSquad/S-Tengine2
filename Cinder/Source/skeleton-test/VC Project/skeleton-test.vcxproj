@@ -96,11 +96,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Shared Code\src\Joint.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
     <ClCompile Include="..\src\CinderApp.cpp" />
     <ClCompile Include="..\src\SkeletonData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Shared Code\include\Joint.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\Node.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />
     <ClInclude Include="..\include\SkeletonData.h" />
   </ItemGroup>
   <ItemGroup>

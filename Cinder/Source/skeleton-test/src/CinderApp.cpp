@@ -25,6 +25,8 @@ public:
 	void update();
 	void draw();
 
+	void render(const Camera & cam);
+
 	void saveSkeleton();
 	void loadSkeleton();
 
@@ -36,9 +38,13 @@ protected:
 
 	SkeletonData * s;
 
+	//! camera
+	MayaCamUI camMayaPersp;
+
 	//! our Phong shader, which supports multiple targets
 	gl::GlslProg	jointShader;
-
+	//! background color
+	Color			mColorBackground;
 
 	params::InterfaceGlRef params;
 	string directory;
@@ -81,6 +87,9 @@ void CinderApp::setup(){
 
 	console() << "setup" << endl;
 	s = new SkeletonData();
+
+	// set background color
+	mColorBackground = Color(0.1f, 0.1f, 0.1f);
 
 	// load shaders
 	loadShaders();
@@ -136,28 +145,36 @@ void CinderApp::loadShaders()
 void CinderApp::update(){}
 
 void CinderApp::draw(){
-
-	gl::clear();
-	gl::color(Color(1.0, 1.0, 1.0));
-
-	// bind phong shader, which renders to both our color targets.
-	//  See 'shaders/phong.frag'
-	jointShader.bind();
-
-	// draw joints:
-	/*for(Joint * j : m_joints){
-		if(j->parent == nullptr){
-			j->draw(&jointShader);
-		}
-	}*/
-
-	// unbind shader
-	jointShader.unbind();
 	
-	
+	render(camMayaPersp.getCamera());
 
 	params->draw();
 	
+}
+
+void CinderApp::render(const Camera & cam){
+	// clear background
+	gl::clear( mColorBackground );
+
+	// specify the camera matrices
+	gl::pushMatrices();
+	gl::setMatrices(cam);
+
+	// draw joints:
+	for(Joint * j : m_joints){
+		if(j->parent == nullptr){
+			j->draw(&jointShader);
+		}
+	}
+
+	// unbind shader
+	jointShader.unbind();
+
+	// restore matrices
+	gl::popMatrices();
+
+	// restore render states
+	glPopAttrib();
 }
 
 
