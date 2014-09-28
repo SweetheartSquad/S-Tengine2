@@ -1,6 +1,12 @@
 #pragma once
 
 #include <SOIL.h>
+#include <string>
+#include <regex>
+#include <sstream>
+#include <iostream>
+#include <glm/glm.hpp>
+#include "MeshInterface.h"
 
 class Resource
 {
@@ -21,4 +27,5 @@ public:
 
 	//Free image data memory
 	static void freeImageData(unsigned char* _image);
+	static TriMesh* loadMeshFromObj(std::string _objSrc);
 };

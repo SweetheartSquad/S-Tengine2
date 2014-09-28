@@ -1,4 +1,5 @@
 #include "Texture.h"
+#include <Resource.h>
 
 Texture::Texture(const char* _src, int _width, int _height, bool _storeData):
 	src(_src),

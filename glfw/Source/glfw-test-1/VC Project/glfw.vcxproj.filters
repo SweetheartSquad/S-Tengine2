@@ -43,6 +43,9 @@
     <Filter Include="Resource Files\textures">
       <UniqueIdentifier>{f7fe7845-75d9-410a-b305-cd808fae3df8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\objects">
+      <UniqueIdentifier>{64b0d5f8-5e48-454c-86d6-b6f53b87473a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Cube.cpp">
@@ -195,6 +198,9 @@
     </None>
     <None Include="..\assets\ColourShader.vert">
       <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\cube.vox">
+      <Filter>Resource Files\objects</Filter>
     </None>
   </ItemGroup>
 </Project>
