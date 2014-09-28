@@ -1,5 +1,3 @@
-#pragma once
-
 #include "cinder/MayaCamUI.h"
 #include "cinder/TriMesh.h"
 #include "cinder/app/AppBasic.h"
@@ -9,9 +7,12 @@
 #include "cinder/gl/Material.h"
 #include "cinder/params/Params.h"
 
+#include <string>
 #include <sstream>
 
+#include "SkeletonData.h"
 #include "Joint.h"
+
 
 using namespace ci;
 using namespace ci::app;
@@ -19,11 +20,9 @@ using namespace std;
 
 class CinderApp : public AppBasic {
 public:
-	//executes before setup (ci::app:: won't work yet because the app isn't ready)
 	void prepareSettings(Settings *settings);
-	//executes when app starts (calls resize)
+
 	void setup();
-	//executes when the app finishes
 	void shutdown();
 	void update();
 	void draw();
@@ -42,6 +41,8 @@ public:
 	void renderScene(gl::Fbo & fbo, const Camera & cam);
 	void renderUI(const Camera & cam, const Rectf & rect);
 
+	//! loads an OBJ file, writes it to a much faster binary file and loads the mesh
+	void loadMesh( const std::string &objFile, const std::string &meshFile, TriMesh *mesh);
 	//! loads the shaders
 	void loadShaders();
 	//! initializes empty single channel fbos
@@ -55,11 +56,13 @@ public:
 	void newJoint(Vec3d pos, Joint * parent = NULL);
 	Vec3d getCameraCorrectedPos();
 
-	void handleUI(const Vec2i &pos);
-
 	void pickJoint(const Vec2i &pos);
 	void switchMode();
 
+	void saveSkeleton();
+	void loadSkeleton();
+
+	void handleUI(const Vec2i &pos);
 public:
 	// utility functions to translate colors to and from ints or chars 
 	static Color charToColor( unsigned char r, unsigned char g, unsigned char b ){
@@ -87,6 +90,11 @@ protected:
 	//params
 	bool drawParams;
 	params::InterfaceGlRef params;
+
+	string directory;
+	string fileName;
+	string filePath;
+	string message;
 
 	//! our cameras
 	MayaCamUI camMayaPersp;
@@ -141,6 +149,7 @@ protected:
 	Vec3i dir;
 	Vec2i mouseAxis;
 	Vec2i oldMousePos;
+	SkeletonData * s;
 
 	enum UImode{
 		CREATE,

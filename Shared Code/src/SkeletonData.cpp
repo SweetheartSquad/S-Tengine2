@@ -22,14 +22,24 @@ void SkeletonData::SaveSkeleton(string directory, string fileName, vector<Joint 
 				std::stringstream json = std::stringstream();
 
 				jointFile << "{\"joints\":[" << endl;
-				for(Joint * j : joints)
-				{ 
+
+				//store the root joints in a temporary vector
+				std::vector<Joint *> roots;
+				for(Joint * j : joints){
+					if(j->parent == nullptr){
+						roots.push_back(j);
+					}
+				}
+
+				//write the joints to file (loop through roots and recurse through children)
+				for(Joint * j : roots){
 					jointFile << writeJoint(j);
-					if (j->id != joints.back()->id) {
+					if (j->id != roots.back()->id) {
 						jointFile << ",";
 					}
 					jointFile << endl;
 				}
+
 				jointFile << "]}" << endl;
 				jointFile.close();
 			}catch (exception ex){
@@ -50,7 +60,7 @@ void SkeletonData::SaveSkeleton(string directory, string fileName, vector<Joint 
 }
 
 vector<Joint*> SkeletonData::LoadSkeleton(string filePath) {
-	//Not sure about this eror catching setup
+	//Not sure about this error catching setup
 	vector<Joint*> joints;
 
 	if( PathFileExistsA(filePath.c_str()) == TRUE)  { 
@@ -58,7 +68,7 @@ vector<Joint*> SkeletonData::LoadSkeleton(string filePath) {
 			JsonTree doc = JsonTree(loadFile(filePath));
 
 			JsonTree jointsJson = doc.getChild( "joints" );
-			Joint * parent = NULL;
+			Joint * parent = nullptr;
 			for( JsonTree::ConstIter joint = jointsJson.begin(); joint != jointsJson.end(); ++joint ) {
 				JsonTree jJson = jointsJson.getChild(joint->getKey());
 				Joint * j = readJoint(jJson);
@@ -67,14 +77,8 @@ vector<Joint*> SkeletonData::LoadSkeleton(string filePath) {
 		}catch (exception ex) {
 			throw ex;
 		}
-<<<<<<< HEAD:Shared Code/src/SkeletonData.cpp
-	}
-	else {
-		throw exception("File does not exist!");
-=======
 	}else{
-		throw new exception("File does not exist!");
->>>>>>> origin/sean-stuff:Cinder/Source/skeleton-test/src/SkeletonData.cpp
+		throw exception("File does not exist!");
 	}
 	return joints;
 }
@@ -106,10 +110,10 @@ string SkeletonData::writeJoint(Joint* j) {
 
 Joint* SkeletonData::readJoint(JsonTree joint, Joint * parent) {
 	
-	Joint * j = new Joint();
+	Joint * j = new Joint(parent);
 	vector<Joint*> children;
 
-	j->parent = parent;
+	//j->parent = parent;
 	j->id = joint.getChild( "id" ).getValue<int>();
 		app::console() << "id: " << j->id << endl;
 	JsonTree pos = joint.getChild("pos");
