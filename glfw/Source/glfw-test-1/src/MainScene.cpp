@@ -30,7 +30,7 @@ MainScene::MainScene():
 
 	Transform *t = new Transform();
 
-	addChild(new Entity(Resource::loadMeshFromObj("../assets/cube.vox"),
+	cube->addChild(new Entity(Resource::loadMeshFromObj("../assets/cube.vox"),
 		t, new ShaderInterface("../assets/junkdata"), nullptr));
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);

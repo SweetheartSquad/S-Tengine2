@@ -8,8 +8,6 @@
 #include "Entity.h"
 #include "Cube.h"
 #include <iostream>
-#include <gmtl/gmtl.h>
-#include <gmtl/Vec.h>
 #include "Game.h"
 #include <TestGame.h>
 #include "Mouse.h"
