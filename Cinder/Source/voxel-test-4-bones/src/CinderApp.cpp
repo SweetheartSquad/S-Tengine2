@@ -1,153 +1,4 @@
-#include "cinder/MayaCamUI.h"
-#include "cinder/TriMesh.h"
-#include "cinder/app/AppBasic.h"
-#include "cinder/gl/Fbo.h"
-#include "cinder/gl/GlslProg.h"
-#include "cinder/gl/Light.h"
-#include "cinder/gl/Material.h"
-#include "cinder/params/Params.h"
-
-#include <string>
-#include <sstream>
-
-#include "SkeletonData.h"
-#include "Joint.h"
-
-
-using namespace ci;
-using namespace ci::app;
-using namespace std;
-
-class CinderApp : public AppBasic {
-public:
-	void prepareSettings(Settings *settings);
-
-	void setup();
-	void shutdown();
-	void update();
-	void draw();
-
-	void mouseMove( MouseEvent event );
-	void mouseDown( MouseEvent event );
-	void mouseDrag( MouseEvent event );
-	void mouseUp( MouseEvent event );
-
-	void keyDown( KeyEvent event );
-	void keyUp( KeyEvent event );
-
-	void resize();
-
-	//! renders the scene
-	void render(const Camera & cam);
-	//! loads an OBJ file, writes it to a much faster binary file and loads the mesh
-	void loadMesh( const std::string &objFile, const std::string &meshFile, TriMesh *mesh);
-	//! loads the shaders
-	void loadShaders();
-	//! initializes empty single channel fbos
-	void initFbo(gl::Fbo & _fbo, Area _area);
-	//! initializes empty 3-channel fbos
-	void initMultiChannelFbo(gl::Fbo & _fbo, Area _area);
-
-	//! draws a grid on the floor
-	void drawGrid(float size=100.0f, float step=10.0f);
-
-	void newJoint(Vec3d pos, Joint * parent = NULL);
-	Vec3d getCameraCorrectedPos();
-
-	void pickJoint(const Vec2i &pos);
-	void switchMode();
-
-	void saveSkeleton();
-	void loadSkeleton();
-
-public:
-	// utility functions to translate colors to and from ints or chars 
-	static Color charToColor( unsigned char r, unsigned char g, unsigned char b ){
-		return Color(r / 255.0f, g / 255.0f, b / 255.0f);
-	};
-
-	static unsigned int charToInt( unsigned char r, unsigned char g, unsigned char b ){
-		return b + (g << 8) + (r << 16);
-	};
-
-	static Color intToColor( unsigned int i ){
-		unsigned char r = (i >> 16) & 0xFF;
-		unsigned char g = (i >> 8) & 0xFF;
-		unsigned char b = (i >> 0) & 0xFF;
-		return Color(r / 255.0f, g / 255.0f, b / 255.0f);
-	};
-
-	static unsigned int colorToInt( const Color &color ){
-		unsigned char r = (unsigned char)(color.r * 255);
-		unsigned char g = (unsigned char)(color.g * 255);
-		unsigned char b = (unsigned char)(color.b * 255);
-		return b + (g << 8) + (r << 16);
-	};
-protected:
-	//params
-	bool drawParams;
-	params::InterfaceGlRef params;
-
-	string directory;
-	string fileName;
-	string filePath;
-	string message;
-
-	//! our cameras
-	MayaCamUI camMayaPersp;
-	CameraOrtho camTop;
-	CameraOrtho camRight;
-	CameraOrtho camFront;
-
-	//! our Phong shader, which supports multiple targets
-	gl::GlslProg	jointShader;
-
-	//! our little picking framebuffer (non-AA) 
-	//gl::Fbo			mPickingFboVoxel;
-	//gl::Fbo			mPickingFboFace;
-	
-	//framebuffers for cameras
-	gl::Fbo fboTop;
-	gl::Fbo fboRight;
-	gl::Fbo fboFront;
-	gl::Fbo	fboPersp; //! our main framebuffer (AA, containing 2 color buffers)
-
-	//framebuffer for selecting joints
-	gl::Fbo mPickingFboJoint;
-	
-	//rect definitions for cameras sizes
-	Rectf rectTop;
-	Rectf rectRight;
-	Rectf rectFront;
-	Rectf rectPersp;
-	//rect definitions for cameras sizes
-	Rectf boundsTop;
-	Rectf boundsRight;
-	Rectf boundsFront;
-	//Rectf boundsPersp;
-
-	//! keeping track of our cursor position
-	Vec2i			mMousePos;
-
-	//! background color
-	Color			mColorBackground;
-
-	//! colour channel to draw to the main viewport
-	unsigned long int channel;
-	
-	gl::Material JointMaterial;
-	
-	std::vector<Joint *> Joints;
-	Joint * selectedJoint;
-
-	SkeletonData * s;
-
-	enum UImode{
-		CREATE,
-		SELECT
-	} mode;
-	
-};
+#include "CinderApp.h"
 
 void CinderApp::prepareSettings(Settings *settings){
 	settings->setWindowSize(900, 600);
@@ -157,7 +8,7 @@ void CinderApp::prepareSettings(Settings *settings){
 
 void CinderApp::setup(){
 	drawParams = true;
-	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 200, 400 ) ) );
+	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 150, 100 ) ) );
 	params->addButton( "Switch Mode", std::bind( &CinderApp::switchMode, this ) );
 	params->addText( "Interaction Mode", "label=`CREATE`" );
 
@@ -190,7 +41,6 @@ void CinderApp::setup(){
 
 	selectedJoint = NULL;
 	
-
 	mode = CREATE;
 }
 
@@ -208,10 +58,10 @@ void CinderApp::resize(){
 	float w2 = w/2;
 	float h2 = h/2;
 	
-	rectTop.set(0,0,w2,h2);
-	rectRight.set(w2,0,w,h2);
-	rectFront.set(0,h2,w2,h);
-	rectPersp.set(w2,h2,w,h);
+	rectTop.set(0, 0, w2, h2);
+	rectRight.set(w2, 0, w, h2);
+	rectFront.set(0, h2, w2, h);
+	rectPersp.set(w2, h2, w, h);
 	
 	boundsTop.set(-r, -1, r, 1);
 	boundsRight.set(-r, -1, r, 1);
@@ -231,6 +81,17 @@ void CinderApp::resize(){
 	camFront.setViewDirection(Vec3f(0,0,-1));
 
 	// create or resize framebuffer if needed
+	if(!fboUI || fboUI.getWidth() != w || fboUI.getHeight() != h){
+		initFbo(fboUI, b);
+	}
+	
+	w /= 2;
+	h /= 2;
+	b.x1 /= 2;
+	b.x2 /= 2;
+	b.y1 /= 2;
+	b.y2 /= 2;
+
 	if(!fboPersp || fboPersp.getWidth() != w || fboPersp.getHeight() != h) {
 		initMultiChannelFbo(fboPersp, b);
 	}if(!fboTop || fboTop.getWidth() != w || fboTop.getHeight() != h){
@@ -243,79 +104,97 @@ void CinderApp::resize(){
 }
 
 void CinderApp::shutdown(){
-	for(int i = 0; i < Joints.size(); ++i){
+	for(unsigned long int i = 0; i < Joints.size(); ++i){
 		delete Joints.at(i);
 	}
 	Joints.clear();
 	selectedJoint = NULL;
 }
 
-void CinderApp::update(){}
-
-void CinderApp::draw(){
-	fboPersp.bindFramebuffer();
-	render(camMayaPersp.getCamera());
-	fboPersp.unbindFramebuffer();
-	
-	fboTop.bindFramebuffer();
-	render(camTop);
-	fboTop.unbindFramebuffer();
-
-	fboRight.bindFramebuffer();
-	render(camRight);
-	fboRight.unbindFramebuffer();
-
-	fboFront.bindFramebuffer();
-	render(camFront);
-	fboFront.unbindFramebuffer();
-
-	// draw the scene
-	gl::color( Color::white() );
-	
-	gl::draw( fboTop.getTexture(channel), rectTop );
-	gl::drawStrokedRect(rectTop);
-	
-	gl::draw( fboRight.getTexture(channel), rectRight );
-	gl::drawStrokedRect(rectRight);
-	
-	gl::draw( fboFront.getTexture(channel), rectFront );
-	gl::drawStrokedRect(rectFront);
-	
-	gl::draw( fboPersp.getTexture(channel), rectPersp );
-	gl::drawStrokedRect(rectPersp);
-
-	// draw the picking framebuffer in the upper right corner
-	if(mPickingFboJoint){
-		Rectf rct = (Rectf) mPickingFboJoint.getBounds() * 5.0f;
-		rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0) );
-		gl::draw( mPickingFboJoint.getTexture(), Rectf(rct.x1, rct.y1, rct.x2, rct.y2) );
-		gl::drawStrokedRect(Rectf(rct.x1, rct.y1, rct.x2, rct.y2));
-	}
-
-	if(drawParams){
-		params->draw();
-	}
-	// draw the colour channels in the upper left corner
-	/*windowBounds *=  0.2f;
-	gl::draw( fboPersp.getTexture(0), windowBounds);
-	windowBounds.y1 += windowBounds.y2;
-	windowBounds.y2 += windowBounds.y2;
-	gl::draw( fboPersp.getTexture(1), windowBounds);
-	windowBounds.y2 += windowBounds.y1;
-	windowBounds.y1 += windowBounds.y1;
-	gl::draw( fboPersp.getTexture(2), windowBounds);*/
-
+void CinderApp::update(){
 	
 }
 
-void CinderApp::render(const Camera & cam){
+void CinderApp::draw(){
+	renderScene(fboPersp, camMayaPersp.getCamera());
+	renderScene(fboTop, camTop);
+	renderScene(fboRight, camRight);
+	renderScene(fboFront, camFront);
+
+	fboUI.bindFramebuffer();
+		// set viewport to the size of the FBO
+		gl::setViewport( fboUI.getBounds() );
+		gl::enableDepthRead();
+		gl::enableDepthWrite();
+		gl::enableAlphaBlending();
+
+		gl::clear(ColorA(0.f, 0.f, 0.f, 0.f));
+
+		renderUI(camMayaPersp.getCamera(), rectPersp);
+		renderUI(camTop, rectTop);
+		renderUI(camRight, rectRight);
+		renderUI(camFront, rectFront);
+
+		gl::setViewport(fboUI.getBounds());
+
+		params->draw();
+		
+		gl::disableAlphaBlending();
+		gl::disableDepthRead();
+		gl::disableDepthWrite();
+	fboUI.unbindFramebuffer();
+
 	
+
+	// draw the scene
+	gl::enableAlphaBlending();
+
+	gl::color( ColorA(1.f, 1.f, 1.f, 1.f) );
+	
+	gl::draw( fboTop.getTexture(channel), fboTop.getBounds(), rectTop );
+	gl::drawStrokedRect(rectTop);
+	
+	gl::draw( fboRight.getTexture(channel), fboRight.getBounds(), rectRight );
+	gl::drawStrokedRect(rectRight);
+	
+	gl::draw( fboFront.getTexture(channel), fboFront.getBounds(), rectFront );
+	gl::drawStrokedRect(rectFront);
+	
+	gl::draw( fboPersp.getTexture(channel), fboPersp.getBounds(), rectPersp );
+	gl::drawStrokedRect(rectPersp);
+	
+	gl::draw( fboUI.getTexture(0), getWindowBounds() );
+
+	// draw the picking framebuffer in the upper right corner
+	if(mPickingFboJoint){
+		Rectf rct((Rectf)mPickingFboJoint.getBounds() * 5.0f);
+		rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0) );
+		gl::draw( mPickingFboJoint.getTexture(0), rct );
+		gl::drawStrokedRect(Rectf(rct.x1, rct.y1, rct.x2, rct.y2));
+	}
+
+	// draw the picking framebuffer in the upper right corner
+	if(pickingFboUI){
+		Rectf rct((Rectf)pickingFboUI.getBounds() * 5.0f);
+		rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0) );
+		gl::draw( pickingFboUI.getTexture(0), Rectf(rct.x1, rct.y1+rct.y2, rct.x2, rct.y2+rct.y2) );
+		gl::drawStrokedRect(Rectf(rct.x1, rct.y1+rct.y2, rct.x2, rct.y2+rct.y2));
+	}
+	
+}
+
+void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
+	fbo.bindFramebuffer();
+
 	// clear background
 	gl::clear( mColorBackground );
 
 	// specify the camera matrices
 	gl::pushMatrices();
 	gl::setMatrices(cam);
+
+		// set viewport to the size of the FBO
+		gl::setViewport( fbo.getBounds() );
 
 		drawGrid(10, 1);
 
@@ -340,9 +219,6 @@ void CinderApp::render(const Camera & cam){
 			if(j->parent == nullptr){
 				j->draw(&jointShader);
 			}
-			if(selectedJoint == j){
-				gl::drawColorCube(j->getPos(false), Vec3f(0.1,0.1,0.1));
-			}
 		}
 
 		// unbind shader
@@ -355,18 +231,49 @@ void CinderApp::render(const Camera & cam){
 
 	// restore render states
 	glPopAttrib();
+
+	fbo.unbindFramebuffer();
 }
 
-void CinderApp::mouseMove( MouseEvent event )
-{
+void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
+	gl::pushMatrices();
+
+	// set viewport to the size of the FBO
+	
+	gl::setViewport(Area(rect.x1, fboUI.getHeight()-rect.y1, rect.x2, fboUI.getHeight()-rect.y2));
+
+	gl::setMatrices(cam);
+	
+	gl::color(ColorA(1, 1, 1, 1));
+	//gl::drawSolidCircle(Vec2f(50, 50), 50);
+	if(selectedJoint != nullptr){
+		gl::drawColorCube(selectedJoint->getPos(false), Vec3f(0.1f, 0.1f, 0.1f));
+			
+		/*gl::drawVector(selectedJoint->getPos(false), selectedJoint->getPos(false)+Vec3f(1.f, 0.f, 0.f));
+		gl::drawVector(selectedJoint->getPos(false), selectedJoint->getPos(false)+Vec3f(0.f, 1.f, 0.f));
+		gl::drawVector(selectedJoint->getPos(false), selectedJoint->getPos(false)+Vec3f(0.f, 0.f, 1.f));*/
+	}
+
+	// restore matrices
+	gl::popMatrices();
+}
+
+void CinderApp::mouseMove( MouseEvent event ){
 	mMousePos = event.getPos();
 
 	//pickJoint(mMousePos);
+	//handleUI(mMousePos);
 }
 
 void CinderApp::mouseDown( MouseEvent event ){
+	mMousePos = event.getPos();
+
 	// handle the camera
-	camMayaPersp.mouseDown( event.getPos() );
+	camMayaPersp.mouseDown( mMousePos );
+
+	if(event.isRight()){
+		handleUI(mMousePos);
+	}
 
 	if(!event.isAltDown() && event.isLeft()){
 		
@@ -388,28 +295,40 @@ void CinderApp::mouseDown( MouseEvent event ){
 	}
 }
 
-void CinderApp::mouseDrag( MouseEvent event )
-{
+void CinderApp::mouseDrag( MouseEvent event ){
 	mMousePos = event.getPos();
 
 	// move the camera
 	if(event.isAltDown()){
-		camMayaPersp.mouseDrag( event.getPos(), event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
+		camMayaPersp.mouseDrag( mMousePos, event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
 	}else{
-		if(selectedJoint != NULL){
-			if(selectedJoint->building){
-				selectedJoint->setPos(getCameraCorrectedPos());
+		if(event.isLeft()){
+			if(selectedJoint != nullptr){
+				if(selectedJoint->building){
+					selectedJoint->setPos(getCameraCorrectedPos());
+				}
+			}
+		}else{
+			if(selectedJoint != nullptr){
+
+				Vec2i delta = mMousePos - oldMousePos;
+
+				float dif = delta.dot(mouseAxis);
+
+				dif /= sqrt(getWindowHeight()*getWindowHeight() + getWindowWidth()*getWindowWidth());
+
+				selectedJoint->transform->translate(glm::vec3(dir.x*dif/100.f, dir.y*dif/100.f, dir.z*dif/100.f));
+				
+				oldMousePos = mMousePos;
 			}
 		}
 	}
 }
 
-void CinderApp::mouseUp( MouseEvent event )
-{
+void CinderApp::mouseUp( MouseEvent event ){
 }
 
-void CinderApp::keyDown( KeyEvent event )
-{
+void CinderApp::keyDown( KeyEvent event ){
 	switch( event.getCode() ) {
 	case KeyEvent::KEY_ESCAPE:
 		quit();
@@ -419,7 +338,11 @@ void CinderApp::keyDown( KeyEvent event )
 		break;
 	case KeyEvent::KEY_F1:
 		drawParams = !drawParams;
-		break;
+		if(drawParams){
+			params->show();
+		}else{
+			params->hide();
+		}
 	case KeyEvent::KEY_1:
 		channel = 0;
 		break;
@@ -442,12 +365,10 @@ void CinderApp::keyDown( KeyEvent event )
 	}
 }
 
-void CinderApp::keyUp( KeyEvent event )
-{
+void CinderApp::keyUp( KeyEvent event ){
 }
 
-void CinderApp::loadShaders()
-{
+void CinderApp::loadShaders(){
 	try{
 		jointShader = gl::GlslProg( loadFile("../assets/shaders/joint.vert"), loadFile("../assets/shaders/joint.frag") );
 	}catch( const std::exception &e ) {
@@ -482,9 +403,9 @@ void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area){
 	//  -one to contain a color coded version of the scene that we can use for picking
 	fmt.enableColorBuffer( true, 3 );
 
-	// enable multi-sampling for better quality 
-	//  (if this sample does not work on your computer, try lowering the number of samples to 2 or 0)
-	fmt.setSamples(4);
+	// anti-aliasing samples
+	fmt.setSamples(0);
+	fmt.setCoverageSamples(0);
 
 	// create the buffer
 	unsigned int w = max(1, _area.getWidth());
@@ -524,7 +445,7 @@ Vec2d fromRectToRect(Vec2d _p, Rectf _r1, Rectf _r2){
 	Vec2d res;
 	res.x = ((_p.x-_r1.x1)/_r1.getWidth())*_r2.getWidth() + _r2.x1;
 	res.y = ((_p.y-_r1.y1)/_r1.getHeight())*_r2.getHeight() + _r2.y1;
-	console() << _p << std::endl << _r1 << std::endl << _r2 << std::endl << res << std::endl;
+	//console() << _p << std::endl << _r1 << std::endl << _r2 << std::endl << res << std::endl;
 	return res;
 }
 
@@ -561,10 +482,126 @@ Vec3d CinderApp::getCameraCorrectedPos(){
 }
 
 
-void CinderApp::pickJoint( const Vec2i &pos ){
+void CinderApp::handleUI( const Vec2i &pos ){
 	// this is the main section of the demo:
 	//  here we sample the second color target to find out
 	//  which color is under the cursor.
+	gl::Fbo * sourceFbo = &fboUI;
+	Rectf * sourceRect;
+	const Camera * sourceCam;
+	if(rectTop.contains(pos)){
+		sourceCam = &camTop;
+		sourceRect = &rectTop;
+	}else if(rectRight.contains(pos)){
+		sourceCam = &camRight;
+		sourceRect = &rectRight;
+	}else if(rectFront.contains(pos)){
+		sourceCam = &camFront;
+		sourceRect = &rectFront;
+	}else if(rectPersp.contains(pos)){
+		sourceCam = &camMayaPersp.getCamera();
+		sourceRect = &rectPersp;
+	}else{
+		return;
+	}
+
+
+
+	// first, specify a small region around the current cursor position 
+	float scaleX = sourceFbo->getWidth() / (float) getWindowWidth();
+	float scaleY = sourceFbo->getHeight() / (float) getWindowHeight();
+	Vec2i	pixel((int)((pos.x) * scaleX), (int)((getWindowHeight() - pos.y) * scaleY));
+
+	//pixel = fromRectToRect(pixel, sourceFbo->getBounds(), *sourceRect);
+
+	Area	area(pixel.x-5, pixel.y-5, pixel.x+5, pixel.y+5);
+
+	// next, we need to copy this region to a non-anti-aliased framebuffer
+	//  because sadly we can not sample colors from an anti-aliased one. However,
+	//  this also simplifies the glReadPixels statement, so no harm done.
+	//  Here, we create that non-AA buffer if it does not yet exist.
+	if(!pickingFboUI) {
+		initFbo(pickingFboUI, area);
+	}
+	
+	// bind the picking framebuffer, so we can clear it and then read its pixels later
+	pickingFboUI.bindFramebuffer();
+	gl::clear();
+
+	// (Cinder does not yet provide a way to handle multiple color targets in the blitTo function, 
+	//  so we have to make sure the correct target is selected before calling it)
+	glBindFramebufferEXT( GL_READ_FRAMEBUFFER_EXT, sourceFbo->getId() );
+	glBindFramebufferEXT( GL_DRAW_FRAMEBUFFER_EXT, pickingFboUI.getId() );
+	glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
+	glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
+
+	sourceFbo->blitTo(pickingFboUI, area, pickingFboUI.getBounds());
+
+
+	// read pixel value(s) in the area
+	GLubyte buffer[400]; // make sure this is large enough to hold 4 bytes for every pixel!
+	glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
+	glReadPixels(0, 0, pickingFboUI.getWidth(), pickingFboUI.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, (void*)buffer);
+
+	// unbind the picking framebuffer
+	mPickingFboJoint.unbindFramebuffer();
+
+	// calculate the total number of pixels
+	unsigned int total = (pickingFboUI.getWidth() * pickingFboUI.getHeight());
+
+	// now that we have the color information, count each occuring color
+	unsigned int color;
+
+	std::map<unsigned int, unsigned int> occurences;
+	for(size_t i=0;i<total;++i) {
+		color = charToInt( buffer[(i*4)+0], buffer[(i*4)+1], buffer[(i*4)+2] );
+		occurences[color]++;
+	}
+
+	// find the most occuring color
+	unsigned int max = 0;
+	std::map<unsigned int, unsigned int>::const_iterator itr;
+	for(itr=occurences.begin();itr!=occurences.end();++itr) {
+		if(itr->second > max) {
+			color = itr->first;
+			max = itr->second;
+		}
+	}
+
+	// if this color is present in at least 50% of the pixels, we can safely assume that it is indeed belonging to one object
+	if(max >= (total / 2)) {
+		console() << color << std::endl;
+		
+		
+		dir.set(Vec3i(0,0,0));
+
+		switch(color){
+			case 16711680: dir.x -= 10; break;	//r
+			case 65280: dir.y -= 10; break;		//g
+			case 255: dir.z -= 10; break;		//b
+			case 65535: dir.x += 10; break;		//m
+			case 16711935: dir.y += 10; break;	//c
+			case 16776960: dir.z += 10; break;	//y
+		}
+
+		if(selectedJoint != nullptr){
+			oldMousePos = mMousePos;
+
+			Vec2i start = sourceCam->worldToScreen(selectedJoint->getPos(false), sourceRect->getWidth(), sourceRect->getHeight());
+			Vec2i end = sourceCam->worldToScreen(selectedJoint->getPos(false) + dir, sourceRect->getWidth(), sourceRect->getHeight());
+
+			mouseAxis = end - start;
+
+			console() << dir << " " << mouseAxis << std::endl;
+		}
+	}else{
+		// we can't be sure about the color, we probably are on an object's edge
+		
+	}
+}
+
+void CinderApp::pickJoint( const Vec2i &pos ){
+	// get the corresponding camera and screen area
 	gl::Fbo * sourceFbo;
 	Rectf * sourceRect;
 	if(rectTop.contains(pos)){

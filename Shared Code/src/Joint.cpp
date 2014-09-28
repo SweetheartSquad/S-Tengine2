@@ -30,9 +30,9 @@ Joint::Joint(Joint * _parent){
 	}
 }
 
-void Joint::setPos(Vec3d _pos, bool _relative){
+void Joint::setPos(Vec3d _pos, bool _convertToRelative){
 	glm::vec3 glmPos = glm::vec3(_pos.x, _pos.y, _pos.z);
-	if(_relative){
+	if(_convertToRelative){
 		Joint * _parent = parent;
 		while(_parent != nullptr){
 			glmPos -= _parent->transform->translationVector;

@@ -67,9 +67,14 @@ vector<Joint*> SkeletonData::LoadSkeleton(string filePath) {
 		}catch (exception ex) {
 			throw ex;
 		}
+<<<<<<< HEAD:Shared Code/src/SkeletonData.cpp
 	}
 	else {
 		throw exception("File does not exist!");
+=======
+	}else{
+		throw new exception("File does not exist!");
+>>>>>>> origin/sean-stuff:Cinder/Source/skeleton-test/src/SkeletonData.cpp
 	}
 	return joints;
 }

@@ -31,7 +31,7 @@ public:
 	Joint(Joint * _parent);
 	~Joint();
 	
-	void setPos(Vec3d _pos, bool _relative = true);
+	void setPos(Vec3d _pos, bool _convertToRelative = true);
 	Vec3d getPos(bool _relative = true);
 
 	void draw(gl::GlslProg * _shader);

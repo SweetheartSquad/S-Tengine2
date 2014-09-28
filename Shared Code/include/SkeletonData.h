@@ -2,18 +2,19 @@
 #pragma comment(lib, "Shlwapi.lib")
 
 #include "shlwapi.h"
-#include "Cinder/app/App.h"
+
 #include <vector>
-#include "Joint.h"
 #include <string>
 #include <sstream>
 #include <fstream>
 #include <cstring>
-
 #include <filesystem>
 #include <regex>
 
-#include "cinder/Json.h"
+#include <Cinder/app/App.h>
+#include <cinder/Json.h>
+
+#include "Joint.h"
 
 using namespace std;
 using namespace ci;

@@ -1,6 +1,6 @@
 #include "Transform.h"
 
-Transform::Transform(void):
+Transform::Transform():
 	translationVector(0.f, 0.f, 0.f),
 	scaleVector(1.f, 1.f, 1.f),
 	orientation(1.f, 0.f, 0.f, 0.f),
@@ -8,7 +8,7 @@ Transform::Transform(void):
 {
 }
 
-Transform::~Transform(void){
+Transform::~Transform(){
 }
 
 void Transform::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){

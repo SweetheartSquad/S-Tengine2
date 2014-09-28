@@ -52,5 +52,8 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\SkeletonData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\CinderApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
