@@ -62,7 +62,6 @@ vector<Joint*> SkeletonData::LoadSkeleton(string filePath) {
 			for( JsonTree::ConstIter joint = jointsJson.begin(); joint != jointsJson.end(); ++joint ) {
 				JsonTree jJson = jointsJson.getChild(joint->getKey());
 				Joint * j = readJoint(jJson);
-
 				joints.push_back(j);
 			}
 		}catch (exception ex) {
@@ -70,7 +69,7 @@ vector<Joint*> SkeletonData::LoadSkeleton(string filePath) {
 		}
 	}
 	else {
-		throw new exception("File does not exist!");
+		throw exception("File does not exist!");
 	}
 	return joints;
 }
@@ -107,10 +106,14 @@ Joint* SkeletonData::readJoint(JsonTree joint, Joint * parent) {
 
 	j->parent = parent;
 	j->id = joint.getChild( "id" ).getValue<int>();
+		app::console() << "id: " << j->id << endl;
 	JsonTree pos = joint.getChild("pos");
-	j->setPos(Vec3f(pos.getChild("x").getValue<float>(),pos.getChild("y").getValue<float>(),pos.getChild("z").getValue<float>()));
+		app::console() << " jt_pos: x = " << pos.getChild("x").getValue<float>() << " y = " << pos.getChild("y").getValue<float>() << " pos: z = " << pos.getChild("z").getValue<float>() << endl;
+	j->setPos(Vec3d(pos.getChild("x").getValue<float>(),pos.getChild("y").getValue<float>(),pos.getChild("z").getValue<float>()),false);
+		app::console() << " pos: x = " << j->getPos().x << " y = " << j->getPos().y << " pos: z = " << j->getPos().z << endl;
 	JsonTree orientation = joint.getChild("orientation");
 	j->transform->orientation = glm::quat(orientation.getChild("x").getValue<float>(), orientation.getChild("y").getValue<float>(), orientation.getChild("z").getValue<float>(), orientation.getChild("w").getValue<float>());
+		app::console() << " orientation: x = " << j->transform->orientation.x << " y = " << j->transform->orientation.y << " z = " << j->transform->orientation.z << " w = " << j->transform->orientation.w << endl;
 
 	JsonTree childrenJson = joint.getChild("children");
 	for( JsonTree::ConstIter child = childrenJson.begin(); child != childrenJson.end(); ++child ) {

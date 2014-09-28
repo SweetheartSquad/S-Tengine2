@@ -7,8 +7,10 @@
 #include "cinder/gl/Material.h"
 #include "cinder/params/Params.h"
 
+#include <string>
 #include <sstream>
 
+#include "SkeletonData.h"
 #include "Joint.h"
 
 
@@ -55,6 +57,9 @@ public:
 	void pickJoint(const Vec2i &pos);
 	void switchMode();
 
+	void saveSkeleton();
+	void loadSkeleton();
+
 public:
 	// utility functions to translate colors to and from ints or chars 
 	static Color charToColor( unsigned char r, unsigned char g, unsigned char b ){
@@ -82,6 +87,11 @@ protected:
 	//params
 	bool drawParams;
 	params::InterfaceGlRef params;
+
+	string directory;
+	string fileName;
+	string filePath;
+	string message;
 
 	//! our cameras
 	MayaCamUI camMayaPersp;
@@ -130,6 +140,8 @@ protected:
 	std::vector<Joint *> Joints;
 	Joint * selectedJoint;
 
+	SkeletonData * s;
+
 	enum UImode{
 		CREATE,
 		SELECT
@@ -148,6 +160,17 @@ void CinderApp::setup(){
 	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 200, 400 ) ) );
 	params->addButton( "Switch Mode", std::bind( &CinderApp::switchMode, this ) );
 	params->addText( "Interaction Mode", "label=`CREATE`" );
+
+	params->addSeparator();
+
+	params->addParam("Directory", &directory);
+	params->addParam("File Name", &fileName);
+	params->addButton("Save", std::bind( &CinderApp::saveSkeleton, this ));
+	params->addSeparator();
+	params->addParam("Bones File", &filePath);
+	params->addButton("Load", std::bind(&CinderApp::loadSkeleton, this));
+	params->addSeparator();
+	params->addParam("Message", &message, "", true);
 	// note: we will setup our camera in the 'resize' function,
 	//  because it is called anyway so we don't have to set it up twice
 
@@ -646,5 +669,29 @@ void CinderApp::switchMode(){
 		params->setOptions( "Interaction Mode", "label=`CREATE`" );
 	}
 }
+
+void CinderApp::saveSkeleton() {
+	try{
+		console() << "saveSkeleton" << endl;
+		s->SaveSkeleton(directory,fileName,Joints);
+		message = "Saved skeleton";
+	}catch (exception ex){
+		message = string(ex.what());
+	}
+}
+
+void CinderApp::loadSkeleton() {
+	try{
+		console() << "loadSkeleton" << endl;
+		Joints.clear();
+
+		Joints = s->LoadSkeleton(filePath);
+		message = "Loaded skeleton";
+
+	}catch (exception ex){
+		message = string(ex.what());
+	}
+}
+
 
 CINDER_APP_BASIC( CinderApp, RendererGl )

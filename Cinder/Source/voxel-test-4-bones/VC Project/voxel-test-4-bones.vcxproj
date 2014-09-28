@@ -99,6 +99,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Shared Code\src\Joint.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\SkeletonData.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
     <ClCompile Include="..\src\CinderApp.cpp" />
   </ItemGroup>
@@ -109,6 +110,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Shared Code\include\Joint.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Node.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\SkeletonData.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
