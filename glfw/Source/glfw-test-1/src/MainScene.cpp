@@ -59,11 +59,7 @@ MainScene::MainScene():
 
 	cube3->mesh->vertices.at(3).x += 0.5;
 	cube3->transform->translateX(0.5);
-<<<<<<< HEAD
-	cube3->mesh->pushTexture2D("../assets/img_test.bmp", 256, 256);
-=======
-	cube3->mesh->pushTextrue2D("../assets/img_cheryl.jpg", 256, 256);
->>>>>>> origin/objParsing
+	cube3->mesh->pushTexture2D("../assets/img_cheryl.jpg", 256, 256);
 
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	addChild(cube);
@@ -71,13 +67,8 @@ MainScene::MainScene():
 	cube4->setShader(new ShaderInterface("../assets/ColourShader"), true);
 
 	cube4->transform->scale(15.0, 15.0, 15.0);
-<<<<<<< HEAD
-	cube4->mesh->pushTexture2D("../assets/img_test.bmp", 256, 256);
 	cube4->mesh->pushTexture2D("../assets/img_cheryl.jpg", 256, 256);
-=======
-	cube4->mesh->pushTextrue2D("../assets/img_cheryl.jpg", 256, 256);
-	cube4->mesh->pushTextrue2D("../assets/img_cheryl.jpg", 256, 256);
->>>>>>> origin/objParsing
+	cube4->mesh->pushTexture2D("../assets/img_cheryl.jpg", 256, 256);
 
 	cube->mesh->dirty = true;
 	cube2->mesh->dirty = true;
