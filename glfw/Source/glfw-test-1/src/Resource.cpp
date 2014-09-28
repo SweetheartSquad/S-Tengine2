@@ -18,8 +18,12 @@ struct Face{
 		f3Vert, f3Uv, f3Norm;
 };
 
-unsigned char* Resource::loadImage(const char* _src, int _width, int _height, int _SOILLoadMode){
-	return SOIL_load_image(_src, &_width, &_height, 0, _SOILLoadMode);
+unsigned char* Resource::loadImage(const char* _src, int _width, int _height, int _SOILLoadMode, int * _channels){
+	unsigned char* res = SOIL_load_image(_src, &_width, &_height, _channels, _SOILLoadMode);
+	if(res == 0){
+		throw;
+	}
+	return res;
 }
 
 void Resource::freeImageData(unsigned char* _image){

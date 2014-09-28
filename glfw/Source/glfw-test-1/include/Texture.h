@@ -27,6 +27,8 @@ public:
 
 	//The image data
 	unsigned char* data;
+	// Num channels
+	int* channels;
 
 	/*Initializes the texture. Can be called to recreate the texture
 	if the context is destroyed*/

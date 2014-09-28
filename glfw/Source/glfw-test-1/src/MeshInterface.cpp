@@ -50,8 +50,8 @@ void MeshInterface::load(){
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*indices.size(), indices.data(), drawMode);
 
 		//Initialize textures
-		for (Texture texture : textures){
-			texture.init();
+		for (Texture * texture : textures){
+			texture->init();
 		}
 
 		//disable VAO
@@ -66,8 +66,8 @@ void MeshInterface::unload(){
 		glDeleteBuffers(1, &iboId);
 		glDeleteBuffers(1, &vboId);
 		glDeleteVertexArrays(1, &vaoId);
-		for (Texture texture : textures){
-			texture.unload();
+		for (Texture * texture : textures){
+			texture->unload();
 		}
 		iboId = 0;
 		vboId = 0;
@@ -112,7 +112,7 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 				for(int i = 0; i < textures.size(); i++){
 					glUniform1i(glGetUniformLocation(shader->getProgramId(), "textureSampler"), i);
 					glActiveTexture(GL_TEXTURE0 + i);
-					glBindTexture(GL_TEXTURE_2D, textures.at(i).textureId);
+					glBindTexture(GL_TEXTURE_2D, textures.at(i)->textureId);
 				}
 
 				GLUtils::checkForError(0,__FILE__,__LINE__);
@@ -120,6 +120,10 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 				GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
 				glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
 				GLUtils::checkForError(0,__FILE__,__LINE__);
+				
+
+				glEnable (GL_BLEND);
+				glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -166,7 +170,8 @@ void MeshInterface::pushVert(Vertex _vertex){
 }
 
 void MeshInterface::pushTexture2D(const char* _src, int _width, int _height){
-	textures.push_back(Texture(_src, _width, _height, true));
+	// THIS TEXTURE ISN'T GOING TO BE DELETED !!!!!
+	textures.push_back(new Texture(_src, _width, _height, true));
 }
 
 void MeshInterface::setNormal(unsigned long int _vertId, float _x, float _y, float _z){

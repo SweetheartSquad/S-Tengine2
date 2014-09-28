@@ -19,7 +19,7 @@ public:
 	bool dirty;		//whether the vbo and ibo contain up-to-date vertex and index data
 	std::vector<Vertex> vertices; //vertex data for the vbo
 	std::vector<GLubyte> indices; //index data for the ibo
-	std::vector<Texture> textures; //Textures
+	std::vector<Texture *> textures; //Textures
 
 public:
 	GLuint vaoId;	//ID of the vertex array object
