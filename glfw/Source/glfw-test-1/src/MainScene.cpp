@@ -5,11 +5,13 @@ Cube * cube2;
 Cube * cube3;
 Cube * cube4;
 
+Light glight;
+
 MainScene::MainScene():
 	Scene()
 {
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
-	cube->setShader(new ShaderInterface("../assets/ColourShader"), true);
+	cube->setShader(new ShaderInterface("../assets/diffuse"), true);
 
 	cube->mesh->vertices.pop_back();
 	cube->mesh->vertices.pop_back();
@@ -28,7 +30,7 @@ MainScene::MainScene():
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
-	cube2->setShader(new ShaderInterface("../assets/junkdata"), true);
+	cube2->setShader(new ShaderInterface("../assets/diffuse"), true);
 
 	cube2->setFrontColour(1,0,0,1);
 	cube2->setLeftColour(0,1,0,1);
@@ -57,7 +59,7 @@ MainScene::MainScene():
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	addChild(cube);
 	addChild(cube4);
-	cube4->setShader(new ShaderInterface("../assets/ColourShader"), true);
+	cube4->setShader(new ShaderInterface("../assets/diffuse"), true);
 
 	cube4->transform->scale(15.0, 15.0, 15.0);
 

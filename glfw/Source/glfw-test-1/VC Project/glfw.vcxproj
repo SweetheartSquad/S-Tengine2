@@ -115,6 +115,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\GLUtils.cpp" />
     <ClCompile Include="..\src\Keyboard.cpp" />
+    <ClCompile Include="..\src\Light.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="..\src\MainScene.cpp" />
     <ClCompile Include="..\src\Mouse.cpp" />
@@ -138,6 +139,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Game.h" />
     <ClInclude Include="..\include\GLUtils.h" />
     <ClInclude Include="..\include\Keyboard.h" />
+    <ClInclude Include="..\include\Light.h" />
     <ClInclude Include="..\include\Mouse.h" />
     <ClInclude Include="..\include\System.h" />
     <ClInclude Include="..\include\TestGame.h" />
@@ -153,6 +155,8 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
   <ItemGroup>
     <None Include="..\assets\ColourShader.frag" />
     <None Include="..\assets\ColourShader.vert" />
+    <None Include="..\assets\diffuse.frag" />
+    <None Include="..\assets\diffuse.vert" />
     <None Include="..\assets\junkdata.frag" />
     <None Include="..\assets\junkdata.vert" />
   </ItemGroup>

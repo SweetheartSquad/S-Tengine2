@@ -99,6 +99,16 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 				glm::mat4 mvp = projectionMatrix * viewMatrix * vox::currentModelMatrix;
 				GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
 				glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
+				glm::mat4 model = vox::currentModelMatrix;
+				GLuint modelUniformLocation = glGetUniformLocation(shader->getProgramId(), "model");
+				glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
+				Light tLight;
+				tLight.data.position = glm::vec3(0.f, 0.f, 1.f);
+				tLight.data.intensities = glm::vec3(1.f, 1.f, 1.f);
+				GLuint lightUniformLocation = glGetUniformLocation(shader->getProgramId(), "light.position");
+				glUniform3f(lightUniformLocation, tLight.data.position.x,  tLight.data.position.y,  tLight.data.position.z);
+				GLuint intensitiesUniformLocation = glGetUniformLocation(shader->getProgramId(), "light.intensities");
+				glUniform3f(intensitiesUniformLocation, tLight.data.intensities.x,  tLight.data.intensities.y,  tLight.data.intensities.z);
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 
 				//draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)

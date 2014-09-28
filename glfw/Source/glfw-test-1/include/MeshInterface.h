@@ -10,6 +10,7 @@
 #include "Vox.h"
 #include "ShaderInterface.h"
 #include "Vertex.h"
+#include "Light.h"
 #include "GLUtils.h"
 
 class MeshInterface{

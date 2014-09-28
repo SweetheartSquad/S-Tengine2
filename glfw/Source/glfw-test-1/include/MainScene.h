@@ -2,6 +2,7 @@
 
 #include<iostream>
 #include"Scene.h"
+#include"Light.h"
 #include"Cube.h"
 #include "Vox.h"
 

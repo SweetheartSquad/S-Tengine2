@@ -102,6 +102,9 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -167,6 +170,9 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\junkdata.frag">
@@ -179,6 +185,12 @@
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="..\assets\ColourShader.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\diffuse.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\diffuse.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>
