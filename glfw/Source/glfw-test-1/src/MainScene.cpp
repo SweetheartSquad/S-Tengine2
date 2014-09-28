@@ -1,4 +1,5 @@
 #include "MainScene.h"
+#include <Resource.h>
 
 Cube * cube;
 Cube * cube2;
@@ -27,6 +28,13 @@ MainScene::MainScene():
 	cube->mesh->vertices.at(0).y += 1.5;
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
+	cube->mesh->pushTexture2D("../assets/img_cheryl.jpg", 256, 256);
+
+	Transform *t = new Transform();
+
+	cube->addChild(new Entity(Resource::loadMeshFromObj("../assets/cube.vox"),
+		t, new ShaderInterface("../assets/junkdata"), nullptr));
+
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->setShader(new ShaderInterface("../assets/junkdata"), true);
 
@@ -53,6 +61,7 @@ MainScene::MainScene():
 
 	cube3->mesh->vertices.at(3).x += 0.5;
 	cube3->transform->translateX(0.5);
+	cube3->mesh->pushTexture2D("../assets/img_cheryl.jpg", 256, 256);
 
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	addChild(cube);
@@ -60,6 +69,8 @@ MainScene::MainScene():
 	cube4->setShader(new ShaderInterface("../assets/ColourShader"), true);
 
 	cube4->transform->scale(15.0, 15.0, 15.0);
+	//cube4->mesh->pushTexture2D("../assets/img_cheryl.jpg", 256, 256);
+	cube4->mesh->pushTexture2D("../assets/img_test.png", 256, 256);
 
 	cube->mesh->dirty = true;
 	cube2->mesh->dirty = true;

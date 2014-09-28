@@ -1,6 +1,7 @@
 #include "MeshInterface.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
+#include <algorithm>
 
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	drawMode(drawMode),
@@ -25,6 +26,7 @@ MeshInterface::~MeshInterface(void){
 GLsizei MeshInterface::getStride(){
 	return sizeof(Vertex);
 }
+
 GLsizei MeshInterface::getVertCount(){
 	return vertices.size();
 }
@@ -47,6 +49,11 @@ void MeshInterface::load(){
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*indices.size(), indices.data(), drawMode);
 
+		//Initialize textures
+		for (Texture * texture : textures){
+			texture->init();
+		}
+
 		//disable VAO
 		glBindVertexArray(0);
 		GLUtils::checkForError(true,__FILE__,__LINE__);
@@ -59,7 +66,9 @@ void MeshInterface::unload(){
 		glDeleteBuffers(1, &iboId);
 		glDeleteBuffers(1, &vboId);
 		glDeleteVertexArrays(1, &vaoId);
-
+		for (Texture * texture : textures){
+			texture->unload();
+		}
 		iboId = 0;
 		vboId = 0;
 		vaoId = 0;
@@ -95,11 +104,29 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 
 				//specify shader attributes
 				glUseProgram(shader->getProgramId());
+
+				//Pass the shader the number of textures
+				glUniform1i(glGetUniformLocation(shader->getProgramId(), "numTextures"), textures.size());
+
+				//Bind each texture to the texture sampler array in the frag shader
+				for(int i = 0; i < textures.size(); i++){
+					glUniform1i(glGetUniformLocation(shader->getProgramId(), "textureSampler"), i);
+					glActiveTexture(GL_TEXTURE0 + i);
+					glBindTexture(GL_TEXTURE_2D, textures.at(i)->textureId);
+				}
+
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 				glm::mat4 mvp = projectionMatrix * viewMatrix * vox::currentModelMatrix;
 				GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
 				glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
 				GLUtils::checkForError(0,__FILE__,__LINE__);
+				
+
+				glEnable (GL_BLEND);
+				glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 				//draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
 				glDrawRangeElements(polygonalDrawMode, 0, vertices.size(), indices.size(), GL_UNSIGNED_BYTE, 0);
@@ -134,19 +161,30 @@ void MeshInterface::configureDefaultVertexAttributes(ShaderInterface *_shader){
 	configureVertexAttributes(_shader->get_aVertexPosition(), 3, 0);
 	configureVertexAttributes(_shader->get_aVertexColor(), 4, sizeof(float)*3);
 	configureVertexAttributes(_shader->get_aVertexNormals(), 3, sizeof(float)*7);
+	configureVertexAttributes(_shader->get_aVertexUVs(), 2, sizeof(float)*10);
 }
 
 void MeshInterface::pushVert(Vertex _vertex){
 	vertices.push_back(_vertex);
-
 	dirty = true;
 }
+
+void MeshInterface::pushTexture2D(const char* _src, int _width, int _height){
+	// THIS TEXTURE ISN'T GOING TO BE DELETED !!!!!
+	textures.push_back(new Texture(_src, _width, _height, true));
+}
+
 void MeshInterface::setNormal(unsigned long int _vertId, float _x, float _y, float _z){
 	vertices.at(_vertId).nx = _x;
 	vertices.at(_vertId).ny = _y;
 	vertices.at(_vertId).nz = _z;
 
 	dirty = true;
+}
+
+void MeshInterface::setUV(unsigned long _vertId, float _u, float _v){
+	vertices.at(_vertId).u = _u;
+	vertices.at(_vertId).v = _v;
 }
 void TriMesh::pushTri(GLubyte _v0, GLubyte _v1, GLubyte _v2){
 	indices.push_back(_v0);

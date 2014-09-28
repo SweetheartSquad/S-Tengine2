@@ -98,6 +98,16 @@ void vox::calculateDeltaTimeCorrection(){
 	lastTimestamp = time;
 }
 
+//Freetype
+void vox::initializeFreetype(){
+	//int error = FT_Init_FreeType(&freetypeLibrary);
+	//if (error){
+	//	std::cout<<"An error occured during the initializtion of Freetype";
+	//}else{
+	//	std::cout<<"Freetype successfully initialized";
+	//}
+}
+
 void vox::destruct(){
 	delete matrixStack;
 }

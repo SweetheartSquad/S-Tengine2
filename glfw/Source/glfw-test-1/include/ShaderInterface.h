@@ -12,6 +12,7 @@ private:
 	GLint aVertexPosition;
 	GLint aVertexColor;
 	GLint aVertexNormals;
+	GLint aVertexUVs;
 
 	void init(std::string _vertexShaderFile, std::string _fragmentShaderFile);
 public:
@@ -28,4 +29,5 @@ public:
 	GLint get_aVertexPosition();
 	GLint get_aVertexColor();
 	GLint get_aVertexNormals();
+	GLint get_aVertexUVs();
 };
