@@ -28,6 +28,11 @@ MainScene::MainScene():
 	cube->mesh->vertices.at(0).y += 1.5;
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
+	Transform *t = new Transform();
+
+	addChild(new Entity(Resource::loadMeshFromObj("../assets/cube.vox"),
+		t, new ShaderInterface("../assets/junkdata"), nullptr));
+
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->setShader(new ShaderInterface("../assets/junkdata"), true);
 
@@ -69,7 +74,6 @@ MainScene::MainScene():
 	cube2->mesh->dirty = true;
 	cube3->mesh->dirty = true;
 	cube4->mesh->dirty = true;
-	Resource::loadMeshFromObj("../assets/cube.vox");
 }
 
 MainScene::~MainScene(){

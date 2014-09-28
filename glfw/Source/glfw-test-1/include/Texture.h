@@ -3,8 +3,6 @@
 #include <iostream>
 #include <GL/glew.h>
 
-#include "Resource.h"
-
 class Texture
 {
 public:

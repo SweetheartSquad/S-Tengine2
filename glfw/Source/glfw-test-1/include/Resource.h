@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iostream>
 #include <glm/glm.hpp>
+#include "MeshInterface.h"
 
 class Resource
 {
@@ -26,5 +27,5 @@ public:
 
 	//Free image data memory
 	static void freeImageData(unsigned char* _image);
-	static void loadMeshFromObj(std::string _objSrc);
+	static TriMesh* loadMeshFromObj(std::string _objSrc);
 };
