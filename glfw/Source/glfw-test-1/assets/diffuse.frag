@@ -25,5 +25,5 @@ void main()
 	float brightness = dot(normal, surfaceToLight) / (length(surfaceToLight) * length(normal));
 	brightness = clamp(brightness, 0, 1);
    
-    outColor = brightness * vec4(light.intensities, 1) * fragColor;
+	outColor = vec4(brightness * vec3(light.intensities), 1) * fragColor;
 }
