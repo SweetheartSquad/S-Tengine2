@@ -1,46 +1,39 @@
 #include "Keyboard.h"
 
-Keyboard::Keyboard():
-	pressedKeys(new std::map<int, int>()),
-	justPressedKeys(new std::map<int, int>()),
-	justReleasedKeys(new std::map<int, int>())
-{
+Keyboard::Keyboard(){
 }
 
 Keyboard::~Keyboard(){
-	delete pressedKeys;
-	delete justPressedKeys;
-	delete justReleasedKeys;
 }
 
 bool Keyboard::keyJustUp(int _glfwKeyCode){
-	return justReleasedKeys->find(_glfwKeyCode) != justReleasedKeys->end();
+	return justReleasedKeys.find(_glfwKeyCode) != justReleasedKeys.end();
 }
 
 bool Keyboard::keyJustDown(int _glfwKeyCode){
-	return justPressedKeys->find(_glfwKeyCode) != justPressedKeys->end();
+	return justPressedKeys.find(_glfwKeyCode) != justPressedKeys.end();
 }
 
 void Keyboard::keyDownListener(int _glfwKeyCode){
-	justPressedKeys->insert(std::make_pair(_glfwKeyCode, _glfwKeyCode));
-	pressedKeys->insert(std::make_pair(_glfwKeyCode, _glfwKeyCode));
+	justPressedKeys.insert(std::make_pair(_glfwKeyCode, _glfwKeyCode));
+	pressedKeys.insert(std::make_pair(_glfwKeyCode, _glfwKeyCode));
 }
 
 void Keyboard::keyUpListener(int _glfwKeyCode){
-	justReleasedKeys->insert(std::make_pair(_glfwKeyCode, _glfwKeyCode));
+	justReleasedKeys.insert(std::make_pair(_glfwKeyCode, _glfwKeyCode));
 
-	if(pressedKeys->find(_glfwKeyCode) != pressedKeys->end()){
-		pressedKeys->erase(_glfwKeyCode);
+	if(pressedKeys.find(_glfwKeyCode) != pressedKeys.end()){
+		pressedKeys.erase(_glfwKeyCode);
 	}
 
-	if(justPressedKeys->find(_glfwKeyCode) != justPressedKeys->end()){
-		justPressedKeys->erase(_glfwKeyCode);
+	if(justPressedKeys.find(_glfwKeyCode) != justPressedKeys.end()){
+		justPressedKeys.erase(_glfwKeyCode);
 	}
 }
 
 void Keyboard::update(){
-	justPressedKeys->clear();
-	justReleasedKeys->clear();
+	justPressedKeys.clear();
+	justReleasedKeys.clear();
 }
 
 Keyboard& Keyboard::getInstance(){
@@ -52,5 +45,5 @@ Keyboard& Keyboard::getInstance(){
 }
 
 bool Keyboard::keyDown(int _glfwKeyCode){
-	return justPressedKeys->find(_glfwKeyCode) != justPressedKeys->end() || pressedKeys->find(_glfwKeyCode) != pressedKeys->end();
+	return justPressedKeys.find(_glfwKeyCode) != justPressedKeys.end() || pressedKeys.find(_glfwKeyCode) != pressedKeys.end();
 }
