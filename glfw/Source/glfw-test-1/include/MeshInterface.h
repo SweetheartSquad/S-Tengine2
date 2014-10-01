@@ -16,16 +16,16 @@
 
 class MeshInterface{
 public:
-	bool loaded;	//whether the vao, vbo, and ibo have been generated and initialized
-	bool dirty;		//whether the vbo and ibo contain up-to-date vertex and index data
-	std::vector<Vertex> vertices; //vertex data for the vbo
-	std::vector<GLubyte> indices; //index data for the ibo
-	std::vector<Texture *> textures; //Textures
+	bool loaded;	// Whether the vao, vbo, and ibo have been generated and initialized
+	bool dirty;		// Whether the vbo and ibo contain up-to-date vertex and index data
+	std::vector<Vertex> vertices; // Vertex data for the vbo
+	std::vector<GLubyte> indices; // Index data for the ibo
+	std::vector<Texture *> textures; // Textures
 
 public:
-	GLuint vaoId;	//ID of the vertex array object
-	GLuint vboId;	//ID of the vertex buffer object
-	GLuint iboId;	//ID of the index buffer object
+	GLuint vaoId;	// ID of the vertex array object
+	GLuint vboId;	// ID of the vertex buffer object
+	GLuint iboId;	// ID of the index buffer object
 
 	/* OpenGL memory hint; possible values:
 	STATIC - The user will set the data once
@@ -48,41 +48,49 @@ public:
 	*/
 	GLenum polygonalDrawMode;
 
-	//returns vertices.size()
+	// Returns vertices.size()
 	GLsizei getVertCount();
-	//returns sizeof(Vertex)
+	// Returns sizeof(Vertex)
 	GLsizei getStride();
 
+	/*
+	_polygonalDrawMode: STATIC, STREAM, DYNAMIC
+	_drawMode: GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS, GL_QUAD_STRIP, GL_POLYGON
+	*/
 	MeshInterface(GLenum _polygonalDrawMode, GLenum _drawMode);
 	~MeshInterface(void);
 
-	//if unloaded, generates the VAO, VBO, IBO and flags as loaded
+	// If unloaded, generates the VAO, VBO, IBO and flags as loaded
 	void load();
-	//if loaded, deletes the VAO, VBO, IBO and flags as not loaded and dirty
+	// If loaded, deletes the VAO, VBO, IBO and flags as not loaded and dirty
 	void unload();
-	//if dirty, copies data from vertices and indices to VBO and IBO and flags as clean
+	// If dirty, copies data from vertices and indices to VBO and IBO and flags as clean
 	void clean();
-	//renders the vao using the given shader and model-view-projection
+	// Renders the vao using the given shader and model-view-projection
 	void render(ShaderInterface *_shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
-	//configures shader attributes (?)
+	// Configures shader attributes (?)
 	void configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset);
-	//A helper method to configure all the starndard vertex attributes - Position, Colours, Normals
+	// A helper method to configure all the starndard vertex attributes - Position, Colours, Normals
 	void configureDefaultVertexAttributes(ShaderInterface *_shader);
-
+	// Sets the normal of the given vert to _x, _y, _z
 	void setNormal(unsigned long int _vertId, float _x, float _y, float _z);
+	// Sets the UV of the given vert to _x, _y
 	void setUV(unsigned long int _vertId, float _x, float _y);
+	// Adds _vertex to the list of vertices
 	void pushVert(Vertex _vertex);
 	void pushTexture2D(const char* _src, int _width, int _height);
 };
 
+// MeshInterface preset for triangle meshes
 class TriMesh : public MeshInterface{
 public:
 	void pushTri(GLubyte _v0, GLubyte _v1, GLubyte _v2);
-	TriMesh(GLenum _polygonalDrawMode, GLenum _drawMode):MeshInterface(_polygonalDrawMode, _drawMode){};
+	TriMesh(GLenum _polygonalDrawMode, GLenum _drawMode = GL_TRIANGLES):MeshInterface(_polygonalDrawMode, _drawMode){};
 };
 
+// MeshInterface preset for quad meshes
 class QuadMesh : public MeshInterface{
 public:
 	void pushQuad(GLubyte _v0, GLubyte _v1, GLubyte _v2, GLubyte _v3);
-	QuadMesh(GLenum _polygonalDrawMode, GLenum _drawMode):MeshInterface(_polygonalDrawMode, _drawMode){};
+	QuadMesh(GLenum _polygonalDrawMode, GLenum _drawMode = GL_QUADS):MeshInterface(_polygonalDrawMode, _drawMode){};
 };

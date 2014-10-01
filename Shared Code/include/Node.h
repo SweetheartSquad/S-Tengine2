@@ -1,8 +1,6 @@
 #pragma once
 
-#include <iostream>
-
-//abstract node
+// Abstract node
 class Node{
 public:
 	virtual ~Node() = 0;

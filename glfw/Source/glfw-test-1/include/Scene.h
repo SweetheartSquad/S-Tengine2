@@ -11,16 +11,12 @@ class Scene{
 public:
 	Scene(void);
 	virtual ~Scene(void);
+	
+	Mouse * mouse;			// Reference to mouse singleton
+	Keyboard * keyboard;	// Reference to keyboard singleton
 
-	// Reference to a list of references to entitites included in this scene
-	std::vector<Entity *> * children;
-	// Reference to this scene's camera
-	Camera * camera;
-
-	// Reference to keyboard singleton
-	Keyboard * keyboard;
-	// Reference to mouse singleton
-	Mouse * mouse;
+	Camera * camera;					// Reference to this scene's camera
+	std::vector<Entity *> * children;	// Reference to a list of references to entitites included in this scene
 
 	// Calls update on the attached camera
 	virtual void update(void);

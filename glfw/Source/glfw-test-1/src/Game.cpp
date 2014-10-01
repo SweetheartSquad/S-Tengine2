@@ -7,7 +7,6 @@ int nbFrames = 0;
 Game::Game(bool _isRunning):
 	isRunning(_isRunning),
 	children(new std::vector<Entity *>()),
-	scenes(new std::map<std::string, Scene *>()),
 	printFPS(true),
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance())
@@ -42,7 +41,7 @@ void Game::printFps(){
 	double currentTime = glfwGetTime();
 	nbFrames++;
 	if (currentTime - lastTime >= 1.0){
-		// If last prinf() was more than 1 sec ago
+		// If last printf() was more than 1 sec ago
 		// printf and reset timer
 		printf("%f FPS\n", double(nbFrames));
 		nbFrames = 0;
