@@ -40,7 +40,7 @@
     <Filter Include="Source Files\input">
       <UniqueIdentifier>{92af4ccb-67a0-48ae-a3e0-b9785d71c2f2}</UniqueIdentifier>
     </Filter>
-    </ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Cube.cpp">
       <Filter>Source Files\geo</Filter>
@@ -102,7 +102,16 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    </ItemGroup>
+    <ClCompile Include="..\src\Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Resource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
       <Filter>Header Files\geo</Filter>
@@ -167,6 +176,15 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\junkdata.frag">
@@ -181,5 +199,12 @@
     <None Include="..\assets\ColourShader.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
-     </ItemGroup>
+    <None Include="..\assets\cube.vox" />
+    <None Include="..\assets\diffuse.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\diffuse.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+  </ItemGroup>
 </Project>
