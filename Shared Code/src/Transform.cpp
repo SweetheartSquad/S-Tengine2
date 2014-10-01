@@ -26,50 +26,41 @@ void Transform::scale(float _scaleX, float _scaleY, float _scaleZ){
 	scaleVector.z *= _scaleZ;
 }
 
-void Transform::scale(glm::vec3 _scale)
-{
+void Transform::scale(glm::vec3 _scale){
 	scaleVector *= _scale;
 }
 
-void Transform::scaleX(float _scaleX)
-{
+void Transform::scaleX(float _scaleX){
 	scaleVector.x *= _scaleX;
 }
 
-void Transform::scaleY(float _scaleY)
-{
+void Transform::scaleY(float _scaleY){
 	scaleVector.y *= _scaleY;
 }
 
-void Transform::scaleZ(float _scaleZ)
-{
+void Transform::scaleZ(float _scaleZ){
 	scaleVector.z *= _scaleZ;
 }
 
-void Transform::translate(float _translateX, float _translateY, float _translateZ)
-{
+void Transform::translate(float _translateX, float _translateY, float _translateZ){
 	translationVector.x += _translateX;
 	translationVector.y += _translateY;
 	translationVector.z += _translateZ;
 }
 
-void Transform::translate(glm::vec3 _translate)
-{
+void Transform::translate(glm::vec3 _translate){
 	translationVector += _translate;
 }
 
-void Transform::translateX(float _translateX)
-{
+void Transform::translateX(float _translateX){
 	translationVector.x += _translateX;
 }
 
-void Transform::translateY(float _translateY)
-{
+void Transform::translateY(float _translateY){
 	translationVector.y += _translateY;
 }
 
-void Transform::translateZ(float _translateZ)
-{
+void Transform::translateZ(float _translateZ){
 	translationVector.z += _translateZ;
 }
 
@@ -78,7 +69,7 @@ void Transform::rotate(glm::quat _rotation){
 }
 
 void Transform::rotate(float _angle, float _x, float _y, float _z){
-	this->rotate(glm::quat(glm::angleAxis(_angle, glm::vec3(_x,_y,_z))));
+	this->rotate(glm::quat(glm::angleAxis(_angle, glm::vec3(_x, _y, _z))));
 }
 
 glm::mat4 Transform::getTranslationMatrix(){
@@ -89,12 +80,12 @@ glm::mat4 Transform::getScaleMatrix(){
 	return glm::scale(scaleVector);
 }
 
-glm::mat4 Transform::getRotationMatrix(){
+glm::mat4 Transform::getOrientationMatrix(){
 	return glm::toMat4(orientation);
 }
 
 glm::mat4 Transform::getModelMatrix(){
-	return getTranslationMatrix() * getRotationMatrix() * getScaleMatrix();
+	return getTranslationMatrix() * getOrientationMatrix() * getScaleMatrix();
 }
 
 void Transform::addChild(Transform* _child){
