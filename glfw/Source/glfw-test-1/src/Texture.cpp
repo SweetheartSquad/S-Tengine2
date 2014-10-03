@@ -6,17 +6,20 @@ Texture::Texture(const char* _src, int _width, int _height, bool _storeData):
 	width(_width),
 	height(_height),
 	data(nullptr),
-	channels(nullptr)
+	channels(nullptr),
+	ReferenceManager()
 {
-	init();
+	ReferenceManager();
+	load();
 }
 
 Texture::~Texture(){
 	delete channels;
+	delete data;
 }
 
-void Texture::init(){
-	if(channels == nullptr){	
+void Texture::load(){
+	if(channels == nullptr){
 		channels = new int(0);
 	}
 
@@ -33,17 +36,15 @@ void Texture::init(){
 			data = tempData;
 		}
 	}
-	
+
 	if(*channels == 3){
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, tempData);
 	}else if(*channels == 4){
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tempData);
 	}else{
-		throw "dunno";
+		throw "Invalid number of image channels";
 	}
 	glGenerateMipmap(GL_TEXTURE_2D);
-
-	delete(channels);
 }
 
 void Texture::unload(){

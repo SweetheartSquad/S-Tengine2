@@ -22,7 +22,6 @@ public:
 	std::vector<GLubyte> indices; //index data for the ibo
 	std::vector<Texture *> textures; //Textures
 
-public:
 	GLuint vaoId;	//ID of the vertex array object
 	GLuint vboId;	//ID of the vertex buffer object
 	GLuint iboId;	//ID of the index buffer object
@@ -72,7 +71,7 @@ public:
 	void setNormal(unsigned long int _vertId, float _x, float _y, float _z);
 	void setUV(unsigned long int _vertId, float _x, float _y);
 	void pushVert(Vertex _vertex);
-	void pushTexture2D(const char* _src, int _width, int _height);
+	void pushTexture2D(Texture* _texture);
 };
 
 class TriMesh : public MeshInterface{

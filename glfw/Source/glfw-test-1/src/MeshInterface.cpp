@@ -17,6 +17,9 @@ MeshInterface::~MeshInterface(void){
 	glDeleteVertexArrays(1, &vaoId);
 	glDeleteBuffers(1, &vboId);
 	glDeleteBuffers(1, &iboId);
+	for(Texture* t:textures){
+		t->dereferenceAndDelete(this);
+	}
 	vaoId = 0;
 	vboId = 0;
 	iboId = 0;
@@ -51,7 +54,7 @@ void MeshInterface::load(){
 
 		//Initialize textures
 		for (Texture * texture : textures){
-			texture->init();
+			texture->load();
 		}
 
 		//disable VAO
@@ -115,10 +118,13 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 					glBindTexture(GL_TEXTURE_2D, textures.at(i)->textureId);
 				}
 
+				//Model View Projection
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 				glm::mat4 mvp = projectionMatrix * viewMatrix * vox::currentModelMatrix;
 				GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
 				glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
+
+				//Lighting
 				glm::mat4 model = vox::currentModelMatrix;
 				GLuint modelUniformLocation = glGetUniformLocation(shader->getProgramId(), "model");
 				glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
@@ -130,11 +136,12 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 				GLuint intensitiesUniformLocation = glGetUniformLocation(shader->getProgramId(), "light.intensities");
 				glUniform3f(intensitiesUniformLocation, tLight.data.intensities.x,  tLight.data.intensities.y,  tLight.data.intensities.z);
 				GLUtils::checkForError(0,__FILE__,__LINE__);
-				
 
+				//Alpha blending
 				glEnable (GL_BLEND);
 				glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				
+
+				//Texture repeat
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
@@ -179,9 +186,9 @@ void MeshInterface::pushVert(Vertex _vertex){
 	dirty = true;
 }
 
-void MeshInterface::pushTexture2D(const char* _src, int _width, int _height){
-	// THIS TEXTURE ISN'T GOING TO BE DELETED !!!!!
-	textures.push_back(new Texture(_src, _width, _height, true));
+void MeshInterface::pushTexture2D(Texture* _texture){
+	_texture->attachReference(this);
+	textures.push_back(_texture);
 }
 
 void MeshInterface::setNormal(unsigned long int _vertId, float _x, float _y, float _z){
