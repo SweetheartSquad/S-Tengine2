@@ -19,11 +19,11 @@ void ShaderInterface::init(std::string _vertexShaderFile, std::string _fragmentS
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 }
 
-ShaderInterface::ShaderInterface(std::string _shaderSource){
+ShaderInterface::ShaderInterface(std::string _shaderSource, bool _autoRelease) : ReferenceManager(_autoRelease){
 	init(_shaderSource+".vert", _shaderSource+".frag");
 }
 
-ShaderInterface::ShaderInterface(std::string _vertexShaderSource, std::string _fragmentShaderSource){
+ShaderInterface::ShaderInterface(std::string _vertexShaderSource, std::string _fragmentShaderSource, bool _autoRelease) : ReferenceManager(_autoRelease){
 	init(_vertexShaderSource, _fragmentShaderSource);
 }
 

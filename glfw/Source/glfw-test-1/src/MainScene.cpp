@@ -8,12 +8,13 @@ Cube * cube4;
 
 Light glight;
 Texture* tex;
+ShaderInterface* texShader;
 
 MainScene::MainScene():
 	Scene()
 {
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
-	cube->setShader(new ShaderInterface("../assets/diffuse"), true);
+	cube->setShader(new ShaderInterface("../assets/diffuse", true), true);
 
 	cube->mesh->vertices.pop_back();
 	cube->mesh->vertices.pop_back();
@@ -31,16 +32,17 @@ MainScene::MainScene():
 	cube->mesh->vertices.at(0).y += 1.5;
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
-	tex = new Texture("../assets/img_cheryl.jpg", 256, 256, true);
+	texShader = new ShaderInterface("../assets/ColourShader", true);
+	tex = new Texture("../assets/img_cheryl.jpg", 256, 256, true, true);
 	cube->mesh->pushTexture2D(tex);
 
 	Transform *t = new Transform();
 
 	cube->addChild(new Entity(Resource::loadMeshFromObj("../assets/cube.vox"),
-		t, new ShaderInterface("../assets/junkdata"), nullptr));
+		t, new ShaderInterface("../assets/junkdata", true), nullptr));
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
-	cube2->setShader(new ShaderInterface("../assets/ColourShader"), true);
+	cube2->setShader(texShader, true);
 
 	cube2->setFrontColour(1,0,0,1);
 	cube2->setLeftColour(0,1,0,1);
@@ -55,7 +57,7 @@ MainScene::MainScene():
 	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
 	cube2->addChild(cube3);
-	cube3->setShader(new ShaderInterface("../assets/ColourShader"), true);
+	cube3->setShader(texShader, true);
 
 	cube3->setFrontColour(0.5,0,0,1);
 	cube3->setLeftColour(0,0.5,0,1);
@@ -71,7 +73,7 @@ MainScene::MainScene():
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	addChild(cube);
 	addChild(cube4);
-	cube4->setShader(new ShaderInterface("../assets/ColourShader"), true);
+	cube4->setShader(texShader, true);
 
 	cube4->transform->scale(15.0, 15.0, 15.0);
 	cube4->mesh->pushTexture2D(tex);

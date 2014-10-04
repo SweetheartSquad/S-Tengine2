@@ -8,7 +8,7 @@
 class Texture : public ReferenceManager
 {
 public:
-	Texture(const char* _src, int _width, int _height, bool _storeData);
+	Texture(const char* _src, int _width, int _height, bool _storeData, bool _autoRelease);
 	~Texture();
 
 	//Source file location

@@ -1,15 +1,14 @@
 #include "Texture.h"
 #include <Resource.h>
 
-Texture::Texture(const char* _src, int _width, int _height, bool _storeData):
+Texture::Texture(const char* _src, int _width, int _height, bool _storeData, bool _autoRelease):
 	src(_src),
 	width(_width),
 	height(_height),
 	data(nullptr),
 	channels(nullptr),
-	ReferenceManager()
+	ReferenceManager(_autoRelease)
 {
-	ReferenceManager();
 	load();
 }
 

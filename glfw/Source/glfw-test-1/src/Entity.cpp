@@ -11,6 +11,7 @@ Entity::Entity(MeshInterface * _mesh, Transform * _transform, ShaderInterface * 
 Entity::~Entity(void){
 	delete transform;
 	delete mesh;
+	shader->safeDelete();
 
 	transform = nullptr;
 	mesh = nullptr;
@@ -85,6 +86,5 @@ void Entity::reset(){
 	std::string shaderVertSrc = shader->vertName;
 	std::string shaderFragSrc = shader->fragName;
 
-	delete shader;
-	shader = new ShaderInterface(shaderVertSrc, shaderFragSrc);
+	shader->init(shaderVertSrc, shaderFragSrc);
 }

@@ -5,8 +5,9 @@
 #include "ShaderLoader.h"
 #include "FileUtils.h"
 #include "GLUtils.h"
+#include "ReferenceManager.h"
 
-class ShaderInterface{
+class ShaderInterface : public ReferenceManager{
 private:
 	ShaderLoader *shader;
 	GLint aVertexPosition;
@@ -14,16 +15,17 @@ private:
 	GLint aVertexNormals;
 	GLint aVertexUVs;
 
-	void init(std::string _vertexShaderFile, std::string _fragmentShaderFile);
 public:
 	std::string vertName;
 	std::string fragName;
 
 	//Creates shader using "shaderFile.vert" and "shaderFile.frag"
-	explicit ShaderInterface(std::string _shaderFile);
+	explicit ShaderInterface(std::string _shaderFile, bool _autoRelease);
 	//Creates shader using "vertexShaderFile" and "fragmentShaderFile"
-	ShaderInterface(std::string _vertexShaderFile, std::string _fragmentShaderFile);
+	ShaderInterface(std::string _vertexShaderFile, std::string _fragmentShaderFile, bool _autoRelease);
 	~ShaderInterface(void);
+
+	void init(std::string _vertexShaderFile, std::string _fragmentShaderFile);
 
 	GLuint getProgramId();
 	GLint get_aVertexPosition();
