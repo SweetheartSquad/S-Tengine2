@@ -37,9 +37,11 @@ MainScene::MainScene():
 	cube->mesh->pushTexture2D(tex);
 
 	Transform *t = new Transform();
+	t->translateX(-0.5);
+	t->scale(2, 2, 2);
 
-	cube->addChild(new Entity(Resource::loadMeshFromObj("../assets/cube.vox"),
-		t, new ShaderInterface("../assets/junkdata", true), nullptr));
+	addChild(new Entity(Resource::loadMeshFromObj("../assets/cube.vox"),
+		t, texShader, cube));
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->setShader(texShader, true);
@@ -97,50 +99,7 @@ void MainScene::update(){
 	Scene::update();
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
-		// Toggle fullscreen flag.
-		vox::fullscreen = !vox::fullscreen;
-
-		//get size
-		int w, h;
-		//if(vox::fullscreen){
-		const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-		w = mode->width;
-		h = mode->height;
-
-		std::cout << w << " " << h << std::endl;
-		//}
-
-		if(!vox::fullscreen){
-			w /= 2;
-			h /= 2;
-		}
-
-		// Renew calls to glfwOpenWindowHint.
-		//vox::setGlfwWindowHints();
-
-		// Create the new window.
-		GLFWwindow* window;
-		window = glfwCreateWindow(w, h, "Simple example 2",  vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
-		if(!window){
-			glfwTerminate();
-			exit(EXIT_FAILURE);
-		}
-		vox::initWindow(window);
-
-		glfwDestroyWindow(vox::currentContext);
-
-		glfwMakeContextCurrent(window);
-		vox::currentContext = window;
-
-		for(Entity * e : *children){
-			e->unload();
-		}
-		for(Entity * e : *children){
-			e->reset();
-		}
-
-		GLUtils::checkForError(0,__FILE__,__LINE__);
+		toggleFullScreen();
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
 		cube->transform->rotate(2.f, 0.f, -1.f, 0.f);

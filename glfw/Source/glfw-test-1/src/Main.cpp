@@ -38,7 +38,7 @@ int main(void){
 	int w = mode->width;
 	int	h = mode->height;
 
-	window = glfwCreateWindow(w/2, h/2, "Simple example", nullptr, nullptr);
+	window = glfwCreateWindow(w/2, h/2, "VOX", nullptr, nullptr);
 	if (!window){
 		glfwTerminate();
 		exit(EXIT_FAILURE);

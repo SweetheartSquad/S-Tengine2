@@ -43,6 +43,8 @@ namespace vox
 	void translate(glm::mat4 _translationMatrix);
 	void applyMatrix(glm::mat4 _modelMatrix);
 
+	void setWindowName(std::string _name);
+
 	void calculateDeltaTimeCorrection();
 
 	//Freetype

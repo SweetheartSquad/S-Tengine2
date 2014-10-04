@@ -23,4 +23,5 @@ public:
 	virtual void draw();
 
 	void addChild(Entity * child);
+	void toggleFullScreen();
 };
