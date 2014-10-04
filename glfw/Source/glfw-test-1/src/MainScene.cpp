@@ -32,7 +32,7 @@ MainScene::MainScene():
 
 	cube->mesh->pushTexture2D("../assets/img_cheryl.jpg", 256, 256);
 
-	Transform *t = new Transform();
+	Transform * t = new Transform();
 
 	cube->addChild(new Entity(Resource::loadMeshFromObj("../assets/cube.vox"),
 		t, new ShaderInterface("../assets/junkdata"), nullptr));

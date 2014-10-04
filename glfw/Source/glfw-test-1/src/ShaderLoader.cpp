@@ -81,9 +81,9 @@ GLuint ShaderLoader::compileShader(GLenum _shaderType, const char* _source, int 
 		std::vector<char> errorLog(maxLength+1);
 		glGetShaderInfoLog(shaderId, maxLength, &maxLength, &errorLog[0]);
 
-		//Provide the infolog in whatever manner you deem best.
+		//Print the error log
 		std::cout << "\t";
-		for(int i = 0; i < errorLog.size(); ++i){
+		for(unsigned long int i = 0; i < errorLog.size(); ++i){
 			std::cout << errorLog.at(i);
 		}
 		std::cout << std::endl;

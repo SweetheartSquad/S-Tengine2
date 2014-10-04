@@ -1,6 +1,6 @@
 #include "Vox.h"
 
-std::vector<glm::mat4>* vox::matrixStack = new std::vector<glm::mat4>;
+std::vector<glm::mat4> vox::matrixStack;
 glm::mat4 vox::currentModelMatrix = glm::mat4(1);
 
 double vox::lastTimestamp = 0;
@@ -16,15 +16,15 @@ void vox::setGlfwWindowHints(){
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
-static void keyCallback(GLFWwindow* _window, int _key, int _scancode, int _action, int _mods){
-	Keyboard *keyboard = &Keyboard::getInstance();
+static void keyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods){
+	Keyboard * keyboard = &Keyboard::getInstance();
 	if(_action == GLFW_PRESS){
 		keyboard->keyDownListener(_key);
 	}else if(_action == GLFW_RELEASE){
 		keyboard->keyUpListener(_key);
 	}
 }
-static void mouseButtonCallback(GLFWwindow* _window, int _button, int _action, int _mods){
+static void mouseButtonCallback(GLFWwindow * _window, int _button, int _action, int _mods){
 	Mouse * mouse = &Mouse::getInstance();
 	if(_action == GLFW_PRESS){
 		mouse->mouseDownListener(_button);
@@ -33,7 +33,7 @@ static void mouseButtonCallback(GLFWwindow* _window, int _button, int _action, i
 	}
 }
 static void mousePostionCallback(GLFWwindow *_window, double _x, double _y){
-	Mouse *mouse = &Mouse::getInstance();
+	Mouse * mouse = &Mouse::getInstance();
 	mouse->mousePositionListener(_x, _y);
 }
 void vox::initWindow(GLFWwindow * _w){
@@ -47,10 +47,10 @@ void vox::initWindow(GLFWwindow * _w){
 
 /////////// Matrix Stack Begin //////////////
 void vox::popMatrix(){
-	if(matrixStack->size() > 0){
-		if(matrixStack->size()>0){
-			currentModelMatrix = matrixStack->at(matrixStack->size()-1);
-			matrixStack->pop_back();
+	if(matrixStack.size() > 0){
+		if(matrixStack.size() > 0){
+			currentModelMatrix = matrixStack.at(matrixStack.size() - 1);
+			matrixStack.pop_back();
 		}else{
 			currentModelMatrix = glm::mat4(1);
 			throw;
@@ -62,7 +62,7 @@ void vox::popMatrix(){
 }
 
 void vox::pushMatrix(){
-	matrixStack->push_back(currentModelMatrix);
+	matrixStack.push_back(currentModelMatrix);
 }
 
 glm::mat4 vox::getCurrentMatrix(){
@@ -85,13 +85,16 @@ void vox::applyMatrix(glm::mat4 _modelMatrix){
 	currentModelMatrix = currentModelMatrix * _modelMatrix;
 }
 
+void vox::resetCurrentMatrix(){
+	currentModelMatrix = glm::mat4(1);
+}
 void vox::clearMatrixStack(){
-	matrixStack->clear();
+	matrixStack.clear();
 }
 
 /////////// Delta Time Begin //////////////
 void vox::calculateDeltaTimeCorrection(){
-	double targetFrameDuration = static_cast<double>(1)/FPS;
+	double targetFrameDuration = static_cast<double>(1) / FPS;
 	double time = glfwGetTime();
 	double deltaTime = time - lastTimestamp;
 	deltaTimeCorrection = deltaTime/(targetFrameDuration);
@@ -109,5 +112,4 @@ void vox::initializeFreetype(){
 }
 
 void vox::destruct(){
-	delete matrixStack;
 }

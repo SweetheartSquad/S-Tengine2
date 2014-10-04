@@ -35,26 +35,26 @@ void MeshInterface::load(){
 	if(!loaded){
 		glBindVertexArray(0);
 
-		//_vertex array object (VAO)
+		// Vertex Array Object (VAO)
 		glGenVertexArrays(1, &vaoId);
 		glBindVertexArray(vaoId);
 
-		//_vertex buffer object (VBO)
+		// Vertex Auffer Object (VBO)
 		glGenBuffers(1, &vboId);
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*vertices.size(), vertices.data(), drawMode);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), vertices.data(), drawMode);
 
-		//index buffer object (IBO)
+		// Index Buffer Object (IBO)
 		glGenBuffers(1, &iboId);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*indices.size(), indices.data(), drawMode);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * indices.size(), indices.data(), drawMode);
 
-		//Initialize textures
+		// Initialize textures
 		for (Texture * texture : textures){
 			texture->init();
 		}
 
-		//disable VAO
+		// Disable VAO
 		glBindVertexArray(0);
 		GLUtils::checkForError(true,__FILE__,__LINE__);
 		loaded = true;
@@ -80,14 +80,14 @@ void MeshInterface::unload(){
 
 void MeshInterface::clean(){
 	if(dirty){
-		//_vertex buffer object (VBO)
+		// Vertex Buffer Object (VBO)
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*(vertices.size()), vertices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * (vertices.size()), vertices.data(), GL_STATIC_DRAW);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 
-		//index buffer object (IBO)
+		// Index Buffer Object (IBO)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*(indices.size()), indices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * (indices.size()), indices.data(), GL_STATIC_DRAW);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 		dirty = false;
 	}
@@ -98,18 +98,18 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 		if(glIsBuffer(vboId) == GL_TRUE){
 			if(glIsBuffer(iboId) == GL_TRUE){
 				GLUtils::checkForError(0,__FILE__,__LINE__);
-				//bind VAO
+				// Bind VAO
 				glBindVertexArray(vaoId);
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 
-				//specify shader attributes
+				// Specify shader attributes
 				glUseProgram(shader->getProgramId());
 
-				//Pass the shader the number of textures
+				// Pass the shader the number of textures
 				glUniform1i(glGetUniformLocation(shader->getProgramId(), "numTextures"), textures.size());
 
-				//Bind each texture to the texture sampler array in the frag shader
-				for(int i = 0; i < textures.size(); i++){
+				// Bind each texture to the texture sampler array in the frag shader
+				for(unsigned long int i = 0; i < textures.size(); i++){
 					glUniform1i(glGetUniformLocation(shader->getProgramId(), "textureSampler"), i);
 					glActiveTexture(GL_TEXTURE0 + i);
 					glBindTexture(GL_TEXTURE_2D, textures.at(i)->textureId);
@@ -126,23 +126,23 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 				tLight.data.position = glm::vec3(0.f, 0.f, 1.f);
 				tLight.data.intensities = glm::vec3(1.f, 1.f, 1.f);
 				GLuint lightUniformLocation = glGetUniformLocation(shader->getProgramId(), "light.position");
-				glUniform3f(lightUniformLocation, tLight.data.position.x,  tLight.data.position.y,  tLight.data.position.z);
+				glUniform3f(lightUniformLocation, tLight.data.position.x,  tLight.data.position.y, tLight.data.position.z);
 				GLuint intensitiesUniformLocation = glGetUniformLocation(shader->getProgramId(), "light.intensities");
 				glUniform3f(intensitiesUniformLocation, tLight.data.intensities.x,  tLight.data.intensities.y,  tLight.data.intensities.z);
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 				
-
-				glEnable (GL_BLEND);
-				glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				// Should these be here or only once in the main render loop?
+				glEnable(GL_BLEND);
+				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-				//draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
+				// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
 				glDrawRangeElements(polygonalDrawMode, 0, vertices.size(), indices.size(), GL_UNSIGNED_BYTE, 0);
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 
-				//disable VAO
+				// Disable VAO
 				glBindVertexArray(0);
 			}else{
 				std::cout << "ibo bad" << std::endl << std::endl;
@@ -169,9 +169,9 @@ void MeshInterface::configureVertexAttributes(GLint _vertexHandle, unsigned long
 
 void MeshInterface::configureDefaultVertexAttributes(ShaderInterface *_shader){
 	configureVertexAttributes(_shader->get_aVertexPosition(), 3, 0);
-	configureVertexAttributes(_shader->get_aVertexColor(), 4, sizeof(float)*3);
-	configureVertexAttributes(_shader->get_aVertexNormals(), 3, sizeof(float)*7);
-	configureVertexAttributes(_shader->get_aVertexUVs(), 2, sizeof(float)*10);
+	configureVertexAttributes(_shader->get_aVertexColor(), 4, sizeof(float) * 3);
+	configureVertexAttributes(_shader->get_aVertexNormals(), 3, sizeof(float) * 7);
+	configureVertexAttributes(_shader->get_aVertexUVs(), 2, sizeof(float) * 10);
 }
 
 void MeshInterface::pushVert(Vertex _vertex){

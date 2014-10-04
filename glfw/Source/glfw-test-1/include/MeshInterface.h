@@ -78,7 +78,7 @@ public:
 	void setUV(unsigned long int _vertId, float _x, float _y);
 	// Adds _vertex to the list of vertices
 	void pushVert(Vertex _vertex);
-	void pushTexture2D(const char* _src, int _width, int _height);
+	void pushTexture2D(const char * _src, int _width, int _height);
 };
 
 // MeshInterface preset for triangle meshes

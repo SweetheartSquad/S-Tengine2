@@ -1,91 +1,125 @@
 #pragma once
 
 struct Vertex{
-	float x,y,z;
-	float red,green,blue,alpha;
-	float nx, ny, nz;
-	float u,v;
+	float x, y, z;					// Position
+	float red, green, blue, alpha;	// Colour
+	float nx, ny, nz;				// Normal
+	float u, v;						// Texture UV
+
 	Vertex(float _x, float _y, float _z,
 		float _red, float _green, float _blue, float _alpha,
 		float _normalX, float _normalY, float _normalZ,
-		float _u, float _v){
-			this->x = _x;
-			this->y = _y;
-			this->z = _z;
-			this->red = _red;
-			this->green = _green;
-			this->blue = _blue;
-			this->alpha = _alpha;
-			this->nx = _normalX;
-			this->ny = _normalY;
-			this->nz = _normalZ;
-			this->u = _u;
-			this->v = _v;
+		float _u, float _v) : 
+	x(_x),
+	y(_y),
+	z(_z),
+	red(_red),
+	green(_green),
+	blue(_blue),
+	alpha(_alpha),
+	nx(_normalX),
+	ny(_normalY),
+	nz(_normalZ),
+	u(_u),
+	v(_v)
+	{
 	}
 
 	Vertex(float _x, float _y, float _z,
-		float _red, float _green, float _blue, float _alpha){
-			this->x = _x;
-			this->y = _y;
-			this->z = _z;
-			this->red = _red;
-			this->green = _green;
-			this->blue = _blue;
-			this->alpha = _alpha;
-			this->nx = 0.0f;
-			this->ny = 0.0f;
-			this->nz = 0.0f;
-			this->u = 0.0f;
-			this->v = 0.0f;
+		float _red, float _green, float _blue, float _alpha) : 
+	x(_x),
+	y(_y),
+	z(_z),
+	red(_red),
+	green(_green),
+	blue(_blue),
+	alpha(_alpha),
+	nx(0.f),
+	ny(0.f),
+	nz(0.f),
+	u(0.f),
+	v(0.f)
+	{
 	}
 
-	Vertex(glm::vec3 _vert){
-		this->x = _vert.x;
-		this->y = _vert.y;
-		this->z = _vert.z;
+	Vertex(glm::vec3 _vert) : 
+	x(_vert.x),
+	y(_vert.y),
+	z(_vert.z),
+	red(1.f),
+	green(1.f),
+	blue(1.f),
+	alpha(1.f),
+	nx(0.f),
+	ny(0.f),
+	nz(0.f),
+	u(0.f),
+	v(0.f)
+	{
 	}
 
-	Vertex(glm::vec3 _vert, glm::vec2 _uvs){
-		this->x = _vert.x;
-		this->y = _vert.y;
-		this->z = _vert.z;
-		this->u = _uvs.x;
-		this->v = _uvs.y;
+	Vertex(glm::vec3 _vert, glm::vec2 _uvs) : 
+	x(_vert.x),
+	y(_vert.y),
+	z(_vert.z),
+	red(1.f),
+	green(1.f),
+	blue(1.f),
+	alpha(1.f),
+	nx(0.f),
+	ny(0.f),
+	nz(0.f),
+	u(_uvs.x),
+	v(_uvs.y)
+	{
 	}
 
-	Vertex(glm::vec3 _vert, glm::vec3 _normal){
-		this->x = _vert.x;
-		this->y = _vert.y;
-		this->z = _vert.z;
-		this->nx = _normal.x;
-		this->ny = _normal.y;
-		this->nz = _normal.z;
+	Vertex(glm::vec3 _vert, glm::vec3 _normal) : 
+	x(_vert.x),
+	y(_vert.y),
+	z(_vert.z),
+	red(1.f),
+	green(1.f),
+	blue(1.f),
+	alpha(1.f),
+	nx(_normal.x),
+	ny(_normal.y),
+	nz(_normal.z),
+	u(0.f),
+	v(0.f)
+	{
 	}
 
-	Vertex(glm::vec3 _vert, glm::vec2 _uvs, glm::vec3 _normal){
-		this->x = _vert.x;
-		this->y = _vert.y;
-		this->z = _vert.z;
-		this->u = _uvs.x;
-		this->v = _uvs.y;
-		this->nx = _normal.x;
-		this->ny = _normal.y;
-		this->nz = _normal.z;
+	Vertex(glm::vec3 _vert, glm::vec2 _uvs, glm::vec3 _normal) : 
+	x(_vert.x),
+	y(_vert.y),
+	z(_vert.z),
+	red(1.f),
+	green(1.f),
+	blue(1.f),
+	alpha(1.f),
+	nx(_normal.x),
+	ny(_normal.y),
+	nz(_normal.z),
+	u(_uvs.x),
+	v(_uvs.y)
+	{
 	}
 
-	//will generate random verte_x colours
-	Vertex(float _x, float _y, float _z){
-		this->x = _x;
-		this->y = _y;
-		this->z = _z;
-		this->red = static_cast<float>(std::rand()%255)/255.f;
-		this->green = static_cast<float>(std::rand()%255)/255.f;
-		this->blue = static_cast<float>(std::rand()%255)/255.f;
-		this->alpha = 1.0f;
-		this->nx = 0.0f;
-		this->ny = 0.0f;
-		this->nz = 0.0f;
-		this->u = 0.0f;
-		this->v = 0.0f;
+	// Will generate random vertex colours
+	Vertex(float _x, float _y, float _z) : 
+	x(_x),
+	y(_y),
+	z(_z),
+	red(static_cast<float>(std::rand()%255)/255.f),
+	green(static_cast<float>(std::rand()%255)/255.f),
+	blue(static_cast<float>(std::rand()%255)/255.f),
+	alpha(1.f),
+	nx(0.f),
+	ny(0.f),
+	nz(0.f),
+	u(0.f),
+	v(0.f)
+	{
 	}
 };

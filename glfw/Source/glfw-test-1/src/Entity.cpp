@@ -37,7 +37,7 @@ void Entity::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix){
 void Entity::update(){
 }
 
-void Entity::addChild(Entity* _child){
+void Entity::addChild(Entity * _child){
 	_child->setParent(this);
 	children.push_back(_child);
 
@@ -50,12 +50,12 @@ void Entity::removeChildAtIndex(int _index){
 	transform->children.erase(transform->children.begin()+_index-1);
 }
 
-void Entity::setParent(Entity* _parent){
+void Entity::setParent(Entity * _parent){
 	this->parent = _parent;
 	transform->setParent(_parent->transform);
 }
 
-void Entity::setShader(ShaderInterface* _shader, bool _confiugreDefaultAttributes){
+void Entity::setShader(ShaderInterface * _shader, bool _confiugreDefaultAttributes){
 	shader = _shader;
 	if(_confiugreDefaultAttributes){
 		if(mesh != nullptr){

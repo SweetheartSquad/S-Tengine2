@@ -18,9 +18,9 @@ public:
 	//tracks the changes in mouse position and uses them to rotate the camera
 	void update();
 
-	Mouse * mouse;
+	Mouse * mouse; // Reference to the mouse singleton
 
-	Transform * transform;
+	Transform * transform;			// Reference to the camera's transform node
 
 	glm::vec3 forwardVectorLocal;	// Direction the camera's front would be pointing at if it weren't rotated at all
 	glm::vec3 forwardVectorRotated;	// Direction the camera's front is pointing at (local * orientation)
@@ -29,12 +29,12 @@ public:
 	glm::vec3 rightVectorLocal;		// Direction the camera's right side would be pointing at if it weren't rotated at all
 	glm::vec3 rightVectorRotated;	// Direction the camera's right side is pointing at (local * orientation)
 
-	float fieldOfView;
-	float pitch;
-	float yaw;
+	float fieldOfView;	// The camera's field of view
+	float pitch;		// The camera's pitch
+	float yaw;			// The camera's yaw
 
-	float speed;
-	float mouseSpeed;
+	float speed;		// Movement speed multiplier
+	float mouseSpeed;	// Mouse speed multiplier
 
 	glm::quat lastOrientation;
 

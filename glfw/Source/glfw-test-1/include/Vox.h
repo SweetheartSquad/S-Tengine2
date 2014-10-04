@@ -6,46 +6,59 @@
 
 #include <iostream>
 #include <vector>
+
 #include <glm/glm.hpp>
+
 #include <GLFW/glfw3.h>
-///#include <ft2build.h>
+
+//#include <ft2build.h>
 //#include FT_FREETYPE_H
 
 #include "Keyboard.h"
 #include "Mouse.h"
 
-namespace vox
-{
-	extern std::vector<glm::mat4> *matrixStack;
-	extern glm::mat4 currentModelMatrix;
-	extern double lastTimestamp;
-	extern double deltaTimeCorrection;
+namespace vox{
+	extern std::vector<glm::mat4> matrixStack;		// Model matrix stack (replaces the OpenGL stack)
+	extern glm::mat4 currentModelMatrix;			// Current model matrix
+	extern double lastTimestamp;					// Equal to glfwGetTime() the last time the delta time correction was calculated
+	extern double deltaTimeCorrection;				// Multiply by this to correct for differences in framerate
 
-	extern GLFWwindow * currentContext; //stores a reference to the main window
-	extern bool fullscreen; //whether the main window is fullscreen or not
+	extern GLFWwindow * currentContext;				// Stores a reference to the main window
+	extern bool fullscreen;							// Whether the main window is fullscreen or not
 
-	//Freetype library
+	// Freetype library
 	//extern FT_Library freetypeLibrary;
 
-	//sets the window properties that need to be initialized before window creation
+	// Sets the window properties that need to be initialized before window creation
 	void setGlfwWindowHints();
-	//sets the window properties that need to be initialized after window creation (uses currentContext if null)
+	// Sets the window properties that need to be initialized after window creation (uses currentContext if null)
 	void initWindow(GLFWwindow * _w = nullptr);
 
-	void calculateModelMatrix();
+	//void calculateModelMatrix();
+	// Pushes the current model matrix onto the stack
 	void pushMatrix();
+	// Restores the current model matrix to the last stored value and pops it off the stack
 	void popMatrix();
+	// Returns the value of the current model matrix
 	glm::mat4 getCurrentMatrix();
+	// Sets the calue of the current model matrix to the identity matrix
+	void resetCurrentMatrix();
+	// Clears the model matrix stack
 	void clearMatrixStack();
+	
+	// currentModelMatrix = currentModelMatrix * _scaleMatrix
+	void scale(			glm::mat4 _scaleMatrix);
+	// currentModelMatrix = currentModelMatrix * _rotationMatrix
+	void rotate(		glm::mat4 _rotationMatrix);
+	// currentModelMatrix = currentModelMatrix * _translationMatrix
+	void translate(		glm::mat4 _translationMatrix);
+	// currentModelMatrix = currentModelMatrix * _modelMatrix
+	void applyMatrix(	glm::mat4 _modelMatrix);
 
-	void scale(glm::mat4 _scaleMatrix);
-	void rotate(glm::mat4 _rotationMatrix);
-	void translate(glm::mat4 _translationMatrix);
-	void applyMatrix(glm::mat4 _modelMatrix);
-
+	// Calculates the value with which to correct for differences in framerate
 	void calculateDeltaTimeCorrection();
 
-	//Freetype
+	// Freetype
 	void initializeFreetype();
 
 	void destruct();

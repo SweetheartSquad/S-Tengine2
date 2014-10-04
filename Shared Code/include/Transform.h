@@ -29,15 +29,15 @@ public:
 	// Doesn't do anything (should probably call update on children)
 	virtual void update();
 
-	// Multiples the x, y, and z component of the scale vector by _scaleX, _scaleY, and _scaleZ, respectively
+	// Multiplies the x, y, and z component of the scale vector by _scaleX, _scaleY, and _scaleZ, respectively
 	void scale(float _scaleX, float _scaleY, float _scaleZ);
-	// Multiples the scale vector by _scale
+	// Multiplies the scale vector by _scale
 	void scale(glm::vec3 _scale);
-	// Multiples the x component of the scale vector by _scaleX
+	// Multiplies the x component of the scale vector by _scaleX
 	void scaleX(float _scaleX);
-	// Multiples the y component of the scale vector by _scaleY
+	// Multiplies the y component of the scale vector by _scaleY
 	void scaleY(float _scaleY);
-	// Multiples the z component of the scale vector by _scaleZ
+	// Multiplies the z component of the scale vector by _scaleZ
 	void scaleZ(float _scaleZ);
 	
 	// Adds _translateX, _translateY, and _translateZ to the x, y, and z component of the translation vector, respectively

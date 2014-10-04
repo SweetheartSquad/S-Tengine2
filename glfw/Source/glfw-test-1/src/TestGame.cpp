@@ -8,8 +8,7 @@ TestGame::TestGame(bool _running):
 	currentScene = scenes.at("main_scene");
 }
 
-TestGame::~TestGame()
-{
+TestGame::~TestGame(){
 }
 
 void TestGame::update(){
