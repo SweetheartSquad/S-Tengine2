@@ -56,6 +56,13 @@ namespace vox{
 	void applyMatrix(	glm::mat4 _modelMatrix);
 
 	// Calculates the value with which to correct for differences in framerate
+	void scale(glm::mat4 _scaleMatrix);
+	void rotate(glm::mat4 _rotationMatrix);
+	void translate(glm::mat4 _translationMatrix);
+	void applyMatrix(glm::mat4 _modelMatrix);
+
+	void setWindowName(std::string _name);
+
 	void calculateDeltaTimeCorrection();
 
 	// Freetype

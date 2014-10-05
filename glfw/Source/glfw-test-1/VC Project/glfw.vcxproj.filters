@@ -37,7 +37,7 @@
     <Filter Include="Header Files\input">
       <UniqueIdentifier>{160824dc-2881-44c5-a369-19a38521d0c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\input">
+    <Filter Include="Source Files\TestGame\input">
       <UniqueIdentifier>{92af4ccb-67a0-48ae-a3e0-b9785d71c2f2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -63,12 +63,6 @@
     <ClCompile Include="..\src\RenderSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\ShaderInterface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ShaderLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -79,10 +73,10 @@
       <Filter>Source Files\TestGame</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Keyboard.cpp">
-      <Filter>Source Files\input</Filter>
+      <Filter>Source Files\TestGame\input</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Mouse.cpp">
-      <Filter>Source Files\input</Filter>
+      <Filter>Source Files\TestGame\input</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Camera.cpp">
       <Filter>Source Files</Filter>
@@ -111,6 +105,12 @@
     <ClCompile Include="..\src\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ResourceNode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -129,12 +129,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\RenderSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ShaderInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\ShaderLoader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Scene.h">
@@ -183,6 +177,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ResourceNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

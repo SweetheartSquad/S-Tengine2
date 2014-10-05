@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "Vox.h"
-#include "ShaderInterface.h"
+#include "Shader.h"
 #include "Vertex.h"
 #include "Light.h"
 #include "GLUtils.h"
@@ -21,6 +21,7 @@ public:
 	std::vector<Vertex> vertices; // Vertex data for the vbo
 	std::vector<GLubyte> indices; // Index data for the ibo
 	std::vector<Texture *> textures; // Textures
+
 
 public:
 	GLuint vaoId;	// ID of the vertex array object
@@ -67,18 +68,18 @@ public:
 	// If dirty, copies data from vertices and indices to VBO and IBO and flags as clean
 	void clean();
 	// Renders the vao using the given shader and model-view-projection
-	void render(ShaderInterface *_shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
+	void render(Shader *_shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
 	// Configures shader attributes (?)
 	void configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset);
 	// A helper method to configure all the starndard vertex attributes - Position, Colours, Normals
-	void configureDefaultVertexAttributes(ShaderInterface *_shader);
+	void configureDefaultVertexAttributes(Shader *_shader);
 	// Sets the normal of the given vert to _x, _y, _z
 	void setNormal(unsigned long int _vertId, float _x, float _y, float _z);
 	// Sets the UV of the given vert to _x, _y
 	void setUV(unsigned long int _vertId, float _x, float _y);
 	// Adds _vertex to the list of vertices
 	void pushVert(Vertex _vertex);
-	void pushTexture2D(const char * _src, int _width, int _height);
+	void pushTexture2D(Texture* _texture);
 };
 
 // MeshInterface preset for triangle meshes

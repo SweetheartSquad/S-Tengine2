@@ -2,29 +2,33 @@
 
 #include <iostream>
 
-#include "ShaderLoader.h"
-#include "FileUtils.h"
 #include "GLUtils.h"
+#include "FileUtils.h"
+#include "ResourceNode.h"
 
-class ShaderInterface{
+class Shader : public ResourceNode{
 private:
-	ShaderLoader * shader;	// Reference to the shader loader (why is the loader separate from the interface?)
+
 	GLint aVertexPosition;	// The attribute location of the vertex position in the shader
 	GLint aVertexColor;		// The attribute location of the color position in the shader
 	GLint aVertexNormals;	// The attribute location of the normal position in the shader
 	GLint aVertexUVs;		// The attribute location of the UV position in the shader
+	GLuint programId;
 
 	// Reads the files at the given location/name and compiles them as a vertex shader and a fragment shader
 	void init(std::string _vertexShaderFile, std::string _fragmentShaderFile);
+
 public:
 	std::string vertName;	// Filename of vertex shader
 	std::string fragName;	// Filename of fragment shader
 
 	// Creates shader using "_shaderFile.vert" and "_shaderFile.frag"
-	explicit ShaderInterface(std::string _shaderFile);
-	// Creates shader using "_vertexShaderFile" and "_fragmentShaderFile"
-	ShaderInterface(std::string _vertexShaderFile, std::string _fragmentShaderFile);
-	~ShaderInterface(void);
+	explicit Shader(std::string _shaderFile, bool _autoRelease);
+	//Creates shader using "vertexShaderFile" and "_fragmentShaderFile"
+	Shader(std::string _vertexShaderFile, std::string _fragmentShaderFile, bool _autoRelease);
+	~Shader(void);
+	GLuint compileShader(GLenum _shaderType, const char* _source, int _length);
+
 
 	// Returns the shader's program ID
 	GLuint getProgramId();
@@ -36,4 +40,7 @@ public:
 	GLint get_aVertexNormals();
 	// Returns the attribute location of the vertex UV in the shader
 	GLint get_aVertexUVs();
+
+	void load() override;
+	void unload() override;
 };
