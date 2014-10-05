@@ -6,6 +6,7 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Camera.h"
+#include "Light.h"
 
 class Scene{
 public:
@@ -17,6 +18,7 @@ public:
 
 	Camera * camera;					// Reference to this scene's camera
 	std::vector<Entity *> * children;	// Reference to a list of references to entitites included in this scene
+	std::vector<Light *> * lights;
 
 	// Calls update on the attached camera
 	virtual void update(void);

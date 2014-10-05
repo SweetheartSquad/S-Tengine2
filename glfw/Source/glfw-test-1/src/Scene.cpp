@@ -3,6 +3,7 @@
 Scene::Scene(void):
 	children(new std::vector<Entity *>()),
 	camera(new Camera()),
+	lights(new std::vector<Light *>()),
 
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
@@ -13,6 +14,7 @@ Scene::Scene(void):
 Scene::~Scene(void){
 	delete children;
 	delete camera;
+	delete lights;
 }
 
 void Scene::update(void){
