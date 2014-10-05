@@ -17,6 +17,9 @@ MeshInterface::~MeshInterface(void){
 	glDeleteVertexArrays(1, &vaoId);
 	glDeleteBuffers(1, &vboId);
 	glDeleteBuffers(1, &iboId);
+	for(Texture* t:textures){
+		t->decrementAndDelete();
+	}
 	vaoId = 0;
 	vboId = 0;
 	iboId = 0;
@@ -51,7 +54,7 @@ void MeshInterface::load(){
 
 		// Initialize textures
 		for (Texture * texture : textures){
-			texture->init();
+			texture->load();
 		}
 
 		// Disable VAO
@@ -93,7 +96,7 @@ void MeshInterface::clean(){
 	}
 }
 
-void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
+void MeshInterface::render(Shader * shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 	if(glIsVertexArray(vaoId) == GL_TRUE){
 		if(glIsBuffer(vboId) == GL_TRUE){
 			if(glIsBuffer(iboId) == GL_TRUE){
@@ -113,12 +116,16 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 					glUniform1i(glGetUniformLocation(shader->getProgramId(), "textureSampler"), i);
 					glActiveTexture(GL_TEXTURE0 + i);
 					glBindTexture(GL_TEXTURE_2D, textures.at(i)->textureId);
+					std::cout << textures.at(i)->textureId << std::endl;
 				}
 
+				//Model View Projection
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 				glm::mat4 mvp = projectionMatrix * viewMatrix * vox::currentModelMatrix;
 				GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
 				glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
+
+				//Lighting
 				glm::mat4 model = vox::currentModelMatrix;
 				GLuint modelUniformLocation = glGetUniformLocation(shader->getProgramId(), "model");
 				glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
@@ -131,10 +138,15 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 				glUniform3f(intensitiesUniformLocation, tLight.data.intensities.x,  tLight.data.intensities.y,  tLight.data.intensities.z);
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 				
-				// Should these be here or only once in the main render loop?
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-				
+
+				//Alpha blending
+				// Should these be here or only once in the main render loop?
+				glEnable (GL_BLEND);
+				glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+				//Texture repeat
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
@@ -167,7 +179,7 @@ void MeshInterface::configureVertexAttributes(GLint _vertexHandle, unsigned long
 	}
 }
 
-void MeshInterface::configureDefaultVertexAttributes(ShaderInterface *_shader){
+void MeshInterface::configureDefaultVertexAttributes(Shader *_shader){
 	configureVertexAttributes(_shader->get_aVertexPosition(), 3, 0);
 	configureVertexAttributes(_shader->get_aVertexColor(), 4, sizeof(float) * 3);
 	configureVertexAttributes(_shader->get_aVertexNormals(), 3, sizeof(float) * 7);
@@ -179,9 +191,9 @@ void MeshInterface::pushVert(Vertex _vertex){
 	dirty = true;
 }
 
-void MeshInterface::pushTexture2D(const char* _src, int _width, int _height){
-	// THIS TEXTURE ISN'T GOING TO BE DELETED !!!!!
-	textures.push_back(new Texture(_src, _width, _height, true));
+void MeshInterface::pushTexture2D(Texture* _texture){
+	++_texture->referenceCount;
+	textures.push_back(_texture);
 }
 
 void MeshInterface::setNormal(unsigned long int _vertId, float _x, float _y, float _z){

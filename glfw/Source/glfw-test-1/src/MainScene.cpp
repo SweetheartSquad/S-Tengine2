@@ -7,12 +7,14 @@ Cube * cube3;
 Cube * cube4;
 
 Light glight;
+Texture* tex;
+Shader* texShader;
 
 MainScene::MainScene():
 	Scene()
 {
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
-	cube->setShader(new ShaderInterface("../assets/diffuse"), true);
+	cube->setShader(new Shader("../assets/diffuse", true), true);
 
 	cube->mesh->vertices.pop_back();
 	cube->mesh->vertices.pop_back();
@@ -30,15 +32,20 @@ MainScene::MainScene():
 	cube->mesh->vertices.at(0).y += 1.5;
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
-	cube->mesh->pushTexture2D("../assets/img_cheryl.jpg", 256, 256);
+	texShader = new Shader("../assets/ColourShader", true);
+	tex = new Texture("../assets/img_cheryl.jpg", 256, 256, true, true);
+	cube->mesh->pushTexture2D(tex);
 
-	Transform * t = new Transform();
 
-	cube->addChild(new Entity(Resource::loadMeshFromObj("../assets/cube.vox"),
-		t, new ShaderInterface("../assets/junkdata"), nullptr));
+	Transform *t = new Transform();
+	t->translateX(-0.5);
+	t->scale(2, 2, 2);
+
+	addChild(new Entity(Resource::loadMeshFromObj("../assets/cube.vox"),
+		t, texShader, cube));
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
-	cube2->setShader(new ShaderInterface("../assets/diffuse"), true);
+	cube2->setShader(texShader, true);
 
 	cube2->setFrontColour(1,0,0,1);
 	cube2->setLeftColour(0,1,0,1);
@@ -48,11 +55,12 @@ MainScene::MainScene():
 	cube2->setRightColour(0,1,1,1);
 
 	cube2->transform->translateX(0.5);
+	cube2->mesh->pushTexture2D(tex);
 
 	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
 	cube2->addChild(cube3);
-	cube3->setShader(new ShaderInterface("../assets/ColourShader"), true);
+	cube3->setShader(texShader, true);
 
 	cube3->setFrontColour(0.5,0,0,1);
 	cube3->setLeftColour(0,0.5,0,1);
@@ -63,21 +71,26 @@ MainScene::MainScene():
 
 	cube3->mesh->vertices.at(3).x += 0.5;
 	cube3->transform->translateX(0.5);
-	cube3->mesh->pushTexture2D("../assets/img_cheryl.jpg", 256, 256);
+	cube3->mesh->pushTexture2D(tex);
 
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	addChild(cube);
 	addChild(cube4);
-	cube4->setShader(new ShaderInterface("../assets/diffuse"), true);
+	cube4->setShader(texShader, true);
 
 	cube4->transform->scale(15.0, 15.0, 15.0);
-	//cube4->mesh->pushTexture2D("../assets/img_cheryl.jpg", 256, 256);
-	cube4->mesh->pushTexture2D("../assets/img_test.png", 256, 256);
+	cube4->mesh->pushTexture2D(tex);
 
 	cube->mesh->dirty = true;
 	cube2->mesh->dirty = true;
 	cube3->mesh->dirty = true;
+
+	//delete cube;
+	//delete cube2;
+	//delete cube3;
+
 	cube4->mesh->dirty = true;
+	//delete cube4;
 }
 
 MainScene::~MainScene(){
@@ -87,50 +100,7 @@ void MainScene::update(){
 	Scene::update();
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
-		// Toggle fullscreen flag.
-		vox::fullscreen = !vox::fullscreen;
-
-		//get size
-		int w, h;
-		//if(vox::fullscreen){
-		const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-		w = mode->width;
-		h = mode->height;
-
-		std::cout << w << " " << h << std::endl;
-		//}
-
-		if(!vox::fullscreen){
-			w /= 2;
-			h /= 2;
-		}
-
-		// Renew calls to glfwOpenWindowHint.
-		//vox::setGlfwWindowHints();
-
-		// Create the new window.
-		GLFWwindow* window;
-		window = glfwCreateWindow(w, h, "Simple example 2",  vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
-		if(!window){
-			glfwTerminate();
-			exit(EXIT_FAILURE);
-		}
-		vox::initWindow(window);
-
-		glfwDestroyWindow(vox::currentContext);
-
-		glfwMakeContextCurrent(window);
-		vox::currentContext = window;
-
-		for(Entity * e : *children){
-			e->unload();
-		}
-		for(Entity * e : *children){
-			e->reset();
-		}
-
-		GLUtils::checkForError(0,__FILE__,__LINE__);
+		toggleFullScreen();
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
 		cube->transform->rotate(2.f, 0.f, -1.f, 0.f);

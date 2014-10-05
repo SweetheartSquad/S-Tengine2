@@ -26,4 +26,5 @@ public:
 	virtual void draw();
 	// Adds a reference to an entity to the attached list of children
 	void addChild(Entity * child);
+	void toggleFullScreen();
 };
