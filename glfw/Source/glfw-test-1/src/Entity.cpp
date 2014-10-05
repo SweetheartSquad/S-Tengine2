@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-Entity::Entity(MeshInterface * _mesh, Transform * _transform, ShaderInterface * _shader, Entity * _parent):
+Entity::Entity(MeshInterface * _mesh, Transform * _transform, Shader * _shader, Entity * _parent):
 	mesh(_mesh),
 	transform(_transform),
 	shader(_shader),
@@ -11,8 +11,7 @@ Entity::Entity(MeshInterface * _mesh, Transform * _transform, ShaderInterface * 
 Entity::~Entity(void){
 	delete transform;
 	delete mesh;
-	shader->safeDelete();
-
+	shader->decrementAndDelete();
 	transform = nullptr;
 	mesh = nullptr;
 	shader = nullptr;
@@ -56,7 +55,7 @@ void Entity::setParent(Entity* _parent){
 	transform->setParent(_parent->transform);
 }
 
-void Entity::setShader(ShaderInterface* _shader, bool _confiugreDefaultAttributes){
+void Entity::setShader(Shader * _shader, bool _confiugreDefaultAttributes){
 	shader = _shader;
 	if(_confiugreDefaultAttributes){
 		if(mesh != nullptr){
@@ -71,6 +70,7 @@ void Entity::unload(){
 	}
 
 	mesh->unload();
+	shader->unload();
 }
 
 void Entity::reset(){
@@ -80,11 +80,9 @@ void Entity::reset(){
 
 	mesh->load();
 	mesh->clean();
+	
+	shader->load();
 
 	mesh->configureDefaultVertexAttributes(shader);
 
-	std::string shaderVertSrc = shader->vertName;
-	std::string shaderFragSrc = shader->fragName;
-
-	shader->init(shaderVertSrc, shaderFragSrc);
 }

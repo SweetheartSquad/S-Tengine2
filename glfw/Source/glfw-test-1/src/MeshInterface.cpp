@@ -18,7 +18,7 @@ MeshInterface::~MeshInterface(void){
 	glDeleteBuffers(1, &vboId);
 	glDeleteBuffers(1, &iboId);
 	for(Texture* t:textures){
-		t->dereferenceAndDelete(this);
+		t->decrementAndDelete();
 	}
 	vaoId = 0;
 	vboId = 0;
@@ -96,7 +96,7 @@ void MeshInterface::clean(){
 	}
 }
 
-void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
+void MeshInterface::render(Shader * shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
 	if(glIsVertexArray(vaoId) == GL_TRUE){
 		if(glIsBuffer(vboId) == GL_TRUE){
 			if(glIsBuffer(iboId) == GL_TRUE){
@@ -116,6 +116,7 @@ void MeshInterface::render(ShaderInterface * shader, glm::mat4 projectionMatrix,
 					glUniform1i(glGetUniformLocation(shader->getProgramId(), "textureSampler"), i);
 					glActiveTexture(GL_TEXTURE0 + i);
 					glBindTexture(GL_TEXTURE_2D, textures.at(i)->textureId);
+					std::cout << textures.at(i)->textureId << std::endl;
 				}
 
 				//Model View Projection
@@ -174,7 +175,7 @@ void MeshInterface::configureVertexAttributes(GLint _vertexHandle, unsigned long
 	}
 }
 
-void MeshInterface::configureDefaultVertexAttributes(ShaderInterface *_shader){
+void MeshInterface::configureDefaultVertexAttributes(Shader *_shader){
 	configureVertexAttributes(_shader->get_aVertexPosition(), 3, 0);
 	configureVertexAttributes(_shader->get_aVertexColor(), 4, sizeof(float)*3);
 	configureVertexAttributes(_shader->get_aVertexNormals(), 3, sizeof(float)*7);
@@ -187,7 +188,7 @@ void MeshInterface::pushVert(Vertex _vertex){
 }
 
 void MeshInterface::pushTexture2D(Texture* _texture){
-	_texture->attachReference(this);
+	++_texture->referenceCount;
 	textures.push_back(_texture);
 }
 

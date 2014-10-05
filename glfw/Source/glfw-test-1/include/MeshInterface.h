@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "Vox.h"
-#include "ShaderInterface.h"
+#include "Shader.h"
 #include "Vertex.h"
 #include "Light.h"
 #include "GLUtils.h"
@@ -62,11 +62,11 @@ public:
 	//if dirty, copies data from vertices and indices to VBO and IBO and flags as clean
 	void clean();
 	//renders the vao using the given shader and model-view-projection
-	void render(ShaderInterface *_shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
+	void render(Shader *_shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
 	//configures shader attributes (?)
 	void configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset);
 	//A helper method to configure all the starndard vertex attributes - Position, Colours, Normals
-	void configureDefaultVertexAttributes(ShaderInterface *_shader);
+	void configureDefaultVertexAttributes(Shader *_shader);
 
 	void setNormal(unsigned long int _vertId, float _x, float _y, float _z);
 	void setUV(unsigned long int _vertId, float _x, float _y);

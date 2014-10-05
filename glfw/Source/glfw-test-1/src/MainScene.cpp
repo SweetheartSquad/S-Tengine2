@@ -8,13 +8,13 @@ Cube * cube4;
 
 Light glight;
 Texture* tex;
-ShaderInterface* texShader;
+Shader* texShader;
 
 MainScene::MainScene():
 	Scene()
 {
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
-	cube->setShader(new ShaderInterface("../assets/diffuse", true), true);
+	cube->setShader(new Shader("../assets/diffuse", true), true);
 
 	cube->mesh->vertices.pop_back();
 	cube->mesh->vertices.pop_back();
@@ -32,7 +32,7 @@ MainScene::MainScene():
 	cube->mesh->vertices.at(0).y += 1.5;
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
-	texShader = new ShaderInterface("../assets/ColourShader", true);
+	texShader = new Shader("../assets/ColourShader", true);
 	tex = new Texture("../assets/img_cheryl.jpg", 256, 256, true, true);
 	cube->mesh->pushTexture2D(tex);
 

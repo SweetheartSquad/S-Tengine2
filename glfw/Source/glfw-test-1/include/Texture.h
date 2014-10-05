@@ -3,9 +3,9 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <vector>
-#include "ReferenceManager.h"
+#include "ResourceNode.h"
 
-class Texture : public ReferenceManager
+class Texture : public ResourceNode
 {
 public:
 	Texture(const char* _src, int _width, int _height, bool _storeData, bool _autoRelease);
@@ -28,7 +28,7 @@ public:
 	int* channels;
 	/*Initializes the texture. Can be called to recreate the texture
 	if the context is destroyed*/
-	void load();
+	void load() override;
 	//Destroy the texture objects relation to the opengl context
-	void unload();
+	void unload() override;
 };
