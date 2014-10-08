@@ -91,6 +91,7 @@ void Joint::draw(gl::GlslProg * _shader){
 		Quatd boneDir(Vec3d(0.0, 1.0, 0.0), cinderTrans);
 		gl::pushMatrices();
 			gl::rotate(boneDir);
+
 			gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
 			gl::rotate(Vec3f(0.f, 90.f, 0.f));
 			gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
