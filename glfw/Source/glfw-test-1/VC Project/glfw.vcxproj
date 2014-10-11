@@ -123,7 +123,6 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="..\src\MainScene.cpp" />
     <ClCompile Include="..\src\Mouse.cpp" />
-    <ClCompile Include="..\src\RenderSystem.cpp" />
     <ClCompile Include="..\src\Resource.cpp" />
     <ClCompile Include="..\src\ResourceNode.cpp" />
     <ClCompile Include="..\src\Scene.cpp" />
@@ -152,7 +151,6 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\System.h" />
     <ClInclude Include="..\include\TestGame.h" />
     <ClInclude Include="..\include\MainScene.h" />
-    <ClInclude Include="..\include\RenderSystem.h" />
     <ClInclude Include="..\include\Scene.h" />
     <ClInclude Include="..\include\Shader.h" />
     <ClInclude Include="..\include\Texture.h" />

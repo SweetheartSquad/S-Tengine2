@@ -96,7 +96,7 @@ void MeshInterface::clean(){
 	}
 }
 
-void MeshInterface::render(Shader * shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
+void MeshInterface::render(Shader * shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix, std::vector<Light*> _lights){
 	if(glIsVertexArray(vaoId) == GL_TRUE){
 		if(glIsBuffer(vboId) == GL_TRUE){
 			if(glIsBuffer(iboId) == GL_TRUE){
@@ -116,7 +116,6 @@ void MeshInterface::render(Shader * shader, glm::mat4 projectionMatrix, glm::mat
 					glUniform1i(glGetUniformLocation(shader->getProgramId(), "textureSampler"), i);
 					glActiveTexture(GL_TEXTURE0 + i);
 					glBindTexture(GL_TEXTURE_2D, textures.at(i)->textureId);
-					std::cout << textures.at(i)->textureId << std::endl;
 				}
 
 				//Model View Projection
@@ -129,15 +128,20 @@ void MeshInterface::render(Shader * shader, glm::mat4 projectionMatrix, glm::mat
 				glm::mat4 model = vox::currentModelMatrix;
 				GLuint modelUniformLocation = glGetUniformLocation(shader->getProgramId(), "model");
 				glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
-				Light tLight;
-				tLight.data.position = glm::vec3(0.f, 0.f, 1.f);
-				tLight.data.intensities = glm::vec3(1.f, 1.f, 1.f);
-				GLuint lightUniformLocation = glGetUniformLocation(shader->getProgramId(), "light.position");
-				glUniform3f(lightUniformLocation, tLight.data.position.x,  tLight.data.position.y, tLight.data.position.z);
-				GLuint intensitiesUniformLocation = glGetUniformLocation(shader->getProgramId(), "light.intensities");
-				glUniform3f(intensitiesUniformLocation, tLight.data.intensities.x,  tLight.data.intensities.y,  tLight.data.intensities.z);
-				GLUtils::checkForError(0,__FILE__,__LINE__);
-				
+
+				// Pass the shader the number of lights
+				glUniform1i(glGetUniformLocation(shader->getProgramId(), "numLights"), _lights.size());
+
+				//Pass the paramaters for each light to the shader
+				for(unsigned long int i = 0; i < _lights.size(); i++){
+					std::string lightPosition = std::string("lights[") + std::to_string(i) + std::string("].position");
+					GLuint lightUniformLocation = glGetUniformLocation(shader->getProgramId(), lightPosition.c_str());
+					glUniform3f(lightUniformLocation, _lights.at(i)->data.position.x, _lights.at(i)->data.position.y, _lights.at(i)->data.position.z);
+					std::string lightIntensity = std::string("lights[") + std::to_string(i) + std::string("].intensities");
+					GLuint intensitiesUniformLocation = glGetUniformLocation(shader->getProgramId(), lightIntensity.c_str());
+					glUniform3f(intensitiesUniformLocation, _lights.at(i)->data.intensities.x, _lights.at(i)->data.intensities.y, _lights.at(i)->data.intensities.z);
+				}
+
 				glEnable(GL_BLEND);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 

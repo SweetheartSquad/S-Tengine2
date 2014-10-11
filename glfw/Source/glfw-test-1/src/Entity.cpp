@@ -17,17 +17,17 @@ Entity::~Entity(void){
 	shader = nullptr;
 }
 
-void Entity::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix){
+void Entity::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
 	//push transform
 	vox::pushMatrix();
 	vox::applyMatrix(transform->getModelMatrix());
 
 	mesh->load();
 	mesh->clean();
-	mesh->render(shader, _projectionMatrix, _viewMatrix);
+	mesh->render(shader, _projectionMatrix, _viewMatrix, _lights);
 
 	for(Entity * child : children){
-		child->draw(_projectionMatrix, _viewMatrix);
+		child->draw(_projectionMatrix, _viewMatrix, _lights);
 	}
 
 	//pop transform
@@ -80,9 +80,8 @@ void Entity::reset(){
 
 	mesh->load();
 	mesh->clean();
-	
+
 	shader->load();
 
 	mesh->configureDefaultVertexAttributes(shader);
-
 }

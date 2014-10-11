@@ -25,10 +25,10 @@ public:
 	Applies the model matrix of transform,
 	Loads and cleans mesh (if necessary),
 	Renders mesh,
-	Calls draw on children (recursive),
+	Calls render on children (recursive),
 	Pops model matrix stack
 	*/
-	virtual void draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
+	virtual void draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights);
 	// Doesn't do anything by default
 	virtual void update();
 

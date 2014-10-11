@@ -24,7 +24,7 @@ public:
 	Transform();
 	virtual ~Transform();
 
-	// Calls draw on children (recursive) (why does a transform node need a draw method?)
+	// Calls render on children (recursive) (why does a transform node need a render method?)
 	virtual void draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
 	// Doesn't do anything (should probably call update on children)
 	virtual void update();

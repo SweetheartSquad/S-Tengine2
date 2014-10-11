@@ -22,7 +22,6 @@ public:
 	std::vector<GLubyte> indices; // Index data for the ibo
 	std::vector<Texture *> textures; // Textures
 
-
 public:
 	GLuint vaoId;	// ID of the vertex array object
 	GLuint vboId;	// ID of the vertex buffer object
@@ -35,7 +34,7 @@ public:
 	*/
 	GLenum drawMode;
 
-	/* OpenGL draw mode; possible values:
+	/* OpenGL render mode; possible values:
 	GL_POINTS - draws points (1, 2, 3, ...)
 	GL_LINES - draws individual line segments (1-2, 3-4, 5-6, ...)
 	GL_LINE_STRIP - draws connected line segments (1-2, 2-3, 3-4, ...)
@@ -67,8 +66,8 @@ public:
 	void unload();
 	// If dirty, copies data from vertices and indices to VBO and IBO and flags as clean
 	void clean();
-	// Renders the vao using the given shader and model-view-projection
-	void render(Shader *_shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
+	// Renders the vao using the given shader, model-view-projection and lights
+	void render(Shader *_shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*>);
 	// Configures shader attributes (?)
 	void configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset);
 	// A helper method to configure all the starndard vertex attributes - Position, Colours, Normals

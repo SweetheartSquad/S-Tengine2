@@ -36,7 +36,6 @@ MainScene::MainScene():
 	tex = new Texture("../assets/img_cheryl.jpg", 256, 256, true, true);
 	cube->mesh->pushTexture2D(tex);
 
-
 	Transform *t = new Transform();
 	t->translateX(-0.5);
 	t->scale(2, 2, 2);
@@ -91,6 +90,12 @@ MainScene::MainScene():
 
 	cube4->mesh->dirty = true;
 	//delete cube4;
+
+	Light *tLight = new Light();
+	tLight->data.position = glm::vec3(0.f, 0.f, 1.f);
+	tLight->data.intensities = glm::vec3(1.f, 1.f, 1.f);
+
+	lights.push_back(tLight);
 }
 
 MainScene::~MainScene(){
@@ -150,6 +155,6 @@ void MainScene::update(){
 	}
 }
 
-void MainScene::draw(){
-	Scene::draw();
+void MainScene::render(){
+	Scene::render();
 }

@@ -1,10 +1,7 @@
 #include "Scene.h"
 
 Scene::Scene(void):
-	children(new std::vector<Entity *>()),
 	camera(new Camera()),
-	lights(new std::vector<Light *>()),
-
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance())
@@ -12,21 +9,37 @@ Scene::Scene(void):
 }
 
 Scene::~Scene(void){
-	delete children;
 	delete camera;
-	delete lights;
 }
 
 void Scene::update(void){
 	camera->update();
 }
 
-void Scene::draw(){
-	RenderSystem::render(vox::currentContext, children, camera->getProjectionMatrix(), camera->getViewMatrix());
+void Scene::render(){
+	glfwMakeContextCurrent(glfwGetCurrentContext());
+	float ratio;
+	int width, height;
+	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+	ratio = width / static_cast<float>(height);
+	glViewport(0, 0, width, height);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+
+	//Back-face culling
+	//glEnable (GL_CULL_FACE); // cull face
+	//glCullFace (GL_BACK); // cull back face
+
+	glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
+
+	for(Entity * e : children){
+		e->draw(camera->getProjectionMatrix(), camera->getViewMatrix(), lights);
+	}
+	GLUtils::checkForError(0,__FILE__,__LINE__);
 }
 
 void Scene::addChild(Entity* _child){
-	children->push_back(_child);
+	children.push_back(_child);
 }
 
 void Scene::toggleFullScreen(){
@@ -53,16 +66,14 @@ void Scene::toggleFullScreen(){
 		exit(EXIT_FAILURE);
 	}
 	vox::initWindow(window);
-
 	glfwDestroyWindow(vox::currentContext);
-
 	glfwMakeContextCurrent(window);
 	vox::currentContext = window;
 
-	for(Entity * e : *children){
+	for(Entity * e : children){
 		e->unload();
 	}
-	for(Entity * e : *children){
+	for(Entity * e : children){
 		e->reset();
 	}
 

@@ -11,5 +11,5 @@ public:
 	MainScene();
 	~MainScene();
 	void update() override;
-	void draw() override;
+	void render() override;
 };

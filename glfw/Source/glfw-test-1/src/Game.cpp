@@ -28,7 +28,7 @@ void Game::update(void){
 }
 
 void Game::draw(void){
-	currentScene->draw();
+	currentScene->render();
 }
 
 void Game::manageInput(){

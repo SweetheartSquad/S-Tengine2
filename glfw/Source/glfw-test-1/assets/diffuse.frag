@@ -5,7 +5,10 @@ uniform mat4 model;
 uniform struct Light{
 	vec3 position;
 	vec3 intensities;
-} light;
+};
+
+uniform Light lights[50];
+uniform int numLights;
 
 in vec3 fragVert;
 in vec3 fragNormal;
@@ -20,10 +23,16 @@ void main()
 
 	vec3 fragWorldPosition = vec3(model * vec4(fragVert, 1));
 
-	vec3 surfaceToLight = light.position -fragWorldPosition;
+	float brightness;
+	vec3 outIntensities;
 
-	float brightness = dot(normal, surfaceToLight) / (length(surfaceToLight) * length(normal));
+	for(int i = 0; i < numLights; i++){
+		vec3 surfaceToLight = lights[i].position -fragWorldPosition;
+		brightness += dot(normal, surfaceToLight) / (length(surfaceToLight) * length(normal));
+		outIntensities += vec3(lights[i].intensities);
+	}
+	
 	brightness = clamp(brightness, 0, 1);
-   
-	outColor = vec4(brightness * vec3(light.intensities), 1) * fragColor;
+ 
+	outColor = vec4(brightness * vec3(outIntensities), 1) * fragColor;
 }
