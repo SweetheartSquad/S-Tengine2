@@ -51,7 +51,7 @@ void main()
 		outIntensities += vec3(lights[i].intensities);
 	}
 	
-	brightness = clamp(brightness, 0, 1);
+	brightness = clamp(brightness, 0.1, 1);
  
 	outColor = vec4(brightness * vec3(outIntensities), 1) * fragColorTex;
 }

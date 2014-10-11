@@ -23,7 +23,6 @@ static void setMousePostionCallback(GLFWwindow *_window, double _x, double _y){
 	Mouse *mouse = &Mouse::getInstance();
 	mouse->mousePositionListener(_x, _y);
 }
-
 int main(void){
 	vox::setGlfwWindowHints();
 

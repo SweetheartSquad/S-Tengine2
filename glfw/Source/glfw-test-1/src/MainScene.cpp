@@ -38,11 +38,13 @@ MainScene::MainScene():
 	tex = new Texture("../assets/img_cheryl.jpg", 256, 256, true, true);
 
 	Transform *t = new Transform();
-	t->translateX(-0.5);
+	t->translateX(-2);
 	t->scale(2, 2, 2);
 
-	addChild(new Entity(Resource::loadMeshFromObj("../assets/cube.vox"),
-		t, texShader, cube));
+	Entity * loaded = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, texShader, cube);
+	loaded->mesh->pushTexture2D(tex);
+
+	addChild(loaded);
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->setShader(texShader, true);
@@ -98,7 +100,7 @@ MainScene::MainScene():
 
 	Light *tLight2 = new Light();
 	tLight2->data.position = glm::vec3(1.f, 1.f, 1.f);
-	tLight2->data.intensities = glm::vec3(1.f, 1.f, 1.f);
+	tLight2->data.intensities = glm::vec3(3.f, 3.f, 3.f);
 
 	lights.push_back(tLight);
 	lights.push_back(tLight2);
