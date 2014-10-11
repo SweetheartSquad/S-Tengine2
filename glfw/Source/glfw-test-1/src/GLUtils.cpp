@@ -1,4 +1,5 @@
 #include "GLUtils.h"
+#include <string>
 
 // check OpenGL error
 void GLUtils::checkForError(bool _printSuccess = false, std::string _file = "", int _line = 0){
@@ -19,4 +20,21 @@ void GLUtils::checkForError(bool _printSuccess = false, std::string _file = "", 
 			//std::cout << glewGetErrorString(err) << std::endl;
 		}
 	}
+}
+
+const char * GLUtils::buildGLArryReferenceString(std::string _value, unsigned long int _index){
+	std::string r;
+	int i = 0;
+	for(char c : _value){
+		if(c != ']'){
+			r += c;
+			++i;
+		}else{
+			r += std::to_string(_index);
+			r += _value.substr(i, _value.size() - 1);
+			break;
+		}
+	}
+	char * rc = new char[r.length()];
+	return strcpy(rc, r.c_str());
 }

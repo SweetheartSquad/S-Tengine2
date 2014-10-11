@@ -45,7 +45,7 @@ namespace vox{
 	void resetCurrentMatrix();
 	// Clears the model matrix stack
 	void clearMatrixStack();
-	
+
 	// currentModelMatrix = currentModelMatrix * _scaleMatrix
 	void scale(			glm::mat4 _scaleMatrix);
 	// currentModelMatrix = currentModelMatrix * _rotationMatrix

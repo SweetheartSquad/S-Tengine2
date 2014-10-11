@@ -134,11 +134,11 @@ void MeshInterface::render(Shader * shader, glm::mat4 projectionMatrix, glm::mat
 
 				//Pass the paramaters for each light to the shader
 				for(unsigned long int i = 0; i < _lights.size(); i++){
-					std::string lightPosition = std::string("lights[") + std::to_string(i) + std::string("].position");
-					GLuint lightUniformLocation = glGetUniformLocation(shader->getProgramId(), lightPosition.c_str());
+					const char * pos = GLUtils::buildGLArryReferenceString("lights[].position", i);
+					const char * ins = GLUtils::buildGLArryReferenceString("lights[].intensities", i);
+					GLuint lightUniformLocation = glGetUniformLocation(shader->getProgramId(), pos);
 					glUniform3f(lightUniformLocation, _lights.at(i)->data.position.x, _lights.at(i)->data.position.y, _lights.at(i)->data.position.z);
-					std::string lightIntensity = std::string("lights[") + std::to_string(i) + std::string("].intensities");
-					GLuint intensitiesUniformLocation = glGetUniformLocation(shader->getProgramId(), lightIntensity.c_str());
+					GLuint intensitiesUniformLocation = glGetUniformLocation(shader->getProgramId(), ins);
 					glUniform3f(intensitiesUniformLocation, _lights.at(i)->data.intensities.x, _lights.at(i)->data.intensities.y, _lights.at(i)->data.intensities.z);
 				}
 

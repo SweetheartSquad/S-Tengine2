@@ -1,4 +1,5 @@
 #include "Vox.h"
+#include <string>
 
 std::vector<glm::mat4> vox::matrixStack;
 glm::mat4 vox::currentModelMatrix = glm::mat4(1);

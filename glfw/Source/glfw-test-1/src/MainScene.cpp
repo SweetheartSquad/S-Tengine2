@@ -95,7 +95,7 @@ MainScene::MainScene():
 	//delete cube4;
 
 	tLight = new Light();
-	tLight->data.position = glm::vec3(0.f, 0.f, 1.f);
+	tLight->data.position = glm::vec3(1.f, 1.f, 1.f);
 	tLight->data.intensities = glm::vec3(1.f, 1.f, 1.f);
 
 	Light *tLight2 = new Light();
@@ -103,7 +103,7 @@ MainScene::MainScene():
 	tLight2->data.intensities = glm::vec3(3.f, 3.f, 3.f);
 
 	lights.push_back(tLight);
-	lights.push_back(tLight2);
+	//lights.push_back(tLight2);
 }
 
 MainScene::~MainScene(){
@@ -112,7 +112,7 @@ MainScene::~MainScene(){
 void MainScene::update(){
 	Scene::update();
 
-	//tLight->data.position.y += 0.01;
+	tLight->data.position = camera->transform->translationVector;
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		toggleFullScreen();

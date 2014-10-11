@@ -34,7 +34,7 @@ public:
 	*/
 	GLenum drawMode;
 
-	/* OpenGL render mode; possible values:
+	/** OpenGL render mode; possible values:
 	GL_POINTS - draws points (1, 2, 3, ...)
 	GL_LINES - draws individual line segments (1-2, 3-4, 5-6, ...)
 	GL_LINE_STRIP - draws connected line segments (1-2, 2-3, 3-4, ...)
@@ -45,7 +45,7 @@ public:
 	GL_QUADS - draws individual qauds (1-2-3-4, 5-6-7-8, 9-10-11-12, ...)
 	GL_QUAD_STRIP - draws quad sequences (1-2-4-3, 3-4-6-5, 5-6-8-7, ...)
 	GL_POLYGON - draws single n-gon (1-2-3-...-n)
-	*/
+	**/
 	GLenum polygonalDrawMode;
 
 	// Returns vertices.size()
