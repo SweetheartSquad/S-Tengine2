@@ -10,6 +10,8 @@ Light glight;
 Texture* tex;
 Shader* texShader;
 
+Light *tLight;
+
 MainScene::MainScene():
 	Scene()
 {
@@ -32,9 +34,8 @@ MainScene::MainScene():
 	cube->mesh->vertices.at(0).y += 1.5;
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
-	texShader = new Shader("../assets/ColourShader", true);
+	texShader = new Shader("../assets/diffuse", true);
 	tex = new Texture("../assets/img_cheryl.jpg", 256, 256, true, true);
-	cube->mesh->pushTexture2D(tex);
 
 	Transform *t = new Transform();
 	t->translateX(-0.5);
@@ -91,11 +92,16 @@ MainScene::MainScene():
 	cube4->mesh->dirty = true;
 	//delete cube4;
 
-	Light *tLight = new Light();
+	tLight = new Light();
 	tLight->data.position = glm::vec3(0.f, 0.f, 1.f);
 	tLight->data.intensities = glm::vec3(1.f, 1.f, 1.f);
 
+	Light *tLight2 = new Light();
+	tLight2->data.position = glm::vec3(1.f, 1.f, 1.f);
+	tLight2->data.intensities = glm::vec3(1.f, 1.f, 1.f);
+
 	lights.push_back(tLight);
+	lights.push_back(tLight2);
 }
 
 MainScene::~MainScene(){
@@ -103,6 +109,8 @@ MainScene::~MainScene(){
 
 void MainScene::update(){
 	Scene::update();
+
+	//tLight->data.position.y += 0.01;
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		toggleFullScreen();
