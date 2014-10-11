@@ -53,6 +53,10 @@ public:
 	// Returns sizeof(Vertex)
 	GLsizei getStride();
 
+	bool shouldRenderLights;
+	bool shouldRenderTextures;
+	bool shouldRenderExtras;
+
 	/*
 	_polygonalDrawMode: STATIC, STREAM, DYNAMIC
 	_drawMode: GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS, GL_QUAD_STRIP, GL_POLYGON
@@ -67,16 +71,26 @@ public:
 	// If dirty, copies data from vertices and indices to VBO and IBO and flags as clean
 	void clean();
 	// Renders the vao using the given shader, model-view-projection and lights
-	void render(Shader *_shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*>);
+	void render(Shader *_shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights);
+	/** Called render loop. Reders the textures for the mesh*/
+	virtual void renderTextures(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights);
+	/** Called render loop. Sets up the lights in the shader*/
+	virtual void renderLights(Shader * _shader, glm::mat4 projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights);
+	/**
+	* Called render loop. Doesn't do anything in the base implementation of MeshInterface
+	* This method can be overriden with any additional render logic. This prevents
+	* the need for overriding the entire render loop
+	*/
+	virtual void renderExtras(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights);
 	// Configures shader attributes (?)
 	void configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset);
-	// A helper method to configure all the starndard vertex attributes - Position, Colours, Normals
+	/** A helper method to configure all the starndard vertex attributes - Position, Colours, Normals */
 	void configureDefaultVertexAttributes(Shader *_shader);
-	// Sets the normal of the given vert to _x, _y, _z
+	/** Sets the normal of the given vert to _x, _y, _z */
 	void setNormal(unsigned long int _vertId, float _x, float _y, float _z);
-	// Sets the UV of the given vert to _x, _y
+	/** Sets the UV of the given vert to _x, _y */
 	void setUV(unsigned long int _vertId, float _x, float _y);
-	// Adds _vertex to the list of vertices
+	/** Adds _vertex to the list of vertices*/
 	void pushVert(Vertex _vertex);
 	void pushTexture2D(Texture* _texture);
 };

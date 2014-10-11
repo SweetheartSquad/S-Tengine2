@@ -7,7 +7,10 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	drawMode(drawMode),
 	polygonalDrawMode(polygonalDrawMode),
 	loaded(false),
-	dirty(true)
+	dirty(true),
+	shouldRenderLights(true),
+	shouldRenderTextures(true),
+	shouldRenderExtras(true)
 {
 	load();
 	clean();
@@ -96,7 +99,7 @@ void MeshInterface::clean(){
 	}
 }
 
-void MeshInterface::render(Shader * shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix, std::vector<Light*> _lights){
+void MeshInterface::render(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
 	if(glIsVertexArray(vaoId) == GL_TRUE){
 		if(glIsBuffer(vboId) == GL_TRUE){
 			if(glIsBuffer(iboId) == GL_TRUE){
@@ -105,41 +108,23 @@ void MeshInterface::render(Shader * shader, glm::mat4 projectionMatrix, glm::mat
 				glBindVertexArray(vaoId);
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 
-				// Specify shader attributes
-				glUseProgram(shader->getProgramId());
-
-				// Pass the shader the number of textures
-				glUniform1i(glGetUniformLocation(shader->getProgramId(), "numTextures"), textures.size());
-
-				// Bind each texture to the texture sampler array in the frag shader
-				for(unsigned long int i = 0; i < textures.size(); i++){
-					glUniform1i(glGetUniformLocation(shader->getProgramId(), "textureSampler"), i);
-					glActiveTexture(GL_TEXTURE0 + i);
-					glBindTexture(GL_TEXTURE_2D, textures.at(i)->textureId);
-				}
+				// Specify _shader attributes
+				glUseProgram(_shader->getProgramId());
 
 				//Model View Projection
 				GLUtils::checkForError(0,__FILE__,__LINE__);
-				glm::mat4 mvp = projectionMatrix * viewMatrix * vox::currentModelMatrix;
-				GLuint mvpUniformLocation = glGetUniformLocation(shader->getProgramId(), "MVP");
+				glm::mat4 mvp = _projectionMatrix * _viewMatrix * vox::currentModelMatrix;
+				GLuint mvpUniformLocation = glGetUniformLocation(_shader->getProgramId(), "MVP");
 				glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
 
-				//Lighting
-				glm::mat4 model = vox::currentModelMatrix;
-				GLuint modelUniformLocation = glGetUniformLocation(shader->getProgramId(), "model");
-				glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
-
-				// Pass the shader the number of lights
-				glUniform1i(glGetUniformLocation(shader->getProgramId(), "numLights"), _lights.size());
-
-				//Pass the paramaters for each light to the shader
-				for(unsigned long int i = 0; i < _lights.size(); i++){
-					const char * pos = GLUtils::buildGLArryReferenceString("lights[].position", i);
-					const char * ins = GLUtils::buildGLArryReferenceString("lights[].intensities", i);
-					GLuint lightUniformLocation = glGetUniformLocation(shader->getProgramId(), pos);
-					glUniform3f(lightUniformLocation, _lights.at(i)->data.position.x, _lights.at(i)->data.position.y, _lights.at(i)->data.position.z);
-					GLuint intensitiesUniformLocation = glGetUniformLocation(shader->getProgramId(), ins);
-					glUniform3f(intensitiesUniformLocation, _lights.at(i)->data.intensities.x, _lights.at(i)->data.intensities.y, _lights.at(i)->data.intensities.z);
+				if(shouldRenderTextures){
+					renderTextures(_shader, _projectionMatrix, _viewMatrix, _lights);
+				}
+				if(shouldRenderLights){
+					renderLights(_shader, _projectionMatrix, _viewMatrix, _lights);
+				}
+				if(shouldRenderExtras){
+					renderExtras(_shader, _projectionMatrix, _viewMatrix, _lights);
 				}
 
 				glEnable(GL_BLEND);
@@ -169,6 +154,40 @@ void MeshInterface::render(Shader * shader, glm::mat4 projectionMatrix, glm::mat
 	}else{
 		std::cout << "vao bad" << std::endl << std::endl;
 	}
+}
+
+void MeshInterface::renderTextures(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
+	// Pass the _shader the number of textures
+	glUniform1i(glGetUniformLocation(_shader->getProgramId(), "numTextures"), textures.size());
+
+	// Bind each texture to the texture sampler array in the frag _shader
+	for(unsigned long int i = 0; i < textures.size(); i++){
+		glUniform1i(glGetUniformLocation(_shader->getProgramId(), "textureSampler"), i);
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, textures.at(i)->textureId);
+	}
+}
+
+void MeshInterface::renderLights(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
+	glm::mat4 model = vox::currentModelMatrix;
+	GLuint modelUniformLocation = glGetUniformLocation(_shader->getProgramId(), "model");
+	glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
+
+	// Pass the _shader the number of lights
+	glUniform1i(glGetUniformLocation(_shader->getProgramId(), "numLights"), _lights.size());
+
+	//Pass the paramaters for each light to the _shader
+	for(unsigned long int i = 0; i < _lights.size(); i++){
+		const char * pos = GLUtils::buildGLArryReferenceString("lights[].position", i);
+		const char * ins = GLUtils::buildGLArryReferenceString("lights[].intensities", i);
+		GLuint lightUniformLocation = glGetUniformLocation(_shader->getProgramId(), pos);
+		glUniform3f(lightUniformLocation, _lights.at(i)->data.position.x, _lights.at(i)->data.position.y, _lights.at(i)->data.position.z);
+		GLuint intensitiesUniformLocation = glGetUniformLocation(_shader->getProgramId(), ins);
+		glUniform3f(intensitiesUniformLocation, _lights.at(i)->data.intensities.x, _lights.at(i)->data.intensities.y, _lights.at(i)->data.intensities.z);
+	}
+}
+
+void MeshInterface::renderExtras(Shader * shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix, std::vector<Light*> _lights){
 }
 
 void MeshInterface::configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset){
