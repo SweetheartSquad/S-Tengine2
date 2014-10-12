@@ -109,8 +109,6 @@ TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
 		}
 	}
 
-	int i = 0;
-
 	for(Face face : faces){
 		Vertex v1(verts.at(face.f1Vert - 1));
 		Vertex v2(verts.at(face.f2Vert - 1));

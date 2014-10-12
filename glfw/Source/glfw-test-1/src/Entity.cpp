@@ -6,6 +6,9 @@ Entity::Entity(MeshInterface * _mesh, Transform * _transform, Shader * _shader, 
 	shader(_shader),
 	parent(_parent)
 {
+	if(mesh != nullptr && shader != nullptr){
+		reset();
+	}
 }
 
 Entity::~Entity(void){
