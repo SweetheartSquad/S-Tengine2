@@ -19,7 +19,7 @@ public:
 	bool loaded;	// Whether the vao, vbo, and ibo have been generated and initialized
 	bool dirty;		// Whether the vbo and ibo contain up-to-date vertex and index data
 	std::vector<Vertex> vertices; // Vertex data for the vbo
-	std::vector<GLubyte> indices; // Index data for the ibo
+	std::vector<GLuint> indices; // Index data for the ibo
 	std::vector<Texture *> textures; // Textures
 
 public:
@@ -98,13 +98,13 @@ public:
 // MeshInterface preset for triangle meshes
 class TriMesh : public MeshInterface{
 public:
-	void pushTri(GLubyte _v0, GLubyte _v1, GLubyte _v2);
+	void pushTri(GLuint _v0, GLuint _v1, GLuint _v2);
 	TriMesh(GLenum _polygonalDrawMode, GLenum _drawMode = GL_TRIANGLES):MeshInterface(_polygonalDrawMode, _drawMode){};
 };
 
 // MeshInterface preset for quad meshes
 class QuadMesh : public MeshInterface{
 public:
-	void pushQuad(GLubyte _v0, GLubyte _v1, GLubyte _v2, GLubyte _v3);
+	void pushQuad(GLuint _v0, GLuint _v1, GLuint _v2, GLuint _v3);
 	QuadMesh(GLenum _polygonalDrawMode, GLenum _drawMode = GL_QUADS):MeshInterface(_polygonalDrawMode, _drawMode){};
 };

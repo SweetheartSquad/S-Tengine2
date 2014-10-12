@@ -51,15 +51,15 @@ TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
 		std::string lineIdStr(lineId);
 		if(lineIdStr.compare("v") == 0){
 			glm::vec3 tempVert(1);
-			sscanf(line.c_str(), "%*s%f %f %f", &tempVert.x, &tempVert.y, &tempVert.z);
+			sscanf(line.c_str(), "%*s %f %f %f", &tempVert.x, &tempVert.y, &tempVert.z);
 			verts.push_back(tempVert);
 		}else if(lineIdStr.compare("vn") == 0){
 			glm::vec3 tempNorm(1);
-			sscanf(line.c_str(), "%*s%f %f %f", &tempNorm.x, &tempNorm.y, &tempNorm.z);
+			sscanf(line.c_str(), "%*s %f %f %f", &tempNorm.x, &tempNorm.y, &tempNorm.z);
 			normals.push_back(tempNorm);
 		}else if(lineIdStr.compare("vt") == 0){
 			glm::vec2 tempUv(1);
-			sscanf(line.c_str(), "%*s%f %f", &tempUv.x, &tempUv.y);
+			sscanf(line.c_str(), "%*s %f %f", &tempUv.x, &tempUv.y);
 			uvs.push_back(tempUv);
 		}else if(lineIdStr.compare("f") == 0){
 			if(!faceFormatChecked){
@@ -109,16 +109,12 @@ TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
 		}
 	}
 
+	int i = 0;
+
 	for(Face face : faces){
 		Vertex v1(verts.at(face.f1Vert - 1));
 		Vertex v2(verts.at(face.f2Vert - 1));
 		Vertex v3(verts.at(face.f3Vert - 1));
-		v1.alpha = 1;
-		v2.alpha = 1;
-		v3.alpha = 1;
-		v1.red = 1;
-		v2.red = 1;
-		v3.red = 1;
 		if(hasUvs){
 			glm::vec2 uv = uvs.at(face.f1Uv - 1);
 			v1.u = uv.x;
@@ -144,12 +140,14 @@ TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
 			v3.ny = norm.y;
 			v3.nz = norm.z;
 		}
+
 		mesh->pushVert(v1);
 		mesh->pushVert(v2);
 		mesh->pushVert(v3);
-		mesh->pushTri(mesh->vertices.size() - 3,
-			mesh->vertices.size() - 2,
-			mesh->vertices.size() - 1);
+
+		mesh->pushTri(mesh->vertices.size()-3,
+			mesh->vertices.size()-2,
+			mesh->vertices.size()-1);
 	}
 	return mesh;
 }

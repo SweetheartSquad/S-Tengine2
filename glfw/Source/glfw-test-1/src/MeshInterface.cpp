@@ -53,7 +53,7 @@ void MeshInterface::load(){
 		// Index Buffer Object (IBO)
 		glGenBuffers(1, &iboId);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * indices.size(), indices.data(), drawMode);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * indices.size(), indices.data(), drawMode);
 
 		// Initialize textures
 		for (Texture * texture : textures){
@@ -93,7 +93,7 @@ void MeshInterface::clean(){
 
 		// Index Buffer Object (IBO)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte) * (indices.size()), indices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * (indices.size()), indices.data(), GL_STATIC_DRAW);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 		dirty = false;
 	}
@@ -140,7 +140,8 @@ void MeshInterface::render(Shader * _shader, glm::mat4 _projectionMatrix, glm::m
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 				// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
-				glDrawRangeElements(polygonalDrawMode, 0, vertices.size(), indices.size(), GL_UNSIGNED_BYTE, 0);
+				glDrawRangeElements(polygonalDrawMode, 0, vertices.size(), indices.size(), GL_UNSIGNED_INT, 0);
+				//glDrawElements(drawMode, vertices.size(), GL_UNSIGNED_BYTE, 0);
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 
 				// Disable VAO
@@ -231,14 +232,14 @@ void MeshInterface::setUV(unsigned long _vertId, float _u, float _v){
 	vertices.at(_vertId).u = _u;
 	vertices.at(_vertId).v = _v;
 }
-void TriMesh::pushTri(GLubyte _v0, GLubyte _v1, GLubyte _v2){
+void TriMesh::pushTri(GLuint _v0, GLuint _v1, GLuint _v2){
 	indices.push_back(_v0);
 	indices.push_back(_v1);
 	indices.push_back(_v2);
 
 	dirty = true;
 }
-void QuadMesh::pushQuad(GLubyte _v0, GLubyte _v1, GLubyte _v2, GLubyte _v3){
+void QuadMesh::pushQuad(GLuint _v0, GLuint _v1, GLuint _v2, GLuint _v3){
 	indices.push_back(_v0);
 	indices.push_back(_v1);
 	indices.push_back(_v2);
