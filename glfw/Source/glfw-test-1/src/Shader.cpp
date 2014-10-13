@@ -7,27 +7,49 @@ void Shader::init(std::string _vertexShaderFile, std::string _fragmentShaderFile
 	load();
 }
 
-Shader::Shader(std::string _shaderSource, bool _autoRelease) : 
-	ResourceNode(_autoRelease)
-{
-	init(_shaderSource+".vert", _shaderSource+".frag");
+void Shader::init(std::string _vertexShaderFile, std::string _fragmentShaderFile, std::string _geometryShaderFile){
+	vertName = _vertexShaderFile;
+	fragName = _fragmentShaderFile;
+	geomName = _geometryShaderFile;
+
+	load();
 }
 
-Shader::Shader(std::string _vertexShaderSource, std::string _fragmentShaderSource, bool _autoRelease) : 
-	ResourceNode(_autoRelease)
+Shader::Shader(std::string _shaderSource, bool _hasGeometryShader, bool _autoRelease) :
+	ResourceNode(_autoRelease),
+	hasGeometryShader(_hasGeometryShader)
+{
+	if (hasGeometryShader){
+		init(_shaderSource + ".vert", _shaderSource + ".frag", _shaderSource + ".geom");
+	}else{
+		init(_shaderSource + ".vert", _shaderSource + ".frag");
+	}
+}
+
+Shader::Shader(std::string _vertexShaderSource, std::string _fragmentShaderSource, bool _autoRelease) :
+	ResourceNode(_autoRelease),
+	hasGeometryShader(false)
 {
 	init(_vertexShaderSource, _fragmentShaderSource);
 }
 
-Shader::~Shader(void){
+Shader::Shader(std::string _vertexShaderSource, std::string _fragmentShaderSource, std::string _geometryShaderSource, bool _autoRelease) :
+	ResourceNode(_autoRelease),
+	hasGeometryShader(true){
+		init(_vertexShaderSource, _fragmentShaderSource, _geometryShaderSource);
+}
 
+Shader::~Shader(void){
 }
 
 void Shader::load(){
 	if(!loaded){
 		std::string _vertexShaderSource = FileUtils::voxReadFile(vertName);
 		std::string _fragmentShaderSource = FileUtils::voxReadFile(fragName);
-
+		std::string _geometryShaderSource;
+		if (hasGeometryShader){
+			_geometryShaderSource = FileUtils::voxReadFile(geomName);
+		}
 		//vert
 		char * v = new char[_vertexShaderSource.size() + 1];
 		int vl = _vertexShaderSource.length();
@@ -44,13 +66,25 @@ void Shader::load(){
 		GLUtils::checkForError(true,__FILE__,__LINE__);
 		delete f;
 
-		GLUtils::checkForError(true,__FILE__,__LINE__);
+		GLuint geometryShader = 0;
+		if (hasGeometryShader){
+			char * g = new char[_geometryShaderSource.size() + 1];
+			int gl = _geometryShaderSource.length();
+			memcpy(g, _geometryShaderSource.c_str(), gl + 1);
+			geometryShader = compileShader(GL_GEOMETRY_SHADER, g, gl);
+			GLUtils::checkForError(true,__FILE__,__LINE__);
+			delete g;
+		}
 
+		GLUtils::checkForError(true,__FILE__,__LINE__);
 		programId = glCreateProgram();
 		glAttachShader(programId, vertexShader);
 		GLUtils::checkForError(true,__FILE__,__LINE__);
 		glAttachShader(programId, fragmentShader);
 		GLUtils::checkForError(true,__FILE__,__LINE__);
+		if (hasGeometryShader){
+			glAttachShader(programId, geometryShader);
+		}
 		glLinkProgram(programId);
 		GLUtils::checkForError(true,__FILE__,__LINE__);
 
@@ -81,6 +115,9 @@ void Shader::load(){
 		glDetachShader(programId, fragmentShader);
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
+		if (hasGeometryShader){
+			glDeleteShader(geometryShader);
+		}
 		GLUtils::checkForError(true,__FILE__,__LINE__);
 
 		// What happens if these aren't in the shader?
@@ -88,7 +125,7 @@ void Shader::load(){
 		aVertexColor		= glGetAttribLocation(programId, "aVertexColor");
 		aVertexNormals		= glGetAttribLocation(programId, "aVertexNormals");
 		aVertexUVs			= glGetAttribLocation(programId, "aVertexUVs");
-	
+
 		loaded = true;
 	}
 }
@@ -142,7 +179,6 @@ GLuint Shader::compileShader(GLenum _shaderType, char const* _source, int _lengt
 
 	return shaderId;
 }
-
 
 GLuint Shader::getProgramId(){
 	return programId;

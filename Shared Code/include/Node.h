@@ -1,6 +1,6 @@
 #pragma once
 
-// Abstract node
+/** Abstract node */
 class Node{
 public:
 	virtual ~Node() = 0;

@@ -15,7 +15,7 @@ private:
 public:
 	~Resource();
 
-	/*_channels stores the returned number of channels
+	/**_channels stores the returned number of channels
 	Readable Image Formats:
 	* BMP - non-1bpp, non-RLE (from stb_image documentation)
 	* PNG - non-interlaced (from stb_image documentation)
@@ -26,7 +26,7 @@ public:
 	* HDR - converted to LDR, unless loaded with *HDR* functions (RGBE or RGBdivA or RGBdivA2)*/
 	static unsigned char* loadImage(const char* _src,  int _width, int _height, int _SOILLoadMode, int * _channels);
 
-	//Free image data memory
+	/**Free image data memory */
 	static void freeImageData(unsigned char* _image);
 	static TriMesh* loadMeshFromObj(std::string _objSrc);
 };

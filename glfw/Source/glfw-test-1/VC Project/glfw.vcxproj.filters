@@ -200,5 +200,8 @@
     <None Include="..\assets\diffuse.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
+    <None Include="..\assets\voxel.geom">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

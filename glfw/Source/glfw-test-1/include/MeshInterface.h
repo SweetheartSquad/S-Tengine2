@@ -16,18 +16,26 @@
 
 class MeshInterface{
 public:
-	bool loaded;	// Whether the vao, vbo, and ibo have been generated and initialized
-	bool dirty;		// Whether the vbo and ibo contain up-to-date vertex and index data
-	std::vector<Vertex> vertices; // Vertex data for the vbo
-	std::vector<GLuint> indices; // Index data for the ibo
-	std::vector<Texture *> textures; // Textures
+	/** Whether the vao, vbo, and ibo have been generated and initialized */
+	bool loaded;
+	/** Whether the vbo and ibo contain up-to-date vertex and index data */
+	bool dirty;
+	/** Vertex data for the vbo */
+	std::vector<Vertex> vertices;
+	/** Index data for the ibo */
+	std::vector<GLuint> indices;
+	/** Textures */
+	std::vector<Texture *> textures;
 
 public:
-	GLuint vaoId;	// ID of the vertex array object
-	GLuint vboId;	// ID of the vertex buffer object
-	GLuint iboId;	// ID of the index buffer object
+	/** ID of the vertex array object */
+	GLuint vaoId;
+	/** ID of the vertex buffer object */
+	GLuint vboId;
+	/** ID of the index buffer object */
+	GLuint iboId;
 
-	/* OpenGL memory hint; possible values:
+	/** OpenGL memory hint; possible values:
 	STATIC - The user will set the data once
 	DYNAMIC - The user will set the data occasionally
 	STREAM - The user will be changing the data after every use(or almost every use)
@@ -45,32 +53,32 @@ public:
 	GL_QUADS - draws individual qauds (1-2-3-4, 5-6-7-8, 9-10-11-12, ...)
 	GL_QUAD_STRIP - draws quad sequences (1-2-4-3, 3-4-6-5, 5-6-8-7, ...)
 	GL_POLYGON - draws single n-gon (1-2-3-...-n)
-	**/
+	*/
 	GLenum polygonalDrawMode;
 
-	// Returns vertices.size()
+	/** Returns vertices.size() */
 	GLsizei getVertCount();
-	// Returns sizeof(Vertex)
+	/** Returns sizeof(Vertex) */
 	GLsizei getStride();
 
 	bool shouldRenderLights;
 	bool shouldRenderTextures;
 	bool shouldRenderExtras;
 
-	/*
+	/**
 	_polygonalDrawMode: STATIC, STREAM, DYNAMIC
 	_drawMode: GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS, GL_QUAD_STRIP, GL_POLYGON
 	*/
 	MeshInterface(GLenum _polygonalDrawMode, GLenum _drawMode);
 	~MeshInterface(void);
 
-	// If unloaded, generates the VAO, VBO, IBO and flags as loaded
+	/** If unloaded, generates the VAO, VBO, IBO and flags as loaded */
 	void load();
-	// If loaded, deletes the VAO, VBO, IBO and flags as not loaded and dirty
+	/** If loaded, deletes the VAO, VBO, IBO and flags as not loaded and dirty */
 	void unload();
-	// If dirty, copies data from vertices and indices to VBO and IBO and flags as clean
+	/** If dirty, copies data from vertices and indices to VBO and IBO and flags as clean */
 	void clean();
-	// Renders the vao using the given shader, model-view-projection and lights
+	/** Renders the vao using the given shader, model-view-projection and lights */
 	void render(Shader *_shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights);
 	/** Called render loop. Reders the textures for the mesh*/
 	virtual void renderTextures(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights);
@@ -82,7 +90,7 @@ public:
 	* the need for overriding the entire render loop
 	*/
 	virtual void renderExtras(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights);
-	// Configures shader attributes (?)
+	/** Configures shader attributes (?) */
 	void configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset);
 	/** A helper method to configure all the starndard vertex attributes - Position, Colours, Normals */
 	void configureDefaultVertexAttributes(Shader *_shader);
@@ -95,14 +103,14 @@ public:
 	void pushTexture2D(Texture* _texture);
 };
 
-// MeshInterface preset for triangle meshes
+/** MeshInterface preset for triangle meshes */
 class TriMesh : public MeshInterface{
 public:
 	void pushTri(GLuint _v0, GLuint _v1, GLuint _v2);
 	TriMesh(GLenum _polygonalDrawMode, GLenum _drawMode = GL_TRIANGLES):MeshInterface(_polygonalDrawMode, _drawMode){};
 };
 
-// MeshInterface preset for quad meshes
+/** MeshInterface preset for quad meshes */
 class QuadMesh : public MeshInterface{
 public:
 	void pushQuad(GLuint _v0, GLuint _v1, GLuint _v2, GLuint _v3);

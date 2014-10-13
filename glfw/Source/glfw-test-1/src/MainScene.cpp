@@ -9,6 +9,7 @@ Cube * cube4;
 Light glight;
 Texture* tex;
 Shader* texShader;
+Shader* voxShader;
 
 Light *tLight;
 
@@ -16,8 +17,7 @@ MainScene::MainScene():
 	Scene()
 {
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
-	cube->setShader(new Shader("../assets/diffuse", true), true);
-
+	cube->setShader(new Shader("../assets/diffuse", false, true), true);
 	cube->mesh->vertices.pop_back();
 	cube->mesh->vertices.pop_back();
 	cube->mesh->vertices.pop_back();
@@ -34,17 +34,21 @@ MainScene::MainScene():
 	cube->mesh->vertices.at(0).y += 1.5;
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
-	texShader = new Shader("../assets/diffuse", true);
+	texShader = new Shader("../assets/diffuse", false, true);
+
+	voxShader = new Shader("../assets/voxel", true, true);
+
 	tex = new Texture("../assets/img_cheryl.jpg", 256, 256, true, true);
 
 	Transform *t = new Transform();
 	t->translateX(-2);
-	t->scale(2, 2, 2);
+	t->scale(6, 6, 6);
 
-	Entity * loaded = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, texShader, cube);
+	Entity * loaded = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxShader, cube);
+	loaded->mesh->polygonalDrawMode = GL_POINTS;
 	loaded->mesh->pushTexture2D(tex);
 
-	addChild(loaded);
+	cube->addChild(loaded);
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->setShader(texShader, true);

@@ -15,26 +15,34 @@ private:
 	void printFps();
 
 public:
-	Mouse * mouse;			// Reference to mouse singleton
-	Keyboard * keyboard;	// Reference to keyboard singleton
+	/** Reference to mouse singleton */
+	Mouse * mouse;
+	/** Reference to keyboard singleton */
+	Keyboard * keyboard;
 
-	bool isRunning;			// True if the game is currently running
-	bool printFPS;			// Whether to print the fps in the console every second
+	/** True if the game is currently running */
+	bool isRunning;
+	/** Whether to print the fps in the console every second */
+	bool printFPS;
 
-	GLFWwindow *glfwWindow;		// Reference to the game's window
+	/** Reference to the game's window */
+	GLFWwindow *glfwWindow;
 
-	std::vector<Entity*> *children;		// Reference to list of references to children (why does the game have children?)
+	/** Reference to list of references to children (why does the game have children?) */
+	std::vector<Entity*> *children;
 
-	Scene * currentScene;					// Reference to the game's current scene
-	std::map<std::string, Scene*> scenes;	// List of references to scenes in the game
+	/** Reference to the game's current scene */
+	Scene * currentScene;
+	/** List of references to scenes in the game */
+	std::map<std::string, Scene*> scenes;
 
 	explicit Game(bool _running);
 	virtual ~Game(void);
 
-	// Updates the deltaTime correction, prints FPS, checks for ESC, and calls update on the current scene
+	/** Updates the deltaTime correction, prints FPS, checks for ESC, and calls update on the current scene */
 	virtual void update(void);
-	// Draws the current scene
+	/** Draws the current scene */
 	virtual void draw(void);
-	// Calls update on the mouse and keyboard
+	/** Calls update on the mouse and keyboard */
 	void manageInput(void);
 };

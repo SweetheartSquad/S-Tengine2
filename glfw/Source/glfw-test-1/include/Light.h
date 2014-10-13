@@ -11,18 +11,19 @@ struct LightData {
 	glm::vec3 intensities;
 };
 
-//A basic light node. Stores a reference to a transform and a struct containing the position and color of the light
+/**A basic light node. Stores a reference to a transform and a struct containing the position and color of the light */
 class Light : public Node{
 public:
-	Transform * transform;			// Reference to this entity's transform
-	
+	/** Reference to this entity's transform */
+	Transform * transform;
+
 	Light(Transform * _transform = nullptr);
 	~Light();
 
-	/*
-	Pushes model matrix stack,
-	Applies the model matrix of transform,
-	Pops model matrix stack
+	/**
+	* Pushes model matrix stack,
+	* Applies the model matrix of transform,
+	* Pops model matrix stack
 	*/
 	virtual void draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
 
