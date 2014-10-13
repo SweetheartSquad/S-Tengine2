@@ -127,9 +127,6 @@ void MeshInterface::render(Shader * _shader, glm::mat4 _projectionMatrix, glm::m
 					renderExtras(_shader, _projectionMatrix, _viewMatrix, _lights);
 				}
 
-				glEnable(GL_BLEND);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 				//Alpha blending
 				// Should these be here or only once in the main render loop?
 				glEnable (GL_BLEND);

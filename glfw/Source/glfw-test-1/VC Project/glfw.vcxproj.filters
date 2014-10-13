@@ -203,5 +203,16 @@
     <None Include="..\assets\voxel.geom">
       <Filter>Resource Files\shaders</Filter>
     </None>
+    <None Include="..\assets\voxel.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\voxel.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\assets\voxel-texture.png">
+      <Filter>Resource Files\shaders</Filter>
+    </Image>
   </ItemGroup>
 </Project>

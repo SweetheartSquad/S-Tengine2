@@ -7,7 +7,10 @@ Cube * cube3;
 Cube * cube4;
 
 Light glight;
+
 Texture* tex;
+Texture* voxTex;
+
 Shader* texShader;
 Shader* voxShader;
 
@@ -39,14 +42,15 @@ MainScene::MainScene():
 	voxShader = new Shader("../assets/voxel", true, true);
 
 	tex = new Texture("../assets/img_cheryl.jpg", 256, 256, true, true);
+	voxTex = new Texture("../assets/voxel-texture.png", 512, 512, true, true);
 
 	Transform *t = new Transform();
 	t->translateX(-2);
-	t->scale(6, 6, 6);
+	t->scale(3, 3, 3);
 
 	Entity * loaded = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxShader, cube);
-	loaded->mesh->polygonalDrawMode = GL_POINTS;
-	loaded->mesh->pushTexture2D(tex);
+	//loaded->mesh->polygonalDrawMode = GL_POINTS;
+	loaded->mesh->pushTexture2D(voxTex);
 
 	cube->addChild(loaded);
 
@@ -79,11 +83,11 @@ MainScene::MainScene():
 
 	tLight = new Light();
 	tLight->data.position = glm::vec3(1.f, 1.f, 1.f);
-	tLight->data.intensities = glm::vec3(1.f, 1.f, 1.f);
+	tLight->data.intensities = glm::vec3(0.5f, 0.7f, 0.5f);
 
 	Light *tLight2 = new Light();
 	tLight2->data.position = glm::vec3(1.f, 1.f, 1.f);
-	tLight2->data.intensities = glm::vec3(3.f, 3.f, 3.f);
+	tLight2->data.intensities = glm::vec3(0.7f, 0.5f, 0.5f);
 
 	lights.push_back(tLight);
 	lights.push_back(tLight2);

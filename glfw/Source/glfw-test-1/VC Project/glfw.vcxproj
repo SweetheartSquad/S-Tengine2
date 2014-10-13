@@ -166,7 +166,12 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <None Include="..\assets\cube.vox" />
     <None Include="..\assets\junkdata.frag" />
     <None Include="..\assets\junkdata.vert" />
+    <None Include="..\assets\voxel.frag" />
     <None Include="..\assets\voxel.geom" />
+    <None Include="..\assets\voxel.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\assets\voxel-texture.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
