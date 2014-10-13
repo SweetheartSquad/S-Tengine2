@@ -1,5 +1,7 @@
+#version 150
+
 layout(triangles) in;
-layout(triangle_strip, max_vertices = 96) out;
+layout(triangle_strip, max_vertices = 64) out;
 
 in vec3 fragVertGeo[];
 in vec3 fragNormalGeo[];
