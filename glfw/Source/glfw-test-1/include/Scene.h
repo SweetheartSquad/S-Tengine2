@@ -21,6 +21,7 @@ public:
 	Camera * camera;
 	/** Reference to a list of references to entitites included in this scene */
 	std::vector<Entity *> children;
+	/** The lights for this scene **/
 	std::vector<Light *> lights;
 
 	/** Calls update on the attached camera */

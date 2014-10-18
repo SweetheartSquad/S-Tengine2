@@ -59,7 +59,6 @@ TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
 		if (line.size() > 0) {
 			if (line[line.size()-1] == '\r') line.erase(line.size()-1);
 		}
-
 		char p1 = line[0];
 		char p2 = line[1];
 
