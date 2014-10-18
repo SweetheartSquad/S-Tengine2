@@ -16,8 +16,8 @@ Shader* voxShader;
 
 Light *tLight;
 
-MainScene::MainScene():
-	Scene()
+MainScene::MainScene(Game * _game):
+	Scene(game)
 {
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
 	cube->setShader(new Shader("../assets/diffuse", false, true), true);
@@ -41,7 +41,7 @@ MainScene::MainScene():
 
 	voxShader = new Shader("../assets/voxel", true, true);
 
-	tex = new Texture("../assets/img_cheryl.jpg", 256, 256, true, true);
+	tex = new Texture("../assets/uv-test.jpg", 1000, 1000, true, true);
 	voxTex = new Texture("../assets/voxel-texture.png", 512, 512, true, true);
 
 	Transform *t = new Transform();
@@ -49,8 +49,8 @@ MainScene::MainScene():
 	t->scale(3, 3, 3);
 
 	Entity * loaded = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxShader, cube);
-	//loaded->mesh->polygonalDrawMode = GL_POINTS;
-	loaded->mesh->pushTexture2D(voxTex);
+	loaded->mesh->polygonalDrawMode = GL_POINTS;
+	loaded->mesh->pushTexture2D(tex);
 
 	cube->addChild(loaded);
 
@@ -73,7 +73,8 @@ MainScene::MainScene():
 	addChild(cube4);
 	cube4->setShader(texShader, true);
 
-	cube4->transform->scale(15.0, 15.0, 15.0);
+	cube4->transform->scale(15.0, 1.0, 15.0);
+	cube4->transform->translateY(-2);
 	cube4->mesh->pushTexture2D(tex);
 
 	cube->mesh->dirty = true;
@@ -82,12 +83,12 @@ MainScene::MainScene():
 	cube4->mesh->dirty = true;
 
 	tLight = new Light();
-	tLight->data.position = glm::vec3(1.f, 1.f, 1.f);
+	tLight->data.position = glm::vec3(-3.f, 1.f, 1.f);
 	tLight->data.intensities = glm::vec3(0.5f, 0.7f, 0.5f);
 
 	Light *tLight2 = new Light();
-	tLight2->data.position = glm::vec3(1.f, 1.f, 1.f);
-	tLight2->data.intensities = glm::vec3(0.7f, 0.5f, 0.5f);
+	tLight2->data.position = glm::vec3(1.f, -1.5, 1.f);
+	tLight2->data.intensities = glm::vec3(1.7f, 1.5f, 1.5f);
 
 	lights.push_back(tLight);
 	lights.push_back(tLight2);
@@ -99,7 +100,8 @@ MainScene::~MainScene(){
 void MainScene::update(){
 	Scene::update();
 
-	tLight->data.position = camera->transform->translationVector;
+	tLight->transform->translateX(sin(glfwGetTime()) * 0.1);
+	tLight->transform->translateZ(cos(glfwGetTime()) * 0.1);
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		toggleFullScreen();
@@ -124,16 +126,13 @@ void MainScene::update(){
 	if(keyboard->keyDown(GLFW_KEY_E)){
 		cube->transform->translate((float)vox::deltaTimeCorrection * 0.001f, 0.f, 0.f);
 	}
-
 	if(mouse->leftDown()){
 		glm::quat r = glm::angleAxis(1.f, glm::vec3(0.f, 0.f, 1.f));
 		cube->transform->rotate(r);
 	}
-
 	if(mouse->rightDown()){
 		cube->transform->scale(0.9f, 0.9f, 0.9f);
 	}
-
 	//camera controls
 	if (keyboard->keyDown(GLFW_KEY_UP)){
 		camera->transform->translate((camera->forwardVectorRotated) * camera->speed);

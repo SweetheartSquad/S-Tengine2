@@ -11,6 +11,13 @@ Game::Game(bool _isRunning):
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance())
 {
+	//Initialize Freetype
+	FT_Library  library;
+
+	int error = FT_Init_FreeType( &library );
+	if ( std::codecvt_base::error ){
+		std::cout<<"Error initializing freetype";
+	}
 }
 
 Game::~Game(void){
@@ -34,6 +41,10 @@ void Game::draw(void){
 void Game::manageInput(){
 	keyboard->update();
 	mouse->update();
+}
+
+FT_Library* Game::getFreetypeLibraryReference(){
+	return new FT_Library(freetypeLibrary);
 }
 
 void Game::printFps(){

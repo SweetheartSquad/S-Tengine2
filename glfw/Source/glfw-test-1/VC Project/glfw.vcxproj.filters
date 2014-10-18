@@ -40,6 +40,9 @@
     <Filter Include="Source Files\input">
       <UniqueIdentifier>{92af4ccb-67a0-48ae-a3e0-b9785d71c2f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\textures">
+      <UniqueIdentifier>{4830f7c0-e46d-4630-bae8-71e8b98e44da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Cube.cpp">
@@ -106,6 +109,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -179,6 +185,9 @@
     <ClInclude Include="..\include\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\junkdata.frag">
@@ -213,6 +222,9 @@
   <ItemGroup>
     <Image Include="..\assets\voxel-texture.png">
       <Filter>Resource Files\shaders</Filter>
+    </Image>
+    <Image Include="..\assets\uv-test.jpg">
+      <Filter>Resource Files\textures</Filter>
     </Image>
   </ItemGroup>
 </Project>

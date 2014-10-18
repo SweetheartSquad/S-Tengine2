@@ -1,6 +1,7 @@
 #include "Scene.h"
 
-Scene::Scene(void):
+Scene::Scene(Game * _game):
+	game(_game),
 	camera(new Camera()),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
@@ -14,6 +15,10 @@ Scene::~Scene(void){
 
 void Scene::update(void){
 	camera->update();
+	//Copy the transform to the light's data
+	for(Light * light : lights){
+		light->update();
+	}
 }
 
 void Scene::render(){
@@ -35,6 +40,7 @@ void Scene::render(){
 	for(Entity * e : children){
 		e->draw(camera->getProjectionMatrix(), camera->getViewMatrix(), lights);
 	}
+
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 }
 
@@ -57,7 +63,6 @@ void Scene::toggleFullScreen(){
 		w /= 2;
 		h /= 2;
 	}
-
 	// Create the new window.
 	GLFWwindow * window;
 	window = glfwCreateWindow(w, h, "VOX",  /*vox::fullscreen ? glfwGetPrimaryMonitor() :*/ nullptr, nullptr);
@@ -65,6 +70,7 @@ void Scene::toggleFullScreen(){
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
+
 	vox::initWindow(window);
 	glfwDestroyWindow(vox::currentContext);
 	glfwMakeContextCurrent(window);
