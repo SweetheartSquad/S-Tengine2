@@ -31,43 +31,54 @@ void Resource::freeImageData(unsigned char* _image){
 }
 
 TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
-	std::string fileSrc = FileUtils::voxReadFile(_objSrc);
-	std::istringstream stream(fileSrc);
-	std::smatch match;
+	std::istringstream stream(FileUtils::voxReadFile(_objSrc));
+
 	std::vector<glm::vec3> verts;
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> uvs;
-	std::vector<Face> faces;
-	std::string line;
+
+	std::smatch match;
 	std::regex faceRegex("(\\d{1})[/]?(\\d?)[/]?(\\d?)[\\s]{1}");
-	bool faceFormatChecked = false;
-	bool hasUvs = false;
-	bool hasNorms = false;
+
+	bool faceFormatChecked  = false;
+	bool hasUvs			    = false;
+	bool hasNorms           = false;
+
 	ObjFaceFormat faceStructure = VERTS;
 	TriMesh* mesh = new TriMesh(GL_TRIANGLES, GL_STATIC_DRAW);
-	while(std::getline(stream, line)) {
-		char* lineId = new char[line.size()];
-		sscanf(line.c_str(), "%s", lineId);
-		std::string lineIdStr(lineId);
-		if(lineIdStr.compare("\0") == 0){
+
+	int maxchars = 8192;
+	std::vector<char> buf(maxchars);
+
+	while(stream.peek() != -1) {
+		stream.getline(&buf[0], maxchars);
+		std::string line(&buf[0]);
+		if (line.size() > 0) {
+			if (line[line.size()-1] == '\n') line.erase(line.size()-1);
+		}
+		if (line.size() > 0) {
+			if (line[line.size()-1] == '\r') line.erase(line.size()-1);
+		}
+
+		char p1 = line[0];
+		char p2 = line[1];
+
+		if(p1 == '\0' || p1 == '#'){
 			continue;
 		}
-		if(lineIdStr.compare("#") == 0){
-			continue;
-		}
-		if(lineIdStr.compare("v") == 0){
+		if(p1 == 'v' && p2 == ' '){
 			glm::vec3 tempVert(1);
 			sscanf(line.c_str(), "%*s %f %f %f", &tempVert.x, &tempVert.y, &tempVert.z);
 			verts.push_back(tempVert);
-		}else if(lineIdStr.compare("vn") == 0){
+		}else if(p1 == 'v' && p2 == 'n'){
 			glm::vec3 tempNorm(1);
 			sscanf(line.c_str(), "%*s %f %f %f", &tempNorm.x, &tempNorm.y, &tempNorm.z);
 			normals.push_back(tempNorm);
-		}else if(lineIdStr.compare("vt") == 0){
+		}else if(p1 == 'v' && p2 == 't'){
 			glm::vec2 tempUv(1);
 			sscanf(line.c_str(), "%*s %f %f", &tempUv.x, &tempUv.y);
 			uvs.push_back(tempUv);
-		}else if(lineIdStr.compare("f") == 0){
+		}else if(p1 == 'f' && p2 == ' '){
 			if(!faceFormatChecked){
 				std::smatch matches;
 				std::regex_search(line, matches, faceRegex);
@@ -111,7 +122,6 @@ TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
 					&face.f3Vert, &face.f3Uv, &face.f3Norm);
 				break;
 			}
-			faces.push_back(face);
 			Vertex v1(verts.at(face.f1Vert - 1));
 			Vertex v2(verts.at(face.f2Vert - 1));
 			Vertex v3(verts.at(face.f3Vert - 1));
