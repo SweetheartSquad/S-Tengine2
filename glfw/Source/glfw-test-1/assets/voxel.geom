@@ -1,12 +1,7 @@
-<<<<<<< HEAD
 #version 150
 
-layout(triangles) in;
-layout(triangle_strip, max_vertices = 64) out;
-=======
 layout(points) in;
-layout(triangle_strip, max_vertices = 96) out;
->>>>>>> ryanNewWork
+layout(triangle_strip, max_vertices = 32) out;
 
 in vec3 fragVertGeo[];
 in vec3 fragNormalGeo[];
