@@ -11,9 +11,6 @@
 
 #include <GLFW/glfw3.h>
 
-//#include <ft2build.h>
-//#include FT_FREETYPE_H
-
 #include "Keyboard.h"
 #include "Mouse.h"
 
@@ -26,15 +23,10 @@ namespace vox{
 	extern double lastTimestamp;
 	/** Multiply by this to correct for differences in framerate */
 	extern double deltaTimeCorrection;
-
 	/** Stores a reference to the main window */
 	extern GLFWwindow * currentContext;
 	/** Whether the main window is fullscreen or not */
 	extern bool fullscreen;
-
-	// Freetype library
-	//extern FT_Library freetypeLibrary;
-
 	/** Sets the window properties that need to be initialized before window creation */
 	void setGlfwWindowHints();
 	/** Sets the window properties that need to be initialized after window creation (uses currentContext if null) */
@@ -70,9 +62,6 @@ namespace vox{
 	void setWindowName(std::string _name);
 
 	void calculateDeltaTimeCorrection();
-
-	/** Freetype */
-	void initializeFreetype();
 
 	void destruct();
 }

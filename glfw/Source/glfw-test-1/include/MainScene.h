@@ -8,7 +8,7 @@
 
 class MainScene : public Scene{
 public:
-	MainScene();
+	MainScene(Game * _game);
 	~MainScene();
 	void update() override;
 	void render() override;

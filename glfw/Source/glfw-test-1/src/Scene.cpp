@@ -1,6 +1,7 @@
 #include "Scene.h"
 
-Scene::Scene(void):
+Scene::Scene(Game * _game):
+	game(_game),
 	camera(new Camera()),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),

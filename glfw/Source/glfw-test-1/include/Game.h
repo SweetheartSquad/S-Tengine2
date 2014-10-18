@@ -10,9 +10,13 @@
 #include "Scene.h"
 #include "Entity.h"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 class Game{
 private:
 	void printFps();
+	FT_Library freetypeLibrary;
 
 public:
 	/** Reference to mouse singleton */
@@ -45,4 +49,6 @@ public:
 	virtual void draw(void);
 	/** Calls update on the mouse and keyboard */
 	void manageInput(void);
+	/** Returns a new reference to the game's freetype library instance*/
+	FT_Library * getFreetypeLibraryReference();
 };

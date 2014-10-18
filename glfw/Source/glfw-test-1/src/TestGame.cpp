@@ -4,7 +4,7 @@
 TestGame::TestGame(bool _running):
 	Game(_running)
 {
-	scenes.insert(std::make_pair("main_scene", new MainScene()));
+	scenes.insert(std::make_pair("main_scene", new MainScene(this)));
 	currentScene = scenes.at("main_scene");
 }
 

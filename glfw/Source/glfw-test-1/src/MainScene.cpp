@@ -16,8 +16,8 @@ Shader* voxShader;
 
 Light *tLight;
 
-MainScene::MainScene():
-	Scene()
+MainScene::MainScene(Game * _game):
+	Scene(game)
 {
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
 	cube->setShader(new Shader("../assets/diffuse", false, true), true);
@@ -100,7 +100,8 @@ MainScene::~MainScene(){
 void MainScene::update(){
 	Scene::update();
 
-	//tLight->data.position = camera->transform->translationVector;
+	tLight->transform->translateX(sin(glfwGetTime()) * 0.1);
+	tLight->transform->translateZ(cos(glfwGetTime()) * 0.1);
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		toggleFullScreen();
@@ -125,16 +126,13 @@ void MainScene::update(){
 	if(keyboard->keyDown(GLFW_KEY_E)){
 		cube->transform->translate((float)vox::deltaTimeCorrection * 0.001f, 0.f, 0.f);
 	}
-
 	if(mouse->leftDown()){
 		glm::quat r = glm::angleAxis(1.f, glm::vec3(0.f, 0.f, 1.f));
 		cube->transform->rotate(r);
 	}
-
 	if(mouse->rightDown()){
 		cube->transform->scale(0.9f, 0.9f, 0.9f);
 	}
-
 	//camera controls
 	if (keyboard->keyDown(GLFW_KEY_UP)){
 		camera->transform->translate((camera->forwardVectorRotated) * camera->speed);
