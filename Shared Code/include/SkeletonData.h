@@ -1,4 +1,4 @@
-#pragma 
+#pragma once
 #pragma comment(lib, "Shlwapi.lib")
 
 #include "shlwapi.h"

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Joint.h"
 
 unsigned long int Joint::nextId = 0;

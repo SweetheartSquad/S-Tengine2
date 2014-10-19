@@ -30,7 +30,13 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\SkeletonData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CreateJointCommand.cpp">
+    <ClCompile Include="..\..\..\..\Shared Code\src\CommandProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CreateJointCommand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -61,7 +67,13 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\Command.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CreateJointCommand.h">
+    <ClInclude Include="..\..\..\..\Shared Code\include\CommandProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CreateJointCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

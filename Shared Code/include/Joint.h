@@ -10,7 +10,7 @@
 
 using namespace ci;
 
-class Joint{
+class Joint : public Node{
 public:
 	static uint32_t nextColor;
 	static unsigned long int nextId;

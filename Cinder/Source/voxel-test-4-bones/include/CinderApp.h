@@ -1,3 +1,4 @@
+#pragma once
 #include "cinder/MayaCamUI.h"
 #include "cinder/TriMesh.h"
 #include "cinder/app/AppBasic.h"
@@ -9,10 +10,13 @@
 
 #include <string>
 #include <sstream>
+#include <set>
 
 #include "SkeletonData.h"
 #include "Joint.h"
+#include "CommandProcessor.h"
 
+#include "CreateJointCommand.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -144,7 +148,7 @@ protected:
 	gl::Material JointMaterial;
 	
 	std::vector<Joint *> Joints;
-	Joint * selectedJoint;
+	
 
 	Vec3i dir;
 	Vec2i mouseAxis;
@@ -155,5 +159,7 @@ protected:
 		CREATE,
 		SELECT
 	} mode;
-	
+
+	// commands
+	CommandProcessor cmdProc;
 };
