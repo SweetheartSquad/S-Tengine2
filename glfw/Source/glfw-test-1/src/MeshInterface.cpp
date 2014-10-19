@@ -88,12 +88,12 @@ void MeshInterface::clean(){
 	if(dirty){
 		// Vertex Buffer Object (VBO)
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * (vertices.size()), vertices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * (vertices.size()), vertices.data(), GL_DYNAMIC_DRAW);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 
 		// Index Buffer Object (IBO)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * (indices.size()), indices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * (indices.size()), indices.data(), GL_DYNAMIC_DRAW);
 		GLUtils::checkForError(0,__FILE__,__LINE__);
 		dirty = false;
 	}
@@ -114,8 +114,18 @@ void MeshInterface::render(Shader * _shader, glm::mat4 _projectionMatrix, glm::m
 				//Model View Projection
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 				glm::mat4 mvp = _projectionMatrix * _viewMatrix * vox::currentModelMatrix;
+				glm::mat4 vp = _projectionMatrix * _viewMatrix;
+				glm::mat4 m = vox::currentModelMatrix;
+				float resolution = 0.1;
 				GLuint mvpUniformLocation = glGetUniformLocation(_shader->getProgramId(), "MVP");
+				GLuint vpUniformLocation = glGetUniformLocation(_shader->getProgramId(), "VP");
+				GLuint mUniformLocation = glGetUniformLocation(_shader->getProgramId(), "M");
+				GLuint resolutionUniformLocation = glGetUniformLocation(_shader->getProgramId(), "resolution");
 				glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
+				glUniformMatrix4fv(vpUniformLocation, 1, GL_FALSE, &vp[0][0]);
+				glUniformMatrix4fv(mUniformLocation, 1, GL_FALSE, &m[0][0]);
+				glUniform1f(resolutionUniformLocation, resolution);
+				GLUtils::checkForError(0,__FILE__,__LINE__);
 
 				if(shouldRenderTextures){
 					renderTextures(_shader, _projectionMatrix, _viewMatrix, _lights);

@@ -48,11 +48,16 @@ MainScene::MainScene(Game * _game):
 	t->translateX(-2);
 	t->scale(3, 3, 3);
 
-	Entity * loaded = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxShader, cube);
-	loaded->mesh->polygonalDrawMode = GL_POINTS;
-	loaded->mesh->pushTexture2D(tex);
+	for(unsigned long int i = 0; i < 3; ++i){
+		Entity * loaded = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxShader, cube);
+		loaded->mesh->polygonalDrawMode = GL_POINTS;
+		cube->addChild(loaded);
+		//loaded->mesh->pushTexture2D(tex);
+	}
 
-	cube->addChild(loaded);
+	//Entity * loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, texShader, cube);
+
+	//cube->addChild(loaded1);
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->setShader(texShader, true);
@@ -61,7 +66,8 @@ MainScene::MainScene(Game * _game):
 
 	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
-	cube2->addChild(cube3);
+	//cube2->addChild(cube3);
+	addChild(cube3);
 	cube3->setShader(texShader, true);
 
 	cube3->mesh->vertices.at(3).x += 0.5;
@@ -83,7 +89,7 @@ MainScene::MainScene(Game * _game):
 	cube4->mesh->dirty = true;
 
 	tLight = new Light();
-	tLight->data.position = glm::vec3(-3.f, 1.f, 1.f);
+	tLight->data.position = glm::vec3(-3.f, 1.5f, 1.f);
 	tLight->data.intensities = glm::vec3(0.5f, 0.7f, 0.5f);
 
 	Light *tLight2 = new Light();
@@ -99,6 +105,8 @@ MainScene::~MainScene(){
 
 void MainScene::update(){
 	Scene::update();
+
+	*cube3->transform = *tLight->transform;
 
 	tLight->transform->translateX(sin(glfwGetTime()) * 0.1);
 	tLight->transform->translateZ(cos(glfwGetTime()) * 0.1);
