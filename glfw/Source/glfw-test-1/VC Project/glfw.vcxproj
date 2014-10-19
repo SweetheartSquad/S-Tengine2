@@ -116,6 +116,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\Cube.cpp" />
     <ClCompile Include="..\src\Entity.cpp" />
     <ClCompile Include="..\src\FileUtils.cpp" />
+    <ClCompile Include="..\src\Font.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\GLUtils.cpp" />
     <ClCompile Include="..\src\Keyboard.cpp" />
@@ -141,6 +142,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Dimension.h" />
     <ClInclude Include="..\include\Entity.h" />
     <ClInclude Include="..\include\FileUtils.h" />
+    <ClInclude Include="..\include\Font.h" />
     <ClInclude Include="..\include\Game.h" />
     <ClInclude Include="..\include\GLUtils.h" />
     <ClInclude Include="..\include\Keyboard.h" />
@@ -171,6 +173,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <None Include="..\assets\voxel.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\assets\uv-test.jpg" />
     <Image Include="..\assets\voxel-texture.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

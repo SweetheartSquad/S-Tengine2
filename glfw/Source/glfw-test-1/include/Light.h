@@ -17,7 +17,8 @@ public:
 	/** Reference to this entity's transform */
 	Transform * transform;
 
-	Light(Transform * _transform = nullptr);
+	Light();
+	explicit Light(Transform * _transform);
 	~Light();
 
 	/**
@@ -26,6 +27,11 @@ public:
 	* Pops model matrix stack
 	*/
 	virtual void draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
+	void update();
 
+	/**
+	* The data struct which is passed to the shader
+	* This should be copied in the shader
+	*/
 	LightData data;
 };

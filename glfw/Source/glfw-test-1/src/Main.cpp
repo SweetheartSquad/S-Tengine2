@@ -59,9 +59,6 @@ int main(void){
 
 	glfwGetWindowSize(window, &screenWidth, &screenHeight);
 	glfwSetCursorPos(window, screenWidth/2, screenHeight/2);
-
-	vox::initializeFreetype();
-
 	game = new TestGame(true);
 
 	while (game->isRunning){
