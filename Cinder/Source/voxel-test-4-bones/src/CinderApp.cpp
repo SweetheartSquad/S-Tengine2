@@ -245,13 +245,18 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 	gl::setMatrices(cam);
 	
 	gl::color(ColorA(1, 1, 1, 1));
-	//gl::drawSolidCircle(Vec2f(50, 50), 50);
 	if(selectedJoint != nullptr){
-		gl::drawColorCube(selectedJoint->getPos(false), Vec3f(0.1f, 0.1f, 0.1f));
-			
-		/*gl::drawVector(selectedJoint->getPos(false), selectedJoint->getPos(false)+Vec3f(1.f, 0.f, 0.f));
-		gl::drawVector(selectedJoint->getPos(false), selectedJoint->getPos(false)+Vec3f(0.f, 1.f, 0.f));
-		gl::drawVector(selectedJoint->getPos(false), selectedJoint->getPos(false)+Vec3f(0.f, 0.f, 1.f));*/
+
+		gl::pushMatrices();
+			gl::translate(selectedJoint->getPos(false));
+			gl::lineWidth(2);
+			if(cam.isPersp()){
+				// If the camera is a perspective view, scale the coordinate frame proportionally to the distance from camera
+				gl::scale(cam.worldToEyeDepth(cam.getCenterOfInterestPoint()),cam.worldToEyeDepth(cam.getCenterOfInterestPoint()),cam.worldToEyeDepth(cam.getCenterOfInterestPoint()));
+			}
+			gl::drawCoordinateFrame(0.3, 0.15, 0.03);
+			gl::lineWidth(1);
+		gl::popMatrices();
 	}
 
 	// restore matrices
@@ -579,9 +584,11 @@ void CinderApp::handleUI( const Vec2i &pos ){
 			case 16711680: dir.x -= 10; break;	//r
 			case 65280: dir.y -= 10; break;		//g
 			case 255: dir.z -= 10; break;		//b
+			/*
 			case 65535: dir.x += 10; break;		//m
 			case 16711935: dir.y += 10; break;	//c
 			case 16776960: dir.z += 10; break;	//y
+			*/
 		}
 
 		if(selectedJoint != nullptr){
