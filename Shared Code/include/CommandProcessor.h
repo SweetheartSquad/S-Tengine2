@@ -1,9 +1,8 @@
 #pragma once
 
-#include "Command.h"
 #include <vector>
 
-using namespace std;
+class Command;
 
 class CommandProcessor{
 public:
@@ -14,7 +13,6 @@ public:
 	void undo();
 	void redo();
 private:
-	vector<Command *> undoStack;
-	vector<Command *> redoStack;
+	std::vector<Command *> undoStack;
+	std::vector<Command *> redoStack;
 };
-

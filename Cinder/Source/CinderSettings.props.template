@@ -1,9 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?> 
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <CINDER_DIR_2012>C:\cinder_0.8.5_vc2012</CINDER_DIR_2012>
-    <CINDER_DIR_2010>D:\Program Files\cinder_0.8.5_vc2010</CINDER_DIR_2010>
+    <CINDER_DIR_2012>D:\Development Libraries\cinder_0.8.5_vc2012</CINDER_DIR_2012>
+    <CINDER_DIR_2010>D:\Development Libraries\cinder_0.8.5_vc2010</CINDER_DIR_2010>
+    <GLM_DIR>D:\Development Libraries\GL Development\glm</GLM_DIR>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup />

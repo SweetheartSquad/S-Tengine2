@@ -7,7 +7,7 @@ class Node;
 class CMD_SelectNode : public Command{
 public:
 	Node * previousSelectedNode;
-	Note * nodeForSelection;
+	Node * nodeForSelection;
 
 	CMD_SelectNode(Node * _node);
 	~CMD_SelectNode();

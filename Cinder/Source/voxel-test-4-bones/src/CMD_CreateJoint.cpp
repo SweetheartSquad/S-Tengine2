@@ -20,7 +20,6 @@ void CMD_CreateJoint::execute(){
 	}
 
 	if(parent != nullptr){
-		parent->building = false;
 		parent->children.push_back(createdJoint);
 	}else{
 		joints->push_back(createdJoint);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CMD_SelectNode.h"
+#include "UI.h"
 
 CMD_SelectNode::CMD_SelectNode(Node * _node) :
 	previousSelectedNode(nullptr),
@@ -8,7 +9,7 @@ CMD_SelectNode::CMD_SelectNode(Node * _node) :
 {
 }
 
-~CMD_SelectNode::CMD_SelectNode(){
+CMD_SelectNode::~CMD_SelectNode(){
 	previousSelectedNode = nullptr;
 	nodeForSelection = nullptr;
 }

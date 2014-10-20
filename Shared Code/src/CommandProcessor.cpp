@@ -1,21 +1,22 @@
 #pragma once
 
-#include "CommandProcessor.h"
 #include <cinder/app/AppBasic.h>
 
-using namespace ci;
+#include "CommandProcessor.h"
+#include "Command.h"
+
 CommandProcessor::CommandProcessor(void){
 }
 
 void CommandProcessor::executeCommand(Command * c){
-	app::console() << "executeCommand" << endl;
+	ci::app::console() << "executeCommand" << std::endl;
 	c->execute();
 	undoStack.push_back(c);
 	redoStack.clear();
 }
 
 void CommandProcessor::undo(){
-	app::console() << "undo" << endl;
+	ci::app::console() << "undo" << std::endl;
 	if (undoStack.size() > 0){
 		undoStack.back()->unexecute();
 		redoStack.push_back(undoStack.back());

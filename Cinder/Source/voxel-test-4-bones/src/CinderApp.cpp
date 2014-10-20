@@ -3,6 +3,7 @@
 #include "CinderApp.h"
 #include "UI.h"
 #include "CMD_DeleteJoint.h"
+#include "CMD_SelectNode.h"
 
 void CinderApp::prepareSettings(Settings *settings){
 	settings->setWindowSize(900, 600);
@@ -287,7 +288,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 		if(mode == CREATE){
 			Vec3d pos = getCameraCorrectedPos();
 			
-			cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, parent));
+			cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, (Joint *)UI::selectedNode));
 		}else if(mode == SELECT){
 			pickJoint(mMousePos);
 		}
@@ -684,7 +685,6 @@ void CinderApp::pickJoint( const Vec2i &pos ){
 	if(max >= (total / 2)) {
 		if(Joint::jointMap.count(color) == 1){
 			cmdProc.executeCommand(new CMD_SelectNode((Node *)Joint::jointMap.at(color)));
-			((Joint *)UI::selectedNode)->building = true;
 		}else{
 			cmdProc.executeCommand(new CMD_SelectNode(nullptr));
 		}
