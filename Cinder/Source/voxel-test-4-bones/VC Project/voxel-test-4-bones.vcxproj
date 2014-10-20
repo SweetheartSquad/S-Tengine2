@@ -104,6 +104,7 @@
     <ClCompile Include="..\src\CinderApp.cpp" />
     <ClCompile Include="..\src\CMD_CreateJoint.cpp" />
     <ClCompile Include="..\src\CMD_DeleteJoint.cpp" />
+    <ClCompile Include="..\src\CMD_SelectNode.cpp" />
     <ClCompile Include="..\src\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -120,6 +121,7 @@
     <ClInclude Include="..\include\CinderApp.h" />
     <ClInclude Include="..\include\CMD_CreateJoint.h" />
     <ClInclude Include="..\include\CMD_DeleteJoint.h" />
+    <ClInclude Include="..\include\CMD_SelectNode.h" />
     <ClInclude Include="..\include\UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

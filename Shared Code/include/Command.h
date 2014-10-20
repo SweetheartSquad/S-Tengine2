@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "CommandProcessor.h"
 
 class Command{
 public:

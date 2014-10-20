@@ -286,16 +286,8 @@ void CinderApp::mouseDown( MouseEvent event ){
 		
 		if(mode == CREATE){
 			Vec3d pos = getCameraCorrectedPos();
-		
-			if((Joint *)UI::selectedNode != nullptr){
-				if(((Joint *)UI::selectedNode)->building){
-					newJoint(pos, (Joint *)UI::selectedNode);
-				}else{
-					newJoint(pos);
-				}
-			}else{
-				newJoint(pos);
-			}
+			
+			cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, parent));
 		}else if(mode == SELECT){
 			pickJoint(mMousePos);
 		}
@@ -310,11 +302,11 @@ void CinderApp::mouseDrag( MouseEvent event ){
 		camMayaPersp.mouseDrag( mMousePos, event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
 	}else{
 		if(event.isLeft()){
-			if(((Joint *)UI::selectedNode) != nullptr){
+			/*if(((Joint *)UI::selectedNode) != nullptr){
 				if(((Joint *)UI::selectedNode)->building){
 					((Joint *)UI::selectedNode)->setPos(getCameraCorrectedPos());
 				}
-			}
+			}*/
 		}else{
 			if(((Joint *)UI::selectedNode) != nullptr){
 
@@ -362,13 +354,6 @@ void CinderApp::keyDown( KeyEvent event ){
 		break;
 	case KeyEvent::KEY_4:
 		channel = 3;
-		break;
-	case KeyEvent::KEY_RETURN:
-		if(((Joint *)UI::selectedNode) != nullptr){
-			if(((Joint *)UI::selectedNode)->building){
-				((Joint *)UI::selectedNode)->building = false;
-			}
-		}
 		break;
 	case KeyEvent::KEY_DELETE:
 		if(UI::selectedNode != nullptr){
@@ -449,22 +434,6 @@ void CinderApp::drawGrid(float size, float step){
 		gl::drawLine( Vec3f(i, 0.0f, -size), Vec3f(i, 0.0f, size) );
 		gl::drawLine( Vec3f(-size, 0.0f, i), Vec3f(size, 0.0f, i) );
 	}
-}
-
-void CinderApp::newJoint(Vec3d pos, Joint * parent){
-	/*Joint * b;
-	if(parent != NULL){
-		b = new Joint(parent);
-		b->parent = parent;
-		parent->building = false;
-		parent->children.push_back(b);
-	}else{	
-		b = new Joint();
-	}
-	b->setPos(pos);
-	selectedJoint = b;*/
-	//Joints.push_back(b);
-	cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, parent));
 }
 
 Vec2d fromRectToRect(Vec2d _p, Rectf _r1, Rectf _r2){
@@ -714,14 +683,14 @@ void CinderApp::pickJoint( const Vec2i &pos ){
 	//  we can safely assume that it is indeed belonging to one object
 	if(max >= (total / 2)) {
 		if(Joint::jointMap.count(color) == 1){
-			UI::selectedNode = (Node *)Joint::jointMap.at(color);
+			cmdProc.executeCommand(new CMD_SelectNode((Node *)Joint::jointMap.at(color)));
 			((Joint *)UI::selectedNode)->building = true;
 		}else{
-			UI::selectedNode = nullptr;
+			cmdProc.executeCommand(new CMD_SelectNode(nullptr));
 		}
 	}else{
 		// we can't be sure about the color, we probably are on an object's edge
-		UI::selectedNode = nullptr;
+		cmdProc.executeCommand(new CMD_SelectNode(nullptr));
 	}
 }
 

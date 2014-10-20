@@ -8,7 +8,6 @@ std::map<uint32_t, Joint*> Joint::jointMap;
 
 void Joint::init(){
 	depth = 0;
-	building = true;
 	parent = NULL;
 	jointMap.insert(JointPair(nextColor, this));
 	color = Color::hex(nextColor);

@@ -21,8 +21,6 @@ public:
 
 	unsigned long int id;
 
-	bool building;
-	
 	Joint * parent;
 	std::vector<Joint *> children;
 	Transform *transform;
