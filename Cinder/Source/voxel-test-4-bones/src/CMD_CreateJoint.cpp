@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CMD_CreateJoint.h"
-#include "CMD_SelectNode.h"
+#include "CMD_SelectNodes.h"
 #include "UI.h"
 #include "Node.h"
 #include "Joint.h"
@@ -29,7 +29,7 @@ void CMD_CreateJoint::execute(){
 
 	// Select newly created joint
 	if(subCommands.size() == 0){
-		subCommands.push_back(new CMD_SelectNode(createdJoint));
+		subCommands.push_back(new CMD_SelectNodes(createdJoint));
 	}
 	subCommands.at(0)->execute();
 }

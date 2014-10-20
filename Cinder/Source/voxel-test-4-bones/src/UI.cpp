@@ -1,4 +1,4 @@
 #pragma once
 #include "UI.h"
 
-Node * UI::selectedNode = nullptr;
+std::vector<Node *> UI::selectedNodes;

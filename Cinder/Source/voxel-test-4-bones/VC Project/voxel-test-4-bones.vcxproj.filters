@@ -42,10 +42,13 @@
     <ClCompile Include="..\src\CMD_DeleteJoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CMD_SelectNode.cpp">
+    <ClCompile Include="..\..\..\..\Shared Code\src\Command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\Command.cpp">
+    <ClCompile Include="..\src\CMD_SetParent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CMD_SelectNodes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -88,7 +91,10 @@
     <ClInclude Include="..\include\CMD_DeleteJoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CMD_SelectNode.h">
+    <ClInclude Include="..\include\CMD_SetParent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_SelectNodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

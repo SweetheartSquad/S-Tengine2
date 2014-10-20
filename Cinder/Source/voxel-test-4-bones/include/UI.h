@@ -1,7 +1,9 @@
 #pragma once
 
+#include <vector>
+
 class Node;
 class UI{
 public:
-	static Node * selectedNode;
+	static std::vector<Node *> selectedNodes;
 };

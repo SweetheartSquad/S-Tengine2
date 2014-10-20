@@ -4,6 +4,7 @@
 
 #include "Command.h"
 
+class Node;
 class Joint;
 
 class CMD_DeleteJoint : public Command{
@@ -18,11 +19,11 @@ private:
 	std::vector<Joint *> * joints;
 
 	// The joint which this command is in reference to
-	Joint * jointForDeletion;
+	std::vector<Node *> jointsForDeletion;
 	
 	// Location in jointForDeletion's parent's list of children (or the joint list if it was a root) at which jointForDeletion exists
-	unsigned long int index;
+	std::vector<unsigned long int> index;
 
 	// If jointForDeletion had children, a copy of them are stored here
-	std::vector<Joint *> children;
+	std::vector<std::vector<Joint *>> children;
 };
