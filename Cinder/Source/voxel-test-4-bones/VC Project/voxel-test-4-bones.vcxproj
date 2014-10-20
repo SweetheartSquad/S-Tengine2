@@ -107,7 +107,7 @@
     <ClCompile Include="..\src\CMD_DeleteJoint.cpp" />
     <ClCompile Include="..\src\CMD_MoveSelectedJoints.cpp" />
     <ClCompile Include="..\src\CMD_SelectNodes.cpp" />
-    <ClCompile Include="..\src\CMD_SetParent.cpp" />
+    <ClCompile Include="..\src\CMD_Parent.cpp" />
     <ClCompile Include="..\src\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -126,7 +126,7 @@
     <ClInclude Include="..\include\CMD_DeleteJoint.h" />
     <ClInclude Include="..\include\CMD_MoveSelectedJoints.h" />
     <ClInclude Include="..\include\CMD_SelectNodes.h" />
-    <ClInclude Include="..\include\CMD_SetParent.h" />
+    <ClInclude Include="..\include\CMD_Parent.h" />
     <ClInclude Include="..\include\UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

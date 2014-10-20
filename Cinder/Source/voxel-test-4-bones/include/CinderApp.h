@@ -60,7 +60,7 @@ public:
 	void newJoint(Vec3d pos, Joint * parent = NULL);
 	Vec3d getCameraCorrectedPos();
 
-	void pickJoint(const Vec2i &pos);
+	Joint * pickJoint(const Vec2i &pos);
 	void switchMode();
 
 	void saveSkeleton();
