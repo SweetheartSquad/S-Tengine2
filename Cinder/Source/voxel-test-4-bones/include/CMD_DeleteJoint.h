@@ -26,4 +26,7 @@ private:
 
 	// If jointForDeletion had children, a copy of them are stored here
 	std::vector<std::vector<Joint *>> children;
+	
+	// False on creation, true after call to execute, false after call to unexecute
+	bool executed;
 };

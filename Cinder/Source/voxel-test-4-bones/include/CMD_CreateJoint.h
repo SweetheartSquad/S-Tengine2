@@ -24,5 +24,8 @@ private:
 	ci::Vec3d pos;
 	Joint * parent;
 	Joint * createdJoint;
+
+	// False on creation, true after call to execute, false after call to unexecute
+	bool executed;
 };
 

@@ -8,7 +8,8 @@
 
 CMD_DeleteJoint::CMD_DeleteJoint(std::vector<Joint *> * _joints) :
 	joints(_joints),
-	index(0)
+	index(0),
+	executed(false)
 {
 }
 
@@ -52,6 +53,7 @@ void CMD_DeleteJoint::execute(){
 			jointForDeletion->children.clear();
 		}
 	}
+	executed = true;
 }
 
 void CMD_DeleteJoint::unexecute(){
@@ -77,7 +79,18 @@ void CMD_DeleteJoint::unexecute(){
 			subCommands.at(0)->unexecute();
 		}
 	}
+	executed = false;
 }
 
 CMD_DeleteJoint::~CMD_DeleteJoint(void){
+	joints = nullptr;
+	// If the command is deleted after having been executed, the joints need to be deleted for real
+	if(executed){
+		for(unsigned long int i = 0; i < jointsForDeletion.size(); ++i){
+			Joint::deleteJoints((Joint *)jointsForDeletion.at(i));
+		}
+	}
+	jointsForDeletion.clear();
+	index.clear();
+	children.clear();
 }

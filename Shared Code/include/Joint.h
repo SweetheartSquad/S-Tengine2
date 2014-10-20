@@ -23,7 +23,10 @@ public:
 
 	Joint * parent;
 	std::vector<Joint *> children;
-	Transform *transform;
+	Transform transform;
+	
+	// Recursively delete all the children of a joint, then delete the joint itself
+	static void deleteJoints(Joint * _j);
 
 	Joint();
 	Joint(Joint * _parent);

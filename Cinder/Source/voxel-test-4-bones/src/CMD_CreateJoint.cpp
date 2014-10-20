@@ -10,7 +10,8 @@ CMD_CreateJoint::CMD_CreateJoint(std::vector<Joint *> * _joints, ci::Vec3d _pos,
 	joints(_joints),
 	pos(_pos),
 	parent(_parent),
-	createdJoint(nullptr)
+	createdJoint(nullptr),
+	executed(false)
 {
 }
 
@@ -32,6 +33,8 @@ void CMD_CreateJoint::execute(){
 		subCommands.push_back(new CMD_SelectNodes(createdJoint));
 	}
 	subCommands.at(0)->execute();
+
+	executed = true;
 }
 
 void CMD_CreateJoint::unexecute(){
@@ -50,10 +53,15 @@ void CMD_CreateJoint::unexecute(){
 
 	// Re-select old selection
 	subCommands.at(0)->unexecute();
+
+	executed = false;
 }
 
 CMD_CreateJoint::~CMD_CreateJoint(void){
-	delete createdJoint;
+	joints = nullptr;
+	if(!executed){
+		delete createdJoint;
+	}
 	joints = nullptr;
 	parent = nullptr;
 }

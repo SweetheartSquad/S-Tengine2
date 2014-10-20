@@ -88,7 +88,7 @@ std::string SkeletonData::writeJoint(Joint * j) {
 		json << "  \"parent_id\":" << j->parent->id << "," << std::endl;
 	}
 	json << "  \"pos\":"<< "{\"x\":" << j->getPos().x << ", \"y\":" << j->getPos().y << ", \"z\":" << j->getPos().z << "}," << std::endl;
-	json << "  \"orientation\":" << "{\"x\":" << j->transform->orientation.x << ", \"y\":" << j->transform->orientation.y << ", \"z\":" << j->transform->orientation.z << ", \"w\":" << j->transform->orientation.w << "}," << std::endl;
+	json << "  \"orientation\":" << "{\"x\":" << j->transform.orientation.x << ", \"y\":" << j->transform.orientation.y << ", \"z\":" << j->transform.orientation.z << ", \"w\":" << j->transform.orientation.w << "}," << std::endl;
 	
 	json << "  \"children\":" << "[" << std::endl;
 	for(Joint * c : j->children) {
@@ -118,8 +118,8 @@ Joint * SkeletonData::readJoint(JsonTree joint, Joint * parent) {
 	j->setPos(Vec3d(pos.getChild("x").getValue<float>(), pos.getChild("y").getValue<float>(), pos.getChild("z").getValue<float>()), false);
 		app::console() << " pos: x = " << j->getPos().x << " y = " << j->getPos().y << " pos: z = " << j->getPos().z << std::endl;
 	JsonTree orientation = joint.getChild("orientation");
-	j->transform->orientation = glm::quat(orientation.getChild("x").getValue<float>(), orientation.getChild("y").getValue<float>(), orientation.getChild("z").getValue<float>(), orientation.getChild("w").getValue<float>());
-		app::console() << " orientation: x = " << j->transform->orientation.x << " y = " << j->transform->orientation.y << " z = " << j->transform->orientation.z << " w = " << j->transform->orientation.w << std::endl;
+	j->transform.orientation = glm::quat(orientation.getChild("x").getValue<float>(), orientation.getChild("y").getValue<float>(), orientation.getChild("z").getValue<float>(), orientation.getChild("w").getValue<float>());
+		app::console() << " orientation: x = " << j->transform.orientation.x << " y = " << j->transform.orientation.y << " z = " << j->transform.orientation.z << " w = " << j->transform.orientation.w << std::endl;
 
 	JsonTree childrenJson = joint.getChild("children");
 	for( JsonTree::ConstIter child = childrenJson.begin(); child != childrenJson.end(); ++child ) {

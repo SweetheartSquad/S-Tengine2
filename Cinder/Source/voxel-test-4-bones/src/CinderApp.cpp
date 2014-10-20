@@ -106,9 +106,10 @@ void CinderApp::resize(){
 	}
 }
 
+
 void CinderApp::shutdown(){
 	for(unsigned long int i = 0; i < Joints.size(); ++i){
-		delete Joints.at(i);
+		Joint::deleteJoints(Joints.at(i));
 	}
 	Joints.clear();
 	UI::selectedNodes.clear();
