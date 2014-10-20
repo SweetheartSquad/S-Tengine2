@@ -24,7 +24,7 @@ using namespace std;
 
 class CinderApp : public AppBasic {
 public:
-	void prepareSettings(Settings *settings);
+	void prepareSettings(Settings * settings);
 
 	void setup();
 	void shutdown();
@@ -41,20 +41,20 @@ public:
 
 	void resize();
 
-	//! renders the scene
+	// Renders the scene
 	void renderScene(gl::Fbo & fbo, const Camera & cam);
 	void renderUI(const Camera & cam, const Rectf & rect);
 
-	//! loads an OBJ file, writes it to a much faster binary file and loads the mesh
+	// Loads an OBJ file, writes it to a much faster binary file and loads the mesh
 	void loadMesh( const std::string &objFile, const std::string &meshFile, TriMesh *mesh);
-	//! loads the shaders
+	// Loads the shaders
 	void loadShaders();
-	//! initializes empty single channel fbos
+	// Initializes empty single channel fbos
 	void initFbo(gl::Fbo & _fbo, Area _area);
-	//! initializes empty 3-channel fbos
+	// Initializes empty 3-channel fbos
 	void initMultiChannelFbo(gl::Fbo & _fbo, Area _area);
 
-	//! draws a grid on the floor
+	// Draws a grid on the floor
 	void drawGrid(float size=100.0f, float step=10.0f);
 
 	void newJoint(Vec3d pos, Joint * parent = NULL);
@@ -68,7 +68,7 @@ public:
 
 	void handleUI(const Vec2i &pos);
 public:
-	// utility functions to translate colors to and from ints or chars 
+	// Utility functions to translate colors to and from ints or chars 
 	static Color charToColor( unsigned char r, unsigned char g, unsigned char b ){
 		return Color(r / 255.0f, g / 255.0f, b / 255.0f);
 	};
@@ -106,14 +106,13 @@ protected:
 	CameraOrtho camRight;
 	CameraOrtho camFront;
 
-	//! our Phong shader, which supports multiple targets
 	gl::GlslProg	jointShader;
 
 	//! our little picking framebuffer (non-AA) 
 	//gl::Fbo			mPickingFboVoxel;
 	//gl::Fbo			mPickingFboFace;
 	
-	//framebuffers for cameras
+	// Framebuffers for cameras
 	gl::Fbo fboTop;
 	gl::Fbo fboRight;
 	gl::Fbo fboFront;
@@ -122,15 +121,15 @@ protected:
 	gl::Fbo	fboUI; //! our main framebuffer (AA, containing 2 color buffers)
 	gl::Fbo pickingFboUI;
 
-	//framebuffer for selecting joints
+	// Framebuffer for selecting joints
 	gl::Fbo mPickingFboJoint;
 	
-	//rect definitions for cameras sizes
+	// Rect definitions for cameras sizes
 	Rectf rectTop;
 	Rectf rectRight;
 	Rectf rectFront;
 	Rectf rectPersp;
-	//rect definitions for cameras sizes
+	// Rect definitions for cameras sizes
 	Rectf boundsTop;
 	Rectf boundsRight;
 	Rectf boundsFront;
@@ -160,6 +159,6 @@ protected:
 		SELECT
 	} mode;
 
-	// commands
+	// Commands
 	CommandProcessor cmdProc;
 };

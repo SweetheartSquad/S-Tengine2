@@ -96,6 +96,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Shared Code\src\Command.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\CommandProcessor.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Joint.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />

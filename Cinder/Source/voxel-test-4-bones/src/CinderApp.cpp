@@ -66,9 +66,9 @@ void CinderApp::resize(){
 	rectFront.set(0, h2, w2, h);
 	rectPersp.set(w2, h2, w, h);
 	
-	boundsTop.set(-r, -1, r, 1);
-	boundsRight.set(-r, -1, r, 1);
-	boundsFront.set(-r, -1, r, 1);
+	boundsTop.set(	-r,	-1.f,	r,	1.f);
+	boundsRight.set(-r,	-1.f,	r,	1.f);
+	boundsFront.set(-r,	-1.f,	r,	1.f);
 	//boundsPersp.set(-1, -h/w, 1, h/w);
 	
 	camTop.setOrtho(boundsTop.x1, boundsTop.x2, boundsTop.y1, boundsTop.y2, -10000, 10000);
@@ -219,9 +219,7 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 
 		// draw joints:
 		for(Joint * j : Joints){
-			//if(j->parent == nullptr){
-				j->draw(&jointShader);
-			//}
+			j->draw(&jointShader);
 		}
 
 		// unbind shader
@@ -315,7 +313,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 
 				float dif = delta.dot(mouseAxis);
 
-				dif /= sqrt(getWindowHeight()*getWindowHeight() + getWindowWidth()*getWindowWidth());
+				dif /= sqrtf(getWindowHeight()*getWindowHeight() + getWindowWidth()*getWindowWidth());
 
 				((Joint *)UI::selectedNode)->transform->translate(glm::vec3(dir.x*dif/100.f, dir.y*dif/100.f, dir.z*dif/100.f));
 				
@@ -447,25 +445,23 @@ Vec2d fromRectToRect(Vec2d _p, Rectf _r1, Rectf _r2){
 
 Vec3d CinderApp::getCameraCorrectedPos(){
 	Vec3d res;
-	float w = getWindowWidth();
-	float h = getWindowHeight();
-	float x = (mMousePos.x);
-	float y = (mMousePos.y);
+	float x = (int)mMousePos.x;
+	float y = (int)mMousePos.y;
 	if(rectTop.contains(mMousePos)){
-		Vec2d t = fromRectToRect(Vec2f(x,y), rectTop, boundsTop);
+		Vec2d t = fromRectToRect(Vec2f(x, y), rectTop, boundsTop);
 		res.x = t.x;
 		res.y = 0;
 		res.z = t.y;
 	}else if(rectRight.contains(mMousePos)){
 		x = rectRight.x2 - x + rectRight.x1;
 		y = rectRight.y2 - y + rectRight.y1;
-		Vec2d t = fromRectToRect(Vec2f(x,y), rectRight, boundsRight);
+		Vec2d t = fromRectToRect(Vec2f(x, y), rectRight, boundsRight);
 		res.x = 0;
 		res.y = t.y;
 		res.z = t.x;
 	}else if(rectFront.contains(mMousePos)){
 		y = rectFront.y2 - y + rectFront.y1;
-		Vec2d t = fromRectToRect(Vec2f(x,y), rectFront, boundsFront);
+		Vec2d t = fromRectToRect(Vec2f(x, y), rectFront, boundsFront);
 		res.x = t.x;
 		res.y = t.y;
 		res.z = 0;

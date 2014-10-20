@@ -16,9 +16,13 @@ public:
 
 private:
 	std::vector<Joint *> * joints;
+
+	// The joint which this command is in reference to
 	Joint * jointForDeletion;
+	
 	// Location in jointForDeletion's parent's list of children (or the joint list if it was a root) at which jointForDeletion exists
 	unsigned long int index;
 
+	// If jointForDeletion had children, a copy of them are stored here
 	std::vector<Joint *> children;
 };

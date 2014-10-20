@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CMD_CreateJoint.h"
+#include "CMD_SelectNode.h"
 #include "UI.h"
 #include "Node.h"
 #include "Joint.h"
@@ -14,7 +15,6 @@ CMD_CreateJoint::CMD_CreateJoint(std::vector<Joint *> * _joints, ci::Vec3d _pos,
 }
 
 void CMD_CreateJoint::execute(){
-	oldSelection = UI::selectedNode;
 	if(createdJoint == nullptr){
 		createdJoint = new Joint(parent);
 	}
@@ -26,8 +26,12 @@ void CMD_CreateJoint::execute(){
 	}
 
 	createdJoint->setPos(pos);
-	UI::selectedNode = createdJoint;
-	
+
+	// Select newly created joint
+	if(subCommands.size() == 0){
+		subCommands.push_back(new CMD_SelectNode(createdJoint));
+	}
+	subCommands.at(0)->execute();
 }
 
 void CMD_CreateJoint::unexecute(){
@@ -45,7 +49,7 @@ void CMD_CreateJoint::unexecute(){
 	}
 
 	// Re-select old selection
-	UI::selectedNode = oldSelection;
+	subCommands.at(0)->unexecute();
 }
 
 CMD_CreateJoint::~CMD_CreateJoint(void){

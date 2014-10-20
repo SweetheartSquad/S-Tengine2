@@ -24,6 +24,5 @@ private:
 	ci::Vec3d pos;
 	Joint * parent;
 	Joint * createdJoint;
-	Node * oldSelection;
 };
 

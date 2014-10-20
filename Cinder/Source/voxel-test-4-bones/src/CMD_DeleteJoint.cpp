@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CMD_DeleteJoint.h"
+#include "CMD_SelectNode.h"
 #include "UI.h"
 #include "Node.h"
 #include "Joint.h"
@@ -37,7 +38,10 @@ void CMD_DeleteJoint::execute(){
 			}
 		}
 		// Joint was deleted, so unselect it
-		UI::selectedNode = nullptr;
+		if(subCommands.size() == 0){
+			subCommands.push_back(new CMD_SelectNode(nullptr));
+		}
+		subCommands.at(0)->execute();
 	}else{
 		// If the joint has children, delete it's children (but not the joint itself)
 		children = jointForDeletion->children;
@@ -60,8 +64,10 @@ void CMD_DeleteJoint::unexecute(){
 		jointForDeletion->children = children;
 	}
 
-	// Re-select old selection
-	UI::selectedNode = jointForDeletion;
+	if(subCommands.size() != 0){
+		// Re-select old selection
+		subCommands.at(0)->unexecute();
+	}
 }
 
 CMD_DeleteJoint::~CMD_DeleteJoint(void){
