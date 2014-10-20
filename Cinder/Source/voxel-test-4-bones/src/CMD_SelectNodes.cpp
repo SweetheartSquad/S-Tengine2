@@ -62,12 +62,22 @@ void CMD_SelectNodes::execute(){
 		}
 	}
 
+	// If subtractive (shift-select, control-select), overlapping selections are ignored
 	if(subtractive){
 		overlapS.clear();
-	}if(!additive && !subtractive){
-		oldS.clear();
-	}if(subtractive && !additive){
-		newS.clear();
+		if(!additive){
+			// If subtractive and not additive (control-select), the new selections are ignored
+			newS.clear();
+		}else{
+			// If subtractive and additive (shift-select), new and old selections are selected
+		}
+	}else{
+		if(!additive){
+			// If not subtractive and not additive (normal select), the old selections are ignored
+			oldS.clear();
+		}else{
+			// If not subtractive and additive (shift+control-select), everything is selected
+		}
 	}
 
 	std::vector<Node *> correctedNodesForSelection;
