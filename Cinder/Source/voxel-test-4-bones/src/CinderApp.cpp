@@ -2,6 +2,7 @@
 
 #include "CinderApp.h"
 #include "UI.h"
+#include "CMD_DeleteJoint.h"
 
 void CinderApp::prepareSettings(Settings *settings){
 	settings->setWindowSize(900, 600);
@@ -217,9 +218,9 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 
 		// draw joints:
 		for(Joint * j : Joints){
-			if(j->parent == nullptr){
+			//if(j->parent == nullptr){
 				j->draw(&jointShader);
-			}
+			//}
 		}
 
 		// unbind shader
@@ -369,6 +370,11 @@ void CinderApp::keyDown( KeyEvent event ){
 			}
 		}
 		break;
+	case KeyEvent::KEY_DELETE:
+		if(UI::selectedNode != nullptr){
+			cmdProc.executeCommand(new CMD_DeleteJoint(&Joints));
+		}
+		break;
 	case KeyEvent::KEY_z:
 		console() << "z down" << endl;
 		if (event.isControlDown()){
@@ -458,7 +464,7 @@ void CinderApp::newJoint(Vec3d pos, Joint * parent){
 	b->setPos(pos);
 	selectedJoint = b;*/
 	//Joints.push_back(b);
-	cmdProc.executeCommand(new CreateJointCommand(Joints, pos, parent));
+	cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, parent));
 }
 
 Vec2d fromRectToRect(Vec2d _p, Rectf _r1, Rectf _r2){
@@ -732,7 +738,7 @@ void CinderApp::switchMode(){
 void CinderApp::saveSkeleton() {
 	try{
 		console() << "saveSkeleton" << endl;
-		s->SaveSkeleton(directory,fileName,Joints);
+		s->SaveSkeleton(directory,fileName, Joints);
 		message = "Saved skeleton";
 	}catch (exception ex){
 		message = string(ex.what());

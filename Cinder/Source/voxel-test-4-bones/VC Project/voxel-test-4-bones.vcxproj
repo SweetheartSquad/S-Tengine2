@@ -102,7 +102,8 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\SkeletonData.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
     <ClCompile Include="..\src\CinderApp.cpp" />
-    <ClCompile Include="..\src\CreateJointCommand.cpp" />
+    <ClCompile Include="..\src\CMD_CreateJoint.cpp" />
+    <ClCompile Include="..\src\CMD_DeleteJoint.cpp" />
     <ClCompile Include="..\src\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -117,7 +118,8 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\SkeletonData.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />
     <ClInclude Include="..\include\CinderApp.h" />
-    <ClInclude Include="..\include\CreateJointCommand.h" />
+    <ClInclude Include="..\include\CMD_CreateJoint.h" />
+    <ClInclude Include="..\include\CMD_DeleteJoint.h" />
     <ClInclude Include="..\include\UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

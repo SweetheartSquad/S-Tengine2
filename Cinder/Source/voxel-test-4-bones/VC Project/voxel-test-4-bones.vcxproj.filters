@@ -33,10 +33,13 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\CommandProcessor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CreateJointCommand.cpp">
+    <ClCompile Include="..\src\UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\UI.cpp">
+    <ClCompile Include="..\src\CMD_CreateJoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CMD_DeleteJoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -70,10 +73,13 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\CommandProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CreateJointCommand.h">
+    <ClInclude Include="..\include\UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\UI.h">
+    <ClInclude Include="..\include\CMD_CreateJoint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_DeleteJoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

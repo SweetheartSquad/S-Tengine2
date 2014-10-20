@@ -4,8 +4,7 @@
 #include <cinder/app/AppBasic.h>
 
 using namespace ci;
-CommandProcessor::CommandProcessor(void)
-{
+CommandProcessor::CommandProcessor(void){
 }
 
 void CommandProcessor::executeCommand(Command * c){
@@ -32,6 +31,14 @@ void CommandProcessor::redo(){
 	}
 }
 
-CommandProcessor::~CommandProcessor(void)
-{
+CommandProcessor::~CommandProcessor(void){
+	for(unsigned long int i = 0; i < undoStack.size(); ++i){
+		delete undoStack.at(i);
+	}
+	undoStack.clear();
+
+	for(unsigned long int i = 0; i < redoStack.size(); ++i){
+		delete redoStack.at(i);
+	}
+	redoStack.clear();
 }

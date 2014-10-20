@@ -16,7 +16,7 @@
 #include "Joint.h"
 #include "CommandProcessor.h"
 
-#include "CreateJointCommand.h"
+#include "CMD_CreateJoint.h"
 
 using namespace ci;
 using namespace ci::app;

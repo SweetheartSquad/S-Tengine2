@@ -6,14 +6,15 @@
 
 #include "Command.h"
 
+class Node;
 class Joint;
 
-class CreateJointCommand :
+class CMD_CreateJoint :
 	public Command
 {
 public:
-	CreateJointCommand(std::vector<Joint*> &joints, ci::Vec3d pos, Joint * parent);
-	~CreateJointCommand(void);
+	CMD_CreateJoint(std::vector<Joint*> * _joints, ci::Vec3d _pos, Joint * _parent);
+	~CMD_CreateJoint(void);
 
 	void execute();
 	void unexecute();
@@ -22,5 +23,7 @@ private:
 	std::vector<Joint*> * joints;
 	ci::Vec3d pos;
 	Joint * parent;
+	Joint * createdJoint;
+	Node * oldSelection;
 };
 
