@@ -106,7 +106,7 @@ protected:
 	CameraOrtho camRight;
 	CameraOrtho camFront;
 
-	gl::GlslProg	jointShader;
+	gl::GlslProg jointShader;
 
 	//! our little picking framebuffer (non-AA) 
 	//gl::Fbo			mPickingFboVoxel;
@@ -136,10 +136,10 @@ protected:
 	//Rectf boundsPersp;
 
 	//! keeping track of our cursor position
-	Vec2i			mMousePos;
+	Vec2i mMousePos;
 
 	//! background color
-	Color			mColorBackground;
+	Color mColorBackground;
 
 	//! colour channel to draw to the main viewport
 	unsigned long int channel;
@@ -152,7 +152,6 @@ protected:
 	Vec3i dir;
 	Vec2i mouseAxis;
 	Vec2i oldMousePos;
-	SkeletonData * s;
 
 	enum UImode{
 		CREATE,

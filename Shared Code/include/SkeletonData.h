@@ -20,18 +20,14 @@ using namespace ci;
 
 class SkeletonData{
 public:
-	SkeletonData(void);
-	
-	void SaveSkeleton(std::string directory, std::string fileName, std::vector<Joint *> &m_joints);
-	std::vector<Joint *> LoadSkeleton(std::string filePath);
+	static void SaveSkeleton(std::string directory, std::string fileName, std::vector<Joint *> &m_joints);
+	static std::vector<Joint *> LoadSkeleton(std::string filePath);
 
-	void validateDirectory(std::string & directory);
-	void validateFileName(std::string & fileName);
-
-	~SkeletonData(void);
+	static void validateDirectory(std::string & directory);
+	static void validateFileName(std::string & fileName);
 
 protected:
-	std::string writeJoint(Joint * b);
-	Joint* readJoint(JsonTree joint, Joint * parent = nullptr);
+	static std::string writeJoint(Joint * b);
+	static Joint * readJoint(JsonTree joint, Joint * parent = nullptr);
 };
 

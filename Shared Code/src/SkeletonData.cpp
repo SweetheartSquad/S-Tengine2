@@ -2,9 +2,6 @@
 
 #include "SkeletonData.h"
 
-SkeletonData::SkeletonData(void){
-}
-
 void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, std::vector<Joint *> & joints) {
 	try{
 		//Validate directory
@@ -170,7 +167,4 @@ void SkeletonData::validateFileName(std::string & fileName) {
 	}catch(std::exception ex){
 		throw ex;
 	}
-}
-
-SkeletonData::~SkeletonData(void){
 }

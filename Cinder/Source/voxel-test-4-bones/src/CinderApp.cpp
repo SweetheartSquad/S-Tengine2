@@ -378,9 +378,7 @@ void CinderApp::keyDown( KeyEvent event ){
 		}
 		break;
 	case KeyEvent::KEY_z:
-		console() << "z down" << endl;
 		if (event.isControlDown()){
-			console() << "ctrl down" << endl;
 			cmdProc.undo();
 		}
 		break;
@@ -737,7 +735,7 @@ void CinderApp::switchMode(){
 void CinderApp::saveSkeleton() {
 	try{
 		console() << "saveSkeleton" << endl;
-		s->SaveSkeleton(directory,fileName, Joints);
+		SkeletonData::SaveSkeleton(directory, fileName, Joints);
 		message = "Saved skeleton";
 	}catch (exception ex){
 		message = string(ex.what());
@@ -749,9 +747,10 @@ void CinderApp::loadSkeleton() {
 		console() << "loadSkeleton" << endl;
 		Joints.clear();
 
-		Joints = s->LoadSkeleton(filePath);
+		Joints = SkeletonData::LoadSkeleton(filePath);
 		message = "Loaded skeleton";
 
+		cmdProc.reset();
 	}catch (exception ex){
 		message = string(ex.what());
 	}
