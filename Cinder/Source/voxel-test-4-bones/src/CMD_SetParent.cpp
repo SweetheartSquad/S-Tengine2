@@ -5,8 +5,8 @@
 #include "Node.h"
 #include "Joint.h"
 
-CMD_SetParent::CMD_SetParent(std::vector<Joint *> * _joints) :
-	joints(_joints)
+CMD_SetParent::CMD_SetParent(/*std::vector<Joint *> * _joints*/)/* :
+	joints(_joints)*/
 {
 }
 

@@ -4,6 +4,8 @@
 #include "UI.h"
 #include "CMD_DeleteJoint.h"
 #include "CMD_SelectNodes.h"
+#include "CMD_MoveSelectedJoints.h"
+#include "CMD_SetParent.h"
 
 void CinderApp::prepareSettings(Settings *settings){
 	settings->setWindowSize(900, 600);
@@ -311,13 +313,9 @@ void CinderApp::mouseDrag( MouseEvent event ){
 	if(event.isAltDown()){
 		camMayaPersp.mouseDrag( mMousePos, event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
 	}else{
-		if(event.isLeft()){
-			/*if(((Joint *)UI::selectedNode) != nullptr){
-				if(((Joint *)UI::selectedNode)->building){
-					((Joint *)UI::selectedNode)->setPos(getCameraCorrectedPos());
-				}
-			}*/
-		}else{
+		if(event.isLeftDown()){
+			//cmdProc.executeCommand(new CMD_MoveSelectedJoints(getCameraCorrectedPos(), false));
+		}else if(event.isRightDown()){
 			if(UI::selectedNodes.size() > 0){
 
 				Vec2i delta = mMousePos - oldMousePos;
@@ -325,8 +323,8 @@ void CinderApp::mouseDrag( MouseEvent event ){
 				float dif = delta.dot(mouseAxis);
 
 				dif /= sqrtf(getWindowHeight()*getWindowHeight() + getWindowWidth()*getWindowWidth());
-
-				//((Joint *)UI::selectedNode)->transform->translate(glm::vec3(dir.x*dif/100.f, dir.y*dif/100.f, dir.z*dif/100.f));
+				
+				cmdProc.executeCommand(new CMD_MoveSelectedJoints(Vec3d(dir.x*dif/100.f, dir.y*dif/100.f, dir.z*dif/100.f), true));
 				
 				oldMousePos = mMousePos;
 			}
@@ -341,6 +339,7 @@ void CinderApp::keyDown( KeyEvent event ){
 	
 	switch( event.getCode() ) {
 	case KeyEvent::KEY_ESCAPE:
+		//shutdown();
 		quit();
 		break;
 	case KeyEvent::KEY_f:
@@ -745,12 +744,15 @@ void CinderApp::saveSkeleton() {
 
 void CinderApp::loadSkeleton() {
 	try{
+		// Deselect everything
+		cmdProc.executeCommand(new CMD_SelectNodes(nullptr));
 		console() << "loadSkeleton" << endl;
 		Joints.clear();
 
 		Joints = SkeletonData::LoadSkeleton(filePath);
 		message = "Loaded skeleton";
 
+		// Clear the undo/redo history
 		cmdProc.reset();
 	}catch (exception ex){
 		message = string(ex.what());

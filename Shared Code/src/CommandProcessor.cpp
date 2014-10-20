@@ -7,47 +7,51 @@
 #include "CommandProcessor.h"
 #include "Command.h"
 
-CommandProcessor::CommandProcessor(void){
-}
+CommandProcessor::CommandProcessor(void){}
 
 void CommandProcessor::executeCommand(Command * c){
-	ci::app::console() << "executeCommand: " << typeid(*c).name() << std::endl;
+	//ci::app::console() << "executeCommand: " << typeid(*c).name() << std::endl;
 	c->execute();
 	undoStack.push_back(c);
 
 	// Executing a new command will always clear the redoStack
-	for(unsigned long int i = 0; i < redoStack.size(); ++i){
-		delete redoStack.at(i);
+	for(unsigned long int i = redoStack.size(); i > 0; --i){
+		delete redoStack.at(i-1);
+		redoStack.at(i-1) = nullptr;
 	}
 	redoStack.clear();
 }
 
 void CommandProcessor::undo(){
-	ci::app::console() << "undo: " << typeid(*undoStack.back()).name() << std::endl;
-	if (undoStack.size() > 0){
-		undoStack.back()->unexecute();
-		redoStack.push_back(undoStack.back());
+	if (undoStack.size() != 0){
+		//ci::app::console() << "undo: " << typeid(*c).name() << std::endl;
+		Command * c = undoStack.back();
+		c->unexecute();
+		redoStack.push_back(c);
 		undoStack.pop_back();
 	}
 }
 
 void CommandProcessor::redo(){
-	ci::app::console() << "redo: " << typeid(*redoStack.back()).name() << std::endl;
-	if (redoStack.size() > 0){
-		redoStack.back()->execute();
-		undoStack.push_back(redoStack.back());
+	if (redoStack.size() != 0){
+		//ci::app::console() << "redo: " << typeid(*c).name() << std::endl;
+		Command * c = redoStack.back();
+		c->execute();
+		undoStack.push_back(c);
 		redoStack.pop_back();
 	}
 }
 
 void CommandProcessor::reset(){
-	for(unsigned long int i = 0; i < undoStack.size(); ++i){
-		delete undoStack.at(i);
+	for(unsigned long int i = undoStack.size(); i > 0; --i){
+		delete undoStack.at(i-1);
+		undoStack.at(i-1) = nullptr;
 	}
 	undoStack.clear();
 
-	for(unsigned long int i = 0; i < redoStack.size(); ++i){
-		delete redoStack.at(i);
+	for(unsigned long int i = redoStack.size(); i > 0; --i){
+		delete redoStack.at(i-1);
+		redoStack.at(i-1) = nullptr;
 	}
 	redoStack.clear();
 }

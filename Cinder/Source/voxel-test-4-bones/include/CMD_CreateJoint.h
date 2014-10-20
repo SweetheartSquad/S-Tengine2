@@ -9,9 +9,7 @@
 class Node;
 class Joint;
 
-class CMD_CreateJoint :
-	public Command
-{
+class CMD_CreateJoint : public Command{
 public:
 	CMD_CreateJoint(std::vector<Joint*> * _joints, ci::Vec3d _pos, Joint * _parent);
 	~CMD_CreateJoint(void);

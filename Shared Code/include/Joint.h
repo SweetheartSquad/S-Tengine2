@@ -17,6 +17,7 @@ public:
 	static std::map<uint32_t, Joint *> jointMap;
 	Color color;
 
+	// Number of parent-child references from root to this
 	unsigned long int depth;
 
 	unsigned long int id;
@@ -28,8 +29,8 @@ public:
 	// Recursively delete all the children of a joint, then delete the joint itself
 	static void deleteJoints(Joint * _j);
 
-	Joint();
-	Joint(Joint * _parent);
+	explicit Joint();
+	explicit Joint(Joint * _parent);
 	~Joint();
 	
 	void setPos(Vec3d _pos, bool _convertToRelative = true);

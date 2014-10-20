@@ -11,11 +11,12 @@ void Joint::deleteJoints(Joint * _j){
 		deleteJoints(_j->children.at(i));
 	}
 	delete _j;
+	_j = nullptr;
 }
 
 void Joint::init(){
 	depth = 0;
-	parent = NULL;
+	parent = nullptr;
 	jointMap.insert(JointPair(nextColor, this));
 	color = Color::hex(nextColor);
 	nextColor -= 0x000001;
@@ -66,11 +67,11 @@ void Joint::draw(gl::GlslProg * _shader){
 	_shader->uniform("pickingColor", color);
 	//colour
 	if(depth%3 == 0){
-		gl::color(Color(0, 1, 1));
+		gl::color(0, 1, 1);
 	}else if(depth%3 == 1){
-		gl::color(Color(1, 0, 1));
+		gl::color(1, 0, 1);
 	}else{
-		gl::color(Color(1, 1, 0));
+		gl::color(1, 1, 0);
 	}
 	
 	//draw joint

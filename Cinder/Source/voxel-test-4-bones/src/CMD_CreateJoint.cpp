@@ -62,6 +62,7 @@ CMD_CreateJoint::~CMD_CreateJoint(void){
 	if(!executed){
 		delete createdJoint;
 	}
+	createdJoint = nullptr;
 	joints = nullptr;
 	parent = nullptr;
 }

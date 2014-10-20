@@ -8,7 +8,7 @@ public:
 	virtual void execute() = 0;
 	virtual void unexecute() = 0;
 	
-	~Command();
+	virtual ~Command();
 
 	std::vector<Command *> subCommands;
 };
