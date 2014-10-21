@@ -6,6 +6,7 @@
 #include "Mouse.h"
 #include "Camera.h"
 #include "Light.h"
+#include "FrameBufferInterface.h"
 
 //Forward declaration since Game has many scenes and Sene has a reference back to game
 class Game;
@@ -33,4 +34,6 @@ public:
 	void addChild(Entity * child);
 	/** Toggles fullscreen on and off */
 	void toggleFullScreen();
+
+	FrameBufferInterface frameBuffer;
 };

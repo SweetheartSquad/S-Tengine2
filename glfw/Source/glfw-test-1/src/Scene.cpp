@@ -3,6 +3,7 @@
 Scene::Scene(Game * _game):
 	game(_game),
 	camera(new Camera()),
+	frameBuffer(FrameBufferInterface()),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance())

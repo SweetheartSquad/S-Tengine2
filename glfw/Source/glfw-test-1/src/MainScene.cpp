@@ -48,7 +48,7 @@ MainScene::MainScene(Game * _game):
 	t->translateX(-2);
 	t->scale(3, 3, 3);
 
-	for(unsigned long int i = 0; i < 3; ++i){
+	for(unsigned long int i = 0; i < 1; ++i){
 		Entity * loaded = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxShader, cube);
 		loaded->mesh->polygonalDrawMode = GL_POINTS;
 		cube->addChild(loaded);
@@ -56,7 +56,6 @@ MainScene::MainScene(Game * _game):
 	}
 
 	//Entity * loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, texShader, cube);
-
 	//cube->addChild(loaded1);
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
@@ -105,7 +104,6 @@ MainScene::~MainScene(){
 
 void MainScene::update(){
 	Scene::update();
-
 	*cube3->transform = *tLight->transform;
 
 	tLight->transform->translateX(sin(glfwGetTime()) * 0.1);
@@ -132,7 +130,7 @@ void MainScene::update(){
 		cube3->transform->rotate(2.f, 0.f, -1.f, 0.f);
 	}
 	if(keyboard->keyDown(GLFW_KEY_E)){
-		cube->transform->translate((float)vox::deltaTimeCorrection * 0.001f, 0.f, 0.f);
+		cube->transform->translate((float)vox::deltaTimeCorrection * 0.01f, 0.f, 0.f);
 	}
 	if(mouse->leftDown()){
 		glm::quat r = glm::angleAxis(1.f, glm::vec3(0.f, 0.f, 1.f));
