@@ -1,6 +1,7 @@
 #pragma once 
 
 #include <gl/glew.h>
+#include "Shader.h"
 
 class FrameBufferInterface{
 public:
@@ -16,6 +17,8 @@ public:
 
 	void bindTextureBuffer();
 	void bindFrameBuffer();
+
+	void configureDefaultShaderAttributes();
 
 	GLenum checkFrameBufferStatus();
 

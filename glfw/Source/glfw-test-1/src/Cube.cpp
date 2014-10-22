@@ -177,4 +177,5 @@ void Cube::setVertexColour(int index, float red, float green, float blue, float 
 }
 
 void Cube::update(void){
+	Entity::update();
 }

@@ -9,9 +9,9 @@ FrameBufferInterface::~FrameBufferInterface(){
 
 void FrameBufferInterface::load(){
 	glGenFramebuffers(1, &frameBufferId);
+	bindFrameBuffer();
 	glGenTextures(1, &textureBufferId);
 	bindTextureBuffer();
-	bindFrameBuffer();
 }
 
 void FrameBufferInterface::unload(){
@@ -29,6 +29,10 @@ void FrameBufferInterface::bindTextureBuffer(){
 
 void FrameBufferInterface::bindFrameBuffer(){
 	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+}
+
+void FrameBufferInterface::configureDefaultShaderAttributes(){
+
 }
 
 GLenum FrameBufferInterface::checkFrameBufferStatus(){

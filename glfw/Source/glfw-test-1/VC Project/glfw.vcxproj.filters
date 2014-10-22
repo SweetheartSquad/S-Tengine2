@@ -117,6 +117,9 @@
     <ClCompile Include="..\src\FrameBufferInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Plane.cpp">
+      <Filter>Source Files\geo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="..\include\FrameBufferInterface.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Plane.h">
+      <Filter>Header Files\geo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
