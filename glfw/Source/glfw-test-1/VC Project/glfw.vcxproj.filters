@@ -120,6 +120,9 @@
     <ClCompile Include="..\src\Plane.cpp">
       <Filter>Source Files\geo</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\RenderSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -199,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="..\include\Plane.h">
       <Filter>Header Files\geo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\RenderSurface.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
