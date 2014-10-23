@@ -8,6 +8,7 @@
 #include "Light.h"
 #include "FrameBufferInterface.h"
 #include <Plane.h>
+#include <RenderSurface.h>
 
 //Forward declaration since Game has many scenes and Sene has a reference back to game
 class Game;
@@ -36,7 +37,8 @@ public:
 	/** Toggles fullscreen on and off */
 	void toggleFullScreen();
 
-	Plane plane;
+	//Plane plane;
 
 	FrameBufferInterface frameBuffer;
+	RenderSurface renderSurface;
 };

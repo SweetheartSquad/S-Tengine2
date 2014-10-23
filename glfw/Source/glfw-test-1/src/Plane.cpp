@@ -12,15 +12,15 @@ Plane::Plane(glm::vec3 _center, float _size)
 	m->pushVert(Vertex(1.f, 1.f, 1.f));
 	m->pushVert(Vertex(1.f, -1.f, 1.f));
 	m->pushVert(Vertex(-1.f, -1.f, 1.f));
-	m->pushQuad(8, 9, 10, 11);
-	m->setNormal(8, 0.0, 0.0, 1.0);
-	m->setNormal(9, 0.0, 0.0, 1.0);
-	m->setNormal(10, 0.0, 0.0, 1.0);
-	m->setNormal(11, 0.0, 0.0, 1.0);
-	m->setUV(8, 0.0, 0.0);
-	m->setUV(9, 0.0, 1.0);
-	m->setUV(10, 1.0, 1.0);
-	m->setUV(11, 1.0, 0.0);
+	m->pushQuad(0, 1, 2, 3);
+	m->setNormal(0, 0.0, 0.0, 1.0);
+	m->setNormal(1, 0.0, 0.0, 1.0);
+	m->setNormal(2, 0.0, 0.0, 1.0);
+	m->setNormal(3, 0.0, 0.0, 1.0);
+	m->setUV(0, 0.0, 0.0);
+	m->setUV(1, 0.0, 1.0);
+	m->setUV(2, 1.0, 1.0);
+	m->setUV(3, 1.0, 0.0);
 }
 
 Plane::~Plane(){

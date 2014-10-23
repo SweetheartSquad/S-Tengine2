@@ -70,7 +70,7 @@ public:
 	_drawMode: GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS, GL_QUAD_STRIP, GL_POLYGON
 	*/
 	MeshInterface(GLenum _polygonalDrawMode, GLenum _drawMode);
-	~MeshInterface(void);
+	virtual ~MeshInterface(void);
 
 	/** If unloaded, generates the VAO, VBO, IBO and flags as loaded */
 	void load();

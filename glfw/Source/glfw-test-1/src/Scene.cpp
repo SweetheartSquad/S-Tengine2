@@ -4,6 +4,7 @@ Scene::Scene(Game * _game):
 	game(_game),
 	camera(new Camera()),
 	frameBuffer(FrameBufferInterface()),
+	renderSurface(RenderSurface(new Shader("../assets/RenderSurface", false, true))),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance())
@@ -23,6 +24,7 @@ void Scene::update(void){
 }
 
 void Scene::render(){
+	frameBuffer.bindFrameBuffer();
 	glfwMakeContextCurrent(glfwGetCurrentContext());
 	float ratio;
 	int width, height;
@@ -42,6 +44,7 @@ void Scene::render(){
 		e->draw(camera->getProjectionMatrix(), camera->getViewMatrix(), lights);
 	}
 
+	renderSurface.render(frameBuffer);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 }
 

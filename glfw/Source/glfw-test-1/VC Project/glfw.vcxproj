@@ -147,6 +147,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\FileUtils.h" />
     <ClInclude Include="..\include\Font.h" />
     <ClInclude Include="..\include\FrameBufferInterface.h" />
+    <ClInclude Include="..\include\FrameBufferVertex.h" />
     <ClInclude Include="..\include\Game.h" />
     <ClInclude Include="..\include\GLUtils.h" />
     <ClInclude Include="..\include\Keyboard.h" />
@@ -174,6 +175,8 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <None Include="..\assets\cube.vox" />
     <None Include="..\assets\junkdata.frag" />
     <None Include="..\assets\junkdata.vert" />
+    <None Include="..\assets\RenderSurface.frag" />
+    <None Include="..\assets\RenderSurface.vert" />
     <None Include="..\assets\voxel.frag" />
     <None Include="..\assets\voxel.geom" />
     <None Include="..\assets\voxel.vert" />
