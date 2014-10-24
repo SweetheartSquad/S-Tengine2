@@ -22,8 +22,6 @@ public:
 	void resize(unsigned long int _width, unsigned long int _height);
 	void bindFrameBuffer();
 
-	void configureDefaultShaderAttributes();
-
 	GLenum checkFrameBufferStatus();
 
 };

@@ -38,3 +38,15 @@ const char * GLUtils::buildGLArryReferenceString(std::string _value, unsigned lo
 	char * rc = new char[r.length()];
 	return strcpy(rc, r.c_str());
 }
+
+void GLUtils::configureVertexAttributes(GLint _vertexHandle, unsigned long _arity, int _bufferOffset, GLuint _vaoId, GLsizei _stride){
+	if (_vertexHandle != -1){
+		glBindVertexArray(_vaoId);
+
+		glEnableVertexAttribArray(_vertexHandle);
+		glVertexAttribPointer(_vertexHandle, _arity, GL_FLOAT, GL_FALSE, _stride, BUFFER_OFFSET(_bufferOffset));
+
+		glBindVertexArray(0);
+		GLUtils::checkForError(0,__FILE__,__LINE__);
+	}
+}

@@ -3,6 +3,8 @@
 #include <GL\glew.h>
 #include <iostream>
 
+#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+
 class GLUtils{
 public:
 	static void checkForError(bool _printSuccess, std::string _file, int _line);
@@ -13,4 +15,6 @@ public:
 	* This can then be passed into openGL to find the attribute location for lights[2].position
 	*/
 	static const char * buildGLArryReferenceString(std::string _value, unsigned long int _index);
+
+	static void configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset, GLuint _vaoId, GLsizei _stride);
 };

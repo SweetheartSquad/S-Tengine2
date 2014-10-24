@@ -9,8 +9,9 @@
 class RenderSurface{
 private:
 	std::vector<FrameBufferVertex> vertices;
+
 public:
-	RenderSurface(Shader * _shader);
+	explicit RenderSurface(Shader * _shader);
 	~RenderSurface();
 
 	GLuint textureId;
@@ -24,5 +25,4 @@ public:
 	void load();
 	void unload();
 	void render(FrameBufferInterface _frameBuffer);
-	void RenderSurface::configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset);
 };

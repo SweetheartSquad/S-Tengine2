@@ -1,8 +1,5 @@
 #include "MeshInterface.h"
 
-#define BUFFER_OFFSET(i) ((char *)NULL + (i))
-#include <algorithm>
-
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	drawMode(drawMode),
 	polygonalDrawMode(polygonalDrawMode),
@@ -198,23 +195,11 @@ void MeshInterface::renderLights(Shader * _shader, glm::mat4 _projectionMatrix, 
 void MeshInterface::renderExtras(Shader * shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix, std::vector<Light*> _lights){
 }
 
-void MeshInterface::configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset){
-	if (_vertexHandle != -1){
-		glBindVertexArray(vaoId);
-
-		glEnableVertexAttribArray(_vertexHandle);
-		glVertexAttribPointer(_vertexHandle, _arity, GL_FLOAT, GL_FALSE, getStride(), BUFFER_OFFSET(_bufferOffset));
-
-		glBindVertexArray(0);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
-	}
-}
-
 void MeshInterface::configureDefaultVertexAttributes(Shader *_shader){
-	configureVertexAttributes(_shader->get_aVertexPosition(), 3, 0);
-	configureVertexAttributes(_shader->get_aVertexColor(), 4, sizeof(float) * 3);
-	configureVertexAttributes(_shader->get_aVertexNormals(), 3, sizeof(float) * 7);
-	configureVertexAttributes(_shader->get_aVertexUVs(), 2, sizeof(float) * 10);
+	GLUtils::configureVertexAttributes(_shader->get_aVertexPosition(), 3, 0, vaoId, getStride());
+	GLUtils::configureVertexAttributes(_shader->get_aVertexColor(), 4, sizeof(float) * 3, vaoId, getStride());
+	GLUtils::configureVertexAttributes(_shader->get_aVertexNormals(), 3, sizeof(float) * 7, vaoId, getStride());
+	GLUtils::configureVertexAttributes(_shader->get_aVertexUVs(), 2, sizeof(float) * 10, vaoId, getStride());
 }
 
 void MeshInterface::pushVert(Vertex _vertex){
