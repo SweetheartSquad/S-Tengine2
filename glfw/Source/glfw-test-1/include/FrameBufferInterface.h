@@ -8,14 +8,18 @@ public:
 
 	GLuint frameBufferId;
 	GLuint textureBufferId;
+	GLuint renderBufferId;
 
-	FrameBufferInterface();
+	unsigned long int width;
+	unsigned long int height;
+
+	FrameBufferInterface(unsigned long int _width, unsigned long int _height);
 	~FrameBufferInterface();
 
 	void load();
 	void unload();
 
-	void bindTextureBuffer();
+	void resize(unsigned long int _width, unsigned long int _height);
 	void bindFrameBuffer();
 
 	void configureDefaultShaderAttributes();

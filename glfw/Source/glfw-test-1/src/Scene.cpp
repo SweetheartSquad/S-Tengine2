@@ -3,7 +3,7 @@
 Scene::Scene(Game * _game):
 	game(_game),
 	camera(new Camera()),
-	frameBuffer(FrameBufferInterface()),
+	frameBuffer(FrameBufferInterface(0, 0)),
 	renderSurface(RenderSurface(new Shader("../assets/RenderSurface", false, true))),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
@@ -24,16 +24,18 @@ void Scene::update(void){
 }
 
 void Scene::render(){
-	frameBuffer.bindFrameBuffer();
-	glfwMakeContextCurrent(glfwGetCurrentContext());
-	float ratio;
 	int width, height;
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+	
+	frameBuffer.resize(width, height);
+	frameBuffer.bindFrameBuffer();
+	
+	glfwMakeContextCurrent(glfwGetCurrentContext());
+	float ratio;
 	ratio = width / static_cast<float>(height);
 	glViewport(0, 0, width, height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-
 	//Back-face culling
 	//glEnable (GL_CULL_FACE); // cull face
 	//glCullFace (GL_BACK); // cull back face

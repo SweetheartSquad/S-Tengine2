@@ -18,8 +18,6 @@ public:
 	GLuint vaoId;
 	/** ID of the vertex buffer object */
 	GLuint vboId;
-	/** ID of the index buffer object */
-	GLuint iboId;
 
 	Shader * shader;
 
