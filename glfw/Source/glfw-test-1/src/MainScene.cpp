@@ -1,5 +1,8 @@
+#pragma once
+
 #include "MainScene.h"
-#include <Resource.h>
+#include "Resource.h"
+#include "FakeAnimation.h"
 
 Cube * cube;
 Cube * cube2;
@@ -91,12 +94,17 @@ MainScene::MainScene(Game * _game):
 	tLight->data.position = glm::vec3(-3.f, 1.5f, 1.f);
 	tLight->data.intensities = glm::vec3(0.5f, 0.7f, 0.5f);
 
-	Light *tLight2 = new Light();
+	Light * tLight2 = new Light();
 	tLight2->data.position = glm::vec3(1.f, -1.5, 1.f);
 	tLight2->data.intensities = glm::vec3(1.7f, 1.5f, 1.5f);
 
 	lights.push_back(tLight);
 	lights.push_back(tLight2);
+
+	FakeAnimation * cat = new FakeAnimation(new Transform(), voxShader, nullptr);
+	cat->transform->translate(1, 0, 2);
+	cat->transform->scale(0.9, 0.9, 0.9);
+	addChild(cat);
 }
 
 MainScene::~MainScene(){
