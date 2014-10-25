@@ -10,30 +10,30 @@ FakeAnimation::FakeAnimation(Transform * t, Shader * s, Entity * parent) :
 	delay(3),
 	delayCount(0)
 {
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/01.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/02.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/03.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/04.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/05.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/06.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/07.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/08.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/09.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/10.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/11.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/12.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/13.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/14.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/15.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/16.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/17.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/18.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/19.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/20.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/21.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/22.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/23.obj"), transform, shader, nullptr));
-	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/24.obj"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/01.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/02.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/03.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/04.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/05.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/06.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/07.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/08.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/09.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/10.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/11.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/12.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/13.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/14.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/15.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/16.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/17.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/18.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/19.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/20.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/21.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/22.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/23.vox"), transform, shader, nullptr));
+	children.push_back(new Entity(Resource::loadMeshFromObj("../assets/CatThing/24.vox"), transform, shader, nullptr));
 
 	for(Entity * e : children){
 		e->mesh->polygonalDrawMode = GL_POINTS;
