@@ -4,12 +4,11 @@
 #include "CMD_SelectNodes.h"
 #include "UI.h"
 #include "Node.h"
+#include "NodeHierarchical.h"
 #include "Joint.h"
 
 CMD_DeleteJoint::CMD_DeleteJoint(std::vector<Joint *> * _joints) :
-	joints(_joints),
-	index(0),
-	executed(false)
+	joints(_joints)
 {
 }
 
@@ -42,18 +41,26 @@ void CMD_DeleteJoint::execute(){
 					}
 				}
 			}
-			// Joint was deleted, so unselect it
-			if(subCommands.size() == 0){
-				subCommands.push_back(new CMD_SelectNodes(nullptr));
-			}
-			subCommands.at(0)->execute();
+			
+			// Add the joint to the list of deleted children
+			deletedJoints.push_back(jointForDeletion);
 		}else{
 			// If the joint has children, delete it's children (but not the joint itself)
 			children.at(j) = jointForDeletion->children;
 			jointForDeletion->children.clear();
+
+			// Add the children to the list of deleted joints
+			for(unsigned long int child = 0; child < children.at(j).size(); ++child){
+				deletedJoints.push_back(dynamic_cast<Joint *>(children.at(j).at(child)));
+			}
 		}
 	}
-	executed = true;
+
+	// Unselect joints
+	if(subCommands.size() == 0){
+		subCommands.push_back(new CMD_SelectNodes(nullptr));
+	}
+	subCommands.at(0)->execute();
 }
 
 void CMD_DeleteJoint::unexecute(){
@@ -73,23 +80,21 @@ void CMD_DeleteJoint::unexecute(){
 			// If the joint had children, add the children back to the joint
 			jointForDeletion->children = children.at(j);
 		}
-
-		if(subCommands.size() != 0){
-			// Re-select old selection
-			subCommands.at(0)->unexecute();
-		}
 	}
-	executed = false;
+	// Remove the deleted joints from the list of deleted joints
+	deletedJoints.clear();
+
+	// Re-select old selection
+	subCommands.at(0)->unexecute();
 }
 
 CMD_DeleteJoint::~CMD_DeleteJoint(void){
 	joints = nullptr;
-	// If the command is deleted after having been executed, the joints need to be deleted for real
-	if(executed){
-		for(unsigned long int i = 0; i < jointsForDeletion.size(); ++i){
-			Joint::deleteJoints(dynamic_cast<NodeHierarchical *>(jointsForDeletion.at(i)));
-		}
+	// The deleted joints need to be deleted for real
+	for(unsigned long int i = 0; i < deletedJoints.size(); ++i){
+		Joint::deleteJoints(dynamic_cast<NodeHierarchical *>(deletedJoints.at(i)));
 	}
+	deletedJoints.clear();
 	jointsForDeletion.clear();
 	index.clear();
 	children.clear();

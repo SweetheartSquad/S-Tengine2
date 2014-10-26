@@ -12,7 +12,6 @@ void Joint::deleteJoints(NodeHierarchical * _j){
 		deleteJoints(_j->children.at(i));
 	}
 	delete _j;
-	_j = nullptr;
 }
 
 void Joint::init(){
