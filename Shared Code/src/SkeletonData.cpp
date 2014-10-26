@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SkeletonData.h"
+#include "Transform.h"
 
 void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, std::vector<Joint *> & joints) {
 	try{
@@ -85,15 +86,16 @@ std::string SkeletonData::writeJoint(Joint * j) {
 	json << " {" << std::endl;
 	json << "  \"id\":" << j->id << "," << std::endl;
 	if (j->parent != nullptr) {
-		json << "  \"parent_id\":" << j->parent->id << "," << std::endl;
+		json << "  \"parent_id\":" << dynamic_cast<Joint *>(j->parent)->id << "," << std::endl;
 	}
 	json << "  \"pos\":"<< "{\"x\":" << j->getPos().x << ", \"y\":" << j->getPos().y << ", \"z\":" << j->getPos().z << "}," << std::endl;
-	json << "  \"orientation\":" << "{\"x\":" << j->transform.orientation.x << ", \"y\":" << j->transform.orientation.y << ", \"z\":" << j->transform.orientation.z << ", \"w\":" << j->transform.orientation.w << "}," << std::endl;
+	json << "  \"orientation\":" << "{\"x\":" << j->transform->orientation.x << ", \"y\":" << j->transform->orientation.y << ", \"z\":" << j->transform->orientation.z << ", \"w\":" << j->transform->orientation.w << "}," << std::endl;
 	
 	json << "  \"children\":" << "[" << std::endl;
-	for(Joint * c : j->children) {
-		json << writeJoint(c);
-		if (j->children.size() != 0 && c->id != j->children.back()->id) {
+	for(unsigned long int i = 0; i < j->children.size(); ++i) {
+		Joint * child = dynamic_cast<Joint *>(j->children.at(i));
+		json << writeJoint(child);
+		if (j->children.size() != 0 && child->id != dynamic_cast<Joint *>(j->children.back())->id) {
 			json << ",";
 		}
 	}
@@ -108,7 +110,7 @@ std::string SkeletonData::writeJoint(Joint * j) {
 Joint * SkeletonData::readJoint(JsonTree joint, Joint * parent) {
 	
 	Joint * j = new Joint(parent);
-	std::vector<Joint *> children;
+	std::vector<NodeHierarchical *> children;
 
 	//j->parent = parent;
 	j->id = joint.getChild( "id" ).getValue<int>();
@@ -118,8 +120,8 @@ Joint * SkeletonData::readJoint(JsonTree joint, Joint * parent) {
 	j->setPos(Vec3d(pos.getChild("x").getValue<float>(), pos.getChild("y").getValue<float>(), pos.getChild("z").getValue<float>()), false);
 		app::console() << " pos: x = " << j->getPos().x << " y = " << j->getPos().y << " pos: z = " << j->getPos().z << std::endl;
 	JsonTree orientation = joint.getChild("orientation");
-	j->transform.orientation = glm::quat(orientation.getChild("x").getValue<float>(), orientation.getChild("y").getValue<float>(), orientation.getChild("z").getValue<float>(), orientation.getChild("w").getValue<float>());
-		app::console() << " orientation: x = " << j->transform.orientation.x << " y = " << j->transform.orientation.y << " z = " << j->transform.orientation.z << " w = " << j->transform.orientation.w << std::endl;
+	j->transform->orientation = glm::quat(orientation.getChild("x").getValue<float>(), orientation.getChild("y").getValue<float>(), orientation.getChild("z").getValue<float>(), orientation.getChild("w").getValue<float>());
+		app::console() << " orientation: x = " << j->transform->orientation.x << " y = " << j->transform->orientation.y << " z = " << j->transform->orientation.z << " w = " << j->transform->orientation.w << std::endl;
 
 	JsonTree childrenJson = joint.getChild("children");
 	for( JsonTree::ConstIter child = childrenJson.begin(); child != childrenJson.end(); ++child ) {

@@ -7,7 +7,7 @@
 /** Abstract node with a parent and list of children */
 class NodeHierarchical : public virtual Node{
 public:
-	explicit NodeHierarchical(NodeHierarchical * _parent) : parent(_parent){};
+	NodeHierarchical(NodeHierarchical * _parent) : parent(_parent){};
 
 	/** Reference to this node's parent */
 	NodeHierarchical * parent;

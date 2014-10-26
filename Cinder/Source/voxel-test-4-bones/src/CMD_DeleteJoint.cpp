@@ -14,13 +14,13 @@ CMD_DeleteJoint::CMD_DeleteJoint(std::vector<Joint *> * _joints) :
 }
 
 void CMD_DeleteJoint::execute(){
-	// Save selected joint
+	// Save selected joints
 	jointsForDeletion = UI::selectedNodes;
 	index.resize(jointsForDeletion.size());
 	children.resize(jointsForDeletion.size());
 
 	for(unsigned long int j = 0; j < jointsForDeletion.size(); ++j){
-		Joint * jointForDeletion = (Joint *)jointsForDeletion.at(j);
+		Joint * jointForDeletion = dynamic_cast<Joint *>(jointsForDeletion.at(j));
 		if(jointForDeletion->children.size() == 0){
 			// If the joint has no children, delete it
 			if(jointForDeletion->parent != nullptr){
@@ -59,7 +59,7 @@ void CMD_DeleteJoint::execute(){
 void CMD_DeleteJoint::unexecute(){
 	// Should this go in reverse order?
 	for(unsigned long int j = 0; j < jointsForDeletion.size(); ++j){
-		Joint * jointForDeletion = (Joint *)jointsForDeletion.at(j);
+		Joint * jointForDeletion = dynamic_cast<Joint *>(jointsForDeletion.at(j));
 		if(children.at(j).size() == 0){
 			// If the joint had no children it was deleted, so restore it
 			if(jointForDeletion->parent != nullptr){
@@ -87,7 +87,7 @@ CMD_DeleteJoint::~CMD_DeleteJoint(void){
 	// If the command is deleted after having been executed, the joints need to be deleted for real
 	if(executed){
 		for(unsigned long int i = 0; i < jointsForDeletion.size(); ++i){
-			Joint::deleteJoints((Joint *)jointsForDeletion.at(i));
+			Joint::deleteJoints(dynamic_cast<NodeHierarchical *>(jointsForDeletion.at(i)));
 		}
 	}
 	jointsForDeletion.clear();

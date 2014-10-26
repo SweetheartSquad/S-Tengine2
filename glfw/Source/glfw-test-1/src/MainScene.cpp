@@ -133,8 +133,8 @@ MainScene::MainScene(Game * _game):
 	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/23.vox")));
 	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/24.vox")));
 
-	for(Entity * e : cat->children){
-		e->mesh->polygonalDrawMode = GL_POINTS;
+	for(Node * e : cat->children){
+		dynamic_cast<Entity *>(e)->mesh->polygonalDrawMode = GL_POINTS;
 	}
 
 	cat->transform->translate(1, 0, 2);
