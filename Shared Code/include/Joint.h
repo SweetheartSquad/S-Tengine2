@@ -10,25 +10,27 @@
 
 using namespace ci;
 
-class Joint{
+class Joint : public Node{
 public:
 	static uint32_t nextColor;
 	static unsigned long int nextId;
 	static std::map<uint32_t, Joint *> jointMap;
 	Color color;
 
+	// Number of parent-child references from root to this
 	unsigned long int depth;
 
 	unsigned long int id;
 
-	bool building;
-	
 	Joint * parent;
 	std::vector<Joint *> children;
-	Transform *transform;
+	Transform transform;
+	
+	// Recursively delete all the children of a joint, then delete the joint itself
+	static void deleteJoints(Joint * _j);
 
-	Joint();
-	Joint(Joint * _parent);
+	explicit Joint();
+	explicit Joint(Joint * _parent);
 	~Joint();
 	
 	void setPos(Vec3d _pos, bool _convertToRelative = true);

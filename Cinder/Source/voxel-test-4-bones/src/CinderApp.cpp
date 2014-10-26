@@ -1,4 +1,11 @@
+#pragma once
+
 #include "CinderApp.h"
+#include "UI.h"
+#include "CMD_DeleteJoint.h"
+#include "CMD_SelectNodes.h"
+#include "CMD_MoveSelectedJoints.h"
+#include "CMD_Parent.h"
 
 void CinderApp::prepareSettings(Settings *settings){
 	settings->setWindowSize(900, 600);
@@ -39,8 +46,6 @@ void CinderApp::setup(){
 	
 	channel = 0;
 
-	selectedJoint = NULL;
-	
 	mode = CREATE;
 }
 
@@ -63,9 +68,9 @@ void CinderApp::resize(){
 	rectFront.set(0, h2, w2, h);
 	rectPersp.set(w2, h2, w, h);
 	
-	boundsTop.set(-r, -1, r, 1);
-	boundsRight.set(-r, -1, r, 1);
-	boundsFront.set(-r, -1, r, 1);
+	boundsTop.set(	-r,	-1.f,	r,	1.f);
+	boundsRight.set(-r,	-1.f,	r,	1.f);
+	boundsFront.set(-r,	-1.f,	r,	1.f);
 	//boundsPersp.set(-1, -h/w, 1, h/w);
 	
 	camTop.setOrtho(boundsTop.x1, boundsTop.x2, boundsTop.y1, boundsTop.y2, -10000, 10000);
@@ -103,12 +108,13 @@ void CinderApp::resize(){
 	}
 }
 
+
 void CinderApp::shutdown(){
 	for(unsigned long int i = 0; i < Joints.size(); ++i){
-		delete Joints.at(i);
+		Joint::deleteJoints(Joints.at(i));
 	}
 	Joints.clear();
-	selectedJoint = NULL;
+	UI::selectedNodes.clear();
 }
 
 void CinderApp::update(){
@@ -216,9 +222,7 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 
 		// draw joints:
 		for(Joint * j : Joints){
-			if(j->parent == nullptr){
-				j->draw(&jointShader);
-			}
+			j->draw(&jointShader);
 		}
 
 		// unbind shader
@@ -245,10 +249,23 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 	gl::setMatrices(cam);
 	
 	gl::color(ColorA(1, 1, 1, 1));
-	if(selectedJoint != nullptr){
+	if(UI::selectedNodes.size() != 0){
 
 		gl::pushMatrices();
-			gl::translate(selectedJoint->getPos(false));
+			Vec3f avg(0, 0, 0);	
+			
+			gl::enableWireframe();
+			for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
+				gl::pushMatrices();
+					gl::translate(((Joint *)UI::selectedNodes.at(i))->getPos(false));
+					gl::drawSphere(Vec3f(0,0,0), 0.06f);
+				gl::popMatrices();
+				avg += ((Joint *)UI::selectedNodes.at(i))->getPos(false);
+			}
+			gl::disableWireframe();
+			avg /= UI::selectedNodes.size();
+
+			gl::translate(avg);
 			gl::lineWidth(2);
 			if(cam.isPersp()){
 				// If the camera is a perspective view, scale the coordinate frame proportionally to the distance from camera
@@ -284,18 +301,16 @@ void CinderApp::mouseDown( MouseEvent event ){
 		
 		if(mode == CREATE){
 			Vec3d pos = getCameraCorrectedPos();
-		
-			if(selectedJoint != NULL){
-				if(selectedJoint->building){
-					newJoint(pos, selectedJoint);
-				}else{
-					newJoint(pos);
-				}
+			
+			if(UI::selectedNodes.size() == 1){
+				cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, (Joint *)UI::selectedNodes.at(0)));
 			}else{
-				newJoint(pos);
+				cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, nullptr));
 			}
 		}else if(mode == SELECT){
-			pickJoint(mMousePos);
+			Joint * selection = pickJoint(mMousePos);
+			// 
+			cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
 		}
 	}
 }
@@ -307,22 +322,14 @@ void CinderApp::mouseDrag( MouseEvent event ){
 	if(event.isAltDown()){
 		camMayaPersp.mouseDrag( mMousePos, event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
 	}else{
-		if(event.isLeft()){
-			if(selectedJoint != nullptr){
-				if(selectedJoint->building){
-					selectedJoint->setPos(getCameraCorrectedPos());
-				}
-			}
-		}else{
-			if(selectedJoint != nullptr){
+		if(event.isLeftDown()){
+			//cmdProc.executeCommand(new CMD_MoveSelectedJoints(getCameraCorrectedPos(), false));
+		}else if(event.isRightDown()){
+			if(UI::selectedNodes.size() > 0){
 
 				Vec2i delta = mMousePos - oldMousePos;
-
-				float dif = delta.dot(mouseAxis);
-
-				dif /= sqrt(getWindowHeight()*getWindowHeight() + getWindowWidth()*getWindowWidth());
-
-				selectedJoint->transform->translate(glm::vec3(dir.x*dif/100.f, dir.y*dif/100.f, dir.z*dif/100.f));
+				float dif = delta.dot(mouseAxis) / sqrtf(getWindowHeight()*getWindowHeight() + getWindowWidth()*getWindowWidth());
+				cmdProc.executeCommand(new CMD_MoveSelectedJoints(Vec3d(dir.x, dir.y, dir.z)*dif/100.f, true));
 				
 				oldMousePos = mMousePos;
 			}
@@ -334,8 +341,10 @@ void CinderApp::mouseUp( MouseEvent event ){
 }
 
 void CinderApp::keyDown( KeyEvent event ){
+	
 	switch( event.getCode() ) {
 	case KeyEvent::KEY_ESCAPE:
+		//shutdown();
 		quit();
 		break;
 	case KeyEvent::KEY_f:
@@ -360,11 +369,30 @@ void CinderApp::keyDown( KeyEvent event ){
 	case KeyEvent::KEY_4:
 		channel = 3;
 		break;
-	case KeyEvent::KEY_RETURN:
-		if(selectedJoint != NULL){
-			if(selectedJoint->building){
-				selectedJoint->building = false;
+	case KeyEvent::KEY_DELETE:
+		if(UI::selectedNodes.size() != 0){
+			cmdProc.executeCommand(new CMD_DeleteJoint(&Joints));
+		}
+		break;
+	case KeyEvent::KEY_p:
+		cmdProc.executeCommand(new CMD_Parent(&Joints));
+		break;
+	case KeyEvent::KEY_d:
+		if(event.isControlDown()){
+			// Deselect all
+			if(UI::selectedNodes.size() != 0){
+				cmdProc.executeCommand(new CMD_SelectNodes(nullptr));
 			}
+		}
+		break;
+	case KeyEvent::KEY_z:
+		if (event.isControlDown()){
+			cmdProc.undo();
+		}
+		break;
+	case KeyEvent::KEY_y:
+		if (event.isControlDown()){
+			cmdProc.redo();
 		}
 		break;
 	}
@@ -431,21 +459,6 @@ void CinderApp::drawGrid(float size, float step){
 	}
 }
 
-void CinderApp::newJoint(Vec3d pos, Joint * parent){
-	Joint * b;
-	if(parent != NULL){
-		b = new Joint(parent);
-		b->parent = parent;
-		parent->building = false;
-		parent->children.push_back(b);
-	}else{	
-		b = new Joint();
-	}
-	b->setPos(pos);
-	selectedJoint = b;
-	Joints.push_back(b);
-}
-
 Vec2d fromRectToRect(Vec2d _p, Rectf _r1, Rectf _r2){
 	Vec2d res;
 	res.x = ((_p.x-_r1.x1)/_r1.getWidth())*_r2.getWidth() + _r2.x1;
@@ -456,25 +469,23 @@ Vec2d fromRectToRect(Vec2d _p, Rectf _r1, Rectf _r2){
 
 Vec3d CinderApp::getCameraCorrectedPos(){
 	Vec3d res;
-	float w = getWindowWidth();
-	float h = getWindowHeight();
-	float x = (mMousePos.x);
-	float y = (mMousePos.y);
+	float x = (int)mMousePos.x;
+	float y = (int)mMousePos.y;
 	if(rectTop.contains(mMousePos)){
-		Vec2d t = fromRectToRect(Vec2f(x,y), rectTop, boundsTop);
+		Vec2d t = fromRectToRect(Vec2f(x, y), rectTop, boundsTop);
 		res.x = t.x;
 		res.y = 0;
 		res.z = t.y;
 	}else if(rectRight.contains(mMousePos)){
 		x = rectRight.x2 - x + rectRight.x1;
 		y = rectRight.y2 - y + rectRight.y1;
-		Vec2d t = fromRectToRect(Vec2f(x,y), rectRight, boundsRight);
+		Vec2d t = fromRectToRect(Vec2f(x, y), rectRight, boundsRight);
 		res.x = 0;
 		res.y = t.y;
 		res.z = t.x;
 	}else if(rectFront.contains(mMousePos)){
 		y = rectFront.y2 - y + rectFront.y1;
-		Vec2d t = fromRectToRect(Vec2f(x,y), rectFront, boundsFront);
+		Vec2d t = fromRectToRect(Vec2f(x, y), rectFront, boundsFront);
 		res.x = t.x;
 		res.y = t.y;
 		res.z = 0;
@@ -591,11 +602,17 @@ void CinderApp::handleUI( const Vec2i &pos ){
 			*/
 		}
 
-		if(selectedJoint != nullptr){
+		if(UI::selectedNodes.size() != 0){
 			oldMousePos = mMousePos;
-
-			Vec2i start = sourceCam->worldToScreen(selectedJoint->getPos(false), sourceRect->getWidth(), sourceRect->getHeight());
-			Vec2i end = sourceCam->worldToScreen(selectedJoint->getPos(false) + dir, sourceRect->getWidth(), sourceRect->getHeight());
+			
+			Vec3f avg(0, 0, 0);	
+			for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
+				avg += ((Joint *)UI::selectedNodes.at(i))->getPos(false);
+			}
+			avg /= UI::selectedNodes.size();
+			
+			Vec2i start = sourceCam->worldToScreen(avg, sourceRect->getWidth(), sourceRect->getHeight());
+			Vec2i end = sourceCam->worldToScreen(avg + dir, sourceRect->getWidth(), sourceRect->getHeight());
 
 			mouseAxis = end - start;
 
@@ -607,7 +624,7 @@ void CinderApp::handleUI( const Vec2i &pos ){
 	}
 }
 
-void CinderApp::pickJoint( const Vec2i &pos ){
+Joint * CinderApp::pickJoint( const Vec2i &pos ){
 	// get the corresponding camera and screen area
 	gl::Fbo * sourceFbo;
 	Rectf * sourceRect;
@@ -624,7 +641,7 @@ void CinderApp::pickJoint( const Vec2i &pos ){
 		sourceFbo = &fboPersp;
 		sourceRect = &rectPersp;
 	}else{
-		return;
+		return nullptr;
 	}
 
 
@@ -693,15 +710,14 @@ void CinderApp::pickJoint( const Vec2i &pos ){
 	//  we can safely assume that it is indeed belonging to one object
 	if(max >= (total / 2)) {
 		if(Joint::jointMap.count(color) == 1){
-			selectedJoint = Joint::jointMap.at(color);
-			selectedJoint->building = true;
+			return Joint::jointMap.at(color);
 		}else{
-			selectedJoint = nullptr;
+			// Selected colour doesn't exist in the joint map (accuracy error?)
 		}
 	}else{
 		// we can't be sure about the color, we probably are on an object's edge
-		selectedJoint = nullptr;
 	}
+	return nullptr;
 }
 
 void CinderApp::switchMode(){
@@ -717,7 +733,7 @@ void CinderApp::switchMode(){
 void CinderApp::saveSkeleton() {
 	try{
 		console() << "saveSkeleton" << endl;
-		s->SaveSkeleton(directory,fileName,Joints);
+		SkeletonData::SaveSkeleton(directory, fileName, Joints);
 		message = "Saved skeleton";
 	}catch (exception ex){
 		message = string(ex.what());
@@ -726,12 +742,16 @@ void CinderApp::saveSkeleton() {
 
 void CinderApp::loadSkeleton() {
 	try{
+		// Deselect everything
+		cmdProc.executeCommand(new CMD_SelectNodes(nullptr));
 		console() << "loadSkeleton" << endl;
 		Joints.clear();
 
-		Joints = s->LoadSkeleton(filePath);
+		Joints = SkeletonData::LoadSkeleton(filePath);
 		message = "Loaded skeleton";
 
+		// Clear the undo/redo history
+		cmdProc.reset();
 	}catch (exception ex){
 		message = string(ex.what());
 	}

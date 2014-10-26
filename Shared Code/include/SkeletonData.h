@@ -1,4 +1,4 @@
-#pragma 
+#pragma once
 #pragma comment(lib, "Shlwapi.lib")
 
 #include "shlwapi.h"
@@ -11,29 +11,23 @@
 #include <filesystem>
 #include <regex>
 
-#include <Cinder/app/App.h>
+#include <cinder/app/App.h>
 #include <cinder/Json.h>
 
 #include "Joint.h"
 
-using namespace std;
 using namespace ci;
 
-class SkeletonData
-{
+class SkeletonData{
 public:
-	SkeletonData(void);
-	
-	void SaveSkeleton(string directory, string fileName, vector<Joint*> &m_joints);
-	vector<Joint*> LoadSkeleton(string filePath);
+	static void SaveSkeleton(std::string directory, std::string fileName, std::vector<Joint *> &m_joints);
+	static std::vector<Joint *> LoadSkeleton(std::string filePath);
 
-	void validateDirectory(string &directory);
-	void validateFileName(string &fileName);
-
-	~SkeletonData(void);
+	static void validateDirectory(std::string & directory);
+	static void validateFileName(std::string & fileName);
 
 protected:
-	string writeJoint(Joint* b);
-	Joint* readJoint(JsonTree joint, Joint * parent = nullptr);
+	static std::string writeJoint(Joint * b);
+	static Joint * readJoint(JsonTree joint, Joint * parent = nullptr);
 };
 
