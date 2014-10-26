@@ -2,9 +2,9 @@
 
 Entity::Entity(MeshInterface * _mesh, Transform * _transform, Shader * _shader, Entity * _parent):
 	mesh(_mesh),
-	transform(_transform),
+	NodeTransformable(_transform),
 	shader(_shader),
-	parent(_parent)
+	NodeHierarchical(_parent)
 {
 	if(mesh != nullptr && shader != nullptr){
 		reset();
@@ -29,8 +29,8 @@ void Entity::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vecto
 	mesh->clean();
 	mesh->render(shader, _projectionMatrix, _viewMatrix, _lights);
 
-	for(Entity * child : children){
-		child->draw(_projectionMatrix, _viewMatrix, _lights);
+	for(Node * child : children){
+		dynamic_cast<Entity *>(child)->draw(_projectionMatrix, _viewMatrix, _lights);
 	}
 
 	//pop transform
@@ -68,8 +68,8 @@ void Entity::setShader(Shader * _shader, bool _confiugreDefaultAttributes){
 }
 
 void Entity::unload(){
-	for(Entity * e : children){
-		e->unload();
+	for(Node * child : children){
+		dynamic_cast<Entity *>(child)->unload();
 	}
 
 	mesh->unload();
@@ -77,8 +77,8 @@ void Entity::unload(){
 }
 
 void Entity::reset(){
-	for(Entity * e : children){
-		e->reset();
+	for(Node * child : children){
+		dynamic_cast<Entity *>(child)->reset();
 	}
 
 	mesh->load();
