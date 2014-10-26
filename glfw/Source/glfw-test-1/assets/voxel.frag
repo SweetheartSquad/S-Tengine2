@@ -7,10 +7,10 @@ uniform struct Light{
 	vec3 intensities;
 };
 
-uniform Light lights[50];
+uniform Light lights[2];
 uniform int numLights;
 
-uniform sampler2D textureSampler[32];
+uniform sampler2D textureSampler[1];
 uniform int numTextures;
 
 in vec3 fragVert;

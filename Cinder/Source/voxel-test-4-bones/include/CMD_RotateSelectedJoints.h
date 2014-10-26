@@ -2,20 +2,23 @@
 
 #include <vector>
 
-#include <cinder/Vector.h>
+#include <glm/gtx/quaternion.hpp>
 
 #include "Command.h"
 
 class CMD_RotateSelectedJoints : public Command{
 public:
-	// Relative move will move by _v, non-relative move will move to _v
-	CMD_RotateSelectedJoints(ci::Vec3d _v, bool _relative);
+	// Relative move will rotate BY _rotation, non-relative rotate TO _rotation
+	CMD_RotateSelectedJoints(glm::quat _rotation, bool _relative);
 	~CMD_RotateSelectedJoints(void);
 
 	void execute();
 	void unexecute();
 private:
-	ci::Vec3d v;
+	// Original orientations of selected joints
+	std::vector<glm::quat> orientations;
+	// Rotation to be applied to selected joints
+	glm::quat rotation;
 	bool relative;
 };
 

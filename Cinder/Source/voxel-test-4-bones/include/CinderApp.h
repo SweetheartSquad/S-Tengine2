@@ -16,8 +16,6 @@
 #include "Joint.h"
 #include "CommandProcessor.h"
 
-#include "CMD_CreateJoint.h"
-
 using namespace ci;
 using namespace ci::app;
 using namespace std;
@@ -149,20 +147,21 @@ protected:
 	std::vector<Joint *> Joints;
 	
 
-	Vec3i dir;
-	Vec2i mouseAxis;
+	//Vec3i dir;
+	//Vec2i mouseAxis;
 	Vec2i oldMousePos;
+	//Vec2i handlePosInScreen;
+	unsigned long int uiColour;
+	const Camera * sourceCam;
+	const Rectf * sourceRect;
 
 	enum UImode{
 		CREATE,
-		SELECT
-	} mode;
-
-	enum UItransform{
+		SELECT,
 		TRANSLATE,
 		ROTATE,
 		SCALE
-	} transform;
+	} mode;
 
 	// Commands
 	CommandProcessor cmdProc;

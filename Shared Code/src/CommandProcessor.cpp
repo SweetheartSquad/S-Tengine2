@@ -10,7 +10,7 @@
 CommandProcessor::CommandProcessor(void){}
 
 void CommandProcessor::executeCommand(Command * c){
-	//ci::app::console() << "executeCommand: " << typeid(*c).name() << std::endl;
+	ci::app::console() << "executeCommand: " << typeid(*c).name() << std::endl;
 	c->execute();
 	undoStack.push_back(c);
 

@@ -87,13 +87,13 @@ void Joint::draw(gl::GlslProg * _shader){
 							transform->translationVector.y,
 							transform->translationVector.z);
 
-		gl::pushMatrices(); 
+		//gl::pushMatrices(); 
 			gl::rotate(Quatd(transform->orientation.w,
 							 transform->orientation.x,
 							 transform->orientation.y,
 							 transform->orientation.z));
 			gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
-		gl::popMatrices();
+		//gl::popMatrices();
 
 	//draw bones
 	for(NodeHierarchical * child : children){
