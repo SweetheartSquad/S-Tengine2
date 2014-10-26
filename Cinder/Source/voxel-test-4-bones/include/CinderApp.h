@@ -158,6 +158,12 @@ protected:
 		SELECT
 	} mode;
 
+	enum UItransform{
+		TRANSLATE,
+		ROTATE,
+		SCALE
+	} transform;
+
 	// Commands
 	CommandProcessor cmdProc;
 };

@@ -47,6 +47,7 @@ void CinderApp::setup(){
 	channel = 0;
 
 	mode = CREATE;
+	transform = TRANSLATE;
 }
 
 
@@ -325,13 +326,22 @@ void CinderApp::mouseDrag( MouseEvent event ){
 		if(event.isLeftDown()){
 			//cmdProc.executeCommand(new CMD_MoveSelectedJoints(getCameraCorrectedPos(), false));
 		}else if(event.isRightDown()){
-			if(UI::selectedNodes.size() > 0){
+			if(transform == TRANSLATE){
+				if(UI::selectedNodes.size() > 0){
 
-				Vec2i delta = mMousePos - oldMousePos;
-				float dif = delta.dot(mouseAxis) / sqrtf(getWindowHeight()*getWindowHeight() + getWindowWidth()*getWindowWidth());
-				cmdProc.executeCommand(new CMD_MoveSelectedJoints(Vec3d(dir.x, dir.y, dir.z)*dif/100.f, true));
+					Vec2i delta = mMousePos - oldMousePos;
+					float dif = delta.dot(mouseAxis) / sqrtf(getWindowHeight()*getWindowHeight() + getWindowWidth()*getWindowWidth());
+					cmdProc.executeCommand(new CMD_MoveSelectedJoints(Vec3d(dir.x, dir.y, dir.z)*dif/100.f, true));
 				
-				oldMousePos = mMousePos;
+					oldMousePos = mMousePos;
+				}
+			}else if(transform == ROTATE){
+				//nothing
+				if(UI::selectedNodes.size() > 0){
+
+				}
+			}else if(transform == SCALE){
+				//nothing
 			}
 		}
 	}
@@ -394,6 +404,15 @@ void CinderApp::keyDown( KeyEvent event ){
 		if (event.isControlDown()){
 			cmdProc.redo();
 		}
+		break;
+	case KeyEvent::KEY_w:
+		transform = TRANSLATE;
+		break;
+	case KeyEvent::KEY_e:
+		transform = ROTATE;
+		break;
+	case KeyEvent::KEY_r:
+		transform = SCALE;
 		break;
 	}
 }
