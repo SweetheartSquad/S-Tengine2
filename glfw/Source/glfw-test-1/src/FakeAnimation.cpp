@@ -20,8 +20,8 @@ FakeAnimation::FakeAnimation(Transform * t, Shader * s, Entity * parent) :
 {
 	
 
-	for(Entity * e : children){
-		e->mesh->polygonalDrawMode = GL_POINTS;
+	for(Node * e : children){
+		dynamic_cast<Entity *>(e)->mesh->polygonalDrawMode = GL_POINTS;
 	}
 }
 
@@ -41,7 +41,7 @@ void FakeAnimation::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std
 	vox::applyMatrix(transform->getModelMatrix());
 
 	//for(Entity * child : children){
-		children.at(frame)->draw(_projectionMatrix, _viewMatrix, _lights);
+		dynamic_cast<Entity *>(children.at(frame))->draw(_projectionMatrix, _viewMatrix, _lights);
 	//}
 
 	//pop transform

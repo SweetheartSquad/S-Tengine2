@@ -120,6 +120,8 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\CommandProcessor.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Joint.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Node.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeTransformable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\SkeletonData.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />
     <ClInclude Include="..\include\CinderApp.h" />

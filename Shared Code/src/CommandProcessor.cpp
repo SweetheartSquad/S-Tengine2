@@ -43,9 +43,9 @@ void CommandProcessor::redo(){
 }
 
 void CommandProcessor::reset(){
-	for(unsigned long int i = undoStack.size(); i > 0; --i){
-		delete undoStack.at(i-1);
-		undoStack.at(i-1) = nullptr;
+	for(unsigned long int i = 0; i < undoStack.size(); ++i){
+		delete undoStack.at(i);
+		undoStack.at(i) = nullptr;
 	}
 	undoStack.clear();
 

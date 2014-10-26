@@ -5,22 +5,18 @@
 #include "MeshInterface.h"
 #include "Shader.h"
 #include "Node.h"
+#include "NodeTransformable.h"
+#include "NodeHierarchical.h"
 #include "Vox.h"
 
 /** A basic entity node. Stores references to a mesh, transform, shader, parent, and list of references to children */
-class Entity : public Node{
+class Entity : public NodeTransformable, public NodeHierarchical{
 public:
 
 	/** Reference to this entity's mesh */
 	MeshInterface * mesh;
-	/** Reference to this entity's transform */
-	Transform * transform;
 	/** Reference to this entity's shader */
 	Shader * shader;
-	/** Reference to this entity's parent */
-	Entity * parent;
-	/** List of references to child entities */
-	std::vector<Entity *> children;
 
 	explicit Entity(MeshInterface * _mesh = nullptr, Transform * _transform = nullptr, Shader * _shader = nullptr, Entity * _parent = nullptr);
 	virtual ~Entity(void);

@@ -9,10 +9,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "Node.h"
+#include "NodeHierarchical.h"
 
 /** A basic transform node */
-class Transform: public Node{
+class Transform: public NodeHierarchical{
 public:
 	/** Position */
 	glm::vec3 translationVector;
@@ -20,11 +20,6 @@ public:
 	glm::vec3 scaleVector;
 	/** Orientation */
 	glm::quat orientation;
-
-	/** List of references to child transforms */
-	std::vector<Transform *> children;
-	/** Reference to parent transform */
-	Transform * parent;
 
 	Transform();
 	virtual ~Transform();

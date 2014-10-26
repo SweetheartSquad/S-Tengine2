@@ -6,7 +6,7 @@ Transform::Transform():
 	translationVector(0.f, 0.f, 0.f),
 	scaleVector(1.f, 1.f, 1.f),
 	orientation(1.f, 0.f, 0.f, 0.f),
-	parent(nullptr)
+	NodeHierarchical(nullptr)
 {
 }
 
@@ -14,8 +14,8 @@ Transform::~Transform(){
 }
 
 void Transform::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
-	for(Transform * child : children){
-		child->draw(projectionMatrix, viewMatrix);
+	for(unsigned long int i = 0; i < children.size(); ++i){
+		dynamic_cast<Transform *>(children.at(i))->draw(projectionMatrix, viewMatrix);
 	}
 }
 
@@ -90,7 +90,7 @@ glm::mat4 Transform::getModelMatrix(){
 	return getTranslationMatrix() * getOrientationMatrix() * getScaleMatrix();
 }
 
-void Transform::addChild(Transform* _child){
+void Transform::addChild(Transform * _child){
 	_child->setParent(this);
 	children.push_back(_child);
 }
@@ -99,6 +99,6 @@ void Transform::removeChildAtIndex(int _index){
 	children.erase(children.begin()+_index-1);
 }
 
-void Transform::setParent(Transform* _parent){
+void Transform::setParent(Transform * _parent){
 	this->parent = _parent;
 }

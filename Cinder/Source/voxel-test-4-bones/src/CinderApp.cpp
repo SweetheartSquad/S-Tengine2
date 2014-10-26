@@ -258,10 +258,10 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 			gl::enableWireframe();
 			for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 				gl::pushMatrices();
-					gl::translate(((Joint *)UI::selectedNodes.at(i))->getPos(false));
+					gl::translate((dynamic_cast<Joint *>(UI::selectedNodes.at(i)))->getPos(false));
 					gl::drawSphere(Vec3f(0,0,0), 0.06f);
 				gl::popMatrices();
-				avg += ((Joint *)UI::selectedNodes.at(i))->getPos(false);
+				avg += (dynamic_cast<Joint *>(UI::selectedNodes.at(i)))->getPos(false);
 			}
 			gl::disableWireframe();
 			avg /= UI::selectedNodes.size();
@@ -304,7 +304,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 			Vec3d pos = getCameraCorrectedPos();
 			
 			if(UI::selectedNodes.size() == 1){
-				cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, (Joint *)UI::selectedNodes.at(0)));
+				cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
 			}else{
 				cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, nullptr));
 			}
@@ -626,7 +626,7 @@ void CinderApp::handleUI( const Vec2i &pos ){
 			
 			Vec3f avg(0, 0, 0);	
 			for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
-				avg += ((Joint *)UI::selectedNodes.at(i))->getPos(false);
+				avg += (dynamic_cast<Joint *>(UI::selectedNodes.at(i)))->getPos(false);
 			}
 			avg /= UI::selectedNodes.size();
 			

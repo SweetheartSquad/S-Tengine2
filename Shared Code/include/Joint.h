@@ -6,11 +6,12 @@
 #include <cinder\gl\gl.h>
 #include <cinder\gl\GlslProg.h>
 
-#include "Transform.h"
+#include "NodeTransformable.h"
+#include "NodeHierarchical.h"
 
 using namespace ci;
 
-class Joint : public Node{
+class Joint : public NodeTransformable, public NodeHierarchical{
 public:
 	static uint32_t nextColor;
 	static unsigned long int nextId;
@@ -21,16 +22,12 @@ public:
 	unsigned long int depth;
 
 	unsigned long int id;
-
-	Joint * parent;
-	std::vector<Joint *> children;
-	Transform transform;
 	
 	// Recursively delete all the children of a joint, then delete the joint itself
-	static void deleteJoints(Joint * _j);
+	static void deleteJoints(NodeHierarchical * _j);
 
 	explicit Joint();
-	explicit Joint(Joint * _parent);
+	explicit Joint(NodeHierarchical * _parent);
 	~Joint();
 	
 	void setPos(Vec3d _pos, bool _convertToRelative = true);

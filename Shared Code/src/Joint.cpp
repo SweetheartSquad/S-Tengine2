@@ -1,17 +1,17 @@
 #pragma once
 
 #include "Joint.h"
+#include "Transform.h"
 
 unsigned long int Joint::nextId = 0;
 uint32_t Joint::nextColor = 0xFFFFFF;
 std::map<uint32_t, Joint*> Joint::jointMap;
 
-void Joint::deleteJoints(Joint * _j){
+void Joint::deleteJoints(NodeHierarchical * _j){
 	for(unsigned long int i = 0; i < _j->children.size(); ++i){
 		deleteJoints(_j->children.at(i));
 	}
 	delete _j;
-	_j = nullptr;
 }
 
 void Joint::init(){
@@ -24,11 +24,16 @@ void Joint::init(){
 	nextId += 1;
 }
 
-Joint::Joint(){
+Joint::Joint() : 
+	NodeTransformable(new Transform()),
+	NodeHierarchical(nullptr){
 	init();
 }
 
-Joint::Joint(Joint * _parent){
+Joint::Joint(NodeHierarchical * _parent) : 
+	NodeTransformable(new Transform()),
+	NodeHierarchical(_parent)
+{
 	init();
 	parent = _parent;
 	while(_parent != nullptr){
@@ -40,27 +45,29 @@ Joint::Joint(Joint * _parent){
 void Joint::setPos(Vec3d _pos, bool _convertToRelative){
 	glm::vec3 glmPos = glm::vec3(_pos.x, _pos.y, _pos.z);
 	if(_convertToRelative){
-		Joint * _parent = parent;
+		NodeHierarchical * _parent = parent;
 		while(_parent != nullptr){
-			glmPos -= _parent->transform.translationVector;
+			glmPos -= dynamic_cast<NodeTransformable *>(_parent)->transform->translationVector;
 			_parent = _parent->parent;
 		}
 	}
-	transform.translationVector = glmPos;
+	transform->translationVector = glmPos;
 }
 Vec3d Joint::getPos(bool _relative){
-	glm::vec3 res = transform.translationVector;
+	glm::vec3 res = transform->translationVector;
 	if(!_relative){
-		Joint * _parent = parent;
+		NodeHierarchical * _parent = parent;
 		while(_parent != nullptr){
-			res += _parent->transform.translationVector;
+			res += dynamic_cast<NodeTransformable *>(_parent)->transform->translationVector;
 			_parent = _parent->parent;
 		}
 	}
 	return Vec3d(res.x, res.y, res.z);
 }
 
-Joint::~Joint(){}
+Joint::~Joint(){
+	delete transform;
+}
 
 void Joint::draw(gl::GlslProg * _shader){
 	//gl::enableWireframe();
@@ -76,24 +83,24 @@ void Joint::draw(gl::GlslProg * _shader){
 	
 	//draw joint
 	gl::pushModelView();
-		gl::translate(transform.translationVector.x,
-							transform.translationVector.y,
-							transform.translationVector.z);
+		gl::translate(transform->translationVector.x,
+							transform->translationVector.y,
+							transform->translationVector.z);
 
 		gl::pushMatrices(); 
-			gl::rotate(Quatd(transform.orientation.w,
-							 transform.orientation.x,
-							 transform.orientation.y,
-							 transform.orientation.z));
+			gl::rotate(Quatd(transform->orientation.w,
+							 transform->orientation.x,
+							 transform->orientation.y,
+							 transform->orientation.z));
 			gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 		gl::popMatrices();
 
 	//draw bones
-	for(Joint * child : children){
+	for(NodeHierarchical * child : children){
 		Vec3d cinderTrans(
-			child->transform.translationVector.x,
-			child->transform.translationVector.y,
-			child->transform.translationVector.z
+			dynamic_cast<NodeTransformable *>(child)->transform->translationVector.x,
+			dynamic_cast<NodeTransformable *>(child)->transform->translationVector.y,
+			dynamic_cast<NodeTransformable *>(child)->transform->translationVector.z
 		);
 		Quatd boneDir(Vec3d(0.0, 1.0, 0.0), cinderTrans);
 		gl::pushMatrices();
@@ -104,7 +111,7 @@ void Joint::draw(gl::GlslProg * _shader){
 			gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
 		gl::popMatrices();
 
-		child->draw(_shader);
+		dynamic_cast<Joint *>(child)->draw(_shader);
 	}
 	gl::popModelView();
 
