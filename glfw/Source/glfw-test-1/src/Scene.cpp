@@ -19,6 +19,9 @@ void Scene::update(void){
 	for(Light * light : lights){
 		light->update();
 	}
+	for(Entity * e : children){
+		e->update();
+	}
 }
 
 void Scene::render(){

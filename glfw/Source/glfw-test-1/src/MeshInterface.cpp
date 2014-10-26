@@ -113,7 +113,7 @@ void MeshInterface::render(Shader * _shader, glm::mat4 _projectionMatrix, glm::m
 				glm::mat4 mvp = _projectionMatrix * _viewMatrix * vox::currentModelMatrix;
 				glm::mat4 vp = _projectionMatrix * _viewMatrix;
 				glm::mat4 m = vox::currentModelMatrix;
-				float resolution = 0.1;
+				float resolution = 0.15;
 				GLuint mvpUniformLocation = glGetUniformLocation(_shader->getProgramId(), "MVP");
 				GLuint vpUniformLocation = glGetUniformLocation(_shader->getProgramId(), "VP");
 				GLuint mUniformLocation = glGetUniformLocation(_shader->getProgramId(), "M");
