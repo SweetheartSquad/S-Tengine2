@@ -13,8 +13,10 @@ public:
 	unsigned long int delay;
 	unsigned long int delayCount;
 
-	FakeAnimation(Transform * t, Shader * s, Entity * parent);
+	FakeAnimation(Transform * _transform, Shader * _shader, Entity * _parent);
 	~FakeAnimation();
+
+	void pushFrame(Entity * _frame);
 
 	/**
 	* Pushes model matrix stack,

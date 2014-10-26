@@ -102,6 +102,35 @@ MainScene::MainScene(Game * _game):
 	lights.push_back(tLight2);
 
 	FakeAnimation * cat = new FakeAnimation(new Transform(), voxShader, nullptr);
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/01.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/02.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/03.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/04.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/05.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/06.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/07.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/08.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/09.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/10.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/11.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/12.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/13.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/14.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/15.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/16.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/17.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/18.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/19.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/20.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/21.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/22.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/23.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/24.vox")));
+
+	for(Entity * e : cat->children){
+		e->mesh->polygonalDrawMode = GL_POINTS;
+	}
+
 	cat->transform->translate(1, 0, 2);
 	cat->transform->scale(0.9, 0.9, 0.9);
 	addChild(cat);
