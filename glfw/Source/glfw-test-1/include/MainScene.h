@@ -8,8 +8,9 @@
 
 class MainScene : public Scene{
 public:
-	MainScene(Game * _game);
+	explicit MainScene(Game * _game);
 	~MainScene();
 	void update() override;
 	void render() override;
+	void onContextChange() override;
 };

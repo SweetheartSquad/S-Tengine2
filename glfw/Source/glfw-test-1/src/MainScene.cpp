@@ -16,9 +16,15 @@ Shader* voxShader;
 
 Light *tLight;
 
+FrameBufferInterface * frameBuffer;
+RenderSurface * renderSurface;
+
 MainScene::MainScene(Game * _game):
 	Scene(game)
 {
+	frameBuffer = new FrameBufferInterface(0, 0);
+	renderSurface = new RenderSurface(new Shader("../assets/RenderSurface", false, true));
+
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
 	cube->setShader(new Shader("../assets/diffuse", false, true), true);
 	cube->mesh->vertices.pop_back();
@@ -158,5 +164,16 @@ void MainScene::update(){
 }
 
 void MainScene::render(){
+	int width, height;
+	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+	frameBuffer->resize(width, height);
+	frameBuffer->bindFrameBuffer();
 	Scene::render();
+	renderSurface->render(*frameBuffer);
+}
+
+void MainScene::onContextChange(){
+	frameBuffer->reload();
+	renderSurface->reload();
+	Scene::onContextChange();
 }

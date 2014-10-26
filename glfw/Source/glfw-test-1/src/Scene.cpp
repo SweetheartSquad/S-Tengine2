@@ -3,8 +3,6 @@
 Scene::Scene(Game * _game):
 	game(_game),
 	camera(new Camera()),
-	frameBuffer(FrameBufferInterface(0, 0)),
-	renderSurface(RenderSurface(new Shader("../assets/RenderSurface", false, true))),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance())
@@ -26,16 +24,13 @@ void Scene::update(void){
 void Scene::render(){
 	int width, height;
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
-	
-	frameBuffer.resize(width, height);
-	frameBuffer.bindFrameBuffer();
-	
 	glfwMakeContextCurrent(glfwGetCurrentContext());
 	float ratio;
 	ratio = width / static_cast<float>(height);
 	glViewport(0, 0, width, height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
+
 	//Back-face culling
 	//glEnable (GL_CULL_FACE); // cull face
 	//glCullFace (GL_BACK); // cull back face
@@ -46,7 +41,6 @@ void Scene::render(){
 		e->draw(camera->getProjectionMatrix(), camera->getViewMatrix(), lights);
 	}
 
-	renderSurface.render(frameBuffer);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 }
 
@@ -82,12 +76,16 @@ void Scene::toggleFullScreen(){
 	glfwMakeContextCurrent(window);
 	vox::currentContext = window;
 
+	onContextChange();
+
+	GLUtils::checkForError(0,__FILE__,__LINE__);
+}
+
+void Scene::onContextChange(){
 	for(Entity * e : children){
 		e->unload();
 	}
 	for(Entity * e : children){
 		e->reset();
 	}
-
-	GLUtils::checkForError(0,__FILE__,__LINE__);
 }

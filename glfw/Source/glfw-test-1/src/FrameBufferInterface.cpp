@@ -25,6 +25,8 @@ void FrameBufferInterface::load(){
 	glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBufferId);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void FrameBufferInterface::unload(){
@@ -34,6 +36,11 @@ void FrameBufferInterface::unload(){
 	frameBufferId   = 0;
 	renderBufferId  = 0;
 	textureBufferId = 0;
+}
+
+void FrameBufferInterface::reload(){
+	unload();
+	load();
 }
 
 void FrameBufferInterface::resize(unsigned long _width, unsigned long _height){	

@@ -36,9 +36,6 @@ public:
 	void addChild(Entity * child);
 	/** Toggles fullscreen on and off */
 	void toggleFullScreen();
-
-	//Plane plane;
-
-	FrameBufferInterface frameBuffer;
-	RenderSurface renderSurface;
+	/**Called when the openGL context is changed. eg. Entering full screen*/
+	virtual void onContextChange();
 };

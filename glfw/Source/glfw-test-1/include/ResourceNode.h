@@ -6,9 +6,6 @@ class ResourceNode{
 protected:
 	/** Whether safeDelete can be called or not */
 	bool autoRelease;
-
-	/** Load state */
-	bool loaded;
 public:
 	explicit ResourceNode(bool _autoRelease);
 	virtual ~ResourceNode();
@@ -25,4 +22,6 @@ public:
 	virtual void load() = 0;
 	/** Override this function with stuff to unload */
 	virtual void unload() = 0;
+	/** Load state */
+	bool loaded;
 };
