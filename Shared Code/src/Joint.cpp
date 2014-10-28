@@ -3,6 +3,8 @@
 #include "Joint.h"
 #include "Transform.h"
 
+#include <cinder\app\App.h>
+
 unsigned long int Joint::nextId = 0;
 uint32_t Joint::nextColor = 0xFFFFFF;
 std::map<uint32_t, Joint*> Joint::jointMap;
@@ -43,31 +45,39 @@ Joint::Joint(NodeHierarchical * _parent) :
 }
 
 void Joint::setPos(Vec3d _pos, bool _convertToRelative){
-	glm::vec3 glmPos = glm::vec3(_pos.x, _pos.y, _pos.z);
+	glm::vec4 newPos(_pos.x, _pos.y, _pos.z, 1);
 	if(_convertToRelative){
 		NodeHierarchical * _parent = parent;
+		std::vector<glm::mat4> modelMatrixStack;
 		while(_parent != nullptr){
-			glmPos -= dynamic_cast<NodeTransformable *>(_parent)->transform->translationVector;
+			modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
 			_parent = _parent->parent;
 		}
+
+		glm::mat4 modelMatrix(1);
+		for(unsigned long int i = modelMatrixStack.size(); i > 0; --i){
+			modelMatrix = modelMatrix * modelMatrixStack.at(i-1);
+		}
+		newPos = glm::inverse(modelMatrix) * newPos;
 	}
-	transform->translationVector = glmPos;
+	transform->translationVector = glm::vec3(newPos.x, newPos.y, newPos.z);
 }
+
 Vec3d Joint::getPos(bool _relative){
 	glm::vec4 res(transform->translationVector.x, transform->translationVector.y, transform->translationVector.z, 1);
 	if(!_relative){
 		NodeHierarchical * _parent = parent;
-		std::vector<glm::mat4> stack;
+		std::vector<glm::mat4> modelMatrixStack;
 		while(_parent != nullptr){
-			stack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
+			modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
 			_parent = _parent->parent;
 		}
 		
-		glm::mat4 mat(1);
-		for(unsigned long int i = stack.size(); i > 0; --i){
-			mat = mat * stack.at(i-1);
+		glm::mat4 modelMatrix(1);
+		for(unsigned long int i = modelMatrixStack.size(); i > 0; --i){
+			modelMatrix = modelMatrix * modelMatrixStack.at(i-1);
 		}
-		res = mat * res;
+		res = modelMatrix * res;
 	}
 	return Vec3d(res.x, res.y, res.z);
 }
