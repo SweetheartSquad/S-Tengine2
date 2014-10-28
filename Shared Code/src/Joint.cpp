@@ -54,13 +54,20 @@ void Joint::setPos(Vec3d _pos, bool _convertToRelative){
 	transform->translationVector = glmPos;
 }
 Vec3d Joint::getPos(bool _relative){
-	glm::vec3 res = transform->translationVector;
+	glm::vec4 res(transform->translationVector.x, transform->translationVector.y, transform->translationVector.z, 1);
 	if(!_relative){
 		NodeHierarchical * _parent = parent;
+		std::vector<glm::mat4> stack;
 		while(_parent != nullptr){
-			res += dynamic_cast<NodeTransformable *>(_parent)->transform->translationVector;
+			stack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
 			_parent = _parent->parent;
 		}
+		
+		glm::mat4 mat(1);
+		for(unsigned long int i = stack.size(); i > 0; --i){
+			mat = mat * stack.at(i-1);
+		}
+		res = mat * res;
 	}
 	return Vec3d(res.x, res.y, res.z);
 }
