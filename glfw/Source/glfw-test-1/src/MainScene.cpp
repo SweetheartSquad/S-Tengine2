@@ -3,6 +3,7 @@
 #include "MainScene.h"
 #include "Resource.h"
 #include "FakeAnimation.h"
+#include "VoxelMeshInterface.h"
 
 Cube * cube;
 Cube * cube2;
@@ -107,8 +108,8 @@ MainScene::MainScene(Game * _game):
 	lights.push_back(tLight);
 	lights.push_back(tLight2);
 
-	FakeAnimation * cat = new FakeAnimation(new Transform(), voxShader, nullptr);
-	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/01.vox")));
+	FakeAnimation * cat = new FakeAnimation(new Transform(), texShader, nullptr);
+	/*cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/01.vox")));
 	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/02.vox")));
 	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/03.vox")));
 	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/04.vox")));
@@ -131,7 +132,7 @@ MainScene::MainScene(Game * _game):
 	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/21.vox")));
 	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/22.vox")));
 	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/23.vox")));
-	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/24.vox")));
+	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/24.vox")));*/
 
 	for(Node * e : cat->children){
 		dynamic_cast<Entity *>(e)->mesh->polygonalDrawMode = GL_POINTS;
@@ -139,7 +140,7 @@ MainScene::MainScene(Game * _game):
 
 	cat->transform->translate(1, 0, 2);
 	cat->transform->scale(0.9, 0.9, 0.9);
-	addChild(cat);
+	//addChild(cat);
 }
 
 MainScene::~MainScene(){

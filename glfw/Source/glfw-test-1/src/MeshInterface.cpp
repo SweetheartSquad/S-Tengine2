@@ -107,31 +107,19 @@ void MeshInterface::render(Shader * _shader, glm::mat4 _projectionMatrix, glm::m
 
 				// Specify _shader attributes
 				glUseProgram(_shader->getProgramId());
+				GLUtils::checkForError(0,__FILE__,__LINE__);
 
 				//Model View Projection
-				GLUtils::checkForError(0,__FILE__,__LINE__);
-				glm::mat4 mvp = _projectionMatrix * _viewMatrix * vox::currentModelMatrix;
-				glm::mat4 vp = _projectionMatrix * _viewMatrix;
-				glm::mat4 m = vox::currentModelMatrix;
-				float resolution = 0.15;
-				GLuint mvpUniformLocation = glGetUniformLocation(_shader->getProgramId(), "MVP");
-				GLuint vpUniformLocation = glGetUniformLocation(_shader->getProgramId(), "VP");
-				GLuint mUniformLocation = glGetUniformLocation(_shader->getProgramId(), "M");
-				GLuint resolutionUniformLocation = glGetUniformLocation(_shader->getProgramId(), "resolution");
-				glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
-				glUniformMatrix4fv(vpUniformLocation, 1, GL_FALSE, &vp[0][0]);
-				glUniformMatrix4fv(mUniformLocation, 1, GL_FALSE, &m[0][0]);
-				glUniform1f(resolutionUniformLocation, resolution);
-				GLUtils::checkForError(0,__FILE__,__LINE__);
+				configureModelViewProjection(_shader, _projectionMatrix, _viewMatrix, _lights);
 
 				if(shouldRenderTextures){
-					renderTextures(_shader, _projectionMatrix, _viewMatrix, _lights);
+					configureTextures(_shader, _projectionMatrix, _viewMatrix, _lights);
 				}
 				if(shouldRenderLights){
-					renderLights(_shader, _projectionMatrix, _viewMatrix, _lights);
+					configureLights(_shader, _projectionMatrix, _viewMatrix, _lights);
 				}
 				if(shouldRenderExtras){
-					renderExtras(_shader, _projectionMatrix, _viewMatrix, _lights);
+					configureExtras(_shader, _projectionMatrix, _viewMatrix, _lights);
 				}
 
 				//Alpha blending
@@ -161,30 +149,29 @@ void MeshInterface::render(Shader * _shader, glm::mat4 _projectionMatrix, glm::m
 	}
 }
 
-void MeshInterface::renderTextures(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
+void MeshInterface::configureTextures(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
 	// Pass the _shader the number of textures
-	glUniform1i(glGetUniformLocation(_shader->getProgramId(), "numTextures"), textures.size());
-
+	glUniform1i(glGetUniformLocation(_shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES), textures.size());
 	// Bind each texture to the texture sampler array in the frag _shader
 	for(unsigned long int i = 0; i < textures.size(); i++){
-		glUniform1i(glGetUniformLocation(_shader->getProgramId(), "textureSampler"), i);
+		glUniform1i(glGetUniformLocation(_shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER), i);
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, textures.at(i)->textureId);
 	}
 }
 
-void MeshInterface::renderLights(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
+void MeshInterface::configureLights(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
 	glm::mat4 model = vox::currentModelMatrix;
-	GLuint modelUniformLocation = glGetUniformLocation(_shader->getProgramId(), "model");
+	GLuint modelUniformLocation = glGetUniformLocation(_shader->getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX);
 	glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
 
 	// Pass the _shader the number of lights
-	glUniform1i(glGetUniformLocation(_shader->getProgramId(), "numLights"), _lights.size());
+	glUniform1i(glGetUniformLocation(_shader->getProgramId(), GL_UNIFORM_ID_NUM_LIGHTS), _lights.size());
 
 	//Pass the paramaters for each light to the _shader
 	for(unsigned long int i = 0; i < _lights.size(); i++){
-		const char * pos = GLUtils::buildGLArryReferenceString("lights[].position", i);
-		const char * ins = GLUtils::buildGLArryReferenceString("lights[].intensities", i);
+		const char * pos = GLUtils::buildGLArryReferenceString(GL_UNIFORM_ID_LIGHTS_POSITION, i);
+		const char * ins = GLUtils::buildGLArryReferenceString(GL_UNIFORM_ID_LIGHTS_INTENSITIES, i);
 		GLuint lightUniformLocation = glGetUniformLocation(_shader->getProgramId(), pos);
 		glUniform3f(lightUniformLocation, _lights.at(i)->data.position.x, _lights.at(i)->data.position.y, _lights.at(i)->data.position.z);
 		GLuint intensitiesUniformLocation = glGetUniformLocation(_shader->getProgramId(), ins);
@@ -192,7 +179,14 @@ void MeshInterface::renderLights(Shader * _shader, glm::mat4 _projectionMatrix, 
 	}
 }
 
-void MeshInterface::renderExtras(Shader * shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix, std::vector<Light*> _lights){
+void MeshInterface::configureModelViewProjection(Shader* _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
+	glm::mat4 mvp = _projectionMatrix * _viewMatrix * vox::currentModelMatrix;
+	GLuint mvpUniformLocation = glGetUniformLocation(_shader->getProgramId(),  GL_UNIFORM_ID_MODEL_VIEW_PROJECTION);
+	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
+	GLUtils::checkForError(0,__FILE__,__LINE__);
+}
+
+void MeshInterface::configureExtras(Shader * shader, glm::mat4 projectionMatrix, glm::mat4 viewMatrix, std::vector<Light*> _lights){
 }
 
 void MeshInterface::configureDefaultVertexAttributes(Shader *_shader){

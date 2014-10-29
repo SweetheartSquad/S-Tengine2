@@ -31,8 +31,8 @@ void Resource::freeImageData(unsigned char* _image){
 }
 
 TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
-	std::istringstream stream(FileUtils::voxReadFile(_objSrc));
 
+	std::istringstream stream(FileUtils::voxReadFile(_objSrc));
 	std::vector<glm::vec3> verts;
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> uvs;
@@ -58,22 +58,18 @@ TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
 		}
 		if (line.size() > 0) {
 			if (line[line.size()-1] == '\r') line.erase(line.size()-1);
-		}
-		
+		}	
 		char p1 = -1;
 		char p2 = -1;
-
 		if(line.size() >= 1){
 			p1 = line[0];	
 		}
 		if(line.size() >= 1){
 			p2 = line[1];	
-		}
-		
+		}		
 		if(p1 == -1 || p2 == -1){
 			continue;	
 		}
-
 		if(p1 == '\0' || p1 == '#'){
 			continue;
 		}
