@@ -257,20 +257,16 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 	if(UI::selectedNodes.size() != 0){
 
 		gl::pushMatrices();
-			Vec3f avg(0, 0, 0);	
-			
 			gl::enableWireframe();
 			for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 				gl::pushMatrices();
 					gl::translate((dynamic_cast<Joint *>(UI::selectedNodes.at(i)))->getPos(false));
 					gl::drawSphere(Vec3f(0,0,0), 0.06f);
 				gl::popMatrices();
-				avg += (dynamic_cast<Joint *>(UI::selectedNodes.at(i)))->getPos(false);
 			}
 			gl::disableWireframe();
-			avg /= UI::selectedNodes.size();
 
-			gl::translate(avg);
+			gl::translate(UI::handlePos);
 			gl::lineWidth(2);
 			if(cam.isPersp()){
 				// If the camera is a perspective view, scale the coordinate frame proportionally to the distance from camera
@@ -335,6 +331,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 			sourceRect = nullptr;
 		}
 
+		// Get the selected colour
 		handleUI(mMousePos);
 
 		oldMousePos = mMousePos;
@@ -356,6 +353,8 @@ void CinderApp::mouseDown( MouseEvent event ){
 			cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
 		}
 	}
+
+	UI::updateHandlePos();
 }
 
 void CinderApp::mouseDrag( MouseEvent event ){
@@ -370,12 +369,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 		}else if(event.isRightDown()){
 			if(uiColour != 0){
 				if(sourceCam != nullptr && sourceRect != nullptr){
-					Vec3d handlePos(0,0,0);
-					for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
-						handlePos += (dynamic_cast<Joint *>(UI::selectedNodes.at(i)))->getPos(false);
-					}
-					handlePos /= UI::selectedNodes.size();
-					Vec2i handlePosInScreen = sourceCam->worldToScreen(handlePos, sourceRect->getWidth(), sourceRect->getHeight());
+					Vec2i handlePosInScreen = sourceCam->worldToScreen(UI::handlePos, sourceRect->getWidth(), sourceRect->getHeight());
 
 					Vec2i deltaMousePos = mMousePos - oldMousePos;
 					
@@ -388,7 +382,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 								case 255: dir.z -= 10; break;		//b
 							}
 						
-							Vec2i end = sourceCam->worldToScreen(handlePos + dir, sourceRect->getWidth(), sourceRect->getHeight());
+							Vec2i end = sourceCam->worldToScreen(UI::handlePos + dir, sourceRect->getWidth(), sourceRect->getHeight());
 							Vec2f mouseAxis = end - handlePosInScreen;
 							float dif = deltaMousePos.dot(mouseAxis) / sqrtf(getWindowHeight()*getWindowHeight() + getWindowWidth()*getWindowWidth());
 				
@@ -428,6 +422,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 }
 
 void CinderApp::mouseUp( MouseEvent event ){
+	UI::updateHandlePos();
 }
 
 void CinderApp::keyDown( KeyEvent event ){

@@ -150,7 +150,6 @@ protected:
 	//Vec3i dir;
 	//Vec2i mouseAxis;
 	Vec2i oldMousePos;
-	//Vec2i handlePosInScreen;
 	unsigned long int uiColour;
 	const Camera * sourceCam;
 	const Rectf * sourceRect;
