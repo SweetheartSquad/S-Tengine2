@@ -59,7 +59,6 @@ public:
 	Vec3d getCameraCorrectedPos();
 
 	Joint * pickJoint(const Vec2i &pos);
-	void switchMode();
 
 	void saveSkeleton();
 	void loadSkeleton();

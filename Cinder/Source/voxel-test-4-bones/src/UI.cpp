@@ -2,6 +2,7 @@
 
 #include "UI.h"
 #include "Joint.h"
+#include "Transform.h"
 
 std::vector<Node *> UI::selectedNodes;
 ci::Vec3d UI::handlePos = ci::Vec3d(0, 0, 0);

@@ -10,6 +10,7 @@
 #include "CMD_RotateSelectedJoints.h"
 #include "CMD_Parent.h"
 
+#include "Transform.h"
 #include "NodeTransformable.h"
 
 void CinderApp::prepareSettings(Settings *settings){
@@ -21,8 +22,7 @@ void CinderApp::prepareSettings(Settings *settings){
 void CinderApp::setup(){
 	drawParams = true;
 	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 150, 100 ) ) );
-	params->addButton( "Switch Mode", std::bind( &CinderApp::switchMode, this ) );
-	params->addText( "Interaction Mode", "label=`CREATE`" );
+	params->addText( "UI Mode", "label=`CREATE`" );
 
 	params->addSeparator();
 
@@ -349,7 +349,6 @@ void CinderApp::mouseDown( MouseEvent event ){
 			}
 		}else if(mode == SELECT){
 			Joint * selection = pickJoint(mMousePos);
-			// 
 			cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
 		}
 	}
@@ -482,17 +481,26 @@ void CinderApp::keyDown( KeyEvent event ){
 		break;
 	case KeyEvent::KEY_q:
 		mode = SELECT;
+		params->setOptions( "UI Mode", "label=`SELECT`" );
 		break;
 	case KeyEvent::KEY_w:
 		mode = TRANSLATE;
+		params->setOptions( "UI Mode", "label=`TRANSLATE`" );
 		break;
 	case KeyEvent::KEY_e:
 		mode = ROTATE;
+		params->setOptions( "UI Mode", "label=`ROTATE`" );
 		break;
 	case KeyEvent::KEY_r:
 		mode = SCALE;
+		params->setOptions( "UI Mode", "label=`SCALE`" );
+		break;
+	case KeyEvent::KEY_t:
+		mode = CREATE;
+		params->setOptions( "UI Mode", "label=`CREATE`" );
 		break;
 	}
+	UI::updateHandlePos();
 }
 
 void CinderApp::keyUp( KeyEvent event ){
@@ -786,16 +794,6 @@ Joint * CinderApp::pickJoint( const Vec2i &pos ){
 		// we can't be sure about the color, we probably are on an object's edge
 	}
 	return nullptr;
-}
-
-void CinderApp::switchMode(){
-	if(mode == CREATE){
-		mode = SELECT;
-		params->setOptions( "Interaction Mode", "label=`SELECT`" );
-	}else{
-		mode = CREATE;
-		params->setOptions( "Interaction Mode", "label=`CREATE`" );
-	}
 }
 
 void CinderApp::saveSkeleton() {
