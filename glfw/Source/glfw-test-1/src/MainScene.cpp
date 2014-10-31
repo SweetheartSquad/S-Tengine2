@@ -3,7 +3,7 @@
 #include "MainScene.h"
 #include "Resource.h"
 #include "FakeAnimation.h"
-#include "VoxelMeshInterface.h"
+#include "VoxelMesh.h"
 
 Cube * cube;
 Cube * cube2;
@@ -59,7 +59,7 @@ MainScene::MainScene(Game * _game):
 	t->scale(3, 3, 3);
 
 	for(unsigned long int i = 0; i < 1; ++i){
-		Entity * loaded = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxShader, cube);
+		Entity * loaded = new Entity(new VoxelMesh(Resource::loadMeshFromObj("../assets/cube.vox")), t, voxShader, cube);
 		loaded->mesh->polygonalDrawMode = GL_POINTS;
 		cube->addChild(loaded);
 		//loaded->mesh->pushTexture2D(tex);

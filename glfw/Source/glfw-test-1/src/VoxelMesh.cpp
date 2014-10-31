@@ -6,6 +6,15 @@ VoxelMesh::VoxelMesh(GLenum _drawMode):
 {
 }
 
+VoxelMesh::VoxelMesh(MeshInterface* _mesh):
+	resolution(0.15),
+	MeshInterface(GL_POINTS, _mesh->drawMode){
+	indices  = _mesh->indices;
+	vertices = _mesh->vertices;
+	unload();
+	load();
+}
+
 VoxelMesh::~VoxelMesh(){
 }
 
