@@ -3,8 +3,9 @@
 #include "Animation.h"
 #include "NodeTransformable.h"
 
-class NodeAnimatable : public NodeTransformable
-{
+class Transform;
+
+class NodeAnimatable : public NodeTransformable{
 public:
 	NodeAnimatable(Transform * _transform);
 	~NodeAnimatable();
