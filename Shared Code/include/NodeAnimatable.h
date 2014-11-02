@@ -5,7 +5,7 @@
 
 class Transform;
 
-class NodeAnimatable : public virtual NodeTransformable{
+class NodeAnimatable : public NodeTransformable{
 
 public:
 

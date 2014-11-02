@@ -2,7 +2,6 @@
 
 Entity::Entity(MeshInterface * _mesh, Transform * _transform, Shader * _shader, Entity * _parent):
 	mesh(_mesh),
-	NodeTransformable(_transform),
 	NodeAnimatable(_transform),
 	shader(_shader),
 	NodeHierarchical(_parent)

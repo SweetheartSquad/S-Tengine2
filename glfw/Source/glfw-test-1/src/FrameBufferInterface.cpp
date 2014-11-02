@@ -1,6 +1,7 @@
 #include "FrameBufferInterface.h"
 
-FrameBufferInterface::FrameBufferInterface(unsigned long int _width, unsigned long int _height):
+FrameBufferInterface::FrameBufferInterface(unsigned long int _width, unsigned long int _height, bool _autoRelease):
+	NodeResource(_autoRelease),
 	width(_width),
 	height(_height)
 {

@@ -13,6 +13,7 @@
 #include "Light.h"
 #include "GLUtils.h"
 #include "Texture.h"
+#include "NodeRenderable.h"
 
 #define GL_UNIFORM_ID_TEXTURE_SAMPLER		"textureSampler"
 #define GL_UNIFORM_ID_NUM_TEXTURES			"numTextures"
@@ -22,7 +23,7 @@
 #define GL_UNIFORM_ID_LIGHTS_POSITION		"lights[].position"
 #define GL_UNIFORM_ID_LIGHTS_INTENSITIES	"lights[].intensities"
 
-class MeshInterface{
+class MeshInterface : public NodeRenderable{
 public:
 	/** Whether the vao, vbo, and ibo have been generated and initialized */
 	bool loaded;

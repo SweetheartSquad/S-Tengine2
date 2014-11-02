@@ -26,7 +26,7 @@ RenderSurface * renderSurface;
 MainScene::MainScene(Game * _game):
 	Scene(game)
 {
-	frameBuffer = new FrameBufferInterface(0, 0);
+	frameBuffer = new FrameBufferInterface(0, 0, false);
 	renderSurface = new RenderSurface(new Shader("../assets/RenderSurface", false, true));
 
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);

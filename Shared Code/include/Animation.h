@@ -5,7 +5,7 @@
 class Animation
 {
 public:
-	Animation(float * _prop);
+	explicit Animation(float * _prop);
 	~Animation();
 
 	Easing::Type interpolation;
