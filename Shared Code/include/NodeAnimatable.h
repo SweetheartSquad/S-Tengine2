@@ -1,13 +1,15 @@
 #pragma once
 
-#include "Animation.h"
 #include "NodeTransformable.h"
+#include "Animation.h"
 
 class Transform;
 
 class NodeAnimatable : public NodeTransformable{
+
 public:
-	NodeAnimatable(Transform * _transform);
+
+	explicit NodeAnimatable(Transform * _transform);
 	~NodeAnimatable();
 
 	Animation translateX;
@@ -20,6 +22,7 @@ public:
 	Animation scaleX;
 	Animation scaleY;
 	Animation scaleZ;
+
 private:
 
 };

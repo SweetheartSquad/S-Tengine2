@@ -26,7 +26,7 @@ RenderSurface * renderSurface;
 MainScene::MainScene(Game * _game):
 	Scene(game)
 {
-	frameBuffer = new FrameBufferInterface(0, 0);
+	frameBuffer = new FrameBufferInterface(0, 0, false);
 	renderSurface = new RenderSurface(new Shader("../assets/RenderSurface", false, true));
 
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
@@ -150,8 +150,8 @@ void MainScene::update(){
 	Scene::update();
 	*cube3->transform = *tLight->transform;
 
-	tLight->transform->translateX(sin(glfwGetTime()) * 0.1);
-	tLight->transform->translateZ(cos(glfwGetTime()) * 0.1);
+	tLight->transform->translateX(sin(glfwGetTime()) * 0.1 * vox::deltaTimeCorrection);
+	tLight->transform->translateZ(cos(glfwGetTime()) * 0.1 * vox::deltaTimeCorrection);
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		toggleFullScreen();

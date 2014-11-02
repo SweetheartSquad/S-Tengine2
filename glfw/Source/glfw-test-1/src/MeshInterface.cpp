@@ -7,7 +7,8 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	dirty(true),
 	shouldRenderLights(true),
 	shouldRenderTextures(true),
-	shouldRenderExtras(true)
+	shouldRenderExtras(true),
+	NodeRenderable()
 {
 	load();
 	clean();

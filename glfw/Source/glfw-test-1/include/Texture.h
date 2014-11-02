@@ -3,9 +3,9 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <vector>
-#include "ResourceNode.h"
+#include "NodeResource.h"
 
-class Texture : public ResourceNode
+class Texture : public NodeResource
 {
 public:
 	Texture(const char* _src, int _width, int _height, bool _storeData, bool _autoRelease);

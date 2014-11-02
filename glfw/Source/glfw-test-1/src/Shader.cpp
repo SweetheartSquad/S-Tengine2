@@ -16,7 +16,7 @@ void Shader::init(std::string _vertexShaderFile, std::string _fragmentShaderFile
 }
 
 Shader::Shader(std::string _shaderSource, bool _hasGeometryShader, bool _autoRelease) :
-	ResourceNode(_autoRelease),
+	NodeResource(_autoRelease),
 	hasGeometryShader(_hasGeometryShader)
 {
 	if (hasGeometryShader){
@@ -27,14 +27,14 @@ Shader::Shader(std::string _shaderSource, bool _hasGeometryShader, bool _autoRel
 }
 
 Shader::Shader(std::string _vertexShaderSource, std::string _fragmentShaderSource, bool _autoRelease) :
-	ResourceNode(_autoRelease),
+	NodeResource(_autoRelease),
 	hasGeometryShader(false)
 {
 	init(_vertexShaderSource, _fragmentShaderSource);
 }
 
 Shader::Shader(std::string _vertexShaderSource, std::string _fragmentShaderSource, std::string _geometryShaderSource, bool _autoRelease) :
-	ResourceNode(_autoRelease),
+	NodeResource(_autoRelease),
 	hasGeometryShader(true){
 		init(_vertexShaderSource, _fragmentShaderSource, _geometryShaderSource);
 }

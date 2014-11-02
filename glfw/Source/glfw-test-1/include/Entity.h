@@ -5,12 +5,12 @@
 #include "MeshInterface.h"
 #include "Shader.h"
 #include "Node.h"
-#include "NodeTransformable.h"
 #include "NodeHierarchical.h"
 #include "Vox.h"
+#include "NodeAnimatable.h"
 
 /** A basic entity node. Stores references to a mesh, transform, shader, parent, and list of references to children */
-class Entity : public NodeTransformable, public NodeHierarchical{
+class Entity : public NodeAnimatable, public NodeHierarchical{
 public:
 
 	/** Reference to this entity's mesh */

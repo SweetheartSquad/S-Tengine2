@@ -4,9 +4,9 @@
 
 #include "GLUtils.h"
 #include "FileUtils.h"
-#include "ResourceNode.h"
+#include "NodeResource.h"
 
-class Shader : public ResourceNode{
+class Shader : public NodeResource{
 private:
 
 	/** The attribute location of the vertex position in the shader */
