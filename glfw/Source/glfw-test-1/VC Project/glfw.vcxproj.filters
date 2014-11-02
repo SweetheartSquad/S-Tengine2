@@ -277,10 +277,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\assets\voxel-texture.png">
-      <Filter>Resource Files\shaders</Filter>
-    </Image>
     <Image Include="..\assets\uv-test.jpg">
+      <Filter>Resource Files\textures</Filter>
+    </Image>
+    <Image Include="..\assets\voxel-texture.png">
       <Filter>Resource Files\textures</Filter>
     </Image>
   </ItemGroup>

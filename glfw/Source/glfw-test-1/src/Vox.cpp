@@ -98,7 +98,7 @@ void vox::calculateDeltaTimeCorrection(){
 	double targetFrameDuration = static_cast<double>(1) / FPS;
 	double time = glfwGetTime();
 	double deltaTime = time - lastTimestamp;
-	deltaTimeCorrection = deltaTime/(targetFrameDuration);
+	deltaTimeCorrection = deltaTime/targetFrameDuration ;
 	lastTimestamp = time;
 }
 
