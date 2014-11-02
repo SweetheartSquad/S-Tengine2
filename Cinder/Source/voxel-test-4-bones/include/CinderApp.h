@@ -59,12 +59,12 @@ public:
 	Vec3d getCameraCorrectedPos();
 
 	Joint * pickJoint(const Vec2i &pos);
-	void switchMode();
 
 	void saveSkeleton();
 	void loadSkeleton();
 
 	void handleUI(const Vec2i &pos);
+	void getPixelThing();
 public:
 	// Utility functions to translate colors to and from ints or chars 
 	static Color charToColor( unsigned char r, unsigned char g, unsigned char b ){
@@ -121,9 +121,12 @@ protected:
 
 	gl::Fbo	fboUI; //! our main framebuffer (AA, containing 2 color buffers)
 	gl::Fbo pickingFboUI;
-
+	
 	// Framebuffer for selecting joints
 	gl::Fbo mPickingFboJoint;
+
+	// Framebuffer for getpixelting
+	gl::Fbo pixelFbo;
 	
 	// Rect definitions for cameras sizes
 	Rectf rectTop;
@@ -153,10 +156,10 @@ protected:
 	//Vec3i dir;
 	//Vec2i mouseAxis;
 	Vec2i oldMousePos;
-	//Vec2i handlePosInScreen;
 	unsigned long int uiColour;
 	const Camera * sourceCam;
 	const Rectf * sourceRect;
+	const gl::Fbo * sourceFbo;
 
 	enum UImode{
 		CREATE,
@@ -168,4 +171,7 @@ protected:
 
 	// Commands
 	CommandProcessor cmdProc;
+
+
+	std::vector<Vec3f> paintPoints;
 };

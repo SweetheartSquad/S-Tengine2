@@ -244,7 +244,7 @@ public:
 	 * @return	Eased value
 	 */
 	static float easeInSine(float t, float b, float c, float d){
-		return -c * cos(t/d * ((3.141592)/2)) + c + b;
+		return -c * cosf(t/d * ((3.141592f)/2)) + c + b;
 	}
 	
 	/**
@@ -255,7 +255,7 @@ public:
 	 * @return	Eased value
 	 */
 	static float easeOutSine(float t, float b, float c, float d){
-		return c * sin(t/d * ((3.141592)/2)) + b;
+		return c * sinf(t/d * ((3.141592f)/2)) + b;
 	}
 	
 	/**
@@ -266,7 +266,7 @@ public:
 	 * @return	Eased value
 	 */
 	static float easeInOutSine(float t, float b, float c, float d){
-		return -c/2 * (cos((3.141592)*t/d) - 1) + b;
+		return -c/2 * (cos((3.141592f)*t/d) - 1) + b;
 	}
 	
 	/**
@@ -277,7 +277,7 @@ public:
 	 * @return	Eased value
 	 */
 	static float easeInExpo(float t, float b, float c, float d){
-		return (t==0) ? b : c * pow(2, 10 * (t/d - 1)) + b;
+		return (t==0) ? b : c * powf(2, 10 * (t/d - 1)) + b;
 	}
 	
 	/**
@@ -288,7 +288,7 @@ public:
 	 * @return	Eased value
 	 */
 	static float easeOutExpo(float t, float b, float c, float d){
-		return (t==d) ? b+c : c * (-pow(2, -10 * t/d) + 1) + b;
+		return (t==d) ? b+c : c * (-powf(2, -10 * t/d) + 1) + b;
 	}
 	
 	/**
@@ -306,9 +306,9 @@ public:
 			return b+c;
 		}
 		if ((t /= d / 2) < 1) {
-			return c/2 * pow(2, 10 * (t - 1)) + b;
+			return c/2 * powf(2, 10 * (t - 1)) + b;
 		}
-		return c/2 * (-pow(2, -10 * --t) + 2) + b;
+		return c/2 * (-powf(2, -10 * --t) + 2) + b;
 	}
 	
 	/**
@@ -319,7 +319,7 @@ public:
 	 * @return	Eased value
 	 */
 	static float easeInCirc(float t, float b, float c, float d){
-		return -c * (sqrt(1 - (t/=d)*t) - 1) + b;
+		return -c * (sqrtf(1 - (t/=d)*t) - 1) + b;
 	}
 	
 	/**
@@ -330,7 +330,7 @@ public:
 	 * @return	Eased value
 	 */
 	static float easeOutCirc(float t, float b, float c, float d){
-		return c * sqrt(1 - (t=t/d-1)*t) + b;
+		return c * sqrtf(1 - (t=t/d-1)*t) + b;
 	}
 	
 	/**
@@ -342,9 +342,9 @@ public:
 	 */
 	static float easeInOutCirc(float t, float b, float c, float d){
 		if ((t /= d / 2) < 1) {
-			return -c/2 * (sqrt(1 - t*t) - 1) + b;
+			return -c/2 * (sqrtf(1 - t*t) - 1) + b;
 		}
-		return c/2 * (sqrt(1 - (t-=2)*t) + 1) + b;
+		return c/2 * (sqrtf(1 - (t-=2)*t) + 1) + b;
 	}
 	
 	/**
@@ -365,7 +365,7 @@ public:
 			return b+c;  
 		}
 		if (p == -1) {
-			p = d * 0.3;
+			p = d * 0.3f;
 		}
 		if (a == -1) {
 			a = c;
@@ -375,8 +375,8 @@ public:
 		if (s == -1) {
 			s = p / 4;
 		}
-		float postFix = a*pow(2, 10*(t-=1));
-		return -(postFix * sin((t*d-s)*(2*(3.141592)) / p )) + b;
+		float postFix = a*powf(2, 10*(t-=1));
+		return -(postFix * sinf((t*d-s)*(2*(3.141592f)) / p )) + b;
 	}
 	
 	/**
@@ -397,7 +397,7 @@ public:
 			return b+c;  
 		}
 		if (p == -1) {
-			p = d * 0.3;
+			p = d * 0.3f;
 		}
 		if (a == -1) {
 			a = c;
@@ -407,7 +407,7 @@ public:
 		if (s == -1) {
 			s = p / 4;
 		}
-		return (a*pow(2,-10*t) * sin( (t*d-s)*(2*(3.141592))/p ) + c + b);	
+		return (a*powf(2, -10*t) * sinf( (t*d-s)*(2*(3.141592f))/p ) + c + b);	
 	}
 	
 	/**
@@ -428,7 +428,7 @@ public:
 			return b+c;  
 		}
 		if (p == -1) {
-			p = d*(0.3*1.5);
+			p = d*(0.3f*1.5f);
 		}
 		if (a == -1) {
 			a = c;
@@ -440,11 +440,11 @@ public:
 		}
 		
 		if (t < 1) {
-			float postFix =a*pow(2,10*(t-=1));
-			return -0.5*(postFix* sin( (t*d-s)*(2*(3.141592))/p )) + b;
+			float postFix =a*powf(2,10*(t-=1));
+			return -0.5f*(postFix* sinf( (t*d-s)*(2*(3.141592f))/p )) + b;
 		} 
-		float postFix =  a*pow(2,-10*(t-=1));
-		return postFix * sin( (t*d-s)*(2*(3.141592))/p )*0.5 + c + b;
+		float postFix =  a*powf(2,-10*(t-=1));
+		return postFix * sinf( (t*d-s)*(2*(3.141592f))/p )*0.5f + c + b;
 	}
 	
 	/**
@@ -455,7 +455,7 @@ public:
 	 * @param	s	Tweak parameter
 	 * @return	Eased value
 	 */
-	static float easeInBack(float t, float b, float c, float d, float s = 1.70158){
+	static float easeInBack(float t, float b, float c, float d, float s = 1.70158f){
 		float postFix = t/=d;
 		return c*(postFix)*t*((s+1)*t - s) + b;
 	}
@@ -468,7 +468,7 @@ public:
 	 * @param	s	Tweak parameter
 	 * @return	Eased value
 	 */
-	static float easeOutBack(float t, float b, float c, float d, float s = 1.70158){
+	static float easeOutBack(float t, float b, float c, float d, float s = 1.70158f){
 		return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
 	}
 	
@@ -480,10 +480,10 @@ public:
 	 * @param	s	Tweak parameter
 	 * @return	Eased value
 	 */
-	static float easeInOutBack(float t, float b, float c, float d, float s = 1.70158){
-		if ((t/=d/2) < 1) return c/2*(t*t*(((s*=(1.525))+1)*t - s)) + b;
+	static float easeInOutBack(float t, float b, float c, float d, float s = 1.70158f){
+		if ((t/=d/2) < 1) return c/2*(t*t*(((s*=(1.525f))+1)*t - s)) + b;
 		float postFix = t-=2;
-		return c/2*((postFix)*t*(((s*=(1.525))+1)*t + s) + 2) + b;
+		return c/2*((postFix)*t*(((s*=(1.525f))+1)*t + s) + 2) + b;
 	}
 	
 	/**
@@ -504,17 +504,17 @@ public:
 	 * @return	Eased value
 	 */
 	static float easeOutBounce(float t, float b, float c, float d){
-		if ((t/=d) < (1/2.75)) {
-			return c*(7.5625*t*t) + b;
-		} else if (t < (2/2.75)) {
-			float postFix = t-=(1.5/2.75);
-			return c*(7.5625*(postFix)*t + 0.75) + b;
-		} else if (t < (2.5/2.75)) {
-			float postFix = t-=(2.25/2.75);
-			return c*(7.5625*(postFix)*t + 0.9375) + b;
+		if ((t/=d) < (1/2.75f)) {
+			return c*(7.5625f*t*t) + b;
+		} else if (t < (2/2.75f)) {
+			float postFix = t-=(1.5f/2.75f);
+			return c*(7.5625f*(postFix)*t + 0.75f) + b;
+		} else if (t < (2.5f/2.75f)) {
+			float postFix = t-=(2.25f/2.75f);
+			return c*(7.5625f*(postFix)*t + 0.9375f) + b;
 		} else {
-			float postFix = t-=(2.625/2.75);
-			return c*(7.5625*(postFix)*t + 0.984375) + b;
+			float postFix = t-=(2.625f/2.75f);
+			return c*(7.5625f*(postFix)*t + 0.984375f) + b;
 		}
 	}
 	/**
@@ -525,8 +525,8 @@ public:
 	 * @return	Eased value
 	 */
 	static float easeInOutBounce(float t, float b, float c, float d){
-		if (t < d/2) return easeInBounce(t*2, 0, c, d) * .5 + b;
-		return easeOutBounce(t*2-d, 0, c, d) * .5 + c*.5 + b;
+		if (t < d/2) return easeInBounce(t*2, 0, c, d) * .5f + b;
+		return easeOutBounce(t*2-d, 0, c, d) * .5f + c*.5f + b;
 	}
 };
 

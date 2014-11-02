@@ -18,11 +18,6 @@ FakeAnimation::FakeAnimation(Transform * t, Shader * s, Entity * parent) :
 	delay(3),
 	delayCount(0)
 {
-	
-
-	for(Node * e : children){
-		dynamic_cast<Entity *>(e)->mesh->polygonalDrawMode = GL_POINTS;
-	}
 }
 
 FakeAnimation::~FakeAnimation(){

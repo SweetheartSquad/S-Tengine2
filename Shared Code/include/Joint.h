@@ -31,7 +31,11 @@ public:
 	explicit Joint(NodeHierarchical * _parent);
 	~Joint();
 	
+
+	// Sets the translation vector of the joint
 	void setPos(Vec3d _pos, bool _convertToRelative = true);
+
+	// Returns the translation vector of the joint (if _relative is false, applies all of the transformations of the parent joints before returning the vector)
 	Vec3d getPos(bool _relative = true);
 
 	void draw(gl::GlslProg * _shader);

@@ -104,6 +104,7 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\SkeletonData.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\VoxMatrices.cpp" />
     <ClCompile Include="..\src\CinderApp.cpp" />
     <ClCompile Include="..\src\CMD_CreateJoint.cpp" />
     <ClCompile Include="..\src\CMD_DeleteJoint.cpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeTransformable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\SkeletonData.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\VoxMatrices.h" />
     <ClInclude Include="..\include\CinderApp.h" />
     <ClInclude Include="..\include\CMD_CreateJoint.h" />
     <ClInclude Include="..\include\CMD_DeleteJoint.h" />

@@ -1,36 +1,14 @@
 #pragma once
 
-#ifndef FPS
-#define FPS 60
-#endif
-
-#include <iostream>
 #include <vector>
 
-#include <glm/glm.hpp>
-
-#include <GLFW/glfw3.h>
-
-#include "Keyboard.h"
-#include "Mouse.h"
+#include <glm\glm.hpp>
 
 namespace vox{
 	/** Model matrix stack (replaces the OpenGL stack) */
 	extern std::vector<glm::mat4> matrixStack;
 	/** Current model matrix */
 	extern glm::mat4 currentModelMatrix;
-	/** Equal to glfwGetTime() the last time the delta time correction was calculated */
-	extern double lastTimestamp;
-	/** Multiply by this to correct for differences in framerate */
-	extern double deltaTimeCorrection;
-	/** Stores a reference to the main window */
-	extern GLFWwindow * currentContext;
-	/** Whether the main window is fullscreen or not */
-	extern bool fullscreen;
-	/** Sets the window properties that need to be initialized before window creation */
-	void setGlfwWindowHints();
-	/** Sets the window properties that need to be initialized after window creation (uses currentContext if null) */
-	void initWindow(GLFWwindow * _w = nullptr);
 
 	//void calculateModelMatrix();
 	/** Pushes the current model matrix onto the stack */
@@ -58,10 +36,4 @@ namespace vox{
 	void rotate(glm::mat4 _rotationMatrix);
 	void translate(glm::mat4 _translationMatrix);
 	void applyMatrix(glm::mat4 _modelMatrix);
-
-	void setWindowName(std::string _name);
-
-	void calculateDeltaTimeCorrection();
-
-	void destruct();
-}
+};
