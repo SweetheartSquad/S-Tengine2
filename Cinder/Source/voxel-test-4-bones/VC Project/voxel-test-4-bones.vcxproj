@@ -96,11 +96,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Shared Code\src\Animation.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Command.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\CommandProcessor.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Joint.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\SkeletonData.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
     <ClCompile Include="..\src\CinderApp.cpp" />
     <ClCompile Include="..\src\CMD_CreateJoint.cpp" />
@@ -110,16 +112,19 @@
     <ClCompile Include="..\src\CMD_SelectNodes.cpp" />
     <ClCompile Include="..\src\CMD_Parent.cpp" />
     <ClCompile Include="..\src\UI.cpp" />
+    <ClCompile Include="Timeline.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag" />
     <None Include="..\assets\shaders\joint.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Animation.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Command.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\CommandProcessor.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Joint.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Node.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeAnimatable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeTransformable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\SkeletonData.h" />
@@ -132,6 +137,7 @@
     <ClInclude Include="..\include\CMD_SelectNodes.h" />
     <ClInclude Include="..\include\CMD_Parent.h" />
     <ClInclude Include="..\include\UI.h" />
+    <ClInclude Include="Timeline.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
