@@ -3,6 +3,8 @@
 #include "NodeTransformable.h"
 #include "Animation.h"
 
+class Transform;
+
 class NodeAnimatable : public virtual NodeTransformable{
 
 public:
