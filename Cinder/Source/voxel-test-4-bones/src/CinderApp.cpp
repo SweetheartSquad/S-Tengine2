@@ -34,6 +34,12 @@ void CinderApp::setup(){
 	params->addButton("Load", std::bind(&CinderApp::loadSkeleton, this));
 	params->addSeparator();
 	params->addParam("Message", &message, "", true);
+
+	timelineParams = params::InterfaceGl::create( getWindow(), "Animation", toPixels( Vec2i(300,100) ));
+	timelineParams->minimize();
+	timelineParams->addParam("Time", &time);
+	
+
 	// note: we will setup our camera in the 'resize' function,
 	//  because it is called anyway so we don't have to set it up twice
 
@@ -149,6 +155,7 @@ void CinderApp::draw(){
 		gl::setViewport(fboUI.getBounds());
 
 		params->draw();
+		timelineParams->draw();
 		
 		gl::disableAlphaBlending();
 		gl::disableDepthRead();

@@ -92,6 +92,9 @@ protected:
 	//params
 	bool drawParams;
 	params::InterfaceGlRef params;
+	params::InterfaceGlRef timelineParams;
+
+	int time;
 
 	string directory;
 	string fileName;
