@@ -1,9 +1,11 @@
 #pragma once
 
+#include <cinder\app\App.h>
+
 #include "Joint.h"
 #include "Transform.h"
 
-#include <cinder\app\App.h>
+#include "VoxMatrices.h"
 
 unsigned long int Joint::nextId = 0;
 uint32_t Joint::nextColor = 0xFFFFFF;
@@ -100,15 +102,20 @@ void Joint::draw(gl::GlslProg * _shader){
 	
 	//draw joint
 	gl::pushModelView();
+	vox::pushMatrix();
 		gl::translate(transform->translationVector.x,
 							transform->translationVector.y,
 							transform->translationVector.z);
+		vox::translate(transform->getModelMatrix());
 
 		//gl::pushMatrices(); 
 			gl::rotate(Quatd(transform->orientation.w,
 							 transform->orientation.x,
 							 transform->orientation.y,
 							 transform->orientation.z));
+			vox::rotate(transform->getOrientationMatrix());
+			
+			glUniformMatrix4fv(_shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
 			gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 		//gl::popMatrices();
 
@@ -121,16 +128,32 @@ void Joint::draw(gl::GlslProg * _shader){
 		);
 		Quatd boneDir(Vec3d(0.0, 1.0, 0.0), cinderTrans);
 		gl::pushMatrices();
+		vox::pushMatrix();
 			gl::rotate(boneDir);
-
+			Transform temp;
+			temp.orientation.x = boneDir.v.x;
+			temp.orientation.y = boneDir.v.y;
+			temp.orientation.z = boneDir.v.z;
+			temp.orientation.w = boneDir.w;
+			vox::rotate(temp.getOrientationMatrix());
+			
+			glUniformMatrix4fv(_shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
 			gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
+
 			gl::rotate(Vec3f(0.f, 90.f, 0.f));
+			Transform temp2;
+			temp2.rotate(90, 0, 1, 0);
+			vox::rotate(temp2.getOrientationMatrix());
+			
+			glUniformMatrix4fv(_shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
 			gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
 		gl::popMatrices();
+		vox::popMatrix();
 
 		dynamic_cast<Joint *>(child)->draw(_shader);
 	}
 	gl::popModelView();
+	vox::popMatrix();
 
 	//gl::disableWireframe();
 }
