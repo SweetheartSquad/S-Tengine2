@@ -110,7 +110,11 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Shared Code\src\Animation.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeRenderable.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeResource.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
     <ClCompile Include="..\src\Camera.cpp" />
     <ClCompile Include="..\src\Cube.cpp" />
@@ -129,7 +133,6 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\Plane.cpp" />
     <ClCompile Include="..\src\RenderSurface.cpp" />
     <ClCompile Include="..\src\Resource.cpp" />
-    <ClCompile Include="..\src\ResourceNode.cpp" />
     <ClCompile Include="..\src\Scene.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
     <ClCompile Include="..\src\System.cpp" />
@@ -140,8 +143,12 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\VoxelMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Animation.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Node.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeAnimatable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeRenderable.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeResource.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeTransformable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />
     <ClInclude Include="..\include\Camera.h" />
@@ -161,7 +168,6 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Plane.h" />
     <ClInclude Include="..\include\RenderSurface.h" />
     <ClInclude Include="..\include\Resource.h" />
-    <ClInclude Include="..\include\ResourceNode.h" />
     <ClInclude Include="..\include\System.h" />
     <ClInclude Include="..\include\TestGame.h" />
     <ClInclude Include="..\include\MainScene.h" />

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Node.h"
-#include "NodeAnimatable.h"
 
 class Transform;
 
