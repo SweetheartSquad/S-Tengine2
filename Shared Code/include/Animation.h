@@ -13,6 +13,9 @@ public:
 	float duration;
 	float * prop;
 
+	void update();
+
+
 private:
 
 };

@@ -8,10 +8,11 @@
 
 #include "NodeTransformable.h"
 #include "NodeHierarchical.h"
+#include "NodeAnimatable.h"
 
 using namespace ci;
 
-class Joint : public NodeTransformable, public NodeHierarchical{
+class Joint : public NodeAnimatable, public NodeHierarchical{
 public:
 	static uint32_t nextColor;
 	static unsigned long int nextId;

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Animation.h"
-#include "Transform.h"
+#include "NodeTransformable.h"
 
-class NodeAnimatable
+class NodeAnimatable : public NodeTransformable
 {
 public:
 	NodeAnimatable(Transform * _transform);

@@ -6,9 +6,9 @@
 class Transform;
 
 /** Abstract node with a transform */
-class NodeTransformable : public virtual Node, public NodeAnimatable{
+class NodeTransformable : public virtual Node{
 public:
-	explicit NodeTransformable(Transform * _transform) : transform(_transform), NodeAnimatable(_transform){};
+	explicit NodeTransformable(Transform * _transform) : transform(_transform){};
 
 	/** Reference to this node's transform */
 	Transform * transform;

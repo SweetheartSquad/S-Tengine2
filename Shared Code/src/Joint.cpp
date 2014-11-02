@@ -25,13 +25,14 @@ void Joint::init(){
 }
 
 Joint::Joint() : 
-	NodeTransformable(new Transform()),
+	NodeAnimatable(new Transform()),
 	NodeHierarchical(nullptr){
 	init();
 }
 
 Joint::Joint(NodeHierarchical * _parent) : 
-	NodeTransformable(new Transform()),
+	//NodeTransformable(new Transform()),
+	NodeAnimatable(new Transform()),
 	NodeHierarchical(_parent)
 {
 	init();
