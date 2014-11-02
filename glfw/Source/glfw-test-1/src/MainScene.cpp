@@ -150,8 +150,8 @@ void MainScene::update(){
 	Scene::update();
 	*cube3->transform = *tLight->transform;
 
-	tLight->transform->translateX(sin(glfwGetTime()) * 0.1);
-	tLight->transform->translateZ(cos(glfwGetTime()) * 0.1);
+	tLight->transform->translateX(sin(glfwGetTime()) * 0.1 * vox::deltaTimeCorrection);
+	tLight->transform->translateZ(cos(glfwGetTime()) * 0.1 * vox::deltaTimeCorrection);
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		toggleFullScreen();

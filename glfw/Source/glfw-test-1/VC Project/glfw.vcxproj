@@ -132,6 +132,8 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\Mouse.cpp" />
     <ClCompile Include="..\src\Plane.cpp" />
     <ClCompile Include="..\src\RenderSurface.cpp" />
+    <ClCompile Include="..\src\RenderSurfaceFilter.cpp" />
+    <ClCompile Include="..\src\RenderSurfaceShaderBuilder.cpp" />
     <ClCompile Include="..\src\Resource.cpp" />
     <ClCompile Include="..\src\Scene.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
@@ -167,6 +169,8 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Mouse.h" />
     <ClInclude Include="..\include\Plane.h" />
     <ClInclude Include="..\include\RenderSurface.h" />
+    <ClInclude Include="..\include\RenderSurfaceFilter.h" />
+    <ClInclude Include="..\include\RenderSurfaceShaderBuilder.h" />
     <ClInclude Include="..\include\Resource.h" />
     <ClInclude Include="..\include\System.h" />
     <ClInclude Include="..\include\TestGame.h" />

@@ -49,9 +49,9 @@ void Camera::update(){
 	double deltaY = lastMouseY - offsetY;
 
 	if(deltaX != 0){
-		pitch += mouseSpeed * static_cast<float>(vox::deltaTimeCorrection) * static_cast<float>(offsetY);
+		pitch += (mouseSpeed * static_cast<float>(offsetY));
 	}if(deltaY != 0){
-		yaw += mouseSpeed * static_cast<float>(vox::deltaTimeCorrection) * static_cast<float>(offsetX);
+		yaw += (mouseSpeed * static_cast<float>(offsetX));
 	}
 
 	//restriction
@@ -65,7 +65,7 @@ void Camera::update(){
 	transform->orientation = glm::rotate(transform->orientation, yaw, upVectorLocal);
 	transform->orientation = glm::rotate(transform->orientation, pitch, rightVectorLocal);
 
-	transform->orientation = glm::slerp(lastOrientation, transform->orientation, 0.15f);
+	transform->orientation = glm::slerp(lastOrientation, transform->orientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
 
 	forwardVectorRotated	= transform->orientation * forwardVectorLocal;
 	rightVectorRotated		= transform->orientation * rightVectorLocal;
