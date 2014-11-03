@@ -69,6 +69,9 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\VoxMatrices.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CMD_PlaceVoxel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag">
@@ -137,6 +140,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\VoxMatrices.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_PlaceVoxel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

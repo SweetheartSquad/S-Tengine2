@@ -9,6 +9,7 @@
 #include "CMD_MoveSelectedJoints.h"
 #include "CMD_RotateSelectedJoints.h"
 #include "CMD_Parent.h"
+#include "CMD_PlaceVoxel.h"
 
 #include "Transform.h"
 #include "NodeTransformable.h"
@@ -393,25 +394,7 @@ void CinderApp::getPixelThing(){
 		Vec3f voxel(buffer[0], buffer[1], buffer[2]);
 		if(voxel.x > 0 && voxel.y > 0 && voxel.z > 0
 			&& voxel.x < 1 && voxel.y < 1 && voxel.z < 1){
-				Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(0));
-				
-				voxel *= 10;
-				
-				glm::vec4 newPos(voxel.x, voxel.y, voxel.z, 1);
-				NodeHierarchical * _parent = j;
-				std::vector<glm::mat4> modelMatrixStack;
-				while(_parent != nullptr){
-					modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
-					_parent = _parent->parent;
-				}
-
-				glm::mat4 modelMatrix(1);
-				for(unsigned long int i = modelMatrixStack.size(); i > 0; --i){
-					modelMatrix = modelMatrix * modelMatrixStack.at(i-1);
-				}
-				newPos = glm::inverse(modelMatrix) * newPos;
-				voxel.set(newPos.x, newPos.y, newPos.z);
-				j->voxels.push_back(voxel);
+				cmdProc.executeCommand(new CMD_PlaceVoxel(voxel*10));
 		}else{
 			console() << "Voxel not placed: outside bounds" << std::endl;
 		}
