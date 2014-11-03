@@ -166,12 +166,10 @@ protected:
 		SELECT,
 		TRANSLATE,
 		ROTATE,
-		SCALE
+		SCALE,
+		PAINT_VOXELS
 	} mode;
 
 	// Commands
 	CommandProcessor cmdProc;
-
-
-	std::vector<Vec3f> paintPoints;
 };

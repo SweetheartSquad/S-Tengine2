@@ -17,6 +17,8 @@ public:
 	static uint32_t nextColor;
 	static unsigned long int nextId;
 	static std::map<uint32_t, Joint *> jointMap;
+
+	std::vector<Vec3f> voxels;
 	Color color;
 
 	// Number of parent-child references from root to this
