@@ -4,7 +4,7 @@
 
 class Keyframe{
 public:
-	Keyframe();
+	Keyframe(float _time, float _startValue, float _value, Easing::Type _interpolation);
 	~Keyframe();
 
 	float time;

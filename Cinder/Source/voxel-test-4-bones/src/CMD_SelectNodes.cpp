@@ -29,6 +29,7 @@ void CMD_SelectNodes::execute(){
 	
 	if(nodesForSelection.size() == 0){
 		UI::selectedNodes.clear();
+		UI::setPropertyWindow();
 	}else{
 		// Nodes that are in previousSelectedNodes but not nodesForSelection
 		std::vector<Node *> oldS;
@@ -96,9 +97,11 @@ void CMD_SelectNodes::execute(){
 		}
 
 		UI::selectedNodes = correctedNodesForSelection;
+		UI::setPropertyWindow();
 	}
 }
 
 void CMD_SelectNodes::unexecute(){
 	UI::selectedNodes = previousSelectedNodes;
+	UI::setPropertyWindow();
 }
