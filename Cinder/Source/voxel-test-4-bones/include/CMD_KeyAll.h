@@ -19,9 +19,7 @@ public:
 
 private:
 	float time;
-	float startValue;
-	float value;
 	Easing::Type interpolation;
-	std::vector<Keyframe *> keyframes;
+	std::vector<Keyframe> keyframes;
 	
 };

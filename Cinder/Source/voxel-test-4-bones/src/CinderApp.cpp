@@ -37,19 +37,9 @@ void CinderApp::setup(){
 	params->addSeparator();
 	params->addParam("Message", &message, "", true);
 
-	timelineParams = params::InterfaceGl::create( getWindow(), "Animation", toPixels( Vec2i(300,100) ));
+	timelineParams = params::InterfaceGl::create( getWindow(), "Animation", toPixels( Vec2i(150,100) ));
 	timelineParams->minimize();
 	timelineParams->addParam("Time", &UI::time);
-	timelineParams->addParam("translateX", &UI::properties.transform->translationVector.x);
-	timelineParams->addParam("translateY", &UI::properties.transform->translationVector.y);
-	timelineParams->addParam("translateZ", &UI::properties.transform->translationVector.z);
-	timelineParams->addParam("rotateX", &UI::properties.transform->orientation.x);
-	timelineParams->addParam("rotateY", &UI::properties.transform->orientation.y);
-	timelineParams->addParam("rotateZ", &UI::properties.transform->orientation.z);
-	timelineParams->addParam("rotateW", &UI::properties.transform->orientation.w);
-	timelineParams->addParam("scaleX", &UI::properties.transform->scaleVector.x);
-	timelineParams->addParam("scaleY", &UI::properties.transform->scaleVector.y);
-	timelineParams->addParam("scaleZ", &UI::properties.transform->scaleVector.z);
 
 	timelineParams->addButton("Add/Edit Keyframe", std::bind(&CinderApp::setKeyframe, this));
 	

@@ -72,7 +72,13 @@
     <ClCompile Include="..\src\CMD_KeyAll.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\CMD_KeyProperty.cpp">
+    <ClCompile Include="..\src\CMD_AddKeyframecpp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CMD_EditKeyframe.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CMD_KeyProperty.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -148,7 +154,13 @@
     <ClInclude Include="..\include\CMD_KeyAll.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\CMD_KeyProperty.h">
+    <ClInclude Include="..\include\CMD_AddKeyframe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_EditKeyframe.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_KeyProperty.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -12,6 +12,8 @@ public:
 	float value;
 	Easing::Type interpolation;
 
+	static bool keyframe_less_than(const Keyframe k1, const Keyframe k2);
+
 private:
 
 };

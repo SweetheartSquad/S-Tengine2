@@ -11,12 +11,6 @@ class UI{
 public:
 	static std::vector<Node *> selectedNodes;
 
-	static struct frame_type {
-		Transform * transform;
-	} properties;
-
 	static float time;
 	static Easing::Type interpolation;
-
-	static void setPropertyWindow();
 };
