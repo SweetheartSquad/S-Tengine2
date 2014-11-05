@@ -26,8 +26,8 @@ Plane::Plane(glm::vec3 _center, float _size)
 Plane::~Plane(){
 }
 
-void Plane::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
-	Entity::draw(_projectionMatrix, _viewMatrix, _lights);
+void Plane::draw(MatrixStack * _matrixStack, std::vector<Light*> _lights){
+	Entity::draw(_matrixStack, _lights);
 }
 
 void Plane::update(){

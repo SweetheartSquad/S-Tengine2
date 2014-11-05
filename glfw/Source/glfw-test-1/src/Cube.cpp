@@ -102,8 +102,8 @@ Cube::Cube(glm::vec3 _center, float _size):
 Cube::~Cube(void){
 }
 
-void Cube::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
-	Entity::draw(_projectionMatrix, _viewMatrix, _lights);
+void Cube::draw(MatrixStack * _matrixStack, std::vector<Light*> _lights){
+	Entity::draw(_matrixStack, _lights);
 }
 
 void Cube::setColour(float red, float green, float blue, float alpha){

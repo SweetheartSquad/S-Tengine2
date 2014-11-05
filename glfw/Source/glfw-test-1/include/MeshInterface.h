@@ -1,4 +1,4 @@
-#pragma once
+#pragma once 
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -14,6 +14,7 @@
 #include "GLUtils.h"
 #include "Texture.h"
 #include "NodeRenderable.h"
+#include "MatrixStack.h"
 
 #define GL_UNIFORM_ID_TEXTURE_SAMPLER		"textureSampler"
 #define GL_UNIFORM_ID_NUM_TEXTURES			"numTextures"
@@ -88,19 +89,19 @@ public:
 	/** If dirty, copies data from vertices and indices to VBO and IBO and flags as clean */
 	void clean();
 	/** Renders the vao using the given shader, model-view-projection and lights */
-	void render(Shader *_shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights);
+	void render(Shader * _shader, MatrixStack * _matrixStack, std::vector<Light*> _lights);
 	/** Called render loop. Reders the textures for the mesh*/
-	virtual void configureTextures(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights);
+	virtual void configureTextures(Shader * _shader, MatrixStack * _matrixStack, std::vector<Light*> _lights);
 	/** Called render loop. Sets up the lights in the shader*/
-	virtual void configureLights(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights);
+	virtual void configureLights(Shader * _shader, MatrixStack * _matrixStack, std::vector<Light*> _lights);
 	/** Sets up the model, view and projection matricies **/
-	virtual void configureModelViewProjection(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights); 
+	virtual void configureModelViewProjection(Shader * _shader, MatrixStack * _matrixStack, std::vector<Light*> _lights); 
 	/**
 	* Called render loop. Doesn't do anything in the base implementation of MeshInterface
 	* This method can be overriden with any additional render logic. This prevents
 	* the need for overriding the entire render loop
 	*/
-	virtual void configureExtras(Shader * _shader, glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights);
+	virtual void configureExtras(Shader * _shader, MatrixStack * _matrixStack, std::vector<Light*> _lights);
 	/** A helper method to configure all the starndard vertex attributes - Position, Colours, Normals */
 	void configureDefaultVertexAttributes(Shader *_shader);
 	/** Sets the normal of the given vert to _x, _y, _z */

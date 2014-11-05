@@ -3,6 +3,7 @@
 Scene::Scene(Game * _game):
 	game(_game),
 	camera(new Camera()),
+	matrixStack(new MatrixStack()),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance())
@@ -11,6 +12,7 @@ Scene::Scene(Game * _game):
 
 Scene::~Scene(void){
 	delete camera;
+	delete matrixStack;
 }
 
 void Scene::update(void){
@@ -40,8 +42,11 @@ void Scene::render(){
 
 	glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
+	matrixStack->projectionMatrix = camera->getProjectionMatrix();
+	matrixStack->viewMatrix		  = camera->getViewMatrix();
+
 	for(Entity * e : children){
-		e->draw(camera->getProjectionMatrix(), camera->getViewMatrix(), lights);
+		e->draw(matrixStack, lights);
 	}
 
 	GLUtils::checkForError(0,__FILE__,__LINE__);

@@ -111,6 +111,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Shared Code\src\Animation.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeRenderable.cpp" />
@@ -123,7 +124,6 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\Entity.cpp" />
     <ClCompile Include="..\src\FakeAnimation.cpp" />
     <ClCompile Include="..\src\FileUtils.cpp" />
-    <ClCompile Include="..\src\Font.cpp" />
     <ClCompile Include="..\src\FrameBufferInterface.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\GLUtils.cpp" />
@@ -134,8 +134,6 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\Mouse.cpp" />
     <ClCompile Include="..\src\Plane.cpp" />
     <ClCompile Include="..\src\RenderSurface.cpp" />
-    <ClCompile Include="..\src\RenderSurfaceFilter.cpp" />
-    <ClCompile Include="..\src\RenderSurfaceShaderBuilder.cpp" />
     <ClCompile Include="..\src\Resource.cpp" />
     <ClCompile Include="..\src\Scene.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
@@ -147,6 +145,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Shared Code\include\Animation.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\MatrixStack.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Node.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeAnimatable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h" />
@@ -162,7 +161,6 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Entity.h" />
     <ClInclude Include="..\include\FakeAnimation.h" />
     <ClInclude Include="..\include\FileUtils.h" />
-    <ClInclude Include="..\include\Font.h" />
     <ClInclude Include="..\include\FrameBufferInterface.h" />
     <ClInclude Include="..\include\FrameBufferVertex.h" />
     <ClInclude Include="..\include\Game.h" />
@@ -172,8 +170,6 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Mouse.h" />
     <ClInclude Include="..\include\Plane.h" />
     <ClInclude Include="..\include\RenderSurface.h" />
-    <ClInclude Include="..\include\RenderSurfaceFilter.h" />
-    <ClInclude Include="..\include\RenderSurfaceShaderBuilder.h" />
     <ClInclude Include="..\include\Resource.h" />
     <ClInclude Include="..\include\System.h" />
     <ClInclude Include="..\include\TestGame.h" />

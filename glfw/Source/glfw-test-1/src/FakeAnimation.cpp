@@ -30,17 +30,17 @@ FakeAnimation::~FakeAnimation(){
 	delete shader;
 }
 
-void FakeAnimation::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
+void FakeAnimation::draw(MatrixStack * _matrixStack, std::vector<Light*> _lights){
 	//push transform
-	vox::pushMatrix();
-	vox::applyMatrix(transform->getModelMatrix());
+	_matrixStack->pushMatrix();
+	_matrixStack->applyMatrix(transform->getModelMatrix());
 
 	//for(Entity * child : children){
-		dynamic_cast<Entity *>(children.at(frame))->draw(_projectionMatrix, _viewMatrix, _lights);
+		dynamic_cast<Entity *>(children.at(frame))->draw(_matrixStack, _lights);
 	//}
 
 	//pop transform
-	vox::popMatrix();
+	_matrixStack->popMatrix();
 }
 
 void FakeAnimation::update(){

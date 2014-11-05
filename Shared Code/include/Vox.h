@@ -12,7 +12,7 @@ struct GLFWwindow;
 
 namespace vox{
 	
-	/** Equal to glfwGetTime() the last time the delta time correction was calculated */
+	//** Equal to glfwGetTime() the last time the delta time correction was calculated */
 	extern double lastTimestamp;
 	/** Multiply by this to correct for differences in framerate */
 	extern double deltaTimeCorrection;

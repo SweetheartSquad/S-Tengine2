@@ -5,6 +5,7 @@
 #include "Transform.h"
 #include "Node.h"
 #include "Vox.h"
+#include "MatrixStack.h"
 
 struct LightData {
 	glm::vec3 position;
@@ -26,7 +27,7 @@ public:
 	* Applies the model matrix of transform,
 	* Pops model matrix stack
 	*/
-	virtual void draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
+	virtual void draw(MatrixStack * _matrixStack);
 	void update();
 
 	/**

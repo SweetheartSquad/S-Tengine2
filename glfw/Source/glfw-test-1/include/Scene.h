@@ -28,6 +28,8 @@ public:
 	std::vector<Entity *> children;
 	/** The lights for this scene **/
 	std::vector<Light *> lights;
+	/**The default matrix stack for the scene*/
+	MatrixStack * matrixStack;
 	/** Calls update on the attached camera */
 	virtual void update(void);
 	/** Tells the RenderSystem to render the attached children to the vox::currentContext using the camera's view-projection matrix */
