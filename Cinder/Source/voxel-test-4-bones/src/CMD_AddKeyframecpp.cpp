@@ -5,15 +5,23 @@
 #include "CMD_EditKeyframe.h"
 #include <algorithm>
 
+
+#include <cinder/app/AppBasic.h>
+
 CMD_AddKeyframe::CMD_AddKeyframe(std::vector<Keyframe> * _keyframes, float _time, float _value, Easing::Type _interpolation) :
 	keyframes(_keyframes),
 	keyframe(Keyframe(_time,0,_value,_interpolation))
 {
 	// Find insert iterator and set startValue of new keyframe
-	previousKeyframe = std::lower_bound(keyframes->begin(),keyframes->end(),keyframe,Keyframe::keyframe_compare);
+	previousKeyframe = std::upper_bound(keyframes->begin(),keyframes->end(),keyframe,Keyframe::keyframe_compare);
+
 	if(keyframes->size() != 0){
+		previousKeyframe = std::prev(previousKeyframe);
+
 		keyframe.startValue = previousKeyframe->value;
 	}else{
+		previousKeyframe = keyframes->begin();
+
 		keyframe.startValue = _value;
 	}
 
@@ -25,8 +33,9 @@ CMD_AddKeyframe::CMD_AddKeyframe(std::vector<Keyframe> * _keyframes, float _time
 }
 
 void CMD_AddKeyframe::execute(){
+	ci::app::console() << "execute CMD_AddKeyframe" << std::endl;
 	// Add keyframe
-	keyframes->insert(previousKeyframe,keyframes->begin(),keyframes->end());
+	keyframes->insert(previousKeyframe,keyframe);
 
 	if(subCommands.size() != 0){
 		// Change next keyframe's startvalue

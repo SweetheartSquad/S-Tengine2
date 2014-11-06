@@ -4,12 +4,18 @@
 #include "Keyframe.h"
 #include <algorithm>
 
+
+#include <cinder/app/AppBasic.h>
+
 CMD_EditKeyframe::CMD_EditKeyframe(std::vector<Keyframe> * _keyframes, Keyframe * _keyframe, float _startValue, float _value, Easing::Type _interpolation) :
 	keyframes(_keyframes),
 	keyframe(_keyframe),
 	startValue(_startValue),
 	value(_value),
-	interpolation(_interpolation)
+	interpolation(_interpolation),
+	oldStartValue(_keyframe->startValue),
+	oldValue(_keyframe->value),
+	oldInterpolation(keyframe->interpolation)
 {
 	// Create command to edit next keyframe's startValue, if this one's is changing
 	if(value != oldValue){
@@ -21,6 +27,7 @@ CMD_EditKeyframe::CMD_EditKeyframe(std::vector<Keyframe> * _keyframes, Keyframe 
 }
 
 void CMD_EditKeyframe::execute(){
+	ci::app::console() << "execute CMD_EditKeyframe" << std::endl;
 	keyframe->startValue = startValue;
 	keyframe->value = value;
 	keyframe->interpolation = interpolation;

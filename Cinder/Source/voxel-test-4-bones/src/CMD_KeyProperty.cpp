@@ -7,6 +7,9 @@
 #include "Animation.h"
 #include <algorithm>
 
+
+#include <cinder/app/AppBasic.h>
+
 CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _time, float _value, Easing::Type _interpolation) :
 	animation(_animation),
 	time(_time),
@@ -15,7 +18,7 @@ CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _time, float _val
 {
 	Keyframe * k = findKeyframe(&animation->keyframes);
 
-	if(k != nullptr){
+	if(k == nullptr){
 		subCommands.push_back(new CMD_AddKeyframe(&animation->keyframes, time, value, interpolation));
 	}else{
 		subCommands.push_back(new CMD_EditKeyframe(&animation->keyframes, k, k->startValue, value, interpolation));
@@ -23,6 +26,7 @@ CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _time, float _val
 }
 
 void CMD_KeyProperty::execute(){
+	ci::app::console() << "execute CMD_KeyProperty" << std::endl;
 	subCommands.at(0)->execute();
 }
 

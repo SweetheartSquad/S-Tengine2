@@ -2,6 +2,8 @@
 
 #include "CMD_KeyAll.h"
 
+#include <cinder/app/AppBasic.h>
+
 #include "NodeAnimatable.h"
 #include "Keyframe.h"
 #include "Transform.h"
@@ -13,7 +15,7 @@ CMD_KeyAll::CMD_KeyAll(float _time) :
 }
 
 void CMD_KeyAll::execute(){
-
+	ci::app::console() << "execute CMD_KeyAll" << std::endl;
 	// Add keyframe to node's animation objects
 	if(subCommands.size() == 0){
 
@@ -44,13 +46,16 @@ void CMD_KeyAll::execute(){
 			subCommands.push_back(new CMD_KeyProperty(&_node->scaleZ,time,_node->transform->scaleVector.z,UI::interpolation));
 		}
 	}
-	subCommands.at(0)->execute();
 
-	
+	for (Command * c : subCommands){
+		c->execute();
+	}
 }
 
 void CMD_KeyAll::unexecute(){
-	
+	for (Command * c : subCommands){
+		c->unexecute();
+	}
 }
 
 
