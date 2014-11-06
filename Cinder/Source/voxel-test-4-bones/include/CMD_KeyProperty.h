@@ -22,8 +22,6 @@ private:
 	float time;
 	float value;
 	Easing::Type interpolation;
-	
-	std::vector<Keyframe>::iterator previousKeyframe;
 
 	Keyframe * findKeyframe(std::vector<Keyframe> * _keyframes);
 };

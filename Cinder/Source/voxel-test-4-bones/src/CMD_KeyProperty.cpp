@@ -16,9 +16,9 @@ CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _time, float _val
 	Keyframe * k = findKeyframe(&animation->keyframes);
 
 	if(k != nullptr){
-		subCommands.push_back(new CMD_AddKeyframe(&animation->keyframes,time,value,interpolation));
+		subCommands.push_back(new CMD_AddKeyframe(&animation->keyframes, time, value, interpolation));
 	}else{
-		subCommands.push_back(new CMD_EditKeyframe(k,value,interpolation));
+		subCommands.push_back(new CMD_EditKeyframe(&animation->keyframes, k, k->startValue, value, interpolation));
 	}
 }
 
