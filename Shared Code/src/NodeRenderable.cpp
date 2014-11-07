@@ -1,5 +1,6 @@
 #include "NodeRenderable.h"
 
+
 NodeRenderable::NodeRenderable(){
 }
 

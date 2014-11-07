@@ -89,19 +89,19 @@ public:
 	/** If dirty, copies data from vertices and indices to VBO and IBO and flags as clean */
 	void clean();
 	/** Renders the vao using the given shader, model-view-projection and lights */
-	void render(Shader * _shader, MatrixStack * _matrixStack, std::vector<Light*> _lights);
+	void render(MatrixStack * _matrixStack, RenderStack * _renderStack) override;
 	/** Called render loop. Reders the textures for the mesh*/
-	virtual void configureTextures(Shader * _shader, MatrixStack * _matrixStack, std::vector<Light*> _lights);
+	virtual void configureTextures(MatrixStack * _matrixStack, RenderStack * _renderStack);
 	/** Called render loop. Sets up the lights in the shader*/
-	virtual void configureLights(Shader * _shader, MatrixStack * _matrixStack, std::vector<Light*> _lights);
+	virtual void configureLights(MatrixStack * _matrixStack, RenderStack * _renderStack);
 	/** Sets up the model, view and projection matricies **/
-	virtual void configureModelViewProjection(Shader * _shader, MatrixStack * _matrixStack, std::vector<Light*> _lights); 
+	virtual void configureModelViewProjection(MatrixStack * _matrixStack, RenderStack * _renderStack); 
 	/**
 	* Called render loop. Doesn't do anything in the base implementation of MeshInterface
 	* This method can be overriden with any additional render logic. This prevents
 	* the need for overriding the entire render loop
 	*/
-	virtual void configureExtras(Shader * _shader, MatrixStack * _matrixStack, std::vector<Light*> _lights);
+	virtual void configureExtras(MatrixStack * _matrixStack, RenderStack * _renderStack);
 	/** A helper method to configure all the starndard vertex attributes - Position, Colours, Normals */
 	void configureDefaultVertexAttributes(Shader *_shader);
 	/** Sets the normal of the given vert to _x, _y, _z */
@@ -117,12 +117,12 @@ public:
 class TriMesh : public MeshInterface{
 public:
 	void pushTri(GLuint _v0, GLuint _v1, GLuint _v2);
-	TriMesh(GLenum _polygonalDrawMode, GLenum _drawMode = GL_TRIANGLES):MeshInterface(_polygonalDrawMode, _drawMode){};
+	explicit TriMesh(GLenum _polygonalDrawMode, GLenum _drawMode = GL_TRIANGLES):MeshInterface(_polygonalDrawMode, _drawMode){};
 };
 
 /** MeshInterface preset for quad meshes */
 class QuadMesh : public MeshInterface{
 public:
 	void pushQuad(GLuint _v0, GLuint _v1, GLuint _v2, GLuint _v3);
-	QuadMesh(GLenum _polygonalDrawMode, GLenum _drawMode = GL_QUADS):MeshInterface(_polygonalDrawMode, _drawMode){};
+	explicit QuadMesh(GLenum _polygonalDrawMode, GLenum _drawMode = GL_QUADS):MeshInterface(_polygonalDrawMode, _drawMode){};
 };

@@ -45,8 +45,10 @@ void Scene::render(){
 	matrixStack->projectionMatrix = camera->getProjectionMatrix();
 	matrixStack->viewMatrix		  = camera->getViewMatrix();
 
+	RenderStack * renderStack = new RenderStack(nullptr, &lights);
+
 	for(Entity * e : children){
-		e->draw(matrixStack, lights);
+		e->draw(matrixStack, renderStack);
 	}
 
 	GLUtils::checkForError(0,__FILE__,__LINE__);

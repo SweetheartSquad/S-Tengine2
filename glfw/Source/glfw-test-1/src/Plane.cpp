@@ -26,14 +26,6 @@ Plane::Plane(glm::vec3 _center, float _size)
 Plane::~Plane(){
 }
 
-void Plane::draw(MatrixStack * _matrixStack, std::vector<Light*> _lights){
-	Entity::draw(_matrixStack, _lights);
-}
-
-void Plane::update(){
-	Entity::update();
-}
-
 void Plane::setColour(float _red, float _green, float _blue, float _alpha){
 	for(int i=0; i<4; i++){
 		mesh->vertices.at(i).red   = _red;

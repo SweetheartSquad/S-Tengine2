@@ -30,13 +30,13 @@ FakeAnimation::~FakeAnimation(){
 	delete shader;
 }
 
-void FakeAnimation::draw(MatrixStack * _matrixStack, std::vector<Light*> _lights){
+void FakeAnimation::draw(MatrixStack * _matrixStack, RenderStack * _renderStack){
 	//push transform
 	_matrixStack->pushMatrix();
 	_matrixStack->applyMatrix(transform->getModelMatrix());
 
 	//for(Entity * child : children){
-		dynamic_cast<Entity *>(children.at(frame))->draw(_matrixStack, _lights);
+		dynamic_cast<Entity *>(children.at(frame))->draw(_matrixStack, _renderStack);
 	//}
 
 	//pop transform

@@ -20,17 +20,18 @@ Entity::~Entity(void){
 	shader = nullptr;
 }
 
-void Entity::draw(MatrixStack * _matrixStack, std::vector<Light*> _lights){
+void Entity::draw(MatrixStack * _matrixStack, RenderStack * _renderStack){
 	//push transform
 	_matrixStack->pushMatrix();
 	_matrixStack->applyMatrix(transform->getModelMatrix());
 
 	mesh->load();
 	mesh->clean();
-	mesh->render(shader,  _matrixStack, _lights);
+	_renderStack->shader = shader;
+	mesh->render(_matrixStack, _renderStack);
 
 	for(Node * child : children){
-		dynamic_cast<Entity *>(child)->draw(_matrixStack, _lights);
+		dynamic_cast<Entity *>(child)->draw(_matrixStack, _renderStack);
 	}
 	//pop transform
 	_matrixStack->popMatrix();

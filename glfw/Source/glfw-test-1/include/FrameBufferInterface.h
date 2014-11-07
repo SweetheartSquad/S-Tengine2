@@ -2,6 +2,7 @@
 
 #include <gl/glew.h>
 #include "Shader.h"
+#include "NodeRenderable.h"
 
 class FrameBufferInterface : public NodeResource{
 public:
