@@ -1,92 +1,90 @@
-varying vec4 position;  // position of the vertex (and fragment) in world space
-varying vec3 varyingNormalDirection;  // surface normal vector in world space
-uniform mat4 m, v, p;
-uniform mat4 v_inv;
- 
-struct lightSource
-{
-  vec4 position;
-  vec4 diffuse;
-  vec4 specular;
-  float constantAttenuation, linearAttenuation, quadraticAttenuation;
-  float spotCutoff, spotExponent;
-  vec3 spotDirection;
+#version 150
+
+uniform mat4 model;
+
+uniform struct Light{
+	vec3 position;
+	vec3 intensities;
+	float ambientCoefficient;
+	float attenuation;
 };
-lightSource light0 = lightSource(
-  vec4(0.0,  1.0,  2.0, 1.0),
-  vec4(1.0,  1.0,  1.0, 1.0),
-  vec4(1.0,  1.0,  1.0, 1.0),
-  0.0, 1.0, 0.0,
-  180.0, 0.0,
-  vec3(0.0, 0.0, 0.0)
-);
-vec4 scene_ambient = vec4(0.2, 0.2, 0.2, 1.0);
- 
-struct material
-{
-  vec4 ambient;
-  vec4 diffuse;
-  vec4 specular;
-  float shininess;
+
+uniform struct Material{
+	int type;
+	float shininess;
+	vec3 specularColor;
 };
-material frontMaterial = material(
-  vec4(0.2, 0.2, 0.2, 1.0),
-  vec4(1.0, 0.8, 0.8, 1.0),
-  vec4(1.0, 1.0, 1.0, 1.0),
-  5.0
-);
- 
+
+uniform Light lights[5];
+uniform int numLights;
+
+uniform sampler2D textureSampler[5];
+uniform int numTextures;
+
+uniform Material materials[5];
+uniform int numMaterials;
+
+in vec3 fragVert;
+in vec3 fragNormal;
+in vec4 fragColor;
+in vec2 fragUV;
+
+out vec4 outColor;
+
 void main()
 {
-  vec3 normalDirection = normalize(varyingNormalDirection);
-  vec3 viewDirection = normalize(vec3(v_inv * vec4(0.0, 0.0, 0.0, 1.0) - position));
-  vec3 lightDirection;
-  float attenuation;
- 
-  if (0.0 == light0.position.w) // directional light?
-    {
-      attenuation = 1.0; // no attenuation
-      lightDirection = normalize(vec3(light0.position));
-    } 
-  else // point light or spotlight (or other kind of light) 
-    {
-      vec3 positionToLightSource = vec3(light0.position - position);
-      float distance = length(positionToLightSource);
-      lightDirection = normalize(positionToLightSource);
-      attenuation = 1.0 / (light0.constantAttenuation
-                           + light0.linearAttenuation * distance
-                           + light0.quadraticAttenuation * distance * distance);
- 
-      if (light0.spotCutoff <= 90.0) // spotlight?
-	{
-	  float clampedCosine = max(0.0, dot(-lightDirection, light0.spotDirection));
-	  if (clampedCosine < cos(radians(light0.spotCutoff))) // outside of spotlight cone?
-	    {
-	      attenuation = 0.0;
-	    }
-	  else
-	    {
-	      attenuation = attenuation * pow(clampedCosine, light0.spotExponent);   
-	    }
+	vec4 fragColorTex = vec4(0,0,0,0);
+
+	if(numTextures == 0){
+		fragColorTex = fragColor;
 	}
-    }
- 
-  vec3 ambientLighting = vec3(scene_ambient) * vec3(frontMaterial.ambient);
- 
-  vec3 diffuseReflection = attenuation 
-    * vec3(light0.diffuse) * vec3(frontMaterial.diffuse)
-    * max(0.0, dot(normalDirection, lightDirection));
- 
-  vec3 specularReflection;
-  if (dot(normalDirection, lightDirection) < 0.0) // light source on the wrong side?
-    {
-      specularReflection = vec3(0.0, 0.0, 0.0); // no specular reflection
-    }
-  else // light source on the right side
-    {
-      specularReflection = attenuation * vec3(light0.specular) * vec3(frontMaterial.specular) 
-	* pow(max(0.0, dot(reflect(-lightDirection, normalDirection), viewDirection)), frontMaterial.shininess);
-    }
- 
-  gl_FragColor = vec4(ambientLighting + diffuseReflection + specularReflection, 1.0);
+
+	for(int i = 0; i < numTextures; i++){
+		if(i == 0){
+			fragColorTex = texture(textureSampler[i], fragUV).rgba;
+		}else{
+			fragColorTex = mix(fragColorTex, texture(textureSampler[i], fragUV).rgba, 0.5);
+		}
+	}
+
+    mat3 normalMatrix = transpose(inverse(mat3(model)));
+
+	vec3 normal = normalize(normalMatrix * fragNormal);
+
+	vec3 fragWorldPosition = vec3(model * vec4(fragVert, 1));
+
+	float brightness = 0;
+	vec3 outIntensities = vec3(0,0,0);
+
+	vec3 surfaceToCamera = fragVert - fragWorldPosition;
+
+	for(int i = 0; i < numLights; i++){
+		for(int j = 0; j < numMaterials; i++){
+			//ambient
+			vec3 ambient = lights[i].ambientCoefficient * fragColorTex.rgb * lights[i].intensities;
+		
+			//diffuse
+			vec3 surfaceToLight = lights[i].position - fragWorldPosition;
+			float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
+			vec3 diffuse = diffuseCoefficient * fragColorTex.rgb * lights[i].intensities;
+		
+			//specular
+			float specularCoefficient = 0.0;
+			if(diffuseCoefficient == 0.0){
+				specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), materials[j].shininess);
+			}
+			vec3 specular = specularCoefficient * materials[j].specularColor * lights[i].intensities;
+		
+			//attenuation
+			float distanceToLight = length(lights[i].position - fragWorldPosition);
+			float attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2));
+		
+			//linear color (color before gamma correction)
+			vec3 linearColor = ambient + attenuation*(diffuse + specular);
+    
+			//final color (after gamma correction)
+			vec3 gamma = vec3(1.0/2.2);
+			outColor = vec4(pow(linearColor, gamma), fragColorTex.a);
+		}
+	}
 }

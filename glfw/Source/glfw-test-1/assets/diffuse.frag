@@ -5,10 +5,14 @@ uniform mat4 model;
 uniform struct Light{
 	vec3 position;
 	vec3 intensities;
+	float ambientCoefficient;
+	float attenuation;
 };
 
 uniform struct Material{
 	int type;
+	float shininess;
+	vec3 specularColor;
 };
 
 uniform Light lights[5];

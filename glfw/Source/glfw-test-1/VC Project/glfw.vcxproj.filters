@@ -299,6 +299,12 @@
     <None Include="..\assets\RenderSurface.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
+    <None Include="..\assets\phong.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\phong.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\assets\voxel-texture.png">

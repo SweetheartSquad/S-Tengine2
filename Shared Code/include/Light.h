@@ -10,6 +10,8 @@
 struct LightData {
 	glm::vec3 position;
 	glm::vec3 intensities;
+	float ambientCoefficient;
+	float attenuation;
 };
 
 /**A basic light node. Stores a reference to a transform and a struct containing the position and color of the light */

@@ -193,6 +193,8 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <None Include="..\assets\cube.vox" />
     <None Include="..\assets\junkdata.frag" />
     <None Include="..\assets\junkdata.vert" />
+    <None Include="..\assets\phong.frag" />
+    <None Include="..\assets\phong.vert" />
     <None Include="..\assets\RenderSurface.frag" />
     <None Include="..\assets\RenderSurface.vert" />
     <None Include="..\assets\voxel.frag" />

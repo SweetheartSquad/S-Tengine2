@@ -4,18 +4,21 @@
 #include <GL/glew.h>
 #include <vector>
 #include "NodeResource.h"
+#include "Vox.h"
 
 enum TypeName { Phong, Blinn };
 
 struct MaterialData {
 	/** Name of material type (phong, blinn, etc) */
 	TypeName type;
+	float shininess;
+	glm::vec3 specularColor;
 };
 
 class Material : public NodeResource
 {
 public:
-	Material(TypeName type, bool autoRelease);
+	Material(TypeName type, float shininess, glm::vec3 specularColour, bool autoRelease);
 	~Material();
 
 	/** Material doesn't need to load anything */
