@@ -1,13 +1,18 @@
 #pragma once
 
 #include <vector>
+#include "Easing.h"
 
 #include <cinder\Vector.h>
 
 class Node;
+
 class UI{
 public:
 	static std::vector<Node *> selectedNodes;
+
+	static float time;
+	static Easing::Type interpolation;
 	static ci::Vec3d handlePos;
 
 	static void updateHandlePos();

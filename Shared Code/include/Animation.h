@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Easing.h"
+#include "Keyframe.h"
+#include <vector>
 
 class Animation
 {
@@ -8,10 +10,9 @@ public:
 	explicit Animation(float * _prop);
 	~Animation();
 
-	Easing::Type interpolation;
-	float start;
-	float duration;
 	float * prop;
+
+	std::vector<Keyframe> keyframes;
 
 	void update();
 

@@ -15,6 +15,8 @@
 #include "SkeletonData.h"
 #include "Joint.h"
 #include "CommandProcessor.h"
+#include "Timeline.h"
+#include "Transform.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -63,6 +65,8 @@ public:
 	void saveSkeleton();
 	void loadSkeleton();
 
+	void setKeyframe();
+
 	void handleUI(const Vec2i &pos);
 	void getPixelThing();
 public:
@@ -93,8 +97,6 @@ protected:
 	bool drawParams;
 	params::InterfaceGlRef params;
 	params::InterfaceGlRef timelineParams;
-
-	int time;
 
 	string directory;
 	string fileName;
@@ -151,6 +153,8 @@ protected:
 	gl::Material JointMaterial;
 	
 	std::vector<Joint *> Joints;
+
+
 	
 
 	//Vec3i dir;
@@ -166,12 +170,12 @@ protected:
 		SELECT,
 		TRANSLATE,
 		ROTATE,
-		SCALE
+		SCALE,
+		PAINT_VOXELS
 	} mode;
 
 	// Commands
 	CommandProcessor cmdProc;
 
-
-	std::vector<Vec3f> paintPoints;
+	
 };

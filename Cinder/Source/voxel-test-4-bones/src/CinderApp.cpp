@@ -8,7 +8,10 @@
 #include "CMD_SelectNodes.h"
 #include "CMD_MoveSelectedJoints.h"
 #include "CMD_RotateSelectedJoints.h"
+#include "CMD_KeyProperty.h"
+#include "CMD_KeyAll.h"
 #include "CMD_Parent.h"
+#include "CMD_PlaceVoxel.h"
 
 #include "Transform.h"
 #include "NodeTransformable.h"
@@ -42,9 +45,11 @@ void CinderApp::setup(){
 	params->addSeparator();
 	params->addParam("Message", &message, "", true);
 
-	timelineParams = params::InterfaceGl::create( getWindow(), "Animation", toPixels( Vec2i(300,100) ));
+	timelineParams = params::InterfaceGl::create( getWindow(), "Animation", toPixels( Vec2i(150,100) ));
 	timelineParams->minimize();
-	timelineParams->addParam("Time", &time);
+	timelineParams->addParam("Time", &UI::time);
+
+	timelineParams->addButton("Add/Edit Keyframe", std::bind(&CinderApp::setKeyframe, this));
 	
 
 	// note: we will setup our camera in the 'resize' function,
@@ -60,7 +65,7 @@ void CinderApp::setup(){
 	loadShaders();
 
 	// set background color
-	mColorBackground = Color(0.1f, 0.1f, 0.1f);
+	mColorBackground = Color(0.0f, 0.0f, 0.0f);
 	
 	channel = 0;
 
@@ -255,8 +260,8 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 			j->draw(&jointShader);
 		}
 
-		jointShader.uniform("offset", true);
-		for(unsigned long int i = 0; i < paintPoints.size(); ++i){
+		//jointShader.uniform("offset", true);
+		/*for(unsigned long int i = 0; i < paintPoints.size(); ++i){
 			gl::pushMatrices();
 			vox::pushMatrix();
 			Transform t;
@@ -268,7 +273,7 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 			gl::drawSphere(Vec3f(0,0,0), 0.1, 16);
 			gl::popMatrices();
 			vox::popMatrix();
-		}
+		}*/
 
 		// unbind shader
 		jointShader.unbind();
@@ -346,7 +351,7 @@ void CinderApp::mouseMove( MouseEvent event ){
 }
 
 void CinderApp::getPixelThing(){
-	if(sourceFbo != nullptr){
+	if(UI::selectedNodes.size() == 1 && sourceFbo != nullptr){
 		// first, specify a small region around the current cursor position 
 		float scaleX = 1;//sourceFbo->getWidth() / (float) getWindowWidth();
 		float scaleY = 1;//sourceFbo->getHeight() / (float) getWindowHeight();
@@ -385,16 +390,18 @@ void CinderApp::getPixelThing(){
 		glClampColor(GL_CLAMP_READ_COLOR, GL_FALSE);
 		glClampColor(GL_CLAMP_VERTEX_COLOR, GL_FALSE);
 		glClampColor(GL_CLAMP_FRAGMENT_COLOR, GL_FALSE);
-		glReadPixels(0, 0, pixelFbo.getWidth(), pixelFbo.getHeight(), GL_RGBA, GL_FLOAT, (void*)buffer);
+		glReadPixels(0, 0, pixelFbo.getWidth(), pixelFbo.getHeight(), GL_RGBA, GL_FLOAT, (void *)buffer);
 
 		// unbind the picking framebuffer
 		pixelFbo.unbindFramebuffer();
 		
-		if(buffer[0] > 0 && buffer[1] > 0 && buffer[2] > 0
-			&& buffer[0] < 1 && buffer[1] < 1 && buffer[2] < 1){
-			paintPoints.push_back(Vec3f(buffer[0], buffer[1], buffer[2])*10);
+		Vec3f voxel(buffer[0], buffer[1], buffer[2]);
+		if(voxel.x > 0 && voxel.y > 0 && voxel.z > 0
+			&& voxel.x < 1 && voxel.y < 1 && voxel.z < 1){
+				cmdProc.executeCommand(new CMD_PlaceVoxel(voxel*10));
+		}else{
+			console() << "Voxel not placed: outside bounds" << std::endl;
 		}
-		console() << "Pixel: " << pixel << std::endl << buffer[0] << " " << buffer[1] << " " << buffer[2] << std::endl;
 	}
 }
 
@@ -446,11 +453,12 @@ void CinderApp::mouseDown( MouseEvent event ){
 		}else if(mode == SELECT){
 			Joint * selection = pickJoint(mMousePos);
 			cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
+		}else if(mode == PAINT_VOXELS){
+			getPixelThing();
 		}
 	}
 
 	UI::updateHandlePos();
-	getPixelThing();
 }
 
 void CinderApp::mouseDrag( MouseEvent event ){
@@ -595,6 +603,10 @@ void CinderApp::keyDown( KeyEvent event ){
 	case KeyEvent::KEY_t:
 		mode = CREATE;
 		params->setOptions( "UI Mode", "label=`CREATE`" );
+		break;
+	case KeyEvent::KEY_v:
+		mode = PAINT_VOXELS;
+		params->setOptions( "UI Mode", "label=`PAINT_VOXELS`" );
 		break;
 	}
 	UI::updateHandlePos();
@@ -878,6 +890,14 @@ void CinderApp::loadSkeleton() {
 		cmdProc.reset();
 	}catch (exception ex){
 		message = string(ex.what());
+	}
+}
+
+void CinderApp::setKeyframe(){
+	if(UI::selectedNodes.size() != 0){
+		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
+			cmdProc.executeCommand(new CMD_KeyAll(UI::time));
+		}
 	}
 }
 

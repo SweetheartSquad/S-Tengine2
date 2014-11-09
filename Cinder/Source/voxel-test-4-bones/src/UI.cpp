@@ -1,10 +1,15 @@
 #pragma once
 
 #include "UI.h"
+<<<<<<< HEAD
+#include "Easing.h"
 #include "Joint.h"
-#include "Transform.h"
 
 std::vector<Node *> UI::selectedNodes;
+
+float UI::time;
+Easing::Type UI::interpolation;
+
 ci::Vec3d UI::handlePos = ci::Vec3d(0, 0, 0);
 
 void UI::updateHandlePos(){
