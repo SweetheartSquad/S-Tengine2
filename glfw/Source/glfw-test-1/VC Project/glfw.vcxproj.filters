@@ -93,16 +93,10 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Light.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\FrameBufferInterface.cpp">
@@ -139,6 +133,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\RenderOptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\Keyframe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -194,16 +197,10 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Light.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\FrameBufferInterface.h">
@@ -252,6 +249,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\RenderOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,9 +6,6 @@ NodeResource::NodeResource(bool _autoRelease) :
 {
 }
 
-NodeResource::~NodeResource(){
-}
-
 bool NodeResource::safeDelete(){
 	if(referenceCount == 0 && autoRelease){
 		delete this;
