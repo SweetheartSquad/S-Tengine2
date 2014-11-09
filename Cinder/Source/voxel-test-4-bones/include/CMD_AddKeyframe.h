@@ -18,5 +18,5 @@ private:
 	Keyframe keyframe;
 	std::vector<Keyframe> * keyframes;
 
-	std::vector<Keyframe>::iterator previousKeyframe;
+	float followingStartValue;
 };

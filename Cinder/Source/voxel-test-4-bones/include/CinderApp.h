@@ -15,7 +15,6 @@
 #include "SkeletonData.h"
 #include "Joint.h"
 #include "CommandProcessor.h"
-#include "Timeline.h"
 #include "Transform.h"
 
 using namespace ci;

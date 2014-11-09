@@ -26,4 +26,5 @@ private:
 	float value;
 	Easing::Type interpolation;
 
+	float followingStartValue;
 };

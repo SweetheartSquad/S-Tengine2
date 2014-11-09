@@ -121,7 +121,6 @@
     <ClCompile Include="..\src\CMD_RotateSelectedJoints.cpp" />
     <ClCompile Include="..\src\CMD_SelectNodes.cpp" />
     <ClCompile Include="..\src\CMD_Parent.cpp" />
-    <ClCompile Include="..\src\Timeline.cpp" />
     <ClCompile Include="..\src\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -156,7 +155,6 @@
     <ClInclude Include="..\include\CMD_RotateSelectedJoints.h" />
     <ClInclude Include="..\include\CMD_SelectNodes.h" />
     <ClInclude Include="..\include\CMD_Parent.h" />
-    <ClInclude Include="..\include\Timeline.h" />
     <ClInclude Include="..\include\UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

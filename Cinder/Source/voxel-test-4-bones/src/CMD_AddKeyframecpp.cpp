@@ -2,7 +2,6 @@
 
 #include "CMD_AddKeyframe.h"
 
-#include "CMD_EditKeyframe.h"
 #include <algorithm>
 
 
@@ -10,36 +9,43 @@
 
 CMD_AddKeyframe::CMD_AddKeyframe(std::vector<Keyframe> * _keyframes, float _time, float _value, Easing::Type _interpolation) :
 	keyframes(_keyframes),
-	keyframe(Keyframe(_time,0,_value,_interpolation))
+	keyframe(Keyframe(_time,0,_value,_interpolation)),
+	followingStartValue(NULL)
 {
+	ci::app::console() << "TIME: " << _time << std::endl;
 	// Find insert iterator and set startValue of new keyframe
-	previousKeyframe = std::upper_bound(keyframes->begin(),keyframes->end(),keyframe,Keyframe::keyframe_compare);
+	std::vector<Keyframe>::iterator followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),keyframe,Keyframe::keyframe_compare);
 
-	if(keyframes->size() != 0){
-		previousKeyframe = std::prev(previousKeyframe);
-
+	//If a previous keyframe exists
+	if(followingKeyframe_it != keyframes->end() && followingKeyframe_it->time != keyframes->front().time){
+		std::vector<Keyframe>::iterator previousKeyframe;
+		previousKeyframe = std::prev(followingKeyframe_it);
+		ci::app::console() << "previous frame: " << previousKeyframe->time << std::endl;
 		keyframe.startValue = previousKeyframe->value;
 	}else{
-		previousKeyframe = keyframes->begin();
-
+		ci::app::console() << "no previous frame" << std::endl;
 		keyframe.startValue = _value;
 	}
 
-	// Create command to edit next keyframe's startValue
-	std::vector<Keyframe>::iterator followingKeyframe = std::upper_bound(keyframes->begin(),keyframes->end(),keyframe,Keyframe::keyframe_compare);
-	if(followingKeyframe != keyframes->end()){
-		subCommands.push_back(new CMD_EditKeyframe(keyframes,&(*followingKeyframe),keyframe.value,followingKeyframe->value,followingKeyframe->interpolation));
+	// Get startValue of next keyframe
+	if(followingKeyframe_it != keyframes->end()){
+		followingStartValue = followingKeyframe_it->startValue;
 	}
 }
 
 void CMD_AddKeyframe::execute(){
 	ci::app::console() << "execute CMD_AddKeyframe" << std::endl;
+	
 	// Add keyframe
-	keyframes->insert(previousKeyframe,keyframe);
+	std::vector<Keyframe>::iterator followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),keyframe,Keyframe::keyframe_compare);
+	keyframes->insert(followingKeyframe_it,keyframe);
 
-	if(subCommands.size() != 0){
-		// Change next keyframe's startvalue
-		subCommands.at(0)->execute();
+	// Get the new iterator after insert
+	followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),keyframe,Keyframe::keyframe_compare);
+
+	// Change next keyframe's start value
+	if (followingKeyframe_it != keyframes->end()){
+		followingKeyframe_it->startValue = keyframe.value;
 	}
 }
 
@@ -52,9 +58,11 @@ void CMD_AddKeyframe::unexecute(){
 		}
 	}
 
-	if(subCommands.size() != 0){
-		// Restore next keyframe's startvalue
-		subCommands.at(0)->unexecute();
+	std::vector<Keyframe>::iterator followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),keyframe,Keyframe::keyframe_compare);
+
+	// Restore next keyframe's start value
+	if (followingKeyframe_it != keyframes->end()){
+		followingKeyframe_it->startValue = followingStartValue;
 	}
 }
 

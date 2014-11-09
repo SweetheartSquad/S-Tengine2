@@ -15,14 +15,15 @@ CMD_EditKeyframe::CMD_EditKeyframe(std::vector<Keyframe> * _keyframes, Keyframe 
 	interpolation(_interpolation),
 	oldStartValue(_keyframe->startValue),
 	oldValue(_keyframe->value),
-	oldInterpolation(keyframe->interpolation)
+	oldInterpolation(keyframe->interpolation),
+	followingStartValue(NULL)
 {
-	// Create command to edit next keyframe's startValue, if this one's is changing
-	if(value != oldValue){
-		std::vector<Keyframe>::iterator followingKeyframe = std::upper_bound(keyframes->begin(),keyframes->end(),*keyframe,Keyframe::keyframe_compare);
-		if(followingKeyframe != keyframes->end()){
-			subCommands.push_back(new CMD_EditKeyframe(keyframes,&(*followingKeyframe),value,followingKeyframe->value,followingKeyframe->interpolation));
-		}
+	
+	std::vector<Keyframe>::iterator followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),*keyframe,Keyframe::keyframe_compare);
+	
+	// Get startValue of next keyframe
+	if(followingKeyframe_it != keyframes->end()){
+		followingStartValue = followingKeyframe_it->startValue;
 	}
 }
 
@@ -32,21 +33,30 @@ void CMD_EditKeyframe::execute(){
 	keyframe->value = value;
 	keyframe->interpolation = interpolation;
 
-	if(subCommands.size() != 0){
-		// Change next keyframe's startvalue if value was changed
-		subCommands.at(0)->execute();
+	// Change next keyframe's start value, if this one's is changing
+	if (value != oldValue){
+		std::vector<Keyframe>::iterator followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),*keyframe,Keyframe::keyframe_compare);
+
+		// Change next keyframe's start value
+		if (followingKeyframe_it != keyframes->end()){
+			followingKeyframe_it->startValue = keyframe->value;
+		}
 	}
 }
 
 void CMD_EditKeyframe::unexecute(){
 	keyframe->startValue = oldStartValue;
-
-	if(subCommands.size() != 0){
-		// Restore next keyframe's startvalue if value was changed
-		subCommands.at(0)->unexecute();
-	}
 	keyframe->value = oldValue;
 	keyframe->interpolation = oldInterpolation;
+
+	// Restore next keyframe's start value, if this one's is changing
+	if (value != oldValue){
+		std::vector<Keyframe>::iterator followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),*keyframe,Keyframe::keyframe_compare);
+
+		if (followingKeyframe_it != keyframes->end()){
+			followingKeyframe_it->startValue = followingStartValue;
+		}
+	}
 }
 
 CMD_EditKeyframe::~CMD_EditKeyframe()

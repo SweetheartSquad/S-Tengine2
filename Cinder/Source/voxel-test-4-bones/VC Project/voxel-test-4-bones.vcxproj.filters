@@ -66,9 +66,6 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Keyframe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Timeline.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\CMD_KeyAll.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -185,9 +182,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeRenderable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Timeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\MatrixStack.h">
