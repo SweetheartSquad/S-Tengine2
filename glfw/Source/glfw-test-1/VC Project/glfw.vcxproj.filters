@@ -147,6 +147,9 @@
     <ClCompile Include="..\src\Material.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\FrameBufferChannel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -260,7 +263,11 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="..\include\Material.h">
+=======
+    <ClInclude Include="..\..\..\..\Shared Code\include\FrameBufferChannel.h">
+>>>>>>> R4-Buffer-Channels
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

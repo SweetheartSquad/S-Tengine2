@@ -5,7 +5,11 @@
 #include "FakeAnimation.h"
 #include "VoxelMesh.h"
 #include "Texture.h"
+<<<<<<< HEAD
 #include "Material.h"
+=======
+#include "framebufferchannel.h"
+>>>>>>> R4-Buffer-Channels
 
 Cube * cube;
 Cube * cube2;
@@ -31,7 +35,12 @@ RenderSurface * renderSurface;
 MainScene::MainScene(Game * _game):
 	Scene(game)
 {
-	frameBuffer = new FrameBufferInterface(0, 0, false);
+	std::vector<FrameBufferChannel> bufferChannels;
+
+	bufferChannels.push_back(FrameBufferChannel(GL_RGB, GL_COLOR_ATTACHMENT0, FrameBufferChannel::TEXTURE, GL_BYTE));
+	bufferChannels.push_back(FrameBufferChannel(GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT, FrameBufferChannel::RENDER_BUFFER, 0));
+	
+	frameBuffer = new FrameBufferInterface(bufferChannels, 0, 0, false);
 	renderSurface = new RenderSurface(new Shader("../assets/RenderSurface", false, true));
 
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);

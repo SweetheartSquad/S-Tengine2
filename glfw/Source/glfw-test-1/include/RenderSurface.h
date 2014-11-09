@@ -6,6 +6,8 @@
 #include"FrameBufferVertex.h"
 #include"FrameBufferInterface.h"
 
+class Shader;
+
 class RenderSurface{
 private:
 	std::vector<FrameBufferVertex> vertices;
