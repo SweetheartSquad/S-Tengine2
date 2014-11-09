@@ -141,7 +141,7 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\RenderStack.cpp">
+    <ClCompile Include="..\..\..\..\Shared Code\src\RenderOptions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -254,7 +254,7 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\MatrixStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\RenderStack.h">
+    <ClInclude Include="..\..\..\..\Shared Code\include\RenderOptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,7 +2,7 @@
 
 #include "Node.h"
 #include <MatrixStack.h>
-#include <RenderStack.h>
+#include "RenderOptions.h"
 
 class NodeRenderable : public virtual Node{
 public:
@@ -10,5 +10,5 @@ public:
 	NodeRenderable();
 	virtual ~NodeRenderable();
 
-	virtual void render(MatrixStack * _matrixStack, RenderStack * _renderStack) = 0;
+	virtual void render(MatrixStack * _matrixStack, RenderOptions * _renderStack) = 0;
 };
