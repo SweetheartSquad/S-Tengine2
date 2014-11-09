@@ -24,8 +24,6 @@
 
 class Texture;
 class MatrixStack;
-class RenderOptions;
-class Material;
 
 class MeshInterface : public NodeRenderable{
 public:
@@ -37,12 +35,8 @@ public:
 	std::vector<Vertex> vertices;
 	/** Index data for the ibo */
 	std::vector<GLuint> indices;
-	/** Lights */
-	std::vector<Light *> lights;
 	/** Textures */
 	std::vector<Texture *> textures;
-	/** Material*/
-	std::vector<Material *> materials;
 
 public:
 	/** ID of the vertex array object */
@@ -117,10 +111,7 @@ public:
 	void setUV(unsigned long int _vertId, float _x, float _y);
 	/** Adds _vertex to the list of vertices*/
 	void pushVert(Vertex _vertex);
-	/** Adds _texture to the list of textures*/
 	void pushTexture2D(Texture * _texture);
-	/** Adds _material to the list of materials*/
-	void pushMaterial(Material * _material);
 };
 
 /** MeshInterface preset for triangle meshes */

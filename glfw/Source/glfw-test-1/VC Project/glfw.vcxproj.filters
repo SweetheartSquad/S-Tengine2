@@ -144,9 +144,6 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Keyframe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Material.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -258,9 +255,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
