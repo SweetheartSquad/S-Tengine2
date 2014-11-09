@@ -1,8 +1,6 @@
+#pragma once
+
 #include "NodeRenderable.h"
 
-
-NodeRenderable::NodeRenderable(){
-}
-
-NodeRenderable::~NodeRenderable(){
+void NodeRenderable::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 }

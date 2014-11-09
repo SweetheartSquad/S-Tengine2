@@ -5,7 +5,7 @@
 #include "Node.h"
 
 /** Abstract node with a parent and list of children */
-class NodeHierarchical : public virtual Node{
+class NodeHierarchical abstract : public virtual Node{
 public:
 	explicit NodeHierarchical(NodeHierarchical * _parent) : parent(_parent){};
 

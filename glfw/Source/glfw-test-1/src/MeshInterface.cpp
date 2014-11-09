@@ -1,4 +1,9 @@
+#pragma once
+
 #include "MeshInterface.h"
+#include "RenderOptions.h"
+#include "Texture.h"
+#include "MatrixStack.h"
 
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	drawMode(drawMode),
@@ -7,18 +12,17 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	dirty(true),
 	shouldRenderLights(true),
 	shouldRenderTextures(true),
-	shouldRenderExtras(true),
-	NodeRenderable()
+	shouldRenderExtras(true)
 {
 	load();
 	clean();
 }
 
-MeshInterface::~MeshInterface(void){
+MeshInterface::~MeshInterface(){
 	glDeleteVertexArrays(1, &vaoId);
 	glDeleteBuffers(1, &vboId);
 	glDeleteBuffers(1, &iboId);
-	for(Texture* t:textures){
+	for(Texture * t : textures){
 		t->decrementAndDelete();
 	}
 	vaoId = 0;

@@ -1,4 +1,7 @@
+#pragma once
+
 #include "Scene.h"
+#include "RenderOptions.h"
 
 Scene::Scene(Game * _game):
 	game(_game),

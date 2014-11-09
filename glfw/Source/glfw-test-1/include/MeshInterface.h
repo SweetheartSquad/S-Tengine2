@@ -12,9 +12,7 @@
 #include "Vertex.h"
 #include "Light.h"
 #include "GLUtils.h"
-#include "Texture.h"
 #include "NodeRenderable.h"
-#include "MatrixStack.h"
 
 #define GL_UNIFORM_ID_TEXTURE_SAMPLER		"textureSampler"
 #define GL_UNIFORM_ID_NUM_TEXTURES			"numTextures"
@@ -23,6 +21,9 @@
 #define GL_UNIFORM_ID_NUM_LIGHTS			"numLights"
 #define GL_UNIFORM_ID_LIGHTS_POSITION		"lights[].position"
 #define GL_UNIFORM_ID_LIGHTS_INTENSITIES	"lights[].intensities"
+
+class Texture;
+class MatrixStack;
 
 class MeshInterface : public NodeRenderable{
 public:
@@ -80,7 +81,7 @@ public:
 	_drawMode: GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS, GL_QUAD_STRIP, GL_POLYGON
 	*/
 	MeshInterface(GLenum _polygonalDrawMode, GLenum _drawMode);
-	virtual ~MeshInterface(void);
+	~MeshInterface();
 
 	/** If unloaded, generates the VAO, VBO, IBO and flags as loaded */
 	void load();
@@ -89,7 +90,7 @@ public:
 	/** If dirty, copies data from vertices and indices to VBO and IBO and flags as clean */
 	void clean();
 	/** Renders the vao using the given shader, model-view-projection and lights */
-	void render(MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
+	virtual void render(MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 	/** Called render loop. Reders the textures for the mesh*/
 	virtual void configureTextures(MatrixStack * _matrixStack, RenderOptions * _renderStack);
 	/** Called render loop. Sets up the lights in the shader*/
@@ -110,7 +111,7 @@ public:
 	void setUV(unsigned long int _vertId, float _x, float _y);
 	/** Adds _vertex to the list of vertices*/
 	void pushVert(Vertex _vertex);
-	void pushTexture2D(Texture* _texture);
+	void pushTexture2D(Texture * _texture);
 };
 
 /** MeshInterface preset for triangle meshes */

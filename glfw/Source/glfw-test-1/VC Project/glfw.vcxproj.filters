@@ -126,9 +126,6 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeRenderable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeResource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

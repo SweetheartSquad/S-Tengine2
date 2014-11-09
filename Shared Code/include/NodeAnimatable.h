@@ -5,12 +5,10 @@
 
 class Transform;
 
-class NodeAnimatable : public NodeTransformable{
+class NodeAnimatable abstract : public NodeTransformable{
 
 public:
-
 	explicit NodeAnimatable(Transform * _transform);
-	~NodeAnimatable();
 
 	Animation translateX;
 	Animation translateY;
@@ -22,7 +20,4 @@ public:
 	Animation scaleX;
 	Animation scaleY;
 	Animation scaleZ;
-
-private:
-
 };

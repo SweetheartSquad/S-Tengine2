@@ -4,6 +4,7 @@
 #include "Resource.h"
 #include "FakeAnimation.h"
 #include "VoxelMesh.h"
+#include "Texture.h"
 
 Cube * cube;
 Cube * cube2;
@@ -12,11 +13,11 @@ Cube * cube4;
 
 Light glight;
 
-Texture* tex;
-Texture* voxTex;
+Texture * tex;
+Texture * voxTex;
 
-Shader* texShader;
-Shader* voxShader;
+Shader * texShader;
+Shader * voxShader;
 
 Light *tLight;
 

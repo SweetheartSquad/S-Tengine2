@@ -1,4 +1,7 @@
+#pragma once
+
 #include "VoxelMesh.h"
+#include "RenderOptions.h"
 
 VoxelMesh::VoxelMesh(GLenum _drawMode):
 	resolution(0.15),
