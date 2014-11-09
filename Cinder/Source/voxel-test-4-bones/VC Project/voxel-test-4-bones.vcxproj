@@ -101,6 +101,7 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\CommandProcessor.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Joint.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Keyframe.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeRenderable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\SkeletonData.cpp" />
@@ -133,6 +134,7 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\CommandProcessor.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Joint.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Keyframe.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\MatrixStack.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Node.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeAnimatable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h" />

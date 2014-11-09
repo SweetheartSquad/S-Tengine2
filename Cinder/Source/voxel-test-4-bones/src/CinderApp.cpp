@@ -16,7 +16,7 @@
 #include "Transform.h"
 #include "NodeTransformable.h"
 
-#include "VoxMatrices.h"
+#include "MatrixStack.h"
 
 
 void CinderApp::prepareSettings(Settings *settings){
@@ -256,8 +256,10 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		
 		jointShader.uniform("offset", false);
 		// draw joints:
+		MatrixStack mStack;
 		for(Joint * j : Joints){
-			j->draw(&jointShader);
+			j->shader = &jointShader;
+			j->render(&mStack, nullptr);
 		}
 
 		//jointShader.uniform("offset", true);

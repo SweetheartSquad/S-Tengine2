@@ -1,8 +1,9 @@
 #pragma once 
 
-#include "Light.h"
-#include "Shader.h"
 #include <vector>
+
+class Shader;
+class Light;
 
 class RenderOptions{
 	

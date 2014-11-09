@@ -5,7 +5,8 @@
 #include "Joint.h"
 #include "Transform.h"
 
-#include "VoxMatrices.h"
+#include "MatrixStack.h"
+#include "RenderOptions.h"
 
 unsigned long int Joint::nextId = 0;
 uint32_t Joint::nextColor = 0xFFFFFF;
@@ -89,9 +90,9 @@ Joint::~Joint(){
 	delete transform;
 }
 
-void Joint::draw(gl::GlslProg * _shader){
+void Joint::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	//gl::enableWireframe();
-	_shader->uniform("pickingColor", color);
+	shader->uniform("pickingColor", color);
 	//colour
 	if(depth%3 == 0){
 		gl::color(0, 1, 1);
@@ -100,10 +101,10 @@ void Joint::draw(gl::GlslProg * _shader){
 	}else{
 		gl::color(1, 1, 0);
 	}
-	
+
 	//draw joint
 	gl::pushModelView();
-	vox::pushMatrix();
+	_matrixStack->pushMatrix();
 		gl::translate(transform->translationVector.x,
 							transform->translationVector.y,
 							transform->translationVector.z);
@@ -117,24 +118,24 @@ void Joint::draw(gl::GlslProg * _shader){
 							transform->orientation.y,
 							transform->orientation.z));
 		//vox::rotate(transform->getOrientationMatrix());
-		vox::applyMatrix(transform->getModelMatrix());
+		_matrixStack->applyMatrix(transform->getModelMatrix());
 
-		glUniformMatrix4fv(_shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
+		glUniformMatrix4fv(shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 		gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 
 		//draw voxels
 		for(unsigned long int i = 0; i < voxels.size(); ++i){
 			gl::pushModelView();
-			vox::pushMatrix();
+			_matrixStack->pushMatrix();
 				gl::translate(voxels.at(i)->pos);
 				Transform t;
 				t.translate(voxels.at(i)->pos.x, voxels.at(i)->pos.y, voxels.at(i)->pos.z);
-				vox::translate(t.getTranslationMatrix());
+				_matrixStack->translate(t.getTranslationMatrix());
 			
-				glUniformMatrix4fv(_shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
+				glUniformMatrix4fv(shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.06f, 16);
 			gl::popModelView();
-			vox::popMatrix();
+			_matrixStack->popMatrix();
 		}
 		
 		//draw bones
@@ -146,32 +147,33 @@ void Joint::draw(gl::GlslProg * _shader){
 			);
 			Quatd boneDir(Vec3d(0.0, 1.0, 0.0), cinderTrans);
 			gl::pushMatrices();
-			vox::pushMatrix();
+			_matrixStack->pushMatrix();
 				gl::rotate(boneDir);
 				Transform temp;
 				temp.orientation.x = boneDir.v.x;
 				temp.orientation.y = boneDir.v.y;
 				temp.orientation.z = boneDir.v.z;
 				temp.orientation.w = boneDir.w;
-				vox::rotate(temp.getOrientationMatrix());
+				_matrixStack->rotate(temp.getOrientationMatrix());
 			
-				glUniformMatrix4fv(_shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
+				glUniformMatrix4fv(shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 				gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
 
 				gl::rotate(Vec3f(0.f, 90.f, 0.f));
 				Transform temp2;
 				temp2.rotate(90, 0, 1, 0);
-				vox::rotate(temp2.getOrientationMatrix());
+				_matrixStack->rotate(temp2.getOrientationMatrix());
 			
-				glUniformMatrix4fv(_shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
+				glUniformMatrix4fv(shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 				gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
 			gl::popMatrices();
-			vox::popMatrix();
+			_matrixStack->popMatrix();
 
-			dynamic_cast<Joint *>(child)->draw(_shader);
+			dynamic_cast<Joint *>(child)->shader = shader;
+			dynamic_cast<Joint *>(child)->render(_matrixStack, _renderStack);
 		}
 	gl::popModelView();
-	vox::popMatrix();
+	_matrixStack->popMatrix();
 
 	//gl::disableWireframe();
 }

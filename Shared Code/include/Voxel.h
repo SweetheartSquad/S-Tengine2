@@ -6,4 +6,5 @@
 class Voxel : public NodeRenderable{
 public:
 	ci::Vec3f pos;
+	virtual void render(MatrixStack * _matrixStack, RenderOptions * _renderStack);
 };

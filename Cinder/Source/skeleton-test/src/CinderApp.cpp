@@ -11,6 +11,7 @@
 #include <sstream>
 
 #include "SkeletonData.h"
+#include "MatrixStack.h"
 
 
 using namespace ci;
@@ -161,9 +162,11 @@ void CinderApp::render(const Camera & cam){
 	gl::setMatrices(cam);
 
 	// draw joints:
+	MatrixStack mStack;
 	for(Joint * j : m_joints){
 		if(j->parent == nullptr){
-			j->draw(&jointShader);
+			j->shader = &jointShader;
+			j->render(&mStack, nullptr);
 		}
 	}
 

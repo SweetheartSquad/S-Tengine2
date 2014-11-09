@@ -16,7 +16,3 @@ NodeAnimatable::NodeAnimatable(Transform * _transform) : NodeTransformable(_tran
 	scaleZ(&transform->scaleVector.z)
 {
 }
-
-NodeAnimatable::~NodeAnimatable()
-{
-}

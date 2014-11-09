@@ -9,16 +9,19 @@
 #include "NodeTransformable.h"
 #include "NodeHierarchical.h"
 #include "NodeAnimatable.h"
+#include "NodeRenderable.h"
 
 #include "Voxel.h"
 
 using namespace ci;
 
-class Joint : public NodeAnimatable, public NodeHierarchical{
+class Joint : public NodeAnimatable, public NodeHierarchical, public NodeRenderable{
 public:
 	static uint32_t nextColor;
 	static unsigned long int nextId;
 	static std::map<uint32_t, Joint *> jointMap;
+
+	gl::GlslProg * shader;
 
 	std::vector<Voxel *> voxels;
 	Color color;
@@ -42,7 +45,7 @@ public:
 	// Returns the translation vector of the joint (if _relative is false, applies all of the transformations of the parent joints before returning the vector)
 	Vec3d getPos(bool _relative = true);
 
-	void draw(gl::GlslProg * _shader);
+	void render(MatrixStack * _matrixStack, RenderOptions * _renderStack);
 private:
 	void init();
 };

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "UI.h"
-<<<<<<< HEAD
 #include "Easing.h"
 #include "Joint.h"
 

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "MatrixStack.h"
 
 MatrixStack::MatrixStack():
