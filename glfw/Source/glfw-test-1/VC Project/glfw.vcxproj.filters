@@ -263,11 +263,10 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="..\include\Material.h">
-=======
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\FrameBufferChannel.h">
->>>>>>> R4-Buffer-Channels
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

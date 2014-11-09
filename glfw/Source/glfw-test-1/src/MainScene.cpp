@@ -5,11 +5,8 @@
 #include "FakeAnimation.h"
 #include "VoxelMesh.h"
 #include "Texture.h"
-<<<<<<< HEAD
 #include "Material.h"
-=======
 #include "framebufferchannel.h"
->>>>>>> R4-Buffer-Channels
 
 Cube * cube;
 Cube * cube2;
