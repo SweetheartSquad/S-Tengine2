@@ -10,6 +10,8 @@
 #include "NodeHierarchical.h"
 #include "NodeAnimatable.h"
 
+#include "Voxel.h"
+
 using namespace ci;
 
 class Joint : public NodeAnimatable, public NodeHierarchical{
@@ -18,7 +20,7 @@ public:
 	static unsigned long int nextId;
 	static std::map<uint32_t, Joint *> jointMap;
 
-	std::vector<Vec3f> voxels;
+	std::vector<Voxel *> voxels;
 	Color color;
 
 	// Number of parent-child references from root to this

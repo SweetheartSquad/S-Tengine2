@@ -9,11 +9,11 @@
 #include "UI.h"
 #include "Joint.h"
 #include "Transform.h"
-//#include "NodeHierarchical.h"
-//#include "NodeTransformable.h"
+#include "Voxel.h"
 
 CMD_PlaceVoxel::CMD_PlaceVoxel(ci::Vec3d _v) :
-	v(_v)
+	v(_v),
+	voxel(nullptr)
 {
 }
 
@@ -33,7 +33,12 @@ void CMD_PlaceVoxel::execute(){
 		modelMatrix = modelMatrix * modelMatrixStack.at(i-1);
 	}
 	newPos = glm::inverse(modelMatrix) * newPos;
-	j->voxels.push_back(Vec3f(newPos.x, newPos.y, newPos.z));
+
+	if(voxel == nullptr){
+		voxel = new Voxel();
+		voxel->pos = Vec3f(newPos.x, newPos.y, newPos.z);
+	}
+	j->voxels.push_back(voxel);
 }
 
 void CMD_PlaceVoxel::unexecute(){
@@ -41,4 +46,8 @@ void CMD_PlaceVoxel::unexecute(){
 	j->voxels.pop_back();
 }
 
-CMD_PlaceVoxel::~CMD_PlaceVoxel(void){}
+CMD_PlaceVoxel::~CMD_PlaceVoxel(void){
+	if(voxel != nullptr){
+		delete voxel;
+	}
+}

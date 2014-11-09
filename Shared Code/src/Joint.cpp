@@ -126,9 +126,9 @@ void Joint::draw(gl::GlslProg * _shader){
 		for(unsigned long int i = 0; i < voxels.size(); ++i){
 			gl::pushModelView();
 			vox::pushMatrix();
-				gl::translate(voxels.at(i));
+				gl::translate(voxels.at(i)->pos);
 				Transform t;
-				t.translate(voxels.at(i).x, voxels.at(i).y, voxels.at(i).z);
+				t.translate(voxels.at(i)->pos.x, voxels.at(i)->pos.y, voxels.at(i)->pos.z);
 				vox::translate(t.getTranslationMatrix());
 			
 				glUniformMatrix4fv(_shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
