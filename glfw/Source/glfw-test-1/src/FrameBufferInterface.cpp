@@ -1,9 +1,11 @@
 #include "FrameBufferInterface.h"
+#include <iostream>
 
-FrameBufferInterface::FrameBufferInterface(unsigned long int _width, unsigned long int _height, bool _autoRelease):
+FrameBufferInterface::FrameBufferInterface(std::vector<FrameBufferChannel> _frameBufferChannels, unsigned long int _width, unsigned long int _height, bool _autoRelease):
 	NodeResource(_autoRelease),
 	width(_width),
-	height(_height)
+	height(_height),
+	frameBufferChannels(_frameBufferChannels)
 {
 	load();
 }
@@ -12,21 +14,34 @@ FrameBufferInterface::~FrameBufferInterface(){
 }
 
 void FrameBufferInterface::load(){
+	
+	unsigned long int colorAttachmentCount = 0;
+	
 	glGenFramebuffers(1, &frameBufferId);
 	bindFrameBuffer();
 
-	glGenTextures(1, &textureBufferId);
-	glBindTexture(GL_TEXTURE_2D, textureBufferId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureBufferId, 0);
-
-	glGenRenderbuffers(1, &renderBufferId);
-	glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBufferId);
-
+	for(unsigned long int i = 0; i < frameBufferChannels.size(); i++){
+		switch (frameBufferChannels.at(i).channelType){
+		case FrameBufferChannel::TEXTURE :
+			glGenTextures(1, &textureBufferId);
+			glBindTexture(GL_TEXTURE_2D, textureBufferId);
+			glTexImage2D(GL_TEXTURE_2D, 0, frameBufferChannels.at(i).internalFormat, width, height, 0, 
+				frameBufferChannels.at(i).internalFormat, frameBufferChannels.at(i).size, 0);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			if(frameBufferChannels.at(i).attachmentType == GL_COLOR_ATTACHMENT0){
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + colorAttachmentCount, GL_TEXTURE_2D, textureBufferId, 0);		
+			}else{
+				glFramebufferTexture2D(GL_FRAMEBUFFER, frameBufferChannels.at(i).attachmentType, GL_TEXTURE_2D, textureBufferId, 0);			
+			}
+			break;
+		case FrameBufferChannel::RENDER_BUFFER :
+			glGenRenderbuffers(1, &renderBufferId);
+			glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
+			glRenderbufferStorage(GL_RENDERBUFFER, frameBufferChannels.at(i).internalFormat, width, height);
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, frameBufferChannels.at(i).attachmentType, GL_RENDERBUFFER, renderBufferId);
+		}		
+	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
