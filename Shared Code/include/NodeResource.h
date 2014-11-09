@@ -7,6 +7,7 @@ protected:
 	/** Whether safeDelete can be called or not */
 	bool autoRelease;
 public:
+
 	explicit NodeResource(bool _autoRelease);
 	virtual ~NodeResource();
 	/** Will cause this to delete itself if references is empty */

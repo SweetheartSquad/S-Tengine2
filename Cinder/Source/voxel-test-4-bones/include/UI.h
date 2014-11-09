@@ -3,9 +3,9 @@
 #include <vector>
 #include "Easing.h"
 
+#include <cinder\Vector.h>
+
 class Node;
-class Transform;
-class NodeTransformable;
 
 class UI{
 public:
@@ -13,4 +13,7 @@ public:
 
 	static float time;
 	static Easing::Type interpolation;
+	static ci::Vec3d handlePos;
+
+	static void updateHandlePos();
 };

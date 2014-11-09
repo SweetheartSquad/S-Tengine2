@@ -13,20 +13,20 @@
 #include "Mouse.h"
 #include "Vox.h"
 
-TestGame *game;
+TestGame * game;
 
-static void error_callback(int _error, const char* _description){
+static void error_callback(int _error, const char * _description){
 	fputs(_description, stderr);
 }
 
-static void setMousePostionCallback(GLFWwindow *_window, double _x, double _y){
-	Mouse *mouse = &Mouse::getInstance();
+static void setMousePostionCallback(GLFWwindow * _window, double _x, double _y){
+	Mouse * mouse = &Mouse::getInstance();
 	mouse->mousePositionListener(_x, _y);
 }
 int main(void){
 	vox::setGlfwWindowHints();
 
-	GLFWwindow* window;
+	GLFWwindow * window;
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit()){
 		exit(EXIT_FAILURE);

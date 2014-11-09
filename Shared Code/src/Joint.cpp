@@ -1,7 +1,11 @@
 #pragma once
 
+#include <cinder\app\App.h>
+
 #include "Joint.h"
 #include "Transform.h"
+
+#include "VoxMatrices.h"
 
 unsigned long int Joint::nextId = 0;
 uint32_t Joint::nextColor = 0xFFFFFF;
@@ -44,24 +48,39 @@ Joint::Joint(NodeHierarchical * _parent) :
 }
 
 void Joint::setPos(Vec3d _pos, bool _convertToRelative){
-	glm::vec3 glmPos = glm::vec3(_pos.x, _pos.y, _pos.z);
+	glm::vec4 newPos(_pos.x, _pos.y, _pos.z, 1);
 	if(_convertToRelative){
 		NodeHierarchical * _parent = parent;
+		std::vector<glm::mat4> modelMatrixStack;
 		while(_parent != nullptr){
-			glmPos -= dynamic_cast<NodeTransformable *>(_parent)->transform->translationVector;
+			modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
 			_parent = _parent->parent;
 		}
+
+		glm::mat4 modelMatrix(1);
+		for(unsigned long int i = modelMatrixStack.size(); i > 0; --i){
+			modelMatrix = modelMatrix * modelMatrixStack.at(i-1);
+		}
+		newPos = glm::inverse(modelMatrix) * newPos;
 	}
-	transform->translationVector = glmPos;
+	transform->translationVector = glm::vec3(newPos.x, newPos.y, newPos.z);
 }
+
 Vec3d Joint::getPos(bool _relative){
-	glm::vec3 res = transform->translationVector;
+	glm::vec4 res(transform->translationVector.x, transform->translationVector.y, transform->translationVector.z, 1);
 	if(!_relative){
 		NodeHierarchical * _parent = parent;
+		std::vector<glm::mat4> modelMatrixStack;
 		while(_parent != nullptr){
-			res += dynamic_cast<NodeTransformable *>(_parent)->transform->translationVector;
+			modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
 			_parent = _parent->parent;
 		}
+		
+		glm::mat4 modelMatrix(1);
+		for(unsigned long int i = modelMatrixStack.size(); i > 0; --i){
+			modelMatrix = modelMatrix * modelMatrixStack.at(i-1);
+		}
+		res = modelMatrix * res;
 	}
 	return Vec3d(res.x, res.y, res.z);
 }
@@ -84,37 +103,75 @@ void Joint::draw(gl::GlslProg * _shader){
 	
 	//draw joint
 	gl::pushModelView();
+	vox::pushMatrix();
 		gl::translate(transform->translationVector.x,
 							transform->translationVector.y,
 							transform->translationVector.z);
+		//vox::translate(transform->getModelMatrix());
 
 		//gl::pushMatrices(); 
-			gl::rotate(Quatd(transform->orientation.w,
-							 transform->orientation.x,
-							 transform->orientation.y,
-							 transform->orientation.z));
-			gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 		//gl::popMatrices();
+	
+		gl::rotate(Quatd(transform->orientation.w,
+							transform->orientation.x,
+							transform->orientation.y,
+							transform->orientation.z));
+		//vox::rotate(transform->getOrientationMatrix());
+		vox::applyMatrix(transform->getModelMatrix());
 
-	//draw bones
-	for(NodeHierarchical * child : children){
-		Vec3d cinderTrans(
-			dynamic_cast<NodeTransformable *>(child)->transform->translationVector.x,
-			dynamic_cast<NodeTransformable *>(child)->transform->translationVector.y,
-			dynamic_cast<NodeTransformable *>(child)->transform->translationVector.z
-		);
-		Quatd boneDir(Vec3d(0.0, 1.0, 0.0), cinderTrans);
-		gl::pushMatrices();
-			gl::rotate(boneDir);
+		glUniformMatrix4fv(_shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
+		gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 
-			gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
-			gl::rotate(Vec3f(0.f, 90.f, 0.f));
-			gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
-		gl::popMatrices();
+		//draw voxels
+		for(unsigned long int i = 0; i < voxels.size(); ++i){
+			gl::pushModelView();
+			vox::pushMatrix();
+				gl::translate(voxels.at(i)->pos);
+				Transform t;
+				t.translate(voxels.at(i)->pos.x, voxels.at(i)->pos.y, voxels.at(i)->pos.z);
+				vox::translate(t.getTranslationMatrix());
+			
+				glUniformMatrix4fv(_shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
+				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.06f, 16);
+			gl::popModelView();
+			vox::popMatrix();
+		}
+		
+		//draw bones
+		for(NodeHierarchical * child : children){
+			Vec3d cinderTrans(
+				dynamic_cast<NodeTransformable *>(child)->transform->translationVector.x,
+				dynamic_cast<NodeTransformable *>(child)->transform->translationVector.y,
+				dynamic_cast<NodeTransformable *>(child)->transform->translationVector.z
+			);
+			Quatd boneDir(Vec3d(0.0, 1.0, 0.0), cinderTrans);
+			gl::pushMatrices();
+			vox::pushMatrix();
+				gl::rotate(boneDir);
+				Transform temp;
+				temp.orientation.x = boneDir.v.x;
+				temp.orientation.y = boneDir.v.y;
+				temp.orientation.z = boneDir.v.z;
+				temp.orientation.w = boneDir.w;
+				vox::rotate(temp.getOrientationMatrix());
+			
+				glUniformMatrix4fv(_shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
+				gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
 
-		dynamic_cast<Joint *>(child)->draw(_shader);
-	}
+				gl::rotate(Vec3f(0.f, 90.f, 0.f));
+				Transform temp2;
+				temp2.rotate(90, 0, 1, 0);
+				vox::rotate(temp2.getOrientationMatrix());
+			
+				glUniformMatrix4fv(_shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
+				gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
+			gl::popMatrices();
+			vox::popMatrix();
+
+			dynamic_cast<Joint *>(child)->draw(_shader);
+		}
 	gl::popModelView();
+	vox::popMatrix();
 
 	//gl::disableWireframe();
 }

@@ -18,11 +18,6 @@ FakeAnimation::FakeAnimation(Transform * t, Shader * s, Entity * parent) :
 	delay(3),
 	delayCount(0)
 {
-	
-
-	for(Node * e : children){
-		dynamic_cast<Entity *>(e)->mesh->polygonalDrawMode = GL_POINTS;
-	}
 }
 
 FakeAnimation::~FakeAnimation(){
@@ -35,17 +30,17 @@ FakeAnimation::~FakeAnimation(){
 	delete shader;
 }
 
-void FakeAnimation::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
+void FakeAnimation::draw(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	//push transform
-	vox::pushMatrix();
-	vox::applyMatrix(transform->getModelMatrix());
+	_matrixStack->pushMatrix();
+	_matrixStack->applyMatrix(transform->getModelMatrix());
 
 	//for(Entity * child : children){
-		dynamic_cast<Entity *>(children.at(frame))->draw(_projectionMatrix, _viewMatrix, _lights);
+		dynamic_cast<Entity *>(children.at(frame))->draw(_matrixStack, _renderStack);
 	//}
 
 	//pop transform
-	vox::popMatrix();
+	_matrixStack->popMatrix();
 }
 
 void FakeAnimation::update(){

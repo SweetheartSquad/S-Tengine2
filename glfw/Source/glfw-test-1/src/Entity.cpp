@@ -20,21 +20,21 @@ Entity::~Entity(void){
 	shader = nullptr;
 }
 
-void Entity::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
+void Entity::draw(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	//push transform
-	vox::pushMatrix();
-	vox::applyMatrix(transform->getModelMatrix());
+	_matrixStack->pushMatrix();
+	_matrixStack->applyMatrix(transform->getModelMatrix());
 
 	mesh->load();
 	mesh->clean();
-	mesh->render(shader, _projectionMatrix, _viewMatrix, _lights);
+	_renderStack->shader = shader;
+	mesh->render(_matrixStack, _renderStack);
 
 	for(Node * child : children){
-		dynamic_cast<Entity *>(child)->draw(_projectionMatrix, _viewMatrix, _lights);
+		dynamic_cast<Entity *>(child)->draw(_matrixStack, _renderStack);
 	}
-
 	//pop transform
-	vox::popMatrix();
+	_matrixStack->popMatrix();
 }
 
 void Entity::update(){

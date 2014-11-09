@@ -17,12 +17,12 @@ Light::~Light() {
 	transform = nullptr;
 }
 
-void Light::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix){
+void Light::draw(MatrixStack * _matrixStack){
 	//push transform
-	vox::pushMatrix();
-	vox::applyMatrix(transform->getModelMatrix());
+	_matrixStack->pushMatrix();
+	_matrixStack->applyMatrix(transform->getModelMatrix());
 	//pop transform
-	vox::popMatrix();
+	_matrixStack->popMatrix();
 }
 
 void Light::update(){

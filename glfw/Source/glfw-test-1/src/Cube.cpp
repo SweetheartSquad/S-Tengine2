@@ -102,10 +102,6 @@ Cube::Cube(glm::vec3 _center, float _size):
 Cube::~Cube(void){
 }
 
-void Cube::draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights){
-	Entity::draw(_projectionMatrix, _viewMatrix, _lights);
-}
-
 void Cube::setColour(float red, float green, float blue, float alpha){
 	for(int i=0; i<24; i++){
 		mesh->vertices.at(i).red = red;
@@ -174,8 +170,4 @@ void Cube::setVertexColour(int index, float red, float green, float blue, float 
 	mesh->vertices.at(index).green = green;
 	mesh->vertices.at(index).blue = blue;
 	mesh->vertices.at(index).alpha = alpha;
-}
-
-void Cube::update(void){
-	Entity::update();
 }

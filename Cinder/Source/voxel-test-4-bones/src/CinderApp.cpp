@@ -11,8 +11,13 @@
 #include "CMD_KeyProperty.h"
 #include "CMD_KeyAll.h"
 #include "CMD_Parent.h"
+#include "CMD_PlaceVoxel.h"
 
+#include "Transform.h"
 #include "NodeTransformable.h"
+
+#include "VoxMatrices.h"
+
 
 void CinderApp::prepareSettings(Settings *settings){
 	settings->setWindowSize(900, 600);
@@ -21,10 +26,13 @@ void CinderApp::prepareSettings(Settings *settings){
 }
 
 void CinderApp::setup(){
+	sourceCam = nullptr;
+	sourceRect = nullptr;
+	sourceFbo = nullptr;
+
 	drawParams = true;
 	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 150, 100 ) ) );
-	params->addButton( "Switch Mode", std::bind( &CinderApp::switchMode, this ) );
-	params->addText( "Interaction Mode", "label=`CREATE`" );
+	params->addText( "UI Mode", "label=`CREATE`" );
 
 	params->addSeparator();
 
@@ -57,7 +65,7 @@ void CinderApp::setup(){
 	loadShaders();
 
 	// set background color
-	mColorBackground = Color(0.1f, 0.1f, 0.1f);
+	mColorBackground = Color(0.0f, 0.0f, 0.0f);
 	
 	channel = 0;
 
@@ -203,6 +211,15 @@ void CinderApp::draw(){
 		gl::drawStrokedRect(Rectf(rct.x1, rct.y1+rct.y2, rct.x2, rct.y2+rct.y2));
 	}
 	
+
+	// draw the picking framebuffer in the upper right corner
+	if(pixelFbo){
+		Rectf rct((Rectf)pixelFbo.getBounds() * 5.0f);
+		rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0) );
+		gl::draw( pixelFbo.getTexture(0), Rectf(rct.x1, rct.y1+rct.y2+rct.y2, rct.x2, rct.y2+rct.y2+rct.y2) );
+		gl::drawStrokedRect(Rectf(rct.x1, rct.y1+rct.y2+rct.y2, rct.x2, rct.y2+rct.y2+rct.y2));
+	}
+	
 }
 
 void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
@@ -232,14 +249,31 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		gl::enableDepthRead();
 		gl::enableDepthWrite();
 
+
 		// bind phong shader, which renders to both our color targets.
 		//  See 'shaders/phong.frag'
 		jointShader.bind();
-
+		
+		jointShader.uniform("offset", false);
 		// draw joints:
 		for(Joint * j : Joints){
 			j->draw(&jointShader);
 		}
+
+		//jointShader.uniform("offset", true);
+		/*for(unsigned long int i = 0; i < paintPoints.size(); ++i){
+			gl::pushMatrices();
+			vox::pushMatrix();
+			Transform t;
+			t.translate(paintPoints.at(i).x, paintPoints.at(i).y, paintPoints.at(i).z);
+			vox::translate(t.getTranslationMatrix());
+			gl::translate(paintPoints.at(i));
+			
+			glUniformMatrix4fv(jointShader.getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
+			gl::drawSphere(Vec3f(0,0,0), 0.1, 16);
+			gl::popMatrices();
+			vox::popMatrix();
+		}*/
 
 		// unbind shader
 		jointShader.unbind();
@@ -268,20 +302,16 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 	if(UI::selectedNodes.size() != 0){
 
 		gl::pushMatrices();
-			Vec3f avg(0, 0, 0);	
-			
 			gl::enableWireframe();
 			for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 				gl::pushMatrices();
 					gl::translate((dynamic_cast<Joint *>(UI::selectedNodes.at(i)))->getPos(false));
 					gl::drawSphere(Vec3f(0,0,0), 0.06f);
 				gl::popMatrices();
-				avg += (dynamic_cast<Joint *>(UI::selectedNodes.at(i)))->getPos(false);
 			}
 			gl::disableWireframe();
-			avg /= UI::selectedNodes.size();
 
-			gl::translate(avg);
+			gl::translate(UI::handlePos);
 			gl::lineWidth(2);
 			if(cam.isPersp()){
 				// If the camera is a perspective view, scale the coordinate frame proportionally to the distance from camera
@@ -316,38 +346,97 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 
 void CinderApp::mouseMove( MouseEvent event ){
 	mMousePos = event.getPos();
-
 	//pickJoint(mMousePos);
 	//handleUI(mMousePos);
 }
 
+void CinderApp::getPixelThing(){
+	if(UI::selectedNodes.size() == 1 && sourceFbo != nullptr){
+		// first, specify a small region around the current cursor position 
+		float scaleX = 1;//sourceFbo->getWidth() / (float) getWindowWidth();
+		float scaleY = 1;//sourceFbo->getHeight() / (float) getWindowHeight();
+		Vec2i pixel((int)((mMousePos.x - sourceRect->x1) * scaleX), (int)((sourceRect->y2 - mMousePos.y) * scaleY));
+
+		//pixel = fromRectToRect(pixel, sourceFbo->getBounds(), *sourceRect);
+
+		//Area	area(pixel.x-5, pixel.y-5, pixel.x+5, pixel.y+5);
+		Area	area(pixel.x, pixel.y, pixel.x+1, pixel.y+1);
+
+		// next, we need to copy this region to a non-anti-aliased framebuffer
+		//  because sadly we can not sample colors from an anti-aliased one. However,
+		//  this also simplifies the glReadPixels statement, so no harm done.
+		//  Here, we create that non-AA buffer if it does not yet exist.
+		if(!pixelFbo) {
+			initFbo(pixelFbo, area);
+		}
+	
+		// bind the picking framebuffer, so we can clear it and then read its pixels later
+		pixelFbo.bindFramebuffer();
+		gl::clear();
+
+		// (Cinder does not yet provide a way to handle multiple color targets in the blitTo function, 
+		//  so we have to make sure the correct target is selected before calling it)
+		glBindFramebufferEXT( GL_READ_FRAMEBUFFER_EXT, sourceFbo->getId() );
+		glBindFramebufferEXT( GL_DRAW_FRAMEBUFFER_EXT, pixelFbo.getId() );
+		glReadBuffer(GL_COLOR_ATTACHMENT3_EXT);
+		glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
+
+		sourceFbo->blitTo(pixelFbo, area, pixelFbo.getBounds());
+		
+		// read pixel value(s) in the area
+		GLfloat buffer[400]; // make sure this is large enough to hold 4 bytes for every pixel!
+		glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
+		
+		glClampColor(GL_CLAMP_READ_COLOR, GL_FALSE);
+		glClampColor(GL_CLAMP_VERTEX_COLOR, GL_FALSE);
+		glClampColor(GL_CLAMP_FRAGMENT_COLOR, GL_FALSE);
+		glReadPixels(0, 0, pixelFbo.getWidth(), pixelFbo.getHeight(), GL_RGBA, GL_FLOAT, (void *)buffer);
+
+		// unbind the picking framebuffer
+		pixelFbo.unbindFramebuffer();
+		
+		Vec3f voxel(buffer[0], buffer[1], buffer[2]);
+		if(voxel.x > 0 && voxel.y > 0 && voxel.z > 0
+			&& voxel.x < 1 && voxel.y < 1 && voxel.z < 1){
+				cmdProc.executeCommand(new CMD_PlaceVoxel(voxel*10));
+		}else{
+			console() << "Voxel not placed: outside bounds" << std::endl;
+		}
+	}
+}
+
 void CinderApp::mouseDown( MouseEvent event ){
 	mMousePos = event.getPos();
-
+	
 	// handle the camera
 	camMayaPersp.mouseDown( mMousePos );
+	
+	if(rectTop.contains(mMousePos)){
+		sourceCam = &camTop;
+		sourceRect = &rectTop;
+		sourceFbo = &fboTop;
+	}else if(rectFront.contains(mMousePos)){
+		sourceCam = &camFront;
+		sourceRect = &rectFront;
+		sourceFbo = &fboFront;
+	}else if(rectRight.contains(mMousePos)){
+		sourceCam = &camRight;
+		sourceRect = &rectRight;
+		sourceFbo = &fboRight;
+	}else if(rectPersp.contains(mMousePos)){
+		sourceCam = &camMayaPersp.getCamera();
+		sourceRect = &rectPersp;
+		sourceFbo = &fboPersp;
+	}else{
+		sourceCam = nullptr;
+		sourceRect = nullptr;
+		sourceFbo = nullptr;
+	}
+	
+	// Get the selected colour
+	handleUI(mMousePos);
 
 	if(event.isRight()){
-
-		if(rectTop.contains(mMousePos)){
-			sourceCam = &camTop;
-			sourceRect = &rectTop;
-		}else if(rectFront.contains(mMousePos)){
-			sourceCam = &camFront;
-			sourceRect = &rectFront;
-		}else if(rectRight.contains(mMousePos)){
-			sourceCam = &camRight;
-			sourceRect = &rectRight;
-		}else if(rectPersp.contains(mMousePos)){
-			sourceCam = &camMayaPersp.getCamera();
-			sourceRect = &rectPersp;
-		}else{
-			sourceCam = nullptr;
-			sourceRect = nullptr;
-		}
-
-		handleUI(mMousePos);
-
 		oldMousePos = mMousePos;
 	}
 
@@ -363,10 +452,13 @@ void CinderApp::mouseDown( MouseEvent event ){
 			}
 		}else if(mode == SELECT){
 			Joint * selection = pickJoint(mMousePos);
-			// 
 			cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
+		}else if(mode == PAINT_VOXELS){
+			getPixelThing();
 		}
 	}
+
+	UI::updateHandlePos();
 }
 
 void CinderApp::mouseDrag( MouseEvent event ){
@@ -381,12 +473,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 		}else if(event.isRightDown()){
 			if(uiColour != 0){
 				if(sourceCam != nullptr && sourceRect != nullptr){
-					Vec3d handlePos(0,0,0);
-					for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
-						handlePos += (dynamic_cast<Joint *>(UI::selectedNodes.at(i)))->getPos(false);
-					}
-					handlePos /= UI::selectedNodes.size();
-					Vec2i handlePosInScreen = sourceCam->worldToScreen(handlePos, sourceRect->getWidth(), sourceRect->getHeight());
+					Vec2i handlePosInScreen = sourceCam->worldToScreen(UI::handlePos, sourceRect->getWidth(), sourceRect->getHeight());
 
 					Vec2i deltaMousePos = mMousePos - oldMousePos;
 					
@@ -399,7 +486,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 								case 255: dir.z -= 10; break;		//b
 							}
 						
-							Vec2i end = sourceCam->worldToScreen(handlePos + dir, sourceRect->getWidth(), sourceRect->getHeight());
+							Vec2i end = sourceCam->worldToScreen(UI::handlePos + dir, sourceRect->getWidth(), sourceRect->getHeight());
 							Vec2f mouseAxis = end - handlePosInScreen;
 							float dif = deltaMousePos.dot(mouseAxis) / sqrtf(getWindowHeight()*getWindowHeight() + getWindowWidth()*getWindowWidth());
 				
@@ -439,6 +526,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 }
 
 void CinderApp::mouseUp( MouseEvent event ){
+	UI::updateHandlePos();
 }
 
 void CinderApp::keyDown( KeyEvent event ){
@@ -498,17 +586,30 @@ void CinderApp::keyDown( KeyEvent event ){
 		break;
 	case KeyEvent::KEY_q:
 		mode = SELECT;
+		params->setOptions( "UI Mode", "label=`SELECT`" );
 		break;
 	case KeyEvent::KEY_w:
 		mode = TRANSLATE;
+		params->setOptions( "UI Mode", "label=`TRANSLATE`" );
 		break;
 	case KeyEvent::KEY_e:
 		mode = ROTATE;
+		params->setOptions( "UI Mode", "label=`ROTATE`" );
 		break;
 	case KeyEvent::KEY_r:
 		mode = SCALE;
+		params->setOptions( "UI Mode", "label=`SCALE`" );
+		break;
+	case KeyEvent::KEY_t:
+		mode = CREATE;
+		params->setOptions( "UI Mode", "label=`CREATE`" );
+		break;
+	case KeyEvent::KEY_v:
+		mode = PAINT_VOXELS;
+		params->setOptions( "UI Mode", "label=`PAINT_VOXELS`" );
 		break;
 	}
+	UI::updateHandlePos();
 }
 
 void CinderApp::keyUp( KeyEvent event ){
@@ -528,7 +629,9 @@ void CinderApp::initFbo(gl::Fbo & _fbo, Area _area){
 	// make sure the framebuffer is not anti-aliased
 	fmt.setSamples(0);
 	fmt.setCoverageSamples(0);
-
+	//if(_fbo == pixelFbo){
+		fmt.setColorInternalFormat(GL_RGBA32F);
+	//}
 	// you can omit these lines if you don't intent to display the picking framebuffer
 	fmt.setMagFilter(GL_NEAREST);
 	fmt.setMinFilter(GL_LINEAR);
@@ -547,7 +650,7 @@ void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area){
 	// we create multiple color targets:
 	//  -one for the scene as we will view it
 	//  -one to contain a color coded version of the scene that we can use for picking
-	fmt.enableColorBuffer( true, 3 );
+	fmt.enableColorBuffer( true, 4 );
 
 	// anti-aliasing samples
 	fmt.setSamples(0);
@@ -562,6 +665,7 @@ void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area){
 	_fbo.getTexture(0).setFlipped(true);
 	_fbo.getTexture(1).setFlipped(true);
 	_fbo.getTexture(2).setFlipped(true);
+	_fbo.getTexture(3).setFlipped(true);
 }
 
 void CinderApp::drawGrid(float size, float step){
@@ -612,36 +716,12 @@ Vec3d CinderApp::getCameraCorrectedPos(){
 
 
 void CinderApp::handleUI( const Vec2i &pos ){
-	// this is the main section of the demo:
-	//  here we sample the second color target to find out
-	//  which color is under the cursor.
-	gl::Fbo * sourceFbo = &fboUI;
-	Rectf * sourceRect;
-	const Camera * sourceCam;
-	if(rectTop.contains(pos)){
-		sourceCam = &camTop;
-		sourceRect = &rectTop;
-	}else if(rectRight.contains(pos)){
-		sourceCam = &camRight;
-		sourceRect = &rectRight;
-	}else if(rectFront.contains(pos)){
-		sourceCam = &camFront;
-		sourceRect = &rectFront;
-	}else if(rectPersp.contains(pos)){
-		sourceCam = &camMayaPersp.getCamera();
-		sourceRect = &rectPersp;
-	}else{
-		return;
-	}
-
-
-
 	// first, specify a small region around the current cursor position 
-	float scaleX = sourceFbo->getWidth() / (float) getWindowWidth();
-	float scaleY = sourceFbo->getHeight() / (float) getWindowHeight();
+	float scaleX = fboUI.getWidth() / (float) getWindowWidth();
+	float scaleY = fboUI.getHeight() / (float) getWindowHeight();
 	Vec2i	pixel((int)((pos.x) * scaleX), (int)((getWindowHeight() - pos.y) * scaleY));
 
-	//pixel = fromRectToRect(pixel, sourceFbo->getBounds(), *sourceRect);
+	//pixel = fromRectToRect(pixel, fboUI.getBounds(), *sourceRect);
 
 	Area	area(pixel.x-5, pixel.y-5, pixel.x+5, pixel.y+5);
 
@@ -659,12 +739,12 @@ void CinderApp::handleUI( const Vec2i &pos ){
 
 	// (Cinder does not yet provide a way to handle multiple color targets in the blitTo function, 
 	//  so we have to make sure the correct target is selected before calling it)
-	glBindFramebufferEXT( GL_READ_FRAMEBUFFER_EXT, sourceFbo->getId() );
+	glBindFramebufferEXT( GL_READ_FRAMEBUFFER_EXT, fboUI.getId() );
 	glBindFramebufferEXT( GL_DRAW_FRAMEBUFFER_EXT, pickingFboUI.getId() );
 	glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
 	glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
 
-	sourceFbo->blitTo(pickingFboUI, area, pickingFboUI.getBounds());
+	fboUI.blitTo(pickingFboUI, area, pickingFboUI.getBounds());
 
 
 	// read pixel value(s) in the area
@@ -673,7 +753,7 @@ void CinderApp::handleUI( const Vec2i &pos ){
 	glReadPixels(0, 0, pickingFboUI.getWidth(), pickingFboUI.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, (void*)buffer);
 
 	// unbind the picking framebuffer
-	mPickingFboJoint.unbindFramebuffer();
+	pickingFboUI.unbindFramebuffer();
 
 	// calculate the total number of pixels
 	unsigned int total = (pickingFboUI.getWidth() * pickingFboUI.getHeight());
@@ -709,109 +789,81 @@ void CinderApp::handleUI( const Vec2i &pos ){
 }
 
 Joint * CinderApp::pickJoint( const Vec2i &pos ){
-	// get the corresponding camera and screen area
-	gl::Fbo * sourceFbo;
-	Rectf * sourceRect;
-	if(rectTop.contains(pos)){
-		sourceFbo = &fboTop;
-		sourceRect = &rectTop;
-	}else if(rectRight.contains(pos)){
-		sourceFbo = &fboRight;
-		sourceRect = &rectRight;
-	}else if(rectFront.contains(pos)){
-		sourceFbo = &fboFront;
-		sourceRect = &rectFront;
-	}else if(rectPersp.contains(pos)){
-		sourceFbo = &fboPersp;
-		sourceRect = &rectPersp;
-	}else{
-		return nullptr;
-	}
+	if(sourceFbo != nullptr){
+		// first, specify a small region around the current cursor position 
+		float scaleX = sourceFbo->getWidth() / (float) sourceRect->getWidth();
+		float scaleY = sourceFbo->getHeight() / (float) sourceRect->getHeight();
+		Vec2i	pixel((int)((pos.x - sourceRect->x1) * scaleX), (int)((sourceRect->y2 - pos.y) * scaleY));
 
+		//pixel = fromRectToRect(pixel, sourceFbo->getBounds(), *sourceRect);
 
-	// first, specify a small region around the current cursor position 
-	float scaleX = sourceFbo->getWidth() / (float) sourceRect->getWidth();
-	float scaleY = sourceFbo->getHeight() / (float) sourceRect->getHeight();
-	Vec2i	pixel((int)((pos.x - sourceRect->x1) * scaleX), (int)((sourceRect->y2 - pos.y) * scaleY));
+		Area	area(pixel.x-5, pixel.y-5, pixel.x+5, pixel.y+5);
 
-	//pixel = fromRectToRect(pixel, sourceFbo->getBounds(), *sourceRect);
-
-	Area	area(pixel.x-5, pixel.y-5, pixel.x+5, pixel.y+5);
-
-	// next, we need to copy this region to a non-anti-aliased framebuffer
-	//  because sadly we can not sample colors from an anti-aliased one. However,
-	//  this also simplifies the glReadPixels statement, so no harm done.
-	//  Here, we create that non-AA buffer if it does not yet exist.
-	if(!mPickingFboJoint) {
-		initFbo(mPickingFboJoint, area);
-	}
+		// next, we need to copy this region to a non-anti-aliased framebuffer
+		//  because sadly we can not sample colors from an anti-aliased one. However,
+		//  this also simplifies the glReadPixels statement, so no harm done.
+		//  Here, we create that non-AA buffer if it does not yet exist.
+		if(!mPickingFboJoint) {
+			initFbo(mPickingFboJoint, area);
+		}
 	
-	// bind the picking framebuffer, so we can clear it and then read its pixels later
-	mPickingFboJoint.bindFramebuffer();
-	gl::clear();
+		// bind the picking framebuffer, so we can clear it and then read its pixels later
+		mPickingFboJoint.bindFramebuffer();
+		gl::clear();
 
-	// (Cinder does not yet provide a way to handle multiple color targets in the blitTo function, 
-	//  so we have to make sure the correct target is selected before calling it)
-	glBindFramebufferEXT( GL_READ_FRAMEBUFFER_EXT, sourceFbo->getId() );
-	glBindFramebufferEXT( GL_DRAW_FRAMEBUFFER_EXT, mPickingFboJoint.getId() );
-	glReadBuffer(GL_COLOR_ATTACHMENT1_EXT);
-	glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
+		// (Cinder does not yet provide a way to handle multiple color targets in the blitTo function, 
+		//  so we have to make sure the correct target is selected before calling it)
+		glBindFramebufferEXT( GL_READ_FRAMEBUFFER_EXT, sourceFbo->getId() );
+		glBindFramebufferEXT( GL_DRAW_FRAMEBUFFER_EXT, mPickingFboJoint.getId() );
+		glReadBuffer(GL_COLOR_ATTACHMENT1_EXT);
+		glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
 
-	sourceFbo->blitTo(mPickingFboJoint, area, mPickingFboJoint.getBounds());
+		sourceFbo->blitTo(mPickingFboJoint, area, mPickingFboJoint.getBounds());
 
 
-	// read pixel value(s) in the area
-	GLubyte buffer[400]; // make sure this is large enough to hold 4 bytes for every pixel!
-	glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
-	glReadPixels(0, 0, mPickingFboJoint.getWidth(), mPickingFboJoint.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, (void*)buffer);
+		// read pixel value(s) in the area
+		GLubyte buffer[400]; // make sure this is large enough to hold 4 bytes for every pixel!
+		glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
+		glReadPixels(0, 0, mPickingFboJoint.getWidth(), mPickingFboJoint.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, (void*)buffer);
 
-	// unbind the picking framebuffer
-	mPickingFboJoint.unbindFramebuffer();
+		// unbind the picking framebuffer
+		mPickingFboJoint.unbindFramebuffer();
 
-	// calculate the total number of pixels
-	unsigned int total = (mPickingFboJoint.getWidth() * mPickingFboJoint.getHeight());
+		// calculate the total number of pixels
+		unsigned int total = (mPickingFboJoint.getWidth() * mPickingFboJoint.getHeight());
 
-	// now that we have the color information, count each occuring color
-	unsigned int color;
+		// now that we have the color information, count each occuring color
+		unsigned int color;
 
-	std::map<unsigned int, unsigned int> occurences;
-	for(size_t i=0;i<total;++i) {
-		color = charToInt( buffer[(i*4)+0], buffer[(i*4)+1], buffer[(i*4)+2] );
-		occurences[color]++;
-	}
-
-	// find the most occuring color
-	unsigned int max = 0;
-	std::map<unsigned int, unsigned int>::const_iterator itr;
-	for(itr=occurences.begin();itr!=occurences.end();++itr) {
-		if(itr->second > max) {
-			color = itr->first;
-			max = itr->second;
+		std::map<unsigned int, unsigned int> occurences;
+		for(size_t i=0;i<total;++i) {
+			color = charToInt( buffer[(i*4)+0], buffer[(i*4)+1], buffer[(i*4)+2] );
+			occurences[color]++;
 		}
-	}
 
-	// if this color is present in at least 50% of the pixels, 
-	//  we can safely assume that it is indeed belonging to one object
-	if(max >= (total / 2)) {
-		if(Joint::jointMap.count(color) == 1){
-			return Joint::jointMap.at(color);
+		// find the most occuring color
+		unsigned int max = 0;
+		std::map<unsigned int, unsigned int>::const_iterator itr;
+		for(itr=occurences.begin();itr!=occurences.end();++itr) {
+			if(itr->second > max) {
+				color = itr->first;
+				max = itr->second;
+			}
+		}
+
+		// if this color is present in at least 50% of the pixels, 
+		//  we can safely assume that it is indeed belonging to one object
+		if(max >= (total / 2)) {
+			if(Joint::jointMap.count(color) == 1){
+				return Joint::jointMap.at(color);
+			}else{
+				// Selected colour doesn't exist in the joint map (accuracy error?)
+			}
 		}else{
-			// Selected colour doesn't exist in the joint map (accuracy error?)
+			// we can't be sure about the color, we probably are on an object's edge
 		}
-	}else{
-		// we can't be sure about the color, we probably are on an object's edge
 	}
 	return nullptr;
-}
-
-void CinderApp::switchMode(){
-	if(mode == CREATE){
-		mode = SELECT;
-		params->setOptions( "Interaction Mode", "label=`SELECT`" );
-	}else{
-		mode = CREATE;
-		params->setOptions( "Interaction Mode", "label=`CREATE`" );
-	}
 }
 
 void CinderApp::saveSkeleton() {

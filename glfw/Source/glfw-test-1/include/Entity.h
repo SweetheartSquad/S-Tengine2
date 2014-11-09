@@ -29,7 +29,7 @@ public:
 	* Calls render on children (recursive),
 	* Pops model matrix stack
 	*/
-	virtual void draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix, std::vector<Light*> _lights);
+	virtual void draw(MatrixStack * _matrixStack, RenderOptions * _renderStack);
 	/** Doesn't do anything by default */
 	virtual void update();
 
