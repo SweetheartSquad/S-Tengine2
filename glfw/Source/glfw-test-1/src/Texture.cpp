@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Texture.h"
 #include <Resource.h>
 

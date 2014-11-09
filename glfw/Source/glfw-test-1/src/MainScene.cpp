@@ -5,6 +5,7 @@
 #include "FakeAnimation.h"
 #include "VoxelMesh.h"
 #include "Texture.h"
+#include "Material.h"
 
 Cube * cube;
 Cube * cube2;
@@ -15,6 +16,9 @@ Light glight;
 
 Texture * tex;
 Texture * voxTex;
+
+Material * mat;
+Material * bMat;
 
 Shader * texShader;
 Shader * voxShader;
@@ -55,6 +59,9 @@ MainScene::MainScene(Game * _game):
 	tex = new Texture("../assets/uv-test.jpg", 1000, 1000, true, true);
 	voxTex = new Texture("../assets/voxel-texture.png", 512, 512, true, true);
 
+	mat = new Material(Phong, true);
+	bMat = new Material(Blinn, true);
+
 	Transform *t = new Transform();
 	t->translateX(-2);
 	t->scale(3, 3, 3);
@@ -64,6 +71,7 @@ MainScene::MainScene(Game * _game):
 		loaded->mesh->polygonalDrawMode = GL_POINTS;
 		cube->addChild(loaded);
 		//loaded->mesh->pushTexture2D(tex);
+		loaded->mesh->pushMaterial(mat);
 	}
 
 	//Entity * loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, texShader, cube);
@@ -73,6 +81,7 @@ MainScene::MainScene(Game * _game):
 	cube2->setShader(texShader, true);
 	cube2->transform->translateX(0.5);
 	cube2->mesh->pushTexture2D(tex);
+	cube2->mesh->pushMaterial(mat);
 
 	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube->addChild(cube2);
@@ -83,6 +92,7 @@ MainScene::MainScene(Game * _game):
 	cube3->mesh->vertices.at(3).x += 0.5;
 	cube3->transform->translateX(0.5);
 	cube3->mesh->pushTexture2D(tex);
+	cube3->mesh->pushMaterial(bMat);
 
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	addChild(cube);
@@ -92,6 +102,7 @@ MainScene::MainScene(Game * _game):
 	cube4->transform->scale(15.0, 1.0, 15.0);
 	cube4->transform->translateY(-2);
 	cube4->mesh->pushTexture2D(tex);
+	cube4->mesh->pushMaterial(bMat);
 
 	cube->mesh->dirty = true;
 	cube2->mesh->dirty = true;
