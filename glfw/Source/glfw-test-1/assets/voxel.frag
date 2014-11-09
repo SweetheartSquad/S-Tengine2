@@ -7,10 +7,10 @@ uniform struct Light{
 	vec3 intensities;
 };
 
-uniform Light lights[50];
+uniform Light lights[5];
 uniform int numLights;
 
-uniform sampler2D textureSampler[32];
+uniform sampler2D textureSampler[5];
 uniform int numTextures;
 
 in vec3 fragVert;
@@ -22,7 +22,7 @@ out vec4 outColor;
 
 void main()
 {
-	vec4 fragColorTex;
+	vec4 fragColorTex = vec4(0,0,0,0);
 
 	if(numTextures == 0){
 		fragColorTex = fragColor;
@@ -42,8 +42,8 @@ void main()
 
 	vec3 fragWorldPosition = vec3(model * vec4(fragVert, 1));
 
-	float brightness;
-	vec3 outIntensities;
+	float brightness = 0;
+	vec3 outIntensities = vec3(0,0,0);
 
 	for(int i = 0; i < numLights; i++){
 		vec3 surfaceToLight = lights[i].position - fragWorldPosition;
