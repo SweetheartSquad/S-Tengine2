@@ -97,7 +97,7 @@ void MeshInterface::clean(){
 	}
 }
 
-void MeshInterface::render(MatrixStack * _matrixStack, RenderStack * _renderStack){
+void MeshInterface::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	if(glIsVertexArray(vaoId) == GL_TRUE){
 		if(glIsBuffer(vboId) == GL_TRUE){
 			if(glIsBuffer(iboId) == GL_TRUE){
@@ -150,7 +150,7 @@ void MeshInterface::render(MatrixStack * _matrixStack, RenderStack * _renderStac
 	}
 }
 
-void MeshInterface::configureTextures(MatrixStack * _matrixStack, RenderStack * _renderStack){
+void MeshInterface::configureTextures(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	// Pass the _shader the number of textures
 	glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES), textures.size());
 	// Bind each texture to the texture sampler array in the frag _shader
@@ -161,7 +161,7 @@ void MeshInterface::configureTextures(MatrixStack * _matrixStack, RenderStack * 
 	}
 }
 
-void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderStack * _renderStack){
+void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	glm::mat4 model = _matrixStack->currentModelMatrix;
 	GLuint modelUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX);
 	glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
@@ -180,14 +180,14 @@ void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderStack * _r
 	}
 }
 
-void MeshInterface::configureModelViewProjection(MatrixStack * _matrixStack, RenderStack * _renderStack){
+void MeshInterface::configureModelViewProjection(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	glm::mat4 mvp = _matrixStack->projectionMatrix * _matrixStack->viewMatrix * _matrixStack->currentModelMatrix;
 	GLuint mvpUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(),  GL_UNIFORM_ID_MODEL_VIEW_PROJECTION);
 	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 }
 
-void MeshInterface::configureExtras(MatrixStack * _matrixStack, RenderStack * _renderStack){
+void MeshInterface::configureExtras(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 }
 
 void MeshInterface::configureDefaultVertexAttributes(Shader *_shader){

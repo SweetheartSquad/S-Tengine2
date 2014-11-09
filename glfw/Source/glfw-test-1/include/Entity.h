@@ -29,7 +29,7 @@ public:
 	* Calls render on children (recursive),
 	* Pops model matrix stack
 	*/
-	virtual void draw(MatrixStack * _matrixStack, RenderStack * _renderStack);
+	virtual void draw(MatrixStack * _matrixStack, RenderOptions * _renderStack);
 	/** Doesn't do anything by default */
 	virtual void update();
 

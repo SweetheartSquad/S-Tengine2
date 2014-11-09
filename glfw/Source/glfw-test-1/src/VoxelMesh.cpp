@@ -18,7 +18,7 @@ VoxelMesh::VoxelMesh(MeshInterface* _mesh):
 VoxelMesh::~VoxelMesh(){
 }
 
-void VoxelMesh::configureExtras(MatrixStack * _matrixStack, RenderStack * _renderStack){
+void VoxelMesh::configureExtras(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	glm::mat4 vp = _matrixStack->projectionMatrix * _matrixStack->viewMatrix;
 	glm::mat4 m = _matrixStack->currentModelMatrix;
 	GLuint vpUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), "VP");

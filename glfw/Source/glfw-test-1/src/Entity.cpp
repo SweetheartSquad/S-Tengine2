@@ -20,7 +20,7 @@ Entity::~Entity(void){
 	shader = nullptr;
 }
 
-void Entity::draw(MatrixStack * _matrixStack, RenderStack * _renderStack){
+void Entity::draw(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	//push transform
 	_matrixStack->pushMatrix();
 	_matrixStack->applyMatrix(transform->getModelMatrix());

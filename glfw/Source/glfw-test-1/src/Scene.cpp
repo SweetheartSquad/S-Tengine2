@@ -45,7 +45,7 @@ void Scene::render(){
 	matrixStack->projectionMatrix = camera->getProjectionMatrix();
 	matrixStack->viewMatrix		  = camera->getViewMatrix();
 
-	RenderStack * renderStack = new RenderStack(nullptr, &lights);
+	RenderOptions * renderStack = new RenderOptions(nullptr, &lights);
 
 	for(Entity * e : children){
 		e->draw(matrixStack, renderStack);

@@ -4,14 +4,14 @@
 #include "Shader.h"
 #include <vector>
 
-class RenderStack{
+class RenderOptions{
 	
 public:
 
-	RenderStack();
-	RenderStack(Shader * _shader, std::vector<Light *> * _lights);
+	RenderOptions();
+	RenderOptions(Shader * _shader, std::vector<Light *> * _lights);
 
-	~RenderStack();
+	~RenderOptions();
 
 	std::vector<Light*> * lights;
 	Shader * shader;
