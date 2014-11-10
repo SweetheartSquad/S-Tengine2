@@ -8,13 +8,16 @@
 #include "CMD_SelectNodes.h"
 #include "CMD_MoveSelectedJoints.h"
 #include "CMD_RotateSelectedJoints.h"
-#include "CMD_KeyProperty.h"
-#include "CMD_KeyAll.h"
+//#include "CMD_KeyProperty.h"
+//#include "CMD_KeyAll.h"
 #include "CMD_Parent.h"
 #include "CMD_PlaceVoxel.h"
 
 #include "Transform.h"
 #include "NodeTransformable.h"
+
+#include "Tween.h"
+#include "Step.h"
 
 #include "MatrixStack.h"
 
@@ -70,6 +73,20 @@ void CinderApp::setup(){
 	channel = 0;
 
 	mode = CREATE;
+
+
+	// test animation
+	vector<Tween> tweens;
+	tweens.push_back(Tween(25, 0.1, Easing::Type::kEASE_OUT_BOUNCE));
+	tweens.push_back(Tween(25, -0.5, Easing::Type::kEASE_IN_CUBIC));
+	
+	cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,0,0), nullptr));
+	cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,1,0), joints.at(0)));
+	//joints.push_back(new Joint());
+	//joints.push_back(new Joint(joints.at(0)));
+
+	joints.at(0)->translateZ.tweens = tweens;
+
 }
 
 
@@ -133,15 +150,19 @@ void CinderApp::resize(){
 
 
 void CinderApp::shutdown(){
-	for(unsigned long int i = 0; i < Joints.size(); ++i){
-		Joint::deleteJoints(Joints.at(i));
+	for(unsigned long int i = 0; i < joints.size(); ++i){
+		Joint::deleteJoints(joints.at(i));
 	}
-	Joints.clear();
+	joints.clear();
 	UI::selectedNodes.clear();
 }
 
 void CinderApp::update(){
-	
+	Step s;
+	s.deltaTime = 1;
+	for(unsigned long int i = 0; i < joints.size(); ++i){
+		joints.at(i)->update(&s);
+	}
 }
 
 void CinderApp::draw(){
@@ -257,7 +278,7 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		jointShader.uniform("offset", false);
 		// draw joints:
 		MatrixStack mStack;
-		for(Joint * j : Joints){
+		for(Joint * j : joints){
 			j->shader = &jointShader;
 			j->render(&mStack, nullptr);
 		}
@@ -448,9 +469,9 @@ void CinderApp::mouseDown( MouseEvent event ){
 			Vec3d pos = getCameraCorrectedPos();
 			
 			if(UI::selectedNodes.size() == 1){
-				cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
+				cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
 			}else{
-				cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, nullptr));
+				cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, nullptr));
 			}
 		}else if(mode == SELECT){
 			Joint * selection = pickJoint(mMousePos);
@@ -562,11 +583,11 @@ void CinderApp::keyDown( KeyEvent event ){
 		break;
 	case KeyEvent::KEY_DELETE:
 		if(UI::selectedNodes.size() != 0){
-			cmdProc.executeCommand(new CMD_DeleteJoint(&Joints));
+			cmdProc.executeCommand(new CMD_DeleteJoint(&joints));
 		}
 		break;
 	case KeyEvent::KEY_p:
-		cmdProc.executeCommand(new CMD_Parent(&Joints));
+		cmdProc.executeCommand(new CMD_Parent(&joints));
 		break;
 	case KeyEvent::KEY_d:
 		if(event.isControlDown()){
@@ -871,7 +892,7 @@ Joint * CinderApp::pickJoint( const Vec2i &pos ){
 void CinderApp::saveSkeleton() {
 	try{
 		console() << "saveSkeleton" << endl;
-		SkeletonData::SaveSkeleton(directory, fileName, Joints);
+		SkeletonData::SaveSkeleton(directory, fileName, joints);
 		message = "Saved skeleton";
 	}catch (exception ex){
 		message = string(ex.what());
@@ -883,9 +904,9 @@ void CinderApp::loadSkeleton() {
 		// Deselect everything
 		cmdProc.executeCommand(new CMD_SelectNodes(nullptr));
 		console() << "loadSkeleton" << endl;
-		Joints.clear();
+		joints.clear();
 
-		Joints = SkeletonData::LoadSkeleton(filePath);
+		joints = SkeletonData::LoadSkeleton(filePath);
 		message = "Loaded skeleton";
 
 		// Clear the undo/redo history
@@ -898,7 +919,7 @@ void CinderApp::loadSkeleton() {
 void CinderApp::setKeyframe(){
 	if(UI::selectedNodes.size() != 0){
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
-			cmdProc.executeCommand(new CMD_KeyAll(UI::time));
+			//cmdProc.executeCommand(new CMD_KeyAll(UI::time));
 		}
 	}
 }

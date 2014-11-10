@@ -4,8 +4,11 @@
 
 class Keyframe{
 public:
-	Keyframe(float _time, float _startValue, float _value, Easing::Type _interpolation);
+	Keyframe(float deltaTime, float deltaValue, Easing::Type _interpolation);
 	~Keyframe();
+
+	float deltaTime;
+	float deltaValue;
 
 	float time;
 	float startValue;

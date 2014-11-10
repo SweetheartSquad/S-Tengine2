@@ -7,11 +7,14 @@
 #include <string>
 
 #include "VoxMatrices.h"
+#include "Step.h"
 
 struct GLFWwindow;
 
 namespace vox{
 	
+	static Step step;
+
 	/** Equal to glfwGetTime() the last time the delta time correction was calculated */
 	extern double lastTimestamp;
 	/** Multiply by this to correct for differences in framerate */

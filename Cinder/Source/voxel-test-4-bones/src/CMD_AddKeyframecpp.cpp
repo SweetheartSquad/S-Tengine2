@@ -9,27 +9,33 @@
 
 CMD_AddKeyframe::CMD_AddKeyframe(std::vector<Keyframe> * _keyframes, float _time, float _value, Easing::Type _interpolation) :
 	keyframes(_keyframes),
-	keyframe(Keyframe(_time,0,_value,_interpolation)),
+	keyframe(Keyframe(0,0,_interpolation)),
 	followingStartValue(NULL)
 {
 	ci::app::console() << "TIME: " << _time << std::endl;
 	// Find insert iterator and set startValue of new keyframe
 	std::vector<Keyframe>::iterator followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),keyframe,Keyframe::keyframe_compare);
 
-	//If a previous keyframe exists
+	// If a previous keyframe exists
 	if(followingKeyframe_it != keyframes->end() && followingKeyframe_it->time != keyframes->front().time){
+		// get previous keyframe
 		std::vector<Keyframe>::iterator previousKeyframe;
 		previousKeyframe = std::prev(followingKeyframe_it);
 		ci::app::console() << "previous frame: " << previousKeyframe->time << std::endl;
-		keyframe.startValue = previousKeyframe->value;
+		// calculate and set delta values
+		keyframe.deltaTime = keyframe.deltaTime - previousKeyframe->deltaTime;
+		keyframe.deltaValue = keyframe.deltaValue - previousKeyframe->deltaValue;
 	}else{
+		// set delta values
 		ci::app::console() << "no previous frame" << std::endl;
-		keyframe.startValue = _value;
+		keyframe.deltaTime = 0;
+		keyframe.deltaValue = 0;
 	}
 
-	// Get startValue of next keyframe
+	// Get deltaTime and deltaValue of next keyframe
 	if(followingKeyframe_it != keyframes->end()){
-		followingStartValue = followingKeyframe_it->startValue;
+		nextDeltaTime = followingKeyframe_it->deltaTime;
+		nextDeltaValue = followingKeyframe_it->deltaValue;
 	}
 }
 
@@ -45,6 +51,7 @@ void CMD_AddKeyframe::execute(){
 
 	// Change next keyframe's start value
 	if (followingKeyframe_it != keyframes->end()){
+		// d2 - d1
 		followingKeyframe_it->startValue = keyframe.value;
 	}
 }

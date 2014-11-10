@@ -4,8 +4,9 @@
 #include "Animation.h"
 
 class Transform;
+class Step;
 
-class NodeAnimatable abstract : public NodeTransformable{
+class NodeAnimatable abstract : public NodeTransformable, NodeUpdatable{
 
 public:
 	explicit NodeAnimatable(Transform * _transform);
@@ -20,4 +21,6 @@ public:
 	Animation scaleX;
 	Animation scaleY;
 	Animation scaleZ;
+
+	void update(Step * _step) override;
 };

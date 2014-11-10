@@ -1,10 +1,13 @@
 #pragma once
 
 #include "Easing.h"
-#include "Keyframe.h"
+#include "Tween.h"
+#include "NodeUpdatable.h"
 #include <vector>
 
-class Animation
+class Step;
+
+class Animation : public NodeUpdatable
 {
 public:
 	explicit Animation(float * _prop);
@@ -12,11 +15,22 @@ public:
 
 	float * prop;
 
-	std::vector<Keyframe> keyframes;
+	float startValue;
 
-	void update();
+	float currentTime;
+	float referenceValue;
+	unsigned long int currentTween;
 
+	std::vector<Tween> tweens;
+
+	void update(Step * _step) override;
+
+	enum LoopType{
+		LOOP,
+		LOOP_WITH_OFFSET
+		//CONSTANT
+	} loopType;
 
 private:
-
+	
 };

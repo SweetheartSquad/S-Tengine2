@@ -2,10 +2,9 @@
 
 #include "Keyframe.h"
 
-Keyframe::Keyframe(float _time, float _startValue, float _value, Easing::Type _interpolation) :
-	time(_time), 
-	startValue(_startValue), 
-	value(_value), 
+Keyframe::Keyframe(float _deltaTime, float _deltaValue, Easing::Type _interpolation) :
+	deltaTime(_deltaTime),  
+	deltaValue(_deltaValue), 
 	interpolation(_interpolation)
 {
 }

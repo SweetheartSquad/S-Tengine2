@@ -16,7 +16,8 @@ CMD_EditKeyframe::CMD_EditKeyframe(std::vector<Keyframe> * _keyframes, Keyframe 
 	oldStartValue(_keyframe->startValue),
 	oldValue(_keyframe->value),
 	oldInterpolation(keyframe->interpolation),
-	followingStartValue(NULL)
+	nextDeltaTime(NULL),
+	nextDeltaValue(NULL)
 {
 	
 	std::vector<Keyframe>::iterator followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),*keyframe,Keyframe::keyframe_compare);

@@ -61,6 +61,12 @@ void vox::calculateDeltaTimeCorrection(){
 	double deltaTime = time - lastTimestamp;
 	deltaTimeCorrection = deltaTime/targetFrameDuration ;
 	lastTimestamp = time;
+
+	step.targetFrameDuration = targetFrameDuration;
+	step.time = time;
+	step.deltaTime = deltaTime;
+	step.deltaTimeCorrection = deltaTimeCorrection;
+	step.lastTimestamp = lastTimestamp;
 }
 
 void vox::destruct(){

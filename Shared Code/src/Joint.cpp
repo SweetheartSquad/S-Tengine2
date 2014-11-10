@@ -7,6 +7,7 @@
 
 #include "MatrixStack.h"
 #include "RenderOptions.h"
+#include "Step.h"
 
 unsigned long int Joint::nextId = 0;
 uint32_t Joint::nextColor = 0xFFFFFF;
@@ -176,4 +177,8 @@ void Joint::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	_matrixStack->popMatrix();
 
 	//gl::disableWireframe();
+}
+
+void Joint::update(Step * _step){
+	NodeAnimatable::update(_step);
 }

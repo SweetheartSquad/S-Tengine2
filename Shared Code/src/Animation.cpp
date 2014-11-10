@@ -1,13 +1,60 @@
 #pragma once
 
 #include "Animation.h"
+#include "Step.h"
 
-Animation::Animation(float * _prop) : prop(_prop)
+Animation::Animation(float * _prop) :
+	prop(_prop),
+	currentTime(0),
+	currentTween(0),
+	loopType(LoopType::LOOP),
+	referenceValue(0),
+	startValue(*_prop)
 {
 }
 
-void Animation::update(){
-	
+void Animation::update(Step * _step){
+	if(tweens.size() > 0){
+		currentTime += _step->deltaTime;
+		if(_step->reverse){
+			while(currentTime < 0){
+				currentTime += tweens.at(currentTween).deltaTime;
+				referenceValue += tweens.at(currentTween).deltaValue;
+				--currentTween;
+				
+				if(currentTween < 0){
+					switch (loopType){
+						case Animation::LOOP:
+							referenceValue = startValue;
+						case Animation::LOOP_WITH_OFFSET:
+							currentTween = tweens.size() - 1;
+							break;
+						default:
+							break;
+					}
+				}
+			}
+		}else{
+			while(currentTime > tweens.at(currentTween).deltaTime){
+				currentTime -= tweens.at(currentTween).deltaTime;
+				referenceValue += tweens.at(currentTween).deltaValue;
+				++currentTween;
+
+				if(currentTween >= tweens.size()){
+					switch (loopType){
+						case Animation::LOOP:
+							referenceValue = startValue;
+						case Animation::LOOP_WITH_OFFSET:
+							currentTween = 0;
+							break;
+						default:
+							break;
+					}
+				}
+			}
+		}
+		*prop = Easing::call(tweens.at(currentTween).interpolation,currentTime,referenceValue,tweens.at(currentTween).deltaValue,tweens.at(currentTween).deltaTime);
+	}
 }
 
 Animation::~Animation()

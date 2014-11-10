@@ -151,7 +151,7 @@ protected:
 	
 	gl::Material JointMaterial;
 	
-	std::vector<Joint *> Joints;
+	std::vector<Joint *> joints;
 
 
 	

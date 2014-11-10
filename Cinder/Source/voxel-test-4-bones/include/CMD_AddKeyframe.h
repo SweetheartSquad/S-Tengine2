@@ -19,4 +19,7 @@ private:
 	std::vector<Keyframe> * keyframes;
 
 	float followingStartValue;
+	float nextDeltaTime;
+	float nextDeltaValue;
+
 };

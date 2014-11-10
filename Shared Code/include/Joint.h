@@ -13,6 +13,8 @@
 
 #include "Voxel.h"
 
+class Step;
+
 using namespace ci;
 
 class Joint : public NodeAnimatable, public NodeHierarchical, public NodeRenderable{
@@ -46,6 +48,7 @@ public:
 	Vec3d getPos(bool _relative = true);
 
 	void render(MatrixStack * _matrixStack, RenderOptions * _renderStack);
+	void update(Step * _step) override;
 private:
 	void init();
 };

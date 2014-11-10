@@ -2,10 +2,11 @@
 
 #include "Node.h"
 
+class Step;
+
 class NodeUpdatable : public virtual Node{
 	
 public:
 
-	NodeUpdatable();
-	virtual ~NodeUpdatable(); 
+	virtual void update(Step * step) = 0;
 };

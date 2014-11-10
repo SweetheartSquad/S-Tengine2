@@ -27,4 +27,7 @@ private:
 	Easing::Type interpolation;
 
 	float followingStartValue;
+	float nextDeltaTime;
+	float nextDeltaValue;
+	
 };
