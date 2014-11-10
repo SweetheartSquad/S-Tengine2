@@ -175,7 +175,7 @@ void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * 
 	glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
 
 	// Pass the _shader the number of lights & materials
-	glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), "numLights"), lights.size());
+	glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(),	GL_UNIFORM_ID_NUM_LIGHTS), _renderStack->lights->size());
 	glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), "numMaterials"), materials.size());
 
 	// Pass each material to the _shader

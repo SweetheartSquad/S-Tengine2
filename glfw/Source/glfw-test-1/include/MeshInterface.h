@@ -37,8 +37,6 @@ public:
 	std::vector<Vertex> vertices;
 	/** Index data for the ibo */
 	std::vector<GLuint> indices;
-	/** Lights */
-	std::vector<Light *> lights;
 	/** Textures */
 	std::vector<Texture *> textures;
 	/** Material*/
