@@ -7,11 +7,15 @@ layout(location = 3) in vec3 aVertexNormals;
 layout(location = 4) in vec2 aVertexUVs; 
 
 uniform mat4 MVP;
+uniform mat4 depthMVP;
+
+uniform mat4 model;
 
 out vec3 fragVert;
 out vec3 fragNormal;
 out vec4 fragColor;
 out vec2 fragUV;
+out vec4 shadowCoord;
 
 void main(){
 	fragVert = aVertexPosition;
@@ -19,4 +23,5 @@ void main(){
 	fragColor = aVertexColor;
 	fragUV = aVertexUVs;
 	gl_Position = MVP * vec4(aVertexPosition, 1.0);
+	shadowCoord = depthMVP * vec4((model *  vec4(aVertexPosition, 1)).xyz * aVertexPosition, 1);
 }

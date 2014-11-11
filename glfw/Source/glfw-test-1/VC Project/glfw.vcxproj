@@ -190,6 +190,8 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
   <ItemGroup>
     <None Include="..\assets\ColourShader.frag" />
     <None Include="..\assets\ColourShader.vert" />
+    <None Include="..\assets\DepthMapShader.frag" />
+    <None Include="..\assets\DepthMapShader.vert" />
     <None Include="..\assets\diffuse.frag" />
     <None Include="..\assets\diffuse.vert" />
     <None Include="..\assets\cube.vox" />

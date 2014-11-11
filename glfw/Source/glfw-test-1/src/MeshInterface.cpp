@@ -163,9 +163,11 @@ void MeshInterface::configureTextures(MatrixStack * _matrixStack, RenderOptions 
 	glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES), textures.size());
 	// Bind each texture to the texture sampler array in the frag _shader
 	for(unsigned long int i = 0; i < textures.size(); i++){
-		glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER), i);
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, textures.at(i)->textureId);
+		glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER), i);
+		
+		
 	}
 }
 
@@ -194,6 +196,30 @@ void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * 
 		glUniform3f(lightUniformLocation, _renderStack->lights->at(i)->data.position.x, _renderStack->lights->at(i)->data.position.y, _renderStack->lights->at(i)->data.position.z);
 		GLuint intensitiesUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), ins);
 		glUniform3f(intensitiesUniformLocation, _renderStack->lights->at(i)->data.intensities.x, _renderStack->lights->at(i)->data.intensities.y, _renderStack->lights->at(i)->data.intensities.z);
+	}
+
+	//Configure DepthMVP 
+	glm::mat4 biasMatrix(
+		0.5, 0.0, 0.0, 0.0,
+		0.0, 0.5, 0.0, 0.0,
+		0.0, 0.0, 0.5, 0.0,
+		0.5, 0.5, 0.5, 1.0
+	);
+
+	glm::vec3 lightInvDir = glm::vec3(0.5, 2, 2);
+	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
+
+	glm::mat4 depthModelMatrix = glm::mat4(1.0);
+
+	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
+	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
+	depthMVP = biasMatrix * depthMVP;
+	glUniformMatrix4fv(glGetUniformLocation(_renderStack->shader->getProgramId(), "depthMVP"), 1, GL_FALSE, &depthMVP[0][0]);
+	
+	if(_renderStack->shadowMapTextureId != 0){
+		glActiveTexture(GL_TEXTURE0 + textures.size());
+		glBindTexture(GL_TEXTURE_2D, _renderStack->shadowMapTextureId);	
+		glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), "shadowMapSampler"), textures.size());
 	}
 }
 

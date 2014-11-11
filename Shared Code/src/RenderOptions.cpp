@@ -6,7 +6,8 @@ RenderOptions::RenderOptions(){
 
 RenderOptions::RenderOptions(Shader* _shader, std::vector<Light *> *_lights):
 	shader(_shader),
-	lights(_lights)
+	lights(_lights),
+	shadowMapTextureId(0)
 {
 }
 

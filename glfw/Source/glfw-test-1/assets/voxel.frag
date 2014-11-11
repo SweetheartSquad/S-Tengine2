@@ -21,6 +21,8 @@ uniform int numLights;
 uniform sampler2D textureSampler[5];
 uniform int numTextures;
 
+uniform sampler2D shadowMapSampler;
+
 uniform Material materials[5];
 uniform int numMaterials;
 
@@ -28,6 +30,7 @@ in vec3 fragVert;
 in vec3 fragNormal;
 in vec4 fragColor;
 in vec2 fragUV;
+in vec4 shadowCoord;
 
 out vec4 outColor;
 
@@ -63,8 +66,11 @@ void main()
 	}
 	
 	brightness = clamp(brightness, 0.1, 1);
- 
-	//vec4(vec3(gl_FragCoord.z/10),1);//vec4(vec3(length(M*VP*vec4(fragVert,1)))/255,1);
 
-	outColor = vec4(brightness * vec3(outIntensities), 1) * fragColorTex;
+ 	float visibility = 1.0;
+	if (texture(shadowMapSampler, shadowCoord.xy ).z  <  shadowCoord.z){
+		visibility = 0.5;
+	}
+
+	outColor = visibility *  vec4(brightness * vec3(outIntensities), 1) * fragColorTex;
 }

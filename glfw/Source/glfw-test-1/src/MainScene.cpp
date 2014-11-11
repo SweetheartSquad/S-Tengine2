@@ -23,21 +23,36 @@ Material * bMat;
 
 Shader * texShader;
 Shader * voxShader;
+Shader * depthShader; 
 
 Light *tLight;
 
 FrameBufferInterface * frameBuffer;
+FrameBufferInterface * depthBuffer;
+
 RenderSurface * renderSurface;
 
 MainScene::MainScene(Game * _game):
 	Scene(game)
 {
 	std::vector<FrameBufferChannel> bufferChannels;
-
 	bufferChannels.push_back(FrameBufferChannel(GL_RGB, GL_COLOR_ATTACHMENT0, FrameBufferChannel::TEXTURE, GL_BYTE));
 	bufferChannels.push_back(FrameBufferChannel(GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT, FrameBufferChannel::RENDER_BUFFER, 0));
 	
-	frameBuffer = new FrameBufferInterface(bufferChannels, 0, 0, false);
+	frameBuffer = new FrameBufferInterface(bufferChannels, 0, 0, true);
+	frameBuffer->checkFrameBufferStatus();
+
+	std::vector<FrameBufferChannel> depthChannels;
+	depthChannels.push_back(FrameBufferChannel(GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT, FrameBufferChannel::TEXTURE, GL_FLOAT));
+
+	depthBuffer = new FrameBufferInterface(depthChannels, 1024, 800, true);
+	depthBuffer->bindFrameBuffer();
+    glDrawBuffer(GL_NONE);
+
+	depthBuffer->checkFrameBufferStatus();
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	renderSurface = new RenderSurface(new Shader("../assets/RenderSurface", false, true));
 
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
@@ -59,8 +74,8 @@ MainScene::MainScene(Game * _game):
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
 	texShader = new Shader("../assets/diffuse", false, true);
-
 	voxShader = new Shader("../assets/voxel", true, true);
+	depthShader = new Shader("../assets/DepthMapShader", false, true);
 
 	tex = new Texture("../assets/uv-test.jpg", 1000, 1000, true, true);
 	voxTex = new Texture("../assets/voxel-texture.png", 512, 512, true, true);
@@ -75,7 +90,7 @@ MainScene::MainScene(Game * _game):
 	for(unsigned long int i = 0; i < 1; ++i){
 		Entity * loaded = new Entity(new VoxelMesh(Resource::loadMeshFromObj("../assets/cube.vox")), t, voxShader, cube);
 		loaded->mesh->polygonalDrawMode = GL_POINTS;
-		cube->addChild(loaded);
+		//cube->addChild(loaded);
 		//loaded->mesh->pushTexture2D(tex);
 		loaded->mesh->pushMaterial(mat);
 	}
@@ -86,18 +101,18 @@ MainScene::MainScene(Game * _game):
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->setShader(texShader, true);
 	cube2->transform->translateX(0.5);
-	cube2->mesh->pushTexture2D(tex);
+    //cube2->mesh->pushTexture2D(tex);
 	cube2->mesh->pushMaterial(mat);
 
 	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
+	cube3->transform->scale(1, 10, 1);
 	cube->addChild(cube2);
-	//cube2->addChild(cube3);
 	addChild(cube3);
 	cube3->setShader(texShader, true);
 
 	cube3->mesh->vertices.at(3).x += 0.5;
 	cube3->transform->translateX(0.5);
-	cube3->mesh->pushTexture2D(tex);
+	//cube3->mesh->pushTexture2D(tex);
 	cube3->mesh->pushMaterial(bMat);
 
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
@@ -107,7 +122,7 @@ MainScene::MainScene(Game * _game):
 
 	cube4->transform->scale(15.0, 1.0, 15.0);
 	cube4->transform->translateY(-2);
-	cube4->mesh->pushTexture2D(tex);
+//	cube4->mesh->pushTexture2D(tex);
 	cube4->mesh->pushMaterial(bMat);
 
 	cube->mesh->dirty = true;
@@ -156,7 +171,7 @@ MainScene::MainScene(Game * _game):
 		dynamic_cast<Entity *>(e)->mesh->polygonalDrawMode = GL_POINTS;
 	}
 
-	cat->transform->translate(1, 0, 2);
+ 	cat->transform->translate(1, 0, 2);
 	cat->transform->scale(0.9f, 0.9f, 0.9f);
 	//addChild(cat);
 }
@@ -166,7 +181,7 @@ MainScene::~MainScene(){
 
 void MainScene::update(){
 	Scene::update();
-	*cube3->transform = *tLight->transform;
+	cube3->transform->translationVector = tLight->transform->translationVector;
 
 	tLight->transform->translateX(sinf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
 	tLight->transform->translateZ(cosf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
@@ -222,14 +237,35 @@ void MainScene::update(){
 void MainScene::render(){
 	int width, height;
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+	depthBuffer->resize(width, height);
+	depthBuffer->bindFrameBuffer();
+	
+	cube->setShader(depthShader, true);
+	cube2->setShader(depthShader, true);
+	cube3->setShader(depthShader, true);
+	cube4->setShader(depthShader, true);
+
+
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	Scene::render();
 	frameBuffer->resize(width, height);
 	frameBuffer->bindFrameBuffer();
+	renderOptions->shadowMapTextureId = depthBuffer->textureBufferId;
+	
+	cube->setShader(texShader, true);
+	cube2->setShader(texShader, true);
+	cube3->setShader(texShader, true);
+	cube4->setShader(texShader, true);
+	
 	Scene::render();
 	renderSurface->render(*frameBuffer);
+	renderOptions->shadowMapTextureId = 0;
 }
 
 void MainScene::onContextChange(){
 	frameBuffer->reload();
+	depthBuffer->reload();
 	renderSurface->reload();
 	Scene::onContextChange();
 }

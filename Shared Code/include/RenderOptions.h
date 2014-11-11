@@ -1,6 +1,7 @@
 #pragma once 
 
 #include <vector>
+#include "GL/glew.h"
 
 class Shader;
 class Light;
@@ -16,4 +17,5 @@ public:
 
 	std::vector<Light*> * lights;
 	Shader * shader;
+	GLuint shadowMapTextureId;
 };

@@ -9,6 +9,7 @@
 #include "FrameBufferInterface.h"
 #include <Plane.h>
 #include <RenderSurface.h>
+#include "RenderOptions.h"
 
 //Forward declaration since Game has many scenes and Sene has a reference back to game
 class Game;
@@ -25,6 +26,7 @@ public:
 	/** Reference to this scene's camera */
 	Camera * camera;
 	/** Reference to a list of references to entitites included in this scene */
+	RenderOptions * renderOptions;
 	std::vector<Entity *> children;
 	/** The lights for this scene **/
 	std::vector<Light *> lights;

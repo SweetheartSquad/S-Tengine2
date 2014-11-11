@@ -14,34 +14,39 @@ uniform struct Material{
 uniform Light lights[5];
 uniform int numLights;
 
-uniform sampler2D textureSampler[5];
+//uniform sampler2D textureSampler[5];
 uniform int numTextures;
 
 uniform Material materials[5];
 uniform int numMaterials;
 
+uniform sampler2D shadowMapSampler;
+
 in vec3 fragVert;
 in vec3 fragNormal;
 in vec4 fragColor;
 in vec2 fragUV;
+in vec4 shadowCoord;
 
 out vec4 outColor;
 
 void main()
 {
 	vec4 fragColorTex = vec4(0,0,0,0);
-
-	if(numTextures == 0){
+	
+	//numTextures = 0;
+	
+	//if(numTextures == 0){
 		fragColorTex = fragColor;
-	}
+	//}
 
-	for(int i = 0; i < numTextures; i++){
+	/*for(int i = 0; i < numTextures; i++){
 		if(i == 0){
 			fragColorTex = texture(textureSampler[i], fragUV).rgba;
 		}else{
 			fragColorTex = mix(fragColorTex, texture(textureSampler[i], fragUV).rgba, 0.5);
 		}
-	}
+	}*/
 
     mat3 normalMatrix = transpose(inverse(mat3(model)));
 
@@ -60,6 +65,11 @@ void main()
 
 	brightness = clamp(brightness, 0.1, 1);
 	
-	outColor = vec4(brightness * vec3(outIntensities), 1) * fragColorTex;
+	float visibility = 1.0;
 
+	if (texture(shadowMapSampler, shadowCoord.xy ).z  <  shadowCoord.z){
+		visibility = 0.5;
+	}
+
+	outColor = visibility *  vec4(brightness * vec3(outIntensities), 1) * fragColorTex;
 }
