@@ -121,13 +121,13 @@ void CinderApp::resize(){
 	b.y2 /= 2;
 
 	if(!fboPersp || fboPersp.getWidth() != w || fboPersp.getHeight() != h) {
-		initMultiChannelFbo(fboPersp, b);
+		initMultiChannelFbo(fboPersp, b, 4);
 	}if(!fboTop || fboTop.getWidth() != w || fboTop.getHeight() != h){
-		initMultiChannelFbo(fboTop, b);
+		initMultiChannelFbo(fboTop, b, 4);
 	}if(!fboRight || fboRight.getWidth() != w || fboRight.getHeight() != h){
-		initMultiChannelFbo(fboRight, b);
+		initMultiChannelFbo(fboRight, b, 4);
 	}if(!fboFront || fboFront.getWidth() != w || fboFront.getHeight() != h){
-		initMultiChannelFbo(fboFront, b);
+		initMultiChannelFbo(fboFront, b, 4);
 	}
 }
 
@@ -352,59 +352,79 @@ void CinderApp::mouseMove( MouseEvent event ){
 	//handleUI(mMousePos);
 }
 
-void CinderApp::getPixelThing(){
-	if(UI::selectedNodes.size() == 1 && sourceFbo != nullptr){
+unsigned long int CinderApp::pickColour(const gl::Fbo * _sourceFbo, gl::Fbo * _destFbo, Vec2i _pos, Area _area, unsigned long int _channel){
+	if(_sourceFbo != nullptr){
 		// first, specify a small region around the current cursor position 
 		float scaleX = 1;//sourceFbo->getWidth() / (float) getWindowWidth();
 		float scaleY = 1;//sourceFbo->getHeight() / (float) getWindowHeight();
-		Vec2i pixel((int)((mMousePos.x - sourceRect->x1) * scaleX), (int)((sourceRect->y2 - mMousePos.y) * scaleY));
+		Vec2i pixel((int)((_pos.x - sourceRect->x1) * scaleX), (int)((sourceRect->y2 - _pos.y) * scaleY));
 
 		//pixel = fromRectToRect(pixel, sourceFbo->getBounds(), *sourceRect);
 
 		//Area	area(pixel.x-5, pixel.y-5, pixel.x+5, pixel.y+5);
-		Area	area(pixel.x, pixel.y, pixel.x+1, pixel.y+1);
+		_area.moveULTo(pixel);
 
 		// next, we need to copy this region to a non-anti-aliased framebuffer
 		//  because sadly we can not sample colors from an anti-aliased one. However,
 		//  this also simplifies the glReadPixels statement, so no harm done.
 		//  Here, we create that non-AA buffer if it does not yet exist.
-		if(!pixelFbo) {
-			initFbo(pixelFbo, area);
+		if(!*_destFbo) {
+			initFbo(*_destFbo, _area);
 		}
 	
 		// bind the picking framebuffer, so we can clear it and then read its pixels later
-		pixelFbo.bindFramebuffer();
+		_destFbo->bindFramebuffer();
 		gl::clear();
 
 		// (Cinder does not yet provide a way to handle multiple color targets in the blitTo function, 
 		//  so we have to make sure the correct target is selected before calling it)
-		glBindFramebufferEXT( GL_READ_FRAMEBUFFER_EXT, sourceFbo->getId() );
-		glBindFramebufferEXT( GL_DRAW_FRAMEBUFFER_EXT, pixelFbo.getId() );
-		glReadBuffer(GL_COLOR_ATTACHMENT3_EXT);
+		glBindFramebufferEXT( GL_READ_FRAMEBUFFER_EXT, _sourceFbo->getId() );
+		glBindFramebufferEXT( GL_DRAW_FRAMEBUFFER_EXT, _destFbo->getId() );
+		glReadBuffer(GL_COLOR_ATTACHMENT0_EXT+_channel);
 		glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
 
-		sourceFbo->blitTo(pixelFbo, area, pixelFbo.getBounds());
+		_sourceFbo->blitTo(*_destFbo, _area, _destFbo->getBounds());
 		
 		// read pixel value(s) in the area
-		GLfloat buffer[400]; // make sure this is large enough to hold 4 bytes for every pixel!
 		glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
+		// calculate the total number of pixels
+		unsigned long int total = (_destFbo->getWidth() * _destFbo->getHeight());
+		GLfloat * buffer = (GLfloat *)malloc(sizeof(GLfloat) * total); // make sure this is large enough to hold 4 bytes for every pixel!
 		
 		glClampColor(GL_CLAMP_READ_COLOR, GL_FALSE);
 		glClampColor(GL_CLAMP_VERTEX_COLOR, GL_FALSE);
 		glClampColor(GL_CLAMP_FRAGMENT_COLOR, GL_FALSE);
-		glReadPixels(0, 0, pixelFbo.getWidth(), pixelFbo.getHeight(), GL_RGBA, GL_FLOAT, (void *)buffer);
+		glReadPixels(0, 0, _destFbo->getWidth(), _destFbo->getHeight(), GL_RGBA, GL_FLOAT, (void *)buffer);
 
 		// unbind the picking framebuffer
-		pixelFbo.unbindFramebuffer();
+		_destFbo->unbindFramebuffer();
 		
-		Vec3f voxel(buffer[0], buffer[1], buffer[2]);
-		if(voxel.x > 0 && voxel.y > 0 && voxel.z > 0
-			&& voxel.x < 1 && voxel.y < 1 && voxel.z < 1){
-				cmdProc.executeCommand(new CMD_PlaceVoxel(voxel*10));
-		}else{
-			console() << "Voxel not placed: outside bounds" << std::endl;
+		// now that we have the color information, count each occuring color
+		unsigned int color;
+
+		std::map<unsigned int, unsigned int> occurences;
+		for(size_t i = 0; i < total; ++i) {
+			color = charToInt( buffer[(i*sizeof(GLfloat))+0], buffer[(i*sizeof(GLfloat))+1], buffer[(i*sizeof(GLfloat))+2] );
+			console() << color << std::endl;
+			occurences[color]++;
+		}
+
+		// find the most occuring color
+		unsigned int max = 0;
+		std::map<unsigned int, unsigned int>::const_iterator itr;
+		for(itr = occurences.begin(); itr != occurences.end(); ++itr) {
+			if(itr->second > max) {
+				color = itr->first;
+				max = itr->second;
+			}
+		}
+
+		// if this color is present in at least 50% of the pixels, we can safely assume that it is indeed belonging to one object
+		if(max >= (total / 2)) {
+			return color;
 		}
 	}
+	return 0;
 }
 
 void CinderApp::mouseDown( MouseEvent event ){
@@ -456,7 +476,13 @@ void CinderApp::mouseDown( MouseEvent event ){
 			Joint * selection = pickJoint(mMousePos);
 			cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
 		}else if(mode == PAINT_VOXELS){
-			getPixelThing();
+			Color voxel = intToColor(pickColour(sourceFbo, &pixelFbo, mMousePos, Area(1,1,1,1), 3));
+			if(voxel.r > 0 && voxel.g > 0 && voxel.b > 0
+				&& voxel.r < 1 && voxel.g < 1 && voxel.b < 1){
+					cmdProc.executeCommand(new CMD_PlaceVoxel(Vec3f(voxel.r, voxel.g, voxel.b)*10));
+			}else{
+				console() << "Voxel not placed: outside bounds" << std::endl;
+			}
 		}
 	}
 
@@ -646,13 +672,13 @@ void CinderApp::initFbo(gl::Fbo & _fbo, Area _area){
 	_fbo.getTexture(0).setFlipped(true);
 }
 
-void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area){
+void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area, unsigned long int _numChannels){
 	gl::Fbo::Format fmt;
 
 	// we create multiple color targets:
 	//  -one for the scene as we will view it
 	//  -one to contain a color coded version of the scene that we can use for picking
-	fmt.enableColorBuffer( true, 4 );
+	fmt.enableColorBuffer( true, _numChannels );
 
 	// anti-aliasing samples
 	fmt.setSamples(0);
@@ -664,10 +690,9 @@ void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area){
 	_fbo = gl::Fbo( w, h, fmt );
 
 	// work-around for an old Cinder issue
-	_fbo.getTexture(0).setFlipped(true);
-	_fbo.getTexture(1).setFlipped(true);
-	_fbo.getTexture(2).setFlipped(true);
-	_fbo.getTexture(3).setFlipped(true);
+	for(unsigned long int i = 0; i < _numChannels; ++i){
+		_fbo.getTexture(i).setFlipped(true);
+	}
 }
 
 void CinderApp::drawGrid(float size, float step){

@@ -52,7 +52,7 @@ public:
 	// Initializes empty single channel fbos
 	void initFbo(gl::Fbo & _fbo, Area _area);
 	// Initializes empty 3-channel fbos
-	void initMultiChannelFbo(gl::Fbo & _fbo, Area _area);
+	void initMultiChannelFbo(gl::Fbo & _fbo, Area _area, unsigned long int _numChannels);
 
 	// Draws a grid on the floor
 	void drawGrid(float size=100.0f, float step=10.0f);
@@ -68,7 +68,12 @@ public:
 	void setKeyframe();
 
 	void handleUI(const Vec2i &pos);
-	void getPixelThing();
+
+	/** Copies an area of size _area with an upper-left position of _pos from (GL_COLOR_ATTACHMENENT0 + _channel) of _sourceFbo into _destFbo.
+	* If the most-occurring colour in _destFbo takes up more than 50% of the pixels,
+	* returns the most-occurring colour. Otherwise, returns 0.
+	*/
+	unsigned long int pickColour(const gl::Fbo * _sourceFbo, gl::Fbo * _destFbo, Vec2i _pos, Area _area, unsigned long int _channel);
 public:
 	// Utility functions to translate colors to and from ints or chars 
 	static Color charToColor( unsigned char r, unsigned char g, unsigned char b ){
