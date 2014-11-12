@@ -21,5 +21,5 @@ void main(){
 	fragNormalGeo = aVertexNormals;
 	fragColorGeo = aVertexColor;
 	fragUVGeo = aVertexUVs;
-	gl_Position = depthMVP * vec4((model *  vec4(aVertexPosition, 1)).xyz, 1.0);
+	gl_Position = depthMVP * vec4(aVertexPosition, 1.0);
 }

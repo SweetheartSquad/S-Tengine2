@@ -212,7 +212,7 @@ void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * 
 	glm::mat4 depthModelMatrix = glm::mat4(1.0);
 
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
-	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * depthModelMatrix;
+	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * _matrixStack->currentModelMatrix;
 	depthMVP = biasMatrix * depthMVP;
 	glUniformMatrix4fv(glGetUniformLocation(_renderStack->shader->getProgramId(), "depthMVP"), 1, GL_FALSE, &depthMVP[0][0]);
 	

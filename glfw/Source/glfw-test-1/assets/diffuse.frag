@@ -68,8 +68,12 @@ void main()
 	float visibility = 1.0;
 
 	if (texture(shadowMapSampler, shadowCoord.xy ).z  <  shadowCoord.z){
-		visibility = 0.5;
+		visibility = 1;
 	}
 
-	outColor = visibility *  vec4(brightness * vec3(outIntensities), 1) * fragColorTex;
+	if (texture(shadowMapSampler, shadowCoord.xy ).z  == 1){
+		visibility = 1.5;
+	}
+
+	outColor =  vec4(visibility * fragColorTex.x, visibility * fragColorTex.y, visibility * fragColorTex.z, 1);//vec4((brightness * visibility) * vec3(outIntensities), 1) * fragColorTex;
 }

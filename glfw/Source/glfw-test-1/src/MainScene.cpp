@@ -125,6 +125,8 @@ MainScene::MainScene(Game * _game):
 //	cube4->mesh->pushTexture2D(tex);
 	cube4->mesh->pushMaterial(bMat);
 
+	cube3->transform->translateX(5 );
+
 	cube->mesh->dirty = true;
 	cube2->mesh->dirty = true;
 	cube3->mesh->dirty = true;
@@ -181,7 +183,7 @@ MainScene::~MainScene(){
 
 void MainScene::update(){
 	Scene::update();
-	cube3->transform->translationVector = tLight->transform->translationVector;
+	//cube3->transform->translationVector = tLight->transform->translationVector;
 
 	tLight->transform->translateX(sinf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
 	tLight->transform->translateZ(cosf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
@@ -191,16 +193,21 @@ void MainScene::update(){
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
 		cube->transform->rotate(2.f, 0.f, -1.f, 0.f);
+		cube3->transform->translateX(-0.2);
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		cube2->transform->translateX(0.02f);
 		cube2->transform->rotate(2.f, 0.f, -1.f, 0.f);
+
+		cube3->transform->translateX(0.2);
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
 		cube->transform->rotate(2.f * (float)vox::deltaTimeCorrection , 1.f, 0.f, 0.f);
+		cube3->transform->translateZ(-0.2);
 	}
 	if(keyboard->keyDown(GLFW_KEY_W)){
 		cube->transform->rotate(2.f, -1.f, 0.f, 0.f);
+		cube3->transform->translateZ(0.2);
 	}
 	if(keyboard->keyDown(GLFW_KEY_Q)){
 		cube3->transform->translateX(0.02f);
@@ -246,8 +253,8 @@ void MainScene::render(){
 	cube4->setShader(depthShader, true);
 
 
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
+	//glDrawBuffer(GL_NONE);
+	//glReadBuffer(GL_NONE);
 	Scene::render();
 	frameBuffer->resize(width, height);
 	frameBuffer->bindFrameBuffer();

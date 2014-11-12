@@ -19,7 +19,7 @@ void FrameBufferInterface::load(){
 	
 	glGenFramebuffers(1, &frameBufferId);
 	bindFrameBuffer();
-
+	//TODO move texure id into channel
 	for(unsigned long int i = 0; i < frameBufferChannels.size(); i++){
 		switch (frameBufferChannels.at(i).channelType){
 		case FrameBufferChannel::TEXTURE :
