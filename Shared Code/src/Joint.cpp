@@ -24,7 +24,7 @@ void Joint::init(){
 	parent = nullptr;
 	jointMap.insert(JointPair(nextColor, this));
 	color = Color::hex(nextColor);
-	nextColor -= 0x000001;
+	nextColor -= 0x000031;
 	id = nextId;
 	nextId += 1;
 	shader = nullptr;

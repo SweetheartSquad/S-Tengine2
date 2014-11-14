@@ -67,19 +67,19 @@ public:
 
 	void setKeyframe();
 
-	void handleUI(const Vec2i &pos);
-
 	/** Copies an area of size _area centered around _pos from (GL_COLOR_ATTACHMENENT0 + _channel) of _sourceFbo into _destFbo.
 	* If the most-occurring colour in _destFbo takes up more than 50% of the pixels,
 	* returns the most-occurring colour. Otherwise, returns 0.
-	*
+	* _res:			pointer to result (Color if _type is GL_FLOAT, unsigned long int otherwise)
 	* _sourceFbo:	fbo to read pixels from
+	* _sourceRect:	rectangle describing _sourceFbo
 	* _destFbo:		fbo to use as intermediary (pixels are copied in from _sourceFbo and then read)
 	* _pos:			pixel to use as reference point
 	* _area:		area describing width/height of pixels to copy
 	* _channel:		channel of _sourceFbo to copy pixels from
+	* _type:		GL_FLOAT or GL_UNSIGNED_BYTE
 	*/
-	Color pickColour(const gl::Fbo * _sourceFbo, const Rectf *  _sourceRect, gl::Fbo * _destFbo, Vec2i _pos, Area _area, unsigned long int _channel, GLenum _type);
+	void pickColour(void * res, const gl::Fbo * _sourceFbo, const Rectf *  _sourceRect, gl::Fbo * _destFbo, Vec2i _pos, Area _area, unsigned long int _channel, GLenum _type);
 public:
 	// Utility functions to translate colors to and from ints or chars 
 	static Color charToColor( unsigned char r, unsigned char g, unsigned char b ){
@@ -146,6 +146,7 @@ protected:
 	Rectf rectRight;
 	Rectf rectFront;
 	Rectf rectPersp;
+	Rectf rectWindow;
 	// Rect definitions for cameras sizes
 	Rectf boundsTop;
 	Rectf boundsRight;

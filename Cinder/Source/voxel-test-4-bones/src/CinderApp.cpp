@@ -78,6 +78,7 @@ void CinderApp::resize(){
 	unsigned int h = max(1, getWindowHeight());
 	double r = getWindowAspectRatio();
 	Area b = getWindowBounds();
+	rectWindow = b;
 	// setup the camera
 	CameraPersp cam = camMayaPersp.getCamera();
 	cam.setPerspective( 60.0f, r, 0.1f, 10000.0f );
@@ -352,7 +353,12 @@ void CinderApp::mouseMove( MouseEvent event ){
 	//handleUI(mMousePos);
 }
 
-Color CinderApp::pickColour(const gl::Fbo * _sourceFbo, const Rectf *  _sourceRect, gl::Fbo * _destFbo, Vec2i _pos, Area _area, unsigned long int _channel, GLenum _type){
+void CinderApp::pickColour(void * res, const gl::Fbo * _sourceFbo, const Rectf *  _sourceRect, gl::Fbo * _destFbo, Vec2i _pos, Area _area, unsigned long int _channel, GLenum _type){
+	if(_type == GL_FLOAT){
+		*((GLfloat *)res) = 0;
+	}else{
+		*((unsigned long int *)res) = 0;
+	}
 	if(_sourceFbo != nullptr && _destFbo != nullptr){
 		// first, specify a small region around the current cursor position 
 		float scaleX = _sourceFbo->getWidth() / (float) _sourceRect->getWidth();
@@ -376,6 +382,9 @@ Color CinderApp::pickColour(const gl::Fbo * _sourceFbo, const Rectf *  _sourceRe
 		_destFbo->bindFramebuffer();
 		gl::clear();
 
+		glClampColor(GL_CLAMP_READ_COLOR, GL_FALSE);
+		glClampColor(GL_CLAMP_VERTEX_COLOR, GL_FALSE);
+		glClampColor(GL_CLAMP_FRAGMENT_COLOR, GL_FALSE);
 		// (Cinder does not yet provide a way to handle multiple color targets in the blitTo function, 
 		//  so we have to make sure the correct target is selected before calling it)
 		glBindFramebufferEXT( GL_READ_FRAMEBUFFER_EXT, _sourceFbo->getId() );
@@ -394,63 +403,74 @@ Color CinderApp::pickColour(const gl::Fbo * _sourceFbo, const Rectf *  _sourceRe
 		
 		// read pixel value(s) in the area
 		glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
+		
 		// calculate the total number of pixels
 		unsigned long int total = (_area.getWidth() * _area.getHeight());
 		void * buffer;
 		switch(_type){
 		case GL_FLOAT:
-			buffer = malloc(sizeof(GLfloat) * total*4); // make sure this is large enough to hold 4 bytes for every pixel!
+			buffer = malloc(sizeof(GLfloat) * total); // make sure this is large enough to hold 4 bytes for every pixel!
+			glReadPixels(0, 0, _area.getWidth(), _area.getHeight(), GL_RGBA, GL_FLOAT, (void *)buffer);
 			break;
 		case GL_UNSIGNED_BYTE:
 		default:
 			buffer = malloc(sizeof(GLubyte) * total*4); // make sure this is large enough to hold 4 bytes for every pixel!
+			glReadPixels(0, 0, _area.getWidth(), _area.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, (void *)buffer);
 			break;
 		}
-		
-		
-		glClampColor(GL_CLAMP_READ_COLOR, GL_FALSE);
-		glClampColor(GL_CLAMP_VERTEX_COLOR, GL_FALSE);
-		glClampColor(GL_CLAMP_FRAGMENT_COLOR, GL_FALSE);
-		glReadPixels(0, 0, _area.getWidth(), _area.getHeight(), GL_RGBA, _type, (void *)buffer);
-
 		// unbind the picking framebuffer
 		_destFbo->unbindFramebuffer();
 		
 		// now that we have the color information, count each occuring color
-		Color color(0,0,0);
-
-		std::map<Color, unsigned int> occurences;
-		for(size_t i = 0; i < total; ++i) {
-			switch(_type){
-			case GL_FLOAT:
-				color = Color( ((GLfloat *)buffer)[(i*sizeof(GLfloat))+0], ((GLfloat *)buffer)[(i*sizeof(GLfloat))+1], ((GLfloat *)buffer)[(i*sizeof(GLfloat))+2] );
-				break;
-			case GL_UNSIGNED_BYTE:
-			default:
-				color = Color( ((GLubyte *)buffer)[(i*sizeof(GLubyte))+0], ((GLubyte *)buffer)[(i*sizeof(GLubyte))+1], ((GLubyte *)buffer)[(i*sizeof(GLubyte))+2] );
-				break;
-			}
-			console() << color << std::endl;
-			occurences[color]++;
-		}
-
-		// find the most occuring color
 		unsigned int max = 0;
-		std::map<Color, unsigned int>::const_iterator itr;
-		for(itr = occurences.begin(); itr != occurences.end(); ++itr) {
-			console() << itr->first << "\t" << itr->second << std::endl;
-			if(itr->second > max) {
-				color = itr->first;
-				max = itr->second;
+		if(_type == GL_FLOAT){
+			Color color(0,0,0);
+			std::map<Color, unsigned long int> occurences;
+			for(size_t i = 0; i < total; ++i) {
+				color = Color(((GLfloat *)buffer)[i],((GLfloat *)buffer)[i+1],((GLfloat *)buffer)[i+2]);
+				occurences[color]++;
+			}
+			
+			// find the most occuring color
+			std::map<Color, unsigned long int>::const_iterator itr;
+			for(itr = occurences.begin(); itr != occurences.end(); ++itr) {
+				console() << itr->first << "\t" << itr->second << std::endl;
+				if(itr->second > max) {
+					color = itr->first;
+					max = itr->second;
+				}
+				total ++;
+			}
+
+			// if this color is present in at least 50% of the pixels, we can safely assume that it is indeed belonging to one object
+			if(max >= (total / 2)) {
+				*((Color *)res) = color;
+			}
+		}else{
+			unsigned long int color = 0;
+			std::map<unsigned long int, unsigned long int> occurences;
+			for(size_t i = 0; i < total; ++i) {
+				color = charToInt( ((GLubyte *)buffer)[(i*4)+0], ((GLubyte *)buffer)[(i*4)+1], ((GLubyte *)buffer)[(i*4)+2] );
+				occurences[color]++;
+			}
+			
+			// find the most occuring color
+			std::map<unsigned long int, unsigned long int>::const_iterator itr;
+			for(itr = occurences.begin(); itr != occurences.end(); ++itr) {
+				console() << itr->first << "\t" << itr->second << std::endl;
+				if(itr->second > max) {
+					color = itr->first;
+					max = itr->second;
+				}
+				total ++;
+			}
+
+			// if this color is present in at least 50% of the pixels, we can safely assume that it is indeed belonging to one object
+			if(max >= (total / 2)) {
+				*((unsigned long int *)res) = color;
 			}
 		}
-
-		// if this color is present in at least 50% of the pixels, we can safely assume that it is indeed belonging to one object
-		//if(max >= (total / 2)) {
-			return color;
-		//}
 	}
-	return Color(0,0,0);
 }
 
 void CinderApp::mouseDown( MouseEvent event ){
@@ -482,7 +502,8 @@ void CinderApp::mouseDown( MouseEvent event ){
 	}
 	
 	// Get the selected colour
-	handleUI(mMousePos);
+	//handleUI(mMousePos);
+	pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 0, GL_UNSIGNED_BYTE);
 
 	if(event.isRight()){
 		oldMousePos = mMousePos;
@@ -499,16 +520,16 @@ void CinderApp::mouseDown( MouseEvent event ){
 				cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, nullptr));
 			}
 		}else if(mode == SELECT){
-			Color colour = pickColour(sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,10,10), 1, GL_UNSIGNED_BYTE);
-			unsigned long int jointColour = charToInt((unsigned char)colour.r, (unsigned char)colour.g, (unsigned char)colour.b);
+			unsigned long int jointColour;
+			pickColour(&jointColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,10,10), 1, GL_UNSIGNED_BYTE);
 			Joint * selection = nullptr;
 			if(Joint::jointMap.count(jointColour) == 1){
 				selection = Joint::jointMap.at(jointColour);
 			}
-			console() << colour << "\t"  << jointColour << "\t" << selection << std::endl;
 			cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
 		}else if(mode == PAINT_VOXELS){
-			Color voxel = Color(0,0,0);//intToColor(pickColour(sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT));
+			Color voxel;
+			pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
 			if(voxel.r > 0 && voxel.g > 0 && voxel.b > 0
 				&& voxel.r < 1 && voxel.g < 1 && voxel.b < 1){
 					cmdProc.executeCommand(new CMD_PlaceVoxel(Vec3f(voxel.r, voxel.g, voxel.b)*10));
@@ -772,82 +793,6 @@ Vec3d CinderApp::getCameraCorrectedPos(){
 	}
 	return res;
 }
-
-
-void CinderApp::handleUI( const Vec2i &pos ){
-	// first, specify a small region around the current cursor position 
-	float scaleX = fboUI.getWidth() / (float) getWindowWidth();
-	float scaleY = fboUI.getHeight() / (float) getWindowHeight();
-	Vec2i	pixel((int)((pos.x) * scaleX), (int)((getWindowHeight() - pos.y) * scaleY));
-
-	//pixel = fromRectToRect(pixel, fboUI.getBounds(), *sourceRect);
-
-	Area	area(pixel.x-5, pixel.y-5, pixel.x+5, pixel.y+5);
-
-	// next, we need to copy this region to a non-anti-aliased framebuffer
-	//  because sadly we can not sample colors from an anti-aliased one. However,
-	//  this also simplifies the glReadPixels statement, so no harm done.
-	//  Here, we create that non-AA buffer if it does not yet exist.
-	if(!pickingFboUI) {
-		initFbo(&pickingFboUI, area);
-	}
-	
-	// bind the picking framebuffer, so we can clear it and then read its pixels later
-	pickingFboUI.bindFramebuffer();
-	gl::clear();
-
-	// (Cinder does not yet provide a way to handle multiple color targets in the blitTo function, 
-	//  so we have to make sure the correct target is selected before calling it)
-	glBindFramebufferEXT( GL_READ_FRAMEBUFFER_EXT, fboUI.getId() );
-	glBindFramebufferEXT( GL_DRAW_FRAMEBUFFER_EXT, pickingFboUI.getId() );
-	glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
-	glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
-
-	fboUI.blitTo(pickingFboUI, area, pickingFboUI.getBounds());
-
-
-	// read pixel value(s) in the area
-	GLubyte buffer[400]; // make sure this is large enough to hold 4 bytes for every pixel!
-	glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
-	glReadPixels(0, 0, pickingFboUI.getWidth(), pickingFboUI.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, (void*)buffer);
-
-	// unbind the picking framebuffer
-	pickingFboUI.unbindFramebuffer();
-
-	// calculate the total number of pixels
-	unsigned int total = (pickingFboUI.getWidth() * pickingFboUI.getHeight());
-
-	// now that we have the color information, count each occuring color
-	unsigned int color;
-
-	std::map<unsigned int, unsigned int> occurences;
-	for(size_t i=0;i<total;++i) {
-		color = charToInt( buffer[(i*4)+0], buffer[(i*4)+1], buffer[(i*4)+2] );
-		occurences[color]++;
-	}
-
-	// find the most occuring color
-	unsigned int max = 0;
-	std::map<unsigned int, unsigned int>::const_iterator itr;
-	for(itr=occurences.begin();itr!=occurences.end();++itr) {
-		if(itr->second > max) {
-			color = itr->first;
-			max = itr->second;
-		}
-	}
-
-	// if this color is present in at least 50% of the pixels, we can safely assume that it is indeed belonging to one object
-	if(max >= (total / 2)) {
-		console() << color << std::endl;
-		
-		uiColour = color;
-	}else{
-		// we can't be sure about the color, we probably are on an object's edge
-		uiColour = 0;
-	}
-}
-//
-
 
 void CinderApp::saveSkeleton() {
 	try{
