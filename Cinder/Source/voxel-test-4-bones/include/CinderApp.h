@@ -50,7 +50,7 @@ public:
 	// Loads the shaders
 	void loadShaders();
 	// Initializes empty single channel fbos
-	void initFbo(gl::Fbo & _fbo, Area _area);
+	void initFbo(gl::Fbo * _fbo, Area _area);
 	// Initializes empty 3-channel fbos
 	void initMultiChannelFbo(gl::Fbo & _fbo, Area _area, unsigned long int _numChannels);
 
@@ -60,7 +60,7 @@ public:
 	void newJoint(Vec3d pos, Joint * parent = NULL);
 	Vec3d getCameraCorrectedPos();
 
-	Joint * pickJoint(const Vec2i &pos);
+	//Joint * pickJoint(const Vec2i &pos);
 
 	void saveSkeleton();
 	void loadSkeleton();
@@ -69,11 +69,17 @@ public:
 
 	void handleUI(const Vec2i &pos);
 
-	/** Copies an area of size _area with an upper-left position of _pos from (GL_COLOR_ATTACHMENENT0 + _channel) of _sourceFbo into _destFbo.
+	/** Copies an area of size _area centered around _pos from (GL_COLOR_ATTACHMENENT0 + _channel) of _sourceFbo into _destFbo.
 	* If the most-occurring colour in _destFbo takes up more than 50% of the pixels,
 	* returns the most-occurring colour. Otherwise, returns 0.
+	*
+	* _sourceFbo:	fbo to read pixels from
+	* _destFbo:		fbo to use as intermediary (pixels are copied in from _sourceFbo and then read)
+	* _pos:			pixel to use as reference point
+	* _area:		area describing width/height of pixels to copy
+	* _channel:		channel of _sourceFbo to copy pixels from
 	*/
-	unsigned long int pickColour(const gl::Fbo * _sourceFbo, gl::Fbo * _destFbo, Vec2i _pos, Area _area, unsigned long int _channel);
+	Color pickColour(const gl::Fbo * _sourceFbo, const Rectf *  _sourceRect, gl::Fbo * _destFbo, Vec2i _pos, Area _area, unsigned long int _channel, GLenum _type);
 public:
 	// Utility functions to translate colors to and from ints or chars 
 	static Color charToColor( unsigned char r, unsigned char g, unsigned char b ){
