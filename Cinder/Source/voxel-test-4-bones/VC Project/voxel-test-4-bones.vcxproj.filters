@@ -96,6 +96,9 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeSelectable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag">
@@ -191,6 +194,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\MatrixStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeSelectable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

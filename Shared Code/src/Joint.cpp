@@ -9,8 +9,6 @@
 #include "RenderOptions.h"
 
 unsigned long int Joint::nextId = 0;
-uint32_t Joint::nextColor = 0xFFFFFF;
-std::map<uint32_t, Joint*> Joint::jointMap;
 
 void Joint::deleteJoints(NodeHierarchical * _j){
 	for(unsigned long int i = 0; i < _j->children.size(); ++i){
@@ -22,9 +20,6 @@ void Joint::deleteJoints(NodeHierarchical * _j){
 void Joint::init(){
 	depth = 0;
 	parent = nullptr;
-	jointMap.insert(JointPair(nextColor, this));
-	color = Color::hex(nextColor);
-	nextColor -= 0x000031;
 	id = nextId;
 	nextId += 1;
 	shader = nullptr;
@@ -32,14 +27,17 @@ void Joint::init(){
 
 Joint::Joint() : 
 	NodeAnimatable(new Transform()),
-	NodeHierarchical(nullptr){
+	NodeHierarchical(nullptr),
+	NodeSelectable()
+{
 	init();
 }
 
 Joint::Joint(NodeHierarchical * _parent) : 
 	//NodeTransformable(new Transform()),
 	NodeAnimatable(new Transform()),
-	NodeHierarchical(_parent)
+	NodeHierarchical(_parent),
+	NodeSelectable()
 {
 	init();
 	parent = _parent;
@@ -94,7 +92,7 @@ Joint::~Joint(){
 void Joint::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	if(shader != nullptr){
 		//gl::enableWireframe();
-		shader->uniform("pickingColor", color);
+		shader->uniform("pickingColor", Color::hex(pickingColor));
 		//colour
 		if(depth%3 == 0){
 			gl::color(0, 1, 1);

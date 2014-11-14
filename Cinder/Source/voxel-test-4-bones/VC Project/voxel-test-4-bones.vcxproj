@@ -104,6 +104,7 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeRenderable.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeSelectable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\SkeletonData.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeAnimatable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeRenderable.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeSelectable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeTransformable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\SkeletonData.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />

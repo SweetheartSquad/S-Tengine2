@@ -389,14 +389,8 @@ void CinderApp::pickColour(void * res, const gl::Fbo * _sourceFbo, const Rectf *
 		//  so we have to make sure the correct target is selected before calling it)
 		glBindFramebufferEXT( GL_READ_FRAMEBUFFER_EXT, _sourceFbo->getId() );
 		glBindFramebufferEXT( GL_DRAW_FRAMEBUFFER_EXT, _destFbo->getId() );
-		switch(_channel){
-			case 0: glReadBuffer(GL_COLOR_ATTACHMENT0_EXT); break;
-			case 1: glReadBuffer(GL_COLOR_ATTACHMENT1_EXT); break;
-			case 2: glReadBuffer(GL_COLOR_ATTACHMENT2_EXT); break;
-			case 3: glReadBuffer(GL_COLOR_ATTACHMENT3_EXT); break;
-			case 4: glReadBuffer(GL_COLOR_ATTACHMENT4_EXT); break;
-			default: glReadBuffer(GL_COLOR_ATTACHMENT0_EXT+_channel); break;
-		}
+		
+		glReadBuffer(GL_COLOR_ATTACHMENT0_EXT+_channel);
 		glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
 
 		_sourceFbo->blitTo(*_destFbo, _area, _destFbo->getBounds());
@@ -409,15 +403,15 @@ void CinderApp::pickColour(void * res, const gl::Fbo * _sourceFbo, const Rectf *
 		void * buffer;
 		switch(_type){
 		case GL_FLOAT:
-			buffer = malloc(sizeof(GLfloat) * total); // make sure this is large enough to hold 4 bytes for every pixel!
-			glReadPixels(0, 0, _area.getWidth(), _area.getHeight(), GL_RGBA, GL_FLOAT, (void *)buffer);
+			buffer = malloc(sizeof(GLfloat) * total*4); // make sure this is large enough to hold 4 bytes for every pixel!
 			break;
 		case GL_UNSIGNED_BYTE:
 		default:
 			buffer = malloc(sizeof(GLubyte) * total*4); // make sure this is large enough to hold 4 bytes for every pixel!
-			glReadPixels(0, 0, _area.getWidth(), _area.getHeight(), GL_RGBA, GL_UNSIGNED_BYTE, (void *)buffer);
 			break;
 		}
+		glReadPixels(0, 0, _area.getWidth(), _area.getHeight(), GL_RGBA, _type, (void *)buffer);
+
 		// unbind the picking framebuffer
 		_destFbo->unbindFramebuffer();
 		
@@ -501,8 +495,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 		sourceFbo = nullptr;
 	}
 	
-	// Get the selected colour
-	//handleUI(mMousePos);
+	// Get the selected UI colour
 	pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 0, GL_UNSIGNED_BYTE);
 
 	if(event.isRight()){
@@ -521,10 +514,10 @@ void CinderApp::mouseDown( MouseEvent event ){
 			}
 		}else if(mode == SELECT){
 			unsigned long int jointColour;
-			pickColour(&jointColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,10,10), 1, GL_UNSIGNED_BYTE);
+			pickColour(&jointColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
 			Joint * selection = nullptr;
-			if(Joint::jointMap.count(jointColour) == 1){
-				selection = Joint::jointMap.at(jointColour);
+			if(NodeSelectable::pickingMap.count(jointColour) == 1){
+				selection = dynamic_cast<Joint *>(NodeSelectable::pickingMap.at(jointColour));
 			}
 			cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
 		}else if(mode == PAINT_VOXELS){
