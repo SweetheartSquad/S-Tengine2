@@ -19,6 +19,4 @@ public:
 	std::vector<Light*> * lights;
 	Shader * shader;
 	GLuint shadowMapTextureId;
-
-	glm::mat4 cameraPos;
 };

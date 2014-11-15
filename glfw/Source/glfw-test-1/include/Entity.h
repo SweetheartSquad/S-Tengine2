@@ -36,7 +36,10 @@ public:
 	void addChild(Entity * _child);
 	void removeChildAtIndex(int _index);
 	void setParent(Entity *_parent);
+	/**Sets shader to _shader*/
 	void setShader(Shader* _shader, bool _confiugreDefaultAttributes);
+	/** Recursivley sets the shader to _shader for _entity's children recursivley*/
+	void setShaderOnChildren(Shader * _shader);
 	/** Calls unload on all children and on mesh */
 	void unload();
 	/** Loads and cleans mesh, configures default vertex attributes, deletes and reloads shader, and calls unload on all children (recursive) */

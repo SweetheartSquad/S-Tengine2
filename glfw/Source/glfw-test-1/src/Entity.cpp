@@ -70,6 +70,13 @@ void Entity::setShader(Shader * _shader, bool _confiugreDefaultAttributes){
 	}
 }
 
+void Entity::setShaderOnChildren(Shader * _shader){
+	for(NodeHierarchical * entity : children){
+		(dynamic_cast<Entity*>(entity))->setShaderOnChildren(_shader);
+	}
+	setShader(_shader, false);
+}
+
 void Entity::unload(){
 	for(Node * child : children){
 		dynamic_cast<Entity *>(child)->unload();

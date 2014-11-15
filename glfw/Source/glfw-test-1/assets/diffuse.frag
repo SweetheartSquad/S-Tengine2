@@ -1,5 +1,4 @@
-#version 330
-
+#version 150
 uniform mat4 model;
 
 uniform struct Light{
@@ -65,17 +64,13 @@ void main()
 	
 	float visibility = 1.0;
 
-	if (texture(shadowMapSampler, shadowCoord.xy ).z  <  shadowCoord.z){
-		visibility = 0.5;
-	}
-
 	vec3 ProjCoords = shadowCoord.xyz / shadowCoord.w;
     vec2 UVCoords;
     UVCoords.x = 0.5 * ProjCoords.x + 0.5;
     UVCoords.y = 0.5 * ProjCoords.y + 0.5;
     float z = 0.5 * ProjCoords.z + 0.5;
     float Depth = texture(shadowMapSampler, UVCoords).x;
-    if (Depth < (z - 0.00001)){
+    if (Depth < (z - 0.0005)){
         visibility = 0.5;
 	}
 

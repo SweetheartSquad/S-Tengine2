@@ -68,9 +68,16 @@ void main()
 	brightness = clamp(brightness, 0.1, 1);
 
  	float visibility = 1.0;
-	if (texture(shadowMapSampler, shadowCoord.xy ).z  <  shadowCoord.z){
-		visibility = 0.5;
+
+	vec3 ProjCoords = shadowCoord.xyz / shadowCoord.w;
+    vec2 UVCoords;
+    UVCoords.x = 0.5 * ProjCoords.x + 0.5;
+    UVCoords.y = 0.5 * ProjCoords.y + 0.5;
+    float z = 0.5 * ProjCoords.z + 0.5;
+    float Depth = texture(shadowMapSampler, UVCoords).x;
+    if (Depth < (z - 0.0005)){
+        visibility = 0.5;
 	}
 
-	outColor = visibility *  vec4(brightness * vec3(outIntensities), 1) * fragColorTex;
+	outColor =  vec4((brightness) * vec3(outIntensities), 1) * vec4(vec3(fragColorTex.xyz) * visibility, 1);
 }
