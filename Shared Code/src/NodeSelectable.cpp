@@ -8,6 +8,6 @@ std::map<_Uint32t, NodeSelectable *> NodeSelectable::pickingMap;
 NodeSelectable::NodeSelectable() :
 	pickingColor(nextColor)
 {
-	pickingMap.insert(std::pair<_Uint32t, NodeSelectable *>(nextColor, this));
+	pickingMap.insert(std::pair<_Uint32t, NodeSelectable *>(pickingColor, this));
 	nextColor -= 0x000001;
 }
