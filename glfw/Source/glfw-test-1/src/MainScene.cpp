@@ -6,7 +6,9 @@
 #include "VoxelMesh.h"
 #include "Texture.h"
 #include "Material.h"
-#include "framebufferchannel.h"
+#include "FrameBufferChannel.h"
+#include "StandardFrameBuffer.h"
+#include "DepthFrameBuffer.h"
 
 Cube * cube;
 Cube * cube2;
@@ -39,20 +41,10 @@ Transform * t;
 MainScene::MainScene(Game * _game):
 	Scene(game)
 {
-	std::vector<FrameBufferChannel> bufferChannels;
-	bufferChannels.push_back(FrameBufferChannel(GL_RGB, GL_COLOR_ATTACHMENT0, FrameBufferChannel::TEXTURE, GL_BYTE));
-	bufferChannels.push_back(FrameBufferChannel(GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT, FrameBufferChannel::RENDER_BUFFER, 0));
-
-	frameBuffer = new FrameBufferInterface(bufferChannels, 1024, 800, true);
+	frameBuffer = new StandardFrameBuffer(true);
 	frameBuffer->checkFrameBufferStatus();
 
-	std::vector<FrameBufferChannel> depthChannels;
-	depthChannels.push_back(FrameBufferChannel(GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT, FrameBufferChannel::TEXTURE, GL_FLOAT));
-
-	depthBuffer = new FrameBufferInterface(depthChannels, 1024, 800, true);
-	depthBuffer->bindFrameBuffer();
-	glDrawBuffer(GL_NONE);
-	depthBuffer->checkFrameBufferStatus();
+	depthBuffer = new DepthFrameBuffer(true);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

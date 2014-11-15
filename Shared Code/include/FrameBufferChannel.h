@@ -9,13 +9,14 @@ public:
 		RENDER_BUFFER
 	} channelType;
 
-	GLint internalFormat;
+	GLint  internalFormat;
 	GLenum attachmentType;
 	GLenum size;
+	GLenum format;
 
 	/**_internalFormat refers to the format OpenGL uses to store the channel. Possible base types are:
 	* GL_ALPHA
-	* GL_LUMINANCE 
+	* GL_LUMINANCE
 	* GL_LUMINANCE_ALPHA
 	* GL_RGB
 	* GL_RGBA
@@ -26,34 +27,45 @@ public:
 	* Render buffers are not accessible from shaders.
 	*
 	* The _size refers to the data type used for the texture. This value is not relevant for a render buffer
-	* The possible values are : 
-	* GL_UNSIGNED_BYTE, 
-	* GL_BYTE, 
-	* GL_UNSIGNED_SHORT, 
-	* GL_SHORT, 
-	* GL_UNSIGNED_INT, 
-	* GL_INT, 
-	* GL_FLOAT, 
-	* GL_UNSIGNED_BYTE_3_3_2, 
-	* GL_UNSIGNED_BYTE_2_3_3_REV, 
-	* GL_UNSIGNED_SHORT_5_6_5, 
-	* GL_UNSIGNED_SHORT_5_6_5_REV, 
-	* GL_UNSIGNED_SHORT_4_4_4_4, 
-	* GL_UNSIGNED_SHORT_4_4_4_4_REV, 
-	* GL_UNSIGNED_SHORT_5_5_5_1, 
-	* GL_UNSIGNED_SHORT_1_5_5_5_REV, 
-	* GL_UNSIGNED_INT_8_8_8_8, 
-	* GL_UNSIGNED_INT_8_8_8_8_REV, 
+	* The possible values are :
+	* GL_UNSIGNED_BYTE,
+	* GL_BYTE,
+	* GL_UNSIGNED_SHORT,
+	* GL_SHORT,
+	* GL_UNSIGNED_INT,
+	* GL_INT,
+	* GL_FLOAT,
+	* GL_UNSIGNED_BYTE_3_3_2,
+	* GL_UNSIGNED_BYTE_2_3_3_REV,
+	* GL_UNSIGNED_SHORT_5_6_5,
+	* GL_UNSIGNED_SHORT_5_6_5_REV,
+	* GL_UNSIGNED_SHORT_4_4_4_4,
+	* GL_UNSIGNED_SHORT_4_4_4_4_REV,
+	* GL_UNSIGNED_SHORT_5_5_5_1,
+	* GL_UNSIGNED_SHORT_1_5_5_5_REV,
+	* GL_UNSIGNED_INT_8_8_8_8,
+	* GL_UNSIGNED_INT_8_8_8_8_REV,
 	* GL_UNSIGNED_INT_10_10_10_2,
 	* GL_UNSIGNED_INT_2_10_10_10_REV
 	*
 	* _atachmentType refers to the achment type to the frame buffer
 	* The possible values are :
-	* GL_COLOR_ATTACHMENT0  -- Always use 0 as this value will be incremented internally, 
-	* GL_DEPTH_ATTACHMENT, 
-	* GL_STENCIL_ATTACHMENT, 
+	* GL_COLOR_ATTACHMENT0  -- Always use 0 as this value will be incremented internally,
+	* GL_DEPTH_ATTACHMENT,
+	* GL_STENCIL_ATTACHMENT,
 	* GL_DEPTH_STENCIL_ATTACHMENT
+	*
+	* _format Specifies the format of the pixel data.
+	* The possible values are :
+	* GL_RED, GL_RED_INTEGER,
+	* GL_RG, GL_RG_INTEGER,
+	* GL_RGB, GL_RGB_INTEGER,
+	* GL_RGBA, GL_RGBA_INTEGER,
+	* GL_DEPTH_COMPONENT,
+	* GL_DEPTH_STENCIL,
+	* GL_LUMINANCE_ALPHA,
+	* GL_LUMINANCE,
+	* GL_ALPHA.
 	*/
-	FrameBufferChannel(GLint _internalFormat, GLenum _attachmentType, ChannelType _channelType, GLenum _size);
+	FrameBufferChannel(GLint _internalFormat, GLenum _attachmentType, GLenum _format, ChannelType _channelType, GLenum _size);
 };
-

@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include <gl/glew.h>
 #include <vector>
@@ -10,7 +10,7 @@ class FrameBufferInterface : public NodeResource{
 public:
 
 	GLuint frameBufferId;
-	GLuint textureBufferId; 
+	GLuint textureBufferId;
 	GLuint renderBufferId;
 
 	std::vector<FrameBufferChannel> frameBufferChannels;
@@ -33,5 +33,4 @@ public:
 	void bindFrameBuffer();
 	/**Prints a string representing the status of the framebuffer*/
 	GLenum checkFrameBufferStatus();
-
 };

@@ -13,7 +13,8 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	dirty(true),
 	shouldRenderLights(true),
 	shouldRenderTextures(true),
-	shouldRenderExtras(true)
+	shouldRenderExtras(true),
+	shouldRenderShadows(true)
 {
 	load();
 	clean();
@@ -105,7 +106,7 @@ void MeshInterface::clean(){
 	}
 }
 
-void MeshInterface::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void MeshInterface::render(MatrixStack * _matrixStack, RenderOptions * _renderOption){
 	if(glIsVertexArray(vaoId) == GL_TRUE){
 		if(glIsBuffer(vboId) == GL_TRUE){
 			if(glIsBuffer(iboId) == GL_TRUE){
@@ -115,20 +116,23 @@ void MeshInterface::render(MatrixStack * _matrixStack, RenderOptions * _renderSt
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 
 				// Specify _shader attributes
-				glUseProgram(_renderStack->shader->getProgramId());
+				glUseProgram(_renderOption->shader->getProgramId());
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 
 				//Model View Projection
-				configureModelViewProjection(_matrixStack, _renderStack);
+				configureModelViewProjection(_matrixStack, _renderOption);
 
 				if(shouldRenderTextures){
-					configureTextures(_matrixStack, _renderStack);
+					configureTextures(_matrixStack, _renderOption);
 				}
 				if(shouldRenderLights){
-					configureLights(_matrixStack, _renderStack);
+					configureLights(_matrixStack, _renderOption);
 				}
 				if(shouldRenderExtras){
-					configureExtras(_matrixStack, _renderStack);
+					configureExtras(_matrixStack, _renderOption);
+				}
+				if(shouldRenderShadows){
+					configureShadows(_matrixStack, _renderOption);
 				}
 
 				//Alpha blending
@@ -158,77 +162,76 @@ void MeshInterface::render(MatrixStack * _matrixStack, RenderOptions * _renderSt
 	}
 }
 
-void MeshInterface::configureTextures(MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void MeshInterface::configureTextures(MatrixStack * _matrixStack, RenderOptions * _renderOption){
 	// Pass the _shader the number of textures
-	glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES), textures.size());
+	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES), textures.size());
 	// Bind each texture to the texture sampler array in the frag _shader
 	for(unsigned long int i = 0; i < textures.size(); i++){
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, textures.at(i)->textureId);
-		glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER), i);
+		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER), i);
 	}
 }
 
-void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * _renderOption){
 	glm::mat4 model = _matrixStack->currentModelMatrix;
-	GLuint modelUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX);
+	GLuint modelUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX);
 	glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
 
 	// Pass the _shader the number of lights & materials
-	glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(),	GL_UNIFORM_ID_NUM_LIGHTS), _renderStack->lights->size());
-	glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), "numMaterials"), materials.size());
+	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(),	GL_UNIFORM_ID_NUM_LIGHTS), _renderOption->lights->size());
+	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_MATERIALS), materials.size());
 
 	// Pass each material to the _shader
 	for(unsigned long int i = 0; i < materials.size(); i++){
-		const char * mat = GLUtils::buildGLArryReferenceString("materials[].materialType", i);
-		GLuint materialUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), mat);
+		const char * mat = GLUtils::buildGLArryReferenceString(GL_UNIFORM_ID_MATERIAL_TYPE, i);
+		GLuint materialUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), mat);
 		int materialType = static_cast<int>(materials.at(i)->data.type);
 		glUniform1f(materialUniformLocation, materialType);
 	}
 
 	//Pass the paramaters for each light to the _shader
-	for(unsigned long int i = 0; i < _renderStack->lights->size(); i++){
+	for(unsigned long int i = 0; i < _renderOption->lights->size(); i++){
 		const char * pos = GLUtils::buildGLArryReferenceString(GL_UNIFORM_ID_LIGHTS_POSITION, i);
 		const char * ins = GLUtils::buildGLArryReferenceString(GL_UNIFORM_ID_LIGHTS_INTENSITIES, i);
-		GLuint lightUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), pos);
-		glUniform3f(lightUniformLocation, _renderStack->lights->at(i)->data.position.x, _renderStack->lights->at(i)->data.position.y, _renderStack->lights->at(i)->data.position.z);
-		GLuint intensitiesUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), ins);
-		glUniform3f(intensitiesUniformLocation, _renderStack->lights->at(i)->data.intensities.x, _renderStack->lights->at(i)->data.intensities.y, _renderStack->lights->at(i)->data.intensities.z);
+		GLuint lightUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), pos);
+		glUniform3f(lightUniformLocation, _renderOption->lights->at(i)->data.position.x, _renderOption->lights->at(i)->data.position.y, _renderOption->lights->at(i)->data.position.z);
+		GLuint intensitiesUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), ins);
+		glUniform3f(intensitiesUniformLocation, _renderOption->lights->at(i)->data.intensities.x, _renderOption->lights->at(i)->data.intensities.y, _renderOption->lights->at(i)->data.intensities.z);
 	}
+}
 
+void MeshInterface::configureModelViewProjection(MatrixStack * _matrixStack, RenderOptions * _renderOption){
+	glm::mat4 mvp = _matrixStack->projectionMatrix * _matrixStack->viewMatrix * _matrixStack->currentModelMatrix;
+	GLuint mvpUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(),  GL_UNIFORM_ID_MODEL_VIEW_PROJECTION);
+	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
+	GLUtils::checkForError(0,__FILE__,__LINE__);
+}
+
+void MeshInterface::configureShadows(MatrixStack* _matrixStack, RenderOptions* _renderOption){
 	//Configure DepthMVP
 	glm::mat4 biasMatrix(
 		0.5, 0.0, 0.0, 0.0,
 		0.0, 0.5, 0.0, 0.0,
 		0.0, 0.0, 0.5, 0.0,
-		0.5, 0.5, 0.5, 1.0
-		);
+		0.5, 0.5, 0.5, 1.0);
 
 	glm::vec3 lightInvDir = glm::vec3(0.5, 2, 2);
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
 
-	glm::mat4 depthModelMatrix = glm::mat4(1.0);
-
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
 	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * _matrixStack->getCurrentMatrix();
 	depthMVP = biasMatrix * depthMVP;
-	glUniformMatrix4fv(glGetUniformLocation(_renderStack->shader->getProgramId(), "depthMVP"), 1, GL_FALSE, &depthMVP[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_DEPTH_MVP), 1, GL_FALSE, &depthMVP[0][0]);
 
-	if(_renderStack->shadowMapTextureId != 0){
+	if(_renderOption->shadowMapTextureId != 0){
 		glActiveTexture(GL_TEXTURE0 + textures.size());
-		glBindTexture(GL_TEXTURE_2D, _renderStack->shadowMapTextureId);
-		glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), "shadowMapSampler"), textures.size());
+		glBindTexture(GL_TEXTURE_2D, _renderOption->shadowMapTextureId);
+		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_SHADOW_MAP_SAMPLER), textures.size());
 	}
 }
 
-void MeshInterface::configureModelViewProjection(MatrixStack * _matrixStack, RenderOptions * _renderStack){
-	glm::mat4 mvp = _matrixStack->projectionMatrix * _matrixStack->viewMatrix * _matrixStack->currentModelMatrix;
-	GLuint mvpUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(),  GL_UNIFORM_ID_MODEL_VIEW_PROJECTION);
-	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
-	GLUtils::checkForError(0,__FILE__,__LINE__);
-}
-
-void MeshInterface::configureExtras(MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void MeshInterface::configureExtras(MatrixStack * _matrixStack, RenderOptions * _renderOption){
 }
 
 void MeshInterface::configureDefaultVertexAttributes(Shader *_shader){
