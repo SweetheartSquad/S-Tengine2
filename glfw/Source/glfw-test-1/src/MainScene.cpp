@@ -32,6 +32,8 @@ FrameBufferInterface * depthBuffer;
 
 RenderSurface * renderSurface;
 
+Entity * loaded1;
+
 MainScene::MainScene(Game * _game):
 	Scene(game)
 {
@@ -95,13 +97,13 @@ MainScene::MainScene(Game * _game):
 		loaded->mesh->pushMaterial(mat);
 	}
 
-	//Entity * loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, texShader, cube);
-	//cube->addChild(loaded1);
+	loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, texShader, cube);
+	addChild(loaded1);
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->setShader(texShader, true);
 	cube2->transform->translateX(0.5);
-    //cube2->mesh->pushTexture2D(tex);
+    cube2->mesh->pushTexture2D(tex);
 	cube2->mesh->pushMaterial(mat);
 
 	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
@@ -112,7 +114,7 @@ MainScene::MainScene(Game * _game):
 
 	cube3->mesh->vertices.at(3).x += 0.5;
 	cube3->transform->translateX(0.5);
-	//cube3->mesh->pushTexture2D(tex);
+	cube3->mesh->pushTexture2D(tex);
 	cube3->mesh->pushMaterial(bMat);
 
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
@@ -122,7 +124,7 @@ MainScene::MainScene(Game * _game):
 
 	cube4->transform->scale(15.0, 1.0, 15.0);
 	cube4->transform->translateY(-2);
-//	cube4->mesh->pushTexture2D(tex);
+	cube4->mesh->pushTexture2D(tex);
 	cube4->mesh->pushMaterial(bMat);
 
 	cube3->transform->translateX(5 );
@@ -242,6 +244,8 @@ void MainScene::update(){
 }
 
 void MainScene::render(){
+
+
 	int width, height;
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
 	depthBuffer->resize(width, height);
@@ -251,11 +255,12 @@ void MainScene::render(){
 	cube2->setShader(depthShader, true);
 	cube3->setShader(depthShader, true);
 	cube4->setShader(depthShader, true);
+	loaded1->setShader(depthShader, true);
 
-
-	//glDrawBuffer(GL_NONE);
-	//glReadBuffer(GL_NONE);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
 	Scene::render();
+
 	frameBuffer->resize(width, height);
 	frameBuffer->bindFrameBuffer();
 	renderOptions->shadowMapTextureId = depthBuffer->textureBufferId;
@@ -264,6 +269,7 @@ void MainScene::render(){
 	cube2->setShader(texShader, true);
 	cube3->setShader(texShader, true);
 	cube4->setShader(texShader, true);
+	loaded1->setShader(texShader, true);
 	
 	Scene::render();
 	renderSurface->render(*frameBuffer);

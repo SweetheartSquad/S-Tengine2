@@ -1,4 +1,4 @@
-#version 150
+#version 330
 
 uniform mat4 model;
 
@@ -14,7 +14,7 @@ uniform struct Material{
 uniform Light lights[5];
 uniform int numLights;
 
-//uniform sampler2D textureSampler[5];
+uniform sampler2D textureSampler[5];
 uniform int numTextures;
 
 uniform Material materials[5];
@@ -32,21 +32,19 @@ out vec4 outColor;
 
 void main()
 {
-	vec4 fragColorTex = vec4(0,0,0,0);
+	vec4 fragColorTex = vec4(0, 0, 0, 0);
 	
-	//numTextures = 0;
-	
-	//if(numTextures == 0){
+	if(numTextures == 0){
 		fragColorTex = fragColor;
-	//}
+	}
 
-	/*for(int i = 0; i < numTextures; i++){
+	for(int i = 0; i < numTextures; i++){
 		if(i == 0){
 			fragColorTex = texture(textureSampler[i], fragUV).rgba;
 		}else{
 			fragColorTex = mix(fragColorTex, texture(textureSampler[i], fragUV).rgba, 0.5);
 		}
-	}*/
+	}
 
     mat3 normalMatrix = transpose(inverse(mat3(model)));
 
@@ -68,12 +66,18 @@ void main()
 	float visibility = 1.0;
 
 	if (texture(shadowMapSampler, shadowCoord.xy ).z  <  shadowCoord.z){
-		visibility = 1;
+		visibility = 0.5;
 	}
 
-	if (texture(shadowMapSampler, shadowCoord.xy ).z  == 1){
-		visibility = 1.5;
+	vec3 ProjCoords = shadowCoord.xyz / shadowCoord.w;
+    vec2 UVCoords;
+    UVCoords.x = 0.5 * ProjCoords.x + 0.5;
+    UVCoords.y = 0.5 * ProjCoords.y + 0.5;
+    float z = 0.5 * ProjCoords.z + 0.5;
+    float Depth = texture(shadowMapSampler, UVCoords).x;
+    if (Depth < (z - 0.00001)){
+        visibility = 0.5;
 	}
 
-	outColor =  vec4(visibility * fragColorTex.x, visibility * fragColorTex.y, visibility * fragColorTex.z, 1);//vec4((brightness * visibility) * vec3(outIntensities), 1) * fragColorTex;
+	outColor =  vec4((brightness) * vec3(outIntensities), 1) * vec4(vec3(fragColorTex.xyz) * visibility, 1);
 }
