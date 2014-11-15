@@ -122,6 +122,7 @@ void MeshInterface::render(MatrixStack * _matrixStack, RenderOptions * _renderOp
 				//Model View Projection
 				configureModelViewProjection(_matrixStack, _renderOption);
 
+				//TODO - A flag in the shader should be set to disable these
 				if(shouldRenderTextures){
 					configureTextures(_matrixStack, _renderOption);
 				}

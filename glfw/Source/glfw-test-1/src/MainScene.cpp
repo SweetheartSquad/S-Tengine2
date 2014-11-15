@@ -167,8 +167,6 @@ MainScene::~MainScene(){
 
 void MainScene::update(){
 	Scene::update();
-	//cube3->transform->translationVector = tLight->transform->translationVector;
-
 	tLight->transform->translateX(sinf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
 	tLight->transform->translateZ(cosf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
 
