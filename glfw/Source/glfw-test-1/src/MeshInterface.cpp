@@ -183,8 +183,8 @@ void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * 
 		const char * shin = GLUtils::buildGLArryReferenceString("materials[].shininess", i);
 		const char * spec = GLUtils::buildGLArryReferenceString("materials[].specularColor", i);
 		GLuint typeUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), mat);
-		int materialType = static_cast<int>(materials.at(i)->data.type);
-		glUniform1f(typeUniformLocation, materialType);
+		int materialType = (int)(materials.at(i)->data.type);
+		glUniform1i(typeUniformLocation, materialType);
 		GLuint shinyUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), shin);
 		int materialShininess = materials.at(i)->data.shininess;
 		glUniform1f(shinyUniformLocation, materialShininess);

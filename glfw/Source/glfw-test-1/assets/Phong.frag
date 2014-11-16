@@ -2,15 +2,15 @@
 
 uniform mat4 model;
 
-uniform struct Light{
+struct Light{
 	vec3 position;
 	vec3 intensities;
 	float ambientCoefficient;
 	float attenuation;
 };
 
-uniform struct Material{
-	int type;
+struct Material{
+	int materialType;
 	float shininess;
 	vec3 specularColor;
 };
@@ -33,7 +33,7 @@ out vec4 outColor;
 
 void main()
 {
-	vec4 fragColorTex = vec4(0,0,0,0);
+	vec4 fragColorTex = vec4(0,0,0,1);
 
 	if(numTextures == 0){
 		fragColorTex = fragColor;
@@ -59,7 +59,7 @@ void main()
 	vec3 surfaceToCamera = fragVert - fragWorldPosition;
 
 	for(int i = 0; i < numLights; i++){
-		for(int j = 0; j < numMaterials; i++){
+		for(int j = 0; j < numMaterials; j++){
 			//ambient
 			vec3 ambient = lights[i].ambientCoefficient * fragColorTex.rgb * lights[i].intensities;
 		
