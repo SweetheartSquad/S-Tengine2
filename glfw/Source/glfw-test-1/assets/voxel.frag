@@ -2,23 +2,26 @@
 
 uniform mat4 model;
 
-uniform struct Light{
+struct Light{
 	vec3 position;
 	vec3 intensities;
 };
 
-uniform struct Material{
+struct Material{
 	int type;
 };
+
+uniform mat4 M;
+uniform mat4 VP;
 
 uniform Light lights[5];
 uniform int numLights;
 
-uniform sampler2D textureSampler[5];
-uniform int numTextures;
-
 uniform Material materials[5];
 uniform int numMaterials;
+
+uniform sampler2D textureSampler[5];
+uniform int numTextures;
 
 in vec3 fragVert;
 in vec3 fragNormal;
@@ -60,5 +63,7 @@ void main()
 	
 	brightness = clamp(brightness, 0.1, 1);
  
+	//vec4(vec3(gl_FragCoord.z/10),1);//vec4(vec3(length(M*VP*vec4(fragVert,1)))/255,1);
+
 	outColor = vec4(brightness * vec3(outIntensities), 1) * fragColorTex;
 }

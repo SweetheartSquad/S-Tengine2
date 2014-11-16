@@ -23,9 +23,8 @@
 #define GL_UNIFORM_ID_LIGHTS_INTENSITIES	"lights[].intensities"
 
 class Texture;
-class MatrixStack;
-class RenderOptions;
 class Material;
+class MatrixStack;
 
 class MeshInterface : public NodeRenderable{
 public:
@@ -37,11 +36,9 @@ public:
 	std::vector<Vertex> vertices;
 	/** Index data for the ibo */
 	std::vector<GLuint> indices;
-	/** Lights */
-	std::vector<Light *> lights;
 	/** Textures */
 	std::vector<Texture *> textures;
-	/** Material*/
+	/** Materials */
 	std::vector<Material *> materials;
 
 public:
@@ -117,9 +114,7 @@ public:
 	void setUV(unsigned long int _vertId, float _x, float _y);
 	/** Adds _vertex to the list of vertices*/
 	void pushVert(Vertex _vertex);
-	/** Adds _texture to the list of textures*/
 	void pushTexture2D(Texture * _texture);
-	/** Adds _material to the list of materials*/
 	void pushMaterial(Material * _material);
 };
 

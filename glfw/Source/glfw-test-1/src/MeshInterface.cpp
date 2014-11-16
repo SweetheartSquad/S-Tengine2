@@ -174,10 +174,9 @@ void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * 
 	GLuint modelUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX);
 	glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
 
-	// Pass the _shader the number of lights & materials
-	glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), "numLights"), lights.size());
+	// Pass the _shader the number of materials
 	glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), "numMaterials"), materials.size());
-
+	
 	// Pass each material to the _shader
 	for(unsigned long int i = 0; i < materials.size(); i++){
 		const char * mat = GLUtils::buildGLArryReferenceString("materials[].materialType", i);
@@ -193,7 +192,10 @@ void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * 
 		glUniform3f(specColorUniformLocation, materials.at(i)->data.specularColor.x, materials.at(i)->data.specularColor.y, materials.at(i)->data.specularColor.z);
 	}
 
-	//Pass the paramaters for each light to the _shader
+	// Pass the _shader the number of lights
+	glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), GL_UNIFORM_ID_NUM_LIGHTS), _renderStack->lights->size());
+
+	// Pass the paramaters for each light to the _shader
 	for(unsigned long int i = 0; i < _renderStack->lights->size(); i++){
 		const char * pos = GLUtils::buildGLArryReferenceString(GL_UNIFORM_ID_LIGHTS_POSITION, i);
 		const char * ins = GLUtils::buildGLArryReferenceString(GL_UNIFORM_ID_LIGHTS_INTENSITIES, i);

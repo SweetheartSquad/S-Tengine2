@@ -1,5 +1,7 @@
 #include "RenderSurface.h"
 
+#include "Shader.h"
+
 RenderSurface::RenderSurface(Shader * _shader):
 	shader(_shader)
 {

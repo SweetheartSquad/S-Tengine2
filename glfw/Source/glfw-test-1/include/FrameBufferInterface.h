@@ -1,20 +1,24 @@
 #pragma once 
 
 #include <gl/glew.h>
-#include "Shader.h"
-#include "NodeRenderable.h"
+#include <vector>
+
+#include "FrameBufferChannel.h"
+#include "NodeResource.h"
 
 class FrameBufferInterface : public NodeResource{
 public:
 
 	GLuint frameBufferId;
-	GLuint textureBufferId;
+	GLuint textureBufferId; 
 	GLuint renderBufferId;
+
+	std::vector<FrameBufferChannel> frameBufferChannels;
 
 	unsigned long int width;
 	unsigned long int height;
 
-	FrameBufferInterface(unsigned long int _width, unsigned long int _height, bool _autoRelase);
+	FrameBufferInterface(std::vector<FrameBufferChannel> frameBufferChannels, unsigned long int _width, unsigned long int _height, bool _autoRelase);
 	~FrameBufferInterface();
 
 	/**Initializes the frame buffer, texture buffer and render buffer*/

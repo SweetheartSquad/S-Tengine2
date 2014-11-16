@@ -2,14 +2,14 @@
 
 uniform mat4 model;
 
-uniform struct Light{
+struct Light{
 	vec3 position;
 	vec3 intensities;
 	float ambientCoefficient;
 	float attenuation;
 };
 
-uniform struct Material{
+struct Material{
 	int type;
 	float shininess;
 	vec3 specularColor;
@@ -18,11 +18,11 @@ uniform struct Material{
 uniform Light lights[5];
 uniform int numLights;
 
-uniform sampler2D textureSampler[5];
-uniform int numTextures;
-
 uniform Material materials[5];
 uniform int numMaterials;
+
+uniform sampler2D textureSampler[5];
+uniform int numTextures;
 
 in vec3 fragVert;
 in vec3 fragNormal;
@@ -61,9 +61,8 @@ void main()
 		brightness += dot(normal, surfaceToLight) / (length(surfaceToLight) * length(normal));
 		outIntensities += vec3(lights[i].intensities);
 	}
-
-	brightness = clamp(brightness, 0.1, 1);
 	
+	brightness = clamp(brightness, 0.1, 1);
+ 
 	outColor = vec4(brightness * vec3(outIntensities), 1) * fragColorTex;
-
 }
