@@ -179,16 +179,16 @@ void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * 
 	
 	// Pass each material to the _shader
 	for(unsigned long int i = 0; i < materials.size(); i++){
-		const char * mat = GLUtils::buildGLArryReferenceString("materials[].materialType", i);
-		const char * shin = GLUtils::buildGLArryReferenceString("materials[].shininess", i);
-		const char * spec = GLUtils::buildGLArryReferenceString("materials[].specularColor", i);
-		GLuint typeUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), mat);
+		std::string mat = GLUtils::buildGLArrayReferenceString("materials[].materialType", i);
+		std::string shin = GLUtils::buildGLArrayReferenceString("materials[].shininess", i);
+		std::string spec = GLUtils::buildGLArrayReferenceString("materials[].specularColor", i);
+		GLuint typeUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), mat.c_str());
 		int materialType = (int)(materials.at(i)->data.type);
 		glUniform1i(typeUniformLocation, materialType);
-		GLuint shinyUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), shin);
+		GLuint shinyUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), shin.c_str());
 		int materialShininess = materials.at(i)->data.shininess;
 		glUniform1f(shinyUniformLocation, materialShininess);
-		GLuint specColorUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), spec);
+		GLuint specColorUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), spec.c_str());
 		glUniform3f(specColorUniformLocation, materials.at(i)->data.specularColor.x, materials.at(i)->data.specularColor.y, materials.at(i)->data.specularColor.z);
 	}
 
@@ -197,17 +197,17 @@ void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * 
 
 	// Pass the paramaters for each light to the _shader
 	for(unsigned long int i = 0; i < _renderStack->lights->size(); i++){
-		const char * pos = GLUtils::buildGLArryReferenceString(GL_UNIFORM_ID_LIGHTS_POSITION, i);
-		const char * ins = GLUtils::buildGLArryReferenceString(GL_UNIFORM_ID_LIGHTS_INTENSITIES, i);
-		const char * amb = GLUtils::buildGLArryReferenceString("lights[].ambientCoefficient", i);
-		const char * att = GLUtils::buildGLArryReferenceString("lights[].attenuation", i);
-		GLuint lightUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), pos);
+		std::string pos = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_POSITION, i);
+		std::string ins = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_INTENSITIES, i);
+		std::string amb = GLUtils::buildGLArrayReferenceString("lights[].ambientCoefficient", i);
+		std::string att = GLUtils::buildGLArrayReferenceString("lights[].attenuation", i);
+		GLuint lightUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), pos.c_str());
 		glUniform3f(lightUniformLocation, _renderStack->lights->at(i)->data.position.x, _renderStack->lights->at(i)->data.position.y, _renderStack->lights->at(i)->data.position.z);
-		GLuint intensitiesUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), ins);
+		GLuint intensitiesUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), ins.c_str());
 		glUniform3f(intensitiesUniformLocation, _renderStack->lights->at(i)->data.intensities.x, _renderStack->lights->at(i)->data.intensities.y, _renderStack->lights->at(i)->data.intensities.z);
-		GLuint ambientUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), amb);
+		GLuint ambientUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), amb.c_str());
 		glUniform1f(ambientUniformLocation, _renderStack->lights->at(i)->data.ambientCoefficient);
-		GLuint attenuationUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), att);
+		GLuint attenuationUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), att.c_str());
 		glUniform1f(attenuationUniformLocation, _renderStack->lights->at(i)->data.attenuation);
 	}
 }
