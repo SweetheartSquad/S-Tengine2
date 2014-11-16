@@ -54,9 +54,6 @@
     <ClCompile Include="..\src\CMD_Parent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CMD_RotateSelectedJoints.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -99,7 +96,10 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeSelectable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CMD_ScaleSelectedJoints.cpp">
+    <ClCompile Include="..\src\CMD_ScaleSelectedTransformable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CMD_RotateSelectedTransformable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -151,9 +151,6 @@
     <ClInclude Include="..\include\CMD_Parent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CMD_RotateSelectedJoints.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -202,7 +199,10 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeSelectable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CMD_ScaleSelectedJoints.h">
+    <ClInclude Include="..\include\CMD_ScaleSelectedTransformable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_RotateSelectedTransformable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

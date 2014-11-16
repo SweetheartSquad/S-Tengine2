@@ -35,10 +35,8 @@ void CMD_PlaceVoxel::execute(){
 	newPos = glm::inverse(modelMatrix) * newPos;
 
 	if(voxel == nullptr){
-		voxel = new Voxel();
-		voxel->pos = Vec3f(newPos.x, newPos.y, newPos.z);
-	}
-	j->voxels.push_back(voxel);
+		voxel = new Voxel(Vec3f(newPos.x, newPos.y, newPos.z), j);
+	};
 }
 
 void CMD_PlaceVoxel::unexecute(){

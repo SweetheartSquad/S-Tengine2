@@ -135,11 +135,13 @@ void Joint::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 					_matrixStack->translate(t.getTranslationMatrix());
 			
 					glUniformMatrix4fv(shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
+					shader->uniform("pickingColor", Color::hex(voxels.at(i)->pickingColor));
 					gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.06f, 16);
 				gl::popModelView();
 				_matrixStack->popMatrix();
 			}
 		
+			shader->uniform("pickingColor", Color::hex(pickingColor));
 			//draw bones
 			for(NodeHierarchical * child : children){
 				Vec3d cinderTrans(

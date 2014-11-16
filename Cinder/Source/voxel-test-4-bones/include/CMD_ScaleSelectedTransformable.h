@@ -6,11 +6,11 @@
 
 #include "Command.h"
 
-class CMD_ScaleSelectedJoints : public Command{
+class CMD_ScaleSelectedTransformable : public Command{
 public:
 	// Relative move will move by _v, non-relative move will move to _v
-	CMD_ScaleSelectedJoints(ci::Vec3d _v);
-	~CMD_ScaleSelectedJoints(void);
+	CMD_ScaleSelectedTransformable(ci::Vec3d _v);
+	~CMD_ScaleSelectedTransformable(void);
 
 	void execute();
 	void unexecute();

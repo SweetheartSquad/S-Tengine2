@@ -7,8 +7,8 @@
 #include "CMD_DeleteJoint.h"
 #include "CMD_SelectNodes.h"
 #include "CMD_MoveSelectedJoints.h"
-#include "CMD_ScaleSelectedJoints.h"
-#include "CMD_RotateSelectedJoints.h"
+#include "CMD_ScaleSelectedTransformable.h"
+#include "CMD_RotateSelectedTransformable.h"
 #include "CMD_KeyProperty.h"
 #include "CMD_KeyAll.h"
 #include "CMD_Parent.h"
@@ -308,10 +308,21 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 		gl::pushMatrices();
 			gl::enableWireframe();
 			for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
-				gl::pushMatrices();
-					gl::translate((dynamic_cast<Joint *>(UI::selectedNodes.at(i)))->getPos(false));
-					gl::drawSphere(Vec3f(0,0,0), 0.06f);
-				gl::popMatrices();
+				Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
+				if(j != NULL){
+					gl::pushMatrices();
+						gl::translate(j->getPos(false));
+						gl::drawSphere(Vec3f(0,0,0), 0.06f);
+					gl::popMatrices();
+				}else{
+					Voxel * v = dynamic_cast<Voxel *>(UI::selectedNodes.at(i));
+					if(v != NULL){
+						gl::pushMatrices();
+							gl::translate(v->parent->getPos(false));
+							gl::drawSphere(v->pos, 0.06f);
+						gl::popMatrices();
+					}
+				}
 			}
 			gl::disableWireframe();
 
@@ -522,9 +533,9 @@ void CinderApp::mouseDown( MouseEvent event ){
 		}else if(mode == SELECT){
 			unsigned long int jointColour;
 			pickColour(&jointColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
-			Joint * selection = nullptr;
+			NodeSelectable * selection = nullptr;
 			if(NodeSelectable::pickingMap.count(jointColour) == 1){
-				selection = dynamic_cast<Joint *>(NodeSelectable::pickingMap.at(jointColour));
+				selection = dynamic_cast<NodeSelectable *>(NodeSelectable::pickingMap.at(jointColour));
 			}
 			cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
 		}else if(mode == PAINT_VOXELS){
@@ -565,7 +576,8 @@ void CinderApp::mouseDrag( MouseEvent event ){
 								case 0xFF0000: dir.x -= 10; break;
 								case 0x00FF00: dir.y -= 10; break;
 								case 0x0000FF: dir.z -= 10; break;
-								case 0xFFFF00: dir.x -= 10; dir.y -= 10; dir.z -= 10; break;
+								//case 0xFFFF00: dir.x -= 10; dir.y -= 10; dir.z -= 10; break;
+								case 0xFFFF00: dir = sourceCam->getViewDirection()*-10; break;
 							}
 						
 							Vec2i end = sourceCam->worldToScreen(UI::handlePos + dir, sourceRect->getWidth(), sourceRect->getHeight());
@@ -580,7 +592,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 							case 0xFF0000: axis.x -= 1; break;
 							case 0x00FF00: axis.y -= 1; break;
 							case 0x0000FF: axis.z -= 1; break;
-							case 0xFFFF00: axis.x -= 1; axis.y -= 1; axis.z -= 1; break;
+							case 0xFFFF00: axis = glm::vec3(sourceCam->getViewDirection().x, sourceCam->getViewDirection().y, sourceCam->getViewDirection().z); break;
 						}
 						if(UI::selectedNodes.size() > 0){
 							Vec2i dif1 = oldMousePos - handlePosInScreen-sourceRect->getUpperLeft();
@@ -596,7 +608,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 							eulerAngles.y *= axis.y;
 							eulerAngles.z *= axis.z;
 
-							cmdProc.executeCommand(new CMD_RotateSelectedJoints(glm::quat(eulerAngles), true));
+							cmdProc.executeCommand(new CMD_RotateSelectedTransformable(glm::quat(eulerAngles), true));
 						}
 					}else if(mode == SCALE){
 						if(UI::selectedNodes.size() > 0){
@@ -615,7 +627,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 							
 							console() << dif << std::endl;
 
-							cmdProc.executeCommand(new CMD_ScaleSelectedJoints(Vec3f(1,1,1) + Vec3d(dir.x, dir.y, dir.z)*dif/100.f));
+							cmdProc.executeCommand(new CMD_ScaleSelectedTransformable(Vec3f(1,1,1) + Vec3d(dir.x, dir.y, dir.z)*dif/100.f));
 						}
 					}
 				}
