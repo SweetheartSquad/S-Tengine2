@@ -242,10 +242,15 @@ void MainScene::render(){
 }
 
 void MainScene::onContextChange(){
-	frameBuffer->reload();
-	depthBuffer->reload();
+	frameBuffer->unload();
+	depthBuffer->unload();
 	depthShader->unload();
-	depthShader->load();
-	renderSurface->reload();
+	renderSurface->unload();
+	
 	Scene::onContextChange();
+
+	frameBuffer->load();
+	depthBuffer->load();
+	depthShader->load();
+	renderSurface->load();
 }
