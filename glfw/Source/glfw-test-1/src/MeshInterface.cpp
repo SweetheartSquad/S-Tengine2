@@ -3,6 +3,7 @@
 #include "MeshInterface.h"
 #include "RenderOptions.h"
 #include "Texture.h"
+#include "Material.h"
 #include "MatrixStack.h"
 
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
@@ -24,6 +25,9 @@ MeshInterface::~MeshInterface(){
 	glDeleteBuffers(1, &iboId);
 	for(Texture * t : textures){
 		t->decrementAndDelete();
+	}
+	for(Material * m : materials){
+		m->decrementAndDelete();
 	}
 	vaoId = 0;
 	vboId = 0;
@@ -170,6 +174,17 @@ void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * 
 	GLuint modelUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX);
 	glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
 
+	// Pass the _shader the number of materials
+	glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), "numMaterials"), materials.size());
+	
+	// Pass each material to the _shader
+	for(unsigned long int i = 0; i < materials.size(); i++){
+		const char * mat = GLUtils::buildGLArryReferenceString("materials[].materialType", i);
+		GLuint materialUniformLocation = glGetUniformLocation(_renderStack->shader->getProgramId(), mat);
+		int materialType = static_cast<int>(materials.at(i)->data.type);
+		glUniform1f(materialUniformLocation, materialType);
+	}
+
 	// Pass the _shader the number of lights
 	glUniform1i(glGetUniformLocation(_renderStack->shader->getProgramId(), GL_UNIFORM_ID_NUM_LIGHTS), _renderStack->lights->size());
 
@@ -209,6 +224,11 @@ void MeshInterface::pushVert(Vertex _vertex){
 void MeshInterface::pushTexture2D(Texture* _texture){
 	++_texture->referenceCount;
 	textures.push_back(_texture);
+}
+
+void MeshInterface::pushMaterial(Material* _material){
+	++_material->referenceCount;
+	materials.push_back(_material);
 }
 
 void MeshInterface::setNormal(unsigned long int _vertId, float _x, float _y, float _z){

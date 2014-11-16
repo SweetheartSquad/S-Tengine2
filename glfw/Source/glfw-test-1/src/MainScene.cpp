@@ -5,6 +5,7 @@
 #include "FakeAnimation.h"
 #include "VoxelMesh.h"
 #include "Texture.h"
+#include "Material.h"
 
 Cube * cube;
 Cube * cube2;
@@ -15,6 +16,9 @@ Light glight;
 
 Texture * tex;
 Texture * voxTex;
+
+Material * mat;
+Material * bMat;
 
 Shader * texShader;
 Shader * voxShader;
@@ -54,6 +58,9 @@ MainScene::MainScene(Game * _game):
 
 	tex = new Texture("../assets/uv-test.jpg", 1000, 1000, true, true);
 	voxTex = new Texture("../assets/voxel-texture.png", 512, 512, true, true);
+
+	mat = new Material(Phong, true);
+	bMat = new Material(Blinn, true);
 
 	Transform *t = new Transform();
 	t->translateX(-2);
