@@ -3,7 +3,7 @@
 #include "CMD_KeyProperty.h"
 #include "CMD_AddKeyframe.h"
 #include "CMD_EditKeyframe.h"
-#include "Keyframe.h"
+#include "Tween.h"
 #include "Animation.h"
 #include <algorithm>
 
@@ -16,12 +16,12 @@ CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _time, float _val
 	value(_value),
 	interpolation(_interpolation)
 {
-	Keyframe * k = findKeyframe(&animation->keyframes);
+	int idx = findKeyframe(&animation->tweens);
 
-	if(k == nullptr){
-		subCommands.push_back(new CMD_AddKeyframe(&animation->keyframes, time, value, interpolation));
+	if(idx > 0){
+		subCommands.push_back(new CMD_EditKeyframe(animation, value, interpolation, idx));
 	}else{
-		subCommands.push_back(new CMD_EditKeyframe(&animation->keyframes, k, k->startValue, value, interpolation));
+		subCommands.push_back(new CMD_AddKeyframe(animation, time, value, interpolation, idx));
 	}
 }
 
@@ -34,14 +34,41 @@ void CMD_KeyProperty::unexecute(){
 	subCommands.at(0)->unexecute();
 }
 
-Keyframe * CMD_KeyProperty::findKeyframe(std::vector<Keyframe> * _keyframes){
-	Keyframe * k = nullptr;
-	for(unsigned long int i = 0; i < _keyframes->size(); ++i){
-		if(_keyframes->at(i).time == time){
-			k = &_keyframes->at(i);
+int CMD_KeyProperty::findKeyframe(std::vector<Tween> * _tweens){
+	// find index of tween
+	int idx = -1;
+	float sumTime = 0;
+
+	for(unsigned long int i = 0; i < _tweens->size(); ++i){
+		sumTime += _tweens->at(i).deltaTime;
+		if(sumTime == time){
+			idx = i;
+			break;
 		}
 	}
-	return k;
+
+	return idx;
+}
+
+float CMD_KeyProperty::getStartValue(int _idx){
+	
+	float value = animation->startValue;
+
+	for(unsigned long int i = 0; i < _idx; ++i){
+		value += animation->tweens.at(i).deltaValue;
+	}
+
+	return value;
+}
+
+float CMD_KeyProperty::getEndValue(int _idx){
+	float value = animation->startValue;
+
+	for(unsigned long int i = 0; i = _idx; ++i){
+		value += animation->tweens.at(i).deltaValue;
+	}
+
+	return value;
 }
 
 CMD_KeyProperty::~CMD_KeyProperty(){

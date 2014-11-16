@@ -2,12 +2,13 @@
 
 #include "Command.h"
 #include <vector>
-#include "Keyframe.h"
+#include "Tween.h"
+#include "Animation.h"
 
 class CMD_AddKeyframe : public Command
 {
 public:
-	CMD_AddKeyframe(std::vector<Keyframe> * _keyframes, float _time, float _value, Easing::Type _interpolation);
+	CMD_AddKeyframe(Animation * _animation, float _time, float _value, Easing::Type _interpolation);
 	~CMD_AddKeyframe();
 
 	void execute();
@@ -15,11 +16,24 @@ public:
 
 private:
 
-	Keyframe keyframe;
-	std::vector<Keyframe> * keyframes;
+	Animation copyAnimation;
 
-	float followingStartValue;
-	float nextDeltaTime;
-	float nextDeltaValue;
+	Tween tween;
+	std::vector<Tween> * tweens;
+
+	/*float deltaTime;
+	float deltaValue;
+	Easing::Type interpolation;*/
+
+	int nextTweenIdx; // -1 if END
+	float nextTween_oldDeltaTime;
+	float nextTween_oldDeltaValue;
+
+	float nextTween_newDeltaTime;
+	float nextTween_newDeltaValue;
+	
+	int getNextTween(float _time);
+	float getTweenEndTime(int _idx);
+	float getTweenEndValue(int _idx, float _startValue);
 
 };

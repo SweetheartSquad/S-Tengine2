@@ -4,38 +4,41 @@
 
 #include <algorithm>
 
-
 #include <cinder/app/AppBasic.h>
 
-CMD_AddKeyframe::CMD_AddKeyframe(std::vector<Keyframe> * _keyframes, float _time, float _value, Easing::Type _interpolation) :
-	keyframes(_keyframes),
-	keyframe(Keyframe(0,0,_interpolation)),
-	followingStartValue(NULL)
+CMD_AddKeyframe::CMD_AddKeyframe(Animation * _animation, float _time, float _value, Easing::Type _interpolation) :
+	copyAnimation(Animation(* _animation)),
+	tweens(&_animation->tweens),
+	tween(Tween(0,0,_interpolation))
 {
-	ci::app::console() << "TIME: " << _time << std::endl;
-	// Find insert iterator and set startValue of new keyframe
-	std::vector<Keyframe>::iterator followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),keyframe,Keyframe::keyframe_compare);
+	// Get index of next tween, if it exists, else -1
+	nextTweenIdx = getNextTween(_time);
 
-	// If a previous keyframe exists
-	if(followingKeyframe_it != keyframes->end() && followingKeyframe_it->time != keyframes->front().time){
-		// get previous keyframe
-		std::vector<Keyframe>::iterator previousKeyframe;
-		previousKeyframe = std::prev(followingKeyframe_it);
-		ci::app::console() << "previous frame: " << previousKeyframe->time << std::endl;
-		// calculate and set delta values
-		keyframe.deltaTime = keyframe.deltaTime - previousKeyframe->deltaTime;
-		keyframe.deltaValue = keyframe.deltaValue - previousKeyframe->deltaValue;
+	// Calculate deltaTime and deltaValue of new tween
+
+	// delta time
+	tween.deltaTime = _time;
+	tween.deltaValue = _value;
+	if(nextTweenIdx >= 0){
+		// subtract from end time and value of tween before next tween, else they are time and value
+		if(nextTweenIdx != 0){
+			tween.deltaTime = _time - getTweenEndTime(nextTweenIdx - 1);
+			tween.deltaValue = _value - getTweenEndValue(nextTweenIdx - 1, _animation->startValue);
+		}
 	}else{
-		// set delta values
-		ci::app::console() << "no previous frame" << std::endl;
-		keyframe.deltaTime = 0;
-		keyframe.deltaValue = 0;
+		// subtract from end time and value of last tween
+		tween.deltaTime = _time - getTweenEndTime(tweens->size() - 1);
+		tween.deltaTime = _value - getTweenEndValue(tweens->size() - 1, _animation->startValue);
 	}
 
-	// Get deltaTime and deltaValue of next keyframe
-	if(followingKeyframe_it != keyframes->end()){
-		nextDeltaTime = followingKeyframe_it->deltaTime;
-		nextDeltaValue = followingKeyframe_it->deltaValue;
+	// save and calculate new delta times and values of next tween (being split)
+	if(nextTweenIdx >= 0) {
+		// get old values
+		nextTween_oldDeltaTime = tweens->at(nextTweenIdx).deltaTime;
+		nextTween_oldDeltaValue = tweens->at(nextTweenIdx).deltaValue;
+		// calculate new values
+		nextTween_newDeltaTime = tweens->at(nextTweenIdx).deltaTime - tween.deltaTime;
+		nextTween_newDeltaValue = getTweenEndValue(nextTweenIdx, _animation->startValue) - _value;
 	}
 }
 
@@ -43,34 +46,78 @@ void CMD_AddKeyframe::execute(){
 	ci::app::console() << "execute CMD_AddKeyframe" << std::endl;
 	
 	// Add keyframe
-	std::vector<Keyframe>::iterator followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),keyframe,Keyframe::keyframe_compare);
-	keyframes->insert(followingKeyframe_it,keyframe);
+	std::vector<Tween>::iterator nextTween_it;
+	if(nextTweenIdx >= 0){
+		nextTween_it = tweens->begin() + nextTweenIdx;
+	}else{
+		nextTween_it = tweens->end();
+	}
+	
+	tweens->insert(nextTween_it,tween);
 
-	// Get the new iterator after insert
-	followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),keyframe,Keyframe::keyframe_compare);
+	if(nextTweenIdx >=0){
+		// Get the new iterator from the new position after insert
+		nextTween_it = tweens->begin() + nextTweenIdx + 1;
 
-	// Change next keyframe's start value
-	if (followingKeyframe_it != keyframes->end()){
 		// d2 - d1
-		followingKeyframe_it->startValue = keyframe.value;
+		nextTween_it->deltaTime = nextTween_newDeltaTime;
+		nextTween_it->deltaValue = nextTween_newDeltaValue;
 	}
 }
 
 void CMD_AddKeyframe::unexecute(){
 	// Remove keyframe
-	for(unsigned long int i = 0; i < keyframes->size(); ++i){
-		if(keyframes->at(i).time == keyframe.time){
-			keyframes->erase(keyframes->begin() + i);
+
+	if(nextTweenIdx >= 0){
+		// after inserting, tween is in nextTweenIdx
+		tweens->erase(tweens->begin() + nextTweenIdx);
+	}else{
+		tweens->erase(tweens->begin() + tweens->size() - 1);
+	}
+
+	if(nextTweenIdx >=0){
+		// after erasing, nextTweenIdx is the actual next tween
+		std::vector<Tween>::iterator nextTween_it = tweens->begin() + nextTweenIdx;
+
+		// Restore old delta time and value
+		nextTween_it->deltaTime = nextTween_oldDeltaTime;
+		nextTween_it->deltaValue = nextTween_oldDeltaValue;
+	}
+}
+
+int CMD_AddKeyframe::getNextTween(float _time){
+	// find index of next tween
+	int idx = -1;
+	float sumTime = 0;
+
+	for(unsigned long int i = 0; i < tweens->size(); ++i){
+		sumTime += tweens->at(i).deltaTime;
+		if(sumTime > _time){
+			idx = i;
 			break;
 		}
 	}
+	return idx;
+}
 
-	std::vector<Keyframe>::iterator followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),keyframe,Keyframe::keyframe_compare);
-
-	// Restore next keyframe's start value
-	if (followingKeyframe_it != keyframes->end()){
-		followingKeyframe_it->startValue = followingStartValue;
+float CMD_AddKeyframe::getTweenEndTime(int _idx){
+	float time = 0;
+	
+	for(unsigned long int i = 0; i = _idx; ++i){
+		time += tweens->at(i).deltaTime;
 	}
+
+	return time;
+}
+
+float CMD_AddKeyframe::getTweenEndValue(int _idx, float _startValue){
+	float value = _startValue;
+
+	for(unsigned long int i = 0; i = _idx; ++i){
+		value += tweens->at(i).deltaValue;
+	}
+
+	return value;
 }
 
 CMD_AddKeyframe::~CMD_AddKeyframe()

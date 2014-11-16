@@ -13,6 +13,17 @@ Animation::Animation(float * _prop) :
 {
 }
 
+Animation::Animation(const Animation & _animation) :
+	prop(new float(*_animation.prop)),
+	currentTime(_animation.currentTime),
+	currentTween(_animation.currentTween),
+	loopType(_animation.loopType),
+	referenceValue(_animation.referenceValue),
+	startValue(_animation.startValue),
+	tweens(_animation.tweens)
+{
+}
+
 void Animation::update(Step * _step){
 	if(tweens.size() > 0){
 		currentTime += _step->deltaTime;

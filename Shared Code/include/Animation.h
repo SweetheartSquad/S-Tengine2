@@ -11,6 +11,7 @@ class Animation : public NodeUpdatable
 {
 public:
 	explicit Animation(float * _prop);
+	Animation(const Animation &_animation);
 	~Animation();
 
 	float * prop;

@@ -3,12 +3,13 @@
 #include "Command.h"
 #include "Easing.h"
 
-class Keyframe;
+class Tween;
+class Animation;
 
 class CMD_EditKeyframe : public Command
 {
 public:
-	CMD_EditKeyframe(std::vector<Keyframe> * _keyframes, Keyframe * _keyframe, float _startValue, float _value, Easing::Type _interpolation);
+	CMD_EditKeyframe(Animation * _animation, float _value, Easing::Type _interpolation, int _idx);
 	~CMD_EditKeyframe();
 
 	void execute();
@@ -17,17 +18,24 @@ public:
 private:
 	Keyframe * keyframe;
 	std::vector<Keyframe> * keyframes;
-
-	float oldStartValue;
-	float oldValue;
+	
+	// ??? float oldDeltaTime;
+	float oldDeltaValue;
 	Easing::Type oldInterpolation;
 
-	float startValue;
-	float value;
+	// ??? float deltaTime;
+	float deltaValue;
 	Easing::Type interpolation;
 
-	float followingStartValue;
-	float nextDeltaTime;
-	float nextDeltaValue;
+	int nextTweenIdx; // -1 if END
+	float nextTween_oldDeltaTime;
+	float nextTween_oldDeltaValue;
+
+	float nextTween_newDeltaTime;
+	float nextTween_newDeltaValue;
+	
+	int getNextTween(int _idx);
+	float getTweenEndTime(int _idx);
+	float getTweenEndValue(int _idx, float _startValue);
 	
 };

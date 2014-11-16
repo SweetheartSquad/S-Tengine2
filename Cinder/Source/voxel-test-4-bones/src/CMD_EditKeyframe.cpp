@@ -60,6 +60,36 @@ void CMD_EditKeyframe::unexecute(){
 	}
 }
 
+int CMD_EditKeyframe::getNextTween(int _idx){
+	// find index of next tween
+	int idx = -1;
+
+	if(tweens->size() > 0 && idx != tweens->size()){
+		idx = idx + 1;
+	}
+	return idx;
+}
+
+float CMD_EditKeyframe::getTweenEndTime(int _idx){
+	float time = 0;
+	
+	for(unsigned long int i = 0; i = _idx; ++i){
+		time += tweens->at(i).deltaTime;
+	}
+
+	return time;
+}
+
+float CMD_EditKeyframe::getTweenEndValue(int _idx, float _startValue){
+	float value = _startValue;
+
+	for(unsigned long int i = 0; i = _idx; ++i){
+		value += tweens->at(i).deltaValue;
+	}
+
+	return value;
+}
+
 CMD_EditKeyframe::~CMD_EditKeyframe()
 {
 }
