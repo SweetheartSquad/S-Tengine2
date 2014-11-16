@@ -5,11 +5,11 @@
 #include "Tween.h"
 #include "Animation.h"
 
-class CMD_AddKeyframe : public Command
+class CMD_AddTween : public Command
 {
 public:
-	CMD_AddKeyframe(Animation * _animation, float _time, float _value, Easing::Type _interpolation);
-	~CMD_AddKeyframe();
+	CMD_AddTween(Animation * _animation, float _time, float _value, Easing::Type _interpolation);
+	~CMD_AddTween();
 
 	void execute();
 	void unexecute();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CMD_EditKeyframe.h"
+#include "CMD_EditTween.h"
 #include "Animation.h"
 #include "Tween.h"
 #include <algorithm>
@@ -8,7 +8,7 @@
 
 #include <cinder/app/AppBasic.h>
 
-CMD_EditKeyframe::CMD_EditKeyframe(Animation * _animation, float _value, Easing::Type _interpolation, int _idx) :
+CMD_EditTween::CMD_EditTween(Animation * _animation, float _value, Easing::Type _interpolation, int _idx) :
 	animation(_animation),
 	tweens(&_animation->tweens),
 	tween(&_animation->tweens.at(_idx)),
@@ -51,8 +51,8 @@ CMD_EditKeyframe::CMD_EditKeyframe(Animation * _animation, float _value, Easing:
 	}
 }
 
-void CMD_EditKeyframe::execute(){
-	ci::app::console() << "execute CMD_EditKeyframe" << std::endl;
+void CMD_EditTween::execute(){
+	ci::app::console() << "execute CMD_EditTween" << std::endl;
 
 	tween->deltaValue = deltaValue;
 	tween->interpolation = interpolation;
@@ -70,7 +70,7 @@ void CMD_EditKeyframe::execute(){
 	}
 }
 
-void CMD_EditKeyframe::unexecute(){
+void CMD_EditTween::unexecute(){
 	tween->deltaValue = oldDeltaValue;
 	tween->interpolation = oldInterpolation;
 
@@ -87,17 +87,17 @@ void CMD_EditKeyframe::unexecute(){
 	}
 }
 
-int CMD_EditKeyframe::getNextTween(int _idx){
+int CMD_EditTween::getNextTween(int _idx){
 	// find index of next tween
 	int idx = -1;
 
-	if(tweens->size() > 0 && idx != tweens->size()){
+	if(tweens->size() > 0 && _idx != tweens->size() - 1){
 		idx = _idx + 1;
 	}
 	return idx;
 }
 
-float CMD_EditKeyframe::getTweenEndTime(int _idx){
+float CMD_EditTween::getTweenEndTime(int _idx){
 	float time = 0;
 	
 	for(unsigned long int i = 0; i <= _idx; ++i){
@@ -107,7 +107,7 @@ float CMD_EditKeyframe::getTweenEndTime(int _idx){
 	return time;
 }
 
-float CMD_EditKeyframe::getTweenEndValue(int _idx, float _startValue){
+float CMD_EditTween::getTweenEndValue(int _idx, float _startValue){
 	float value = _startValue;
 
 	for(unsigned long int i = 0; i <= _idx; ++i){
@@ -117,6 +117,6 @@ float CMD_EditKeyframe::getTweenEndValue(int _idx, float _startValue){
 	return value;
 }
 
-CMD_EditKeyframe::~CMD_EditKeyframe()
+CMD_EditTween::~CMD_EditTween()
 {
 }

@@ -91,6 +91,8 @@ public:
 		unsigned char b = (unsigned char)(color.b * 255);
 		return b + (g << 8) + (r << 16);
 	};
+
+	void togglePlay();
 protected:
 	//params
 	bool drawParams;
@@ -176,5 +178,6 @@ protected:
 	// Commands
 	CommandProcessor cmdProc;
 
-	
+	// Animation
+	bool play;
 };

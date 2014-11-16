@@ -53,6 +53,10 @@ void CinderApp::setup(){
 	timelineParams->addParam("Time", &UI::time);
 
 	timelineParams->addButton("Add/Edit Keyframe", std::bind(&CinderApp::setKeyframe, this));
+
+	timelineParams->addSeparator();
+	timelineParams->addButton("togglePlay", std::bind(&CinderApp::togglePlay, this));
+	timelineParams->addText("Status: ", "label=`STOPPED`");
 	
 
 	// note: we will setup our camera in the 'resize' function,
@@ -86,7 +90,7 @@ void CinderApp::setup(){
 	////joints.push_back(new Joint(joints.at(0)));
 
 	//joints.at(0)->translateZ.tweens = tweens;
-
+	play = false;
 }
 
 
@@ -158,11 +162,13 @@ void CinderApp::shutdown(){
 }
 
 void CinderApp::update(){
-	/*Step s;
-	s.deltaTime = 1;
-	for(unsigned long int i = 0; i < joints.size(); ++i){
-		joints.at(i)->update(&s);
-	}*/
+	if(play){
+		Step s;
+		s.deltaTime = 0.1;
+		for(unsigned long int i = 0; i < joints.size(); ++i){
+			joints.at(i)->update(&s);
+		}
+	}
 }
 
 void CinderApp::draw(){
@@ -922,6 +928,16 @@ void CinderApp::setKeyframe(){
 			cmdProc.executeCommand(new CMD_KeyAll(UI::time));
 		}
 	}
+}
+
+void CinderApp::togglePlay(){
+	if (!play){
+		timelineParams->setOptions( "togglePlay", "label=`PLAYING`" );
+	}else{
+		timelineParams->setOptions( "togglePlay", "label=`STOPPED`" );
+	}
+
+	play = !play;
 }
 
 

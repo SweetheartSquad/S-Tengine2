@@ -1,12 +1,12 @@
 #pragma once
 
-#include "CMD_AddKeyframe.h"
+#include "CMD_AddTween.h"
 
 #include <algorithm>
 
 #include <cinder/app/AppBasic.h>
 
-CMD_AddKeyframe::CMD_AddKeyframe(Animation * _animation, float _time, float _value, Easing::Type _interpolation) :
+CMD_AddTween::CMD_AddTween(Animation * _animation, float _time, float _value, Easing::Type _interpolation) :
 	animation(_animation),
 	tweens(&_animation->tweens),
 	tween(Tween(0,0,_interpolation)),
@@ -50,8 +50,8 @@ CMD_AddKeyframe::CMD_AddKeyframe(Animation * _animation, float _time, float _val
 	}
 }
 
-void CMD_AddKeyframe::execute(){
-	ci::app::console() << "execute CMD_AddKeyframe" << std::endl;
+void CMD_AddTween::execute(){
+	ci::app::console() << "execute CMD_AddTween" << std::endl;
 	
 	// Add keyframe
 	std::vector<Tween>::iterator nextTween_it;
@@ -78,7 +78,7 @@ void CMD_AddKeyframe::execute(){
 	}
 }
 
-void CMD_AddKeyframe::unexecute(){
+void CMD_AddTween::unexecute(){
 	// Remove keyframe
 
 	if(nextTweenIdx >= 0){
@@ -103,7 +103,7 @@ void CMD_AddKeyframe::unexecute(){
 	}
 }
 
-int CMD_AddKeyframe::getNextTween(float _time){
+int CMD_AddTween::getNextTween(float _time){
 	// find index of next tween
 	int idx = -1;
 	float sumTime = 0;
@@ -118,7 +118,7 @@ int CMD_AddKeyframe::getNextTween(float _time){
 	return idx;
 }
 
-float CMD_AddKeyframe::getTweenEndTime(int _idx){
+float CMD_AddTween::getTweenEndTime(int _idx){
 	float time = 0;
 	
 	for(unsigned long int i = 0; i <= _idx; ++i){
@@ -128,7 +128,7 @@ float CMD_AddKeyframe::getTweenEndTime(int _idx){
 	return time;
 }
 
-float CMD_AddKeyframe::getTweenEndValue(int _idx, float _startValue){
+float CMD_AddTween::getTweenEndValue(int _idx, float _startValue){
 	float value = _startValue;
 
 	for(unsigned long int i = 0; i <= _idx; ++i){
@@ -138,6 +138,6 @@ float CMD_AddKeyframe::getTweenEndValue(int _idx, float _startValue){
 	return value;
 }
 
-CMD_AddKeyframe::~CMD_AddKeyframe()
+CMD_AddTween::~CMD_AddTween()
 {
 }

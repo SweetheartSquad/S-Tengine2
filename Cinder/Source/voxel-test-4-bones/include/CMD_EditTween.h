@@ -6,11 +6,11 @@
 class Tween;
 class Animation;
 
-class CMD_EditKeyframe : public Command
+class CMD_EditTween : public Command
 {
 public:
-	CMD_EditKeyframe(Animation * _animation, float _value, Easing::Type _interpolation, int _idx);
-	~CMD_EditKeyframe();
+	CMD_EditTween(Animation * _animation, float _value, Easing::Type _interpolation, int _idx);
+	~CMD_EditTween();
 
 	void execute();
 	void unexecute();

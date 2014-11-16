@@ -1,8 +1,8 @@
 #pragma once
 
 #include "CMD_KeyProperty.h"
-#include "CMD_AddKeyframe.h"
-#include "CMD_EditKeyframe.h"
+#include "CMD_AddTween.h"
+#include "CMD_EditTween.h"
 #include "Tween.h"
 #include "Animation.h"
 #include <algorithm>
@@ -19,9 +19,9 @@ CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _time, float _val
 	int idx = findKeyframe(&animation->tweens);
 
 	if(idx >= 0){
-		subCommands.push_back(new CMD_EditKeyframe(animation, value, interpolation, idx));
+		subCommands.push_back(new CMD_EditTween(animation, value, interpolation, idx));
 	}else{
-		subCommands.push_back(new CMD_AddKeyframe(animation, time, value, interpolation));
+		subCommands.push_back(new CMD_AddTween(animation, time, value, interpolation));
 	}
 }
 
