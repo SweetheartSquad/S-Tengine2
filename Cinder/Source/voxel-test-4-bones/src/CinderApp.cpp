@@ -8,8 +8,8 @@
 #include "CMD_SelectNodes.h"
 #include "CMD_MoveSelectedJoints.h"
 #include "CMD_RotateSelectedJoints.h"
-//#include "CMD_KeyProperty.h"
-//#include "CMD_KeyAll.h"
+#include "CMD_KeyProperty.h"
+#include "CMD_KeyAll.h"
 #include "CMD_Parent.h"
 #include "CMD_PlaceVoxel.h"
 
@@ -75,17 +75,17 @@ void CinderApp::setup(){
 	mode = CREATE;
 
 
-	// test animation
-	vector<Tween> tweens;
-	tweens.push_back(Tween(25, 0.1, Easing::Type::kEASE_OUT_BOUNCE));
-	tweens.push_back(Tween(25, -0.5, Easing::Type::kEASE_IN_CUBIC));
-	
-	cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,0,0), nullptr));
-	cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,1,0), joints.at(0)));
-	//joints.push_back(new Joint());
-	//joints.push_back(new Joint(joints.at(0)));
+	//// test animation
+	//vector<Tween> tweens;
+	//tweens.push_back(Tween(25, 0.1, Easing::Type::kEASE_OUT_BOUNCE));
+	//tweens.push_back(Tween(25, -0.5, Easing::Type::kEASE_IN_CUBIC));
+	//
+	//cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,0,0), nullptr));
+	//cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,1,0), joints.at(0)));
+	////joints.push_back(new Joint());
+	////joints.push_back(new Joint(joints.at(0)));
 
-	joints.at(0)->translateZ.tweens = tweens;
+	//joints.at(0)->translateZ.tweens = tweens;
 
 }
 
@@ -158,11 +158,11 @@ void CinderApp::shutdown(){
 }
 
 void CinderApp::update(){
-	Step s;
+	/*Step s;
 	s.deltaTime = 1;
 	for(unsigned long int i = 0; i < joints.size(); ++i){
 		joints.at(i)->update(&s);
-	}
+	}*/
 }
 
 void CinderApp::draw(){
@@ -919,7 +919,7 @@ void CinderApp::loadSkeleton() {
 void CinderApp::setKeyframe(){
 	if(UI::selectedNodes.size() != 0){
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
-			//cmdProc.executeCommand(new CMD_KeyAll(UI::time));
+			cmdProc.executeCommand(new CMD_KeyAll(UI::time));
 		}
 	}
 }

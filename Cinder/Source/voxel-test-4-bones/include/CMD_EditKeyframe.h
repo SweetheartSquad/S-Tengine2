@@ -16,6 +16,10 @@ public:
 	void unexecute();
 
 private:
+	// If keying time 0
+	Animation * animation;
+	float startValue;
+	float oldStartValue;
 
 	Tween * tween;
 	std::vector<Tween> * tweens;

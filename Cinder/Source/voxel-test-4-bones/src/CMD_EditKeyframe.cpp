@@ -9,9 +9,11 @@
 #include <cinder/app/AppBasic.h>
 
 CMD_EditKeyframe::CMD_EditKeyframe(Animation * _animation, float _value, Easing::Type _interpolation, int _idx) :
+	animation(_animation),
 	tweens(&_animation->tweens),
 	tween(&_animation->tweens.at(_idx)),
-	interpolation(_interpolation)
+	interpolation(_interpolation),
+	startValue(NULL)
 {
 	// Get index of next tween, if it exists, else -1
 	nextTweenIdx = getNextTween(_idx);
@@ -20,15 +22,24 @@ CMD_EditKeyframe::CMD_EditKeyframe(Animation * _animation, float _value, Easing:
 	oldDeltaValue = tween->deltaValue;
 
 	// Calculate deltaTime(?) and deltaValue of edited tween
-	tween->deltaValue = _value;
+	deltaValue = _value;
 	if(nextTweenIdx >= 0){
-		// subtract from end time and value of tween before next tween, else they are time and value
+		// subtract from end time and value of tween before this tween, else they are time and value
 		if(nextTweenIdx != 0){
-			tween->deltaValue = _value - getTweenEndValue(nextTweenIdx - 1, _animation->startValue);
+			deltaValue = _value - getTweenEndValue(_idx - 1, _animation->startValue);
 		}
 	}else{
-		// subtract from end time(?) and value of last tween
-		tween->deltaTime = _value - getTweenEndValue(tweens->size() - 1, _animation->startValue);
+		// subtract from end time and value of last tween, if there are any, else they are time and value
+		if(tweens->size() > 0){
+			deltaValue = _value - getTweenEndValue(tweens->size() - 1, _animation->startValue);
+		}
+	}
+
+	//// if we edit time 0, deltaValue should be 0? set startValue?
+	if(getTweenEndTime(_idx) == 0){
+		startValue = _value;
+		oldStartValue = _animation->startValue;
+		deltaValue = 0;
 	}
 
 	// save and calculate new delta times and values of next tween (being split)
@@ -52,6 +63,11 @@ void CMD_EditKeyframe::execute(){
 			tweens->at(nextTweenIdx).deltaValue = nextTween_newDeltaValue;
 		}
 	}
+
+	// If we just keyed time 0, update startValue of animation
+	if(startValue != NULL){
+		animation->startValue = startValue;
+	}
 }
 
 void CMD_EditKeyframe::unexecute(){
@@ -64,6 +80,11 @@ void CMD_EditKeyframe::unexecute(){
 			tweens->at(nextTweenIdx).deltaValue = nextTween_oldDeltaValue;
 		}
 	}
+
+	// If we undid keying time 0, restore startValue of animation
+	if(startValue != NULL){
+		animation->startValue = oldStartValue;
+	}
 }
 
 int CMD_EditKeyframe::getNextTween(int _idx){
@@ -71,7 +92,7 @@ int CMD_EditKeyframe::getNextTween(int _idx){
 	int idx = -1;
 
 	if(tweens->size() > 0 && idx != tweens->size()){
-		idx = idx + 1;
+		idx = _idx + 1;
 	}
 	return idx;
 }
@@ -79,7 +100,7 @@ int CMD_EditKeyframe::getNextTween(int _idx){
 float CMD_EditKeyframe::getTweenEndTime(int _idx){
 	float time = 0;
 	
-	for(unsigned long int i = 0; i = _idx; ++i){
+	for(unsigned long int i = 0; i <= _idx; ++i){
 		time += tweens->at(i).deltaTime;
 	}
 
@@ -89,7 +110,7 @@ float CMD_EditKeyframe::getTweenEndTime(int _idx){
 float CMD_EditKeyframe::getTweenEndValue(int _idx, float _startValue){
 	float value = _startValue;
 
-	for(unsigned long int i = 0; i = _idx; ++i){
+	for(unsigned long int i = 0; i <= _idx; ++i){
 		value += tweens->at(i).deltaValue;
 	}
 

@@ -16,7 +16,10 @@ public:
 
 private:
 
-	Animation copyAnimation;
+	// If keying time 0
+	Animation * animation;
+	float startValue;
+	float oldStartValue;
 
 	Tween tween;
 	std::vector<Tween> * tweens;
