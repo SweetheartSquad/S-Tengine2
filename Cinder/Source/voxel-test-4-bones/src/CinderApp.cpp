@@ -136,7 +136,7 @@ void CinderApp::resize(){
 
 void CinderApp::shutdown(){
 	for(unsigned long int i = 0; i < Joints.size(); ++i){
-		Joint::deleteJoints(Joints.at(i));
+		NodeHierarchical::deleteRecursively(Joints.at(i));
 	}
 	Joints.clear();
 	UI::selectedNodes.clear();
@@ -672,7 +672,15 @@ void CinderApp::keyDown( KeyEvent event ){
 		break;
 	case KeyEvent::KEY_DELETE:
 		if(UI::selectedNodes.size() != 0){
-			cmdProc.executeCommand(new CMD_DeleteJoint(&Joints));
+			std::vector<NodeHierarchical *> temp;
+			for(unsigned long int i = 0; i < Joints.size(); ++i){
+				temp.push_back(Joints.at(i));
+			}
+			cmdProc.executeCommand(new CMD_DeleteJoint(&temp));
+			Joints.clear();
+			for(unsigned long int i = 0; i < temp.size(); ++i){
+				Joints.push_back(dynamic_cast<Joint *>(temp.at(i)));
+			}
 		}
 		break;
 	case KeyEvent::KEY_p:

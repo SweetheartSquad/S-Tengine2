@@ -25,7 +25,7 @@ void CMD_MoveSelectedJoints::execute(){
 }
 
 void CMD_MoveSelectedJoints::unexecute(){
-	for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
+	for(unsigned long int i = UI::selectedNodes.size(); i > 0; -- i){
 		Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i-1));
 		if(j != NULL){
 			if(relative){

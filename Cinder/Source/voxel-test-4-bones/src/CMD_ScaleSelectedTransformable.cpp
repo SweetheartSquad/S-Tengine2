@@ -22,7 +22,7 @@ void CMD_ScaleSelectedTransformable::execute(){
 }
 
 void CMD_ScaleSelectedTransformable::unexecute(){
-	for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
+	for(unsigned long int i = UI::selectedNodes.size(); i > 0; -- i){
 		NodeTransformable * j = dynamic_cast<NodeTransformable *>(UI::selectedNodes.at(i-1));
 		if(j != NULL){
 			j->transform->scale(1/v.x, 1/v.y, 1/v.z);

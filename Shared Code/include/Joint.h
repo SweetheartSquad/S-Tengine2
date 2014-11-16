@@ -29,8 +29,6 @@ public:
 
 	unsigned long int id;
 	
-	// Recursively delete all the children of a joint, then delete the joint itself
-	static void deleteJoints(NodeHierarchical * _j);
 
 	explicit Joint();
 	explicit Joint(NodeHierarchical * _parent);

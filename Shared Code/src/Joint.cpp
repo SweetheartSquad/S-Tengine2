@@ -10,13 +10,6 @@
 
 unsigned long int Joint::nextId = 0;
 
-void Joint::deleteJoints(NodeHierarchical * _j){
-	for(unsigned long int i = 0; i < _j->children.size(); ++i){
-		deleteJoints(_j->children.at(i));
-	}
-	delete _j;
-}
-
 void Joint::init(){
 	depth = 0;
 	parent = nullptr;
