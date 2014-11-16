@@ -68,7 +68,7 @@ MainScene::MainScene(Game * _game):
 	tex = new Texture("../assets/uv-test.jpg", 1000, 1000, true, true);
 	voxTex = new Texture("../assets/voxel-texture.png", 512, 512, true, true);
 
-	mat = new Material(PHONG, 80.0, glm::vec3(1.0f, 1.0f, 1.0f), true);
+	mat = new Material(PHONG, 10.0, glm::vec3(1.0f, 1.0f, 1.0f), true);
 	bMat = new Material(BLINN, 80.0, glm::vec3(1.0f, 1.0f, 1.0f), true);
 
 	Transform *t = new Transform();

@@ -53,28 +53,32 @@ void main()
 
 	vec3 fragWorldPosition = vec3(model * vec4(fragVert, 1));
 
-	float brightness = 0;
-	vec3 outIntensities = vec3(0,0,0);
-
 	vec3 surfaceToCamera = fragVert - fragWorldPosition;
 
 	for(int i = 0; i < numLights; i++){
 		for(int j = 0; j < numMaterials; j++){
+			vec3 surfaceToLight = normalize(lights[i].position - fragWorldPosition);
+			
 			//ambient
 			vec3 ambient = lights[i].ambientCoefficient * fragColorTex.rgb * lights[i].intensities;
 		
 			//diffuse
-			vec3 surfaceToLight = lights[i].position - fragWorldPosition;
 			float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
 			vec3 diffuse = diffuseCoefficient * fragColorTex.rgb * lights[i].intensities;
+			diffuse = clamp(diffuse, 0.0, 1.0);
 		
 			//specular
 			float specularCoefficient = 0.0;
-			if(diffuseCoefficient == 0.0){
-				specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), materials[j].shininess);
+			//only calculate specular for the front side of the surface
+			if(diffuseCoefficient > 0.0){
+				vec3 R = normalize(-reflect(surfaceToLight, normal));
+				vec3 E = normalize(-surfaceToCamera);
+
+				specularCoefficient = pow(max(0.0, dot(R, E)), materials[j].shininess);
 			}
 			vec3 specular = specularCoefficient * materials[j].specularColor * lights[i].intensities;
-		
+			specular = clamp(specular, 0.0, 1.0);
+			
 			//attenuation
 			float distanceToLight = length(lights[i].position - fragWorldPosition);
 			float attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2));
@@ -83,7 +87,7 @@ void main()
 			vec3 linearColor = ambient + attenuation*(diffuse + specular);
     
 			//final color (after gamma correction)
-			vec3 gamma = vec3(1.0/2.2);
+			vec3 gamma = vec3(1.0/2.2, 1.0/2.2, 1.0/2.2);
 			outColor = vec4(pow(linearColor, gamma), fragColorTex.a);
 		}
 	}
