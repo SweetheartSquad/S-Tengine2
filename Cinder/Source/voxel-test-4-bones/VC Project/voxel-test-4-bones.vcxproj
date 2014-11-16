@@ -113,6 +113,7 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\VoxMatrices.cpp" />
     <ClCompile Include="..\src\CinderApp.cpp" />
     <ClCompile Include="..\src\CMD_AddKeyframecpp.cpp" />
+    <ClCompile Include="..\src\CMD_DeleteVoxel.cpp" />
     <ClCompile Include="..\src\CMD_EditKeyframe.cpp" />
     <ClCompile Include="..\src\CMD_KeyAll.cpp" />
     <ClCompile Include="..\src\CMD_CreateJoint.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\VoxMatrices.h" />
     <ClInclude Include="..\include\CinderApp.h" />
     <ClInclude Include="..\include\CMD_AddKeyframe.h" />
+    <ClInclude Include="..\include\CMD_DeleteVoxel.h" />
     <ClInclude Include="..\include\CMD_EditKeyframe.h" />
     <ClInclude Include="..\include\CMD_KeyAll.h" />
     <ClInclude Include="..\include\CMD_CreateJoint.h" />

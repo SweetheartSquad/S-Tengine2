@@ -13,6 +13,7 @@
 #include "CMD_KeyAll.h"
 #include "CMD_Parent.h"
 #include "CMD_PlaceVoxel.h"
+#include "CMD_DeleteVoxel.h"
 
 #include "Transform.h"
 #include "NodeTransformable.h"
@@ -520,32 +521,46 @@ void CinderApp::mouseDown( MouseEvent event ){
 		oldMousePos = mMousePos;
 	}
 
-	if(!event.isAltDown() && event.isLeft()){
-		
-		if(mode == CREATE){
-			Vec3d pos = getCameraCorrectedPos();
-			
-			if(UI::selectedNodes.size() == 1){
-				cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
+	if(!event.isAltDown()){
+		if(mode == PAINT_VOXELS){
+			if(event.isLeft()){
+				// place voxel
+				Color voxel;
+				pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
+				if(voxel.r > 0 && voxel.g > 0 && voxel.b > 0
+					&& voxel.r < 1 && voxel.g < 1 && voxel.b < 1){
+						cmdProc.executeCommand(new CMD_PlaceVoxel(Vec3f(voxel.r, voxel.g, voxel.b)*10));
+				}else{
+					console() << "outside bounds" << std::endl;
+				}
 			}else{
-				cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, nullptr));
+				// delete voxel
+				unsigned long int voxel;
+				pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+				Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
+				if(t != NULL){
+					cmdProc.executeCommand(new CMD_DeleteVoxel(t));
+				}
+			}
+		}else if(mode == CREATE){
+			if(event.isLeft()){
+				Vec3d pos = getCameraCorrectedPos();
+			
+				if(UI::selectedNodes.size() == 1){
+					cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
+				}else{
+					cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, nullptr));
+				}
 			}
 		}else if(mode == SELECT){
-			unsigned long int jointColour;
-			pickColour(&jointColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
-			NodeSelectable * selection = nullptr;
-			if(NodeSelectable::pickingMap.count(jointColour) == 1){
-				selection = dynamic_cast<NodeSelectable *>(NodeSelectable::pickingMap.at(jointColour));
-			}
-			cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
-		}else if(mode == PAINT_VOXELS){
-			Color voxel;
-			pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
-			if(voxel.r > 0 && voxel.g > 0 && voxel.b > 0
-				&& voxel.r < 1 && voxel.g < 1 && voxel.b < 1){
-					cmdProc.executeCommand(new CMD_PlaceVoxel(Vec3f(voxel.r, voxel.g, voxel.b)*10));
-			}else{
-				console() << "Voxel not placed: outside bounds" << std::endl;
+			if(event.isLeft()){
+				unsigned long int jointColour;
+				pickColour(&jointColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
+				NodeSelectable * selection = nullptr;
+				if(NodeSelectable::pickingMap.count(jointColour) == 1){
+					selection = dynamic_cast<NodeSelectable *>(NodeSelectable::pickingMap.at(jointColour));
+				}
+				cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
 			}
 		}
 	}
