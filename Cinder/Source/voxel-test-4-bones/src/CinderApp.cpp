@@ -7,6 +7,7 @@
 #include "CMD_DeleteJoint.h"
 #include "CMD_SelectNodes.h"
 #include "CMD_MoveSelectedJoints.h"
+#include "CMD_ScaleSelectedJoints.h"
 #include "CMD_RotateSelectedJoints.h"
 #include "CMD_KeyProperty.h"
 #include "CMD_KeyAll.h"
@@ -323,6 +324,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 
 			if(mode == TRANSLATE){
 				gl::drawCoordinateFrame(0.3, 0.15, 0.03);
+				gl::color(1,1,0);
+				gl::drawSphere(Vec3f(0,0,0), 0.05);
 			}else if(mode == ROTATE){
 				gl::lineWidth(10);
 				gl::color(0,0,1.f);
@@ -335,8 +338,12 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				gl::scale(0.9,0.9,0.9);
 				gl::rotate(Vec3f(90,0,0));
 				gl::drawStrokedCircle(Vec2f(0,0), 0.3, 32);
+				gl::color(1,1,0);
+				gl::drawSphere(Vec3f(0,0,0), 0.05);
 			}else if(mode == SCALE){
 				gl::drawCoordinateFrame(0.3, 0.15, 0.03);
+				gl::color(1,1,0);
+				gl::drawSphere(Vec3f(0,0,0), 0.05);
 			}
 
 			gl::lineWidth(1);
@@ -555,9 +562,10 @@ void CinderApp::mouseDrag( MouseEvent event ){
 						if(UI::selectedNodes.size() > 0){
 							Vec3i dir(0,0,0);
 							switch(uiColour){
-								case 16711680: dir.x -= 10; break;	//r
-								case 65280: dir.y -= 10; break;		//g
-								case 255: dir.z -= 10; break;		//b
+								case 0xFF0000: dir.x -= 10; break;
+								case 0x00FF00: dir.y -= 10; break;
+								case 0x0000FF: dir.z -= 10; break;
+								case 0xFFFF00: dir.x -= 10; dir.y -= 10; dir.z -= 10; break;
 							}
 						
 							Vec2i end = sourceCam->worldToScreen(UI::handlePos + dir, sourceRect->getWidth(), sourceRect->getHeight());
@@ -569,9 +577,10 @@ void CinderApp::mouseDrag( MouseEvent event ){
 					}else if(mode == ROTATE){
 						glm::vec3 axis(0,0,0);
 						switch(uiColour){
-							case 16711680: axis.x -= 1; break;	//r
-							case 65280: axis.y -= 1; break;		//g
-							case 255: axis.z -= 1; break;		//b
+							case 0xFF0000: axis.x -= 1; break;
+							case 0x00FF00: axis.y -= 1; break;
+							case 0x0000FF: axis.z -= 1; break;
+							case 0xFFFF00: axis.x -= 1; axis.y -= 1; axis.z -= 1; break;
 						}
 						if(UI::selectedNodes.size() > 0){
 							Vec2i dif1 = oldMousePos - handlePosInScreen-sourceRect->getUpperLeft();
@@ -590,7 +599,24 @@ void CinderApp::mouseDrag( MouseEvent event ){
 							cmdProc.executeCommand(new CMD_RotateSelectedJoints(glm::quat(eulerAngles), true));
 						}
 					}else if(mode == SCALE){
-						//nothing
+						if(UI::selectedNodes.size() > 0){
+							//nothing
+							Vec3i dir(0,0,0);
+							switch(uiColour){
+								case 0xFF0000: dir.x -= 1; break;
+								case 0x00FF00: dir.y -= 1; break;
+								case 0x0000FF: dir.z -= 1; break;
+								case 0xFFFF00: dir.x -= 1; dir.y -= 1; dir.z -= 1; break;
+							}
+						
+							Vec2i end = sourceCam->worldToScreen(UI::handlePos + dir, sourceRect->getWidth(), sourceRect->getHeight());
+							Vec2f mouseAxis = end - handlePosInScreen;
+							float dif = deltaMousePos.dot(mouseAxis) / sqrtf(getWindowHeight()*getWindowHeight() + getWindowWidth()*getWindowWidth());
+							
+							console() << dif << std::endl;
+
+							cmdProc.executeCommand(new CMD_ScaleSelectedJoints(Vec3f(1,1,1) + Vec3d(dir.x, dir.y, dir.z)*dif/100.f));
+						}
 					}
 				}
 			}

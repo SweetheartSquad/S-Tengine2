@@ -99,6 +99,9 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeSelectable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CMD_ScaleSelectedJoints.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag">
@@ -197,6 +200,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeSelectable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_ScaleSelectedJoints.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

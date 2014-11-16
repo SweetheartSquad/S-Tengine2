@@ -117,6 +117,8 @@ void Joint::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 								transform->orientation.x,
 								transform->orientation.y,
 								transform->orientation.z));
+
+			gl::scale(transform->scaleVector.x, transform->scaleVector.y, transform->scaleVector.z);
 			//vox::rotate(transform->getOrientationMatrix());
 			_matrixStack->applyMatrix(transform->getModelMatrix());
 
