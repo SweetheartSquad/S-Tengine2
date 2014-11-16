@@ -5,7 +5,7 @@
 #include <vector>
 #include "NodeResource.h"
 
-enum TypeName { Phong, Blinn };
+enum TypeName { PHONG, BLINN };
 
 struct MaterialData {
 	/** Name of material type (phong, blinn, etc) */

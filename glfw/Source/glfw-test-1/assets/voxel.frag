@@ -2,13 +2,12 @@
 
 uniform mat4 model;
 
-uniform struct Light{
+struct Light{
 	vec3 position;
 	vec3 intensities;
 };
 
-
-uniform struct Material{
+struct Material{
 	int type;
 };
 
@@ -18,11 +17,11 @@ uniform mat4 VP;
 uniform Light lights[5];
 uniform int numLights;
 
-uniform sampler2D textureSampler[5];
-uniform int numTextures;
-
 uniform Material materials[5];
 uniform int numMaterials;
+
+uniform sampler2D textureSampler[5];
+uniform int numTextures;
 
 in vec3 fragVert;
 in vec3 fragNormal;
