@@ -5,7 +5,6 @@
 #include "UI.h"
 #include <vector>
 
-class Keyframe;
 class NodeAnimatable;
 
 class CMD_KeyAll : public Command
@@ -20,6 +19,5 @@ public:
 private:
 	float time;
 	Easing::Type interpolation;
-	std::vector<Keyframe> keyframes;
 	
 };

@@ -21,7 +21,7 @@ CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _time, float _val
 	if(idx > 0){
 		subCommands.push_back(new CMD_EditKeyframe(animation, value, interpolation, idx));
 	}else{
-		subCommands.push_back(new CMD_AddKeyframe(animation, time, value, interpolation, idx));
+		subCommands.push_back(new CMD_AddKeyframe(animation, time, value, interpolation));
 	}
 }
 

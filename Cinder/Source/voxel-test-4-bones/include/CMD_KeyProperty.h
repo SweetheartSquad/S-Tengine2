@@ -4,7 +4,7 @@
 #include "Easing.h"
 #include <vector>
 
-class Keyframe;
+class Tween;
 class Animation;
 
 class CMD_KeyProperty : public Command

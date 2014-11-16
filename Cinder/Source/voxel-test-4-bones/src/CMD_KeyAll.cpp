@@ -5,7 +5,6 @@
 #include <cinder/app/AppBasic.h>
 
 #include "NodeAnimatable.h"
-#include "Keyframe.h"
 #include "Transform.h"
 #include "CMD_KeyProperty.h"
 

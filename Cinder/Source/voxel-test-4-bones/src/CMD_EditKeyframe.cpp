@@ -1,61 +1,67 @@
 #pragma once
 
 #include "CMD_EditKeyframe.h"
-#include "Keyframe.h"
+#include "Animation.h"
+#include "Tween.h"
 #include <algorithm>
 
 
 #include <cinder/app/AppBasic.h>
 
-CMD_EditKeyframe::CMD_EditKeyframe(std::vector<Keyframe> * _keyframes, Keyframe * _keyframe, float _startValue, float _value, Easing::Type _interpolation) :
-	keyframes(_keyframes),
-	keyframe(_keyframe),
-	startValue(_startValue),
-	value(_value),
-	interpolation(_interpolation),
-	oldStartValue(_keyframe->startValue),
-	oldValue(_keyframe->value),
-	oldInterpolation(keyframe->interpolation),
-	nextDeltaTime(NULL),
-	nextDeltaValue(NULL)
+CMD_EditKeyframe::CMD_EditKeyframe(Animation * _animation, float _value, Easing::Type _interpolation, int _idx) :
+	tweens(&_animation->tweens),
+	tween(&_animation->tweens.at(_idx)),
+	interpolation(_interpolation)
 {
-	
-	std::vector<Keyframe>::iterator followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),*keyframe,Keyframe::keyframe_compare);
-	
-	// Get startValue of next keyframe
-	if(followingKeyframe_it != keyframes->end()){
-		followingStartValue = followingKeyframe_it->startValue;
+	// Get index of next tween, if it exists, else -1
+	nextTweenIdx = getNextTween(_idx);
+
+	// Save old deltaTime(?) and deltaValue of edited tween
+	oldDeltaValue = tween->deltaValue;
+
+	// Calculate deltaTime(?) and deltaValue of edited tween
+	tween->deltaValue = _value;
+	if(nextTweenIdx >= 0){
+		// subtract from end time and value of tween before next tween, else they are time and value
+		if(nextTweenIdx != 0){
+			tween->deltaValue = _value - getTweenEndValue(nextTweenIdx - 1, _animation->startValue);
+		}
+	}else{
+		// subtract from end time(?) and value of last tween
+		tween->deltaTime = _value - getTweenEndValue(tweens->size() - 1, _animation->startValue);
+	}
+
+	// save and calculate new delta times and values of next tween (being split)
+	if(nextTweenIdx >= 0) {
+		// get old values
+		nextTween_oldDeltaValue = tweens->at(nextTweenIdx).deltaValue;
+		// calculate new values
+		nextTween_newDeltaValue = getTweenEndValue(nextTweenIdx, _animation->startValue) - _value;
 	}
 }
 
 void CMD_EditKeyframe::execute(){
 	ci::app::console() << "execute CMD_EditKeyframe" << std::endl;
-	keyframe->startValue = startValue;
-	keyframe->value = value;
-	keyframe->interpolation = interpolation;
+
+	tween->deltaValue = deltaValue;
+	tween->interpolation = interpolation;
 
 	// Change next keyframe's start value, if this one's is changing
-	if (value != oldValue){
-		std::vector<Keyframe>::iterator followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),*keyframe,Keyframe::keyframe_compare);
-
-		// Change next keyframe's start value
-		if (followingKeyframe_it != keyframes->end()){
-			followingKeyframe_it->startValue = keyframe->value;
+	if (deltaValue != oldDeltaValue){
+		if (nextTweenIdx >= 0){
+			tweens->at(nextTweenIdx).deltaValue = nextTween_newDeltaValue;
 		}
 	}
 }
 
 void CMD_EditKeyframe::unexecute(){
-	keyframe->startValue = oldStartValue;
-	keyframe->value = oldValue;
-	keyframe->interpolation = oldInterpolation;
+	tween->deltaValue = oldDeltaValue;
+	tween->interpolation = oldInterpolation;
 
 	// Restore next keyframe's start value, if this one's is changing
-	if (value != oldValue){
-		std::vector<Keyframe>::iterator followingKeyframe_it = std::upper_bound(keyframes->begin(),keyframes->end(),*keyframe,Keyframe::keyframe_compare);
-
-		if (followingKeyframe_it != keyframes->end()){
-			followingKeyframe_it->startValue = followingStartValue;
+	if (deltaValue != oldDeltaValue){
+		if (nextTweenIdx >= 0){
+			tweens->at(nextTweenIdx).deltaValue = nextTween_oldDeltaValue;
 		}
 	}
 }

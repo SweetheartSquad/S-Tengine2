@@ -15,8 +15,6 @@ CMD_AddKeyframe::CMD_AddKeyframe(Animation * _animation, float _time, float _val
 	nextTweenIdx = getNextTween(_time);
 
 	// Calculate deltaTime and deltaValue of new tween
-
-	// delta time
 	tween.deltaTime = _time;
 	tween.deltaValue = _value;
 	if(nextTweenIdx >= 0){

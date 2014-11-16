@@ -16,8 +16,9 @@ public:
 	void unexecute();
 
 private:
-	Keyframe * keyframe;
-	std::vector<Keyframe> * keyframes;
+
+	Tween * tween;
+	std::vector<Tween> * tweens;
 	
 	// ??? float oldDeltaTime;
 	float oldDeltaValue;
@@ -27,11 +28,11 @@ private:
 	float deltaValue;
 	Easing::Type interpolation;
 
-	int nextTweenIdx; // -1 if END
-	float nextTween_oldDeltaTime;
+	int nextTweenIdx; // -1 if none
+	//float nextTween_oldDeltaTime;
 	float nextTween_oldDeltaValue;
 
-	float nextTween_newDeltaTime;
+	//float nextTween_newDeltaTime;
 	float nextTween_newDeltaValue;
 	
 	int getNextTween(int _idx);
