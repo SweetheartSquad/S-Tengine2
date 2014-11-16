@@ -22,6 +22,7 @@ Material * mat;
 Material * bMat;
 
 Shader * texShader;
+Shader * phongShader;
 Shader * voxShader;
 
 Light *tLight;
@@ -60,6 +61,8 @@ MainScene::MainScene(Game * _game):
 
 	texShader = new Shader("../assets/diffuse", false, true);
 
+	phongShader = new Shader("../assets/phong", false, true);
+
 	voxShader = new Shader("../assets/voxel", true, true);
 
 	tex = new Texture("../assets/uv-test.jpg", 1000, 1000, true, true);
@@ -72,15 +75,16 @@ MainScene::MainScene(Game * _game):
 	t->translateX(-2);
 	t->scale(3, 3, 3);
 
-	for(unsigned long int i = 0; i < 1; ++i){
+	for(unsigned long int i = 0; i < 0; ++i){
 		Entity * loaded = new Entity(new VoxelMesh(Resource::loadMeshFromObj("../assets/cube.vox")), t, voxShader, cube);
 		loaded->mesh->polygonalDrawMode = GL_POINTS;
 		cube->addChild(loaded);
 		//loaded->mesh->pushTexture2D(tex);
 	}
 
-	//Entity * loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, texShader, cube);
-	//cube->addChild(loaded1);
+	Entity * loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, phongShader, cube);
+	cube->addChild(loaded1);
+	loaded1->mesh->pushMaterial(mat);
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->setShader(texShader, true);
