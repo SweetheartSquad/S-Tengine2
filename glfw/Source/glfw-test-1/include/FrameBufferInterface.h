@@ -10,8 +10,6 @@ class FrameBufferInterface : public NodeResource{
 public:
 
 	GLuint frameBufferId;
-	GLuint textureBufferId;
-	GLuint renderBufferId;
 
 	std::vector<FrameBufferChannel> frameBufferChannels;
 

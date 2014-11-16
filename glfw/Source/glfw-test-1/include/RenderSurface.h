@@ -29,5 +29,5 @@ public:
 	void reload();
 	/**Renders a frame buffers texture buffer to this surface using the 
 	*  Main openGL framne buffer */
-	void render(FrameBufferInterface _frameBuffer);
+	void render(GLuint _textureId);
 };

@@ -14,3 +14,11 @@ StandardFrameBuffer::StandardFrameBuffer( bool _autoRelase):
 
 StandardFrameBuffer::~StandardFrameBuffer(){
 }
+
+GLuint StandardFrameBuffer::getTextureId(){
+	return frameBufferChannels.at(0).id;
+}
+
+GLuint StandardFrameBuffer::getRenderBufferId(){
+	return frameBufferChannels.at(1).id;
+}

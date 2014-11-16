@@ -13,7 +13,7 @@ public:
 	GLenum attachmentType;
 	GLenum size;
 	GLenum format;
-
+	GLuint id;
 	/**_internalFormat refers to the format OpenGL uses to store the channel. Possible base types are:
 	* GL_ALPHA
 	* GL_LUMINANCE

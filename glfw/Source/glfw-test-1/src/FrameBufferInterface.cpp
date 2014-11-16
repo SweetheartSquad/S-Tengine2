@@ -18,27 +18,27 @@ void FrameBufferInterface::load(){
 
 	glGenFramebuffers(1, &frameBufferId);
 	bindFrameBuffer();
-	//TODO move texure id into channel
 	for(unsigned long int i = 0; i < frameBufferChannels.size(); i++){
 		switch (frameBufferChannels.at(i).channelType){
 		case FrameBufferChannel::TEXTURE :
-			glGenTextures(1, &textureBufferId);
-			glBindTexture(GL_TEXTURE_2D, textureBufferId);
+			glGenTextures(1, &frameBufferChannels.at(i).id);
+			glBindTexture(GL_TEXTURE_2D, frameBufferChannels.at(i).id);
 			glTexImage2D(GL_TEXTURE_2D, 0, frameBufferChannels.at(i).internalFormat, width, height, 0,
 				frameBufferChannels.at(i).format, frameBufferChannels.at(i).size, 0);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			if(frameBufferChannels.at(i).attachmentType == GL_COLOR_ATTACHMENT0){
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + colorAttachmentCount, GL_TEXTURE_2D, textureBufferId, 0);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + colorAttachmentCount, GL_TEXTURE_2D, frameBufferChannels.at(i).id, 0);
 			}else{
-				glFramebufferTexture2D(GL_FRAMEBUFFER, frameBufferChannels.at(i).attachmentType,GL_TEXTURE_2D, textureBufferId, 0);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, frameBufferChannels.at(i).attachmentType,GL_TEXTURE_2D, frameBufferChannels.at(i).id, 0);
 			}
 			break;
 		case FrameBufferChannel::RENDER_BUFFER :
-			glGenRenderbuffers(1, &renderBufferId);
-			glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
+			glGenRenderbuffers(1, &frameBufferChannels.at(i).id);
+			glBindRenderbuffer(GL_RENDERBUFFER, frameBufferChannels.at(i).id);
 			glRenderbufferStorage(GL_RENDERBUFFER, frameBufferChannels.at(i).internalFormat, width, height);
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, frameBufferChannels.at(i).attachmentType, GL_RENDERBUFFER, renderBufferId);
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, frameBufferChannels.at(i).attachmentType, GL_RENDERBUFFER, frameBufferChannels.at(i).id);
+			break;
 		}
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -46,11 +46,19 @@ void FrameBufferInterface::load(){
 
 void FrameBufferInterface::unload(){
 	glDeleteFramebuffers(1, &frameBufferId);
-	glDeleteTextures(1, &textureBufferId);
-	glDeleteRenderbuffers(1, &renderBufferId);
-	frameBufferId   = 0;
-	renderBufferId  = 0;
-	textureBufferId = 0;
+	frameBufferId = 0;
+	for(unsigned long int i = 0; i < frameBufferChannels.size(); i++){
+		switch (frameBufferChannels.at(i).channelType){
+		case FrameBufferChannel::TEXTURE :
+			glDeleteTextures(1, &frameBufferChannels.at(i).id);
+			frameBufferChannels.at(i).id = 0;
+			break;
+		case FrameBufferChannel::RENDER_BUFFER :
+			glDeleteRenderbuffers(1, &frameBufferChannels.at(i).id);
+			frameBufferChannels.at(i).id = 0;
+			break;
+		}
+	}
 }
 
 void FrameBufferInterface::reload(){

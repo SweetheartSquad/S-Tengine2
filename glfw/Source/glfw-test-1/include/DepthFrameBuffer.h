@@ -6,4 +6,6 @@ class DepthFrameBuffer : public FrameBufferInterface{
 public:
 	explicit DepthFrameBuffer(bool _autoRelase);
 	~DepthFrameBuffer();
+
+	GLuint getTextureId();
 };

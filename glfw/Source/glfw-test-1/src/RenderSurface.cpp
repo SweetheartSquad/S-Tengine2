@@ -55,13 +55,13 @@ void RenderSurface::reload(){
 	load();
 }
 
-void RenderSurface::render(FrameBufferInterface _frameBuffer){
+void RenderSurface::render(GLuint _textureId){
 	glUseProgram(shader->getProgramId());
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindVertexArray(vaoId);
 	glDisable(GL_DEPTH_TEST);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _frameBuffer.textureBufferId);
+	glBindTexture(GL_TEXTURE_2D, _textureId);
 	glDrawArrays(GL_QUADS, 0, vertices.size());
 	glEnable(GL_DEPTH_TEST);
 	glBindVertexArray(0);

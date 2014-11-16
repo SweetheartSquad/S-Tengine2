@@ -29,8 +29,8 @@ Shader * depthShader;
 
 Light *tLight;
 
-FrameBufferInterface * frameBuffer;
-FrameBufferInterface * depthBuffer;
+StandardFrameBuffer * frameBuffer;
+DepthFrameBuffer * depthBuffer;
 
 RenderSurface * renderSurface;
 
@@ -224,6 +224,7 @@ void MainScene::update(){
 }
 
 void MainScene::render(){
+	
 	int width, height;
 
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
@@ -234,10 +235,11 @@ void MainScene::render(){
 
 	frameBuffer->resize(width, height);
 	frameBuffer->bindFrameBuffer();
-	renderOptions->shadowMapTextureId = depthBuffer->textureBufferId;	
+	renderOptions->shadowMapTextureId = depthBuffer->getTextureId();
 	renderOptions->overrideShader = nullptr;
+
 	Scene::render();
-	renderSurface->render(*frameBuffer);
+	renderSurface->render(frameBuffer->getTextureId());
 	renderOptions->shadowMapTextureId = 0;
 }
 

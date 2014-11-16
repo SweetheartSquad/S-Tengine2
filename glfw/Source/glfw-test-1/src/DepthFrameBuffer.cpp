@@ -13,3 +13,7 @@ DepthFrameBuffer::DepthFrameBuffer(bool _autoRelase):
 
 DepthFrameBuffer::~DepthFrameBuffer(){
 }
+
+GLuint DepthFrameBuffer::getTextureId(){
+	return frameBufferChannels.at(0).id;
+}
