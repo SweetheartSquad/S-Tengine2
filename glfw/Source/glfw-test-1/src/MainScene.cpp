@@ -225,6 +225,7 @@ void MainScene::update(){
 
 void MainScene::render(){
 	int width, height;
+
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
 	depthBuffer->resize(width, height);
 	depthBuffer->bindFrameBuffer();

@@ -224,7 +224,7 @@ void MeshInterface::configureShadows(MatrixStack* _matrixStack, RenderOptions* _
 		0.0, 0.0, 0.5, 0.0,
 		0.5, 0.5, 0.5, 1.0);
 
-	glm::vec3 lightInvDir = glm::vec3(0.5, 2, 2);
+	glm::vec3 lightInvDir = glm::vec3(0.5, 1, 1);
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
 
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);

@@ -33,10 +33,7 @@ void Entity::draw(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	if(_renderStack->overrideShader == nullptr){
 		_renderStack->shader = shader;
 	}else{
-		Shader * s = shader;
-		setShader(_renderStack->overrideShader, false);
 		_renderStack->shader = _renderStack->overrideShader;
-		shader = s;
 	}
 	mesh->render(_matrixStack, _renderStack);
 
