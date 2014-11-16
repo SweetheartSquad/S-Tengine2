@@ -30,7 +30,14 @@ void Entity::draw(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 
 	mesh->load();
 	mesh->clean();
-	_renderStack->shader = shader;
+	if(_renderStack->overrideShader == nullptr){
+		_renderStack->shader = shader;
+	}else{
+		Shader * s = shader;
+		setShader(_renderStack->overrideShader, false);
+		_renderStack->shader = _renderStack->overrideShader;
+		shader = s;
+	}
 	mesh->render(_matrixStack, _renderStack);
 
 	for(Node * child : children){

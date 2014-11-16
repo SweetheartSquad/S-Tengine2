@@ -11,12 +11,14 @@ class RenderOptions{
 	
 public:
 
-	RenderOptions();
-	RenderOptions(Shader * _shader, std::vector<Light *> * _lights);
+	RenderOptions(Shader * _shader, std::vector<Light *> * _lights, Shader * _overrideShader = nullptr);
 
 	~RenderOptions();
 
 	std::vector<Light*> * lights;
+	
 	Shader * shader;
+	Shader * overrideShader;
+
 	GLuint shadowMapTextureId;
 };

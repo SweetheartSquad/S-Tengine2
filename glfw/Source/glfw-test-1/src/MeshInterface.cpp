@@ -112,11 +112,18 @@ void MeshInterface::render(MatrixStack * _matrixStack, RenderOptions * _renderOp
 			if(glIsBuffer(iboId) == GL_TRUE){
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 				// Bind VAO
-				glBindVertexArray(vaoId);
 				GLUtils::checkForError(0,__FILE__,__LINE__);
-
+				glBindVertexArray(vaoId);
 				// Specify _shader attributes
-				glUseProgram(_renderOption->shader->getProgramId());
+				/*if(_renderOption->overrideShader != nullptr){
+					//configureDefaultVertexAttributes(_renderOption->overrideShader);
+					glUseProgram(_renderOption->overrideShader->getProgramId());	
+				}else{
+					glUseProgram(_renderOption->shader->getProgramId());	
+					//configureDefaultVertexAttributes(_renderOption->shader);
+				}*/
+				glUseProgram(_renderOption->shader->getProgramId());	
+
 				GLUtils::checkForError(0,__FILE__,__LINE__);
 
 				//Model View Projection

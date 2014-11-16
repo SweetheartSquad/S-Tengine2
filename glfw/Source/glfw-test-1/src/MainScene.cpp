@@ -106,7 +106,7 @@ MainScene::MainScene(Game * _game):
 		loaded->mesh->pushMaterial(mat);
 	}
 
-	loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxShader, nullptr);
+	loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, texShader, nullptr);
 	loaded1->mesh->pushTexture2D(tex);
 	cube->addChild(loaded1);
 
@@ -228,20 +228,13 @@ void MainScene::render(){
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
 	depthBuffer->resize(width, height);
 	depthBuffer->bindFrameBuffer();
-	for(Entity * child : children){
-		child->setShaderOnChildren(depthShader);
-	}
-
+	renderOptions->overrideShader = depthShader;
 	Scene::render();
 
 	frameBuffer->resize(width, height);
 	frameBuffer->bindFrameBuffer();
-	renderOptions->shadowMapTextureId = depthBuffer->textureBufferId;
-
-	for(Entity * child : children){
-		child->setShaderOnChildren(texShader);
-	}
-
+	renderOptions->shadowMapTextureId = depthBuffer->textureBufferId;	
+	renderOptions->overrideShader = nullptr;
 	Scene::render();
 	renderSurface->render(*frameBuffer);
 	renderOptions->shadowMapTextureId = 0;
