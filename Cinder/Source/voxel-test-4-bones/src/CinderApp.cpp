@@ -135,10 +135,10 @@ void CinderApp::resize(){
 
 
 void CinderApp::shutdown(){
-	for(unsigned long int i = 0; i < Joints.size(); ++i){
-		NodeHierarchical::deleteRecursively(Joints.at(i));
+	for(unsigned long int i = 0; i < joints.size(); ++i){
+		NodeHierarchical::deleteRecursively(joints.at(i));
 	}
-	Joints.clear();
+	joints.clear();
 	UI::selectedNodes.clear();
 }
 
@@ -259,7 +259,7 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		jointShader.uniform("offset", false);
 		// draw joints:
 		MatrixStack mStack;
-		for(Joint * j : Joints){
+		for(Joint * j : joints){
 			j->shader = &jointShader;
 			j->render(&mStack, nullptr);
 		}
@@ -318,7 +318,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 					Voxel * v = dynamic_cast<Voxel *>(UI::selectedNodes.at(i));
 					if(v != NULL){
 						gl::pushMatrices();
-							gl::translate(v->parent->getPos(false));
+							gl::translate(dynamic_cast<Joint *>(v->parent)->getPos(false));
 							gl::drawSphere(v->pos, 0.06f);
 						gl::popMatrices();
 					}
@@ -526,9 +526,9 @@ void CinderApp::mouseDown( MouseEvent event ){
 			Vec3d pos = getCameraCorrectedPos();
 			
 			if(UI::selectedNodes.size() == 1){
-				cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
+				cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
 			}else{
-				cmdProc.executeCommand(new CMD_CreateJoint(&Joints, pos, nullptr));
+				cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, nullptr));
 			}
 		}else if(mode == SELECT){
 			unsigned long int jointColour;
@@ -673,18 +673,18 @@ void CinderApp::keyDown( KeyEvent event ){
 	case KeyEvent::KEY_DELETE:
 		if(UI::selectedNodes.size() != 0){
 			std::vector<NodeHierarchical *> temp;
-			for(unsigned long int i = 0; i < Joints.size(); ++i){
-				temp.push_back(Joints.at(i));
+			for(unsigned long int i = 0; i < joints.size(); ++i){
+				temp.push_back(joints.at(i));
 			}
 			cmdProc.executeCommand(new CMD_DeleteJoint(&temp));
-			Joints.clear();
+			joints.clear();
 			for(unsigned long int i = 0; i < temp.size(); ++i){
-				Joints.push_back(dynamic_cast<Joint *>(temp.at(i)));
+				joints.push_back(dynamic_cast<Joint *>(temp.at(i)));
 			}
 		}
 		break;
 	case KeyEvent::KEY_p:
-		cmdProc.executeCommand(new CMD_Parent(&Joints));
+		cmdProc.executeCommand(new CMD_Parent(&joints));
 		break;
 	case KeyEvent::KEY_d:
 		if(event.isControlDown()){
@@ -836,7 +836,7 @@ Vec3d CinderApp::getCameraCorrectedPos(){
 void CinderApp::saveSkeleton() {
 	try{
 		console() << "saveSkeleton" << endl;
-		SkeletonData::SaveSkeleton(directory, fileName, Joints);
+		SkeletonData::SaveSkeleton(directory, fileName, joints);
 		message = "Saved skeleton";
 	}catch (exception ex){
 		message = string(ex.what());
@@ -848,9 +848,9 @@ void CinderApp::loadSkeleton() {
 		// Deselect everything
 		cmdProc.executeCommand(new CMD_SelectNodes(nullptr));
 		console() << "loadSkeleton" << endl;
-		Joints.clear();
+		joints.clear();
 
-		Joints = SkeletonData::LoadSkeleton(filePath);
+		joints = SkeletonData::LoadSkeleton(filePath);
 		message = "Loaded skeleton";
 
 		// Clear the undo/redo history

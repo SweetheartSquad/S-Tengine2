@@ -4,12 +4,12 @@
 
 #include "NodeRenderable.h"
 #include "NodeSelectable.h"
+#include "NodeHierarchical.h"
 
 class Joint;
 
-class Voxel : public NodeRenderable, public NodeSelectable{
+class Voxel : public NodeRenderable, public NodeSelectable, public NodeHierarchical{
 public:
-	Joint * parent;
 	ci::Vec3f pos;
 	virtual void render(MatrixStack * _matrixStack, RenderOptions * _renderStack);
 

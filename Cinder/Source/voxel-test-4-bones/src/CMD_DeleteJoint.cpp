@@ -5,6 +5,7 @@
 #include "UI.h"
 #include "Node.h"
 #include "NodeHierarchical.h"
+#include "Joint.h"
 
 CMD_DeleteJoint::CMD_DeleteJoint(std::vector<NodeHierarchical *> * _joints) :
 	joints(_joints)
@@ -13,7 +14,12 @@ CMD_DeleteJoint::CMD_DeleteJoint(std::vector<NodeHierarchical *> * _joints) :
 
 void CMD_DeleteJoint::execute(){
 	// Save selected joints
-	jointsForDeletion = UI::selectedNodes;
+	for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
+		Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
+		if(j != NULL){
+			jointsForDeletion.push_back(j);
+		}
+	}
 	index.resize(jointsForDeletion.size());
 	children.resize(jointsForDeletion.size());
 
@@ -63,7 +69,7 @@ void CMD_DeleteJoint::execute(){
 }
 
 void CMD_DeleteJoint::unexecute(){
-	// Should this go in reverse order?
+	// Should this go in reverse order? I think it does already
 	for(unsigned long int j = 0; j < jointsForDeletion.size(); ++j){
 		NodeHierarchical * jointForDeletion = dynamic_cast<NodeHierarchical *>(jointsForDeletion.at(j));
 		if(children.at(j).size() == 0){
