@@ -6,23 +6,22 @@
 
 class Node;
 class NodeHierarchical;
-class Joint;
 
 class CMD_DeleteJoint : public Command{
 public:
-	CMD_DeleteJoint(std::vector<Joint *> * joints);
+	CMD_DeleteJoint(std::vector<NodeHierarchical *> * joints);
 	~CMD_DeleteJoint(void);
 
 	void execute();
 	void unexecute();
 
 private:
-	std::vector<Joint *> * joints;
+	std::vector<NodeHierarchical *> * joints;
 	
 	// The joints which this command is in reference to
 	std::vector<Node *> jointsForDeletion;
 	// The joints which have been deleted by this command
-	std::vector<Joint *> deletedJoints;
+	std::vector<NodeHierarchical *> deletedJoints;
 	
 	// Location in jointForDeletion's parent's list of children (or the joint list if it was a root) at which jointForDeletion exists
 	std::vector<unsigned long int> index;

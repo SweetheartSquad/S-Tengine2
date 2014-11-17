@@ -17,5 +17,7 @@ public:
 private:
 	ci::Vec3d v;
 	Voxel * voxel;
+
+	bool executed;
 };
 

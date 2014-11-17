@@ -6,11 +6,11 @@
 
 #include "Command.h"
 
-class CMD_RotateSelectedJoints : public Command{
+class CMD_RotateSelectedTransformable : public Command{
 public:
 	// Relative move will rotate BY _rotation, non-relative rotate TO _rotation
-	CMD_RotateSelectedJoints(glm::quat _rotation, bool _relative);
-	~CMD_RotateSelectedJoints(void);
+	CMD_RotateSelectedTransformable(glm::quat _rotation, bool _relative);
+	~CMD_RotateSelectedTransformable(void);
 
 	void execute();
 	void unexecute();

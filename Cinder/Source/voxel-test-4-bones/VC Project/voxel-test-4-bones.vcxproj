@@ -103,7 +103,9 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Keyframe.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeHierarchical.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeRenderable.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeSelectable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\SkeletonData.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
@@ -111,6 +113,7 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\VoxMatrices.cpp" />
     <ClCompile Include="..\src\CinderApp.cpp" />
     <ClCompile Include="..\src\CMD_AddKeyframecpp.cpp" />
+    <ClCompile Include="..\src\CMD_DeleteVoxel.cpp" />
     <ClCompile Include="..\src\CMD_EditKeyframe.cpp" />
     <ClCompile Include="..\src\CMD_KeyAll.cpp" />
     <ClCompile Include="..\src\CMD_CreateJoint.cpp" />
@@ -118,7 +121,8 @@
     <ClCompile Include="..\src\CMD_KeyProperty.cpp" />
     <ClCompile Include="..\src\CMD_MoveSelectedJoints.cpp" />
     <ClCompile Include="..\src\CMD_PlaceVoxel.cpp" />
-    <ClCompile Include="..\src\CMD_RotateSelectedJoints.cpp" />
+    <ClCompile Include="..\src\CMD_RotateSelectedTransformable.cpp" />
+    <ClCompile Include="..\src\CMD_ScaleSelectedTransformable.cpp" />
     <ClCompile Include="..\src\CMD_SelectNodes.cpp" />
     <ClCompile Include="..\src\CMD_Parent.cpp" />
     <ClCompile Include="..\src\Timeline.cpp" />
@@ -139,6 +143,7 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeAnimatable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeRenderable.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeSelectable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeTransformable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\SkeletonData.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />
@@ -146,6 +151,7 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\VoxMatrices.h" />
     <ClInclude Include="..\include\CinderApp.h" />
     <ClInclude Include="..\include\CMD_AddKeyframe.h" />
+    <ClInclude Include="..\include\CMD_DeleteVoxel.h" />
     <ClInclude Include="..\include\CMD_EditKeyframe.h" />
     <ClInclude Include="..\include\CMD_KeyAll.h" />
     <ClInclude Include="..\include\CMD_CreateJoint.h" />
@@ -153,7 +159,8 @@
     <ClInclude Include="..\include\CMD_KeyProperty.h" />
     <ClInclude Include="..\include\CMD_MoveSelectedJoints.h" />
     <ClInclude Include="..\include\CMD_PlaceVoxel.h" />
-    <ClInclude Include="..\include\CMD_RotateSelectedJoints.h" />
+    <ClInclude Include="..\include\CMD_RotateSelectedTransformable.h" />
+    <ClInclude Include="..\include\CMD_ScaleSelectedTransformable.h" />
     <ClInclude Include="..\include\CMD_SelectNodes.h" />
     <ClInclude Include="..\include\CMD_Parent.h" />
     <ClInclude Include="..\include\Timeline.h" />
