@@ -19,6 +19,7 @@ public:
 	float startValue;
 
 	float currentTime;
+	// The start value of the current tween
 	float referenceValue;
 	unsigned long int currentTween;
 

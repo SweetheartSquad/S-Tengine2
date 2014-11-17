@@ -26,23 +26,27 @@ Animation::Animation(const Animation & _animation) :
 
 void Animation::update(Step * _step){
 	if(tweens.size() > 0){
-		currentTime += _step->deltaTime;
-		if(_step->reverse){
+		currentTime += _step->getDeltaTime();
+		if(_step->getReverse()){
 			while(currentTime < 0){
 				currentTime += tweens.at(currentTween)->deltaTime;
-				referenceValue += tweens.at(currentTween)->deltaValue;
-				--currentTween;
+				referenceValue -= tweens.at(currentTween)->deltaValue;
 				
-				if(currentTween < 0){
+				if(currentTween == 0){
 					switch (loopType){
 						case Animation::LOOP:
 							referenceValue = startValue;
+							for(unsigned long int i = 0; i < tweens.size(); ++i){
+								referenceValue += tweens.at(i)->deltaValue;
+							}
 						case Animation::LOOP_WITH_OFFSET:
 							currentTween = tweens.size() - 1;
 							break;
 						default:
 							break;
 					}
+				}else{
+					--currentTween;
 				}
 			}
 		}else{
@@ -64,7 +68,12 @@ void Animation::update(Step * _step){
 				}
 			}
 		}
-		*prop = Easing::call(tweens.at(currentTween)->interpolation, currentTime, referenceValue, tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
+		
+		if(_step->getReverse()){
+			*prop = Easing::call(tweens.at(currentTween)->interpolation, tweens.at(currentTween)->deltaTime-currentTime, referenceValue, -tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
+		}else{
+			*prop = Easing::call(tweens.at(currentTween)->interpolation, currentTime, referenceValue, tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
+		}
 	}
 }
 

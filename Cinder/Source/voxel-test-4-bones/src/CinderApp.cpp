@@ -80,16 +80,14 @@ void CinderApp::setup(){
 
 
 	//// test animation
-	//vector<Tween> tweens;
-	//tweens.push_back(Tween(25, 0.1, Easing::Type::kEASE_OUT_BOUNCE));
-	//tweens.push_back(Tween(25, -0.5, Easing::Type::kEASE_IN_CUBIC));
-	//
-	//cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,0,0), nullptr));
-	//cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,1,0), joints.at(0)));
-	////joints.push_back(new Joint());
-	////joints.push_back(new Joint(joints.at(0)));
+	vector<Tween *> tweens;
+	tweens.push_back(new Tween(1, 0.1, Easing::Type::kNONE));
+	tweens.push_back(new Tween(1, -0.5, Easing::Type::kNONE));
+	
+	cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,0,0), nullptr));
+	cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,1,0), joints.at(0)));
 
-	//joints.at(0)->translateZ.tweens = tweens;
+	joints.at(0)->translateZ.tweens = tweens;
 	play = false;
 	previousTime = 0;
 }
@@ -168,7 +166,7 @@ void CinderApp::update(){
 
 	if(play){
 		Step s;
-		s.deltaTime = 1 * scale;
+		s.setDeltaTime(1 * scale);
 		for(unsigned long int i = 0; i < joints.size(); ++i){
 			joints.at(i)->update(&s);
 		}
@@ -176,7 +174,7 @@ void CinderApp::update(){
 	}else{
 		if(UI::time != previousTime){
 			Step s;
-			s.deltaTime = (UI::time - previousTime) * scale;
+			s.setDeltaTime((UI::time - previousTime) * scale);
 			for(unsigned long int i = 0; i < joints.size(); ++i){
 				joints.at(i)->update(&s);
 			}

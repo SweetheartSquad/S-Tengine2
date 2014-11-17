@@ -22,8 +22,6 @@ CMD_AddTween::CMD_AddTween(Animation * _animation, float _time, float _value, Ea
 void CMD_AddTween::execute(){
 	ci::app::console() << "execute CMD_AddTween" << std::endl;
 	
-	
-
 	nextTweenIdx = getNextTween(time);
 
 	// Calculate deltaTime and deltaValue of new tween

@@ -15,3 +15,20 @@ Step::Step() :
 Step::~Step()
 {
 }
+
+void Step::setDeltaTime(double _deltaTime){
+	deltaTime = _deltaTime;
+	if(deltaTime >= 0){
+		reverse = false;
+	}else{
+		reverse = true;
+	}
+}
+
+double Step::getDeltaTime(){
+	return deltaTime;
+}
+
+bool Step::getReverse(){
+	return reverse;
+}
