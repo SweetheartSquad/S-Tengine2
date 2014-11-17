@@ -91,6 +91,7 @@ void CinderApp::setup(){
 
 	//joints.at(0)->translateZ.tweens = tweens;
 	play = false;
+	previousTime = 0;
 }
 
 
@@ -162,13 +163,27 @@ void CinderApp::shutdown(){
 }
 
 void CinderApp::update(){
+	// play animation or edit
+	float scale = 0.1;
+
 	if(play){
 		Step s;
-		s.deltaTime = 0.1;
+		s.deltaTime = 1 * scale;
 		for(unsigned long int i = 0; i < joints.size(); ++i){
 			joints.at(i)->update(&s);
 		}
+		
+	}else{
+		if(UI::time != previousTime){
+			Step s;
+			s.deltaTime = (UI::time - previousTime) * scale;
+			for(unsigned long int i = 0; i < joints.size(); ++i){
+				joints.at(i)->update(&s);
+			}
+			previousTime = UI::time;
+		}
 	}
+
 }
 
 void CinderApp::draw(){

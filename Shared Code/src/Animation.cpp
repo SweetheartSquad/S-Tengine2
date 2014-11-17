@@ -29,8 +29,8 @@ void Animation::update(Step * _step){
 		currentTime += _step->deltaTime;
 		if(_step->reverse){
 			while(currentTime < 0){
-				currentTime += tweens.at(currentTween).deltaTime;
-				referenceValue += tweens.at(currentTween).deltaValue;
+				currentTime += tweens.at(currentTween)->deltaTime;
+				referenceValue += tweens.at(currentTween)->deltaValue;
 				--currentTween;
 				
 				if(currentTween < 0){
@@ -46,9 +46,9 @@ void Animation::update(Step * _step){
 				}
 			}
 		}else{
-			while(currentTime > tweens.at(currentTween).deltaTime){
-				currentTime -= tweens.at(currentTween).deltaTime;
-				referenceValue += tweens.at(currentTween).deltaValue;
+			while(currentTime > tweens.at(currentTween)->deltaTime){
+				currentTime -= tweens.at(currentTween)->deltaTime;
+				referenceValue += tweens.at(currentTween)->deltaValue;
 				++currentTween;
 
 				if(currentTween >= tweens.size()){
@@ -64,7 +64,7 @@ void Animation::update(Step * _step){
 				}
 			}
 		}
-		*prop = Easing::call(tweens.at(currentTween).interpolation,currentTime,referenceValue,tweens.at(currentTween).deltaValue,tweens.at(currentTween).deltaTime);
+		*prop = Easing::call(tweens.at(currentTween)->interpolation, currentTime, referenceValue, tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
 	}
 }
 

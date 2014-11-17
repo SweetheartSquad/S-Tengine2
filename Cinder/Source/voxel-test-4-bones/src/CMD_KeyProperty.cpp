@@ -34,13 +34,13 @@ void CMD_KeyProperty::unexecute(){
 	subCommands.at(0)->unexecute();
 }
 
-int CMD_KeyProperty::findKeyframe(std::vector<Tween> * _tweens){
+int CMD_KeyProperty::findKeyframe(std::vector<Tween *> * _tweens){
 	// find index of tween
 	int idx = -1;
 	float sumTime = 0;
 
 	for(unsigned long int i = 0; i < _tweens->size(); ++i){
-		sumTime += _tweens->at(i).deltaTime;
+		sumTime += _tweens->at(i)->deltaTime;
 		if(sumTime == time){
 			idx = i;
 			break;
@@ -55,7 +55,7 @@ float CMD_KeyProperty::getStartValue(int _idx){
 	float value = animation->startValue;
 
 	for(unsigned long int i = 0; i < _idx; ++i){
-		value += animation->tweens.at(i).deltaValue;
+		value += animation->tweens.at(i)->deltaValue;
 	}
 
 	return value;
@@ -65,7 +65,7 @@ float CMD_KeyProperty::getEndValue(int _idx){
 	float value = animation->startValue;
 
 	for(unsigned long int i = 0; i = _idx; ++i){
-		value += animation->tweens.at(i).deltaValue;
+		value += animation->tweens.at(i)->deltaValue;
 	}
 
 	return value;

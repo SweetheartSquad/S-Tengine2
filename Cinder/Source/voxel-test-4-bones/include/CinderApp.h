@@ -180,4 +180,5 @@ protected:
 
 	// Animation
 	bool play;
+	int previousTime;
 };

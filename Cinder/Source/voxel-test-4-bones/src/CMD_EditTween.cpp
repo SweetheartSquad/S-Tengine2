@@ -10,8 +10,7 @@
 
 CMD_EditTween::CMD_EditTween(Animation * _animation, float _value, Easing::Type _interpolation, int _idx) :
 	animation(_animation),
-	tweens(&_animation->tweens),
-	tween(&_animation->tweens.at(_idx)),
+	tween(_animation->tweens.at(_idx)),
 	interpolation(_interpolation),
 	startValue(NULL)
 {
@@ -30,8 +29,8 @@ CMD_EditTween::CMD_EditTween(Animation * _animation, float _value, Easing::Type 
 		}
 	}else{
 		// subtract from end time and value of last tween, if there are any, else they are time and value
-		if(tweens->size() > 0){
-			deltaValue = _value - getTweenEndValue(tweens->size() - 1, _animation->startValue);
+		if(animation->tweens.size() > 0){
+			deltaValue = _value - getTweenEndValue(animation->tweens.size() - 1, _animation->startValue);
 		}
 	}
 
@@ -45,7 +44,7 @@ CMD_EditTween::CMD_EditTween(Animation * _animation, float _value, Easing::Type 
 	// save and calculate new delta times and values of next tween (being split)
 	if(nextTweenIdx >= 0) {
 		// get old values
-		nextTween_oldDeltaValue = tweens->at(nextTweenIdx).deltaValue;
+		nextTween_oldDeltaValue = animation->tweens.at(nextTweenIdx)->deltaValue;
 		// calculate new values
 		nextTween_newDeltaValue = getTweenEndValue(nextTweenIdx, _animation->startValue) - _value;
 	}
@@ -60,7 +59,7 @@ void CMD_EditTween::execute(){
 	// Change next keyframe's start value, if this one's is changing
 	if (deltaValue != oldDeltaValue){
 		if (nextTweenIdx >= 0){
-			tweens->at(nextTweenIdx).deltaValue = nextTween_newDeltaValue;
+			animation->tweens.at(nextTweenIdx)->deltaValue = nextTween_newDeltaValue;
 		}
 	}
 
@@ -77,7 +76,7 @@ void CMD_EditTween::unexecute(){
 	// Restore next keyframe's start value, if this one's is changing
 	if (deltaValue != oldDeltaValue){
 		if (nextTweenIdx >= 0){
-			tweens->at(nextTweenIdx).deltaValue = nextTween_oldDeltaValue;
+			animation->tweens.at(nextTweenIdx)->deltaValue = nextTween_oldDeltaValue;
 		}
 	}
 
@@ -91,7 +90,7 @@ int CMD_EditTween::getNextTween(int _idx){
 	// find index of next tween
 	int idx = -1;
 
-	if(tweens->size() > 0 && _idx != tweens->size() - 1){
+	if(animation->tweens.size() > 0 && _idx != animation->tweens.size() - 1){
 		idx = _idx + 1;
 	}
 	return idx;
@@ -101,7 +100,7 @@ float CMD_EditTween::getTweenEndTime(int _idx){
 	float time = 0;
 	
 	for(unsigned long int i = 0; i <= _idx; ++i){
-		time += tweens->at(i).deltaTime;
+		time += animation->tweens.at(i)->deltaTime;
 	}
 
 	return time;
@@ -111,7 +110,7 @@ float CMD_EditTween::getTweenEndValue(int _idx, float _startValue){
 	float value = _startValue;
 
 	for(unsigned long int i = 0; i <= _idx; ++i){
-		value += tweens->at(i).deltaValue;
+		value += animation->tweens.at(i)->deltaValue;
 	}
 
 	return value;

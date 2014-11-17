@@ -22,7 +22,7 @@ public:
 	float referenceValue;
 	unsigned long int currentTween;
 
-	std::vector<Tween> tweens;
+	std::vector<Tween *> tweens;
 
 	void update(Step * _step) override;
 

@@ -181,4 +181,8 @@ void Joint::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 
 void Joint::update(Step * _step){
 	NodeAnimatable::update(_step);
+
+	for(NodeHierarchical * child : children){
+		dynamic_cast<Joint *>(child)->update(_step);
+	}
 }

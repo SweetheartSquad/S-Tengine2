@@ -20,9 +20,16 @@ private:
 	Animation * animation;
 	float startValue;
 	float oldStartValue;
+	// Location of the keyframe on the timeline
+	float time;
+	// Value of the property at the given time
+	float value;
+	// Interpolation type for the tween
+	Easing::Type interpolation;
 
-	Tween tween;
-	std::vector<Tween> * tweens;
+	Tween * tween;
+
+	bool executed;
 
 	/*float deltaTime;
 	float deltaValue;

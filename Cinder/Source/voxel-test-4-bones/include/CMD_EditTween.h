@@ -22,7 +22,6 @@ private:
 	float oldStartValue;
 
 	Tween * tween;
-	std::vector<Tween> * tweens;
 	
 	// ??? float oldDeltaTime;
 	float oldDeltaValue;
