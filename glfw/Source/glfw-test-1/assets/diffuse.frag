@@ -91,24 +91,24 @@ void main()
    
 	for (int i=0; i<16; i++){
 
-		//int index = int(16.0*random(floor(fragVert.xyz*1000.0), i))%16;
+		//int index = int(16.0*random(floor(fragVert.xyz*500.0), i))%16;
         vec3 ProjCoords = shadowCoord.xyz / shadowCoord.w;
 		vec2 UVCoords;
 		
-		UVCoords.x = (0.5 * ProjCoords.x + 0.5 + poissonDisk[i]/700.0);
-		UVCoords.y = (0.5 * ProjCoords.y + 0.5 + poissonDisk[i]/700.0);
+		UVCoords.x = (0.5 * ProjCoords.x + 0.5 + poissonDisk[i].x/900.0);
+		UVCoords.y = (0.5 * ProjCoords.y + 0.5 + poissonDisk[i].y/900.0);
+
 		float z = 0.5 * ProjCoords.z + 0.5;
 		float Depth = texture(shadowMapSampler, UVCoords).x;
 		
+		if(Depth < z - 0.005){
+			visibility -= 0.05;
+			}
 		if (z - Depth < 0.1){
-			visibility-= z - Depth;
-		}else{
-			visibility = 0;
+			visibility -= z - Depth;
 		}
 	}
 	outColor = vec4(vec3(clamp(visibility, 0,1)), 1);
-	/*if(visibility < 0.8){
-		visibility -= 0.4;
-	}*/
+	
 	outColor = vec4((brightness) * vec3(outIntensities), 1) * vec4(vec3(fragColorTex.xyz) * clamp(visibility, 0.2, 1), 1);
 }
