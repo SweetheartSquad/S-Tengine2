@@ -231,13 +231,14 @@ void MainScene::render(){
 	depthBuffer->resize(width, height);
 	depthBuffer->bindFrameBuffer();
 	renderOptions->overrideShader = depthShader;
+	glCullFace(GL_FRONT);
 	Scene::render();
 
 	frameBuffer->resize(width, height);
 	frameBuffer->bindFrameBuffer();
 	renderOptions->shadowMapTextureId = depthBuffer->getTextureId();
 	renderOptions->overrideShader = nullptr;
-
+	glCullFace(GL_BACK);
 	Scene::render();
 	renderSurface->render(frameBuffer->getTextureId());
 	renderOptions->shadowMapTextureId = 0;
