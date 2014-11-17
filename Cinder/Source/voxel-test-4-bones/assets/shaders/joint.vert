@@ -12,7 +12,7 @@ void main()
 	faceNormals = gl_Normal*0.5+vec3(0.5,0.5,0.5);
 
 	gl_TexCoord[0] = gl_MultiTexCoord0;
-	vVertexPosition = (modelMatrix * viewMatrix * projectionMatrix * gl_Vertex).xyz;
-	gl_Position = modelMatrix * viewMatrix * projectionMatrix * gl_Vertex;
+	vVertexPosition = (modelMatrix * gl_Vertex).xyz;
+	gl_Position = ftransform();
 	gl_FrontColor = gl_Color;
 }

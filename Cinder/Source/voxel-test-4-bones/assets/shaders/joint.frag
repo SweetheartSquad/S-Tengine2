@@ -19,5 +19,5 @@ void main(){
 	
 	// write position in fourth color target
 	//gl_FragData[3] = vec4(vVertexPosition, 1.0f);
-	gl_FragData[3] = vec4(0.5f*vVertexPosition+0.5f, 1.0f);
+	gl_FragData[3] = vec4(vVertexPosition, 1.0f);
 }

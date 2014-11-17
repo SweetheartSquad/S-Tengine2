@@ -534,24 +534,20 @@ void CinderApp::mouseDown( MouseEvent event ){
 					// place voxel
 					Color voxel;
 					pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
-					if(voxel.r > 0 && voxel.g > 0 && voxel.b > 0
-						&& voxel.r < 1 && voxel.g < 1 && voxel.b < 1){
-							Vec3f coord(voxel.r, voxel.g, voxel.b);
-							coord -= Vec3f(0.5,0.5,0.5);
-							coord /= Vec3f(0.5,0.5,0.5);
-							coord = (sourceCam->getModelViewMatrix() * sourceCam->getProjectionMatrix()).inverted() * coord;
-							
-							cmdProc.executeCommand(new CMD_PlaceVoxel(coord));
+					if(voxel != Color(0,0,0)){
+							cmdProc.executeCommand(new CMD_PlaceVoxel(Vec3f(voxel.r, voxel.g, voxel.b)));
 					}else{
-						console() << "outside bounds" << std::endl;
+						console() << "bg" << std::endl;
 					}
 				}else{
 					// delete voxel
 					unsigned long int voxel;
 					pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
-					Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
-					if(t != NULL){
-						cmdProc.executeCommand(new CMD_DeleteVoxel(t));
+					if(voxel != 0){
+						Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
+						if(t != NULL){
+							cmdProc.executeCommand(new CMD_DeleteVoxel(t));
+						}
 					}
 				}
 			}
@@ -799,6 +795,7 @@ void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area, unsigned long in
 	//  -one for the scene as we will view it
 	//  -one to contain a color coded version of the scene that we can use for picking
 	fmt.enableColorBuffer( true, _numChannels );
+		fmt.setColorInternalFormat(GL_RGBA32F);
 
 	// anti-aliasing samples
 	fmt.setSamples(0);
