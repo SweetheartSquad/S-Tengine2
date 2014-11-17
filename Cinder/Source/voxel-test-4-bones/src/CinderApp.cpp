@@ -256,10 +256,16 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		// bind phong shader, which renders to both our color targets.
 		//  See 'shaders/phong.frag'
 		jointShader.bind();
-		
+
 		jointShader.uniform("offset", false);
 		// draw joints:
 		MatrixStack mStack;
+		jointShader.uniform("camEye", cam.getEyePoint());
+		jointShader.uniform("viewMatrix", cam.getModelViewMatrix());
+		jointShader.uniform("projectionMatrix", cam.getProjectionMatrix());
+		
+
+
 		for(Joint * j : joints){
 			j->shader = &jointShader;
 			j->render(&mStack, nullptr);
@@ -523,23 +529,30 @@ void CinderApp::mouseDown( MouseEvent event ){
 
 	if(!event.isAltDown()){
 		if(mode == PAINT_VOXELS){
-			if(event.isLeft()){
-				// place voxel
-				Color voxel;
-				pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
-				if(voxel.r > 0 && voxel.g > 0 && voxel.b > 0
-					&& voxel.r < 1 && voxel.g < 1 && voxel.b < 1){
-						cmdProc.executeCommand(new CMD_PlaceVoxel(Vec3f(voxel.r, voxel.g, voxel.b)*10));
+			if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
+				if(event.isLeft()){
+					// place voxel
+					Color voxel;
+					pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
+					if(voxel.r > 0 && voxel.g > 0 && voxel.b > 0
+						&& voxel.r < 1 && voxel.g < 1 && voxel.b < 1){
+							Vec3f coord(voxel.r, voxel.g, voxel.b);
+							coord -= Vec3f(0.5,0.5,0.5);
+							coord /= Vec3f(0.5,0.5,0.5);
+							coord = (sourceCam->getModelViewMatrix() * sourceCam->getProjectionMatrix()).inverted() * coord;
+							
+							cmdProc.executeCommand(new CMD_PlaceVoxel(coord));
+					}else{
+						console() << "outside bounds" << std::endl;
+					}
 				}else{
-					console() << "outside bounds" << std::endl;
-				}
-			}else{
-				// delete voxel
-				unsigned long int voxel;
-				pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
-				Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
-				if(t != NULL){
-					cmdProc.executeCommand(new CMD_DeleteVoxel(t));
+					// delete voxel
+					unsigned long int voxel;
+					pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+					Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
+					if(t != NULL){
+						cmdProc.executeCommand(new CMD_DeleteVoxel(t));
+					}
 				}
 			}
 		}else if(mode == CREATE){
