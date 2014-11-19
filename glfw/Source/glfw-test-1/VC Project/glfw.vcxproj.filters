@@ -281,9 +281,6 @@
     <ClInclude Include="..\include\StandardFrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\ShaderVariables.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\junkdata.frag">
@@ -324,6 +321,12 @@
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="..\assets\DepthMapShader.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\shadow.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\shadow.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

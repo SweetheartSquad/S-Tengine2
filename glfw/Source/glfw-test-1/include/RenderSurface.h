@@ -27,7 +27,7 @@ public:
 	void unload();
 	/**Calls unload, reload*/
 	void reload();
-	/**Renders a frame buffers texture buffer to this surface using the 
+	/**Renders a frame buffers texture buffer to this surface using the
 	*  Main openGL framne buffer */
-	void render(GLuint _textureId);
+	void render(GLuint _textureId, GLint _renderTo = 0);
 };

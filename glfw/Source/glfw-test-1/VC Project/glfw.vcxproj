@@ -203,6 +203,8 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <None Include="..\assets\junkdata.vert" />
     <None Include="..\assets\RenderSurface.frag" />
     <None Include="..\assets\RenderSurface.vert" />
+    <None Include="..\assets\shadow.frag" />
+    <None Include="..\assets\shadow.vert" />
     <None Include="..\assets\voxel.frag" />
     <None Include="..\assets\voxel.geom" />
     <None Include="..\assets\voxel.vert" />

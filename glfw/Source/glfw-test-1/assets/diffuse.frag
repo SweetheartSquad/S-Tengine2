@@ -104,11 +104,11 @@ void main()
 		if(Depth < z - 0.005){
 			visibility -= 0.05;
 			}
-		if (z - Depth < 0.1){
-			visibility -= z - Depth;
-		}
+		//if (z - Depth < 0.1){
+		//	visibility -= z - Depth;
+		//}
 	}
 	outColor = vec4(vec3(clamp(visibility, 0,1)), 1);
 	
-	outColor = vec4((brightness) * vec3(outIntensities), 1) * vec4(vec3(fragColorTex.xyz) * clamp(visibility, 0.2, 1), 1);
+	outColor = vec4((brightness) * vec3(outIntensities), 1) * vec4(vec3(fragColorTex.xyz) * clamp(visibility, 0.5, 1), 1);
 }

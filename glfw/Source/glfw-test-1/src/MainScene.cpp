@@ -31,8 +31,10 @@ Light *tLight;
 
 StandardFrameBuffer * frameBuffer;
 DepthFrameBuffer * depthBuffer;
+StandardFrameBuffer * shadowBuffer;
 
 RenderSurface * renderSurface;
+RenderSurface * shadowSurface;
 
 Entity * loaded1;
 
@@ -46,9 +48,12 @@ MainScene::MainScene(Game * _game):
 
 	depthBuffer = new DepthFrameBuffer(true);
 
+	shadowBuffer = new StandardFrameBuffer(true);
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	renderSurface = new RenderSurface(new Shader("../assets/RenderSurface", false, true));
+	shadowSurface = new RenderSurface(new Shader("../assets/shadow", false, true));
 
 	texShader = new Shader("../assets/diffuse", false, true);
 	voxShader = new Shader("../assets/voxel", true, true);
@@ -224,7 +229,6 @@ void MainScene::update(){
 }
 
 void MainScene::render(){
-	
 	int width, height;
 
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
@@ -232,14 +236,24 @@ void MainScene::render(){
 	depthBuffer->bindFrameBuffer();
 	renderOptions->overrideShader = depthShader;
 	glCullFace(GL_FRONT);
+
 	Scene::render();
+
+	shadowBuffer->resize(width, height);
+	shadowBuffer->bindFrameBuffer();
+	shadowSurface->render(depthBuffer->getTextureId(), shadowBuffer->frameBufferId);
+
+	//Scene::render();
 
 	frameBuffer->resize(width, height);
 	frameBuffer->bindFrameBuffer();
-	renderOptions->shadowMapTextureId = depthBuffer->getTextureId();
+	renderOptions->shadowMapTextureId = shadowBuffer->getTextureId();
 	renderOptions->overrideShader = nullptr;
 	glCullFace(GL_BACK);
+
 	Scene::render();
+
+	//renderSurface->render(shadowBuffer->getTextureId());
 	renderSurface->render(frameBuffer->getTextureId());
 	renderOptions->shadowMapTextureId = 0;
 }
@@ -249,7 +263,7 @@ void MainScene::onContextChange(){
 	depthBuffer->unload();
 	depthShader->unload();
 	renderSurface->unload();
-	
+
 	Scene::onContextChange();
 
 	frameBuffer->load();
