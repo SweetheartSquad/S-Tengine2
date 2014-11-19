@@ -30,7 +30,11 @@ void Entity::draw(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 
 	mesh->load();
 	mesh->clean();
-	_renderStack->shader = shader;
+	if(_renderStack->overrideShader == nullptr){
+		_renderStack->shader = shader;
+	}else{
+		_renderStack->shader = _renderStack->overrideShader;
+	}
 	mesh->render(_matrixStack, _renderStack);
 
 	for(Node * child : children){
@@ -68,6 +72,13 @@ void Entity::setShader(Shader * _shader, bool _confiugreDefaultAttributes){
 			mesh->configureDefaultVertexAttributes(shader);
 		}
 	}
+}
+
+void Entity::setShaderOnChildren(Shader * _shader){
+	for(NodeHierarchical * entity : children){
+		(dynamic_cast<Entity*>(entity))->setShaderOnChildren(_shader);
+	}
+	setShader(_shader, false);
 }
 
 void Entity::unload(){

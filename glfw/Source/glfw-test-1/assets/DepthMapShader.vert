@@ -9,17 +9,17 @@ layout(location = 4) in vec2 aVertexUVs;
 uniform mat4 MVP;
 uniform mat4 depthMVP;
 
+uniform mat4 model;
+
 out vec3 fragVertGeo;
 out vec3 fragNormalGeo;
 out vec4 fragColorGeo;
 out vec2 fragUVGeo;
-out vec4 shadowCoord;
 
 void main(){
 	fragVertGeo = aVertexPosition;
 	fragNormalGeo = aVertexNormals;
 	fragColorGeo = aVertexColor;
 	fragUVGeo = aVertexUVs;
-	gl_Position = vec4(aVertexPosition, 1.0);
-	shadowCoord = depthMVP * vec4(aVertexPosition, 1);
+	gl_Position = depthMVP * vec4(aVertexPosition, 1.0); 
 }

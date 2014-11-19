@@ -67,9 +67,9 @@ void Camera::update(){
 
 	transform->orientation = glm::slerp(lastOrientation, transform->orientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
 
-	forwardVectorRotated	= transform->orientation * forwardVectorLocal;
-	rightVectorRotated		= transform->orientation * rightVectorLocal;
-	upVectorRotated			= transform->orientation *  upVectorLocal;
+	forwardVectorRotated   = transform->orientation * forwardVectorLocal;
+	rightVectorRotated	   = transform->orientation * rightVectorLocal;
+	upVectorRotated		   = transform->orientation *  upVectorLocal;
 
 	glfwSetCursorPos(vox::currentContext, centerX, centerY);
 

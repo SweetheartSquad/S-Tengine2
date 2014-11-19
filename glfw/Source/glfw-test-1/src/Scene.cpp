@@ -1,12 +1,12 @@
 #pragma once
 
 #include "Scene.h"
-#include "RenderOptions.h"
 
 Scene::Scene(Game * _game):
 	game(_game),
 	camera(new Camera()),
 	matrixStack(new MatrixStack()),
+	renderOptions(new RenderOptions(nullptr, &lights)),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance())
@@ -48,10 +48,8 @@ void Scene::render(){
 	matrixStack->projectionMatrix = camera->getProjectionMatrix();
 	matrixStack->viewMatrix		  = camera->getViewMatrix();
 
-	RenderOptions * renderStack = new RenderOptions(nullptr, &lights);
-
 	for(Entity * e : children){
-		e->draw(matrixStack, renderStack);
+		e->draw(matrixStack, renderOptions);
 	}
 
 	GLUtils::checkForError(0,__FILE__,__LINE__);
@@ -78,7 +76,7 @@ void Scene::toggleFullScreen(){
 	}
 	// Create the new window.
 	GLFWwindow * window;
-	window = glfwCreateWindow(w, h, "VOX",  /*vox::fullscreen ? glfwGetPrimaryMonitor() :*/ nullptr, nullptr);
+	window = glfwCreateWindow(w, h, "VOX",  vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 	if(!window){
 		glfwTerminate();
 		exit(EXIT_FAILURE);

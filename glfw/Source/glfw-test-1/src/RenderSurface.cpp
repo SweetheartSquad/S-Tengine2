@@ -20,7 +20,7 @@ RenderSurface::~RenderSurface(){
 
 void RenderSurface::load(){
 	if(!shader->loaded){
-		shader->load();	
+		shader->load();
 	}
 	glUseProgram(shader->getProgramId());
 	// Vertex Array Object (VAO)
@@ -46,7 +46,7 @@ void RenderSurface::unload(){
 	vboId = 0;
 	vaoId = 0;
 	if(shader->loaded){
-		shader->unload();	
+		shader->unload();
 	}
 }
 
@@ -55,13 +55,13 @@ void RenderSurface::reload(){
 	load();
 }
 
-void RenderSurface::render(FrameBufferInterface _frameBuffer){
+void RenderSurface::render(GLuint _textureId, GLint _renderTo){
 	glUseProgram(shader->getProgramId());
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, _renderTo);
 	glBindVertexArray(vaoId);
 	glDisable(GL_DEPTH_TEST);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _frameBuffer.textureBufferId);
+	glBindTexture(GL_TEXTURE_2D, _textureId);
 	glDrawArrays(GL_QUADS, 0, vertices.size());
 	glEnable(GL_DEPTH_TEST);
 	glBindVertexArray(0);
