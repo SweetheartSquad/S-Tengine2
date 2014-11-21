@@ -6,21 +6,55 @@
 /** Singleton encapsulating keyboard events and properties */
 class Keyboard{
 public:
-	/** Returns true if the given key is currently pressed down */
+
+	/**
+	* Returns true if the given key is currently pressed down
+	*
+	* @param The GLFW key code - eg. GLFW_KEY_A
+	* @return Whether the key is currently down or not
+	*/
 	bool keyDown(int _glfwKeyCode);
-	/** Returns true if the given key was released since the keyboard's last call to update */
+
+	/**
+	* Returns true if the given key was released since the keyboard's last call to update
+	*
+	* @param The GLFW key code - eg. GLFW_KEY_A
+	* @return Whether the key was released since the last keyboard update
+	*/
 	bool keyJustUp(int _glfwKeyCode);
-	/** Returns true if the given key was pressed down since the keyboard's last call to update */
+
+	/**
+	* Returns true if the given key was pressed down since the keyboard's last call to update
+	*
+	* @param The GLFW key code - eg. GLFW_KEY_A
+	* @return Whether the key was pressed down since the last keyboard update
+	*/
 	bool keyJustDown(int _glfwKeyCode);
-	/** Clears the maps of justPressed and justReleased keys */
+
+	/**
+	* Clears the maps of justPressed and justReleased keys
+	*/
 	void update();
 
-	/** Inserts _glfwKeyCode into the maps of justPressed and pressed keys */
+	/**
+	* Inserts _glfwKeyCode into the maps of justPressed and pressed keys
+	*
+	* @param The GLFW key code - eg. GLFW_KEY_A
+	*/
 	void keyDownListener(int _glfwKeyCode);
-	/** Inserts _glfwKeyCode into the map of justPressed keys and removes it from the maps of justPressed and pressed keys */
+
+	/**
+	* Inserts _glfwKeyCode into the map of justPressed keys and removes it from the maps of justPressed and pressed keys
+	*
+	* @param The GLFW key code - eg. GLFW_KEY_A
+	*/
 	void keyUpListener(int _glfwKeyCode);
 
-	/** Returns a reference to the keyboard singleton */
+	/**
+	* Used to get a reference to the Keyboard singleton instance
+	*
+	* @return a reference to the keyboard singleton
+	*/
 	static Keyboard& getInstance();
 
 private:

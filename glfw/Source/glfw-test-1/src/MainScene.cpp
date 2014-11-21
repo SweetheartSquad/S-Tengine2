@@ -249,8 +249,6 @@ void MainScene::render(){
 	shadowBuffer->bindFrameBuffer();
 	shadowSurface->render(depthBuffer->getTextureId(), shadowBuffer->frameBufferId);
 
-	//Scene::render();
-
 	frameBuffer->resize(width, height);
 	frameBuffer->bindFrameBuffer();
 	renderOptions->shadowMapTextureId = shadowBuffer->getTextureId();
@@ -259,7 +257,6 @@ void MainScene::render(){
 
 	Scene::render();
 
-	//renderSurface->render(shadowBuffer->getTextureId());
 	renderSurface->render(frameBuffer->getTextureId());
 	renderOptions->shadowMapTextureId = 0;
 }

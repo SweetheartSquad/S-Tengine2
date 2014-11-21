@@ -1,11 +1,11 @@
 #include "Cube.h"
 
-Cube::Cube(glm::vec3 _center, float _size):
+Cube::Cube(glm::vec3 _center, float _scale):
 	Entity(new QuadMesh(GL_QUADS, GL_STATIC_DRAW), new Transform())
 {
 	QuadMesh * m = static_cast<QuadMesh *>(mesh);
 
-	transform->scale(_size, _size, _size);
+	transform->scale(_scale, _scale, _scale);
 	transform->translate(_center);
 
 	//Top
