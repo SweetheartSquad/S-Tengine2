@@ -91,7 +91,6 @@ MainScene::MainScene(Game * _game):
 	cube->addChild(cube2);
 	addChild(cube3);
 	cube3->setShader(texShader, true);
-	cube3->mesh->vertices.at(3).x += 0.5;
 	cube3->transform->translateX(0.5);
 	cube3->mesh->pushTexture2D(tex);
 
@@ -136,7 +135,8 @@ MainScene::MainScene(Game * _game):
 	tLight2->data.attenuation = 0.2f;
 	tLight2->data.ambientCoefficient = 0.005f;
 
-	lights.push_back(tLight);
+	tLight2->transform->translateX(2);
+	//lights.push_back(tLight);
 	lights.push_back(tLight2);
 
 	FakeAnimation * cat = new FakeAnimation(new Transform(), texShader, nullptr);
@@ -237,12 +237,11 @@ void MainScene::update(){
 
 void MainScene::render(){
 	int width, height;
-
+	glCullFace(GL_FRONT);
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
 	depthBuffer->resize(width, height);
 	depthBuffer->bindFrameBuffer();
 	renderOptions->overrideShader = depthShader;
-	glCullFace(GL_FRONT);
 
 	Scene::render();
 
@@ -270,6 +269,7 @@ void MainScene::onContextChange(){
 	depthBuffer->unload();
 	depthShader->unload();
 	renderSurface->unload();
+	shadowBuffer->unload();
 
 	Scene::onContextChange();
 
@@ -277,4 +277,5 @@ void MainScene::onContextChange(){
 	depthBuffer->load();
 	depthShader->load();
 	renderSurface->load();
+	shadowBuffer->load();
 }

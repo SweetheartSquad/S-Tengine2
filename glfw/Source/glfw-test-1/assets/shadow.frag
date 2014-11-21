@@ -3,8 +3,8 @@ in vec2 Texcoord;
 out vec4 outColor;
 uniform sampler2D texFramebuffer;
 
-const float blurSizeH = 1.0 / 2500.0;
-const float blurSizeV = 1.0 / 2500.0;
+const float blurSizeH = 1.0 / 2000.0;
+const float blurSizeV = 1.0 / 2000.0;
 void main() {
     vec4 sum = vec4(0.0);
     for (int x = -4; x <= 4; x++)
