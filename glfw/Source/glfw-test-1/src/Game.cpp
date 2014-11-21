@@ -1,4 +1,6 @@
 #include "Game.h"
+#include "Keyboard.h"
+#include "Mouse.h"
 
 //these shouldn't be global
 double lastTime = glfwGetTime();

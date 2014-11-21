@@ -9,6 +9,11 @@
 #include "FrameBufferChannel.h"
 #include "StandardFrameBuffer.h"
 #include "DepthFrameBuffer.h"
+#include "RenderSurface.h"
+#include "Keyboard.h"
+#include "Mouse.h"
+#include "RenderOptions.h"
+#include "Camera.h"
 
 Cube * cube;
 Cube * cube2;
@@ -26,16 +31,12 @@ Material * bMat;
 Shader * texShader;
 Shader * phongShader;
 Shader * voxShader;
-Shader * depthShader;
 
 Light *tLight;
 
 StandardFrameBuffer * frameBuffer;
-DepthFrameBuffer * depthBuffer;
-StandardFrameBuffer * shadowBuffer;
 
 RenderSurface * renderSurface;
-RenderSurface * shadowSurface;
 
 Entity * loaded1;
 
@@ -47,21 +48,15 @@ MainScene::MainScene(Game * _game):
 	frameBuffer = new StandardFrameBuffer(true);
 	frameBuffer->checkFrameBufferStatus();
 
-	depthBuffer = new DepthFrameBuffer(true);
-
-	shadowBuffer = new StandardFrameBuffer(true);
-
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	renderSurface = new RenderSurface(new Shader("../assets/RenderSurface", false, true));
-	shadowSurface = new RenderSurface(new Shader("../assets/shadow", false, true));
 
 	texShader = new Shader("../assets/diffuse", false, true);
 
 	phongShader = new Shader("../assets/phong", false, true);
 
 	voxShader = new Shader("../assets/voxel", true, true);
-	depthShader = new Shader("../assets/DepthMapShader", false, true);
 
 	tex = new Texture("../assets/uv-test.jpg", 1000, 1000, true, true);
 	voxTex = new Texture("../assets/voxel-texture.png", 512, 512, true, true);
@@ -237,23 +232,13 @@ void MainScene::update(){
 
 void MainScene::render(){
 	int width, height;
-	glCullFace(GL_FRONT);
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
-	depthBuffer->resize(width, height);
-	depthBuffer->bindFrameBuffer();
-	renderOptions->overrideShader = depthShader;
 
-	Scene::render();
-
-	shadowBuffer->resize(width, height);
-	shadowBuffer->bindFrameBuffer();
-	shadowSurface->render(depthBuffer->getTextureId(), shadowBuffer->frameBufferId);
+	Scene::renderShadows();
 
 	frameBuffer->resize(width, height);
 	frameBuffer->bindFrameBuffer();
-	renderOptions->shadowMapTextureId = shadowBuffer->getTextureId();
 	renderOptions->overrideShader = nullptr;
-	glCullFace(GL_BACK);
 
 	Scene::render();
 

@@ -1,12 +1,21 @@
 #pragma once
 
 #include "Scene.h"
+#include <DepthFrameBuffer.h>
+#include <StandardFrameBuffer.h>
+#include <Camera.h>
+#include <RenderOptions.h>
+#include "RenderSurface.h"
 
 Scene::Scene(Game * _game):
 	game(_game),
 	camera(new Camera()),
 	matrixStack(new MatrixStack()),
 	renderOptions(new RenderOptions(nullptr, &lights)),
+	shadowBuffer(new StandardFrameBuffer(true)),
+	depthBuffer(new DepthFrameBuffer(true)),
+	depthShader(new Shader("../assets/DepthMapShader", false, true)),
+	shadowSurface(new RenderSurface(new Shader("../assets/shadow", false, true))),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance())
@@ -99,4 +108,26 @@ void Scene::onContextChange(){
 	for(Entity * e : children){
 		e->reset();
 	}
+}
+
+void Scene::renderShadows(){
+	Shader * backupOverride = renderOptions->overrideShader;
+	int width, height;
+	//Do we actuall need this?
+	//glCullFace(GL_FRONT);
+	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+	depthBuffer->resize(width, height);
+	depthBuffer->bindFrameBuffer();
+	renderOptions->overrideShader = depthShader;
+
+	Scene::render();
+
+	shadowBuffer->resize(width, height);
+	shadowBuffer->bindFrameBuffer();
+	shadowSurface->render(depthBuffer->getTextureId(), shadowBuffer->frameBufferId);
+	renderOptions->shadowMapTextureId = shadowBuffer->getTextureId();
+	renderOptions->overrideShader = backupOverride;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//Do we actually need this?
+	//glCullFace(GL_BACK);
 }

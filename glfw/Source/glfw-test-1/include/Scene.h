@@ -2,16 +2,13 @@
 
 #include <iostream>
 #include "Entity.h"
-#include "Keyboard.h"
-#include "Mouse.h"
-#include "Camera.h"
-#include "Light.h"
-#include "FrameBufferInterface.h"
-#include <Plane.h>
-#include <RenderSurface.h>
-#include "RenderOptions.h"
 
-//Forward declaration since Game has many scenes and Sene has a reference back to game
+class RenderSurface;
+class Camera;
+class Keyboard;
+class StandardFrameBuffer;
+class DepthFrameBuffer;
+class Mouse;
 class Game;
 
 class Scene{
@@ -26,7 +23,11 @@ public:
 	/** Reference to this scene's camera */
 	Camera * camera;
 	/** Reference to a list of references to entitites included in this scene */
-	RenderOptions * renderOptions;
+	RenderOptions       * renderOptions;
+	DepthFrameBuffer    * depthBuffer;
+	StandardFrameBuffer * shadowBuffer;
+	Shader              * depthShader;
+	RenderSurface       * shadowSurface;
 	std::vector<Entity *> children;
 	/** The lights for this scene **/
 	std::vector<Light *> lights;
@@ -42,4 +43,6 @@ public:
 	void toggleFullScreen();
 	/**Called when the openGL context is changed. eg. Entering full screen*/
 	virtual void onContextChange();
+
+	virtual void renderShadows();
 };

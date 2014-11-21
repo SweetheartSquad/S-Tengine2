@@ -3,7 +3,11 @@
 #include <iostream>
 #include <map>
 
-/** Singleton encapsulating keyboard events and properties */
+/**
+* Singleton encapsulating keyboard events and properties
+*
+* TODO - Add modifier keys to the value section of the maps
+*/
 class Keyboard{
 public:
 
