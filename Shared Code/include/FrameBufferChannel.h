@@ -4,16 +4,26 @@
 
 class FrameBufferChannel{
 public:
+	/** Enum for a channels type. Either a texture2D or a render buffer*/
 	enum ChannelType{
 		TEXTURE,
 		RENDER_BUFFER
 	} channelType;
 
+	/**The iternal format of the buffer channel*/
 	GLint  internalFormat;
+	/**The attachement type of the buffer channel*/
 	GLenum attachmentType;
+	/**The size of te data type. eg GL_UNSIGNED_INT*/
 	GLenum size;
+	/**The format of the buffer channel*/
 	GLenum format;
+	/**
+	* The id of te buffer channel. Depending on the type of channel this
+	* may be a texture ID or a render buffer ID
+	*/
 	GLuint id;
+
 	/**_internalFormat refers to the format OpenGL uses to store the channel. Possible base types are:
 	* GL_ALPHA
 	* GL_LUMINANCE

@@ -1,4 +1,7 @@
+# pragma once
+
 #include "DepthFrameBuffer.h"
+
 #include <GLFW/glfw3.h>
 
 DepthFrameBuffer::DepthFrameBuffer(bool _autoRelase):

@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Scene.h"
-#include <DepthFrameBuffer.h>
-#include <StandardFrameBuffer.h>
-#include <Camera.h>
-#include <RenderOptions.h>
+#include "DepthFrameBuffer.h"
+#include "StandardFrameBuffer.h"
+#include "Camera.h"
+#include "RenderOptions.h"
 #include "RenderSurface.h"
+#include "Keyboard.h"
+#include "Mouse.h"
 
 Scene::Scene(Game * _game):
 	game(_game),
