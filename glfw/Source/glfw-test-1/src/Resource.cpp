@@ -1,6 +1,17 @@
+#pragma once
+
+#include <SOIL.h>
+#include <regex>
+#include <sstream>
+#include <iostream>
+
+#include <glm/glm.hpp>
+
+#include <soil.h>
+
+#include "MeshInterface.h"
 #include "Resource.h"
-#include <FileUtils.h>
-#include <MeshInterface.h>
+#include "FileUtils.h"
 
 Resource::Resource(){}
 Resource::~Resource(){}
