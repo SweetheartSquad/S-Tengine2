@@ -3,9 +3,12 @@
 #include <iostream>
 #include "Entity.h"
 
-/**
+/*****************************
+*
 * A simple plane Entity.
-*/
+*
+******************************/
+
 class Plane : public Entity{
 public:
 	virtual char * getTypename(){

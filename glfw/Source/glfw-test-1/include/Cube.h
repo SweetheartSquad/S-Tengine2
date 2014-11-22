@@ -4,9 +4,12 @@
 
 #include "Entity.h"
 
-/**
+/*******************************
+*
 * A simple cube Entity.
-*/
+*
+********************************/
+
 class Cube : public Entity{
 public:
 
