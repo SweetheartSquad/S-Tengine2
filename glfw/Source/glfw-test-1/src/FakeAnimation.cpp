@@ -3,6 +3,7 @@
 #include "FakeAnimation.h"
 #include "Resource.h"
 #include "Entity.h"
+#include "MatrixStack.h"
 
 void FakeAnimation::pushFrame(Entity * _frame){
 	_frame->transform = this->transform;

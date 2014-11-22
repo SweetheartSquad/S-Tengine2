@@ -8,6 +8,7 @@
 #include "RenderSurface.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "MatrixStack.h"
 
 Scene::Scene(Game * _game):
 	game(_game),

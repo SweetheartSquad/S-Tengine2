@@ -1,13 +1,14 @@
 #include "Light.h"
+#include "Transform.h"
 
 Light::Light():
-	transform(new Transform()),
+	NodeTransformable(new Transform()),
 	Node()
 {
 }
 
 Light::Light(Transform * _transform) :
-	transform(_transform),
+	NodeTransformable(_transform),
 	Node()
 {
 }
@@ -15,14 +16,6 @@ Light::Light(Transform * _transform) :
 Light::~Light() {
 	delete transform;
 	transform = nullptr;
-}
-
-void Light::draw(MatrixStack * _matrixStack){
-	//push transform
-	_matrixStack->pushMatrix();
-	_matrixStack->applyMatrix(transform->getModelMatrix());
-	//pop transform
-	_matrixStack->popMatrix();
 }
 
 void Light::update(){

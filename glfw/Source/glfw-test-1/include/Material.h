@@ -22,8 +22,8 @@ public:
 	~Material();
 
 	/** Material doesn't need to load anything */
-	virtual void load();
-	virtual void unload();
+	virtual void load() override;
+	virtual void unload() override;
 	
 	/**
 	* The data struct which is passed to the shader

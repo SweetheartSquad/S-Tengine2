@@ -2,10 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Transform.h"
-#include "Node.h"
-#include "Vox.h"
-#include "MatrixStack.h"
+#include "NodeTransformable.h"
 
 struct LightData {
 	glm::vec3 position;
@@ -14,22 +11,23 @@ struct LightData {
 	float attenuation;
 };
 
-/**A basic light node. Stores a reference to a transform and a struct containing the position and color of the light */
-class Light : public Node{
+/**************************************************************************************************
+*
+* A basic light node. 
+* Stores a reference to a transform and a struct containing the position and color of the light 
+*
+****************************************************************************************************/
+class Light : public NodeTransformable{
 public:
-	/** Reference to this entity's transform */
-	Transform * transform;
 
 	Light();
 	explicit Light(Transform * _transform);
 	~Light();
 
 	/**
-	* Pushes model matrix stack,
-	* Applies the model matrix of transform,
-	* Pops model matrix stack
+	* Updates the light data.position with its transforms
+	* translation vector
 	*/
-	virtual void draw(MatrixStack * _matrixStack);
 	void update();
 
 	/**

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "RenderSurface.h"
 
 #include "Shader.h"
@@ -48,11 +50,6 @@ void RenderSurface::unload(){
 	if(shader->loaded){
 		shader->unload();
 	}
-}
-
-void RenderSurface::reload(){
-	unload();
-	load();
 }
 
 void RenderSurface::render(GLuint _textureId, GLint _renderTo){

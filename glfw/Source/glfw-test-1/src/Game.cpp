@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Game.h"
 #include "Keyboard.h"
 #include "Mouse.h"
@@ -8,7 +10,6 @@ int nbFrames = 0;
 
 Game::Game(bool _isRunning):
 	isRunning(_isRunning),
-	children(new std::vector<Entity *>()),
 	printFPS(true),
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance())

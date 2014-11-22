@@ -1,3 +1,11 @@
+#pragma once
+
+/***************************************************************
+*
+* A data struct for use with framebuffers and render surfaces
+*
+****************************************************************/
+
 struct FrameBufferVertex{
 	
 	float x, y;

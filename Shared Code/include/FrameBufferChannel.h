@@ -2,6 +2,13 @@
 
 #include<gl/glew.h>
 
+/****************************************************************
+*
+* A FrameBuffer Channel. May be a render buffer or a texture2D
+* This class works in conjunction with FrameBufferInterface
+*
+***************************************************************/
+
 class FrameBufferChannel{
 public:
 	/** Enum for a channels type. Either a texture2D or a render buffer*/
@@ -24,7 +31,8 @@ public:
 	*/
 	GLuint id;
 
-	/**_internalFormat refers to the format OpenGL uses to store the channel. Possible base types are:
+	/**
+	* @param _internalFormat Refers to the format OpenGL uses to store the channel. Possible base types are:
 	* GL_ALPHA
 	* GL_LUMINANCE
 	* GL_LUMINANCE_ALPHA
@@ -33,10 +41,10 @@ public:
 	* GL_DEPTH_COMPONENT
 	* For more explicit types refer to table two at the following link : https://www.khronos.org/opengles/sdk/docs/man3/html/glTexImage2D.xhtml
 	*
-	* The _channelType refers to whether the data is saved as a texture or a render buffer.
+	* @param _channelType Refers to whether the data is saved as a texture or a render buffer.
 	* Render buffers are not accessible from shaders.
 	*
-	* The _size refers to the data type used for the texture. This value is not relevant for a render buffer
+	* @param _size Refers to the data type used for the texture. This value is not relevant for a render buffer
 	* The possible values are :
 	* GL_UNSIGNED_BYTE,
 	* GL_BYTE,
@@ -58,14 +66,14 @@ public:
 	* GL_UNSIGNED_INT_10_10_10_2,
 	* GL_UNSIGNED_INT_2_10_10_10_REV
 	*
-	* _atachmentType refers to the achment type to the frame buffer
+	* @param _atachmentType Refers to the achment type to the frame buffer
 	* The possible values are :
 	* GL_COLOR_ATTACHMENT0  -- Always use 0 as this value will be incremented internally,
 	* GL_DEPTH_ATTACHMENT,
 	* GL_STENCIL_ATTACHMENT,
 	* GL_DEPTH_STENCIL_ATTACHMENT
 	*
-	* _format Specifies the format of the pixel data.
+	* @param _format Specifies the format of the pixel data.
 	* The possible values are :
 	* GL_RED, GL_RED_INTEGER,
 	* GL_RG, GL_RG_INTEGER,
@@ -76,6 +84,7 @@ public:
 	* GL_LUMINANCE_ALPHA,
 	* GL_LUMINANCE,
 	* GL_ALPHA.
+	*
 	*/
 	FrameBufferChannel(GLint _internalFormat, GLenum _attachmentType, GLenum _format, ChannelType _channelType, GLenum _size);
 };

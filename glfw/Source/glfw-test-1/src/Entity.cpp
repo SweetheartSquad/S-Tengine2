@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include "RenderOptions.h"
+#include "MatrixStack.h"
 
 Entity::Entity(MeshInterface * _mesh, Transform * _transform, Shader * _shader, Entity * _parent):
 	mesh(_mesh),
