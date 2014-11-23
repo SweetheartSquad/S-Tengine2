@@ -20,8 +20,6 @@ class Joint : public NodeAnimatable, public NodeHierarchical, public NodeRendera
 public:
 	static unsigned long int nextId;
 
-	gl::GlslProg * shader;
-
 	std::vector<Voxel *> voxels;
 
 	// Number of parent-child references from root to this

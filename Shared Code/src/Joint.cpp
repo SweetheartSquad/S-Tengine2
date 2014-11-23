@@ -1,12 +1,13 @@
 #pragma once
 
 #include <cinder\app\App.h>
+#include <cinder\Camera.h>
 
 #include "Joint.h"
 #include "Transform.h"
 
 #include "MatrixStack.h"
-#include "RenderOptions.h"
+#include "CinderRenderOptions.h"
 
 unsigned long int Joint::nextId = 0;
 
@@ -15,7 +16,6 @@ void Joint::init(){
 	parent = nullptr;
 	id = nextId;
 	nextId += 1;
-	shader = nullptr;
 }
 
 Joint::Joint() : 
@@ -83,9 +83,10 @@ Joint::~Joint(){
 }
 
 void Joint::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
-	if(shader != nullptr){
+	CinderRenderOptions * r = (CinderRenderOptions *)_renderStack;
+	if(r->ciShader != nullptr){
 		//gl::enableWireframe();
-		shader->uniform("pickingColor", Color::hex(pickingColor));
+		r->ciShader->uniform("pickingColor", Color::hex(pickingColor));
 		//colour
 		if(depth%3 == 0){
 			gl::color(0, 1, 1);
@@ -115,26 +116,72 @@ void Joint::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 			//vox::rotate(transform->getOrientationMatrix());
 			_matrixStack->applyMatrix(transform->getModelMatrix());
 
-			glUniformMatrix4fv(shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
+			glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 			gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 
 			//draw voxels
+			float resolution = 0.1;
 			for(unsigned long int i = 0; i < voxels.size(); ++i){
 				gl::pushModelView();
 				_matrixStack->pushMatrix();
-					gl::translate(voxels.at(i)->pos);
+					gl::setMatrices(*r->ciCam);
+
+					glm::vec4 voxelPos(voxels.at(i)->pos.x, voxels.at(i)->pos.y, voxels.at(i)->pos.z, 1);
+					
+					glm::vec4 pos = _matrixStack->getCurrentMatrix() * voxelPos;
+					glm::vec4 posDif
+						(
+							fmod(pos.x, resolution),
+							fmod(pos.y, resolution),
+							fmod(pos.z, resolution),
+							0
+						);
+					glm::vec4 finalPos = pos - posDif;
+
+					/*posDif.w = 1;
+					glm::vec4 posDif2 = glm::inverse(_matrixStack->getCurrentMatrix()) * posDif;
+					
+					posDif2.w = 0;
+					voxelPos = voxelPos - posDif2;*/
+
+					/*glm::vec4 finalPos2 = glm::inverse(_matrixStack->getCurrentMatrix()) * finalPos;*/
+					
+					for(unsigned long int x = 0; x < 4; ++x){
+						for(unsigned long int y = 0; y < 4; ++y){
+							_matrixStack->currentModelMatrix[x][y] = x == y ? 1 : 0;
+						}
+					}
+
 					Transform t;
-					t.translate(voxels.at(i)->pos.x, voxels.at(i)->pos.y, voxels.at(i)->pos.z);
+					t.translate(finalPos.x, finalPos.y, finalPos.z);
+					gl::translate(finalPos.x, finalPos.y, finalPos.z);
 					_matrixStack->translate(t.getTranslationMatrix());
-			
-					glUniformMatrix4fv(shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
-					shader->uniform("pickingColor", Color::hex(voxels.at(i)->pickingColor));
-					gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.06f, 16);
+					
+					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
+					r->ciShader->uniform("pickingColor", Color::hex(voxels.at(i)->pickingColor));
+					gl::drawCube(Vec3f(0,0,0), Vec3f(resolution*2,resolution*2,resolution*2));
+
+					/*
+					Transform t;
+					//t.translate(voxels.at(i)->pos.x, voxels.at(i)->pos.y, voxels.at(i)->pos.z);
+					t.rotate(transform->orientation);
+					t.scale(transform->scaleVector);
+
+					glm::vec4 test(voxels.at(i)->pos.x, voxels.at(i)->pos.y, voxels.at(i)->pos.z, 1);
+					test = t.getModelMatrix() * test;
+
+					Vec3f pos = getPos(false) + Vec3f(test.x, test.y, test.z);
+
+					float resolution = 0.1;
+					pos.x -= fmod(pos.x, resolution);
+					pos.y -= fmod(pos.y, resolution);
+					pos.z -= fmod(pos.z, resolution);
+*/
 				gl::popModelView();
 				_matrixStack->popMatrix();
 			}
 		
-			shader->uniform("pickingColor", Color::hex(pickingColor));
+			r->ciShader->uniform("pickingColor", Color::hex(pickingColor));
 			//draw bones
 			for(NodeHierarchical * child : children){
 				Vec3d cinderTrans(
@@ -153,7 +200,7 @@ void Joint::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 					temp.orientation.w = boneDir.w;
 					_matrixStack->rotate(temp.getOrientationMatrix());
 			
-					glUniformMatrix4fv(shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
+					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 					gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
 
 					gl::rotate(Vec3f(0.f, 90.f, 0.f));
@@ -161,12 +208,11 @@ void Joint::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 					temp2.rotate(90, 0, 1, 0);
 					_matrixStack->rotate(temp2.getOrientationMatrix());
 			
-					glUniformMatrix4fv(shader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
+					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 					gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
 				gl::popMatrices();
 				_matrixStack->popMatrix();
 
-				dynamic_cast<Joint *>(child)->shader = shader;
 				dynamic_cast<Joint *>(child)->render(_matrixStack, _renderStack);
 			}
 		gl::popModelView();

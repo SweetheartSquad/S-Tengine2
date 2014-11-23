@@ -19,6 +19,7 @@
 #include "NodeTransformable.h"
 
 #include "MatrixStack.h"
+#include "CinderRenderOptions.h"
 
 
 void CinderApp::prepareSettings(Settings *settings){
@@ -264,11 +265,19 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		jointShader.uniform("viewMatrix", cam.getModelViewMatrix());
 		jointShader.uniform("projectionMatrix", cam.getProjectionMatrix());
 		
+		/*for(unsigned long int x = 0; x < 4; ++x){
+			for(unsigned long int y = 0; y < 4; ++y){
+				mStack.projectionMatrix[x][y] = cam.getProjectionMatrix().at(x,y);
+				mStack.viewMatrix[x][y] = cam.getModelViewMatrix().at(x,y);
+			}
+		}*/
 
+		CinderRenderOptions r(nullptr, nullptr);
+		r.ciCam = &cam;
+		r.ciShader = &jointShader;
 
 		for(Joint * j : joints){
-			j->shader = &jointShader;
-			j->render(&mStack, nullptr);
+			j->render(&mStack, &r);
 		}
 
 		//jointShader.uniform("offset", true);
@@ -543,7 +552,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 					// delete voxel
 					unsigned long int voxel;
 					pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
-					if(voxel != 0){
+					if(NodeSelectable::pickingMap.count(voxel) != 0){
 						Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
 						if(t != NULL){
 							cmdProc.executeCommand(new CMD_DeleteVoxel(t));
