@@ -3,6 +3,13 @@
 #include <vector>
 #include <glm\glm.hpp>
 
+/***********************************************
+*
+* A matrix stack used for matrix operations such
+* as translation, scaling and rotation
+*
+***********************************************/
+
 class MatrixStack{
 
 public:
@@ -19,7 +26,6 @@ public:
 	/**Projection matrix*/ 
 	glm::mat4 projectionMatrix;
 
-	//void calculateModelMatrix();
 	/** Pushes the current model matrix onto the stack */
 	void pushMatrix();
 	/** Restores the current model matrix to the last stored value and pops it off the stack */
@@ -31,12 +37,31 @@ public:
 	/** Clears the model matrix stack */
 	void clearMatrixStack();
 
-	/** currentModelMatrix = currentModelMatrix * _scaleMatrix */
+	/**
+	* currentModelMatrix = currentModelMatrix * _scaleMatrix 
+	*
+	* @param _scaleMatrix The scale matrix to push onto the stack
+	*/
 	void scale(			glm::mat4 _scaleMatrix);
-	/** currentModelMatrix = currentModelMatrix * _rotationMatrix */
+
+	/**
+	* currentModelMatrix = currentModelMatrix * _rotationMatrix 
+	*
+	* @param _scaleMatrix The rotation matrix to push onto the stack
+	*/
 	void rotate(		glm::mat4 _rotationMatrix);
-	/** currentModelMatrix = currentModelMatrix * _translationMatrix */
+
+	/**
+	* currentModelMatrix = currentModelMatrix * _translationMatrix 
+	*
+	* @param _scaleMatrix The translation matrix to push onto the stack
+	*/
 	void translate(		glm::mat4 _translationMatrix);
-	/** currentModelMatrix = currentModelMatrix * _modelMatrix */
+
+	/**
+	* currentModelMatrix = currentModelMatrix * _modelMatrix 
+	*
+	* @param _scaleMatrix The model matrix to push onto the stack
+	*/
 	void applyMatrix(	glm::mat4 _modelMatrix);
 };

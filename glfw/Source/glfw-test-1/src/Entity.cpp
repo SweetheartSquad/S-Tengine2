@@ -2,12 +2,13 @@
 
 #include "Entity.h"
 #include "RenderOptions.h"
+#include "MatrixStack.h"
 
-Entity::Entity(MeshInterface * _mesh, Transform * _transform, Shader * _shader, Entity * _parent):
+Entity::Entity(MeshInterface * _mesh, Transform * _transform, Shader * _shader):
 	mesh(_mesh),
 	NodeAnimatable(_transform),
 	shader(_shader),
-	NodeHierarchical(_parent)
+	NodeHierarchical(nullptr)
 {
 	if(mesh != nullptr && shader != nullptr){
 		reset();
@@ -17,7 +18,9 @@ Entity::Entity(MeshInterface * _mesh, Transform * _transform, Shader * _shader, 
 Entity::~Entity(void){
 	delete transform;
 	delete mesh;
-	shader->decrementAndDelete();
+	if(shader != nullptr){
+		shader->decrementAndDelete();		
+	}
 	transform = nullptr;
 	mesh = nullptr;
 	shader = nullptr;
@@ -25,40 +28,45 @@ Entity::~Entity(void){
 
 void Entity::draw(MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	//push transform
-	_matrixStack->pushMatrix();
-	_matrixStack->applyMatrix(transform->getModelMatrix());
-
-	mesh->load();
-	mesh->clean();
-	_renderStack->shader = shader;
-	mesh->render(_matrixStack, _renderStack);
-
-	for(Node * child : children){
-		dynamic_cast<Entity *>(child)->draw(_matrixStack, _renderStack);
+	if(_matrixStack != nullptr && _renderStack != nullptr){
+		_matrixStack->pushMatrix();
+		_matrixStack->applyMatrix(transform->getModelMatrix());
+	
+		if(mesh != nullptr){
+			mesh->load();
+			mesh->clean();
+		}
+		if(_renderStack->overrideShader == nullptr){
+			_renderStack->shader = shader;
+		}else{
+			_renderStack->shader = _renderStack->overrideShader;
+		}
+		if(mesh != nullptr){
+			mesh->render(_matrixStack, _renderStack);
+		}
+		for(Node * child : children){
+			dynamic_cast<Entity *>(child)->draw(_matrixStack, _renderStack);
+		}
+		//pop transform
+		_matrixStack->popMatrix();
 	}
-	//pop transform
-	_matrixStack->popMatrix();
 }
 
 void Entity::update(){
 }
 
 void Entity::addChild(Entity * _child){
-	_child->setParent(this);
-	children.push_back(_child);
-
-	_child->transform->setParent(this->transform);
-	transform->children.push_back(_child->transform);
+	NodeHierarchical::addChild(_child);
+	if(transform != nullptr){
+		transform->addChild(_child->transform);	
+	}
 }
 
 void Entity::removeChildAtIndex(int _index){
-	children.erase(children.begin()+_index-1);
-	transform->children.erase(transform->children.begin()+_index-1);
-}
-
-void Entity::setParent(Entity * _parent){
-	this->parent = _parent;
-	transform->setParent(_parent->transform);
+	NodeHierarchical::removeChildAtIndex(_index);
+	if(transform != nullptr){
+		transform->removeChildAtIndex(_index);
+	}
 }
 
 void Entity::setShader(Shader * _shader, bool _confiugreDefaultAttributes){
@@ -70,13 +78,23 @@ void Entity::setShader(Shader * _shader, bool _confiugreDefaultAttributes){
 	}
 }
 
+void Entity::setShaderOnChildren(Shader * _shader){
+	for(NodeHierarchical * entity : children){
+		(dynamic_cast<Entity*>(entity))->setShaderOnChildren(_shader);
+	}
+	setShader(_shader, false);
+}
+
 void Entity::unload(){
 	for(Node * child : children){
 		dynamic_cast<Entity *>(child)->unload();
 	}
-
-	mesh->unload();
-	shader->unload();
+	if(mesh != nullptr){
+		mesh->unload();
+	}
+	if(shader != nullptr){
+		shader->unload();	
+	}
 }
 
 void Entity::reset(){
@@ -84,10 +102,16 @@ void Entity::reset(){
 		dynamic_cast<Entity *>(child)->reset();
 	}
 
-	mesh->load();
-	mesh->clean();
-
-	shader->load();
-
-	mesh->configureDefaultVertexAttributes(shader);
+	if(mesh != nullptr){
+		mesh->load();
+		mesh->clean();	
+	}
+	
+	if(shader != nullptr){
+		shader->load();
+	}
+	
+	if(mesh != nullptr){
+		mesh->configureDefaultVertexAttributes(shader);
+	}
 }

@@ -1,12 +1,10 @@
 #include "RenderOptions.h"
 
-RenderOptions::RenderOptions(){
-
-}
-
-RenderOptions::RenderOptions(Shader* _shader, std::vector<Light *> *_lights):
+RenderOptions::RenderOptions(Shader* _shader, std::vector<Light *> *_lights, Shader * _overrideShader):
 	shader(_shader),
-	lights(_lights)
+	lights(_lights),
+	overrideShader(_overrideShader)/*,
+	shadowMapTextureId(0)*/
 {
 }
 

@@ -22,21 +22,20 @@ void GLUtils::checkForError(bool _printSuccess = false, std::string _file = "", 
 	}
 }
 
-const char * GLUtils::buildGLArryReferenceString(std::string _value, unsigned long int _index){
+std::string GLUtils::buildGLArrayReferenceString(std::string _value, unsigned long int _index){
 	std::string r;
 	int i = 0;
 	for(char c : _value){
 		if(c != ']'){
-			r += c;
 			++i;
 		}else{
+			r += _value.substr(0, i);
 			r += std::to_string(_index);
 			r += _value.substr(i, _value.size() - 1);
-			break;
+			return r;
 		}
 	}
-	char * rc = new char[r.length()];
-	return strcpy(rc, r.c_str());
+	throw "string not an array reference";
 }
 
 void GLUtils::configureVertexAttributes(GLint _vertexHandle, unsigned long _arity, int _bufferOffset, GLuint _vaoId, GLsizei _stride){

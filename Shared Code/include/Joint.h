@@ -10,6 +10,7 @@
 #include "NodeHierarchical.h"
 #include "NodeAnimatable.h"
 #include "NodeRenderable.h"
+#include "NodeSelectable.h"
 
 #include "Voxel.h"
 
@@ -17,24 +18,17 @@ class Step;
 
 using namespace ci;
 
-class Joint : public NodeAnimatable, public NodeHierarchical, public NodeRenderable{
+class Joint : public NodeAnimatable, public NodeHierarchical, public NodeRenderable, public NodeSelectable{
 public:
-	static uint32_t nextColor;
 	static unsigned long int nextId;
-	static std::map<uint32_t, Joint *> jointMap;
-
-	gl::GlslProg * shader;
 
 	std::vector<Voxel *> voxels;
-	Color color;
 
 	// Number of parent-child references from root to this
 	unsigned long int depth;
 
 	unsigned long int id;
 	
-	// Recursively delete all the children of a joint, then delete the joint itself
-	static void deleteJoints(NodeHierarchical * _j);
 
 	explicit Joint();
 	explicit Joint(NodeHierarchical * _parent);

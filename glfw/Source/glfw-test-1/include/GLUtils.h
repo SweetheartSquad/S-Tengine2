@@ -14,7 +14,7 @@ public:
 	* For example passing in lights[].position, 2 would return lights.position[2]
 	* This can then be passed into openGL to find the attribute location for lights[2].position
 	*/
-	static const char * buildGLArryReferenceString(std::string _value, unsigned long int _index);
+	static std::string buildGLArrayReferenceString(std::string _value, unsigned long int _index);
 
 	static void configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset, GLuint _vaoId, GLsizei _stride);
 };

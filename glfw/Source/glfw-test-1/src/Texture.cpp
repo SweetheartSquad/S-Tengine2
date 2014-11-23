@@ -1,5 +1,9 @@
+#pragma once
+
 #include "Texture.h"
 #include <Resource.h>
+#include <GLUtils.h>
+#include <SOIL.h>
 
 Texture::Texture(const char* _src, int _width, int _height, bool _storeData, bool _autoRelease) :
 	NodeResource(_autoRelease),

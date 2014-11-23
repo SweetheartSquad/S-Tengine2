@@ -13,8 +13,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "voxel-test-3", "voxel-test-
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "voxel-test-4-bones", "voxel-test-4-bones\VC Project\voxel-test-4-bones.vcxproj", "{B8B5D88C-E497-4FF7-8220-8A9D619D5DD7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "skeleton-test", "skeleton-test\VC Project\skeleton-test.vcxproj", "{CE3AA13E-9CEF-407B-B664-8FB867CCFEE6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -37,10 +35,6 @@ Global
 		{B8B5D88C-E497-4FF7-8220-8A9D619D5DD7}.Debug|Win32.Build.0 = Debug|Win32
 		{B8B5D88C-E497-4FF7-8220-8A9D619D5DD7}.Release|Win32.ActiveCfg = Release|Win32
 		{B8B5D88C-E497-4FF7-8220-8A9D619D5DD7}.Release|Win32.Build.0 = Release|Win32
-		{CE3AA13E-9CEF-407B-B664-8FB867CCFEE6}.Debug|Win32.ActiveCfg = Debug|Win32
-		{CE3AA13E-9CEF-407B-B664-8FB867CCFEE6}.Debug|Win32.Build.0 = Debug|Win32
-		{CE3AA13E-9CEF-407B-B664-8FB867CCFEE6}.Release|Win32.ActiveCfg = Release|Win32
-		{CE3AA13E-9CEF-407B-B664-8FB867CCFEE6}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

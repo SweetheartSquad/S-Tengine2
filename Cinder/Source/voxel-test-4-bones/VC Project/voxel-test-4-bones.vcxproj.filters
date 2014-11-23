@@ -54,9 +54,6 @@
     <ClCompile Include="..\src\CMD_Parent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CMD_RotateSelectedJoints.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -90,9 +87,6 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Tween.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CMD_KeyAll.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\CMD_KeyProperty.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -100,6 +94,39 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\CMD_EditTween.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CMD_KeyAll.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeHierarchical.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeResource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeSelectable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\RenderOptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CinderRenderOptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CMD_DeleteVoxel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CMD_RotateSelectedTransformable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CMD_ScaleSelectedTransformable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Timeline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -151,9 +178,6 @@
     <ClInclude Include="..\include\CMD_Parent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CMD_RotateSelectedJoints.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -203,6 +227,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\CMD_EditTween.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_RotateSelectedJoints.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Easing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeResource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeSelectable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\RenderOptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

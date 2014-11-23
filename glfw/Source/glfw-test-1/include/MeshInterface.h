@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -13,16 +13,10 @@
 #include "Light.h"
 #include "GLUtils.h"
 #include "NodeRenderable.h"
-
-#define GL_UNIFORM_ID_TEXTURE_SAMPLER		"textureSampler"
-#define GL_UNIFORM_ID_NUM_TEXTURES			"numTextures"
-#define GL_UNIFORM_ID_MODEL_MATRIX			"model"
-#define GL_UNIFORM_ID_MODEL_VIEW_PROJECTION "MVP"
-#define GL_UNIFORM_ID_NUM_LIGHTS			"numLights"
-#define GL_UNIFORM_ID_LIGHTS_POSITION		"lights[].position"
-#define GL_UNIFORM_ID_LIGHTS_INTENSITIES	"lights[].intensities"
+#include "ShaderVariables.h"
 
 class Texture;
+class Material;
 class MatrixStack;
 
 class MeshInterface : public NodeRenderable{
@@ -37,6 +31,8 @@ public:
 	std::vector<GLuint> indices;
 	/** Textures */
 	std::vector<Texture *> textures;
+	/** Materials */
+	std::vector<Material *> materials;
 
 public:
 	/** ID of the vertex array object */
@@ -74,6 +70,7 @@ public:
 
 	bool shouldRenderLights;
 	bool shouldRenderTextures;
+	bool shouldRenderShadows;
 	bool shouldRenderExtras;
 
 	/**
@@ -90,19 +87,20 @@ public:
 	/** If dirty, copies data from vertices and indices to VBO and IBO and flags as clean */
 	void clean();
 	/** Renders the vao using the given shader, model-view-projection and lights */
-	virtual void render(MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
+	virtual void render(MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
 	/** Called render loop. Reders the textures for the mesh*/
-	virtual void configureTextures(MatrixStack * _matrixStack, RenderOptions * _renderStack);
+	virtual void configureTextures(MatrixStack * _matrixStack, RenderOptions * _renderOption);
 	/** Called render loop. Sets up the lights in the shader*/
-	virtual void configureLights(MatrixStack * _matrixStack, RenderOptions * _renderStack);
+	virtual void configureLights(MatrixStack * _matrixStack, RenderOptions * _renderOption);
 	/** Sets up the model, view and projection matricies **/
-	virtual void configureModelViewProjection(MatrixStack * _matrixStack, RenderOptions * _renderStack); 
+	virtual void configureModelViewProjection(MatrixStack * _matrixStack, RenderOptions * _renderOption);
+	virtual void configureShadows(MatrixStack * _matrixStack, RenderOptions * _renderOption);
 	/**
 	* Called render loop. Doesn't do anything in the base implementation of MeshInterface
 	* This method can be overriden with any additional render logic. This prevents
 	* the need for overriding the entire render loop
 	*/
-	virtual void configureExtras(MatrixStack * _matrixStack, RenderOptions * _renderStack);
+	virtual void configureExtras(MatrixStack * _matrixStack, RenderOptions * _renderOption);
 	/** A helper method to configure all the starndard vertex attributes - Position, Colours, Normals */
 	void configureDefaultVertexAttributes(Shader *_shader);
 	/** Sets the normal of the given vert to _x, _y, _z */
@@ -112,6 +110,7 @@ public:
 	/** Adds _vertex to the list of vertices*/
 	void pushVert(Vertex _vertex);
 	void pushTexture2D(Texture * _texture);
+	void pushMaterial(Material * _material);
 };
 
 /** MeshInterface preset for triangle meshes */

@@ -13,7 +13,7 @@ public:
 	unsigned long int delay;
 	unsigned long int delayCount;
 
-	FakeAnimation(Transform * _transform, Shader * _shader, Entity * _parent);
+	FakeAnimation(Transform * _transform, Shader * _shader);
 	~FakeAnimation();
 
 	void pushFrame(Entity * _frame);

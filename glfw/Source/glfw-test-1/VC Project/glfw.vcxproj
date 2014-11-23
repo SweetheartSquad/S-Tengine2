@@ -111,12 +111,15 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Shared Code\src\Animation.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\FrameBufferChannel.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Keyframe.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Light.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeHierarchical.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeResource.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeUpdatable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\RenderOptions.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Shader.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Step.cpp" />
@@ -125,6 +128,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\..\..\..\Shared Code\src\VoxMatrices.cpp" />
     <ClCompile Include="..\src\Camera.cpp" />
     <ClCompile Include="..\src\Cube.cpp" />
+    <ClCompile Include="..\src\DepthFrameBuffer.cpp" />
     <ClCompile Include="..\src\Entity.cpp" />
     <ClCompile Include="..\src\FakeAnimation.cpp" />
     <ClCompile Include="..\src\FileUtils.cpp" />
@@ -134,11 +138,13 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\Keyboard.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="..\src\MainScene.cpp" />
+    <ClCompile Include="..\src\Material.cpp" />
     <ClCompile Include="..\src\Mouse.cpp" />
     <ClCompile Include="..\src\Plane.cpp" />
     <ClCompile Include="..\src\RenderSurface.cpp" />
     <ClCompile Include="..\src\Resource.cpp" />
     <ClCompile Include="..\src\Scene.cpp" />
+    <ClCompile Include="..\src\StandardFrameBuffer.cpp" />
     <ClCompile Include="..\src\System.cpp" />
     <ClCompile Include="..\src\TestGame.cpp" />
     <ClCompile Include="..\src\MeshInterface.cpp" />
@@ -147,6 +153,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Shared Code\include\Animation.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\FrameBufferChannel.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Light.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\MatrixStack.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Node.h" />
@@ -163,6 +170,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\..\..\..\Shared Code\include\VoxMatrices.h" />
     <ClInclude Include="..\include\Camera.h" />
     <ClInclude Include="..\include\Cube.h" />
+    <ClInclude Include="..\include\DepthFrameBuffer.h" />
     <ClInclude Include="..\include\Dimension.h" />
     <ClInclude Include="..\include\Entity.h" />
     <ClInclude Include="..\include\FakeAnimation.h" />
@@ -172,10 +180,12 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Game.h" />
     <ClInclude Include="..\include\GLUtils.h" />
     <ClInclude Include="..\include\Keyboard.h" />
+    <ClInclude Include="..\include\Material.h" />
     <ClInclude Include="..\include\Mouse.h" />
     <ClInclude Include="..\include\Plane.h" />
     <ClInclude Include="..\include\RenderSurface.h" />
     <ClInclude Include="..\include\Resource.h" />
+    <ClInclude Include="..\include\StandardFrameBuffer.h" />
     <ClInclude Include="..\include\System.h" />
     <ClInclude Include="..\include\TestGame.h" />
     <ClInclude Include="..\include\MainScene.h" />
@@ -188,13 +198,19 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
   <ItemGroup>
     <None Include="..\assets\ColourShader.frag" />
     <None Include="..\assets\ColourShader.vert" />
+    <None Include="..\assets\DepthMapShader.frag" />
+    <None Include="..\assets\DepthMapShader.vert" />
     <None Include="..\assets\diffuse.frag" />
     <None Include="..\assets\diffuse.vert" />
     <None Include="..\assets\cube.vox" />
     <None Include="..\assets\junkdata.frag" />
     <None Include="..\assets\junkdata.vert" />
+    <None Include="..\assets\phong.frag" />
+    <None Include="..\assets\phong.vert" />
     <None Include="..\assets\RenderSurface.frag" />
     <None Include="..\assets\RenderSurface.vert" />
+    <None Include="..\assets\shadow.frag" />
+    <None Include="..\assets\shadow.vert" />
     <None Include="..\assets\voxel.frag" />
     <None Include="..\assets\voxel.geom" />
     <None Include="..\assets\voxel.vert" />

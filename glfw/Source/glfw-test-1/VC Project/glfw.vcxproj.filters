@@ -144,7 +144,26 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Keyframe.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="..\..\..\..\Shared Code\src\Step.cpp">
+=======
+    <ClCompile Include="..\src\Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\FrameBufferChannel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DepthFrameBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\StandardFrameBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeHierarchical.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeUpdatable.cpp">
+>>>>>>> origin/master
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -260,7 +279,20 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="..\..\..\..\Shared Code\include\Step.h">
+=======
+    <ClInclude Include="..\include\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\FrameBufferChannel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\DepthFrameBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\StandardFrameBuffer.h">
+>>>>>>> origin/master
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -297,6 +329,24 @@
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="..\assets\RenderSurface.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\phong.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\phong.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\DepthMapShader.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\DepthMapShader.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\shadow.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="..\assets\shadow.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

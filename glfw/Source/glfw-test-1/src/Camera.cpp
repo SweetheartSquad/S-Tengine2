@@ -1,13 +1,19 @@
+#pragma once
+
 #include "Camera.h"
+#include "Mouse.h"
+#include "Keyboard.h"
+#include "System.h"
+#include "Transform.h"
 
 Camera::Camera():
+	NodeTransformable(new Transform()),
 	forwardVectorLocal(1.f, 0.f, 0.f),
 	forwardVectorRotated(1.f, 0.f, 0.f),
 	upVectorLocal(0.f, 1.f, 0.f),
 	upVectorRotated(0.f, 1.f, 0.f),
 	rightVectorLocal(0.f, 0.f, 1.f),
 	rightVectorRotated(0.f, 0.f, 1.f),
-	transform(new Transform()),
 	fieldOfView(60.0f),
 	yaw(-30.f),
 	pitch(0.0f),
@@ -67,9 +73,9 @@ void Camera::update(){
 
 	transform->orientation = glm::slerp(lastOrientation, transform->orientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
 
-	forwardVectorRotated	= transform->orientation * forwardVectorLocal;
-	rightVectorRotated		= transform->orientation * rightVectorLocal;
-	upVectorRotated			= transform->orientation *  upVectorLocal;
+	forwardVectorRotated   = transform->orientation * forwardVectorLocal;
+	rightVectorRotated	   = transform->orientation * rightVectorLocal;
+	upVectorRotated		   = transform->orientation *  upVectorLocal;
 
 	glfwSetCursorPos(vox::currentContext, centerX, centerY);
 

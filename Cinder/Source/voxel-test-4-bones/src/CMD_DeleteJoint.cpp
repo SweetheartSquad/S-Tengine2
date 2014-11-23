@@ -7,19 +7,24 @@
 #include "NodeHierarchical.h"
 #include "Joint.h"
 
-CMD_DeleteJoint::CMD_DeleteJoint(std::vector<Joint *> * _joints) :
+CMD_DeleteJoint::CMD_DeleteJoint(std::vector<NodeHierarchical *> * _joints) :
 	joints(_joints)
 {
 }
 
 void CMD_DeleteJoint::execute(){
 	// Save selected joints
-	jointsForDeletion = UI::selectedNodes;
+	for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
+		Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
+		if(j != NULL){
+			jointsForDeletion.push_back(j);
+		}
+	}
 	index.resize(jointsForDeletion.size());
 	children.resize(jointsForDeletion.size());
 
 	for(unsigned long int j = 0; j < jointsForDeletion.size(); ++j){
-		Joint * jointForDeletion = dynamic_cast<Joint *>(jointsForDeletion.at(j));
+		NodeHierarchical * jointForDeletion = dynamic_cast<NodeHierarchical *>(jointsForDeletion.at(j));
 		if(jointForDeletion->children.size() == 0){
 			// If the joint has no children, delete it
 			if(jointForDeletion->parent != nullptr){
@@ -51,7 +56,7 @@ void CMD_DeleteJoint::execute(){
 
 			// Add the children to the list of deleted joints
 			for(unsigned long int child = 0; child < children.at(j).size(); ++child){
-				deletedJoints.push_back(dynamic_cast<Joint *>(children.at(j).at(child)));
+				deletedJoints.push_back(dynamic_cast<NodeHierarchical *>(children.at(j).at(child)));
 			}
 		}
 	}
@@ -64,9 +69,9 @@ void CMD_DeleteJoint::execute(){
 }
 
 void CMD_DeleteJoint::unexecute(){
-	// Should this go in reverse order?
+	// Should this go in reverse order? I think it does already
 	for(unsigned long int j = 0; j < jointsForDeletion.size(); ++j){
-		Joint * jointForDeletion = dynamic_cast<Joint *>(jointsForDeletion.at(j));
+		NodeHierarchical * jointForDeletion = dynamic_cast<NodeHierarchical *>(jointsForDeletion.at(j));
 		if(children.at(j).size() == 0){
 			// If the joint had no children it was deleted, so restore it
 			if(jointForDeletion->parent != nullptr){
@@ -92,7 +97,7 @@ CMD_DeleteJoint::~CMD_DeleteJoint(void){
 	joints = nullptr;
 	// The deleted joints need to be deleted for real
 	for(unsigned long int i = 0; i < deletedJoints.size(); ++i){
-		Joint::deleteJoints(dynamic_cast<NodeHierarchical *>(deletedJoints.at(i)));
+		NodeHierarchical::deleteRecursively(dynamic_cast<NodeHierarchical *>(deletedJoints.at(i)));
 	}
 	deletedJoints.clear();
 	jointsForDeletion.clear();
