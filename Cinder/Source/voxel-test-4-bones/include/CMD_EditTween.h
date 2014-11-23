@@ -16,29 +16,34 @@ public:
 	void unexecute();
 
 private:
-	// If keying time 0
+	// Used in getTweenEndValue function
 	Animation * animation;
-	float startValue;
-	float oldStartValue;
 
-	Tween * tween;
-	
-	// ??? float oldDeltaTime;
-	float oldDeltaValue;
-	Easing::Type oldInterpolation;
-
-	// ??? float deltaTime;
-	float deltaValue;
+	// New value of the property at the given time, used to calculate new deltaValue
+	float value;
+	// New interpolation type for the tween
 	Easing::Type interpolation;
 
-	int nextTweenIdx; // -1 if none
-	//float nextTween_oldDeltaTime;
-	float nextTween_oldDeltaValue;
+	// New deltaValue to be set in the tween
+	float deltaValue;
+	// Old deltaValue set in the tween
+	float oldDeltaValue;
+	// Old interpolation type of the tween
+	Easing::Type oldInterpolation;
 
-	//float nextTween_newDeltaTime;
+	// The index of the tween
+	int idx;
+	Tween * tween;
+
+	// Tween after this tween in animation, will be updated if this tween's deltaValue changes
+	int nextTweenIdx; // -1 if none
+	float nextTween_oldDeltaValue;
 	float nextTween_newDeltaValue;
+
+	bool executed;
 	
 	int getNextTween(int _idx);
+	int getPreviousTween(int _idx);
 	float getTweenEndTime(int _idx);
 	float getTweenEndValue(int _idx, float _startValue);
 	

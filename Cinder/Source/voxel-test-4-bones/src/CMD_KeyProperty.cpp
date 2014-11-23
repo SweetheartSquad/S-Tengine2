@@ -14,24 +14,42 @@ CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _time, float _val
 	animation(_animation),
 	time(_time),
 	value(_value),
-	interpolation(_interpolation)
+	interpolation(_interpolation),
+	oldStartValue(NULL)
 {
-	int idx = findKeyframe(&animation->tweens);
-
-	if(idx >= 0){
-		subCommands.push_back(new CMD_EditTween(animation, value, interpolation, idx));
-	}else{
-		subCommands.push_back(new CMD_AddTween(animation, time, value, interpolation));
-	}
 }
 
 void CMD_KeyProperty::execute(){
+	// Executing for the first time, save the oldStartValue if keying 0, or create an add or edit command
+	if((subCommands.size() == 0) && (oldStartValue == NULL)){
+		if(time == 0.f){
+			oldStartValue = animation->startValue;
+		}else{
+			int idx = findKeyframe(&animation->tweens);
+
+			if(idx >= 0){
+				subCommands.push_back(new CMD_EditTween(animation, value, interpolation, idx));
+			}else{
+				subCommands.push_back(new CMD_AddTween(animation, time, value, interpolation));
+			}
+		}
+	}
 	ci::app::console() << "execute CMD_KeyProperty" << std::endl;
-	subCommands.at(0)->execute();
+	if(subCommands.size() > 0){
+		// add or edit keyframe
+		subCommands.at(0)->execute();
+	}else{
+		// set start value
+		animation->startValue = value;
+	}
 }
 
 void CMD_KeyProperty::unexecute(){
-	subCommands.at(0)->unexecute();
+	if(subCommands.size() > 0){
+		subCommands.at(0)->unexecute();
+	}else{
+		animation->startValue = oldStartValue;
+	}
 }
 
 int CMD_KeyProperty::findKeyframe(std::vector<Tween *> * _tweens){

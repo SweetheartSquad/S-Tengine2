@@ -10,52 +10,50 @@
 
 CMD_EditTween::CMD_EditTween(Animation * _animation, float _value, Easing::Type _interpolation, int _idx) :
 	animation(_animation),
+	value(_value),
 	tween(_animation->tweens.at(_idx)),
+	idx(_idx),
 	interpolation(_interpolation),
-	startValue(NULL)
+	executed(false)
 {
-	// Get index of next tween, if it exists, else -1
-	nextTweenIdx = getNextTween(_idx);
-
-	// Save old deltaTime(?) and deltaValue of edited tween
-	oldDeltaValue = tween->deltaValue;
-
-	// Calculate deltaTime(?) and deltaValue of edited tween
-	deltaValue = _value;
-	if(nextTweenIdx >= 0){
-		// subtract from end time and value of tween before this tween, else they are time and value
-		if(nextTweenIdx != 0){
-			deltaValue = _value - getTweenEndValue(_idx - 1, _animation->startValue);
-		}
-	}else{
-		// subtract from end time and value of last tween, if there are any, else they are time and value
-		if(animation->tweens.size() > 0){
-			deltaValue = _value - getTweenEndValue(animation->tweens.size() - 1, _animation->startValue);
-		}
-	}
-
-	//// if we edit time 0, deltaValue should be 0? set startValue?
-	if(getTweenEndTime(_idx) == 0){
-		startValue = _value;
-		oldStartValue = _animation->startValue;
-		deltaValue = 0;
-	}
-
-	// save and calculate new delta times and values of next tween (being split)
-	if(nextTweenIdx >= 0) {
-		// get old values
-		nextTween_oldDeltaValue = animation->tweens.at(nextTweenIdx)->deltaValue;
-		// calculate new values
-		nextTween_newDeltaValue = getTweenEndValue(nextTweenIdx, _animation->startValue) - _value;
-	}
 }
 
 void CMD_EditTween::execute(){
 	ci::app::console() << "execute CMD_EditTween" << std::endl;
+	
+	// save old tween values and calculate other values being affected by this tween edit
+	if (!executed){
+		// Get index of next tween, if it exists, else -1
+		nextTweenIdx = getNextTween(idx);
 
+		// Save old deltaTime(?) and deltaValue of edited tween
+		oldDeltaValue = tween->deltaValue;
+
+		// Calculate deltaValue of edited tween
+		int prevTweenIdx = getPreviousTween(idx);
+		deltaValue = value;
+		if(prevTweenIdx >= 0){
+			// d2 for value is previous tween's value
+			deltaValue = value - getTweenEndValue(prevTweenIdx, animation->startValue);
+		}else{
+			// d2 for value is start value
+			deltaValue = value - animation->startValue;
+		}
+
+		// save and calculate new delta times and values of next tween (being split)
+		if(nextTweenIdx >= 0) {
+			// get old values
+			nextTween_oldDeltaValue = animation->tweens.at(nextTweenIdx)->deltaValue;
+			// calculate new values
+			nextTween_newDeltaValue = getTweenEndValue(nextTweenIdx, animation->startValue) - value;
+		}
+	}
+	
+	// Edit tween values
 	tween->deltaValue = deltaValue;
 	tween->interpolation = interpolation;
 
+	// TODO: see if I can just create edit tween cmd now
 	// Change next keyframe's start value, if this one's is changing
 	if (deltaValue != oldDeltaValue){
 		if (nextTweenIdx >= 0){
@@ -63,10 +61,7 @@ void CMD_EditTween::execute(){
 		}
 	}
 
-	// If we just keyed time 0, update startValue of animation
-	if(startValue != NULL){
-		animation->startValue = startValue;
-	}
+	executed = true;
 }
 
 void CMD_EditTween::unexecute(){
@@ -79,11 +74,16 @@ void CMD_EditTween::unexecute(){
 			animation->tweens.at(nextTweenIdx)->deltaValue = nextTween_oldDeltaValue;
 		}
 	}
+}
 
-	// If we undid keying time 0, restore startValue of animation
-	if(startValue != NULL){
-		animation->startValue = oldStartValue;
+int CMD_EditTween::getPreviousTween(int _idx){
+	// find index of previous tween
+	int idx = -1;
+
+	if(animation->tweens.size() > 0 && _idx != 0){
+		idx = _idx - 1;
 	}
+	return idx;
 }
 
 int CMD_EditTween::getNextTween(int _idx){

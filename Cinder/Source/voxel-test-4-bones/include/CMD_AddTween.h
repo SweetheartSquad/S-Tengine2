@@ -15,11 +15,9 @@ public:
 	void unexecute();
 
 private:
-
-	// If keying time 0
+	// Used in getTweenEndValue
 	Animation * animation;
-	float startValue;
-	float oldStartValue;
+
 	// Location of the keyframe on the timeline
 	float time;
 	// Value of the property at the given time
@@ -29,12 +27,6 @@ private:
 
 	Tween * tween;
 
-	bool executed;
-
-	/*float deltaTime;
-	float deltaValue;
-	Easing::Type interpolation;*/
-
 	int nextTweenIdx; // -1 if END
 	float nextTween_oldDeltaTime;
 	float nextTween_oldDeltaValue;
@@ -42,6 +34,7 @@ private:
 	float nextTween_newDeltaTime;
 	float nextTween_newDeltaValue;
 	
+	int getPreviousTween(int _idx);
 	int getNextTween(float _time);
 	float getTweenEndTime(int _idx);
 	float getTweenEndValue(int _idx, float _startValue);
