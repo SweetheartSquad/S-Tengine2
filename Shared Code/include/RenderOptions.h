@@ -1,7 +1,7 @@
 #pragma once 
 
 #include <vector>
-#include "GL/glew.h"
+//#include "GL/glew.h"
 #include <glm/glm.hpp>
 
 class Shader;
@@ -20,5 +20,5 @@ public:
 	Shader * shader;
 	Shader * overrideShader;
 
-	GLuint shadowMapTextureId;
+	//GLuint shadowMapTextureId;
 };
