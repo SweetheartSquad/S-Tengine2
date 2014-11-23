@@ -10,7 +10,6 @@ struct Light{
 };
 
 struct Material{
-	int materialType;
 	float shininess;
 	vec3 specularColor;
 };
@@ -54,6 +53,8 @@ void main()
 	vec3 fragWorldPosition = vec3(model * vec4(fragVert, 1));
 
 	vec3 surfaceToCamera = fragVert - fragWorldPosition;
+	
+	outColor = vec4(0,0,0,1);
 
 	for(int i = 0; i < numLights; i++){
 		for(int j = 0; j < numMaterials; j++){
@@ -71,10 +72,10 @@ void main()
 			float specularCoefficient = 0.0;
 			//only calculate specular for the front side of the surface
 			if(diffuseCoefficient > 0.0){
-				vec3 R = normalize(-reflect(surfaceToLight, normal));
-				vec3 E = normalize(-surfaceToCamera);
+				vec3 reflectDirection = normalize(-reflect(surfaceToLight, normal));
+				vec3 viewDirection = normalize(-surfaceToCamera);
 
-				specularCoefficient = pow(max(0.0, dot(R, E)), materials[j].shininess);
+				specularCoefficient = pow(max(0.0, dot(reflectDirection, viewDirection)), materials[j].shininess);
 			}
 			vec3 specular = specularCoefficient * materials[j].specularColor * lights[i].intensities;
 			specular = clamp(specular, 0.0, 1.0);
@@ -84,11 +85,12 @@ void main()
 			float attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2));
 		
 			//linear color (color before gamma correction)
-			vec3 linearColor = ambient + attenuation*(diffuse + specular);
+			vec3 linearColor = ambient + attenuation * (diffuse + specular);
     
 			//final color (after gamma correction)
 			vec3 gamma = vec3(1.0/2.2, 1.0/2.2, 1.0/2.2);
-			outColor = vec4(pow(linearColor, gamma), fragColorTex.a);
+			vec3 gammaColor = pow(linearColor, gamma);
+			outColor = outColor + gammaColor;
 		}
 	}
 }

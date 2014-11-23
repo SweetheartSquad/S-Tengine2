@@ -68,8 +68,8 @@ MainScene::MainScene(Game * _game):
 	tex = new Texture("../assets/uv-test.jpg", 1000, 1000, true, true);
 	voxTex = new Texture("../assets/voxel-texture.png", 512, 512, true, true);
 
-	mat = new Material(PHONG, 10.0, glm::vec3(1.0f, 1.0f, 1.0f), true);
-	bMat = new Material(BLINN, 80.0, glm::vec3(1.0f, 1.0f, 1.0f), true);
+	mat = new Material(2.0, glm::vec3(1.0f, 1.0f, 1.0f), true);
+	bMat = new Material(2.0, glm::vec3(0.5f, 1.0f, 1.0f), true);
 
 	Transform *t = new Transform();
 	t->translateX(-2);
@@ -119,7 +119,7 @@ MainScene::MainScene(Game * _game):
 	tLight->data.position = glm::vec3(-3.f, 1.5f, 1.f);
 	tLight->data.intensities = glm::vec3(0.5f, 0.7f, 0.5f);
 	tLight->data.attenuation = 0.2f;
-	tLight->data.ambientCoefficient = 0.005f;
+	tLight->data.ambientCoefficient = 0.00f;
 
 	Light * tLight2 = new Light();
 	tLight2->data.position = glm::vec3(1.f, -1.5, 1.f);

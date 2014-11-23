@@ -6,11 +6,7 @@
 #include "NodeResource.h"
 #include "Vox.h"
 
-enum TypeName { PHONG, BLINN };
-
 struct MaterialData {
-	/** Name of material type (phong, blinn, etc) */
-	TypeName type;
 	float shininess;
 	glm::vec3 specularColor;
 };
@@ -18,7 +14,7 @@ struct MaterialData {
 class Material : public NodeResource
 {
 public:
-	Material(TypeName type, float shininess, glm::vec3 specularColour, bool autoRelease);
+	Material(float shininess, glm::vec3 specularColour, bool autoRelease);
 	~Material();
 
 	/** Material doesn't need to load anything */
