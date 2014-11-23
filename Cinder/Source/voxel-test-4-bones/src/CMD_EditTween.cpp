@@ -34,7 +34,7 @@ void CMD_EditTween::execute(){
 		deltaValue = value;
 		if(prevTweenIdx >= 0){
 			// d2 for value is previous tween's value
-			deltaValue = value - getTweenEndValue(prevTweenIdx, animation->startValue);
+			deltaValue = value - getTweenEndValue(prevTweenIdx);
 		}else{
 			// d2 for value is start value
 			deltaValue = value - animation->startValue;
@@ -45,7 +45,7 @@ void CMD_EditTween::execute(){
 			// get old values
 			nextTween_oldDeltaValue = animation->tweens.at(nextTweenIdx)->deltaValue;
 			// calculate new values
-			nextTween_newDeltaValue = getTweenEndValue(nextTweenIdx, animation->startValue) - value;
+			nextTween_newDeltaValue = getTweenEndValue(nextTweenIdx) - value;
 		}
 	}
 	
@@ -106,8 +106,8 @@ float CMD_EditTween::getTweenEndTime(int _idx){
 	return time;
 }
 
-float CMD_EditTween::getTweenEndValue(int _idx, float _startValue){
-	float value = _startValue;
+float CMD_EditTween::getTweenEndValue(int _idx){
+	float value = animation->startValue;
 
 	for(unsigned long int i = 0; i <= _idx; ++i){
 		value += animation->tweens.at(i)->deltaValue;

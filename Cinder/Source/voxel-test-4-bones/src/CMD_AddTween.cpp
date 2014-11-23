@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CMD_AddTween.h"
+#include "CMD_EditTween.h"
 
 #include <algorithm>
 
@@ -30,7 +31,7 @@ void CMD_AddTween::execute(){
 		if(prevTweenIdx >= 0){
 			// d2s for time and value are previous tween's time and value
 			deltaTime = time - getTweenEndTime(prevTweenIdx);
-			deltaValue = value - getTweenEndValue(prevTweenIdx, animation->startValue);
+			deltaValue = value - getTweenEndValue(prevTweenIdx);
 		}else{
 			// d2s for time and value are 0 and start value (deltaTime stays as time)
 			deltaValue = value - animation->startValue;
@@ -43,7 +44,7 @@ void CMD_AddTween::execute(){
 			nextTween_oldDeltaValue = animation->tweens.at(nextTweenIdx)->deltaValue;
 			// calculate new values
 			nextTween_newDeltaTime = animation->tweens.at(nextTweenIdx)->deltaTime - deltaTime;
-			nextTween_newDeltaValue = getTweenEndValue(nextTweenIdx, animation->startValue) - value;
+			nextTween_newDeltaValue = getTweenEndValue(nextTweenIdx) - value;
 		}
 		
 		tween = new Tween(deltaTime, deltaValue, interpolation);
@@ -60,8 +61,7 @@ void CMD_AddTween::execute(){
 	// insert tween
 	animation->tweens.insert(nextTween_it, tween);
 
-	// TODO: see if I can just call edit tween cmd now
-	// update next tween's delta time and delta value, if it exists
+	// update next tween's delta time and delta value, if it exists, can't use EditTween cmd because the next tween's index will change when we execute and unexecute inserting the new tween
 	if(nextTweenIdx >=0){
 		// Get the new iterator from the new position after insert
 		nextTween_it = animation->tweens.begin() + nextTweenIdx + 1;
@@ -137,8 +137,8 @@ float CMD_AddTween::getTweenEndTime(int _idx){
 	return time;
 }
 
-float CMD_AddTween::getTweenEndValue(int _idx, float _startValue){
-	float value = _startValue;
+float CMD_AddTween::getTweenEndValue(int _idx){
+	float value = animation->startValue;
 
 	for(unsigned long int i = 0; i <= _idx; ++i){
 		value += animation->tweens.at(i)->deltaValue;

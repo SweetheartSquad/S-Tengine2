@@ -37,6 +37,6 @@ private:
 	int getPreviousTween(int _idx);
 	int getNextTween(float _time);
 	float getTweenEndTime(int _idx);
-	float getTweenEndValue(int _idx, float _startValue);
+	float getTweenEndValue(int _idx);
 
 };

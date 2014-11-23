@@ -162,19 +162,18 @@ void CinderApp::shutdown(){
 
 void CinderApp::update(){
 	// play animation or edit
-	float scale = 0.1;
-
 	if(play){
 		Step s;
-		s.setDeltaTime(1 * scale);
+		s.setDeltaTime(1 * UI::stepScale);
 		for(unsigned long int i = 0; i < joints.size(); ++i){
 			joints.at(i)->update(&s);
 		}
-		
+		UI::time += s.getDeltaTime();
+		previousTime = UI::time;
 	}else{
 		if(UI::time != previousTime){
 			Step s;
-			s.setDeltaTime((UI::time - previousTime) * scale);
+			s.setDeltaTime((UI::time - previousTime));
 			for(unsigned long int i = 0; i < joints.size(); ++i){
 				joints.at(i)->update(&s);
 			}

@@ -12,6 +12,7 @@ public:
 	static std::vector<Node *> selectedNodes;
 
 	static float time;
+	static float stepScale;
 	static Easing::Type interpolation;
 	static ci::Vec3d handlePos;
 
