@@ -111,55 +111,50 @@ void MeshInterface::render(MatrixStack * _matrixStack, RenderOptions * _renderOp
 	if(glIsVertexArray(vaoId) == GL_TRUE){
 		if(glIsBuffer(vboId) == GL_TRUE){
 			if(glIsBuffer(iboId) == GL_TRUE){
-				GLUtils::checkForError(0,__FILE__,__LINE__);
-				// Bind VAO
-				GLUtils::checkForError(0,__FILE__,__LINE__);
-				glBindVertexArray(vaoId);
-				// Specify _shader attributes
-				/*if(_renderOption->overrideShader != nullptr){
-				//configureDefaultVertexAttributes(_renderOption->overrideShader);
-				glUseProgram(_renderOption->overrideShader->getProgramId());
+				if(_renderOption->shader != nullptr){				
+					// Bind VAO
+					glBindVertexArray(vaoId);
+					GLUtils::checkForError(0,__FILE__,__LINE__);
+				
+					glUseProgram(_renderOption->shader->getProgramId());
+
+					GLUtils::checkForError(0,__FILE__,__LINE__);
+
+					//Model View Projection
+					configureModelViewProjection(_matrixStack, _renderOption);
+
+					//TODO - A flag in the shader should be set to disable these
+					if(shouldRenderTextures){
+						configureTextures(_matrixStack, _renderOption);
+					}
+					if(shouldRenderLights && _renderOption->lights != nullptr){
+						configureLights(_matrixStack, _renderOption);
+					}
+					if(shouldRenderExtras){
+						configureExtras(_matrixStack, _renderOption);
+					}
+					if(shouldRenderShadows){
+						configureShadows(_matrixStack, _renderOption);
+					}
+					//Alpha blending
+					// Should these be here or only once in the main render loop?
+					glEnable (GL_BLEND);
+					glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+					//Texture repeat
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+					// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
+					glDrawRangeElements(polygonalDrawMode, 0, vertices.size(), indices.size(), GL_UNSIGNED_INT, 0);
+					//glDrawElements(drawMode, vertices.size(), GL_UNSIGNED_BYTE, 0);
+					GLUtils::checkForError(0,__FILE__,__LINE__);
+
+					// Disable VAO
+					glBindVertexArray(0);
 				}else{
-				glUseProgram(_renderOption->shader->getProgramId());
-				//configureDefaultVertexAttributes(_renderOption->shader);
-				}*/
-				glUseProgram(_renderOption->shader->getProgramId());
-
-				GLUtils::checkForError(0,__FILE__,__LINE__);
-
-				//Model View Projection
-				configureModelViewProjection(_matrixStack, _renderOption);
-
-				//TODO - A flag in the shader should be set to disable these
-				if(shouldRenderTextures){
-					configureTextures(_matrixStack, _renderOption);
+					std::cout << "no shader" << std::endl << std::endl;	
 				}
-				if(shouldRenderLights){
-					configureLights(_matrixStack, _renderOption);
-				}
-				if(shouldRenderExtras){
-					configureExtras(_matrixStack, _renderOption);
-				}
-				if(shouldRenderShadows){
-					configureShadows(_matrixStack, _renderOption);
-				}
-
-				//Alpha blending
-				// Should these be here or only once in the main render loop?
-				glEnable (GL_BLEND);
-				glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-				//Texture repeat
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-				// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
-				glDrawRangeElements(polygonalDrawMode, 0, vertices.size(), indices.size(), GL_UNSIGNED_INT, 0);
-				//glDrawElements(drawMode, vertices.size(), GL_UNSIGNED_BYTE, 0);
-				GLUtils::checkForError(0,__FILE__,__LINE__);
-
-				// Disable VAO
-				glBindVertexArray(0);
 			}else{
 				std::cout << "ibo bad" << std::endl << std::endl;
 			}
@@ -196,7 +191,7 @@ void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * 
 		std::string shin = GLUtils::buildGLArrayReferenceString("materials[].shininess", i);
 		std::string spec = GLUtils::buildGLArrayReferenceString("materials[].specularColor", i);
 		GLuint typeUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), mat.c_str());
-		int materialType = (int)(materials.at(i)->data.type);
+		int materialType = static_cast<int>(materials.at(i)->data.type);
 		glUniform1i(typeUniformLocation, materialType);
 		GLuint shinyUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), shin.c_str());
 		int materialShininess = materials.at(i)->data.shininess;
