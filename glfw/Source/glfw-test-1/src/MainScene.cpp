@@ -252,6 +252,7 @@ void MainScene::onContextChange(){
 	depthBuffer->unload();
 	depthShader->unload();
 	renderSurface->unload();
+	shadowSurface->unload();
 	shadowBuffer->unload();
 
 	Scene::onContextChange();
@@ -260,5 +261,6 @@ void MainScene::onContextChange(){
 	depthBuffer->load();
 	depthShader->load();
 	renderSurface->load();
+	shadowSurface->load();
 	shadowBuffer->load();
 }
