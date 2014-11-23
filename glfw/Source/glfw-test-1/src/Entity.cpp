@@ -4,11 +4,11 @@
 #include "RenderOptions.h"
 #include "MatrixStack.h"
 
-Entity::Entity(MeshInterface * _mesh, Transform * _transform, Shader * _shader, Entity * _parent):
+Entity::Entity(MeshInterface * _mesh, Transform * _transform, Shader * _shader):
 	mesh(_mesh),
 	NodeAnimatable(_transform),
 	shader(_shader),
-	NodeHierarchical(_parent)
+	NodeHierarchical(nullptr)
 {
 	if(mesh != nullptr && shader != nullptr){
 		reset();
@@ -49,21 +49,13 @@ void Entity::update(){
 }
 
 void Entity::addChild(Entity * _child){
-	_child->setParent(this);
-	children.push_back(_child);
-
-	_child->transform->setParent(this->transform);
-	transform->children.push_back(_child->transform);
+	NodeHierarchical::addChild(_child);
+	transform->addChild(_child->transform);
 }
 
 void Entity::removeChildAtIndex(int _index){
-	children.erase(children.begin()+_index-1);
-	transform->children.erase(transform->children.begin()+_index-1);
-}
-
-void Entity::setParent(Entity * _parent){
-	this->parent = _parent;
-	transform->setParent(_parent->transform);
+	NodeHierarchical::removeChildAtIndex(_index);
+	transform->removeChildAtIndex(_index);
 }
 
 void Entity::setShader(Shader * _shader, bool _confiugreDefaultAttributes){

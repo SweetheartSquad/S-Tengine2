@@ -18,7 +18,7 @@ public:
 	/** Reference to this entity's shader */
 	Shader * shader;
 
-	explicit Entity(MeshInterface * _mesh = nullptr, Transform * _transform = nullptr, Shader * _shader = nullptr, Entity * _parent = nullptr);
+	explicit Entity(MeshInterface * _mesh = nullptr, Transform * _transform = nullptr, Shader * _shader = nullptr);
 	virtual ~Entity(void);
 
 	/**
@@ -34,8 +34,7 @@ public:
 	virtual void update();
 
 	void addChild(Entity * _child);
-	void removeChildAtIndex(int _index);
-	void setParent(Entity *_parent);
+	virtual void removeChildAtIndex(int _index) override;
 	/**Sets shader to _shader*/
 	void setShader(Shader* _shader, bool _confiugreDefaultAttributes);
 	/** Recursivley sets the shader to _shader for _entity's children recursivley*/

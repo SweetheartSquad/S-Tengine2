@@ -101,15 +101,15 @@ MainScene::MainScene(Game * _game):
 	cube4->mesh->pushTexture2D(tex);
 
 	for(unsigned long int i = 0; i < 0; ++i){
-		Entity * loaded = new Entity(new VoxelMesh(Resource::loadMeshFromObj("../assets/cube.vox")), t, voxShader, cube);
+		Entity * loaded = new Entity(new VoxelMesh(Resource::loadMeshFromObj("../assets/cube.vox")), t, voxShader);
 		loaded->mesh->polygonalDrawMode = GL_POINTS;
 		cube->addChild(loaded);
 		loaded->mesh->pushTexture2D(tex);
 		loaded->mesh->pushMaterial(mat);
 	}
 
-	loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, texShader, nullptr);
-	loaded1->mesh->pushTexture2D(tex);
+	loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, texShader);
+	//loaded1->mesh->pushTexture2D(tex);
 	cube->addChild(loaded1);
 
 	cube->mesh->dirty = true;
@@ -134,7 +134,7 @@ MainScene::MainScene(Game * _game):
 	lights.push_back(tLight);
 	lights.push_back(tLight2);
 
-	FakeAnimation * cat = new FakeAnimation(new Transform(), texShader, nullptr);
+	FakeAnimation * cat = new FakeAnimation(new Transform(), texShader);
 	/*cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/01.vox")));
 	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/02.vox")));
 	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/03.vox")));
