@@ -12,7 +12,7 @@
 #include "RenderSurface.h"
 #include "Keyboard.h"
 #include "Mouse.h"
-#include "RenderOptions.h"
+#include "GLFWRenderOptions.h"
 #include "Camera.h"
 
 Cube * cube;
@@ -244,7 +244,7 @@ void MainScene::render(){
 	Scene::render();
 
 	renderSurface->render(frameBuffer->getTextureId());
-	renderOptions->shadowMapTextureId = 0;
+	((GLFWRenderOptions *)renderOptions)->shadowMapTextureId = 0;
 }
 
 void MainScene::onContextChange(){

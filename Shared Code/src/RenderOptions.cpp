@@ -1,3 +1,5 @@
+#pragma once 
+
 #include "RenderOptions.h"
 
 RenderOptions::RenderOptions(Shader* _shader, std::vector<Light *> *_lights, Shader * _overrideShader):

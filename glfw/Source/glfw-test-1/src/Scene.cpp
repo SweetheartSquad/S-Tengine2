@@ -4,7 +4,7 @@
 #include "DepthFrameBuffer.h"
 #include "StandardFrameBuffer.h"
 #include "Camera.h"
-#include "RenderOptions.h"
+#include "GLFWRenderOptions.h"
 #include "RenderSurface.h"
 #include "Keyboard.h"
 #include "Mouse.h"
@@ -128,7 +128,7 @@ void Scene::renderShadows(){
 	shadowBuffer->resize(width, height);
 	shadowBuffer->bindFrameBuffer();
 	shadowSurface->render(depthBuffer->getTextureId(), shadowBuffer->frameBufferId);
-	renderOptions->shadowMapTextureId = shadowBuffer->getTextureId();
+	((GLFWRenderOptions *)renderOptions)->shadowMapTextureId = shadowBuffer->getTextureId();
 	renderOptions->overrideShader = backupOverride;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	//Do we actually need this?

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "MeshInterface.h"
-#include "RenderOptions.h"
+#include "GLFWRenderOptions.h"
 #include "Texture.h"
 #include "Material.h"
 #include "MatrixStack.h"
@@ -264,9 +264,9 @@ void MeshInterface::configureShadows(MatrixStack* _matrixStack, RenderOptions* _
 	depthMVP = biasMatrix * depthMVP;
 	glUniformMatrix4fv(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_DEPTH_MVP), 1, GL_FALSE, &depthMVP[0][0]);
 
-	if(_renderOption->shadowMapTextureId != 0){
+	if(((GLFWRenderOptions *)_renderOption)->shadowMapTextureId != 0){
 		glActiveTexture(GL_TEXTURE0 + textures.size());
-		glBindTexture(GL_TEXTURE_2D, _renderOption->shadowMapTextureId);
+		glBindTexture(GL_TEXTURE_2D, ((GLFWRenderOptions *)_renderOption)->shadowMapTextureId);
 		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_SHADOW_MAP_SAMPLER), textures.size());
 	}
 }

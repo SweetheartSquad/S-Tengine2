@@ -64,7 +64,7 @@ void vox::calculateDeltaTimeCorrection(){
 
 	step.targetFrameDuration = targetFrameDuration;
 	step.time = time;
-	step.deltaTime = deltaTime;
+	step.setDeltaTime(deltaTime);
 	step.deltaTimeCorrection = deltaTimeCorrection;
 	step.lastTimestamp = lastTimestamp;
 }
