@@ -23,6 +23,7 @@ Material * bMat;
 
 Shader * texShader;
 Shader * phongShader;
+Shader * blinnShader;
 Shader * voxShader;
 
 Light *tLight;
@@ -62,6 +63,7 @@ MainScene::MainScene(Game * _game):
 	texShader = new Shader("../assets/diffuse", false, true);
 
 	phongShader = new Shader("../assets/phong", false, true);
+	blinnShader = new Shader("../assets/blinn", false, true);
 
 	voxShader = new Shader("../assets/voxel", true, true);
 
