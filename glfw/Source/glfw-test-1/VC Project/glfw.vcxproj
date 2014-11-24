@@ -136,6 +136,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\GLUtils.cpp" />
     <ClCompile Include="..\src\Keyboard.cpp" />
+    <ClCompile Include="..\src\LightShaderComponent.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="..\src\MainScene.cpp" />
     <ClCompile Include="..\src\Material.cpp" />
@@ -151,6 +152,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\TestGame.cpp" />
     <ClCompile Include="..\src\MeshInterface.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
+    <ClCompile Include="..\src\TextureShaderComponent.cpp" />
     <ClCompile Include="..\src\VoxelMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +184,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Game.h" />
     <ClInclude Include="..\include\GLUtils.h" />
     <ClInclude Include="..\include\Keyboard.h" />
+    <ClInclude Include="..\include\LightShaderComponent.h" />
     <ClInclude Include="..\include\Material.h" />
     <ClInclude Include="..\include\Mouse.h" />
     <ClInclude Include="..\include\Plane.h" />
@@ -195,6 +198,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\MainScene.h" />
     <ClInclude Include="..\include\Scene.h" />
     <ClInclude Include="..\include\Texture.h" />
+    <ClInclude Include="..\include\TextureShaderComponent.h" />
     <ClInclude Include="..\include\Vertex.h" />
     <ClInclude Include="..\include\MeshInterface.h" />
     <ClInclude Include="..\include\VoxelMesh.h" />

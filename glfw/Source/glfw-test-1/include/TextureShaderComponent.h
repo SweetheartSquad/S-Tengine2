@@ -1,11 +1,11 @@
-#pragma once
+#pragma once 
 
 #include "ShaderComponent.h"
 
-class ShadowShaderComponent : ShaderComponent{
+class TextureShaderComponent : ShaderComponent{
 public:
-	ShadowShaderComponent();
-	~ShadowShaderComponent() override;
+	TextureShaderComponent();
+	~TextureShaderComponent() override;
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;
 	std::string getVertexBodyString() override;

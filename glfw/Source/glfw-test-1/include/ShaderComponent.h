@@ -2,8 +2,7 @@
 
 #include <string>
 
-class ShaderComponent{
-
+class ShaderComponent abstract{
 public:
 	ShaderComponent();
 	virtual ~ShaderComponent();
@@ -12,4 +11,5 @@ public:
 	virtual std::string getFragmentVariablesString() = 0;
 	virtual std::string getVertexBodyString() = 0;
 	virtual std::string getFragmentBodyString() = 0;
+	virtual std::string getOutColorMod() = 0;
 };

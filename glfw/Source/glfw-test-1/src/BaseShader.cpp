@@ -33,11 +33,11 @@ std::string BaseShader::buildVertexShader(){
 	}
 
 	shaderString += "void main(){"
-					"fragVert = aVertexPosition;"
-					"fragNormal = aVertexNormals;"
-					"fragColor = aVertexColor;"
-					"fragUV = aVertexUVs;"
-					"gl_Position = MVP * vec4(aVertexPosition, 1.0);";
+						"fragVert = aVertexPosition;"
+						"fragNormal = aVertexNormals;"
+						"fragColor = aVertexColor;"
+						"fragUV = aVertexUVs;"
+						"gl_Position = MVP * vec4(aVertexPosition, 1.0);";
 
 	for(unsigned long int i = 0; i < components->size(); i++){
 		shaderString += components->at(i)->getVertexBodyString();
@@ -71,6 +71,12 @@ std::string BaseShader::buildFragmentShader(){
 
 	for(unsigned long int i = 0; i < components->size(); i++){
 		shaderString += components->at(i)->getFragmentBodyString();
+	}
+
+	shaderString += "outColor = vec4(1, 1, 1, 1);";
+
+	for(unsigned long int i = 0; i < components->size(); i++){
+		shaderString += components->at(i)->getOutColorMod();
 	}
 
 	shaderString += "}";
