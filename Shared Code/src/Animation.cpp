@@ -3,32 +3,51 @@
 #include "Animation.h"
 #include "Step.h"
 
-Animation::Animation(float * _prop) :
+float Animation::getTweenEndTime(unsigned long int _idx){
+	if(_idx < tweens.size()){
+		float time = 0;
+		for(unsigned long int i = 0; i <= _idx; ++i){
+			time += tweens.at(i)->deltaTime;
+		}
+		return time;
+	}else{
+		throw "index outside bounds of tween array";
+	}
+}
+
+float Animation::getTweenEndValue(unsigned long int _idx){
+	if(_idx < tweens.size()){
+		float value = startValue;
+		for(unsigned long int i = 0; i <= _idx; ++i){
+			value += tweens.at(i)->deltaValue;
+		}
+		return value;
+	}else{
+		throw "index outside bounds of tween array";
+	}
+}
+
+
+Animation::Animation(float * const _prop) :
 	prop(_prop),
+	time(0),
 	currentTime(0),
 	currentTween(0),
 	loopType(LoopType::LOOP),
 	referenceValue(0),
-	startValue(*_prop)
-{
-}
-
-Animation::Animation(const Animation & _animation) :
-	prop(new float(*_animation.prop)),
-	currentTime(_animation.currentTime),
-	currentTween(_animation.currentTween),
-	loopType(_animation.loopType),
-	referenceValue(_animation.referenceValue),
-	startValue(_animation.startValue),
-	tweens(_animation.tweens)
+	startValue(*_prop),
+	hasStart(false)
 {
 }
 
 void Animation::update(Step * _step){
+	if(hasStart){
+		time += _step->getDeltaTime();
+	}
 	if(tweens.size() > 0){
 		currentTime += _step->getDeltaTime();
 		if(_step->getReverse()){
-			while(currentTime < 0){
+			while(currentTime <= 0){
 				currentTime += tweens.at(currentTween)->deltaTime;
 				referenceValue -= tweens.at(currentTween)->deltaValue;
 				
@@ -50,7 +69,7 @@ void Animation::update(Step * _step){
 				}
 			}
 		}else{
-			while(currentTime >= tweens.at(currentTween)->deltaTime){
+			while(currentTime > tweens.at(currentTween)->deltaTime){
 				currentTime -= tweens.at(currentTween)->deltaTime;
 				referenceValue += tweens.at(currentTween)->deltaValue;
 				++currentTween;
@@ -69,11 +88,7 @@ void Animation::update(Step * _step){
 			}
 		}
 		
-		/*if(_step->getReverse()){
-			*prop = Easing::call(tweens.at(currentTween)->interpolation, tweens.at(currentTween)->deltaTime-currentTime, referenceValue, -tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
-		}else{*/
-			*prop = Easing::call(tweens.at(currentTween)->interpolation, currentTime, referenceValue, tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
-		//}
+		*prop = Easing::call(tweens.at(currentTween)->interpolation, currentTime, referenceValue, tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
 	}
 }
 

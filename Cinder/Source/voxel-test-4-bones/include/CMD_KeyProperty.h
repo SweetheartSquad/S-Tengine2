@@ -10,7 +10,16 @@ class Animation;
 class CMD_KeyProperty : public Command
 {
 public:
-	CMD_KeyProperty(Animation * _animation, float _time, float _value, Easing::Type _interpolation);
+	/**
+	* Adds or edits a keyframe for the specified property
+	*
+	* @param _animation		The animation object to modify
+	* @param _currentTime	The current time in the scene
+	* @param _targetTime	The target time to key
+	* @param _value			The target value to key
+	* @param _interpolation	The interpolation type to key
+	*/
+	CMD_KeyProperty(Animation * _animation, float _currentTime, float _targetTime, float _value, Easing::Type _interpolation);
 	~CMD_KeyProperty();
 
 	void execute();
@@ -19,11 +28,15 @@ public:
 private:
 
 	Animation * animation;
-	float time;
+	float currentTime;
+	float targetTime;
 	float value;
 	Easing::Type interpolation;
 
 	float oldStartValue;
+	bool oldHasStart;
+
+	bool executed;
 
 	int findKeyframe(std::vector<Tween *> * _tweens);
 

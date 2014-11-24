@@ -10,38 +10,65 @@
 
 #include <cinder/app/AppBasic.h>
 
-CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _time, float _value, Easing::Type _interpolation) :
+CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _currentTime, float _targetTime, float _value, Easing::Type _interpolation) :
 	animation(_animation),
-	time(_time),
+	currentTime(_currentTime),
+	targetTime(_targetTime),
 	value(_value),
 	interpolation(_interpolation),
-	oldStartValue(NULL)
+	executed(false)
 {
 }
 
 void CMD_KeyProperty::execute(){
 	// Executing for the first time, save the oldStartValue if keying 0, or create an add or edit command
-	if((subCommands.size() == 0) && (oldStartValue == NULL)){
-		if(time == 0.f){
-			oldStartValue = animation->startValue;
-		}else{
-			int idx = findKeyframe(&animation->tweens);
+	if(!animation->hasStart){
+		// If there are no keyframes and the start hasn't been set
+		oldStartValue = animation->startValue;
 
-			if(idx >= 0){
-				subCommands.push_back(new CMD_EditTween(animation, value, interpolation, idx));
-			}else{
-				subCommands.push_back(new CMD_AddTween(animation, time, value, interpolation));
-			}
-		}
-	}
-	ci::app::console() << "execute CMD_KeyProperty" << std::endl;
-	if(subCommands.size() > 0){
-		// add or edit keyframe
-		subCommands.at(0)->execute();
-	}else{
 		// set start value
 		animation->startValue = value;
+		animation->referenceValue = value;
+		animation->hasStart = true;
+		oldHasStart = false;
+	}else{
+		if(animation->time + (targetTime - currentTime) == 0){
+			// Edit start of the animation
+			oldStartValue = animation->startValue;
+			oldHasStart = true;
+
+			// set start value
+			animation->startValue = value;
+			animation->referenceValue = value;
+
+			if(animation->tweens.size() > 0){
+				// If there are other keyframes
+				animation->tweens.at(0)->deltaValue -= (value - oldStartValue);
+			}
+		}else{
+			// Edit or add a tween
+			if(subCommands.size() == 0){
+				// find index of tween
+				int idx = -1;
+				float sumTime = animation->time;
+				for(unsigned long int i = 0; i < animation->tweens.size(); ++i){
+					sumTime += animation->tweens.at(i)->deltaTime;
+					if(sumTime == (targetTime - currentTime)){
+						idx = i;
+						break;
+					}
+				}
+				if(idx >= 0){
+					subCommands.push_back(new CMD_EditTween(animation, value, interpolation, idx));
+				}else{
+					subCommands.push_back(new CMD_AddTween(animation, currentTime, targetTime, value, interpolation));
+				}
+			}
+			subCommands.at(0)->execute();
+		}
 	}
+
+	executed = true;
 }
 
 void CMD_KeyProperty::unexecute(){
@@ -49,23 +76,13 @@ void CMD_KeyProperty::unexecute(){
 		subCommands.at(0)->unexecute();
 	}else{
 		animation->startValue = oldStartValue;
-	}
-}
-
-int CMD_KeyProperty::findKeyframe(std::vector<Tween *> * _tweens){
-	// find index of tween
-	int idx = -1;
-	float sumTime = 0;
-
-	for(unsigned long int i = 0; i < _tweens->size(); ++i){
-		sumTime += _tweens->at(i)->deltaTime;
-		if(sumTime == time){
-			idx = i;
-			break;
+		animation->hasStart = oldHasStart;
+		if(oldHasStart == true || animation->tweens.size() > 0){
+			animation->tweens.at(0)->deltaValue += (value - oldStartValue);
 		}
 	}
 
-	return idx;
+	executed = false;
 }
 
 float CMD_KeyProperty::getStartValue(int _idx){

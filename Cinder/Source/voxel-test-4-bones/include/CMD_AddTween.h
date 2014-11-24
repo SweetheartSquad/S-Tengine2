@@ -8,7 +8,16 @@
 class CMD_AddTween : public Command
 {
 public:
-	CMD_AddTween(Animation * _animation, float _time, float _value, Easing::Type _interpolation);
+	/**
+	* Adds a tween to the specified animation
+	*
+	* @param _animation		The animation object to modify
+	* @param _currentTime	The current time in the scene
+	* @param _targetTime	The target time at the end of the added tween
+	* @param _value			The target value at the end of the added tween
+	* @param _interpolation	The interpolation type for the tween
+	*/
+	CMD_AddTween(Animation * _animation, float _currentTime, float _targetTime, float _targetValue, Easing::Type _interpolation);
 	~CMD_AddTween();
 
 	void execute();
@@ -18,25 +27,23 @@ private:
 	// Used in getTweenEndValue
 	Animation * animation;
 
-	// Location of the keyframe on the timeline
-	float time;
+	// Time between the current time on the timeline and the target end-time for the tween
+	float deltaTimeline;
 	// Value of the property at the given time
-	float value;
+	float targetValue;
 	// Interpolation type for the tween
 	Easing::Type interpolation;
 
 	Tween * tween;
 
-	int nextTweenIdx; // -1 if END
+	unsigned long int nextTweenIndex;
+
+	float oldStartValue;
+
 	float nextTween_oldDeltaTime;
 	float nextTween_oldDeltaValue;
-
 	float nextTween_newDeltaTime;
 	float nextTween_newDeltaValue;
-	
-	int getPreviousTween(int _idx);
-	int getNextTween(float _time);
-	float getTweenEndTime(int _idx);
-	float getTweenEndValue(int _idx);
 
+	bool executed;
 };

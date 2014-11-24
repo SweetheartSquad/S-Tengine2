@@ -2,17 +2,19 @@
 
 #include "CMD_AddTween.h"
 #include "CMD_EditTween.h"
+#include "CMD_EditStartKey.h"
 
 #include <algorithm>
 
 #include <cinder/app/AppBasic.h>
 
-CMD_AddTween::CMD_AddTween(Animation * _animation, float _time, float _value, Easing::Type _interpolation) :
+CMD_AddTween::CMD_AddTween(Animation * _animation, float _currentTime, float _targetTime, float _targetValue, Easing::Type _interpolation) :
 	animation(_animation),
-	time(_time),
-	value(_value),
+	deltaTimeline(_targetTime - _currentTime),
+	targetValue(_targetValue),
 	tween(nullptr),
-	interpolation(_interpolation)
+	interpolation(_interpolation),
+	executed(false)
 {	
 }
 
@@ -21,30 +23,61 @@ void CMD_AddTween::execute(){
 	
 	// calculate values for new tween, and save other values that will be changed by this tween insert
 	if (tween == nullptr){
-		// Get index of next tween, if it exists, else -1
-		nextTweenIdx = getNextTween(time);
 
-		// Calculate deltaTime and deltaValue of new tween, where d1s are time and value
-		int prevTweenIdx = getPreviousTween(nextTweenIdx);
-		float deltaTime = time;
-		float deltaValue = value;
-		if(prevTweenIdx >= 0){
-			// d2s for time and value are previous tween's time and value
-			deltaTime = time - getTweenEndTime(prevTweenIdx);
-			deltaValue = value - getTweenEndValue(prevTweenIdx);
-		}else{
+		float targetTime = animation->time + deltaTimeline;
+		float deltaTime;// = deltaTimeline;
+		float deltaValue;// = targetValue;
+
+		if(targetTime <= 0){
+			// Before the animation
+
+			deltaTime = 0 - targetTime;
 			// d2s for time and value are 0 and start value (deltaTime stays as time)
-			deltaValue = value - animation->startValue;
-		}
+			deltaValue = animation->startValue - targetValue;
 
-		// save and calculate new delta times and values of next tween (being split)
-		if(nextTweenIdx >= 0) {
-			// get old values
-			nextTween_oldDeltaTime = animation->tweens.at(nextTweenIdx)->deltaTime;
-			nextTween_oldDeltaValue = animation->tweens.at(nextTweenIdx)->deltaValue;
-			// calculate new values
-			nextTween_newDeltaTime = animation->tweens.at(nextTweenIdx)->deltaTime - deltaTime;
-			nextTween_newDeltaValue = getTweenEndValue(nextTweenIdx) - value;
+			if(subCommands.size() == 0){
+				subCommands.push_back(new CMD_EditStartKey(animation, targetValue));
+			}
+		}else{
+			float sumTime = 0;
+			bool insideAnimation = false;
+			for(unsigned long int i = 0; i < animation->tweens.size(); ++i){
+				sumTime += animation->tweens.at(i)->deltaTime;
+				if(sumTime > targetTime){
+					// Inside the animation
+					insideAnimation = true;
+					nextTweenIndex = i;
+					break;
+				}
+			}
+
+			if(insideAnimation){
+				// d2s for time and value are previous tween's time and value
+				if(nextTweenIndex == 0){
+					// Interrupting first tween
+					deltaTime = targetTime;
+					deltaValue = targetValue - animation->startValue;
+				}else{
+					// Interrupting a different tween
+					deltaTime = targetTime - animation->getTweenEndTime(nextTweenIndex-1);
+					deltaValue = targetValue - animation->getTweenEndValue(nextTweenIndex-1);
+				}
+
+				nextTween_oldDeltaTime = animation->tweens.at(nextTweenIndex)->deltaTime;
+				nextTween_oldDeltaValue = animation->tweens.at(nextTweenIndex)->deltaValue;
+				nextTween_newDeltaTime = animation->tweens.at(nextTweenIndex)->deltaTime - deltaTime;
+				nextTween_newDeltaValue = animation->tweens.at(nextTweenIndex)->deltaValue - deltaValue;
+				
+
+			}else{
+				// After the animation
+				deltaTime = targetTime - sumTime;
+				if(animation->tweens.size() > 0){
+					deltaValue = targetValue - animation->getTweenEndValue(animation->tweens.size()-1);
+				}else{
+					deltaValue = targetValue - animation->startValue;
+				}
+			}
 		}
 		
 		tween = new Tween(deltaTime, deltaValue, interpolation);
@@ -52,8 +85,8 @@ void CMD_AddTween::execute(){
 
 	// Get insert iterator
 	std::vector<Tween *>::iterator nextTween_it;
-	if(nextTweenIdx >= 0){
-		nextTween_it = animation->tweens.begin() + nextTweenIdx;
+	if(nextTweenIndex < animation->tweens.size()){
+		nextTween_it = animation->tweens.begin() + nextTweenIndex;
 	}else{
 		nextTween_it = animation->tweens.end();
 	}
@@ -62,91 +95,47 @@ void CMD_AddTween::execute(){
 	animation->tweens.insert(nextTween_it, tween);
 
 	// update next tween's delta time and delta value, if it exists, can't use EditTween cmd because the next tween's index will change when we execute and unexecute inserting the new tween
-	if(nextTweenIdx >=0){
-		// Get the new iterator from the new position after insert
-		nextTween_it = animation->tweens.begin() + nextTweenIdx + 1;
-
-		// d2 - d1
-		(*nextTween_it)->deltaTime = nextTween_newDeltaTime;
-		(*nextTween_it)->deltaValue = nextTween_newDeltaValue;
+	/*if(nextTweenIndex < animation->tweens.size()){
+		if(subCommands.size() == 0){
+			subCommands.push_back(new CMD_EditTween(animation, targetValue + nextTween_newDeltaValue, animation->tweens.at(nextTweenIndex+1)->interpolation, nextTweenIndex+1));
+		}
+	}*/
+	if(nextTweenIndex < animation->tweens.size()){
+		animation->tweens.at(nextTweenIndex+1)->deltaTime = nextTween_newDeltaTime;
+		animation->tweens.at(nextTweenIndex+1)->deltaValue = nextTween_newDeltaValue;
 	}
+
+	if(subCommands.size() > 0){
+		subCommands.at(0)->execute();
+	}
+
+	executed = true;
 }
 
 void CMD_AddTween::unexecute(){
+	for(unsigned long int i = subCommands.size(); i > 0; --i){
+		subCommands.at(i-1)->execute();
+	}
 
 	// Remove tween
-	if(nextTweenIdx >= 0){
-		// after inserting, tween is in nextTweenIdx
-		animation->tweens.erase(animation->tweens.begin() + nextTweenIdx);
+	if(nextTweenIndex < animation->tweens.size()){
+		// Inside animation
+
+		// after inserting, tween is in nextTweenIndex
+		animation->tweens.erase(animation->tweens.begin() + nextTweenIndex);
+		animation->tweens.at(nextTweenIndex+1)->deltaTime = nextTween_oldDeltaTime;
+		animation->tweens.at(nextTweenIndex+1)->deltaValue = nextTween_oldDeltaValue;
+
 	}else{
-		animation->tweens.erase(animation->tweens.begin() + animation->tweens.size() - 1);
+		// Before/After animation
+		animation->tweens.erase((animation->tweens.at(0) == tween) ? (animation->tweens.begin()) : (animation->tweens.begin() + animation->tweens.size() - 1));
 	}
 
-	// restore next tween's delta time and delta value, if it exists
-	if(nextTweenIdx >=0){
-		// after erasing, nextTweenIdx is the actual next tween
-		std::vector<Tween *>::iterator nextTween_it = animation->tweens.begin() + nextTweenIdx;
-
-		// Restore old delta time and value
-		(*nextTween_it)->deltaTime = nextTween_oldDeltaTime;
-		(*nextTween_it)->deltaValue = nextTween_oldDeltaValue;
-	}
+	executed = false;
 }
 
-int CMD_AddTween::getPreviousTween(int _idx){
-	// find index of previous tween
-	int idx = -1;
-
-	if(animation->tweens.size() > 0){
-		// if idx is not -1
-		if(_idx >= 0){
-			if(_idx != 0){
-				idx = _idx - 1;
-			}
-		}else{
-			// previous tween is last tween
-			idx = animation->tweens.size() - 1;
-		}
-		
+CMD_AddTween::~CMD_AddTween(){
+	if(!executed){
+		delete tween;
 	}
-	return idx;
-}
-
-int CMD_AddTween::getNextTween(float _time){
-	// find index of next tween
-	int idx = -1;
-	float sumTime = 0;
-
-	for(unsigned long int i = 0; i < animation->tweens.size(); ++i){
-		sumTime += animation->tweens.at(i)->deltaTime;
-		if(sumTime > _time){
-			idx = i;
-			break;
-		}
-	}
-	return idx;
-}
-
-float CMD_AddTween::getTweenEndTime(int _idx){
-	float time = 0;
-	
-	for(unsigned long int i = 0; i <= _idx; ++i){
-		time += animation->tweens.at(i)->deltaTime;
-	}
-
-	return time;
-}
-
-float CMD_AddTween::getTweenEndValue(int _idx){
-	float value = animation->startValue;
-
-	for(unsigned long int i = 0; i <= _idx; ++i){
-		value += animation->tweens.at(i)->deltaValue;
-	}
-
-	return value;
-}
-
-CMD_AddTween::~CMD_AddTween()
-{
 }

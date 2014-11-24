@@ -10,14 +10,20 @@ class Step;
 class Animation : public NodeUpdatable
 {
 public:
-	explicit Animation(float * _prop);
-	Animation(const Animation &_animation);
+	float getTweenEndTime(unsigned long int _idx);
+	float getTweenEndValue(unsigned long int _idx);
+
+	explicit Animation(float * const _prop);
 	~Animation();
 
-	float * prop;
+	float * const prop;
 
 	float startValue;
+	bool hasStart;
 
+	// Time elapsed since the start of the animation
+	float time;
+	// Time elapsed since the start of the current tween
 	float currentTime;
 	// The start value of the current tween
 	float referenceValue;
