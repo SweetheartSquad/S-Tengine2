@@ -49,7 +49,13 @@ void Animation::update(Step * _step){
 		if(_step->getReverse()){
 			while(currentTime <= 0){
 				currentTime += tweens.at(currentTween)->deltaTime;
-				referenceValue -= tweens.at(currentTween)->deltaValue;
+				//referenceValue -= tweens.at(currentTween)->deltaValue;
+
+				referenceValue = startValue;
+				for(unsigned long int i = 0; i+1 < currentTween; ++i){
+					referenceValue += tweens.at(i)->deltaValue;
+				}
+
 				
 				if(currentTween == 0){
 					switch (loopType){
