@@ -112,5 +112,9 @@ void main()
 
 	visibility += brightness;
 
-	outColor = vec4(vec3(outIntensities), 1) * vec4(vec3(fragColorTex.xyz),1) * vec4(clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1) , 1) * vec4(brightness, brightness, brightness, 1);
+	outColor = vec4(vec3(fragColorTex.xyz),1);
+	outColor *= vec4(clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1) , 1);
+	outColor *= vec4(vec3(outIntensities), 1) * vec4(vec3(fragColorTex.xyz),1) * vec4(brightness, brightness, brightness, 1);
+	
+	//outColor = vec4(vec3(outIntensities), 1) * vec4(vec3(fragColorTex.xyz),1) * vec4(clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1) , 1) * vec4(brightness, brightness, brightness, 1);
 }

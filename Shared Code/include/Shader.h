@@ -7,6 +7,13 @@
 #include "NodeResource.h"
 
 class Shader : public NodeResource{
+
+protected:
+	/** Reads the files at the given location/name and compiles them as a vertex shader and a fragment shader */
+	void init(std::string _vertexShaderFile, std::string _fragmentShaderFile);
+	/** Reads the files at the given location/name and compiles them as a vertex shader and a fragment shader */
+	void init(std::string _vertexShaderFile, std::string _fragmentShaderFile, std::string _geometryShaderFile);
+
 private:
 
 	/** The attribute location of the vertex position in the shader */
@@ -20,11 +27,6 @@ private:
 	GLuint programId;
 
 	bool hasGeometryShader;
-
-	/** Reads the files at the given location/name and compiles them as a vertex shader and a fragment shader */
-	void init(std::string _vertexShaderFile, std::string _fragmentShaderFile);
-	/** Reads the files at the given location/name and compiles them as a vertex shader and a fragment shader */
-	void init(std::string _vertexShaderFile, std::string _fragmentShaderFile, std::string _geometryShaderFile);
 
 public:
 
