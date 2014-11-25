@@ -55,7 +55,6 @@ std::string BaseShader::buildFragmentShader(){
 								"in vec3 fragNormal;\n"
 								"in vec4 fragColor;\n"
 								"in vec2 fragUV;\n"
-								"in vec4 shadowCoord;\n"
 
 								"out vec4 outColor;\n";
 
@@ -80,6 +79,7 @@ std::string BaseShader::buildFragmentShader(){
 }
 
 void BaseShader::compileShader(){
+	Shader::unload();
 	Shader::init(buildVertexShader(), buildFragmentShader());
 }
 

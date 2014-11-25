@@ -2,7 +2,7 @@
 
 #include "ShaderComponent.h"
 
-class TextureShaderComponent : ShaderComponent{
+class TextureShaderComponent : public ShaderComponent{
 public:
 	TextureShaderComponent();
 	~TextureShaderComponent() override;

@@ -2,7 +2,7 @@
 
 #include "ShaderComponent.h"
 
-class ShadowShaderComponent : ShaderComponent{
+class ShadowShaderComponent : public ShaderComponent{
 public:
 	ShadowShaderComponent();
 	~ShadowShaderComponent() override;

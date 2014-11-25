@@ -2,7 +2,7 @@
 
 #include "ShaderComponent.h"
 
-class LightShaderComponent : ShaderComponent{
+class LightShaderComponent : public ShaderComponent{
 public:
 	LightShaderComponent();
 	~LightShaderComponent() override;

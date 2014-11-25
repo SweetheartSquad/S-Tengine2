@@ -15,6 +15,9 @@
 #include "RenderOptions.h"
 #include "Camera.h"
 #include <BaseShader.h>
+#include <LightShaderComponent.h>
+#include <ShadowShaderComponent.h>
+#include <TextureShaderComponent.h>
 
 Cube * cube;
 Cube * cube2;
@@ -66,6 +69,10 @@ MainScene::MainScene(Game * _game):
 	voxTex = new Texture("../assets/voxel-texture.png", 512, 512, true, true);
 
 	baseShader = new BaseShader();
+	baseShader->components.push_back(new TextureShaderComponent());
+	baseShader->components.push_back(new LightShaderComponent());
+	baseShader->components.push_back(new ShadowShaderComponent());
+	baseShader->compileShader();
 
 	mat = new Material(PHONG, 10.0, glm::vec3(1.0f, 1.0f, 1.0f), true);
 	bMat = new Material(BLINN, 80.0, glm::vec3(1.0f, 1.0f, 1.0f), true);
@@ -75,7 +82,7 @@ MainScene::MainScene(Game * _game):
 	t->scale(3, 3, 3);
 
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
-	cube->setShader(new Shader("../assets/diffuse", false, true), true);
+	cube->setShader(baseShader, true);
 	cube->transform->translateX(0.5);
 	cube->mesh->vertices.at(3).y += 1.5;
 	cube->mesh->vertices.at(0).y += 1.5;
