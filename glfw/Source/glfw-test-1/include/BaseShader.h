@@ -8,11 +8,11 @@
 class BaseShader : public Shader{
 public:	
 	BaseShader();
-	explicit BaseShader(std::vector<ShaderComponent *> * _components);
+	explicit BaseShader(std::vector<ShaderComponent *> _components);
 
 	~BaseShader();
 
-	std::vector<ShaderComponent *> * components;
+	std::vector<ShaderComponent *> components;
 
 	void compileShader();
 

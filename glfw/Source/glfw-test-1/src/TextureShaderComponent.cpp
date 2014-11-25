@@ -41,5 +41,5 @@ std::string TextureShaderComponent::getFragmentBodyString(){
 }
 
 std::string TextureShaderComponent::getOutColorMod(){
-	return "outColor *= fragColorTex;";
+	return "outColor = fragColorTex;";
 }

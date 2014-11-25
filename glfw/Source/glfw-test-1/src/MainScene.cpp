@@ -14,6 +14,7 @@
 #include "Mouse.h"
 #include "RenderOptions.h"
 #include "Camera.h"
+#include <BaseShader.h>
 
 Cube * cube;
 Cube * cube2;
@@ -42,6 +43,9 @@ Entity * loaded1;
 
 Transform * t;
 
+BaseShader * baseShader;
+
+
 MainScene::MainScene(Game * _game):
 	Scene(game)
 {
@@ -60,6 +64,8 @@ MainScene::MainScene(Game * _game):
 
 	tex = new Texture("../assets/uv-test.jpg", 1000, 1000, true, true);
 	voxTex = new Texture("../assets/voxel-texture.png", 512, 512, true, true);
+
+	baseShader = new BaseShader();
 
 	mat = new Material(PHONG, 10.0, glm::vec3(1.0f, 1.0f, 1.0f), true);
 	bMat = new Material(BLINN, 80.0, glm::vec3(1.0f, 1.0f, 1.0f), true);
@@ -108,7 +114,7 @@ MainScene::MainScene(Game * _game):
 		loaded->mesh->pushMaterial(mat);
 	}
 
-	loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, texShader);
+	loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, baseShader);
 	//loaded1->mesh->pushTexture2D(tex);
 	cube->addChild(loaded1);
 

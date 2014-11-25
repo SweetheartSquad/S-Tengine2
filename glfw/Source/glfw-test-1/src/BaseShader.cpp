@@ -2,45 +2,46 @@
 
 #include "BaseShader.h"
 
-BaseShader::BaseShader() : Shader(buildVertexShader(), buildFragmentShader(), false){
+BaseShader::BaseShader() :
+	Shader(buildVertexShader(), buildFragmentShader(), false){
 
 }
 
-BaseShader::BaseShader(std::vector<ShaderComponent*>* _components) :
+BaseShader::BaseShader(std::vector<ShaderComponent*> _components) :
 	components(_components),
 	Shader(buildVertexShader(), buildFragmentShader(), false)
 {
 }
 
 std::string BaseShader::buildVertexShader(){
-	std::string shaderString  = "#version 150" 
-							    "#extension GL_ARB_explicit_attrib_location : enable"
-								"layout(location = 1) in vec3 aVertexPosition;"
-								"layout(location = 2) in vec4 aVertexColor;"
-								"layout(location = 3) in vec3 aVertexNormals;"
-								"layout(location = 4) in vec2 aVertexUVs;"
+	std::string shaderString  = "#version 150\n" 
+							    "#extension GL_ARB_explicit_attrib_location : enable\n"
+								"layout(location = 1) in vec3 aVertexPosition;\n"
+								"layout(location = 2) in vec4 aVertexColor;\n"
+								"layout(location = 3) in vec3 aVertexNormals;\n"
+								"layout(location = 4) in vec2 aVertexUVs;\n"
 
-								"uniform mat4 MVP;"
-								"uniform mat4 depthMVP;"
+								"uniform mat4 MVP;\n"
+								"uniform mat4 depthMVP;\n"
 
-								"out vec3 fragVert;"
-								"out vec3 fragNormal;"
-								"out vec4 fragColor;"
-								"out vec2 fragUV;";
+								"out vec3 fragVert;\n"
+								"out vec3 fragNormal;\n"
+								"out vec4 fragColor;\n"
+								"out vec2 fragUV;\n";
 
-	for(unsigned long int i = 0; i < components->size(); i++){
-		shaderString += components->at(i)->getVertexVariablesString();
+	for(unsigned long int i = 0; i < components.size(); i++){
+		shaderString += components.at(i)->getVertexVariablesString();
 	}
 
-	shaderString += "void main(){"
-						"fragVert = aVertexPosition;"
-						"fragNormal = aVertexNormals;"
-						"fragColor = aVertexColor;"
-						"fragUV = aVertexUVs;"
-						"gl_Position = MVP * vec4(aVertexPosition, 1.0);";
+	shaderString += "void main(){\n"
+						"fragVert = aVertexPosition;\n"
+						"fragNormal = aVertexNormals;\n"
+						"fragColor = aVertexColor;\n"
+						"fragUV = aVertexUVs;\n"
+						"gl_Position = MVP * vec4(aVertexPosition, 1.0);\n";
 
-	for(unsigned long int i = 0; i < components->size(); i++){
-		shaderString += components->at(i)->getVertexBodyString();
+	for(unsigned long int i = 0; i < components.size(); i++){
+		shaderString += components.at(i)->getVertexBodyString();
 	}
 
 	shaderString += "}";
@@ -48,35 +49,30 @@ std::string BaseShader::buildVertexShader(){
 }
 
 std::string BaseShader::buildFragmentShader(){
-	std::string shaderString  = "#version 150"
+	std::string shaderString  = "#version 150\n"
 
-								"in vec3 fragVert;"
-								"in vec3 fragNormal;"
-								"in vec4 fragColor;"
-								"in vec2 fragUV;"
-								"in vec4 shadowCoord;"
+								"in vec3 fragVert;\n"
+								"in vec3 fragNormal;\n"
+								"in vec4 fragColor;\n"
+								"in vec2 fragUV;\n"
+								"in vec4 shadowCoord;\n"
 
-								"out vec4 outColor;";
+								"out vec4 outColor;\n";
 
-	for(unsigned long int i = 0; i < components->size(); i++){
-		shaderString += components->at(i)->getFragmentVariablesString();
+	for(unsigned long int i = 0; i < components.size(); i++){
+		shaderString += components.at(i)->getFragmentVariablesString();
 	}
 
-	shaderString += "void main(){"
-					"fragVert = aVertexPosition;"
-					"fragNormal = aVertexNormals;"
-					"fragColor = aVertexColor;"
-					"fragUV = aVertexUVs;"
-					"gl_Position = MVP * vec4(aVertexPosition, 1.0);";
+	shaderString += "void main(){\n";
 
-	for(unsigned long int i = 0; i < components->size(); i++){
-		shaderString += components->at(i)->getFragmentBodyString();
+	for(unsigned long int i = 0; i < components.size(); i++){
+		shaderString += components.at(i)->getFragmentBodyString();
 	}
 
-	shaderString += "outColor = vec4(1, 1, 1, 1);";
+	shaderString += "outColor = fragColor;\n";
 
-	for(unsigned long int i = 0; i < components->size(); i++){
-		shaderString += components->at(i)->getOutColorMod();
+	for(unsigned long int i = 0; i < components.size(); i++){
+		shaderString += components.at(i)->getOutColorMod();
 	}
 
 	shaderString += "}";

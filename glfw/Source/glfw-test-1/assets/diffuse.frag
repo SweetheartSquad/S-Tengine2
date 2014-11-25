@@ -114,9 +114,9 @@ void main()
 	//Requires lights and shadows
 	visibility += brightness;
 	//Set the out color to white
-	outColor  = vec4(1, 1, 1, 1);
+	outColor  = fragColor;
 	//Texture modification
-	outColor *= fragColorTex;
+	outColor = fragColorTex;
 	//Shadow modification
 	outColor *= vec4(clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1) , 1);
 	//lights Modficiation
