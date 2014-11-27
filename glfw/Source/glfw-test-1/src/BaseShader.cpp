@@ -22,7 +22,6 @@ std::string BaseShader::buildVertexShader(){
 								"layout(location = 4) in vec2 aVertexUVs;\n"
 
 								"uniform mat4 MVP;\n"
-								"uniform mat4 depthMVP;\n"
 
 								"out vec3 fragVert;\n"
 								"out vec3 fragNormal;\n"

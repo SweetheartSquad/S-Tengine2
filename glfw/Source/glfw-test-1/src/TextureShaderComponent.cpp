@@ -1,6 +1,7 @@
-#pragma once
+#pragma 
 
 #include "TextureShaderComponent.h"
+#include "ShaderVariables.h"
 
 TextureShaderComponent::TextureShaderComponent() : ShaderComponent(){
 }
@@ -9,14 +10,14 @@ TextureShaderComponent::~TextureShaderComponent(){
 }
 
 std::string TextureShaderComponent::getVertexVariablesString(){
-	return "#define TEXTURE_COMPONENT\n";
+	return "#define " + SHADER_COMPONENT_TEXTURE + "\n";
 }
 
 std::string TextureShaderComponent::getFragmentVariablesString(){
 	return 
-		"#define TEXTURE_COMPONENT\n"
-		"uniform sampler2D textureSampler[5];\n"
-		"uniform int numTextures;\n";
+		"#define " + SHADER_COMPONENT_TEXTURE + "\n"
+		"uniform sampler2D " + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[" + std::to_string(MAX_LIGHTS) + "]" + ";\n"
+		"uniform int " + GL_UNIFORM_ID_NUM_TEXTURES + ";\n";
 }
 
 std::string TextureShaderComponent::getVertexBodyString(){
@@ -27,19 +28,19 @@ std::string TextureShaderComponent::getFragmentBodyString(){
 	return
 		"vec4 fragColorTex = vec4(0, 0, 0, 0);\n"
 	
-		"if(numTextures == 0){\n"
-		"	fragColorTex = fragColor;\n"
+		"if(" + GL_UNIFORM_ID_NUM_TEXTURES + " == 0){\n"
+		"	\tfragColorTex = " + GL_IN_OUT_FRAG_COLOR + ";\n"
 		"}\n"
 
-		"for(int i = 0; i < numTextures; i++){"
-		"	if(i == 0){\n"
-		"		fragColorTex = texture(textureSampler[i], fragUV).rgba;\n"
-		"	}else{\n"
-		"		fragColorTex = mix(fragColorTex, texture(textureSampler[i], fragUV).rgba, 0.5);\n"
-		"	}\n"
+		"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_TEXTURES + "; i++){"
+		"	\tif(i == 0){\n"
+		"		fragColorTex = texture(" + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[i], " + GL_IN_OUT_FRAG_UV + ").rgba;\n"
+		"	\t}else{\n"
+		"		\t\tfragColorTex = mix(fragColorTex, texture(" + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[i], " + GL_IN_OUT_FRAG_UV + ").rgba, 0.5);\n"
+		"	\t}\n"
 		"}\n";
 }
 
 std::string TextureShaderComponent::getOutColorMod(){
-	return "outColor = fragColorTex;\n";
+	return GL_OUT_OUT_COLOR + " = fragColorTex;\n";
 }

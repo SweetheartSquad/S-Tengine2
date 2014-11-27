@@ -168,18 +168,18 @@ void MeshInterface::render(MatrixStack * _matrixStack, RenderOptions * _renderOp
 
 void MeshInterface::configureTextures(MatrixStack * _matrixStack, RenderOptions * _renderOption){
 	// Pass the _shader the number of textures
-	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES), textures.size());
+	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), textures.size());
 	// Bind each texture to the texture sampler array in the frag _shader
 	for(unsigned long int i = 0; i < textures.size(); i++){
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, textures.at(i)->textureId);
-		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER), i);
+		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str()), i);
 	}
 }
 
 void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * _renderOption){
 	glm::mat4 model = _matrixStack->currentModelMatrix;
-	GLuint modelUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX);
+	GLuint modelUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX.c_str());
 	glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
 
 	// Pass the _shader the number of materials
@@ -201,7 +201,7 @@ void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * 
 	}
 
 	// Pass the _shader the number of lights
-	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_LIGHTS), _renderOption->lights->size());
+	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_LIGHTS.c_str()), _renderOption->lights->size());
 
 	// Pass the paramaters for each light to the _shader
 	for(unsigned long int i = 0; i < _renderOption->lights->size(); i++){
@@ -219,8 +219,8 @@ void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * 
 		glUniform1f(attenuationUniformLocation, _renderOption->lights->at(i)->data.attenuation);
 	}
 	// Pass the _shader the number of lights & materials
-	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(),	GL_UNIFORM_ID_NUM_LIGHTS), _renderOption->lights->size());
-	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_MATERIALS), materials.size());
+	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(),	GL_UNIFORM_ID_NUM_LIGHTS.c_str()), _renderOption->lights->size());
+	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_MATERIALS.c_str()), materials.size());
 
 	// Pass each material to the _shader
 	for(unsigned long int i = 0; i < materials.size(); i++){
@@ -243,7 +243,7 @@ void MeshInterface::configureLights(MatrixStack * _matrixStack, RenderOptions * 
 
 void MeshInterface::configureModelViewProjection(MatrixStack * _matrixStack, RenderOptions * _renderOption){
 	glm::mat4 mvp = _matrixStack->projectionMatrix * _matrixStack->viewMatrix * _matrixStack->currentModelMatrix;
-	GLuint mvpUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(),  GL_UNIFORM_ID_MODEL_VIEW_PROJECTION);
+	GLuint mvpUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(),  GL_UNIFORM_ID_MODEL_VIEW_PROJECTION.c_str());
 	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 }
@@ -262,12 +262,12 @@ void MeshInterface::configureShadows(MatrixStack* _matrixStack, RenderOptions* _
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
 	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * _matrixStack->getCurrentMatrix();
 	depthMVP = biasMatrix * depthMVP;
-	glUniformMatrix4fv(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_DEPTH_MVP), 1, GL_FALSE, &depthMVP[0][0]);
+	glUniformMatrix4fv(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_DEPTH_MVP.c_str()), 1, GL_FALSE, &depthMVP[0][0]);
 
 	if(_renderOption->shadowMapTextureId != 0){
 		glActiveTexture(GL_TEXTURE0 + textures.size());
 		glBindTexture(GL_TEXTURE_2D, _renderOption->shadowMapTextureId);
-		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_SHADOW_MAP_SAMPLER), textures.size());
+		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_SHADOW_MAP_SAMPLER.c_str()), textures.size());
 	}
 }
 

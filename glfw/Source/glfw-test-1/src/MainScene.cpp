@@ -108,7 +108,7 @@ MainScene::MainScene(Game * _game):
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	addChild(cube);
 	addChild(cube4);
-	cube4->setShader(texShader, true);
+	cube4->setShader(baseShader, true);
 	cube4->transform->scale(15.0, 1.0, 15.0);
 	cube4->transform->translateY(-2);
 	cube4->mesh->pushTexture2D(tex);

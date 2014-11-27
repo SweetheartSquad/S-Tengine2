@@ -1,6 +1,7 @@
 #pragma once 
 
 #include "LightShaderComponent.h"
+#include "ShaderVariables.h"
 
 LightShaderComponent::LightShaderComponent() : ShaderComponent(){
 }
@@ -9,13 +10,13 @@ LightShaderComponent::~LightShaderComponent(){
 }
 
 std::string LightShaderComponent::getVertexVariablesString(){
-	return "#define LIGHT_COMPONENT\n";
+	return "#define " + SHADER_COMPONENT_LIGHT + "\n";
 }
 
 std::string LightShaderComponent::getFragmentVariablesString(){
 	return 
-		"#define LIGHT_COMPONENT\n"
-		"uniform mat4 model;\n"
+		"#define " + SHADER_COMPONENT_LIGHT + "\n"
+		"uniform mat4 " + GL_UNIFORM_ID_MODEL_MATRIX + ";\n"
 
 		"struct Light{\n"
 		"	vec3 position;\n"
@@ -23,8 +24,8 @@ std::string LightShaderComponent::getFragmentVariablesString(){
 		"	float ambientCoefficient;\n"
 		"	float attenuation;"
 		"};\n"
-		"uniform Light lights[5];\n"
-		"uniform int numLights;\n";
+		"uniform Light " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[ " + std::to_string(MAX_LIGHTS) + " ];\n"
+		"uniform int " + GL_UNIFORM_ID_NUM_LIGHTS + ";\n";
 }
 
 std::string LightShaderComponent::getVertexBodyString(){
@@ -52,5 +53,5 @@ std::string LightShaderComponent::getFragmentBodyString(){
 }
 
 std::string LightShaderComponent::getOutColorMod(){
-	return "outColor *= vec4(vec3(outIntensities), 1) * vec4(brightness, brightness, brightness, 1);\n";
+	return GL_OUT_OUT_COLOR + " *= vec4(vec3(outIntensities), 1) * vec4(brightness, brightness, brightness, 1);\n";
 }
