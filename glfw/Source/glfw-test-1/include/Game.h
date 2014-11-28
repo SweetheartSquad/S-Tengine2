@@ -1,5 +1,7 @@
 #pragma once
 
+#define GLFW_INCLUDE_NONE
+
 #include <iostream>
 #include <map>
 
@@ -50,6 +52,9 @@ public:
 	Scene * currentScene;
 	/** List of references to scenes in the game */
 	std::map<std::string, Scene*> scenes;
+
+	/**Perorms a full game loop*/
+	void performGameLoop();
 
 	/** 
 	* Updates the deltaTime correction, prints FPS, checks for ESC, and calls update on the current scene 

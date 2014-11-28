@@ -267,6 +267,7 @@ void MainScene::onContextChange(){
 	renderSurface->unload();
 	shadowSurface->unload();
 	shadowBuffer->unload();
+	baseShader->unload();
 
 	Scene::onContextChange();
 
@@ -276,4 +277,5 @@ void MainScene::onContextChange(){
 	renderSurface->load();
 	shadowSurface->load();
 	shadowBuffer->load();
+	baseShader->load();
 }
