@@ -3,7 +3,7 @@
 #include "Voxel.h"
 #include "Joint.h"
 
-void Voxel::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void Voxel::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 
 }
 

@@ -41,7 +41,7 @@ public:
 	// Returns the translation vector of the joint (if _relative is false, applies all of the transformations of the parent joints before returning the vector)
 	Vec3d getPos(bool _relative = true);
 
-	void render(MatrixStack * _matrixStack, RenderOptions * _renderStack);
+	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack);
 	void update(Step * _step) override;
 private:
 	void init();

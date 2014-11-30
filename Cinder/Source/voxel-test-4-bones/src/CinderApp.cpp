@@ -299,7 +299,7 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 
 		jointShader.uniform("offset", false);
 		// draw joints:
-		MatrixStack mStack;
+		vox::MatrixStack mStack;
 		jointShader.uniform("camEye", cam.getEyePoint());
 		jointShader.uniform("viewMatrix", cam.getModelViewMatrix());
 		jointShader.uniform("projectionMatrix", cam.getProjectionMatrix());

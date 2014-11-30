@@ -34,10 +34,8 @@ void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, std
 				jointFile << "]}" << std::endl;
 				jointFile.close();
 			}catch (std::exception ex){
-				if(jointFile != NULL){
-					if (jointFile.is_open()){
-						jointFile.close();
-					}
+				if (jointFile.is_open()){
+					jointFile.close();
 				}
 				throw ex;
 			}

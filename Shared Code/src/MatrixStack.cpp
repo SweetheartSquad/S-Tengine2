@@ -2,16 +2,16 @@
 
 #include "MatrixStack.h"
 
-MatrixStack::MatrixStack():
+vox::MatrixStack::MatrixStack():
 	currentModelMatrix(glm::mat4(1)),
 	projectionMatrix(glm::mat4(1)),
 	viewMatrix(glm::mat4(1)){
 }
 
-MatrixStack::~MatrixStack(){
+vox::MatrixStack::~MatrixStack(){
 }
 
-void MatrixStack::popMatrix(){
+void vox::MatrixStack::popMatrix(){
 	if(matrixStack.size() > 0){
 		if(matrixStack.size() > 0){
 			currentModelMatrix = matrixStack.at(matrixStack.size() - 1);
@@ -26,33 +26,33 @@ void MatrixStack::popMatrix(){
 	}
 }
 
-void MatrixStack::pushMatrix(){
+void vox::MatrixStack::pushMatrix(){
 	matrixStack.push_back(currentModelMatrix);
 }
 
-glm::mat4 MatrixStack::getCurrentMatrix(){
+glm::mat4 vox::MatrixStack::getCurrentMatrix(){
 	return currentModelMatrix;
 }
 
-void MatrixStack::scale(glm::mat4 _scaleMatrix){
+void vox::MatrixStack::scale(glm::mat4 _scaleMatrix){
 	currentModelMatrix = currentModelMatrix * _scaleMatrix;
 }
 
-void MatrixStack::rotate(glm::mat4 _rotationMatrix){
+void vox::MatrixStack::rotate(glm::mat4 _rotationMatrix){
 	currentModelMatrix = currentModelMatrix * _rotationMatrix;
 }
 
-void MatrixStack::translate(glm::mat4 _translationMatrix){
+void vox::MatrixStack::translate(glm::mat4 _translationMatrix){
 	currentModelMatrix = currentModelMatrix * _translationMatrix;
 }
 
-void MatrixStack::applyMatrix(glm::mat4 _modelMatrix){
+void vox::MatrixStack::applyMatrix(glm::mat4 _modelMatrix){
 	currentModelMatrix = currentModelMatrix * _modelMatrix;
 }
 
-void MatrixStack::resetCurrentMatrix(){
+void vox::MatrixStack::resetCurrentMatrix(){
 	currentModelMatrix = glm::mat4(1);
 }
-void MatrixStack::clearMatrixStack(){
+void vox::MatrixStack::clearMatrixStack(){
 	matrixStack.clear();
 }
