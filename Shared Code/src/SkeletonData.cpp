@@ -191,32 +191,32 @@ std::string SkeletonData::writeAnimations(Joint * j, unsigned int indent){
 	std::stringstream json;
 	indent++;
 
-	json << writeAnimation(j->translateX, "translateX", indent) << "," << std::endl;
-	json << writeAnimation(j->translateY, "translateY", indent) << "," << std::endl;
-	json << writeAnimation(j->translateZ, "translateZ", indent) << "," << std::endl;
-	json << writeAnimation(j->rotateX, "rotateX", indent) << "," << std::endl;
-	json << writeAnimation(j->rotateY, "rotateY", indent) << "," << std::endl;
-	json << writeAnimation(j->rotateZ, "rotateZ", indent) << "," << std::endl;
-	json << writeAnimation(j->rotateW, "rotateW", indent) << "," << std::endl;
-	json << writeAnimation(j->scaleX, "scaleX", indent) << "," << std::endl;
-	json << writeAnimation(j->scaleY, "scaleY", indent) << "," << std::endl;
-	json << writeAnimation(j->scaleZ, "scaleZ", indent) << std::endl;
+	json << writeAnimation(&j->translateX, "translateX", indent) << "," << std::endl;
+	json << writeAnimation(&j->translateY, "translateY", indent) << "," << std::endl;
+	json << writeAnimation(&j->translateZ, "translateZ", indent) << "," << std::endl;
+	json << writeAnimation(&j->rotateX, "rotateX", indent) << "," << std::endl;
+	json << writeAnimation(&j->rotateY, "rotateY", indent) << "," << std::endl;
+	json << writeAnimation(&j->rotateZ, "rotateZ", indent) << "," << std::endl;
+	json << writeAnimation(&j->rotateW, "rotateW", indent) << "," << std::endl;
+	json << writeAnimation(&j->scaleX, "scaleX", indent) << "," << std::endl;
+	json << writeAnimation(&j->scaleY, "scaleY", indent) << "," << std::endl;
+	json << writeAnimation(&j->scaleZ, "scaleZ", indent) << std::endl;
 
 	return json.str();
 }
 
 void SkeletonData::readAnimations(JsonTree animations, Joint * j){
 
-	readAnimation(animations.getChild("translateX"), j->translateX);
-	readAnimation(animations.getChild("translateY"), j->translateY);
-	readAnimation(animations.getChild("translateZ"), j->translateZ);
-	readAnimation(animations.getChild("rotateX"), j->rotateX);
-	readAnimation(animations.getChild("rotateY"), j->rotateY);
-	readAnimation(animations.getChild("rotateZ"), j->rotateZ);
-	readAnimation(animations.getChild("rotateW"), j->rotateW);
-	readAnimation(animations.getChild("scaleX"), j->scaleX);
-	readAnimation(animations.getChild("scaleY"), j->scaleY);
-	readAnimation(animations.getChild("scaleZ"), j->scaleX);
+	readAnimation(animations.getChild("translateX"), &j->translateX);
+	readAnimation(animations.getChild("translateY"), &j->translateY);
+	readAnimation(animations.getChild("translateZ"), &j->translateZ);
+	readAnimation(animations.getChild("rotateX"), &j->rotateX);
+	readAnimation(animations.getChild("rotateY"), &j->rotateY);
+	readAnimation(animations.getChild("rotateZ"), &j->rotateZ);
+	readAnimation(animations.getChild("rotateW"), &j->rotateW);
+	readAnimation(animations.getChild("scaleX"), &j->scaleX);
+	readAnimation(animations.getChild("scaleY"), &j->scaleY);
+	readAnimation(animations.getChild("scaleZ"), &j->scaleX);
 }
 
 std::string SkeletonData::writeAnimation(Animation * a, std::string name, unsigned int indent){
