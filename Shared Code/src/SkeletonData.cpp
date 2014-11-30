@@ -89,7 +89,7 @@ std::string SkeletonData::writeJoint(Joint * j, unsigned int indent) {
 		json << std::string(indent * 3, ' ') << "\"parent\": " << dynamic_cast<Joint *>(j->parent)->id << "," << std::endl;
 	}
 
-	// transform object
+	// Transform: Object
 	json << std::string(indent * 3, ' ') << "\"transform\":{" << std::endl;
 	indent++;
 	json << std::string(indent * 3, ' ') << "\"pos\": " << "{" << "\"x\": " << j->getPos().x << ", " << "\"y\": " << j->getPos().y << ", " << "\"z\": " << j->getPos().z << "}," << std::endl;
@@ -98,12 +98,24 @@ std::string SkeletonData::writeJoint(Joint * j, unsigned int indent) {
 	indent--;
 	json << std::string(indent * 3, ' ') << "}," << std::endl;
 
-	// animation objects
+	// Voxels: Array
+	json << std::string(indent * 3, ' ') << "\"voxels\": " << "[" << std::endl;
+	for (unsigned long int i = 0; i < j->voxels.size(); ++i) {
+		Voxel * v = j->voxels.at(i);
+		json << writeVoxel(v, indent);
+		if (i != j->voxels.size() - 1) {
+			json << ",";
+		}
+		json << std::endl;
+	}
+	json << std::string(indent * 3, ' ') << "]," << std::endl;
+
+	// Animations: Objects
 	json << std::string(indent * 3, ' ') << "\"animations\":{" << std::endl;
 	json << writeAnimations(j, indent);
 	json << std::string(indent * 3, ' ') << "}," << std::endl;
 
-	// children array
+	// Children: Array
 	json << std::string(indent * 3, ' ') << "\"children\": " << "[" << std::endl;
 	for(unsigned long int i = 0; i < j->children.size(); ++i) {
 		Joint * child = dynamic_cast<Joint *>(j->children.at(i));
@@ -124,11 +136,12 @@ Joint * SkeletonData::readJoint(JsonTree joint, Joint * parent) {
 	
 	Joint * j = new Joint(parent);
 	std::vector<NodeHierarchical *> children;
+	std::vector<Voxel *> voxels;
 
 	j->id = joint.getChild( "id" ).getValue<int>();
 	app::console() << "id: " << j->id << std::endl;
 	
-	// Transform data
+	// Transform: Object
 	JsonTree transform = joint.getChild("transform");
 
 	JsonTree pos = transform.getChild("pos");
@@ -144,18 +157,30 @@ Joint * SkeletonData::readJoint(JsonTree joint, Joint * parent) {
 	j->transform->scaleVector = glm::vec3(scale.getChild("x").getValue<float>(), scale.getChild("y").getValue<float>(), scale.getChild("z").getValue<float>());
 	app::console() << " scale: x = " << j->transform->scaleVector.x << " y = " << j->transform->scaleVector.y << " z = " << j->transform->scaleVector.z << std::endl;
 	
-	// Get animation data
-	readAnimations(joint.getChild("animations"), j);
+	// Voxels: Array
+	JsonTree voxelsJson = joint.getChild("voxels");
+	unsigned int voxel_index = 0;
+	for (JsonTree::ConstIter voxel = voxelsJson.begin(); voxel != voxelsJson.end(); ++voxel) {
+		// Apparently, getKey DOESN't return an index if there is no key?
+		//JsonTree cJson = childrenJson.getChild(child->getKey());
+		JsonTree vJson = voxelsJson.getChild(voxel_index);
+		readVoxel(vJson, j);
+		voxel_index++;
+	}
 
+	// Animations: Objects
+	readAnimations(joint.getChild("animations"), j);
+	
+	// Children: Array
 	JsonTree childrenJson = joint.getChild("children");
-	unsigned int i = 0;
+	unsigned int children_index = 0;
 	for( JsonTree::ConstIter child = childrenJson.begin(); child != childrenJson.end(); ++child ) {
 		// Apparently, getKey DOESN't return an index if there is no key?
 		//JsonTree cJson = childrenJson.getChild(child->getKey());
-		JsonTree cJson = childrenJson.getChild(i);
+		JsonTree cJson = childrenJson.getChild(children_index);
 		Joint * c = readJoint(cJson, j);
 		children.push_back(c);
-		i++;
+		children_index++;
 	}
 	j->children = children;
 
@@ -271,6 +296,22 @@ Tween * SkeletonData::readTween(JsonTree tween){
 	Tween * t = new Tween(tween.getChild("deltaTime").getValue<float>(), tween.getChild("deltaValue").getValue<float>(), static_cast<Easing::Type>(tween.getChild("interpolation").getValue<int>()));
 	app::console() << "id: " << tween.getChild("id").getValue<int>() << " deltaTime: " << tween.getChild("deltaTime").getValue<float>() << " deltaValue: " << tween.getChild("deltaValue").getValue<float>() << std::endl;
 	return t;
+}
+
+std::string SkeletonData::writeVoxel(Voxel * v, unsigned int indent){
+	std::stringstream json;
+	indent++;
+
+	// Just the position vector
+	json << std::string(indent * 3, ' ') << "{" << "\"x\": " << v->pos.x << ", " << "\"y\": " << v->pos.y << ", " << "\"z\": " << v->pos.z << "}";
+
+	return json.str();
+}
+
+void SkeletonData::readVoxel(JsonTree voxel, Joint * parent){
+
+	// create voxel, added to parent in constructor
+	Voxel * v = new Voxel(Vec3d(voxel.getChild("x").getValue<float>(), voxel.getChild("y").getValue<float>(), voxel.getChild("z").getValue<float>()), parent);
 }
 
 void SkeletonData::validateDirectory(std::string & directory) {

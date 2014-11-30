@@ -83,14 +83,16 @@ void CinderApp::setup(){
 
 
 	//// test animation
-	vector<Tween *> tweens;
-	tweens.push_back(new Tween(1, 0.1, Easing::Type::kNONE));
-	tweens.push_back(new Tween(1, -0.5, Easing::Type::kNONE));
+	/*vector<Tween *> tweens;
+	tweens.push_back(new Tween(2, 0.1, Easing::Type::kNONE));
+	tweens.push_back(new Tween(2, -0.5, Easing::Type::kNONE));
 	
 	cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,0,0), nullptr));
 	cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,1,0), joints.at(0)));
 
-	joints.at(0)->translateZ.tweens = tweens;
+	joints.at(0)->translateZ.tweens = tweens;*/
+
+
 	play = false;
 	previousTime = 0;
 }

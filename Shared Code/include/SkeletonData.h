@@ -20,6 +20,7 @@ using namespace ci;
 
 class Animation;
 class Tween;
+class Voxel;
 
 class SkeletonData{
 public:
@@ -41,5 +42,8 @@ protected:
 
 	static std::string writeTween(Tween * t, int id, unsigned int indent = 0);
 	static Tween * readTween(JsonTree tween);
+
+	static std::string writeVoxel(Voxel * v, unsigned int indent = 0);
+	static void readVoxel(JsonTree voxel, Joint * parent);
 };
 
