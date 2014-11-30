@@ -14,6 +14,10 @@
 #include "Mouse.h"
 #include "GLFWRenderOptions.h"
 #include "Camera.h"
+#include <BaseShader.h>
+#include <LightShaderComponent.h>
+#include <ShadowShaderComponent.h>
+#include <TextureShaderComponent.h>
 
 Cube * cube;
 Cube * cube2;
@@ -42,6 +46,9 @@ Entity * loaded1;
 
 Transform * t;
 
+BaseShader * baseShader;
+
+
 MainScene::MainScene(Game * _game):
 	Scene(game)
 {
@@ -61,6 +68,12 @@ MainScene::MainScene(Game * _game):
 	tex = new Texture("../assets/uv-test.jpg", 1000, 1000, true, true);
 	voxTex = new Texture("../assets/voxel-texture.png", 512, 512, true, true);
 
+	baseShader = new BaseShader();
+	baseShader->components.push_back(new TextureShaderComponent());
+	baseShader->components.push_back(new LightShaderComponent());
+	baseShader->components.push_back(new ShadowShaderComponent());
+	baseShader->compileShader();
+
 	mat = new Material(PHONG, 10.0, glm::vec3(1.0f, 1.0f, 1.0f), true);
 	bMat = new Material(BLINN, 80.0, glm::vec3(1.0f, 1.0f, 1.0f), true);
 
@@ -69,7 +82,7 @@ MainScene::MainScene(Game * _game):
 	t->scale(3, 3, 3);
 
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
-	cube->setShader(new Shader("../assets/diffuse", false, true), true);
+	cube->setShader(baseShader, true);
 	cube->transform->translateX(0.5);
 	cube->mesh->vertices.at(3).y += 1.5;
 	cube->mesh->vertices.at(0).y += 1.5;
@@ -95,7 +108,7 @@ MainScene::MainScene(Game * _game):
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	addChild(cube);
 	addChild(cube4);
-	cube4->setShader(texShader, true);
+	cube4->setShader(baseShader, true);
 	cube4->transform->scale(15.0, 1.0, 15.0);
 	cube4->transform->translateY(-2);
 	cube4->mesh->pushTexture2D(tex);
@@ -108,7 +121,7 @@ MainScene::MainScene(Game * _game):
 		loaded->mesh->pushMaterial(mat);
 	}
 
-	loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, texShader);
+	loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, baseShader);
 	//loaded1->mesh->pushTexture2D(tex);
 	cube->addChild(loaded1);
 
@@ -131,7 +144,7 @@ MainScene::MainScene(Game * _game):
 	tLight2->data.ambientCoefficient = 0.005f;
 
 	tLight2->transform->translateX(2);
-	lights.push_back(tLight);
+	//lights.push_back(tLight);
 	lights.push_back(tLight2);
 
 	FakeAnimation * cat = new FakeAnimation(new Transform(), texShader);
@@ -175,8 +188,8 @@ MainScene::~MainScene(){
 void MainScene::update(){
 	Scene::update();
 
-	tLight->transform->translateX(sinf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
-	tLight->transform->translateZ(cosf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
+	//tLight->transform->translateX(sinf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
+	//tLight->transform->translateZ(cosf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		toggleFullScreen();
@@ -254,6 +267,7 @@ void MainScene::onContextChange(){
 	renderSurface->unload();
 	shadowSurface->unload();
 	shadowBuffer->unload();
+	baseShader->unload();
 
 	Scene::onContextChange();
 
@@ -263,4 +277,5 @@ void MainScene::onContextChange(){
 	renderSurface->load();
 	shadowSurface->load();
 	shadowBuffer->load();
+	baseShader->load();
 }

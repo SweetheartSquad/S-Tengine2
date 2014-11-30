@@ -1,17 +1,17 @@
 #include "Shader.h"
 #include "ShaderVariables.h"
 
-void Shader::init(std::string _vertexShaderFile, std::string _fragmentShaderFile){
-	vertName = _vertexShaderFile;
-	fragName = _fragmentShaderFile;
+void Shader::init(std::string _vertexShaderSource, std::string _fragmentShaderSource){
+	vertSource = _vertexShaderSource;
+	fragSource = _fragmentShaderSource;
 
 	load();
 }
 
-void Shader::init(std::string _vertexShaderFile, std::string _fragmentShaderFile, std::string _geometryShaderFile){
-	vertName = _vertexShaderFile;
-	fragName = _fragmentShaderFile;
-	geomName = _geometryShaderFile;
+void Shader::init(std::string _vertexShaderSource, std::string _fragmentShaderSource, std::string _geometryShaderSource){
+	vertSource = _vertexShaderSource;
+	fragSource = _fragmentShaderSource;
+	geomSource = _geometryShaderSource;
 
 	load();
 }
@@ -20,10 +20,14 @@ Shader::Shader(std::string _shaderSource, bool _hasGeometryShader, bool _autoRel
 	NodeResource(_autoRelease),
 	hasGeometryShader(_hasGeometryShader)
 {
+	std::string _vertexShaderSource = FileUtils::voxReadFile(_shaderSource + ".vert");
+	std::string _fragmentShaderSource = FileUtils::voxReadFile(_shaderSource + ".frag");
+	
 	if (hasGeometryShader){
-		init(_shaderSource + ".vert", _shaderSource + ".frag", _shaderSource + ".geom");
+		std::string _geometryShaderSource = FileUtils::voxReadFile(_shaderSource + ".geom");
+		init(_vertexShaderSource, _fragmentShaderSource, _geometryShaderSource);
 	}else{
-		init(_shaderSource + ".vert", _shaderSource + ".frag");
+		init(_vertexShaderSource, _fragmentShaderSource);
 	}
 }
 
@@ -45,33 +49,27 @@ Shader::~Shader(void){
 
 void Shader::load(){
 	if(!loaded){
-		std::string _vertexShaderSource = FileUtils::voxReadFile(vertName);
-		std::string _fragmentShaderSource = FileUtils::voxReadFile(fragName);
-		std::string _geometryShaderSource;
-		if (hasGeometryShader){
-			_geometryShaderSource = FileUtils::voxReadFile(geomName);
-		}
 		//vert
-		char * v = new char[_vertexShaderSource.size() + 1];
-		int vl = _vertexShaderSource.length();
-		memcpy(v, _vertexShaderSource.c_str(), vl + 1);
+		char * v = new char[vertSource.size() + 1];
+		int vl = vertSource.length();
+		memcpy(v, vertSource.c_str(), vl + 1);
 		GLuint vertexShader = compileShader(GL_VERTEX_SHADER, v, vl);
 		GLUtils::checkForError(true,__FILE__,__LINE__);
 		delete v;
 
 		//frag
-		char * f = new char[_fragmentShaderSource.size() + 1];
-		int fl = _fragmentShaderSource.length();
-		memcpy(f, _fragmentShaderSource.c_str(), fl + 1);
+		char * f = new char[fragSource.size() + 1];
+		int fl = fragSource.length();
+		memcpy(f, fragSource.c_str(), fl + 1);
 		GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, f, fl);
 		GLUtils::checkForError(true,__FILE__,__LINE__);
 		delete f;
 
 		GLuint geometryShader = 0;
 		if (hasGeometryShader){
-			char * g = new char[_geometryShaderSource.size() + 1];
-			int gl = _geometryShaderSource.length();
-			memcpy(g, _geometryShaderSource.c_str(), gl + 1);
+			char * g = new char[geomSource.size() + 1];
+			int gl = geomSource.length();
+			memcpy(g, geomSource.c_str(), gl + 1);
 			geometryShader = compileShader(GL_GEOMETRY_SHADER, g, gl);
 			GLUtils::checkForError(true,__FILE__,__LINE__);
 			delete g;
@@ -122,10 +120,10 @@ void Shader::load(){
 		GLUtils::checkForError(true,__FILE__,__LINE__);
 
 		// What happens if these aren't in the shader?
-		aVertexPosition		= glGetAttribLocation(programId, GL_ATTRIBUTE_ID_VERTEX_POSITION);
-		aVertexColor		= glGetAttribLocation(programId, GL_ATTRIBUTE_ID_VERTEX_COLOR);
-		aVertexNormals		= glGetAttribLocation(programId, GL_ATTRIBUTE_ID_VERTEX_NORMALS);
-		aVertexUVs			= glGetAttribLocation(programId, GL_ATTRIBUTE_ID_VERTEX_UVS);
+		aVertexPosition		= glGetAttribLocation(programId, GL_ATTRIBUTE_ID_VERTEX_POSITION.c_str());
+		aVertexColor		= glGetAttribLocation(programId, GL_ATTRIBUTE_ID_VERTEX_COLOR.c_str());
+		aVertexNormals		= glGetAttribLocation(programId, GL_ATTRIBUTE_ID_VERTEX_NORMALS.c_str());
+		aVertexUVs			= glGetAttribLocation(programId, GL_ATTRIBUTE_ID_VERTEX_UVS.c_str());
 
 		loaded = true;
 	}

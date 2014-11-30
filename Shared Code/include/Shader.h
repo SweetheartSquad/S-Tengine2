@@ -7,6 +7,13 @@
 #include "NodeResource.h"
 
 class Shader : public NodeResource{
+
+protected:
+	/** Reads the files at the given location/name and compiles them as a vertex shader and a fragment shader */
+	void init(std::string _vertexSource, std::string _fragmentSource);
+	/** Reads the files at the given location/name and compiles them as a vertex shader and a fragment shader */
+	void init(std::string _vertexShaderSource, std::string _fragmentShaderSource, std::string _geometryShaderSource);
+
 private:
 
 	/** The attribute location of the vertex position in the shader */
@@ -21,19 +28,14 @@ private:
 
 	bool hasGeometryShader;
 
-	/** Reads the files at the given location/name and compiles them as a vertex shader and a fragment shader */
-	void init(std::string _vertexShaderFile, std::string _fragmentShaderFile);
-	/** Reads the files at the given location/name and compiles them as a vertex shader and a fragment shader */
-	void init(std::string _vertexShaderFile, std::string _fragmentShaderFile, std::string _geometryShaderFile);
-
 public:
 
 	/** Filename of vertex shader */
-	std::string vertName;
+	std::string vertSource;
 	/** Filename of fragment shader */
-	std::string fragName;
+	std::string fragSource;
 	/** Filename of geometry shader */
-	std::string geomName;
+	std::string geomSource;
 
 	/** Creates shader using "_shaderFile.vert", "_shaderFile.frag" and "_shaderFile.geom" */
 	explicit Shader(std::string _shaderSource, bool _hasGeometryShader, bool _autoRelease);

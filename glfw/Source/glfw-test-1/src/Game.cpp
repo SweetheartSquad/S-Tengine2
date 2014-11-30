@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include <stdlib.h>
 
 //these shouldn't be global
 double lastTime = glfwGetTime();
@@ -24,6 +25,17 @@ Game::Game(bool _isRunning):
 }
 
 Game::~Game(void){
+}
+
+void Game::performGameLoop(){
+	glfwPollEvents();
+
+	update();
+	draw();
+
+	glfwSwapBuffers(vox::currentContext);
+	manageInput();
+	isRunning = !glfwWindowShouldClose(vox::currentContext);
 }
 
 void Game::update(void){
@@ -62,3 +74,4 @@ void Game::printFps(){
 		lastTime += 1.0;
 	}
 }
+

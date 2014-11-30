@@ -60,6 +60,7 @@ float random(vec3 seed, int i){
 
 void main()
 {
+	//Texture stuff
 	vec4 fragColorTex = vec4(0, 0, 0, 0);
 	
 	if(numTextures == 0){
@@ -74,6 +75,7 @@ void main()
 		}
 	}
 
+	//Light Stuff
     mat3 normalMatrix = transpose(inverse(mat3(model)));
 
 	vec3 normal = normalize(normalMatrix * fragNormal);
@@ -88,10 +90,10 @@ void main()
 		brightness += dot(normal, surfaceToLight) / (length(surfaceToLight) * length(normal));
 		outIntensities += vec3(lights[i].intensities);
 	}
-	
 
 	brightness = clamp(brightness, 0.1, 1);
  
+	//Shadow stuff
 	float visibility = 1.0;
    
 	for (int i=0; i<16; i++){
@@ -109,8 +111,16 @@ void main()
 			visibility -= 0.05;
 		}
 	}
-
+	//Requires lights and shadows
 	visibility += brightness;
-
-	outColor = vec4(vec3(outIntensities), 1) * vec4(vec3(fragColorTex.xyz),1) * vec4(clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1) , 1) * vec4(brightness, brightness, brightness, 1);
+	//Set the out color to white
+	outColor  = fragColor;
+	//Texture modification
+	outColor = fragColorTex;
+	//Shadow modification
+	outColor *= vec4(clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1) , 1);
+	//lights Modficiation
+	outColor *= vec4(vec3(outIntensities), 1) * vec4(brightness, brightness, brightness, 1);
+	
+	//outColor = vec4(vec3(outIntensities), 1) * vec4(vec3(fragColorTex.xyz),1) * vec4(clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1) , 1) * vec4(brightness, brightness, brightness, 1);
 }

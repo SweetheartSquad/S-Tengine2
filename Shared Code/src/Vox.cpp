@@ -4,10 +4,12 @@
 
 #include <string>
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "Keyboard.h"
 #include "Mouse.h"
+
 
 
 double vox::lastTimestamp = 0;
@@ -43,6 +45,11 @@ static void mousePostionCallback(GLFWwindow *_window, double _x, double _y){
 	Mouse * mouse = &Mouse::getInstance();
 	mouse->mousePositionListener(_x, _y);
 }
+
+static void error_callback(int _error, const char * _description){
+	fputs(_description, stderr);
+}
+
 void vox::initWindow(GLFWwindow * _w){
 	if(_w != nullptr){
 		//glfwMakeContextCurrent(currentContext);
@@ -52,7 +59,50 @@ void vox::initWindow(GLFWwindow * _w){
 	}
 }
 
+void vox::initialize(std::string _title){
 
+	vox::setGlfwWindowHints();
+
+	GLFWwindow * window;
+	glfwSetErrorCallback(error_callback);
+	if (!glfwInit()){
+		exit(EXIT_FAILURE);
+	}
+
+	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+	int w = mode->width;
+	int	h = mode->height;
+
+	window = glfwCreateWindow(w/2, h/2, _title.c_str(), nullptr, nullptr);
+	if (!window){
+		glfwTerminate();
+		exit(EXIT_FAILURE);
+	}
+
+	vox::initWindow(window);
+	glfwMakeContextCurrent(window);
+	vox::currentContext = window;
+
+	glewExperimental = GL_TRUE;
+	GLenum err = glewInit();
+	if (GLEW_OK != err){
+		/* Problem: glewInit failed, something is seriously wrong. */
+		fprintf(stderr, "\tERROR: %s\n", glewGetErrorString(err));
+	}
+
+	int screenHeight;
+	int screenWidth;
+
+	glfwGetWindowSize(window, &screenWidth, &screenHeight);
+	glfwSetCursorPos(window, screenWidth/2, screenHeight/2);
+}
+
+void vox::destruct(){
+	glfwDestroyWindow(vox::currentContext);
+	glfwTerminate();
+	exit(EXIT_SUCCESS);
+}
 
 /////////// Delta Time Begin //////////////
 void vox::calculateDeltaTimeCorrection(){
@@ -69,5 +119,3 @@ void vox::calculateDeltaTimeCorrection(){
 	step.lastTimestamp = lastTimestamp;
 }
 
-void vox::destruct(){
-}

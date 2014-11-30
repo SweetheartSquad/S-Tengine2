@@ -19,6 +19,7 @@ class Texture;
 class Material;
 class MatrixStack;
 
+
 class MeshInterface : public NodeRenderable{
 public:
 	/** Whether the vao, vbo, and ibo have been generated and initialized */

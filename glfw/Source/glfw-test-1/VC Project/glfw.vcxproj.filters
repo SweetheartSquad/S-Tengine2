@@ -43,6 +43,18 @@
     <Filter Include="Resource Files\textures">
       <UniqueIdentifier>{4830f7c0-e46d-4630-bae8-71e8b98e44da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\shader">
+      <UniqueIdentifier>{3d03607c-93ad-4402-85b9-e1059d116f57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\shader">
+      <UniqueIdentifier>{c9af958e-373b-48c9-a384-25589c5913ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\node">
+      <UniqueIdentifier>{455f384c-ecdc-47be-b682-29351bd11fc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\node">
+      <UniqueIdentifier>{2d2e6eed-ba43-4e0f-a0b1-12678e9e7f27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Cube.cpp">
@@ -90,9 +102,6 @@
     <ClCompile Include="..\src\MeshInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -117,12 +126,6 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeResource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\Vox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -138,13 +141,7 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\Keyframe.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\Step.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Material.cpp">
@@ -159,14 +156,38 @@
     <ClCompile Include="..\src\StandardFrameBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeHierarchical.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\..\..\Shared Code\src\Shader.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ShaderComponent.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ShadowShaderComponent.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BaseShader.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeResource.cpp">
+      <Filter>Source Files\node</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeUpdatable.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\node</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GLFWRenderOptions.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp">
+      <Filter>Source Files\node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeHierarchical.cpp">
+      <Filter>Source Files\node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp">
+      <Filter>Source Files\node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LightShaderComponent.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextureShaderComponent.cpp">
+      <Filter>Source Files\shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -218,9 +239,6 @@
     <ClInclude Include="..\include\MeshInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\Node.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -242,25 +260,10 @@
     <ClInclude Include="..\include\FakeAnimation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeTransformable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\VoxelMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\Animation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeAnimatable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeRenderable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeResource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\Vox.h">
@@ -278,12 +281,6 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\Step.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -296,8 +293,41 @@
     <ClInclude Include="..\include\StandardFrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\GLFWRenderOptions.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\include\ShaderComponent.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ShadowShaderComponent.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Shader.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\BaseShader.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeAnimatable.h">
+      <Filter>Header Files\node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Node.h">
+      <Filter>Header Files\node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h">
+      <Filter>Header Files\node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeResource.h">
+      <Filter>Header Files\node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeTransformable.h">
+      <Filter>Header Files\node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeRenderable.h">
+      <Filter>Header Files\node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\LightShaderComponent.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\TextureShaderComponent.h">
+      <Filter>Header Files\shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
