@@ -374,7 +374,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 			}
 			gl::disableWireframe();
 
-			gl::translate(UI::handlePos);
+			gl::translate(UI::displayHandlePos);
 			gl::lineWidth(2);
 			if(cam.isPersp()){
 				// If the camera is a perspective view, scale the coordinate frame proportionally to the distance from camera
@@ -564,7 +564,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 	// Get the selected UI colour
 	pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 0, GL_UNSIGNED_BYTE);
 
-	if(event.isRight()){
+	if(event.isLeft()){
 		oldMousePos = mMousePos;
 	}
 
@@ -615,7 +615,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 		}
 	}
 
-	UI::updateHandlePos();
+	UI::updateHandlePos(false);
 }
 
 void CinderApp::mouseDrag( MouseEvent event ){
@@ -626,30 +626,55 @@ void CinderApp::mouseDrag( MouseEvent event ){
 		camMayaPersp.mouseDrag( mMousePos, event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
 	}else{
 		if(event.isLeftDown()){
-			//cmdProc.executeCommand(new CMD_MoveSelectedJoints(getCameraCorrectedPos(), false));
-		}else if(event.isRightDown()){
 			if(uiColour != 0){
 				if(sourceCam != nullptr && sourceRect != nullptr){
-					Vec2i handlePosInScreen = sourceCam->worldToScreen(UI::handlePos, sourceRect->getWidth(), sourceRect->getHeight());
+					Vec2f handlePosInScreen = sourceCam->worldToScreen(UI::handlePos, sourceRect->getWidth(), sourceRect->getHeight());
 
-					Vec2i deltaMousePos = mMousePos - oldMousePos;
+					Vec2f deltaMousePos = mMousePos - oldMousePos;
 					
+					
+
+					/*Ray ray = sourceCam->generateRay((handlePosInScreen.x + deltaMousePos.x)/sourceRect->getWidth(), (handlePosInScreen.y + deltaMousePos.y)/sourceRect->getHeight(), sourceCam->getAspectRatio());
+					float distance = 0.f;
+					bool hit = ray.calcPlaneIntersection(UI::handlePos, sourceCam->getViewDirection(), &distance);
+					if(hit){
+						Vec3f newPos = ray.calcPosition(distance);
+						console() << UI::handlePos << " -> " << newPos << std::endl;
+						console() << ray.getDirection() << "\t" << distance << std::endl;
+						console() << ray.getOrigin() << "\t" << std::endl;
+					}*/
+
 					if(mode == TRANSLATE){
 						if(UI::selectedNodes.size() > 0){
-							Vec3i dir(0,0,0);
+							/*Vec3i dir(0,0,0);
 							switch(uiColour){
-								case 0xFF0000: dir.x -= 10; break;
-								case 0x00FF00: dir.y -= 10; break;
-								case 0x0000FF: dir.z -= 10; break;
-								//case 0xFFFF00: dir.x -= 10; dir.y -= 10; dir.z -= 10; break;
-								case 0xFFFF00: dir = sourceCam->getViewDirection()*-10; break;
+								case 0xFF0000: dir.x -= 100; break;
+								case 0x00FF00: dir.y -= 100; break;
+								case 0x0000FF: dir.z -= 100; break;
+								case 0xFFFF00: dir = sourceCam->getViewDirection()*-100; break;
 							}
 						
 							Vec2i end = sourceCam->worldToScreen(UI::handlePos + dir, sourceRect->getWidth(), sourceRect->getHeight());
 							Vec2f mouseAxis = end - handlePosInScreen;
 							float dif = deltaMousePos.dot(mouseAxis) / sqrtf(getWindowHeight()*getWindowHeight() + getWindowWidth()*getWindowWidth());
 				
-							cmdProc.executeCommand(new CMD_MoveSelectedJoints(Vec3d(dir.x, dir.y, dir.z)*dif/100.f, true));
+							cmdProc.executeCommand(new CMD_MoveSelectedJoints(Vec3d(dir.x, dir.y, dir.z)*dif/1000.f, true));*/
+
+
+							Ray ray = sourceCam->generateRay((handlePosInScreen.x + deltaMousePos.x)/sourceRect->getWidth(), 1-(handlePosInScreen.y + deltaMousePos.y)/sourceRect->getHeight(), sourceCam->getAspectRatio());
+							float distance = 0.f;
+							//ray.setDirection(sourceCam->getViewDirection());
+							
+
+							bool hit = ray.calcPlaneIntersection(UI::handlePos, sourceCam->getViewDirection(), &distance);
+							if(hit){
+								Vec3f newPos = ray.calcPosition(distance);
+								console() << UI::handlePos << " -> " << newPos << std::endl;
+								console() << ray.getDirection() << "\t" << distance << std::endl;
+								console() << ray.getOrigin() << "\t" << std::endl;
+								cmdProc.executeCommand(new CMD_MoveSelectedJoints(newPos-UI::handlePos, true));
+							}
+
 						}
 					}else if(mode == ROTATE){
 						glm::vec3 axis(0,0,0);
@@ -700,10 +725,11 @@ void CinderApp::mouseDrag( MouseEvent event ){
 			oldMousePos = mMousePos;
 		}
 	}
+	UI::updateHandlePos(true);
 }
 
 void CinderApp::mouseUp( MouseEvent event ){
-	UI::updateHandlePos();
+	UI::updateHandlePos(false);
 }
 
 void CinderApp::keyDown( KeyEvent event ){
@@ -794,7 +820,7 @@ void CinderApp::keyDown( KeyEvent event ){
 		params->setOptions( "UI Mode", "label=`PAINT_VOXELS`" );
 		break;
 	}
-	UI::updateHandlePos();
+	UI::updateHandlePos(false);
 }
 
 void CinderApp::keyUp( KeyEvent event ){

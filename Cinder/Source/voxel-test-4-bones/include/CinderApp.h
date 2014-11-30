@@ -1,12 +1,14 @@
 #pragma once
-#include "cinder/MayaCamUI.h"
-#include "cinder/TriMesh.h"
-#include "cinder/app/AppBasic.h"
-#include "cinder/gl/Fbo.h"
-#include "cinder/gl/GlslProg.h"
-#include "cinder/gl/Light.h"
-#include "cinder/gl/Material.h"
-#include "cinder/params/Params.h"
+#include <cinder\MayaCamUI.h>
+#include <cinder\TriMesh.h>
+#include <cinder\app\AppBasic.h>
+#include <cinder\gl\Fbo.h>
+#include <cinder\gl\GlslProg.h>
+#include <cinder\gl\Light.h>
+#include <cinder\gl\Material.h>
+#include <cinder\params\Params.h>
+#include <cinder\Plane.h>
+#include <cinder\Ray.h>
 
 #include <string>
 #include <sstream>
@@ -65,6 +67,7 @@ public:
 	void loadSkeleton();
 
 	void setKeyframe();
+	void togglePlay();
 
 	/** Copies an area of size _area centered around _pos from (GL_COLOR_ATTACHMENENT0 + _channel) of _sourceFbo into _destFbo.
 	* If the most-occurring colour in _destFbo takes up more than 50% of the pixels,
@@ -103,7 +106,6 @@ public:
 		return b + (g << 8) + (r << 16);
 	};
 
-	void togglePlay();
 protected:
 	//params
 	bool drawParams;

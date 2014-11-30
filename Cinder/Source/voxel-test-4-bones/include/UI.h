@@ -15,6 +15,7 @@ public:
 	static float stepScale;
 	static Easing::Type interpolation;
 	static ci::Vec3d handlePos;
+	static ci::Vec3d displayHandlePos;
 
-	static void updateHandlePos();
+	static void updateHandlePos(bool _displayOnly);
 };
