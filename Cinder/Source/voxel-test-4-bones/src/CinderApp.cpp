@@ -363,6 +363,16 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 	gl::setMatrices(cam);
 	
 	gl::color(ColorA(1, 1, 1, 1));
+
+	Ray ray = camMayaPersp.getCamera().generateRay((float)mMousePos.x/rectPersp.getWidth(), 1.f-((float)(mMousePos.y-rect.y1)/rectPersp.getHeight()), camMayaPersp.getCamera().getAspectRatio());			
+	float distance = 0.f;
+	if(ray.calcPlaneIntersection(Vec3f(0,0,0), Vec3f(0,1,0), &distance)){
+		Vec3f t = ray.calcPosition(distance);
+
+		gl::drawVector(Vec3f(ray.getOrigin()), t);
+	}
+
+
 	if(UI::selectedNodes.size() != 0){
 
 		gl::pushMatrices();
@@ -922,9 +932,11 @@ Vec3d CinderApp::getCameraCorrectedPos(){
 		res.y = t.y;
 		res.z = 0;
 	}else if(rectPersp.contains(mMousePos)){
-		res.x = 0;
-		res.y = 0;
-		res.z = 0;
+		Ray ray = camMayaPersp.getCamera().generateRay((float)mMousePos.x/rectPersp.getWidth(), 1.f-((float)(mMousePos.y-rectPersp.y1)/rectPersp.getHeight()), camMayaPersp.getCamera().getAspectRatio());			
+		float distance = 0.f;
+		if(ray.calcPlaneIntersection(Vec3f(0,0,0), Vec3f(0,1,0), &distance)){
+			res = ray.calcPosition(distance);
+		}
 	}
 	return res;
 }
