@@ -35,6 +35,7 @@ void CinderApp::setup(){
 	sourceCam = nullptr;
 	sourceRect = nullptr;
 	sourceFbo = nullptr;
+	sourceBounds = nullptr;
 
 	drawParams = true;
 	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 150, 100 ) ) );
@@ -102,31 +103,47 @@ void CinderApp::resize(){
 	double r = getWindowAspectRatio();
 	Area b = getWindowBounds();
 	rectWindow = b;
-	// setup the camera
-	CameraPersp cam = camMayaPersp.getCamera();
-	cam.setPerspective( 60.0f, r, 0.1f, 10000.0f );
-	camMayaPersp.setCurrentCam( cam );
 	
 	float w2 = w/2;
 	float h2 = h/2;
+	float w3 = w/3;
+	float h3 = h/3;
 	
 	rectTop.set(0, 0, w2, h2);
 	rectRight.set(w2, 0, w, h2);
 	rectFront.set(0, h2, w2, h);
 	rectPersp.set(w2, h2, w, h);
 	
+	rectTop.set(0, 0, w3, h3);
+	rectRight.set(w3, 0, w3+w3, h3);
+	rectFront.set(w3+w3, 0, w3+w3+w3, h3);
+
+	rectPersp.set(0, h3, w, h);
+	
 	boundsTop.set(	-r,	-1.f,	r,	1.f);
 	boundsRight.set(-r,	-1.f,	r,	1.f);
 	boundsFront.set(-r,	-1.f,	r,	1.f);
 	//boundsPersp.set(-1, -h/w, 1, h/w);
 	
+	// setup the camera
+	CameraPersp cam = camMayaPersp.getCamera();
+	cam.setPerspective( 60.0f, rectPersp.getAspectRatio(), 0.1f, 10000.0f );
+	camMayaPersp.setCurrentCam( cam );
+
 	camTop.setOrtho(boundsTop.x1, boundsTop.x2, boundsTop.y1, boundsTop.y2, -10000, 10000);
 	camRight.setOrtho(boundsRight.x1, boundsRight.x2, boundsRight.y1, boundsRight.y2, -10000, 10000);
 	camFront.setOrtho(boundsFront.x1, boundsFront.x2, boundsFront.y1, boundsFront.y2, -10000, 10000);
 	
-	camTop.setEyePoint(Vec3f(0,0,0));
+	/*camTop.setEyePoint(Vec3f(0,0,0));
 	camRight.setEyePoint(Vec3f(0,0,0));
-	camFront.setEyePoint(Vec3f(0,0,0));
+	camFront.setEyePoint(Vec3f(0,0,0));*/
+	camTop.lookAt(Vec3f(0, 1, 0), Vec3f(0,0,0), Vec3f(1,0,0));
+	camRight.lookAt(Vec3f(1, 0, 0), Vec3f(0,0,0), Vec3f(0,1,0));
+	camFront.lookAt(Vec3f(0, 0, 1), Vec3f(0,0,0), Vec3f(0,1,0));
+
+	camTop.setCenterOfInterestPoint(Vec3f(0,0,0));
+	camRight.setCenterOfInterestPoint(Vec3f(0,0,0));
+	camFront.setCenterOfInterestPoint(Vec3f(0,0,0));
 	
 	camTop.setViewDirection(Vec3f(0,-1,0));
 	camRight.setViewDirection(Vec3f(-1,0,0));
@@ -137,21 +154,14 @@ void CinderApp::resize(){
 		initFbo(&fboUI, b);
 	}
 	
-	w /= 2;
-	h /= 2;
-	b.x1 /= 2;
-	b.x2 /= 2;
-	b.y1 /= 2;
-	b.y2 /= 2;
-
-	if(!fboPersp || fboPersp.getWidth() != w || fboPersp.getHeight() != h) {
-		initMultiChannelFbo(fboPersp, b, 4);
-	}if(!fboTop || fboTop.getWidth() != w || fboTop.getHeight() != h){
-		initMultiChannelFbo(fboTop, b, 4);
-	}if(!fboRight || fboRight.getWidth() != w || fboRight.getHeight() != h){
-		initMultiChannelFbo(fboRight, b, 4);
-	}if(!fboFront || fboFront.getWidth() != w || fboFront.getHeight() != h){
-		initMultiChannelFbo(fboFront, b, 4);
+	if(!fboPersp || fboPersp.getWidth() != rectPersp.getWidth() || fboPersp.getHeight() != rectPersp.getHeight()) {
+		initMultiChannelFbo(fboPersp, rectPersp.getInteriorArea(), 4);
+	}if(!fboTop || fboTop.getWidth() != rectTop.getWidth() || fboTop.getHeight() != rectTop.getHeight()){
+		initMultiChannelFbo(fboTop, rectTop.getInteriorArea(), 4);
+	}if(!fboRight || fboRight.getWidth() != rectRight.getWidth() || fboRight.getHeight() != rectRight.getHeight()){
+		initMultiChannelFbo(fboRight, rectRight.getInteriorArea(), 4);
+	}if(!fboFront || fboFront.getWidth() != rectFront.getWidth() || fboFront.getHeight() != rectFront.getHeight()){
+		initMultiChannelFbo(fboFront, rectFront.getInteriorArea(), 4);
 	}
 }
 
@@ -379,6 +389,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 			if(cam.isPersp()){
 				// If the camera is a perspective view, scale the coordinate frame proportionally to the distance from camera
 				gl::scale(cam.worldToEyeDepth(cam.getCenterOfInterestPoint()),cam.worldToEyeDepth(cam.getCenterOfInterestPoint()),cam.worldToEyeDepth(cam.getCenterOfInterestPoint()));
+				gl::scale(-1,-1,-1);
 			}
 
 			if(mode == TRANSLATE){
@@ -543,22 +554,27 @@ void CinderApp::mouseDown( MouseEvent event ){
 		sourceCam = &camTop;
 		sourceRect = &rectTop;
 		sourceFbo = &fboTop;
+		sourceBounds = &boundsTop;
 	}else if(rectFront.contains(mMousePos)){
 		sourceCam = &camFront;
 		sourceRect = &rectFront;
 		sourceFbo = &fboFront;
+		sourceBounds = &boundsFront;
 	}else if(rectRight.contains(mMousePos)){
 		sourceCam = &camRight;
 		sourceRect = &rectRight;
 		sourceFbo = &fboRight;
+		sourceBounds = &boundsRight;
 	}else if(rectPersp.contains(mMousePos)){
 		sourceCam = &camMayaPersp.getCamera();
 		sourceRect = &rectPersp;
 		sourceFbo = &fboPersp;
+		sourceBounds = nullptr;
 	}else{
 		sourceCam = nullptr;
 		sourceRect = nullptr;
 		sourceFbo = nullptr;
+		sourceBounds = nullptr;
 	}
 	
 	// Get the selected UI colour
@@ -631,33 +647,36 @@ void CinderApp::mouseDrag( MouseEvent event ){
 					Vec2f handlePosInScreen = sourceCam->worldToScreen(UI::handlePos, sourceRect->getWidth(), sourceRect->getHeight());
 
 					Vec2f deltaMousePos = mMousePos - oldMousePos;
+					console() << "Mouse:\t" << deltaMousePos << std::endl;
 
 					if(mode == TRANSLATE){
 						if(UI::selectedNodes.size() > 0){
+							if(sourceCam->isPersp()){
 
-							Ray ray = sourceCam->generateRay((handlePosInScreen.x + deltaMousePos.x)/sourceRect->getWidth(), 1-(handlePosInScreen.y + deltaMousePos.y)/sourceRect->getHeight(), sourceCam->getAspectRatio());
-							float distance = 0.f;
-							//ray.setDirection(sourceCam->getViewDirection());
+								Ray ray = sourceCam->generateRay((handlePosInScreen.x + deltaMousePos.x)/sourceRect->getWidth(), 1.f-(handlePosInScreen.y + deltaMousePos.y)/sourceRect->getHeight(), sourceCam->getAspectRatio());
 							
+								console() << "Ray:\t" << ray.getOrigin() << ",\t" << ray.getDirection() << std::endl;
+							
+								float distance = 0.f;
+								if(ray.calcPlaneIntersection(UI::handlePos, sourceCam->getViewDirection(), &distance)){
+									Vec3f newPos = ray.calcPosition(distance);
+									Vec3f dif = newPos-UI::handlePos;
 
-							bool hit = ray.calcPlaneIntersection(UI::handlePos, sourceCam->getViewDirection(), &distance);
-							if(hit){
-								Vec3f newPos = ray.calcPosition(distance);
-								console() << UI::handlePos << " -> " << newPos << std::endl;
-								console() << ray.getDirection() << "\t" << distance << std::endl;
-								console() << ray.getOrigin() << "\t" << std::endl;
-								Vec3f dif = newPos-UI::handlePos;
+									switch(uiColour){
+										case 0xFF0000: dif.y = 0; dif.z = 0; break;
+										case 0x00FF00: dif.x = 0; dif.z = 0; break;
+										case 0x0000FF: dif.x = 0; dif.y = 0; break;
+										case 0xFFFF00: break;
+										default: break;
+									}
+									console() << "distance:\t" << distance << std::endl;
+									console() << "newPos:\t" << newPos << std::endl;
+									console() << "handlePos:\t" << UI::handlePos << std::endl;
+									console() << "Move:\t" << dif << std::endl << std::endl;
 
-								switch(uiColour){
-									case 0xFF0000: dif.y = 0; dif.z = 0; break;
-									case 0x00FF00: dif.x = 0; dif.z = 0; break;
-									case 0x0000FF: dif.x = 0; dif.y = 0; break;
-									case 0xFFFF00: break;
+									cmdProc.executeCommand(new CMD_MoveSelectedJoints(dif, true, CMD_MoveSelectedJoints::MovementMode::OBJECT));
 								}
-
-								cmdProc.executeCommand(new CMD_MoveSelectedJoints(dif, true, CMD_MoveSelectedJoints::MovementMode::WORLD));
 							}
-
 						}
 					}else if(mode == ROTATE){
 						glm::vec3 axis(0,0,0);
@@ -870,7 +889,7 @@ void CinderApp::drawGrid(float size, float step){
 	}
 }
 
-Vec2d fromRectToRect(Vec2d _p, Rectf _r1, Rectf _r2){
+Vec2d CinderApp::fromRectToRect(Vec2d _p, Rectf _r1, Rectf _r2){
 	Vec2d res;
 	res.x = ((_p.x-_r1.x1)/_r1.getWidth())*_r2.getWidth() + _r2.x1;
 	res.y = ((_p.y-_r1.y1)/_r1.getHeight())*_r2.getHeight() + _r2.y1;

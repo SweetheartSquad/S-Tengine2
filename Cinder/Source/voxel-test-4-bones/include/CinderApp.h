@@ -60,6 +60,7 @@ public:
 
 	void newJoint(Vec3d pos, Joint * parent = NULL);
 	Vec3d getCameraCorrectedPos();
+	Vec2d fromRectToRect(Vec2d _p, Rectf _r1, Rectf _r2);
 
 	//Joint * pickJoint(const Vec2i &pos);
 
@@ -178,6 +179,7 @@ protected:
 	unsigned long int uiColour;
 	const Camera * sourceCam;
 	const Rectf * sourceRect;
+	const Rectf * sourceBounds;
 	const gl::Fbo * sourceFbo;
 
 	enum UImode{
