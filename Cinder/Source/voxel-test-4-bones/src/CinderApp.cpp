@@ -358,6 +358,9 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 		gl::pushMatrices();
 			gl::enableWireframe();
 			for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
+				if (i == UI::selectedNodes.size() - 1){
+					gl::color(1, 0.25, 0.1);
+				}
 				Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
 				if(j != NULL){
 					gl::pushMatrices();
@@ -751,7 +754,7 @@ void CinderApp::keyDown( KeyEvent event ){
 		}
 		break;
 	case KeyEvent::KEY_p:
-		cmdProc.executeCommand(new CMD_Parent(&joints));
+		cmdProc.executeCommand(new CMD_Parent(nullptr, nullptr));
 		break;
 	case KeyEvent::KEY_d:
 		if(event.isControlDown()){

@@ -132,6 +132,9 @@
     <ClCompile Include="..\src\CMD_EditStartKey.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\CMD_ParentSelectedNodes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag">
@@ -251,6 +254,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\CMD_EditStartKey.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\CMD_ParentSelectedNodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
