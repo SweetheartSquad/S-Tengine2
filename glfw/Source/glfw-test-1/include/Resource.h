@@ -2,6 +2,7 @@
 
 #include <string>
 
+class VoxelJoint;
 class VoxelMesh;
 class TriMesh;
 
@@ -48,6 +49,6 @@ public:
 	*/
 	static TriMesh* loadMeshFromObj(std::string _objSrc);
 
-	static VoxelMesh * loadVoxelModel(std::string _jsonSrc); 
+	static VoxelJoint * loadVoxelModel(std::string _jsonSrc); 
 
 };

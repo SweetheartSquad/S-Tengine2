@@ -18,6 +18,7 @@
 #include <LightShaderComponent.h>
 #include <ShadowShaderComponent.h>
 #include <TextureShaderComponent.h>
+#include <VoxelJoint.h>
 
 Cube * cube;
 Cube * cube2;
@@ -180,6 +181,9 @@ MainScene::MainScene(Game * _game):
 	cat->transform->translate(1, 0, 2);
 	cat->transform->scale(0.9f, 0.9f, 0.9f);
 	//addChild(cat);
+
+	VoxelJoint * voxelJoint = Resource::loadVoxelModel("../assets/jsonTest.json");
+
 }
 
 MainScene::~MainScene(){
