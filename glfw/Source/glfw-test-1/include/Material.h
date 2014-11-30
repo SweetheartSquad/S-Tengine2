@@ -9,6 +9,8 @@
 struct MaterialData {
 	float shininess;
 	glm::vec3 specularColor;
+
+	MaterialData(float _shininess, glm::vec3 _specularColor);
 };
 
 class Material : public NodeResource

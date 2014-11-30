@@ -47,12 +47,9 @@ void main()
 	}
 
     mat3 normalMatrix = transpose(inverse(mat3(model)));
-
 	vec3 normal = normalize(normalMatrix * fragNormal);
-
 	vec3 fragWorldPosition = vec3(model * vec4(fragVert, 1));
-
-	vec3 surfaceToCamera = fragVert - fragWorldPosition;
+	vec3 surfaceToCamera = normalize(fragVert - fragWorldPosition);
 	
 	outColor = vec4(0,0,0,1);
 
@@ -66,20 +63,19 @@ void main()
 			//diffuse
 			float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
 			vec3 diffuse = diffuseCoefficient * fragColorTex.rgb * lights[i].intensities;
-			diffuse = clamp(diffuse, 0.0, 1.0);
 		
 			//specular
 			float specularCoefficient = 0.0;
 			//only calculate specular for the front side of the surface
 			if(diffuseCoefficient > 0.0){
-				vec3 reflectDirection = normalize(-reflect(surfaceToLight, normal));
-				vec3 viewDirection = normalize(-surfaceToCamera);
+				vec3 reflectDirection = reflect(-surfaceToLight, normal);
+				vec3 viewDirection = surfaceToCamera;
 
-				specularCoefficient = pow(max(0.0, dot(reflectDirection, viewDirection)), materials[j].shininess);
+				specularCoefficient = pow(max(0.0,dot(reflectDirection, viewDirection)), materials[j].shininess);
 			}
 			vec3 specular = specularCoefficient * materials[j].specularColor * lights[i].intensities;
 			specular = clamp(specular, 0.0, 1.0);
-			
+
 			//attenuation
 			float distanceToLight = length(lights[i].position - fragWorldPosition);
 			float attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2));

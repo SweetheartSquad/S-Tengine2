@@ -47,11 +47,8 @@ void main()
 	}
 
     mat3 normalMatrix = transpose(inverse(mat3(model)));
-
 	vec3 normal = normalize(normalMatrix * fragNormal);
-
 	vec3 fragWorldPosition = vec3(model * vec4(fragVert, 1));
-
 	vec3 surfaceToCamera = fragVert - fragWorldPosition;
 	
 	outColor = vec4(0,0,0,1);
@@ -79,7 +76,7 @@ void main()
 				specularCoefficient = pow(max(0.0, dot(halfAngle, normal)), materials[j].shininess);
 			}
 			vec3 specular = specularCoefficient * materials[j].specularColor * lights[i].intensities;
-			specular = clamp(specular, 0.0, 1.0);
+			//specular = clamp(specular, 0.0, 1.0);
 			
 			//attenuation
 			float distanceToLight = length(lights[i].position - fragWorldPosition);

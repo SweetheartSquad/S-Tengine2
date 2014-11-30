@@ -1,8 +1,15 @@
 #include "Material.h"
 #include <Resource.h>
 
-Material::Material(float shininess, glm::vec3 specularColor, bool _autoRelease) :
-	NodeResource(_autoRelease)
+MaterialData::MaterialData(float _shininess, glm::vec3 _specularColor) :
+	shininess(_shininess),
+	specularColor(_specularColor)
+{
+}
+
+Material::Material(float _shininess, glm::vec3 _specularColor, bool _autoRelease) :
+	NodeResource(_autoRelease),
+	data(_shininess, _specularColor)
 {
 }
 
