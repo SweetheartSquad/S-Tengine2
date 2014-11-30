@@ -18,6 +18,9 @@
 
 using namespace ci;
 
+class Animation;
+class Tween;
+
 class SkeletonData{
 public:
 	static void SaveSkeleton(std::string directory, std::string fileName, std::vector<Joint *> &m_joints);
@@ -27,7 +30,16 @@ public:
 	static void validateFileName(std::string & fileName);
 
 protected:
-	static std::string writeJoint(Joint * b);
+	static std::string writeJoint(Joint * j, unsigned int indent = 0);
 	static Joint * readJoint(JsonTree joint, Joint * parent = nullptr);
+
+	static std::string writeAnimations(Joint * j, unsigned int indent = 0);
+	static void readAnimations(JsonTree animations, Joint * j);
+
+	static std::string writeAnimation(Animation * a, std::string name, unsigned int indent = 0);
+	static Animation readAnimation(JsonTree animation, float * prop);
+
+	static std::string writeTween(Tween * t, int id, unsigned int indent = 0);
+	static Tween * readTween(JsonTree tween);
 };
 

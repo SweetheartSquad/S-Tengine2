@@ -2,6 +2,8 @@
 
 #include "SkeletonData.h"
 #include "Transform.h"
+#include "Animation.h"
+#include "Easing.h"
 
 void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, std::vector<Joint *> & joints) {
 	try{
@@ -17,22 +19,13 @@ void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, std
 			std::ofstream jointFile;
 			try {
 				jointFile.open(directory.append(fileName));
-				std::stringstream json = std::stringstream();
 
-				jointFile << "{\"joints\":[" << std::endl;
-
-				//store the root joints in a temporary vector
-				std::vector<Joint *> roots;
-				for(Joint * j : joints){
-					if(j->parent == nullptr){
-						roots.push_back(j);
-					}
-				}
+				jointFile << "{" << "\"joints\": " << "[" << std::endl;
 
 				//write the joints to file (loop through roots and recurse through children)
-				for(Joint * j : roots){
+				for(Joint * j : joints){
 					jointFile << writeJoint(j);
-					if (j->id != roots.back()->id) {
+					if (j->id != joints.back()->id) {
 						jointFile << ",";
 					}
 					jointFile << std::endl;
@@ -67,10 +60,14 @@ std::vector<Joint *> SkeletonData::LoadSkeleton(std::string filePath) {
 
 			JsonTree jointsJson = doc.getChild( "joints" );
 			Joint * parent = nullptr;
+			unsigned int i = 0;
 			for( JsonTree::ConstIter joint = jointsJson.begin(); joint != jointsJson.end(); ++joint ) {
-				JsonTree jJson = jointsJson.getChild(joint->getKey());
+				// Apparently, getKey DOESN't return an index if there is no key? (Even though it says it will in the json.h header...)
+				//JsonTree jJson = jointsJson.getChild(joint->getKey());
+				JsonTree jJson = jointsJson.getChild(i);
 				Joint * j = readJoint(jJson);
 				joints.push_back(j);
+				i++;
 			}
 		}catch (std::exception ex) {
 			throw ex;
@@ -81,29 +78,47 @@ std::vector<Joint *> SkeletonData::LoadSkeleton(std::string filePath) {
 	return joints;
 }
 
-std::string SkeletonData::writeJoint(Joint * j) {
+std::string SkeletonData::writeJoint(Joint * j, unsigned int indent) {
+
 	std::stringstream json;
-	json << " {" << std::endl;
-	json << "  \"id\":" << j->id << "," << std::endl;
+	indent++;
+	json << std::string(indent * 3, ' ') << "{" << std::endl;
+	indent++;
+
+	json << std::string(indent * 3, ' ') << "\"id\": " << j->id << "," << std::endl;
+
 	if (j->parent != nullptr) {
-		json << "  \"parent_id\":" << dynamic_cast<Joint *>(j->parent)->id << "," << std::endl;
+		json << std::string(indent * 3, ' ') << "\"parent\": " << dynamic_cast<Joint *>(j->parent)->id << "," << std::endl;
 	}
-	json << "  \"pos\":"<< "{\"x\":" << j->getPos().x << ", \"y\":" << j->getPos().y << ", \"z\":" << j->getPos().z << "}," << std::endl;
-	json << "  \"orientation\":" << "{\"x\":" << j->transform->orientation.x << ", \"y\":" << j->transform->orientation.y << ", \"z\":" << j->transform->orientation.z << ", \"w\":" << j->transform->orientation.w << "}," << std::endl;
-	
-	json << "  \"children\":" << "[" << std::endl;
+
+	// transform object
+	json << std::string(indent * 3, ' ') << "\"transform\":{" << std::endl;
+	indent++;
+	json << std::string(indent * 3, ' ') << "\"pos\": " << "{" << "\"x\": " << j->getPos().x << ", " << "\"y\": " << j->getPos().y << ", " << "\"z\": " << j->getPos().z << "}," << std::endl;
+	json << std::string(indent * 3, ' ') << "\"orientation\": " << "{" << "\"x\": " << j->transform->orientation.x << ", " << "\"y\": " << j->transform->orientation.y << ", " << "\"z\": " << j->transform->orientation.z << ", " << "\"w\": " << j->transform->orientation.w << "}," << std::endl;
+	json << std::string(indent * 3, ' ') << "\"scaleVector\": " << "{" << "\"x\": " << j->transform->scaleVector.x << ", " << "\"y\": " << j->transform->scaleVector.y << ", " << "\"z\": " << j->transform->scaleVector.z << "}" << std::endl;
+	indent--;
+	json << std::string(indent * 3, ' ') << "}," << std::endl;
+
+	// animation objects
+	json << std::string(indent * 3, ' ') << "\"animations\":{" << std::endl;
+	json << writeAnimations(j, indent);
+	json << std::string(indent * 3, ' ') << "}," << std::endl;
+
+	// children array
+	json << std::string(indent * 3, ' ') << "\"children\": " << "[" << std::endl;
 	for(unsigned long int i = 0; i < j->children.size(); ++i) {
 		Joint * child = dynamic_cast<Joint *>(j->children.at(i));
-		json << writeJoint(child);
+		json << writeJoint(child, indent);
 		if (j->children.size() != 0 && child->id != dynamic_cast<Joint *>(j->children.back())->id) {
 			json << ",";
 		}
+		json << std::endl;
 	}
-	
-	json << "]" << std::endl;
-	
-	json << " }" << std::endl;
-
+	json << std::string(indent * 3, ' ') << "]" << std::endl;
+	indent--;
+	json << std::string(indent * 3, ' ') << "}";
+	std::string blah = json.str();
 	return json.str();
 }
 
@@ -112,26 +127,149 @@ Joint * SkeletonData::readJoint(JsonTree joint, Joint * parent) {
 	Joint * j = new Joint(parent);
 	std::vector<NodeHierarchical *> children;
 
-	//j->parent = parent;
 	j->id = joint.getChild( "id" ).getValue<int>();
-		app::console() << "id: " << j->id << std::endl;
-	JsonTree pos = joint.getChild("pos");
-		app::console() << " jt_pos: x = " << pos.getChild("x").getValue<float>() << " y = " << pos.getChild("y").getValue<float>() << " pos: z = " << pos.getChild("z").getValue<float>() << std::endl;
+	app::console() << "id: " << j->id << std::endl;
+	
+	// Transform data
+	JsonTree transform = joint.getChild("transform");
+
+	JsonTree pos = transform.getChild("pos");
+	app::console() << " jt_pos: x = " << pos.getChild("x").getValue<float>() << " y = " << pos.getChild("y").getValue<float>() << " pos: z = " << pos.getChild("z").getValue<float>() << std::endl;
 	j->setPos(Vec3d(pos.getChild("x").getValue<float>(), pos.getChild("y").getValue<float>(), pos.getChild("z").getValue<float>()), false);
-		app::console() << " pos: x = " << j->getPos().x << " y = " << j->getPos().y << " pos: z = " << j->getPos().z << std::endl;
-	JsonTree orientation = joint.getChild("orientation");
-	j->transform->orientation = glm::quat(orientation.getChild("x").getValue<float>(), orientation.getChild("y").getValue<float>(), orientation.getChild("z").getValue<float>(), orientation.getChild("w").getValue<float>());
-		app::console() << " orientation: x = " << j->transform->orientation.x << " y = " << j->transform->orientation.y << " z = " << j->transform->orientation.z << " w = " << j->transform->orientation.w << std::endl;
+	app::console() << " pos: x = " << j->getPos().x << " y = " << j->getPos().y << " pos: z = " << j->getPos().z << std::endl;
+	
+	JsonTree orientation = transform.getChild("orientation");
+	j->transform->orientation = glm::quat(orientation.getChild("w").getValue<float>(), orientation.getChild("x").getValue<float>(), orientation.getChild("y").getValue<float>(), orientation.getChild("z").getValue<float>());
+	app::console() << " orientation: x = " << j->transform->orientation.x << " y = " << j->transform->orientation.y << " z = " << j->transform->orientation.z << " w = " << j->transform->orientation.w << std::endl;
+	
+	JsonTree scale = transform.getChild("scaleVector");
+	j->transform->scaleVector = glm::vec3(scale.getChild("x").getValue<float>(), scale.getChild("y").getValue<float>(), scale.getChild("z").getValue<float>());
+	app::console() << " scale: x = " << j->transform->scaleVector.x << " y = " << j->transform->scaleVector.y << " z = " << j->transform->scaleVector.z << std::endl;
+	
+	// Get animation data
+	readAnimations(joint.getChild("animations"), j);
 
 	JsonTree childrenJson = joint.getChild("children");
+	unsigned int i = 0;
 	for( JsonTree::ConstIter child = childrenJson.begin(); child != childrenJson.end(); ++child ) {
-		JsonTree cJson = childrenJson.getChild(child->getKey());
+		// Apparently, getKey DOESN't return an index if there is no key?
+		//JsonTree cJson = childrenJson.getChild(child->getKey());
+		JsonTree cJson = childrenJson.getChild(i);
 		Joint * c = readJoint(cJson, j);
 		children.push_back(c);
+		i++;
 	}
 	j->children = children;
 
 	return j;
+}
+
+std::string SkeletonData::writeAnimations(Joint * j, unsigned int indent){
+	std::stringstream json;
+	indent++;
+
+	json << writeAnimation(&j->translateX, "translateX", indent) << "," << std::endl;
+	json << writeAnimation(&j->translateY, "translateY", indent) << "," << std::endl;
+	json << writeAnimation(&j->translateZ, "translateZ", indent) << "," << std::endl;
+	json << writeAnimation(&j->rotateX, "rotateX", indent) << "," << std::endl;
+	json << writeAnimation(&j->rotateY, "rotateY", indent) << "," << std::endl;
+	json << writeAnimation(&j->rotateZ, "rotateZ", indent) << "," << std::endl;
+	json << writeAnimation(&j->rotateW, "rotateW", indent) << "," << std::endl;
+	json << writeAnimation(&j->scaleX, "scaleX", indent) << "," << std::endl;
+	json << writeAnimation(&j->scaleY, "scaleY", indent) << "," << std::endl;
+	json << writeAnimation(&j->scaleZ, "scaleZ", indent) << std::endl;
+
+	return json.str();
+}
+
+void SkeletonData::readAnimations(JsonTree animations, Joint * j){
+
+	j->translateX = readAnimation(animations.getChild("translateX"), &j->transform->translationVector.x);
+	j->translateY = readAnimation(animations.getChild("translateY"), &j->transform->translationVector.y);
+	j->translateZ = readAnimation(animations.getChild("translateZ"), &j->transform->translationVector.z);
+	j->rotateX = readAnimation(animations.getChild("rotateX"), &j->transform->orientation.x);
+	j->rotateX = readAnimation(animations.getChild("rotateY"), &j->transform->orientation.y);
+	j->rotateX = readAnimation(animations.getChild("rotateZ"), &j->transform->orientation.z);
+	j->rotateX = readAnimation(animations.getChild("rotateW"), &j->transform->orientation.w);
+	j->scaleX = readAnimation(animations.getChild("scaleX"), &j->transform->scaleVector.x);
+	j->scaleX = readAnimation(animations.getChild("scaleY"), &j->transform->scaleVector.y);
+	j->scaleX = readAnimation(animations.getChild("scaleZ"), &j->transform->scaleVector.z);
+}
+
+std::string SkeletonData::writeAnimation(Animation * a, std::string name, unsigned int indent){
+
+	std::stringstream json;
+	
+	json << std::string(indent * 3, ' ') << "\"" << name << "\":{" << std::endl;
+	indent++;
+	json << std::string(indent * 3, ' ') << "\"startValue\": " << a->startValue << "," << std::endl;
+
+	// tween array
+	json << std::string(indent * 3, ' ') << "\"tweens\": " << "[" << std::endl;
+	for(unsigned long int i = 0; i < a->tweens.size(); ++i) {
+		Tween * tween = a->tweens.at(i);
+		json << writeTween(tween, i, indent);
+		if (i != a->tweens.size() - 1) {
+			json << ",";
+		}
+		json << std::endl;
+	}
+	json << std::string(indent * 3, ' ') << "]" << std::endl;
+
+	indent--;
+	json << std::string(indent * 3, ' ') << "}";
+
+	return json.str();
+}
+
+Animation SkeletonData::readAnimation(JsonTree animation, float * prop){
+	Animation a = Animation(prop);
+	std::vector<Tween *> tweens;
+	app::console() << animation.getKey() << std::endl;
+	a.startValue = animation.getChild("startValue").getValue<float>();
+
+	JsonTree tweensJson = animation.getChild("tweens");
+	unsigned int i = 0;
+	for( JsonTree::ConstIter tween = tweensJson.begin(); tween != tweensJson.end(); ++tween ) {
+		app::console() << "tween key: " << tween->getKey() << std::endl;
+		// Apparently, getKey DOESN't return an index if there is no key?
+		//JsonTree tJson = tweensJson.getChild(tween->getKey());
+		JsonTree tJson = tweensJson.getChild(i);
+		Tween * t = readTween(tJson);
+		tweens.push_back(t);
+		i++;
+	}
+	a.tweens = tweens;
+
+	return a;
+}
+
+std::string SkeletonData::writeTween(Tween * t, int id, unsigned int indent){
+	std::stringstream json;
+	indent++;
+
+	json << std::string(indent * 3, ' ') << "{" << std::endl;
+	
+	indent++;
+	json << std::string(indent * 3, ' ') << "\"id\": " << id << "," << std::endl;
+	json << std::string(indent * 3, ' ') << "\"deltaTime\": " << t->deltaTime << "," << std::endl;
+	json << std::string(indent * 3, ' ') << "\"deltaValue\": " << t->deltaValue << "," << std::endl;
+	json << std::string(indent * 3, ' ') << "\"interpolation\": " << t->interpolation << std::endl;
+	indent--;
+
+	json << std::string(indent * 3, ' ') << "}";
+
+	return json.str();
+}
+
+Tween * SkeletonData::readTween(JsonTree tween){
+	// get interpolation
+	// TODO: make getting easing enum safer
+	Easing::Type i = static_cast<Easing::Type>(tween.getChild("interpolation").getValue<int>());
+
+	Tween * t = new Tween(tween.getChild("deltaTime").getValue<float>(), tween.getChild("deltaValue").getValue<float>(), i);
+	app::console() << "id: " << tween.getChild("id").getValue<int>() << " deltaTime: " << tween.getChild("deltaTime").getValue<float>() << " deltaValue: " << tween.getChild("deltaValue").getValue<float>() << std::endl;
+	return t;
 }
 
 void SkeletonData::validateDirectory(std::string & directory) {
@@ -148,7 +286,7 @@ void SkeletonData::validateDirectory(std::string & directory) {
 }
 
 void SkeletonData::validateFileName(std::string & fileName) {
-	std::regex rgx_name("[\\\\/<>\|\":\?\*]+");
+	std::regex rgx_name("[\\\\/<>\|\"\?\*]+");
 	std::regex rgx_ext("^.*\\.json$");
 	try{
 		app::console() << "validateFileName" << std::endl;
