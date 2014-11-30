@@ -2,6 +2,7 @@
 
 #include <string>
 
+class VoxelMesh;
 class TriMesh;
 
 class Resource
@@ -46,4 +47,7 @@ public:
 	* @param _objSrc The path to the obj file
 	*/
 	static TriMesh* loadMeshFromObj(std::string _objSrc);
+
+	static VoxelMesh * loadVoxelModel(std::string _jsonSrc); 
+
 };

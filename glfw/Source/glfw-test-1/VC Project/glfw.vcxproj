@@ -44,11 +44,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GMTL_DIR);$(GLM_DIR);$(FREETYPE_DIR)\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GMTL_DIR);$(GLM_DIR);$(FREETYPE_DIR)\include;$(JSON_CPP_DIR)\include;$(IncludePath)</IncludePath>
     <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\$(Configuration)\$(Platform);$(GLFW_DIR)\lib-msvc110;$(FREETYPE_DIR)\objs\win32\vc2010;$(SOIL_DIR)\projects\VC9\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(GLEW_DIR)\lib\$(Configuration)\$(Platform);$(GLFW_DIR)\lib-msvc110;$(FREETYPE_DIR)\objs\win32\vc2010;$(SOIL_DIR)\projects\VC9\$(Configuration);$(JSON_CPP_DIR)\makefiles\msvc2010\Debug\lib_json.lib;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
@@ -58,7 +58,7 @@
     <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\$(Configuration)\$(Platform);$(GLFW_DIR)\lib-msvc110;$(FREETYPE_DIR)\objs\win32\vc2010;$(SOIL_DIR)\projects\VC9\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(GLEW_DIR)\lib\$(Configuration)\$(Platform);$(GLFW_DIR)\lib-msvc110;$(FREETYPE_DIR)\objs\win32\vc2010;$(SOIL_DIR)\projects\VC9\$(Configuration);$(JSON_CPP_DIR)\makefiles\msvc2010\Release\lib_json.lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -155,6 +155,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\MeshInterface.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
     <ClCompile Include="..\src\TextureShaderComponent.cpp" />
+    <ClCompile Include="..\src\VoxelJoint.cpp" />
     <ClCompile Include="..\src\VoxelMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +206,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\TextureShaderComponent.h" />
     <ClInclude Include="..\include\Vertex.h" />
     <ClInclude Include="..\include\MeshInterface.h" />
+    <ClInclude Include="..\include\VoxelJoint.h" />
     <ClInclude Include="..\include\VoxelMesh.h" />
   </ItemGroup>
   <ItemGroup>

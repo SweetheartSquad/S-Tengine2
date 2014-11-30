@@ -9,6 +9,8 @@
 
 #include <soil.h>
 
+#include <json/json.h>
+
 #include "MeshInterface.h"
 #include "Resource.h"
 #include "FileUtils.h"
@@ -179,4 +181,16 @@ TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
 		}
 	}
 	return mesh;
+}
+
+VoxelMesh* Resource::loadVoxelModel(std::string _jsonSrc){
+	std::string jsonString = FileUtils::voxReadFile(_jsonSrc);
+
+	Json::Value root;
+	Json::Reader reader;
+	bool parsedSuccess = reader.parse(jsonString, root, false);
+
+	if(!parsedSuccess){
+		std::cout << "Not able to parse json";	
+	}
 }
