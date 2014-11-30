@@ -182,16 +182,16 @@ std::string SkeletonData::writeAnimations(Joint * j, unsigned int indent){
 
 void SkeletonData::readAnimations(JsonTree animations, Joint * j){
 
-	j->translateX = readAnimation(animations.getChild("translateX"), &j->transform->translationVector.x);
-	j->translateY = readAnimation(animations.getChild("translateY"), &j->transform->translationVector.y);
-	j->translateZ = readAnimation(animations.getChild("translateZ"), &j->transform->translationVector.z);
-	j->rotateX = readAnimation(animations.getChild("rotateX"), &j->transform->orientation.x);
-	j->rotateX = readAnimation(animations.getChild("rotateY"), &j->transform->orientation.y);
-	j->rotateX = readAnimation(animations.getChild("rotateZ"), &j->transform->orientation.z);
-	j->rotateX = readAnimation(animations.getChild("rotateW"), &j->transform->orientation.w);
-	j->scaleX = readAnimation(animations.getChild("scaleX"), &j->transform->scaleVector.x);
-	j->scaleX = readAnimation(animations.getChild("scaleY"), &j->transform->scaleVector.y);
-	j->scaleX = readAnimation(animations.getChild("scaleZ"), &j->transform->scaleVector.z);
+	readAnimation(animations.getChild("translateX"), &j->translateX);
+	readAnimation(animations.getChild("translateY"), &j->translateY);
+	readAnimation(animations.getChild("translateZ"), &j->translateZ);
+	readAnimation(animations.getChild("rotateX"), &j->rotateX);
+	readAnimation(animations.getChild("rotateY"), &j->rotateY);
+	readAnimation(animations.getChild("rotateZ"), &j->rotateZ);
+	readAnimation(animations.getChild("rotateW"), &j->rotateW);
+	readAnimation(animations.getChild("scaleX"), &j->scaleX);
+	readAnimation(animations.getChild("scaleY"), &j->scaleY);
+	readAnimation(animations.getChild("scaleZ"), &j->scaleX);
 }
 
 std::string SkeletonData::writeAnimation(Animation * a, std::string name, unsigned int indent){
@@ -200,6 +200,8 @@ std::string SkeletonData::writeAnimation(Animation * a, std::string name, unsign
 	
 	json << std::string(indent * 3, ' ') << "\"" << name << "\":{" << std::endl;
 	indent++;
+
+	// startValue
 	json << std::string(indent * 3, ' ') << "\"startValue\": " << a->startValue << "," << std::endl;
 
 	// tween array
@@ -212,7 +214,10 @@ std::string SkeletonData::writeAnimation(Animation * a, std::string name, unsign
 		}
 		json << std::endl;
 	}
-	json << std::string(indent * 3, ' ') << "]" << std::endl;
+	json << std::string(indent * 3, ' ') << "]," << std::endl;
+
+	// loopType
+	json << std::string(indent * 3, ' ') << "\"loopType\": " << a->loopType << std::endl;
 
 	indent--;
 	json << std::string(indent * 3, ' ') << "}";
@@ -220,11 +225,11 @@ std::string SkeletonData::writeAnimation(Animation * a, std::string name, unsign
 	return json.str();
 }
 
-Animation SkeletonData::readAnimation(JsonTree animation, float * prop){
-	Animation a = Animation(prop);
+void SkeletonData::readAnimation(JsonTree animation, Animation * a){
+
 	std::vector<Tween *> tweens;
 	app::console() << animation.getKey() << std::endl;
-	a.startValue = animation.getChild("startValue").getValue<float>();
+	a->startValue = animation.getChild("startValue").getValue<float>();
 
 	JsonTree tweensJson = animation.getChild("tweens");
 	unsigned int i = 0;
@@ -237,9 +242,9 @@ Animation SkeletonData::readAnimation(JsonTree animation, float * prop){
 		tweens.push_back(t);
 		i++;
 	}
-	a.tweens = tweens;
+	a->tweens = tweens;
 
-	return a;
+	a->loopType = static_cast<Animation::LoopType>(animation.getChild("loopType").getValue<int>());
 }
 
 std::string SkeletonData::writeTween(Tween * t, int id, unsigned int indent){
@@ -262,10 +267,8 @@ std::string SkeletonData::writeTween(Tween * t, int id, unsigned int indent){
 
 Tween * SkeletonData::readTween(JsonTree tween){
 	// get interpolation
-	// TODO: make getting easing enum safer
-	Easing::Type i = static_cast<Easing::Type>(tween.getChild("interpolation").getValue<int>());
 
-	Tween * t = new Tween(tween.getChild("deltaTime").getValue<float>(), tween.getChild("deltaValue").getValue<float>(), i);
+	Tween * t = new Tween(tween.getChild("deltaTime").getValue<float>(), tween.getChild("deltaValue").getValue<float>(), static_cast<Easing::Type>(tween.getChild("interpolation").getValue<int>()));
 	app::console() << "id: " << tween.getChild("id").getValue<int>() << " deltaTime: " << tween.getChild("deltaTime").getValue<float>() << " deltaValue: " << tween.getChild("deltaValue").getValue<float>() << std::endl;
 	return t;
 }

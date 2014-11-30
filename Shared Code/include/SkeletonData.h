@@ -37,7 +37,7 @@ protected:
 	static void readAnimations(JsonTree animations, Joint * j);
 
 	static std::string writeAnimation(Animation * a, std::string name, unsigned int indent = 0);
-	static Animation readAnimation(JsonTree animation, float * prop);
+	static void readAnimation(JsonTree animation, Animation * a);
 
 	static std::string writeTween(Tween * t, int id, unsigned int indent = 0);
 	static Tween * readTween(JsonTree tween);
