@@ -2,5 +2,5 @@
 
 #include "NodeRenderable.h"
 
-void NodeRenderable::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void NodeRenderable::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 }

@@ -2,9 +2,16 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <CINDER_DIR_2012>D:\Development Libraries\cinder_0.8.5_vc2012</CINDER_DIR_2012>
+
+    <!-- Cinder installation directories -->
+    <CINDER_DIR_2012>C:\DevLibraries\cinder_0.8.6_vc2013\cinder_0.8.6_vc2013</CINDER_DIR_2012>
     <CINDER_DIR_2010>D:\Development Libraries\cinder_0.8.5_vc2010</CINDER_DIR_2010>
-    <GLM_DIR>D:\Development Libraries\GL Development\glm</GLM_DIR>
+    
+    <!-- Version of cinder library used in the cinder .lib file naming. Format: -v### (prior to 2013, leave blank) -->
+    <CINDER_VER>-v120</CINDER_VER>
+
+    <!-- GLM directory -->
+    <GLM_DIR>C:\DevLibraries\glm-0.9.5.4\glm</GLM_DIR>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup />
