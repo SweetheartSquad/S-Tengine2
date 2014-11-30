@@ -631,35 +631,9 @@ void CinderApp::mouseDrag( MouseEvent event ){
 					Vec2f handlePosInScreen = sourceCam->worldToScreen(UI::handlePos, sourceRect->getWidth(), sourceRect->getHeight());
 
 					Vec2f deltaMousePos = mMousePos - oldMousePos;
-					
-					
-
-					/*Ray ray = sourceCam->generateRay((handlePosInScreen.x + deltaMousePos.x)/sourceRect->getWidth(), (handlePosInScreen.y + deltaMousePos.y)/sourceRect->getHeight(), sourceCam->getAspectRatio());
-					float distance = 0.f;
-					bool hit = ray.calcPlaneIntersection(UI::handlePos, sourceCam->getViewDirection(), &distance);
-					if(hit){
-						Vec3f newPos = ray.calcPosition(distance);
-						console() << UI::handlePos << " -> " << newPos << std::endl;
-						console() << ray.getDirection() << "\t" << distance << std::endl;
-						console() << ray.getOrigin() << "\t" << std::endl;
-					}*/
 
 					if(mode == TRANSLATE){
 						if(UI::selectedNodes.size() > 0){
-							/*Vec3i dir(0,0,0);
-							switch(uiColour){
-								case 0xFF0000: dir.x -= 100; break;
-								case 0x00FF00: dir.y -= 100; break;
-								case 0x0000FF: dir.z -= 100; break;
-								case 0xFFFF00: dir = sourceCam->getViewDirection()*-100; break;
-							}
-						
-							Vec2i end = sourceCam->worldToScreen(UI::handlePos + dir, sourceRect->getWidth(), sourceRect->getHeight());
-							Vec2f mouseAxis = end - handlePosInScreen;
-							float dif = deltaMousePos.dot(mouseAxis) / sqrtf(getWindowHeight()*getWindowHeight() + getWindowWidth()*getWindowWidth());
-				
-							cmdProc.executeCommand(new CMD_MoveSelectedJoints(Vec3d(dir.x, dir.y, dir.z)*dif/1000.f, true));*/
-
 
 							Ray ray = sourceCam->generateRay((handlePosInScreen.x + deltaMousePos.x)/sourceRect->getWidth(), 1-(handlePosInScreen.y + deltaMousePos.y)/sourceRect->getHeight(), sourceCam->getAspectRatio());
 							float distance = 0.f;
@@ -672,7 +646,16 @@ void CinderApp::mouseDrag( MouseEvent event ){
 								console() << UI::handlePos << " -> " << newPos << std::endl;
 								console() << ray.getDirection() << "\t" << distance << std::endl;
 								console() << ray.getOrigin() << "\t" << std::endl;
-								cmdProc.executeCommand(new CMD_MoveSelectedJoints(newPos-UI::handlePos, true));
+								Vec3f dif = newPos-UI::handlePos;
+
+								switch(uiColour){
+									case 0xFF0000: dif.y = 0; dif.z = 0; break;
+									case 0x00FF00: dif.x = 0; dif.z = 0; break;
+									case 0x0000FF: dif.x = 0; dif.y = 0; break;
+									case 0xFFFF00: break;
+								}
+
+								cmdProc.executeCommand(new CMD_MoveSelectedJoints(dif, true, CMD_MoveSelectedJoints::MovementMode::WORLD));
 							}
 
 						}
