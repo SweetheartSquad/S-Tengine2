@@ -89,13 +89,27 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 		//gl::enableWireframe();
 		r->ciShader->uniform("pickingColor", Color::hex(pickingColor));
 		//colour
-		if(depth%3 == 0){
-			gl::color(0, 1, 1);
-		}else if(depth%3 == 1){
-			gl::color(1, 0, 1);
+		ColorA color(1 - (float)depth / 28.f,
+			0.25f + (depth <= 14 ? (float)depth / 14.f : (float)(14-depth) / 14.f),
+			(float)depth / 28.f);
+
+		/*color.b += depth*0.05;
+		color.g -= depth*0.05;
+		if (depth > 6){
+			if (depth > 12){
+				color.r += (depth - 12)*0.1;
+				
+			}
+
 		}else{
-			gl::color(1, 1, 0);
+			color.r -= depth*0.15;
+		}*/
+
+		if (depth > 28){
+			color.set(1, 1, 1, 1);
 		}
+
+		gl::color(color);
 
 		//draw joint
 		gl::pushModelView();
