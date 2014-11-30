@@ -11,7 +11,7 @@
 #include "Transform.h"
 #include "Voxel.h"
 
-CMD_PlaceVoxel::CMD_PlaceVoxel(ci::Vec3d _v) :
+CMD_PlaceVoxel::CMD_PlaceVoxel(ci::Vec3f _v) :
 	v(_v),
 	voxel(nullptr),
 	executed(false)

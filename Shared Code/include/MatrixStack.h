@@ -3,6 +3,8 @@
 #include <vector>
 #include <glm\glm.hpp>
 
+
+namespace vox{
 /***********************************************
 *
 * A matrix stack used for matrix operations such
@@ -64,4 +66,5 @@ public:
 	* @param _scaleMatrix The model matrix to push onto the stack
 	*/
 	void applyMatrix(	glm::mat4 _modelMatrix);
+};
 };

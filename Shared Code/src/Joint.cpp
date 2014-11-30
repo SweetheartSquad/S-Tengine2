@@ -83,7 +83,7 @@ Joint::~Joint(){
 	delete transform;
 }
 
-void Joint::render(MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	CinderRenderOptions * r = (CinderRenderOptions *)_renderStack;
 	if(r->ciShader != nullptr){
 		//gl::enableWireframe();
