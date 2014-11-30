@@ -182,8 +182,8 @@ MainScene::MainScene(Game * _game):
 	cat->transform->scale(0.9f, 0.9f, 0.9f);
 	//addChild(cat);
 
-	VoxelJoint * voxelJoint = Resource::loadVoxelModel("../assets/jsonTest2.json");
-	addChild(voxelJoint);
+	//VoxelJoint * voxelJoint = Resource::loadVoxelModel("../assets/jsonTest2.json");
+	//addChild(voxelJoint);
 
 }
 

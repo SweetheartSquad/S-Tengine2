@@ -7,13 +7,14 @@ in vec3 fragVertGeo[];
 in vec3 fragNormalGeo[];
 in vec4 fragColorGeo[];
 in vec2 fragUVGeo[];
-in vec4 shadowCoord[];
+
+in vec4 shadowCoordIn[];
 
 out vec3 fragVert;
 out vec3 fragNormal;
 out vec4 fragColor;
 out vec2 fragUV;
-out shadowCoord;
+out vec4 shadowCoord;
 
 uniform mat4 M;
 uniform mat4 VP;
@@ -31,7 +32,7 @@ void rotate(in int i, inout vec3 inVec){
 
 void main() {
 
-	//shadowCoord = 
+	shadowCoord = shadowCoordIn[0];
 
 	fragVert = fragVertGeo[0];
 	fragNormal = fragNormalGeo[0];
