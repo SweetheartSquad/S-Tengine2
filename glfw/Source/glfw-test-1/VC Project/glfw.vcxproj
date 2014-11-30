@@ -112,6 +112,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Shared Code\src\Animation.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\FrameBufferChannel.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\jsoncpp.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Keyframe.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Light.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp" />
@@ -124,6 +125,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\..\..\..\Shared Code\src\Shader.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Step.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\Tween.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Vox.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\VoxMatrices.cpp" />
     <ClCompile Include="..\src\BaseShader.cpp" />
@@ -155,10 +157,12 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\MeshInterface.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
     <ClCompile Include="..\src\TextureShaderComponent.cpp" />
+    <ClCompile Include="..\src\VoxelJoint.cpp" />
     <ClCompile Include="..\src\VoxelMesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Shared Code\include\Animation.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\Easing.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\FrameBufferChannel.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Light.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\MatrixStack.h" />
@@ -172,6 +176,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\..\..\..\Shared Code\include\Shader.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Step.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\Tween.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Vox.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\VoxMatrices.h" />
     <ClInclude Include="..\include\BaseShader.h" />
@@ -205,6 +210,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\TextureShaderComponent.h" />
     <ClInclude Include="..\include\Vertex.h" />
     <ClInclude Include="..\include\MeshInterface.h" />
+    <ClInclude Include="..\include\VoxelJoint.h" />
     <ClInclude Include="..\include\VoxelMesh.h" />
   </ItemGroup>
   <ItemGroup>

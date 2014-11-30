@@ -31,7 +31,7 @@ FakeAnimation::~FakeAnimation(){
 	delete shader;
 }
 
-void FakeAnimation::draw(MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void FakeAnimation::draw(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	//push transform
 	_matrixStack->pushMatrix();
 	_matrixStack->applyMatrix(transform->getModelMatrix());

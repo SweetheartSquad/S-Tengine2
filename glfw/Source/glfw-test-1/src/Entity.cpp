@@ -26,7 +26,7 @@ Entity::~Entity(void){
 	shader = nullptr;
 }
 
-void Entity::draw(MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void Entity::draw(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	//push transform
 	if(_matrixStack != nullptr && _renderStack != nullptr){
 		_matrixStack->pushMatrix();

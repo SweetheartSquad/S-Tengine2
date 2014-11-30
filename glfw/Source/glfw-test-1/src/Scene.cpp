@@ -13,7 +13,7 @@
 Scene::Scene(Game * _game):
 	game(_game),
 	camera(new Camera()),
-	matrixStack(new MatrixStack()),
+	matrixStack(new vox::MatrixStack()),
 	renderOptions(new RenderOptions(nullptr, &lights)),
 	shadowBuffer(new StandardFrameBuffer(true)),
 	depthBuffer(new DepthFrameBuffer(true)),
