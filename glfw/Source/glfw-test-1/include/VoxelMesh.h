@@ -11,6 +11,6 @@ public:
 	explicit VoxelMesh(MeshInterface *_mesh);
 	~VoxelMesh();
 
-	void configureExtras(MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
+	void configureExtras(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 	void pushPoint(GLint _vertex);
 };

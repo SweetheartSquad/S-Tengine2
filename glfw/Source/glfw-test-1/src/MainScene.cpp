@@ -122,7 +122,7 @@ MainScene::MainScene(Game * _game):
 		loaded->mesh->pushMaterial(mat);
 	}
 
-	loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, baseShader);
+	loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxShader);
 	//loaded1->mesh->pushTexture2D(tex);
 	cube->addChild(loaded1);
 
@@ -182,7 +182,8 @@ MainScene::MainScene(Game * _game):
 	cat->transform->scale(0.9f, 0.9f, 0.9f);
 	//addChild(cat);
 
-	VoxelJoint * voxelJoint = Resource::loadVoxelModel("../assets/jsonTest.json");
+	VoxelJoint * voxelJoint = Resource::loadVoxelModel("../assets/jsonTest2.json");
+	addChild(voxelJoint);
 
 }
 

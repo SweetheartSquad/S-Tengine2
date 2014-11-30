@@ -186,7 +186,7 @@ TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
 
 VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 
-	VoxelJoint * mainJoint = new VoxelJoint(_node[_index]["id"].asInt(), new MeshInterface(GL_TRIANGLES, GL_STATIC_DRAW), new Transform());
+	VoxelJoint * mainJoint = new VoxelJoint(_node[_index]["id"].asInt(), new MeshInterface(GL_POINTS, GL_STATIC_DRAW), new Transform());
 
 	mainJoint->transform->translationVector = glm::vec3(
 		_node[_index]["transform"]["pos"].get("x", 0).asFloat(),
@@ -234,6 +234,7 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 	mainJoint->rotateY->startValue = _node[_index]["animations"]["rotateY"].get("startValue", 0).asFloat();
 	mainJoint->rotateZ->startValue = _node[_index]["animations"]["rotateZ"].get("startValue", 0).asFloat();
 	mainJoint->rotateW->startValue = _node[_index]["animations"]["rotateW"].get("startValue", 0).asFloat();
+
 
 	Json::Value rotateXTweens = _node[_index]["animations"]["rotateX"]["tweens"];
 	for(int j = 0; j < rotateXTweens.size(); j++){
@@ -295,12 +296,21 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 				static_cast<Easing::Type>(scaleZTweens[j].get("interpolation", 0).asInt())));
 	}
 
+	Json::Value voxels =  _node[_index]["voxels"];
+
+	for(Json::ArrayIndex v = 0; v < voxels.size(); v++){
+		mainJoint->mesh->vertices.push_back(Vertex(
+				voxels[v].get("x", 0).asFloat(),
+				voxels[v].get("y", 0).asFloat(),
+				voxels[v].get("z", 0).asFloat()
+			));		
+	}
+
 	Json::Value children = _node[_index]["children"];
 
 	for(Json::ArrayIndex c = 0; c < children.size(); c++){
 		mainJoint->addChild(parseJoint(children, c));
 	}
-
 	return mainJoint;
 }
 	

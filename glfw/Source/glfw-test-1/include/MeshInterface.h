@@ -88,20 +88,20 @@ public:
 	/** If dirty, copies data from vertices and indices to VBO and IBO and flags as clean */
 	void clean();
 	/** Renders the vao using the given shader, model-view-projection and lights */
-	virtual void render(MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
+	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
 	/** Called render loop. Reders the textures for the mesh*/
-	virtual void configureTextures(MatrixStack * _matrixStack, RenderOptions * _renderOption);
+	virtual void configureTextures(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption);
 	/** Called render loop. Sets up the lights in the shader*/
-	virtual void configureLights(MatrixStack * _matrixStack, RenderOptions * _renderOption);
+	virtual void configureLights(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption);
 	/** Sets up the model, view and projection matricies **/
-	virtual void configureModelViewProjection(MatrixStack * _matrixStack, RenderOptions * _renderOption);
-	virtual void configureShadows(MatrixStack * _matrixStack, RenderOptions * _renderOption);
+	virtual void configureModelViewProjection(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption);
+	virtual void configureShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption);
 	/**
 	* Called render loop. Doesn't do anything in the base implementation of MeshInterface
 	* This method can be overriden with any additional render logic. This prevents
 	* the need for overriding the entire render loop
 	*/
-	virtual void configureExtras(MatrixStack * _matrixStack, RenderOptions * _renderOption);
+	virtual void configureExtras(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption);
 	/** A helper method to configure all the starndard vertex attributes - Position, Colours, Normals */
 	void configureDefaultVertexAttributes(Shader *_shader);
 	/** Sets the normal of the given vert to _x, _y, _z */
