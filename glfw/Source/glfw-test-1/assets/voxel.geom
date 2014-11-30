@@ -7,7 +7,6 @@ in vec3 fragVertGeo[];
 in vec3 fragNormalGeo[];
 in vec4 fragColorGeo[];
 in vec2 fragUVGeo[];
-
 in vec4 shadowCoordIn[];
 
 out vec3 fragVert;

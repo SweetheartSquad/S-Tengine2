@@ -15,6 +15,7 @@
 #include "Resource.h"
 #include "FileUtils.h"
 #include "VoxelJoint.h"
+#include "VoxelMesh.h"
 
 Resource::Resource(){}
 Resource::~Resource(){}
@@ -186,7 +187,7 @@ TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
 
 VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 
-	VoxelJoint * mainJoint = new VoxelJoint(_node[_index]["id"].asInt(), new MeshInterface(GL_POINTS, GL_STATIC_DRAW), new Transform());
+	VoxelJoint * mainJoint = new VoxelJoint(_node[_index]["id"].asInt(), new VoxelMesh(GL_STATIC_DRAW), new Transform());
 
 	mainJoint->transform->translationVector = glm::vec3(
 		_node[_index]["transform"]["pos"].get("x", 0).asFloat(),
@@ -299,7 +300,7 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 	Json::Value voxels =  _node[_index]["voxels"];
 
 	for(Json::ArrayIndex v = 0; v < voxels.size(); v++){
-		mainJoint->mesh->vertices.push_back(Vertex(
+		mainJoint->mesh->pushVert(Vertex(
 				voxels[v].get("x", 0).asFloat(),
 				voxels[v].get("y", 0).asFloat(),
 				voxels[v].get("z", 0).asFloat()
@@ -323,12 +324,12 @@ VoxelJoint * Resource::loadVoxelModel(std::string _jsonSrc){
 	bool parsedSuccess = reader.parse(jsonString, root, false);
 
 	if(!parsedSuccess){
-		std::cout << "Not able to parse json";	
+		std::cout << "Unable to parse json";	
 	}
 
 	Json::Value array = root["joints"];
 
-	VoxelJoint * mainJoint = nullptr;
+	VoxelJoint * mainJoint = new VoxelJoint(0, nullptr, new Transform, nullptr);
 	std::vector<VoxelJoint *> joints;
 
 	for(Json::ArrayIndex i = 0; i < array.size(); ++i)  {

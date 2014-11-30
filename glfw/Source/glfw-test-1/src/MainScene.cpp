@@ -114,17 +114,17 @@ MainScene::MainScene(Game * _game):
 	cube4->transform->translateY(-2);
 	cube4->mesh->pushTexture2D(tex);
 
-	for(unsigned long int i = 0; i < 0; ++i){
+	for(unsigned long int i = 0; i < 1; ++i){
 		Entity * loaded = new Entity(new VoxelMesh(Resource::loadMeshFromObj("../assets/cube.vox")), t, voxShader);
 		loaded->mesh->polygonalDrawMode = GL_POINTS;
-		cube->addChild(loaded);
+		//cube->addChild(loaded);
 		loaded->mesh->pushTexture2D(tex);
 		loaded->mesh->pushMaterial(mat);
 	}
 
 	loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxShader);
 	//loaded1->mesh->pushTexture2D(tex);
-	cube->addChild(loaded1);
+	//cube->addChild(loaded1);
 
 	cube->mesh->dirty = true;
 	cube2->mesh->dirty = true;
@@ -182,8 +182,9 @@ MainScene::MainScene(Game * _game):
 	cat->transform->scale(0.9f, 0.9f, 0.9f);
 	//addChild(cat);
 
-	//VoxelJoint * voxelJoint = Resource::loadVoxelModel("../assets/jsonTest2.json");
-	//addChild(voxelJoint);
+	VoxelJoint * voxelJoint = Resource::loadVoxelModel("../assets/testJson2.json");
+	voxelJoint->setShaderOnChildren(voxShader);
+	addChild(voxelJoint);
 
 }
 
