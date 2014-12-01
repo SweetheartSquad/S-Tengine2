@@ -5,19 +5,20 @@
 #include "Command.h"
 
 class Joint;
-class NodeHierarchical;
+class NodeChild;
+class NodeParent;
 
 class CMD_Parent : public Command{
 public:
-	CMD_Parent(NodeHierarchical * node, NodeHierarchical * _parent);
+	CMD_Parent(NodeChild * _node, NodeParent * _parent);
 	~CMD_Parent(void);
 
 	void execute();
 	void unexecute();
 
 private:
-	NodeHierarchical * node;
+	NodeChild * node;
 
-	NodeHierarchical * oldParent;
-	NodeHierarchical * newParent;
+	NodeParent * oldParent;
+	NodeParent * newParent;
 };

@@ -26,7 +26,7 @@ void CMD_PlaceVoxel::execute(){
 	std::vector<glm::mat4> modelMatrixStack;
 	while(_parent != nullptr){
 		modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
-		_parent = _parent->parent;
+		_parent = dynamic_cast<NodeHierarchical *>(_parent->parent);
 	}
 
 	glm::mat4 modelMatrix(1);

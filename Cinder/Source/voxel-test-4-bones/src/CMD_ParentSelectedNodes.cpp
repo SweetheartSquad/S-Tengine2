@@ -38,9 +38,6 @@ void CMD_ParentSelectedNodes::execute(){
 			}
 		}
 	}
-
-
-	
 }
 
 void CMD_ParentSelectedNodes::unexecute(){

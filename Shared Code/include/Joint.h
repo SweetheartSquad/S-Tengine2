@@ -31,7 +31,7 @@ public:
 	
 
 	explicit Joint();
-	explicit Joint(NodeHierarchical * _parent);
+	explicit Joint(NodeParent * _parent);
 	~Joint();
 	
 

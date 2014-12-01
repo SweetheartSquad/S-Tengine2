@@ -20,35 +20,46 @@ void Joint::init(){
 }
 
 Joint::Joint() : 
-	NodeAnimatable(new Transform()),
-	NodeHierarchical(nullptr),
+	NodeTransformable(new Transform()),
+	NodeAnimatable(this->transform),
+	NodeChild(nullptr),
 	NodeSelectable()
 {
 	init();
 }
 
-Joint::Joint(NodeHierarchical * _parent) : 
-	//NodeTransformable(new Transform()),
-	NodeAnimatable(new Transform()),
-	NodeHierarchical(_parent),
+Joint::Joint(NodeParent * _parent) : 
+	NodeTransformable(new Transform()),
+	NodeAnimatable(this->transform),
+	NodeChild(_parent),
 	NodeSelectable()
 {
 	init();
 	parent = _parent;
 	while(_parent != nullptr){
-		_parent = _parent->parent;
-		depth += 1;
+		NodeHierarchical * t = dynamic_cast<NodeHierarchical *>(_parent);
+		if (t != NULL){
+			_parent = t->parent;
+			depth += 1;
+		}else{
+			break;
+		}
 	}
 }
 
 void Joint::setPos(Vec3d _pos, bool _convertToRelative){
 	glm::vec4 newPos(_pos.x, _pos.y, _pos.z, 1);
 	if(_convertToRelative){
-		NodeHierarchical * _parent = parent;
+		NodeParent * _parent = parent;
 		std::vector<glm::mat4> modelMatrixStack;
 		while(_parent != nullptr){
-			modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
-			_parent = _parent->parent;
+			NodeHierarchical * t = dynamic_cast<NodeHierarchical *>(_parent);
+			if (t != NULL){
+				modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
+				_parent = t->parent;
+			}else{
+				break;
+			}
 		}
 
 		glm::mat4 modelMatrix(1);
@@ -63,11 +74,16 @@ void Joint::setPos(Vec3d _pos, bool _convertToRelative){
 Vec3d Joint::getPos(bool _relative){
 	glm::vec4 res(transform->translationVector.x, transform->translationVector.y, transform->translationVector.z, 1);
 	if(!_relative){
-		NodeHierarchical * _parent = parent;
+		NodeParent * _parent = parent;
 		std::vector<glm::mat4> modelMatrixStack;
-		while(_parent != nullptr){
-			modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
-			_parent = _parent->parent;
+		while (_parent != nullptr){
+			NodeHierarchical * t = dynamic_cast<NodeHierarchical *>(_parent);
+			if (t != NULL){
+				modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
+				_parent = t->parent;
+			}else{
+				break;
+			}
 		}
 		
 		glm::mat4 modelMatrix(1);
@@ -201,7 +217,7 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 		
 			r->ciShader->uniform("pickingColor", Color::hex(pickingColor));
 			//draw bones
-			for(NodeHierarchical * child : children){
+			for(NodeChild * child : children){
 				Vec3d cinderTrans(
 					dynamic_cast<NodeTransformable *>(child)->transform->translationVector.x,
 					dynamic_cast<NodeTransformable *>(child)->transform->translationVector.y,
@@ -245,7 +261,7 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 void Joint::update(Step * _step){
 	NodeAnimatable::update(_step);
 
-	for(NodeHierarchical * child : children){
-		dynamic_cast<Joint *>(child)->update(_step);
+	for(NodeChild * child : children){
+		dynamic_cast<NodeUpdatable *>(child)->update(_step);
 	}
 }
