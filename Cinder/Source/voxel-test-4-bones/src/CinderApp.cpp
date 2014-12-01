@@ -364,14 +364,18 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 	
 	gl::color(ColorA(1, 1, 1, 1));
 
-	Ray ray = camMayaPersp.getCamera().generateRay((float)mMousePos.x/rectPersp.getWidth(), 1.f-((float)(mMousePos.y-rect.y1)/rectPersp.getHeight()), camMayaPersp.getCamera().getAspectRatio());			
-	float distance = 0.f;
-	if(ray.calcPlaneIntersection(Vec3f(0,0,0), Vec3f(0,1,0), &distance)){
-		Vec3f t = ray.calcPosition(distance);
-
-		gl::drawVector(Vec3f(ray.getOrigin()), t);
+	
+	if(mode == CREATE){
+		Ray ray = camMayaPersp.getCamera().generateRay((float)mMousePos.x/rectPersp.getWidth(), 1.f-((float)(mMousePos.y-rect.y1)/rectPersp.getHeight()), camMayaPersp.getCamera().getAspectRatio());			
+		float distance = 0.f;
+		if(ray.calcPlaneIntersection(Vec3f(0,0,0), Vec3f(0,1,0), &distance)){
+			Vec3f jointWillGoHere = ray.calcPosition(distance);
+			
+			gl::enableWireframe();
+			gl::drawSphere(jointWillGoHere, 0.06f);
+			gl::disableWireframe();
+		}
 	}
-
 
 	if(UI::selectedNodes.size() != 0){
 
@@ -405,24 +409,62 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 			}
 
 			if(mode == TRANSLATE){
+				// Draw the axes
 				gl::drawCoordinateFrame(0.3, 0.15, 0.03);
 				gl::color(1,1,0);
 				gl::drawSphere(Vec3f(0,0,0), 0.05);
 			}else if(mode == ROTATE){
-				gl::lineWidth(10);
-				gl::color(0,0,1.f);
+				// Rotate to match the object orientation
+				Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
+				if(j != NULL){
+					std::vector<glm::quat> rotateStack;
+					while(j != nullptr){
+						rotateStack.push_back(j->transform->orientation);
+						j = (Joint *)j->parent;
+					}
+					while(rotateStack.size() > 0){
+						glm::quat t = rotateStack.at(rotateStack.size()-1);
+						gl::rotate(Quatf(t.w, t.x, t.y, t.z));
+						rotateStack.pop_back();
+					}
+				}
+
+				// Draw the three circles
+				gl::lineWidth((uiColour == 0x0000FF || uiColour == 0) ? 5 : 2.5);
+				gl::color((uiColour == 0x0000FF || uiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawStrokedCircle(Vec2f(0,0), 0.3, 32);
-				gl::color(1.f,0,0);
+
 				gl::scale(0.9,0.9,0.9);
 				gl::rotate(Vec3f(0,90,0));
+				gl::lineWidth((uiColour == 0xFF0000 || uiColour == 0) ? 5 : 2.5);
+				gl::color((uiColour == 0xFF0000 || uiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawStrokedCircle(Vec2f(0,0), 0.3, 32);
-				gl::color(0,1.f,0);
+
 				gl::scale(0.9,0.9,0.9);
 				gl::rotate(Vec3f(90,0,0));
+				gl::lineWidth((uiColour == 0x00FF00 || uiColour == 0) ? 5 : 2.5);
+				gl::color((uiColour == 0x00FF00 || uiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawStrokedCircle(Vec2f(0,0), 0.3, 32);
+
 				gl::color(1,1,0);
 				gl::drawSphere(Vec3f(0,0,0), 0.05);
 			}else if(mode == SCALE){
+				// Rotate to match the object orientation
+				Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
+				if(j != NULL){
+					std::vector<glm::quat> rotateStack;
+					while(j != nullptr){
+						rotateStack.push_back(j->transform->orientation);
+						j = (Joint *)j->parent;
+					}
+					while(rotateStack.size() > 1){
+						glm::quat t = rotateStack.at(rotateStack.size()-1);
+						gl::rotate(Quatf(t.w, t.x, t.y, t.z));
+						rotateStack.pop_back();
+					}
+				}
+
+				// Draw the axes
 				gl::drawCoordinateFrame(0.3, 0.15, 0.03);
 				gl::color(1,1,0);
 				gl::drawSphere(Vec3f(0,0,0), 0.05);
@@ -686,7 +728,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 									console() << "handlePos:\t" << UI::handlePos << std::endl;
 									console() << "Move:\t" << dif << std::endl << std::endl;
 
-									cmdProc.executeCommand(new CMD_MoveSelectedJoints(dif, true, CMD_MoveSelectedJoints::MovementMode::OBJECT));
+									cmdProc.executeCommand(new CMD_MoveSelectedJoints(dif, true, false));
 								}
 							}
 						}
@@ -712,7 +754,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 							eulerAngles.y *= axis.y;
 							eulerAngles.z *= axis.z;
 
-							cmdProc.executeCommand(new CMD_RotateSelectedTransformable(glm::quat(eulerAngles), true));
+							cmdProc.executeCommand(new CMD_RotateSelectedTransformable(glm::quat(eulerAngles), true, true));
 						}
 					}else if(mode == SCALE){
 						if(UI::selectedNodes.size() > 0){
@@ -744,6 +786,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 
 void CinderApp::mouseUp( MouseEvent event ){
 	UI::updateHandlePos(false);
+	uiColour = 0;
 }
 
 void CinderApp::keyDown( KeyEvent event ){

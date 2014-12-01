@@ -5,15 +5,15 @@
 #include "Node.h"
 #include "Joint.h"
 
-CMD_MoveSelectedJoints::CMD_MoveSelectedJoints(ci::Vec3d _v, bool _relative, MovementMode _mode) :
+CMD_MoveSelectedJoints::CMD_MoveSelectedJoints(ci::Vec3d _v, bool _relative, bool _local) :
 	v(_v),
 	relative(_relative),
-	mode(_mode)
+	local(_local)
 {
 }
 
 void CMD_MoveSelectedJoints::execute(){
-	if(mode == OBJECT){
+	if(local){
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 			Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
 			if(j != NULL){
@@ -24,7 +24,7 @@ void CMD_MoveSelectedJoints::execute(){
 				}
 			}
 		}
-	}else if(mode == WORLD){
+	}else{
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 			Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
 			if(j != NULL){
@@ -39,7 +39,7 @@ void CMD_MoveSelectedJoints::execute(){
 }
 
 void CMD_MoveSelectedJoints::unexecute(){
-	if(mode == OBJECT){
+	if(local){
 		for(unsigned long int i = UI::selectedNodes.size(); i > 0; --i){
 			Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i-1));
 			if(j != NULL){
@@ -50,7 +50,7 @@ void CMD_MoveSelectedJoints::unexecute(){
 				}
 			}
 		}
-	}else if(mode == WORLD){
+	}else{
 		for(unsigned long int i = UI::selectedNodes.size(); i > 0; --i){
 			Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i-1));
 			if(j != NULL){
