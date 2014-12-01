@@ -73,7 +73,7 @@ void Entity::setShader(Shader * _shader, bool _confiugreDefaultAttributes){
 	shader = _shader;
 	if(_confiugreDefaultAttributes){
 		if(mesh != nullptr){
-			mesh->configureDefaultVertexAttributes(shader);
+			reset();
 		}
 	}
 }
@@ -82,7 +82,7 @@ void Entity::setShaderOnChildren(Shader * _shader){
 	for(NodeHierarchical * entity : children){
 		(dynamic_cast<Entity*>(entity))->setShaderOnChildren(_shader);
 	}
-	setShader(_shader, false);
+	setShader(_shader, true);
 }
 
 void Entity::unload(){
@@ -109,9 +109,8 @@ void Entity::reset(){
 	
 	if(shader != nullptr){
 		shader->load();
-	}
-	
-	if(mesh != nullptr){
-		mesh->configureDefaultVertexAttributes(shader);
+		if(mesh != nullptr ){
+			mesh->configureDefaultVertexAttributes(shader);
+		}
 	}
 }

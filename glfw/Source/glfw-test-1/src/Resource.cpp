@@ -303,8 +303,10 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 		mainJoint->mesh->pushVert(Vertex(
 				voxels[v].get("x", 0).asFloat(),
 				voxels[v].get("y", 0).asFloat(),
-				voxels[v].get("z", 0).asFloat()
-			));		
+				voxels[v].get("z", 0).asFloat(),
+				1, 1, 1, 1
+			));	
+		static_cast<VoxelMesh *>(mainJoint->mesh)->pushPoint(v);
 	}
 
 	Json::Value children = _node[_index]["children"];
@@ -312,6 +314,7 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 	for(Json::ArrayIndex c = 0; c < children.size(); c++){
 		mainJoint->addChild(parseJoint(children, c));
 	}
+
 	return mainJoint;
 }
 	
@@ -344,5 +347,6 @@ VoxelJoint * Resource::loadVoxelModel(std::string _jsonSrc){
 			mainJoint->addChild(joint);
 		}
 	}
+
 	return mainJoint;
 }

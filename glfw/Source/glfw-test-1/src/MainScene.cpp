@@ -183,9 +183,12 @@ MainScene::MainScene(Game * _game):
 	//addChild(cat);
 
 	VoxelJoint * voxelJoint = Resource::loadVoxelModel("../assets/testJson2.json");
+	voxelJoint->setShader(baseShader, true);
 	voxelJoint->setShaderOnChildren(voxShader);
-	addChild(voxelJoint);
 
+	cube->addChild(voxelJoint); 
+
+	//voxelJoint->transform->scale(0.1, 0.1, 0.1);
 }
 
 MainScene::~MainScene(){

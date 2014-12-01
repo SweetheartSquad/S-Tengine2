@@ -122,7 +122,6 @@ void Scene::renderShadows(){
 	depthBuffer->resize(width, height);
 	depthBuffer->bindFrameBuffer();
 	renderOptions->overrideShader = depthShader;
-
 	Scene::render();
 
 	shadowBuffer->resize(width, height);
