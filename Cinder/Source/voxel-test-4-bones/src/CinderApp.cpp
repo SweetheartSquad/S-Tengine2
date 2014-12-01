@@ -37,9 +37,11 @@ void CinderApp::prepareSettings(Settings *settings){
 
 void changeMode1(CinderApp * _app){
 	_app->mode = CinderApp::UImode::SELECT;
+	_app->params->setOptions("UI Mode", "label=`SELECT`");
 };
 void changeMode2(CinderApp * _app){
 	_app->mode = CinderApp::UImode::TRANSLATE;
+	_app->params->setOptions("UI Mode", "label=`TRANSLATE`");
 };
 
 void CinderApp::setup(){
@@ -443,8 +445,23 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 
 			if(mode == TRANSLATE){
 				// Draw the axes
-				gl::drawCoordinateFrame(0.3, 0.15, 0.03);
-				gl::color(1,1,0);
+				gl::lineWidth((uiColour == 0x0000FF || uiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (uiColour == 0x0000FF || uiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.f, 0.f, 0.f));
+				gl::color((uiColour == 0x0000FF || uiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawVector(Vec3f(0,0,0), Vec3f(0,0,0.3), 0.15, 0.03);
+				
+				gl::lineWidth((uiColour == 0xFF0000 || uiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (uiColour == 0xFF0000 || uiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((uiColour == 0xFF0000 || uiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawVector(Vec3f(0,0,0), Vec3f(0.3,0,0), 0.15, 0.03);
+				
+				gl::lineWidth((uiColour == 0x00FF00 || uiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (uiColour == 0x00FF00 || uiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((uiColour == 0x00FF00 || uiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawVector(Vec3f(0,0,0), Vec3f(0,0.3,0), 0.15, 0.03);
+				
+				uiShader.uniform("pickingColor", Color(1.f,1.f,0.f));
+				gl::color((uiColour == 0xFFFF00 || uiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawSphere(Vec3f(0,0,0), 0.05);
 			}else if(mode == ROTATE){
 				// Rotate to match the object orientation
@@ -482,7 +499,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				gl::color((uiColour == 0x00FF00 || uiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawStrokedCircle(Vec2f(0,0), 0.3, 32);
 
-				gl::color(1,1,0);
+				uiShader.uniform("pickingColor", Color(1.f,1.f,0.f));
+				gl::color((uiColour == 0xFFFF00 || uiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawSphere(Vec3f(0,0,0), 0.05);
 			}else if(mode == SCALE){
 				// Rotate to match the object orientation
@@ -501,8 +519,23 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				}
 
 				// Draw the axes
-				gl::drawCoordinateFrame(0.3, 0.15, 0.03);
-				gl::color(1,1,0);
+				gl::lineWidth((uiColour == 0x0000FF || uiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (uiColour == 0x0000FF || uiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.f, 0.f, 0.f));
+				gl::color((uiColour == 0x0000FF || uiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawVector(Vec3f(0,0,0), Vec3f(0,0,0.3), 0.15, 0.03);
+				
+				gl::lineWidth((uiColour == 0xFF0000 || uiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (uiColour == 0xFF0000 || uiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((uiColour == 0xFF0000 || uiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawVector(Vec3f(0,0,0), Vec3f(0.3,0,0), 0.15, 0.03);
+				
+				gl::lineWidth((uiColour == 0x00FF00 || uiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (uiColour == 0x00FF00 || uiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((uiColour == 0x00FF00 || uiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawVector(Vec3f(0,0,0), Vec3f(0,0.3,0), 0.15, 0.03);
+				
+				uiShader.uniform("pickingColor", Color(1.f,1.f,0.f));
+				gl::color((uiColour == 0xFFFF00 || uiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawSphere(Vec3f(0,0,0), 0.05);
 			}
 
