@@ -24,6 +24,10 @@
 #include "MatrixStack.h"
 #include "CinderRenderOptions.h"
 
+#include "ToolBar.h"
+#include "ToolSet.h"
+#include "ToolButton.h"
+
 
 void CinderApp::prepareSettings(Settings *settings){
 	settings->setWindowSize(900, 600);
@@ -96,6 +100,16 @@ void CinderApp::setup(){
 
 	play = false;
 	previousTime = 0;
+	
+	toolbar = new ToolBar(Vec2i(0,0));
+
+	toolbar->toolsets.push_back(new ToolSet(Rectf(0,0,30,30)));
+	toolbar->toolsets.push_back(new ToolSet(Rectf(0,0,20,20)));
+	toolbar->toolsets.at(0)->buttons.push_back(new ToolButton());
+	toolbar->toolsets.at(0)->buttons.push_back(new ToolButton());
+	toolbar->toolsets.at(1)->buttons.push_back(new ToolButton());
+	toolbar->toolsets.at(1)->buttons.push_back(new ToolButton());
+	toolbar->toolsets.at(1)->buttons.push_back(new ToolButton());
 }
 
 
@@ -221,6 +235,8 @@ void CinderApp::draw(){
 
 		gl::setViewport(fboUI.getBounds());
 
+		toolbar->render();
+
 		params->draw();
 		timelineParams->draw();
 		
@@ -274,6 +290,7 @@ void CinderApp::draw(){
 		gl::draw( pixelFbo.getTexture(0), Rectf(rct.x1, rct.y1+rct.y2+rct.y2, rct.x2, rct.y2+rct.y2+rct.y2) );
 		gl::drawStrokedRect(Rectf(rct.x1, rct.y1+rct.y2+rct.y2, rct.x2, rct.y2+rct.y2+rct.y2));
 	}
+
 	
 }
 

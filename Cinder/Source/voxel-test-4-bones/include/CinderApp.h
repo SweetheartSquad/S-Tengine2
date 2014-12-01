@@ -23,6 +23,8 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
+class ToolBar;
+
 class CinderApp : public AppBasic {
 public:
 	void prepareSettings(Settings * settings);
@@ -112,6 +114,8 @@ protected:
 	bool drawParams;
 	params::InterfaceGlRef params;
 	params::InterfaceGlRef timelineParams;
+
+	ToolBar * toolbar;
 
 	string directory;
 	string fileName;

@@ -133,6 +133,9 @@
     <ClCompile Include="..\src\CMD_SelectNodes.cpp" />
     <ClCompile Include="..\src\CMD_Parent.cpp" />
     <ClCompile Include="..\src\Timeline.cpp" />
+    <ClCompile Include="..\src\Toolbar.cpp" />
+    <ClCompile Include="..\src\ToolButton.cpp" />
+    <ClCompile Include="..\src\ToolSet.cpp" />
     <ClCompile Include="..\src\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +179,9 @@
     <ClInclude Include="..\include\CMD_RotateSelectedJoints.h" />
     <ClInclude Include="..\include\CMD_SelectNodes.h" />
     <ClInclude Include="..\include\CMD_Parent.h" />
+    <ClInclude Include="..\include\Toolbar.h" />
+    <ClInclude Include="..\include\ToolButton.h" />
+    <ClInclude Include="..\include\ToolSet.h" />
     <ClInclude Include="..\include\UI.h" />
     <ClCompile Include="..\src\CMD_EditStartKey.cpp" />
   </ItemGroup>
