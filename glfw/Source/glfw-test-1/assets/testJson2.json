@@ -1,0 +1,465 @@
+{"joints": [
+   {
+      "id": 0,
+      "transform":{
+         "pos": {"x": -0.48, "y": 0, "z": 0.533333},
+         "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
+         "scaleVector": {"x": 1, "y": 1, "z": 1}
+      },
+      "voxels": [
+      ],
+      "animations":{
+         "translateX":{
+            "startValue": 0,
+            "tweens": [
+            ],
+            "loopType": 0
+         },
+         "translateY":{
+            "startValue": 0,
+            "tweens": [
+            ],
+            "loopType": 0
+         },
+         "translateZ":{
+            "startValue": 0,
+            "tweens": [
+            ],
+            "loopType": 0
+         },
+         "rotateX":{
+            "startValue": 0,
+            "tweens": [
+            ],
+            "loopType": 0
+         },
+         "rotateY":{
+            "startValue": 0,
+            "tweens": [
+            ],
+            "loopType": 0
+         },
+         "rotateZ":{
+            "startValue": 0,
+            "tweens": [
+            ],
+            "loopType": 0
+         },
+         "rotateW":{
+            "startValue": 1,
+            "tweens": [
+            ],
+            "loopType": 0
+         },
+         "scaleX":{
+            "startValue": 1,
+            "tweens": [
+            ],
+            "loopType": 0
+         },
+         "scaleY":{
+            "startValue": 1,
+            "tweens": [
+            ],
+            "loopType": 0
+         },
+         "scaleZ":{
+            "startValue": 1,
+            "tweens": [
+            ],
+            "loopType": 0
+         }
+      },
+      "children": [
+         {
+            "id": 1,
+            "parent": 0,
+            "transform":{
+               "pos": {"x": 0.853333, "y": 0, "z": -1.06667},
+               "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
+               "scaleVector": {"x": 1, "y": 1, "z": 1}
+            },
+            "voxels": [
+            ],
+            "animations":{
+               "translateX":{
+                  "startValue": 0,
+                  "tweens": [
+                  ],
+                  "loopType": 0
+               },
+               "translateY":{
+                  "startValue": 0,
+                  "tweens": [
+                  ],
+                  "loopType": 0
+               },
+               "translateZ":{
+                  "startValue": 0,
+                  "tweens": [
+                  ],
+                  "loopType": 0
+               },
+               "rotateX":{
+                  "startValue": 0,
+                  "tweens": [
+                  ],
+                  "loopType": 0
+               },
+               "rotateY":{
+                  "startValue": 0,
+                  "tweens": [
+                  ],
+                  "loopType": 0
+               },
+               "rotateZ":{
+                  "startValue": 0,
+                  "tweens": [
+                  ],
+                  "loopType": 0
+               },
+               "rotateW":{
+                  "startValue": 1,
+                  "tweens": [
+                  ],
+                  "loopType": 0
+               },
+               "scaleX":{
+                  "startValue": 1,
+                  "tweens": [
+                  ],
+                  "loopType": 0
+               },
+               "scaleY":{
+                  "startValue": 1,
+                  "tweens": [
+                  ],
+                  "loopType": 0
+               },
+               "scaleZ":{
+                  "startValue": 1,
+                  "tweens": [
+                  ],
+                  "loopType": 0
+               }
+            },
+            "children": [
+               {
+                  "id": 2,
+                  "parent": 1,
+                  "transform":{
+                     "pos": {"x": 0.126667, "y": 0, "z": -0.301305},
+                     "orientation": {"x": -0.491512, "y": 0, "z": 0, "w": 0.407935},
+                     "scaleVector": {"x": 0.880886, "y": 0.876517, "z": 0.886278}
+                  },
+                  "voxels": [
+                     {"x": -0.897083, "y": -6.0471, "z": -8.84232},
+                     {"x": -0.727727, "y": -5.47204, "z": -8.20122},
+                     {"x": -0.491279, "y": -5.88581, "z": -7.87506},
+                     {"x": -0.736918, "y": -5.51673, "z": -8.0249},
+                     {"x": -0.859738, "y": -5.58865, "z": -7.9952},
+                     {"x": -0.982557, "y": -5.8984, "z": -8.46947},
+                     {"x": -1.02077, "y": -6.45758, "z": -9.44514},
+                     {"x": -1.11066, "y": -6.67414, "z": -9.85675},
+                     {"x": -0.501074, "y": -4.80315, "z": -6.93505},
+                     {"x": -0.491279, "y": -4.63881, "z": -7.56964},
+                     {"x": -0.491279, "y": -4.95842, "z": -7.48651},
+                     {"x": -0.491279, "y": -5.24107, "z": -7.17643},
+                     {"x": -0.491279, "y": -5.29982, "z": -7.06543},
+                     {"x": -0.447047, "y": -4.5218, "z": -6.63865},
+                     {"x": -0.40238, "y": -3.88982, "z": -6.60897},
+                     {"x": -0.31973, "y": -4.14497, "z": -6.03295},
+                     {"x": -0.265182, "y": -3.93383, "z": -5.75734},
+                     {"x": -0.261583, "y": -4.39855, "z": -5.4274},
+                     {"x": -0.484783, "y": -4.86488, "z": -5.07607},
+                     {"x": -0.682749, "y": -5.40041, "z": -6.89972},
+                     {"x": -0.929529, "y": -5.87633, "z": -7.59912},
+                     {"x": -0.209106, "y": -3.73127, "z": -5.4787},
+                     {"x": -0.286194, "y": -5.01436, "z": -5.29575},
+                     {"x": -0.161988, "y": -4.44277, "z": -5.49238},
+                     {"x": -0.329575, "y": -4.81561, "z": -5.00366},
+                     {"x": -0.150712, "y": -2.59782, "z": -3.78106},
+                     {"x": -0.0953043, "y": -2.11647, "z": -3.10781},
+                     {"x": -0.0667922, "y": -1.72061, "z": -2.53716},
+                     {"x": 0.580071, "y": -0.00731471, "z": -1.03819}
+                  ],
+                  "animations":{
+                     "translateX":{
+                        "startValue": 0.126667,
+                        "tweens": [
+                           {
+                              "id": 0,
+                              "deltaTime": 5,
+                              "deltaValue": 0,
+                              "interpolation": 0
+                           }
+                        ],
+                        "loopType": 0
+                     },
+                     "translateY":{
+                        "startValue": 0,
+                        "tweens": [
+                           {
+                              "id": 0,
+                              "deltaTime": 5,
+                              "deltaValue": 0,
+                              "interpolation": 0
+                           }
+                        ],
+                        "loopType": 0
+                     },
+                     "translateZ":{
+                        "startValue": 1.10667,
+                        "tweens": [
+                           {
+                              "id": 0,
+                              "deltaTime": 5,
+                              "deltaValue": -2.81566,
+                              "interpolation": 0
+                           }
+                        ],
+                        "loopType": 0
+                     },
+                     "rotateX":{
+                        "startValue": 0,
+                        "tweens": [
+                           {
+                              "id": 0,
+                              "deltaTime": 5,
+                              "deltaValue": -0.982924,
+                              "interpolation": 0
+                           }
+                        ],
+                        "loopType": 0
+                     },
+                     "rotateY":{
+                        "startValue": 0,
+                        "tweens": [
+                           {
+                              "id": 0,
+                              "deltaTime": 5,
+                              "deltaValue": 0,
+                              "interpolation": 0
+                           }
+                        ],
+                        "loopType": 0
+                     },
+                     "rotateZ":{
+                        "startValue": 0,
+                        "tweens": [
+                           {
+                              "id": 0,
+                              "deltaTime": 5,
+                              "deltaValue": 0,
+                              "interpolation": 0
+                           }
+                        ],
+                        "loopType": 0
+                     },
+                     "rotateW":{
+                        "startValue": 1,
+                        "tweens": [
+                           {
+                              "id": 0,
+                              "deltaTime": 5,
+                              "deltaValue": -1.18401,
+                              "interpolation": 0
+                           }
+                        ],
+                        "loopType": 0
+                     },
+                     "scaleX":{
+                        "startValue": 1,
+                        "tweens": [
+                           {
+                              "id": 0,
+                              "deltaTime": 5,
+                              "deltaValue": -0.238204,
+                              "interpolation": 0
+                           }
+                        ],
+                        "loopType": 0
+                     },
+                     "scaleY":{
+                        "startValue": 1,
+                        "tweens": [
+                           {
+                              "id": 0,
+                              "deltaTime": 5,
+                              "deltaValue": -0.24694,
+                              "interpolation": 0
+                           }
+                        ],
+                        "loopType": 0
+                     },
+                     "scaleZ":{
+                        "startValue": 1,
+                        "tweens": [
+                           {
+                              "id": 0,
+                              "deltaTime": 5,
+                              "deltaValue": -0.227422,
+                              "interpolation": 0
+                           }
+                        ],
+                        "loopType": 0
+                     }
+                  },
+                  "children": [
+                     {
+                        "id": 3,
+                        "parent": 2,
+                        "transform":{
+                           "pos": {"x": 0.533333, "y": 0, "z": -1.03333},
+                           "orientation": {"x": -0.230154, "y": 0.0774435, "z": -0.152814, "w": -0.957956},
+                           "scaleVector": {"x": 1.08245, "y": 1.08245, "z": 1.08245}
+                        },
+                        "voxels": [
+                        ],
+                        "animations":{
+                           "translateX":{
+                              "startValue": 0,
+                              "tweens": [
+                              ],
+                              "loopType": 0
+                           },
+                           "translateY":{
+                              "startValue": 0,
+                              "tweens": [
+                              ],
+                              "loopType": 0
+                           },
+                           "translateZ":{
+                              "startValue": 0,
+                              "tweens": [
+                              ],
+                              "loopType": 0
+                           },
+                           "rotateX":{
+                              "startValue": 0,
+                              "tweens": [
+                              ],
+                              "loopType": 0
+                           },
+                           "rotateY":{
+                              "startValue": 0,
+                              "tweens": [
+                              ],
+                              "loopType": 0
+                           },
+                           "rotateZ":{
+                              "startValue": 0,
+                              "tweens": [
+                              ],
+                              "loopType": 0
+                           },
+                           "rotateW":{
+                              "startValue": 1,
+                              "tweens": [
+                              ],
+                              "loopType": 0
+                           },
+                           "scaleX":{
+                              "startValue": 1,
+                              "tweens": [
+                              ],
+                              "loopType": 0
+                           },
+                           "scaleY":{
+                              "startValue": 1,
+                              "tweens": [
+                              ],
+                              "loopType": 0
+                           },
+                           "scaleZ":{
+                              "startValue": 1,
+                              "tweens": [
+                              ],
+                              "loopType": 0
+                           }
+                        },
+                        "children": [
+                           {
+                              "id": 4,
+                              "parent": 3,
+                              "transform":{
+                                 "pos": {"x": -0.326667, "y": 0, "z": -0.406667},
+                                 "orientation": {"x": 0, "y": 0, "z": 0, "w": 1},
+                                 "scaleVector": {"x": 1, "y": 1, "z": 1}
+                              },
+                              "voxels": [
+                              ],
+                              "animations":{
+                                 "translateX":{
+                                    "startValue": 0,
+                                    "tweens": [
+                                    ],
+                                    "loopType": 0
+                                 },
+                                 "translateY":{
+                                    "startValue": 0,
+                                    "tweens": [
+                                    ],
+                                    "loopType": 0
+                                 },
+                                 "translateZ":{
+                                    "startValue": 0,
+                                    "tweens": [
+                                    ],
+                                    "loopType": 0
+                                 },
+                                 "rotateX":{
+                                    "startValue": 0,
+                                    "tweens": [
+                                    ],
+                                    "loopType": 0
+                                 },
+                                 "rotateY":{
+                                    "startValue": 0,
+                                    "tweens": [
+                                    ],
+                                    "loopType": 0
+                                 },
+                                 "rotateZ":{
+                                    "startValue": 0,
+                                    "tweens": [
+                                    ],
+                                    "loopType": 0
+                                 },
+                                 "rotateW":{
+                                    "startValue": 1,
+                                    "tweens": [
+                                    ],
+                                    "loopType": 0
+                                 },
+                                 "scaleX":{
+                                    "startValue": 1,
+                                    "tweens": [
+                                    ],
+                                    "loopType": 0
+                                 },
+                                 "scaleY":{
+                                    "startValue": 1,
+                                    "tweens": [
+                                    ],
+                                    "loopType": 0
+                                 },
+                                 "scaleZ":{
+                                    "startValue": 1,
+                                    "tweens": [
+                                    ],
+                                    "loopType": 0
+                                 }
+                              },
+                              "children": [
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }
+            ]
+         }
+      ]
+   }
+]}

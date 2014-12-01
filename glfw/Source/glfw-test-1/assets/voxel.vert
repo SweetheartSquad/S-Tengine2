@@ -13,7 +13,7 @@ out vec3 fragVertGeo;
 out vec3 fragNormalGeo;
 out vec4 fragColorGeo;
 out vec2 fragUVGeo;
-out vec4 shadowCoord;
+out vec4 shadowCoordIn;
 
 void main(){
 	fragVertGeo = aVertexPosition;
@@ -21,5 +21,5 @@ void main(){
 	fragColorGeo = aVertexColor;
 	fragUVGeo = aVertexUVs;
 	gl_Position = vec4(aVertexPosition, 1.0);
-	shadowCoord = depthMVP * vec4(aVertexPosition, 1);
+	shadowCoordIn = depthMVP * vec4(aVertexPosition, 1);
 }
