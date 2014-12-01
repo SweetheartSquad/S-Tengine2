@@ -6,7 +6,8 @@
 #include "UI.h"
 #include "NodeHierarchical.h"
 
-CMD_ParentSelectedNodes::CMD_ParentSelectedNodes()
+CMD_ParentSelectedNodes::CMD_ParentSelectedNodes() :
+	executed(false)
 {
 }
 

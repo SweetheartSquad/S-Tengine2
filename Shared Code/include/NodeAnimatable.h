@@ -10,6 +10,7 @@ class NodeAnimatable abstract : public virtual NodeTransformable, public virtual
 
 public:
 	explicit NodeAnimatable(Transform * _transform);
+	~NodeAnimatable();
 
 	Animation * translateX;
 	Animation * translateY;

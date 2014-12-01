@@ -97,7 +97,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Shared Code\src\Animation.cpp" />
-    <ClCompile Include="..\..\..\..\Shared Code\src\CMD_ParentSelectedNodes.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Command.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\CommandProcessor.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Joint.cpp" />
@@ -105,7 +104,9 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Light.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeChild.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeHierarchical.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeParent.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeRenderable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeResource.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeSelectable.cpp" />
@@ -128,6 +129,7 @@
     <ClCompile Include="..\src\CMD_KeyAll.cpp" />
     <ClCompile Include="..\src\CMD_KeyProperty.cpp" />
     <ClCompile Include="..\src\CMD_MoveSelectedJoints.cpp" />
+    <ClCompile Include="..\src\CMD_ParentSelectedNodes.cpp" />
     <ClCompile Include="..\src\CMD_PlaceVoxel.cpp" />
     <ClCompile Include="..\src\CMD_RotateSelectedTransformable.cpp" />
     <ClCompile Include="..\src\CMD_ScaleSelectedTransformable.cpp" />
@@ -152,7 +154,9 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\MatrixStack.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Node.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeAnimatable.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeChild.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeParent.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeRenderable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeResource.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeSelectable.h" />

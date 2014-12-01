@@ -186,10 +186,8 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 						}
 					}
 
-					Transform t;
-					t.translate(finalPos.x, finalPos.y, finalPos.z);
 					gl::translate(finalPos.x, finalPos.y, finalPos.z);
-					_matrixStack->translate(t.getTranslationMatrix());
+					_matrixStack->translate(glm::translate(glm::vec3(finalPos.x, finalPos.y, finalPos.z)));
 					
 					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 					r->ciShader->uniform("pickingColor", Color::hex(voxels.at(i)->pickingColor));
@@ -227,20 +225,19 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 				gl::pushMatrices();
 				_matrixStack->pushMatrix();
 					gl::rotate(boneDir);
-					Transform temp;
-					temp.orientation.x = boneDir.v.x;
-					temp.orientation.y = boneDir.v.y;
-					temp.orientation.z = boneDir.v.z;
-					temp.orientation.w = boneDir.w;
-					_matrixStack->rotate(temp.getOrientationMatrix());
+					glm::quat tempOrientation;
+					tempOrientation.x = boneDir.v.x;
+					tempOrientation.y = boneDir.v.y;
+					tempOrientation.z = boneDir.v.z;
+					tempOrientation.w = boneDir.w;
+					_matrixStack->rotate(glm::toMat4(tempOrientation));
 			
 					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 					gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
 
 					gl::rotate(Vec3f(0.f, 90.f, 0.f));
-					Transform temp2;
-					temp2.rotate(90, 0, 1, 0);
-					_matrixStack->rotate(temp2.getOrientationMatrix());
+					glm::quat tempOrientation2(90.f, 0.f, 1.f, 0.f);
+					_matrixStack->rotate(glm::toMat4(tempOrientation2));
 			
 					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 					gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));

@@ -135,10 +135,10 @@
     <ClCompile Include="..\src\CMD_ParentSelectedNodes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeParent.cpp">
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeChild.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeChild.cpp">
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeParent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -262,7 +262,7 @@
     <ClInclude Include="..\include\CMD_EditStartKey.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CMD_ParentSelectedNodes.h">
+    <ClInclude Include="..\..\..\..\Shared Code\include\CMD_ParentSelectedNodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeChild.h">

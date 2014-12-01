@@ -869,7 +869,7 @@ void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area, unsigned long in
 	//  -one for the scene as we will view it
 	//  -one to contain a color coded version of the scene that we can use for picking
 	fmt.enableColorBuffer( true, _numChannels );
-		fmt.setColorInternalFormat(GL_RGBA32F);
+	fmt.setColorInternalFormat(GL_RGBA32F);
 
 	// anti-aliasing samples
 	fmt.setSamples(0);
