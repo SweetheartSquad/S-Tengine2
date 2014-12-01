@@ -18,7 +18,8 @@ ToolButton::ToolButton(Type _type):
 
 }
 
-void ToolButton::down(){
+void ToolButton::down(CinderApp * _app){
+	hovered = true;
 	justPressed = true;
 	switch (type){
 	case ToolButton::NORMAL:
@@ -28,26 +29,30 @@ void ToolButton::down(){
 		active = !active;
 		break;
 	case ToolButton::RADIO:
-		// need to unclick siblings
-		for(unsigned long int i = 0; i < group->buttons.size(); ++i){
-			group->buttons.at(i)->active = false;
-		}
 		active = true;
 		break;
 	default:
 		break;
 	}
 	if(!downCallback._Empty()){
-		downCallback();
+		downCallback(_app);
 	}
 }
-void ToolButton::up(){
+void ToolButton::up(CinderApp * _app){
 	if(type == NORMAL){
 		active = false;
+	}else if(type == RADIO){
+		if(hovered){
+			// need to unclick sibling
+			for(unsigned long int i = 0; i < group->buttons.size(); ++i){
+				group->buttons.at(i)->active = false;
+			}
+			active = true;
+		}
 	}
 	if(hovered){
 		if(!upCallback._Empty()){
-			upCallback();
+			upCallback(_app);
 		}
 	}
 }
@@ -60,16 +65,6 @@ void ToolButton::out(){
 
 void ToolButton::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	((CinderRenderOptions *)_renderStack)->ciShader->uniform("pickingColor", ci::Color::hex(pickingColor));
-	ci::gl::color(active ? displayColor-ci::Color(0.2f,0.2f,0.2f) : displayColor);
+	ci::gl::color(active && hovered ? displayColor-ci::Color(0.2f,0.2f,0.2f) : displayColor);
 	ci::gl::drawSolidRect(ci::Rectf(0,0,1,1));
-}
-
-void ToolButton::update(Step * _step){
-	if(active){
-		if(justPressed){
-			justPressed = false;
-		}else{
-			up();
-		}
-	}
 }

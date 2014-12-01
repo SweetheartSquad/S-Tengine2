@@ -4,12 +4,11 @@
 #include <cinder\Rect.h>
 
 #include "NodeRenderable.h"
-#include "NodeUpdatable.h"
 
 class ToolButton;
 class Step;
 
-class ToolSet : public NodeRenderable, public NodeUpdatable{
+class ToolSet : public NodeRenderable{
 public:
 	ToolSet(ci::Rectf _iconSize);
 
@@ -17,7 +16,6 @@ public:
 	std::vector<ToolButton *> buttons;
 
 	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
-	void update(Step * _step) override;
 
 	void addButton(ToolButton * _button);
 

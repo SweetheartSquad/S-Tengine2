@@ -22,9 +22,3 @@ void ToolBar::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderSta
 		}
 	ci::gl::popMatrices();
 }
-
-void ToolBar::update(Step * _step){
-	for(unsigned long int i = 0; i < toolsets.size(); ++i){
-		toolsets.at(i)->update(_step);
-	}
-}

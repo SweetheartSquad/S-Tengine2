@@ -24,12 +24,6 @@ void ToolSet::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderSta
 	ci::gl::popMatrices();
 }
 
-void ToolSet::update(Step * _step){
-	for(unsigned long int i = 0; i < buttons.size(); ++i){
-		buttons.at(i)->update(_step);
-	}
-}
-
 void ToolSet::addButton(ToolButton * _button){
 	buttons.push_back(_button);
 	_button->group = this;

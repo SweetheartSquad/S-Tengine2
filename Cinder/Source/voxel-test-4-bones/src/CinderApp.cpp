@@ -35,11 +35,19 @@ void CinderApp::prepareSettings(Settings *settings){
 	settings->setTitle("Picking using multiple targets and color coding");
 }
 
+void changeMode1(CinderApp * _app){
+	_app->mode = CinderApp::UImode::SELECT;
+};
+void changeMode2(CinderApp * _app){
+	_app->mode = CinderApp::UImode::TRANSLATE;
+};
+
 void CinderApp::setup(){
 	sourceCam = nullptr;
 	sourceRect = nullptr;
 	sourceFbo = nullptr;
 	sourceBounds = nullptr;
+	activeButton = nullptr;
 
 	drawParams = true;
 	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 150, 100 ) ) );
@@ -112,8 +120,10 @@ void CinderApp::setup(){
 	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::NORMAL));
 	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::TOGGLE));
 	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::TOGGLE));
+	
+	toolbar->toolsets.at(0)->buttons.at(0)->upCallback = changeMode1;
+	toolbar->toolsets.at(0)->buttons.at(1)->upCallback = changeMode2;
 }
-
 
 void CinderApp::resize(){
 	unsigned int w = max(1, getWindowWidth());
@@ -212,8 +222,6 @@ void CinderApp::update(){
 			previousTime = UI::time;
 		}
 	}
-	
-	toolbar->update(nullptr);
 }
 
 void CinderApp::draw(){
@@ -712,11 +720,10 @@ void CinderApp::mouseDown( MouseEvent event ){
 			}
 		}
 	}else{
-		ToolButton * button;
 		if(NodeSelectable::pickingMap.count(uiColour) == 1){
-			button = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour));
-			if(button != NULL){
-				button->down();
+			activeButton = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour));
+			if(activeButton != NULL){
+				activeButton->down(this);
 			}
 		}
 	}
@@ -817,11 +824,36 @@ void CinderApp::mouseDrag( MouseEvent event ){
 			oldMousePos = mMousePos;
 		}
 	}
+
+	// Get the selected UI colour
+	if(activeButton != NULL){
+		pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+		if(NodeSelectable::pickingMap.count(uiColour) == 1){
+			if(activeButton != dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour))){
+				if(activeButton->hovered){
+					activeButton->out();
+				}
+			}else if(!activeButton->hovered){
+				activeButton->in();
+			}
+		}else{
+			if(activeButton->hovered){
+				activeButton->out();
+			}
+		}
+	}
+
 	UI::updateHandlePos(true);
 }
 
 void CinderApp::mouseUp( MouseEvent event ){
 	UI::updateHandlePos(false);
+	
+	if(activeButton != NULL){
+		activeButton->up(this);
+	}
+	
+
 	uiColour = 0;
 }
 

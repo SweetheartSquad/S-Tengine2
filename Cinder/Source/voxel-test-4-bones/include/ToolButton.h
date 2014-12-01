@@ -1,7 +1,6 @@
 #pragma once
 
 #include "NodeSelectable.h"
-#include "NodeUpdatable.h"
 #include "NodeRenderable.h"
 
 #include <cinder\Rect.h>
@@ -9,10 +8,11 @@
 
 #include <functional>
 
+class CinderApp;
 class ToolSet;
 class Step;
 
-class ToolButton : public NodeSelectable, public NodeRenderable, public NodeUpdatable{
+class ToolButton : public NodeSelectable, public NodeRenderable{
 public:
 	ci::Color displayColor;
 
@@ -30,13 +30,12 @@ public:
 	bool active;
 	bool justPressed;
 	
-	std::function<void(void)> downCallback;
-	std::function<void(void)> upCallback;
+	std::function<void(CinderApp *)> downCallback;
+	std::function<void(CinderApp *)> upCallback;
 
-	void down();
-	void up();
+	void down(CinderApp * _app);
+	void up(CinderApp * _app);
 	void in();
 	void out();
-	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
-	void update(Step * _step) override;			
+	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;		
 };

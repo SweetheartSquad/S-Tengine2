@@ -1,4 +1,5 @@
 #pragma once
+
 #include <cinder\MayaCamUI.h>
 #include <cinder\TriMesh.h>
 #include <cinder\app\AppBasic.h>
@@ -24,6 +25,7 @@ using namespace ci::app;
 using namespace std;
 
 class ToolBar;
+class ToolButton;
 
 class CinderApp : public AppBasic {
 public:
@@ -109,7 +111,7 @@ public:
 		return b + (g << 8) + (r << 16);
 	};
 
-protected:
+public:
 	//params
 	bool drawParams;
 	params::InterfaceGlRef params;
@@ -129,7 +131,6 @@ protected:
 	CameraOrtho camFront;
 
 	gl::GlslProg jointShader;
-
 	gl::GlslProg uiShader;
 	
 	// Framebuffers for cameras
@@ -172,7 +173,7 @@ protected:
 	
 	std::vector<Joint *> joints;
 
-
+	ToolButton * activeButton;
 	
 
 	//Vec3i dir;
