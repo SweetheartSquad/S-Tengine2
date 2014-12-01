@@ -3,18 +3,23 @@
 #include "ToolButton.h"
 #include "ToolSet.h"
 
+#include "CinderRenderOptions.h"
+
 #include <cinder\gl\gl.h>
 
-ToolButton::ToolButton():
+ToolButton::ToolButton(Type _type):
 	NodeSelectable(),
 	hovered(false),
 	active(false),
-	displayColor((float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f)
+	justPressed(false),
+	displayColor((float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f),
+	type(_type)
 {
 
 }
 
 void ToolButton::down(){
+	justPressed = true;
 	switch (type){
 	case ToolButton::NORMAL:
 		active = true;
@@ -32,13 +37,18 @@ void ToolButton::down(){
 	default:
 		break;
 	}
-
-	downCallback();
+	if(!downCallback._Empty()){
+		downCallback();
+	}
 }
 void ToolButton::up(){
-	active = false;
+	if(type == NORMAL){
+		active = false;
+	}
 	if(hovered){
-		upCallback();
+		if(!upCallback._Empty()){
+			upCallback();
+		}
 	}
 }
 void ToolButton::in(){
@@ -48,9 +58,18 @@ void ToolButton::out(){
 	hovered = false;
 }
 
-void ToolButton::render(ci::Rectf _iconRect){
-	ci::gl::color(ci::Color::hex(pickingColor));
-	ci::gl::drawSolidRect(_iconRect);
-	ci::gl::color(displayColor);
-	ci::gl::drawStrokedRect(_iconRect);
+void ToolButton::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+	((CinderRenderOptions *)_renderStack)->ciShader->uniform("pickingColor", ci::Color::hex(pickingColor));
+	ci::gl::color(active ? displayColor-ci::Color(0.2f,0.2f,0.2f) : displayColor);
+	ci::gl::drawSolidRect(ci::Rectf(0,0,1,1));
+}
+
+void ToolButton::update(Step * _step){
+	if(active){
+		if(justPressed){
+			justPressed = false;
+		}else{
+			up();
+		}
+	}
 }

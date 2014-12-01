@@ -10,15 +10,21 @@ ToolBar::ToolBar(ci::Vec2i _pos) :
 {
 }
 
-void ToolBar::render(){
+void ToolBar::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	ci::gl::pushMatrices();
 		ci::gl::translate(pos);
-		ci::Rectf setRect(0,0,0,0);
+		ci::Vec2i setPos(0,0);
 		for(unsigned long int i = 0; i < toolsets.size(); ++i){
-			setRect.y2 += toolsets.at(i)->buttons.size() * (toolsets.at(i)->iconSize.getHeight()+2) + 5;
-			setRect.x2 = std::max(setRect.x2, toolsets.at(i)->iconSize.getWidth());
-			toolsets.at(i)->render(setRect);
-			setRect.y1 += toolsets.at(i)->buttons.size() * (toolsets.at(i)->iconSize.getHeight()+2) + 5;
+			ci::gl::translate(setPos);
+
+			toolsets.at(i)->render(_matrixStack, _renderStack);
+			setPos.y = toolsets.at(i)->buttons.size() * (toolsets.at(i)->iconSize.getHeight()+2) + 5;
 		}
 	ci::gl::popMatrices();
+}
+
+void ToolBar::update(Step * _step){
+	for(unsigned long int i = 0; i < toolsets.size(); ++i){
+		toolsets.at(i)->update(_step);
+	}
 }

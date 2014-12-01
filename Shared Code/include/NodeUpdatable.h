@@ -8,5 +8,5 @@ class NodeUpdatable : public virtual Node{
 	
 public:
 
-	virtual void update(Step * step) = 0;
+	virtual void update(Step * _step) = 0;
 };

@@ -10,12 +10,27 @@ ToolSet::ToolSet(ci::Rectf _iconSize) :
 {
 }
 
-void ToolSet::render(ci::Rectf _setRect){
-	ci::gl::translate(_setRect.x1, _setRect.y1);
-	ci::Rectf iconRect(0,0,iconSize.getWidth(),iconSize.getHeight());
+void ToolSet::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+	ci::gl::pushMatrices();
+		ci::Vec2i iconPos(0,0);
+		for(unsigned long int i = 0; i < buttons.size(); ++i){
+			ci::gl::translate(iconPos);
+			ci::gl::pushMatrices();
+				ci::gl::scale(iconSize.getWidth(), iconSize.getHeight());
+				buttons.at(i)->render(_matrixStack, _renderStack);
+			ci::gl::popMatrices();
+			iconPos.y = iconSize.getHeight()+2;
+		}
+	ci::gl::popMatrices();
+}
+
+void ToolSet::update(Step * _step){
 	for(unsigned long int i = 0; i < buttons.size(); ++i){
-		buttons.at(i)->render(iconRect);
-		iconRect.y1 += iconSize.getHeight()+2;
-		iconRect.y2 += iconSize.getHeight()+2;
+		buttons.at(i)->update(_step);
 	}
+}
+
+void ToolSet::addButton(ToolButton * _button){
+	buttons.push_back(_button);
+	_button->group = this;
 }

@@ -101,15 +101,17 @@ void CinderApp::setup(){
 	play = false;
 	previousTime = 0;
 	
-	toolbar = new ToolBar(Vec2i(0,0));
+	toolbar = new ToolBar(Vec2i(5,5));
 
 	toolbar->toolsets.push_back(new ToolSet(Rectf(0,0,30,30)));
 	toolbar->toolsets.push_back(new ToolSet(Rectf(0,0,20,20)));
-	toolbar->toolsets.at(0)->buttons.push_back(new ToolButton());
-	toolbar->toolsets.at(0)->buttons.push_back(new ToolButton());
-	toolbar->toolsets.at(1)->buttons.push_back(new ToolButton());
-	toolbar->toolsets.at(1)->buttons.push_back(new ToolButton());
-	toolbar->toolsets.at(1)->buttons.push_back(new ToolButton());
+	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
+	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
+	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
+	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::NORMAL));
+	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::NORMAL));
+	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::TOGGLE));
+	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::TOGGLE));
 }
 
 
@@ -167,7 +169,7 @@ void CinderApp::resize(){
 
 	// create or resize framebuffer if needed
 	if(!fboUI || fboUI.getWidth() != w || fboUI.getHeight() != h){
-		initFbo(&fboUI, b);
+		initMultiChannelFbo(fboUI, b, 2);
 	}
 	
 	if(!fboPersp || fboPersp.getWidth() != rectPersp.getWidth() || fboPersp.getHeight() != rectPersp.getHeight()) {
@@ -210,7 +212,8 @@ void CinderApp::update(){
 			previousTime = UI::time;
 		}
 	}
-
+	
+	toolbar->update(nullptr);
 }
 
 void CinderApp::draw(){
@@ -220,6 +223,7 @@ void CinderApp::draw(){
 	renderScene(fboFront, camFront);
 
 	fboUI.bindFramebuffer();
+		uiShader.bind();
 		// set viewport to the size of the FBO
 		gl::setViewport( fboUI.getBounds() );
 		gl::enableDepthRead();
@@ -235,7 +239,11 @@ void CinderApp::draw(){
 
 		gl::setViewport(fboUI.getBounds());
 
-		toolbar->render();
+		vox::MatrixStack t;
+		CinderRenderOptions t2(nullptr, nullptr);
+		t2.ciShader = &uiShader;
+		toolbar->render(&t, &t2);
+		uiShader.unbind();
 
 		params->draw();
 		timelineParams->draw();
@@ -381,7 +389,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 	
 	gl::color(ColorA(1, 1, 1, 1));
 
-	
+	uiShader.uniform("pickingColor", Color(0,0,0));
 	if(mode == CREATE){
 		Ray ray = camMayaPersp.getCamera().generateRay((float)mMousePos.x/rectPersp.getWidth(), 1.f-((float)(mMousePos.y-rect.y1)/rectPersp.getHeight()), camMayaPersp.getCamera().getAspectRatio());			
 		float distance = 0.f;
@@ -448,18 +456,21 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 
 				// Draw the three circles
 				gl::lineWidth((uiColour == 0x0000FF || uiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (uiColour == 0x0000FF || uiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.f, 0.f, 0.f));
 				gl::color((uiColour == 0x0000FF || uiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawStrokedCircle(Vec2f(0,0), 0.3, 32);
 
 				gl::scale(0.9,0.9,0.9);
 				gl::rotate(Vec3f(0,90,0));
 				gl::lineWidth((uiColour == 0xFF0000 || uiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (uiColour == 0xFF0000 || uiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.f, 0.f, 0.f));
 				gl::color((uiColour == 0xFF0000 || uiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawStrokedCircle(Vec2f(0,0), 0.3, 32);
 
 				gl::scale(0.9,0.9,0.9);
 				gl::rotate(Vec3f(90,0,0));
 				gl::lineWidth((uiColour == 0x00FF00 || uiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (uiColour == 0x00FF00 || uiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.f, 0.f, 0.f));
 				gl::color((uiColour == 0x00FF00 || uiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawStrokedCircle(Vec2f(0,0), 0.3, 32);
 
@@ -649,13 +660,13 @@ void CinderApp::mouseDown( MouseEvent event ){
 	}
 	
 	// Get the selected UI colour
-	pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 0, GL_UNSIGNED_BYTE);
+	pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
 
 	if(event.isLeft()){
 		oldMousePos = mMousePos;
 	}
 
-	if(!event.isAltDown()){
+	if(!event.isAltDown() && (uiColour == 0)){
 		if(mode == PAINT_VOXELS){
 			if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
 				if(event.isLeft()){
@@ -695,9 +706,17 @@ void CinderApp::mouseDown( MouseEvent event ){
 				pickColour(&jointColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
 				NodeSelectable * selection = nullptr;
 				if(NodeSelectable::pickingMap.count(jointColour) == 1){
-					selection = dynamic_cast<NodeSelectable *>(NodeSelectable::pickingMap.at(jointColour));
+					selection = NodeSelectable::pickingMap.at(jointColour);
 				}
 				cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
+			}
+		}
+	}else{
+		ToolButton * button;
+		if(NodeSelectable::pickingMap.count(uiColour) == 1){
+			button = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour));
+			if(button != NULL){
+				button->down();
 			}
 		}
 	}
@@ -903,6 +922,7 @@ void CinderApp::keyUp( KeyEvent event ){
 void CinderApp::loadShaders(){
 	try{
 		jointShader = gl::GlslProg( loadFile("../assets/shaders/joint.vert"), loadFile("../assets/shaders/joint.frag") );
+		uiShader = gl::GlslProg( loadFile("../assets/shaders/ui.vert"), loadFile("../assets/shaders/ui.frag") );
 	}catch( const std::exception &e ) {
 		console() << e.what() << std::endl;
 		quit();
@@ -914,9 +934,7 @@ void CinderApp::initFbo(gl::Fbo * _fbo, Area _area){
 	// make sure the framebuffer is not anti-aliased
 	fmt.setSamples(0);
 	fmt.setCoverageSamples(0);
-	//if(_fbo == pixelFbo){
-		fmt.setColorInternalFormat(GL_RGBA32F);
-	//}
+	fmt.setColorInternalFormat(GL_RGBA32F);
 	// you can omit these lines if you don't intent to display the picking framebuffer
 	fmt.setMagFilter(GL_NEAREST);
 	fmt.setMinFilter(GL_LINEAR);
@@ -936,11 +954,14 @@ void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area, unsigned long in
 	//  -one for the scene as we will view it
 	//  -one to contain a color coded version of the scene that we can use for picking
 	fmt.enableColorBuffer( true, _numChannels );
-		fmt.setColorInternalFormat(GL_RGBA32F);
+	fmt.setColorInternalFormat(GL_RGBA32F);
 
 	// anti-aliasing samples
 	fmt.setSamples(0);
 	fmt.setCoverageSamples(0);
+	// you can omit these lines if you don't intent to display the picking framebuffer
+	fmt.setMagFilter(GL_NEAREST);
+	fmt.setMinFilter(GL_LINEAR);
 
 	// create the buffer
 	unsigned int w = max(1, _area.getWidth());

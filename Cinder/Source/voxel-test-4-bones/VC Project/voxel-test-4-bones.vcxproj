@@ -141,6 +141,8 @@
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag" />
     <None Include="..\assets\shaders\joint.vert" />
+    <None Include="..\assets\shaders\ui.frag" />
+    <None Include="..\assets\shaders\ui.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Shared Code\include\Animation.h" />

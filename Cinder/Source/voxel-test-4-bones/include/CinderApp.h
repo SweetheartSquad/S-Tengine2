@@ -130,9 +130,7 @@ protected:
 
 	gl::GlslProg jointShader;
 
-	//! our little picking framebuffer (non-AA) 
-	//gl::Fbo			mPickingFboVoxel;
-	//gl::Fbo			mPickingFboFace;
+	gl::GlslProg uiShader;
 	
 	// Framebuffers for cameras
 	gl::Fbo fboTop;

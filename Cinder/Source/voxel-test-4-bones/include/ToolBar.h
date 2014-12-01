@@ -4,15 +4,19 @@
 #include <cinder\Rect.h>
 #include <cinder\Vector.h>
 
-class ToolSet;
+#include "NodeRenderable.h"
+#include "NodeUpdatable.h"
 
-class ToolBar{
+class ToolSet;
+class Step;
+
+class ToolBar : public NodeRenderable, public NodeUpdatable{
 public:
 	std::vector<ToolSet *> toolsets;
-
+	
 	ci::Vec2i pos;
 
 	ToolBar(ci::Vec2i _pos);
-
-	void render();
+	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
+	void update(Step * _step) override;			
 };
