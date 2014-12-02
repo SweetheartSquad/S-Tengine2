@@ -26,9 +26,12 @@ public:
 	
 	ToolButton(Type _type);
 
-	bool hovered;
-	bool active;
-	bool justPressed;
+	// Whether the button is under the mouse
+	bool isHovered;
+	// Whether the mouse clicked the button (and hasn't been released)
+	bool isDown;
+	// Whether the button is active (only affects RADIO and TOGGLE buttons)
+	bool isActive;
 	
 	std::function<void(CinderApp *)> downCallback;
 	std::function<void(CinderApp *)> upCallback;

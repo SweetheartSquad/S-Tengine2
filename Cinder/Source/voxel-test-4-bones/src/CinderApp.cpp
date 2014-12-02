@@ -555,35 +555,30 @@ void CinderApp::mouseMove( MouseEvent event ){
 	mMousePos = event.getPos();
 	//pickJoint(mMousePos);
 	//handleUI(mMousePos);
-
-	pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
-	if(NodeSelectable::pickingMap.count(uiColour) == 1){
-		ToolButton * newButt = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour));
-		if(activeButton != NULL){
-			if(activeButton != newButt){
-				if(activeButton->hovered){
-					activeButton->out();
-					activeButton = newButt;
-					if(activeButton != NULL){
-						if(!activeButton->hovered){
-							activeButton->in();
-						}
+	if(!event.isLeftDown() && !event.isRightDown()){
+		pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+		if(NodeSelectable::pickingMap.count(uiColour) == 1){
+			ToolButton * newButt = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour));
+			if(activeButton != NULL){
+				if(activeButton != newButt){
+					if(activeButton->isHovered){
+						activeButton->out();
+						
 					}
 				}
 			}
-		}else{
 			activeButton = newButt;
 			if(activeButton != NULL){
-				if(!activeButton->hovered){
+				if(!activeButton->isHovered){
 					activeButton->in();
 				}
 			}
-		}
-	}else{
-		if(activeButton != NULL){
-			if(activeButton->hovered){
-				activeButton->out();
-				activeButton = nullptr;
+		}else{
+			if(activeButton != NULL){
+				if(activeButton->isHovered){
+					activeButton->out();
+					activeButton = nullptr;
+				}
 			}
 		}
 	}
@@ -744,7 +739,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 		oldMousePos = mMousePos;
 	}
 
-	if(!event.isAltDown() && (uiColour == 0)){
+	if(!event.isAltDown() && (clickedUiColour == 0)){
 		if(mode == PAINT_VOXELS){
 			if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
 				if(event.isLeft()){
@@ -790,8 +785,8 @@ void CinderApp::mouseDown( MouseEvent event ){
 			}
 		}
 	}else{
-		if(NodeSelectable::pickingMap.count(uiColour) == 1){
-			activeButton = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour));
+		if(NodeSelectable::pickingMap.count(clickedUiColour) == 1){
+			activeButton = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(clickedUiColour));
 			if(activeButton != NULL){
 				activeButton->down(this);
 			}
@@ -809,7 +804,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 		camMayaPersp.mouseDrag( mMousePos, event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
 	}else{
 		if(event.isLeftDown()){
-			if(uiColour != 0){
+			if(clickedUiColour != 0){
 				if(sourceCam != nullptr && sourceRect != nullptr){
 					Vec2f handlePosInScreen = sourceCam->worldToScreen(UI::handlePos, sourceRect->getWidth(), sourceRect->getHeight());
 
@@ -900,14 +895,14 @@ void CinderApp::mouseDrag( MouseEvent event ){
 		pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
 		if(NodeSelectable::pickingMap.count(uiColour) == 1){
 			if(activeButton != dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour))){
-				if(activeButton->hovered){
+				if(activeButton->isHovered){
 					activeButton->out();
 				}
-			}else if(!activeButton->hovered){
+			}else if(!activeButton->isHovered){
 				activeButton->in();
 			}
 		}else{
-			if(activeButton->hovered){
+			if(activeButton->isHovered){
 				activeButton->out();
 			}
 		}
