@@ -7,7 +7,7 @@
 std::vector<Node *> UI::selectedNodes;
 
 float UI::time;
-float UI::stepScale = 0.1;
+float UI::stepScale = 0.1f;
 Easing::Type UI::interpolation;
 
 ci::Vec3d UI::handlePos = ci::Vec3d(0, 0, 0);

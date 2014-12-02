@@ -85,7 +85,7 @@ void CMD_KeyProperty::unexecute(){
 	executed = false;
 }
 
-float CMD_KeyProperty::getStartValue(int _idx){
+float CMD_KeyProperty::getStartValue(unsigned long int _idx){
 	
 	float value = animation->startValue;
 
@@ -96,7 +96,7 @@ float CMD_KeyProperty::getStartValue(int _idx){
 	return value;
 }
 
-float CMD_KeyProperty::getEndValue(int _idx){
+float CMD_KeyProperty::getEndValue(unsigned long int _idx){
 	float value = animation->startValue;
 
 	for(unsigned long int i = 0; i = _idx; ++i){

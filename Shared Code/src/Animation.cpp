@@ -42,10 +42,10 @@ Animation::Animation(float * const _prop) :
 
 void Animation::update(Step * _step){
 	if(hasStart){
-		time += _step->getDeltaTime();
+		time += (float)_step->getDeltaTime();
 	}
 	if(tweens.size() > 0){
-		currentTime += _step->getDeltaTime();
+		currentTime += (float)_step->getDeltaTime();
 		if(_step->getReverse()){
 			while(currentTime <= 0){
 				currentTime += tweens.at(currentTween)->deltaTime;

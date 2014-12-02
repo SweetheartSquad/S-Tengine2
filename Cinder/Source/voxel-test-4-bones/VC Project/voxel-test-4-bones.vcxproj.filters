@@ -135,12 +135,27 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\CMD_ParentSelectedNodes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Toolbar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ToolSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ToolButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="..\assets\shaders\joint.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\assets\shaders\ui.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\assets\shaders\ui.frag">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
@@ -257,6 +272,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\CMD_ParentSelectedNodes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Toolbar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ToolSet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ToolButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

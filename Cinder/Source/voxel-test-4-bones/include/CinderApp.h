@@ -1,4 +1,5 @@
 #pragma once
+
 #include <cinder\MayaCamUI.h>
 #include <cinder\TriMesh.h>
 #include <cinder\app\AppBasic.h>
@@ -22,6 +23,9 @@
 using namespace ci;
 using namespace ci::app;
 using namespace std;
+
+class ToolBar;
+class ToolButton;
 
 class CinderApp : public AppBasic {
 public:
@@ -47,7 +51,7 @@ public:
 	void renderUI(const Camera & cam, const Rectf & rect);
 
 	// Loads an OBJ file, writes it to a much faster binary file and loads the mesh
-	void loadMesh( const std::string &objFile, const std::string &meshFile, TriMesh *mesh);
+	void loadMesh( const std::string & objFile, const std::string & meshFile, TriMesh * mesh);
 	// Loads the shaders
 	void loadShaders();
 	// Initializes empty single channel fbos
@@ -56,11 +60,10 @@ public:
 	void initMultiChannelFbo(gl::Fbo & _fbo, Area _area, unsigned long int _numChannels);
 
 	// Draws a grid on the floor
-	void drawGrid(float size=100.0f, float step=10.0f);
+	void drawGrid(float size = 100.f, float step = 10.f);
 
-	void newJoint(Vec3d pos, Joint * parent = NULL);
-	Vec3d getCameraCorrectedPos();
-	Vec2d fromRectToRect(Vec2d _p, Rectf _r1, Rectf _r2);
+	Vec3f getCameraCorrectedPos();
+	Vec2f fromRectToRect(Vec2f _p, Rectf _r1, Rectf _r2);
 
 	//Joint * pickJoint(const Vec2i &pos);
 
@@ -107,11 +110,13 @@ public:
 		return b + (g << 8) + (r << 16);
 	};
 
-protected:
+public:
 	//params
 	bool drawParams;
 	params::InterfaceGlRef params;
 	params::InterfaceGlRef timelineParams;
+
+	ToolBar * toolbar;
 
 	string directory;
 	string fileName;
@@ -125,10 +130,7 @@ protected:
 	CameraOrtho camFront;
 
 	gl::GlslProg jointShader;
-
-	//! our little picking framebuffer (non-AA) 
-	//gl::Fbo			mPickingFboVoxel;
-	//gl::Fbo			mPickingFboFace;
+	gl::GlslProg uiShader;
 	
 	// Framebuffers for cameras
 	gl::Fbo fboTop;
@@ -170,13 +172,14 @@ protected:
 	
 	std::vector<Joint *> joints;
 
-
+	ToolButton * activeButton;
 	
 
 	//Vec3i dir;
 	//Vec2i mouseAxis;
 	Vec2i oldMousePos;
 	unsigned long int uiColour;
+	unsigned long int clickedUiColour;
 	const Camera * sourceCam;
 	const Rectf * sourceRect;
 	const Rectf * sourceBounds;

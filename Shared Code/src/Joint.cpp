@@ -138,7 +138,7 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 			gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 
 			//draw voxels
-			float resolution = 0.1;
+			float resolution = 0.1f;
 			for(unsigned long int i = 0; i < voxels.size(); ++i){
 				gl::pushModelView();
 				_matrixStack->pushMatrix();
@@ -166,7 +166,7 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 					
 					for(unsigned long int x = 0; x < 4; ++x){
 						for(unsigned long int y = 0; y < 4; ++y){
-							_matrixStack->currentModelMatrix[x][y] = x == y ? 1 : 0;
+							_matrixStack->currentModelMatrix[x][y] = x == y ? 1.f : 0.f;
 						}
 					}
 
@@ -177,7 +177,7 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 					
 					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 					r->ciShader->uniform("pickingColor", Color::hex(voxels.at(i)->pickingColor));
-					gl::drawCube(Vec3f(0,0,0), Vec3f(resolution*2,resolution*2,resolution*2));
+					gl::drawCube(Vec3f(0.f, 0.f, 0.f), Vec3f(resolution*2,resolution*2,resolution*2));
 
 					/*
 					Transform t;
@@ -202,12 +202,12 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 			r->ciShader->uniform("pickingColor", Color::hex(pickingColor));
 			//draw bones
 			for(NodeHierarchical * child : children){
-				Vec3d cinderTrans(
+				Vec3f cinderTrans(
 					dynamic_cast<NodeTransformable *>(child)->transform->translationVector.x,
 					dynamic_cast<NodeTransformable *>(child)->transform->translationVector.y,
 					dynamic_cast<NodeTransformable *>(child)->transform->translationVector.z
 				);
-				Quatd boneDir(Vec3d(0.0, 1.0, 0.0), cinderTrans);
+				Quatf boneDir(Vec3f(0.0, 1.0, 0.0), cinderTrans);
 				gl::pushMatrices();
 				_matrixStack->pushMatrix();
 					gl::rotate(boneDir);
@@ -223,7 +223,7 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 
 					gl::rotate(Vec3f(0.f, 90.f, 0.f));
 					Transform temp2;
-					temp2.rotate(90, 0, 1, 0);
+					temp2.rotate(90, 0, 1, 0, true);
 					_matrixStack->rotate(temp2.getOrientationMatrix());
 			
 					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);

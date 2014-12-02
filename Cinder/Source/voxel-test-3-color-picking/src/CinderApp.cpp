@@ -167,9 +167,8 @@ void CinderApp::setup()
 	channel = 0;
 }
 
-void CinderApp::shutdown()
-{
-	for(int i = 0; i < voxels.size(); ++i){
+void CinderApp::shutdown(){
+	for(unsigned long int i = 0; i < voxels.size(); ++i){
 		delete voxels.at(i);
 	}
 	voxels.clear();
@@ -275,7 +274,7 @@ void CinderApp::mouseDrag( MouseEvent event )
 				//face is uncertain
 			}
 		}else{
-			pos = Vec3f(mMousePos.x, 0, -mMousePos.y);
+			pos = Vec3f(mMousePos.x, 0.f, -mMousePos.y);
 		}
 		Voxel * t = new Voxel(pos, false);
 		voxels.push_back(t);
@@ -388,7 +387,7 @@ void CinderApp::render()
 					voxelMaterial.setDiffuse(Color::black());
 					voxelMaterial.apply();
 				}
-				gl::drawColorCube(Vec3f(0,0,0), Vec3f(Voxel::resolution*0.9,Voxel::resolution*0.9,Voxel::resolution*0.9));
+				gl::drawColorCube(Vec3f(0.f,0.f,0.f), Vec3f(Voxel::resolution*0.9f,Voxel::resolution*0.9f,Voxel::resolution*0.9f));
 			
 				if(selectedVoxel == voxels.at(i)){
 					voxelMaterial.setDiffuse(Color::white());
@@ -415,15 +414,15 @@ void CinderApp::render()
 			Vec3f cof = mCamera.getCamera().getCenterOfInterestPoint();
 			float scale = mCamera.getCamera().getEyePoint().distance(cof);
 			gl::translate(cof);
-			gl::scale(scale/5, scale/5, scale/5);
+			gl::scale(scale/5.f, scale/5.f, scale/5.f);
 
-			gl::lineWidth(5);
+			gl::lineWidth(5.f);
 			gl::color(0,0,1);
-			gl::drawVector(Vec3f(0,0,0),Vec3f(0,0,1),0.4,0.1);
+			gl::drawVector(Vec3f(0.f, 0.f, 0.f),Vec3f(0.f, 0.f, 1.f), 0.4f, 0.1f);
 			gl::color(0,1,0);
-			gl::drawVector(Vec3f(0,0,0),Vec3f(0,1,0),0.4,0.1);
+			gl::drawVector(Vec3f(0.f, 0.f, 0.f),Vec3f(0.f, 1.f, 0.f), 0.4f, 0.1f);
 			gl::color(1,0,0);
-			gl::drawVector(Vec3f(0,0,0),Vec3f(1,0,0),0.4,0.1);
+			gl::drawVector(Vec3f(0.f, 0.f, 0.f),Vec3f(1.f, 0.f, 0.f), 0.4f, 0.1f);
 		gl::popMatrices();
 	gl::popModelView();
 	mUIFbo.unbindFramebuffer();

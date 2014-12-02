@@ -7,7 +7,7 @@
 #include "NodeTransformable.h"
 #include "Transform.h"
 
-CMD_ScaleSelectedTransformable::CMD_ScaleSelectedTransformable(ci::Vec3d _v) :
+CMD_ScaleSelectedTransformable::CMD_ScaleSelectedTransformable(ci::Vec3f _v) :
 	v(_v)
 {
 }
@@ -25,7 +25,7 @@ void CMD_ScaleSelectedTransformable::unexecute(){
 	for(unsigned long int i = UI::selectedNodes.size(); i > 0; -- i){
 		NodeTransformable * j = dynamic_cast<NodeTransformable *>(UI::selectedNodes.at(i-1));
 		if(j != NULL){
-			j->transform->scale(1/v.x, 1/v.y, 1/v.z);
+			j->transform->scale(1.f/v.x, 1.f/v.y, 1.f/v.z);
 		}
 	}
 }

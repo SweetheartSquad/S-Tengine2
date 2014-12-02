@@ -24,6 +24,10 @@
 #include "MatrixStack.h"
 #include "CinderRenderOptions.h"
 
+#include "ToolBar.h"
+#include "ToolSet.h"
+#include "ToolButton.h"
+
 
 void CinderApp::prepareSettings(Settings *settings){
 	settings->setWindowSize(900, 600);
@@ -31,11 +35,24 @@ void CinderApp::prepareSettings(Settings *settings){
 	settings->setTitle("Picking using multiple targets and color coding");
 }
 
+void changeMode1(CinderApp * _app){
+	_app->mode = CinderApp::UImode::SELECT;
+	_app->params->setOptions("UI Mode", "label=`SELECT`");
+};
+void changeMode2(CinderApp * _app){
+	_app->mode = CinderApp::UImode::TRANSLATE;
+	_app->params->setOptions("UI Mode", "label=`TRANSLATE`");
+};
+
 void CinderApp::setup(){
 	sourceCam = nullptr;
 	sourceRect = nullptr;
 	sourceFbo = nullptr;
 	sourceBounds = nullptr;
+	activeButton = nullptr;
+
+	uiColour = 0;
+	clickedUiColour = 0;
 
 	drawParams = true;
 	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 150, 100 ) ) );
@@ -88,7 +105,7 @@ void CinderApp::setup(){
 	tweens.push_back(new Tween(2, 0.1, Easing::Type::kNONE));
 	tweens.push_back(new Tween(2, -0.5, Easing::Type::kNONE));
 	
-	cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,0,0), nullptr));
+	cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0.f, 0.f, 0.f), nullptr));
 	cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,1,0), joints.at(0)));
 
 	joints.at(0)->translateZ.tweens = tweens;*/
@@ -96,31 +113,40 @@ void CinderApp::setup(){
 
 	play = false;
 	previousTime = 0;
-}
+	
+	toolbar = new ToolBar(Vec2i(5,5));
 
+	toolbar->toolsets.push_back(new ToolSet(Area(0,0,30,30)));
+	toolbar->toolsets.push_back(new ToolSet(Area(0,0,20,20)));
+	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
+	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
+	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
+	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::NORMAL));
+	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::NORMAL));
+	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::TOGGLE));
+	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::TOGGLE));
+	
+	toolbar->toolsets.at(0)->buttons.at(0)->upCallback = changeMode1;
+	toolbar->toolsets.at(0)->buttons.at(1)->upCallback = changeMode2;
+}
 
 void CinderApp::resize(){
 	unsigned int w = max(1, getWindowWidth());
 	unsigned int h = max(1, getWindowHeight());
-	double r = getWindowAspectRatio();
+	float r = getWindowAspectRatio();
 	Area b = getWindowBounds();
 	rectWindow = b;
 	
-	float w2 = w/2;
-	float h2 = h/2;
-	float w3 = w/3;
-	float h3 = h/3;
+	float w2 = w/2.f;
+	float h2 = h/2.f;
+	float w3 = w/3.f;
+	float h3 = h/3.f;
 	
-	rectTop.set(0, 0, w2, h2);
-	rectRight.set(w2, 0, w, h2);
-	rectFront.set(0, h2, w2, h);
-	rectPersp.set(w2, h2, w, h);
-	
-	rectTop.set(0, 0, w3, h3);
-	rectRight.set(w3, 0, w3+w3, h3);
-	rectFront.set(w3+w3, 0, w3+w3+w3, h3);
+	rectTop.set(0.f, 0.f, w3, h3);
+	rectRight.set(w3, 0.f, w3+w3, h3);
+	rectFront.set(w3+w3, 0.f, w3+w3+w3, h3);
 
-	rectPersp.set(0, h3, w, h);
+	rectPersp.set(0.f, h3, w, h);
 	
 	boundsTop.set(	-r,	-1.f,	r,	1.f);
 	boundsRight.set(-r,	-1.f,	r,	1.f);
@@ -132,28 +158,28 @@ void CinderApp::resize(){
 	cam.setPerspective( 60.0f, rectPersp.getAspectRatio(), 0.1f, 10000.0f );
 	camMayaPersp.setCurrentCam( cam );
 
-	camTop.setOrtho(boundsTop.x1, boundsTop.x2, boundsTop.y1, boundsTop.y2, -10000, 10000);
-	camRight.setOrtho(boundsRight.x1, boundsRight.x2, boundsRight.y1, boundsRight.y2, -10000, 10000);
-	camFront.setOrtho(boundsFront.x1, boundsFront.x2, boundsFront.y1, boundsFront.y2, -10000, 10000);
+	camTop.setOrtho(boundsTop.x1, boundsTop.x2, boundsTop.y1, boundsTop.y2, -10000.f, 10000.f);
+	camRight.setOrtho(boundsRight.x1, boundsRight.x2, boundsRight.y1, boundsRight.y2, -10000.f, 10000.f);
+	camFront.setOrtho(boundsFront.x1, boundsFront.x2, boundsFront.y1, boundsFront.y2, -10000.f, 10000.f);
 	
-	/*camTop.setEyePoint(Vec3f(0,0,0));
-	camRight.setEyePoint(Vec3f(0,0,0));
-	camFront.setEyePoint(Vec3f(0,0,0));*/
-	camTop.lookAt(Vec3f(0, 1, 0), Vec3f(0,0,0), Vec3f(1,0,0));
-	camRight.lookAt(Vec3f(1, 0, 0), Vec3f(0,0,0), Vec3f(0,1,0));
-	camFront.lookAt(Vec3f(0, 0, 1), Vec3f(0,0,0), Vec3f(0,1,0));
+	/*camTop.setEyePoint(Vec3f(0.f, 0.f, 0.f));
+	camRight.setEyePoint(Vec3f(0.f, 0.f, 0.f));
+	camFront.setEyePoint(Vec3f(0.f, 0.f, 0.f));*/
+	camTop.lookAt(Vec3f(0.f, 1.f, 0.f), Vec3f(0.f, 0.f, 0.f), Vec3f(1.f, 0.f, 0.f));
+	camRight.lookAt(Vec3f(1.f, 0.f, 0.f), Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 1.f, 0.f));
+	camFront.lookAt(Vec3f(0.f, 0.f, 1.f), Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 1.f, 0.f));
 
-	camTop.setCenterOfInterestPoint(Vec3f(0,0,0));
-	camRight.setCenterOfInterestPoint(Vec3f(0,0,0));
-	camFront.setCenterOfInterestPoint(Vec3f(0,0,0));
+	camTop.setCenterOfInterestPoint(Vec3f(0.f, 0.f, 0.f));
+	camRight.setCenterOfInterestPoint(Vec3f(0.f, 0.f, 0.f));
+	camFront.setCenterOfInterestPoint(Vec3f(0.f, 0.f, 0.f));
 	
-	camTop.setViewDirection(Vec3f(0,-1,0));
-	camRight.setViewDirection(Vec3f(-1,0,0));
-	camFront.setViewDirection(Vec3f(0,0,-1));
+	camTop.setViewDirection(Vec3f(0.f, -1.f, 0.f));
+	camRight.setViewDirection(Vec3f(-1.f, 0.f, 0.f));
+	camFront.setViewDirection(Vec3f(0.f, 0.f, -1.f));
 
 	// create or resize framebuffer if needed
 	if(!fboUI || fboUI.getWidth() != w || fboUI.getHeight() != h){
-		initFbo(&fboUI, b);
+		initMultiChannelFbo(fboUI, b, 2);
 	}
 	
 	if(!fboPersp || fboPersp.getWidth() != rectPersp.getWidth() || fboPersp.getHeight() != rectPersp.getHeight()) {
@@ -174,6 +200,7 @@ void CinderApp::shutdown(){
 	}
 	joints.clear();
 	UI::selectedNodes.clear();
+	delete toolbar;
 }
 
 void CinderApp::update(){
@@ -184,7 +211,7 @@ void CinderApp::update(){
 		for(unsigned long int i = 0; i < joints.size(); ++i){
 			joints.at(i)->update(&s);
 		}
-		UI::time += s.getDeltaTime();
+		UI::time += (float)s.getDeltaTime();
 		previousTime = UI::time;
 	}else{
 		if(UI::time != previousTime){
@@ -196,7 +223,6 @@ void CinderApp::update(){
 			previousTime = UI::time;
 		}
 	}
-
 }
 
 void CinderApp::draw(){
@@ -206,6 +232,7 @@ void CinderApp::draw(){
 	renderScene(fboFront, camFront);
 
 	fboUI.bindFramebuffer();
+		uiShader.bind();
 		// set viewport to the size of the FBO
 		gl::setViewport( fboUI.getBounds() );
 		gl::enableDepthRead();
@@ -220,6 +247,12 @@ void CinderApp::draw(){
 		renderUI(camFront, rectFront);
 
 		gl::setViewport(fboUI.getBounds());
+
+		vox::MatrixStack t;
+		CinderRenderOptions t2(nullptr, nullptr);
+		t2.ciShader = &uiShader;
+		toolbar->render(&t, &t2);
+		uiShader.unbind();
 
 		params->draw();
 		timelineParams->draw();
@@ -252,16 +285,16 @@ void CinderApp::draw(){
 
 	// draw the picking framebuffer in the upper right corner
 	if(mPickingFboJoint){
-		Rectf rct((Rectf)mPickingFboJoint.getBounds() * 5.0f);
-		rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0) );
+		Rectf rct((Rectf)mPickingFboJoint.getBounds() * 5.f);
+		rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0.f) );
 		gl::draw( mPickingFboJoint.getTexture(0), rct );
 		gl::drawStrokedRect(Rectf(rct.x1, rct.y1, rct.x2, rct.y2));
 	}
 
 	// draw the picking framebuffer in the upper right corner
 	if(pickingFboUI){
-		Rectf rct((Rectf)pickingFboUI.getBounds() * 5.0f);
-		rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0) );
+		Rectf rct((Rectf)pickingFboUI.getBounds() * 5.f);
+		rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0.f) );
 		gl::draw( pickingFboUI.getTexture(0), Rectf(rct.x1, rct.y1+rct.y2, rct.x2, rct.y2+rct.y2) );
 		gl::drawStrokedRect(Rectf(rct.x1, rct.y1+rct.y2, rct.x2, rct.y2+rct.y2));
 	}
@@ -270,10 +303,11 @@ void CinderApp::draw(){
 	// draw the picking framebuffer in the upper right corner
 	if(pixelFbo){
 		Rectf rct((Rectf)pixelFbo.getBounds() * 5.0f);
-		rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0) );
+		rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0.f) );
 		gl::draw( pixelFbo.getTexture(0), Rectf(rct.x1, rct.y1+rct.y2+rct.y2, rct.x2, rct.y2+rct.y2+rct.y2) );
 		gl::drawStrokedRect(Rectf(rct.x1, rct.y1+rct.y2+rct.y2, rct.x2, rct.y2+rct.y2+rct.y2));
 	}
+
 	
 }
 
@@ -334,7 +368,7 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 			gl::translate(paintPoints.at(i));
 			
 			glUniformMatrix4fv(jointShader.getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
-			gl::drawSphere(Vec3f(0,0,0), 0.1, 16);
+			gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.1, 16);
 			gl::popMatrices();
 			vox::popMatrix();
 		}*/
@@ -342,7 +376,7 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		// unbind shader
 		jointShader.unbind();
 	
-		//gl::drawColorCube(Vec3f(0,0,0),Vec3f(5,5,5));
+		//gl::drawColorCube(Vec3f(0.f, 0.f, 0.f),Vec3f(5,5,5));
 
 	// restore matrices
 	gl::popMatrices();
@@ -362,20 +396,34 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 
 	gl::setMatrices(cam);
 	
-	gl::color(ColorA(1, 1, 1, 1));
+	gl::color(ColorA(1.f, 1.f, 1.f, 1.f));
+
+	uiShader.uniform("pickingColor", Color(0.f, 0.f, 0.f));
+	if(mode == CREATE){
+		Ray ray = camMayaPersp.getCamera().generateRay((float)mMousePos.x/rectPersp.getWidth(), 1.f-((float)(mMousePos.y-rect.y1)/rectPersp.getHeight()), camMayaPersp.getCamera().getAspectRatio());			
+		float distance = 0.f;
+		if(ray.calcPlaneIntersection(Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 1.f, 0.f), &distance)){
+			Vec3f jointWillGoHere = ray.calcPosition(distance);
+			
+			gl::enableWireframe();
+			gl::drawSphere(jointWillGoHere, 0.06f);
+			gl::disableWireframe();
+		}
+	}
+
 	if(UI::selectedNodes.size() != 0){
 
 		gl::pushMatrices();
 			gl::enableWireframe();
 			for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 				if (i == UI::selectedNodes.size() - 1){
-					gl::color(1, 0.25, 0.1);
+					gl::color(1.f, 0.25f, 0.1f);
 				}
 				Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
 				if(j != NULL){
 					gl::pushMatrices();
 						gl::translate(j->getPos(false));
-						gl::drawSphere(Vec3f(0,0,0), 0.06f);
+						gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.06f);
 					gl::popMatrices();
 				}else{
 					Voxel * v = dynamic_cast<Voxel *>(UI::selectedNodes.at(i));
@@ -398,27 +446,99 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 			}
 
 			if(mode == TRANSLATE){
-				gl::drawCoordinateFrame(0.3, 0.15, 0.03);
-				gl::color(1,1,0);
-				gl::drawSphere(Vec3f(0,0,0), 0.05);
+				// Draw the axes
+				gl::lineWidth((clickedUiColour == 0x0000FF || clickedUiColour == 0) ? 5.f : 2.5f);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0x0000FF || clickedUiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0x0000FF || clickedUiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawVector(Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 0.f, 0.3f), 0.15f, 0.03f);
+				
+				gl::lineWidth((clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? 5.f : 2.5f);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawVector(Vec3f(0.f, 0.f, 0.f), Vec3f(0.3f, 0.f, 0.f), 0.15f, 0.03f);
+				
+				gl::lineWidth((clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? 5.f : 2.5f);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawVector(Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 0.3f, 0.f), 0.15f, 0.03f);
+				
+				uiShader.uniform("pickingColor", (clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.f, 0.f, 0.));
+				gl::color((clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 			}else if(mode == ROTATE){
-				gl::lineWidth(10);
-				gl::color(0,0,1.f);
-				gl::drawStrokedCircle(Vec2f(0,0), 0.3, 32);
-				gl::color(1.f,0,0);
-				gl::scale(0.9,0.9,0.9);
-				gl::rotate(Vec3f(0,90,0));
-				gl::drawStrokedCircle(Vec2f(0,0), 0.3, 32);
-				gl::color(0,1.f,0);
-				gl::scale(0.9,0.9,0.9);
-				gl::rotate(Vec3f(90,0,0));
-				gl::drawStrokedCircle(Vec2f(0,0), 0.3, 32);
-				gl::color(1,1,0);
-				gl::drawSphere(Vec3f(0,0,0), 0.05);
+				// Rotate to match the object orientation
+				Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
+				if(j != NULL){
+					std::vector<glm::quat> rotateStack;
+					while(j != nullptr){
+						rotateStack.push_back(j->transform->orientation);
+						j = (Joint *)j->parent;
+					}
+					while(rotateStack.size() > 0){
+						glm::quat t = rotateStack.at(rotateStack.size()-1);
+						gl::rotate(Quatf(t.w, t.x, t.y, t.z));
+						rotateStack.pop_back();
+					}
+				}
+
+				// Draw the three circles
+				gl::lineWidth((clickedUiColour == 0x0000FF || clickedUiColour == 0) ? 5.f : 2.5f);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0x0000FF || clickedUiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0x0000FF || clickedUiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawStrokedCircle(Vec2f(0.f, 0.f), 0.3f, 32);
+				
+				gl::scale(0.9f, 0.9f, 0.9f);
+				gl::rotate(Vec3f(0.f, 90.f, 0.f));
+				gl::lineWidth((clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? 5.f : 2.5f);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawStrokedCircle(Vec2f(0.f, 0.f), 0.3f, 32);
+
+				gl::scale(0.9f, 0.9f, 0.9f);
+				gl::rotate(Vec3f(90.f, 0.f, 0.f));
+				gl::lineWidth((clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? 5.f : 2.5f);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawStrokedCircle(Vec2f(0.f, 0.f), 0.3f, 32);
+				
+				uiShader.uniform("pickingColor", (clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.f, 0.f, 0.));
+				gl::color((clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 			}else if(mode == SCALE){
-				gl::drawCoordinateFrame(0.3, 0.15, 0.03);
-				gl::color(1,1,0);
-				gl::drawSphere(Vec3f(0,0,0), 0.05);
+				// Rotate to match the object orientation
+				Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
+				if(j != NULL){
+					std::vector<glm::quat> rotateStack;
+					while(j != nullptr){
+						rotateStack.push_back(j->transform->orientation);
+						j = (Joint *)j->parent;
+					}
+					while(rotateStack.size() > 1){
+						glm::quat t = rotateStack.at(rotateStack.size()-1);
+						gl::rotate(Quatf(t.w, t.x, t.y, t.z));
+						rotateStack.pop_back();
+					}
+				}
+
+				// Draw the axes
+				gl::lineWidth((clickedUiColour == 0x0000FF || clickedUiColour == 0) ? 5.f : 2.5f);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0x0000FF || clickedUiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0x0000FF || clickedUiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawVector(Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 0.f, 0.3f), 0.15f, 0.03f);
+				
+				gl::lineWidth((clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? 5.f : 2.5f);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawVector(Vec3f(0.f, 0.f, 0.f), Vec3f(0.3f, 0.f, 0.f), 0.15f, 0.03f);
+				
+				gl::lineWidth((clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? 5.f : 2.5f);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawVector(Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 0.3f, 0.f), 0.15f, 0.03f);
+				
+				uiShader.uniform("pickingColor", (clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.f, 0.f, 0.));
+				gl::color((clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 			}
 
 			gl::lineWidth(1);
@@ -433,6 +553,33 @@ void CinderApp::mouseMove( MouseEvent event ){
 	mMousePos = event.getPos();
 	//pickJoint(mMousePos);
 	//handleUI(mMousePos);
+	if(!event.isLeftDown() && !event.isRightDown()){
+		pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+		if(NodeSelectable::pickingMap.count(uiColour) == 1){
+			ToolButton * newButt = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour));
+			if(activeButton != NULL){
+				if(activeButton != newButt){
+					if(activeButton->isHovered){
+						activeButton->out();
+						
+					}
+				}
+			}
+			activeButton = newButt;
+			if(activeButton != NULL){
+				if(!activeButton->isHovered){
+					activeButton->in();
+				}
+			}
+		}else{
+			if(activeButton != NULL){
+				if(activeButton->isHovered){
+					activeButton->out();
+					activeButton = nullptr;
+				}
+			}
+		}
+	}
 }
 
 void CinderApp::pickColour(void * res, const gl::Fbo * _sourceFbo, const Rectf *  _sourceRect, gl::Fbo * _destFbo, Vec2i _pos, Area _area, unsigned long int _channel, GLenum _type){
@@ -583,20 +730,21 @@ void CinderApp::mouseDown( MouseEvent event ){
 	}
 	
 	// Get the selected UI colour
-	pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 0, GL_UNSIGNED_BYTE);
+	pickColour(&clickedUiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+	uiColour = clickedUiColour;
 
 	if(event.isLeft()){
 		oldMousePos = mMousePos;
 	}
 
-	if(!event.isAltDown()){
+	if(!event.isAltDown() && (clickedUiColour == 0)){
 		if(mode == PAINT_VOXELS){
 			if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
 				if(event.isLeft()){
 					// place voxel
 					Color voxel;
 					pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
-					if(voxel != Color(0,0,0)){
+					if(voxel != Color(0.f, 0.f, 0.f)){
 							cmdProc.executeCommand(new CMD_PlaceVoxel(Vec3f(voxel.r, voxel.g, voxel.b)));
 					}else{
 						console() << "bg" << std::endl;
@@ -629,9 +777,16 @@ void CinderApp::mouseDown( MouseEvent event ){
 				pickColour(&jointColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
 				NodeSelectable * selection = nullptr;
 				if(NodeSelectable::pickingMap.count(jointColour) == 1){
-					selection = dynamic_cast<NodeSelectable *>(NodeSelectable::pickingMap.at(jointColour));
+					selection = NodeSelectable::pickingMap.at(jointColour);
 				}
 				cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
+			}
+		}
+	}else{
+		if(NodeSelectable::pickingMap.count(clickedUiColour) == 1){
+			activeButton = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(clickedUiColour));
+			if(activeButton != NULL){
+				activeButton->down(this);
 			}
 		}
 	}
@@ -647,7 +802,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 		camMayaPersp.mouseDrag( mMousePos, event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
 	}else{
 		if(event.isLeftDown()){
-			if(uiColour != 0){
+			if(clickedUiColour != 0){
 				if(sourceCam != nullptr && sourceRect != nullptr){
 					Vec2f handlePosInScreen = sourceCam->worldToScreen(UI::handlePos, sourceRect->getWidth(), sourceRect->getHeight());
 
@@ -667,7 +822,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 									Vec3f newPos = ray.calcPosition(distance);
 									Vec3f dif = newPos-UI::handlePos;
 
-									switch(uiColour){
+									switch(clickedUiColour){
 										case 0xFF0000: dif.y = 0; dif.z = 0; break;
 										case 0x00FF00: dif.x = 0; dif.z = 0; break;
 										case 0x0000FF: dif.x = 0; dif.y = 0; break;
@@ -679,13 +834,13 @@ void CinderApp::mouseDrag( MouseEvent event ){
 									console() << "handlePos:\t" << UI::handlePos << std::endl;
 									console() << "Move:\t" << dif << std::endl << std::endl;
 
-									cmdProc.executeCommand(new CMD_MoveSelectedJoints(dif, true, CMD_MoveSelectedJoints::MovementMode::OBJECT));
+									cmdProc.executeCommand(new CMD_MoveSelectedJoints(dif, true, false));
 								}
 							}
 						}
 					}else if(mode == ROTATE){
 						glm::vec3 axis(0,0,0);
-						switch(uiColour){
+						switch(clickedUiColour){
 							case 0xFF0000: axis.x -= 1; break;
 							case 0x00FF00: axis.y -= 1; break;
 							case 0x0000FF: axis.z -= 1; break;
@@ -694,8 +849,8 @@ void CinderApp::mouseDrag( MouseEvent event ){
 						if(UI::selectedNodes.size() > 0){
 							Vec2i dif1 = oldMousePos - handlePosInScreen-sourceRect->getUpperLeft();
 							Vec2i dif2 = mMousePos - handlePosInScreen-sourceRect->getUpperLeft();
-							float angle1 = atan2(dif1.y, dif1.x);
-							float angle2 = atan2(dif2.y, dif2.x);
+							float angle1 = atan2f(dif1.y, dif1.x);
+							float angle2 = atan2f(dif2.y, dif2.x);
 							float angle = (angle2 - angle1);
 					
 							console() << angle << std::endl;
@@ -705,13 +860,13 @@ void CinderApp::mouseDrag( MouseEvent event ){
 							eulerAngles.y *= axis.y;
 							eulerAngles.z *= axis.z;
 
-							cmdProc.executeCommand(new CMD_RotateSelectedTransformable(glm::quat(eulerAngles), true));
+							cmdProc.executeCommand(new CMD_RotateSelectedTransformable(glm::quat(eulerAngles), true, true));
 						}
 					}else if(mode == SCALE){
 						if(UI::selectedNodes.size() > 0){
 							//nothing
 							Vec3i dir(0,0,0);
-							switch(uiColour){
+							switch(clickedUiColour){
 								case 0xFF0000: dir.x -= 1; break;
 								case 0x00FF00: dir.y -= 1; break;
 								case 0x0000FF: dir.z -= 1; break;
@@ -724,7 +879,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 							
 							console() << dif << std::endl;
 
-							cmdProc.executeCommand(new CMD_ScaleSelectedTransformable(Vec3f(1,1,1) + Vec3d(dir.x, dir.y, dir.z)*dif/100.f));
+							cmdProc.executeCommand(new CMD_ScaleSelectedTransformable(Vec3f(1.f, 1.f, 1.f) + Vec3f(dir)*dif/100.f));
 						}
 					}
 				}
@@ -732,11 +887,38 @@ void CinderApp::mouseDrag( MouseEvent event ){
 			oldMousePos = mMousePos;
 		}
 	}
+
+	// Get the selected UI colour
+	if(activeButton != NULL){
+		pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+		if(NodeSelectable::pickingMap.count(uiColour) == 1){
+			if(activeButton != dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour))){
+				if(activeButton->isHovered){
+					activeButton->out();
+				}
+			}else if(!activeButton->isHovered){
+				activeButton->in();
+			}
+		}else{
+			if(activeButton->isHovered){
+				activeButton->out();
+			}
+		}
+	}
+
 	UI::updateHandlePos(true);
 }
 
 void CinderApp::mouseUp( MouseEvent event ){
 	UI::updateHandlePos(false);
+	
+	if(activeButton != NULL){
+		activeButton->up(this);
+	}
+	
+
+	uiColour = 0;
+	clickedUiColour = 0;
 }
 
 void CinderApp::keyDown( KeyEvent event ){
@@ -836,6 +1018,7 @@ void CinderApp::keyUp( KeyEvent event ){
 void CinderApp::loadShaders(){
 	try{
 		jointShader = gl::GlslProg( loadFile("../assets/shaders/joint.vert"), loadFile("../assets/shaders/joint.frag") );
+		uiShader = gl::GlslProg( loadFile("../assets/shaders/ui.vert"), loadFile("../assets/shaders/ui.frag") );
 	}catch( const std::exception &e ) {
 		console() << e.what() << std::endl;
 		quit();
@@ -847,9 +1030,7 @@ void CinderApp::initFbo(gl::Fbo * _fbo, Area _area){
 	// make sure the framebuffer is not anti-aliased
 	fmt.setSamples(0);
 	fmt.setCoverageSamples(0);
-	//if(_fbo == pixelFbo){
-		fmt.setColorInternalFormat(GL_RGBA32F);
-	//}
+	fmt.setColorInternalFormat(GL_RGBA32F);
 	// you can omit these lines if you don't intent to display the picking framebuffer
 	fmt.setMagFilter(GL_NEAREST);
 	fmt.setMinFilter(GL_LINEAR);
@@ -869,11 +1050,14 @@ void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area, unsigned long in
 	//  -one for the scene as we will view it
 	//  -one to contain a color coded version of the scene that we can use for picking
 	fmt.enableColorBuffer( true, _numChannels );
-		fmt.setColorInternalFormat(GL_RGBA32F);
+	fmt.setColorInternalFormat(GL_RGBA32F);
 
 	// anti-aliasing samples
 	fmt.setSamples(0);
 	fmt.setCoverageSamples(0);
+	// you can omit these lines if you don't intent to display the picking framebuffer
+	fmt.setMagFilter(GL_NEAREST);
+	fmt.setMinFilter(GL_LINEAR);
 
 	// create the buffer
 	unsigned int w = max(1, _area.getWidth());
@@ -889,45 +1073,47 @@ void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area, unsigned long in
 void CinderApp::drawGrid(float size, float step){
 	gl::color( Colorf(0.2f, 0.2f, 0.2f) );
 	for(float i=-size;i<=size;i+=step) {
-		gl::drawLine( Vec3f(i, 0.0f, -size), Vec3f(i, 0.0f, size) );
-		gl::drawLine( Vec3f(-size, 0.0f, i), Vec3f(size, 0.0f, i) );
+		gl::drawLine( Vec3f(i, 0.f, -size), Vec3f(i, 0.f, size) );
+		gl::drawLine( Vec3f(-size, 0.f, i), Vec3f(size, 0.f, i) );
 	}
 }
 
-Vec2d CinderApp::fromRectToRect(Vec2d _p, Rectf _r1, Rectf _r2){
-	Vec2d res;
+Vec2f CinderApp::fromRectToRect(Vec2f _p, Rectf _r1, Rectf _r2){
+	Vec2f res;
 	res.x = ((_p.x-_r1.x1)/_r1.getWidth())*_r2.getWidth() + _r2.x1;
 	res.y = ((_p.y-_r1.y1)/_r1.getHeight())*_r2.getHeight() + _r2.y1;
 	//console() << _p << std::endl << _r1 << std::endl << _r2 << std::endl << res << std::endl;
 	return res;
 }
 
-Vec3d CinderApp::getCameraCorrectedPos(){
-	Vec3d res;
-	float x = (int)mMousePos.x;
-	float y = (int)mMousePos.y;
+Vec3f CinderApp::getCameraCorrectedPos(){
+	Vec3f res;
+	float x = mMousePos.x;
+	float y = mMousePos.y;
 	if(rectTop.contains(mMousePos)){
-		Vec2d t = fromRectToRect(Vec2f(x, y), rectTop, boundsTop);
+		Vec2f t = fromRectToRect(Vec2f(x, y), rectTop, boundsTop);
 		res.x = t.x;
 		res.y = 0;
 		res.z = t.y;
 	}else if(rectRight.contains(mMousePos)){
 		x = rectRight.x2 - x + rectRight.x1;
 		y = rectRight.y2 - y + rectRight.y1;
-		Vec2d t = fromRectToRect(Vec2f(x, y), rectRight, boundsRight);
+		Vec2f t = fromRectToRect(Vec2f(x, y), rectRight, boundsRight);
 		res.x = 0;
 		res.y = t.y;
 		res.z = t.x;
 	}else if(rectFront.contains(mMousePos)){
 		y = rectFront.y2 - y + rectFront.y1;
-		Vec2d t = fromRectToRect(Vec2f(x, y), rectFront, boundsFront);
+		Vec2f t = fromRectToRect(Vec2f(x, y), rectFront, boundsFront);
 		res.x = t.x;
 		res.y = t.y;
 		res.z = 0;
 	}else if(rectPersp.contains(mMousePos)){
-		res.x = 0;
-		res.y = 0;
-		res.z = 0;
+		Ray ray = camMayaPersp.getCamera().generateRay((float)mMousePos.x/rectPersp.getWidth(), 1.f-((float)(mMousePos.y-rectPersp.y1)/rectPersp.getHeight()), camMayaPersp.getCamera().getAspectRatio());			
+		float distance = 0.f;
+		if(ray.calcPlaneIntersection(Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 1.f, 0.f), &distance)){
+			res = ray.calcPosition(distance);
+		}
 	}
 	return res;
 }

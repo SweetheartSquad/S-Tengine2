@@ -201,8 +201,8 @@ void CinderApp::renderScene(){
 	bb1 += center;
 	bb2 += center;
 
-	float size = 25;
-	float rot = sin(getElapsedSeconds())*2*3.14159;
+	float size = 25.f;
+	float rot = sinf(getElapsedSeconds())*2.f*3.14159f;
 	Vec3f aabb;
 	float r = resolution;
 	for(aabb.x = bb1.x; aabb.x <= bb2.x; aabb.x += r){
@@ -210,7 +210,7 @@ void CinderApp::renderScene(){
 			for(aabb.z = bb1.z; aabb.z <= bb2.z; aabb.z += r){
 				if(pointInObj(aabb, center, size, rot)){
 					gl::enableDepthRead();
-					gl::drawColorCube(aabb, Vec3f(r*0.9, r*0.9, r*0.9));
+					gl::drawColorCube(aabb, Vec3f(r*0.9f, r*0.9f, r*0.9f));
 				}
 			}
 		}

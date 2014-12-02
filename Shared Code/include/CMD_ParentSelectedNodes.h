@@ -10,5 +10,5 @@ public:
 	void execute();
 	void unexecute();
 
-	bool executed = false;
+	bool executed;
 };

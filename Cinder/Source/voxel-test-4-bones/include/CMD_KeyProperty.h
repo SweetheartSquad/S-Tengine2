@@ -40,6 +40,6 @@ private:
 
 	int findKeyframe(std::vector<Tween *> * _tweens);
 
-	float getStartValue(int _idx);
-	float getEndValue(int _idx);
+	float getStartValue(unsigned long int _idx);
+	float getEndValue(unsigned long int _idx);
 };

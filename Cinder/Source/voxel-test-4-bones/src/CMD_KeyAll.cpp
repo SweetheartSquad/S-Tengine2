@@ -20,7 +20,6 @@ void CMD_KeyAll::execute(){
 	// Add keyframe to node's animation objects
 	if(subCommands.size() == 0){
 
-		int prev;
 		//Loop through selected nodes
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 			NodeAnimatable * _node = dynamic_cast<NodeAnimatable *>(UI::selectedNodes.at(i));
