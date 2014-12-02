@@ -189,7 +189,7 @@
                         "tweens": [
                            {
                               "id": 0,
-                              "deltaTime": 5,
+                              "deltaTime": 1,
                               "deltaValue": 0,
                               "interpolation": 0
                            }
@@ -201,7 +201,7 @@
                         "tweens": [
                            {
                               "id": 0,
-                              "deltaTime": 5,
+                              "deltaTime": 1,
                               "deltaValue": 0,
                               "interpolation": 0
                            }
@@ -213,7 +213,7 @@
                         "tweens": [
                            {
                               "id": 0,
-                              "deltaTime": 5,
+                              "deltaTime": 1,
                               "deltaValue": -2.81566,
                               "interpolation": 0
                            }
@@ -225,7 +225,7 @@
                         "tweens": [
                            {
                               "id": 0,
-                              "deltaTime": 5,
+                              "deltaTime": 1,
                               "deltaValue": -0.982924,
                               "interpolation": 0
                            }
@@ -237,7 +237,7 @@
                         "tweens": [
                            {
                               "id": 0,
-                              "deltaTime": 5,
+                              "deltaTime": 1,
                               "deltaValue": 0,
                               "interpolation": 0
                            }
@@ -249,7 +249,7 @@
                         "tweens": [
                            {
                               "id": 0,
-                              "deltaTime": 5,
+                              "deltaTime": 1,
                               "deltaValue": 0,
                               "interpolation": 0
                            }
@@ -261,7 +261,7 @@
                         "tweens": [
                            {
                               "id": 0,
-                              "deltaTime": 5,
+                              "deltaTime": 1,
                               "deltaValue": -1.18401,
                               "interpolation": 0
                            }
@@ -273,7 +273,7 @@
                         "tweens": [
                            {
                               "id": 0,
-                              "deltaTime": 5,
+                              "deltaTime": 1,
                               "deltaValue": -0.238204,
                               "interpolation": 0
                            }
@@ -285,7 +285,7 @@
                         "tweens": [
                            {
                               "id": 0,
-                              "deltaTime": 5,
+                              "deltaTime": 1,
                               "deltaValue": -0.24694,
                               "interpolation": 0
                            }
@@ -297,7 +297,7 @@
                         "tweens": [
                            {
                               "id": 0,
-                              "deltaTime": 5,
+                              "deltaTime": 1,
                               "deltaValue": -0.227422,
                               "interpolation": 0
                            }

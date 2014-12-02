@@ -43,4 +43,6 @@ public:
 	void unload();
 	/** Loads and cleans mesh, configures default vertex attributes, deletes and reloads shader, and calls unload on all children (recursive) */
 	void reset();
+
+	void updateAnimation(Step * step);
 };

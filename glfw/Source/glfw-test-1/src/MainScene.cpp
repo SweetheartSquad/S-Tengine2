@@ -49,7 +49,7 @@ Transform * t;
 
 BaseShader * baseShader;
 
-
+VoxelJoint * voxelJoint;
 MainScene::MainScene(Game * _game):
 	Scene(game)
 {
@@ -182,11 +182,11 @@ MainScene::MainScene(Game * _game):
 	cat->transform->scale(0.9f, 0.9f, 0.9f);
 	//addChild(cat);
 
-	VoxelJoint * voxelJoint = Resource::loadVoxelModel("../assets/testJson2.json");
+	voxelJoint = Resource::loadVoxelModel("../assets/testJson2.json");
 	voxelJoint->setShader(baseShader, true);
 	voxelJoint->setShaderOnChildren(voxShader);
 
-	cube->addChild(voxelJoint); 
+	addChild(voxelJoint); 
 
 	//voxelJoint->transform->scale(0.1, 0.1, 0.1);
 }
@@ -199,6 +199,7 @@ void MainScene::update(){
 
 	//tLight->transform->translateX(sinf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
 	//tLight->transform->translateZ(cosf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
+	voxelJoint->updateAnimation(vox::calculateDeltaTimeCorrection());
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		toggleFullScreen();

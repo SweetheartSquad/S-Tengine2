@@ -11,7 +11,6 @@
 #include "Mouse.h"
 
 
-
 double vox::lastTimestamp = 0;
 double vox::deltaTimeCorrection = 1;
 
@@ -105,17 +104,19 @@ void vox::destruct(){
 }
 
 /////////// Delta Time Begin //////////////
-void vox::calculateDeltaTimeCorrection(){
+Step * vox::calculateDeltaTimeCorrection(){
 	double targetFrameDuration = static_cast<double>(1) / FPS;
 	double time = glfwGetTime();
 	double deltaTime = time - lastTimestamp;
-	deltaTimeCorrection = deltaTime/targetFrameDuration ;
+	deltaTimeCorrection = deltaTime/targetFrameDuration;
 	lastTimestamp = time;
 
-	step.targetFrameDuration = targetFrameDuration;
-	step.time = time;
-	step.setDeltaTime(deltaTime);
-	step.deltaTimeCorrection = deltaTimeCorrection;
-	step.lastTimestamp = lastTimestamp;
+	Step * step = new Step();
+	step->targetFrameDuration = targetFrameDuration;
+	step->time = time;
+	step->setDeltaTime(deltaTimeCorrection);
+	step->deltaTimeCorrection = deltaTimeCorrection;
+	step->lastTimestamp = lastTimestamp;
+	return step;
 }
 

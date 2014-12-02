@@ -114,3 +114,10 @@ void Entity::reset(){
 		}
 	}
 }
+
+void Entity::updateAnimation(Step* step){
+	NodeAnimatable::update(step);
+	for(int i = 0; i < children.size(); i++){
+		dynamic_cast<Entity *>(children.at(i))->updateAnimation(step);
+	}
+}
