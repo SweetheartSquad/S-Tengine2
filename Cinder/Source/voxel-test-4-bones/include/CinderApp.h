@@ -180,6 +180,7 @@ public:
 	//Vec2i mouseAxis;
 	Vec2i oldMousePos;
 	unsigned long int uiColour;
+	unsigned long int clickedUiColour;
 	const Camera * sourceCam;
 	const Rectf * sourceRect;
 	const Rectf * sourceBounds;

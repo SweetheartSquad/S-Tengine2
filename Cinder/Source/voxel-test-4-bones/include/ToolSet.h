@@ -11,6 +11,7 @@ class Step;
 class ToolSet : public NodeRenderable{
 public:
 	ToolSet(ci::Rectf _iconSize);
+	~ToolSet();
 
 	ci::Rectf iconSize;
 	std::vector<ToolButton *> buttons;

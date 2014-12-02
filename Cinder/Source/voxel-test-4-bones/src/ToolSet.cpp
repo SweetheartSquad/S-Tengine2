@@ -28,3 +28,10 @@ void ToolSet::addButton(ToolButton * _button){
 	buttons.push_back(_button);
 	_button->group = this;
 }
+
+ToolSet::~ToolSet(){
+	while(buttons.size() > 0){
+		delete buttons.at(buttons.size()-1);
+		buttons.pop_back();
+	}
+}

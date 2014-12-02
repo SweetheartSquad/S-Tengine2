@@ -22,3 +22,10 @@ void ToolBar::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderSta
 		}
 	ci::gl::popMatrices();
 }
+
+ToolBar::~ToolBar(){
+	while(toolsets.size() > 0){
+		delete toolsets.at(toolsets.size()-1);
+		toolsets.pop_back();
+	}
+}

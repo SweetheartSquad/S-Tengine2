@@ -7,6 +7,7 @@ std::map<_Uint32t, NodeSelectable *> NodeSelectable::pickingMap;
 
 std::vector<_Uint32t> NodeSelectable::reserved = [] {
     std::vector<_Uint32t> v; 
+    v.push_back(0xFFFFFF);
     v.push_back(0xFFFF00);
     v.push_back(0xFF0000);
     v.push_back(0x00FF00); 

@@ -51,6 +51,9 @@ void CinderApp::setup(){
 	sourceBounds = nullptr;
 	activeButton = nullptr;
 
+	uiColour = 0;
+	clickedUiColour = 0;
+
 	drawParams = true;
 	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 150, 100 ) ) );
 	params->addText( "UI Mode", "label=`CREATE`" );
@@ -202,6 +205,7 @@ void CinderApp::shutdown(){
 	}
 	joints.clear();
 	UI::selectedNodes.clear();
+	delete toolbar;
 }
 
 void CinderApp::update(){
@@ -445,23 +449,23 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 
 			if(mode == TRANSLATE){
 				// Draw the axes
-				gl::lineWidth((uiColour == 0x0000FF || uiColour == 0) ? 5 : 2.5);
-				uiShader.uniform("pickingColor", (uiColour == 0x0000FF || uiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.f, 0.f, 0.f));
-				gl::color((uiColour == 0x0000FF || uiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::lineWidth((clickedUiColour == 0x0000FF || clickedUiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0x0000FF || clickedUiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0x0000FF || clickedUiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawVector(Vec3f(0,0,0), Vec3f(0,0,0.3), 0.15, 0.03);
 				
-				gl::lineWidth((uiColour == 0xFF0000 || uiColour == 0) ? 5 : 2.5);
-				uiShader.uniform("pickingColor", (uiColour == 0xFF0000 || uiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.f, 0.f, 0.f));
-				gl::color((uiColour == 0xFF0000 || uiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::lineWidth((clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawVector(Vec3f(0,0,0), Vec3f(0.3,0,0), 0.15, 0.03);
 				
-				gl::lineWidth((uiColour == 0x00FF00 || uiColour == 0) ? 5 : 2.5);
-				uiShader.uniform("pickingColor", (uiColour == 0x00FF00 || uiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.f, 0.f, 0.f));
-				gl::color((uiColour == 0x00FF00 || uiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::lineWidth((clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawVector(Vec3f(0,0,0), Vec3f(0,0.3,0), 0.15, 0.03);
 				
-				uiShader.uniform("pickingColor", Color(1.f,1.f,0.f));
-				gl::color((uiColour == 0xFFFF00 || uiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				uiShader.uniform("pickingColor", (clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.f, 0.f, 0.));
+				gl::color((clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawSphere(Vec3f(0,0,0), 0.05);
 			}else if(mode == ROTATE){
 				// Rotate to match the object orientation
@@ -480,27 +484,27 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				}
 
 				// Draw the three circles
-				gl::lineWidth((uiColour == 0x0000FF || uiColour == 0) ? 5 : 2.5);
-				uiShader.uniform("pickingColor", (uiColour == 0x0000FF || uiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.f, 0.f, 0.f));
-				gl::color((uiColour == 0x0000FF || uiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::lineWidth((clickedUiColour == 0x0000FF || clickedUiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0x0000FF || clickedUiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0x0000FF || clickedUiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawStrokedCircle(Vec2f(0,0), 0.3, 32);
 
 				gl::scale(0.9,0.9,0.9);
 				gl::rotate(Vec3f(0,90,0));
-				gl::lineWidth((uiColour == 0xFF0000 || uiColour == 0) ? 5 : 2.5);
-				uiShader.uniform("pickingColor", (uiColour == 0xFF0000 || uiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.f, 0.f, 0.f));
-				gl::color((uiColour == 0xFF0000 || uiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::lineWidth((clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawStrokedCircle(Vec2f(0,0), 0.3, 32);
 
 				gl::scale(0.9,0.9,0.9);
 				gl::rotate(Vec3f(90,0,0));
-				gl::lineWidth((uiColour == 0x00FF00 || uiColour == 0) ? 5 : 2.5);
-				uiShader.uniform("pickingColor", (uiColour == 0x00FF00 || uiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.f, 0.f, 0.f));
-				gl::color((uiColour == 0x00FF00 || uiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::lineWidth((clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawStrokedCircle(Vec2f(0,0), 0.3, 32);
-
-				uiShader.uniform("pickingColor", Color(1.f,1.f,0.f));
-				gl::color((uiColour == 0xFFFF00 || uiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				
+				uiShader.uniform("pickingColor", (clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.f, 0.f, 0.));
+				gl::color((clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawSphere(Vec3f(0,0,0), 0.05);
 			}else if(mode == SCALE){
 				// Rotate to match the object orientation
@@ -519,23 +523,23 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				}
 
 				// Draw the axes
-				gl::lineWidth((uiColour == 0x0000FF || uiColour == 0) ? 5 : 2.5);
-				uiShader.uniform("pickingColor", (uiColour == 0x0000FF || uiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.f, 0.f, 0.f));
-				gl::color((uiColour == 0x0000FF || uiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::lineWidth((clickedUiColour == 0x0000FF || clickedUiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0x0000FF || clickedUiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0x0000FF || clickedUiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawVector(Vec3f(0,0,0), Vec3f(0,0,0.3), 0.15, 0.03);
 				
-				gl::lineWidth((uiColour == 0xFF0000 || uiColour == 0) ? 5 : 2.5);
-				uiShader.uniform("pickingColor", (uiColour == 0xFF0000 || uiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.f, 0.f, 0.f));
-				gl::color((uiColour == 0xFF0000 || uiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::lineWidth((clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0xFF0000 || clickedUiColour == 0) ? Color(1.f, 0.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawVector(Vec3f(0,0,0), Vec3f(0.3,0,0), 0.15, 0.03);
 				
-				gl::lineWidth((uiColour == 0x00FF00 || uiColour == 0) ? 5 : 2.5);
-				uiShader.uniform("pickingColor", (uiColour == 0x00FF00 || uiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.f, 0.f, 0.f));
-				gl::color((uiColour == 0x00FF00 || uiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				gl::lineWidth((clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? 5 : 2.5);
+				uiShader.uniform("pickingColor", (clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.f, 0.f, 0.f));
+				gl::color((clickedUiColour == 0x00FF00 || clickedUiColour == 0) ? Color(0.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawVector(Vec3f(0,0,0), Vec3f(0,0.3,0), 0.15, 0.03);
 				
-				uiShader.uniform("pickingColor", Color(1.f,1.f,0.f));
-				gl::color((uiColour == 0xFFFF00 || uiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
+				uiShader.uniform("pickingColor", (clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.f, 0.f, 0.));
+				gl::color((clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawSphere(Vec3f(0,0,0), 0.05);
 			}
 
@@ -551,6 +555,38 @@ void CinderApp::mouseMove( MouseEvent event ){
 	mMousePos = event.getPos();
 	//pickJoint(mMousePos);
 	//handleUI(mMousePos);
+
+	pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+	if(NodeSelectable::pickingMap.count(uiColour) == 1){
+		ToolButton * newButt = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour));
+		if(activeButton != NULL){
+			if(activeButton != newButt){
+				if(activeButton->hovered){
+					activeButton->out();
+					activeButton = newButt;
+					if(activeButton != NULL){
+						if(!activeButton->hovered){
+							activeButton->in();
+						}
+					}
+				}
+			}
+		}else{
+			activeButton = newButt;
+			if(activeButton != NULL){
+				if(!activeButton->hovered){
+					activeButton->in();
+				}
+			}
+		}
+	}else{
+		if(activeButton != NULL){
+			if(activeButton->hovered){
+				activeButton->out();
+				activeButton = nullptr;
+			}
+		}
+	}
 }
 
 void CinderApp::pickColour(void * res, const gl::Fbo * _sourceFbo, const Rectf *  _sourceRect, gl::Fbo * _destFbo, Vec2i _pos, Area _area, unsigned long int _channel, GLenum _type){
@@ -701,7 +737,8 @@ void CinderApp::mouseDown( MouseEvent event ){
 	}
 	
 	// Get the selected UI colour
-	pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+	pickColour(&clickedUiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+	uiColour = clickedUiColour;
 
 	if(event.isLeft()){
 		oldMousePos = mMousePos;
@@ -792,7 +829,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 									Vec3f newPos = ray.calcPosition(distance);
 									Vec3f dif = newPos-UI::handlePos;
 
-									switch(uiColour){
+									switch(clickedUiColour){
 										case 0xFF0000: dif.y = 0; dif.z = 0; break;
 										case 0x00FF00: dif.x = 0; dif.z = 0; break;
 										case 0x0000FF: dif.x = 0; dif.y = 0; break;
@@ -810,7 +847,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 						}
 					}else if(mode == ROTATE){
 						glm::vec3 axis(0,0,0);
-						switch(uiColour){
+						switch(clickedUiColour){
 							case 0xFF0000: axis.x -= 1; break;
 							case 0x00FF00: axis.y -= 1; break;
 							case 0x0000FF: axis.z -= 1; break;
@@ -836,7 +873,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 						if(UI::selectedNodes.size() > 0){
 							//nothing
 							Vec3i dir(0,0,0);
-							switch(uiColour){
+							switch(clickedUiColour){
 								case 0xFF0000: dir.x -= 1; break;
 								case 0x00FF00: dir.y -= 1; break;
 								case 0x0000FF: dir.z -= 1; break;
@@ -888,6 +925,7 @@ void CinderApp::mouseUp( MouseEvent event ){
 	
 
 	uiColour = 0;
+	clickedUiColour = 0;
 }
 
 void CinderApp::keyDown( KeyEvent event ){

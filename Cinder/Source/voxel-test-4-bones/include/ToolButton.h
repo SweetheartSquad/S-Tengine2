@@ -23,7 +23,7 @@ public:
 	} type;
 
 	ToolSet * group;
-
+	
 	ToolButton(Type _type);
 
 	bool hovered;

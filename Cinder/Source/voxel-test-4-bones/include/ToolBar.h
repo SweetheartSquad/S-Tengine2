@@ -14,7 +14,8 @@ public:
 	std::vector<ToolSet *> toolsets;
 	
 	ci::Vec2i pos;
-
+	
 	ToolBar(ci::Vec2i _pos);
+	~ToolBar();
 	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;	
 };

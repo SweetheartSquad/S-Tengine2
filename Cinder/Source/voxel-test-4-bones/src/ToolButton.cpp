@@ -65,6 +65,6 @@ void ToolButton::out(){
 
 void ToolButton::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	((CinderRenderOptions *)_renderStack)->ciShader->uniform("pickingColor", ci::Color::hex(pickingColor));
-	ci::gl::color(active && hovered ? displayColor-ci::Color(0.2f,0.2f,0.2f) : displayColor);
+	ci::gl::color(displayColor + (active ? -1 : 1) * (hovered ? ci::Color(0.2f,0.2f,0.2f) : ci::Color(0.f,0.f,0.f)));
 	ci::gl::drawSolidRect(ci::Rectf(0,0,1,1));
 }
