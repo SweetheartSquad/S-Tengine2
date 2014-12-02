@@ -35,6 +35,7 @@ Material * bMat;
 
 Shader * texShader;
 Shader * phongShader;
+Shader * blinnShader;
 Shader * voxShader;
 
 Light *tLight;
@@ -63,6 +64,7 @@ MainScene::MainScene(Game * _game):
 	texShader = new Shader("../assets/diffuse", false, true);
 
 	phongShader = new Shader("../assets/phong", false, true);
+	blinnShader = new Shader("../assets/blinn", false, true);
 
 	voxShader = new Shader("../assets/voxel", true, true);
 
@@ -75,8 +77,8 @@ MainScene::MainScene(Game * _game):
 	baseShader->components.push_back(new ShadowShaderComponent());
 	baseShader->compileShader();
 
-	mat = new Material(PHONG, 10.0, glm::vec3(1.0f, 1.0f, 1.0f), true);
-	bMat = new Material(BLINN, 80.0, glm::vec3(1.0f, 1.0f, 1.0f), true);
+	mat = new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true);
+	bMat = new Material(10.0, glm::vec3(0.5f, 0.1f, 0.9f), true);
 
 	t = new Transform();
 	t->translateX(-2);
@@ -88,6 +90,17 @@ MainScene::MainScene(Game * _game):
 	cube->mesh->vertices.at(3).y += 1.5;
 	cube->mesh->vertices.at(0).y += 1.5;
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
+
+	for(unsigned long int i = 0; i < 0; ++i){
+		Entity * loaded = new Entity(new VoxelMesh(Resource::loadMeshFromObj("../assets/cube.vox")), t, voxShader);
+		loaded->mesh->polygonalDrawMode = GL_POINTS;
+		cube->addChild(loaded);
+		//loaded->mesh->pushTexture2D(tex);
+	}
+
+	Entity * loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, phongShader);
+	cube->addChild(loaded1);
+	loaded1->mesh->pushMaterial(mat);
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->setShader(texShader, true);
@@ -114,18 +127,6 @@ MainScene::MainScene(Game * _game):
 	cube4->transform->translateY(-2);
 	cube4->mesh->pushTexture2D(tex);
 
-	for(unsigned long int i = 0; i < 1; ++i){
-		Entity * loaded = new Entity(new VoxelMesh(Resource::loadMeshFromObj("../assets/cube.vox")), t, voxShader);
-		loaded->mesh->polygonalDrawMode = GL_POINTS;
-		//cube->addChild(loaded);
-		loaded->mesh->pushTexture2D(tex);
-		loaded->mesh->pushMaterial(mat);
-	}
-
-	loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxShader);
-	//loaded1->mesh->pushTexture2D(tex);
-	//cube->addChild(loaded1);
-
 	cube->mesh->dirty = true;
 	cube2->mesh->dirty = true;
 	cube3->mesh->dirty = true;
@@ -134,13 +135,13 @@ MainScene::MainScene(Game * _game):
 
 	tLight = new Light();
 	tLight->data.position = glm::vec3(-3.f, 1.5f, 1.f);
-	tLight->data.intensities = glm::vec3(0.5f, 0.7f, 0.5f);
+	tLight->data.intensities = glm::vec3(0.5f, 0.5f, 0.5f);
 	tLight->data.attenuation = 0.2f;
-	tLight->data.ambientCoefficient = 0.005f;
+	tLight->data.ambientCoefficient = 0.00f;
 
 	Light * tLight2 = new Light();
 	tLight2->data.position = glm::vec3(1.f, -1.5, 1.f);
-	tLight2->data.intensities = glm::vec3(1.7f, 1.5f, 1.5f);
+	tLight2->data.intensities = glm::vec3(0.5f, 0.5f, 0.5f);
 	tLight2->data.attenuation = 0.2f;
 	tLight2->data.ambientCoefficient = 0.005f;
 
@@ -247,6 +248,13 @@ void MainScene::update(){
 	// Strafe left
 	if (keyboard->keyDown(GLFW_KEY_LEFT)){
 		camera->transform->translate((camera->rightVectorRotated) * -camera->speed);
+	}
+	//shininess
+	if (keyboard->keyDown(GLFW_KEY_O)){
+		mat->data.shininess++;
+	}
+	if (keyboard->keyDown(GLFW_KEY_L)){
+		mat->data.shininess--;
 	}
 }
 

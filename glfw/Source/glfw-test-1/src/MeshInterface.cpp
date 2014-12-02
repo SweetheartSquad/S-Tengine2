@@ -188,13 +188,10 @@ void MeshInterface::configureLights(vox::MatrixStack * _matrixStack, RenderOptio
 
 	// Pass each material to the _shader
 	for(unsigned long int i = 0; i < materials.size(); i++){
-		std::string mat = GLUtils::buildGLArrayReferenceString("materials[].materialType", i);
 		std::string shin = GLUtils::buildGLArrayReferenceString("materials[].shininess", i);
 		std::string spec = GLUtils::buildGLArrayReferenceString("materials[].specularColor", i);
-		GLuint typeUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), mat.c_str());
-		int materialType = static_cast<int>(materials.at(i)->data.type);
-		glUniform1i(typeUniformLocation, materialType);
 		GLuint shinyUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), shin.c_str());
+
 		int materialShininess = materials.at(i)->data.shininess;
 		glUniform1f(shinyUniformLocation, materialShininess);
 		GLuint specColorUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), spec.c_str());
@@ -222,14 +219,6 @@ void MeshInterface::configureLights(vox::MatrixStack * _matrixStack, RenderOptio
 	// Pass the _shader the number of lights & materials
 	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(),	GL_UNIFORM_ID_NUM_LIGHTS.c_str()), _renderOption->lights->size());
 	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_MATERIALS.c_str()), materials.size());
-
-	// Pass each material to the _shader
-	for(unsigned long int i = 0; i < materials.size(); i++){
-		const char * mat = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_MATERIAL_TYPE, i).c_str();
-		GLuint materialUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), mat);
-		int materialType = static_cast<int>(materials.at(i)->data.type);
-		glUniform1f(materialUniformLocation, materialType);
-	}
 
 	//Pass the paramaters for each light to the _shader
 	for(unsigned long int i = 0; i < _renderOption->lights->size(); i++){

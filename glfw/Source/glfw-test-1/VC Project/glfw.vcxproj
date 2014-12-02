@@ -214,6 +214,8 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\VoxelMesh.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\assets\blinn.frag" />
+    <None Include="..\assets\blinn.vert" />
     <None Include="..\assets\ColourShader.frag" />
     <None Include="..\assets\ColourShader.vert" />
     <None Include="..\assets\DepthMapShader.frag" />
