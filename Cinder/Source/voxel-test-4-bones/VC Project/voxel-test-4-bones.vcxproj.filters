@@ -283,5 +283,8 @@
     <ClInclude Include="..\include\ToolButton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\CinderRenderOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

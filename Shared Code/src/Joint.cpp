@@ -138,7 +138,7 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 			gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 
 			//draw voxels
-			float resolution = 0.1f;
+			float resolution = ((CinderRenderOptions *)_renderStack)->voxelPreviewResolution;
 			for(unsigned long int i = 0; i < voxels.size(); ++i){
 				gl::pushModelView();
 				_matrixStack->pushMatrix();
@@ -147,22 +147,18 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 					glm::vec4 voxelPos(voxels.at(i)->pos.x, voxels.at(i)->pos.y, voxels.at(i)->pos.z, 1);
 					
 					glm::vec4 pos = _matrixStack->getCurrentMatrix() * voxelPos;
-					glm::vec4 posDif
-						(
-							fmod(pos.x, resolution),
-							fmod(pos.y, resolution),
-							fmod(pos.z, resolution),
-							0
-						);
-					glm::vec4 finalPos = pos - posDif;
 
-					/*posDif.w = 1;
-					glm::vec4 posDif2 = glm::inverse(_matrixStack->getCurrentMatrix()) * posDif;
-					
-					posDif2.w = 0;
-					voxelPos = voxelPos - posDif2;*/
 
-					/*glm::vec4 finalPos2 = glm::inverse(_matrixStack->getCurrentMatrix()) * finalPos;*/
+					if(((CinderRenderOptions *)_renderStack)->voxelPreviewMode){
+						glm::vec4 posDif
+							(
+								fmod(pos.x, resolution),
+								fmod(pos.y, resolution),
+								fmod(pos.z, resolution),
+								0
+							);
+						pos -= posDif;
+					}
 					
 					for(unsigned long int x = 0; x < 4; ++x){
 						for(unsigned long int y = 0; y < 4; ++y){
@@ -171,13 +167,18 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 					}
 
 					Transform t;
-					t.translate(finalPos.x, finalPos.y, finalPos.z);
-					gl::translate(finalPos.x, finalPos.y, finalPos.z);
+					t.translate(pos.x, pos.y, pos.z);
+					gl::translate(pos.x, pos.y, pos.z);
 					_matrixStack->translate(t.getTranslationMatrix());
 					
 					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 					r->ciShader->uniform("pickingColor", Color::hex(voxels.at(i)->pickingColor));
-					gl::drawCube(Vec3f(0.f, 0.f, 0.f), Vec3f(resolution*2,resolution*2,resolution*2));
+					
+					if(((CinderRenderOptions *)_renderStack)->voxelPreviewMode){
+						gl::drawCube(Vec3f(0.f, 0.f, 0.f), Vec3f(resolution*2,resolution*2,resolution*2));
+					}else{
+						gl::drawSphere(Vec3f(0.f, 0.f, 0.f), ((CinderRenderOptions *)_renderStack)->voxelSphereRadius);
+					}
 
 					/*
 					Transform t;

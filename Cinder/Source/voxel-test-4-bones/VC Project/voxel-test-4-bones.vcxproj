@@ -171,6 +171,7 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\Voxel.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\VoxMatrices.h" />
     <ClInclude Include="..\include\CinderApp.h" />
+    <ClInclude Include="..\include\CinderRenderOptions.h" />
     <ClInclude Include="..\include\CMD_AddTween.h" />
     <ClInclude Include="..\include\CMD_CreateJoint.h" />
     <ClInclude Include="..\include\CMD_DeleteJoint.h" />

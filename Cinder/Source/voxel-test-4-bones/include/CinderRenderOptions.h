@@ -22,4 +22,11 @@ public:
 
 	const ci::Camera * ciCam;
 	ci::gl::GlslProg * ciShader;
+
+	// Whether to draw the voxels as voxels
+	bool voxelPreviewMode;
+	// Grid resolution for voxel preview
+	float voxelPreviewResolution;
+	// Sphere radius for voxel placing
+	float voxelSphereRadius;
 };

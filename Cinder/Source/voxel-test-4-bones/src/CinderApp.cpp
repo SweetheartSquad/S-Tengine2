@@ -55,7 +55,7 @@ void CinderApp::setup(){
 	clickedUiColour = 0;
 
 	drawParams = true;
-	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 150, 100 ) ) );
+	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 175, 200 ) ), ColorA(0.6f, 0.3f, 0.3f, 0.4f));
 	params->addText( "UI Mode", "label=`CREATE`" );
 
 	params->addSeparator();
@@ -69,7 +69,7 @@ void CinderApp::setup(){
 	params->addSeparator();
 	params->addParam("Message", &message, "", true);
 
-	timelineParams = params::InterfaceGl::create( getWindow(), "Animation", toPixels( Vec2i(180,150) ));
+	timelineParams = params::InterfaceGl::create( getWindow(), "Animation", toPixels(Vec2i(175,125)), ColorA(0.3f, 0.6f, 0.3f, 0.4f));
 	timelineParams->minimize();
 	timelineParams->addParam("Time", &UI::time);
 
@@ -78,7 +78,19 @@ void CinderApp::setup(){
 	timelineParams->addSeparator();
 	timelineParams->addButton("togglePlay", std::bind(&CinderApp::togglePlay, this));
 	timelineParams->addText("Status: ", "label=`STOPPED`");
+	timelineParams->maximize();
 	
+
+	voxelPreviewMode = false;
+	voxelPreviewResolution = 0.1;
+	voxelSphereRadius = 0.1;
+
+	voxelParams = params::InterfaceGl::create(getWindow(), "Voxel", toPixels(Vec2i(180,150)), ColorA(0.3f, 0.3f, 0.6f, 0.4f));
+	voxelParams->addParam("Preview", &voxelPreviewMode);
+	voxelParams->addParam("Resolution", &voxelPreviewResolution, "min=0.01, step=0.01");
+	voxelParams->addParam("Radius", &voxelSphereRadius, "min=0.01, step=0.01");
+	voxelParams->maximize();
+
 
 	// note: we will setup our camera in the 'resize' function,
 	//  because it is called anyway so we don't have to set it up twice
@@ -256,6 +268,7 @@ void CinderApp::draw(){
 
 		params->draw();
 		timelineParams->draw();
+		voxelParams->draw();
 		
 		gl::disableAlphaBlending();
 		gl::disableDepthRead();
@@ -353,6 +366,9 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		CinderRenderOptions r(nullptr, nullptr);
 		r.ciCam = &cam;
 		r.ciShader = &jointShader;
+		r.voxelPreviewMode = voxelPreviewMode;
+		r.voxelPreviewResolution = voxelPreviewResolution;
+		r.voxelSphereRadius = voxelSphereRadius;
 
 		for(Joint * j : joints){
 			j->render(&mStack, &r);

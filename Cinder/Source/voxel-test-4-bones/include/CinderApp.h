@@ -115,6 +115,7 @@ public:
 	bool drawParams;
 	params::InterfaceGlRef params;
 	params::InterfaceGlRef timelineParams;
+	params::InterfaceGlRef voxelParams;
 
 	ToolBar * toolbar;
 
@@ -144,7 +145,7 @@ public:
 	// Framebuffer for selecting joints
 	gl::Fbo mPickingFboJoint;
 
-	// Framebuffer for getpixelting
+	// Framebuffer for getpixelthing
 	gl::Fbo pixelFbo;
 	
 	// Rect definitions for cameras sizes
@@ -174,6 +175,12 @@ public:
 
 	ToolButton * activeButton;
 	
+	// Whether to draw the voxels as voxels
+	bool voxelPreviewMode;
+	// Grid resolution for voxel preview
+	float voxelPreviewResolution;
+	// Sphere radius for voxel placing
+	float voxelSphereRadius;
 
 	//Vec3i dir;
 	//Vec2i mouseAxis;
