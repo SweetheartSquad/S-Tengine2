@@ -556,7 +556,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 							rotateStack.push_back(j->transform->orientation);
 							j = (Joint *)j->parent;
 						}
-						while(rotateStack.size() > 1){
+						while(rotateStack.size() > 0){
 							glm::quat t = rotateStack.at(rotateStack.size()-1);
 							gl::rotate(Quatf(t.w, t.x, t.y, t.z));
 							rotateStack.pop_back();
