@@ -199,7 +199,7 @@ void MainScene::update(){
 
 	//tLight->transform->translateX(sinf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
 	//tLight->transform->translateZ(cosf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
-	voxelJoint->updateAnimation(vox::calculateDeltaTimeCorrection());
+	voxelJoint->updateAnimation(&vox::step);
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		toggleFullScreen();

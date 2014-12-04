@@ -7,13 +7,14 @@
 #include <string>
 
 #include "VoxMatrices.h"
+
 #include "Step.h"
 
 struct GLFWwindow;
 
 namespace vox{
 	
-	//extern Step step;
+	extern Step step;
 
 	/** Equal to glfwGetTime() the last time the delta time correction was calculated */
 	extern double lastTimestamp;
@@ -30,7 +31,7 @@ namespace vox{
 	/**Initializes everyting need to get the engine up and running*/
 	void initialize(std::string _title);
 
-	Step * calculateDeltaTimeCorrection();
+	void calculateDeltaTimeCorrection();
 
 	void destruct();
 }

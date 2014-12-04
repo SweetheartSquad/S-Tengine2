@@ -10,6 +10,7 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 
+Step vox::step = Step();
 
 double vox::lastTimestamp = 0;
 double vox::deltaTimeCorrection = 1;
@@ -104,19 +105,17 @@ void vox::destruct(){
 }
 
 /////////// Delta Time Begin //////////////
-Step * vox::calculateDeltaTimeCorrection(){
+void vox::calculateDeltaTimeCorrection(){
 	double targetFrameDuration = static_cast<double>(1) / FPS;
 	double time = glfwGetTime();
 	double deltaTime = time - lastTimestamp;
 	deltaTimeCorrection = deltaTime/targetFrameDuration;
 	lastTimestamp = time;
 
-	Step * step = new Step();
-	step->targetFrameDuration = targetFrameDuration;
-	step->time = time;
-	step->setDeltaTime(deltaTimeCorrection);
-	step->deltaTimeCorrection = deltaTimeCorrection;
-	step->lastTimestamp = lastTimestamp;
-	return step;
+	vox::step.targetFrameDuration = targetFrameDuration;
+	vox::step.time = time;
+	vox::step.setDeltaTime(deltaTime);
+	vox::step.deltaTimeCorrection = deltaTimeCorrection;
+	vox::step.lastTimestamp = lastTimestamp;
 }
 
