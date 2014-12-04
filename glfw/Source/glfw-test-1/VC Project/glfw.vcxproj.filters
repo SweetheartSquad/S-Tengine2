@@ -425,7 +425,7 @@
     <None Include="..\assets\blinn.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="..\..\..\..\..\..\..\dev\ttt.json">
+    <None Include="..\assets\testJson2.json">
       <Filter>Resource Files\models</Filter>
     </None>
   </ItemGroup>

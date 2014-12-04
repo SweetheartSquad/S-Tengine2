@@ -203,9 +203,13 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 		_node[_index]["transform"]["scaleVector"].get("y", 0).asFloat(),
 		_node[_index]["transform"]["scaleVector"].get("z", 0).asFloat());
 
-	mainJoint->translateX->startValue = _node[_index]["animations"]["translateX"].get("startValue", 1).asFloat();
-	mainJoint->translateY->startValue = _node[_index]["animations"]["translateY"].get("startValue", 1).asFloat();
-	mainJoint->translateZ->startValue = _node[_index]["animations"]["translateZ"].get("startValue", 1).asFloat();
+	mainJoint->translateX->startValue = _node[_index]["animations"]["translateX"].get("startValue", 0).asFloat();
+	mainJoint->translateY->startValue = _node[_index]["animations"]["translateY"].get("startValue", 0).asFloat();
+	mainJoint->translateZ->startValue = _node[_index]["animations"]["translateZ"].get("startValue", 0).asFloat();
+
+	mainJoint->translateX->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["translateX"].get("loopType", 0).asInt());
+	mainJoint->translateY->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["translateY"].get("loopType", 0).asInt());
+	mainJoint->translateZ->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["translateZ"].get("loopType", 0).asInt());
 
 	Json::Value transXTweens = _node[_index]["animations"]["translateX"]["tweens"];
 	for(int j = 0; j < transXTweens.size(); j++){
@@ -236,6 +240,10 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 	mainJoint->rotateZ->startValue = _node[_index]["animations"]["rotateZ"].get("startValue", 0).asFloat();
 	mainJoint->rotateW->startValue = _node[_index]["animations"]["rotateW"].get("startValue", 0).asFloat();
 
+	mainJoint->rotateX->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["rotateX"].get("loopType", 0).asInt());
+	mainJoint->rotateY->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["rotateY"].get("loopType", 0).asInt());
+	mainJoint->rotateZ->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["rotateZ"].get("loopType", 0).asInt());
+	mainJoint->rotateW->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["rotateW"].get("loopType", 0).asInt());
 
 	Json::Value rotateXTweens = _node[_index]["animations"]["rotateX"]["tweens"];
 	for(int j = 0; j < rotateXTweens.size(); j++){
@@ -273,6 +281,10 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 	mainJoint->scaleY->startValue = _node[_index]["animations"]["scaleY"].get("startValue", 0).asFloat();
 	mainJoint->scaleZ->startValue = _node[_index]["animations"]["scaleZ"].get("startValue", 0).asFloat();
 
+	mainJoint->scaleX->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["scaleX"].get("loopType", 0).asInt());
+	mainJoint->scaleY->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["scaleY"].get("loopType", 0).asInt());
+	mainJoint->scaleZ->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["scaleZ"].get("loopType", 0).asInt());
+
 	Json::Value scaleXTweens = _node[_index]["animations"]["scaleX"]["tweens"];
 	for(int j = 0; j < scaleXTweens.size(); j++){
 		mainJoint->scaleX->tweens.push_back(new Tween(
@@ -303,8 +315,10 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 		mainJoint->mesh->pushVert(Vertex(
 				voxels[v].get("x", 0).asFloat(),
 				voxels[v].get("y", 0).asFloat(),
-				voxels[v].get("z", 0).asFloat()
-			));		
+				voxels[v].get("z", 0).asFloat(),
+				1, 1, 1, 1
+			));	
+		static_cast<VoxelMesh *>(mainJoint->mesh)->pushPoint(v);
 	}
 
 	Json::Value children = _node[_index]["children"];
@@ -312,6 +326,7 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 	for(Json::ArrayIndex c = 0; c < children.size(); c++){
 		mainJoint->addChild(parseJoint(children, c));
 	}
+
 	return mainJoint;
 }
 	
@@ -344,5 +359,6 @@ VoxelJoint * Resource::loadVoxelModel(std::string _jsonSrc){
 			mainJoint->addChild(joint);
 		}
 	}
+
 	return mainJoint;
 }

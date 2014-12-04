@@ -6,7 +6,7 @@
 
 VoxelMesh::VoxelMesh(GLenum _drawMode):
 	MeshInterface(GL_POINTS, _drawMode),
-	resolution(0.8)
+	resolution(0.15)
 {
 }
 
