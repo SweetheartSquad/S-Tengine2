@@ -200,6 +200,10 @@ public:
 		SCALE,
 		PAINT_VOXELS
 	} mode;
+	
+	CoordinateSpace translateSpace;
+	CoordinateSpace rotateSpace;
+	CoordinateSpace scaleSpace;
 
 	// Commands
 	CommandProcessor cmdProc;

@@ -53,12 +53,20 @@ void CinderApp::setup(){
 
 	uiColour = 0;
 	clickedUiColour = 0;
+	
+	translateSpace = WORLD;
+	rotateSpace = OBJECT;
+	scaleSpace = OBJECT;
 
 	drawParams = true;
-	params = params::InterfaceGl::create( getWindow(), "Params", toPixels( Vec2i( 175, 200 ) ), ColorA(0.6f, 0.3f, 0.3f, 0.4f));
+	params = params::InterfaceGl::create( getWindow(), "General", toPixels( Vec2i( 175, 200 ) ), ColorA(0.6f, 0.3f, 0.3f, 0.4f));
 	params->addText( "UI Mode", "label=`CREATE`" );
 
 	params->addSeparator();
+	
+	params->addParam("Translate Space", (int *)&translateSpace, "min=0 max=1");
+	params->addParam("Rotate Space", (int *)&rotateSpace, "min=0 max=1");
+	params->addParam("Scale Space", (int *)&scaleSpace, "min=0 max=1");
 
 	params->addParam("Directory", &directory);
 	params->addParam("File Name", &fileName);
@@ -462,6 +470,22 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 			}
 
 			if(mode == TRANSLATE){
+				if(translateSpace == OBJECT){
+					// Rotate to match the object orientation
+					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
+					if(j != NULL){
+						std::vector<glm::quat> rotateStack;
+						while(j != nullptr){
+							rotateStack.push_back(j->transform->orientation);
+							j = (Joint *)j->parent;
+						}
+						while(rotateStack.size() > 1){
+							glm::quat t = rotateStack.at(rotateStack.size()-1);
+							gl::rotate(Quatf(t.w, t.x, t.y, t.z));
+							rotateStack.pop_back();
+						}
+					}
+				}
 				// Draw the axes
 				gl::lineWidth((clickedUiColour == 0x0000FF || clickedUiColour == 0) ? 5.f : 2.5f);
 				uiShader.uniform("pickingColor", (clickedUiColour == 0x0000FF || clickedUiColour == 0) ? Color(0.f, 0.f, 1.f) : Color(0.f, 0.f, 0.f));
@@ -482,18 +506,20 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				gl::color((clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 			}else if(mode == ROTATE){
-				// Rotate to match the object orientation
-				Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
-				if(j != NULL){
-					std::vector<glm::quat> rotateStack;
-					while(j != nullptr){
-						rotateStack.push_back(j->transform->orientation);
-						j = (Joint *)j->parent;
-					}
-					while(rotateStack.size() > 0){
-						glm::quat t = rotateStack.at(rotateStack.size()-1);
-						gl::rotate(Quatf(t.w, t.x, t.y, t.z));
-						rotateStack.pop_back();
+				if(rotateSpace == OBJECT){
+					// Rotate to match the object orientation
+					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
+					if(j != NULL){
+						std::vector<glm::quat> rotateStack;
+						while(j != nullptr){
+							rotateStack.push_back(j->transform->orientation);
+							j = (Joint *)j->parent;
+						}
+						while(rotateStack.size() > 0){
+							glm::quat t = rotateStack.at(rotateStack.size()-1);
+							gl::rotate(Quatf(t.w, t.x, t.y, t.z));
+							rotateStack.pop_back();
+						}
 					}
 				}
 
@@ -521,18 +547,20 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				gl::color((clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 			}else if(mode == SCALE){
-				// Rotate to match the object orientation
-				Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
-				if(j != NULL){
-					std::vector<glm::quat> rotateStack;
-					while(j != nullptr){
-						rotateStack.push_back(j->transform->orientation);
-						j = (Joint *)j->parent;
-					}
-					while(rotateStack.size() > 1){
-						glm::quat t = rotateStack.at(rotateStack.size()-1);
-						gl::rotate(Quatf(t.w, t.x, t.y, t.z));
-						rotateStack.pop_back();
+				if(scaleSpace == OBJECT){
+					// Rotate to match the object orientation
+					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
+					if(j != NULL){
+						std::vector<glm::quat> rotateStack;
+						while(j != nullptr){
+							rotateStack.push_back(j->transform->orientation);
+							j = (Joint *)j->parent;
+						}
+						while(rotateStack.size() > 1){
+							glm::quat t = rotateStack.at(rotateStack.size()-1);
+							gl::rotate(Quatf(t.w, t.x, t.y, t.z));
+							rotateStack.pop_back();
+						}
 					}
 				}
 
@@ -850,7 +878,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 									console() << "handlePos:\t" << UI::handlePos << std::endl;
 									console() << "Move:\t" << dif << std::endl << std::endl;
 
-									cmdProc.executeCommand(new CMD_MoveSelectedJoints(dif, true, false));
+									cmdProc.executeCommand(new CMD_MoveSelectedJoints(dif, true, translateSpace));
 								}
 							}
 						}
@@ -876,7 +904,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 							eulerAngles.y *= axis.y;
 							eulerAngles.z *= axis.z;
 
-							cmdProc.executeCommand(new CMD_RotateSelectedTransformable(glm::quat(eulerAngles), true, true));
+							cmdProc.executeCommand(new CMD_RotateSelectedTransformable(glm::quat(eulerAngles), true, rotateSpace));
 						}
 					}else if(mode == SCALE){
 						if(UI::selectedNodes.size() > 0){
@@ -895,7 +923,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 							
 							console() << dif << std::endl;
 
-							cmdProc.executeCommand(new CMD_ScaleSelectedTransformable(Vec3f(1.f, 1.f, 1.f) + Vec3f(dir)*dif/100.f));
+							cmdProc.executeCommand(new CMD_ScaleSelectedTransformable(Vec3f(1.f, 1.f, 1.f) + Vec3f(dir)*dif/100.f, scaleSpace));
 						}
 					}
 				}

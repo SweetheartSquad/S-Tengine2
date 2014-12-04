@@ -66,16 +66,19 @@ void Transform::translateZ(float _translateZ){
 	translationVector.z += _translateZ;
 }
 
-void Transform::rotate(glm::quat _rotation, bool _local){
-	if(_local){
-		orientation = orientation * _rotation;
-	}else{
+void Transform::rotate(glm::quat _rotation, CoordinateSpace _space){
+	switch(_space){
+	case WORLD:
 		orientation = _rotation * orientation;
+		break;
+	case OBJECT:
+		orientation = orientation * _rotation;
+		break;
 	}
 }
 
-void Transform::rotate(float _angle, float _x, float _y, float _z, bool _local){
-	this->rotate(glm::quat(glm::angleAxis(_angle, glm::vec3(_x, _y, _z))), _local);
+void Transform::rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space){
+	this->rotate(glm::quat(glm::angleAxis(_angle, glm::vec3(_x, _y, _z))), _space);
 }
 
 glm::mat4 Transform::getTranslationMatrix(){

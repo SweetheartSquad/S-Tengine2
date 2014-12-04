@@ -202,33 +202,33 @@ void MainScene::update(){
 		toggleFullScreen();
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		cube->transform->rotate(2.f, 0.f, -1.f, 0.f);
+		cube->transform->rotate(2.f, 0.f, -1.f, 0.f, true);
 		cube3->transform->translateX(-0.2);
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		cube2->transform->translateX(0.02f);
-		cube2->transform->rotate(2.f, 0.f, -1.f, 0.f);
+		cube2->transform->rotate(2.f, 0.f, -1.f, 0.f, true);
 
 		cube3->transform->translateX(0.2);
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
-		cube->transform->rotate(2.f * (float)vox::deltaTimeCorrection , 1.f, 0.f, 0.f);
+		cube->transform->rotate(2.f * (float)vox::deltaTimeCorrection , 1.f, 0.f, 0.f, true);
 		cube3->transform->translateZ(-0.2);
 	}
 	if(keyboard->keyDown(GLFW_KEY_W)){
-		cube->transform->rotate(2.f, -1.f, 0.f, 0.f);
+		cube->transform->rotate(2.f, -1.f, 0.f, 0.f, true);
 		cube3->transform->translateZ(0.2);
 	}
 	if(keyboard->keyDown(GLFW_KEY_Q)){
 		cube3->transform->translateX(0.02f);
-		cube3->transform->rotate(2.f, 0.f, -1.f, 0.f);
+		cube3->transform->rotate(2.f, 0.f, -1.f, 0.f, true);
 	}
 	if(keyboard->keyDown(GLFW_KEY_E)){
 		cube->transform->translate((float)vox::deltaTimeCorrection * 0.01f, 0.f, 0.f);
 	}
 	if(mouse->leftDown()){
 		glm::quat r = glm::angleAxis(1.f, glm::vec3(0.f, 0.f, 1.f));
-		cube->transform->rotate(r);
+		cube->transform->rotate(r, true);
 	}
 	if(mouse->rightDown()){
 		cube->transform->scale(0.9f, 0.9f, 0.9f);

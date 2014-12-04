@@ -11,6 +11,11 @@
 
 #include "NodeHierarchical.h"
 
+typedef enum{
+	WORLD,
+	OBJECT
+} CoordinateSpace;
+
 /** A basic transform node */
 class Transform: public NodeHierarchical{
 public:
@@ -52,16 +57,16 @@ public:
 	void translateZ(float _translateZ);
 
 	/** 
-	Local = true:	Rotates the orientation quaternion by _rotation in object-space (i.e. orientation = _rotation * orientation) 
-	Local = false:	Rotates the orientation quaternion by _rotation in world-space (i.e. orientation = orientation * _rotation) 
+	OBJECT:	Rotates the orientation quaternion by _rotation in object-space (i.e. orientation = _rotation * orientation) 
+	WORLD:	Rotates the orientation quaternion by _rotation in world-space (i.e. orientation = orientation * _rotation) 
 	*/
-	void rotate(glm::quat _rotation, bool _local);
+	void rotate(glm::quat _rotation, CoordinateSpace _space);
 	/**
 	Rotates the orientation quaternion by the quaternion defined by _angle, _x, _y, and _z (i.e. orientation = quat(axisAngle(_angle, vec3(_x, _y, _z))) * orientation)
-	Local = true:	Rotates the orientation quaternion by _rotation in object-space (i.e. orientation = _rotation * orientation) 
-	Local = false:	Rotates the orientation quaternion by _rotation in world-space (i.e. orientation = orientation * _rotation)
+	OBJECT:	Rotates the orientation quaternion by _rotation in object-space (i.e. orientation = _rotation * orientation) 
+	WORLD:	Rotates the orientation quaternion by _rotation in world-space (i.e. orientation = orientation * _rotation)
 	*/
-	void rotate(float _angle, float _x, float _y, float _z, bool _local);
+	void rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space);
 
 	/** Converts the translation vector to a 4x4 matrix and returns the result */
 	glm::mat4 getTranslationMatrix();

@@ -24,7 +24,7 @@ public:
 
 	std::vector<Voxel *> voxels;
 
-	// Number of parent-child references from root to this
+	// Number of parent-child references from root to this (depth of 0 = root joint)
 	unsigned long int depth;
 
 	unsigned long int id;
