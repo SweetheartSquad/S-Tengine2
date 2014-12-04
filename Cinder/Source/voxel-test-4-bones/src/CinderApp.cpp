@@ -61,12 +61,12 @@ void CinderApp::setup(){
 	drawParams = true;
 	params = params::InterfaceGl::create( getWindow(), "General", toPixels( Vec2i( 175, 200 ) ), ColorA(0.6f, 0.3f, 0.3f, 0.4f));
 	params->addText( "UI Mode", "label=`CREATE`" );
-
-	params->addSeparator();
 	
 	params->addParam("Translate Space", (int *)&translateSpace, "min=0 max=1");
 	params->addParam("Rotate Space", (int *)&rotateSpace, "min=0 max=1");
 	params->addParam("Scale Space", (int *)&scaleSpace, "min=0 max=1");
+
+	params->addSeparator();
 
 	params->addParam("Directory", &directory);
 	params->addParam("File Name", &fileName);
@@ -469,7 +469,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				gl::scale(-1,-1,-1);
 			}
 
-			if(mode == TRANSLATE){
+			switch(mode){
+			case TRANSLATE:
 				if(translateSpace == OBJECT){
 					// Rotate to match the object orientation
 					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
@@ -505,7 +506,9 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				uiShader.uniform("pickingColor", (clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.f, 0.f, 0.));
 				gl::color((clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
-			}else if(mode == ROTATE){
+				break;
+
+			case ROTATE:
 				if(rotateSpace == OBJECT){
 					// Rotate to match the object orientation
 					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
@@ -546,7 +549,9 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				uiShader.uniform("pickingColor", (clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.f, 0.f, 0.));
 				gl::color((clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
-			}else if(mode == SCALE){
+				break;
+
+			case SCALE:
 				if(scaleSpace == OBJECT){
 					// Rotate to match the object orientation
 					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
@@ -583,7 +588,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				uiShader.uniform("pickingColor", (clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.f, 0.f, 0.));
 				gl::color((clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
 				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
-			}
+				break;
+			}// end switch
 
 			gl::lineWidth(1);
 		gl::popMatrices();
