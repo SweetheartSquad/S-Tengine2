@@ -243,6 +243,37 @@ void CinderApp::update(){
 			previousTime = UI::time;
 		}
 	}
+	
+	float r = getWindowAspectRatio();
+
+	Vec3f dif = camMayaPersp.getCamera().getEyePoint() - camMayaPersp.getCamera().getCenterOfInterestPoint();
+	float zoom = dif.length();
+
+	boundsTop.set(	-r,	-1.f,	r,	1.f);
+	boundsRight.set(-r,	-1.f,	r,	1.f);
+	boundsFront.set(-r,	-1.f,	r,	1.f);
+	
+	boundsTop.scale(zoom);
+	boundsRight.scale(zoom);
+	boundsFront.scale(zoom);
+
+	camTop.setOrtho(boundsTop.x1, boundsTop.x2, boundsTop.y2, boundsTop.y1, -10000, 10000);
+	camFront.setOrtho(boundsFront.x1, boundsFront.x2, boundsFront.y2, boundsFront.y1, -10000, 10000);
+	camRight.setOrtho(boundsRight.x1, boundsRight.x2, boundsRight.y2, boundsRight.y1, -10000, 10000);
+	
+	/*Quatf o = camMayaPersp.getCamera().getOrientation();
+	
+	console() << o.getPitch() << " " << o.getRoll() << " " << o.getYaw() << std::endl;
+	
+	camTop.setOrientation(Quatf(glm::radians(90.f), 0, glm::radians(-90.f)+atan2(dif.z, dif.x)));
+	
+	camFront.setOrientation(Quatf(0, atan2(dif.y, dif.x), 0));
+	
+	camRight.setOrientation(Quatf(0, glm::radians(90.f), glm::radians(-90.f)+atan2(dif.y, dif.z)));*/
+
+	camTop.setEyePoint(camMayaPersp.getCamera().getEyePoint());
+	camFront.setEyePoint(camMayaPersp.getCamera().getEyePoint());
+	camRight.setEyePoint(camMayaPersp.getCamera().getEyePoint());
 }
 
 void CinderApp::draw(){
@@ -597,6 +628,20 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 
 	// restore matrices
 	gl::popMatrices();
+	
+	gl::pushMatrices();
+		Area t = Area(rect.x1, (fboUI.getHeight()-rect.y1), rect.x2, (fboUI.getHeight()-rect.y2));
+		gl::setViewport(t);
+
+		gl::setMatrices(cam);
+		
+		//gl::multModelView(cam.getInverseModelViewMatrix());
+		gl::multProjection(cam.getProjectionMatrix().inverted());
+
+		uiShader.uniform("pickingColor", Color(0.f, 0.f, 0.f));
+
+		gl::drawCoordinateFrame();
+	gl::popMatrices();
 }
 
 void CinderApp::mouseMove( MouseEvent event ){
@@ -779,69 +824,72 @@ void CinderApp::mouseDown( MouseEvent event ){
 		sourceBounds = nullptr;
 	}
 	
-	// Get the selected UI colour
-	pickColour(&clickedUiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
-	uiColour = clickedUiColour;
 
-	if(event.isLeft()){
-		oldMousePos = mMousePos;
-	}
+	if(sourceCam == &camMayaPersp.getCamera()){
+		// Get the selected UI colour
+		pickColour(&clickedUiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+		uiColour = clickedUiColour;
 
-	if(!event.isAltDown() && (clickedUiColour == 0)){
-		if(mode == PAINT_VOXELS){
-			if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
-				if(event.isLeft()){
-					// place voxel
-					Color voxel;
-					pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
-					if(voxel != Color(0.f, 0.f, 0.f)){
-							cmdProc.executeCommand(new CMD_PlaceVoxel(Vec3f(voxel.r, voxel.g, voxel.b)));
+		if(event.isLeft()){
+			oldMousePos = mMousePos;
+		}
+
+		if(!event.isAltDown() && (clickedUiColour == 0)){
+			if(mode == PAINT_VOXELS){
+				if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
+					if(event.isLeft()){
+						// place voxel
+						Color voxel;
+						pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
+						if(voxel != Color(0.f, 0.f, 0.f)){
+								cmdProc.executeCommand(new CMD_PlaceVoxel(Vec3f(voxel.r, voxel.g, voxel.b)));
+						}else{
+							console() << "bg" << std::endl;
+						}
 					}else{
-						console() << "bg" << std::endl;
-					}
-				}else{
-					// delete voxel
-					unsigned long int voxel;
-					pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
-					if(NodeSelectable::pickingMap.count(voxel) != 0){
-						Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
-						if(t != NULL){
-							cmdProc.executeCommand(new CMD_DeleteVoxel(t));
+						// delete voxel
+						unsigned long int voxel;
+						pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+						if(NodeSelectable::pickingMap.count(voxel) != 0){
+							Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
+							if(t != NULL){
+								cmdProc.executeCommand(new CMD_DeleteVoxel(t));
+							}
 						}
 					}
 				}
-			}
-		}else if(mode == CREATE){
-			if(event.isLeft()){
-				Vec3d pos = getCameraCorrectedPos();
+			}else if(mode == CREATE){
+				if(event.isLeft()){
+					Vec3d pos = getCameraCorrectedPos();
 			
-				if(UI::selectedNodes.size() == 1){
-					cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
-				}else{
-					cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, nullptr));
+					if(UI::selectedNodes.size() == 1){
+						cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
+					}else{
+						cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, nullptr));
+					}
+				}
+			}else if(mode == SELECT){
+				if(event.isLeft()){
+					unsigned long int jointColour;
+					pickColour(&jointColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
+					NodeSelectable * selection = nullptr;
+					if(NodeSelectable::pickingMap.count(jointColour) == 1){
+						selection = NodeSelectable::pickingMap.at(jointColour);
+					}
+					cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
 				}
 			}
-		}else if(mode == SELECT){
-			if(event.isLeft()){
-				unsigned long int jointColour;
-				pickColour(&jointColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
-				NodeSelectable * selection = nullptr;
-				if(NodeSelectable::pickingMap.count(jointColour) == 1){
-					selection = NodeSelectable::pickingMap.at(jointColour);
+		}else{
+			if(NodeSelectable::pickingMap.count(clickedUiColour) == 1){
+				activeButton = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(clickedUiColour));
+				if(activeButton != NULL){
+					activeButton->down(this);
 				}
-				cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
 			}
 		}
-	}else{
-		if(NodeSelectable::pickingMap.count(clickedUiColour) == 1){
-			activeButton = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(clickedUiColour));
-			if(activeButton != NULL){
-				activeButton->down(this);
-			}
-		}
-	}
 
-	UI::updateHandlePos(false);
+		UI::updateHandlePos(false);
+	}
 }
 
 void CinderApp::mouseDrag( MouseEvent event ){
@@ -985,8 +1033,12 @@ void CinderApp::keyDown( KeyEvent event ){
 		drawParams = !drawParams;
 		if(drawParams){
 			params->show();
+			timelineParams->show();
+			voxelParams->show();
 		}else{
 			params->hide();
+			timelineParams->hide();
+			voxelParams->hide();
 		}
 	case KeyEvent::KEY_1:
 		channel = 0;
