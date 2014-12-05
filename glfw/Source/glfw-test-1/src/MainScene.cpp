@@ -19,6 +19,7 @@
 #include <ShadowShaderComponent.h>
 #include <TextureShaderComponent.h>
 #include <VoxelJoint.h>
+#include "PhongShaderComponent.h"
 
 Cube * cube;
 Cube * cube2;
@@ -73,8 +74,9 @@ MainScene::MainScene(Game * _game):
 
 	baseShader = new BaseShader();
 	baseShader->components.push_back(new TextureShaderComponent());
-	baseShader->components.push_back(new LightShaderComponent());
+	//baseShader->components.push_back(new LightShaderComponent());
 	baseShader->components.push_back(new ShadowShaderComponent());
+	baseShader->components.push_back(new PhongShaderComponent());
 	baseShader->compileShader();
 
 	mat = new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true);
@@ -98,7 +100,7 @@ MainScene::MainScene(Game * _game):
 		//loaded->mesh->pushTexture2D(tex);
 	}
 
-	Entity * loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, phongShader);
+	Entity * loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, baseShader);
 	cube->addChild(loaded1);
 	loaded1->mesh->pushMaterial(mat);
 
@@ -126,6 +128,7 @@ MainScene::MainScene(Game * _game):
 	cube4->transform->scale(15.0, 1.0, 15.0);
 	cube4->transform->translateY(-2);
 	cube4->mesh->pushTexture2D(tex);
+	cube4->mesh->pushMaterial(mat);
 
 	cube->mesh->dirty = true;
 	cube2->mesh->dirty = true;
@@ -183,7 +186,7 @@ MainScene::MainScene(Game * _game):
 	cat->transform->scale(0.9f, 0.9f, 0.9f);
 	//addChild(cat);
 
-	VoxelJoint * voxelJoint = Resource::loadVoxelModel("../assets/ttt.json");
+	voxelJoint = Resource::loadVoxelModel("../assets/ttt.json");
 	voxelJoint->setShaderOnChildren(voxShader);
 	addChild(voxelJoint);
 
@@ -195,7 +198,7 @@ MainScene::~MainScene(){
 void MainScene::update(){
 	Scene::update();
 
-	voxelJoint
+	voxelJoint->updateAnimation(&vox::step);
 
 	//tLight->transform->translateX(sinf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
 	//tLight->transform->translateZ(cosf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);

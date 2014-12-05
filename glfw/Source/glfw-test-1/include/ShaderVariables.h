@@ -34,3 +34,5 @@ const std::string GL_IN_OUT_SHADOW_COORD			  =	"shadowCoord";
 const std::string SHADER_COMPONENT_TEXTURE	          =	"TEXTURE_COMPONENT";
 const std::string SHADER_COMPONENT_SHADOW	          =	"SHADOW_COMPONENT";
 const std::string SHADER_COMPONENT_LIGHT	          =	"LIGHT_COMPONENT";
+const std::string SHADER_COMPONENT_PHONG			  = "SHADER_COMPONENT_PHONG";
+const std::string SHADER_COMPONENT_MATERIAL			  = "SHADER_COMPONENT_MATERIAL";

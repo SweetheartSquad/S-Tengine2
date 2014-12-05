@@ -210,6 +210,9 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Tween.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\PhongShaderComponent.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -365,6 +368,9 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\Easing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\PhongShaderComponent.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\junkdata.frag">
@@ -427,6 +433,9 @@
     </None>
     <None Include="..\assets\testJson2.json">
       <Filter>Resource Files\models</Filter>
+    </None>
+    <None Include="..\..\..\..\..\..\..\dev\ttt.json">
+      <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
