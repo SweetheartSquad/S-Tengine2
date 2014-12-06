@@ -2,6 +2,7 @@
 
 #include "CinderApp.h"
 #include "UI.h"
+#include "ButtonFunctions.hpp"
 
 #include "CMD_CreateJoint.h"
 #include "CMD_DeleteJoint.h"
@@ -34,15 +35,6 @@ void CinderApp::prepareSettings(Settings *settings){
 	settings->setFrameRate(100.0f);
 	settings->setTitle("Picking using multiple targets and color coding");
 }
-
-void changeMode1(CinderApp * _app){
-	_app->mode = CinderApp::UImode::SELECT;
-	_app->params->setOptions("UI Mode", "label=`SELECT`");
-};
-void changeMode2(CinderApp * _app){
-	_app->mode = CinderApp::UImode::TRANSLATE;
-	_app->params->setOptions("UI Mode", "label=`TRANSLATE`");
-};
 
 void CinderApp::setup(){
 	sourceCam = nullptr;
@@ -138,16 +130,31 @@ void CinderApp::setup(){
 
 	toolbar->toolsets.push_back(new ToolSet(Area(0,0,30,30)));
 	toolbar->toolsets.push_back(new ToolSet(Area(0,0,20,20)));
+
+
 	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
 	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
 	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
-	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::NORMAL));
-	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::NORMAL));
-	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::TOGGLE));
-	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::TOGGLE));
-	
-	toolbar->toolsets.at(0)->buttons.at(0)->upCallback = changeMode1;
-	toolbar->toolsets.at(0)->buttons.at(1)->upCallback = changeMode2;
+	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
+	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
+	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
+
+	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::RADIO));
+	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::RADIO));
+	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::RADIO));
+	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::RADIO));
+
+	toolbar->toolsets.at(0)->buttons.at(0)->upCallback = ButtonFunctions::MODE_Select;
+	toolbar->toolsets.at(0)->buttons.at(1)->upCallback = ButtonFunctions::MODE_Translate;
+	toolbar->toolsets.at(0)->buttons.at(2)->upCallback = ButtonFunctions::MODE_Rotate;
+	toolbar->toolsets.at(0)->buttons.at(3)->upCallback = ButtonFunctions::MODE_Scale;
+	toolbar->toolsets.at(0)->buttons.at(4)->upCallback = ButtonFunctions::MODE_CreateJoints;
+	toolbar->toolsets.at(0)->buttons.at(5)->upCallback = ButtonFunctions::MODE_PaintVoxels;
+
+	toolbar->toolsets.at(1)->buttons.at(0)->upCallback = ButtonFunctions::CHANNEL_0;
+	toolbar->toolsets.at(1)->buttons.at(1)->upCallback = ButtonFunctions::CHANNEL_1;
+	toolbar->toolsets.at(1)->buttons.at(2)->upCallback = ButtonFunctions::CHANNEL_2;
+	toolbar->toolsets.at(1)->buttons.at(3)->upCallback = ButtonFunctions::CHANNEL_3;
 }
 
 void CinderApp::resize(){
