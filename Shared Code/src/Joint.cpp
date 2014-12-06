@@ -20,35 +20,46 @@ void Joint::init(){
 }
 
 Joint::Joint() : 
-	NodeAnimatable(new Transform()),
-	NodeHierarchical(nullptr),
+	NodeTransformable(new Transform()),
+	NodeAnimatable(this->transform),
+	NodeChild(nullptr),
 	NodeSelectable()
 {
 	init();
 }
 
-Joint::Joint(NodeHierarchical * _parent) : 
-	//NodeTransformable(new Transform()),
-	NodeAnimatable(new Transform()),
-	NodeHierarchical(_parent),
+Joint::Joint(NodeParent * _parent) : 
+	NodeTransformable(new Transform()),
+	NodeAnimatable(this->transform),
+	NodeChild(_parent),
 	NodeSelectable()
 {
 	init();
 	parent = _parent;
 	while(_parent != nullptr){
-		_parent = _parent->parent;
-		depth += 1;
+		NodeHierarchical * t = dynamic_cast<NodeHierarchical *>(_parent);
+		if (t != NULL){
+			_parent = t->parent;
+			depth += 1;
+		}else{
+			break;
+		}
 	}
 }
 
 void Joint::setPos(Vec3d _pos, bool _convertToRelative){
 	glm::vec4 newPos(_pos.x, _pos.y, _pos.z, 1);
 	if(_convertToRelative){
-		NodeHierarchical * _parent = parent;
+		NodeParent * _parent = parent;
 		std::vector<glm::mat4> modelMatrixStack;
 		while(_parent != nullptr){
-			modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
-			_parent = _parent->parent;
+			NodeHierarchical * t = dynamic_cast<NodeHierarchical *>(_parent);
+			if (t != NULL){
+				modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
+				_parent = t->parent;
+			}else{
+				break;
+			}
 		}
 
 		glm::mat4 modelMatrix(1);
@@ -63,11 +74,16 @@ void Joint::setPos(Vec3d _pos, bool _convertToRelative){
 Vec3d Joint::getPos(bool _relative){
 	glm::vec4 res(transform->translationVector.x, transform->translationVector.y, transform->translationVector.z, 1);
 	if(!_relative){
-		NodeHierarchical * _parent = parent;
+		NodeParent * _parent = parent;
 		std::vector<glm::mat4> modelMatrixStack;
-		while(_parent != nullptr){
-			modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
-			_parent = _parent->parent;
+		while (_parent != nullptr){
+			NodeHierarchical * t = dynamic_cast<NodeHierarchical *>(_parent);
+			if (t != NULL){
+				modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
+				_parent = t->parent;
+			}else{
+				break;
+			}
 		}
 		
 		glm::mat4 modelMatrix(1);
@@ -155,10 +171,8 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 						}
 					}
 
-					Transform t;
-					t.translate(pos.x, pos.y, pos.z);
 					gl::translate(pos.x, pos.y, pos.z);
-					_matrixStack->translate(t.getTranslationMatrix());
+					_matrixStack->translate(glm::translate(glm::vec3(pos.x, pos.y, pos.z)));
 					
 					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 					r->ciShader->uniform("pickingColor", Color::hex(voxels.at(i)->pickingColor));
@@ -175,8 +189,8 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 			//draw bones
 			gl::color(color);
 			r->ciShader->uniform("pickingColor", Color::hex(pickingColor));
-			for(NodeHierarchical * child : children){
-				Vec3f cinderTrans(
+			for(NodeChild * child : children){
+				Vec3d cinderTrans(
 					dynamic_cast<NodeTransformable *>(child)->transform->translationVector.x,
 					dynamic_cast<NodeTransformable *>(child)->transform->translationVector.y,
 					dynamic_cast<NodeTransformable *>(child)->transform->translationVector.z
@@ -186,20 +200,20 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 				gl::pushMatrices();
 				_matrixStack->pushMatrix();
 					gl::rotate(boneDir);
-					Transform temp;
-					temp.orientation.x = boneDir.v.x;
-					temp.orientation.y = boneDir.v.y;
-					temp.orientation.z = boneDir.v.z;
-					temp.orientation.w = boneDir.w;
-					_matrixStack->rotate(temp.getOrientationMatrix());
+					glm::quat tempOrientation;
+					tempOrientation.x = boneDir.v.x;
+					tempOrientation.y = boneDir.v.y;
+					tempOrientation.z = boneDir.v.z;
+					tempOrientation.w = boneDir.w;
+					_matrixStack->rotate(glm::toMat4(tempOrientation));
 			
 					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 					gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
 
 					gl::rotate(Vec3f(0.f, 90.f, 0.f));
-					Transform temp2;
-					temp2.rotate(90, 0, 1, 0, OBJECT);
-					_matrixStack->rotate(temp2.getOrientationMatrix());
+
+					glm::quat tempOrientation2(90.f, 0.f, 1.f, 0.f);
+					_matrixStack->rotate(glm::toMat4(tempOrientation2));
 			
 					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 					gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
@@ -209,7 +223,7 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 			}
 
 			// Draw child joints
-			for(NodeHierarchical * child : children){
+			for(NodeChild * child : children){
 				dynamic_cast<Joint *>(child)->render(_matrixStack, _renderStack);
 			}
 		gl::popModelView();
@@ -224,7 +238,7 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 void Joint::update(Step * _step){
 	NodeAnimatable::update(_step);
 
-	for(NodeHierarchical * child : children){
-		dynamic_cast<Joint *>(child)->update(_step);
+	for(NodeChild * child : children){
+		dynamic_cast<NodeUpdatable *>(child)->update(_step);
 	}
 }

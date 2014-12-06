@@ -8,9 +8,12 @@ class Joint;
 class NodeParent;
 class NodeChild;
 
+class NodeChild;
+class NodeParent;
+
 class CMD_Parent : public Command{
 public:
-	CMD_Parent(NodeChild * node, NodeParent * _parent);
+	CMD_Parent(NodeChild * _node, NodeParent * _parent);
 	~CMD_Parent(void);
 
 	void execute();
@@ -21,4 +24,6 @@ private:
 
 	NodeParent * oldParent;
 	NodeParent * newParent;
+
+	unsigned long int index;
 };

@@ -6,6 +6,7 @@
 
 class Node;
 class NodeHierarchical;
+class NodeChild;
 
 class CMD_DeleteJoint : public Command{
 public:
@@ -27,5 +28,5 @@ private:
 	std::vector<unsigned long int> index;
 
 	// If jointForDeletion had children, a copy of them are stored here
-	std::vector<std::vector<NodeHierarchical *>> children;
+	std::vector<std::vector<NodeChild *>> children;
 };

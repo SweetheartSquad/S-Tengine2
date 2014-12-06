@@ -8,7 +8,7 @@
 
 class Joint;
 
-class Voxel : public NodeRenderable, public NodeSelectable, public NodeHierarchical{
+class Voxel : public NodeRenderable, public NodeSelectable, public NodeChild{
 public:
 	ci::Vec3f pos;
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack);

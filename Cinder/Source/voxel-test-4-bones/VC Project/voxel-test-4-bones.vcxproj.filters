@@ -132,7 +132,13 @@
     <ClCompile Include="..\src\CMD_EditStartKey.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\CMD_ParentSelectedNodes.cpp">
+    <ClCompile Include="..\src\CMD_ParentSelectedNodes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeChild.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeParent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Toolbar.cpp">
@@ -271,9 +277,6 @@
     <ClInclude Include="..\include\CMD_EditStartKey.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\CMD_ParentSelectedNodes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Toolbar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -284,6 +287,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\CinderRenderOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeChild.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeParent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_ParentSelectedNodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

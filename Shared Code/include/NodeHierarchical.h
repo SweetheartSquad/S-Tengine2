@@ -1,22 +1,14 @@
 #pragma once
 
-#include <vector>
 
 #include "Node.h"
+#include "NodeParent.h"
+#include "NodeChild.h"
 
 /** Abstract node with a parent and list of children */
-class NodeHierarchical abstract : public virtual Node{
+class NodeHierarchical abstract : public virtual NodeParent, public virtual NodeChild{
 public:
-	explicit NodeHierarchical(NodeHierarchical * _parent) : parent(_parent){};
-	
-	// Recursively delete all the children of a node, then delete the node itself
+	NodeHierarchical();
 	static void deleteRecursively(NodeHierarchical * _j);
-
-	virtual void addChild(NodeHierarchical * _child);
-	virtual void removeChildAtIndex(int _index);
-
-	/** Reference to this node's parent */
-	NodeHierarchical * parent;
-	/** List of references to child entities */
-	std::vector<NodeHierarchical *> children;
+	//explicit NodeHierarchical(NodeParent * _parent) : NodeChild(_parent){};
 };

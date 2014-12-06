@@ -5,6 +5,7 @@
 #include "UI.h"
 #include "Node.h"
 #include "NodeHierarchical.h"
+#include "NodeChild.h"
 #include "Joint.h"
 
 CMD_DeleteJoint::CMD_DeleteJoint(std::vector<NodeHierarchical *> * _joints) :

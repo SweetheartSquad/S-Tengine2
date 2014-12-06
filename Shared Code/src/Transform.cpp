@@ -6,7 +6,7 @@ Transform::Transform():
 	translationVector(0.f, 0.f, 0.f),
 	scaleVector(1.f, 1.f, 1.f),
 	orientation(1.f, 0.f, 0.f, 0.f),
-	NodeHierarchical(nullptr)
+	NodeChild(nullptr)
 {
 }
 

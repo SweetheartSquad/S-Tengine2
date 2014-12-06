@@ -96,6 +96,5 @@ void Animation::update(Step * _step){
 	}
 }
 
-Animation::~Animation()
-{
+Animation::~Animation(){
 }

@@ -6,10 +6,11 @@
 class Transform;
 class Step;
 
-class NodeAnimatable abstract : public NodeTransformable, NodeUpdatable{
+class NodeAnimatable abstract : public virtual NodeTransformable, public virtual NodeUpdatable{
 
 public:
 	explicit NodeAnimatable(Transform * _transform);
+	~NodeAnimatable();
 
 	Animation * translateX;
 	Animation * translateY;

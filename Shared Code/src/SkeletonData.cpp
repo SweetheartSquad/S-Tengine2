@@ -135,7 +135,7 @@ std::string SkeletonData::writeJoint(Joint * j, unsigned int indent) {
 Joint * SkeletonData::readJoint(JsonTree joint, Joint * parent) {
 	
 	Joint * j = new Joint(parent);
-	std::vector<NodeHierarchical *> children;
+	std::vector<NodeChild *> children;
 	std::vector<Voxel *> voxels;
 
 	j->id = joint.getChild( "id" ).getValue<int>();

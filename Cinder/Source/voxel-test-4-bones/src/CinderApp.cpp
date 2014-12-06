@@ -509,7 +509,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 						std::vector<glm::quat> rotateStack;
 						while(j != nullptr){
 							rotateStack.push_back(j->transform->orientation);
-							j = (Joint *)j->parent;
+							j = dynamic_cast<Joint *>(j->parent);
 						}
 						while(rotateStack.size() > 1){
 							glm::quat t = rotateStack.at(rotateStack.size()-1);
@@ -547,7 +547,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 						std::vector<glm::quat> rotateStack;
 						while(j != nullptr){
 							rotateStack.push_back(j->transform->orientation);
-							j = (Joint *)j->parent;
+							j = dynamic_cast<Joint *>(j->parent);
 						}
 						while(rotateStack.size() > 0){
 							glm::quat t = rotateStack.at(rotateStack.size()-1);
@@ -590,7 +590,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 						std::vector<glm::quat> rotateStack;
 						while(j != nullptr){
 							rotateStack.push_back(j->transform->orientation);
-							j = (Joint *)j->parent;
+							j = dynamic_cast<Joint *>(j->parent);
 						}
 						while(rotateStack.size() > 0){
 							glm::quat t = rotateStack.at(rotateStack.size()-1);

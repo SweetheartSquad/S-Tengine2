@@ -23,10 +23,10 @@ void CMD_ScaleSelectedTransformable::execute(){
 				NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(j);
 				if(nh != NULL){
 					std::vector<glm::mat4> modelMatrixStack;
-					NodeHierarchical * parent = nh->parent;
+					NodeParent * parent = nh->parent;
 					while(parent != NULL){
 						modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(parent)->transform->getOrientationMatrix());
-						parent = parent->parent;
+						parent = dynamic_cast<NodeHierarchical *>(parent)->parent;
 					}
 
 					glm::mat4 modelMatrix(1);

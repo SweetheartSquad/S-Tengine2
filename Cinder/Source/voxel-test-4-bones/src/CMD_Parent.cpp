@@ -3,28 +3,37 @@
 #include "CMD_Parent.h"
 #include "UI.h"
 #include "Node.h"
+
 #include "NodeParent.h"
 #include "NodeChild.h"
 
 CMD_Parent::CMD_Parent(NodeChild * _node, NodeParent * _parent) :
 	node(_node),
-	oldParent(_node->parent),
 	newParent(_parent)
 {
 }
 
 void CMD_Parent::execute(){
-	node->parent = newParent;
+	if(node != nullptr){
+		oldParent = node->parent;
+		node->parent = newParent;
 
-	newParent->children.push_back(node);
-	if (oldParent != nullptr){
-		//std::vector<NodeHierarchical *>::iterator = node;
-		//oldParent->children.erase(oldParent->children.begin(), oldParent->children.end(), it);
-//		oldParent->children.erase(std::find_if(oldParent->children.begin(), oldParent->children.end(), address_equals(node)));
+		newParent->children.push_back(node);
+		if (oldParent != nullptr){
+			for(unsigned long int i = 0; i < oldParent->children.size(); ++i){
+				if(node == oldParent->children.at(i)){
+					index = i;
+					oldParent->children.erase(oldParent->children.begin() + index);
+					break;
+				}
+			}
+		}
 	}
 }
 
 void CMD_Parent::unexecute(){
+	oldParent->children.insert(oldParent->children.begin() + index, node);
+	newParent->children.pop_back();
 	node->parent = oldParent;
 }
 
