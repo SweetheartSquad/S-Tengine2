@@ -298,5 +298,8 @@
     <ClInclude Include="..\include\CMD_ParentSelectedNodes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ButtonFunctions.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
