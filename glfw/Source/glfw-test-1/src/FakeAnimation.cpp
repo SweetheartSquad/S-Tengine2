@@ -13,8 +13,10 @@ void FakeAnimation::pushFrame(Entity * _frame){
 	children.push_back(_frame);
 }
 
-FakeAnimation::FakeAnimation(Transform * t, Shader * s) :
-	Entity(nullptr, t, s),
+FakeAnimation::FakeAnimation(Transform * _transform, Shader * _shader) :
+	NodeTransformable(_transform),
+	NodeChild(nullptr),
+	Entity(nullptr, _transform, _shader),
 	frame(0),
 	delay(3),
 	delayCount(0)

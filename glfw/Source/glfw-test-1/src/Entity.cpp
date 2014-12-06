@@ -6,9 +6,11 @@
 
 Entity::Entity(MeshInterface * _mesh, Transform * _transform, Shader * _shader):
 	mesh(_mesh),
+	NodeTransformable(_transform),
 	NodeAnimatable(_transform),
 	shader(_shader),
-	NodeHierarchical(nullptr)
+	NodeHierarchical(),
+	NodeChild(nullptr)
 {
 	if(mesh != nullptr && shader != nullptr){
 		reset();
@@ -79,14 +81,14 @@ void Entity::setShader(Shader * _shader, bool _confiugreDefaultAttributes){
 }
 
 void Entity::setShaderOnChildren(Shader * _shader){
-	for(NodeHierarchical * entity : children){
-		(dynamic_cast<Entity*>(entity))->setShaderOnChildren(_shader);
+	for(NodeChild * child : children){
+		(dynamic_cast<Entity*>(child))->setShaderOnChildren(_shader);
 	}
 	setShader(_shader, false);
 }
 
 void Entity::unload(){
-	for(Node * child : children){
+	for(NodeChild * child : children){
 		dynamic_cast<Entity *>(child)->unload();
 	}
 	if(mesh != nullptr){
@@ -98,7 +100,7 @@ void Entity::unload(){
 }
 
 void Entity::reset(){
-	for(Node * child : children){
+	for(NodeChild * child : children){
 		dynamic_cast<Entity *>(child)->reset();
 	}
 

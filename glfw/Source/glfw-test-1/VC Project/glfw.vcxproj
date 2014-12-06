@@ -118,7 +118,9 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeChild.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeHierarchical.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeParent.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeResource.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeUpdatable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\RenderOptions.cpp" />
@@ -168,7 +170,9 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\..\..\..\Shared Code\include\MatrixStack.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Node.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeAnimatable.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeChild.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeParent.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeRenderable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeResource.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeTransformable.h" />

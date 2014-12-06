@@ -18,7 +18,9 @@ void CMD_Parent::execute(){
 		oldParent = node->parent;
 		node->parent = newParent;
 
-		newParent->children.push_back(node);
+		if(newParent != nullptr){
+			newParent->children.push_back(node);
+		}
 		if (oldParent != nullptr){
 			for(unsigned long int i = 0; i < oldParent->children.size(); ++i){
 				if(node == oldParent->children.at(i)){
@@ -32,8 +34,12 @@ void CMD_Parent::execute(){
 }
 
 void CMD_Parent::unexecute(){
-	oldParent->children.insert(oldParent->children.begin() + index, node);
-	newParent->children.pop_back();
+	if(oldParent != nullptr){
+		oldParent->children.insert(oldParent->children.begin() + index, node);
+	}
+	if(newParent != nullptr){
+		newParent->children.pop_back();
+	}
 	node->parent = oldParent;
 }
 

@@ -1,7 +1,9 @@
 #include "Plane.h"
 
-Plane::Plane(glm::vec3 _center, float _size)
-	:Entity(new QuadMesh(GL_QUADS, GL_STATIC_DRAW), new Transform())
+Plane::Plane(glm::vec3 _center, float _size) :
+	NodeTransformable(new Transform()),
+	NodeChild(nullptr),
+	Entity(new QuadMesh(GL_QUADS, GL_STATIC_DRAW), transform)
 {
 	QuadMesh * m = static_cast<QuadMesh *>(mesh);
 	
