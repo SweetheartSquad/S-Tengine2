@@ -1250,7 +1250,10 @@ void CinderApp::loadSkeleton() {
 void CinderApp::setKeyframe(){
 	if(UI::selectedNodes.size() != 0){
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
-			cmdProc.executeCommand(new CMD_KeyAll(UI::time));
+			NodeAnimatable * _node = dynamic_cast<NodeAnimatable *>(UI::selectedNodes.at(i));
+			if (_node != NULL){
+				cmdProc.executeCommand(new CMD_KeyAll(_node, UI::time));
+			}
 		}
 	}
 }

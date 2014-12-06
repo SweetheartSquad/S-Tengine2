@@ -10,13 +10,14 @@ class NodeAnimatable;
 class CMD_KeyAll : public Command
 {
 public:
-	CMD_KeyAll(float _time);
+	CMD_KeyAll(NodeAnimatable * _node, float _time);
 	~CMD_KeyAll();
 
 	void execute();
 	void unexecute();
 
 private:
+	NodeAnimatable * node;
 	float time;
 	Easing::Type interpolation;
 	
