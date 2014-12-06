@@ -257,9 +257,9 @@ void CinderApp::update(){
 	boundsRight.scale(zoom);
 	boundsFront.scale(zoom);
 
-	camTop.setOrtho(boundsTop.x1, boundsTop.x2, boundsTop.y2, boundsTop.y1, -10000, 10000);
-	camFront.setOrtho(boundsFront.x1, boundsFront.x2, boundsFront.y2, boundsFront.y1, -10000, 10000);
-	camRight.setOrtho(boundsRight.x1, boundsRight.x2, boundsRight.y2, boundsRight.y1, -10000, 10000);
+	camTop.setOrtho(-boundsTop.x1, -boundsTop.x2, boundsTop.y2, boundsTop.y1, -10000, 10000);
+	camFront.setOrtho(boundsFront.x1, boundsFront.x2, -boundsFront.y2, -boundsFront.y1, -10000, 10000);
+	camRight.setOrtho(boundsRight.x1, boundsRight.x2, -boundsRight.y2, -boundsRight.y1, -10000, 10000);
 	
 	/*Quatf o = camMayaPersp.getCamera().getOrientation();
 	
@@ -1032,13 +1032,13 @@ void CinderApp::keyDown( KeyEvent event ){
 	case KeyEvent::KEY_F1:
 		drawParams = !drawParams;
 		if(drawParams){
-			params->show();
-			timelineParams->show();
-			voxelParams->show();
+			params->maximize();
+			timelineParams->maximize();
+			voxelParams->maximize();
 		}else{
-			params->hide();
-			timelineParams->hide();
-			voxelParams->hide();
+			params->minimize();
+			timelineParams->minimize();
+			voxelParams->minimize();
 		}
 	case KeyEvent::KEY_1:
 		channel = 0;
@@ -1102,7 +1102,7 @@ void CinderApp::keyDown( KeyEvent event ){
 		mode = SCALE;
 		params->setOptions( "UI Mode", "label=`SCALE`" );
 		break;
-	case KeyEvent::KEY_t:
+	case KeyEvent::KEY_b:
 		mode = CREATE;
 		params->setOptions( "UI Mode", "label=`CREATE`" );
 		break;

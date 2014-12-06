@@ -3,12 +3,12 @@
 #include "CMD_Parent.h"
 #include "UI.h"
 #include "Node.h"
-#include "Joint.h"
-#include "NodeHierarchical.h"
+#include "NodeParent.h"
+#include "NodeChild.h"
 
-CMD_Parent::CMD_Parent(NodeHierarchical * _node, NodeHierarchical * _parent) :
+CMD_Parent::CMD_Parent(NodeChild * _node, NodeParent * _parent) :
 	node(_node),
-	oldParent(dynamic_cast<NodeHierarchical *>(_node)->parent),
+	oldParent(_node->parent),
 	newParent(_parent)
 {
 }
