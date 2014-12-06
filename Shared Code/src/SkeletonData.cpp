@@ -229,6 +229,12 @@ std::string SkeletonData::writeAnimation(Animation * a, std::string name, unsign
 	// startValue
 	json << std::string(indent * 3, ' ') << "\"startValue\": " << a->startValue << "," << std::endl;
 
+	// startValue
+	json << std::string(indent * 3, ' ') << "\"referenceValue\": " << a->referenceValue << "," << std::endl;
+
+	// hasStart
+	json << std::string(indent * 3, ' ') << "\"hasStart\": " << a->hasStart << "," << std::endl;
+
 	// tween array
 	json << std::string(indent * 3, ' ') << "\"tweens\": " << "[" << std::endl;
 	for(unsigned long int i = 0; i < a->tweens.size(); ++i) {
@@ -255,6 +261,8 @@ void SkeletonData::readAnimation(JsonTree animation, Animation * a){
 	std::vector<Tween *> tweens;
 	app::console() << animation.getKey() << std::endl;
 	a->startValue = animation.getChild("startValue").getValue<float>();
+	a->hasStart = animation.getChild("hasStart").getValue<bool>();
+	a->referenceValue = animation.getChild("referenceValue").getValue<float>();
 
 	JsonTree tweensJson = animation.getChild("tweens");
 	unsigned int i = 0;
