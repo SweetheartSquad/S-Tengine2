@@ -376,6 +376,7 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeParent.h">
       <Filter>Header Files\node</Filter>
+    </ClInclude>
     <ClInclude Include="..\include\PhongShaderComponent.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
