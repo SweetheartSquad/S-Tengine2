@@ -1,20 +1,14 @@
 #include "System.h"
 
-System::System(){
-}
-
-System::~System(){
-}
-
-int System::getScreenWidth(){
+int vox::getScreenWidth(){
 	return getScreenDimensions().height;
 }
 
-int System::getScreenHeight(){
+int vox::getScreenHeight(){
 	return getScreenDimensions().width;
 }
 
-Dimension System::getScreenDimensions(){
+Dimension vox::getScreenDimensions(){
 	int screenHeight;
 	int screenWidth;
 
