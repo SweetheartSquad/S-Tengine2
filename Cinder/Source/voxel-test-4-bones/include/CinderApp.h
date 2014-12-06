@@ -62,11 +62,6 @@ public:
 	// Draws a grid on the floor
 	void drawGrid(float size = 100.f, float step = 10.f);
 
-	Vec3f getCameraCorrectedPos();
-	Vec2f fromRectToRect(Vec2f _p, Rectf _r1, Rectf _r2);
-
-	//Joint * pickJoint(const Vec2i &pos);
-
 	void saveSkeleton();
 	void loadSkeleton();
 

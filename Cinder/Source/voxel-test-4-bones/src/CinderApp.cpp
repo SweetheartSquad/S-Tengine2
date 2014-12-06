@@ -870,12 +870,15 @@ void CinderApp::mouseDown( MouseEvent event ){
 				}
 			}else if(mode == CREATE){
 				if(event.isLeft()){
-					Vec3d pos = getCameraCorrectedPos();
-			
-					if(UI::selectedNodes.size() == 1){
-						cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
-					}else{
-						cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, nullptr));
+					Ray ray = camMayaPersp.getCamera().generateRay((float)mMousePos.x/rectPersp.getWidth(), 1.f-((float)(mMousePos.y-rectPersp.y1)/rectPersp.getHeight()), camMayaPersp.getCamera().getAspectRatio());			
+					float distance = 0.f;
+					if(ray.calcPlaneIntersection(Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 1.f, 0.f), &distance)){
+						Vec3f pos = ray.calcPosition(distance);
+						if(UI::selectedNodes.size() == 1){
+							cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
+						}else{
+							cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, nullptr));
+						}
 					}
 				}
 			}else if(mode == SELECT){
@@ -1194,46 +1197,6 @@ void CinderApp::drawGrid(float size, float step){
 		gl::drawLine( Vec3f(i, 0.f, -size), Vec3f(i, 0.f, size) );
 		gl::drawLine( Vec3f(-size, 0.f, i), Vec3f(size, 0.f, i) );
 	}
-}
-
-Vec2f CinderApp::fromRectToRect(Vec2f _p, Rectf _r1, Rectf _r2){
-	Vec2f res;
-	res.x = ((_p.x-_r1.x1)/_r1.getWidth())*_r2.getWidth() + _r2.x1;
-	res.y = ((_p.y-_r1.y1)/_r1.getHeight())*_r2.getHeight() + _r2.y1;
-	//console() << _p << std::endl << _r1 << std::endl << _r2 << std::endl << res << std::endl;
-	return res;
-}
-
-Vec3f CinderApp::getCameraCorrectedPos(){
-	Vec3f res;
-	float x = mMousePos.x;
-	float y = mMousePos.y;
-	if(rectTop.contains(mMousePos)){
-		Vec2f t = fromRectToRect(Vec2f(x, y), rectTop, boundsTop);
-		res.x = t.x;
-		res.y = 0;
-		res.z = t.y;
-	}else if(rectRight.contains(mMousePos)){
-		x = rectRight.x2 - x + rectRight.x1;
-		y = rectRight.y2 - y + rectRight.y1;
-		Vec2f t = fromRectToRect(Vec2f(x, y), rectRight, boundsRight);
-		res.x = 0;
-		res.y = t.y;
-		res.z = t.x;
-	}else if(rectFront.contains(mMousePos)){
-		y = rectFront.y2 - y + rectFront.y1;
-		Vec2f t = fromRectToRect(Vec2f(x, y), rectFront, boundsFront);
-		res.x = t.x;
-		res.y = t.y;
-		res.z = 0;
-	}else if(rectPersp.contains(mMousePos)){
-		Ray ray = camMayaPersp.getCamera().generateRay((float)mMousePos.x/rectPersp.getWidth(), 1.f-((float)(mMousePos.y-rectPersp.y1)/rectPersp.getHeight()), camMayaPersp.getCamera().getAspectRatio());			
-		float distance = 0.f;
-		if(ray.calcPlaneIntersection(Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 1.f, 0.f), &distance)){
-			res = ray.calcPosition(distance);
-		}
-	}
-	return res;
 }
 
 void CinderApp::saveSkeleton() {
