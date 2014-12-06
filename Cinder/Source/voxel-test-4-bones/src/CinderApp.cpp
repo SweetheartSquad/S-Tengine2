@@ -886,7 +886,13 @@ void CinderApp::mouseDown( MouseEvent event ){
 					if(NodeSelectable::pickingMap.count(jointColour) == 1){
 						selection = NodeSelectable::pickingMap.at(jointColour);
 					}
-					cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, event.isShiftDown(), event.isControlDown() != event.isShiftDown()));
+
+					bool additive = event.isShiftDown();
+					bool subtractive = event.isControlDown() != event.isShiftDown();
+
+					if(selection != nullptr || (!additive && !subtractive)){
+						cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, additive, subtractive));
+					}
 				}
 			}
 		}else{

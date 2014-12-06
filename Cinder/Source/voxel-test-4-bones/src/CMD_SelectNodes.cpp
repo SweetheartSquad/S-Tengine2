@@ -28,7 +28,9 @@ void CMD_SelectNodes::execute(){
 	previousSelectedNodes = UI::selectedNodes;
 	
 	if(nodesForSelection.size() == 0){
-		UI::selectedNodes.clear();
+		if(!additive && !subtractive){
+			UI::selectedNodes.clear();
+		}
 	}else{
 		// Nodes that are in previousSelectedNodes but not nodesForSelection
 		std::vector<Node *> oldS;
