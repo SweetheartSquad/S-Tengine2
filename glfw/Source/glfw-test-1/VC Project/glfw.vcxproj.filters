@@ -165,9 +165,6 @@
     <ClCompile Include="..\src\ShadowShaderComponent.cpp">
       <Filter>Source Files\shader</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\BaseShader.cpp">
-      <Filter>Source Files\shader</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeResource.cpp">
       <Filter>Source Files\node</Filter>
     </ClCompile>
@@ -182,9 +179,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp">
       <Filter>Source Files\node</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\LightShaderComponent.cpp">
-      <Filter>Source Files\shader</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TextureShaderComponent.cpp">
       <Filter>Source Files\shader</Filter>
@@ -218,6 +212,12 @@
     </ClCompile>
     <ClCompile Include="..\src\System.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BaseComponentShader.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DiffuseShaderComponent.cpp">
+      <Filter>Source Files\shader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -329,9 +329,6 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\Shader.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\BaseShader.h">
-      <Filter>Header Files\shader</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeAnimatable.h">
       <Filter>Header Files\node</Filter>
     </ClInclude>
@@ -349,9 +346,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeRenderable.h">
       <Filter>Header Files\node</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\LightShaderComponent.h">
-      <Filter>Header Files\shader</Filter>
     </ClInclude>
     <ClInclude Include="..\include\TextureShaderComponent.h">
       <Filter>Header Files\shader</Filter>
@@ -384,6 +378,12 @@
       <Filter>Header Files\shader</Filter>
     </ClInclude>
     <ClInclude Include="..\include\AmbientShaderComponent.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\BaseComponentShader.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\DiffuseShaderComponent.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
   </ItemGroup>
@@ -452,6 +452,7 @@
     <None Include="..\..\..\..\..\..\..\dev\ttt.json">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\assets\voxel-texture.png">

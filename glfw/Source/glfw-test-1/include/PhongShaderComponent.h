@@ -2,6 +2,17 @@
 
 #include "ShaderComponent.h"
 
+/******************************************************************************
+*
+* Adds phong material support to the shader that this component is added to.
+*
+* In order for the phong effect to occur the Mesh that is being rendered must
+* have a material applied to it
+*
+* See ShaderComponent for method descriptions
+*
+*******************************************************************************/
+
 class PhongShaderComponent : public ShaderComponent{
 public:
 	PhongShaderComponent();

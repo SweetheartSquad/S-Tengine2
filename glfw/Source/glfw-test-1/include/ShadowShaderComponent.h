@@ -2,6 +2,17 @@
 
 #include "ShaderComponent.h"
 
+/******************************************************************************
+*
+* Adds shadow support to the shader that this component is added to
+*
+* In order for shadows to be rendered the renderShadow method of scene must be 
+* called. This is because this method will render a depth map which is used to determine
+* how the shadows will be rendered
+*
+* See ShaderComponent for method descriptions
+*
+*******************************************************************************/
 class ShadowShaderComponent : public ShaderComponent{
 public:
 	ShadowShaderComponent();

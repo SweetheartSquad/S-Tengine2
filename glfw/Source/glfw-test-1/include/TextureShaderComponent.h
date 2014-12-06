@@ -2,6 +2,15 @@
 
 #include "ShaderComponent.h"
 
+/******************************************************************************
+*
+* Adds Texture support to the shader that this component is added to 
+*
+* In order for textures to appear they must be added to rendered Mesh's texture vector
+*
+* See ShaderComponent for method descriptions
+*
+******************************************************************************/
 class TextureShaderComponent : public ShaderComponent{
 public:
 	TextureShaderComponent();

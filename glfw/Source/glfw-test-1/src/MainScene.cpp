@@ -14,8 +14,8 @@
 #include "Mouse.h"
 #include "GLFWRenderOptions.h"
 #include "Camera.h"
-#include <BaseShader.h>
-#include <LightShaderComponent.h>
+#include <BaseComponentShader.h>
+#include <DiffuseShaderComponent.h>
 #include <ShadowShaderComponent.h>
 #include <TextureShaderComponent.h>
 #include <VoxelJoint.h>
@@ -49,7 +49,7 @@ Entity * loaded1;
 
 Transform * t;
 
-BaseShader * baseShader;
+BaseComponentShader * baseShader;
 VoxelJoint * voxelJoint;
 
 MainScene::MainScene(Game * _game):
@@ -72,11 +72,11 @@ MainScene::MainScene(Game * _game):
 	tex = new Texture("../assets/uv-test.jpg", 1000, 1000, true, true);
 	voxTex = new Texture("../assets/voxel-texture.png", 512, 512, true, true);
 
-	baseShader = new BaseShader();
+	baseShader = new BaseComponentShader();
 	baseShader->components.push_back(new TextureShaderComponent());
-	//baseShader->components.push_back(new LightShaderComponent());
-	baseShader->components.push_back(new ShadowShaderComponent());
+	//baseShader->components.push_back(new DiffuseShaderComponent());
 	baseShader->components.push_back(new PhongShaderComponent());
+	baseShader->components.push_back(new ShadowShaderComponent());
 	baseShader->compileShader();
 
 	mat = new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true);
