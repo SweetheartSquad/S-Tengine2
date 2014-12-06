@@ -5,15 +5,24 @@
 
 #include "Vox.h"
 
-class System{
-private:
-	System();
-	~System();
-public:
-	/**Returns the width of the current context in pixels */
-	static int getScreenWidth();
-	/**Returns the height of the current context in pixels */
-	static int getScreenHeight();
-	/**Returns the width and height of the current context in pixels as a Dimension object */
-	static Dimension getScreenDimensions();
+/**********************************************
+*
+* A collection of system utility functions
+*
+***********************************************/
+namespace vox{
+	/**
+	* @returns the width of the current context in pixels 
+	*/
+	int getScreenWidth();
+	
+	/**
+	* @returns the height of the current context in pixels 
+	*/
+	int getScreenHeight();
+	
+	/**
+	* @returns the width and height of the current context in pixels as a Dimension object 
+	*/
+	Dimension getScreenDimensions();
 };

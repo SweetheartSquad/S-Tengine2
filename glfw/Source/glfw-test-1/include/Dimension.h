@@ -1,3 +1,8 @@
+/**********************************************
+*
+* A data stuct containing a width and a height
+*
+***********************************************/
 struct Dimension
 {
 	int width;

@@ -48,6 +48,7 @@ void Scene::render(){
 	float ratio;
 	ratio = width / static_cast<float>(height);
 	glViewport(0, 0, width, height);
+	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
@@ -122,7 +123,6 @@ void Scene::renderShadows(){
 	depthBuffer->resize(width, height);
 	depthBuffer->bindFrameBuffer();
 	renderOptions->overrideShader = depthShader;
-
 	Scene::render();
 
 	shadowBuffer->resize(width, height);

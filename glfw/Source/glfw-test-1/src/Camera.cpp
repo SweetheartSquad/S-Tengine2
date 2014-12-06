@@ -25,7 +25,7 @@ Camera::Camera():
 	transform->translateX(-5);
 	transform->translateY(3);
 
-	Dimension screenDimensions = System::getScreenDimensions();
+	Dimension screenDimensions = vox::getScreenDimensions();
 	lastMouseY	= screenDimensions.height/2;
 	lastMouseX	= screenDimensions.width/2;
 }
@@ -36,7 +36,7 @@ Camera::~Camera(){
 void Camera::update(){
 	lastOrientation = transform->orientation;
 
-	Dimension screenDimensions = System::getScreenDimensions();
+	Dimension screenDimensions = vox::getScreenDimensions();
 
 	double centerX = static_cast<double>(screenDimensions.width)*0.5;
 	double centerY = static_cast<double>(screenDimensions.height)*0.5;
@@ -92,7 +92,7 @@ glm::mat4 Camera::getViewMatrix(){
 }
 
 glm::mat4 Camera::getProjectionMatrix(){
-	Dimension screenDimensions = System::getScreenDimensions();
+	Dimension screenDimensions = vox::getScreenDimensions();
 	// Projection matrix : 45° Field of View, ratio, near-far clip : 0.1 unit <-> 100 units
 	return glm::perspective(fieldOfView, static_cast<float>(screenDimensions.width)/static_cast<float>(screenDimensions.height), 0.1f, 100.0f);
 }

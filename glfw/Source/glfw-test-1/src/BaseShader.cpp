@@ -54,8 +54,10 @@ std::string BaseShader::buildFragmentShader(){
 								"in vec3 fragNormal;\n"
 								"in vec4 fragColor;\n"
 								"in vec2 fragUV;\n"
-
-								"out vec4 outColor;\n";
+								
+								"out vec4 outColor;\n"
+								
+								"uniform mat4 model;\n";
 
 	for(unsigned long int i = 0; i < components.size(); i++){
 		shaderString += components.at(i)->getFragmentVariablesString();

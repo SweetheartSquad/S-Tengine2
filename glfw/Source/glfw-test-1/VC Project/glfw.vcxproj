@@ -129,7 +129,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Tween.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Vox.cpp" />
-    <ClCompile Include="..\..\..\..\Shared Code\src\VoxMatrices.cpp" />
+    <ClCompile Include="..\src\AmbientShaderComponent.cpp" />
     <ClCompile Include="..\src\BaseShader.cpp" />
     <ClCompile Include="..\src\Camera.cpp" />
     <ClCompile Include="..\src\Cube.cpp" />
@@ -147,6 +147,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\MainScene.cpp" />
     <ClCompile Include="..\src\Material.cpp" />
     <ClCompile Include="..\src\Mouse.cpp" />
+    <ClCompile Include="..\src\PhongShaderComponent.cpp" />
     <ClCompile Include="..\src\Plane.cpp" />
     <ClCompile Include="..\src\RenderSurface.cpp" />
     <ClCompile Include="..\src\Resource.cpp" />
@@ -182,7 +183,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Tween.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Vox.h" />
-    <ClInclude Include="..\..\..\..\Shared Code\include\VoxMatrices.h" />
+    <ClInclude Include="..\include\AmbientShaderComponent.h" />
     <ClInclude Include="..\include\BaseShader.h" />
     <ClInclude Include="..\include\Camera.h" />
     <ClInclude Include="..\include\Cube.h" />
@@ -200,10 +201,12 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\LightShaderComponent.h" />
     <ClInclude Include="..\include\Material.h" />
     <ClInclude Include="..\include\Mouse.h" />
+    <ClInclude Include="..\include\PhongShaderComponent.h" />
     <ClInclude Include="..\include\Plane.h" />
     <ClInclude Include="..\include\RenderSurface.h" />
     <ClInclude Include="..\include\Resource.h" />
     <ClInclude Include="..\include\ShaderComponent.h" />
+    <ClInclude Include="..\include\ShaderVariables.h" />
     <ClInclude Include="..\include\ShadowShaderComponent.h" />
     <ClInclude Include="..\include\StandardFrameBuffer.h" />
     <ClInclude Include="..\include\System.h" />
@@ -218,6 +221,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\VoxelMesh.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\..\..\..\dev\ttt.json" />
     <None Include="..\assets\blinn.frag" />
     <None Include="..\assets\blinn.vert" />
     <None Include="..\assets\ColourShader.frag" />
@@ -235,6 +239,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <None Include="..\assets\RenderSurface.vert" />
     <None Include="..\assets\shadow.frag" />
     <None Include="..\assets\shadow.vert" />
+    <None Include="..\assets\testJson2.json" />
     <None Include="..\assets\voxel.frag" />
     <None Include="..\assets\voxel.geom" />
     <None Include="..\assets\voxel.vert" />

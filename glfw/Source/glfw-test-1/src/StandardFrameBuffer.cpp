@@ -4,7 +4,7 @@
 StandardFrameBuffer::StandardFrameBuffer( bool _autoRelase):
 	FrameBufferInterface(std::vector<FrameBufferChannel>(), 1, 1, _autoRelase)
 {
-	frameBufferChannels.push_back(FrameBufferChannel(GL_RGB, GL_COLOR_ATTACHMENT0, GL_RGB,  FrameBufferChannel::TEXTURE, GL_BYTE));
+	frameBufferChannels.push_back(FrameBufferChannel(GL_RGBA, GL_COLOR_ATTACHMENT0, GL_RGBA,  FrameBufferChannel::TEXTURE, GL_BYTE));
 	frameBufferChannels.push_back(FrameBufferChannel(GL_DEPTH_COMPONENT, GL_DEPTH_ATTACHMENT, GL_DEPTH_COMPONENT, FrameBufferChannel::RENDER_BUFFER, 0));
 
 	int width, height;
