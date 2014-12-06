@@ -77,10 +77,13 @@ Vec3d Joint::getPos(bool _relative){
 		NodeParent * _parent = parent;
 		std::vector<glm::mat4> modelMatrixStack;
 		while (_parent != nullptr){
-			NodeHierarchical * t = dynamic_cast<NodeHierarchical *>(_parent);
-			if (t != NULL){
-				modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
-				_parent = t->parent;
+			NodeHierarchical * ph = dynamic_cast<NodeHierarchical *>(_parent);
+			NodeTransformable * pt = dynamic_cast<NodeTransformable *>(_parent);
+			if(pt != NULL){
+				modelMatrixStack.push_back(pt->transform->getModelMatrix());
+			}
+			if (ph != NULL){
+				_parent = ph->parent;
 			}else{
 				break;
 			}
@@ -121,23 +124,13 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 		gl::pushModelView();
 		_matrixStack->pushMatrix();
 			gl::translate(transform->translationVector.x,
-								transform->translationVector.y,
-								transform->translationVector.z);
-			//vox::translate(transform->getModelMatrix());
-
-			//gl::pushMatrices(); 
-			//gl::popMatrices();
-	
+							transform->translationVector.y,
+							transform->translationVector.z);
 			gl::rotate(Quatd(transform->orientation.w,
 								transform->orientation.x,
 								transform->orientation.y,
 								transform->orientation.z));
-			if(transform->scaleVector.x != transform->scaleVector.y || transform->scaleVector.x != transform->scaleVector.z || transform->scaleVector.z != transform->scaleVector.y){
-				std::cout<< "test" << std::endl;
-
-			}
 			gl::scale(transform->scaleVector.x, transform->scaleVector.y, transform->scaleVector.z);
-			//vox::rotate(transform->getOrientationMatrix());
 			_matrixStack->applyMatrix(transform->getModelMatrix());
 
 			glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);

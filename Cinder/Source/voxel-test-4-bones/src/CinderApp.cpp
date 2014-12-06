@@ -467,8 +467,9 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 	}
 
 	if(UI::selectedNodes.size() != 0){
-
 		gl::pushMatrices();
+
+			// Draw spheres around the selected joints
 			gl::enableWireframe();
 			for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 				if (i == UI::selectedNodes.size() - 1){
@@ -492,7 +493,16 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 			}
 			gl::disableWireframe();
 
-			gl::translate(UI::displayHandlePos);
+			switch(mode){
+			case TRANSLATE:
+				gl::translate(UI::displayHandlePos);
+				break;
+			case ROTATE:
+			case SCALE:
+				gl::translate(UI::handlePos);
+				break;
+			}
+
 			gl::lineWidth(2);
 			if(cam.isPersp()){
 				// If the camera is a perspective view, scale the coordinate frame proportionally to the distance from camera
@@ -752,7 +762,7 @@ void CinderApp::pickColour(void * res, const gl::Fbo * _sourceFbo, const Rectf *
 			// find the most occuring color
 			std::map<Color, unsigned long int>::const_iterator itr;
 			for(itr = occurences.begin(); itr != occurences.end(); ++itr) {
-				console() << itr->first << "\t" << itr->second << std::endl;
+				//console() << itr->first << "\t" << itr->second << std::endl;
 				if(itr->second > max) {
 					color = itr->first;
 					max = itr->second;
@@ -775,7 +785,7 @@ void CinderApp::pickColour(void * res, const gl::Fbo * _sourceFbo, const Rectf *
 			// find the most occuring color
 			std::map<unsigned long int, unsigned long int>::const_iterator itr;
 			for(itr = occurences.begin(); itr != occurences.end(); ++itr) {
-				console() << itr->first << "\t" << itr->second << std::endl;
+				//console() << itr->first << "\t" << itr->second << std::endl;
 				if(itr->second > max) {
 					color = itr->first;
 					max = itr->second;
