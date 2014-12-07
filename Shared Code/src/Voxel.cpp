@@ -7,11 +7,10 @@ void Voxel::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 
 }
 
-Voxel::Voxel(ci::Vec3f _pos, Joint * _parent) :
+Voxel::Voxel(ci::Vec3f _pos) :
 	NodeRenderable(),
 	NodeSelectable(),
-	NodeChild(_parent),
+	NodeChild(nullptr),
 	pos(_pos)
 {
-	_parent->voxels.push_back(this);
 }

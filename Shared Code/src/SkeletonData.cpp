@@ -316,7 +316,9 @@ std::string SkeletonData::writeVoxel(Voxel * v, unsigned int indent){
 void SkeletonData::readVoxel(JsonTree voxel, Joint * parent){
 
 	// create voxel, added to parent in constructor
-	Voxel * v = new Voxel(Vec3d(voxel.getChild("x").getValue<float>(), voxel.getChild("y").getValue<float>(), voxel.getChild("z").getValue<float>()), parent);
+	Voxel * v = new Voxel(Vec3d(voxel.getChild("x").getValue<float>(), voxel.getChild("y").getValue<float>(), voxel.getChild("z").getValue<float>()));
+	v->parent = parent;
+	parent->voxels.push_back(v);
 }
 
 void SkeletonData::validateDirectory(std::string & directory) {

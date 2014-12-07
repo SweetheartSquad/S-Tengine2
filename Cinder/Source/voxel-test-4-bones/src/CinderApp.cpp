@@ -821,6 +821,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 		case CinderApp::SCALE:
 		case CinderApp::PAINT_VOXELS:
 			cmdProc.startCompressing();
+			console() << "startCompressing" << endl;
 			break;
 		default:
 			break;
@@ -1024,11 +1025,8 @@ void CinderApp::mouseDrag( MouseEvent event ){
 				}
 			}else{
 				if(mode == PAINT_VOXELS){
-					console() << "mouse drag" << endl;
 						if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
-							console() << "bone selected" << endl;
 							if(event.isLeftDown()){
-								console() << "painting" << endl;
 								// place voxel
 								Color voxel;
 								pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
@@ -1037,22 +1035,21 @@ void CinderApp::mouseDrag( MouseEvent event ){
 								}else{
 									console() << "bg" << std::endl;
 								}
-							}else{
-								console() << "deleting drag" << endl;
-								// delete voxel
-								unsigned long int voxel;
-								pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
-								if(NodeSelectable::pickingMap.count(voxel) != 0){
-									Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
-									if(t != NULL){
-										cmdProc.executeCommand(new CMD_DeleteVoxel(t));
-									}
-								}
 							}
 						}
 					}
 			}
 			oldMousePos = mMousePos;
+		}else{
+			// delete voxel
+			unsigned long int voxel;
+			pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+			if(NodeSelectable::pickingMap.count(voxel) != 0){
+				Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
+				if(t != NULL){
+					cmdProc.executeCommand(new CMD_DeleteVoxel(t));
+				}
+			}
 		}
 	}
 
@@ -1086,6 +1083,7 @@ void CinderApp::mouseUp( MouseEvent event ){
 	
 	if(mode == TRANSLATE || mode == ROTATE || mode == SCALE || mode == PAINT_VOXELS){
 		cmdProc.endCompressing();
+		console() << "endCompressing" << endl;
 	}
 
 	uiColour = 0;
