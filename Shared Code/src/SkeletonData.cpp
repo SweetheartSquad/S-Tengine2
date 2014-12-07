@@ -4,8 +4,9 @@
 #include "Transform.h"
 #include "Animation.h"
 #include "Easing.h"
+#include "SceneRoot.h"
 
-void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, std::vector<Joint *> & joints) {
+void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, SceneRoot * _sceneRoot) {
 	try{
 		//Validate directory
 		validateDirectory(directory);
@@ -23,9 +24,10 @@ void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, std
 				jointFile << "{" << "\"joints\": " << "[" << std::endl;
 
 				//write the joints to file (loop through roots and recurse through children)
-				for(Joint * j : joints){
+				for(unsigned long int i = 0; i < _sceneRoot->children.size(); ++i){
+					Joint * j = dynamic_cast<Joint * >(_sceneRoot->children.at(i));
 					jointFile << writeJoint(j);
-					if (j->id != joints.back()->id) {
+					if (j != _sceneRoot->children.back()) {
 						jointFile << ",";
 					}
 					jointFile << std::endl;

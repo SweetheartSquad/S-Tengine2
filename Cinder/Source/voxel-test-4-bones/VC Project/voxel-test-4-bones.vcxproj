@@ -112,6 +112,7 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeSelectable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeUpdatable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\RenderOptions.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\SceneRoot.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\ShiftKiddie.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\SkeletonData.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp" />

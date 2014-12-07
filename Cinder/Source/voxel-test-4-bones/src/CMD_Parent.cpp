@@ -1,17 +1,18 @@
 #pragma once
 
 #include "CMD_Parent.h"
-#include "UI.h"
 #include "Node.h"
 
 #include "NodeParent.h"
 #include "NodeChild.h"
 #include "ShiftKiddie.h"
+#include "SceneRoot.h"
 
-CMD_Parent::CMD_Parent(NodeChild * _node, NodeParent * _parent) :
+CMD_Parent::CMD_Parent(SceneRoot * _sceneRoot, NodeChild * _node, NodeParent * _parent) :
 	node(_node),
 	newParent(_parent),
-	oldParent(nullptr)
+	oldParent(nullptr),
+	sceneRoot(_sceneRoot)
 {
 }
 
@@ -27,20 +28,14 @@ void CMD_Parent::execute(){
 				oldPos = sk->getPos(false);
 			}
 		
-			node->parent = newParent;
-
 			if(newParent != nullptr){
-				newParent->children.push_back(node);
+				newParent->addChild(node);
+			}else if(sceneRoot != nullptr){
+				sceneRoot->addChild(node);
 			}
 
 			if (oldParent != nullptr){
-				for(unsigned long int i = 0; i < oldParent->children.size(); ++i){
-					if(node == oldParent->children.at(i)){
-						index = i;
-						oldParent->children.erase(oldParent->children.begin() + index);
-						break;
-					}
-				}
+				index = oldParent->removeChild(node);
 			}
 
 			if(sk != nullptr){
@@ -61,6 +56,8 @@ void CMD_Parent::unexecute(){
 		}
 		if(newParent != nullptr){
 			newParent->children.pop_back();
+		}else if(sceneRoot != nullptr){
+			sceneRoot->children.pop_back();
 		}
 		if(node != nullptr){
 			node->parent = oldParent;

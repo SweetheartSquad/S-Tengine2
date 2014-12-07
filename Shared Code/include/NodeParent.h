@@ -15,6 +15,10 @@ public:
 
 	virtual void addChild(NodeChild * _child);
 	virtual void removeChildAtIndex(int _index);
+	// Loops through the node's children and removes the first instance of _child and returns the index
+	// Does NOT change node->parent
+	// Returns (unsigned long int)(-1) if _child is not a child of this node
+	virtual unsigned long int removeChild(NodeChild * _child);
 
 
 	/** List of references to child entities */

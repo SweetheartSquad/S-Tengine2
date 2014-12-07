@@ -45,6 +45,8 @@ void changeMode2(CinderApp * _app){
 };
 
 void CinderApp::setup(){
+	sceneRoot = new SceneRoot();
+
 	sourceCam = nullptr;
 	sourceRect = nullptr;
 	sourceFbo = nullptr;
@@ -215,15 +217,9 @@ void CinderApp::resize(){
 
 
 void CinderApp::shutdown(){
-	for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
-		NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(sceneRoot.children.at(i));
-		if(nh != nullptr){
-			NodeHierarchical::deleteRecursively(nh);
-		}
-	}
-	sceneRoot.children.clear();
 	UI::selectedNodes.clear();
 	delete toolbar;
+	delete sceneRoot;
 }
 
 void CinderApp::update(){
@@ -231,8 +227,8 @@ void CinderApp::update(){
 	if(play){
 		Step s;
 		s.setDeltaTime(1 * UI::stepScale);
-		for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
-			NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot.children.at(i));
+		for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
+			NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot->children.at(i));
 			nu->update(&s);
 		}
 		UI::time += (float)s.getDeltaTime();
@@ -241,8 +237,8 @@ void CinderApp::update(){
 		if(UI::time != previousTime){
 			Step s;
 			s.setDeltaTime((UI::time - previousTime));
-			for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
-				NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot.children.at(i));
+			for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
+				NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot->children.at(i));
 				nu->update(&s);
 			}
 			previousTime = UI::time;
@@ -414,8 +410,8 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		r.voxelPreviewResolution = voxelPreviewResolution;
 		r.voxelSphereRadius = voxelSphereRadius;
 
-		for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
-			NodeRenderable * nr = dynamic_cast<NodeRenderable *>(sceneRoot.children.at(i));
+		for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
+			NodeRenderable * nr = dynamic_cast<NodeRenderable *>(sceneRoot->children.at(i));
 			if(nr != nullptr){
 				nr->render(&mStack, &r);
 			}
@@ -885,9 +881,9 @@ void CinderApp::mouseDown( MouseEvent event ){
 					if(ray.calcPlaneIntersection(Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 1.f, 0.f), &distance)){
 						Vec3f pos = ray.calcPosition(distance);
 						if(UI::selectedNodes.size() == 1){
-							cmdProc.executeCommand(new CMD_CreateJoint(&sceneRoot, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
+							cmdProc.executeCommand(new CMD_CreateJoint(sceneRoot, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
 						}else{
-							cmdProc.executeCommand(new CMD_CreateJoint(&sceneRoot, pos, nullptr));
+							cmdProc.executeCommand(new CMD_CreateJoint(sceneRoot, pos, nullptr));
 						}
 					}
 				}
@@ -1084,18 +1080,18 @@ void CinderApp::keyDown( KeyEvent event ){
 	case KeyEvent::KEY_DELETE:
 		if(UI::selectedNodes.size() != 0){
 			std::vector<NodeHierarchical *> temp;
-			for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
-				temp.push_back(dynamic_cast<NodeHierarchical *>(sceneRoot.children.at(i)));
+			for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
+				temp.push_back(dynamic_cast<NodeHierarchical *>(sceneRoot->children.at(i)));
 			}
 			cmdProc.executeCommand(new CMD_DeleteJoint(&temp));
-			sceneRoot.children.clear();
+			sceneRoot->children.clear();
 			for(unsigned long int i = 0; i < temp.size(); ++i){
-				sceneRoot.children.push_back(temp.at(i));
+				sceneRoot->children.push_back(temp.at(i));
 			}
 		}
 		break;
 	case KeyEvent::KEY_p:
-		cmdProc.executeCommand(new CMD_ParentSelectedNodes(event.isShiftDown() ? nullptr : dynamic_cast<NodeParent *>(UI::selectedNodes.back())));
+		cmdProc.executeCommand(new CMD_ParentSelectedNodes(sceneRoot, event.isShiftDown() ? nullptr : dynamic_cast<NodeParent *>(UI::selectedNodes.back())));
 		break;
 	case KeyEvent::KEY_d:
 		if(event.isControlDown()){
@@ -1212,7 +1208,7 @@ void CinderApp::drawGrid(float size, float step){
 void CinderApp::saveSkeleton() {
 	try{
 		console() << "saveSkeleton" << endl;
-		SkeletonData::SaveSkeleton(directory, fileName, joints);
+		SkeletonData::SaveSkeleton(directory, fileName, sceneRoot);
 		message = "Saved skeleton";
 	}catch (exception ex){
 		message = string(ex.what());
@@ -1224,9 +1220,13 @@ void CinderApp::loadSkeleton() {
 		// Deselect everything
 		cmdProc.executeCommand(new CMD_SelectNodes(nullptr));
 		console() << "loadSkeleton" << endl;
-		joints.clear();
+		sceneRoot->children.clear();
 
-		joints = SkeletonData::LoadSkeleton(filePath);
+		std::vector<Joint *> joints = SkeletonData::LoadSkeleton(filePath);
+		for(unsigned long int i = 0; i < joints.size(); ++i){
+			sceneRoot->children.push_back(joints.at(i));
+		}
+
 		message = "Loaded skeleton";
 
 		// Clear the undo/redo history

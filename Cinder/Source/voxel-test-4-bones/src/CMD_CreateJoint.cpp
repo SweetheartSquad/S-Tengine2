@@ -5,9 +5,10 @@
 #include "UI.h"
 #include "Node.h"
 #include "Joint.h"
+#include "SceneRoot.h"
 
-CMD_CreateJoint::CMD_CreateJoint(std::vector<Joint *> * _joints, ci::Vec3d _pos, Joint * _parent) :
-	joints(_joints),
+CMD_CreateJoint::CMD_CreateJoint(SceneRoot * _sceneRoot, ci::Vec3d _pos, Joint * _parent) :
+	sceneRoot(_sceneRoot),
 	pos(_pos),
 	parent(_parent),
 	createdJoint(nullptr),
@@ -23,7 +24,7 @@ void CMD_CreateJoint::execute(){
 	if(parent != nullptr){
 		parent->children.push_back(createdJoint);
 	}else{
-		joints->push_back(createdJoint);
+		sceneRoot->children.push_back(createdJoint);
 	}
 
 	createdJoint->setPos(glm::vec3(pos.x, pos.y, pos.z));
@@ -43,7 +44,7 @@ void CMD_CreateJoint::unexecute(){
 		createdJoint->parent->children.pop_back();
 	}else{
 		// Remove created joint from joint list
-		joints->pop_back();
+		sceneRoot->children.pop_back();
 	}
 
 	// Re-select old selection

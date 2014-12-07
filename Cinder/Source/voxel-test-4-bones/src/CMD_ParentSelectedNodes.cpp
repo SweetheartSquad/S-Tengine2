@@ -5,8 +5,10 @@
 
 #include "UI.h"
 #include "NodeHierarchical.h"
+#include "SceneRoot.h"
 
-CMD_ParentSelectedNodes::CMD_ParentSelectedNodes(NodeParent * _parent) :
+CMD_ParentSelectedNodes::CMD_ParentSelectedNodes(SceneRoot * _sceneRoot, NodeParent * _parent) :
+	sceneRoot(_sceneRoot),
 	parent(_parent)
 {
 }
@@ -21,7 +23,7 @@ void CMD_ParentSelectedNodes::execute(){
 						NodeChild * n = dynamic_cast<NodeChild *>(UI::selectedNodes.at(i));
 						if (n != nullptr){
 							// add subCommand
-							subCommands.push_back(new CMD_Parent(n, parent));
+							subCommands.push_back(new CMD_Parent(sceneRoot, n, parent));
 						}
 					}
 				}

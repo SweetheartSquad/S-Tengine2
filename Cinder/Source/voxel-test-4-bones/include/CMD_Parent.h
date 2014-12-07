@@ -6,16 +6,14 @@
 
 #include "Command.h"
 
-class Joint;
-class NodeParent;
 class NodeChild;
+class NodeParent;
 
-class NodeChild;
-class NodeParent;
+class SceneRoot;
 
 class CMD_Parent : public Command{
 public:
-	CMD_Parent(NodeChild * _node, NodeParent * _parent);
+	CMD_Parent(SceneRoot * _sceneRoot, NodeChild * _node, NodeParent * _parent);
 	~CMD_Parent(void);
 
 	void execute();
@@ -24,6 +22,7 @@ public:
 private:
 	NodeChild * node;
 
+	SceneRoot * sceneRoot;
 	NodeParent * oldParent;
 	NodeParent * newParent;
 

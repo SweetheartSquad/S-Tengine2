@@ -21,10 +21,11 @@ using namespace ci;
 class Animation;
 class Tween;
 class Voxel;
+class SceneRoot;
 
 class SkeletonData{
 public:
-	static void SaveSkeleton(std::string directory, std::string fileName, std::vector<Joint *> &m_joints);
+	static void SaveSkeleton(std::string directory, std::string fileName, SceneRoot * _sceneRoot);
 	static std::vector<Joint *> LoadSkeleton(std::string filePath);
 
 	static void validateDirectory(std::string & directory);
