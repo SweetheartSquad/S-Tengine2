@@ -91,7 +91,6 @@ void CinderApp::setup(){
 	voxelParams->addParam("Radius", &voxelSphereRadius, "min=0.01, step=0.01");
 	voxelParams->maximize();
 
-
 	// note: we will setup our camera in the 'resize' function,
 	//  because it is called anyway so we don't have to set it up twice
 
@@ -281,6 +280,8 @@ void CinderApp::update(){
 	camTop.setEyePoint(camMayaPersp.getCamera().getEyePoint());
 	camFront.setEyePoint(camMayaPersp.getCamera().getEyePoint());
 	camRight.setEyePoint(camMayaPersp.getCamera().getEyePoint());
+
+	snapParams();
 }
 
 void CinderApp::draw(){
@@ -1278,6 +1279,23 @@ void CinderApp::drawGrid(float size, float step){
 	jointShader.unbind();
 }
 
+void CinderApp::snapParams(){
+	// Snap window to side. Using setOptions instead of setPosition, which is for Cinder for VS2013 and up only
+	// Params options
+	stringstream paramsOptions;
+	paramsOptions << "position='" << getWindowWidth() - 175 - 5 << " " << getWindowHeight() / 2.5 << "'";
+	string blah = paramsOptions.str();
+	params->setOptions("", paramsOptions.str());
+	//params->
+
+	stringstream timelineParamsOptions;
+	timelineParamsOptions << "position='5 " << getWindowHeight() / 2 << "'";
+	timelineParams->setOptions("", timelineParamsOptions.str());
+
+	stringstream voxelParamsOptions;
+	voxelParamsOptions << "position='5 " << 2 * (getWindowHeight() / 2.5) << "'";
+	voxelParams->setOptions("", voxelParamsOptions.str());
+}
 void CinderApp::saveSkeleton() {
 	try{
 		console() << "saveSkeleton" << endl;
