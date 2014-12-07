@@ -215,10 +215,13 @@ void CinderApp::resize(){
 
 
 void CinderApp::shutdown(){
-	for(unsigned long int i = 0; i < joints.size(); ++i){
-		NodeHierarchical::deleteRecursively(joints.at(i));
+	for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
+		NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(sceneRoot.children.at(i));
+		if(nh != nullptr){
+			NodeHierarchical::deleteRecursively(nh);
+		}
 	}
-	joints.clear();
+	sceneRoot.children.clear();
 	UI::selectedNodes.clear();
 	delete toolbar;
 }
@@ -228,8 +231,9 @@ void CinderApp::update(){
 	if(play){
 		Step s;
 		s.setDeltaTime(1 * UI::stepScale);
-		for(unsigned long int i = 0; i < joints.size(); ++i){
-			joints.at(i)->update(&s);
+		for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
+			NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot.children.at(i));
+			nu->update(&s);
 		}
 		UI::time += (float)s.getDeltaTime();
 		previousTime = UI::time;
@@ -237,8 +241,9 @@ void CinderApp::update(){
 		if(UI::time != previousTime){
 			Step s;
 			s.setDeltaTime((UI::time - previousTime));
-			for(unsigned long int i = 0; i < joints.size(); ++i){
-				joints.at(i)->update(&s);
+			for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
+				NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot.children.at(i));
+				nu->update(&s);
 			}
 			previousTime = UI::time;
 		}
@@ -409,8 +414,11 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		r.voxelPreviewResolution = voxelPreviewResolution;
 		r.voxelSphereRadius = voxelSphereRadius;
 
-		for(Joint * j : joints){
-			j->render(&mStack, &r);
+		for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
+			NodeRenderable * nr = dynamic_cast<NodeRenderable *>(sceneRoot.children.at(i));
+			if(nr != nullptr){
+				nr->render(&mStack, &r);
+			}
 		}
 
 		//jointShader.uniform("offset", true);
@@ -478,14 +486,16 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
 				if(j != NULL){
 					gl::pushMatrices();
-						gl::translate(j->getPos(false));
+						glm::vec3 absPos = j->getPos(false);
+						gl::translate(absPos.x, absPos.y, absPos.z);
 						gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.06f);
 					gl::popMatrices();
 				}else{
 					Voxel * v = dynamic_cast<Voxel *>(UI::selectedNodes.at(i));
 					if(v != NULL){
 						gl::pushMatrices();
-							gl::translate(dynamic_cast<Joint *>(v->parent)->getPos(false));
+							glm::vec3 absPos = dynamic_cast<Joint *>(v->parent)->getPos(false);
+							gl::translate(absPos.x, absPos.y, absPos.z);
 							gl::drawSphere(v->pos, 0.06f);
 						gl::popMatrices();
 					}
@@ -875,9 +885,9 @@ void CinderApp::mouseDown( MouseEvent event ){
 					if(ray.calcPlaneIntersection(Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 1.f, 0.f), &distance)){
 						Vec3f pos = ray.calcPosition(distance);
 						if(UI::selectedNodes.size() == 1){
-							cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
+							cmdProc.executeCommand(new CMD_CreateJoint(&sceneRoot, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
 						}else{
-							cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, nullptr));
+							cmdProc.executeCommand(new CMD_CreateJoint(&sceneRoot, pos, nullptr));
 						}
 					}
 				}
@@ -1074,13 +1084,13 @@ void CinderApp::keyDown( KeyEvent event ){
 	case KeyEvent::KEY_DELETE:
 		if(UI::selectedNodes.size() != 0){
 			std::vector<NodeHierarchical *> temp;
-			for(unsigned long int i = 0; i < joints.size(); ++i){
-				temp.push_back(joints.at(i));
+			for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
+				temp.push_back(dynamic_cast<NodeHierarchical *>(sceneRoot.children.at(i)));
 			}
 			cmdProc.executeCommand(new CMD_DeleteJoint(&temp));
-			joints.clear();
+			sceneRoot.children.clear();
 			for(unsigned long int i = 0; i < temp.size(); ++i){
-				joints.push_back(dynamic_cast<Joint *>(temp.at(i)));
+				sceneRoot.children.push_back(temp.at(i));
 			}
 		}
 		break;

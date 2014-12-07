@@ -18,7 +18,8 @@ void UI::updateHandlePos(bool _displayOnly){
 	for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 		Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
 		if(j != NULL){
-			displayHandlePos += j->getPos(false);
+			glm::vec3 t = j->getPos(false);
+			displayHandlePos += Vec3f(t.x, t.y, t.z);
 		}
 	}
 	displayHandlePos /= UI::selectedNodes.size();

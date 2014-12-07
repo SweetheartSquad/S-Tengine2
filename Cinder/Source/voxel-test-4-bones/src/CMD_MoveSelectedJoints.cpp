@@ -19,9 +19,9 @@ void CMD_MoveSelectedJoints::execute(){
 			Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
 			if(j != NULL){
 				if(relative){
-					j->setPos(j->getPos(false) + v, true);
+					j->setPos(j->getPos(false) + glm::vec3(v.x, v.y, v.z), true);
 				}else{
-					j->setPos(v);
+					j->setPos(glm::vec3(v.x, v.y, v.z));
 				}
 			}
 		}
@@ -31,9 +31,9 @@ void CMD_MoveSelectedJoints::execute(){
 			Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
 			if(j != NULL){
 				if(relative){
-					j->setPos(j->getPos(true) + v, false);
+					j->setPos(j->getPos(true) + glm::vec3(v.x, v.y, v.z), false);
 				}else{
-					j->setPos(v);
+					j->setPos(glm::vec3(v.x, v.y, v.z));
 				}
 			}
 		}
@@ -48,9 +48,9 @@ void CMD_MoveSelectedJoints::unexecute(){
 			Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i-1));
 			if(j != NULL){
 				if(relative){
-					j->setPos(j->getPos(false) - v, true);
+					j->setPos(j->getPos(false) - glm::vec3(v.x, v.y, v.z), true);
 				}else{
-					j->setPos(v, false);
+					j->setPos(glm::vec3(v.x, v.y, v.z), false);
 				}
 			}
 		}
@@ -60,9 +60,9 @@ void CMD_MoveSelectedJoints::unexecute(){
 			Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i-1));
 			if(j != NULL){
 				if(relative){
-					j->setPos(j->getPos(true) - v, false);
+					j->setPos(j->getPos(true) - glm::vec3(v.x, v.y, v.z), false);
 				}else{
-					j->setPos(v, false);
+					j->setPos(glm::vec3(v.x, v.y, v.z), false);
 				}
 			}
 		}

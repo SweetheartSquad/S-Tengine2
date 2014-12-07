@@ -4,8 +4,8 @@
 #include "Transform.h"
 #include "Step.h"
 
-NodeAnimatable::NodeAnimatable(Transform * _transform) :
-	NodeTransformable(_transform)
+NodeAnimatable::NodeAnimatable() :
+	NodeTransformable(nullptr)
 {
 	translateX	= new Animation(&transform->translationVector.x);
 	translateY	= new Animation(&transform->translationVector.y);

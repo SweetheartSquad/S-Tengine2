@@ -11,6 +11,7 @@
 #include "NodeAnimatable.h"
 #include "NodeRenderable.h"
 #include "NodeSelectable.h"
+#include "ShiftKiddie.h"
 
 #include "Voxel.h"
 
@@ -18,7 +19,7 @@ class Step;
 
 using namespace ci;
 
-class Joint : public NodeAnimatable, public NodeHierarchical, public NodeRenderable, public NodeSelectable{
+class Joint : public NodeAnimatable, public NodeHierarchical, public NodeRenderable, public NodeSelectable, public ShiftKiddie{
 public:
 	static unsigned long int nextId;
 
@@ -35,11 +36,6 @@ public:
 	~Joint();
 	
 
-	// Sets the translation vector of the joint
-	void setPos(Vec3d _pos, bool _convertToRelative = true);
-
-	// Returns the translation vector of the joint (if _relative is false, applies all of the transformations of the parent joints before returning the vector)
-	Vec3d getPos(bool _relative = true);
 
 	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack);
 	void update(Step * _step) override;

@@ -112,6 +112,7 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeSelectable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeUpdatable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\RenderOptions.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\ShiftKiddie.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\SkeletonData.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Step.cpp" />
@@ -167,6 +168,8 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeTransformable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeUpdatable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\RenderOptions.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\SceneRoot.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\ShiftKiddie.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\SkeletonData.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Step.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />

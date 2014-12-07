@@ -26,7 +26,7 @@ void CMD_CreateJoint::execute(){
 		joints->push_back(createdJoint);
 	}
 
-	createdJoint->setPos(pos);
+	createdJoint->setPos(glm::vec3(pos.x, pos.y, pos.z));
 
 	// Select newly created joint
 	if(subCommands.size() == 0){
@@ -40,12 +40,7 @@ void CMD_CreateJoint::execute(){
 void CMD_CreateJoint::unexecute(){
 	if(createdJoint->parent != nullptr){
 		// Remove created joint from list of children on parent
-		for(unsigned long int i = 0; i < createdJoint->parent->children.size(); ++i){
-			if(createdJoint->parent->children.at(i) == createdJoint){
-				createdJoint->parent->children.erase(createdJoint->parent->children.begin() + i);
-				break;
-			}
-		}
+		createdJoint->parent->children.pop_back();
 	}else{
 		// Remove created joint from joint list
 		joints->pop_back();

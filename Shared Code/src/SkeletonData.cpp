@@ -146,7 +146,7 @@ Joint * SkeletonData::readJoint(JsonTree joint, Joint * parent) {
 
 	JsonTree pos = transform.getChild("pos");
 	app::console() << " jt_pos: x = " << pos.getChild("x").getValue<float>() << " y = " << pos.getChild("y").getValue<float>() << " pos: z = " << pos.getChild("z").getValue<float>() << std::endl;
-	j->setPos(Vec3d(pos.getChild("x").getValue<float>(), pos.getChild("y").getValue<float>(), pos.getChild("z").getValue<float>()), false);
+	j->setPos(glm::vec3(pos.getChild("x").getValue<float>(), pos.getChild("y").getValue<float>(), pos.getChild("z").getValue<float>()), false);
 	app::console() << " pos: x = " << j->getPos().x << " y = " << j->getPos().y << " pos: z = " << j->getPos().z << std::endl;
 	
 	JsonTree orientation = transform.getChild("orientation");

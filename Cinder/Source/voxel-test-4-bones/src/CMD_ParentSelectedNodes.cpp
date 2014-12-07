@@ -13,13 +13,17 @@ CMD_ParentSelectedNodes::CMD_ParentSelectedNodes(NodeParent * _parent) :
 
 void CMD_ParentSelectedNodes::execute(){
 	if (!executed){
-		if (UI::selectedNodes.size() > 1){
-
-			for (unsigned long int i = 0; i < UI::selectedNodes.size() - 1; ++i){
-				NodeChild * n = dynamic_cast<NodeChild *>(UI::selectedNodes.at(i));
-				if (n != NULL){
-					// add subCommand
-					subCommands.push_back(new CMD_Parent(n, parent));
+		
+		if(subCommands.size() == 0){
+			if(UI::selectedNodes.size() > 0){
+				for (unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
+					if(parent != UI::selectedNodes.at(i)){
+						NodeChild * n = dynamic_cast<NodeChild *>(UI::selectedNodes.at(i));
+						if (n != nullptr){
+							// add subCommand
+							subCommands.push_back(new CMD_Parent(n, parent));
+						}
+					}
 				}
 			}
 		}

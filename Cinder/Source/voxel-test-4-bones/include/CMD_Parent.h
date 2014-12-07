@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include <glm\glm.hpp>
+
 #include "Command.h"
 
 class Joint;
@@ -26,4 +28,6 @@ private:
 	NodeParent * newParent;
 
 	unsigned long int index;
+
+	glm::vec3 oldPos;
 };

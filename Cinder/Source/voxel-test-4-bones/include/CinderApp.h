@@ -19,6 +19,7 @@
 #include "Joint.h"
 #include "CommandProcessor.h"
 #include "Transform.h"
+#include "SceneRoot.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -166,7 +167,8 @@ public:
 	
 	gl::Material JointMaterial;
 	
-	std::vector<Joint *> joints;
+	// The root node of the scene; contains the "root" nodes for each skeleton
+	SceneRoot sceneRoot;
 
 	ToolButton * activeButton;
 	

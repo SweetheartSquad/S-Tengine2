@@ -28,7 +28,7 @@ void CommandProcessor::undo(){
 		//ci::app::console() << "undo: " << typeid(*c).name() << std::endl;
 		Command * c = undoStack.back();
 		c->unexecute();
-		c->executed = true;
+		c->executed = false;
 		redoStack.push_back(c);
 		undoStack.pop_back();
 	}
