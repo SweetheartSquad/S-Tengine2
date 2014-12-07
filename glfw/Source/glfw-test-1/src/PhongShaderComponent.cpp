@@ -10,7 +10,7 @@ PhongShaderComponent::~PhongShaderComponent(){
 }
 
 std::string PhongShaderComponent::getVertexVariablesString(){
-	return DEFINE + SHADER_COMPONENT_PHONG + "\n";
+	return DEFINE + SHADER_COMPONENT_PHONG + ENDL;
 }
 
 std::string PhongShaderComponent::getFragmentVariablesString(){

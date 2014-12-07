@@ -32,18 +32,18 @@ std::string BlinnShaderComponent::getFragmentBodyString(){
 	VEC3 + " fragWorldPosition = vec3(model * vec4(fragVert, 1))" + SEMI_ENDL +
 	VEC3 + " surfaceToCamera = fragVert - fragWorldPosition" + SEMI_ENDL +
 	
-	VEC3 + " outColorBlinn = vec4(0,0,0,1)" + SEMI_ENDL +
+	VEC4 + " outColorBlinn = vec4(0,0,0,1)" + SEMI_ENDL +
 
 	"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_LIGHTS + "; i++){" + ENDL +
 		TAB + "for(int j = 0; j < " + GL_UNIFORM_ID_NUM_MATERIALS + "; j++){" + ENDL +
-			TAB + TAB + VEC3 + " surfaceToLight = normalize(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
+			TAB + TAB + VEC3 + " surfaceToLight = normalize(" + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].position - fragWorldPosition)" + SEMI_ENDL +
 			
 			TAB + TAB + "//ambient" + ENDL +
 			TAB + TAB + VEC3 + " ambient = lights[i].ambientCoefficient * fragColorTex.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 		
 			TAB + TAB + "//diffuse" + ENDL +
 			TAB + TAB + FLOAT + " diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))" + SEMI_ENDL +
-			TAB + TAB + VEC3 + " diffuse = diffuseCoefficient * fragColorTex.rgb * lights[i].intensities" + SEMI_ENDL +
+			TAB + TAB + VEC3 + " diffuse = diffuseCoefficient * fragColorTex.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 			TAB + TAB + "diffuse = clamp(diffuse, 0.0, 1.0)" + SEMI_ENDL +
 		
 			TAB + TAB + "//specular" + ENDL +

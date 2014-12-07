@@ -207,9 +207,6 @@
     <ClCompile Include="..\src\PhongShaderComponent.cpp">
       <Filter>Source Files\shader</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\AmbientShaderComponent.cpp">
-      <Filter>Source Files\shader</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -378,9 +375,6 @@
       <Filter>Header Files\shader</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ShaderVariables.h">
-      <Filter>Header Files\shader</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\AmbientShaderComponent.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
     <ClInclude Include="..\include\BaseComponentShader.h">
