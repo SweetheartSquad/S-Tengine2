@@ -26,7 +26,7 @@ void NodeHierarchical::deleteRecursively(NodeHierarchical * _j){
 	delete _j;
 }
 
-void NodeHierarchical::addChild(NodeChild * _child){
+bool NodeHierarchical::addChild(NodeChild * _child){
 	// Check to see if the child is one of the ancestors of this node
 	bool error = false;
 	NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(this->parent);
@@ -50,8 +50,9 @@ void NodeHierarchical::addChild(NodeChild * _child){
 		// Add the child to the list of children and set it's parent to this
 		children.push_back(_child);
 		_child->parent = this;
+		return true;
 	}else{
 		// Error Message: Cannot parent a node to one of its descendants
-		children.push_back(nullptr);
+		return false;
 	}
 }

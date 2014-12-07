@@ -5,7 +5,7 @@
 #include "NodeChild.h"
 #include "NodeHierarchical.h"
 
-void NodeParent::addChild(NodeChild * _child){
+bool NodeParent::addChild(NodeChild * _child){
 	// Remove the first instance of the child in the current list of children
 	for (unsigned long int i = 0; i < children.size(); ++i){
 		if (_child == children.at(i)){
@@ -17,6 +17,7 @@ void NodeParent::addChild(NodeChild * _child){
 	// Add the child to the list of children and set it's parent to this
 	children.push_back(_child);
 	_child->parent = this;
+	return true;
 }
 
 void NodeParent::removeChildAtIndex(int _index){

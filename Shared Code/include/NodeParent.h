@@ -17,7 +17,8 @@ public:
 	// Loops through the node's children and removes the first instance of _child
 	// Pushes _child onto the node's children stack
 	// Sets _child->parent = this node
-	virtual void addChild(NodeChild * _child);
+	// Returns whether or not the child was successfully added
+	virtual bool addChild(NodeChild * _child);
 	virtual void removeChildAtIndex(int _index);
 	// Loops through the node's children and removes the first instance of _child and returns the index
 	// Does NOT change node->parent

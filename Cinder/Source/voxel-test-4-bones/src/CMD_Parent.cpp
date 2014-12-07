@@ -12,7 +12,8 @@ CMD_Parent::CMD_Parent(SceneRoot * _sceneRoot, NodeChild * _node, NodeParent * _
 	node(_node),
 	newParent(_parent),
 	oldParent(nullptr),
-	sceneRoot(_sceneRoot)
+	sceneRoot(_sceneRoot),
+	error(false)
 {
 }
 
@@ -27,28 +28,34 @@ void CMD_Parent::execute(){
 			if(sk != nullptr){
 				oldPos = sk->getPos(false);
 			}
-		
+			
 			if(newParent != nullptr){
-				newParent->addChild(node);
+				error = !newParent->addChild(node);
 			}else if(sceneRoot != nullptr){
-				sceneRoot->addChild(node);
+				error = !sceneRoot->addChild(node);
 			}else{
 				// Error: no parent provided
+				error = true;
 			}
 
-			if (oldParent != nullptr){
-				index = oldParent->removeChild(node);
-			}
+			if(!error){
+				if (oldParent != nullptr){
+					index = oldParent->removeChild(node);
+				}
 
-			if(sk != nullptr){
-				sk->setPos(oldPos, true);
+				if(sk != nullptr){
+					sk->setPos(oldPos, true);
+				}
 			}
+		}else{
+			// Error: Node is already the parent of child
+			error = true;
 		}
 	}
 }
 
 void CMD_Parent::unexecute(){
-	if(oldParent != newParent){
+	if(oldParent != newParent && !error){
 		ShiftKiddie * sk = dynamic_cast<ShiftKiddie *>(node);
 		if(sk != nullptr){
 			oldPos = sk->getPos(false);

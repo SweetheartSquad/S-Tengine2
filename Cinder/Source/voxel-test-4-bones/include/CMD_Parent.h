@@ -29,4 +29,5 @@ private:
 	unsigned long int index;
 
 	glm::vec3 oldPos;
+	bool error;
 };
