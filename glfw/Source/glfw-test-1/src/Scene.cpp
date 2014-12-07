@@ -16,7 +16,7 @@ Scene::Scene(Game * _game):
 	matrixStack(new vox::MatrixStack()),
 	renderOptions(new RenderOptions(nullptr, &lights)),
 	shadowBuffer(new StandardFrameBuffer(true)),
-	depthBuffer(new DepthFrameBuffer(true)),
+	depthBuffer(new StandardFrameBuffer(true)),
 	depthShader(new Shader("../assets/DepthMapShader", false, true)),
 	shadowSurface(new RenderSurface(new Shader("../assets/shadow", false, true))),
 	//Singletons
