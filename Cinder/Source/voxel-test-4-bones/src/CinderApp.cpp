@@ -402,10 +402,10 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		//  See 'shaders/phong.frag'
 		jointShader.bind();
 
-		jointShader.uniform("offset", false);
+		jointShader.uniform("availableForVoxel", true);
+
 		// draw joints:
 		vox::MatrixStack mStack;
-		jointShader.uniform("camEye", cam.getEyePoint());
 		jointShader.uniform("viewMatrix", cam.getModelViewMatrix());
 		jointShader.uniform("projectionMatrix", cam.getProjectionMatrix());
 
@@ -1199,11 +1199,16 @@ void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area, unsigned long in
 }
 
 void CinderApp::drawGrid(float size, float step){
+	jointShader.bind();
 	gl::color( Colorf(0.2f, 0.2f, 0.2f) );
+	jointShader.uniform("pickingColor", Color(0.f, 0.f, 0.f));
+	jointShader.uniform("availableForVoxel", false);
 	for(float i=-size;i<=size;i+=step) {
 		gl::drawLine( Vec3f(i, 0.f, -size), Vec3f(i, 0.f, size) );
 		gl::drawLine( Vec3f(-size, 0.f, i), Vec3f(size, 0.f, i) );
 	}
+	jointShader.uniform("availableForVoxel", true);
+	jointShader.unbind();
 }
 
 void CinderApp::saveSkeleton() {

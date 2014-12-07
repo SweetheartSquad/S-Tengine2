@@ -205,7 +205,7 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 
 					gl::rotate(Vec3f(0.f, 90.f, 0.f));
 
-					glm::quat tempOrientation2(90.f, 0.f, 1.f, 0.f);
+					glm::quat tempOrientation2(glm::vec3(0.f, 90.f, 0.f));
 					_matrixStack->rotate(glm::toMat4(tempOrientation2));
 			
 					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
