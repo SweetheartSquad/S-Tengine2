@@ -186,9 +186,12 @@ MainScene::MainScene(Game * _game):
 	cat->transform->translate(1, 0, 2);
 	cat->transform->scale(0.9f, 0.9f, 0.9f);
 	//addChild(cat);
+	
 
 	voxelJoint = Resource::loadVoxelModel("../assets/ttt.json");
 	voxelJoint->setShaderOnChildren(voxShader);
+	voxelJoint->transform->translateX(5);
+
 	addChild(voxelJoint);
 
 }

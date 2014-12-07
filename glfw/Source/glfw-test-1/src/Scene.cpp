@@ -62,7 +62,7 @@ void Scene::render(){
 	matrixStack->viewMatrix		  = camera->getViewMatrix();
 
 	for(Entity * e : children){
-		e->draw(matrixStack, renderOptions);
+		e->render(matrixStack, renderOptions);
 	}
 
 	GLUtils::checkForError(0,__FILE__,__LINE__);
