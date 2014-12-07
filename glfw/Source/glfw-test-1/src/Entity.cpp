@@ -28,7 +28,7 @@ Entity::~Entity(void){
 	shader = nullptr;
 }
 
-void Entity::draw(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void Entity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	//push transform
 	if(_matrixStack != nullptr && _renderStack != nullptr){
 		_matrixStack->pushMatrix();
@@ -47,7 +47,7 @@ void Entity::draw(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack)
 			mesh->render(_matrixStack, _renderStack);
 		}
 		for(Node * child : children){
-			dynamic_cast<Entity *>(child)->draw(_matrixStack, _renderStack);
+			dynamic_cast<Entity *>(child)->render(_matrixStack, _renderStack);
 		}
 		//pop transform
 		_matrixStack->popMatrix();

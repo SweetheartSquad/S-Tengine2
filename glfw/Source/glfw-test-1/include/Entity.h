@@ -10,7 +10,7 @@
 #include "NodeAnimatable.h"
 
 /** A basic entity node. Stores references to a mesh, transform, shader, parent, and list of references to children */
-class Entity : public NodeAnimatable, public NodeHierarchical{
+class Entity : public NodeAnimatable, public NodeHierarchical, public NodeRenderable{
 public:
 
 	/** Reference to this entity's mesh */
@@ -29,7 +29,7 @@ public:
 	* Calls render on children (recursive),
 	* Pops model matrix stack
 	*/
-	virtual void draw(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack);
+	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 	/** Doesn't do anything by default */
 	virtual void update();
 

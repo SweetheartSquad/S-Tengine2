@@ -61,6 +61,12 @@
     <Filter Include="Source Files\json">
       <UniqueIdentifier>{e24025d5-3e3a-4b69-93af-84579f5e3c3b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\frameBuffers">
+      <UniqueIdentifier>{be4432e3-fbcd-4fcf-9cda-f162af39506f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\frameBuffers">
+      <UniqueIdentifier>{51c605bb-ebd5-43eb-b1a8-9ed270b4c034}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Cube.cpp">
@@ -111,9 +117,6 @@
     <ClCompile Include="..\src\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\FrameBufferInterface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Plane.cpp">
       <Filter>Source Files\geo</Filter>
     </ClCompile>
@@ -145,15 +148,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Material.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\FrameBufferChannel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\DepthFrameBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\StandardFrameBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\Shader.cpp">
@@ -207,9 +201,6 @@
     <ClCompile Include="..\src\PhongShaderComponent.cpp">
       <Filter>Source Files\shader</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\AmbientShaderComponent.cpp">
-      <Filter>Source Files\shader</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -218,6 +209,21 @@
     </ClCompile>
     <ClCompile Include="..\src\DiffuseShaderComponent.cpp">
       <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\BlinnShaderComponent.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\FrameBufferChannel.cpp">
+      <Filter>Source Files\frameBuffers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FrameBufferInterface.cpp">
+      <Filter>Source Files\frameBuffers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DepthFrameBuffer.cpp">
+      <Filter>Source Files\frameBuffers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\StandardFrameBuffer.cpp">
+      <Filter>Source Files\frameBuffers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -275,9 +281,6 @@
     <ClInclude Include="..\include\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\FrameBufferInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Plane.h">
       <Filter>Header Files\geo</Filter>
     </ClInclude>
@@ -309,15 +312,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Material.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\FrameBufferChannel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\DepthFrameBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\StandardFrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ShaderComponent.h">
@@ -377,14 +371,26 @@
     <ClInclude Include="..\include\ShaderVariables.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\AmbientShaderComponent.h">
-      <Filter>Header Files\shader</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\BaseComponentShader.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
     <ClInclude Include="..\include\DiffuseShaderComponent.h">
       <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\BlinnShaderComponent.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\DepthFrameBuffer.h">
+      <Filter>Header Files\frameBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\FrameBufferInterface.h">
+      <Filter>Header Files\frameBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\FrameBufferChannel.h">
+      <Filter>Header Files\frameBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\StandardFrameBuffer.h">
+      <Filter>Header Files\frameBuffers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

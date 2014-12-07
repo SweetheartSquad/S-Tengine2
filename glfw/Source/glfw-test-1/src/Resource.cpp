@@ -351,14 +351,10 @@ VoxelJoint * Resource::loadVoxelModel(std::string _jsonSrc){
 		joints.push_back(parseJoint(array, i));
 	}
 
-	if(joints.size() == 1){
-		mainJoint = joints.at(0);
-	}else{
-		mainJoint = new VoxelJoint(0, nullptr, new Transform, nullptr);
-		for(auto joint : joints){
-			mainJoint->addChild(joint);
-		}
+	mainJoint = new VoxelJoint(0, nullptr, new Transform, nullptr);
+	for(auto joint : joints){
+		mainJoint->addChild(joint);
 	}
-
+	
 	return mainJoint;
 }

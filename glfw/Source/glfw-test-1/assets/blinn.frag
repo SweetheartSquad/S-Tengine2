@@ -51,7 +51,7 @@ void main()
 	vec3 fragWorldPosition = vec3(model * vec4(fragVert, 1));
 	vec3 surfaceToCamera = fragVert - fragWorldPosition;
 	
-	outColor = vec4(0,0,0,1);
+	outColorTemp = vec4(0,0,0,1);
 
 	for(int i = 0; i < numLights; i++){
 		for(int j = 0; j < numMaterials; j++){
@@ -88,7 +88,9 @@ void main()
 			//final color (after gamma correction)
 			vec3 gamma = vec3(1.0/2.2, 1.0/2.2, 1.0/2.2);
 			vec3 gammaColor = pow(linearColor, gamma);
-			outColor = outColor + vec4(gammaColor, 1);
+			outColorTemp = outColorTemp + vec4(gammaColor, 1);
 		}
 	}
+
+	outColor = outColorTemp;
 }
