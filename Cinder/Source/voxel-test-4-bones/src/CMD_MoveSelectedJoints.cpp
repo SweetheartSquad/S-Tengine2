@@ -67,7 +67,6 @@ void CMD_MoveSelectedJoints::unexecute(){
 			}
 		}
 		break;
-	
 	}
 }
 

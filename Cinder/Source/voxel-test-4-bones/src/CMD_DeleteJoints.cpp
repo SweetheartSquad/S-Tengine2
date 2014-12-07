@@ -8,7 +8,7 @@
 #include "NodeChild.h"
 #include "Joint.h"
 
-CMD_DeleteJoints::CMD_DeleteJoints(std::vector<NodeHierarchical *> * _joints) :
+CMD_DeleteJoints::CMD_DeleteJoints(std::vector<Joint *> * _joints) :
 	joints(_joints)
 {
 }
@@ -17,11 +17,11 @@ void CMD_DeleteJoints::execute(){
 	// Save selected joints
 	for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 		Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
-		if(j != nullptr){
+		if(j == nullptr){
 			jointsForDeletion.push_back(j);
 		}
 	}
-	index.resize(jointsForDeletion.size());
+	indices.resize(jointsForDeletion.size());
 	children.resize(jointsForDeletion.size());
 
 	for(unsigned long int j = 0; j < jointsForDeletion.size(); ++j){
@@ -33,7 +33,7 @@ void CMD_DeleteJoints::execute(){
 				for(unsigned long int i = 0; i < jointForDeletion->parent->children.size(); ++i){
 					if(jointForDeletion->parent->children.at(i) == jointForDeletion){
 						jointForDeletion->parent->children.erase(jointForDeletion->parent->children.begin() + i);
-						index.at(j) = i;
+						indices.at(j) = i;
 						break;
 					}
 				}
@@ -42,7 +42,7 @@ void CMD_DeleteJoints::execute(){
 				for(unsigned long int i = 0; i < joints->size(); ++i){
 					if(joints->at(i) == jointForDeletion){
 						joints->erase(joints->begin() + i);
-						index.at(j) = i;
+						indices.at(j) = i;
 						break;
 					}
 				}
@@ -65,34 +65,41 @@ void CMD_DeleteJoints::execute(){
 	// Unselect joints
 	if(firstRun){
 		subCmdProc.executeCommand(new CMD_SelectNodes(nullptr));
+		for(unsigned long int i = 0; i < jointsForDeletion.size(); ++i){
+			subCmdProc.executeCommand(new CMD_SelectNodes(jointsForDeletion.at(i), true, false));
+		}
 	}else{
-		subCmdProc.redo();
+		subCmdProc.redoAll();
 	}
 }
 
 void CMD_DeleteJoints::unexecute(){
+	// Re-select old selection
+	subCmdProc.undoAll();
+
+
 	// Should this go in reverse order? I think it does already
 	for(unsigned long int j = jointsForDeletion.size(); j > 0; --j){
 		NodeHierarchical * jointForDeletion = dynamic_cast<NodeHierarchical *>(jointsForDeletion.at(j-1));
 		if(children.at(j-1).size() == 0){
-			// If the joint had no children it was deleted, so restore it
+			// If the joint had no children, it was deleted, so restore it
 			if(jointForDeletion->parent != nullptr){
-				// If the joint had no parent, it goes back into the joints vector
-				jointForDeletion->parent->children.insert(jointForDeletion->parent->children.begin() + index.at(j-1), jointForDeletion);
-			}else{
 				// If the joint had a parent, it goes back into the parent's children
-				joints->insert(joints->begin() + index.at(j-1), jointForDeletion);
+				jointForDeletion->parent->children.insert(jointForDeletion->parent->children.begin() + indices.at(j-1), jointForDeletion);
+			}else{
+				// If the joint had no parent, it goes back into the joints vector
+				joints->insert(joints->begin() + indices.at(j-1), jointForDeletion);
 			}
 		}else{
 			// If the joint had children, add the children back to the joint
 			jointForDeletion->children = children.at(j-1);
+			for(unsigned long int i = 0; i < children.at(j-1).size(); ++i){
+				children.at(j-1).at(i)->parent = jointForDeletion;
+			}
 		}
 	}
 	// Remove the deleted joints from the list of deleted joints
 	deletedJoints.clear();
-
-	// Re-select old selection
-	subCmdProc.undo();
 }
 
 CMD_DeleteJoints::~CMD_DeleteJoints(void){
@@ -103,6 +110,6 @@ CMD_DeleteJoints::~CMD_DeleteJoints(void){
 	}
 	deletedJoints.clear();
 	jointsForDeletion.clear();
-	index.clear();
+	indices.clear();
 	children.clear();
 }
