@@ -45,4 +45,7 @@ public:
 	virtual void onContextChange();
 
 	virtual void renderShadows();
+
+	virtual void setViewport(float x, float y, float w, float h);
+	float x, y, w, h;
 };
