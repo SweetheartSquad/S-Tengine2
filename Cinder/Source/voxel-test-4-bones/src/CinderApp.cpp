@@ -84,11 +84,13 @@ void CinderApp::setup(){
 	voxelPreviewMode = false;
 	voxelPreviewResolution = 0.1;
 	voxelSphereRadius = 0.1;
+	voxelPaintSpacing = 1;
 
 	voxelParams = params::InterfaceGl::create(getWindow(), "Voxel", toPixels(Vec2i(180,150)), ColorA(0.3f, 0.3f, 0.6f, 0.4f));
 	voxelParams->addParam("Preview", &voxelPreviewMode);
 	voxelParams->addParam("Resolution", &voxelPreviewResolution, "min=0.01, step=0.01");
 	voxelParams->addParam("Radius", &voxelSphereRadius, "min=0.01, step=0.01");
+	voxelParams->addParam("Paint Spacing", &voxelPaintSpacing, "min=0.01, step=0.5");
 	voxelParams->maximize();
 
 	// note: we will setup our camera in the 'resize' function,
@@ -877,7 +879,11 @@ void CinderApp::mouseDown( MouseEvent event ){
 						Color voxel;
 						pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
 						if(voxel != Color(0.f, 0.f, 0.f)){
-							cmdProc.executeCommand(new CMD_PlaceVoxel(Vec3f(voxel.r, voxel.g, voxel.b)));
+							Vec3f voxelPos = Vec3f(voxel.r, voxel.g, voxel.b);
+							console() << "voxelPos: " << voxelPos << endl;
+							cmdProc.executeCommand(new CMD_PlaceVoxel(voxelPos));
+							lastVoxelPaintPos = voxelPos;
+							currentSpacingDistance = 0;
 						}else{
 							console() << "bg" << std::endl;
 						}
@@ -1032,8 +1038,20 @@ void CinderApp::mouseDrag( MouseEvent event ){
 								// place voxel
 								Color voxel;
 								pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
+								
 								if(voxel != Color(0.f, 0.f, 0.f)){
-									cmdProc.executeCommand(new CMD_PlaceVoxel(Vec3f(voxel.r, voxel.g, voxel.b)));
+									Vec3f voxelPos = Vec3f(voxel.r, voxel.g, voxel.b);
+									float spacingDistance = voxelPaintSpacing * (voxelPreviewMode ? voxelPreviewResolution : voxelSphereRadius ) * 2;
+									currentSpacingDistance += lastVoxelPaintPos.distance(voxelPos);
+									console() << "lastVoxelPaintPos: " << lastVoxelPaintPos << endl;
+									console() << " voxelPos: " << voxelPos << endl;
+									console() << "currentSpacingDistance: " << currentSpacingDistance << " spacingDistance: " << spacingDistance << endl;
+									if(currentSpacingDistance >= spacingDistance){
+										console() << "blah distance: " << currentSpacingDistance << " spacing: " << voxelPaintSpacing << endl;
+										cmdProc.executeCommand(new CMD_PlaceVoxel(voxelPos));
+										currentSpacingDistance = 0;
+									}
+									lastVoxelPaintPos = voxelPos;
 								}else{
 									console() << "bg" << std::endl;
 								}

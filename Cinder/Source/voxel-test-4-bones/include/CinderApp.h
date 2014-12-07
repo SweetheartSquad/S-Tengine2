@@ -211,4 +211,9 @@ public:
 
 	// UI restriction check variables
 	bool isMouseDown;
+
+	// VoxelPaint spacing
+	Vec3f lastVoxelPaintPos;
+	float currentSpacingDistance;
+	float voxelPaintSpacing;
 };
