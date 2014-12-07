@@ -24,7 +24,7 @@ public:
 	Camera * camera;
 	/** Reference to a list of references to entitites included in this scene */
 	RenderOptions       * renderOptions;
-	DepthFrameBuffer    * depthBuffer;
+	DepthFrameBuffer	* depthBuffer;
 	StandardFrameBuffer * shadowBuffer;
 	Shader              * depthShader;
 	RenderSurface       * shadowSurface;
