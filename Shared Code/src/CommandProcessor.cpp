@@ -6,13 +6,21 @@
 
 #include "CommandProcessor.h"
 #include "Command.h"
+#include "CompressedCommand.h"
 
-CommandProcessor::CommandProcessor(void){}
+CommandProcessor::CommandProcessor(void) :
+	currentCompressedCommand(nullptr)
+{
+}
 
 void CommandProcessor::executeCommand(Command * c){
 	//ci::app::console() << "executeCommand: " << typeid(*c).name() << std::endl;
 	c->execute();
-	undoStack.push_back(c);
+	if(currentCompressedCommand != NULL){
+		currentCompressedCommand->subCommands.push_back(c);
+	}else{
+		undoStack.push_back(c);
+	}
 
 	// Executing a new command will always clear the redoStack
 	for(unsigned long int i = redoStack.size(); i > 0; --i){
@@ -54,6 +62,21 @@ void CommandProcessor::reset(){
 		redoStack.at(i-1) = nullptr;
 	}
 	redoStack.clear();
+}
+
+void CommandProcessor::startCompressing(){
+
+	CompressedCommand * c = new CompressedCommand();
+	currentCompressedCommand = c;
+}
+
+void CommandProcessor::endCompressing(){
+
+	if(currentCompressedCommand->subCommands.size() > 0){
+		undoStack.push_back(currentCompressedCommand);
+		redoStack.clear();
+	}
+	currentCompressedCommand = nullptr;
 }
 
 CommandProcessor::~CommandProcessor(void){

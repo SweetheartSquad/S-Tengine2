@@ -810,6 +810,21 @@ void CinderApp::pickColour(void * res, const gl::Fbo * _sourceFbo, const Rectf *
 
 void CinderApp::mouseDown( MouseEvent event ){
 	mMousePos = event.getPos();
+
+	switch (mode){
+		case CinderApp::CREATE:
+			break;
+		case CinderApp::SELECT:
+			break;
+		case CinderApp::TRANSLATE:
+		case CinderApp::ROTATE:
+		case CinderApp::SCALE:
+		case CinderApp::PAINT_VOXELS:
+			cmdProc.startCompressing();
+			break;
+		default:
+			break;
+	}
 	
 	// handle the camera
 	camMayaPersp.mouseDown( mMousePos );
@@ -859,7 +874,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 						Color voxel;
 						pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
 						if(voxel != Color(0.f, 0.f, 0.f)){
-								cmdProc.executeCommand(new CMD_PlaceVoxel(Vec3f(voxel.r, voxel.g, voxel.b)));
+							cmdProc.executeCommand(new CMD_PlaceVoxel(Vec3f(voxel.r, voxel.g, voxel.b)));
 						}else{
 							console() << "bg" << std::endl;
 						}
@@ -1007,6 +1022,35 @@ void CinderApp::mouseDrag( MouseEvent event ){
 						}
 					}
 				}
+			}else{
+				if(mode == PAINT_VOXELS){
+					console() << "mouse drag" << endl;
+						if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
+							console() << "bone selected" << endl;
+							if(event.isLeftDown()){
+								console() << "painting" << endl;
+								// place voxel
+								Color voxel;
+								pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
+								if(voxel != Color(0.f, 0.f, 0.f)){
+									cmdProc.executeCommand(new CMD_PlaceVoxel(Vec3f(voxel.r, voxel.g, voxel.b)));
+								}else{
+									console() << "bg" << std::endl;
+								}
+							}else{
+								console() << "deleting drag" << endl;
+								// delete voxel
+								unsigned long int voxel;
+								pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+								if(NodeSelectable::pickingMap.count(voxel) != 0){
+									Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
+									if(t != NULL){
+										cmdProc.executeCommand(new CMD_DeleteVoxel(t));
+									}
+								}
+							}
+						}
+					}
 			}
 			oldMousePos = mMousePos;
 		}
@@ -1040,6 +1084,9 @@ void CinderApp::mouseUp( MouseEvent event ){
 		activeButton->up(this);
 	}
 	
+	if(mode == TRANSLATE || mode == ROTATE || mode == SCALE || mode == PAINT_VOXELS){
+		cmdProc.endCompressing();
+	}
 
 	uiColour = 0;
 	clickedUiColour = 0;

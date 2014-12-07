@@ -3,6 +3,7 @@
 #include <vector>
 
 class Command;
+class CompressedCommand;
 
 class CommandProcessor{
 public:
@@ -16,7 +17,12 @@ public:
 	void redo();
 	// Deletes and clears the contents of the undo and redo stacks
 	void reset();
+	
+	void startCompressing();
+	void endCompressing();
 private:
 	std::vector<Command *> undoStack;
 	std::vector<Command *> redoStack;
+	
+	CompressedCommand * currentCompressedCommand;
 };
