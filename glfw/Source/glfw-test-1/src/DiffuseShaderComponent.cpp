@@ -15,8 +15,7 @@ std::string DiffuseShaderComponent::getVertexVariablesString(){
 
 std::string DiffuseShaderComponent::getFragmentVariablesString(){
 	return 
-		DEFINE + SHADER_COMPONENT_DIFFUSE + ENDL + 
-		"uniform mat4 " + GL_UNIFORM_ID_MODEL_MATRIX + SEMI_ENDL +
+		DEFINE + SHADER_COMPONENT_DIFFUSE + ENDL +
 		SHADER_INCLUDE_LIGHT;
 }
 
@@ -26,7 +25,7 @@ std::string DiffuseShaderComponent::getVertexBodyString(){
 
 std::string DiffuseShaderComponent::getFragmentBodyString(){
 	return
-		IF_DEFINED + SHADER_COMPONENT_LIGHT + 
+		IF_NOT_DEFINED + SHADER_COMPONENT_BLINN + " && " + SHADER_COMPONENT_PHONG + ENDL + 
 		"mat3 normalMatrix = transpose(inverse(mat3(model)))" + SEMI_ENDL +
 		"vec3 normal = normalize(normalMatrix * fragNormal)" + SEMI_ENDL +
 		"vec3 fragWorldPosition = vec3(model * vec4(fragVert, 1))" + SEMI_ENDL +
@@ -39,10 +38,13 @@ std::string DiffuseShaderComponent::getFragmentBodyString(){
 			"outIntensities += vec3(lights[i].intensities)" + SEMI_ENDL +
 		"}" + ENDL +
 
-		"brightness = clamp(brightness, 0.1, 1)" + SEMI_ENDL +
-		END_IF;
+		"brightness = clamp(brightness, 0.1, 1)" + SEMI_ENDL + 
+		END_IF + ENDL;
 }
 
 std::string DiffuseShaderComponent::getOutColorMod(){
-	return GL_OUT_OUT_COLOR + " *= vec4(vec3(outIntensities), 1) * vec4(brightness, brightness, brightness, 1)" + SEMI_ENDL;
+	return 
+		IF_NOT_DEFINED + SHADER_COMPONENT_BLINN + " && " + SHADER_COMPONENT_PHONG + ENDL + 
+		GL_OUT_OUT_COLOR + " *= vec4(vec3(outIntensities), 1) * vec4(brightness, brightness, brightness, 1)" + SEMI_ENDL +
+		END_IF + ENDL;
 }

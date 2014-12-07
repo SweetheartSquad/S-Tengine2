@@ -20,6 +20,7 @@
 #include <TextureShaderComponent.h>
 #include <VoxelJoint.h>
 #include "PhongShaderComponent.h"
+#include "BlinnShaderComponent.h"
 
 Cube * cube;
 Cube * cube2;
@@ -74,8 +75,8 @@ MainScene::MainScene(Game * _game):
 
 	baseShader = new BaseComponentShader();
 	baseShader->components.push_back(new TextureShaderComponent());
-	//baseShader->components.push_back(new DiffuseShaderComponent());
-	baseShader->components.push_back(new PhongShaderComponent());
+	baseShader->components.push_back(new DiffuseShaderComponent());
+	baseShader->components.push_back(new BlinnShaderComponent());
 	baseShader->components.push_back(new ShadowShaderComponent());
 	baseShader->compileShader();
 

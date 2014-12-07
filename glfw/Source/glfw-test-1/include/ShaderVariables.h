@@ -25,6 +25,18 @@ const std::string SEMI_ENDL							  = SEMI + ENDL;
 
 const std::string EMPTY								  = "";
 
+const std::string UNIFORM							  = "uniform ";
+const std::string OUT								  = "out ";
+const std::string IN							      = "in ";
+
+const std::string VEC4								  = "vec4 ";
+const std::string VEC3								  = "vec3 ";
+const std::string VEC2								  = "vec2 ";
+const std::string MAT4								  = "mat4 ";
+const std::string MAT3								  = "mat3 ";
+const std::string FLOAT								  = "float ";
+const std::string INT								  = "int ";
+
 //Uniform variable names
 const std::string GL_UNIFORM_ID_TEXTURE_SAMPLER       = "textureSampler";
 const std::string GL_UNIFORM_ID_NUM_TEXTURES 		  = "numTextures";
@@ -59,6 +71,7 @@ const std::string SHADER_COMPONENT_PHONG			  = "SHADER_COMPONENT_PHONG";
 const std::string SHADER_COMPONENT_MATERIAL			  = "SHADER_COMPONENT_MATERIAL";
 const std::string SHADER_COMPONENT_AMBIENT			  = "SHADER_COMPONENT_AMBIENT";
 const std::string SHADER_COMPONENT_DIFFUSE			  = "SHADER_COMPONENT_DIFFUSE";
+const std::string SHADER_COMPONENT_BLINN			  = "SHADER_COMPONENT_BLINN";
 
 const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGHT + "\n"
 														"#define " + SHADER_COMPONENT_LIGHT + "\n"

@@ -26,11 +26,12 @@ std::string PhongShaderComponent::getVertexBodyString(){
 
 std::string PhongShaderComponent::getFragmentBodyString(){
 	return 
+	IF_NOT_DEFINED + SHADER_COMPONENT_BLINN + ENDL + 
 	"mat3 normalMatrix = transpose(inverse(mat3(model)))" + SEMI_ENDL +
 	"vec3 normal = normalize(normalMatrix * fragNormal)" + SEMI_ENDL +
 	"vec3 fragWorldPosition = vec3(model * vec4(fragVert, 1))" + SEMI_ENDL +
 	"vec3 surfaceToCamera = normalize(fragVert - fragWorldPosition)" + SEMI_ENDL +
-	"vec4 outColorTemp = vec4(0,0,0,1)" + SEMI_ENDL +
+	"vec4 outColorPhong = vec4(0,0,0,1)" + SEMI_ENDL +
 	"for(int i = 0; i < numLights; i++){" + ENDL +
 		"for(int j = 0; j < numMaterials; j++){" + ENDL +
 			"vec3 surfaceToLight = normalize(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
@@ -62,11 +63,15 @@ std::string PhongShaderComponent::getFragmentBodyString(){
 			"//final color (after gamma correction)" + ENDL +
 			"vec3 gamma = vec3(1.0/2.2, 1.0/2.2, 1.0/2.2)" + SEMI_ENDL +
 			"vec3 gammaColor = pow(linearColor, gamma)" + SEMI_ENDL +
-			"outColorTemp = outColorTemp + vec4(gammaColor, 1)" + SEMI_ENDL +
+			"outColorPhong = outColorPhong + vec4(gammaColor, 1)" + SEMI_ENDL +
 		"}" + ENDL +
-	"}" + ENDL;
+	"}" + ENDL +
+	END_IF + ENDL;
 }
 
 std::string PhongShaderComponent::getOutColorMod(){
-	return GL_OUT_OUT_COLOR + " *= outColorTemp;" + ENDL;
+	return 
+		IF_NOT_DEFINED + SHADER_COMPONENT_BLINN + ENDL + 
+		GL_OUT_OUT_COLOR + " *= outColorPhong;" + SEMI_ENDL + 
+		END_IF + ENDL;	
 }

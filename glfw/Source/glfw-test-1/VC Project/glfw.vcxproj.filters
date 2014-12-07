@@ -219,6 +219,9 @@
     <ClCompile Include="..\src\DiffuseShaderComponent.cpp">
       <Filter>Source Files\shader</Filter>
     </ClCompile>
+    <ClCompile Include="..\include\BlinnShaderComponent.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -384,6 +387,9 @@
       <Filter>Header Files\shader</Filter>
     </ClInclude>
     <ClInclude Include="..\include\DiffuseShaderComponent.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\BlinnShaderComponent.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
   </ItemGroup>
