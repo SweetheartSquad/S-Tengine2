@@ -11,20 +11,21 @@ CMD_CreateJoint::CMD_CreateJoint(SceneRoot * _sceneRoot, ci::Vec3d _pos, Joint *
 	sceneRoot(_sceneRoot),
 	pos(_pos),
 	parent(_parent),
-	createdJoint(nullptr),
-	executed(false)
+	createdJoint(nullptr)
 {
 }
 
 void CMD_CreateJoint::execute(){
 	if(createdJoint == nullptr){
-		createdJoint = new Joint(parent);
+		createdJoint = new Joint();
 	}
 
 	if(parent != nullptr){
-		parent->children.push_back(createdJoint);
+		parent->addChild(createdJoint);
+	}else if(sceneRoot != nullptr){
+		sceneRoot->addChild(createdJoint);
 	}else{
-		sceneRoot->children.push_back(createdJoint);
+		// Error: no appropriate parent for created joint found
 	}
 
 	createdJoint->setPos(glm::vec3(pos.x, pos.y, pos.z));
@@ -34,23 +35,16 @@ void CMD_CreateJoint::execute(){
 		subCommands.push_back(new CMD_SelectNodes(createdJoint));
 	}
 	subCommands.at(0)->execute();
-
-	executed = true;
 }
 
 void CMD_CreateJoint::unexecute(){
 	if(createdJoint->parent != nullptr){
 		// Remove created joint from list of children on parent
 		createdJoint->parent->children.pop_back();
-	}else{
-		// Remove created joint from joint list
-		sceneRoot->children.pop_back();
 	}
 
 	// Re-select old selection
 	subCommands.at(0)->unexecute();
-
-	executed = false;
 }
 
 CMD_CreateJoint::~CMD_CreateJoint(void){

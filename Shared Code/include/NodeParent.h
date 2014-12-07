@@ -5,6 +5,7 @@
 #include <vector>
 
 class NodeChild;
+class SceneRoot;
 
 class NodeParent abstract : public virtual Node{
 public:
@@ -13,6 +14,9 @@ public:
 	// Recursively delete all the children of a node, then delete the node itself
 	static void deleteRecursively(NodeParent * _j);
 
+	// Loops through the node's children and removes the first instance of _child
+	// Pushes _child onto the node's children stack
+	// Sets _child->parent = this node
 	virtual void addChild(NodeChild * _child);
 	virtual void removeChildAtIndex(int _index);
 	// Loops through the node's children and removes the first instance of _child and returns the index

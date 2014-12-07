@@ -12,35 +12,12 @@
 
 unsigned long int Joint::nextId = 0;
 
-void Joint::init(){
-	depth = 0;
-	parent = nullptr;
-	id = nextId;
-	nextId += 1;
-}
-
 Joint::Joint() : 
 	NodeTransformable(new Transform()),
-	NodeChild(nullptr)
+	NodeChild(nullptr),
+	id(nextId)
 {
-	init();
-}
-
-Joint::Joint(NodeParent * _parent) : 
-	NodeTransformable(new Transform()),
-	NodeChild(_parent)
-{
-	init();
-	parent = _parent;
-	while(_parent != nullptr){
-		NodeHierarchical * t = dynamic_cast<NodeHierarchical *>(_parent);
-		if (t != NULL){
-			_parent = t->parent;
-			depth += 1;
-		}else{
-			break;
-		}
-	}
+	nextId += 1;
 }
 
 Joint::~Joint(){
@@ -53,6 +30,7 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 		//gl::enableWireframe();
 		r->ciShader->uniform("pickingColor", Color::hex(pickingColor));
 		//colour
+		float depth = calculateDepth();
 		ColorA color(
 			1 - (float)depth / 28.f,
 			0.25f + (depth <= 14 ? (float)depth / 14.f : (float)(14-depth) / 14.f),

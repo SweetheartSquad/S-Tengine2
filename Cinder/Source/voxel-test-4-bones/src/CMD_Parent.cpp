@@ -32,6 +32,8 @@ void CMD_Parent::execute(){
 				newParent->addChild(node);
 			}else if(sceneRoot != nullptr){
 				sceneRoot->addChild(node);
+			}else{
+				// Error: no parent provided
 			}
 
 			if (oldParent != nullptr){
