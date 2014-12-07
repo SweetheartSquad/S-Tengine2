@@ -4,17 +4,17 @@
 #include <cinder\Area.h>
 
 #include "NodeRenderable.h"
+#include "NodeHierarchical.h"
 
 class ToolButton;
 class Step;
 
-class ToolSet : public NodeRenderable{
+class ToolSet : public NodeRenderable, public NodeHierarchical{
 public:
 	ToolSet(ci::Area _iconSize);
 	~ToolSet();
 
 	ci::Area iconSize;
-	std::vector<ToolButton *> buttons;
 
 	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 

@@ -12,6 +12,7 @@ CommandProcessor::CommandProcessor(void){}
 void CommandProcessor::executeCommand(Command * c){
 	//ci::app::console() << "executeCommand: " << typeid(*c).name() << std::endl;
 	c->execute();
+	c->executed = true;
 	undoStack.push_back(c);
 
 	// Executing a new command will always clear the redoStack
@@ -27,6 +28,7 @@ void CommandProcessor::undo(){
 		//ci::app::console() << "undo: " << typeid(*c).name() << std::endl;
 		Command * c = undoStack.back();
 		c->unexecute();
+		c->executed = true;
 		redoStack.push_back(c);
 		undoStack.pop_back();
 	}
@@ -37,6 +39,7 @@ void CommandProcessor::redo(){
 		//ci::app::console() << "redo: " << typeid(*c).name() << std::endl;
 		Command * c = redoStack.back();
 		c->execute();
+		c->executed = true;
 		undoStack.push_back(c);
 		redoStack.pop_back();
 	}

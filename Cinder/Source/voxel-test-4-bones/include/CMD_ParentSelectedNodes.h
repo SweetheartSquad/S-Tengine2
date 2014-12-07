@@ -2,13 +2,15 @@
 
 #include "Command.h"
 
+class NodeParent;
+
 class CMD_ParentSelectedNodes : public Command{
 public:
-	CMD_ParentSelectedNodes();
+	CMD_ParentSelectedNodes(NodeParent * _parent);
 	~CMD_ParentSelectedNodes();
 
 	void execute();
 	void unexecute();
 
-	bool executed;
+	NodeParent * parent;
 };

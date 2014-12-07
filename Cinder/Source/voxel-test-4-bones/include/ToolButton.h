@@ -2,6 +2,7 @@
 
 #include "NodeSelectable.h"
 #include "NodeRenderable.h"
+#include "NodeChild.h"
 
 #include <cinder\Rect.h>
 #include <cinder\Color.h>
@@ -12,7 +13,7 @@ class CinderApp;
 class ToolSet;
 class Step;
 
-class ToolButton : public NodeSelectable, public NodeRenderable{
+class ToolButton : public NodeSelectable, public NodeRenderable, public NodeChild{
 public:
 	ci::Color displayColor;
 
@@ -21,8 +22,6 @@ public:
 		TOGGLE,
 		RADIO
 	} type;
-
-	ToolSet * group;
 	
 	ToolButton(Type _type);
 

@@ -11,7 +11,7 @@
 #include "CMD_RotateSelectedTransformable.h"
 #include "CMD_KeyProperty.h"
 #include "CMD_KeyAll.h"
-#include "CMD_Parent.h"
+#include "CMD_ParentSelectedNodes.h"
 #include "CMD_PlaceVoxel.h"
 #include "CMD_DeleteVoxel.h"
 
@@ -136,7 +136,7 @@ void CinderApp::setup(){
 	
 	toolbar = new ToolBar(Vec2i(5,5));
 
-	toolbar->toolsets.push_back(new ToolSet(Area(0,0,30,30)));
+	/*toolbar->toolsets.push_back(new ToolSet(Area(0,0,30,30)));
 	toolbar->toolsets.push_back(new ToolSet(Area(0,0,20,20)));
 	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
 	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
@@ -147,7 +147,7 @@ void CinderApp::setup(){
 	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::TOGGLE));
 	
 	toolbar->toolsets.at(0)->buttons.at(0)->upCallback = changeMode1;
-	toolbar->toolsets.at(0)->buttons.at(1)->upCallback = changeMode2;
+	toolbar->toolsets.at(0)->buttons.at(1)->upCallback = changeMode2;*/
 }
 
 void CinderApp::resize(){
@@ -1085,7 +1085,7 @@ void CinderApp::keyDown( KeyEvent event ){
 		}
 		break;
 	case KeyEvent::KEY_p:
-		cmdProc.executeCommand(new CMD_Parent(nullptr, nullptr));
+		cmdProc.executeCommand(new CMD_ParentSelectedNodes(event.isShiftDown() ? nullptr : dynamic_cast<NodeParent *>(UI::selectedNodes.back())));
 		break;
 	case KeyEvent::KEY_d:
 		if(event.isControlDown()){

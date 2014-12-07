@@ -9,7 +9,8 @@
 
 CMD_Parent::CMD_Parent(NodeChild * _node, NodeParent * _parent) :
 	node(_node),
-	newParent(_parent)
+	newParent(_parent),
+	oldParent(nullptr)
 {
 }
 
@@ -19,7 +20,17 @@ void CMD_Parent::execute(){
 		node->parent = newParent;
 
 		if(newParent != nullptr){
-			newParent->children.push_back(node);
+			// check that it isn't already a child of the new parent
+			bool isChild = false;
+			for (unsigned long int i = 0; i < newParent->children.size(); ++i){
+				if (node == newParent->children.at(i)){
+					isChild = true;
+					break;
+				}
+			}
+			if(!isChild){
+				newParent->children.push_back(node);
+			}
 		}
 		if (oldParent != nullptr){
 			for(unsigned long int i = 0; i < oldParent->children.size(); ++i){
@@ -40,7 +51,9 @@ void CMD_Parent::unexecute(){
 	if(newParent != nullptr){
 		newParent->children.pop_back();
 	}
-	node->parent = oldParent;
+	if(node != nullptr){
+		node->parent = oldParent;
+	}
 }
 
 CMD_Parent::~CMD_Parent(void){

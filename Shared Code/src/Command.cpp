@@ -2,6 +2,11 @@
 
 #include "Command.h"
 
+Command::Command() :
+	executed(false)
+{
+}
+
 Command::~Command(){
 	for(unsigned long int i = 0; i < subCommands.size(); ++i){
 		delete subCommands.at(i);

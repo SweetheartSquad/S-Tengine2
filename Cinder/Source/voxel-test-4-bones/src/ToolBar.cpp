@@ -14,18 +14,18 @@ void ToolBar::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderSta
 	ci::gl::pushMatrices();
 		ci::gl::translate(pos);
 		ci::Vec2i setPos(0,0);
-		for(unsigned long int i = 0; i < toolsets.size(); ++i){
+		for(unsigned long int i = 0; i < children.size(); ++i){
 			ci::gl::translate(setPos);
 
-			toolsets.at(i)->render(_matrixStack, _renderStack);
-			setPos.y = toolsets.at(i)->buttons.size() * (toolsets.at(i)->iconSize.getHeight()+2) + 5;
+			dynamic_cast<ToolSet *>(children.at(i))->render(_matrixStack, _renderStack);
+			setPos.y = dynamic_cast<ToolSet *>(children.at(i))->children.size() * (dynamic_cast<ToolSet *>(children.at(i))->iconSize.getHeight()+2) + 5;
 		}
 	ci::gl::popMatrices();
 }
 
 ToolBar::~ToolBar(){
-	while(toolsets.size() > 0){
-		delete toolsets.at(toolsets.size()-1);
-		toolsets.pop_back();
+	while(children.size() > 0){
+		delete children.at(children.size()-1);
+		children.pop_back();
 	}
 }

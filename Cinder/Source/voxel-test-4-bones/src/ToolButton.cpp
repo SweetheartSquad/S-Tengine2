@@ -8,6 +8,7 @@
 #include <cinder\gl\gl.h>
 
 ToolButton::ToolButton(Type _type):
+	NodeChild(nullptr),
 	NodeSelectable(),
 	isHovered(false),
 	isDown(false),
@@ -39,8 +40,8 @@ void ToolButton::up(CinderApp * _app){
 	case ToolButton::RADIO:
 		if(isHovered){
 			// need to unclick sibling
-			for(unsigned long int i = 0; i < group->buttons.size(); ++i){
-				group->buttons.at(i)->isActive = false;
+			for(unsigned long int i = 0; i < dynamic_cast<ToolSet *>(parent)->children.size(); ++i){
+				dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(parent)->children.at(i))->isActive = false;
 			}
 			isActive = true;
 		}
