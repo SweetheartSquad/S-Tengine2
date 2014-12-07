@@ -268,7 +268,7 @@ void MainScene::update(){
 }
 
 void MainScene::render(){
-	int width, height;
+	/**int width, height;
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
 
 	setViewport(0, 0, width/2.f, height/2.f);
@@ -284,8 +284,6 @@ void MainScene::render(){
 	renderSurface->render(frameBuffer->getTextureId());
 	((GLFWRenderOptions *)renderOptions)->shadowMapTextureId = 0;
 
-	//
-
 	setViewport(w, 0, w, h);
 
 	//Scene::renderShadows();
@@ -299,12 +297,8 @@ void MainScene::render(){
 
 	renderSurface->render(depthBuffer->getTextureId());
 	((GLFWRenderOptions *)renderOptions)->shadowMapTextureId = 0;
-
-	//
 	
 	setViewport(w, h, w, h);
-
-	//
 
 	shadowBuffer->resize(w, h);
 	shadowBuffer->bindFrameBuffer();
@@ -314,7 +308,15 @@ void MainScene::render(){
 	Scene::render();
 
 	renderSurface->render(shadowBuffer->getTextureId());
-	((GLFWRenderOptions *)renderOptions)->shadowMapTextureId = 0;
+	((GLFWRenderOptions *)renderOptions)->shadowMapTextureId = 0;*/
+
+	int width, height;
+	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+
+	setViewport(0, 0, width, height);
+
+	Scene::renderShadows();
+	Scene::render();
 }
 
 void MainScene::onContextChange(){

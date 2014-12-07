@@ -30,7 +30,7 @@ void FrameBufferInterface::load(){
 			if(frameBufferChannels.at(i).attachmentType == GL_COLOR_ATTACHMENT0){
 				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + colorAttachmentCount, GL_TEXTURE_2D, frameBufferChannels.at(i).id, 0);
 			}else{
-				glFramebufferTexture2D(GL_FRAMEBUFFER, frameBufferChannels.at(i).attachmentType,GL_TEXTURE_2D, frameBufferChannels.at(i).id, 0);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, frameBufferChannels.at(i).attachmentType, GL_TEXTURE_2D, frameBufferChannels.at(i).id, 0);
 			}
 			break;
 		case FrameBufferChannel::RENDER_BUFFER :
