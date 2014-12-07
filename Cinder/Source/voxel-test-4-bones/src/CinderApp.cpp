@@ -644,20 +644,6 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 
 	// restore matrices
 	gl::popMatrices();
-	
-	gl::pushMatrices();
-		Area t = Area(rect.x1, (fboUI.getHeight()-rect.y1), rect.x2, (fboUI.getHeight()-rect.y2));
-		gl::setViewport(t);
-
-		gl::setMatrices(cam);
-		
-		//gl::multModelView(cam.getInverseModelViewMatrix());
-		gl::multProjection(cam.getProjectionMatrix().inverted());
-
-		uiShader.uniform("pickingColor", Color(0.f, 0.f, 0.f));
-
-		gl::drawCoordinateFrame();
-	gl::popMatrices();
 }
 
 void CinderApp::mouseMove( MouseEvent event ){
