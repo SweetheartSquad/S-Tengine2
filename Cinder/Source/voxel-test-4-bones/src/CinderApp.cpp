@@ -4,7 +4,7 @@
 #include "UI.h"
 
 #include "CMD_CreateJoint.h"
-#include "CMD_DeleteJoint.h"
+#include "CMD_DeleteJoints.h"
 #include "CMD_SelectNodes.h"
 #include "CMD_MoveSelectedJoints.h"
 #include "CMD_ScaleSelectedTransformable.h"
@@ -1081,9 +1081,12 @@ void CinderApp::keyDown( KeyEvent event ){
 		if(UI::selectedNodes.size() != 0){
 			std::vector<NodeHierarchical *> temp;
 			for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
-				temp.push_back(dynamic_cast<NodeHierarchical *>(sceneRoot->children.at(i)));
+				NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(sceneRoot->children.at(i));
+				if(nh != nullptr){
+					temp.push_back(nh);
+				}
 			}
-			cmdProc.executeCommand(new CMD_DeleteJoint(&temp));
+			cmdProc.executeCommand(new CMD_DeleteJoints(&temp));
 			sceneRoot->children.clear();
 			for(unsigned long int i = 0; i < temp.size(); ++i){
 				sceneRoot->children.push_back(temp.at(i));

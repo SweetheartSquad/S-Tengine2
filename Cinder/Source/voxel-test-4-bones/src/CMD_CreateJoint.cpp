@@ -31,10 +31,11 @@ void CMD_CreateJoint::execute(){
 	createdJoint->setPos(glm::vec3(pos.x, pos.y, pos.z));
 
 	// Select newly created joint
-	if(subCommands.size() == 0){
-		subCommands.push_back(new CMD_SelectNodes(createdJoint));
+	if(firstRun){
+		subCmdProc.executeCommand(new CMD_SelectNodes(createdJoint));
+	}else{
+		subCmdProc.redo();
 	}
-	subCommands.at(0)->execute();
 }
 
 void CMD_CreateJoint::unexecute(){
@@ -44,7 +45,7 @@ void CMD_CreateJoint::unexecute(){
 	}
 
 	// Re-select old selection
-	subCommands.at(0)->unexecute();
+	subCmdProc.undo();
 }
 
 CMD_CreateJoint::~CMD_CreateJoint(void){

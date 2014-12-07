@@ -8,10 +8,10 @@ class Node;
 class NodeHierarchical;
 class NodeChild;
 
-class CMD_DeleteJoint : public Command{
+class CMD_DeleteJoints : public Command{
 public:
-	CMD_DeleteJoint(std::vector<NodeHierarchical *> * joints);
-	~CMD_DeleteJoint(void);
+	CMD_DeleteJoints(std::vector<NodeHierarchical *> * joints);
+	~CMD_DeleteJoints(void);
 
 	void execute();
 	void unexecute();

@@ -39,9 +39,6 @@
     <ClCompile Include="..\src\CMD_CreateJoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CMD_DeleteJoint.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\Command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -156,6 +153,9 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\SceneRoot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CMD_DeleteJoints.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag">
@@ -197,9 +197,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\CMD_CreateJoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_DeleteJoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\CMD_SelectNodes.h">
@@ -308,6 +305,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\SceneRoot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_DeleteJoints.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
