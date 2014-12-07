@@ -20,6 +20,10 @@ bool NodeParent::addChild(NodeChild * _child){
 	return true;
 }
 
+void NodeParent::addChildAtIndex(NodeChild * _child, int _index){
+	children.insert(children.begin() + _index, _child);
+}
+
 void NodeParent::removeChildAtIndex(int _index){
 	children.erase(children.begin() + _index - 1);
 }

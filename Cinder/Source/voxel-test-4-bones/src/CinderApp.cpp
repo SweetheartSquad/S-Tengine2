@@ -1065,11 +1065,11 @@ void CinderApp::keyDown( KeyEvent event ){
 		break;
 	case KeyEvent::KEY_DELETE:
 		if(UI::selectedNodes.size() != 0){
-			std::vector<NodeHierarchical *> temp;
+			std::vector<Joint *> temp;
 			for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
-				NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(sceneRoot->children.at(i));
-				if(nh != nullptr){
-					temp.push_back(nh);
+				Joint * j = dynamic_cast<Joint *>(sceneRoot->children.at(i));
+				if(j != nullptr){
+					temp.push_back(j);
 				}
 			}
 			cmdProc.executeCommand(new CMD_DeleteJoints(&temp));
