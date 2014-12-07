@@ -206,4 +206,7 @@ public:
 	// Animation
 	bool play;
 	float previousTime;
+
+	// UI restriction check variables
+	bool isMouseDown;
 };
