@@ -62,6 +62,8 @@ public:
 	// Draws a grid on the floor
 	void drawGrid(float size = 100.f, float step = 10.f);
 
+	void snapParams();
+
 	void saveSkeleton();
 	void loadSkeleton();
 
@@ -206,4 +208,7 @@ public:
 	// Animation
 	bool play;
 	float previousTime;
+
+	// UI restriction check variables
+	bool isMouseDown;
 };

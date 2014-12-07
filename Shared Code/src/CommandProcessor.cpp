@@ -71,12 +71,15 @@ void CommandProcessor::startCompressing(){
 }
 
 void CommandProcessor::endCompressing(){
-
-	if(currentCompressedCommand->subCommands.size() > 0){
-		undoStack.push_back(currentCompressedCommand);
-		redoStack.clear();
+	if(currentCompressedCommand != nullptr){
+		if(currentCompressedCommand->subCommands.size() > 0){
+			undoStack.push_back(currentCompressedCommand);
+			redoStack.clear();
+		}else{
+			delete currentCompressedCommand;
+		}
+		currentCompressedCommand = nullptr;
 	}
-	currentCompressedCommand = nullptr;
 }
 
 CommandProcessor::~CommandProcessor(void){

@@ -91,7 +91,6 @@ void CinderApp::setup(){
 	voxelParams->addParam("Radius", &voxelSphereRadius, "min=0.01, step=0.01");
 	voxelParams->maximize();
 
-
 	// note: we will setup our camera in the 'resize' function,
 	//  because it is called anyway so we don't have to set it up twice
 
@@ -281,6 +280,8 @@ void CinderApp::update(){
 	camTop.setEyePoint(camMayaPersp.getCamera().getEyePoint());
 	camFront.setEyePoint(camMayaPersp.getCamera().getEyePoint());
 	camRight.setEyePoint(camMayaPersp.getCamera().getEyePoint());
+
+	snapParams();
 }
 
 void CinderApp::draw(){
@@ -809,6 +810,7 @@ void CinderApp::pickColour(void * res, const gl::Fbo * _sourceFbo, const Rectf *
 }
 
 void CinderApp::mouseDown( MouseEvent event ){
+	isMouseDown = true;
 	mMousePos = event.getPos();
 
 	switch (mode){
@@ -1075,6 +1077,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 }
 
 void CinderApp::mouseUp( MouseEvent event ){
+	isMouseDown = false;
 	UI::updateHandlePos(false);
 	
 	if(activeButton != NULL){
@@ -1091,98 +1094,118 @@ void CinderApp::mouseUp( MouseEvent event ){
 }
 
 void CinderApp::keyDown( KeyEvent event ){
-	
-	switch( event.getCode() ) {
-	case KeyEvent::KEY_ESCAPE:
-		//shutdown();
-		quit();
-		break;
-	case KeyEvent::KEY_f:
-		setFullScreen( !isFullScreen() );
-		break;
-	case KeyEvent::KEY_F1:
-		drawParams = !drawParams;
-		if(drawParams){
-			params->maximize();
-			timelineParams->maximize();
-			voxelParams->maximize();
+	if(!isMouseDown){
+		if(!event.isAltDown()){
+			if(event.isControlDown()){
+				if(!event.isShiftDown()){
+					// Ctrl + key combinations
+					switch( event.getCode() ){
+					case KeyEvent::KEY_z:
+						cmdProc.undo();
+						break;
+					case KeyEvent::KEY_y:
+						cmdProc.redo();
+						break;
+					case KeyEvent::KEY_d:
+						// Deselect all
+						if(UI::selectedNodes.size() != 0){
+							cmdProc.executeCommand(new CMD_SelectNodes(nullptr));
+						}
+						break;
+					}
+				}else{
+					// Ctrl + Shift + key combinations
+				}
+			}else if(event.isShiftDown()){
+				// Shift + key combinations
+			}else{
+				// Simple key
+				switch (event.getCode() ){
+				case KeyEvent::KEY_ESCAPE:
+					//shutdown();
+					quit();
+					break;
+				case KeyEvent::KEY_f:
+					setFullScreen( !isFullScreen() );
+					break;
+				case KeyEvent::KEY_F1:
+					drawParams = !drawParams;
+					if(drawParams){
+						params->maximize();
+						timelineParams->maximize();
+						voxelParams->maximize();
+					}else{
+						params->minimize();
+						timelineParams->minimize();
+						voxelParams->minimize();
+					}
+				case KeyEvent::KEY_1:
+					channel = 0;
+					break;
+				case KeyEvent::KEY_2:
+					channel = 1;
+					break;
+				case KeyEvent::KEY_3:
+					channel = 2;
+					break;
+				case KeyEvent::KEY_4:
+					channel = 3;
+					break;
+				case KeyEvent::KEY_DELETE:
+					if(UI::selectedNodes.size() != 0){
+						std::vector<NodeHierarchical *> temp;
+						for(unsigned long int i = 0; i < joints.size(); ++i){
+							temp.push_back(joints.at(i));
+						}
+						cmdProc.executeCommand(new CMD_DeleteJoint(&temp));
+						joints.clear();
+						for(unsigned long int i = 0; i < temp.size(); ++i){
+							joints.push_back(dynamic_cast<Joint *>(temp.at(i)));
+						}
+					}
+					break;
+				case KeyEvent::KEY_p:
+					cmdProc.executeCommand(new CMD_Parent(nullptr, nullptr));
+					break;
+				case KeyEvent::KEY_q:
+					mode = SELECT;
+					params->setOptions( "UI Mode", "label=`SELECT`" );
+					break;
+				case KeyEvent::KEY_w:
+					mode = TRANSLATE;
+					params->setOptions( "UI Mode", "label=`TRANSLATE`" );
+					break;
+				case KeyEvent::KEY_e:
+					mode = ROTATE;
+					params->setOptions( "UI Mode", "label=`ROTATE`" );
+					break;
+				case KeyEvent::KEY_r:
+					mode = SCALE;
+					params->setOptions( "UI Mode", "label=`SCALE`" );
+					break;
+				case KeyEvent::KEY_b:
+					mode = CREATE;
+					params->setOptions( "UI Mode", "label=`CREATE`" );
+					break;
+				case KeyEvent::KEY_v:
+					mode = PAINT_VOXELS;
+					params->setOptions( "UI Mode", "label=`PAINT_VOXELS`" );
+					break;
+				}
+			}
 		}else{
-			params->minimize();
-			timelineParams->minimize();
-			voxelParams->minimize();
-		}
-	case KeyEvent::KEY_1:
-		channel = 0;
-		break;
-	case KeyEvent::KEY_2:
-		channel = 1;
-		break;
-	case KeyEvent::KEY_3:
-		channel = 2;
-		break;
-	case KeyEvent::KEY_4:
-		channel = 3;
-		break;
-	case KeyEvent::KEY_DELETE:
-		if(UI::selectedNodes.size() != 0){
-			std::vector<NodeHierarchical *> temp;
-			for(unsigned long int i = 0; i < joints.size(); ++i){
-				temp.push_back(joints.at(i));
-			}
-			cmdProc.executeCommand(new CMD_DeleteJoint(&temp));
-			joints.clear();
-			for(unsigned long int i = 0; i < temp.size(); ++i){
-				joints.push_back(dynamic_cast<Joint *>(temp.at(i)));
+			if(event.isControlDown()){
+				if(!event.isShiftDown()){
+					// Alt + Ctrl + key combinations
+				}
+			}else if(event.isShiftDown()){
+				// Alt + Shift + key combinations
+			}else{
+				// Alt + key combination
 			}
 		}
-		break;
-	case KeyEvent::KEY_p:
-		cmdProc.executeCommand(new CMD_Parent(nullptr, nullptr));
-		break;
-	case KeyEvent::KEY_d:
-		if(event.isControlDown()){
-			// Deselect all
-			if(UI::selectedNodes.size() != 0){
-				cmdProc.executeCommand(new CMD_SelectNodes(nullptr));
-			}
-		}
-		break;
-	case KeyEvent::KEY_z:
-		if (event.isControlDown()){
-			cmdProc.undo();
-		}
-		break;
-	case KeyEvent::KEY_y:
-		if (event.isControlDown()){
-			cmdProc.redo();
-		}
-		break;
-	case KeyEvent::KEY_q:
-		mode = SELECT;
-		params->setOptions( "UI Mode", "label=`SELECT`" );
-		break;
-	case KeyEvent::KEY_w:
-		mode = TRANSLATE;
-		params->setOptions( "UI Mode", "label=`TRANSLATE`" );
-		break;
-	case KeyEvent::KEY_e:
-		mode = ROTATE;
-		params->setOptions( "UI Mode", "label=`ROTATE`" );
-		break;
-	case KeyEvent::KEY_r:
-		mode = SCALE;
-		params->setOptions( "UI Mode", "label=`SCALE`" );
-		break;
-	case KeyEvent::KEY_b:
-		mode = CREATE;
-		params->setOptions( "UI Mode", "label=`CREATE`" );
-		break;
-	case KeyEvent::KEY_v:
-		mode = PAINT_VOXELS;
-		params->setOptions( "UI Mode", "label=`PAINT_VOXELS`" );
-		break;
+		UI::updateHandlePos(false);
 	}
-	UI::updateHandlePos(false);
 }
 
 void CinderApp::keyUp( KeyEvent event ){
@@ -1256,6 +1279,23 @@ void CinderApp::drawGrid(float size, float step){
 	jointShader.unbind();
 }
 
+void CinderApp::snapParams(){
+	// Snap window to side. Using setOptions instead of setPosition, which is for Cinder for VS2013 and up only
+	// Params options
+	stringstream paramsOptions;
+	paramsOptions << "position='" << getWindowWidth() - 175 - 5 << " " << getWindowHeight() / 2.5 << "'";
+	string blah = paramsOptions.str();
+	params->setOptions("", paramsOptions.str());
+	//params->
+
+	stringstream timelineParamsOptions;
+	timelineParamsOptions << "position='5 " << getWindowHeight() / 2 << "'";
+	timelineParams->setOptions("", timelineParamsOptions.str());
+
+	stringstream voxelParamsOptions;
+	voxelParamsOptions << "position='5 " << 2 * (getWindowHeight() / 2.5) << "'";
+	voxelParams->setOptions("", voxelParamsOptions.str());
+}
 void CinderApp::saveSkeleton() {
 	try{
 		console() << "saveSkeleton" << endl;
