@@ -19,24 +19,19 @@ unsigned long int NodeHierarchical::calculateDepth(){
 	return depth;
 }
 
-void NodeHierarchical::deleteRecursively(NodeHierarchical * _j){
-	for (unsigned long int i = 0; i < _j->children.size(); ++i){
-		deleteRecursively(dynamic_cast<NodeHierarchical *>(_j->children.at(i)));
+void NodeHierarchical::deleteRecursively(NodeHierarchical * _node){
+	for (unsigned long int i = 0; i < _node->children.size(); ++i){
+		NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(_node->children.at(i));
+		if(nh != nullptr){
+			deleteRecursively(nh);
+		}
 	}
-	delete _j;
+	delete _node;
 }
 
 bool NodeHierarchical::addChild(NodeChild * _child){
 	// Check to see if the child is one of the ancestors of this node
-	bool error = false;
-	NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(this->parent);
-	while(nh != nullptr){
-		if(nh == _child){
-			error = true;
-			break;
-		}
-		nh = dynamic_cast<NodeHierarchical *>(nh->parent);
-	}
+	bool error = hasAncestor(dynamic_cast<NodeHierarchical *>(_child));
 
 	if(!error){
 		// Remove the first instance of the child in the current list of children

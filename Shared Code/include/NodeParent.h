@@ -31,7 +31,13 @@ public:
 	// Does NOT change node->parent
 	// Returns (unsigned long int)(-1) if _child is not a child of this node
 	virtual unsigned long int removeChild(NodeChild * _child);
-
+	
+	// Returns whether _child is a direct child of this node
+	// If _child = nullptr, returns false
+	virtual bool hasChild(NodeChild * _child);
+	// Returns whether _child is a descendant of this node (i.e. a child, a child of its children, etc)
+	// If _child = nullptr, returns false
+	virtual bool hasDescendant(NodeChild * _child);
 
 	/** List of references to child entities */
 	std::vector<NodeChild *> children;

@@ -168,7 +168,7 @@ public:
 	gl::Material JointMaterial;
 	
 	// The root node of the scene; contains the "root" nodes for each skeleton
-	SceneRoot * sceneRoot;
+	SceneRoot sceneRoot;
 
 	ToolButton * activeButton;
 	

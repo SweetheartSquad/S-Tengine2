@@ -39,6 +39,37 @@ unsigned long int NodeParent::removeChild(NodeChild * _child){
 	return -1;
 }
 
+bool NodeParent::hasChild(NodeChild * _child){
+	if(_child == nullptr){
+		return false;
+	}
+	for (unsigned long int i = 0; i < children.size(); ++i){
+		if (_child == children.at(i)){
+			return true;
+			break;
+		}
+	}
+	return false;
+}
+
+bool NodeParent::hasDescendant(NodeChild *_child) {
+	if(_child == nullptr){
+		return false;
+	}
+	for (unsigned long int i = 0; i < children.size(); ++i){
+		if (_child == children.at(i)){
+			return true;
+			break;
+		}else{
+			NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(children.at(i));
+			if(nh != nullptr){
+				if(nh->hasDescendant(_child));
+			}
+		}
+	}
+	return false;
+}
+
 NodeParent::~NodeParent()
 {
 }

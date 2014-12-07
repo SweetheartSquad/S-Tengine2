@@ -32,7 +32,7 @@ void CMD_DeleteJoint::unexecute(){
 
 CMD_DeleteJoint::~CMD_DeleteJoint(void){
 	if(executed){
-		if(index != (unsigned long int)(-1)){
+		if(index == (unsigned long int)(-1)){
 			// Delete children for good if they were actually deleted
 			for(unsigned long int i = 0; i < children.size(); ++i){
 				delete children.at(i);

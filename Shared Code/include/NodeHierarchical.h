@@ -9,7 +9,9 @@
 class NodeHierarchical abstract : public virtual NodeParent, public virtual NodeChild{
 public:
 	NodeHierarchical();
-	static void deleteRecursively(NodeHierarchical * _j);
+
+	// Calls deleteRecursively on all of _node's children, and then deletes _node
+	static void deleteRecursively(NodeHierarchical * _node);
 	//explicit NodeHierarchical(NodeParent * _parent) : NodeChild(_parent){};
 
 	// Loops through the node's children and removes the first instance of _child

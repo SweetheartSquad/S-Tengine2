@@ -9,9 +9,7 @@
 #include "NodeChild.h"
 #include "Joint.h"
 
-CMD_DeleteJoints::CMD_DeleteJoints(std::vector<Joint *> * _joints) :
-	joints(_joints)
-{
+CMD_DeleteJoints::CMD_DeleteJoints(){
 }
 
 void CMD_DeleteJoints::execute(){
@@ -20,9 +18,20 @@ void CMD_DeleteJoints::execute(){
 
 	// Save selected joints
 	for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
-		Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
-		if(j != nullptr){
-			jointsForDeletion.push_back(j);
+		Joint * candidate = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
+		if(candidate != nullptr){
+			bool add = true;
+			for(unsigned long int j = 0; j < jointsForDeletion.size(); ++j){
+				if(jointsForDeletion.at(j)->hasChild(candidate)){
+					add = false;
+					break;
+				}else if(candidate->hasChild(jointsForDeletion.at(j))){
+					jointsForDeletion.erase(jointsForDeletion.begin() + j);
+				}
+			}
+			if(add){
+				jointsForDeletion.push_back(candidate);
+			}
 		}
 	}
 

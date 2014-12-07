@@ -49,11 +49,9 @@ void CMD_CreateJoint::unexecute(){
 }
 
 CMD_CreateJoint::~CMD_CreateJoint(void){
-	joints = nullptr;
 	if(!executed){
 		delete createdJoint;
 	}
 	createdJoint = nullptr;
-	joints = nullptr;
 	parent = nullptr;
 }

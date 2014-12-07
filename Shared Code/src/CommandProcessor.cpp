@@ -68,15 +68,15 @@ void CommandProcessor::redoAll(){
 }
 
 void CommandProcessor::reset(){
-	for(unsigned long int i = 0; i < undoStack.size(); ++i){
-		delete undoStack.at(i);
-		undoStack.at(i) = nullptr;
+	while(undoStack.size() > 0){
+		delete undoStack.back();
+		undoStack.pop_back();
 	}
 	undoStack.clear();
-
-	for(unsigned long int i = redoStack.size(); i > 0; --i){
-		delete redoStack.at(i-1);
-		redoStack.at(i-1) = nullptr;
+	
+	while(redoStack.size() > 0){
+		delete redoStack.back();
+		redoStack.pop_back();
 	}
 	redoStack.clear();
 }

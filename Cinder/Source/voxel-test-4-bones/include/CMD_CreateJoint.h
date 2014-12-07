@@ -19,7 +19,6 @@ public:
 	void unexecute();
 
 private:
-	std::vector<Joint*> * joints;
 	ci::Vec3d pos;
 	Joint * parent;
 	Joint * createdJoint;
