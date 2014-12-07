@@ -271,15 +271,49 @@ void MainScene::render(){
 	int width, height;
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
 
+	setViewport(0, 0, width/2.f, height/2.f);
+
 	Scene::renderShadows();
 
-	frameBuffer->resize(width, height);
+	frameBuffer->resize(w, h);
 	frameBuffer->bindFrameBuffer();
+	renderOptions->overrideShader = nullptr;
+	
+	Scene::render();
+
+	renderSurface->render(frameBuffer->getTextureId());
+	((GLFWRenderOptions *)renderOptions)->shadowMapTextureId = 0;
+
+	//
+
+	setViewport(w, 0, w, h);
+
+	//Scene::renderShadows();
+
+	depthBuffer->resize(w, h);
+	depthBuffer->bindFrameBuffer();
+	Scene::renderShadows();
 	renderOptions->overrideShader = nullptr;
 
 	Scene::render();
 
-	renderSurface->render(frameBuffer->getTextureId());
+	renderSurface->render(depthBuffer->getTextureId());
+	((GLFWRenderOptions *)renderOptions)->shadowMapTextureId = 0;
+
+	//
+	
+	setViewport(w, h, w, h);
+
+	//
+
+	shadowBuffer->resize(w, h);
+	shadowBuffer->bindFrameBuffer();
+	Scene::renderShadows();
+	renderOptions->overrideShader = nullptr;
+
+	Scene::render();
+
+	renderSurface->render(shadowBuffer->getTextureId());
 	((GLFWRenderOptions *)renderOptions)->shadowMapTextureId = 0;
 }
 

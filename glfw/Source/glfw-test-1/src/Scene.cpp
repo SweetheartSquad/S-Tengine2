@@ -41,15 +41,26 @@ void Scene::update(void){
 	}
 }
 
+void Scene::setViewport(float _x, float _y, float _w, float _h){
+	x = _x;
+	y = _y;
+	w = _w;
+	h = _h;
+}
+
 void Scene::render(){
-	int width, height;
-	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+	//glfwGetFramebufferSize(glfwGetCurrentContext(), &w, &h);
 	glfwMakeContextCurrent(glfwGetCurrentContext());
 	float ratio;
-	ratio = width / static_cast<float>(height);
-	glViewport(0, 0, width, height);
+	ratio = w / static_cast<float>(h);
+
+	glEnable(GL_SCISSOR_TEST);
+
+	glViewport(x, y, w, h);
+	glScissor(x, y, w ,h);
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
 	glEnable(GL_DEPTH_TEST);
 
 	//Back-face culling
@@ -116,16 +127,16 @@ void Scene::onContextChange(){
 
 void Scene::renderShadows(){
 	Shader * backupOverride = renderOptions->overrideShader;
-	int width, height;
+	//int width, height;
 	//Do we actuall need this?
 	//glCullFace(GL_FRONT);
-	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
-	depthBuffer->resize(width, height);
+	//glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+	depthBuffer->resize(w, h);
 	depthBuffer->bindFrameBuffer();
 	renderOptions->overrideShader = depthShader;
 	Scene::render();
 
-	shadowBuffer->resize(width, height);
+	shadowBuffer->resize(w, h);
 	shadowBuffer->bindFrameBuffer();
 	shadowSurface->render(depthBuffer->getTextureId(), shadowBuffer->frameBufferId);
 	((GLFWRenderOptions *)renderOptions)->shadowMapTextureId = shadowBuffer->getTextureId();
