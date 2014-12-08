@@ -4,9 +4,8 @@
 
 #include "Command.h"
 
-class Node;
-class NodeHierarchical;
 class Voxel;
+class Joint;
 
 class CMD_DeleteVoxel : public Command{
 public:
@@ -19,6 +18,8 @@ public:
 private:
 	// Voxel for deletion
 	Voxel * voxel;
+	// Voxel for deletion's parent
+	Joint * parent;
 	// Location in parent's list of children at which voxel exists
 	unsigned long int index;
 

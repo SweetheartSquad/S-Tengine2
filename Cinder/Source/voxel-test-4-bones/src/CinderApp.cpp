@@ -885,7 +885,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 						pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
 						if(NodeSelectable::pickingMap.count(voxel) != 0){
 							Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
-							if(t != NULL){
+							if(t != nullptr){
 								cmdProc->executeCommand(new CMD_DeleteVoxel(t));
 							}
 						}
@@ -1058,7 +1058,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 			pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
 			if(NodeSelectable::pickingMap.count(voxel) != 0){
 				Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
-				if(t != NULL){
+				if(t != nullptr){
 					cmdProc->executeCommand(new CMD_DeleteVoxel(t));
 				}
 			}
@@ -1066,7 +1066,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 	}
 
 	// Get the selected UI colour
-	if(activeButton != NULL){
+	if(activeButton != nullptr){
 		pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
 		if(NodeSelectable::pickingMap.count(uiColour) == 1){
 			if(activeButton != dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour))){
