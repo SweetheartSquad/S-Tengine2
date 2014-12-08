@@ -14,8 +14,6 @@ CommandProcessor::CommandProcessor(void) :
 }
 
 void CommandProcessor::executeCommand(Command * c){
-	//ci::app::console() << "executeCommand: " << typeid(*c).name() << std::endl;
-	
 	if(currentCompressedCommand != nullptr){
 		currentCompressedCommand->subCmdProc.executeCommand(c);
 		currentCompressedCommand->firstRun = true;
@@ -27,11 +25,10 @@ void CommandProcessor::executeCommand(Command * c){
 	}
 
 	// Executing a new command will always clear the redoStack
-	for(unsigned long int i = redoStack.size(); i > 0; --i){
-		delete redoStack.at(i-1);
-		redoStack.at(i-1) = nullptr;
+	while(redoStack.size() > 0){
+		delete redoStack.back();
+		redoStack.pop_back();
 	}
-	redoStack.clear();
 }
 
 void CommandProcessor::startCompressing(){
@@ -103,13 +100,11 @@ void CommandProcessor::reset(){
 		delete undoStack.back();
 		undoStack.pop_back();
 	}
-	undoStack.clear();
 	
 	while(redoStack.size() > 0){
 		delete redoStack.back();
 		redoStack.pop_back();
 	}
-	redoStack.clear();
 }
 
 

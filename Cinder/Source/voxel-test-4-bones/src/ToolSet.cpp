@@ -32,7 +32,7 @@ void ToolSet::addButton(ToolButton * _button){
 
 ToolSet::~ToolSet(){
 	while(children.size() > 0){
-		delete children.at(children.size()-1);
+		delete children.back();
 		children.pop_back();
 	}
 }

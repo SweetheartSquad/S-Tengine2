@@ -33,13 +33,23 @@ void NodeAnimatable::update(Step * _step){
 }
 NodeAnimatable::~NodeAnimatable(){
 	delete translateX;
+	translateX = nullptr;
 	delete translateY;
+	translateY = nullptr;
 	delete translateZ;
+	translateZ = nullptr;
 	delete rotateX;
+	rotateX = nullptr;
 	delete rotateY;
+	rotateY = nullptr;
 	delete rotateZ;
+	rotateZ = nullptr;
 	delete rotateW;
+	rotateW = nullptr;
 	delete scaleX;
+	scaleX = nullptr;
 	delete scaleY;
+	scaleY = nullptr;
 	delete scaleZ;
+	scaleZ = nullptr;
 }

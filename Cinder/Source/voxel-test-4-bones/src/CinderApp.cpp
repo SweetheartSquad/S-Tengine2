@@ -37,6 +37,9 @@ void CinderApp::prepareSettings(Settings *settings){
 }
 
 void CinderApp::setup(){
+	sceneRoot = new SceneRoot();
+	cmdProc = new CommandProcessor();
+
 	sourceCam = nullptr;
 	sourceRect = nullptr;
 	sourceFbo = nullptr;
@@ -118,8 +121,8 @@ void CinderApp::setup(){
 	tweens.push_back(new Tween(2, 0.1, Easing::Type::kNONE));
 	tweens.push_back(new Tween(2, -0.5, Easing::Type::kNONE));
 	
-	cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0.f, 0.f, 0.f), nullptr));
-	cmdProc.executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,1,0), joints.at(0)));
+	cmdProc->executeCommand(new CMD_CreateJoint(&joints, Vec3f(0.f, 0.f, 0.f), nullptr));
+	cmdProc->executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,1,0), joints.at(0)));
 
 	joints.at(0)->translateZ.tweens = tweens;*/
 
@@ -213,6 +216,11 @@ void CinderApp::resize(){
 void CinderApp::shutdown(){
 	UI::selectedNodes.clear();
 	delete toolbar;
+	toolbar = nullptr;
+	delete sceneRoot;
+	sceneRoot = nullptr;
+	delete cmdProc;
+	cmdProc = nullptr;
 }
 
 void CinderApp::update(){
@@ -220,8 +228,8 @@ void CinderApp::update(){
 	if(play){
 		Step s;
 		s.setDeltaTime(1 * UI::stepScale);
-		for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
-			NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot.children.at(i));
+		for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
+			NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot->children.at(i));
 			nu->update(&s);
 		}
 		UI::time += (float)s.getDeltaTime();
@@ -230,8 +238,8 @@ void CinderApp::update(){
 		if(UI::time != previousTime){
 			Step s;
 			s.setDeltaTime((UI::time - previousTime));
-			for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
-				NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot.children.at(i));
+			for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
+				NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot->children.at(i));
 				nu->update(&s);
 			}
 			previousTime = UI::time;
@@ -405,8 +413,8 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		r.voxelPreviewResolution = voxelPreviewResolution;
 		r.voxelSphereRadius = voxelSphereRadius;
 
-		for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
-			NodeRenderable * nr = dynamic_cast<NodeRenderable *>(sceneRoot.children.at(i));
+		for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
+			NodeRenderable * nr = dynamic_cast<NodeRenderable *>(sceneRoot->children.at(i));
 			if(nr != nullptr){
 				nr->render(&mStack, &r);
 			}
@@ -643,13 +651,12 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 
 void CinderApp::mouseMove( MouseEvent event ){
 	mMousePos = event.getPos();
-	//pickJoint(mMousePos);
-	//handleUI(mMousePos);
+
 	if(!event.isLeftDown() && !event.isRightDown()){
 		pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
 		if(NodeSelectable::pickingMap.count(uiColour) == 1){
 			ToolButton * newButt = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour));
-			if(activeButton != NULL){
+			if(activeButton != nullptr){
 				if(activeButton != newButt){
 					if(activeButton->isHovered){
 						activeButton->out();
@@ -658,13 +665,13 @@ void CinderApp::mouseMove( MouseEvent event ){
 				}
 			}
 			activeButton = newButt;
-			if(activeButton != NULL){
+			if(activeButton != nullptr){
 				if(!activeButton->isHovered){
 					activeButton->in();
 				}
 			}
 		}else{
-			if(activeButton != NULL){
+			if(activeButton != nullptr){
 				if(activeButton->isHovered){
 					activeButton->out();
 					activeButton = nullptr;
@@ -675,116 +682,124 @@ void CinderApp::mouseMove( MouseEvent event ){
 }
 
 void CinderApp::pickColour(void * res, const gl::Fbo * _sourceFbo, const Rectf *  _sourceRect, gl::Fbo * _destFbo, Vec2i _pos, Area _area, unsigned long int _channel, GLenum _type){
-	if(_type == GL_FLOAT){
-		*((GLfloat *)res) = 0;
-	}else{
-		*((unsigned long int *)res) = 0;
-	}
-	if(_sourceFbo != nullptr && _destFbo != nullptr){
-		// first, specify a small region around the current cursor position 
-		float scaleX = _sourceFbo->getWidth() / (float) _sourceRect->getWidth();
-		float scaleY = _sourceFbo->getHeight() / (float) _sourceRect->getHeight();
-		Vec2i pixel((int)((_pos.x - _sourceRect->x1) * scaleX), (int)((_sourceRect->y2 - _pos.y) * scaleY));
-
-		//pixel = fromRectToRect(pixel, sourceFbo->getBounds(), *sourceRect);
-
-		//Area	area(pixel.x-5, pixel.y-5, pixel.x+5, pixel.y+5);
-		_area.moveULTo(pixel-Vec2i(_area.getWidth()/2, _area.getHeight()/2));
-
-		// next, we need to copy this region to a non-anti-aliased framebuffer
-		//  because sadly we can not sample colors from an anti-aliased one. However,
-		//  this also simplifies the glReadPixels statement, so no harm done.
-		//  Here, we create that non-AA buffer if it does not yet exist.
-		if(!*_destFbo || _destFbo->getWidth() != _area.getWidth() || _destFbo->getHeight() != _area.getHeight()) {
-			initFbo(_destFbo, _area);
-		}
-	
-		// bind the picking framebuffer, so we can clear it and then read its pixels later
-		_destFbo->bindFramebuffer();
-		gl::clear();
-
-		glClampColor(GL_CLAMP_READ_COLOR, GL_FALSE);
-		glClampColor(GL_CLAMP_VERTEX_COLOR, GL_FALSE);
-		glClampColor(GL_CLAMP_FRAGMENT_COLOR, GL_FALSE);
-		// (Cinder does not yet provide a way to handle multiple color targets in the blitTo function, 
-		//  so we have to make sure the correct target is selected before calling it)
-		glBindFramebufferEXT( GL_READ_FRAMEBUFFER_EXT, _sourceFbo->getId() );
-		glBindFramebufferEXT( GL_DRAW_FRAMEBUFFER_EXT, _destFbo->getId() );
-		
-		glReadBuffer(GL_COLOR_ATTACHMENT0_EXT+_channel);
-		glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
-
-		_sourceFbo->blitTo(*_destFbo, _area, _destFbo->getBounds());
-		
-		// read pixel value(s) in the area
-		glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
-		
-		// calculate the total number of pixels
-		unsigned long int total = (_area.getWidth() * _area.getHeight());
-		void * buffer;
-		switch(_type){
-		case GL_FLOAT:
-			buffer = malloc(sizeof(GLfloat) * total*4); // make sure this is large enough to hold 4 bytes for every pixel!
-			break;
-		case GL_UNSIGNED_BYTE:
-		default:
-			buffer = malloc(sizeof(GLubyte) * total*4); // make sure this is large enough to hold 4 bytes for every pixel!
-			break;
-		}
-		glReadPixels(0, 0, _area.getWidth(), _area.getHeight(), GL_RGBA, _type, (void *)buffer);
-
-		// unbind the picking framebuffer
-		_destFbo->unbindFramebuffer();
-		
-		// now that we have the color information, count each occuring color
-		unsigned int max = 0;
+	if(res != nullptr){
 		if(_type == GL_FLOAT){
-			Color color(0,0,0);
-			std::map<Color, unsigned long int> occurences;
-			for(size_t i = 0; i < total; ++i) {
-				color = Color(((GLfloat *)buffer)[i],((GLfloat *)buffer)[i+1],((GLfloat *)buffer)[i+2]);
-				occurences[color]++;
-			}
-			
-			// find the most occuring color
-			std::map<Color, unsigned long int>::const_iterator itr;
-			for(itr = occurences.begin(); itr != occurences.end(); ++itr) {
-				//console() << itr->first << "\t" << itr->second << std::endl;
-				if(itr->second > max) {
-					color = itr->first;
-					max = itr->second;
-				}
-				total ++;
-			}
-
-			// if this color is present in at least 50% of the pixels, we can safely assume that it is indeed belonging to one object
-			if(max >= (total / 2)) {
-				*((Color *)res) = color;
-			}
+			*((GLfloat *)res) = 0;
 		}else{
-			unsigned long int color = 0;
-			std::map<unsigned long int, unsigned long int> occurences;
-			for(size_t i = 0; i < total; ++i) {
-				color = charToInt( ((GLubyte *)buffer)[(i*4)+0], ((GLubyte *)buffer)[(i*4)+1], ((GLubyte *)buffer)[(i*4)+2] );
-				occurences[color]++;
-			}
-			
-			// find the most occuring color
-			std::map<unsigned long int, unsigned long int>::const_iterator itr;
-			for(itr = occurences.begin(); itr != occurences.end(); ++itr) {
-				//console() << itr->first << "\t" << itr->second << std::endl;
-				if(itr->second > max) {
-					color = itr->first;
-					max = itr->second;
-				}
-				total ++;
-			}
+			*((unsigned long int *)res) = 0;
+		}
+		if(_sourceFbo != nullptr && _destFbo != nullptr){
+			// first, specify a small region around the current cursor position 
+			float scaleX = _sourceFbo->getWidth() / (float) _sourceRect->getWidth();
+			float scaleY = _sourceFbo->getHeight() / (float) _sourceRect->getHeight();
+			Vec2i pixel((int)((_pos.x - _sourceRect->x1) * scaleX), (int)((_sourceRect->y2 - _pos.y) * scaleY));
 
-			// if this color is present in at least 50% of the pixels, we can safely assume that it is indeed belonging to one object
-			if(max >= (total / 2)) {
-				*((unsigned long int *)res) = color;
+			//pixel = fromRectToRect(pixel, sourceFbo->getBounds(), *sourceRect);
+
+			//Area	area(pixel.x-5, pixel.y-5, pixel.x+5, pixel.y+5);
+			_area.moveULTo(pixel-Vec2i(_area.getWidth()/2, _area.getHeight()/2));
+
+			// next, we need to copy this region to a non-anti-aliased framebuffer
+			//  because sadly we can not sample colors from an anti-aliased one. However,
+			//  this also simplifies the glReadPixels statement, so no harm done.
+			//  Here, we create that non-AA buffer if it does not yet exist.
+			if(!*_destFbo || _destFbo->getWidth() != _area.getWidth() || _destFbo->getHeight() != _area.getHeight()) {
+				initFbo(*_destFbo, _area);
+			}
+	
+			// bind the picking framebuffer, so we can clear it and then read its pixels later
+			_destFbo->bindFramebuffer();
+			gl::clear();
+
+			glClampColor(GL_CLAMP_READ_COLOR, GL_FALSE);
+			glClampColor(GL_CLAMP_VERTEX_COLOR, GL_FALSE);
+			glClampColor(GL_CLAMP_FRAGMENT_COLOR, GL_FALSE);
+			// (Cinder does not yet provide a way to handle multiple color targets in the blitTo function, 
+			//  so we have to make sure the correct target is selected before calling it)
+			glBindFramebufferEXT( GL_READ_FRAMEBUFFER_EXT, _sourceFbo->getId() );
+			glBindFramebufferEXT( GL_DRAW_FRAMEBUFFER_EXT, _destFbo->getId() );
+		
+			glReadBuffer(GL_COLOR_ATTACHMENT0_EXT+_channel);
+			glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
+
+			_sourceFbo->blitTo(*_destFbo, _area, _destFbo->getBounds());
+		
+			// read pixel value(s) in the area
+			glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
+		
+			// calculate the total number of pixels
+			unsigned long int total = (_area.getWidth() * _area.getHeight());
+			void * buffer = nullptr;
+			switch(_type){
+			case GL_FLOAT:
+				buffer = malloc(sizeof(GLfloat) * total*4); // make sure this is large enough to hold 4 bytes for every pixel!
+				break;
+			case GL_UNSIGNED_BYTE:
+			default:
+				buffer = malloc(sizeof(GLubyte) * total*4); // make sure this is large enough to hold 4 bytes for every pixel!
+				break;
+			}
+			glReadPixels(0, 0, _area.getWidth(), _area.getHeight(), GL_RGBA, _type, (void *)buffer);
+
+			// unbind the picking framebuffer
+			_destFbo->unbindFramebuffer();
+		
+			// now that we have the color information, count each occuring color
+			unsigned int max = 0;
+			if(_type == GL_FLOAT){
+				Color color(0,0,0);
+				std::map<Color, unsigned long int> occurences;
+				for(size_t i = 0; i < total; ++i) {
+					color = Color(((GLfloat *)buffer)[i],((GLfloat *)buffer)[i+1],((GLfloat *)buffer)[i+2]);
+					occurences[color]++;
+				}
+			
+				// find the most occuring color
+				std::map<Color, unsigned long int>::const_iterator itr;
+				for(itr = occurences.begin(); itr != occurences.end(); ++itr) {
+					//console() << itr->first << "\t" << itr->second << std::endl;
+					if(itr->second > max) {
+						color = itr->first;
+						max = itr->second;
+					}
+					total ++;
+				}
+
+				// if this color is present in at least 50% of the pixels, we can safely assume that it is indeed belonging to one object
+				if(max >= (total / 2)) {
+					*((Color *)res) = color;
+				}
+			}else{
+				unsigned long int color = 0;
+				std::map<unsigned long int, unsigned long int> occurences;
+				for(size_t i = 0; i < total; ++i) {
+					color = charToInt( ((GLubyte *)buffer)[(i*4)+0], ((GLubyte *)buffer)[(i*4)+1], ((GLubyte *)buffer)[(i*4)+2] );
+					occurences[color]++;
+				}
+			
+				// find the most occuring color
+				std::map<unsigned long int, unsigned long int>::const_iterator itr;
+				for(itr = occurences.begin(); itr != occurences.end(); ++itr) {
+					//console() << itr->first << "\t" << itr->second << std::endl;
+					if(itr->second > max) {
+						color = itr->first;
+						max = itr->second;
+					}
+					total ++;
+				}
+
+				// if this color is present in at least 50% of the pixels, we can safely assume that it is indeed belonging to one object
+				if(max >= (total / 2)) {
+					*((unsigned long int *)res) = color;
+				}
+			}
+			if(buffer != nullptr){
+				free(buffer);
+				buffer = nullptr;
 			}
 		}
+	}else{
+		// Error: no result variable provided
 	}
 }
 
@@ -801,7 +816,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 		case CinderApp::ROTATE:
 		case CinderApp::SCALE:
 		case CinderApp::PAINT_VOXELS:
-			cmdProc.startCompressing();
+			cmdProc->startCompressing();
 			console() << "startCompressing" << endl;
 			break;
 		default:
@@ -858,7 +873,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 						if(voxel != Color(0.f, 0.f, 0.f)){
 							Vec3f voxelPos = Vec3f(voxel.r, voxel.g, voxel.b);
 							console() << "voxelPos: " << voxelPos << endl;
-							cmdProc.executeCommand(new CMD_PlaceVoxel(voxelPos));
+							cmdProc->executeCommand(new CMD_PlaceVoxel(voxelPos));
 							lastVoxelPaintPos = voxelPos;
 							currentSpacingDistance = 0;
 						}else{
@@ -871,7 +886,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 						if(NodeSelectable::pickingMap.count(voxel) != 0){
 							Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
 							if(t != NULL){
-								cmdProc.executeCommand(new CMD_DeleteVoxel(t));
+								cmdProc->executeCommand(new CMD_DeleteVoxel(t));
 							}
 						}
 					}
@@ -883,9 +898,9 @@ void CinderApp::mouseDown( MouseEvent event ){
 					if(ray.calcPlaneIntersection(Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 1.f, 0.f), &distance)){
 						Vec3f pos = ray.calcPosition(distance);
 						if(UI::selectedNodes.size() == 1){
-							cmdProc.executeCommand(new CMD_CreateJoint(&sceneRoot, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
+							cmdProc->executeCommand(new CMD_CreateJoint(sceneRoot, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
 						}else{
-							cmdProc.executeCommand(new CMD_CreateJoint(&sceneRoot, pos, nullptr));
+							cmdProc->executeCommand(new CMD_CreateJoint(sceneRoot, pos, nullptr));
 						}
 					}
 				}
@@ -902,7 +917,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 					bool subtractive = event.isControlDown() != event.isShiftDown();
 
 					if(selection != nullptr || (!additive && !subtractive)){
-						cmdProc.executeCommand(new CMD_SelectNodes((Node *)selection, additive, subtractive));
+						cmdProc->executeCommand(new CMD_SelectNodes((Node *)selection, additive, subtractive));
 					}
 				}
 			}
@@ -959,7 +974,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 									console() << "handlePos:\t" << UI::handlePos << std::endl;
 									console() << "Move:\t" << dif << std::endl << std::endl;
 
-									cmdProc.executeCommand(new CMD_MoveSelectedJoints(dif, true, translateSpace));
+									cmdProc->executeCommand(new CMD_MoveSelectedJoints(dif, true, translateSpace));
 								}
 							}
 						}
@@ -985,7 +1000,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 							eulerAngles.y *= axis.y;
 							eulerAngles.z *= axis.z;
 
-							cmdProc.executeCommand(new CMD_RotateSelectedTransformable(glm::quat(eulerAngles), true, rotateSpace));
+							cmdProc->executeCommand(new CMD_RotateSelectedTransformable(glm::quat(eulerAngles), true, rotateSpace));
 						}
 					}else if(mode == SCALE){
 						if(UI::selectedNodes.size() > 0){
@@ -1004,7 +1019,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 							
 							console() << dif << std::endl;
 
-							cmdProc.executeCommand(new CMD_ScaleSelectedTransformable(Vec3f(1.f, 1.f, 1.f) + Vec3f(dir)*dif/100.f, scaleSpace));
+							cmdProc->executeCommand(new CMD_ScaleSelectedTransformable(Vec3f(1.f, 1.f, 1.f) + Vec3f(dir)*dif/100.f, scaleSpace));
 						}
 					}
 				}
@@ -1025,7 +1040,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 									console() << "currentSpacingDistance: " << currentSpacingDistance << " spacingDistance: " << spacingDistance << endl;
 									if(currentSpacingDistance >= spacingDistance){
 										console() << "blah distance: " << currentSpacingDistance << " spacing: " << voxelPaintSpacing << endl;
-										cmdProc.executeCommand(new CMD_PlaceVoxel(voxelPos));
+										cmdProc->executeCommand(new CMD_PlaceVoxel(voxelPos));
 										currentSpacingDistance = 0;
 									}
 									lastVoxelPaintPos = voxelPos;
@@ -1044,7 +1059,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 			if(NodeSelectable::pickingMap.count(voxel) != 0){
 				Voxel * t = dynamic_cast<Voxel *>(NodeSelectable::pickingMap.at(voxel));
 				if(t != NULL){
-					cmdProc.executeCommand(new CMD_DeleteVoxel(t));
+					cmdProc->executeCommand(new CMD_DeleteVoxel(t));
 				}
 			}
 		}
@@ -1080,7 +1095,7 @@ void CinderApp::mouseUp( MouseEvent event ){
 	}
 	
 	if(mode == TRANSLATE || mode == ROTATE || mode == SCALE || mode == PAINT_VOXELS){
-		cmdProc.endCompressing();
+		cmdProc->endCompressing();
 		console() << "endCompressing" << endl;
 	}
 
@@ -1096,15 +1111,15 @@ void CinderApp::keyDown( KeyEvent event ){
 					// Ctrl + key combinations
 					switch( event.getCode() ){
 					case KeyEvent::KEY_z:
-						cmdProc.undo();
+						cmdProc->undo();
 						break;
 					case KeyEvent::KEY_y:
-						cmdProc.redo();
+						cmdProc->redo();
 						break;
 					case KeyEvent::KEY_d:
 						// Deselect all
 						if(UI::selectedNodes.size() != 0){
-							cmdProc.executeCommand(new CMD_SelectNodes(nullptr));
+							cmdProc->executeCommand(new CMD_SelectNodes(nullptr));
 						}
 						break;
 					}
@@ -1148,11 +1163,11 @@ void CinderApp::keyDown( KeyEvent event ){
 					break;
 				case KeyEvent::KEY_DELETE:
 					if(UI::selectedNodes.size() > 0){
-						cmdProc.executeCommand(new CMD_DeleteJoints());
+						cmdProc->executeCommand(new CMD_DeleteJoints());
 					}
 					break;
 				case KeyEvent::KEY_p:
-					cmdProc.executeCommand(new CMD_ParentSelectedNodes(&sceneRoot, dynamic_cast<NodeParent *>(UI::selectedNodes.back())));
+					cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, dynamic_cast<NodeParent *>(UI::selectedNodes.back())));
 					break;
 				case KeyEvent::KEY_q:
 					/*mode = SELECT;
@@ -1209,7 +1224,7 @@ void CinderApp::loadShaders(){
 	}
 }
 
-void CinderApp::initFbo(gl::Fbo * _fbo, Area _area){
+void CinderApp::initFbo(gl::Fbo & _fbo, Area _area){
 	gl::Fbo::Format fmt;
 	// make sure the framebuffer is not anti-aliased
 	fmt.setSamples(0);
@@ -1221,10 +1236,10 @@ void CinderApp::initFbo(gl::Fbo * _fbo, Area _area){
 	
 	unsigned int w = max(1, _area.getWidth());
 	unsigned int h = max(1, _area.getHeight());
-	*_fbo = gl::Fbo(w, h, fmt);
+	_fbo = gl::Fbo(w, h, fmt);
 
 	// work-around for an old Cinder issue
-	_fbo->getTexture(0).setFlipped(true);
+	_fbo.getTexture(0).setFlipped(true);
 }
 
 void CinderApp::initMultiChannelFbo(gl::Fbo & _fbo, Area _area, unsigned long int _numChannels){
@@ -1287,7 +1302,7 @@ void CinderApp::snapParams(){
 void CinderApp::saveSkeleton() {
 	try{
 		console() << "saveSkeleton" << endl;
-		SkeletonData::SaveSkeleton(directory, fileName, &sceneRoot);
+		SkeletonData::SaveSkeleton(directory, fileName, sceneRoot);
 		message = "Saved skeleton";
 	}catch (exception ex){
 		message = string(ex.what());
@@ -1297,19 +1312,19 @@ void CinderApp::saveSkeleton() {
 void CinderApp::loadSkeleton() {
 	try{
 		// Deselect everything
-		cmdProc.executeCommand(new CMD_SelectNodes(nullptr));
+		cmdProc->executeCommand(new CMD_SelectNodes(nullptr));
 		console() << "loadSkeleton" << endl;
-		sceneRoot.children.clear();
+		sceneRoot->children.clear();
 
 		std::vector<Joint *> joints = SkeletonData::LoadSkeleton(filePath);
 		for(unsigned long int i = 0; i < joints.size(); ++i){
-			sceneRoot.children.push_back(joints.at(i));
+			sceneRoot->children.push_back(joints.at(i));
 		}
 
 		message = "Loaded skeleton";
 
 		// Clear the undo/redo history
-		cmdProc.reset();
+		cmdProc->reset();
 	}catch (exception ex){
 		message = string(ex.what());
 	}
@@ -1320,7 +1335,7 @@ void CinderApp::setKeyframe(){
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 			NodeAnimatable * _node = dynamic_cast<NodeAnimatable *>(UI::selectedNodes.at(i));
 			if (_node != NULL){
-				cmdProc.executeCommand(new CMD_KeyAll(_node, UI::time));
+				cmdProc->executeCommand(new CMD_KeyAll(_node, UI::time));
 			}
 		}
 	}

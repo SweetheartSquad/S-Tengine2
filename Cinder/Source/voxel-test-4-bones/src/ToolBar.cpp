@@ -41,7 +41,7 @@ void ToolBar::addButton(unsigned long int _setIndex, ToolButton * _button){
 
 ToolBar::~ToolBar(){
 	while(children.size() > 0){
-		delete children.at(children.size()-1);
+		delete children.back();
 		children.pop_back();
 	}
 }

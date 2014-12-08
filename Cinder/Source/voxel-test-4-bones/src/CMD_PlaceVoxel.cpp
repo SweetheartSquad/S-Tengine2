@@ -13,8 +13,7 @@
 
 CMD_PlaceVoxel::CMD_PlaceVoxel(ci::Vec3f _v) :
 	v(_v),
-	voxel(nullptr),
-	executed(false)
+	voxel(nullptr)
 {
 }
 
@@ -35,23 +34,22 @@ void CMD_PlaceVoxel::execute(){
 	}
 	newPos = glm::inverse(modelMatrix) * newPos;
 
-	if(voxel == nullptr){
+	if(firstRun){
 		voxel = new Voxel(Vec3f(newPos.x, newPos.y, newPos.z));
 	}
 	voxel->parent = j;
 	j->voxels.push_back(voxel);
-	executed = true;
 }
 
 void CMD_PlaceVoxel::unexecute(){
 	Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(0));
 	j->voxels.pop_back();
 	voxel->parent = nullptr;
-	executed = false;
 }
 
 CMD_PlaceVoxel::~CMD_PlaceVoxel(void){
 	if(!executed){
 		delete voxel;
+		voxel = nullptr;
 	}
 }

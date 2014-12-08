@@ -22,6 +22,7 @@ Joint::Joint() :
 
 Joint::~Joint(){
 	delete transform;
+	transform = nullptr;
 }
 
 void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){

@@ -4,13 +4,13 @@
 #include "NodeHierarchical.h"
 
 SceneRoot::~SceneRoot(){
-	for(unsigned long int i = 0; i < children.size(); ++i){
-		NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(children.at(i));
+	while(children.size() > 0){
+		NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(children.back());
 		if(nh != nullptr){
 			NodeHierarchical::deleteRecursively(nh);
 		}else{
-			delete children.at(i);
+			delete children.back();
 		}
+		children.pop_back();
 	}
-	children.clear();
 }

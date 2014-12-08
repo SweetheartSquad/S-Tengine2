@@ -2,8 +2,9 @@
 
 #include <vector>
 #include "CommandProcessor.h"
+#include "Node.h"
 
-class Command{
+class Command : public Node{
 public:
 	virtual void execute() = 0;
 	virtual void unexecute() = 0;

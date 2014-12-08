@@ -56,7 +56,7 @@ public:
 	// Loads the shaders
 	void loadShaders();
 	// Initializes empty single channel fbos
-	void initFbo(gl::Fbo * _fbo, Area _area);
+	void initFbo(gl::Fbo & _fbo, Area _area);
 	// Initializes empty 3-channel fbos
 	void initMultiChannelFbo(gl::Fbo & _fbo, Area _area, unsigned long int _numChannels);
 
@@ -170,7 +170,7 @@ public:
 	gl::Material JointMaterial;
 	
 	// The root node of the scene; contains the "root" nodes for each skeleton
-	SceneRoot sceneRoot;
+	SceneRoot * sceneRoot;
 
 	ToolButton * activeButton;
 	
@@ -205,7 +205,7 @@ public:
 	CoordinateSpace scaleSpace;
 
 	// Commands
-	CommandProcessor cmdProc;
+	CommandProcessor * cmdProc;
 
 	// Animation
 	bool play;

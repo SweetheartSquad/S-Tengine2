@@ -27,6 +27,7 @@ void NodeHierarchical::deleteRecursively(NodeHierarchical * _node){
 		}
 	}
 	delete _node;
+	_node = nullptr;
 }
 
 bool NodeHierarchical::addChild(NodeChild * _child){

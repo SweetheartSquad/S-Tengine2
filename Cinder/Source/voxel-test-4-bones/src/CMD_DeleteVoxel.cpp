@@ -11,7 +11,6 @@
 
 CMD_DeleteVoxel::CMD_DeleteVoxel(Voxel * _v) :
 	voxel(_v),
-	executed(false),
 	index(-1)
 {
 }
@@ -31,8 +30,6 @@ void CMD_DeleteVoxel::execute(){
 	}else{
 		// Error: Parent of voxel is not a joint
 	}
-
-	executed = true;
 }
 
 void CMD_DeleteVoxel::unexecute(){
@@ -45,14 +42,13 @@ void CMD_DeleteVoxel::unexecute(){
 	}else{
 		// Error: Parent of voxel is not a joint
 	}
-
-	executed = false;
 }
 
 CMD_DeleteVoxel::~CMD_DeleteVoxel(void){
 	if(executed){
 		if(index != (unsigned long int)(-1)){
 			delete voxel;
+			voxel = nullptr;
 		}
 	}
 }

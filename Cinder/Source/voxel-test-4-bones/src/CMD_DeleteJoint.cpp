@@ -34,12 +34,14 @@ CMD_DeleteJoint::~CMD_DeleteJoint(void){
 	if(executed){
 		if(index == (unsigned long int)(-1)){
 			// Delete children for good if they were actually deleted
-			for(unsigned long int i = 0; i < children.size(); ++i){
-				delete children.at(i);
+			while(children.size() > 0){
+				delete children.back();
+				children.pop_back();
 			}
 		}else{
 			// Delete node for good if it was actually deleted
 			delete jointForDeletion;
+			jointForDeletion = nullptr;
 		}
 	}
 }

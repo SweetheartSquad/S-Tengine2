@@ -136,4 +136,5 @@ CMD_AddTween::~CMD_AddTween(){
 	if(!executed){
 		delete tween;
 	}
+	tween = nullptr;
 }
