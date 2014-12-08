@@ -1128,6 +1128,13 @@ void CinderApp::keyDown( KeyEvent event ){
 				}
 			}else if(event.isShiftDown()){
 				// Shift + key combinations
+				switch (event.getCode() ){
+				case KeyEvent::KEY_p:
+					if(UI::selectedNodes.size() > 0){
+						cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, sceneRoot));
+					}
+					break;
+				}
 			}else{
 				// Simple key
 				switch (event.getCode() ){
@@ -1167,7 +1174,9 @@ void CinderApp::keyDown( KeyEvent event ){
 					}
 					break;
 				case KeyEvent::KEY_p:
-					cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, dynamic_cast<NodeParent *>(UI::selectedNodes.back())));
+					if(UI::selectedNodes.size() > 0){
+						cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, dynamic_cast<NodeParent *>(UI::selectedNodes.back())));
+					}
 					break;
 				case KeyEvent::KEY_q:
 					/*mode = SELECT;
