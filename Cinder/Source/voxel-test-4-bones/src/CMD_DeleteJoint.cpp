@@ -35,12 +35,21 @@ CMD_DeleteJoint::~CMD_DeleteJoint(void){
 		if(index == (unsigned long int)(-1)){
 			// Delete children for good if they were actually deleted
 			while(children.size() > 0){
-				delete children.back();
-				children.pop_back();
+				NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(children.back());
+				if(nh){
+					NodeHierarchical::deleteRecursively(nh);
+				}else{
+					delete children.back();
+				}children.pop_back();
 			}
 		}else{
 			// Delete node for good if it was actually deleted
-			delete jointForDeletion;
+			NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(children.back());
+			if(nh){
+				NodeHierarchical::deleteRecursively(nh);
+			}else{
+				delete jointForDeletion;
+			}
 			jointForDeletion = nullptr;
 		}
 	}
