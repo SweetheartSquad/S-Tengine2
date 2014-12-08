@@ -8,13 +8,18 @@
 #include "NodeParent.h"
 
 class ToolSet;
+class ToolButton;
 class Step;
 
 class ToolBar : public NodeRenderable, public NodeParent{
 public:
 	ci::Vec2i pos;
 	
-	void addSet(ToolSet * _toolset);
+	// Adds _set to the list of children
+	void addSet(ToolSet * _set);
+
+	// Adds _button to the ToolSet at _setIndex
+	void addButton(unsigned long int _setIndex, ToolButton * _button);
 
 	ToolBar(ci::Vec2i _pos);
 	~ToolBar();

@@ -133,17 +133,17 @@ void CinderApp::setup(){
 	toolbar->addSet(new ToolSet(Area(0,0,20,20)));
 
 
-	dynamic_cast<ToolSet *>(toolbar->children.at(0))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Select));
-	dynamic_cast<ToolSet *>(toolbar->children.at(0))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Translate));
-	dynamic_cast<ToolSet *>(toolbar->children.at(0))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Rotate));
-	dynamic_cast<ToolSet *>(toolbar->children.at(0))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Scale));
-	dynamic_cast<ToolSet *>(toolbar->children.at(0))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_CreateJoints));
-	dynamic_cast<ToolSet *>(toolbar->children.at(0))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_PaintVoxels));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Select));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Translate));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Rotate));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Scale));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_CreateJoints));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_PaintVoxels));
 
-	dynamic_cast<ToolSet *>(toolbar->children.at(1))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_0));
-	dynamic_cast<ToolSet *>(toolbar->children.at(1))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_1));
-	dynamic_cast<ToolSet *>(toolbar->children.at(1))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_2));
-	dynamic_cast<ToolSet *>(toolbar->children.at(1))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_3));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_0));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_1));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_2));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_3));
 }
 
 void CinderApp::resize(){
