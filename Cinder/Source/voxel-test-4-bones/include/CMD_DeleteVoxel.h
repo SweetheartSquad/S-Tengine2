@@ -22,7 +22,4 @@ private:
 	Joint * parent;
 	// Location in parent's list of children at which voxel exists
 	unsigned long int index;
-
-	// If the command has been executed
-	bool executed;
 };

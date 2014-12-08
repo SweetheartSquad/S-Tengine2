@@ -38,6 +38,8 @@ void CMD_DeleteVoxel::execute(){
 
 void CMD_DeleteVoxel::unexecute(){
 	if(voxel != nullptr){
+		voxel->parent = parent;
+
 		// voxel's parent
 		if(parent != nullptr){
 			if(index != (unsigned long int)(-1)){
@@ -50,7 +52,6 @@ void CMD_DeleteVoxel::unexecute(){
 			// Error: Parent of voxel was not a joint or voxel had no parent
 			throw;
 		}
-		voxel->parent = parent;
 	}
 }
 

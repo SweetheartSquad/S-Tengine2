@@ -1295,7 +1295,7 @@ void CinderApp::snapParams(){
 	// Snap window to side. Using setOptions instead of setPosition, which is for Cinder for VS2013 and up only
 	// Params options
 	stringstream paramsOptions;
-	paramsOptions << "position='" << getWindowWidth() - 175 - 5 << " " << getWindowHeight() / 2.5 << "'";
+	paramsOptions << "position='" << getWindowWidth() - 175 - 5 << " " << getWindowHeight() / 2.5f << "'";
 	string blah = paramsOptions.str();
 	params->setOptions("", paramsOptions.str());
 	//params->
