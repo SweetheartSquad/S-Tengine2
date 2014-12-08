@@ -58,6 +58,7 @@ void Animation::update(Step * _step){
 				if(currentTween == 0){
 					switch (loopType){
 						case Animation::LOOP:
+						case Animation::CONSTANT:
 							referenceValue = startValue;
 							for(unsigned long int i = 0; i+1 < tweens.size(); ++i){
 								referenceValue += tweens.at(i)->deltaValue;
@@ -81,6 +82,7 @@ void Animation::update(Step * _step){
 				if(currentTween >= tweens.size()){
 					switch (loopType){
 						case Animation::LOOP:
+						case Animation::CONSTANT:
 							referenceValue = startValue;
 						case Animation::LOOP_WITH_OFFSET:
 							currentTween = 0;
@@ -93,6 +95,19 @@ void Animation::update(Step * _step){
 		}
 		
 		*prop = Easing::call(tweens.at(currentTween)->interpolation, currentTime, referenceValue, tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
+		
+		if(loopType == CONSTANT){
+			if(time < 0){
+				*prop = startValue;
+			}else if(time > getTweenEndTime(tweens.size()-1)){
+				*prop = getTweenEndValue(tweens.size()-1);
+			}
+		}
+
+		// Display the start-frame value on the start frame (ordinarily it would show the last frame-value if looping)
+		if(time == 0){
+			*prop = startValue;
+		}
 	}
 }
 

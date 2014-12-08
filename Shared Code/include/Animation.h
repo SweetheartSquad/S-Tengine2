@@ -35,8 +35,8 @@ public:
 
 	enum LoopType{
 		LOOP,
-		LOOP_WITH_OFFSET
-		//CONSTANT
+		LOOP_WITH_OFFSET,
+		CONSTANT
 	} loopType;
 
 private:
