@@ -1299,11 +1299,13 @@ void CinderApp::loadSkeleton() {
 		// Deselect everything
 		cmdProc.executeCommand(new CMD_SelectNodes(nullptr));
 		console() << "loadSkeleton" << endl;
-		sceneRoot.children.clear();
 
 		std::vector<Joint *> joints = SkeletonData::LoadSkeleton(filePath);
+
+		// If SkeletonData loads without any exceptions, clear and load joints into sceneRoot's children
+		sceneRoot.children.clear();
 		for(unsigned long int i = 0; i < joints.size(); ++i){
-			sceneRoot.children.push_back(joints.at(i));
+			sceneRoot.addChild(joints.at(i));
 		}
 
 		message = "Loaded skeleton";

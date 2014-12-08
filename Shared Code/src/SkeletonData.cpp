@@ -87,7 +87,8 @@ std::string SkeletonData::writeJoint(Joint * j, unsigned int indent) {
 
 	json << std::string(indent * 3, ' ') << "\"id\": " << j->id << "," << std::endl;
 
-	if (j->parent != nullptr) {
+	Joint * parentJoint = dynamic_cast<Joint *>(j->parent);
+	if (parentJoint != nullptr) {
 		json << std::string(indent * 3, ' ') << "\"parent\": " << dynamic_cast<Joint *>(j->parent)->id << "," << std::endl;
 	}
 
@@ -137,7 +138,9 @@ std::string SkeletonData::writeJoint(Joint * j, unsigned int indent) {
 Joint * SkeletonData::readJoint(JsonTree joint, Joint * parent) {
 	
 	Joint * j = new Joint();
-	parent->addChild(j);
+	if(parent != nullptr){
+		parent->addChild(j);
+	}
 	std::vector<NodeChild *> children;
 	std::vector<Voxel *> voxels;
 
