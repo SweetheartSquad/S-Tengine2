@@ -23,6 +23,11 @@ Joint::Joint() :
 Joint::~Joint(){
 	delete transform;
 	transform = nullptr;
+
+	while(voxels.size() > 0){
+		delete voxels.back();
+		voxels.pop_back();
+	}
 }
 
 void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){

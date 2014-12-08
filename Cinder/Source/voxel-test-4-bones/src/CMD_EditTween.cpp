@@ -13,8 +13,7 @@ CMD_EditTween::CMD_EditTween(Animation * _animation, float _targetValue, Easing:
 	targetValue(_targetValue),
 	tween(_animation->tweens.at(_idx)),
 	idx(_idx),
-	interpolation(_interpolation),
-	executed(false)
+	interpolation(_interpolation)
 {
 }
 
@@ -52,8 +51,6 @@ void CMD_EditTween::execute(){
 			animation->tweens.at(nextTweenIndex)->deltaValue = nextTween_newDeltaValue;
 		}
 	}
-
-	executed = true;
 }
 
 void CMD_EditTween::unexecute(){

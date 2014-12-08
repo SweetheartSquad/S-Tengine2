@@ -23,8 +23,5 @@ private:
 	Joint * parent;
 	Joint * createdJoint;
 	SceneRoot * sceneRoot;
-
-	// False on creation, true after call to execute, false after call to unexecute
-	bool executed;
 };
 

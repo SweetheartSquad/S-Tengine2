@@ -39,6 +39,4 @@ private:
 	unsigned long int nextTweenIndex; // -1 if none
 	float nextTween_oldDeltaValue;
 	float nextTween_newDeltaValue;
-
-	bool executed;
 };

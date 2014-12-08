@@ -873,7 +873,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 						if(voxel != Color(0.f, 0.f, 0.f)){
 							Vec3f voxelPos = Vec3f(voxel.r, voxel.g, voxel.b);
 							console() << "voxelPos: " << voxelPos << endl;
-							cmdProc->executeCommand(new CMD_PlaceVoxel(voxelPos));
+							cmdProc->executeCommand(new CMD_PlaceVoxel(voxelPos, dynamic_cast<Joint *>(UI::selectedNodes.back())));
 							lastVoxelPaintPos = voxelPos;
 							currentSpacingDistance = 0;
 						}else{
@@ -1040,7 +1040,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 									console() << "currentSpacingDistance: " << currentSpacingDistance << " spacingDistance: " << spacingDistance << endl;
 									if(currentSpacingDistance >= spacingDistance){
 										console() << "blah distance: " << currentSpacingDistance << " spacing: " << voxelPaintSpacing << endl;
-										cmdProc->executeCommand(new CMD_PlaceVoxel(voxelPos));
+										cmdProc->executeCommand(new CMD_PlaceVoxel(voxelPos, dynamic_cast<Joint *>(UI::selectedNodes.back())));
 										currentSpacingDistance = 0;
 									}
 									lastVoxelPaintPos = voxelPos;

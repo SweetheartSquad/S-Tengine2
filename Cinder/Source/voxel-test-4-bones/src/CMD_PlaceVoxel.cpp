@@ -11,17 +11,16 @@
 #include "Transform.h"
 #include "Voxel.h"
 
-CMD_PlaceVoxel::CMD_PlaceVoxel(ci::Vec3f _v) :
+CMD_PlaceVoxel::CMD_PlaceVoxel(ci::Vec3f _v, Joint * _parent) :
 	v(_v),
+	parent(_parent),
 	voxel(nullptr)
 {
 }
 
 void CMD_PlaceVoxel::execute(){
-	Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(0));
-
 	glm::vec4 newPos(v.x, v.y, v.z, 1);
-	NodeHierarchical * _parent = j;
+	NodeHierarchical * _parent = parent;
 	std::vector<glm::mat4> modelMatrixStack;
 	while(_parent != nullptr){
 		modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
@@ -37,14 +36,18 @@ void CMD_PlaceVoxel::execute(){
 	if(firstRun){
 		voxel = new Voxel(Vec3f(newPos.x, newPos.y, newPos.z));
 	}
-	voxel->parent = j;
-	j->voxels.push_back(voxel);
+	voxel->parent = parent;
+	if(parent != nullptr){
+		parent->voxels.push_back(voxel);
+	}
 }
 
 void CMD_PlaceVoxel::unexecute(){
-	Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(0));
-	j->voxels.pop_back();
+	if(parent != nullptr){
+		parent->voxels.pop_back();
+	}
 	voxel->parent = nullptr;
+	
 }
 
 CMD_PlaceVoxel::~CMD_PlaceVoxel(void){

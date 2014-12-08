@@ -15,8 +15,7 @@ CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _currentTime, flo
 	currentTime(_currentTime),
 	targetTime(_targetTime),
 	value(_value),
-	interpolation(_interpolation),
-	executed(false)
+	interpolation(_interpolation)
 {
 }
 
@@ -68,8 +67,6 @@ void CMD_KeyProperty::execute(){
 			}
 		}
 	}
-
-	executed = true;
 }
 
 void CMD_KeyProperty::unexecute(){
@@ -82,8 +79,6 @@ void CMD_KeyProperty::unexecute(){
 			animation->tweens.at(0)->deltaValue += (value - oldStartValue);
 		}
 	}
-
-	executed = false;
 }
 
 float CMD_KeyProperty::getStartValue(unsigned long int _idx){

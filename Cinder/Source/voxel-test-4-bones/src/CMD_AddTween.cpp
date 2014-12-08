@@ -13,8 +13,7 @@ CMD_AddTween::CMD_AddTween(Animation * _animation, float _currentTime, float _ta
 	deltaTimeline(_targetTime - _currentTime),
 	targetValue(_targetValue),
 	tween(nullptr),
-	interpolation(_interpolation),
-	executed(false)
+	interpolation(_interpolation)
 {	
 }
 
@@ -108,8 +107,6 @@ void CMD_AddTween::execute(){
 			subCmdProc.redo();
 		}
 	}
-
-	executed = true;
 }
 
 void CMD_AddTween::unexecute(){
@@ -128,8 +125,6 @@ void CMD_AddTween::unexecute(){
 		// Before/After animation
 		animation->tweens.erase((animation->tweens.at(0) == tween) ? (animation->tweens.begin()) : (animation->tweens.begin() + animation->tweens.size() - 1));
 	}
-
-	executed = false;
 }
 
 CMD_AddTween::~CMD_AddTween(){

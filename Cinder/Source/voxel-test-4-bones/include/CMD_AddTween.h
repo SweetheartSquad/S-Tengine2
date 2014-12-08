@@ -44,6 +44,4 @@ private:
 	float nextTween_oldDeltaValue;
 	float nextTween_newDeltaTime;
 	float nextTween_newDeltaValue;
-
-	bool executed;
 };

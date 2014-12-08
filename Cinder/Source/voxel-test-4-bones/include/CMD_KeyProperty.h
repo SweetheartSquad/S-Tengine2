@@ -36,8 +36,6 @@ private:
 	float oldStartValue;
 	bool oldHasStart;
 
-	bool executed;
-
 	int findKeyframe(std::vector<Tween *> * _tweens);
 
 	float getStartValue(unsigned long int _idx);

@@ -16,39 +16,44 @@ CMD_DeleteVoxel::CMD_DeleteVoxel(Voxel * _v) :
 }
 
 void CMD_DeleteVoxel::execute(){
-	
-	// voxel's parent
-	Joint * parent = dynamic_cast<Joint *>(voxel->parent);
-	if(parent != nullptr){
-		for(unsigned long int i = 0; i < parent->voxels.size(); ++i){
-			if(parent->voxels.at(i) == voxel){
-				index = i;
-				parent->voxels.erase(parent->voxels.begin() + i);
-				break;
+	if(voxel != nullptr){
+		// voxel's parent
+		Joint * parent = dynamic_cast<Joint *>(voxel->parent);
+		if(parent != nullptr){
+			for(unsigned long int i = 0; i < parent->voxels.size(); ++i){
+				if(parent->voxels.at(i) == voxel){
+					index = i;
+					parent->voxels.erase(parent->voxels.begin() + i);
+					break;
+				}
 			}
+		}else{
+			// Error: Parent of voxel is not a joint
 		}
-	}else{
-		// Error: Parent of voxel is not a joint
 	}
 }
 
 void CMD_DeleteVoxel::unexecute(){
-	// voxel's parent
-	Joint * parent = dynamic_cast<Joint *>(voxel->parent);
-	if(parent != nullptr){
-		if(index != (unsigned long int)(-1)){
-			parent->voxels.insert(parent->voxels.begin() + index, voxel);
+	if(voxel != nullptr){
+		// voxel's parent
+		Joint * parent = dynamic_cast<Joint *>(voxel->parent);
+		if(parent != nullptr){
+			if(index != (unsigned long int)(-1)){
+				parent->voxels.insert(parent->voxels.begin() + index, voxel);
+			}
+		}else{
+			// Error: Parent of voxel is not a joint
 		}
-	}else{
-		// Error: Parent of voxel is not a joint
 	}
 }
 
 CMD_DeleteVoxel::~CMD_DeleteVoxel(void){
-	if(executed){
-		if(index != (unsigned long int)(-1)){
-			delete voxel;
-			voxel = nullptr;
+	if(voxel != nullptr){
+		if(executed){
+			if(index != (unsigned long int)(-1)){
+				delete voxel;
+				voxel = nullptr;
+			}
 		}
 	}
 }
