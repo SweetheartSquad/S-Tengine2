@@ -97,4 +97,8 @@ void Animation::update(Step * _step){
 }
 
 Animation::~Animation(){
+	while(tweens.size() > 0){
+		delete tweens.back();
+		tweens.pop_back();
+	}
 }
