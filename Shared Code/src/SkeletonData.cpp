@@ -4,8 +4,9 @@
 #include "Transform.h"
 #include "Animation.h"
 #include "Easing.h"
+#include "SceneRoot.h"
 
-void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, std::vector<Joint *> & joints) {
+void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, SceneRoot * _sceneRoot) {
 	try{
 		//Validate directory
 		validateDirectory(directory);
@@ -23,9 +24,10 @@ void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, std
 				jointFile << "{" << "\"joints\": " << "[" << std::endl;
 
 				//write the joints to file (loop through roots and recurse through children)
-				for(Joint * j : joints){
+				for(unsigned long int i = 0; i < _sceneRoot->children.size(); ++i){
+					Joint * j = dynamic_cast<Joint * >(_sceneRoot->children.at(i));
 					jointFile << writeJoint(j);
-					if (j->id != joints.back()->id) {
+					if (j != _sceneRoot->children.back()) {
 						jointFile << ",";
 					}
 					jointFile << std::endl;
@@ -134,7 +136,8 @@ std::string SkeletonData::writeJoint(Joint * j, unsigned int indent) {
 
 Joint * SkeletonData::readJoint(JsonTree joint, Joint * parent) {
 	
-	Joint * j = new Joint(parent);
+	Joint * j = new Joint();
+	parent->addChild(j);
 	std::vector<NodeChild *> children;
 	std::vector<Voxel *> voxels;
 
@@ -146,7 +149,7 @@ Joint * SkeletonData::readJoint(JsonTree joint, Joint * parent) {
 
 	JsonTree pos = transform.getChild("pos");
 	app::console() << " jt_pos: x = " << pos.getChild("x").getValue<float>() << " y = " << pos.getChild("y").getValue<float>() << " pos: z = " << pos.getChild("z").getValue<float>() << std::endl;
-	j->setPos(Vec3d(pos.getChild("x").getValue<float>(), pos.getChild("y").getValue<float>(), pos.getChild("z").getValue<float>()), false);
+	j->setPos(glm::vec3(pos.getChild("x").getValue<float>(), pos.getChild("y").getValue<float>(), pos.getChild("z").getValue<float>()), false);
 	app::console() << " pos: x = " << j->getPos().x << " y = " << j->getPos().y << " pos: z = " << j->getPos().z << std::endl;
 	
 	JsonTree orientation = transform.getChild("orientation");

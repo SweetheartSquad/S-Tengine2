@@ -5,14 +5,14 @@
 #include "ButtonFunctions.hpp"
 
 #include "CMD_CreateJoint.h"
-#include "CMD_DeleteJoint.h"
+#include "CMD_DeleteJoints.h"
 #include "CMD_SelectNodes.h"
 #include "CMD_MoveSelectedJoints.h"
 #include "CMD_ScaleSelectedTransformable.h"
 #include "CMD_RotateSelectedTransformable.h"
 #include "CMD_KeyProperty.h"
 #include "CMD_KeyAll.h"
-#include "CMD_Parent.h"
+#include "CMD_ParentSelectedNodes.h"
 #include "CMD_PlaceVoxel.h"
 #include "CMD_DeleteVoxel.h"
 
@@ -129,33 +129,21 @@ void CinderApp::setup(){
 	
 	toolbar = new ToolBar(Vec2i(5,5));
 
-	toolbar->toolsets.push_back(new ToolSet(Area(0,0,30,30)));
-	toolbar->toolsets.push_back(new ToolSet(Area(0,0,20,20)));
+	toolbar->addSet(new ToolSet(Area(0,0,30,30)));
+	toolbar->addSet(new ToolSet(Area(0,0,20,20)));
 
 
-	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
-	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
-	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
-	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
-	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
-	toolbar->toolsets.at(0)->addButton(new ToolButton(ToolButton::Type::RADIO));
+	dynamic_cast<ToolSet *>(toolbar->children.at(0))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Select));
+	dynamic_cast<ToolSet *>(toolbar->children.at(0))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Translate));
+	dynamic_cast<ToolSet *>(toolbar->children.at(0))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Rotate));
+	dynamic_cast<ToolSet *>(toolbar->children.at(0))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Scale));
+	dynamic_cast<ToolSet *>(toolbar->children.at(0))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_CreateJoints));
+	dynamic_cast<ToolSet *>(toolbar->children.at(0))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_PaintVoxels));
 
-	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::RADIO));
-	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::RADIO));
-	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::RADIO));
-	toolbar->toolsets.at(1)->addButton(new ToolButton(ToolButton::Type::RADIO));
-
-	toolbar->toolsets.at(0)->buttons.at(0)->upCallback = ButtonFunctions::MODE_Select;
-	toolbar->toolsets.at(0)->buttons.at(1)->upCallback = ButtonFunctions::MODE_Translate;
-	toolbar->toolsets.at(0)->buttons.at(2)->upCallback = ButtonFunctions::MODE_Rotate;
-	toolbar->toolsets.at(0)->buttons.at(3)->upCallback = ButtonFunctions::MODE_Scale;
-	toolbar->toolsets.at(0)->buttons.at(4)->upCallback = ButtonFunctions::MODE_CreateJoints;
-	toolbar->toolsets.at(0)->buttons.at(5)->upCallback = ButtonFunctions::MODE_PaintVoxels;
-
-	toolbar->toolsets.at(1)->buttons.at(0)->upCallback = ButtonFunctions::CHANNEL_0;
-	toolbar->toolsets.at(1)->buttons.at(1)->upCallback = ButtonFunctions::CHANNEL_1;
-	toolbar->toolsets.at(1)->buttons.at(2)->upCallback = ButtonFunctions::CHANNEL_2;
-	toolbar->toolsets.at(1)->buttons.at(3)->upCallback = ButtonFunctions::CHANNEL_3;
+	dynamic_cast<ToolSet *>(toolbar->children.at(1))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_0));
+	dynamic_cast<ToolSet *>(toolbar->children.at(1))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_1));
+	dynamic_cast<ToolSet *>(toolbar->children.at(1))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_2));
+	dynamic_cast<ToolSet *>(toolbar->children.at(1))->addButton(new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_3));
 }
 
 void CinderApp::resize(){
@@ -223,10 +211,6 @@ void CinderApp::resize(){
 
 
 void CinderApp::shutdown(){
-	for(unsigned long int i = 0; i < joints.size(); ++i){
-		NodeHierarchical::deleteRecursively(joints.at(i));
-	}
-	joints.clear();
 	UI::selectedNodes.clear();
 	delete toolbar;
 }
@@ -236,8 +220,9 @@ void CinderApp::update(){
 	if(play){
 		Step s;
 		s.setDeltaTime(1 * UI::stepScale);
-		for(unsigned long int i = 0; i < joints.size(); ++i){
-			joints.at(i)->update(&s);
+		for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
+			NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot.children.at(i));
+			nu->update(&s);
 		}
 		UI::time += (float)s.getDeltaTime();
 		previousTime = UI::time;
@@ -245,8 +230,9 @@ void CinderApp::update(){
 		if(UI::time != previousTime){
 			Step s;
 			s.setDeltaTime((UI::time - previousTime));
-			for(unsigned long int i = 0; i < joints.size(); ++i){
-				joints.at(i)->update(&s);
+			for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
+				NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot.children.at(i));
+				nu->update(&s);
 			}
 			previousTime = UI::time;
 		}
@@ -419,8 +405,11 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		r.voxelPreviewResolution = voxelPreviewResolution;
 		r.voxelSphereRadius = voxelSphereRadius;
 
-		for(Joint * j : joints){
-			j->render(&mStack, &r);
+		for(unsigned long int i = 0; i < sceneRoot.children.size(); ++i){
+			NodeRenderable * nr = dynamic_cast<NodeRenderable *>(sceneRoot.children.at(i));
+			if(nr != nullptr){
+				nr->render(&mStack, &r);
+			}
 		}
 
 		//jointShader.uniform("offset", true);
@@ -488,14 +477,16 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
 				if(j != NULL){
 					gl::pushMatrices();
-						gl::translate(j->getPos(false));
+						glm::vec3 absPos = j->getPos(false);
+						gl::translate(absPos.x, absPos.y, absPos.z);
 						gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.06f);
 					gl::popMatrices();
 				}else{
 					Voxel * v = dynamic_cast<Voxel *>(UI::selectedNodes.at(i));
 					if(v != NULL){
 						gl::pushMatrices();
-							gl::translate(dynamic_cast<Joint *>(v->parent)->getPos(false));
+							glm::vec3 absPos = dynamic_cast<Joint *>(v->parent)->getPos(false);
+							gl::translate(absPos.x, absPos.y, absPos.z);
 							gl::drawSphere(v->pos, 0.06f);
 						gl::popMatrices();
 					}
@@ -647,20 +638,6 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 	}
 
 	// restore matrices
-	gl::popMatrices();
-	
-	gl::pushMatrices();
-		Area t = Area(rect.x1, (fboUI.getHeight()-rect.y1), rect.x2, (fboUI.getHeight()-rect.y2));
-		gl::setViewport(t);
-
-		gl::setMatrices(cam);
-		
-		//gl::multModelView(cam.getInverseModelViewMatrix());
-		gl::multProjection(cam.getProjectionMatrix().inverted());
-
-		uiShader.uniform("pickingColor", Color(0.f, 0.f, 0.f));
-
-		gl::drawCoordinateFrame();
 	gl::popMatrices();
 }
 
@@ -906,9 +883,9 @@ void CinderApp::mouseDown( MouseEvent event ){
 					if(ray.calcPlaneIntersection(Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 1.f, 0.f), &distance)){
 						Vec3f pos = ray.calcPosition(distance);
 						if(UI::selectedNodes.size() == 1){
-							cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
+							cmdProc.executeCommand(new CMD_CreateJoint(&sceneRoot, pos, dynamic_cast<Joint *>(UI::selectedNodes.at(0))));
 						}else{
-							cmdProc.executeCommand(new CMD_CreateJoint(&joints, pos, nullptr));
+							cmdProc.executeCommand(new CMD_CreateJoint(&sceneRoot, pos, nullptr));
 						}
 					}
 				}
@@ -1170,24 +1147,17 @@ void CinderApp::keyDown( KeyEvent event ){
 					channel = 3;
 					break;
 				case KeyEvent::KEY_DELETE:
-					if(UI::selectedNodes.size() != 0){
-						std::vector<NodeHierarchical *> temp;
-						for(unsigned long int i = 0; i < joints.size(); ++i){
-							temp.push_back(joints.at(i));
-						}
-						cmdProc.executeCommand(new CMD_DeleteJoint(&temp));
-						joints.clear();
-						for(unsigned long int i = 0; i < temp.size(); ++i){
-							joints.push_back(dynamic_cast<Joint *>(temp.at(i)));
-						}
+					if(UI::selectedNodes.size() > 0){
+						cmdProc.executeCommand(new CMD_DeleteJoints());
 					}
 					break;
 				case KeyEvent::KEY_p:
-					cmdProc.executeCommand(new CMD_Parent(nullptr, nullptr));
+					cmdProc.executeCommand(new CMD_ParentSelectedNodes(&sceneRoot, dynamic_cast<NodeParent *>(UI::selectedNodes.back())));
 					break;
 				case KeyEvent::KEY_q:
-					mode = SELECT;
-					params->setOptions( "UI Mode", "label=`SELECT`" );
+					/*mode = SELECT;
+					params->setOptions( "UI Mode", "label=`SELECT`" );*/
+					dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(0))->pressProgrammatically(this);
 					break;
 				case KeyEvent::KEY_w:
 					mode = TRANSLATE;
@@ -1317,7 +1287,7 @@ void CinderApp::snapParams(){
 void CinderApp::saveSkeleton() {
 	try{
 		console() << "saveSkeleton" << endl;
-		SkeletonData::SaveSkeleton(directory, fileName, joints);
+		SkeletonData::SaveSkeleton(directory, fileName, &sceneRoot);
 		message = "Saved skeleton";
 	}catch (exception ex){
 		message = string(ex.what());
@@ -1329,9 +1299,13 @@ void CinderApp::loadSkeleton() {
 		// Deselect everything
 		cmdProc.executeCommand(new CMD_SelectNodes(nullptr));
 		console() << "loadSkeleton" << endl;
-		joints.clear();
+		sceneRoot.children.clear();
 
-		joints = SkeletonData::LoadSkeleton(filePath);
+		std::vector<Joint *> joints = SkeletonData::LoadSkeleton(filePath);
+		for(unsigned long int i = 0; i < joints.size(); ++i){
+			sceneRoot.children.push_back(joints.at(i));
+		}
+
 		message = "Loaded skeleton";
 
 		// Clear the undo/redo history

@@ -12,90 +12,12 @@
 
 unsigned long int Joint::nextId = 0;
 
-void Joint::init(){
-	depth = 0;
-	parent = nullptr;
-	id = nextId;
-	nextId += 1;
-}
-
 Joint::Joint() : 
 	NodeTransformable(new Transform()),
-	NodeAnimatable(this->transform),
 	NodeChild(nullptr),
-	NodeSelectable()
+	id(nextId)
 {
-	init();
-}
-
-Joint::Joint(NodeParent * _parent) : 
-	NodeTransformable(new Transform()),
-	NodeAnimatable(this->transform),
-	NodeChild(_parent),
-	NodeSelectable()
-{
-	init();
-	parent = _parent;
-	while(_parent != nullptr){
-		NodeHierarchical * t = dynamic_cast<NodeHierarchical *>(_parent);
-		if (t != NULL){
-			_parent = t->parent;
-			depth += 1;
-		}else{
-			break;
-		}
-	}
-}
-
-void Joint::setPos(Vec3d _pos, bool _convertToRelative){
-	glm::vec4 newPos(_pos.x, _pos.y, _pos.z, 1);
-	if(_convertToRelative){
-		NodeParent * _parent = parent;
-		std::vector<glm::mat4> modelMatrixStack;
-		while(_parent != nullptr){
-			NodeHierarchical * t = dynamic_cast<NodeHierarchical *>(_parent);
-			if (t != NULL){
-				modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(_parent)->transform->getModelMatrix());
-				_parent = t->parent;
-			}else{
-				break;
-			}
-		}
-
-		glm::mat4 modelMatrix(1);
-		for(unsigned long int i = modelMatrixStack.size(); i > 0; --i){
-			modelMatrix = modelMatrix * modelMatrixStack.at(i-1);
-		}
-		newPos = glm::inverse(modelMatrix) * newPos;
-	}
-	transform->translationVector = glm::vec3(newPos.x, newPos.y, newPos.z);
-}
-
-Vec3d Joint::getPos(bool _relative){
-	glm::vec4 res(transform->translationVector.x, transform->translationVector.y, transform->translationVector.z, 1);
-	if(!_relative){
-		NodeParent * _parent = parent;
-		std::vector<glm::mat4> modelMatrixStack;
-		while (_parent != nullptr){
-			NodeHierarchical * ph = dynamic_cast<NodeHierarchical *>(_parent);
-			NodeTransformable * pt = dynamic_cast<NodeTransformable *>(_parent);
-			if(pt != NULL){
-				modelMatrixStack.push_back(pt->transform->getModelMatrix());
-			}
-			if (ph != NULL){
-				_parent = ph->parent;
-			}else{
-				break;
-			}
-		}
-		
-		glm::mat4 modelMatrix(1);
-		for(unsigned long int i = modelMatrixStack.size(); i > 0; --i){
-			modelMatrix = modelMatrix * modelMatrixStack.at(i-1);
-		}
-		res = modelMatrix * res;
-	}
-	return Vec3d(res.x, res.y, res.z);
+	nextId += 1;
 }
 
 Joint::~Joint(){
@@ -108,6 +30,7 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 		//gl::enableWireframe();
 		r->ciShader->uniform("pickingColor", Color::hex(pickingColor));
 		//colour
+		float depth = calculateDepth();
 		ColorA color(
 			1 - (float)depth / 28.f,
 			0.25f + (depth <= 14 ? (float)depth / 14.f : (float)(14-depth) / 14.f),

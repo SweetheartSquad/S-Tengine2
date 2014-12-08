@@ -2,22 +2,17 @@
 
 #include "CompressedCommand.h"
 
-CompressedCommand::CompressedCommand()
-{
+CompressedCommand::CompressedCommand(){
+	firstRun = false;
 }
 
 void CompressedCommand::execute(){
-	for (unsigned int i = 0; i < subCommands.size(); ++i){
-		subCommands.at(i)->execute();
-	}
+	subCmdProc.redoAll();
 }
 
 void CompressedCommand::unexecute(){
-	for (unsigned int i = subCommands.size(); i > 0; --i){
-		subCommands.at(i-1)->unexecute();
-	}
+	subCmdProc.undoAll();
 }
 
-CompressedCommand::~CompressedCommand()
-{
+CompressedCommand::~CompressedCommand(){
 }

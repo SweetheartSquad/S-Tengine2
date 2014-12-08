@@ -7,13 +7,16 @@
 
 #include <cinder\gl\gl.h>
 
-ToolButton::ToolButton(Type _type):
+ToolButton::ToolButton(Type _type, void (*_downCallback)(CinderApp * _app), void (*_upCallback)(CinderApp * _app)):
+	NodeChild(nullptr),
 	NodeSelectable(),
 	isHovered(false),
 	isDown(false),
 	isActive(false),
 	displayColor((float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f),
-	type(_type)
+	type(_type),
+	downCallback(_downCallback),
+	upCallback(_upCallback)
 {
 
 }
@@ -21,7 +24,7 @@ ToolButton::ToolButton(Type _type):
 void ToolButton::down(CinderApp * _app){
 	isHovered = true;
 	isDown = true;
-	if(!downCallback._Empty()){
+	if(downCallback != nullptr){
 		downCallback(_app);
 	}
 }
@@ -39,8 +42,8 @@ void ToolButton::up(CinderApp * _app){
 	case ToolButton::RADIO:
 		if(isHovered){
 			// need to unclick sibling
-			for(unsigned long int i = 0; i < group->buttons.size(); ++i){
-				group->buttons.at(i)->isActive = false;
+			for(unsigned long int i = 0; i < dynamic_cast<ToolSet *>(parent)->children.size(); ++i){
+				dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(parent)->children.at(i))->isActive = false;
 			}
 			isActive = true;
 		}
@@ -50,7 +53,7 @@ void ToolButton::up(CinderApp * _app){
 	}
 
 	if(isHovered){
-		if(!upCallback._Empty()){
+		if(upCallback != nullptr){
 			upCallback(_app);
 		}
 	}
@@ -94,4 +97,11 @@ void ToolButton::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 	}
 
 	ci::gl::drawSolidRect(ci::Rectf(0,0,1,1));
+}
+
+void ToolButton::pressProgrammatically(CinderApp * _app){
+	in();
+	down(_app);
+	up(_app);
+	out();
 }

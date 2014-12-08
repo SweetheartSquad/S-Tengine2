@@ -5,16 +5,17 @@
 #include <cinder\Vector.h>
 
 #include "NodeRenderable.h"
+#include "NodeParent.h"
 
 class ToolSet;
 class Step;
 
-class ToolBar : public NodeRenderable{
+class ToolBar : public NodeRenderable, public NodeParent{
 public:
-	std::vector<ToolSet *> toolsets;
-	
 	ci::Vec2i pos;
 	
+	void addSet(ToolSet * _toolset);
+
 	ToolBar(ci::Vec2i _pos);
 	~ToolBar();
 	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;	

@@ -47,7 +47,7 @@ void CMD_KeyProperty::execute(){
 			}
 		}else{
 			// Edit or add a tween
-			if(subCommands.size() == 0){
+			if(firstRun){
 				// find index of tween
 				int idx = -1;
 				float sumTime = animation->time;
@@ -59,12 +59,13 @@ void CMD_KeyProperty::execute(){
 					}
 				}
 				if(idx >= 0){
-					subCommands.push_back(new CMD_EditTween(animation, value, interpolation, idx));
+					subCmdProc.executeCommand(new CMD_EditTween(animation, value, interpolation, idx));
 				}else{
-					subCommands.push_back(new CMD_AddTween(animation, currentTime, targetTime, value, interpolation));
+					subCmdProc.executeCommand(new CMD_AddTween(animation, currentTime, targetTime, value, interpolation));
 				}
+			}else{
+				subCmdProc.redo();
 			}
-			subCommands.at(0)->execute();
 		}
 	}
 
@@ -72,8 +73,8 @@ void CMD_KeyProperty::execute(){
 }
 
 void CMD_KeyProperty::unexecute(){
-	if(subCommands.size() > 0){
-		subCommands.at(0)->unexecute();
+	if(animation->time + (targetTime - currentTime) != 0){
+		subCmdProc.undo();
 	}else{
 		animation->startValue = oldStartValue;
 		animation->hasStart = oldHasStart;

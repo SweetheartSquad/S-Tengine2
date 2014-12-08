@@ -15,10 +15,14 @@ CommandProcessor::CommandProcessor(void) :
 
 void CommandProcessor::executeCommand(Command * c){
 	//ci::app::console() << "executeCommand: " << typeid(*c).name() << std::endl;
-	c->execute();
-	if(currentCompressedCommand != NULL){
-		currentCompressedCommand->subCommands.push_back(c);
+	
+	if(currentCompressedCommand != nullptr){
+		currentCompressedCommand->subCmdProc.executeCommand(c);
+		currentCompressedCommand->firstRun = true;
 	}else{
+		c->execute();
+		c->executed = true;
+		c->firstRun = false;
 		undoStack.push_back(c);
 	}
 
@@ -30,11 +34,44 @@ void CommandProcessor::executeCommand(Command * c){
 	redoStack.clear();
 }
 
+void CommandProcessor::startCompressing(){
+	if(currentCompressedCommand == nullptr){
+		CompressedCommand * c = new CompressedCommand();
+		currentCompressedCommand = c;
+	}else{
+		// Error: already compressing
+	}
+}
+
+void CommandProcessor::endCompressing(){
+	if(currentCompressedCommand != nullptr){
+		if(currentCompressedCommand->firstRun){
+			undoStack.push_back(currentCompressedCommand);
+			redoStack.clear();
+		}else{
+			delete currentCompressedCommand;
+		}
+		currentCompressedCommand = nullptr;
+	}
+}
+
 void CommandProcessor::undo(){
 	if (undoStack.size() != 0){
 		//ci::app::console() << "undo: " << typeid(*c).name() << std::endl;
 		Command * c = undoStack.back();
 		c->unexecute();
+		c->executed = false;
+		redoStack.push_back(c);
+		undoStack.pop_back();
+	}
+}
+
+void CommandProcessor::undoAll(){
+	while (undoStack.size() != 0){
+		//ci::app::console() << "undo: " << typeid(*c).name() << std::endl;
+		Command * c = undoStack.back();
+		c->unexecute();
+		c->executed = false;
 		redoStack.push_back(c);
 		undoStack.pop_back();
 	}
@@ -45,42 +82,36 @@ void CommandProcessor::redo(){
 		//ci::app::console() << "redo: " << typeid(*c).name() << std::endl;
 		Command * c = redoStack.back();
 		c->execute();
+		c->executed = true;
+		undoStack.push_back(c);
+		redoStack.pop_back();
+	}
+}
+void CommandProcessor::redoAll(){
+	while (redoStack.size() != 0){
+		//ci::app::console() << "redo: " << typeid(*c).name() << std::endl;
+		Command * c = redoStack.back();
+		c->execute();
+		c->executed = true;
 		undoStack.push_back(c);
 		redoStack.pop_back();
 	}
 }
 
 void CommandProcessor::reset(){
-	for(unsigned long int i = 0; i < undoStack.size(); ++i){
-		delete undoStack.at(i);
-		undoStack.at(i) = nullptr;
+	while(undoStack.size() > 0){
+		delete undoStack.back();
+		undoStack.pop_back();
 	}
 	undoStack.clear();
-
-	for(unsigned long int i = redoStack.size(); i > 0; --i){
-		delete redoStack.at(i-1);
-		redoStack.at(i-1) = nullptr;
+	
+	while(redoStack.size() > 0){
+		delete redoStack.back();
+		redoStack.pop_back();
 	}
 	redoStack.clear();
 }
 
-void CommandProcessor::startCompressing(){
-
-	CompressedCommand * c = new CompressedCommand();
-	currentCompressedCommand = c;
-}
-
-void CommandProcessor::endCompressing(){
-	if(currentCompressedCommand != nullptr){
-		if(currentCompressedCommand->subCommands.size() > 0){
-			undoStack.push_back(currentCompressedCommand);
-			redoStack.clear();
-		}else{
-			delete currentCompressedCommand;
-		}
-		currentCompressedCommand = nullptr;
-	}
-}
 
 CommandProcessor::~CommandProcessor(void){
 	reset();

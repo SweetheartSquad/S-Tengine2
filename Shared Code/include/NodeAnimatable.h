@@ -9,7 +9,7 @@ class Step;
 class NodeAnimatable abstract : public virtual NodeTransformable, public virtual NodeUpdatable{
 
 public:
-	explicit NodeAnimatable(Transform * _transform);
+	explicit NodeAnimatable();
 	~NodeAnimatable();
 
 	Animation * translateX;

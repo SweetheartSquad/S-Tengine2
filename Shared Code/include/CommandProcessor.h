@@ -13,8 +13,12 @@ public:
 	void executeCommand(Command * c);
 	// Runs "unexecute()" on the last command in the undoStack, pops it off the stack, and pushes it onto the redoStack
 	void undo();
+	// Runs "unexecute()" on every command in the undoStack, pops them off the stack, and pushes it onto the redoStack
+	void undoAll();
 	// Runs "execute()" on the last command in the redoStack, pops it off the stack, and pushes it onto the undoStack
 	void redo();
+	// Runs "execute()" on every command in the redoStack, pops them off the stack, and pushes it onto the undoStack
+	void redoAll();
 	// Deletes and clears the contents of the undo and redo stacks
 	void reset();
 	

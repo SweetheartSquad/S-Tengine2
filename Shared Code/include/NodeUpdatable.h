@@ -4,7 +4,7 @@
 
 class Step;
 
-class NodeUpdatable : public virtual Node{
+class NodeUpdatable abstract : public virtual Node{
 	
 public:
 

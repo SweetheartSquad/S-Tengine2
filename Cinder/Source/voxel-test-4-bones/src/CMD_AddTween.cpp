@@ -21,8 +21,11 @@ CMD_AddTween::CMD_AddTween(Animation * _animation, float _currentTime, float _ta
 void CMD_AddTween::execute(){
 	ci::app::console() << "execute CMD_AddTween" << std::endl;
 	
+	bool addCommand = false;
+	CMD_EditStartKey * cmd = nullptr;
+
 	// calculate values for new tween, and save other values that will be changed by this tween insert
-	if (tween == nullptr){
+	if (firstRun){
 
 		float targetTime = animation->time + deltaTimeline;
 		float deltaTime;// = deltaTimeline;
@@ -35,9 +38,8 @@ void CMD_AddTween::execute(){
 			// d2s for time and value are 0 and start value (deltaTime stays as time)
 			deltaValue = animation->startValue - targetValue;
 
-			if(subCommands.size() == 0){
-				subCommands.push_back(new CMD_EditStartKey(animation, targetValue));
-			}
+			addCommand = true;
+			cmd = new CMD_EditStartKey(animation, targetValue);
 		}else{
 			float sumTime = 0;
 			bool insideAnimation = false;
@@ -94,28 +96,24 @@ void CMD_AddTween::execute(){
 	// insert tween
 	animation->tweens.insert(nextTween_it, tween);
 
-	// update next tween's delta time and delta value, if it exists, can't use EditTween cmd because the next tween's index will change when we execute and unexecute inserting the new tween
-	/*if(nextTweenIndex < animation->tweens.size()){
-		if(subCommands.size() == 0){
-			subCommands.push_back(new CMD_EditTween(animation, targetValue + nextTween_newDeltaValue, animation->tweens.at(nextTweenIndex+1)->interpolation, nextTweenIndex+1));
-		}
-	}*/
 	if(nextTweenIndex < animation->tweens.size()){
 		animation->tweens.at(nextTweenIndex+1)->deltaTime = nextTween_newDeltaTime;
 		animation->tweens.at(nextTweenIndex+1)->deltaValue = nextTween_newDeltaValue;
 	}
 
-	if(subCommands.size() > 0){
-		subCommands.at(0)->execute();
+	if(addCommand){
+		if(firstRun){
+			subCmdProc.executeCommand(cmd);
+		}else{
+			subCmdProc.redo();
+		}
 	}
 
 	executed = true;
 }
 
 void CMD_AddTween::unexecute(){
-	for(unsigned long int i = subCommands.size(); i > 0; --i){
-		subCommands.at(i-1)->execute();
-	}
+	subCmdProc.undo();
 
 	// Remove tween
 	if(nextTweenIndex < animation->tweens.size()){
