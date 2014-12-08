@@ -96,6 +96,7 @@ void Animation::update(Step * _step){
 		
 		*prop = Easing::call(tweens.at(currentTween)->interpolation, currentTime, referenceValue, tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
 		
+		// The time > sum-delta-time bit is inefficient since we don't keep a record of the total animation length (which we should), but it works
 		if(loopType == CONSTANT){
 			if(time < 0){
 				*prop = startValue;
