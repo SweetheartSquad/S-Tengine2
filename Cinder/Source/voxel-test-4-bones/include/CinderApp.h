@@ -174,6 +174,8 @@ public:
 
 	ToolButton * activeButton;
 	
+	// Whether voxels can be selected (if false, their parent joint is selected instead)
+	bool voxelSelectMode;
 	// Whether to draw the voxels as voxels
 	bool voxelPreviewMode;
 	// Grid resolution for voxel preview

@@ -83,13 +83,15 @@ void CinderApp::setup(){
 	timelineParams->addText("Status: ", "label=`STOPPED`");
 	timelineParams->maximize();
 	
-
+	
+	voxelSelectMode = false;
 	voxelPreviewMode = false;
 	voxelPreviewResolution = 0.1;
 	voxelSphereRadius = 0.1;
 	voxelPaintSpacing = 1;
 
 	voxelParams = params::InterfaceGl::create(getWindow(), "Voxel", toPixels(Vec2i(180,150)), ColorA(0.3f, 0.3f, 0.6f, 0.4f));
+	voxelParams->addParam("Selectable", &voxelSelectMode);
 	voxelParams->addParam("Preview", &voxelPreviewMode);
 	voxelParams->addParam("Resolution", &voxelPreviewResolution, "min=0.01, step=0.01");
 	voxelParams->addParam("Radius", &voxelSphereRadius, "min=0.01, step=0.01");
@@ -906,11 +908,17 @@ void CinderApp::mouseDown( MouseEvent event ){
 				}
 			}else if(mode == SELECT){
 				if(event.isLeft()){
-					unsigned long int jointColour;
-					pickColour(&jointColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
+					unsigned long int pickedColour;
+					pickColour(&pickedColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
 					NodeSelectable * selection = nullptr;
-					if(NodeSelectable::pickingMap.count(jointColour) == 1){
-						selection = NodeSelectable::pickingMap.at(jointColour);
+					if(NodeSelectable::pickingMap.count(pickedColour) == 1){
+						selection = NodeSelectable::pickingMap.at(pickedColour);
+					}
+
+					if(!voxelSelectMode){
+						if(dynamic_cast<Voxel *>(selection) != nullptr){
+							selection = dynamic_cast<Joint *>(dynamic_cast<Voxel *>(selection)->parent);
+						}
 					}
 
 					bool additive = event.isShiftDown();
