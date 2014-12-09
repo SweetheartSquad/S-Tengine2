@@ -9,13 +9,14 @@
 
 class CMD_ScaleSelectedTransformables : public Command{
 public:
-	// Relative move will move by _v, non-relative move will move to _v
-	CMD_ScaleSelectedTransformables(ci::Vec3f _v, CoordinateSpace _space);
+	// Relative will scale TO _scale, non-relative will scale BY _scale
+	CMD_ScaleSelectedTransformables(ci::Vec3f _scale, bool _relative, CoordinateSpace _space);
 	~CMD_ScaleSelectedTransformables(void);
 
 	void execute();
 	void unexecute();
 private:
-	ci::Vec3f v;
+	ci::Vec3f scale;
+	bool relative;
 	CoordinateSpace space;
 };

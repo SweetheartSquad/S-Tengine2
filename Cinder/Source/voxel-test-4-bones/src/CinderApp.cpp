@@ -1027,7 +1027,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 							
 							console() << dif << std::endl;
 
-							cmdProc->executeCommand(new CMD_ScaleSelectedTransformables(Vec3f(1.f, 1.f, 1.f) + Vec3f(dir)*dif/100.f, scaleSpace));
+							cmdProc->executeCommand(new CMD_ScaleSelectedTransformables(Vec3f(1.f, 1.f, 1.f) + Vec3f(dir)*dif/100.f, true, scaleSpace));
 						}
 					}
 				}

@@ -177,6 +177,12 @@
     <ClCompile Include="..\src\CMD_TranslateTransformable.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CMD_RotateTransformable.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CMD_ScaleTransformable.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag">
@@ -344,6 +350,12 @@
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="..\include\CMD_ScaleSelectedTransformables.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_RotateTransformable.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_ScaleTransformable.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CMD_RotateSelectedTransformables.h"
+#include "CMD_RotateTransformable.h"
 #include "UI.h"
 #include "NodeTransformable.h"
 #include "Joint.h"
@@ -13,30 +14,22 @@ CMD_RotateSelectedTransformables::CMD_RotateSelectedTransformables(glm::quat _ro
 }
 
 void CMD_RotateSelectedTransformables::execute(){
-	for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
-		NodeTransformable * j = dynamic_cast<NodeTransformable *>(UI::selectedNodes.at(i));
-		if(j != NULL){
-			if(relative){
-				j->transform->rotate(rotation, space);
+	if(firstRun){
+		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
+			NodeTransformable * nt = dynamic_cast<NodeTransformable *>(UI::selectedNodes.at(i));
+			if(nt != nullptr){
+				subCmdProc.executeCommand(new CMD_RotateTransformable(nt, rotation, relative, space));
 			}else{
-				if(orientations.size() != UI::selectedNodes.size()){
-					orientations.push_back(j->transform->orientation);
-				}
-				j->transform->orientation = rotation;
+				// node doesn't have a transform
 			}
 		}
+	}else{
+		subCmdProc.redoAll();
 	}
 }
 
 void CMD_RotateSelectedTransformables::unexecute(){
-	for(unsigned long int i = UI::selectedNodes.size(); i > 0; -- i){
-		NodeTransformable * j = dynamic_cast<NodeTransformable *>(UI::selectedNodes.at(i-1));
-		if(relative){
-			j->transform->rotate(glm::inverse(rotation), space);
-		}else{
-			j->transform->orientation = orientations.at(i-1);
-		}
-	}
+	subCmdProc.undoAll();
 }
 
 CMD_RotateSelectedTransformables::~CMD_RotateSelectedTransformables(void){}

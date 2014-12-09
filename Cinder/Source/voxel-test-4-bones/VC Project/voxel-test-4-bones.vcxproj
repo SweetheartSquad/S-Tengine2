@@ -131,6 +131,8 @@
     <ClCompile Include="..\src\CMD_EditTween.cpp" />
     <ClCompile Include="..\src\CMD_KeyAll.cpp" />
     <ClCompile Include="..\src\CMD_KeyProperty.cpp" />
+    <ClCompile Include="..\src\CMD_RotateTransformable.cpp" />
+    <ClCompile Include="..\src\CMD_ScaleTransformable.cpp" />
     <ClCompile Include="..\src\CMD_TranslateSelectedTransformables.cpp" />
     <ClCompile Include="..\src\CMD_ParentSelectedNodes.cpp" />
     <ClCompile Include="..\src\CMD_PlaceVoxel.cpp" />
@@ -191,6 +193,7 @@
     <ClInclude Include="..\include\CMD_EditTween.h" />
     <ClInclude Include="..\include\CMD_KeyAll.h" />
     <ClInclude Include="..\include\CMD_KeyProperty.h" />
+    <ClInclude Include="..\include\CMD_RotateTransformable.h" />
     <ClInclude Include="..\include\CMD_TranslateSelectedTransformables.h" />
     <ClInclude Include="..\include\CMD_ParentSelectedNodes.h" />
     <ClInclude Include="..\include\CMD_PlaceVoxel.h" />
@@ -200,6 +203,7 @@
     <ClInclude Include="..\include\CMD_Parent.h" />
     <ClInclude Include="..\include\CMD_TranslateTransformable.h" />
     <ClInclude Include="..\include\CompressedCommand.h" />
+    <ClInclude Include="..\include\CMD_ScaleTransformable.h" />
     <ClInclude Include="..\include\Toolbar.h" />
     <ClInclude Include="..\include\ToolButton.h" />
     <ClInclude Include="..\include\ToolSet.h" />

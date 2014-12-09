@@ -10,9 +10,7 @@
 
 class CMD_TranslateSelectedTransformables : public Command{
 public:
-	// Relative move will move by _v, non-relative move will move to _v
-	// Local = true: OBJECT 
-	// Local = false: WORLD
+	// Relative will move BY _v, non-relative will move TO _v
 	CMD_TranslateSelectedTransformables(ci::Vec3d _v, bool _relative, CoordinateSpace _space);
 	~CMD_TranslateSelectedTransformables(void);
 
