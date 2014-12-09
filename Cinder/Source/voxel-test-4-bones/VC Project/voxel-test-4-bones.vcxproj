@@ -193,7 +193,8 @@
     <ClInclude Include="..\include\CMD_MoveSelectedJoints.h" />
     <ClInclude Include="..\include\CMD_ParentSelectedNodes.h" />
     <ClInclude Include="..\include\CMD_PlaceVoxel.h" />
-    <ClInclude Include="..\include\CMD_RotateSelectedJoints.h" />
+    <ClInclude Include="..\include\CMD_RotateSelectedTransformable.h" />
+    <ClInclude Include="..\include\CMD_ScaleSelectedTransformable.h" />
     <ClInclude Include="..\include\CMD_SelectNodes.h" />
     <ClInclude Include="..\include\CMD_Parent.h" />
     <ClInclude Include="..\include\CompressedCommand.h" />
