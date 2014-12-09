@@ -18,6 +18,7 @@ CMD_EditTween::CMD_EditTween(Animation * _animation, float _targetValue, Easing:
 }
 
 void CMD_EditTween::execute(){
+	ci::app::console() << "execute CMD_EditTween" << std::endl;
 	// save old tween values and calculate other values being affected by this tween edit
 	if (!executed){
 		// Save old deltaValue of edited tween

@@ -38,7 +38,7 @@ void CMD_AddTween::execute(){
 			deltaValue = animation->startValue - targetValue;
 
 			addCommand = true;
-			cmd = new CMD_EditStartKey(animation, targetValue);
+			cmd = new CMD_EditStartKey(animation, targetValue, targetTime);
 		}else{
 			float sumTime = 0;
 			bool insideAnimation = false;

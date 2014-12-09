@@ -7,18 +7,24 @@
 
 #include <cinder/app/AppBasic.h>
 
-CMD_EditStartKey::CMD_EditStartKey(Animation * _animation, float _targetValue) :
+CMD_EditStartKey::CMD_EditStartKey(Animation * _animation, float _targetValue, float _targetTime) :
 	animation(_animation),
-	targetValue(_targetValue)
+	targetValue(_targetValue),
+	targetTime(_targetTime)
 {	
 }
 
 void CMD_EditStartKey::execute(){
 	oldStartValue = animation->startValue;
+	oldReferenceValue = animation->referenceValue;
 	animation->startValue = targetValue;
+	/* // Right now, this is only called when adding a tween before the animation, which already makes this tween with the correct deltaValue
 	if(animation->tweens.size() > 0){
 		animation->tweens.at(0)->deltaValue -= oldStartValue - targetValue;
 	}
+	*/
+	animation->time -= targetTime;
+	//animation->referenceValue = targetValue;
 }
 
 void CMD_EditStartKey::unexecute(){
@@ -27,6 +33,8 @@ void CMD_EditStartKey::unexecute(){
 	}
 
 	animation->startValue = oldStartValue;
+	//animation->referenceValue = oldReferenceValue;
+	animation->time += targetTime;
 }
 
 CMD_EditStartKey::~CMD_EditStartKey(){

@@ -14,7 +14,7 @@ public:
 	* @param _animation		The animation object to modify
 	* @param _value			The target value at the start of the animation
 	*/
-	CMD_EditStartKey(Animation * _animation, float _targetValue);
+	CMD_EditStartKey(Animation * _animation, float _targetValue, float _targetTime);
 	~CMD_EditStartKey();
 
 	void execute();
@@ -23,6 +23,8 @@ public:
 private:
 	Animation * animation;
 	float targetValue;
+	float targetTime;
 
 	float oldStartValue;
+	float oldReferenceValue;
 };
