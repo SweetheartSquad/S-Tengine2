@@ -13,9 +13,13 @@ public:
 
 	static float time;
 	static float stepScale;
-	static Easing::Type interpolation;
+	static int interpolationValue;
+	static std::vector<std::string> interpolationNames;
+
 	static ci::Vec3d handlePos;
 	static ci::Vec3d displayHandlePos;
 
 	static void updateHandlePos(bool _displayOnly);
+
+	static std::vector<std::string> getInterpolationNames();
 };

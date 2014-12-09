@@ -29,7 +29,6 @@
 #include "ToolSet.h"
 #include "ToolButton.h"
 
-
 void CinderApp::prepareSettings(Settings *settings){
 	settings->setWindowSize(900, 600);
 	settings->setFrameRate(100.0f);
@@ -54,7 +53,7 @@ void CinderApp::setup(){
 	scaleSpace = OBJECT;
 
 	drawParams = true;
-	params = params::InterfaceGl::create( getWindow(), "General", toPixels( Vec2i( 175, 200 ) ), ColorA(0.6f, 0.3f, 0.3f, 0.4f));
+	params = params::InterfaceGl::create( getWindow(), "General", toPixels( Vec2i( 175, 250 ) ), ColorA(0.6f, 0.3f, 0.3f, 0.4f));
 	params->addText( "UI Mode", "label=`CREATE`" );
 	
 	params->addParam("Translate Space", (int *)&translateSpace, "min=0 max=1");
@@ -72,10 +71,11 @@ void CinderApp::setup(){
 	params->addSeparator();
 	params->addParam("Message", &message, "", true);
 
-	timelineParams = params::InterfaceGl::create( getWindow(), "Animation", toPixels(Vec2i(175,125)), ColorA(0.3f, 0.6f, 0.3f, 0.4f));
+	timelineParams = params::InterfaceGl::create( getWindow(), "Animation", toPixels(Vec2i(175,150)), ColorA(0.3f, 0.6f, 0.3f, 0.4f));
 	timelineParams->minimize();
 	timelineParams->addParam("Time", &UI::time);
 
+	timelineParams->addParam("Interpolation", UI::interpolationNames, &UI::interpolationValue);
 	timelineParams->addButton("Add/Edit Keyframe", std::bind(&CinderApp::setKeyframe, this));
 
 	timelineParams->addSeparator();
@@ -1331,11 +1331,13 @@ void CinderApp::loadSkeleton() {
 		// Deselect everything
 		cmdProc->executeCommand(new CMD_SelectNodes(nullptr));
 		console() << "loadSkeleton" << endl;
-		sceneRoot->children.clear();
 
 		std::vector<Joint *> joints = SkeletonData::LoadSkeleton(filePath);
+
+		// If SkeletonData loads without any exceptions, clear and load joints into sceneRoot's children
+		sceneRoot->children.clear();
 		for(unsigned long int i = 0; i < joints.size(); ++i){
-			sceneRoot->children.push_back(joints.at(i));
+			sceneRoot->addChild(joints.at(i));
 		}
 
 		message = "Loaded skeleton";
@@ -1367,6 +1369,5 @@ void CinderApp::togglePlay(){
 
 	play = !play;
 }
-
 
 CINDER_APP_BASIC( CinderApp, RendererGl )
