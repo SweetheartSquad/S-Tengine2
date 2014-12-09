@@ -7,9 +7,10 @@
 
 #include <cinder\gl\gl.h>
 
-ToolButton::ToolButton(Type _type, void (*_downCallback)(CinderApp * _app), void (*_upCallback)(CinderApp * _app)):
+ToolButton::ToolButton(Type _type, std::string _label, void (*_downCallback)(CinderApp * _app), void (*_upCallback)(CinderApp * _app)):
 	NodeChild(nullptr),
 	NodeSelectable(),
+	label(_label),
 	isHovered(false),
 	isDown(false),
 	isActive(false),

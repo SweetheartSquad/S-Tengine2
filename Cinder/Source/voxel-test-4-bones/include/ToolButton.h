@@ -4,6 +4,8 @@
 #include "NodeRenderable.h"
 #include "NodeChild.h"
 
+#include <string>
+
 #include <cinder\Rect.h>
 #include <cinder\Color.h>
 
@@ -21,7 +23,9 @@ public:
 		RADIO
 	} type;
 	
-	ToolButton(Type _type, void (*_downCallback)(CinderApp * _app) = nullptr, void (*_upCallback)(CinderApp * _app) = nullptr);
+	ToolButton(Type _type, std::string _label, void (*_downCallback)(CinderApp * _app) = nullptr, void (*_upCallback)(CinderApp * _app) = nullptr);
+
+	std::string label;
 
 	// Whether the button is under the mouse
 	bool isHovered;

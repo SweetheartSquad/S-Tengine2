@@ -174,6 +174,9 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\ShiftKiddie.cpp">
       <Filter>Source Files\Nodes</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CMD_SetTime.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag">
@@ -339,6 +342,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\ShiftKiddie.h">
       <Filter>Header Files\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_SetTime.h">
+      <Filter>Header Files\Commands</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

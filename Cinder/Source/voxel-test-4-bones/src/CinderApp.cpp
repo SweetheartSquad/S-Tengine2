@@ -15,6 +15,7 @@
 #include "CMD_ParentSelectedNodes.h"
 #include "CMD_PlaceVoxel.h"
 #include "CMD_DeleteVoxel.h"
+#include "CMD_SetTime.h"
 
 #include "Transform.h"
 #include "NodeTransformable.h"
@@ -138,17 +139,17 @@ void CinderApp::setup(){
 	toolbar->addSet(new ToolSet(Area(0,0,20,20)));
 
 
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Select));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Translate));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Rotate));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Scale));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_CreateJoints));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_PaintVoxels));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Select", nullptr, &ButtonFunctions::MODE_Select));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Translate", nullptr, &ButtonFunctions::MODE_Translate));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Rotate", nullptr, &ButtonFunctions::MODE_Rotate));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Scale", nullptr, &ButtonFunctions::MODE_Scale));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Joint", nullptr, &ButtonFunctions::MODE_CreateJoints));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Voxels", nullptr, &ButtonFunctions::MODE_PaintVoxels));
 
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_0));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_1));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_2));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_3));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 1", nullptr, &ButtonFunctions::CHANNEL_0));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 2", nullptr, &ButtonFunctions::CHANNEL_1));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 3", nullptr, &ButtonFunctions::CHANNEL_2));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 4", nullptr, &ButtonFunctions::CHANNEL_3));
 }
 
 void CinderApp::resize(){
@@ -238,6 +239,7 @@ void CinderApp::update(){
 		previousTime = UI::time;
 	}else{
 		if(UI::time != previousTime){
+
 			Step s;
 			s.setDeltaTime((UI::time - previousTime));
 			for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
@@ -365,8 +367,6 @@ void CinderApp::draw(){
 		gl::draw( pixelFbo.getTexture(0), Rectf(rct.x1, rct.y1+rct.y2+rct.y2, rct.x2, rct.y2+rct.y2+rct.y2) );
 		gl::drawStrokedRect(Rectf(rct.x1, rct.y1+rct.y2+rct.y2, rct.x2, rct.y2+rct.y2+rct.y2));
 	}
-
-	
 }
 
 void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
