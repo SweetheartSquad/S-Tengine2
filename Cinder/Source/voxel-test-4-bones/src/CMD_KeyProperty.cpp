@@ -88,6 +88,7 @@ void CMD_KeyProperty::unexecute(){
 
 	// subtract the change in time from the animation's time, if there has been any change
 	// since I'm adjusting the animation's time if this adds a new tween at the beginning, this won't work, since it's time at this frame wil be zero...
+	// we may end up needing to check the subCmdProc stacks after all...
 	if((animation->time - (UI::time - currentTime)) + (targetTime - currentTime) != 0){
 		subCmdProc.undo();
 	}else{
