@@ -1,18 +1,18 @@
 #pragma once
 
-#include "CMD_ScaleSelectedTransformable.h"
+#include "CMD_ScaleSelectedTransformables.h"
 
 #include "UI.h"
 #include "Node.h"
 #include "NodeTransformable.h"
 
-CMD_ScaleSelectedTransformable::CMD_ScaleSelectedTransformable(ci::Vec3f _v, CoordinateSpace _space) :
+CMD_ScaleSelectedTransformables::CMD_ScaleSelectedTransformables(ci::Vec3f _v, CoordinateSpace _space) :
 	v(_v),
 	space(_space)
 {
 }
 
-void CMD_ScaleSelectedTransformable::execute(){
+void CMD_ScaleSelectedTransformables::execute(){
 	switch(space){
 	case WORLD:
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
@@ -51,7 +51,7 @@ void CMD_ScaleSelectedTransformable::execute(){
 	}
 }
 
-void CMD_ScaleSelectedTransformable::unexecute(){
+void CMD_ScaleSelectedTransformables::unexecute(){
 	switch(space){
 	case WORLD:
 
@@ -67,4 +67,4 @@ void CMD_ScaleSelectedTransformable::unexecute(){
 	}
 }
 
-CMD_ScaleSelectedTransformable::~CMD_ScaleSelectedTransformable(void){}
+CMD_ScaleSelectedTransformables::~CMD_ScaleSelectedTransformables(void){}

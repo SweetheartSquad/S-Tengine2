@@ -7,13 +7,13 @@
 #include "Command.h"
 #include "Transform.h"
 
-class CMD_RotateSelectedTransformable : public Command{
+class CMD_RotateSelectedTransformables : public Command{
 public:
 	// Relative will rotate BY _rotation, non-relative will rotate TO _rotation
 	// Local = true: OBJECT
 	// Local = false: WORLD
-	CMD_RotateSelectedTransformable(glm::quat _rotation, bool _relative, CoordinateSpace _space);
-	~CMD_RotateSelectedTransformable(void);
+	CMD_RotateSelectedTransformables(glm::quat _rotation, bool _relative, CoordinateSpace _space);
+	~CMD_RotateSelectedTransformables(void);
 
 	void execute();
 	void unexecute();

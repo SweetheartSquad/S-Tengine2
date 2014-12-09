@@ -1,18 +1,18 @@
 #pragma once
 
-#include "CMD_RotateSelectedTransformable.h"
+#include "CMD_RotateSelectedTransformables.h"
 #include "UI.h"
 #include "NodeTransformable.h"
 #include "Joint.h"
 
-CMD_RotateSelectedTransformable::CMD_RotateSelectedTransformable(glm::quat _rotation, bool _relative, CoordinateSpace _space) :
+CMD_RotateSelectedTransformables::CMD_RotateSelectedTransformables(glm::quat _rotation, bool _relative, CoordinateSpace _space) :
 	rotation(_rotation),
 	relative(_relative),
 	space(_space)
 {
 }
 
-void CMD_RotateSelectedTransformable::execute(){
+void CMD_RotateSelectedTransformables::execute(){
 	for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 		NodeTransformable * j = dynamic_cast<NodeTransformable *>(UI::selectedNodes.at(i));
 		if(j != NULL){
@@ -28,7 +28,7 @@ void CMD_RotateSelectedTransformable::execute(){
 	}
 }
 
-void CMD_RotateSelectedTransformable::unexecute(){
+void CMD_RotateSelectedTransformables::unexecute(){
 	for(unsigned long int i = UI::selectedNodes.size(); i > 0; -- i){
 		NodeTransformable * j = dynamic_cast<NodeTransformable *>(UI::selectedNodes.at(i-1));
 		if(relative){
@@ -39,4 +39,4 @@ void CMD_RotateSelectedTransformable::unexecute(){
 	}
 }
 
-CMD_RotateSelectedTransformable::~CMD_RotateSelectedTransformable(void){}
+CMD_RotateSelectedTransformables::~CMD_RotateSelectedTransformables(void){}

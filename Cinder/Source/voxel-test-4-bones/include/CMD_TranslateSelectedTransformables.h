@@ -3,17 +3,18 @@
 #include <vector>
 
 #include <cinder/Vector.h>
+#include <glm\glm.hpp>
 
 #include "Command.h"
 #include "Transform.h"
 
-class CMD_MoveSelectedJoints : public Command{
+class CMD_TranslateSelectedTransformables : public Command{
 public:
 	// Relative move will move by _v, non-relative move will move to _v
 	// Local = true: OBJECT 
 	// Local = false: WORLD
-	CMD_MoveSelectedJoints(ci::Vec3d _v, bool _relative, CoordinateSpace _space);
-	~CMD_MoveSelectedJoints(void);
+	CMD_TranslateSelectedTransformables(ci::Vec3d _v, bool _relative, CoordinateSpace _space);
+	~CMD_TranslateSelectedTransformables(void);
 
 	void execute();
 	void unexecute();

@@ -7,11 +7,11 @@
 #include "Command.h"
 #include "Transform.h"
 
-class CMD_ScaleSelectedTransformable : public Command{
+class CMD_ScaleSelectedTransformables : public Command{
 public:
 	// Relative move will move by _v, non-relative move will move to _v
-	CMD_ScaleSelectedTransformable(ci::Vec3f _v, CoordinateSpace _space);
-	~CMD_ScaleSelectedTransformable(void);
+	CMD_ScaleSelectedTransformables(ci::Vec3f _v, CoordinateSpace _space);
+	~CMD_ScaleSelectedTransformables(void);
 
 	void execute();
 	void unexecute();

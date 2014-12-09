@@ -7,9 +7,9 @@
 #include "CMD_CreateJoint.h"
 #include "CMD_DeleteJoints.h"
 #include "CMD_SelectNodes.h"
-#include "CMD_MoveSelectedJoints.h"
-#include "CMD_ScaleSelectedTransformable.h"
-#include "CMD_RotateSelectedTransformable.h"
+#include "CMD_TranslateSelectedTransformables.h"
+#include "CMD_ScaleSelectedTransformables.h"
+#include "CMD_RotateSelectedTransformables.h"
 #include "CMD_KeyProperty.h"
 #include "CMD_KeyAll.h"
 #include "CMD_ParentSelectedNodes.h"
@@ -982,7 +982,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 									console() << "handlePos:\t" << UI::handlePos << std::endl;
 									console() << "Move:\t" << dif << std::endl << std::endl;
 
-									cmdProc->executeCommand(new CMD_MoveSelectedJoints(dif, true, translateSpace));
+									cmdProc->executeCommand(new CMD_TranslateSelectedTransformables(dif, true, translateSpace));
 								}
 							}
 						}
@@ -1008,7 +1008,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 							eulerAngles.y *= axis.y;
 							eulerAngles.z *= axis.z;
 
-							cmdProc->executeCommand(new CMD_RotateSelectedTransformable(glm::quat(eulerAngles), true, rotateSpace));
+							cmdProc->executeCommand(new CMD_RotateSelectedTransformables(glm::quat(eulerAngles), true, rotateSpace));
 						}
 					}else if(mode == SCALE){
 						if(UI::selectedNodes.size() > 0){
@@ -1027,7 +1027,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 							
 							console() << dif << std::endl;
 
-							cmdProc->executeCommand(new CMD_ScaleSelectedTransformable(Vec3f(1.f, 1.f, 1.f) + Vec3f(dir)*dif/100.f, scaleSpace));
+							cmdProc->executeCommand(new CMD_ScaleSelectedTransformables(Vec3f(1.f, 1.f, 1.f) + Vec3f(dir)*dif/100.f, scaleSpace));
 						}
 					}
 				}
