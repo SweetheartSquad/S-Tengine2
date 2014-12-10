@@ -73,15 +73,15 @@ void CMD_KeyProperty::execute(){
 		}
 	}
 	// We need to update the animation's time and reference value to the current time (not necessarily the same time as first run) using the new tweens/start value somehow
-	Step * s = new Step();
-	s->setDeltaTime(animation->time);
+	Step s;
+	s.setDeltaTime(animation->time);
 	ci::app::console() << "step deltaTime: " << animation->time << std::endl;
 	animation->time = 0;
 	animation->referenceValue = animation->startValue;
 	animation->currentTime = 0;
 	animation->currentTween = 0;
 		
-	animation->update(s);
+	animation->update(&s);
 }
 
 void CMD_KeyProperty::unexecute(){
@@ -100,15 +100,15 @@ void CMD_KeyProperty::unexecute(){
 		}
 	}
 	// We need to update the animation's time and reference value to the current time (not necessarily the same time as first run) using the restored tweens/start value somehow
-	Step * s = new Step();
-	s->setDeltaTime(animation->time);
+	Step s;
+	s.setDeltaTime(animation->time);
 		
 	animation->time = 0;
 	animation->referenceValue = animation->startValue;
 	animation->currentTime = 0;
 	animation->currentTween = 0;
 
-	animation->update(s);
+	animation->update(&s);
 }
 
 float CMD_KeyProperty::getStartValue(unsigned long int _idx){

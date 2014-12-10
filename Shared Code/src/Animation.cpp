@@ -2,14 +2,15 @@
 
 #include "Animation.h"
 #include "Step.h"
+#include "cinder/app/AppBasic.h"
 
 float Animation::getTweenEndTime(unsigned long int _idx){
 	if(_idx < tweens.size()){
-		float time = 0;
+		float tempTime = 0;
 		for(unsigned long int i = 0; i <= _idx; ++i){
-			time += tweens.at(i)->deltaTime;
+			tempTime += tweens.at(i)->deltaTime;
 		}
-		return time;
+		return tempTime;
 	}else{
 		throw "index outside bounds of tween array";
 	}
@@ -43,6 +44,7 @@ Animation::Animation(float * const _prop) :
 void Animation::update(Step * _step){
 	if(hasStart){
 		time += (float)_step->getDeltaTime();
+		ci::app::console() << "Animation.update() time: " << time << std::endl;
 	}
 	if(tweens.size() > 0){
 		currentTime += (float)_step->getDeltaTime();

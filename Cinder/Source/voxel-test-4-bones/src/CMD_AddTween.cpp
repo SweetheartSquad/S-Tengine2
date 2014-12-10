@@ -13,7 +13,8 @@ CMD_AddTween::CMD_AddTween(Animation * _animation, float _currentTime, float _ta
 	deltaTimeline(_targetTime - _currentTime),
 	targetValue(_targetValue),
 	tween(nullptr),
-	interpolation(_interpolation)
+	interpolation(_interpolation),
+	nextTweenIndex(-1)
 {	
 }
 
@@ -86,7 +87,9 @@ void CMD_AddTween::execute(){
 
 	// Get insert iterator
 	std::vector<Tween *>::iterator nextTween_it;
-	if(nextTweenIndex < animation->tweens.size()){
+	if(nextTweenIndex == (unsigned long int)(-1)){
+		nextTween_it = animation->tweens.begin();
+	}else if(nextTweenIndex < animation->tweens.size()){
 		nextTween_it = animation->tweens.begin() + nextTweenIndex;
 	}else{
 		nextTween_it = animation->tweens.end();

@@ -12,6 +12,7 @@ public:
 
 private:
 	float * timelineTime;
-	float value;
+	float newValue;
+	float oldValue;
 	bool relative;
 };

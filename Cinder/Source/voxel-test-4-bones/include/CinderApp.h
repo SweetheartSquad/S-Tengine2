@@ -116,6 +116,7 @@ public:
 	params::InterfaceGlRef voxelParams;
 
 	ToolBar * toolbar;
+	ToolBar * timelineBar;
 
 	string directory;
 	string fileName;

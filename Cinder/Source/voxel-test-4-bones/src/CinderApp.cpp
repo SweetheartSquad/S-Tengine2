@@ -74,7 +74,7 @@ void CinderApp::setup(){
 
 	timelineParams = params::InterfaceGl::create( getWindow(), "Animation", toPixels(Vec2i(175,150)), ColorA(0.3f, 0.6f, 0.3f, 0.4f));
 	timelineParams->minimize();
-	timelineParams->addParam("Time", &UI::time);
+	timelineParams->addParam("Time", &UI::time, "", true);
 
 	timelineParams->addParam("Interpolation", UI::interpolationNames, &UI::interpolationValue);
 	timelineParams->addButton("Add/Edit Keyframe", std::bind(&CinderApp::setKeyframe, this));
@@ -133,7 +133,7 @@ void CinderApp::setup(){
 	play = false;
 	previousTime = 0;
 	
-	toolbar = new ToolBar(Vec2i(5,5));
+	toolbar = new ToolBar(Vec2i(5,5), false);
 
 	toolbar->addSet(new ToolSet(Area(0,0,30,30)));
 	toolbar->addSet(new ToolSet(Area(0,0,20,20)));
@@ -150,6 +150,14 @@ void CinderApp::setup(){
 	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 2", nullptr, &ButtonFunctions::CHANNEL_1));
 	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 3", nullptr, &ButtonFunctions::CHANNEL_2));
 	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 4", nullptr, &ButtonFunctions::CHANNEL_3));
+
+	timelineBar = new ToolBar(Vec2i(5,40), false);
+
+	timelineBar->addSet(new ToolSet(Area(0,0,20,20)));
+
+	timelineBar->addButton(0, new ToolButton(ToolButton::Type::NORMAL, "Next", nullptr, &ButtonFunctions::TIME_Increment));
+	timelineBar->addButton(0, new ToolButton(ToolButton::Type::NORMAL, "Prev", nullptr, &ButtonFunctions::TIME_Decrement));
+
 }
 
 void CinderApp::resize(){
@@ -231,15 +239,20 @@ void CinderApp::update(){
 	if(play){
 		Step s;
 		s.setDeltaTime(1 * UI::stepScale);
+		cmdProc->executeCommand(new CMD_SetTime(&UI::time, UI::time+(float)s.getDeltaTime(), false));
+		app::console() << "CinderApp.update() play UI::time: " << UI::time << endl;
+		console() << "previousTime: " << previousTime << endl;
 		for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
 			NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot->children.at(i));
 			nu->update(&s);
 		}
-		UI::time += (float)s.getDeltaTime();
+
+		//UI::time += (float)s.getDeltaTime();
 		previousTime = UI::time;
 	}else{
 		if(UI::time != previousTime){
-
+			console() << "CinderApp.update() !play UI::time: " << UI::time << endl;
+			console() << "previousTime: " << previousTime << endl;
 			Step s;
 			s.setDeltaTime((UI::time - previousTime));
 			for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
@@ -267,16 +280,6 @@ void CinderApp::update(){
 	camFront.setOrtho(boundsFront.x1, boundsFront.x2, -boundsFront.y2, -boundsFront.y1, -10000, 10000);
 	camRight.setOrtho(boundsRight.x1, boundsRight.x2, -boundsRight.y2, -boundsRight.y1, -10000, 10000);
 	
-	/*Quatf o = camMayaPersp.getCamera().getOrientation();
-	
-	console() << o.getPitch() << " " << o.getRoll() << " " << o.getYaw() << std::endl;
-	
-	camTop.setOrientation(Quatf(glm::radians(90.f), 0, glm::radians(-90.f)+atan2(dif.z, dif.x)));
-	
-	camFront.setOrientation(Quatf(0, atan2(dif.y, dif.x), 0));
-	
-	camRight.setOrientation(Quatf(0, glm::radians(90.f), glm::radians(-90.f)+atan2(dif.y, dif.z)));*/
-
 	camTop.setEyePoint(camMayaPersp.getCamera().getEyePoint());
 	camFront.setEyePoint(camMayaPersp.getCamera().getEyePoint());
 	camRight.setEyePoint(camMayaPersp.getCamera().getEyePoint());
@@ -311,6 +314,7 @@ void CinderApp::draw(){
 		CinderRenderOptions t2(nullptr, nullptr);
 		t2.ciShader = &uiShader;
 		toolbar->render(&t, &t2);
+		timelineBar->render(&t, &t2);
 		uiShader.unbind();
 
 		params->draw();
@@ -1363,8 +1367,10 @@ void CinderApp::setKeyframe(){
 void CinderApp::togglePlay(){
 	if (!play){
 		timelineParams->setOptions( "togglePlay", "label=`PLAYING`" );
+		cmdProc->startCompressing();
 	}else{
 		timelineParams->setOptions( "togglePlay", "label=`STOPPED`" );
+		cmdProc->endCompressing();
 	}
 
 	play = !play;
