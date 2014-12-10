@@ -2,6 +2,14 @@
 
 #include <string>
 
+class NodeRenderable;
+
+namespace vox{
+	class MatrixStack;
+}
+
+class RenderOptions;
+
 /********************************************************
 *
 * An abstract class used to define a shader component
@@ -42,4 +50,6 @@ public:
 	* fragment shaders out color. This is GL_OUT_OUT_COLOR in ShaderVariables.h
 	*/
 	virtual std::string getOutColorMod() = 0;
+
+	virtual void configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable) = 0;
 };

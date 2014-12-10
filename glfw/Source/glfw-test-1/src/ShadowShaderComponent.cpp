@@ -2,6 +2,16 @@
 
 #include "ShadowShaderComponent.h"
 #include "ShaderVariables.h"
+#include "MatrixStack.h"
+#include "RenderOptions.h"
+#include "MeshInterface.h"
+#include "GLFWRenderOptions.h"
+
+#include <glm/gtc/matrix_transform.inl>
+
+#include "GL/glew.h"
+
+class GLFWRenderOptions;
 
 ShadowShaderComponent::ShadowShaderComponent() : ShaderComponent(){
 }
@@ -70,4 +80,32 @@ std::string ShadowShaderComponent::getFragmentBodyString(){
 
 std::string ShadowShaderComponent::getOutColorMod(){
 	return GL_OUT_OUT_COLOR + " *= vec4(clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1) , 1)" + SEMI_ENDL;
+}
+
+void ShadowShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+	
+	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
+	
+	if(mesh != nullptr){
+		//Configure DepthMVP
+		glm::mat4 biasMatrix(
+			0.5, 0.0, 0.0, 0.0,
+			0.0, 0.5, 0.0, 0.0,
+			0.0, 0.0, 0.5, 0.0,
+			0.5, 0.5, 0.5, 1.0);
+
+		glm::vec3 lightInvDir = glm::vec3(0.5, 1, 1);
+		glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
+
+		glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
+		glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * _matrixStack->getCurrentMatrix();
+		depthMVP = biasMatrix * depthMVP;
+		glUniformMatrix4fv(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_DEPTH_MVP.c_str()), 1, GL_FALSE, &depthMVP[0][0]);
+
+		if(static_cast<GLFWRenderOptions *>(_renderOption)->shadowMapTextureId != 0){
+			glActiveTexture(GL_TEXTURE0 + mesh->textures.size());
+			glBindTexture(GL_TEXTURE_2D, static_cast<GLFWRenderOptions *>(_renderOption)->shadowMapTextureId);
+			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_SHADOW_MAP_SAMPLER.c_str()), mesh->textures.size());
+		}	
+	}
 }

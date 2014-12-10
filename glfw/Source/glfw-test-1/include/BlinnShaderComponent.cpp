@@ -2,6 +2,9 @@
 
 #include "BlinnShaderComponent.h"
 #include "ShaderVariables.h"
+#include "MatrixStack.h"
+#include "RenderOptions.h"
+#include "SharedComponentShaderMethods.h"
 
 BlinnShaderComponent::BlinnShaderComponent() : ShaderComponent()
 {
@@ -80,4 +83,9 @@ std::string BlinnShaderComponent::getOutColorMod(){
 		IF_NOT_DEFINED + SHADER_COMPONENT_PHONG + ENDL + 
 		GL_OUT_OUT_COLOR + "*= outColorBlinn" + SEMI_ENDL + 
 		END_IF + ENDL;
+}
+
+void BlinnShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+	SharedComponentShaderMethods::configureLights(_matrixStack, _renderOption, _nodeRenderable);
+	SharedComponentShaderMethods::configureMaterials(_matrixStack, _renderOption, _nodeRenderable);
 }

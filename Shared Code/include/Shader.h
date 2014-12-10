@@ -6,6 +6,14 @@
 #include "FileUtils.h"
 #include "NodeResource.h"
 
+class NodeRenderable;
+
+namespace vox{
+	class MatrixStack;
+}
+
+class RenderOptions;
+
 class Shader : public NodeResource{
 
 protected:
@@ -56,6 +64,8 @@ public:
 	GLint get_aVertexNormals();
 	/** Returns the attribute location of the vertex UV in the shader */
 	GLint get_aVertexUVs();
+
+	virtual void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
 
 	void load() override;
 	void unload() override;

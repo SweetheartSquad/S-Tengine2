@@ -16,6 +16,8 @@ public:
 
 	void compileShader();
 
+	virtual void configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable) override;
+
 private:
 	std::string buildVertexShader();
 	std::string buildFragmentShader();

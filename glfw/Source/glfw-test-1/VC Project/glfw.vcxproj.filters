@@ -225,6 +225,9 @@
     <ClCompile Include="..\src\StandardFrameBuffer.cpp">
       <Filter>Source Files\frameBuffers</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\SharedComponentShaderMethods.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -391,6 +394,9 @@
     </ClInclude>
     <ClInclude Include="..\include\StandardFrameBuffer.h">
       <Filter>Header Files\frameBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SharedComponentShaderMethods.h">
+      <Filter>Header Files\shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -154,6 +154,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\Scene.cpp" />
     <ClCompile Include="..\src\ShaderComponent.cpp" />
     <ClCompile Include="..\src\ShadowShaderComponent.cpp" />
+    <ClCompile Include="..\src\SharedComponentShaderMethods.cpp" />
     <ClCompile Include="..\src\StandardFrameBuffer.cpp" />
     <ClCompile Include="..\src\System.cpp" />
     <ClCompile Include="..\src\TestGame.cpp" />
@@ -205,6 +206,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Plane.h" />
     <ClInclude Include="..\include\RenderSurface.h" />
     <ClInclude Include="..\include\Resource.h" />
+    <ClInclude Include="..\include\SharedComponentShaderMethods.h" />
     <ClInclude Include="..\include\ShaderComponent.h" />
     <ClInclude Include="..\include\ShaderVariables.h" />
     <ClInclude Include="..\include\ShadowShaderComponent.h" />

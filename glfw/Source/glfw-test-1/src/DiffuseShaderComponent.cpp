@@ -2,6 +2,9 @@
 
 #include "DiffuseShaderComponent.h"
 #include "ShaderVariables.h"
+#include "MatrixStack.h"
+#include "RenderOptions.h"
+#include "SharedComponentShaderMethods.h"
 
 DiffuseShaderComponent::DiffuseShaderComponent() : ShaderComponent(){
 }
@@ -52,3 +55,8 @@ std::string DiffuseShaderComponent::getOutColorMod(){
 		END_IF + ENDL + 
 		END_IF + ENDL;
 }
+
+void DiffuseShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+	SharedComponentShaderMethods::configureLights(_matrixStack, _renderOption, _nodeRenderable);
+}
+

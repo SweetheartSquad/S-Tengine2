@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Shader.h"
 #include "ShaderVariables.h"
 
@@ -195,6 +197,11 @@ GLint Shader::get_aVertexNormals(){
 	return aVertexNormals;
 }
 
+
 GLint Shader::get_aVertexUVs(){
 	return aVertexUVs;
+}
+
+void Shader::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+	//leave unimplemented
 }
