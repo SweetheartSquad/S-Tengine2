@@ -3,6 +3,8 @@
 #include <iostream>
 #include "Entity.h"
 
+class DepthMapShader;
+class BaseComponentShader;
 class RenderSurface;
 class Camera;
 class Keyboard;
@@ -26,7 +28,7 @@ public:
 	RenderOptions       * renderOptions;
 	StandardFrameBuffer	* depthBuffer;
 	StandardFrameBuffer * shadowBuffer;
-	Shader              * depthShader;
+	DepthMapShader		* depthShader;
 	RenderSurface       * shadowSurface;
 	std::vector<Entity *> children;
 	/** The lights for this scene **/

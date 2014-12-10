@@ -2,6 +2,8 @@
  
 #include <string>
 
+#include "glm/glm.hpp"
+
 /**********************************************************************
 *
 * A collection of constants used for interacting with shaders
@@ -12,6 +14,12 @@
 #define MAX_LIGHTS    5
 #define MAX_TEXTURES  5
 #define MAX_MATERIALS 5
+
+const glm::mat4 BIAS_MATRIX(
+			0.5, 0.0, 0.0, 0.0,
+			0.0, 0.5, 0.0, 0.0,
+			0.0, 0.0, 0.5, 0.0,
+			0.5, 0.5, 0.5, 1.0);
 
 const std::string DEFINE							  = "#define ";
 const std::string IF_DEFINED						  = "#ifdef ";

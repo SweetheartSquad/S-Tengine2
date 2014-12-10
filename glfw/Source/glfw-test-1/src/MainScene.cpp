@@ -21,6 +21,7 @@
 #include <VoxelJoint.h>
 #include "PhongShaderComponent.h"
 #include "BlinnShaderComponent.h"
+#include "DepthMapShader.h"
 
 Cube * cube;
 Cube * cube2;
@@ -314,7 +315,7 @@ void MainScene::render(){
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
 
 	setViewport(0, 0, width, height);
-
+	
 	Scene::renderShadows();
 	Scene::render();
 }

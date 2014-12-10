@@ -87,19 +87,12 @@ void ShadowShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, Re
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 	
 	if(mesh != nullptr){
-		//Configure DepthMVP
-		glm::mat4 biasMatrix(
-			0.5, 0.0, 0.0, 0.0,
-			0.0, 0.5, 0.0, 0.0,
-			0.0, 0.0, 0.5, 0.0,
-			0.5, 0.5, 0.5, 1.0);
-
 		glm::vec3 lightInvDir = glm::vec3(0.5, 1, 1);
 		glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
 
 		glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
 		glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * _matrixStack->getCurrentMatrix();
-		depthMVP = biasMatrix * depthMVP;
+		depthMVP = BIAS_MATRIX * depthMVP;
 		glUniformMatrix4fv(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_DEPTH_MVP.c_str()), 1, GL_FALSE, &depthMVP[0][0]);
 
 		if(static_cast<GLFWRenderOptions *>(_renderOption)->shadowMapTextureId != 0){

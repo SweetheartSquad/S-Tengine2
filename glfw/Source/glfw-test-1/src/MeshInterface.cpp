@@ -124,9 +124,9 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 					_renderOption->shader->configureUniforms(_matrixStack, _renderOption, this);
 					
 					//Model View Projection
-					//configureModelViewProjection(_matrixStack, _renderOption);
+					/*configureModelViewProjection(_matrixStack, _renderOption);
 
-					/*//TODO - A flag in the shader should be set to disable these
+					//TODO - A flag in the shader should be set to disable these
 					if(shouldRenderTextures){
 						configureTextures(_matrixStack, _renderOption);
 					}
@@ -137,7 +137,7 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 						configureExtras(_matrixStack, _renderOption);
 					}
 					if(shouldRenderShadows){
-						configureShadows(_matrixStack, _renderOption);
+						//configureShadows(_matrixStack, _renderOption);
 					}*/
 
 					//configureShadows(_matrixStack, _renderOption);

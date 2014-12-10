@@ -9,6 +9,7 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "MatrixStack.h"
+#include "DepthMapShader.h"
 
 Scene::Scene(Game * _game):
 	game(_game),
@@ -17,7 +18,7 @@ Scene::Scene(Game * _game):
 	renderOptions(new RenderOptions(nullptr, &lights)),
 	shadowBuffer(new StandardFrameBuffer(true)),
 	depthBuffer(new StandardFrameBuffer(true)),
-	depthShader(new Shader("../assets/DepthMapShader", false, true)),
+	depthShader(new DepthMapShader(true)),
 	shadowSurface(new RenderSurface(new Shader("../assets/shadow", false, true))),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
