@@ -231,6 +231,9 @@
     <ClCompile Include="..\src\DepthMapShader.cpp">
       <Filter>Source Files\shader</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\BlurShader.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -402,6 +405,9 @@
       <Filter>Header Files\shader</Filter>
     </ClInclude>
     <ClInclude Include="..\include\DepthMapShader.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\BlurShader.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
   </ItemGroup>

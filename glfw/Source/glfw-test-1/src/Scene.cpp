@@ -10,6 +10,7 @@
 #include "Mouse.h"
 #include "MatrixStack.h"
 #include "DepthMapShader.h"
+#include "BlurShader.h"
 
 Scene::Scene(Game * _game):
 	game(_game),
@@ -19,7 +20,7 @@ Scene::Scene(Game * _game):
 	shadowBuffer(new StandardFrameBuffer(true)),
 	depthBuffer(new StandardFrameBuffer(true)),
 	depthShader(new DepthMapShader(true)),
-	shadowSurface(new RenderSurface(new Shader("../assets/shadow", false, true))),
+	shadowSurface(new RenderSurface(new BlurShader(true))),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance())
