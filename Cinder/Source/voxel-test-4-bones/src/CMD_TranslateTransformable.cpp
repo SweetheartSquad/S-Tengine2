@@ -21,10 +21,10 @@ void CMD_TranslateTransformable::execute(){
 		if(sk != nullptr){
 			if(relative){
 				switch(space){
-				case WORLD:
+				case kWORLD:
 					sk->setPos(sk->getPos(false) + glm::vec3(v.x, v.y, v.z), true);
 					break;
-				case OBJECT:
+				case kOBJECT:
 					sk->setPos(sk->getPos(true) + glm::vec3(v.x, v.y, v.z), false);
 					break;
 				}
@@ -35,12 +35,12 @@ void CMD_TranslateTransformable::execute(){
 			// no parent transforms to worry about
 			if(relative){
 				switch(space){
-				case WORLD:
+				case kWORLD:
 					// doesn't take into account node's orientation/scale?
 					node->transform->translationVector += glm::vec3(v.x, v.y, v.z);
 					break;
 
-				case OBJECT:
+				case kOBJECT:
 					node->transform->translationVector += glm::vec3(v.x, v.y, v.z);
 					break;
 				}

@@ -33,7 +33,7 @@ Animation::Animation(float * const _prop) :
 	time(0),
 	currentTime(0),
 	currentTween(0),
-	loopType(LoopType::LOOP),
+	loopType(LoopType::kLOOP),
 	referenceValue(0),
 	startValue(*_prop),
 	hasStart(false)
@@ -57,13 +57,13 @@ void Animation::update(Step * _step){
 				
 				if(currentTween == 0){
 					switch (loopType){
-						case Animation::LOOP:
-						case Animation::CONSTANT:
+						case Animation::kLOOP:
+						case Animation::kCONSTANT:
 							referenceValue = startValue;
 							for(unsigned long int i = 0; i+1 < tweens.size(); ++i){
 								referenceValue += tweens.at(i)->deltaValue;
 							}
-						case Animation::LOOP_WITH_OFFSET:
+						case Animation::kLOOP_WITH_OFFSET:
 							currentTween = tweens.size() - 1;
 							break;
 						default:
@@ -81,10 +81,10 @@ void Animation::update(Step * _step){
 
 				if(currentTween >= tweens.size()){
 					switch (loopType){
-						case Animation::LOOP:
-						case Animation::CONSTANT:
+						case Animation::kLOOP:
+						case Animation::kCONSTANT:
 							referenceValue = startValue;
-						case Animation::LOOP_WITH_OFFSET:
+						case Animation::kLOOP_WITH_OFFSET:
 							currentTween = 0;
 							break;
 						default:
@@ -97,7 +97,7 @@ void Animation::update(Step * _step){
 		*prop = Easing::call(tweens.at(currentTween)->interpolation, currentTime, referenceValue, tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
 		
 		// The time > sum-delta-time bit is inefficient since we don't keep a record of the total animation length (which we should), but it works
-		if(loopType == CONSTANT){
+		if(loopType == kCONSTANT){
 			if(time < 0){
 				*prop = startValue;
 			}else if(time > getTweenEndTime(tweens.size()-1)){

@@ -4,6 +4,7 @@
 
 class Command;
 class CompressedCommand;
+class ConsoleEntry;
 
 class CommandProcessor{
 public:
@@ -24,6 +25,8 @@ public:
 	
 	void startCompressing();
 	void endCompressing();
+
+	std::vector<ConsoleEntry> log;
 private:
 	std::vector<Command *> undoStack;
 	std::vector<Command *> redoStack;

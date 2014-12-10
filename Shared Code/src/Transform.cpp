@@ -68,10 +68,10 @@ void Transform::translateZ(float _translateZ){
 
 void Transform::rotate(glm::quat _rotation, CoordinateSpace _space){
 	switch(_space){
-	case WORLD:
+	case kWORLD:
 		orientation = _rotation * orientation;
 		break;
-	case OBJECT:
+	case kOBJECT:
 		orientation = orientation * _rotation;
 		break;
 	}

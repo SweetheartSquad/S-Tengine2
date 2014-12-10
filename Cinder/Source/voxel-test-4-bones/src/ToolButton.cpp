@@ -31,15 +31,15 @@ void ToolButton::down(CinderApp * _app){
 void ToolButton::up(CinderApp * _app){
 	isDown = false;
 	switch (type){
-	case ToolButton::NORMAL:
+	case ToolButton::kNORMAL:
 		isActive = false;
 		break;
-	case ToolButton::TOGGLE:
+	case ToolButton::kTOGGLE:
 		if(isHovered){
 			isActive = !isActive;
 		}
 		break;
-	case ToolButton::RADIO:
+	case ToolButton::kRADIO:
 		if(isHovered){
 			// need to unclick sibling
 			for(unsigned long int i = 0; i < dynamic_cast<ToolSet *>(parent)->children.size(); ++i){

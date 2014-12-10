@@ -183,6 +183,9 @@
     <ClCompile Include="..\src\CMD_ScaleTransformable.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ConsoleGUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag">
@@ -357,6 +360,9 @@
     </ClInclude>
     <ClInclude Include="..\include\CMD_ScaleTransformable.h">
       <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ConsoleGUI.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

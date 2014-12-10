@@ -22,7 +22,7 @@ void CMD_ScaleTransformable::execute(){
 			glm::vec4 v2(scale.x, scale.y, scale.z, 0);
 			NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(node);
 			switch(space){
-			case WORLD:
+			case kWORLD:
 
 				if(nh != nullptr){
 					std::vector<glm::mat4> modelMatrixStack;
@@ -42,7 +42,7 @@ void CMD_ScaleTransformable::execute(){
 				node->transform->scale(v2.x, v2.y, v2.z);
 				break;
 
-			case OBJECT:
+			case kOBJECT:
 				node->transform->scale(scale.x, scale.y, scale.z);
 				break;
 			}

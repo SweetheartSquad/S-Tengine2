@@ -7,6 +7,7 @@
 #include "CommandProcessor.h"
 #include "Command.h"
 #include "CompressedCommand.h"
+#include "ConsoleGUI.h"
 
 CommandProcessor::CommandProcessor(void) :
 	currentCompressedCommand(nullptr)
@@ -54,8 +55,10 @@ void CommandProcessor::endCompressing(){
 
 void CommandProcessor::undo(){
 	if (undoStack.size() != 0){
-		//ci::app::console() << "undo: " << typeid(*c).name() << std::endl;
 		Command * c = undoStack.back();
+		std::string msg("undo: ");
+		msg += std::string(typeid(*c).name());
+		log.push_back(ConsoleEntry(msg, ConsoleEntry::Type::kLOG));
 		c->unexecute();
 		c->executed = false;
 		redoStack.push_back(c);

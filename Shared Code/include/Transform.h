@@ -12,8 +12,8 @@
 #include "NodeHierarchical.h"
 
 typedef enum{
-	WORLD,
-	OBJECT
+	kWORLD,
+	kOBJECT
 } CoordinateSpace;
 
 /** A basic transform node */

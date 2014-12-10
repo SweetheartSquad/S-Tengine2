@@ -29,6 +29,8 @@
 #include "ToolSet.h"
 #include "ToolButton.h"
 
+#include "ConsoleGUI.h"
+
 void CinderApp::prepareSettings(Settings *settings){
 	settings->setWindowSize(900, 600);
 	settings->setFrameRate(100.0f);
@@ -48,9 +50,9 @@ void CinderApp::setup(){
 	uiColour = 0;
 	clickedUiColour = 0;
 	
-	translateSpace = WORLD;
-	rotateSpace = OBJECT;
-	scaleSpace = OBJECT;
+	translateSpace = kWORLD;
+	rotateSpace = kOBJECT;
+	scaleSpace = kOBJECT;
 
 	drawParams = true;
 	params = params::InterfaceGl::create( getWindow(), "General", toPixels( Vec2i( 175, 250 ) ), ColorA(0.6f, 0.3f, 0.3f, 0.4f));
@@ -86,11 +88,11 @@ void CinderApp::setup(){
 	
 	voxelSelectMode = false;
 	voxelPreviewMode = false;
-	voxelPreviewResolution = 0.1;
-	voxelSphereRadius = 0.1;
-	voxelPaintSpacing = 1;
+	voxelPreviewResolution = 0.1f;
+	voxelSphereRadius = 0.1f;
+	voxelPaintSpacing = 1.f;
 
-	voxelParams = params::InterfaceGl::create(getWindow(), "Voxel", toPixels(Vec2i(180,150)), ColorA(0.3f, 0.3f, 0.6f, 0.4f));
+	voxelParams = params::InterfaceGl::create(getWindow(), "Voxel", toPixels(Vec2i(180, 150)), ColorA(0.3f, 0.3f, 0.6f, 0.4f));
 	voxelParams->addParam("Selectable", &voxelSelectMode);
 	voxelParams->addParam("Preview", &voxelPreviewMode);
 	voxelParams->addParam("Resolution", &voxelPreviewResolution, "min=0.01, step=0.01");
@@ -98,8 +100,10 @@ void CinderApp::setup(){
 	voxelParams->addParam("Paint Spacing", &voxelPaintSpacing, "min=0.01, step=0.5");
 	voxelParams->maximize();
 
+	consoleGUI = new ConsoleGUI(Rectf(0.f, getWindowHeight()-15.f, getWindowWidth(), getWindowHeight()), &cmdProc->log);
+
 	// note: we will setup our camera in the 'resize' function,
-	//  because it is called anyway so we don't have to set it up twice
+	// because it is called anyway so we don't have to set it up twice
 
 	// create materials
 	JointMaterial.setAmbient(Color::white());
@@ -115,7 +119,7 @@ void CinderApp::setup(){
 	
 	channel = 0;
 
-	mode = CREATE;
+	mode = kCREATE;
 
 
 	//// test animation
@@ -134,21 +138,21 @@ void CinderApp::setup(){
 	
 	toolbar = new ToolBar(Vec2i(5,5));
 
-	toolbar->addSet(new ToolSet(Area(0,0,30,30)));
-	toolbar->addSet(new ToolSet(Area(0,0,20,20)));
+	toolbar->addSet(new ToolSet(Area(0, 0, 30, 30)));
+	toolbar->addSet(new ToolSet(Area(0, 0, 20, 20)));
 
 
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Select));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Translate));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Rotate));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Scale));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_CreateJoints));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_PaintVoxels));
-
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_0));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_1));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_2));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_3));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::MODE_Select));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::MODE_Translate));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::MODE_Rotate));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::MODE_Scale));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::MODE_CreateJoints));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::MODE_PaintVoxels));
+														   
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::CHANNEL_0));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::CHANNEL_1));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::CHANNEL_2));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::CHANNEL_3));
 }
 
 void CinderApp::resize(){
@@ -212,6 +216,8 @@ void CinderApp::resize(){
 	}if(!fboFront || fboFront.getWidth() != rectFront.getWidth() || fboFront.getHeight() != rectFront.getHeight()){
 		initMultiChannelFbo(fboFront, rectFront.getInteriorArea(), 4);
 	}
+
+	consoleGUI->resize(Rectf(0.f, getWindowHeight()-15.f, getWindowWidth(), getWindowHeight()));
 }
 
 
@@ -223,6 +229,8 @@ void CinderApp::shutdown(){
 	sceneRoot = nullptr;
 	delete cmdProc;
 	cmdProc = nullptr;
+	delete consoleGUI;
+	consoleGUI = nullptr;
 }
 
 void CinderApp::update(){
@@ -367,6 +375,7 @@ void CinderApp::draw(){
 	}
 
 	
+	consoleGUI->render(&t, &t2);
 }
 
 void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
@@ -463,7 +472,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 	gl::color(ColorA(1.f, 1.f, 1.f, 1.f));
 
 	uiShader.uniform("pickingColor", Color(0.f, 0.f, 0.f));
-	if(mode == CREATE){
+	if(mode == kCREATE){
 		Ray ray = camMayaPersp.getCamera().generateRay((float)mMousePos.x/rectPersp.getWidth(), 1.f-((float)(mMousePos.y-rect.y1)/rectPersp.getHeight()), camMayaPersp.getCamera().getAspectRatio());			
 		float distance = 0.f;
 		if(ray.calcPlaneIntersection(Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 1.f, 0.f), &distance)){
@@ -505,11 +514,11 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 			gl::disableWireframe();
 
 			switch(mode){
-			case TRANSLATE:
+			case kTRANSLATE:
 				gl::translate(UI::displayHandlePos);
 				break;
-			case ROTATE:
-			case SCALE:
+			case kROTATE:
+			case kSCALE:
 				gl::translate(UI::handlePos);
 				break;
 			}
@@ -522,8 +531,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 			}
 
 			switch(mode){
-			case TRANSLATE:
-				if(translateSpace == OBJECT){
+			case kTRANSLATE:
+				if(translateSpace == kOBJECT){
 					// Rotate to match the object orientation
 					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
 					if(j != NULL){
@@ -560,8 +569,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 				break;
 
-			case ROTATE:
-				if(rotateSpace == OBJECT){
+			case kROTATE:
+				if(rotateSpace == kOBJECT){
 					// Rotate to match the object orientation
 					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
 					if(j != NULL){
@@ -603,8 +612,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 				break;
 
-			case SCALE:
-				if(scaleSpace == OBJECT){
+			case kSCALE:
+				if(scaleSpace == kOBJECT){
 					// Rotate to match the object orientation
 					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
 					if(j != NULL){
@@ -810,14 +819,14 @@ void CinderApp::mouseDown( MouseEvent event ){
 	mMousePos = event.getPos();
 
 	switch (mode){
-		case CinderApp::CREATE:
+		case CinderApp::kCREATE:
 			break;
-		case CinderApp::SELECT:
+		case CinderApp::kSELECT:
 			break;
-		case CinderApp::TRANSLATE:
-		case CinderApp::ROTATE:
-		case CinderApp::SCALE:
-		case CinderApp::PAINT_VOXELS:
+		case CinderApp::kTRANSLATE:
+		case CinderApp::kROTATE:
+		case CinderApp::kSCALE:
+		case CinderApp::kPAINT_VOXELS:
 			cmdProc->startCompressing();
 			console() << "startCompressing" << endl;
 			break;
@@ -866,7 +875,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 		}
 
 		if(!event.isAltDown() && (clickedUiColour == 0)){
-			if(mode == PAINT_VOXELS){
+			if(mode == kPAINT_VOXELS){
 				if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
 					if(event.isLeft()){
 						// place voxel
@@ -893,7 +902,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 						}
 					}
 				}
-			}else if(mode == CREATE){
+			}else if(mode == kCREATE){
 				if(event.isLeft()){
 					Ray ray = camMayaPersp.getCamera().generateRay((float)mMousePos.x/rectPersp.getWidth(), 1.f-((float)(mMousePos.y-rectPersp.y1)/rectPersp.getHeight()), camMayaPersp.getCamera().getAspectRatio());			
 					float distance = 0.f;
@@ -906,7 +915,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 						}
 					}
 				}
-			}else if(mode == SELECT){
+			}else if(mode == kSELECT){
 				if(event.isLeft()){
 					unsigned long int pickedColour;
 					pickColour(&pickedColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
@@ -957,7 +966,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 					Vec2f deltaMousePos = mMousePos - oldMousePos;
 					console() << "Mouse:\t" << deltaMousePos << std::endl;
 
-					if(mode == TRANSLATE){
+					if(mode == kTRANSLATE){
 						if(UI::selectedNodes.size() > 0){
 							if(sourceCam->isPersp()){
 
@@ -986,7 +995,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 								}
 							}
 						}
-					}else if(mode == ROTATE){
+					}else if(mode == kROTATE){
 						glm::vec3 axis(0,0,0);
 						switch(clickedUiColour){
 							case 0xFF0000: axis.x -= 1; break;
@@ -1010,7 +1019,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 
 							cmdProc->executeCommand(new CMD_RotateSelectedTransformables(glm::quat(eulerAngles), true, rotateSpace));
 						}
-					}else if(mode == SCALE){
+					}else if(mode == kSCALE){
 						if(UI::selectedNodes.size() > 0){
 							//nothing
 							Vec3i dir(0,0,0);
@@ -1032,7 +1041,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 					}
 				}
 			}else{
-				if(mode == PAINT_VOXELS){
+				if(mode == kPAINT_VOXELS){
 						if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
 							if(event.isLeftDown()){
 								// place voxel
@@ -1102,9 +1111,18 @@ void CinderApp::mouseUp( MouseEvent event ){
 		activeButton->up(this);
 	}
 	
-	if(mode == TRANSLATE || mode == ROTATE || mode == SCALE || mode == PAINT_VOXELS){
+	switch (mode){
+	case CinderApp::kCREATE:
+	case CinderApp::kSELECT:
+	default:
+		break;
+	case CinderApp::kTRANSLATE:
+	case CinderApp::kROTATE:
+	case CinderApp::kSCALE:
+	case CinderApp::kPAINT_VOXELS:
 		cmdProc->endCompressing();
 		console() << "endCompressing" << endl;
+		break;
 	}
 
 	uiColour = 0;
@@ -1192,23 +1210,23 @@ void CinderApp::keyDown( KeyEvent event ){
 					dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(0))->pressProgrammatically(this);
 					break;
 				case KeyEvent::KEY_w:
-					mode = TRANSLATE;
+					mode = kTRANSLATE;
 					params->setOptions( "UI Mode", "label=`TRANSLATE`" );
 					break;
 				case KeyEvent::KEY_e:
-					mode = ROTATE;
+					mode = kROTATE;
 					params->setOptions( "UI Mode", "label=`ROTATE`" );
 					break;
 				case KeyEvent::KEY_r:
-					mode = SCALE;
+					mode = kSCALE;
 					params->setOptions( "UI Mode", "label=`SCALE`" );
 					break;
 				case KeyEvent::KEY_b:
-					mode = CREATE;
+					mode = kCREATE;
 					params->setOptions( "UI Mode", "label=`CREATE`" );
 					break;
 				case KeyEvent::KEY_v:
-					mode = PAINT_VOXELS;
+					mode = kPAINT_VOXELS;
 					params->setOptions( "UI Mode", "label=`PAINT_VOXELS`" );
 					break;
 				}

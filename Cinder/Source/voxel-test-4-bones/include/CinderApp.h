@@ -27,6 +27,7 @@ using namespace std;
 
 class ToolBar;
 class ToolButton;
+class ConsoleGUI;
 
 class CinderApp : public AppBasic {
 public:
@@ -194,12 +195,12 @@ public:
 	const gl::Fbo * sourceFbo;
 
 	enum UImode{
-		CREATE,
-		SELECT,
-		TRANSLATE,
-		ROTATE,
-		SCALE,
-		PAINT_VOXELS
+		kCREATE,
+		kSELECT,
+		kTRANSLATE,
+		kROTATE,
+		kSCALE,
+		kPAINT_VOXELS
 	} mode;
 	
 	CoordinateSpace translateSpace;
@@ -220,4 +221,6 @@ public:
 	Vec3f lastVoxelPaintPos;
 	float currentSpacingDistance;
 	float voxelPaintSpacing;
+
+	ConsoleGUI * consoleGUI;
 };

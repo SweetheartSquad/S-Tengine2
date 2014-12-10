@@ -16,9 +16,9 @@ public:
 	ci::Color displayColor;
 
 	enum Type{
-		NORMAL,
-		TOGGLE,
-		RADIO
+		kNORMAL,
+		kTOGGLE,
+		kRADIO
 	} type;
 	
 	ToolButton(Type _type, void (*_downCallback)(CinderApp * _app) = nullptr, void (*_upCallback)(CinderApp * _app) = nullptr);
