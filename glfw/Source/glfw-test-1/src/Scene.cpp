@@ -11,19 +11,20 @@
 #include "MatrixStack.h"
 #include "DepthMapShader.h"
 #include "BlurShader.h"
+#include "Light.h"
 
 Scene::Scene(Game * _game):
 	game(_game),
-	camera(new Camera()),
-	matrixStack(new vox::MatrixStack()),
-	renderOptions(new RenderOptions(nullptr, &lights)),
-	shadowBuffer(new StandardFrameBuffer(true)),
-	depthBuffer(new StandardFrameBuffer(true)),
-	depthShader(new DepthMapShader(true)),
-	shadowSurface(new RenderSurface(new BlurShader(true))),
-	//Singletons
+	mouse(&Mouse::getInstance()),
 	keyboard(&Keyboard::getInstance()),
-	mouse(&Mouse::getInstance())
+	camera(new Camera()),
+	renderOptions(new RenderOptions(nullptr, &lights)),
+	depthBuffer(new StandardFrameBuffer(true)),
+	shadowBuffer(new StandardFrameBuffer(true)),
+	depthShader(new DepthMapShader(true)),
+	//Singletons
+	shadowSurface(new RenderSurface(new BlurShader(true))),
+	matrixStack(new vox::MatrixStack())
 {
 }
 
@@ -39,7 +40,7 @@ void Scene::update(void){
 		light->update();
 	}
 	for(Entity * e : children){
-		e->update();
+		e->update(&vox::step);
 	}
 }
 
@@ -123,7 +124,7 @@ void Scene::onContextChange(){
 		e->unload();
 	}
 	for(Entity * e : children){
-		e->reset();
+		e->load();
 	}
 }
 

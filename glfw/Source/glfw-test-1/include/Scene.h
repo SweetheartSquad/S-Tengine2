@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Entity.h"
 
+class Light;
 class DepthMapShader;
 class BaseComponentShader;
 class RenderSurface;

@@ -2,12 +2,12 @@
 
 #include <vector>
 
-#include "Entity.h"
+#include "MeshEntity.h"
 
 class Shader;
 class Transform;
 
-class FakeAnimation : public Entity {
+class FakeAnimation : public MeshEntity {
 public:
 	unsigned long int frame;
 	unsigned long int delay;
@@ -16,7 +16,7 @@ public:
 	FakeAnimation(Transform * _transform, Shader * _shader);
 	~FakeAnimation();
 
-	void pushFrame(Entity * _frame);
+	void pushFrame(MeshEntity * _frame);
 
 	/**
 	* Pushes model matrix stack,
@@ -28,6 +28,6 @@ public:
 	*/
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 	/** Doesn't do anything by default */
-	virtual void update() override;
+	virtual void update(Step * _step) override;
 
 };

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "Entity.h"
+#include "MeshEntity.h"
 
 /*****************************
 *
@@ -9,7 +9,7 @@
 *
 ******************************/
 
-class Plane : public Entity{
+class Plane : public MeshEntity{
 public:
 	virtual char * getTypename(){
 		return "Plane";

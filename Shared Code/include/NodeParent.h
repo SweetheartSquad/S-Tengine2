@@ -11,9 +11,6 @@ class NodeParent abstract : public virtual Node{
 public:
 	virtual ~NodeParent() = 0;
 
-	// Recursively delete all the children of a node, then delete the node itself
-	static void deleteRecursively(NodeParent * _j);
-
 	// Loops through the node's children and removes the first instance of _child
 	// Pushes _child onto the node's children stack
 	// Sets _child->parent = this node
@@ -41,8 +38,5 @@ public:
 
 	/** List of references to child entities */
 	std::vector<NodeChild *> children;
-
-
-private:
 
 };

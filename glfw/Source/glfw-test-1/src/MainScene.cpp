@@ -22,40 +22,9 @@
 #include "PhongShaderComponent.h"
 #include "BlinnShaderComponent.h"
 #include "DepthMapShader.h"
-#include <VoxelComponent.h>
+#include "VoxelComponent.h"
 
-Cube * cube;
-Cube * cube2;
-Cube * cube3;
-Cube * cube4;
-
-Light glight;
-
-Texture * tex;
-Texture * voxTex;
-
-Material * mat;
-Material * bMat;
-
-Shader * texShader;
-Shader * phongShader;
-Shader * blinnShader;
-Shader * voxShader;
-
-Light *tLight;
-
-StandardFrameBuffer * frameBuffer;
-
-RenderSurface * renderSurface;
-
-Entity * loaded1;
-
-Transform * t;
-
-BaseComponentShader * baseShader;
-BaseComponentShader * voxelShader;
-
-VoxelJoint * voxelJoint;
+#include "MeshEntity.h"
 
 MainScene::MainScene(Game * _game):
 	Scene(game)
@@ -107,14 +76,14 @@ MainScene::MainScene(Game * _game):
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
 	for(unsigned long int i = 0; i < 1; ++i){
-		Entity * loaded = new Entity(new VoxelMesh(Resource::loadMeshFromObj("../assets/cube.vox")), t, voxelShader);
+		MeshEntity * loaded = new MeshEntity(new VoxelMesh(Resource::loadMeshFromObj("../assets/cube.vox")), t, voxelShader);
 		loaded->mesh->polygonalDrawMode = GL_POINTS;
 		loaded->mesh->pushMaterial(mat);
 		cube->addChild(loaded);
 		loaded->mesh->pushTexture2D(tex);
 	}
 
-	Entity * loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, baseShader);
+	MeshEntity * loaded1 = new MeshEntity(Resource::loadMeshFromObj("../assets/cube.vox"), t, baseShader);
 	//cube->addChild(loaded1);
 	//loaded1->mesh->pushMaterial(mat);
 
@@ -193,7 +162,7 @@ MainScene::MainScene(Game * _game):
 	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/24.vox")));*/
 
 	for(Node * e : cat->children){
-		dynamic_cast<Entity *>(e)->mesh->polygonalDrawMode = GL_POINTS;
+		dynamic_cast<MeshEntity *>(e)->mesh->polygonalDrawMode = GL_POINTS;
 	}
 
 	cat->transform->translate(1, 0, 2);
@@ -215,7 +184,7 @@ MainScene::~MainScene(){
 void MainScene::update(){
 	Scene::update();
 
-	voxelJoint->updateAnimation(&vox::step);
+	voxelJoint->update(&vox::step);
 
 	//tLight->transform->translateX(sinf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
 	//tLight->transform->translateZ(cosf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);

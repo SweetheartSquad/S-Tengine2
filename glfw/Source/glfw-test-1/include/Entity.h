@@ -2,23 +2,17 @@
 
 #include "Transform.h"
 #include "Vertex.h"
-#include "MeshInterface.h"
-#include "Shader.h"
 #include "Node.h"
 #include "NodeHierarchical.h"
 #include "Vox.h"
 #include "NodeAnimatable.h"
+#include "NodeRenderable.h"
 
 /** A basic entity node. Stores references to a mesh, transform, shader, parent, and list of references to children */
 class Entity : public NodeAnimatable, public NodeHierarchical, public NodeRenderable{
 public:
 
-	/** Reference to this entity's mesh */
-	MeshInterface * mesh;
-	/** Reference to this entity's shader */
-	Shader * shader;
-
-	explicit Entity(MeshInterface * _mesh = nullptr, Transform * _transform = nullptr, Shader * _shader = nullptr);
+	explicit Entity(Transform * _transform = nullptr);
 	virtual ~Entity(void);
 
 	/**
@@ -31,18 +25,11 @@ public:
 	*/
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 	/** Doesn't do anything by default */
-	virtual void update();
+	virtual void update(Step * _step) override;
 
-	void addChild(Entity * _child);
 	virtual void removeChildAtIndex(int _index) override;
-	/**Sets shader to _shader*/
-	void setShader(Shader* _shader, bool _confiugreDefaultAttributes);
-	/** Recursivley sets the shader to _shader for _entity's children recursivley*/
-	void setShaderOnChildren(Shader * _shader);
-	/** Calls unload on all children and on mesh */
-	void unload();
-	/** Loads and cleans mesh, configures default vertex attributes, deletes and reloads shader, and calls unload on all children (recursive) */
-	void reset();
-
-	void updateAnimation(Step * step);
+	/** Calls unload on all children */
+	virtual void unload();
+	/** Calls unload on all children */
+	virtual void load();
 };
