@@ -15,15 +15,13 @@
 #define MAX_TEXTURES  5
 #define MAX_MATERIALS 5
 
-#define MOD_GEO (bool hasGeo, std::string str) (hasGeo ? (GEO + str) : str)
-
 const glm::mat4 BIAS_MATRIX(
 			0.5, 0.0, 0.0, 0.0,
 			0.0, 0.5, 0.0, 0.0,
 			0.0, 0.0, 0.5, 0.0,
 			0.5, 0.5, 0.5, 1.0);
 
-const std::string GEO							      = "geo";
+const std::string GEO							      = "Geo";
 
 const std::string DEFINE							  = "#define ";
 const std::string IF_DEFINED						  = "#ifdef ";

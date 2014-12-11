@@ -413,13 +413,13 @@
     <ClInclude Include="..\include\DepthMapShader.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\BlurShader.h">
-      <Filter>Header Files\shader</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\VoxelComponent.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
     <ClInclude Include="..\include\GeometryComponent.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\BlurShader.h">
       <Filter>Header Files\shader</Filter>
     </ClInclude>
   </ItemGroup>

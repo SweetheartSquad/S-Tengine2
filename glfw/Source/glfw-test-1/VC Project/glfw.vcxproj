@@ -190,6 +190,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\..\..\..\Shared Code\include\Vox.h" />
     <ClInclude Include="..\include\BaseComponentShader.h" />
     <ClInclude Include="..\include\BlinnShaderComponent.h" />
+    <ClInclude Include="..\include\BlurShader.h" />
     <ClInclude Include="..\include\Camera.h" />
     <ClInclude Include="..\include\Cube.h" />
     <ClInclude Include="..\include\DepthFrameBuffer.h" />
@@ -228,7 +229,6 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\VoxelComponent.h" />
     <ClInclude Include="..\include\VoxelJoint.h" />
     <ClInclude Include="..\include\VoxelMesh.h" />
-    <ClInclude Include="..\src\BlurShader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\..\..\dev\ttt.json" />

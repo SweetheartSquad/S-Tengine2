@@ -42,7 +42,7 @@ std::string VoxelComponent::getGeometryShader(){
 
 		"uniform mat4 VP;\n"
 		"uniform float resolution;\n"
-		"uniform mat4 M;\n"
+		"uniform mat4 model;\n"
 
 		"void rotate(in int i, inout vec3 inVec){\n"
 			"if(i == 0){\n"
@@ -76,7 +76,7 @@ std::string VoxelComponent::getGeometryShader(){
 							"vec3 cubeVert = vec3(x-0.5, y-0.5, z-0.5) * resolution;\n"
 							"rotate(i, cubeVert);\n"
 					
-							"vec4 pos = M * gl_in[0].gl_Position.xyzw;\n"
+							"vec4 pos = model * gl_in[0].gl_Position.xyzw;\n"
 
 							"pos.xyz = pos.xyz - mod(pos.xyz, vec3(resolution, resolution, resolution));\n"
 					
@@ -91,13 +91,11 @@ std::string VoxelComponent::getGeometryShader(){
 		"}\n";
 }
 
+//TOOD make resolution configurable
 void VoxelComponent::configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable){
 	glm::mat4 vp = _matrixStack->projectionMatrix * _matrixStack->viewMatrix;
-	glm::mat4 m = _matrixStack->currentModelMatrix;
 	GLuint vpUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), "VP");
-	GLuint mUniformLocation =  glGetUniformLocation(_renderOption->shader->getProgramId(), "M");
 	GLuint resolutionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), "resolution");
 	glUniformMatrix4fv(vpUniformLocation, 1, GL_FALSE, &vp[0][0]);
-	glUniformMatrix4fv(mUniformLocation, 1, GL_FALSE, &m[0][0]);
 	glUniform1f(resolutionUniformLocation, 0.15);
 }

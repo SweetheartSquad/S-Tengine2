@@ -4,7 +4,7 @@
 
 class DepthMapShader : public Shader{
 public:
-	DepthMapShader(bool _autoRelease);
+	explicit DepthMapShader(bool _autoRelease);
 
 	void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 

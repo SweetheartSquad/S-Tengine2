@@ -23,7 +23,7 @@ std::string BaseComponentShader::buildVertexShader(){
 
 	std::string modGeo = "";
 	if(geometryComponent != nullptr){
-		modGeo = "Geo";
+		modGeo = GEO;
 	}
 
 	std::string shaderString  = "#version 150" + ENDL + 
