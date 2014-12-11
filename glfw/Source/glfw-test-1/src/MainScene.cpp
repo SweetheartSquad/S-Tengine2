@@ -21,13 +21,13 @@
 #include <VoxelJoint.h>
 #include "PhongShaderComponent.h"
 #include "BlinnShaderComponent.h"
+#include "PointLight.h"
+#include "DirectionalLight.h"
 
 Cube * cube;
 Cube * cube2;
 Cube * cube3;
 Cube * cube4;
-
-Light glight;
 
 Texture * tex;
 Texture * voxTex;
@@ -40,7 +40,7 @@ Shader * phongShader;
 Shader * blinnShader;
 Shader * voxShader;
 
-Light *tLight;
+DirectionalLight *tLight;
 
 StandardFrameBuffer * frameBuffer;
 
@@ -101,7 +101,7 @@ MainScene::MainScene(Game * _game):
 		//loaded->mesh->pushTexture2D(tex);
 	}
 
-	Entity * loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, baseShader);
+	Entity * loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, phongShader);
 	cube->addChild(loaded1);
 	loaded1->mesh->pushMaterial(mat);
 
@@ -137,21 +137,18 @@ MainScene::MainScene(Game * _game):
 	cube4->mesh->dirty = true;
 	loaded1->mesh->dirty = true;
 
-	tLight = new Light();
-	tLight->data.position = glm::vec3(-3.f, 1.5f, 1.f);
-	tLight->data.intensities = glm::vec3(0.5f, 0.5f, 0.5f);
-	tLight->data.attenuation = 0.2f;
-	tLight->data.ambientCoefficient = 0.00f;
+	tLight = new DirectionalLight(glm::vec3(1.f, 1.5f, 1.f),
+		glm::vec3(0.5f, 0.5f, 0.5f),
+		0.2f);
 
-	Light * tLight2 = new Light();
-	tLight2->data.position = glm::vec3(1.f, -1.5, 1.f);
-	tLight2->data.intensities = glm::vec3(0.5f, 0.5f, 0.5f);
-	tLight2->data.attenuation = 0.2f;
-	tLight2->data.ambientCoefficient = 0.005f;
+	/*PointLight * tLight2 = new PointLight(glm::vec3(1.f, -1.5, 1.f),
+		glm::vec3(0.5f, 0.5f, 0.5f),
+		0.2f,
+		0.005f);
 
-	tLight2->transform->translateX(2);
-	//lights.push_back(tLight);
-	lights.push_back(tLight2);
+	tLight2->transform->translateX(2);*/
+	lights.push_back(tLight);
+	//lights.push_back(tLight2);
 
 	FakeAnimation * cat = new FakeAnimation(new Transform(), texShader);
 	/*cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/01.vox")));

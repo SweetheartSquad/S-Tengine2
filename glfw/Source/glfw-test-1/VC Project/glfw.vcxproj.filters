@@ -225,6 +225,12 @@
     <ClCompile Include="..\src\StandardFrameBuffer.cpp">
       <Filter>Source Files\frameBuffers</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\PointLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DirectionalLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -391,6 +397,12 @@
     </ClInclude>
     <ClInclude Include="..\include\StandardFrameBuffer.h">
       <Filter>Header Files\frameBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\PointLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\DirectionalLight.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
