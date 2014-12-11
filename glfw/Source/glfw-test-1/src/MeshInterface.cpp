@@ -139,7 +139,7 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 					if(shouldRenderShadows){
 						//configureShadows(_matrixStack, _renderOption);
 					}*/
-
+					//	configureExtras(_matrixStack, _renderOption);
 					//configureShadows(_matrixStack, _renderOption);
 
 					//Alpha blending

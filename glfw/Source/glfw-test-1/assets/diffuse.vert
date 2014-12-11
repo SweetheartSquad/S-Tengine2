@@ -21,6 +21,6 @@ void main(){
 	fragColor = aVertexColor;
 	fragUV = aVertexUVs;
 	gl_Position = MVP * vec4(aVertexPosition, 1.0);
-	shadowCoord = depthMVP * vec4(aVertexPosition, 1.0);
+	//shadowCoord = depthMVP * vec4(aVertexPosition, 1.0);
 }
  

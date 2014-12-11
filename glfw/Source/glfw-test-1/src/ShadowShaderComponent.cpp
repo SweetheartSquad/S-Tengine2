@@ -22,7 +22,11 @@ ShadowShaderComponent::~ShadowShaderComponent(){
 std::string ShadowShaderComponent::getVertexVariablesString(){
 	return 
 		DEFINE + SHADER_COMPONENT_SHADOW + ENDL + 
+		IF_DEFINED + SHADER_COMPONENT_VOXEL + ENDL +
+		"out vec4 " + GL_IN_OUT_SHADOW_COORD + "Geo" + SEMI_ENDL + 
+		ELSE + ENDL +
 		"out vec4 " + GL_IN_OUT_SHADOW_COORD + SEMI_ENDL + 
+		END_IF + ENDL +
 		"uniform mat4 " + GL_UNIFORM_ID_DEPTH_MVP + SEMI_ENDL;
 }
 
@@ -53,7 +57,12 @@ std::string ShadowShaderComponent::getFragmentVariablesString(){
 }
 
 std::string ShadowShaderComponent::getVertexBodyString(){
-	return GL_IN_OUT_SHADOW_COORD + " = " + GL_UNIFORM_ID_DEPTH_MVP + " * vec4(aVertexPosition, 1.0)" + SEMI_ENDL;
+	return 	
+		IF_DEFINED + SHADER_COMPONENT_VOXEL + ENDL +
+			GL_IN_OUT_SHADOW_COORD + "Geo" + " = " + GL_UNIFORM_ID_DEPTH_MVP + " * vec4(aVertexPosition, 1.0)" + SEMI_ENDL +
+		ELSE + ENDL +
+			GL_IN_OUT_SHADOW_COORD + " = " + GL_UNIFORM_ID_DEPTH_MVP + " * vec4(aVertexPosition, 1.0)" + SEMI_ENDL +
+		END_IF + ENDL;
 }
 
 std::string ShadowShaderComponent::getFragmentBodyString(){

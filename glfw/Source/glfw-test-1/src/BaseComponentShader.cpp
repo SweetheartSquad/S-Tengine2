@@ -5,19 +5,27 @@
 #include "NodeRenderable.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
+#include "GeometryComponent.h"
 
 BaseComponentShader::BaseComponentShader() :
-	Shader(buildVertexShader(), buildFragmentShader(), false){
-
+	Shader(false),
+	geometryComponent(nullptr){
 }
 
 BaseComponentShader::BaseComponentShader(std::vector<ShaderComponent*> _components) :
+	Shader(false),
 	components(_components),
-	Shader(buildVertexShader(), buildFragmentShader(), false)
+	geometryComponent(nullptr)
 {
 }
 
 std::string BaseComponentShader::buildVertexShader(){
+
+	std::string modGeo = "";
+	if(geometryComponent != nullptr){
+		modGeo = "Geo";
+	}
+
 	std::string shaderString  = "#version 150" + ENDL + 
 							    "#extension GL_ARB_explicit_attrib_location : enable" + ENDL + 
 								"layout(location = 1) in vec3 aVertexPosition" + SEMI_ENDL +
@@ -27,24 +35,32 @@ std::string BaseComponentShader::buildVertexShader(){
 
 								"uniform mat4 MVP" + SEMI_ENDL +
 								
-								"out vec3 fragVert" + SEMI_ENDL +
-								"out vec3 fragNormal" + SEMI_ENDL +
-								"out vec4 fragColor" + SEMI_ENDL +
-								"out vec2 fragUV" + SEMI_ENDL;
+								"out vec3 fragVert" + modGeo + SEMI_ENDL +
+								"out vec3 fragNormal" + modGeo + SEMI_ENDL +
+								"out vec4 fragColor" + modGeo + SEMI_ENDL +
+								"out vec2 fragUV" + modGeo + SEMI_ENDL;
+
+	if(geometryComponent != nullptr){
+		shaderString += geometryComponent->getVertexVariablesString();
+	}
 
 	for(unsigned long int i = 0; i < components.size(); i++){
 		shaderString += components.at(i)->getVertexVariablesString();
 	}
 
 	shaderString += "void main(){\n"
-						"fragVert = aVertexPosition;\n"
-						"fragNormal = aVertexNormals;\n"
-						"fragColor = aVertexColor;\n"
-						"fragUV = aVertexUVs;\n"
+						"fragVert" + modGeo + "= aVertexPosition;\n"
+						"fragNormal" + modGeo + " = aVertexNormals;\n"
+						"fragColor" + modGeo + "= aVertexColor;\n"
+						"fragUV" + modGeo + " = aVertexUVs;\n"
 						"gl_Position = MVP * vec4(aVertexPosition, 1.0);\n";
 
 	for(unsigned long int i = 0; i < components.size(); i++){
 		shaderString += components.at(i)->getVertexBodyString();
+	}
+
+	if(geometryComponent != nullptr){
+		shaderString += geometryComponent->getVertexBodyString();
 	}
 
 	shaderString += "}";
@@ -85,7 +101,12 @@ std::string BaseComponentShader::buildFragmentShader(){
 
 void BaseComponentShader::compileShader(){
 	Shader::unload();
-	Shader::init(buildVertexShader(), buildFragmentShader());
+	if(geometryComponent != nullptr){
+		init(buildVertexShader(), buildFragmentShader(), geometryComponent->getGeometryShader());	
+	}else{
+		init(buildVertexShader(), buildFragmentShader());	
+	}
+	
 }
 
 void BaseComponentShader::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
@@ -100,6 +121,10 @@ void BaseComponentShader::configureUniforms(vox::MatrixStack* _matrixStack, Rend
 	
 	for(unsigned long int i = 0; i < components.size(); i++){
 		components.at(i)->configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
+	}
+
+	if(geometryComponent != nullptr){
+		geometryComponent->configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 	}
 }
 

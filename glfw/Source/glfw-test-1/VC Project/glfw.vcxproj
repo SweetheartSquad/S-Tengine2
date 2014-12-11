@@ -129,8 +129,8 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Tween.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Vox.cpp" />
-    <ClCompile Include="..\include\BlinnShaderComponent.cpp" />
     <ClCompile Include="..\src\BaseComponentShader.cpp" />
+    <ClCompile Include="..\src\BlinnShaderComponent.cpp" />
     <ClCompile Include="..\src\BlurShader.cpp" />
     <ClCompile Include="..\src\Camera.cpp" />
     <ClCompile Include="..\src\Cube.cpp" />
@@ -141,6 +141,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\FileUtils.cpp" />
     <ClCompile Include="..\src\FrameBufferInterface.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
+    <ClCompile Include="..\src\GeometryComponent.cpp" />
     <ClCompile Include="..\src\GLFWRenderOptions.cpp" />
     <ClCompile Include="..\src\GLUtils.cpp" />
     <ClCompile Include="..\src\Keyboard.cpp" />
@@ -163,6 +164,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\MeshInterface.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
     <ClCompile Include="..\src\TextureShaderComponent.cpp" />
+    <ClCompile Include="..\src\VoxelComponent.cpp" />
     <ClCompile Include="..\src\VoxelJoint.cpp" />
     <ClCompile Include="..\src\VoxelMesh.cpp" />
   </ItemGroup>
@@ -199,6 +201,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\FrameBufferInterface.h" />
     <ClInclude Include="..\include\FrameBufferVertex.h" />
     <ClInclude Include="..\include\Game.h" />
+    <ClInclude Include="..\include\GeometryComponent.h" />
     <ClInclude Include="..\include\GLFWRenderOptions.h" />
     <ClInclude Include="..\include\GLUtils.h" />
     <ClInclude Include="..\include\Keyboard.h" />
@@ -222,6 +225,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\TextureShaderComponent.h" />
     <ClInclude Include="..\include\Vertex.h" />
     <ClInclude Include="..\include\MeshInterface.h" />
+    <ClInclude Include="..\include\VoxelComponent.h" />
     <ClInclude Include="..\include\VoxelJoint.h" />
     <ClInclude Include="..\include\VoxelMesh.h" />
     <ClInclude Include="..\src\BlurShader.h" />

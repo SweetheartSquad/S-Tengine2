@@ -5,6 +5,8 @@
 #include "Shader.h"
 #include "ShaderComponent.h"
 
+class GeometryComponent;
+
 class BaseComponentShader : public Shader{
 public:	
 	BaseComponentShader();
@@ -13,6 +15,7 @@ public:
 	~BaseComponentShader();
 
 	std::vector<ShaderComponent *> components;
+	GeometryComponent * geometryComponent;
 
 	void compileShader();
 
@@ -21,4 +24,5 @@ public:
 private:
 	std::string buildVertexShader();
 	std::string buildFragmentShader();
+
 };

@@ -22,6 +22,7 @@
 #include "PhongShaderComponent.h"
 #include "BlinnShaderComponent.h"
 #include "DepthMapShader.h"
+#include <VoxelComponent.h>
 
 Cube * cube;
 Cube * cube2;
@@ -52,6 +53,8 @@ Entity * loaded1;
 Transform * t;
 
 BaseComponentShader * baseShader;
+BaseComponentShader * voxelShader;
+
 VoxelJoint * voxelJoint;
 
 MainScene::MainScene(Game * _game):
@@ -81,6 +84,14 @@ MainScene::MainScene(Game * _game):
 	baseShader->components.push_back(new ShadowShaderComponent());
 	baseShader->compileShader();
 
+	voxelShader = new BaseComponentShader();
+	voxelShader->components.push_back(new TextureShaderComponent());
+	voxelShader->components.push_back(new DiffuseShaderComponent());
+	voxelShader->components.push_back(new PhongShaderComponent());
+	voxelShader->components.push_back(new ShadowShaderComponent());
+	voxelShader->geometryComponent = new VoxelComponent();
+	voxelShader->compileShader();
+
 	mat = new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true);
 	bMat = new Material(10.0, glm::vec3(0.5f, 0.1f, 0.9f), true);
 
@@ -95,16 +106,17 @@ MainScene::MainScene(Game * _game):
 	cube->mesh->vertices.at(0).y += 1.5;
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
-	for(unsigned long int i = 0; i < 0; ++i){
-		Entity * loaded = new Entity(new VoxelMesh(Resource::loadMeshFromObj("../assets/cube.vox")), t, voxShader);
+	for(unsigned long int i = 0; i < 1; ++i){
+		Entity * loaded = new Entity(new VoxelMesh(Resource::loadMeshFromObj("../assets/cube.vox")), t, voxelShader);
 		loaded->mesh->polygonalDrawMode = GL_POINTS;
+		loaded->mesh->pushMaterial(mat);
 		cube->addChild(loaded);
-		//loaded->mesh->pushTexture2D(tex);
+		loaded->mesh->pushTexture2D(tex);
 	}
 
 	Entity * loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, baseShader);
-	cube->addChild(loaded1);
-	loaded1->mesh->pushMaterial(mat);
+	//cube->addChild(loaded1);
+	//loaded1->mesh->pushMaterial(mat);
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->setShader(texShader, true);

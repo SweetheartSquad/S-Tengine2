@@ -15,16 +15,21 @@
 #define MAX_TEXTURES  5
 #define MAX_MATERIALS 5
 
+#define MOD_GEO (bool hasGeo, std::string str) (hasGeo ? (GEO + str) : str)
+
 const glm::mat4 BIAS_MATRIX(
 			0.5, 0.0, 0.0, 0.0,
 			0.0, 0.5, 0.0, 0.0,
 			0.0, 0.0, 0.5, 0.0,
 			0.5, 0.5, 0.5, 1.0);
 
+const std::string GEO							      = "geo";
+
 const std::string DEFINE							  = "#define ";
 const std::string IF_DEFINED						  = "#ifdef ";
 const std::string IF_NOT_DEFINED				      = "#ifndef ";
 const std::string END_IF							  = "#endif";
+const std::string ELSE								  = "#else";
 
 const std::string ENDL								  = "\n";
 const std::string TAB								  = "\t";
@@ -80,6 +85,8 @@ const std::string SHADER_COMPONENT_MATERIAL			  = "SHADER_COMPONENT_MATERIAL";
 const std::string SHADER_COMPONENT_AMBIENT			  = "SHADER_COMPONENT_AMBIENT";
 const std::string SHADER_COMPONENT_DIFFUSE			  = "SHADER_COMPONENT_DIFFUSE";
 const std::string SHADER_COMPONENT_BLINN			  = "SHADER_COMPONENT_BLINN";
+const std::string SHADER_COMPONENT_VOXEL			  = "SHADER_COMPONENT_VOXEL";
+
 
 const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGHT + "\n"
 														"#define " + SHADER_COMPONENT_LIGHT + "\n"
