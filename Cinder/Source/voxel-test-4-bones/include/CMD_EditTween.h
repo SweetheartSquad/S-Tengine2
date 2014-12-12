@@ -12,8 +12,8 @@ public:
 	CMD_EditTween(Animation * _animation, float _targetValue, Easing::Type _interpolation, int _idx);
 	~CMD_EditTween();
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 
 private:
 	// Used in getTweenEndValue function

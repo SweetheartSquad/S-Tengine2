@@ -13,8 +13,8 @@ public:
 	CMD_PlaceVoxel(ci::Vec3f _v, Joint * _parent);
 	~CMD_PlaceVoxel(void);
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 private:
 	ci::Vec3f v;
 	Voxel * voxel;

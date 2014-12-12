@@ -1,22 +1,12 @@
 #pragma once
 
 #include "NodeRenderable.h"
+#include "ConsoleEntry.h"
+
 
 #include <vector>
 
 #include <cinder\Rect.h>
-
-class ConsoleEntry{
-public:
-	std::string message;
-	enum Type{
-		kLOG,
-		kWARNING,
-		kERROR
-	} type;
-
-	ConsoleEntry(std::string _message, Type _type);
-};
 
 class ConsoleGUI : public NodeRenderable {
 public:

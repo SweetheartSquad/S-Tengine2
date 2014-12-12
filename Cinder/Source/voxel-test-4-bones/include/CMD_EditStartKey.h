@@ -17,8 +17,8 @@ public:
 	CMD_EditStartKey(Animation * _animation, float _targetValue, float _targetTime);
 	~CMD_EditStartKey();
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 
 private:
 	Animation * animation;

@@ -17,6 +17,6 @@ public:
 	CMD_SelectNodes(Node * _node = nullptr, bool _additive = false, bool _subtractive = false);
 	~CMD_SelectNodes();
 	
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 };

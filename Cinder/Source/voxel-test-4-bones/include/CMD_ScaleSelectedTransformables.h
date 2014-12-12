@@ -13,8 +13,8 @@ public:
 	CMD_ScaleSelectedTransformables(ci::Vec3f _scale, bool _relative, CoordinateSpace _space);
 	~CMD_ScaleSelectedTransformables(void);
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 private:
 	ci::Vec3f scale;
 	bool relative;

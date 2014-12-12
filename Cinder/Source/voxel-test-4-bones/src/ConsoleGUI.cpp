@@ -4,12 +4,6 @@
 
 #include <cinder\gl\gl.h>
 
-ConsoleEntry::ConsoleEntry(std::string _message, Type _type) :
-	message(_message),
-	type(_type)
-{
-}
-
 ConsoleGUI::ConsoleGUI(ci::Rectf _rect, std::vector<ConsoleEntry> * _log) :
 	rect(_rect),
 	log(_log)

@@ -15,8 +15,8 @@ public:
 	CMD_RotateTransformable(NodeTransformable * _node, glm::quat _rotation, bool _relative, CoordinateSpace _space);
 	~CMD_RotateTransformable(void);
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 private:
 	NodeTransformable * node;
 	// Original orientations of selected joints

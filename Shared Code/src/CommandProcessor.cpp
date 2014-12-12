@@ -19,10 +19,9 @@ void CommandProcessor::executeCommand(Command * c){
 		currentCompressedCommand->subCmdProc.executeCommand(c);
 		currentCompressedCommand->firstRun = true;
 	}else{
-		c->execute();
-		c->executed = true;
+		redoStack.push_back(c);
+		redo();
 		c->firstRun = false;
-		undoStack.push_back(c);
 	}
 
 	// Executing a new command will always clear the redoStack
@@ -56,45 +55,38 @@ void CommandProcessor::endCompressing(){
 void CommandProcessor::undo(){
 	if (undoStack.size() != 0){
 		Command * c = undoStack.back();
-		std::string msg("undo: ");
-		msg += std::string(typeid(*c).name());
-		log.push_back(ConsoleEntry(msg, ConsoleEntry::Type::kLOG));
-		c->unexecute();
-		c->executed = false;
-		redoStack.push_back(c);
+		if(c->unexecute()){
+			c->executed = false;
+			redoStack.push_back(c);
+		}
 		undoStack.pop_back();
-	}
-}
-
-void CommandProcessor::undoAll(){
-	while (undoStack.size() != 0){
-		//ci::app::console() << "undo: " << typeid(*c).name() << std::endl;
-		Command * c = undoStack.back();
-		c->unexecute();
-		c->executed = false;
-		redoStack.push_back(c);
-		undoStack.pop_back();
+		// Log command's entries
+		consoleEntries.insert(consoleEntries.end(), c->consoleEntries.begin(), c->consoleEntries.end());
 	}
 }
 
 void CommandProcessor::redo(){
 	if (redoStack.size() != 0){
-		//ci::app::console() << "redo: " << typeid(*c).name() << std::endl;
 		Command * c = redoStack.back();
-		c->execute();
-		c->executed = true;
-		undoStack.push_back(c);
+		if(c->execute()){
+			c->executed = true;
+			undoStack.push_back(c);
+		}
 		redoStack.pop_back();
+		// Log command's entries
+		consoleEntries.insert(consoleEntries.end(), c->consoleEntries.begin(), c->consoleEntries.end());
 	}
 }
+
+void CommandProcessor::undoAll(){
+	while (undoStack.size() != 0){
+		undo();
+	}
+}
+
 void CommandProcessor::redoAll(){
 	while (redoStack.size() != 0){
-		//ci::app::console() << "redo: " << typeid(*c).name() << std::endl;
-		Command * c = redoStack.back();
-		c->execute();
-		c->executed = true;
-		undoStack.push_back(c);
-		redoStack.pop_back();
+		redo();
 	}
 }
 
@@ -113,4 +105,17 @@ void CommandProcessor::reset(){
 
 CommandProcessor::~CommandProcessor(void){
 	reset();
+}
+
+
+void CommandProcessor::log(std::string _message){
+	consoleEntries.push_back(ConsoleEntry(_message, ConsoleEntry::Type::kLOG));
+}
+
+void CommandProcessor::warn(std::string _message){
+	consoleEntries.push_back(ConsoleEntry(_message, ConsoleEntry::Type::kWARNING));
+}
+
+void CommandProcessor::error(std::string _message){
+	consoleEntries.push_back(ConsoleEntry(_message, ConsoleEntry::Type::kERROR));
 }

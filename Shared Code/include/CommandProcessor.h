@@ -11,7 +11,7 @@ public:
 	CommandProcessor(void);
 	~CommandProcessor(void);
 
-	void executeCommand(Command * c);
+	bool executeCommand(Command * c);
 	// Runs "unexecute()" on the last command in the undoStack, pops it off the stack, and pushes it onto the redoStack
 	void undo();
 	// Runs "unexecute()" on every command in the undoStack, pops them off the stack, and pushes it onto the redoStack
@@ -26,10 +26,14 @@ public:
 	void startCompressing();
 	void endCompressing();
 
-	std::vector<ConsoleEntry> log;
+	std::vector<ConsoleEntry> consoleEntries;
 private:
 	std::vector<Command *> undoStack;
 	std::vector<Command *> redoStack;
+
+	void log(std::string _message);
+	void warn(std::string _message);
+	void error(std::string _message);
 	
 	CompressedCommand * currentCompressedCommand;
 };

@@ -7,6 +7,6 @@ public:
 	CompressedCommand();
 	~CompressedCommand();
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 };

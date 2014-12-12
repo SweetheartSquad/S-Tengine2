@@ -20,8 +20,8 @@ public:
 	CMD_AddTween(Animation * _animation, float _currentTime, float _targetTime, float _targetValue, Easing::Type _interpolation);
 	~CMD_AddTween();
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 
 private:
 	// Used in getTweenEndValue

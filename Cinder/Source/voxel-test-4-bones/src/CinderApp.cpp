@@ -100,7 +100,7 @@ void CinderApp::setup(){
 	voxelParams->addParam("Paint Spacing", &voxelPaintSpacing, "min=0.01, step=0.5");
 	voxelParams->maximize();
 
-	consoleGUI = new ConsoleGUI(Rectf(0.f, getWindowHeight()-15.f, getWindowWidth(), getWindowHeight()), &cmdProc->log);
+	consoleGUI = new ConsoleGUI(Rectf(0.f, getWindowHeight()-15.f, getWindowWidth(), getWindowHeight()), &cmdProc->consoleEntries);
 
 	// note: we will setup our camera in the 'resize' function,
 	// because it is called anyway so we don't have to set it up twice
@@ -156,8 +156,8 @@ void CinderApp::setup(){
 }
 
 void CinderApp::resize(){
-	unsigned int w = max(1, getWindowWidth());
-	unsigned int h = max(1, getWindowHeight());
+	float w = (float)max(1, getWindowWidth());
+	float h = (float)max(1, getWindowHeight());
 	float r = getWindowAspectRatio();
 	Area b = getWindowBounds();
 	rectWindow = b;
@@ -491,18 +491,28 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 			gl::enableWireframe();
 			for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 				if (i == UI::selectedNodes.size() - 1){
-					gl::color(1.f, 0.25f, 0.1f);
+					gl::color(0.f, 1.f, 1.f);
 				}
 				Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
-				if(j != NULL){
+				if(j != nullptr){
 					gl::pushMatrices();
 						glm::vec3 absPos = j->getPos(false);
 						gl::translate(absPos.x, absPos.y, absPos.z);
 						gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.06f);
+						
+						gl::enableWireframe();
+						for(unsigned long int i = 0; i < j->voxels.size(); ++i){
+							Voxel * v = dynamic_cast<Voxel*>(j->voxels.at(i));
+							if(v != nullptr){
+								gl::drawSphere(v->pos, 0.01f, 16);
+							}
+						}
+						gl::disableWireframe();
+
 					gl::popMatrices();
 				}else{
 					Voxel * v = dynamic_cast<Voxel *>(UI::selectedNodes.at(i));
-					if(v != NULL){
+					if(v != nullptr){
 						gl::pushMatrices();
 							glm::vec3 absPos = dynamic_cast<Joint *>(v->parent)->getPos(false);
 							gl::translate(absPos.x, absPos.y, absPos.z);

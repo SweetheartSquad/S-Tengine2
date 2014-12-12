@@ -13,8 +13,8 @@ public:
 	CMD_KeyAll(NodeAnimatable * _node, float _time);
 	~CMD_KeyAll();
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 
 private:
 	NodeAnimatable * node;

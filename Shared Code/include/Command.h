@@ -2,12 +2,13 @@
 
 #include <vector>
 #include "CommandProcessor.h"
+#include "ConsoleEntry.h"
 #include "Node.h"
 
 class Command : public Node{
 public:
-	virtual void execute() = 0;
-	virtual void unexecute() = 0;
+	virtual bool execute() = 0;
+	virtual bool unexecute() = 0;
 	
 	Command();
 	virtual ~Command();
@@ -18,4 +19,12 @@ public:
 	bool executed;
 	// True from creation up until the end of the first call to execute, false otherwise
 	bool firstRun;
+
+	
+
+	std::vector<ConsoleEntry> consoleEntries;
+
+	void log(std::string _message);
+	void warn(std::string _message);
+	void error(std::string _message);
 };

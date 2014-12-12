@@ -11,6 +11,6 @@ public:
 	CMD_DeleteJoints();
 	~CMD_DeleteJoints(void);
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 };
