@@ -826,7 +826,6 @@ void CinderApp::mouseDown( MouseEvent event ){
 		case CinderApp::CREATE:
 			break;
 		case CinderApp::SELECT:
-			break;
 		case CinderApp::TRANSLATE:
 		case CinderApp::ROTATE:
 		case CinderApp::SCALE:
@@ -1046,32 +1045,55 @@ void CinderApp::mouseDrag( MouseEvent event ){
 					}
 				}
 			}else{
-				if(mode == PAINT_VOXELS){
-						if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
-							if(event.isLeftDown()){
-								// place voxel
-								Color voxel;
-								pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
+				if(mode == SELECT){
+					if(event.isLeftDown() && !event.isAltDown() && !event.isShiftDown()){
+						unsigned long int pickedColour;
+						pickColour(&pickedColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
+						NodeSelectable * selection = nullptr;
+						if(NodeSelectable::pickingMap.count(pickedColour) == 1){
+							selection = NodeSelectable::pickingMap.at(pickedColour);
+						}
+
+						if(!voxelSelectMode){
+							if(dynamic_cast<Voxel *>(selection) != nullptr){
+								selection = dynamic_cast<Joint *>(dynamic_cast<Voxel *>(selection)->parent);
+							}
+						}
+
+						bool additive = !event.isControlDown();
+						bool subtractive = event.isControlDown();
+
+						if(selection != nullptr || (!additive && !subtractive)){
+							cmdProc->executeCommand(new CMD_SelectNodes((Node *)selection, additive, subtractive));
+						}
+					}
+
+				}else if(mode == PAINT_VOXELS){
+					if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
+						if(event.isLeftDown()){
+							// place voxel
+							Color voxel;
+							pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
 								
-								if(voxel != Color(0.f, 0.f, 0.f)){
-									Vec3f voxelPos = Vec3f(voxel.r, voxel.g, voxel.b);
-									float spacingDistance = voxelPaintSpacing * (voxelPreviewMode ? voxelPreviewResolution : voxelSphereRadius ) * 2;
-									currentSpacingDistance += lastVoxelPaintPos.distance(voxelPos);
-									console() << "lastVoxelPaintPos: " << lastVoxelPaintPos << endl;
-									console() << " voxelPos: " << voxelPos << endl;
-									console() << "currentSpacingDistance: " << currentSpacingDistance << " spacingDistance: " << spacingDistance << endl;
-									if(currentSpacingDistance >= spacingDistance){
-										console() << "blah distance: " << currentSpacingDistance << " spacing: " << voxelPaintSpacing << endl;
-										cmdProc->executeCommand(new CMD_PlaceVoxel(voxelPos, dynamic_cast<Joint *>(UI::selectedNodes.back())));
-										currentSpacingDistance = 0;
-									}
-									lastVoxelPaintPos = voxelPos;
-								}else{
-									console() << "bg" << std::endl;
+							if(voxel != Color(0.f, 0.f, 0.f)){
+								Vec3f voxelPos = Vec3f(voxel.r, voxel.g, voxel.b);
+								float spacingDistance = voxelPaintSpacing * (voxelPreviewMode ? voxelPreviewResolution : voxelSphereRadius ) * 2;
+								currentSpacingDistance += lastVoxelPaintPos.distance(voxelPos);
+								console() << "lastVoxelPaintPos: " << lastVoxelPaintPos << endl;
+								console() << " voxelPos: " << voxelPos << endl;
+								console() << "currentSpacingDistance: " << currentSpacingDistance << " spacingDistance: " << spacingDistance << endl;
+								if(currentSpacingDistance >= spacingDistance){
+									console() << "blah distance: " << currentSpacingDistance << " spacing: " << voxelPaintSpacing << endl;
+									cmdProc->executeCommand(new CMD_PlaceVoxel(voxelPos, dynamic_cast<Joint *>(UI::selectedNodes.back())));
+									currentSpacingDistance = 0;
 								}
+								lastVoxelPaintPos = voxelPos;
+							}else{
+								console() << "bg" << std::endl;
 							}
 						}
 					}
+				}
 			}
 			oldMousePos = mMousePos;
 		}else{
@@ -1116,7 +1138,7 @@ void CinderApp::mouseUp( MouseEvent event ){
 		activeButton->up(this);
 	}
 	
-	if(mode == TRANSLATE || mode == ROTATE || mode == SCALE || mode == PAINT_VOXELS){
+	if(mode == SELECT || mode == TRANSLATE || mode == ROTATE || mode == SCALE || mode == PAINT_VOXELS){
 		cmdProc->endCompressing();
 		console() << "endCompressing" << endl;
 	}
