@@ -168,8 +168,6 @@ public:
 	//! colour channel to draw to the main viewport
 	unsigned long int channel;
 	
-	gl::Material JointMaterial;
-	
 	// The root node of the scene; contains the "root" nodes for each skeleton
 	SceneRoot * sceneRoot;
 

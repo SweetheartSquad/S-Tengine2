@@ -16,7 +16,7 @@ CMD_KeyAll::CMD_KeyAll(NodeAnimatable * _node, float _time) :
 {
 }
 
-void CMD_KeyAll::execute(){
+bool CMD_KeyAll::execute(){
 	ci::app::console() << "execute CMD_KeyAll" << std::endl;
 	// Add keyframe to node's animation objects
 	if(firstRun){
@@ -49,10 +49,12 @@ void CMD_KeyAll::execute(){
 		Step s;
 		node->update(&s);
 	}*/
+	return true;
 }
 
-void CMD_KeyAll::unexecute(){
+bool CMD_KeyAll::unexecute(){
 	subCmdProc.undoAll();
+	return true;
 }
 
 

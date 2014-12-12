@@ -100,16 +100,10 @@ void CinderApp::setup(){
 	voxelParams->addParam("Paint Spacing", &voxelPaintSpacing, "min=0.01, step=0.5");
 	voxelParams->maximize();
 
-	consoleGUI = new ConsoleGUI(Rectf(0.f, getWindowHeight()-15.f, getWindowWidth(), getWindowHeight()), &cmdProc->consoleEntries);
+	consoleGUI = new ConsoleGUI(15, &cmdProc->consoleEntries, 3);
 
 	// note: we will setup our camera in the 'resize' function,
 	// because it is called anyway so we don't have to set it up twice
-
-	// create materials
-	JointMaterial.setAmbient(Color::white());
-	JointMaterial.setDiffuse(Color::black());
-	JointMaterial.setSpecular(Color::black());
-	JointMaterial.setShininess( 0.0f );
 
 	// load shaders
 	loadShaders();
@@ -216,8 +210,6 @@ void CinderApp::resize(){
 	}if(!fboFront || fboFront.getWidth() != rectFront.getWidth() || fboFront.getHeight() != rectFront.getHeight()){
 		initMultiChannelFbo(fboFront, rectFront.getInteriorArea(), 4);
 	}
-
-	consoleGUI->resize(Rectf(0.f, getWindowHeight()-15.f, getWindowWidth(), getWindowHeight()));
 }
 
 

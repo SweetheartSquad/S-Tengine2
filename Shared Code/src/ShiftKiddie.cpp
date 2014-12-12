@@ -19,10 +19,10 @@ glm::vec3 ShiftKiddie::getPos(bool _relative){
 		while (_parent != nullptr){
 			NodeHierarchical * ph = dynamic_cast<NodeHierarchical *>(_parent);
 			NodeTransformable * pt = dynamic_cast<NodeTransformable *>(_parent);
-			if(pt != NULL){
+			if(pt != nullptr){
 				modelMatrixStack.push_back(pt->transform->getModelMatrix());
 			}
-			if (ph != NULL){
+			if (ph != nullptr){
 				_parent = ph->parent;
 			}else{
 				break;

@@ -12,7 +12,7 @@
 CMD_DeleteJoints::CMD_DeleteJoints(){
 }
 
-void CMD_DeleteJoints::execute(){
+bool CMD_DeleteJoints::execute(){
 	// The joints which this command is in reference to
 	std::vector<Joint *> jointsForDeletion;
 
@@ -47,11 +47,13 @@ void CMD_DeleteJoints::execute(){
 	}else{
 		subCmdProc.redoAll();
 	}
+	return true;
 }
 
-void CMD_DeleteJoints::unexecute(){
+bool CMD_DeleteJoints::unexecute(){
 	// Re-select old selection
 	subCmdProc.undoAll();
+	return true;
 }
 
 CMD_DeleteJoints::~CMD_DeleteJoints(void){

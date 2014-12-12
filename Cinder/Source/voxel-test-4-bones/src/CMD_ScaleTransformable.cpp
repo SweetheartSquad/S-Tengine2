@@ -12,7 +12,7 @@ CMD_ScaleTransformable::CMD_ScaleTransformable(NodeTransformable * _node, ci::Ve
 {
 }
 
-void CMD_ScaleTransformable::execute(){
+bool CMD_ScaleTransformable::execute(){
 	if(node != nullptr){
 		if(firstRun){
 			oldScale = node->transform->scaleVector;
@@ -50,16 +50,20 @@ void CMD_ScaleTransformable::execute(){
 			node->transform->scaleVector = glm::vec3(scale.x, scale.y, scale.z);
 		}
 	}else{
-		// Error: no node provided
+		error("Node is null");
+		return false;
 	}
+	return true;
 }
 
-void CMD_ScaleTransformable::unexecute(){
+bool CMD_ScaleTransformable::unexecute(){
 	if(node != nullptr){
 		node->transform->scaleVector = oldScale;
 	}else{
-		// Error: no node provided
+		error("Node is null");
+		return false;
 	}
+	return true;
 }
 
 CMD_ScaleTransformable::~CMD_ScaleTransformable(void){}

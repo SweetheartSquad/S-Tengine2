@@ -17,7 +17,7 @@ CMD_AddTween::CMD_AddTween(Animation * _animation, float _currentTime, float _ta
 {	
 }
 
-void CMD_AddTween::execute(){
+bool CMD_AddTween::execute(){
 	ci::app::console() << "execute CMD_AddTween" << std::endl;
 	
 	bool addCommand = false;
@@ -107,9 +107,10 @@ void CMD_AddTween::execute(){
 			subCmdProc.redo();
 		}
 	}
+	return true;
 }
 
-void CMD_AddTween::unexecute(){
+bool CMD_AddTween::unexecute(){
 	subCmdProc.undo();
 
 	// Remove tween
@@ -125,6 +126,7 @@ void CMD_AddTween::unexecute(){
 		// Before/After animation
 		animation->tweens.erase((animation->tweens.at(0) == tween) ? (animation->tweens.begin()) : (animation->tweens.begin() + animation->tweens.size() - 1));
 	}
+	return true;
 }
 
 CMD_AddTween::~CMD_AddTween(){

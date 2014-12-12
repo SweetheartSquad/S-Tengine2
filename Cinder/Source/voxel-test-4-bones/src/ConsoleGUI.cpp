@@ -3,10 +3,12 @@
 #include "ConsoleGUI.h"
 
 #include <cinder\gl\gl.h>
+#include <cinder\app\App.h>
 
-ConsoleGUI::ConsoleGUI(ci::Rectf _rect, std::vector<ConsoleEntry> * _log) :
-	rect(_rect),
-	log(_log)
+ConsoleGUI::ConsoleGUI(float _size, std::vector<ConsoleEntry> * _log, unsigned long int _displayLength) :
+	size(_size),
+	log(_log),
+	displayLength(_displayLength)
 {
 }
 
@@ -14,13 +16,11 @@ ConsoleGUI::~ConsoleGUI(){
 
 }
 
-void ConsoleGUI::resize(ci::Rectf _rect){
-	rect = _rect;
-}
-
 void ConsoleGUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
-	if(log->size() > 0){
-		switch (log->back().type){
+	for(unsigned long int i = 1; i <= log->size() && i <= displayLength; ++i){
+		ConsoleEntry * l = &log->at(log->size() - i);
+
+		switch (l->type){
 		case ConsoleEntry::Type::kLOG:
 		default:
 			ci::gl::color(0.f, 0.f, 0.f, 0.5f);
@@ -32,9 +32,12 @@ void ConsoleGUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 			ci::gl::color(1.f, 0.f, 0.f, 0.5f);
 			break;
 		}
-		ci::gl::drawSolidRect(rect);
-		ci::gl::color(1.f, 1.f, 1.f);
-		ci::gl::drawStrokedRect(rect);
-		ci::gl::drawString(log->back().message, ci::Vec2i(rect.x1, rect.y1), ci::ColorA(1.f, 1.f, 1.f, 1.f), ci::Font("Segoe UI", 15));
+
+		ci::gl::drawSolidRect(ci::Rectf(0, ci::app::getWindowHeight()-size*i, ci::app::getWindowWidth(), ci::app::getWindowHeight()-size*(i-1)));
+		ci::gl::drawString(l->message, ci::Vec2i(0, ci::app::getWindowHeight()-size*i), ci::ColorA(1.f, 1.f, 1.f, 1.f), ci::Font("Segoe UI", size));
+		
 	}
+
+	ci::gl::color(1,1,1,1);
+	ci::gl::drawStrokedRect(ci::Rectf(0, ci::app::getWindowHeight()-size*displayLength, ci::app::getWindowWidth(), ci::app::getWindowHeight()));
 }

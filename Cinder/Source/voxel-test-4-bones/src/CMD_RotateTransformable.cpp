@@ -11,7 +11,7 @@ CMD_RotateTransformable::CMD_RotateTransformable(NodeTransformable * _node, glm:
 {
 }
 
-void CMD_RotateTransformable::execute(){
+bool CMD_RotateTransformable::execute(){
 	if(node != nullptr){
 		if(firstRun){
 			oldOrientation = node->transform->orientation;
@@ -23,16 +23,20 @@ void CMD_RotateTransformable::execute(){
 			node->transform->orientation = rotation;
 		}
 	}else{
-		// Error: no node provided
+		error("Node is null");
+		return false;
 	}
+	return true;
 }
 
-void CMD_RotateTransformable::unexecute(){
+bool CMD_RotateTransformable::unexecute(){
 	if(node != nullptr){
 		node->transform->orientation = oldOrientation;
 	}else{
-		// Error: no node
+		error("Node is null");
+		return false;
 	}
+	return true;
 }
 
 CMD_RotateTransformable::~CMD_RotateTransformable(void){}

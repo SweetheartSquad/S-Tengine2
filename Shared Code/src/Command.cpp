@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Command.h"
+#include <sstream>
 
 Command::Command() :
 	executed(false),
@@ -12,13 +13,13 @@ Command::~Command(){
 }
 
 void Command::log(std::string _message){
-	consoleEntries.push_back(ConsoleEntry(_message, ConsoleEntry::Type::kLOG));
+	subCmdProc.log(_message);
 }
 
 void Command::warn(std::string _message){
-	consoleEntries.push_back(ConsoleEntry(_message, ConsoleEntry::Type::kWARNING));
+	subCmdProc.warn(_message);
 }
 
 void Command::error(std::string _message){
-	consoleEntries.push_back(ConsoleEntry(_message, ConsoleEntry::Type::kERROR));
+	subCmdProc.error(_message);
 }

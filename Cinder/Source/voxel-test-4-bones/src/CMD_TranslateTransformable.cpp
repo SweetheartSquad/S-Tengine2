@@ -12,7 +12,7 @@ CMD_TranslateTransformable::CMD_TranslateTransformable(NodeTransformable * _node
 {
 }
 
-void CMD_TranslateTransformable::execute(){
+bool CMD_TranslateTransformable::execute(){
 	if(node != nullptr){
 		if(firstRun){
 			oldPos = node->transform->translationVector;
@@ -51,14 +51,16 @@ void CMD_TranslateTransformable::execute(){
 	}else{
 		// Error: node not provided
 	}
+	return true;
 }
 
-void CMD_TranslateTransformable::unexecute(){
+bool CMD_TranslateTransformable::unexecute(){
 	if(node != nullptr){
 		node->transform->translationVector = oldPos;
 	}else{
 		// Error: No node provided
 	}
+	return true;
 }
 
 CMD_TranslateTransformable::~CMD_TranslateTransformable(void){}

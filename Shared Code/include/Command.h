@@ -20,10 +20,6 @@ public:
 	// True from creation up until the end of the first call to execute, false otherwise
 	bool firstRun;
 
-	
-
-	std::vector<ConsoleEntry> consoleEntries;
-
 	void log(std::string _message);
 	void warn(std::string _message);
 	void error(std::string _message);

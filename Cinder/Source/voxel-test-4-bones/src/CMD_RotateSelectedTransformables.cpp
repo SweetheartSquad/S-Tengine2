@@ -13,7 +13,7 @@ CMD_RotateSelectedTransformables::CMD_RotateSelectedTransformables(glm::quat _ro
 {
 }
 
-void CMD_RotateSelectedTransformables::execute(){
+bool CMD_RotateSelectedTransformables::execute(){
 	if(firstRun){
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 			NodeTransformable * nt = dynamic_cast<NodeTransformable *>(UI::selectedNodes.at(i));
@@ -26,10 +26,12 @@ void CMD_RotateSelectedTransformables::execute(){
 	}else{
 		subCmdProc.redoAll();
 	}
+	return true;
 }
 
-void CMD_RotateSelectedTransformables::unexecute(){
+bool CMD_RotateSelectedTransformables::unexecute(){
 	subCmdProc.undoAll();
+	return true;
 }
 
 CMD_RotateSelectedTransformables::~CMD_RotateSelectedTransformables(void){}

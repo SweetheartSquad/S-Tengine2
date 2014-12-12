@@ -18,7 +18,7 @@ CMD_PlaceVoxel::CMD_PlaceVoxel(ci::Vec3f _v, Joint * _parent) :
 {
 }
 
-void CMD_PlaceVoxel::execute(){
+bool CMD_PlaceVoxel::execute(){
 	glm::vec4 newPos(v.x, v.y, v.z, 1);
 	NodeHierarchical * _parent = parent;
 	std::vector<glm::mat4> modelMatrixStack;
@@ -40,14 +40,16 @@ void CMD_PlaceVoxel::execute(){
 	if(parent != nullptr){
 		parent->voxels.push_back(voxel);
 	}
+	return true;
 }
 
-void CMD_PlaceVoxel::unexecute(){
+bool CMD_PlaceVoxel::unexecute(){
 	if(parent != nullptr){
 		parent->voxels.pop_back();
 	}
 	voxel->parent = nullptr;
 	
+	return true;
 }
 
 CMD_PlaceVoxel::~CMD_PlaceVoxel(void){

@@ -13,7 +13,7 @@ CMD_TranslateSelectedTransformables::CMD_TranslateSelectedTransformables(ci::Vec
 {
 }
 
-void CMD_TranslateSelectedTransformables::execute(){
+bool CMD_TranslateSelectedTransformables::execute(){
 	if(firstRun){
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 			NodeTransformable * nt = dynamic_cast<NodeTransformable *>(UI::selectedNodes.at(i));
@@ -26,10 +26,12 @@ void CMD_TranslateSelectedTransformables::execute(){
 	}else{
 		subCmdProc.redoAll();
 	}
+	return true;
 }
 
-void CMD_TranslateSelectedTransformables::unexecute(){
+bool CMD_TranslateSelectedTransformables::unexecute(){
 	subCmdProc.undoAll();
+	return true;
 }
 
 CMD_TranslateSelectedTransformables::~CMD_TranslateSelectedTransformables(void){}

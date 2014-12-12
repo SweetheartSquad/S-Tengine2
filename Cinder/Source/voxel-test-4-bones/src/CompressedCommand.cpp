@@ -6,12 +6,14 @@ CompressedCommand::CompressedCommand(){
 	firstRun = false;
 }
 
-void CompressedCommand::execute(){
+bool CompressedCommand::execute(){
 	subCmdProc.redoAll();
+	return true;
 }
 
-void CompressedCommand::unexecute(){
+bool CompressedCommand::unexecute(){
 	subCmdProc.undoAll();
+	return true;
 }
 
 CompressedCommand::~CompressedCommand(){

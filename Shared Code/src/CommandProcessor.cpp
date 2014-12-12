@@ -14,14 +14,17 @@ CommandProcessor::CommandProcessor(void) :
 {
 }
 
-void CommandProcessor::executeCommand(Command * c){
+bool CommandProcessor::executeCommand(Command * c){
 	if(currentCompressedCommand != nullptr){
 		currentCompressedCommand->subCmdProc.executeCommand(c);
 		currentCompressedCommand->firstRun = true;
 	}else{
 		redoStack.push_back(c);
-		redo();
-		c->firstRun = false;
+		if(redo()){
+			c->firstRun = false;
+		}else{
+			return false;
+		}
 	}
 
 	// Executing a new command will always clear the redoStack
@@ -52,29 +55,47 @@ void CommandProcessor::endCompressing(){
 	}
 }
 
-void CommandProcessor::undo(){
+bool CommandProcessor::undo(){
+	//log("undo");
 	if (undoStack.size() != 0){
 		Command * c = undoStack.back();
-		if(c->unexecute()){
-			c->executed = false;
-			redoStack.push_back(c);
-		}
+		bool success = c->unexecute();
 		undoStack.pop_back();
 		// Log command's entries
-		consoleEntries.insert(consoleEntries.end(), c->consoleEntries.begin(), c->consoleEntries.end());
+		for(unsigned long int i = 0; i < c->subCmdProc.consoleEntries.size(); ++i){
+			consoleEntries.push_back(c->subCmdProc.consoleEntries.at(i));
+		}
+		c->subCmdProc.consoleEntries.clear();
+		//consoleEntries.insert(consoleEntries.end(), c->subCmdProc.consoleEntries.begin(), c->subCmdProc.consoleEntries.end());
+		if(success){
+			c->executed = true;
+			redoStack.push_back(c);
+		}else{
+			delete c;
+		}
+		return success;
 	}
 }
 
-void CommandProcessor::redo(){
+bool CommandProcessor::redo(){
+	//log("redo");
 	if (redoStack.size() != 0){
 		Command * c = redoStack.back();
-		if(c->execute()){
-			c->executed = true;
-			undoStack.push_back(c);
-		}
+		bool success = c->execute();
 		redoStack.pop_back();
 		// Log command's entries
-		consoleEntries.insert(consoleEntries.end(), c->consoleEntries.begin(), c->consoleEntries.end());
+		for(unsigned long int i = 0; i < c->subCmdProc.consoleEntries.size(); ++i){
+			consoleEntries.push_back(c->subCmdProc.consoleEntries.at(i));
+		}
+		c->subCmdProc.consoleEntries.clear();
+		//consoleEntries.insert(consoleEntries.end(), c->subCmdProc.consoleEntries.begin(), c->subCmdProc.consoleEntries.end());
+		if(success){
+			c->executed = true;
+			undoStack.push_back(c);
+		}else{
+			delete c;
+		}
+		return success;
 	}
 }
 
@@ -107,15 +128,23 @@ CommandProcessor::~CommandProcessor(void){
 	reset();
 }
 
-
 void CommandProcessor::log(std::string _message){
-	consoleEntries.push_back(ConsoleEntry(_message, ConsoleEntry::Type::kLOG));
+	std::stringstream t;
+	t << "Log: ";
+	t << _message;
+	consoleEntries.push_back(ConsoleEntry(t.str(), ConsoleEntry::Type::kLOG));
 }
 
 void CommandProcessor::warn(std::string _message){
-	consoleEntries.push_back(ConsoleEntry(_message, ConsoleEntry::Type::kWARNING));
+	std::stringstream t;
+	t << "Warning: ";
+	t << _message;
+	consoleEntries.push_back(ConsoleEntry(t.str(), ConsoleEntry::Type::kWARNING));
 }
 
 void CommandProcessor::error(std::string _message){
-	consoleEntries.push_back(ConsoleEntry(_message, ConsoleEntry::Type::kERROR));
+	std::stringstream t;
+	t << "Error: ";
+	t << _message;
+	consoleEntries.push_back(ConsoleEntry(t.str(), ConsoleEntry::Type::kERROR));
 }

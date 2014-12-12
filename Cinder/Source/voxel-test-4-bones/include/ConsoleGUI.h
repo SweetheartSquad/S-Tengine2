@@ -10,13 +10,12 @@
 
 class ConsoleGUI : public NodeRenderable {
 public:
-	ConsoleGUI(ci::Rectf _rect, std::vector<ConsoleEntry> * _log);
+	ConsoleGUI(float _size, std::vector<ConsoleEntry> * _log, unsigned long int _displayLength);
 	~ConsoleGUI();
 
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 
-	void resize(ci::Rectf _rect);
-
-	ci::Rectf rect;
+	float size;
+	unsigned long int displayLength;
 	std::vector<ConsoleEntry> * log;
 };

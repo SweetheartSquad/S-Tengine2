@@ -20,7 +20,7 @@ CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _currentTime, flo
 {
 }
 
-void CMD_KeyProperty::execute(){
+bool CMD_KeyProperty::execute(){
 	// Executing for the first time, save the oldStartValue if keying 0, or create an add or edit command
 	if(!animation->hasStart){
 		// If there are no keyframes and the start hasn't been set
@@ -82,9 +82,10 @@ void CMD_KeyProperty::execute(){
 	animation->currentTween = 0;
 		
 	animation->update(s);
+	return true;
 }
 
-void CMD_KeyProperty::unexecute(){
+bool CMD_KeyProperty::unexecute(){
 
 	// subtract the change in time from the animation's time, if there has been any change
 	// since I'm adjusting the animation's time if this adds a new tween at the beginning, this won't work, since it's time at this frame wil be zero...
@@ -109,6 +110,7 @@ void CMD_KeyProperty::unexecute(){
 	animation->currentTween = 0;
 
 	animation->update(s);
+	return true;
 }
 
 float CMD_KeyProperty::getStartValue(unsigned long int _idx){

@@ -14,7 +14,7 @@ CMD_ScaleSelectedTransformables::CMD_ScaleSelectedTransformables(ci::Vec3f _scal
 {
 }
 
-void CMD_ScaleSelectedTransformables::execute(){
+bool CMD_ScaleSelectedTransformables::execute(){
 	if(firstRun){
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 			NodeTransformable * nt = dynamic_cast<NodeTransformable *>(UI::selectedNodes.at(i));
@@ -27,10 +27,12 @@ void CMD_ScaleSelectedTransformables::execute(){
 	}else{
 		subCmdProc.redoAll();
 	}
+	return true;
 }
 
-void CMD_ScaleSelectedTransformables::unexecute(){
+bool CMD_ScaleSelectedTransformables::unexecute(){
 	subCmdProc.undoAll();
+	return true;
 }
 
 CMD_ScaleSelectedTransformables::~CMD_ScaleSelectedTransformables(void){}

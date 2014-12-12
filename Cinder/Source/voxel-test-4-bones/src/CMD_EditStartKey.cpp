@@ -14,7 +14,7 @@ CMD_EditStartKey::CMD_EditStartKey(Animation * _animation, float _targetValue, f
 {	
 }
 
-void CMD_EditStartKey::execute(){
+bool CMD_EditStartKey::execute(){
 	oldStartValue = animation->startValue;
 	oldReferenceValue = animation->referenceValue;
 	animation->startValue = targetValue;
@@ -25,9 +25,10 @@ void CMD_EditStartKey::execute(){
 	*/
 	animation->time -= targetTime;
 	//animation->referenceValue = targetValue;
+	return true;
 }
 
-void CMD_EditStartKey::unexecute(){
+bool CMD_EditStartKey::unexecute(){
 	if(animation->tweens.size() > 0){
 		animation->tweens.at(0)->deltaValue += oldStartValue - targetValue;
 	}
@@ -35,6 +36,7 @@ void CMD_EditStartKey::unexecute(){
 	animation->startValue = oldStartValue;
 	//animation->referenceValue = oldReferenceValue;
 	animation->time += targetTime;
+	return true;
 }
 
 CMD_EditStartKey::~CMD_EditStartKey(){
