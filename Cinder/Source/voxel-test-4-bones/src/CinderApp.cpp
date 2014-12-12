@@ -236,6 +236,8 @@ void CinderApp::shutdown(){
 	UI::selectedNodes.clear();
 	delete toolbar;
 	toolbar = nullptr;
+	delete timelineBar;
+	timelineBar = nullptr;
 	delete sceneRoot;
 	sceneRoot = nullptr;
 	delete cmdProc;
