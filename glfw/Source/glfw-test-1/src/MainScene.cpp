@@ -47,10 +47,11 @@ MainScene::MainScene(Game * _game):
 	voxTex = new Texture("../assets/voxel-texture.png", 512, 512, true, true);
 
 	baseShader = new BaseComponentShader();
-	baseShader->components.push_back(new TextureShaderComponent());
+	
 	baseShader->components.push_back(new DiffuseShaderComponent());
 	baseShader->components.push_back(new PhongShaderComponent());
 	baseShader->components.push_back(new ShadowShaderComponent());
+	baseShader->components.push_back(new TextureShaderComponent());
 	baseShader->compileShader();
 
 	voxelShader = new BaseComponentShader();

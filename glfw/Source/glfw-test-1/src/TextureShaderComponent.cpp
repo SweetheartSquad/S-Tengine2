@@ -47,7 +47,7 @@ std::string TextureShaderComponent::getFragmentBodyString(){
 }
 
 std::string TextureShaderComponent::getOutColorMod(){
-	return GL_OUT_OUT_COLOR + " = fragColorTex" + SEMI_ENDL;
+	return GL_OUT_OUT_COLOR + " *= fragColorTex" + SEMI_ENDL;
 }
 
 void TextureShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
