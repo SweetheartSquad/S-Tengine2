@@ -33,4 +33,8 @@ private:
 	float targetValue;
 	// Interpolation type for the tween
 	Easing::Type interpolation;
+
+    // Update the current tween of the animation to match with the new tweens
+    unsigned long int oldCurrentTween;
+    unsigned long int newCurrentTween;
 };

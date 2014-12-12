@@ -15,7 +15,8 @@ CMD_AddTween::CMD_AddTween(Animation * _animation, float _currentTime, float _ta
 	animation(_animation),
 	deltaTimeline(_targetTime - _currentTime),
 	targetValue(_targetValue),
-	interpolation(_interpolation)
+	interpolation(_interpolation),
+    oldCurrentTween(-1)
 {	
 }
 
@@ -24,10 +25,12 @@ void CMD_AddTween::execute(){
     
     // calculate values for new tween, and save other values that will be changed by this tween insert
 	if (firstRun){
+		oldCurrentTween = animation->currentTween;
 
 		float targetTime = animation->time + deltaTimeline;
 
 		if(targetTime <= 0){
+            newCurrentTween = 0;
 			subCmdProc.executeCommand(new CMD_AddTweenBefore(animation, deltaTimeline, targetValue, interpolation));
 		}else{
 			float sumTime = 0;
@@ -44,19 +47,23 @@ void CMD_AddTween::execute(){
 			}
 
 			if(insideAnimation){
+                newCurrentTween = nextTweenIndex;
 				subCmdProc.executeCommand(new CMD_AddTweenInside(animation, deltaTimeline, targetValue, interpolation, nextTweenIndex));
 			}else{
 				// After the animation
+                newCurrentTween = animation->tweens.size();
 				subCmdProc.executeCommand(new CMD_AddTweenAfter(animation, deltaTimeline, targetValue, interpolation, sumTime));
 			}
 		}
 	}else{
 		subCmdProc.redo();
 	}
+    animation->currentTween = newCurrentTween;
 }
 
 void CMD_AddTween::unexecute(){
 	subCmdProc.undo();
+    animation->currentTween = oldCurrentTween;
 }
 
 CMD_AddTween::~CMD_AddTween(){
