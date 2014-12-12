@@ -5,21 +5,11 @@
 Transform::Transform():
 	translationVector(0.f, 0.f, 0.f),
 	scaleVector(1.f, 1.f, 1.f),
-	orientation(1.f, 0.f, 0.f, 0.f),
-	NodeChild(nullptr)
+	orientation(1.f, 0.f, 0.f, 0.f)
 {
 }
 
 Transform::~Transform(){
-}
-
-void Transform::draw(glm::mat4 projectionMatrix, glm::mat4 viewMatrix){
-	for(unsigned long int i = 0; i < children.size(); ++i){
-		dynamic_cast<Transform *>(children.at(i))->draw(projectionMatrix, viewMatrix);
-	}
-}
-
-void Transform::update(){
 }
 
 void Transform::scale(float _scaleX, float _scaleY, float _scaleZ){
@@ -95,17 +85,4 @@ glm::mat4 Transform::getOrientationMatrix(){
 
 glm::mat4 Transform::getModelMatrix(){
 	return getTranslationMatrix() * getOrientationMatrix() * getScaleMatrix();
-}
-
-void Transform::addChild(Transform * _child){
-	_child->setParent(this);
-	children.push_back(_child);
-}
-
-void Transform::removeChildAtIndex(int _index){
-	children.erase(children.begin()+_index-1);
-}
-
-void Transform::setParent(Transform * _parent){
-	this->parent = _parent;
 }

@@ -17,7 +17,7 @@ typedef enum{
 } CoordinateSpace;
 
 /** A basic transform node */
-class Transform: public NodeHierarchical{
+class Transform{
 public:
 	/** Position */
 	glm::vec3 translationVector;
@@ -28,11 +28,6 @@ public:
 
 	Transform();
 	virtual ~Transform();
-
-	/** Calls render on children (recursive) (why does a transform node need a render method?) */
-	virtual void draw(glm::mat4 _projectionMatrix, glm::mat4 _viewMatrix);
-	/** Doesn't do anything (should probably call update on children) */
-	virtual void update();
 
 	/** Multiplies the x, y, and z component of the scale vector by _scaleX, _scaleY, and _scaleZ, respectively */
 	void scale(float _scaleX, float _scaleY, float _scaleZ);
@@ -77,7 +72,4 @@ public:
 	/** Calculates a 4x4 model matrix (translation * orientation * scale) and returns the result */
 	glm::mat4 getModelMatrix();
 
-	void addChild(Transform * _child);
-	virtual void removeChildAtIndex(int _index);
-	void setParent(Transform * _parent);
 };

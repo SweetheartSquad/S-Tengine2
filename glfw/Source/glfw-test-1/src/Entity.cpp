@@ -39,9 +39,6 @@ void Entity::update(Step * _step){
 
 void Entity::removeChildAtIndex(int _index){
 	NodeHierarchical::removeChildAtIndex(_index);
-	if(transform != nullptr){
-		transform->removeChildAtIndex(_index);
-	}
 }
 
 void Entity::unload(){
@@ -52,6 +49,7 @@ void Entity::unload(){
 		}
 	}
 }
+
 void Entity::load(){
 	for(NodeChild * child : children){
 		NodeResource * nr = dynamic_cast<NodeResource *>(child);
