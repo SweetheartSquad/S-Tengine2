@@ -21,7 +21,7 @@ bool CMD_ScaleSelectedTransformables::execute(){
 			if(nt != nullptr){
 				subCmdProc.executeCommand(new CMD_ScaleTransformable(nt, scale, relative, space));
 			}else{
-				// node doesn't have a transform
+				warn("Node ignored (not transformable)");
 			}
 		}
 	}else{

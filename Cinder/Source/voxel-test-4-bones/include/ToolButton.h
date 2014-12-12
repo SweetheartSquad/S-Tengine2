@@ -7,13 +7,15 @@
 #include <cinder\Rect.h>
 #include <cinder\Color.h>
 
+#include <string>
+
 class CinderApp;
 class ToolSet;
 class Step;
 
 class ToolButton : public NodeSelectable, public NodeRenderable, public NodeChild{
 public:
-	ci::Color displayColor;
+	ci::ColorA displayColor;
 
 	enum Type{
 		kNORMAL,
@@ -21,7 +23,7 @@ public:
 		kRADIO
 	} type;
 	
-	ToolButton(Type _type, void (*_downCallback)(CinderApp * _app) = nullptr, void (*_upCallback)(CinderApp * _app) = nullptr);
+	ToolButton(std::string _label, Type _type, ci::Vec2i _iconSize, void (*_downCallback)(CinderApp * _app) = nullptr, void (*_upCallback)(CinderApp * _app) = nullptr);
 
 	// Whether the button is under the mouse
 	bool isHovered;
@@ -29,6 +31,12 @@ public:
 	bool isDown;
 	// Whether the button is active (only affects RADIO and TOGGLE buttons)
 	bool isActive;
+
+	// Size of icon to render
+	ci::Vec2i iconSize;
+
+	// Label describing button's function
+	std::string label;
 	
 	void (*downCallback)(CinderApp * _app);
 	void (*upCallback)(CinderApp * _app);

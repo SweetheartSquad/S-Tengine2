@@ -13,6 +13,11 @@ CMD_ScaleTransformable::CMD_ScaleTransformable(NodeTransformable * _node, ci::Ve
 }
 
 bool CMD_ScaleTransformable::execute(){
+	if(space == kWORLD){
+		warn("World-space rotation not implemented; command aborted");
+		return false;
+	}
+
 	if(node != nullptr){
 		if(firstRun){
 			oldScale = node->transform->scaleVector;

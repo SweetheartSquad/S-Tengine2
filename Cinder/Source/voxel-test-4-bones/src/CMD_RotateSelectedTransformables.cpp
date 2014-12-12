@@ -20,7 +20,7 @@ bool CMD_RotateSelectedTransformables::execute(){
 			if(nt != nullptr){
 				subCmdProc.executeCommand(new CMD_RotateTransformable(nt, rotation, relative, space));
 			}else{
-				// node doesn't have a transform
+				warn("Node ignored (not transformable)");
 			}
 		}
 	}else{

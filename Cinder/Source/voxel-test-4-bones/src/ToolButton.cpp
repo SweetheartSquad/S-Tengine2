@@ -6,19 +6,22 @@
 #include "CinderRenderOptions.h"
 
 #include <cinder\gl\gl.h>
+#include <cinder\Text.h>
+#include <cinder\gl\TextureFont.h>
 
-ToolButton::ToolButton(Type _type, void (*_downCallback)(CinderApp * _app), void (*_upCallback)(CinderApp * _app)):
+ToolButton::ToolButton(std::string _label, Type _type, ci::Vec2i _iconSize, void (*_downCallback)(CinderApp * _app), void (*_upCallback)(CinderApp * _app)):
 	NodeChild(nullptr),
 	NodeSelectable(),
 	isHovered(false),
 	isDown(false),
 	isActive(false),
-	displayColor((float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f),
+	displayColor((float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f, 1.f),
+	label(_label),
 	type(_type),
+	iconSize(_iconSize),
 	downCallback(_downCallback),
 	upCallback(_upCallback)
 {
-
 }
 
 void ToolButton::down(CinderApp * _app){
@@ -73,30 +76,32 @@ void ToolButton::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 		if(isActive){
 			if(isHovered){
 				// down + active
-				ci::gl::color(0.25,0.25,0.25);
+				ci::gl::color(0.25f, 0.25f, 0.25f, 1.f);
 			}else{
 				// down + active, but moused out (show active)
-				ci::gl::color(0.5,0.5,0.5);
+				ci::gl::color(0.5f, 0.5f, 0.5f, 1.f);
 			}
 		}else if(isHovered){
 			// down
-			ci::gl::color(0.25,0.25,0.25);
+			ci::gl::color(0.25f, 0.25f, 0.25f, 1.f);
 		}else{
 			// down, but moused out (show up)
 			ci::gl::color(displayColor);
 		}
 	}else if(isHovered){
 		// over
-		ci::gl::color(1,1,1);
+		ci::gl::color(1.f, 1.f, 1.f, 1.f);
 	}else if(isActive){
 		// active
-		ci::gl::color(0.5,0.5,0.5);
+		ci::gl::color(0.5f, 0.5f, 0.5f, 1.f);
 	}else{
 		// up
 		ci::gl::color(displayColor);
 	}
 
-	ci::gl::drawSolidRect(ci::Rectf(0,0,1,1));
+	ci::gl::drawSolidRect(ci::Rectf(0.f, 0.f, iconSize.x, iconSize.y));
+//	ci::gl::drawString(label, ci::Vec2f(0.f, 0.f), ci::ColorA(0.5f,1,0,0.5), ci::Font("Segoe UI", 15));
+
 }
 
 void ToolButton::pressProgrammatically(CinderApp * _app){

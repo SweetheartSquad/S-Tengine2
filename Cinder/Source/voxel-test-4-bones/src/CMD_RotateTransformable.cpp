@@ -12,6 +12,11 @@ CMD_RotateTransformable::CMD_RotateTransformable(NodeTransformable * _node, glm:
 }
 
 bool CMD_RotateTransformable::execute(){
+	if(space == kWORLD){
+		warn("World-space rotation not implemented; command aborted");
+		return false;
+	}
+
 	if(node != nullptr){
 		if(firstRun){
 			oldOrientation = node->transform->orientation;

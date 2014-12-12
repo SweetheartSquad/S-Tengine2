@@ -132,21 +132,21 @@ void CinderApp::setup(){
 	
 	toolbar = new ToolBar(Vec2i(5,5));
 
-	toolbar->addSet(new ToolSet(Area(0, 0, 30, 30)));
-	toolbar->addSet(new ToolSet(Area(0, 0, 20, 20)));
+	toolbar->addSet(new ToolSet());
+	toolbar->addSet(new ToolSet());
 
 
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::MODE_Select));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::MODE_Translate));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::MODE_Rotate));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::MODE_Scale));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::MODE_CreateJoints));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::MODE_PaintVoxels));
-														   
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::CHANNEL_0));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::CHANNEL_1));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::CHANNEL_2));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::kRADIO, nullptr, &ButtonFunctions::CHANNEL_3));
+	toolbar->addButton(0, new ToolButton("Select", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_Select));
+	toolbar->addButton(0, new ToolButton("Translate", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_Translate));
+	toolbar->addButton(0, new ToolButton("Rotate", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_Rotate));
+	toolbar->addButton(0, new ToolButton("Scale", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_Scale));
+	toolbar->addButton(0, new ToolButton("Joint", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_CreateJoints));
+	toolbar->addButton(0, new ToolButton("Voxel", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_PaintVoxels));
+										 
+	toolbar->addButton(1, new ToolButton("FBO:1", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_0));
+	toolbar->addButton(1, new ToolButton("FBO:2", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_1));
+	toolbar->addButton(1, new ToolButton("FBO:3", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_2));
+	toolbar->addButton(1, new ToolButton("FBO:4", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_3));
 }
 
 void CinderApp::resize(){
@@ -308,12 +308,13 @@ void CinderApp::draw(){
 		vox::MatrixStack t;
 		CinderRenderOptions t2(nullptr, nullptr);
 		t2.ciShader = &uiShader;
-		toolbar->render(&t, &t2);
+		//toolbar->render(&t, &t2);
+		ci::gl::drawString("test", ci::Vec2f(0.f, 0.f), ci::ColorA(0.8f,1,0,0.8), ci::Font("Segoe UI", 15));
+		
 		uiShader.unbind();
-
 		params->draw();
 		timelineParams->draw();
-		voxelParams->draw();
+		voxelParams->draw();	
 		
 		gl::disableAlphaBlending();
 		gl::disableDepthRead();
@@ -367,7 +368,9 @@ void CinderApp::draw(){
 	}
 
 	
+		ci::gl::drawString("test", ci::Vec2f(50.f, 0.f), ci::ColorA(0.8f,1,0,0.8), ci::Font("Segoe UI", 15));
 	consoleGUI->render(&t, &t2);
+		ci::gl::drawString("test2", ci::Vec2f(50.f, 30.f), ci::ColorA(0.8f,1,0,0.8), ci::Font("Segoe UI", 15));
 }
 
 void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
