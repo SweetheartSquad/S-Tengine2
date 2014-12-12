@@ -59,7 +59,7 @@ MainScene::MainScene(Game * _game):
 	voxelShader->components.push_back(new DiffuseShaderComponent());
 	voxelShader->components.push_back(new PhongShaderComponent());
 	voxelShader->components.push_back(new ShadowShaderComponent());
-	voxelShader->geometryComponent = new VoxelComponent();
+	//voxelShader->geometryComponent = new VoxelComponent();
 	voxelShader->compileShader();
 
 	mat = new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true);
@@ -77,10 +77,10 @@ MainScene::MainScene(Game * _game):
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
 	for(unsigned long int i = 0; i < 1; ++i){
-		MeshEntity * loaded = new MeshEntity(new VoxelMesh(Resource::loadMeshFromObj("../assets/cube.vox")), t, voxelShader);
+		MeshEntity * loaded = new MeshEntity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxelShader);
 		loaded->mesh->polygonalDrawMode = GL_POINTS;
 		loaded->mesh->pushMaterial(mat);
-		cube->addChild(loaded);
+		//cube->addChild(loaded);
 		loaded->mesh->pushTexture2D(tex);
 	}
 

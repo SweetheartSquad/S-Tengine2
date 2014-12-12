@@ -103,7 +103,7 @@ void Scene::toggleFullScreen(){
 	}
 	// Create the new window.
 	GLFWwindow * window;
-	window = glfwCreateWindow(w, h, "VOX",  vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	window = glfwCreateWindow(w, h, "VOX",  /*vox::fullscreen ? glfwGetPrimaryMonitor() :*/ nullptr, nullptr);
 	if(!window){
 		glfwTerminate();
 		exit(EXIT_FAILURE);
