@@ -184,6 +184,9 @@ public:
 	// Sphere radius for voxel placing
 	float voxelSphereRadius;
 
+    // Whether to display the voxels
+    bool viewJointsOnly;
+
 	//Vec3i dir;
 	//Vec2i mouseAxis;
 	Vec2i oldMousePos;

@@ -19,10 +19,10 @@ glm::vec3 ShiftKiddie::getPos(bool _relative){
 		while (_parent != nullptr){
 			NodeHierarchical * ph = dynamic_cast<NodeHierarchical *>(_parent);
 			NodeTransformable * pt = dynamic_cast<NodeTransformable *>(_parent);
-			if(pt != NULL){
+			if(pt != nullptr){
 				modelMatrixStack.push_back(pt->transform->getModelMatrix());
 			}
-			if (ph != NULL){
+			if (ph != nullptr){
 				_parent = ph->parent;
 			}else{
 				break;
@@ -44,15 +44,15 @@ void ShiftKiddie::setPos(glm::vec3 _pos, bool _convertToRelative){
 		NodeParent * _parent = parent;
 		std::vector<glm::mat4> modelMatrixStack;
 		while(_parent != nullptr){
-			NodeChild * nc = dynamic_cast<NodeChild *>(_parent);
-			if (nc != nullptr){
-				NodeTransformable * nt = dynamic_cast<NodeTransformable *>(_parent);
-				if(nt != nullptr){
-					modelMatrixStack.push_back(nt->transform->getModelMatrix());
-				}
-				_parent = nc->parent;
+			NodeTransformable * nt = dynamic_cast<NodeTransformable *>(_parent);
+			if(nt != nullptr){
+				modelMatrixStack.push_back(nt->transform->getModelMatrix());
+			}
+			NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(_parent);
+            if(nh != nullptr){
+				_parent = nh->parent;
 			}else{
-				break;
+                break;
 			}
 		}
 

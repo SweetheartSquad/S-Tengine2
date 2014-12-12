@@ -34,10 +34,14 @@ public:
 	// Whether the button is active (only affects RADIO and TOGGLE buttons)
 	bool isActive;
 	
+    // The function you want to call when you start clicking the button
 	void (*downCallback)(CinderApp * _app);
+    // The function you want to call when you finish clicking the button (press + release)
 	void (*upCallback)(CinderApp * _app);
 
+    // The function to be called when you are starting a click
 	void down(CinderApp * _app);
+    // The fucntion to be called when you complete a click
 	void up(CinderApp * _app);
 	void in();
 	void out();

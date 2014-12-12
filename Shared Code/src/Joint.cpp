@@ -66,46 +66,48 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 			gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 
 			//draw voxels
-			float resolution = ((CinderRenderOptions *)_renderStack)->voxelPreviewResolution;
-			for(unsigned long int i = 0; i < voxels.size(); ++i){
-				gl::pushModelView();
-				_matrixStack->pushMatrix();
-					gl::setMatrices(*r->ciCam);
+            if(!r->viewJointsOnly){
+			    float resolution = ((CinderRenderOptions *)_renderStack)->voxelPreviewResolution;
+			    for(unsigned long int i = 0; i < voxels.size(); ++i){
+				    gl::pushModelView();
+				    _matrixStack->pushMatrix();
+					    gl::setMatrices(*r->ciCam);
 
-					glm::vec4 voxelPos(voxels.at(i)->pos.x, voxels.at(i)->pos.y, voxels.at(i)->pos.z, 1);
+					    glm::vec4 voxelPos(voxels.at(i)->getPos().x, voxels.at(i)->getPos().y, voxels.at(i)->getPos().z, 1);
 					
-					glm::vec4 pos = _matrixStack->getCurrentMatrix() * voxelPos;
+					    glm::vec4 pos = _matrixStack->getCurrentMatrix() * voxelPos;
 
 
-					if(((CinderRenderOptions *)_renderStack)->voxelPreviewMode){
-						// Snap to grid
-						glm::vec4 posDif(
-							fmod(pos.x, resolution),
-							fmod(pos.y, resolution),
-							fmod(pos.z, resolution),
-							0);
-						pos -= posDif;
-					}
+					    if(((CinderRenderOptions *)_renderStack)->voxelPreviewMode){
+						    // Snap to grid
+						    glm::vec4 posDif(
+							    fmod(pos.x, resolution),
+							    fmod(pos.y, resolution),
+							    fmod(pos.z, resolution),
+							    0);
+						    pos -= posDif;
+					    }
 					
-					for(unsigned long int x = 0; x < 4; ++x){
-						for(unsigned long int y = 0; y < 4; ++y){
-							_matrixStack->currentModelMatrix[x][y] = x == y ? 1.f : 0.f;
-						}
-					}
+					    for(unsigned long int x = 0; x < 4; ++x){
+						    for(unsigned long int y = 0; y < 4; ++y){
+							    _matrixStack->currentModelMatrix[x][y] = x == y ? 1.f : 0.f;
+						    }
+					    }
 
-					gl::translate(pos.x, pos.y, pos.z);
-					_matrixStack->translate(glm::translate(glm::vec3(pos.x, pos.y, pos.z)));
+					    gl::translate(pos.x, pos.y, pos.z);
+					    _matrixStack->translate(glm::translate(glm::vec3(pos.x, pos.y, pos.z)));
 					
-					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
-					r->ciShader->uniform("pickingColor", Color::hex(voxels.at(i)->pickingColor));
+					    glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
+					    r->ciShader->uniform("pickingColor", Color::hex(voxels.at(i)->pickingColor));
 					
-					if(((CinderRenderOptions *)_renderStack)->voxelPreviewMode){
-						gl::drawCube(Vec3f(0.f, 0.f, 0.f), Vec3f(resolution*2,resolution*2,resolution*2));
-					}else{
-						gl::drawSphere(Vec3f(0.f, 0.f, 0.f), ((CinderRenderOptions *)_renderStack)->voxelSphereRadius);
-					}
-				gl::popModelView();
-				_matrixStack->popMatrix();
+					    if(((CinderRenderOptions *)_renderStack)->voxelPreviewMode){
+						    gl::drawCube(Vec3f(0.f, 0.f, 0.f), Vec3f(resolution*2,resolution*2,resolution*2));
+					    }else{
+						    gl::drawSphere(Vec3f(0.f, 0.f, 0.f), ((CinderRenderOptions *)_renderStack)->voxelSphereRadius);
+					    }
+				    gl::popModelView();
+				    _matrixStack->popMatrix();
+			    }
 			}
 		
 			//draw bones
@@ -163,4 +165,61 @@ void Joint::update(Step * _step){
 	for(NodeChild * child : children){
 		dynamic_cast<NodeUpdatable *>(child)->update(_step);
 	}
+}
+
+bool Joint::addChild(NodeChild * _child){
+    if(dynamic_cast<Voxel *>(_child) != nullptr){
+        // Remove the first instance of the child in the current list of voxels
+        for (unsigned long int i = 0; i < voxels.size(); ++i){
+		    if (_child == voxels.at(i)){
+			    voxels.erase(voxels.begin() + i);
+			    break;
+		    }
+	    }    
+        // Add the child to the list of voxels and set it's parent to this
+	    voxels.push_back(dynamic_cast<Voxel *>(_child));
+	    _child->parent = this;
+	    return true;
+	}else{
+        // Remove the first instance of the child in the current list of children
+	    for (unsigned long int i = 0; i < children.size(); ++i){
+		    if (_child == children.at(i)){
+			    children.erase(children.begin() + i);
+			    break;
+		    }
+	    }
+        // Add the child to the list of children and set it's parent to this
+	    children.push_back(_child);
+	    _child->parent = this;
+	    return true;
+	}
+}
+
+void Joint::addChildAtIndex(NodeChild * _child, int _index){
+    if(dynamic_cast<Voxel *>(_child) != nullptr){
+        voxels.insert(voxels.begin() + _index, dynamic_cast<Voxel *>(_child));
+	}else{
+	    children.insert(children.begin() + _index, _child);
+	}
+}
+
+unsigned long int Joint::removeChild(NodeChild * _child){
+    if(dynamic_cast<Voxel *>(_child) != nullptr){
+        for(unsigned long int i = 0; i < voxels.size(); ++i){
+		    if(_child == voxels.at(i)){
+			    voxels.erase(voxels.begin() + i);
+			    return i;
+		    }
+	    }
+	    return -1;
+	}else{
+        for(unsigned long int i = 0; i < children.size(); ++i){
+		    if(_child == children.at(i)){
+			    children.erase(children.begin() + i);
+			    return i;
+		    }
+	    }
+	    return -1;
+	}
+	
 }

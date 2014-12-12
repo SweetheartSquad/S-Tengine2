@@ -91,6 +91,8 @@ void CinderApp::setup(){
 	voxelSphereRadius = 0.1;
 	voxelPaintSpacing = 1;
 
+	viewJointsOnly = false;
+
 	voxelParams = params::InterfaceGl::create(getWindow(), "Voxel", toPixels(Vec2i(180,150)), ColorA(0.3f, 0.3f, 0.6f, 0.4f));
 	voxelParams->addParam("Selectable", &voxelSelectMode);
 	voxelParams->addParam("Preview", &voxelPreviewMode);
@@ -135,8 +137,12 @@ void CinderApp::setup(){
 	
 	toolbar = new ToolBar(Vec2i(5,5), false);
 
+	// Selecting, Creating, Painting, and Transformations
 	toolbar->addSet(new ToolSet(Area(0,0,30,30)));
+	// Channels
 	toolbar->addSet(new ToolSet(Area(0,0,20,20)));
+	// View Joints, Voxels, or All
+	toolbar->addSet(new ToolSet(Area(0,0,25,25)));
 
 
 	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Select", nullptr, &ButtonFunctions::MODE_Select));
@@ -150,6 +156,8 @@ void CinderApp::setup(){
 	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 2", nullptr, &ButtonFunctions::CHANNEL_1));
 	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 3", nullptr, &ButtonFunctions::CHANNEL_2));
 	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 4", nullptr, &ButtonFunctions::CHANNEL_3));
+
+	toolbar->addButton(2, new ToolButton(ToolButton::Type::RADIO, "View Joints Only", nullptr, &ButtonFunctions::VIEW_JointsOnly));
 
 	timelineBar = new ToolBar(Vec2i(5,40), false);
 
@@ -418,6 +426,7 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		r.voxelPreviewMode = voxelPreviewMode;
 		r.voxelPreviewResolution = voxelPreviewResolution;
 		r.voxelSphereRadius = voxelSphereRadius;
+		r.viewJointsOnly = viewJointsOnly;
 
 		for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
 			NodeRenderable * nr = dynamic_cast<NodeRenderable *>(sceneRoot->children.at(i));
@@ -501,7 +510,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 						gl::pushMatrices();
 							glm::vec3 absPos = dynamic_cast<Joint *>(v->parent)->getPos(false);
 							gl::translate(absPos.x, absPos.y, absPos.z);
-							gl::drawSphere(v->pos, 0.06f);
+							gl::drawSphere(Vec3f(v->getPos().x, v->getPos().y, v->getPos().z), 0.06f);
 						gl::popMatrices();
 					}
 				}
@@ -860,16 +869,17 @@ void CinderApp::mouseDown( MouseEvent event ){
 	}
 	
 
-	if(sourceCam == &camMayaPersp.getCamera()){
-		// Get the selected UI colour
-		pickColour(&clickedUiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
-		uiColour = clickedUiColour;
+	
+	// Get the selected UI colour
+	pickColour(&clickedUiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+	uiColour = clickedUiColour;
 
-		if(event.isLeft()){
-			oldMousePos = mMousePos;
-		}
+	if(event.isLeft()){
+		oldMousePos = mMousePos;
+	}
 
-		if(!event.isAltDown() && (clickedUiColour == 0)){
+	if(!event.isAltDown() && (clickedUiColour == 0)){
+		if(sourceCam == &camMayaPersp.getCamera()){
 			if(mode == PAINT_VOXELS){
 				if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
 					if(event.isLeft()){
@@ -933,16 +943,16 @@ void CinderApp::mouseDown( MouseEvent event ){
 					}
 				}
 			}
-		}else{
-			if(NodeSelectable::pickingMap.count(clickedUiColour) == 1){
-				activeButton = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(clickedUiColour));
-				if(activeButton != NULL){
-					activeButton->down(this);
-				}
-			}
 		}
 
 		UI::updateHandlePos(false);
+	}else{
+		if(NodeSelectable::pickingMap.count(clickedUiColour) == 1){
+			activeButton = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(clickedUiColour));
+			if(activeButton != nullptr){
+				activeButton->down(this);
+			}
+		}
 	}
 }
 
