@@ -30,7 +30,7 @@ public:
 	void warn(std::string _message);
 	void error(std::string _message);
 	
-	std::vector<ConsoleEntry> consoleEntries;
+	std::vector<ConsoleEntry *> consoleEntries;
 private:
 	std::vector<Command *> undoStack;
 	std::vector<Command *> redoStack;

@@ -289,13 +289,13 @@ void CinderApp::draw(){
 	renderScene(fboFront, camFront);
 
 	fboUI.bindFramebuffer();
-		uiShader.bind();
 		// set viewport to the size of the FBO
 		gl::setViewport( fboUI.getBounds() );
 		gl::enableDepthRead();
 		gl::enableDepthWrite();
 		gl::enableAlphaBlending();
 
+		uiShader.bind();
 		gl::clear(ColorA(0.f, 0.f, 0.f, 0.f));
 
 		renderUI(camMayaPersp.getCamera(), rectPersp);
@@ -308,8 +308,7 @@ void CinderApp::draw(){
 		vox::MatrixStack t;
 		CinderRenderOptions t2(nullptr, nullptr);
 		t2.ciShader = &uiShader;
-		//toolbar->render(&t, &t2);
-		ci::gl::drawString("test", ci::Vec2f(0.f, 0.f), ci::ColorA(0.8f,1,0,0.8), ci::Font("Segoe UI", 15));
+		toolbar->render(&t, &t2);
 		
 		uiShader.unbind();
 		params->draw();
@@ -325,7 +324,7 @@ void CinderApp::draw(){
 
 	// draw the scene
 	gl::enableAlphaBlending();
-
+	
 	gl::color( ColorA(1.f, 1.f, 1.f, 1.f) );
 	
 	gl::draw( fboTop.getTexture(channel), fboTop.getBounds(), rectTop );
@@ -341,7 +340,7 @@ void CinderApp::draw(){
 	gl::drawStrokedRect(rectPersp);
 	
 	gl::draw( fboUI.getTexture(0), getWindowBounds() );
-
+	
 	// draw the picking framebuffer in the upper right corner
 	if(mPickingFboJoint){
 		Rectf rct((Rectf)mPickingFboJoint.getBounds() * 5.f);
@@ -349,7 +348,7 @@ void CinderApp::draw(){
 		gl::draw( mPickingFboJoint.getTexture(0), rct );
 		gl::drawStrokedRect(Rectf(rct.x1, rct.y1, rct.x2, rct.y2));
 	}
-
+	
 	// draw the picking framebuffer in the upper right corner
 	if(pickingFboUI){
 		Rectf rct((Rectf)pickingFboUI.getBounds() * 5.f);
@@ -368,9 +367,8 @@ void CinderApp::draw(){
 	}
 
 	
-		ci::gl::drawString("test", ci::Vec2f(50.f, 0.f), ci::ColorA(0.8f,1,0,0.8), ci::Font("Segoe UI", 15));
 	consoleGUI->render(&t, &t2);
-		ci::gl::drawString("test2", ci::Vec2f(50.f, 30.f), ci::ColorA(0.8f,1,0,0.8), ci::Font("Segoe UI", 15));
+	//toolbar->render(&t, &t2);
 }
 
 void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){

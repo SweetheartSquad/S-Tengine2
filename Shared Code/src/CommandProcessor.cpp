@@ -32,6 +32,7 @@ bool CommandProcessor::executeCommand(Command * c){
 		delete redoStack.back();
 		redoStack.pop_back();
 	}
+	return true;
 }
 
 void CommandProcessor::startCompressing(){
@@ -126,25 +127,29 @@ void CommandProcessor::reset(){
 
 CommandProcessor::~CommandProcessor(void){
 	reset();
+	while(consoleEntries.size() > 0){
+		delete consoleEntries.back();
+		consoleEntries.pop_back();
+	}
 }
 
 void CommandProcessor::log(std::string _message){
 	std::stringstream t;
 	t << "Log: ";
 	t << _message;
-	consoleEntries.push_back(ConsoleEntry(t.str(), ConsoleEntry::Type::kLOG));
+	consoleEntries.push_back(new ConsoleEntry(t.str(), ConsoleEntry::Type::kLOG));
 }
 
 void CommandProcessor::warn(std::string _message){
 	std::stringstream t;
 	t << "Warning: ";
 	t << _message;
-	consoleEntries.push_back(ConsoleEntry(t.str(), ConsoleEntry::Type::kWARNING));
+	consoleEntries.push_back(new ConsoleEntry(t.str(), ConsoleEntry::Type::kWARNING));
 }
 
 void CommandProcessor::error(std::string _message){
 	std::stringstream t;
 	t << "Error: ";
 	t << _message;
-	consoleEntries.push_back(ConsoleEntry(t.str(), ConsoleEntry::Type::kERROR));
+	consoleEntries.push_back(new ConsoleEntry(t.str(), ConsoleEntry::Type::kERROR));
 }

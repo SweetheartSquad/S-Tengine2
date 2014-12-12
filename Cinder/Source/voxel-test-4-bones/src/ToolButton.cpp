@@ -100,7 +100,7 @@ void ToolButton::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 	}
 
 	ci::gl::drawSolidRect(ci::Rectf(0.f, 0.f, iconSize.x, iconSize.y));
-//	ci::gl::drawString(label, ci::Vec2f(0.f, 0.f), ci::ColorA(0.5f,1,0,0.5), ci::Font("Segoe UI", 15));
+	ci::gl::drawString(label, ci::Vec2f(0.f, 0.f));
 
 }
 
