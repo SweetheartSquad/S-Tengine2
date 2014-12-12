@@ -70,37 +70,50 @@ void ToolButton::out(){
 
 void ToolButton::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	((CinderRenderOptions *)_renderStack)->ciShader->uniform("pickingColor", ci::Color::hex(pickingColor));
+	
+	ci::TextBox test;
 
 	// button rendering logic (colour-based atm, replace with textures later)
 	if(isDown){
 		if(isActive){
 			if(isHovered){
 				// down + active
-				ci::gl::color(0.25f, 0.25f, 0.25f, 1.f);
+				test.setBackgroundColor(ci::ColorA(0.25f, 0.25f, 0.25f, 1.f));
 			}else{
 				// down + active, but moused out (show active)
-				ci::gl::color(0.5f, 0.5f, 0.5f, 1.f);
+				test.setBackgroundColor(ci::ColorA(0.5f, 0.5f, 0.5f, 1.f));
 			}
 		}else if(isHovered){
 			// down
-			ci::gl::color(0.25f, 0.25f, 0.25f, 1.f);
+			test.setBackgroundColor(ci::ColorA(0.25f, 0.25f, 0.25f, 1.f));
 		}else{
 			// down, but moused out (show up)
-			ci::gl::color(displayColor);
+			test.setBackgroundColor(displayColor);
 		}
 	}else if(isHovered){
 		// over
-		ci::gl::color(1.f, 1.f, 1.f, 1.f);
+		test.setBackgroundColor(ci::ColorA(1.f, 1.f, 1.f, 1.f));
 	}else if(isActive){
 		// active
-		ci::gl::color(0.5f, 0.5f, 0.5f, 1.f);
+		test.setBackgroundColor(ci::ColorA(0.5f, 0.5f, 0.5f, 1.f));
 	}else{
 		// up
-		ci::gl::color(displayColor);
+		test.setBackgroundColor(displayColor);
 	}
 
-	ci::gl::drawSolidRect(ci::Rectf(0.f, 0.f, iconSize.x, iconSize.y));
-	ci::gl::drawString(label, ci::Vec2f(0.f, 0.f));
+	//ci::gl::drawSolidRect(ci::Rectf(0.f, 0.f, iconSize.x, iconSize.y));
+
+	
+	test.setSize(iconSize);
+	test.setAlignment(ci::TextBox::Alignment::LEFT);
+	test.setFont(ci::Font("Segoe UI", 15));
+	test.setColor(ci::ColorA(0.f, 0.f, 0.f, 1.f));
+	test.setText(label);
+	test.setText("test");
+
+	ci::gl::color(1.f, 1.f, 1.f, 1.f);
+	ci::gl::draw(ci::gl::Texture(test.render()));
+	//ci::gl::drawString(label, ci::Vec2f(0.f, 0.f));
 
 }
 
