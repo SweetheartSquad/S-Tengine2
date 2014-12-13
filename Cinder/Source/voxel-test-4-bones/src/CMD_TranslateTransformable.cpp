@@ -34,10 +34,9 @@ bool CMD_TranslateTransformable::execute(){
 		}else{
 			// no parent transforms to worry about
 			if(relative){
+				glm::vec4 newPos(v.x, v.y, v.z, 1.f);
 				switch(space){
 				case kWORLD:
-					// doesn't take into account node's orientation/scale?
-					glm::vec4 newPos(v.x, v.y, v.z, 1.f);
 					newPos = glm::inverse(node->transform->getOrientationMatrix() * node->transform->getScaleMatrix()) * newPos;
 					node->transform->translate(newPos.x, newPos.y, newPos.z);
 					break;

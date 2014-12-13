@@ -29,22 +29,6 @@ bool CMD_ScaleTransformable::execute(){
 			switch(space){
 			case kWORLD:
 
-				if(nh != nullptr){
-					std::vector<glm::mat4> modelMatrixStack;
-					NodeParent * parent = nh->parent;
-					while(parent != nullptr){
-						modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(parent)->transform->getOrientationMatrix());
-						parent = dynamic_cast<NodeHierarchical *>(parent)->parent;
-					}
-
-					glm::mat4 modelMatrix(1);
-					for(unsigned long int i = modelMatrixStack.size(); i > 0; --i){
-						modelMatrix = modelMatrix * modelMatrixStack.at(i-1);
-					}
-					v2 = modelMatrix * v2;
-				}
-				
-				node->transform->scale(v2.x, v2.y, v2.z);
 				break;
 
 			case kOBJECT:
