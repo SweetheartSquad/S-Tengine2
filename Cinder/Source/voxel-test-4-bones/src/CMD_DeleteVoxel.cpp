@@ -18,55 +18,50 @@ CMD_DeleteVoxel::CMD_DeleteVoxel(Voxel * _v) :
 
 bool CMD_DeleteVoxel::execute(){
 	if(voxel != nullptr){
+		ci::app::console() << "deleteVoxel.execute: " << voxel << std::endl;
 		// voxel's parent
-		parent = dynamic_cast<Joint *>(voxel->parent);
+		parent = voxel->parent;
 		if(parent != nullptr){
-			for(unsigned long int i = 0; i < parent->voxels.size(); ++i){
-				if(parent->voxels.at(i) == voxel){
-					index = i;
-					parent->voxels.erase(parent->voxels.begin() + index);
-					break;
-				}
-			}
+			index = parent->removeChild(voxel);
 			if(index == (unsigned long int)(-1)){
 				warn("Voxel was not a child of it's parent");
 			}
 		}else{
-			error("Voxel's parent was not a joint");
-			return false;
+			warn("Voxel did not have a parent");
 		}
 		voxel->parent = nullptr;
 	}else{
-		error("Cannot delete null voxel");
-		return false;
+		warn("Cannot delete null voxel");
 	}
+	return true;
 }
 
 bool CMD_DeleteVoxel::unexecute(){
 	if(voxel != nullptr){
+		ci::app::console() << "deleteVoxel.unexecute: " << voxel << std::endl;
 		voxel->parent = parent;
 
 		// voxel's parent
 		if(parent != nullptr){
 			if(index != (unsigned long int)(-1)){
-				parent->voxels.insert(parent->voxels.begin() + index, voxel);
+				parent->addChildAtIndex(voxel, index);
 			}else{
 				warn("Voxel was not a child of it's parent");
 			}
 		}else{
-			error("Voxel's parent was not a joint");
-			return false;
+			error("Voxel did not have a parent");
 		}
 	}else{
-		error("Cannot delete null voxel");
-		return false;
+		warn("Cannot delete null voxel");
 	}
+	return true;
 }
 
 CMD_DeleteVoxel::~CMD_DeleteVoxel(void){
 	if(voxel != nullptr){
 		if(executed){
 			if(index != (unsigned long int)(-1)){
+				ci::app::console() << "~deleteVoxel: " << voxel << std::endl;
 				delete voxel;
 				voxel = nullptr;
 			}

@@ -19,8 +19,8 @@ bool CommandProcessor::executeCommand(Command * c){
 		if(!currentCompressedCommand->subCmdProc.executeCommand(c)){
 			error("Compression command failed: sub-command error bubbled up");
 			currentCompressedCommand->subCmdProc.undoAll();
-			endCompressing();
 			currentCompressedCommand->firstRun = false;
+			endCompressing();
 			return false;
 		}else{
 			currentCompressedCommand->firstRun = true;
