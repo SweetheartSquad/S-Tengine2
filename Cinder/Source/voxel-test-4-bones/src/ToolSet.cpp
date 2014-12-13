@@ -18,7 +18,7 @@ void ToolSet::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderSta
 			if(tb != nullptr){
 				ci::gl::translate(iconPos);
 				tb->render(_matrixStack, _renderStack);
-				iconPos.y = tb->iconSize.y;
+				iconPos.y = tb->textbox.getSize().y;
 			}
 		}
 	ci::gl::popMatrices();
@@ -41,7 +41,7 @@ unsigned long int ToolSet::getWidth(){
 	for(unsigned long int i = 0; i < children.size(); ++i){
 		ToolButton * tb = dynamic_cast<ToolButton *>(children.at(i));
 		if(tb != nullptr){
-			res = std::max(res, tb->iconSize.x);
+			res = std::max(res, tb->textbox.getSize().x);
 		}
 	}
 	return res;
@@ -51,7 +51,7 @@ unsigned long int ToolSet::getHeight(){
 	for(unsigned long int i = 0; i < children.size(); ++i){
 		ToolButton * tb = dynamic_cast<ToolButton *>(children.at(i));
 		if(tb != nullptr){
-			res += tb->iconSize.y;
+			res += tb->textbox.getSize().y;
 		}
 	}
 	return res;

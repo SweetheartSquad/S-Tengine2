@@ -6,8 +6,7 @@
 #include "CinderRenderOptions.h"
 
 #include <cinder\gl\gl.h>
-#include <cinder\Text.h>
-#include <cinder\gl\TextureFont.h>
+#include <cinder\gl\Texture.h>
 
 ToolButton::ToolButton(std::string _label, Type _type, ci::Vec2i _iconSize, void (*_downCallback)(CinderApp * _app), void (*_upCallback)(CinderApp * _app)):
 	NodeChild(nullptr),
@@ -16,12 +15,15 @@ ToolButton::ToolButton(std::string _label, Type _type, ci::Vec2i _iconSize, void
 	isDown(false),
 	isActive(false),
 	displayColor((float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f, 1.f),
-	label(_label),
 	type(_type),
-	iconSize(_iconSize),
 	downCallback(_downCallback),
 	upCallback(_upCallback)
 {
+	textbox.setText(_label);
+	textbox.setSize(_iconSize);
+	textbox.setAlignment(ci::TextBox::Alignment::LEFT);
+	textbox.setFont(ci::Font("Segoe UI", 15));
+	textbox.setColor(ci::ColorA(0.f, 0.f, 0.f, 1.f));
 }
 
 void ToolButton::down(CinderApp * _app){
@@ -69,52 +71,38 @@ void ToolButton::out(){
 }
 
 void ToolButton::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
-	((CinderRenderOptions *)_renderStack)->ciShader->uniform("pickingColor", ci::Color::hex(pickingColor));
-	
-	ci::TextBox test;
-
 	// button rendering logic (colour-based atm, replace with textures later)
 	if(isDown){
 		if(isActive){
 			if(isHovered){
 				// down + active
-				test.setBackgroundColor(ci::ColorA(0.25f, 0.25f, 0.25f, 1.f));
+				textbox.setBackgroundColor(ci::ColorA(0.25f, 0.25f, 0.25f, 1.f));
 			}else{
 				// down + active, but moused out (show active)
-				test.setBackgroundColor(ci::ColorA(0.5f, 0.5f, 0.5f, 1.f));
+				textbox.setBackgroundColor(ci::ColorA(0.5f, 0.5f, 0.5f, 1.f));
 			}
 		}else if(isHovered){
 			// down
-			test.setBackgroundColor(ci::ColorA(0.25f, 0.25f, 0.25f, 1.f));
+			textbox.setBackgroundColor(ci::ColorA(0.25f, 0.25f, 0.25f, 1.f));
 		}else{
 			// down, but moused out (show up)
-			test.setBackgroundColor(displayColor);
+			textbox.setBackgroundColor(displayColor);
 		}
 	}else if(isHovered){
 		// over
-		test.setBackgroundColor(ci::ColorA(1.f, 1.f, 1.f, 1.f));
+		textbox.setBackgroundColor(ci::ColorA(1.f, 1.f, 1.f, 1.f));
 	}else if(isActive){
 		// active
-		test.setBackgroundColor(ci::ColorA(0.5f, 0.5f, 0.5f, 1.f));
+		textbox.setBackgroundColor(ci::ColorA(0.5f, 0.5f, 0.5f, 1.f));
 	}else{
 		// up
-		test.setBackgroundColor(displayColor);
+		textbox.setBackgroundColor(displayColor);
 	}
 
-	//ci::gl::drawSolidRect(ci::Rectf(0.f, 0.f, iconSize.x, iconSize.y));
-
 	
-	test.setSize(iconSize);
-	test.setAlignment(ci::TextBox::Alignment::LEFT);
-	test.setFont(ci::Font("Segoe UI", 15));
-	test.setColor(ci::ColorA(0.f, 0.f, 0.f, 1.f));
-	test.setText(label);
-	test.setText("test");
-
+	((CinderRenderOptions *)_renderStack)->ciShader->uniform("pickingColor", ci::Color::hex(pickingColor));
 	ci::gl::color(1.f, 1.f, 1.f, 1.f);
-	ci::gl::draw(ci::gl::Texture(test.render()));
-	//ci::gl::drawString(label, ci::Vec2f(0.f, 0.f));
-
+	ci::gl::draw(ci::gl::Texture(textbox.render()));
 }
 
 void ToolButton::pressProgrammatically(CinderApp * _app){

@@ -27,7 +27,8 @@ ConsoleGUI::~ConsoleGUI(){
 }
 
 void ConsoleGUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
-	for(unsigned long int i = 1; i <= log->size() && i <= displayLength; ++i){
+	unsigned long int i;
+	for(i = 1; i <= log->size() && i <= displayLength; ++i){
 		ci::gl::pushMatrices();
 		ConsoleEntry * l = log->at(log->size() - i);
 
@@ -51,5 +52,5 @@ void ConsoleGUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 	}
 
 	ci::gl::color(1,1,1,1);
-	ci::gl::drawStrokedRect(ci::Rectf(0, ci::app::getWindowHeight()-size*displayLength, ci::app::getWindowWidth(), ci::app::getWindowHeight()));
+	ci::gl::drawStrokedRect(ci::Rectf(0, ci::app::getWindowHeight()-size*(i-1), ci::app::getWindowWidth(), ci::app::getWindowHeight()));
 }

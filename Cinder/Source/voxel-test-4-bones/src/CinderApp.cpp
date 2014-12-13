@@ -296,6 +296,7 @@ void CinderApp::draw(){
 		gl::enableAlphaBlending();
 
 		uiShader.bind();
+		uiShader.uniform("tex", false);
 		gl::clear(ColorA(0.f, 0.f, 0.f, 0.f));
 
 		renderUI(camMayaPersp.getCamera(), rectPersp);
@@ -308,7 +309,11 @@ void CinderApp::draw(){
 		vox::MatrixStack t;
 		CinderRenderOptions t2(nullptr, nullptr);
 		t2.ciShader = &uiShader;
+		uiShader.uniform("tex", true);
+		uiShader.uniform("pickingColor", 0);
+		consoleGUI->render(&t, &t2);
 		toolbar->render(&t, &t2);
+		uiShader.uniform("tex", false);
 		
 		uiShader.unbind();
 		params->draw();
@@ -365,10 +370,6 @@ void CinderApp::draw(){
 		gl::draw( pixelFbo.getTexture(0), Rectf(rct.x1, rct.y1+rct.y2+rct.y2, rct.x2, rct.y2+rct.y2+rct.y2) );
 		gl::drawStrokedRect(Rectf(rct.x1, rct.y1+rct.y2+rct.y2, rct.x2, rct.y2+rct.y2+rct.y2));
 	}
-
-	
-	consoleGUI->render(&t, &t2);
-	//toolbar->render(&t, &t2);
 }
 
 void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
@@ -479,7 +480,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 
 	if(UI::selectedNodes.size() != 0){
 		gl::pushMatrices();
-
+		
+			glPointSize(5);
 			// Draw spheres around the selected joints
 			gl::enableWireframe();
 			for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
@@ -497,7 +499,9 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 						for(unsigned long int i = 0; i < j->voxels.size(); ++i){
 							Voxel * v = dynamic_cast<Voxel*>(j->voxels.at(i));
 							if(v != nullptr){
-								gl::drawSphere(v->pos, 0.01f, 16);
+								glBegin(GL_POINTS);
+								glVertex3f(v->pos);
+								glEnd();
 							}
 						}
 						gl::disableWireframe();
@@ -509,7 +513,9 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 						gl::pushMatrices();
 							glm::vec3 absPos = dynamic_cast<Joint *>(v->parent)->getPos(false);
 							gl::translate(absPos.x, absPos.y, absPos.z);
-							gl::drawSphere(v->pos, 0.06f);
+							glBegin(GL_POINTS);
+							glVertex3f(v->pos);
+							glEnd();
 						gl::popMatrices();
 					}
 				}
@@ -867,17 +873,17 @@ void CinderApp::mouseDown( MouseEvent event ){
 		sourceBounds = nullptr;
 	}
 	
+	
+	// Get the selected UI colour
+	pickColour(&clickedUiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+	uiColour = clickedUiColour;
 
-	if(sourceCam == &camMayaPersp.getCamera()){
-		// Get the selected UI colour
-		pickColour(&clickedUiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
-		uiColour = clickedUiColour;
+	if(event.isLeft()){
+		oldMousePos = mMousePos;
+	}
 
-		if(event.isLeft()){
-			oldMousePos = mMousePos;
-		}
-
-		if(!event.isAltDown() && (clickedUiColour == 0)){
+	if(!event.isAltDown() && (clickedUiColour == 0)){
+		if(sourceCam == &camMayaPersp.getCamera()){
 			if(mode == kPAINT_VOXELS){
 				if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
 					if(event.isLeft()){
@@ -941,16 +947,16 @@ void CinderApp::mouseDown( MouseEvent event ){
 					}
 				}
 			}
-		}else{
-			if(NodeSelectable::pickingMap.count(clickedUiColour) == 1){
-				activeButton = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(clickedUiColour));
-				if(activeButton != NULL){
-					activeButton->down(this);
-				}
-			}
 		}
 
 		UI::updateHandlePos(false);
+	}else{
+		if(NodeSelectable::pickingMap.count(clickedUiColour) == 1){
+			activeButton = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(clickedUiColour));
+			if(activeButton != nullptr){
+				activeButton->down(this);
+			}
+		}
 	}
 }
 

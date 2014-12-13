@@ -8,6 +8,7 @@
 #include <cinder\Color.h>
 
 #include <string>
+#include <cinder\Text.h>
 
 class CinderApp;
 class ToolSet;
@@ -32,11 +33,7 @@ public:
 	// Whether the button is active (only affects RADIO and TOGGLE buttons)
 	bool isActive;
 
-	// Size of icon to render
-	ci::Vec2i iconSize;
-
-	// Label describing button's function
-	std::string label;
+	ci::TextBox textbox;
 	
 	void (*downCallback)(CinderApp * _app);
 	void (*upCallback)(CinderApp * _app);
