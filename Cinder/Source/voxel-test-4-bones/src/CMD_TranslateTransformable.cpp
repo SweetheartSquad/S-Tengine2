@@ -37,11 +37,13 @@ bool CMD_TranslateTransformable::execute(){
 				switch(space){
 				case kWORLD:
 					// doesn't take into account node's orientation/scale?
-					node->transform->translationVector += glm::vec3(v.x, v.y, v.z);
+					glm::vec4 newPos(v.x, v.y, v.z, 1.f);
+					newPos = glm::inverse(node->transform->getOrientationMatrix() * node->transform->getScaleMatrix()) * newPos;
+					node->transform->translate(newPos.x, newPos.y, newPos.z);
 					break;
 
 				case kOBJECT:
-					node->transform->translationVector += glm::vec3(v.x, v.y, v.z);
+					node->transform->translate(v.x, v.y, v.z);
 					break;
 				}
 			}else{

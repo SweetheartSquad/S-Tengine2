@@ -49,12 +49,6 @@ public:
 	void translate(float _translateX, float _translateY, float _translateZ);
 	/** Adds _translate to the translation vector */
 	void translate(glm::vec3 _translate);
-	/** Adds _translateX to the x component of the translation vector */
-	void translateX(float _translateX);
-	/** Adds _translateY to the y component of the translation vector */
-	void translateY(float _translateY);
-	/** Adds _translateZ to the z component of the translation vector */
-	void translateZ(float _translateZ);
 
 	/** 
 	OBJECT:	Rotates the orientation quaternion by _rotation in object-space (i.e. orientation = _rotation * orientation) 

@@ -41,26 +41,30 @@ glm::vec3 ShiftKiddie::getPos(bool _relative){
 void ShiftKiddie::setPos(glm::vec3 _pos, bool _convertToRelative){
 	glm::vec4 newPos(_pos, 1);
 	if(_convertToRelative){
-		NodeParent * _parent = parent;
-		std::vector<glm::mat4> modelMatrixStack;
-		while(_parent != nullptr){
-			NodeChild * nc = dynamic_cast<NodeChild *>(_parent);
-			if (nc != nullptr){
-				NodeTransformable * nt = dynamic_cast<NodeTransformable *>(_parent);
-				if(nt != nullptr){
-					modelMatrixStack.push_back(nt->transform->getModelMatrix());
-				}
-				_parent = nc->parent;
-			}else{
-				break;
-			}
-		}
-
-		glm::mat4 modelMatrix(1);
-		for(unsigned long int i = modelMatrixStack.size(); i > 0; --i){
-			modelMatrix = modelMatrix * modelMatrixStack.at(i-1);
-		}
-		newPos = glm::inverse(modelMatrix) * newPos;
+		newPos = getInverseModelMatrixHierarchical() * newPos;
 	}
 	transform->translationVector = glm::vec3(newPos.x, newPos.y, newPos.z);
+}
+
+glm::mat4 ShiftKiddie::getInverseModelMatrixHierarchical(){
+	NodeParent * _parent = parent;
+	std::vector<glm::mat4> modelMatrixStack;
+	while(_parent != nullptr){
+		NodeChild * nc = dynamic_cast<NodeChild *>(_parent);
+		if (nc != nullptr){
+			NodeTransformable * nt = dynamic_cast<NodeTransformable *>(_parent);
+			if(nt != nullptr){
+				modelMatrixStack.push_back(nt->transform->getModelMatrix());
+			}
+			_parent = nc->parent;
+		}else{
+			break;
+		}
+	}
+
+	glm::mat4 modelMatrix(1);
+	for(unsigned long int i = modelMatrixStack.size(); i > 0; --i){
+		modelMatrix = modelMatrix * modelMatrixStack.at(i-1);
+	}
+	return glm::inverse(modelMatrix);
 }

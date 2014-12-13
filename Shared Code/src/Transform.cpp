@@ -54,18 +54,6 @@ void Transform::translate(glm::vec3 _translate){
 	translationVector += _translate;
 }
 
-void Transform::translateX(float _translateX){
-	translationVector.x += _translateX;
-}
-
-void Transform::translateY(float _translateY){
-	translationVector.y += _translateY;
-}
-
-void Transform::translateZ(float _translateZ){
-	translationVector.z += _translateZ;
-}
-
 void Transform::rotate(glm::quat _rotation, CoordinateSpace _space){
 	switch(_space){
 	case kWORLD:
