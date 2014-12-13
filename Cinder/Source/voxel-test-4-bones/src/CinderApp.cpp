@@ -16,6 +16,7 @@
 #include "CMD_PlaceVoxel.h"
 #include "CMD_DeleteVoxel.h"
 #include "CMD_SetTime.h"
+#include "CMD_UpdateTrackbar.h"
 
 #include "Transform.h"
 #include "NodeTransformable.h"
@@ -165,7 +166,7 @@ void CinderApp::setup(){
 
 	timeTextBox = new ParamTextBox(ParamTextBox::Type::NUMBER, Vec2i(60, 40), Vec2i(30,20));
 
-	timelineTrackbar = new TrackBar(&UI::time, Vec2i(0, getWindowHeight()/2), Vec2i(getWindowWidth(), 15), Vec2i(10, 25), 0, 24, 0, &mMousePos);
+	timelineTrackbar = new TrackBar(&UI::time, Vec2i(0, getWindowHeight()/2), Vec2i(getWindowWidth(), 15), Vec2i(10, 25), 0, 24, 1, &mMousePos);
 }
 
 void CinderApp::resize(){
@@ -253,7 +254,11 @@ void CinderApp::shutdown(){
 
 void CinderApp::update(){
 	// play animation or edit
-	timelineTrackbar->update(nullptr);
+	if(timelineTrackbar->isDown){
+		cmdProc->executeCommand(new CMD_UpdateTrackbar(timelineTrackbar));
+	}else{
+		timelineTrackbar->update(nullptr);
+	}
 	if(play){
 		Step s;
 		s.setDeltaTime(1 * UI::stepScale);
@@ -337,6 +342,35 @@ void CinderApp::draw(){
 		t2.ciShader = &uiShader;
 
 		timelineTrackbar->render(&t, &t2);
+
+		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
+			// draw keyframes
+			NodeAnimatable * na = dynamic_cast<NodeAnimatable *>(UI::selectedNodes.at(i));
+			if(na != nullptr){
+				glLineWidth(2.f);
+				gl::color(1.f, 0.f, 0.f);
+
+				if(na->rotateW->hasStart){
+					glBegin(GL_LINES);
+					float time = (UI::time - na->rotateW->time);
+					float timeStart = time;
+					glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y);
+					glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y+timelineTrackbar->size.y);
+				
+					for(unsigned long int anim = 0; anim < na->rotateW->tweens.size(); ++anim){
+						time += na->rotateW->tweens.at(anim)->deltaTime;
+
+						glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y);
+						glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y+timelineTrackbar->size.y);
+					}
+					glVertex2f(timelineTrackbar->pos.x + timeStart*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y+timelineTrackbar->size.y/2);
+					glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y+timelineTrackbar->size.y/2);
+					
+					glEnd();
+				}
+				glLineWidth(1.f);
+			}
+		}
 
 		uiShader.uniform("tex", true);
 		uiShader.uniform("pickingColor", Color(0.f, 0.f, 0.f));
@@ -499,6 +533,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 			// Draw spheres around the selected joints
 			gl::enableWireframe();
 			for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
+
 				if (i == UI::selectedNodes.size() - 1){
 					gl::color(0.f, 1.f, 1.f);
 				}
@@ -509,16 +544,18 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 						gl::translate(absPos.x, absPos.y, absPos.z);
 						gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.06f);
 						
-						glBegin(GL_POINTS);
-						for(unsigned long int i = 0; i < j->voxels.size(); ++i){
-							Voxel * v = dynamic_cast<Voxel*>(j->voxels.at(i));
-							if(v != nullptr){
-								glVertex3f(v->transform->translationVector.x, v->transform->translationVector.y, v->transform->translationVector.z);
-							}
-						}
-						glEnd();
-
 					gl::popMatrices();
+
+					glBegin(GL_POINTS);
+					for(unsigned long int i = 0; i < j->voxels.size(); ++i){
+						Voxel * v = dynamic_cast<Voxel*>(j->voxels.at(i));
+						if(v != nullptr){
+							glm::vec3 pos = v->getPos(false);
+							glVertex3f(pos.x, pos.y, pos.z);
+						}
+					}
+					glEnd();
+
 				}else{
 					Voxel * v = dynamic_cast<Voxel *>(UI::selectedNodes.at(i));
 					if(v != nullptr){
@@ -838,22 +875,9 @@ void CinderApp::pickColour(void * res, const gl::Fbo * _sourceFbo, const Rectf *
 void CinderApp::mouseDown( MouseEvent event ){
 	isMouseDown = true;
 	mMousePos = event.getPos();
-
-	switch (mode){
-		case CinderApp::kCREATE:
-			break;
-			break;
-		case CinderApp::kSELECT:
-		case CinderApp::kTRANSLATE:
-		case CinderApp::kROTATE:
-		case CinderApp::kSCALE:
-		case CinderApp::kPAINT_VOXELS:
-			cmdProc->startCompressing();
-			console() << "startCompressing" << endl;
-			break;
-		default:
-			break;
-	}
+	
+	cmdProc->startCompressing();
+	console() << "startCompressing" << endl;
 	
 	// handle the camera
 	camMayaPersp.mouseDown( mMousePos );
@@ -1005,7 +1029,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 										case 0x00FF00: dif.x = 0; dif.z = 0; break;
 										case 0x0000FF: dif.x = 0; dif.y = 0; break;
 										case 0xFFFF00: break;
-										default: break;
+										default: dif.x = 0; dif.y = 0;  dif.z = 0; break;
 									}
 									console() << "distance:\t" << distance << std::endl;
 									console() << "newPos:\t" << newPos << std::endl;
@@ -1155,19 +1179,8 @@ void CinderApp::mouseUp( MouseEvent event ){
 		activeButton->up(this);
 	}
 	
-	switch (mode){
-	case CinderApp::kCREATE:
-	default:
-		break;
-	case CinderApp::kSELECT:
-	case CinderApp::kTRANSLATE:
-	case CinderApp::kROTATE:
-	case CinderApp::kSCALE:
-	case CinderApp::kPAINT_VOXELS:
-		cmdProc->endCompressing();
-		console() << "endCompressing" << endl;
-		break;
-	}
+	cmdProc->endCompressing();
+	console() << "endCompressing" << endl;
 
 	uiColour = 0;
 	clickedUiColour = 0;

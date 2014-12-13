@@ -17,6 +17,7 @@ TrackBar::TrackBar(float * _target, ci::Vec2i _pos, ci::Vec2i _barSize, ci::Vec2
 	target(_target),
 	min(_min),
 	max(_max),
+	step(_step),
 	mousePos(_mousePos)
 {
 	if(min > max){
@@ -63,9 +64,20 @@ void TrackBar::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderSt
 	
 	ci::gl::color(0.1f, 0.1f, 0.1f);
 	ci::gl::drawSolidRect(ci::Rectf(pos.x, pos.y, pos.x+size.x, pos.y+size.y));
+	
+	ci::gl::color(0.2f, 0.2f, 0.2f);
+	glLineWidth(1);
+	glBegin(GL_LINES);
+	for(float i = min; i < max; i += step){
+		glVertex2f(pos.x + i*((float)size.x/max), pos.y);
+		glVertex2f(pos.x + i*((float)size.x/max), pos.y+size.y);
+	}
+	glEnd();
+
 	((CinderRenderOptions *)_renderStack)->ciShader->uniform("pickingColor", ci::Color::hex(pickingColor));
 	ci::gl::color(color);
-	ci::gl::drawSolidRect(ci::Rectf(pos.x+*target, pos.y, pos.x+*target+handleSize.x, pos.y+handleSize.y));
+	Vec2i handlePos(pos.x+(*target/(max-min))*size.x-handleSize.x/2, (pos.y+size.y/2)-handleSize.y/2);
+	ci::gl::drawSolidRect(ci::Rectf(handlePos.x, handlePos.y, handlePos.x+handleSize.x, handlePos.y+handleSize.y));
 }
 
 
@@ -82,8 +94,13 @@ void TrackBar::resize(CinderApp * _app){
 
 void TrackBar::update(Step * _step){
 	if(isDown){
-		*target += mousePos->x - oldPos.x;
+		*target = ((float)(mousePos->x-pos.x)/(float)size.x) * (max-min);
+		*target = *target + step/2 - fmod(*target+step/2, step);
+		if(*target < min){
+			*target = min;
+		}else if(*target > max){
+			*target = max;
+		}
 		oldPos = *mousePos;
 	}
-	// need to make this a command somehow
 }

@@ -146,6 +146,7 @@
     <ClCompile Include="..\src\CMD_Parent.cpp" />
     <ClCompile Include="..\src\CMD_TranslateTransformable.cpp" />
     <ClCompile Include="..\src\CMD_SetTime.cpp" />
+    <ClCompile Include="..\src\CMD_UpdateTrackbar.cpp" />
     <ClCompile Include="..\src\CompressedCommand.cpp" />
     <ClCompile Include="..\src\ParamTextBox.cpp" />
     <ClCompile Include="..\src\ConsoleEntry.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="..\include\CMD_SelectNodes.h" />
     <ClInclude Include="..\include\CMD_Parent.h" />
     <ClInclude Include="..\include\CMD_TranslateTransformable.h" />
+    <ClInclude Include="..\include\CMD_UpdateTrackbar.h" />
     <ClInclude Include="..\include\CompressedCommand.h" />
     <ClInclude Include="..\include\CMD_ScaleTransformable.h" />
     <ClInclude Include="..\include\CMD_SetTime.h" />
