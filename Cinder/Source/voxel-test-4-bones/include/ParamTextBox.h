@@ -9,6 +9,8 @@
 #include <cinder\Color.h>
 #include <cinder\app\KeyEvent.h>
 
+#include <cinder\Text.h>
+
 class CinderApp;
 
 class ParamTextBox : public UiInteractable, public NodeChild
@@ -21,6 +23,8 @@ public:
 
 	ParamTextBox(Type _type, ci::Vec2i _pos, ci::Vec2i _size);
 	~ParamTextBox();
+
+    ci::TextBox textbox;
 
 	void setText(std::string _txt);
 	void setText(ci::app::KeyEvent _k);
