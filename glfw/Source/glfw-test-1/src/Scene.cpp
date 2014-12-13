@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include "DepthFrameBuffer.h"
 #include "StandardFrameBuffer.h"
-#include "Camera.h"
+#include "PerspectiveCamera.h"
 #include "GLFWRenderOptions.h"
 #include "RenderSurface.h"
 #include "Keyboard.h"
@@ -17,7 +17,7 @@ Scene::Scene(Game * _game):
 	game(_game),
 	mouse(&Mouse::getInstance()),
 	keyboard(&Keyboard::getInstance()),
-	camera(new Camera()),
+	camera(new PerspectiveCamera()),
 	renderOptions(new RenderOptions(nullptr, &lights)),
 	depthBuffer(new StandardFrameBuffer(true)),
 	shadowBuffer(new StandardFrameBuffer(true)),

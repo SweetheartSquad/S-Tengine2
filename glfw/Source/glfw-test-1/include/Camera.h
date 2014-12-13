@@ -6,25 +6,21 @@
 
 #include "NodeTransformable.h"
 
-class Mouse;
-
 /****************************
 *
 * A basic camera class. This camera is rotated via the mouse position 
 * The camera's rotation is restricted on the x axis so that It can not flip upside down
 *
 *****************************/
-class Camera : public NodeTransformable {
+class Camera abstract : public NodeTransformable {
 public:
 
 	Camera();
 	~Camera();
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
-	void update();
+	virtual void update() = 0;
 
-	/** Reference to the mouse singleton */
-	Mouse * mouse;
 	/** Direction the camera's front would be pointing at if it weren't rotated at all */
 	glm::vec3 forwardVectorLocal;
 	/** Direction the camera's front is pointing at (local * orientation) */
@@ -45,26 +41,13 @@ public:
 	/** The camera's yaw */
 	float yaw;
 
-	/** Movement speed multiplier */
-	float speed;
-	/** Mouse speed multiplier */
-	float mouseSpeed;
-	/** The orientation quaternian from the last update loop*/
-	glm::quat lastOrientation;
+	/**
+	* @return The view matrix of the camera. Pure virtual; to be implemented only in derived classes
+	*/
+	virtual glm::mat4 getViewMatrix() = 0;
 
 	/**
-	* @return The view matrix of the camera
+	* @return The projection matrix of the camera. Pure virtual; to be implemented only in derived classes
 	*/
-	glm::mat4 getViewMatrix();
-
-	/**
-	* @return The projection matrix of the camera 
-	*/
-	glm::mat4 getProjectionMatrix();
-
-private :
-	/** The X position of the mouse from the last update loop*/
-	double lastMouseX;
-	/** The Y position of the mouse from the last update loop*/
-	double lastMouseY;
+	virtual glm::mat4 getProjectionMatrix() = 0;
 };

@@ -7,7 +7,7 @@ class Light;
 class DepthMapShader;
 class BaseComponentShader;
 class RenderSurface;
-class Camera;
+class PerspectiveCamera;
 class Keyboard;
 class StandardFrameBuffer;
 class DepthFrameBuffer;
@@ -24,7 +24,7 @@ public:
 	/** Reference to keyboard singleton */
 	Keyboard * keyboard;
 	/** Reference to this scene's camera */
-	Camera * camera;
+	PerspectiveCamera * camera;
 	/** Reference to a list of references to entitites included in this scene */
 	RenderOptions       * renderOptions;
 	StandardFrameBuffer	* depthBuffer;
