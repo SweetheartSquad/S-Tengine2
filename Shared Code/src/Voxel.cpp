@@ -56,3 +56,7 @@ Voxel::Voxel(ci::Vec3f _pos, Joint * _parent, bool _convertToRelative) :
 {
     setPos(glm::vec3(_pos.x, _pos.y, _pos.z), _convertToRelative);
 }
+
+Voxel::~Voxel(){
+	delete transform;
+}
