@@ -8,7 +8,10 @@
 
 PerspectiveCamera::PerspectiveCamera():
 	Camera(),
-	mouse(&Mouse::getInstance())
+	speed(0.1f),
+	mouseSpeed(0.05f),
+	mouse(&Mouse::getInstance()),
+	lastOrientation(1.f, 0.f, 0.f, 0.f)
 {
 	transform->translate(-5.f, 0.f, 0.f);
 	transform->translate(0.f, 3.f, 0.f);
@@ -63,7 +66,7 @@ void PerspectiveCamera::update(){
 
 	forwardVectorRotated   = transform->orientation * forwardVectorLocal;
 	rightVectorRotated	   = transform->orientation * rightVectorLocal;
-	upVectorRotated		   = transform->orientation *  upVectorLocal;
+	upVectorRotated		   = transform->orientation * upVectorLocal;
 
 	glfwSetCursorPos(vox::currentContext, centerX, centerY);
 

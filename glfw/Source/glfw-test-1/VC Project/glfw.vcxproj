@@ -218,6 +218,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Material.h" />
     <ClInclude Include="..\include\MeshEntity.h" />
     <ClInclude Include="..\include\Mouse.h" />
+    <ClInclude Include="..\include\PerspectiveCamera.h" />
     <ClInclude Include="..\include\PhongShaderComponent.h" />
     <ClInclude Include="..\include\Plane.h" />
     <ClInclude Include="..\include\PointLight.h" />
@@ -239,7 +240,6 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\VoxelComponent.h" />
     <ClInclude Include="..\include\VoxelJoint.h" />
     <ClInclude Include="..\include\VoxelMesh.h" />
-    <ClInclude Include="PerspectiveCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\..\..\dev\ttt.json" />

@@ -452,7 +452,7 @@
     <ClInclude Include="..\include\DirectionalLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PerspectiveCamera.h">
+    <ClInclude Include="..\include\PerspectiveCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -21,7 +21,7 @@ public:
 	~PerspectiveCamera();
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
-	void update();
+	void update() override;
 
 	/** Reference to the mouse singleton */
 	Mouse * mouse;
