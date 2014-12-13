@@ -154,6 +154,7 @@
     <ClCompile Include="..\src\Toolbar.cpp" />
     <ClCompile Include="..\src\ToolButton.cpp" />
     <ClCompile Include="..\src\ToolSet.cpp" />
+    <ClCompile Include="..\src\TrackBar.cpp" />
     <ClCompile Include="..\src\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +224,7 @@
     <ClInclude Include="..\include\Toolbar.h" />
     <ClInclude Include="..\include\ToolButton.h" />
     <ClInclude Include="..\include\ToolSet.h" />
+    <ClInclude Include="..\include\TrackBar.h" />
     <ClInclude Include="..\include\UI.h" />
     <ClCompile Include="..\src\CMD_EditStartKey.cpp" />
     <ClInclude Include="..\include\UiInteractable.h" />

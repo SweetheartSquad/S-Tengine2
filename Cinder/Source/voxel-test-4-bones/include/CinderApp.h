@@ -30,6 +30,7 @@ class ParamTextBox;
 class UiInteractable;
 class ToolButton;
 class ConsoleGUI;
+class TrackBar;
 
 class CinderApp : public AppBasic {
 public:
@@ -121,6 +122,7 @@ public:
 	ToolBar * toolbar;
 	ToolBar * timelineBar;
     ParamTextBox * timeTextBox;
+    TrackBar * timelineTrackbar;
 
 	string directory;
 	string fileName;

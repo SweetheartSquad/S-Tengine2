@@ -182,7 +182,7 @@
     </ClCompile>
     <ClCompile Include="..\src\CMD_ScaleTransformable.cpp">
       <Filter>Source Files\Commands</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\src\CMD_SetTime.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
@@ -205,6 +205,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ConsoleEntry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TrackBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -381,7 +384,7 @@
     </ClInclude>
     <ClInclude Include="..\include\CMD_ScaleTransformable.h">
       <Filter>Header Files\Commands</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\include\CMD_SetTime.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
@@ -404,6 +407,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ConsoleEntry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CompressedCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\TrackBar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

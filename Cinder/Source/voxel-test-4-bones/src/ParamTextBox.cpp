@@ -9,7 +9,7 @@
 #include <cinder\Text.h>
 
 ParamTextBox::ParamTextBox(Type _type, ci::Vec2i _pos, ci::Vec2i _size) :
-    UiInteractable(_pos, ci::Area(0, 0, _size.x, _size.y)),
+    UiInteractable(_pos, _size),
 	NodeChild(nullptr),
     type(_type)
 {
@@ -103,7 +103,7 @@ void ParamTextBox::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	ci::gl::pushMatrices();
 	ci::gl::translate(pos);
 
-	ci::gl::drawSolidRect(ci::Rectf(0, 0, size.getWidth(), size.getHeight()));
+	ci::gl::drawSolidRect(ci::Rectf(0, 0, size.x, size.y));
 
 	ci::gl::enableAlphaBlending();
 	ci::gl::drawStringCentered(txt, ci::Vec2f(0,0), ci::ColorA(1,1,1,1));

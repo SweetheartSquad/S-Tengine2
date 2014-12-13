@@ -30,6 +30,7 @@
 #include "ToolSet.h"
 #include "ToolButton.h"
 #include "ParamTextBox.h"
+#include "TrackBar.h"
 
 #include "ConsoleGUI.h"
 
@@ -163,6 +164,8 @@ void CinderApp::setup(){
 	timelineBar->addButton(0, new ToolButton("Next", ToolButton::Type::kNORMAL, Vec2i(20, 20), nullptr, &ButtonFunctions::TIME_Increment));
 
 	timeTextBox = new ParamTextBox(ParamTextBox::Type::NUMBER, Vec2i(60, 40), Vec2i(30,20));
+
+	timelineTrackbar = new TrackBar(&UI::time, Vec2i(0, getWindowHeight()/2), Vec2i(getWindowWidth(), 15), Vec2i(10, 25), 0, 24, 0, &mMousePos);
 }
 
 void CinderApp::resize(){
@@ -227,7 +230,8 @@ void CinderApp::resize(){
 		initMultiChannelFbo(fboFront, rectFront.getInteriorArea(), 4);
 	}
 
-	consoleGUI->resize();
+	consoleGUI->resize(this);
+	timelineTrackbar->resize(this);
 }
 
 
@@ -249,6 +253,7 @@ void CinderApp::shutdown(){
 
 void CinderApp::update(){
 	// play animation or edit
+	timelineTrackbar->update(nullptr);
 	if(play){
 		Step s;
 		s.setDeltaTime(1 * UI::stepScale);
@@ -330,6 +335,9 @@ void CinderApp::draw(){
 		vox::MatrixStack t;
 		CinderRenderOptions t2(nullptr, nullptr);
 		t2.ciShader = &uiShader;
+
+		timelineTrackbar->render(&t, &t2);
+
 		uiShader.uniform("tex", true);
 		uiShader.uniform("pickingColor", Color(0.f, 0.f, 0.f));
 		consoleGUI->render(&t, &t2);
