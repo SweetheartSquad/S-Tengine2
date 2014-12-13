@@ -72,7 +72,7 @@ void main()
 			}
 			
 			//ambient
-			vec3 ambient = vec3(0,0,0);//lights[i].ambientCoefficient * fragColorTex.rgb * lights[i].intensities;
+			vec3 ambient = lights[i].ambientCoefficient * fragColorTex.rgb * lights[i].intensities;
 		
 			//diffuse
 			float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
