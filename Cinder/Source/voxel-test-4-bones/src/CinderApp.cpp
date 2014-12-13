@@ -29,6 +29,7 @@
 #include "ToolBar.h"
 #include "ToolSet.h"
 #include "ToolButton.h"
+#include "ParamTextBox.h"
 
 void CinderApp::prepareSettings(Settings *settings){
 	settings->setWindowSize(900, 600);
@@ -157,7 +158,7 @@ void CinderApp::setup(){
 	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 3", nullptr, &ButtonFunctions::CHANNEL_2));
 	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 4", nullptr, &ButtonFunctions::CHANNEL_3));
 
-	toolbar->addButton(2, new ToolButton(ToolButton::Type::RADIO, "View Joints Only", nullptr, &ButtonFunctions::VIEW_JointsOnly));
+	toolbar->addButton(2, new ToolButton(ToolButton::Type::TOGGLE, "View Joints Only", nullptr, &ButtonFunctions::VIEW_JointsOnly));
 
 	timelineBar = new ToolBar(Vec2i(5,40), false);
 
@@ -166,6 +167,7 @@ void CinderApp::setup(){
 	timelineBar->addButton(0, new ToolButton(ToolButton::Type::NORMAL, "Next", nullptr, &ButtonFunctions::TIME_Increment));
 	timelineBar->addButton(0, new ToolButton(ToolButton::Type::NORMAL, "Prev", nullptr, &ButtonFunctions::TIME_Decrement));
 
+	timeTextBox = new ParamTextBox(ParamTextBox::Type::NUMBER, Vec2i(60, 40), Vec2i(30,20));
 }
 
 void CinderApp::resize(){
@@ -238,6 +240,8 @@ void CinderApp::shutdown(){
 	toolbar = nullptr;
 	delete timelineBar;
 	timelineBar = nullptr;
+    delete timeTextBox;
+    timeTextBox = nullptr;
 	delete sceneRoot;
 	sceneRoot = nullptr;
 	delete cmdProc;
@@ -325,6 +329,7 @@ void CinderApp::draw(){
 		t2.ciShader = &uiShader;
 		toolbar->render(&t, &t2);
 		timelineBar->render(&t, &t2);
+        timeTextBox->render(&t, &t2);
 		uiShader.unbind();
 
 		params->draw();
@@ -672,7 +677,7 @@ void CinderApp::mouseMove( MouseEvent event ){
 	if(!event.isLeftDown() && !event.isRightDown()){
 		pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
 		if(NodeSelectable::pickingMap.count(uiColour) == 1){
-			ToolButton * newButt = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour));
+			UiInteractable * newButt = dynamic_cast<UiInteractable *>(NodeSelectable::pickingMap.at(uiColour));
 			if(activeButton != nullptr){
 				if(activeButton != newButt){
 					if(activeButton->isHovered){
@@ -949,7 +954,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 		UI::updateHandlePos(false);
 	}else{
 		if(NodeSelectable::pickingMap.count(clickedUiColour) == 1){
-			activeButton = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(clickedUiColour));
+			activeButton = dynamic_cast<UiInteractable *>(NodeSelectable::pickingMap.at(clickedUiColour));
 			if(activeButton != nullptr){
 				activeButton->down(this);
 			}
@@ -1115,7 +1120,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 	if(activeButton != nullptr){
 		pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
 		if(NodeSelectable::pickingMap.count(uiColour) == 1){
-			if(activeButton != dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour))){
+			if(activeButton != dynamic_cast<UiInteractable *>(NodeSelectable::pickingMap.at(uiColour))){
 				if(activeButton->isHovered){
 					activeButton->out();
 				}
@@ -1151,117 +1156,123 @@ void CinderApp::mouseUp( MouseEvent event ){
 
 void CinderApp::keyDown( KeyEvent event ){
 	if(!isMouseDown){
-		if(!event.isAltDown()){
-			if(event.isControlDown()){
-				if(!event.isShiftDown()){
-					// Ctrl + key combinations
-					switch( event.getCode() ){
-					case KeyEvent::KEY_z:
-						cmdProc->undo();
-						break;
-					case KeyEvent::KEY_y:
-						cmdProc->redo();
-						break;
-					case KeyEvent::KEY_d:
-						// Deselect all
-						if(UI::selectedNodes.size() != 0){
-							cmdProc->executeCommand(new CMD_SelectNodes(nullptr));
-						}
-						break;
-					}
-				}else{
-					// Ctrl + Shift + key combinations
-				}
-			}else if(event.isShiftDown()){
-				// Shift + key combinations
-				switch (event.getCode() ){
-				case KeyEvent::KEY_p:
-					if(UI::selectedNodes.size() > 0){
-						cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, sceneRoot));
-					}
-					break;
-				}
-			}else{
-				// Simple key
-				switch (event.getCode() ){
-				case KeyEvent::KEY_ESCAPE:
-					//shutdown();
-					quit();
-					break;
-				case KeyEvent::KEY_f:
-					setFullScreen( !isFullScreen() );
-					break;
-				case KeyEvent::KEY_F1:
-					drawParams = !drawParams;
-					if(drawParams){
-						params->maximize();
-						timelineParams->maximize();
-						voxelParams->maximize();
-					}else{
-						params->minimize();
-						timelineParams->minimize();
-						voxelParams->minimize();
-					}
-				case KeyEvent::KEY_1:
-					channel = 0;
-					break;
-				case KeyEvent::KEY_2:
-					channel = 1;
-					break;
-				case KeyEvent::KEY_3:
-					channel = 2;
-					break;
-				case KeyEvent::KEY_4:
-					channel = 3;
-					break;
-				case KeyEvent::KEY_DELETE:
-					if(UI::selectedNodes.size() > 0){
-						cmdProc->executeCommand(new CMD_DeleteJoints());
-					}
-					break;
-				case KeyEvent::KEY_p:
-					if(UI::selectedNodes.size() > 0){
-						cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, dynamic_cast<NodeParent *>(UI::selectedNodes.back())));
-					}
-					break;
-				case KeyEvent::KEY_q:
-					/*mode = SELECT;
-					params->setOptions( "UI Mode", "label=`SELECT`" );*/
-					dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(0))->pressProgrammatically(this);
-					break;
-				case KeyEvent::KEY_w:
-					mode = TRANSLATE;
-					params->setOptions( "UI Mode", "label=`TRANSLATE`" );
-					break;
-				case KeyEvent::KEY_e:
-					mode = ROTATE;
-					params->setOptions( "UI Mode", "label=`ROTATE`" );
-					break;
-				case KeyEvent::KEY_r:
-					mode = SCALE;
-					params->setOptions( "UI Mode", "label=`SCALE`" );
-					break;
-				case KeyEvent::KEY_b:
-					mode = CREATE;
-					params->setOptions( "UI Mode", "label=`CREATE`" );
-					break;
-				case KeyEvent::KEY_v:
-					mode = PAINT_VOXELS;
-					params->setOptions( "UI Mode", "label=`PAINT_VOXELS`" );
-					break;
-				}
-			}
+        ParamTextBox * activeTextBox = dynamic_cast<ParamTextBox *>(activeButton);
+        if (activeTextBox != nullptr){
+            activeTextBox->setText(event);
 		}else{
-			if(event.isControlDown()){
-				if(!event.isShiftDown()){
-					// Alt + Ctrl + key combinations
-				}
-			}else if(event.isShiftDown()){
-				// Alt + Shift + key combinations
-			}else{
-				// Alt + key combination
-			}
-		}
+		    if(!event.isAltDown()){
+			    if(event.isControlDown()){
+				    if(!event.isShiftDown()){
+					    // Ctrl + key combinations
+					    switch( event.getCode() ){
+					    case KeyEvent::KEY_z:
+						    cmdProc->undo();
+						    break;
+					    case KeyEvent::KEY_y:
+						    cmdProc->redo();
+						    break;
+					    case KeyEvent::KEY_d:
+						    // Deselect all
+						    if(UI::selectedNodes.size() != 0){
+							    cmdProc->executeCommand(new CMD_SelectNodes(nullptr));
+						    }
+						    break;
+					    }
+				    }else{
+					    // Ctrl + Shift + key combinations
+				    }
+			    }else if(event.isShiftDown()){
+				    // Shift + key combinations
+				    switch (event.getCode() ){
+				    case KeyEvent::KEY_p:
+					    if(UI::selectedNodes.size() > 0){
+						    cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, sceneRoot));
+					    }
+					    break;
+				    }
+			    }else{
+				    // Simple key
+				    switch (event.getCode() ){
+				    case KeyEvent::KEY_ESCAPE:
+					    //shutdown();
+					    quit();
+					    break;
+				    case KeyEvent::KEY_f:
+					    setFullScreen( !isFullScreen() );
+					    break;
+				    case KeyEvent::KEY_F1:
+					    drawParams = !drawParams;
+					    if(drawParams){
+						    params->maximize();
+						    timelineParams->maximize();
+						    voxelParams->maximize();
+					    }else{
+						    params->minimize();
+						    timelineParams->minimize();
+						    voxelParams->minimize();
+					    }
+				    case KeyEvent::KEY_1:
+					    channel = 0;
+					    break;
+				    case KeyEvent::KEY_2:
+					    channel = 1;
+					    break;
+				    case KeyEvent::KEY_3:
+					    channel = 2;
+					    break;
+				    case KeyEvent::KEY_4:
+					    channel = 3;
+					    break;
+				    case KeyEvent::KEY_DELETE:
+					    if(UI::selectedNodes.size() > 0){
+						    cmdProc->executeCommand(new CMD_DeleteJoints());
+					    }
+					    break;
+				    case KeyEvent::KEY_p:
+					    if(UI::selectedNodes.size() > 0){
+						    cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, dynamic_cast<NodeParent *>(UI::selectedNodes.back())));
+					    }
+					    break;
+				    case KeyEvent::KEY_q:
+					    /*mode = SELECT;
+					    params->setOptions( "UI Mode", "label=`SELECT`" );*/
+					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(0))->pressProgrammatically(this);
+					    break;
+				    case KeyEvent::KEY_w:
+					    mode = TRANSLATE;
+					    params->setOptions( "UI Mode", "label=`TRANSLATE`" );
+					    break;
+				    case KeyEvent::KEY_e:
+					    mode = ROTATE;
+					    params->setOptions( "UI Mode", "label=`ROTATE`" );
+					    break;
+				    case KeyEvent::KEY_r:
+					    mode = SCALE;
+					    params->setOptions( "UI Mode", "label=`SCALE`" );
+					    break;
+				    case KeyEvent::KEY_b:
+					    mode = CREATE;
+					    params->setOptions( "UI Mode", "label=`CREATE`" );
+					    break;
+				    case KeyEvent::KEY_v:
+					    mode = PAINT_VOXELS;
+					    params->setOptions( "UI Mode", "label=`PAINT_VOXELS`" );
+					    break;
+				    }
+			    }
+		    }else{
+			    if(event.isControlDown()){
+				    if(!event.isShiftDown()){
+					    // Alt + Ctrl + key combinations
+				    }
+			    }else if(event.isShiftDown()){
+				    // Alt + Shift + key combinations
+			    }else{
+				    // Alt + key combination
+			    }
+		    }
+		
+        }
 		UI::updateHandlePos(false);
 	}
 }

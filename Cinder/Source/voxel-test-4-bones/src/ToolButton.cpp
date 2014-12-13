@@ -8,13 +8,9 @@
 #include <cinder\gl\gl.h>
 
 ToolButton::ToolButton(Type _type, std::string _label, void (*_downCallback)(CinderApp * _app), void (*_upCallback)(CinderApp * _app)):
+	UiInteractable(ci::Vec2i(0,0), ci::Area(0,0,0,0)),
 	NodeChild(nullptr),
-	NodeSelectable(),
 	label(_label),
-	isHovered(false),
-	isDown(false),
-	isActive(false),
-	displayColor((float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f),
 	type(_type),
 	downCallback(_downCallback),
 	upCallback(_upCallback)
@@ -22,15 +18,12 @@ ToolButton::ToolButton(Type _type, std::string _label, void (*_downCallback)(Cin
 
 }
 
-void ToolButton::down(CinderApp * _app){
-	isHovered = true;
-	isDown = true;
+void ToolButton::downHandler(CinderApp * _app){
 	if(downCallback != nullptr){
 		downCallback(_app);
 	}
 }
-void ToolButton::up(CinderApp * _app){
-	isDown = false;
+void ToolButton::upHandler(CinderApp * _app){
 	switch (type){
 	case ToolButton::NORMAL:
 		isActive = false;
@@ -58,12 +51,6 @@ void ToolButton::up(CinderApp * _app){
 			upCallback(_app);
 		}
 	}
-}
-void ToolButton::in(){
-	isHovered = true;
-}
-void ToolButton::out(){
-	isHovered = false;
 }
 
 void ToolButton::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
@@ -98,11 +85,4 @@ void ToolButton::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 	}
 
 	ci::gl::drawSolidRect(ci::Rectf(0,0,1,1));
-}
-
-void ToolButton::pressProgrammatically(CinderApp * _app){
-	in();
-	down(_app);
-	up(_app);
-	out();
 }
