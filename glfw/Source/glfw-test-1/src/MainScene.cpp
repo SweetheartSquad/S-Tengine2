@@ -13,7 +13,7 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "GLFWRenderOptions.h"
-#include "Camera.h"
+#include "PerspectiveCamera.h"
 #include <BaseComponentShader.h>
 #include <DiffuseShaderComponent.h>
 #include <ShadowShaderComponent.h>
