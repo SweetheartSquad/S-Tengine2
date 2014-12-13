@@ -5,8 +5,8 @@
 #include "Texture.h"
 #include "Material.h"
 #include "MatrixStack.h"
-#include <glm/gtc/matrix_transform.inl>
 #include "GLFWRenderOptions.h"
+#include "Transform.h"
 
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	drawMode(drawMode),
@@ -210,8 +210,8 @@ void MeshInterface::configureLights(vox::MatrixStack * _matrixStack, RenderOptio
 		std::string att = GLUtils::buildGLArrayReferenceString("lights[].attenuation", i);
 		GLuint typeUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), typ.c_str());
 		glUniform1i(typeUniformLocation, static_cast<int>(_renderOption->lights->at(i)->data.type));
-		GLuint lightUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), pos.c_str());
-		glUniform3f(lightUniformLocation, _renderOption->lights->at(i)->data.position.x, _renderOption->lights->at(i)->data.position.y, _renderOption->lights->at(i)->data.position.z);
+		GLuint positionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), pos.c_str());
+		glUniform3f(positionUniformLocation, _renderOption->lights->at(i)->transform->translationVector.x, _renderOption->lights->at(i)->transform->translationVector.y, _renderOption->lights->at(i)->transform->translationVector.z);
 		GLuint intensitiesUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), ins.c_str());
 		glUniform3f(intensitiesUniformLocation, _renderOption->lights->at(i)->data.intensities.x, _renderOption->lights->at(i)->data.intensities.y, _renderOption->lights->at(i)->data.intensities.z);
 		GLuint ambientUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), amb.c_str());

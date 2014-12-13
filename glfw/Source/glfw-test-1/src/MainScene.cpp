@@ -137,18 +137,19 @@ MainScene::MainScene(Game * _game):
 	cube4->mesh->dirty = true;
 	loaded1->mesh->dirty = true;
 
-	tLight = new DirectionalLight(glm::vec3(1.f, 1.5f, 1.f),
-		glm::vec3(0.5f, 0.5f, 0.5f),
-		0.2f);
+	tLight = new DirectionalLight(glm::vec3(1.f, 0.8f, 0.6f),
+		glm::vec3(0.6f, 0.2f, 0.f),
+		0.06f);
 
-	/*PointLight * tLight2 = new PointLight(glm::vec3(1.f, -1.5, 1.f),
-		glm::vec3(0.5f, 0.5f, 0.5f),
+	PointLight * tLight2 = new PointLight(glm::vec3(1.f, -1.5, 1.f),
+		glm::vec3(0.1f, 0.2f, 0.8f),
 		0.2f,
 		0.005f);
 
-	tLight2->transform->translateX(2);*/
+	tLight2->transform->translateX(-2);
+	tLight->transform->translateX(2);
 	lights.push_back(tLight);
-	//lights.push_back(tLight2);
+	lights.push_back(tLight2);
 
 	FakeAnimation * cat = new FakeAnimation(new Transform(), texShader);
 	/*cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/01.vox")));

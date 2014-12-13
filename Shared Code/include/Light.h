@@ -11,12 +11,11 @@ enum class LightType {
 
 struct LightData {
 	LightType type;
-	glm::vec3 position;
 	glm::vec3 intensities;
 	float ambientCoefficient;
 	float attenuation;
 
-	LightData(LightType _type, glm::vec3 _position, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation);
+	LightData(LightType _type, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation);
 };
 
 /**************************************************************************************************
@@ -29,14 +28,8 @@ struct LightData {
 class Light abstract : public NodeTransformable{
 public:
 
-	explicit Light(LightType _type, glm::vec3 position, glm::vec3 intensities, float ambientCoefficient, float attenuation, Transform * _transform = nullptr);
+	explicit Light(LightType _type, glm::vec3 _position, glm::vec3 intensities, float ambientCoefficient, float attenuation, Transform * _transform = nullptr);
 	~Light();
-
-	/**
-	* Updates the light data.position with its transforms
-	* translation vector
-	*/
-	void update();
 
 	/**
 	* The data struct which is passed to the shader

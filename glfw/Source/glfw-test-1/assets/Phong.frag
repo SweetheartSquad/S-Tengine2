@@ -88,7 +88,7 @@ void main()
 				specularCoefficient = pow(max(0.0,dot(reflectDirection, viewDirection)), materials[j].shininess);
 			}
 			vec3 specular = specularCoefficient * materials[j].specularColor * lights[i].intensities;
-			specular = clamp(specular, 0.0, 1.0);
+			//specular = clamp(specular, 0.0, 1.0);
 		
 			//linear color (color before gamma correction)
 			vec3 linearColor = ambient + attenuation * (diffuse + specular);
@@ -99,6 +99,6 @@ void main()
 			outColorTemp = outColorTemp + vec4(gammaColor, 1);
 		}
 	}
-
 	outColor = outColorTemp;
+	outColor = min(outColor, 1.0);
 }
