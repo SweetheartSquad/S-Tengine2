@@ -116,8 +116,6 @@ public:
 	//params
 	bool drawParams;
 	params::InterfaceGlRef params;
-	params::InterfaceGlRef timelineParams;
-	params::InterfaceGlRef voxelParams;
 
 	ToolBar * toolbar;
 	ToolBar * timelineBar;

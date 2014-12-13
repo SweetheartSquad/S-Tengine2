@@ -20,9 +20,9 @@ void ToolSet::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderSta
 				ci::gl::translate(iconPos);
 				tb->render(_matrixStack, _renderStack);
 				if(dynamic_cast<ToolBar *>(parent)->vertical){
-					iconPos.y = tb->size.y;
+					iconPos.y = tb->size.y+2;
 				}else{
-					iconPos.x = tb->size.x;
+					iconPos.x = tb->size.x+2;
 				}
 			}
 		}
@@ -49,7 +49,7 @@ unsigned long int ToolSet::getWidth(){
 			if(dynamic_cast<ToolBar *>(parent)->vertical){
 				res = std::max(res, tb->size.x);
 			}else{
-				res += tb->size.x;
+				res += tb->size.x+2;
 			}
 		}
 	}
@@ -61,7 +61,7 @@ unsigned long int ToolSet::getHeight(){
 		ToolButton * tb = dynamic_cast<ToolButton *>(children.at(i));
 		if(tb != nullptr){
 			if(dynamic_cast<ToolBar *>(parent)->vertical){
-				res += tb->size.y;
+				res += tb->size.y+2;
 			}else{
 				res = std::max(res, tb->size.y);
 			}

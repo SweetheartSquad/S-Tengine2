@@ -22,9 +22,9 @@ void ToolBar::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderSta
 				ci::gl::translate(setPos);
 				ts->render(_matrixStack, _renderStack);
 				if(vertical){
-					setPos.y = ts->getHeight();
+					setPos.y = ts->getHeight()+20;
 				}else{
-					setPos.x = ts->getWidth();
+					setPos.x = ts->getWidth()+20;
 				}
 			}
 		}

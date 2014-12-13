@@ -57,55 +57,47 @@ void CinderApp::setup(){
 	translateSpace = kWORLD;
 	rotateSpace = kOBJECT;
 	scaleSpace = kOBJECT;
+	
+	channel = 0;
+
+	mode = kCREATE;
 
 	drawParams = true;
-	params = params::InterfaceGl::create( getWindow(), "General", toPixels( Vec2i( 175, 250 ) ), ColorA(0.6f, 0.3f, 0.3f, 0.4f));
-	params->addText( "UI Mode", "label=`CREATE`" );
-	
-	params->addParam("Translate Space", (int *)&translateSpace, "min=0 max=1");
-	params->addParam("Rotate Space", (int *)&rotateSpace, "min=0 max=1");
-	params->addParam("Scale Space", (int *)&scaleSpace, "min=0 max=1");
 
-	params->addSeparator();
-
-	params->addParam("Directory", &directory);
-	params->addParam("File Name", &fileName);
-	params->addButton("Save", std::bind( &CinderApp::saveSkeleton, this ));
-	params->addSeparator();
-	params->addParam("Bones File", &filePath);
-	params->addButton("Load", std::bind(&CinderApp::loadSkeleton, this));
-	params->addSeparator();
-	params->addParam("Message", &message, "", true);
-
-	timelineParams = params::InterfaceGl::create( getWindow(), "Animation", toPixels(Vec2i(175,150)), ColorA(0.3f, 0.6f, 0.3f, 0.4f));
-	timelineParams->minimize();
-	timelineParams->addParam("Time", &UI::time, "", true);
-
-	timelineParams->addParam("Interpolation", UI::interpolationNames, &UI::interpolationValue);
-	timelineParams->addButton("Add/Edit Keyframe", std::bind(&CinderApp::setKeyframe, this));
-
-	timelineParams->addSeparator();
-	timelineParams->addButton("togglePlay", std::bind(&CinderApp::togglePlay, this));
-	timelineParams->addText("Status: ", "label=`STOPPED`");
-	timelineParams->maximize();
-	
-	
+	viewJointsOnly = false;
 	voxelSelectMode = false;
 	voxelPreviewMode = false;
 	voxelPreviewResolution = 0.1f;
 	voxelSphereRadius = 0.1f;
 	voxelPaintSpacing = 1.f;
 
-	viewJointsOnly = false;
+	params = params::InterfaceGl::create( getWindow(), "General", toPixels( Vec2i( 175, 325 ) ), ColorA(0.6f, 0.3f, 0.3f, 0.4f));
+	
+	params->addText("Animation");
+	params->addParam("Time", &UI::time, "", true);
+	params->addParam("Interpolation", UI::interpolationNames, &UI::interpolationValue);
+	params->addButton("Add/Edit Keyframe", std::bind(&CinderApp::setKeyframe, this));
+	
+	params->addSeparator();
+	params->addText("Voxels");
 
-	voxelParams = params::InterfaceGl::create(getWindow(), "Voxel", toPixels(Vec2i(180, 125)), ColorA(0.3f, 0.3f, 0.6f, 0.4f));
-	voxelParams->addParam("Selectable", &voxelSelectMode);
-	voxelParams->addParam("Preview", &voxelPreviewMode);
-	voxelParams->addParam("Resolution", &voxelPreviewResolution, "min=0.01, step=0.01");
-	voxelParams->addParam("Radius", &voxelSphereRadius, "min=0.01, step=0.01");
-	voxelParams->addParam("Paint Spacing", &voxelPaintSpacing, "min=0.01, step=0.5");
-	voxelParams->maximize();
+	params->addParam("Resolution", &voxelPreviewResolution, "min=0.01, step=0.01");
+	params->addParam("Radius", &voxelSphereRadius, "min=0.01, step=0.01");
+	params->addParam("Paint Spacing", &voxelPaintSpacing, "min=0.01, step=0.5");
 
+	params->addSeparator();
+	params->addText("Save");
+
+	params->addParam("Directory", &directory);
+	params->addParam("File Name", &fileName);
+	params->addButton("Save", std::bind( &CinderApp::saveSkeleton, this ));
+	params->addSeparator();
+	params->addText("Load");
+	params->addParam("Bones File", &filePath);
+	params->addButton("Load", std::bind(&CinderApp::loadSkeleton, this));
+	params->addSeparator();
+	params->addParam("Message", &message, "", true);
+	
 	consoleGUI = new ConsoleGUI(15, &cmdProc->consoleEntries, 3);
 
 	// note: we will setup our camera in the 'resize' function,
@@ -117,9 +109,6 @@ void CinderApp::setup(){
 	// set background color
 	mColorBackground = Color(0.0f, 0.0f, 0.0f);
 	
-	channel = 0;
-
-	mode = kCREATE;
 
 
 	//// test animation
@@ -131,42 +120,51 @@ void CinderApp::setup(){
 	cmdProc->executeCommand(new CMD_CreateJoint(&joints, Vec3f(0,1,0), joints.at(0)));
 
 	joints.at(0)->translateZ.tweens = tweens;*/
-
+	
+	timelineTrackbar = new TrackBar(&UI::time, Vec2i(0, 5), Vec2i(getWindowWidth(), 15), Vec2i(10, 25), 0, 24, 1, &mMousePos);
 
 	play = false;
 	previousTime = 0;
-	toolbar = new ToolBar(Vec2i(5,5), false);
+	toolbar = new ToolBar(Vec2i(5, 30), true);
 	// Selecting, Creating, Painting, and Transformations
 	toolbar->addSet(new ToolSet());
-	// Channels
-	toolbar->addSet(new ToolSet());
+
+	toolbar->addButton(0, new ToolButton("Select", ToolButton::Type::kRADIO, Vec2i(40, 40), nullptr, &ButtonFunctions::MODE_Select));
+	toolbar->addButton(0, new ToolButton("Translate", ToolButton::Type::kRADIO, Vec2i(40, 40), nullptr, &ButtonFunctions::MODE_Translate));
+	toolbar->addButton(0, new ToolButton("Rotate", ToolButton::Type::kRADIO, Vec2i(40, 40), nullptr, &ButtonFunctions::MODE_Rotate));
+	toolbar->addButton(0, new ToolButton("Scale", ToolButton::Type::kRADIO, Vec2i(40, 40), nullptr, &ButtonFunctions::MODE_Scale));
+	toolbar->addButton(0, new ToolButton("Joint", ToolButton::Type::kRADIO, Vec2i(40, 40), nullptr, &ButtonFunctions::MODE_CreateJoints));
+	toolbar->addButton(0, new ToolButton("Voxel", ToolButton::Type::kRADIO, Vec2i(40, 40), nullptr, &ButtonFunctions::MODE_PaintVoxels));
+
+	timelineBar = new ToolBar(Vec2i(50, 30), false);
+	
+	// timeline controls
+	timelineBar->addSet(new ToolSet());
+	// channel
+	timelineBar->addSet(new ToolSet());
 	// View Joints, Voxels, or All
-	toolbar->addSet(new ToolSet());
-
-	toolbar->addButton(0, new ToolButton("Select", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_Select));
-	toolbar->addButton(0, new ToolButton("Translate", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_Translate));
-	toolbar->addButton(0, new ToolButton("Rotate", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_Rotate));
-	toolbar->addButton(0, new ToolButton("Scale", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_Scale));
-	toolbar->addButton(0, new ToolButton("Joint", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_CreateJoints));
-	toolbar->addButton(0, new ToolButton("Voxel", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_PaintVoxels));
-										 
-	toolbar->addButton(1, new ToolButton("FBO:1", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_0));
-	toolbar->addButton(1, new ToolButton("FBO:2", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_1));
-	toolbar->addButton(1, new ToolButton("FBO:3", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_2));
-	toolbar->addButton(1, new ToolButton("FBO:4", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_3));
-
-	toolbar->addButton(2, new ToolButton("View Joints Only", ToolButton::Type::kTOGGLE, Vec2i(20, 20), nullptr, &ButtonFunctions::VIEW_JointsOnly));
-
-	timelineBar = new ToolBar(Vec2i(5,40), false);
-
+	timelineBar->addSet(new ToolSet());
+	// coordinate-space
 	timelineBar->addSet(new ToolSet());
 
     timelineBar->addButton(0, new ToolButton("Prev", ToolButton::Type::kNORMAL, Vec2i(20, 20), nullptr, &ButtonFunctions::TIME_Decrement));
+	timelineBar->addButton(0, new ToolButton("Play", ToolButton::Type::kTOGGLE, Vec2i(20, 20), nullptr, &ButtonFunctions::TIME_PlayPause));
 	timelineBar->addButton(0, new ToolButton("Next", ToolButton::Type::kNORMAL, Vec2i(20, 20), nullptr, &ButtonFunctions::TIME_Increment));
+								 
+	timelineBar->addButton(1, new ToolButton("FBO:1", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_0));
+	timelineBar->addButton(1, new ToolButton("FBO:2", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_1));
+	timelineBar->addButton(1, new ToolButton("FBO:3", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_2));
+	timelineBar->addButton(1, new ToolButton("FBO:4", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_3));
+	
+	timelineBar->addButton(2, new ToolButton("View Joints Only", ToolButton::Type::kTOGGLE, Vec2i(20, 20), nullptr, &ButtonFunctions::VOXEL_ShowHide));
+	timelineBar->addButton(2, new ToolButton("Voxel Preview", ToolButton::Type::kTOGGLE, Vec2i(20, 20), nullptr, &ButtonFunctions::VOXEL_Preview));
+	timelineBar->addButton(2, new ToolButton("Voxel Preview", ToolButton::Type::kTOGGLE, Vec2i(20, 20), nullptr, &ButtonFunctions::VOXEL_Selectable));
 
-	timeTextBox = new ParamTextBox(ParamTextBox::Type::NUMBER, Vec2i(60, 40), Vec2i(30,20));
+	timelineBar->addButton(3, new ToolButton("Object", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::SPACE_Object));
+	timelineBar->addButton(3, new ToolButton("World", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::SPACE_World));
 
-	timelineTrackbar = new TrackBar(&UI::time, Vec2i(0, getWindowHeight()/2), Vec2i(getWindowWidth(), 15), Vec2i(10, 25), 0, 24, 1, &mMousePos);
+	//timeTextBox = new ParamTextBox(ParamTextBox::Type::NUMBER, Vec2i(60, 40), Vec2i(30,20));
+
 }
 
 void CinderApp::resize(){
@@ -242,8 +240,8 @@ void CinderApp::shutdown(){
 	toolbar = nullptr;
 	delete timelineBar;
 	timelineBar = nullptr;
-    delete timeTextBox;
-    timeTextBox = nullptr;
+   // delete timeTextBox;
+   // timeTextBox = nullptr;
 	delete sceneRoot;
 	sceneRoot = nullptr;
 	delete cmdProc;
@@ -382,12 +380,10 @@ void CinderApp::draw(){
 		consoleGUI->render(&t, &t2);
 		toolbar->render(&t, &t2);
 		timelineBar->render(&t, &t2);
-        timeTextBox->render(&t, &t2);
+        //timeTextBox->render(&t, &t2);
 		uiShader.unbind();
 
 		params->draw();
-		timelineParams->draw();
-		voxelParams->draw();
 
 		gl::disableAlphaBlending();
 	fboUI.unbindFramebuffer();
@@ -1243,12 +1239,8 @@ void CinderApp::keyDown( KeyEvent event ){
 					    drawParams = !drawParams;
 					    if(drawParams){
 						    params->maximize();
-						    timelineParams->maximize();
-						    voxelParams->maximize();
 					    }else{
 						    params->minimize();
-						    timelineParams->minimize();
-						    voxelParams->minimize();
 					    }
 				    case KeyEvent::KEY_1:
 					    channel = 0;
@@ -1394,15 +1386,6 @@ void CinderApp::snapParams(){
 	paramsOptions << "position='" << getWindowWidth() - 175 - 5 << " " << getWindowHeight() / 2.5f << "'";
 	string blah = paramsOptions.str();
 	params->setOptions("", paramsOptions.str());
-	//params->
-
-	stringstream timelineParamsOptions;
-	timelineParamsOptions << "position='5 " << getWindowHeight() / 2 << "'";
-	timelineParams->setOptions("", timelineParamsOptions.str());
-
-	stringstream voxelParamsOptions;
-	voxelParamsOptions << "position='5 " << 1.9 * (getWindowHeight() / 2.5) << "'";
-	voxelParams->setOptions("", voxelParamsOptions.str());
 }
 void CinderApp::saveSkeleton() {
 	try{
@@ -1446,18 +1429,6 @@ void CinderApp::setKeyframe(){
 			}
 		}
 	}
-}
-
-void CinderApp::togglePlay(){
-	if (!play){
-		timelineParams->setOptions( "togglePlay", "label=`PLAYING`" );
-		cmdProc->startCompressing();
-	}else{
-		timelineParams->setOptions( "togglePlay", "label=`STOPPED`" );
-		cmdProc->endCompressing();
-	}
-
-	play = !play;
 }
 
 CINDER_APP_BASIC( CinderApp, RendererGl )
