@@ -7,7 +7,8 @@
 #include "Transform.h"
 
 PerspectiveCamera::PerspectiveCamera():
-	Camera()
+	Camera(),
+	mouse(&Mouse::getInstance())
 {
 	transform->translate(-5.f, 0.f, 0.f);
 	transform->translate(0.f, 3.f, 0.f);

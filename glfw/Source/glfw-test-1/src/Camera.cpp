@@ -15,8 +15,8 @@ Camera::Camera():
 	rightVectorLocal(0.f, 0.f, 1.f),
 	rightVectorRotated(0.f, 0.f, 1.f),
 	fieldOfView(60.0f),
-	yaw(-30.f),
-	pitch(0.0f)
+	pitch(0.0f),
+	yaw(-30.f)
 {
 	transform->translate(-5.f, 0.f, 0.f);
 	transform->translate(0.f, 3.f, 0.f);
