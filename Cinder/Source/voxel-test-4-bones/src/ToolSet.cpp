@@ -46,7 +46,11 @@ unsigned long int ToolSet::getWidth(){
 	for(unsigned long int i = 0; i < children.size(); ++i){
 		ToolButton * tb = dynamic_cast<ToolButton *>(children.at(i));
 		if(tb != nullptr){
-			res = std::max(res, tb->textbox.getSize().x);
+			if(dynamic_cast<ToolBar *>(parent)->vertical){
+				res = std::max(res, tb->textbox.getSize().x);
+			}else{
+				res += tb->textbox.getSize().x;
+			}
 		}
 	}
 	return res;
@@ -56,7 +60,11 @@ unsigned long int ToolSet::getHeight(){
 	for(unsigned long int i = 0; i < children.size(); ++i){
 		ToolButton * tb = dynamic_cast<ToolButton *>(children.at(i));
 		if(tb != nullptr){
-			res += tb->textbox.getSize().y;
+			if(dynamic_cast<ToolBar *>(parent)->vertical){
+				res += tb->textbox.getSize().y;
+			}else{
+				res = std::max(res, tb->textbox.getSize().y);
+			}
 		}
 	}
 	return res;

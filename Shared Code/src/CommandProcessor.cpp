@@ -16,8 +16,15 @@ CommandProcessor::CommandProcessor(void) :
 
 bool CommandProcessor::executeCommand(Command * c){
 	if(currentCompressedCommand != nullptr){
-		currentCompressedCommand->subCmdProc.executeCommand(c);
-		currentCompressedCommand->firstRun = true;
+		if(!currentCompressedCommand->subCmdProc.executeCommand(c)){
+			error("Compression command failed: sub-command error bubbled up");
+			currentCompressedCommand->subCmdProc.undoAll();
+			endCompressing();
+			currentCompressedCommand->firstRun = false;
+			return false;
+		}else{
+			currentCompressedCommand->firstRun = true;
+		}
 	}else{
 		redoStack.push_back(c);
 		if(redo()){

@@ -36,7 +36,9 @@ public:
 	void update(Step * _step) override;
     // Since voxels can be parented to joints, but joints don't have voxels as children, we are overriding the add and remove child functions
     bool addChild(NodeChild * _child);
+    // Since voxels can be parented to joints, but joints don't have voxels as children, we are overriding the add and remove child functions
     void addChildAtIndex(NodeChild * _child, int _index);
-    unsigned long int removeChild(NodeChild * _child);
+   // Since voxels can be parented to joints, but joints don't have voxels as children, we are overriding the add and remove child functions
+     unsigned long int removeChild(NodeChild * _child);
 };
 typedef std::pair<uint32_t, Joint*> JointPair;

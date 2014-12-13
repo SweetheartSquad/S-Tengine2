@@ -31,10 +31,10 @@ Joint::~Joint(){
 }
 
 void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
-	CinderRenderOptions * r = (CinderRenderOptions *)_renderStack;
-	if(r->ciShader != nullptr){
+	CinderRenderOptions * cro = (CinderRenderOptions *)_renderStack;
+	if(cro->ciShader != nullptr){
 		//gl::enableWireframe();
-		r->ciShader->uniform("pickingColor", Color::hex(pickingColor));
+		cro->ciShader->uniform("pickingColor", Color::hex(pickingColor));
 		//colour
 		float depth = calculateDepth();
 		ColorA color(
@@ -62,57 +62,20 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 			gl::scale(transform->scaleVector.x, transform->scaleVector.y, transform->scaleVector.z);
 			_matrixStack->applyMatrix(transform->getModelMatrix());
 
-			glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
+			glUniformMatrix4fv(cro->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 			gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 
 			//draw voxels
-            if(!r->viewJointsOnly){
-			    float resolution = ((CinderRenderOptions *)_renderStack)->voxelPreviewResolution;
+            if(!cro->viewJointsOnly){
+			    float resolution = cro->voxelPreviewResolution;
 			    for(unsigned long int i = 0; i < voxels.size(); ++i){
-				    gl::pushModelView();
-				    _matrixStack->pushMatrix();
-					    gl::setMatrices(*r->ciCam);
-
-					    glm::vec4 voxelPos(voxels.at(i)->getPos().x, voxels.at(i)->getPos().y, voxels.at(i)->getPos().z, 1);
-					
-					    glm::vec4 pos = _matrixStack->getCurrentMatrix() * voxelPos;
-
-
-					    if(((CinderRenderOptions *)_renderStack)->voxelPreviewMode){
-						    // Snap to grid
-						    glm::vec4 posDif(
-							    fmod(pos.x, resolution),
-							    fmod(pos.y, resolution),
-							    fmod(pos.z, resolution),
-							    0);
-						    pos -= posDif;
-					    }
-					
-					    for(unsigned long int x = 0; x < 4; ++x){
-						    for(unsigned long int y = 0; y < 4; ++y){
-							    _matrixStack->currentModelMatrix[x][y] = x == y ? 1.f : 0.f;
-						    }
-					    }
-
-					    gl::translate(pos.x, pos.y, pos.z);
-					    _matrixStack->translate(glm::translate(glm::vec3(pos.x, pos.y, pos.z)));
-					
-					    glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
-					    r->ciShader->uniform("pickingColor", Color::hex(voxels.at(i)->pickingColor));
-					
-					    if(((CinderRenderOptions *)_renderStack)->voxelPreviewMode){
-						    gl::drawCube(Vec3f(0.f, 0.f, 0.f), Vec3f(resolution*2,resolution*2,resolution*2));
-					    }else{
-						    gl::drawSphere(Vec3f(0.f, 0.f, 0.f), ((CinderRenderOptions *)_renderStack)->voxelSphereRadius);
-					    }
-				    gl::popModelView();
-				    _matrixStack->popMatrix();
+					voxels.at(i)->render(_matrixStack, _renderStack);
 			    }
 			}
 		
 			//draw bones
 			gl::color(color);
-			r->ciShader->uniform("pickingColor", Color::hex(pickingColor));
+			cro->ciShader->uniform("pickingColor", Color::hex(pickingColor));
 			for(NodeChild * child : children){
 				Vec3d cinderTrans(
 					dynamic_cast<NodeTransformable *>(child)->transform->translationVector.x,
@@ -124,22 +87,15 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 				gl::pushMatrices();
 				_matrixStack->pushMatrix();
 					gl::rotate(boneDir);
-					glm::quat tempOrientation;
-					tempOrientation.x = boneDir.v.x;
-					tempOrientation.y = boneDir.v.y;
-					tempOrientation.z = boneDir.v.z;
-					tempOrientation.w = boneDir.w;
-					_matrixStack->rotate(glm::toMat4(tempOrientation));
+					_matrixStack->rotate(glm::toMat4(glm::quat(boneDir.w, boneDir.v.x, boneDir.v.y, boneDir.v.z)));
 			
-					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
+					glUniformMatrix4fv(cro->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 					gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
 
 					gl::rotate(Vec3f(0.f, 90.f, 0.f));
-
-					glm::quat tempOrientation2(glm::vec3(0.f, 90.f, 0.f));
-					_matrixStack->rotate(glm::toMat4(tempOrientation2));
+					_matrixStack->rotate(glm::toMat4(glm::quat(glm::vec3(0.f, 90.f, 0.f))));
 			
-					glUniformMatrix4fv(r->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
+					glUniformMatrix4fv(cro->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 					gl::drawSolidTriangle(Vec2f(0.05f, 0.f), Vec2f(-0.05f, 0.f), Vec2f(0.f, cinderTrans.length()));
 
 				gl::popMatrices();

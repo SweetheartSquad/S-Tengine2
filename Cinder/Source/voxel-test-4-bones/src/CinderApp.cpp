@@ -431,35 +431,20 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		jointShader.uniform("viewMatrix", cam.getModelViewMatrix());
 		jointShader.uniform("projectionMatrix", cam.getProjectionMatrix());
 
-		CinderRenderOptions r(nullptr, nullptr);
-		r.ciCam = &cam;
-		r.ciShader = &jointShader;
-		r.voxelPreviewMode = voxelPreviewMode;
-		r.voxelPreviewResolution = voxelPreviewResolution;
-		r.voxelSphereRadius = voxelSphereRadius;
-		r.viewJointsOnly = viewJointsOnly;
+		CinderRenderOptions cro(nullptr, nullptr);
+		cro.ciCam = &cam;
+		cro.ciShader = &jointShader;
+		cro.voxelPreviewMode = voxelPreviewMode;
+		cro.voxelPreviewResolution = voxelPreviewResolution;
+		cro.voxelSphereRadius = voxelSphereRadius;
+		cro.viewJointsOnly = viewJointsOnly;
 
 		for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
 			NodeRenderable * nr = dynamic_cast<NodeRenderable *>(sceneRoot->children.at(i));
 			if(nr != nullptr){
-				nr->render(&mStack, &r);
+				nr->render(&mStack, &cro);
 			}
 		}
-
-		//jointShader.uniform("offset", true);
-		/*for(unsigned long int i = 0; i < paintPoints.size(); ++i){
-			gl::pushMatrices();
-			vox::pushMatrix();
-			Transform t;
-			t.translate(paintPoints.at(i).x, paintPoints.at(i).y, paintPoints.at(i).z);
-			vox::translate(t.getTranslationMatrix());
-			gl::translate(paintPoints.at(i));
-			
-			glUniformMatrix4fv(jointShader.getUniformLocation("modelMatrix"), 1, GL_FALSE, &vox::currentModelMatrix[0][0]);
-			gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.1, 16);
-			gl::popMatrices();
-			vox::popMatrix();
-		}*/
 
 		// unbind shader
 		jointShader.unbind();
@@ -516,16 +501,14 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 						gl::translate(absPos.x, absPos.y, absPos.z);
 						gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.06f);
 						
-						gl::enableWireframe();
+						glBegin(GL_POINTS);
 						for(unsigned long int i = 0; i < j->voxels.size(); ++i){
 							Voxel * v = dynamic_cast<Voxel*>(j->voxels.at(i));
 							if(v != nullptr){
-								glBegin(GL_POINTS);
 								glVertex3f(v->transform->translationVector.x, v->transform->translationVector.y, v->transform->translationVector.z);
-								glEnd();
 							}
 						}
-						gl::disableWireframe();
+						glEnd();
 
 					gl::popMatrices();
 				}else{
