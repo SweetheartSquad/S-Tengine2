@@ -9,7 +9,7 @@
 #include <cinder\gl\Texture.h>
 
 ToolButton::ToolButton(std::string _label, Type _type, ci::Vec2i _iconSize, void (*_downCallback)(CinderApp * _app), void (*_upCallback)(CinderApp * _app)):
-	UiInteractable(ci::Vec2i(0,0), ci::Area(0,0,0,0)),
+	UiInteractable(ci::Vec2i(0,0), _iconSize),
 	NodeChild(nullptr),
 	NodeSelectable(),
 	displayColor((float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f, 1.f),
@@ -60,33 +60,36 @@ void ToolButton::upHandler(CinderApp * _app){
 }
 
 void ToolButton::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+	ci::Color color;
 	// button rendering logic (colour-based atm, replace with textures later)
 	if(isDown){
 		if(isActive){
 			if(isHovered){
 				// down + active
-				textbox.setBackgroundColor(ci::ColorA(0.25f, 0.25f, 0.25f, 1.f));
+				color = ci::Color(0.25f, 0.25f, 0.25f);
 			}else{
 				// down + active, but moused out (show active)
-				textbox.setBackgroundColor(ci::ColorA(0.5f, 0.5f, 0.5f, 1.f));
+				color = ci::Color(0.5f, 0.5f, 0.5f);
 			}
 		}else if(isHovered){
 			// down
-			textbox.setBackgroundColor(ci::ColorA(0.25f, 0.25f, 0.25f, 1.f));
+			color = ci::ColorA(0.25f, 0.25f, 0.25f);
 		}else{
 			// down, but moused out (show up)
-			textbox.setBackgroundColor(displayColor);
+			color = displayColor;
 		}
 	}else if(isHovered){
 		// over
-		textbox.setBackgroundColor(ci::ColorA(1.f, 1.f, 1.f, 1.f));
+		color = ci::Color(1.f, 1.f, 1.f);
 	}else if(isActive){
 		// active
-		textbox.setBackgroundColor(ci::ColorA(0.5f, 0.5f, 0.5f, 1.f));
+		color = ci::Color(0.5f, 0.5f, 0.5f);
 	}else{
 		// up
-		textbox.setBackgroundColor(displayColor);
+		color = displayColor;
 	}
+
+	textbox.setBackgroundColor(color);
 
 	((CinderRenderOptions *)_renderStack)->ciShader->uniform("pickingColor", ci::Color::hex(pickingColor));
 	ci::gl::color(1.f, 1.f, 1.f, 1.f);

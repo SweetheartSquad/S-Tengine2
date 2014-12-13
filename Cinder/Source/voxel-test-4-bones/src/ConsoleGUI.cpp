@@ -4,7 +4,7 @@
 
 #include <cinder\gl\gl.h>
 #include <cinder\gl\Texture.h>
-#include <cinder\app\App.h>
+#include "CinderApp.h"
 
 ConsoleGUI::ConsoleGUI(float _size, std::vector<ConsoleEntry *> * _log, unsigned long int _displayLength) :
 	size(_size),
@@ -22,9 +22,9 @@ ConsoleGUI::ConsoleGUI(float _size, std::vector<ConsoleEntry *> * _log, unsigned
 	}
 }
 
-void ConsoleGUI::resize(){
+void ConsoleGUI::resize(CinderApp * _app){
 	for(unsigned long int i = 0; i < displayLength; ++i){
-		textboxes.at(i).setSize(ci::Vec2i(ci::app::getWindowWidth(), size));
+		textboxes.at(i).setSize(ci::Vec2i(_app->getWindowWidth(), size));
 	}
 }
 

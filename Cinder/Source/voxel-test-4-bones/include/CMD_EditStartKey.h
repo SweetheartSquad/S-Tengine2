@@ -27,5 +27,5 @@ private:
 
 	float oldStartValue;
 	float oldReferenceValue;
-    float oldHasStart;
+    bool oldHasStart;
 };

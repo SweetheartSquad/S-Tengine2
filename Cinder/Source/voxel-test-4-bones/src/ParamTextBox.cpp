@@ -8,12 +8,12 @@
 #include <cinder\gl\Texture.h>
 
 ParamTextBox::ParamTextBox(Type _type, ci::Vec2i _pos, ci::Vec2i _size) :
-    UiInteractable(_pos, ci::Area(0, 0, _size.x, _size.y)),
+    UiInteractable(_pos, _size),
 	NodeChild(nullptr),
     type(_type)
 {
     textbox.setText("");
-	textbox.setSize(ci::Vec2i(size.getWidth(), size.getHeight()));
+	textbox.setSize(size);
 	textbox.setAlignment(ci::TextBox::Alignment::LEFT);
 	textbox.setFont(ci::Font("Segoe UI", 15));
 	textbox.setColor(ci::ColorA(0.f, 0.f, 0.f, 1.f));

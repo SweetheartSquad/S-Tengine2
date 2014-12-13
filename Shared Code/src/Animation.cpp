@@ -35,7 +35,7 @@ Animation::Animation(float * const _prop) :
 	currentTime(0),
 	currentTween(0),
 	loopType(LoopType::kLOOP),
-	referenceValue(0),
+	referenceValue(*_prop),
 	startValue(*_prop),
 	hasStart(false)
 {
@@ -56,7 +56,6 @@ void Animation::update(Step * _step){
 					referenceValue -= tweens.at(currentTween-1)->deltaValue;
 				}
 
-				
 				if(currentTween == 0){
 					switch (loopType){
 						case Animation::kLOOP:
@@ -102,14 +101,17 @@ void Animation::update(Step * _step){
 		if(loopType == kCONSTANT){
 			if(time < 0){
 				*prop = startValue;
+				//referenceValue = startValue;
 			}else if(time > getTweenEndTime(tweens.size()-1)){
 				*prop = getTweenEndValue(tweens.size()-1);
+				//referenceValue = getTweenEndValue(tweens.size()-2);
 			}
 		}
 
 		// Display the start-frame value on the start frame (ordinarily it would show the last frame-value if looping)
 		if(time == 0){
 			*prop = startValue;
+			//referenceValue = startValue;
 		}
 	}
 }
