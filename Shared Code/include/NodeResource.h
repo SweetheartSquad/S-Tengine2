@@ -1,9 +1,9 @@
 #pragma once
 
 #include <vector>
-#include "Node.h"
+#include "NodeLoadable.h"
 
-class NodeResource abstract : public Node{
+class NodeResource abstract : public NodeLoadable{
 protected:
 	/** Whether safeDelete can be called or not */
 	bool autoRelease;
@@ -18,11 +18,4 @@ public:
 	/** Number of references to this */
 	unsigned long int referenceCount;
 	bool isAutoReleasing();
-
-	/** Override this function with stuff to load */
-	virtual void load() = 0;
-	/** Override this function with stuff to unload */
-	virtual void unload() = 0;
-	/** Load state */
-	bool loaded;
 };

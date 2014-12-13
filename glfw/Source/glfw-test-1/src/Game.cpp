@@ -3,6 +3,8 @@
 #include "Game.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "Vox.h"
+
 #include <stdlib.h>
 
 //these shouldn't be global

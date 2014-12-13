@@ -1,8 +1,7 @@
 #include "NodeResource.h"
 
 NodeResource::NodeResource(bool _autoRelease) :
-	autoRelease(_autoRelease),
-	loaded(false)
+	autoRelease(_autoRelease)
 {
 }
 

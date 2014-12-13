@@ -24,7 +24,6 @@
 #include "Transform.h"
 #include "DepthMapShader.h"
 #include "VoxelComponent.h"
-
 #include "MeshEntity.h"
 
 MainScene::MainScene(Game * _game):
@@ -303,7 +302,8 @@ void MainScene::render(){
 	Scene::render();
 }
 
-void MainScene::onContextChange(){
+
+void MainScene::unload(){
 	frameBuffer->unload();
 	depthBuffer->unload();
 	depthShader->unload();
@@ -311,9 +311,10 @@ void MainScene::onContextChange(){
 	shadowSurface->unload();
 	shadowBuffer->unload();
 	baseShader->unload();
+	Scene::unload();
+}
 
-	Scene::onContextChange();
-
+void MainScene::load(){
 	frameBuffer->load();
 	depthBuffer->load();
 	depthShader->load();
@@ -321,4 +322,5 @@ void MainScene::onContextChange(){
 	shadowSurface->load();
 	shadowBuffer->load();
 	baseShader->load();
+	Scene::load();
 }

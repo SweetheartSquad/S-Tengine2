@@ -7,9 +7,10 @@
 #include "Vox.h"
 #include "NodeAnimatable.h"
 #include "NodeRenderable.h"
+#include "NodeLoadable.h"
 
 /** A basic entity node. Stores references to a mesh, transform, shader, parent, and list of references to children */
-class Entity : public NodeAnimatable, public NodeHierarchical, public NodeRenderable{
+class Entity : public NodeAnimatable, public NodeHierarchical, public NodeRenderable, public NodeLoadable{
 public:
 
 	explicit Entity(Transform * _transform = nullptr);

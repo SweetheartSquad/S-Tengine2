@@ -246,6 +246,9 @@
     <ClCompile Include="..\src\BaseScene.cpp">
       <Filter>Source Files\TestGame</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\NodeLoadable.cpp">
+      <Filter>Source Files\node</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -436,6 +439,9 @@
     </ClInclude>
     <ClInclude Include="..\include\BaseScene.h">
       <Filter>Header Files\TestGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\NodeLoadable.h">
+      <Filter>Header Files\node</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
