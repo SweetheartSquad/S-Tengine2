@@ -31,23 +31,17 @@ std::string TextureShaderComponent::getVertexBodyString(){
 
 std::string TextureShaderComponent::getFragmentBodyString(){
 	return
-		"vec4 fragColorTex = vec4(0, 0, 0, 0);" + SEMI_ENDL + 
-	
-		"if(" + GL_UNIFORM_ID_NUM_TEXTURES + " == 0){" + ENDL + 
-		"	fragColorTex = " + GL_IN_OUT_FRAG_COLOR + SEMI_ENDL + 
-		"}" + ENDL + 
-
 		"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_TEXTURES + "; i++){" + ENDL + 
 		"	if(i == 0){" + ENDL + 
-		"		fragColorTex = texture(" + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[i], " + GL_IN_OUT_FRAG_UV + ").rgba" + SEMI_ENDL + 
+		"		modFrag = texture(" + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[i], " + GL_IN_OUT_FRAG_UV + ").rgba" + SEMI_ENDL + 
 		"	}else{" + ENDL + 
-		"		fragColorTex = mix(fragColorTex, texture(" + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[i], " + GL_IN_OUT_FRAG_UV + ").rgba, 0.5)" + SEMI_ENDL + 
+		"		modFrag = mix(modFrag, texture(" + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[i], " + GL_IN_OUT_FRAG_UV + ").rgba, 0.5)" + SEMI_ENDL + 
 		"	}" + ENDL + 
 		"}" + ENDL;
 }
 
 std::string TextureShaderComponent::getOutColorMod(){
-	return GL_OUT_OUT_COLOR + " *= fragColorTex" + SEMI_ENDL;
+	return GL_OUT_OUT_COLOR + " *= modFrag" + SEMI_ENDL;
 }
 
 void TextureShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){

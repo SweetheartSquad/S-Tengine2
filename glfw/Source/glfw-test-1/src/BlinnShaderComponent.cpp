@@ -54,11 +54,11 @@ std::string BlinnShaderComponent::getFragmentBodyString(){
 				"attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2))" + SEMI_ENDL +
 			"}" + ENDL +
 
-			TAB + TAB + VEC3 + " ambient = lights[i].ambientCoefficient * fragColor.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
+			TAB + TAB + VEC3 + " ambient = lights[i].ambientCoefficient * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 		
 			TAB + TAB + "//diffuse" + ENDL +
 			TAB + TAB + FLOAT + " diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))" + SEMI_ENDL +
-			TAB + TAB + VEC3 + " diffuse = diffuseCoefficient * fragColor.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
+			TAB + TAB + VEC3 + " diffuse = diffuseCoefficient * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 			TAB + TAB + "diffuse = clamp(diffuse, 0.0, 1.0)" + SEMI_ENDL +
 		
 			TAB + TAB + "//specular" + ENDL +

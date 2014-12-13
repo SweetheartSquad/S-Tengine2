@@ -56,11 +56,11 @@ std::string PhongShaderComponent::getFragmentBodyString(){
 				"attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2))" + SEMI_ENDL +
 			"}" + ENDL +
 
-			"vec3 ambient = lights[i].ambientCoefficient * fragColor.rgb * lights[i].intensities" + SEMI_ENDL +
+			"vec3 ambient = lights[i].ambientCoefficient * modFrag.rgb * lights[i].intensities" + SEMI_ENDL +
 
 			"//diffuse" + ENDL +
 			"float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))" + SEMI_ENDL +
-			"vec3 diffuse = diffuseCoefficient * fragColor.rgb * lights[i].intensities" + SEMI_ENDL +
+			"vec3 diffuse = diffuseCoefficient * modFrag.rgb * lights[i].intensities" + SEMI_ENDL +
 		
 			"//specular" + ENDL +
 			"float specularCoefficient = 0.0" + SEMI_ENDL +
