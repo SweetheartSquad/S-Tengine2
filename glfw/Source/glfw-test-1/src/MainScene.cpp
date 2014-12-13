@@ -132,7 +132,6 @@ MainScene::MainScene(Game * _game):
 	tLight2->data.attenuation = 0.2f;
 	tLight2->data.ambientCoefficient = 0.005f;
 
-	tLight2->transform->translate(2.f, 0.f, 0.f);
 	//lights.push_back(tLight);
 	lights.push_back(tLight2);
 

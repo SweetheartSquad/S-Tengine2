@@ -2,14 +2,27 @@
 
 #include "Scene.h"
 
+class Material;
+class Plane;
 class Cube;
 class BaseComponentShader;
 
 class BaseScene : public Scene
 {
 public:
+
+	//Entities
+	Cube * ground;
 	Cube * cube;
+
+	//Shaders
 	BaseComponentShader * shader;
+
+	//Materials
+	Material * material;
+
+	//Lights
+	Light * light; 
 
 	explicit BaseScene(Game* _game);
 	virtual ~BaseScene();

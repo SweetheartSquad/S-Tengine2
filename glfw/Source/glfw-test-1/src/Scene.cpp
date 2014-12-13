@@ -39,14 +39,18 @@ Scene::Scene(Game * _game):
 Scene::~Scene(void){
 	delete camera;
 	delete matrixStack;
+	delete renderOptions;
+	delete depthBuffer;
+	delete shadowBuffer;
+	delete depthShader;
+	delete shadowSurface;
+	for(auto light : lights){
+		delete light;
+	}
 }
 
 void Scene::update(void){
 	camera->update();
-	//Copy the transform to the light's data
-	for(Light * light : lights){
-		light->update();
-	}
 	for(Entity * e : children){
 		e->update(&vox::step);
 	}
@@ -87,8 +91,8 @@ void Scene::render(){
 	glEnable(GL_DEPTH_TEST);
 
 	//Back-face culling
-	//glEnable (GL_CULL_FACE); // cull face
-	//glCullFace (GL_BACK); // cull back face
+	glEnable (GL_CULL_FACE); // cull face
+	glCullFace (GL_BACK); // cull back face
 
 	glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
