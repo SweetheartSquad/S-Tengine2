@@ -71,10 +71,10 @@ void ButtonFunctions::VIEW_JointsOnly(CinderApp * _app){
 };
 
 void ButtonFunctions::TIME_Decrement(CinderApp * _app){
-	_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, 1, true));
+	_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, -1, true));
 };
 
 void ButtonFunctions::TIME_Increment(CinderApp * _app){
-	_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, -1, true));
+	_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, 1, true));
 };
 

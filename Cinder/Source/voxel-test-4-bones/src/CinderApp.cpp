@@ -159,8 +159,8 @@ void CinderApp::setup(){
 
 	timelineBar->addSet(new ToolSet());
 
+    timelineBar->addButton(0, new ToolButton("Prev", ToolButton::Type::kNORMAL, Vec2i(20, 20), nullptr, &ButtonFunctions::TIME_Decrement));
 	timelineBar->addButton(0, new ToolButton("Next", ToolButton::Type::kNORMAL, Vec2i(20, 20), nullptr, &ButtonFunctions::TIME_Increment));
-	timelineBar->addButton(0, new ToolButton("Prev", ToolButton::Type::kNORMAL, Vec2i(20, 20), nullptr, &ButtonFunctions::TIME_Decrement));
 
 	timeTextBox = new ParamTextBox(ParamTextBox::Type::NUMBER, Vec2i(60, 40), Vec2i(30,20));
 }
