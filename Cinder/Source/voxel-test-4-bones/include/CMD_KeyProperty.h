@@ -33,10 +33,6 @@ private:
 	float value;
 	Easing::Type interpolation;
 
-	float oldStartValue;
-	bool oldHasStart;
-    float oldReferenceValue;
-
 	int findKeyframe(std::vector<Tween *> * _tweens);
 
 	float getStartValue(unsigned long int _idx);

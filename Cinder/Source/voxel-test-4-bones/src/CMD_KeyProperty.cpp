@@ -24,7 +24,6 @@ CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _currentTime, flo
 bool CMD_KeyProperty::execute(){
 	// Executing for the first time, save the oldStartValue if keying 0, or create an add or edit command
 	if(firstRun){
-        oldReferenceValue = animation->referenceValue;
 	    if(!animation->hasStart){
 		    // If there are no keyframes and the start hasn't been set
             subCmdProc.executeCommand(new CMD_EditStartKey(animation, value, targetTime));
@@ -58,38 +57,13 @@ bool CMD_KeyProperty::execute(){
 	}else{
 		subCmdProc.redo();
 	}
-	// We need to update the animation's time and reference value to the current time (not necessarily the same time as first run) using the new tweens/start value somehow
-	
-    // Now that we have a time command, we can just update the reference value to the value and the current tween to the index
-	/*Step s;
-	s.setDeltaTime(animation->time);
-	ci::app::console() << "step deltaTime: " << animation->time << std::endl;
-	animation->time = 0;
-	animation->referenceValue = animation->startValue;
-	animation->currentTime = 0;
-	animation->currentTween = 0;
-		
-	animation->update(&s);
-    */
-    animation->referenceValue = value;
+
 	return true;
 }
 
 bool CMD_KeyProperty::unexecute(){
-
 	subCmdProc.undo();
 
-	// We need to update the animation's time and reference value to the current time (not necessarily the same time as first run) using the restored tweens/start value somehow
-	/*Step s;
-	s.setDeltaTime(animation->time);
-		
-	animation->time = 0;
-	animation->referenceValue = animation->startValue;
-	animation->currentTime = 0;
-	animation->currentTween = 0;
-
-	animation->update(&s);*/
-    animation->referenceValue = oldReferenceValue;
 	return true;
 }
 

@@ -63,8 +63,8 @@ bool CMD_AddTween::execute(){
 }
 
 bool CMD_AddTween::unexecute(){
-	subCmdProc.undo();
     animation->currentTween = oldCurrentTween;
+    subCmdProc.undo();
 	return true;
 }
 
