@@ -92,7 +92,7 @@ void CinderApp::setup(){
 	voxelSphereRadius = 0.1f;
 	voxelPaintSpacing = 1.f;
 
-	voxelParams = params::InterfaceGl::create(getWindow(), "Voxel", toPixels(Vec2i(180, 150)), ColorA(0.3f, 0.3f, 0.6f, 0.4f));
+	voxelParams = params::InterfaceGl::create(getWindow(), "Voxel", toPixels(Vec2i(180, 125)), ColorA(0.3f, 0.3f, 0.6f, 0.4f));
 	voxelParams->addParam("Selectable", &voxelSelectMode);
 	voxelParams->addParam("Preview", &voxelPreviewMode);
 	voxelParams->addParam("Resolution", &voxelPreviewResolution, "min=0.01, step=0.01");
@@ -210,6 +210,8 @@ void CinderApp::resize(){
 	}if(!fboFront || fboFront.getWidth() != rectFront.getWidth() || fboFront.getHeight() != rectFront.getHeight()){
 		initMultiChannelFbo(fboFront, rectFront.getInteriorArea(), 4);
 	}
+
+	consoleGUI->resize();
 }
 
 
@@ -303,6 +305,9 @@ void CinderApp::draw(){
 		renderUI(camTop, rectTop);
 		renderUI(camRight, rectRight);
 		renderUI(camFront, rectFront);
+		
+		gl::disableDepthRead();
+		gl::disableDepthWrite();
 
 		gl::setViewport(fboUI.getBounds());
 
@@ -310,19 +315,16 @@ void CinderApp::draw(){
 		CinderRenderOptions t2(nullptr, nullptr);
 		t2.ciShader = &uiShader;
 		uiShader.uniform("tex", true);
-		uiShader.uniform("pickingColor", 0);
+		uiShader.uniform("pickingColor", Color(0.f, 0.f, 0.f));
 		consoleGUI->render(&t, &t2);
 		toolbar->render(&t, &t2);
-		uiShader.uniform("tex", false);
-		
 		uiShader.unbind();
+
 		params->draw();
 		timelineParams->draw();
-		voxelParams->draw();	
-		
+		voxelParams->draw();
+
 		gl::disableAlphaBlending();
-		gl::disableDepthRead();
-		gl::disableDepthWrite();
 	fboUI.unbindFramebuffer();
 
 	
@@ -1340,7 +1342,7 @@ void CinderApp::snapParams(){
 	timelineParams->setOptions("", timelineParamsOptions.str());
 
 	stringstream voxelParamsOptions;
-	voxelParamsOptions << "position='5 " << 2 * (getWindowHeight() / 2.5) << "'";
+	voxelParamsOptions << "position='5 " << 1.9 * (getWindowHeight() / 2.5) << "'";
 	voxelParams->setOptions("", voxelParamsOptions.str());
 }
 void CinderApp::saveSkeleton() {

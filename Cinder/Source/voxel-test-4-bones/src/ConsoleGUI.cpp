@@ -16,9 +16,15 @@ ConsoleGUI::ConsoleGUI(float _size, std::vector<ConsoleEntry *> * _log, unsigned
 		test.setSize(ci::Vec2i(ci::app::getWindowWidth(), size));
 		test.setAlignment(ci::TextBox::Alignment::LEFT);
 		test.setFont(ci::Font("Segoe UI", _size));
-		test.setBackgroundColor(ci::ColorA(0.f, 0.f, 0.f, 0.75f));
+		test.setBackgroundColor(ci::ColorA(0.25f, 0.25f, 0.25f, 0.75f));
 		test.setColor(ci::ColorA(1.f, 1.f, 1.f, 1.f));
 		textboxes.push_back(test);
+	}
+}
+
+void ConsoleGUI::resize(){
+	for(unsigned long int i = 0; i < displayLength; ++i){
+		textboxes.at(i).setSize(ci::Vec2i(ci::app::getWindowWidth(), size));
 	}
 }
 
@@ -52,5 +58,4 @@ void ConsoleGUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 	}
 
 	ci::gl::color(1,1,1,1);
-	ci::gl::drawStrokedRect(ci::Rectf(0, ci::app::getWindowHeight()-size*(i-1), ci::app::getWindowWidth(), ci::app::getWindowHeight()));
 }

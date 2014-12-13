@@ -20,5 +20,7 @@ public:
 	unsigned long int displayLength;
 	std::vector<ConsoleEntry *> * log;
 
+	void resize();
+
 	std::vector<ci::TextBox> textboxes;
 };
