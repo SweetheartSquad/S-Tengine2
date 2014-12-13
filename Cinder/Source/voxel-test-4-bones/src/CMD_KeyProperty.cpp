@@ -3,6 +3,7 @@
 #include "CMD_KeyProperty.h"
 #include "CMD_AddTween.h"
 #include "CMD_EditTween.h"
+#include "CMD_EditStartKey.h"
 #include "Tween.h"
 #include "Animation.h"
 #include "Step.h"
@@ -22,33 +23,18 @@ CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _currentTime, flo
 
 void CMD_KeyProperty::execute(){
 	// Executing for the first time, save the oldStartValue if keying 0, or create an add or edit command
-	if(!animation->hasStart){
-		// If there are no keyframes and the start hasn't been set
-		oldStartValue = animation->startValue;
-
-		// set start value
-		animation->startValue = value;
-		animation->referenceValue = value;
-		animation->hasStart = true;
-		oldHasStart = false;
-	}else{
-		// subtract the change in time from the animation's time, if there has been any change
-		if((animation->time - (UI::time - currentTime)) + (targetTime - currentTime) == 0){
-			// Edit start of the animation
-			oldStartValue = animation->startValue;
-			oldHasStart = true;
-
-			// set start value
-			animation->startValue = value;
-			animation->referenceValue = value;
-
-			if(animation->tweens.size() > 0){
-				// If there are other keyframes
-				animation->tweens.at(0)->deltaValue -= (value - oldStartValue);
-			}
-		}else{
-			// Edit or add a tween
-			if(firstRun){
+	if(firstRun){
+        oldReferenceValue = animation->referenceValue;
+	    if(!animation->hasStart){
+		    // If there are no keyframes and the start hasn't been set
+            subCmdProc.executeCommand(new CMD_EditStartKey(animation, value, targetTime));
+	    }else{
+		    // subtract the change in time from the animation's time, if there has been any change
+		    if((animation->time - (UI::time - currentTime)) + (targetTime - currentTime) == 0){
+			    subCmdProc.executeCommand(new CMD_EditStartKey(animation, value, targetTime));
+		    }else{
+			    // Edit or add a tween
+			
 				// find index of tween
 				int idx = -1;
 				float sumTime = animation->time;
@@ -67,48 +53,42 @@ void CMD_KeyProperty::execute(){
 				}else{
 					subCmdProc.executeCommand(new CMD_AddTween(animation, currentTime, targetTime, value, interpolation));
 				}
-			}else{
-				subCmdProc.redo();
-			}
-		}
+		    }
+        }
+	}else{
+		subCmdProc.redo();
 	}
 	// We need to update the animation's time and reference value to the current time (not necessarily the same time as first run) using the new tweens/start value somehow
-	Step * s = new Step();
-	s->setDeltaTime(animation->time);
+	
+    // Now that we have a time command, we can just update the reference value to the value and the current tween to the index
+	/*Step s;
+	s.setDeltaTime(animation->time);
 	ci::app::console() << "step deltaTime: " << animation->time << std::endl;
 	animation->time = 0;
 	animation->referenceValue = animation->startValue;
 	animation->currentTime = 0;
 	animation->currentTween = 0;
 		
-	animation->update(s);
+	animation->update(&s);
+    */
+    animation->referenceValue = value;
 }
 
 void CMD_KeyProperty::unexecute(){
 
-	// subtract the change in time from the animation's time, if there has been any change
-	// since I'm adjusting the animation's time if this adds a new tween at the beginning, this won't work, since it's time at this frame wil be zero...
-	// we may end up needing to check the subCmdProc stacks after all...
-	if((animation->time - (UI::time - currentTime)) + (targetTime - currentTime) != 0){
-		subCmdProc.undo();
-	}else{
-		animation->startValue = oldStartValue;
-		animation->hasStart = oldHasStart;
-		ci::app::console() << "CMD_KeyProperty unexecute" << std::endl;
-		if(oldHasStart == true || animation->tweens.size() > 0){
-			animation->tweens.at(0)->deltaValue += (value - oldStartValue);
-		}
-	}
+	subCmdProc.undo();
+
 	// We need to update the animation's time and reference value to the current time (not necessarily the same time as first run) using the restored tweens/start value somehow
-	Step * s = new Step();
-	s->setDeltaTime(animation->time);
+	/*Step s;
+	s.setDeltaTime(animation->time);
 		
 	animation->time = 0;
 	animation->referenceValue = animation->startValue;
 	animation->currentTime = 0;
 	animation->currentTween = 0;
 
-	animation->update(s);
+	animation->update(&s);*/
+    animation->referenceValue = oldReferenceValue;
 }
 
 float CMD_KeyProperty::getStartValue(unsigned long int _idx){

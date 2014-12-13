@@ -314,7 +314,7 @@ std::string SkeletonData::writeVoxel(Voxel * v, unsigned int indent){
 	indent++;
 
 	// Just the position vector
-	json << std::string(indent * 3, ' ') << "{" << "\"x\": " << v->pos.x << ", " << "\"y\": " << v->pos.y << ", " << "\"z\": " << v->pos.z << "}";
+	json << std::string(indent * 3, ' ') << "{" << "\"x\": " << v->getPos().x << ", " << "\"y\": " << v->getPos().y << ", " << "\"z\": " << v->getPos().z << "}";
 
 	return json.str();
 }
@@ -322,9 +322,8 @@ std::string SkeletonData::writeVoxel(Voxel * v, unsigned int indent){
 void SkeletonData::readVoxel(JsonTree voxel, Joint * parent){
 
 	// create voxel, added to parent in constructor
-	Voxel * v = new Voxel(Vec3d(voxel.getChild("x").getValue<float>(), voxel.getChild("y").getValue<float>(), voxel.getChild("z").getValue<float>()));
-	v->parent = parent;
-	parent->voxels.push_back(v);
+	Voxel * v = new Voxel(Vec3d(voxel.getChild("x").getValue<float>(), voxel.getChild("y").getValue<float>(), voxel.getChild("z").getValue<float>()), parent, false);
+	parent->addChild(v);
 }
 
 void SkeletonData::validateDirectory(std::string & directory) {

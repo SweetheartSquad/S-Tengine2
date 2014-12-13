@@ -1,4 +1,5 @@
 #include "CinderApp.h"
+#include "CMD_SetTime.h"
 
 class ButtonFunctions
 {
@@ -15,6 +16,11 @@ public:
 	static void CHANNEL_1(CinderApp * _app);
 	static void CHANNEL_2(CinderApp * _app);
 	static void CHANNEL_3(CinderApp * _app);
+
+    static void VIEW_JointsOnly(CinderApp * _app);
+
+	static void TIME_Decrement(CinderApp * _app);
+	static void TIME_Increment(CinderApp * _app);
 };
 
 void ButtonFunctions::MODE_Select(CinderApp * _app){
@@ -58,5 +64,17 @@ void ButtonFunctions::CHANNEL_2(CinderApp * _app){
 
 void ButtonFunctions::CHANNEL_3(CinderApp * _app){
 	_app->channel = 3;
+};
+
+void ButtonFunctions::VIEW_JointsOnly(CinderApp * _app){
+    _app->viewJointsOnly = !_app->viewJointsOnly;
+};
+
+void ButtonFunctions::TIME_Decrement(CinderApp * _app){
+	_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, 1, true));
+};
+
+void ButtonFunctions::TIME_Increment(CinderApp * _app){
+	_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, -1, true));
 };
 

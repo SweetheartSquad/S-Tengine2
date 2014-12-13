@@ -45,7 +45,6 @@ void CMD_EditTween::execute(){
 	tween->deltaValue = newDeltaValue;
 	tween->interpolation = interpolation;
 
-	// TODO: see if I can just create edit tween cmd now
 	// Change next keyframe's start value, if this one's is changing
 	if (newDeltaValue != oldDeltaValue){
 		if (nextTweenIndex < animation->tweens.size()){

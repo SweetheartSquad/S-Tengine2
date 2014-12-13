@@ -35,6 +35,7 @@ private:
 
 	float oldStartValue;
 	bool oldHasStart;
+    float oldReferenceValue;
 
 	int findKeyframe(std::vector<Tween *> * _tweens);
 

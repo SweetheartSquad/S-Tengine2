@@ -15,6 +15,7 @@
 #include "CMD_ParentSelectedNodes.h"
 #include "CMD_PlaceVoxel.h"
 #include "CMD_DeleteVoxel.h"
+#include "CMD_SetTime.h"
 
 #include "Transform.h"
 #include "NodeTransformable.h"
@@ -28,6 +29,7 @@
 #include "ToolBar.h"
 #include "ToolSet.h"
 #include "ToolButton.h"
+#include "ParamTextBox.h"
 
 void CinderApp::prepareSettings(Settings *settings){
 	settings->setWindowSize(900, 600);
@@ -73,7 +75,7 @@ void CinderApp::setup(){
 
 	timelineParams = params::InterfaceGl::create( getWindow(), "Animation", toPixels(Vec2i(175,150)), ColorA(0.3f, 0.6f, 0.3f, 0.4f));
 	timelineParams->minimize();
-	timelineParams->addParam("Time", &UI::time);
+	timelineParams->addParam("Time", &UI::time, "", true);
 
 	timelineParams->addParam("Interpolation", UI::interpolationNames, &UI::interpolationValue);
 	timelineParams->addButton("Add/Edit Keyframe", std::bind(&CinderApp::setKeyframe, this));
@@ -89,6 +91,8 @@ void CinderApp::setup(){
 	voxelPreviewResolution = 0.1;
 	voxelSphereRadius = 0.1;
 	voxelPaintSpacing = 1;
+
+	viewJointsOnly = false;
 
 	voxelParams = params::InterfaceGl::create(getWindow(), "Voxel", toPixels(Vec2i(180,150)), ColorA(0.3f, 0.3f, 0.6f, 0.4f));
 	voxelParams->addParam("Selectable", &voxelSelectMode);
@@ -132,23 +136,38 @@ void CinderApp::setup(){
 	play = false;
 	previousTime = 0;
 	
-	toolbar = new ToolBar(Vec2i(5,5));
+	toolbar = new ToolBar(Vec2i(5,5), false);
 
+	// Selecting, Creating, Painting, and Transformations
 	toolbar->addSet(new ToolSet(Area(0,0,30,30)));
+	// Channels
 	toolbar->addSet(new ToolSet(Area(0,0,20,20)));
+	// View Joints, Voxels, or All
+	toolbar->addSet(new ToolSet(Area(0,0,25,25)));
 
 
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Select));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Translate));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Rotate));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_Scale));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_CreateJoints));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::MODE_PaintVoxels));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Select", nullptr, &ButtonFunctions::MODE_Select));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Translate", nullptr, &ButtonFunctions::MODE_Translate));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Rotate", nullptr, &ButtonFunctions::MODE_Rotate));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Scale", nullptr, &ButtonFunctions::MODE_Scale));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Joint", nullptr, &ButtonFunctions::MODE_CreateJoints));
+	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Voxels", nullptr, &ButtonFunctions::MODE_PaintVoxels));
 
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_0));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_1));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_2));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, nullptr, &ButtonFunctions::CHANNEL_3));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 1", nullptr, &ButtonFunctions::CHANNEL_0));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 2", nullptr, &ButtonFunctions::CHANNEL_1));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 3", nullptr, &ButtonFunctions::CHANNEL_2));
+	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 4", nullptr, &ButtonFunctions::CHANNEL_3));
+
+	toolbar->addButton(2, new ToolButton(ToolButton::Type::TOGGLE, "View Joints Only", nullptr, &ButtonFunctions::VIEW_JointsOnly));
+
+	timelineBar = new ToolBar(Vec2i(5,40), false);
+
+	timelineBar->addSet(new ToolSet(Area(0,0,20,20)));
+
+	timelineBar->addButton(0, new ToolButton(ToolButton::Type::NORMAL, "Next", nullptr, &ButtonFunctions::TIME_Increment));
+	timelineBar->addButton(0, new ToolButton(ToolButton::Type::NORMAL, "Prev", nullptr, &ButtonFunctions::TIME_Decrement));
+
+	timeTextBox = new ParamTextBox(ParamTextBox::Type::NUMBER, Vec2i(60, 40), Vec2i(30,20));
 }
 
 void CinderApp::resize(){
@@ -219,6 +238,10 @@ void CinderApp::shutdown(){
 	UI::selectedNodes.clear();
 	delete toolbar;
 	toolbar = nullptr;
+	delete timelineBar;
+	timelineBar = nullptr;
+    delete timeTextBox;
+    timeTextBox = nullptr;
 	delete sceneRoot;
 	sceneRoot = nullptr;
 	delete cmdProc;
@@ -230,14 +253,20 @@ void CinderApp::update(){
 	if(play){
 		Step s;
 		s.setDeltaTime(1 * UI::stepScale);
+		cmdProc->executeCommand(new CMD_SetTime(&UI::time, UI::time+(float)s.getDeltaTime(), false));
+		app::console() << "CinderApp.update() play UI::time: " << UI::time << endl;
+		console() << "previousTime: " << previousTime << endl;
 		for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
 			NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot->children.at(i));
 			nu->update(&s);
 		}
-		UI::time += (float)s.getDeltaTime();
+
+		//UI::time += (float)s.getDeltaTime();
 		previousTime = UI::time;
 	}else{
 		if(UI::time != previousTime){
+			console() << "CinderApp.update() !play UI::time: " << UI::time << endl;
+			console() << "previousTime: " << previousTime << endl;
 			Step s;
 			s.setDeltaTime((UI::time - previousTime));
 			for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
@@ -265,16 +294,6 @@ void CinderApp::update(){
 	camFront.setOrtho(boundsFront.x1, boundsFront.x2, -boundsFront.y2, -boundsFront.y1, -10000, 10000);
 	camRight.setOrtho(boundsRight.x1, boundsRight.x2, -boundsRight.y2, -boundsRight.y1, -10000, 10000);
 	
-	/*Quatf o = camMayaPersp.getCamera().getOrientation();
-	
-	console() << o.getPitch() << " " << o.getRoll() << " " << o.getYaw() << std::endl;
-	
-	camTop.setOrientation(Quatf(glm::radians(90.f), 0, glm::radians(-90.f)+atan2(dif.z, dif.x)));
-	
-	camFront.setOrientation(Quatf(0, atan2(dif.y, dif.x), 0));
-	
-	camRight.setOrientation(Quatf(0, glm::radians(90.f), glm::radians(-90.f)+atan2(dif.y, dif.z)));*/
-
 	camTop.setEyePoint(camMayaPersp.getCamera().getEyePoint());
 	camFront.setEyePoint(camMayaPersp.getCamera().getEyePoint());
 	camRight.setEyePoint(camMayaPersp.getCamera().getEyePoint());
@@ -309,6 +328,8 @@ void CinderApp::draw(){
 		CinderRenderOptions t2(nullptr, nullptr);
 		t2.ciShader = &uiShader;
 		toolbar->render(&t, &t2);
+		timelineBar->render(&t, &t2);
+        timeTextBox->render(&t, &t2);
 		uiShader.unbind();
 
 		params->draw();
@@ -365,8 +386,6 @@ void CinderApp::draw(){
 		gl::draw( pixelFbo.getTexture(0), Rectf(rct.x1, rct.y1+rct.y2+rct.y2, rct.x2, rct.y2+rct.y2+rct.y2) );
 		gl::drawStrokedRect(Rectf(rct.x1, rct.y1+rct.y2+rct.y2, rct.x2, rct.y2+rct.y2+rct.y2));
 	}
-
-	
 }
 
 void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
@@ -414,6 +433,7 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		r.voxelPreviewMode = voxelPreviewMode;
 		r.voxelPreviewResolution = voxelPreviewResolution;
 		r.voxelSphereRadius = voxelSphereRadius;
+		r.viewJointsOnly = viewJointsOnly;
 
 		for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
 			NodeRenderable * nr = dynamic_cast<NodeRenderable *>(sceneRoot->children.at(i));
@@ -497,7 +517,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 						gl::pushMatrices();
 							glm::vec3 absPos = dynamic_cast<Joint *>(v->parent)->getPos(false);
 							gl::translate(absPos.x, absPos.y, absPos.z);
-							gl::drawSphere(v->pos, 0.06f);
+							gl::drawSphere(Vec3f(v->getPos().x, v->getPos().y, v->getPos().z), 0.06f);
 						gl::popMatrices();
 					}
 				}
@@ -657,7 +677,7 @@ void CinderApp::mouseMove( MouseEvent event ){
 	if(!event.isLeftDown() && !event.isRightDown()){
 		pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
 		if(NodeSelectable::pickingMap.count(uiColour) == 1){
-			ToolButton * newButt = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour));
+			UiInteractable * newButt = dynamic_cast<UiInteractable *>(NodeSelectable::pickingMap.at(uiColour));
 			if(activeButton != nullptr){
 				if(activeButton != newButt){
 					if(activeButton->isHovered){
@@ -813,7 +833,6 @@ void CinderApp::mouseDown( MouseEvent event ){
 		case CinderApp::CREATE:
 			break;
 		case CinderApp::SELECT:
-			break;
 		case CinderApp::TRANSLATE:
 		case CinderApp::ROTATE:
 		case CinderApp::SCALE:
@@ -856,16 +875,17 @@ void CinderApp::mouseDown( MouseEvent event ){
 	}
 	
 
-	if(sourceCam == &camMayaPersp.getCamera()){
-		// Get the selected UI colour
-		pickColour(&clickedUiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
-		uiColour = clickedUiColour;
+	
+	// Get the selected UI colour
+	pickColour(&clickedUiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
+	uiColour = clickedUiColour;
 
-		if(event.isLeft()){
-			oldMousePos = mMousePos;
-		}
+	if(event.isLeft()){
+		oldMousePos = mMousePos;
+	}
 
-		if(!event.isAltDown() && (clickedUiColour == 0)){
+	if(!event.isAltDown() && (clickedUiColour == 0)){
+		if(sourceCam == &camMayaPersp.getCamera()){
 			if(mode == PAINT_VOXELS){
 				if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
 					if(event.isLeft()){
@@ -929,16 +949,16 @@ void CinderApp::mouseDown( MouseEvent event ){
 					}
 				}
 			}
-		}else{
-			if(NodeSelectable::pickingMap.count(clickedUiColour) == 1){
-				activeButton = dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(clickedUiColour));
-				if(activeButton != NULL){
-					activeButton->down(this);
-				}
-			}
 		}
 
 		UI::updateHandlePos(false);
+	}else{
+		if(NodeSelectable::pickingMap.count(clickedUiColour) == 1){
+			activeButton = dynamic_cast<UiInteractable *>(NodeSelectable::pickingMap.at(clickedUiColour));
+			if(activeButton != nullptr){
+				activeButton->down(this);
+			}
+		}
 	}
 }
 
@@ -1032,32 +1052,55 @@ void CinderApp::mouseDrag( MouseEvent event ){
 					}
 				}
 			}else{
-				if(mode == PAINT_VOXELS){
-						if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
-							if(event.isLeftDown()){
-								// place voxel
-								Color voxel;
-								pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
+				if(mode == SELECT){
+					if(event.isLeftDown() && !event.isAltDown() && !event.isShiftDown()){
+						unsigned long int pickedColour;
+						pickColour(&pickedColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
+						NodeSelectable * selection = nullptr;
+						if(NodeSelectable::pickingMap.count(pickedColour) == 1){
+							selection = NodeSelectable::pickingMap.at(pickedColour);
+						}
+
+						if(!voxelSelectMode){
+							if(dynamic_cast<Voxel *>(selection) != nullptr){
+								selection = dynamic_cast<Joint *>(dynamic_cast<Voxel *>(selection)->parent);
+							}
+						}
+
+						bool additive = !event.isControlDown();
+						bool subtractive = event.isControlDown();
+
+						if(selection != nullptr || (!additive && !subtractive)){
+							cmdProc->executeCommand(new CMD_SelectNodes((Node *)selection, additive, subtractive));
+						}
+					}
+
+				}else if(mode == PAINT_VOXELS){
+					if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
+						if(event.isLeftDown()){
+							// place voxel
+							Color voxel;
+							pickColour(&voxel, sourceFbo, sourceRect, &pixelFbo, mMousePos, Area(0,0,1,1), 3, GL_FLOAT);
 								
-								if(voxel != Color(0.f, 0.f, 0.f)){
-									Vec3f voxelPos = Vec3f(voxel.r, voxel.g, voxel.b);
-									float spacingDistance = voxelPaintSpacing * (voxelPreviewMode ? voxelPreviewResolution : voxelSphereRadius ) * 2;
-									currentSpacingDistance += lastVoxelPaintPos.distance(voxelPos);
-									console() << "lastVoxelPaintPos: " << lastVoxelPaintPos << endl;
-									console() << " voxelPos: " << voxelPos << endl;
-									console() << "currentSpacingDistance: " << currentSpacingDistance << " spacingDistance: " << spacingDistance << endl;
-									if(currentSpacingDistance >= spacingDistance){
-										console() << "blah distance: " << currentSpacingDistance << " spacing: " << voxelPaintSpacing << endl;
-										cmdProc->executeCommand(new CMD_PlaceVoxel(voxelPos, dynamic_cast<Joint *>(UI::selectedNodes.back())));
-										currentSpacingDistance = 0;
-									}
-									lastVoxelPaintPos = voxelPos;
-								}else{
-									console() << "bg" << std::endl;
+							if(voxel != Color(0.f, 0.f, 0.f)){
+								Vec3f voxelPos = Vec3f(voxel.r, voxel.g, voxel.b);
+								float spacingDistance = voxelPaintSpacing * (voxelPreviewMode ? voxelPreviewResolution : voxelSphereRadius ) * 2;
+								currentSpacingDistance += lastVoxelPaintPos.distance(voxelPos);
+								console() << "lastVoxelPaintPos: " << lastVoxelPaintPos << endl;
+								console() << " voxelPos: " << voxelPos << endl;
+								console() << "currentSpacingDistance: " << currentSpacingDistance << " spacingDistance: " << spacingDistance << endl;
+								if(currentSpacingDistance >= spacingDistance){
+									console() << "blah distance: " << currentSpacingDistance << " spacing: " << voxelPaintSpacing << endl;
+									cmdProc->executeCommand(new CMD_PlaceVoxel(voxelPos, dynamic_cast<Joint *>(UI::selectedNodes.back())));
+									currentSpacingDistance = 0;
 								}
+								lastVoxelPaintPos = voxelPos;
+							}else{
+								console() << "bg" << std::endl;
 							}
 						}
 					}
+				}
 			}
 			oldMousePos = mMousePos;
 		}else{
@@ -1077,7 +1120,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 	if(activeButton != nullptr){
 		pickColour(&uiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
 		if(NodeSelectable::pickingMap.count(uiColour) == 1){
-			if(activeButton != dynamic_cast<ToolButton *>(NodeSelectable::pickingMap.at(uiColour))){
+			if(activeButton != dynamic_cast<UiInteractable *>(NodeSelectable::pickingMap.at(uiColour))){
 				if(activeButton->isHovered){
 					activeButton->out();
 				}
@@ -1102,7 +1145,7 @@ void CinderApp::mouseUp( MouseEvent event ){
 		activeButton->up(this);
 	}
 	
-	if(mode == TRANSLATE || mode == ROTATE || mode == SCALE || mode == PAINT_VOXELS){
+	if(mode == SELECT || mode == TRANSLATE || mode == ROTATE || mode == SCALE || mode == PAINT_VOXELS){
 		cmdProc->endCompressing();
 		console() << "endCompressing" << endl;
 	}
@@ -1113,117 +1156,123 @@ void CinderApp::mouseUp( MouseEvent event ){
 
 void CinderApp::keyDown( KeyEvent event ){
 	if(!isMouseDown){
-		if(!event.isAltDown()){
-			if(event.isControlDown()){
-				if(!event.isShiftDown()){
-					// Ctrl + key combinations
-					switch( event.getCode() ){
-					case KeyEvent::KEY_z:
-						cmdProc->undo();
-						break;
-					case KeyEvent::KEY_y:
-						cmdProc->redo();
-						break;
-					case KeyEvent::KEY_d:
-						// Deselect all
-						if(UI::selectedNodes.size() != 0){
-							cmdProc->executeCommand(new CMD_SelectNodes(nullptr));
-						}
-						break;
-					}
-				}else{
-					// Ctrl + Shift + key combinations
-				}
-			}else if(event.isShiftDown()){
-				// Shift + key combinations
-				switch (event.getCode() ){
-				case KeyEvent::KEY_p:
-					if(UI::selectedNodes.size() > 0){
-						cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, sceneRoot));
-					}
-					break;
-				}
-			}else{
-				// Simple key
-				switch (event.getCode() ){
-				case KeyEvent::KEY_ESCAPE:
-					//shutdown();
-					quit();
-					break;
-				case KeyEvent::KEY_f:
-					setFullScreen( !isFullScreen() );
-					break;
-				case KeyEvent::KEY_F1:
-					drawParams = !drawParams;
-					if(drawParams){
-						params->maximize();
-						timelineParams->maximize();
-						voxelParams->maximize();
-					}else{
-						params->minimize();
-						timelineParams->minimize();
-						voxelParams->minimize();
-					}
-				case KeyEvent::KEY_1:
-					channel = 0;
-					break;
-				case KeyEvent::KEY_2:
-					channel = 1;
-					break;
-				case KeyEvent::KEY_3:
-					channel = 2;
-					break;
-				case KeyEvent::KEY_4:
-					channel = 3;
-					break;
-				case KeyEvent::KEY_DELETE:
-					if(UI::selectedNodes.size() > 0){
-						cmdProc->executeCommand(new CMD_DeleteJoints());
-					}
-					break;
-				case KeyEvent::KEY_p:
-					if(UI::selectedNodes.size() > 0){
-						cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, dynamic_cast<NodeParent *>(UI::selectedNodes.back())));
-					}
-					break;
-				case KeyEvent::KEY_q:
-					/*mode = SELECT;
-					params->setOptions( "UI Mode", "label=`SELECT`" );*/
-					dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(0))->pressProgrammatically(this);
-					break;
-				case KeyEvent::KEY_w:
-					mode = TRANSLATE;
-					params->setOptions( "UI Mode", "label=`TRANSLATE`" );
-					break;
-				case KeyEvent::KEY_e:
-					mode = ROTATE;
-					params->setOptions( "UI Mode", "label=`ROTATE`" );
-					break;
-				case KeyEvent::KEY_r:
-					mode = SCALE;
-					params->setOptions( "UI Mode", "label=`SCALE`" );
-					break;
-				case KeyEvent::KEY_b:
-					mode = CREATE;
-					params->setOptions( "UI Mode", "label=`CREATE`" );
-					break;
-				case KeyEvent::KEY_v:
-					mode = PAINT_VOXELS;
-					params->setOptions( "UI Mode", "label=`PAINT_VOXELS`" );
-					break;
-				}
-			}
+        ParamTextBox * activeTextBox = dynamic_cast<ParamTextBox *>(activeButton);
+        if (activeTextBox != nullptr){
+            activeTextBox->setText(event);
 		}else{
-			if(event.isControlDown()){
-				if(!event.isShiftDown()){
-					// Alt + Ctrl + key combinations
-				}
-			}else if(event.isShiftDown()){
-				// Alt + Shift + key combinations
-			}else{
-				// Alt + key combination
-			}
-		}
+		    if(!event.isAltDown()){
+			    if(event.isControlDown()){
+				    if(!event.isShiftDown()){
+					    // Ctrl + key combinations
+					    switch( event.getCode() ){
+					    case KeyEvent::KEY_z:
+						    cmdProc->undo();
+						    break;
+					    case KeyEvent::KEY_y:
+						    cmdProc->redo();
+						    break;
+					    case KeyEvent::KEY_d:
+						    // Deselect all
+						    if(UI::selectedNodes.size() != 0){
+							    cmdProc->executeCommand(new CMD_SelectNodes(nullptr));
+						    }
+						    break;
+					    }
+				    }else{
+					    // Ctrl + Shift + key combinations
+				    }
+			    }else if(event.isShiftDown()){
+				    // Shift + key combinations
+				    switch (event.getCode() ){
+				    case KeyEvent::KEY_p:
+					    if(UI::selectedNodes.size() > 0){
+						    cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, sceneRoot));
+					    }
+					    break;
+				    }
+			    }else{
+				    // Simple key
+				    switch (event.getCode() ){
+				    case KeyEvent::KEY_ESCAPE:
+					    //shutdown();
+					    quit();
+					    break;
+				    case KeyEvent::KEY_f:
+					    setFullScreen( !isFullScreen() );
+					    break;
+				    case KeyEvent::KEY_F1:
+					    drawParams = !drawParams;
+					    if(drawParams){
+						    params->maximize();
+						    timelineParams->maximize();
+						    voxelParams->maximize();
+					    }else{
+						    params->minimize();
+						    timelineParams->minimize();
+						    voxelParams->minimize();
+					    }
+				    case KeyEvent::KEY_1:
+					    channel = 0;
+					    break;
+				    case KeyEvent::KEY_2:
+					    channel = 1;
+					    break;
+				    case KeyEvent::KEY_3:
+					    channel = 2;
+					    break;
+				    case KeyEvent::KEY_4:
+					    channel = 3;
+					    break;
+				    case KeyEvent::KEY_DELETE:
+					    if(UI::selectedNodes.size() > 0){
+						    cmdProc->executeCommand(new CMD_DeleteJoints());
+					    }
+					    break;
+				    case KeyEvent::KEY_p:
+					    if(UI::selectedNodes.size() > 0){
+						    cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, dynamic_cast<NodeParent *>(UI::selectedNodes.back())));
+					    }
+					    break;
+				    case KeyEvent::KEY_q:
+					    /*mode = SELECT;
+					    params->setOptions( "UI Mode", "label=`SELECT`" );*/
+					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(0))->pressProgrammatically(this);
+					    break;
+				    case KeyEvent::KEY_w:
+					    mode = TRANSLATE;
+					    params->setOptions( "UI Mode", "label=`TRANSLATE`" );
+					    break;
+				    case KeyEvent::KEY_e:
+					    mode = ROTATE;
+					    params->setOptions( "UI Mode", "label=`ROTATE`" );
+					    break;
+				    case KeyEvent::KEY_r:
+					    mode = SCALE;
+					    params->setOptions( "UI Mode", "label=`SCALE`" );
+					    break;
+				    case KeyEvent::KEY_b:
+					    mode = CREATE;
+					    params->setOptions( "UI Mode", "label=`CREATE`" );
+					    break;
+				    case KeyEvent::KEY_v:
+					    mode = PAINT_VOXELS;
+					    params->setOptions( "UI Mode", "label=`PAINT_VOXELS`" );
+					    break;
+				    }
+			    }
+		    }else{
+			    if(event.isControlDown()){
+				    if(!event.isShiftDown()){
+					    // Alt + Ctrl + key combinations
+				    }
+			    }else if(event.isShiftDown()){
+				    // Alt + Shift + key combinations
+			    }else{
+				    // Alt + key combination
+			    }
+		    }
+		
+        }
 		UI::updateHandlePos(false);
 	}
 }
@@ -1363,8 +1412,10 @@ void CinderApp::setKeyframe(){
 void CinderApp::togglePlay(){
 	if (!play){
 		timelineParams->setOptions( "togglePlay", "label=`PLAYING`" );
+		cmdProc->startCompressing();
 	}else{
 		timelineParams->setOptions( "togglePlay", "label=`STOPPED`" );
+		cmdProc->endCompressing();
 	}
 
 	play = !play;

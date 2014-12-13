@@ -2,6 +2,7 @@
 
 #include "ToolSet.h"
 #include "ToolButton.h"
+#include "ToolBar.h"
 
 #include <cinder\gl\gl.h>
 
@@ -20,7 +21,11 @@ void ToolSet::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderSta
 				ci::gl::scale(iconSize.getWidth(), iconSize.getHeight());
 				dynamic_cast<ToolButton *>(children.at(i))->render(_matrixStack, _renderStack);
 			ci::gl::popMatrices();
-			iconPos.y = iconSize.getHeight()+2;
+			if(dynamic_cast<ToolBar *>(parent)->vertical){
+				iconPos.y = iconSize.getHeight()+2;
+			}else{
+				iconPos.x = iconSize.getWidth()+2;
+			}
 		}
 	ci::gl::popMatrices();
 }
