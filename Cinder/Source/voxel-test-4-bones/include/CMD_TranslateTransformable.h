@@ -16,8 +16,8 @@ public:
 	CMD_TranslateTransformable(NodeTransformable * _node, ci::Vec3d _v, bool _relative, CoordinateSpace _space);
 	~CMD_TranslateTransformable(void);
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 private:
 	NodeTransformable * node;
 	ci::Vec3d v;

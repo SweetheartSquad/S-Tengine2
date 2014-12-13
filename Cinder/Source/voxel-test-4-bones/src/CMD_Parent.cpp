@@ -12,12 +12,11 @@ CMD_Parent::CMD_Parent(SceneRoot * _sceneRoot, NodeChild * _node, NodeParent * _
 	node(_node),
 	newParent(_parent),
 	oldParent(nullptr),
-	sceneRoot(_sceneRoot),
-	error(false)
+	sceneRoot(_sceneRoot)
 {
 }
 
-void CMD_Parent::execute(){
+bool CMD_Parent::execute(){
 	if(node != nullptr){
 		oldParent = node->parent;
 
@@ -30,32 +29,40 @@ void CMD_Parent::execute(){
 			}
 			
 			if(newParent != nullptr){
-				error = !newParent->addChild(node);
+				if(!newParent->addChild(node)){
+					error("Node could not be parented");
+					return false;
+				}
 			}else if(sceneRoot != nullptr){
-				error = !sceneRoot->addChild(node);
+				if(!sceneRoot->addChild(node)){
+					error("Node could not be parented");
+					return false;
+				}
 			}else{
-				// Error: no parent provided
-				error = true;
+				warn("No parent provided; command aborted");
+				return false;
 			}
 
-			if(!error){
-				if (oldParent != nullptr){
-					index = oldParent->removeChild(node);
-				}
+			if (oldParent != nullptr){
+				index = oldParent->removeChild(node);
+			}
 
-				if(sk != nullptr){
-					sk->setPos(oldPos, true);
-				}
+			if(sk != nullptr){
+				sk->setPos(oldPos, true);
 			}
 		}else{
-			// Error: Node is already the parent of child
-			error = true;
+			warn("Node is already the parent of child; command aborted");
+			return false;
 		}
+	}else{
+		error("Node is null");
+		return false;
 	}
+	return true;
 }
 
-void CMD_Parent::unexecute(){
-	if(oldParent != newParent && !error){
+bool CMD_Parent::unexecute(){
+	if(oldParent != newParent){
 		ShiftKiddie * sk = dynamic_cast<ShiftKiddie *>(node);
 		if(sk != nullptr){
 			oldPos = sk->getPos(false);
@@ -75,6 +82,7 @@ void CMD_Parent::unexecute(){
 			sk->setPos(oldPos, true);
 		}
 	}
+	return true;
 }
 
 CMD_Parent::~CMD_Parent(void){

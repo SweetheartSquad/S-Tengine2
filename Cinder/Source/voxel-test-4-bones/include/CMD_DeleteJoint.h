@@ -13,8 +13,8 @@ public:
 	CMD_DeleteJoint(Joint * _jointForDeletion);
 	~CMD_DeleteJoint(void);
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 
 private:
 	// The joints which this command is in reference to

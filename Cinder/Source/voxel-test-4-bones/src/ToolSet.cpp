@@ -6,8 +6,7 @@
 
 #include <cinder\gl\gl.h>
 
-ToolSet::ToolSet(ci::Area _iconSize) :
-	iconSize(_iconSize),
+ToolSet::ToolSet() :
 	NodeChild(nullptr)
 {
 }
@@ -16,15 +15,15 @@ void ToolSet::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderSta
 	ci::gl::pushMatrices();
 		ci::Vec2i iconPos(0,0);
 		for(unsigned long int i = 0; i < children.size(); ++i){
-			ci::gl::translate(iconPos);
-			ci::gl::pushMatrices();
-				ci::gl::scale(iconSize.getWidth(), iconSize.getHeight());
-				dynamic_cast<ToolButton *>(children.at(i))->render(_matrixStack, _renderStack);
-			ci::gl::popMatrices();
-			if(dynamic_cast<ToolBar *>(parent)->vertical){
-				iconPos.y = iconSize.getHeight()+2;
-			}else{
-				iconPos.x = iconSize.getWidth()+2;
+			ToolButton * tb = dynamic_cast<ToolButton *>(children.at(i));
+			if(tb != nullptr){
+				ci::gl::translate(iconPos);
+				tb->render(_matrixStack, _renderStack);
+				if(dynamic_cast<ToolBar *>(parent)->vertical){
+					iconPos.y = tb->textbox.getSize().y;
+				}else{
+					iconPos.x = tb->textbox.getSize().x;
+				}
 			}
 		}
 	ci::gl::popMatrices();
@@ -40,4 +39,25 @@ ToolSet::~ToolSet(){
 		delete children.back();
 		children.pop_back();
 	}
+}
+
+unsigned long int ToolSet::getWidth(){
+	int res = 0;
+	for(unsigned long int i = 0; i < children.size(); ++i){
+		ToolButton * tb = dynamic_cast<ToolButton *>(children.at(i));
+		if(tb != nullptr){
+			res = std::max(res, tb->textbox.getSize().x);
+		}
+	}
+	return res;
+}
+unsigned long int ToolSet::getHeight(){
+	int res = 0;
+	for(unsigned long int i = 0; i < children.size(); ++i){
+		ToolButton * tb = dynamic_cast<ToolButton *>(children.at(i));
+		if(tb != nullptr){
+			res += tb->textbox.getSize().y;
+		}
+	}
+	return res;
 }

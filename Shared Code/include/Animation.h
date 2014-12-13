@@ -34,9 +34,9 @@ public:
 	void update(Step * _step) override;
 
 	enum LoopType{
-		LOOP,
-		LOOP_WITH_OFFSET,
-		CONSTANT
+		kLOOP,
+		kLOOP_WITH_OFFSET,
+		kCONSTANT
 	} loopType;
 
 private:

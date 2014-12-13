@@ -17,7 +17,7 @@ CMD_EditTween::CMD_EditTween(Animation * _animation, float _targetValue, Easing:
 {
 }
 
-void CMD_EditTween::execute(){
+bool CMD_EditTween::execute(){
 	ci::app::console() << "execute CMD_EditTween" << std::endl;
 	// save old tween values and calculate other values being affected by this tween edit
 	if (!executed){
@@ -51,9 +51,10 @@ void CMD_EditTween::execute(){
 			animation->tweens.at(nextTweenIndex)->deltaValue = nextTween_newDeltaValue;
 		}
 	}
+	return true;
 }
 
-void CMD_EditTween::unexecute(){
+bool CMD_EditTween::unexecute(){
 	tween->deltaValue = oldDeltaValue;
 	tween->interpolation = oldInterpolation;
 
@@ -63,6 +64,7 @@ void CMD_EditTween::unexecute(){
 			animation->tweens.at(nextTweenIndex)->deltaValue = nextTween_oldDeltaValue;
 		}
 	}
+	return true;
 }
 
 CMD_EditTween::~CMD_EditTween()

@@ -20,7 +20,7 @@ CMD_AddTween::CMD_AddTween(Animation * _animation, float _currentTime, float _ta
 {	
 }
 
-void CMD_AddTween::execute(){
+bool CMD_AddTween::execute(){
 	ci::app::console() << "execute CMD_AddTween" << std::endl;
     
     // calculate values for new tween, and save other values that will be changed by this tween insert
@@ -59,11 +59,13 @@ void CMD_AddTween::execute(){
 		subCmdProc.redo();
 	}
     animation->currentTween = newCurrentTween;
+	return true;
 }
 
-void CMD_AddTween::unexecute(){
+bool CMD_AddTween::unexecute(){
 	subCmdProc.undo();
     animation->currentTween = oldCurrentTween;
+	return true;
 }
 
 CMD_AddTween::~CMD_AddTween(){

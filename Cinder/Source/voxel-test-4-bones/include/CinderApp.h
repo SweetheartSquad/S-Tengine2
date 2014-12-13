@@ -28,6 +28,8 @@ using namespace std;
 class ToolBar;
 class ParamTextBox;
 class UiInteractable;
+class ToolButton;
+class ConsoleGUI;
 
 class CinderApp : public AppBasic {
 public:
@@ -170,8 +172,6 @@ public:
 	//! colour channel to draw to the main viewport
 	unsigned long int channel;
 	
-	gl::Material JointMaterial;
-	
 	// The root node of the scene; contains the "root" nodes for each skeleton
 	SceneRoot * sceneRoot;
 
@@ -200,12 +200,12 @@ public:
 	const gl::Fbo * sourceFbo;
 
 	enum UImode{
-		CREATE,
-		SELECT,
-		TRANSLATE,
-		ROTATE,
-		SCALE,
-		PAINT_VOXELS
+		kCREATE,
+		kSELECT,
+		kTRANSLATE,
+		kROTATE,
+		kSCALE,
+		kPAINT_VOXELS
 	} mode;
 	
 	CoordinateSpace translateSpace;
@@ -226,4 +226,6 @@ public:
 	Vec3f lastVoxelPaintPos;
 	float currentSpacingDistance;
 	float voxelPaintSpacing;
+
+	ConsoleGUI * consoleGUI;
 };

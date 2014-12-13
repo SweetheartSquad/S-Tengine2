@@ -16,7 +16,7 @@ CMD_DeleteVoxel::CMD_DeleteVoxel(Voxel * _v) :
 {
 }
 
-void CMD_DeleteVoxel::execute(){
+bool CMD_DeleteVoxel::execute(){
 	if(voxel != nullptr){
 		// voxel's parent
 		parent = dynamic_cast<Joint *>(voxel->parent);
@@ -28,15 +28,21 @@ void CMD_DeleteVoxel::execute(){
 					break;
 				}
 			}
+			if(index == (unsigned long int)(-1)){
+				warn("Voxel was not a child of it's parent");
+			}
 		}else{
-			// Error: Parent of voxel is not a joint or voxel has no parent
-			throw;
+			error("Voxel's parent was not a joint");
+			return false;
 		}
 		voxel->parent = nullptr;
+	}else{
+		error("Cannot delete null voxel");
+		return false;
 	}
 }
 
-void CMD_DeleteVoxel::unexecute(){
+bool CMD_DeleteVoxel::unexecute(){
 	if(voxel != nullptr){
 		voxel->parent = parent;
 
@@ -45,13 +51,15 @@ void CMD_DeleteVoxel::unexecute(){
 			if(index != (unsigned long int)(-1)){
 				parent->voxels.insert(parent->voxels.begin() + index, voxel);
 			}else{
-				// Error: voxel was not a child of it's parent
-				throw;
+				warn("Voxel was not a child of it's parent");
 			}
 		}else{
-			// Error: Parent of voxel was not a joint or voxel had no parent
-			throw;
+			error("Voxel's parent was not a joint");
+			return false;
 		}
+	}else{
+		error("Cannot delete null voxel");
+		return false;
 	}
 }
 

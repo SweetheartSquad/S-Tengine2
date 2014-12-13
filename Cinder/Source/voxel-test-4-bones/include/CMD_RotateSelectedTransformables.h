@@ -15,8 +15,8 @@ public:
 	CMD_RotateSelectedTransformables(glm::quat _rotation, bool _relative, CoordinateSpace _space);
 	~CMD_RotateSelectedTransformables(void);
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 private:
 	// Original orientations of selected joints
 	std::vector<glm::quat> orientations;

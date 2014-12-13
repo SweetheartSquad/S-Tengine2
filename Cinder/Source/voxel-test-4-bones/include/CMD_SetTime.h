@@ -7,8 +7,8 @@ public:
 	CMD_SetTime(float * _timelineTime, float _value, bool _relative);
 	~CMD_SetTime();
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 
 private:
 	float * timelineTime;

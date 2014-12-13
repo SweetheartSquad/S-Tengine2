@@ -15,8 +15,8 @@ public:
 	CMD_CreateJoint(SceneRoot * _sceneRoot, ci::Vec3d _pos, Joint * _parent);
 	~CMD_CreateJoint(void);
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 
 private:
 	ci::Vec3d pos;

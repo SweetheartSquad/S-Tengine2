@@ -17,7 +17,7 @@ CMD_AddTweenBefore::CMD_AddTweenBefore(Animation * _animation, float _deltaTimel
 {	
 }
 
-void CMD_AddTweenBefore::execute(){
+bool CMD_AddTweenBefore::execute(){
 	ci::app::console() << "execute CMD_AddTweenBefore" << std::endl;
 	
 	CMD_EditStartKey * cmd = nullptr;
@@ -49,13 +49,16 @@ void CMD_AddTweenBefore::execute(){
 	}else{
 		subCmdProc.redo();
 	}
+
+	return true;
 }
 
-void CMD_AddTweenBefore::unexecute(){
+bool CMD_AddTweenBefore::unexecute(){
 	// Remove tween before animation
 	animation->tweens.erase(animation->tweens.begin());
 
     subCmdProc.undo();
+	return true;
 }
 
 CMD_AddTweenBefore::~CMD_AddTweenBefore(){

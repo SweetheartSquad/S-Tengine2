@@ -12,7 +12,12 @@ CMD_ScaleTransformable::CMD_ScaleTransformable(NodeTransformable * _node, ci::Ve
 {
 }
 
-void CMD_ScaleTransformable::execute(){
+bool CMD_ScaleTransformable::execute(){
+	if(space == kWORLD){
+		warn("World-space rotation not implemented; command aborted");
+		return false;
+	}
+
 	if(node != nullptr){
 		if(firstRun){
 			oldScale = node->transform->scaleVector;
@@ -22,27 +27,11 @@ void CMD_ScaleTransformable::execute(){
 			glm::vec4 v2(scale.x, scale.y, scale.z, 0);
 			NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(node);
 			switch(space){
-			case WORLD:
+			case kWORLD:
 
-				if(nh != nullptr){
-					std::vector<glm::mat4> modelMatrixStack;
-					NodeParent * parent = nh->parent;
-					while(parent != nullptr){
-						modelMatrixStack.push_back(dynamic_cast<NodeTransformable *>(parent)->transform->getOrientationMatrix());
-						parent = dynamic_cast<NodeHierarchical *>(parent)->parent;
-					}
-
-					glm::mat4 modelMatrix(1);
-					for(unsigned long int i = modelMatrixStack.size(); i > 0; --i){
-						modelMatrix = modelMatrix * modelMatrixStack.at(i-1);
-					}
-					v2 = modelMatrix * v2;
-				}
-				
-				node->transform->scale(v2.x, v2.y, v2.z);
 				break;
 
-			case OBJECT:
+			case kOBJECT:
 				node->transform->scale(scale.x, scale.y, scale.z);
 				break;
 			}
@@ -50,16 +39,20 @@ void CMD_ScaleTransformable::execute(){
 			node->transform->scaleVector = glm::vec3(scale.x, scale.y, scale.z);
 		}
 	}else{
-		// Error: no node provided
+		error("Node is null");
+		return false;
 	}
+	return true;
 }
 
-void CMD_ScaleTransformable::unexecute(){
+bool CMD_ScaleTransformable::unexecute(){
 	if(node != nullptr){
 		node->transform->scaleVector = oldScale;
 	}else{
-		// Error: no node provided
+		error("Node is null");
+		return false;
 	}
+	return true;
 }
 
 CMD_ScaleTransformable::~CMD_ScaleTransformable(void){}

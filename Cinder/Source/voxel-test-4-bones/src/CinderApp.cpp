@@ -31,6 +31,8 @@
 #include "ToolButton.h"
 #include "ParamTextBox.h"
 
+#include "ConsoleGUI.h"
+
 void CinderApp::prepareSettings(Settings *settings){
 	settings->setWindowSize(900, 600);
 	settings->setFrameRate(100.0f);
@@ -50,9 +52,9 @@ void CinderApp::setup(){
 	uiColour = 0;
 	clickedUiColour = 0;
 	
-	translateSpace = WORLD;
-	rotateSpace = OBJECT;
-	scaleSpace = OBJECT;
+	translateSpace = kWORLD;
+	rotateSpace = kOBJECT;
+	scaleSpace = kOBJECT;
 
 	drawParams = true;
 	params = params::InterfaceGl::create( getWindow(), "General", toPixels( Vec2i( 175, 250 ) ), ColorA(0.6f, 0.3f, 0.3f, 0.4f));
@@ -88,13 +90,13 @@ void CinderApp::setup(){
 	
 	voxelSelectMode = false;
 	voxelPreviewMode = false;
-	voxelPreviewResolution = 0.1;
-	voxelSphereRadius = 0.1;
-	voxelPaintSpacing = 1;
+	voxelPreviewResolution = 0.1f;
+	voxelSphereRadius = 0.1f;
+	voxelPaintSpacing = 1.f;
 
 	viewJointsOnly = false;
 
-	voxelParams = params::InterfaceGl::create(getWindow(), "Voxel", toPixels(Vec2i(180,150)), ColorA(0.3f, 0.3f, 0.6f, 0.4f));
+	voxelParams = params::InterfaceGl::create(getWindow(), "Voxel", toPixels(Vec2i(180, 125)), ColorA(0.3f, 0.3f, 0.6f, 0.4f));
 	voxelParams->addParam("Selectable", &voxelSelectMode);
 	voxelParams->addParam("Preview", &voxelPreviewMode);
 	voxelParams->addParam("Resolution", &voxelPreviewResolution, "min=0.01, step=0.01");
@@ -102,14 +104,10 @@ void CinderApp::setup(){
 	voxelParams->addParam("Paint Spacing", &voxelPaintSpacing, "min=0.01, step=0.5");
 	voxelParams->maximize();
 
-	// note: we will setup our camera in the 'resize' function,
-	//  because it is called anyway so we don't have to set it up twice
+	consoleGUI = new ConsoleGUI(15, &cmdProc->consoleEntries, 3);
 
-	// create materials
-	JointMaterial.setAmbient(Color::white());
-	JointMaterial.setDiffuse(Color::black());
-	JointMaterial.setSpecular(Color::black());
-	JointMaterial.setShininess( 0.0f );
+	// note: we will setup our camera in the 'resize' function,
+	// because it is called anyway so we don't have to set it up twice
 
 	// load shaders
 	loadShaders();
@@ -119,7 +117,7 @@ void CinderApp::setup(){
 	
 	channel = 0;
 
-	mode = CREATE;
+	mode = kCREATE;
 
 
 	//// test animation
@@ -135,44 +133,41 @@ void CinderApp::setup(){
 
 	play = false;
 	previousTime = 0;
-	
 	toolbar = new ToolBar(Vec2i(5,5), false);
-
 	// Selecting, Creating, Painting, and Transformations
-	toolbar->addSet(new ToolSet(Area(0,0,30,30)));
+	toolbar->addSet(new ToolSet());
 	// Channels
-	toolbar->addSet(new ToolSet(Area(0,0,20,20)));
+	toolbar->addSet(new ToolSet());
 	// View Joints, Voxels, or All
-	toolbar->addSet(new ToolSet(Area(0,0,25,25)));
+	toolbar->addSet(new ToolSet());
 
+	toolbar->addButton(0, new ToolButton("Select", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_Select));
+	toolbar->addButton(0, new ToolButton("Translate", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_Translate));
+	toolbar->addButton(0, new ToolButton("Rotate", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_Rotate));
+	toolbar->addButton(0, new ToolButton("Scale", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_Scale));
+	toolbar->addButton(0, new ToolButton("Joint", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_CreateJoints));
+	toolbar->addButton(0, new ToolButton("Voxel", ToolButton::Type::kRADIO, Vec2i(30, 30), nullptr, &ButtonFunctions::MODE_PaintVoxels));
+										 
+	toolbar->addButton(1, new ToolButton("FBO:1", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_0));
+	toolbar->addButton(1, new ToolButton("FBO:2", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_1));
+	toolbar->addButton(1, new ToolButton("FBO:3", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_2));
+	toolbar->addButton(1, new ToolButton("FBO:4", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_3));
 
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Select", nullptr, &ButtonFunctions::MODE_Select));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Translate", nullptr, &ButtonFunctions::MODE_Translate));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Rotate", nullptr, &ButtonFunctions::MODE_Rotate));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Scale", nullptr, &ButtonFunctions::MODE_Scale));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Joint", nullptr, &ButtonFunctions::MODE_CreateJoints));
-	toolbar->addButton(0, new ToolButton(ToolButton::Type::RADIO, "Voxels", nullptr, &ButtonFunctions::MODE_PaintVoxels));
-
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 1", nullptr, &ButtonFunctions::CHANNEL_0));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 2", nullptr, &ButtonFunctions::CHANNEL_1));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 3", nullptr, &ButtonFunctions::CHANNEL_2));
-	toolbar->addButton(1, new ToolButton(ToolButton::Type::RADIO, "Channel 4", nullptr, &ButtonFunctions::CHANNEL_3));
-
-	toolbar->addButton(2, new ToolButton(ToolButton::Type::TOGGLE, "View Joints Only", nullptr, &ButtonFunctions::VIEW_JointsOnly));
+	toolbar->addButton(2, new ToolButton("View Joints Only", ToolButton::Type::kTOGGLE, Vec2i(20, 20), nullptr, &ButtonFunctions::VIEW_JointsOnly));
 
 	timelineBar = new ToolBar(Vec2i(5,40), false);
 
-	timelineBar->addSet(new ToolSet(Area(0,0,20,20)));
+	timelineBar->addSet(new ToolSet());
 
-	timelineBar->addButton(0, new ToolButton(ToolButton::Type::NORMAL, "Next", nullptr, &ButtonFunctions::TIME_Increment));
-	timelineBar->addButton(0, new ToolButton(ToolButton::Type::NORMAL, "Prev", nullptr, &ButtonFunctions::TIME_Decrement));
+	timelineBar->addButton(0, new ToolButton("Next", ToolButton::Type::kNORMAL, Vec2i(20, 20), nullptr, &ButtonFunctions::TIME_Increment));
+	timelineBar->addButton(0, new ToolButton("Prev", ToolButton::Type::kNORMAL, Vec2i(20, 20), nullptr, &ButtonFunctions::TIME_Decrement));
 
 	timeTextBox = new ParamTextBox(ParamTextBox::Type::NUMBER, Vec2i(60, 40), Vec2i(30,20));
 }
 
 void CinderApp::resize(){
-	unsigned int w = max(1, getWindowWidth());
-	unsigned int h = max(1, getWindowHeight());
+	float w = (float)max(1, getWindowWidth());
+	float h = (float)max(1, getWindowHeight());
 	float r = getWindowAspectRatio();
 	Area b = getWindowBounds();
 	rectWindow = b;
@@ -231,6 +226,8 @@ void CinderApp::resize(){
 	}if(!fboFront || fboFront.getWidth() != rectFront.getWidth() || fboFront.getHeight() != rectFront.getHeight()){
 		initMultiChannelFbo(fboFront, rectFront.getInteriorArea(), 4);
 	}
+
+	consoleGUI->resize();
 }
 
 
@@ -246,6 +243,8 @@ void CinderApp::shutdown(){
 	sceneRoot = nullptr;
 	delete cmdProc;
 	cmdProc = nullptr;
+	delete consoleGUI;
+	consoleGUI = nullptr;
 }
 
 void CinderApp::update(){
@@ -308,25 +307,32 @@ void CinderApp::draw(){
 	renderScene(fboFront, camFront);
 
 	fboUI.bindFramebuffer();
-		uiShader.bind();
 		// set viewport to the size of the FBO
 		gl::setViewport( fboUI.getBounds() );
 		gl::enableDepthRead();
 		gl::enableDepthWrite();
 		gl::enableAlphaBlending();
 
+		uiShader.bind();
+		uiShader.uniform("tex", false);
 		gl::clear(ColorA(0.f, 0.f, 0.f, 0.f));
 
 		renderUI(camMayaPersp.getCamera(), rectPersp);
 		renderUI(camTop, rectTop);
 		renderUI(camRight, rectRight);
 		renderUI(camFront, rectFront);
+		
+		gl::disableDepthRead();
+		gl::disableDepthWrite();
 
 		gl::setViewport(fboUI.getBounds());
 
 		vox::MatrixStack t;
 		CinderRenderOptions t2(nullptr, nullptr);
 		t2.ciShader = &uiShader;
+		uiShader.uniform("tex", true);
+		uiShader.uniform("pickingColor", Color(0.f, 0.f, 0.f));
+		consoleGUI->render(&t, &t2);
 		toolbar->render(&t, &t2);
 		timelineBar->render(&t, &t2);
         timeTextBox->render(&t, &t2);
@@ -335,17 +341,15 @@ void CinderApp::draw(){
 		params->draw();
 		timelineParams->draw();
 		voxelParams->draw();
-		
+
 		gl::disableAlphaBlending();
-		gl::disableDepthRead();
-		gl::disableDepthWrite();
 	fboUI.unbindFramebuffer();
 
 	
 
 	// draw the scene
 	gl::enableAlphaBlending();
-
+	
 	gl::color( ColorA(1.f, 1.f, 1.f, 1.f) );
 	
 	gl::draw( fboTop.getTexture(channel), fboTop.getBounds(), rectTop );
@@ -361,7 +365,7 @@ void CinderApp::draw(){
 	gl::drawStrokedRect(rectPersp);
 	
 	gl::draw( fboUI.getTexture(0), getWindowBounds() );
-
+	
 	// draw the picking framebuffer in the upper right corner
 	if(mPickingFboJoint){
 		Rectf rct((Rectf)mPickingFboJoint.getBounds() * 5.f);
@@ -369,7 +373,7 @@ void CinderApp::draw(){
 		gl::draw( mPickingFboJoint.getTexture(0), rct );
 		gl::drawStrokedRect(Rectf(rct.x1, rct.y1, rct.x2, rct.y2));
 	}
-
+	
 	// draw the picking framebuffer in the upper right corner
 	if(pickingFboUI){
 		Rectf rct((Rectf)pickingFboUI.getBounds() * 5.f);
@@ -483,7 +487,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 	gl::color(ColorA(1.f, 1.f, 1.f, 1.f));
 
 	uiShader.uniform("pickingColor", Color(0.f, 0.f, 0.f));
-	if(mode == CREATE){
+	if(mode == kCREATE){
 		Ray ray = camMayaPersp.getCamera().generateRay((float)mMousePos.x/rectPersp.getWidth(), 1.f-((float)(mMousePos.y-rect.y1)/rectPersp.getHeight()), camMayaPersp.getCamera().getAspectRatio());			
 		float distance = 0.f;
 		if(ray.calcPlaneIntersection(Vec3f(0.f, 0.f, 0.f), Vec3f(0.f, 1.f, 0.f), &distance)){
@@ -497,27 +501,42 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 
 	if(UI::selectedNodes.size() != 0){
 		gl::pushMatrices();
-
+		
+			glPointSize(5);
 			// Draw spheres around the selected joints
 			gl::enableWireframe();
 			for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 				if (i == UI::selectedNodes.size() - 1){
-					gl::color(1.f, 0.25f, 0.1f);
+					gl::color(0.f, 1.f, 1.f);
 				}
 				Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(i));
-				if(j != NULL){
+				if(j != nullptr){
 					gl::pushMatrices();
 						glm::vec3 absPos = j->getPos(false);
 						gl::translate(absPos.x, absPos.y, absPos.z);
 						gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.06f);
+						
+						gl::enableWireframe();
+						for(unsigned long int i = 0; i < j->voxels.size(); ++i){
+							Voxel * v = dynamic_cast<Voxel*>(j->voxels.at(i));
+							if(v != nullptr){
+								glBegin(GL_POINTS);
+								glVertex3f(v->transform->translationVector.x, v->transform->translationVector.y, v->transform->translationVector.z);
+								glEnd();
+							}
+						}
+						gl::disableWireframe();
+
 					gl::popMatrices();
 				}else{
 					Voxel * v = dynamic_cast<Voxel *>(UI::selectedNodes.at(i));
-					if(v != NULL){
+					if(v != nullptr){
 						gl::pushMatrices();
 							glm::vec3 absPos = dynamic_cast<Joint *>(v->parent)->getPos(false);
 							gl::translate(absPos.x, absPos.y, absPos.z);
-							gl::drawSphere(Vec3f(v->getPos().x, v->getPos().y, v->getPos().z), 0.06f);
+							glBegin(GL_POINTS);
+							glVertex3f(v->transform->translationVector.x, v->transform->translationVector.y, v->transform->translationVector.z);
+							glEnd();
 						gl::popMatrices();
 					}
 				}
@@ -525,11 +544,11 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 			gl::disableWireframe();
 
 			switch(mode){
-			case TRANSLATE:
+			case kTRANSLATE:
 				gl::translate(UI::displayHandlePos);
 				break;
-			case ROTATE:
-			case SCALE:
+			case kROTATE:
+			case kSCALE:
 				gl::translate(UI::handlePos);
 				break;
 			}
@@ -542,8 +561,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 			}
 
 			switch(mode){
-			case TRANSLATE:
-				if(translateSpace == OBJECT){
+			case kTRANSLATE:
+				if(translateSpace == kOBJECT){
 					// Rotate to match the object orientation
 					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
 					if(j != NULL){
@@ -580,8 +599,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 				break;
 
-			case ROTATE:
-				if(rotateSpace == OBJECT){
+			case kROTATE:
+				if(rotateSpace == kOBJECT){
 					// Rotate to match the object orientation
 					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
 					if(j != NULL){
@@ -623,8 +642,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 				break;
 
-			case SCALE:
-				if(scaleSpace == OBJECT){
+			case kSCALE:
+				if(scaleSpace == kOBJECT){
 					// Rotate to match the object orientation
 					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
 					if(j != NULL){
@@ -830,13 +849,14 @@ void CinderApp::mouseDown( MouseEvent event ){
 	mMousePos = event.getPos();
 
 	switch (mode){
-		case CinderApp::CREATE:
+		case CinderApp::kCREATE:
 			break;
-		case CinderApp::SELECT:
-		case CinderApp::TRANSLATE:
-		case CinderApp::ROTATE:
-		case CinderApp::SCALE:
-		case CinderApp::PAINT_VOXELS:
+			break;
+		case CinderApp::kSELECT:
+		case CinderApp::kTRANSLATE:
+		case CinderApp::kROTATE:
+		case CinderApp::kSCALE:
+		case CinderApp::kPAINT_VOXELS:
 			cmdProc->startCompressing();
 			console() << "startCompressing" << endl;
 			break;
@@ -874,7 +894,6 @@ void CinderApp::mouseDown( MouseEvent event ){
 		sourceBounds = nullptr;
 	}
 	
-
 	
 	// Get the selected UI colour
 	pickColour(&clickedUiColour, &fboUI, &rectWindow, &pickingFboUI, mMousePos, Area(0,0,1,1), 1, GL_UNSIGNED_BYTE);
@@ -886,7 +905,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 
 	if(!event.isAltDown() && (clickedUiColour == 0)){
 		if(sourceCam == &camMayaPersp.getCamera()){
-			if(mode == PAINT_VOXELS){
+			if(mode == kPAINT_VOXELS){
 				if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
 					if(event.isLeft()){
 						// place voxel
@@ -913,7 +932,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 						}
 					}
 				}
-			}else if(mode == CREATE){
+			}else if(mode == kCREATE){
 				if(event.isLeft()){
 					Ray ray = camMayaPersp.getCamera().generateRay((float)mMousePos.x/rectPersp.getWidth(), 1.f-((float)(mMousePos.y-rectPersp.y1)/rectPersp.getHeight()), camMayaPersp.getCamera().getAspectRatio());			
 					float distance = 0.f;
@@ -926,7 +945,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 						}
 					}
 				}
-			}else if(mode == SELECT){
+			}else if(mode == kSELECT){
 				if(event.isLeft()){
 					unsigned long int pickedColour;
 					pickColour(&pickedColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
@@ -977,7 +996,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 					Vec2f deltaMousePos = mMousePos - oldMousePos;
 					console() << "Mouse:\t" << deltaMousePos << std::endl;
 
-					if(mode == TRANSLATE){
+					if(mode == kTRANSLATE){
 						if(UI::selectedNodes.size() > 0){
 							if(sourceCam->isPersp()){
 
@@ -1006,7 +1025,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 								}
 							}
 						}
-					}else if(mode == ROTATE){
+					}else if(mode == kROTATE){
 						glm::vec3 axis(0,0,0);
 						switch(clickedUiColour){
 							case 0xFF0000: axis.x -= 1; break;
@@ -1030,7 +1049,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 
 							cmdProc->executeCommand(new CMD_RotateSelectedTransformables(glm::quat(eulerAngles), true, rotateSpace));
 						}
-					}else if(mode == SCALE){
+					}else if(mode == kSCALE){
 						if(UI::selectedNodes.size() > 0){
 							//nothing
 							Vec3i dir(0,0,0);
@@ -1052,7 +1071,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 					}
 				}
 			}else{
-				if(mode == SELECT){
+				if(mode == kSELECT){
 					if(event.isLeftDown() && !event.isAltDown() && !event.isShiftDown()){
 						unsigned long int pickedColour;
 						pickColour(&pickedColour, sourceFbo, sourceRect, &mPickingFboJoint, mMousePos, Area(0,0,5,5), 1, GL_UNSIGNED_BYTE);
@@ -1075,7 +1094,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 						}
 					}
 
-				}else if(mode == PAINT_VOXELS){
+				}else if(mode == kPAINT_VOXELS){
 					if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
 						if(event.isLeftDown()){
 							// place voxel
@@ -1145,9 +1164,18 @@ void CinderApp::mouseUp( MouseEvent event ){
 		activeButton->up(this);
 	}
 	
-	if(mode == SELECT || mode == TRANSLATE || mode == ROTATE || mode == SCALE || mode == PAINT_VOXELS){
+	switch (mode){
+	case CinderApp::kCREATE:
+	default:
+		break;
+	case CinderApp::kSELECT:
+	case CinderApp::kTRANSLATE:
+	case CinderApp::kROTATE:
+	case CinderApp::kSCALE:
+	case CinderApp::kPAINT_VOXELS:
 		cmdProc->endCompressing();
 		console() << "endCompressing" << endl;
+		break;
 	}
 
 	uiColour = 0;
@@ -1239,23 +1267,23 @@ void CinderApp::keyDown( KeyEvent event ){
 					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(0))->pressProgrammatically(this);
 					    break;
 				    case KeyEvent::KEY_w:
-					    mode = TRANSLATE;
+					    mode = kTRANSLATE;
 					    params->setOptions( "UI Mode", "label=`TRANSLATE`" );
 					    break;
 				    case KeyEvent::KEY_e:
-					    mode = ROTATE;
+					    mode = kROTATE;
 					    params->setOptions( "UI Mode", "label=`ROTATE`" );
 					    break;
 				    case KeyEvent::KEY_r:
-					    mode = SCALE;
+					    mode = kSCALE;
 					    params->setOptions( "UI Mode", "label=`SCALE`" );
 					    break;
 				    case KeyEvent::KEY_b:
-					    mode = CREATE;
+					    mode = kCREATE;
 					    params->setOptions( "UI Mode", "label=`CREATE`" );
 					    break;
 				    case KeyEvent::KEY_v:
-					    mode = PAINT_VOXELS;
+					    mode = kPAINT_VOXELS;
 					    params->setOptions( "UI Mode", "label=`PAINT_VOXELS`" );
 					    break;
 				    }
@@ -1362,7 +1390,7 @@ void CinderApp::snapParams(){
 	timelineParams->setOptions("", timelineParamsOptions.str());
 
 	stringstream voxelParamsOptions;
-	voxelParamsOptions << "position='5 " << 2 * (getWindowHeight() / 2.5) << "'";
+	voxelParamsOptions << "position='5 " << 1.9 * (getWindowHeight() / 2.5) << "'";
 	voxelParams->setOptions("", voxelParamsOptions.str());
 }
 void CinderApp::saveSkeleton() {

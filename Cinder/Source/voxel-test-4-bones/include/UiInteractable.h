@@ -8,7 +8,7 @@
 
 class CinderApp;
 
-class UiInteractable : public NodeSelectable, public NodeRenderable {
+class UiInteractable : public virtual NodeSelectable, public virtual NodeRenderable {
 public:
     ci::Color displayColor;
 
@@ -17,9 +17,12 @@ public:
 
     ci::Vec2i pos;
 	ci::Area size;
-
+	
+	// Whether the button is under the mouse
 	bool isHovered;
+	// Whether the mouse clicked the button (and hasn't been released)
 	bool isDown;
+	// Whether the button is active (only affects RADIO and TOGGLE buttons)
 	bool isActive;
 
     // The function to be called when you are starting a click

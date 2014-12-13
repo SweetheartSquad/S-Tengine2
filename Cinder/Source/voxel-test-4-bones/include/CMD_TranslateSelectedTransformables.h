@@ -14,8 +14,8 @@ public:
 	CMD_TranslateSelectedTransformables(ci::Vec3d _v, bool _relative, CoordinateSpace _space);
 	~CMD_TranslateSelectedTransformables(void);
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 private:
 	ci::Vec3d v;
 	bool relative;

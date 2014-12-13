@@ -8,21 +8,25 @@
 #include <cinder\Rect.h>
 #include <cinder\Color.h>
 
+#include <string>
+#include <cinder\Text.h>
+
 class CinderApp;
 class ToolSet;
 class Step;
 
 class ToolButton : public UiInteractable, public NodeChild{
 public:
+	ci::ColorA displayColor;
 	enum Type{
-		NORMAL,
-		TOGGLE,
-		RADIO
+		kNORMAL,
+		kTOGGLE,
+		kRADIO
 	} type;
 	
-	ToolButton(Type _type, std::string _label, void (*_downCallback)(CinderApp * _app) = nullptr, void (*_upCallback)(CinderApp * _app) = nullptr);
+	ToolButton(std::string _label, Type _type, ci::Vec2i _iconSize, void (*_downCallback)(CinderApp * _app) = nullptr, void (*_upCallback)(CinderApp * _app) = nullptr);
 
-	std::string label;
+	ci::TextBox textbox;
 	
     // The function you want to call when you start clicking the button
 	void (*downCallback)(CinderApp * _app);

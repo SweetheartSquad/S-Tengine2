@@ -14,7 +14,7 @@ CMD_ParentSelectedNodes::CMD_ParentSelectedNodes(SceneRoot * _sceneRoot, NodePar
 {
 }
 
-void CMD_ParentSelectedNodes::execute(){
+bool CMD_ParentSelectedNodes::execute(){
 	if (!executed){
 		
 		if(firstRun){
@@ -24,7 +24,10 @@ void CMD_ParentSelectedNodes::execute(){
 						NodeChild * n = dynamic_cast<NodeChild *>(UI::selectedNodes.at(i));
 						if (n != nullptr){
 							// add subCommand
-					        subCmdProc.executeCommand(new CMD_Parent(sceneRoot, n, parent));
+							if(!subCmdProc.executeCommand(new CMD_Parent(sceneRoot, n, parent))){
+								subCmdProc.undoAll();
+								return false;
+							}
 						}
 					}
 				}
@@ -33,10 +36,12 @@ void CMD_ParentSelectedNodes::execute(){
 			subCmdProc.redoAll();
 		}
 	}
+	return true;
 }
 
-void CMD_ParentSelectedNodes::unexecute(){
+bool CMD_ParentSelectedNodes::unexecute(){
 	subCmdProc.undoAll();
+	return true;
 }
 
 

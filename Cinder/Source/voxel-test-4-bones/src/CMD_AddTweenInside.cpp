@@ -18,7 +18,7 @@ CMD_AddTweenInside::CMD_AddTweenInside(Animation * _animation, float _deltaTimel
 {	
 }
 
-void CMD_AddTweenInside::execute(){
+bool CMD_AddTweenInside::execute(){
 	ci::app::console() << "execute CMD_AddTweenInside" << std::endl;
 
 	// calculate values for new tween, and save other values that will be changed by this tween insert
@@ -53,15 +53,19 @@ void CMD_AddTweenInside::execute(){
 
 	animation->tweens.at(nextTweenIndex+1)->deltaTime = nextTween_newDeltaTime;
 	animation->tweens.at(nextTweenIndex+1)->deltaValue = nextTween_newDeltaValue;
+
+	return true;
 }
 
-void CMD_AddTweenInside::unexecute(){
+bool CMD_AddTweenInside::unexecute(){
 	// Remove tween inside animation
 	
 	// after inserting, tween is in nextTweenIndex
 	animation->tweens.erase(animation->tweens.begin() + nextTweenIndex);
 	animation->tweens.at(nextTweenIndex+1)->deltaTime = nextTween_oldDeltaTime;
 	animation->tweens.at(nextTweenIndex+1)->deltaValue = nextTween_oldDeltaValue;
+
+	return true;
 }
 
 CMD_AddTweenInside::~CMD_AddTweenInside(){

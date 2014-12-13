@@ -12,8 +12,8 @@ public:
 	CMD_DeleteVoxel(Voxel * _v);
 	~CMD_DeleteVoxel(void);
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 
 private:
 	// Voxel for deletion

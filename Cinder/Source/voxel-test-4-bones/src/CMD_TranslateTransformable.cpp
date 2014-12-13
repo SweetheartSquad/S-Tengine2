@@ -12,7 +12,7 @@ CMD_TranslateTransformable::CMD_TranslateTransformable(NodeTransformable * _node
 {
 }
 
-void CMD_TranslateTransformable::execute(){
+bool CMD_TranslateTransformable::execute(){
 	if(node != nullptr){
 		if(firstRun){
 			oldPos = node->transform->translationVector;
@@ -21,10 +21,10 @@ void CMD_TranslateTransformable::execute(){
 		if(sk != nullptr){
 			if(relative){
 				switch(space){
-				case WORLD:
+				case kWORLD:
 					sk->setPos(sk->getPos(false) + glm::vec3(v.x, v.y, v.z), true);
 					break;
-				case OBJECT:
+				case kOBJECT:
 					sk->setPos(sk->getPos(true) + glm::vec3(v.x, v.y, v.z), false);
 					break;
 				}
@@ -34,14 +34,15 @@ void CMD_TranslateTransformable::execute(){
 		}else{
 			// no parent transforms to worry about
 			if(relative){
+				glm::vec4 newPos(v.x, v.y, v.z, 1.f);
 				switch(space){
-				case WORLD:
-					// doesn't take into account node's orientation/scale?
-					node->transform->translationVector += glm::vec3(v.x, v.y, v.z);
+				case kWORLD:
+					newPos = glm::inverse(node->transform->getOrientationMatrix() * node->transform->getScaleMatrix()) * newPos;
+					node->transform->translate(newPos.x, newPos.y, newPos.z);
 					break;
 
-				case OBJECT:
-					node->transform->translationVector += glm::vec3(v.x, v.y, v.z);
+				case kOBJECT:
+					node->transform->translate(v.x, v.y, v.z);
 					break;
 				}
 			}else{
@@ -51,14 +52,16 @@ void CMD_TranslateTransformable::execute(){
 	}else{
 		// Error: node not provided
 	}
+	return true;
 }
 
-void CMD_TranslateTransformable::unexecute(){
+bool CMD_TranslateTransformable::unexecute(){
 	if(node != nullptr){
 		node->transform->translationVector = oldPos;
 	}else{
 		// Error: No node provided
 	}
+	return true;
 }
 
 CMD_TranslateTransformable::~CMD_TranslateTransformable(void){}

@@ -21,6 +21,7 @@
 #include <VoxelJoint.h>
 #include "PhongShaderComponent.h"
 #include "BlinnShaderComponent.h"
+#include "Transform.h"
 
 Cube * cube;
 Cube * cube2;

@@ -7,21 +7,24 @@
 #include "CommandProcessor.h"
 #include "Command.h"
 #include "CompressedCommand.h"
+#include "ConsoleGUI.h"
 
 CommandProcessor::CommandProcessor(void) :
 	currentCompressedCommand(nullptr)
 {
 }
 
-void CommandProcessor::executeCommand(Command * c){
+bool CommandProcessor::executeCommand(Command * c){
 	if(currentCompressedCommand != nullptr){
 		currentCompressedCommand->subCmdProc.executeCommand(c);
 		currentCompressedCommand->firstRun = true;
 	}else{
-		c->execute();
-		c->executed = true;
-		c->firstRun = false;
-		undoStack.push_back(c);
+		redoStack.push_back(c);
+		if(redo()){
+			c->firstRun = false;
+		}else{
+			return false;
+		}
 	}
 
 	// Executing a new command will always clear the redoStack
@@ -29,6 +32,7 @@ void CommandProcessor::executeCommand(Command * c){
 		delete redoStack.back();
 		redoStack.pop_back();
 	}
+	return true;
 }
 
 void CommandProcessor::startCompressing(){
@@ -52,46 +56,59 @@ void CommandProcessor::endCompressing(){
 	}
 }
 
-void CommandProcessor::undo(){
+bool CommandProcessor::undo(){
+	//log("undo");
 	if (undoStack.size() != 0){
-		//ci::app::console() << "undo: " << typeid(*c).name() << std::endl;
 		Command * c = undoStack.back();
-		c->unexecute();
-		c->executed = false;
-		redoStack.push_back(c);
+		bool success = c->unexecute();
 		undoStack.pop_back();
+		// Log command's entries
+		for(unsigned long int i = 0; i < c->subCmdProc.consoleEntries.size(); ++i){
+			consoleEntries.push_back(c->subCmdProc.consoleEntries.at(i));
+		}
+		c->subCmdProc.consoleEntries.clear();
+		//consoleEntries.insert(consoleEntries.end(), c->subCmdProc.consoleEntries.begin(), c->subCmdProc.consoleEntries.end());
+		if(success){
+			c->executed = true;
+			redoStack.push_back(c);
+		}else{
+			delete c;
+		}
+		return success;
+	}
+}
+
+bool CommandProcessor::redo(){
+	//log("redo");
+	if (redoStack.size() != 0){
+		Command * c = redoStack.back();
+		bool success = c->execute();
+		redoStack.pop_back();
+		// Log command's entries
+		for(unsigned long int i = 0; i < c->subCmdProc.consoleEntries.size(); ++i){
+			consoleEntries.push_back(c->subCmdProc.consoleEntries.at(i));
+		}
+		c->subCmdProc.consoleEntries.clear();
+		//consoleEntries.insert(consoleEntries.end(), c->subCmdProc.consoleEntries.begin(), c->subCmdProc.consoleEntries.end());
+		if(success){
+			c->executed = true;
+			undoStack.push_back(c);
+		}else{
+			delete c;
+		}
+		return success;
 	}
 }
 
 void CommandProcessor::undoAll(){
 	while (undoStack.size() != 0){
-		//ci::app::console() << "undo: " << typeid(*c).name() << std::endl;
-		Command * c = undoStack.back();
-		c->unexecute();
-		c->executed = false;
-		redoStack.push_back(c);
-		undoStack.pop_back();
+		undo();
 	}
 }
 
-void CommandProcessor::redo(){
-	if (redoStack.size() != 0){
-		//ci::app::console() << "redo: " << typeid(*c).name() << std::endl;
-		Command * c = redoStack.back();
-		c->execute();
-		c->executed = true;
-		undoStack.push_back(c);
-		redoStack.pop_back();
-	}
-}
 void CommandProcessor::redoAll(){
 	while (redoStack.size() != 0){
-		//ci::app::console() << "redo: " << typeid(*c).name() << std::endl;
-		Command * c = redoStack.back();
-		c->execute();
-		c->executed = true;
-		undoStack.push_back(c);
-		redoStack.pop_back();
+		redo();
 	}
 }
 
@@ -110,4 +127,29 @@ void CommandProcessor::reset(){
 
 CommandProcessor::~CommandProcessor(void){
 	reset();
+	while(consoleEntries.size() > 0){
+		delete consoleEntries.back();
+		consoleEntries.pop_back();
+	}
+}
+
+void CommandProcessor::log(std::string _message){
+	std::stringstream t;
+	t << "Log: ";
+	t << _message;
+	consoleEntries.push_back(new ConsoleEntry(t.str(), ConsoleEntry::Type::kLOG));
+}
+
+void CommandProcessor::warn(std::string _message){
+	std::stringstream t;
+	t << "Warning: ";
+	t << _message;
+	consoleEntries.push_back(new ConsoleEntry(t.str(), ConsoleEntry::Type::kWARNING));
+}
+
+void CommandProcessor::error(std::string _message){
+	std::stringstream t;
+	t << "Error: ";
+	t << _message;
+	consoleEntries.push_back(new ConsoleEntry(t.str(), ConsoleEntry::Type::kERROR));
 }

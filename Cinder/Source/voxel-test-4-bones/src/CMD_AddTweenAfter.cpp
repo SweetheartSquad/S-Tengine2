@@ -18,7 +18,7 @@ CMD_AddTweenAfter::CMD_AddTweenAfter(Animation * _animation, float _deltaTimelin
 {	
 }
 
-void CMD_AddTweenAfter::execute(){
+bool CMD_AddTweenAfter::execute(){
 	ci::app::console() << "execute CMD_AddTweenAfter" << std::endl;
 
 	// calculate values for new tween, and save other values that will be changed by this tween insert
@@ -41,11 +41,13 @@ void CMD_AddTweenAfter::execute(){
 	
 	// insert tween
 	animation->tweens.insert(animation->tweens.end(), tween);
+	return true;
 }
 
-void CMD_AddTweenAfter::unexecute(){
+bool CMD_AddTweenAfter::unexecute(){
 	// Remove tween after animation
 	animation->tweens.erase(animation->tweens.begin() + animation->tweens.size() - 1);
+	return true;
 }
 
 CMD_AddTweenAfter::~CMD_AddTweenAfter(){

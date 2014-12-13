@@ -24,7 +24,7 @@ CMD_SelectNodes::~CMD_SelectNodes(){
 	nodesForSelection.clear();
 }
 
-void CMD_SelectNodes::execute(){
+bool CMD_SelectNodes::execute(){
 	previousSelectedNodes = UI::selectedNodes;
 	
 	if(nodesForSelection.size() == 0){
@@ -99,8 +99,10 @@ void CMD_SelectNodes::execute(){
 
 		UI::selectedNodes = correctedNodesForSelection;
 	}
+	return true;
 }
 
-void CMD_SelectNodes::unexecute(){
+bool CMD_SelectNodes::unexecute(){
 	UI::selectedNodes = previousSelectedNodes;
+	return true;
 }

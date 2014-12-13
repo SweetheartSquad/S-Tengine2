@@ -5,8 +5,7 @@
 #include "Tween.h"
 #include "Animation.h"
 
-class CMD_AddTweenInside : public Command
-{
+class CMD_AddTweenInside : public Command{
 public:
 	/**
 	* Adds a tween to the specified animation
@@ -20,8 +19,8 @@ public:
 	CMD_AddTweenInside(Animation * _animation, float _deltaTimeline, float _targetValue, Easing::Type _interpolation, unsigned long int _nextTweenIndex);
 	~CMD_AddTweenInside();
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 
 private:
 	// Used in getTweenEndValue

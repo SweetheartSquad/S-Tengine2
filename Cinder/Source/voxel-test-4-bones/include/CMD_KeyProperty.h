@@ -22,8 +22,8 @@ public:
 	CMD_KeyProperty(Animation * _animation, float _currentTime, float _targetTime, float _value, Easing::Type _interpolation);
 	~CMD_KeyProperty();
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 
 private:
 

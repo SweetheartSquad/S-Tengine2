@@ -16,8 +16,8 @@ public:
 	CMD_Parent(SceneRoot * _sceneRoot, NodeChild * _node, NodeParent * _parent);
 	~CMD_Parent(void);
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 
 private:
 	NodeChild * node;
@@ -29,5 +29,4 @@ private:
 	unsigned long int index;
 
 	glm::vec3 oldPos;
-	bool error;
 };

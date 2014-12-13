@@ -148,6 +148,8 @@
     <ClCompile Include="..\src\CMD_SetTime.cpp" />
     <ClCompile Include="..\src\CompressedCommand.cpp" />
     <ClCompile Include="..\src\ParamTextBox.cpp" />
+    <ClCompile Include="..\src\ConsoleEntry.cpp" />
+    <ClCompile Include="..\src\ConsoleGUI.cpp" />
     <ClCompile Include="..\src\Timeline.cpp" />
     <ClCompile Include="..\src\Toolbar.cpp" />
     <ClCompile Include="..\src\ToolButton.cpp" />
@@ -216,6 +218,8 @@
     <ClInclude Include="..\include\CMD_SetTime.h" />
     <ClInclude Include="..\include\CompressedCommand.h" />
     <ClInclude Include="..\include\ParamTextBox.h" />
+    <ClInclude Include="..\include\ConsoleEntry.h" />
+    <ClInclude Include="..\include\ConsoleGUI.h" />
     <ClInclude Include="..\include\Toolbar.h" />
     <ClInclude Include="..\include\ToolButton.h" />
     <ClInclude Include="..\include\ToolSet.h" />

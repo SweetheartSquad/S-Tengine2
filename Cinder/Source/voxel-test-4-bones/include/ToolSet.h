@@ -11,13 +11,13 @@ class Step;
 
 class ToolSet : public NodeRenderable, public NodeHierarchical{
 public:
-	ToolSet(ci::Area _iconSize);
+	ToolSet();
 	~ToolSet();
-
-	ci::Area iconSize;
 
 	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 
 	void addButton(ToolButton * _button);
 
+	unsigned long int getHeight();
+	unsigned long int getWidth();
 };

@@ -12,20 +12,32 @@ CMD_SetTime::CMD_SetTime(float * _timelineTime, float _value, bool _relative) :
 {
 }
 
-void CMD_SetTime::execute(){
-	if(firstRun){
-		oldValue = *timelineTime;
-	}
-	if (relative){
-		* timelineTime += newValue;
+bool CMD_SetTime::execute(){
+	if(timelineTime != nullptr){
+		if(firstRun){
+			oldValue = *timelineTime;
+		}
+		if (relative){
+			* timelineTime += newValue;
+		}else{
+			* timelineTime = newValue;
+		}
 	}else{
-		* timelineTime = newValue;
+		error("null timeline");
+		return false;
 	}
+	return true;
 }
 
-void CMD_SetTime::unexecute(){
-	*timelineTime = oldValue;
-	ci::app::console() << "restored timelineTime: " << *timelineTime << std::endl;
+bool CMD_SetTime::unexecute(){
+	if(timelineTime != nullptr){
+		*timelineTime = oldValue;
+		ci::app::console() << "restored timelineTime: " << *timelineTime << std::endl;
+	}else{
+		error("null timeline");
+		return false;
+	}
+	return true;
 }
 
 CMD_SetTime::~CMD_SetTime()

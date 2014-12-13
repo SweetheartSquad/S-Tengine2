@@ -9,7 +9,7 @@ CMD_DeleteJoint::CMD_DeleteJoint(Joint * _jointForDeletion) :
 {
 }
 
-void CMD_DeleteJoint::execute(){
+bool CMD_DeleteJoint::execute(){
 	if(jointForDeletion != nullptr){
 		if(jointForDeletion->children.size() > 0){
 			children = jointForDeletion->children;
@@ -18,16 +18,23 @@ void CMD_DeleteJoint::execute(){
 			index = jointForDeletion->parent->removeChild(jointForDeletion);
 		}
 	}else{
-		// Error: no joint selected
+		error("Null joint cannot be deleted");
+		return false;
 	}
+	return true;
 }
 
-void CMD_DeleteJoint::unexecute(){
-	if(index != (unsigned long int)(-1)){
-		jointForDeletion->parent->addChildAtIndex(jointForDeletion, index);
-	}else{		
-		jointForDeletion->children = children;
+bool CMD_DeleteJoint::unexecute(){
+	if(jointForDeletion != nullptr){
+		if(index != (unsigned long int)(-1)){
+			jointForDeletion->parent->addChildAtIndex(jointForDeletion, index);
+		}else{		
+			jointForDeletion->children = children;
+		}
+		error("Null joint cannot be deleted");
+		return false;
 	}
+	return true;
 }
 
 CMD_DeleteJoint::~CMD_DeleteJoint(void){

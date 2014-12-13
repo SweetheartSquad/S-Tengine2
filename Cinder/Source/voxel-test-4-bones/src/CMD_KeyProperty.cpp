@@ -21,7 +21,7 @@ CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _currentTime, flo
 {
 }
 
-void CMD_KeyProperty::execute(){
+bool CMD_KeyProperty::execute(){
 	// Executing for the first time, save the oldStartValue if keying 0, or create an add or edit command
 	if(firstRun){
         oldReferenceValue = animation->referenceValue;
@@ -72,9 +72,10 @@ void CMD_KeyProperty::execute(){
 	animation->update(&s);
     */
     animation->referenceValue = value;
+	return true;
 }
 
-void CMD_KeyProperty::unexecute(){
+bool CMD_KeyProperty::unexecute(){
 
 	subCmdProc.undo();
 
@@ -89,6 +90,7 @@ void CMD_KeyProperty::unexecute(){
 
 	animation->update(&s);*/
     animation->referenceValue = oldReferenceValue;
+	return true;
 }
 
 float CMD_KeyProperty::getStartValue(unsigned long int _idx){

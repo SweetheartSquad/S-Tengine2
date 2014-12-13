@@ -15,8 +15,8 @@ public:
 	CMD_ScaleTransformable(NodeTransformable * _node, ci::Vec3f _scale, bool _relative, CoordinateSpace _space);
 	~CMD_ScaleTransformable(void);
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 private:
 	NodeTransformable * node;
 	ci::Vec3f scale;

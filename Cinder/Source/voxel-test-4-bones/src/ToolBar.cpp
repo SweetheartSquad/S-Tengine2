@@ -17,13 +17,15 @@ void ToolBar::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderSta
 		ci::gl::translate(pos);
 		ci::Vec2i setPos(0,0);
 		for(unsigned long int i = 0; i < children.size(); ++i){
-			ci::gl::translate(setPos);
-
-			dynamic_cast<ToolSet *>(children.at(i))->render(_matrixStack, _renderStack);
-			if(vertical){
-				setPos.y = dynamic_cast<ToolSet *>(children.at(i))->children.size() * (dynamic_cast<ToolSet *>(children.at(i))->iconSize.getHeight()+2) + 5;
-			}else{
-				setPos.x = dynamic_cast<ToolSet *>(children.at(i))->children.size() * (dynamic_cast<ToolSet *>(children.at(i))->iconSize.getWidth()+2) + 5;
+			ToolSet * ts = dynamic_cast<ToolSet *>(children.at(i));
+			if(ts != nullptr){
+				ci::gl::translate(setPos);
+				ts->render(_matrixStack, _renderStack);
+				if(vertical){
+					setPos.y = ts->getHeight();
+				}else{
+					setPos.x = ts->getWidth();
+				}
 			}
 		}
 	ci::gl::popMatrices();

@@ -10,8 +10,8 @@ public:
 	CMD_ParentSelectedNodes(SceneRoot * _sceneRoot, NodeParent * _parent);
 	~CMD_ParentSelectedNodes();
 
-	void execute();
-	void unexecute();
+	bool execute();
+	bool unexecute();
 
 	NodeParent * parent;
 	SceneRoot * sceneRoot;
