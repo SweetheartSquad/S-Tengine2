@@ -35,7 +35,7 @@ bool CMD_AddTween::execute(){
 		}else{
 			float sumTime = 0;
 			bool insideAnimation = false;
-			unsigned long int nextTweenIndex;
+			unsigned long int nextTweenIndex = -1;
 			for(unsigned long int i = 0; i < animation->tweens.size(); ++i){
 				sumTime += animation->tweens.at(i)->deltaTime;
 				if(sumTime > targetTime){
@@ -47,18 +47,37 @@ bool CMD_AddTween::execute(){
 			}
 
 			if(insideAnimation){
-                newCurrentTween = nextTweenIndex;
+               // newCurrentTween = nextTweenIndex;
 				subCmdProc.executeCommand(new CMD_AddTweenInside(animation, deltaTimeline, targetValue, interpolation, nextTweenIndex));
 			}else{
 				// After the animation
-                newCurrentTween = animation->tweens.size();
+                //newCurrentTween = animation->tweens.size();
 				subCmdProc.executeCommand(new CMD_AddTweenAfter(animation, deltaTimeline, targetValue, interpolation, sumTime));
+			}
+		}
+
+		// calculate the new currentTween
+		newCurrentTween = animation->tweens.size()-1;
+		float t = 0;
+		float comparison = animation->time;
+		while(comparison < 0){
+			comparison += animation->getTweenEndTime(animation->tweens.size()-1);
+		}while(comparison > animation->getTweenEndTime(animation->tweens.size()-1)){
+			comparison -= animation->getTweenEndTime(animation->tweens.size()-1);
+		}
+		for(unsigned long int i = 0; i < animation->tweens.size(); ++i){
+			t += animation->tweens.at(i)->deltaTime;
+			if(t > comparison){
+				newCurrentTween = i-1;
 			}
 		}
 	}else{
 		subCmdProc.redo();
 	}
+	
     animation->currentTween = newCurrentTween;
+
+
 	return true;
 }
 

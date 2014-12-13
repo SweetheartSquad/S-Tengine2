@@ -41,6 +41,13 @@ public:
 		kEASE_OUT_BACK,
 		kEASE_IN_OUT_BACK,
 	};
+	/**
+	 * @param	t	Current time
+	 * @param	b	Start value
+	 * @param	c	Change in value (target - start value)
+	 * @param	d	Duration
+	 * @return	Eased value
+	 */
 	static float call(Type type, float t, float b, float c, float d){
 		switch(type) {
 			case kNONE: return none(t,b,c,d);

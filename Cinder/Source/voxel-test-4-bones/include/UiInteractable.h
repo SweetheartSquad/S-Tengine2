@@ -8,15 +8,15 @@
 
 class CinderApp;
 
-class UiInteractable : public virtual NodeSelectable, public virtual NodeRenderable {
+class UiInteractable abstract : public virtual NodeSelectable, public virtual NodeRenderable {
 public:
     ci::Color displayColor;
 
-	UiInteractable(ci::Vec2i _pos, ci::Area _size);
+	UiInteractable(ci::Vec2i _pos, ci::Vec2i _size);
 	~UiInteractable();
 
     ci::Vec2i pos;
-	ci::Area size;
+	ci::Vec2i size;
 	
 	// Whether the button is under the mouse
 	bool isHovered;

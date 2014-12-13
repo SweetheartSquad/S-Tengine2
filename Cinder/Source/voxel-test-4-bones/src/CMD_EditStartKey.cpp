@@ -25,8 +25,12 @@ bool CMD_EditStartKey::execute(){
 	    }
 	}else{
         oldHasStart = animation->hasStart;
-        animation->hasStart = true;
-	    animation->time -= targetTime;
+		if(animation->hasStart){
+			animation->time -= targetTime;
+		}else{
+			animation->time = 0;
+			animation->hasStart = true;
+		}
 	}
 	//animation->referenceValue = targetValue;
 	return true;

@@ -4,7 +4,7 @@
 
 #include <cinder\gl\gl.h>
 
-UiInteractable::UiInteractable(ci::Vec2i _pos, ci::Area _size) :
+UiInteractable::UiInteractable(ci::Vec2i _pos, ci::Vec2i _size) :
     NodeSelectable(),
     pos(_pos),
     size(_size),

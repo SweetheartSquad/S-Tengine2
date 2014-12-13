@@ -9,6 +9,7 @@
 #include <cinder\Font.h>
 #include <cinder\Text.h>
 
+class CinderApp;
 class ConsoleGUI : public NodeRenderable {
 public:
 	ConsoleGUI(float _size, std::vector<ConsoleEntry *> * _log, unsigned long int _displayLength);
@@ -20,7 +21,7 @@ public:
 	unsigned long int displayLength;
 	std::vector<ConsoleEntry *> * log;
 
-	void resize();
+	void resize(CinderApp * _app);
 
 	std::vector<ci::TextBox> textboxes;
 };
