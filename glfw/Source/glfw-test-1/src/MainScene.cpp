@@ -80,7 +80,7 @@ MainScene::MainScene(Game * _game):
 	baseShader = new BaseComponentShader();
 	
 	baseShader->components.push_back(new DiffuseShaderComponent());
-	baseShader->components.push_back(new PhongShaderComponent());
+	baseShader->components.push_back(new BlinnShaderComponent());
 	baseShader->components.push_back(new ShadowShaderComponent());
 	baseShader->components.push_back(new TextureShaderComponent());
 	baseShader->compileShader();
@@ -111,11 +111,11 @@ MainScene::MainScene(Game * _game):
 		MeshEntity * loaded = new MeshEntity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxelShader);
 		loaded->mesh->polygonalDrawMode = GL_POINTS;
 		loaded->mesh->pushMaterial(mat);
-		cube->addChild(loaded);
+		//cube->addChild(loaded);
 		loaded->mesh->pushTexture2D(tex);
 	}
 
-	MeshEntity * loaded1 = new MeshEntity(Resource::loadMeshFromObj("../assets/cube.vox"), t, phongShader);
+	MeshEntity * loaded1 = new MeshEntity(Resource::loadMeshFromObj("../assets/cube.vox"), t, baseShader);
 	cube->addChild(loaded1);
 	loaded1->mesh->pushMaterial(mat);
 
@@ -152,7 +152,7 @@ MainScene::MainScene(Game * _game):
 	loaded1->mesh->dirty = true;
 
 	tLight = new DirectionalLight(glm::vec3(1.f, 0.8f, 0.6f),
-		glm::vec3(0.6f, 0.2f, 0.f),
+		glm::vec3(1.0f, 0.0f, 0.f),
 		0.06f);
 
 	PointLight * tLight2 = new PointLight(glm::vec3(1.f, -1.5, 1.f),

@@ -89,6 +89,7 @@ const std::string SHADER_COMPONENT_VOXEL			  = "SHADER_COMPONENT_VOXEL";
 const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGHT + "\n"
 														"#define " + SHADER_COMPONENT_LIGHT + "\n"
 														"struct Light{\n"
+														"	int type;\n"
 														"	vec3 position;\n"
 														"	vec3 intensities;\n"
 														"	float ambientCoefficient;\n"

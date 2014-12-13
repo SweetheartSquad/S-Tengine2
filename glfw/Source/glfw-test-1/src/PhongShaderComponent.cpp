@@ -38,12 +38,26 @@ std::string PhongShaderComponent::getFragmentBodyString(){
 	"vec3 fragWorldPosition = vec3(model * vec4(fragVert, 1))" + SEMI_ENDL +
 	"vec3 surfaceToCamera = normalize(fragVert - fragWorldPosition)" + SEMI_ENDL +
 	"vec4 outColorPhong = vec4(0,0,0,1)" + SEMI_ENDL +
+
+	"vec3 surfaceToLight = vec3(0,0,0)" + SEMI_ENDL +
+	"float attenuation = 1.0" + SEMI_ENDL +
+
 	"for(int i = 0; i < numLights; i++){" + ENDL +
 		"for(int j = 0; j < numMaterials; j++){" + ENDL +
-			"vec3 surfaceToLight = normalize(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
-			"//ambient" + ENDL +
+			"if(lights[i].type == 1){" + ENDL +
+				"//DIRECTIONAL" + ENDL +
+				"surfaceToLight = normalize(lights[i].position)" + SEMI_ENDL +
+				"attenuation = lights[i].attenuation" + SEMI_ENDL +
+			"} else {" + ENDL +	
+				"//POINT" + ENDL +
+				"surfaceToLight = normalize(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
+				"//attenuation" + ENDL +
+				"float distanceToLight = length(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
+				"attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2))" + SEMI_ENDL +
+			"}" + ENDL +
+
 			"vec3 ambient = lights[i].ambientCoefficient * fragColor.rgb * lights[i].intensities" + SEMI_ENDL +
-		
+
 			"//diffuse" + ENDL +
 			"float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))" + SEMI_ENDL +
 			"vec3 diffuse = diffuseCoefficient * fragColor.rgb * lights[i].intensities" + SEMI_ENDL +
