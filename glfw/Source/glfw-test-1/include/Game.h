@@ -10,9 +10,6 @@
 
 #include "Scene.h"
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
 /*************************************************************************
 *
 * The Game class for VOX. There should only ever be one instance of Game.
@@ -28,8 +25,6 @@ private:
 	* is running to the console
 	*/
 	void printFps();
-	FT_Library freetypeLibrary;
-
 public:
 
 	explicit Game(bool _running);
@@ -70,10 +65,4 @@ public:
 	* Calls update on the mouse and keyboard 
 	*/
 	void manageInput(void);
-	
-	/** 
-	* Returns a new reference to the game's freetype library instance
-	* TODO Actually implement this
-	*/
-	FT_Library * getFreetypeLibraryReference();
 };
