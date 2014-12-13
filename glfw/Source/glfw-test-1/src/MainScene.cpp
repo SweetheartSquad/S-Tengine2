@@ -331,17 +331,18 @@ void MainScene::render(){
 	Scene::render();
 }
 
-void MainScene::onContextChange(){
-	frameBuffer->unload();
-	depthBuffer->unload();
-	depthShader->unload();
-	renderSurface->unload();
-	shadowSurface->unload();
-	shadowBuffer->unload();
-	baseShader->unload();
+void MainScene::unload(){
+	frameBuffer->load();
+	depthBuffer->load();
+	depthShader->load();
+	renderSurface->load();
+	shadowSurface->load();
+	shadowBuffer->load();
+	baseShader->load();	
+}
 
-	Scene::onContextChange();
-
+void MainScene::load(){
+	Scene::load();
 	frameBuffer->load();
 	depthBuffer->load();
 	depthShader->load();

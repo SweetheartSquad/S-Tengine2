@@ -9,6 +9,7 @@ Entity::Entity(Transform * _transform) :
 	NodeTransformable(_transform),
 	NodeAnimatable(),
 	NodeHierarchical(),
+	NodeLoadable(),
 	NodeChild(nullptr)
 {
 }
@@ -43,30 +44,18 @@ void Entity::removeChildAtIndex(int _index){
 
 void Entity::unload(){
 	for(NodeChild * child : children){
-		Entity * e = dynamic_cast<Entity *>(child);
-		if(e != nullptr){
-			e->unload();	
-		}else
-		{
-			NodeResource * nr = dynamic_cast<NodeResource *>(child);
-			if(nr != nullptr){
-				nr->unload();	
-			}	
-		}	
+		NodeLoadable * nl = dynamic_cast<NodeLoadable *>(child);
+		if(nl != nullptr){
+			nl->unload();	
+		}
 	}
 }
 
 void Entity::load(){
 	for(NodeChild * child : children){
-		Entity * e = dynamic_cast<Entity *>(child);
-		if(e != nullptr){
-			e->load();	
-		}else
-		{
-			NodeResource * nr = dynamic_cast<NodeResource *>(child);
-			if(nr != nullptr){
-				nr->load();	
-			}	
-		}	
+		NodeLoadable * nl = dynamic_cast<NodeLoadable *>(child);
+		if(nl != nullptr){
+			nl->load();	
+		}
 	}
 }

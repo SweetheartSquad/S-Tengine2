@@ -1,8 +1,15 @@
 #pragma once
 
 #include <iostream>
-#include "Entity.h"
+#include <vector>
 
+#include "NodeLoadable.h"
+
+namespace vox{
+	class MatrixStack;
+}
+
+class RenderOptions;
 class Light;
 class DepthMapShader;
 class BaseComponentShader;
@@ -13,8 +20,9 @@ class StandardFrameBuffer;
 class DepthFrameBuffer;
 class Mouse;
 class Game;
+class Entity;
 
-class Scene{
+class Scene : public NodeLoadable{
 public:
 	explicit Scene(Game * _game);
 	virtual ~Scene(void);
@@ -44,11 +52,12 @@ public:
 	void addChild(Entity * child);
 	/** Toggles fullscreen on and off */
 	void toggleFullScreen();
-	/**Called when the openGL context is changed. eg. Entering full screen*/
-	virtual void onContextChange();
 
 	virtual void renderShadows();
 
 	virtual void setViewport(float _x, float _y, float _width, float _height);
 	float viewPortX, viewPortY, viewPortWidth, viewPortHeight;
+
+	virtual void load() override;
+	virtual void unload() override;
 };

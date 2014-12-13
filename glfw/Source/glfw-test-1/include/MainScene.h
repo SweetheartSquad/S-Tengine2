@@ -50,5 +50,6 @@ public:
 	~MainScene();
 	void update() override;
 	void render() override;
-	void onContextChange() override;
+	void unload() override;
+	void load() override;
 };

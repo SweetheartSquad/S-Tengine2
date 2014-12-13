@@ -255,6 +255,9 @@
     <ClCompile Include="PerspectiveCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\NodeLoadable.cpp">
+      <Filter>Source Files\node</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -454,6 +457,9 @@
     </ClInclude>
     <ClInclude Include="..\include\PerspectiveCamera.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\NodeLoadable.h">
+      <Filter>Header Files\node</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -12,6 +12,8 @@
 #include "DepthMapShader.h"
 #include "BlurShader.h"
 #include "Light.h"
+#include "Entity.h"
+#include "MatrixStack.h"
 
 Scene::Scene(Game * _game):
 	game(_game),
@@ -28,18 +30,41 @@ Scene::Scene(Game * _game):
 {
 	int width, height;
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
-	setViewport(0, 0, width, height);
+	viewPortWidth = width;
+	viewPortHeight = height;
+	viewPortX = 0;
+	viewPortY = 0;
 }
 
 Scene::~Scene(void){
 	delete camera;
 	delete matrixStack;
+	delete renderOptions;
+	delete depthBuffer;
+	delete shadowBuffer;
+	delete depthShader;
+	delete shadowSurface;
+	for(auto light : lights){
+		delete light;
+	}
 }
 
 void Scene::update(void){
 	camera->update();
 	for(Entity * e : children){
 		e->update(&vox::step);
+	}
+}
+
+void Scene::load(){
+	for(Entity * e : children){
+		e->load();
+	}
+}
+
+void Scene::unload(){
+	for(Entity * e : children){
+		e->unload();
 	}
 }
 
@@ -66,8 +91,8 @@ void Scene::render(){
 	glEnable(GL_DEPTH_TEST);
 
 	//Back-face culling
-	//glEnable (GL_CULL_FACE); // cull face
-	//glCullFace (GL_BACK); // cull back face
+	glEnable (GL_CULL_FACE); // cull face
+	glCullFace (GL_BACK); // cull back face
 
 	glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
@@ -113,18 +138,10 @@ void Scene::toggleFullScreen(){
 	glfwMakeContextCurrent(window);
 	vox::currentContext = window;
 
-	onContextChange();
+	unload();
+	load();
 
 	GLUtils::checkForError(0,__FILE__,__LINE__);
-}
-
-void Scene::onContextChange(){
-	for(Entity * e : children){
-		e->unload();
-	}
-	for(Entity * e : children){
-		e->load();
-	}
 }
 
 void Scene::renderShadows(){
