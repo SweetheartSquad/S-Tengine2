@@ -60,12 +60,20 @@ void Scene::load(){
 	for(Entity * e : children){
 		e->load();
 	}
+	depthBuffer->load();
+	shadowBuffer->load();
+	depthShader->load();
+	shadowSurface->load();
 }
 
 void Scene::unload(){
 	for(Entity * e : children){
 		e->unload();
 	}
+	depthBuffer->unload();
+	shadowBuffer->unload();
+	depthShader->unload();
+	shadowSurface->unload();
 }
 
 void Scene::setViewport(float _x, float _y, float _w, float _h){
@@ -137,6 +145,13 @@ void Scene::toggleFullScreen(){
 	glfwDestroyWindow(vox::currentContext);
 	glfwMakeContextCurrent(window);
 	vox::currentContext = window;
+
+	int width, height;
+	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+	viewPortWidth = width;
+	viewPortHeight = height;
+	viewPortX = 0;
+	viewPortY = 0;
 
 	unload();
 	load();

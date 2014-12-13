@@ -96,6 +96,11 @@ void BaseScene::update(){
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		camera->transform->translate((camera->rightVectorRotated) * camera->speed);	
 	}
+	
+	//Toggle fullscreen
+	if(keyboard->keyJustUp(GLFW_KEY_F11)){
+		Scene::toggleFullScreen();
+	}
 }
 
 void BaseScene::render(){
