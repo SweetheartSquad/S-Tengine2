@@ -26,7 +26,8 @@ using namespace ci::app;
 using namespace std;
 
 class ToolBar;
-class ToolButton;
+class ParamTextBox;
+class UiInteractable;
 
 class CinderApp : public AppBasic {
 public:
@@ -116,6 +117,8 @@ public:
 	params::InterfaceGlRef voxelParams;
 
 	ToolBar * toolbar;
+	ToolBar * timelineBar;
+    ParamTextBox * timeTextBox;
 
 	string directory;
 	string fileName;
@@ -172,7 +175,7 @@ public:
 	// The root node of the scene; contains the "root" nodes for each skeleton
 	SceneRoot * sceneRoot;
 
-	ToolButton * activeButton;
+	UiInteractable * activeButton;
 	
 	// Whether voxels can be selected (if false, their parent joint is selected instead)
 	bool voxelSelectMode;
@@ -182,6 +185,9 @@ public:
 	float voxelPreviewResolution;
 	// Sphere radius for voxel placing
 	float voxelSphereRadius;
+
+    // Whether to display the voxels
+    bool viewJointsOnly;
 
 	//Vec3i dir;
 	//Vec2i mouseAxis;

@@ -7,19 +7,20 @@
 #include "Command.h"
 #include "Transform.h"
 
-class CMD_RotateSelectedTransformable : public Command{
+class NodeTransformable;
+
+class CMD_RotateTransformable : public Command{
 public:
 	// Relative will rotate BY _rotation, non-relative will rotate TO _rotation
-	// Local = true: OBJECT
-	// Local = false: WORLD
-	CMD_RotateSelectedTransformable(glm::quat _rotation, bool _relative, CoordinateSpace _space);
-	~CMD_RotateSelectedTransformable(void);
+	CMD_RotateTransformable(NodeTransformable * _node, glm::quat _rotation, bool _relative, CoordinateSpace _space);
+	~CMD_RotateTransformable(void);
 
 	void execute();
 	void unexecute();
 private:
+	NodeTransformable * node;
 	// Original orientations of selected joints
-	std::vector<glm::quat> orientations;
+	glm::quat oldOrientation;
 	// Rotation to be applied to selected joints
 	glm::quat rotation;
 	bool relative;

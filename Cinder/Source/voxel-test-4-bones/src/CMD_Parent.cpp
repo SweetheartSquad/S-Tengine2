@@ -61,12 +61,12 @@ void CMD_Parent::unexecute(){
 			oldPos = sk->getPos(false);
 		}
 		if(oldParent != nullptr){
-			oldParent->children.insert(oldParent->children.begin() + index, node);
+			oldParent->removeChild(node);
 		}
 		if(newParent != nullptr){
-			newParent->children.pop_back();
+			newParent->removeChild(node);
 		}else if(sceneRoot != nullptr){
-			sceneRoot->children.pop_back();
+			sceneRoot->removeChild(node);
 		}
 		if(node != nullptr){
 			node->parent = oldParent;

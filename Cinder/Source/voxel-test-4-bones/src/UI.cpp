@@ -7,7 +7,7 @@
 std::vector<Node *> UI::selectedNodes;
 
 float UI::time;
-float UI::stepScale = 0.1f;
+float UI::stepScale = 1.f;
 int UI::interpolationValue = 0;
 std::vector<std::string> UI::interpolationNames = getInterpolationNames();
 

@@ -29,4 +29,6 @@ public:
 	float voxelPreviewResolution;
 	// Sphere radius for voxel placing
 	float voxelSphereRadius;
+    // Whether to display the voxels
+    bool viewJointsOnly;
 };

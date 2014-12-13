@@ -6,8 +6,9 @@
 
 #include <cinder\gl\gl.h>
 
-ToolBar::ToolBar(ci::Vec2i _pos) :
-	pos(_pos)
+ToolBar::ToolBar(ci::Vec2i _pos, bool _vertical) :
+	pos(_pos),
+	vertical(_vertical)
 {
 }
 
@@ -19,7 +20,11 @@ void ToolBar::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderSta
 			ci::gl::translate(setPos);
 
 			dynamic_cast<ToolSet *>(children.at(i))->render(_matrixStack, _renderStack);
-			setPos.y = dynamic_cast<ToolSet *>(children.at(i))->children.size() * (dynamic_cast<ToolSet *>(children.at(i))->iconSize.getHeight()+2) + 5;
+			if(vertical){
+				setPos.y = dynamic_cast<ToolSet *>(children.at(i))->children.size() * (dynamic_cast<ToolSet *>(children.at(i))->iconSize.getHeight()+2) + 5;
+			}else{
+				setPos.x = dynamic_cast<ToolSet *>(children.at(i))->children.size() * (dynamic_cast<ToolSet *>(children.at(i))->iconSize.getWidth()+2) + 5;
+			}
 		}
 	ci::gl::popMatrices();
 }

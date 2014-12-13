@@ -5,7 +5,7 @@
 #include "Tween.h"
 #include "Animation.h"
 
-class CMD_AddTween : public Command
+class CMD_AddTweenAfter : public Command
 {
 public:
 	/**
@@ -17,8 +17,8 @@ public:
 	* @param _value			The target value at the end of the added tween
 	* @param _interpolation	The interpolation type for the tween
 	*/
-	CMD_AddTween(Animation * _animation, float _currentTime, float _targetTime, float _targetValue, Easing::Type _interpolation);
-	~CMD_AddTween();
+	CMD_AddTweenAfter(Animation * _animation, float _deltaTimeline, float _targetValue, Easing::Type _interpolation, float _sumTime);
+	~CMD_AddTweenAfter();
 
 	void execute();
 	void unexecute();
@@ -34,7 +34,7 @@ private:
 	// Interpolation type for the tween
 	Easing::Type interpolation;
 
-    // Update the current tween of the animation to match with the new tweens
-    unsigned long int oldCurrentTween;
-    unsigned long int newCurrentTween;
+	Tween * tween;
+
+	float sumTime;
 };
