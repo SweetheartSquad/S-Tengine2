@@ -137,6 +137,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\Cube.cpp" />
     <ClCompile Include="..\src\DepthFrameBuffer.cpp" />
     <ClCompile Include="..\src\DepthMapShader.cpp" />
+    <ClCompile Include="..\src\DirectionalLight.cpp" />
     <ClCompile Include="..\src\Entity.cpp" />
     <ClCompile Include="..\src\FakeAnimation.cpp" />
     <ClCompile Include="..\src\FileUtils.cpp" />
@@ -154,6 +155,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\Mouse.cpp" />
     <ClCompile Include="..\src\PhongShaderComponent.cpp" />
     <ClCompile Include="..\src\Plane.cpp" />
+    <ClCompile Include="..\src\PointLight.cpp" />
     <ClCompile Include="..\src\RenderSurface.cpp" />
     <ClCompile Include="..\src\Resource.cpp" />
     <ClCompile Include="..\src\Scene.cpp" />
@@ -200,6 +202,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\DepthFrameBuffer.h" />
     <ClInclude Include="..\include\DepthMapShader.h" />
     <ClInclude Include="..\include\Dimension.h" />
+    <ClInclude Include="..\include\DirectionalLight.h" />
     <ClInclude Include="..\include\Entity.h" />
     <ClInclude Include="..\include\FakeAnimation.h" />
     <ClInclude Include="..\include\FileUtils.h" />
@@ -216,6 +219,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Mouse.h" />
     <ClInclude Include="..\include\PhongShaderComponent.h" />
     <ClInclude Include="..\include\Plane.h" />
+    <ClInclude Include="..\include\PointLight.h" />
     <ClInclude Include="..\include\RenderSurface.h" />
     <ClInclude Include="..\include\Resource.h" />
     <ClInclude Include="..\include\SharedComponentShaderMethods.h" />

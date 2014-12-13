@@ -3,6 +3,7 @@
 uniform mat4 model;
 
 struct Light{
+	int type;
 	vec3 position;
 	vec3 intensities;
 	float ambientCoefficient;
@@ -50,12 +51,25 @@ void main()
 	vec3 normal = normalize(normalMatrix * fragNormal);
 	vec3 fragWorldPosition = vec3(model * vec4(fragVert, 1));
 	vec3 surfaceToCamera = fragVert - fragWorldPosition;
-	
-	outColorTemp = vec4(0,0,0,1);
+	vec3 surfaceToLight = vec3(0,0,0);
+
+	float attenuation = 1.0;
+
+	vec4 outColorTemp = vec4(0,0,0,1);
 
 	for(int i = 0; i < numLights; i++){
 		for(int j = 0; j < numMaterials; j++){
-			vec3 surfaceToLight = normalize(lights[i].position - fragWorldPosition);
+			if(lights[i].type == 1){
+				//DIRECTIONAL
+				surfaceToLight = normalize(lights[i].position);
+				attenuation = lights[i].attenuation;
+			} else {		
+				//POINT
+				surfaceToLight = normalize(lights[i].position - fragWorldPosition);
+				//attenuation
+				float distanceToLight = length(lights[i].position - fragWorldPosition);
+				attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2));
+			}
 			
 			//ambient
 			vec3 ambient = lights[i].ambientCoefficient * fragColorTex.rgb * lights[i].intensities;
@@ -77,10 +91,6 @@ void main()
 			}
 			vec3 specular = specularCoefficient * materials[j].specularColor * lights[i].intensities;
 			//specular = clamp(specular, 0.0, 1.0);
-			
-			//attenuation
-			float distanceToLight = length(lights[i].position - fragWorldPosition);
-			float attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2));
 		
 			//linear color (color before gamma correction)
 			vec3 linearColor = ambient + attenuation * (diffuse + specular);

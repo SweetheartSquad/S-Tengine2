@@ -20,8 +20,6 @@ public:
 	Cube * cube3;
 	Cube * cube4;
 
-	Light glight;
-
 	Texture * tex;
 	Texture * voxTex;
 

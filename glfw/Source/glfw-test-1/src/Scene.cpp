@@ -38,10 +38,6 @@ Scene::~Scene(void){
 
 void Scene::update(void){
 	camera->update();
-	//Copy the transform to the light's data
-	for(Light * light : lights){
-		light->update();
-	}
 	for(Entity * e : children){
 		e->update(&vox::step);
 	}

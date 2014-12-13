@@ -4,31 +4,32 @@
 
 #include "NodeTransformable.h"
 
+enum class LightType {
+	POINT = 0,
+	DIRECTIONAL = 1
+};
+
 struct LightData {
-	glm::vec3 position;
+	LightType type;
 	glm::vec3 intensities;
 	float ambientCoefficient;
 	float attenuation;
+
+	LightData(LightType _type, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation);
 };
 
 /**************************************************************************************************
 *
 * A basic light node. 
-* Stores a reference to a transform and a struct containing the position and color of the light 
+* Stores a reference to a transform and a struct containing data used by lighting shaders, including
+* position, color, ambient coefficient, and attentuation. 
 *
 ****************************************************************************************************/
-class Light : public NodeTransformable{
+class Light abstract : public NodeTransformable{
 public:
 
-	Light();
-	explicit Light(Transform * _transform);
+	explicit Light(LightType _type, glm::vec3 _position, glm::vec3 intensities, float ambientCoefficient, float attenuation, Transform * _transform = nullptr);
 	~Light();
-
-	/**
-	* Updates the light data.position with its transforms
-	* translation vector
-	*/
-	void update();
 
 	/**
 	* The data struct which is passed to the shader

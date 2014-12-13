@@ -5,8 +5,8 @@
 #include "Texture.h"
 #include "Material.h"
 #include "MatrixStack.h"
-#include <glm/gtc/matrix_transform.inl>
 #include "GLFWRenderOptions.h"
+#include "Transform.h"
 
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	drawMode(drawMode),
@@ -208,31 +208,21 @@ void MeshInterface::configureLights(vox::MatrixStack * _matrixStack, RenderOptio
 
 	// Pass the paramaters for each light to the _shader
 	for(unsigned long int i = 0; i < _renderOption->lights->size(); i++){
+		std::string typ = GLUtils::buildGLArrayReferenceString("lights[].type", i);
 		std::string pos = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_POSITION, i);
 		std::string ins = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_INTENSITIES, i);
 		std::string amb = GLUtils::buildGLArrayReferenceString("lights[].ambientCoefficient", i);
 		std::string att = GLUtils::buildGLArrayReferenceString("lights[].attenuation", i);
-		GLuint lightUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), pos.c_str());
-		glUniform3f(lightUniformLocation, _renderOption->lights->at(i)->data.position.x, _renderOption->lights->at(i)->data.position.y, _renderOption->lights->at(i)->data.position.z);
+		GLuint typeUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), typ.c_str());
+		glUniform1i(typeUniformLocation, static_cast<int>(_renderOption->lights->at(i)->data.type));
+		GLuint positionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), pos.c_str());
+		glUniform3f(positionUniformLocation, _renderOption->lights->at(i)->transform->translationVector.x, _renderOption->lights->at(i)->transform->translationVector.y, _renderOption->lights->at(i)->transform->translationVector.z);
 		GLuint intensitiesUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), ins.c_str());
 		glUniform3f(intensitiesUniformLocation, _renderOption->lights->at(i)->data.intensities.x, _renderOption->lights->at(i)->data.intensities.y, _renderOption->lights->at(i)->data.intensities.z);
 		GLuint ambientUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), amb.c_str());
 		glUniform1f(ambientUniformLocation, _renderOption->lights->at(i)->data.ambientCoefficient);
 		GLuint attenuationUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), att.c_str());
 		glUniform1f(attenuationUniformLocation, _renderOption->lights->at(i)->data.attenuation);
-	}
-	// Pass the _shader the number of lights & materials
-	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(),	GL_UNIFORM_ID_NUM_LIGHTS.c_str()), _renderOption->lights->size());
-	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_MATERIALS.c_str()), materials.size());
-
-	//Pass the paramaters for each light to the _shader
-	for(unsigned long int i = 0; i < _renderOption->lights->size(); i++){
-		const char * pos = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_POSITION, i).c_str();
-		const char * ins = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_INTENSITIES, i).c_str();
-		GLuint lightUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), pos);
-		glUniform3f(lightUniformLocation, _renderOption->lights->at(i)->data.position.x, _renderOption->lights->at(i)->data.position.y, _renderOption->lights->at(i)->data.position.z);
-		GLuint intensitiesUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), ins);
-		glUniform3f(intensitiesUniformLocation, _renderOption->lights->at(i)->data.intensities.x, _renderOption->lights->at(i)->data.intensities.y, _renderOption->lights->at(i)->data.intensities.z);
 	}
 }
 

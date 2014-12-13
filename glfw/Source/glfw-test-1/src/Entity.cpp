@@ -8,6 +8,7 @@
 Entity::Entity(Transform * _transform) :
 	NodeTransformable(_transform),
 	NodeAnimatable(),
+	shader(_shader),
 	NodeHierarchical(),
 	NodeChild(nullptr)
 {

@@ -24,8 +24,38 @@
 #include "Transform.h"
 #include "DepthMapShader.h"
 #include "VoxelComponent.h"
-
 #include "MeshEntity.h"
+#include "PointLight.h"
+#include "DirectionalLight.h"
+
+Cube * cube;
+Cube * cube2;
+Cube * cube3;
+Cube * cube4;
+
+Texture * tex;
+Texture * voxTex;
+
+Material * mat;
+Material * bMat;
+
+Shader * texShader;
+Shader * phongShader;
+Shader * blinnShader;
+Shader * voxShader;
+
+DirectionalLight *tLight;
+
+StandardFrameBuffer * frameBuffer;
+
+RenderSurface * renderSurface;
+
+Entity * loaded1;
+
+Transform * t;
+
+BaseComponentShader * baseShader;
+VoxelJoint * voxelJoint;
 
 MainScene::MainScene(Game * _game):
 	Scene(game)
@@ -85,9 +115,9 @@ MainScene::MainScene(Game * _game):
 		loaded->mesh->pushTexture2D(tex);
 	}
 
-	MeshEntity * loaded1 = new MeshEntity(Resource::loadMeshFromObj("../assets/cube.vox"), t, baseShader);
-	//cube->addChild(loaded1);
-	//loaded1->mesh->pushMaterial(mat);
+	MeshEntity * loaded1 = new MeshEntity(Resource::loadMeshFromObj("../assets/cube.vox"), t, phongShader);
+	cube->addChild(loaded1);
+	loaded1->mesh->pushMaterial(mat);
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->setShader(texShader, true);
@@ -121,20 +151,18 @@ MainScene::MainScene(Game * _game):
 	cube4->mesh->dirty = true;
 	loaded1->mesh->dirty = true;
 
-	tLight = new Light();
-	tLight->data.position = glm::vec3(-3.f, 1.5f, 1.f);
-	tLight->data.intensities = glm::vec3(0.5f, 0.5f, 0.5f);
-	tLight->data.attenuation = 0.2f;
-	tLight->data.ambientCoefficient = 0.00f;
+	tLight = new DirectionalLight(glm::vec3(1.f, 0.8f, 0.6f),
+		glm::vec3(0.6f, 0.2f, 0.f),
+		0.06f);
 
-	Light * tLight2 = new Light();
-	tLight2->data.position = glm::vec3(1.f, -1.5, 1.f);
-	tLight2->data.intensities = glm::vec3(0.5f, 0.5f, 0.5f);
-	tLight2->data.attenuation = 0.2f;
-	tLight2->data.ambientCoefficient = 0.005f;
+	PointLight * tLight2 = new PointLight(glm::vec3(1.f, -1.5, 1.f),
+		glm::vec3(0.1f, 0.2f, 0.8f),
+		0.2f,
+		0.005f);
 
-	tLight2->transform->translate(2.f, 0.f, 0.f);
-	//lights.push_back(tLight);
+	tLight2->transform->translate(-2,0,0);
+	tLight->transform->translate(2,0,0);
+	lights.push_back(tLight);
 	lights.push_back(tLight2);
 
 	FakeAnimation * cat = new FakeAnimation(new Transform(), texShader);
