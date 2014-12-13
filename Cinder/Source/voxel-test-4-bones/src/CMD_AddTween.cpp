@@ -55,26 +55,29 @@ bool CMD_AddTween::execute(){
 				subCmdProc.executeCommand(new CMD_AddTweenAfter(animation, deltaTimeline, targetValue, interpolation, sumTime));
 			}
 		}
+
+		// calculate the new currentTween
+		newCurrentTween = animation->tweens.size()-1;
+		float t = 0;
+		float comparison = animation->time;
+		while(comparison < 0){
+			comparison += animation->getTweenEndTime(animation->tweens.size()-1);
+		}while(comparison > animation->getTweenEndTime(animation->tweens.size()-1)){
+			comparison -= animation->getTweenEndTime(animation->tweens.size()-1);
+		}
+		for(unsigned long int i = 0; i < animation->tweens.size(); ++i){
+			t += animation->tweens.at(i)->deltaTime;
+			if(t > comparison){
+				newCurrentTween = i-1;
+			}
+		}
 	}else{
 		subCmdProc.redo();
 	}
-
-	newCurrentTween = animation->tweens.size()-1;
-	float t = 0;
-	float comparison = animation->time;
-	while(comparison < 0){
-		comparison += animation->getTweenEndTime(animation->tweens.size()-1);
-	}while(comparison > animation->getTweenEndTime(animation->tweens.size()-1)){
-		comparison -= animation->getTweenEndTime(animation->tweens.size()-1);
-	}
-	for(unsigned long int i = 0; i < animation->tweens.size(); ++i){
-		t += animation->tweens.at(i)->deltaTime;
-		if(t > comparison){
-			newCurrentTween = i-1;
-		}
-	}
-
+	
     animation->currentTween = newCurrentTween;
+
+
 	return true;
 }
 
