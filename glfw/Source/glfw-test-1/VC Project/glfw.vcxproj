@@ -130,6 +130,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\..\..\..\Shared Code\src\Tween.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Vox.cpp" />
     <ClCompile Include="..\src\BaseComponentShader.cpp" />
+    <ClCompile Include="..\src\BaseScene.cpp" />
     <ClCompile Include="..\src\BlinnShaderComponent.cpp" />
     <ClCompile Include="..\src\BlurShader.cpp" />
     <ClCompile Include="..\src\Camera.cpp" />
@@ -191,6 +192,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\..\..\..\Shared Code\include\Tween.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Vox.h" />
     <ClInclude Include="..\include\BaseComponentShader.h" />
+    <ClInclude Include="..\include\BaseScene.h" />
     <ClInclude Include="..\include\BlinnShaderComponent.h" />
     <ClInclude Include="..\include\BlurShader.h" />
     <ClInclude Include="..\include\Camera.h" />

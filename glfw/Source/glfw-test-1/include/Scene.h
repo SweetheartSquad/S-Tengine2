@@ -49,6 +49,6 @@ public:
 
 	virtual void renderShadows();
 
-	virtual void setViewport(float x, float y, float w, float h);
-	float x, y, w, h;
+	virtual void setViewport(float _x, float _y, float _width, float _height);
+	float viewPortX, viewPortY, viewPortWidth, viewPortHeight;
 };

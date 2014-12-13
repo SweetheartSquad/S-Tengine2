@@ -243,6 +243,9 @@
     <ClCompile Include="..\src\MeshEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\BaseScene.cpp">
+      <Filter>Source Files\TestGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -430,6 +433,9 @@
     </ClInclude>
     <ClInclude Include="..\include\MeshEntity.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\BaseScene.h">
+      <Filter>Header Files\TestGame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
