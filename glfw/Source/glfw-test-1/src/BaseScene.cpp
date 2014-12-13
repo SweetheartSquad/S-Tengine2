@@ -5,6 +5,7 @@
 #include "BaseComponentShader.h"
 #include "TextureShaderComponent.h"
 #include "MeshInterface.h"
+#include "Texture.h";
 
 BaseScene::BaseScene(Game* _game)
 	:Scene(_game),
@@ -16,8 +17,6 @@ BaseScene::BaseScene(Game* _game)
 
 	cube->setShader(shader, true);
 	addChild(cube);
-
-	cube->mesh->dirty = true;
 }
 
 BaseScene::~BaseScene(){

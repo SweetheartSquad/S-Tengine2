@@ -26,6 +26,9 @@ Scene::Scene(Game * _game):
 	shadowSurface(new RenderSurface(new BlurShader(true))),
 	matrixStack(new vox::MatrixStack())
 {
+	int width, height;
+	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+	setViewport(0, 0, width, height);
 }
 
 Scene::~Scene(void){
