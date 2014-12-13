@@ -9,20 +9,26 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "MatrixStack.h"
+#include "DepthMapShader.h"
+#include "BlurShader.h"
+#include "Light.h"
 
 Scene::Scene(Game * _game):
 	game(_game),
-	camera(new Camera()),
-	matrixStack(new vox::MatrixStack()),
-	renderOptions(new RenderOptions(nullptr, &lights)),
-	shadowBuffer(new StandardFrameBuffer(true)),
-	depthBuffer(new StandardFrameBuffer(true)),
-	depthShader(new Shader("../assets/DepthMapShader", false, true)),
-	shadowSurface(new RenderSurface(new Shader("../assets/shadow", false, true))),
-	//Singletons
+	mouse(&Mouse::getInstance()),
 	keyboard(&Keyboard::getInstance()),
-	mouse(&Mouse::getInstance())
+	camera(new Camera()),
+	renderOptions(new RenderOptions(nullptr, &lights)),
+	depthBuffer(new StandardFrameBuffer(true)),
+	shadowBuffer(new StandardFrameBuffer(true)),
+	depthShader(new DepthMapShader(true)),
+	//Singletons
+	shadowSurface(new RenderSurface(new BlurShader(true))),
+	matrixStack(new vox::MatrixStack())
 {
+	int width, height;
+	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+	setViewport(0, 0, width, height);
 }
 
 Scene::~Scene(void){
@@ -37,27 +43,27 @@ void Scene::update(void){
 		light->update();
 	}
 	for(Entity * e : children){
-		e->update();
+		e->update(&vox::step);
 	}
 }
 
 void Scene::setViewport(float _x, float _y, float _w, float _h){
-	x = _x;
-	y = _y;
-	w = _w;
-	h = _h;
+	viewPortX = _x;
+	viewPortY = _y;
+	viewPortWidth = _w;
+	viewPortHeight = _h;
 }
 
 void Scene::render(){
 	//glfwGetFramebufferSize(glfwGetCurrentContext(), &w, &h);
 	glfwMakeContextCurrent(glfwGetCurrentContext());
 	float ratio;
-	ratio = w / static_cast<float>(h);
+	ratio = viewPortWidth / static_cast<float>(viewPortHeight);
 
 	glEnable(GL_SCISSOR_TEST);
 
-	glViewport(x, y, w, h);
-	glScissor(x, y, w ,h);
+	glViewport(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
+	glScissor(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -121,27 +127,21 @@ void Scene::onContextChange(){
 		e->unload();
 	}
 	for(Entity * e : children){
-		e->reset();
+		e->load();
 	}
 }
 
 void Scene::renderShadows(){
 	Shader * backupOverride = renderOptions->overrideShader;
-	//int width, height;
-	//Do we actuall need this?
-	//glCullFace(GL_FRONT);
-	//glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
-	depthBuffer->resize(w, h);
+	depthBuffer->resize(viewPortWidth, viewPortHeight);
 	depthBuffer->bindFrameBuffer();
 	renderOptions->overrideShader = depthShader;
 	Scene::render();
 
-	shadowBuffer->resize(w, h);
+	shadowBuffer->resize(viewPortWidth, viewPortHeight);
 	shadowBuffer->bindFrameBuffer();
 	shadowSurface->render(depthBuffer->getTextureId(), shadowBuffer->frameBufferId);
-	((GLFWRenderOptions *)renderOptions)->shadowMapTextureId = shadowBuffer->getTextureId();
+	static_cast<GLFWRenderOptions *>(renderOptions)->shadowMapTextureId = shadowBuffer->getTextureId();
 	renderOptions->overrideShader = backupOverride;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//Do we actually need this?
-	//glCullFace(GL_BACK);
 }

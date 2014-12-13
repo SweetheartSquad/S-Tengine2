@@ -1,9 +1,10 @@
 #include "Cube.h"
+#include "MeshInterface.h"
 
 Cube::Cube(glm::vec3 _center, float _scale) :
 	NodeChild(nullptr),
 	NodeTransformable(new Transform()),
-	Entity(new QuadMesh(GL_QUADS, GL_STATIC_DRAW), transform)
+	MeshEntity(new QuadMesh(GL_QUADS, GL_STATIC_DRAW), transform)
 {
 	QuadMesh * m = static_cast<QuadMesh *>(mesh);
 

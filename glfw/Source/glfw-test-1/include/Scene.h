@@ -3,6 +3,9 @@
 #include <iostream>
 #include "Entity.h"
 
+class Light;
+class DepthMapShader;
+class BaseComponentShader;
 class RenderSurface;
 class Camera;
 class Keyboard;
@@ -26,7 +29,7 @@ public:
 	RenderOptions       * renderOptions;
 	StandardFrameBuffer	* depthBuffer;
 	StandardFrameBuffer * shadowBuffer;
-	Shader              * depthShader;
+	DepthMapShader		* depthShader;
 	RenderSurface       * shadowSurface;
 	std::vector<Entity *> children;
 	/** The lights for this scene **/
@@ -46,6 +49,6 @@ public:
 
 	virtual void renderShadows();
 
-	virtual void setViewport(float x, float y, float w, float h);
-	float x, y, w, h;
+	virtual void setViewport(float _x, float _y, float _width, float _height);
+	float viewPortX, viewPortY, viewPortWidth, viewPortHeight;
 };

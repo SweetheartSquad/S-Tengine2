@@ -22,8 +22,8 @@ Camera::Camera():
 	mouse(&Mouse::getInstance()),
 	lastOrientation(1.f, 0.f, 0.f, 0.f)
 {
-	transform->translateX(-5);
-	transform->translateY(3);
+	transform->translate(-5.f, 0.f, 0.f);
+	transform->translate(0.f, 3.f, 0.f);
 
 	Dimension screenDimensions = vox::getScreenDimensions();
 	lastMouseY	= screenDimensions.height/2;

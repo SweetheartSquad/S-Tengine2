@@ -2,7 +2,7 @@
 
 #include "Animation.h"
 #include "Step.h"
-#include "cinder/app/AppBasic.h"
+//#include "cinder/app/AppBasic.h"
 
 float Animation::getTweenEndTime(unsigned long int _idx){
 	if(_idx < tweens.size()){
@@ -44,7 +44,7 @@ Animation::Animation(float * const _prop) :
 void Animation::update(Step * _step){
 	if(hasStart){
 		time += (float)_step->getDeltaTime();
-		ci::app::console() << "Animation.update() time: " << time << std::endl;
+		//ci::app::console() << "Animation.update() time: " << time << std::endl;
 	}
 	if(tweens.size() > 0){
 		currentTime += (float)_step->getDeltaTime();

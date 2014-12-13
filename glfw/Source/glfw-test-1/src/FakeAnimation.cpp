@@ -4,19 +4,21 @@
 #include "Resource.h"
 #include "Entity.h"
 #include "MatrixStack.h"
+#include "Shader.h"
+#include "Step.h"
 
-void FakeAnimation::pushFrame(Entity * _frame){
+void FakeAnimation::pushFrame(MeshEntity * _frame){
 	_frame->transform = this->transform;
 	_frame->shader = this->shader;
 	_frame->parent = nullptr;//this;
-	_frame->reset();
+	_frame->load();
 	children.push_back(_frame);
 }
 
 FakeAnimation::FakeAnimation(Transform * _transform, Shader * _shader) :
 	NodeTransformable(_transform),
 	NodeChild(nullptr),
-	Entity(nullptr, _transform, _shader),
+	MeshEntity(nullptr, _transform, _shader),
 	frame(0),
 	delay(3),
 	delayCount(0)
@@ -46,7 +48,7 @@ void FakeAnimation::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 	_matrixStack->popMatrix();
 }
 
-void FakeAnimation::update(){
+void FakeAnimation::update(Step * _step){
 	delayCount += 1;
 	if(delayCount >= delay){
 		delayCount = 0;

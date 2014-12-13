@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#include "Entity.h"
+#include "MeshEntity.h"
 
 /*******************************
 *
@@ -10,7 +10,7 @@
 *
 ********************************/
 
-class Cube : public Entity{
+class Cube : public MeshEntity{
 public:
 
 	virtual char * getTypename(){

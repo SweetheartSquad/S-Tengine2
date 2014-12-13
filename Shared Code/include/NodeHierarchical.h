@@ -11,7 +11,7 @@ public:
 	NodeHierarchical();
 
 	// Calls deleteRecursively on all of _node's children, and then deletes _node
-	static void deleteRecursively(NodeHierarchical * _node);
+	static void deleteRecursively(NodeParent * _node);
 	//explicit NodeHierarchical(NodeParent * _parent) : NodeChild(_parent){};
 
 	// Loops through the node's children and removes the first instance of _child

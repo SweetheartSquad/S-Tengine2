@@ -22,37 +22,10 @@
 #include "PhongShaderComponent.h"
 #include "BlinnShaderComponent.h"
 #include "Transform.h"
+#include "DepthMapShader.h"
+#include "VoxelComponent.h"
 
-Cube * cube;
-Cube * cube2;
-Cube * cube3;
-Cube * cube4;
-
-Light glight;
-
-Texture * tex;
-Texture * voxTex;
-
-Material * mat;
-Material * bMat;
-
-Shader * texShader;
-Shader * phongShader;
-Shader * blinnShader;
-Shader * voxShader;
-
-Light *tLight;
-
-StandardFrameBuffer * frameBuffer;
-
-RenderSurface * renderSurface;
-
-Entity * loaded1;
-
-Transform * t;
-
-BaseComponentShader * baseShader;
-VoxelJoint * voxelJoint;
+#include "MeshEntity.h"
 
 MainScene::MainScene(Game * _game):
 	Scene(game)
@@ -75,60 +48,70 @@ MainScene::MainScene(Game * _game):
 	voxTex = new Texture("../assets/voxel-texture.png", 512, 512, true, true);
 
 	baseShader = new BaseComponentShader();
-	baseShader->components.push_back(new TextureShaderComponent());
+	
 	baseShader->components.push_back(new DiffuseShaderComponent());
 	baseShader->components.push_back(new PhongShaderComponent());
 	baseShader->components.push_back(new ShadowShaderComponent());
+	baseShader->components.push_back(new TextureShaderComponent());
 	baseShader->compileShader();
+
+	voxelShader = new BaseComponentShader();
+	voxelShader->components.push_back(new TextureShaderComponent());
+	voxelShader->components.push_back(new DiffuseShaderComponent());
+	voxelShader->components.push_back(new PhongShaderComponent());
+	voxelShader->components.push_back(new ShadowShaderComponent());
+	voxelShader->geometryComponent = new VoxelComponent();
+	voxelShader->compileShader();
 
 	mat = new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true);
 	bMat = new Material(10.0, glm::vec3(0.5f, 0.1f, 0.9f), true);
 
 	t = new Transform();
-	t->translateX(-2);
+	t->translate(-2.f, 0, 0);
 	t->scale(3, 3, 3);
 
 	cube = new Cube(glm::vec3(0.f, 0.f, 0.5f),0.2f);
 	cube->setShader(baseShader, true);
-	cube->transform->translateX(0.5);
+	cube->transform->translate(0.5f, 0 ,0);
 	cube->mesh->vertices.at(3).y += 1.5;
 	cube->mesh->vertices.at(0).y += 1.5;
 	static_cast<QuadMesh *>(cube->mesh)->pushQuad(2,1,5,7);
 
-	for(unsigned long int i = 0; i < 0; ++i){
-		Entity * loaded = new Entity(new VoxelMesh(Resource::loadMeshFromObj("../assets/cube.vox")), t, voxShader);
+	for(unsigned long int i = 0; i < 1; ++i){
+		MeshEntity * loaded = new MeshEntity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxelShader);
 		loaded->mesh->polygonalDrawMode = GL_POINTS;
+		loaded->mesh->pushMaterial(mat);
 		cube->addChild(loaded);
-		//loaded->mesh->pushTexture2D(tex);
+		loaded->mesh->pushTexture2D(tex);
 	}
 
-	Entity * loaded1 = new Entity(Resource::loadMeshFromObj("../assets/cube.vox"), t, baseShader);
-	cube->addChild(loaded1);
-	loaded1->mesh->pushMaterial(mat);
+	MeshEntity * loaded1 = new MeshEntity(Resource::loadMeshFromObj("../assets/cube.vox"), t, baseShader);
+	//cube->addChild(loaded1);
+	//loaded1->mesh->pushMaterial(mat);
 
 	cube2 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube2->setShader(texShader, true);
-	cube2->transform->translateX(0.5);
+	cube2->transform->translate(0.5f, 0.f, 0.f);
 	cube2->mesh->pushTexture2D(tex);
 
 	cube3 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	cube3->transform->scale(1, 10, 1);
-	cube3->transform->translateY(5);
+	cube3->transform->translate(0.f, 5.f, 0.f);
 	cube->addChild(cube2);
 	addChild(cube3);
 	cube3->setShader(texShader, true);
-	cube3->transform->translateX(0.5);
+	cube3->transform->translate(0.5f, 0.f, 0.f);
 	cube3->mesh->pushTexture2D(tex);
 
 	cube3->mesh->pushMaterial(bMat);
-	cube3->transform->translateX(5);
+	cube3->transform->translate(5, 0 ,0);
 
 	cube4 = new Cube(glm::vec3(0.f, 0.f, 0.5f),1);
 	addChild(cube);
 	addChild(cube4);
 	cube4->setShader(baseShader, true);
 	cube4->transform->scale(15.0, 1.0, 15.0);
-	cube4->transform->translateY(-2);
+	cube4->transform->translate(0, -2, 0);
 	cube4->mesh->pushTexture2D(tex);
 	cube4->mesh->pushMaterial(mat);
 
@@ -150,7 +133,7 @@ MainScene::MainScene(Game * _game):
 	tLight2->data.attenuation = 0.2f;
 	tLight2->data.ambientCoefficient = 0.005f;
 
-	tLight2->transform->translateX(2);
+	tLight2->transform->translate(2.f, 0.f, 0.f);
 	//lights.push_back(tLight);
 	lights.push_back(tLight2);
 
@@ -181,7 +164,7 @@ MainScene::MainScene(Game * _game):
 	cat->pushFrame(new Entity(Resource::loadMeshFromObj("../assets/CatThing/24.vox")));*/
 
 	for(Node * e : cat->children){
-		dynamic_cast<Entity *>(e)->mesh->polygonalDrawMode = GL_POINTS;
+		dynamic_cast<MeshEntity *>(e)->mesh->polygonalDrawMode = GL_POINTS;
 	}
 
 	cat->transform->translate(1, 0, 2);
@@ -191,7 +174,7 @@ MainScene::MainScene(Game * _game):
 
 	voxelJoint = Resource::loadVoxelModel("../assets/ttt.json");
 	voxelJoint->setShaderOnChildren(voxShader);
-	voxelJoint->transform->translateX(5);
+	voxelJoint->transform->translate(5.f, 0.f, 0.f);
 
 	addChild(voxelJoint);
 
@@ -203,7 +186,7 @@ MainScene::~MainScene(){
 void MainScene::update(){
 	Scene::update();
 
-	voxelJoint->updateAnimation(&vox::step);
+	voxelJoint->update(&vox::step);
 
 	//tLight->transform->translateX(sinf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
 	//tLight->transform->translateZ(cosf((float)glfwGetTime()) * 0.1f * (float)vox::deltaTimeCorrection);
@@ -212,33 +195,33 @@ void MainScene::update(){
 		toggleFullScreen();
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		cube->transform->rotate(2.f, 0.f, -1.f, 0.f, OBJECT);
-		cube3->transform->translateX(-0.2);
+		cube->transform->rotate(2.f, 0.f, -1.f, 0.f, kOBJECT);
+		cube3->transform->translate(-0.2f, 0.f, 0.f);
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		cube2->transform->translateX(0.02f);
-		cube2->transform->rotate(2.f, 0.f, -1.f, 0.f, OBJECT);
+		cube2->transform->translate(0.02f, 0.f, 0.f);
+		cube2->transform->rotate(2.f, 0.f, -1.f, 0.f, kOBJECT);
 
-		cube3->transform->translateX(0.2);
+		cube3->transform->translate(0.2f, 0.f, 0.f);
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
-		cube->transform->rotate(2.f * (float)vox::deltaTimeCorrection , 1.f, 0.f, 0.f, OBJECT);
-		cube3->transform->translateZ(-0.2);
+		cube->transform->rotate(2.f * (float)vox::deltaTimeCorrection , 1.f, 0.f, 0.f, kOBJECT);
+		cube3->transform->translate(0.f, 0.f, -0.2f);
 	}
 	if(keyboard->keyDown(GLFW_KEY_W)){
-		cube->transform->rotate(2.f, -1.f, 0.f, 0.f, OBJECT);
-		cube3->transform->translateZ(0.2);
+		cube->transform->rotate(2.f, -1.f, 0.f, 0.f, kOBJECT);
+		cube3->transform->translate(0.f, 0.f, 0.2f);
 	}
 	if(keyboard->keyDown(GLFW_KEY_Q)){
-		cube3->transform->translateX(0.02f);
-		cube3->transform->rotate(2.f, 0.f, -1.f, 0.f, OBJECT);
+		cube3->transform->translate(0.02f, 0.f, 0.f);
+		cube3->transform->rotate(2.f, 0.f, -1.f, 0.f, kOBJECT);
 	}
 	if(keyboard->keyDown(GLFW_KEY_E)){
 		cube->transform->translate((float)vox::deltaTimeCorrection * 0.01f, 0.f, 0.f);
 	}
 	if(mouse->leftDown()){
 		glm::quat r = glm::angleAxis(1.f, glm::vec3(0.f, 0.f, 1.f));
-		cube->transform->rotate(r, OBJECT);
+		cube->transform->rotate(r, kOBJECT);
 	}
 	if(mouse->rightDown()){
 		cube->transform->scale(0.9f, 0.9f, 0.9f);
@@ -315,7 +298,7 @@ void MainScene::render(){
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
 
 	setViewport(0, 0, width, height);
-
+	
 	Scene::renderShadows();
 	Scene::render();
 }

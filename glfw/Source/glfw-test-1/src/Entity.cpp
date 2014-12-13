@@ -3,123 +3,70 @@
 #include "Entity.h"
 #include "RenderOptions.h"
 #include "MatrixStack.h"
+#include "NodeResource.h"
 
-Entity::Entity(MeshInterface * _mesh, Transform * _transform, Shader * _shader):
-	mesh(_mesh),
+Entity::Entity(Transform * _transform) :
 	NodeTransformable(_transform),
 	NodeAnimatable(),
-	shader(_shader),
 	NodeHierarchical(),
 	NodeChild(nullptr)
 {
-	if(mesh != nullptr && shader != nullptr){
-		reset();
-	}
 }
 
 Entity::~Entity(void){
-	delete transform;
-	delete mesh;
-	if(shader != nullptr){
-		shader->decrementAndDelete();		
-	}
+	delete transform;	
 	transform = nullptr;
-	mesh = nullptr;
-	shader = nullptr;
 }
 
 void Entity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
-	//push transform
-	if(_matrixStack != nullptr && _renderStack != nullptr){
-		_matrixStack->pushMatrix();
-		_matrixStack->applyMatrix(transform->getModelMatrix());
-	
-		if(mesh != nullptr){
-			mesh->load();
-			mesh->clean();
+	for(unsigned long int i = 0; i < children.size(); i++){
+		NodeRenderable * nr = dynamic_cast<NodeRenderable *>(children.at(i));
+		if(nr != nullptr){
+			nr->render(_matrixStack, _renderStack);	
 		}
-		if(_renderStack->overrideShader == nullptr){
-			_renderStack->shader = shader;
-		}else{
-			_renderStack->shader = _renderStack->overrideShader;
-		}
-		if(mesh != nullptr){
-			mesh->render(_matrixStack, _renderStack);
-		}
-		for(Node * child : children){
-			dynamic_cast<Entity *>(child)->render(_matrixStack, _renderStack);
-		}
-		//pop transform
-		_matrixStack->popMatrix();
 	}
 }
 
-void Entity::update(){
-}
-
-void Entity::addChild(Entity * _child){
-	NodeHierarchical::addChild(_child);
-	if(transform != nullptr){
-		transform->addChild(_child->transform);	
+void Entity::update(Step * _step){
+	NodeAnimatable::update(_step);
+	for(int i = 0; i < children.size(); i++){
+		NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(children.at(i));
+		if(nu != nullptr){
+			nu->update(_step);	
+		}
 	}
 }
 
 void Entity::removeChildAtIndex(int _index){
 	NodeHierarchical::removeChildAtIndex(_index);
-	if(transform != nullptr){
-		transform->removeChildAtIndex(_index);
-	}
-}
-
-void Entity::setShader(Shader * _shader, bool _confiugreDefaultAttributes){
-	shader = _shader;
-	if(_confiugreDefaultAttributes){
-		if(mesh != nullptr){
-			reset();
-		}
-	}
-}
-
-void Entity::setShaderOnChildren(Shader * _shader){
-	for(NodeChild * child : children){
-		(dynamic_cast<Entity*>(child))->setShaderOnChildren(_shader);
-	}
-	setShader(_shader, true);
 }
 
 void Entity::unload(){
 	for(NodeChild * child : children){
-		dynamic_cast<Entity *>(child)->unload();
-	}
-	if(mesh != nullptr){
-		mesh->unload();
-	}
-	if(shader != nullptr){
-		shader->unload();	
+		Entity * e = dynamic_cast<Entity *>(child);
+		if(e != nullptr){
+			e->unload();	
+		}else
+		{
+			NodeResource * nr = dynamic_cast<NodeResource *>(child);
+			if(nr != nullptr){
+				nr->unload();	
+			}	
+		}	
 	}
 }
 
-void Entity::reset(){
+void Entity::load(){
 	for(NodeChild * child : children){
-		dynamic_cast<Entity *>(child)->reset();
-	}
-
-	if(mesh != nullptr){
-		mesh->load();
-		mesh->clean();	
-	}
-	
-	if(shader != nullptr){
-		shader->load();
-		if(mesh != nullptr ){
-			mesh->configureDefaultVertexAttributes(shader);
-		}
-	}
-}
-
-void Entity::updateAnimation(Step* step){
-	NodeAnimatable::update(step);
-	for(int i = 0; i < children.size(); i++){
-		dynamic_cast<Entity *>(children.at(i))->updateAnimation(step);
+		Entity * e = dynamic_cast<Entity *>(child);
+		if(e != nullptr){
+			e->load();	
+		}else
+		{
+			NodeResource * nr = dynamic_cast<NodeResource *>(child);
+			if(nr != nullptr){
+				nr->load();	
+			}	
+		}	
 	}
 }

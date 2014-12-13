@@ -70,6 +70,7 @@ bool NodeParent::hasDescendant(NodeChild *_child) {
 	return false;
 }
 
+
 NodeParent::~NodeParent()
 {
 }

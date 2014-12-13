@@ -2,6 +2,11 @@
 
 #include "TextureShaderComponent.h"
 #include "ShaderVariables.h"
+#include "MatrixStack.h"
+#include "RenderOptions.h"
+#include "Texture.h"
+#include "NodeRenderable.h"
+#include <MeshInterface.h>
 
 TextureShaderComponent::TextureShaderComponent() : ShaderComponent(){
 }
@@ -42,5 +47,20 @@ std::string TextureShaderComponent::getFragmentBodyString(){
 }
 
 std::string TextureShaderComponent::getOutColorMod(){
-	return GL_OUT_OUT_COLOR + " = fragColorTex" + SEMI_ENDL;
+	return GL_OUT_OUT_COLOR + " *= fragColorTex" + SEMI_ENDL;
+}
+
+void TextureShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+	
+	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
+	if(mesh != nullptr){
+		// Pass the _shader the number of textures
+		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), mesh->textures.size());
+		// Bind each texture to the texture sampler array in the frag _shader
+		for(unsigned long int i = 0; i < mesh->textures.size(); i++){
+			glActiveTexture(GL_TEXTURE0 + i);
+			glBindTexture(GL_TEXTURE_2D, mesh->textures.at(i)->textureId);
+			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str()), i);
+		}
+	}
 }

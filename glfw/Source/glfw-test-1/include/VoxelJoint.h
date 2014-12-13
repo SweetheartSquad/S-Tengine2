@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Entity.h"
+#include "MeshEntity.h"
 
 class VoxelMesh;
 
-class VoxelJoint : public Entity {
+class VoxelJoint : public MeshEntity {
 
 public:
 	explicit VoxelJoint(unsigned long int _id, VoxelMesh * _mesh = nullptr, Transform * _transform = nullptr, Shader * _shader = nullptr);

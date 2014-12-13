@@ -210,9 +210,6 @@
     <ClCompile Include="..\src\DiffuseShaderComponent.cpp">
       <Filter>Source Files\shader</Filter>
     </ClCompile>
-    <ClCompile Include="..\include\BlinnShaderComponent.cpp">
-      <Filter>Source Files\shader</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\FrameBufferChannel.cpp">
       <Filter>Source Files\frameBuffers</Filter>
     </ClCompile>
@@ -224,6 +221,30 @@
     </ClCompile>
     <ClCompile Include="..\src\StandardFrameBuffer.cpp">
       <Filter>Source Files\frameBuffers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SharedComponentShaderMethods.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DepthMapShader.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BlurShader.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GeometryComponent.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BlinnShaderComponent.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\VoxelComponent.cpp">
+      <Filter>Source Files\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MeshEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BaseScene.cpp">
+      <Filter>Source Files\TestGame</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -391,6 +412,30 @@
     </ClInclude>
     <ClInclude Include="..\include\StandardFrameBuffer.h">
       <Filter>Header Files\frameBuffers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SharedComponentShaderMethods.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\DepthMapShader.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\VoxelComponent.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\GeometryComponent.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\BlurShader.h">
+      <Filter>Header Files\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeUpdatable.h">
+      <Filter>Header Files\node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\MeshEntity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\BaseScene.h">
+      <Filter>Header Files\TestGame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

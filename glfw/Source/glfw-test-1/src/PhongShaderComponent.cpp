@@ -2,6 +2,12 @@
 
 #include "PhongShaderComponent.h"
 #include "ShaderVariables.h"
+#include "MatrixStack.h"
+#include "RenderOptions.h"
+#include "MatrixStack.h"
+#include "RenderOptions.h"
+#include "RenderOptions.h"
+#include "SharedComponentShaderMethods.h"
 
 PhongShaderComponent::PhongShaderComponent() : ShaderComponent(){
 }
@@ -74,4 +80,9 @@ std::string PhongShaderComponent::getOutColorMod(){
 		IF_NOT_DEFINED + SHADER_COMPONENT_BLINN + ENDL + 
 		GL_OUT_OUT_COLOR + " *= outColorPhong;" + SEMI_ENDL + 
 		END_IF + ENDL;	
+}
+
+void PhongShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+	SharedComponentShaderMethods::configureLights(_matrixStack, _renderOption, _nodeRenderable);
+	SharedComponentShaderMethods::configureMaterials(_matrixStack, _renderOption, _nodeRenderable);
 }

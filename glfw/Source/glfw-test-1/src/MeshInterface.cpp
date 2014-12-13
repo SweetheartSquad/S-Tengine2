@@ -121,8 +121,10 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 
 					GLUtils::checkForError(0,__FILE__,__LINE__);
 
+					_renderOption->shader->configureUniforms(_matrixStack, _renderOption, this);
+					
 					//Model View Projection
-					configureModelViewProjection(_matrixStack, _renderOption);
+					/*configureModelViewProjection(_matrixStack, _renderOption);
 
 					//TODO - A flag in the shader should be set to disable these
 					if(shouldRenderTextures){
@@ -135,8 +137,11 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 						configureExtras(_matrixStack, _renderOption);
 					}
 					if(shouldRenderShadows){
-						configureShadows(_matrixStack, _renderOption);
-					}
+						//configureShadows(_matrixStack, _renderOption);
+					}*/
+					//	configureExtras(_matrixStack, _renderOption);
+					//configureShadows(_matrixStack, _renderOption);
+
 					//Alpha blending
 					// Should these be here or only once in the main render loop?
 					glEnable (GL_BLEND);
@@ -147,7 +152,7 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 					// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
-					glDrawRangeElements(polygonalDrawMode, 0, vertices.size(), indices.size(), GL_UNSIGNED_INT, 0);
+					glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
 					//glDrawElements(drawMode, vertices.size(), GL_UNSIGNED_BYTE, 0);
 					GLUtils::checkForError(0,__FILE__,__LINE__);
 

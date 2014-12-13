@@ -1,10 +1,12 @@
+#pragma once
+
 #include "Shader.h"
 #include "ShaderVariables.h"
 
 void Shader::init(std::string _vertexShaderSource, std::string _fragmentShaderSource){
 	vertSource = _vertexShaderSource;
 	fragSource = _fragmentShaderSource;
-
+	hasGeometryShader = false;
 	load();
 }
 
@@ -12,8 +14,11 @@ void Shader::init(std::string _vertexShaderSource, std::string _fragmentShaderSo
 	vertSource = _vertexShaderSource;
 	fragSource = _fragmentShaderSource;
 	geomSource = _geometryShaderSource;
-
+	hasGeometryShader = true;
 	load();
+}
+
+Shader::Shader(bool _autoRelease) : NodeResource(_autoRelease){
 }
 
 Shader::Shader(std::string _shaderSource, bool _hasGeometryShader, bool _autoRelease) :
@@ -195,6 +200,11 @@ GLint Shader::get_aVertexNormals(){
 	return aVertexNormals;
 }
 
+
 GLint Shader::get_aVertexUVs(){
 	return aVertexUVs;
+}
+
+void Shader::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+	//leave unimplemented
 }
