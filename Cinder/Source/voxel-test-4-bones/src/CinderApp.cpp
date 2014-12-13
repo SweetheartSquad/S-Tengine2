@@ -698,7 +698,9 @@ void CinderApp::mouseMove( MouseEvent event ){
 			if(activeButton != nullptr){
 				if(activeButton->isHovered){
 					activeButton->out();
-					activeButton = nullptr;
+                    if(dynamic_cast<ParamTextBox *>(activeButton) == nullptr){
+					    activeButton = nullptr;
+					}
 				}
 			}
 		}
