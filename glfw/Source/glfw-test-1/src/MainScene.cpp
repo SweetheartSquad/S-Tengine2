@@ -59,7 +59,7 @@ MainScene::MainScene(Game * _game):
 	voxelShader->components.push_back(new DiffuseShaderComponent());
 	voxelShader->components.push_back(new PhongShaderComponent());
 	voxelShader->components.push_back(new ShadowShaderComponent());
-	//voxelShader->geometryComponent = new VoxelComponent();
+	voxelShader->geometryComponent = new VoxelComponent();
 	voxelShader->compileShader();
 
 	mat = new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true);
@@ -80,7 +80,7 @@ MainScene::MainScene(Game * _game):
 		MeshEntity * loaded = new MeshEntity(Resource::loadMeshFromObj("../assets/cube.vox"), t, voxelShader);
 		loaded->mesh->polygonalDrawMode = GL_POINTS;
 		loaded->mesh->pushMaterial(mat);
-		//cube->addChild(loaded);
+		cube->addChild(loaded);
 		loaded->mesh->pushTexture2D(tex);
 	}
 

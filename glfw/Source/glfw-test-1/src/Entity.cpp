@@ -43,18 +43,30 @@ void Entity::removeChildAtIndex(int _index){
 
 void Entity::unload(){
 	for(NodeChild * child : children){
-		NodeResource * nr = dynamic_cast<NodeResource *>(child);
-		if(nr != nullptr){
-			nr->unload();	
-		}
+		Entity * e = dynamic_cast<Entity *>(child);
+		if(e != nullptr){
+			e->unload();	
+		}else
+		{
+			NodeResource * nr = dynamic_cast<NodeResource *>(child);
+			if(nr != nullptr){
+				nr->unload();	
+			}	
+		}	
 	}
 }
 
 void Entity::load(){
 	for(NodeChild * child : children){
-		NodeResource * nr = dynamic_cast<NodeResource *>(child);
-		if(nr != nullptr){
-			nr->load();	
-		}
+		Entity * e = dynamic_cast<Entity *>(child);
+		if(e != nullptr){
+			e->load();	
+		}else
+		{
+			NodeResource * nr = dynamic_cast<NodeResource *>(child);
+			if(nr != nullptr){
+				nr->load();	
+			}	
+		}	
 	}
 }
