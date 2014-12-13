@@ -24,7 +24,7 @@ bool CMD_AddTweenAfter::execute(){
 	// calculate values for new tween, and save other values that will be changed by this tween insert
 	if (firstRun){
 
-		float targetTime = animation->time + deltaTimeline;
+		float targetTime = animation->currentAnimationTime + deltaTimeline;
 		float deltaTime;// = deltaTimeline;
 		float deltaValue;// = targetValue;
 

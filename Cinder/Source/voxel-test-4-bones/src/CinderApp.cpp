@@ -351,11 +351,12 @@ void CinderApp::draw(){
 			NodeAnimatable * na = dynamic_cast<NodeAnimatable *>(UI::selectedNodes.at(i));
 			if(na != nullptr){
 				glLineWidth(2.f);
-				gl::color(1.f, 0.f, 0.f);
+				gl::color(1.f, (float)i/(float)UI::selectedNodes.size(), 0.f);
 
+				// should check each animation object individually
 				if(na->rotateW->hasStart){
 					glBegin(GL_LINES);
-					float time = (UI::time - na->rotateW->time);
+					float time = (UI::time - na->rotateW->currentAnimationTime);
 					float timeStart = time;
 					glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y);
 					glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y+timelineTrackbar->size.y);
@@ -366,8 +367,9 @@ void CinderApp::draw(){
 						glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y);
 						glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y+timelineTrackbar->size.y);
 					}
-					glVertex2f(timelineTrackbar->pos.x + timeStart*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y+timelineTrackbar->size.y/2);
-					glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y+timelineTrackbar->size.y/2);
+
+					glVertex2f(timelineTrackbar->pos.x + timeStart*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y+timelineTrackbar->size.y/2+i);
+					glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y+timelineTrackbar->size.y/2+i);
 					
 					glEnd();
 				}

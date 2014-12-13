@@ -22,9 +22,9 @@ public:
 	bool hasStart;
 
 	// Time elapsed since the start of the animation
-	float time;
+	float currentAnimationTime;
 	// Time elapsed since the start of the current tween
-	float currentTime;
+	float currentTweenTime;
 	// The start value of the current tween
 	float referenceValue;
 	unsigned long int currentTween;

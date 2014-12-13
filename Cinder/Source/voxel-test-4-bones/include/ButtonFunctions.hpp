@@ -1,8 +1,8 @@
 #include "CinderApp.h"
 #include "CMD_SetTime.h"
+#include "TrackBar.h"
 
-class ButtonFunctions
-{
+class ButtonFunctions{
 public:
 
 	static void MODE_Select(CinderApp * _app);
@@ -85,25 +85,29 @@ void ButtonFunctions::VOXEL_Selectable(CinderApp * _app){
 };
 
 void ButtonFunctions::TIME_Decrement(CinderApp * _app){
-	_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, -1, true));
+	if(UI::time-1 < _app->timelineTrackbar->min){
+		_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, _app->timelineTrackbar->max, false));
+	}else{
+		_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, -1, true));
+	}
 };
 
 void ButtonFunctions::TIME_PlayPause(CinderApp * _app){
 	_app->play = !_app->play;
 };
 
-
 void ButtonFunctions::TIME_Increment(CinderApp * _app){
-	_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, 1, true));
+	if(UI::time+1 > _app->timelineTrackbar->max){
+		_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, _app->timelineTrackbar->min, false));
+	}else{
+		_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, 1, true));
+	}
 };
-
 
 void ButtonFunctions::SPACE_Object(CinderApp * _app){
 	_app->translateSpace = kOBJECT;
 };
 
-
 void ButtonFunctions::SPACE_World(CinderApp * _app){
 	_app->translateSpace = kWORLD;
 };
-

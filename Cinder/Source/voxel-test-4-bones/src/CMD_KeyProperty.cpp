@@ -29,14 +29,14 @@ bool CMD_KeyProperty::execute(){
             subCmdProc.executeCommand(new CMD_EditStartKey(animation, value, targetTime));
 	    }else{
 		    // subtract the change in time from the animation's time, if there has been any change
-		    if((animation->time - (UI::time - currentTime)) + (targetTime - currentTime) == 0){
+		    if((animation->currentAnimationTime - (UI::time - currentTime)) + (targetTime - currentTime) == 0){
 			    subCmdProc.executeCommand(new CMD_EditStartKey(animation, value, targetTime));
 		    }else{
 			    // Edit or add a tween
 			
 				// find index of tween
 				int idx = -1;
-				float sumTime = animation->time;
+				float sumTime = animation->currentAnimationTime;
 				if(sumTime + (targetTime - currentTime) > 0){
 					for(unsigned long int i = 0; i < animation->tweens.size(); ++i){
 						sumTime -= animation->tweens.at(i)->deltaTime;

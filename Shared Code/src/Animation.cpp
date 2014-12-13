@@ -31,8 +31,8 @@ float Animation::getTweenEndValue(unsigned long int _idx){
 
 Animation::Animation(float * const _prop) :
 	prop(_prop),
-	time(0),
-	currentTime(0),
+	currentAnimationTime(0),
+	currentTweenTime(0),
 	currentTween(0),
 	loopType(LoopType::kLOOP),
 	referenceValue(*_prop),
@@ -43,14 +43,14 @@ Animation::Animation(float * const _prop) :
 
 void Animation::update(Step * _step){
 	if(hasStart){
-		time += (float)_step->getDeltaTime();
+		currentAnimationTime += (float)_step->getDeltaTime();
 		//ci::app::console() << "Animation.update() time: " << time << std::endl;
 	}
 	if(tweens.size() > 0){
-		currentTime += (float)_step->getDeltaTime();
+		currentTweenTime += (float)_step->getDeltaTime();
 		if(_step->getReverse()){
-			while(currentTime <= 0){
-				currentTime += tweens.at(currentTween)->deltaTime;
+			while(currentTweenTime <= 0){
+				currentTweenTime += tweens.at(currentTween)->deltaTime;
 
 				if(currentTween > 0){
 					referenceValue -= tweens.at(currentTween-1)->deltaValue;
@@ -75,8 +75,8 @@ void Animation::update(Step * _step){
 				}
 			}
 		}else{
-			while(currentTime > tweens.at(currentTween)->deltaTime){
-				currentTime -= tweens.at(currentTween)->deltaTime;
+			while(currentTweenTime > tweens.at(currentTween)->deltaTime){
+				currentTweenTime -= tweens.at(currentTween)->deltaTime;
 				referenceValue += tweens.at(currentTween)->deltaValue;
 				++currentTween;
 
@@ -95,21 +95,21 @@ void Animation::update(Step * _step){
 			}
 		}
 		
-		*prop = Easing::call(tweens.at(currentTween)->interpolation, currentTime, referenceValue, tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
+		*prop = Easing::call(tweens.at(currentTween)->interpolation, currentTweenTime, referenceValue, tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
 		
 		// The time > sum-delta-time bit is inefficient since we don't keep a record of the total animation length (which we should), but it works
 		if(loopType == kCONSTANT){
-			if(time < 0){
+			if(currentAnimationTime < 0){
 				*prop = startValue;
 				//referenceValue = startValue;
-			}else if(time > getTweenEndTime(tweens.size()-1)){
+			}else if(currentAnimationTime > getTweenEndTime(tweens.size()-1)){
 				*prop = getTweenEndValue(tweens.size()-1);
 				//referenceValue = getTweenEndValue(tweens.size()-2);
 			}
 		}
 
 		// Display the start-frame value on the start frame (ordinarily it would show the last frame-value if looping)
-		if(time == 0){
+		if(currentAnimationTime == 0){
 			*prop = startValue;
 			//referenceValue = startValue;
 		}

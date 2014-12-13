@@ -16,7 +16,8 @@ CMD_AddTween::CMD_AddTween(Animation * _animation, float _currentTime, float _ta
 	deltaTimeline(_targetTime - _currentTime),
 	targetValue(_targetValue),
 	interpolation(_interpolation),
-    oldCurrentTween(-1)
+    oldCurrentTween(-1),
+	newCurrentTween(-1)
 {	
 }
 
@@ -27,7 +28,7 @@ bool CMD_AddTween::execute(){
 	if (firstRun){
 		oldCurrentTween = animation->currentTween;
 
-		float targetTime = animation->time + deltaTimeline;
+		float targetTime = animation->currentAnimationTime + deltaTimeline;
 
 		if(targetTime <= 0){
             newCurrentTween = 0;
@@ -59,18 +60,27 @@ bool CMD_AddTween::execute(){
 		// calculate the new currentTween
 		newCurrentTween = animation->tweens.size()-1;
 		float t = 0;
-		float comparison = animation->time;
+
+		// if the animation is outside the actual animation tweens,
+		// add or subtract the total animation time until it is at
+		// the corresponding time inside the range
+		float comparison = animation->currentAnimationTime;
 		while(comparison < 0){
 			comparison += animation->getTweenEndTime(animation->tweens.size()-1);
 		}while(comparison > animation->getTweenEndTime(animation->tweens.size()-1)){
 			comparison -= animation->getTweenEndTime(animation->tweens.size()-1);
 		}
+
+		float currTweenTime = 0;
 		for(unsigned long int i = 0; i < animation->tweens.size(); ++i){
 			t += animation->tweens.at(i)->deltaTime;
 			if(t > comparison){
-				newCurrentTween = i-1;
+				newCurrentTween = (i > 0 ? i : animation->tweens.size()) - 1;
+				currTweenTime = animation->tweens.at(i)->deltaTime - (t - comparison);
+				break;
 			}
 		}
+
 	}else{
 		subCmdProc.redo();
 	}
