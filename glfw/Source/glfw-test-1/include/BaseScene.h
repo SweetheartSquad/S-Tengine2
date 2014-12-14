@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 
+class DirectionalLight;
 class PointLight;
 class Material;
 class Plane;
@@ -23,7 +24,8 @@ public:
 	Material * material;
 
 	//Lights
-	PointLight * light; 
+	PointLight * pointLight;
+	DirectionalLight * keyLight;
 
 	explicit BaseScene(Game* _game);
 	virtual ~BaseScene();

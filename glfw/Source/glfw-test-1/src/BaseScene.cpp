@@ -15,16 +15,14 @@
 #include "Material.h"
 #include "PointLight.h"
 #include "PerspectiveCamera.h"
+#include "DirectionalLight.h"
 
 BaseScene::BaseScene(Game* _game):
 	Scene(_game),
-	ground(new Cube(glm::vec3(0.0f, -2.0f, 0.0), 1)),
+	ground(new Cube(glm::vec3(0.0f, -1.5f, 0.0), 1)),
 	cube(new Cube(glm::vec3(0.0f, 0.0f, 0.0f), 1)),
 	shader(new BaseComponentShader()),
-	material(new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true)),
-	light(new PointLight(glm::vec3(1.f, -1.5, 1.f),
-		glm::vec3(0.1f, 0.2f, 0.8f),
-		0.2f, 0.005f))
+	material(new Material(10.0, glm::vec3(1.f, 1.f, 1.f), true))
 {
 	//Add shader components
 	shader->components.push_back(new TextureShaderComponent());
@@ -51,32 +49,31 @@ BaseScene::BaseScene(Game* _game):
 	//Make the ground brown
 	ground->setColour(0.65f, 0.16f, 0.16f, 1.0f);
 	//Rotate the ground 90 degrees along the X-axis so it is flat
-	ground->transform->scale(5.0f, 1.0f, 5.0f);
+	ground->transform->scale(15.0f, 0.5f, 15.0f);
 	//Add the texture to ground
 	ground->mesh->pushTexture2D(tex);
 	//Add it to the scene
 	addChild(ground);
 	
-	//Setup light
-	PointLight * light =  new PointLight(glm::vec3(1.f, -1.5, 1.f),
-		glm::vec3(0.1f, 0.2f, 0.8f),
-		0.2f, 0.005f);
-
-	light->transform->translate(-2.0f, 3.0f, 0.0f);
-	//Make the light bright white
-	light->data.intensities = glm::vec3(1.0f, 1.0f, 1.0f);
-	light->data.attenuation = 0.2f;
-	light->data.ambientCoefficient = 0.005f;
-
+	//Setup point light
+	pointLight = new PointLight(glm::vec3(4.0f, 1.0f, 1.f), glm::vec3(1.0f, 1.0f, 1.0f), 0.005f, 0.2f);
 	//Add it to the scene's list of lights
-	lights.push_back(light);
+	//lights.push_back(pointLight);
+
+	//intialize key light
+	keyLight = new DirectionalLight(glm::vec3(0.5f, 0.8f, 0.6f), glm::vec3(0.1f, 0.1f, 0.1f), 0.005f);
+	//Set it as the key light so it casts shadows
+	keyLight->isKeyLight = true;
+	//Add it to the scene
+	lights.push_back(keyLight);
 }
 
 BaseScene::~BaseScene(){
 	delete cube;
 	delete shader;
 	delete ground;
-	delete light;
+	delete pointLight;
+	delete keyLight;
 }
 
 void BaseScene::update(){

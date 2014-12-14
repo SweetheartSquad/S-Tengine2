@@ -57,7 +57,6 @@ std::string PhongShaderComponent::getFragmentBodyString(){
 			"}" + ENDL +
 
 			"vec3 ambient = lights[i].ambientCoefficient * modFrag.rgb * lights[i].intensities" + SEMI_ENDL +
-
 			"//diffuse" + ENDL +
 			"float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))" + SEMI_ENDL +
 			"vec3 diffuse = diffuseCoefficient * modFrag.rgb * lights[i].intensities" + SEMI_ENDL +
