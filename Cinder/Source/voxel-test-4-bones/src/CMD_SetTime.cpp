@@ -18,9 +18,9 @@ bool CMD_SetTime::execute(){
 			oldValue = *timelineTime;
 		}
 		if (relative){
-			* timelineTime += newValue;
+			*timelineTime += newValue;
 		}else{
-			* timelineTime = newValue;
+			*timelineTime = newValue;
 		}
 	}else{
 		error("null timeline");
@@ -40,6 +40,5 @@ bool CMD_SetTime::unexecute(){
 	return true;
 }
 
-CMD_SetTime::~CMD_SetTime()
-{
+CMD_SetTime::~CMD_SetTime(){
 }

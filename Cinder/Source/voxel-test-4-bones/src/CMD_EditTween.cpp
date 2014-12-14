@@ -67,6 +67,5 @@ bool CMD_EditTween::unexecute(){
 	return true;
 }
 
-CMD_EditTween::~CMD_EditTween()
-{
+CMD_EditTween::~CMD_EditTween(){
 }
