@@ -59,13 +59,6 @@ bool CMD_EditTween<T>::execute(){
 		// Save old deltaValue of edited tween
 		oldDeltaValue = tween->deltaValue;
 
-		// Get index of next tween, if it exists, else -1
-		nextTweenIndex = idx == animation->tweens.size()-1 ? -1 : idx + 1;
-		if(nextTweenIndex < animation->tweens.size()){
-			nextTween_oldDeltaValue = animation->tweens.at(nextTweenIndex)->deltaValue;
-			nextTween_newDeltaValue = nextTween_oldDeltaValue + (newDeltaValue - oldDeltaValue);
-		}
-
 		// Calculate deltaValue of edited tween
 		if(idx > 0){
 			// d2 for value is previous tween's value
@@ -73,6 +66,13 @@ bool CMD_EditTween<T>::execute(){
 		}else{
 			// d2 for value is start value
 			newDeltaValue = targetValue - animation->startValue;
+		}
+
+		// Get index of next tween, if it exists, else -1
+		nextTweenIndex = idx == animation->tweens.size()-1 ? -1 : idx + 1;
+		if(nextTweenIndex < animation->tweens.size()){
+			nextTween_oldDeltaValue = animation->tweens.at(nextTweenIndex)->deltaValue;
+			nextTween_newDeltaValue = nextTween_oldDeltaValue + (newDeltaValue - oldDeltaValue);
 		}
 	}
 	
@@ -97,13 +97,6 @@ bool CMD_EditTween<glm::quat>::execute(){
 		// Save old deltaValue of edited tween
 		oldDeltaValue = tween->deltaValue;
 
-		// Get index of next tween, if it exists, else -1
-		nextTweenIndex = idx == animation->tweens.size()-1 ? -1 : idx + 1;
-		if(nextTweenIndex < animation->tweens.size()){
-			nextTween_oldDeltaValue = animation->tweens.at(nextTweenIndex)->deltaValue;\
-			nextTween_newDeltaValue = (glm::inverse(oldDeltaValue) * newDeltaValue) * nextTween_oldDeltaValue;
-		}
-
 		// Calculate deltaValue of edited tween
 		if(idx > 0){
 			// d2 for value is previous tween's value
@@ -112,6 +105,14 @@ bool CMD_EditTween<glm::quat>::execute(){
 			// d2 for value is start value
 			newDeltaValue = glm::inverse(animation->startValue) * targetValue;
 		}
+
+		// Get index of next tween, if it exists, else -1
+		nextTweenIndex = idx == animation->tweens.size()-1 ? -1 : idx + 1;
+		if(nextTweenIndex < animation->tweens.size()){
+			nextTween_oldDeltaValue = animation->tweens.at(nextTweenIndex)->deltaValue;\
+			nextTween_newDeltaValue = (glm::inverse(oldDeltaValue) * newDeltaValue) * nextTween_oldDeltaValue;
+		}
+
 	}
 	
 	// Edit tween values

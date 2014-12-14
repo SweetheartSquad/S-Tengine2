@@ -16,6 +16,7 @@ public:
 	*
 	* @param _animation		The animation object to modify
 	* @param _value			The target value at the start of the animation
+	* @param _targetTime	The target time inside the animation
 	*/
 	CMD_EditStartKey(Animation<T> * _animation, T _targetValue, float _targetTime);
 	~CMD_EditStartKey();
@@ -50,6 +51,7 @@ bool CMD_EditStartKey<T>::execute(){
 	oldStartValue = animation->startValue;
 	oldReferenceValue = animation->referenceValue;
 	oldCurrentAnimationTime = animation->currentAnimationTime;
+
 	animation->startValue = targetValue;
 	if(animation->hasStart && targetTime == 0){
 	    if(animation->tweens.size() > 0){

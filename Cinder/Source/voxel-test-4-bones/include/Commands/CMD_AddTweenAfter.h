@@ -60,8 +60,8 @@ bool CMD_AddTweenAfter<T>::execute(){
 	if (firstRun){
 
 		float targetTime = animation->currentAnimationTime + deltaTimeline;
-		float deltaTime;// = deltaTimeline;
-		T deltaValue;// = targetValue;
+		float deltaTime;
+		T deltaValue;
 
 		// After the animation
 		deltaTime = targetTime - sumTime;
