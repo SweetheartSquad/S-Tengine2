@@ -17,6 +17,7 @@ void Voxel::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 		glm::vec4 pos = _matrixStack->getCurrentMatrix() * voxelPos;
 		
 		float resolution = cro->voxelPreviewResolution;
+		float size = cro->voxelPreviewSize/2.f;
 		if(cro->voxelPreviewMode){
 			// Snap to grid
 			glm::vec4 posDif(
@@ -42,8 +43,8 @@ void Voxel::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 		if(cro->voxelPreviewMode){
 			gl::pushMatrices();
 			_matrixStack->pushMatrix();
-				gl::scale(resolution*2.f, resolution*2.f, resolution*2.f);
-				_matrixStack->scale(glm::scale(glm::vec3(resolution*2.f, resolution*2.f, resolution*2.f)));
+				gl::scale(size, size, size);
+				_matrixStack->scale(glm::scale(glm::vec3(size, size, size)));
 				glUniformMatrix4fv(cro->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
 				gl::draw(*cro->cube);
 			gl::popMatrices();

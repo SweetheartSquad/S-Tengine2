@@ -4,6 +4,7 @@ CinderRenderOptions::CinderRenderOptions(Shader* _shader, std::vector<Light *> *
 	RenderOptions(_shader, _lights, _overrideShader),
 	voxelPreviewMode(false),
 	voxelPreviewResolution(0.1f),
+	voxelPreviewSize(0.1f),
 	voxelSphereRadius(0.1f),
 	sphere(nullptr),
 	cube(nullptr)

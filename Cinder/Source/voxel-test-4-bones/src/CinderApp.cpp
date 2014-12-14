@@ -79,6 +79,7 @@ void CinderApp::setup(){
 	voxelSelectMode = false;
 	voxelPreviewMode = false;
 	voxelPreviewResolution = 0.1f;
+	voxelPreviewSize = 0.1f;
 	voxelSphereRadius = 0.1f;
 	voxelPaintSpacing = 1.f;
 
@@ -92,8 +93,9 @@ void CinderApp::setup(){
 	
 	params->addSeparator();
 	params->addText("Voxels");
-
+	
 	params->addParam("Resolution", &voxelPreviewResolution, "min=0.01, step=0.01");
+	params->addParam("Cube Size", &voxelPreviewSize, "min=0.01, step=0.01");
 	params->addParam("Radius", &voxelSphereRadius, "min=0.01, step=0.01");
 	params->addParam("Paint Spacing", &voxelPaintSpacing, "min=0.01, step=0.5");
 
@@ -168,7 +170,7 @@ void CinderApp::setup(){
 								 
 	timelineBar->addButton(1, new ToolButton("Joints Only", ToolButton::Type::kTOGGLE, Vec2i(50, 30), "../assets/icons/null.png", nullptr, &ButtonFunctions::VOXEL_ShowHide));
 	timelineBar->addButton(1, new ToolButton("Voxel Preview", ToolButton::Type::kTOGGLE, Vec2i(50, 30), "../assets/icons/null.png", nullptr, &ButtonFunctions::VOXEL_Preview));
-	timelineBar->addButton(1, new ToolButton("Voxel Preview", ToolButton::Type::kTOGGLE, Vec2i(50, 30), "../assets/icons/null.png", nullptr, &ButtonFunctions::VOXEL_Selectable));
+	timelineBar->addButton(1, new ToolButton("Voxel Selection", ToolButton::Type::kTOGGLE, Vec2i(50, 30), "../assets/icons/null.png", nullptr, &ButtonFunctions::VOXEL_Selectable));
 
 	timelineBar->addButton(2, new ToolButton("Object", ToolButton::Type::kRADIO, Vec2i(40, 30), "../assets/icons/null.png", nullptr, &ButtonFunctions::SPACE_Object));
 	timelineBar->addButton(2, new ToolButton("World", ToolButton::Type::kRADIO, Vec2i(40, 30), "../assets/icons/null.png", nullptr, &ButtonFunctions::SPACE_World));
@@ -372,6 +374,7 @@ void CinderApp::draw(){
 		CinderRenderOptions t2(nullptr, nullptr);
 		t2.ciShader = &uiShader;
 
+
 		timelineTrackbar->render(&t, &t2);
 		
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
@@ -507,6 +510,7 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		cro.ciShader = &jointShader;
 		cro.voxelPreviewMode = voxelPreviewMode;
 		cro.voxelPreviewResolution = voxelPreviewResolution;
+		cro.voxelPreviewSize = voxelPreviewSize;
 		cro.voxelSphereRadius = voxelSphereRadius;
 		cro.viewJointsOnly = viewJointsOnly;
 		cro.sphere = &sphere;

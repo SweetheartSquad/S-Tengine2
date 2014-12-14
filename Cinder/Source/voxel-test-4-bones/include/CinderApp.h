@@ -187,6 +187,8 @@ public:
 	bool voxelSelectMode;
 	// Whether to draw the voxels as voxels
 	bool voxelPreviewMode;
+	// Cube size for voxel placing
+	float voxelPreviewSize;
 	// Grid resolution for voxel preview
 	float voxelPreviewResolution;
 	// Sphere radius for voxel placing

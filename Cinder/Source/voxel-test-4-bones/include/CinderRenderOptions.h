@@ -30,6 +30,8 @@ public:
 	bool voxelPreviewMode;
 	// Grid resolution for voxel preview
 	float voxelPreviewResolution;
+	// Cube size for voxel preview
+	float voxelPreviewSize;
 	// Sphere radius for voxel placing
 	float voxelSphereRadius;
     // Whether to display the voxels
