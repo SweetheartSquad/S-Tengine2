@@ -38,7 +38,7 @@ private:
 	unsigned long int oldCurrentTween, newCurrentTween;
 	float	oldCurrentAnimationTime, newCurrentAnimationTime,
 			oldCurrentTweenTime, newCurrentTweenTime;
-	T		oldReferenceValue, newReferenceValue;
+	T		oldReferenceValue, newReferenceValue, oldProperty;
 
 	int findKeyframe(std::vector<Tween<T> *> * _tweens);
 };
@@ -62,10 +62,6 @@ template<typename T>
 bool CMD_ClearProperty<T>::execute(){
 	// Executing for the first time, save the oldStartValue if keying 0, or create an add or edit command
 	if(firstRun){
-		oldCurrentAnimationTime = animation->currentAnimationTime;
-		oldCurrentTweenTime = animation->currentTweenTime;
-		oldCurrentTween = animation->currentTween;
-		oldReferenceValue = animation->referenceValue;
 
 	    if(!animation->hasStart){
 		    // Shouldn't happen? No keyframe? Do nothing?
@@ -109,7 +105,12 @@ bool CMD_ClearProperty<T>::execute(){
 				}
 		    }
         }
-
+		
+		oldCurrentAnimationTime = animation->currentAnimationTime;
+		oldCurrentTweenTime = animation->currentTweenTime;
+		oldCurrentTween = animation->currentTween;
+		oldReferenceValue = animation->referenceValue;
+		oldProperty = *animation->prop;
 		Step s;
 		s.setDeltaTime(animation->currentAnimationTime);
 		animation->currentAnimationTime = 0;
@@ -118,22 +119,15 @@ bool CMD_ClearProperty<T>::execute(){
 		animation->referenceValue = animation->startValue;
 		animation->update(&s);
 
-		// save vals
-		newCurrentAnimationTime = animation->currentAnimationTime;
-		newCurrentTweenTime = animation->currentTweenTime;
-		newCurrentTween = animation->currentTween;
-		newReferenceValue = animation->referenceValue;
-
 	}else{
 		subCmdProc.redo();
-
-		animation->currentAnimationTime = newCurrentAnimationTime;
-		animation->currentTweenTime = newCurrentTweenTime;
-		animation->currentTween = newCurrentTween;
-		animation->referenceValue = newReferenceValue;
 		
 		Step s;
-		s.setDeltaTime(0.f);
+		s.setDeltaTime(animation->currentAnimationTime);
+		animation->currentAnimationTime = 0;
+		animation->currentTweenTime = 0;
+		animation->currentTween = 0;
+		animation->referenceValue = animation->startValue;
 		animation->update(&s);
 	}
 
@@ -143,17 +137,18 @@ bool CMD_ClearProperty<T>::execute(){
 template<typename T>
 bool CMD_ClearProperty<T>::unexecute(){
 
-	subCmdProc.undo();
-
-	animation->currentAnimationTime = oldCurrentAnimationTime;
-	animation->currentTweenTime = oldCurrentTweenTime;
-	animation->currentTween = oldCurrentTween;
-	animation->referenceValue = oldReferenceValue;
-	
 	Step s;
-	s.setDeltaTime(0.f);
+	s.setDeltaTime(oldCurrentAnimationTime);
+	animation->currentAnimationTime = 0;
+	animation->currentTweenTime = 0;
+	animation->currentTween = 0;
+	animation->referenceValue = animation->startValue;
 	animation->update(&s);
 
+	*(animation->prop) = oldProperty;
+
+	subCmdProc.undo();
+	
 	return true;
 }
 
