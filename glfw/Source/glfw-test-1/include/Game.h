@@ -65,4 +65,8 @@ public:
 	* Calls update on the mouse and keyboard 
 	*/
 	void manageInput(void);
+	
+	unsigned long int kc_lastKey;
+	unsigned long int kc_code;
+	bool kc_active;
 };

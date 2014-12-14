@@ -29,5 +29,5 @@ public:
 	virtual ~BaseScene();
 
 	virtual void update() override;
-	virtual void render() override;
+	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 };

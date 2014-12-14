@@ -280,7 +280,7 @@ void MainScene::update(){
 	}
 }
 
-void MainScene::render(){
+void MainScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	/**int width, height;
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
 
@@ -328,8 +328,8 @@ void MainScene::render(){
 
 	setViewport(0, 0, width, height);
 	
-	Scene::renderShadows();
-	Scene::render();
+	Scene::renderShadows(_matrixStack, _renderStack);
+	Scene::render(_matrixStack, _renderStack);
 }
 
 void MainScene::unload(){

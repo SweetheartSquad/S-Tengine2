@@ -77,17 +77,19 @@ void Scene::setViewport(float _x, float _y, float _w, float _h){
 	viewPortHeight = _h;
 }
 
-void Scene::render(){
+void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	//glfwGetFramebufferSize(glfwGetCurrentContext(), &w, &h);
 	glfwMakeContextCurrent(glfwGetCurrentContext());
 	float ratio;
 	ratio = viewPortWidth / static_cast<float>(viewPortHeight);
 
 	glEnable(GL_SCISSOR_TEST);
+	glEnable (GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glViewport(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
 	glScissor(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
-	glClearColor(0, 0, 0, 1);
+	glClearColor(1.f, 0.f, 0.f, ((GLFWRenderOptions *)_renderStack)->kc_active ? 0.05f : 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST);
@@ -146,12 +148,12 @@ void Scene::toggleFullScreen(){
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 }
 
-void Scene::renderShadows(){
+void Scene::renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	Shader * backupOverride = renderOptions->overrideShader;
 	depthBuffer->resize(viewPortWidth, viewPortHeight);
 	depthBuffer->bindFrameBuffer();
 	renderOptions->overrideShader = depthShader;
-	Scene::render();
+	Scene::render(_matrixStack, _renderStack);
 
 	shadowBuffer->resize(viewPortWidth, viewPortHeight);
 	shadowBuffer->bindFrameBuffer();
