@@ -258,6 +258,9 @@
     <ClCompile Include="..\src\NodeLoadable.cpp">
       <Filter>Source Files\node</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\OrthographicCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -460,6 +463,9 @@
     </ClInclude>
     <ClInclude Include="..\include\NodeLoadable.h">
       <Filter>Header Files\node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\OrthographicCamera.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

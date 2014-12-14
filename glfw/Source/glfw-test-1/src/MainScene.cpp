@@ -14,6 +14,7 @@
 #include "Mouse.h"
 #include "GLFWRenderOptions.h"
 #include "PerspectiveCamera.h"
+#include "OrthographicCamera.h"
 #include <BaseComponentShader.h>
 #include <DiffuseShaderComponent.h>
 #include <ShadowShaderComponent.h>

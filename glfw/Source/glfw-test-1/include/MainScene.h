@@ -31,8 +31,6 @@ public:
 	Shader * blinnShader;
 	Shader * voxShader;
 
-	Light * tLight;
-
 	StandardFrameBuffer * frameBuffer;
 
 	RenderSurface * renderSurface;
