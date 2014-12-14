@@ -10,7 +10,7 @@
 ```
 
 
-# Prerequisites # 
+# Prerequisites 
 
 * Visual Studio 2012
 * A computer with graphics card that supports OpenGL 3.3
