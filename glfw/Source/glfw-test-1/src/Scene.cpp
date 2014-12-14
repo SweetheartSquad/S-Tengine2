@@ -62,12 +62,20 @@ void Scene::load(){
 	for(Entity * e : children){
 		e->load();
 	}
+	depthBuffer->load();
+	shadowBuffer->load();
+	depthShader->load();
+	shadowSurface->load();
 }
 
 void Scene::unload(){
 	for(Entity * e : children){
 		e->unload();
 	}
+	depthBuffer->unload();
+	shadowBuffer->unload();
+	depthShader->unload();
+	shadowSurface->unload();
 }
 
 void Scene::setViewport(float _x, float _y, float _w, float _h){
@@ -87,16 +95,16 @@ void Scene::render(){
 
 	glViewport(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
 	glScissor(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
-	glClearColor(0, 0, 0, 1);
+	glClearColor(1, 1, 1, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST);
 
 	//Back-face culling
-	glEnable (GL_CULL_FACE); // cull face
-	glCullFace (GL_BACK); // cull back face
+	//glEnable (GL_CULL_FACE); // cull face
+    //glCullFace (GL_BACK); // cull back face
 
-	glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
+	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
 	matrixStack->projectionMatrix = camera->getProjectionMatrix();
 	matrixStack->viewMatrix		  = camera->getViewMatrix();
@@ -139,6 +147,13 @@ void Scene::toggleFullScreen(){
 	glfwDestroyWindow(vox::currentContext);
 	glfwMakeContextCurrent(window);
 	vox::currentContext = window;
+
+	int width, height;
+	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+	viewPortWidth = width;
+	viewPortHeight = height;
+	viewPortX = 0;
+	viewPortY = 0;
 
 	unload();
 	load();

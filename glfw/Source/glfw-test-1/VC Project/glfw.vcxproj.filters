@@ -261,6 +261,9 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeLoadable.cpp">
       <Filter>Source Files\node</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\ShiftKiddie.cpp">
+      <Filter>Source Files\node</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -481,7 +484,6 @@
     <None Include="..\assets\ColourShader.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
-    <None Include="..\assets\cube.vox" />
     <None Include="..\assets\diffuse.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
@@ -533,6 +535,7 @@
     <None Include="..\..\..\..\..\..\..\dev\ttt.json">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\assets\monkey.vox" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\assets\voxel-texture.png">

@@ -19,7 +19,7 @@ public:
 	// Sets _child->parent = this node
 	// Note: does nothing if this node is a descendant of _child
 	// Returns whether or not the child was successfully added
-	virtual bool addChild(NodeChild * _child);
+	virtual bool addChild(NodeChild * _child) override;
 
 	// Returns the number of Nodes between this node and the top of its hierarchy
 	virtual unsigned long int calculateDepth();

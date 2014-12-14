@@ -3,9 +3,12 @@
 #include "Node.h"
 
 #include <vector>
+#include <functional>
 
+class NodeHierarchical;
 class NodeChild;
 class SceneRoot;
+class NodeChild;
 
 class NodeParent abstract : public virtual Node{
 public:
@@ -39,4 +42,5 @@ public:
 	/** List of references to child entities */
 	std::vector<NodeChild *> children;
 
+	void doRecursivley(std::function<void(Node *, void * args[])> _toDo, void * _args[]);
 };

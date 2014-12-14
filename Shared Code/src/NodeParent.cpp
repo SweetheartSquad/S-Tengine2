@@ -70,6 +70,17 @@ bool NodeParent::hasDescendant(NodeChild *_child) {
 	return false;
 }
 
+void NodeParent::doRecursivley(std::function<void(Node *, void * args[])> _toDo, void * _args[]){
+	_toDo(this, _args);
+	for(unsigned long int i = 0; i < children.size(); i++){
+		NodeParent * np = dynamic_cast<NodeParent *>(children.at(i));
+		if(np != nullptr){
+			np->doRecursivley(_toDo, _args);
+		}else{
+			_toDo(children.at(i), _args);
+		}
+	}
+}
 
 NodeParent::~NodeParent()
 {

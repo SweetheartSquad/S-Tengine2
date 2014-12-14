@@ -24,5 +24,5 @@ public:
 	Animation<float> * scaleY;
 	Animation<float> * scaleZ;
 
-	void update(Step * _step) override;
+	virtual void update(Step * _step) override;
 };
