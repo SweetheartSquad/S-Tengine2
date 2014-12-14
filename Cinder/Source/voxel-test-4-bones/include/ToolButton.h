@@ -10,6 +10,7 @@
 
 #include <string>
 #include <cinder\Text.h>
+#include <cinder\gl\Texture.h>
 
 class CinderApp;
 class ToolSet;
@@ -24,9 +25,10 @@ public:
 		kRADIO
 	} type;
 	
-	ToolButton(std::string _label, Type _type, ci::Vec2i _iconSize, void (*_downCallback)(CinderApp * _app) = nullptr, void (*_upCallback)(CinderApp * _app) = nullptr);
+	ToolButton(std::string _label, Type _type, ci::Vec2i _iconSize, std::string _iconSrc, void (*_downCallback)(CinderApp * _app) = nullptr, void (*_upCallback)(CinderApp * _app) = nullptr);
 
 	ci::TextBox textbox;
+	ci::gl::Texture icon;
 	
     // The function you want to call when you start clicking the button
 	void (*downCallback)(CinderApp * _app);

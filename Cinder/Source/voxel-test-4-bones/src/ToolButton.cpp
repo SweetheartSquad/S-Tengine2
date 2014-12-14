@@ -6,22 +6,24 @@
 #include "CinderRenderOptions.h"
 
 #include <cinder\gl\gl.h>
-#include <cinder\gl\Texture.h>
+#include <cinder\ImageSourcePng.h>
 
-ToolButton::ToolButton(std::string _label, Type _type, ci::Vec2i _iconSize, void (*_downCallback)(CinderApp * _app), void (*_upCallback)(CinderApp * _app)):
+ToolButton::ToolButton(std::string _label, Type _type, ci::Vec2i _iconSize, std::string _iconSrc, void (*_downCallback)(CinderApp * _app), void (*_upCallback)(CinderApp * _app)):
 	UiInteractable(ci::Vec2i(0,0), _iconSize),
 	NodeChild(nullptr),
 	NodeSelectable(),
 	displayColor((float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f, (float)(std::rand()%255)/255.f, 1.f),
 	type(_type),
 	downCallback(_downCallback),
-	upCallback(_upCallback)
+	upCallback(_upCallback),
+	icon(ci::loadImage(ci::loadFile(_iconSrc)))
 {
 	textbox.setText(_label);
 	textbox.setSize(_iconSize);
 	textbox.setAlignment(ci::TextBox::Alignment::LEFT);
 	textbox.setFont(ci::Font("Segoe UI", 15));
 	textbox.setColor(ci::ColorA(0.f, 0.f, 0.f, 1.f));
+	
 }
 
 void ToolButton::downHandler(CinderApp * _app){
@@ -94,4 +96,5 @@ void ToolButton::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 	((CinderRenderOptions *)_renderStack)->ciShader->uniform("pickingColor", ci::Color::hex(pickingColor));
 	ci::gl::color(1.f, 1.f, 1.f, 1.f);
 	ci::gl::draw(ci::gl::Texture(textbox.render()));
+	ci::gl::draw(icon, ci::Rectf(pos.x, pos.y, size.x, size.y));
 }

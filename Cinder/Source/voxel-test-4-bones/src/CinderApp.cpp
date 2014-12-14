@@ -146,12 +146,12 @@ void CinderApp::setup(){
 	// Selecting, Creating, Painting, and Transformations
 	toolbar->addSet(new ToolSet());
 
-	toolbar->addButton(0, new ToolButton("Select", ToolButton::Type::kRADIO, Vec2i(40, 40), nullptr, &ButtonFunctions::MODE_Select));
-	toolbar->addButton(0, new ToolButton("Translate", ToolButton::Type::kRADIO, Vec2i(40, 40), nullptr, &ButtonFunctions::MODE_Translate));
-	toolbar->addButton(0, new ToolButton("Rotate", ToolButton::Type::kRADIO, Vec2i(40, 40), nullptr, &ButtonFunctions::MODE_Rotate));
-	toolbar->addButton(0, new ToolButton("Scale", ToolButton::Type::kRADIO, Vec2i(40, 40), nullptr, &ButtonFunctions::MODE_Scale));
-	toolbar->addButton(0, new ToolButton("Joint", ToolButton::Type::kRADIO, Vec2i(40, 40), nullptr, &ButtonFunctions::MODE_CreateJoints));
-	toolbar->addButton(0, new ToolButton("Voxel", ToolButton::Type::kRADIO, Vec2i(40, 40), nullptr, &ButtonFunctions::MODE_PaintVoxels));
+	toolbar->addButton(0, new ToolButton("", ToolButton::Type::kRADIO, Vec2i(40, 40), "../assets/icons/select.png", nullptr, &ButtonFunctions::MODE_Select));
+	toolbar->addButton(0, new ToolButton("", ToolButton::Type::kRADIO, Vec2i(40, 40), "../assets/icons/translate.png", nullptr, &ButtonFunctions::MODE_Translate));
+	toolbar->addButton(0, new ToolButton("", ToolButton::Type::kRADIO, Vec2i(40, 40), "../assets/icons/rotate.png", nullptr, &ButtonFunctions::MODE_Rotate));
+	toolbar->addButton(0, new ToolButton("", ToolButton::Type::kRADIO, Vec2i(40, 40), "../assets/icons/scale.png", nullptr, &ButtonFunctions::MODE_Scale));
+	toolbar->addButton(0, new ToolButton("", ToolButton::Type::kRADIO, Vec2i(40, 40), "../assets/icons/joint.png", nullptr, &ButtonFunctions::MODE_CreateJoints));
+	toolbar->addButton(0, new ToolButton("", ToolButton::Type::kRADIO, Vec2i(40, 40), "../assets/icons/voxel.png", nullptr, &ButtonFunctions::MODE_PaintVoxels));
 
 	timelineBar = new ToolBar(Vec2i(50, 30), false);
 	
@@ -164,26 +164,32 @@ void CinderApp::setup(){
 	// coordinate-space
 	timelineBar->addSet(new ToolSet());
 
-    timelineBar->addButton(0, new ToolButton("Prev", ToolButton::Type::kNORMAL, Vec2i(20, 20), nullptr, &ButtonFunctions::TIME_Decrement));
-	timelineBar->addButton(0, new ToolButton("Play", ToolButton::Type::kTOGGLE, Vec2i(20, 20), nullptr, &ButtonFunctions::TIME_PlayPause));
-	timelineBar->addButton(0, new ToolButton("Next", ToolButton::Type::kNORMAL, Vec2i(20, 20), nullptr, &ButtonFunctions::TIME_Increment));
+    timelineBar->addButton(0, new ToolButton("", ToolButton::Type::kNORMAL, Vec2i(30, 30), "../assets/icons/prev.png", nullptr, &ButtonFunctions::TIME_Decrement));
+	timelineBar->addButton(0, new ToolButton("", ToolButton::Type::kTOGGLE, Vec2i(30, 30), "../assets/icons/play.png", nullptr, &ButtonFunctions::TIME_PlayPause));
+	timelineBar->addButton(0, new ToolButton("", ToolButton::Type::kNORMAL, Vec2i(30, 30), "../assets/icons/next.png", nullptr, &ButtonFunctions::TIME_Increment));
 								 
-	timelineBar->addButton(1, new ToolButton("FBO:1", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_0));
-	timelineBar->addButton(1, new ToolButton("FBO:2", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_1));
-	timelineBar->addButton(1, new ToolButton("FBO:3", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_2));
-	timelineBar->addButton(1, new ToolButton("FBO:4", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::CHANNEL_3));
+	timelineBar->addButton(1, new ToolButton("Joints Only", ToolButton::Type::kTOGGLE, Vec2i(50, 30), "../assets/icons/null.png", nullptr, &ButtonFunctions::VOXEL_ShowHide));
+	timelineBar->addButton(1, new ToolButton("Voxel Preview", ToolButton::Type::kTOGGLE, Vec2i(50, 30), "../assets/icons/null.png", nullptr, &ButtonFunctions::VOXEL_Preview));
+	timelineBar->addButton(1, new ToolButton("Voxel Preview", ToolButton::Type::kTOGGLE, Vec2i(50, 30), "../assets/icons/null.png", nullptr, &ButtonFunctions::VOXEL_Selectable));
+
+	timelineBar->addButton(2, new ToolButton("Object", ToolButton::Type::kRADIO, Vec2i(40, 30), "../assets/icons/null.png", nullptr, &ButtonFunctions::SPACE_Object));
+	timelineBar->addButton(2, new ToolButton("World", ToolButton::Type::kRADIO, Vec2i(40, 30), "../assets/icons/null.png", nullptr, &ButtonFunctions::SPACE_World));
 	
-	timelineBar->addButton(2, new ToolButton("View Joints Only", ToolButton::Type::kTOGGLE, Vec2i(20, 20), nullptr, &ButtonFunctions::VOXEL_ShowHide));
-	timelineBar->addButton(2, new ToolButton("Voxel Preview", ToolButton::Type::kTOGGLE, Vec2i(20, 20), nullptr, &ButtonFunctions::VOXEL_Preview));
-	timelineBar->addButton(2, new ToolButton("Voxel Preview", ToolButton::Type::kTOGGLE, Vec2i(20, 20), nullptr, &ButtonFunctions::VOXEL_Selectable));
-
-	timelineBar->addButton(3, new ToolButton("Object", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::SPACE_Object));
-	timelineBar->addButton(3, new ToolButton("World", ToolButton::Type::kRADIO, Vec2i(20, 20), nullptr, &ButtonFunctions::SPACE_World));
-
+	timelineBar->addButton(3, new ToolButton("1", ToolButton::Type::kRADIO, Vec2i(20, 240), "../assets/icons/null.png", nullptr, &ButtonFunctions::CHANNEL_0));
+	timelineBar->addButton(3, new ToolButton("2", ToolButton::Type::kRADIO, Vec2i(20, 240), "../assets/icons/null.png", nullptr, &ButtonFunctions::CHANNEL_1));
+	timelineBar->addButton(3, new ToolButton("3", ToolButton::Type::kRADIO, Vec2i(20, 240), "../assets/icons/null.png", nullptr, &ButtonFunctions::CHANNEL_2));
+	timelineBar->addButton(3, new ToolButton("4", ToolButton::Type::kRADIO, Vec2i(20, 240), "../assets/icons/null.png", nullptr, &ButtonFunctions::CHANNEL_3));
+	
+	
 	//timeTextBox = new ParamTextBox(ParamTextBox::Type::NUMBER, Vec2i(60, 40), Vec2i(30,20));
 
 	code = 0;
 	active = false;
+
+	// press active buttons
+	dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(4))->pressProgrammatically(this);
+	dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(2))->children.at(0))->pressProgrammatically(this);
+	dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(3))->children.at(0))->pressProgrammatically(this);
 }
 
 void CinderApp::resize(){
@@ -445,22 +451,19 @@ void CinderApp::draw(){
 		gl::drawStrokedRect(Rectf(rct.x1, rct.y1, rct.x2, rct.y2));
 	}
 	
-	// draw the picking framebuffer in the upper right corner
-	if(pickingFboUI){
+	// draw the picking framebuffers in the corner
+	/*if(pickingFboUI){
 		Rectf rct((Rectf)pickingFboUI.getBounds() * 5.f);
 		rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0.f) );
 		gl::draw( pickingFboUI.getTexture(0), Rectf(rct.x1, rct.y1+rct.y2, rct.x2, rct.y2+rct.y2) );
 		gl::drawStrokedRect(Rectf(rct.x1, rct.y1+rct.y2, rct.x2, rct.y2+rct.y2));
 	}
-	
-
-	// draw the picking framebuffer in the upper right corner
 	if(pixelFbo){
 		Rectf rct((Rectf)pixelFbo.getBounds() * 5.0f);
 		rct.offset( Vec2f((float) getWindowWidth() - rct.getWidth(), 0.f) );
 		gl::draw( pixelFbo.getTexture(0), Rectf(rct.x1, rct.y1+rct.y2+rct.y2, rct.x2, rct.y2+rct.y2+rct.y2) );
 		gl::drawStrokedRect(Rectf(rct.x1, rct.y1+rct.y2+rct.y2, rct.x2, rct.y2+rct.y2+rct.y2));
-	}
+	}*/
 }
 
 void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
@@ -1306,17 +1309,18 @@ void CinderApp::keyDown( KeyEvent event ){
 					    }else{
 						    params->minimize();
 					    }
+						break;
 				    case KeyEvent::KEY_1:
-					    channel = 0;
+						dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(3))->children.at(0))->pressProgrammatically(this);
 					    break;
 				    case KeyEvent::KEY_2:
-					    channel = 1;
+						dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(3))->children.at(1))->pressProgrammatically(this);
 					    break;
 				    case KeyEvent::KEY_3:
-					    channel = 2;
+						dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(3))->children.at(2))->pressProgrammatically(this);
 					    break;
 				    case KeyEvent::KEY_4:
-					    channel = 3;
+						dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(3))->children.at(3))->pressProgrammatically(this);
 					    break;
 				    case KeyEvent::KEY_DELETE:
 					    if(UI::selectedNodes.size() > 0){
@@ -1329,29 +1333,22 @@ void CinderApp::keyDown( KeyEvent event ){
 					    }
 					    break;
 				    case KeyEvent::KEY_q:
-					    /*mode = SELECT;
-					    params->setOptions( "UI Mode", "label=`SELECT`" );*/
 					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(0))->pressProgrammatically(this);
 					    break;
 				    case KeyEvent::KEY_w:
-					    mode = kTRANSLATE;
-					    params->setOptions( "UI Mode", "label=`TRANSLATE`" );
+					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(1))->pressProgrammatically(this);
 					    break;
 				    case KeyEvent::KEY_e:
-					    mode = kROTATE;
-					    params->setOptions( "UI Mode", "label=`ROTATE`" );
+					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(2))->pressProgrammatically(this);
 					    break;
 				    case KeyEvent::KEY_r:
-					    mode = kSCALE;
-					    params->setOptions( "UI Mode", "label=`SCALE`" );
+					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(3))->pressProgrammatically(this);
 					    break;
 				    case KeyEvent::KEY_b:
-					    mode = kCREATE;
-					    params->setOptions( "UI Mode", "label=`CREATE`" );
+					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(4))->pressProgrammatically(this);
 					    break;
 				    case KeyEvent::KEY_v:
-					    mode = kPAINT_VOXELS;
-					    params->setOptions( "UI Mode", "label=`PAINT_VOXELS`" );
+					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(5))->pressProgrammatically(this);
 					    break;
 				    }
 			    }
