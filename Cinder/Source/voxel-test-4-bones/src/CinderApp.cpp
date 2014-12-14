@@ -45,11 +45,11 @@ void CinderApp::prepareSettings(Settings *settings){
 void CinderApp::setup(){
 
 	TriMesh test;
-	ObjLoader objLoader(loadFile("../assets/sphere.obj"));
+	ObjLoader objLoader(loadFile("../assets/sphere.vox"));
 	objLoader.load(&test, true, false, true);
 	sphere = gl::VboMesh(test);
 
-	ObjLoader objLoader2(loadFile("../assets/cube.obj"));
+	ObjLoader objLoader2(loadFile("../assets/cube.vox"));
 	objLoader2.load(&test, true, false, true);
 	cube = gl::VboMesh(test);
 
