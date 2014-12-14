@@ -255,11 +255,11 @@
     <ClCompile Include="PerspectiveCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\NodeLoadable.cpp">
-      <Filter>Source Files\node</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\OrthographicCamera.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeLoadable.cpp">
+      <Filter>Source Files\node</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -461,11 +461,11 @@
     <ClInclude Include="..\include\PerspectiveCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\NodeLoadable.h">
-      <Filter>Header Files\node</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\OrthographicCamera.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeLoadable.h">
+      <Filter>Header Files\node</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

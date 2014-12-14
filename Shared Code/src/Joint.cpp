@@ -36,11 +36,11 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 		//gl::enableWireframe();
 		cro->ciShader->uniform("pickingColor", Color::hex(pickingColor));
 		//colour
-		float depth = calculateDepth();
+		float depth = (float)calculateDepth();
 		ColorA color(
-			1 - (float)depth / 28.f,
-			0.25f + (depth <= 14 ? (float)depth / 14.f : (float)(14-depth) / 14.f),
-			(float)depth / 28.f
+			1 - (depth / 28.f),
+			0.25f + (depth <= 14.f ? depth / 14.f : (28.f-depth) / 14.f),
+			depth / 28.f
 		);
 
 		if (depth > 28){

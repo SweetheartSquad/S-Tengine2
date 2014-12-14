@@ -97,6 +97,11 @@ void CinderApp::setup(){
 	params->addButton("Load", std::bind(&CinderApp::loadSkeleton, this));
 	params->addSeparator();
 	params->addParam("Message", &message, "", true);
+
+	stringstream paramsOptions;
+	paramsOptions << "position='" << getWindowWidth() - 175 - 5 << " " << getWindowHeight() / 2.5f << "'";
+	string blah = paramsOptions.str();
+	params->setOptions("", paramsOptions.str());
 	
 	consoleGUI = new ConsoleGUI(15, &cmdProc->consoleEntries, 3);
 
@@ -311,8 +316,6 @@ void CinderApp::update(){
 	camTop.setEyePoint(camMayaPersp.getCamera().getEyePoint());
 	camFront.setEyePoint(camMayaPersp.getCamera().getEyePoint());
 	camRight.setEyePoint(camMayaPersp.getCamera().getEyePoint());
-
-	snapParams();
 }
 
 void CinderApp::draw(){
@@ -1384,14 +1387,6 @@ void CinderApp::drawGrid(float size, float step){
 	jointShader.unbind();
 }
 
-void CinderApp::snapParams(){
-	// Snap window to side. Using setOptions instead of setPosition, which is for Cinder for VS2013 and up only
-	// Params options
-	stringstream paramsOptions;
-	paramsOptions << "position='" << getWindowWidth() - 175 - 5 << " " << getWindowHeight() / 2.5f << "'";
-	string blah = paramsOptions.str();
-	params->setOptions("", paramsOptions.str());
-}
 void CinderApp::saveSkeleton() {
 	try{
 		console() << "saveSkeleton" << endl;

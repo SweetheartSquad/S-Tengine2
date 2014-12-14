@@ -201,7 +201,7 @@ MainScene::MainScene(Game * _game):
 	//addChild(cat);
 	
 
-	voxelJoint = Resource::loadVoxelModel("../assets/ttt.json");
+	voxelJoint = Resource::loadVoxelModel("A:/test.json");
 	voxelJoint->setShaderOnChildren(voxShader);
 	voxelJoint->transform->translate(5.f, 0.f, 0.f);
 

@@ -120,6 +120,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeChild.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeHierarchical.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeLoadable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeParent.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeResource.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeUpdatable.cpp" />
@@ -153,7 +154,6 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\src\Material.cpp" />
     <ClCompile Include="..\src\MeshEntity.cpp" />
     <ClCompile Include="..\src\Mouse.cpp" />
-    <ClCompile Include="..\src\NodeLoadable.cpp" />
     <ClCompile Include="..\src\OrthographicCamera.cpp" />
     <ClCompile Include="..\src\PhongShaderComponent.cpp" />
     <ClCompile Include="..\src\Plane.cpp" />
@@ -185,6 +185,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeAnimatable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeChild.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeLoadable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeParent.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeRenderable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeResource.h" />
@@ -220,7 +221,6 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClInclude Include="..\include\Material.h" />
     <ClInclude Include="..\include\MeshEntity.h" />
     <ClInclude Include="..\include\Mouse.h" />
-    <ClInclude Include="..\include\NodeLoadable.h" />
     <ClInclude Include="..\include\OrthographicCamera.h" />
     <ClInclude Include="..\include\PerspectiveCamera.h" />
     <ClInclude Include="..\include\PhongShaderComponent.h" />
