@@ -100,17 +100,17 @@ bool CMD_EditTween<glm::quat>::execute(){
 		// Get index of next tween, if it exists, else -1
 		nextTweenIndex = idx == animation->tweens.size()-1 ? -1 : idx + 1;
 		if(nextTweenIndex < animation->tweens.size()){
-			nextTween_oldDeltaValue = animation->tweens.at(nextTweenIndex)->deltaValue;
-			nextTween_newDeltaValue = (glm::inverse(newDeltaValue) * oldDeltaValue) * nextTween_oldDeltaValue;
+			nextTween_oldDeltaValue = animation->tweens.at(nextTweenIndex)->deltaValue;\
+			nextTween_newDeltaValue = (glm::inverse(oldDeltaValue) * newDeltaValue) * nextTween_oldDeltaValue;
 		}
 
 		// Calculate deltaValue of edited tween
 		if(idx > 0){
 			// d2 for value is previous tween's value
-			newDeltaValue = glm::inverse(targetValue) * animation->getTweenEndValue(idx-1);
+			newDeltaValue = glm::inverse(animation->getTweenEndValue(idx-1)) * targetValue;
 		}else{
 			// d2 for value is start value
-			newDeltaValue = glm::inverse(targetValue) * animation->startValue;
+			newDeltaValue = glm::inverse(animation->startValue) * targetValue;
 		}
 	}
 	

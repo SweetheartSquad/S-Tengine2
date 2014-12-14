@@ -97,7 +97,7 @@ bool CMD_AddTweenBefore<glm::quat>::execute(){
 
 		deltaTime = 0 - targetTime;
 		// d2s for time and value are 0 and start value (deltaTime stays as time)
-		deltaValue = glm::inverse(animation->startValue) * targetValue;
+		deltaValue = glm::inverse(targetValue) * animation->startValue;
 
 		cmd = new CMD_EditStartKey<glm::quat>(animation, targetValue, targetTime);
 		tween = new Tween<glm::quat>(deltaTime, deltaValue, interpolation);

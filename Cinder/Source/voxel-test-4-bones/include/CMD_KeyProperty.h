@@ -36,9 +36,6 @@ private:
 	Easing::Type interpolation;
 
 	int findKeyframe(std::vector<Tween<T> *> * _tweens);
-
-	T getStartValue(unsigned long int _idx);
-	T getEndValue(unsigned long int _idx);
 };
 
 /*template class CMD_KeyProperty<float>;
@@ -102,29 +99,6 @@ bool CMD_KeyProperty<T>::unexecute(){
 	subCmdProc.undo();
 
 	return true;
-}
-
-template<typename T>
-T CMD_KeyProperty<T>::getStartValue(unsigned long int _idx){
-	
-	T value = animation->startValue;
-
-	for(unsigned long int i = 0; i < _idx; ++i){
-		value += animation->tweens.at(i)->deltaValue;
-	}
-
-	return value;
-}
-
-template<typename T>
-T CMD_KeyProperty<T>::getEndValue(unsigned long int _idx){
-	T value = animation->startValue;
-
-	for(unsigned long int i = 0; i = _idx; ++i){
-		value += animation->tweens.at(i)->deltaValue;
-	}
-
-	return value;
 }
 
 template<typename T>

@@ -76,7 +76,7 @@ bool CMD_EditStartKey<glm::quat>::execute(){
 	if(animation->hasStart && targetTime == 0){
 	    if(animation->tweens.size() > 0){
 			oldDeltaValue = animation->tweens.at(0)->deltaValue;
-			animation->tweens.at(0)->deltaValue = (glm::inverse(targetValue) * oldStartValue) * animation->tweens.at(0)->deltaValue;
+			animation->tweens.at(0)->deltaValue = (glm::inverse(oldStartValue) * targetValue) * animation->tweens.at(0)->deltaValue;
 	    }
 	}else{
 		if(animation->hasStart){

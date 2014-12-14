@@ -93,9 +93,9 @@ bool CMD_AddTweenAfter<glm::quat>::execute(){
 		// After the animation
 		deltaTime = targetTime - sumTime;
 		if(animation->tweens.size() > 0){
-			deltaValue = glm::inverse(targetValue) * animation->getTweenEndValue(animation->tweens.size()-1);
+			deltaValue = glm::inverse(animation->getTweenEndValue(animation->tweens.size()-1)) * targetValue;
 		}else{
-			deltaValue = glm::inverse(targetValue) * animation->startValue;
+			deltaValue = glm::inverse(animation->startValue) * targetValue;
 		}
 		
 		tween = new Tween<glm::quat>(deltaTime, deltaValue, interpolation);

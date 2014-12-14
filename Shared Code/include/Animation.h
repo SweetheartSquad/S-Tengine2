@@ -195,7 +195,7 @@ void Animation<glm::quat>::update(Step * _step){
 						case Animation::kCONSTANT:
 							referenceValue = startValue;
 							for(unsigned long int i = 0; i+1 < tweens.size(); ++i){
-								referenceValue += tweens.at(i)->deltaValue;
+								referenceValue = tweens.at(i)->deltaValue * referenceValue;
 							}
 						case Animation::kLOOP_WITH_OFFSET:
 							currentTween = tweens.size() - 1;
@@ -228,7 +228,7 @@ void Animation<glm::quat>::update(Step * _step){
 		
 		float slerpInterpolation = Easing::call(tweens.at(currentTween)->interpolation, currentTweenTime, 0, 1, tweens.at(currentTween)->deltaTime);
 
-		*prop = glm::slerp(referenceValue, referenceValue * tweens.at(currentTween)->deltaValue, -slerpInterpolation);
+		*prop = glm::slerp(referenceValue, tweens.at(currentTween)->deltaValue * referenceValue, slerpInterpolation);
 		
 		// The time > sum-delta-time bit is inefficient since we don't keep a record of the total animation length (which we should), but it works
 		if(loopType == kCONSTANT){

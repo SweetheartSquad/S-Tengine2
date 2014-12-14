@@ -114,19 +114,24 @@ bool CMD_AddTweenInside<glm::quat>::execute(){
 		if(nextTweenIndex == 0){
 			// Interrupting first tween
 			deltaTime = targetTime;
-			deltaValue = glm::inverse(targetValue) * animation->startValue;
+			deltaValue = glm::inverse(animation->startValue) * targetValue;
 		}else{
 			// Interrupting a different tween
 			deltaTime = targetTime - animation->getTweenEndTime(nextTweenIndex-1);
-			deltaValue = glm::inverse(targetValue) * animation->getTweenEndValue(nextTweenIndex-1);
+			deltaValue = glm::inverse(animation->getTweenEndValue(nextTweenIndex-1)) * targetValue;
 		}
 
 		nextTween_oldDeltaTime = animation->tweens.at(nextTweenIndex)->deltaTime;
 		nextTween_oldDeltaValue = animation->tweens.at(nextTweenIndex)->deltaValue;
 		nextTween_newDeltaTime = animation->tweens.at(nextTweenIndex)->deltaTime - deltaTime;
-		nextTween_newDeltaValue = glm::inverse(animation->tweens.at(nextTweenIndex)->deltaValue) * deltaValue;
+
+		glm::quat end;
+		end = nextTween_oldDeltaValue * animation->getTweenEndValue(nextTweenIndex);
+
+		//nextTween_newDeltaValue = glm::inverse(deltaValue) * animation->tweens.at(nextTweenIndex)->deltaValue;
 		
-		
+		nextTween_newDeltaValue = glm::inverse(targetValue) * end;
+
 		tween = new Tween<glm::quat>(deltaTime, deltaValue, interpolation);
 	}
 
