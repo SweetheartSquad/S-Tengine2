@@ -248,6 +248,8 @@ void CinderApp::shutdown(){
 	cmdProc = nullptr;
 	delete consoleGUI;
 	consoleGUI = nullptr;
+	delete timelineTrackbar;
+	timelineTrackbar = nullptr;
 }
 
 void CinderApp::update(){
