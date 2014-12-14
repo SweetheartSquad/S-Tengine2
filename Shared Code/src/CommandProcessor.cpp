@@ -29,6 +29,8 @@ bool CommandProcessor::executeCommand(Command * c){
 		redoStack.push_back(c);
 		if(!redo()){
 			return false;
+		}else{
+			c->firstRun = false;
 		}
 	}
 

@@ -109,7 +109,7 @@ bool CMD_AddTweenAfter<glm::quat>::execute(){
 template<typename T>
 bool CMD_AddTweenAfter<T>::unexecute(){
 	// Remove tween after animation
-	animation->tweens.erase(animation->tweens.begin() + animation->tweens.size() - 1);
+	animation->tweens.erase(animation->tweens.end()-1);
 	return true;
 }
 

@@ -64,10 +64,11 @@ bool CMD_AddTween<T>::execute(){
     
     // calculate values for new tween, and save other values that will be changed by this tween insert
 	if (firstRun){
-		/*oldCurrentAnimationTime = animation->currentAnimationTime;
+		
+		oldCurrentAnimationTime = animation->currentAnimationTime;
 		oldCurrentTweenTime = animation->currentTweenTime;
 		oldCurrentTween = animation->currentTween;
-		oldReferenceValue = animation->referenceValue;*/
+		oldReferenceValue = animation->referenceValue;
 
 		float targetTime = animation->currentAnimationTime + deltaTimeline;
 
@@ -97,6 +98,8 @@ bool CMD_AddTween<T>::execute(){
 				subCmdProc.executeCommand(new CMD_AddTweenAfter<T>(animation, deltaTimeline, targetValue, interpolation, sumTime));
 			}
 		}
+
+
 		Step s;
 		s.setDeltaTime(animation->currentAnimationTime);
 		animation->currentAnimationTime = 0;
