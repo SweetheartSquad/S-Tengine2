@@ -240,4 +240,6 @@ public:
 	unsigned long int code;
 	bool active;
 	void handleCode(unsigned long int _code);
+
+	Step step;
 };
