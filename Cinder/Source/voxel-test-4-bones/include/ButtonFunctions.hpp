@@ -82,7 +82,7 @@ void ButtonFunctions::TIME_Decrement(CinderApp * _app){
 	if(UI::time-1 < _app->timelineTrackbar->min){
 		_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, _app->timelineTrackbar->max, false));
 	}else{
-		_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, -1, true));
+		_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, UI::time-1-fmod(UI::time, _app->timelineTrackbar->step), false));
 	}
 };
 
@@ -94,7 +94,7 @@ void ButtonFunctions::TIME_Increment(CinderApp * _app){
 	if(UI::time+1 > _app->timelineTrackbar->max){
 		_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, _app->timelineTrackbar->min, false));
 	}else{
-		_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, 1, true));
+		_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, UI::time+1-fmod(UI::time, _app->timelineTrackbar->step), false));
 	}
 };
 

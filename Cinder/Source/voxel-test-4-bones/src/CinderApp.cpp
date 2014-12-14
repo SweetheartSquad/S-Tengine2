@@ -278,20 +278,25 @@ void CinderApp::update(){
 	}else{
 		timelineTrackbar->update(nullptr);
 	}
+
+	step.time = getElapsedSeconds();
+
 	if(play){
-		Step s;
-		s.setDeltaTime(1 * UI::stepScale);
-		if(UI::time + s.getDeltaTime() > timelineTrackbar->max){
-			s.setDeltaTime(s.getDeltaTime() - timelineTrackbar->max);
-		}else if(UI::time + s.getDeltaTime() < timelineTrackbar->min){
-			s.setDeltaTime(s.getDeltaTime() + timelineTrackbar->min);
+		step.targetFrameDuration = static_cast<double>(1) / 60;
+		step.setDeltaTime(step.time - step.lastTimestamp);
+		step.deltaTimeCorrection = step.getDeltaTime()/step.targetFrameDuration;
+
+		if(UI::time + step.getDeltaTime() > timelineTrackbar->max){
+			step.setDeltaTime(step.getDeltaTime() - timelineTrackbar->max);
+		}else if(UI::time + step.getDeltaTime() < timelineTrackbar->min){
+			step.setDeltaTime(step.getDeltaTime() + timelineTrackbar->min);
 		}
-		cmdProc->executeCommand(new CMD_SetTime(&UI::time, UI::time+(float)s.getDeltaTime(), false));
+		cmdProc->executeCommand(new CMD_SetTime(&UI::time, UI::time+(float)step.getDeltaTime(), false));
 		app::console() << "CinderApp.update() play UI::time: " << UI::time << endl;
 		console() << "previousTime: " << previousTime << endl;
 		for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
 			NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(sceneRoot->children.at(i));
-			nu->update(&s);
+			nu->update(&step);
 		}
 
 		//UI::time += (float)s.getDeltaTime();
@@ -309,6 +314,7 @@ void CinderApp::update(){
 			previousTime = UI::time;
 		}
 	}
+	step.lastTimestamp = step.time;
 	
 	float r = getWindowAspectRatio();
 
