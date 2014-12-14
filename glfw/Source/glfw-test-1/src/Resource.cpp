@@ -214,10 +214,7 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 	mainJoint->translateX->hasStart = _node[_index]["animations"]["translateX"].get("hasStart", 0).asBool();
 	mainJoint->translateY->hasStart = _node[_index]["animations"]["translateY"].get("hasStart", 0).asBool();
 	mainJoint->translateZ->hasStart = _node[_index]["animations"]["translateZ"].get("hasStart", 0).asBool();
-	mainJoint->rotateX->hasStart = _node[_index]["animations"]["rotateX"].get("hasStart", 0).asBool();
-	mainJoint->rotateY->hasStart = _node[_index]["animations"]["rotateY"].get("hasStart", 0).asBool();
-	mainJoint->rotateZ->hasStart = _node[_index]["animations"]["rotateZ"].get("hasStart", 0).asBool();
-	mainJoint->rotateW->hasStart = _node[_index]["animations"]["rotateW"].get("hasStart", 0).asBool();
+	mainJoint->rotate->hasStart = _node[_index]["animations"]["rotate"].get("hasStart", 0).asBool();
 	mainJoint->scaleX->hasStart = _node[_index]["animations"]["scaleX"].get("hasStart", 0).asBool();
 	mainJoint->scaleY->hasStart = _node[_index]["animations"]["scaleY"].get("hasStart", 0).asBool();
 	mainJoint->scaleZ->hasStart = _node[_index]["animations"]["scaleZ"].get("hasStart", 0).asBool();
@@ -355,7 +352,7 @@ VoxelJoint * Resource::loadVoxelModel(std::string _jsonSrc){
 
 	Json::Value array = root["joints"];
 
-	VoxelJoint * mainJoint = new VoxelJoint(0, nullptr, new Transform, nullptr);
+	VoxelJoint * mainJoint = new VoxelJoint(0, new VoxelMesh(GL_STATIC_DRAW), new Transform, nullptr);
 	std::vector<VoxelJoint *> joints;
 
 	for(Json::ArrayIndex i = 0; i < array.size(); ++i)  {

@@ -12,7 +12,8 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	drawMode(drawMode),
 	polygonalDrawMode(polygonalDrawMode),
 	loaded(false),
-	dirty(true)
+	dirty(true),
+	NodeRenderable()
 {
 	load();
 	clean();

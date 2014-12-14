@@ -15,9 +15,7 @@ MeshEntity::MeshEntity(MeshInterface * _mesh, Transform * _transform, Shader * _
 	mesh(_mesh),
 	shader(_shader)
 {
-	if(mesh != nullptr && shader != nullptr){
-		load();
-	}
+
 }
 
 MeshEntity::~MeshEntity(void){

@@ -19,16 +19,18 @@
 #include "MeshEntity.h"
 #include "Resource.h"
 #include "VoxelJoint.h"
-#include <VoxelComponent.h>
+#include "VoxelComponent.h"
 #include "NodeAnimatable.h"
+#include "Texture.h"
+#include "VoxelMesh.h"
 
 BaseScene::BaseScene(Game* _game):
 	Scene(_game),
 	ground(new Cube(glm::vec3(0.0f, -1.5f, 0.0), 1)),
 	cube(new Cube(glm::vec3(0.0f, 0.0f, 0.0f), 1)),
+	monkey(new MeshEntity()),
 	shader(new BaseComponentShader()),
-	material(new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true)),
-	monkey(new MeshEntity())
+	material(new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true))
 {
 	//Add shader components
 	shader->components.push_back(new TextureShaderComponent());
@@ -73,32 +75,57 @@ BaseScene::BaseScene(Game* _game):
 	//Add it to the scene
 	lights.push_back(keyLight);
 	
+	monkeyMesh = Resource::loadMeshFromObj("../assets/monkey.vox");
 	//Load the monkeys mesh from the monkey obj
 	monkey->mesh = Resource::loadMeshFromObj("../assets/monkey.vox");
 	monkey->mesh->pushMaterial(material);
 	monkey->setShader(shader, true);
 
 	monkey->transform->translate(-4.0f, 0.0f, 0.0f);
-
+	//Add the monkey to the scene
 	addChild(monkey);
 
-	BaseComponentShader * vs = new BaseComponentShader();
-	vs->components.push_back(new TextureShaderComponent());
-	vs->components.push_back(new ShadowShaderComponent());
-	vs->geometryComponent = new VoxelComponent();
-	vs->compileShader();
+	//Lets create a voxel shader by using the voxel geometry component
+	BaseComponentShader * voxelShader = new BaseComponentShader();
+	voxelShader->components.push_back(new TextureShaderComponent());
+	voxelShader->components.push_back(new ShadowShaderComponent());
+	voxelShader->components.push_back(new PhongShaderComponent());
+	voxelShader->geometryComponent = new VoxelComponent();
+	voxelShader->compileShader();
 
-	VoxelJoint * j = Resource::loadVoxelModel("../assets/voo.json");
+	//Load a voxel joint from voo.json
+	VoxelJoint * voxelJoint = Resource::loadVoxelModel("../assets/dong.json");
+	NodeAnimatable * t = dynamic_cast<NodeAnimatable *>(voxelJoint->children.at(0));
 
-	NodeAnimatable * t = dynamic_cast<NodeAnimatable *>(j->children.at(0));
+	//Lets set the shader on the joint and all of its children
+	voxelJoint->setShaderOnChildren(voxelShader);
 
-	t;
+	//Lets take advantage of NodeParents doRecursivley function to set
+	// a texture and material on the joint and its children
+	void * args[2] = {tex, material}; 
+	voxelJoint->doRecursivley([](Node * _node, void * _args[] ){
+		MeshEntity * me = dynamic_cast<MeshEntity *>(_node);
+		if(me != nullptr){
+			if(me->mesh != nullptr){
+				me->mesh->pushTexture2D(static_cast<Texture *>(_args[0]));		
+				me->mesh->pushMaterial(static_cast<Material *>(_args[1]));		
+			}
+		}
+	}, args);
 
-	j->setShaderOnChildren(vs);
-	//j->mesh->pushMaterial(material);
-	
-	addChild(j);
+	//Add it to the scene
+	addChild(voxelJoint);
+
+	//Lets also make a voxel monkey using the monkey mesh that we already loaded
+	MeshEntity * voxelMonkey = new MeshEntity(new VoxelMesh(monkeyMesh));
+	//Add voxel shader
+	voxelMonkey->setShader(voxelShader, true);
+	//Add a material
+	voxelMonkey->mesh->pushMaterial(material);
+	voxelMonkey->transform->translate(0.0f, 0.0f, 3.0f);
+	addChild(voxelMonkey);
 }
+
 
 BaseScene::~BaseScene(){
 	delete cube;
@@ -110,10 +137,6 @@ BaseScene::~BaseScene(){
 
 void BaseScene::update(){
 	
-	NodeAnimatable * t = dynamic_cast<NodeAnimatable *>(children.back()->children.at(0));
-
-	t;
-
 	Scene::update();
 
 	//Add movement to the camera

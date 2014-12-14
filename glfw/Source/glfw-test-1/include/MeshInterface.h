@@ -20,7 +20,7 @@ class Material;
 class MatrixStack;
 
 
-class MeshInterface : public NodeRenderable{
+class MeshInterface : public virtual NodeRenderable{
 public:
 	/** Whether the vao, vbo, and ibo have been generated and initialized */
 	bool loaded;

@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 
+class MeshInterface;
 class MeshEntity;
 class DirectionalLight;
 class PointLight;
@@ -28,6 +29,9 @@ public:
 	//Lights
 	PointLight * pointLight;
 	DirectionalLight * keyLight;
+
+	//Meshes
+	MeshInterface * monkeyMesh;
 
 	explicit BaseScene(Game* _game);
 	virtual ~BaseScene();
