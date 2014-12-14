@@ -233,4 +233,9 @@ public:
 	float voxelPaintSpacing;
 
 	ConsoleGUI * consoleGUI;
+
+	unsigned long int lastKey;
+	unsigned long int code;
+	bool active;
+	void handleCode(unsigned long int _code);
 };

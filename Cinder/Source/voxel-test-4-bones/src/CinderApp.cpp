@@ -180,6 +180,8 @@ void CinderApp::setup(){
 
 	//timeTextBox = new ParamTextBox(ParamTextBox::Type::NUMBER, Vec2i(60, 40), Vec2i(30,20));
 
+	code = 0;
+	active = false;
 }
 
 void CinderApp::resize(){
@@ -457,7 +459,7 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 	fbo.bindFramebuffer();
 
 	// clear background
-	gl::clear( mColorBackground );
+	gl::clear( ColorA(mColorBackground.r, mColorBackground.g, mColorBackground.b, active ? 0.05f : 1.f) );
 
 	// specify the camera matrices
 	gl::pushMatrices();
@@ -616,7 +618,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				//console() << cam.getInverseModelViewMatrix() << std::endl;
 				//console() << cam.getProjectionMatrix() << std::endl;
 				// If the camera is a perspective view, scale the coordinate frame proportionally to the distance from camera
-				float zoom = cam.getModelViewMatrix().at(2,3);//cam.getEyePoint().distance(cam.getCenterOfInterestPoint());
+				float zoom = cam.getEyePoint().distance(UI::handlePos);
 				gl::scale(zoom, zoom, zoom);
 				gl::scale(-1,-1,-1);
 			}
@@ -1224,6 +1226,8 @@ void CinderApp::mouseUp( MouseEvent event ){
 }
 
 void CinderApp::keyDown( KeyEvent event ){
+	handleCode(event.getCode());
+	
 	if(!isMouseDown){
         ParamTextBox * activeTextBox = dynamic_cast<ParamTextBox *>(activeButton);
 		if (activeTextBox != nullptr && activeTextBox->isActive){
@@ -1455,6 +1459,98 @@ void CinderApp::setKeyframe(){
 			}
 		}
 	}
+}
+
+void CinderApp::handleCode(unsigned long int _code){
+	switch(code){
+	case 0:
+		if(_code == KeyEvent::KEY_UP){
+			code += 1;
+		}else{
+			code = 0;
+		}
+		break;
+	case 1:
+		if(lastKey == KeyEvent::KEY_UP){
+			if(_code == KeyEvent::KEY_UP){
+				code += 1;
+			}else{
+				code = 0;
+			}
+		}
+		break;
+	case 2:
+		if(lastKey == KeyEvent::KEY_UP){
+			if(_code == KeyEvent::KEY_DOWN){
+				code += 1;
+			}else{
+				code = 0;
+			}
+		}
+		break;
+	case 3:
+		if(lastKey == KeyEvent::KEY_DOWN){
+			if(_code == KeyEvent::KEY_DOWN){
+				code += 1;
+			}else{
+				code = 0;
+			}
+		}
+		break;
+	case 4:
+		if(lastKey == KeyEvent::KEY_DOWN){
+			if(_code == KeyEvent::KEY_LEFT){
+				code += 1;
+			}else{
+				code = 0;
+			}
+		}
+		break;
+	case 5:
+		if(lastKey == KeyEvent::KEY_LEFT){
+			if(_code == KeyEvent::KEY_RIGHT){
+				code += 1;
+			}else{
+				code = 0;
+			}
+		}
+		break;
+	case 6:
+		if(lastKey == KeyEvent::KEY_RIGHT){
+			if(_code == KeyEvent::KEY_LEFT){
+				code += 1;
+			}else{
+				code = 0;
+			}
+		}
+		break;
+	case 7:
+		if(lastKey == KeyEvent::KEY_LEFT){
+			if(_code == KeyEvent::KEY_RIGHT){
+				code += 1;
+			}else{
+				code = 0;
+			}
+		}
+		break;
+	case 8:
+		if(lastKey == KeyEvent::KEY_RIGHT){
+			if(_code == KeyEvent::KEY_a){
+				code += 1;
+			}else{
+				code = 0;
+			}
+		}
+		break;
+	case 9:
+		if(lastKey == KeyEvent::KEY_a){
+			if(_code == KeyEvent::KEY_b){
+				active = !active;
+			}
+			code = 0;
+		}
+	}
+	lastKey = _code;
 }
 
 CINDER_APP_BASIC( CinderApp, RendererGl )
