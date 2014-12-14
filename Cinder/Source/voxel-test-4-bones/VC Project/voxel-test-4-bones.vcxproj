@@ -99,7 +99,6 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Command.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\CommandProcessor.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Joint.cpp" />
-    <ClCompile Include="..\..\..\..\Shared Code\src\Light.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeChild.cpp" />
@@ -117,7 +116,6 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Step.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
-    <ClCompile Include="..\..\..\..\Shared Code\src\Tween.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Voxel.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\VoxMatrices.cpp" />
     <ClCompile Include="..\include\UiInteractable.cpp" />

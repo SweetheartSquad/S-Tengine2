@@ -54,12 +54,6 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Step.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\Tween.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\Light.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\RenderOptions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -404,6 +398,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\Animation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CompressedCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\CompressedCommand.h">

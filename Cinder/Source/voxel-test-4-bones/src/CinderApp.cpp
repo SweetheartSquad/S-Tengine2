@@ -571,26 +571,44 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 						gl::draw(sphere);
 					gl::popMatrices();
 
-					glBegin(GL_POINTS);
-					for(unsigned long int i = 0; i < j->voxels.size(); ++i){
-						Voxel * v = dynamic_cast<Voxel*>(j->voxels.at(i));
-						if(v != nullptr){
-							glm::vec3 pos = v->getPos(false);
-							glVertex3f(pos.x, pos.y, pos.z);
+					if(j->voxels.size() > 0){
+						//glBegin(GL_POINTS);
+						Vec3f * verts = (Vec3f *) malloc(sizeof(Vec3f) * j->voxels.size());
+						uint32_t * indices = (uint32_t *) malloc(sizeof(uint32_t) * j->voxels.size());
+						for(unsigned long int i = 0; i < j->voxels.size(); ++i){
+							Voxel * v = dynamic_cast<Voxel*>(j->voxels.at(i));
+							if(v != nullptr){
+								glm::vec3 pos = v->getPos(false);
+								verts[i] = Vec3f(pos.x, pos.y, pos.z);
+								indices[i] = i;
+								//glVertex3f(pos.x, pos.y, pos.z);
+							}
 						}
+						//glEnd();
+						glVertexPointer(3, GL_FLOAT, 0, verts);
+
+						glEnableClientState( GL_VERTEX_ARRAY );
+						glDisableClientState( GL_NORMAL_ARRAY );
+						glDisableClientState( GL_COLOR_ARRAY );	
+						glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+
+						glDrawElements(GL_POINTS, j->voxels.size(), GL_UNSIGNED_INT, indices);
+						free(indices);
+						free(verts);
+
+						glDisableClientState( GL_VERTEX_ARRAY );
+						glDisableClientState( GL_NORMAL_ARRAY );
+						glDisableClientState( GL_COLOR_ARRAY );
+						glDisableClientState( GL_TEXTURE_COORD_ARRAY );
 					}
-					glEnd();
 
 				}else{
 					Voxel * v = dynamic_cast<Voxel *>(UI::selectedNodes.at(i));
 					if(v != nullptr){
-						gl::pushMatrices();
-							glm::vec3 absPos = dynamic_cast<Joint *>(v->parent)->getPos(false);
-							gl::translate(absPos.x, absPos.y, absPos.z);
-							glBegin(GL_POINTS);
-							glVertex3f(v->transform->translationVector.x, v->transform->translationVector.y, v->transform->translationVector.z);
-							glEnd();
-						gl::popMatrices();
+						glBegin(GL_POINTS);
+						glm::vec3 pos = v->getPos(false);
+						glVertex3f(pos.x, pos.y, pos.z);
+						glEnd();
 					}
 				}
 			}
