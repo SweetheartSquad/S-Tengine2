@@ -98,7 +98,7 @@ void BaseScene::update(){
 	}
 }
 
-void BaseScene::render(){
-	Scene::renderShadows();
-	Scene::render();
+void BaseScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+	Scene::renderShadows(_matrixStack, _renderStack);
+	Scene::render(_matrixStack, _renderStack);
 }

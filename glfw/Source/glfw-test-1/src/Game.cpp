@@ -4,6 +4,8 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Vox.h"
+#include "MatrixStack.h"
+#include "GLFWRenderOptions.h"
 
 #include <stdlib.h>
 
@@ -15,7 +17,10 @@ Game::Game(bool _isRunning):
 	isRunning(_isRunning),
 	printFPS(true),
 	keyboard(&Keyboard::getInstance()),
-	mouse(&Mouse::getInstance())
+	mouse(&Mouse::getInstance()),
+	kc_code(0),
+	kc_lastKey(0),
+	kc_active(false)
 {
 }
 
@@ -41,11 +46,114 @@ void Game::update(void){
 	if(keyboard->keyDown(GLFW_KEY_ESCAPE)){
 		glfwSetWindowShouldClose(vox::currentContext, true);
 	}
+
+	std::cout << kc_code << std::endl;
+	switch(kc_code){
+	case 0:
+		if(keyboard->keyJustUp(GLFW_KEY_UP)){
+			kc_lastKey = GLFW_KEY_UP;
+			kc_code += 1;
+		}
+		break;
+	case 1:
+		if(keyboard->keyJustUp(GLFW_KEY_UP)){
+			if(kc_lastKey == GLFW_KEY_UP){
+				kc_lastKey = GLFW_KEY_UP;
+				kc_code += 1;
+			}else{
+				kc_code = 0;
+			}
+		}
+		break;
+	case 2:
+		if(keyboard->keyJustUp(GLFW_KEY_DOWN)){
+			if(kc_lastKey == GLFW_KEY_UP){
+				kc_lastKey = GLFW_KEY_DOWN;
+				kc_code += 1;
+			}else{
+				kc_code = 0;
+			}
+		}
+		break;
+	case 3:
+		if(keyboard->keyJustUp(GLFW_KEY_DOWN)){
+			if(kc_lastKey == GLFW_KEY_DOWN){
+				kc_lastKey = GLFW_KEY_DOWN;
+				kc_code += 1;
+			}else{
+				kc_code = 0;
+			}
+		}
+		break;
+	case 4:
+		if(keyboard->keyJustUp(GLFW_KEY_LEFT)){
+			if(kc_lastKey == GLFW_KEY_DOWN){
+				kc_lastKey = GLFW_KEY_LEFT;
+				kc_code += 1;
+			}else{
+				kc_code = 0;
+			}
+		}
+		break;
+	case 5:
+		if(keyboard->keyJustUp(GLFW_KEY_RIGHT)){
+			if(kc_lastKey == GLFW_KEY_LEFT){
+				kc_lastKey = GLFW_KEY_RIGHT;
+				kc_code += 1;
+			}else{
+				kc_code = 0;
+			}
+		}
+		break;
+	case 6:
+		if(keyboard->keyJustUp(GLFW_KEY_LEFT)){
+			if(kc_lastKey == GLFW_KEY_RIGHT){
+				kc_lastKey = GLFW_KEY_LEFT;
+				kc_code += 1;
+			}else{
+				kc_code = 0;
+			}
+		}
+		break;
+	case 7:
+		if(keyboard->keyJustUp(GLFW_KEY_RIGHT)){
+			if(kc_lastKey == GLFW_KEY_LEFT){
+				kc_lastKey = GLFW_KEY_RIGHT;
+				kc_code += 1;
+			}else{
+				kc_code = 0;
+			}
+		}
+		break;
+	case 8:
+		if(keyboard->keyJustUp(GLFW_KEY_B)){
+			if(kc_lastKey == GLFW_KEY_RIGHT){
+				kc_lastKey = GLFW_KEY_B;
+				kc_code += 1;
+			}else{
+				kc_code = 0;
+			}
+		}
+		break;
+	case 9:
+		if(keyboard->keyJustUp(GLFW_KEY_A)){
+			if(kc_lastKey == GLFW_KEY_B){
+				kc_active = !kc_active;
+			}
+			kc_code = 0;
+		}
+		break;
+	}
+
+
 	currentScene->update();
 }
 
 void Game::draw(void){
-	currentScene->render();
+	vox::MatrixStack ms;
+	GLFWRenderOptions ro(nullptr, nullptr, nullptr);
+	ro.kc_active = kc_active;
+	currentScene->render(&ms, &ro);
 }
 
 void Game::manageInput(){

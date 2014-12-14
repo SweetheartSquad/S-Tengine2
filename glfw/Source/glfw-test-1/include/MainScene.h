@@ -47,7 +47,7 @@ public:
 	explicit MainScene(Game * _game);
 	~MainScene();
 	void update() override;
-	void render() override;
+	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 	void unload() override;
 	void load() override;
 };

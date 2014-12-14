@@ -16,6 +16,7 @@
 #include "FileUtils.h"
 #include "VoxelJoint.h"
 #include "VoxelMesh.h"
+#include "Animation.h"
 
 Resource::Resource(){}
 Resource::~Resource(){}
@@ -207,13 +208,13 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 	mainJoint->translateY->startValue = _node[_index]["animations"]["translateY"].get("startValue", 0).asFloat();
 	mainJoint->translateZ->startValue = _node[_index]["animations"]["translateZ"].get("startValue", 0).asFloat();
 
-	mainJoint->translateX->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["translateX"].get("loopType", 0).asInt());
-	mainJoint->translateY->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["translateY"].get("loopType", 0).asInt());
-	mainJoint->translateZ->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["translateZ"].get("loopType", 0).asInt());
+	mainJoint->translateX->loopType = static_cast<Animation<float>::LoopType>(_node[_index]["animations"]["translateX"].get("loopType", 0).asInt());
+	mainJoint->translateY->loopType = static_cast<Animation<float>::LoopType>(_node[_index]["animations"]["translateY"].get("loopType", 0).asInt());
+	mainJoint->translateZ->loopType = static_cast<Animation<float>::LoopType>(_node[_index]["animations"]["translateZ"].get("loopType", 0).asInt());
 
 	Json::Value transXTweens = _node[_index]["animations"]["translateX"]["tweens"];
 	for(int j = 0; j < transXTweens.size(); j++){
-		mainJoint->translateX->tweens.push_back(new Tween(
+		mainJoint->translateX->tweens.push_back(new Tween<float>(
 				transXTweens[j].get("deltaTime", 0).asFloat(),
 				transXTweens[j].get("deltaValue", 0).asFloat(),
 				static_cast<Easing::Type>(transXTweens[j].get("interpolation", 0).asInt())));
@@ -221,7 +222,7 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 
 	Json::Value transYTweens = _node[_index]["animations"]["translateY"]["tweens"];
 	for(int j = 0; j < transYTweens.size(); j++){
-		mainJoint->translateY->tweens.push_back(new Tween(
+		mainJoint->translateY->tweens.push_back(new Tween<float>(
 				transYTweens[j].get("deltaTime", 0).asFloat(),
 				transYTweens[j].get("deltaValue", 0).asFloat(),
 				static_cast<Easing::Type>(transYTweens[j].get("interpolation", 0).asInt())));
@@ -229,65 +230,43 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 
 	Json::Value transZTweens = _node[_index]["animations"]["translateZ"]["tweens"];
 	for(int j = 0; j < transZTweens.size(); j++){
-		mainJoint->translateZ->tweens.push_back(new Tween(
+		mainJoint->translateZ->tweens.push_back(new Tween<float>(
 				transZTweens[j].get("deltaTime", 0).asFloat(),
 				transZTweens[j].get("deltaValue", 0).asFloat(),
 				static_cast<Easing::Type>(transZTweens[j].get("interpolation", 0).asInt())));
 	}
+	
+	mainJoint->rotate->startValue.w = _node[_index]["animations"]["rotate"]["startValue"].get("w", 0).asFloat();
+	mainJoint->rotate->startValue.x = _node[_index]["animations"]["rotate"]["startValue"].get("x", 0).asFloat();
+	mainJoint->rotate->startValue.y = _node[_index]["animations"]["rotate"]["startValue"].get("y", 0).asFloat();
+	mainJoint->rotate->startValue.z = _node[_index]["animations"]["rotate"]["startValue"].get("z", 0).asFloat();
 
-	mainJoint->rotateX->startValue = _node[_index]["animations"]["rotateX"].get("startValue", 0).asFloat();
-	mainJoint->rotateY->startValue = _node[_index]["animations"]["rotateY"].get("startValue", 0).asFloat();
-	mainJoint->rotateZ->startValue = _node[_index]["animations"]["rotateZ"].get("startValue", 0).asFloat();
-	mainJoint->rotateW->startValue = _node[_index]["animations"]["rotateW"].get("startValue", 0).asFloat();
+	mainJoint->rotate->loopType = static_cast<Animation<glm::quat>::LoopType>(_node[_index]["animations"]["rotate"].get("loopType", 0).asInt());
 
-	mainJoint->rotateX->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["rotateX"].get("loopType", 0).asInt());
-	mainJoint->rotateY->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["rotateY"].get("loopType", 0).asInt());
-	mainJoint->rotateZ->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["rotateZ"].get("loopType", 0).asInt());
-	mainJoint->rotateW->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["rotateW"].get("loopType", 0).asInt());
-
-	Json::Value rotateXTweens = _node[_index]["animations"]["rotateX"]["tweens"];
-	for(int j = 0; j < rotateXTweens.size(); j++){
-		mainJoint->translateX->tweens.push_back(new Tween(
-				rotateXTweens[j].get("deltaTime", 0).asFloat(),
-				rotateXTweens[j].get("deltaValue", 0).asFloat(),
-				static_cast<Easing::Type>(rotateXTweens[j].get("interpolation", 0).asInt())));
-	}
-
-	Json::Value rotateYTweens = _node[_index]["animations"]["rotateY"]["tweens"];
-	for(int j = 0; j < rotateYTweens.size(); j++){
-		mainJoint->translateY->tweens.push_back(new Tween(
-				rotateYTweens[j].get("deltaTime", 0).asFloat(),
-				rotateYTweens[j].get("deltaValue", 0).asFloat(),
-				static_cast<Easing::Type>(rotateYTweens[j].get("interpolation", 0).asInt())));
-	}
-
-	Json::Value rotateZTweens = _node[_index]["animations"]["rotateZ"]["tweens"];
-	for(int j = 0; j < rotateZTweens.size(); j++){
-		mainJoint->translateZ->tweens.push_back(new Tween(
-				rotateZTweens[j].get("deltaTime", 0).asFloat(),
-				rotateZTweens[j].get("deltaValue", 0).asFloat(),
-				static_cast<Easing::Type>(rotateZTweens[_index]["animations"]["rotateZ"]["tweens"][j].get("interpolation", 0).asInt())));
-	}
-
-	Json::Value rotateWTweens = _node[_index]["animations"]["rotateW"]["tweens"];
-	for(int j = 0; j < rotateWTweens.size(); j++){
-		mainJoint->translateZ->tweens.push_back(new Tween(
-				rotateWTweens[j].get("deltaTime", 0).asFloat(),
-				rotateWTweens[j].get("deltaValue", 0).asFloat(),
-				static_cast<Easing::Type>(rotateWTweens[j].get("interpolation", 0).asInt())));
+	Json::Value rotateTweens = _node[_index]["animations"]["rotate"]["tweens"];
+	for(int j = 0; j < rotateTweens.size(); j++){
+		mainJoint->rotate->tweens.push_back(new Tween<glm::quat>(
+				rotateTweens[j].get("deltaTime", 0).asFloat(),
+				glm::quat(
+					rotateTweens[j]["deltaValue"].get("w", 0).asFloat(),
+					rotateTweens[j]["deltaValue"].get("x", 0).asFloat(),
+					rotateTweens[j]["deltaValue"].get("y", 0).asFloat(),
+					rotateTweens[j]["deltaValue"].get("z", 0).asFloat()
+				),
+				static_cast<Easing::Type>(rotateTweens[j].get("interpolation", 0).asInt())));
 	}
 
 	mainJoint->scaleX->startValue = _node[_index]["animations"]["scaleX"].get("startValue", 0).asFloat();
 	mainJoint->scaleY->startValue = _node[_index]["animations"]["scaleY"].get("startValue", 0).asFloat();
 	mainJoint->scaleZ->startValue = _node[_index]["animations"]["scaleZ"].get("startValue", 0).asFloat();
 
-	mainJoint->scaleX->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["scaleX"].get("loopType", 0).asInt());
-	mainJoint->scaleY->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["scaleY"].get("loopType", 0).asInt());
-	mainJoint->scaleZ->loopType = static_cast<Animation::LoopType>(_node[_index]["animations"]["scaleZ"].get("loopType", 0).asInt());
+	mainJoint->scaleX->loopType = static_cast<Animation<float>::LoopType>(_node[_index]["animations"]["scaleX"].get("loopType", 0).asInt());
+	mainJoint->scaleY->loopType = static_cast<Animation<float>::LoopType>(_node[_index]["animations"]["scaleY"].get("loopType", 0).asInt());
+	mainJoint->scaleZ->loopType = static_cast<Animation<float>::LoopType>(_node[_index]["animations"]["scaleZ"].get("loopType", 0).asInt());
 
 	Json::Value scaleXTweens = _node[_index]["animations"]["scaleX"]["tweens"];
 	for(int j = 0; j < scaleXTweens.size(); j++){
-		mainJoint->scaleX->tweens.push_back(new Tween(
+		mainJoint->scaleX->tweens.push_back(new Tween<float>(
 				scaleXTweens[j].get("deltaTime", 0).asFloat(),
 				scaleXTweens[j].get("deltaValue", 0).asFloat(),
 				static_cast<Easing::Type>(scaleXTweens[j].get("interpolation", 0).asInt())));
@@ -295,7 +274,7 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 
 	Json::Value scaleYTweens = _node[_index]["animations"]["scaleY"]["tweens"];
 	for(int j = 0; j < scaleYTweens.size(); j++){
-		mainJoint->scaleY->tweens.push_back(new Tween(
+		mainJoint->scaleY->tweens.push_back(new Tween<float>(
 				scaleYTweens[j].get("deltaTime", 0).asFloat(),
 				scaleYTweens[j].get("deltaValue", 0).asFloat(),
 				static_cast<Easing::Type>(scaleYTweens[j].get("interpolation", 0).asInt())));
@@ -303,7 +282,7 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 
 	Json::Value scaleZTweens = _node[_index]["animations"]["scaleZ"]["tweens"];
 	for(int j = 0; j < scaleZTweens.size(); j++){
-		mainJoint->scaleZ->tweens.push_back(new Tween(
+		mainJoint->scaleZ->tweens.push_back(new Tween<float>(
 				scaleZTweens[j].get("deltaTime", 0).asFloat(),
 				scaleZTweens[j].get("deltaValue", 0).asFloat(),
 				static_cast<Easing::Type>(scaleZTweens[j].get("interpolation", 0).asInt())));

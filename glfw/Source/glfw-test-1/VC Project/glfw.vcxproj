@@ -110,10 +110,8 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Shared Code\src\Animation.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\FrameBufferChannel.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\jsoncpp.cpp" />
-    <ClCompile Include="..\..\..\..\Shared Code\src\Keyframe.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Light.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
@@ -122,13 +120,13 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeHierarchical.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeLoadable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeParent.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeRenderable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeResource.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeUpdatable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\RenderOptions.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Shader.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Step.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
-    <ClCompile Include="..\..\..\..\Shared Code\src\Tween.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Vox.cpp" />
     <ClCompile Include="..\src\BaseComponentShader.cpp" />
     <ClCompile Include="..\src\BaseScene.cpp" />

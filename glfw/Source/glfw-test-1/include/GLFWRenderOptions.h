@@ -16,4 +16,6 @@ public:
 	~GLFWRenderOptions();
 
 	GLuint shadowMapTextureId;
+
+	bool kc_active;
 };

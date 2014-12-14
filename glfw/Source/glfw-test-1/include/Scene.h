@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "NodeLoadable.h"
+#include "NodeRenderable.h"
 
 namespace vox{
 	class MatrixStack;
@@ -23,7 +24,7 @@ class Mouse;
 class Game;
 class Entity;
 
-class Scene : public NodeLoadable{
+class Scene : public virtual NodeLoadable, public virtual NodeRenderable{
 public:
 	explicit Scene(Game * _game);
 	virtual ~Scene(void);
@@ -48,13 +49,13 @@ public:
 	/** Calls update on the attached camera */
 	virtual void update(void);
 	/** Tells the RenderSystem to render the attached children to the vox::currentContext using the camera's view-projection matrix */
-	virtual void render();
+	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack);
 	/** Adds a reference to an entity to the attached list of children */
 	void addChild(Entity * child);
 	/** Toggles fullscreen on and off */
 	void toggleFullScreen();
 
-	virtual void renderShadows();
+	virtual void renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack);
 
 	virtual void setViewport(float _x, float _y, float _width, float _height);
 	float viewPortX, viewPortY, viewPortWidth, viewPortHeight;
