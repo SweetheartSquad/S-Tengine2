@@ -132,7 +132,6 @@ public:
 	string directory;
 	string fileName;
 	string filePath;
-	string message;
 
 	//! our cameras
 	MayaCamUI camMayaPersp;

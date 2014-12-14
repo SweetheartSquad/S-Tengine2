@@ -75,7 +75,7 @@ std::vector<Joint *> SkeletonData::LoadSkeleton(std::string filePath) {
 			}
 		}catch (std::exception ex) {
 			//throw ex;
-			throw std::exception("Error reading file!");
+			throw std::exception("Invalid File Format. File may be out of date.");
 		}
 	}else{
 		throw std::exception("File does not exist!");

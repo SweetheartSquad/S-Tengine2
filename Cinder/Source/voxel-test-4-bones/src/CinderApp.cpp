@@ -107,8 +107,6 @@ void CinderApp::setup(){
 	params->addText("Load Menu");
 	params->addParam("Bones File", &filePath);
 	params->addButton("Load", std::bind(&CinderApp::loadSkeleton, this));
-	params->addSeparator();
-	params->addParam("Message", &message, "", true);
 
 	stringstream paramsOptions;
 	paramsOptions << "position='" << getWindowWidth() - 175 - 5 << " " << getWindowHeight() / 2.4f << "'";
@@ -1443,9 +1441,9 @@ void CinderApp::saveSkeleton() {
 	try{
 		console() << "saveSkeleton" << endl;
 		SkeletonData::SaveSkeleton(directory, fileName, sceneRoot);
-		message = "Saved skeleton";
+		cmdProc->log("Saved skeleton");
 	}catch (exception ex){
-		message = string(ex.what());
+		cmdProc->error(string(ex.what()));
 	}
 }
 
@@ -1453,7 +1451,6 @@ void CinderApp::loadSkeleton() {
 	try{
 		// Deselect everything
 		cmdProc->executeCommand(new CMD_SelectNodes(nullptr));
-		console() << "loadSkeleton" << endl;
 
 		std::vector<Joint *> joints = SkeletonData::LoadSkeleton(filePath);
 
@@ -1463,12 +1460,12 @@ void CinderApp::loadSkeleton() {
 			sceneRoot->addChild(joints.at(i));
 		}
 
-		message = "Loaded skeleton";
+		cmdProc->log("Loaded skeleton");
 
 		// Clear the undo/redo history
 		cmdProc->reset();
 	}catch (exception ex){
-		message = string(ex.what());
+		cmdProc->error(string(ex.what()));
 	}
 }
 
