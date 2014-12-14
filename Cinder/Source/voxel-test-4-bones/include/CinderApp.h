@@ -21,6 +21,10 @@
 #include "Transform.h"
 #include "SceneRoot.h"
 
+#include <cinder\gl\Vbo.h>
+#include <cinder\ObjLoader.h>
+#include <cinder\TriMesh.h>
+
 using namespace ci;
 using namespace ci::app;
 using namespace std;
@@ -111,6 +115,9 @@ public:
 	};
 
 public:
+	gl::VboMesh sphere;
+	gl::VboMesh cube;
+
 	//params
 	bool drawParams;
 	params::InterfaceGlRef params;

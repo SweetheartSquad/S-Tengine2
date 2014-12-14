@@ -62,8 +62,14 @@ void Joint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 			gl::scale(transform->scaleVector.x, transform->scaleVector.y, transform->scaleVector.z);
 			_matrixStack->applyMatrix(transform->getModelMatrix());
 
-			glUniformMatrix4fv(cro->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
-			gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
+			gl::pushMatrices();
+			_matrixStack->pushMatrix();
+				gl::scale(0.05f, 0.05f, 0.05f);
+				_matrixStack->scale(glm::scale(glm::vec3(0.05f, 0.05f, 0.05f)));
+				glUniformMatrix4fv(cro->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
+				gl::draw(*cro->sphere);
+			gl::popMatrices();
+			_matrixStack->popMatrix();
 
 			//draw voxels
             if(!cro->viewJointsOnly){

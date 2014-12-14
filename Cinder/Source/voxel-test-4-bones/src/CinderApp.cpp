@@ -42,6 +42,16 @@ void CinderApp::prepareSettings(Settings *settings){
 }
 
 void CinderApp::setup(){
+
+	TriMesh test;
+	ObjLoader objLoader(loadFile("../assets/sphere.obj"));
+	objLoader.load(&test, true, false, true);
+	sphere = gl::VboMesh(test);
+
+	ObjLoader objLoader2(loadFile("../assets/cube.obj"));
+	objLoader2.load(&test, true, false, true);
+	cube = gl::VboMesh(test);
+
 	sceneRoot = new SceneRoot();
 	cmdProc = new CommandProcessor();
 
@@ -381,7 +391,7 @@ void CinderApp::draw(){
 				glLineWidth(1.f);
 			}
 		}
-		uiShader.uniform("pickingColor", Vec3f(0,0,0));
+		uiShader.uniform("pickingColor", Vec3f(0.f, 0.f, 0.f));
 
 		uiShader.uniform("tex", true);
 		uiShader.uniform("pickingColor", Color(0.f, 0.f, 0.f));
@@ -489,6 +499,8 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 		cro.voxelPreviewResolution = voxelPreviewResolution;
 		cro.voxelSphereRadius = voxelSphereRadius;
 		cro.viewJointsOnly = viewJointsOnly;
+		cro.sphere = &sphere;
+		cro.cube = &cube;
 
 		for(unsigned long int i = 0; i < sceneRoot->children.size(); ++i){
 			NodeRenderable * nr = dynamic_cast<NodeRenderable *>(sceneRoot->children.at(i));
@@ -499,8 +511,6 @@ void CinderApp::renderScene(gl::Fbo & fbo, const Camera & cam){
 
 		// unbind shader
 		jointShader.unbind();
-	
-		//gl::drawColorCube(Vec3f(0.f, 0.f, 0.f),Vec3f(5,5,5));
 
 	// restore matrices
 	gl::popMatrices();
@@ -530,7 +540,11 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 			Vec3f jointWillGoHere = ray.calcPosition(distance);
 			
 			gl::enableWireframe();
-			gl::drawSphere(jointWillGoHere, 0.06f);
+			gl::pushMatrices();
+			gl::translate(jointWillGoHere);
+			gl::scale(0.06f, 0.06f, 0.06f);
+			gl::draw(sphere);
+			gl::popMatrices();
 			gl::disableWireframe();
 		}
 	}
@@ -551,8 +565,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 					gl::pushMatrices();
 						glm::vec3 absPos = j->getPos(false);
 						gl::translate(absPos.x, absPos.y, absPos.z);
-						gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.06f);
-						
+						gl::scale(0.06f, 0.06f, 0.06f);
+						gl::draw(sphere);
 					gl::popMatrices();
 
 					glBegin(GL_POINTS);
@@ -643,7 +657,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				
 				uiShader.uniform("pickingColor", (clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.f, 0.f, 0.));
 				gl::color((clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
-				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
+				gl::scale(0.05f, 0.05f, 0.05f);
+				gl::draw(sphere);
 				break;
 
 			case kROTATE:
@@ -686,7 +701,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				
 				uiShader.uniform("pickingColor", (clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.f, 0.f, 0.));
 				gl::color((clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
-				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
+				gl::scale(0.05f, 0.05f, 0.05f);
+				gl::draw(sphere);
 				break;
 
 			case kSCALE:
@@ -725,7 +741,8 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				
 				uiShader.uniform("pickingColor", (clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.f, 0.f, 0.));
 				gl::color((clickedUiColour == 0xFFFF00 || clickedUiColour == 0) ? Color(1.f, 1.f, 0.f) : Color(0.25f, 0.25f, 0.25f));
-				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
+				gl::scale(0.05f, 0.05f, 0.05f);
+				gl::draw(sphere);
 				break;
 			}// end switch
 			gl::lineWidth(1);

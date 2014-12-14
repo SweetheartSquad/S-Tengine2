@@ -40,9 +40,23 @@ void Voxel::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 		cro->ciShader->uniform("pickingColor", Color::hex(pickingColor));
 					
 		if(cro->voxelPreviewMode){
-			gl::drawCube(Vec3f(0.f, 0.f, 0.f), Vec3f(resolution*2,resolution*2,resolution*2));
+			gl::pushMatrices();
+			_matrixStack->pushMatrix();
+				gl::scale(resolution*2.f, resolution*2.f, resolution*2.f);
+				_matrixStack->scale(glm::scale(glm::vec3(resolution*2.f, resolution*2.f, resolution*2.f)));
+				glUniformMatrix4fv(cro->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
+				gl::draw(*cro->cube);
+			gl::popMatrices();
+			_matrixStack->popMatrix();
 		}else{
-			gl::drawSphere(Vec3f(0.f, 0.f, 0.f), cro->voxelSphereRadius);
+			gl::pushMatrices();
+			_matrixStack->pushMatrix();
+				gl::scale(cro->voxelSphereRadius,cro->voxelSphereRadius,cro->voxelSphereRadius);
+				_matrixStack->scale(glm::scale(glm::vec3(cro->voxelSphereRadius, cro->voxelSphereRadius, cro->voxelSphereRadius)));
+				glUniformMatrix4fv(cro->ciShader->getUniformLocation("modelMatrix"), 1, GL_FALSE, &_matrixStack->currentModelMatrix[0][0]);
+				gl::draw(*cro->sphere);
+			gl::popMatrices();
+			_matrixStack->popMatrix();
 		}
 	gl::popModelView();
 	_matrixStack->popMatrix();

@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 
 #include <cinder\Camera.h>
+#include <cinder\gl\Vbo.h>
 
 class Shader;
 class Light;
@@ -22,6 +23,8 @@ public:
 
 	const ci::Camera * ciCam;
 	ci::gl::GlslProg * ciShader;
+	ci::gl::VboMesh * sphere;
+	ci::gl::VboMesh * cube;
 
 	// Whether to draw the voxels as voxels
 	bool voxelPreviewMode;
