@@ -252,11 +252,10 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeLoadable.cpp">
       <Filter>Source Files\node</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeRenderable.cpp">
-=======
+      <Filter>Source Files\node</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\ShiftKiddie.cpp">
->>>>>>> d35f509dcf73bfa7ba12b5a925884cf1184f1a79
       <Filter>Source Files\node</Filter>
     </ClCompile>
   </ItemGroup>

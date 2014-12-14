@@ -114,7 +114,7 @@ void vox::calculateDeltaTimeCorrection(){
 
 	vox::step.targetFrameDuration = targetFrameDuration;
 	vox::step.time = time;
-	vox::step.setDeltaTime(deltaTime * 10);
+	vox::step.setDeltaTime(deltaTime);
 	vox::step.deltaTimeCorrection = deltaTimeCorrection;
 	vox::step.lastTimestamp = lastTimestamp;
 }

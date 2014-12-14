@@ -47,7 +47,6 @@ void Game::update(void){
 		glfwSetWindowShouldClose(vox::currentContext, true);
 	}
 
-	std::cout << kc_code << std::endl;
 	switch(kc_code){
 	case 0:
 		if(keyboard->keyJustUp(GLFW_KEY_UP)){

@@ -101,14 +101,18 @@ BaseScene::BaseScene(Game* _game):
 	voxelJoint->setShaderOnChildren(voxelShader);
 
 	//Lets take advantage of NodeParents doRecursivley function to set
-	// a texture and material on the joint and its children
+	// material on the joint and its children
 	void * args[2] = {tex, material}; 
 	voxelJoint->doRecursivley([](Node * _node, void * _args[] ){
 		MeshEntity * me = dynamic_cast<MeshEntity *>(_node);
 		if(me != nullptr){
 			if(me->mesh != nullptr){
-				me->mesh->pushTexture2D(static_cast<Texture *>(_args[0]));		
-				me->mesh->pushMaterial(static_cast<Material *>(_args[1]));		
+				me->mesh->pushMaterial(static_cast<Material *>(_args[1]));	
+				for(unsigned long int i = 0; i < me->mesh->vertices.size(); ++i){
+					 me->mesh->vertices.at(i).red = 1.0f;
+					 me->mesh->vertices.at(i).blue = 1.0f;
+					 me->mesh->vertices.at(i).green = 1.0f;
+				}
 			}
 		}
 	}, args);

@@ -99,7 +99,7 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 	glScissor(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
 
 	// not working?
-	glClearColor(1.f, 0.f, 0.f, ((GLFWRenderOptions *)_renderStack)->kc_active ? 0.05f : 1.f);
+	glClearColor(0.f, 0.f, 0.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST);
