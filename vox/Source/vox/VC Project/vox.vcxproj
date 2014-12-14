@@ -1,0 +1,400 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="LibDebug|Win32">
+      <Configuration>LibDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="LibRelease|Win32">
+      <Configuration>LibRelease</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>vox</RootNamespace>
+    <ProjectName>vox</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\voxSettings.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\voxSettings.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\voxSettings.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\voxSettings.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(IncludePath)</IncludePath>
+    <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
+    <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
+    <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
+    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\projects\VC9\$(Configuration);$(LibraryPath)</LibraryPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(IncludePath)</IncludePath>
+    <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
+    <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
+    <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
+    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\projects\VC9\$(Configuration);$(LibraryPath)</LibraryPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(IncludePath)</IncludePath>
+    <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
+    <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
+    <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
+    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\projects\VC9\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\include;..\..\..\..\Shared Code\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(IncludePath)</IncludePath>
+    <SourcePath>..\src;..\..\..\..\Shared Code\src;$(SourcePath)</SourcePath>
+    <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
+    <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
+    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\projects\VC9\$(Configuration);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BrowseInformation>true</BrowseInformation>
+      <EnablePREfast>false</EnablePREfast>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <PerUserRedirection>true</PerUserRedirection>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalLibraryDirectories>C:\dev\glfw\lib-msvc110;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+    <PreBuildEvent>
+      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
+copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)vox\include" "$(TargetDir)..\..\..\include" /S /I /Y
+xcopy "$(SolutionDir)..\..\Shared Code\include" "$(TargetDir)..\..\..\include" /S /I /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BrowseInformation>true</BrowseInformation>
+      <EnablePREfast>false</EnablePREfast>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <PerUserRedirection>true</PerUserRedirection>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalLibraryDirectories>C:\dev\glfw\lib-msvc110;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)vox\include" "$(TargetDir)..\..\..\include" /S /I /Y
+xcopy "$(SolutionDir)..\..\Shared Code\include" "$(TargetDir)..\..\..\include" /S /I /Y
+xcopy  "$(SolutionDir)..\Output\vox-LibDebug" "$(SolutionDir)..\..\lib"  /Y /I
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy /Y "$(GLEW_DIR)\bin\$(Configuration)\$(Platform)\glew32.dll" "$(TargetDir)\glew32.dll"
+copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)vox\include" "$(TargetDir)..\..\..\include" /S /I /Y
+xcopy "$(SolutionDir)..\..\Shared Code\include" "$(TargetDir)..\..\..\include" /S /I /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)vox\include" "$(TargetDir)..\..\..\include" /S /I /Y
+xcopy "$(SolutionDir)..\..\Shared Code\include" "$(TargetDir)..\..\..\include" /S /I /Y
+xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Shared Code\src\FrameBufferChannel.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\jsoncpp.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\Light.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\Node.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeAnimatable.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeChild.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeHierarchical.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeLoadable.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeParent.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeRenderable.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeResource.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeSelectable.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeUpdatable.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\ShiftKiddie.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\RenderOptions.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\Step.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\Vox.cpp" />
+    <ClCompile Include="..\src\BaseScene.cpp" />
+    <ClCompile Include="..\src\Camera.cpp" />
+    <ClCompile Include="..\src\Cube.cpp" />
+    <ClCompile Include="..\src\DepthFrameBuffer.cpp" />
+    <ClCompile Include="..\src\DirectionalLight.cpp" />
+    <ClCompile Include="..\src\Entity.cpp" />
+    <ClCompile Include="..\src\FakeAnimation.cpp" />
+    <ClCompile Include="..\src\FileUtils.cpp" />
+    <ClCompile Include="..\src\FrameBufferInterface.cpp" />
+    <ClCompile Include="..\src\Game.cpp" />
+    <ClCompile Include="..\src\shader\BaseComponentShader.cpp" />
+    <ClCompile Include="..\src\shader\BlinnShaderComponent.cpp" />
+    <ClCompile Include="..\src\shader\BlurShader.cpp" />
+    <ClCompile Include="..\src\shader\DepthMapShader.cpp" />
+    <ClCompile Include="..\src\shader\DiffuseShaderComponent.cpp" />
+    <ClCompile Include="..\src\shader\GeometryComponent.cpp" />
+    <ClCompile Include="..\src\shader\PhongShaderComponent.cpp" />
+    <ClCompile Include="..\src\shader\Shader.cpp" />
+    <ClCompile Include="..\src\shader\ShaderComponent.cpp" />
+    <ClCompile Include="..\src\shader\ShaderLoader.cpp" />
+    <ClCompile Include="..\src\shader\ShadowShaderComponent.cpp" />
+    <ClCompile Include="..\src\shader\SharedComponentShaderMethods.cpp" />
+    <ClCompile Include="..\src\shader\TextureShaderComponent.cpp" />
+    <ClCompile Include="..\src\shader\VoxelComponent.cpp" />
+    <ClCompile Include="..\src\VoxelJoint.cpp" />
+    <ClCompile Include="..\src\VoxRenderOptions.cpp" />
+    <ClCompile Include="..\src\GLUtils.cpp" />
+    <ClCompile Include="..\src\Keyboard.cpp" />
+    <ClCompile Include="..\src\Main.cpp" />
+    <ClCompile Include="..\src\MainScene.cpp" />
+    <ClCompile Include="..\src\Material.cpp" />
+    <ClCompile Include="..\src\MeshEntity.cpp" />
+    <ClCompile Include="..\src\Mouse.cpp" />
+    <ClCompile Include="..\src\OrthographicCamera.cpp" />
+    <ClCompile Include="..\src\Plane.cpp" />
+    <ClCompile Include="..\src\PointLight.cpp" />
+    <ClCompile Include="..\src\RenderSurface.cpp" />
+    <ClCompile Include="..\src\Resource.cpp" />
+    <ClCompile Include="..\src\Scene.cpp" />
+    <ClCompile Include="..\src\StandardFrameBuffer.cpp" />
+    <ClCompile Include="..\src\System.cpp" />
+    <ClCompile Include="..\src\TestGame.cpp" />
+    <ClCompile Include="..\src\MeshInterface.cpp" />
+    <ClCompile Include="..\src\Texture.cpp" />
+    <ClCompile Include="..\src\VoxelMesh.cpp" />
+    <ClCompile Include="PerspectiveCamera.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Animation.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\Easing.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\FrameBufferChannel.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\Light.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\MatrixStack.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\Node.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeAnimatable.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeChild.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeHierarchical.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeLoadable.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeParent.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeRenderable.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeResource.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeSelectable.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeTransformable.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeUpdatable.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\ShiftKiddie.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\RenderOptions.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\Step.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\Tween.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\Vox.h" />
+    <ClInclude Include="..\include\BaseScene.h" />
+    <ClInclude Include="..\include\Camera.h" />
+    <ClInclude Include="..\include\Cube.h" />
+    <ClInclude Include="..\include\DepthFrameBuffer.h" />
+    <ClInclude Include="..\include\Dimension.h" />
+    <ClInclude Include="..\include\DirectionalLight.h" />
+    <ClInclude Include="..\include\Entity.h" />
+    <ClInclude Include="..\include\FakeAnimation.h" />
+    <ClInclude Include="..\include\FileUtils.h" />
+    <ClInclude Include="..\include\FrameBufferInterface.h" />
+    <ClInclude Include="..\include\FrameBufferVertex.h" />
+    <ClInclude Include="..\include\Game.h" />
+    <ClInclude Include="..\include\shader\BaseComponentShader.h" />
+    <ClInclude Include="..\include\shader\BlinnShaderComponent.h" />
+    <ClInclude Include="..\include\shader\BlurShader.h" />
+    <ClInclude Include="..\include\shader\DepthMapShader.h" />
+    <ClInclude Include="..\include\shader\DiffuseShaderComponent.h" />
+    <ClInclude Include="..\include\shader\GeometryComponent.h" />
+    <ClInclude Include="..\include\shader\PhongShaderComponent.h" />
+    <ClInclude Include="..\include\shader\Shader.h" />
+    <ClInclude Include="..\include\shader\ShaderComponent.h" />
+    <ClInclude Include="..\include\shader\ShaderLoader.h" />
+    <ClInclude Include="..\include\shader\ShaderVariables.h" />
+    <ClInclude Include="..\include\shader\ShadowShaderComponent.h" />
+    <ClInclude Include="..\include\shader\SharedComponentShaderMethods.h" />
+    <ClInclude Include="..\include\shader\TextureShaderComponent.h" />
+    <ClInclude Include="..\include\shader\VoxelComponent.h" />
+    <ClInclude Include="..\include\VoxRenderOptions.h" />
+    <ClInclude Include="..\include\GLUtils.h" />
+    <ClInclude Include="..\include\Keyboard.h" />
+    <ClInclude Include="..\include\Material.h" />
+    <ClInclude Include="..\include\MeshEntity.h" />
+    <ClInclude Include="..\include\Mouse.h" />
+    <ClInclude Include="..\include\OrthographicCamera.h" />
+    <ClInclude Include="..\include\PerspectiveCamera.h" />
+    <ClInclude Include="..\include\Plane.h" />
+    <ClInclude Include="..\include\PointLight.h" />
+    <ClInclude Include="..\include\RenderSurface.h" />
+    <ClInclude Include="..\include\Resource.h" />
+    <ClInclude Include="..\include\StandardFrameBuffer.h" />
+    <ClInclude Include="..\include\System.h" />
+    <ClInclude Include="..\include\TestGame.h" />
+    <ClInclude Include="..\include\MainScene.h" />
+    <ClInclude Include="..\include\Scene.h" />
+    <ClInclude Include="..\include\Texture.h" />
+    <ClInclude Include="..\include\Vertex.h" />
+    <ClInclude Include="..\include\MeshInterface.h" />
+    <ClInclude Include="..\include\VoxelJoint.h" />
+    <ClInclude Include="..\include\VoxelMesh.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\..\..\dev\ttt.json" />
+    <None Include="..\assets\blinn.frag" />
+    <None Include="..\assets\blinn.vert" />
+    <None Include="..\assets\ColourShader.frag" />
+    <None Include="..\assets\ColourShader.vert" />
+    <None Include="..\assets\DepthMapShader.frag" />
+    <None Include="..\assets\DepthMapShader.vert" />
+    <None Include="..\assets\diffuse.frag" />
+    <None Include="..\assets\diffuse.vert" />
+    <None Include="..\assets\monkey.vox" />
+    <None Include="..\assets\junkdata.frag" />
+    <None Include="..\assets\junkdata.vert" />
+    <None Include="..\assets\phong.frag" />
+    <None Include="..\assets\phong.vert" />
+    <None Include="..\assets\RenderSurface.frag" />
+    <None Include="..\assets\RenderSurface.vert" />
+    <None Include="..\assets\shadow.frag" />
+    <None Include="..\assets\shadow.vert" />
+    <None Include="..\assets\testJson2.json" />
+    <None Include="..\assets\voxel.frag" />
+    <None Include="..\assets\voxel.geom" />
+    <None Include="..\assets\voxel.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\assets\uv-test.jpg" />
+    <Image Include="..\assets\voxel-texture.png" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
