@@ -636,16 +636,6 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 
 			gl::lineWidth(2);
 			if(cam.isPersp()){
-				/*CameraOrtho test;
-				test.setEyePoint(cam.getEyePoint());
-				test.setCenterOfInterestPoint(cam.getCenterOfInterestPoint());
-				test.setViewDirection(cam.getViewDirection());
-				test.setFov(cam.getFov());
-				test.setWorldUp(cam.getWorldUp());
-				gl::setMatrices(test);*/
-				//console() << cam.getInverseModelViewMatrix() << std::endl;
-				//console() << cam.getProjectionMatrix() << std::endl;
-				// If the camera is a perspective view, scale the coordinate frame proportionally to the distance from camera
 				float zoom = cam.getEyePoint().distance(UI::handlePos);
 				gl::scale(zoom, zoom, zoom);
 				gl::scale(-1,-1,-1);
@@ -985,7 +975,7 @@ void CinderApp::mouseDown( MouseEvent event ){
 		oldMousePos = mMousePos;
 	}
 
-	if(!event.isAltDown() && (clickedUiColour == 0)){
+	if(!event.isAltDown() && clickedUiColour == 0 && !play){
 		if(sourceCam == &camMayaPersp.getCamera()){
 			if(mode == kPAINT_VOXELS){
 				if(UI::selectedNodes.size() == 1 && (dynamic_cast<Joint *>(UI::selectedNodes.at(0)) != NULL)){
@@ -1069,7 +1059,7 @@ void CinderApp::mouseDrag( MouseEvent event ){
 	// move the camera
 	if(event.isAltDown()){
 		camMayaPersp.mouseDrag( mMousePos, event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
-	}else{
+	}else if(!play){
 		if(event.isLeftDown()){
 			if(clickedUiColour != 0){
 				if(sourceCam != nullptr && sourceRect != nullptr){
@@ -1242,12 +1232,14 @@ void CinderApp::mouseUp( MouseEvent event ){
 	isMouseDown = false;
 	UI::updateHandlePos(false);
 	
-	if(activeButton != NULL){
+	if(activeButton != nullptr){
 		activeButton->up(this);
 	}
 	
-	cmdProc->endCompressing();
-	console() << "endCompressing" << endl;
+	if(!play){
+		cmdProc->endCompressing();
+		console() << "endCompressing" << endl;
+	}
 
 	uiColour = 0;
 	clickedUiColour = 0;
@@ -1255,116 +1247,124 @@ void CinderApp::mouseUp( MouseEvent event ){
 
 void CinderApp::keyDown( KeyEvent event ){
 	handleCode(event.getCode());
-	
-	if(!isMouseDown){
-        ParamTextBox * activeTextBox = dynamic_cast<ParamTextBox *>(activeButton);
-		if (activeTextBox != nullptr && activeTextBox->isActive){
-            activeTextBox->setText(event);
-		}else{
-		    if(!event.isAltDown()){
-			    if(event.isControlDown()){
-				    if(!event.isShiftDown()){
-					    // Ctrl + key combinations
-					    switch( event.getCode() ){
-					    case KeyEvent::KEY_z:
-						    cmdProc->undo();
-						    break;
-					    case KeyEvent::KEY_y:
-						    cmdProc->redo();
-						    break;
-					    case KeyEvent::KEY_d:
-						    // Deselect all
-						    if(UI::selectedNodes.size() != 0){
-							    cmdProc->executeCommand(new CMD_SelectNodes(nullptr));
-						    }
-						    break;
-					    }
-				    }else{
-					    // Ctrl + Shift + key combinations
-				    }
-			    }else if(event.isShiftDown()){
-				    // Shift + key combinations
-				    switch (event.getCode() ){
-				    case KeyEvent::KEY_p:
-					    if(UI::selectedNodes.size() > 0){
-						    cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, sceneRoot));
-					    }
-					    break;
-				    }
-			    }else{
-				    // Simple key
-				    switch (event.getCode() ){
-				    case KeyEvent::KEY_ESCAPE:
-					    //shutdown();
-					    quit();
-					    break;
-				    case KeyEvent::KEY_f:
-					    setFullScreen( !isFullScreen() );
-					    break;
-				    case KeyEvent::KEY_F1:
-					    drawParams = !drawParams;
-					    if(drawParams){
-						    params->maximize();
-					    }else{
-						    params->minimize();
-					    }
-						break;
-				    case KeyEvent::KEY_1:
-						dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(3))->children.at(0))->pressProgrammatically(this);
-					    break;
-				    case KeyEvent::KEY_2:
-						dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(3))->children.at(1))->pressProgrammatically(this);
-					    break;
-				    case KeyEvent::KEY_3:
-						dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(3))->children.at(2))->pressProgrammatically(this);
-					    break;
-				    case KeyEvent::KEY_4:
-						dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(3))->children.at(3))->pressProgrammatically(this);
-					    break;
-				    case KeyEvent::KEY_DELETE:
-					    if(UI::selectedNodes.size() > 0){
-						    cmdProc->executeCommand(new CMD_DeleteJoints());
-					    }
-					    break;
-				    case KeyEvent::KEY_p:
-					    if(UI::selectedNodes.size() > 0){
-						    cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, dynamic_cast<NodeParent *>(UI::selectedNodes.back())));
-					    }
-					    break;
-				    case KeyEvent::KEY_q:
-					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(0))->pressProgrammatically(this);
-					    break;
-				    case KeyEvent::KEY_w:
-					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(1))->pressProgrammatically(this);
-					    break;
-				    case KeyEvent::KEY_e:
-					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(2))->pressProgrammatically(this);
-					    break;
-				    case KeyEvent::KEY_r:
-					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(3))->pressProgrammatically(this);
-					    break;
-				    case KeyEvent::KEY_b:
-					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(4))->pressProgrammatically(this);
-					    break;
-				    case KeyEvent::KEY_v:
-					    dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(5))->pressProgrammatically(this);
-					    break;
-				    }
-			    }
-		    }else{
-			    if(event.isControlDown()){
-				    if(!event.isShiftDown()){
-					    // Alt + Ctrl + key combinations
-				    }
-			    }else if(event.isShiftDown()){
-				    // Alt + Shift + key combinations
-			    }else{
-				    // Alt + key combination
-			    }
-		    }
+	if(!play){
+		if(!isMouseDown){
+			ParamTextBox * activeTextBox = dynamic_cast<ParamTextBox *>(activeButton);
+			if (activeTextBox != nullptr && activeTextBox->isActive){
+				activeTextBox->setText(event);
+			}else{
+				if(!event.isAltDown()){
+					if(event.isControlDown()){
+						if(!event.isShiftDown()){
+							// Ctrl + key combinations
+							switch( event.getCode() ){
+							case KeyEvent::KEY_z:
+								cmdProc->undo();
+								break;
+							case KeyEvent::KEY_y:
+								cmdProc->redo();
+								break;
+							case KeyEvent::KEY_d:
+								// Deselect all
+								if(UI::selectedNodes.size() != 0){
+									cmdProc->executeCommand(new CMD_SelectNodes(nullptr));
+								}
+								break;
+							}
+						}else{
+							// Ctrl + Shift + key combinations
+						}
+					}else if(event.isShiftDown()){
+						// Shift + key combinations
+						switch (event.getCode() ){
+						case KeyEvent::KEY_p:
+							if(UI::selectedNodes.size() > 0){
+								cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, sceneRoot));
+							}
+							break;
+						}
+					}else{
+						// Simple key
+						switch (event.getCode() ){
+						case KeyEvent::KEY_ESCAPE:
+							//shutdown();
+							quit();
+							break;
+						case KeyEvent::KEY_f:
+							setFullScreen( !isFullScreen() );
+							break;
+						case KeyEvent::KEY_F1:
+							drawParams = !drawParams;
+							if(drawParams){
+								params->maximize();
+							}else{
+								params->minimize();
+							}
+							break;
+						case KeyEvent::KEY_1:
+							dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(3))->children.at(0))->pressProgrammatically(this);
+							break;
+						case KeyEvent::KEY_2:
+							dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(3))->children.at(1))->pressProgrammatically(this);
+							break;
+						case KeyEvent::KEY_3:
+							dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(3))->children.at(2))->pressProgrammatically(this);
+							break;
+						case KeyEvent::KEY_4:
+							dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(3))->children.at(3))->pressProgrammatically(this);
+							break;
+						case KeyEvent::KEY_DELETE:
+							if(UI::selectedNodes.size() > 0){
+								cmdProc->executeCommand(new CMD_DeleteJoints());
+							}
+							break;
+						case KeyEvent::KEY_p:
+							if(UI::selectedNodes.size() > 0){
+								cmdProc->executeCommand(new CMD_ParentSelectedNodes(sceneRoot, dynamic_cast<NodeParent *>(UI::selectedNodes.back())));
+							}
+							break;
+						case KeyEvent::KEY_q:
+							dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(0))->pressProgrammatically(this);
+							break;
+						case KeyEvent::KEY_w:
+							dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(1))->pressProgrammatically(this);
+							break;
+						case KeyEvent::KEY_e:
+							dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(2))->pressProgrammatically(this);
+							break;
+						case KeyEvent::KEY_r:
+							dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(3))->pressProgrammatically(this);
+							break;
+						case KeyEvent::KEY_b:
+							dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(4))->pressProgrammatically(this);
+							break;
+						case KeyEvent::KEY_v:
+							dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(toolbar->children.at(0))->children.at(5))->pressProgrammatically(this);
+							break;
+						case KeyEvent::KEY_SPACE:
+							dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(0))->children.at(1))->pressProgrammatically(this);
+							break;
+						}
+					}
+				}else{
+					if(event.isControlDown()){
+						if(!event.isShiftDown()){
+							// Alt + Ctrl + key combinations
+						}
+					}else if(event.isShiftDown()){
+						// Alt + Shift + key combinations
+					}else{
+						// Alt + key combination
+					}
+				}
 		
-        }
-		UI::updateHandlePos(false);
+			}
+			UI::updateHandlePos(false);
+		}
+	}else{
+		if(event.getCode() == KeyEvent::KEY_SPACE){
+			dynamic_cast<ToolButton *>(dynamic_cast<ToolSet *>(timelineBar->children.at(0))->children.at(1))->pressProgrammatically(this);			
+		}
 	}
 }
 
