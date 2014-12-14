@@ -60,10 +60,10 @@ bool CMD_AddTweenInside::execute(){
 bool CMD_AddTweenInside::unexecute(){
 	// Remove tween inside animation
 	
-	// after inserting, tween is in nextTweenIndex
+	// after erasing, tween is in nextTweenIndex
 	animation->tweens.erase(animation->tweens.begin() + nextTweenIndex);
-	animation->tweens.at(nextTweenIndex+1)->deltaTime = nextTween_oldDeltaTime;
-	animation->tweens.at(nextTweenIndex+1)->deltaValue = nextTween_oldDeltaValue;
+	animation->tweens.at(nextTweenIndex)->deltaTime = nextTween_oldDeltaTime;
+	animation->tweens.at(nextTweenIndex)->deltaValue = nextTween_oldDeltaValue;
 
 	return true;
 }

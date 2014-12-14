@@ -50,13 +50,13 @@ void Animation::update(Step * _step){
 		currentTweenTime += (float)_step->getDeltaTime();
 		if(_step->getReverse()){
 			while(currentTweenTime <= 0){
-				currentTweenTime += tweens.at(currentTween)->deltaTime;
-
 				if(currentTween > 0){
+					currentTweenTime += tweens.at(currentTween-1)->deltaTime;
 					referenceValue -= tweens.at(currentTween-1)->deltaValue;
-				}
-
-				if(currentTween == 0){
+					--currentTween;
+				}else{
+					currentTweenTime += tweens.at(tweens.size()-1)->deltaTime;
+					referenceValue -= tweens.at(tweens.size()-1)->deltaValue;
 					switch (loopType){
 						case Animation::kLOOP:
 						case Animation::kCONSTANT:
@@ -70,17 +70,15 @@ void Animation::update(Step * _step){
 						default:
 							break;
 					}
-				}else{
-					--currentTween;
 				}
 			}
 		}else{
 			while(currentTweenTime > tweens.at(currentTween)->deltaTime){
 				currentTweenTime -= tweens.at(currentTween)->deltaTime;
 				referenceValue += tweens.at(currentTween)->deltaValue;
-				++currentTween;
-
-				if(currentTween >= tweens.size()){
+				if(currentTween < tweens.size()-1){
+					++currentTween;
+				}else{
 					switch (loopType){
 						case Animation::kLOOP:
 						case Animation::kCONSTANT:
@@ -111,7 +109,9 @@ void Animation::update(Step * _step){
 		// Display the start-frame value on the start frame (ordinarily it would show the last frame-value if looping)
 		if(currentAnimationTime == 0){
 			*prop = startValue;
-			//referenceValue = startValue;
+			referenceValue = startValue;
+			currentTween = 0;
+			currentTweenTime = 0;
 		}
 	}
 }

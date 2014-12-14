@@ -54,10 +54,9 @@ bool CMD_AddTweenBefore::execute(){
 }
 
 bool CMD_AddTweenBefore::unexecute(){
+    subCmdProc.undo();
 	// Remove tween before animation
 	animation->tweens.erase(animation->tweens.begin());
-
-    subCmdProc.undo();
 	return true;
 }
 

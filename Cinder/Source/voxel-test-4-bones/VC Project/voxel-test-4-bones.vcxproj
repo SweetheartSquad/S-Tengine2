@@ -106,6 +106,7 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeChild.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeHierarchical.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\NodeLoadable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeParent.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeRenderable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeResource.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeAnimatable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeChild.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h" />
+    <ClInclude Include="..\..\..\..\Shared Code\include\NodeLoadable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeParent.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeRenderable.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\NodeResource.h" />

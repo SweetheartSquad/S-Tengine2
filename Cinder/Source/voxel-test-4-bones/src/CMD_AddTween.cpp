@@ -7,7 +7,7 @@
 #include "CMD_EditTween.h"
 #include "CMD_EditStartKey.h"
 
-#include <algorithm>
+#include "Step.h"
 
 #include <cinder/app/AppBasic.h>
 
@@ -17,16 +17,27 @@ CMD_AddTween::CMD_AddTween(Animation * _animation, float _currentTime, float _ta
 	targetValue(_targetValue),
 	interpolation(_interpolation),
     oldCurrentTween(-1),
-	newCurrentTween(-1)
+	newCurrentTween(-1),
+	oldCurrentAnimationTime(0),
+	newCurrentAnimationTime(0),
+	oldCurrentTweenTime(0),
+	newCurrentTweenTime(0),
+	oldReferenceValue(0),
+	newReferenceValue(0)
 {	
 }
 
 bool CMD_AddTween::execute(){
 	ci::app::console() << "execute CMD_AddTween" << std::endl;
     
+	float newCurrTweenTime = 0;
+	float newRefVal = 0;
     // calculate values for new tween, and save other values that will be changed by this tween insert
 	if (firstRun){
+		oldCurrentAnimationTime = animation->currentAnimationTime;
+		oldCurrentTweenTime = animation->currentTweenTime;
 		oldCurrentTween = animation->currentTween;
+		oldReferenceValue = animation->referenceValue;
 
 		float targetTime = animation->currentAnimationTime + deltaTimeline;
 
@@ -56,43 +67,38 @@ bool CMD_AddTween::execute(){
 				subCmdProc.executeCommand(new CMD_AddTweenAfter(animation, deltaTimeline, targetValue, interpolation, sumTime));
 			}
 		}
+		Step s;
+		s.setDeltaTime(animation->currentAnimationTime);
+		animation->currentAnimationTime = 0;
+		animation->currentTweenTime = 0;
+		animation->currentTween = 0;
+		animation->referenceValue = animation->startValue;
+		animation->update(&s);
 
-		// calculate the new currentTween
-		newCurrentTween = animation->tweens.size()-1;
-		float t = 0;
-
-		// if the animation is outside the actual animation tweens,
-		// add or subtract the total animation time until it is at
-		// the corresponding time inside the range
-		float comparison = animation->currentAnimationTime;
-		while(comparison < 0){
-			comparison += animation->getTweenEndTime(animation->tweens.size()-1);
-		}while(comparison > animation->getTweenEndTime(animation->tweens.size()-1)){
-			comparison -= animation->getTweenEndTime(animation->tweens.size()-1);
-		}
-
-		float currTweenTime = 0;
-		for(unsigned long int i = 0; i < animation->tweens.size(); ++i){
-			t += animation->tweens.at(i)->deltaTime;
-			if(t > comparison){
-				newCurrentTween = (i > 0 ? i : animation->tweens.size()) - 1;
-				currTweenTime = animation->tweens.at(i)->deltaTime - (t - comparison);
-				break;
-			}
-		}
-
+		// save vals
+		newCurrentAnimationTime = animation->currentAnimationTime;
+		newCurrentTweenTime = animation->currentTweenTime;
+		newCurrentTween = animation->currentTween;
+		newReferenceValue = animation->referenceValue;
 	}else{
 		subCmdProc.redo();
+		
+		animation->currentAnimationTime = newCurrentAnimationTime;
+		animation->currentTweenTime = newCurrentTweenTime;
+		animation->currentTween = newCurrentTween;
+		animation->referenceValue = newReferenceValue;
 	}
-	
-    animation->currentTween = newCurrentTween;
-
 
 	return true;
 }
 
 bool CMD_AddTween::unexecute(){
-    animation->currentTween = oldCurrentTween;
+	
+	animation->currentAnimationTime = oldCurrentAnimationTime;
+	animation->currentTweenTime = oldCurrentTweenTime;
+	animation->currentTween = oldCurrentTween;
+	animation->referenceValue = oldReferenceValue;
+
     subCmdProc.undo();
 	return true;
 }

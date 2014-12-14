@@ -34,7 +34,8 @@ private:
 	// Interpolation type for the tween
 	Easing::Type interpolation;
 
-    // Update the current tween of the animation to match with the new tweens
-    unsigned long int oldCurrentTween;
-    unsigned long int newCurrentTween;
+    unsigned long int oldCurrentTween, newCurrentTween;
+	float	oldCurrentAnimationTime, newCurrentAnimationTime,
+			oldCurrentTweenTime, newCurrentTweenTime,
+			oldReferenceValue, newReferenceValue;
 };
