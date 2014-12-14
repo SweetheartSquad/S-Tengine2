@@ -119,7 +119,6 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Voxel.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\VoxMatrices.cpp" />
-    <ClCompile Include="..\include\UiInteractable.cpp" />
     <ClCompile Include="..\src\CinderApp.cpp" />
     <ClCompile Include="..\src\CinderRenderOptions.cpp" />
     <ClCompile Include="..\src\Commands\CMD_ClearAllProperties.cpp" />
@@ -149,6 +148,7 @@
     <ClCompile Include="..\src\ToolSet.cpp" />
     <ClCompile Include="..\src\TrackBar.cpp" />
     <ClCompile Include="..\src\UI.cpp" />
+    <ClCompile Include="..\src\UiInteractable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag" />

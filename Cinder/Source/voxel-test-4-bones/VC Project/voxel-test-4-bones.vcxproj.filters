@@ -60,9 +60,6 @@
     <ClCompile Include="..\src\ParamTextBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\include\UiInteractable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ConsoleGUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -186,6 +183,9 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\CommandProcessor.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\UiInteractable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag">
@@ -248,9 +248,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ConsoleEntry.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CompressedCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\TrackBar.h">
