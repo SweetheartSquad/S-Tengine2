@@ -36,7 +36,7 @@ void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, Sce
 					jointFile << "]}" << std::endl;
 					jointFile.close();
 				}else{
-					throw std::exception("Cannot save file in directory");
+					throw std::exception("Failed to write in directory. Permission may be denied.");
 				}
 			}catch (std::exception ex){
 				if (jointFile.is_open()){
