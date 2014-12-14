@@ -22,10 +22,10 @@ bool CMD_CreateJoint::execute(){
 
 	if(parent != nullptr){
 		parent->addChild(createdJoint);
-		log("Created joint as a child of joint");
+		//log("Created joint as a child of joint");
 	}else if(sceneRoot != nullptr){
 		sceneRoot->addChild(createdJoint);
-		log("Created joint as a child of scene");
+		//log("Created joint as a child of scene");
 	}else{
 		// Error: no appropriate parent for created joint found
 		error("No appropriate parent for created joint found");

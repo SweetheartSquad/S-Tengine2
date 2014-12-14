@@ -119,7 +119,7 @@ public:
 
 	ToolBar * toolbar;
 	ToolBar * timelineBar;
-    ParamTextBox * timeTextBox;
+    //ParamTextBox * timeTextBox;
     TrackBar * timelineTrackbar;
 
 	string directory;

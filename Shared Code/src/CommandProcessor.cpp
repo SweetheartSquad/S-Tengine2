@@ -27,9 +27,7 @@ bool CommandProcessor::executeCommand(Command * c){
 		}
 	}else{
 		redoStack.push_back(c);
-		if(redo()){
-			c->firstRun = false;
-		}else{
+		if(!redo()){
 			return false;
 		}
 	}
@@ -55,7 +53,6 @@ void CommandProcessor::endCompressing(){
 	if(currentCompressedCommand != nullptr){
 		if(currentCompressedCommand->firstRun){
 			undoStack.push_back(currentCompressedCommand);
-			redoStack.clear();
 		}else{
 			delete currentCompressedCommand;
 		}
@@ -65,7 +62,7 @@ void CommandProcessor::endCompressing(){
 
 bool CommandProcessor::undo(){
 	//log("undo");
-	if (undoStack.size() != 0){
+	if (undoStack.size() > 0){
 		Command * c = undoStack.back();
 		bool success = c->unexecute();
 		undoStack.pop_back();
@@ -76,7 +73,7 @@ bool CommandProcessor::undo(){
 		c->subCmdProc.consoleEntries.clear();
 		//consoleEntries.insert(consoleEntries.end(), c->subCmdProc.consoleEntries.begin(), c->subCmdProc.consoleEntries.end());
 		if(success){
-			c->executed = true;
+			c->executed = false;
 			redoStack.push_back(c);
 		}else{
 			delete c;
@@ -87,7 +84,7 @@ bool CommandProcessor::undo(){
 
 bool CommandProcessor::redo(){
 	//log("redo");
-	if (redoStack.size() != 0){
+	if (redoStack.size() > 0){
 		Command * c = redoStack.back();
 		bool success = c->execute();
 		redoStack.pop_back();
@@ -144,6 +141,7 @@ void CommandProcessor::log(std::string _message){
 	t << "Log: ";
 	t << _message;
 	consoleEntries.push_back(new ConsoleEntry(t.str(), ConsoleEntry::Type::kLOG));
+	t.flush();
 }
 
 void CommandProcessor::warn(std::string _message){
@@ -151,6 +149,7 @@ void CommandProcessor::warn(std::string _message){
 	t << "Warning: ";
 	t << _message;
 	consoleEntries.push_back(new ConsoleEntry(t.str(), ConsoleEntry::Type::kWARNING));
+	t.flush();
 }
 
 void CommandProcessor::error(std::string _message){
@@ -158,4 +157,5 @@ void CommandProcessor::error(std::string _message){
 	t << "Error: ";
 	t << _message;
 	consoleEntries.push_back(new ConsoleEntry(t.str(), ConsoleEntry::Type::kERROR));
+	t.flush();
 }
