@@ -35,6 +35,11 @@ private:
 	T value;
 	Easing::Type interpolation;
 
+	unsigned long int oldCurrentTween, newCurrentTween;
+	float	oldCurrentAnimationTime, newCurrentAnimationTime,
+			oldCurrentTweenTime, newCurrentTweenTime;
+	T		oldReferenceValue, newReferenceValue;
+
 	int findKeyframe(std::vector<Tween<T> *> * _tweens);
 };
 
@@ -57,6 +62,7 @@ template<typename T>
 bool CMD_KeyProperty<T>::execute(){
 	// Executing for the first time, save the oldStartValue if keying 0, or create an add or edit command
 	if(firstRun){
+
 	    if(!animation->hasStart){
 		    // If there are no keyframes and the start hasn't been set
             subCmdProc.executeCommand(new CMD_EditStartKey<T>(animation, value, targetTime));
@@ -87,8 +93,33 @@ bool CMD_KeyProperty<T>::execute(){
 				}
 		    }
         }
+		
+		oldCurrentAnimationTime = animation->currentAnimationTime;
+		oldCurrentTweenTime = animation->currentTweenTime;
+		oldCurrentTween = animation->currentTween;
+		oldReferenceValue = animation->referenceValue;
+		Step s;
+		s.setDeltaTime(animation->currentAnimationTime);
+		animation->currentAnimationTime = 0;
+		animation->currentTweenTime = 0;
+		animation->currentTween = 0;
+		animation->referenceValue = animation->startValue;
+		animation->update(&s);
 	}else{
 		subCmdProc.redo();
+
+		Step s;
+		s.setDeltaTime(animation->currentAnimationTime);
+		animation->currentAnimationTime = 0;
+		animation->currentTweenTime = 0;
+		animation->currentTween = 0;
+		animation->referenceValue = animation->startValue;
+		animation->update(&s);
+
+		/*animation->currentAnimationTime = newCurrentAnimationTime;
+		animation->currentTweenTime = newCurrentTweenTime;
+		animation->currentTween = newCurrentTween;
+		animation->referenceValue = newReferenceValue;*/
 	}
 
 	return true;
@@ -96,6 +127,19 @@ bool CMD_KeyProperty<T>::execute(){
 
 template<typename T>
 bool CMD_KeyProperty<T>::unexecute(){
+
+	Step s;
+	s.setDeltaTime(oldCurrentAnimationTime);
+	animation->currentAnimationTime = 0;
+	animation->currentTweenTime = 0;
+	animation->currentTween = 0;
+	animation->referenceValue = animation->startValue;
+	animation->update(&s);
+	/*animation->currentAnimationTime = oldCurrentAnimationTime;
+	animation->currentTweenTime = oldCurrentTweenTime;
+	animation->currentTween = oldCurrentTween;
+	animation->referenceValue = oldReferenceValue;*/
+
 	subCmdProc.undo();
 
 	return true;

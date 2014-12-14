@@ -37,10 +37,7 @@ private:
 	// Interpolation type for the tween
 	Easing::Type interpolation;
 
-    unsigned long int oldCurrentTween, newCurrentTween;
-	float	oldCurrentAnimationTime, newCurrentAnimationTime,
-			oldCurrentTweenTime, newCurrentTweenTime;
-	T		oldReferenceValue, newReferenceValue;
+    
 };
 
 template<typename T>
@@ -48,13 +45,7 @@ CMD_AddTween<T>::CMD_AddTween(Animation<T> * _animation, float _currentTime, flo
 	animation(_animation),
 	deltaTimeline(_targetTime - _currentTime),
 	targetValue(_targetValue),
-	interpolation(_interpolation),
-    oldCurrentTween(-1),
-	newCurrentTween(-1),
-	oldCurrentAnimationTime(0),
-	newCurrentAnimationTime(0),
-	oldCurrentTweenTime(0),
-	newCurrentTweenTime(0)
+	interpolation(_interpolation)
 {	
 }
 
@@ -64,16 +55,10 @@ bool CMD_AddTween<T>::execute(){
     
     // calculate values for new tween, and save other values that will be changed by this tween insert
 	if (firstRun){
-		
-		oldCurrentAnimationTime = animation->currentAnimationTime;
-		oldCurrentTweenTime = animation->currentTweenTime;
-		oldCurrentTween = animation->currentTween;
-		oldReferenceValue = animation->referenceValue;
 
 		float targetTime = animation->currentAnimationTime + deltaTimeline;
 
 		if(targetTime <= 0){
-            newCurrentTween = 0;
 			subCmdProc.executeCommand(new CMD_AddTweenBefore<T>(animation, deltaTimeline, targetValue, interpolation));
 		}else{
 			float sumTime = 0;
@@ -99,27 +84,9 @@ bool CMD_AddTween<T>::execute(){
 			}
 		}
 
-
-		Step s;
-		s.setDeltaTime(animation->currentAnimationTime);
-		animation->currentAnimationTime = 0;
-		animation->currentTweenTime = 0;
-		animation->currentTween = 0;
-		animation->referenceValue = animation->startValue;
-		animation->update(&s);
-
-		// save vals
-		newCurrentAnimationTime = animation->currentAnimationTime;
-		newCurrentTweenTime = animation->currentTweenTime;
-		newCurrentTween = animation->currentTween;
-		newReferenceValue = animation->referenceValue;
 	}else{
 		subCmdProc.redo();
 		
-		animation->currentAnimationTime = newCurrentAnimationTime;
-		animation->currentTweenTime = newCurrentTweenTime;
-		animation->currentTween = newCurrentTween;
-		animation->referenceValue = newReferenceValue;
 	}
 
 	return true;
@@ -127,11 +94,6 @@ bool CMD_AddTween<T>::execute(){
 
 template<typename T>
 bool CMD_AddTween<T>::unexecute(){
-	
-	animation->currentAnimationTime = oldCurrentAnimationTime;
-	animation->currentTweenTime = oldCurrentTweenTime;
-	animation->currentTween = oldCurrentTween;
-	animation->referenceValue = oldReferenceValue;
 
     subCmdProc.undo();
 	return true;
