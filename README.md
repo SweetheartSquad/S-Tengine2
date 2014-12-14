@@ -1,4 +1,3 @@
-
 ```
 #!html
 
@@ -23,40 +22,40 @@ Open project
 Rename glfwSettings.props.template to glfwSettings.props
 
 ## GLEW ##
-Download glew 1.11.0
-http://sourceforge.net/projects/glew/files/glew/1.11.0/glew-1.11.0-win32.zip/download
+* Download glew 1.11.0 
+* http://sourceforge.net/projects/glew/files/glew/1.11.0/glew-1.11.0-win32.zip/download
 
-Unzip the folder and place it in an accessible location. Set the GLEW_DIR property to this location.
-e.g. <GLEW_DIR>C:\Dev\glew-1.10.0</GLEW_DIR>
+* Unzip the folder and place it in an accessible location. Set the GLEW_DIR property to this location.
+* e.g. <GLEW_DIR>C:\Dev\glew-1.10.0</GLEW_DIR>
  
 ## GLFW ##
-Download GLFW 3.0.4
-http://sourceforge.net/projects/glfw/files/glfw/3.0.4/glfw-3.0.4.bin.WIN32.zip/download
+* Download GLFW 3.0.4
+* http://sourceforge.net/projects/glfw/files/glfw/3.0.4/glfw-3.0.4.bin.WIN32.zip/download
 
-Unzip the folder and place it in an accessible location. Set the GLFW_DIR property to this location
-e.g. <GLFW_DIR> C:\Dev\glfw-3.0.4.bin.WIN32</GLFW_DIR>
+* Unzip the folder and place it in an accessible location. Set the GLFW_DIR property to this location
+* e.g. <GLFW_DIR> C:\Dev\glfw-3.0.4.bin.WIN32</GLFW_DIR>
  
 ## GLM ##
-Download GLM 0.9.5.4
-http://sourceforge.net/projects/ogl-math/files/glm-0.9.5.4/glm-0.9.5.4.zip/download
+* Download GLM 0.9.5.4
+* http://sourceforge.net/projects/ogl-math/files/glm-0.9.5.4/glm-0.9.5.4.zip/download
 
-Unzip the folder and place it in an accessible location. Set the GLM_DIR property to this location
-e.g. <GLM_DIR>C:\Dev\glm</GLM_DIR>
+* Unzip the folder and place it in an accessible location. Set the GLM_DIR property to this location
+* e.g. <GLM_DIR>C:\Dev\glm</GLM_DIR>
  
 ## SOIL ##
 Download SOIL
 http://www.lonesock.net/files/soil.zip
 
-Unzip the folder and place it in an accessible location. Set the SOIL_DIR property to this location
-e.g. <SOIL_DIR> C:\Dev\Simple OpenGL Image Library</SOIL_DIR>
+* Unzip the folder and place it in an accessible location. Set the SOIL_DIR property to this location
+* e.g. <SOIL_DIR> C:\Dev\Simple OpenGL Image Library</SOIL_DIR>
 
-Open the projects folder under in the library’s root, then open the VC9 folder.
+* Open the projects folder under in the library’s root, then open the VC9 folder.
 
-Open the SOIL.sln file in Visual Studio. You will have to upgrade the project.
+* Open the SOIL.sln file in Visual Studio. You will have to upgrade the project.
 
-Once it is open, click Build to build the lib file.
+* Once it is open, click Build to build the lib file.
 
-The project should now build
+**The project should now build**
 
 # Vox Sample Project #
 
