@@ -4,9 +4,9 @@
 #include "Easing.h"
 #include <vector>
 #include "Animation.h"
-#include "CMD_EditStartKey.h"
-#include "CMD_AddTween.h"
-#include "CMD_EditTween.h"
+#include "Commands/CMD_EditStartKey.h"
+#include "Commands/CMD_AddTween.h"
+#include "Commands/CMD_EditTween.h"
 
 template <typename T>
 class CMD_KeyProperty : public Command{

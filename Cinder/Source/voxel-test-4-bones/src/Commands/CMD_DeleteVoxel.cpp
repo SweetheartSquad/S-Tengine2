@@ -1,10 +1,10 @@
 #pragma once
 
-#include "CMD_DeleteVoxel.h"
-#include "CMD_SelectNodes.h"
+#include "Commands/CMD_DeleteVoxel.h"
+#include "Commands/CMD_SelectNodes.h"
 #include "UI.h"
-#include "Node.h"
-#include "NodeHierarchical.h"
+#include "node/Node.h"
+#include "node/NodeHierarchical.h"
 #include "Joint.h"
 
 #include "cinder/app/App.h"

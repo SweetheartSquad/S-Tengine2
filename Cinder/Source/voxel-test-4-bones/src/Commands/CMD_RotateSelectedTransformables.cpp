@@ -1,9 +1,9 @@
 #pragma once
 
-#include "CMD_RotateSelectedTransformables.h"
-#include "CMD_RotateTransformable.h"
+#include "Commands/CMD_RotateSelectedTransformables.h"
+#include "Commands/CMD_RotateTransformable.h"
 #include "UI.h"
-#include "NodeTransformable.h"
+#include "node/NodeTransformable.h"
 #include "Joint.h"
 
 CMD_RotateSelectedTransformables::CMD_RotateSelectedTransformables(glm::quat _rotation, bool _relative, CoordinateSpace _space) :

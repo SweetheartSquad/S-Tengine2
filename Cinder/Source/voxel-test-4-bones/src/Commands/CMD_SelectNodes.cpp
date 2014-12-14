@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CMD_SelectNodes.h"
+#include "Commands/CMD_SelectNodes.h"
 #include "UI.h"
 
 CMD_SelectNodes::CMD_SelectNodes(std::vector<Node *> _nodes, bool _additive, bool _subtractive) :

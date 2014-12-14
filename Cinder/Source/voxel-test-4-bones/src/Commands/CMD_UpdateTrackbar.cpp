@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CMD_UpdateTrackbar.h"
+#include "Commands/CMD_UpdateTrackbar.h"
 #include "TrackBar.h"
 #include <sstream>
 

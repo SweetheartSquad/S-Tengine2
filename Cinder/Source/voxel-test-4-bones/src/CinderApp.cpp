@@ -4,23 +4,23 @@
 #include "UI.h"
 #include "ButtonFunctions.hpp"
 
-#include "CMD_CreateJoint.h"
-#include "CMD_DeleteJoints.h"
-#include "CMD_SelectNodes.h"
-#include "CMD_TranslateSelectedTransformables.h"
-#include "CMD_ScaleSelectedTransformables.h"
-#include "CMD_RotateSelectedTransformables.h"
-#include "CMD_KeyProperty.h"
-#include "CMD_KeyAllProperties.h"
-#include "CMD_ClearAllProperties.h"
-#include "CMD_ParentSelectedNodes.h"
-#include "CMD_PlaceVoxel.h"
-#include "CMD_DeleteVoxel.h"
-#include "CMD_SetTime.h"
-#include "CMD_UpdateTrackbar.h"
+#include "Commands/CMD_CreateJoint.h"
+#include "Commands/CMD_DeleteJoints.h"
+#include "Commands/CMD_SelectNodes.h"
+#include "Commands/CMD_TranslateSelectedTransformables.h"
+#include "Commands/CMD_ScaleSelectedTransformables.h"
+#include "Commands/CMD_RotateSelectedTransformables.h"
+#include "Commands/CMD_KeyProperty.h"
+#include "Commands/CMD_KeyAllProperties.h"
+#include "Commands/CMD_ClearAllProperties.h"
+#include "Commands/CMD_ParentSelectedNodes.h"
+#include "Commands/CMD_PlaceVoxel.h"
+#include "Commands/CMD_DeleteVoxel.h"
+#include "Commands/CMD_SetTime.h"
+#include "Commands/CMD_UpdateTrackbar.h"
 
 #include "Transform.h"
-#include "NodeTransformable.h"
+#include "node/NodeTransformable.h"
 
 #include "Tween.h"
 #include "Step.h"
@@ -82,7 +82,7 @@ void CinderApp::setup(){
 	voxelSphereRadius = 0.1f;
 	voxelPaintSpacing = 1.f;
 
-	params = params::InterfaceGl::create( getWindow(), "General", toPixels( Vec2i( 175, 340 ) ), ColorA(0.6f, 0.3f, 0.3f, 0.4f));
+	params = params::InterfaceGl::create( getWindow(), "General", toPixels( Vec2i( 175, 360 ) ), ColorA(0.6f, 0.3f, 0.3f, 0.4f));
 	
 	params->addText("Animation");
 	params->addParam("Time", &UI::time, "", true);
@@ -111,7 +111,7 @@ void CinderApp::setup(){
 	params->addParam("Message", &message, "", true);
 
 	stringstream paramsOptions;
-	paramsOptions << "position='" << getWindowWidth() - 175 - 5 << " " << getWindowHeight() / 2.5f << "'";
+	paramsOptions << "position='" << getWindowWidth() - 175 - 5 << " " << getWindowHeight() / 2.4f << "'";
 	string blah = paramsOptions.str();
 	params->setOptions("", paramsOptions.str());
 	
@@ -175,11 +175,10 @@ void CinderApp::setup(){
 	timelineBar->addButton(2, new ToolButton("Object", ToolButton::Type::kRADIO, Vec2i(40, 30), "../assets/icons/null.png", nullptr, &ButtonFunctions::SPACE_Object));
 	timelineBar->addButton(2, new ToolButton("World", ToolButton::Type::kRADIO, Vec2i(40, 30), "../assets/icons/null.png", nullptr, &ButtonFunctions::SPACE_World));
 	
-	timelineBar->addButton(3, new ToolButton("1", ToolButton::Type::kRADIO, Vec2i(20, 240), "../assets/icons/null.png", nullptr, &ButtonFunctions::CHANNEL_0));
-	timelineBar->addButton(3, new ToolButton("2", ToolButton::Type::kRADIO, Vec2i(20, 240), "../assets/icons/null.png", nullptr, &ButtonFunctions::CHANNEL_1));
-	timelineBar->addButton(3, new ToolButton("3", ToolButton::Type::kRADIO, Vec2i(20, 240), "../assets/icons/null.png", nullptr, &ButtonFunctions::CHANNEL_2));
-	timelineBar->addButton(3, new ToolButton("4", ToolButton::Type::kRADIO, Vec2i(20, 240), "../assets/icons/null.png", nullptr, &ButtonFunctions::CHANNEL_3));
-	
+	timelineBar->addButton(3, new ToolButton("1", ToolButton::Type::kRADIO, Vec2i(20, 20), "../assets/icons/null.png", nullptr, &ButtonFunctions::CHANNEL_0));
+	timelineBar->addButton(3, new ToolButton("2", ToolButton::Type::kRADIO, Vec2i(20, 20), "../assets/icons/null.png", nullptr, &ButtonFunctions::CHANNEL_1));
+	timelineBar->addButton(3, new ToolButton("3", ToolButton::Type::kRADIO, Vec2i(20, 20), "../assets/icons/null.png", nullptr, &ButtonFunctions::CHANNEL_2));
+	timelineBar->addButton(3, new ToolButton("4", ToolButton::Type::kRADIO, Vec2i(20, 20), "../assets/icons/null.png", nullptr, &ButtonFunctions::CHANNEL_3));
 	
 	//timeTextBox = new ParamTextBox(ParamTextBox::Type::NUMBER, Vec2i(60, 40), Vec2i(30,20));
 

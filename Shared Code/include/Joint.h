@@ -6,12 +6,12 @@
 #include <cinder\gl\gl.h>
 #include <cinder\gl\GlslProg.h>
 
-#include "NodeTransformable.h"
-#include "NodeHierarchical.h"
-#include "NodeAnimatable.h"
-#include "NodeRenderable.h"
-#include "NodeSelectable.h"
-#include "ShiftKiddie.h"
+#include "node/NodeTransformable.h"
+#include "node/NodeHierarchical.h"
+#include "node/NodeAnimatable.h"
+#include "node/NodeRenderable.h"
+#include "node/NodeSelectable.h"
+#include "node/ShiftKiddie.h"
 
 #include "Voxel.h"
 

@@ -4,9 +4,9 @@
 #include <vector>
 #include "Tween.h"
 #include "Animation.h"
-#include "CMD_AddTweenInside.h"
-#include "CMD_AddTweenAfter.h"
-#include "CMD_AddTweenBefore.h"
+#include "Commands/CMD_AddTweenInside.h"
+#include "Commands/CMD_AddTweenAfter.h"
+#include "Commands/CMD_AddTweenBefore.h"
 
 template<typename T>
 class CMD_AddTween : public Command{

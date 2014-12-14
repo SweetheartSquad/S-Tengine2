@@ -1,10 +1,10 @@
 #pragma once
 
-#include "CMD_TranslateSelectedTransformables.h"
-#include "CMD_TranslateTransformable.h"
+#include "Commands/CMD_TranslateSelectedTransformables.h"
+#include "Commands/CMD_TranslateTransformable.h"
 #include "UI.h"
-#include "Node.h"
-#include "NodeTransformable.h"
+#include "node/Node.h"
+#include "node/NodeTransformable.h"
 
 CMD_TranslateSelectedTransformables::CMD_TranslateSelectedTransformables(ci::Vec3d _v, bool _relative, CoordinateSpace _space) :
 	v(_v),

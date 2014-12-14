@@ -7,7 +7,7 @@
 #include "CinderRenderOptions.h"
 #include "Step.h"
 #include "CinderApp.h"
-#include "CMD_SetTime.h"
+#include "Commands/CMD_SetTime.h"
 #include "UI.h"
 
 

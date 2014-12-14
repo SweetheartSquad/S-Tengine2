@@ -33,28 +33,13 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\Joint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\SkeletonData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\VoxMatrices.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\Shared Code\src\Voxel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\Step.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\RenderOptions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\CinderRenderOptions.cpp">
@@ -72,90 +57,6 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\SceneRoot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CMD_CreateJoint.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CMD_DeleteJoint.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CMD_DeleteJoints.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CMD_DeleteVoxel.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CMD_Parent.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CMD_ParentSelectedNodes.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CMD_PlaceVoxel.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CMD_SelectNodes.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\Command.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\CommandProcessor.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CompressedCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp">
-      <Filter>Source Files\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeAnimatable.cpp">
-      <Filter>Source Files\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeChild.cpp">
-      <Filter>Source Files\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeHierarchical.cpp">
-      <Filter>Source Files\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeParent.cpp">
-      <Filter>Source Files\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeRenderable.cpp">
-      <Filter>Source Files\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeResource.cpp">
-      <Filter>Source Files\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeSelectable.cpp">
-      <Filter>Source Files\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeUpdatable.cpp">
-      <Filter>Source Files\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\ShiftKiddie.cpp">
-      <Filter>Source Files\Nodes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CMD_TranslateSelectedTransformables.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CMD_RotateSelectedTransformables.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CMD_ScaleSelectedTransformables.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CMD_TranslateTransformable.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CMD_RotateTransformable.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CMD_ScaleTransformable.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CMD_SetTime.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ParamTextBox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -171,16 +72,118 @@
     <ClCompile Include="..\src\TrackBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CMD_UpdateTrackbar.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Shared Code\src\NodeLoadable.cpp">
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\Node.cpp">
       <Filter>Source Files\Nodes</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CMD_KeyAllProperties.cpp">
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeAnimatable.cpp">
+      <Filter>Source Files\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeChild.cpp">
+      <Filter>Source Files\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeHierarchical.cpp">
+      <Filter>Source Files\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeLoadable.cpp">
+      <Filter>Source Files\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeParent.cpp">
+      <Filter>Source Files\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeRenderable.cpp">
+      <Filter>Source Files\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeResource.cpp">
+      <Filter>Source Files\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeSelectable.cpp">
+      <Filter>Source Files\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\NodeUpdatable.cpp">
+      <Filter>Source Files\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\node\ShiftKiddie.cpp">
+      <Filter>Source Files\Nodes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\RenderOptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\Step.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\VoxMatrices.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_ClearAllProperties.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CMD_ClearAllProperties.cpp">
+    <ClCompile Include="..\src\Commands\CMD_CreateJoint.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_DeleteJoint.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_DeleteJoints.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_DeleteVoxel.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_KeyAllProperties.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_Parent.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_ParentSelectedNodes.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_PlaceVoxel.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_RotateSelectedTransformables.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_RotateTransformable.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_ScaleSelectedTransformables.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_ScaleTransformable.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_SelectNodes.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_SetTime.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_TranslateSelectedTransformables.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_TranslateTransformable.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CMD_UpdateTrackbar.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Commands\CompressedCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\Command.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\CommandProcessor.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
   </ItemGroup>
@@ -202,9 +205,6 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\Joint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\SkeletonData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -214,25 +214,7 @@
     <ClInclude Include="..\include\UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\VoxMatrices.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\Voxel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\MatrixStack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\Step.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\Tween.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\Easing.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\RenderOptions.h">
@@ -256,113 +238,8 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\SceneRoot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CMD_AddTween.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_CreateJoint.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_DeleteJoint.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_DeleteJoints.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_EditStartKey.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_EditTween.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_KeyProperty.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_Parent.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_ParentSelectedNodes.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_PlaceVoxel.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_SelectNodes.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\Command.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\CommandProcessor.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CompressedCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\Node.h">
-      <Filter>Header Files\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeAnimatable.h">
-      <Filter>Header Files\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeChild.h">
-      <Filter>Header Files\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeHierarchical.h">
-      <Filter>Header Files\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeParent.h">
-      <Filter>Header Files\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeRenderable.h">
-      <Filter>Header Files\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeResource.h">
-      <Filter>Header Files\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeSelectable.h">
-      <Filter>Header Files\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeTransformable.h">
-      <Filter>Header Files\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeUpdatable.h">
-      <Filter>Header Files\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\ShiftKiddie.h">
-      <Filter>Header Files\Nodes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_TranslateTransformable.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_TranslateSelectedTransformables.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_RotateSelectedTransformables.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_ScaleSelectedTransformables.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_RotateTransformable.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_ScaleTransformable.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_SetTime.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\ParamTextBox.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_AddTweenAfter.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_AddTweenBefore.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_AddTweenInside.h">
-      <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="..\include\UiInteractable.h">
       <Filter>Header Files</Filter>
@@ -382,52 +259,187 @@
     <ClInclude Include="..\include\CompressedCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CMD_UpdateTrackbar.h">
-      <Filter>Header Files\Commands</Filter>
+    <ClInclude Include="..\include\CompressedCommand.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\CompressedCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Shared Code\include\NodeLoadable.h">
+    <ClInclude Include="..\include\CompressedCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CompressedCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CompressedCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CompressedCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CompressedCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\Node.h">
       <Filter>Header Files\Nodes</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CompressedCommand.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeAnimatable.h">
+      <Filter>Header Files\Nodes</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CompressedCommand.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeChild.h">
+      <Filter>Header Files\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeHierarchical.h">
+      <Filter>Header Files\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeLoadable.h">
+      <Filter>Header Files\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeParent.h">
+      <Filter>Header Files\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeRenderable.h">
+      <Filter>Header Files\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeResource.h">
+      <Filter>Header Files\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeSelectable.h">
+      <Filter>Header Files\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeTransformable.h">
+      <Filter>Header Files\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\NodeUpdatable.h">
+      <Filter>Header Files\Nodes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\node\ShiftKiddie.h">
+      <Filter>Header Files\Nodes</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\Animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CompressedCommand.h">
+    <ClInclude Include="..\..\..\..\Shared Code\include\Easing.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CompressedCommand.h">
+    <ClInclude Include="..\..\..\..\Shared Code\include\Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CompressedCommand.h">
+    <ClInclude Include="..\..\..\..\Shared Code\include\MatrixStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CMD_KeyAllProperties.h">
+    <ClInclude Include="..\..\..\..\Shared Code\include\Step.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Tween.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Vox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\VoxMatrices.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Shared Code\include\Command.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CMD_ClearAllProperties.h">
+    <ClInclude Include="..\..\..\..\Shared Code\include\CommandProcessor.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CMD_ClearProperty.h">
+    <ClInclude Include="..\include\Commands\CMD_AddTween.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CMD_ClearStartKey.h">
+    <ClInclude Include="..\include\Commands\CMD_AddTweenAfter.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CMD_RemoveFirstTween.h">
+    <ClInclude Include="..\include\Commands\CMD_AddTweenBefore.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CMD_RemoveLastTween.h">
+    <ClInclude Include="..\include\Commands\CMD_AddTweenInside.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CMD_RemoveInnerTween.h">
+    <ClInclude Include="..\include\Commands\CMD_ClearAllProperties.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_ClearProperty.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_ClearStartKey.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_CreateJoint.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_DeleteJoint.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_DeleteJoints.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_DeleteVoxel.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_EditStartKey.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_EditTween.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_KeyAllProperties.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_KeyProperty.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_Parent.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_ParentSelectedNodes.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_PlaceVoxel.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_RemoveFirstTween.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_RemoveInnerTween.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_RemoveLastTween.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_RotateSelectedTransformables.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_RotateTransformable.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_ScaleSelectedTransformables.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_ScaleTransformable.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_SelectNodes.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_SetTime.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_TranslateSelectedTransformables.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_TranslateTransformable.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CMD_UpdateTrackbar.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Commands\CompressedCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
   </ItemGroup>

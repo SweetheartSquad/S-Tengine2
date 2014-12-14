@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "NodeLoadable.h"
+#include "node/NodeLoadable.h"
 
 class NodeResource abstract : public virtual NodeLoadable{
 protected:

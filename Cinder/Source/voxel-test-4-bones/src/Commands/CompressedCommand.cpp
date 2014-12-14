@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CompressedCommand.h"
+#include "Commands/CompressedCommand.h"
 
 CompressedCommand::CompressedCommand(){
 	firstRun = false;

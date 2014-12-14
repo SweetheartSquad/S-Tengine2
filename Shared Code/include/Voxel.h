@@ -2,10 +2,10 @@
 
 #include <cinder/Vector.h>
 
-#include "NodeRenderable.h"
-#include "NodeSelectable.h"
-#include "NodeHierarchical.h"
-#include "ShiftKiddie.h"
+#include "node/NodeRenderable.h"
+#include "node/NodeSelectable.h"
+#include "node/NodeHierarchical.h"
+#include "node/ShiftKiddie.h"
 
 class Joint;
 

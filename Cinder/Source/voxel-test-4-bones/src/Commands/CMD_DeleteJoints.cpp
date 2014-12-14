@@ -1,12 +1,12 @@
 #pragma once
 
-#include "CMD_DeleteJoints.h"
-#include "CMD_DeleteJoint.h"
-#include "CMD_SelectNodes.h"
+#include "Commands/CMD_DeleteJoints.h"
+#include "Commands/CMD_DeleteJoint.h"
+#include "Commands/CMD_SelectNodes.h"
 #include "UI.h"
-#include "Node.h"
-#include "NodeHierarchical.h"
-#include "NodeChild.h"
+#include "node/Node.h"
+#include "node/NodeHierarchical.h"
+#include "node/NodeChild.h"
 #include "Joint.h"
 
 CMD_DeleteJoints::CMD_DeleteJoints(){

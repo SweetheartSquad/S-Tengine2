@@ -1,5 +1,5 @@
 #include "CinderApp.h"
-#include "CMD_SetTime.h"
+#include "Commands/CMD_SetTime.h"
 #include "TrackBar.h"
 
 class ButtonFunctions{

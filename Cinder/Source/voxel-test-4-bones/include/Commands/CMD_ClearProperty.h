@@ -5,10 +5,10 @@
 #include <vector>
 #include "Animation.h"
 
-#include "CMD_ClearStartKey.h"
-#include "CMD_RemoveFirstTween.h"
-#include "CMD_RemoveInnerTween.h"
-#include "CMD_RemoveLastTween.h"
+#include "Commands/CMD_ClearStartKey.h"
+#include "Commands/CMD_RemoveFirstTween.h"
+#include "Commands/CMD_RemoveInnerTween.h"
+#include "Commands/CMD_RemoveLastTween.h"
 
 template <typename T>
 class CMD_ClearProperty : public Command{

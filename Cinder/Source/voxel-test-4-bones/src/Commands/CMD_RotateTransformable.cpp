@@ -1,7 +1,7 @@
 #pragma once
 
-#include "CMD_RotateTransformable.h"
-#include "NodeTransformable.h"
+#include "Commands/CMD_RotateTransformable.h"
+#include "node/NodeTransformable.h"
 
 CMD_RotateTransformable::CMD_RotateTransformable(NodeTransformable * _node, glm::quat _rotation, bool _relative, CoordinateSpace _space) :
 	node(_node),
