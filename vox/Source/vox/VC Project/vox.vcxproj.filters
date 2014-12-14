@@ -90,9 +90,6 @@
     <ClCompile Include="..\src\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\MainScene.cpp">
-      <Filter>Source Files\TestGame</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\TestGame.cpp">
       <Filter>Source Files\TestGame</Filter>
     </ClCompile>
@@ -175,9 +172,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\DirectionalLight.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PerspectiveCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\OrthographicCamera.cpp">
@@ -264,6 +258,9 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\node\ShiftKiddie.cpp">
       <Filter>Source Files\node</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\PerspectiveCamera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -283,9 +280,6 @@
     </ClInclude>
     <ClInclude Include="..\include\Scene.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\MainScene.h">
-      <Filter>Header Files\TestGame</Filter>
     </ClInclude>
     <ClInclude Include="..\include\TestGame.h">
       <Filter>Header Files\TestGame</Filter>

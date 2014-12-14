@@ -23,14 +23,17 @@
 #include "node/NodeAnimatable.h"
 #include "Texture.h"
 #include "VoxelMesh.h"
+#include "StandardFrameBuffer.h"
+#include "RenderSurface.h"
 
-BaseScene::BaseScene(Game* _game):
+BaseScene::BaseScene(Game * _game):
 	Scene(_game),
 	ground(new Cube(glm::vec3(0.0f, -1.5f, 0.0), 1)),
 	cube(new Cube(glm::vec3(0.0f, 0.0f, 0.0f), 1)),
 	monkey(new MeshEntity()),
 	shader(new BaseComponentShader()),
-	material(new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true))
+	material(new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true)),
+	frameBuffer(new StandardFrameBuffer(true))
 {
 	//Add shader components
 	shader->components.push_back(new TextureShaderComponent());
@@ -95,7 +98,6 @@ BaseScene::BaseScene(Game* _game):
 
 	//Load a voxel joint from voo.json
 	VoxelJoint * voxelJoint = Resource::loadVoxelModel("../assets/dong.json");
-	NodeAnimatable * t = dynamic_cast<NodeAnimatable *>(voxelJoint->children.at(0));
 
 	//Lets set the shader on the joint and all of its children
 	voxelJoint->setShaderOnChildren(voxelShader);
@@ -128,6 +130,11 @@ BaseScene::BaseScene(Game* _game):
 	voxelMonkey->mesh->pushMaterial(material);
 	voxelMonkey->transform->translate(0.0f, 0.0f, 3.0f);
 	addChild(voxelMonkey);
+
+	//Load the render surface shader from a file
+	renderSurfaceShader = new Shader("../assets/RenderSurface", false, true);
+	//Instantiate the render surface
+	renderSurface = new RenderSurface(renderSurfaceShader);
 }
 
 
@@ -164,6 +171,13 @@ void BaseScene::update(){
 }
 
 void BaseScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+	//Render the shadows
 	Scene::renderShadows(_matrixStack, _renderStack);
+	//Bind frameBuffer
+	frameBuffer->bindFrameBuffer();
+	//render the scene to the buffer
 	Scene::render(_matrixStack, _renderStack);
+
+	//Render the buffer to the render surface
+	renderSurface->render(frameBuffer->getTextureId());
 }

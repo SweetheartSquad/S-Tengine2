@@ -25,6 +25,9 @@ Game::Game(bool _isRunning):
 }
 
 Game::~Game(void){
+	for(auto scene : scenes){
+		delete scene.second;
+	}
 }
 
 void Game::performGameLoop(){

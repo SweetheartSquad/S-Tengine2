@@ -256,6 +256,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\src\FileUtils.cpp" />
     <ClCompile Include="..\src\FrameBufferInterface.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
+    <ClCompile Include="..\src\PerspectiveCamera.cpp" />
     <ClCompile Include="..\src\shader\BaseComponentShader.cpp" />
     <ClCompile Include="..\src\shader\BlinnShaderComponent.cpp" />
     <ClCompile Include="..\src\shader\BlurShader.cpp" />
@@ -275,7 +276,6 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\src\GLUtils.cpp" />
     <ClCompile Include="..\src\Keyboard.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
-    <ClCompile Include="..\src\MainScene.cpp" />
     <ClCompile Include="..\src\Material.cpp" />
     <ClCompile Include="..\src\MeshEntity.cpp" />
     <ClCompile Include="..\src\Mouse.cpp" />
@@ -291,7 +291,6 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\src\MeshInterface.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
     <ClCompile Include="..\src\VoxelMesh.cpp" />
-    <ClCompile Include="PerspectiveCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Shared Code\include\Animation.h" />
@@ -358,7 +357,6 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\include\StandardFrameBuffer.h" />
     <ClInclude Include="..\include\System.h" />
     <ClInclude Include="..\include\TestGame.h" />
-    <ClInclude Include="..\include\MainScene.h" />
     <ClInclude Include="..\include\Scene.h" />
     <ClInclude Include="..\include\Texture.h" />
     <ClInclude Include="..\include\Vertex.h" />

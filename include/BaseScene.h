@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 
+class Shader;
 class MeshInterface;
 class MeshEntity;
 class DirectionalLight;
@@ -21,6 +22,7 @@ public:
 
 	//Shaders
 	BaseComponentShader * shader;
+	Shader * renderSurfaceShader;
 
 	//Materials
 	Material * material;
@@ -31,6 +33,9 @@ public:
 
 	//Meshes
 	MeshInterface * monkeyMesh;
+
+	RenderSurface * renderSurface;
+	StandardFrameBuffer * frameBuffer;
 
 	explicit BaseScene(Game* _game);
 	virtual ~BaseScene();
