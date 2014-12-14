@@ -56,10 +56,7 @@ void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 }
 
 void MeshEntity::update(Step * _step){
-	NodeAnimatable::update(_step);
-	for(int i = 0; i < children.size(); i++){
-		dynamic_cast<Entity *>(children.at(i))->update(_step);
-	}
+	Entity::update(_step);
 }
 
 void MeshEntity::removeChildAtIndex(int _index){

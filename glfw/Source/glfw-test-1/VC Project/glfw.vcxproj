@@ -125,6 +125,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"</Command>
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeUpdatable.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\RenderOptions.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Shader.cpp" />
+    <ClCompile Include="..\..\..\..\Shared Code\src\ShiftKiddie.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Step.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Tween.cpp" />

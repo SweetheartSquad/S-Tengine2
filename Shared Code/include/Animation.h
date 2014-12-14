@@ -7,8 +7,7 @@
 
 class Step;
 
-class Animation : public NodeUpdatable
-{
+class Animation : public NodeUpdatable{
 public:
 	float getTweenEndTime(unsigned long int _idx);
 	float getTweenEndValue(unsigned long int _idx);
@@ -31,7 +30,7 @@ public:
 
 	std::vector<Tween *> tweens;
 
-	void update(Step * _step) override;
+	virtual void update(Step * _step) override;
 
 	enum LoopType{
 		kLOOP,

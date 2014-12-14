@@ -3,7 +3,7 @@
 #include <vector>
 #include "NodeLoadable.h"
 
-class NodeResource abstract : public NodeLoadable{
+class NodeResource abstract : public virtual NodeLoadable{
 protected:
 	/** Whether safeDelete can be called or not */
 	bool autoRelease;

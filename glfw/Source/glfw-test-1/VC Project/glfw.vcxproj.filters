@@ -258,6 +258,9 @@
     <ClCompile Include="..\src\NodeLoadable.cpp">
       <Filter>Source Files\node</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\Shared Code\src\ShiftKiddie.cpp">
+      <Filter>Source Files\node</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">

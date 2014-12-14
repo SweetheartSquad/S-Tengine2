@@ -30,7 +30,7 @@ void Entity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStac
 
 void Entity::update(Step * _step){
 	NodeAnimatable::update(_step);
-	for(int i = 0; i < children.size(); i++){
+	for(unsigned long int i = 0; i < children.size(); ++i){
 		NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(children.at(i));
 		if(nu != nullptr){
 			nu->update(_step);	

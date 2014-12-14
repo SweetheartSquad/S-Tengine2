@@ -102,7 +102,7 @@ void Scene::render(){
 	glEnable (GL_CULL_FACE); // cull face
 	glCullFace (GL_BACK); // cull back face
 
-	glFrontFace (GL_CCW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
+	glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
 	matrixStack->projectionMatrix = camera->getProjectionMatrix();
 	matrixStack->viewMatrix		  = camera->getViewMatrix();

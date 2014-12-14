@@ -18,6 +18,9 @@
 #include "DirectionalLight.h"
 #include "MeshEntity.h"
 #include "Resource.h"
+#include "VoxelJoint.h"
+#include <VoxelComponent.h>
+#include "NodeAnimatable.h"
 
 BaseScene::BaseScene(Game* _game):
 	Scene(_game),
@@ -78,7 +81,23 @@ BaseScene::BaseScene(Game* _game):
 	monkey->transform->translate(-4.0f, 0.0f, 0.0f);
 
 	addChild(monkey);
+
+	BaseComponentShader * vs = new BaseComponentShader();
+	vs->components.push_back(new TextureShaderComponent());
+	vs->components.push_back(new ShadowShaderComponent());
+	vs->geometryComponent = new VoxelComponent();
+	vs->compileShader();
+
+	VoxelJoint * j = Resource::loadVoxelModel("../assets/voo.json");
+
+	NodeAnimatable * t = dynamic_cast<NodeAnimatable *>(j->children.at(0));
+
+	t;
+
+	j->setShaderOnChildren(vs);
+	//j->mesh->pushMaterial(material);
 	
+	addChild(j);
 }
 
 BaseScene::~BaseScene(){
@@ -91,6 +110,10 @@ BaseScene::~BaseScene(){
 
 void BaseScene::update(){
 	
+	NodeAnimatable * t = dynamic_cast<NodeAnimatable *>(children.back()->children.at(0));
+
+	t;
+
 	Scene::update();
 
 	//Add movement to the camera
