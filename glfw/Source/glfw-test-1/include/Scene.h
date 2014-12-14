@@ -15,6 +15,7 @@ class DepthMapShader;
 class BaseComponentShader;
 class RenderSurface;
 class PerspectiveCamera;
+class OrthographicCamera;
 class Keyboard;
 class StandardFrameBuffer;
 class DepthFrameBuffer;
