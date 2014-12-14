@@ -1,5 +1,5 @@
 ## Icons ##
-Icons made by Amit Jakhu, Elegant Themes, Freepik, Icomoon from [www.flaticon.com](http://www.flaticon.com) is licensed by [Creative Commons 3.0](http://creativecommons.org/licenses/by/3.0/).
+Icons used in the modelling software made by Amit Jakhu, Elegant Themes, Freepik, Icomoon from [www.flaticon.com](http://www.flaticon.com) is licensed by [Creative Commons 3.0](http://creativecommons.org/licenses/by/3.0/).
 
 ## Useful Links 
 
