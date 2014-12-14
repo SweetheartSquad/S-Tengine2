@@ -3,8 +3,8 @@
 #include <iostream>
 #include <vector>
 
-#include "NodeLoadable.h"
-#include "NodeRenderable.h"
+#include "node/NodeLoadable.h"
+#include "node/NodeRenderable.h"
 
 namespace vox{
 	class MatrixStack;

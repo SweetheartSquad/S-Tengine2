@@ -2,7 +2,7 @@
 
 #include "Easing.h"
 #include "Tween.h"
-#include "NodeUpdatable.h"
+#include "node/NodeUpdatable.h"
 #include <vector>
 
 #include "Step.h"

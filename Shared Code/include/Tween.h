@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Node.h"
+#include "node/Node.h"
 #include "Easing.h"
 #include <glm/gtx/quaternion.hpp>
 

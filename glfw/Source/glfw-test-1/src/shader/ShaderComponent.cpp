@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ShaderComponent.h"
+#include "shader/ShaderComponent.h"
 
 ShaderComponent::ShaderComponent(){
 }

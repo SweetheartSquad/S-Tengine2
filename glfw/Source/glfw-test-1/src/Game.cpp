@@ -5,7 +5,7 @@
 #include "Mouse.h"
 #include "Vox.h"
 #include "MatrixStack.h"
-#include "GLFWRenderOptions.h"
+#include "VoxRenderOptions.h"
 
 #include <stdlib.h>
 
@@ -150,7 +150,7 @@ void Game::update(void){
 
 void Game::draw(void){
 	vox::MatrixStack ms;
-	GLFWRenderOptions ro(nullptr, nullptr, nullptr);
+	VoxRenderOptions ro(nullptr, nullptr, nullptr);
 	ro.kc_active = kc_active;
 	currentScene->render(&ms, &ro);
 }

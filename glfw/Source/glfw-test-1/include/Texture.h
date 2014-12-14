@@ -3,7 +3,7 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <vector>
-#include "NodeResource.h"
+#include "node/NodeResource.h"
 
 class Texture : public NodeResource
 {

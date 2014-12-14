@@ -9,7 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "NodeHierarchical.h"
+#include "node/NodeHierarchical.h"
 
 typedef enum{
 	kWORLD,

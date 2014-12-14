@@ -5,13 +5,13 @@
 #include "StandardFrameBuffer.h"
 #include "PerspectiveCamera.h"
 #include "OrthographicCamera.h"
-#include "GLFWRenderOptions.h"
+#include "VoxRenderOptions.h"
 #include "RenderSurface.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "MatrixStack.h"
-#include "DepthMapShader.h"
-#include "BlurShader.h"
+#include "shader/DepthMapShader.h"
+#include "shader/BlurShader.h"
 #include "Light.h"
 #include "Entity.h"
 #include "MatrixStack.h"
@@ -175,7 +175,7 @@ void Scene::renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	shadowBuffer->resize(viewPortWidth, viewPortHeight);
 	shadowBuffer->bindFrameBuffer();
 	shadowSurface->render(depthBuffer->getTextureId(), shadowBuffer->frameBufferId);
-	static_cast<GLFWRenderOptions *>(renderOptions)->shadowMapTextureId = shadowBuffer->getTextureId();
+	static_cast<VoxRenderOptions *>(renderOptions)->shadowMapTextureId = shadowBuffer->getTextureId();
 	renderOptions->overrideShader = backupOverride;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

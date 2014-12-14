@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NodeSelectable.h"
+#include "node/NodeSelectable.h"
 
 _Uint32t NodeSelectable::nextColor = 0xFFFFFF;
 std::map<_Uint32t, NodeSelectable *> NodeSelectable::pickingMap;

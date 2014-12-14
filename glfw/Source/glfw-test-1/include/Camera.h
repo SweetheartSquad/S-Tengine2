@@ -4,7 +4,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "NodeTransformable.h"
+#include "node/NodeTransformable.h"
 
 /****************************
 *

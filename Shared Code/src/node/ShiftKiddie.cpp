@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ShiftKiddie.h"
+#include "node/ShiftKiddie.h"
 
 #include "Transform.h"
-#include "NodeHierarchical.h"
+#include "node/NodeHierarchical.h"
 
 ShiftKiddie::ShiftKiddie() :
 	NodeChild(nullptr),

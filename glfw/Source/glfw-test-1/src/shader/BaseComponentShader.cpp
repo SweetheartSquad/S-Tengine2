@@ -1,11 +1,11 @@
 #pragma once 
 
-#include "BaseComponentShader.h"
-#include "ShaderVariables.h"
-#include "NodeRenderable.h"
+#include "shader/BaseComponentShader.h"
+#include "shader/ShaderVariables.h"
+#include "node/NodeRenderable.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
-#include "GeometryComponent.h"
+#include "shader/GeometryComponent.h"
 
 BaseComponentShader::BaseComponentShader() :
 	Shader(false),

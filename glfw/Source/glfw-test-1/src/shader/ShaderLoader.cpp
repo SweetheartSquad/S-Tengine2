@@ -1,4 +1,4 @@
-#include "ShaderLoader.h"
+#include "shader/ShaderLoader.h"
 
 ShaderLoader::ShaderLoader(std::string _vertexShaderSource, std::string _fragmentShaderSource){
 	//vertex shader

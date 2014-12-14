@@ -5,7 +5,7 @@
 #include "Texture.h"
 #include "Material.h"
 #include "MatrixStack.h"
-#include "GLFWRenderOptions.h"
+#include "VoxRenderOptions.h"
 #include "Transform.h"
 
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):

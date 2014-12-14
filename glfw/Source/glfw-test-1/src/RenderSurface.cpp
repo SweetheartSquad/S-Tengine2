@@ -2,7 +2,7 @@
 
 #include "RenderSurface.h"
 
-#include "Shader.h"
+#include "shader/Shader.h"
 
 RenderSurface::RenderSurface(Shader * _shader):
 	shader(_shader)

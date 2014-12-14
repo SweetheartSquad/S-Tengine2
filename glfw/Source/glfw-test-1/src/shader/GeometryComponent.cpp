@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GeometryComponent.h"
+#include "shader/GeometryComponent.h"
 
 GeometryComponent::GeometryComponent(){
 }

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "NodeParent.h"
+#include "node/NodeParent.h"
 
-#include "NodeChild.h"
-#include "NodeHierarchical.h"
+#include "node/NodeChild.h"
+#include "node/NodeHierarchical.h"
 
 bool NodeParent::addChild(NodeChild * _child){
 	// Remove the first instance of the child in the current list of children

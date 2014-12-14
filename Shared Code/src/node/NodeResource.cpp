@@ -1,4 +1,4 @@
-#include "NodeResource.h"
+#include "node/NodeResource.h"
 
 NodeResource::NodeResource(bool _autoRelease) :
 	autoRelease(_autoRelease)

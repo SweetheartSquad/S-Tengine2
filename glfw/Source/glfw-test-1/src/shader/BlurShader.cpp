@@ -1,4 +1,4 @@
-#include "BlurShader.h"
+#include "shader/BlurShader.h"
 
 BlurShader::BlurShader(bool _autoRelease)
 	:Shader(getVertString(), getFragString(), _autoRelease)

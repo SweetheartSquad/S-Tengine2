@@ -11,19 +11,19 @@
 #include "RenderSurface.h"
 #include "Keyboard.h"
 #include "Mouse.h"
-#include "GLFWRenderOptions.h"
+#include "VoxRenderOptions.h"
 #include "PerspectiveCamera.h"
 #include "OrthographicCamera.h"
-#include <BaseComponentShader.h>
-#include <DiffuseShaderComponent.h>
-#include <ShadowShaderComponent.h>
-#include <TextureShaderComponent.h>
+#include "shader/BaseComponentShader.h"
+#include <shader/DiffuseShaderComponent.h>
+#include <shader/ShadowShaderComponent.h>
+#include <shader/TextureShaderComponent.h>
 #include <VoxelJoint.h>
-#include "PhongShaderComponent.h"
-#include "BlinnShaderComponent.h"
+#include "shader/PhongShaderComponent.h"
+#include "shader/BlinnShaderComponent.h"
 #include "Transform.h"
-#include "DepthMapShader.h"
-#include "VoxelComponent.h"
+#include "shader/DepthMapShader.h"
+#include "shader/VoxelComponent.h"
 #include "MeshEntity.h"
 #include "PointLight.h"
 #include "DirectionalLight.h"
@@ -295,7 +295,7 @@ void MainScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderS
 	Scene::render();
 
 	renderSurface->render(frameBuffer->getTextureId());
-	((GLFWRenderOptions *)renderOptions)->shadowMapTextureId = 0;
+	((VoxRenderOptions *)renderOptions)->shadowMapTextureId = 0;
 
 	setViewport(w, 0, w, h);
 
@@ -309,7 +309,7 @@ void MainScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderS
 	Scene::render();
 
 	renderSurface->render(depthBuffer->getTextureId());
-	((GLFWRenderOptions *)renderOptions)->shadowMapTextureId = 0;
+	((VoxRenderOptions *)renderOptions)->shadowMapTextureId = 0;
 	
 	setViewport(w, h, w, h);
 
@@ -321,7 +321,7 @@ void MainScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderS
 	Scene::render();
 
 	renderSurface->render(shadowBuffer->getTextureId());
-	((GLFWRenderOptions *)renderOptions)->shadowMapTextureId = 0;*/
+	((VoxRenderOptions *)renderOptions)->shadowMapTextureId = 0;*/
 
 	int width, height;
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Shader.h"
-#include "ShaderVariables.h"
+#include "shader/Shader.h"
+#include "shader/ShaderVariables.h"
 
 void Shader::init(std::string _vertexShaderSource, std::string _fragmentShaderSource){
 	vertSource = _vertexShaderSource;

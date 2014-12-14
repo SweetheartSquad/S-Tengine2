@@ -1,13 +1,13 @@
 #pragma once 
 
-#include "PhongShaderComponent.h"
-#include "ShaderVariables.h"
+#include "shader/PhongShaderComponent.h"
+#include "shader/ShaderVariables.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
 #include "RenderOptions.h"
-#include "SharedComponentShaderMethods.h"
+#include "shader/SharedComponentShaderMethods.h"
 
 PhongShaderComponent::PhongShaderComponent() : ShaderComponent(){
 }

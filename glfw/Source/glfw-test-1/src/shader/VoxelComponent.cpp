@@ -1,10 +1,10 @@
 #pragma once
 
-#include "VoxelComponent.h"
+#include "shader/VoxelComponent.h"
 #include "MatrixStack.h"
 #include "MeshInterface.h"
 #include "RenderOptions.h"
-#include "ShaderVariables.h"
+#include "shader/ShaderVariables.h"
 
 #include <GL/glew.h>
 

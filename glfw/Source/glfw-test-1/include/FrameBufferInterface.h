@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "FrameBufferChannel.h"
-#include "NodeResource.h"
+#include "node/NodeResource.h"
 
 /*******************************************************
 *

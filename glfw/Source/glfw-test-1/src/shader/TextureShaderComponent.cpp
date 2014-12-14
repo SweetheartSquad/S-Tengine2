@@ -1,11 +1,11 @@
 #pragma 
 
-#include "TextureShaderComponent.h"
-#include "ShaderVariables.h"
+#include "shader/TextureShaderComponent.h"
+#include "shader/ShaderVariables.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
 #include "Texture.h"
-#include "NodeRenderable.h"
+#include "node/NodeRenderable.h"
 #include <MeshInterface.h>
 
 TextureShaderComponent::TextureShaderComponent() : ShaderComponent(){

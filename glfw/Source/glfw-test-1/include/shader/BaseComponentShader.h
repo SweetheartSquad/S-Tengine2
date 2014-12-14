@@ -12,7 +12,7 @@ public:
 	BaseComponentShader();
 	explicit BaseComponentShader(std::vector<ShaderComponent *> _components);
 
-	~BaseComponentShader();
+	virtual ~BaseComponentShader();
 
 	std::vector<ShaderComponent *> components;
 	GeometryComponent * geometryComponent;

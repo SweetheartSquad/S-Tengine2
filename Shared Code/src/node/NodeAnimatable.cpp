@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NodeAnimatable.h"
+#include "node/NodeAnimatable.h"
 #include "Transform.h"
 #include "Step.h"
 

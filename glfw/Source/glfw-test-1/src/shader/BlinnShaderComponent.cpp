@@ -1,10 +1,10 @@
 #pragma once
 
-#include "BlinnShaderComponent.h"
-#include "ShaderVariables.h"
+#include "shader/BlinnShaderComponent.h"
+#include "shader/ShaderVariables.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
-#include "SharedComponentShaderMethods.h"
+#include "shader/SharedComponentShaderMethods.h"
 
 BlinnShaderComponent::BlinnShaderComponent() : ShaderComponent()
 {

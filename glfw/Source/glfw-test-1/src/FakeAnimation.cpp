@@ -4,13 +4,13 @@
 #include "Resource.h"
 #include "Entity.h"
 #include "MatrixStack.h"
-#include "Shader.h"
+#include "shader/Shader.h"
 #include "Step.h"
 
 void FakeAnimation::pushFrame(MeshEntity * _frame){
 	_frame->transform = this->transform;
 	_frame->shader = this->shader;
-	_frame->parent = nullptr;//this;
+	_frame->parent = nullptr;
 	_frame->load();
 	children.push_back(_frame);
 }

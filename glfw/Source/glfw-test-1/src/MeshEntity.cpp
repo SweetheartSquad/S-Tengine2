@@ -3,7 +3,7 @@
 #include "MeshEntity.h"
 
 #include "MeshInterface.h"
-#include "Shader.h"
+#include "shader/Shader.h"
 
 #include "RenderOptions.h"
 #include "MatrixStack.h"

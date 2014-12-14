@@ -3,7 +3,7 @@
 #include "Entity.h"
 #include "RenderOptions.h"
 #include "MatrixStack.h"
-#include "NodeResource.h"
+#include "node/NodeResource.h"
 
 Entity::Entity(Transform * _transform) :
 	NodeTransformable(_transform),

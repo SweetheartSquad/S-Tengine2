@@ -8,12 +8,12 @@
 #include <vector>
 
 #include "Vox.h"
-#include "Shader.h"
+#include "shader/Shader.h"
 #include "Vertex.h"
 #include "Light.h"
 #include "GLUtils.h"
-#include "NodeRenderable.h"
-#include "ShaderVariables.h"
+#include "node/NodeRenderable.h"
+#include "shader/ShaderVariables.h"
 
 class Texture;
 class Material;

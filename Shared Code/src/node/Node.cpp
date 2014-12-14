@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Node.h"
+#include "node/Node.h"
 //#include <cinder\app\AppBasic.h>
 
 unsigned long int Node::count = 0;

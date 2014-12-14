@@ -1,7 +1,7 @@
 #pragma once
 
-#include "NodeChild.h"
-#include "NodeHierarchical.h"
+#include "node/NodeChild.h"
+#include "node/NodeHierarchical.h"
 
 NodeChild::NodeChild(NodeParent * _parent):
 	parent(_parent)

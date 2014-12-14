@@ -1,10 +1,10 @@
 #pragma once 
 
-#include "DiffuseShaderComponent.h"
-#include "ShaderVariables.h"
+#include "shader/DiffuseShaderComponent.h"
+#include "shader/ShaderVariables.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
-#include "SharedComponentShaderMethods.h"
+#include "shader/SharedComponentShaderMethods.h"
 
 DiffuseShaderComponent::DiffuseShaderComponent() : ShaderComponent(){
 }

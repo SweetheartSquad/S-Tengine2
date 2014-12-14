@@ -4,7 +4,7 @@
 
 #include "GLUtils.h"
 #include "FileUtils.h"
-#include "NodeResource.h"
+#include "node/NodeResource.h"
 
 class NodeRenderable;
 
@@ -52,7 +52,7 @@ public:
 	Shader(std::string _vertexShaderFile, std::string _fragmentShaderFile, bool _autoRelease);
 	/**Creates shader using "vertexShaderFile", "_fragmentShaderFile" and "_geometryShaderFile" */
 	Shader(std::string _vertexShaderFile, std::string _fragmentShaderFile, std::string _geometryShaderFile, bool _autoRelease);
-	~Shader(void);
+	virtual ~Shader(void);
 	GLuint compileShader(GLenum _shaderType, const char* _source, int _length);
 
 	/** Returns the shader's program ID */

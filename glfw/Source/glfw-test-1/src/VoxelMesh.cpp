@@ -3,7 +3,7 @@
 #include "VoxelMesh.h"
 #include "RenderOptions.h"
 #include "MatrixStack.h"
-#include "NodeRenderable.h"
+#include "node/NodeRenderable.h"
 
 VoxelMesh::VoxelMesh(GLenum _drawMode):
 	MeshInterface(GL_POINTS, _drawMode),

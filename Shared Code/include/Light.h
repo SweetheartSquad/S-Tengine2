@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "NodeTransformable.h"
+#include "node/NodeTransformable.h"
 
 enum class LightType {
 	POINT = 0,

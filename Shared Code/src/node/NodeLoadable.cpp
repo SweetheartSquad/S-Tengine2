@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NodeLoadable.h"
+#include "node/NodeLoadable.h"
 
 NodeLoadable::NodeLoadable():
 	Node(),

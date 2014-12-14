@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NodeHierarchical.h"
+#include "node/NodeHierarchical.h"
 
 NodeHierarchical::NodeHierarchical() : NodeChild(nullptr){}
 

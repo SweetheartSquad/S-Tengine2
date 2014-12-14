@@ -1,9 +1,9 @@
 #pragma once
 
-#include "SharedComponentShaderMethods.h"
+#include "shader/SharedComponentShaderMethods.h"
 #include "RenderOptions.h"
 #include "MatrixStack.h"
-#include "NodeRenderable.h"
+#include "node/NodeRenderable.h"
 #include "GLUtils.h"
 #include "MeshInterface.h"
 #include "Material.h"

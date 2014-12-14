@@ -1,8 +1,8 @@
 #pragma once
 
 #include "MatrixStack.h"
-#include "ShaderVariables.h"
-#include "DepthMapShader.h"
+#include "shader/ShaderVariables.h"
+#include "shader/DepthMapShader.h"
 #include "RenderOptions.h"
 
 #include "GL/glew.h"
