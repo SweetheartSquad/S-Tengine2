@@ -170,6 +170,10 @@ void Animation<T>::update(Step * _step){
 			currentTween = 0;
 			currentTweenTime = 0;
 		}
+	}else{
+		if(hasStart){
+			*prop = startValue;
+		}
 	}
 };
 
@@ -247,6 +251,10 @@ void Animation<glm::quat>::update(Step * _step){
 			referenceValue = startValue;
 			currentTween = 0;
 			currentTweenTime = 0;
+		}
+	}else{
+		if(hasStart){
+			*prop = startValue;
 		}
 	}
 };
