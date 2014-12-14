@@ -28,4 +28,5 @@ private:
 	float oldStartValue;
 	float oldReferenceValue;
     bool oldHasStart;
+	float oldCurrentAnimationTime;
 };

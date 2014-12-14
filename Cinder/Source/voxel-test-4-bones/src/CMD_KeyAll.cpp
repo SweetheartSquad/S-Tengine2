@@ -44,11 +44,6 @@ bool CMD_KeyAll::execute(){
 		subCmdProc.redoAll();
 	}
 	
-	/*for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
-		NodeAnimatable * node = dynamic_cast<NodeAnimatable *>(UI::selectedNodes.at(i));
-		Step s;
-		node->update(&s);
-	}*/
 	return true;
 }
 
@@ -56,8 +51,6 @@ bool CMD_KeyAll::unexecute(){
 	subCmdProc.undoAll();
 	return true;
 }
-
-
 
 CMD_KeyAll::~CMD_KeyAll(){
 }

@@ -345,7 +345,8 @@ void CinderApp::draw(){
 		t2.ciShader = &uiShader;
 
 		timelineTrackbar->render(&t, &t2);
-
+		
+		uiShader.uniform("pickingColor", Vec3f(0,0,0));
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 			// draw keyframes
 			NodeAnimatable * na = dynamic_cast<NodeAnimatable *>(UI::selectedNodes.at(i));

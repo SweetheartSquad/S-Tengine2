@@ -61,6 +61,8 @@ void TrackBar::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderSt
 		// up
 		color = displayColor;
 	}
+
+	((CinderRenderOptions *)_renderStack)->ciShader->uniform("pickingColor", ci::Color::hex(pickingColor));
 	
 	ci::gl::color(0.1f, 0.1f, 0.1f);
 	ci::gl::drawSolidRect(ci::Rectf(pos.x, pos.y, pos.x+size.x, pos.y+size.y));
@@ -74,7 +76,6 @@ void TrackBar::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderSt
 	}
 	glEnd();
 
-	((CinderRenderOptions *)_renderStack)->ciShader->uniform("pickingColor", ci::Color::hex(pickingColor));
 	ci::gl::color(color);
 	Vec2i handlePos(pos.x+(*target/(max-min))*size.x-handleSize.x/2, (pos.y+size.y/2)-handleSize.y/2);
 	ci::gl::drawSolidRect(ci::Rectf(handlePos.x, handlePos.y, handlePos.x+handleSize.x, handlePos.y+handleSize.y));

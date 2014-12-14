@@ -20,8 +20,7 @@ CMD_AddTweenBefore::CMD_AddTweenBefore(Animation * _animation, float _deltaTimel
 bool CMD_AddTweenBefore::execute(){
 	ci::app::console() << "execute CMD_AddTweenBefore" << std::endl;
 	
-	CMD_EditStartKey * cmd = nullptr;
-
+	CMD_EditStartKey * cmd;
 	// calculate values for new tween, and save other values that will be changed by this tween insert
 	if (firstRun){
 
@@ -29,15 +28,11 @@ bool CMD_AddTweenBefore::execute(){
 		float deltaTime;// = deltaTimeline;
 		float deltaValue;// = targetValue;
 
-		if(targetTime <= 0){
-			// Before the animation
+		deltaTime = 0 - targetTime;
+		// d2s for time and value are 0 and start value (deltaTime stays as time)
+		deltaValue = animation->startValue - targetValue;
 
-			deltaTime = 0 - targetTime;
-			// d2s for time and value are 0 and start value (deltaTime stays as time)
-			deltaValue = animation->startValue - targetValue;
-
-			cmd = new CMD_EditStartKey(animation, targetValue, targetTime);
-		}
+		cmd = new CMD_EditStartKey(animation, targetValue, targetTime);
 		tween = new Tween(deltaTime, deltaValue, interpolation);
 	}
 

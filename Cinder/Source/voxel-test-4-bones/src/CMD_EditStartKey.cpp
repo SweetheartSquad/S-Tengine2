@@ -18,11 +18,11 @@ bool CMD_EditStartKey::execute(){
     oldHasStart = animation->hasStart;
 	oldStartValue = animation->startValue;
 	oldReferenceValue = animation->referenceValue;
+	oldCurrentAnimationTime = animation->currentAnimationTime;
 	animation->startValue = targetValue;
-	//  // Right now, this is only called when adding a tween before the animation, which already makes this tween with the correct deltaValue
 	if(animation->hasStart && targetTime == 0){
 	    if(animation->tweens.size() > 0){
-		    animation->tweens.at(0)->deltaValue += targetValue - oldStartValue; // - targetValue;
+		    animation->tweens.at(0)->deltaValue += targetValue - oldStartValue;
 	    }
 	}else{
 		if(animation->hasStart){
@@ -32,7 +32,6 @@ bool CMD_EditStartKey::execute(){
 			animation->hasStart = true;
 		}
 	}
-	//animation->referenceValue = targetValue;
 	return true;
 }
 
@@ -41,14 +40,10 @@ bool CMD_EditStartKey::unexecute(){
 	    if(animation->tweens.size() > 0){
 		    animation->tweens.at(0)->deltaValue += oldStartValue - targetValue;
 	    }
-	}else{
-        animation->currentAnimationTime += targetTime;
 	}
     animation->hasStart = oldHasStart;
 	animation->startValue = oldStartValue;
-	//animation->referenceValue = oldReferenceValue;
-
-	animation->currentAnimationTime += targetTime;
+	animation->currentAnimationTime = oldCurrentAnimationTime;
 	return true;
 }
 
