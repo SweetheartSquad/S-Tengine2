@@ -8,9 +8,10 @@
 #include "NodeAnimatable.h"
 #include "NodeRenderable.h"
 #include "NodeLoadable.h"
+#include "ShiftKiddie.h"
 
 /** A basic entity node. Stores references to a mesh, transform, shader, parent, and list of references to children */
-class Entity : public NodeAnimatable, public NodeHierarchical, public NodeRenderable, public NodeLoadable{
+class Entity : public virtual NodeAnimatable, public virtual NodeHierarchical, public virtual NodeRenderable, public virtual NodeLoadable, public virtual ShiftKiddie{
 public:
 
 	explicit Entity(Transform * _transform = nullptr);

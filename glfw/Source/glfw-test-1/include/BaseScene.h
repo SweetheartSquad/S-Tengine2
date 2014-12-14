@@ -2,19 +2,22 @@
 
 #include "Scene.h"
 
+class MeshInterface;
+class MeshEntity;
+class DirectionalLight;
 class PointLight;
 class Material;
 class Plane;
 class Cube;
 class BaseComponentShader;
 
-class BaseScene : public Scene
-{
+class BaseScene : public Scene{
 public:
 
 	//Entities
 	Cube * ground;
 	Cube * cube;
+	MeshEntity * monkey;
 
 	//Shaders
 	BaseComponentShader * shader;
@@ -23,7 +26,11 @@ public:
 	Material * material;
 
 	//Lights
-	PointLight * light; 
+	PointLight * pointLight;
+	DirectionalLight * keyLight;
+
+	//Meshes
+	MeshInterface * monkeyMesh;
 
 	explicit BaseScene(Game* _game);
 	virtual ~BaseScene();

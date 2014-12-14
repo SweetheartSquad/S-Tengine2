@@ -15,4 +15,6 @@ public:
 
 	DirectionalLight(glm::vec3 position, glm::vec3 intensities, float ambientCoefficient);
 	~DirectionalLight();
+
+	bool isKeyLight;
 };

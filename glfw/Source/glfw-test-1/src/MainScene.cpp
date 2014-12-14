@@ -3,7 +3,6 @@
 #include "MainScene.h"
 #include "Resource.h"
 #include "FakeAnimation.h"
-#include "VoxelMesh.h"
 #include "Texture.h"
 #include "Material.h"
 #include "FrameBufferChannel.h"
@@ -28,6 +27,7 @@
 #include "MeshEntity.h"
 #include "PointLight.h"
 #include "DirectionalLight.h"
+#include "MeshInterface.h"
 
 Cube * cube;
 Cube * cube2;

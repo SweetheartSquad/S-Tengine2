@@ -1472,23 +1472,27 @@ void CinderApp::loadSkeleton() {
 
 void CinderApp::setKeyframe(){
 	if(UI::selectedNodes.size() != 0){
+		cmdProc->startCompressing();
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 			NodeAnimatable * _node = dynamic_cast<NodeAnimatable *>(UI::selectedNodes.at(i));
 			if (_node != nullptr){
 				cmdProc->executeCommand(new CMD_KeyAllProperties(_node, UI::time));
 			}
 		}
+		cmdProc->endCompressing();
 	}
 }
 
 void CinderApp::clearKeyframe(){
 	if(UI::selectedNodes.size() != 0){
+		cmdProc->startCompressing();
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 			NodeAnimatable * _node = dynamic_cast<NodeAnimatable *>(UI::selectedNodes.at(i));
 			if (_node != nullptr){
 				cmdProc->executeCommand(new CMD_ClearAllProperties(_node, UI::time));
 			}
 		}
+		cmdProc->endCompressing();
 	}
 }
 

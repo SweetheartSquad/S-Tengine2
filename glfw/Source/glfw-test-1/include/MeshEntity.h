@@ -2,8 +2,8 @@
 
 #include "Entity.h"
 #include "Vox.h"
+#include "Transform.h"
 
-class Trasform;
 class Shader;
 class MeshInterface;
 
@@ -16,7 +16,7 @@ public:
 	/** Reference to this entity's shader */
 	Shader * shader;
 
-	explicit MeshEntity(MeshInterface * _mesh = nullptr, Transform * _transform = nullptr, Shader * _shader = nullptr);
+	explicit MeshEntity(MeshInterface * _mesh = nullptr, Transform * _transform = new Transform(), Shader * _shader = nullptr);
 	virtual ~MeshEntity(void);
 
 	/**

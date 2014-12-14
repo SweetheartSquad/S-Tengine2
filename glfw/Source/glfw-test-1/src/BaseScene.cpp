@@ -15,16 +15,22 @@
 #include "Material.h"
 #include "PointLight.h"
 #include "PerspectiveCamera.h"
+#include "DirectionalLight.h"
+#include "MeshEntity.h"
+#include "Resource.h"
+#include "VoxelJoint.h"
+#include "VoxelComponent.h"
+#include "NodeAnimatable.h"
+#include "Texture.h"
+#include "VoxelMesh.h"
 
 BaseScene::BaseScene(Game* _game):
 	Scene(_game),
-	ground(new Cube(glm::vec3(0.0f, -2.0f, 0.0), 1)),
+	ground(new Cube(glm::vec3(0.0f, -1.5f, 0.0), 1)),
 	cube(new Cube(glm::vec3(0.0f, 0.0f, 0.0f), 1)),
+	monkey(new MeshEntity()),
 	shader(new BaseComponentShader()),
-	material(new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true)),
-	light(new PointLight(glm::vec3(1.f, -1.5, 1.f),
-		glm::vec3(0.1f, 0.2f, 0.8f),
-		0.2f, 0.005f))
+	material(new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true))
 {
 	//Add shader components
 	shader->components.push_back(new TextureShaderComponent());
@@ -51,32 +57,82 @@ BaseScene::BaseScene(Game* _game):
 	//Make the ground brown
 	ground->setColour(0.65f, 0.16f, 0.16f, 1.0f);
 	//Rotate the ground 90 degrees along the X-axis so it is flat
-	ground->transform->scale(5.0f, 1.0f, 5.0f);
+	ground->transform->scale(15.0f, 0.5f, 15.0f);
 	//Add the texture to ground
 	ground->mesh->pushTexture2D(tex);
 	//Add it to the scene
 	addChild(ground);
 	
-	//Setup light
-	PointLight * light =  new PointLight(glm::vec3(1.f, -1.5, 1.f),
-		glm::vec3(0.1f, 0.2f, 0.8f),
-		0.2f, 0.005f);
-
-	light->transform->translate(-2.0f, 3.0f, 0.0f);
-	//Make the light bright white
-	light->data.intensities = glm::vec3(1.0f, 1.0f, 1.0f);
-	light->data.attenuation = 0.2f;
-	light->data.ambientCoefficient = 0.005f;
-
+	//Setup point light - lets make it red
+	pointLight = new PointLight(glm::vec3(-5.0f, 1.0f, 1.f), glm::vec3(0.8f, 0.0f, 0.0f), 0.005f, 0.2f);
 	//Add it to the scene's list of lights
-	lights.push_back(light);
+	lights.push_back(pointLight);
+
+	//intialize key light
+	keyLight = new DirectionalLight(glm::vec3(0.5f, 0.8f, 0.6f), glm::vec3(0.1f, 0.1f, 0.5f), 0.005f);
+	//Set it as the key light so it casts shadows
+	keyLight->isKeyLight = true;
+	//Add it to the scene
+	lights.push_back(keyLight);
+	
+	monkeyMesh = Resource::loadMeshFromObj("../assets/monkey.vox");
+	//Load the monkeys mesh from the monkey obj
+	monkey->mesh = Resource::loadMeshFromObj("../assets/monkey.vox");
+	monkey->mesh->pushMaterial(material);
+	monkey->setShader(shader, true);
+
+	monkey->transform->translate(-4.0f, 0.0f, 0.0f);
+	//Add the monkey to the scene
+	addChild(monkey);
+
+	//Lets create a voxel shader by using the voxel geometry component
+	BaseComponentShader * voxelShader = new BaseComponentShader();
+	voxelShader->components.push_back(new TextureShaderComponent());
+	voxelShader->components.push_back(new ShadowShaderComponent());
+	voxelShader->components.push_back(new PhongShaderComponent());
+	voxelShader->geometryComponent = new VoxelComponent();
+	voxelShader->compileShader();
+
+	//Load a voxel joint from voo.json
+	VoxelJoint * voxelJoint = Resource::loadVoxelModel("../assets/dong.json");
+	NodeAnimatable * t = dynamic_cast<NodeAnimatable *>(voxelJoint->children.at(0));
+
+	//Lets set the shader on the joint and all of its children
+	voxelJoint->setShaderOnChildren(voxelShader);
+
+	//Lets take advantage of NodeParents doRecursivley function to set
+	// a texture and material on the joint and its children
+	void * args[2] = {tex, material}; 
+	voxelJoint->doRecursivley([](Node * _node, void * _args[] ){
+		MeshEntity * me = dynamic_cast<MeshEntity *>(_node);
+		if(me != nullptr){
+			if(me->mesh != nullptr){
+				me->mesh->pushTexture2D(static_cast<Texture *>(_args[0]));		
+				me->mesh->pushMaterial(static_cast<Material *>(_args[1]));		
+			}
+		}
+	}, args);
+
+	//Add it to the scene
+	addChild(voxelJoint);
+
+	//Lets also make a voxel monkey using the monkey mesh that we already loaded
+	MeshEntity * voxelMonkey = new MeshEntity(new VoxelMesh(monkeyMesh));
+	//Add voxel shader
+	voxelMonkey->setShader(voxelShader, true);
+	//Add a material
+	voxelMonkey->mesh->pushMaterial(material);
+	voxelMonkey->transform->translate(0.0f, 0.0f, 3.0f);
+	addChild(voxelMonkey);
 }
+
 
 BaseScene::~BaseScene(){
 	delete cube;
 	delete shader;
 	delete ground;
-	delete light;
+	delete pointLight;
+	delete keyLight;
 }
 
 void BaseScene::update(){
@@ -95,6 +151,11 @@ void BaseScene::update(){
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		camera->transform->translate((camera->rightVectorRotated) * camera->speed);	
+	}
+	
+	//Toggle fullscreen
+	if(keyboard->keyJustUp(GLFW_KEY_F11)){
+		Scene::toggleFullScreen();
 	}
 }
 

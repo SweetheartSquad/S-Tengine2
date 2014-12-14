@@ -20,7 +20,7 @@ class Material;
 class MatrixStack;
 
 
-class MeshInterface : public NodeRenderable{
+class MeshInterface : public virtual NodeRenderable{
 public:
 	/** Whether the vao, vbo, and ibo have been generated and initialized */
 	bool loaded;
@@ -68,12 +68,6 @@ public:
 	GLsizei getVertCount();
 	/** Returns sizeof(Vertex) */
 	GLsizei getStride();
-
-	bool shouldRenderLights;
-	bool shouldRenderTextures;
-	bool shouldRenderShadows;
-	bool shouldRenderExtras;
-
 	/**
 	_polygonalDrawMode: STATIC, STREAM, DYNAMIC
 	_drawMode: GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS, GL_QUAD_STRIP, GL_POLYGON
@@ -89,19 +83,6 @@ public:
 	void clean();
 	/** Renders the vao using the given shader, model-view-projection and lights */
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
-	/** Called render loop. Reders the textures for the mesh*/
-	virtual void configureTextures(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption);
-	/** Called render loop. Sets up the lights in the shader*/
-	virtual void configureLights(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption);
-	/** Sets up the model, view and projection matricies **/
-	virtual void configureModelViewProjection(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption);
-	virtual void configureShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption);
-	/**
-	* Called render loop. Doesn't do anything in the base implementation of MeshInterface
-	* This method can be overriden with any additional render logic. This prevents
-	* the need for overriding the entire render loop
-	*/
-	virtual void configureExtras(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption);
 	/** A helper method to configure all the starndard vertex attributes - Position, Colours, Normals */
 	void configureDefaultVertexAttributes(Shader *_shader);
 	/** Sets the normal of the given vert to _x, _y, _z */

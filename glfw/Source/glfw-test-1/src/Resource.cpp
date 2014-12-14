@@ -46,7 +46,7 @@ void Resource::freeImageData(unsigned char* _image){
 	SOIL_free_image_data(_image);
 }
 
-TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
+TriMesh * Resource::loadMeshFromObj(std::string _objSrc){
 
 	std::istringstream stream(FileUtils::voxReadFile(_objSrc));
 	std::vector<glm::vec3> verts;
@@ -189,7 +189,7 @@ TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
 VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 
 	VoxelJoint * mainJoint = new VoxelJoint(_node[_index]["id"].asInt(), new VoxelMesh(GL_STATIC_DRAW), new Transform());
-
+	
 	mainJoint->transform->translationVector = glm::vec3(
 		_node[_index]["transform"]["pos"].get("x", 0).asFloat(),
 		_node[_index]["transform"]["pos"].get("y", 0).asFloat(),
@@ -290,7 +290,7 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 
 	Json::Value voxels =  _node[_index]["voxels"];
 
-	for(Json::ArrayIndex v = 0; v < voxels.size(); v++){
+	for(Json::Value::ArrayIndex v = 0; v < voxels.size(); ++v){
 		mainJoint->mesh->pushVert(Vertex(
 				voxels[v].get("x", 0).asFloat(),
 				voxels[v].get("y", 0).asFloat(),
@@ -302,7 +302,7 @@ VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 
 	Json::Value children = _node[_index]["children"];
 
-	for(Json::ArrayIndex c = 0; c < children.size(); c++){
+	for(Json::Value::ArrayIndex c = 0; c < children.size(); ++c){
 		mainJoint->addChild(parseJoint(children, c));
 	}
 
@@ -323,16 +323,15 @@ VoxelJoint * Resource::loadVoxelModel(std::string _jsonSrc){
 
 	Json::Value array = root["joints"];
 
-	VoxelJoint * mainJoint = new VoxelJoint(0, nullptr, new Transform, nullptr);
+	VoxelJoint * mainJoint = new VoxelJoint(0, new VoxelMesh(GL_STATIC_DRAW), new Transform, nullptr);
 	std::vector<VoxelJoint *> joints;
 
 	for(Json::ArrayIndex i = 0; i < array.size(); ++i)  {
 		joints.push_back(parseJoint(array, i));
 	}
 
-	mainJoint = new VoxelJoint(0, nullptr, new Transform, nullptr);
-	for(auto joint : joints){
-		mainJoint->addChild(joint);
+	for(unsigned long int i = 0; i < joints.size(); ++i){
+		mainJoint->addChild(joints.at(i));
 	}
 	
 	return mainJoint;

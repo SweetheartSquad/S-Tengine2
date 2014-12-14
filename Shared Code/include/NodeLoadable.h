@@ -2,8 +2,7 @@
 
 #include "Node.h"
 
-class NodeLoadable abstract : public Node
-{
+class NodeLoadable abstract : public virtual Node{
 public:
 	NodeLoadable();
 	virtual ~NodeLoadable();
