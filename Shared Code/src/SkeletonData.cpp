@@ -284,7 +284,7 @@ std::string SkeletonData::writeAnimation(Animation<float> * a, std::string name,
 	++indent;
 
 	// startValue
-	json << std::string(indent * 3, ' ') << "\"startValue\": " << /*a->startValue*/"?" << "," << std::endl;
+	json << std::string(indent * 3, ' ') << "\"startValue\": " << a->startValue << "," << std::endl;
 
 	// hasStart
 	json << std::string(indent * 3, ' ') << "\"hasStart\": " << a->hasStart << "," << std::endl;
@@ -404,7 +404,7 @@ std::string SkeletonData::writeTween(Tween<float> * t, int id, unsigned int inde
 	++indent;
 	json << std::string(indent * 3, ' ') << "\"id\": " << id << "," << std::endl;
 	json << std::string(indent * 3, ' ') << "\"deltaTime\": " << t->deltaTime << "," << std::endl;
-	json << std::string(indent * 3, ' ') << "\"deltaValue\": " << /*t->deltaValue*/"?" << "," << std::endl;
+	json << std::string(indent * 3, ' ') << "\"deltaValue\": " << t->deltaValue << "," << std::endl;
 	json << std::string(indent * 3, ' ') << "\"interpolation\": " << t->interpolation << std::endl;
 	--indent;
 
@@ -435,7 +435,7 @@ Tween<float> * SkeletonData::readFloatTween(JsonTree tween){
 	// get interpolation
 	Tween<float> * t = new Tween<float>(tween.getChild("deltaTime").getValue<float>(), tween.getChild("deltaValue").getValue<float>(), static_cast<Easing::Type>(tween.getChild("interpolation").getValue<int>()));
 	app::console() << "id: " << tween.getChild("id").getValue<int>() << " deltaTime: " << tween.getChild("deltaTime").getValue<float>() << " deltaValue: " << tween.getChild("deltaValue").getValue<float>() << std::endl;
-	return nullptr;//t;
+	return t;
 };
 
 Tween<glm::quat> * SkeletonData::readQuaternionTween(JsonTree tween){

@@ -71,7 +71,7 @@ void CinderApp::setup(){
 	voxelSphereRadius = 0.1f;
 	voxelPaintSpacing = 1.f;
 
-	params = params::InterfaceGl::create( getWindow(), "General", toPixels( Vec2i( 175, 325 ) ), ColorA(0.6f, 0.3f, 0.3f, 0.4f));
+	params = params::InterfaceGl::create( getWindow(), "General", toPixels( Vec2i( 175, 340 ) ), ColorA(0.6f, 0.3f, 0.3f, 0.4f));
 	
 	params->addText("Animation");
 	params->addParam("Time", &UI::time, "", true);
@@ -351,7 +351,6 @@ void CinderApp::draw(){
 
 		timelineTrackbar->render(&t, &t2);
 		
-		uiShader.uniform("pickingColor", Vec3f(0,0,0));
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 			// draw keyframes
 			NodeAnimatable * na = dynamic_cast<NodeAnimatable *>(UI::selectedNodes.at(i));
@@ -382,6 +381,7 @@ void CinderApp::draw(){
 				glLineWidth(1.f);
 			}
 		}
+		uiShader.uniform("pickingColor", Vec3f(0,0,0));
 
 		uiShader.uniform("tex", true);
 		uiShader.uniform("pickingColor", Color(0.f, 0.f, 0.f));
