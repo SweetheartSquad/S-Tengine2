@@ -86,13 +86,13 @@ void CinderApp::setup(){
 	params->addParam("Paint Spacing", &voxelPaintSpacing, "min=0.01, step=0.5");
 
 	params->addSeparator();
-	params->addText("Save");
+	params->addText("Save Menu");
 
 	params->addParam("Directory", &directory);
 	params->addParam("File Name", &fileName);
 	params->addButton("Save", std::bind( &CinderApp::saveSkeleton, this ));
 	params->addSeparator();
-	params->addText("Load");
+	params->addText("Load Menu");
 	params->addParam("Bones File", &filePath);
 	params->addButton("Load", std::bind(&CinderApp::loadSkeleton, this));
 	params->addSeparator();

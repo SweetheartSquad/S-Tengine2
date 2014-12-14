@@ -96,7 +96,6 @@ bool CommandProcessor::redo(){
 			consoleEntries.push_back(c->subCmdProc.consoleEntries.at(i));
 		}
 		c->subCmdProc.consoleEntries.clear();
-		//consoleEntries.insert(consoleEntries.end(), c->subCmdProc.consoleEntries.begin(), c->subCmdProc.consoleEntries.end());
 		if(success){
 			c->executed = true;
 			undoStack.push_back(c);
