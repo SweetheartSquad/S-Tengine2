@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Node.h"
-#include "NodeParent.h"
+#include "node/Node.h"
+#include "node/NodeParent.h"
 
 class NodeChild abstract : public virtual Node{
 public:

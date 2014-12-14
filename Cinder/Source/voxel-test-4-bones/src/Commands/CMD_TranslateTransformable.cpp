@@ -1,8 +1,8 @@
 #pragma once
 
-#include "CMD_TranslateTransformable.h"
-#include "NodeTransformable.h"
-#include "ShiftKiddie.h"
+#include "Commands/CMD_TranslateTransformable.h"
+#include "node/NodeTransformable.h"
+#include "node/ShiftKiddie.h"
 
 CMD_TranslateTransformable::CMD_TranslateTransformable(NodeTransformable * _node, ci::Vec3d _v, bool _relative, CoordinateSpace _space) :
 	node(_node),

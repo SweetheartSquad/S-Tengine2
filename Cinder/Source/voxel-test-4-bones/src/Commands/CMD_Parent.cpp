@@ -1,11 +1,11 @@
 #pragma once
 
-#include "CMD_Parent.h"
-#include "Node.h"
+#include "Commands/CMD_Parent.h"
+#include "node/Node.h"
 
-#include "NodeParent.h"
-#include "NodeChild.h"
-#include "ShiftKiddie.h"
+#include "node/NodeParent.h"
+#include "node/NodeChild.h"
+#include "node/ShiftKiddie.h"
 #include "SceneRoot.h"
 
 CMD_Parent::CMD_Parent(SceneRoot * _sceneRoot, NodeChild * _node, NodeParent * _parent) :

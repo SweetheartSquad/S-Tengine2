@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CMD_SetTime.h"
+#include "Commands/CMD_SetTime.h"
 #include "Step.h"
 
 #include "cinder/app/AppBasic.h"

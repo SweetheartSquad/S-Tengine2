@@ -4,8 +4,8 @@
 #include <vector>
 #include "Tween.h"
 #include "Animation.h"
-#include "CMD_EditTween.h"
-#include "CMD_EditStartKey.h"
+#include "Commands/CMD_EditTween.h"
+#include "Commands/CMD_EditStartKey.h"
 #include <cinder/app/AppBasic.h>
 
 template<typename T>

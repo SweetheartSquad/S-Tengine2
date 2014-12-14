@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Node.h"
+#include "node/Node.h"
 
 class NodeLoadable abstract : public virtual Node{
 public:

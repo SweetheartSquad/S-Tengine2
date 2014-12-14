@@ -1,7 +1,7 @@
 #pragma once
 
 #include "UiInteractable.h"
-#include "NodeUpdatable.h"
+#include "node/NodeUpdatable.h"
 
 class Step;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CMD_DeleteJoint.h"
+#include "Commands/CMD_DeleteJoint.h"
 #include "Joint.h"
 
 CMD_DeleteJoint::CMD_DeleteJoint(Joint * _jointForDeletion) :

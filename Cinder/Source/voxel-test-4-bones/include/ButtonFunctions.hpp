@@ -1,5 +1,5 @@
 #include "CinderApp.h"
-#include "CMD_SetTime.h"
+#include "Commands/CMD_SetTime.h"
 #include "TrackBar.h"
 
 class ButtonFunctions{
@@ -88,6 +88,12 @@ void ButtonFunctions::TIME_Decrement(CinderApp * _app){
 
 void ButtonFunctions::TIME_PlayPause(CinderApp * _app){
 	_app->play = !_app->play;
+	if(!_app->play){
+		_app->cmdProc->executeCommand(new CMD_SetTime(&UI::time, (_app->timelineTrackbar->step/2.f)-fmod((_app->timelineTrackbar->step/2.f)+UI::time, _app->timelineTrackbar->step), true));
+		_app->cmdProc->endCompressing();
+	}else{
+		_app->cmdProc->startCompressing();
+	}
 };
 
 void ButtonFunctions::TIME_Increment(CinderApp * _app){

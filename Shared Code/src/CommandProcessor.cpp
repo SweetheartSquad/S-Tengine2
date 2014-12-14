@@ -6,7 +6,7 @@
 
 #include "CommandProcessor.h"
 #include "Command.h"
-#include "CompressedCommand.h"
+#include "Commands/CompressedCommand.h"
 #include "ConsoleGUI.h"
 
 CommandProcessor::CommandProcessor(void) :
@@ -82,6 +82,7 @@ bool CommandProcessor::undo(){
 		}
 		return success;
 	}
+	return true;
 }
 
 bool CommandProcessor::redo(){
@@ -103,6 +104,7 @@ bool CommandProcessor::redo(){
 		}
 		return success;
 	}
+	return true;
 }
 
 void CommandProcessor::undoAll(){

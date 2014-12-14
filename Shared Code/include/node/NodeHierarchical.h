@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include "Node.h"
-#include "NodeParent.h"
-#include "NodeChild.h"
+#include "node/Node.h"
+#include "node/NodeParent.h"
+#include "node/NodeChild.h"
 
 /** Abstract node with a parent and list of children */
 class NodeHierarchical abstract : public virtual NodeParent, public virtual NodeChild{

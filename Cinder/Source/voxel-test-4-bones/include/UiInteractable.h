@@ -1,7 +1,7 @@
 #pragma once
 
-#include "NodeSelectable.h"
-#include "NodeRenderable.h"
+#include "node/NodeSelectable.h"
+#include "node/NodeRenderable.h"
 
 #include <cinder\Rect.h>
 #include <cinder\Color.h>

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "CMD_ParentSelectedNodes.h"
-#include "CMD_Parent.h"
+#include "Commands/CMD_ParentSelectedNodes.h"
+#include "Commands/CMD_Parent.h"
 
 #include "UI.h"
-#include "NodeHierarchical.h"
+#include "node/NodeHierarchical.h"
 #include "SceneRoot.h"
 #include "Joint.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SceneRoot.h"
-#include "NodeHierarchical.h"
+#include "node/NodeHierarchical.h"
 
 SceneRoot::~SceneRoot(){
 	while(children.size() > 0){

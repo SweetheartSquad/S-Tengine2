@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NodeParent.h"
+#include "node/NodeParent.h"
 
 class SceneRoot : public NodeParent{
 public:

@@ -4,7 +4,7 @@
 #include <vector>
 #include "Tween.h"
 #include "Animation.h"
-#include "CMD_EditStartKey.h"
+#include "Commands/CMD_EditStartKey.h"
 #include <glm\glm.hpp>
 #include <cinder\app\App.h>
 

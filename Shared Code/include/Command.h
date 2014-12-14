@@ -3,7 +3,7 @@
 #include <vector>
 #include "CommandProcessor.h"
 #include "ConsoleEntry.h"
-#include "Node.h"
+#include "node/Node.h"
 
 class Command : public Node{
 public:

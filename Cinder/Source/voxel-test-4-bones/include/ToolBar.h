@@ -4,8 +4,8 @@
 #include <cinder\Rect.h>
 #include <cinder\Vector.h>
 
-#include "NodeRenderable.h"
-#include "NodeParent.h"
+#include "node/NodeRenderable.h"
+#include "node/NodeParent.h"
 
 class ToolSet;
 class ToolButton;

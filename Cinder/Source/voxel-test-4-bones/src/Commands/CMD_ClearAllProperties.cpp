@@ -1,12 +1,12 @@
 #pragma once
 
-#include "CMD_ClearAllProperties.h"
+#include "Commands/CMD_ClearAllProperties.h"
 
 #include <cinder/app/AppBasic.h>
 
-#include "NodeAnimatable.h"
+#include "node/NodeAnimatable.h"
 #include "Transform.h"
-#include "CMD_ClearProperty.h"
+#include "Commands/CMD_ClearProperty.h"
 
 #include "Step.h"
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CMD_PlaceVoxel.h"
+#include "Commands/CMD_PlaceVoxel.h"
 
 #include <vector>
 

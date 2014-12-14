@@ -1,7 +1,7 @@
 #pragma once
 
-#include "NodeTransformable.h"
-#include "NodeUpdatable.h"
+#include "node/NodeTransformable.h"
+#include "node/NodeUpdatable.h"
 #include <glm\glm.hpp>
 
 class Transform;

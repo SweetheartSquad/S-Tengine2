@@ -1,8 +1,8 @@
 #pragma once
 
-#include "CMD_ScaleTransformable.h"
+#include "Commands/CMD_ScaleTransformable.h"
 
-#include "NodeTransformable.h"
+#include "node/NodeTransformable.h"
 
 CMD_ScaleTransformable::CMD_ScaleTransformable(NodeTransformable * _node, ci::Vec3f _scale, bool _relative, CoordinateSpace _space) :
 	node(_node),

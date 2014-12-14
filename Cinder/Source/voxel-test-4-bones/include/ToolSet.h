@@ -3,8 +3,8 @@
 #include <vector>
 #include <cinder\Area.h>
 
-#include "NodeRenderable.h"
-#include "NodeHierarchical.h"
+#include "node/NodeRenderable.h"
+#include "node/NodeHierarchical.h"
 
 class ToolButton;
 class Step;

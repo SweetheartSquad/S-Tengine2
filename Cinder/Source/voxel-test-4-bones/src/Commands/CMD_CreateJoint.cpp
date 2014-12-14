@@ -1,9 +1,9 @@
 #pragma once
 
-#include "CMD_CreateJoint.h"
-#include "CMD_SelectNodes.h"
+#include "Commands/CMD_CreateJoint.h"
+#include "Commands/CMD_SelectNodes.h"
 #include "UI.h"
-#include "Node.h"
+#include "node/Node.h"
 #include "Joint.h"
 #include "SceneRoot.h"
 

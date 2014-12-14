@@ -1,12 +1,12 @@
 #pragma once
 
-#include "CMD_KeyAllProperties.h"
+#include "Commands/CMD_KeyAllProperties.h"
 
 #include <cinder/app/AppBasic.h>
 
-#include "NodeAnimatable.h"
+#include "node/NodeAnimatable.h"
 #include "Transform.h"
-#include "CMD_KeyProperty.h"
+#include "Commands/CMD_KeyProperty.h"
 
 #include "Step.h"
 

@@ -19,22 +19,25 @@ void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, Sce
 			app::console() << "dir created/exists" << std::endl;
 			std::ofstream jointFile;
 			try {
-				jointFile.open(directory.append(fileName), GENERIC_WRITE);
+				jointFile.open(directory.append(fileName));
+				if(jointFile.fail() == false){
+					jointFile << "{" << "\"joints\": " << "[" << std::endl;
 
-				jointFile << "{" << "\"joints\": " << "[" << std::endl;
-
-				//write the joints to file (loop through roots and recurse through children)
-				for(unsigned long int i = 0; i < _sceneRoot->children.size(); ++i){
-					Joint * j = dynamic_cast<Joint * >(_sceneRoot->children.at(i));
-					jointFile << writeJoint(j);
-					if (j != _sceneRoot->children.back()) {
-						jointFile << ",";
+					//write the joints to file (loop through roots and recurse through children)
+					for(unsigned long int i = 0; i < _sceneRoot->children.size(); ++i){
+						Joint * j = dynamic_cast<Joint * >(_sceneRoot->children.at(i));
+						jointFile << writeJoint(j);
+						if (j != _sceneRoot->children.back()) {
+							jointFile << ",";
+						}
+						jointFile << std::endl;
 					}
-					jointFile << std::endl;
-				}
 
-				jointFile << "]}" << std::endl;
-				jointFile.close();
+					jointFile << "]}" << std::endl;
+					jointFile.close();
+				}else{
+					throw std::exception("Failed to write in directory. Permission may be denied.");
+				}
 			}catch (std::exception ex){
 				if (jointFile.is_open()){
 					jointFile.close();

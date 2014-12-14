@@ -1,7 +1,7 @@
 #pragma once
 
 #include "UiInteractable.h"
-#include "NodeChild.h"
+#include "node/NodeChild.h"
 
 #include <string>
 

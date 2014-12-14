@@ -1,11 +1,11 @@
 #pragma once
 
-#include "CMD_ScaleSelectedTransformables.h"
-#include "CMD_ScaleTransformable.h"
+#include "Commands/CMD_ScaleSelectedTransformables.h"
+#include "Commands/CMD_ScaleTransformable.h"
 
 #include "UI.h"
-#include "Node.h"
-#include "NodeTransformable.h"
+#include "node/Node.h"
+#include "node/NodeTransformable.h"
 
 CMD_ScaleSelectedTransformables::CMD_ScaleSelectedTransformables(ci::Vec3f _scale, bool _relative, CoordinateSpace _space) :
 	scale(_scale),
