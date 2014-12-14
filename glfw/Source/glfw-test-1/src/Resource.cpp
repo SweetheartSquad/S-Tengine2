@@ -45,7 +45,7 @@ void Resource::freeImageData(unsigned char* _image){
 	SOIL_free_image_data(_image);
 }
 
-TriMesh* Resource::loadMeshFromObj(std::string _objSrc){
+TriMesh * Resource::loadMeshFromObj(std::string _objSrc){
 
 	std::istringstream stream(FileUtils::voxReadFile(_objSrc));
 	std::vector<glm::vec3> verts;

@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 
+class MeshEntity;
 class DirectionalLight;
 class PointLight;
 class Material;
@@ -16,6 +17,7 @@ public:
 	//Entities
 	Cube * ground;
 	Cube * cube;
+	MeshEntity * monkey;
 
 	//Shaders
 	BaseComponentShader * shader;

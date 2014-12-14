@@ -16,13 +16,16 @@
 #include "PointLight.h"
 #include "PerspectiveCamera.h"
 #include "DirectionalLight.h"
+#include "MeshEntity.h"
+#include "Resource.h"
 
 BaseScene::BaseScene(Game* _game):
 	Scene(_game),
 	ground(new Cube(glm::vec3(0.0f, -1.5f, 0.0), 1)),
 	cube(new Cube(glm::vec3(0.0f, 0.0f, 0.0f), 1)),
 	shader(new BaseComponentShader()),
-	material(new Material(10.0, glm::vec3(1.f, 1.f, 1.f), true))
+	material(new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true)),
+	monkey(new MeshEntity())
 {
 	//Add shader components
 	shader->components.push_back(new TextureShaderComponent());
@@ -55,17 +58,27 @@ BaseScene::BaseScene(Game* _game):
 	//Add it to the scene
 	addChild(ground);
 	
-	//Setup point light
-	pointLight = new PointLight(glm::vec3(4.0f, 1.0f, 1.f), glm::vec3(1.0f, 1.0f, 1.0f), 0.005f, 0.2f);
+	//Setup point light - lets make it red
+	pointLight = new PointLight(glm::vec3(-5.0f, 1.0f, 1.f), glm::vec3(0.8f, 0.0f, 0.0f), 0.005f, 0.2f);
 	//Add it to the scene's list of lights
-	//lights.push_back(pointLight);
+	lights.push_back(pointLight);
 
 	//intialize key light
-	keyLight = new DirectionalLight(glm::vec3(0.5f, 0.8f, 0.6f), glm::vec3(0.1f, 0.1f, 0.1f), 0.005f);
+	keyLight = new DirectionalLight(glm::vec3(0.5f, 0.8f, 0.6f), glm::vec3(0.1f, 0.1f, 0.5f), 0.005f);
 	//Set it as the key light so it casts shadows
 	keyLight->isKeyLight = true;
 	//Add it to the scene
 	lights.push_back(keyLight);
+	
+	//Load the monkeys mesh from the monkey obj
+	monkey->mesh = Resource::loadMeshFromObj("../assets/monkey.vox");
+	monkey->mesh->pushMaterial(material);
+	monkey->setShader(shader, true);
+
+	monkey->transform->translate(-4.0f, 0.0f, 0.0f);
+
+	addChild(monkey);
+	
 }
 
 BaseScene::~BaseScene(){
