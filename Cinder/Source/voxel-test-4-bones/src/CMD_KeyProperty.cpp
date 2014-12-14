@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include <cinder/app/AppBasic.h>
+<<<<<<< HEAD
 
 CMD_KeyProperty::CMD_KeyProperty(Animation * _animation, float _currentTime, float _targetTime, float _value, Easing::Type _interpolation) :
 	animation(_animation),
@@ -90,3 +91,5 @@ float CMD_KeyProperty::getEndValue(unsigned long int _idx){
 
 CMD_KeyProperty::~CMD_KeyProperty(){
 }
+=======
+>>>>>>> origin/E1-QuaternionAnimation

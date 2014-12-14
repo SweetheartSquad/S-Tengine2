@@ -1,15 +1,18 @@
 #pragma once
 
+#include "Node.h"
 #include "Easing.h"
+#include <glm/gtx/quaternion.hpp>
 
-class Tween
+template<typename T>
+class Tween : public Node
 {
 public:
-	Tween(float deltaTime, float deltaValue, Easing::Type _interpolation);
+	Tween(float deltaTime, T deltaValue, Easing::Type _interpolation);
 	~Tween();
 
 	float deltaTime;
-	float deltaValue;
+	T deltaValue;
 
 	Easing::Type interpolation;
 
@@ -17,3 +20,15 @@ public:
 private:
 
 };
+
+template<typename T>
+Tween<T>::Tween(float _deltaTime, T _deltaValue, Easing::Type _interpolation) :
+	deltaTime(_deltaTime),  
+	deltaValue(_deltaValue), 
+	interpolation(_interpolation)
+{
+}
+
+template<typename T>
+Tween<T>::~Tween(){
+}

@@ -50,6 +50,7 @@ void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, Sce
 	}
 }
 
+
 std::vector<Joint *> SkeletonData::LoadSkeleton(std::string filePath) {
 	//Not sure about this error catching setup
 	std::vector<Joint*> joints;
@@ -77,6 +78,7 @@ std::vector<Joint *> SkeletonData::LoadSkeleton(std::string filePath) {
 	}
 	return joints;
 }
+
 
 std::string SkeletonData::writeJoint(Joint * j, unsigned int indent) {
 
@@ -200,10 +202,7 @@ std::string SkeletonData::writeAnimations(Joint * j, unsigned int indent){
 	json << writeAnimation(j->translateX, "translateX", indent) << "," << std::endl;
 	json << writeAnimation(j->translateY, "translateY", indent) << "," << std::endl;
 	json << writeAnimation(j->translateZ, "translateZ", indent) << "," << std::endl;
-	json << writeAnimation(j->rotateX, "rotateX", indent) << "," << std::endl;
-	json << writeAnimation(j->rotateY, "rotateY", indent) << "," << std::endl;
-	json << writeAnimation(j->rotateZ, "rotateZ", indent) << "," << std::endl;
-	json << writeAnimation(j->rotateW, "rotateW", indent) << "," << std::endl;
+	json << writeAnimation(j->rotate, "rotate", indent) << "," << std::endl;
 	json << writeAnimation(j->scaleX, "scaleX", indent) << "," << std::endl;
 	json << writeAnimation(j->scaleY, "scaleY", indent) << "," << std::endl;
 	json << writeAnimation(j->scaleZ, "scaleZ", indent) << std::endl;
@@ -212,106 +211,18 @@ std::string SkeletonData::writeAnimations(Joint * j, unsigned int indent){
 }
 
 void SkeletonData::readAnimations(JsonTree animations, Joint * j){
-
 	readAnimation(animations.getChild("translateX"), j->translateX);
 	readAnimation(animations.getChild("translateY"), j->translateY);
 	readAnimation(animations.getChild("translateZ"), j->translateZ);
-	readAnimation(animations.getChild("rotateX"), j->rotateX);
-	readAnimation(animations.getChild("rotateY"), j->rotateY);
-	readAnimation(animations.getChild("rotateZ"), j->rotateZ);
-	readAnimation(animations.getChild("rotateW"), j->rotateW);
+	readAnimation(animations.getChild("rotate"), j->rotate);
 	readAnimation(animations.getChild("scaleX"), j->scaleX);
 	readAnimation(animations.getChild("scaleY"), j->scaleY);
 	readAnimation(animations.getChild("scaleZ"), j->scaleX);
 }
 
-std::string SkeletonData::writeAnimation(Animation * a, std::string name, unsigned int indent){
-
-	std::stringstream json;
-	
-	json << std::string(indent * 3, ' ') << "\"" << name << "\":{" << std::endl;
-	indent++;
-
-	// startValue
-	json << std::string(indent * 3, ' ') << "\"startValue\": " << a->startValue << "," << std::endl;
-
-	// hasStart
-	json << std::string(indent * 3, ' ') << "\"hasStart\": " << a->hasStart << "," << std::endl;
-
-	// tween array
-	json << std::string(indent * 3, ' ') << "\"tweens\": " << "[" << std::endl;
-	for(unsigned long int i = 0; i < a->tweens.size(); ++i) {
-		Tween * tween = a->tweens.at(i);
-		json << writeTween(tween, i, indent);
-		if (i != a->tweens.size() - 1) {
-			json << ",";
-		}
-		json << std::endl;
-	}
-	json << std::string(indent * 3, ' ') << "]," << std::endl;
-
-	// loopType
-	json << std::string(indent * 3, ' ') << "\"loopType\": " << a->loopType << std::endl;
-
-	indent--;
-	json << std::string(indent * 3, ' ') << "}";
-
-	return json.str();
-}
-
-void SkeletonData::readAnimation(JsonTree animation, Animation * a){
-
-	std::vector<Tween *> tweens;
-	app::console() << animation.getKey() << std::endl;
-	a->startValue = animation.getChild("startValue").getValue<float>();
-	a->hasStart = animation.getChild("hasStart").getValue<bool>();
-	a->referenceValue = a->startValue;
-
-	JsonTree tweensJson = animation.getChild("tweens");
-	unsigned int i = 0;
-	for( JsonTree::ConstIter tween = tweensJson.begin(); tween != tweensJson.end(); ++tween ) {
-		app::console() << "tween key: " << tween->getKey() << std::endl;
-		// Apparently, getKey DOESN't return an index if there is no key?
-		//JsonTree tJson = tweensJson.getChild(tween->getKey());
-		JsonTree tJson = tweensJson.getChild(i);
-		Tween * t = readTween(tJson);
-		tweens.push_back(t);
-		i++;
-	}
-	a->tweens = tweens;
-
-	a->loopType = static_cast<Animation::LoopType>(animation.getChild("loopType").getValue<int>());
-}
-
-std::string SkeletonData::writeTween(Tween * t, int id, unsigned int indent){
-	std::stringstream json;
-	indent++;
-
-	json << std::string(indent * 3, ' ') << "{" << std::endl;
-	
-	indent++;
-	json << std::string(indent * 3, ' ') << "\"id\": " << id << "," << std::endl;
-	json << std::string(indent * 3, ' ') << "\"deltaTime\": " << t->deltaTime << "," << std::endl;
-	json << std::string(indent * 3, ' ') << "\"deltaValue\": " << t->deltaValue << "," << std::endl;
-	json << std::string(indent * 3, ' ') << "\"interpolation\": " << t->interpolation << std::endl;
-	indent--;
-
-	json << std::string(indent * 3, ' ') << "}";
-
-	return json.str();
-}
-
-Tween * SkeletonData::readTween(JsonTree tween){
-	// get interpolation
-
-	Tween * t = new Tween(tween.getChild("deltaTime").getValue<float>(), tween.getChild("deltaValue").getValue<float>(), static_cast<Easing::Type>(tween.getChild("interpolation").getValue<int>()));
-	app::console() << "id: " << tween.getChild("id").getValue<int>() << " deltaTime: " << tween.getChild("deltaTime").getValue<float>() << " deltaValue: " << tween.getChild("deltaValue").getValue<float>() << std::endl;
-	return t;
-}
-
 std::string SkeletonData::writeVoxel(Voxel * v, unsigned int indent){
 	std::stringstream json;
-	indent++;
+	++indent;
 
 	// Just the position vector
 	json << std::string(indent * 3, ' ') << "{" << "\"x\": " << v->getPos().x << ", " << "\"y\": " << v->getPos().y << ", " << "\"z\": " << v->getPos().z << "}";
@@ -319,12 +230,13 @@ std::string SkeletonData::writeVoxel(Voxel * v, unsigned int indent){
 	return json.str();
 }
 
-void SkeletonData::readVoxel(JsonTree voxel, Joint * parent){
 
+void SkeletonData::readVoxel(JsonTree voxel, Joint * parent){
 	// create voxel, added to parent in constructor
 	Voxel * v = new Voxel(Vec3d(voxel.getChild("x").getValue<float>(), voxel.getChild("y").getValue<float>(), voxel.getChild("z").getValue<float>()), parent, false);
 	parent->addChild(v);
 }
+
 
 void SkeletonData::validateDirectory(std::string & directory) {
 	if( PathFileExistsA(directory.c_str()) == TRUE)  { 
@@ -338,6 +250,7 @@ void SkeletonData::validateDirectory(std::string & directory) {
 		throw std::exception("Directory does not exist!");
 	}
 }
+
 
 void SkeletonData::validateFileName(std::string & fileName) {
 	std::regex rgx_name("[\\\\/<>\|\"\?\*]+");
@@ -362,3 +275,175 @@ void SkeletonData::validateFileName(std::string & fileName) {
 		throw ex;
 	}
 }
+
+std::string SkeletonData::writeAnimation(Animation<float> * a, std::string name, unsigned int indent){
+
+	std::stringstream json;
+	
+	json << std::string(indent * 3, ' ') << "\"" << name << "\":{" << std::endl;
+	++indent;
+
+	// startValue
+	json << std::string(indent * 3, ' ') << "\"startValue\": " << /*a->startValue*/"?" << "," << std::endl;
+
+	// hasStart
+	json << std::string(indent * 3, ' ') << "\"hasStart\": " << a->hasStart << "," << std::endl;
+
+	// tween array
+	json << std::string(indent * 3, ' ') << "\"tweens\": " << "[" << std::endl;
+	for(unsigned long int i = 0; i < a->tweens.size(); ++i) {
+		Tween<float> * tween = a->tweens.at(i);
+		json << writeTween(tween, i, indent);
+		if (i != a->tweens.size() - 1) {
+			json << ",";
+		}
+		json << std::endl;
+	}
+	json << std::string(indent * 3, ' ') << "]," << std::endl;
+
+	// loopType
+	json << std::string(indent * 3, ' ') << "\"loopType\": " << a->loopType << std::endl;
+
+	--indent;
+	json << std::string(indent * 3, ' ') << "}";
+
+	return json.str();
+
+}
+
+
+std::string SkeletonData::writeAnimation(Animation<glm::quat> * a, std::string name, unsigned int indent){
+
+	std::stringstream json;
+	
+	json << std::string(indent * 3, ' ') << "\"" << name << "\":{" << std::endl;
+	++indent;
+
+	// startValue
+	json << std::string(indent * 3, ' ') << "\"startValue\": {" << "\"w\": " << a->startValue.w << ", " << "\"x\": " << a->startValue.x << ", " << "\"y\": " << a->startValue.y << ", " << "\"z\": " << a->startValue.z << "}," << std::endl;
+
+	// hasStart
+	json << std::string(indent * 3, ' ') << "\"hasStart\": " << a->hasStart << "," << std::endl;
+
+	// tween array
+	json << std::string(indent * 3, ' ') << "\"tweens\": " << "[" << std::endl;
+	for(unsigned long int i = 0; i < a->tweens.size(); ++i) {
+		Tween<glm::quat> * tween = a->tweens.at(i);
+		json << writeTween(tween, i, indent);
+		if (i != a->tweens.size() - 1) {
+			json << ",";
+		}
+		json << std::endl;
+	}
+	json << std::string(indent * 3, ' ') << "]," << std::endl;
+
+	// loopType
+	json << std::string(indent * 3, ' ') << "\"loopType\": " << a->loopType << std::endl;
+
+	--indent;
+	json << std::string(indent * 3, ' ') << "}";
+
+	return json.str();
+};
+
+void SkeletonData::readAnimation(JsonTree animation, Animation<float> * a){
+
+	std::vector<Tween<float> *> tweens;
+	app::console() << animation.getKey() << std::endl;
+	a->startValue = animation.getChild("startValue").getValue<float>();
+	a->hasStart = animation.getChild("hasStart").getValue<bool>();
+	a->referenceValue = a->startValue;
+
+	JsonTree tweensJson = animation.getChild("tweens");
+	unsigned int i = 0;
+	for( JsonTree::ConstIter tween = tweensJson.begin(); tween != tweensJson.end(); ++tween ) {
+		app::console() << "tween key: " << tween->getKey() << std::endl;
+		// Apparently, getKey DOESN'T return an index if there is no key?
+		//JsonTree tJson = tweensJson.getChild(tween->getKey());
+		JsonTree tJson = tweensJson.getChild(i);
+		Tween<float> * t = readFloatTween(tJson);
+		tweens.push_back(t);
+		++i;
+	}
+	a->tweens = tweens;
+
+	a->loopType = static_cast<Animation<float>::LoopType>(animation.getChild("loopType").getValue<int>());
+};
+
+void SkeletonData::readAnimation(JsonTree animation, Animation<glm::quat> * a){
+
+	std::vector<Tween<glm::quat> *> tweens;
+	app::console() << animation.getKey() << std::endl;
+	JsonTree startValue = animation.getChild("startValue");
+	a->startValue = glm::quat(startValue.getChild("w").getValue<float>(), startValue.getChild("x").getValue<float>(), startValue.getChild("y").getValue<float>(), startValue.getChild("z").getValue<float>());
+	a->hasStart = animation.getChild("hasStart").getValue<bool>();
+	a->referenceValue = a->startValue;
+
+	JsonTree tweensJson = animation.getChild("tweens");
+	unsigned int i = 0;
+	for( JsonTree::ConstIter tween = tweensJson.begin(); tween != tweensJson.end(); ++tween ) {
+		app::console() << "tween key: " << tween->getKey() << std::endl;
+		// Apparently, getKey DOESN't return an index if there is no key?
+		//JsonTree tJson = tweensJson.getChild(tween->getKey());
+		JsonTree tJson = tweensJson.getChild(i);
+		Tween<glm::quat> * t = readQuaternionTween(tJson);
+		tweens.push_back(t);
+		i++;
+	}
+	a->tweens = tweens;
+
+	a->loopType = static_cast<Animation<glm::quat>::LoopType>(animation.getChild("loopType").getValue<int>());
+};
+
+std::string SkeletonData::writeTween(Tween<float> * t, int id, unsigned int indent){
+	std::stringstream json;
+	++indent;
+
+	json << std::string(indent * 3, ' ') << "{" << std::endl;
+	
+	++indent;
+	json << std::string(indent * 3, ' ') << "\"id\": " << id << "," << std::endl;
+	json << std::string(indent * 3, ' ') << "\"deltaTime\": " << t->deltaTime << "," << std::endl;
+	json << std::string(indent * 3, ' ') << "\"deltaValue\": " << /*t->deltaValue*/"?" << "," << std::endl;
+	json << std::string(indent * 3, ' ') << "\"interpolation\": " << t->interpolation << std::endl;
+	--indent;
+
+	json << std::string(indent * 3, ' ') << "}";
+
+	return json.str();
+};
+
+std::string SkeletonData::writeTween(Tween<glm::quat> * t, int id, unsigned int indent){
+	std::stringstream json;
+	indent++;
+
+	json << std::string(indent * 3, ' ') << "{" << std::endl;
+	
+	++indent;
+	json << std::string(indent * 3, ' ') << "\"id\": " << id << "," << std::endl;
+	json << std::string(indent * 3, ' ') << "\"deltaTime\": " << t->deltaTime << "," << std::endl;
+	json << std::string(indent * 3, ' ') << "\"deltaValue\": {" << "\"w\": " << t->deltaValue.w << ", " << "\"x\": " << t->deltaValue.x << ", " << "\"y\": " << t->deltaValue.y << ", " << "\"z\": " << t->deltaValue.z << "}," << std::endl;
+	json << std::string(indent * 3, ' ') << "\"interpolation\": " << t->interpolation << std::endl;
+	--indent;
+
+	json << std::string(indent * 3, ' ') << "}";
+
+	return json.str();
+};
+
+Tween<float> * SkeletonData::readFloatTween(JsonTree tween){
+	// get interpolation
+	Tween<float> * t = new Tween<float>(tween.getChild("deltaTime").getValue<float>(), tween.getChild("deltaValue").getValue<float>(), static_cast<Easing::Type>(tween.getChild("interpolation").getValue<int>()));
+	app::console() << "id: " << tween.getChild("id").getValue<int>() << " deltaTime: " << tween.getChild("deltaTime").getValue<float>() << " deltaValue: " << tween.getChild("deltaValue").getValue<float>() << std::endl;
+	return nullptr;//t;
+};
+
+Tween<glm::quat> * SkeletonData::readQuaternionTween(JsonTree tween){
+	// get interpolation
+	JsonTree deltaValueJson = tween.getChild("deltaValue");
+	glm::quat deltaValue = glm::quat(deltaValueJson.getChild("w").getValue<float>(), deltaValueJson.getChild("x").getValue<float>(), deltaValueJson.getChild("y").getValue<float>(), deltaValueJson.getChild("z").getValue<float>());
+
+	Tween<glm::quat> * t = new Tween<glm::quat>(tween.getChild("deltaTime").getValue<float>(), deltaValue, static_cast<Easing::Type>(tween.getChild("interpolation").getValue<int>()));
+	//app::console() << "id: " << tween.getChild("id").getValue<int>() << " deltaTime: " << tween.getChild("deltaTime").getValue<float>() << " deltaValue: w = " << deltaValue.w << " deltaValue: x = " << deltaValue.y << " y = " << deltaValue.x << " z = " << deltaValue.z << std::endl;
+	return t;
+};

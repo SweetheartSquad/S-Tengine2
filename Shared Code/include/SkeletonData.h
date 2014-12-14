@@ -15,11 +15,14 @@
 #include <cinder/Json.h>
 
 #include "Joint.h"
+#include "Animation.h"
+
+#include "Transform.h"
+#include "Easing.h"
+#include "SceneRoot.h"
 
 using namespace ci;
 
-class Animation;
-class Tween;
 class Voxel;
 class SceneRoot;
 
@@ -37,14 +40,19 @@ protected:
 
 	static std::string writeAnimations(Joint * j, unsigned int indent = 0);
 	static void readAnimations(JsonTree animations, Joint * j);
-
-	static std::string writeAnimation(Animation * a, std::string name, unsigned int indent = 0);
-	static void readAnimation(JsonTree animation, Animation * a);
-
-	static std::string writeTween(Tween * t, int id, unsigned int indent = 0);
-	static Tween * readTween(JsonTree tween);
+	
+	static std::string writeAnimation(Animation<float> * a, std::string name, unsigned int indent = 0);
+	static std::string writeAnimation(Animation<glm::quat> * a, std::string name, unsigned int indent = 0);
+	
+	static void readAnimation(JsonTree animation, Animation<float> * a);
+	static void readAnimation(JsonTree animation, Animation<glm::quat> * a);
+	
+	static std::string writeTween(Tween<float> * t, int id, unsigned int indent = 0);
+	static std::string writeTween(Tween<glm::quat> * t, int id, unsigned int indent = 0);
+	
+	static Tween<float> * readFloatTween(JsonTree tween);
+	static Tween<glm::quat> * readQuaternionTween(JsonTree tween);
 
 	static std::string writeVoxel(Voxel * v, unsigned int indent = 0);
 	static void readVoxel(JsonTree voxel, Joint * parent);
 };
-

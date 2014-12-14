@@ -31,29 +31,23 @@ public:
 
 void ButtonFunctions::MODE_Select(CinderApp * _app){
 	_app->mode = CinderApp::UImode::kSELECT;
-	_app->params->setOptions("UI Mode", "label=`SELECT`");
 };
 void ButtonFunctions::MODE_Translate(CinderApp * _app){
 	_app->mode = CinderApp::UImode::kTRANSLATE;
-	_app->params->setOptions("UI Mode", "label=`TRANSLATE`");
 };
 void ButtonFunctions::MODE_Rotate(CinderApp * _app){
 	_app->mode = CinderApp::UImode::kROTATE;
-	_app->params->setOptions("UI Mode", "label=`ROTATE`");
 };
 void ButtonFunctions::MODE_Scale(CinderApp * _app){
 	_app->mode = CinderApp::UImode::kSCALE;
-	_app->params->setOptions("UI Mode", "label=`SCALE`");
 };
 
 void ButtonFunctions::MODE_CreateJoints(CinderApp * _app){
 	_app->mode = CinderApp::UImode::kCREATE;
-	_app->params->setOptions("UI Mode", "label=`CREATE`");
 };
 
 void ButtonFunctions::MODE_PaintVoxels(CinderApp * _app){
 	_app->mode = CinderApp::UImode::kPAINT_VOXELS;
-	_app->params->setOptions("UI Mode", "label=`PAINT VOXELS`");
 };
 
 void ButtonFunctions::CHANNEL_0(CinderApp * _app){

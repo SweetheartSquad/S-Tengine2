@@ -96,11 +96,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Shared Code\src\Animation.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Command.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\CommandProcessor.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Joint.cpp" />
-    <ClCompile Include="..\..\..\..\Shared Code\src\Keyframe.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Light.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\MatrixStack.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Node.cpp" />
@@ -125,17 +123,11 @@
     <ClCompile Include="..\include\UiInteractable.cpp" />
     <ClCompile Include="..\src\CinderApp.cpp" />
     <ClCompile Include="..\src\CinderRenderOptions.cpp" />
-    <ClCompile Include="..\src\CMD_AddTween.cpp" />
-    <ClCompile Include="..\src\CMD_AddTweenAfter.cpp" />
-    <ClCompile Include="..\src\CMD_AddTweenBefore.cpp" />
-    <ClCompile Include="..\src\CMD_AddTweenInside.cpp" />
     <ClCompile Include="..\src\CMD_CreateJoint.cpp" />
     <ClCompile Include="..\src\CMD_DeleteJoint.cpp" />
     <ClCompile Include="..\src\CMD_DeleteJoints.cpp" />
     <ClCompile Include="..\src\CMD_DeleteVoxel.cpp" />
-    <ClCompile Include="..\src\CMD_EditTween.cpp" />
     <ClCompile Include="..\src\CMD_KeyAll.cpp" />
-    <ClCompile Include="..\src\CMD_KeyProperty.cpp" />
     <ClCompile Include="..\src\CMD_RotateTransformable.cpp" />
     <ClCompile Include="..\src\CMD_ScaleTransformable.cpp" />
     <ClCompile Include="..\src\CMD_TranslateSelectedTransformables.cpp" />
@@ -152,7 +144,6 @@
     <ClCompile Include="..\src\ParamTextBox.cpp" />
     <ClCompile Include="..\src\ConsoleEntry.cpp" />
     <ClCompile Include="..\src\ConsoleGUI.cpp" />
-    <ClCompile Include="..\src\Timeline.cpp" />
     <ClCompile Include="..\src\Toolbar.cpp" />
     <ClCompile Include="..\src\ToolButton.cpp" />
     <ClCompile Include="..\src\ToolSet.cpp" />
@@ -171,7 +162,6 @@
     <ClInclude Include="..\..\..\..\Shared Code\include\CommandProcessor.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Easing.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Joint.h" />
-    <ClInclude Include="..\..\..\..\Shared Code\include\Keyframe.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Light.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\MatrixStack.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Node.h" />
@@ -230,7 +220,6 @@
     <ClInclude Include="..\include\ToolSet.h" />
     <ClInclude Include="..\include\TrackBar.h" />
     <ClInclude Include="..\include\UI.h" />
-    <ClCompile Include="..\src\CMD_EditStartKey.cpp" />
     <ClInclude Include="..\include\UiInteractable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 
 #include "Tween.h"
 
@@ -10,4 +10,4 @@ Tween::Tween(float _deltaTime, float _deltaValue, Easing::Type _interpolation) :
 }
 
 Tween::~Tween(){
-}
+}*/

@@ -360,15 +360,15 @@ void CinderApp::draw(){
 				gl::color(1.f, (float)i/(float)UI::selectedNodes.size(), 0.f);
 
 				// should check each animation object individually
-				if(na->rotateW->hasStart){
+				if(na->translateX->hasStart){
 					glBegin(GL_LINES);
-					float time = (UI::time - na->rotateW->currentAnimationTime);
+					float time = (UI::time - na->translateX->currentAnimationTime);
 					float timeStart = time;
 					glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y);
 					glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y+timelineTrackbar->size.y);
 				
-					for(unsigned long int anim = 0; anim < na->rotateW->tweens.size(); ++anim){
-						time += na->rotateW->tweens.at(anim)->deltaTime;
+					for(unsigned long int anim = 0; anim < na->translateX->tweens.size(); ++anim){
+						time += na->translateX->tweens.at(anim)->deltaTime;
 
 						glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y);
 						glVertex2f(timelineTrackbar->pos.x + time*((float)timelineTrackbar->size.x/timelineTrackbar->max), timelineTrackbar->pos.y+timelineTrackbar->size.y);
@@ -592,8 +592,18 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 
 			gl::lineWidth(2);
 			if(cam.isPersp()){
+				/*CameraOrtho test;
+				test.setEyePoint(cam.getEyePoint());
+				test.setCenterOfInterestPoint(cam.getCenterOfInterestPoint());
+				test.setViewDirection(cam.getViewDirection());
+				test.setFov(cam.getFov());
+				test.setWorldUp(cam.getWorldUp());
+				gl::setMatrices(test);*/
+				//console() << cam.getInverseModelViewMatrix() << std::endl;
+				//console() << cam.getProjectionMatrix() << std::endl;
 				// If the camera is a perspective view, scale the coordinate frame proportionally to the distance from camera
-				gl::scale(cam.worldToEyeDepth(cam.getCenterOfInterestPoint()),cam.worldToEyeDepth(cam.getCenterOfInterestPoint()),cam.worldToEyeDepth(cam.getCenterOfInterestPoint()));
+				float zoom = cam.getModelViewMatrix().at(2,3);//cam.getEyePoint().distance(cam.getCenterOfInterestPoint());
+				gl::scale(zoom, zoom, zoom);
 				gl::scale(-1,-1,-1);
 			}
 
@@ -602,7 +612,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				if(translateSpace == kOBJECT){
 					// Rotate to match the object orientation
 					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
-					if(j != NULL){
+					if(j != nullptr){
 						std::vector<glm::quat> rotateStack;
 						while(j != nullptr){
 							rotateStack.push_back(j->transform->orientation);
@@ -640,7 +650,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				if(rotateSpace == kOBJECT){
 					// Rotate to match the object orientation
 					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
-					if(j != NULL){
+					if(j != nullptr){
 						std::vector<glm::quat> rotateStack;
 						while(j != nullptr){
 							rotateStack.push_back(j->transform->orientation);
@@ -683,7 +693,7 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				if(scaleSpace == kOBJECT){
 					// Rotate to match the object orientation
 					Joint * j = dynamic_cast<Joint *>(UI::selectedNodes.at(UI::selectedNodes.size()-1));
-					if(j != NULL){
+					if(j != nullptr){
 						std::vector<glm::quat> rotateStack;
 						while(j != nullptr){
 							rotateStack.push_back(j->transform->orientation);
@@ -718,7 +728,6 @@ void CinderApp::renderUI(const Camera & cam, const Rectf & rect){
 				gl::drawSphere(Vec3f(0.f, 0.f, 0.f), 0.05f);
 				break;
 			}// end switch
-
 			gl::lineWidth(1);
 		gl::popMatrices();
 	}
@@ -1424,7 +1433,7 @@ void CinderApp::setKeyframe(){
 	if(UI::selectedNodes.size() != 0){
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 			NodeAnimatable * _node = dynamic_cast<NodeAnimatable *>(UI::selectedNodes.at(i));
-			if (_node != NULL){
+			if (_node != nullptr){
 				cmdProc->executeCommand(new CMD_KeyAll(_node, UI::time));
 			}
 		}
