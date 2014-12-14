@@ -1,4 +1,7 @@
-## Useful Links ## 
+## Icons ##
+Icons used in the modelling software made by Amit Jakhu, Elegant Themes, Freepik, Icomoon from [www.flaticon.com](http://www.flaticon.com) is licensed by [Creative Commons 3.0](http://creativecommons.org/licenses/by/3.0/).
+
+## Useful Links 
 
 http://www.tomdalling.com/blog/category/modern-opengl/
 

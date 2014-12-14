@@ -19,7 +19,7 @@ void SkeletonData::SaveSkeleton(std::string directory, std::string fileName, Sce
 			app::console() << "dir created/exists" << std::endl;
 			std::ofstream jointFile;
 			try {
-				jointFile.open(directory.append(fileName));
+				jointFile.open(directory.append(fileName), GENERIC_WRITE);
 
 				jointFile << "{" << "\"joints\": " << "[" << std::endl;
 
@@ -71,7 +71,8 @@ std::vector<Joint *> SkeletonData::LoadSkeleton(std::string filePath) {
 				i++;
 			}
 		}catch (std::exception ex) {
-			throw ex;
+			//throw ex;
+			throw std::exception("Error reading file!");
 		}
 	}else{
 		throw std::exception("File does not exist!");
