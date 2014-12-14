@@ -76,6 +76,7 @@ public:
 	void loadSkeleton();
 
 	void setKeyframe();
+	void clearKeyframe();
 	void togglePlay();
 
 	/** Copies an area of size _area centered around _pos from (GL_COLOR_ATTACHMENENT0 + _channel) of _sourceFbo into _destFbo.

@@ -38,8 +38,6 @@ private:
 	Easing::Type interpolation;
 
 	Tween<T> * tween;
-
-	T oldStartValue;
 };
 
 template<typename T>

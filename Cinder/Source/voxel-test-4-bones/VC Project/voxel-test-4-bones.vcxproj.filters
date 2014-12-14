@@ -84,9 +84,6 @@
     <ClCompile Include="..\src\CMD_DeleteVoxel.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CMD_KeyAll.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\CMD_Parent.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
@@ -180,6 +177,12 @@
     <ClCompile Include="..\..\..\..\Shared Code\src\NodeLoadable.cpp">
       <Filter>Source Files\Nodes</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CMD_KeyAllProperties.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CMD_ClearAllProperties.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\shaders\joint.frag">
@@ -269,9 +272,6 @@
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="..\include\CMD_EditTween.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\CMD_KeyAll.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="..\include\CMD_KeyProperty.h">
@@ -405,6 +405,30 @@
     </ClInclude>
     <ClInclude Include="..\include\CompressedCommand.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CompressedCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_KeyAllProperties.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_ClearAllProperties.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_ClearProperty.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_ClearStartKey.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_RemoveFirstTween.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_RemoveLastTween.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CMD_RemoveInnerTween.h">
+      <Filter>Header Files\Commands</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

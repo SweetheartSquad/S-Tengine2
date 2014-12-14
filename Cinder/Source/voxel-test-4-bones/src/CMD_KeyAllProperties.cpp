@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CMD_KeyAll.h"
+#include "CMD_KeyAllProperties.h"
 
 #include <cinder/app/AppBasic.h>
 
@@ -10,13 +10,13 @@
 
 #include "Step.h"
 
-CMD_KeyAll::CMD_KeyAll(NodeAnimatable * _node, float _time) :
+CMD_KeyAllProperties::CMD_KeyAllProperties(NodeAnimatable * _node, float _time) :
 	node(_node),
 	time(_time)
 {
 }
 
-bool CMD_KeyAll::execute(){
+bool CMD_KeyAllProperties::execute(){
 	ci::app::console() << "execute CMD_KeyAll" << std::endl;
 	// Add keyframe to node's animation objects
 	if(firstRun){
@@ -41,10 +41,10 @@ bool CMD_KeyAll::execute(){
 	return true;
 }
 
-bool CMD_KeyAll::unexecute(){
+bool CMD_KeyAllProperties::unexecute(){
 	subCmdProc.undoAll();
 	return true;
 }
 
-CMD_KeyAll::~CMD_KeyAll(){
+CMD_KeyAllProperties::~CMD_KeyAllProperties(){
 }

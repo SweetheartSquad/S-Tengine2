@@ -4,7 +4,6 @@
 #include <vector>
 #include "Tween.h"
 #include "Animation.h"
-#include "CMD_EditTween.h"
 
 #include <cinder/app/AppBasic.h>
 

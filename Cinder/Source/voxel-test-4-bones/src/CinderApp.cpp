@@ -11,7 +11,8 @@
 #include "CMD_ScaleSelectedTransformables.h"
 #include "CMD_RotateSelectedTransformables.h"
 #include "CMD_KeyProperty.h"
-#include "CMD_KeyAll.h"
+#include "CMD_KeyAllProperties.h"
+#include "CMD_ClearAllProperties.h"
 #include "CMD_ParentSelectedNodes.h"
 #include "CMD_PlaceVoxel.h"
 #include "CMD_DeleteVoxel.h"
@@ -87,6 +88,7 @@ void CinderApp::setup(){
 	params->addParam("Time", &UI::time, "", true);
 	params->addParam("Interpolation", UI::interpolationNames, &UI::interpolationValue);
 	params->addButton("Add/Edit Keyframe", std::bind(&CinderApp::setKeyframe, this));
+	params->addButton("Clear Keyframe", std::bind(&CinderApp::clearKeyframe, this));
 	
 	params->addSeparator();
 	params->addText("Voxels");
@@ -1473,7 +1475,18 @@ void CinderApp::setKeyframe(){
 		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
 			NodeAnimatable * _node = dynamic_cast<NodeAnimatable *>(UI::selectedNodes.at(i));
 			if (_node != nullptr){
-				cmdProc->executeCommand(new CMD_KeyAll(_node, UI::time));
+				cmdProc->executeCommand(new CMD_KeyAllProperties(_node, UI::time));
+			}
+		}
+	}
+}
+
+void CinderApp::clearKeyframe(){
+	if(UI::selectedNodes.size() != 0){
+		for(unsigned long int i = 0; i < UI::selectedNodes.size(); ++i){
+			NodeAnimatable * _node = dynamic_cast<NodeAnimatable *>(UI::selectedNodes.at(i));
+			if (_node != nullptr){
+				cmdProc->executeCommand(new CMD_ClearAllProperties(_node, UI::time));
 			}
 		}
 	}

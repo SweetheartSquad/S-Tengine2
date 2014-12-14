@@ -7,11 +7,11 @@
 
 class NodeAnimatable;
 
-class CMD_KeyAll : public Command
+class CMD_ClearAllProperties : public Command
 {
 public:
-	CMD_KeyAll(NodeAnimatable * _node, float _time);
-	~CMD_KeyAll();
+	CMD_ClearAllProperties(NodeAnimatable * _node, float _time);
+	~CMD_ClearAllProperties();
 
 	bool execute();
 	bool unexecute();
@@ -19,6 +19,5 @@ public:
 private:
 	NodeAnimatable * node;
 	float time;
-	Easing::Type interpolation;
 	
 };
