@@ -1535,7 +1535,7 @@ void CinderApp::handleCode(unsigned long int _code){
 		break;
 	case 8:
 		if(lastKey == KeyEvent::KEY_RIGHT){
-			if(_code == KeyEvent::KEY_a){
+			if(_code == KeyEvent::KEY_b){
 				code += 1;
 			}else{
 				code = 0;
@@ -1543,8 +1543,8 @@ void CinderApp::handleCode(unsigned long int _code){
 		}
 		break;
 	case 9:
-		if(lastKey == KeyEvent::KEY_a){
-			if(_code == KeyEvent::KEY_b){
+		if(lastKey == KeyEvent::KEY_b){
+			if(_code == KeyEvent::KEY_a){
 				active = !active;
 			}
 			code = 0;
