@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Node.h"
-#include "NodeChild.h"
-#include "NodeTransformable.h"
+#include "node/Node.h"
+#include "node/NodeChild.h"
+#include "node/NodeTransformable.h"
 
 #include <glm\glm.hpp>
 

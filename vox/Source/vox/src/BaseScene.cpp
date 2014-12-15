@@ -173,6 +173,7 @@ void BaseScene::update(){
 void BaseScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	//Render the shadows
 	Scene::renderShadows(_matrixStack, _renderStack);
+	frameBuffer->resize(viewPortWidth, viewPortHeight);
 	//Bind frameBuffer
 	frameBuffer->bindFrameBuffer();
 	//render the scene to the buffer
@@ -180,4 +181,18 @@ void BaseScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderS
 
 	//Render the buffer to the render surface
 	renderSurface->render(frameBuffer->getTextureId());
+}
+
+void BaseScene::load(){
+	frameBuffer->load();
+	renderSurface->load();
+
+	Scene::load();
+}
+
+void BaseScene::unload(){
+	frameBuffer->unload();
+	renderSurfaceShader->unload();
+
+	Scene::unload();
 }

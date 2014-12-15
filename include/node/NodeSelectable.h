@@ -3,7 +3,7 @@
 #include <map>
 #include <vector>
 
-#include "Node.h"
+#include "node/Node.h"
 
 class NodeSelectable abstract : public virtual Node{
 public:
