@@ -274,9 +274,6 @@
     <ClInclude Include="..\include\CompressedCommand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\CompressedCommand.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\Shared Code\include\node\Node.h">
       <Filter>Header Files\Nodes</Filter>
     </ClInclude>
