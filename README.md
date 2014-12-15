@@ -78,6 +78,10 @@ A sample project has been included as a zip file(SampleProject.zip) in the repos
 
 This sample project also has many comments which should clarify what is being done and why
 
+## VOX library pack  
+
+https://drive.google.com/file/d/0B2VyAXziLJJtSDFCTWhqb3RvZEk/view?usp=sharing
+
 =================================================================
 
 ## Icons ##
