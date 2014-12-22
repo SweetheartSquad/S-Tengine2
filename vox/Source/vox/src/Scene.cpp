@@ -21,7 +21,6 @@ Scene::Scene(Game * _game):
 	mouse(&Mouse::getInstance()),
 	keyboard(&Keyboard::getInstance()),
 	camera(new PerspectiveCamera()),
-	//camera(new OrthograpicCamera(-10, 10, -10, 10, -10, 20)),
 	renderOptions(new RenderOptions(nullptr, &lights)),
 	depthBuffer(new StandardFrameBuffer(true)),
 	shadowBuffer(new StandardFrameBuffer(true)),

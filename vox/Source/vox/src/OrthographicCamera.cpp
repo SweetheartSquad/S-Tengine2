@@ -15,10 +15,8 @@ OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom,
 	near(_near),
 	far(_far)
 {
-	transform->translate(-5.f, 0.f, 0.f);
-	transform->translate(0.f, 3.f, 0.f);
-
 	Dimension screenDimensions = vox::getScreenDimensions();
+	forwardVectorRotated = glm::vec3(1.f, 0.f, 1.f);
 }
 
 OrthographicCamera::~OrthographicCamera(){
@@ -34,5 +32,5 @@ glm::mat4 OrthographicCamera::getViewMatrix(){
 
 glm::mat4 OrthographicCamera::getProjectionMatrix(){
 	//
-	return glm::ortho<float>(left,right,bottom,top,near,far);
+	return glm::ortho<float>(left, right, bottom, top, near, far);
 }
