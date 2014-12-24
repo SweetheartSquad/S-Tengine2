@@ -13,6 +13,6 @@ public:
 	explicit SpriteSheet(Texture * _texture);
 	~SpriteSheet();
 
-	void pushFrame(int _idx, float _width, float _height);
+	void pushFrame(int _column, int _row, float _width, float _height);
 
 };

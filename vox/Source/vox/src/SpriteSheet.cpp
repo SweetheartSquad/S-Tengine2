@@ -11,13 +11,13 @@ SpriteSheet::SpriteSheet(Texture* _texture){
 SpriteSheet::~SpriteSheet(){
 }
 
-void SpriteSheet::pushFrame(int _idx, float _width, float _height){
+void SpriteSheet::pushFrame(int _column, int _row, float _width, float _height){
 	float u, v, rW, rH;
 	rW = _width / texture->width;
 	rH = _height / texture->height;
 	u = rW;
 	v = rH;
-	u *= _idx;
-	v *= _idx;
+	u *= _column;
+	v *= _row;
 	frames.push_back(Rectangle(u, v, rW, rH));
 }

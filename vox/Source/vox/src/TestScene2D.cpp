@@ -10,7 +10,11 @@
 #include "Keyboard.h"
 #include "SpriteSheet.h"
 #include "Rectangle.h"
+#include "SpriteSheetAnimation.h"
+#include "Vox.h"
 
+SpriteSheetAnimation * an;
+SpriteSheet * spriteSheet;
 TestScene2D::TestScene2D(Game* _game)
 	:Scene2D(_game),
 	sprite(new Sprite(nullptr, new Transform())),
@@ -24,11 +28,35 @@ TestScene2D::TestScene2D(Game* _game)
 	sprite->mesh->pushTexture2D(tex);
 	addChild(sprite);	
 
-	SpriteSheet * spriteSheet = new SpriteSheet(tex);
-	spriteSheet->pushFrame(2, 128, 140);
+	spriteSheet = new SpriteSheet(tex);
+	spriteSheet->pushFrame(0, 0, 130, 150);
+	spriteSheet->pushFrame(1, 0, 130, 150);
+	spriteSheet->pushFrame(2, 0, 130, 150);
+	spriteSheet->pushFrame(3, 0, 130, 150);
+	spriteSheet->pushFrame(4, 0, 130, 150);
+	spriteSheet->pushFrame(5, 0, 130, 150);
+	spriteSheet->pushFrame(6, 0, 130, 150);
+
+	spriteSheet->pushFrame(0, 1, 130, 150);
+	spriteSheet->pushFrame(1, 1, 130, 150);
+	spriteSheet->pushFrame(2, 1, 130, 150);
+	spriteSheet->pushFrame(3, 1, 130, 150);
+	spriteSheet->pushFrame(4, 1, 130, 150);
+	spriteSheet->pushFrame(5, 1, 130, 150);
+	spriteSheet->pushFrame(6, 1, 130, 150);
+
+	spriteSheet->pushFrame(0, 2, 130, 150);
+	spriteSheet->pushFrame(1, 2, 130, 150);
+	spriteSheet->pushFrame(2, 2, 130, 150);
+	spriteSheet->pushFrame(3, 2, 130, 150);
+	spriteSheet->pushFrame(4, 2, 130, 150);
+	spriteSheet->pushFrame(5, 2, 130, 150);
+	spriteSheet->pushFrame(6, 2, 130, 150);
+
+	an = new SpriteSheetAnimation(spriteSheet, 0.05);
 
 	sprite->setUvs(spriteSheet->frames.at(0));
-	sprite->transform->scale(10, 10, 1);
+	sprite->transform->scale(-2, 2, 1);
 
 	sprite->mesh->dirty = true;
 }
@@ -59,6 +87,10 @@ void TestScene2D::update(){
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		sprite->transform->translate(-0.1f, 0.f, 0.f);	
 	}
+
+	an->update(&vox::step);
+	sprite->setUvs(spriteSheet->frames.at(an->currentFrame));
+	sprite->mesh->dirty = true;
 }
 
 void TestScene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
