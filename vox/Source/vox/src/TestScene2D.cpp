@@ -8,11 +8,13 @@
 #include "shader/ShadowShaderComponent.h"
 #include "shader/PhongShaderComponent.h"
 #include "Keyboard.h"
+#include "SpriteSheet.h"
+#include "Rectangle.h"
 
 TestScene2D::TestScene2D(Game* _game)
 	:Scene2D(_game),
 	sprite(new Sprite(nullptr, new Transform())),
-	tex(new Texture("../assets/spritesheet.png", 1000, 1000, true, true)),
+	tex(new Texture("../assets/spritesheet.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader())
 {
 	shader->components.push_back(new TextureShaderComponent());
@@ -22,7 +24,13 @@ TestScene2D::TestScene2D(Game* _game)
 	sprite->mesh->pushTexture2D(tex);
 	addChild(sprite);	
 
+	SpriteSheet * spriteSheet = new SpriteSheet(tex);
+	spriteSheet->pushFrame(2, 128, 140);
 
+	sprite->setUvs(spriteSheet->frames.at(0));
+	sprite->transform->scale(10, 10, 1);
+
+	sprite->mesh->dirty = true;
 }
 
 TestScene2D::~TestScene2D(){

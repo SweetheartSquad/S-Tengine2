@@ -14,19 +14,19 @@ Rectangle::~Rectangle(){
 }
 
 Point Rectangle::getTopLeft(){
-	return Point(x - 0.5f * width, y + 0.5f * height);
+	return Point(x, y);
 }
 
 Point Rectangle::getTopRight(){
-	return Point(x + width * 0.5f, y + 0.5f * height);
+	return Point(x + width, y);
 }
 
 Point Rectangle::getBottomLeft(){
-	return Point(x - 0.5f * width, y - 0.5f * height);
+	return Point(x, y + height);
 }
 
 Point Rectangle::getBottomRight(){
-	return Point(x + 0.5f * width, y - 0.5f * height);
+	return Point(x + width, y + height);
 }
 
 float Rectangle::getArea(){

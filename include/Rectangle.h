@@ -17,7 +17,5 @@ public:
 
 	float getArea();
 	float getPerimeter();
-
-	float intersects(Rectangle _rect);
-	Rectangle getIntersection(Rectangle _rect);
+	bool intersects(Rectangle _rect);
 };

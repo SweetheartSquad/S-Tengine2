@@ -3,6 +3,8 @@
 #include "MeshEntity.h"
 #include "MeshInterface.h"
 
+class Rectangle;
+
 class Sprite : public MeshEntity{
 public:
 	
@@ -16,6 +18,7 @@ public:
 
 	void setUvs(float _topLeftU, float _topLeftV, float _topRightU, float _topRightV, 
 		float _bottomLeftU, float _bottomLeftV, float _bottomRightU, float _bottomRightV);
+	void setUvs(Rectangle _rect);
 };
 
 class SpriteMesh : public MeshInterface{
