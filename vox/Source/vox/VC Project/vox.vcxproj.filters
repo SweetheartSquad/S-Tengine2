@@ -270,6 +270,15 @@
     <ClCompile Include="..\src\TestScene2D.cpp">
       <Filter>Source Files\TestGame</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\SpriteSheet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Rectangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Point.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -490,6 +499,15 @@
     </ClInclude>
     <ClInclude Include="..\include\TestScene2D.h">
       <Filter>Header Files\TestGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SpriteSheet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Rectangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Point.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

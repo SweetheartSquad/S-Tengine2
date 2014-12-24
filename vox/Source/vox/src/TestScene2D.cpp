@@ -12,7 +12,7 @@
 TestScene2D::TestScene2D(Game* _game)
 	:Scene2D(_game),
 	sprite(new Sprite(nullptr, new Transform())),
-	tex(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true)),
+	tex(new Texture("../assets/spritesheet.png", 1000, 1000, true, true)),
 	shader(new BaseComponentShader())
 {
 	shader->components.push_back(new TextureShaderComponent());
@@ -20,7 +20,9 @@ TestScene2D::TestScene2D(Game* _game)
 
 	sprite->setShader(shader, true);
 	sprite->mesh->pushTexture2D(tex);
-	addChild(sprite);
+	addChild(sprite);	
+
+
 }
 
 TestScene2D::~TestScene2D(){

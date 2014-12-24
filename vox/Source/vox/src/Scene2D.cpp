@@ -1,5 +1,6 @@
 #include "Scene2D.h"
 #include "OrthographicCamera.h"
+#include <GLFW/glfw3.h>
 
 Scene2D::Scene2D(Game * _game):
 	Scene(_game)
