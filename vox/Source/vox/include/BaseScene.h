@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 
+class Sprite;
 class Shader;
 class MeshInterface;
 class MeshEntity;
@@ -19,6 +20,8 @@ public:
 	Cube * ground;
 	Cube * cube;
 	MeshEntity * monkey;
+
+	Sprite * sprite; 
 
 	//Shaders
 	BaseComponentShader * shader;

@@ -19,19 +19,17 @@ public:
 	OrthographicCamera(float left, float right, float bottom, float top, float near, float far);
 	~OrthographicCamera();
 
-	void update() { /* empty*/ };
+	void update() override {/* empty*/};
 
 	/**
 	* @return The view matrix of the camera
 	*/
-	glm::mat4 getViewMatrix();
+	glm::mat4 getViewMatrix() override;
 
 	/**
 	* @return The projection matrix of the camera 
 	*/
-	glm::mat4 getProjectionMatrix();
-	
-private:
+	glm::mat4 getProjectionMatrix() override;
 	
 	float left;
 	float top;

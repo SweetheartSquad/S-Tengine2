@@ -21,7 +21,6 @@ Scene::Scene(Game * _game):
 	mouse(&Mouse::getInstance()),
 	keyboard(&Keyboard::getInstance()),
 	camera(new PerspectiveCamera()),
-	//camera(new OrthograpicCamera(-10, 10, -10, 10, -10, 20)),
 	renderOptions(new RenderOptions(nullptr, &lights)),
 	depthBuffer(new StandardFrameBuffer(true)),
 	shadowBuffer(new StandardFrameBuffer(true)),
@@ -99,7 +98,7 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 	glScissor(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
 
 	// not working?
-	glClearColor(0.f, 0.f, 0.f, 1.f);
+	glClearColor(1.f, 1.f, 1.f, 1.f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST);

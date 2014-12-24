@@ -25,6 +25,7 @@
 #include "VoxelMesh.h"
 #include "StandardFrameBuffer.h"
 #include "RenderSurface.h"
+#include "Sprite.h"
 
 BaseScene::BaseScene(Game * _game):
 	Scene(_game),
@@ -33,7 +34,8 @@ BaseScene::BaseScene(Game * _game):
 	monkey(new MeshEntity()),
 	shader(new BaseComponentShader()),
 	material(new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true)),
-	frameBuffer(new StandardFrameBuffer(true))
+	frameBuffer(new StandardFrameBuffer(true)),
+	sprite(new Sprite(nullptr, new Transform()))
 {
 	//Add shader components
 	shader->components.push_back(new TextureShaderComponent());
@@ -131,6 +133,14 @@ BaseScene::BaseScene(Game * _game):
 	voxelMonkey->transform->translate(0.0f, 0.0f, 3.0f);
 	addChild(voxelMonkey);
 
+
+	sprite->setShader(shader, true);
+	sprite->mesh->pushTexture2D(tex);
+	sprite->mesh->pushMaterial(material);
+	sprite->transform->translate(-5, 0, 0);
+
+	addChild(sprite);
+
 	//Load the render surface shader from a file
 	renderSurfaceShader = new Shader("../assets/RenderSurface", false, true);
 	//Instantiate the render surface
@@ -152,16 +162,16 @@ void BaseScene::update(){
 
 	//Add movement to the camera
 	if(keyboard->keyDown(GLFW_KEY_W)){
-		camera->transform->translate((camera->forwardVectorRotated) * camera->speed);
+		camera->transform->translate((camera->forwardVectorRotated) * static_cast<PerspectiveCamera *>(camera)->speed);
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
-		camera->transform->translate((camera->forwardVectorRotated) * -camera->speed);	
+		camera->transform->translate((camera->forwardVectorRotated) * -static_cast<PerspectiveCamera *>(camera)->speed);	
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		camera->transform->translate((camera->rightVectorRotated) * -camera->speed);		
+		camera->transform->translate((camera->rightVectorRotated) * -static_cast<PerspectiveCamera *>(camera)->speed);		
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		camera->transform->translate((camera->rightVectorRotated) * camera->speed);	
+		camera->transform->translate((camera->rightVectorRotated) * static_cast<PerspectiveCamera *>(camera)->speed);	
 	}
 	
 	//Toggle fullscreen

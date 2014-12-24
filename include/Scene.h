@@ -6,6 +6,8 @@
 #include "node/NodeLoadable.h"
 #include "node/NodeRenderable.h"
 
+class Camera;
+
 namespace vox{
 	class MatrixStack;
 }
@@ -15,8 +17,6 @@ class Light;
 class DepthMapShader;
 class BaseComponentShader;
 class RenderSurface;
-class PerspectiveCamera;
-class OrthographicCamera;
 class Keyboard;
 class StandardFrameBuffer;
 class DepthFrameBuffer;
@@ -34,7 +34,7 @@ public:
 	/** Reference to keyboard singleton */
 	Keyboard * keyboard;
 	/** Reference to this scene's camera */
-	PerspectiveCamera * camera;
+	Camera * camera;
 	/** Reference to a list of references to entitites included in this scene */
 	RenderOptions       * renderOptions;
 	StandardFrameBuffer	* depthBuffer;
@@ -49,7 +49,7 @@ public:
 	/** Calls update on the attached camera */
 	virtual void update(void);
 	/** Tells the RenderSystem to render the attached children to the vox::currentContext using the camera's view-projection matrix */
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack);
+	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 	/** Adds a reference to an entity to the attached list of children */
 	void addChild(Entity * child);
 	/** Toggles fullscreen on and off */

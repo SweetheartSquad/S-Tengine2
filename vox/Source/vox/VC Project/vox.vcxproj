@@ -257,6 +257,9 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\src\FrameBufferInterface.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\PerspectiveCamera.cpp" />
+    <ClCompile Include="..\src\Point.cpp" />
+    <ClCompile Include="..\src\Rectangle.cpp" />
+    <ClCompile Include="..\src\Scene2D.cpp" />
     <ClCompile Include="..\src\shader\BaseComponentShader.cpp" />
     <ClCompile Include="..\src\shader\BlinnShaderComponent.cpp" />
     <ClCompile Include="..\src\shader\BlurShader.cpp" />
@@ -271,6 +274,10 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\src\shader\SharedComponentShaderMethods.cpp" />
     <ClCompile Include="..\src\shader\TextureShaderComponent.cpp" />
     <ClCompile Include="..\src\shader\VoxelComponent.cpp" />
+    <ClCompile Include="..\src\Sprite.cpp" />
+    <ClCompile Include="..\src\SpriteSheet.cpp" />
+    <ClCompile Include="..\src\SpriteSheetAnimation.cpp" />
+    <ClCompile Include="..\src\TestScene2D.cpp" />
     <ClCompile Include="..\src\VoxelJoint.cpp" />
     <ClCompile Include="..\src\VoxRenderOptions.cpp" />
     <ClCompile Include="..\src\GLUtils.cpp" />
@@ -327,6 +334,9 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\include\FrameBufferInterface.h" />
     <ClInclude Include="..\include\FrameBufferVertex.h" />
     <ClInclude Include="..\include\Game.h" />
+    <ClInclude Include="..\include\Point.h" />
+    <ClInclude Include="..\include\Rectangle.h" />
+    <ClInclude Include="..\include\Scene2D.h" />
     <ClInclude Include="..\include\shader\BaseComponentShader.h" />
     <ClInclude Include="..\include\shader\BlinnShaderComponent.h" />
     <ClInclude Include="..\include\shader\BlurShader.h" />
@@ -342,6 +352,10 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\include\shader\SharedComponentShaderMethods.h" />
     <ClInclude Include="..\include\shader\TextureShaderComponent.h" />
     <ClInclude Include="..\include\shader\VoxelComponent.h" />
+    <ClInclude Include="..\include\Sprite.h" />
+    <ClInclude Include="..\include\SpriteSheet.h" />
+    <ClInclude Include="..\include\SpriteSheetAnimation.h" />
+    <ClInclude Include="..\include\TestScene2D.h" />
     <ClInclude Include="..\include\VoxRenderOptions.h" />
     <ClInclude Include="..\include\GLUtils.h" />
     <ClInclude Include="..\include\Keyboard.h" />
