@@ -5,22 +5,32 @@
 #include "Animation.h"
 #include "Tween.h"
 #include "Rectangle.h"
+#include "Texture.h"
 
-SpriteSheetAnimation::SpriteSheetAnimation(SpriteSheet * _spriteSheet, float _secondsPerFrame):
+SpriteSheetAnimation::SpriteSheetAnimation(Texture * _texture, float _secondsPerFrame):
 	NodeUpdatable(),
-	frames(Animation<int>(&currentFrame)),
-	currentFrame(0)
+	frameIndicies(Animation<int>(&currentFrame)),
+	texture(_texture),
+	currentFrame(0),
+	secondsPerFrame(_secondsPerFrame)
 {
-	frames.hasStart = true;
-	for(unsigned long int i = 0; i < _spriteSheet->frames.size(); ++i){
-		frames.tweens.push_back(new Tween<int>(_secondsPerFrame, 1, Easing::kNONE));
-	}
+	frameIndicies.hasStart = true;
 }
 
 SpriteSheetAnimation::~SpriteSheetAnimation(){
 }
 
 void SpriteSheetAnimation::update(Step* _step){
-	frames.update(_step);
-	currentFrame = frames.currentTween;
+	frameIndicies.update(_step);
+	currentFrame = frameIndicies.currentTween;
+}
+
+void SpriteSheetAnimation::pushFrame(int _column, int _row, float _width, float _height){
+	float u, v, rW, rH;
+	rW = _width / texture->width;
+	rH = _height / texture->height;
+	u = rW * _column;
+	v = rH * _row;
+	frames.push_back(Rectangle(u, v, rW, rH));
+	frameIndicies.tweens.push_back(new Tween<int>(secondsPerFrame, 1, Easing::kNONE));
 }

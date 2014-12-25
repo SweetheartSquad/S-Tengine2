@@ -3,39 +3,44 @@
 #include "Sprite.h"
 #include "Rectangle.h"
 #include "Point.h"
+#include "SpriteSheetAnimation.h"
 
 Sprite::Sprite(Shader * _shader, Transform * _transform):
 	MeshEntity(new SpriteMesh(GL_STATIC_DRAW)),
 	NodeTransformable(_transform),
-	NodeChild(nullptr)
+	NodeChild(nullptr),
+	currentAnimation(nullptr),
+	playAnimation(true)
 {
 }
 
 Sprite::~Sprite(){
+	for(auto anim : animations){
+		delete anim.second;
+	}
 }
 
-SpriteMesh::SpriteMesh(GLenum _drawMode): 
-	MeshInterface(GL_QUADS, _drawMode){
-	//Top left
-	pushVert(Vertex(-1.f, 1.f, 1.f));
-	//top right
-	pushVert(Vertex(1.f, 1.f, 1.f));
-	//bottom right
-	pushVert(Vertex(1.f, -1.f, 1.f));
-	//bottom left
-	pushVert(Vertex(-1.f, -1.f, 1.f));
-	indices.push_back(0);
-	indices.push_back(1);
-	indices.push_back(2);
-	indices.push_back(3);
-	setNormal(0, 0.0, 0.0, 1.0);
-	setNormal(1, 0.0, 0.0, 1.0);
-	setNormal(2, 0.0, 0.0, 1.0);
-	setNormal(3, 0.0, 0.0, 1.0);
-	setUV(0, 1.0, 0.0);
-	setUV(1, 0.0, 0.0);
-	setUV(2, 0.0, 1.0);
-	setUV(3, 1.0, 1.0);
+void Sprite::update(Step* _step){
+	MeshEntity::update(_step);
+	if(currentAnimation != nullptr && playAnimation){
+		currentAnimation->update(_step);
+		mesh->dirty = true;
+		setUvs(currentAnimation->frames.at(currentAnimation->currentFrame));
+	}
+}
+
+void Sprite::addAnimation(std::string _name, SpriteSheetAnimation* _animation, bool _makeCurrent){
+	animations.insert(std::make_pair(_name, _animation));
+	if(_makeCurrent){
+		currentAnimation = _animation;
+	}
+}
+
+void Sprite::setCurrentAnimation(std::string _name){
+	SpriteSheetAnimation * anim = animations.at(_name);
+	if(anim != nullptr){
+		currentAnimation = anim;
+	}
 }
 
 Vertex * Sprite::getTopLeft(){
@@ -66,16 +71,41 @@ void Sprite::setUvs(float _topLeftU, float _topLeftV, float _topRightU, float _t
 	getBottomRight()->v   = _bottomRightV;
 }
 
-void Sprite::setUvs(Rectangle _rect){
-	mesh->vertices.at(3).u  = _rect.getBottomLeft().x;
-	mesh->vertices.at(3).v  = _rect.getBottomLeft().y;
+void Sprite::setUvs(Rectangle _rect){	
 	mesh->vertices.at(0).u  = _rect.getTopLeft().x;
 	mesh->vertices.at(0).v  = _rect.getTopLeft().y;
 	mesh->vertices.at(1).u  = _rect.getTopRight().x;
 	mesh->vertices.at(1).v  = _rect.getTopRight().y;
 	mesh->vertices.at(2).u  = _rect.getBottomRight().x;
 	mesh->vertices.at(2).v  = _rect.getBottomRight().y;
+	mesh->vertices.at(3).u  = _rect.getBottomLeft().x;
+	mesh->vertices.at(3).v  = _rect.getBottomLeft().y;
 }
+
+SpriteMesh::SpriteMesh(GLenum _drawMode): 
+	MeshInterface(GL_QUADS, _drawMode){
+	//Top left
+	pushVert(Vertex(-1.f, 1.f, 1.f));
+	//top right
+	pushVert(Vertex(1.f, 1.f, 1.f));
+	//bottom right
+	pushVert(Vertex(1.f, -1.f, 1.f));
+	//bottom left
+	pushVert(Vertex(-1.f, -1.f, 1.f));
+	indices.push_back(0);
+	indices.push_back(1);
+	indices.push_back(2);
+	indices.push_back(3);
+	setNormal(0, 0.0, 0.0, 1.0);
+	setNormal(1, 0.0, 0.0, 1.0);
+	setNormal(2, 0.0, 0.0, 1.0);
+	setNormal(3, 0.0, 0.0, 1.0);
+	setUV(0, 1.0, 0.0);
+	setUV(1, 0.0, 0.0);
+	setUV(2, 0.0, 1.0);
+	setUV(3, 1.0, 1.0);
+}
+
 
 SpriteMesh::~SpriteMesh(){
 }

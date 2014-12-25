@@ -13,8 +13,8 @@
 #include "SpriteSheetAnimation.h"
 #include "Vox.h"
 
-SpriteSheetAnimation * an;
-SpriteSheet * spriteSheet;
+SpriteSheetAnimation * spriteSheet;
+
 TestScene2D::TestScene2D(Game* _game)
 	:Scene2D(_game),
 	sprite(new Sprite(nullptr, new Transform())),
@@ -28,7 +28,8 @@ TestScene2D::TestScene2D(Game* _game)
 	sprite->mesh->pushTexture2D(tex);
 	addChild(sprite);	
 
-	spriteSheet = new SpriteSheet(tex);
+	spriteSheet = new SpriteSheetAnimation(tex, 0.03);
+
 	spriteSheet->pushFrame(0, 0, 130, 150);
 	spriteSheet->pushFrame(1, 0, 130, 150);
 	spriteSheet->pushFrame(2, 0, 130, 150);
@@ -53,12 +54,17 @@ TestScene2D::TestScene2D(Game* _game)
 	spriteSheet->pushFrame(5, 2, 130, 150);
 	spriteSheet->pushFrame(6, 2, 130, 150);
 
-	an = new SpriteSheetAnimation(spriteSheet, 0.05);
+	spriteSheet->pushFrame(0, 3, 130, 150);
+	spriteSheet->pushFrame(1, 3, 130, 150);
+	spriteSheet->pushFrame(2, 3, 130, 150);
+	spriteSheet->pushFrame(3, 3, 130, 150);
+	spriteSheet->pushFrame(4, 3, 130, 150);
+	spriteSheet->pushFrame(5, 3, 130, 150);
 
 	sprite->setUvs(spriteSheet->frames.at(0));
 	sprite->transform->scale(-2, 2, 1);
-
-	sprite->mesh->dirty = true;
+	
+	sprite->addAnimation("run", spriteSheet, true);
 }
 
 TestScene2D::~TestScene2D(){
@@ -87,10 +93,6 @@ void TestScene2D::update(){
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		sprite->transform->translate(-0.1f, 0.f, 0.f);	
 	}
-
-	an->update(&vox::step);
-	sprite->setUvs(spriteSheet->frames.at(an->currentFrame));
-	sprite->mesh->dirty = true;
 }
 
 void TestScene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
