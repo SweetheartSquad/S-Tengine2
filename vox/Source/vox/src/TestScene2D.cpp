@@ -13,6 +13,7 @@
 #include "SpriteSheetAnimation.h"
 #include "Vox.h"
 #include <array>
+#include <libzplay.h>
 
 SpriteSheetAnimation * spriteSheet;
 TestScene2D::TestScene2D(Game* _game)
@@ -21,6 +22,17 @@ TestScene2D::TestScene2D(Game* _game)
 	tex(new Texture("../assets/spritesheet.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader())
 {
+
+	libZPlay::ZPlay *player = libZPlay::CreateZPlay();
+    int result = player->OpenFile("test.wav", libZPlay::sfAutodetect);
+    if(result == 0)
+    {
+        // display error message
+        //printf("Error: %s\n", player->GetError());
+        player->Release();
+      
+    }
+
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
 
