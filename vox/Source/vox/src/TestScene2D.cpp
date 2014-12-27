@@ -24,14 +24,14 @@ TestScene2D::TestScene2D(Game* _game)
 {
 
 	libZPlay::ZPlay *player = libZPlay::CreateZPlay();
-    int result = player->OpenFile("test.wav", libZPlay::sfAutodetect);
+    int result = player->OpenFile("../assets/test.wav", libZPlay::sfAutodetect);
     if(result == 0)
     {
-        // display error message
-        //printf("Error: %s\n", player->GetError());
+		std::cout<<player->GetError();
         player->Release();
-      
     }
+
+	player->Play();
 
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
