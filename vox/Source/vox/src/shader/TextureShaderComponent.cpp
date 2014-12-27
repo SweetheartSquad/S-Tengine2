@@ -9,6 +9,7 @@
 #include "MeshInterface.h"
 #include "Sprite.h"
 #include "SpriteSheetAnimation.h"
+#include "SpriteMesh.h"
 
 TextureShaderComponent::TextureShaderComponent() : ShaderComponent(){
 }
@@ -48,10 +49,10 @@ std::string TextureShaderComponent::getOutColorMod(){
 
 void TextureShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
-	Sprite * sprite = dynamic_cast<Sprite *>(_nodeRenderable);
+	SpriteMesh * spriteMesh = dynamic_cast<SpriteMesh *>(_nodeRenderable);
 	int numTextures = 0;
 	if(mesh != nullptr){
-		if(sprite == nullptr){
+		if(spriteMesh == nullptr){
 			// Pass the _shader the number of textures
 			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), mesh->textures.size());
 		}
@@ -64,10 +65,10 @@ void TextureShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, R
 		numTextures = mesh->textures.size();
 	}
 	//Setup the texture for the current animation
-	if(sprite != nullptr){	
-		if(sprite->currentAnimation->texture != nullptr){
+	if(spriteMesh != nullptr){	
+		if(spriteMesh->animatedTexture != nullptr){
 			glActiveTexture(GL_TEXTURE0 + 1 + numTextures);
-			glBindTexture(GL_TEXTURE_2D, sprite->currentAnimation->texture->textureId);
+			glBindTexture(GL_TEXTURE_2D, spriteMesh->animatedTexture->textureId);
 			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str()), numTextures + 1);
 		}
 		// Pass the _shader the number of textures

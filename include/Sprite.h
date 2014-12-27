@@ -7,10 +7,10 @@
 
 class SpriteSheetAnimation;
 class Rectangle;
+class SpriteMesh;
 
 class Sprite : public MeshEntity{
 public:
-	
 	std::map<std::string, SpriteSheetAnimation *> animations;
 	SpriteSheetAnimation * currentAnimation;
 	bool playAnimation;
@@ -29,10 +29,4 @@ public:
 	void update(Step* _step) override;
 	void addAnimation(std::string _name, SpriteSheetAnimation * _animation, bool _makeCurrent);
 	void setCurrentAnimation(std::string _name);
-};
-
-class SpriteMesh : public MeshInterface{
-public:
-	explicit SpriteMesh(GLenum _drawMode);
-	virtual ~SpriteMesh();
 };
