@@ -6,7 +6,9 @@
 #include "RenderOptions.h"
 #include "Texture.h"
 #include "node/NodeRenderable.h"
-#include <MeshInterface.h>
+#include "MeshInterface.h"
+#include "Sprite.h"
+#include "SpriteSheetAnimation.h"
 
 TextureShaderComponent::TextureShaderComponent() : ShaderComponent(){
 }
@@ -45,16 +47,30 @@ std::string TextureShaderComponent::getOutColorMod(){
 }
 
 void TextureShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
-	
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
+	Sprite * sprite = dynamic_cast<Sprite *>(_nodeRenderable);
+	int numTextures = 0;
 	if(mesh != nullptr){
-		// Pass the _shader the number of textures
-		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), mesh->textures.size());
+		if(sprite == nullptr){
+			// Pass the _shader the number of textures
+			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), mesh->textures.size());
+		}
 		// Bind each texture to the texture sampler array in the frag _shader
 		for(unsigned long int i = 0; i < mesh->textures.size(); i++){
 			glActiveTexture(GL_TEXTURE0 + i);
 			glBindTexture(GL_TEXTURE_2D, mesh->textures.at(i)->textureId);
 			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str()), i);
 		}
+		numTextures = mesh->textures.size();
+	}
+	//Setup the texture for the current animation
+	if(sprite != nullptr){	
+		if(sprite->currentAnimation->texture != nullptr){
+			glActiveTexture(GL_TEXTURE0 + 1 + numTextures);
+			glBindTexture(GL_TEXTURE_2D, sprite->currentAnimation->texture->textureId);
+			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str()), numTextures + 1);
+		}
+		// Pass the _shader the number of textures
+		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), numTextures + 1);
 	}
 }

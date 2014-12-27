@@ -18,19 +18,19 @@ SpriteSheetAnimation * spriteSheet;
 TestScene2D::TestScene2D(Game* _game)
 	:Scene2D(_game),
 	sprite(new Sprite(nullptr, new Transform())),
-	tex(new Texture("../assets/spritesheet.png", 1024, 1024, true, true)),
+	tex(new Texture("../assets/spritesheet2.png", 900, 495, true, true)),
 	shader(new BaseComponentShader())
 {
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
 
 	sprite->setShader(shader, true);
-	sprite->mesh->pushTexture2D(tex);
+	//sprite->mesh->pushTexture2D(tex);
 	addChild(sprite);	
 
-	spriteSheet = new SpriteSheetAnimation(tex, 0.03);
+	spriteSheet = new SpriteSheetAnimation(tex, 0.1);
 
-	spriteSheet->pushFrame(0, 0, 130, 150);
+	/*spriteSheet->pushFrame(0, 0, 130, 150);
 	spriteSheet->pushFrame(1, 0, 130, 150);
 	spriteSheet->pushFrame(2, 0, 130, 150);
 	spriteSheet->pushFrame(3, 0, 130, 150);
@@ -59,10 +59,13 @@ TestScene2D::TestScene2D(Game* _game)
 	spriteSheet->pushFrame(2, 3, 130, 150);
 	spriteSheet->pushFrame(3, 3, 130, 150);
 	spriteSheet->pushFrame(4, 3, 130, 150);
-	spriteSheet->pushFrame(5, 3, 130, 150);
+	spriteSheet->pushFrame(5, 3, 130, 150);*/
+	int f [10] = {0,1,2,3,4,5,6,7,8,9};
+	//spriteSheet->pushMultipleFrames(f, 180, 248);
 
-	sprite->setUvs(spriteSheet->frames.at(0));
-	sprite->transform->scale(-2, 2, 1);
+	spriteSheet->pushFramesInRange(0, 9, 180, 248);
+
+	sprite->transform->scale(3, 3, 1);
 	
 	sprite->addAnimation("run", spriteSheet, true);
 }

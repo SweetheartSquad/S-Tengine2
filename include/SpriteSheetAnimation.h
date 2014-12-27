@@ -21,4 +21,6 @@ public:
 
 	void update(Step* _step) override;
 	void pushFrame(int _column, int _row, float _width, float _height);
+	void pushMultipleFrames(int _frames[], float _width, float _height);
+	void pushFramesInRange(int _min, int _max, float _width, float _height);
 };
