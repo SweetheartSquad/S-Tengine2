@@ -60,11 +60,12 @@ void SpriteSheetAnimation::pushMultipleFrames(std::vector<int> _frames, float _w
 }
 
 void SpriteSheetAnimation::pushFramesInRange(int _min, int _max, float _width, float _height, float _textureWidth){
-	int curCol = _min;
+	int curCol = _min - 1;
 	int curRow = 0;
 	int colOffset = 0;
 	int colInRow = -1;
 	for(unsigned long int i = 0; i <= _max - _min; i++){
+		curCol++;
 		if((curCol - colOffset + 1) * _width > _textureWidth){
 			curRow++;
 			if(colInRow == -1){
