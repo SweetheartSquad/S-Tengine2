@@ -12,13 +12,13 @@
 #include "Rectangle.h"
 #include "SpriteSheetAnimation.h"
 #include "Vox.h"
+#include <array>
 
 SpriteSheetAnimation * spriteSheet;
-
 TestScene2D::TestScene2D(Game* _game)
 	:Scene2D(_game),
 	sprite(new Sprite(nullptr, new Transform())),
-	tex(new Texture("../assets/spritesheet2.png", 900, 495, true, true)),
+	tex(new Texture("../assets/spritesheet.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader())
 {
 	shader->components.push_back(new TextureShaderComponent());
@@ -29,8 +29,8 @@ TestScene2D::TestScene2D(Game* _game)
 	addChild(sprite);	
 
 	spriteSheet = new SpriteSheetAnimation(tex, 0.1);
-
-	/*spriteSheet->pushFrame(0, 0, 130, 150);
+/*
+	spriteSheet->pushFrame(0, 0, 130, 150);
 	spriteSheet->pushFrame(1, 0, 130, 150);
 	spriteSheet->pushFrame(2, 0, 130, 150);
 	spriteSheet->pushFrame(3, 0, 130, 150);
@@ -60,10 +60,12 @@ TestScene2D::TestScene2D(Game* _game)
 	spriteSheet->pushFrame(3, 3, 130, 150);
 	spriteSheet->pushFrame(4, 3, 130, 150);
 	spriteSheet->pushFrame(5, 3, 130, 150);*/
-	int f [10] = {0,1,2,3,4,5,6,7,8,9};
-	//spriteSheet->pushMultipleFrames(f, 180, 248);
 
-	spriteSheet->pushFramesInRange(0, 9, 180, 248);
+	int f[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26};
+	std::vector<int> ff(std::begin(f), std::end(f));
+	spriteSheet->pushMultipleFrames(ff, 130, 150, 130 * 7);
+
+	spriteSheet->pushFramesInRange(0, 26, 130, 150, 130 * 7);
 
 	sprite->transform->scale(3, 3, 1);
 	

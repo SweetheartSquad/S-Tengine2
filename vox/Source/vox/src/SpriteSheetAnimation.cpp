@@ -7,6 +7,8 @@
 #include "Rectangle.h"
 #include "Texture.h"
 
+
+
 SpriteSheetAnimation::SpriteSheetAnimation(Texture * _texture, float _secondsPerFrame):
 	NodeUpdatable(),
 	frameIndicies(Animation<int>(&currentFrame)),
@@ -31,32 +33,49 @@ void SpriteSheetAnimation::pushFrame(int _column, int _row, float _width, float 
 	rH = _height / texture->height;
 	u = rW * _column;
 	v = rH * _row;
-	frames.push_back(Rectangle(u, v, -rW, rH));
+	frames.push_back(Rectangle(u, v, rW, rH));
 	frameIndicies.tweens.push_back(new Tween<int>(secondsPerFrame, 1, Easing::kNONE));
 }
 
-void SpriteSheetAnimation::pushMultipleFrames(int _frames[], float _width, float _height){
+void SpriteSheetAnimation::pushMultipleFrames(std::vector<int> _frames, float _width, float _height){
+	pushMultipleFrames(_frames, _width, _height, texture->width);
+}
+
+void SpriteSheetAnimation::pushMultipleFrames(std::vector<int> _frames, float _width, float _height, float _textureWidth){
 	int curCol = 0;
 	int curRow = 0;
-	for(unsigned long int i = 0; i < sizeof(frames)/sizeof(int); i++){
-		curCol = _frames[i];
-		if(curCol / (curRow + 1) * _width > texture->width){
+	int colOffset = 0;
+	int colInRow = -1;
+	for(unsigned long int i = 0; i < _frames.size(); i++){
+		curCol = _frames.at(i);
+		if((curCol - colOffset + 1) * _width > _textureWidth){
 			curRow++;
-			curCol /= (curRow + 1);
+			if(colInRow == -1){
+				colInRow = curCol;	
+			}
+			colOffset += colInRow;
 		}
-		pushFrame(curCol, curRow, _width, _height);
+		pushFrame(curCol - colOffset, curRow, _width, _height);
+	}
+}
+
+void SpriteSheetAnimation::pushFramesInRange(int _min, int _max, float _width, float _height, float _textureWidth){
+	int curCol = _min;
+	int curRow = 0;
+	int colOffset = 0;
+	int colInRow = -1;
+	for(unsigned long int i = 0; i <= _max - _min; i++){
+		if((curCol - colOffset + 1) * _width > _textureWidth){
+			curRow++;
+			if(colInRow == -1){
+				colInRow = curCol;	
+			}
+			colOffset += colInRow;
+		}
+		pushFrame(curCol - colOffset, curRow, _width, _height);
 	}
 }
 
 void SpriteSheetAnimation::pushFramesInRange(int _min, int _max, float _width, float _height){
-	int curCol = _min;
-	int curRow = 0;
-	for(unsigned long int i = 0; i <= _max - _min; i++){
-		if(curCol / (curRow + 1) * _width > texture->width){
-			curRow++;
-			curCol /= (curRow + 1);
-		}
-		pushFrame(curCol, curRow, _width, _height);
-		curCol++;
-	}
+	pushFramesInRange(_min, _max, _width, _height, texture->width);
 }
