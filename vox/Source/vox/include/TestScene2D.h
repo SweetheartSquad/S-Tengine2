@@ -2,6 +2,7 @@
 
 #include "Scene2D.h"
 
+class SoundManager;
 class Texture;
 class Sprite;
 
@@ -12,6 +13,7 @@ public:
 	Sprite * sprite;
 	Texture * tex;
 	BaseComponentShader* shader;
+	SoundManager * soundManager;
 
 	explicit TestScene2D(Game * _game);
 	virtual ~TestScene2D();

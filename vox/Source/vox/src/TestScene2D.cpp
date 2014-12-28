@@ -12,6 +12,8 @@
 #include "Rectangle.h"
 #include "SpriteSheetAnimation.h"
 #include "Vox.h"
+#include "SoundManager.h"
+
 #include <array>
 #include <libzplay.h>
 
@@ -20,24 +22,17 @@ TestScene2D::TestScene2D(Game* _game)
 	:Scene2D(_game),
 	sprite(new Sprite(nullptr, new Transform())),
 	tex(new Texture("../assets/spritesheet.png", 1024, 1024, true, true)),
-	shader(new BaseComponentShader())
+	shader(new BaseComponentShader()),
+	soundManager(new SoundManager())
 {
 
-	libZPlay::ZPlay *player = libZPlay::CreateZPlay();
-    int result = player->OpenFile("../assets/test.wav", libZPlay::sfAutodetect);
-    if(result == 0)
-    {
-		std::cout<<player->GetError();
-        player->Release();
-    }
-
-	player->Play();
+	soundManager->addNewSound("green_chair", "../assets/test.wav");
+	soundManager->play("green_chair");
 
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
 
 	sprite->setShader(shader, true);
-	//sprite->mesh->pushTexture2D(tex);
 	addChild(sprite);	
 
 	spriteSheet = new SpriteSheetAnimation(tex, 0.1);
@@ -77,7 +72,7 @@ TestScene2D::TestScene2D(Game* _game)
 	std::vector<int> ff(std::begin(f), std::end(f));
 	//spriteSheet->pushMultipleFrames(ff, 130, 150, 130 * 7);
 
-	spriteSheet->pushFramesInRange(20, 21, 130, 150, 130 * 7);
+	spriteSheet->pushFramesInRange(0, 26, 130, 150, 130 * 7);
 
 	sprite->transform->scale(3, 3, 1);
 	
