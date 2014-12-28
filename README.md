@@ -19,7 +19,7 @@
 
 Open project
 
-Rename glfwSettings.props.template to glfwSettings.props
+Rename voxSettings.props.template to voxSettings.props
 
 ## GLEW ##
 * Download glew 1.11.0 
