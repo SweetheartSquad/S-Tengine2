@@ -7,8 +7,6 @@
 #include "Rectangle.h"
 #include "Texture.h"
 
-
-
 SpriteSheetAnimation::SpriteSheetAnimation(Texture * _texture, float _secondsPerFrame):
 	NodeUpdatable(),
 	frameIndicies(Animation<int>(&currentFrame)),

@@ -16,6 +16,13 @@
 
 #include <array>
 #include <libzplay.h>
+#include <Box2D/Box2D.h>
+
+int velocityIterations = 6;
+int positionIterations = 2;
+b2Vec2 gravity(0.0f, -10.0f);
+b2World world(gravity);
+b2Body* body;
 
 SpriteSheetAnimation * spriteSheet;
 TestScene2D::TestScene2D(Game* _game)
@@ -25,10 +32,9 @@ TestScene2D::TestScene2D(Game* _game)
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager())
 {
-
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	soundManager->play("green_chair");
-
+	
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
 
@@ -36,47 +42,51 @@ TestScene2D::TestScene2D(Game* _game)
 	addChild(sprite);	
 
 	spriteSheet = new SpriteSheetAnimation(tex, 0.1);
-/*
-	spriteSheet->pushFrame(0, 0, 130, 150);
-	spriteSheet->pushFrame(1, 0, 130, 150);
-	spriteSheet->pushFrame(2, 0, 130, 150);
-	spriteSheet->pushFrame(3, 0, 130, 150);
-	spriteSheet->pushFrame(4, 0, 130, 150);
-	spriteSheet->pushFrame(5, 0, 130, 150);
-	spriteSheet->pushFrame(6, 0, 130, 150);
-
-	spriteSheet->pushFrame(0, 1, 130, 150);
-	spriteSheet->pushFrame(1, 1, 130, 150);
-	spriteSheet->pushFrame(2, 1, 130, 150);
-	spriteSheet->pushFrame(3, 1, 130, 150);
-	spriteSheet->pushFrame(4, 1, 130, 150);
-	spriteSheet->pushFrame(5, 1, 130, 150);
-	spriteSheet->pushFrame(6, 1, 130, 150);
-
-	spriteSheet->pushFrame(0, 2, 130, 150);
-	spriteSheet->pushFrame(1, 2, 130, 150);
-	spriteSheet->pushFrame(2, 2, 130, 150);
-	spriteSheet->pushFrame(3, 2, 130, 150);
-	spriteSheet->pushFrame(4, 2, 130, 150);
-	spriteSheet->pushFrame(5, 2, 130, 150);
-	spriteSheet->pushFrame(6, 2, 130, 150);
-
-	spriteSheet->pushFrame(0, 3, 130, 150);
-	spriteSheet->pushFrame(1, 3, 130, 150);
-	spriteSheet->pushFrame(2, 3, 130, 150);
-	spriteSheet->pushFrame(3, 3, 130, 150);
-	spriteSheet->pushFrame(4, 3, 130, 150);
-	spriteSheet->pushFrame(5, 3, 130, 150);*/
-
-	int f[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26};
-	std::vector<int> ff(std::begin(f), std::end(f));
-	//spriteSheet->pushMultipleFrames(ff, 130, 150, 130 * 7);
-
 	spriteSheet->pushFramesInRange(0, 26, 130, 150, 130 * 7);
 
 	sprite->transform->scale(3, 3, 1);
-	
 	sprite->addAnimation("run", spriteSheet, true);
+
+    // Define the ground body.
+    b2BodyDef groundBodyDef;
+    groundBodyDef.position.Set(0.0f, -10.0f);
+
+    // Call the body factory which allocates memory for the ground body
+    // from a pool and creates the ground box shape (also from a pool).
+    // The body is also added to the world.
+    b2Body* groundBody = world.CreateBody(&groundBodyDef);
+
+    // Define the ground box shape.
+    b2PolygonShape groundBox;
+
+    // The extents are the half-widths of the box.
+    groundBox.SetAsBox(50.0f, 10.0f);
+
+    // Add the ground fixture to the ground body.
+    groundBody->CreateFixture(&groundBox, 0.0f);
+
+    // Define the dynamic body. We set its position and call the body factory.
+    b2BodyDef bodyDef;
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position.Set(0.0f, 10.0f);
+    body = world.CreateBody(&bodyDef);
+    // Define another box shape for our dynamic body.
+    b2PolygonShape dynamicBox;
+    dynamicBox.SetAsBox(1.0f, 1.0f);
+
+    // Define the dynamic body fixture.
+    b2FixtureDef fixtureDef;
+    fixtureDef.shape = &dynamicBox;
+
+    // Set the box density to be non-zero, so it will be dynamic.
+    fixtureDef.density = 1.0f;
+
+    // Override the default friction.
+    fixtureDef.friction = 0.3f;
+
+    // Add the shape to the body.
+    body->CreateFixture(&fixtureDef);
+
 }
 
 TestScene2D::~TestScene2D(){
@@ -91,7 +101,13 @@ void TestScene2D::unload(){
 }
 
 void TestScene2D::update(){
+
 	Scene2D::update();
+
+	 world.Step(vox::step.getDeltaTime(), velocityIterations, positionIterations);
+	
+	 sprite->transform->translationVector.x = body->GetPosition().x;
+	 sprite->transform->translationVector.y = body->GetPosition().y;
 
 	if(keyboard->keyDown(GLFW_KEY_W)){
 		sprite->transform->translate(0.f, 0.1f, 0.f);
