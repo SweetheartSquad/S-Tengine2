@@ -23,7 +23,7 @@ void Box2DSprite::update(Step * _step){
 	Sprite::update(_step);
 }
 
-void Box2DSprite::translatePhysical(glm::vec3 _translation){
+void Box2DSprite::setTranslationPhysical(glm::vec3 _translation){
 	transform->translate(_translation);
 	bodyDef.position.Set(transform->translationVector.x, transform->translationVector.y);
 	if(body != nullptr){
@@ -31,20 +31,20 @@ void Box2DSprite::translatePhysical(glm::vec3 _translation){
 	}
 }
 
-void Box2DSprite::translatePhysical(float _x, float _y, float _z){
-	translatePhysical(glm::vec3(_x, _y, _z));
+void Box2DSprite::setTranslationPhysical(float _x, float _y, float _z){
+	setTranslationPhysical(glm::vec3(_x, _y, _z));
 }
 
 void Box2DSprite::setXPhysical(float _x){
-	translatePhysical(glm::vec3(_x, 0, 0));
+	setTranslationPhysical(glm::vec3(_x, 0, 0));
 }
 
 void Box2DSprite::setYPhysical(float _y){
-	translatePhysical(glm::vec3(0, _y, 0));
+	setTranslationPhysical(glm::vec3(0, _y, 0));
 }
 
 void Box2DSprite::setXYPhysical(float _x, float _y){
-	translatePhysical(glm::vec3(_x, _y, 0));
+	setTranslationPhysical(glm::vec3(_x, _y, 0));
 }
 
 void Box2DSprite::applyForce(float _forceX, float _forceY, float _pointX, float _pointY){
@@ -76,3 +76,40 @@ void Box2DSprite::applyForceDown(float _force){
 		body->ApplyForce(b2Vec2(0, -_force), body->GetWorldCenter(), true);
 	}
 }
+
+void Box2DSprite::applyLinearImpulse(float _forceX, float _forceY, float _pointX, float _pointY){
+	if(body != nullptr){
+		body->ApplyLinearImpulse(b2Vec2(_forceX, _forceY), b2Vec2(_pointX, _pointY), true);
+	}
+}
+
+void Box2DSprite::applyLinearImpulseLeft(float _force){
+	if(body != nullptr){
+		body->ApplyLinearImpulse(b2Vec2(-_force, 0), body->GetWorldCenter(), true);
+	}
+}
+
+void Box2DSprite::applyLinearImpulseRight(float _force){
+	if(body != nullptr){
+		body->ApplyLinearImpulse(b2Vec2(_force, 0), body->GetWorldCenter(), true);
+	}
+}
+
+void Box2DSprite::applyLinearImpulseUp(float _force){
+	if(body != nullptr){
+		body->ApplyLinearImpulse(b2Vec2(0, _force), body->GetWorldCenter(), true);
+	}
+}
+
+void Box2DSprite::applyLinearImpulseDown(float _force){
+	if(body != nullptr){
+		body->ApplyLinearImpulse(b2Vec2(0, -_force), body->GetWorldCenter(), true);
+	}
+}
+
+void Box2DSprite::applyAngularImpule(float _angle){
+	if(body != nullptr){
+		body->ApplyAngularImpulse(_angle, true);
+	}
+}
+

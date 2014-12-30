@@ -24,7 +24,7 @@ TestScene2D::TestScene2D(Game* _game):
 	Scene2D(_game),
 	sprite(new Box2DSprite(b2_dynamicBody, true, nullptr, new Transform())),
 	ground(new Box2DSprite(b2_staticBody, true, nullptr, new Transform())),
-	world(new Box2DWorld(b2Vec2(0, -10))),
+	world(new Box2DWorld(b2Vec2(0, -40))),
 	tex(new Texture("../assets/spritesheet.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager())
@@ -37,19 +37,20 @@ TestScene2D::TestScene2D(Game* _game):
 
 	sprite->setShader(shader, true);
 	ground->setShader(shader, true);
+	
 	addChild(sprite);	
 	addChild(ground);
 
 	spriteSheet = new SpriteSheetAnimation(tex, 0.1);
 	spriteSheet->pushFramesInRange(0, 26, 130, 150, 130 * 7);
 
-	sprite->transform->scale(3, 3, 1);
+	sprite->transform->scale(2, 2, 1);
 	sprite->addAnimation("run", spriteSheet, true);
 
-	ground->translatePhysical(0, -10, 0);
+	ground->setTranslationPhysical(0, -10, 0);
 	ground->transform->scale(20, 10, 0);
 
-	sprite->translatePhysical(0, 10, 0);
+	sprite->setTranslationPhysical(0, 10, 0);
 
 	world->addToWorld(sprite);
 	world->addToWorld(ground);
@@ -73,16 +74,16 @@ void TestScene2D::update(){
 	 world->update(&vox::step);
 	
 	if(keyboard->keyDown(GLFW_KEY_W)){
-		sprite->applyForceUp(500);
+		sprite->applyForceUp(8000);
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
 		sprite->applyForceDown(5);
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		sprite->applyForceLeft(200);
+		sprite->applyLinearImpulseLeft(5);
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		sprite->applyForceRight(200);
+		sprite->applyForceRight(600);
 	}
 }
 

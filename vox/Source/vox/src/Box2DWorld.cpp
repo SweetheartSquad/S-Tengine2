@@ -28,6 +28,7 @@ void Box2DWorld::addToWorld(Box2DSprite * _sprite){
 		fixtureDef.shape = &dynamicBox;
 		if(_sprite->bodyDef.type != b2_staticBody){
 			  fixtureDef.density = 1.0f;
+			  fixtureDef.friction = 0.8f;
 		}
 		_sprite->body->CreateFixture(&fixtureDef);
 	}
