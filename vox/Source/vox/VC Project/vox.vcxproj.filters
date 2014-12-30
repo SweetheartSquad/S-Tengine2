@@ -291,6 +291,12 @@
     <ClCompile Include="..\src\Sound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Box2DSprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Box2DWorld.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -531,6 +537,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Sound.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Box2DSprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Box2DWorld.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

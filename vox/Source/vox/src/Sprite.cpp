@@ -10,6 +10,7 @@ Sprite::Sprite(Shader * _shader, Transform * _transform):
 	MeshEntity(new SpriteMesh(GL_STATIC_DRAW)),
 	NodeTransformable(_transform),
 	NodeChild(nullptr),
+	currentAnimation(nullptr),
 	playAnimation(true)
 {
 }

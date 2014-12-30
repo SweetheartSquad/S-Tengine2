@@ -1,0 +1,78 @@
+#pragma once
+
+#include "Box2DSprite.h"
+
+Box2DSprite::Box2DSprite(b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform):
+	NodeTransformable(_transform),
+	NodeChild(nullptr),
+	body(nullptr),
+	defaultFixture(_defaultFixture)
+{
+	bodyDef.position.Set(_transform->translationVector.x, _transform->translationVector.y);
+	bodyDef.type = _bodyType;
+}
+
+Box2DSprite::~Box2DSprite(){
+}
+
+void Box2DSprite::update(Step * _step){
+	if(body != nullptr){
+		transform->translationVector.x = body->GetPosition().x;	
+		transform->translationVector.y = body->GetPosition().y;	
+	}
+	Sprite::update(_step);
+}
+
+void Box2DSprite::translatePhysical(glm::vec3 _translation){
+	transform->translate(_translation);
+	bodyDef.position.Set(transform->translationVector.x, transform->translationVector.y);
+	if(body != nullptr){
+		body->SetTransform(b2Vec2(_translation.x, _translation.y), body->GetAngle());
+	}
+}
+
+void Box2DSprite::translatePhysical(float _x, float _y, float _z){
+	translatePhysical(glm::vec3(_x, _y, _z));
+}
+
+void Box2DSprite::setXPhysical(float _x){
+	translatePhysical(glm::vec3(_x, 0, 0));
+}
+
+void Box2DSprite::setYPhysical(float _y){
+	translatePhysical(glm::vec3(0, _y, 0));
+}
+
+void Box2DSprite::setXYPhysical(float _x, float _y){
+	translatePhysical(glm::vec3(_x, _y, 0));
+}
+
+void Box2DSprite::applyForce(float _forceX, float _forceY, float _pointX, float _pointY){
+	if(body != nullptr){
+		body->ApplyForce(b2Vec2(_forceX, _forceY), b2Vec2(_pointX, _pointY), true);
+	}
+}
+
+void Box2DSprite::applyForceLeft(float _force){
+	if(body != nullptr){
+		body->ApplyForce(b2Vec2(-_force, 0), body->GetWorldCenter(), true);
+	}
+}
+
+void Box2DSprite::applyForceRight(float _force){
+	if(body != nullptr){
+		body->ApplyForce(b2Vec2(_force, 0), body->GetWorldCenter(), true);
+	}
+}
+
+void Box2DSprite::applyForceUp(float _force){
+	if(body != nullptr){
+		body->ApplyForce(b2Vec2(0, _force), body->GetWorldCenter(), true);
+	}
+}
+
+void Box2DSprite::applyForceDown(float _force){
+	if(body != nullptr){
+		body->ApplyForce(b2Vec2(0, -_force), body->GetWorldCenter(), true);
+	}
+}

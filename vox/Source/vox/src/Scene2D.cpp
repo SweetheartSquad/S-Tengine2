@@ -5,7 +5,7 @@
 Scene2D::Scene2D(Game * _game):
 	Scene(_game)
 {
-	camera = (new OrthographicCamera(-10, 10, -10, 10, -10, 10));
+	camera = (new OrthographicCamera(10, -10, -10, 10, -10, 10));
 }
 
 Scene2D::~Scene2D(){
