@@ -34,12 +34,17 @@ std::string TextureShaderComponent::getVertexBodyString(){
 
 std::string TextureShaderComponent::getFragmentBodyString(){
 	return
-		"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_TEXTURES + "; i++){" + ENDL + 
-		"	if(i == 0){" + ENDL + 
-		"		modFrag = texture(" + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[i], " + GL_IN_OUT_FRAG_UV + ").rgba" + SEMI_ENDL + 
-		"	}else{" + ENDL + 
-		"		modFrag = mix(modFrag, texture(" + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[i], " + GL_IN_OUT_FRAG_UV + ").rgba, 0.5)" + SEMI_ENDL + 
-		"	}" + ENDL + 
+		"if(" + GL_UNIFORM_ID_NUM_TEXTURES + " > 0){" + SEMI_ENDL +
+			"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_TEXTURES + "; i++){" + ENDL + 
+			"	if(i == 0){" + ENDL + 
+			"		modFrag = texture(" + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[i], " + GL_IN_OUT_FRAG_UV + ").rgba" + SEMI_ENDL + 
+			"	}else{" + ENDL + 
+			"		modFrag = mix(modFrag, texture(" + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[i], " + GL_IN_OUT_FRAG_UV + ").rgba, 0.5)" + SEMI_ENDL + 
+			"	}" + ENDL + 
+			"}" + ENDL +
+		"}" + ENDL +
+		"else{" + ENDL +
+			"modFrag = fragColor" + SEMI_ENDL + 
 		"}" + ENDL;
 }
 

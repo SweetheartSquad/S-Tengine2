@@ -3,11 +3,16 @@
 #include "Sprite.h"
 #include <Box2D/Box2D.h>
 
+#define NO_VELOCITY_LIMIT -1
+
 class Box2DSprite : public Sprite{
 public:
 
 	b2Body * body;
 	b2BodyDef bodyDef;
+
+	//Max velocity. Should always be set as positive. -1 means no limit
+	b2Vec2 maxVelocity;
 
 	bool defaultFixture;
 
@@ -35,4 +40,11 @@ public:
 	void applyLinearImpulseDown(float _force);
 
 	void applyAngularImpule(float _angle);
+
+	bool movingVertically(float _threshold = 0);
+	bool movingHorizontally(float _threshold = 0);
+	bool movingRight(float _threshold = 0);
+	bool movingLeft(float _threshold = 0);
+	bool movingUp(float _threshold = 0);
+	bool movingDown(float _threshold = 0);
 };

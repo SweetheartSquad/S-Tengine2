@@ -24,7 +24,7 @@ TestScene2D::TestScene2D(Game* _game):
 	Scene2D(_game),
 	sprite(new Box2DSprite(b2_dynamicBody, true, nullptr, new Transform())),
 	ground(new Box2DSprite(b2_staticBody, true, nullptr, new Transform())),
-	world(new Box2DWorld(b2Vec2(0, -40))),
+	world(new Box2DWorld(b2Vec2(0, -60))),
 	tex(new Texture("../assets/spritesheet.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager())
@@ -41,7 +41,7 @@ TestScene2D::TestScene2D(Game* _game):
 	addChild(sprite);	
 	addChild(ground);
 
-	spriteSheet = new SpriteSheetAnimation(tex, 0.1);
+	spriteSheet = new SpriteSheetAnimation(tex, 0.05);
 	spriteSheet->pushFramesInRange(0, 26, 130, 150, 130 * 7);
 
 	sprite->transform->scale(2, 2, 1);
@@ -51,6 +51,8 @@ TestScene2D::TestScene2D(Game* _game):
 	ground->transform->scale(20, 10, 0);
 
 	sprite->setTranslationPhysical(0, 10, 0);
+
+	sprite->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 
 	world->addToWorld(sprite);
 	world->addToWorld(ground);
@@ -69,21 +71,34 @@ void TestScene2D::unload(){
 
 void TestScene2D::update(){
 
-	 Scene2D::update();
+	Scene2D::update();
 
-	 world->update(&vox::step);
+	world->update(&vox::step);
+	sprite->playAnimation = false;
 	
 	if(keyboard->keyDown(GLFW_KEY_W)){
-		sprite->applyForceUp(8000);
+		if(!sprite->movingVertically(0.05)){
+			sprite->applyLinearImpulseUp(500);	
+		}
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
-		sprite->applyForceDown(5);
+
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		sprite->applyLinearImpulseLeft(5);
+		sprite->applyLinearImpulseLeft(50);
+		if(sprite->transform->scaleVector.x > 0){
+			sprite->transform->scaleX(-1);
+		}
+		sprite->playAnimation = true;
+		sprite->setCurrentAnimation("run");
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		sprite->applyForceRight(600);
+		sprite->applyLinearImpulseRight(50);
+		if(sprite->transform->scaleVector.x < 0){
+			sprite->transform->scaleX(-1);
+		}
+		sprite->setCurrentAnimation("run");
+		sprite->playAnimation = true;
 	}
 }
 
