@@ -156,9 +156,9 @@ BaseScene::~BaseScene(){
 	delete keyLight;
 }
 
-void BaseScene::update(){
+void BaseScene::update(Step * _step){
 	
-	Scene::update();
+	Scene::update(_step);
 
 	//Add movement to the camera
 	if(keyboard->keyDown(GLFW_KEY_W)){

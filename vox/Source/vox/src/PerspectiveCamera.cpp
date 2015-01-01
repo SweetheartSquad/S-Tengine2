@@ -8,9 +8,12 @@
 
 PerspectiveCamera::PerspectiveCamera():
 	Camera(),
+	NodeTransformable(new Transform),
+	NodeAnimatable(),
+	NodeUpdatable(),
+	mouse(&Mouse::getInstance()),
 	speed(0.1f),
 	mouseSpeed(0.05f),
-	mouse(&Mouse::getInstance()),
 	lastOrientation(1.f, 0.f, 0.f, 0.f)
 {
 	transform->translate(-5.f, 0.f, 0.f);
@@ -24,7 +27,7 @@ PerspectiveCamera::PerspectiveCamera():
 PerspectiveCamera::~PerspectiveCamera(){
 }
 
-void PerspectiveCamera::update(){
+void PerspectiveCamera::update(Step * _step){
 	lastOrientation = transform->orientation;
 
 	Dimension screenDimensions = vox::getScreenDimensions();

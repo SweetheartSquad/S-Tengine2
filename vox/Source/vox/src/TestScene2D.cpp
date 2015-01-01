@@ -15,6 +15,7 @@
 #include "SoundManager.h"
 #include "Box2DSprite.h"
 #include "Box2DWorld.h"
+#include "ControllableOrthographicCamera.h"
 
 #include <array>
 #include <libzplay.h>
@@ -29,6 +30,10 @@ TestScene2D::TestScene2D(Game* _game):
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager())
 {
+
+	camera = new ControllableOrthographicCamera(10, -10, -10, 10, 20, -20);
+	static_cast<ControllableOrthographicCamera*>(camera)->follow(sprite);
+
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	soundManager->play("green_chair");
 	
@@ -43,13 +48,13 @@ TestScene2D::TestScene2D(Game* _game):
 
 	spriteSheet = new SpriteSheetAnimation(tex, 0.05);
 	spriteSheet->pushFramesInRange(0, 26, 130, 150, 130 * 7);
-
-	sprite->transform->scale(2, 2, 1);
 	sprite->addAnimation("run", spriteSheet, true);
 
 	ground->setTranslationPhysical(0, -10, 0);
 	ground->transform->scale(20, 10, 0);
+	ground->mesh->pushTexture2D(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true));
 
+	sprite->transform->scale(2, 2, 1);
 	sprite->setTranslationPhysical(0, 10, 0);
 
 	sprite->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
@@ -69,11 +74,11 @@ void TestScene2D::unload(){
 	Scene2D::unload();
 }
 
-void TestScene2D::update(){
+void TestScene2D::update(Step * _step){
 
-	Scene2D::update();
+	Scene2D::update(_step);
 
-	world->update(&vox::step);
+	world->update(_step);
 	sprite->playAnimation = false;
 	
 	if(keyboard->keyDown(GLFW_KEY_W)){

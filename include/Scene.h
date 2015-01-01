@@ -5,6 +5,7 @@
 
 #include "node/NodeLoadable.h"
 #include "node/NodeRenderable.h"
+#include "node/NodeUpdatable.h"
 
 class Camera;
 
@@ -24,7 +25,7 @@ class Mouse;
 class Game;
 class Entity;
 
-class Scene : public virtual NodeLoadable, public virtual NodeRenderable{
+class Scene : public virtual NodeLoadable, public virtual NodeRenderable, public virtual NodeUpdatable{
 public:
 	explicit Scene(Game * _game);
 	virtual ~Scene(void);
@@ -47,7 +48,7 @@ public:
 	/**The default matrix stack for the scene*/
 	vox::MatrixStack * matrixStack;
 	/** Calls update on the attached camera */
-	virtual void update(void);
+	virtual void update(Step * _step);
 	/** Tells the RenderSystem to render the attached children to the vox::currentContext using the camera's view-projection matrix */
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 	/** Adds a reference to an entity to the attached list of children */

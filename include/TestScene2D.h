@@ -26,6 +26,6 @@ public:
 
 	void load() override;
 	void unload() override;
-	void update() override;
+	void update(Step * _step) override;
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
 };

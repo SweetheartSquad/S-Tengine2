@@ -14,12 +14,12 @@ double lastTime = glfwGetTime();
 int nbFrames = 0;
 
 Game::Game(bool _isRunning):
+	mouse(&Mouse::getInstance()),
+	keyboard(&Keyboard::getInstance()),
 	isRunning(_isRunning),
 	printFPS(true),
-	keyboard(&Keyboard::getInstance()),
-	mouse(&Mouse::getInstance()),
-	kc_code(0),
 	kc_lastKey(0),
+	kc_code(0),
 	kc_active(false)
 {
 }
@@ -147,8 +147,7 @@ void Game::update(void){
 		break;
 	}
 
-
-	currentScene->update();
+	currentScene->update(&vox::step);
 }
 
 void Game::draw(void){

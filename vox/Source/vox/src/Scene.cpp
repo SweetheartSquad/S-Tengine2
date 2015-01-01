@@ -50,8 +50,8 @@ Scene::~Scene(void){
 	}
 }
 
-void Scene::update(void){
-	camera->update();
+void Scene::update(Step * _step){
+	camera->update(_step);
 	for(Entity * e : children){
 		e->update(&vox::step);
 	}

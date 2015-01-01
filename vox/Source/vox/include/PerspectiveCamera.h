@@ -21,7 +21,7 @@ public:
 	~PerspectiveCamera();
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
-	void update() override;
+	void update(Step * _step) override;
 
 	/** Reference to the mouse singleton */
 	Mouse * mouse;
@@ -36,12 +36,12 @@ public:
 	/**
 	* @return The view matrix of the camera
 	*/
-	glm::mat4 getViewMatrix();
+	glm::mat4 getViewMatrix() override;
 
 	/**
 	* @return The projection matrix of the camera 
 	*/
-	glm::mat4 getProjectionMatrix();
+	glm::mat4 getProjectionMatrix() override;
 
 private :
 	/** The X position of the mouse from the last update loop*/

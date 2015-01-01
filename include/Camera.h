@@ -4,7 +4,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "node/NodeTransformable.h"
+#include "node/NodeAnimatable.h"
 
 /****************************
 *
@@ -12,15 +12,14 @@
 * The camera's rotation is restricted on the x axis so that It can not flip upside down
 *
 *****************************/
-class Camera abstract : public NodeTransformable {
+class Camera abstract : public virtual NodeAnimatable {
 public:
 
 	Camera();
 	~Camera();
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
-	virtual void update() = 0;
-
+	void update(Step* _step) override = 0;
 	/** Direction the camera's front would be pointing at if it weren't rotated at all */
 	glm::vec3 forwardVectorLocal;
 	/** Direction the camera's front is pointing at (local * orientation) */

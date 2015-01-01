@@ -14,6 +14,9 @@ Box2DSprite::Box2DSprite(b2BodyType _bodyType, bool _defaultFixture, Shader* _sh
 }
 
 Box2DSprite::~Box2DSprite(){
+	if(body != nullptr){
+		body->GetWorld()->DestroyBody(body);
+	}
 }
 
 void Box2DSprite::update(Step * _step){
