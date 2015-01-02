@@ -249,6 +249,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Vox.cpp" />
     <ClCompile Include="..\src\BaseScene.cpp" />
+    <ClCompile Include="..\src\Box2DLevel.cpp" />
     <ClCompile Include="..\src\Box2DSprite.cpp" />
     <ClCompile Include="..\src\Box2DWorld.cpp" />
     <ClCompile Include="..\src\Camera.cpp" />
@@ -331,6 +332,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\..\..\..\Shared Code\include\Tween.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Vox.h" />
     <ClInclude Include="..\include\BaseScene.h" />
+    <ClInclude Include="..\include\Box2DLevel.h" />
     <ClInclude Include="..\include\Box2DSprite.h" />
     <ClInclude Include="..\include\Box2DWorld.h" />
     <ClInclude Include="..\include\Camera.h" />

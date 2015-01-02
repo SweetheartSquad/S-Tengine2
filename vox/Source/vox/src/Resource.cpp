@@ -51,10 +51,16 @@ struct FizzXImage{
 	std::string atlas;
 };
 
+struct FizzXFixture{
+	b2FixtureDef fixtureDef;
+	std::string name;
+};
+
 struct FizzXBody{
 	b2BodyDef bodyDef;
 	std::string name;
 	std::string image;
+	std::vector<FizzXFixture> fixtures;
 };
 
 unsigned char* Resource::loadImage(const char* _src, int _width, int _height, int _SOILLoadMode, int * _channels){
@@ -391,6 +397,38 @@ Box2DLevel* Resource::loadFizzXLevel(std::string _jsonSrc){
 	Json::Value bodies = box2D["bodies"]["body"];
 
 	for(Json::ArrayIndex i = 0; i < bodies.size(); i++){
+		FizzXBody body;
+		body.bodyDef.position.x = bodies[i].get("x", 0).asFloat();
+		body.bodyDef.position.x = bodies[i].get("y", 0).asFloat();
+		body.bodyDef.bullet		= bodies[i].get("bullet", false).asBool();
+		body.image				= bodies[i].get("image", "").asString();
 		
+		Json::Value fixtures = box2D["fixtures"]["fixture"];
+		for(Json::ArrayIndex j = 0; j < fixtures.size(); j++){
+			FizzXFixture fixture;
+			fixture.name = fixtures[j].get("name", "").asString();
+			fixture.fixtureDef.isSensor = fixtures[j].get("isSensor", false).asBool(); 
+			fixture.fixtureDef.restitution = fixtures[j].get("restitution", 1).asFloat();
+			fixture.fixtureDef.friction = fixtures[j].get("friction", 1).asFloat(); 
+			fixture.fixtureDef.density = fixtures[j].get("density", 1).asFloat(); 
+			if(fixtures[j].get("shapeType", "").asString() == "circleShape"){
+				b2CircleShape circle;
+				circle.m_p.x = fixtures[j].get("circleX", 1).asFloat();
+				circle.m_p.y = fixtures[j].get("circleY", 1).asFloat();
+				circle.m_radius = fixtures[j].get("circleRadius", 1).asFloat();
+				fixture.fixtureDef.shape = &circle;
+			}else{
+				//Assume polygonal
+				b2PolygonShape shape;
+				Json::Value verts = fixtures[j]["vertex"];
+				b2Vec2 * vertArr = new b2Vec2[]();
+				for(int v = 0; v < verts.size(); v++){
+					vertArr[v] = b2Vec2(verts.get("x", 0).asFloat(), verts.get("y", 0).asFloat());
+				}
+				shape.Set(vertArr, verts.size());
+				fixture.fixtureDef.shape = &shape;
+			}
+			body.fixtures.push_back(fixture);
+		}
 	}
 }
