@@ -91,7 +91,7 @@ std::string BaseComponentShader::buildFragmentShader(){
 		shaderString += components.at(i)->getFragmentBodyString();
 	}
 
-	shaderString += "outColor = vec4(1, 1, 1, 1);\n";
+	shaderString += "outColor = vec4(1, 1, 1, fragColor.a);\n";
 
 	for(unsigned long int i = 0; i < components.size(); i++){
 		shaderString += components.at(i)->getOutColorMod();

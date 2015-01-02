@@ -34,6 +34,29 @@ struct Face{
 		f3Vert, f3Uv, f3Norm;
 };
 
+struct FizzXAtlas{
+	
+};
+
+struct FizzXImage{
+	std::string path;
+	std::string level;
+	float x;
+	float y;
+	float rotation;
+	float scaleX;
+	float scaleY;
+	float zDepth;
+	std::string body;
+	std::string atlas;
+};
+
+struct FizzXBody{
+	b2BodyDef bodyDef;
+	std::string name;
+	std::string image;
+};
+
 unsigned char* Resource::loadImage(const char* _src, int _width, int _height, int _SOILLoadMode, int * _channels){
 	unsigned char* res = SOIL_load_image(_src, &_width, &_height, _channels, _SOILLoadMode);
 	if(res == 0){
@@ -345,4 +368,29 @@ VoxelJoint * Resource::loadVoxelModel(std::string _jsonSrc){
 	}
 	
 	return mainJoint;
+}
+
+Box2DLevel* Resource::loadFizzXLevel(std::string _jsonSrc){
+	std::string jsonString = FileUtils::voxReadFile(_jsonSrc);
+
+	Json::Value root;
+	Json::Reader reader;
+	bool parsedSuccess = reader.parse(jsonString, root, false);
+
+	if(!parsedSuccess){
+		std::cout << "Unable to parse json";	
+	}
+
+	Json::Value box2D = root["box2d"];
+
+	std::map<std::string, b2Body *>bodiesMap;
+	std::map<std::string, Json::Value>jointsMap;
+	std::map<std::string, Json::Value>imageMap;
+	std::map<std::string, Json::Value>atlasMap;
+
+	Json::Value bodies = box2D["bodies"]["body"];
+
+	for(Json::ArrayIndex i = 0; i < bodies.size(); i++){
+		
+	}
 }
