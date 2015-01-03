@@ -16,6 +16,7 @@
 #include "Box2DSprite.h"
 #include "Box2DWorld.h"
 #include "ControllableOrthographicCamera.h"
+#include "Resource.h"
 
 #include <array>
 #include <libzplay.h>
@@ -61,6 +62,8 @@ TestScene2D::TestScene2D(Game* _game):
 
 	world->addToWorld(sprite);
 	world->addToWorld(ground);
+
+	Resource::loadFizzXLevel("../assets/box2dLevel.json", "../assets/"); 
 }
 
 TestScene2D::~TestScene2D(){

@@ -17,6 +17,10 @@
 #include "VoxelJoint.h"
 #include "VoxelMesh.h"
 #include "Animation.h"
+#include "Box2DSprite.h"
+#include "Box2DLevel.h"
+#include "Box2DWorld.h"
+#include "Texture.h"
 
 Resource::Resource(){}
 Resource::~Resource(){}
@@ -40,7 +44,7 @@ struct FizzXAtlas{
 
 struct FizzXImage{
 	std::string path;
-	std::string level;
+	std::string name;
 	float x;
 	float y;
 	float rotation;
@@ -49,6 +53,7 @@ struct FizzXImage{
 	float zDepth;
 	std::string body;
 	std::string atlas;
+	bool pinned;
 };
 
 struct FizzXFixture{
@@ -376,7 +381,11 @@ VoxelJoint * Resource::loadVoxelModel(std::string _jsonSrc){
 	return mainJoint;
 }
 
-Box2DLevel* Resource::loadFizzXLevel(std::string _jsonSrc){
+Box2DLevel * Resource::loadFizzXLevel(std::string _jsonSrc, std::string _imageLocation){
+
+	Box2DLevel * level = new Box2DLevel();
+	Box2DWorld * world = new Box2DWorld(b2Vec2(0, 0));
+
 	std::string jsonString = FileUtils::voxReadFile(_jsonSrc);
 
 	Json::Value root;
@@ -389,28 +398,29 @@ Box2DLevel* Resource::loadFizzXLevel(std::string _jsonSrc){
 
 	Json::Value box2D = root["box2d"];
 
-	std::map<std::string, b2Body *>bodiesMap;
+	std::map<std::string, FizzXBody>bodiesMap;
 	std::map<std::string, Json::Value>jointsMap;
-	std::map<std::string, Json::Value>imageMap;
+	std::map<std::string, FizzXImage>imageMap;
 	std::map<std::string, Json::Value>atlasMap;
 
 	Json::Value bodies = box2D["bodies"]["body"];
 
 	for(Json::ArrayIndex i = 0; i < bodies.size(); i++){
 		FizzXBody body;
-		body.bodyDef.position.x = bodies[i].get("x", 0).asFloat();
-		body.bodyDef.position.x = bodies[i].get("y", 0).asFloat();
-		body.bodyDef.bullet		= bodies[i].get("bullet", false).asBool();
+		body.bodyDef.position.x = atof(bodies[i].get("x", "0").asCString());
+		body.bodyDef.position.x = atof(bodies[i].get("y", "0").asCString());
+		body.bodyDef.bullet		= static_cast<bool>(atoi(bodies[i].get("bullet", "false").asCString()));
 		body.image				= bodies[i].get("image", "").asString();
-		
+		body.name				= bodies[i].get("name", "").asString();
+
 		Json::Value fixtures = box2D["fixtures"]["fixture"];
 		for(Json::ArrayIndex j = 0; j < fixtures.size(); j++){
 			FizzXFixture fixture;
 			fixture.name = fixtures[j].get("name", "").asString();
-			fixture.fixtureDef.isSensor = fixtures[j].get("isSensor", false).asBool(); 
-			fixture.fixtureDef.restitution = fixtures[j].get("restitution", 1).asFloat();
-			fixture.fixtureDef.friction = fixtures[j].get("friction", 1).asFloat(); 
-			fixture.fixtureDef.density = fixtures[j].get("density", 1).asFloat(); 
+			fixture.fixtureDef.isSensor = static_cast<bool>(atoi(fixtures[j].get("isSensor", "false").asCString())); 
+			fixture.fixtureDef.restitution = atof(fixtures[j].get("restitution", "1").asCString());
+			fixture.fixtureDef.friction = atof(fixtures[j].get("friction", "1").asCString());
+			fixture.fixtureDef.density = atof(fixtures[j].get("density", "1").asCString());
 			if(fixtures[j].get("shapeType", "").asString() == "circleShape"){
 				b2CircleShape circle;
 				circle.m_p.x = fixtures[j].get("circleX", 1).asFloat();
@@ -423,12 +433,44 @@ Box2DLevel* Resource::loadFizzXLevel(std::string _jsonSrc){
 				Json::Value verts = fixtures[j]["vertex"];
 				b2Vec2 * vertArr = new b2Vec2[]();
 				for(int v = 0; v < verts.size(); v++){
-					vertArr[v] = b2Vec2(verts.get("x", 0).asFloat(), verts.get("y", 0).asFloat());
+					vertArr[v] = b2Vec2(atof(verts.get("x", "0").asCString()), atof(verts.get("y", "0").asCString()));
 				}
 				shape.Set(vertArr, verts.size());
 				fixture.fixtureDef.shape = &shape;
 			}
 			body.fixtures.push_back(fixture);
 		}
+		bodiesMap.insert(std::make_pair(body.name, body));
 	}
+
+	Json::Value images = box2D["images"]["image"];
+	for(Json::ArrayIndex j = 0; j < images.size(); j++){
+		FizzXImage image;
+		image.body = images[j].get("body", "").asString();
+		image.name = images[j].get("name", "").asString();
+		image.path = images[j].get("path", "").asString();
+		image.x = atof(images[j].get("x", 0).asCString());
+		image.y = atof(images[j].get("y", 0).asCString());
+		image.rotation = atof(images[j].get("rotation", "0").asCString());
+		image.scaleX =  atof(images[j].get("scaleX", "0").asCString());
+		image.scaleY =  atof(images[j].get("scaleY", "0").asCString());
+		image.zDepth =  atof(images[j].get("zDepth", "0").asCString());
+		image.body = images[j].get("body", "").asString();
+		image.atlas = images[j].get("atlas", "").asString();
+		image.pinned = static_cast<bool>(atoi(images[j].get("pinned", false).asCString()));
+		imageMap.insert(std::make_pair(image.name, image));
+	}
+
+	for(auto body : bodiesMap){
+		Box2DSprite * sprite = new Box2DSprite(body.second.bodyDef.type, false);
+		sprite->bodyDef = body.second.bodyDef;
+		level->world.addToWorld(sprite);
+		FizzXImage image = imageMap[body.second.image];
+		if(image.path.length() > 0 && image.path != "null"){
+			Texture * tex = new Texture((_imageLocation + image.path).c_str(), 1554, 1017, true, false);
+			sprite->mesh->pushTexture2D(tex);
+		}
+		level->sprites.push_back(sprite);
+	}
+	return level;
 }
