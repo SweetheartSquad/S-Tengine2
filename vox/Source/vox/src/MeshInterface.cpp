@@ -9,11 +9,11 @@
 #include "Transform.h"
 
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
-	drawMode(drawMode),
-	polygonalDrawMode(polygonalDrawMode),
+	NodeRenderable(),
 	loaded(false),
 	dirty(true),
-	NodeRenderable()
+	drawMode(drawMode),
+	polygonalDrawMode(polygonalDrawMode)
 {
 	load();
 	clean();

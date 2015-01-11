@@ -16,7 +16,7 @@ Sprite::Sprite(Shader * _shader, Transform * _transform):
 }
 
 Sprite::~Sprite(){
-	delete mesh;
+
 }
 
 void Sprite::update(Step* _step){

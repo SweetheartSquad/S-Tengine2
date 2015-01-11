@@ -2,6 +2,7 @@
 
 #include "Scene2D.h"
 
+class Box2DDebugDraw;
 class SpriteSheetAnimation;
 class Box2DSprite;
 class SoundManager;
@@ -20,6 +21,7 @@ public:
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
 	SpriteSheetAnimation * spriteSheet;
+	Box2DDebugDraw * drawer;
 
 	explicit TestScene2D(Game * _game);
 	virtual ~TestScene2D();

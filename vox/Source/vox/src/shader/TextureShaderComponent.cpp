@@ -42,10 +42,7 @@ std::string TextureShaderComponent::getFragmentBodyString(){
 			"		modFrag = mix(modFrag, texture(" + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[i], " + GL_IN_OUT_FRAG_UV + ").rgba, 0.5)" + SEMI_ENDL + 
 			"	}" + ENDL + 
 			"}" + ENDL +
-		"}" + ENDL +
-		"else{" + ENDL +
-			"modFrag = fragColor" + SEMI_ENDL + 
-		"}" + ENDL;
+		"}";
 }
 
 std::string TextureShaderComponent::getOutColorMod(){
@@ -76,7 +73,9 @@ void TextureShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, R
 			glBindTexture(GL_TEXTURE_2D, spriteMesh->animatedTexture->textureId);
 			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str()), numTextures + 1);
 		}
-		// Pass the _shader the number of textures
-		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), numTextures + 1);
+		if(spriteMesh->animatedTexture != nullptr){
+			// Pass the _shader the number of textures
+			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), numTextures + 1);
+		}
 	}
 }

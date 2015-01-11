@@ -249,6 +249,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Vox.cpp" />
     <ClCompile Include="..\src\BaseScene.cpp" />
+    <ClCompile Include="..\src\Box2DDebugDraw.cpp" />
     <ClCompile Include="..\src\Box2DLevel.cpp" />
     <ClCompile Include="..\src\Box2DSprite.cpp" />
     <ClCompile Include="..\src\Box2DWorld.cpp" />
@@ -269,6 +270,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\src\shader\BaseComponentShader.cpp" />
     <ClCompile Include="..\src\shader\BlinnShaderComponent.cpp" />
     <ClCompile Include="..\src\shader\BlurShader.cpp" />
+    <ClCompile Include="..\src\shader\Box2DDebugShader.cpp" />
     <ClCompile Include="..\src\shader\DepthMapShader.cpp" />
     <ClCompile Include="..\src\shader\DiffuseShaderComponent.cpp" />
     <ClCompile Include="..\src\shader\GeometryComponent.cpp" />
@@ -332,6 +334,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\..\..\..\Shared Code\include\Tween.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Vox.h" />
     <ClInclude Include="..\include\BaseScene.h" />
+    <ClInclude Include="..\include\Box2DDebugDraw.h" />
     <ClInclude Include="..\include\Box2DLevel.h" />
     <ClInclude Include="..\include\Box2DSprite.h" />
     <ClInclude Include="..\include\Box2DWorld.h" />
@@ -353,6 +356,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\include\shader\BaseComponentShader.h" />
     <ClInclude Include="..\include\shader\BlinnShaderComponent.h" />
     <ClInclude Include="..\include\shader\BlurShader.h" />
+    <ClInclude Include="..\include\shader\Box2DDebugShader.h" />
     <ClInclude Include="..\include\shader\DepthMapShader.h" />
     <ClInclude Include="..\include\shader\DiffuseShaderComponent.h" />
     <ClInclude Include="..\include\shader\GeometryComponent.h" />

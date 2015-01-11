@@ -21,8 +21,10 @@
 #include <array>
 #include <libzplay.h>
 #include <Box2D/Box2D.h>
+#include <Box2DDebugDraw.h>
 
-TestScene2D::TestScene2D(Game* _game):
+
+TestScene2D::TestScene2D(Game * _game):
 	Scene2D(_game),
 	sprite(new Box2DSprite(b2_dynamicBody, true, nullptr, new Transform())),
 	ground(new Box2DSprite(b2_staticBody, true, nullptr, new Transform())),
@@ -31,6 +33,7 @@ TestScene2D::TestScene2D(Game* _game):
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager())
 {
+	Box2DDebugDraw * drawer = new Box2DDebugDraw(this);
 
 	camera = new ControllableOrthographicCamera(10, -10, -10, 10, 20, -20);
 	static_cast<ControllableOrthographicCamera*>(camera)->follow(sprite);
@@ -63,7 +66,8 @@ TestScene2D::TestScene2D(Game* _game):
 	world->addToWorld(sprite);
 	world->addToWorld(ground);
 
-	Resource::loadFizzXLevel("../assets/box2dLevel.json", "../assets/"); 
+	world->world->SetDebugDraw(drawer);
+	drawer->SetFlags(b2Draw::e_shapeBit);
 }
 
 TestScene2D::~TestScene2D(){
@@ -83,7 +87,7 @@ void TestScene2D::update(Step * _step){
 
 	world->update(_step);
 	sprite->playAnimation = false;
-	
+
 	if(keyboard->keyDown(GLFW_KEY_W)){
 		if(!sprite->movingVertically(0.05)){
 			sprite->applyLinearImpulseUp(500);	
@@ -112,4 +116,5 @@ void TestScene2D::update(Step * _step){
 
 void TestScene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene2D::render(_matrixStack, _renderStack);
+	world->world->DrawDebugData();
 }
