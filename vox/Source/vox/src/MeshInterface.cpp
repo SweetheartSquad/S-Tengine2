@@ -160,6 +160,7 @@ void MeshInterface::configureDefaultVertexAttributes(Shader *_shader){
 
 void MeshInterface::pushVert(Vertex _vertex){
 	vertices.push_back(_vertex);
+	indices.push_back(vertices.size() - 1);
 	dirty = true;
 }
 
