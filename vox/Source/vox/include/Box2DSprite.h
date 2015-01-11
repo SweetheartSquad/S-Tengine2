@@ -47,4 +47,7 @@ public:
 	bool movingLeft(float _threshold = 0);
 	bool movingUp(float _threshold = 0);
 	bool movingDown(float _threshold = 0);
+
+private:
+	float prevAngle;
 };

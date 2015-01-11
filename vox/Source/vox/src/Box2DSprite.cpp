@@ -7,7 +7,8 @@ Box2DSprite::Box2DSprite(b2BodyType _bodyType, bool _defaultFixture, Shader* _sh
 	NodeChild(nullptr),
 	body(nullptr),
 	defaultFixture(_defaultFixture),
-	maxVelocity(b2Vec2(-1, -1))
+	maxVelocity(b2Vec2(-1, -1)),
+	prevAngle(0)
 {
 	bodyDef.position.Set(_transform->translationVector.x, _transform->translationVector.y);
 	bodyDef.type = _bodyType;
@@ -28,6 +29,10 @@ void Box2DSprite::update(Step * _step){
 		}
 		if(maxVelocity.y != -1 && body->GetLinearVelocity().y > maxVelocity.y){
 			body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, maxVelocity.y * (body->GetLinearVelocity().y < 0 ? -1 : 1)));
+		}
+		if(abs(body->GetAngle() - prevAngle) > 0.00005f){
+			transform->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
+			prevAngle = body->GetAngle();
 		}
 	}
 	Sprite::update(_step);
