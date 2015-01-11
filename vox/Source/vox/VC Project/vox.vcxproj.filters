@@ -306,6 +306,9 @@
     <ClCompile Include="..\src\Box2DDebugDraw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Arduino.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -561,6 +564,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Box2DDebugDraw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Arduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

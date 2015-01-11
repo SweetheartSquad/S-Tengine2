@@ -248,6 +248,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\..\..\..\Shared Code\src\Step.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Vox.cpp" />
+    <ClCompile Include="..\src\Arduino.cpp" />
     <ClCompile Include="..\src\BaseScene.cpp" />
     <ClCompile Include="..\src\Box2DDebugDraw.cpp" />
     <ClCompile Include="..\src\Box2DLevel.cpp" />
@@ -332,6 +333,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Tween.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Vox.h" />
+    <ClInclude Include="..\include\Arduino.h" />
     <ClInclude Include="..\include\BaseScene.h" />
     <ClInclude Include="..\include\Box2DDebugDraw.h" />
     <ClInclude Include="..\include\Box2DLevel.h" />
