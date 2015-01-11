@@ -306,9 +306,6 @@
     <ClCompile Include="..\src\Box2DDebugDraw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\shader\Box2DDebugShader.cpp">
-      <Filter>Source Files\shader</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -565,9 +562,6 @@
     </ClInclude>
     <ClInclude Include="..\include\Box2DDebugDraw.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\shader\Box2DDebugShader.h">
-      <Filter>Header Files\shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

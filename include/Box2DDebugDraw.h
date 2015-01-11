@@ -2,8 +2,8 @@
 
 #include <Box2D/Box2D.h>
 
-#include "shader/Box2DDebugShader.h"
 #include "shader/BaseComponentShader.h"
+#include "Sprite.h"
 
 class Scene2D;
 
@@ -19,5 +19,6 @@ public:
 
 private:
 	BaseComponentShader shader;
+	Sprite sprite;
 	Scene2D * scene;
 };
