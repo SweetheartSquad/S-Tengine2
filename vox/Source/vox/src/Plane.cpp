@@ -1,29 +1,14 @@
 #include "Plane.h"
 #include "MeshInterface.h"
+#include "MeshFactory.h"
 
 Plane::Plane(glm::vec3 _center, float _size) :
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
-	MeshEntity(new QuadMesh(GL_QUADS, GL_STATIC_DRAW), transform)
+	MeshEntity(MeshFactory::getPlaneMesh(), transform)
 {
-	QuadMesh * m = static_cast<QuadMesh *>(mesh);
-	
 	transform->scale(_size, _size, _size);
 	transform->translate(_center);
-
-	m->pushVert(Vertex(-1.f, 1.f, 1.f));
-	m->pushVert(Vertex(1.f, 1.f, 1.f));
-	m->pushVert(Vertex(1.f, -1.f, 1.f));
-	m->pushVert(Vertex(-1.f, -1.f, 1.f));
-	m->pushQuad(0, 1, 2, 3);
-	m->setNormal(0, 0.0, 0.0, 1.0);
-	m->setNormal(1, 0.0, 0.0, 1.0);
-	m->setNormal(2, 0.0, 0.0, 1.0);
-	m->setNormal(3, 0.0, 0.0, 1.0);
-	m->setUV(0, 0.0, 0.0);
-	m->setUV(1, 0.0, 1.0);
-	m->setUV(2, 1.0, 1.0);
-	m->setUV(3, 1.0, 0.0);
 }
 
 Plane::~Plane(){

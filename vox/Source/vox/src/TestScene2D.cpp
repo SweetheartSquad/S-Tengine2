@@ -22,12 +22,14 @@
 #include <libzplay.h>
 #include <Box2D/Box2D.h>
 #include <Box2DDebugDraw.h>
-
+#include "Box2DMeshEntity.h"
+#include "MeshFactory.h"
+#include "PerspectiveCamera.h"
 
 TestScene2D::TestScene2D(Game * _game):
-	Scene2D(_game),
+	Scene(_game),
 	sprite(new Box2DSprite(b2_dynamicBody, true, nullptr, new Transform())),
-	ground(new Box2DSprite(b2_staticBody, true, nullptr, new Transform())),
+	ground(new Box2DMeshEntity(MeshFactory::getCubeMesh(), b2_staticBody)),
 	world(new Box2DWorld(b2Vec2(0, -60))),
 	tex(new Texture("../assets/spritesheet.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
@@ -35,8 +37,8 @@ TestScene2D::TestScene2D(Game * _game):
 {
 	Box2DDebugDraw * drawer = new Box2DDebugDraw(this);
 
-	camera = new ControllableOrthographicCamera(10, -10, -10, 10, 20, -20);
-	static_cast<ControllableOrthographicCamera*>(camera)->follow(sprite);
+	//camera = new ControllableOrthographicCamera(10, -10, -10, 10, 20, -20);
+	//static_cast<ControllableOrthographicCamera*>(camera)->follow(sprite);
 
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	soundManager->play("green_chair");
@@ -55,7 +57,7 @@ TestScene2D::TestScene2D(Game * _game):
 	sprite->addAnimation("run", spriteSheet, true);
 
 	ground->setTranslationPhysical(0, -10, 0);
-	ground->transform->scale(20, 10, 0);
+	ground->transform->scale(20, 10, 2);
 	ground->mesh->pushTexture2D(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true));
 
 	sprite->transform->scale(2, 2, 1);
@@ -74,16 +76,16 @@ TestScene2D::~TestScene2D(){
 }
 
 void TestScene2D::load(){
-	Scene2D::load();
+	Scene::load();
 }
 
 void TestScene2D::unload(){
-	Scene2D::unload();
+	Scene::unload();
 }
 
 void TestScene2D::update(Step * _step){
 
-	Scene2D::update(_step);
+	Scene::update(_step);
 
 	world->update(_step);
 	sprite->playAnimation = false;
@@ -112,9 +114,23 @@ void TestScene2D::update(Step * _step){
 		sprite->setCurrentAnimation("run");
 		sprite->playAnimation = true;
 	}
+
+	//Add movement to the camera
+	if(keyboard->keyDown(GLFW_KEY_W)){
+		camera->transform->translate((camera->forwardVectorRotated) * static_cast<PerspectiveCamera *>(camera)->speed);
+	}
+	if(keyboard->keyDown(GLFW_KEY_S)){
+		camera->transform->translate((camera->forwardVectorRotated) * -static_cast<PerspectiveCamera *>(camera)->speed);	
+	}
+	if(keyboard->keyDown(GLFW_KEY_A)){
+		camera->transform->translate((camera->rightVectorRotated) * -static_cast<PerspectiveCamera *>(camera)->speed);		
+	}
+	if(keyboard->keyDown(GLFW_KEY_D)){
+		camera->transform->translate((camera->rightVectorRotated) * static_cast<PerspectiveCamera *>(camera)->speed);	
+	}
 }
 
 void TestScene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	Scene2D::render(_matrixStack, _renderStack);
+	Scene::render(_matrixStack, _renderStack);
 	world->world->DrawDebugData();
 }

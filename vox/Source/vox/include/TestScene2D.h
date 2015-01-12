@@ -2,6 +2,7 @@
 
 #include "Scene2D.h"
 
+class Box2DMeshEntity;
 class Box2DDebugDraw;
 class SpriteSheetAnimation;
 class Box2DSprite;
@@ -10,12 +11,12 @@ class Texture;
 class Sprite;
 class Box2DWorld;
 
-class TestScene2D : public Scene2D
+class TestScene2D : public Scene
 {
 public:
 
 	Box2DSprite * sprite;
-	Box2DSprite * ground;
+	Box2DMeshEntity * ground;
 	Box2DWorld * world;
 	Texture * tex;
 	BaseComponentShader* shader;

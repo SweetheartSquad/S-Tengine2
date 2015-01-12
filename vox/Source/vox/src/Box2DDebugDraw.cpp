@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Box2DDebugDraw.h"
-#include "Scene2D.h"
+#include "Scene.h"
 #include "Sprite.h"
 #include "shader/BaseComponentShader.h"
 #include "shader/TextureShaderComponent.h"
@@ -9,7 +9,7 @@
 #include <GL/glew.h>
 #include <Math.h>
 
-Box2DDebugDraw::Box2DDebugDraw(Scene2D * _scene):
+Box2DDebugDraw::Box2DDebugDraw(Scene * _scene):
 	shader(BaseComponentShader()),
 	scene(_scene)
 {

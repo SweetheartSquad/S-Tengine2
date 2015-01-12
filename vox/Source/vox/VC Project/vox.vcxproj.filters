@@ -324,6 +324,9 @@
     <ClCompile Include="..\src\Box2DMeshEntity.cpp">
       <Filter>Source Files\box2D</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\MeshFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -586,6 +589,9 @@
     </ClInclude>
     <ClInclude Include="..\include\Box2DMeshEntity.h">
       <Filter>Header Files\box2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\MeshFactory.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

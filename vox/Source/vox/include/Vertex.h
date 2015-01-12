@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 struct Vertex{
 	/** Position */
 	float x, y, z;
@@ -46,7 +48,7 @@ struct Vertex{
 	{
 	}
 
-	Vertex(glm::vec3 _vert) :
+	explicit Vertex(glm::vec3 _vert) :
 		x(_vert.x),
 		y(_vert.y),
 		z(_vert.z),
@@ -115,9 +117,9 @@ struct Vertex{
 		x(_x),
 		y(_y),
 		z(_z),
-		red(static_cast<float>(std::rand()%255)/255.f),
-		green(static_cast<float>(std::rand()%255)/255.f),
-		blue(static_cast<float>(std::rand()%255)/255.f),
+		red(static_cast<float>(rand()%255)/255.f),
+		green(static_cast<float>(rand()%255)/255.f),
+		blue(static_cast<float>(rand()%255)/255.f),
 		alpha(1.f),
 		nx(0.f),
 		ny(0.f),

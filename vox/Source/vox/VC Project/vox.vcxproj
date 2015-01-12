@@ -264,6 +264,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\src\FileUtils.cpp" />
     <ClCompile Include="..\src\FrameBufferInterface.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
+    <ClCompile Include="..\src\MeshFactory.cpp" />
     <ClCompile Include="..\src\node\NodeBox2D.cpp" />
     <ClCompile Include="..\src\PerspectiveCamera.cpp" />
     <ClCompile Include="..\src\Point.cpp" />
@@ -352,6 +353,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\include\FrameBufferInterface.h" />
     <ClInclude Include="..\include\FrameBufferVertex.h" />
     <ClInclude Include="..\include\Game.h" />
+    <ClInclude Include="..\include\MeshFactory.h" />
     <ClInclude Include="..\include\node\NodeBox2D.h" />
     <ClInclude Include="..\include\Point.h" />
     <ClInclude Include="..\include\Rectangle.h" />
