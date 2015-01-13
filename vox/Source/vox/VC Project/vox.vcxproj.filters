@@ -67,6 +67,18 @@
     <Filter Include="Header Files\frameBuffers">
       <UniqueIdentifier>{51c605bb-ebd5-43eb-b1a8-9ed270b4c034}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\box2D">
+      <UniqueIdentifier>{79ea79f8-eccc-448e-976a-91de925fb5f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\box2D">
+      <UniqueIdentifier>{e6c7ee33-703c-436a-9c76-436ec8f003a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\arduino">
+      <UniqueIdentifier>{d0fd3845-cefa-4329-b0e2-cd899eb8aaa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\arduino">
+      <UniqueIdentifier>{759c8fc0-0321-4e52-b957-f0e5b6990a9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Cube.cpp">
@@ -291,23 +303,26 @@
     <ClCompile Include="..\src\Sound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Box2DSprite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Box2DWorld.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ControllableOrthographicCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Box2DLevel.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\node\NodeBox2D.cpp">
+      <Filter>Source Files\node</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Box2DDebugDraw.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\box2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Box2DSprite.cpp">
+      <Filter>Source Files\box2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Box2DWorld.cpp">
+      <Filter>Source Files\box2D</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Arduino.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\arduino</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Box2DMeshEntity.cpp">
+      <Filter>Source Files\box2D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -551,23 +566,26 @@
     <ClInclude Include="..\include\Sound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Box2DSprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\Box2DWorld.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\ControllableOrthographicCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Box2DLevel.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\include\node\NodeBox2D.h">
+      <Filter>Header Files\node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Box2DSprite.h">
+      <Filter>Header Files\box2D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Box2DWorld.h">
+      <Filter>Header Files\box2D</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Box2DDebugDraw.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\box2D</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Arduino.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\arduino</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Box2DMeshEntity.h">
+      <Filter>Header Files\box2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

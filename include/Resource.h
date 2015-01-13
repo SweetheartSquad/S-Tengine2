@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include "Box2DLevel.h"
 
 class VoxelJoint;
 class VoxelMesh;
@@ -60,6 +59,4 @@ public:
 	* @returns The loaded VoxelJoint
 	*/
 	static VoxelJoint * loadVoxelModel(std::string _jsonSrc); 
-
-	static Box2DLevel * loadFizzXLevel(std::string _jsonSrc, std::string _imageLocation);
 };

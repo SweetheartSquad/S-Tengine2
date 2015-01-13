@@ -5,6 +5,8 @@
 #include "node/NodeUpdatable.h"
 #include "Box2DWorld.h"
 
+class Box2DSprite;
+
 class Box2DLevel : public virtual NodeUpdatable{
 public:
 	std::vector<Box2DSprite *> sprites;

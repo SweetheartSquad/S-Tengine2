@@ -4,7 +4,7 @@
 
 #include <Box2D/Box2D.h>
 
-class Box2DSprite;
+class NodeBox2D;
 
 class Box2DWorld : public virtual NodeUpdatable{
 public:
@@ -19,5 +19,5 @@ public:
 
 	void update(Step* _step) override;
 
-	void addToWorld(Box2DSprite * _sprite);
+	void addToWorld(NodeBox2D * _nodeBox2D);
 };

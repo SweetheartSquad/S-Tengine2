@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Box2DWorld.h"
-#include "Box2DSprite.h"
+#include "node/NodeBox2D.h"
+#include "Step.h"
 
 Box2DWorld::Box2DWorld(b2Vec2 _gravityVector):
 	NodeUpdatable(),
@@ -19,18 +20,18 @@ void Box2DWorld::update(Step* _step){
 	world->Step(_step->getDeltaTime(), velocityIterations, positionIterations);
 }
 
-void Box2DWorld::addToWorld(Box2DSprite * _sprite){
-	_sprite->body = world->CreateBody(&_sprite->bodyDef);
-	if(_sprite->defaultFixture){
+void Box2DWorld::addToWorld(NodeBox2D * _nodeBox2D){
+	_nodeBox2D->body = world->CreateBody(&_nodeBox2D->bodyDef);
+	if(_nodeBox2D->defaultFixture){
 		b2PolygonShape dynamicBox;
-		dynamicBox.SetAsBox(1.0f * _sprite->transform->scaleVector.x, 1.0f * _sprite->transform->scaleVector.y);	
+		dynamicBox.SetAsBox(1.0f * _nodeBox2D->transform->scaleVector.x, 1.0f * _nodeBox2D->transform->scaleVector.y);	
 		b2FixtureDef fixtureDef;
 		fixtureDef.shape = &dynamicBox;
-		if(_sprite->bodyDef.type != b2_staticBody){
+		if(_nodeBox2D->bodyDef.type != b2_staticBody){
 			  fixtureDef.density = 1.0f;
 			  fixtureDef.friction = 0.8f;
 		}
-		_sprite->body->CreateFixture(&fixtureDef);
+		_nodeBox2D->body->CreateFixture(&fixtureDef);
 	}
 }
 

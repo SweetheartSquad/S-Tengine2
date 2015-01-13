@@ -18,7 +18,6 @@
 #include "VoxelMesh.h"
 #include "Animation.h"
 #include "Box2DSprite.h"
-#include "Box2DLevel.h"
 #include "Box2DWorld.h"
 #include "Texture.h"
 
@@ -381,7 +380,7 @@ VoxelJoint * Resource::loadVoxelModel(std::string _jsonSrc){
 	return mainJoint;
 }
 
-Box2DLevel * Resource::loadFizzXLevel(std::string _jsonSrc, std::string _imageLocation){
+/*Box2DLevel * Resource::loadFizzXLevel(std::string _jsonSrc, std::string _imageLocation){
 
 	Box2DLevel * level = new Box2DLevel();
 	Box2DWorld * world = new Box2DWorld(b2Vec2(0, 0));
@@ -473,4 +472,4 @@ Box2DLevel * Resource::loadFizzXLevel(std::string _jsonSrc, std::string _imageLo
 		level->sprites.push_back(sprite);
 	}
 	return level;
-}
+}*/
