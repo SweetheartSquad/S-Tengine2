@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 
 /***************************************************************
 *
@@ -25,7 +26,7 @@ class Arduino
 
     public:
         //Initialize Serial communication with the given COM port
-        Arduino(wchar_t * portName);
+        Arduino(std::string portName);
         //Close the connection
         //NOTA: for some reason you can't connect again before exiting
         //the program and running it again

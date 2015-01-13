@@ -36,17 +36,17 @@ const std::string SEMI_ENDL							  = SEMI + ENDL;
 
 const std::string EMPTY								  = "";
 
-const std::string UNIFORM							  = "uniform ";
-const std::string OUT								  = "out ";
-const std::string IN							      = "in ";
+const std::string VAR_UNIFORM						  = "uniform ";
+const std::string VAR_OUT							  = "out ";
+const std::string VAR_IN							      = "in ";
 
-const std::string VEC4								  = "vec4 ";
-const std::string VEC3								  = "vec3 ";
-const std::string VEC2								  = "vec2 ";
-const std::string MAT4								  = "mat4 ";
-const std::string MAT3								  = "mat3 ";
-const std::string FLOAT								  = "float ";
-const std::string INT								  = "int ";
+const std::string VAR_VEC4							  = "vec4 ";
+const std::string VAR_VEC3							  = "vec3 ";
+const std::string VAR_VEC2						      = "vec2 ";
+const std::string VAR_MAT4							  = "mat4 ";
+const std::string VAR_MAT3							  = "mat3 ";
+const std::string VAR_FLOAT						      = "float ";
+const std::string VAR_INT							  = "int ";
 
 //Uniform variable names
 const std::string GL_UNIFORM_ID_TEXTURE_SAMPLER       = "textureSampler";

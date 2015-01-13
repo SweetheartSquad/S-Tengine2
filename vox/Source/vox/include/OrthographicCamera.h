@@ -16,7 +16,7 @@ class Mouse;
 class OrthographicCamera : public Camera {
 public:
 
-	OrthographicCamera(float left, float right, float bottom, float top, float near, float far);
+	OrthographicCamera(float _left, float _right, float _bottom, float _top, float _nearClip, float _farClip);
 	~OrthographicCamera();
 
 	void update(Step * _step) override {/* empty*/};
@@ -35,7 +35,7 @@ public:
 	float top;
 	float bottom;
 	float right;
-	float near;
-	float far;
+	float nearClip;
+	float farClip;
 
 };

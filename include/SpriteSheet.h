@@ -1,13 +1,15 @@
 #pragma once
+
 #include <vector>
 
-class Rectangle;
+#include "Rectangle.h"
+
 class Texture;
 
 class SpriteSheet{
 public:
 
-	std::vector<Rectangle> frames;
+	std::vector<vox::Rectangle> frames;
 	Texture * texture;
 
 	explicit SpriteSheet(Texture * _texture);

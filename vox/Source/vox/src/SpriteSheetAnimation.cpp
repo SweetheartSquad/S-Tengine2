@@ -31,7 +31,7 @@ void SpriteSheetAnimation::pushFrame(int _column, int _row, float _width, float 
 	rH = _height / texture->height;
 	u = rW * _column;
 	v = rH * _row;
-	frames.push_back(Rectangle(u, v, rW, rH));
+	frames.push_back(vox::Rectangle(u, v, rW, rH));
 	frameIndicies.tweens.push_back(new Tween<int>(secondsPerFrame, 1, Easing::kNONE));
 }
 

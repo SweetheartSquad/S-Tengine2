@@ -11,7 +11,7 @@ class SpriteSheetAnimation : NodeUpdatable
 {
 public:
 	Animation<int> frameIndicies;
-	std::vector<Rectangle> frames;
+	std::vector<vox::Rectangle> frames;
 	Texture * texture;
 	int currentFrame;
 	float secondsPerFrame;

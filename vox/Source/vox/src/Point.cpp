@@ -2,10 +2,10 @@
 
 #include "Point.h"
 
-Point::Point(float _x, float _y){
+vox::Point::Point(float _x, float _y){
 	x = _x;
 	y=  _y;
 }
 
-Point::~Point(){
+vox::Point::~Point(){
 }

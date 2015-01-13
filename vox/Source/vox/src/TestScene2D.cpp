@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Arduino.h"
+
 #include "TestScene2D.h"
 #include "Texture.h"
 #include "Sprite.h"
@@ -40,6 +42,9 @@ TestScene2D::TestScene2D(Game * _game):
 	//camera = new ControllableOrthographicCamera(10, -10, -10, 10, 20, -20);
 	//static_cast<ControllableOrthographicCamera*>(camera)->follow(sprite);
 
+	camera->transform->rotate(90, 0, 1, 0, kWORLD);
+	
+
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	soundManager->play("green_chair");
 	
@@ -70,6 +75,9 @@ TestScene2D::TestScene2D(Game * _game):
 
 	world->world->SetDebugDraw(drawer);
 	drawer->SetFlags(b2Draw::e_shapeBit);
+
+	arduino = new Arduino("COM3");
+
 }
 
 TestScene2D::~TestScene2D(){
@@ -128,9 +136,106 @@ void TestScene2D::update(Step * _step){
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		camera->transform->translate((camera->rightVectorRotated) * static_cast<PerspectiveCamera *>(camera)->speed);	
 	}
+
+	if(arduino->IsConnected()) {
+		char incomingData[256] = "";
+		int readResult = arduino->ReadData(incomingData, 256);
+		std::string test(incomingData);
+		std::cout << test;
+	}
 }
 
 void TestScene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene::render(_matrixStack, _renderStack);
 	world->world->DrawDebugData();
 }
+
+//Arduino Sketch
+/*
+const int  buttonPin0 = 2;  // the pin that the pushbutton is attached to
+const int  buttonPin1 = 3;  // the pin that the pushbutton is attached to
+const int  buttonPin2 = 4;  // the pin that the pushbutton is attached to
+const int  buttonPin3 = 5;  // the pin that the pushbutton is attached to
+
+int buttonState0 = 0;         // current state of the button
+int buttonState1 = 0;         // current state of the button
+int buttonState2 = 0;         // current state of the button
+int buttonState3 = 0;         // current state of the button
+
+void setup() {
+  // initialize the button pin as a input:
+  pinMode(buttonPin0, INPUT);
+  pinMode(buttonPin1, INPUT);
+  pinMode(buttonPin2, INPUT);
+  pinMode(buttonPin3, INPUT);
+  
+  // initialize serial communication:
+  Serial.begin(9600);
+}
+
+// A printf function, taken from...
+// https://gist.github.com/EleotleCram/eb586037e2976a8d9884
+int aprintf(char *str, ...) {
+	int i, j, count = 0;
+ 
+	va_list argv;
+	va_start(argv, str);
+	for(i = 0, j = 0; str[i] != '\0'; i++) {
+		if (str[i] == '%') {
+			count++;
+ 
+			Serial.write(reinterpret_cast<const uint8_t*>(str+j), i-j);
+ 
+			switch (str[++i]) {
+				case 'd': Serial.print(va_arg(argv, int));
+					break;
+				case 'l': Serial.print(va_arg(argv, long));
+					break;
+				case 'f': Serial.print(va_arg(argv, double));
+					break;
+				case 'c': Serial.print((char) va_arg(argv, int));
+					break;
+				case 's': Serial.print(va_arg(argv, char *));
+					break;
+				case '%': Serial.print("%");
+					break;
+				default:;
+			};
+ 
+			j = i+1;
+		}
+	};
+	va_end(argv);
+ 
+	if(i > j) {
+		Serial.write(reinterpret_cast<const uint8_t*>(str+j), i-j);
+	}
+ 
+	return count;
+}
+
+void loop() {
+  // read the pushbutton input pin:
+  buttonState0 = digitalRead(buttonPin0);
+  buttonState1 = digitalRead(buttonPin1);
+  buttonState2 = digitalRead(buttonPin2);
+  buttonState3 = digitalRead(buttonPin3);
+  int pressed[4] = {0, 0, 0, 0};
+  if(buttonState0 == HIGH) {
+    pressed[0] = 1;
+  } 
+  if(buttonState1 == HIGH) {
+    pressed[1] = 2;
+  } 
+  if(buttonState2 == HIGH) {
+    pressed[2] = 3;
+  } 
+  if(buttonState3 == HIGH) {
+    pressed[3] = 4;
+  }   
+  aprintf("%d %d %d %d \n",
+    pressed[0], pressed[1],
+    pressed[2], pressed[3]);
+}
+
+*/

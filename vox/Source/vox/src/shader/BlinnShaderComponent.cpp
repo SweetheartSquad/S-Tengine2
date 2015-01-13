@@ -30,12 +30,12 @@ std::string BlinnShaderComponent::getVertexBodyString(){
 std::string BlinnShaderComponent::getFragmentBodyString(){
 	return
 	IF_NOT_DEFINED + SHADER_COMPONENT_PHONG + ENDL + 
-	MAT3 + " normalMatrix = transpose(inverse(mat3(model)))" + SEMI_ENDL +
-	VEC3 + " normal = normalize(normalMatrix * fragNormal)" + SEMI_ENDL +
-	VEC3 + " fragWorldPosition = vec3(model * vec4(fragVert, 1))" + SEMI_ENDL +
-	VEC3 + " surfaceToCamera = fragVert - fragWorldPosition" + SEMI_ENDL +
+	VAR_MAT3 + " normalMatrix = transpose(inverse(mat3(model)))" + SEMI_ENDL +
+	VAR_VEC3 + " normal = normalize(normalMatrix * fragNormal)" + SEMI_ENDL +
+	VAR_VEC3 + " fragWorldPosition = vec3(model * vec4(fragVert, 1))" + SEMI_ENDL +
+	VAR_VEC3 + " surfaceToCamera = fragVert - fragWorldPosition" + SEMI_ENDL +
 	
-	VEC4 + " outColorBlinn = vec4(0,0,0,1)" + SEMI_ENDL +
+	VAR_VEC4 + " outColorBlinn = vec4(0,0,0,1)" + SEMI_ENDL +
 
 	"vec3 surfaceToLight = vec3(0,0,0)" + SEMI_ENDL +
 	"float attenuation = 1.0" + SEMI_ENDL +
@@ -54,36 +54,36 @@ std::string BlinnShaderComponent::getFragmentBodyString(){
 				"attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2))" + SEMI_ENDL +
 			"}" + ENDL +
 
-			TAB + TAB + VEC3 + " ambient = lights[i].ambientCoefficient * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
+			TAB + TAB + VAR_VEC3 + " ambient = lights[i].ambientCoefficient * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 		
 			TAB + TAB + "//diffuse" + ENDL +
-			TAB + TAB + FLOAT + " diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))" + SEMI_ENDL +
-			TAB + TAB + VEC3 + " diffuse = diffuseCoefficient * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
+			TAB + TAB + VAR_FLOAT + " diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))" + SEMI_ENDL +
+			TAB + TAB + VAR_VEC3 + " diffuse = diffuseCoefficient * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 			TAB + TAB + "diffuse = clamp(diffuse, 0.0, 1.0)" + SEMI_ENDL +
 		
 			TAB + TAB + "//specular" + ENDL +
-			TAB + TAB + FLOAT + " specularCoefficient = 0.0" + SEMI_ENDL +
+			TAB + TAB + VAR_FLOAT + " specularCoefficient = 0.0" + SEMI_ENDL +
 			TAB + TAB + "//only calculate specular for the front side of the surface" + ENDL +
 			TAB + TAB + "if(diffuseCoefficient > 0.0){" + ENDL +
-				TAB + TAB + TAB + VEC3 + " lightDirection = normalize(-surfaceToLight)" + SEMI_ENDL +
-				TAB + TAB + TAB + VEC3 + " viewDirection = normalize(-surfaceToCamera)" + SEMI_ENDL +
-				TAB + TAB + TAB + VEC3 + " halfAngle = normalize(lightDirection + viewDirection)" + SEMI_ENDL +
+				TAB + TAB + TAB + VAR_VEC3 + " lightDirection = normalize(-surfaceToLight)" + SEMI_ENDL +
+				TAB + TAB + TAB + VAR_VEC3 + " viewDirection = normalize(-surfaceToCamera)" + SEMI_ENDL +
+				TAB + TAB + TAB + VAR_VEC3 + " halfAngle = normalize(lightDirection + viewDirection)" + SEMI_ENDL +
 
 				TAB + TAB + TAB + "specularCoefficient = pow(max(0.0, dot(halfAngle, normal)), materials[j].shininess)" + SEMI_ENDL +
 			TAB + TAB +"}" + ENDL +
-			TAB + TAB + VEC3 + " specular = specularCoefficient * materials[j].specularColor * lights[i].intensities" + SEMI_ENDL +
+			TAB + TAB + VAR_VEC3 + " specular = specularCoefficient * materials[j].specularColor * lights[i].intensities" + SEMI_ENDL +
 			TAB + TAB + "//specular = clamp(specular, 0.0, 1.0)" + SEMI_ENDL +
 			
 			TAB + TAB + "//attenuation" + ENDL +
-			TAB + TAB + FLOAT + " distanceToLight = length(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
-			TAB + TAB + FLOAT + " attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2))" + SEMI_ENDL +
+			TAB + TAB + VAR_FLOAT + " distanceToLight = length(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
+			TAB + TAB + VAR_FLOAT + " attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2))" + SEMI_ENDL +
 		
 			TAB + TAB + "//linear color (color before gamma correction)" + ENDL +
-			TAB + TAB + VEC3 + " linearColor = ambient + attenuation * (diffuse + specular)" + SEMI_ENDL +
+			TAB + TAB + VAR_VEC3 + " linearColor = ambient + attenuation * (diffuse + specular)" + SEMI_ENDL +
     
 			TAB + TAB + "//final color (after gamma correction)" + ENDL +
-			TAB + TAB + VEC3 + " gamma = vec3(1.0/2.2, 1.0/2.2, 1.0/2.2)" + SEMI_ENDL +
-			TAB + TAB + VEC3 + " gammaColor = pow(linearColor, gamma)" + SEMI_ENDL +
+			TAB + TAB + VAR_VEC3 + " gamma = vec3(1.0/2.2, 1.0/2.2, 1.0/2.2)" + SEMI_ENDL +
+			TAB + TAB + VAR_VEC3 + " gammaColor = pow(linearColor, gamma)" + SEMI_ENDL +
 			TAB + TAB + "outColorBlinn = outColorBlinn + vec4(gammaColor, 1)" + SEMI_ENDL +
 		TAB + "}" + ENDL +
 	"}" + ENDL + 

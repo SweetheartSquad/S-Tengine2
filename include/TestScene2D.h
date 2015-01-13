@@ -2,6 +2,7 @@
 
 #include "Scene2D.h"
 
+class Arduino;
 class Box2DMeshEntity;
 class Box2DDebugDraw;
 class SpriteSheetAnimation;
@@ -23,6 +24,7 @@ public:
 	SoundManager * soundManager;
 	SpriteSheetAnimation * spriteSheet;
 	Box2DDebugDraw * drawer;
+	Arduino * arduino;
 
 	explicit TestScene2D(Game * _game);
 	virtual ~TestScene2D();

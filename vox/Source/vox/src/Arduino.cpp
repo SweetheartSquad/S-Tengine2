@@ -6,13 +6,18 @@
 *
 ****************************************************************/
 
-Arduino::Arduino(wchar_t *portName)
+Arduino::Arduino(std::string portName)
 {
     //We're not yet connected
     this->connected = false;
 
     //Try to connect to the given port throuh CreateFile
-    this->hSerial = CreateFile(portName,
+	std::wstring portName_t;
+	for(int i = 0; i < portName.length(); ++i){
+	  portName_t += wchar_t(portName[i]);
+	}
+
+    this->hSerial = CreateFile(portName_t.c_str(),
             GENERIC_READ | GENERIC_WRITE,
             0,
             NULL,
