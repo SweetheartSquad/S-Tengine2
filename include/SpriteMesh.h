@@ -5,7 +5,7 @@
 
 class SpriteSheetAnimation;
 
-class SpriteMesh : public virtual MeshInterface{
+class SpriteMesh : public MeshInterface{
 public:
 
 	Texture * animatedTexture;

@@ -25,6 +25,7 @@ public:
 	SpriteSheetAnimation * spriteSheet;
 	Box2DDebugDraw * drawer;
 	Arduino * arduino;
+	Sprite * frame; 
 
 	explicit TestScene2D(Game * _game);
 	virtual ~TestScene2D();

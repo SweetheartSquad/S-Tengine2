@@ -51,13 +51,10 @@ std::string TextureShaderComponent::getOutColorMod(){
 
 void TextureShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
-	SpriteMesh * spriteMesh = dynamic_cast<SpriteMesh *>(_nodeRenderable);
 	int numTextures = 0;
+	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), 0);
 	if(mesh != nullptr){
-		if(spriteMesh == nullptr){
-			// Pass the _shader the number of textures
-			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), mesh->textures.size());
-		}
+		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), mesh->textures.size());
 		// Bind each texture to the texture sampler array in the frag _shader
 		for(unsigned long int i = 0; i < mesh->textures.size(); i++){
 			glActiveTexture(GL_TEXTURE0 + i);
@@ -66,15 +63,13 @@ void TextureShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, R
 		}
 		numTextures = mesh->textures.size();
 	}
+	SpriteMesh * spriteMesh = dynamic_cast<SpriteMesh *>(_nodeRenderable);
 	//Setup the texture for the current animation
 	if(spriteMesh != nullptr){	
 		if(spriteMesh->animatedTexture != nullptr){
 			glActiveTexture(GL_TEXTURE0 + 1 + numTextures);
 			glBindTexture(GL_TEXTURE_2D, spriteMesh->animatedTexture->textureId);
 			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str()), numTextures + 1);
-		}
-		if(spriteMesh->animatedTexture != nullptr){
-			// Pass the _shader the number of textures
 			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), numTextures + 1);
 		}
 	}

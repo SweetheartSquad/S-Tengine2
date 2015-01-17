@@ -1,17 +1,25 @@
 #pragma once
 
 #include "PerspectiveCamera.h"
-#include "Mouse.h"
-#include "Keyboard.h"
 #include "System.h"
 #include "Transform.h"
 
 PerspectiveCamera::PerspectiveCamera():
 	Camera(),
-	NodeTransformable(new Transform),
+	NodeTransformable(new Transform()),
 	NodeAnimatable(),
 	NodeUpdatable(),
 	lastOrientation(1.f, 0.f, 0.f, 0.f)
+{
+}
+
+PerspectiveCamera::PerspectiveCamera(Transform * _trans):
+	Camera(),
+	NodeTransformable(new Transform()),
+	NodeAnimatable(),
+	NodeUpdatable(),
+	lastOrientation(1.f, 0.f, 0.f, 0.f),
+	trans(_trans)
 {
 }
 
@@ -20,37 +28,6 @@ PerspectiveCamera::~PerspectiveCamera(){
 
 void PerspectiveCamera::update(Step * _step){
 	lastOrientation = transform->orientation;
-
-	//Dimension screenDimensions = vox::getScreenDimensions();
-
-	//double centerX = static_cast<double>(screenDimensions.width)*0.5;
-	//double centerY = static_cast<double>(screenDimensions.height)*0.5;
-
-	//double offsetX = 0.;
-	//double offsetY = 0.;
-
-	//if(abs(centerX - mouse->mouseX()) > 0.01){
-	//	offsetX = centerX - mouse->mouseX();
-	//}
-	//if(abs(centerY - mouse->mouseY()) > 0.01){
-	//	offsetY = centerY - mouse->mouseY();
-	//}
-
-	//double deltaX = lastMouseX - offsetX;
-	//double deltaY = lastMouseY - offsetY;
-
-	//if(deltaX != 0){
-	//	pitch += (mouseSpeed * static_cast<float>(offsetY));
-	//}if(deltaY != 0){
-	//	yaw += (mouseSpeed * static_cast<float>(offsetX));
-	//}
-
-	////restriction
-	//if(pitch < -80.f){
-	//	pitch = -80.f;
-	//}else if(pitch > 80.f){
-	//	pitch = 80.f;
-	//}
 
 	transform->orientation = glm::quat(1.f, 0.f, 0.f, 0.f);
 	transform->orientation = glm::rotate(transform->orientation, yaw, upVectorLocal);
@@ -61,11 +38,6 @@ void PerspectiveCamera::update(Step * _step){
 	forwardVectorRotated   = transform->orientation * forwardVectorLocal;
 	rightVectorRotated	   = transform->orientation * rightVectorLocal;
 	upVectorRotated		   = transform->orientation * upVectorLocal;
-
-	//glfwSetCursorPos(vox::currentContext, centerX, centerY);
-
-	/*lastMouseX = offsetX;
-	lastMouseY = offsetY;*/
 }
 
 glm::mat4 PerspectiveCamera::getViewMatrix(){

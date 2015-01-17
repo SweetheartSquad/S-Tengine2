@@ -31,7 +31,7 @@ public:
 
 	virtual void removeChildAtIndex(int _index) override;
 	/** Calls unload on all children */
-	virtual void unload();
+	virtual void unload() override;
 	/** Calls unload on all children */
-	virtual void load();
+	virtual void load() override;
 };

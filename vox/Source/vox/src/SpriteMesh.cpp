@@ -16,10 +16,6 @@ SpriteMesh::SpriteMesh(GLenum _drawMode) :
 	pushVert(Vertex(1.f, -1.f, 0.f));
 	//bottom left
 	pushVert(Vertex(-1.f, -1.f, 0.f));
-	indices.push_back(0);
-	indices.push_back(1);
-	indices.push_back(2);
-	indices.push_back(3);
 	setNormal(0, 0.0, 0.0, 1.0);
 	setNormal(1, 0.0, 0.0, 1.0);
 	setNormal(2, 0.0, 0.0, 1.0);

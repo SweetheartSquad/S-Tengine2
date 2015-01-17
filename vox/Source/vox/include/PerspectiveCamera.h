@@ -18,6 +18,7 @@ class PerspectiveCamera : public Camera {
 public:
 
 	PerspectiveCamera();
+	PerspectiveCamera(Transform * trans);
 	~PerspectiveCamera();
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
@@ -35,4 +36,6 @@ public:
 	* @return The projection matrix of the camera 
 	*/
 	glm::mat4 getProjectionMatrix() override;
+
+	Transform * trans;
 };

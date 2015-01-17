@@ -33,6 +33,7 @@ TestScene2D::TestScene2D(Game * _game):
 	Scene(_game),
 	sprite(new Box2DSprite(b2_dynamicBody, true, nullptr, new Transform())),
 	ground(new Box2DMeshEntity(MeshFactory::getCubeMesh(), b2_staticBody)),
+	frame(new Sprite()),
 	world(new Box2DWorld(b2Vec2(0, -60))),
 	tex(new Texture("../assets/spritesheet.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
@@ -40,11 +41,9 @@ TestScene2D::TestScene2D(Game * _game):
 {
 	Box2DDebugDraw * drawer = new Box2DDebugDraw(this);
 
-	camera = new MousePerspectiveCamera();
 	//static_cast<ControllableOrthographicCamera*>(camera)->follow(sprite);
 
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
-	
 
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	soundManager->play("green_chair");
@@ -54,9 +53,14 @@ TestScene2D::TestScene2D(Game * _game):
 
 	sprite->setShader(shader, true);
 	ground->setShader(shader, true);
+	frame->setShader(shader, true);
 	
-	addChild(sprite);	
+	frame->transform->scale(20, 10, 1);
+	frame->transform->translate(0.f, 5.f, -1.f);
+
+	addChild(frame);
 	addChild(ground);
+	addChild(sprite);	
 
 	spriteSheet = new SpriteSheetAnimation(tex, 0.05);
 	spriteSheet->pushFramesInRange(0, 26, 130, 150, 130 * 7);
@@ -79,6 +83,10 @@ TestScene2D::TestScene2D(Game * _game):
 
 	arduino = new Arduino("COM3");
 
+	camera = new PerspectiveCamera(sprite->transform);
+	camera->transform->translate(5.0f, 5.0f, 20.0f);
+	camera->yaw = 90.0f;
+	camera->pitch = -10.0f;
 }
 
 TestScene2D::~TestScene2D(){
