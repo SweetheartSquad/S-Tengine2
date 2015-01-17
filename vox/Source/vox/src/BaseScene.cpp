@@ -160,7 +160,7 @@ void BaseScene::update(Step * _step){
 	
 	Scene::update(_step);
 
-	//Add movement to the camera
+	/*//Add movement to the camera
 	if(keyboard->keyDown(GLFW_KEY_W)){
 		camera->transform->translate((camera->forwardVectorRotated) * static_cast<PerspectiveCamera *>(camera)->speed);
 	}
@@ -172,7 +172,7 @@ void BaseScene::update(Step * _step){
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		camera->transform->translate((camera->rightVectorRotated) * static_cast<PerspectiveCamera *>(camera)->speed);	
-	}
+	}*/
 	
 	//Toggle fullscreen
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){

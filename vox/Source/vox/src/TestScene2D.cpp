@@ -27,6 +27,7 @@
 #include "Box2DMeshEntity.h"
 #include "MeshFactory.h"
 #include "PerspectiveCamera.h"
+#include "MousePerspectiveCamera.h"
 
 TestScene2D::TestScene2D(Game * _game):
 	Scene(_game),
@@ -39,7 +40,7 @@ TestScene2D::TestScene2D(Game * _game):
 {
 	Box2DDebugDraw * drawer = new Box2DDebugDraw(this);
 
-	//camera = new ControllableOrthographicCamera(10, -10, -10, 10, 20, -20);
+	camera = new MousePerspectiveCamera();
 	//static_cast<ControllableOrthographicCamera*>(camera)->follow(sprite);
 
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
@@ -125,16 +126,16 @@ void TestScene2D::update(Step * _step){
 
 	//Add movement to the camera
 	if(keyboard->keyDown(GLFW_KEY_W)){
-		camera->transform->translate((camera->forwardVectorRotated) * static_cast<PerspectiveCamera *>(camera)->speed);
+		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
-		camera->transform->translate((camera->forwardVectorRotated) * -static_cast<PerspectiveCamera *>(camera)->speed);	
+		camera->transform->translate((camera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);	
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		camera->transform->translate((camera->rightVectorRotated) * -static_cast<PerspectiveCamera *>(camera)->speed);		
+		camera->transform->translate((camera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);		
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		camera->transform->translate((camera->rightVectorRotated) * static_cast<PerspectiveCamera *>(camera)->speed);	
+		camera->transform->translate((camera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);	
 	}
 
 	if(arduino->IsConnected()) {

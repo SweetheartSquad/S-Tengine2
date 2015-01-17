@@ -59,7 +59,7 @@ public:
 	virtual void renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack);
 
 	virtual void setViewport(float _x, float _y, float _width, float _height);
-	float viewPortX, viewPortY, viewPortWidth, viewPortHeight;
+	int viewPortX, viewPortY, viewPortWidth, viewPortHeight;
 
 	virtual void load() override;
 	virtual void unload() override;

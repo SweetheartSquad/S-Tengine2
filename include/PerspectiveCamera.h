@@ -24,12 +24,12 @@ public:
 	void update(Step * _step) override;
 
 	/** Reference to the mouse singleton */
-	Mouse * mouse;
+	//Mouse * mouse;
 
 	/** Movement speed multiplier */
-	float speed;
-	/** Mouse speed multiplier */
-	float mouseSpeed;
+	//float speed;
+	//** Mouse speed multiplier */
+	//float mouseSpeed;
 	/** The orientation quaternian from the last update loop*/
 	glm::quat lastOrientation;
 
@@ -45,8 +45,8 @@ public:
 
 private :
 	/** The X position of the mouse from the last update loop*/
-	double lastMouseX;
+	//double lastMouseX;
 	/** The Y position of the mouse from the last update loop*/
-	double lastMouseY;
+	//double lastMouseY;
 
 };
