@@ -1,8 +1,8 @@
 #pragma once
 
-#include "node/NodeBox2D.h"
+#include "node/NodeBox2DBody.h"
 
-NodeBox2D::NodeBox2D(b2BodyType _bodyType, bool _defaultFixture, Transform* _transform):
+NodeBox2DBody::NodeBox2DBody(b2BodyType _bodyType, bool _defaultFixture, Transform* _transform):
 	NodeTransformable(_transform),
 	NodeUpdatable(),
 	body(nullptr),
@@ -14,13 +14,13 @@ NodeBox2D::NodeBox2D(b2BodyType _bodyType, bool _defaultFixture, Transform* _tra
 	bodyDef.type = _bodyType;
 }
 
-NodeBox2D::~NodeBox2D(){
+NodeBox2DBody::~NodeBox2DBody(){
 	if(body != nullptr){
 		body->GetWorld()->DestroyBody(body);
 	}
 }
 
-void NodeBox2D::update(Step * _step){
+void NodeBox2DBody::update(Step * _step){
 	if(body != nullptr){
 		transform->translationVector.x = body->GetPosition().x;	
 		transform->translationVector.y = body->GetPosition().y;	
@@ -37,7 +37,7 @@ void NodeBox2D::update(Step * _step){
 	}
 }
 
-void NodeBox2D::setTranslationPhysical(glm::vec3 _translation){
+void NodeBox2DBody::setTranslationPhysical(glm::vec3 _translation){
 	transform->translate(_translation);
 	bodyDef.position.Set(transform->translationVector.x, transform->translationVector.y);
 	if(body != nullptr){
@@ -45,124 +45,124 @@ void NodeBox2D::setTranslationPhysical(glm::vec3 _translation){
 	}
 }
 
-void NodeBox2D::setTranslationPhysical(float _x, float _y, float _z){
+void NodeBox2DBody::setTranslationPhysical(float _x, float _y, float _z){
 	setTranslationPhysical(glm::vec3(_x, _y, _z));
 }
 
-void NodeBox2D::setXPhysical(float _x){
+void NodeBox2DBody::setXPhysical(float _x){
 	setTranslationPhysical(glm::vec3(_x, 0, 0));
 }
 
-void NodeBox2D::setYPhysical(float _y){
+void NodeBox2DBody::setYPhysical(float _y){
 	setTranslationPhysical(glm::vec3(0, _y, 0));
 }
 
-void NodeBox2D::setXYPhysical(float _x, float _y){
+void NodeBox2DBody::setXYPhysical(float _x, float _y){
 	setTranslationPhysical(glm::vec3(_x, _y, 0));
 }
 
-void NodeBox2D::applyForce(float _forceX, float _forceY, float _pointX, float _pointY){
+void NodeBox2DBody::applyForce(float _forceX, float _forceY, float _pointX, float _pointY){
 	if(body != nullptr){
 		body->ApplyForce(b2Vec2(_forceX, _forceY), b2Vec2(_pointX, _pointY), true);
 	}
 }
 
-void NodeBox2D::applyForceLeft(float _force){
+void NodeBox2DBody::applyForceLeft(float _force){
 	if(body != nullptr){
 		body->ApplyForce(b2Vec2(-_force, 0), body->GetWorldCenter(), true);
 	}
 }
 
-void NodeBox2D::applyForceRight(float _force){
+void NodeBox2DBody::applyForceRight(float _force){
 	if(body != nullptr){
 		body->ApplyForce(b2Vec2(_force, 0), body->GetWorldCenter(), true);
 	}
 }
 
-void NodeBox2D::applyForceUp(float _force){
+void NodeBox2DBody::applyForceUp(float _force){
 	if(body != nullptr){
 		body->ApplyForce(b2Vec2(0, _force), body->GetWorldCenter(), true);
 	}
 }
 
-void NodeBox2D::applyForceDown(float _force){
+void NodeBox2DBody::applyForceDown(float _force){
 	if(body != nullptr){
 		body->ApplyForce(b2Vec2(0, -_force), body->GetWorldCenter(), true);
 	}
 }
 
-void NodeBox2D::applyLinearImpulse(float _forceX, float _forceY, float _pointX, float _pointY){
+void NodeBox2DBody::applyLinearImpulse(float _forceX, float _forceY, float _pointX, float _pointY){
 	if(body != nullptr){
 		body->ApplyLinearImpulse(b2Vec2(_forceX, _forceY), b2Vec2(_pointX, _pointY), true);
 	}
 }
 
-void NodeBox2D::applyLinearImpulseLeft(float _force){
+void NodeBox2DBody::applyLinearImpulseLeft(float _force){
 	if(body != nullptr){
 		body->ApplyLinearImpulse(b2Vec2(-_force, 0), body->GetWorldCenter(), true);
 	}
 }
 
-void NodeBox2D::applyLinearImpulseRight(float _force){
+void NodeBox2DBody::applyLinearImpulseRight(float _force){
 	if(body != nullptr){
 		body->ApplyLinearImpulse(b2Vec2(_force, 0), body->GetWorldCenter(), true);
 	}
 }
 
-void NodeBox2D::applyLinearImpulseUp(float _force){
+void NodeBox2DBody::applyLinearImpulseUp(float _force){
 	if(body != nullptr){
 		body->ApplyLinearImpulse(b2Vec2(0, _force), body->GetWorldCenter(), true);
 	}
 }
 
-void NodeBox2D::applyLinearImpulseDown(float _force){
+void NodeBox2DBody::applyLinearImpulseDown(float _force){
 	if(body != nullptr){
 		body->ApplyLinearImpulse(b2Vec2(0, -_force), body->GetWorldCenter(), true);
 	}
 }
 
-void NodeBox2D::applyAngularImpule(float _angle){
+void NodeBox2DBody::applyAngularImpule(float _angle){
 	if(body != nullptr){
 		body->ApplyAngularImpulse(_angle, true);
 	}
 }
 
-bool NodeBox2D::movingVertically(float _threshold){
+bool NodeBox2DBody::movingVertically(float _threshold){
 	if(body != nullptr){
 		return body->GetLinearVelocity().y > abs(_threshold) || body->GetLinearVelocity().y < _threshold * -1;
 	}
 	return false;
 }
 
-bool NodeBox2D::movingHorizontally(float _threshold){
+bool NodeBox2DBody::movingHorizontally(float _threshold){
 	if(body != nullptr){
 		return abs(body->GetLinearVelocity().x) > abs(_threshold) || abs(body->GetLinearVelocity().x) < abs(_threshold);
 	}
 	return false;
 }
 
-bool NodeBox2D::movingRight(float _threshold){
+bool NodeBox2DBody::movingRight(float _threshold){
 	if(body != nullptr){
 		return abs(body->GetLinearVelocity().x) > abs(_threshold);
 	}
 	return false;
 }
 
-bool NodeBox2D::movingLeft(float _threshold){
+bool NodeBox2DBody::movingLeft(float _threshold){
 	if(body != nullptr){
 		return abs(body->GetLinearVelocity().x) < abs(_threshold);
 	}
 	return false;
 }
 
-bool NodeBox2D::movingUp(float _threshold){
+bool NodeBox2DBody::movingUp(float _threshold){
 	if(body != nullptr){
 		return abs(body->GetLinearVelocity().y) > abs(_threshold);
 	}
 	return false;
 }
 
-bool NodeBox2D::movingDown(float _threshold){
+bool NodeBox2DBody::movingDown(float _threshold){
 	if(body != nullptr){
 		return abs(body->GetLinearVelocity().y) < abs(_threshold);
 	}

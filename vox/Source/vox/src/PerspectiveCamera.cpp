@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Sprite.h"
 #include "PerspectiveCamera.h"
 #include "System.h"
 #include "Transform.h"
@@ -13,7 +14,7 @@ PerspectiveCamera::PerspectiveCamera():
 {
 }
 
-PerspectiveCamera::PerspectiveCamera(Transform * _trans):
+PerspectiveCamera::PerspectiveCamera(Sprite * _trans):
 	Camera(),
 	NodeTransformable(new Transform()),
 	NodeAnimatable(),
@@ -27,11 +28,12 @@ PerspectiveCamera::~PerspectiveCamera(){
 }
 
 void PerspectiveCamera::update(Step * _step){
+
 	lastOrientation = transform->orientation;
 
-	transform->orientation = glm::quat(1.f, 0.f, 0.f, 0.f);
-	transform->orientation = glm::rotate(transform->orientation, yaw, upVectorLocal);
-	transform->orientation = glm::rotate(transform->orientation, pitch, rightVectorLocal);
+	//transform->orientation = glm::quat(1.f, 0.f, 0.f, 0.f);
+	//transform->orientation = glm::rotate(transform->orientation, yaw, upVectorLocal);
+	//transform->orientation = glm::rotate(transform->orientation, pitch, rightVectorLocal);
 
 	transform->orientation = glm::slerp(lastOrientation, transform->orientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
 
@@ -43,8 +45,8 @@ void PerspectiveCamera::update(Step * _step){
 glm::mat4 PerspectiveCamera::getViewMatrix(){
 	return glm::lookAt(
 		transform->translationVector,	// Camera is here
-		transform->translationVector + forwardVectorRotated, // and looks here : at the same position, plus "direction"
-		upVectorRotated				// Head is up (set to 0,-1,0 to look upside-down)
+		trans->transform->translationVector, // and looks here : at the same position, plus "direction"
+		upVectorLocal				// Head is up (set to 0,-1,0 to look upside-down)
 		);
 }
 

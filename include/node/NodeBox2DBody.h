@@ -9,8 +9,9 @@
 
 #define NO_VELOCITY_LIMIT -1
 
-class NodeBox2D : public virtual NodeUpdatable, public virtual NodeTransformable {
+class NodeBox2DBody : public virtual NodeUpdatable, public virtual NodeTransformable {
 public:
+
 	b2Body * body;
 	b2BodyDef bodyDef;
 
@@ -19,8 +20,8 @@ public:
 
 	bool defaultFixture;
 
-	explicit NodeBox2D(b2BodyType _bodyType = b2_dynamicBody, bool _defaultFixture = true, Transform * _transform = new Transform());
-	~NodeBox2D();	
+	explicit NodeBox2DBody(b2BodyType _bodyType = b2_dynamicBody, bool _defaultFixture = true, Transform * _transform = new Transform());
+	~NodeBox2DBody();	
 
 	void update(Step* _step) override;
 

@@ -7,7 +7,7 @@
 #include "Camera.h"
 
 class Mouse;
-
+class Sprite;
 /****************************
 *
 * A perspective camera class, i.e. objects seem smaller the farther they are away from this camera.
@@ -18,7 +18,7 @@ class PerspectiveCamera : public Camera {
 public:
 
 	PerspectiveCamera();
-	PerspectiveCamera(Transform * trans);
+	PerspectiveCamera(Sprite * trans);
 	~PerspectiveCamera();
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
@@ -37,5 +37,5 @@ public:
 	*/
 	glm::mat4 getProjectionMatrix() override;
 
-	Transform * trans;
+	Sprite * trans;
 };

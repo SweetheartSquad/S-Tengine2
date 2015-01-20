@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Box2DWorld.h"
-#include "node/NodeBox2D.h"
+#include "node/NodeBox2DBody.h"
 #include "Step.h"
 
 Box2DWorld::Box2DWorld(b2Vec2 _gravityVector):
@@ -20,7 +20,7 @@ void Box2DWorld::update(Step* _step){
 	world->Step(_step->getDeltaTime(), velocityIterations, positionIterations);
 }
 
-void Box2DWorld::addToWorld(NodeBox2D * _nodeBox2D){
+void Box2DWorld::addToWorld(NodeBox2DBody * _nodeBox2D){
 	_nodeBox2D->body = world->CreateBody(&_nodeBox2D->bodyDef);
 	if(_nodeBox2D->defaultFixture){
 		b2PolygonShape dynamicBox;

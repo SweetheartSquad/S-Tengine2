@@ -83,7 +83,7 @@ TestScene2D::TestScene2D(Game * _game):
 
 	arduino = new Arduino("COM3");
 
-	camera = new PerspectiveCamera(sprite->transform);
+	camera = new PerspectiveCamera(sprite);
 	camera->transform->translate(5.0f, 5.0f, 20.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
@@ -113,7 +113,7 @@ void TestScene2D::update(Step * _step){
 		}
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
-
+		sprite->transform->rotate(1, 0, 1, 0, kOBJECT);
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
 		sprite->applyLinearImpulseLeft(50);
