@@ -80,7 +80,7 @@ This sample project also has many comments which should clarify what is being do
 
 ## VOX library pack  
 
-https://drive.google.com/file/d/0B2VyAXziLJJtSDFCTWhqb3RvZEk/view?usp=sharing
+https://drive.google.com/file/d/0B2VyAXziLJJtNXJ2Y0REU3RrSm8/view?usp=sharing
 
 =================================================================
 
