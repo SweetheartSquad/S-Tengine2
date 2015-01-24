@@ -16,4 +16,6 @@ public:
 	
 	Shader * shader;
 	Shader * overrideShader;
+
+	bool alphaSorting;
 };

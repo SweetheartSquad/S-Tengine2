@@ -36,12 +36,12 @@ public:
 	Keyboard * keyboard;
 	/** Reference to this scene's camera */
 	Camera * camera;
-	/** Reference to a list of references to entitites included in this scene */
 	RenderOptions       * renderOptions;
 	StandardFrameBuffer	* depthBuffer;
 	StandardFrameBuffer * shadowBuffer;
 	DepthMapShader		* depthShader;
 	RenderSurface       * shadowSurface;
+	/** Reference to a list of references to entitites included in this scene */
 	std::vector<Entity *> children;
 	/** The lights for this scene **/
 	std::vector<Light *> lights;
@@ -52,7 +52,7 @@ public:
 	/** Tells the RenderSystem to render the attached children to the vox::currentContext using the camera's view-projection matrix */
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 	/** Adds a reference to an entity to the attached list of children */
-	void addChild(Entity * child);
+	void addChild(Entity * _child);
 	/** Toggles fullscreen on and off */
 	void toggleFullScreen();
 
