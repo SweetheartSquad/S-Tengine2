@@ -17,6 +17,7 @@
 #include "Box2DWorld.h"
 #include "ControllableOrthographicCamera.h"
 #include "Resource.h"
+#include "RenderOptions.h"
 
 #include <array>
 #include <libzplay.h>
@@ -28,16 +29,21 @@
 #include "MousePerspectiveCamera.h"
 #include "GameJamScene.h"
 #include "BitmapFont.h"
+#include "CylinderScreen.h"
 
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
 	world(new Box2DWorld(b2Vec2(0, -60))),
-	sprite(new Box2DSprite(world, b2_dynamicBody, true, nullptr, new Transform())),
+	playerSprite(new Box2DSprite(world, b2_dynamicBody, true, nullptr, new Transform())),
 	ground(new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_staticBody)),
-	tex(new Texture("../assets/spritesheet.png", 1024, 1024, true, true)),
+	tex(new Texture("../assets/MichaelScale.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
-	soundManager(new SoundManager())
+	soundManager(new SoundManager()),
+	backgroundScreen(new CylinderScreen(25, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky.png", 4096, 4096, true, true))),
+	midgroundScreen(new CylinderScreen(50, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky2.png", 4096, 4096, true, true))),
+	foregroundScreen(new CylinderScreen(75, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky3.png", 4096, 4096, true, true)))
 {
+	renderOptions->alphaSorting = true;
 	Box2DDebugDraw * drawer = new Box2DDebugDraw(this);
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
 
@@ -47,42 +53,62 @@ GameJamScene::GameJamScene(Game * _game):
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
 
-	sprite->setShader(shader, true);
+	playerSprite->mesh->pushTexture2D(tex);
+	playerSprite->setShader(shader, true);
 	ground->setShader(shader, true);
 
-	spriteSheet = new SpriteSheetAnimation(tex, 0.05);
-	spriteSheet->pushFramesInRange(0, 26, 130, 150, 130 * 7);
-	sprite->addAnimation("run", spriteSheet, true);
-
-	ground->setTranslationPhysical(0, -10, 0);
-	ground->transform->scale(20, 10, 2);
+	ground->setTranslationPhysical(0, -10, -3);
+	ground->transform->scale(50, 10, 2);
 	ground->mesh->pushTexture2D(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true));
 
-	sprite->transform->scale(2, 2, 1);
-	sprite->setTranslationPhysical(0, 10, 0);
+	playerSprite->transform->scale(4, 4, 1);
+	playerSprite->setTranslationPhysical(0, 10, 0);
 
-	sprite->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
+	playerSprite->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 
-	world->addToWorld(sprite);
+	world->addToWorld(playerSprite);
 	world->addToWorld(ground);
 
-	world->b2world->SetDebugDraw(drawer);
-	drawer->SetFlags(b2Draw::e_shapeBit);
-
-	addChild(sprite);
-	addChild(ground);
-
+	
+	backgroundScreen->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
+	backgroundScreen->transform->scale(25, 75, 75);
+	backgroundScreen->transform->translate(0, -10, -20);
+	backgroundScreen->setShader(shader, true);
+	
+	midgroundScreen->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
+	midgroundScreen->transform->scale(15, 50, 50);
+	midgroundScreen->transform->translate(0, -10, -10);
+	midgroundScreen->setShader(shader, true);
+	
+	foregroundScreen->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
+	foregroundScreen->transform->scale(-5, 25, 25);
+	foregroundScreen->transform->translate(0, -10, 10);
+	foregroundScreen->setShader(shader, true);
+	
+	
 	Texture * font = new Texture("../assets/MoonFlowerBold.png", 1024, 1024, true, true);
 	BitmapFont * fontM = new BitmapFont(font, 32, 16, 16); 
-	fontM->setShader(shader, true);
     fontM->setText("sdsdweqweqwewqesdsdsdadasd");
-	fontM->transform->translate(0, 3, 0);
-	addChild(fontM);
+	fontM->transform->translate(0, 3, 5);
+	fontM->setShader(shader, true);
 
-	camera = new PerspectiveCamera(sprite);
+	
+	addChild(foregroundScreen);
+	addChild(fontM);
+	addChild(playerSprite);
+	addChild(ground);
+	addChild(midgroundScreen);
+	addChild(backgroundScreen);
+
+	
+	camera = new PerspectiveCamera(playerSprite, glm::vec3(0, 10, 0), 5, 0);
+	//camera = new MousePerspectiveCamera();
 	camera->transform->translate(5.0f, 5.0f, 20.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
+
+	world->b2world->SetDebugDraw(drawer);
+	drawer->SetFlags(b2Draw::e_shapeBit);
 }
 
 GameJamScene::~GameJamScene(){
@@ -100,30 +126,48 @@ void GameJamScene::update(Step * _step){
 	Scene::update(_step);
 
 	world->update(_step);
-	sprite->playAnimation = false;
+	playerSprite->playAnimation = false;
 	if(keyboard->keyDown(GLFW_KEY_W)){
-		if(!sprite->movingVertically(0.05)){
-			sprite->applyLinearImpulseUp(500);	
+		if(!playerSprite->movingVertically(0.05)){
+			playerSprite->applyLinearImpulseUp(500);	
 		}
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
-		sprite->transform->rotate(1, 0, 1, 0, kOBJECT);
+		playerSprite->transform->rotate(1, 0, 1, 0, kOBJECT);
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		sprite->applyLinearImpulseLeft(50);
-		if(sprite->transform->scaleVector.x > 0){
-			sprite->transform->scaleX(-1);
+		playerSprite->applyLinearImpulseLeft(50);
+		if(playerSprite->transform->scaleVector.x > 0){
+			playerSprite->transform->scaleX(-1);
 		}
-		sprite->playAnimation = true;
-		sprite->setCurrentAnimation("run");
+		//playerSprite->playAnimation = true;
+		//playerSprite->setCurrentAnimation("run");
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		sprite->applyLinearImpulseRight(50);
-		if(sprite->transform->scaleVector.x < 0){
-			sprite->transform->scaleX(-1);
+		playerSprite->applyLinearImpulseRight(50);
+		if(playerSprite->transform->scaleVector.x < 0){
+			playerSprite->transform->scaleX(-1);
 		}
-		sprite->setCurrentAnimation("run");
-		sprite->playAnimation = true;
+		//playerSprite->setCurrentAnimation("run");
+		//playerSprite->playAnimation = true;
+	}
+
+	// move the ground and background with the player
+	ground->setTranslationPhysical(playerSprite->transform->translationVector.x, ground->transform->translationVector.y, ground->transform->translationVector.z);
+
+
+	// camera controls
+	if(keyboard->keyDown(GLFW_KEY_UP)){
+		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
+	}
+	if(keyboard->keyDown(GLFW_KEY_DOWN)){
+		camera->transform->translate((camera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);	
+	}
+	if(keyboard->keyDown(GLFW_KEY_LEFT)){
+		camera->transform->translate((camera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);		
+	}
+	if(keyboard->keyDown(GLFW_KEY_RIGHT)){
+		camera->transform->translate((camera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);	
 	}
 }
 

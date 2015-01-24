@@ -13,6 +13,12 @@ CylinderScreen::CylinderScreen(float _speed, float * _control, int _numLevels, T
 	if(_texture != nullptr){
 		mesh->pushTexture2D(_texture);
 	}
+
+	for(unsigned long int i = 0; i < mesh->getVertCount(); ++i){
+		float y = 1.f - mesh->vertices.at(i).y * 0.2f;
+		mesh->setUV(i, mesh->vertices.at(i).u, y);
+	}
+	mesh->dirty = true;
 }
 
 void CylinderScreen::update(Step * _step){
@@ -62,4 +68,6 @@ void CylinderScreen::update(Step * _step){
 	}
 	mesh->dirty = true;
 	prevControlValue = *control;
+
+	transform->translationVector.x = *control;
 }

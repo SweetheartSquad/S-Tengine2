@@ -11,18 +11,22 @@ class SoundManager;
 class Texture;
 class Sprite;
 class Box2DWorld;
+class CylinderScreen;
 
 class GameJamScene : public Scene
 {
 public:
 	Box2DWorld * world;
-	Box2DSprite * sprite;
+	Box2DSprite * playerSprite;
 	Box2DMeshEntity * ground;
 	Texture * tex;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
 	SpriteSheetAnimation * spriteSheet;
 	Box2DDebugDraw * drawer;
+	CylinderScreen * backgroundScreen;
+	CylinderScreen * midgroundScreen;
+	CylinderScreen * foregroundScreen;
 
 	explicit GameJamScene(Game * _game);
 	virtual ~GameJamScene();

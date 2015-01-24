@@ -145,19 +145,7 @@ TestScene2D::TestScene2D(Game * _game):
 
 
 
-	me = new CylinderScreen(10, &sprite->transform->translationVector.x, 4, new Texture("../assets/sky.png", 4096, 4096, true, true));
-	me->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
-	me->transform->scale(25, 75, 75);
-	me->setShader(shader, true);
-	me->transform->translate(0, -10, 0);
-	addChild(me);
 	
-	for(unsigned long int i = 0; i < me->mesh->getVertCount(); ++i){
-		float y = 1.f - me->mesh->vertices.at(i).y * 0.2f;
-		me->mesh->setUV(i, me->mesh->vertices.at(i).u, y);
-	}
-	me->mesh->dirty = true;
-	me->mesh->clean();
 	//me->mesh->dirty = true;
 
 }
@@ -229,8 +217,6 @@ void TestScene2D::update(Step * _step){
 	me->update(_step);
 	
 	
-	ground->setTranslationPhysical(sprite->transform->translationVector.x, ground->transform->translationVector.y, ground->transform->translationVector.z);
-	me->transform->translationVector.x = sprite->transform->translationVector.x;
 }
 
 void TestScene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
