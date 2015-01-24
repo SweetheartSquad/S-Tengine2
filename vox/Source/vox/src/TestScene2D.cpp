@@ -28,6 +28,7 @@
 #include "MeshFactory.h"
 #include "PerspectiveCamera.h"
 #include "MousePerspectiveCamera.h"
+#include "RenderOptions.h"
 
 TestScene2D::TestScene2D(Game * _game):
 	Scene(_game),
@@ -41,6 +42,7 @@ TestScene2D::TestScene2D(Game * _game):
 	layer1(new Sprite()),
 	layer2(new Sprite())
 {
+	renderOptions->alphaSorting = true;
 	Box2DDebugDraw * drawer = new Box2DDebugDraw(this);
 
 	//static_cast<ControllableOrthographicCamera*>(camera)->follow(sprite);
@@ -99,12 +101,13 @@ TestScene2D::TestScene2D(Game * _game):
 
 	layer1->transform->translate(0, 0, -0.5);
 	layer2->transform->translate(2, 0, -1);
+	ground->transform->translate(0,0,-1.1);
 	
-	addChild(ground);
 	addChild(layer2);
+	addChild(sprite);
 	addChild(layer1);
+	addChild(ground);
 
-	addChild(sprite);	
 }
 
 TestScene2D::~TestScene2D(){
