@@ -5,13 +5,16 @@
 #include "System.h"
 #include "Transform.h"
 
-PerspectiveCamera::PerspectiveCamera(Sprite * _trans):
+PerspectiveCamera::PerspectiveCamera(Sprite * _trans, glm::vec3 _offset, float _deadZoneX, float _deadZoneY):
 	Camera(),
 	NodeTransformable(new Transform()),
 	NodeAnimatable(),
 	NodeUpdatable(),
 	lastOrientation(1.f, 0.f, 0.f, 0.f),
-	trans(_trans)
+	trans(_trans),
+	offset(_offset),
+	deadZoneX(_deadZoneX),
+	deadZoneY(_deadZoneY)
 {
 }
 
@@ -36,7 +39,7 @@ void PerspectiveCamera::update(Step * _step){
 glm::mat4 PerspectiveCamera::getViewMatrix(){
 	return glm::lookAt(
 		transform->translationVector,	// Camera is here
-		(trans == nullptr) ? (transform->translationVector+forwardVectorRotated) : trans->transform->translationVector, // and looks here : at the same position, plus "direction"
+		offset + ((trans == nullptr) ? (transform->translationVector+forwardVectorRotated) : trans->transform->translationVector), // and looks here : at the same position, plus "direction"
 		upVectorRotated				// Head is up (set to 0,-1,0 to look upside-down)
 		);
 }

@@ -70,15 +70,16 @@ TestScene2D::TestScene2D(Game * _game):
 
 	//addChild(frame);
 	
-	spriteSheet = new SpriteSheetAnimation(tex, 0.05);
-	spriteSheet->pushFramesInRange(0, 26, 130, 150, 130 * 7);
-	sprite->addAnimation("run", spriteSheet, true);
+	//spriteSheet = new SpriteSheetAnimation(tex, 0.05);
+	//spriteSheet->pushFramesInRange(0, 26, 130, 150, 130 * 7);
+	//sprite->addAnimation("run", spriteSheet, true);
+	sprite->mesh->pushTexture2D(new Texture("../assets/MichaelScale.png", 1024, 1024, true, true));
 
 	ground->setTranslationPhysical(0, -10, 0);
 	ground->transform->scale(20, 10, 2);
 	ground->mesh->pushTexture2D(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true));
 
-	sprite->transform->scale(2, 2, 1);
+	sprite->transform->scale(-4, 4, 1);
 	sprite->setTranslationPhysical(0, 10, 0);
 
 	sprite->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
@@ -89,7 +90,7 @@ TestScene2D::TestScene2D(Game * _game):
 	arduino = new Arduino("COM3");
 	
 	//camera = new MousePerspectiveCamera();
-	camera = new PerspectiveCamera(sprite);
+	camera = new PerspectiveCamera(sprite, glm::vec3(0, 5, 0), 0, 0);
 	camera->transform->translate(5.0f, 5.0f, 20.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
@@ -115,7 +116,7 @@ TestScene2D::TestScene2D(Game * _game):
 
 
 
-	Box2DSprite * s = new Box2DSprite(world, b2BodyType::b2_dynamicBody, false);
+	/*Box2DSprite * s = new Box2DSprite(world, b2BodyType::b2_dynamicBody, false);
 
 	s->setShader(shader, true);
 	
@@ -126,9 +127,6 @@ TestScene2D::TestScene2D(Game * _game):
 	verts[3] = b2Vec2(-3, 3);
 
 	b2PolygonShape shape;
-
-
-
 	shape.Set(verts, 4);
 	
 	s->body->CreateFixture(&shape, 1);
@@ -141,7 +139,7 @@ TestScene2D::TestScene2D(Game * _game):
 	world->b2world->CreateJoint(&j);
 
 	world->b2world->SetDebugDraw(drawer);
-	drawer->SetFlags(b2Draw::e_shapeBit);
+	drawer->SetFlags(b2Draw::e_shapeBit);*/
 
 
 
@@ -154,7 +152,7 @@ TestScene2D::TestScene2D(Game * _game):
 	me->transform->scale(25, 75, 75);
 	me->setShader(shader, true);
 	me->transform->translate(0, -10, 0);
-	camera->transform->translate(0, -25, 0);
+	camera->transform->translate(0, -5, 0);
 	addChild(me);
 	
 	for(unsigned long int i = 0; i < me->mesh->getVertCount(); ++i){
@@ -183,7 +181,7 @@ void TestScene2D::update(Step * _step){
 	Scene::update(_step);
 
 	world->update(_step);
-	sprite->playAnimation = false;
+	//sprite->playAnimation = false;
 
 	if(keyboard->keyDown(GLFW_KEY_W)){
 		if(!sprite->movingVertically(0.05)){
@@ -198,16 +196,16 @@ void TestScene2D::update(Step * _step){
 		if(sprite->transform->scaleVector.x > 0){
 			sprite->transform->scaleX(-1);
 		}
-		sprite->playAnimation = true;
-		sprite->setCurrentAnimation("run");
+		//sprite->playAnimation = true;
+		//sprite->setCurrentAnimation("run");
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		sprite->applyLinearImpulseRight(50);
 		if(sprite->transform->scaleVector.x < 0){
 			sprite->transform->scaleX(-1);
 		}
-		sprite->setCurrentAnimation("run");
-		sprite->playAnimation = true;
+		//sprite->setCurrentAnimation("run");
+		//sprite->playAnimation = true;
 	}
 
 	//Add movement to the camera

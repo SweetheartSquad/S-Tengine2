@@ -23,7 +23,7 @@ void Box2DWorld::update(Step* _step){
 void Box2DWorld::addToWorld(NodeBox2DBody * _nodeBox2D){
 	if(_nodeBox2D->defaultFixture){
 		b2PolygonShape dynamicBox;
-		dynamicBox.SetAsBox(1.0f * _nodeBox2D->transform->scaleVector.x, 1.0f * _nodeBox2D->transform->scaleVector.y);	
+		dynamicBox.SetAsBox(1.0f * std::abs(_nodeBox2D->transform->scaleVector.x), 1.0f * std::abs(_nodeBox2D->transform->scaleVector.y));	
 		b2FixtureDef fixtureDef;
 		fixtureDef.shape = &dynamicBox;
 		if(_nodeBox2D->bodyDef.type != b2_staticBody){

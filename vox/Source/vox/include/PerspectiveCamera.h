@@ -16,9 +16,10 @@ class Sprite;
 *****************************/
 class PerspectiveCamera : public Camera {
 public:
+	
 
 	/** trans is the target for following with lookAt */
-	PerspectiveCamera(Sprite * trans = nullptr);
+	PerspectiveCamera(Sprite * trans = nullptr, glm::vec3 _offset = glm::vec3(0,0,0), float _deadZoneX = 0, float _deadZoneY = 0);
 	~PerspectiveCamera();
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
@@ -36,6 +37,15 @@ public:
 	* @return The projection matrix of the camera 
 	*/
 	glm::mat4 getProjectionMatrix() override;
+	
 
+	// Sprite to follow
 	Sprite * trans;
+	// Look at the sprite offset by this
+	glm::vec3 offset;
+	// Tolerable horizontal difference between the follow target and the current lookAt
+	float deadZoneX;
+	// Tolerable difference between the follow target and the current lookAt
+	float deadZoneY;
+	
 };
