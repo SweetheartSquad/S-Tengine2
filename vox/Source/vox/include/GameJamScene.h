@@ -13,9 +13,9 @@ class Sprite;
 class Box2DWorld;
 class CylinderScreen;
 
-class GameJamScene : public Scene
-{
+class GameJamScene : public Scene{
 public:
+	Box2DDebugDraw * drawer;
 	Box2DWorld * world;
 	Box2DSprite * playerSprite;
 	Box2DMeshEntity * ground;
@@ -23,7 +23,6 @@ public:
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
 	SpriteSheetAnimation * spriteSheet;
-	Box2DDebugDraw * drawer;
 	CylinderScreen * backgroundScreen;
 	CylinderScreen * midgroundScreen;
 	CylinderScreen * foregroundScreen;

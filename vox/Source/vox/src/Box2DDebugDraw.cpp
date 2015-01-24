@@ -96,3 +96,14 @@ void Box2DDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Col
 
 void Box2DDebugDraw::DrawTransform(const b2Transform& xf){
 }
+
+
+void Box2DDebugDraw::load(){
+	shader.load();
+	sprite.load();
+}
+
+void Box2DDebugDraw::unload(){
+	shader.unload();
+	sprite.unload();
+}

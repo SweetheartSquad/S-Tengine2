@@ -41,10 +41,10 @@ GameJamScene::GameJamScene(Game * _game):
 	soundManager(new SoundManager()),
 	backgroundScreen(new CylinderScreen(25, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky.png", 4096, 4096, true, true))),
 	midgroundScreen(new CylinderScreen(50, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky2.png", 4096, 4096, true, true))),
-	foregroundScreen(new CylinderScreen(75, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky3.png", 4096, 4096, true, true)))
+	foregroundScreen(new CylinderScreen(75, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky3.png", 4096, 4096, true, true))),
+	drawer(new Box2DDebugDraw(this))
 {
 	renderOptions->alphaSorting = true;
-	Box2DDebugDraw * drawer = new Box2DDebugDraw(this);
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
 
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
@@ -133,10 +133,12 @@ GameJamScene::~GameJamScene(){
 
 void GameJamScene::load(){
 	Scene::load();
+	drawer->load();
 }
 
 void GameJamScene::unload(){
 	Scene::unload();
+	drawer->unload();
 }
 
 void GameJamScene::update(Step * _step){
@@ -185,6 +187,9 @@ void GameJamScene::update(Step * _step){
 	}
 	if(keyboard->keyDown(GLFW_KEY_RIGHT)){
 		camera->transform->translate((camera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);	
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_F11)){
+		Scene::toggleFullScreen();
 	}
 }
 
