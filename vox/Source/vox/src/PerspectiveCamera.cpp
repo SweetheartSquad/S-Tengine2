@@ -11,7 +11,7 @@ PerspectiveCamera::PerspectiveCamera(Sprite * _trans):
 	NodeAnimatable(),
 	NodeUpdatable(),
 	lastOrientation(1.f, 0.f, 0.f, 0.f),
-	trans(_trans),
+	trans(_trans)
 {
 }
 

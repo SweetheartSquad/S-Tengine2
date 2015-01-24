@@ -40,6 +40,9 @@ public:
 	/** The camera's yaw */
 	float yaw;
 
+	float nearClip;
+	float farClip;
+
 	/**
 	* @return The view matrix of the camera. Pure virtual; to be implemented only in derived classes
 	*/

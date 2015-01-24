@@ -35,7 +35,5 @@ public:
 	float top;
 	float bottom;
 	float right;
-	float nearClip;
-	float farClip;
 
 };

@@ -14,12 +14,13 @@ OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom,
 	left(_left),
 	top(_top),
 	bottom(_bottom),
-	right(_right),
-	nearClip(_near),
-	farClip(_far)
+	right(_right)
 {
 	Dimension screenDimensions = vox::getScreenDimensions();
 	forwardVectorRotated = glm::vec3(1.f, 0.f, 1.f);
+
+	nearClip = _near;
+	farClip = _far;
 }
 
 OrthographicCamera::~OrthographicCamera(){
