@@ -34,6 +34,7 @@
 
 #include "Resource.h"
 
+MeshEntity * me;
 TestScene2D::TestScene2D(Game * _game):
 	world(new Box2DWorld(b2Vec2(0, -60))),
 	Scene(_game),
@@ -52,6 +53,8 @@ TestScene2D::TestScene2D(Game * _game):
 	//static_cast<ControllableOrthographicCamera*>(camera)->follow(sprite);
 
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
+	camera->farClip = 1000.f;
+	
 
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	soundManager->play("green_chair");
@@ -86,7 +89,7 @@ TestScene2D::TestScene2D(Game * _game):
 
 	arduino = new Arduino("COM3");
 
-	camera = new MousePerspectiveCamera();
+	camera = new PerspectiveCamera(sprite);
 	camera->transform->translate(5.0f, 5.0f, 20.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
@@ -142,15 +145,25 @@ TestScene2D::TestScene2D(Game * _game):
 
 
 
-	MeshEntity * me = new MeshEntity();
+	me = new MeshEntity();
 	me->mesh = Resource::loadMeshFromObj("../assets/layer.vox");
-	me->mesh->pushTexture2D(tex);
-	me->transform->scale(50, 50, 5);
+	//me->mesh->pushTexture2D(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true));
+	me->mesh->pushTexture2D(new Texture("../assets/sky.png", 4096, 4096, true, true));
+	me->transform->translate(0,-50,0);
+	me->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
+	me->transform->scale(100, 100, 100);
 	me->setShader(shader, true);
 	addChild(me);
+	
+	for(unsigned long int i = 0; i < me->mesh->getVertCount(); ++i){
+		float y = 1.f - me->mesh->vertices.at(i).y * 0.2f;
+		me->mesh->setUV(i, me->mesh->vertices.at(i).u, y);
+	}
+	me->mesh->dirty = true;
+	me->mesh->clean();
+	//me->mesh->dirty = true;
 
 }
-
 TestScene2D::~TestScene2D(){
 }
 
@@ -163,6 +176,8 @@ void TestScene2D::unload(){
 }
 
 void TestScene2D::update(Step * _step){
+
+	float oldX = sprite->transform->translationVector.x;
 
 	Scene::update(_step);
 
@@ -214,6 +229,53 @@ void TestScene2D::update(Step * _step){
 		std::string test(incomingData);
 		std::cout << test;
 	}
+
+
+	
+	for(unsigned long int i = 0; i < me->mesh->getVertCount(); i += 3){
+		float x1 = me->mesh->vertices.at(i).u+(sprite->transform->translationVector.x - oldX)/10.f;//_step->deltaTimeCorrection*-0.0005;//i/(float)3;//;
+		float y1 = me->mesh->vertices.at(i).v;//1.f - me->mesh->vertices.at(i).y * 0.2f;
+		float x2 = me->mesh->vertices.at(i+1).u+(sprite->transform->translationVector.x - oldX)/10.f;//_step->deltaTimeCorrection*-0.0005;//i/(float)3;//;
+		float y2 = me->mesh->vertices.at(i+1).v;//1.f - me->mesh->vertices.at(i).y * 0.2f;
+		float x3 = me->mesh->vertices.at(i+2).u+(sprite->transform->translationVector.x - oldX)/10.f;//_step->deltaTimeCorrection*-0.0005;//i/(float)3;//;
+		float y3 = me->mesh->vertices.at(i+2).v;//1.f - me->mesh->vertices.at(i).y * 0.2f;
+
+			if(x1 > 1.02 /*|| x2 > 1 || x3 > 1*/){
+				x1 -= 1.0;
+				y1 += 0.2;
+				x2 -= 1.0;
+				y2 += 0.2;
+				x3 -= 1.0;
+				y3 += 0.2;
+			}
+
+			if(x3 < 0.02 /* || x2 < 0 || x3 < 0*/){
+				x1 += 1.0;
+				y1 -= 0.2;
+				x2 += 1.0;
+				y2 -= 0.2;
+				x3 += 1.0;
+				y3 -= 0.2;
+			}
+			
+			if(y1 > 1){
+				y1 -= 1;
+				y2 -= 1;
+				y3 -= 1;
+			}
+			if(y1 < 0){
+				y1 += 1;
+				y2 += 1;
+				y3 += 1;
+			}
+			
+		me->mesh->setUV(i, x1, y1);
+		me->mesh->setUV(i+1, x2, y2);
+		me->mesh->setUV(i+2, x3, y3);
+	}
+	me->mesh->dirty = true;
+	ground->setTranslationPhysical(sprite->transform->translationVector.x, ground->transform->translationVector.y, ground->transform->translationVector.z);
+	me->transform->translationVector.x = camera->transform->translationVector.x = sprite->transform->translationVector.x;
 }
 
 void TestScene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
