@@ -13,8 +13,6 @@ public:
 
 	/** Reference to this entity's mesh */
 	MeshInterface * mesh;
-	/** Reference to this entity's shader */
-	Shader * shader;
 
 	explicit MeshEntity(MeshInterface * _mesh = nullptr, Transform * _transform = new Transform(), Shader * _shader = nullptr);
 	virtual ~MeshEntity(void);
@@ -34,10 +32,18 @@ public:
 	virtual void removeChildAtIndex(int _index) override;
 	/**Sets shader to _shader*/
 	void setShader(Shader* _shader, bool _configureDefaultAttributes);
+	/**Get shader*/
+	Shader* getShader();
 	/** Recursivley sets the shader to _shader for _entity's children recursivley*/
 	void setShaderOnChildren(Shader * _shader);
 	/** Calls unload on all children and on mesh */
 	virtual void unload() override;
 	/** Loads and cleans mesh, configures default vertex attributes, deletes and reloads shader, and calls unload on all children (recursive) */
 	virtual void load() override;
+
+
+private:
+	
+	/** Reference to this entity's shader */
+	Shader * shader;
 };

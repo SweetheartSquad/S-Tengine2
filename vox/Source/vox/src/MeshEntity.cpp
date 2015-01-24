@@ -70,6 +70,9 @@ void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
 		}
 	}
 }
+Shader* MeshEntity::getShader(){
+	return shader;
+}
 
 void MeshEntity::setShaderOnChildren(Shader * _shader){
 	for(NodeChild * child : children){

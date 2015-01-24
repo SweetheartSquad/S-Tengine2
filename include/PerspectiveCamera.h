@@ -17,8 +17,8 @@ class Sprite;
 class PerspectiveCamera : public Camera {
 public:
 
-	PerspectiveCamera();
-	PerspectiveCamera(Sprite * trans);
+	/** trans is the target for following with lookAt */
+	PerspectiveCamera(Sprite * trans = nullptr);
 	~PerspectiveCamera();
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */

@@ -94,7 +94,7 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 	glEnable (GL_BLEND);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClearColor(1.0, 0.0, 0.0, 0.0);
 
 	glViewport(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
 	glScissor(viewPortX, viewPortY, viewPortWidth, viewPortHeight);

@@ -32,6 +32,8 @@
 #include "MousePerspectiveCamera.h"
 #include "RenderOptions.h"
 
+#include "Resource.h"
+
 TestScene2D::TestScene2D(Game * _game):
 	world(new Box2DWorld(b2Vec2(0, -60))),
 	Scene(_game),
@@ -84,7 +86,7 @@ TestScene2D::TestScene2D(Game * _game):
 
 	arduino = new Arduino("COM3");
 
-	camera = new PerspectiveCamera(sprite);
+	camera = new MousePerspectiveCamera();
 	camera->transform->translate(5.0f, 5.0f, 20.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
@@ -121,17 +123,32 @@ TestScene2D::TestScene2D(Game * _game):
 	verts[3] = b2Vec2(-3, 3);
 
 	b2PolygonShape shape;
-	shape.Set(verts, 4);
 
-	//s->
+
+
+	shape.Set(verts, 4);
 	
 	s->body->CreateFixture(&shape, 1);
 	world->addToWorld(s);
 	addChild(s);
-	
+
+	b2RevoluteJointDef j;
+	j.bodyA = s->body;
+	j.bodyB = sprite->body;
+	world->b2world->CreateJoint(&j);
 
 	world->b2world->SetDebugDraw(drawer);
 	drawer->SetFlags(b2Draw::e_shapeBit);
+
+
+
+	MeshEntity * me = new MeshEntity();
+	me->mesh = Resource::loadMeshFromObj("../assets/layer.vox");
+	me->mesh->pushTexture2D(tex);
+	me->transform->scale(50, 50, 5);
+	me->setShader(shader, true);
+	addChild(me);
+
 }
 
 TestScene2D::~TestScene2D(){

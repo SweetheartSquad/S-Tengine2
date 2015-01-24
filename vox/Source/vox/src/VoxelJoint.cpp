@@ -10,7 +10,7 @@ VoxelJoint::VoxelJoint(unsigned long int _id, VoxelMesh * _mesh, Transform * _tr
 	NodeRenderable(),
 	id(_id)
 {
-	if(mesh != nullptr && shader != nullptr){
+	if(mesh != nullptr && getShader() != nullptr){
 		load();
 	}
 }

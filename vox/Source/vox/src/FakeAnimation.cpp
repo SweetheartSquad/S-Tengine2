@@ -9,7 +9,7 @@
 
 void FakeAnimation::pushFrame(MeshEntity * _frame){
 	_frame->transform = this->transform;
-	_frame->shader = this->shader;
+	_frame->setShader(this->getShader(), false);
 	_frame->parent = nullptr;
 	_frame->load();
 	children.push_back(_frame);
@@ -32,7 +32,7 @@ FakeAnimation::~FakeAnimation(){
 	children.clear();
 
 	delete transform;
-	delete shader;
+	delete getShader();
 }
 
 void FakeAnimation::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){

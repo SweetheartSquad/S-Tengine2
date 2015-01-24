@@ -7,7 +7,7 @@ Box2DMeshEntity::Box2DMeshEntity(Box2DWorld * _world, MeshInterface * _mesh, b2B
 	NodeTransformable(_transform),
 	NodeChild(nullptr),
 	NodeBox2DBody(_world, _bodyType, _defaultFixture, _transform),
-	MeshEntity(_mesh, transform, shader)
+	MeshEntity(_mesh, transform, getShader())
 {
 }
 
