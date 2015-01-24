@@ -76,10 +76,10 @@ TestScene2D::TestScene2D(Game * _game):
 	sprite->mesh->pushTexture2D(new Texture("../assets/MichaelScale.png", 1024, 1024, true, true));
 
 	ground->setTranslationPhysical(0, -10, 0);
-	ground->transform->scale(20, 10, 2);
+	ground->transform->scale(200, 10, 2);
 	ground->mesh->pushTexture2D(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true));
 
-	sprite->transform->scale(-4, 4, 1);
+	sprite->transform->scale(4, 4, 1);
 	sprite->setTranslationPhysical(0, 10, 0);
 
 	sprite->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
@@ -90,7 +90,7 @@ TestScene2D::TestScene2D(Game * _game):
 	arduino = new Arduino("COM3");
 	
 	//camera = new MousePerspectiveCamera();
-	camera = new PerspectiveCamera(sprite, glm::vec3(0, 5, 0), 0, 0);
+	camera = new PerspectiveCamera(sprite, glm::vec3(0, 10, 0), 5, 0);
 	camera->transform->translate(5.0f, 5.0f, 20.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
@@ -193,7 +193,7 @@ void TestScene2D::update(Step * _step){
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
 		sprite->applyLinearImpulseLeft(50);
-		if(sprite->transform->scaleVector.x > 0){
+		if(sprite->transform->scaleVector.x < 0){
 			sprite->transform->scaleX(-1);
 		}
 		//sprite->playAnimation = true;
@@ -201,7 +201,7 @@ void TestScene2D::update(Step * _step){
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		sprite->applyLinearImpulseRight(50);
-		if(sprite->transform->scaleVector.x < 0){
+		if(sprite->transform->scaleVector.x > 0){
 			sprite->transform->scaleX(-1);
 		}
 		//sprite->setCurrentAnimation("run");
@@ -209,7 +209,7 @@ void TestScene2D::update(Step * _step){
 	}
 
 	//Add movement to the camera
-	if(keyboard->keyDown(GLFW_KEY_W)){
+	/*if(keyboard->keyDown(GLFW_KEY_W)){
 		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
@@ -220,14 +220,14 @@ void TestScene2D::update(Step * _step){
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		camera->transform->translate((camera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);	
-	}
+	}*/
 
-	if(arduino->IsConnected()) {
+	/*if(arduino->IsConnected()) {
 		char incomingData[256] = "";
 		int readResult = arduino->ReadData(incomingData, 256);
 		std::string test(incomingData);
 		std::cout << test;
-	}
+	}*/
 
 
 	
@@ -273,7 +273,7 @@ void TestScene2D::update(Step * _step){
 	}
 	me->mesh->dirty = true;
 	ground->setTranslationPhysical(sprite->transform->translationVector.x, ground->transform->translationVector.y, ground->transform->translationVector.z);
-	me->transform->translationVector.x = camera->transform->translationVector.x = sprite->transform->translationVector.x;
+	me->transform->translationVector.x = sprite->transform->translationVector.x;
 }
 
 void TestScene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){

@@ -19,7 +19,7 @@ public:
 	
 
 	/** trans is the target for following with lookAt */
-	PerspectiveCamera(Sprite * trans = nullptr, glm::vec3 _offset = glm::vec3(0,0,0), float _deadZoneX = 0, float _deadZoneY = 0);
+	PerspectiveCamera(Sprite * trans = nullptr, glm::vec3 _offset = glm::vec3(0,0,0), float _deadZoneX = 0, float _deadZoneY = 0, float _deadZoneZ = 0);
 	~PerspectiveCamera();
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
@@ -45,7 +45,11 @@ public:
 	glm::vec3 offset;
 	// Tolerable horizontal difference between the follow target and the current lookAt
 	float deadZoneX;
-	// Tolerable difference between the follow target and the current lookAt
+	// Tolerable vertical difference between the follow target and the current lookAt
 	float deadZoneY;
+	// Tolerable depth difference between the follow target and the current lookAt
+	float deadZoneZ;
+
+	glm::vec3 lookAtSpot;
 	
 };
