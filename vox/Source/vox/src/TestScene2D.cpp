@@ -109,19 +109,15 @@ TestScene2D::TestScene2D(Game * _game):
 
 	Texture * font = new Texture("../assets/MoonFlowerBold.png", 512, 512, true, true);
 	BitmapFont * fontM = new BitmapFont(font, 32, 16, 16); 
-	fontM->setText("abctttd");
-	//MeshInterface * mi = MeshFactory::getCubeMesh();
-	//mi->pushTexture2D(font);
-	MeshEntity * fontEn = new MeshEntity(fontM);
-	//fontEn->mesh = fontM;
-	fontEn->setShader(shader, true);
-	fontEn->transform->rotate(-90, 0, 1, 0, kOBJECT);
-	addChild(fontEn);
+	fontM->transform->rotate(-90, 0, 1, 0, kOBJECT);
+	fontM->setShader(shader, true);
+    fontM->setText("sdsdweqweqwewqesdsdsdadasd");
+	addChild(fontM);
 
 	//fontEn->transform->translate(0, 5, 0);
 	//fontEn->transform->scale(4, 4, 1);
 	
-	camera = new PerspectiveCamera(fontEn->transform);
+	camera = new PerspectiveCamera(fontM->transform);
 	//camera->transform->translate(5.0f, 5.0f, 20.0f);
 	//camera->yaw = 90.0f;
 	//camera->pitch = -10.0f;
