@@ -107,7 +107,7 @@ TestScene2D::TestScene2D(Game * _game):
 	//addChild(layer1);	
 	//addChild(ground);
 
-	Texture * font = new Texture("../assets/MoonFlowerBold.png", 512, 512, true, true);
+	Texture * font = new Texture("../assets/MoonFlowerBold.png", 1024, 1024, true, true);
 	BitmapFont * fontM = new BitmapFont(font, 32, 16, 16); 
 	fontM->transform->rotate(-90, 0, 1, 0, kOBJECT);
 	fontM->setShader(shader, true);

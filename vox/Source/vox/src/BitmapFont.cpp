@@ -38,10 +38,8 @@ void BitmapFont::setText(std::string _text){
 void BitmapFont::createQuads(){
 	mesh->vertices.clear();
 	mesh->indices.clear();
-	
 	unload();
 	load();
-
 	std::vector<int> chars;
 
 	for(unsigned long int i = 0; i < text.length(); ++i){
