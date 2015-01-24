@@ -122,18 +122,23 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 void Scene::addChild(Entity* _child){
 	if(renderOptions->alphaSorting){
 		float z;// = -100000;
+		float childZ = _child->transform->translationVector.z;
 		if(children.size() > 0){
 			z = children.at(0)->transform->translationVector.z;
-			if(_child->transform->translationVector.z < z){
+			std::cout << "first check; z: " << z << " vs. childZ: " << childZ << std::endl;
+			if(childZ < z){
+				std::cout << "inserted" << std::endl;
 				children.insert(children.begin(), _child);
 				return;
 			}
-		}
-		for(unsigned long int i = 0; i < children.size(); ++i){
-			z = children.at(i)->transform->translationVector.z;
-			if(_child->transform->translationVector.z > z){
-				children.insert(children.begin()+i+1, _child);
-				return;
+			for(unsigned long int i = 0; i < children.size(); ++i){
+				z = children.at(i)->transform->translationVector.z;
+				std::cout << "z: " << z << " vs. childZ: " << childZ << std::endl;
+				if(childZ > z && i+1 < children.size() && childZ < children.at(i+1)->transform->translationVector.z){
+					std::cout << "inserted" << std::endl;
+					children.insert(children.begin()+i+1, _child);
+					return;
+				}
 			}
 		}
 	}

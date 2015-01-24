@@ -48,7 +48,7 @@ GameJamScene::GameJamScene(Game * _game):
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
 
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
-	soundManager->play("green_chair");
+	//soundManager->play("green_chair");
 	
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
@@ -93,12 +93,29 @@ GameJamScene::GameJamScene(Game * _game):
 	fontM->setShader(shader, true);
 
 	
+	addChild(midgroundScreen);
+	addChild(playerSprite);
+	addChild(ground);
 	addChild(foregroundScreen);
+	addChild(fontM);
+	addChild(backgroundScreen);
+	
+	/*addChild(foregroundScreen);
 	addChild(fontM);
 	addChild(playerSprite);
 	addChild(ground);
 	addChild(midgroundScreen);
-	addChild(backgroundScreen);
+	addChild(backgroundScreen);*/
+	std::cout << "add order: " << std::endl;
+	std::cout << foregroundScreen->transform->translationVector.z << std::endl;
+	std::cout << fontM->transform->translationVector.z << std::endl;
+	std::cout << playerSprite->transform->translationVector.z << std::endl;
+	std::cout << ground->transform->translationVector.z << std::endl;
+	std::cout << midgroundScreen->transform->translationVector.z << std::endl;
+	std::cout << backgroundScreen->transform->translationVector.z << std::endl << std::endl << "final order:" << std::endl;
+	for(unsigned long int i = 0; i < children.size(); ++i){
+		std::cout << children.at(i)->transform->translationVector.z << std::endl;
+	}
 
 	
 	camera = new PerspectiveCamera(playerSprite, glm::vec3(0, 10, 0), 5, 0);
