@@ -145,7 +145,7 @@ TestScene2D::TestScene2D(Game * _game):
 
 
 
-	me = new CylinderScreen(10, &sprite->transform->translationVector.x, new Texture("../assets/sky.png", 4096, 4096, true, true));
+	me = new CylinderScreen(10, &sprite->transform->translationVector.x, 4, new Texture("../assets/sky.png", 4096, 4096, true, true));
 	me->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
 	me->transform->scale(25, 75, 75);
 	me->setShader(shader, true);
