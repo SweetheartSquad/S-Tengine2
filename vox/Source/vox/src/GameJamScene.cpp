@@ -31,9 +31,9 @@
 
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
-	sprite(new Box2DSprite(b2_dynamicBody, true, nullptr, new Transform())),
-	ground(new Box2DMeshEntity(MeshFactory::getCubeMesh(), b2_staticBody)),
 	world(new Box2DWorld(b2Vec2(0, -60))),
+	sprite(new Box2DSprite(world, b2_dynamicBody, true, nullptr, new Transform())),
+	ground(new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_staticBody)),
 	tex(new Texture("../assets/spritesheet.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager())
@@ -66,7 +66,7 @@ GameJamScene::GameJamScene(Game * _game):
 	world->addToWorld(sprite);
 	world->addToWorld(ground);
 
-	world->world->SetDebugDraw(drawer);
+	world->b2world->SetDebugDraw(drawer);
 	drawer->SetFlags(b2Draw::e_shapeBit);
 
 	addChild(sprite);
@@ -79,7 +79,7 @@ GameJamScene::GameJamScene(Game * _game):
 	fontM->transform->translate(0, 3, 0);
 	addChild(fontM);
 
-	camera = new PerspectiveCamera(sprite->transform);
+	camera = new PerspectiveCamera(sprite);
 	camera->transform->translate(5.0f, 5.0f, 20.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
@@ -129,5 +129,5 @@ void GameJamScene::update(Step * _step){
 
 void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene::render(_matrixStack, _renderStack);
-	world->world->DrawDebugData();
+	world->b2world->DrawDebugData();
 }

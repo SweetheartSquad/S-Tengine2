@@ -15,9 +15,9 @@ class Box2DWorld;
 class GameJamScene : public Scene
 {
 public:
+	Box2DWorld * world;
 	Box2DSprite * sprite;
 	Box2DMeshEntity * ground;
-	Box2DWorld * world;
 	Texture * tex;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
