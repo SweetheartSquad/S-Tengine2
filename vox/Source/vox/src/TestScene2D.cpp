@@ -37,7 +37,9 @@ TestScene2D::TestScene2D(Game * _game):
 	world(new Box2DWorld(b2Vec2(0, -60))),
 	tex(new Texture("../assets/spritesheet.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
-	soundManager(new SoundManager())
+	soundManager(new SoundManager()),
+	layer1(new Sprite()),
+	layer2(new Sprite())
 {
 	Box2DDebugDraw * drawer = new Box2DDebugDraw(this);
 
@@ -58,10 +60,8 @@ TestScene2D::TestScene2D(Game * _game):
 	frame->transform->scale(20, 10, 1);
 	frame->transform->translate(0.f, 5.f, -1.f);
 
-	addChild(frame);
-	addChild(ground);
-	addChild(sprite);	
-
+	//addChild(frame);
+	
 	spriteSheet = new SpriteSheetAnimation(tex, 0.05);
 	spriteSheet->pushFramesInRange(0, 26, 130, 150, 130 * 7);
 	sprite->addAnimation("run", spriteSheet, true);
@@ -87,6 +87,24 @@ TestScene2D::TestScene2D(Game * _game):
 	camera->transform->translate(5.0f, 5.0f, 20.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
+
+	layer1->setShader(shader, true);
+	layer2->setShader(shader, true);
+
+	layer1->mesh->pushTexture2D(tex);
+	layer2->mesh->pushTexture2D(tex);
+
+	layer1->transform->scale(10, 10, 1);
+	layer2->transform->scale(10, 10, 1);
+
+	layer1->transform->translate(0, 0, -0.5);
+	layer2->transform->translate(2, 0, -1);
+	
+	addChild(ground);
+	addChild(layer2);
+	addChild(layer1);
+
+	addChild(sprite);	
 }
 
 TestScene2D::~TestScene2D(){

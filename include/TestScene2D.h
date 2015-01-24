@@ -27,6 +27,9 @@ public:
 	Arduino * arduino;
 	Sprite * frame; 
 
+	Sprite * layer1;
+	Sprite * layer2;
+
 	explicit TestScene2D(Game * _game);
 	virtual ~TestScene2D();
 
