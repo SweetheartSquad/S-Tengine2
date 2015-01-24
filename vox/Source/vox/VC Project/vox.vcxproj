@@ -250,6 +250,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\..\..\..\Shared Code\src\Vox.cpp" />
     <ClCompile Include="..\src\Arduino.cpp" />
     <ClCompile Include="..\src\BaseScene.cpp" />
+    <ClCompile Include="..\src\BitmapFont.cpp" />
     <ClCompile Include="..\src\Box2DDebugDraw.cpp" />
     <ClCompile Include="..\src\Box2DMeshEntity.cpp" />
     <ClCompile Include="..\src\Box2DSprite.cpp" />
@@ -340,6 +341,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\..\..\..\Shared Code\include\Vox.h" />
     <ClInclude Include="..\include\Arduino.h" />
     <ClInclude Include="..\include\BaseScene.h" />
+    <ClInclude Include="..\include\BitmapFont.h" />
     <ClInclude Include="..\include\Box2DDebugDraw.h" />
     <ClInclude Include="..\include\Box2DMeshEntity.h" />
     <ClInclude Include="..\include\Box2DSprite.h" />
