@@ -103,7 +103,6 @@ TestScene2D::TestScene2D(Game * _game):
 	addChild(ground);
 	addChild(layer2);
 	addChild(layer1);
-
 	addChild(sprite);	
 }
 

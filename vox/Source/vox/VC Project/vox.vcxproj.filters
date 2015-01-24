@@ -79,6 +79,12 @@
     <Filter Include="Header Files\arduino">
       <UniqueIdentifier>{759c8fc0-0321-4e52-b957-f0e5b6990a9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\TestGame\GameJAm">
+      <UniqueIdentifier>{4fb0706c-514d-40e9-bc7c-77db02609ee1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TestGame\GameJamScene">
+      <UniqueIdentifier>{c964133c-c09b-42e0-b189-02ff94dc8c7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Cube.cpp">
@@ -331,7 +337,7 @@
       <Filter>Source Files\node</Filter>
     </ClCompile>
     <ClCompile Include="..\src\GameJamScene.cpp">
-      <Filter>Source Files\TestGame</Filter>
+      <Filter>Source Files\TestGame\GameJAm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -603,7 +609,7 @@
       <Filter>Header Files\node</Filter>
     </ClInclude>
     <ClInclude Include="..\include\GameJamScene.h">
-      <Filter>Header Files\TestGame</Filter>
+      <Filter>Header Files\TestGame\GameJamScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
