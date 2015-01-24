@@ -62,9 +62,9 @@ void MeshEntity::removeChildAtIndex(int _index){
 	NodeHierarchical::removeChildAtIndex(_index);
 }
 
-void MeshEntity::setShader(Shader * _shader, bool _confiugreDefaultAttributes){
+void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
 	shader = _shader;
-	if(_confiugreDefaultAttributes){
+	if(_configureDefaultAttributes){
 		if(mesh != nullptr){
 			load();
 		}

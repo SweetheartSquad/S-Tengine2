@@ -6,22 +6,21 @@
 
 Box2DWorld::Box2DWorld(b2Vec2 _gravityVector):
 	NodeUpdatable(),
-	world(new b2World(_gravityVector)),
+	b2world(new b2World(_gravityVector)),
 	velocityIterations(6),
 	positionIterations(2)
 {
 }
 
 Box2DWorld::~Box2DWorld(){
-	delete world;
+	delete b2world;
 }
 
 void Box2DWorld::update(Step* _step){
-	world->Step(_step->getDeltaTime(), velocityIterations, positionIterations);
+	b2world->Step(_step->getDeltaTime(), velocityIterations, positionIterations);
 }
 
 void Box2DWorld::addToWorld(NodeBox2DBody * _nodeBox2D){
-	_nodeBox2D->body = world->CreateBody(&_nodeBox2D->bodyDef);
 	if(_nodeBox2D->defaultFixture){
 		b2PolygonShape dynamicBox;
 		dynamicBox.SetAsBox(1.0f * _nodeBox2D->transform->scaleVector.x, 1.0f * _nodeBox2D->transform->scaleVector.y);	

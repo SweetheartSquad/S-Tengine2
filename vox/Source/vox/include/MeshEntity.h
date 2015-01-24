@@ -33,7 +33,7 @@ public:
 
 	virtual void removeChildAtIndex(int _index) override;
 	/**Sets shader to _shader*/
-	void setShader(Shader* _shader, bool _confiugreDefaultAttributes);
+	void setShader(Shader* _shader, bool _configureDefaultAttributes);
 	/** Recursivley sets the shader to _shader for _entity's children recursivley*/
 	void setShaderOnChildren(Shader * _shader);
 	/** Calls unload on all children and on mesh */

@@ -1,22 +1,25 @@
 #pragma once
 
 #include "node/NodeBox2DBody.h"
+#include "Box2DWorld.h"
 
-NodeBox2DBody::NodeBox2DBody(b2BodyType _bodyType, bool _defaultFixture, Transform* _transform):
+NodeBox2DBody::NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Transform* _transform):
 	NodeTransformable(_transform),
 	NodeUpdatable(),
 	body(nullptr),
 	defaultFixture(_defaultFixture),
 	maxVelocity(b2Vec2(-1, -1)),
-	prevAngle(0)
+	prevAngle(0),
+	world(_world)
 {
 	bodyDef.position.Set(_transform->translationVector.x, _transform->translationVector.y);
 	bodyDef.type = _bodyType;
+	body = world->b2world->CreateBody(&bodyDef);
 }
 
 NodeBox2DBody::~NodeBox2DBody(){
 	if(body != nullptr){
-		body->GetWorld()->DestroyBody(body);
+		world->b2world->DestroyBody(body);
 	}
 }
 

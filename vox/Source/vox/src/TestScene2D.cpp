@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Box2D\Box2D.h>
+
 #include "Arduino.h"
 
 #include "TestScene2D.h"
@@ -31,11 +33,11 @@
 #include "RenderOptions.h"
 
 TestScene2D::TestScene2D(Game * _game):
-	Scene(_game),
-	sprite(new Box2DSprite(b2_dynamicBody, true, nullptr, new Transform())),
-	ground(new Box2DMeshEntity(MeshFactory::getCubeMesh(), b2_staticBody)),
-	frame(new Sprite()),
 	world(new Box2DWorld(b2Vec2(0, -60))),
+	Scene(_game),
+	sprite(new Box2DSprite(world, b2_dynamicBody, true, nullptr, new Transform())),
+	ground(new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_staticBody)),
+	frame(new Sprite()),
 	tex(new Texture("../assets/spritesheet.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
@@ -80,9 +82,6 @@ TestScene2D::TestScene2D(Game * _game):
 	world->addToWorld(sprite);
 	world->addToWorld(ground);
 
-	world->world->SetDebugDraw(drawer);
-	drawer->SetFlags(b2Draw::e_shapeBit);
-
 	arduino = new Arduino("COM3");
 
 	camera = new PerspectiveCamera(sprite);
@@ -108,6 +107,31 @@ TestScene2D::TestScene2D(Game * _game):
 	addChild(layer1);
 	addChild(ground);
 
+
+
+
+	Box2DSprite * s = new Box2DSprite(world, b2BodyType::b2_dynamicBody, false);
+
+	s->setShader(shader, true);
+	
+	b2Vec2 verts[4];
+	verts[0] = b2Vec2(3, 0);
+	verts[1] = b2Vec2(0, 6);
+	verts[2] = b2Vec2(-3, 0);
+	verts[3] = b2Vec2(-3, 3);
+
+	b2PolygonShape shape;
+	shape.Set(verts, 4);
+
+	//s->
+	
+	s->body->CreateFixture(&shape, 1);
+	world->addToWorld(s);
+	addChild(s);
+	
+
+	world->b2world->SetDebugDraw(drawer);
+	drawer->SetFlags(b2Draw::e_shapeBit);
 }
 
 TestScene2D::~TestScene2D(){
@@ -177,7 +201,7 @@ void TestScene2D::update(Step * _step){
 
 void TestScene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene::render(_matrixStack, _renderStack);
-	world->world->DrawDebugData();
+	world->b2world->DrawDebugData();
 }
 
 //Arduino Sketch

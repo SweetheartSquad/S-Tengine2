@@ -9,7 +9,7 @@ class NodeBox2DBody;
 class Box2DWorld : public virtual NodeUpdatable{
 public:
 
-	b2World * world;
+	b2World * b2world;
 
 	int velocityIterations;
 	int positionIterations;
