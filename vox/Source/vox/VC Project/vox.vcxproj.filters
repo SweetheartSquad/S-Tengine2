@@ -333,6 +333,9 @@
     <ClCompile Include="..\src\GameJamScene.cpp">
       <Filter>Source Files\TestGame</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CylinderScreen.cpp">
+      <Filter>Source Files\TestGame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -603,6 +606,9 @@
       <Filter>Header Files\node</Filter>
     </ClInclude>
     <ClInclude Include="..\include\GameJamScene.h">
+      <Filter>Header Files\TestGame</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CylinderScreen.h">
       <Filter>Header Files\TestGame</Filter>
     </ClInclude>
   </ItemGroup>
