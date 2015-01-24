@@ -48,7 +48,6 @@ TestScene2D::TestScene2D(Game * _game):
 
 	//static_cast<ControllableOrthographicCamera*>(camera)->follow(sprite);
 
-
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
 
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
@@ -107,17 +106,11 @@ TestScene2D::TestScene2D(Game * _game):
 	//addChild(layer1);	
 	//addChild(ground);
 
-	Texture * font = new Texture("../assets/MoonFlowerBold.png", 1024, 1024, true, true);
-	BitmapFont * fontM = new BitmapFont(font, 32, 16, 16); 
-	fontM->transform->rotate(-90, 0, 1, 0, kOBJECT);
-	fontM->setShader(shader, true);
-    fontM->setText("sdsdweqweqwewqesdsdsdadasd");
-	addChild(fontM);
-
+	
 	//fontEn->transform->translate(0, 5, 0);
 	//fontEn->transform->scale(4, 4, 1);
 	
-	camera = new PerspectiveCamera(fontM->transform);
+	//camera = new PerspectiveCamera(fontM->transform);
 	//camera->transform->translate(5.0f, 5.0f, 20.0f);
 	//camera->yaw = 90.0f;
 	//camera->pitch = -10.0f;

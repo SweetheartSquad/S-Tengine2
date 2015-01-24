@@ -27,6 +27,7 @@
 #include "PerspectiveCamera.h"
 #include "MousePerspectiveCamera.h"
 #include "GameJamScene.h"
+#include "BitmapFont.h"
 
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
@@ -68,13 +69,20 @@ GameJamScene::GameJamScene(Game * _game):
 	world->world->SetDebugDraw(drawer);
 	drawer->SetFlags(b2Draw::e_shapeBit);
 
-//	camera = new PerspectiveCamera(sprite);
+	addChild(sprite);
+	addChild(ground);
+
+	Texture * font = new Texture("../assets/MoonFlowerBold.png", 1024, 1024, true, true);
+	BitmapFont * fontM = new BitmapFont(font, 32, 16, 16); 
+	fontM->setShader(shader, true);
+    fontM->setText("sdsdweqweqwewqesdsdsdadasd");
+	fontM->transform->translate(0, 3, 0);
+	addChild(fontM);
+
+	camera = new PerspectiveCamera(sprite->transform);
 	camera->transform->translate(5.0f, 5.0f, 20.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
-
-	addChild(sprite);
-	addChild(ground);
 }
 
 GameJamScene::~GameJamScene(){
