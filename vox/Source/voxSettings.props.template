@@ -2,13 +2,12 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <GLEW_DIR>C:\dev\glew-1.10.0</GLEW_DIR>
-    <GLFW_DIR>C:\dev\glfw</GLFW_DIR>
-    <GMTL_DIR>C:\dev\gmtl</GMTL_DIR>
-    <GLM_DIR>C:\dev\glm</GLM_DIR>
-    <SOIL_DIR>C:\dev\SOIL</SOIL_DIR>
-    <FREETYPE_DIR>C:\dev\freetype-2.5.3</FREETYPE_DIR>
-    <FREETYPE_VER>253</FREETYPE_VER>
+    <GLEW_DIR>D:\Development Libraries\dev\glew-1.11.0</GLEW_DIR>
+    <GLFW_DIR>D:\Development Libraries\dev\glfw-3.0.4.bin.WIN32</GLFW_DIR>
+    <GLM_DIR>D:\Development Libraries\dev\glm</GLM_DIR>
+    <SOIL_DIR>D:\Development Libraries\dev\Simple OpenGL Image Library</SOIL_DIR>
+    <ZPLAY_DIR>D:\Development Libraries\dev\libzplay-2.02-sdk\C++</ZPLAY_DIR>
+    <BOX2D_DIR>D:\Development Libraries\dev\box2d\v2.3.1\Box2D</BOX2D_DIR>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup />
