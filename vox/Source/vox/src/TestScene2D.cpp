@@ -29,6 +29,7 @@
 #include "PerspectiveCamera.h"
 #include "MousePerspectiveCamera.h"
 #include "RenderOptions.h"
+#include "BitmapFont.h"
 
 TestScene2D::TestScene2D(Game * _game):
 	Scene(_game),
@@ -46,6 +47,7 @@ TestScene2D::TestScene2D(Game * _game):
 	Box2DDebugDraw * drawer = new Box2DDebugDraw(this);
 
 	//static_cast<ControllableOrthographicCamera*>(camera)->follow(sprite);
+
 
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
 
@@ -85,10 +87,7 @@ TestScene2D::TestScene2D(Game * _game):
 
 	arduino = new Arduino("COM3");
 
-	camera = new PerspectiveCamera(sprite);
-	camera->transform->translate(5.0f, 5.0f, 20.0f);
-	camera->yaw = 90.0f;
-	camera->pitch = -10.0f;
+	
 
 	layer1->setShader(shader, true);
 	layer2->setShader(shader, true);
@@ -103,12 +102,29 @@ TestScene2D::TestScene2D(Game * _game):
 	layer2->transform->translate(2, 0, -1);
 	ground->transform->translate(0,0,-1.1);
 	
-	addChild(layer2);
-	addChild(sprite);
-	addChild(layer1);
-	addChild(sprite);	
-	addChild(ground);
+	//addChild(layer2);
+	//addChild(sprite);
+	//addChild(layer1);	
+	//addChild(ground);
 
+	Texture * font = new Texture("../assets/MoonFlowerBold.png", 512, 512, true, true);
+	BitmapFont * fontM = new BitmapFont(font, 32, 16, 16); 
+	fontM->setText("abctttd");
+	//MeshInterface * mi = MeshFactory::getCubeMesh();
+	//mi->pushTexture2D(font);
+	MeshEntity * fontEn = new MeshEntity(fontM);
+	//fontEn->mesh = fontM;
+	fontEn->setShader(shader, true);
+	fontEn->transform->rotate(-90, 0, 1, 0, kOBJECT);
+	addChild(fontEn);
+
+	//fontEn->transform->translate(0, 5, 0);
+	//fontEn->transform->scale(4, 4, 1);
+	
+	camera = new PerspectiveCamera(fontEn->transform);
+	//camera->transform->translate(5.0f, 5.0f, 20.0f);
+	//camera->yaw = 90.0f;
+	//camera->pitch = -10.0f;
 }
 
 TestScene2D::~TestScene2D(){
@@ -178,7 +194,7 @@ void TestScene2D::update(Step * _step){
 
 void TestScene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene::render(_matrixStack, _renderStack);
-	world->world->DrawDebugData();
+	//world->world->DrawDebugData();
 }
 
 //Arduino Sketch

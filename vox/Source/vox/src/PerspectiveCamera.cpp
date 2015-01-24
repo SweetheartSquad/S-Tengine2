@@ -14,7 +14,7 @@ PerspectiveCamera::PerspectiveCamera():
 {
 }
 
-PerspectiveCamera::PerspectiveCamera(Sprite * _trans):
+PerspectiveCamera::PerspectiveCamera(Transform * _trans):
 	Camera(),
 	NodeTransformable(new Transform()),
 	NodeAnimatable(),
@@ -45,7 +45,7 @@ void PerspectiveCamera::update(Step * _step){
 glm::mat4 PerspectiveCamera::getViewMatrix(){
 	return glm::lookAt(
 		transform->translationVector,	// Camera is here
-		trans->transform->translationVector, // and looks here : at the same position, plus "direction"
+		trans->translationVector, // and looks here : at the same position, plus "direction"
 		upVectorLocal				// Head is up (set to 0,-1,0 to look upside-down)
 		);
 }

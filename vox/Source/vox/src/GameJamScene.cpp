@@ -68,7 +68,7 @@ GameJamScene::GameJamScene(Game * _game):
 	world->world->SetDebugDraw(drawer);
 	drawer->SetFlags(b2Draw::e_shapeBit);
 
-	camera = new PerspectiveCamera(sprite);
+//	camera = new PerspectiveCamera(sprite);
 	camera->transform->translate(5.0f, 5.0f, 20.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;

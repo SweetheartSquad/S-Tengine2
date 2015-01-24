@@ -8,6 +8,7 @@
 
 class Mouse;
 class Sprite;
+class Transform;
 /****************************
 *
 * A perspective camera class, i.e. objects seem smaller the farther they are away from this camera.
@@ -18,7 +19,7 @@ class PerspectiveCamera : public Camera {
 public:
 
 	PerspectiveCamera();
-	PerspectiveCamera(Sprite * trans);
+	PerspectiveCamera(Transform * trans);
 	~PerspectiveCamera();
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
@@ -37,5 +38,5 @@ public:
 	*/
 	glm::mat4 getProjectionMatrix() override;
 
-	Sprite * trans;
+	Transform * trans;
 };

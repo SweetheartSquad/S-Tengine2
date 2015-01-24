@@ -339,6 +339,9 @@
     <ClCompile Include="..\src\GameJamScene.cpp">
       <Filter>Source Files\TestGame\GameJAm</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\BitmapFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -610,6 +613,9 @@
     </ClInclude>
     <ClInclude Include="..\include\GameJamScene.h">
       <Filter>Header Files\TestGame\GameJamScene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\BitmapFont.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
