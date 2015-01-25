@@ -42,8 +42,8 @@ GameJamScene::GameJamScene(Game * _game):
 	soundManager(new SoundManager()),
 	backgroundScreen(new CylinderScreen(25, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky.png", 512, 512, true, true))),
 	midgroundScreen(new CylinderScreen(50, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky2.png", 512, 512, true, true))),
-	foregroundScreen(new CylinderScreen(75, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky3.png", 512, 512, true, true)))//,
-	//drawer(new Box2DDebugDraw(this))
+	foregroundScreen(new CylinderScreen(75, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky3.png", 512, 512, true, true))),
+	drawer(new Box2DDebugDraw(this))
 {
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
@@ -118,7 +118,7 @@ GameJamScene::GameJamScene(Game * _game):
 	camera = new PerspectiveCamera(playerSprite, glm::vec3(0, 10, 0), 5, 0);
 	//camera = new MousePerspectiveCamera();
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
-	camera->transform->translate(5.0f, 2.5f, 20.0f);
+	camera->transform->translate(5.0f, 2.55f, 21.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
 
@@ -160,7 +160,7 @@ void GameJamScene::update(Step * _step){
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
 		playerSprite->applyLinearImpulseLeft(150);
-		if(playerSprite->transform->scaleVector.x > 0){
+		if(playerSprite->transform->scaleVector.x < 0){
 			playerSprite->transform->scaleX(-1);
 		}
 		//playerSprite->playAnimation = true;
@@ -168,7 +168,7 @@ void GameJamScene::update(Step * _step){
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		playerSprite->applyLinearImpulseRight(150);
-		if(playerSprite->transform->scaleVector.x < 0){
+		if(playerSprite->transform->scaleVector.x > 0){
 			playerSprite->transform->scaleX(-1);
 		}
 		//playerSprite->setCurrentAnimation("run");
