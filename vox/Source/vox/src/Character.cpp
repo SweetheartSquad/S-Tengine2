@@ -172,11 +172,10 @@ void Character::update(Step * _step){
 
 		neck->SetMotorSpeed(-angle*360*_step->deltaTimeCorrection);
 		neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5*_step->deltaTimeCorrection));
-
 		float bodAngle = torso->body->GetAngle();
 		torso->body->SetAngularVelocity(-bodAngle*10*_step->deltaTimeCorrection);
 		if(torso->body->GetPosition().y < 5){
-			torso->applyLinearImpulseUp(250*_step->deltaTimeCorrection);
+			torso->applyLinearImpulseUp(250);
 		}
 	}
 	
@@ -196,8 +195,8 @@ void Character::update(Step * _step){
 
 			if(type1 != type2){
 				if(leftLowerLeg->body->GetLinearVelocity().y <= 0.1){
-					leftLowerLeg->applyLinearImpulseUp(125*_step->deltaTimeCorrection);	
-					torso->applyLinearImpulseUp(125*_step->deltaTimeCorrection);	
+					leftLowerLeg->applyLinearImpulseUp(125);	
+					torso->applyLinearImpulseUp(125);	
 				}
 			}
 		}
@@ -208,8 +207,8 @@ void Character::update(Step * _step){
 
 			if(type1 != type2){
 				if(rightLowerLeg->body->GetLinearVelocity().y <= 0.1){
-					rightLowerLeg->applyLinearImpulseUp(125*_step->deltaTimeCorrection);
-					torso->applyLinearImpulseUp(125*_step->deltaTimeCorrection);	
+					rightLowerLeg->applyLinearImpulseUp(125);
+					torso->applyLinearImpulseUp(125);	
 				}
 			}
 		}

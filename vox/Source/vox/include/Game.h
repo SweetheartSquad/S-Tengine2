@@ -60,6 +60,10 @@ public:
 	* Draws the current scene 
 	*/
 	virtual void draw(void);
+
+	bool switchingScene;
+	std::string newScene;
+	void switchScene(std::string _newScene);
 	
 	/** 
 	* Calls update on the mouse and keyboard 

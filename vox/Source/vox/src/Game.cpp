@@ -20,7 +20,8 @@ Game::Game(bool _isRunning):
 	printFPS(true),
 	kc_lastKey(0),
 	kc_code(0),
-	kc_active(false)
+	kc_active(false),
+	switchingScene(false)
 {
 }
 
@@ -39,6 +40,12 @@ void Game::performGameLoop(){
 	glfwSwapBuffers(vox::currentContext);
 	manageInput();
 	isRunning = !glfwWindowShouldClose(vox::currentContext);
+
+	if(switchingScene){
+		currentScene = scenes.at(newScene);
+		switchingScene = false;
+		newScene = "";
+	}
 }
 
 void Game::update(void){
@@ -146,8 +153,10 @@ void Game::update(void){
 		}
 		break;
 	}
-
-	currentScene->update(&vox::step);
+	
+	if(currentScene != nullptr){
+		currentScene->update(&vox::step);
+	}
 }
 
 void Game::draw(void){
@@ -175,3 +184,15 @@ void Game::printFps(){
 	}
 }
 
+
+
+
+void Game::switchScene(std::string _newScene){
+	if(scenes.count(_newScene) > 0){
+		switchingScene = true;
+		newScene = _newScene;
+	}else{
+		switchingScene = false;
+		newScene = "";
+	}
+}

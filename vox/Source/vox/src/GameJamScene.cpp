@@ -83,7 +83,7 @@ GameJamScene::GameJamScene(Game * _game):
 		"../assets/props/WigHead_228_257.png"
 	};
 
-	for(unsigned long int i = 0; i < 50; ++i){
+	for(unsigned long int i = 0; i < 10+std::rand()%20; ++i){
 		unsigned long int tex = std::rand()%imgCount;
 		Box2DSprite * s = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform());
 		s->mesh->pushTexture2D(new Texture(strings[tex].c_str(), 1024, 1024, true, true));
@@ -271,7 +271,7 @@ GameJamScene::GameJamScene(Game * _game):
 
 	playerCharacter->text->setText("Howdy Ya'll, My Name's Baby Legs Hetman");
 	
-	for(unsigned long int i = 0; i < std::rand()%10; ++i){
+	for(unsigned long int i = 0; i < std::rand()%5; ++i){
 		RandomCharacter * dude1 = new RandomCharacter(world, true);
 		dude1->setShader(shader, true);
 		dude1->addToScene(this);
