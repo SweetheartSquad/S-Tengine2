@@ -95,7 +95,7 @@ public:
 	CharacterComponent * rightUpperLeg;
 	CharacterComponent * rightLowerLeg;
 
-	std::vector<CharacterComponent *> components;
+	std::vector<CharacterComponent **> components;
 
 	explicit Character(Box2DWorld * _world, bool _ai = true);
 	~Character();
@@ -105,7 +105,7 @@ public:
 	void attachJoints();
 	void unload() override;
 	void load() override;
-	void setShader(Shader * _shader);
+	void setShader(Shader * _shader, bool _configureDefaultVertexAttributes) override;
 
 	void addToScene(Scene * _scene);
 

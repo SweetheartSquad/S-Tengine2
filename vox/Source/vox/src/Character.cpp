@@ -129,23 +129,24 @@ Character::Character(Box2DWorld * _world, bool _ai) :
 	text->kerning = 0.75f;
 	text->setSizeMod(0.85f);
 
-	components.push_back(head);
-	components.push_back(leftUpperArm);
-	components.push_back(leftLowerArm);
-	components.push_back(leftHand);
-	components.push_back(rightUpperArm);
-	components.push_back(rightLowerArm);
-	components.push_back(rightHand);
-	components.push_back(leftUpperLeg);
-	components.push_back(leftLowerLeg);
-	components.push_back(rightUpperLeg);
-	components.push_back(rightLowerLeg);
+	components.push_back(&head);
+	components.push_back(&leftUpperArm);
+	components.push_back(&leftLowerArm);
+	components.push_back(&leftHand);
+	components.push_back(&rightUpperArm);
+	components.push_back(&rightLowerArm);
+	components.push_back(&rightHand);
+	components.push_back(&leftUpperLeg);
+	components.push_back(&leftLowerLeg);
+	components.push_back(&rightUpperLeg);
+	components.push_back(&rightLowerLeg);
+	components.push_back(&torso);
 
 }
 
 Character::~Character(){
 	while(components.size() > 0){
-		delete components.back();
+		delete *components.back();
 	}
 	components.clear();
 }
@@ -216,7 +217,6 @@ void Character::attachJoints(){
 
 	torso->createFixture(groupIndex);
 	head->createFixture(groupIndex);
-
 	
 	float correctedTorsoWidth = torso->getCorrectedWidth();
 	float correctedTorsoHeight = torso->getCorrectedHeight();
@@ -401,42 +401,29 @@ void Character::unload(){
 void Character::load(){
 }
 
-void Character::setShader(Shader * _shader){
-	torso	      ->setShader(_shader, true);
-	head		  ->setShader(_shader, true);
-	leftUpperArm  ->setShader(_shader, true);
-	leftLowerArm  ->setShader(_shader, true);
-	leftHand	  ->setShader(_shader, true);
-	rightUpperArm ->setShader(_shader, true);
-	rightLowerArm ->setShader(_shader, true);
-	rightHand	  ->setShader(_shader, true);
-	leftUpperLeg  ->setShader(_shader, true);
-	leftLowerLeg  ->setShader(_shader, true);
-	rightUpperLeg ->setShader(_shader, true);
-	rightLowerLeg ->setShader(_shader, true);
-	text->setShader(_shader ,true);
+void Character::setShader(Shader * _shader, bool _configureDefaultVertexAttributes){
+	MeshEntity::setShader(_shader, _configureDefaultVertexAttributes);
+	for(CharacterComponent ** c : components){
+		if(*c != nullptr){
+			(*c)->setShader(_shader, _configureDefaultVertexAttributes);
+		}
+	}
+	text->setShader(_shader ,_configureDefaultVertexAttributes);
 }
 
 void Character::addToScene(Scene * _scene){
-	_scene->addChild(torso);
-	_scene->addChild(leftUpperArm);
-	_scene->addChild(leftLowerArm);
-	_scene->addChild(leftHand);
-	_scene->addChild(rightUpperArm);
-	_scene->addChild(rightLowerArm);
-	_scene->addChild(rightHand);
-	_scene->addChild(leftUpperLeg);
-	_scene->addChild(leftLowerLeg);
-	_scene->addChild(rightUpperLeg);
-	_scene->addChild(rightLowerLeg);
-	_scene->addChild(head);
+	for(CharacterComponent ** c : components){
+		if(*c != nullptr){
+			_scene->addChild(*c);
+		}
+	}
 	_scene->addChild(text);
 }
 
 void Character::translateComponents(glm::vec3 _translateVector){
-	for(CharacterComponent * c : components){
-		if(c != nullptr){
-			c->setTranslationPhysical(_translateVector, true);
+	for(CharacterComponent ** c : components){
+		if(*c != nullptr){
+			(*c)->setTranslationPhysical(_translateVector, true);
 		}
 	}
 }
