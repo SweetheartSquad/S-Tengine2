@@ -111,7 +111,7 @@ GameJamScene::GameJamScene(Game * _game):
 
 		b2PolygonShape tShape;
 
-		float scaleVec = std::rand()%50/50.f;
+		float scaleVec = std::rand()%50/50.f+0.5f;
 		s->transform->scale(scaleVec, scaleVec, scaleVec);
 		tShape.SetAsBox(width*std::abs(s->transform->scaleVector.x)*scale*2.f, std::abs(height*s->transform->scaleVector.y)*scale*2.f);
 		s->body->CreateFixture(&tShape, 1);
@@ -144,7 +144,7 @@ GameJamScene::GameJamScene(Game * _game):
 		s->mesh->vertices.at(0).v = height/mag;
 		s->mesh->dirty = true;
 		
-		s->setTranslationPhysical(std::rand()%100 - 50, 0, 0.01f);
+		s->setTranslationPhysical(std::rand()%100 - 50, height*scale, 0.01f);
 		s->setShader(shader, true);
 		items.push_back(s);
 	}
@@ -290,8 +290,8 @@ void GameJamScene::update(Step * _step){
 
 	world->update(_step);
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
-		if(playerCharacter->torso->body->GetPosition().y < 5){
-			playerCharacter->torso->applyLinearImpulseUp(1250);
+		if(playerCharacter->torso->body->GetPosition().y < 10){
+			playerCharacter->torso->applyLinearImpulseUp(750);
 		}
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
@@ -403,12 +403,6 @@ void GameJamScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_F1)){
 		debugDraw = !debugDraw;
 	}
-	if(keyboard->keyJustUp(GLFW_KEY_F2)){
-		if(game->scenes.count("outdoors") != 0){
-			game->currentScene = game->scenes.at("outdoors");
-		}
-	}
-	
 }
 
 void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
