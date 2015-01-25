@@ -39,8 +39,12 @@ void Character::init(){
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroHead.png", 512, 512, true, true),	   260,	250));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieHead.png", 512, 512, true, true),	   170,	300));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailHead.png", 512, 512, true, true),  155,	365));
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MonsterHead.png", 512, 512, true, true),  222,	393));
-	
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MonsterHead.png", 512, 512, true, true),	222,	393));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/BeardHead.png", 512, 512, true, true),		165,	342));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/FringeHead.png", 512, 512, true, true),		228,	257));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/BlankHead.png", 512, 512, true, true),		169,	247));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/BowlcutHead.png", 512, 512, true, true),		272,	243));
+
 	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelUpperArm.png", 512, 512, true, true),55,	205));
 	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheUA.png", 512, 512, true, true),	55,	205));
 	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroUA.png", 512, 512, true, true),			50,	200));
@@ -85,6 +89,7 @@ Character::Character(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, 
 	ai(_ai),
 	text(new BitmapFont(new Texture("../assets/arial.bmp", 1024, 1024, true, true), 32, 16, 16 )),
 	reactiveFeet(true),
+	reactiveBody(true),
 	head(nullptr),
 	leftUpperArm(nullptr),
 	leftLowerArm(nullptr),
@@ -161,17 +166,17 @@ void Character::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderS
 
 void Character::update(Step * _step){
 	MeshEntity::update(_step);
-	if(reactiveFeet){
+	if(reactiveBody){
 		b2RevoluteJoint * neck = ((b2RevoluteJoint *)head->body->GetJointList()->joint);
 		float angle = neck->GetJointAngle();
 
-		neck->SetMotorSpeed(-angle*360);
-		neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5));
+		neck->SetMotorSpeed(-angle*360*_step->deltaTimeCorrection);
+		neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5*_step->deltaTimeCorrection));
 
 		float bodAngle = torso->body->GetAngle();
-		torso->body->SetAngularVelocity(-bodAngle*10);
+		torso->body->SetAngularVelocity(-bodAngle*10*_step->deltaTimeCorrection);
 		if(torso->body->GetPosition().y < 5){
-			torso->applyLinearImpulseUp(250);
+			torso->applyLinearImpulseUp(250*_step->deltaTimeCorrection);
 		}
 	}
 	
@@ -191,8 +196,8 @@ void Character::update(Step * _step){
 
 			if(type1 != type2){
 				if(leftLowerLeg->body->GetLinearVelocity().y <= 0.1){
-					leftLowerLeg->applyLinearImpulseUp(125);	
-					torso->applyLinearImpulseUp(125);	
+					leftLowerLeg->applyLinearImpulseUp(125*_step->deltaTimeCorrection);	
+					torso->applyLinearImpulseUp(125*_step->deltaTimeCorrection);	
 				}
 			}
 		}
@@ -203,8 +208,8 @@ void Character::update(Step * _step){
 
 			if(type1 != type2){
 				if(rightLowerLeg->body->GetLinearVelocity().y <= 0.1){
-					rightLowerLeg->applyLinearImpulseUp(125);
-					torso->applyLinearImpulseUp(125);	
+					rightLowerLeg->applyLinearImpulseUp(125*_step->deltaTimeCorrection);
+					torso->applyLinearImpulseUp(125*_step->deltaTimeCorrection);	
 				}
 			}
 		}

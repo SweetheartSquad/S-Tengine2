@@ -2,18 +2,23 @@
 #include "BaseScene.h"
 #include <string>
 #include "TestScene2D.h"
-#include "GameJamScene.h"
+#include "GameJamSceneIndoor.h"
+#include "GameJamSceneOutdoor.h"
 
 #include "Character.h"
+
+#include <cstdlib>
+#include <ctime>
+ 
 
 TestGame::TestGame(bool _running):
 	Game(_running)
 {
+	std::srand(std::time(0));
 	Character::init();
-	//scenes.insert(std::make_pair("base_scene", new BaseScene(this)));
-	//scenes.insert(std::make_pair("scene_2d", new TestScene2D(this)));
-	scenes.insert(std::make_pair("game_jam", new GameJamScene(this)));
-	currentScene = scenes.at("game_jam");
+	scenes.insert(std::make_pair("outdoors", new GameJamSceneOutdoor(this)));
+	scenes.insert(std::make_pair("indoors", new GameJamSceneIndoor(this)));
+	currentScene = scenes.at("indoors");
 }
 
 TestGame::~TestGame(){
