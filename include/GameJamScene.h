@@ -26,7 +26,6 @@ public:
 	Box2DWorld * world;
 	Character * playerCharacter;
 	Box2DMeshEntity * ground;
-	Texture * tex;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
 	SpriteSheetAnimation * spriteSheet;

@@ -43,7 +43,6 @@ GameJamScene::GameJamScene(Game * _game):
 	world(new Box2DWorld(b2Vec2(0, -60))),
 	playerCharacter(new TestCharacter(world, true)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
-	tex(new Texture("../assets/MichaelScale.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
 	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/skybox - HD - edited.png", 4096, 4096, true, true))),
@@ -58,18 +57,18 @@ GameJamScene::GameJamScene(Game * _game):
 
 	const int imgCount = 12;
 	std::string strings[imgCount] = {
-		"../assets/Table_657_332.png",		
-		"../assets/TourDePizza_738_854.png",
-		"../assets/ArtisticStatue_820_915.png",
-		"../assets/BullitenBoard_573_353.png",
-		"../assets/Cat_441_726.png",
-		"../assets/Creepy_263_470.png",
-		"../assets/DeadPlant_228_468.png",
-		"../assets/Garbage_300_374.png",
-		"../assets/HealthyPlant_272_877.png",
-		"../assets/JollySkeleton_399_916.png",
-		"../assets/Lockers_1024_604.png",
-		"../assets/Pie_667_692.png"
+		"../assets/props/Table_657_332.png",		
+		"../assets/props/TourDePizza_738_854.png",
+		"../assets/props/ArtisticStatue_820_915.png",
+		"../assets/props/BullitenBoard_573_353.png",
+		"../assets/props/Cat_441_726.png",
+		"../assets/props/Creepy_263_470.png",
+		"../assets/props/DeadPlant_228_468.png",
+		"../assets/props/Garbage_300_374.png",
+		"../assets/props/HealthyPlant_272_877.png",
+		"../assets/props/JollySkeleton_399_916.png",
+		"../assets/props/Lockers_1024_604.png",
+		"../assets/props/Pie_667_692.png"
 	};
 
 	for(unsigned long int i = 0; i < imgCount; ++i){
