@@ -26,6 +26,9 @@
 #include "StandardFrameBuffer.h"
 #include "RenderSurface.h"
 #include "Sprite.h"
+#include "Game.h"
+#include "GameJamScene.h"
+#include "Character.h"
 
 BaseScene::BaseScene(Game * _game):
 	Scene(_game),
@@ -177,6 +180,15 @@ void BaseScene::update(Step * _step){
 	//Toggle fullscreen
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		Scene::toggleFullScreen();
+	}
+	if(keyboard->keyJustUp(GLFW_KEY_F2)){
+		if(game->scenes.count("game_jam") != 0){
+			//game->scenes.at("game_jam")->unload();
+			delete game->scenes.at("game_jam");
+			Character::init();
+			game->scenes.at("game_jam") = new GameJamScene(game);
+			game->currentScene = game->scenes.at("game_jam");
+		}
 	}
 }
 

@@ -274,6 +274,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\src\FileUtils.cpp" />
     <ClCompile Include="..\src\FrameBufferInterface.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
+    <ClCompile Include="..\src\GameJamSceneOutdoor.cpp" />
     <ClCompile Include="..\src\GameJamScene.cpp" />
     <ClCompile Include="..\src\ListenAction.cpp" />
     <ClCompile Include="..\src\MeshFactory.cpp" />
@@ -380,6 +381,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\include\FrameBufferInterface.h" />
     <ClInclude Include="..\include\FrameBufferVertex.h" />
     <ClInclude Include="..\include\Game.h" />
+    <ClInclude Include="..\include\GameJamSceneOutdoor.h" />
     <ClInclude Include="..\include\GameJamScene.h" />
     <ClInclude Include="..\include\ListenAction.h" />
     <ClInclude Include="..\include\MeshFactory.h" />

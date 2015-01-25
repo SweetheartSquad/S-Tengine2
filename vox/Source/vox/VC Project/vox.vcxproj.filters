@@ -379,9 +379,12 @@
       <Filter>Source Files\TestGame\GameJam</Filter>
     </ClCompile>
     <ClCompile Include="..\src\ListenAction.cpp">
-    	  <Filter>Source Files\TestGame\GameJam</Filter>
+      <Filter>Source Files\TestGame\GameJam</Filter>
     </ClCompile>
     <ClCompile Include="..\src\RandomCharacter.cpp">
+      <Filter>Source Files\TestGame\GameJam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameJamSceneOutdoor.cpp">
       <Filter>Source Files\TestGame\GameJam</Filter>
     </ClCompile>
   </ItemGroup>
@@ -696,9 +699,12 @@
       <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
     <ClInclude Include="..\include\ListenAction.h">
-        <Filter>Header Files\TestGame\GameJam</Filter>
+      <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
     <ClInclude Include="..\include\RandomCharacter.h">
+      <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\GameJamSceneOutdoor.h">
       <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
   </ItemGroup>

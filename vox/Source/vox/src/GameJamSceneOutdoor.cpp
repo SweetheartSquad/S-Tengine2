@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameJamScene.h"
+#include "GameJamSceneOutdoor.h"
 
 #include "Texture.h"
 #include "Sprite.h"
@@ -41,7 +41,7 @@
 #include "RandomCharacter.h"
 #include "Game.h"
 
-GameJamScene::GameJamScene(Game * _game):
+GameJamSceneOutdoor::GameJamSceneOutdoor(Game * _game):
 	Scene(_game),
 	drawer(new Box2DDebugDraw(this)),
 	world(new Box2DWorld(b2Vec2(0, -60))),
@@ -50,7 +50,7 @@ GameJamScene::GameJamScene(Game * _game):
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
 	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/environments/skybox - HD - edited.png", 4096, 4096, true, true))),
-	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/environments/walls - HD - edited.png", 4096, 4096, true, true))),
+	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/environments/courtyardsmall.png", 256, 256, true, true))),
 	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/environments/foregroundhallway.png", 4096, 4096, true, true))),
 	dialogEvent(new DialogEvent()),
 	debugDraw(false)
@@ -150,7 +150,7 @@ GameJamScene::GameJamScene(Game * _game):
 	ground->setTranslationPhysical(0, 0, -5.f);
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
 	ground->transform->scale(1000, 10, 1);
-	ground->mesh->pushTexture2D(new Texture("../assets/environments/bathroomtile.png", 512, 512, true, true));
+	ground->mesh->pushTexture2D(new Texture("../assets/environments/courtyardtile.png", 512, 512, true, true));
 	ground->mesh->setUV(3, 0, 0);
 	ground->mesh->setUV(2, 200.f, 0);
 	ground->mesh->setUV(1, 200.f, 2.f);
@@ -269,20 +269,20 @@ GameJamScene::GameJamScene(Game * _game):
 	}
 }
 
-GameJamScene::~GameJamScene(){
+GameJamSceneOutdoor::~GameJamSceneOutdoor(){
 }
 
-void GameJamScene::load(){
+void GameJamSceneOutdoor::load(){
 	Scene::load();
 	drawer->load();
 }
 
-void GameJamScene::unload(){
+void GameJamSceneOutdoor::unload(){
 	Scene::unload();
 	drawer->unload();
 }
 
-void GameJamScene::update(Step * _step){
+void GameJamSceneOutdoor::update(Step * _step){
 	Scene::update(_step);
 
 	world->update(_step);
@@ -401,14 +401,14 @@ void GameJamScene::update(Step * _step){
 		debugDraw = !debugDraw;
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_F2)){
-		if(game->scenes.count("outdoors") != 0){
-			game->currentScene = game->scenes.at("outdoors");
+		if(game->scenes.count("indoors") != 0){
+			game->currentScene = game->scenes.at("indoors");
 		}
 	}
 	
 }
 
-void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
+void GameJamSceneOutdoor::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene::render(_matrixStack, _renderStack);
 
 	//world->b2world->DrawDebugData();

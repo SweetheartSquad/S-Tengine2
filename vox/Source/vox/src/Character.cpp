@@ -39,8 +39,12 @@ void Character::init(){
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroHead.png", 512, 512, true, true),	   260,	250));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieHead.png", 512, 512, true, true),	   170,	300));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailHead.png", 512, 512, true, true),  155,	365));
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MonsterHead.png", 512, 512, true, true),  222,	393));
-	
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MonsterHead.png", 512, 512, true, true),	222,	393));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/BeardHead.png", 512, 512, true, true),		165,	342));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/FringeHead.png", 512, 512, true, true),		228,	257));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/BlankHead.png", 512, 512, true, true),		169,	247));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/BowlcutHead.png", 512, 512, true, true),		272,	243));
+
 	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelUpperArm.png", 512, 512, true, true),55,	205));
 	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheUA.png", 512, 512, true, true),	55,	205));
 	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroUA.png", 512, 512, true, true),			50,	200));
