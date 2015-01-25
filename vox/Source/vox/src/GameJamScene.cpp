@@ -87,15 +87,18 @@ GameJamScene::GameJamScene(Game * _game):
 		int height = 0;
 
 		int cc = 0;
-		for(char c : strings[tex]){
+
+		std::string temp = strings[tex];
+
+		for(char c : temp){
 			if(c == '_' || c == '.'){
-				strings[tex].at(cc) = ' ';
+				temp.at(cc) = ' ';
 			}
 			cc++;
 		}
 		std::string arr[4];
 		int j = 0;
-		std::stringstream ssin(strings[tex]);
+		std::stringstream ssin(temp);
 		while (ssin.good() && j < 4){
 			ssin >> arr[j];
 			++j;
