@@ -19,10 +19,8 @@ DialogHandler::~DialogHandler(){
 void DialogHandler::makeDialog(){
 	int charVecSize = sceneCharacters.size();
 	int randDialog = rand() % charVecSize;
-	
 	for(unsigned long int i = 0; i < charVecSize; i++){
-		sceneCharacters.at(i)->text->transform->translate(0, 3, -2);
-		dialogEvent->addAction(new SayAction(sceneCharacters[i], dialogBits[randDialog], 2));
+		dialogEvent->addAction(new SayAction(sceneCharacters[i], dialogBits[randDialog], dialogBits[randDialog].length()/4));
 	}
 	dialogEvent->running = true;
 }

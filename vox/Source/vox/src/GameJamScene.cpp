@@ -411,8 +411,13 @@ void GameJamScene::update(Step * _step){
 	}
 
 	//DIALOG
+
 	//dialogEvent->update(_step);
 
+	dialogHandler->update(_step);
+
+
+	//dialogEvent->update(_step);
 	if(keyboard->keyJustUp(GLFW_KEY_F1)){
 		debugDraw = !debugDraw;
 	}

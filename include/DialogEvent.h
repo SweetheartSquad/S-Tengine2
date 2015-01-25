@@ -5,11 +5,14 @@
 #include "DialogAction.h"
 #include "node/NodeUpdatable.h"
 
+class SoundManager;
+
 class DialogEvent : public virtual NodeUpdatable{
 public:
 	std::vector<DialogAction *> actions;
 	int currentAction;
 	bool running;
+	SoundManager * soundManager;
 
 	DialogEvent();
 	~DialogEvent();
