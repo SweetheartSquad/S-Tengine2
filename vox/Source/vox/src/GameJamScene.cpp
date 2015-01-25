@@ -144,7 +144,7 @@ GameJamScene::GameJamScene(Game * _game):
 		s->mesh->vertices.at(0).v = height/mag;
 		s->mesh->dirty = true;
 		
-		s->setTranslationPhysical(std::rand()%100 - 50, height*scale, 0.01f);
+		s->setTranslationPhysical(std::rand()%1000 - 500, height*scale, 0.01f);
 		s->setShader(shader, true);
 		items.push_back(s);
 	}
@@ -231,36 +231,36 @@ GameJamScene::GameJamScene(Game * _game):
 	char1->setShader(shader, true);
 	char1->addToScene(this);
 	addChild(char1);
-	char1->translateComponents(glm::vec3(150, 50, 0));
+	char1->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 
 	Character2 * char2 = new Character2(world, true);
 	char2->setShader(shader, true);
 	char2->addToScene(this);
 	addChild(char2);
-	char2->translateComponents(glm::vec3(125, 25, 0));
+	char2->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 
 	Character3 * char3 = new Character3(world, true);
 	char3->setShader(shader, true);
 	char3->addToScene(this);
 	addChild(char3);
-	char3->translateComponents(glm::vec3(-125, 150, 0));
+	char3->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 
 	Character4 * char4 = new Character4(world, true);
 	char4->setShader(shader, true);
 	char4->addToScene(this);
-	char4->translateComponents(glm::vec3(-150, 150, 0));
+	char4->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 	addChild(char4);
 
 	//playerCharacter->text->setText("Howdy Ya'll, My Name's Baby Legs Hetman");
 	playerCharacter->text->transform->translate(0, 3, -2);
 
-	dialogEvent->addAction(new SayAction(playerCharacter, "Howdy", 2));
+	/*dialogEvent->addAction(new SayAction(playerCharacter, "Howdy", 2));
 	dialogEvent->addAction(new SayAction(playerCharacter, "My", 2));
 	dialogEvent->addAction(new SayAction(playerCharacter, "Name", 2));
 	dialogEvent->addAction(new SayAction(playerCharacter, "Is", 2));
 	dialogEvent->addAction(new SayAction(playerCharacter, "Baby", 2));
 	dialogEvent->addAction(new SayAction(playerCharacter, "Hetman", 2));
-	dialogEvent->running = true;
+	dialogEvent->running = true;*/
 	
 	
 	for(unsigned long int i = 0; i < 3; ++i){
