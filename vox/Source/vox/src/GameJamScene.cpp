@@ -65,7 +65,18 @@ GameJamScene::GameJamScene(Game * _game):
 		s->setTranslationPhysical(3, 10, -3);
 		items.push_back(s);
 	}
+	{	
+		Box2DSprite * s = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform());
+		s->mesh->pushTexture2D(new Texture("../assets/TourDePizza_738_854.png", 1024, 1024, true, true));
+		s->transform->scale(5, 5, 1);
 
+		b2CircleShape shape;
+		s->body->CreateFixture(&shape, 1);
+		s->body->GetFixtureList()->SetSensor(true);
+		s->setShader(shader, true);
+		s->setTranslationPhysical(12, 10, -3);
+		items.push_back(s);
+	}
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	//soundManager->play("green_chair");
 
