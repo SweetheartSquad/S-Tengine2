@@ -256,7 +256,6 @@ GameJamScene::GameJamScene(Game * _game):
 	char4->translateComponents(glm::vec3(-150, 150, 0));
 	addChild(char4);
 
-	sceneCharacters.push_back(playerCharacter);
 	sceneCharacters.push_back(char1);
 	sceneCharacters.push_back(char2);
 	sceneCharacters.push_back(char3);
@@ -265,17 +264,6 @@ GameJamScene::GameJamScene(Game * _game):
 	dialogHandler = new DialogHandler(sceneCharacters);
 	dialogHandler->makeDialog();
 
-	playerCharacter->text->setText("Howdy Ya'll, My Name's Baby Legs Hetman");
-	//playerCharacter->text->transform->translate(0, -25, 2.343f);
-	/*dialogEvent->addAction(new SayAction(playerCharacter, "Howdy", 20));
-	dialogEvent->addAction(new SayAction(playerCharacter, "My", 20));
-	dialogEvent->addAction(new SayAction(playerCharacter, "Name", 20));
-	dialogEvent->addAction(new SayAction(playerCharacter, "Is", 20));
-	dialogEvent->addAction(new SayAction(playerCharacter, "Baby", 20));
-	dialogEvent->addAction(new SayAction(playerCharacter, "Hetman", 20));
-	dialogEvent->running = true;*/
-
-	
 	for(unsigned long int i = 0; i < 3; ++i){
 		RandomCharacter * dude1 = new RandomCharacter(world, true);
 		dude1->setShader(shader, true);
@@ -429,7 +417,7 @@ void GameJamScene::update(Step * _step){
 	int count;
 	const unsigned char* axes = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
 
-	std::cout<<axes;
+	//std::cout<<axes;
 	for(int i = 0; i < count; i++){
 		std::cout<<i<<std::string(" ")<<(int)axes[i]<<std::endl;
 	}
