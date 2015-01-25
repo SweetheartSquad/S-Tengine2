@@ -78,4 +78,5 @@ public:
 	void setShader(Shader * _shader);
 
 	void addToScene(Scene * _scene);
+ 
 };

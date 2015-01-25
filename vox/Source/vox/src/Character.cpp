@@ -20,6 +20,8 @@ Character::Character(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, 
 	maskBits(_maskBits),
 	ai(_ai)
 {
+	
+
 	ratioX_neck_to_torso = 0.0f;
 	ratioY_neck_to_torso = 0.8f;
 	ratioX_torso_to_neck = 0.0f;

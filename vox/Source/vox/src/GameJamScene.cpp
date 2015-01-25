@@ -36,6 +36,9 @@
 #include "Character2.h"
 #include "Character3.h"
 #include "Character4.h"
+#include "GameJamContactListener.h"
+
+GameJamContactListener cl;
 
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
@@ -50,6 +53,7 @@ GameJamScene::GameJamScene(Game * _game):
 	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/foregroundhallway.png", 4096, 4096, true, true))),
 	drawer(new Box2DDebugDraw(this))
 {
+	world->b2world->SetContactListener(&cl);
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
@@ -100,12 +104,21 @@ GameJamScene::GameJamScene(Game * _game):
 
 		b2PolygonShape tShape;
 		tShape.SetAsBox(width*std::abs(s->transform->scaleVector.x)*scale*2.f, std::abs(height*s->transform->scaleVector.y)*scale*2.f);
-		s->body->CreateFixture(&tShape, 1);
+		b2Fixture * sfx = s->body->CreateFixture(&tShape, 1); // physical
+		b2Fixture * ssfx = s->body->CreateFixture(&tShape, 1); // sensor
+		ssfx->SetSensor(true);
+
+		// physical
 		b2Filter t;
 		t.groupIndex = -8;
-		t.categoryBits = PROP;
-		t.maskBits = BOUNDARY;
 		s->body->GetFixtureList()->SetFilterData(t);
+		
+		b2Filter ts;
+		t.groupIndex = -8;
+		ts.categoryBits = PROP;
+		ts.maskBits = BOUNDARY;
+		s->body->GetFixtureList()->GetNext()->SetFilterData(ts);
+		
 
 		b2Vec2 v1 = tShape.GetVertex(0);
 		b2Vec2 v2 = tShape.GetVertex(1);
@@ -157,14 +170,15 @@ GameJamScene::GameJamScene(Game * _game):
 	ground->mesh->vertices.at(2).z -= 10;
 	ground->mesh->vertices.at(3).z -= 10;
 
-	
-	b2Filter gf;
-	gf.categoryBits = BOUNDARY;
-	b2Fixture * blah = ground->body->GetFixtureList();
-	ground->body->GetFixtureList()->SetFilterData(gf);
-
-
 	world->addToWorld(ground, 2);
+
+	//get the existing filter
+	b2Fixture * gfx = ground->body->GetFixtureList();
+	b2Filter gf = gfx->GetFilterData();
+  
+	gf.categoryBits = BOUNDARY;
+	gfx->SetFilterData(gf);
+
 	for(Box2DSprite * s : items){
 		world->addToWorld(s);
 	}
