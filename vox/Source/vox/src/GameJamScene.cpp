@@ -265,6 +265,7 @@ GameJamScene::GameJamScene(Game * _game):
 		dude1->addToScene(this);
 		dude1->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 		addChild(dude1);
+		sceneCharacters.push_back(dude1);
 	}
 }
 

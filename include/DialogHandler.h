@@ -8,7 +8,7 @@
 #include "node/NodeUpdatable.h"
 #include "Character.h"
 
-const std::string dialogBits[] =
+const std::string dialogBits[29] =
 {
 	"I hear they’re adding a new floor to Dunton Tower. I wonder what it’s for.",
 	"I’d watch your back around here, if I were you.",
