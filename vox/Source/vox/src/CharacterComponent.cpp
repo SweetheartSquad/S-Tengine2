@@ -14,6 +14,8 @@ CharacterComponent::CharacterComponent(float _componentScale, float _width, floa
 	
 	float fullW = _texture->width;
 	float fullH = _texture->height;
+
+	body->SetUserData(this);
 }
 
 float CharacterComponent::getCorrectedHeight(){
@@ -26,10 +28,14 @@ float CharacterComponent::getCorrectedWidth(){
 void CharacterComponent::createFixture(int16 _groupIndex){
 	b2PolygonShape tShape;
 	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f);
-	body->CreateFixture(&tShape, 1);
-	b2Filter t;
-	t.groupIndex = _groupIndex;
-	body->GetFixtureList()->SetFilterData(t);
+
+	b2Fixture * f = body->CreateFixture(&tShape, 1); // physical fixture
+
+	// physical fixture
+	b2Filter tf;
+	tf.groupIndex = _groupIndex;
+	f->SetFilterData(tf);
+
 
 	b2Vec2 v1 = tShape.GetVertex(0);
 	b2Vec2 v2 = tShape.GetVertex(1);

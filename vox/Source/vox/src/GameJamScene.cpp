@@ -39,12 +39,17 @@
 #include "DialogHandler.h"
 #include "SayAction.h"
 #include "RandomCharacter.h"
+#include "GameJamContactListener.h"
+
+GameJamContactListener cl;
 
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
 	drawer(new Box2DDebugDraw(this)),
 	world(new Box2DWorld(b2Vec2(0, -60))),
-	playerCharacter(new TestCharacter(world, true)),
+
+	playerCharacter(new TestCharacter(world, false, PLAYER, PROP | NPC)),
+	
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
@@ -53,6 +58,7 @@ GameJamScene::GameJamScene(Game * _game):
 	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/foregroundhallway.png", 4096, 4096, true, true))),
 	debugDraw(false)
 {
+	world->b2world->SetContactListener(&cl);
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
@@ -105,10 +111,22 @@ GameJamScene::GameJamScene(Game * _game):
 
 		b2PolygonShape tShape;
 		tShape.SetAsBox(width*std::abs(s->transform->scaleVector.x)*scale*2.f, std::abs(height*s->transform->scaleVector.y)*scale*2.f);
-		s->body->CreateFixture(&tShape, 1);
+		b2PolygonShape tsShape;
+		tsShape.SetAsBox(width*std::abs(s->transform->scaleVector.x)*scale*2.f, std::abs(height*s->transform->scaleVector.y)*scale*2.f);
+		b2Fixture * sfx = s->body->CreateFixture(&tShape, 1); // physical
+		b2Fixture * ssfx = s->body->CreateFixture(&tsShape, 1); // sensor
+		ssfx->SetSensor(true);
+
+		// physical
 		b2Filter t;
 		t.groupIndex = -8;
 		s->body->GetFixtureList()->SetFilterData(t);
+		
+		b2Filter ts;
+		ts.categoryBits = PROP;
+		ts.maskBits = PLAYER;
+		s->body->GetFixtureList()->GetNext()->SetFilterData(ts);
+		
 
 		b2Vec2 v1 = tShape.GetVertex(0);
 		b2Vec2 v2 = tShape.GetVertex(1);
@@ -195,7 +213,6 @@ GameJamScene::GameJamScene(Game * _game):
 	addChild(foregroundScreen);
 	//addChild(fontM);
 	addChild(backgroundScreen);
-
 	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 0, 0);
 	//camera = new MousePerspectiveCamera();
 	camera->farClip = 1000.f;
@@ -214,26 +231,26 @@ GameJamScene::GameJamScene(Game * _game):
 	addChild(playerCharacter);
 	playerCharacter->addToScene(this);
 	playerCharacter->torso->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
-	
-	Character1 * char1 = new Character1(world, true);
+
+	Character1 * char1 = new Character1(world, true, NPC);
 	char1->setShader(shader, true);
 	char1->addToScene(this);
 	addChild(char1);
 	char1->translateComponents(glm::vec3(150, 50, 0));
 
-	Character2 * char2 = new Character2(world, true);
+	Character2 * char2 = new Character2(world, true, NPC);
 	char2->setShader(shader, true);
 	char2->addToScene(this);
 	addChild(char2);
 	char2->translateComponents(glm::vec3(125, 25, 0));
 
-	Character3 * char3 = new Character3(world, true);
+	Character3 * char3 = new Character3(world, true, NPC);
 	char3->setShader(shader, true);
 	char3->addToScene(this);
 	addChild(char3);
 	char3->translateComponents(glm::vec3(-125, 150, 0));
-
-	Character4 * char4 = new Character4(world, true);
+	
+	Character4 * char4 = new Character4(world, true, NPC);
 	char4->setShader(shader, true);
 	char4->addToScene(this);
 	char4->translateComponents(glm::vec3(-150, 150, 0));
@@ -410,7 +427,7 @@ void GameJamScene::update(Step * _step){
 
 void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene::render(_matrixStack, _renderStack);
-
+	
 	//world->b2world->DrawDebugData();
 
 	if(debugDraw){

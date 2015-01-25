@@ -44,4 +44,11 @@ public:
 	void unload() override;
 	void update(Step * _step) override;
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+
+	enum GAMEJAM_CATEGORY{
+		BOUNDARY = 0x0001,
+		PROP = 0x0002,
+		NPC = 0x0004,
+		PLAYER = 0x00010
+	};
 };
