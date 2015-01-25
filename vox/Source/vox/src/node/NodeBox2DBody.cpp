@@ -40,16 +40,23 @@ void NodeBox2DBody::update(Step * _step){
 	}
 }
 
-void NodeBox2DBody::setTranslationPhysical(glm::vec3 _translation){
-	transform->translationVector = _translation;
-	bodyDef.position.Set(transform->translationVector.x, transform->translationVector.y);
-	if(body != nullptr){
-		body->SetTransform(b2Vec2(_translation.x, _translation.y), body->GetAngle());
+void NodeBox2DBody::setTranslationPhysical(glm::vec3 _translation, bool _relative){
+	if(_relative){
+		transform->translate(_translation);
+		if(body != nullptr){
+			bodyDef.position.Set(bodyDef.position.x + _translation.x,bodyDef.position.y +  _translation.y);
+		}
+	}else{
+		transform->translationVector = _translation;
+		bodyDef.position.Set(transform->translationVector.x, transform->translationVector.y);
+		if(body != nullptr){
+			body->SetTransform(b2Vec2(_translation.x, _translation.y), body->GetAngle());
+		}
 	}
 }
 
-void NodeBox2DBody::setTranslationPhysical(float _x, float _y, float _z){
-	setTranslationPhysical(glm::vec3(_x, _y, _z));
+void NodeBox2DBody::setTranslationPhysical(float _x, float _y, float _z, bool _relative){
+	setTranslationPhysical(glm::vec3(_x, _y, _z), _relative);
 }
 
 void NodeBox2DBody::setXPhysical(float _x){

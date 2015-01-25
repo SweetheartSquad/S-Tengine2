@@ -18,7 +18,19 @@ Character::Character(Box2DWorld * _world, bool _ai) :
 	componentScale(0.0025f),
 	groupIndex(--gGroupIndex),
 	ai(_ai),
-	text(new BitmapFont(new Texture("../assets/arial.bmp", 1024, 1024, true, true), 32, 16, 16 ))
+	text(new BitmapFont(new Texture("../assets/arial.bmp", 1024, 1024, true, true), 32, 16, 16 )),
+	head(nullptr),
+	leftUpperArm(nullptr),
+	leftLowerArm(nullptr),
+	leftHand(nullptr),
+	rightUpperArm(nullptr),
+	rightLowerArm(nullptr),
+	rightHand(nullptr),
+	leftUpperLeg(nullptr),
+	leftLowerLeg(nullptr),
+	rightUpperLeg(nullptr),
+	rightLowerLeg(nullptr)
+
 {
 	ratioX_neck_to_torso = 0.0f;
 	ratioY_neck_to_torso = 0.8f;
@@ -53,9 +65,26 @@ Character::Character(Box2DWorld * _world, bool _ai) :
 	text->transform->translate(0, 0, 6);
 	text->kerning = -0.9f;
 	text->setSizeMod(0.85f);
+
+	components.push_back(head);
+	components.push_back(leftUpperArm);
+	components.push_back(leftLowerArm);
+	components.push_back(leftHand);
+	components.push_back(rightUpperArm);
+	components.push_back(rightLowerArm);
+	components.push_back(rightHand);
+	components.push_back(leftUpperLeg);
+	components.push_back(leftLowerLeg);
+	components.push_back(rightUpperLeg);
+	components.push_back(rightLowerLeg);
+
 }
 
 Character::~Character(){
+	while(components.size() > 0){
+		delete components.back();
+	}
+	components.clear();
 }
 
 void Character::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
@@ -71,7 +100,7 @@ void Character::update(Step * _step){
 	neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5));
 
 	float bodAngle = torso->body->GetAngle();
-	torso->body->SetAngularVelocity(-bodAngle*6);
+	torso->body->SetAngularVelocity(-bodAngle*10);
 	
 	/*if(angle < neck->GetLowerLimit()/2 || angle > neck->GetUpperLimit()/2){
 		neck->SetMotorSpeed(angle < 0 ? 0.1 : -0.1);
@@ -329,4 +358,12 @@ void Character::addToScene(Scene * _scene){
 	_scene->addChild(rightLowerLeg);
 	_scene->addChild(head);
 	_scene->addChild(text);
+}
+
+void Character::translateComponents(glm::vec3 _translateVector){
+	for(CharacterComponent * c : components){
+		if(c != nullptr){
+			c->setTranslationPhysical(_translateVector, true);
+		}
+	}
 }
