@@ -44,8 +44,8 @@
 GameJamSceneOutdoor::GameJamSceneOutdoor(Game * _game):
 	GameJamScene(_game)
 {
-	backgroundScreen->mesh->pushTexture2D(new Texture("../assets/environments/skybox - HD - edited.png", 4096, 4096, true, true));
-	midgroundScreen->mesh->pushTexture2D(new Texture("../assets/environments/courtyardsmall.png", 256, 256, true, true));
+	backgroundScreen->mesh->pushTexture2D(new Texture("../assets/environments/skybox.png", 4096, 4096, true, true));
+	midgroundScreen->mesh->pushTexture2D(new Texture("../assets/environments/courtyard.png", 4096, 4096, true, true));
 	foregroundScreen->mesh->pushTexture2D(new Texture("../assets/environments/foregroundhallway.png", 4096, 4096, true, true));
 
 	ground->mesh->pushTexture2D(new Texture("../assets/environments/courtyardtile.png", 512, 512, true, true));

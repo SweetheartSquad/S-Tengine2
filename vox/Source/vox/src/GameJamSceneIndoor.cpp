@@ -44,7 +44,7 @@
 GameJamSceneIndoor::GameJamSceneIndoor(Game * _game) :
 	GameJamScene(_game)
 {
-	backgroundScreen->mesh->pushTexture2D(new Texture("../assets/environments/skybox - HD - edited.png", 4096, 4096, true, true));
+	backgroundScreen->mesh->pushTexture2D(new Texture("../assets/environments/skybox.png", 4096, 4096, true, true));
 	midgroundScreen->mesh->pushTexture2D(new Texture("../assets/environments/walls - HD - edited.png", 4096, 4096, true, true));
 	foregroundScreen->mesh->pushTexture2D(new Texture("../assets/environments/foregroundhallway.png", 4096, 4096, true, true));
 
