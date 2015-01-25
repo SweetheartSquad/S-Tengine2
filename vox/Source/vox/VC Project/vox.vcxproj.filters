@@ -354,6 +354,18 @@
     <ClCompile Include="..\src\CharacterComponent.cpp">
       <Filter>Source Files\TestGame\GameJam</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Character1.cpp">
+      <Filter>Source Files\TestGame\GameJam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Character2.cpp">
+      <Filter>Source Files\TestGame\GameJam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Character3.cpp">
+      <Filter>Source Files\TestGame\GameJam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Character4.cpp">
+      <Filter>Source Files\TestGame\GameJam</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -639,6 +651,18 @@
       <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
     <ClInclude Include="..\include\CharacterComponent.h">
+      <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Character1.h">
+      <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Character2.h">
+      <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Character3.h">
+      <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Character4.h">
       <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
   </ItemGroup>

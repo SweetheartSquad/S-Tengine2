@@ -32,11 +32,15 @@
 #include "CylinderScreen.h"
 #include "TestCharacter.h"
 #include "CharacterComponent.h"
+#include "Character1.h"
+#include "Character2.h"
+#include "Character3.h"
+#include "Character4.h"
 
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
 	world(new Box2DWorld(b2Vec2(0, -60))),
-	playerCharacter(new TestCharacter(world)),
+	playerCharacter(new Character4(world)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	tex(new Texture("../assets/MichaelScale.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
@@ -141,6 +145,8 @@ GameJamScene::GameJamScene(Game * _game):
 	playerCharacter->torso->body->SetGravityScale(0);
 	playerCharacter->torso->body->SetGravityScale(0);
 	//ch->transform->scale(5, 5, 1);
+
+
 }
 
 GameJamScene::~GameJamScene(){
