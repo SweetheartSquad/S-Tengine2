@@ -53,30 +53,86 @@ GameJamScene::GameJamScene(Game * _game):
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
-	{
-		Box2DSprite * s = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform());
-		s->mesh->pushTexture2D(new Texture("../assets/Table.png", 256, 256, true, true));
-		s->transform->scale(5, 5, 1);
 
-		b2CircleShape shape;
-		s->body->CreateFixture(&shape, 1);
-		s->body->GetFixtureList()->SetSensor(true);
+	const int imgCount = 12;
+	std::string strings[imgCount] = {
+		"../assets/Table_657_332.png",		
+		"../assets/TourDePizza_738_854.png",
+		"../assets/ArtisticStatue_820_915.png",
+		"../assets/BullitenBoard_573_353.png",
+		"../assets/Cat_441_726.png",
+		"../assets/Creepy_263_470.png",
+		"../assets/DeadPlant_228_468.png",
+		"../assets/Garbage_300_374.png",
+		"../assets/HealthyPlant_272_877.png",
+		"../assets/JollySkeleton_399_916.png",
+		"../assets/Lockers_1024_604.png",
+		"../assets/Pie_667_692.png"
+	};
+
+	for(unsigned long int i = 0; i < imgCount; ++i){
+		Box2DSprite * s = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform());
+		s->mesh->pushTexture2D(new Texture(strings[i].c_str(), 1024, 1024, true, true));
+
+		int width = 0;
+		int height = 0;
+
+		int cc = 0;
+		for(char c : strings[i]){
+			if(c == '_' || c == '.'){
+				strings[i].at(cc) = ' ';
+			}
+			cc++;
+		}
+		std::string arr[4];
+		int j = 0;
+		std::stringstream ssin(strings[i]);
+		while (ssin.good() && i < 4){
+			ssin >> arr[j];
+			++j;
+		}
+
+		width =  atoi(arr[1].c_str());
+		height =  atoi(arr[2].c_str());
+
+		float scale = 0.002;
+
+		b2PolygonShape tShape;
+		tShape.SetAsBox(width*std::abs(s->transform->scaleVector.x)*scale*2.f, std::abs(height*s->transform->scaleVector.y)*scale*2.f);
+		s->body->CreateFixture(&tShape, 1);
+		b2Filter t;
+		t.groupIndex = -8;
+		s->body->GetFixtureList()->SetFilterData(t);
+
+		b2Vec2 v1 = tShape.GetVertex(0);
+		b2Vec2 v2 = tShape.GetVertex(1);
+		b2Vec2 v3 = tShape.GetVertex(2);
+		b2Vec2 v4 = tShape.GetVertex(3);
+
+		s->mesh->vertices.at(0).x = v1.x;
+		s->mesh->vertices.at(0).y = v1.y;
+		s->mesh->vertices.at(1).x = v2.x;
+		s->mesh->vertices.at(1).y = v2.y;
+		s->mesh->vertices.at(2).x = v3.x;
+		s->mesh->vertices.at(2).y = v3.y;
+		s->mesh->vertices.at(3).x = v4.x;
+		s->mesh->vertices.at(3).y = v4.y;
+	
+		float mag = std::max(s->mesh->textures.at(0)->width, s->mesh->textures.at(0)->height);
+		s->mesh->vertices.at(3).u = 0;
+		s->mesh->vertices.at(3).v = 0;
+		s->mesh->vertices.at(2).u = width/mag;
+		s->mesh->vertices.at(2).v = 0;
+		s->mesh->vertices.at(1).u = width/mag;
+		s->mesh->vertices.at(1).v = height/mag;
+		s->mesh->vertices.at(0).u = 0;
+		s->mesh->vertices.at(0).v = height/mag;
+		
+		s->setTranslationPhysical(i * 50, 3, -3);
 		s->setShader(shader, true);
-		s->setTranslationPhysical(3, 10, -3);
 		items.push_back(s);
 	}
-	{	
-		Box2DSprite * s = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform());
-		s->mesh->pushTexture2D(new Texture("../assets/TourDePizza_738_854.png", 1024, 1024, true, true));
-		s->transform->scale(5, 5, 1);
 
-		b2CircleShape shape;
-		s->body->CreateFixture(&shape, 1);
-		s->body->GetFixtureList()->SetSensor(true);
-		s->setShader(shader, true);
-		s->setTranslationPhysical(12, 10, -3);
-		items.push_back(s);
-	}
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	//soundManager->play("green_chair");
 
