@@ -253,11 +253,11 @@ GameJamScene::GameJamScene(Game * _game):
 	addChild(char4);
 	
 	
-	for(unsigned long int i = 0; i < 20; ++i){
+	for(unsigned long int i = 0; i < 10; ++i){
 		RandomCharacter * dude1 = new RandomCharacter(world, true);
 		dude1->setShader(shader);
 		dude1->addToScene(this);
-		dude1->translateComponents(glm::vec3(std::rand()%500, std::rand()%250, 0));
+		dude1->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 		addChild(dude1);
 	}
 }
