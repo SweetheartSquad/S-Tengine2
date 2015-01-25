@@ -266,6 +266,9 @@ GameJamScene::GameJamScene(Game * _game):
 		dude1->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 		addChild(dude1);
 	}
+
+	int present = glfwJoystickPresent(GLFW_JOYSTICK_1);
+	std::cout<<"ds";
 }
 
 GameJamScene::~GameJamScene(){
@@ -405,6 +408,13 @@ void GameJamScene::update(Step * _step){
 		debugDraw = !debugDraw;
 	}
 	
+	int count;
+	const unsigned char* axes = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &count);
+
+	std::cout<<axes;
+	for(int i = 0; i < count; i++){
+		std::cout<<i<<std::string(" ")<<(int)axes[i]<<std::endl;
+	}
 }
 
 void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
