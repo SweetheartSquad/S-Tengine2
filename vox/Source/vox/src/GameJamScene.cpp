@@ -111,7 +111,7 @@ GameJamScene::GameJamScene(Game * _game):
 
 		b2PolygonShape tShape;
 
-		float scaleVec = ((std::rand()%50)/50.f);
+		float scaleVec = ((std::rand()%50)/50.f)+0.5f;
 		s->transform->scale(scaleVec, scaleVec, scaleVec);
 		tShape.SetAsBox(width*std::abs(s->transform->scaleVector.x)*scale*2.f, std::abs(height*s->transform->scaleVector.y)*scale*2.f);
 		s->body->CreateFixture(&tShape, 1);
@@ -263,7 +263,7 @@ GameJamScene::GameJamScene(Game * _game):
 	dialogEvent->running = true;*/
 	
 	
-	for(unsigned long int i = 0; i < 3; ++i){
+	for(unsigned long int i = 0; i < std::rand()%10; ++i){
 		RandomCharacter * dude1 = new RandomCharacter(world, true);
 		dude1->setShader(shader, true);
 		dude1->addToScene(this);
@@ -409,7 +409,7 @@ void GameJamScene::update(Step * _step){
 	//DIALOG
 	//dialogEvent->update(_step);
 	
-	if(keyboard->keyJustUp(GLFW_KEY_F1)){
+	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		debugDraw = !debugDraw;
 	}
 }

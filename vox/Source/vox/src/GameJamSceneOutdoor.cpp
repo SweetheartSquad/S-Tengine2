@@ -54,7 +54,7 @@ GameJamSceneOutdoor::GameJamSceneOutdoor(Game * _game):
 
 void GameJamSceneOutdoor::update(Step * _step){
 	GameJamScene::update(_step);
-	if(keyboard->keyJustUp(GLFW_KEY_F2)){
+	if(keyboard->keyJustUp(GLFW_KEY_SPACE) || fmod(_step->time, 600) > 599){
 		if(game->scenes.count("indoors") != 0){
 			game->currentScene = game->scenes.at("indoors");
 		}
