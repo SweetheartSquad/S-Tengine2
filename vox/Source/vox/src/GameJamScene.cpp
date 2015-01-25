@@ -30,6 +30,7 @@
 #include "GameJamScene.h"
 #include "BitmapFont.h"
 #include "CylinderScreen.h"
+#include "TestCharacter.h"
 
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
@@ -60,8 +61,6 @@ GameJamScene::GameJamScene(Game * _game):
 		items.push_back(s);
 	}
 
-
-
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	//soundManager->play("green_chair");
 
@@ -84,7 +83,6 @@ GameJamScene::GameJamScene(Game * _game):
 		world->addToWorld(s);
 	}
 
-	
 	backgroundScreen->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
 	backgroundScreen->transform->scale(25, 75, 75);
 	backgroundScreen->transform->translate(0, -10, -20);
@@ -100,7 +98,6 @@ GameJamScene::GameJamScene(Game * _game):
 	foregroundScreen->transform->translate(0, -10, 10);
 	foregroundScreen->setShader(shader, true);
 	
-	
 	Texture * font = new Texture("../assets/MoonFlowerBold.png", 1024, 1024, true, true);
 	BitmapFont * fontM = new BitmapFont(font, 32, 16, 16); 
     fontM->setText("sdsdweqweqwewqesdsdsdadasd");
@@ -110,7 +107,7 @@ GameJamScene::GameJamScene(Game * _game):
 	addChild(midgroundScreen);
 	
 	addChild(ground);
-	addChild(foregroundScreen);
+	//addChild(foregroundScreen);
 	addChild(fontM);
 	addChild(backgroundScreen);
 	addChild(playerSprite);
@@ -127,6 +124,12 @@ GameJamScene::GameJamScene(Game * _game):
 
 	//world->b2world->SetDebugDraw(drawer);
 	//drawer->SetFlags(b2Draw::e_shapeBit);
+
+	TestCharacter * ch = new TestCharacter(world);
+	ch->setShader(shader);
+	addChild(ch);
+	//ch->torso->setTranslationPhysical(0, 5, 0);
+	ch->transform->scale(5, 5, 1);
 }
 
 GameJamScene::~GameJamScene(){
@@ -175,7 +178,6 @@ void GameJamScene::update(Step * _step){
 	// move the ground and background with the player
 	//ground->setTranslationPhysical(playerSprite->transform->translationVector.x, ground->transform->translationVector.y, ground->transform->translationVector.z);
 
-
 	// camera controls
 	if(keyboard->keyDown(GLFW_KEY_UP)){
 		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
@@ -196,5 +198,5 @@ void GameJamScene::update(Step * _step){
 
 void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene::render(_matrixStack, _renderStack);
-	//world->b2world->DrawDebugData();
+	world->b2world->DrawDebugData();
 }

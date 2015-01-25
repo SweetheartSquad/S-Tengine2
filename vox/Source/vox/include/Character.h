@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Entity.h"
+#include "MeshEntity.h"
 
 class Shader;
 class Box2DWorld;
 class Box2DSprite;
 
-class Character : public Entity{
+class Character : public MeshEntity{
 public:
 
 	Box2DWorld * world;

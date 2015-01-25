@@ -5,8 +5,8 @@
 #include "Box2DWorld.h"
 #include "shader/Shader.h"
 
-Character::Character(Box2DWorld * _world)
-	:Entity(new Transform()),
+Character::Character(Box2DWorld * _world) :
+	MeshEntity(nullptr, new Transform()),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	world(_world)
@@ -17,34 +17,11 @@ Character::~Character(){
 }
 
 void Character::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	Entity::render(_matrixStack, _renderStack);
-	/*torso->render(_matrixStack, _renderStack);
-	leftUpperArm->render(_matrixStack, _renderStack);
-	leftLowerArm->render(_matrixStack, _renderStack);
-	leftHand->render(_matrixStack, _renderStack);
-	rightUpperArm->render(_matrixStack, _renderStack);
-	rightLowerArm->render(_matrixStack, _renderStack);
-	rightHand->render(_matrixStack, _renderStack);
-	upperLeftLeg->render(_matrixStack, _renderStack);
-	lowerLeftLeg->render(_matrixStack, _renderStack);
-	upperRightLeg->render(_matrixStack, _renderStack);
-	lowerRightLeg->render(_matrixStack, _renderStack);
-	*/
+	MeshEntity::render(_matrixStack, _renderStack);
 }
 
 void Character::update(Step* _step){
-	Entity::update(_step);
-	/*torso->update(_step);
-	leftUpperArm->update(_step);
-	leftLowerArm->update(_step);
-	leftHand->update(_step);
-	rightUpperArm->update(_step);
-	rightLowerArm->update(_step);
-	rightHand->update(_step);
-	upperLeftLeg->update(_step);
-	lowerLeftLeg->update(_step);
-	upperRightLeg->update(_step);
-	lowerRightLeg->update(_step);*/
+	MeshEntity::update(_step);
 }
 
 void Character::attachJoints(){
