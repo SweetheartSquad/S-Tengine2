@@ -7,7 +7,69 @@
 #include "CharacterComponent.h"
 #include "Scene.h"
 
+#include "Texture.h"
+
 int16 Character::gGroupIndex = 0;
+
+ComponentTexture::ComponentTexture(Texture * _texture, float _width, float _height) :
+	texture(_texture),
+	width(_width),
+	height(_height)
+{
+}
+
+std::vector<ComponentTexture *> Character::torsoTexPacks;
+std::vector<ComponentTexture *> Character::headTexPacks;
+std::vector<ComponentTexture *> Character::upperArmTexPacks;
+std::vector<ComponentTexture *> Character::lowerArmTexPacks;
+std::vector<ComponentTexture *> Character::handTexPacks;
+std::vector<ComponentTexture *> Character::upperLegTexPacks;
+std::vector<ComponentTexture *> Character::lowerLegTexPacks;
+
+void Character::init(){
+	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/MichaelTorso.png", 512, 512, true, true),	150,	360)); 
+	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/MoustacheTorso.png", 512, 512, true, true),	160,	290));
+	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/AfroTorso.png", 512, 512, true, true),		190,	325));
+	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/HoodieTorso.png", 512, 512, true, true),	175,	285));
+	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/PonytailTorso.png", 512, 512, true, true),	160,	355));
+
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/MichaelHead.png", 512, 512, true, true),   160,	270));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/MoustacheHead.png", 512, 512, true, true), 160,	270));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/AfroHead.png", 512, 512, true, true),	   260,	250));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/HoodieHead.png", 512, 512, true, true),	   170,	300));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/PonytailHead.png", 512, 512, true, true),  155,	365));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/MonsterHead.png", 512, 512, true, true),  222,	393));
+	
+	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/MichaelUpperArm.png", 512, 512, true, true),55,	205));
+	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/MoustacheUA.png", 512, 512, true, true),	55,	205));
+	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/AfroUA.png", 512, 512, true, true),			50,	200));
+	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/HoodieUA.png", 512, 512, true, true),		65,	165));
+	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/PonytailUA.png", 512, 512, true, true),		60,	200));
+	
+	lowerArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/MichaelLowerArm.png", 512, 512, true, true),40,	145));
+	lowerArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/MoustacheLA.png", 512, 512, true, true),	40,	145));
+	lowerArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/AfroLA.png", 512, 512, true, true),			40,	145));
+	lowerArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/HoodieLA.png", 512, 512, true, true),		55,	165));
+	lowerArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/PonytailLA.png", 512, 512, true, true),		55,	160));
+	
+	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/MichaelHand.png", 512, 512, true, true),	50,	82));
+	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/MoustacheHand.png", 512, 512, true, true),	55,	85));
+	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/AfroHand.png", 512, 512, true, true),		55,	70));
+	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/HoodieHand.png", 512, 512, true, true),		55,	85));
+	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/PonytailHand.png", 512, 512, true, true),	60,	80));
+	
+	upperLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/MichaelUpperLeg.png", 512, 512, true, true), 70,	215));
+	upperLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/MoustacheUL.png", 512, 512, true, true),	 70,	215));
+	upperLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/AfroUL.png", 512, 512, true, true),			 60,	200));
+	upperLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/HoodieUL.png", 512, 512, true, true),		 50,	205));
+	upperLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/PonytailUL.png", 512, 512, true, true),		 80,	185));
+	
+	lowerLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/MichaelLowerLeg.png", 512, 512, true, true), 135,	285));
+	lowerLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/MoustacheLL.png", 512, 512, true, true),	 135,	285));
+	lowerLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/AfroLL.png", 512, 512, true, true),			 105,	255));
+	lowerLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/HoodieLL.png", 512, 512, true, true),		 115,	240));
+	lowerLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/PonytailLL.png", 512, 512, true, true),		 110,	205));
+}
 
 Character::Character(Box2DWorld * _world, bool _ai) :
 	MeshEntity(nullptr, new Transform()),
@@ -17,6 +79,7 @@ Character::Character(Box2DWorld * _world, bool _ai) :
 	componentScale(0.0025f),
 	groupIndex(--gGroupIndex),
 	ai(_ai),
+	reactiveFeet(true),
 	head(nullptr),
 	leftUpperArm(nullptr),
 	leftLowerArm(nullptr),
@@ -86,16 +149,18 @@ void Character::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderS
 
 void Character::update(Step * _step){
 	MeshEntity::update(_step);
-	b2RevoluteJoint * neck = ((b2RevoluteJoint *)head->body->GetJointList()->joint);
-	float angle = neck->GetJointAngle();
+	if(reactiveFeet){
+		b2RevoluteJoint * neck = ((b2RevoluteJoint *)head->body->GetJointList()->joint);
+		float angle = neck->GetJointAngle();
 
-	neck->SetMotorSpeed(-angle*360);
-	neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5));
+		neck->SetMotorSpeed(-angle*360);
+		neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5));
 
-	float bodAngle = torso->body->GetAngle();
-	torso->body->SetAngularVelocity(-bodAngle*10);
-	if(torso->body->GetPosition().y < 5){
-		torso->applyLinearImpulseUp(250);
+		float bodAngle = torso->body->GetAngle();
+		torso->body->SetAngularVelocity(-bodAngle*10);
+		if(torso->body->GetPosition().y < 5){
+			torso->applyLinearImpulseUp(250);
+		}
 	}
 	
 	/*if(angle < neck->GetLowerLimit()/2 || angle > neck->GetUpperLimit()/2){
@@ -106,7 +171,7 @@ void Character::update(Step * _step){
 		neck->SetMaxMotorTorque(0);
 	}*/
 
-	if(ai){
+	if(ai && reactiveFeet){
 		b2ContactEdge * stuff = leftLowerLeg->body->GetContactList();
 		if(stuff != nullptr && stuff->contact->IsTouching()){
 			int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
@@ -297,20 +362,23 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&lrltj);
 
 	
-	torso		   ->setTranslationPhysical(0.f, 0.f, 0.001f);
-	head		   ->setTranslationPhysical(0.f, 0.f, 0.21f);
-	leftUpperArm   ->setTranslationPhysical(0.f, 0.f, 0.11f);
-	leftLowerArm   ->setTranslationPhysical(0.f, 0.f, 0.12f);
-	leftHand	   ->setTranslationPhysical(0.f, 0.f, 0.13f);
-	rightUpperArm  ->setTranslationPhysical(0.f, 0.f, -0.11f);
-	rightLowerArm  ->setTranslationPhysical(0.f, 0.f, -0.12f);
-	rightHand	   ->setTranslationPhysical(0.f, 0.f, -0.13f);
-	leftUpperLeg   ->setTranslationPhysical(0.f, 0.f, -0.21f);
-	leftLowerLeg   ->setTranslationPhysical(0.f, 0.f, -0.22f);
-	rightUpperLeg  ->setTranslationPhysical(0.f, 0.f, -0.23f);
-	rightLowerLeg  ->setTranslationPhysical(0.f, 0.f, -0.24f);
+	float t = groupIndex*0.000001f;
 
-	torso->body->SetLinearDamping(0.8);
+	torso		   ->setTranslationPhysical(0.f, 0.f, 0.1f+t);
+	head		   ->setTranslationPhysical(0.f, 0.f, 0.2f+t);
+	leftUpperArm   ->setTranslationPhysical(0.f, 0.f, 0.31f+t);
+	leftLowerArm   ->setTranslationPhysical(0.f, 0.f, 0.32f+t);
+	leftHand	   ->setTranslationPhysical(0.f, 0.f, 0.33f+t);
+	rightUpperArm  ->setTranslationPhysical(0.f, 0.f, -0.11f+t);
+	rightLowerArm  ->setTranslationPhysical(0.f, 0.f, -0.12f+t);
+	rightHand	   ->setTranslationPhysical(0.f, 0.f, -0.13f+t);
+	leftUpperLeg   ->setTranslationPhysical(0.f, 0.f, -0.21f+t);
+	leftLowerLeg   ->setTranslationPhysical(0.f, 0.f, -0.22f+t);
+	rightUpperLeg  ->setTranslationPhysical(0.f, 0.f, -0.23f+t);
+	rightLowerLeg  ->setTranslationPhysical(0.f, 0.f, -0.24f+t);
+
+	torso->body->SetLinearDamping(0.9);
+	torso->body->SetGravityScale(0.5);
 }
 
 void Character::unload(){

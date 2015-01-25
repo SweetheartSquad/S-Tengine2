@@ -95,15 +95,16 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 	//glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBlendFunc(GL_ONE, GL_ZERO);
 	glEnable (GL_BLEND);
-	
-	glClearColor(1.0, 0.0, 0.0, 0.0);
+	glBlendEquation(GL_FUNC_ADD);
+
+	glClearColor(1.0, 1.0, 1.0, 1.0);
 
 	glViewport(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
 	glScissor(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	//glEnable(GL_DEPTH_TEST);
+	glEnable(GL_DEPTH_TEST);
 
 	//Back-face culling
 	//glEnable (GL_CULL_FACE); // cull face

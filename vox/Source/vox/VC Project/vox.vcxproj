@@ -278,6 +278,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\src\node\NodeBox2DBody.cpp" />
     <ClCompile Include="..\src\PerspectiveCamera.cpp" />
     <ClCompile Include="..\src\Point.cpp" />
+    <ClCompile Include="..\src\RandomCharacter.cpp" />
     <ClCompile Include="..\src\Rectangle.cpp" />
     <ClCompile Include="..\src\Scene2D.cpp" />
     <ClCompile Include="..\src\shader\BaseComponentShader.cpp" />
@@ -377,6 +378,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\include\MousePerspectiveCamera.h" />
     <ClInclude Include="..\include\node\NodeBox2DBody.h" />
     <ClInclude Include="..\include\Point.h" />
+    <ClInclude Include="..\include\RandomCharacter.h" />
     <ClInclude Include="..\include\Rectangle.h" />
     <ClInclude Include="..\include\Scene2D.h" />
     <ClInclude Include="..\include\shader\BaseComponentShader.h" />

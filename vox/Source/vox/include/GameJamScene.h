@@ -21,6 +21,7 @@ class Character4;
 
 class GameJamScene : public Scene{
 public:
+	bool debugDraw;
 	Box2DDebugDraw * drawer;
 	Box2DWorld * world;
 	Character * playerCharacter;
