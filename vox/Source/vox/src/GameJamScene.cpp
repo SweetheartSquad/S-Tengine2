@@ -36,14 +36,18 @@
 #include "Character2.h"
 #include "Character3.h"
 #include "Character4.h"
+<<<<<<< .merge_file_a07136
 #include "DialogEvent.h"
 #include "SayAction.h"
+=======
+#include "RandomCharacter.h"
+>>>>>>> .merge_file_a06292
 
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
 	drawer(new Box2DDebugDraw(this)),
 	world(new Box2DWorld(b2Vec2(0, -60))),
-	playerCharacter(new Character1(world, false)),
+	playerCharacter(new TestCharacter(world, true)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	tex(new Texture("../assets/MichaelScale.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
@@ -51,7 +55,12 @@ GameJamScene::GameJamScene(Game * _game):
 	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/skybox - HD - edited.png", 4096, 4096, true, true))),
 	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/walls - HD - edited.png", 4096, 4096, true, true))),
 	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/foregroundhallway.png", 4096, 4096, true, true))),
+<<<<<<< .merge_file_a07136
 	dialogEvent(new DialogEvent())
+=======
+	drawer(new Box2DDebugDraw(this)),
+	debugDraw(false)
+>>>>>>> .merge_file_a06292
 {
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
@@ -203,11 +212,17 @@ GameJamScene::GameJamScene(Game * _game):
 	//addChild(fontM);
 	addChild(backgroundScreen);
 
+<<<<<<< .merge_file_a07136
 
 	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 1, 0);
 //	camera = new MousePerspectiveCamera();
 
 	camera->farClip = 100000000.f;
+=======
+	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 0, 0);
+	//camera = new MousePerspectiveCamera();
+	camera->farClip = 1000.f;
+>>>>>>> .merge_file_a06292
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
 	camera->transform->translate(5.0f, 0.f, 15.0f);
 	camera->yaw = 90.0f;
@@ -216,6 +231,7 @@ GameJamScene::GameJamScene(Game * _game):
 	world->b2world->SetDebugDraw(drawer);
 	drawer->SetFlags(b2Draw::e_shapeBit);
 
+<<<<<<< .merge_file_a07136
 	playerCharacter->setShader(shader);
 	addChild(playerCharacter);
 	playerCharacter->addToScene(this);
@@ -226,27 +242,47 @@ GameJamScene::GameJamScene(Game * _game):
 	playerCharacter->torso->body->SetGravityScale(0);
 	playerCharacter->torso->body->SetGravityScale(0);
 	//ch->transform->scale(5, 5, 1);
+=======
+
+>>>>>>> .merge_file_a06292
 	
 	Character1 * char1 = new Character1(world, true);
 	char1->setShader(shader);
 	char1->addToScene(this);
 	addChild(char1);
-	char1->translateComponents(glm::vec3(50, 50, 0));
+	char1->translateComponents(glm::vec3(150, 50, 0));
+
 	Character2 * char2 = new Character2(world, true);
 	char2->setShader(shader);
 	char2->addToScene(this);
 	addChild(char2);
-	char2->translateComponents(glm::vec3(25, 25, 0));
+	char2->translateComponents(glm::vec3(125, 25, 0));
+
 	Character3 * char3 = new Character3(world, true);
 	char3->setShader(shader);
 	char3->addToScene(this);
 	addChild(char3);
-	char3->translateComponents(glm::vec3(-25, 150, 0));
+	char3->translateComponents(glm::vec3(-125, 150, 0));
+
+	
+	playerCharacter->setShader(shader);
+	playerCharacter->addToScene(this);
+
+	//playerCharacter->torso->setTranslationPhysical(50, 50, 0);
+	//playerCharacter->head->setTranslationPhysical(25, 25, 0);
+	playerCharacter->torso->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
+	//playerCharacter->torso->body->SetGravityScale(0);
+	//playerCharacter->torso->body->SetGravityScale(0);
+
+	addChild(playerCharacter);
+	
+
 	Character4 * char4 = new Character4(world, true);
 	char4->setShader(shader);
 	char4->addToScene(this);
-	char4->translateComponents(glm::vec3(-50, 150, 0));
+	char4->translateComponents(glm::vec3(-150, 150, 0));
 	addChild(char4);
+<<<<<<< .merge_file_a07136
 
 	//playerCharacter->text->setText("Howdy Ya'll, My Name's Baby Legs Hetman");
 	playerCharacter->text->transform->translate(0, 3, -2);
@@ -258,6 +294,17 @@ GameJamScene::GameJamScene(Game * _game):
 	dialogEvent->addAction(new SayAction(playerCharacter, "Baby", 2));
 	dialogEvent->addAction(new SayAction(playerCharacter, "Hetman", 2));
 	dialogEvent->running = true;
+=======
+	
+	
+	for(unsigned long int i = 0; i < 10; ++i){
+		RandomCharacter * dude1 = new RandomCharacter(world, true);
+		dude1->setShader(shader);
+		dude1->addToScene(this);
+		dude1->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
+		addChild(dude1);
+	}
+>>>>>>> .merge_file_a06292
 }
 
 GameJamScene::~GameJamScene(){
@@ -284,6 +331,9 @@ void GameJamScene::update(Step * _step){
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
 		//playerCharacter->transform->rotate(1, 0, 1, 0, kOBJECT);
+		playerCharacter->reactiveFeet = false;
+	}else{
+		playerCharacter->reactiveFeet = true;
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
 		playerCharacter->torso->applyLinearImpulseLeft(25);
@@ -293,33 +343,39 @@ void GameJamScene::update(Step * _step){
 		//playerCharacter->playAnimation = true;
 		//playerCharacter->setCurrentAnimation("run");
 
-		b2ContactEdge * stuff = playerCharacter->leftLowerLeg->body->GetContactList();
-		if(stuff != nullptr && stuff->contact->IsTouching()){
-			int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
-			int type2 = (int)stuff->contact->GetFixtureB()->GetUserData();
+		if(playerCharacter->reactiveFeet){
+			b2ContactEdge * stuff = playerCharacter->leftLowerLeg->body->GetContactList();
+			if(stuff != nullptr && stuff->contact->IsTouching()){
+				int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
+				int type2 = (int)stuff->contact->GetFixtureB()->GetUserData();
 
-			if(type1 != type2){
-				if(playerCharacter->leftLowerLeg->body->GetLinearVelocity().y <= 0.1){
-					playerCharacter->leftLowerLeg->applyLinearImpulseLeft(5);
-					playerCharacter->leftLowerLeg->applyLinearImpulseUp(125);	
-					playerCharacter->torso->applyLinearImpulseUp(125);	
+				if(type1 != type2){
+					if(playerCharacter->leftLowerLeg->body->GetLinearVelocity().y <= 0.1){
+						playerCharacter->leftLowerLeg->applyLinearImpulseLeft(5);
+						playerCharacter->leftLowerLeg->applyLinearImpulseUp(125);	
+						playerCharacter->torso->applyLinearImpulseUp(125);	
+					}
+				}
+			}
+			stuff = playerCharacter->rightLowerLeg->body->GetContactList();
+			if(stuff != nullptr && stuff->contact->IsTouching()){
+				int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
+				int type2 = (int)stuff->contact->GetFixtureB()->GetUserData();
+
+				if(type1 != type2){
+					if(playerCharacter->rightLowerLeg->body->GetLinearVelocity().y <= 0.1){
+						playerCharacter->rightLowerLeg->applyLinearImpulseLeft(5);
+						playerCharacter->rightLowerLeg->applyLinearImpulseUp(125);
+						playerCharacter->torso->applyLinearImpulseUp(125);	
+					}
 				}
 			}
 		}
-		stuff = playerCharacter->rightLowerLeg->body->GetContactList();
-		if(stuff != nullptr && stuff->contact->IsTouching()){
-			int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
-			int type2 = (int)stuff->contact->GetFixtureB()->GetUserData();
 
-			if(type1 != type2){
-				if(playerCharacter->rightLowerLeg->body->GetLinearVelocity().y <= 0.1){
-					playerCharacter->rightLowerLeg->applyLinearImpulseLeft(5);
-					playerCharacter->rightLowerLeg->applyLinearImpulseUp(125);
-					playerCharacter->torso->applyLinearImpulseUp(125);	
-				}
-			}
-		}
+<<<<<<< .merge_file_a07136
+=======
 
+>>>>>>> .merge_file_a06292
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		playerCharacter->torso->applyLinearImpulseRight(25);
@@ -329,7 +385,7 @@ void GameJamScene::update(Step * _step){
 		//playerCharacter->setCurrentAnimation("run");
 		//playerCharacter->playAnimation = true;
 
-
+		if(playerCharacter->reactiveFeet){
 		b2ContactEdge * stuff = playerCharacter->leftLowerLeg->body->GetContactList();
 		if(stuff != nullptr && stuff->contact->IsTouching()){
 			int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
@@ -356,6 +412,13 @@ void GameJamScene::update(Step * _step){
 				}
 			}
 		}
+<<<<<<< .merge_file_a07136
+=======
+		}
+
+
+		
+>>>>>>> .merge_file_a06292
 	}
 
 	// move the ground and background with the player
@@ -377,13 +440,25 @@ void GameJamScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		Scene::toggleFullScreen();
 	}
+<<<<<<< .merge_file_a07136
 
 
 	//DIALOG
 	dialogEvent->update(_step);
+=======
+	if(keyboard->keyJustUp(GLFW_KEY_F1)){
+		debugDraw = !debugDraw;
+	}
+>>>>>>> .merge_file_a06292
 }
 
 void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene::render(_matrixStack, _renderStack);
+<<<<<<< .merge_file_a07136
 	//world->b2world->DrawDebugData();
+=======
+	if(debugDraw){
+		world->b2world->DrawDebugData();
+	}
+>>>>>>> .merge_file_a06292
 }

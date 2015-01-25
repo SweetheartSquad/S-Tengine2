@@ -9,10 +9,39 @@ class Shader;
 class Box2DWorld;
 class Box2DSprite;
 class CharacterComponent;
+class Texture;
+
+class ComponentTexture{
+public:
+	Texture * texture;
+	float width;
+	float height;
+
+	ComponentTexture(Texture * _texture, float _width, float _height);
+};
 
 class Character : public MeshEntity{
 public:
+
+	static void init();
+	static enum texture_packs{
+		kMICHAEL,
+		kMOUSTACHE,
+		kAFRO,
+		kIAN,
+		kPONYTAIL
+	};
+
+	static std::vector<ComponentTexture *> torsoTexPacks;
+	static std::vector<ComponentTexture *> headTexPacks;
+	static std::vector<ComponentTexture *> upperArmTexPacks;
+	static std::vector<ComponentTexture *> lowerArmTexPacks;
+	static std::vector<ComponentTexture *> handTexPacks;
+	static std::vector<ComponentTexture *> upperLegTexPacks;
+	static std::vector<ComponentTexture *> lowerLegTexPacks;
+
 	bool ai;
+	bool reactiveFeet;
 	static int16 gGroupIndex;
 	int16 groupIndex;
 	float componentScale;
