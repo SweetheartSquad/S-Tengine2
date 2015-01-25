@@ -39,11 +39,10 @@ void BitmapFont::setText(std::string _text){
 void BitmapFont::createQuads(){
 	layoutHeight = 0;
 	layoutWidth = 0;
-	kerning = 0.75f;
+	frames.clear();
 	mesh->vertices.clear();
 	mesh->indices.clear();
-	unload();
-	load();
+	mesh->dirty = true;
 	std::vector<int> chars;
 
 	for(unsigned long int i = 0; i < text.length(); ++i){
@@ -103,6 +102,29 @@ void BitmapFont::createQuads(){
 		count++;
 		layoutHeight += modSize * kerning;
 	}
+
+	/*meshQ->pushVert(Vertex(0.f, layoutHeight, 0.f));
+	meshQ->pushVert(Vertex(layoutWidth, layoutHeight, 0.f));
+	meshQ->pushVert(Vertex(layoutWidth, 0, 0.f));
+	meshQ->pushVert(Vertex(0.f, 0, 0.f));
+
+	int a = meshQ->vertices.size()-4;
+	int b = meshQ->vertices.size()-3;
+	int c = meshQ->vertices.size()-2;
+	int d = meshQ->vertices.size()-1;
+	meshQ->pushQuad(a, b, c, d);
+	meshQ->setNormal(a, 0.0, 0.0, 1.0);
+	meshQ->setNormal(b, 0.0, 0.0, 1.0);
+	meshQ->setNormal(c, 0.0, 0.0, 1.0);
+	meshQ->setNormal(d, 0.0, 0.0, 1.0);
+	meshQ->vertices.at(a).u  = 0.f;
+	meshQ->vertices.at(a).v  = 0.f;
+	meshQ->vertices.at(b).u  = 0.f;
+	meshQ->vertices.at(b).v  = 0.f;
+	meshQ->vertices.at(c).u  = 0.f;
+	meshQ->vertices.at(c).v  = 0.f;
+	meshQ->vertices.at(d).u  = 0.f;
+	meshQ->vertices.at(d).v  = 0.f;*/
 }
 
 void BitmapFont::pushMultipleFrames(std::vector<int> _frames, float _width, float _height, float _textureWidth){

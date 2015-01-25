@@ -36,9 +36,12 @@
 #include "Character2.h"
 #include "Character3.h"
 #include "Character4.h"
+#include "DialogEvent.h"
+#include "SayAction.h"
 
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
+	drawer(new Box2DDebugDraw(this)),
 	world(new Box2DWorld(b2Vec2(0, -60))),
 	playerCharacter(new Character1(world, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
@@ -48,7 +51,7 @@ GameJamScene::GameJamScene(Game * _game):
 	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/skybox - HD - edited.png", 4096, 4096, true, true))),
 	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/walls - HD - edited.png", 4096, 4096, true, true))),
 	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/foregroundhallway.png", 4096, 4096, true, true))),
-	drawer(new Box2DDebugDraw(this))
+	dialogEvent(new DialogEvent())
 {
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
@@ -245,9 +248,16 @@ GameJamScene::GameJamScene(Game * _game):
 	char4->translateComponents(glm::vec3(-50, 150, 0));
 	addChild(char4);
 
-	playerCharacter->text->setText("Howdy Ya'll, My Name's Baby Legs Hetman");
+	//playerCharacter->text->setText("Howdy Ya'll, My Name's Baby Legs Hetman");
 	playerCharacter->text->transform->translate(0, 3, -2);
 
+	dialogEvent->addAction(new SayAction(playerCharacter, "Howdy", 2));
+	dialogEvent->addAction(new SayAction(playerCharacter, "My", 2));
+	dialogEvent->addAction(new SayAction(playerCharacter, "Name", 2));
+	dialogEvent->addAction(new SayAction(playerCharacter, "Is", 2));
+	dialogEvent->addAction(new SayAction(playerCharacter, "Baby", 2));
+	dialogEvent->addAction(new SayAction(playerCharacter, "Hetman", 2));
+	dialogEvent->running = true;
 }
 
 GameJamScene::~GameJamScene(){
@@ -310,8 +320,6 @@ void GameJamScene::update(Step * _step){
 			}
 		}
 
-
-
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		playerCharacter->torso->applyLinearImpulseRight(25);
@@ -369,9 +377,13 @@ void GameJamScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		Scene::toggleFullScreen();
 	}
+
+
+	//DIALOG
+	dialogEvent->update(_step);
 }
 
 void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene::render(_matrixStack, _renderStack);
-	world->b2world->DrawDebugData();
+	//world->b2world->DrawDebugData();
 }

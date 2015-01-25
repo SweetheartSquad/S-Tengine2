@@ -366,6 +366,21 @@
     <ClCompile Include="..\src\Character4.cpp">
       <Filter>Source Files\TestGame\GameJam</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\TextChunk.cpp">
+      <Filter>Source Files\TestGame\GameJam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DialogEvent.cpp">
+      <Filter>Source Files\TestGame\GameJam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\DialogAction.cpp">
+      <Filter>Source Files\TestGame\GameJam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SayAction.cpp">
+      <Filter>Source Files\TestGame\GameJam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ListenAction.cpp">
+      <Filter>Source Files\TestGame\GameJam</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -663,6 +678,21 @@
       <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Character4.h">
+      <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\TextChunk.h">
+      <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\DialogEvent.h">
+      <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\DialogAction.h">
+      <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\SayAction.h">
+      <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ListenAction.h">
       <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
   </ItemGroup>

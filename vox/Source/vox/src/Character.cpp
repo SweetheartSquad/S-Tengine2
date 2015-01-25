@@ -63,7 +63,7 @@ Character::Character(Box2DWorld * _world, bool _ai) :
 	ratioY_hip_to_knee = 0.8f;
 
 	text->transform->translate(0, 0, 6);
-	text->kerning = -0.9f;
+	text->kerning = 0.75f;
 	text->setSizeMod(0.85f);
 
 	components.push_back(head);
