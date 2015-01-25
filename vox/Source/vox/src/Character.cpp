@@ -72,13 +72,16 @@ void Character::init(){
 	lowerLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailLL.png", 512, 512, true, true),		 110,	205));
 }
 
-Character::Character(Box2DWorld * _world, bool _ai) :
+Character::Character(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, bool _ai) :
+	
 	MeshEntity(nullptr, new Transform()),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	world(_world),
 	componentScale(0.0025f),
 	groupIndex(--gGroupIndex),
+	categoryBits(_categoryBits),
+	maskBits(_maskBits),
 	ai(_ai),
 	text(new BitmapFont(new Texture("../assets/arial.bmp", 1024, 1024, true, true), 32, 16, 16 )),
 	reactiveFeet(true),
@@ -93,8 +96,9 @@ Character::Character(Box2DWorld * _world, bool _ai) :
 	leftLowerLeg(nullptr),
 	rightUpperLeg(nullptr),
 	rightLowerLeg(nullptr)
-
 {
+	
+
 	ratioX_neck_to_torso = 0.0f;
 	ratioY_neck_to_torso = 0.8f;
 	ratioX_torso_to_neck = 0.0f;
@@ -217,6 +221,20 @@ void Character::attachJoints(){
 
 	torso->createFixture(groupIndex);
 	head->createFixture(groupIndex);
+
+	// sensor
+	b2PolygonShape tShape;
+	tShape.SetAsBox(torso->width*std::abs(transform->scaleVector.x)*torso->scale*4.f, std::abs(torso->height*transform->scaleVector.y)*torso->scale*5.f);
+
+	b2Fixture * s = torso->body->CreateFixture(&tShape, 1); // physical fixture
+	s->SetSensor(true);
+
+	b2Filter sf;
+	sf.categoryBits = categoryBits;
+	if(maskBits != (int16)-1){
+		sf.maskBits = maskBits;
+	}
+	s->SetFilterData(sf);
 	
 	float correctedTorsoWidth = torso->getCorrectedWidth();
 	float correctedTorsoHeight = torso->getCorrectedHeight();
