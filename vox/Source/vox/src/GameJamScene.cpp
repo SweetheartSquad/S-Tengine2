@@ -37,7 +37,7 @@ GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
 	world(new Box2DWorld(b2Vec2(0, -60))),
 	playerCharacter(new TestCharacter(world)),
-	ground(new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_staticBody)),
+	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	tex(new Texture("../assets/MichaelScale.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
@@ -65,11 +65,24 @@ GameJamScene::GameJamScene(Game * _game):
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	//soundManager->play("green_chair");
 
+	
 	ground->setShader(shader, true);
-
-	ground->setTranslationPhysical(0, -10, -1);
-	ground->transform->scale(500, 10, 2);
-	ground->mesh->pushTexture2D(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true));
+	ground->setTranslationPhysical(0, 0, 0);
+	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
+	ground->transform->scale(1000, 10, 1);
+	ground->mesh->pushTexture2D(new Texture("../assets/hallwaycarpet.png", 1024, 1024, true, true));
+	ground->mesh->setUV(3, 0, 0);
+	ground->mesh->setUV(2, 200.f, 0);
+	ground->mesh->setUV(1, 200.f, 2.f);
+	ground->mesh->setUV(0, 0, 2.f);
+	ground->mesh->dirty = true;
+	ground->mesh->uvEdgeMode = GL_REPEAT;
+	ground->body->SetTransform(b2Vec2(0, -10), 0);
+	
+	ground->mesh->vertices.at(0).z -= 10;
+	ground->mesh->vertices.at(1).z -= 10;
+	ground->mesh->vertices.at(2).z -= 10;
+	ground->mesh->vertices.at(3).z -= 10;
 
 
 	world->addToWorld(ground);
@@ -79,12 +92,12 @@ GameJamScene::GameJamScene(Game * _game):
 
 	backgroundScreen->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
 	backgroundScreen->transform->scale(25, 100, 100);
-	backgroundScreen->transform->translate(0, -10, -50);
+	backgroundScreen->transform->translate(0, 0, -50);
 	backgroundScreen->setShader(shader, true);
 	
 	midgroundScreen->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
-	midgroundScreen->transform->scale(25, 50, 50);
-	midgroundScreen->transform->translate(0, -10, -20);
+	midgroundScreen->transform->scale(25, 43, 43);
+	midgroundScreen->transform->translate(0, -6, -19);
 	midgroundScreen->setShader(shader, true);
 	
 	foregroundScreen->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
@@ -108,7 +121,7 @@ GameJamScene::GameJamScene(Game * _game):
 		addChild(s);
 	}
 
-	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 5, 0);
+	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 1, 0);
 	//camera = new MousePerspectiveCamera();
 	camera->farClip = 100000000.f;
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
@@ -149,7 +162,7 @@ void GameJamScene::update(Step * _step){
 	world->update(_step);
 	if(keyboard->keyDown(GLFW_KEY_W)){
 		if(!playerCharacter->torso->movingVertically(0.05)){
-			playerCharacter->torso->applyLinearImpulseUp(50);	
+			playerCharacter->torso->applyLinearImpulseUp(250);	
 		}
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){

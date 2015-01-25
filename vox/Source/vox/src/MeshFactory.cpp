@@ -100,10 +100,10 @@ MeshInterface* MeshFactory::getCubeMesh(GLenum _polygonalDrawMode, GLenum _drawM
 
 MeshInterface* MeshFactory::getPlaneMesh(GLenum _polygonalDrawMode, GLenum _drawMode){
 	QuadMesh * m = new QuadMesh(_polygonalDrawMode, _drawMode);
-	m->pushVert(Vertex(-1.f, 1.f, 1.f));
-	m->pushVert(Vertex(1.f, 1.f, 1.f));
-	m->pushVert(Vertex(1.f, -1.f, 1.f));
-	m->pushVert(Vertex(-1.f, -1.f, 1.f));
+	m->pushVert(Vertex(-1.f, 1.f, 0.f));
+	m->pushVert(Vertex(1.f, 1.f, 0.f));
+	m->pushVert(Vertex(1.f, -1.f, 0.f));
+	m->pushVert(Vertex(-1.f, -1.f, 0.f));
 	m->pushQuad(0, 1, 2, 3);
 	m->setNormal(0, 0.0, 0.0, 1.0);
 	m->setNormal(1, 0.0, 0.0, 1.0);

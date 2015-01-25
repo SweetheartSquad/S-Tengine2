@@ -21,18 +21,19 @@ TestCharacter::TestCharacter(Box2DWorld * _world):
 
 	Texture * uvTex = new Texture("../assets/uv-test.jpg", 1000, 1000, true, true);
 
-	torso	      = new CharacterComponent(componentScale, 150, 360, torsoTex, _world, b2_dynamicBody, false);
-	head		  = new CharacterComponent(componentScale, 160, 270, headTex, _world, b2_dynamicBody, false);
-	leftUpperArm  = new CharacterComponent(componentScale, 55, 205, upperArmTex,_world, b2_dynamicBody, false);
-	leftLowerArm  = new CharacterComponent(componentScale, 40, 145,lowerArmTex,_world, b2_dynamicBody, false);
-	leftHand	  = new CharacterComponent(componentScale, 55, 85,handTex,_world, b2_dynamicBody, false);
-	rightUpperArm = new CharacterComponent(componentScale, 55, 205,upperArmTex,_world, b2_dynamicBody, false);
-	rightLowerArm = new CharacterComponent(componentScale, 40, 145,lowerArmTex,_world, b2_dynamicBody, false);
-	rightHand	  = new CharacterComponent(componentScale, 55,85,handTex,_world, b2_dynamicBody, false);
-	upperLeftLeg  = new CharacterComponent(componentScale, 70, 215,upperLegTex,_world, b2_dynamicBody, false);
-	lowerLeftLeg  = new CharacterComponent(componentScale, 135, 285,lowerLegTex,_world, b2_dynamicBody, false);
-	upperRightLeg = new CharacterComponent(componentScale, 70,215,upperLegTex,_world, b2_dynamicBody, false);
-	lowerRightLeg = new CharacterComponent(componentScale, 135, 285,lowerLegTex,_world, b2_dynamicBody, false);
+	torso	      = new CharacterComponent(componentScale, 150,	360,	torsoTex, _world, b2_dynamicBody, false);
+	head		  = new CharacterComponent(componentScale, 160,	270,	headTex, _world, b2_dynamicBody, false);
+	leftUpperArm  = new CharacterComponent(componentScale, 55,	205,	upperArmTex,_world, b2_dynamicBody, false);
+	leftLowerArm  = new CharacterComponent(componentScale, 40,	145,	lowerArmTex,_world, b2_dynamicBody, false);
+	leftHand	  = new CharacterComponent(componentScale, 55,	85,		handTex,_world, b2_dynamicBody, false);
+	rightUpperArm = new CharacterComponent(componentScale, 55,	205,	upperArmTex,_world, b2_dynamicBody, false);
+	rightLowerArm = new CharacterComponent(componentScale, 40,	145,	lowerArmTex,_world, b2_dynamicBody, false);
+	rightHand	  = new CharacterComponent(componentScale, 55,	85,		handTex,_world, b2_dynamicBody, false);
+	upperLeftLeg  = new CharacterComponent(componentScale, 70,	215,	upperLegTex,_world, b2_dynamicBody, false);
+	lowerLeftLeg  = new CharacterComponent(componentScale, 135,	285,	lowerLegTex,_world, b2_dynamicBody, false);
+	upperRightLeg = new CharacterComponent(componentScale, 70,	215,	upperLegTex,_world, b2_dynamicBody, false);
+	lowerRightLeg = new CharacterComponent(componentScale, 135,	285,	lowerLegTex,_world, b2_dynamicBody, false);
+
 
 	upperLeftLeg->transform->scale(-1, 1, 1);
 	lowerLeftLeg->transform->scale(-1, 1, 1); 
@@ -40,18 +41,12 @@ TestCharacter::TestCharacter(Box2DWorld * _world):
 	leftLowerArm->transform->scale(-1, 1, 1);  
 	leftHand->transform->scale(-1, 1, 1);
  
-	     
-	/*leftUpperArm  ->mesh->pushTexture2D(upperArmTex);
-	leftLowerArm  ->mesh->pushTexture2D(lowerArmTex);
-	leftHand	  ->mesh->pushTexture2D(handTex);
-	rightUpperArm ->mesh->pushTexture2D(upperArmTex);
-	rightLowerArm ->mesh->pushTexture2D(lowerArmTex);
-	rightHand	  ->mesh->pushTexture2D(upperArmTex);
-	upperLeftLeg  ->mesh->pushTexture2D(upperLegTex);
-	lowerLeftLeg  ->mesh->pushTexture2D(lowerLegTex);
-	upperRightLeg ->mesh->pushTexture2D(upperLegTex);
-	lowerRightLeg ->mesh->pushTexture2D(lowerLegTex);*/
 	
+	
+	lowerLeftLeg->transform->scale(0.9f, 0.9f, 1.f);
+	lowerRightLeg->transform->scale(0.9f, 0.9f, 1.f);
+	upperLeftLeg->transform->scale(0.9f, 0.9f, 1.f);
+	upperRightLeg->transform->scale(0.9f, 0.9f, 1.f);
 
     attachJoints();
 }

@@ -13,7 +13,8 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	loaded(false),
 	dirty(true),
 	drawMode(drawMode),
-	polygonalDrawMode(polygonalDrawMode)
+	polygonalDrawMode(polygonalDrawMode),
+	uvEdgeMode(GL_CLAMP_TO_EDGE)
 {
 	load();
 	clean();
@@ -126,8 +127,8 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 					glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 					//Texture repeat
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, uvEdgeMode);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, uvEdgeMode);
 
 					// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
 					glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);

@@ -16,11 +16,21 @@ CharacterComponent::CharacterComponent(float _componentScale, float _width, floa
 	float fullH = _texture->height;
 }
 
+float CharacterComponent::getCorrectedHeight(){
+	return height*std::abs(transform->scaleVector.y)*scale*2.f;
+}
+float CharacterComponent::getCorrectedWidth(){
+	return width*std::abs(transform->scaleVector.x)*scale*2.f;
+}
+
 void CharacterComponent::createFixture(){
 	b2PolygonShape tShape;
 	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f);
 	body->CreateFixture(&tShape, 1);
-	
+	b2Filter t;
+	t.groupIndex = -8;
+	body->GetFixtureList()->SetFilterData(t);
+
 	b2Vec2 v1 = tShape.GetVertex(0);
 	b2Vec2 v2 = tShape.GetVertex(1);
 	b2Vec2 v3 = tShape.GetVertex(2);

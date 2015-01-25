@@ -14,6 +14,30 @@ Character::Character(Box2DWorld * _world) :
 	world(_world),
 	componentScale(0.0025f)
 {
+	ratioX_neck_to_torso = 0.0f;
+	ratioY_neck_to_torso = 0.8f;
+	ratioX_torso_to_neck = 0.0f;
+	ratioY_torso_to_neck = 0.8f;
+	
+	ratioX_shoulder_to_torso = 0.f;
+	ratioY_shoulder_to_torso = 1.f;
+	ratioX_torso_to_shoulder = 0.8f;
+	ratioY_torso_to_shoulder = 0.5f;
+	
+	ratioX_hip_to_torso = 0.f;
+	ratioY_hip_to_torso = 1.f;
+	ratioX_torso_to_hip = 0.55f;
+	ratioY_torso_to_hip = 0.7f;
+	
+	ratioX_knee_to_hip = 0.5f;
+	ratioY_knee_to_hip = 0.8f;
+	ratioX_hip_to_knee = 0.75f;
+	ratioY_hip_to_knee = 0.8f;
+	
+	ratioX_elbow_to_shoulder;
+	ratioY_elbow_to_shoulder;
+	ratioX_shoulder_to_elbow;
+	ratioY_shoulder_to_elbow;
 }
 
 Character::~Character(){
@@ -32,7 +56,7 @@ void Character::update(Step * _step){
 	neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5));
 
 	float bodAngle = torso->body->GetAngle();
-	torso->body->SetAngularVelocity(-bodAngle*2);
+	torso->body->SetAngularVelocity(-bodAngle*5);
 	
 	/*if(angle < neck->GetLowerLimit()/2 || angle > neck->GetUpperLimit()/2){
 		neck->SetMotorSpeed(angle < 0 ? 0.1 : -0.1);
@@ -52,116 +76,115 @@ void Character::attachJoints(){
 
 	torso->createFixture();
 	head->createFixture();
-	/*
-	b2PolygonShape hShape;
-	hShape.SetAsBox(1.6, 2.7);
-	head->body->CreateFixture(&hShape, 1);
-	*/
-	//world->addToWorld(head);
-	//world->addToWorld(torso);
 
+	
+	float correctedTorsoWidth = torso->getCorrectedWidth();
+	float correctedTorsoHeight = torso->getCorrectedHeight();
+
+	// neck
 	b2RevoluteJointDef jth;
-	//jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
 	jth.bodyA = torso->body;
 	jth.bodyB = head->body;
-	//jth.localAnchorA.Set(torso->width/2.f*torso->transform->scaleVector.x*componentScale, torso->height*torso->transform->scaleVector.y*componentScale);
-	//jth.localAnchorB.Set(head->width/2.f*head->transform->scaleVector.x*componentScale, -head->height*head->transform->scaleVector.y*componentScale);
-	jth.localAnchorA.Set(0, 0.8f * torso->height*torso->transform->scaleVector.y*componentScale*2.f);
-	jth.localAnchorB.Set(0, 0.8f * -head->height*head->transform->scaleVector.y*componentScale*2.f);
+	jth.localAnchorA.Set(ratioX_torso_to_neck * correctedTorsoWidth, ratioY_torso_to_neck * correctedTorsoHeight);
+	jth.localAnchorB.Set(ratioX_neck_to_torso * head->getCorrectedWidth(), ratioY_neck_to_torso * -head->getCorrectedHeight());
 	jth.collideConnected = false;
 	jth.enableLimit = true;
 	jth.enableMotor = true;
-	jth.maxMotorTorque = 0;//head->body->GetMass()*1000;
-	jth.motorSpeed = 0;//
+	jth.maxMotorTorque = 0;
+	jth.motorSpeed = 0;
 	jth.referenceAngle = 0;
 	jth.lowerAngle = -glm::radians(45.f);
 	jth.upperAngle = glm::radians(45.f);
 	world->b2world->CreateJoint(&jth);
 
-
+	// left shoulder
 	leftUpperArm->createFixture();
-
 	b2RevoluteJointDef latj;
-	//jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
 	latj.bodyA = torso->body;
 	latj.bodyB = leftUpperArm->body;
-	latj.localAnchorA.Set(-(torso->width * std::abs(torso->transform->scaleVector.x) * componentScale * 2.f), 0.8f * torso->height*torso->transform->scaleVector.y*componentScale*2.f);
-	latj.localAnchorB.Set(0,  leftUpperArm->height*leftUpperArm->transform->scaleVector.y*componentScale*2.f);
+	latj.localAnchorA.Set(-ratioX_torso_to_shoulder * correctedTorsoWidth, ratioY_torso_to_shoulder * correctedTorsoHeight);
+	latj.localAnchorB.Set(ratioX_shoulder_to_torso * leftUpperArm->getCorrectedWidth(), ratioY_shoulder_to_torso * leftUpperArm->getCorrectedHeight());
 	latj.collideConnected = false;
+	latj.referenceAngle = glm::radians(-90.f);
 	world->b2world->CreateJoint(&latj);
 	
-	rightUpperArm->createFixture();
 
+	// right shoulder
+	rightUpperArm->createFixture();
 	b2RevoluteJointDef ratj;
-	//jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
 	ratj.bodyA = torso->body;
 	ratj.bodyB = rightUpperArm->body;
-	ratj.localAnchorA.Set(torso->width * std::abs(torso->transform->scaleVector.x) * componentScale * 2.f, 0.8f * torso->height*torso->transform->scaleVector.y*componentScale*2.f);
-	ratj.localAnchorB.Set(0, rightUpperArm->height*rightUpperArm->transform->scaleVector.y*componentScale*2.f);
+	ratj.localAnchorA.Set(ratioX_torso_to_shoulder * correctedTorsoWidth, ratioY_torso_to_shoulder * correctedTorsoHeight);
+	ratj.localAnchorB.Set(ratioX_shoulder_to_torso * leftUpperArm->getCorrectedWidth(), ratioY_shoulder_to_torso * leftUpperArm->getCorrectedHeight());
 	ratj.collideConnected = false;
+	ratj.referenceAngle = glm::radians(90.f);
 	world->b2world->CreateJoint(&ratj);
 
+	// left elbow
+	/*rightUpperArm->createFixture();
+	b2RevoluteJointDef letj;
+	ratj.bodyA = torso->body;
+	ratj.bodyB = rightUpperArm->body;
+	ratj.localAnchorA.Set(ratioX_torso_to_shoulder * correctedTorsoWidth, ratioY_torso_to_shoulder * correctedTorsoHeight);
+	ratj.localAnchorB.Set(ratioX_shoulder_to_torso * leftUpperArm->getCorrectedWidth(), ratioY_shoulder_to_torso * leftUpperArm->getCorrectedHeight());
+	ratj.collideConnected = false;
+	ratj.referenceAngle = glm::radians(90.f);
+	world->b2world->CreateJoint(&ratj);*/
 
+
+	// left hip
 	upperLeftLeg->createFixture();
-
 	b2RevoluteJointDef lltj;
-	//jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
 	lltj.bodyA = torso->body;
 	lltj.bodyB = upperLeftLeg->body;
-	lltj.localAnchorA.Set(-(torso->width * std::abs(torso->transform->scaleVector.x) * componentScale * 2.f), -(0.8f * torso->height*torso->transform->scaleVector.y*componentScale*2.f));
-	lltj.localAnchorB.Set(0,  upperLeftLeg->height*upperLeftLeg->transform->scaleVector.y*componentScale*2.f);
+	lltj.localAnchorA.Set(-ratioX_torso_to_hip * correctedTorsoWidth, -ratioY_torso_to_hip * correctedTorsoHeight);
+	lltj.localAnchorB.Set(ratioX_hip_to_torso * upperLeftLeg->getCorrectedWidth(),  ratioY_hip_to_torso * upperLeftLeg->getCorrectedHeight());
 	lltj.collideConnected = false;
 	world->b2world->CreateJoint(&lltj);
 	
-
+	// right hip
 	upperRightLeg->createFixture();
-
 	b2RevoluteJointDef lrtj;
-	//jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
 	lrtj.bodyA = torso->body;
 	lrtj.bodyB = upperRightLeg->body;
-	lrtj.localAnchorA.Set(torso->width * std::abs(torso->transform->scaleVector.x) * componentScale * 2.f, -(0.8f * torso->height*torso->transform->scaleVector.y*componentScale*2.f));
-	lrtj.localAnchorB.Set(0, upperRightLeg->height*upperRightLeg->transform->scaleVector.y*componentScale*2.f);
+	lrtj.localAnchorA.Set(ratioX_torso_to_hip * correctedTorsoWidth, -ratioY_torso_to_hip * correctedTorsoHeight);
+	lrtj.localAnchorB.Set(ratioX_hip_to_torso * upperLeftLeg->getCorrectedWidth(), ratioY_hip_to_torso * upperRightLeg->getCorrectedHeight());
 	lrtj.collideConnected = false;
 	world->b2world->CreateJoint(&lrtj);
 
-
+	// left knee
 	lowerLeftLeg->createFixture();
-
 	b2RevoluteJointDef llltj;
-	//jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
 	llltj.bodyA = upperLeftLeg->body;
 	llltj.bodyB = lowerLeftLeg->body;
-	llltj.localAnchorA.Set(-(upperLeftLeg->width * std::abs(upperLeftLeg->transform->scaleVector.x) * componentScale * 2.f), -(0.8f * upperLeftLeg->height*upperLeftLeg->transform->scaleVector.y*componentScale*2.f));
-	llltj.localAnchorB.Set(0,  lowerLeftLeg->height*lowerLeftLeg->transform->scaleVector.y*componentScale*2.f);
+	llltj.localAnchorA.Set(-ratioX_hip_to_knee * upperLeftLeg->getCorrectedWidth(), -ratioY_hip_to_knee * upperLeftLeg->getCorrectedHeight());
+	llltj.localAnchorB.Set(ratioX_knee_to_hip * lowerLeftLeg->getCorrectedWidth(), ratioY_knee_to_hip * lowerLeftLeg->getCorrectedHeight());
 	llltj.collideConnected = false;
 	world->b2world->CreateJoint(&llltj);
 	
-
+	// right knee
 	lowerRightLeg->createFixture();
-
 	b2RevoluteJointDef lrltj;
-	//jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
 	lrltj.bodyA = upperRightLeg->body;
 	lrltj.bodyB = lowerRightLeg->body;
-	lrltj.localAnchorA.Set(-(upperRightLeg->width * std::abs(upperRightLeg->transform->scaleVector.x) * componentScale * 2.f), -(0.8f * upperRightLeg->height*upperRightLeg->transform->scaleVector.y*componentScale*2.f));
-	lrltj.localAnchorB.Set(0,  lowerRightLeg->height*lowerRightLeg->transform->scaleVector.y*componentScale*2.f);
+	lrltj.localAnchorA.Set(-ratioX_hip_to_knee * upperRightLeg->getCorrectedWidth(), -ratioY_hip_to_knee * upperRightLeg->getCorrectedHeight());
+	lrltj.localAnchorB.Set(-ratioX_knee_to_hip * lowerRightLeg->getCorrectedWidth(), ratioY_knee_to_hip * lowerRightLeg->getCorrectedHeight());
 	lrltj.collideConnected = false;
 	world->b2world->CreateJoint(&lrltj);
 
 	
-	torso		   ->setTranslationPhysical(0, 0, 1);
-	head		   ->setTranslationPhysical(0, 0, -1);
-	leftUpperArm   ->setTranslationPhysical(0, 0, -0.01);
-	leftLowerArm   ->setTranslationPhysical(0, 0, -0.02);
-	leftHand	   ->setTranslationPhysical(0, 0, -0.03);
-	rightUpperArm  ->setTranslationPhysical(0, 0, 0.01);
-	rightLowerArm  ->setTranslationPhysical(0, 0, 0.02);
-	rightHand	   ->setTranslationPhysical(0, 0, 0.03);
-	upperLeftLeg   ->setTranslationPhysical(0, 0, -0.01);
-	lowerLeftLeg   ->setTranslationPhysical(0, 0, -0.02);
-	upperRightLeg  ->setTranslationPhysical(0, 0, 0.01);
-	lowerRightLeg  ->setTranslationPhysical(0, 0, 0.02);
+	torso		   ->setTranslationPhysical(0.f, 0.f, 1.f);
+	head		   ->setTranslationPhysical(0.f, 0.f, -1.f);
+	leftUpperArm   ->setTranslationPhysical(0.f, 0.f, -0.01f);
+	leftLowerArm   ->setTranslationPhysical(0.f, 0.f, -0.02f);
+	leftHand	   ->setTranslationPhysical(0.f, 0.f, -0.03f);
+	rightUpperArm  ->setTranslationPhysical(0.f, 0.f, 0.01f);
+	rightLowerArm  ->setTranslationPhysical(0.f, 0.f, 0.02f);
+	rightHand	   ->setTranslationPhysical(0.f, 0.f, 0.03f);
+	upperLeftLeg   ->setTranslationPhysical(0.f, 0.f, -0.01f);
+	lowerLeftLeg   ->setTranslationPhysical(0.f, 0.f, -0.02f);
+	upperRightLeg  ->setTranslationPhysical(0.f, 0.f, 0.01f);
+	lowerRightLeg  ->setTranslationPhysical(0.f, 0.f, 0.02f);
 }
 
 void Character::unload(){

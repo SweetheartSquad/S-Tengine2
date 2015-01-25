@@ -36,6 +36,14 @@ public:
 	std::vector<Material *> materials;
 
 public:
+	/**
+	GL_REPEAT
+	GL_MIRRORED_REPEAT
+	GL_CLAMP_TO_EDGE
+	GL_CLAMP_TO_BORDER
+	*/
+	GLenum uvEdgeMode;
+
 	/** ID of the vertex array object */
 	GLuint vaoId;
 	/** ID of the vertex buffer object */

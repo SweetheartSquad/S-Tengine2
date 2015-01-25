@@ -11,6 +11,35 @@ class CharacterComponent;
 class Character : public MeshEntity{
 public:
 	float componentScale;
+	
+	float ratioX_neck_to_torso;
+	float ratioY_neck_to_torso;
+	float ratioX_torso_to_neck;
+	float ratioY_torso_to_neck;
+
+	float ratioX_shoulder_to_torso;
+	float ratioY_shoulder_to_torso;
+	float ratioX_torso_to_shoulder;
+	float ratioY_torso_to_shoulder;
+	
+	float ratioX_hip_to_torso;
+	float ratioY_hip_to_torso;
+	float ratioX_torso_to_hip;
+	float ratioY_torso_to_hip;
+	
+	float ratioX_knee_to_hip;
+	float ratioY_knee_to_hip;
+	float ratioX_hip_to_knee;
+	float ratioY_hip_to_knee;
+	
+	float ratioX_elbow_to_shoulder;
+	float ratioY_elbow_to_shoulder;
+	float ratioX_shoulder_to_elbow;
+	float ratioY_shoulder_to_elbow;
+
+	float hipWidth;
+
+
 	Box2DWorld * world;
 
 	CharacterComponent * torso;
