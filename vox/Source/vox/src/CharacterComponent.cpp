@@ -25,27 +25,17 @@ float CharacterComponent::getCorrectedWidth(){
 	return width*std::abs(transform->scaleVector.x)*scale*2.f;
 }
 
-void CharacterComponent::createFixture(int16 _groupIndex, int16 _categoryBits, int16 _maskBits){
+void CharacterComponent::createFixture(int16 _groupIndex){
 	b2PolygonShape tShape;
 	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f);
-	
-	b2Fixture * f = body->CreateFixture(&tShape, 1); // physical fixture
-	b2Fixture *s = body->CreateFixture(&tShape, 1); // sensor fixtue
-	s->SetSensor(true);
 
-	// physical
+	b2Fixture * f = body->CreateFixture(&tShape, 1); // physical fixture
+
+	// physical fixture
 	b2Filter tf;
 	tf.groupIndex = _groupIndex;
 	f->SetFilterData(tf);
 
-	// sensor?
-	b2Filter ts;
-	ts.groupIndex = _groupIndex;
-	ts.categoryBits = _categoryBits;
-	if(_maskBits != (int16)-1){
-		ts.maskBits = _maskBits;
-	}
-	s->SetFilterData(ts);
 
 	b2Vec2 v1 = tShape.GetVertex(0);
 	b2Vec2 v2 = tShape.GetVertex(1);
@@ -80,27 +70,4 @@ void CharacterComponent::createFixture(int16 _groupIndex, int16 _categoryBits, i
 	mesh->vertices.at(1).v = height/mag;
 	mesh->vertices.at(0).u = 0;
 	mesh->vertices.at(0).v = height/mag;
-}
-
-bool checkCollision(b2Contact* contact){
-    b2Fixture* fixtureA = contact->GetFixtureA();
-    b2Fixture* fixtureB = contact->GetFixtureB();
-	/*
-    //make sure only one of the fixtures was a sensor
-    bool sensorA = fixtureA->IsSensor();
-    bool sensorB = fixtureB->IsSensor();
-    if ( ! (sensorA ^ sensorB) )
-        return false;
-	*/
-	int16 mBA = fixtureA->GetFilterData().maskBits;
-	int16 mBB = fixtureB->GetFilterData().maskBits;
-  
-    if(mBA == 0x0001 || mBB == 0x0001){
-		// Colliding with Boundary, collide!
-		return true;
-	}else {
-		// 
-		return false;
-	}
-      
 }

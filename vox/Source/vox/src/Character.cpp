@@ -114,9 +114,22 @@ void Character::attachJoints(){
 		dynamic_cast<Box2DSprite *>(s)->transform->scale(5,5,1);
 	}*/
 
-	torso->createFixture(groupIndex, categoryBits, maskBits);
-	head->createFixture(groupIndex, categoryBits, maskBits);
+	torso->createFixture(groupIndex);
+	head->createFixture(groupIndex);
 
+	// sensor
+	b2PolygonShape tShape;
+	tShape.SetAsBox(torso->width*std::abs(transform->scaleVector.x)*torso->scale*4.f, std::abs(torso->height*transform->scaleVector.y)*torso->scale*5.f);
+
+	b2Fixture * s = torso->body->CreateFixture(&tShape, 1); // physical fixture
+	s->SetSensor(true);
+
+	b2Filter sf;
+	sf.categoryBits = categoryBits;
+	if(maskBits != (int16)-1){
+		sf.maskBits = maskBits;
+	}
+	s->SetFilterData(sf);
 	
 	float correctedTorsoWidth = torso->getCorrectedWidth();
 	float correctedTorsoHeight = torso->getCorrectedHeight();
@@ -138,7 +151,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&jth);
 
 	// left shoulder
-	leftUpperArm->createFixture(groupIndex, categoryBits, maskBits);
+	leftUpperArm->createFixture(groupIndex);
 	b2RevoluteJointDef latj;
 	latj.bodyA = torso->body;
 	latj.bodyB = leftUpperArm->body;
@@ -153,7 +166,7 @@ void Character::attachJoints(){
 	
 
 	// right shoulder
-	rightUpperArm->createFixture(groupIndex, categoryBits, maskBits);
+	rightUpperArm->createFixture(groupIndex);
 	b2RevoluteJointDef ratj;
 	ratj.bodyA = torso->body;
 	ratj.bodyB = rightUpperArm->body;
@@ -168,7 +181,7 @@ void Character::attachJoints(){
 	
 	
 	// left elbow
-	leftLowerArm->createFixture(groupIndex, categoryBits, maskBits);
+	leftLowerArm->createFixture(groupIndex);
 	b2RevoluteJointDef lelsj;
 	lelsj.bodyA = leftUpperArm->body;
 	lelsj.bodyB = leftLowerArm->body;
@@ -182,7 +195,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&lelsj);
 
 	// right elbow
-	rightLowerArm->createFixture(groupIndex, categoryBits, maskBits);
+	rightLowerArm->createFixture(groupIndex);
 	b2RevoluteJointDef rersj;
 	rersj.bodyA = rightUpperArm->body;
 	rersj.bodyB = rightLowerArm->body;
@@ -196,7 +209,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&rersj);
 
 	// left hand
-	leftHand->createFixture(groupIndex, categoryBits, maskBits);
+	leftHand->createFixture(groupIndex);
 	b2RevoluteJointDef lhlej;
 	lhlej.bodyA = leftLowerArm->body;
 	lhlej.bodyB = leftHand->body;
@@ -210,7 +223,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&lhlej);
 
 	// right hand
-	rightHand->createFixture(groupIndex, categoryBits, maskBits);
+	rightHand->createFixture(groupIndex);
 	b2RevoluteJointDef rhrej;
 	rhrej.bodyA = rightLowerArm->body;
 	rhrej.bodyB = rightHand->body;
@@ -224,7 +237,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&rhrej);
 
 	// left hip
-	leftUpperLeg->createFixture(groupIndex, categoryBits, maskBits);
+	leftUpperLeg->createFixture(groupIndex);
 	b2RevoluteJointDef lltj;
 	lltj.bodyA = torso->body;
 	lltj.bodyB = leftUpperLeg->body;
@@ -237,7 +250,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&lltj);
 	
 	// right hip
-	rightUpperLeg->createFixture(groupIndex, categoryBits, maskBits);
+	rightUpperLeg->createFixture(groupIndex);
 	b2RevoluteJointDef lrtj;
 	lrtj.bodyA = torso->body;
 	lrtj.bodyB = rightUpperLeg->body;
@@ -250,7 +263,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&lrtj);
 
 	// left knee
-	leftLowerLeg->createFixture(groupIndex, categoryBits, maskBits);
+	leftLowerLeg->createFixture(groupIndex);
 	b2RevoluteJointDef llltj;
 	llltj.bodyA = leftUpperLeg->body;
 	llltj.bodyB = leftLowerLeg->body;
@@ -263,7 +276,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&llltj);
 	
 	// right knee
-	rightLowerLeg->createFixture(groupIndex, categoryBits, maskBits);
+	rightLowerLeg->createFixture(groupIndex);
 	b2RevoluteJointDef lrltj;
 	lrltj.bodyA = rightUpperLeg->body;
 	lrltj.bodyB = rightLowerLeg->body;

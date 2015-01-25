@@ -1,5 +1,5 @@
 #include "GameJamContactListener.h"
-
+#include "GameJamScene.h"
 /*bool GameJamContactListener:: ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB){
 	if(fixtureA->GetFilterData().maskBits == 1 || fixtureB->GetFilterData().maskBits == 1){
 		// collide
@@ -10,37 +10,39 @@
 
 void GameJamContactListener::BeginContact(b2Contact* contact){
 	
-
 	if(contact->GetFixtureA()->IsSensor() || contact->GetFixtureB()->IsSensor()){
-		int16 mA = contact->GetFixtureA()->GetFilterData().maskBits;
-		int16 mB = contact->GetFixtureB()->GetFilterData().maskBits;
-		
-		int i = 0;
+		b2Filter fA = contact->GetFixtureA()->GetFilterData();
+		b2Filter fB = contact->GetFixtureB()->GetFilterData();
 
-		if(mA == 2 && mB == 2){
-			// Both characters
-		}else if((mA == 2 && mB == 4) || (mA == 4 && mB == 2)){
-			// character and prop
-		}else{
+		if(fA.categoryBits == GameJamScene::PLAYER || fB.categoryBits == GameJamScene::PLAYER){
 
+			if(fA.categoryBits == GameJamScene::NPC || fB.categoryBits == GameJamScene::NPC){
+				// Player character and character
+				int i = 0;
+			}else if(fA.categoryBits == GameJamScene::PROP || fB.categoryBits == GameJamScene::PROP){
+				// player character and prop
+				int i = 1;
+			}else{
+
+			}
 		}
 	}else{
 		// do nothing
 	}
-
-	
 	
 }
 
 void GameJamContactListener::EndContact(b2Contact* contact){
 	if(contact->GetFixtureA()->IsSensor() || contact->GetFixtureB()->IsSensor()){
-		int16 mA = contact->GetFixtureA()->GetFilterData().maskBits;
-		int16 mB = contact->GetFixtureB()->GetFilterData().maskBits;
-		
-		if(mA == 2 && mB == 2){
-			// Both characters
-		}else if((mA == 2 && mB == 4) || (mA == 4 && mB == 2)){
-			// character and prop
+		b2Filter fA = contact->GetFixtureA()->GetFilterData();
+		b2Filter fB = contact->GetFixtureB()->GetFilterData();
+
+		if((fA.maskBits == 2 + 4 && fB.maskBits == 4) || (fA.maskBits = 4 && fB.maskBits == 2 + 4)){
+			// Player character and character
+			int i = 0;
+		}else if((fA.maskBits == 2 + 4 && fB.maskBits == 4) || (fA.maskBits == 4 && fB.maskBits == 2 + 4)){
+			// player character and prop
+			int i = 1;
 		}else{
 
 		}

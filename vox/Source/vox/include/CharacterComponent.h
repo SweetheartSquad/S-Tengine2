@@ -13,5 +13,5 @@ public:
 	float getCorrectedHeight();
 	float getCorrectedWidth();
 
-	void createFixture(int16 _groupIndex, int16 _categoryBits, int16 maskBits);
+	void createFixture(int16 _groupIndex);
 };
