@@ -24,20 +24,25 @@ Character::Character(Box2DWorld * _world) :
 	ratioX_torso_to_shoulder = 0.8f;
 	ratioY_torso_to_shoulder = 0.5f;
 	
+	ratioX_elbow_to_shoulder = 0.f;
+	ratioY_elbow_to_shoulder = 0.7f;
+	ratioX_shoulder_to_elbow = 0.f;
+	ratioY_shoulder_to_elbow = 0.7f;
+	
+	ratioX_wrist_to_elbow = 0.f;
+	ratioY_wrist_to_elbow = 0.8f;
+	ratioX_elbow_to_wrist = 0.f;
+	ratioY_elbow_to_wrist = 0.8f;
+	
 	ratioX_hip_to_torso = 0.f;
 	ratioY_hip_to_torso = 1.f;
 	ratioX_torso_to_hip = 0.55f;
 	ratioY_torso_to_hip = 0.7f;
 	
-	ratioX_knee_to_hip = 0.5f;
+	ratioX_knee_to_hip = 1.0f;
 	ratioY_knee_to_hip = 0.8f;
-	ratioX_hip_to_knee = 0.75f;
+	ratioX_hip_to_knee = 1.0f;
 	ratioY_hip_to_knee = 0.8f;
-	
-	ratioX_elbow_to_shoulder;
-	ratioY_elbow_to_shoulder;
-	ratioX_shoulder_to_elbow;
-	ratioY_shoulder_to_elbow;
 }
 
 Character::~Character(){
@@ -56,7 +61,7 @@ void Character::update(Step * _step){
 	neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5));
 
 	float bodAngle = torso->body->GetAngle();
-	torso->body->SetAngularVelocity(-bodAngle*5);
+	torso->body->SetAngularVelocity(-bodAngle*6);
 	
 	/*if(angle < neck->GetLowerLimit()/2 || angle > neck->GetUpperLimit()/2){
 		neck->SetMotorSpeed(angle < 0 ? 0.1 : -0.1);
@@ -105,7 +110,10 @@ void Character::attachJoints(){
 	latj.localAnchorA.Set(-ratioX_torso_to_shoulder * correctedTorsoWidth, ratioY_torso_to_shoulder * correctedTorsoHeight);
 	latj.localAnchorB.Set(ratioX_shoulder_to_torso * leftUpperArm->getCorrectedWidth(), ratioY_shoulder_to_torso * leftUpperArm->getCorrectedHeight());
 	latj.collideConnected = false;
-	latj.referenceAngle = glm::radians(-90.f);
+	latj.enableLimit = true;
+	latj.referenceAngle = glm::radians(0.f);
+	latj.lowerAngle = glm::radians(-120.f);
+	latj.upperAngle = glm::radians(10.f);
 	world->b2world->CreateJoint(&latj);
 	
 
@@ -117,74 +125,134 @@ void Character::attachJoints(){
 	ratj.localAnchorA.Set(ratioX_torso_to_shoulder * correctedTorsoWidth, ratioY_torso_to_shoulder * correctedTorsoHeight);
 	ratj.localAnchorB.Set(ratioX_shoulder_to_torso * leftUpperArm->getCorrectedWidth(), ratioY_shoulder_to_torso * leftUpperArm->getCorrectedHeight());
 	ratj.collideConnected = false;
-	ratj.referenceAngle = glm::radians(90.f);
+	ratj.enableLimit = true;
+	ratj.referenceAngle = glm::radians(0.f);
+	ratj.lowerAngle = glm::radians(-10.f);
+	ratj.upperAngle = glm::radians(120.f);
 	world->b2world->CreateJoint(&ratj);
-
+	
+	
 	// left elbow
-	/*rightUpperArm->createFixture();
-	b2RevoluteJointDef letj;
-	ratj.bodyA = torso->body;
-	ratj.bodyB = rightUpperArm->body;
-	ratj.localAnchorA.Set(ratioX_torso_to_shoulder * correctedTorsoWidth, ratioY_torso_to_shoulder * correctedTorsoHeight);
-	ratj.localAnchorB.Set(ratioX_shoulder_to_torso * leftUpperArm->getCorrectedWidth(), ratioY_shoulder_to_torso * leftUpperArm->getCorrectedHeight());
-	ratj.collideConnected = false;
-	ratj.referenceAngle = glm::radians(90.f);
-	world->b2world->CreateJoint(&ratj);*/
+	leftLowerArm->createFixture();
+	b2RevoluteJointDef lelsj;
+	lelsj.bodyA = leftUpperArm->body;
+	lelsj.bodyB = leftLowerArm->body;
+	lelsj.localAnchorA.Set(-ratioX_shoulder_to_elbow * leftUpperArm->getCorrectedWidth(), -ratioY_shoulder_to_elbow * leftUpperArm->getCorrectedHeight());
+	lelsj.localAnchorB.Set(-ratioX_elbow_to_shoulder * leftLowerArm->getCorrectedWidth(), ratioY_elbow_to_shoulder * leftLowerArm->getCorrectedHeight());
+	lelsj.collideConnected = false;
+	lelsj.enableLimit = true;
+	lelsj.referenceAngle = glm::radians(0.f);
+	lelsj.lowerAngle = glm::radians(-10.f);
+	lelsj.upperAngle = glm::radians(90.f);
+	world->b2world->CreateJoint(&lelsj);
 
+	// right elbow
+	rightLowerArm->createFixture();
+	b2RevoluteJointDef rersj;
+	rersj.bodyA = rightUpperArm->body;
+	rersj.bodyB = rightLowerArm->body;
+	rersj.localAnchorA.Set(-ratioX_shoulder_to_elbow * rightUpperArm->getCorrectedWidth(), -ratioY_shoulder_to_elbow * rightUpperArm->getCorrectedHeight());
+	rersj.localAnchorB.Set(ratioX_elbow_to_shoulder * rightLowerArm->getCorrectedWidth(), ratioY_elbow_to_shoulder * rightLowerArm->getCorrectedHeight());
+	rersj.collideConnected = false;
+	rersj.enableLimit = true;
+	rersj.referenceAngle = glm::radians(0.f);
+	rersj.lowerAngle = glm::radians(-90.f);
+	rersj.upperAngle = glm::radians(10.f);
+	world->b2world->CreateJoint(&rersj);
+
+	// left hand
+	leftHand->createFixture();
+	b2RevoluteJointDef lhlej;
+	lhlej.bodyA = leftLowerArm->body;
+	lhlej.bodyB = leftHand->body;
+	lhlej.localAnchorA.Set(-ratioX_elbow_to_wrist * leftLowerArm->getCorrectedWidth(), -ratioY_elbow_to_wrist * leftLowerArm->getCorrectedHeight());
+	lhlej.localAnchorB.Set(-ratioX_wrist_to_elbow * leftHand->getCorrectedWidth(), ratioY_wrist_to_elbow * leftHand->getCorrectedHeight());
+	lhlej.collideConnected = false;
+	lhlej.enableLimit = true;
+	lhlej.referenceAngle = glm::radians(0.f);
+	lhlej.lowerAngle = glm::radians(-20.f);
+	lhlej.upperAngle = glm::radians(20.f);
+	world->b2world->CreateJoint(&lhlej);
+
+	// right hand
+	rightHand->createFixture();
+	b2RevoluteJointDef rhrej;
+	rhrej.bodyA = rightLowerArm->body;
+	rhrej.bodyB = rightHand->body;
+	rhrej.localAnchorA.Set(-ratioX_elbow_to_wrist * rightLowerArm->getCorrectedWidth(), -ratioY_elbow_to_wrist * rightLowerArm->getCorrectedHeight());
+	rhrej.localAnchorB.Set(ratioX_wrist_to_elbow * rightHand->getCorrectedWidth(), ratioY_wrist_to_elbow * rightHand->getCorrectedHeight());
+	rhrej.collideConnected = false;
+	rhrej.enableLimit = true;
+	rhrej.referenceAngle = glm::radians(0.f);
+	rhrej.lowerAngle = glm::radians(-20.f);
+	rhrej.upperAngle = glm::radians(20.f);
+	world->b2world->CreateJoint(&rhrej);
 
 	// left hip
-	upperLeftLeg->createFixture();
+	leftUpperLeg->createFixture();
 	b2RevoluteJointDef lltj;
 	lltj.bodyA = torso->body;
-	lltj.bodyB = upperLeftLeg->body;
+	lltj.bodyB = leftUpperLeg->body;
 	lltj.localAnchorA.Set(-ratioX_torso_to_hip * correctedTorsoWidth, -ratioY_torso_to_hip * correctedTorsoHeight);
-	lltj.localAnchorB.Set(ratioX_hip_to_torso * upperLeftLeg->getCorrectedWidth(),  ratioY_hip_to_torso * upperLeftLeg->getCorrectedHeight());
+	lltj.localAnchorB.Set(ratioX_hip_to_torso * leftUpperLeg->getCorrectedWidth(),  ratioY_hip_to_torso * leftUpperLeg->getCorrectedHeight());
 	lltj.collideConnected = false;
+	lltj.enableLimit = true;
+	lltj.lowerAngle = glm::radians(-100.f);
+	lltj.upperAngle = glm::radians(25.f);
 	world->b2world->CreateJoint(&lltj);
 	
 	// right hip
-	upperRightLeg->createFixture();
+	rightUpperLeg->createFixture();
 	b2RevoluteJointDef lrtj;
 	lrtj.bodyA = torso->body;
-	lrtj.bodyB = upperRightLeg->body;
+	lrtj.bodyB = rightUpperLeg->body;
 	lrtj.localAnchorA.Set(ratioX_torso_to_hip * correctedTorsoWidth, -ratioY_torso_to_hip * correctedTorsoHeight);
-	lrtj.localAnchorB.Set(ratioX_hip_to_torso * upperLeftLeg->getCorrectedWidth(), ratioY_hip_to_torso * upperRightLeg->getCorrectedHeight());
+	lrtj.localAnchorB.Set(ratioX_hip_to_torso * leftUpperLeg->getCorrectedWidth(), ratioY_hip_to_torso * rightUpperLeg->getCorrectedHeight());
 	lrtj.collideConnected = false;
+	lrtj.enableLimit = true;
+	lrtj.lowerAngle = glm::radians(-25.f);
+	lrtj.upperAngle = glm::radians(100.f);
 	world->b2world->CreateJoint(&lrtj);
 
 	// left knee
-	lowerLeftLeg->createFixture();
+	leftLowerLeg->createFixture();
 	b2RevoluteJointDef llltj;
-	llltj.bodyA = upperLeftLeg->body;
-	llltj.bodyB = lowerLeftLeg->body;
-	llltj.localAnchorA.Set(-ratioX_hip_to_knee * upperLeftLeg->getCorrectedWidth(), -ratioY_hip_to_knee * upperLeftLeg->getCorrectedHeight());
-	llltj.localAnchorB.Set(ratioX_knee_to_hip * lowerLeftLeg->getCorrectedWidth(), ratioY_knee_to_hip * lowerLeftLeg->getCorrectedHeight());
+	llltj.bodyA = leftUpperLeg->body;
+	llltj.bodyB = leftLowerLeg->body;
+	llltj.localAnchorA.Set(ratioX_hip_to_knee * leftUpperLeg->getCorrectedWidth(), -ratioY_hip_to_knee * leftUpperLeg->getCorrectedHeight());
+	llltj.localAnchorB.Set(ratioX_knee_to_hip * leftLowerLeg->getCorrectedWidth(), ratioY_knee_to_hip * leftLowerLeg->getCorrectedHeight());
 	llltj.collideConnected = false;
+	llltj.enableLimit = true;
+	llltj.lowerAngle = glm::radians(0.f);
+	llltj.upperAngle = glm::radians(75.f);
 	world->b2world->CreateJoint(&llltj);
 	
 	// right knee
-	lowerRightLeg->createFixture();
+	rightLowerLeg->createFixture();
 	b2RevoluteJointDef lrltj;
-	lrltj.bodyA = upperRightLeg->body;
-	lrltj.bodyB = lowerRightLeg->body;
-	lrltj.localAnchorA.Set(-ratioX_hip_to_knee * upperRightLeg->getCorrectedWidth(), -ratioY_hip_to_knee * upperRightLeg->getCorrectedHeight());
-	lrltj.localAnchorB.Set(-ratioX_knee_to_hip * lowerRightLeg->getCorrectedWidth(), ratioY_knee_to_hip * lowerRightLeg->getCorrectedHeight());
+	lrltj.bodyA = rightUpperLeg->body;
+	lrltj.bodyB = rightLowerLeg->body;
+	lrltj.localAnchorA.Set(-ratioX_hip_to_knee * rightUpperLeg->getCorrectedWidth(), -ratioY_hip_to_knee * rightUpperLeg->getCorrectedHeight());
+	lrltj.localAnchorB.Set(-ratioX_knee_to_hip * rightLowerLeg->getCorrectedWidth(), ratioY_knee_to_hip * rightLowerLeg->getCorrectedHeight());
 	lrltj.collideConnected = false;
+	lrltj.enableLimit = true;
+	lrltj.lowerAngle = glm::radians(-75.f);
+	lrltj.upperAngle = glm::radians(0.f);
 	world->b2world->CreateJoint(&lrltj);
 
 	
-	torso		   ->setTranslationPhysical(0.f, 0.f, 1.f);
-	head		   ->setTranslationPhysical(0.f, 0.f, -1.f);
-	leftUpperArm   ->setTranslationPhysical(0.f, 0.f, -0.01f);
-	leftLowerArm   ->setTranslationPhysical(0.f, 0.f, -0.02f);
-	leftHand	   ->setTranslationPhysical(0.f, 0.f, -0.03f);
-	rightUpperArm  ->setTranslationPhysical(0.f, 0.f, 0.01f);
-	rightLowerArm  ->setTranslationPhysical(0.f, 0.f, 0.02f);
-	rightHand	   ->setTranslationPhysical(0.f, 0.f, 0.03f);
-	upperLeftLeg   ->setTranslationPhysical(0.f, 0.f, -0.01f);
-	lowerLeftLeg   ->setTranslationPhysical(0.f, 0.f, -0.02f);
-	upperRightLeg  ->setTranslationPhysical(0.f, 0.f, 0.01f);
-	lowerRightLeg  ->setTranslationPhysical(0.f, 0.f, 0.02f);
+	torso		   ->setTranslationPhysical(0.f, 0.f, 0.001f);
+	head		   ->setTranslationPhysical(0.f, 0.f, 0.21f);
+	leftUpperArm   ->setTranslationPhysical(0.f, 0.f, 0.11f);
+	leftLowerArm   ->setTranslationPhysical(0.f, 0.f, 0.12f);
+	leftHand	   ->setTranslationPhysical(0.f, 0.f, 0.13f);
+	rightUpperArm  ->setTranslationPhysical(0.f, 0.f, -0.11f);
+	rightLowerArm  ->setTranslationPhysical(0.f, 0.f, -0.12f);
+	rightHand	   ->setTranslationPhysical(0.f, 0.f, -0.13f);
+	leftUpperLeg   ->setTranslationPhysical(0.f, 0.f, -0.21f);
+	leftLowerLeg   ->setTranslationPhysical(0.f, 0.f, -0.22f);
+	rightUpperLeg  ->setTranslationPhysical(0.f, 0.f, -0.23f);
+	rightLowerLeg  ->setTranslationPhysical(0.f, 0.f, -0.24f);
 }
 
 void Character::unload(){
@@ -202,10 +270,10 @@ void Character::setShader(Shader * _shader){
 	rightUpperArm ->setShader(_shader, true);
 	rightLowerArm ->setShader(_shader, true);
 	rightHand	  ->setShader(_shader, true);
-	upperLeftLeg  ->setShader(_shader, true);
-	lowerLeftLeg  ->setShader(_shader, true);
-	upperRightLeg ->setShader(_shader, true);
-	lowerRightLeg ->setShader(_shader, true);
+	leftUpperLeg  ->setShader(_shader, true);
+	leftLowerLeg  ->setShader(_shader, true);
+	rightUpperLeg ->setShader(_shader, true);
+	rightLowerLeg ->setShader(_shader, true);
 }
 
 void Character::addToScene(Scene * _scene){
@@ -216,9 +284,9 @@ void Character::addToScene(Scene * _scene){
 	_scene->addChild(rightUpperArm);
 	_scene->addChild(rightLowerArm);
 	_scene->addChild(rightHand);
-	_scene->addChild(upperLeftLeg);
-	_scene->addChild(lowerLeftLeg);
-	_scene->addChild(upperRightLeg);
-	_scene->addChild(lowerRightLeg);
+	_scene->addChild(leftUpperLeg);
+	_scene->addChild(leftLowerLeg);
+	_scene->addChild(rightUpperLeg);
+	_scene->addChild(rightLowerLeg);
 	_scene->addChild(head);
 }

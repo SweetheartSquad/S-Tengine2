@@ -14,10 +14,12 @@ public:
 	int velocityIterations;
 	int positionIterations;
 
+
+
 	explicit Box2DWorld(b2Vec2 _gravityVector);
 	~Box2DWorld();
 
 	void update(Step* _step) override;
 
-	void addToWorld(NodeBox2DBody * _nodeBox2D);
+	void addToWorld(NodeBox2DBody * _nodeBox2D, int _userDataGroup = 1);
 };

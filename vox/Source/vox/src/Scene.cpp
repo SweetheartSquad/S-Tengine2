@@ -113,11 +113,11 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 	matrixStack->projectionMatrix = camera->getProjectionMatrix();
 	matrixStack->viewMatrix		  = camera->getViewMatrix();
 
-	float offset = 10;
+	float offset = children.size();
 	for(Entity * e : children){
 		e->render(matrixStack, renderOptions);
-		glPolygonOffset(offset, offset);
-		offset -= 0.1f;
+		glPolygonOffset(offset, 1);
+		offset -= 1.f;
 	}
 
 	GLUtils::checkForError(0,__FILE__,__LINE__);

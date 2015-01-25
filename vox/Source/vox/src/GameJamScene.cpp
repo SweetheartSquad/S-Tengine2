@@ -67,7 +67,7 @@ GameJamScene::GameJamScene(Game * _game):
 
 	
 	ground->setShader(shader, true);
-	ground->setTranslationPhysical(0, 0, 0);
+	ground->setTranslationPhysical(0, 0, -5.f);
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
 	ground->transform->scale(1000, 10, 1);
 	ground->mesh->pushTexture2D(new Texture("../assets/hallwaycarpet.png", 1024, 1024, true, true));
@@ -84,8 +84,7 @@ GameJamScene::GameJamScene(Game * _game):
 	ground->mesh->vertices.at(2).z -= 10;
 	ground->mesh->vertices.at(3).z -= 10;
 
-
-	world->addToWorld(ground);
+	world->addToWorld(ground, 2);
 	for(Box2DSprite * s : items){
 		world->addToWorld(s);
 	}
@@ -160,13 +159,13 @@ void GameJamScene::update(Step * _step){
 	Scene::update(_step);
 
 	world->update(_step);
-	if(keyboard->keyDown(GLFW_KEY_W)){
-		if(!playerCharacter->torso->movingVertically(0.05)){
+	if(keyboard->keyJustDown(GLFW_KEY_W)){
+		//if(!playerCharacter->torso->movingVertically(0.05)){
 			playerCharacter->torso->applyLinearImpulseUp(250);	
-		}
+		//}
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
-		playerCharacter->transform->rotate(1, 0, 1, 0, kOBJECT);
+		//playerCharacter->transform->rotate(1, 0, 1, 0, kOBJECT);
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
 		playerCharacter->torso->applyLinearImpulseLeft(25);
@@ -175,6 +174,38 @@ void GameJamScene::update(Step * _step){
 		}
 		//playerCharacter->playAnimation = true;
 		//playerCharacter->setCurrentAnimation("run");
+
+		b2ContactEdge * stuff = playerCharacter->leftLowerLeg->body->GetContactList();
+		if(stuff != nullptr && stuff->contact->IsTouching()){
+			int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
+			int type2 = (int)stuff->contact->GetFixtureB()->GetUserData();
+
+			if(type1 != type2){
+				if(playerCharacter->leftLowerLeg->body->GetLinearVelocity().y <= 0.1){
+					playerCharacter->leftLowerLeg->applyLinearImpulseLeft(5);
+					playerCharacter->leftLowerLeg->applyLinearImpulseUp(125);	
+					playerCharacter->torso->applyLinearImpulseUp(125);	
+				}
+			}
+			std::cout << type1 << " " << type2 << std::endl;
+		}
+		stuff = playerCharacter->rightLowerLeg->body->GetContactList();
+		if(stuff != nullptr && stuff->contact->IsTouching()){
+			int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
+			int type2 = (int)stuff->contact->GetFixtureB()->GetUserData();
+
+			if(type1 != type2){
+				if(playerCharacter->rightLowerLeg->body->GetLinearVelocity().y <= 0.1){
+					playerCharacter->rightLowerLeg->applyLinearImpulseLeft(5);
+					playerCharacter->rightLowerLeg->applyLinearImpulseUp(125);
+					playerCharacter->torso->applyLinearImpulseUp(125);	
+				}
+			}
+			std::cout << type1 << " " << type2 << std::endl;
+		}
+
+
+
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		playerCharacter->torso->applyLinearImpulseRight(25);
@@ -183,6 +214,39 @@ void GameJamScene::update(Step * _step){
 		}
 		//playerCharacter->setCurrentAnimation("run");
 		//playerCharacter->playAnimation = true;
+
+
+		b2ContactEdge * stuff = playerCharacter->leftLowerLeg->body->GetContactList();
+		if(stuff != nullptr && stuff->contact->IsTouching()){
+			int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
+			int type2 = (int)stuff->contact->GetFixtureB()->GetUserData();
+
+			if(type1 != type2){
+				if(playerCharacter->leftLowerLeg->body->GetLinearVelocity().y <= 0.1){
+					playerCharacter->leftLowerLeg->applyLinearImpulseRight(5);
+					playerCharacter->leftLowerLeg->applyLinearImpulseUp(50);	
+					playerCharacter->torso->applyLinearImpulseUp(100);	
+				}
+			}
+			std::cout << type1 << " " << type2 << std::endl;
+		}
+		stuff = playerCharacter->rightLowerLeg->body->GetContactList();
+		if(stuff != nullptr && stuff->contact->IsTouching()){
+			int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
+			int type2 = (int)stuff->contact->GetFixtureB()->GetUserData();
+
+			if(type1 != type2){
+				if(playerCharacter->rightLowerLeg->body->GetLinearVelocity().y <= 0.1){
+					playerCharacter->rightLowerLeg->applyLinearImpulseRight(5);
+					playerCharacter->rightLowerLeg->applyLinearImpulseUp(50);
+					playerCharacter->torso->applyLinearImpulseUp(100);	
+				}
+			}
+			std::cout << type1 << " " << type2 << std::endl;
+		}
+
+
+
 	}
 
 	// move the ground and background with the player
