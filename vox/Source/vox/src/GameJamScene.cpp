@@ -36,7 +36,7 @@
 #include "Character2.h"
 #include "Character3.h"
 #include "Character4.h"
-#include "DialogEvent.h"
+#include "DialogHandler.h"
 #include "SayAction.h"
 #include "RandomCharacter.h"
 
@@ -51,7 +51,6 @@ GameJamScene::GameJamScene(Game * _game):
 	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/skybox - HD - edited.png", 4096, 4096, true, true))),
 	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/walls - HD - edited.png", 4096, 4096, true, true))),
 	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/foregroundhallway.png", 4096, 4096, true, true))),
-	dialogEvent(new DialogEvent()),
 	debugDraw(false)
 {
 	shader->components.push_back(new TextureShaderComponent());
@@ -218,6 +217,9 @@ GameJamScene::GameJamScene(Game * _game):
 	//world->b2world->SetDebugDraw(drawer);
 	//drawer->SetFlags(b2Draw::e_shapeBit);
 
+	//keep a vector of the characters, for the dialogHandler
+	std::vector<Character *> sceneCharacters;
+
 	playerCharacter->setShader(shader, true);
 	addChild(playerCharacter);
 	playerCharacter->addToScene(this);
@@ -241,23 +243,35 @@ GameJamScene::GameJamScene(Game * _game):
 	addChild(char3);
 	char3->translateComponents(glm::vec3(-125, 150, 0));
 
+	playerCharacter->setShader(shader);
+	playerCharacter->addToScene(this);
+
+	//playerCharacter->torso->setTranslationPhysical(50, 50, 0);
+	//playerCharacter->head->setTranslationPhysical(25, 25, 0);
+	playerCharacter->torso->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
+	//playerCharacter->torso->body->SetGravityScale(0);
+	//playerCharacter->torso->body->SetGravityScale(0);
+
+	addChild(playerCharacter);
+
 	Character4 * char4 = new Character4(world, true);
 	char4->setShader(shader, true);
 	char4->addToScene(this);
 	char4->translateComponents(glm::vec3(-150, 150, 0));
 	addChild(char4);
+	
 
 	//playerCharacter->text->setText("Howdy Ya'll, My Name's Baby Legs Hetman");
 	playerCharacter->text->transform->translate(0, 3, -2);
 
-	dialogEvent->addAction(new SayAction(playerCharacter, "Howdy", 2));
-	dialogEvent->addAction(new SayAction(playerCharacter, "My", 2));
-	dialogEvent->addAction(new SayAction(playerCharacter, "Name", 2));
-	dialogEvent->addAction(new SayAction(playerCharacter, "Is", 2));
-	dialogEvent->addAction(new SayAction(playerCharacter, "Baby", 2));
-	dialogEvent->addAction(new SayAction(playerCharacter, "Hetman", 2));
-	dialogEvent->running = true;
-	
+	sceneCharacters.push_back(playerCharacter);
+	sceneCharacters.push_back(char1);
+	sceneCharacters.push_back(char2);
+	sceneCharacters.push_back(char3);
+	sceneCharacters.push_back(char4);
+
+	dialogHandler = new DialogHandler(sceneCharacters);
+	dialogHandler->makeDialog();
 	
 	for(unsigned long int i = 0; i < 3; ++i){
 		RandomCharacter * dude1 = new RandomCharacter(world, true);
@@ -394,7 +408,11 @@ void GameJamScene::update(Step * _step){
 	}
 
 	//DIALOG
+<<<<<<< HEAD
 	//dialogEvent->update(_step);
+=======
+	dialogHandler->update(_step);
+>>>>>>> origin/dialog
 
 	if(keyboard->keyJustUp(GLFW_KEY_F1)){
 		debugDraw = !debugDraw;
