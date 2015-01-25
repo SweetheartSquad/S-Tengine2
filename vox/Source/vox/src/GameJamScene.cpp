@@ -40,7 +40,7 @@
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
 	world(new Box2DWorld(b2Vec2(0, -60))),
-	playerCharacter(new TestCharacter(world, false)),
+	playerCharacter(new TestCharacter(world, false, CHARACTER, BOUNDARY)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	tex(new Texture("../assets/MichaelScale.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
@@ -54,6 +54,7 @@ GameJamScene::GameJamScene(Game * _game):
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 
+	
 	const int imgCount = 12;
 	std::string strings[imgCount] = {
 		"../assets/Table_657_332.png",		
@@ -102,6 +103,8 @@ GameJamScene::GameJamScene(Game * _game):
 		s->body->CreateFixture(&tShape, 1);
 		b2Filter t;
 		t.groupIndex = -8;
+		t.categoryBits = PROP;
+		t.maskBits = BOUNDARY;
 		s->body->GetFixtureList()->SetFilterData(t);
 
 		b2Vec2 v1 = tShape.GetVertex(0);
@@ -136,7 +139,6 @@ GameJamScene::GameJamScene(Game * _game):
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	//soundManager->play("green_chair");
 
-	
 	ground->setShader(shader, true);
 	ground->setTranslationPhysical(0, 0, -5.f);
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
@@ -154,6 +156,13 @@ GameJamScene::GameJamScene(Game * _game):
 	ground->mesh->vertices.at(1).z -= 10;
 	ground->mesh->vertices.at(2).z -= 10;
 	ground->mesh->vertices.at(3).z -= 10;
+
+	
+	b2Filter gf;
+	gf.categoryBits = BOUNDARY;
+	b2Fixture * blah = ground->body->GetFixtureList();
+	ground->body->GetFixtureList()->SetFilterData(gf);
+
 
 	world->addToWorld(ground, 2);
 	for(Box2DSprite * s : items){
@@ -220,19 +229,19 @@ GameJamScene::GameJamScene(Game * _game):
 	playerCharacter->torso->body->SetGravityScale(0);
 	//ch->transform->scale(5, 5, 1);
 	
-	Character1 * char1 = new Character1(world, true);
+	Character1 * char1 = new Character1(world, true, CHARACTER, BOUNDARY);
 	char1->setShader(shader);
 	char1->addToScene(this);
 	addChild(char1);
-	Character2 * char2 = new Character2(world, true);
+	Character2 * char2 = new Character2(world, true, CHARACTER, BOUNDARY);
 	char2->setShader(shader);
 	char2->addToScene(this);
 	addChild(char2);
-	Character3 * char3 = new Character3(world, true);
+	Character3 * char3 = new Character3(world, true, CHARACTER, BOUNDARY);
 	char3->setShader(shader);
 	char3->addToScene(this);
 	addChild(char3);
-	Character4 * char4 = new Character4(world, true);
+	Character4 * char4 = new Character4(world, true, CHARACTER, BOUNDARY);
 	char4->setShader(shader);
 	char4->addToScene(this);
 	addChild(char4);

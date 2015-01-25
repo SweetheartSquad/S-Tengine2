@@ -23,12 +23,19 @@ float CharacterComponent::getCorrectedWidth(){
 	return width*std::abs(transform->scaleVector.x)*scale*2.f;
 }
 
-void CharacterComponent::createFixture(int16 _groupIndex){
+void CharacterComponent::createFixture(int16 _groupIndex, int16 _categoryBits, int16 _maskBits){
 	b2PolygonShape tShape;
 	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f);
-	body->CreateFixture(&tShape, 1);
+	
+	b2Fixture * f = body->CreateFixture(&tShape, 1);
+	f->SetSensor(true);
+
 	b2Filter t;
 	t.groupIndex = _groupIndex;
+	t.categoryBits = _categoryBits;
+	if(_maskBits != (int16)-1){
+		t.maskBits = _maskBits;
+	}
 	body->GetFixtureList()->SetFilterData(t);
 
 	b2Vec2 v1 = tShape.GetVertex(0);
