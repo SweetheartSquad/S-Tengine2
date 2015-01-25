@@ -46,6 +46,9 @@ Character3::Character3(Box2DWorld * _world, bool _ai):
 	leftUpperLeg->transform->scale(0.9f, 0.9f, 1.f);
 	rightUpperLeg->transform->scale(0.9f, 0.9f, 1.f);
 
+	ratioY_shoulder_to_torso = 0.9f;
+	ratioY_torso_to_shoulder = 0.6f;
+
     attachJoints();
 }
 

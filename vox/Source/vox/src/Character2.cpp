@@ -46,6 +46,9 @@ Character2::Character2(Box2DWorld * _world, bool _ai):
 	leftUpperLeg->transform->scale(0.9f, 0.9f, 1.f);
 	rightUpperLeg->transform->scale(0.9f, 0.9f, 1.f);
 
+	ratioY_knee_to_hip = 0.75f;
+	ratioY_hip_to_knee = 0.75f;
+
     attachJoints();
 }
 

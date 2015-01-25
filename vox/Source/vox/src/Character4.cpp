@@ -46,6 +46,24 @@ Character4::Character4(Box2DWorld * _world, bool _ai):
 	leftUpperLeg->transform->scale(0.9f, 0.9f, 1.f);
 	rightUpperLeg->transform->scale(0.9f, 0.9f, 1.f);
 
+	
+	ratioY_shoulder_to_torso = 0.95f;
+	ratioY_torso_to_shoulder = 0.65f;
+
+	ratioY_neck_to_torso = 0.9f;
+	ratioY_torso_to_neck = 0.9f;
+
+	ratioY_knee_to_hip = 0.75f;
+	ratioY_hip_to_knee = 0.65f;
+	ratioX_knee_to_hip = 0.95f;
+	ratioX_hip_to_knee = 0.75f;
+	
+	
+	ratioY_hip_to_torso = 0.85f;
+	ratioY_torso_to_hip = 0.85f;
+	ratioX_hip_to_torso = 0.35f;
+	ratioX_torso_to_hip= 0.35f;
+
     attachJoints();
 }
 
