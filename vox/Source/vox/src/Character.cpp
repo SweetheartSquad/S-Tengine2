@@ -6,6 +6,7 @@
 #include "shader/Shader.h"
 #include "CharacterComponent.h"
 #include "Scene.h"
+#include "BitmapFont.h"
 
 int16 Character::gGroupIndex = 0;
 
@@ -16,7 +17,8 @@ Character::Character(Box2DWorld * _world, bool _ai) :
 	world(_world),
 	componentScale(0.0025f),
 	groupIndex(--gGroupIndex),
-	ai(_ai)
+	ai(_ai),
+	text(new BitmapFont(new Texture("../assets/arial.bmp", 1024, 1024, true, true), 32, 16, 16 ))
 {
 	ratioX_neck_to_torso = 0.0f;
 	ratioY_neck_to_torso = 0.8f;
@@ -47,6 +49,10 @@ Character::Character(Box2DWorld * _world, bool _ai) :
 	ratioY_knee_to_hip = 0.8f;
 	ratioX_hip_to_knee = 1.0f;
 	ratioY_hip_to_knee = 0.8f;
+
+	text->transform->translate(0, 0, 6);
+	text->kerning = -0.9f;
+	text->setSizeMod(0.85f);
 }
 
 Character::~Character(){
@@ -101,10 +107,11 @@ void Character::update(Step * _step){
 			}
 		}
 	}
+	text->transform->translationVector.x = (torso->transform->translationVector.x) - text->getWidth()/4;
+	text->transform->translationVector.y = head->transform->translationVector.y + 1.5f;
 }
 
 void Character::attachJoints(){
-	
 
 	/*for(NodeChild * s : children){
 		dynamic_cast<Box2DSprite *>(s)->transform->scale(5,5,1);
@@ -305,6 +312,7 @@ void Character::setShader(Shader * _shader){
 	leftLowerLeg  ->setShader(_shader, true);
 	rightUpperLeg ->setShader(_shader, true);
 	rightLowerLeg ->setShader(_shader, true);
+	text->setShader(_shader ,true);
 }
 
 void Character::addToScene(Scene * _scene){
@@ -320,4 +328,5 @@ void Character::addToScene(Scene * _scene){
 	_scene->addChild(rightUpperLeg);
 	_scene->addChild(rightLowerLeg);
 	_scene->addChild(head);
+	_scene->addChild(text);
 }

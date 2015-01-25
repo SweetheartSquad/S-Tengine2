@@ -3,6 +3,7 @@
 #include "MeshEntity.h"
 #include <Box2D/Box2D.h>
 
+class BitmapFont;
 class Scene;
 class Shader;
 class Box2DWorld;
@@ -48,11 +49,11 @@ public:
 
 	float hipWidth;
 
+	BitmapFont * text;
 
 	Box2DWorld * world;
 
 	CharacterComponent * torso;
-
 	CharacterComponent * head;
 	CharacterComponent * leftUpperArm;
 	CharacterComponent * leftLowerArm;

@@ -70,7 +70,7 @@ GameJamScene::GameJamScene(Game * _game):
 		"../assets/Pie_667_692.png"
 	};
 
-	for(unsigned long int i = 0; i < imgCount; ++i){
+	for(unsigned long int i = 12; i < imgCount; ++i){
 		Box2DSprite * s = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform());
 		s->mesh->pushTexture2D(new Texture(strings[i].c_str(), 1024, 1024, true, true));
 
@@ -192,15 +192,15 @@ GameJamScene::GameJamScene(Game * _game):
 	addChild(midgroundScreen);
 	
 	addChild(ground);
-	addChild(foregroundScreen);
-	addChild(fontM);
+//	addChild(foregroundScreen);
+	//addChild(fontM);
 	addChild(backgroundScreen);
 	for(Box2DSprite * s : items){
 		addChild(s);
 	}
 
 	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 1, 0);
-	//camera = new MousePerspectiveCamera();
+//	camera = new MousePerspectiveCamera();
 	camera->farClip = 100000000.f;
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
 	camera->transform->translate(5.0f, 0.f, 15.0f);
@@ -213,7 +213,7 @@ GameJamScene::GameJamScene(Game * _game):
 	playerCharacter->setShader(shader);
 	addChild(playerCharacter);
 	playerCharacter->addToScene(this);
-	playerCharacter->torso->setTranslationPhysical(15, 5, 0);
+	playerCharacter->torso->setTranslationPhysical(15, 100, 0);
 	playerCharacter->head->setTranslationPhysical(15, 5, 0);
 	playerCharacter->torso->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	playerCharacter->torso->body->SetGravityScale(0);
@@ -236,6 +236,10 @@ GameJamScene::GameJamScene(Game * _game):
 	char4->setShader(shader);
 	char4->addToScene(this);
 	addChild(char4);
+
+	playerCharacter->text->setText("Howdy Ya'll, My Name's Baby Legs Hetman");
+	playerCharacter->text->transform->translate(0, 3, -2);
+
 }
 
 GameJamScene::~GameJamScene(){
@@ -336,9 +340,6 @@ void GameJamScene::update(Step * _step){
 				}
 			}
 		}
-
-
-
 	}
 
 	// move the ground and background with the player
