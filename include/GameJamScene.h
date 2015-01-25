@@ -12,6 +12,7 @@ class Texture;
 class Sprite;
 class Box2DWorld;
 class CylinderScreen;
+class Character;
 class TestCharacter;
 class Character1;
 class Character2;
@@ -22,7 +23,7 @@ class GameJamScene : public Scene{
 public:
 	Box2DDebugDraw * drawer;
 	Box2DWorld * world;
-	Character4 * playerCharacter;
+	Character * playerCharacter;
 	Box2DMeshEntity * ground;
 	Texture * tex;
 	BaseComponentShader* shader;

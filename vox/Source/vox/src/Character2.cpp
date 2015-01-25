@@ -6,8 +6,8 @@
 #include "Texture.h"
 #include "CharacterComponent.h"
 
-Character2::Character2(Box2DWorld * _world):
-	Character(_world),
+Character2::Character2(Box2DWorld * _world, bool _ai):
+	Character(_world, _ai),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()

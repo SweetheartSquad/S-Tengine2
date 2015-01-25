@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MeshEntity.h"
+#include <Box2D/Box2D.h>
 
 class Scene;
 class Shader;
@@ -10,6 +11,9 @@ class CharacterComponent;
 
 class Character : public MeshEntity{
 public:
+	bool ai;
+	static int16 gGroupIndex;
+	int16 groupIndex;
 	float componentScale;
 	
 	float ratioX_neck_to_torso;
@@ -61,7 +65,7 @@ public:
 	CharacterComponent * rightUpperLeg;
 	CharacterComponent * rightLowerLeg;
 
-	explicit Character(Box2DWorld * _world);
+	explicit Character(Box2DWorld * _world, bool _ai = true);
 	~Character();
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;

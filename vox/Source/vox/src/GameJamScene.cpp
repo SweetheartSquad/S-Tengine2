@@ -40,14 +40,14 @@
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
 	world(new Box2DWorld(b2Vec2(0, -60))),
-	playerCharacter(new Character4(world)),
+	playerCharacter(new TestCharacter(world, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	tex(new Texture("../assets/MichaelScale.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
 	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/skybox - HD.png", 4096, 4096, true, true))),
 	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/walls - HD.png", 4096, 4096, true, true))),
-	foregroundScreen(new CylinderScreen(25, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/sky3.png", 512, 512, true, true))),
+	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/foregroundhallway.png", 4096, 4096, true, true))),
 	drawer(new Box2DDebugDraw(this))
 {
 	shader->components.push_back(new TextureShaderComponent());
@@ -115,9 +115,17 @@ GameJamScene::GameJamScene(Game * _game):
 	midgroundScreen->setShader(shader, true);
 	
 	foregroundScreen->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
-	foregroundScreen->transform->scale(-5, 25, 25);
-	foregroundScreen->transform->translate(0, -10, 10);
+	foregroundScreen->transform->scale(1, 10, 4.5);
+	foregroundScreen->transform->translate(0, 0, 12.0f);
+	
+	for(Vertex & v :foregroundScreen->mesh->vertices){
+		//v.x += 0.5f;
+		v.u += 0.5f;
+	}
+	foregroundScreen->mesh->dirty = true;
+	
 	foregroundScreen->setShader(shader, true);
+
 	
 	Texture * font = new Texture("../assets/MoonFlowerBold.png", 1024, 1024, true, true);
 	BitmapFont * fontM = new BitmapFont(font, 32, 16, 16); 
@@ -128,7 +136,7 @@ GameJamScene::GameJamScene(Game * _game):
 	addChild(midgroundScreen);
 	
 	addChild(ground);
-	//addChild(foregroundScreen);
+	addChild(foregroundScreen);
 	addChild(fontM);
 	addChild(backgroundScreen);
 	for(Box2DSprite * s : items){
@@ -155,8 +163,23 @@ GameJamScene::GameJamScene(Game * _game):
 	playerCharacter->torso->body->SetGravityScale(0);
 	playerCharacter->torso->body->SetGravityScale(0);
 	//ch->transform->scale(5, 5, 1);
-
-
+	
+	Character1 * char1 = new Character1(world, true);
+	char1->setShader(shader);
+	char1->addToScene(this);
+	addChild(char1);
+	Character2 * char2 = new Character2(world, true);
+	char2->setShader(shader);
+	char2->addToScene(this);
+	addChild(char2);
+	Character3 * char3 = new Character3(world, true);
+	char3->setShader(shader);
+	char3->addToScene(this);
+	addChild(char3);
+	Character4 * char4 = new Character4(world, true);
+	char4->setShader(shader);
+	char4->addToScene(this);
+	addChild(char4);
 }
 
 GameJamScene::~GameJamScene(){
@@ -204,7 +227,6 @@ void GameJamScene::update(Step * _step){
 					playerCharacter->torso->applyLinearImpulseUp(125);	
 				}
 			}
-			std::cout << type1 << " " << type2 << std::endl;
 		}
 		stuff = playerCharacter->rightLowerLeg->body->GetContactList();
 		if(stuff != nullptr && stuff->contact->IsTouching()){
@@ -218,7 +240,6 @@ void GameJamScene::update(Step * _step){
 					playerCharacter->torso->applyLinearImpulseUp(125);	
 				}
 			}
-			std::cout << type1 << " " << type2 << std::endl;
 		}
 
 
@@ -245,7 +266,6 @@ void GameJamScene::update(Step * _step){
 					playerCharacter->torso->applyLinearImpulseUp(100);	
 				}
 			}
-			std::cout << type1 << " " << type2 << std::endl;
 		}
 		stuff = playerCharacter->rightLowerLeg->body->GetContactList();
 		if(stuff != nullptr && stuff->contact->IsTouching()){
@@ -259,7 +279,6 @@ void GameJamScene::update(Step * _step){
 					playerCharacter->torso->applyLinearImpulseUp(100);	
 				}
 			}
-			std::cout << type1 << " " << type2 << std::endl;
 		}
 
 

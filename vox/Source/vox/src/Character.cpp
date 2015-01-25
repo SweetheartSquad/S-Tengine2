@@ -7,12 +7,16 @@
 #include "CharacterComponent.h"
 #include "Scene.h"
 
-Character::Character(Box2DWorld * _world) :
+int16 Character::gGroupIndex = 0;
+
+Character::Character(Box2DWorld * _world, bool _ai) :
 	MeshEntity(nullptr, new Transform()),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	world(_world),
-	componentScale(0.0025f)
+	componentScale(0.0025f),
+	groupIndex(--gGroupIndex),
+	ai(_ai)
 {
 	ratioX_neck_to_torso = 0.0f;
 	ratioY_neck_to_torso = 0.8f;
@@ -70,6 +74,33 @@ void Character::update(Step * _step){
 		neck->SetMotorSpeed(0);
 		neck->SetMaxMotorTorque(0);
 	}*/
+
+	if(ai){
+		b2ContactEdge * stuff = leftLowerLeg->body->GetContactList();
+		if(stuff != nullptr && stuff->contact->IsTouching()){
+			int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
+			int type2 = (int)stuff->contact->GetFixtureB()->GetUserData();
+
+			if(type1 != type2){
+				if(leftLowerLeg->body->GetLinearVelocity().y <= 0.1){
+					leftLowerLeg->applyLinearImpulseUp(125);	
+					torso->applyLinearImpulseUp(125);	
+				}
+			}
+		}
+		stuff = rightLowerLeg->body->GetContactList();
+		if(stuff != nullptr && stuff->contact->IsTouching()){
+			int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
+			int type2 = (int)stuff->contact->GetFixtureB()->GetUserData();
+
+			if(type1 != type2){
+				if(rightLowerLeg->body->GetLinearVelocity().y <= 0.1){
+					rightLowerLeg->applyLinearImpulseUp(125);
+					torso->applyLinearImpulseUp(125);	
+				}
+			}
+		}
+	}
 }
 
 void Character::attachJoints(){
@@ -79,8 +110,8 @@ void Character::attachJoints(){
 		dynamic_cast<Box2DSprite *>(s)->transform->scale(5,5,1);
 	}*/
 
-	torso->createFixture();
-	head->createFixture();
+	torso->createFixture(groupIndex);
+	head->createFixture(groupIndex);
 
 	
 	float correctedTorsoWidth = torso->getCorrectedWidth();
@@ -103,7 +134,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&jth);
 
 	// left shoulder
-	leftUpperArm->createFixture();
+	leftUpperArm->createFixture(groupIndex);
 	b2RevoluteJointDef latj;
 	latj.bodyA = torso->body;
 	latj.bodyB = leftUpperArm->body;
@@ -118,7 +149,7 @@ void Character::attachJoints(){
 	
 
 	// right shoulder
-	rightUpperArm->createFixture();
+	rightUpperArm->createFixture(groupIndex);
 	b2RevoluteJointDef ratj;
 	ratj.bodyA = torso->body;
 	ratj.bodyB = rightUpperArm->body;
@@ -133,7 +164,7 @@ void Character::attachJoints(){
 	
 	
 	// left elbow
-	leftLowerArm->createFixture();
+	leftLowerArm->createFixture(groupIndex);
 	b2RevoluteJointDef lelsj;
 	lelsj.bodyA = leftUpperArm->body;
 	lelsj.bodyB = leftLowerArm->body;
@@ -147,7 +178,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&lelsj);
 
 	// right elbow
-	rightLowerArm->createFixture();
+	rightLowerArm->createFixture(groupIndex);
 	b2RevoluteJointDef rersj;
 	rersj.bodyA = rightUpperArm->body;
 	rersj.bodyB = rightLowerArm->body;
@@ -161,7 +192,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&rersj);
 
 	// left hand
-	leftHand->createFixture();
+	leftHand->createFixture(groupIndex);
 	b2RevoluteJointDef lhlej;
 	lhlej.bodyA = leftLowerArm->body;
 	lhlej.bodyB = leftHand->body;
@@ -175,7 +206,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&lhlej);
 
 	// right hand
-	rightHand->createFixture();
+	rightHand->createFixture(groupIndex);
 	b2RevoluteJointDef rhrej;
 	rhrej.bodyA = rightLowerArm->body;
 	rhrej.bodyB = rightHand->body;
@@ -189,7 +220,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&rhrej);
 
 	// left hip
-	leftUpperLeg->createFixture();
+	leftUpperLeg->createFixture(groupIndex);
 	b2RevoluteJointDef lltj;
 	lltj.bodyA = torso->body;
 	lltj.bodyB = leftUpperLeg->body;
@@ -202,7 +233,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&lltj);
 	
 	// right hip
-	rightUpperLeg->createFixture();
+	rightUpperLeg->createFixture(groupIndex);
 	b2RevoluteJointDef lrtj;
 	lrtj.bodyA = torso->body;
 	lrtj.bodyB = rightUpperLeg->body;
@@ -215,7 +246,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&lrtj);
 
 	// left knee
-	leftLowerLeg->createFixture();
+	leftLowerLeg->createFixture(groupIndex);
 	b2RevoluteJointDef llltj;
 	llltj.bodyA = leftUpperLeg->body;
 	llltj.bodyB = leftLowerLeg->body;
@@ -228,7 +259,7 @@ void Character::attachJoints(){
 	world->b2world->CreateJoint(&llltj);
 	
 	// right knee
-	rightLowerLeg->createFixture();
+	rightLowerLeg->createFixture(groupIndex);
 	b2RevoluteJointDef lrltj;
 	lrltj.bodyA = rightUpperLeg->body;
 	lrltj.bodyB = rightLowerLeg->body;
