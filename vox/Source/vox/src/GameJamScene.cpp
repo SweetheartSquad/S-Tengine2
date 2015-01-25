@@ -46,7 +46,7 @@ GameJamScene::GameJamScene(Game * _game):
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
 	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/skybox - HD.png", 4096, 4096, true, true))),
-	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/walls - HD.png", 4096, 4096, true, true))),
+	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/walls - HD - edited.png", 4096, 4096, true, true))),
 	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/foregroundhallway.png", 4096, 4096, true, true))),
 	drawer(new Box2DDebugDraw(this))
 {
@@ -87,7 +87,7 @@ GameJamScene::GameJamScene(Game * _game):
 		std::string arr[4];
 		int j = 0;
 		std::stringstream ssin(strings[i]);
-		while (ssin.good() && i < 4){
+		while (ssin.good() && j < 4){
 			ssin >> arr[j];
 			++j;
 		}
@@ -127,8 +127,9 @@ GameJamScene::GameJamScene(Game * _game):
 		s->mesh->vertices.at(1).v = height/mag;
 		s->mesh->vertices.at(0).u = 0;
 		s->mesh->vertices.at(0).v = height/mag;
+		s->mesh->dirty = true;
 		
-		s->setTranslationPhysical(i * 50, 3, -3);
+		s->setTranslationPhysical(i * 25, height/mag*0.5f, 0.01f);
 		s->setShader(shader, true);
 		items.push_back(s);
 	}
@@ -171,8 +172,8 @@ GameJamScene::GameJamScene(Game * _game):
 	midgroundScreen->setShader(shader, true);
 	
 	foregroundScreen->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
-	foregroundScreen->transform->scale(1, 10, 4.5);
-	foregroundScreen->transform->translate(0, 0, 12.0f);
+	foregroundScreen->transform->scale(-2, 12.f, 12.f);
+	foregroundScreen->transform->translate(0, 0, 6.0f);
 	
 	for(Vertex & v :foregroundScreen->mesh->vertices){
 		//v.x += 0.5f;
@@ -191,15 +192,15 @@ GameJamScene::GameJamScene(Game * _game):
 
 	addChild(midgroundScreen);
 	
+	for(Box2DSprite * s : items){
+		addChild(s);
+	}
 	addChild(ground);
 	addChild(foregroundScreen);
 	addChild(fontM);
 	addChild(backgroundScreen);
-	for(Box2DSprite * s : items){
-		addChild(s);
-	}
 
-	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 1, 0);
+	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 0, 0);
 	//camera = new MousePerspectiveCamera();
 	camera->farClip = 100000000.f;
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
@@ -213,8 +214,8 @@ GameJamScene::GameJamScene(Game * _game):
 	playerCharacter->setShader(shader);
 	addChild(playerCharacter);
 	playerCharacter->addToScene(this);
-	playerCharacter->torso->setTranslationPhysical(15, 5, 0);
-	playerCharacter->head->setTranslationPhysical(15, 5, 0);
+	playerCharacter->torso->setTranslationPhysical(25, 25, 0);
+	playerCharacter->head->setTranslationPhysical(25, 25, 0);
 	playerCharacter->torso->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	playerCharacter->torso->body->SetGravityScale(0);
 	playerCharacter->torso->body->SetGravityScale(0);
