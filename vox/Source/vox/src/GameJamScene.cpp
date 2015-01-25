@@ -78,7 +78,7 @@ GameJamScene::GameJamScene(Game * _game):
 		"../assets/props/WigHead_228_257.png"
 	};
 
-	for(unsigned long int i = std::rand()%200; i < imgCount; ++i){
+	for(unsigned long int i = 0; i < 50; ++i){
 		unsigned long int tex = std::rand()%imgCount;
 		Box2DSprite * s = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform());
 		s->mesh->pushTexture2D(new Texture(strings[tex].c_str(), 1024, 1024, true, true));
@@ -111,7 +111,7 @@ GameJamScene::GameJamScene(Game * _game):
 
 		b2PolygonShape tShape;
 
-		float scaleVec = std::rand()%50/50.f+0.5f;
+		float scaleVec = ((std::rand()%50)/50.f);
 		s->transform->scale(scaleVec, scaleVec, scaleVec);
 		tShape.SetAsBox(width*std::abs(s->transform->scaleVector.x)*scale*2.f, std::abs(height*s->transform->scaleVector.y)*scale*2.f);
 		s->body->CreateFixture(&tShape, 1);
@@ -269,6 +269,13 @@ GameJamScene::GameJamScene(Game * _game):
 		dude1->addToScene(this);
 		dude1->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 		addChild(dude1);
+		
+		if(std::rand() % 500 / 500.f < 0.5f){
+			dude1->reactiveFeet = false;
+		}
+		if(std::rand() % 500 / 500.f < 0.5f){
+			dude1->reactiveBody = false;
+		}
 	}
 }
 
@@ -290,15 +297,17 @@ void GameJamScene::update(Step * _step){
 
 	world->update(_step);
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
-		if(playerCharacter->torso->body->GetPosition().y < 10){
-			playerCharacter->torso->applyLinearImpulseUp(750);
+		if(playerCharacter->torso->body->GetPosition().y < 12){
+			playerCharacter->torso->applyLinearImpulseUp(400);
 		}
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
 		//playerCharacter->transform->rotate(1, 0, 1, 0, kOBJECT);
 		playerCharacter->reactiveFeet = false;
+		playerCharacter->reactiveBody = false;
 	}else{
 		playerCharacter->reactiveFeet = true;
+		playerCharacter->reactiveBody = true;
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
 		playerCharacter->torso->applyLinearImpulseLeft(25);

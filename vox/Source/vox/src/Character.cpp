@@ -86,6 +86,7 @@ Character::Character(Box2DWorld * _world, bool _ai) :
 	ai(_ai),
 	text(new BitmapFont(new Texture("../assets/arial.bmp", 1024, 1024, true, true), 32, 16, 16 )),
 	reactiveFeet(true),
+	reactiveBody(true),
 	head(nullptr),
 	leftUpperArm(nullptr),
 	leftLowerArm(nullptr),
@@ -161,7 +162,7 @@ void Character::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderS
 
 void Character::update(Step * _step){
 	MeshEntity::update(_step);
-	if(reactiveFeet){
+	if(reactiveBody){
 		b2RevoluteJoint * neck = ((b2RevoluteJoint *)head->body->GetJointList()->joint);
 		float angle = neck->GetJointAngle();
 
