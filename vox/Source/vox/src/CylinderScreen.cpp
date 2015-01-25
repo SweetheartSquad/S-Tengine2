@@ -13,9 +13,10 @@ CylinderScreen::CylinderScreen(float _speed, float * _control, int _numLevels, T
 	if(_texture != nullptr){
 		mesh->pushTexture2D(_texture);
 	}
-
+	
+	float layers = 1.f/numLevels;
 	for(unsigned long int i = 0; i < mesh->getVertCount(); ++i){
-		float y = 1.f - mesh->vertices.at(i).y * 0.2f;
+		float y = 1.f - mesh->vertices.at(i).y * layers;
 		mesh->setUV(i, mesh->vertices.at(i).u, y);
 	}
 	mesh->dirty = true;

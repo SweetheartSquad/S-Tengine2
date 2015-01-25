@@ -36,14 +36,14 @@
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
 	world(new Box2DWorld(b2Vec2(0, -60))),
-	playerSprite(new Box2DSprite(world, b2_dynamicBody, true, nullptr, new Transform())),
+	playerCharacter(new TestCharacter(world)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_staticBody)),
 	tex(new Texture("../assets/MichaelScale.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
-	backgroundScreen(new CylinderScreen(25, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/skybox.png", 256, 256, true, true))),
-	midgroundScreen(new CylinderScreen(50, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/walls.png", 256, 256, true, true))),
-	foregroundScreen(new CylinderScreen(75, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky3.png", 512, 512, true, true))),
+	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/skybox - HD.png", 4096, 4096, true, true))),
+	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/walls - HD.png", 4096, 4096, true, true))),
+	foregroundScreen(new CylinderScreen(25, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/sky3.png", 512, 512, true, true))),
 	drawer(new Box2DDebugDraw(this))
 {
 	shader->components.push_back(new TextureShaderComponent());
@@ -65,33 +65,26 @@ GameJamScene::GameJamScene(Game * _game):
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	//soundManager->play("green_chair");
 
-	playerSprite->mesh->pushTexture2D(tex);
-	playerSprite->setShader(shader, true);
 	ground->setShader(shader, true);
 
 	ground->setTranslationPhysical(0, -10, -1);
 	ground->transform->scale(500, 10, 2);
 	ground->mesh->pushTexture2D(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true));
 
-	playerSprite->transform->scale(4, 12, 1);
-	playerSprite->setTranslationPhysical(0, 20, 0);
 
-	playerSprite->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
-
-	world->addToWorld(playerSprite);
 	world->addToWorld(ground);
 	for(Box2DSprite * s : items){
 		world->addToWorld(s);
 	}
 
 	backgroundScreen->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
-	backgroundScreen->transform->scale(25, 75, 75);
-	backgroundScreen->transform->translate(0, -10, -20);
+	backgroundScreen->transform->scale(25, 100, 100);
+	backgroundScreen->transform->translate(0, -10, -50);
 	backgroundScreen->setShader(shader, true);
 	
 	midgroundScreen->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
-	midgroundScreen->transform->scale(15, 50, 50);
-	midgroundScreen->transform->translate(0, -10, -10);
+	midgroundScreen->transform->scale(25, 50, 50);
+	midgroundScreen->transform->translate(0, -10, -20);
 	midgroundScreen->setShader(shader, true);
 	
 	foregroundScreen->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
@@ -111,27 +104,29 @@ GameJamScene::GameJamScene(Game * _game):
 	//addChild(foregroundScreen);
 	addChild(fontM);
 	addChild(backgroundScreen);
-	addChild(playerSprite);
 	for(Box2DSprite * s : items){
 		addChild(s);
 	}
 
-	camera = new PerspectiveCamera(playerSprite, glm::vec3(0, 10, 0), 5, 0);
+	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 5, 0);
 	//camera = new MousePerspectiveCamera();
+	camera->farClip = 100000000.f;
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
-	camera->transform->translate(5.0f, 2.55f, 21.0f);
+	camera->transform->translate(5.0f, 0.f, 15.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
 
 	world->b2world->SetDebugDraw(drawer);
 	drawer->SetFlags(b2Draw::e_shapeBit);
 
-	TestCharacter * ch = new TestCharacter(world);
-	ch->setShader(shader);
-	//addChild(ch);
-	ch->addToScene(this);
-	ch->torso->setTranslationPhysical(15, 5, 0);
-	ch->head->setTranslationPhysical(15, 5, 0);
+	playerCharacter->setShader(shader);
+	addChild(playerCharacter);
+	playerCharacter->addToScene(this);
+	playerCharacter->torso->setTranslationPhysical(15, 5, 0);
+	playerCharacter->head->setTranslationPhysical(15, 5, 0);
+	playerCharacter->torso->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
+	playerCharacter->torso->body->SetGravityScale(0);
+	playerCharacter->torso->body->SetGravityScale(0);
 	//ch->transform->scale(5, 5, 1);
 }
 
@@ -152,34 +147,33 @@ void GameJamScene::update(Step * _step){
 	Scene::update(_step);
 
 	world->update(_step);
-	playerSprite->playAnimation = false;
 	if(keyboard->keyDown(GLFW_KEY_W)){
-		if(!playerSprite->movingVertically(0.05)){
-			playerSprite->applyLinearImpulseUp(1500);	
+		if(!playerCharacter->torso->movingVertically(0.05)){
+			playerCharacter->torso->applyLinearImpulseUp(50);	
 		}
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
-		playerSprite->transform->rotate(1, 0, 1, 0, kOBJECT);
+		playerCharacter->transform->rotate(1, 0, 1, 0, kOBJECT);
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		playerSprite->applyLinearImpulseLeft(150);
-		if(playerSprite->transform->scaleVector.x < 0){
-			playerSprite->transform->scaleX(-1);
+		playerCharacter->torso->applyLinearImpulseLeft(25);
+		if(playerCharacter->transform->scaleVector.x < 0){
+			playerCharacter->transform->scaleX(-1);
 		}
-		//playerSprite->playAnimation = true;
-		//playerSprite->setCurrentAnimation("run");
+		//playerCharacter->playAnimation = true;
+		//playerCharacter->setCurrentAnimation("run");
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		playerSprite->applyLinearImpulseRight(150);
-		if(playerSprite->transform->scaleVector.x > 0){
-			playerSprite->transform->scaleX(-1);
+		playerCharacter->torso->applyLinearImpulseRight(25);
+		if(playerCharacter->transform->scaleVector.x > 0){
+			playerCharacter->transform->scaleX(-1);
 		}
-		//playerSprite->setCurrentAnimation("run");
-		//playerSprite->playAnimation = true;
+		//playerCharacter->setCurrentAnimation("run");
+		//playerCharacter->playAnimation = true;
 	}
 
 	// move the ground and background with the player
-	//ground->setTranslationPhysical(playerSprite->transform->translationVector.x, ground->transform->translationVector.y, ground->transform->translationVector.z);
+	//ground->setTranslationPhysical(playerCharacter->transform->translationVector.x, ground->transform->translationVector.y, ground->transform->translationVector.z);
 
 	// camera controls
 	if(keyboard->keyDown(GLFW_KEY_UP)){

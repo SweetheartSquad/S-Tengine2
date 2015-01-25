@@ -12,24 +12,35 @@ Character::Character(Box2DWorld * _world) :
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	world(_world),
-	componentScale(0.01f)
+	componentScale(0.0025f)
 {
 }
 
 Character::~Character(){
 }
 
-void Character::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
+void Character::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	MeshEntity::render(_matrixStack, _renderStack);
 }
 
-void Character::update(Step* _step){
+void Character::update(Step * _step){
 	MeshEntity::update(_step);
+	b2RevoluteJoint * neck = ((b2RevoluteJoint *)head->body->GetJointList()->joint);
+	float angle = neck->GetJointAngle();
 
-	float neck = ((b2RevoluteJoint *)head->body->GetJointList()->joint)->GetJointAngle();
-	((b2RevoluteJoint *)head->body->GetJointList()->joint)->SetMotorSpeed(neck*1000);
+	neck->SetMotorSpeed(-angle*360);
+	neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5));
 
-
+	float bodAngle = torso->body->GetAngle();
+	torso->body->SetAngularVelocity(-bodAngle*2);
+	
+	/*if(angle < neck->GetLowerLimit()/2 || angle > neck->GetUpperLimit()/2){
+		neck->SetMotorSpeed(angle < 0 ? 0.1 : -0.1);
+		neck->SetMaxMotorTorque(head->body->GetMass()*1000);
+	}else{
+		neck->SetMotorSpeed(0);
+		neck->SetMaxMotorTorque(0);
+	}*/
 }
 
 void Character::attachJoints(){
@@ -60,7 +71,7 @@ void Character::attachJoints(){
 	jth.collideConnected = false;
 	jth.enableLimit = true;
 	jth.enableMotor = true;
-	jth.maxMotorTorque = head->body->GetMass()*5;
+	jth.maxMotorTorque = 0;//head->body->GetMass()*1000;
 	jth.motorSpeed = 0;//
 	jth.referenceAngle = 0;
 	jth.lowerAngle = -glm::radians(45.f);

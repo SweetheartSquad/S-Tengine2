@@ -12,12 +12,13 @@ class Texture;
 class Sprite;
 class Box2DWorld;
 class CylinderScreen;
+class TestCharacter;
 
 class GameJamScene : public Scene{
 public:
 	Box2DDebugDraw * drawer;
 	Box2DWorld * world;
-	Box2DSprite * playerSprite;
+	TestCharacter * playerCharacter;
 	Box2DMeshEntity * ground;
 	Texture * tex;
 	BaseComponentShader* shader;
