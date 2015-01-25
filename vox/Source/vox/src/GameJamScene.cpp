@@ -36,12 +36,9 @@
 #include "Character2.h"
 #include "Character3.h"
 #include "Character4.h"
-<<<<<<< .merge_file_a07136
 #include "DialogEvent.h"
 #include "SayAction.h"
-=======
 #include "RandomCharacter.h"
->>>>>>> .merge_file_a06292
 
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
@@ -55,12 +52,8 @@ GameJamScene::GameJamScene(Game * _game):
 	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/skybox - HD - edited.png", 4096, 4096, true, true))),
 	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/walls - HD - edited.png", 4096, 4096, true, true))),
 	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/foregroundhallway.png", 4096, 4096, true, true))),
-<<<<<<< .merge_file_a07136
-	dialogEvent(new DialogEvent())
-=======
-	drawer(new Box2DDebugDraw(this)),
+	dialogEvent(new DialogEvent()),
 	debugDraw(false)
->>>>>>> .merge_file_a06292
 {
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
@@ -212,17 +205,9 @@ GameJamScene::GameJamScene(Game * _game):
 	//addChild(fontM);
 	addChild(backgroundScreen);
 
-<<<<<<< .merge_file_a07136
-
-	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 1, 0);
-//	camera = new MousePerspectiveCamera();
-
-	camera->farClip = 100000000.f;
-=======
 	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 0, 0);
 	//camera = new MousePerspectiveCamera();
 	camera->farClip = 1000.f;
->>>>>>> .merge_file_a06292
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
 	camera->transform->translate(5.0f, 0.f, 15.0f);
 	camera->yaw = 90.0f;
@@ -231,7 +216,7 @@ GameJamScene::GameJamScene(Game * _game):
 	world->b2world->SetDebugDraw(drawer);
 	drawer->SetFlags(b2Draw::e_shapeBit);
 
-<<<<<<< .merge_file_a07136
+
 	playerCharacter->setShader(shader);
 	addChild(playerCharacter);
 	playerCharacter->addToScene(this);
@@ -242,9 +227,6 @@ GameJamScene::GameJamScene(Game * _game):
 	playerCharacter->torso->body->SetGravityScale(0);
 	playerCharacter->torso->body->SetGravityScale(0);
 	//ch->transform->scale(5, 5, 1);
-=======
-
->>>>>>> .merge_file_a06292
 	
 	Character1 * char1 = new Character1(world, true);
 	char1->setShader(shader);
@@ -282,7 +264,6 @@ GameJamScene::GameJamScene(Game * _game):
 	char4->addToScene(this);
 	char4->translateComponents(glm::vec3(-150, 150, 0));
 	addChild(char4);
-<<<<<<< .merge_file_a07136
 
 	//playerCharacter->text->setText("Howdy Ya'll, My Name's Baby Legs Hetman");
 	playerCharacter->text->transform->translate(0, 3, -2);
@@ -294,7 +275,6 @@ GameJamScene::GameJamScene(Game * _game):
 	dialogEvent->addAction(new SayAction(playerCharacter, "Baby", 2));
 	dialogEvent->addAction(new SayAction(playerCharacter, "Hetman", 2));
 	dialogEvent->running = true;
-=======
 	
 	
 	for(unsigned long int i = 0; i < 10; ++i){
@@ -304,7 +284,6 @@ GameJamScene::GameJamScene(Game * _game):
 		dude1->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 		addChild(dude1);
 	}
->>>>>>> .merge_file_a06292
 }
 
 GameJamScene::~GameJamScene(){
@@ -372,10 +351,6 @@ void GameJamScene::update(Step * _step){
 			}
 		}
 
-<<<<<<< .merge_file_a07136
-=======
-
->>>>>>> .merge_file_a06292
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		playerCharacter->torso->applyLinearImpulseRight(25);
@@ -412,13 +387,9 @@ void GameJamScene::update(Step * _step){
 				}
 			}
 		}
-<<<<<<< .merge_file_a07136
-=======
+
 		}
 
-
-		
->>>>>>> .merge_file_a06292
 	}
 
 	// move the ground and background with the player
@@ -440,25 +411,23 @@ void GameJamScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		Scene::toggleFullScreen();
 	}
-<<<<<<< .merge_file_a07136
-
 
 	//DIALOG
 	dialogEvent->update(_step);
-=======
+
 	if(keyboard->keyJustUp(GLFW_KEY_F1)){
 		debugDraw = !debugDraw;
 	}
->>>>>>> .merge_file_a06292
+
 }
 
 void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene::render(_matrixStack, _renderStack);
-<<<<<<< .merge_file_a07136
+
 	//world->b2world->DrawDebugData();
-=======
+
 	if(debugDraw){
 		world->b2world->DrawDebugData();
 	}
->>>>>>> .merge_file_a06292
+
 }

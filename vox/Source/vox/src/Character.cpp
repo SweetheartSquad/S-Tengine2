@@ -80,11 +80,8 @@ Character::Character(Box2DWorld * _world, bool _ai) :
 	componentScale(0.0025f),
 	groupIndex(--gGroupIndex),
 	ai(_ai),
-<<<<<<< HEAD
 	text(new BitmapFont(new Texture("../assets/arial.bmp", 1024, 1024, true, true), 32, 16, 16 )),
-=======
 	reactiveFeet(true),
->>>>>>> 129de6a3b6b9df912d3186a827011a7de0963ac4
 	head(nullptr),
 	leftUpperArm(nullptr),
 	leftLowerArm(nullptr),
