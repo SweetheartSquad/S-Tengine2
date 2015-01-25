@@ -28,23 +28,23 @@ Character2::Character2(Box2DWorld * _world):
 	rightUpperArm = new CharacterComponent(componentScale, 50,	200,	upperArmTex,_world, b2_dynamicBody, false);
 	rightLowerArm = new CharacterComponent(componentScale, 40,	145,	lowerArmTex,_world, b2_dynamicBody, false);
 	rightHand	  = new CharacterComponent(componentScale, 55,	85,		handTex,_world, b2_dynamicBody, false);
-	upperLeftLeg  = new CharacterComponent(componentScale, 60,	200,	upperLegTex,_world, b2_dynamicBody, false);
-	lowerLeftLeg  = new CharacterComponent(componentScale, 105,	255,	lowerLegTex,_world, b2_dynamicBody, false);
-	upperRightLeg = new CharacterComponent(componentScale, 60,	200,	upperLegTex,_world, b2_dynamicBody, false);
-	lowerRightLeg = new CharacterComponent(componentScale, 105,	255,	lowerLegTex,_world, b2_dynamicBody, false);
+	leftUpperLeg  = new CharacterComponent(componentScale, 60,	200,	upperLegTex,_world, b2_dynamicBody, false);
+	leftLowerLeg  = new CharacterComponent(componentScale, 105,	255,	lowerLegTex,_world, b2_dynamicBody, false);
+	rightUpperLeg = new CharacterComponent(componentScale, 60,	200,	upperLegTex,_world, b2_dynamicBody, false);
+	rightLowerLeg = new CharacterComponent(componentScale, 105,	255,	lowerLegTex,_world, b2_dynamicBody, false);
 
 
-	upperLeftLeg->transform->scale(-1, 1, 1);
-	lowerLeftLeg->transform->scale(-1, 1, 1); 
+	leftUpperLeg->transform->scale(-1, 1, 1);
+	leftLowerLeg->transform->scale(-1, 1, 1); 
 	leftUpperArm->transform->scale(-1, 1, 1); 
 	leftLowerArm->transform->scale(-1, 1, 1);  
 	leftHand->transform->scale(-1, 1, 1);
 
 	
-	lowerLeftLeg->transform->scale(0.9f, 0.9f, 1.f);
-	lowerRightLeg->transform->scale(0.9f, 0.9f, 1.f);
-	upperLeftLeg->transform->scale(0.9f, 0.9f, 1.f);
-	upperRightLeg->transform->scale(0.9f, 0.9f, 1.f);
+	leftLowerLeg->transform->scale(0.9f, 0.9f, 1.f);
+	rightLowerLeg->transform->scale(0.9f, 0.9f, 1.f);
+	leftUpperLeg->transform->scale(0.9f, 0.9f, 1.f);
+	rightUpperLeg->transform->scale(0.9f, 0.9f, 1.f);
 
     attachJoints();
 }
