@@ -6,5 +6,9 @@
   {
 	//ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB);
 	  void BeginContact(b2Contact* contact);
+
+	  void contactWithProp(Character *& cA);
+	  void contactWithCharacter(b2Contact * contact);
+
 	  void EndContact(b2Contact* contact);
   };
