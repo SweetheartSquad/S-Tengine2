@@ -2,7 +2,7 @@
 
 #include "Scene2D.h"
 
-class DialogEvent;
+class DialogHandler;
 class Arduino;
 class Box2DMeshEntity;
 class Box2DDebugDraw;
@@ -34,7 +34,7 @@ public:
 	CylinderScreen * backgroundScreen;
 	CylinderScreen * midgroundScreen;
 	CylinderScreen * foregroundScreen;
-	DialogEvent * dialogEvent;
+	DialogHandler * dialogHandler;
 
 	std::vector<Box2DSprite *> items;
 

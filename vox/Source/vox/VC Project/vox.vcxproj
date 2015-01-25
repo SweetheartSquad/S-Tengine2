@@ -268,6 +268,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\src\DepthFrameBuffer.cpp" />
     <ClCompile Include="..\src\DialogAction.cpp" />
     <ClCompile Include="..\src\DialogEvent.cpp" />
+    <ClCompile Include="..\src\DialogHandler.cpp" />
     <ClCompile Include="..\src\DirectionalLight.cpp" />
     <ClCompile Include="..\src\Entity.cpp" />
     <ClCompile Include="..\src\FakeAnimation.cpp" />
@@ -372,6 +373,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\include\DepthFrameBuffer.h" />
     <ClInclude Include="..\include\DialogAction.h" />
     <ClInclude Include="..\include\DialogEvent.h" />
+    <ClInclude Include="..\include\DialogHandler.h" />
     <ClInclude Include="..\include\Dimension.h" />
     <ClInclude Include="..\include\DirectionalLight.h" />
     <ClInclude Include="..\include\Entity.h" />
