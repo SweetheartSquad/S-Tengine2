@@ -53,6 +53,9 @@ public:
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 	/** Adds a reference to an entity to the attached list of children */
 	void addChild(Entity * _child);
+
+	void alphaSort();
+
 	/** Toggles fullscreen on and off */
 	void toggleFullScreen();
 

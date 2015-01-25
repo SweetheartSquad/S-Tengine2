@@ -41,8 +41,8 @@ GameJamScene::GameJamScene(Game * _game):
 	tex(new Texture("../assets/MichaelScale.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
-	backgroundScreen(new CylinderScreen(25, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky.png", 512, 512, true, true))),
-	midgroundScreen(new CylinderScreen(50, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/walls.png", 4096, 4096, true, true))),
+	backgroundScreen(new CylinderScreen(25, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/skybox.png", 256, 256, true, true))),
+	midgroundScreen(new CylinderScreen(50, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/walls.png", 256, 256, true, true))),
 	foregroundScreen(new CylinderScreen(75, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky3.png", 512, 512, true, true))),
 	drawer(new Box2DDebugDraw(this))
 {
@@ -73,7 +73,7 @@ GameJamScene::GameJamScene(Game * _game):
 	ground->transform->scale(500, 10, 2);
 	ground->mesh->pushTexture2D(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true));
 
-	playerSprite->transform->scale(4, 4, 1);
+	playerSprite->transform->scale(4, 12, 1);
 	playerSprite->setTranslationPhysical(0, 20, 0);
 
 	playerSprite->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
@@ -128,7 +128,8 @@ GameJamScene::GameJamScene(Game * _game):
 
 	TestCharacter * ch = new TestCharacter(world);
 	ch->setShader(shader);
-	addChild(ch);
+	//addChild(ch);
+	ch->addToScene(this);
 	ch->torso->setTranslationPhysical(15, 5, 0);
 	ch->head->setTranslationPhysical(15, 5, 0);
 	//ch->transform->scale(5, 5, 1);

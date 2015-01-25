@@ -2,6 +2,7 @@
 
 #include "MeshEntity.h"
 
+class Scene;
 class Shader;
 class Box2DWorld;
 class Box2DSprite;
@@ -35,4 +36,6 @@ public:
 	void unload() override;
 	void load() override;
 	void setShader(Shader * _shader);
+
+	void addToScene(Scene * _scene);
 };

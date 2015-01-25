@@ -92,6 +92,7 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 
 	glEnable(GL_SCISSOR_TEST);
 	glEnable (GL_BLEND);
+    glEnable(GL_POLYGON_OFFSET_FILL);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	glClearColor(1.0, 0.0, 0.0, 0.0);
@@ -112,11 +113,15 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 	matrixStack->projectionMatrix = camera->getProjectionMatrix();
 	matrixStack->viewMatrix		  = camera->getViewMatrix();
 
+	float offset = 10;
 	for(Entity * e : children){
 		e->render(matrixStack, renderOptions);
+		glPolygonOffset(offset, offset);
+		offset -= 0.1f;
 	}
 
 	GLUtils::checkForError(0,__FILE__,__LINE__);
+    glDisable(GL_POLYGON_OFFSET_FILL);
 }
 
 void Scene::addChild(Entity* _child){
@@ -144,6 +149,10 @@ void Scene::addChild(Entity* _child){
 	}
 	children.push_back(_child);
 	std::cout << "inserted at end" << std::endl;
+}
+
+void Scene::alphaSort(){
+
 }
 
 void Scene::toggleFullScreen(){

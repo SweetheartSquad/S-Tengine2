@@ -5,13 +5,14 @@
 #include "Box2DWorld.h"
 #include "shader/Shader.h"
 #include "CharacterComponent.h"
+#include "Scene.h"
 
 Character::Character(Box2DWorld * _world) :
 	MeshEntity(nullptr, new Transform()),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	world(_world),
-	componentScale(0.001f)
+	componentScale(0.01f)
 {
 }
 
@@ -24,38 +25,19 @@ void Character::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderSta
 
 void Character::update(Step* _step){
 	MeshEntity::update(_step);
+
+	float neck = ((b2RevoluteJoint *)head->body->GetJointList()->joint)->GetJointAngle();
+	((b2RevoluteJoint *)head->body->GetJointList()->joint)->SetMotorSpeed(neck*1000);
+
+
 }
 
 void Character::attachJoints(){
-	addChild(torso);
-	addChild(leftUpperArm);
-	addChild(leftLowerArm);
-	addChild(leftHand);
-	addChild(rightUpperArm);
-	addChild(rightLowerArm);
-	addChild(rightHand);
-	addChild(upperLeftLeg);
-	addChild(lowerLeftLeg);
-	addChild(upperRightLeg);
-	addChild(lowerRightLeg);
-	addChild(head);
+	
 
-	torso		   ->transform->translate(0, 0, -0.01);
-	head		   ->transform->translate(0, 0, 0.01);
-	leftUpperArm   ->transform->translate(0, 0, -0.01);
-	leftLowerArm   ->transform->translate(0, 0, -0.02);
-	leftHand	   ->transform->translate(0, 0, -0.03);
-	rightUpperArm  ->transform->translate(0, 0, 0.01);
-	rightLowerArm  ->transform->translate(0, 0, 0.02);
-	rightHand	   ->transform->translate(0, 0, 0.03);
-	upperLeftLeg   ->transform->translate(0, 0, -0.01);
-	lowerLeftLeg   ->transform->translate(0, 0, -0.02);
-	upperRightLeg  ->transform->translate(0, 0, 0.01);
-	lowerRightLeg  ->transform->translate(0, 0, 0.02);
-
-	for(NodeChild * s : children){
+	/*for(NodeChild * s : children){
 		dynamic_cast<Box2DSprite *>(s)->transform->scale(5,5,1);
-	}
+	}*/
 
 	torso->createFixture();
 	head->createFixture();
@@ -77,10 +59,26 @@ void Character::attachJoints(){
 	jth.localAnchorB.Set(0, 0.8f * -head->height*head->transform->scaleVector.y*componentScale*2.f);
 	jth.collideConnected = false;
 	jth.enableLimit = true;
+	jth.enableMotor = true;
+	jth.maxMotorTorque = head->body->GetMass()*5;
+	jth.motorSpeed = 0;//
 	jth.referenceAngle = 0;
-	jth.lowerAngle = -glm::radians(90.f);
-	jth.upperAngle = glm::radians(90.f);
+	jth.lowerAngle = -glm::radians(45.f);
+	jth.upperAngle = glm::radians(45.f);
 	world->b2world->CreateJoint(&jth);
+
+	torso		   ->setTranslationPhysical(0, 0, 1);
+	head		   ->setTranslationPhysical(0, 0, -1);
+	leftUpperArm   ->setTranslationPhysical(0, 0, -0.01);
+	leftLowerArm   ->setTranslationPhysical(0, 0, -0.02);
+	leftHand	   ->setTranslationPhysical(0, 0, -0.03);
+	rightUpperArm  ->setTranslationPhysical(0, 0, 0.01);
+	rightLowerArm  ->setTranslationPhysical(0, 0, 0.02);
+	rightHand	   ->setTranslationPhysical(0, 0, 0.03);
+	upperLeftLeg   ->setTranslationPhysical(0, 0, -0.01);
+	lowerLeftLeg   ->setTranslationPhysical(0, 0, -0.02);
+	upperRightLeg  ->setTranslationPhysical(0, 0, 0.01);
+	lowerRightLeg  ->setTranslationPhysical(0, 0, 0.02);
 }
 
 void Character::unload(){
@@ -102,4 +100,19 @@ void Character::setShader(Shader * _shader){
 	lowerLeftLeg  ->setShader(_shader, true);
 	upperRightLeg ->setShader(_shader, true);
 	lowerRightLeg ->setShader(_shader, true);
+}
+
+void Character::addToScene(Scene * _scene){
+	_scene->addChild(torso);
+	_scene->addChild(leftUpperArm);
+	_scene->addChild(leftLowerArm);
+	_scene->addChild(leftHand);
+	_scene->addChild(rightUpperArm);
+	_scene->addChild(rightLowerArm);
+	_scene->addChild(rightHand);
+	_scene->addChild(upperLeftLeg);
+	_scene->addChild(lowerLeftLeg);
+	_scene->addChild(upperRightLeg);
+	_scene->addChild(lowerRightLeg);
+	_scene->addChild(head);
 }
