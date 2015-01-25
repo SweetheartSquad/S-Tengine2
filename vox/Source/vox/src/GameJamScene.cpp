@@ -55,7 +55,7 @@ GameJamScene::GameJamScene(Game * _game):
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 
-	const int imgCount = 12;
+	const int imgCount = 15;
 	std::string strings[imgCount] = {
 		"../assets/props/Table_657_332.png",		
 		"../assets/props/TourDePizza_738_854.png",
@@ -68,7 +68,10 @@ GameJamScene::GameJamScene(Game * _game):
 		"../assets/props/HealthyPlant_272_877.png",
 		"../assets/props/JollySkeleton_399_916.png",
 		"../assets/props/Lockers_1024_604.png",
-		"../assets/props/Pie_667_692.png"
+		"../assets/props/Pie_667_692.png",
+		"../assets/props/GarbageBags_296_247.png",
+		"../assets/props/HopHorse_253_511.png",
+		"../assets/props/WigHead_228_257.png"
 	};
 
 	for(unsigned long int i = 0; i < imgCount; ++i){
@@ -252,7 +255,7 @@ GameJamScene::GameJamScene(Game * _game):
 	addChild(char4);
 	
 	
-	for(unsigned long int i = 0; i < 10; ++i){
+	for(unsigned long int i = 0; i < 3; ++i){
 		RandomCharacter * dude1 = new RandomCharacter(world, true);
 		dude1->setShader(shader);
 		dude1->addToScene(this);
