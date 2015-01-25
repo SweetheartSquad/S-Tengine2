@@ -79,11 +79,11 @@
     <Filter Include="Header Files\arduino">
       <UniqueIdentifier>{759c8fc0-0321-4e52-b957-f0e5b6990a9c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\TestGame\GameJamScene">
-      <UniqueIdentifier>{c964133c-c09b-42e0-b189-02ff94dc8c7f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\TestGame\GameJam">
       <UniqueIdentifier>{4fb0706c-514d-40e9-bc7c-77db02609ee1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TestGame\GameJam">
+      <UniqueIdentifier>{c964133c-c09b-42e0-b189-02ff94dc8c7f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -350,6 +350,9 @@
     </ClCompile>
     <ClCompile Include="..\src\TestCharacter.cpp">
       <Filter>Source Files\TestGame\GameJAm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CharacterComponent.cpp">
+      <Filter>Source Files\TestGame\GameJam</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -621,7 +624,7 @@
       <Filter>Header Files\node</Filter>
     </ClInclude>
     <ClInclude Include="..\include\GameJamScene.h">
-      <Filter>Header Files\TestGame\GameJamScene</Filter>
+      <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
     <ClInclude Include="..\include\BitmapFont.h">
       <Filter>Header Files</Filter>
@@ -630,10 +633,13 @@
       <Filter>Header Files\TestGame</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Character.h">
-      <Filter>Header Files\TestGame\GameJamScene</Filter>
+      <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
     <ClInclude Include="..\include\TestCharacter.h">
-      <Filter>Header Files\TestGame\GameJamScene</Filter>
+      <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\CharacterComponent.h">
+      <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

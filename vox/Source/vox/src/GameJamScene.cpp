@@ -31,6 +31,7 @@
 #include "BitmapFont.h"
 #include "CylinderScreen.h"
 #include "TestCharacter.h"
+#include "CharacterComponent.h"
 
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
@@ -41,7 +42,7 @@ GameJamScene::GameJamScene(Game * _game):
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
 	backgroundScreen(new CylinderScreen(25, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky.png", 512, 512, true, true))),
-	midgroundScreen(new CylinderScreen(50, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky2.png", 512, 512, true, true))),
+	midgroundScreen(new CylinderScreen(50, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/walls.png", 4096, 4096, true, true))),
 	foregroundScreen(new CylinderScreen(75, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky3.png", 512, 512, true, true))),
 	drawer(new Box2DDebugDraw(this))
 {
@@ -73,7 +74,7 @@ GameJamScene::GameJamScene(Game * _game):
 	ground->mesh->pushTexture2D(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true));
 
 	playerSprite->transform->scale(4, 4, 1);
-	playerSprite->setTranslationPhysical(0, 10, 0);
+	playerSprite->setTranslationPhysical(0, 20, 0);
 
 	playerSprite->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 
@@ -122,14 +123,15 @@ GameJamScene::GameJamScene(Game * _game):
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
 
-	//world->b2world->SetDebugDraw(drawer);
-	//drawer->SetFlags(b2Draw::e_shapeBit);
+	world->b2world->SetDebugDraw(drawer);
+	drawer->SetFlags(b2Draw::e_shapeBit);
 
 	TestCharacter * ch = new TestCharacter(world);
 	ch->setShader(shader);
 	addChild(ch);
-	//ch->torso->setTranslationPhysical(0, 5, 0);
-	ch->transform->scale(5, 5, 1);
+	ch->torso->setTranslationPhysical(15, 5, 0);
+	ch->head->setTranslationPhysical(15, 5, 0);
+	//ch->transform->scale(5, 5, 1);
 }
 
 GameJamScene::~GameJamScene(){

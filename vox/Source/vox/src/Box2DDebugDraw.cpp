@@ -25,8 +25,10 @@ Box2DDebugDraw::~Box2DDebugDraw(){
 }
 
 void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color){
-	delete sprite->mesh;
-	sprite->mesh = new SpriteMesh(GL_STATIC_DRAW);
+	//delete sprite->mesh;
+	//sprite->mesh = new SpriteMesh(GL_STATIC_DRAW);
+	sprite->mesh->vertices.clear();
+	sprite->mesh->indices.clear();
 	sprite->setShader(shader, true);
 	sprite->mesh->polygonalDrawMode = GL_POLYGON;
 	for(int32 i = 0; i < vertexCount; i++) {
@@ -40,8 +42,10 @@ void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, cons
 }
 
 void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount, const b2Color& color){
-	delete sprite->mesh;
-	sprite->mesh = new SpriteMesh(GL_STATIC_DRAW);
+	//delete sprite->mesh;
+	//sprite->mesh = new SpriteMesh(GL_STATIC_DRAW);
+	sprite->mesh->vertices.clear();
+	sprite->mesh->indices.clear();
 	sprite->setShader(shader, true);
 	sprite->mesh->polygonalDrawMode = GL_POLYGON;
 	for(int32 i = 0; i < vertexCount; i++) {
@@ -55,8 +59,10 @@ void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount
 }
 
 void Box2DDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color){
-	delete sprite->mesh;
-	sprite->mesh = new SpriteMesh(GL_STATIC_DRAW);
+	//delete sprite->mesh;
+	//sprite->mesh = new SpriteMesh(GL_STATIC_DRAW);
+	sprite->mesh->vertices.clear();
+	sprite->mesh->indices.clear();
 	sprite->setShader(shader, true);
 	sprite->mesh->polygonalDrawMode = GL_POLYGON;
 	for (int32 i = 0; i < 30; ++i){
@@ -74,8 +80,10 @@ void Box2DDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Co
 }
 
 void Box2DDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color){
-	delete sprite->mesh;
-	sprite->mesh = new SpriteMesh(GL_STATIC_DRAW);
+	//delete sprite->mesh;
+	//sprite->mesh = new SpriteMesh(GL_STATIC_DRAW);
+	sprite->mesh->vertices.clear();
+	sprite->mesh->indices.clear();
 	sprite->setShader(shader, true);
 	sprite->mesh->polygonalDrawMode = GL_POLYGON;
 	for (int32 i = 0; i < 30; ++i){
@@ -93,8 +101,10 @@ void Box2DDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const
 }
 
 void Box2DDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color){
-	delete sprite->mesh;
-	sprite->mesh = new SpriteMesh(GL_STATIC_DRAW);
+	//delete sprite->mesh;
+	//sprite->mesh = new SpriteMesh(GL_STATIC_DRAW);
+	sprite->mesh->vertices.clear();
+	sprite->mesh->indices.clear();
 	sprite->setShader(shader, true);
 	sprite->mesh->polygonalDrawMode = GL_POLYGON;
 	sprite->mesh->pushVert(Vertex(p1.x, p1.y, 0.0001f, color.r, color.g, color.b, 1.f));

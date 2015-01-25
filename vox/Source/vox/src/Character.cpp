@@ -4,12 +4,14 @@
 #include "Box2DSprite.h"
 #include "Box2DWorld.h"
 #include "shader/Shader.h"
+#include "CharacterComponent.h"
 
 Character::Character(Box2DWorld * _world) :
 	MeshEntity(nullptr, new Transform()),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
-	world(_world)
+	world(_world),
+	componentScale(0.001f)
 {
 }
 
@@ -38,7 +40,7 @@ void Character::attachJoints(){
 	addChild(lowerRightLeg);
 	addChild(head);
 
-	torso		   ->transform->translate(0, 0, 0);
+	torso		   ->transform->translate(0, 0, -0.01);
 	head		   ->transform->translate(0, 0, 0.01);
 	leftUpperArm   ->transform->translate(0, 0, -0.01);
 	leftLowerArm   ->transform->translate(0, 0, -0.02);
@@ -51,21 +53,33 @@ void Character::attachJoints(){
 	upperRightLeg  ->transform->translate(0, 0, 0.01);
 	lowerRightLeg  ->transform->translate(0, 0, 0.02);
 
-	b2PolygonShape tShape;
-	tShape.SetAsBox(2.5, 3);
-	torso->body->CreateFixture(&tShape, 1);
+	for(NodeChild * s : children){
+		dynamic_cast<Box2DSprite *>(s)->transform->scale(5,5,1);
+	}
 
+	torso->createFixture();
+	head->createFixture();
+	/*
 	b2PolygonShape hShape;
-	hShape.SetAsBox(1, 1);
+	hShape.SetAsBox(1.6, 2.7);
 	head->body->CreateFixture(&hShape, 1);
-
+	*/
 	//world->addToWorld(head);
 	//world->addToWorld(torso);
 
 	b2RevoluteJointDef jth;
-	jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
-	jth.bodyA = head->body;
-	jth.bodyB = torso->body;
+	//jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
+	jth.bodyA = torso->body;
+	jth.bodyB = head->body;
+	//jth.localAnchorA.Set(torso->width/2.f*torso->transform->scaleVector.x*componentScale, torso->height*torso->transform->scaleVector.y*componentScale);
+	//jth.localAnchorB.Set(head->width/2.f*head->transform->scaleVector.x*componentScale, -head->height*head->transform->scaleVector.y*componentScale);
+	jth.localAnchorA.Set(0, 0.8f * torso->height*torso->transform->scaleVector.y*componentScale*2.f);
+	jth.localAnchorB.Set(0, 0.8f * -head->height*head->transform->scaleVector.y*componentScale*2.f);
+	jth.collideConnected = false;
+	jth.enableLimit = true;
+	jth.referenceAngle = 0;
+	jth.lowerAngle = -glm::radians(90.f);
+	jth.upperAngle = glm::radians(90.f);
 	world->b2world->CreateJoint(&jth);
 }
 
