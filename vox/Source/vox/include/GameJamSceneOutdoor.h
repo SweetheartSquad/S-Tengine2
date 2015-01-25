@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Scene2D.h"
+#include "GameJamScene.h"
 
 class DialogEvent;
 class Arduino;
@@ -20,28 +21,8 @@ class Character2;
 class Character3;
 class Character4;
 
-class GameJamSceneOutdoor : public Scene{
+class GameJamSceneOutdoor : public GameJamScene{
 public:
-	bool debugDraw;
-	Box2DDebugDraw * drawer;
-	Box2DWorld * world;
-	Character * playerCharacter;
-	Box2DMeshEntity * ground;
-	BaseComponentShader* shader;
-	SoundManager * soundManager;
-	SpriteSheetAnimation * spriteSheet;
-	CylinderScreen * backgroundScreen;
-	CylinderScreen * midgroundScreen;
-	CylinderScreen * foregroundScreen;
-	DialogEvent * dialogEvent;
-
-	std::vector<Box2DSprite *> items;
-
 	explicit GameJamSceneOutdoor(Game * _game);
-	virtual ~GameJamSceneOutdoor();
-
-	void load() override;
-	void unload() override;
 	void update(Step * _step) override;
-	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
 };

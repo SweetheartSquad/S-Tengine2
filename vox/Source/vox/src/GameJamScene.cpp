@@ -49,11 +49,11 @@ GameJamScene::GameJamScene(Game * _game):
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
-	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/environments/skybox - HD - edited.png", 4096, 4096, true, true))),
-	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/environments/walls - HD - edited.png", 4096, 4096, true, true))),
-	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/environments/foregroundhallway.png", 4096, 4096, true, true))),
 	dialogEvent(new DialogEvent()),
-	debugDraw(false)
+	debugDraw(false),
+	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4)),
+	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4)),
+	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4))
 {
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
@@ -78,23 +78,24 @@ GameJamScene::GameJamScene(Game * _game):
 		"../assets/props/WigHead_228_257.png"
 	};
 
-	for(unsigned long int i = 12; i < imgCount; ++i){
+	for(unsigned long int i = std::rand()%200; i < imgCount; ++i){
+		unsigned long int tex = std::rand()%imgCount;
 		Box2DSprite * s = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform());
-		s->mesh->pushTexture2D(new Texture(strings[i].c_str(), 1024, 1024, true, true));
+		s->mesh->pushTexture2D(new Texture(strings[tex].c_str(), 1024, 1024, true, true));
 
 		int width = 0;
 		int height = 0;
 
 		int cc = 0;
-		for(char c : strings[i]){
+		for(char c : strings[tex]){
 			if(c == '_' || c == '.'){
-				strings[i].at(cc) = ' ';
+				strings[tex].at(cc) = ' ';
 			}
 			cc++;
 		}
 		std::string arr[4];
 		int j = 0;
-		std::stringstream ssin(strings[i]);
+		std::stringstream ssin(strings[tex]);
 		while (ssin.good() && j < 4){
 			ssin >> arr[j];
 			++j;
@@ -106,6 +107,9 @@ GameJamScene::GameJamScene(Game * _game):
 		float scale = 0.002;
 
 		b2PolygonShape tShape;
+
+		float scaleVec = std::rand()%50/50.f;
+		s->transform->scale(scaleVec, scaleVec, scaleVec);
 		tShape.SetAsBox(width*std::abs(s->transform->scaleVector.x)*scale*2.f, std::abs(height*s->transform->scaleVector.y)*scale*2.f);
 		s->body->CreateFixture(&tShape, 1);
 		b2Filter t;
@@ -137,20 +141,16 @@ GameJamScene::GameJamScene(Game * _game):
 		s->mesh->vertices.at(0).v = height/mag;
 		s->mesh->dirty = true;
 		
-		s->setTranslationPhysical(i * 25, height/mag*2.f, 0.01f);
+		s->setTranslationPhysical(std::rand()%100 - 50, 0, 0.01f);
 		s->setShader(shader, true);
 		items.push_back(s);
 	}
-
-	//soundManager->addNewSound("green_chair", "../assets/test.wav");
-	//soundManager->play("green_chair");
-
 	
 	ground->setShader(shader, true);
 	ground->setTranslationPhysical(0, 0, -5.f);
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
 	ground->transform->scale(1000, 10, 1);
-	ground->mesh->pushTexture2D(new Texture("../assets/environments/bathroomtile.png", 512, 512, true, true));
+	//ground->mesh->pushTexture2D(new Texture("../assets/environments/bathroomtile.png", 512, 512, true, true));
 	ground->mesh->setUV(3, 0, 0);
 	ground->mesh->setUV(2, 200.f, 0);
 	ground->mesh->setUV(1, 200.f, 2.f);

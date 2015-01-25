@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GameJamSceneOutdoor.h"
+#include "GameJamSceneIndoor.h"
 
 #include "Texture.h"
 #include "Sprite.h"
@@ -41,22 +41,21 @@
 #include "RandomCharacter.h"
 #include "Game.h"
 
-GameJamSceneOutdoor::GameJamSceneOutdoor(Game * _game):
+GameJamSceneIndoor::GameJamSceneIndoor(Game * _game) :
 	GameJamScene(_game)
 {
 	backgroundScreen->mesh->pushTexture2D(new Texture("../assets/environments/skybox - HD - edited.png", 4096, 4096, true, true));
-	midgroundScreen->mesh->pushTexture2D(new Texture("../assets/environments/courtyardsmall.png", 4096, 4096, true, true));
+	midgroundScreen->mesh->pushTexture2D(new Texture("../assets/environments/walls - HD - edited.png", 4096, 4096, true, true));
 	foregroundScreen->mesh->pushTexture2D(new Texture("../assets/environments/foregroundhallway.png", 4096, 4096, true, true));
 
-	ground->mesh->pushTexture2D(new Texture("../assets/environments/courtyardtile.png", 512, 512, true, true));
+	ground->mesh->pushTexture2D(new Texture("../assets/environments/bathroomtile.png", 512, 512, true, true));
 }
 
-
-void GameJamSceneOutdoor::update(Step * _step){
+void GameJamSceneIndoor::update(Step * _step){
 	GameJamScene::update(_step);
 	if(keyboard->keyJustUp(GLFW_KEY_F2)){
-		if(game->scenes.count("indoors") != 0){
-			game->currentScene = game->scenes.at("indoors");
+		if(game->scenes.count("outdoors") != 0){
+			game->currentScene = game->scenes.at("outdoors");
 		}
 	}
 }

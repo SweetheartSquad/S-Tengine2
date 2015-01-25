@@ -21,8 +21,9 @@ class Character2;
 class Character3;
 class Character4;
 
-class GameJamSceneOutdoor : public GameJamScene{
+class GameJamSceneIndoor : public GameJamScene{
 public:
-	explicit GameJamSceneOutdoor(Game * _game);
+	explicit GameJamSceneIndoor(Game * _game);
+
 	void update(Step * _step) override;
 };

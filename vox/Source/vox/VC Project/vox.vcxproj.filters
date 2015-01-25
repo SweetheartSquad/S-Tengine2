@@ -387,6 +387,9 @@
     <ClCompile Include="..\src\GameJamSceneOutdoor.cpp">
       <Filter>Source Files\TestGame\GameJam</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\GameJamSceneIndoor.cpp">
+      <Filter>Source Files\TestGame\GameJam</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -705,6 +708,12 @@
       <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
     <ClInclude Include="..\include\GameJamSceneOutdoor.h">
+      <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\GameJamSceneIndoor.h">
+      <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Props.h">
       <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
   </ItemGroup>
