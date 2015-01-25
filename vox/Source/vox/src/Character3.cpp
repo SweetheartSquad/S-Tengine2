@@ -20,18 +20,18 @@ Character3::Character3(Box2DWorld * _world):
 	Texture * upperLegTex = new Texture("../assets/HoodieUL.png", 512, 512, true, true);  
 	Texture * lowerLegTex = new Texture("../assets/HoodieLL.png", 512, 512, true, true); 
 
-	torso	      = new CharacterComponent(componentScale, 150,	360,	torsoTex, _world, b2_dynamicBody, false);
-	head		  = new CharacterComponent(componentScale, 160,	270,	headTex, _world, b2_dynamicBody, false);
-	leftUpperArm  = new CharacterComponent(componentScale, 55,	205,	upperArmTex,_world, b2_dynamicBody, false);
-	leftLowerArm  = new CharacterComponent(componentScale, 40,	145,	lowerArmTex,_world, b2_dynamicBody, false);
+	torso	      = new CharacterComponent(componentScale, 175,	285,	torsoTex, _world, b2_dynamicBody, false);
+	head		  = new CharacterComponent(componentScale, 170,	300,	headTex, _world, b2_dynamicBody, false);
+	leftUpperArm  = new CharacterComponent(componentScale, 65,	165,	upperArmTex,_world, b2_dynamicBody, false);
+	leftLowerArm  = new CharacterComponent(componentScale, 55,	165,	lowerArmTex,_world, b2_dynamicBody, false);
 	leftHand	  = new CharacterComponent(componentScale, 55,	85,		handTex,_world, b2_dynamicBody, false);
-	rightUpperArm = new CharacterComponent(componentScale, 55,	205,	upperArmTex,_world, b2_dynamicBody, false);
-	rightLowerArm = new CharacterComponent(componentScale, 40,	145,	lowerArmTex,_world, b2_dynamicBody, false);
-	rightHand	  = new CharacterComponent(componentScale, 55,	85,		handTex,_world, b2_dynamicBody, false);
-	upperLeftLeg  = new CharacterComponent(componentScale, 70,	215,	upperLegTex,_world, b2_dynamicBody, false);
-	lowerLeftLeg  = new CharacterComponent(componentScale, 135,	285,	lowerLegTex,_world, b2_dynamicBody, false);
-	upperRightLeg = new CharacterComponent(componentScale, 70,	215,	upperLegTex,_world, b2_dynamicBody, false);
-	lowerRightLeg = new CharacterComponent(componentScale, 135,	285,	lowerLegTex,_world, b2_dynamicBody, false);
+	rightUpperArm = new CharacterComponent(componentScale, 65,	165,	upperArmTex,_world, b2_dynamicBody, false);
+	rightLowerArm = new CharacterComponent(componentScale, 55,	165,	lowerArmTex,_world, b2_dynamicBody, false);
+	rightHand	  = new CharacterComponent(componentScale, 65,	85,		handTex,_world, b2_dynamicBody, false);
+	upperLeftLeg  = new CharacterComponent(componentScale, 50,	205,	upperLegTex,_world, b2_dynamicBody, false);
+	lowerLeftLeg  = new CharacterComponent(componentScale, 115,	240,	lowerLegTex,_world, b2_dynamicBody, false);
+	upperRightLeg = new CharacterComponent(componentScale, 50,	205,	upperLegTex,_world, b2_dynamicBody, false);
+	lowerRightLeg = new CharacterComponent(componentScale, 115,	240,	lowerLegTex,_world, b2_dynamicBody, false);
 
 
 	upperLeftLeg->transform->scale(-1, 1, 1);
