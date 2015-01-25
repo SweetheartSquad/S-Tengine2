@@ -20,7 +20,7 @@ Character1::Character1(Box2DWorld * _world, bool _ai):
 	Texture * upperLegTex = new Texture("../assets/MoustacheUL.png", 512, 512, true, true);  
 	Texture * lowerLegTex = new Texture("../assets/MoustacheLL.png", 512, 512, true, true); 
 
-	torso	      = new CharacterComponent(componentScale, 150,	360,	torsoTex, _world, b2_dynamicBody, false);
+	torso	      = new CharacterComponent(componentScale, 160,	290,	torsoTex, _world, b2_dynamicBody, false);
 	head		  = new CharacterComponent(componentScale, 160,	270,	headTex, _world, b2_dynamicBody, false);
 	leftUpperArm  = new CharacterComponent(componentScale, 55,	205,	upperArmTex,_world, b2_dynamicBody, false);
 	leftLowerArm  = new CharacterComponent(componentScale, 40,	145,	lowerArmTex,_world, b2_dynamicBody, false);
@@ -45,6 +45,19 @@ Character1::Character1(Box2DWorld * _world, bool _ai):
 	rightLowerLeg->transform->scale(0.9f, 0.9f, 1.f);
 	leftUpperLeg->transform->scale(0.9f, 0.9f, 1.f);
 	rightUpperLeg->transform->scale(0.9f, 0.9f, 1.f);
+
+	
+	ratioY_shoulder_to_torso = 0.85f;
+	ratioY_torso_to_shoulder = 0.3f;
+	
+	ratioY_hip_to_torso = 0.85f;
+	ratioY_torso_to_hip = 0.85f;
+
+	ratioY_knee_to_hip = 0.75f;
+	ratioY_hip_to_knee = 0.75f;
+
+	ratioY_torso_to_neck = 0.9f;
+	ratioY_neck_to_torso = 0.9f;
 
     attachJoints();
 }

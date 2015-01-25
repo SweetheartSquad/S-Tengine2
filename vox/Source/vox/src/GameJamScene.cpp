@@ -40,12 +40,12 @@
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
 	world(new Box2DWorld(b2Vec2(0, -60))),
-	playerCharacter(new TestCharacter(world, false)),
+	playerCharacter(new Character1(world, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	tex(new Texture("../assets/MichaelScale.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
-	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/skybox - HD.png", 4096, 4096, true, true))),
+	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/skybox - HD - edited.png", 4096, 4096, true, true))),
 	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/walls - HD - edited.png", 4096, 4096, true, true))),
 	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/foregroundhallway.png", 4096, 4096, true, true))),
 	drawer(new Box2DDebugDraw(this))
