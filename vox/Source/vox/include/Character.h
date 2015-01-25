@@ -3,6 +3,7 @@
 #include "MeshEntity.h"
 #include <Box2D/Box2D.h>
 
+class BitmapFont;
 class Scene;
 class Shader;
 class Box2DWorld;
@@ -77,11 +78,11 @@ public:
 
 	float hipWidth;
 
+	BitmapFont * text;
 
 	Box2DWorld * world;
 
 	CharacterComponent * torso;
-
 	CharacterComponent * head;
 	CharacterComponent * leftUpperArm;
 	CharacterComponent * leftLowerArm;
@@ -94,7 +95,7 @@ public:
 	CharacterComponent * rightUpperLeg;
 	CharacterComponent * rightLowerLeg;
 
-	std::vector<CharacterComponent *> components;
+	std::vector<CharacterComponent **> components;
 
 	explicit Character(Box2DWorld * _world, bool _ai = true);
 	~Character();
@@ -104,7 +105,7 @@ public:
 	void attachJoints();
 	void unload() override;
 	void load() override;
-	void setShader(Shader * _shader);
+	void setShader(Shader * _shader, bool _configureDefaultVertexAttributes) override;
 
 	void addToScene(Scene * _scene);
 

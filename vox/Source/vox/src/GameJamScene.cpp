@@ -36,10 +36,13 @@
 #include "Character2.h"
 #include "Character3.h"
 #include "Character4.h"
+#include "DialogEvent.h"
+#include "SayAction.h"
 #include "RandomCharacter.h"
 
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
+	drawer(new Box2DDebugDraw(this)),
 	world(new Box2DWorld(b2Vec2(0, -60))),
 	playerCharacter(new TestCharacter(world, true)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
@@ -48,7 +51,7 @@ GameJamScene::GameJamScene(Game * _game):
 	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/skybox - HD - edited.png", 4096, 4096, true, true))),
 	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/walls - HD - edited.png", 4096, 4096, true, true))),
 	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/foregroundhallway.png", 4096, 4096, true, true))),
-	drawer(new Box2DDebugDraw(this)),
+	dialogEvent(new DialogEvent()),
 	debugDraw(false)
 {
 	shader->components.push_back(new TextureShaderComponent());
@@ -74,7 +77,7 @@ GameJamScene::GameJamScene(Game * _game):
 		"../assets/props/WigHead_228_257.png"
 	};
 
-	for(unsigned long int i = 0; i < imgCount; ++i){
+	for(unsigned long int i = 12; i < imgCount; ++i){
 		Box2DSprite * s = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform());
 		s->mesh->pushTexture2D(new Texture(strings[i].c_str(), 1024, 1024, true, true));
 
@@ -188,11 +191,11 @@ GameJamScene::GameJamScene(Game * _game):
 	foregroundScreen->setShader(shader, true);
 
 	
-	Texture * font = new Texture("../assets/MoonFlowerBold.png", 1024, 1024, true, true);
-	BitmapFont * fontM = new BitmapFont(font, 32, 16, 16); 
-    fontM->setText("sdsdweqweqwewqesdsdsdadasd");
-	fontM->transform->translate(0, 3, 5);
-	fontM->setShader(shader, true);
+	//Texture * font = new Texture("../assets/MoonFlowerBold.png", 1024, 1024, true, true);
+	//BitmapFont * fontM = new BitmapFont(font, 32, 16, 16); 
+    //fontM->setText("sdsdweqweqwewqesdsdsdadasd");
+	//fontM->transform->translate(0, 3, 5);
+	//fontM->setShader(shader, true);
 
 	addChild(midgroundScreen);
 	
@@ -201,7 +204,7 @@ GameJamScene::GameJamScene(Game * _game):
 	}
 	addChild(ground);
 	addChild(foregroundScreen);
-	addChild(fontM);
+	//addChild(fontM);
 	addChild(backgroundScreen);
 
 	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 0, 0);
@@ -212,52 +215,53 @@ GameJamScene::GameJamScene(Game * _game):
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
 
-	world->b2world->SetDebugDraw(drawer);
-	drawer->SetFlags(b2Draw::e_shapeBit);
+	//world->b2world->SetDebugDraw(drawer);
+	//drawer->SetFlags(b2Draw::e_shapeBit);
 
-
+	playerCharacter->setShader(shader, true);
+	addChild(playerCharacter);
+	playerCharacter->addToScene(this);
+	playerCharacter->torso->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	
 	Character1 * char1 = new Character1(world, true);
-	char1->setShader(shader);
+	char1->setShader(shader, true);
 	char1->addToScene(this);
 	addChild(char1);
 	char1->translateComponents(glm::vec3(150, 50, 0));
 
 	Character2 * char2 = new Character2(world, true);
-	char2->setShader(shader);
+	char2->setShader(shader, true);
 	char2->addToScene(this);
 	addChild(char2);
 	char2->translateComponents(glm::vec3(125, 25, 0));
 
 	Character3 * char3 = new Character3(world, true);
-	char3->setShader(shader);
+	char3->setShader(shader, true);
 	char3->addToScene(this);
 	addChild(char3);
 	char3->translateComponents(glm::vec3(-125, 150, 0));
 
-	
-	playerCharacter->setShader(shader);
-	playerCharacter->addToScene(this);
-
-	//playerCharacter->torso->setTranslationPhysical(50, 50, 0);
-	//playerCharacter->head->setTranslationPhysical(25, 25, 0);
-	playerCharacter->torso->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
-	//playerCharacter->torso->body->SetGravityScale(0);
-	//playerCharacter->torso->body->SetGravityScale(0);
-
-	addChild(playerCharacter);
-	
-
 	Character4 * char4 = new Character4(world, true);
-	char4->setShader(shader);
+	char4->setShader(shader, true);
 	char4->addToScene(this);
 	char4->translateComponents(glm::vec3(-150, 150, 0));
 	addChild(char4);
+
+	//playerCharacter->text->setText("Howdy Ya'll, My Name's Baby Legs Hetman");
+	playerCharacter->text->transform->translate(0, 3, -2);
+
+	dialogEvent->addAction(new SayAction(playerCharacter, "Howdy", 2));
+	dialogEvent->addAction(new SayAction(playerCharacter, "My", 2));
+	dialogEvent->addAction(new SayAction(playerCharacter, "Name", 2));
+	dialogEvent->addAction(new SayAction(playerCharacter, "Is", 2));
+	dialogEvent->addAction(new SayAction(playerCharacter, "Baby", 2));
+	dialogEvent->addAction(new SayAction(playerCharacter, "Hetman", 2));
+	dialogEvent->running = true;
 	
 	
 	for(unsigned long int i = 0; i < 3; ++i){
 		RandomCharacter * dude1 = new RandomCharacter(world, true);
-		dude1->setShader(shader);
+		dude1->setShader(shader, true);
 		dude1->addToScene(this);
 		dude1->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 		addChild(dude1);
@@ -329,7 +333,6 @@ void GameJamScene::update(Step * _step){
 			}
 		}
 
-
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		playerCharacter->torso->applyLinearImpulseRight(25);
@@ -366,10 +369,8 @@ void GameJamScene::update(Step * _step){
 				}
 			}
 		}
+
 		}
-
-
-		
 	}
 
 	// move the ground and background with the player
@@ -391,14 +392,23 @@ void GameJamScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		Scene::toggleFullScreen();
 	}
+
+	//DIALOG
+	//dialogEvent->update(_step);
+
 	if(keyboard->keyJustUp(GLFW_KEY_F1)){
 		debugDraw = !debugDraw;
 	}
+	
 }
 
 void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene::render(_matrixStack, _renderStack);
+
+	//world->b2world->DrawDebugData();
+
 	if(debugDraw){
 		world->b2world->DrawDebugData();
 	}
+
 }

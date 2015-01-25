@@ -15,7 +15,8 @@ BitmapFont::BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _c
 	rows(_rows),
 	columns(_columns),
 	meshQ(new QuadMesh(GL_QUADS, GL_STATIC_DRAW)),
-	modSize(1)
+	modSize(1),
+	kerning(0.f)
 {
 	mesh = meshQ;
 	meshQ->pushTexture2D(_fontTextue);	
@@ -36,10 +37,12 @@ void BitmapFont::setText(std::string _text){
 }
 
 void BitmapFont::createQuads(){
+	layoutHeight = 0;
+	layoutWidth = 0;
+	frames.clear();
 	mesh->vertices.clear();
 	mesh->indices.clear();
-	unload();
-	load();
+	mesh->dirty = true;
 	std::vector<int> chars;
 
 	for(unsigned long int i = 0; i < text.length(); ++i){
@@ -67,10 +70,10 @@ void BitmapFont::createQuads(){
 	int count = 0;
 
 	for(vox::Rectangle frame : frames){
-		meshQ->pushVert(Vertex((0 + col) * modSize, (1.f - row) * modSize, 0.f));
-		meshQ->pushVert(Vertex((1.f + col) * modSize, (1.f - row) * modSize, 0.f));
-		meshQ->pushVert(Vertex((1.f + col) * modSize, (0 - row) * modSize, 0.f));
-		meshQ->pushVert(Vertex((0 + col) * modSize, (0 - row) * modSize, 0.f));
+		meshQ->pushVert(Vertex(((0 + col + kerning) * (modSize * kerning)), (1.f - row) * modSize, 0.f));
+		meshQ->pushVert(Vertex(((1.f + col + kerning) * (modSize * kerning)), (1.f - row) * modSize, 0.f));
+		meshQ->pushVert(Vertex(((1.f + col + kerning) * (modSize * kerning)), (0 - row) * modSize, 0.f));
+		meshQ->pushVert(Vertex(((0 + col + kerning) * (modSize * kerning)), (0 - row) * modSize, 0.f));
 
 		int a = meshQ->vertices.size()-4;
 		int b = meshQ->vertices.size()-3;
@@ -83,9 +86,9 @@ void BitmapFont::createQuads(){
 		meshQ->setNormal(d, 0.0, 0.0, 1.0);
 		meshQ->vertices.at(a).u  = frame.getTopLeft().x;
 	    meshQ->vertices.at(a).v  = frame.getTopLeft().y;
-	    meshQ->vertices.at(b).u  = frame.getTopRight().x;
+	    meshQ->vertices.at(b).u  = frame.getTopRight().x - 1/columns * kerning;
 	    meshQ->vertices.at(b).v  = frame.getTopRight().y;
-	    meshQ->vertices.at(c).u  = frame.getBottomRight().x;
+	    meshQ->vertices.at(c).u  = frame.getBottomRight().x - 1/columns * kerning;
 	    meshQ->vertices.at(c).v  = frame.getBottomRight().y;
 	    meshQ->vertices.at(d).u  = frame.getBottomLeft().x;
 	    meshQ->vertices.at(d).v  = frame.getBottomLeft().y;
@@ -94,9 +97,34 @@ void BitmapFont::createQuads(){
 			col = 0;
 		}else{
 			col++;
+			layoutWidth += modSize * kerning;
 		}
 		count++;
+		layoutHeight += modSize * kerning;
 	}
+
+	/*meshQ->pushVert(Vertex(0.f, layoutHeight, 0.f));
+	meshQ->pushVert(Vertex(layoutWidth, layoutHeight, 0.f));
+	meshQ->pushVert(Vertex(layoutWidth, 0, 0.f));
+	meshQ->pushVert(Vertex(0.f, 0, 0.f));
+
+	int a = meshQ->vertices.size()-4;
+	int b = meshQ->vertices.size()-3;
+	int c = meshQ->vertices.size()-2;
+	int d = meshQ->vertices.size()-1;
+	meshQ->pushQuad(a, b, c, d);
+	meshQ->setNormal(a, 0.0, 0.0, 1.0);
+	meshQ->setNormal(b, 0.0, 0.0, 1.0);
+	meshQ->setNormal(c, 0.0, 0.0, 1.0);
+	meshQ->setNormal(d, 0.0, 0.0, 1.0);
+	meshQ->vertices.at(a).u  = 0.f;
+	meshQ->vertices.at(a).v  = 0.f;
+	meshQ->vertices.at(b).u  = 0.f;
+	meshQ->vertices.at(b).v  = 0.f;
+	meshQ->vertices.at(c).u  = 0.f;
+	meshQ->vertices.at(c).v  = 0.f;
+	meshQ->vertices.at(d).u  = 0.f;
+	meshQ->vertices.at(d).v  = 0.f;*/
 }
 
 void BitmapFont::pushMultipleFrames(std::vector<int> _frames, float _width, float _height, float _textureWidth){
@@ -112,6 +140,14 @@ void BitmapFont::pushFrame(int _column, int _row, float _width, float _height){
 	u = rW * _column;
 	v = rH * _row;
 	frames.push_back(vox::Rectangle(u, v, rW, rH));
+}
+
+float BitmapFont::getWidth(){
+	return layoutWidth;
+}
+
+float BitmapFont::getHeight(){
+	return layoutHeight;
 }
 
 void BitmapFont::setWidthMod(float _mod){

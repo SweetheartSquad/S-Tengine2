@@ -11,7 +11,9 @@ class BitmapFont : public MeshEntity
 public:
 	int asciiStart;
 	int rows;
+	float kerning;
 	int columns;
+
 	QuadMesh * meshQ;
 	std::vector<vox::Rectangle> frames;
 
@@ -24,9 +26,14 @@ public:
 	void pushFrame(int _column, int _row, float _width, float _height);
 	void setSizeMod(float _mod);
 	void setWidthMod(float _mod);
+
+	float getWidth();
+	float getHeight();
 private:
 	std::string text;
 	void createQuads();
 	float modSize;
 	float width;
+	float layoutWidth;
+	float layoutHeight;
 };

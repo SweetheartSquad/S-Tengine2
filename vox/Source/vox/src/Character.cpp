@@ -6,6 +6,7 @@
 #include "shader/Shader.h"
 #include "CharacterComponent.h"
 #include "Scene.h"
+#include "BitmapFont.h"
 
 #include "Texture.h"
 
@@ -79,6 +80,7 @@ Character::Character(Box2DWorld * _world, bool _ai) :
 	componentScale(0.0025f),
 	groupIndex(--gGroupIndex),
 	ai(_ai),
+	text(new BitmapFont(new Texture("../assets/arial.bmp", 1024, 1024, true, true), 32, 16, 16 )),
 	reactiveFeet(true),
 	head(nullptr),
 	leftUpperArm(nullptr),
@@ -91,6 +93,7 @@ Character::Character(Box2DWorld * _world, bool _ai) :
 	leftLowerLeg(nullptr),
 	rightUpperLeg(nullptr),
 	rightLowerLeg(nullptr)
+
 {
 	ratioX_neck_to_torso = 0.0f;
 	ratioY_neck_to_torso = 0.8f;
@@ -122,23 +125,28 @@ Character::Character(Box2DWorld * _world, bool _ai) :
 	ratioX_hip_to_knee = 1.0f;
 	ratioY_hip_to_knee = 0.8f;
 
-	components.push_back(head);
-	components.push_back(leftUpperArm);
-	components.push_back(leftLowerArm);
-	components.push_back(leftHand);
-	components.push_back(rightUpperArm);
-	components.push_back(rightLowerArm);
-	components.push_back(rightHand);
-	components.push_back(leftUpperLeg);
-	components.push_back(leftLowerLeg);
-	components.push_back(rightUpperLeg);
-	components.push_back(rightLowerLeg);
+	text->transform->translate(0, 0, 6);
+	text->kerning = 0.75f;
+	text->setSizeMod(0.85f);
+
+	components.push_back(&head);
+	components.push_back(&leftUpperArm);
+	components.push_back(&leftLowerArm);
+	components.push_back(&leftHand);
+	components.push_back(&rightUpperArm);
+	components.push_back(&rightLowerArm);
+	components.push_back(&rightHand);
+	components.push_back(&leftUpperLeg);
+	components.push_back(&leftLowerLeg);
+	components.push_back(&rightUpperLeg);
+	components.push_back(&rightLowerLeg);
+	components.push_back(&torso);
 
 }
 
 Character::~Character(){
 	while(components.size() > 0){
-		delete components.back();
+		delete *components.back();
 	}
 	components.clear();
 }
@@ -197,12 +205,18 @@ void Character::update(Step * _step){
 			}
 		}
 	}
+	text->transform->translationVector.x = (torso->transform->translationVector.x) - text->getWidth()/4;
+	text->transform->translationVector.y = head->transform->translationVector.y + 1.5f;
 }
 
 void Character::attachJoints(){
+
+	/*for(NodeChild * s : children){
+		dynamic_cast<Box2DSprite *>(s)->transform->scale(5,5,1);
+	}*/
+
 	torso->createFixture(groupIndex);
 	head->createFixture(groupIndex);
-
 	
 	float correctedTorsoWidth = torso->getCorrectedWidth();
 	float correctedTorsoHeight = torso->getCorrectedHeight();
@@ -387,40 +401,29 @@ void Character::unload(){
 void Character::load(){
 }
 
-void Character::setShader(Shader * _shader){
-	torso	      ->setShader(_shader, true);
-	head		  ->setShader(_shader, true);
-	leftUpperArm  ->setShader(_shader, true);
-	leftLowerArm  ->setShader(_shader, true);
-	leftHand	  ->setShader(_shader, true);
-	rightUpperArm ->setShader(_shader, true);
-	rightLowerArm ->setShader(_shader, true);
-	rightHand	  ->setShader(_shader, true);
-	leftUpperLeg  ->setShader(_shader, true);
-	leftLowerLeg  ->setShader(_shader, true);
-	rightUpperLeg ->setShader(_shader, true);
-	rightLowerLeg ->setShader(_shader, true);
+void Character::setShader(Shader * _shader, bool _configureDefaultVertexAttributes){
+	MeshEntity::setShader(_shader, _configureDefaultVertexAttributes);
+	for(CharacterComponent ** c : components){
+		if(*c != nullptr){
+			(*c)->setShader(_shader, _configureDefaultVertexAttributes);
+		}
+	}
+	text->setShader(_shader ,_configureDefaultVertexAttributes);
 }
 
 void Character::addToScene(Scene * _scene){
-	_scene->addChild(torso);
-	_scene->addChild(leftUpperArm);
-	_scene->addChild(leftLowerArm);
-	_scene->addChild(leftHand);
-	_scene->addChild(rightUpperArm);
-	_scene->addChild(rightLowerArm);
-	_scene->addChild(rightHand);
-	_scene->addChild(leftUpperLeg);
-	_scene->addChild(leftLowerLeg);
-	_scene->addChild(rightUpperLeg);
-	_scene->addChild(rightLowerLeg);
-	_scene->addChild(head);
+	for(CharacterComponent ** c : components){
+		if(*c != nullptr){
+			_scene->addChild(*c);
+		}
+	}
+	_scene->addChild(text);
 }
 
 void Character::translateComponents(glm::vec3 _translateVector){
-	for(CharacterComponent * c : components){
-		if(c != nullptr){
-			c->setTranslationPhysical(_translateVector, true);
+	for(CharacterComponent ** c : components){
+		if(*c != nullptr){
+			(*c)->setTranslationPhysical(_translateVector, true);
 		}
 	}
 }
