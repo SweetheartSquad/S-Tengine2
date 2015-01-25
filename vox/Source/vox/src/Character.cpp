@@ -205,8 +205,8 @@ void Character::update(Step * _step){
 			}
 		}
 	}
-	text->transform->translationVector.x = (torso->transform->translationVector.x) - text->getWidth()/4;
-	text->transform->translationVector.y = head->transform->translationVector.y + 1.5f;
+	text->transform->translationVector.x = (torso->transform->translationVector.x) - text->getWidth()/2;
+	text->transform->translationVector.y = head->transform->translationVector.y - 1.5f;
 }
 
 void Character::attachJoints(){
@@ -390,6 +390,7 @@ void Character::attachJoints(){
 	leftLowerLeg   ->setTranslationPhysical(0.f, 0.f, -0.22f+t);
 	rightUpperLeg  ->setTranslationPhysical(0.f, 0.f, -0.23f+t);
 	rightLowerLeg  ->setTranslationPhysical(0.f, 0.f, -0.24f+t);
+	text->transform->translate(0, 0, -2.3f + t);
 
 	torso->body->SetLinearDamping(0.9);
 	torso->body->SetGravityScale(0.5);

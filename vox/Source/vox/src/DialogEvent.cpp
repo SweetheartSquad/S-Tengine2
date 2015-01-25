@@ -18,7 +18,7 @@ void DialogEvent::update(Step* _step){
 		curAc->update(_step);
 		if(curAc->isComplete()){
 			if(currentAction + 1 < actions.size()){
-				currentAction ++;	
+				currentAction++;	
 			}
 		}
 	}
