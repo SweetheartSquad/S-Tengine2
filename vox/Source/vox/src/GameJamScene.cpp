@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Arduino.h"
+#include "GameJamScene.h"
+
 #include "Texture.h"
 #include "Sprite.h"
 #include "shader/BaseComponentShader.h"
@@ -27,7 +28,6 @@
 #include "MeshFactory.h"
 #include "PerspectiveCamera.h"
 #include "MousePerspectiveCamera.h"
-#include "GameJamScene.h"
 #include "BitmapFont.h"
 #include "CylinderScreen.h"
 #include "TestCharacter.h"
@@ -40,6 +40,7 @@
 #include "SayAction.h"
 #include "RandomCharacter.h"
 #include "GameJamContactListener.h"
+#include "Game.h"
 
 GameJamContactListener cl;
 
@@ -53,10 +54,10 @@ GameJamScene::GameJamScene(Game * _game):
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
-	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/skybox - HD - edited.png", 4096, 4096, true, true))),
-	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/walls - HD - edited.png", 4096, 4096, true, true))),
-	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4, new Texture("../assets/foregroundhallway.png", 4096, 4096, true, true))),
-	debugDraw(false)
+	debugDraw(false),
+	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4)),
+	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4)),
+	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4))
 {
 	world->b2world->SetContactListener(&cl);
 	shader->components.push_back(new TextureShaderComponent());
@@ -82,23 +83,27 @@ GameJamScene::GameJamScene(Game * _game):
 		"../assets/props/WigHead_228_257.png"
 	};
 
-	for(unsigned long int i = 12; i < imgCount; ++i){
+	for(unsigned long int i = 0; i < 50; ++i){
+		unsigned long int tex = std::rand()%imgCount;
 		Box2DSprite * s = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform());
-		s->mesh->pushTexture2D(new Texture(strings[i].c_str(), 1024, 1024, true, true));
+		s->mesh->pushTexture2D(new Texture(strings[tex].c_str(), 1024, 1024, true, true));
 
 		int width = 0;
 		int height = 0;
 
 		int cc = 0;
-		for(char c : strings[i]){
+
+		std::string temp = strings[tex];
+
+		for(char c : temp){
 			if(c == '_' || c == '.'){
-				strings[i].at(cc) = ' ';
+				temp.at(cc) = ' ';
 			}
 			cc++;
 		}
 		std::string arr[4];
 		int j = 0;
-		std::stringstream ssin(strings[i]);
+		std::stringstream ssin(temp);
 		while (ssin.good() && j < 4){
 			ssin >> arr[j];
 			++j;
@@ -110,6 +115,9 @@ GameJamScene::GameJamScene(Game * _game):
 		float scale = 0.002;
 
 		b2PolygonShape tShape;
+
+		float scaleVec = ((std::rand()%50)/50.f)+0.5f;
+		s->transform->scale(scaleVec, scaleVec, scaleVec);
 		tShape.SetAsBox(width*std::abs(s->transform->scaleVector.x)*scale*2.f, std::abs(height*s->transform->scaleVector.y)*scale*2.f);
 		b2PolygonShape tsShape;
 		tsShape.SetAsBox(width*std::abs(s->transform->scaleVector.x)*scale*2.f, std::abs(height*s->transform->scaleVector.y)*scale*2.f);
@@ -153,19 +161,15 @@ GameJamScene::GameJamScene(Game * _game):
 		s->mesh->vertices.at(0).v = height/mag;
 		s->mesh->dirty = true;
 		
-		s->setTranslationPhysical(i * 25, height/mag*2.f, 0.01f);
+		s->setTranslationPhysical(std::rand()%1000 - 500, height*scale, 0.01f);
 		s->setShader(shader, true);
 		items.push_back(s);
 	}
-
-	soundManager->addNewSound("green_chair", "../assets/test.wav");
-	//soundManager->play("green_chair");
-
 	ground->setShader(shader, true);
 	ground->setTranslationPhysical(0, 0, -5.f);
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
 	ground->transform->scale(1000, 10, 1);
-	ground->mesh->pushTexture2D(new Texture("../assets/hallwaycarpet.png", 1024, 1024, true, true));
+	//ground->mesh->pushTexture2D(new Texture("../assets/environments/bathroomtile.png", 512, 512, true, true));
 	ground->mesh->setUV(3, 0, 0);
 	ground->mesh->setUV(2, 200.f, 0);
 	ground->mesh->setUV(1, 200.f, 2.f);
@@ -236,24 +240,24 @@ GameJamScene::GameJamScene(Game * _game):
 	char1->setShader(shader, true);
 	char1->addToScene(this);
 	addChild(char1);
-	char1->translateComponents(glm::vec3(150, 50, 0));
+	char1->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 
 	Character2 * char2 = new Character2(world, true, NPC);
 	char2->setShader(shader, true);
 	char2->addToScene(this);
 	addChild(char2);
-	char2->translateComponents(glm::vec3(125, 25, 0));
+	char2->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 
 	Character3 * char3 = new Character3(world, true, NPC);
 	char3->setShader(shader, true);
 	char3->addToScene(this);
 	addChild(char3);
-	char3->translateComponents(glm::vec3(-125, 150, 0));
-	
+
 	Character4 * char4 = new Character4(world, true, NPC);
+	char3->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 	char4->setShader(shader, true);
 	char4->addToScene(this);
-	char4->translateComponents(glm::vec3(-150, 150, 0));
+	char4->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 	addChild(char4);
 
 	sceneCharacters.push_back(char1);
@@ -264,13 +268,21 @@ GameJamScene::GameJamScene(Game * _game):
 	dialogHandler = new DialogHandler(sceneCharacters);
 	dialogHandler->makeDialog();
 
-	for(unsigned long int i = 0; i < 3; ++i){
+	for(unsigned long int i = 0; i < std::rand()%10; ++i){
 		RandomCharacter * dude1 = new RandomCharacter(world, true);
 		dude1->setShader(shader, true);
 		dude1->addToScene(this);
 		dude1->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 		addChild(dude1);
+
 		sceneCharacters.push_back(dude1);
+		
+		if(std::rand() % 500 / 500.f < 0.5f){
+			dude1->reactiveFeet = false;
+		}
+		if(std::rand() % 500 / 500.f < 0.5f){
+			dude1->reactiveBody = false;
+		}
 	}
 
 	int present = glfwJoystickPresent(GLFW_JOYSTICK_1);
@@ -295,15 +307,17 @@ void GameJamScene::update(Step * _step){
 
 	world->update(_step);
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
-		//if(!playerCharacter->torso->movingVertically(0.05)){
-			playerCharacter->torso->applyLinearImpulseUp(250);	
-		//}
+		if(playerCharacter->torso->body->GetPosition().y < 12){
+			playerCharacter->torso->applyLinearImpulseUp(400);
+		}
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
 		//playerCharacter->transform->rotate(1, 0, 1, 0, kOBJECT);
 		playerCharacter->reactiveFeet = false;
+		playerCharacter->reactiveBody = false;
 	}else{
 		playerCharacter->reactiveFeet = true;
+		playerCharacter->reactiveBody = true;
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
 		playerCharacter->torso->applyLinearImpulseLeft(25);
@@ -401,15 +415,6 @@ void GameJamScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		Scene::toggleFullScreen();
 	}
-
-	//DIALOG
-
-	//dialogEvent->update(_step);
-
-	dialogHandler->update(_step);
-
-
-	//dialogEvent->update(_step);
 	if(keyboard->keyJustUp(GLFW_KEY_F1)){
 		debugDraw = !debugDraw;
 	}
@@ -421,6 +426,13 @@ void GameJamScene::update(Step * _step){
 	for(int i = 0; i < count; i++){
 		std::cout<<i<<std::string(" ")<<(int)axes[i]<<std::endl;
 	}
+
+	if(keyboard->keyJustUp(GLFW_KEY_F11)){
+		debugDraw = !debugDraw;
+	}
+
+	//DIALOG
+	dialogHandler->update(_step);
 }
 
 void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){

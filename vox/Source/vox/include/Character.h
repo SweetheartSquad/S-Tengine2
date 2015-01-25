@@ -42,6 +42,7 @@ public:
 
 	bool ai;
 	bool reactiveFeet;
+	bool reactiveBody;
 	static int16 gGroupIndex;
 	int16 groupIndex;
 	int16 categoryBits; // Box2D entity category
