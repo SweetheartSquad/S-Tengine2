@@ -44,7 +44,6 @@ TestCharacter::TestCharacter(Box2DWorld * _world, bool _ai, int16 _categoryBits,
 	rightUpperArm->transform->scale(0.9f, 0.9f, 1.f);
 
     attachJoints();
-	text->setText("dsadsad");
 }
 
 TestCharacter::~TestCharacter(){

@@ -153,6 +153,7 @@ void Scene::alphaSort(){
 }
 
 void Scene::toggleFullScreen(){
+	return;
 	// Toggle fullscreen flag.
 	vox::fullscreen = !vox::fullscreen;
 	//get size

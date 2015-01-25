@@ -19,9 +19,11 @@ DialogHandler::~DialogHandler(){
 void DialogHandler::makeDialog(){
 	int charVecSize = sceneCharacters.size();
 	int randDialog = 0;
-	for(unsigned long int i = 0; i < charVecSize; i++){
-		randDialog = rand() % 29;
-		dialogEvent->addAction(new SayAction(sceneCharacters[i], dialogBits[randDialog], dialogBits[randDialog].length()/4));
+	for(unsigned long int i = 0; i < 50; i++) {
+		for(unsigned long int i = 0; i < charVecSize; i++){
+			randDialog = rand() % 29;
+			dialogEvent->addAction(new SayAction(sceneCharacters[i], dialogBits[randDialog], dialogBits[randDialog].length()/4));
+		}
 	}
 	dialogEvent->running = true;
 }

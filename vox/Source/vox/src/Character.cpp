@@ -213,7 +213,7 @@ void Character::update(Step * _step){
 			}
 		}
 	}
-	text->transform->translationVector.x = (torso->transform->translationVector.x);// - text->getWidth()/2;
+	text->transform->translationVector.x = (torso->transform->translationVector.x) - 2.0f;
 	text->transform->translationVector.y = 7;
 }
 

@@ -260,7 +260,6 @@ GameJamScene::GameJamScene(Game * _game):
 	char4->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
 	addChild(char4);
 
-	sceneCharacters.push_back(playerCharacter);
 	sceneCharacters.push_back(char1);
 	sceneCharacters.push_back(char2);
 	sceneCharacters.push_back(char3);
@@ -446,5 +445,4 @@ void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _render
 	if(debugDraw){
 		world->b2world->DrawDebugData();
 	}
-
 }
