@@ -108,7 +108,7 @@ void BaseComponentShader::compileShader(){
 	}else{
 		init(buildVertexShader(), buildFragmentShader());	
 	}
-	
+	isCompiled = true;
 }
 
 void BaseComponentShader::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){

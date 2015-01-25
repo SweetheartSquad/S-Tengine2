@@ -11,6 +11,7 @@ class Scene;
 class Box2DDebugDraw : public b2Draw, public NodeLoadable{
 public:
 	explicit Box2DDebugDraw(Scene * _scene);
+	~Box2DDebugDraw();
 	void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
 	void DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
 	void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color) override;
@@ -22,7 +23,7 @@ public:
 	void unload();
 
 private:
-	BaseComponentShader shader;
-	Sprite sprite;
+	BaseComponentShader * shader;
+	Sprite * sprite;
 	Scene * scene;
 };

@@ -39,26 +39,38 @@ GameJamScene::GameJamScene(Game * _game):
 	tex(new Texture("../assets/MichaelScale.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
-	backgroundScreen(new CylinderScreen(25, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky.png", 4096, 4096, true, true))),
-	midgroundScreen(new CylinderScreen(50, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky2.png", 4096, 4096, true, true))),
-	foregroundScreen(new CylinderScreen(75, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky3.png", 4096, 4096, true, true))),
-	drawer(new Box2DDebugDraw(this))
+	backgroundScreen(new CylinderScreen(25, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky.png", 512, 512, true, true))),
+	midgroundScreen(new CylinderScreen(50, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky2.png", 512, 512, true, true))),
+	foregroundScreen(new CylinderScreen(75, &playerSprite->transform->translationVector.x, 4, new Texture("../assets/sky3.png", 512, 512, true, true)))//,
+	//drawer(new Box2DDebugDraw(this))
 {
+	shader->components.push_back(new TextureShaderComponent());
+	shader->compileShader();
 	renderOptions->alphaSorting = true;
-	camera->transform->rotate(90, 0, 1, 0, kWORLD);
+	{
+		Box2DSprite * s = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform());
+		s->mesh->pushTexture2D(new Texture("../assets/Table.png", 256, 256, true, true));
+		s->transform->scale(5, 5, 1);
+
+		b2CircleShape shape;
+		s->body->CreateFixture(&shape, 1);
+		s->body->GetFixtureList()->SetSensor(true);
+		s->setShader(shader, true);
+		s->setTranslationPhysical(3, 10, -3);
+		items.push_back(s);
+	}
+
+
 
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	//soundManager->play("green_chair");
-	
-	shader->components.push_back(new TextureShaderComponent());
-	shader->compileShader();
 
 	playerSprite->mesh->pushTexture2D(tex);
 	playerSprite->setShader(shader, true);
 	ground->setShader(shader, true);
 
-	ground->setTranslationPhysical(0, -10, -3);
-	ground->transform->scale(50, 10, 2);
+	ground->setTranslationPhysical(0, -10, -1);
+	ground->transform->scale(500, 10, 2);
 	ground->mesh->pushTexture2D(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true));
 
 	playerSprite->transform->scale(4, 4, 1);
@@ -68,6 +80,9 @@ GameJamScene::GameJamScene(Game * _game):
 
 	world->addToWorld(playerSprite);
 	world->addToWorld(ground);
+	for(Box2DSprite * s : items){
+		world->addToWorld(s);
+	}
 
 	
 	backgroundScreen->transform->rotate(-90.f, 0.f, 1.f, 0.f, CoordinateSpace::kOBJECT);
@@ -92,40 +107,26 @@ GameJamScene::GameJamScene(Game * _game):
 	fontM->transform->translate(0, 3, 5);
 	fontM->setShader(shader, true);
 
-	
 	addChild(midgroundScreen);
-	addChild(playerSprite);
+	
 	addChild(ground);
 	addChild(foregroundScreen);
 	addChild(fontM);
 	addChild(backgroundScreen);
-	
-	/*addChild(foregroundScreen);
-	addChild(fontM);
 	addChild(playerSprite);
-	addChild(ground);
-	addChild(midgroundScreen);
-	addChild(backgroundScreen);*/
-	std::cout << "add order: " << std::endl;
-	std::cout << foregroundScreen->transform->translationVector.z << std::endl;
-	std::cout << fontM->transform->translationVector.z << std::endl;
-	std::cout << playerSprite->transform->translationVector.z << std::endl;
-	std::cout << ground->transform->translationVector.z << std::endl;
-	std::cout << midgroundScreen->transform->translationVector.z << std::endl;
-	std::cout << backgroundScreen->transform->translationVector.z << std::endl << std::endl << "final order:" << std::endl;
-	for(unsigned long int i = 0; i < children.size(); ++i){
-		std::cout << children.at(i)->transform->translationVector.z << std::endl;
+	for(Box2DSprite * s : items){
+		addChild(s);
 	}
 
-	
 	camera = new PerspectiveCamera(playerSprite, glm::vec3(0, 10, 0), 5, 0);
 	//camera = new MousePerspectiveCamera();
-	camera->transform->translate(5.0f, 5.0f, 20.0f);
+	camera->transform->rotate(90, 0, 1, 0, kWORLD);
+	camera->transform->translate(5.0f, 2.5f, 20.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
 
-	world->b2world->SetDebugDraw(drawer);
-	drawer->SetFlags(b2Draw::e_shapeBit);
+	//world->b2world->SetDebugDraw(drawer);
+	//drawer->SetFlags(b2Draw::e_shapeBit);
 }
 
 GameJamScene::~GameJamScene(){
@@ -148,14 +149,14 @@ void GameJamScene::update(Step * _step){
 	playerSprite->playAnimation = false;
 	if(keyboard->keyDown(GLFW_KEY_W)){
 		if(!playerSprite->movingVertically(0.05)){
-			playerSprite->applyLinearImpulseUp(500);	
+			playerSprite->applyLinearImpulseUp(1500);	
 		}
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
 		playerSprite->transform->rotate(1, 0, 1, 0, kOBJECT);
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		playerSprite->applyLinearImpulseLeft(50);
+		playerSprite->applyLinearImpulseLeft(150);
 		if(playerSprite->transform->scaleVector.x > 0){
 			playerSprite->transform->scaleX(-1);
 		}
@@ -163,7 +164,7 @@ void GameJamScene::update(Step * _step){
 		//playerSprite->setCurrentAnimation("run");
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		playerSprite->applyLinearImpulseRight(50);
+		playerSprite->applyLinearImpulseRight(150);
 		if(playerSprite->transform->scaleVector.x < 0){
 			playerSprite->transform->scaleX(-1);
 		}
@@ -172,7 +173,7 @@ void GameJamScene::update(Step * _step){
 	}
 
 	// move the ground and background with the player
-	ground->setTranslationPhysical(playerSprite->transform->translationVector.x, ground->transform->translationVector.y, ground->transform->translationVector.z);
+	//ground->setTranslationPhysical(playerSprite->transform->translationVector.x, ground->transform->translationVector.y, ground->transform->translationVector.z);
 
 
 	// camera controls
@@ -195,5 +196,5 @@ void GameJamScene::update(Step * _step){
 
 void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene::render(_matrixStack, _renderStack);
-	world->b2world->DrawDebugData();
+	//world->b2world->DrawDebugData();
 }

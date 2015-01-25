@@ -27,6 +27,8 @@ public:
 	CylinderScreen * midgroundScreen;
 	CylinderScreen * foregroundScreen;
 
+	std::vector<Box2DSprite *> items;
+
 	explicit GameJamScene(Game * _game);
 	virtual ~GameJamScene();
 

@@ -45,6 +45,9 @@ public:
 	/** Filename of geometry shader */
 	std::string geomSource;
 
+	// Whether the shader has been compiled
+	bool isCompiled;
+
 	explicit Shader(bool _autoRelease);
 	/** Creates shader using "_shaderFile.vert", "_shaderFile.frag" and "_shaderFile.geom" */
 	explicit Shader(std::string _shaderSource, bool _hasGeometryShader, bool _autoRelease);

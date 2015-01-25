@@ -8,6 +8,7 @@ void Shader::init(std::string _vertexShaderSource, std::string _fragmentShaderSo
 	fragSource = _fragmentShaderSource;
 	hasGeometryShader = false;
 	load();
+	isCompiled = false;
 }
 
 void Shader::init(std::string _vertexShaderSource, std::string _fragmentShaderSource, std::string _geometryShaderSource){
@@ -16,6 +17,7 @@ void Shader::init(std::string _vertexShaderSource, std::string _fragmentShaderSo
 	geomSource = _geometryShaderSource;
 	hasGeometryShader = true;
 	load();
+	isCompiled = false;
 }
 
 Shader::Shader(bool _autoRelease) : NodeResource(_autoRelease){
@@ -180,7 +182,8 @@ GLuint Shader::compileShader(GLenum _shaderType, char const* _source, int _lengt
 		std::cout << "Shader compiled succesfully." << std::endl << std::endl << _source << std::endl << std::endl;
 	}
 	GLUtils::checkForError(true,__FILE__,__LINE__);
-
+	
+	isCompiled = true;
 	return shaderId;
 }
 

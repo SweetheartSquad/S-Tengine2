@@ -127,7 +127,7 @@ void Scene::addChild(Entity* _child){
 			z = children.at(0)->transform->translationVector.z;
 			std::cout << "first check; z: " << z << " vs. childZ: " << childZ << std::endl;
 			if(childZ < z){
-				std::cout << "inserted" << std::endl;
+				std::cout << "inserted at start" << std::endl;
 				children.insert(children.begin(), _child);
 				return;
 			}
@@ -135,7 +135,7 @@ void Scene::addChild(Entity* _child){
 				z = children.at(i)->transform->translationVector.z;
 				std::cout << "z: " << z << " vs. childZ: " << childZ << std::endl;
 				if(childZ > z && i+1 < children.size() && childZ < children.at(i+1)->transform->translationVector.z){
-					std::cout << "inserted" << std::endl;
+					std::cout << "inserted at " << i+1 << std::endl;
 					children.insert(children.begin()+i+1, _child);
 					return;
 				}
@@ -143,6 +143,7 @@ void Scene::addChild(Entity* _child){
 		}
 	}
 	children.push_back(_child);
+	std::cout << "inserted at end" << std::endl;
 }
 
 void Scene::toggleFullScreen(){
@@ -162,7 +163,7 @@ void Scene::toggleFullScreen(){
 	}
 	// Create the new window.
 	GLFWwindow * window;
-	window = glfwCreateWindow(w, h, "VOX",  vox::fullscreen ? nullptr : nullptr, nullptr);
+	window = glfwCreateWindow(w, h, "VOX",  vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 	if(!window){
 		glfwTerminate();
 		exit(EXIT_FAILURE);
