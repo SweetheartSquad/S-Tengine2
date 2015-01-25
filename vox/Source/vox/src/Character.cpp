@@ -205,8 +205,8 @@ void Character::update(Step * _step){
 			}
 		}
 	}
-	text->transform->translationVector.x = (torso->transform->translationVector.x) - text->getWidth()/4;
-	text->transform->translationVector.y = head->transform->translationVector.y + 1.5f;
+	text->transform->translationVector.x = (torso->transform->translationVector.x) - text->getWidth()/2;
+	text->transform->translationVector.y = head->transform->translationVector.y - 1.5f;
 }
 
 void Character::attachJoints(){

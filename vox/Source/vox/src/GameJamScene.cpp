@@ -144,7 +144,6 @@ GameJamScene::GameJamScene(Game * _game):
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	//soundManager->play("green_chair");
 
-	
 	ground->setShader(shader, true);
 	ground->setTranslationPhysical(0, 0, -5.f);
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
@@ -247,17 +246,15 @@ GameJamScene::GameJamScene(Game * _game):
 	char4->translateComponents(glm::vec3(-150, 150, 0));
 	addChild(char4);
 
-	//playerCharacter->text->setText("Howdy Ya'll, My Name's Baby Legs Hetman");
-	playerCharacter->text->transform->translate(0, 3, -2);
-
-	dialogEvent->addAction(new SayAction(playerCharacter, "Howdy", 2));
-	dialogEvent->addAction(new SayAction(playerCharacter, "My", 2));
-	dialogEvent->addAction(new SayAction(playerCharacter, "Name", 2));
-	dialogEvent->addAction(new SayAction(playerCharacter, "Is", 2));
-	dialogEvent->addAction(new SayAction(playerCharacter, "Baby", 2));
-	dialogEvent->addAction(new SayAction(playerCharacter, "Hetman", 2));
+	playerCharacter->text->setText("Howdy Ya'll, My Name's Baby Legs Hetman");
+	playerCharacter->text->transform->translate(0, -25, 2.343f);
+	dialogEvent->addAction(new SayAction(playerCharacter, "Howdy", 20));
+	dialogEvent->addAction(new SayAction(playerCharacter, "My", 20));
+	dialogEvent->addAction(new SayAction(playerCharacter, "Name", 20));
+	dialogEvent->addAction(new SayAction(playerCharacter, "Is", 20));
+	dialogEvent->addAction(new SayAction(playerCharacter, "Baby", 20));
+	dialogEvent->addAction(new SayAction(playerCharacter, "Hetman", 20));
 	dialogEvent->running = true;
-	
 	
 	for(unsigned long int i = 0; i < 3; ++i){
 		RandomCharacter * dude1 = new RandomCharacter(world, true);
@@ -394,7 +391,7 @@ void GameJamScene::update(Step * _step){
 	}
 
 	//DIALOG
-	//dialogEvent->update(_step);
+	dialogEvent->update(_step);
 
 	if(keyboard->keyJustUp(GLFW_KEY_F1)){
 		debugDraw = !debugDraw;

@@ -4,6 +4,7 @@
 #include "Box2DSprite.h"
 #include "Texture.h"
 #include "CharacterComponent.h"
+#include "BitmapFont.h"
 
 TestCharacter::TestCharacter(Box2DWorld * _world, bool _ai):
 	Character(_world, _ai),
@@ -31,8 +32,6 @@ TestCharacter::TestCharacter(Box2DWorld * _world, bool _ai):
 	leftUpperArm->transform->scale(-1, 1, 1); 
 	leftLowerArm->transform->scale(-1, 1, 1);  
 	leftHand->transform->scale(-1, 1, 1);
- 
-	
 	
 	leftLowerLeg->transform->scale(0.9f, 0.9f, 1.f);
 	rightLowerLeg->transform->scale(0.9f, 0.9f, 1.f);
@@ -45,6 +44,7 @@ TestCharacter::TestCharacter(Box2DWorld * _world, bool _ai):
 	rightUpperArm->transform->scale(0.9f, 0.9f, 1.f);
 
     attachJoints();
+	text->setText("dsadsad");
 }
 
 TestCharacter::~TestCharacter(){
