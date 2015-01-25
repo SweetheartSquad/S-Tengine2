@@ -144,7 +144,6 @@ TestScene2D::TestScene2D(Game * _game):
 	drawer->SetFlags(b2Draw::e_shapeBit);*/
 
 
-
 	
 	//me->mesh->dirty = true;
 

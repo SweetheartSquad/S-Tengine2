@@ -78,6 +78,78 @@ void Character::attachJoints(){
 	jth.upperAngle = glm::radians(45.f);
 	world->b2world->CreateJoint(&jth);
 
+
+	leftUpperArm->createFixture();
+
+	b2RevoluteJointDef latj;
+	//jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
+	latj.bodyA = torso->body;
+	latj.bodyB = leftUpperArm->body;
+	latj.localAnchorA.Set(-(torso->width * std::abs(torso->transform->scaleVector.x) * componentScale * 2.f), 0.8f * torso->height*torso->transform->scaleVector.y*componentScale*2.f);
+	latj.localAnchorB.Set(0,  leftUpperArm->height*leftUpperArm->transform->scaleVector.y*componentScale*2.f);
+	latj.collideConnected = false;
+	world->b2world->CreateJoint(&latj);
+	
+	rightUpperArm->createFixture();
+
+	b2RevoluteJointDef ratj;
+	//jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
+	ratj.bodyA = torso->body;
+	ratj.bodyB = rightUpperArm->body;
+	ratj.localAnchorA.Set(torso->width * std::abs(torso->transform->scaleVector.x) * componentScale * 2.f, 0.8f * torso->height*torso->transform->scaleVector.y*componentScale*2.f);
+	ratj.localAnchorB.Set(0, rightUpperArm->height*rightUpperArm->transform->scaleVector.y*componentScale*2.f);
+	ratj.collideConnected = false;
+	world->b2world->CreateJoint(&ratj);
+
+
+	upperLeftLeg->createFixture();
+
+	b2RevoluteJointDef lltj;
+	//jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
+	lltj.bodyA = torso->body;
+	lltj.bodyB = upperLeftLeg->body;
+	lltj.localAnchorA.Set(-(torso->width * std::abs(torso->transform->scaleVector.x) * componentScale * 2.f), -(0.8f * torso->height*torso->transform->scaleVector.y*componentScale*2.f));
+	lltj.localAnchorB.Set(0,  upperLeftLeg->height*upperLeftLeg->transform->scaleVector.y*componentScale*2.f);
+	lltj.collideConnected = false;
+	world->b2world->CreateJoint(&lltj);
+	
+
+	upperRightLeg->createFixture();
+
+	b2RevoluteJointDef lrtj;
+	//jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
+	lrtj.bodyA = torso->body;
+	lrtj.bodyB = upperRightLeg->body;
+	lrtj.localAnchorA.Set(torso->width * std::abs(torso->transform->scaleVector.x) * componentScale * 2.f, -(0.8f * torso->height*torso->transform->scaleVector.y*componentScale*2.f));
+	lrtj.localAnchorB.Set(0, upperRightLeg->height*upperRightLeg->transform->scaleVector.y*componentScale*2.f);
+	lrtj.collideConnected = false;
+	world->b2world->CreateJoint(&lrtj);
+
+
+	lowerLeftLeg->createFixture();
+
+	b2RevoluteJointDef llltj;
+	//jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
+	llltj.bodyA = upperLeftLeg->body;
+	llltj.bodyB = lowerLeftLeg->body;
+	llltj.localAnchorA.Set(-(upperLeftLeg->width * std::abs(upperLeftLeg->transform->scaleVector.x) * componentScale * 2.f), -(0.8f * upperLeftLeg->height*upperLeftLeg->transform->scaleVector.y*componentScale*2.f));
+	llltj.localAnchorB.Set(0,  lowerLeftLeg->height*lowerLeftLeg->transform->scaleVector.y*componentScale*2.f);
+	llltj.collideConnected = false;
+	world->b2world->CreateJoint(&llltj);
+	
+
+	lowerRightLeg->createFixture();
+
+	b2RevoluteJointDef lrltj;
+	//jth.localAnchorB = b2Vec2(2.5/2 - 0.5, 1);
+	lrltj.bodyA = upperRightLeg->body;
+	lrltj.bodyB = lowerRightLeg->body;
+	lrltj.localAnchorA.Set(-(upperRightLeg->width * std::abs(upperRightLeg->transform->scaleVector.x) * componentScale * 2.f), -(0.8f * upperRightLeg->height*upperRightLeg->transform->scaleVector.y*componentScale*2.f));
+	lrltj.localAnchorB.Set(0,  lowerRightLeg->height*lowerRightLeg->transform->scaleVector.y*componentScale*2.f);
+	lrltj.collideConnected = false;
+	world->b2world->CreateJoint(&lrltj);
+
+	
 	torso		   ->setTranslationPhysical(0, 0, 1);
 	head		   ->setTranslationPhysical(0, 0, -1);
 	leftUpperArm   ->setTranslationPhysical(0, 0, -0.01);

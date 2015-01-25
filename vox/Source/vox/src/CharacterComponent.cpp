@@ -18,7 +18,7 @@ CharacterComponent::CharacterComponent(float _componentScale, float _width, floa
 
 void CharacterComponent::createFixture(){
 	b2PolygonShape tShape;
-	tShape.SetAsBox(width*transform->scaleVector.x*scale*2.f, height*transform->scaleVector.y*scale*2.f);
+	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f);
 	body->CreateFixture(&tShape, 1);
 	
 	b2Vec2 v1 = tShape.GetVertex(0);
