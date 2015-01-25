@@ -129,7 +129,7 @@ GameJamScene::GameJamScene(Game * _game):
 		s->mesh->vertices.at(0).v = height/mag;
 		s->mesh->dirty = true;
 		
-		s->setTranslationPhysical(i * 25, height/mag*0.5f, 0.01f);
+		s->setTranslationPhysical(i * 25, height/mag*2.f, 0.01f);
 		s->setShader(shader, true);
 		items.push_back(s);
 	}
@@ -225,17 +225,21 @@ GameJamScene::GameJamScene(Game * _game):
 	char1->setShader(shader);
 	char1->addToScene(this);
 	addChild(char1);
+	char1->translateComponents(glm::vec3(50, 50, 0));
 	Character2 * char2 = new Character2(world, true);
 	char2->setShader(shader);
 	char2->addToScene(this);
 	addChild(char2);
+	char2->translateComponents(glm::vec3(25, 25, 0));
 	Character3 * char3 = new Character3(world, true);
 	char3->setShader(shader);
 	char3->addToScene(this);
 	addChild(char3);
+	char3->translateComponents(glm::vec3(-25, 150, 0));
 	Character4 * char4 = new Character4(world, true);
 	char4->setShader(shader);
 	char4->addToScene(this);
+	char4->translateComponents(glm::vec3(-50, 150, 0));
 	addChild(char4);
 }
 

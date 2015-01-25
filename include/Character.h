@@ -65,6 +65,8 @@ public:
 	CharacterComponent * rightUpperLeg;
 	CharacterComponent * rightLowerLeg;
 
+	std::vector<CharacterComponent *> components;
+
 	explicit Character(Box2DWorld * _world, bool _ai = true);
 	~Character();
 
@@ -76,4 +78,6 @@ public:
 	void setShader(Shader * _shader);
 
 	void addToScene(Scene * _scene);
+
+	void translateComponents(glm::vec3 _translateVector);
 };

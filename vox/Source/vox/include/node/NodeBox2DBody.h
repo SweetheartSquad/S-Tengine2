@@ -28,8 +28,8 @@ public:
 
 	void update(Step* _step) override;
 
-	void setTranslationPhysical(glm::vec3 _translation);
-	void setTranslationPhysical(float _x, float _y, float _z);
+	void setTranslationPhysical(glm::vec3 _translation, bool _relative = false);
+	void setTranslationPhysical(float _x, float _y, float _z, bool _relative = false);
 	void setXPhysical(float _x);
 	void setYPhysical(float _y);
 	void setXYPhysical(float _x, float _y);
