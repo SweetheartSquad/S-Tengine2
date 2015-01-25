@@ -101,6 +101,9 @@ void Character::update(Step * _step){
 
 	float bodAngle = torso->body->GetAngle();
 	torso->body->SetAngularVelocity(-bodAngle*10);
+	if(torso->body->GetPosition().y < 5){
+		torso->applyLinearImpulseUp(250);
+	}
 	
 	/*if(angle < neck->GetLowerLimit()/2 || angle > neck->GetUpperLimit()/2){
 		neck->SetMotorSpeed(angle < 0 ? 0.1 : -0.1);
@@ -320,6 +323,8 @@ void Character::attachJoints(){
 	leftLowerLeg   ->setTranslationPhysical(0.f, 0.f, -0.22f);
 	rightUpperLeg  ->setTranslationPhysical(0.f, 0.f, -0.23f);
 	rightLowerLeg  ->setTranslationPhysical(0.f, 0.f, -0.24f);
+
+	torso->body->SetLinearDamping(0.8);
 }
 
 void Character::unload(){
