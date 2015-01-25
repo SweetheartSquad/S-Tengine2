@@ -13,12 +13,16 @@ class Sprite;
 class Box2DWorld;
 class CylinderScreen;
 class TestCharacter;
+class Character1;
+class Character2;
+class Character3;
+class Character4;
 
 class GameJamScene : public Scene{
 public:
 	Box2DDebugDraw * drawer;
 	Box2DWorld * world;
-	TestCharacter * playerCharacter;
+	Character4 * playerCharacter;
 	Box2DMeshEntity * ground;
 	Texture * tex;
 	BaseComponentShader* shader;

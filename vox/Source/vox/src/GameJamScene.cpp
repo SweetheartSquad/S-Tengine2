@@ -32,11 +32,15 @@
 #include "CylinderScreen.h"
 #include "TestCharacter.h"
 #include "CharacterComponent.h"
+#include "Character1.h"
+#include "Character2.h"
+#include "Character3.h"
+#include "Character4.h"
 
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
 	world(new Box2DWorld(b2Vec2(0, -60))),
-	playerCharacter(new TestCharacter(world)),
+	playerCharacter(new Character4(world)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	tex(new Texture("../assets/MichaelScale.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
@@ -61,7 +65,18 @@ GameJamScene::GameJamScene(Game * _game):
 		s->setTranslationPhysical(3, 10, -3);
 		items.push_back(s);
 	}
+	{	
+		Box2DSprite * s = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform());
+		s->mesh->pushTexture2D(new Texture("../assets/TourDePizza_738_854.png", 1024, 1024, true, true));
+		s->transform->scale(5, 5, 1);
 
+		b2CircleShape shape;
+		s->body->CreateFixture(&shape, 1);
+		s->body->GetFixtureList()->SetSensor(true);
+		s->setShader(shader, true);
+		s->setTranslationPhysical(12, 10, -3);
+		items.push_back(s);
+	}
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	//soundManager->play("green_chair");
 
@@ -140,6 +155,8 @@ GameJamScene::GameJamScene(Game * _game):
 	playerCharacter->torso->body->SetGravityScale(0);
 	playerCharacter->torso->body->SetGravityScale(0);
 	//ch->transform->scale(5, 5, 1);
+
+
 }
 
 GameJamScene::~GameJamScene(){
