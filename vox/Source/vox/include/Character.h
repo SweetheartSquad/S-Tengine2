@@ -42,8 +42,11 @@ public:
 
 	bool ai;
 	bool reactiveFeet;
+	bool reactiveBody;
 	static int16 gGroupIndex;
 	int16 groupIndex;
+	int16 categoryBits; // Box2D entity category
+	int16 maskBits;		// Box2D collides only with
 	float componentScale;
 	
 	float ratioX_neck_to_torso;
@@ -95,9 +98,10 @@ public:
 	CharacterComponent * rightUpperLeg;
 	CharacterComponent * rightLowerLeg;
 
-	std::vector<CharacterComponent *> components;
+	std::vector<CharacterComponent **> components;
 
-	explicit Character(Box2DWorld * _world, bool _ai = true);
+	explicit Character(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, bool _ai = true);
+	
 	~Character();
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
@@ -105,7 +109,7 @@ public:
 	void attachJoints();
 	void unload() override;
 	void load() override;
-	void setShader(Shader * _shader);
+	void setShader(Shader * _shader, bool _configureDefaultVertexAttributes) override;
 
 	void addToScene(Scene * _scene);
 

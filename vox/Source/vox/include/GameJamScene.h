@@ -2,7 +2,7 @@
 
 #include "Scene2D.h"
 
-class DialogEvent;
+class DialogHandler;
 class Arduino;
 class Box2DMeshEntity;
 class Box2DDebugDraw;
@@ -20,21 +20,20 @@ class Character2;
 class Character3;
 class Character4;
 
-class GameJamScene : public Scene{
+ class GameJamScene abstract : public Scene{
 public:
 	bool debugDraw;
 	Box2DDebugDraw * drawer;
 	Box2DWorld * world;
 	Character * playerCharacter;
 	Box2DMeshEntity * ground;
-	Texture * tex;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
 	SpriteSheetAnimation * spriteSheet;
 	CylinderScreen * backgroundScreen;
 	CylinderScreen * midgroundScreen;
 	CylinderScreen * foregroundScreen;
-	DialogEvent * dialogEvent;
+	DialogHandler * dialogHandler;
 
 	std::vector<Box2DSprite *> items;
 
@@ -45,4 +44,11 @@ public:
 	void unload() override;
 	void update(Step * _step) override;
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+
+	enum GAMEJAM_CATEGORY{
+		BOUNDARY = 0x0001,
+		PROP = 0x0002,
+		NPC = 0x0004,
+		PLAYER = 0x00010
+	};
 };

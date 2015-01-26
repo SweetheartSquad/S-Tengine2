@@ -31,7 +31,7 @@ public:
 
 	virtual void removeChildAtIndex(int _index) override;
 	/**Sets shader to _shader*/
-	void setShader(Shader* _shader, bool _configureDefaultAttributes);
+	virtual void setShader(Shader* _shader, bool _configureDefaultAttributes);
 	/**Get shader*/
 	Shader* getShader();
 	/** Recursivley sets the shader to _shader for _entity's children recursivley*/
