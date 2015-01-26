@@ -169,7 +169,6 @@ GameJamScene::GameJamScene(Game * _game):
 	ground->setTranslationPhysical(0, 0, -5.f);
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
 	ground->transform->scale(1000, 10, 1);
-	//ground->mesh->pushTexture2D(new Texture("../assets/environments/bathroomtile.png", 512, 512, true, true));
 	ground->mesh->setUV(3, 0, 0);
 	ground->mesh->setUV(2, 200.f, 0);
 	ground->mesh->setUV(1, 200.f, 2.f);

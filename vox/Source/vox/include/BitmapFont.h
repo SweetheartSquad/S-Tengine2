@@ -19,12 +19,13 @@ public:
 	int rows;
 	float kerning;
 	int columns;
+	bool padFront;
 	WrapMode wrapMode;
 
 	QuadMesh * meshQ;
 	std::vector<vox::Rectangle> frames;
 
-	BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _columns, WrapMode _wrapMode = WORD_WRAP);
+	BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _columns, bool padFront = true, WrapMode _wrapMode = WORD_WRAP);
 	~BitmapFont();
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
