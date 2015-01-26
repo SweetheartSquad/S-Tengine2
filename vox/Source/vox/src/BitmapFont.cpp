@@ -6,17 +6,18 @@
 #include "node/NodeTransformable.h"
 #include <vector>
 
-BitmapFont::BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _columns):
+BitmapFont::BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _columns, WrapMode _wrapMode):
 	MeshEntity(),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable(),
 	asciiStart(_asciiStart),
 	rows(_rows),
+	kerning(0.f),
 	columns(_columns),
+	wrapMode(_wrapMode),
 	meshQ(new QuadMesh(GL_QUADS, GL_STATIC_DRAW)),
-	modSize(1),
-	kerning(0.f)
+	modSize(1)
 {
 	mesh = meshQ;
 	meshQ->pushTexture2D(_fontTextue);	
@@ -47,18 +48,37 @@ void BitmapFont::createQuads(){
 
 	for(unsigned long int i = 0; i < text.length(); ++i){
 		char c = text.at(i);	
-		chars.push_back(static_cast<int>(c) - 32);
+		chars.push_back(static_cast<int>(c) - asciiStart);
 	}
 
 	float w = 0.0f;
-	float charW = 1.0f/columns;
+	float charW = 1.0f / columns * modSize;
 	std::vector<int>::iterator it;
 	for(unsigned long int i = 0; i < text.length(); ++i){
-		w+=charW;
-		if(w > width){
-			w = 0.0f;
-			it = chars.begin();
-			chars.insert(it + i, 45 - asciiStart);
+		w += charW;
+		switch(wrapMode) {
+			case WORD_WRAP : 
+				if(w > width && chars.at(i) == ' '){
+					w = 0.0f;
+					it = chars.begin();
+					chars.insert(it + i + 1, '\n');
+				}
+				break;
+			case CHARACTER_WRAP : 
+				if(w > width){
+					w = 0.0f;
+					it = chars.begin();
+					chars.insert(it + i + 1, '\n');
+				}
+				break;
+			case CHARACTER_WRAP_HYPHEN : 
+				if(w > width){
+					w = 0.0f;
+					it = chars.begin();
+					chars.insert(it + i, 45 - asciiStart);
+					chars.insert(it + i + 1, '\n');
+				}
+				break;
 		}
 	}
 
@@ -92,7 +112,7 @@ void BitmapFont::createQuads(){
 	    meshQ->vertices.at(c).v  = frame.getBottomRight().y;
 	    meshQ->vertices.at(d).u  = frame.getBottomLeft().x;
 	    meshQ->vertices.at(d).v  = frame.getBottomLeft().y;
-		if(chars.at(col) == 45 - asciiStart){
+		if(chars.at(col) == '\n' - asciiStart){
 			row++;
 			col = 0;
 		}else{
@@ -152,6 +172,10 @@ float BitmapFont::getHeight(){
 
 void BitmapFont::setWidthMod(float _mod){
 	width = _mod;
+	createQuads();
+}
+
+void BitmapFont::renderText(){
 	createQuads();
 }
 

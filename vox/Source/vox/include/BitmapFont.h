@@ -6,6 +6,12 @@
 #include "Rectangle.h"
 #include "MeshEntity.h"
 
+enum WrapMode {
+	CHARACTER_WRAP,
+	CHARACTER_WRAP_HYPHEN,
+	WORD_WRAP
+};
+
 class BitmapFont : public MeshEntity
 {
 public:
@@ -13,11 +19,12 @@ public:
 	int rows;
 	float kerning;
 	int columns;
+	WrapMode wrapMode;
 
 	QuadMesh * meshQ;
 	std::vector<vox::Rectangle> frames;
 
-	BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _columns);
+	BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _columns, WrapMode _wrapMode = WORD_WRAP);
 	~BitmapFont();
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
@@ -26,6 +33,7 @@ public:
 	void pushFrame(int _column, int _row, float _width, float _height);
 	void setSizeMod(float _mod);
 	void setWidthMod(float _mod);
+	void renderText();
 
 	float getWidth();
 	float getHeight();
