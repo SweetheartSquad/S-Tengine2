@@ -74,7 +74,7 @@ void vox::initialize(std::string _title){
 	int w = mode->width;
 	int	h = mode->height;
 
-	window = glfwCreateWindow(w/2, h/2, _title.c_str(), nullptr, nullptr);
+	window = glfwCreateWindow(w, h, _title.c_str(), glfwGetPrimaryMonitor(), nullptr);
 	if (!window){
 		glfwTerminate();
 		exit(EXIT_FAILURE);
