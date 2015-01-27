@@ -52,7 +52,9 @@ void BitmapFont::createQuads(){
 		chars.push_back(static_cast<int>(c) - asciiStart);
 	}
 	float w = 0.0f;
-	float charW = 1.0f / (columns * modSize);
+	modSize = 0.3f;
+	float charW = 1.0f / (columns);
+	charW *= modSize * width;
 	if(chars.size() > 0){
 		std::vector<int>::iterator it;
 		it = chars.begin();
