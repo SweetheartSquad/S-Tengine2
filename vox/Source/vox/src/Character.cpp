@@ -170,10 +170,10 @@ void Character::update(Step * _step){
 		b2RevoluteJoint * neck = ((b2RevoluteJoint *)head->body->GetJointList()->joint);
 		float angle = neck->GetJointAngle();
 
-		neck->SetMotorSpeed(-angle*360*_step->deltaTimeCorrection);
-		neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5*_step->deltaTimeCorrection));
+		neck->SetMotorSpeed(-angle*360);
+		neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5));
 		float bodAngle = torso->body->GetAngle();
-		torso->body->SetAngularVelocity(-bodAngle*10*_step->deltaTimeCorrection);
+		torso->body->SetAngularVelocity(-bodAngle*10);
 		if(torso->body->GetPosition().y < 5){
 			torso->applyLinearImpulseUp(250);
 		}

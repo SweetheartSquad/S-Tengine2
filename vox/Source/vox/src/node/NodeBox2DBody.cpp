@@ -27,12 +27,15 @@ void NodeBox2DBody::update(Step * _step){
 	if(body != nullptr){
 		transform->translationVector.x = body->GetPosition().x;	
 		transform->translationVector.y = body->GetPosition().y;	
-		if(maxVelocity.x != -1 && abs(body->GetLinearVelocity().x) > abs(maxVelocity.x)){
-			body->SetLinearVelocity(b2Vec2(maxVelocity.x * (body->GetLinearVelocity().x < 0 ? -1 : 1),  body->GetLinearVelocity().y));
+		float lvx = body->GetLinearVelocity().x;
+		float lvy = body->GetLinearVelocity().y;
+		if(maxVelocity.x != -1 && abs(lvx) > abs(maxVelocity.x)){
+			lvx = maxVelocity.x * (lvx < 0 ? -1 : 1);
 		}
-		if(maxVelocity.y != -1 && body->GetLinearVelocity().y > maxVelocity.y){
-			body->SetLinearVelocity(b2Vec2(body->GetLinearVelocity().x, maxVelocity.y * (body->GetLinearVelocity().y < 0 ? -1 : 1)));
+		if(maxVelocity.y != -1 && lvy > maxVelocity.y){
+			lvy = maxVelocity.y * (lvy < 0 ? -1 : 1);
 		}
+		body->SetLinearVelocity(b2Vec2(lvx, lvy));
 		if(abs(body->GetAngle() - prevAngle) > 0.00005f){
 			transform->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
 			prevAngle = body->GetAngle();

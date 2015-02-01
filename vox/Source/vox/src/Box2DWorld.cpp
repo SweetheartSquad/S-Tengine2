@@ -8,7 +8,8 @@ Box2DWorld::Box2DWorld(b2Vec2 _gravityVector):
 	NodeUpdatable(),
 	b2world(new b2World(_gravityVector)),
 	velocityIterations(6),
-	positionIterations(2)
+	positionIterations(2),
+	timeStepAccumulator(0)
 {
 }
 
@@ -17,7 +18,14 @@ Box2DWorld::~Box2DWorld(){
 }
 
 void Box2DWorld::update(Step* _step){
-	b2world->Step(_step->getDeltaTime(), velocityIterations, positionIterations);
+	timeStepAccumulator = _step->getDeltaTime();
+	while(timeStepAccumulator >= _step->targetFrameDuration*2){
+		b2world->Step(_step->targetFrameDuration, velocityIterations, positionIterations);
+		timeStepAccumulator -= _step->targetFrameDuration;
+	}
+	b2world->Step(timeStepAccumulator, velocityIterations, positionIterations);
+	timeStepAccumulator = 0;
+	//std::cout << _step->deltaTimeCorrection;
 }
 
 void Box2DWorld::addToWorld(NodeBox2DBody * _nodeBox2D, int _userDataGroup){
