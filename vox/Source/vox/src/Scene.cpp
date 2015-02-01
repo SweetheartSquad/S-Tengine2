@@ -15,6 +15,7 @@
 #include "Light.h"
 #include "Entity.h"
 #include "MatrixStack.h"
+#include "Game.h"
 
 Scene::Scene(Game * _game):
 	game(_game),
@@ -29,12 +30,6 @@ Scene::Scene(Game * _game):
 	shadowSurface(new RenderSurface(new BlurShader(true))),
 	matrixStack(new vox::MatrixStack())
 {
-	int width, height;
-	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
-	viewPortWidth = width;
-	viewPortHeight = height;
-	viewPortX = 0;
-	viewPortY = 0;
 }
 
 Scene::~Scene(void){
@@ -51,6 +46,9 @@ Scene::~Scene(void){
 }
 
 void Scene::update(Step * _step){
+	if(!loaded){
+		load();
+	}
 	camera->update(_step);
 	for(Entity * e : children){
 		e->update(&vox::step);
@@ -65,6 +63,8 @@ void Scene::load(){
 	shadowBuffer->load();
 	depthShader->load();
 	shadowSurface->load();
+	
+	NodeLoadable::load();
 }
 
 void Scene::unload(){
@@ -75,20 +75,16 @@ void Scene::unload(){
 	shadowBuffer->unload();
 	depthShader->unload();
 	shadowSurface->unload();
+
+	NodeLoadable::unload();
 }
 
-void Scene::setViewport(float _x, float _y, float _w, float _h){
-	viewPortX = _x;
-	viewPortY = _y;
-	viewPortWidth = _w;
-	viewPortHeight = _h;
-}
 
 void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	//glfwGetFramebufferSize(glfwGetCurrentContext(), &w, &h);
 	glfwMakeContextCurrent(glfwGetCurrentContext());
 	float ratio;
-	ratio = viewPortWidth / static_cast<float>(viewPortHeight);
+	ratio = game->viewPortWidth / static_cast<float>(game->viewPortHeight);
 
 	glEnable(GL_SCISSOR_TEST);
     //glEnable(GL_POLYGON_OFFSET_FILL);
@@ -99,8 +95,8 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 
-	glViewport(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
-	glScissor(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
+	glViewport(game->viewPortX, game->viewPortY, game->viewPortWidth, game->viewPortHeight);
+	glScissor(game->viewPortX, game->viewPortY, game->viewPortWidth, game->viewPortHeight);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
@@ -148,60 +144,14 @@ void Scene::addChild(Entity* _child){
 	children.push_back(_child);
 }
 
-void Scene::alphaSort(){
-
-}
-
-void Scene::toggleFullScreen(){
-	return;
-	// Toggle fullscreen flag.
-	vox::fullscreen = !vox::fullscreen;
-	//get size
-	int w, h;
-	//if(vox::fullscreen){
-	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-	w = mode->width;
-	h = mode->height;
-
-	if(!vox::fullscreen){
-		w /= 2;
-		h /= 2;
-	}
-	// Create the new window.
-	GLFWwindow * window;
-	window = glfwCreateWindow(w, h, "VOX",  vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
-	if(!window){
-		glfwTerminate();
-		exit(EXIT_FAILURE);
-	}
-
-	vox::initWindow(window);
-	glfwDestroyWindow(vox::currentContext);
-	glfwMakeContextCurrent(window);
-	vox::currentContext = window;
-
-	int width, height;
-	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
-	viewPortWidth = width;
-	viewPortHeight = height;
-	viewPortX = 0;
-	viewPortY = 0;
-
-	unload();
-	load();
-
-	GLUtils::checkForError(0,__FILE__,__LINE__);
-}
-
 void Scene::renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	Shader * backupOverride = renderOptions->overrideShader;
-	depthBuffer->resize(viewPortWidth, viewPortHeight);
+	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	depthBuffer->bindFrameBuffer();
 	renderOptions->overrideShader = depthShader;
 	Scene::render(_matrixStack, _renderStack);
 
-	shadowBuffer->resize(viewPortWidth, viewPortHeight);
+	shadowBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	shadowBuffer->bindFrameBuffer();
 	shadowSurface->render(depthBuffer->getTextureId(), shadowBuffer->frameBufferId);
 	static_cast<VoxRenderOptions *>(renderOptions)->shadowMapTextureId = shadowBuffer->getTextureId();

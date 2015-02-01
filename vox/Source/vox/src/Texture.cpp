@@ -51,14 +51,16 @@ void Texture::load(){
 			throw "Invalid number of image channels";
 		}
 		glGenerateMipmap(GL_TEXTURE_2D);
-		loaded = true;
 	}
+	
+	NodeLoadable::load();
 }
 
 void Texture::unload(){
 	if(loaded){
 		glDeleteTextures(1, &textureId);
 		textureId = 0;
-		loaded = false;
 	}
+	
+	NodeLoadable::unload();
 }

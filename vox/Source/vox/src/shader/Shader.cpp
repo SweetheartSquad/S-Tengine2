@@ -132,13 +132,13 @@ void Shader::load(){
 		aVertexNormals		= glGetAttribLocation(programId, GL_ATTRIBUTE_ID_VERTEX_NORMALS.c_str());
 		aVertexUVs			= glGetAttribLocation(programId, GL_ATTRIBUTE_ID_VERTEX_UVS.c_str());
 
-		loaded = true;
 	}
+	
+	NodeLoadable::load();
 }
 
 void Shader::unload(){
 	if(loaded){
-		loaded = false;
 		glDeleteProgram(programId);
 		programId = 0;
 		aVertexPosition = -1;
@@ -146,6 +146,8 @@ void Shader::unload(){
 		aVertexNormals = -1;
 		aVertexUVs = -1;
 	}
+	
+	NodeLoadable::unload();
 }
 
 GLuint Shader::compileShader(GLenum _shaderType, char const* _source, int _length){

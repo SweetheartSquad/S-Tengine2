@@ -4,9 +4,9 @@
 #include <GL/glew.h>
 #include <vector>
 #include "node/NodeResource.h"
+#include "node/NodeLoadable.h"
 
-class Texture : public NodeResource
-{
+class Texture : public virtual NodeResource{
 public:
 	Texture(const char* _src, int _width, int _height, bool _storeData, bool _autoRelease);
 	~Texture();

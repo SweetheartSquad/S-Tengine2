@@ -123,9 +123,13 @@ void Box2DDebugDraw::DrawTransform(const b2Transform& xf){
 void Box2DDebugDraw::load(){
 	shader->load();
 	sprite->load();
+	
+	NodeLoadable::load();
 }
 
 void Box2DDebugDraw::unload(){
 	shader->unload();
 	sprite->unload();
+	
+	NodeLoadable::unload();
 }

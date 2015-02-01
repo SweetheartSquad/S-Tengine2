@@ -10,3 +10,10 @@ NodeLoadable::NodeLoadable():
 
 NodeLoadable::~NodeLoadable(){
 }
+
+void NodeLoadable::load(){
+	loaded = true;
+}
+void NodeLoadable::unload(){
+	loaded = false;
+}

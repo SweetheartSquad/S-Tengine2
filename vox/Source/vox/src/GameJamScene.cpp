@@ -414,7 +414,7 @@ void GameJamScene::update(Step * _step){
 		camera->transform->translate((camera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);	
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
-		Scene::toggleFullScreen();
+		game->toggleFullScreen();
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_F1)){
 		debugDraw = !debugDraw;

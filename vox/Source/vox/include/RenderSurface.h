@@ -3,8 +3,9 @@
 #include<GL/glew.h>
 #include <vector>
 
-#include"FrameBufferVertex.h"
-#include"FrameBufferInterface.h"
+#include "FrameBufferVertex.h"
+#include "FrameBufferInterface.h"
+#include "node\NodeLoadable.h"
 
 class Shader;
 
@@ -14,7 +15,7 @@ class Shader;
 * likely be used to render a frame buffer
 *
 ******************************************************/
-class RenderSurface{
+class RenderSurface : public NodeLoadable{
 private:
 	/** The surface verties */
 	std::vector<FrameBufferVertex> vertices;
@@ -36,13 +37,13 @@ public:
 	* Intializes the render surface quad along with the vertex array object
 	* and vertex buffer object. The shader is also loaded if it is unloaded
 	*/
-	void load();
+	void load() override;
 
 	/**
 	* Unbinds the vertex array object and vertex buffer object.
 	* Also unloads the shader id it is loaded
 	*/
-	void unload();
+	void unload() override;
 
 	/**
 	* Renders a frame buffers texture buffer to this surface using the

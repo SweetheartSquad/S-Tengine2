@@ -107,8 +107,7 @@ public:
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
 	void update(Step* _step) override;
 	void attachJoints();
-	void unload() override;
-	void load() override;
+
 	void setShader(Shader * _shader, bool _configureDefaultVertexAttributes) override;
 
 	void addToScene(Scene * _scene);

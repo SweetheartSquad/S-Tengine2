@@ -25,7 +25,7 @@ class Mouse;
 class Game;
 class Entity;
 
-class Scene : public virtual NodeLoadable, public virtual NodeRenderable, public virtual NodeUpdatable{
+class Scene : public virtual NodeRenderable, public virtual NodeLoadable, public virtual NodeUpdatable{
 public:
 	explicit Scene(Game * _game);
 	virtual ~Scene(void);
@@ -54,15 +54,8 @@ public:
 	/** Adds a reference to an entity to the attached list of children */
 	void addChild(Entity * _child);
 
-	void alphaSort();
-
-	/** Toggles fullscreen on and off */
-	void toggleFullScreen();
-
 	virtual void renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack);
 
-	virtual void setViewport(float _x, float _y, float _width, float _height);
-	int viewPortX, viewPortY, viewPortWidth, viewPortHeight;
 
 	virtual void load() override;
 	virtual void unload() override;

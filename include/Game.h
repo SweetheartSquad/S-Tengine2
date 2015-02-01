@@ -69,6 +69,14 @@ public:
 	* Calls update on the mouse and keyboard 
 	*/
 	void manageInput(void);
+
+	/**
+	* Toggles the fullscreen mode. Destroys the current glfwContext and makes a new one; sets all scenes to dirty
+	*/
+	void toggleFullScreen();
+
+	virtual void setViewport(float _x, float _y, float _width, float _height);
+	int viewPortX, viewPortY, viewPortWidth, viewPortHeight;
 	
 	unsigned long int kc_lastKey;
 	unsigned long int kc_code;

@@ -26,6 +26,7 @@
 #include "StandardFrameBuffer.h"
 #include "RenderSurface.h"
 #include "Sprite.h"
+#include "Game.h"
 
 BaseScene::BaseScene(Game * _game):
 	Scene(_game),
@@ -176,14 +177,14 @@ void BaseScene::update(Step * _step){
 	
 	//Toggle fullscreen
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
-		Scene::toggleFullScreen();
+		game->toggleFullScreen();
 	}
 }
 
 void BaseScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	//Render the shadows
 	Scene::renderShadows(_matrixStack, _renderStack);
-	frameBuffer->resize(viewPortWidth, viewPortHeight);
+	frameBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer
 	frameBuffer->bindFrameBuffer();
 	//render the scene to the buffer

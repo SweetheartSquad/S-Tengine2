@@ -49,6 +49,8 @@ void Entity::unload(){
 			nl->unload();	
 		}
 	}
+	
+	NodeLoadable::unload();
 }
 
 void Entity::load(){
@@ -58,4 +60,6 @@ void Entity::load(){
 			nl->load();	
 		}
 	}
+	
+	NodeLoadable::load();
 }

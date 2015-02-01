@@ -89,28 +89,30 @@ void MeshEntity::setShaderOnChildren(Shader * _shader){
 }
 
 void MeshEntity::unload(){
+	if(loaded){
+		if(mesh != nullptr){
+			mesh->unload();
+		}
+		if(shader != nullptr){
+			shader->unload();	
+		}
+	}
 	Entity::unload();
-
-	if(mesh != nullptr){
-		mesh->unload();
-	}
-	if(shader != nullptr){
-		shader->unload();	
-	}
 }
 
 void MeshEntity::load(){
-	Entity::load();
-
-	if(mesh != nullptr){
-		mesh->load();
-		mesh->clean();	
-	}
+	if(!loaded){
+		if(mesh != nullptr){
+			mesh->load();
+			mesh->clean();	
+		}
 	
-	if(shader != nullptr){
-		shader->load();
-		if(mesh != nullptr ){
-			mesh->configureDefaultVertexAttributes(shader);
+		if(shader != nullptr){
+			shader->load();
+			if(mesh != nullptr ){
+				mesh->configureDefaultVertexAttributes(shader);
+			}
 		}
 	}
+	Entity::load();
 }

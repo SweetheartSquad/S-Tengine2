@@ -13,6 +13,7 @@
 #include "Light.h"
 #include "GLUtils.h"
 #include "node/NodeRenderable.h"
+#include "node/NodeLoadable.h"
 #include "shader/ShaderVariables.h"
 
 class Texture;
@@ -20,10 +21,8 @@ class Material;
 class MatrixStack;
 
 
-class MeshInterface : public virtual NodeRenderable{
+class MeshInterface : public virtual NodeRenderable, public virtual NodeLoadable{
 public:
-	/** Whether the vao, vbo, and ibo have been generated and initialized */
-	bool loaded;
 	/** Whether the vbo and ibo contain up-to-date vertex and index data */
 	bool dirty;
 	/** Vertex data for the vbo */
@@ -84,9 +83,9 @@ public:
 	~MeshInterface();
 
 	/** If unloaded, generates the VAO, VBO, IBO and flags as loaded */
-	void load();
+	void load() override;
 	/** If loaded, deletes the VAO, VBO, IBO and flags as not loaded and dirty */
-	void unload();
+	void unload() override;
 	/** If dirty, copies data from vertices and indices to VBO and IBO and flags as clean */
 	void clean();
 	/** Renders the vao using the given shader, model-view-projection and lights */

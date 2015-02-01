@@ -1,13 +1,14 @@
 #pragma once
 
+#include <stdlib.h>
+
 #include "Game.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Vox.h"
 #include "MatrixStack.h"
 #include "VoxRenderOptions.h"
-
-#include <stdlib.h>
+#include "GLUtils.h"
 
 //these shouldn't be global
 double lastTime = glfwGetTime();
@@ -23,6 +24,12 @@ Game::Game(bool _isRunning):
 	kc_active(false),
 	switchingScene(false)
 {
+	int width, height;
+	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+	viewPortWidth = width;
+	viewPortHeight = height;
+	viewPortX = 0;
+	viewPortY = 0;
 }
 
 Game::~Game(void){
@@ -195,4 +202,59 @@ void Game::switchScene(std::string _newScene){
 		switchingScene = false;
 		newScene = "";
 	}
+}
+
+
+
+
+void Game::toggleFullScreen(){
+	// Toggle fullscreen flag.
+	vox::fullscreen = !vox::fullscreen;
+	//get size
+	int w, h;
+	//if(vox::fullscreen){
+	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+
+	w = mode->width;
+	h = mode->height;
+
+	if(!vox::fullscreen){
+		w /= 2;
+		h /= 2;
+	}
+	// Create the new window.
+	GLFWwindow * window;
+	window = glfwCreateWindow(w, h, "VOX",  vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	if(!window){
+		glfwTerminate();
+		exit(EXIT_FAILURE);
+	}
+
+	vox::initWindow(window);
+	glfwDestroyWindow(vox::currentContext);
+	glfwMakeContextCurrent(window);
+	vox::currentContext = window;
+
+	int width, height;
+	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
+	viewPortWidth = width;
+	viewPortHeight = height;
+	viewPortX = 0;
+	viewPortY = 0;
+	
+	for(std::pair<std::string, Scene *> s : scenes){
+		s.second->unload();
+	}
+	for(std::pair<std::string, Scene *> s : scenes){
+		s.second->load();
+	}
+
+	GLUtils::checkForError(0,__FILE__,__LINE__);
+}
+
+void Game::setViewport(float _x, float _y, float _w, float _h){
+	viewPortX = _x;
+	viewPortY = _y;
+	viewPortWidth = _w;
+	viewPortHeight = _h;
 }

@@ -10,7 +10,6 @@
 
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	NodeRenderable(),
-	loaded(false),
 	dirty(true),
 	drawMode(drawMode),
 	polygonalDrawMode(polygonalDrawMode),
@@ -70,8 +69,9 @@ void MeshInterface::load(){
 		// Disable VAO
 		glBindVertexArray(0);
 		GLUtils::checkForError(true,__FILE__,__LINE__);
-		loaded = true;
 	}
+	
+	NodeLoadable::load();
 }
 
 void MeshInterface::unload(){
@@ -86,9 +86,10 @@ void MeshInterface::unload(){
 		vboId = 0;
 		vaoId = 0;
 
-		loaded = false;
 		dirty = true;
 	}
+	
+	NodeLoadable::unload();
 }
 
 void MeshInterface::clean(){

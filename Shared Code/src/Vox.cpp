@@ -71,10 +71,10 @@ void vox::initialize(std::string _title){
 
 	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-	int w = mode->width;
-	int	h = mode->height;
+	int w = mode->width/2;
+	int	h = mode->height/2;
 
-	window = glfwCreateWindow(w, h, _title.c_str(), glfwGetPrimaryMonitor(), nullptr);
+	window = glfwCreateWindow(w, h, _title.c_str(), nullptr, nullptr);
 	if (!window){
 		glfwTerminate();
 		exit(EXIT_FAILURE);

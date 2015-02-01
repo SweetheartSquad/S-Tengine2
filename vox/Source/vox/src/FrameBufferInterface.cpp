@@ -42,6 +42,8 @@ void FrameBufferInterface::load(){
 		}
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	
+	NodeLoadable::load();
 }
 
 void FrameBufferInterface::unload(){
@@ -59,6 +61,8 @@ void FrameBufferInterface::unload(){
 			break;
 		}
 	}
+	
+	NodeLoadable::unload();
 }
 
 void FrameBufferInterface::reload(){

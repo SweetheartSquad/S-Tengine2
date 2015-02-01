@@ -418,11 +418,6 @@ void Character::attachJoints(){
 	torso->body->SetGravityScale(0.5);
 }
 
-void Character::unload(){
-}
-
-void Character::load(){
-}
 
 void Character::setShader(Shader * _shader, bool _configureDefaultVertexAttributes){
 	MeshEntity::setShader(_shader, _configureDefaultVertexAttributes);

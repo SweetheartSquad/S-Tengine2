@@ -21,35 +21,38 @@ RenderSurface::~RenderSurface(){
 }
 
 void RenderSurface::load(){
-	if(!shader->loaded){
+	if(!loaded){
 		shader->load();
+		glUseProgram(shader->getProgramId());
+		// Vertex Array Object (VAO)
+		glGenVertexArrays(1, &vaoId);
+		glBindVertexArray(vaoId);
+
+		// Vertex Auffer Object (VBO)
+		glGenBuffers(1, &vboId);
+		glBindBuffer(GL_ARRAY_BUFFER, vboId);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(FrameBufferVertex) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+
+		GLint aVertexPosition	= shader->get_aVertexPosition();
+		GLint aVertexUvs		= shader->get_aVertexUVs();
+
+		GLUtils::configureVertexAttributes(aVertexPosition, 2, 0, vaoId, sizeof(FrameBufferVertex));
+		GLUtils::configureVertexAttributes(aVertexUvs, 2, sizeof(float) * 2, vaoId, sizeof(FrameBufferVertex));
+		glBindVertexArray(0);
 	}
-	glUseProgram(shader->getProgramId());
-	// Vertex Array Object (VAO)
-	glGenVertexArrays(1, &vaoId);
-	glBindVertexArray(vaoId);
-
-	// Vertex Auffer Object (VBO)
-	glGenBuffers(1, &vboId);
-	glBindBuffer(GL_ARRAY_BUFFER, vboId);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(FrameBufferVertex) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
-
-	GLint aVertexPosition	= shader->get_aVertexPosition();
-	GLint aVertexUvs		= shader->get_aVertexUVs();
-
-	GLUtils::configureVertexAttributes(aVertexPosition, 2, 0, vaoId, sizeof(FrameBufferVertex));
-	GLUtils::configureVertexAttributes(aVertexUvs, 2, sizeof(float) * 2, vaoId, sizeof(FrameBufferVertex));
-	glBindVertexArray(0);
+	
+	NodeLoadable::load();
 }
 
 void RenderSurface::unload(){
-	glDeleteBuffers(1, &vboId);
-	glDeleteVertexArrays(1, &vaoId);
-	vboId = 0;
-	vaoId = 0;
-	if(shader->loaded){
+	if(loaded){
+		glDeleteBuffers(1, &vboId);
+		glDeleteVertexArrays(1, &vaoId);
+		vboId = 0;
+		vaoId = 0;
 		shader->unload();
 	}
+	NodeLoadable::unload();
 }
 
 void RenderSurface::render(GLuint _textureId, GLint _renderTo){
