@@ -9,7 +9,6 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {
-	
 	ComponentTexture * headTex = new ComponentTexture(new Texture("../assets/character components/MichaelHead.png", 512, 512, true, true), 160, 270);
 	CharacterComponent * head = new CharacterComponent(1.f, headTex->width, headTex->height, headTex->texture, _world);
 	components.push_back(head);
