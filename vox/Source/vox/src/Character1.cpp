@@ -3,11 +3,10 @@
 #include "Character1.h"
 
 #include "Box2DSprite.h"
-#include "Texture.h"
 #include "CharacterComponent.h"
 
 Character1::Character1(Box2DWorld * _world, bool _ai, int16 _categoryBits, int16 _maskBits):
-	Character(_world, _categoryBits, _maskBits, _ai),
+	GameJamCharacter(_world, _categoryBits, _maskBits, _ai),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()

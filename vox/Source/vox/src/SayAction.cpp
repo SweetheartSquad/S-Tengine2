@@ -1,11 +1,11 @@
 #pragma once
 
 #include "SayAction.h"
-#include "Character.h"
+#include "GameJamCharacter.h"
 #include "BitmapFont.h"
 #include "Vox.h"
 
-SayAction::SayAction(Character * _speaker, std::string _text, float _duration):
+SayAction::SayAction(GameJamCharacter * _speaker, std::string _text, float _duration):
 	DialogAction(_speaker),
 	text(_text),
 	duration(_duration),
@@ -26,13 +26,13 @@ void SayAction::update(Step* _step){
 	if(timePassed >= duration){
 		complete = true;
 		if(!setBlank){
-			spreaker->text->setText("");	
+			speaker->text->setText("");	
 			setBlank = true;
 		}
 	}else{
 		timePassed += vox::step.getDeltaTime();
 		if(!setText){
-			spreaker->text->setText(text);
+			speaker->text->setText(text);
 			setText = true;
 		}
 	}

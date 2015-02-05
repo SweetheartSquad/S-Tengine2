@@ -19,13 +19,14 @@ class Character1;
 class Character2;
 class Character3;
 class Character4;
+class GameJamCharacter;
 
  class GameJamScene abstract : public Scene{
 public:
 	bool debugDraw;
 	Box2DDebugDraw * drawer;
 	Box2DWorld * world;
-	Character * playerCharacter;
+	GameJamCharacter * playerCharacter;
 	Box2DMeshEntity * ground;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;

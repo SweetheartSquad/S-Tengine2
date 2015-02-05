@@ -7,7 +7,7 @@
 #include "CharacterComponent.h"
 
 Character4::Character4(Box2DWorld * _world, bool _ai, int16 _categoryBits, int16 _maskBits):
-	Character(_world, _categoryBits, _maskBits, _ai),
+	GameJamCharacter(_world, _categoryBits, _maskBits, _ai),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()

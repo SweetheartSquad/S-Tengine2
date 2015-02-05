@@ -2,11 +2,8 @@
 
 #include <vector>
 
-#include "DialogAction.h"
 #include "DialogEvent.h"
-#include "SayAction.h"
 #include "node/NodeUpdatable.h"
-#include "Character.h"
 
 const std::string dialogBits[29] =
 {
@@ -43,10 +40,10 @@ const std::string dialogBits[29] =
 
 class DialogHandler : public virtual NodeUpdatable{
 public:
-	std::vector<Character *> sceneCharacters;
+	std::vector<GameJamCharacter *> sceneCharacters;
 	DialogEvent * dialogEvent;
 
-	DialogHandler(std::vector<Character *> _sceneCharacters);
+	DialogHandler(std::vector<GameJamCharacter *> _sceneCharacters);
 	~DialogHandler();
 
 	void makeDialog();

@@ -1,6 +1,6 @@
 #include "CharacterComponent.h"
-#include "Character.h"
 #include "Texture.h"
+#include "MeshInterface.h"
 
 CharacterComponent::CharacterComponent(float _componentScale, float _width, float _height, Texture* _texture, Box2DWorld* _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform) :
 	Box2DSprite(_world, _bodyType, _defaultFixture, _shader, _transform),

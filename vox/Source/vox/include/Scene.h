@@ -1,6 +1,5 @@
 #pragma once
 
-#include <iostream>
 #include <vector>
 
 #include "node/NodeLoadable.h"
@@ -56,6 +55,7 @@ public:
 
 	virtual void renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack);
 
+	float clearColor[4];
 
 	virtual void load() override;
 	virtual void unload() override;

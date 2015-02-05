@@ -1,10 +1,11 @@
 #pragma once
 
+#include <vector>
+
 #include "BitmapFont.h"
-#include "MeshFactory.h"
 #include "Rectangle.h"
 #include "node/NodeTransformable.h"
-#include <vector>
+#include "Texture.h"
 
 BitmapFont::BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _columns, bool _padFront, WrapMode _wrapMode):
 	MeshEntity(),

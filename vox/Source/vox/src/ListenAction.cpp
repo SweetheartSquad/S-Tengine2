@@ -3,7 +3,7 @@
 #include "ListenAction.h"
 #include "Character.h"
 
-ListenAction::ListenAction(Character * _speaker):
+ListenAction::ListenAction(GameJamCharacter * _speaker):
 	DialogAction(_speaker)
 {
 }

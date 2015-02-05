@@ -2,8 +2,8 @@
 
 #include "DialogAction.h"
 
-DialogAction::DialogAction(Character * spreaker):
-	spreaker(spreaker),
+DialogAction::DialogAction(GameJamCharacter * speaker):
+	speaker(speaker),
 	complete(false)
 {
 }

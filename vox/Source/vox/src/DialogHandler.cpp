@@ -2,10 +2,10 @@
 
 #include "DialogHandler.h"
 #include "DialogEvent.h"
-#include "Transform.h"
 #include "BitmapFont.h"
+#include <SayAction.h>
 
-DialogHandler::DialogHandler(std::vector<Character *> _sceneCharacters):
+DialogHandler::DialogHandler(std::vector<GameJamCharacter *> _sceneCharacters):
 	NodeUpdatable(),
 	sceneCharacters(_sceneCharacters),
 	dialogEvent(new DialogEvent())

@@ -228,7 +228,7 @@ GameJamScene::GameJamScene(Game * _game):
 	drawer->SetFlags(b2Draw::e_shapeBit);
 
 	//keep a vector of the characters, for the dialogHandler
-	std::vector<Character *> sceneCharacters;
+	std::vector<GameJamCharacter *> sceneCharacters;
 
 	playerCharacter->setShader(shader, true);
 	addChild(playerCharacter);
@@ -269,7 +269,7 @@ GameJamScene::GameJamScene(Game * _game):
 
 	playerCharacter->text->setText("Howdy Ya'll, My Name's Baby Legs Hetman");
 	
-	for(unsigned long int i = 0; i < std::rand()%5; ++i){
+	for(unsigned long int i = 0; i < (unsigned long int)std::rand()%5; ++i){
 		RandomCharacter * dude1 = new RandomCharacter(world, true);
 		dude1->setShader(shader, true);
 		dude1->addToScene(this);

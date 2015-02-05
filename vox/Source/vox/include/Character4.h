@@ -1,8 +1,8 @@
 #pragma once 
 
-#include "Character.h"
+#include "GameJamCharacter.h"
 
-class Character4 : public Character{
+class Character4 : public GameJamCharacter{
 public:
 	Character4(Box2DWorld * _world, bool _ai, int16 _categoryBits, int16 _maskBits = -1);
 	~Character4();

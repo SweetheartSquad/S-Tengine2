@@ -1,6 +1,8 @@
 #include "Box2DSprite.h"
 #include "box2d/Box2D.h"
 
+class Texture;
+
 class CharacterComponent : public Box2DSprite{
 public:
 	

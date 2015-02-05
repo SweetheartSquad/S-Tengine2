@@ -2,7 +2,7 @@
 
 #include "node/NodeUpdatable.h"
 
-class Character;
+class GameJamCharacter;
 
 enum DialogActionType{
 	NONE,
@@ -13,9 +13,9 @@ enum DialogActionType{
 class DialogAction : public virtual NodeUpdatable{
 public:
 
-	Character * spreaker;
+	GameJamCharacter * speaker;
 
-	explicit DialogAction(Character * _spreaker);
+	explicit DialogAction(GameJamCharacter * _speaker);
 	virtual ~DialogAction();
 
 	virtual DialogActionType getActionType();

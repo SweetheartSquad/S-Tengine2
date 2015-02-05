@@ -1,11 +1,9 @@
 #pragma once 
 
 #include "MeshEntity.h"
-#include "MeshInterface.h"
 #include "Rectangle.h"
 
 #include <map>
-#include <utility>
 
 class SpriteSheetAnimation;
 class Rectangle;

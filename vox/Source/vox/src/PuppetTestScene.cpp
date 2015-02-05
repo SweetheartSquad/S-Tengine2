@@ -5,6 +5,7 @@
 PuppetTestScene::PuppetTestScene(Game* _game):
 	PuppetScene(_game)
 {
+
 }
 
 PuppetTestScene::~PuppetTestScene(){

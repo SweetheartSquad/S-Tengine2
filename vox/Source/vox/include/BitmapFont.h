@@ -1,7 +1,6 @@
 #pragma once
 
 #include "node/NodeRenderable.h"
-#include "Texture.h"
 #include "MeshInterface.h"
 #include "Rectangle.h"
 #include "MeshEntity.h"

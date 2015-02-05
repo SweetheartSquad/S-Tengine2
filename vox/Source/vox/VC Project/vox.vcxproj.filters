@@ -85,6 +85,12 @@
     <Filter Include="Header Files\TestGame\GameJam">
       <UniqueIdentifier>{c964133c-c09b-42e0-b189-02ff94dc8c7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\TestGame\HurlyBurly">
+      <UniqueIdentifier>{5c656503-5f8d-4bdc-ac87-972961814dc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TestGame\HurlyBurly">
+      <UniqueIdentifier>{8b800f95-ac0e-43e8-82cc-bfb1780fa75c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Cube.cpp">
@@ -385,7 +391,7 @@
       <Filter>Source Files\TestGame\GameJam</Filter>
     </ClCompile>
     <ClCompile Include="..\src\DialogHandler.cpp">
-	<Filter>Source Files\TestGame\GameJam</Filter>
+      <Filter>Source Files\TestGame\GameJam</Filter>
     </ClCompile>
     <ClCompile Include="..\src\GameJamContactListener.cpp">
       <Filter>Source Files\TestGame\GameJam</Filter>
@@ -394,6 +400,18 @@
       <Filter>Source Files\TestGame\GameJam</Filter>
     </ClCompile>
     <ClCompile Include="..\src\GameJamSceneIndoor.cpp">
+      <Filter>Source Files\TestGame\GameJam</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PuppetTestScene.cpp">
+      <Filter>Source Files\TestGame\HurlyBurly</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PuppetScene.cpp">
+      <Filter>Source Files\TestGame\HurlyBurly</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PuppetCharacter.cpp">
+      <Filter>Source Files\TestGame\HurlyBurly</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameJamCharacter.cpp">
       <Filter>Source Files\TestGame\GameJam</Filter>
     </ClCompile>
   </ItemGroup>
@@ -714,7 +732,7 @@
       <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
     <ClInclude Include="..\include\DialogHandler.h">
-	<Filter>Header Files\TestGame\GameJam</Filter>
+      <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
     <ClInclude Include="..\include\GameJamContactListener.h">
       <Filter>Header Files\TestGame\GameJam</Filter>
@@ -726,6 +744,18 @@
       <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Props.h">
+      <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\PuppetTestScene.h">
+      <Filter>Header Files\TestGame\HurlyBurly</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\PuppetScene.h">
+      <Filter>Header Files\TestGame\HurlyBurly</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\PuppetCharacter.h">
+      <Filter>Header Files\TestGame\HurlyBurly</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\GameJamCharacter.h">
       <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
   </ItemGroup>

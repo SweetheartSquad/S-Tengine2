@@ -14,7 +14,7 @@ public:
 	bool setText;
 	bool setBlank;
 
-	SayAction(Character * _speaker, std::string _text, float _duration);
+	SayAction(GameJamCharacter * _speaker, std::string _text, float _duration);
 	~SayAction();
 
 	DialogActionType getActionType() override;

@@ -1,11 +1,7 @@
 #include "TestGame.h"
-#include "BaseScene.h"
-#include <string>
-#include "TestScene2D.h"
-#include "GameJamSceneIndoor.h"
-#include "GameJamSceneOutdoor.h"
+#include "PuppetTestScene.h"
 
-#include "Character.h"
+#include "GameJamCharacter.h"
 
 #include <cstdlib>
 #include <ctime>
@@ -15,10 +11,9 @@ TestGame::TestGame(bool _running):
 	Game(_running)
 {
 	std::srand(std::time(0));
-	Character::init();
-	scenes.insert(std::make_pair("outdoors", new GameJamSceneOutdoor(this)));
-	scenes.insert(std::make_pair("indoors", new GameJamSceneIndoor(this)));
-	currentScene = scenes.at("indoors");
+	GameJamCharacter::init();
+	scenes.insert(std::make_pair("Raid the Castle", new PuppetTestScene(this)));
+	currentScene = scenes.at("Raid the Castle");
 }
 
 TestGame::~TestGame(){

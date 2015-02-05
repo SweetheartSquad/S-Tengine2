@@ -2,11 +2,11 @@
 
 #include "DialogAction.h"
 
-class Character;
+class GameJamCharacter;
 
 class ListenAction : public DialogAction{
 public:
-	ListenAction(Character * _speaker);
+	ListenAction(GameJamCharacter * _speaker);
 	~ListenAction();
 
 	DialogActionType getActionType() override;

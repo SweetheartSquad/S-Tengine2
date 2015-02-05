@@ -6,7 +6,7 @@
 #include "CharacterComponent.h"
 
 RandomCharacter::RandomCharacter(Box2DWorld * _world, bool _ai):
-	Character(_world, _ai),
+	GameJamCharacter(_world, _ai),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()

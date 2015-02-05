@@ -16,7 +16,7 @@ public:
 
 	float timeStepAccumulator;
 
-	explicit Box2DWorld(b2Vec2 _gravityVector);
+	explicit Box2DWorld(b2Vec2 _gravityVector = b2Vec2(0.f, -9.8f));
 	~Box2DWorld();
 
 	void update(Step* _step) override;

@@ -30,6 +30,10 @@ Scene::Scene(Game * _game):
 	shadowSurface(new RenderSurface(new BlurShader(true))),
 	matrixStack(new vox::MatrixStack())
 {
+	clearColor[0] = 0.0;
+	clearColor[1] = 0.0;
+	clearColor[2] = 0.0;
+	clearColor[3] = 1.0;
 }
 
 Scene::~Scene(void){
@@ -93,7 +97,7 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 	glEnable (GL_BLEND);
 	glBlendEquation(GL_FUNC_ADD);
 
-	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
 
 	glViewport(game->viewPortX, game->viewPortY, game->viewPortWidth, game->viewPortHeight);
 	glScissor(game->viewPortX, game->viewPortY, game->viewPortWidth, game->viewPortHeight);

@@ -40,8 +40,8 @@ void GameJamContactListener::contactWithCharacter(b2Contact * contact){
 	b2Fixture * fxA = contact->GetFixtureA();
 	b2Fixture * fxB = contact->GetFixtureB();
 
-	Character* cA = static_cast<Character*>( fxA->GetBody()->GetUserData() );
-    Character* cB = static_cast<Character*>( fxB->GetBody()->GetUserData() );
+	GameJamCharacter* cA = static_cast<GameJamCharacter*>( fxA->GetBody()->GetUserData() );
+    GameJamCharacter* cB = static_cast<GameJamCharacter*>( fxB->GetBody()->GetUserData() );
 
 	SayAction(cA, "Ow!", 100.0f);
 	SayAction(cB, "Ow!", 100.0f);

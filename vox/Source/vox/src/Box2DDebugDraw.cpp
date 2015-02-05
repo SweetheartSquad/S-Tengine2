@@ -35,7 +35,8 @@ void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, cons
 		sprite->mesh->pushVert(Vertex(vertices[i].x, vertices[i].y, 0.0001f, color.r, color.g, color.b, 1.f));
 	}
 	glLineWidth(2);
-	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 	sprite->render(scene->matrixStack, scene->renderOptions);
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 	sprite->mesh->dirty = true;
@@ -52,7 +53,8 @@ void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount
 		sprite->mesh->pushVert(Vertex(vertices[i].x, vertices[i].y, 0.0001f, color.r, color.g, color.b, 1.f));
 	}
 	glLineWidth(2);
-	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 	sprite->render(scene->matrixStack, scene->renderOptions);
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
 	sprite->mesh->dirty = true;

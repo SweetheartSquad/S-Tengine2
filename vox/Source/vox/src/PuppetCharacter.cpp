@@ -1,18 +1,18 @@
 #pragma once
 
 #include "PuppetCharacter.h"
+#include <CharacterComponent.h>
+#include <Texture.h>
 
 PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, bool _ai):
-	MeshEntity(nullptr, new Transform()),
+	Character(_world, _categoryBits, _maskBits, _ai),
 	NodeTransformable(new Transform()),
-	NodeChild(nullptr),
-	world(_world),
-	componentScale(0.0025f),
-	groupIndex(--gGroupIndex),
-	categoryBits(_categoryBits),
-	maskBits(_maskBits),
-	ai(_ai)
+	NodeChild(nullptr)
 {
+	
+	ComponentTexture * headTex = new ComponentTexture(new Texture("../assets/character components/MichaelHead.png", 512, 512, true, true), 160, 270);
+	CharacterComponent * head = new CharacterComponent(1.f, headTex->width, headTex->height, headTex->texture, _world);
+	components.push_back(head);
 }
 
 PuppetCharacter::~PuppetCharacter(){
