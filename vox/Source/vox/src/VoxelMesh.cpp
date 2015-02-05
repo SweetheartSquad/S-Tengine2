@@ -1,20 +1,18 @@
 #pragma once
 
 #include "VoxelMesh.h"
-#include "RenderOptions.h"
-#include "MatrixStack.h"
 #include "node/NodeRenderable.h"
 
 VoxelMesh::VoxelMesh(GLenum _drawMode):
 	MeshInterface(GL_POINTS, _drawMode),
 	NodeRenderable(),
-	resolution(0.15)
+	resolution(0.15f)
 {
 }
 
 VoxelMesh::VoxelMesh(MeshInterface* _mesh):
 	MeshInterface(GL_POINTS, _mesh->drawMode),
-	resolution(0.15){
+	resolution(0.15f){
 	indices  = _mesh->indices;
 	vertices = _mesh->vertices;
 	unload();

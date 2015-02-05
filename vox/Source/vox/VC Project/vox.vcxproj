@@ -398,7 +398,6 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\include\MousePerspectiveCamera.h" />
     <ClInclude Include="..\include\node\NodeBox2DBody.h" />
     <ClInclude Include="..\include\Point.h" />
-    <ClInclude Include="..\include\Props.h" />
     <ClInclude Include="..\include\PuppetCharacter.h" />
     <ClInclude Include="..\include\PuppetScene.h" />
     <ClInclude Include="..\include\PuppetTestScene.h" />

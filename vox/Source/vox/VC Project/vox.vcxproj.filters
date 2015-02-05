@@ -743,9 +743,6 @@
     <ClInclude Include="..\src\GameJamSceneIndoor.h">
       <Filter>Header Files\TestGame\GameJam</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Props.h">
-      <Filter>Header Files\TestGame\GameJam</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\PuppetTestScene.h">
       <Filter>Header Files\TestGame\HurlyBurly</Filter>
     </ClInclude>

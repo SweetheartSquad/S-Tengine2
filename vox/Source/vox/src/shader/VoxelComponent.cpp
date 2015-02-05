@@ -97,5 +97,5 @@ void VoxelComponent::configureUniforms(vox::MatrixStack * _matrixStack, RenderOp
 	GLuint vpUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), "VP");
 	GLuint resolutionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), "resolution");
 	glUniformMatrix4fv(vpUniformLocation, 1, GL_FALSE, &vp[0][0]);
-	glUniform1f(resolutionUniformLocation, 0.15);
+	glUniform1f(resolutionUniformLocation, 0.15f);
 }

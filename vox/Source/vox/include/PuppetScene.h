@@ -33,11 +33,6 @@ GameJamContactListener * cl;
 	Box2DMeshEntity * ground;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
-	SpriteSheetAnimation * spriteSheet;
-	CylinderScreen * backgroundScreen;
-	CylinderScreen * midgroundScreen;
-	CylinderScreen * foregroundScreen;
-	DialogHandler * dialogHandler;
 
 	std::vector<Box2DSprite *> items;
 
