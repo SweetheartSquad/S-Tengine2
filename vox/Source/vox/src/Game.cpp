@@ -224,7 +224,11 @@ void Game::toggleFullScreen(){
 	}
 	// Create the new window.
 	GLFWwindow * window;
+#ifdef _DEBUG
+	window = glfwCreateWindow(w, h, "VOX",  nullptr, nullptr);
+#else
 	window = glfwCreateWindow(w, h, "VOX",  vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+#endif
 	if(!window){
 		glfwTerminate();
 		exit(EXIT_FAILURE);

@@ -134,7 +134,7 @@ void NodeBox2DBody::applyLinearImpulseDown(float _force){
 	}
 }
 
-void NodeBox2DBody::applyAngularImpule(float _angle){
+void NodeBox2DBody::applyAngularImpulse(float _angle){
 	if(body != nullptr){
 		body->ApplyAngularImpulse(_angle, true);
 	}

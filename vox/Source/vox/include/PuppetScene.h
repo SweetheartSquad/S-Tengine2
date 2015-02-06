@@ -2,6 +2,7 @@
 
 #include "Scene2D.h"
 
+class PuppetCharacter;
 class GameJamCharacter;
 class GameJamContactListener;
 class DialogHandler;
@@ -29,7 +30,7 @@ GameJamContactListener * cl;
 	bool debugDraw;
 	Box2DDebugDraw * drawer;
 	Box2DWorld * world;
-	GameJamCharacter * playerCharacter;
+	PuppetCharacter * playerCharacter;
 	Box2DMeshEntity * ground;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
@@ -40,12 +41,11 @@ GameJamContactListener * cl;
 	explicit PuppetScene(Game * _game);
 	virtual ~PuppetScene();
 
-	void load() override;
-	void unload() override;
-	void update(Step * _step) override;
-	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
-	void readArduino();
-
+	virtual void load() override;
+	virtual void unload() override;
+	virtual void update(Step * _step) override;
+	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+	
 	enum HURLYBURLY_CATEGORY{
 		BOUNDARY = 0x0001,
 		PROP = 0x0002,

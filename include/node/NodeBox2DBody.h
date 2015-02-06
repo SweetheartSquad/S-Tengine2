@@ -46,7 +46,7 @@ public:
 	void applyLinearImpulseUp(float _force);
 	void applyLinearImpulseDown(float _force);
 
-	void applyAngularImpule(float _angle);
+	void applyAngularImpulse(float _angle);
 
 	bool movingVertically(float _threshold = 0);
 	bool movingHorizontally(float _threshold = 0);

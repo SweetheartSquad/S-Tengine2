@@ -9,8 +9,8 @@ public:
 	explicit PuppetTestScene(Game * _game);
 	~PuppetTestScene();
 
-	void update(Step * _step) override;
-	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
-	void load() override;
-	void unload() override;
+	virtual void update(Step * _step) override;
+	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+	virtual void load() override;
+	virtual void unload() override;
 };

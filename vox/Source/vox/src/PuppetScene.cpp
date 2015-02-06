@@ -29,13 +29,15 @@
 #include <AccelerometerParser.h>
 #include <Accelerometer.h>
 
+#include <PuppetCharacter.h>
+
 PuppetScene::PuppetScene(Game * _game):
 	Scene(_game),
 	cl(new GameJamContactListener),
-	debugDraw(false),
+	debugDraw(true),
 	drawer(new Box2DDebugDraw(this)),
 	world(new Box2DWorld(b2Vec2(0, -60))),
-	playerCharacter(new TestCharacter(world, false, PLAYER, PROP | NPC)),
+	playerCharacter(new PuppetCharacter(world, PLAYER, PROP | NPC, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager())
@@ -45,7 +47,7 @@ PuppetScene::PuppetScene(Game * _game):
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	ground->setShader(shader, true);
-	ground->setTranslationPhysical(0, 0, -5.f);
+	ground->setTranslationPhysical(0, -5, -5.f);
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
 	ground->transform->scale(1000, 10, 1);
 	ground->mesh->setUV(3, 0, 0);
@@ -64,8 +66,8 @@ PuppetScene::PuppetScene(Game * _game):
 	world->addToWorld(ground, 2);
 	
 	addChild(ground);
-	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 0, 0);
-	//camera = new MousePerspectiveCamera();
+//	camera = new PerspectiveCamera(playerCharacter->components.at(0), glm::vec3(0, 0, 0), 0, 0);
+	camera = new MousePerspectiveCamera();
 	camera->farClip = 1000.f;
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
 	camera->transform->translate(5.0f, 0.f, 15.0f);
@@ -75,13 +77,19 @@ PuppetScene::PuppetScene(Game * _game):
 	world->b2world->SetDebugDraw(drawer);
 	drawer->SetFlags(b2Draw::e_shapeBit);
 
-	//keep a vector of the characters, for the dialogHandler
-	std::vector<GameJamCharacter *> sceneCharacters;
 
 	playerCharacter->setShader(shader, true);
 	addChild(playerCharacter);
 	playerCharacter->addToScene(this);
-	playerCharacter->torso->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
+	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
+	playerCharacter->head->setTranslationPhysical(5, 7, 5);
+	//world->addToWorld(playerCharacter->components.at(0));
+	
+	TestCharacter * michael = new TestCharacter(world, false, PLAYER, PROP | NPC);
+	michael->setShader(shader, true);
+	addChild(michael);
+	michael->addToScene(this);
+	
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM3");
@@ -95,13 +103,17 @@ PuppetScene::~PuppetScene(){
 }
 
 void PuppetScene::load(){
+	if(!loaded){
+		drawer->load();
+	}
 	Scene::load();
-	drawer->load();
 }
 
 void PuppetScene::unload(){
+	if(loaded){
+		drawer->unload();
+	}
 	Scene::unload();
-	drawer->unload();
 }
 
 void PuppetScene::update(Step * _step){
@@ -112,27 +124,27 @@ void PuppetScene::update(Step * _step){
 	arduino->update(_step);
 
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
-		if(playerCharacter->torso->body->GetPosition().y < 12){
-			playerCharacter->torso->applyLinearImpulseUp(400);
+		if(playerCharacter->head->body->GetPosition().y < 12){
+			playerCharacter->head->applyLinearImpulseUp(400);
 		}
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
 		//playerCharacter->transform->rotate(1, 0, 1, 0, kOBJECT);
-		playerCharacter->reactiveFeet = false;
-		playerCharacter->reactiveBody = false;
+		//playerCharacter->reactiveFeet = false;
+		//playerCharacter->reactiveBody = false;
 	}else{
-		playerCharacter->reactiveFeet = true;
-		playerCharacter->reactiveBody = true;
+		//playerCharacter->reactiveFeet = true;
+		//playerCharacter->reactiveBody = true;
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		playerCharacter->torso->applyLinearImpulseLeft(25);
+		playerCharacter->head->applyLinearImpulseLeft(25);
 		if(playerCharacter->transform->scaleVector.x < 0){
 			playerCharacter->transform->scaleX(-1);
 		}
 		//playerCharacter->playAnimation = true;
 		//playerCharacter->setCurrentAnimation("run");
 
-		if(playerCharacter->reactiveFeet){
+		/*if(playerCharacter->reactiveFeet){
 			b2ContactEdge * stuff = playerCharacter->leftLowerLeg->body->GetContactList();
 			if(stuff != nullptr && stuff->contact->IsTouching()){
 				int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
@@ -159,46 +171,45 @@ void PuppetScene::update(Step * _step){
 					}
 				}
 			}
-		}
+		}*/
 
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		playerCharacter->torso->applyLinearImpulseRight(25);
+		playerCharacter->head->applyLinearImpulseRight(25);
 		if(playerCharacter->transform->scaleVector.x > 0){
 			playerCharacter->transform->scaleX(-1);
 		}
 		//playerCharacter->setCurrentAnimation("run");
 		//playerCharacter->playAnimation = true;
 
-		if(playerCharacter->reactiveFeet){
-		b2ContactEdge * stuff = playerCharacter->leftLowerLeg->body->GetContactList();
-		if(stuff != nullptr && stuff->contact->IsTouching()){
-			int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
-			int type2 = (int)stuff->contact->GetFixtureB()->GetUserData();
+		/*if(playerCharacter->reactiveFeet){
+			b2ContactEdge * stuff = playerCharacter->leftLowerLeg->body->GetContactList();
+			if(stuff != nullptr && stuff->contact->IsTouching()){
+				int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
+				int type2 = (int)stuff->contact->GetFixtureB()->GetUserData();
 
-			if(type1 != type2){
-				if(playerCharacter->leftLowerLeg->body->GetLinearVelocity().y <= 0.1){
-					playerCharacter->leftLowerLeg->applyLinearImpulseRight(5);
-					playerCharacter->leftLowerLeg->applyLinearImpulseUp(50);	
-					playerCharacter->torso->applyLinearImpulseUp(100);	
+				if(type1 != type2){
+					if(playerCharacter->leftLowerLeg->body->GetLinearVelocity().y <= 0.1){
+						playerCharacter->leftLowerLeg->applyLinearImpulseRight(5);
+						playerCharacter->leftLowerLeg->applyLinearImpulseUp(50);	
+						playerCharacter->torso->applyLinearImpulseUp(100);	
+					}
 				}
 			}
-		}
-		stuff = playerCharacter->rightLowerLeg->body->GetContactList();
-		if(stuff != nullptr && stuff->contact->IsTouching()){
-			int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
-			int type2 = (int)stuff->contact->GetFixtureB()->GetUserData();
+			stuff = playerCharacter->rightLowerLeg->body->GetContactList();
+			if(stuff != nullptr && stuff->contact->IsTouching()){
+				int type1 = (int)stuff->contact->GetFixtureA()->GetUserData();
+				int type2 = (int)stuff->contact->GetFixtureB()->GetUserData();
 
-			if(type1 != type2){
-				if(playerCharacter->rightLowerLeg->body->GetLinearVelocity().y <= 0.1){
-					playerCharacter->rightLowerLeg->applyLinearImpulseRight(5);
-					playerCharacter->rightLowerLeg->applyLinearImpulseUp(50);
-					playerCharacter->torso->applyLinearImpulseUp(100);	
+				if(type1 != type2){
+					if(playerCharacter->rightLowerLeg->body->GetLinearVelocity().y <= 0.1){
+						playerCharacter->rightLowerLeg->applyLinearImpulseRight(5);
+						playerCharacter->rightLowerLeg->applyLinearImpulseUp(50);
+						playerCharacter->torso->applyLinearImpulseUp(100);	
+					}
 				}
 			}
-		}
-
-		}
+		}*/
 	}
 
 	// move the ground and background with the player

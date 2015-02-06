@@ -25,7 +25,7 @@ void GameJamCharacter::init(){
 	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieTorso.png", 512, 512, true, true),	175,	285));
 	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailTorso.png", 512, 512, true, true),	160,	355));
 
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/pHead.png", 512, 512, true, true),   200,	270));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelHead.png", 512, 512, true, true),   200,	270));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheHead.png", 512, 512, true, true), 160,	270));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroHead.png", 512, 512, true, true),	   260,	250));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieHead.png", 512, 512, true, true),	   170,	300));
@@ -147,11 +147,14 @@ void GameJamCharacter::render(vox::MatrixStack * _matrixStack, RenderOptions * _
 void GameJamCharacter::update(Step * _step){
 	Character::update(_step);
 	if(reactiveBody){
+		//neck
 		b2RevoluteJoint * neck = ((b2RevoluteJoint *)head->body->GetJointList()->joint);
 		float angle = neck->GetJointAngle();
 
 		neck->SetMotorSpeed(-angle*360);
 		neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5));
+
+		//body
 		float bodAngle = torso->body->GetAngle();
 		torso->body->SetAngularVelocity(-bodAngle*10);
 		if(torso->body->GetPosition().y < 5){
@@ -394,8 +397,8 @@ void GameJamCharacter::attachJoints(){
 	rightLowerLeg  ->setTranslationPhysical(0.f, 0.f, -0.24f+t);
 	text->transform->translate(0, 0, -2.3f + t);
 
-	torso->body->SetLinearDamping(0.9);
-	torso->body->SetGravityScale(0.5);
+	torso->body->SetLinearDamping(0.9f);
+	torso->body->SetGravityScale(0.5f);
 }
 
 

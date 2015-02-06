@@ -1,6 +1,9 @@
 #pragma once
 
 #include "PuppetController.h"
+#include "PuppetCharacter.h"
+#include "Accelerometer.h"
+#include "CharacterComponent.h"
 
 PuppetController::PuppetController(Accelerometer* _accelerometer, PuppetCharacter* _puppetCharacter):
 	NodeUpdatable(),
@@ -13,4 +16,6 @@ PuppetController::~PuppetController(){
 }
 
 void PuppetController::update(Step* _step){
+//	puppetCharacter->components.at(0)->applyAngularImpulse()
+	puppetCharacter->targetRoll = accelerometer->getRoll();
 }

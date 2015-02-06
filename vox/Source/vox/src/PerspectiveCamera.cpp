@@ -46,6 +46,7 @@ void PerspectiveCamera::update(Step * _step){
 			transform->translationVector.x += (xDif+deadZoneX);
 			lookAtSpot.x += xDif+deadZoneX;
 		}
+		lookAtSpot.y = trans->transform->translationVector.y;
 	}else{
 		lookAtSpot = transform->translationVector+forwardVectorRotated;
 	}
