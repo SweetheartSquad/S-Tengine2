@@ -37,7 +37,7 @@ class Arduino
         //be read, the number of bytes actually read.
         int ReadData(char *buffer, unsigned int nbChar);
 
-		std::string ReadDataUntil(char _until);
+		std::string ReadDataUntil(char _until, bool * _forced);
         //Writes data from a buffer through the Serial connection
         //return true on success.
         bool WriteData(char *buffer, unsigned int nbChar);
