@@ -41,6 +41,8 @@
 #include "RandomCharacter.h"
 #include "GameJamContactListener.h"
 #include "Game.h"
+#include <Arduino.h>
+#include <StringUtils.h>
 
 PuppetScene::PuppetScene(Game * _game):
 	Scene(_game),
@@ -95,6 +97,9 @@ PuppetScene::PuppetScene(Game * _game):
 	addChild(playerCharacter);
 	playerCharacter->addToScene(this);
 	playerCharacter->torso->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
+
+	//Arduino 
+	arduino = new Arduino("COM3");
 }
 
 PuppetScene::~PuppetScene(){
@@ -229,6 +234,8 @@ void PuppetScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		debugDraw = !debugDraw;
 	}
+
+	readArduino();
 }
 
 void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
@@ -238,5 +245,14 @@ void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderS
 
 	if(debugDraw){
 		world->b2world->DrawDebugData();
+	}
+}
+
+void PuppetScene::readArduino(){
+	if(arduino->IsConnected()) {
+		std::string data = arduino->ReadDataUntil('\n');
+		data = StringUtils::removeSymbols(data, true);
+		auto vals =  StringUtils::split(data, ' ');
+		std::cout << "sd";
 	}
 }

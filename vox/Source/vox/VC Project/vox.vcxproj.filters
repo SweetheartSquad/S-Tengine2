@@ -414,6 +414,9 @@
     <ClCompile Include="..\src\GameJamCharacter.cpp">
       <Filter>Source Files\TestGame\GameJam</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\StringUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -754,6 +757,9 @@
     </ClInclude>
     <ClInclude Include="..\include\GameJamCharacter.h">
       <Filter>Header Files\TestGame\GameJam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\StringUtils.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

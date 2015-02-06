@@ -123,6 +123,23 @@ int Arduino::ReadData(char *buffer, unsigned int nbChar)
 
 }
 
+std::string Arduino::ReadDataUntil(char _until){
+	std::string ret; 
+	char data[1];
+	while(true) {
+		if(ReadData(data, 1) != -1) {
+			if(data[0] == _until) {
+				ret += _until;
+				break;
+			}
+			ret += data[0];
+		}
+		else {
+			break;
+		}
+	}
+	return ret;
+}
 
 bool Arduino::WriteData(char *buffer, unsigned int nbChar)
 {

@@ -33,6 +33,7 @@ GameJamContactListener * cl;
 	Box2DMeshEntity * ground;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
+	Arduino * arduino;
 
 	std::vector<Box2DSprite *> items;
 
@@ -43,6 +44,7 @@ GameJamContactListener * cl;
 	void unload() override;
 	void update(Step * _step) override;
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+	void readArduino();
 
 	enum HURLYBURLY_CATEGORY{
 		BOUNDARY = 0x0001,

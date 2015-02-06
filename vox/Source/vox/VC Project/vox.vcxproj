@@ -313,6 +313,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\src\SpriteMesh.cpp" />
     <ClCompile Include="..\src\SpriteSheet.cpp" />
     <ClCompile Include="..\src\SpriteSheetAnimation.cpp" />
+    <ClCompile Include="..\src\StringUtils.cpp" />
     <ClCompile Include="..\src\TestCharacter.cpp" />
     <ClCompile Include="..\src\TestScene2D.cpp" />
     <ClCompile Include="..\src\TextChunk.cpp" />
@@ -426,6 +427,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\include\SpriteMesh.h" />
     <ClInclude Include="..\include\SpriteSheet.h" />
     <ClInclude Include="..\include\SpriteSheetAnimation.h" />
+    <ClInclude Include="..\include\StringUtils.h" />
     <ClInclude Include="..\include\TestCharacter.h" />
     <ClInclude Include="..\include\TestScene2D.h" />
     <ClInclude Include="..\include\TextChunk.h" />
