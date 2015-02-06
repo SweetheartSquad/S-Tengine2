@@ -248,6 +248,8 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\..\..\..\Shared Code\src\Step.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Transform.cpp" />
     <ClCompile Include="..\..\..\..\Shared Code\src\Vox.cpp" />
+    <ClCompile Include="..\src\Accelerometer.cpp" />
+    <ClCompile Include="..\src\AccelerometerParser.cpp" />
     <ClCompile Include="..\src\Arduino.cpp" />
     <ClCompile Include="..\src\BaseScene.cpp" />
     <ClCompile Include="..\src\BitmapFont.cpp" />
@@ -287,6 +289,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\src\PerspectiveCamera.cpp" />
     <ClCompile Include="..\src\Point.cpp" />
     <ClCompile Include="..\src\PuppetCharacter.cpp" />
+    <ClCompile Include="..\src\PuppetController.cpp" />
     <ClCompile Include="..\src\PuppetScene.cpp" />
     <ClCompile Include="..\src\PuppetTestScene.cpp" />
     <ClCompile Include="..\src\RandomCharacter.cpp" />
@@ -361,6 +364,8 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\..\..\..\Shared Code\include\Transform.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Tween.h" />
     <ClInclude Include="..\..\..\..\Shared Code\include\Vox.h" />
+    <ClInclude Include="..\include\Accelerometer.h" />
+    <ClInclude Include="..\include\AccelerometerParser.h" />
     <ClInclude Include="..\include\Arduino.h" />
     <ClInclude Include="..\include\BaseScene.h" />
     <ClInclude Include="..\include\BitmapFont.h" />
@@ -400,6 +405,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\include\node\NodeBox2DBody.h" />
     <ClInclude Include="..\include\Point.h" />
     <ClInclude Include="..\include\PuppetCharacter.h" />
+    <ClInclude Include="..\include\PuppetController.h" />
     <ClInclude Include="..\include\PuppetScene.h" />
     <ClInclude Include="..\include\PuppetTestScene.h" />
     <ClInclude Include="..\include\RandomCharacter.h" />

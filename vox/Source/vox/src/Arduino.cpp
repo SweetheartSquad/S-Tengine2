@@ -148,3 +148,7 @@ bool Arduino::IsConnected()
     //Simply return the connection status
     return this->connected;
 }
+
+void Arduino::update(Step* _step){
+
+}

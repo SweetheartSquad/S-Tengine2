@@ -6,13 +6,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <node/NodeUpdatable.h>
 
 /***************************************************************
 *
 * Taken from http://playground.arduino.cc/Interfacing/CPPWindows
 *
 ****************************************************************/
-class Arduino
+class Arduino : public NodeUpdatable
 {
     private:
         //Serial comm handler
@@ -43,5 +44,7 @@ class Arduino
         bool WriteData(char *buffer, unsigned int nbChar);
         //Check if we are actually connected
         bool IsConnected();
+
+		virtual void update(Step * _step) override;
 };
 

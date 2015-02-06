@@ -6,22 +6,14 @@
 #include "Sprite.h"
 #include "shader/BaseComponentShader.h"
 #include "shader/TextureShaderComponent.h"
-#include "shader/ShadowShaderComponent.h"
-#include "shader/PhongShaderComponent.h"
 #include "Keyboard.h"
-#include "SpriteSheet.h"
-#include "Rectangle.h"
-#include "SpriteSheetAnimation.h"
-#include "Vox.h"
 #include "SoundManager.h"
 #include "Box2DSprite.h"
 #include "Box2DWorld.h"
 #include "ControllableOrthographicCamera.h"
-#include "Resource.h"
 #include "RenderOptions.h"
 
 #include <array>
-#include <libzplay.h>
 #include <Box2D/Box2D.h>
 #include <Box2DDebugDraw.h>
 #include "Box2DMeshEntity.h"
@@ -29,20 +21,13 @@
 #include "PerspectiveCamera.h"
 #include "MousePerspectiveCamera.h"
 #include "BitmapFont.h"
-#include "CylinderScreen.h"
 #include "TestCharacter.h"
 #include "CharacterComponent.h"
-#include "Character1.h"
-#include "Character2.h"
-#include "Character3.h"
-#include "Character4.h"
-#include "DialogHandler.h"
-#include "SayAction.h"
-#include "RandomCharacter.h"
 #include "GameJamContactListener.h"
 #include "Game.h"
 #include <Arduino.h>
-#include <StringUtils.h>
+#include <AccelerometerParser.h>
+#include <Accelerometer.h>
 
 PuppetScene::PuppetScene(Game * _game):
 	Scene(_game),
@@ -99,7 +84,11 @@ PuppetScene::PuppetScene(Game * _game):
 	playerCharacter->torso->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 
 	//Arduino 
-	arduino = new Arduino("COM3");
+	arduino = new AccelerometerParser("COM3");
+	arduino->addAccelerometer(new Accelerometer(arduino));
+	//arduino->addAccelerometer(new Accelerometer(arduino));
+	//arduino->addAccelerometer(new Accelerometer(arduino));
+	//arduino->addAccelerometer(new Accelerometer(arduino));
 }
 
 PuppetScene::~PuppetScene(){
@@ -116,8 +105,12 @@ void PuppetScene::unload(){
 }
 
 void PuppetScene::update(Step * _step){
+	
 	Scene::update(_step);
 	world->update(_step);
+
+	arduino->update(_step);
+
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
 		if(playerCharacter->torso->body->GetPosition().y < 12){
 			playerCharacter->torso->applyLinearImpulseUp(400);
@@ -234,8 +227,6 @@ void PuppetScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		debugDraw = !debugDraw;
 	}
-
-	readArduino();
 }
 
 void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
@@ -245,41 +236,5 @@ void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderS
 
 	if(debugDraw){
 		world->b2world->DrawDebugData();
-	}
-}
-
-void PuppetScene::readArduino(){
-	int x = 0;
-	int y = 0;
-	int z = 0;
-	int count = 0;
-	bool loop = true;
-	bool forced = false;
-
-	do{
-		if(arduino->IsConnected()) {
-			std::string data = arduino->ReadDataUntil('\n', &forced);
-			auto vals =  StringUtils::split(data, ' ');
-			if(vals.size() >= 3){
-				x += atoi(vals.at(0).c_str());
-				y += atoi(vals.at(1).c_str());
-				z += atoi(vals.at(2).c_str());
-				//std::cout << "\t" << vals.at(0) << "\t" << vals.at(1) << "\t" << vals.at(2) << std::endl;
-				++count;
-				if(forced){
-					loop = false;
-				}
-			}else{
-				loop = false;
-			}
-		}else{
-			loop = false;
-		}
-	}while(loop);
-	if(count != 0){
-		x /= count;
-		y /= count;
-		z /= count;
-		std::cout << x << "\t" << y << "\t" << z << std::endl << std::endl;
 	}
 }

@@ -5,7 +5,7 @@
 class GameJamCharacter;
 class GameJamContactListener;
 class DialogHandler;
-class Arduino;
+class AccelerometerParser;
 class Box2DMeshEntity;
 class Box2DDebugDraw;
 class SpriteSheetAnimation;
@@ -33,7 +33,7 @@ GameJamContactListener * cl;
 	Box2DMeshEntity * ground;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
-	Arduino * arduino;
+	AccelerometerParser * arduino;
 
 	std::vector<Box2DSprite *> items;
 

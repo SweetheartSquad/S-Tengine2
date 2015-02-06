@@ -72,9 +72,9 @@ void loop() {
   buttonState1 = analogRead(buttonPin1);
   buttonState2 = analogRead(buttonPin2);
 
-  aprintf("%d %d %d\n",
-  buttonState0, buttonState1, buttonState2);
+  aprintf("%d,%d,%d;%d,%d,%d;%d,%d,%d;%d,%d,%d\n",
+  buttonState0, buttonState1, buttonState2,
+  0, 0, 0,
+  0, 0, 0 , 
+  0, 0, 0);
 }
-
-
-
