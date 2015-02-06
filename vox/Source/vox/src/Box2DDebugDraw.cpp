@@ -7,13 +7,18 @@
 #include "shader/BaseComponentShader.h"
 #include "shader/TextureShaderComponent.h"
 
-#include <GL/glew.h>
-#include <Math.h>
+#include "GameJamScene.h"
+#include "Box2DWorld.h"
 
-Box2DDebugDraw::Box2DDebugDraw(Scene * _scene):
+#include <GL/glew.h>
+
+Box2DDebugDraw::Box2DDebugDraw(Scene * _scene, Box2DWorld * _world):
 	shader(new BaseComponentShader()),
 	scene(_scene),
-	sprite(new Sprite())
+	world(_world),
+	sprite(new Sprite()),
+	NodeTransformable(new Transform()),
+	NodeChild(nullptr)
 {
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
@@ -117,8 +122,8 @@ void Box2DDebugDraw::DrawTransform(const b2Transform& xf){
 
 void Box2DDebugDraw::load(){
 	if(!loaded){
-		sprite->setShader(shader, true);
 		sprite->load();
+		//sprite->setShader(shader, true);
 		shader->load();
 	}
 
@@ -134,4 +139,8 @@ void Box2DDebugDraw::unload(){
 	}
 	
 	NodeLoadable::unload();
+}
+
+void Box2DDebugDraw::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	world->b2world->DrawDebugData();
 }

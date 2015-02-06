@@ -35,7 +35,7 @@ PuppetScene::PuppetScene(Game * _game):
 	Scene(_game),
 	cl(new GameJamContactListener),
 	debugDraw(true),
-	drawer(new Box2DDebugDraw(this)),
+	drawer(new Box2DDebugDraw(this, world)),
 	world(new Box2DWorld(b2Vec2(0, -60))),
 	playerCharacter(new PuppetCharacter(world, PLAYER, PROP | NPC, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
@@ -76,6 +76,7 @@ PuppetScene::PuppetScene(Game * _game):
 
 	world->b2world->SetDebugDraw(drawer);
 	drawer->SetFlags(b2Draw::e_shapeBit);
+	addChild(drawer);
 
 
 	playerCharacter->setShader(shader, true);
@@ -242,10 +243,4 @@ void PuppetScene::update(Step * _step){
 
 void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene::render(_matrixStack, _renderStack);
-	
-	//world->b2world->DrawDebugData();
-
-	if(debugDraw){
-		world->b2world->DrawDebugData();
-	}
 }

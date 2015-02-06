@@ -471,7 +471,6 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <None Include="..\assets\diffuse.frag" />
     <None Include="..\assets\diffuse.vert" />
     <None Include="..\assets\layer.vox" />
-    <None Include="..\assets\monkey.vox" />
     <None Include="..\assets\junkdata.frag" />
     <None Include="..\assets\junkdata.vert" />
     <None Include="..\assets\phong.frag" />

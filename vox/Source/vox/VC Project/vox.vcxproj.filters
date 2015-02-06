@@ -844,7 +844,6 @@
     <None Include="..\..\..\..\..\..\..\dev\ttt.json">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\assets\monkey.vox" />
     <None Include="..\assets\layer.vox">
       <Filter>Resource Files\models</Filter>
     </None>

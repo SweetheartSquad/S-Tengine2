@@ -7,10 +7,11 @@
 #include "node\NodeLoadable.h"
 
 class Scene;
+class Box2DWorld;
 
-class Box2DDebugDraw : public b2Draw, public NodeLoadable{
+class Box2DDebugDraw : public b2Draw, public Entity{
 public:
-	explicit Box2DDebugDraw(Scene * _scene);
+	explicit Box2DDebugDraw(Scene * _scene, Box2DWorld * _world);
 	~Box2DDebugDraw();
 	void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
 	void DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
@@ -19,11 +20,13 @@ public:
 	void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) override;
 	void DrawTransform(const b2Transform& xf) override;
 
-	void load();
-	void unload();
-
+	virtual void load() override;
+	virtual void unload() override;
+	
+	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 private:
 	BaseComponentShader * shader;
 	Sprite * sprite;
 	Scene * scene;
+	Box2DWorld * world;
 };

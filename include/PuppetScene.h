@@ -28,8 +28,8 @@ public:
 
 GameJamContactListener * cl;
 	bool debugDraw;
-	Box2DDebugDraw * drawer;
 	Box2DWorld * world;
+	Box2DDebugDraw * drawer;
 	PuppetCharacter * playerCharacter;
 	Box2DMeshEntity * ground;
 	BaseComponentShader* shader;

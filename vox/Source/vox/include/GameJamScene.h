@@ -24,11 +24,11 @@ class GameJamCharacter;
  class GameJamScene abstract : public Scene{
 public:
 	bool debugDraw;
-	Box2DDebugDraw * drawer;
 	Box2DWorld * world;
+	Box2DDebugDraw * drawer;
 	GameJamCharacter * playerCharacter;
 	Box2DMeshEntity * ground;
-	BaseComponentShader* shader;
+	BaseComponentShader * shader;
 	SoundManager * soundManager;
 	SpriteSheetAnimation * spriteSheet;
 	CylinderScreen * backgroundScreen;

@@ -46,8 +46,8 @@ GameJamContactListener cl;
 
 GameJamScene::GameJamScene(Game * _game):
 	Scene(_game),
-	drawer(new Box2DDebugDraw(this)),
 	world(new Box2DWorld(b2Vec2(0, -60))),
+	drawer(new Box2DDebugDraw(this, world)),
 
 	playerCharacter(new TestCharacter(world, false, PLAYER, PROP | NPC)),
 	
@@ -213,7 +213,7 @@ GameJamScene::GameJamScene(Game * _game):
 		addChild(s);
 	}
 	addChild(ground);
-	addChild(foregroundScreen);
+	//addChild(foregroundScreen);
 	//addChild(fontM);
 	addChild(backgroundScreen);
 	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 0, 0);
@@ -226,6 +226,7 @@ GameJamScene::GameJamScene(Game * _game):
 
 	world->b2world->SetDebugDraw(drawer);
 	drawer->SetFlags(b2Draw::e_shapeBit);
+	addChild(drawer);
 
 	//keep a vector of the characters, for the dialogHandler
 	std::vector<GameJamCharacter *> sceneCharacters;
@@ -295,12 +296,10 @@ GameJamScene::~GameJamScene(){
 
 void GameJamScene::load(){
 	Scene::load();
-	drawer->load();
 }
 
 void GameJamScene::unload(){
 	Scene::unload();
-	drawer->unload();
 }
 
 void GameJamScene::update(Step * _step){
@@ -438,10 +437,4 @@ void GameJamScene::update(Step * _step){
 
 void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Scene::render(_matrixStack, _renderStack);
-	
-	//world->b2world->DrawDebugData();
-
-	if(debugDraw){
-		world->b2world->DrawDebugData();
-	}
 }

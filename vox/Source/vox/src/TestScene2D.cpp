@@ -50,7 +50,7 @@ TestScene2D::TestScene2D(Game * _game):
 	layer2(new Sprite())
 {
 	renderOptions->alphaSorting = true;
-	Box2DDebugDraw * drawer = new Box2DDebugDraw(this);
+	Box2DDebugDraw * drawer = new Box2DDebugDraw(this, world);
 
 	//static_cast<ControllableOrthographicCamera*>(camera)->follow(sprite);
 
