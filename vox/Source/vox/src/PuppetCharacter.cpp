@@ -4,12 +4,13 @@
 #include <CharacterComponent.h>
 #include <Texture.h>
 #include <GameJamCharacter.h>
+#include "Box2DWorld.h"
 PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, bool _ai):
 	Character(_world, _categoryBits, _maskBits, _ai),
-	NodeRenderable(),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
-	targetRoll(0.f)
+	NodeRenderable(),
+	targetRoll(0)
 {
 	//ComponentTexture * headTex = new ComponentTexture(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true), 1000, 1000);
 	//CharacterComponent * head = new CharacterComponent(componentScale, headTex->width, headTex->height, headTex->texture, _world,  b2_dynamicBody, false);
@@ -24,6 +25,26 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	components.push_back(&head);
 	
 	head->createFixture(groupIndex);
+	head->setTranslationPhysical(0.f, 0.f, 0.2f);
+	torso->createFixture(groupIndex);
+	torso->setTranslationPhysical(0.f, 0.f, 0.3f);
+
+	
+	// neck
+	b2RevoluteJointDef jth;
+	jth.bodyA = torso->body;
+	jth.bodyB = head->body;
+	jth.localAnchorA.Set(0.5 * torso->getCorrectedWidth(), 0.9 * torso->getCorrectedHeight());
+	jth.localAnchorB.Set(0.5 * head->getCorrectedWidth(), 0.9 * -head->getCorrectedHeight());
+	jth.collideConnected = false;
+	jth.enableLimit = true;
+	jth.enableMotor = true;
+	jth.maxMotorTorque = 0;
+	jth.motorSpeed = 0;
+	jth.referenceAngle = 0;
+	jth.lowerAngle = -glm::radians(45.f);
+	jth.upperAngle = glm::radians(45.f);
+	world->b2world->CreateJoint(&jth);
 
 
 

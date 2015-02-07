@@ -123,7 +123,6 @@ void Box2DDebugDraw::DrawTransform(const b2Transform& xf){
 void Box2DDebugDraw::load(){
 	if(!loaded){
 		sprite->load();
-		//sprite->setShader(shader, true);
 		shader->load();
 	}
 

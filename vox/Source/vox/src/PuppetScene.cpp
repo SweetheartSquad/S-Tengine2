@@ -75,7 +75,7 @@ PuppetScene::PuppetScene(Game * _game):
 	camera->pitch = -10.0f;
 
 	world->b2world->SetDebugDraw(drawer);
-	drawer->SetFlags(b2Draw::e_shapeBit);
+	drawer->SetFlags(b2Draw::e_aabbBit | b2Draw::e_shapeBit);
 	addChild(drawer);
 
 
@@ -104,16 +104,10 @@ PuppetScene::~PuppetScene(){
 }
 
 void PuppetScene::load(){
-	if(!loaded){
-		drawer->load();
-	}
 	Scene::load();
 }
 
 void PuppetScene::unload(){
-	if(loaded){
-		drawer->unload();
-	}
 	Scene::unload();
 }
 
