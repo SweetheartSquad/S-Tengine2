@@ -83,15 +83,15 @@ GameJamScene::GameJamScene(Game * _game):
 		"../assets/props/WigHead_228_257.png"
 	};
 
-	for(unsigned long int i = 0; i < 10+std::rand()%20; ++i){
+	for(unsigned long int i = 0; i < (unsigned long int)10+std::rand()%20; ++i){
 		unsigned long int tex = std::rand()%imgCount;
 		Box2DSprite * s = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform());
 		s->mesh->pushTexture2D(new Texture(strings[tex].c_str(), 1024, 1024, true, true));
 
-		int width = 0;
-		int height = 0;
+		unsigned long int width = 0;
+		unsigned long int height = 0;
 
-		int cc = 0;
+		unsigned long int cc = 0;
 
 		std::string temp = strings[tex];
 
@@ -112,7 +112,7 @@ GameJamScene::GameJamScene(Game * _game):
 		width =  atoi(arr[1].c_str());
 		height =  atoi(arr[2].c_str());
 
-		float scale = 0.002;
+		float scale = 0.002f;
 
 		b2PolygonShape tShape;
 
@@ -150,18 +150,18 @@ GameJamScene::GameJamScene(Game * _game):
 		s->mesh->vertices.at(3).x = v4.x;
 		s->mesh->vertices.at(3).y = v4.y;
 	
-		float mag = std::max(s->mesh->textures.at(0)->width, s->mesh->textures.at(0)->height);
+		unsigned long int mag = std::max(s->mesh->textures.at(0)->width, s->mesh->textures.at(0)->height);
 		s->mesh->vertices.at(3).u = 0;
 		s->mesh->vertices.at(3).v = 0;
-		s->mesh->vertices.at(2).u = width/mag;
+		s->mesh->vertices.at(2).u = (float)width/mag;
 		s->mesh->vertices.at(2).v = 0;
-		s->mesh->vertices.at(1).u = width/mag;
-		s->mesh->vertices.at(1).v = height/mag;
+		s->mesh->vertices.at(1).u = (float)width/mag;
+		s->mesh->vertices.at(1).v = (float)height/mag;
 		s->mesh->vertices.at(0).u = 0;
-		s->mesh->vertices.at(0).v = height/mag;
+		s->mesh->vertices.at(0).v = (float)height/mag;
 		s->mesh->dirty = true;
 		
-		s->setTranslationPhysical(std::rand()%1000 - 500, height*scale, 0.01f);
+		s->setTranslationPhysical(std::rand()%1000 - 500.f, height*scale, 0.01f);
 		s->setShader(shader, true);
 		items.push_back(s);
 	}

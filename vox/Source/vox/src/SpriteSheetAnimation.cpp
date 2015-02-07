@@ -9,37 +9,37 @@
 
 SpriteSheetAnimation::SpriteSheetAnimation(Texture * _texture, float _secondsPerFrame):
 	NodeUpdatable(),
-	frameIndicies(Animation<int>(&currentFrame)),
+	frameIndices(Animation<unsigned long int>(&currentFrame)),
 	texture(_texture),
 	currentFrame(0),
 	secondsPerFrame(_secondsPerFrame)
 {
-	frameIndicies.hasStart = true;
+	frameIndices.hasStart = true;
 }
 
 SpriteSheetAnimation::~SpriteSheetAnimation(){
 }
 
 void SpriteSheetAnimation::update(Step* _step){
-	frameIndicies.update(_step);
-	currentFrame = frameIndicies.currentTween;
+	frameIndices.update(_step);
+	currentFrame = frameIndices.currentTween;
 }
 
-void SpriteSheetAnimation::pushFrame(int _column, int _row, float _width, float _height){
+void SpriteSheetAnimation::pushFrame(unsigned long int _column, unsigned long int _row, float _width, float _height){
 	float u, v, rW, rH;
 	rW = _width / texture->width;
 	rH = _height / texture->height;
 	u = rW * _column;
 	v = rH * _row;
 	frames.push_back(vox::Rectangle(u, v, rW, rH));
-	frameIndicies.tweens.push_back(new Tween<int>(secondsPerFrame, 1, Easing::kNONE));
+	frameIndices.tweens.push_back(new Tween<unsigned long int>(secondsPerFrame, 1, Easing::kNONE));
 }
 
-void SpriteSheetAnimation::pushMultipleFrames(std::vector<int> _frames, float _width, float _height){
+void SpriteSheetAnimation::pushMultipleFrames(std::vector<unsigned long int> _frames, float _width, float _height){
 	pushMultipleFrames(_frames, _width, _height, texture->width);
 }
 
-void SpriteSheetAnimation::pushMultipleFrames(std::vector<int> _frames, float _width, float _height, float _textureWidth){
+void SpriteSheetAnimation::pushMultipleFrames(std::vector<unsigned long int> _frames, float _width, float _height, float _textureWidth){
 	int curCol = 0;
 	int curRow = 0;
 	int colOffset = 0;
@@ -57,7 +57,7 @@ void SpriteSheetAnimation::pushMultipleFrames(std::vector<int> _frames, float _w
 	}
 }
 
-void SpriteSheetAnimation::pushFramesInRange(int _min, int _max, float _width, float _height, float _textureWidth){
+void SpriteSheetAnimation::pushFramesInRange(unsigned long int _min, unsigned long int _max, float _width, float _height, float _textureWidth){
 	int curCol = _min - 1;
 	int curRow = 0;
 	int colOffset = 0;
@@ -75,6 +75,6 @@ void SpriteSheetAnimation::pushFramesInRange(int _min, int _max, float _width, f
 	}
 }
 
-void SpriteSheetAnimation::pushFramesInRange(int _min, int _max, float _width, float _height){
+void SpriteSheetAnimation::pushFramesInRange(unsigned long int _min, unsigned long int _max, float _width, float _height){
 	pushFramesInRange(_min, _max, _width, _height, texture->width);
 }

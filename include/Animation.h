@@ -61,7 +61,7 @@ float Animation<T>::getTweenEndTime(unsigned long int _idx){
 template<typename T> 
 T Animation<T>::getTweenEndValue(unsigned long int _idx){
 	if(_idx < tweens.size()){
-		float value = startValue;
+		T value = startValue;
 		for(unsigned long int i = 0; i <= _idx; ++i){
 			value += tweens.at(i)->deltaValue;
 		}
@@ -150,7 +150,7 @@ void Animation<T>::update(Step * _step){
 			}
 		}
 		
-		*prop = Easing::call(tweens.at(currentTween)->interpolation, currentTweenTime, referenceValue, tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
+		*prop = (T)Easing::call(tweens.at(currentTween)->interpolation, currentTweenTime, (float)referenceValue, (float)tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
 		
 		// The time > sum-delta-time bit is inefficient since we don't keep a record of the total animation length (which we should), but it works
 		if(loopType == kCONSTANT){

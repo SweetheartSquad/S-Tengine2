@@ -84,7 +84,6 @@ PuppetScene::PuppetScene(Game * _game):
 	playerCharacter->addToScene(this);
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter->head->setTranslationPhysical(5, 7, 5);
-	//world->addToWorld(playerCharacter->components.at(0));
 	
 	TestCharacter * michael = new TestCharacter(world, false, PLAYER, PROP | NPC);
 	michael->setShader(shader, true);

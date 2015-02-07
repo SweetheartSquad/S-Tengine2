@@ -103,12 +103,12 @@ TestScene2D::TestScene2D(Game * _game):
 	layer1->mesh->pushTexture2D(tex);
 	layer2->mesh->pushTexture2D(tex);
 
-	layer1->transform->scale(10, 10, 1);
-	layer2->transform->scale(10, 10, 1);
+	layer1->transform->scale(10.f, 10.f, 1.f);
+	layer2->transform->scale(10.f, 10.f, 1.f);
 
-	layer1->transform->translate(0, 0, -0.5);
-	layer2->transform->translate(2, 0, -1);
-	ground->transform->translate(0,0,-1.1);
+	layer1->transform->translate(0.f, 0.f, -0.5f);
+	layer2->transform->translate(2.f, 0.f, -1.f);
+	ground->transform->translate(0.f, 0.f, -1.1f);
 	
 	addChild(layer2);
 	addChild(sprite);
@@ -167,7 +167,7 @@ void TestScene2D::update(Step * _step){
 	//sprite->playAnimation = false;
 
 	if(keyboard->keyDown(GLFW_KEY_W)){
-		if(!sprite->movingVertically(0.05)){
+		if(!sprite->movingVertically(0.05f)){
 			sprite->applyLinearImpulseUp(500);	
 		}
 	}

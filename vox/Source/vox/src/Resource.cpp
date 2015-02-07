@@ -138,14 +138,14 @@ TriMesh * Resource::loadMeshFromObj(std::string _objSrc){
 			if(!faceFormatChecked){
 				std::smatch matches;
 				std::regex_search(line, matches, faceRegex);
-				if(matches[2].str().size()>0 && matches[3].str().size()>0){
+				if(matches[2].str().size() > 0 && matches[3].str().size() > 0){
 					faceStructure = VERTS_UVS_NORMALS;
 					hasUvs = true;
 					hasNorms = true;
-				}else if(matches[2].str().size()>0 && !matches[3].str().size()>0){
+				}else if(matches[2].str().size() > 0 && !matches[3].str().size() > 0){
 					faceStructure = VERTS_UVS;
 					hasUvs = true;
-				}else if(!matches[2].str().size()>0 && matches[3].str().size()>0){
+				}else if(!matches[2].str().size() > 0 && matches[3].str().size() > 0){
 					faceStructure = VERTS_NORMALS;
 					hasNorms = true;
 				}

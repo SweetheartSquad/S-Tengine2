@@ -8,15 +8,15 @@
 
 class Texture : public virtual NodeResource{
 public:
-	Texture(const char* _src, int _width, int _height, bool _storeData, bool _autoRelease);
+	Texture(const char* _src, unsigned long int _width, unsigned long int _height, bool _storeData, bool _autoRelease);
 	~Texture();
 
 	/**Source file location */
 	const char* src;
 	/**Texture Width */
-	int width;
+	unsigned long int width;
 	/**Texture Height */
-	int height;
+	unsigned long int height;
 	/**OpenGL Texture ID */
 	GLuint textureId;
 	/** Whether or not to store the image data in memory
@@ -24,8 +24,8 @@ public:
 	bool storeData;
 	/**The image data */
 	unsigned char* data;
-	/** Num channels */
-	int* channels;
+	/** Num channels (can't be unsigned long because of SOIL) */
+	int * channels;
 	/**Initializes the texture. Can be called to recreate the texture
 	if the context is destroyed*/
 	void load() override;

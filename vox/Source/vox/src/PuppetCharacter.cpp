@@ -21,7 +21,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	
 	torso = new CharacterComponent(componentScale, GameJamCharacter::torsoTexPacks[character]->width, GameJamCharacter::torsoTexPacks[character]->height, GameJamCharacter::torsoTexPacks[character]->texture, _world, b2_dynamicBody, false);
 	
-	//components.push_back(&torso);
+	components.push_back(&torso);
 	components.push_back(&head);
 	
 	head->createFixture(groupIndex);
@@ -34,8 +34,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	b2RevoluteJointDef jth;
 	jth.bodyA = torso->body;
 	jth.bodyB = head->body;
-	jth.localAnchorA.Set(0.5 * torso->getCorrectedWidth(), 0.9 * torso->getCorrectedHeight());
-	jth.localAnchorB.Set(0.5 * head->getCorrectedWidth(), 0.9 * -head->getCorrectedHeight());
+	jth.localAnchorA.Set(0.5f * torso->getCorrectedWidth(), 0.9f * torso->getCorrectedHeight());
+	jth.localAnchorB.Set(0.5f * head->getCorrectedWidth(), 0.9f * -head->getCorrectedHeight());
 	jth.collideConnected = false;
 	jth.enableLimit = true;
 	jth.enableMotor = true;
