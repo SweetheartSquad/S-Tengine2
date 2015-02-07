@@ -1,4 +1,4 @@
-# Global Game Jam 2015: The Game #
+# Hurly Burly Puppet Party #
 
 
 
@@ -6,7 +6,6 @@
 
 Engine Stuff:
 ```
-#!html
 
  __   __   ______     __  __    
 /\ \ / /  /\  __ \   /\_\_\_\   
