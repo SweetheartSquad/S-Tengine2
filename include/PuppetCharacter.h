@@ -15,8 +15,6 @@ public:
 CharacterComponent * head;
 CharacterComponent * torso;
 
-	std::vector<CharacterComponent ** > components;
-
 	PuppetCharacter(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, bool _ai = true);
 	~PuppetCharacter();	
 	

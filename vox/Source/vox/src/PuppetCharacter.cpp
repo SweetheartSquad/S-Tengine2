@@ -46,9 +46,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	jth.upperAngle = glm::radians(45.f);
 	world->b2world->CreateJoint(&jth);
 
-
-
-	/*b2PolygonShape tShape;
+	b2PolygonShape tShape;
 	tShape.SetAsBox(head->width*std::abs(transform->scaleVector.x)*head->scale*4.f, std::abs(head->height*transform->scaleVector.y)*head->scale*5.f);
 	
 	b2Fixture * s = head->body->CreateFixture(&tShape, 1);
@@ -59,7 +57,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	if(maskBits != (int16)-1){
 		sf.maskBits = maskBits;
 	}
-	s->SetFilterData(sf);*/
+	s->SetFilterData(sf);
 }
 
 PuppetCharacter::~PuppetCharacter(){
@@ -72,18 +70,18 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 void PuppetCharacter::update(Step* _step){
 	Character::update(_step);
 	//neck
-	/*b2RevoluteJoint * neck = ((b2RevoluteJoint *)head->body->GetJointList()->joint);
-	float angle = neck->GetJointAngle();
+	//b2RevoluteJoint * neck = ((b2RevoluteJoint *)head->body->GetJointList()->joint);
+	//float angle = neck->GetJointAngle();
 
-	neck->SetMotorSpeed(-angle*360);
-	neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5));*/
+	//neck->SetMotorSpeed(-angle*360);
+	//neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5));
 
 	//body
 	float bodAngle = (*components.at(0))->body->GetAngle() - targetRoll;
 	(*components.at(0))->body->SetAngularVelocity(-bodAngle*10);
-	/*if((*components.at(0))->body->GetPosition().y < 5){
+	if((*components.at(0))->body->GetPosition().y < 5){
 		(*components.at(0))->applyLinearImpulseUp(250);
-	}*/
+	}
 }
 
 void PuppetCharacter::unload(){

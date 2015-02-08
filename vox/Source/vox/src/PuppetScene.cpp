@@ -30,6 +30,7 @@
 #include <Accelerometer.h>
 
 #include <PuppetCharacter.h>
+#include <PuppetController.h>
 
 PuppetScene::PuppetScene(Game * _game):
 	Scene(_game),
@@ -93,10 +94,14 @@ PuppetScene::PuppetScene(Game * _game):
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM3");
-	arduino->addAccelerometer(new Accelerometer(arduino));
+	Accelerometer * acc = new Accelerometer(arduino);
+	arduino->addAccelerometer(acc);
 	//arduino->addAccelerometer(new Accelerometer(arduino));
 	//arduino->addAccelerometer(new Accelerometer(arduino));
 	//arduino->addAccelerometer(new Accelerometer(arduino));
+	
+	puppetController = new PuppetController(acc, playerCharacter);
+
 }
 
 PuppetScene::~PuppetScene(){
@@ -116,6 +121,7 @@ void PuppetScene::update(Step * _step){
 	world->update(_step);
 
 	arduino->update(_step);
+	puppetController->update(_step);
 
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
 		if(playerCharacter->head->body->GetPosition().y < 12){

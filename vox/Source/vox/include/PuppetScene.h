@@ -2,6 +2,7 @@
 
 #include "Scene2D.h"
 
+class PuppetController;
 class PuppetCharacter;
 class GameJamCharacter;
 class GameJamContactListener;
@@ -35,6 +36,7 @@ GameJamContactListener * cl;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
 	AccelerometerParser * arduino;
+	PuppetController * puppetController;
 
 	std::vector<Box2DSprite *> items;
 
