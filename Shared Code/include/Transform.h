@@ -78,6 +78,11 @@ public:
 	*/
 	void rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space);
 
+	/**
+	* Resets the translation, orientation, and scale to their defaults
+	*/
+	void reset();
+
 	/** 
 	* Converts the translation vector to a 4x4 matrix and returns the result 
 	*/

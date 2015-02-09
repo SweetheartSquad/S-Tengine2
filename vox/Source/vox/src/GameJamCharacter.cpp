@@ -211,7 +211,7 @@ void GameJamCharacter::attachJoints(){
 
 	// sensor
 	b2PolygonShape tShape;
-	tShape.SetAsBox(torso->width*std::abs(transform->scaleVector.x)*torso->scale*4.f, std::abs(torso->height*transform->scaleVector.y)*torso->scale*5.f);
+	tShape.SetAsBox(torso->width*std::abs(transform->scaleVector.x)*torso->scale, std::abs(torso->height*transform->scaleVector.y)*torso->scale);
 
 	b2Fixture * s = torso->body->CreateFixture(&tShape, 1); // physical fixture
 	s->SetSensor(true);

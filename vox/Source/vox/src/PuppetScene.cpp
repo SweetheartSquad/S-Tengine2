@@ -37,7 +37,7 @@ PuppetScene::PuppetScene(Game * _game):
 	cl(new GameJamContactListener),
 	debugDraw(true),
 	drawer(new Box2DDebugDraw(this, world)),
-	world(new Box2DWorld(b2Vec2(0, -60))),
+	world(new Box2DWorld(b2Vec2(0, -9.8))),
 	playerCharacter(new PuppetCharacter(world, PLAYER, PROP | NPC, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	shader(new BaseComponentShader()),
@@ -76,7 +76,10 @@ PuppetScene::PuppetScene(Game * _game):
 	camera->pitch = -10.0f;
 
 	world->b2world->SetDebugDraw(drawer);
-	drawer->SetFlags(b2Draw::e_aabbBit | b2Draw::e_shapeBit);
+	//drawer->AppendFlags(b2Draw::e_aabbBit);
+	drawer->AppendFlags(b2Draw::e_shapeBit);
+	drawer->AppendFlags(b2Draw::e_centerOfMassBit);
+	drawer->AppendFlags(b2Draw::e_jointBit);
 	addChild(drawer);
 
 
@@ -84,7 +87,6 @@ PuppetScene::PuppetScene(Game * _game):
 	addChild(playerCharacter);
 	playerCharacter->addToScene(this);
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter->head->setTranslationPhysical(5, 7, 5);
 	
 	TestCharacter * michael = new TestCharacter(world, false, PLAYER, PROP | NPC);
 	michael->setShader(shader, true);
@@ -125,7 +127,7 @@ void PuppetScene::update(Step * _step){
 
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
 		if(playerCharacter->head->body->GetPosition().y < 12){
-			playerCharacter->head->applyLinearImpulseUp(400);
+			playerCharacter->head->applyLinearImpulseUp(2500);
 		}
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){

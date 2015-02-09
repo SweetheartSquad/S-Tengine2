@@ -143,7 +143,9 @@ void Box2DDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Col
 
 void Box2DDebugDraw::DrawTransform(const b2Transform& xf){
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE);
-	spriteTransform->transform->translationVector = glm::vec3(xf.p.x, xf.p.y, 0);
+	spriteTransform->transform->reset();
+	spriteTransform->transform->translate(xf.p.x, xf.p.y, 0);
+	spriteTransform->transform->rotate(glm::degrees(xf.q.GetAngle()), 0,0,1, kOBJECT);
 	spriteTransform->render(scene->matrixStack, scene->renderOptions);
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
 }

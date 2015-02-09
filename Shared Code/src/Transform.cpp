@@ -74,3 +74,9 @@ glm::mat4 Transform::getOrientationMatrix(){
 glm::mat4 Transform::getModelMatrix(){
 	return getTranslationMatrix() * getOrientationMatrix() * getScaleMatrix();
 }
+
+void Transform::reset(){
+	translationVector = glm::vec3(0.f, 0.f, 0.f);
+	scaleVector = glm::vec3(0.f, 0.f, 0.f);
+	orientation = glm::quat(1.f, 0.f, 0.f, 0.f);
+}

@@ -25,9 +25,9 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	components.push_back(&head);
 	
 	head->createFixture(groupIndex);
-	head->setTranslationPhysical(0.f, 0.f, 0.2f);
+	head->setTranslationPhysical(0.f, 0.f, 0);
 	torso->createFixture(groupIndex);
-	torso->setTranslationPhysical(0.f, 0.f, 0.3f);
+	torso->setTranslationPhysical(0.f, 0.f, 0);
 
 	
 	// neck
@@ -47,7 +47,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	world->b2world->CreateJoint(&jth);
 
 	b2PolygonShape tShape;
-	tShape.SetAsBox(head->width*std::abs(transform->scaleVector.x)*head->scale*4.f, std::abs(head->height*transform->scaleVector.y)*head->scale*5.f);
+	tShape.SetAsBox(head->width*std::abs(transform->scaleVector.x)*head->scale, std::abs(head->height*transform->scaleVector.y)*head->scale);
 	
 	b2Fixture * s = head->body->CreateFixture(&tShape, 1);
 	s->SetSensor(true);
@@ -77,11 +77,11 @@ void PuppetCharacter::update(Step* _step){
 	//neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5));
 
 	//body
-	float bodAngle = (*components.at(0))->body->GetAngle() - targetRoll;
+	/*float bodAngle = (*components.at(0))->body->GetAngle() - targetRoll;
 	(*components.at(0))->body->SetAngularVelocity(-bodAngle*10);
 	if((*components.at(0))->body->GetPosition().y < 5){
 		(*components.at(0))->applyLinearImpulseUp(250);
-	}
+	}*/
 }
 
 void PuppetCharacter::unload(){
