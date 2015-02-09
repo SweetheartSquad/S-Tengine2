@@ -1,6 +1,6 @@
 ﻿# Hurly Burly Puppet Party #
 
-
+Interactive installation project (in progress).
 
 
 
@@ -56,30 +56,30 @@ Rename voxSettings.props.template to voxSettings.props
 
 https://drive.google.com/file/d/0B2VyAXziLJJtNXJ2Y0REU3RrSm8/view?usp=sharing
 
-### Individual Libraries ###
+## Individual Libraries ##
 
-## GLEW ##
+### GLEW ###
 * Download glew 1.11.0 
 * http://sourceforge.net/projects/glew/files/glew/1.11.0/glew-1.11.0-win32.zip/download
 
 * Unzip the folder and place it in an accessible location. Set the GLEW_DIR property to this location.
 * e.g. <GLEW_DIR>C:\Dev\glew-1.10.0</GLEW_DIR>
  
-## GLFW ##
+### GLFW ###
 * Download GLFW 3.0.4
 * http://sourceforge.net/projects/glfw/files/glfw/3.0.4/glfw-3.0.4.bin.WIN32.zip/download
 
 * Unzip the folder and place it in an accessible location. Set the GLFW_DIR property to this location
 * e.g. <GLFW_DIR> C:\Dev\glfw-3.0.4.bin.WIN32</GLFW_DIR>
  
-## GLM ##
+### GLM ###
 * Download GLM 0.9.5.4
 * http://sourceforge.net/projects/ogl-math/files/glm-0.9.5.4/glm-0.9.5.4.zip/download
 
 * Unzip the folder and place it in an accessible location. Set the GLM_DIR property to this location
 * e.g. <GLM_DIR>C:\Dev\glm</GLM_DIR>
  
-## SOIL ##
+### SOIL ###
 Download SOIL
 http://www.lonesock.net/files/soil.zip
 
