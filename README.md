@@ -1,4 +1,4 @@
-# Hurly Burly Puppet Party #
+﻿# Hurly Burly Puppet Party #
 
 
 
@@ -21,11 +21,42 @@ Engine Stuff:
 * Visual Studio 2012
 * A computer with graphics card that supports OpenGL 3.3
 
+# Vox Sample Project #
+
+A sample project has been included as a zip file(SampleProject.zip) in the repository. This project is designed to run without any configuration. Simply open the project and click run. This will build and run the project. The project contains a sample scene which demonstrates the basic features of the Vox engine. These features include...
+
+* Entities
+* Shaders/Shader Components
+* OBJ Model Loading
+* JSON Model Loading
+* Frame Buffers
+* Render Surfaces
+* Directional Lights
+* Point Lights 
+* Animations
+* Shadows
+* Camera
+* Voxels
+* Shader Loading
+* Transformations
+
+This sample project also has many comments which should clarify what is being done and why
+
+
+
+
 # Vox Set-up Instructions #
 
 Open project
 
 Rename voxSettings.props.template to voxSettings.props
+
+
+## VOX library pack  
+
+https://drive.google.com/file/d/0B2VyAXziLJJtNXJ2Y0REU3RrSm8/view?usp=sharing
+
+### Individual Libraries ###
 
 ## GLEW ##
 * Download glew 1.11.0 
@@ -62,41 +93,3 @@ http://www.lonesock.net/files/soil.zip
 * Once it is open, click Build to build the lib file.
 
 **The project should now build**
-
-# Vox Sample Project #
-
-A sample project has been included as a zip file(SampleProject.zip) in the repository. This project is designed to run without any configuration. Simply open the project and click run. This will build and run the project. The project contains a sample scene which demonstrates the basic features of the Vox engine. These features include...
-
-* Entities
-* Shaders/Shader Components
-* OBJ Model Loading
-* JSON Model Loading
-* Frame Buffers
-* Render Surfaces
-* Directional Lights
-* Point Lights 
-* Animations
-* Shadows
-* Camera
-* Voxels
-* Shader Loading
-* Transformations
-
-This sample project also has many comments which should clarify what is being done and why
-
-## VOX library pack  
-
-https://drive.google.com/file/d/0B2VyAXziLJJtNXJ2Y0REU3RrSm8/view?usp=sharing
-
-=================================================================
-
-## Icons ##
-Icons used in the modelling software made by Amit Jakhu, Elegant Themes, Freepik, Icomoon from [www.flaticon.com](http://www.flaticon.com) is licensed by [Creative Commons 3.0](http://creativecommons.org/licenses/by/3.0/).
-
-## Useful Links 
-
-http://www.tomdalling.com/blog/category/modern-opengl/
-
-http://www.informit.com/articles/article.aspx?p=461848
-
-http://www.volumesoffun.com/polyvox/documentation/0.2.1/manual/index.html - an existing voxel engine's documentation, could give us ideas on handling our shader, textures, lighting. etc.
