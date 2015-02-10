@@ -60,7 +60,7 @@ void Character::setShader(Shader * _shader, bool _configureDefaultVertexAttribut
 void Character::addToScene(Scene * _scene){
 	for(CharacterComponent ** c : components){
 		if(*c != nullptr){
-			_scene->addChild(*c);
+			_scene->addChild(*c, true);
 		}
 	}
 }

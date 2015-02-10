@@ -4,6 +4,9 @@
 #include "RenderOptions.h"
 #include "MatrixStack.h"
 #include "node/NodeResource.h"
+#include "Sprite.h"
+
+#include "glew\glew.h"
 
 Entity::Entity(Transform * _transform) :
 	NodeTransformable(_transform),

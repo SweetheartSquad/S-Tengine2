@@ -26,7 +26,7 @@ public:
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 private:
 	BaseComponentShader * shader;
-	Sprite * sprite, * spriteSegment, * spriteTransform;
+	Sprite * sprite, * spriteSegment, * spriteTransform, * spriteCircle;
 	Scene * scene;
 	Box2DWorld * world;
 };

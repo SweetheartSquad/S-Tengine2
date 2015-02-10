@@ -21,6 +21,7 @@ Box2DDebugDraw::Box2DDebugDraw(Scene * _scene, Box2DWorld * _world):
 	sprite(new Sprite()),
 	spriteSegment(new Sprite()),
 	spriteTransform(new Sprite()),
+	spriteCircle(new Sprite()),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {
@@ -30,6 +31,7 @@ Box2DDebugDraw::Box2DDebugDraw(Scene * _scene, Box2DWorld * _world):
 	sprite->setShader(shader, true);
 	spriteSegment->setShader(shader, true);
 	spriteTransform->setShader(shader, true);
+	spriteCircle->setShader(shader, true);
 	
 	spriteSegment->mesh->vertices.clear();
 	spriteSegment->mesh->indices.clear();
@@ -47,6 +49,18 @@ Box2DDebugDraw::Box2DDebugDraw(Scene * _scene, Box2DWorld * _world):
 	spriteTransform->mesh->pushVert(Vertex(1, 0, 0.0001f, 255, 0, 0, 1.f));
 	spriteTransform->mesh->pushVert(Vertex(0, 0, 0.0001f, 0, 255, 0, 1.f));
 	spriteTransform->mesh->pushVert(Vertex(0, 1, 0.0001f, 0, 255, 0, 1.f));
+
+	
+	spriteCircle->mesh->polygonalDrawMode = GL_POLYGON;
+	spriteCircle->mesh->vertices.clear();
+	spriteCircle->mesh->indices.clear();
+	for (int32 i = 0; i < 30; ++i){
+		float percent = (i / static_cast<float>(30-1));
+		float rad = percent * 2 * 3.14159f;
+		float x = cos(rad);
+		float y = sin(rad);
+		sprite->mesh->pushVert(Vertex(x, y, 0.0001f, 0, 0, 0, 1.f));
+	}
 }
 
 Box2DDebugDraw::~Box2DDebugDraw(){
@@ -72,6 +86,7 @@ void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, cons
 }
 
 void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount, const b2Color& color){
+	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 	sprite->mesh->polygonalDrawMode = GL_POLYGON;
 
 	sprite->transform->translationVector = glm::vec3(0, 0, 0);
@@ -82,45 +97,21 @@ void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount
 		sprite->mesh->pushVert(Vertex(vertices[i].x, vertices[i].y, 0.0001f, color.r, color.g, color.b, 1.f));
 	}
 	sprite->render(scene->matrixStack, scene->renderOptions);
+	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 }
 
 void Box2DDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color){
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE);
-	sprite->mesh->polygonalDrawMode = GL_POLYGON;
-	
-	sprite->transform->translationVector = glm::vec3(center.x, center.y, 0);
-
-	sprite->mesh->vertices.clear();
-	sprite->mesh->indices.clear();
-	for (int32 i = 0; i < 30; ++i){
-		float percent = (i / static_cast<float>(30-1));
-		float rad = percent * 2 * 3.14159f;
-		float x = radius * cos(rad);
-		float y = radius * sin(rad);
-		sprite->mesh->pushVert(Vertex(x, y, 0.0001f, color.r, color.g, color.b, 1.f));
-	}
-	sprite->render(scene->matrixStack, scene->renderOptions);
+	spriteCircle->transform->translationVector = glm::vec3(center.x, center.y, 0);
+	spriteCircle->transform->scaleVector = glm::vec3(radius, radius, radius);
+	spriteCircle->render(scene->matrixStack, scene->renderOptions);
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void Box2DDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color){
-	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE);
-	sprite->mesh->polygonalDrawMode = GL_POLYGON;
-	
-	sprite->transform->translationVector = glm::vec3(center.x, center.y, 0);
-
-	sprite->mesh->vertices.clear();
-	sprite->mesh->indices.clear();
-	for (int32 i = 0; i < 30; ++i){
-		float percent = (i / static_cast<float>(30-1));
-		float rad = percent * 2 * 3.14159f;
-		float x = radius * cos(rad);
-		float y = radius * sin(rad);
-		sprite->mesh->pushVert(Vertex(x, y, 0.0001f, color.r, color.g, color.b, 1.f));
-	}
-	
-	sprite->render(scene->matrixStack, scene->renderOptions);
-	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
+	spriteCircle->transform->translationVector = glm::vec3(center.x, center.y, 0);
+	spriteCircle->transform->scaleVector = glm::vec3(radius, radius, radius);
+	spriteCircle->render(scene->matrixStack, scene->renderOptions);
 }
 
 void Box2DDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color){
@@ -149,7 +140,6 @@ void Box2DDebugDraw::DrawTransform(const b2Transform& xf){
 	spriteTransform->render(scene->matrixStack, scene->renderOptions);
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
 }
-
 
 void Box2DDebugDraw::load(){
 	if(!loaded){

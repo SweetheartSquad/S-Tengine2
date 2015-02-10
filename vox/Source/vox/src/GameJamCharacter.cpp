@@ -383,18 +383,18 @@ void GameJamCharacter::attachJoints(){
 	
 	float t = groupIndex*0.000001f;
 
-	torso		   ->setTranslationPhysical(0.f, 0.f, 0.1f+t);
-	head		   ->setTranslationPhysical(0.f, 0.f, 0.2f+t);
-	leftUpperArm   ->setTranslationPhysical(0.f, 0.f, 0.31f+t);
-	leftLowerArm   ->setTranslationPhysical(0.f, 0.f, 0.32f+t);
-	leftHand	   ->setTranslationPhysical(0.f, 0.f, 0.33f+t);
-	rightUpperArm  ->setTranslationPhysical(0.f, 0.f, -0.11f+t);
-	rightLowerArm  ->setTranslationPhysical(0.f, 0.f, -0.12f+t);
-	rightHand	   ->setTranslationPhysical(0.f, 0.f, -0.13f+t);
-	leftUpperLeg   ->setTranslationPhysical(0.f, 0.f, -0.21f+t);
-	leftLowerLeg   ->setTranslationPhysical(0.f, 0.f, -0.22f+t);
-	rightUpperLeg  ->setTranslationPhysical(0.f, 0.f, -0.23f+t);
-	rightLowerLeg  ->setTranslationPhysical(0.f, 0.f, -0.24f+t);
+	torso		   ->setTranslationPhysical(0.f, 0.f, 0);
+	head		   ->setTranslationPhysical(0.f, 0.f, 0);
+	leftUpperArm   ->setTranslationPhysical(0.f, 0.f, 0);
+	leftLowerArm   ->setTranslationPhysical(0.f, 0.f, 0);
+	leftHand	   ->setTranslationPhysical(0.f, 0.f, 0);
+	rightUpperArm  ->setTranslationPhysical(0.f, 0.f, 0);
+	rightLowerArm  ->setTranslationPhysical(0.f, 0.f, 0);
+	rightHand	   ->setTranslationPhysical(0.f, 0.f, 0);
+	leftUpperLeg   ->setTranslationPhysical(0.f, 0.f, 0);
+	leftLowerLeg   ->setTranslationPhysical(0.f, 0.f, 0);
+	rightUpperLeg  ->setTranslationPhysical(0.f, 0.f, 0);
+	rightLowerLeg  ->setTranslationPhysical(0.f, 0.f, 0);
 	text->transform->translate(0, 0, -2.3f + t);
 
 	torso->body->SetLinearDamping(0.9f);

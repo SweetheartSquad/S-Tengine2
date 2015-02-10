@@ -24,29 +24,12 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	components.push_back(&torso);
 	components.push_back(&head);
 	
-	head->createFixture(groupIndex);
-	head->setTranslationPhysical(0.f, 0.f, 0);
-	torso->createFixture(groupIndex);
-	torso->setTranslationPhysical(0.f, 0.f, 0);
-
+	/*b2CircleShape tShape;
+	tShape.m_radius = glm::length(glm::vec2(transform->scaleVector.x,transform->scaleVector.y));
+	tShape.m_p = b2Vec2(0,0);*/
 	
-	// neck
-	b2RevoluteJointDef jth;
-	jth.bodyA = torso->body;
-	jth.bodyB = head->body;
-	jth.localAnchorA.Set(0.5f * torso->getCorrectedWidth(), 0.9f * torso->getCorrectedHeight());
-	jth.localAnchorB.Set(0.5f * head->getCorrectedWidth(), 0.9f * -head->getCorrectedHeight());
-	jth.collideConnected = false;
-	jth.enableLimit = true;
-	jth.enableMotor = true;
-	jth.maxMotorTorque = 0;
-	jth.motorSpeed = 0;
-	jth.referenceAngle = 0;
-	jth.lowerAngle = -glm::radians(45.f);
-	jth.upperAngle = glm::radians(45.f);
-	world->b2world->CreateJoint(&jth);
-
-	b2PolygonShape tShape;
+	
+	/*b2PolygonShape tShape;
 	tShape.SetAsBox(head->width*std::abs(transform->scaleVector.x)*head->scale, std::abs(head->height*transform->scaleVector.y)*head->scale);
 	
 	b2Fixture * s = head->body->CreateFixture(&tShape, 1);
@@ -57,7 +40,30 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	if(maskBits != (int16)-1){
 		sf.maskBits = maskBits;
 	}
-	s->SetFilterData(sf);
+	s->SetFilterData(sf);*/
+
+	head->createFixture(groupIndex);
+	head->setTranslationPhysical(0.f, 0.f, 0);
+	torso->createFixture(groupIndex);
+	torso->setTranslationPhysical(0.f, 0.f, 0);
+
+	
+	// neck
+	b2RevoluteJointDef jth;
+	jth.bodyA = torso->body;
+	jth.bodyB = head->body;
+	jth.localAnchorA.Set(0, 0.9f * torso->getCorrectedHeight());
+	jth.localAnchorB.Set(0, 0.9f * -head->getCorrectedHeight());
+	jth.collideConnected = false;
+	jth.enableLimit = true;
+	jth.enableMotor = true;
+	jth.maxMotorTorque = 0;
+	jth.motorSpeed = 0;
+	jth.referenceAngle = 0;
+	jth.lowerAngle = -glm::radians(45.f);
+	jth.upperAngle = glm::radians(45.f);
+	world->b2world->CreateJoint(&jth);
+
 }
 
 PuppetCharacter::~PuppetCharacter(){

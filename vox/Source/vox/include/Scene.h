@@ -51,7 +51,7 @@ public:
 	/** Tells the RenderSystem to render the attached children to the vox::currentContext using the camera's view-projection matrix */
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 	/** Adds a reference to an entity to the attached list of children */
-	void addChild(Entity * _child);
+	void addChild(Entity * _child, bool _translucent = false);
 
 	virtual void renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack);
 
@@ -59,4 +59,9 @@ public:
 
 	virtual void load() override;
 	virtual void unload() override;
+
+	
+	std::vector<Entity *> opaqueChildren;
+	std::vector<Entity *> translucentChildren;
+	
 };

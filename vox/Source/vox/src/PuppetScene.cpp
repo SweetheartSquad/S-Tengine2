@@ -65,8 +65,8 @@ PuppetScene::PuppetScene(Game * _game):
 	ground->mesh->vertices.at(3).z -= 10;
 
 	world->addToWorld(ground, 2);
+	addChild(ground, false);
 	
-	addChild(ground);
 //	camera = new PerspectiveCamera(playerCharacter->components.at(0), glm::vec3(0, 0, 0), 0, 0);
 	camera = new MousePerspectiveCamera();
 	camera->farClip = 1000.f;
@@ -80,17 +80,17 @@ PuppetScene::PuppetScene(Game * _game):
 	drawer->AppendFlags(b2Draw::e_shapeBit);
 	drawer->AppendFlags(b2Draw::e_centerOfMassBit);
 	drawer->AppendFlags(b2Draw::e_jointBit);
-	addChild(drawer);
+	addChild(drawer, false);
 
 
 	playerCharacter->setShader(shader, true);
-	addChild(playerCharacter);
+	addChild(playerCharacter, true);
 	playerCharacter->addToScene(this);
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
-	
+	playerCharacter->head->transform->scale(2,2,2);
 	TestCharacter * michael = new TestCharacter(world, false, PLAYER, PROP | NPC);
 	michael->setShader(shader, true);
-	addChild(michael);
+	addChild(michael, true);
 	michael->addToScene(this);
 	
 
@@ -103,7 +103,7 @@ PuppetScene::PuppetScene(Game * _game):
 	//arduino->addAccelerometer(new Accelerometer(arduino));
 	
 	puppetController = new PuppetController(acc, playerCharacter);
-
+	
 }
 
 PuppetScene::~PuppetScene(){

@@ -82,3 +82,7 @@ void Sprite::setUvs(vox::Rectangle _rect){
 	mesh->vertices.at(3).v  = _rect.getBottomLeft().y;
 }
 
+
+void Sprite::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+   MeshEntity::render(_matrixStack, _renderStack);
+}

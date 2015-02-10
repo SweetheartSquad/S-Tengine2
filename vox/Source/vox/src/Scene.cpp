@@ -16,6 +16,7 @@
 #include "Entity.h"
 #include "MatrixStack.h"
 #include "Game.h"
+#include "Sprite.h"
 
 Scene::Scene(Game * _game):
 	game(_game),
@@ -91,10 +92,16 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 	ratio = game->viewPortWidth / static_cast<float>(game->viewPortHeight);
 
 	glEnable(GL_SCISSOR_TEST);
-    //glEnable(GL_POLYGON_OFFSET_FILL);
 	//glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBlendFunc(GL_ONE, GL_ZERO);
+	//glBlendFunc(GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
+
+
+	//glBlendFunc(GL_ONE, GL_ZERO);
 	glEnable (GL_BLEND);
+
+	//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+	//glBlendFunc(GL_ONE_MINUS_DST_ALPHA, GL_ONE);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	glBlendEquation(GL_FUNC_ADD);
 
 	glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
@@ -105,6 +112,8 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST);
+     glAlphaFunc ( GL_GREATER, 0.1 ) ;
+     glEnable ( GL_ALPHA_TEST ) ;
 
 	//Back-face culling
 	//glEnable (GL_CULL_FACE); // cull face
@@ -116,34 +125,54 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 	matrixStack->viewMatrix		  = camera->getViewMatrix();
 
 	//float offset = children.size();
-	for(Entity * e : children){
-		e->render(matrixStack, renderOptions);
-		//glPolygonOffset(offset, 1);
-		//offset -= 1.f;
+	
+	if(renderOptions->alphaSorting){
+     //glDisable ( GL_ALPHA_TEST ) ;
+		for(Entity * e : opaqueChildren){
+			e->render(matrixStack, renderOptions);
+		}
+		
+   glDisable(GL_DEPTH_TEST);
+    glEnable(GL_POLYGON_OFFSET_FILL);
+	glPolygonOffset(1,2);
+		for(Entity * e : translucentChildren){
+			e->render(matrixStack, renderOptions);
+		}
+	}else{
+		for(Entity * e : children){
+			e->render(matrixStack, renderOptions);
+		}
 	}
+	
+	
 
 	GLUtils::checkForError(0,__FILE__,__LINE__);
     //glDisable(GL_POLYGON_OFFSET_FILL);
 }
 
-void Scene::addChild(Entity* _child){
+void Scene::addChild(Entity* _child, bool _translucent){
 	if(renderOptions->alphaSorting){
+		if(!_translucent){
+			opaqueChildren.push_back(_child);
+			return;
+		}
 		float z;// = -100000;
 		float childZ = _child->transform->translationVector.z;
-		if(children.size() > 0){
-			z = children.at(0)->transform->translationVector.z;
+		if(translucentChildren.size() > 0){
+			z = translucentChildren.at(0)->transform->translationVector.z;
 			if(childZ < z){
-				children.insert(children.begin(), _child);
+				translucentChildren.insert(translucentChildren.begin(), _child);
 				return;
 			}
-			for(unsigned long int i = 0; i < children.size(); ++i){
-				z = children.at(i)->transform->translationVector.z;
-				if(childZ > z && i+1 < children.size() && childZ < children.at(i+1)->transform->translationVector.z){
-					children.insert(children.begin()+i+1, _child);
+			for(unsigned long int i = 0; i < translucentChildren.size(); ++i){
+				z = translucentChildren.at(i)->transform->translationVector.z;
+				if(childZ > z && i+1 < translucentChildren.size() && childZ < translucentChildren.at(i+1)->transform->translationVector.z){
+					translucentChildren.insert(translucentChildren.begin()+i+1, _child);
 					return;
 				}
 			}
 		}
+		translucentChildren.push_back(_child);
 	}
 	children.push_back(_child);
 }
