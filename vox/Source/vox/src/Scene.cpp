@@ -132,10 +132,10 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 			e->render(matrixStack, renderOptions);
 		}
 		
-   glDisable(GL_DEPTH_TEST);
+    //glDisable(GL_DEPTH_TEST);
     glEnable(GL_POLYGON_OFFSET_FILL);
-	glPolygonOffset(1,2);
 		for(Entity * e : translucentChildren){
+	glPolygonOffset((std::rand()%500)/500.f,2);
 			e->render(matrixStack, renderOptions);
 		}
 	}else{

@@ -63,8 +63,6 @@ void AccelerometerParser::update(Step* _step){
 			accelerometers.at(i)->y /= count;
 			accelerometers.at(i)->z /= count;
 			accelerometers.at(i)->update(_step);
-			std::cout << i << ":\t" << accelerometers.at(i)->x << "\t" << accelerometers.at(i)->y << "\t" << accelerometers.at(i)->z << std::endl;
 		}
 	}
-	std::cout << std::endl;
 }

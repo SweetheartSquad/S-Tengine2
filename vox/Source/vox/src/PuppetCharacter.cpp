@@ -83,11 +83,11 @@ void PuppetCharacter::update(Step* _step){
 	//neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5));
 
 	//body
-	/*float bodAngle = (*components.at(0))->body->GetAngle() - targetRoll;
+	float bodAngle = (*components.at(0))->body->GetAngle() + targetRoll;
 	(*components.at(0))->body->SetAngularVelocity(-bodAngle*10);
 	if((*components.at(0))->body->GetPosition().y < 5){
 		(*components.at(0))->applyLinearImpulseUp(250);
-	}*/
+	}
 }
 
 void PuppetCharacter::unload(){

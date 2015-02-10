@@ -18,7 +18,7 @@ Camera::Camera():
 	pitch(0.0f),
 	yaw(-30.f),
 	NodeAnimatable(),
-	nearClip(0.1f),
+	nearClip(1.f),
 	farClip(100.f)
 {
 	transform->translate(-5.f, 0.f, 0.f);

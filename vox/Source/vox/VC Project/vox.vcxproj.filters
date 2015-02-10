@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
@@ -12,12 +8,6 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Source Files\utils">
-      <UniqueIdentifier>{52d6d784-931d-49a9-b5fa-465d78bdc1a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\geo">
-      <UniqueIdentifier>{60fe33d1-1791-4794-89f9-852f516a981f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Resource Files\shaders">
       <UniqueIdentifier>{b08bc618-aa74-4407-b892-edbd4042eb90}</UniqueIdentifier>
@@ -28,29 +18,17 @@
     <Filter Include="Header Files\geo">
       <UniqueIdentifier>{4ba3dee6-0fa3-43ca-886d-f785d17c6859}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\TestGame">
-      <UniqueIdentifier>{40908594-3aea-4682-ae22-ddaca988a7ad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\TestGame">
       <UniqueIdentifier>{33658aa7-c89d-477b-80fe-5d5e950eed80}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\input">
       <UniqueIdentifier>{160824dc-2881-44c5-a369-19a38521d0c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\input">
-      <UniqueIdentifier>{92af4ccb-67a0-48ae-a3e0-b9785d71c2f2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\textures">
       <UniqueIdentifier>{4830f7c0-e46d-4630-bae8-71e8b98e44da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\shader">
-      <UniqueIdentifier>{3d03607c-93ad-4402-85b9-e1059d116f57}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\shader">
       <UniqueIdentifier>{c9af958e-373b-48c9-a384-25589c5913ee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\node">
-      <UniqueIdentifier>{455f384c-ecdc-47be-b682-29351bd11fc8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\node">
       <UniqueIdentifier>{2d2e6eed-ba43-4e0f-a0b1-12678e9e7f27}</UniqueIdentifier>
@@ -58,38 +36,60 @@
     <Filter Include="Resource Files\models">
       <UniqueIdentifier>{d2005005-2e01-4bfc-a1b6-a872aa155465}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\json">
-      <UniqueIdentifier>{e24025d5-3e3a-4b69-93af-84579f5e3c3b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\frameBuffers">
-      <UniqueIdentifier>{be4432e3-fbcd-4fcf-9cda-f162af39506f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\frameBuffers">
       <UniqueIdentifier>{51c605bb-ebd5-43eb-b1a8-9ed270b4c034}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\box2D">
       <UniqueIdentifier>{79ea79f8-eccc-448e-976a-91de925fb5f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\arduino">
+      <UniqueIdentifier>{759c8fc0-0321-4e52-b957-f0e5b6990a9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TestGame\GameJam">
+      <UniqueIdentifier>{c964133c-c09b-42e0-b189-02ff94dc8c7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TestGame\HurlyBurly">
+      <UniqueIdentifier>{8b800f95-ac0e-43e8-82cc-bfb1780fa75c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{52d6d784-931d-49a9-b5fa-465d78bdc1a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\geo">
+      <UniqueIdentifier>{60fe33d1-1791-4794-89f9-852f516a981f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TestGame">
+      <UniqueIdentifier>{40908594-3aea-4682-ae22-ddaca988a7ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TestGame\GameJam">
+      <UniqueIdentifier>{4fb0706c-514d-40e9-bc7c-77db02609ee1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TestGame\HurlyBurly">
+      <UniqueIdentifier>{5c656503-5f8d-4bdc-ac87-972961814dc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\input">
+      <UniqueIdentifier>{92af4ccb-67a0-48ae-a3e0-b9785d71c2f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\shader">
+      <UniqueIdentifier>{3d03607c-93ad-4402-85b9-e1059d116f57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\node">
+      <UniqueIdentifier>{455f384c-ecdc-47be-b682-29351bd11fc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\json">
+      <UniqueIdentifier>{e24025d5-3e3a-4b69-93af-84579f5e3c3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\frameBuffers">
+      <UniqueIdentifier>{be4432e3-fbcd-4fcf-9cda-f162af39506f}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\box2D">
       <UniqueIdentifier>{e6c7ee33-703c-436a-9c76-436ec8f003a8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\arduino">
       <UniqueIdentifier>{d0fd3845-cefa-4329-b0e2-cd899eb8aaa7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\arduino">
-      <UniqueIdentifier>{759c8fc0-0321-4e52-b957-f0e5b6990a9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\TestGame\GameJam">
-      <UniqueIdentifier>{4fb0706c-514d-40e9-bc7c-77db02609ee1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\TestGame\GameJam">
-      <UniqueIdentifier>{c964133c-c09b-42e0-b189-02ff94dc8c7f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\TestGame\HurlyBurly">
-      <UniqueIdentifier>{5c656503-5f8d-4bdc-ac87-972961814dc2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\TestGame\HurlyBurly">
-      <UniqueIdentifier>{8b800f95-ac0e-43e8-82cc-bfb1780fa75c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -352,10 +352,10 @@
       <Filter>Source Files\TestGame</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Character.cpp">
-      <Filter>Source Files\TestGame\GameJAm</Filter>
+      <Filter>Source Files\TestGame\GameJam</Filter>
     </ClCompile>
     <ClCompile Include="..\src\TestCharacter.cpp">
-      <Filter>Source Files\TestGame\GameJAm</Filter>
+      <Filter>Source Files\TestGame\GameJam</Filter>
     </ClCompile>
     <ClCompile Include="..\src\CharacterComponent.cpp">
       <Filter>Source Files\TestGame\GameJam</Filter>

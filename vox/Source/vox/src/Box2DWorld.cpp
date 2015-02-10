@@ -25,7 +25,6 @@ void Box2DWorld::update(Step* _step){
 	}
 	b2world->Step(timeStepAccumulator, velocityIterations, positionIterations);
 	timeStepAccumulator = 0;
-	//std::cout << _step->deltaTimeCorrection;
 }
 
 void Box2DWorld::addToWorld(NodeBox2DBody * _nodeBox2D, int _userDataGroup){

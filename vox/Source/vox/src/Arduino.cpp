@@ -109,21 +109,16 @@ int Arduino::ReadData(char *buffer, unsigned int nbChar){
 std::string Arduino::ReadDataUntil(char _until, bool * _forced){
 	std::string ret; 
 	char data[1];
-	//std::cout << "AD: ";
 	while(true){
 		if(ReadData(data, 1) != -1) {
-			//std::cout << data[0];
 			if(data[0] == _until) {
 				break;
 			}
 			ret += data[0];
 		}else{
-			//ret = "";
-			//break;
 			*_forced = true;
 		}
 	}
-	//std::cout << std::endl;
 	return ret;
 }
 

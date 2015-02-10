@@ -31,8 +31,6 @@ void Accelerometer::update(Step* _step){
 
 	pitch =  atan2(deltaZ, 1 + abs(deltaY))/0.26f * -M_PI/2.f;
 	roll  =  atan2(deltaX, 1 + abs(deltaY))/0.26f *  M_PI/2.f;
-
-	std::cout<<roll << "    " << pitch;
 }
 
 Accelerometer::~Accelerometer(){
