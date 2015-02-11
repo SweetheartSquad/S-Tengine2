@@ -128,18 +128,18 @@ GameJamCharacter::GameJamCharacter(Box2DWorld * _world, int16 _categoryBits, int
 	text->kerning = 0.75f;
 	text->setSizeMod(0.85f);
 
-	components.push_back(&head);
 	components.push_back(&leftUpperArm);
 	components.push_back(&leftLowerArm);
 	components.push_back(&leftHand);
+	components.push_back(&leftUpperLeg);
+	components.push_back(&leftLowerLeg);
+	components.push_back(&torso);
+	components.push_back(&head);
+	components.push_back(&rightUpperLeg);
+	components.push_back(&rightLowerLeg);
 	components.push_back(&rightUpperArm);
 	components.push_back(&rightLowerArm);
 	components.push_back(&rightHand);
-	components.push_back(&leftUpperLeg);
-	components.push_back(&leftLowerLeg);
-	components.push_back(&rightUpperLeg);
-	components.push_back(&rightLowerLeg);
-	components.push_back(&torso);
 
 }
 

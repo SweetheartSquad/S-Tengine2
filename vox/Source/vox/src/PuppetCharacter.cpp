@@ -25,12 +25,12 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	handLeft = new CharacterComponent(componentScale, GameJamCharacter::handTexPacks[character]->width, GameJamCharacter::handTexPacks[character]->height, GameJamCharacter::handTexPacks[character]->texture, _world, b2_dynamicBody, false);
 	handRight = new CharacterComponent(componentScale, GameJamCharacter::handTexPacks[character]->width, GameJamCharacter::handTexPacks[character]->height, GameJamCharacter::handTexPacks[character]->texture, _world, b2_dynamicBody, false);
 	
-	components.push_back(&torso);
-	components.push_back(&head);
 	components.push_back(&armLeft);
 	components.push_back(&armRight);
 	components.push_back(&handLeft);
 	components.push_back(&handRight);
+	components.push_back(&torso);
+	components.push_back(&head);
 	
 	/*b2CircleShape tShape;
 	tShape.m_radius = glm::length(glm::vec2(transform->scaleVector.x,transform->scaleVector.y));
