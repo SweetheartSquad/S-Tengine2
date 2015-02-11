@@ -16,25 +16,31 @@ void setup() {
   pinMode(buttonPin2, INPUT);
 
   // initialize serial communication:
-  Serial.begin(115200);
+  Serial.begin(57600);
 }
 
 // A printf function, taken from...
 // https://gist.github.com/EleotleCram/eb586037e2976a8d9884
-int aprintf(char *str, ...) {
+int aprintf(const char *str, ...) {
   int i, j, count = 0;
-
   va_list argv;
   va_start(argv, str);
-  for(i = 0, j = 0; str[i] != '\0'; i++) {
+  for(i = 0, j = 0; str[i] != '\0'; ++i) {
     if (str[i] == '%') {
       count++;
 
       Serial.write(reinterpret_cast<const uint8_t*>(str+j), i-j);
-
+      int v;
       switch (str[++i]) {
       case 'd': 
-        Serial.print(va_arg(argv, int));
+        v = va_arg(argv, int);
+        if(v < 100){
+          Serial.print(0); 
+          if(v < 10){
+            Serial.print(0); 
+          }
+        }
+        Serial.print(v);
         break;
       case 'l': 
         Serial.print(va_arg(argv, long));
@@ -72,9 +78,12 @@ void loop() {
   buttonState1 = analogRead(buttonPin1);
   buttonState2 = analogRead(buttonPin2);
 
-  aprintf("%d,%d,%d;%d,%d,%d;%d,%d,%d;%d,%d,%d\n",
+  aprintf(":%d%d%d%d%d%d%d%d%d%d%d%d",
   buttonState0, buttonState1, buttonState2,
   0, 0, 0,
   0, 0, 0 , 
   0, 0, 0);
+  Serial.flush();
 }
+
+

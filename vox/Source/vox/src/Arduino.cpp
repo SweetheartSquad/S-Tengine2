@@ -46,7 +46,7 @@ Arduino::Arduino(std::string portName){
             printf("failed to get current serial parameters!");
         }else{
             //Define serial connection parameters for the arduino board
-            dcbSerialParams.BaudRate=CBR_115200;
+            dcbSerialParams.BaudRate=CBR_57600;
             dcbSerialParams.ByteSize=8;
             dcbSerialParams.StopBits=ONESTOPBIT;
             dcbSerialParams.Parity=NOPARITY;
@@ -85,15 +85,11 @@ int Arduino::ReadData(char *buffer, unsigned int nbChar){
     ClearCommError(this->hSerial, &this->errors, &this->status);
 
     //Check if there is something to read
-    if(this->status.cbInQue>0){
+    if(this->status.cbInQue > 0){
         //If there is we check if there is enough data to read the required number
         //of characters, if not we'll read only the available characters to prevent
         //locking of the application.
-        if(this->status.cbInQue>nbChar){
-            toRead = nbChar;
-        }else{
-            toRead = this->status.cbInQue;
-        }
+        toRead = min(nbChar, this->status.cbInQue);
 
         //Try to read the require number of chars, and return the number of read bytes on success
         if(ReadFile(this->hSerial, buffer, toRead, &bytesRead, NULL) && bytesRead != 0){
@@ -117,6 +113,7 @@ std::string Arduino::ReadDataUntil(char _until, bool * _forced){
 			ret += data[0];
 		}else{
 			*_forced = true;
+			break;
 		}
 	}
 	return ret;

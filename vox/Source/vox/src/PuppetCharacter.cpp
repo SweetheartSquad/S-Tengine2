@@ -162,6 +162,7 @@ void PuppetCharacter::update(Step* _step){
 	if((torso->body->GetPosition().y < 5)){
 		(torso)->applyLinearImpulseUp(250);
 	}
+	//torso->body->SetTransform(torso->body->GetPosition(), targetRoll);
 }
 
 void PuppetCharacter::unload(){

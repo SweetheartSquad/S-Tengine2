@@ -8,6 +8,7 @@ class Accelerometer;
 
 class AccelerometerParser : public Arduino{
 public:
+	bool forced;
 
 	explicit AccelerometerParser(std::string portName);
 	~AccelerometerParser();
