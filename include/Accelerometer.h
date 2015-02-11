@@ -11,10 +11,12 @@ public:
 
 	std::string buffer;
 
-	signed long int x, y, z;
+	float x, y, z;
 	float deltaX, deltaY, deltaZ;
 
 	float roll, pitch;
+
+	float highestX, lowestX, highestY, lowestY, highestZ, lowestZ;
 
 	explicit Accelerometer(Arduino * _arduino);
 	~Accelerometer();

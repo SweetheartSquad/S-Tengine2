@@ -26,6 +26,12 @@ void AccelerometerParser::update(Step* _step){
 	int count = 0;
 	bool loop = true;
 	bool forced = false;
+	//Zero out the x,y,z data
+	for(Accelerometer * acc : accelerometers) {
+		acc->x = 0;
+		acc->y = 0;
+		acc->z = 0;
+	}
 	do{
 		if(IsConnected()) {
 			std::string data = ReadDataUntil('\n', &forced);
@@ -35,9 +41,6 @@ void AccelerometerParser::update(Step* _step){
 					break;
 				}
 				std::string dataPack = dataPacks.at(i);
-				accelerometers.at(i)->x = 0;
-				accelerometers.at(i)->y = 0;
-				accelerometers.at(i)->z = 0;
 				std::vector<std::string> vals = StringUtils::split(dataPack, ',');
 				if(vals.size() >= 3){
 					accelerometers.at(i)->x += atoi(vals.at(0).c_str());

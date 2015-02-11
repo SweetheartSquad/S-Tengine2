@@ -8,8 +8,20 @@
 
 Accelerometer::Accelerometer(Arduino * _arduino):
 	arduino(_arduino),
-	pitch(0),
-	roll(0)
+	x(0.f),
+	y(0.f), 
+	z(0.f),
+	deltaX(0.f),
+	deltaY(0.f),
+	deltaZ(0.f),
+	roll(0.f),
+	pitch(0.f),
+	highestX(530.f),
+	lowestX(130.f),
+	highestY(530.f),
+	lowestY(130.f),
+	highestZ(530.f),
+	lowestZ(130.f)
 {
 }
 
@@ -22,10 +34,9 @@ float Accelerometer::getPitch(){
 }
 
 void Accelerometer::update(Step* _step){
-
-	float diffX = ((x - 530.0f) / (130.0f - 530.0f))* 2.f - 1.f - deltaX;
-	float diffY = ((y - 530.0f) / (130.0f - 530.0f))* 2.f - 1.f - deltaY;
-	float diffZ = ((z - 530.0f) / (130.0f - 530.0f))* 2.f - 1.f - deltaZ;
+	float diffX = ((x - highestX) / (lowestX - highestX))* 2.f - 1.f - deltaX;
+	float diffY = ((y - highestY) / (lowestY - highestY))* 2.f - 1.f - deltaY;
+	float diffZ = ((z - highestZ) / (lowestZ - highestZ))* 2.f - 1.f - deltaZ;
 
     deltaX = deltaX + 0.25f*(diffX);
     deltaY = deltaY + 0.25f*(diffY);
