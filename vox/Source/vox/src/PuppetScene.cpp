@@ -57,7 +57,7 @@ PuppetScene::PuppetScene(Game * _game):
 	ground->mesh->setUV(0, 0, 2.f);
 	ground->mesh->dirty = true;
 	ground->mesh->uvEdgeMode = GL_REPEAT;
-	ground->body->SetTransform(b2Vec2(0, -10), 0);
+	//ground->body->SetTransform(b2Vec2(0, -10), 0);
 	
 	ground->mesh->vertices.at(0).z -= 10;
 	ground->mesh->vertices.at(1).z -= 10;
@@ -71,7 +71,7 @@ PuppetScene::PuppetScene(Game * _game):
 	camera = new MousePerspectiveCamera();
 	camera->farClip = 1000.f;
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
-	camera->transform->translate(5.0f, 0.f, 15.0f);
+	camera->transform->translate(5.0f, 5.f, 15.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
 
@@ -87,11 +87,14 @@ PuppetScene::PuppetScene(Game * _game):
 	addChild(playerCharacter, true);
 	playerCharacter->addToScene(this);
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter->head->transform->scale(2,2,2);
+	//playerCharacter->head->transform->scale(2,2,2);
+
+
 	TestCharacter * michael = new TestCharacter(world, false, PLAYER, PROP | NPC);
 	michael->setShader(shader, true);
 	addChild(michael, true);
 	michael->addToScene(this);
+	michael->translateComponents(glm::vec3(1,0,0));
 	
 
 	//Arduino 

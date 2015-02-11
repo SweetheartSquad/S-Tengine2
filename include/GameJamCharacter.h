@@ -8,6 +8,7 @@ public:
 
 	static void init();
 	static enum texture_packs{
+		kPUPPET,
 		kMICHAEL,
 		kMOUSTACHE,
 		kAFRO,
