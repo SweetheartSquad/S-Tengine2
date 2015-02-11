@@ -46,9 +46,8 @@ void NodeBox2DBody::update(Step * _step){
 void NodeBox2DBody::setTranslationPhysical(glm::vec3 _translation, bool _relative){
 	if(_relative){
 		transform->translate(_translation);
-		bodyDef.position.Set(bodyDef.position.x + _translation.x, bodyDef.position.y +  _translation.y);
 		if(body != nullptr){
-			body->SetTransform(b2Vec2(body->GetPosition().x + _translation.x, body->GetPosition().y + _translation.y), body->GetAngle());
+			body->SetTransform(b2Vec2(transform->translationVector.x, transform->translationVector.y), body->GetAngle());
 		}
 	}else{
 		transform->translationVector = _translation;
