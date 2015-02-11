@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Sprite.h"
+#include "Entity.h"
 #include "PerspectiveCamera.h"
 #include "System.h"
 #include "Transform.h"
 
-PerspectiveCamera::PerspectiveCamera(Sprite * _trans, glm::vec3 _offset, float _deadZoneX, float _deadZoneY, float _deadZoneZ):
+PerspectiveCamera::PerspectiveCamera(Entity * _trans, glm::vec3 _offset, float _deadZoneX, float _deadZoneY, float _deadZoneZ):
 	Camera(),
 	NodeTransformable(new Transform()),
 	NodeAnimatable(),

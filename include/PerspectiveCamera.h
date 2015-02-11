@@ -8,6 +8,7 @@
 
 class Mouse;
 class Sprite;
+class Entity;
 /****************************
 *
 * A perspective camera class, i.e. objects seem smaller the farther they are away from this camera.
@@ -19,7 +20,7 @@ public:
 	
 
 	/** trans is the target for following with lookAt */
-	PerspectiveCamera(Sprite * trans = nullptr, glm::vec3 _offset = glm::vec3(0,0,0), float _deadZoneX = 0, float _deadZoneY = 0, float _deadZoneZ = 0);
+	explicit PerspectiveCamera(Entity * _trans = nullptr, glm::vec3 _offset = glm::vec3(0,0,0), float _deadZoneX = 0, float _deadZoneY = 0, float _deadZoneZ = 0);
 	~PerspectiveCamera();
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
@@ -40,7 +41,7 @@ public:
 	
 
 	// Sprite to follow
-	Sprite * trans;
+	Entity * trans;
 	// Look at the sprite offset by this
 	glm::vec3 offset;
 	// Tolerable horizontal difference between the follow target and the current lookAt

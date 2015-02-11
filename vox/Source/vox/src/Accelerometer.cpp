@@ -7,7 +7,9 @@
 #include <iostream>
 
 Accelerometer::Accelerometer(Arduino * _arduino):
-	arduino(_arduino)
+	arduino(_arduino),
+	pitch(0),
+	roll(0)
 {
 }
 

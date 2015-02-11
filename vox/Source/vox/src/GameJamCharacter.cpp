@@ -25,7 +25,7 @@ void GameJamCharacter::init(){
 	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieTorso.png", 512, 512, true, true),	175,	285));
 	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailTorso.png", 512, 512, true, true),	160,	355));
 
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelHead.png", 512, 512, true, true),   200,	270));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/pHead.png", 512, 512, true, true),   200,	200));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheHead.png", 512, 512, true, true), 160,	270));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroHead.png", 512, 512, true, true),	   260,	250));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieHead.png", 512, 512, true, true),	   170,	300));
@@ -36,7 +36,7 @@ void GameJamCharacter::init(){
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/BlankHead.png", 512, 512, true, true),		169,	247));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/BowlcutHead.png", 512, 512, true, true),		272,	243));
 
-	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/pArm.png", 512, 512, true, true),55,	205));
+	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelLowerArm.png", 512, 512, true, true),55,	205));
 	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheUA.png", 512, 512, true, true),	55,	205));
 	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroUA.png", 512, 512, true, true),			50,	200));
 	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieUA.png", 512, 512, true, true),		65,	165));

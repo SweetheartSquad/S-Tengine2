@@ -166,7 +166,7 @@ GameJamScene::GameJamScene(Game * _game):
 		items.push_back(s);
 	}
 	ground->setShader(shader, true);
-	ground->setTranslationPhysical(0, 0, -5.f);
+	ground->setTranslationPhysical(0, -5.f, -5.f, true);
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
 	ground->transform->scale(1000, 10, 1);
 	ground->mesh->setUV(3, 0, 0);
@@ -220,6 +220,7 @@ GameJamScene::GameJamScene(Game * _game):
 	//camera = new MousePerspectiveCamera();
 	camera->farClip = 1000.f;
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
+	
 	camera->transform->translate(5.0f, 0.f, 15.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
@@ -228,7 +229,7 @@ GameJamScene::GameJamScene(Game * _game):
 	drawer->SetFlags(b2Draw::e_shapeBit);
 	addChild(drawer);
 
-	//keep a vector of the characters, for the dialogHandler
+	//keep a vector of the characters, for the dialogHandlert
 	std::vector<GameJamCharacter *> sceneCharacters;
 
 	playerCharacter->setShader(shader, true);

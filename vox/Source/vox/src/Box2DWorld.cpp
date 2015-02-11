@@ -33,7 +33,7 @@ void Box2DWorld::addToWorld(NodeBox2DBody * _nodeBox2D, int _userDataGroup){
 		dynamicBox.SetAsBox(1.0f * std::abs(_nodeBox2D->transform->scaleVector.x), 1.0f * std::abs(_nodeBox2D->transform->scaleVector.y));	
 		b2FixtureDef fixtureDef;
 		fixtureDef.shape = &dynamicBox;
-		fixtureDef.userData = (void *)_userDataGroup;
+		fixtureDef.userData = reinterpret_cast<void *>(_userDataGroup);
 		if(_nodeBox2D->bodyDef.type != b2_staticBody){
 			  fixtureDef.density = 1.0f;
 			  fixtureDef.friction = 0.8f;

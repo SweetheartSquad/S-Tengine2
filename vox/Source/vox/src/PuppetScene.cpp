@@ -48,16 +48,15 @@ PuppetScene::PuppetScene(Game * _game):
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	ground->setShader(shader, true);
-	ground->setTranslationPhysical(0, -5, -5.f);
+	ground->transform->scale(1000, 10, 0);
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
-	ground->transform->scale(1000, 10, 1);
 	ground->mesh->setUV(3, 0, 0);
 	ground->mesh->setUV(2, 200.f, 0);
 	ground->mesh->setUV(1, 200.f, 2.f);
 	ground->mesh->setUV(0, 0, 2.f);
 	ground->mesh->dirty = true;
 	ground->mesh->uvEdgeMode = GL_REPEAT;
-	ground->body->SetTransform(b2Vec2(0, -10), 0);
+	ground->body->SetTransform(b2Vec2(0, -15), 0);
 	
 	ground->mesh->vertices.at(0).z -= 10;
 	ground->mesh->vertices.at(1).z -= 10;
@@ -65,13 +64,16 @@ PuppetScene::PuppetScene(Game * _game):
 	ground->mesh->vertices.at(3).z -= 10;
 
 	world->addToWorld(ground, 2);
+
+	ground->setTranslationPhysical(0, -150.f, -5.f);
+
 	addChild(ground, false);
 	
-//	camera = new PerspectiveCamera(playerCharacter->components.at(0), glm::vec3(0, 0, 0), 0, 0);
-	camera = new MousePerspectiveCamera();
+	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 0, 0);
+	//camera = new MousePerspectiveCamera();
 	camera->farClip = 1000.f;
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
-	camera->transform->translate(5.0f, 0.f, 15.0f);
+	camera->transform->translate(5.0f, 10.f, -20.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
 
@@ -86,22 +88,19 @@ PuppetScene::PuppetScene(Game * _game):
 	playerCharacter->setShader(shader, true);
 	addChild(playerCharacter, true);
 	playerCharacter->addToScene(this);
+	//playerCharacter->head->setTranslationPhysical(0.f, 5.f, 0.f);
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter->head->transform->scale(2,2,2);
-	TestCharacter * michael = new TestCharacter(world, false, PLAYER, PROP | NPC);
-	michael->setShader(shader, true);
-	addChild(michael, true);
-	michael->addToScene(this);
-	
 
+	//playerCharacter->head->transform->scale(2,2,2);
+	//TestCharacter * michael = new TestCharacter(world, false, PLAYER, PROP | NPC);
+	//michael->setShader(shader, true);
+	//addChild(michael, true);
+	//michael->addToScene(this);
+	
 	//Arduino 
 	arduino = new AccelerometerParser("COM3");
 	Accelerometer * acc = new Accelerometer(arduino);
 	arduino->addAccelerometer(acc);
-	//arduino->addAccelerometer(new Accelerometer(arduino));
-	//arduino->addAccelerometer(new Accelerometer(arduino));
-	//arduino->addAccelerometer(new Accelerometer(arduino));
-	
 	puppetController = new PuppetController(acc, playerCharacter);
 	
 }
