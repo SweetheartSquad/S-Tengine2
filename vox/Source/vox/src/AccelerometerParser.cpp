@@ -132,48 +132,45 @@ void AccelerometerParser::update(Step* _step){
 
 #define LINE_SIZE 38
 	if(IsConnected()) {
-			char buffer[LINE_SIZE];
-			for(unsigned long int i = 0; i < LINE_SIZE; ++i){
-				buffer[i] = '\0';
-			}
-			int numRead = ReadData(buffer, LINE_SIZE-1);
-			if(numRead > 0 && buffer[0] == ':'){
-				std::cout << numRead << ":\t" << buffer << std::endl;
-				if(numRead >= 37){
-					for(unsigned long int i = 0; i < accelerometers.size(); ++i){
-						char * src = buffer + (i*9) + 1;
-						char x[4];
-						char y[4];
-						char z[4];
+		char buffer[LINE_SIZE];
+		for(unsigned long int i = 0; i < LINE_SIZE; ++i){
+			buffer[i] = '\0';
+		}
+		int numRead = ReadData(buffer, LINE_SIZE-1);
+		if(numRead > 0 && buffer[0] == ':'){
+			//std::cout << numRead << ":\t" << buffer << std::endl;
+			if(numRead >= 37){
+				for(unsigned long int i = 0; i < accelerometers.size(); ++i){
+					char * src = buffer + (i*9) + 1;
+					char x[4];
+					char y[4];
+					char z[4];
 						
-						x[0] = src[0];
-						x[1] = src[1];
-						x[2] = src[2];
-						x[3] = '\0';
+					x[0] = src[0];
+					x[1] = src[1];
+					x[2] = src[2];
+					x[3] = '\0';
 						
-						y[0] = src[3];
-						y[1] = src[4];
-						y[2] = src[5];
-						y[3] = '\0';
+					y[0] = src[3];
+					y[1] = src[4];
+					y[2] = src[5];
+					y[3] = '\0';
 						
-						z[0] = src[6];
-						z[1] = src[7];
-						z[2] = src[8];
-						z[3] = '\0';
+					z[0] = src[6];
+					z[1] = src[7];
+					z[2] = src[8];
+					z[3] = '\0';
 
-						accelerometers.at(i)->x = atoi(x);
-						accelerometers.at(i)->y = atoi(y);
-						accelerometers.at(i)->z = atoi(z);
-						accelerometers.at(i)->update(_step);
-					}
+					accelerometers.at(i)->x = atoi(x);
+					accelerometers.at(i)->y = atoi(y);
+					accelerometers.at(i)->z = atoi(z);
+					accelerometers.at(i)->update(_step);
 				}
 			}
 		}
-	if(IsConnected()){
-		char ping[1];
-		ping[0] = '1';
+		PurgeComm(hSerial, PURGE_RXABORT);
+		char ping[1] = {'1'};
 		WriteData(ping, 1);
 	}
-	PurgeComm(hSerial, PURGE_RXABORT);
 	//std::cout << accelerometers.at(0)->x << " " << accelerometers.at(0)->y << " " << accelerometers.at(0)->z << std::endl;
 }
