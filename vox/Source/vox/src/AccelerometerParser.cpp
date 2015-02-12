@@ -24,24 +24,24 @@ void AccelerometerParser::addAccelerometer(Accelerometer* _accelerometer){
 void AccelerometerParser::update(Step* _step){
 	Arduino::update(_step);
 
-	int count = 0;
-	bool loop = true;
+	//int count = 0;
+	//bool loop = true;
 	//Zero out the x,y,z data
 	for(Accelerometer * acc : accelerometers) {
-		acc->x = 0;
-		acc->y = 0;
-		acc->z = 0;
+		//acc->x = 0;
+		//acc->y = 0;
+		//acc->z = 0;
 	}
-	do{
+	/*do{
 		if(IsConnected()) {
-#define SIZE_THING 37*3
+#define SIZE_THING 37
 			char buffer[SIZE_THING];
 			for(unsigned long int i = 0; i < SIZE_THING; ++i){
 				buffer[i] = '\0';
 			}
-			bool test;
 
-			ReadDataUntil(':', &test);
+			//bool test;
+			//ReadDataUntil(':', &test);
 
 			int numRead = ReadData(buffer, SIZE_THING-1);
 			if(numRead > 0){
@@ -56,7 +56,7 @@ void AccelerometerParser::update(Step* _step){
 				/*if(numRead < 38){
 					buffer[numRead] = '\0';
 				}*/
-				//std::cout << numRead << ":\t" << buffer << std::endl;
+				/*std::cout << numRead << ":\t" << buffer << std::endl;
 				if(numRead-colon >= 36){
 					for(unsigned long int i = 0; i < accelerometers.size(); ++i){
 						char * src = buffer+colon + (i*9);
@@ -82,7 +82,7 @@ void AccelerometerParser::update(Step* _step){
 						accelerometers.at(i)->x += atoi(x);
 						accelerometers.at(i)->y += atoi(y);
 						accelerometers.at(i)->z += atoi(z);
-					}
+					}*/
 
 					/*std::vector<std::string> dataPacks;// =  StringUtils::split(data, ';');
 					dataPacks.push_back(data.substr(0,9));
@@ -110,7 +110,7 @@ void AccelerometerParser::update(Step* _step){
 							loop = false;
 						}
 					}*/
-					++count;
+					/*++count;
 				}else{
 					loop = false;
 				}
@@ -120,15 +120,60 @@ void AccelerometerParser::update(Step* _step){
 		}else{
 			loop = false;
 		}
-	}while(loop);
-
-	if(count != 0){
+	}while(false);*/
+	/*if(count != 0){
 		for(unsigned long int i = 0; i < accelerometers.size(); ++i){
 			accelerometers.at(i)->x /= count;
 			accelerometers.at(i)->y /= count;
 			accelerometers.at(i)->z /= count;
 			accelerometers.at(i)->update(_step);
 		}
+	}*/
+
+#define LINE_SIZE 38
+	if(IsConnected()) {
+			char buffer[LINE_SIZE];
+			for(unsigned long int i = 0; i < LINE_SIZE; ++i){
+				buffer[i] = '\0';
+			}
+			int numRead = ReadData(buffer, LINE_SIZE-1);
+			if(numRead > 0 && buffer[0] == ':'){
+				std::cout << numRead << ":\t" << buffer << std::endl;
+				if(numRead >= 37){
+					for(unsigned long int i = 0; i < accelerometers.size(); ++i){
+						char * src = buffer + (i*9) + 1;
+						char x[4];
+						char y[4];
+						char z[4];
+						
+						x[0] = src[0];
+						x[1] = src[1];
+						x[2] = src[2];
+						x[3] = '\0';
+						
+						y[0] = src[3];
+						y[1] = src[4];
+						y[2] = src[5];
+						y[3] = '\0';
+						
+						z[0] = src[6];
+						z[1] = src[7];
+						z[2] = src[8];
+						z[3] = '\0';
+
+						accelerometers.at(i)->x = atoi(x);
+						accelerometers.at(i)->y = atoi(y);
+						accelerometers.at(i)->z = atoi(z);
+						accelerometers.at(i)->update(_step);
+					}
+				}
+			}
+		}
+	if(IsConnected()){
+		char ping[1];
+		ping[0] = '1';
+		WriteData(ping, 1);
 	}
+	PurgeComm(hSerial, PURGE_RXABORT);
 	//std::cout << accelerometers.at(0)->x << " " << accelerometers.at(0)->y << " " << accelerometers.at(0)->z << std::endl;
 }

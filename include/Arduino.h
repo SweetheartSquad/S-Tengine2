@@ -15,7 +15,7 @@
 ****************************************************************/
 class Arduino : public NodeUpdatable
 {
-    private:
+  public:
         //Serial comm handler
         HANDLE hSerial;
         //Connection status
@@ -25,7 +25,6 @@ class Arduino : public NodeUpdatable
         //Keep track of last error
         DWORD errors;
 
-    public:
         //Initialize Serial communication with the given COM port
         Arduino(std::string portName);
         //Close the connection
