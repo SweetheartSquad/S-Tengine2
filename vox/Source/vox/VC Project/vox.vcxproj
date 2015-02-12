@@ -258,6 +258,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\src\Box2DSprite.cpp" />
     <ClCompile Include="..\src\Box2DWorld.cpp" />
     <ClCompile Include="..\src\Camera.cpp" />
+    <ClCompile Include="..\src\Catapult.cpp" />
     <ClCompile Include="..\src\Character.cpp" />
     <ClCompile Include="..\src\Character1.cpp" />
     <ClCompile Include="..\src\Character2.cpp" />
@@ -317,6 +318,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClCompile Include="..\src\SpriteSheet.cpp" />
     <ClCompile Include="..\src\SpriteSheetAnimation.cpp" />
     <ClCompile Include="..\src\StringUtils.cpp" />
+    <ClCompile Include="..\src\Structure.cpp" />
     <ClCompile Include="..\src\TestCharacter.cpp" />
     <ClCompile Include="..\src\TestScene2D.cpp" />
     <ClCompile Include="..\src\TextChunk.cpp" />
@@ -374,6 +376,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\include\Box2DSprite.h" />
     <ClInclude Include="..\include\Box2DWorld.h" />
     <ClInclude Include="..\include\Camera.h" />
+    <ClInclude Include="..\include\Catapult.h" />
     <ClInclude Include="..\include\Character.h" />
     <ClInclude Include="..\include\Character1.h" />
     <ClInclude Include="..\include\Character2.h" />
@@ -434,6 +437,7 @@ xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I
     <ClInclude Include="..\include\SpriteSheet.h" />
     <ClInclude Include="..\include\SpriteSheetAnimation.h" />
     <ClInclude Include="..\include\StringUtils.h" />
+    <ClInclude Include="..\include\Structure.h" />
     <ClInclude Include="..\include\TestCharacter.h" />
     <ClInclude Include="..\include\TestScene2D.h" />
     <ClInclude Include="..\include\TextChunk.h" />

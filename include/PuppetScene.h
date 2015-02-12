@@ -50,8 +50,8 @@ GameJamContactListener * cl;
 	
 	enum HURLYBURLY_CATEGORY{
 		BOUNDARY = 0x0001,
-		PROP = 0x0002,
-		NPC = 0x0004,
+		STRUCTURE = 0x0002,
+		ITEM = 0x0004,
 		PLAYER = 0x00010
 	};
 };

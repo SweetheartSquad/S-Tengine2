@@ -426,6 +426,12 @@
     <ClCompile Include="..\src\AccelerometerParser.cpp">
       <Filter>Source Files\TestGame\HurlyBurly</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Catapult.cpp">
+      <Filter>Source Files\TestGame\HurlyBurly</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Structure.cpp">
+      <Filter>Source Files\TestGame\HurlyBurly</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -777,6 +783,12 @@
       <Filter>Header Files\TestGame\HurlyBurly</Filter>
     </ClInclude>
     <ClInclude Include="..\include\AccelerometerParser.h">
+      <Filter>Header Files\TestGame\HurlyBurly</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Catapult.h">
+      <Filter>Header Files\TestGame\HurlyBurly</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Structure.h">
       <Filter>Header Files\TestGame\HurlyBurly</Filter>
     </ClInclude>
   </ItemGroup>

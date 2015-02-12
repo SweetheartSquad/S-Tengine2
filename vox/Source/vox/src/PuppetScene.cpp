@@ -23,6 +23,7 @@
 #include "BitmapFont.h"
 #include "TestCharacter.h"
 #include "CharacterComponent.h"
+#include "Catapult.h"
 #include "GameJamContactListener.h"
 #include "Game.h"
 #include <Arduino.h>
@@ -38,7 +39,7 @@ PuppetScene::PuppetScene(Game * _game):
 	debugDraw(true),
 	drawer(new Box2DDebugDraw(this, world)),
 	world(new Box2DWorld(b2Vec2(0, -9.8))),
-	playerCharacter(new PuppetCharacter(world, PLAYER, PROP | NPC, false)),
+	playerCharacter(new PuppetCharacter(world, PLAYER, STRUCTURE | ITEM | PLAYER, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager())
@@ -90,12 +91,17 @@ PuppetScene::PuppetScene(Game * _game):
 	//playerCharacter->head->transform->scale(2,2,2);
 
 
-	TestCharacter * michael = new TestCharacter(world, false, PLAYER, PROP | NPC);
+	TestCharacter * michael = new TestCharacter(world, false, PLAYER, STRUCTURE | ITEM | PLAYER);
 	michael->setShader(shader, true);
 	addChild(michael, true);
 	michael->addToScene(this);
 	michael->translateComponents(glm::vec3(1,0,0));
 	
+	Catapult * catapult = new Catapult(world, STRUCTURE, PLAYER);
+	catapult->setShader(shader, true);
+	addChild(catapult, true);
+	catapult->addToScene(this);
+	catapult->translateComponents(glm::vec3(1,0,0));
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM3");
