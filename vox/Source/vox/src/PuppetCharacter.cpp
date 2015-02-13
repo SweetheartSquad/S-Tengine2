@@ -15,8 +15,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	//ComponentTexture * headTex = new ComponentTexture(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true), 1000, 1000);
 	//CharacterComponent * head = new CharacterComponent(componentScale, headTex->width, headTex->height, headTex->texture, _world,  b2_dynamicBody, false);
 	
-	
-	GameJamCharacter::texture_packs character = GameJamCharacter::kPUPPET;
+	GameJamCharacter::texture_packs character = GameJamCharacter::kKNIGHT;
 	head = new CharacterComponent(componentScale, GameJamCharacter::headTexPacks[character]->width, GameJamCharacter::headTexPacks[character]->height, GameJamCharacter::headTexPacks[character]->texture, _world, b2_dynamicBody, false);
 	
 	torso = new CharacterComponent(componentScale, GameJamCharacter::torsoTexPacks[character]->width, GameJamCharacter::torsoTexPacks[character]->height, GameJamCharacter::torsoTexPacks[character]->texture, _world, b2_dynamicBody, false);
@@ -54,8 +53,6 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	for(CharacterComponent ** c : components){
 		(*c)->createFixture(groupIndex);
 	}
-
-
 	
 	// neck
 	b2RevoluteJointDef jth;
@@ -78,7 +75,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	b2RevoluteJointDef jtar;
 	jtar.bodyA = torso->body;
 	jtar.bodyB = armRight->body;
-	jtar.localAnchorA.Set(0.9 * torso->getCorrectedWidth(), 0.6f * torso->getCorrectedHeight());
+	jtar.localAnchorA.Set(0.9 * torso->getCorrectedWidth(), 0.8f * torso->getCorrectedHeight());
 	jtar.localAnchorB.Set(0, 0.6 * armRight->getCorrectedHeight());
 	jtar.collideConnected = false;
 	jtar.enableLimit = true;
@@ -95,7 +92,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	b2RevoluteJointDef jtal;
 	jtal.bodyA = torso->body;
 	jtal.bodyB = armLeft->body;
-	jtal.localAnchorA.Set(-0.9 * torso->getCorrectedWidth(), 0.6f * torso->getCorrectedHeight());
+	jtal.localAnchorA.Set(-0.9 * torso->getCorrectedWidth(), 0.8f * torso->getCorrectedHeight());
 	jtal.localAnchorB.Set(0, 0.6 * armLeft->getCorrectedHeight());
 	jtal.collideConnected = false;
 	jtal.enableLimit = true;
@@ -159,7 +156,7 @@ void PuppetCharacter::update(Step* _step){
 	//body
 	float bodAngle = (torso)->body->GetAngle() + targetRoll;
 	(torso->body->SetAngularVelocity(-bodAngle * 10));
-	if((torso->body->GetPosition().y < 5)){
+	if((torso->body->GetPosition().y < 0)){
 		(torso)->applyLinearImpulseUp(250);
 	}
 	//torso->body->SetTransform(torso->body->GetPosition(), targetRoll);

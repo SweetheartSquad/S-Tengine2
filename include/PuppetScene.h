@@ -2,6 +2,9 @@
 
 #include "Scene2D.h"
 
+class MousePerspectiveCamera;
+class PerspectiveCamera;
+class MeshEntity;
 class PuppetController;
 class PuppetCharacter;
 class GameJamCharacter;
@@ -33,10 +36,16 @@ GameJamContactListener * cl;
 	Box2DDebugDraw * drawer;
 	PuppetCharacter * playerCharacter;
 	Box2DMeshEntity * ground;
+	MeshEntity * background;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
 	AccelerometerParser * arduino;
 	PuppetController * puppetController;
+
+	PerspectiveCamera * perspectiveCamera;
+	MousePerspectiveCamera * mouseCamera;
+
+	bool mouseCam;
 
 	std::vector<Box2DSprite *> items;
 
