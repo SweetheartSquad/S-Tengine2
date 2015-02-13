@@ -4,7 +4,7 @@
 
 #include "Structure.h"
 
-class CharacterComponent;
+class Box2DSprite;
 class Box2DWorld;
 
 class Catapult : public Structure{
@@ -12,10 +12,8 @@ public:
 
 	float targetRoll;
 	
-	CharacterComponent * arm;
-	CharacterComponent * base;
-
-	std::vector<CharacterComponent ** > components;
+	Box2DSprite * arm;
+	Box2DSprite * base;
 
 	Catapult(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1);
 	~Catapult();	

@@ -2,25 +2,26 @@
 
 #include <Box2D/Box2D.h>
 
-#include "Character.h"
+#include "Box2DSuperSprite.h"
 
-class CharacterComponent;
+class Box2DSprite;
 class Box2DWorld;
 
-class PuppetCharacter : public Character{
+class PuppetCharacter : public Box2DSuperSprite {
 public:
+	bool ai;
 
 	float targetRoll;
 	
-	CharacterComponent * head;
-	CharacterComponent * torso;
-	CharacterComponent * armLeft;
-	CharacterComponent * armRight;
-	CharacterComponent * handLeft;
-	CharacterComponent * handRight;
+	Box2DSprite * head;
+	Box2DSprite * torso;
+	Box2DSprite * armLeft;
+	Box2DSprite * armRight;
+	Box2DSprite * handLeft;
+	Box2DSprite * handRight;
 
-	CharacterComponent * face;
-	CharacterComponent * headgear;
+	Box2DSprite * face;
+	Box2DSprite * headgear;
 
 	PuppetCharacter(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, bool _ai = true);
 	~PuppetCharacter();	

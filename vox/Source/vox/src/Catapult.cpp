@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Catapult.h"
-#include <CharacterComponent.h>
+#include <Box2DSprite.h>
 #include <Texture.h>
 #include <GameJamCharacter.h>
 #include "Box2DWorld.h"
@@ -13,14 +13,16 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	NodeRenderable(),
 	targetRoll(0)
 {
-	StructureComponentTexture baseTex = StructureComponentTexture(new Texture("../assets/structure components/catapult/CatapultBase.png", 512, 512, true, true), 418, 264);
-	StructureComponentTexture armTex = StructureComponentTexture(new Texture("../assets/structure components/catapult/CatapultFlinger.png", 512, 512, true, true), 429, 76);
+	componentScale = 0.008f;
 
-	base = new CharacterComponent(componentScale, baseTex.width, baseTex.height, baseTex.texture, _world, b2_staticBody, false);
-	arm = new CharacterComponent(componentScale, armTex.width, armTex.height, armTex.texture, _world, b2_dynamicBody, false);
+	TextureSampler baseTex = TextureSampler(new Texture("../assets/structure components/catapult/CatapultBase.png", 512, 512, true, true), 418, 264);
+	TextureSampler armTex = TextureSampler(new Texture("../assets/structure components/catapult/CatapultFlinger.png", 512, 512, true, true), 429, 76);
 
-	components.push_back(&base);
+	base = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), baseTex.width, baseTex.height, baseTex.texture, componentScale);
+	arm = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), armTex.width, armTex.height, armTex.texture, componentScale);
+
 	components.push_back(&arm);
+	components.push_back(&base);
 	
 	arm->createFixture(groupIndex);
 	arm->setTranslationPhysical(0.f, 0.f, 0.2f);
@@ -32,8 +34,8 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	b2RevoluteJointDef jth;
 	jth.bodyA = base->body;
 	jth.bodyB = arm->body;
-	jth.localAnchorA.Set(0.5f * base->getCorrectedWidth(), 0.9f * base->getCorrectedHeight());
-	jth.localAnchorB.Set(0.9f * arm->getCorrectedWidth(), 0.5f * -arm->getCorrectedHeight());
+	jth.localAnchorA.Set(0.f * base->getCorrectedWidth(), 0.7f * base->getCorrectedHeight());
+	jth.localAnchorB.Set(0.9f * arm->getCorrectedWidth(), 0.f * arm->getCorrectedHeight());
 	jth.collideConnected = false;
 	jth.enableLimit = true;
 	jth.enableMotor = true;

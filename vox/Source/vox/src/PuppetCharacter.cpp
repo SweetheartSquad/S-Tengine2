@@ -1,34 +1,33 @@
 #pragma once
 
 #include "PuppetCharacter.h"
-#include <CharacterComponent.h>
+#include <Box2DSprite.h>
 #include <Texture.h>
 #include <GameJamCharacter.h>
 #include "Box2DWorld.h"
 PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, bool _ai):
-	Character(_world, _categoryBits, _maskBits, _ai),
+	Box2DSuperSprite(_world, _categoryBits, _maskBits),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable(),
-	targetRoll(0)
+	targetRoll(0),
+	ai(ai)
 {
-	//ComponentTexture * headTex = new ComponentTexture(new Texture("../assets/uv-test.jpg", 1000, 1000, true, true), 1000, 1000);
-	//CharacterComponent * head = new CharacterComponent(componentScale, headTex->width, headTex->height, headTex->texture, _world,  b2_dynamicBody, false);
 	
 	GameJamCharacter::texture_packs character = GameJamCharacter::kKNIGHT;
-	head = new CharacterComponent(componentScale, GameJamCharacter::headTexPacks[character]->width, GameJamCharacter::headTexPacks[character]->height, GameJamCharacter::headTexPacks[character]->texture, _world, b2_dynamicBody, false);
+	head = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::headTexPacks[character]->width, GameJamCharacter::headTexPacks[character]->height, GameJamCharacter::headTexPacks[character]->texture, componentScale);
 	
-	torso = new CharacterComponent(componentScale, GameJamCharacter::torsoTexPacks[character]->width, GameJamCharacter::torsoTexPacks[character]->height, GameJamCharacter::torsoTexPacks[character]->texture, _world, b2_dynamicBody, false);
-	armLeft = new CharacterComponent(componentScale, GameJamCharacter::upperArmTexPacks[character]->width, GameJamCharacter::upperArmTexPacks[character]->height, GameJamCharacter::upperArmTexPacks[character]->texture, _world, b2_dynamicBody, false);
-	armRight = new CharacterComponent(componentScale, GameJamCharacter::upperArmTexPacks[character]->width, GameJamCharacter::upperArmTexPacks[character]->height, GameJamCharacter::upperArmTexPacks[character]->texture, _world, b2_dynamicBody, false);
-	handLeft = new CharacterComponent(componentScale, GameJamCharacter::handTexPacks[character]->width, GameJamCharacter::handTexPacks[character]->height, GameJamCharacter::handTexPacks[character]->texture, _world, b2_dynamicBody, false);
-	handRight = new CharacterComponent(componentScale, GameJamCharacter::handTexPacks[character]->width, GameJamCharacter::handTexPacks[character]->height, GameJamCharacter::handTexPacks[character]->texture, _world, b2_dynamicBody, false);
+	torso = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::torsoTexPacks[character]->width, GameJamCharacter::torsoTexPacks[character]->height, GameJamCharacter::torsoTexPacks[character]->texture, componentScale);
+	armLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::upperArmTexPacks[character]->width, GameJamCharacter::upperArmTexPacks[character]->height, GameJamCharacter::upperArmTexPacks[character]->texture, componentScale);
+	armRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::upperArmTexPacks[character]->width, GameJamCharacter::upperArmTexPacks[character]->height, GameJamCharacter::upperArmTexPacks[character]->texture, componentScale);
+	handLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::handTexPacks[character]->width, GameJamCharacter::handTexPacks[character]->height, GameJamCharacter::handTexPacks[character]->texture, componentScale);
+	handRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::handTexPacks[character]->width, GameJamCharacter::handTexPacks[character]->height, GameJamCharacter::handTexPacks[character]->texture, componentScale);
 	
 
-	ComponentTexture * faceTex = new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/Face1.png", 512,512, true, true), 67, 72);
-	ComponentTexture * helmetTex = new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/Helmet1.png", 512,512, true, true), 114, 165);
-	face = new CharacterComponent(componentScale, faceTex->width, faceTex->height, faceTex->texture, _world, b2_dynamicBody, false);
-	headgear = new CharacterComponent(componentScale, helmetTex->width, helmetTex->height, helmetTex->texture, _world, b2_dynamicBody, false);
+	TextureSampler * faceTex = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Face1.png", 512,512, true, true), 67, 72);
+	TextureSampler * helmetTex = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Helmet1.png", 512,512, true, true), 114, 165);
+	face = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), faceTex->width, faceTex->height, faceTex->texture, componentScale);
+	headgear = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), helmetTex->width, helmetTex->height, helmetTex->texture, componentScale);
 
 	components.push_back(&armLeft);
 	components.push_back(&armRight);
@@ -58,7 +57,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	}
 	s->SetFilterData(sf);*/
 
-	for(CharacterComponent ** c : components){
+	for(Box2DSprite ** c : components){
 		(*c)->createFixture(groupIndex);
 	}
 	
@@ -170,11 +169,11 @@ PuppetCharacter::~PuppetCharacter(){
 }
 
 void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	Character::render(_matrixStack, _renderStack);
+	Box2DSuperSprite::render(_matrixStack, _renderStack);
 }
 
 void PuppetCharacter::update(Step* _step){
-	Character::update(_step);
+	Box2DSuperSprite::update(_step);
 	//neck
 	//b2RevoluteJoint * neck = ((b2RevoluteJoint *)head->body->GetJointList()->joint);
 	//float angle = neck->GetJointAngle();
@@ -195,9 +194,9 @@ void PuppetCharacter::update(Step* _step){
 }
 
 void PuppetCharacter::unload(){
-	Character::unload();
+	Box2DSuperSprite::unload();
 }
 
 void PuppetCharacter::load(){
-	Character::load();
+	Box2DSuperSprite::load();
 }
