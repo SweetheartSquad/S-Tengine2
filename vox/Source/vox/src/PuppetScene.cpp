@@ -37,13 +37,13 @@ PuppetScene::PuppetScene(Game * _game):
 	Scene(_game),
 	cl(new GameJamContactListener),
 	debugDraw(true),
-	drawer(new Box2DDebugDraw(this, world)),
 	world(new Box2DWorld(b2Vec2(0, -9.8))),
+	drawer(new Box2DDebugDraw(this, world)),
 	playerCharacter(new PuppetCharacter(world, PLAYER, PROP | NPC, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
+	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
-	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	mouseCam(false)
 {
 	world->b2world->SetContactListener(cl);
@@ -96,7 +96,7 @@ PuppetScene::PuppetScene(Game * _game):
 	michael->addToScene(this);
 	michael->translateComponents(glm::vec3(1,0,0));
 	
-	//Arduino 
+	//Arduino setup
 	arduino = new AccelerometerParser("COM3");
 	Accelerometer * acc = new Accelerometer(arduino);
 	arduino->addAccelerometer(acc);
@@ -104,6 +104,7 @@ PuppetScene::PuppetScene(Game * _game):
 	puppetController = new PuppetController(acc, playerCharacter);
 	perspectiveCamera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 0, 0), 0, 0);
 	
+	//Set up cameras
 	perspectiveCamera->farClip = 1000.f;
 	perspectiveCamera->transform->rotate(90, 0, 1, 0, kWORLD);
 	perspectiveCamera->transform->translate(5.0f, 5.f, 15.0f);
