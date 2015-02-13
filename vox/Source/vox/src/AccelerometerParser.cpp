@@ -138,7 +138,7 @@ void AccelerometerParser::update(Step* _step){
 		}
 		int numRead = ReadData(buffer, LINE_SIZE-1);
 		if(numRead > 0 && buffer[0] == ':'){
-			//std::cout << numRead << ":\t" << buffer << std::endl;
+			std::cout << numRead << ":\t" << buffer << std::endl;
 			if(numRead >= 37){
 				for(unsigned long int i = 0; i < accelerometers.size(); ++i){
 					char * src = buffer + (i*9) + 1;
@@ -168,9 +168,9 @@ void AccelerometerParser::update(Step* _step){
 				}
 			}
 		}
-		PurgeComm(hSerial, PURGE_RXABORT);
 		char ping[1] = {'1'};
 		WriteData(ping, 1);
-	}
+	}		
+	PurgeComm(hSerial, PURGE_RXABORT);
 	//std::cout << accelerometers.at(0)->x << " " << accelerometers.at(0)->y << " " << accelerometers.at(0)->z << std::endl;
 }

@@ -16,7 +16,7 @@ void setup() {
   pinMode(buttonPin2, INPUT);
 
   // initialize serial communication:
-  Serial.begin(57600);
+  Serial.begin(115200);
 }
 
 // A printf function, taken from...

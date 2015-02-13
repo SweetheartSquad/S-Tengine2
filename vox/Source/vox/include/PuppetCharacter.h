@@ -19,6 +19,9 @@ public:
 	CharacterComponent * handLeft;
 	CharacterComponent * handRight;
 
+	CharacterComponent * face;
+	CharacterComponent * headgear;
+
 	PuppetCharacter(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, bool _ai = true);
 	~PuppetCharacter();	
 	

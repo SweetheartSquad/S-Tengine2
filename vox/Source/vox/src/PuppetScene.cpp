@@ -38,6 +38,7 @@ PuppetScene::PuppetScene(Game * _game):
 	Scene(_game),
 	cl(new GameJamContactListener),
 	debugDraw(true),
+	drawer(new Box2DDebugDraw(this, world)),
 	world(new Box2DWorld(b2Vec2(0, -9.8))),
 	playerCharacter(new PuppetCharacter(world, PLAYER, STRUCTURE | ITEM | PLAYER, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
@@ -108,11 +109,11 @@ PuppetScene::PuppetScene(Game * _game):
 	michael->addToScene(this);
 	michael->translateComponents(glm::vec3(1,0,0));
 	
-	Catapult * catapult = new Catapult(world, STRUCTURE, PLAYER);
+	/*Catapult * catapult = new Catapult(world, STRUCTURE, PLAYER);
 	catapult->setShader(shader, true);
 	addChild(catapult, true);
 	catapult->addToScene(this);
-	catapult->translateComponents(glm::vec3(1,0,0));
+	catapult->translateComponents(glm::vec3(1,0,0));*/
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM3");
@@ -120,7 +121,7 @@ PuppetScene::PuppetScene(Game * _game):
 	arduino->addAccelerometer(acc);
 	
 	puppetController = new PuppetController(acc, playerCharacter);
-	perspectiveCamera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 0, 0), 0, 0);
+	perspectiveCamera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 8.f, 0), 0, 0);
 	
 	//Set up cameras
 	perspectiveCamera->farClip = 1000.f;
