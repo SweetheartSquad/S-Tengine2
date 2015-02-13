@@ -71,10 +71,17 @@ void vox::initialize(std::string _title){
 
 	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-	int w = mode->width/2;
-	int	h = mode->height/2;
+	int w = mode->width;
+	int	h = mode->height;
 
-	window = glfwCreateWindow(w, h, _title.c_str(), nullptr, nullptr);
+#ifdef _DEBUG
+	w = mode->width/2;
+	h = mode->height/2;
+	window = glfwCreateWindow(w, h, "VOX", nullptr, nullptr);
+#else
+	window = glfwCreateWindow(w, h, "VOX", vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+#endif
+
 	if (!window){
 		glfwTerminate();
 		exit(EXIT_FAILURE);

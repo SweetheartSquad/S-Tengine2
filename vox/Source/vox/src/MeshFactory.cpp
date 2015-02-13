@@ -110,8 +110,8 @@ MeshInterface* MeshFactory::getPlaneMesh(GLenum _polygonalDrawMode, GLenum _draw
 	m->setNormal(2, 0.0, 0.0, 1.0);
 	m->setNormal(3, 0.0, 0.0, 1.0);
 	m->setUV(0, 0.0, 0.0);
-	m->setUV(1, 0.0, 1.0);
+	m->setUV(1, 1.0, 0.0);
 	m->setUV(2, 1.0, 1.0);
-	m->setUV(3, 1.0, 0.0);
+	m->setUV(3, 0.0, 1.0);
 	return m;
 }

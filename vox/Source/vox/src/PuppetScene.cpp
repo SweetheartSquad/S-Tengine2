@@ -37,16 +37,15 @@
 PuppetScene::PuppetScene(Game * _game):
 	Scene(_game),
 	cl(new RaidTheCastleContactListener),
-	debugDraw(true),
-	drawer(new Box2DDebugDraw(this, world)),
 	world(new Box2DWorld(b2Vec2(0, -9.8))),
+	drawer(new Box2DDebugDraw(this, world)),
 	playerCharacter(new PuppetCharacter(world, PLAYER, STRUCTURE | ITEM | PLAYER, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
-	mouseCam(false),
-	tempCatapault(new Box2DSprite(world))
+	tempCatapault(new Box2DSprite(world)),
+	mouseCam(false)
 {
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new TextureShaderComponent());
@@ -76,27 +75,49 @@ PuppetScene::PuppetScene(Game * _game):
 	addChild(ground, false);
 
 	background->setShader(shader, true);
-	background->transform->translate(0.0f, 250.f, -10.0f);
-	background->transform->scale(250, 250, 1);
+	background->transform->translate(0.0f, 25.f, -10.0f);
+	background->transform->scale(125, 25, 1);
 	background->mesh->pushTexture2D(new Texture("../assets/hurly-burly/Sky.png", 1024, 1024, true, true));
 	background->mesh->uvEdgeMode = GL_REPEAT;
 	background->mesh->dirty = true;
 
 	addChild(background);
 
+	Texture * treeTex1 = new Texture("../assets/hurly-burly/Foliage/Tree1-ds.png", 1024, 1024, true, true);
+	Texture * treeTex2 = new Texture("../assets/hurly-burly/Foliage/Tree2-ds.png", 1024, 1024, true, true);
+	Texture * bushTex1 = new Texture("../assets/hurly-burly/Foliage/Bush1-ds.png", 1024, 1024, true, true);
+	Texture * bushTex2 = new Texture("../assets/hurly-burly/Foliage/Bush2-ds.png", 1024, 1024, true, true);
+	int numFoliage = std::rand()%500/50 + 10;
+	for(signed long int i = 0; i < numFoliage; ++i){
+		float height = std::rand()%500/50.f+5.f;
+		MeshEntity * foliage = new MeshEntity(MeshFactory::getPlaneMesh());
+		foliage->setShader(shader, true);
+		foliage->transform->translate((std::rand()%500/10.f)-25.f, height, max(-9, -(float)i/numFoliage)*8.f - 1.f);
+		foliage->transform->scale(height, height, 1);
+		int tex = i % 4;
+		switch(tex){
+			case 0:
+				foliage->mesh->pushTexture2D(treeTex1); break;
+			case 1:
+				foliage->mesh->pushTexture2D(treeTex2); break;
+			case 2:
+				foliage->mesh->pushTexture2D(bushTex1); break;
+			case 3:
+				foliage->mesh->pushTexture2D(bushTex2); break;
+			default:
+				break;
+		}
+		addChild(foliage, true);
+	}
+
+
 	tempCatapault->setShader(shader, true);
 	tempCatapault->mesh->pushTexture2D(new Texture("../assets/hurly-burly/CatapultFull.png", 512, 512, true, true));
 	tempCatapault->setTranslationPhysical(-8.0f, 8.0f, 0.0f);
 	tempCatapault->transform->scale(-8.0f, 8.0f, 0.0f);
 	world->addToWorld(tempCatapault);
-	addChild(tempCatapault);
-	
-	world->b2world->SetDebugDraw(drawer);
-	//drawer->AppendFlags(b2Draw::e_aabbBit);
-	drawer->AppendFlags(b2Draw::e_shapeBit);
-	drawer->AppendFlags(b2Draw::e_centerOfMassBit);
-	drawer->AppendFlags(b2Draw::e_jointBit);
-	addChild(drawer, false);
+
+	addChild(tempCatapault, true);
 
 	playerCharacter->setShader(shader, true);
 	addChild(playerCharacter, true);
@@ -116,7 +137,7 @@ PuppetScene::PuppetScene(Game * _game):
 	catapult->translateComponents(glm::vec3(1,0,0));*/
 
 	//Arduino 
-	arduino = new AccelerometerParser("COM3");
+	arduino = new AccelerometerParser("COM4");
 	Accelerometer * acc = new Accelerometer(arduino);
 	arduino->addAccelerometer(acc);
 	
@@ -139,6 +160,14 @@ PuppetScene::PuppetScene(Game * _game):
 	mouseCamera->pitch = -10.0f;
 
 	camera =  perspectiveCamera;
+
+	
+	world->b2world->SetDebugDraw(drawer);
+	//drawer->AppendFlags(b2Draw::e_aabbBit);
+	drawer->AppendFlags(b2Draw::e_shapeBit);
+	drawer->AppendFlags(b2Draw::e_centerOfMassBit);
+	drawer->AppendFlags(b2Draw::e_jointBit);
+	addChild(drawer, true);
 }
 
 PuppetScene::~PuppetScene(){
@@ -161,8 +190,14 @@ void PuppetScene::update(Step * _step){
 	puppetController->update(_step);
 
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
-		if(playerCharacter->head->body->GetPosition().y < 12){
-			playerCharacter->head->applyLinearImpulseUp(2500);
+		if(playerCharacter->torso->body->GetPosition().y < 8){
+			float t = playerCharacter->torso->body->GetAngle();
+			playerCharacter->torso->applyLinearImpulseUp(50*(1-sin(t)));
+			if(playerCharacter->torso->body->GetAngle() > 0){
+				playerCharacter->torso->applyLinearImpulseLeft(150*(1-cos(t)));
+			}else{
+				playerCharacter->torso->applyLinearImpulseRight(150*(1-cos(t)));
+			}
 		}
 	}
 
@@ -204,12 +239,8 @@ void PuppetScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
 	}
-	if(keyboard->keyJustUp(GLFW_KEY_F1)){
-		debugDraw = !debugDraw;
-	}
-
-	if(keyboard->keyJustUp(GLFW_KEY_F11)){
-		debugDraw = !debugDraw;
+	if(keyboard->keyJustUp(GLFW_KEY_2)){
+		drawer->drawing = !drawer->drawing;
 	}
 }
 

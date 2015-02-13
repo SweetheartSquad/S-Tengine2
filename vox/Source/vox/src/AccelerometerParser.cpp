@@ -137,8 +137,8 @@ void AccelerometerParser::update(Step* _step){
 			buffer[i] = '\0';
 		}
 		int numRead = ReadData(buffer, LINE_SIZE-1);
+		std::cout << numRead << ":\t" << buffer << std::endl;
 		if(numRead > 0 && buffer[0] == ':'){
-			std::cout << numRead << ":\t" << buffer << std::endl;
 			if(numRead >= 37){
 				for(unsigned long int i = 0; i < accelerometers.size(); ++i){
 					char * src = buffer + (i*9) + 1;
