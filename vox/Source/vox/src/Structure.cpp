@@ -15,7 +15,7 @@ std::vector<StructureComponentTexture *> Structure::leverTexPacks;
 std::vector<StructureComponentTexture *> Structure::fortificationTexPacks;
 
 void Structure::init(){
-	catapultTexPacks.push_back(new StructureComponentTexture(new Texture("../assets/structure components/catapult/CatapultBase.png", 512, 512, true, true),	500,	300)); 
+	catapultTexPacks.push_back(new StructureComponentTexture(new Texture("../assets/structure components/catapult/CatapultBase.png", 512, 512, true, true),	500,	400)); 
 	catapultTexPacks.push_back(new StructureComponentTexture(new Texture("../assets/structure components/catapult/CatapultFlinger.png", 512, 512, true, true),	500,	100));
 }
 

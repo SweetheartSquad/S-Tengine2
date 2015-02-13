@@ -7,7 +7,6 @@
 #include "Box2DWorld.h"
 
 
-
 Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	Structure(_world, _categoryBits, _maskBits),
 	NodeTransformable(new Transform()),
