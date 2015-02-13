@@ -432,6 +432,9 @@
     <ClCompile Include="..\src\Structure.cpp">
       <Filter>Source Files\TestGame\HurlyBurly</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\RaidTheCastleContactListener.cpp">
+      <Filter>Source Files\TestGame\HurlyBurly</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Cube.h">
@@ -789,6 +792,9 @@
       <Filter>Header Files\TestGame\HurlyBurly</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Structure.h">
+      <Filter>Header Files\TestGame\HurlyBurly</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\RaidTheCastleContactListener.h">
       <Filter>Header Files\TestGame\HurlyBurly</Filter>
     </ClInclude>
   </ItemGroup>

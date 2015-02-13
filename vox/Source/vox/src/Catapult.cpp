@@ -27,12 +27,12 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	base->setTranslationPhysical(0.f, 0.f, 0.3f);
 
 	
-	// neck
+	// axel
 	b2RevoluteJointDef jth;
 	jth.bodyA = base->body;
 	jth.bodyB = arm->body;
 	jth.localAnchorA.Set(0.5f * base->getCorrectedWidth(), 0.9f * base->getCorrectedHeight());
-	jth.localAnchorB.Set(0.5f * arm->getCorrectedWidth(), 0.9f * -arm->getCorrectedHeight());
+	jth.localAnchorB.Set(0.9f * arm->getCorrectedWidth(), 0.5f * -arm->getCorrectedHeight());
 	jth.collideConnected = false;
 	jth.enableLimit = true;
 	jth.enableMotor = true;

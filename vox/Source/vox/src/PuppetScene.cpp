@@ -90,7 +90,7 @@ PuppetScene::PuppetScene(Game * _game):
 	tempCatapault->transform->scale(-8.0f, 8.0f, 0.0f);
 	world->addToWorld(tempCatapault);
 	addChild(tempCatapault);
-
+	
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);
 	drawer->AppendFlags(b2Draw::e_shapeBit);
