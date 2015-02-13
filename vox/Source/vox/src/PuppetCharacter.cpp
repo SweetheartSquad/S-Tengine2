@@ -24,8 +24,11 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	handLeft = new CharacterComponent(componentScale, GameJamCharacter::handTexPacks[character]->width, GameJamCharacter::handTexPacks[character]->height, GameJamCharacter::handTexPacks[character]->texture, _world, b2_dynamicBody, false);
 	handRight = new CharacterComponent(componentScale, GameJamCharacter::handTexPacks[character]->width, GameJamCharacter::handTexPacks[character]->height, GameJamCharacter::handTexPacks[character]->texture, _world, b2_dynamicBody, false);
 	
-	//face = new CharacterComponent(componentScale, 0, 0, nullptr, _world, b2_dynamicBody, false);
-	//headgear = new CharacterComponent(componentScale, 0, 0, nullptr, _world, b2_dynamicBody, false);
+
+	ComponentTexture * faceTex = new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/Face1.png", 512,512, true, true), 67, 72);
+	ComponentTexture * helmetTex = new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/Helmet1.png", 512,512, true, true), 114, 165);
+	face = new CharacterComponent(componentScale, faceTex->width, faceTex->height, faceTex->texture, _world, b2_dynamicBody, false);
+	headgear = new CharacterComponent(componentScale, helmetTex->width, helmetTex->height, helmetTex->texture, _world, b2_dynamicBody, false);
 
 	components.push_back(&armLeft);
 	components.push_back(&armRight);
@@ -33,8 +36,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	components.push_back(&handRight);
 	components.push_back(&torso);
 	components.push_back(&head);
-	//components.push_back(&face);
-	//components.push_back(&headgear);
+	components.push_back(&face);
+	components.push_back(&headgear);
 	
 	/*b2CircleShape tShape;
 	tShape.m_radius = glm::length(glm::vec2(transform->scaleVector.x,transform->scaleVector.y));
@@ -64,16 +67,37 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	jth.bodyA = torso->body;
 	jth.bodyB = head->body;
 	jth.localAnchorA.Set(0, 0.9f * torso->getCorrectedHeight());
-	jth.localAnchorB.Set(0, 0.9f * -head->getCorrectedHeight());
+	jth.localAnchorB.Set(0, -0.9f * head->getCorrectedHeight());
 	jth.collideConnected = false;
 	jth.enableLimit = true;
 	jth.enableMotor = true;
 	jth.maxMotorTorque = 0;
 	jth.motorSpeed = 0;
 	jth.referenceAngle = 0;
-	//jth.lowerAngle = -glm::radians(45.f);
-	//jth.upperAngle = glm::radians(45.f);
+	jth.lowerAngle = glm::radians(-15.f);
+	jth.upperAngle = glm::radians(15.f);
 	world->b2world->CreateJoint(&jth);
+	
+	// face
+	b2RevoluteJointDef jhf;
+	jhf.bodyA = head->body;
+	jhf.bodyB = face->body;
+	jhf.localAnchorA.Set(0, 0);
+	jhf.localAnchorB.Set(0, 0);
+	jhf.collideConnected = false;
+	jhf.enableLimit = true;
+	jhf.referenceAngle = 0;
+	world->b2world->CreateJoint(&jhf);
+	// headgear
+	b2RevoluteJointDef jhh;
+	jhh.bodyA = head->body;
+	jhh.bodyB = headgear->body;
+	jhh.localAnchorA.Set(0, 1.0f * head->getCorrectedHeight());
+	jhh.localAnchorB.Set(0, -0.1f * headgear->getCorrectedHeight());
+	jhh.collideConnected = false;
+	jhh.enableLimit = true;
+	jhh.referenceAngle = 0;
+	world->b2world->CreateJoint(&jhh);
 
 	
 	// right arm
@@ -165,6 +189,9 @@ void PuppetCharacter::update(Step* _step){
 		(torso)->applyLinearImpulseUp(250);
 	}
 	//torso->body->SetTransform(torso->body->GetPosition(), targetRoll);
+	
+	//headgear->body->SetTransform(head->body->GetPosition(), head->body->GetAngle());
+	//face->body->SetTransform(head->body->GetPosition(), head->body->GetAngle());
 }
 
 void PuppetCharacter::unload(){
