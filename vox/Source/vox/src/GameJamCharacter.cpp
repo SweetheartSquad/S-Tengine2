@@ -28,7 +28,7 @@ void GameJamCharacter::init(){
 	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailTorso.png", 512, 512, true, true),	160,	355));
 	
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/pHead.png", 512, 512, true, true),   214,	186));
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/Head1.png", 512, 512, true, true), 110, 115)); 
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/Head1.png", 512, 512, true, true), 106, 111)); 
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelHead.png", 512, 512, true, true),   200,	270));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheHead.png", 512, 512, true, true), 160,	270));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroHead.png", 512, 512, true, true),	   260,	250));
@@ -56,7 +56,7 @@ void GameJamCharacter::init(){
 	lowerArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailLA.png", 512, 512, true, true),		55,	160));
 	
 	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/pHand.png", 512, 512, true, true), 80,	85));
-	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/Hand1.png", 512, 512, true, true), 45,	30));
+	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/Hand1.png", 512, 512, true, true), 38,	32));
 	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelHand.png", 512, 512, true, true),	50,	82));
 	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheHand.png", 512, 512, true, true),	55,	85));
 	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroHand.png", 512, 512, true, true),		55,	70));
