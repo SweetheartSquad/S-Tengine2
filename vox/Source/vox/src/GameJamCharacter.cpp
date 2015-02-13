@@ -4,84 +4,84 @@
 #include "Box2DSprite.h"
 #include "Box2DWorld.h"
 #include "shader/Shader.h"
-#include "CharacterComponent.h"
+#include "Box2DSprite.h"
 #include "Scene.h"
 #include "BitmapFont.h"
 
 #include "Texture.h"
 
-std::vector<ComponentTexture *> GameJamCharacter::torsoTexPacks;
-std::vector<ComponentTexture *> GameJamCharacter::headTexPacks;
-std::vector<ComponentTexture *> GameJamCharacter::upperArmTexPacks;
-std::vector<ComponentTexture *> GameJamCharacter::lowerArmTexPacks;
-std::vector<ComponentTexture *> GameJamCharacter::handTexPacks;
-std::vector<ComponentTexture *> GameJamCharacter::upperLegTexPacks;
-std::vector<ComponentTexture *> GameJamCharacter::lowerLegTexPacks;
+std::vector<TextureSampler *> GameJamCharacter::torsoTexPacks;
+std::vector<TextureSampler *> GameJamCharacter::headTexPacks;
+std::vector<TextureSampler *> GameJamCharacter::upperArmTexPacks;
+std::vector<TextureSampler *> GameJamCharacter::lowerArmTexPacks;
+std::vector<TextureSampler *> GameJamCharacter::handTexPacks;
+std::vector<TextureSampler *> GameJamCharacter::upperLegTexPacks;
+std::vector<TextureSampler *> GameJamCharacter::lowerLegTexPacks;
 
 void GameJamCharacter::init(){
-	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/pTorso.png", 512, 512, true, true),	123,	185)); 
-	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/BreastplateStick1.png", 512, 512, true, true),	145,	405)); 
-	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelTorso.png", 512, 512, true, true),	145,	362)); 
-	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheTorso.png", 512, 512, true, true),	160,	290));
-	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroTorso.png", 512, 512, true, true),		190,	325));
-	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieTorso.png", 512, 512, true, true),	175,	285));
-	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailTorso.png", 512, 512, true, true),	160,	355));
+	torsoTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/pTorso.png", 512, 512, true, true),	123,	185)); 
+	torsoTexPacks.push_back(new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/BreastplateStick1.png", 512, 512, true, true),	145,	405)); 
+	torsoTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MichaelTorso.png", 512, 512, true, true),	145,	362)); 
+	torsoTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MoustacheTorso.png", 512, 512, true, true),	160,	290));
+	torsoTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/AfroTorso.png", 512, 512, true, true),		190,	325));
+	torsoTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/HoodieTorso.png", 512, 512, true, true),	175,	285));
+	torsoTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/PonytailTorso.png", 512, 512, true, true),	160,	355));
 	
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/pHead.png", 512, 512, true, true),   214,	186));
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/Head1.png", 512, 512, true, true), 106, 111)); 
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelHead.png", 512, 512, true, true),   200,	270));
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheHead.png", 512, 512, true, true), 160,	270));
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroHead.png", 512, 512, true, true),	   260,	250));
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieHead.png", 512, 512, true, true),	   170,	300));
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailHead.png", 512, 512, true, true),  155,	365));
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MonsterHead.png", 512, 512, true, true),	222,	393));
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/BeardHead.png", 512, 512, true, true),		165,	342));
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/FringeHead.png", 512, 512, true, true),		228,	257));
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/BlankHead.png", 512, 512, true, true),		169,	247));
-	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/BowlcutHead.png", 512, 512, true, true),		272,	243));
+	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/pHead.png", 512, 512, true, true),   214,	186));
+	headTexPacks.push_back(new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Head1.png", 512, 512, true, true), 106, 111)); 
+	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MichaelHead.png", 512, 512, true, true),   200,	270));
+	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MoustacheHead.png", 512, 512, true, true), 160,	270));
+	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/AfroHead.png", 512, 512, true, true),	   260,	250));
+	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/HoodieHead.png", 512, 512, true, true),	   170,	300));
+	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/PonytailHead.png", 512, 512, true, true),  155,	365));
+	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MonsterHead.png", 512, 512, true, true),	222,	393));
+	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/BeardHead.png", 512, 512, true, true),		165,	342));
+	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/FringeHead.png", 512, 512, true, true),		228,	257));
+	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/BlankHead.png", 512, 512, true, true),		169,	247));
+	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/BowlcutHead.png", 512, 512, true, true),		272,	243));
 
-	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/pArm.png", 512, 512, true, true),	45,	155));
-	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/Arm1.png", 512, 512, true, true),	40,	105)); 
-	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheUA.png", 512, 512, true, true),	55,	205));
-	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroUA.png", 512, 512, true, true),			50,	200));
-	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieUA.png", 512, 512, true, true),		65,	165));
-	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailUA.png", 512, 512, true, true),		60,	200));
+	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/pArm.png", 512, 512, true, true),	45,	155));
+	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Arm1.png", 512, 512, true, true),	40,	105)); 
+	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MoustacheUA.png", 512, 512, true, true),	55,	205));
+	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/AfroUA.png", 512, 512, true, true),			50,	200));
+	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/HoodieUA.png", 512, 512, true, true),		65,	165));
+	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/PonytailUA.png", 512, 512, true, true),		60,	200));
 	
 	lowerArmTexPacks.push_back(nullptr);
 	lowerArmTexPacks.push_back(nullptr);
-	lowerArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelLowerArm.png", 512, 512, true, true), 39,	144));
-	lowerArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheLA.png", 512, 512, true, true),	40,	145));
-	lowerArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroLA.png", 512, 512, true, true),			40,	145));
-	lowerArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieLA.png", 512, 512, true, true),		55,	165));
-	lowerArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailLA.png", 512, 512, true, true),		55,	160));
+	lowerArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MichaelLowerArm.png", 512, 512, true, true), 39,	144));
+	lowerArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MoustacheLA.png", 512, 512, true, true),	40,	145));
+	lowerArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/AfroLA.png", 512, 512, true, true),			40,	145));
+	lowerArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/HoodieLA.png", 512, 512, true, true),		55,	165));
+	lowerArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/PonytailLA.png", 512, 512, true, true),		55,	160));
 	
-	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/pHand.png", 512, 512, true, true), 80,	85));
-	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/Hand1.png", 512, 512, true, true), 38,	32));
-	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelHand.png", 512, 512, true, true),	50,	82));
-	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheHand.png", 512, 512, true, true),	55,	85));
-	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroHand.png", 512, 512, true, true),		55,	70));
-	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieHand.png", 512, 512, true, true),		55,	85));
-	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailHand.png", 512, 512, true, true),	60,	80));
+	handTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/pHand.png", 512, 512, true, true), 80,	85));
+	handTexPacks.push_back(new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Hand1.png", 512, 512, true, true), 38,	32));
+	handTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MichaelHand.png", 512, 512, true, true),	50,	82));
+	handTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MoustacheHand.png", 512, 512, true, true),	55,	85));
+	handTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/AfroHand.png", 512, 512, true, true),		55,	70));
+	handTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/HoodieHand.png", 512, 512, true, true),		55,	85));
+	handTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/PonytailHand.png", 512, 512, true, true),	60,	80));
 	
 	upperLegTexPacks.push_back(nullptr);
 	lowerArmTexPacks.push_back(nullptr);
-	upperLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelUpperLeg.png", 512, 512, true, true), 64,	218));
-	upperLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheUL.png", 512, 512, true, true),	 70,	215));
-	upperLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroUL.png", 512, 512, true, true),			 60,	200));
-	upperLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieUL.png", 512, 512, true, true),		 50,	205));
-	upperLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailUL.png", 512, 512, true, true),		 80,	185));
+	upperLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MichaelUpperLeg.png", 512, 512, true, true), 64,	218));
+	upperLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MoustacheUL.png", 512, 512, true, true),	 70,	215));
+	upperLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/AfroUL.png", 512, 512, true, true),			 60,	200));
+	upperLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/HoodieUL.png", 512, 512, true, true),		 50,	205));
+	upperLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/PonytailUL.png", 512, 512, true, true),		 80,	185));
 	
 	lowerLegTexPacks.push_back(nullptr);
 	lowerArmTexPacks.push_back(nullptr);
-	lowerLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelLowerLeg.png", 512, 512, true, true), 135,	281));
-	lowerLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheLL.png", 512, 512, true, true),	 135,	285));
-	lowerLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroLL.png", 512, 512, true, true),			 105,	255));
-	lowerLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieLL.png", 512, 512, true, true),		 115,	240));
-	lowerLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailLL.png", 512, 512, true, true),		 110,	205));
+	lowerLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MichaelLowerLeg.png", 512, 512, true, true), 135,	281));
+	lowerLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MoustacheLL.png", 512, 512, true, true),	 135,	285));
+	lowerLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/AfroLL.png", 512, 512, true, true),			 105,	255));
+	lowerLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/HoodieLL.png", 512, 512, true, true),		 115,	240));
+	lowerLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/PonytailLL.png", 512, 512, true, true),		 110,	205));
 }
 
 GameJamCharacter::GameJamCharacter(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, bool _ai) :
-	Character(_world, _categoryBits, _maskBits, _ai),
+	Box2DSuperSprite(_world, _categoryBits, _maskBits),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	text(new BitmapFont(new Texture("../assets/arial.bmp", 1024, 1024, true, true), 32, 16, 16 )),
@@ -97,7 +97,8 @@ GameJamCharacter::GameJamCharacter(Box2DWorld * _world, int16 _categoryBits, int
 	leftUpperLeg(nullptr),
 	leftLowerLeg(nullptr),
 	rightUpperLeg(nullptr),
-	rightLowerLeg(nullptr)
+	rightLowerLeg(nullptr),
+	ai(ai)
 {
 	
 
@@ -154,11 +155,11 @@ GameJamCharacter::~GameJamCharacter(){
 }
 
 void GameJamCharacter::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
-	Character::render(_matrixStack, _renderStack);
+	Box2DSuperSprite::render(_matrixStack, _renderStack);
 }
 
 void GameJamCharacter::update(Step * _step){
-	Character::update(_step);
+	Box2DSuperSprite::update(_step);
 	if(reactiveBody){
 		//neck
 		b2RevoluteJoint * neck = ((b2RevoluteJoint *)head->body->GetJointList()->joint);
@@ -416,11 +417,11 @@ void GameJamCharacter::attachJoints(){
 
 
 void GameJamCharacter::setShader(Shader * _shader, bool _configureDefaultVertexAttributes){
-	Character::setShader(_shader, _configureDefaultVertexAttributes);
+	Box2DSuperSprite::setShader(_shader, _configureDefaultVertexAttributes);
 	text->setShader(_shader ,_configureDefaultVertexAttributes);
 }
 
 void GameJamCharacter::addToScene(Scene * _scene){
-	Character::addToScene(_scene);
+	Box2DSuperSprite::addToScene(_scene);
 	_scene->addChild(text);
 }

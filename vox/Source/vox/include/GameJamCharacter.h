@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Character.h"
+#include "Box2DSuperSprite.h"
 #include <Box2D/Box2D.h>
 
-class GameJamCharacter : public Character{
+class GameJamCharacter : public Box2DSuperSprite{
 public:
-
+	bool ai;
 	static void init();
 	static enum texture_packs{
 		kPUPPET,
@@ -17,13 +17,13 @@ public:
 		kPONYTAIL
 	};
 
-	static std::vector<ComponentTexture *> torsoTexPacks;
-	static std::vector<ComponentTexture *> headTexPacks;
-	static std::vector<ComponentTexture *> upperArmTexPacks;
-	static std::vector<ComponentTexture *> lowerArmTexPacks;
-	static std::vector<ComponentTexture *> handTexPacks;
-	static std::vector<ComponentTexture *> upperLegTexPacks;
-	static std::vector<ComponentTexture *> lowerLegTexPacks;
+	static std::vector<TextureSampler *> torsoTexPacks;
+	static std::vector<TextureSampler *> headTexPacks;
+	static std::vector<TextureSampler *> upperArmTexPacks;
+	static std::vector<TextureSampler *> lowerArmTexPacks;
+	static std::vector<TextureSampler *> handTexPacks;
+	static std::vector<TextureSampler *> upperLegTexPacks;
+	static std::vector<TextureSampler *> lowerLegTexPacks;
 
 	bool reactiveFeet;
 	bool reactiveBody;
@@ -62,18 +62,18 @@ public:
 
 	BitmapFont * text;
 
-	CharacterComponent * torso;
-	CharacterComponent * head;
-	CharacterComponent * leftUpperArm;
-	CharacterComponent * leftLowerArm;
-	CharacterComponent * leftHand;
-	CharacterComponent * rightUpperArm;
-	CharacterComponent * rightLowerArm;
-	CharacterComponent * rightHand;
-	CharacterComponent * leftUpperLeg;
-	CharacterComponent * leftLowerLeg;
-	CharacterComponent * rightUpperLeg;
-	CharacterComponent * rightLowerLeg;
+	Box2DSprite * torso;
+	Box2DSprite * head;
+	Box2DSprite * leftUpperArm;
+	Box2DSprite * leftLowerArm;
+	Box2DSprite * leftHand;
+	Box2DSprite * rightUpperArm;
+	Box2DSprite * rightLowerArm;
+	Box2DSprite * rightHand;
+	Box2DSprite * leftUpperLeg;
+	Box2DSprite * leftLowerLeg;
+	Box2DSprite * rightUpperLeg;
+	Box2DSprite * rightLowerLeg;
 
 	explicit GameJamCharacter(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, bool _ai = true);
 	
