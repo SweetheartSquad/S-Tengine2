@@ -12,7 +12,7 @@ std::string FileUtils::voxReadFile(std::string _filename){
 	}else{
 		contents << "\tERROR: file \"" << _filename << "\" could not be opened for reading." << std::endl;
 	}
-	std::cout << contents;
+	std::cout << contents.str();
 
 	return contents.str();
 }

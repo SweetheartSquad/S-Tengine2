@@ -105,7 +105,7 @@ void ShadowShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, Re
 	DirectionalLight * keyLight = nullptr;
 
 	for(unsigned long int i = 0; i < _renderOption->lights->size(); ++i){
-		if(_renderOption->lights->at(i)->data.type == LightType::DIRECTIONAL){
+		if(_renderOption->lights->at(i)->data.type == LightType::kDIRECTIONAL_LIGHT){
 			keyLight = dynamic_cast<DirectionalLight *>(_renderOption->lights->at(i));
 			break;
 		}

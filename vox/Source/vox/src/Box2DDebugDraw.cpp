@@ -136,16 +136,16 @@ void Box2DDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Col
 void Box2DDebugDraw::DrawTransform(const b2Transform& xf){
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
 	
-	sprite->mesh->polygonalDrawMode = GL_POLYGON;
+	spriteTransform->mesh->polygonalDrawMode = GL_POLYGON;
 	
-	sprite->mesh->vertices.clear();
-	sprite->mesh->indices.clear();
+	/*spriteTransform->mesh->vertices.clear();
+	spriteTransform->mesh->indices.clear();
 	for(int32 i = 0; i < 4; i++) {
-		sprite->mesh->pushVert(Vertex(i%2, (i-1)%2, 0.0001f));
-	}
+		spriteTransform->mesh->pushVert(Vertex(i % 2, (i - 1) % 2, 0.0001f));
+	}*/
 
-	sprite->transform->translationVector = glm::vec3(xf.p.x, xf.p.y, 0);
-sprite->render(scene->matrixStack, scene->renderOptions);
+	spriteTransform->transform->translationVector = glm::vec3(xf.p.x, xf.p.y, 0);
+	spriteTransform->render(scene->matrixStack, scene->renderOptions);
 	
 	/*spriteTransform->transform->reset();
 	spriteTransform->transform->translate(xf.p.x, xf.p.y, 0);

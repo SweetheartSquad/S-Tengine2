@@ -4,9 +4,9 @@
 
 #include "node/NodeTransformable.h"
 
-enum class LightType {
-	POINT = 0,
-	DIRECTIONAL = 1
+enum LightType {
+	kPOINT_LIGHT = 0,
+	kDIRECTIONAL_LIGHT = 1
 };
 
 struct LightData {
