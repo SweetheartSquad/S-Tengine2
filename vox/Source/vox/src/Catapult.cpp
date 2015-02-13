@@ -24,11 +24,16 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	components.push_back(&arm);
 	components.push_back(&base);
 	
+	/*
 	arm->createFixture(groupIndex);
 	arm->setTranslationPhysical(0.f, 0.f, 0.2f);
 	base->createFixture(groupIndex);
-	base->setTranslationPhysical(0.f, 0.f, 0.3f);
-
+	base->setTranslationPhysical(0.f, 0.f, 10.f);
+	*/
+	for(Box2DSprite ** c : components){
+		(*c)->createFixture(groupIndex);
+	}
+	base->setTranslationPhysical(0.f, base->getCorrectedHeight(), 0.f);
 	
 	// axel
 	b2RevoluteJointDef jth;
