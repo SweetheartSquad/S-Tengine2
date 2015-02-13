@@ -20,6 +20,7 @@ std::vector<ComponentTexture *> GameJamCharacter::lowerLegTexPacks;
 
 void GameJamCharacter::init(){
 	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/pTorso.png", 512, 512, true, true),	123,	185)); 
+	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/BreastplateStick1.png", 512, 512, true, true),	145,	405)); 
 	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelTorso.png", 512, 512, true, true),	145,	362)); 
 	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheTorso.png", 512, 512, true, true),	160,	290));
 	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroTorso.png", 512, 512, true, true),		190,	325));
@@ -27,6 +28,7 @@ void GameJamCharacter::init(){
 	torsoTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailTorso.png", 512, 512, true, true),	160,	355));
 	
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/pHead.png", 512, 512, true, true),   214,	186));
+	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/Head1.png", 512, 512, true, true), 110, 115)); 
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelHead.png", 512, 512, true, true),   200,	270));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheHead.png", 512, 512, true, true), 160,	270));
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroHead.png", 512, 512, true, true),	   260,	250));
@@ -39,11 +41,13 @@ void GameJamCharacter::init(){
 	headTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/BowlcutHead.png", 512, 512, true, true),		272,	243));
 
 	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/pArm.png", 512, 512, true, true),	45,	155));
+	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/Arm1.png", 512, 512, true, true),	40,	105)); 
 	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheUA.png", 512, 512, true, true),	55,	205));
 	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroUA.png", 512, 512, true, true),			50,	200));
 	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/HoodieUA.png", 512, 512, true, true),		65,	165));
 	upperArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailUA.png", 512, 512, true, true),		60,	200));
 	
+	lowerArmTexPacks.push_back(nullptr);
 	lowerArmTexPacks.push_back(nullptr);
 	lowerArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelLowerArm.png", 512, 512, true, true), 39,	144));
 	lowerArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheLA.png", 512, 512, true, true),	40,	145));
@@ -52,6 +56,7 @@ void GameJamCharacter::init(){
 	lowerArmTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailLA.png", 512, 512, true, true),		55,	160));
 	
 	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/pHand.png", 512, 512, true, true), 80,	85));
+	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/hurly-burly/KnightAssets/Hand1.png", 512, 512, true, true), 45,	30));
 	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelHand.png", 512, 512, true, true),	50,	82));
 	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheHand.png", 512, 512, true, true),	55,	85));
 	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroHand.png", 512, 512, true, true),		55,	70));
@@ -59,6 +64,7 @@ void GameJamCharacter::init(){
 	handTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailHand.png", 512, 512, true, true),	60,	80));
 	
 	upperLegTexPacks.push_back(nullptr);
+	lowerArmTexPacks.push_back(nullptr);
 	upperLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelUpperLeg.png", 512, 512, true, true), 64,	218));
 	upperLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheUL.png", 512, 512, true, true),	 70,	215));
 	upperLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroUL.png", 512, 512, true, true),			 60,	200));
@@ -66,6 +72,7 @@ void GameJamCharacter::init(){
 	upperLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/PonytailUL.png", 512, 512, true, true),		 80,	185));
 	
 	lowerLegTexPacks.push_back(nullptr);
+	lowerArmTexPacks.push_back(nullptr);
 	lowerLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MichaelLowerLeg.png", 512, 512, true, true), 135,	281));
 	lowerLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/MoustacheLL.png", 512, 512, true, true),	 135,	285));
 	lowerLegTexPacks.push_back(new ComponentTexture(new Texture("../assets/character components/AfroLL.png", 512, 512, true, true),			 105,	255));

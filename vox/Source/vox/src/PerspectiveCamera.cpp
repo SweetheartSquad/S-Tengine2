@@ -50,7 +50,6 @@ void PerspectiveCamera::update(Step * _step){
 	}else{
 		lookAtSpot = transform->translationVector+forwardVectorRotated;
 	}
-
 }
 
 glm::mat4 PerspectiveCamera::getViewMatrix(){
