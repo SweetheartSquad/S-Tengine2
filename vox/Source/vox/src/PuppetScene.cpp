@@ -190,8 +190,14 @@ void PuppetScene::update(Step * _step){
 	puppetController->update(_step);
 
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
-		if(playerCharacter->head->body->GetPosition().y < 12){
-			playerCharacter->head->applyLinearImpulseUp(2500);
+		if(playerCharacter->torso->body->GetPosition().y < 4){
+			float t = playerCharacter->torso->body->GetAngle();
+			playerCharacter->torso->applyLinearImpulseUp(150*(1-sin(t)));
+			if(playerCharacter->torso->body->GetAngle() > 0){
+				playerCharacter->torso->applyLinearImpulseLeft(150*(1-cos(t)));
+			}else{
+				playerCharacter->torso->applyLinearImpulseRight(150*(1-cos(t)));
+			}
 		}
 	}
 
