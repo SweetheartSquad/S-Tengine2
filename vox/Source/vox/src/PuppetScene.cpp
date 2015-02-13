@@ -25,7 +25,7 @@
 #include "TestCharacter.h"
 #include "CharacterComponent.h"
 #include "Catapult.h"
-#include "GameJamContactListener.h"
+#include "RaidTheCastleContactListener.h"
 #include "Game.h"
 #include <Arduino.h>
 #include <AccelerometerParser.h>
@@ -36,7 +36,7 @@
 
 PuppetScene::PuppetScene(Game * _game):
 	Scene(_game),
-	cl(new GameJamContactListener),
+	cl(new RaidTheCastleContactListener),
 	debugDraw(true),
 	drawer(new Box2DDebugDraw(this, world)),
 	world(new Box2DWorld(b2Vec2(0, -9.8))),

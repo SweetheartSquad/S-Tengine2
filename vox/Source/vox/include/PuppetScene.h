@@ -8,7 +8,7 @@ class MeshEntity;
 class PuppetController;
 class PuppetCharacter;
 class GameJamCharacter;
-class GameJamContactListener;
+class RaidTheCastleContactListener;
 class DialogHandler;
 class AccelerometerParser;
 class Box2DMeshEntity;
@@ -30,7 +30,7 @@ class Character4;
  class PuppetScene abstract : public Scene{
 public:
 
-GameJamContactListener * cl;
+	RaidTheCastleContactListener * cl;
 	bool debugDraw;
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
