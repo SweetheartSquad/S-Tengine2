@@ -88,10 +88,10 @@ license you like.
 #ifndef JSON_VERSION_H_INCLUDED
 # define JSON_VERSION_H_INCLUDED
 
-# define JSONCPP_VERSION_STRING "1.0.0"
+# define JSONCPP_VERSION_STRING "1.4.1"
 # define JSONCPP_VERSION_MAJOR 1
-# define JSONCPP_VERSION_MINOR 0
-# define JSONCPP_VERSION_PATCH 0
+# define JSONCPP_VERSION_MINOR 4
+# define JSONCPP_VERSION_PATCH 1
 # define JSONCPP_VERSION_QUALIFIER
 # define JSONCPP_VERSION_HEXA ((JSONCPP_VERSION_MAJOR << 24) | (JSONCPP_VERSION_MINOR << 16) | (JSONCPP_VERSION_PATCH << 8))
 
@@ -499,7 +499,8 @@ public:
   typedef Json::LargestUInt LargestUInt;
   typedef Json::ArrayIndex ArrayIndex;
 
-  static const Value& null;
+  static const Value& null;  ///! We regret this reference to a global instance; prefer the simpler Value().
+  static const Value& nullRef;  ///! just a kludge for binary-compatibility; same as null
   /// Minimum signed integer value that can be stored in a Json::Value.
   static const LargestInt minLargestInt;
   /// Maximum signed integer value that can be stored in a Json::Value.
@@ -601,25 +602,26 @@ Json::Value obj_value(Json::objectValue); // {}
   Value(const CppTL::ConstString& value);
 #endif
   Value(bool value);
+  /// Deep copy.
   Value(const Value& other);
   ~Value();
 
+  // Deep copy, then swap(other).
   Value& operator=(Value other);
-  /// Swap values.
-  /// \note Currently, comments are intentionally not swapped, for
-  /// both logic and efficiency.
+  /// Swap everything.
   void swap(Value& other);
+  /// Swap values but leave comments and source offsets in place.
+  void swapPayload(Value& other);
 
   ValueType type() const;
 
+  /// Compare payload only, not comments etc.
   bool operator<(const Value& other) const;
   bool operator<=(const Value& other) const;
   bool operator>=(const Value& other) const;
   bool operator>(const Value& other) const;
-
   bool operator==(const Value& other) const;
   bool operator!=(const Value& other) const;
-
   int compare(const Value& other) const;
 
   const char* asCString() const;
@@ -757,9 +759,24 @@ Json::Value obj_value(Json::objectValue); // {}
   /// \return the removed Value, or null.
   /// \pre type() is objectValue or nullValue
   /// \post type() is unchanged
+  /// \deprecated
   Value removeMember(const char* key);
   /// Same as removeMember(const char*)
+  /// \deprecated
   Value removeMember(const std::string& key);
+  /** \brief Remove the named map member.
+
+      Update 'removed' iff removed.
+      \return true iff removed (no exceptions)
+  */
+  bool removeMember(const char* key, Value* removed);
+  /** \brief Remove the indexed array element.
+
+      O(n) expensive operations.
+      Update 'removed' iff removed.
+      \return true iff removed (no exceptions)
+  */
+  bool removeIndex(ArrayIndex i, Value* removed);
 
   /// Return true if the object has a member named key.
   bool isMember(const char* key) const;
@@ -782,8 +799,10 @@ Json::Value obj_value(Json::objectValue); // {}
   //      EnumValues enumValues() const;
   //# endif
 
-  /// Comments must be //... or /* ... */
+  /// \deprecated Always pass len.
   void setComment(const char* comment, CommentPlacement placement);
+  /// Comments must be //... or /* ... */
+  void setComment(const char* comment, size_t len, CommentPlacement placement);
   /// Comments must be //... or /* ... */
   void setComment(const std::string& comment, CommentPlacement placement);
   bool hasComment(CommentPlacement placement) const;
@@ -827,7 +846,7 @@ private:
     CommentInfo();
     ~CommentInfo();
 
-    void setComment(const char* text);
+    void setComment(const char* text, size_t len);
 
     char* comment_;
   };
@@ -855,10 +874,10 @@ private:
 #endif
   } value_;
   ValueType type_ : 8;
-  int allocated_ : 1; // Notes: if declared as bool, bitfield is useless.
+  unsigned int allocated_ : 1; // Notes: if declared as bool, bitfield is useless.
 #ifdef JSON_VALUE_USE_INTERNAL_MAP
   unsigned int itemIsUsed_ : 1; // used by the ValueInternalMap container.
-  int memberNameIsStatic_ : 1;  // used by the ValueInternalMap container.
+  unsigned int memberNameIsStatic_ : 1;  // used by the ValueInternalMap container.
 #endif
   CommentInfo* comments_;
 
@@ -1447,6 +1466,14 @@ public:
 
 } // namespace Json
 
+
+namespace std {
+/// Specialize std::swap() for Json::Value.
+template<>
+inline void swap(Json::Value& a, Json::Value& b) { a.swap(b); }
+}
+
+
 #if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
 #pragma warning(pop)
 #endif // if defined(JSONCPP_DISABLE_DLL_INTERFACE_WARNING)
@@ -1482,6 +1509,7 @@ public:
 #include <iosfwd>
 #include <stack>
 #include <string>
+#include <istream>
 
 // Disable warning C4251: <data member>: <type> needs to have dll-interface to
 // be used by...
@@ -1495,6 +1523,7 @@ namespace Json {
 /** \brief Unserialize a <a HREF="http://www.json.org">JSON</a> document into a
  *Value.
  *
+ * \deprecated Use CharReader and CharReaderBuilder.
  */
 class JSON_API Reader {
 public:
@@ -1546,7 +1575,7 @@ public:
    document to read.
    * \param endDoc Pointer on the end of the UTF-8 encoded string of the
    document to read.
-   \               Must be >= beginDoc.
+   *               Must be >= beginDoc.
    * \param root [out] Contains the root value of the document if it was
    *             successfully parsed.
    * \param collectComments \c true to collect comment and allow writing them
@@ -1655,7 +1684,6 @@ private:
 
   typedef std::deque<ErrorInfo> Errors;
 
-  bool expectToken(TokenType type, Token& token, const char* message);
   bool readToken(Token& token);
   void skipSpaces();
   bool match(Location pattern, int patternLength);
@@ -1707,7 +1735,123 @@ private:
   std::string commentsBefore_;
   Features features_;
   bool collectComments_;
+};  // Reader
+
+/** Interface for reading JSON from a char array.
+ */
+class JSON_API CharReader {
+public:
+  virtual ~CharReader() {}
+  /** \brief Read a Value from a <a HREF="http://www.json.org">JSON</a>
+   document.
+   * The document must be a UTF-8 encoded string containing the document to read.
+   *
+   * \param beginDoc Pointer on the beginning of the UTF-8 encoded string of the
+   document to read.
+   * \param endDoc Pointer on the end of the UTF-8 encoded string of the
+   document to read.
+   *        Must be >= beginDoc.
+   * \param root [out] Contains the root value of the document if it was
+   *             successfully parsed.
+   * \param errs [out] Formatted error messages (if not NULL)
+   *        a user friendly string that lists errors in the parsed
+   * document.
+   * \return \c true if the document was successfully parsed, \c false if an
+   error occurred.
+   */
+  virtual bool parse(
+      char const* beginDoc, char const* endDoc,
+      Value* root, std::string* errs) = 0;
+
+  class Factory {
+  public:
+    /** \brief Allocate a CharReader via operator new().
+     * \throw std::exception if something goes wrong (e.g. invalid settings)
+     */
+    virtual CharReader* newCharReader() const = 0;
+  };  // Factory
+};  // CharReader
+
+/** \brief Build a CharReader implementation.
+
+  \deprecated This is experimental and will be altered before the next release.
+
+Usage:
+\code
+  using namespace Json;
+  CharReaderBuilder builder;
+  builder.settings_["collectComments"] = false;
+  Value value;
+  std::string errs;
+  bool ok = parseFromStream(builder, std::cin, &value, &errs);
+\endcode
+*/
+class JSON_API CharReaderBuilder : public CharReader::Factory {
+public:
+  // Note: We use a Json::Value so that we can add data-members to this class
+  // without a major version bump.
+  /** Configuration of this builder.
+    These are case-sensitive.
+    Available settings (case-sensitive):
+    - `"collectComments": false or true`
+      - true to collect comment and allow writing them
+        back during serialization, false to discard comments.
+        This parameter is ignored if allowComments is false.
+    - `"allowComments": false or true`
+      - true if comments are allowed.
+    - `"strictRoot": false or true`
+      - true if root must be either an array or an object value
+    - `"allowDroppedNullPlaceholders": false or true`
+      - true if dropped null placeholders are allowed. (See StreamWriterBuilder.)
+    - `"allowNumericKeys": false or true`
+      - true if numeric object keys are allowed.
+    - `"stackLimit": integer`
+      - Exceeding stackLimit (recursive depth of `readValue()`) will
+        cause an exception.
+      - This is a security issue (seg-faults caused by deeply nested JSON),
+        so the default is low.
+    - `"failIfExtra": false or true`
+      - If true, `parse()` returns false when extra non-whitespace trails
+        the JSON value in the input string.
+
+    You can examine 'settings_` yourself
+    to see the defaults. You can also write and read them just like any
+    JSON Value.
+    \sa setDefaults()
+    */
+  Json::Value settings_;
+
+  CharReaderBuilder();
+  virtual ~CharReaderBuilder();
+
+  virtual CharReader* newCharReader() const;
+
+  /** \return true if 'settings' are legal and consistent;
+   *   otherwise, indicate bad settings via 'invalid'.
+   */
+  bool validate(Json::Value* invalid) const;
+  /** Called by ctor, but you can use this to reset settings_.
+   * \pre 'settings' != NULL (but Json::null is fine)
+   * \remark Defaults:
+   * \snippet src/lib_json/json_reader.cpp CharReaderBuilderStrictMode
+   */
+  static void setDefaults(Json::Value* settings);
+  /** Same as old Features::strictMode().
+   * \pre 'settings' != NULL (but Json::null is fine)
+   * \remark Defaults:
+   * \snippet src/lib_json/json_reader.cpp CharReaderBuilderDefaults
+   */
+  static void strictMode(Json::Value* settings);
 };
+
+/** Consume entire stream and use its begin/end.
+  * Someday we might have a real StreamReader, but for now this
+  * is convenient.
+  */
+bool parseFromStream(
+    CharReader::Factory const&,
+    std::istream&,
+    Value* root, std::string* errs);
 
 /** \brief Read from 'sin' into 'root'.
 
@@ -1769,6 +1913,7 @@ JSON_API std::istream& operator>>(std::istream&, Value&);
 #endif // if !defined(JSON_IS_AMALGAMATION)
 #include <vector>
 #include <string>
+#include <ostream>
 
 // Disable warning C4251: <data member>: <type> needs to have dll-interface to
 // be used by...
@@ -1781,7 +1926,111 @@ namespace Json {
 
 class Value;
 
+/**
+
+Usage:
+\code
+  using namespace Json;
+  void writeToStdout(StreamWriter::Factory const& factory, Value const& value) {
+    std::unique_ptr<StreamWriter> const writer(
+      factory.newStreamWriter());
+    writer->write(value, &std::cout);
+    std::cout << std::endl;  // add lf and flush
+  }
+\endcode
+*/
+class JSON_API StreamWriter {
+protected:
+  std::ostream* sout_;  // not owned; will not delete
+public:
+  StreamWriter();
+  virtual ~StreamWriter();
+  /** Write Value into document as configured in sub-class.
+      Do not take ownership of sout, but maintain a reference during function.
+      \pre sout != NULL
+      \return zero on success
+      \throw std::exception possibly, depending on configuration
+   */
+  virtual int write(Value const& root, std::ostream* sout) = 0;
+
+  /** \brief A simple abstract factory.
+   */
+  class JSON_API Factory {
+  public:
+    virtual ~Factory();
+    /** \brief Allocate a CharReader via operator new().
+     * \throw std::exception if something goes wrong (e.g. invalid settings)
+     */
+    virtual StreamWriter* newStreamWriter() const = 0;
+  };  // Factory
+};  // StreamWriter
+
+/** \brief Write into stringstream, then return string, for convenience.
+ * A StreamWriter will be created from the factory, used, and then deleted.
+ */
+std::string writeString(StreamWriter::Factory const& factory, Value const& root);
+
+
+/** \brief Build a StreamWriter implementation.
+
+Usage:
+\code
+  using namespace Json;
+  Value value = ...;
+  StreamWriterBuilder builder;
+  builder.settings_["commentStyle"] = "None";
+  builder.settings_["indentation"] = "   ";  // or whatever you like
+  std::unique_ptr<Json::StreamWriter> writer(
+      builder.newStreamWriter());
+  writer->write(value, &std::cout);
+  std::cout << std::endl;  // add lf and flush
+\endcode
+*/
+class JSON_API StreamWriterBuilder : public StreamWriter::Factory {
+public:
+  // Note: We use a Json::Value so that we can add data-members to this class
+  // without a major version bump.
+  /** Configuration of this builder.
+    Available settings (case-sensitive):
+    - "commentStyle": "None" or "All"
+    - "indentation":  "<anything>"
+    - "enableYAMLCompatibility": false or true
+      - slightly change the whitespace around colons
+    - "dropNullPlaceholders": false or true
+      - Drop the "null" string from the writer's output for nullValues.
+        Strictly speaking, this is not valid JSON. But when the output is being
+        fed to a browser's Javascript, it makes for smaller output and the
+        browser can handle the output just fine.
+
+    You can examine 'settings_` yourself
+    to see the defaults. You can also write and read them just like any
+    JSON Value.
+    \sa setDefaults()
+    */
+  Json::Value settings_;
+
+  StreamWriterBuilder();
+  virtual ~StreamWriterBuilder();
+
+  /**
+   * \throw std::exception if something goes wrong (e.g. invalid settings)
+   */
+  virtual StreamWriter* newStreamWriter() const;
+
+  /** \return true if 'settings' are legal and consistent;
+   *   otherwise, indicate bad settings via 'invalid'.
+   */
+  bool validate(Json::Value* invalid) const;
+  /** Called by ctor, but you can use this to reset settings_.
+   * \pre 'settings' != NULL (but Json::null is fine)
+   * \remark Defaults:
+   * \snippet src/lib_json/json_writer.cpp StreamWriterBuilderDefaults
+   */
+  static void setDefaults(Json::Value* settings);
+};
+
 /** \brief Abstract class for writers.
+ * \deprecated Use StreamWriter.
  */
 class JSON_API Writer {
 public:
@@ -1797,6 +2046,7 @@ public:
  *consumption,
  * but may be usefull to support feature such as RPC where bandwith is limited.
  * \sa Reader, Value
+ * \deprecated Use StreamWriterBuilder.
  */
 class JSON_API FastWriter : public Writer {
 public:
@@ -1848,6 +2098,7 @@ private:
  *#CommentPlacement.
  *
  * \sa Reader, Value, Value::setComment()
+ * \deprecated Use StreamWriterBuilder.
  */
 class JSON_API StyledWriter : public Writer {
 public:
@@ -1909,6 +2160,7 @@ private:
  *
  * \param indentation Each level will be indented by this amount extra.
  * \sa Reader, Value, Value::setComment()
+ * \deprecated Use StreamWriterBuilder.
  */
 class JSON_API StyledStreamWriter {
 public:
@@ -1945,7 +2197,8 @@ private:
   std::string indentString_;
   int rightMargin_;
   std::string indentation_;
-  bool addChildValues_;
+  bool addChildValues_ : 1;
+  bool indented_ : 1;
 };
 
 #if defined(JSON_HAS_INT64)
@@ -1992,6 +2245,7 @@ JSON_API std::ostream& operator<<(std::ostream&, const Value& root);
 #define CPPTL_JSON_ASSERTIONS_H_INCLUDED
 
 #include <stdlib.h>
+#include <sstream>
 
 #if !defined(JSON_IS_AMALGAMATION)
 #include "config.h"
@@ -2001,26 +2255,26 @@ JSON_API std::ostream& operator<<(std::ostream&, const Value& root);
 #include <stdexcept>
 #define JSON_ASSERT(condition)                                                 \
   assert(condition); // @todo <= change this into an exception throw
-#define JSON_FAIL_MESSAGE(message) throw std::runtime_error(message);
+#define JSON_FAIL_MESSAGE(message) do{std::ostringstream oss; oss << message; throw std::runtime_error(oss.str());}while(0)
+//#define JSON_FAIL_MESSAGE(message) throw std::runtime_error(message)
 #else // JSON_USE_EXCEPTION
 #define JSON_ASSERT(condition) assert(condition);
 
 // The call to assert() will show the failure message in debug builds. In
-// release bugs we write to invalid memory in order to crash hard, so that a
-// debugger or crash reporter gets the chance to take over. We still call exit()
-// afterward in order to tell the compiler that this macro doesn't return.
+// release bugs we abort, for a core-dump or debugger.
 #define JSON_FAIL_MESSAGE(message)                                             \
   {                                                                            \
-    assert(false&& message);                                                   \
-    strcpy(reinterpret_cast<char*>(666), message);                             \
-    exit(123);                                                                 \
+    std::ostringstream oss; oss << message;                                    \
+    assert(false && oss.str().c_str());                                        \
+    abort();                                                                   \
   }
+
 
 #endif
 
 #define JSON_ASSERT_MESSAGE(condition, message)                                \
   if (!(condition)) {                                                          \
-    JSON_FAIL_MESSAGE(message)                                                 \
+    JSON_FAIL_MESSAGE(message);                                                \
   }
 
 #endif // CPPTL_JSON_ASSERTIONS_H_INCLUDED
