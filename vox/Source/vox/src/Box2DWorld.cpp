@@ -41,4 +41,3 @@ void Box2DWorld::addToWorld(NodeBox2DBody * _nodeBox2D, int _userDataGroup){
 		_nodeBox2D->body->CreateFixture(&fixtureDef);
 	}
 }
-

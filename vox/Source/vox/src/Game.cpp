@@ -161,7 +161,7 @@ void Game::update(void){
 		break;
 	}
 	
-	if(currentScene != nullptr){
+	if(currentScene != nullptr/* && vox::step.deltaTimeCorrection < 5*/){
 		currentScene->update(&vox::step);
 	}
 }

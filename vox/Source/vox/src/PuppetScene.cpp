@@ -37,7 +37,7 @@
 PuppetScene::PuppetScene(Game * _game):
 	Scene(_game),
 	cl(new RaidTheCastleContactListener),
-	world(new Box2DWorld(b2Vec2(0, -9.8))),
+	world(new Box2DWorld(b2Vec2(0, -9.8f))),
 	drawer(new Box2DDebugDraw(this, world)),
 	playerCharacter(new PuppetCharacter(world, PLAYER, STRUCTURE | ITEM | PLAYER, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
@@ -241,6 +241,11 @@ void PuppetScene::update(Step * _step){
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_2)){
 		drawer->drawing = !drawer->drawing;
+		/*if (drawer->drawing){
+			drawer->load();
+		}else{
+			drawer->unload();
+		}*/
 	}
 }
 

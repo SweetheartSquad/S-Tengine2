@@ -117,6 +117,10 @@ void vox::calculateDeltaTimeCorrection(){
 	double time = glfwGetTime();
 	double deltaTime = time - lastTimestamp;
 	deltaTimeCorrection = deltaTime/targetFrameDuration;
+	while (deltaTimeCorrection > 1){
+		deltaTime = targetFrameDuration;
+		deltaTimeCorrection = 1;
+	}
 	lastTimestamp = time;
 
 	vox::step.targetFrameDuration = targetFrameDuration;
