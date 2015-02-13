@@ -10,15 +10,6 @@
 
 #include "Texture.h"
 
-std::vector<StructureComponentTexture *> Structure::catapultTexPacks;
-std::vector<StructureComponentTexture *> Structure::leverTexPacks;
-std::vector<StructureComponentTexture *> Structure::fortificationTexPacks;
-
-void Structure::init(){
-	catapultTexPacks.push_back(new StructureComponentTexture(new Texture("../assets/structure components/catapult/CatapultBase.png", 512, 512, true, true),	400,	350)); 
-	catapultTexPacks.push_back(new StructureComponentTexture(new Texture("../assets/structure components/catapult/CatapultFlinger.png", 512, 512, true, true),	500,	50));
-}
-
 int16 Structure::gGroupIndex = 0;
 
 StructureComponentTexture::StructureComponentTexture(Texture * _texture, float _width, float _height) :
@@ -34,7 +25,7 @@ Structure::Structure(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits) 
 	NodeChild(nullptr),
 	world(_world),
 	componentScale(0.0025f),
-	groupIndex(--gGroupIndex),
+	groupIndex(++gGroupIndex),
 	categoryBits(_categoryBits),
 	maskBits(_maskBits)
 {

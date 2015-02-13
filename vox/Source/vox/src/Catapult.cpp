@@ -6,7 +6,6 @@
 #include <GameJamCharacter.h>
 #include "Box2DWorld.h"
 
-
 Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	Structure(_world, _categoryBits, _maskBits),
 	NodeTransformable(new Transform()),
@@ -14,10 +13,12 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	NodeRenderable(),
 	targetRoll(0)
 {
-	arm = new CharacterComponent(componentScale, Structure::catapultTexPacks[kARM]->width, Structure::catapultTexPacks[kARM]->height, Structure::catapultTexPacks[kARM]->texture, _world, b2_dynamicBody, false);
-	
-	base = new CharacterComponent(componentScale, Structure::catapultTexPacks[kBASE]->width, Structure::catapultTexPacks[kBASE]->height, Structure::catapultTexPacks[kBASE]->texture, _world, b2_dynamicBody, false);
-	
+	StructureComponentTexture baseTex = StructureComponentTexture(new Texture("../assets/structure components/catapult/CatapultBase.png", 512, 512, true, true), 418, 264);
+	StructureComponentTexture armTex = StructureComponentTexture(new Texture("../assets/structure components/catapult/CatapultFlinger.png", 512, 512, true, true), 429, 76);
+
+	base = new CharacterComponent(componentScale, baseTex.width, baseTex.height, baseTex.texture, _world, b2_staticBody, false);
+	arm = new CharacterComponent(componentScale, armTex.width, armTex.height, armTex.texture, _world, b2_dynamicBody, false);
+
 	components.push_back(&base);
 	components.push_back(&arm);
 	
@@ -42,8 +43,6 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	jth.lowerAngle = -glm::radians(45.f);
 	jth.upperAngle = glm::radians(45.f);
 	world->b2world->CreateJoint(&jth);
-
-
 
 	/*b2PolygonShape tShape;
 	tShape.SetAsBox(head->width*std::abs(transform->scaleVector.x)*head->scale*4.f, std::abs(head->height*transform->scaleVector.y)*head->scale*5.f);

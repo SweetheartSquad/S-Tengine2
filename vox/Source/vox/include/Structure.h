@@ -24,22 +24,6 @@ public:
 
 class Structure : public MeshEntity{
 public:
-	static void init();
-	static enum texture_packs{
-		kCATAPULT,
-		kLEVER,
-		kFORTIFICATION
-	};
-
-	static enum catapult_components{
-		kBASE,
-		kARM
-	};
-
-	static std::vector<StructureComponentTexture *> catapultTexPacks;
-	static std::vector<StructureComponentTexture *> leverTexPacks;
-	static std::vector<StructureComponentTexture *> fortificationTexPacks;
-
 	static int16 gGroupIndex;
 	int16 groupIndex;
 	int16 categoryBits; // Box2D entity category
