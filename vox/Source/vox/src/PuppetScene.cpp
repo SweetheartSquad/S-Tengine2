@@ -76,20 +76,49 @@ PuppetScene::PuppetScene(Game * _game):
 	addChild(ground, false);
 
 	background->setShader(shader, true);
-	background->transform->translate(0.0f, 250.f, -10.0f);
-	background->transform->scale(250, 250, 1);
+	background->transform->translate(0.0f, 25.f, -10.0f);
+	background->transform->scale(125, 25, 1);
 	background->mesh->pushTexture2D(new Texture("../assets/hurly-burly/Sky.png", 1024, 1024, true, true));
 	background->mesh->uvEdgeMode = GL_REPEAT;
 	background->mesh->dirty = true;
 
 	addChild(background);
 
+	
+	Texture * treeTex1 = new Texture("../assets/hurly-burly/Foliage/Tree1-ds.png", 1024, 1024, true, true);
+	Texture * treeTex2 = new Texture("../assets/hurly-burly/Foliage/Tree2-ds.png", 1024, 1024, true, true);
+	Texture * bushTex1 = new Texture("../assets/hurly-burly/Foliage/Bush1-ds.png", 1024, 1024, true, true);
+	Texture * bushTex2 = new Texture("../assets/hurly-burly/Foliage/Bush2-ds.png", 1024, 1024, true, true);
+	int numFoliage = std::rand()%500/50 + 10;
+	for(signed long int i = 0; i < numFoliage; ++i){
+		float height = std::rand()%500/50.f+5.f;
+		MeshEntity * foliage = new MeshEntity(MeshFactory::getPlaneMesh());
+		foliage->setShader(shader, true);
+		foliage->transform->translate((std::rand()%500/10.f)-25.f, height, max(-9, -(float)i/numFoliage)*8.f - 1.f);
+		foliage->transform->scale(height, height, 1);
+		int tex = i % 4;
+		switch(tex){
+			case 0:
+				foliage->mesh->pushTexture2D(treeTex1); break;
+			case 1:
+				foliage->mesh->pushTexture2D(treeTex2); break;
+			case 2:
+				foliage->mesh->pushTexture2D(bushTex1); break;
+			case 3:
+				foliage->mesh->pushTexture2D(bushTex2); break;
+			default:
+				break;
+		}
+		addChild(foliage, true);
+	}
+
+
 	tempCatapault->setShader(shader, true);
 	tempCatapault->mesh->pushTexture2D(new Texture("../assets/hurly-burly/CatapultFull.png", 512, 512, true, true));
 	tempCatapault->setTranslationPhysical(-8.0f, 8.0f, 0.0f);
 	tempCatapault->transform->scale(-8.0f, 8.0f, 0.0f);
 	world->addToWorld(tempCatapault);
-	addChild(tempCatapault);
+	addChild(tempCatapault, true);
 
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);

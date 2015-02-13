@@ -92,7 +92,7 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 	ratio = game->viewPortWidth / static_cast<float>(game->viewPortHeight);
 
 	glEnable(GL_SCISSOR_TEST);
-	//glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//glBlendFunc(GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
 
 
@@ -101,7 +101,7 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 
 	//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	//glBlendFunc(GL_ONE_MINUS_DST_ALPHA, GL_ONE);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	glBlendEquation(GL_FUNC_ADD);
 
 	glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
@@ -112,7 +112,7 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST);
-     glAlphaFunc ( GL_GREATER, 0.1 ) ;
+     //glAlphaFunc ( GL_GREATER, 0.1 ) ;
      glEnable ( GL_ALPHA_TEST ) ;
 
 	//Back-face culling
