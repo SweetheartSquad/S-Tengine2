@@ -23,7 +23,8 @@ Box2DDebugDraw::Box2DDebugDraw(Scene * _scene, Box2DWorld * _world):
 	spriteTransform(new Sprite()),
 	spriteCircle(new Sprite()),
 	NodeTransformable(new Transform()),
-	NodeChild(nullptr)
+	NodeChild(nullptr),
+	drawing(false)
 {
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
@@ -133,11 +134,23 @@ void Box2DDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Col
 }
 
 void Box2DDebugDraw::DrawTransform(const b2Transform& xf){
-	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE);
-	spriteTransform->transform->reset();
+	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
+	
+	sprite->mesh->polygonalDrawMode = GL_POLYGON;
+	
+	sprite->mesh->vertices.clear();
+	sprite->mesh->indices.clear();
+	for(int32 i = 0; i < 4; i++) {
+		sprite->mesh->pushVert(Vertex(i%2, (i-1)%2, 0.0001f));
+	}
+
+	sprite->transform->translationVector = glm::vec3(xf.p.x, xf.p.y, 0);
+sprite->render(scene->matrixStack, scene->renderOptions);
+	
+	/*spriteTransform->transform->reset();
 	spriteTransform->transform->translate(xf.p.x, xf.p.y, 0);
 	spriteTransform->transform->rotate(glm::degrees(xf.q.GetAngle()), 0,0,1, kOBJECT);
-	spriteTransform->render(scene->matrixStack, scene->renderOptions);
+	spriteTransform->render(scene->matrixStack, scene->renderOptions);*/
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);
 }
 
@@ -166,5 +179,8 @@ void Box2DDebugDraw::unload(){
 }
 
 void Box2DDebugDraw::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	world->b2world->DrawDebugData();
+	glLineWidth(2.5f);
+	if(drawing){
+		world->b2world->DrawDebugData();
+	}
 }

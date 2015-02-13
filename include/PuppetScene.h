@@ -31,7 +31,6 @@ class Character4;
 public:
 
 GameJamContactListener * cl;
-	bool debugDraw;
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
 	PuppetCharacter * playerCharacter;

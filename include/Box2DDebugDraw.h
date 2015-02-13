@@ -11,6 +11,8 @@ class Box2DWorld;
 
 class Box2DDebugDraw : public b2Draw, public Entity{
 public:
+	bool drawing;
+
 	explicit Box2DDebugDraw(Scene * _scene, Box2DWorld * _world);
 	~Box2DDebugDraw();
 	void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
