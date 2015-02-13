@@ -45,6 +45,8 @@ GameJamContactListener * cl;
 	PerspectiveCamera * perspectiveCamera;
 	MousePerspectiveCamera * mouseCamera;
 
+	Box2DSprite * tempCatapault;
+
 	bool mouseCam;
 
 	std::vector<Box2DSprite *> items;

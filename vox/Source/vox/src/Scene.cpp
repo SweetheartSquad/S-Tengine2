@@ -154,6 +154,7 @@ void Scene::addChild(Entity* _child, bool _translucent){
 	if(renderOptions->alphaSorting){
 		if(!_translucent){
 			opaqueChildren.push_back(_child);
+	children.push_back(_child);
 			return;
 		}
 		float z;// = -100000;
@@ -162,12 +163,14 @@ void Scene::addChild(Entity* _child, bool _translucent){
 			z = translucentChildren.at(0)->transform->translationVector.z;
 			if(childZ < z){
 				translucentChildren.insert(translucentChildren.begin(), _child);
+	children.push_back(_child);
 				return;
 			}
 			for(unsigned long int i = 0; i < translucentChildren.size(); ++i){
 				z = translucentChildren.at(i)->transform->translationVector.z;
 				if(childZ > z && i+1 < translucentChildren.size() && childZ < translucentChildren.at(i+1)->transform->translationVector.z){
 					translucentChildren.insert(translucentChildren.begin()+i+1, _child);
+	children.push_back(_child);
 					return;
 				}
 			}

@@ -44,7 +44,8 @@ PuppetScene::PuppetScene(Game * _game):
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
-	mouseCam(false)
+	mouseCam(false),
+	tempCatapault(new Box2DSprite(world))
 {
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new TextureShaderComponent());
@@ -55,10 +56,14 @@ PuppetScene::PuppetScene(Game * _game):
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
 	ground->transform->rotate(90.f, 0, 0, 1, kOBJECT);
 	ground->transform->scale(250, 250, 1);
-	ground->mesh->dirty = true;
 	ground->mesh->uvEdgeMode = GL_REPEAT;
 	ground->mesh->pushTexture2D(new Texture("../assets/hurly-burly/StageFloor.png", 1024, 1024, true, true));
 	ground->body->SetTransform(b2Vec2(0, -250), 0);
+	ground->mesh->vertices.at(0).z -= 250;
+	ground->mesh->vertices.at(1).z -= 250;
+	ground->mesh->vertices.at(2).z -= 250;
+	ground->mesh->vertices.at(3).z -= 250;
+	ground->mesh->dirty = true;
 
 	//Set UVs so the texture isn't stetched
 	ground->mesh->setUV(0, 0.0,  0.0);
@@ -77,7 +82,14 @@ PuppetScene::PuppetScene(Game * _game):
 	background->mesh->dirty = true;
 
 	addChild(background);
-	
+
+	tempCatapault->setShader(shader, true);
+	tempCatapault->mesh->pushTexture2D(new Texture("../assets/hurly-burly/CatapultFull.png", 512, 512, true, true));
+	tempCatapault->setTranslationPhysical(-8.0f, 8.0f, 0.0f);
+	tempCatapault->transform->scale(-8.0f, 8.0f, 0.0f);
+	world->addToWorld(tempCatapault);
+	addChild(tempCatapault);
+
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);
 	drawer->AppendFlags(b2Draw::e_shapeBit);
@@ -113,7 +125,7 @@ PuppetScene::PuppetScene(Game * _game):
 	//Set up cameras
 	perspectiveCamera->farClip = 1000.f;
 	perspectiveCamera->transform->rotate(90, 0, 1, 0, kWORLD);
-	perspectiveCamera->transform->translate(5.0f, 5.f, 15.0f);
+	perspectiveCamera->transform->translate(5.0f, 1.5f, 22.5f);
 	perspectiveCamera->yaw = 90.0f;
 	perspectiveCamera->pitch = -10.0f;
 	
@@ -121,7 +133,7 @@ PuppetScene::PuppetScene(Game * _game):
 
 	mouseCamera->farClip = 1000.f;
 	mouseCamera->transform->rotate(90, 0, 1, 0, kWORLD);
-	mouseCamera->transform->translate(5.0f, 5.f, 15.0f);
+	mouseCamera->transform->translate(5.0f, 1.5f, 22.5f);
 	mouseCamera->yaw = 90.0f;
 	mouseCamera->pitch = -10.0f;
 
