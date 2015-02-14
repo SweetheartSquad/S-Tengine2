@@ -5,7 +5,7 @@
   class RaidTheCastleContactListener : public b2ContactListener
   {
 	//ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB);
-	  void BeginContact(b2Contact* contact);
+	  virtual void BeginContact(b2Contact* contact);
 
 	  void playerPlayerContact(b2Contact * contact);
 	  void playerItemContact(b2Contact * contact);

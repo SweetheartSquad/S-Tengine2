@@ -6,6 +6,7 @@
 
 class Box2DSprite;
 class Box2DWorld;
+using namespace std;
 
 class Catapult : public Structure{
 public:

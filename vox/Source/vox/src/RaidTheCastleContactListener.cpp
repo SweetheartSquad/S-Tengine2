@@ -1,8 +1,13 @@
 #include "RaidTheCastleContactListener.h"
 #include "PuppetScene.h"
-#include "SayAction.h"
 
-#include "Structure.h"
+#include "Catapult.h"
+#include "PuppetCharacter.h"
+#include "Box2DSprite.h"
+#include <Box2D/Box2D.h>
+#include <Box2D\Dynamics\Joints\b2RevoluteJoint.h>
+
+using namespace std;
 
 /*bool GameJamContactListener:: ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB){
 	if(fixtureA->GetFilterData().maskBits == 1 || fixtureB->GetFilterData().maskBits == 1){
@@ -40,8 +45,8 @@ void RaidTheCastleContactListener::playerPlayerContact(b2Contact * contact){
 	b2Fixture * fxA = contact->GetFixtureA();
 	b2Fixture * fxB = contact->GetFixtureB();
 
-	PuppetCharacter * puppetA = static_cast<PuppetCharacter *>( fxA->GetBody()->GetUserData() );
-    PuppetCharacter * puppetB = static_cast<PuppetCharacter *>( fxB->GetBody()->GetUserData() );
+	PuppetCharacter * puppetA = reinterpret_cast<PuppetCharacter *>( fxA->GetBody()->GetUserData() );
+    PuppetCharacter * puppetB = reinterpret_cast<PuppetCharacter *>( fxB->GetBody()->GetUserData() );
 
 	if(puppetA != nullptr && puppetB != nullptr){
 		// Stuff
@@ -72,23 +77,29 @@ void RaidTheCastleContactListener::playerItemContact(b2Contact * contact){
 void RaidTheCastleContactListener::playerStructureContact(b2Contact * contact){
 	b2Fixture * fxA = contact->GetFixtureA();
 	b2Fixture * fxB = contact->GetFixtureB();
-
+	
 	PuppetCharacter * puppet;
-	Structure * structure;
+	Catapult * catapult;
+	float flingerMass;
 
-	puppet = static_cast<PuppetCharacter *>( fxA->GetBody()->GetUserData() );
+	puppet = static_cast<PuppetCharacter *>( fxA->GetUserData() );
 	if(puppet != nullptr){
-		structure = static_cast<Structure *>( fxB->GetBody()->GetUserData() );
+		catapult = static_cast<Catapult *>( fxB->GetUserData() );
 	}else{
-		puppet = static_cast<PuppetCharacter *>( fxB->GetBody()->GetUserData() );
-		structure = static_cast<Structure *>( fxA->GetBody()->GetUserData() );
+		puppet = static_cast<PuppetCharacter *>( fxB->GetUserData() );
+		catapult = static_cast<Catapult *>( fxA->GetUserData() );
 	}
-
-	if(puppet != nullptr && structure != nullptr){
+	
+	if(puppet != nullptr && catapult != nullptr){
 		// Check for cooldown
-
-		// Fire catapult
+		if(catapult->components.size() > 1){
+			// Fire catapult
+			b2RevoluteJoint * j = (b2RevoluteJoint *)(*catapult->components.at(1))->body->GetJointList()->joint;
+			j->SetMotorSpeed(-j->GetJointAngle()*360);
+			j->SetMaxMotorTorque((*catapult->components.at(0))->body->GetMass()*750*(std::abs(j->GetJointAngle())*5));
+		}
 	}
+	//cout << "Player-Player Contact" << endl;
 }
 
 void RaidTheCastleContactListener::EndContact(b2Contact* contact){

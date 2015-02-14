@@ -8,6 +8,7 @@ class MeshEntity;
 class PuppetController;
 class PuppetCharacter;
 class GameJamCharacter;
+class Catapult;
 class RaidTheCastleContactListener;
 class DialogHandler;
 class AccelerometerParser;
@@ -34,6 +35,7 @@ public:
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
 	PuppetCharacter * playerCharacter;
+	Catapult * catapult;
 	Box2DMeshEntity * ground;
 	MeshEntity * background;
 	BaseComponentShader* shader;

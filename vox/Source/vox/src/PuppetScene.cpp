@@ -109,16 +109,6 @@ PuppetScene::PuppetScene(Game * _game):
 		addChild(foliage, true);
 	}
 
-	/*
-	tempCatapault->setShader(shader, true);
-	tempCatapault->mesh->pushTexture2D(new Texture("../assets/hurly-burly/CatapultFull.png", 512, 512, true, true));
-	tempCatapault->setTranslationPhysical(-8.0f, 8.0f, 0.0f);
-	tempCatapault->transform->scale(-8.0f, 8.0f, 0.0f);
-	world->addToWorld(tempCatapault);
-
-	addChild(tempCatapault, true);
-	*/
-
 	playerCharacter->setShader(shader, true);
 	addChild(playerCharacter, true);
 	playerCharacter->addToScene(this);
@@ -130,11 +120,11 @@ PuppetScene::PuppetScene(Game * _game):
 	michael->addToScene(this);
 	michael->translateComponents(glm::vec3(1,0,0));
 	
-	Catapult * catapult = new Catapult(world, STRUCTURE, PLAYER);
+	catapult = new Catapult(world, STRUCTURE, PLAYER);
 	catapult->setShader(shader, true);
 	addChild(catapult, true);
 	catapult->addToScene(this);
-	catapult->translateComponents(glm::vec3(1,0,0));
+	catapult->translateComponents(glm::vec3(-10,0,0));
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");

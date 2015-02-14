@@ -44,18 +44,27 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	b2Fixture * s = torso->body->CreateFixture(&tShape, 1);*/
 	
 	
-	/*b2PolygonShape tShape;
-	tShape.SetAsBox(head->width*std::abs(transform->scaleVector.x)*head->scale, std::abs(head->height*transform->scaleVector.y)*head->scale);
+	b2PolygonShape tShapeLeft;
+	tShapeLeft.SetAsBox(std::abs(handLeft->width*transform->scaleVector.x)*handLeft->scale*2.f, std::abs(handLeft->height*transform->scaleVector.y)*handLeft->scale*2.f);
 	
-	b2Fixture * s = head->body->CreateFixture(&tShape, 1);
-	s->SetSensor(true);
+	b2Fixture * sensorLeft = handLeft->body->CreateFixture(&tShapeLeft, 1);
+	sensorLeft->SetSensor(true);
+	sensorLeft->SetUserData(this);
+
+	b2PolygonShape tShapeRight;
+	tShapeRight.SetAsBox(std::abs(handRight->width*transform->scaleVector.x)*handRight->scale*2.f, std::abs(handRight->height*transform->scaleVector.y)*handRight->scale*2.f);
+	
+	b2Fixture * sensorRight = handRight->body->CreateFixture(&tShapeRight, 1);
+	sensorRight->SetSensor(true);
+	sensorRight->SetUserData(this);
 	
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
 	if(maskBits != (int16)-1){
 		sf.maskBits = maskBits;
 	}
-	s->SetFilterData(sf);*/
+	sensorLeft->SetFilterData(sf);
+	sensorRight->SetFilterData(sf);
 
 	for(Box2DSprite ** c : components){
 		(*c)->createFixture(groupIndex);
