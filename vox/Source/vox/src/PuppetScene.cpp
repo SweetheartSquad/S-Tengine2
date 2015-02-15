@@ -134,7 +134,7 @@ PuppetScene::PuppetScene(Game * _game):
 	catapult->setShader(shader, true);
 	addChild(catapult, true);
 	catapult->addToScene(this);
-	catapult->translateComponents(glm::vec3(1,0,0));
+	catapult->translateComponents(glm::vec3(-10,0,0));
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");

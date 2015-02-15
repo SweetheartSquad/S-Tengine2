@@ -3,12 +3,14 @@
 
 #include "Arduino.h"
 
-class Accelerometer;
+#define LINE_SIZE 37
 
+class Accelerometer;
 
 class AccelerometerParser : public Arduino{
 public:
 	bool forced;
+	bool firstPing;
 
 	explicit AccelerometerParser(std::string portName);
 	~AccelerometerParser();
