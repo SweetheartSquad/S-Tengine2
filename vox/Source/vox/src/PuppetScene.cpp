@@ -37,7 +37,7 @@
 PuppetScene::PuppetScene(Game * _game):
 	Scene(_game),
 	cl(new RaidTheCastleContactListener),
-	world(new Box2DWorld(b2Vec2(0, -9.8f))),
+	world(new Box2DWorld(b2Vec2(0, -9.8f * 2))),
 	drawer(new Box2DDebugDraw(this, world)),
 	playerCharacter(new PuppetCharacter(world, PLAYER, STRUCTURE | ITEM | PLAYER, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
