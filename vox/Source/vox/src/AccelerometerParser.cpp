@@ -57,6 +57,9 @@ void AccelerometerParser::update(Step* _step){
 						z[2] = src[8];
 						z[3] = '\0';
 
+						accelerometers.at(i)->lx = accelerometers.at(i)->x;
+						accelerometers.at(i)->ly = accelerometers.at(i)->y;
+						accelerometers.at(i)->lz = accelerometers.at(i)->z;
 						accelerometers.at(i)->x = atoi(x);
 						accelerometers.at(i)->y = atoi(y);
 						accelerometers.at(i)->z = atoi(z);

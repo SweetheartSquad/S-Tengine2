@@ -12,7 +12,13 @@ public:
 	std::string buffer;
 
 	float x, y, z;
+	//Last values. Set in the accelerometer parser
+	float lx, ly, lz;
+	//Values without the effect of gravity and other ambient data
+	float gx, gy, gz;
 	float deltaX, deltaY, deltaZ;
+	//gravity/ambient values
+	float gravX, gravY, gravZ;
 
 	float roll, pitch;
 
