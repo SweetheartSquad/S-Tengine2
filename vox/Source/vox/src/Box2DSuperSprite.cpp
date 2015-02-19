@@ -5,6 +5,7 @@
 #include "Box2DWorld.h"
 #include "shader/Shader.h"
 #include "Scene.h"
+#include "LayeredScene.h"
 #include "BitmapFont.h"
 
 #include "Texture.h"
@@ -58,7 +59,14 @@ void Box2DSuperSprite::setShader(Shader * _shader, bool _configureDefaultVertexA
 void Box2DSuperSprite::addToScene(Scene * _scene){
 	for(Box2DSprite ** c : components){
 		if(*c != nullptr){
-			_scene->addChild(*c, true);
+			_scene->addChild(*c);
+		}
+	}
+}
+void Box2DSuperSprite::addToLayeredScene(LayeredScene * _scene, unsigned long int _layer){
+	for(Box2DSprite ** c : components){
+		if(*c != nullptr){
+			_scene->addChild(*c, _layer);
 		}
 	}
 }

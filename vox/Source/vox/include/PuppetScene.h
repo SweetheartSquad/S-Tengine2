@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene2D.h"
+#include "LayeredScene.h"
 
 class MousePerspectiveCamera;
 class PerspectiveCamera;
@@ -27,7 +27,7 @@ class Character2;
 class Character3;
 class Character4;
 
- class PuppetScene abstract : public Scene{
+ class PuppetScene abstract : public LayeredScene{
 public:
 
 	RaidTheCastleContactListener * cl;

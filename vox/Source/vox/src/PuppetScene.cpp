@@ -35,7 +35,7 @@
 #include <PuppetController.h>
 
 PuppetScene::PuppetScene(Game * _game):
-	Scene(_game),
+	LayeredScene(_game, 3),
 	cl(new RaidTheCastleContactListener),
 	world(new Box2DWorld(b2Vec2(0, -9.8f * 2))),
 	drawer(new Box2DDebugDraw(this, world)),
@@ -50,6 +50,19 @@ PuppetScene::PuppetScene(Game * _game):
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
+
+
+	
+	background->setShader(shader, true);
+	background->transform->translate(0.0f, 25.f, -10.0f);
+	background->transform->scale(125, 25, 1);
+	background->mesh->pushTexture2D(new Texture("../assets/hurly-burly/Sky.png", 1024, 1024, true, true));
+	background->mesh->uvEdgeMode = GL_REPEAT;
+	background->mesh->dirty = true;
+
+	addChild(background, 0);
+
+	
 	ground->setShader(shader, true);
 	ground->setTranslationPhysical(0, 0, 0);
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
@@ -71,16 +84,8 @@ PuppetScene::PuppetScene(Game * _game):
 	ground->mesh->setUV(3, 40.0, 0.0);
 
 	world->addToWorld(ground, 2);
-	addChild(ground, false);
+	addChild(ground, 0);
 
-	background->setShader(shader, true);
-	background->transform->translate(0.0f, 25.f, -10.0f);
-	background->transform->scale(125, 25, 1);
-	background->mesh->pushTexture2D(new Texture("../assets/hurly-burly/Sky.png", 1024, 1024, true, true));
-	background->mesh->uvEdgeMode = GL_REPEAT;
-	background->mesh->dirty = true;
-
-	addChild(background);
 
 	Texture * treeTex1 = new Texture("../assets/hurly-burly/Foliage/Tree1-ds.png", 1024, 1024, true, true);
 	Texture * treeTex2 = new Texture("../assets/hurly-burly/Foliage/Tree2-ds.png", 1024, 1024, true, true);
@@ -91,7 +96,7 @@ PuppetScene::PuppetScene(Game * _game):
 		float height = std::rand()%500/50.f+5.f;
 		MeshEntity * foliage = new MeshEntity(MeshFactory::getPlaneMesh());
 		foliage->setShader(shader, true);
-		foliage->transform->translate((std::rand()%500/10.f)-25.f, height, max(-9, -(float)i/numFoliage)*8.f - 1.f);
+		foliage->transform->translate((std::rand()%500/10.f)-25.f, height, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
 		foliage->transform->scale(height, height, 1);
 		int tex = i % 4;
 		switch(tex){
@@ -106,7 +111,7 @@ PuppetScene::PuppetScene(Game * _game):
 			default:
 				break;
 		}
-		addChild(foliage, true);
+		addChild(foliage, 0);
 	}
 
 	/*
@@ -120,20 +125,20 @@ PuppetScene::PuppetScene(Game * _game):
 	*/
 
 	playerCharacter->setShader(shader, true);
-	addChild(playerCharacter, true);
-	playerCharacter->addToScene(this);
+	addChild(playerCharacter, 1);
+	playerCharacter->addToLayeredScene(this, 1);
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
 
 	TestCharacter * michael = new TestCharacter(world, false, PLAYER, STRUCTURE | ITEM | PLAYER);
 	michael->setShader(shader, true);
-	addChild(michael, true);
-	michael->addToScene(this);
+	addChild(michael, 1);
+	michael->addToLayeredScene(this, 1);
 	michael->translateComponents(glm::vec3(1,0,0));
 	
 	Catapult * catapult = new Catapult(world, STRUCTURE, PLAYER);
 	catapult->setShader(shader, true);
-	addChild(catapult, true);
-	catapult->addToScene(this);
+	addChild(catapult, 1);
+	catapult->addToLayeredScene(this, 1);
 	catapult->translateComponents(glm::vec3(-10,0,0));
 
 	//Arduino 
@@ -167,7 +172,7 @@ PuppetScene::PuppetScene(Game * _game):
 	drawer->AppendFlags(b2Draw::e_shapeBit);
 	drawer->AppendFlags(b2Draw::e_centerOfMassBit);
 	drawer->AppendFlags(b2Draw::e_jointBit);
-	addChild(drawer, true);
+	addChild(drawer, 2);
 }
 
 PuppetScene::~PuppetScene(){
@@ -250,5 +255,5 @@ void PuppetScene::update(Step * _step){
 }
 
 void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	Scene::render(_matrixStack, _renderStack);
+	LayeredScene::render(_matrixStack, _renderStack);
 }

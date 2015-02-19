@@ -5,6 +5,7 @@
 
 class BitmapFont;
 class Scene;
+class LayeredScene;
 class Shader;
 class Box2DWorld;
 class Box2DSprite;
@@ -41,8 +42,9 @@ public:
 	virtual void update(Step* _step) override;
 
 	virtual void setShader(Shader * _shader, bool _configureDefaultVertexAttributes) override;
-
+	
 	virtual void addToScene(Scene * _scene);
+	virtual void addToLayeredScene(LayeredScene * _scene, unsigned long int _layer);
 
 	void translateComponents(glm::vec3 _translateVector);
 };
