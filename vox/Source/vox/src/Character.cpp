@@ -6,6 +6,7 @@
 #include "shader/Shader.h"
 #include "CharacterComponent.h"
 #include "Scene.h"
+#include "LayeredScene.h"
 #include "BitmapFont.h"
 
 #include "Texture.h"
@@ -60,7 +61,15 @@ void Character::setShader(Shader * _shader, bool _configureDefaultVertexAttribut
 void Character::addToScene(Scene * _scene){
 	for(CharacterComponent ** c : components){
 		if(*c != nullptr){
-			_scene->addChild(*c, true);
+			_scene->addChild(*c);
+		}
+	}
+}
+
+void Character::addToLayeredScene(LayeredScene * _scene, unsigned long int _layer){
+	for(CharacterComponent ** c : components){
+		if(*c != nullptr){
+			_scene->addChild(*c, _layer);
 		}
 	}
 }

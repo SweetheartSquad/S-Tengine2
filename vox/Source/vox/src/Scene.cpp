@@ -124,24 +124,8 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 	matrixStack->projectionMatrix = camera->getProjectionMatrix();
 	matrixStack->viewMatrix		  = camera->getViewMatrix();
 
-	//float offset = children.size();
-	
-	if(renderOptions->alphaSorting){
-     //glDisable ( GL_ALPHA_TEST ) ;
-		for(Entity * e : opaqueChildren){
-			e->render(matrixStack, renderOptions);
-		}
-		
-    glDisable(GL_DEPTH_TEST);
-    glEnable(GL_POLYGON_OFFSET_FILL);
-		for(Entity * e : translucentChildren){
-	glPolygonOffset((std::rand()%500)/500.f,2);
-			e->render(matrixStack, renderOptions);
-		}
-	}else{
-		for(Entity * e : children){
-			e->render(matrixStack, renderOptions);
-		}
+	for(Entity * e : children){
+		e->render(matrixStack, renderOptions);
 	}
 	
 	
@@ -150,33 +134,7 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
     //glDisable(GL_POLYGON_OFFSET_FILL);
 }
 
-void Scene::addChild(Entity* _child, bool _translucent){
-	if(renderOptions->alphaSorting){
-		if(!_translucent){
-			opaqueChildren.push_back(_child);
-	children.push_back(_child);
-			return;
-		}
-		float z;// = -100000;
-		float childZ = _child->transform->translationVector.z;
-		if(translucentChildren.size() > 0){
-			z = translucentChildren.at(0)->transform->translationVector.z;
-			if(childZ < z){
-				translucentChildren.insert(translucentChildren.begin(), _child);
-	children.push_back(_child);
-				return;
-			}
-			for(unsigned long int i = 0; i < translucentChildren.size(); ++i){
-				z = translucentChildren.at(i)->transform->translationVector.z;
-				if(childZ > z && i+1 < translucentChildren.size() && childZ < translucentChildren.at(i+1)->transform->translationVector.z){
-					translucentChildren.insert(translucentChildren.begin()+i+1, _child);
-	children.push_back(_child);
-					return;
-				}
-			}
-		}
-		translucentChildren.push_back(_child);
-	}
+void Scene::addChild(Entity* _child){
 	children.push_back(_child);
 }
 

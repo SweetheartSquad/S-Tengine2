@@ -60,6 +60,7 @@
     <ClCompile Include="..\src\GLUtils.cpp" />
     <ClCompile Include="..\src\jsoncpp.cpp" />
     <ClCompile Include="..\src\Keyboard.cpp" />
+    <ClCompile Include="..\src\LayeredScene.cpp" />
     <ClCompile Include="..\src\Light.cpp" />
     <ClCompile Include="..\src\ListenAction.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="..\include\json\json-forwards.h" />
     <ClInclude Include="..\include\json\json.h" />
     <ClInclude Include="..\include\Keyboard.h" />
+    <ClInclude Include="..\include\LayeredScene.h" />
     <ClInclude Include="..\include\Light.h" />
     <ClInclude Include="..\include\ListenAction.h" />
     <ClInclude Include="..\include\Material.h" />

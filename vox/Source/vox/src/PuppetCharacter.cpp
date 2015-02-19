@@ -138,8 +138,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	b2RevoluteJointDef rhrej;
 	rhrej.bodyA = armRight->body;
 	rhrej.bodyB = handRight->body;
-	rhrej.localAnchorA.Set(0, -0.9 * armRight->getCorrectedHeight());
-	rhrej.localAnchorB.Set(0,0);
+	rhrej.localAnchorA.Set(0.f, -0.9f * armRight->getCorrectedHeight());
+	rhrej.localAnchorB.Set(0.f, 0.f);
 	rhrej.collideConnected = false;
 	rhrej.enableLimit = true;
 	rhrej.referenceAngle = glm::radians(0.f);
@@ -151,8 +151,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	b2RevoluteJointDef lhlej;
 	lhlej.bodyA = armLeft->body;
 	lhlej.bodyB = handLeft->body;
-	lhlej.localAnchorA.Set(0, -0.9 * armLeft->getCorrectedHeight());
-	lhlej.localAnchorB.Set(-0,0);
+	lhlej.localAnchorA.Set(0.f, -0.9f * armLeft->getCorrectedHeight());
+	lhlej.localAnchorB.Set(-0.f, 0.f);
 	lhlej.collideConnected = false;
 	lhlej.enableLimit = true;
 	lhlej.referenceAngle = glm::radians(0.f);
