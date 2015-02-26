@@ -50,8 +50,6 @@ PuppetScene::PuppetScene(Game * _game):
 	shader->components.push_back(new TextureShaderComponent());
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
-
-
 	
 	background->setShader(shader, true);
 	background->transform->translate(0.0f, 25.f, -10.0f);
@@ -86,11 +84,11 @@ PuppetScene::PuppetScene(Game * _game):
 	world->addToWorld(ground, 2);
 	addChild(ground, 0);
 
-
 	Texture * treeTex1 = new Texture("../assets/hurly-burly/Foliage/Tree1-ds.png", 1024, 1024, true, true);
 	Texture * treeTex2 = new Texture("../assets/hurly-burly/Foliage/Tree2-ds.png", 1024, 1024, true, true);
 	Texture * bushTex1 = new Texture("../assets/hurly-burly/Foliage/Bush1-ds.png", 1024, 1024, true, true);
 	Texture * bushTex2 = new Texture("../assets/hurly-burly/Foliage/Bush2-ds.png", 1024, 1024, true, true);
+
 	int numFoliage = std::rand()%500/50 + 10;
 	for(signed long int i = 0; i < numFoliage; ++i){
 		float height = std::rand()%500/50.f+5.f;
@@ -114,16 +112,6 @@ PuppetScene::PuppetScene(Game * _game):
 		addChild(foliage, 0);
 	}
 
-	/*
-	tempCatapault->setShader(shader, true);
-	tempCatapault->mesh->pushTexture2D(new Texture("../assets/hurly-burly/CatapultFull.png", 512, 512, true, true));
-	tempCatapault->setTranslationPhysical(-8.0f, 8.0f, 0.0f);
-	tempCatapault->transform->scale(-8.0f, 8.0f, 0.0f);
-	world->addToWorld(tempCatapault);
-
-	addChild(tempCatapault, true);
-	*/
-
 	playerCharacter->setShader(shader, true);
 	addChild(playerCharacter, 1);
 	playerCharacter->addToLayeredScene(this, 1);
@@ -135,10 +123,11 @@ PuppetScene::PuppetScene(Game * _game):
 	michael->addToLayeredScene(this, 1);
 	michael->translateComponents(glm::vec3(1,0,0));
 	
-	Catapult * catapult = new Catapult(world, STRUCTURE, PLAYER);
+	catapult = new Catapult(world, STRUCTURE, PLAYER);
 	catapult->setShader(shader, true);
 	addChild(catapult, 1);
 	catapult->addToLayeredScene(this, 1);
+
 	catapult->translateComponents(glm::vec3(-10,0,0));
 
 	//Arduino 
