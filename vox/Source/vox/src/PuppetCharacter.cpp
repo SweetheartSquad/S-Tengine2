@@ -11,6 +11,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	NodeChild(nullptr),
 	NodeRenderable(),
 	ai(ai),
+	canJump(false),
 	targetRoll(0)
 {
 	

@@ -28,6 +28,9 @@ public:
 
 	void update(Step* _step) override;
 
+	//Creates a new fixture for the body and returns a reference to it
+	b2Fixture * getNewFixture(b2PolygonShape _shape, float _density);
+
 	void setTranslationPhysical(glm::vec3 _translation, bool _relative = false);
 	void setTranslationPhysical(float _x, float _y, float _z, bool _relative = false);
 	void setXPhysical(float _x);

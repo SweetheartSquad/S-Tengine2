@@ -43,6 +43,10 @@ void NodeBox2DBody::update(Step * _step){
 	}
 }
 
+b2Fixture * NodeBox2DBody::getNewFixture(b2PolygonShape _shape, float _density){
+	return body->CreateFixture(&_shape, _density);
+}
+
 void NodeBox2DBody::setTranslationPhysical(glm::vec3 _translation, bool _relative){
 	if(_relative){
 		transform->translate(_translation);

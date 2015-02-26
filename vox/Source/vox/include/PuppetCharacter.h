@@ -10,9 +10,10 @@ class Box2DWorld;
 class PuppetCharacter : public Box2DSuperSprite {
 public:
 	bool ai;
+	bool canJump;
 
 	float targetRoll;
-	
+
 	Box2DSprite * head;
 	Box2DSprite * torso;
 	Box2DSprite * armLeft;

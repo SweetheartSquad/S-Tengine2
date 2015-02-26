@@ -34,6 +34,9 @@ void RaidTheCastleContactListener::BeginContact(b2Contact* contact){
 			}else if(fA.categoryBits == PuppetScene::STRUCTURE || fB.categoryBits == PuppetScene::STRUCTURE){
 				// Player-Structure collision
 				playerStructureContact(contact);
+			}else if(fA.categoryBits == PuppetScene::GROUND || fB.categoryBits == PuppetScene::GROUND){
+				// Player-Structure collision
+				playerGroundContact(contact);
 			}
 		}
 	}else{
@@ -100,6 +103,25 @@ void RaidTheCastleContactListener::playerStructureContact(b2Contact * contact){
 		}
 	}
 	//cout << "Player-Player Contact" << endl;
+}
+
+void RaidTheCastleContactListener::playerGroundContact(b2Contact* _contact){
+	b2Fixture * fxA = _contact->GetFixtureA();
+	b2Fixture * fxB = _contact->GetFixtureB();
+	
+	PuppetCharacter * puppet;
+
+	if(fxA->GetFilterData().categoryBits == PuppetScene::PLAYER){
+		puppet = static_cast<PuppetCharacter *>( fxA->GetUserData());
+		if(puppet != nullptr){
+			puppet->canJump = true;
+		}
+	}else if(fxB->GetFilterData().categoryBits == PuppetScene::PLAYER){
+		puppet = static_cast<PuppetCharacter *>( fxB->GetUserData());
+		if(puppet != nullptr){
+			puppet->canJump = true;
+		}
+	}
 }
 
 void RaidTheCastleContactListener::EndContact(b2Contact* contact){

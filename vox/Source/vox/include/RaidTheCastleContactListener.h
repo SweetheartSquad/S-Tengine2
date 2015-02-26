@@ -4,12 +4,14 @@
 //main collision call back function
   class RaidTheCastleContactListener : public b2ContactListener
   {
-	//ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB);
-	  virtual void BeginContact(b2Contact* contact);
+	 
+	  //ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB);
+	  virtual void BeginContact(b2Contact* contact) override;
 
 	  void playerPlayerContact(b2Contact * contact);
 	  void playerItemContact(b2Contact * contact);
 	  void playerStructureContact(b2Contact * contact);
+	  void playerGroundContact(b2Contact* b2_contact);
 
-	  void EndContact(b2Contact* contact);
+	  void EndContact(b2Contact* contact) override;
   };

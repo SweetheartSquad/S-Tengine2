@@ -64,6 +64,7 @@ public:
 		BOUNDARY = 0x0001,
 		STRUCTURE = 0x0002,
 		ITEM = 0x0004,
+		GROUND = 0x0006,
 		PLAYER = 0x00010
 	};
 };

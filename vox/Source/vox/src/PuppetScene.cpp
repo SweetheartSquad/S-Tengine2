@@ -39,7 +39,7 @@ PuppetScene::PuppetScene(Game * _game):
 	cl(new RaidTheCastleContactListener),
 	world(new Box2DWorld(b2Vec2(0, -9.8f * 2))),
 	drawer(new Box2DDebugDraw(this, world)),
-	playerCharacter(new PuppetCharacter(world, PLAYER, STRUCTURE | ITEM | PLAYER, false)),
+	playerCharacter(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
@@ -83,6 +83,17 @@ PuppetScene::PuppetScene(Game * _game):
 
 	world->addToWorld(ground, 2);
 	addChild(ground, 0);
+
+	b2PolygonShape dynamicBox;
+	dynamicBox.SetAsBox(1.0f * std::abs(ground->transform->scaleVector.x), 1.0f * std::abs(ground->transform->scaleVector.y));	
+	b2Fixture * groundFixture = ground->getNewFixture(dynamicBox, 1.0f);
+	
+	groundFixture->SetSensor(true);
+	groundFixture->SetUserData(this);
+	
+	b2Filter sf;
+	sf.categoryBits = GROUND;
+	groundFixture->SetFilterData(sf);
 
 	Texture * treeTex1 = new Texture("../assets/hurly-burly/Foliage/Tree1-ds.png", 1024, 1024, true, true);
 	Texture * treeTex2 = new Texture("../assets/hurly-burly/Foliage/Tree2-ds.png", 1024, 1024, true, true);
