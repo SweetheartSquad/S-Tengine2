@@ -86,7 +86,6 @@ void loop() {
     0, 0, 0 , 
     0, 0, 0);
   }
-  Serial.flush();
 }
 
 
