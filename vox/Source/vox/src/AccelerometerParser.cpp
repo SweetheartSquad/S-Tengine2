@@ -14,7 +14,10 @@ AccelerometerParser::AccelerometerParser(std::string portName):
 	firstPing(true)
 {
 	//Make sure our buffer is clear
+    PurgeComm(hSerial, PURGE_RXABORT); 
+	PurgeComm(hSerial, PURGE_TXABORT);
 	PurgeComm(hSerial, PURGE_RXCLEAR);
+	PurgeComm(hSerial, PURGE_TXCLEAR);
 }
 
 AccelerometerParser::~AccelerometerParser(){
@@ -29,7 +32,7 @@ void AccelerometerParser::update(Step* _step){
 	if(IsConnected()) {
 		char buffer[LINE_SIZE];
 		if(firstPing) {
-			 ClearCommError(this->hSerial, &this->errors, &this->status);
+			ClearCommError(this->hSerial, &this->errors, &this->status);
 		}
 		if(this->status.cbInQue == LINE_SIZE){
 			int numRead = ReadData(buffer, LINE_SIZE);
@@ -68,7 +71,7 @@ void AccelerometerParser::update(Step* _step){
 				}
 			}else {
 				PurgeComm(hSerial, PURGE_RXCLEAR);
-			}
+			} 
 		}else {
 			PurgeComm(hSerial, PURGE_RXCLEAR);	
 		}

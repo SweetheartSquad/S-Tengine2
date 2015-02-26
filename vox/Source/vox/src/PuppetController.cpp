@@ -16,6 +16,10 @@ PuppetController::~PuppetController(){
 }
 
 void PuppetController::update(Step* _step){
+
+	if(accelerometer->pitch > 1.5f && accelerometer->z > 550.0f){
+		std::cout << "GO\n";
+	}
 	if(abs(accelerometer->x - accelerometer->lx) > 10.f 
 		|| abs(accelerometer->y - accelerometer->ly) > 10.f 
 		&& !puppetCharacter->torso->movingVertically(0.1f)) {
