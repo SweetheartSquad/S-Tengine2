@@ -70,9 +70,15 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	sensorTorso->SetSensor(true);
 	sensorTorso->SetUserData(this);
 
+	b2PolygonShape headShape = head->getFixtureShape();
+	b2Fixture * sensorHead = head->body->CreateFixture(&torsoShape, 1);
+	sensorHead->SetSensor(true);
+	sensorHead->SetUserData(this);
+
 	sensorLeft->SetFilterData(sf);
 	sensorRight->SetFilterData(sf);
 	sensorTorso->SetFilterData(sf);
+	sensorHead->SetFilterData(sf);
 
 	for(Box2DSprite ** c : components){
 		(*c)->createFixture(groupIndex);
