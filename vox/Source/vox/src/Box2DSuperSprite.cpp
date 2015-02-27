@@ -24,7 +24,7 @@ Box2DSuperSprite::Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int
 	NodeChild(nullptr),
 	world(_world),
 	componentScale(0.0025f),
-	groupIndex(--gGroupIndex),
+	groupIndex(0),
 	categoryBits(_categoryBits),
 	maskBits(_maskBits)
 {

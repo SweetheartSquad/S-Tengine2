@@ -4,13 +4,20 @@
 #include <Box2DSprite.h>
 #include <Texture.h>
 #include "Box2DWorld.h"
+#include "Boulder.h"
+#include "PuppetScene.h"
+#include <iostream>
+using namespace std;
+#define COOLDOWN 10
+
 
 Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	Structure(_world, _categoryBits, _maskBits),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable(),
-	targetRoll(0)
+	ready(true),
+	cooldownCnt(0.f)
 {
 	componentScale = 0.008f;
 
@@ -54,9 +61,9 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	jth.enableMotor = true;
 	jth.maxMotorTorque = 0;
 	jth.motorSpeed = 0;
-	jth.referenceAngle = glm::radians(-90.f);
-	jth.lowerAngle = glm::radians(-90.f);
-	jth.upperAngle = glm::radians(90.f);
+	jth.referenceAngle = glm::radians(0.f);
+	jth.lowerAngle = glm::radians(45.f);
+	jth.upperAngle = glm::radians(-180.f);
 	world->b2world->CreateJoint(&jth);
 }
 
@@ -68,7 +75,26 @@ void Catapult::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStac
 }
 
 void Catapult::update(Step* _step){
+	b2RevoluteJoint * jk = (b2RevoluteJoint *)(*components.at(1))->body->GetJointList()->joint;
+	float angle = jk->GetJointAngle()*180;
+	cout << "angle: ";
+	cout << angle << endl;
+	cout << "motorSpeed: ";
+	cout << jk->GetMotorSpeed() << endl;
+	cout << "maxMotorTorque";
+	cout << jk->GetMaxMotorTorque() << endl;
 	Structure::update(_step);
+	if(!ready){
+		b2RevoluteJoint * j = (b2RevoluteJoint *)(*components.at(1))->body->GetJointList()->joint;
+		
+		if(j->GetMaxMotorTorque() > 20.f && !j->GetJointAngle()*180/2 <= -180.f){
+			j->SetMaxMotorTorque(20.f);
+			j->SetMotorSpeed(18.f);
+		}
+		if(j->GetJointAngle()*180 <= -180.f){
+			loadCatapult();
+		}
+	}
 }
 
 void Catapult::unload(){
@@ -77,4 +103,23 @@ void Catapult::unload(){
 
 void Catapult::load(){
 	Structure::load();
+}
+
+void Catapult::loadCatapult(){
+
+	Boulder * boulder = new Boulder(world, PuppetScene::ITEM, PuppetScene::PLAYER | PuppetScene::STRUCTURE | PuppetScene::ITEM);
+	boulder->setShader(getShader(), true);
+	addChild(boulder);
+	boulder->translateComponents(glm::vec3(base->getCorrectedWidth() * 0.8,base->getCorrectedHeight(),0));
+	cooldownCnt = 0.f;
+	ready = true;
+}
+
+void Catapult::fireCatapult(){
+	b2RevoluteJoint * j = (b2RevoluteJoint *)(*components.at(1))->body->GetJointList()->joint;
+	float angle = abs((j->GetJointAngle()*180));
+	j->SetMotorSpeed(-180+angle);
+	j->SetMaxMotorTorque((*components.at(0))->body->GetMass()*750*(angle*5));
+	
+	ready = false;
 }

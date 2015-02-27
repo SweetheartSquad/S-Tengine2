@@ -1,6 +1,7 @@
 #include "RaidTheCastleContactListener.h"
 #include "PuppetScene.h"
 
+#include "Scene.h"
 #include "Catapult.h"
 #include "PuppetCharacter.h"
 #include "Box2DSprite.h"
@@ -91,13 +92,7 @@ void RaidTheCastleContactListener::playerStructureContact(b2Contact * contact){
 	}
 	
 	if(puppet != nullptr && catapult != nullptr){
-		// Check for cooldown
-		if(catapult->components.size() > 1){
-			// Fire catapult
-			b2RevoluteJoint * j = (b2RevoluteJoint *)(*catapult->components.at(1))->body->GetJointList()->joint;
-			j->SetMotorSpeed(-j->GetJointAngle()*360);
-			j->SetMaxMotorTorque((*catapult->components.at(0))->body->GetMass()*750*(std::abs(j->GetJointAngle())*5));
-		}
+		catapult->fireCatapult();
 	}
 	//cout << "Player-Player Contact" << endl;
 }

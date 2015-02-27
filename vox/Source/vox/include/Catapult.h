@@ -10,8 +10,9 @@ class Box2DWorld;
 class Catapult : public Structure{
 public:
 
-	float targetRoll;
-	
+	bool ready;
+	float cooldownCnt;
+
 	Box2DSprite * arm;
 	Box2DSprite * base;
 
@@ -22,5 +23,8 @@ public:
 	void update(Step* _step) override;
 	void unload() override;
 	void load() override;
+
+	void loadCatapult();
+	void fireCatapult();
 
 };
