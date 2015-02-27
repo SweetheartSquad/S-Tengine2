@@ -224,7 +224,31 @@ void PuppetCharacter::update(Step* _step){
 	}
 }
 
+void PuppetCharacter::jump(){
+	float t = torso->body->GetAngle();
+	torso->applyLinearImpulseUp(200);
+	if(torso->body->GetAngle() > 0){
+		torso->applyLinearImpulseLeft(100*(1-cos(t)));
+	}else{
+		torso->applyLinearImpulseRight(100*(1-cos(t)));
+	}
+}
+
 void PuppetCharacter::action(){
+	if(heldItem != nullptr){
+		if(itemJoint != nullptr){
+			world->b2world->DestroyJoint(itemJoint);
+			float t = torso->body->GetAngle();
+			(*heldItem->components.at(0))->applyLinearImpulseUp(200);
+			if(torso->body->GetAngle() > 0){
+				(*heldItem->components.at(0))->applyLinearImpulseLeft(100*(1-cos(t)));
+			}else{
+				(*heldItem->components.at(0))->applyLinearImpulseRight(100*(1-cos(t)));
+			}
+			heldItem = nullptr;
+			itemJoint = nullptr;
+		}
+	}
 }
 
 void PuppetCharacter::unload(){
@@ -237,9 +261,7 @@ void PuppetCharacter::load(){
 
 void PuppetCharacter::pickupItem(Item * _item){
 	if(_item != heldItem){
-		if(itemJoint != nullptr){
-			world->b2world->DestroyJoint(itemJoint);
-		}
+		action();
 		b2WeldJointDef jd;
 		jd.bodyA = armRight->body;
 		jd.bodyB = (*_item->components.at(0))->body;
