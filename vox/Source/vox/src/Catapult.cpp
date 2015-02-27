@@ -91,7 +91,7 @@ void Catapult::update(Step * _step){
 	
 	if(!ready){
 		if(firing){
-			if(angle <= glm::radians(-70.f)){
+			if(angle <= glm::radians(-78.f)){
 				fireBoulder = true;
 			}
 			if(angle <= glm::radians(-80.f)){

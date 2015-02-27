@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Catapult.h"
 #include "PuppetCharacter.h"
+#include "Box2dWorld.h"
 #include "Item.h"
 #include "Box2DSprite.h"
 #include <Box2D/Box2D.h>
@@ -16,6 +17,11 @@
 		// pass
 	}
 }*/
+
+RaidTheCastleContactListener::RaidTheCastleContactListener(PuppetScene * _scene) :
+	scene(_scene)
+{
+}
 
 void RaidTheCastleContactListener::BeginContact(b2Contact* contact){
 	if(contact->GetFixtureA()->IsSensor() || contact->GetFixtureB()->IsSensor()){
@@ -68,6 +74,12 @@ void RaidTheCastleContactListener::playerPlayerContact(b2Contact * contact){
 
 void RaidTheCastleContactListener::playerItemContact(b2Contact * contact, b2Fixture * playerFixture, b2Fixture * itemContact){
 	std::cout << "Player-Item Collision" << std::endl;
+	
+	//((PuppetCharacter *)playerFixture->GetUserData())->pickupItem(((Item *)itemContact->GetUserData());
+		((PuppetCharacter *)playerFixture->GetUserData())->itemToPickup = (Item *)itemContact->GetUserData();
+
+	
+
 	/*puppet = static_cast<PuppetCharacter *>( fxA->GetBody()->GetUserData() );
 	if(puppet != nullptr){
 		item = static_cast<Item *>( fxB->GetBody()->GetUserData() );

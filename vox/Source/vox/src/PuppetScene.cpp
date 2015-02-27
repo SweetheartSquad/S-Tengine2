@@ -36,7 +36,7 @@
 
 PuppetScene::PuppetScene(Game * _game):
 	LayeredScene(_game, 3),
-	cl(new RaidTheCastleContactListener()),
+	cl(new RaidTheCastleContactListener(this)),
 	world(new Box2DWorld(b2Vec2(0, -9.8f * 2))),
 	drawer(new Box2DDebugDraw(this, world)),
 	playerCharacter(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),

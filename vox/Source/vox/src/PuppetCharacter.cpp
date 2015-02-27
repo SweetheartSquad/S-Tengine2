@@ -5,6 +5,7 @@
 #include <Texture.h>
 #include <GameJamCharacter.h>
 #include "Box2DWorld.h"
+#include "Item.h"
 PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, bool _ai):
 	Box2DSuperSprite(_world, _categoryBits, _maskBits),
 	NodeTransformable(new Transform()),
@@ -12,7 +13,10 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	NodeRenderable(),
 	ai(ai),
 	canJump(false),
-	targetRoll(0)
+	targetRoll(0),
+	itemToPickup(nullptr),
+	heldItem(nullptr),
+	itemJoint(nullptr)
 {
 	
 	GameJamCharacter::texture_packs character = GameJamCharacter::kKNIGHT;
@@ -214,6 +218,10 @@ void PuppetCharacter::update(Step* _step){
 	
 	//headgear->body->SetTransform(head->body->GetPosition(), head->body->GetAngle());
 	//face->body->SetTransform(head->body->GetPosition(), head->body->GetAngle());
+
+	if(itemToPickup != nullptr){
+		pickupItem(itemToPickup);
+	}
 }
 
 void PuppetCharacter::action(){
@@ -225,4 +233,22 @@ void PuppetCharacter::unload(){
 
 void PuppetCharacter::load(){
 	Box2DSuperSprite::load();
+}
+
+void PuppetCharacter::pickupItem(Item * _item){
+	if(_item != heldItem){
+		if(itemJoint != nullptr){
+			world->b2world->DestroyJoint(itemJoint);
+		}
+		b2WeldJointDef jd;
+		jd.bodyA = armRight->body;
+		jd.bodyB = (*_item->components.at(0))->body;
+		jd.localAnchorA.Set(0, 0);
+		jd.localAnchorB.Set(0, 0);
+		jd.collideConnected = false;
+		jd.referenceAngle = 0.f;
+		itemJoint = (b2WeldJoint *)world->b2world->CreateJoint(&jd);
+		heldItem = _item;
+		itemToPickup = nullptr;
+	}
 }

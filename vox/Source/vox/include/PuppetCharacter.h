@@ -6,7 +6,7 @@
 
 class Box2DSprite;
 class Box2DWorld;
-
+class Item;
 class PuppetCharacter : public Box2DSuperSprite {
 public:
 	bool ai;
@@ -33,4 +33,9 @@ public:
 	void load() override;
 	//Called when the controller is thrust forward
 	void action();
+
+	Item * itemToPickup;
+	Item * heldItem;
+	b2WeldJoint * itemJoint;
+	void pickupItem(Item * _item);
 };

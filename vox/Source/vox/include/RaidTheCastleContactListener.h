@@ -1,10 +1,13 @@
 #include <Box2D\Box2D.h>
 
-class Scene;
+class PuppetScene;
 
 //main collision call back function
   class RaidTheCastleContactListener : public b2ContactListener
   {
+  public:
+	  RaidTheCastleContactListener(PuppetScene * _scene);
+
 	//ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB);
 	  virtual void BeginContact(b2Contact* contact) override;
 
@@ -15,6 +18,5 @@ class Scene;
 
 	  void EndContact(b2Contact* contact) override;
   
-  private:
-	  Scene * scene;
+	  PuppetScene * scene;
   };
