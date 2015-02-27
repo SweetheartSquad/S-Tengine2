@@ -11,6 +11,8 @@ class Catapult : public Structure{
 public:
 
 	bool ready;
+	bool firing;
+	bool fireBoulder;
 	float cooldownCnt;
 
 	Box2DSprite * arm;

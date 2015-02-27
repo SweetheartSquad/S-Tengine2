@@ -7,7 +7,7 @@
 #include "Boulder.h"
 #include "PuppetScene.h"
 #include <iostream>
-using namespace std;
+
 #define COOLDOWN 10
 
 
@@ -17,6 +17,8 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	NodeChild(nullptr),
 	NodeRenderable(),
 	ready(true),
+	firing(false),
+	fireBoulder(false),
 	cooldownCnt(0.f)
 {
 	componentScale = 0.008f;
@@ -40,9 +42,12 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	tShape.SetAsBox(base->width*std::abs(transform->scaleVector.x)*base->scale*2.f, std::abs(base->height*transform->scaleVector.y)*base->scale*2.f);
 	
 	b2Fixture * sensor = base->body->CreateFixture(&tShape, 1);
+	sensor->SetRestitution(0.9f);
 	sensor->SetSensor(true);
 	sensor->SetUserData(this);
 	
+	arm->body->GetFixtureList()->SetRestitution(0.9f);
+
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
 	if(maskBits != (int16)-1){
@@ -58,12 +63,12 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	jth.localAnchorB.Set(0.9f * arm->getCorrectedWidth(), 0.f * arm->getCorrectedHeight());
 	jth.collideConnected = false;
 	jth.enableLimit = true;
-	jth.enableMotor = true;
-	jth.maxMotorTorque = 0;
-	jth.motorSpeed = 0;
-	jth.referenceAngle = glm::radians(0.f);
-	jth.lowerAngle = glm::radians(-90.f);
-	jth.upperAngle = glm::radians(0.f);
+	/*jth.enableMotor = true;
+	jth.maxMotorTorque = 0.f;
+	jth.motorSpeed = 0.f;*/
+	jth.referenceAngle = 0.f;
+	jth.lowerAngle = -glm::radians(80.f);
+	//jth.upperAngle = 0.f;
 	world->b2world->CreateJoint(&jth);
 }
 
@@ -75,24 +80,27 @@ void Catapult::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStac
 }
 
 void Catapult::update(Step* _step){
-	b2RevoluteJoint * jk = (b2RevoluteJoint *)(*components.at(1))->body->GetJointList()->joint;
-	float angle = glm::degrees(jk->GetJointAngle());
-	cout << "angle: ";
-	cout << angle << endl;
-	cout << "motorSpeed: ";
-	cout << jk->GetMotorSpeed() << endl;
-	cout << "maxMotorTorque";
-	cout << jk->GetMaxMotorTorque() << endl;
 	Structure::update(_step);
+	if(fireBoulder){
+		fireBoulder = false;
+	}
+
+	b2RevoluteJoint * jk = (b2RevoluteJoint *)base->body->GetJointList()->joint;
+	float angle = jk->GetJointAngle();
+	std::cout << glm::degrees(angle) << std::endl;
+	std::cout << ready << std::endl;
+	std::cout << firing << std::endl;
+	
 	if(!ready){
-		b2RevoluteJoint * j = (b2RevoluteJoint *)(*components.at(1))->body->GetJointList()->joint;
-		
-		if(j->GetMaxMotorTorque() > 20.f && angle > -180.f){
-			j->SetMaxMotorTorque(20.f);
-			j->SetMotorSpeed(18.f);
-		}
-		if(angle <= -180.f){
+		if(firing){
+			if(angle <= -glm::radians(80.f)){
+				arm->body->SetAngularVelocity(0);
+				firing = false;
+				fireBoulder = true;
+			}
+		}else if(angle >= -0.00001f){
 			ready = true;
+			//arm->body->SetAngularVelocity(-1);
 		}
 	}
 }
@@ -106,10 +114,8 @@ void Catapult::load(){
 }
 
 void Catapult::fireCatapult(){
-	b2RevoluteJoint * j = (b2RevoluteJoint *)(*components.at(1))->body->GetJointList()->joint;
-	float angle = abs((j->GetJointAngle()*180));
-	j->SetMotorSpeed(-180+angle);
-	j->SetMaxMotorTorque((*components.at(0))->body->GetMass()*750*(angle*5));
-	
+	b2RevoluteJoint * j = (b2RevoluteJoint *)base->body->GetJointList()->joint;
+	arm->body->SetAngularVelocity(-50);
+	firing = true;
 	ready = false;
 }

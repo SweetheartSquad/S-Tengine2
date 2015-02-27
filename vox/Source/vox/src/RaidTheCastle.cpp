@@ -5,6 +5,8 @@
 #include "Catapult.h"
 #include "Box2DSprite.h"
 #include "shader/BaseComponentShader.h"
+#include "keyboard.h"
+#include <glfw\glfw3.h>
 
 RaidTheCastle::RaidTheCastle(Game* _game):
 	PuppetScene(_game)
@@ -19,6 +21,10 @@ void RaidTheCastle::update(Step* _step){
 	PuppetScene::update(_step);
 	if(catapult->ready){
 		loadCatapult();
+	}
+
+	if(keyboard->keyDown(GLFW_KEY_F)){
+		catapult->fireCatapult();
 	}
 }
 

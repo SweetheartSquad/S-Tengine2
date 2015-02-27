@@ -39,7 +39,7 @@ PuppetScene::PuppetScene(Game * _game):
 	cl(new RaidTheCastleContactListener()),
 	world(new Box2DWorld(b2Vec2(0, -9.8f))),
 	drawer(new Box2DDebugDraw(this, world)),
-	playerCharacter(new PuppetCharacter(world, PLAYER, ITEM | PLAYER, false)),
+	playerCharacter(new PuppetCharacter(world, PLAYER, ITEM | PLAYER | STRUCTURE, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
@@ -120,7 +120,7 @@ PuppetScene::PuppetScene(Game * _game):
 	michael->addToScene(this);
 	michael->translateComponents(glm::vec3(1,0,0));
 	
-	catapult = new Catapult(world, STRUCTURE, STRUCTURE | ITEM | BOUNDARY);
+	catapult = new Catapult(world, STRUCTURE, STRUCTURE | ITEM | BOUNDARY | PLAYER);
 	catapult->setShader(shader, true);
 	addChild(catapult, true);
 	catapult->addToScene(this);

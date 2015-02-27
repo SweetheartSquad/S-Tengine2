@@ -11,8 +11,8 @@ class Scene;
 	  virtual void BeginContact(b2Contact* contact);
 
 	  void playerPlayerContact(b2Contact * contact);
-	  void playerItemContact(b2Contact * contact);
-	  void playerStructureContact(b2Contact * contact);
+	  void playerItemContact(b2Contact * contact, b2Fixture * playerFixture, b2Fixture * itemFixture);
+	  void playerStructureContact(b2Contact * contact, b2Fixture * playerFixture, b2Fixture * structureFixture);
 
 	  void EndContact(b2Contact* contact);
   
