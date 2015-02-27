@@ -36,7 +36,7 @@
 
 PuppetScene::PuppetScene(Game * _game):
 	LayeredScene(_game, 3),
-	cl(new RaidTheCastleContactListener),
+	cl(new RaidTheCastleContactListener()),
 	world(new Box2DWorld(b2Vec2(0, -9.8f * 2))),
 	drawer(new Box2DDebugDraw(this, world)),
 	playerCharacter(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),
@@ -155,10 +155,10 @@ PuppetScene::PuppetScene(Game * _game):
 	michael->addToLayeredScene(this, 1);
 	michael->translateComponents(glm::vec3(1,0,0));
 	
-	catapult = new Catapult(world, STRUCTURE, PLAYER);
+	catapult = new Catapult(world, STRUCTURE, STRUCTURE | ITEM | BOUNDARY | PLAYER, -10);
 	catapult->setShader(shader, true);
-	addChild(catapult, 1);
 	catapult->addToLayeredScene(this, 1);
+	addChild(catapult, 1);
 
 	catapult->translateComponents(glm::vec3(-10,0,0));
 

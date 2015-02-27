@@ -1,13 +1,13 @@
 #include "RaidTheCastleContactListener.h"
 #include "PuppetScene.h"
 
+#include "Scene.h"
 #include "Catapult.h"
 #include "PuppetCharacter.h"
+#include "Item.h"
 #include "Box2DSprite.h"
 #include <Box2D/Box2D.h>
 #include <Box2D\Dynamics\Joints\b2RevoluteJoint.h>
-
-using namespace std;
 
 /*bool GameJamContactListener:: ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB){
 	if(fixtureA->GetFilterData().maskBits == 1 || fixtureB->GetFilterData().maskBits == 1){
@@ -18,25 +18,35 @@ using namespace std;
 }*/
 
 void RaidTheCastleContactListener::BeginContact(b2Contact* contact){
-
 	if(contact->GetFixtureA()->IsSensor() || contact->GetFixtureB()->IsSensor()){
 		b2Filter fA = contact->GetFixtureA()->GetFilterData();
 		b2Filter fB = contact->GetFixtureB()->GetFilterData();
+		b2Fixture * playerFixture;
+		b2Fixture * otherFixture;
+		bool player = false;
+		if(fA.categoryBits == PuppetScene::PLAYER){
+			playerFixture = contact->GetFixtureA();
+			otherFixture = contact->GetFixtureB();
+			player = true;
+		}else if(fB.categoryBits == PuppetScene::PLAYER){
+			playerFixture = contact->GetFixtureB();
+			otherFixture = contact->GetFixtureA();
+			player = true;
+		}
 
-		if(fA.categoryBits == PuppetScene::PLAYER || fB.categoryBits == PuppetScene::PLAYER){
-
+		if(player){
 			if(fA.categoryBits == PuppetScene::PLAYER && fB.categoryBits == PuppetScene::PLAYER){
 				// Player-Player collision
 				playerPlayerContact(contact);
 			}else if(fA.categoryBits == PuppetScene::ITEM || fB.categoryBits == PuppetScene::ITEM){
 				// Player-Item collision
-				playerItemContact(contact);
+				playerItemContact(contact, playerFixture, otherFixture);
 			}else if(fA.categoryBits == PuppetScene::STRUCTURE || fB.categoryBits == PuppetScene::STRUCTURE){
 				// Player-Structure collision
-				playerStructureContact(contact);
+				playerStructureContact(contact, playerFixture, otherFixture);
 			}else if(fA.categoryBits == PuppetScene::GROUND || fB.categoryBits == PuppetScene::GROUND){
-				// Player-Structure collision
-				playerGroundContact(contact);
+				// Player-Ground collision
+				playerGroundContact(contact, playerFixture, otherFixture);
 			}
 		}
 	}else{
@@ -56,15 +66,9 @@ void RaidTheCastleContactListener::playerPlayerContact(b2Contact * contact){
 	}
 }
 
-void RaidTheCastleContactListener::playerItemContact(b2Contact * contact){
-	b2Fixture * fxA = contact->GetFixtureA();
-	b2Fixture * fxB = contact->GetFixtureB();
-
-	/*
-	PuppetCharacter * puppet;
-	Item * item;
-
-	puppet = static_cast<PuppetCharacter *>( fxA->GetBody()->GetUserData() );
+void RaidTheCastleContactListener::playerItemContact(b2Contact * contact, b2Fixture * playerFixture, b2Fixture * itemContact){
+	std::cout << "Player-Item Collision" << std::endl;
+	/*puppet = static_cast<PuppetCharacter *>( fxA->GetBody()->GetUserData() );
 	if(puppet != nullptr){
 		item = static_cast<Item *>( fxB->GetBody()->GetUserData() );
 	}else{
@@ -77,13 +81,24 @@ void RaidTheCastleContactListener::playerItemContact(b2Contact * contact){
 	}*/
 }
 
-void RaidTheCastleContactListener::playerStructureContact(b2Contact * contact){
-	b2Fixture * fxA = contact->GetFixtureA();
-	b2Fixture * fxB = contact->GetFixtureB();
+void RaidTheCastleContactListener::playerStructureContact(b2Contact * contact, b2Fixture * playerFixture, b2Fixture * structureFixture){
 	
-	PuppetCharacter * puppet;
+	std::cout << "Player-Structure Collision" << std::endl;
+	
+	// need to actually check if the structure is the catapult
+	((Catapult *)structureFixture->GetUserData())->fireCatapult();
+
+	/*std::cout << typeid (fxA->GetUserData()).name() << std::endl;
+	if(typeid (fxA->GetUserData()) == typeid (Catapult *)){
+		((Catapult *)fxA->GetUserData())->fireCatapult();
+	std::cout << "FIRE THE CATAPULT!" << std::endl;
+	}
+	if(typeid (fxB->GetUserData()) == typeid (Catapult *)){
+		((Catapult *)fxB->GetUserData())->fireCatapult();
+	std::cout << "FIRE THE CATAPULT!" << std::endl;
+	}*/
+	/*PuppetCharacter * puppet;
 	Catapult * catapult;
-	float flingerMass;
 
 	puppet = static_cast<PuppetCharacter *>( fxA->GetUserData() );
 	if(puppet != nullptr){
@@ -94,33 +109,14 @@ void RaidTheCastleContactListener::playerStructureContact(b2Contact * contact){
 	}
 	
 	if(puppet != nullptr && catapult != nullptr){
-		// Check for cooldown
-		if(catapult->components.size() > 1){
-			// Fire catapult
-			b2RevoluteJoint * j = (b2RevoluteJoint *)(*catapult->components.at(1))->body->GetJointList()->joint;
-			j->SetMotorSpeed(-j->GetJointAngle()*360);
-			j->SetMaxMotorTorque((*catapult->components.at(0))->body->GetMass()*750*(std::abs(j->GetJointAngle())*5));
-		}
-	}
-	//cout << "Player-Player Contact" << endl;
+		catapult->fireCatapult();
+	}*/
 }
 
-void RaidTheCastleContactListener::playerGroundContact(b2Contact* _contact){
-	b2Fixture * fxA = _contact->GetFixtureA();
-	b2Fixture * fxB = _contact->GetFixtureB();
-	
-	PuppetCharacter * puppet;
-
-	if(fxA->GetFilterData().categoryBits == PuppetScene::PLAYER){
-		puppet = static_cast<PuppetCharacter *>( fxA->GetUserData());
-		if(puppet != nullptr){
-			puppet->canJump = true;
-		}
-	}else if(fxB->GetFilterData().categoryBits == PuppetScene::PLAYER){
-		puppet = static_cast<PuppetCharacter *>( fxB->GetUserData());
-		if(puppet != nullptr){
-			puppet->canJump = true;
-		}
+void RaidTheCastleContactListener::playerGroundContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _groundFixture){
+	PuppetCharacter * puppet = static_cast<PuppetCharacter *>( _playerFixture->GetUserData());
+	if(puppet != nullptr){
+		puppet->canJump = true;
 	}
 }
 

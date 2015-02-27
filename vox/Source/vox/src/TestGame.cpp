@@ -1,5 +1,5 @@
 #include "TestGame.h"
-#include "PuppetTestScene.h"
+#include "RaidTheCastle.h"
 
 #include "GameJamCharacter.h"
 #include "GameJamSceneIndoor.h"
@@ -13,7 +13,7 @@ TestGame::TestGame(bool _running):
 {
 	std::srand((unsigned long int)std::time(0));
 	GameJamCharacter::init();
-	scenes.insert(std::make_pair("Raid the Castle", new PuppetTestScene(this)));
+	scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(this)));
 	//((GameJamSceneIndoor *)scenes.at("Raid the Castle"))->debugDraw = true;
 	currentScene = scenes.at("Raid the Castle");
 }

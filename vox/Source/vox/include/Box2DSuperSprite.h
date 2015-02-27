@@ -35,7 +35,7 @@ public:
 
 	std::vector<Box2DSprite **> components;
 
-	explicit Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1);
+	explicit Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	
 	~Box2DSuperSprite();
 
