@@ -62,8 +62,8 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	jth.maxMotorTorque = 0;
 	jth.motorSpeed = 0;
 	jth.referenceAngle = glm::radians(0.f);
-	jth.lowerAngle = glm::radians(45.f);
-	jth.upperAngle = glm::radians(-180.f);
+	jth.lowerAngle = glm::radians(-90.f);
+	jth.upperAngle = glm::radians(0.f);
 	world->b2world->CreateJoint(&jth);
 }
 
@@ -76,7 +76,7 @@ void Catapult::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStac
 
 void Catapult::update(Step* _step){
 	b2RevoluteJoint * jk = (b2RevoluteJoint *)(*components.at(1))->body->GetJointList()->joint;
-	float angle = jk->GetJointAngle()*180;
+	float angle = glm::degrees(jk->GetJointAngle());
 	cout << "angle: ";
 	cout << angle << endl;
 	cout << "motorSpeed: ";
@@ -87,13 +87,13 @@ void Catapult::update(Step* _step){
 	if(!ready){
 		b2RevoluteJoint * j = (b2RevoluteJoint *)(*components.at(1))->body->GetJointList()->joint;
 		
-		if(j->GetMaxMotorTorque() > 20.f && !j->GetJointAngle()*180/2 <= -180.f){
+		if(j->GetMaxMotorTorque() > 20.f && angle > -180.f){
 			j->SetMaxMotorTorque(20.f);
 			j->SetMotorSpeed(18.f);
 		}
-		/*if(j->GetJointAngle()*180 <= -180.f){
-			loadCatapult();
-		}*/
+		if(angle <= -180.f){
+			ready = true;
+		}
 	}
 }
 
