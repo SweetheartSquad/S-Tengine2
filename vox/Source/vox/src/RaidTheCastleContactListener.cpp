@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Catapult.h"
 #include "PuppetCharacter.h"
+#include "Item.h"
 #include "Box2DSprite.h"
 #include <Box2D/Box2D.h>
 #include <Box2D\Dynamics\Joints\b2RevoluteJoint.h>
@@ -58,11 +59,11 @@ void RaidTheCastleContactListener::playerItemContact(b2Contact * contact){
 	b2Fixture * fxA = contact->GetFixtureA();
 	b2Fixture * fxB = contact->GetFixtureB();
 
-	/*
+	
 	PuppetCharacter * puppet;
 	Item * item;
-
-	puppet = static_cast<PuppetCharacter *>( fxA->GetBody()->GetUserData() );
+	std::cout << "Player-Item Collision" << std::endl;
+	/*puppet = static_cast<PuppetCharacter *>( fxA->GetBody()->GetUserData() );
 	if(puppet != nullptr){
 		item = static_cast<Item *>( fxB->GetBody()->GetUserData() );
 	}else{

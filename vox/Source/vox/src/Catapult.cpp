@@ -91,9 +91,9 @@ void Catapult::update(Step* _step){
 			j->SetMaxMotorTorque(20.f);
 			j->SetMotorSpeed(18.f);
 		}
-		if(j->GetJointAngle()*180 <= -180.f){
+		/*if(j->GetJointAngle()*180 <= -180.f){
 			loadCatapult();
-		}
+		}*/
 	}
 }
 
@@ -103,16 +103,6 @@ void Catapult::unload(){
 
 void Catapult::load(){
 	Structure::load();
-}
-
-void Catapult::loadCatapult(){
-
-	Boulder * boulder = new Boulder(world, PuppetScene::ITEM, PuppetScene::PLAYER | PuppetScene::STRUCTURE | PuppetScene::ITEM);
-	boulder->setShader(getShader(), true);
-	addChild(boulder);
-	boulder->translateComponents(glm::vec3(base->getCorrectedWidth() * 0.8,base->getCorrectedHeight(),0));
-	cooldownCnt = 0.f;
-	ready = true;
 }
 
 void Catapult::fireCatapult(){

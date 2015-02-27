@@ -92,7 +92,7 @@
     <ClCompile Include="..\src\PuppetCharacter.cpp" />
     <ClCompile Include="..\src\PuppetController.cpp" />
     <ClCompile Include="..\src\PuppetScene.cpp" />
-    <ClCompile Include="..\src\PuppetTestScene.cpp" />
+    <ClCompile Include="..\src\RaidTheCastle.cpp" />
     <ClCompile Include="..\src\RaidTheCastleContactListener.cpp" />
     <ClCompile Include="..\src\RandomCharacter.cpp" />
     <ClCompile Include="..\src\Rectangle.cpp" />
@@ -220,7 +220,7 @@
     <ClInclude Include="..\include\PuppetCharacter.h" />
     <ClInclude Include="..\include\PuppetController.h" />
     <ClInclude Include="..\include\PuppetScene.h" />
-    <ClInclude Include="..\include\PuppetTestScene.h" />
+    <ClInclude Include="..\include\RaidTheCastle.h" />
     <ClInclude Include="..\include\RaidTheCastleContactListener.h" />
     <ClInclude Include="..\include\RandomCharacter.h" />
     <ClInclude Include="..\include\Rectangle.h" />

@@ -36,7 +36,7 @@
 
 PuppetScene::PuppetScene(Game * _game):
 	Scene(_game),
-	cl(new RaidTheCastleContactListener),
+	cl(new RaidTheCastleContactListener()),
 	world(new Box2DWorld(b2Vec2(0, -9.8f))),
 	drawer(new Box2DDebugDraw(this, world)),
 	playerCharacter(new PuppetCharacter(world, PLAYER, ITEM | PLAYER, false)),
@@ -125,7 +125,7 @@ PuppetScene::PuppetScene(Game * _game):
 	addChild(catapult, true);
 	catapult->addToScene(this);
 	catapult->translateComponents(glm::vec3(-25,0,0));
-	catapult->loadCatapult();
+	
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");

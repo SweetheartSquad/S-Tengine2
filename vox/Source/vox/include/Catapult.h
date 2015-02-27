@@ -24,7 +24,5 @@ public:
 	void unload() override;
 	void load() override;
 
-	void loadCatapult();
 	void fireCatapult();
-
 };
