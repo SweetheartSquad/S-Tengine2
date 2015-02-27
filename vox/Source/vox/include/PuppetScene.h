@@ -34,14 +34,23 @@ public:
 	RaidTheCastleContactListener * cl;
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
+
 	PuppetCharacter * playerCharacter;
+	PuppetCharacter * playerCharacter2;
+	PuppetCharacter * playerCharacter3;
+	PuppetCharacter * playerCharacter4;
+
+	PuppetController * puppetController;
+	PuppetController * puppetController2;
+	PuppetController * puppetController3;
+	PuppetController * puppetController4;
+
 	Catapult * catapult;
 	Box2DMeshEntity * ground;
 	MeshEntity * background;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
 	AccelerometerParser * arduino;
-	PuppetController * puppetController;
 
 	PerspectiveCamera * perspectiveCamera;
 	MousePerspectiveCamera * mouseCamera;

@@ -40,6 +40,9 @@ PuppetScene::PuppetScene(Game * _game):
 	world(new Box2DWorld(b2Vec2(0, -9.8f * 2))),
 	drawer(new Box2DDebugDraw(this, world)),
 	playerCharacter(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),
+	playerCharacter2(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),
+	playerCharacter3(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),
+	playerCharacter4(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
@@ -128,6 +131,24 @@ PuppetScene::PuppetScene(Game * _game):
 	playerCharacter->addToLayeredScene(this, 1);
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
 
+	playerCharacter2->setShader(shader, true);
+	addChild(playerCharacter2, 1);
+	playerCharacter2->addToLayeredScene(this, 1);
+	playerCharacter2->head->maxVelocity = b2Vec2(10, 10);
+	playerCharacter2->translateComponents(glm::vec3(5.0f, 0.f, 0.f));
+
+	playerCharacter3->setShader(shader, true);
+	addChild(playerCharacter3, 1);
+	playerCharacter3->addToLayeredScene(this, 1);
+	playerCharacter3->head->maxVelocity = b2Vec2(10, 10);
+	playerCharacter3->translateComponents(glm::vec3(10.0f, 0.f, 0.f));
+
+	playerCharacter4->setShader(shader, true);
+	addChild(playerCharacter4, 1);
+	playerCharacter4->addToLayeredScene(this, 1);
+	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
+	playerCharacter4->translateComponents(glm::vec3(15.0f, 0.f, 0.f));
+
 	TestCharacter * michael = new TestCharacter(world, false, PLAYER, STRUCTURE | ITEM | PLAYER);
 	michael->setShader(shader, true);
 	addChild(michael, 1);
@@ -143,10 +164,24 @@ PuppetScene::PuppetScene(Game * _game):
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");
+
 	Accelerometer * acc = new Accelerometer(arduino);
 	arduino->addAccelerometer(acc);
+
+	Accelerometer * acc2 = new Accelerometer(arduino);
+	arduino->addAccelerometer(acc2);
+
+	Accelerometer * acc3 = new Accelerometer(arduino);
+	arduino->addAccelerometer(acc3);
 	
-	puppetController = new PuppetController(acc, playerCharacter);
+	Accelerometer * acc4 = new Accelerometer(arduino);
+	arduino->addAccelerometer(acc4);
+	
+	puppetController =  new PuppetController(acc, playerCharacter);
+	puppetController2 = new PuppetController(acc2, playerCharacter2);
+	puppetController3 = new PuppetController(acc3, playerCharacter3);
+	puppetController4 = new PuppetController(acc4, playerCharacter4);
+
 	perspectiveCamera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 8.f, 0), 0, 0);
 	
 	//Set up cameras
@@ -193,6 +228,9 @@ void PuppetScene::update(Step * _step){
 
 	arduino->update(_step);
 	puppetController->update(_step);
+	puppetController2->update(_step);
+	puppetController3->update(_step);
+	puppetController4->update(_step);
 
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
 		if(playerCharacter->torso->body->GetPosition().y < 8){

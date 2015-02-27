@@ -31,6 +31,6 @@ public:
 	void update(Step* _step) override;
 	void unload() override;
 	void load() override;
-
+	//Called when the controller is thrust forward
 	void action();
 };

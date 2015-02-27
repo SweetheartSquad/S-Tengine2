@@ -1,19 +1,37 @@
 //Arduino Sketch
-const int  buttonPin0 = 0;  // the pin that the pushbutton is attached to
-const int  buttonPin1 = 1;  // the pin that the pushbutton is attached to
-const int  buttonPin2 = 2;  // the pin that the pushbutton is attached to
+const int  acclPin0 = 0;  // the pin that the pushbutton is attached to
+const int  acclPin1 = 1;  // the pin that the pushbutton is attached to
+const int  acclPin2 = 2;  // the pin that the pushbutton is attached to
 
+const int  acclPin3 = 3;  // the pin that the pushbutton is attached to
+const int  acclPin4 = 4;  // the pin that the pushbutton is attached to
+const int  acclPin5 = 5;  // the pin that the pushbutton is attached to
 
-int buttonState0 = 0;         // current state of the button
-int buttonState1 = 0;         // current state of the button
-int buttonState2 = 0;         // current state of the button
-int buttonState3 = 0;         // current state of the button
+const int  acclPin6 = 6;  // the pin that the pushbutton is attached to
+const int  acclPin7 = 7;  // the pin that the pushbutton is attached to
+const int  acclPin8 = 8;  // the pin that the pushbutton is attached to
+
+const int  acclPin9 = 9;  // the pin that the pushbutton is attached to
+const int  acclPin10 = 10;  // the pin that the pushbutton is attached to
+const int  acclPin11 = 11;  // the pin that the pushbutton is attached to
 
 void setup() {
   // initialize the button pin as a input:
-  pinMode(buttonPin0, INPUT);
-  pinMode(buttonPin1, INPUT);
-  pinMode(buttonPin2, INPUT);
+  pinMode(acclPin0, INPUT);
+  pinMode(acclPin1, INPUT);
+  pinMode(acclPin2, INPUT);
+   
+  pinMode(acclPin3, INPUT);
+  pinMode(acclPin4, INPUT);
+  pinMode(acclPin5, INPUT);
+  
+  pinMode(acclPin6, INPUT);
+  pinMode(acclPin7, INPUT);
+  pinMode(acclPin8, INPUT);
+  
+  pinMode(acclPin9, INPUT);
+  pinMode(acclPin10, INPUT);
+  pinMode(acclPin11, INPUT);
 
   // initialize serial communication:
   Serial.begin(115200);
@@ -73,18 +91,13 @@ int aprintf(const char *str, ...) {
 }
 
 void loop() {
-  // read the pushbutton input pin:
-  buttonState0 = analogRead(buttonPin0);
-  buttonState1 = analogRead(buttonPin1);
-  buttonState2 = analogRead(buttonPin2);
-
   if(Serial.available() > 0){
     Serial.read();
     aprintf(":%d%d%d%d%d%d%d%d%d%d%d%d",
-    buttonState0, buttonState1, buttonState2,
-    0, 0, 0,
-    0, 0, 0 , 
-    0, 0, 0);
+    analogRead(acclPin0), analogRead(acclPin1), analogRead(acclPin2),
+    analogRead(acclPin3), analogRead(acclPin4), analogRead(acclPin5),
+    analogRead(acclPin6), analogRead(acclPin7), analogRead(acclPin8),
+    analogRead(acclPin9), analogRead(acclPin10), analogRead(acclPin11));
   }
 }
 
