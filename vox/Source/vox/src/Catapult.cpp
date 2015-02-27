@@ -82,30 +82,24 @@ void Catapult::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStac
 
 void Catapult::update(Step* _step){
 	Structure::update(_step);
-	if(fireBoulder){
-		fireBoulder = false;
-	}
 
 	b2RevoluteJoint * jk = (b2RevoluteJoint *)base->body->GetJointList()->joint;
 	float angle = jk->GetJointAngle();
-	std::cout << glm::degrees(angle) << std::endl;
-	std::cout << ready << std::endl;
-	std::cout << firing << std::endl;
+	//std::cout << glm::degrees(angle) << std::endl;
+	//std::cout << ready << std::endl;
+	//std::cout << firing << std::endl;
 	
 	if(!ready){
 		if(firing){
-			if(boulderJoint != nullptr){
-				world->b2world->DestroyJoint(boulderJoint);
-				boulderJoint = nullptr;
+			if(angle <= glm::radians(-70.f)){
+				fireBoulder = true;
 			}
-			if(angle <= -glm::radians(80.f)){
+			if(angle <= glm::radians(-80.f)){
 				arm->body->SetAngularVelocity(0);
 				firing = false;
-				fireBoulder = true;
 			}
 		}else if(angle >= -0.00001f){
 			ready = true;
-			//arm->body->SetAngularVelocity(-1);
 		}
 	}
 }

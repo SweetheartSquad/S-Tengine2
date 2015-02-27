@@ -29,6 +29,7 @@ Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16
 	b2Fixture * sensor = boulder->body->CreateFixture(&tShape, 1);
 	sensor->SetSensor(true);
 	sensor->SetUserData(this);
+	sensor->SetDensity(10.f);
 	
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
