@@ -18,21 +18,17 @@ PuppetController::~PuppetController(){
 void PuppetController::update(Step* _step){
 
 	if(accelerometer->pitch > 1.5f && accelerometer->z > 550.0f){
-		std::cout << "GO\n";
+		puppetCharacter->action();
 	}
 	if(abs(accelerometer->x - accelerometer->lx) > 10.f 
-		|| abs(accelerometer->y - accelerometer->ly) > 10.f 
-		&& !puppetCharacter->torso->movingVertically(0.1f)) {
-
-		//We can limit jumping based on y position but this won't work in levels such as repunzel
+		|| abs(accelerometer->y - accelerometer->ly) > 10.f) {
 		if(puppetCharacter->canJump){
-			puppetCharacter->canJump = false;
 			float t = puppetCharacter->torso->body->GetAngle();
-			puppetCharacter->torso->applyLinearImpulseUp(500*(1-sin(abs(t))));
+			puppetCharacter->torso->applyLinearImpulseUp(200);
 			if(puppetCharacter->torso->body->GetAngle() > 0){
-				puppetCharacter->torso->applyLinearImpulseLeft(350*(1-cos(t)));
+				puppetCharacter->torso->applyLinearImpulseLeft(100*(1-cos(t)));
 			}else{
-				puppetCharacter->torso->applyLinearImpulseRight(350*(1-cos(t)));
+				puppetCharacter->torso->applyLinearImpulseRight(100*(1-cos(t)));
 			}
 		}
 	}else{

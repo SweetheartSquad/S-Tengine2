@@ -66,6 +66,12 @@ void Box2DSprite::createFixture(int16 _groupIndex){
 	mesh->vertices.at(0).v = height/mag;
 }
 
+b2PolygonShape Box2DSprite::getFixtureShape(){
+	b2PolygonShape tShape;
+	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f);
+	return tShape;
+}
+
 Box2DSprite::~Box2DSprite(){
 	if(world != nullptr) {
 		world->b2world->DestroyBody(body);

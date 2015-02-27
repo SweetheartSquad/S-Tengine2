@@ -135,8 +135,19 @@ void RaidTheCastleContactListener::EndContact(b2Contact* contact){
 		}else if((fA.maskBits == 2 + 4 && fB.maskBits == 4) || (fA.maskBits == 4 && fB.maskBits == 2 + 4)){
 			// player character and prop
 			int i = 1;
-		}else{
-
+		}else if(fA.categoryBits == PuppetScene::PLAYER && fB.categoryBits == PuppetScene::GROUND || fB.categoryBits == PuppetScene::PLAYER && fA.categoryBits == PuppetScene::GROUND){
+			PuppetCharacter * puppet;
+			if(contact->GetFixtureA()->GetFilterData().categoryBits == PuppetScene::PLAYER){
+				puppet = static_cast<PuppetCharacter *>( contact->GetFixtureA()->GetUserData());
+				if(puppet != nullptr){
+					puppet->canJump = false;
+				}
+			}else if(contact->GetFixtureB()->GetFilterData().categoryBits == PuppetScene::PLAYER){
+				puppet = static_cast<PuppetCharacter *>( contact->GetFixtureB()->GetUserData());
+				if(puppet != nullptr){
+					puppet->canJump = false;
+				}
+			}
 		}
 	}else{
 		// do nothing

@@ -32,4 +32,5 @@ public:
 	void unload() override;
 	void load() override;
 
+	void action();
 };

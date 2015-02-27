@@ -64,8 +64,15 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	if(maskBits != (int16)-1){
 		sf.maskBits = maskBits;
 	}
+
+	b2PolygonShape torsoShape = torso->getFixtureShape();
+	b2Fixture * sensorTorso = torso->body->CreateFixture(&torsoShape, 1);
+	sensorTorso->SetSensor(true);
+	sensorTorso->SetUserData(this);
+
 	sensorLeft->SetFilterData(sf);
 	sensorRight->SetFilterData(sf);
+	sensorTorso->SetFilterData(sf);
 
 	for(Box2DSprite ** c : components){
 		(*c)->createFixture(groupIndex);
@@ -201,6 +208,9 @@ void PuppetCharacter::update(Step* _step){
 	
 	//headgear->body->SetTransform(head->body->GetPosition(), head->body->GetAngle());
 	//face->body->SetTransform(head->body->GetPosition(), head->body->GetAngle());
+}
+
+void PuppetCharacter::action(){
 }
 
 void PuppetCharacter::unload(){

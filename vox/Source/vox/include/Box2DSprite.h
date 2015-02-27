@@ -21,8 +21,11 @@ public:
 
 	void update(Step * _step) override;
 
-	float getCorrectedHeight();
-	float getCorrectedWidth();
+	virtual float getCorrectedHeight();
+	virtual float getCorrectedWidth();
 
-	void createFixture(int16 _groupIndex);
+	virtual void createFixture(int16 _groupIndex);
+
+	//Creates a rectangular shape that fits the sprite
+	b2PolygonShape getFixtureShape();
 };
