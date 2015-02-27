@@ -207,6 +207,7 @@ PuppetScene::PuppetScene(Game * _game):
 	drawer->AppendFlags(b2Draw::e_shapeBit);
 	drawer->AppendFlags(b2Draw::e_centerOfMassBit);
 	drawer->AppendFlags(b2Draw::e_jointBit);
+	//drawer->AppendFlags(b2Draw::e_pairBit);
 	addChild(drawer, 2);
 }
 
