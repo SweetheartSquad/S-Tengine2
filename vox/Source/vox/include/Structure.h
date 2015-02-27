@@ -5,7 +5,7 @@
 class Structure : public Box2DSuperSprite {
 public:
 	
-	explicit Structure(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1);
+	explicit Structure(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	
 	~Structure();
 };

@@ -10,11 +10,11 @@
 
 #include "Texture.h"
 
-Structure::Structure(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits) :
+Structure::Structure(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable(),
-	Box2DSuperSprite(_world, _categoryBits, _maskBits)
+	Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex)
 {
 }
 

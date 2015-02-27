@@ -5,8 +5,8 @@
 #include <Texture.h>
 #include "Box2DWorld.h"
 
-Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
-	Item(_world, _categoryBits, _maskBits, 10.f),
+Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+	Item(_world, _categoryBits, _maskBits, _groupIndex, 10.f),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()
@@ -35,6 +35,7 @@ Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	if(maskBits != (int16)-1){
 		sf.maskBits = maskBits;
 	}
+	sf.groupIndex = groupIndex;
 	sensor->SetFilterData(sf);
 }
 

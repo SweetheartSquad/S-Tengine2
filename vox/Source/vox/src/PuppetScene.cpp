@@ -120,7 +120,7 @@ PuppetScene::PuppetScene(Game * _game):
 	michael->addToScene(this);
 	michael->translateComponents(glm::vec3(1,0,0));
 	
-	catapult = new Catapult(world, STRUCTURE, STRUCTURE | ITEM | BOUNDARY | PLAYER);
+	catapult = new Catapult(world, STRUCTURE, STRUCTURE | ITEM | BOUNDARY | PLAYER, -10);
 	catapult->setShader(shader, true);
 	addChild(catapult, true);
 	catapult->addToScene(this);

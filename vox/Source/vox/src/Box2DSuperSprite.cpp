@@ -18,13 +18,13 @@ TextureSampler::TextureSampler(Texture * _texture, float _width, float _height) 
 {
 }
 
-Box2DSuperSprite::Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits) :
+Box2DSuperSprite::Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :
 	MeshEntity(nullptr, transform), // THERE ARE TWO TRANSFORM NODES HERE WHEN THERE SHOULD BE ONE
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	world(_world),
 	componentScale(0.0025f),
-	groupIndex(0),
+	groupIndex(_groupIndex),
 	categoryBits(_categoryBits),
 	maskBits(_maskBits)
 {

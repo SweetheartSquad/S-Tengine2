@@ -7,18 +7,24 @@
 class Box2DSprite;
 class Box2DWorld;
 
+class Boulder;
+
 class Catapult : public Structure{
 public:
 
 	bool ready;
 	bool firing;
 	bool fireBoulder;
+	bool boulderLoaded;
 	float cooldownCnt;
+
+	Boulder * boulder;
+	b2WeldJoint * boulderJoint;
 
 	Box2DSprite * arm;
 	Box2DSprite * base;
 
-	Catapult(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1);
+	Catapult(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	~Catapult();	
 	
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;

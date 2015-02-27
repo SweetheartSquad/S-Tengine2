@@ -11,14 +11,16 @@
 #define COOLDOWN 10
 
 
-Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
-	Structure(_world, _categoryBits, _maskBits),
+Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+	Structure(_world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable(),
 	ready(true),
 	firing(false),
 	fireBoulder(false),
+	boulderLoaded(false),
+	boulderJoint(nullptr),
 	cooldownCnt(0.f)
 {
 	componentScale = 0.008f;
@@ -42,11 +44,10 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits):
 	tShape.SetAsBox(base->width*std::abs(transform->scaleVector.x)*base->scale*2.f, std::abs(base->height*transform->scaleVector.y)*base->scale*2.f);
 	
 	b2Fixture * sensor = base->body->CreateFixture(&tShape, 1);
-	sensor->SetRestitution(0.9f);
 	sensor->SetSensor(true);
 	sensor->SetUserData(this);
 	
-	arm->body->GetFixtureList()->SetRestitution(0.9f);
+	arm->body->GetFixtureList()->SetDensity(10.f);
 
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
@@ -93,6 +94,10 @@ void Catapult::update(Step* _step){
 	
 	if(!ready){
 		if(firing){
+			if(boulderJoint != nullptr){
+				world->b2world->DestroyJoint(boulderJoint);
+				boulderJoint = nullptr;
+			}
 			if(angle <= -glm::radians(80.f)){
 				arm->body->SetAngularVelocity(0);
 				firing = false;

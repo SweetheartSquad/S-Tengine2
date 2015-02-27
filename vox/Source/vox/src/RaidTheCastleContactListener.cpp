@@ -66,12 +66,6 @@ void RaidTheCastleContactListener::playerPlayerContact(b2Contact * contact){
 }
 
 void RaidTheCastleContactListener::playerItemContact(b2Contact * contact, b2Fixture * playerFixture, b2Fixture * itemContact){
-	b2Fixture * fxA = contact->GetFixtureA();
-	b2Fixture * fxB = contact->GetFixtureB();
-
-	
-	PuppetCharacter * puppet;
-	Item * item;
 	std::cout << "Player-Item Collision" << std::endl;
 	/*puppet = static_cast<PuppetCharacter *>( fxA->GetBody()->GetUserData() );
 	if(puppet != nullptr){
