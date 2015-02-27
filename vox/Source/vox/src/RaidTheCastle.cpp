@@ -34,10 +34,8 @@ void RaidTheCastle::update(Step* _step){
 		if(catapult->boulderJoint != nullptr){
 			world->b2world->DestroyJoint(catapult->boulderJoint);
 			catapult->boulderJoint = nullptr;
+			catapult->boulder = nullptr;
 		}
-	}
-	if(catapult->boulder != nullptr){
-		std::cout << "Boulder pos: " << catapult->boulder->boulder->body->GetPosition().x << " " << catapult->boulder->boulder->body->GetPosition().y << std::endl;
 	}
 }
 
@@ -59,6 +57,8 @@ void RaidTheCastle::loadCatapult(){
 	addChild(boulder);
 	boulder->addToScene(this);
 	//boulder->boulder->body->SetTransform(catapult->arm->body->GetPosition(), std::rand());
+	boulder->translateComponents(glm::vec3(-36, 6, 0)); // this is hard-coded, should not be
+	//boulder->boulder->body->SetTransform(b2Vec2(-36, 6), 0);
 	catapult->cooldownCnt = 0.f;
 	catapult->ready = true;
 	catapult->boulderLoaded = true;
@@ -72,6 +72,5 @@ void RaidTheCastle::loadCatapult(){
 	abpj.localAnchorB.Set(0.0f * boulder->boulder->getCorrectedWidth(), 0.f * boulder->boulder->getCorrectedHeight());
 	abpj.collideConnected = false;
 	abpj.referenceAngle = 0.f;
-	
 	catapult->boulderJoint = (b2WeldJoint *)world->b2world->CreateJoint(&abpj);
 }
