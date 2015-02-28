@@ -23,13 +23,7 @@ void PuppetController::update(Step* _step){
 	if(abs(accelerometer->x - accelerometer->lx) > 10.f 
 		|| abs(accelerometer->y - accelerometer->ly) > 10.f) {
 		if(puppetCharacter->canJump){
-			float t = puppetCharacter->torso->body->GetAngle();
-			puppetCharacter->torso->applyLinearImpulseUp(200);
-			if(puppetCharacter->torso->body->GetAngle() > 0){
-				puppetCharacter->torso->applyLinearImpulseLeft(100*(1-cos(t)));
-			}else{
-				puppetCharacter->torso->applyLinearImpulseRight(100*(1-cos(t)));
-			}
+			puppetCharacter->jump();
 		}
 	}
 	puppetCharacter->targetRoll = accelerometer->getRoll();	

@@ -266,6 +266,9 @@ void PuppetScene::update(Step * _step){
 			playerCharacter->transform->scaleX(-1);
 		}
 	}
+	if(keyboard->keyJustDown(GLFW_KEY_T)){
+		playerCharacter->action();
+	}
 
 	// camera controls
 	if(keyboard->keyDown(GLFW_KEY_UP)){
