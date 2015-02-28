@@ -31,7 +31,6 @@ void PuppetController::update(Step* _step){
 				puppetCharacter->torso->applyLinearImpulseRight(100*(1-cos(t)));
 			}
 		}
-	}else{
-		puppetCharacter->targetRoll = accelerometer->getRoll();	
 	}
+	puppetCharacter->targetRoll = accelerometer->getRoll();	
 }
