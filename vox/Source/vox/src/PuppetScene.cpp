@@ -39,10 +39,10 @@ PuppetScene::PuppetScene(Game * _game):
 	cl(new RaidTheCastleContactListener(this)),
 	world(new Box2DWorld(b2Vec2(0, -9.8f * 2))),
 	drawer(new Box2DDebugDraw(this, world)),
-	playerCharacter(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),
-	playerCharacter2(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),
-	playerCharacter3(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),
-	playerCharacter4(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),
+	playerCharacter(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, false)),
+	playerCharacter2(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, false)),
+	playerCharacter3(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, false)),
+	playerCharacter4(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
@@ -95,7 +95,7 @@ PuppetScene::PuppetScene(Game * _game):
 	groundFixture->SetUserData(this);
 	
 	b2Filter sf;
-	sf.categoryBits = GROUND;
+	sf.categoryBits = kGROUND;
 	groundFixture->SetFilterData(sf);
 
 	Texture * treeTex1 = new Texture("../assets/hurly-burly/Foliage/Tree1-ds.png", 1024, 1024, true, true);
@@ -149,13 +149,13 @@ PuppetScene::PuppetScene(Game * _game):
 	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter4->translateComponents(glm::vec3(15.0f, 0.f, 0.f));
 
-	TestCharacter * michael = new TestCharacter(world, false, PLAYER, STRUCTURE | ITEM | PLAYER);
+	TestCharacter * michael = new TestCharacter(world, false, kPLAYER, kSTRUCTURE | kITEM | kPLAYER);
 	michael->setShader(shader, true);
 	addChild(michael, 1);
 	michael->addToLayeredScene(this, 1);
 	michael->translateComponents(glm::vec3(1,0,0));
 	
-	catapult = new Catapult(world, STRUCTURE, STRUCTURE | ITEM | BOUNDARY | PLAYER, -10);
+	catapult = new Catapult(world, kSTRUCTURE, kSTRUCTURE | kITEM | kBOUNDARY | kPLAYER, -10);
 	catapult->setShader(shader, true);
 	catapult->addToLayeredScene(this, 1);
 	addChild(catapult, 1);

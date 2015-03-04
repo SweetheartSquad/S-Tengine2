@@ -52,7 +52,7 @@ void RaidTheCastle::unload(){
 }
 
 void RaidTheCastle::loadCatapult(){
-	Boulder * boulder = new Boulder(world, PuppetScene::ITEM, PuppetScene::PLAYER | PuppetScene::STRUCTURE | PuppetScene::ITEM, catapult->groupIndex);
+	Boulder * boulder = new Boulder(world, PuppetScene::kITEM, PuppetScene::kPLAYER | PuppetScene::kSTRUCTURE | PuppetScene::kITEM, catapult->groupIndex);
 	boulder->setShader(shader, true);
 	addChild(boulder, 1);
 	boulder->addToLayeredScene(this, 1);

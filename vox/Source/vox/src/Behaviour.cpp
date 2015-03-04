@@ -5,9 +5,9 @@
 Behaviour::Behaviour(std::function<void(PuppetCharacter *)> _callback, float _radius, size_t _target) :
 	functionCallback(_callback),
 	radius(_radius),
-	target(_target)
+	target(_target),
+	active(false)
 {
-
 }
 
 Behaviour::~Behaviour(){

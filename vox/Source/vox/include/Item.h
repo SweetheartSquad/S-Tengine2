@@ -11,7 +11,7 @@ public:
 
 	bool pickupable;
 
-	explicit Item(bool _pickupable, Box2DWorld * _world, int16 _categoryBits = PuppetScene::ITEM, int16 _maskBits = -1, int16 _groupIndex = 0, int _damage = 0, float _handleX = 0.f, float _handleY = 0.f);
+	explicit Item(bool _pickupable, Box2DWorld * _world, int16 _categoryBits = PuppetScene::kITEM, int16 _maskBits = -1, int16 _groupIndex = 0, int _damage = 0, float _handleX = 0.f, float _handleY = 0.f);
 	
 	~Item ();
 

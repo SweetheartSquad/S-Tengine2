@@ -6,5 +6,5 @@
 #include "Box2DSprite.h"
 
 void Behaviours::followX(PuppetCharacter * b){
-	b->torso->applyLinearImpulseUp(10);
+	b->torso->applyLinearImpulseUp(50);
 }
