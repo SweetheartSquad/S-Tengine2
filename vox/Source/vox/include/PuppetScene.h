@@ -31,6 +31,7 @@ class Character4;
  class PuppetScene abstract : public LayeredScene{
 public:
 
+	float time;
 	RaidTheCastleContactListener * cl;
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
@@ -45,7 +46,6 @@ public:
 	PuppetController * puppetController3;
 	PuppetController * puppetController4;
 
-	Catapult * catapult;
 	Box2DMeshEntity * ground;
 	MeshEntity * background;
 	BaseComponentShader* shader;
@@ -61,7 +61,7 @@ public:
 
 	std::vector<Box2DSprite *> items;
 
-	explicit PuppetScene(Game * _game);
+	explicit PuppetScene(Game * _game, float time);
 	virtual ~PuppetScene();
 
 	virtual void load() override;

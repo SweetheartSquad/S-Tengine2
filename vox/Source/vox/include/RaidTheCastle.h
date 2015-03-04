@@ -2,9 +2,14 @@
 
 #include "PuppetScene.h"
 
+class Castle;
+class Catapult;
+
 class RaidTheCastle : public PuppetScene{
 public:
 
+	Castle * castle;
+	Catapult * catapult;
 
 	explicit RaidTheCastle(Game * _game);
 	~RaidTheCastle();

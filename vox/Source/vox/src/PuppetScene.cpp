@@ -24,7 +24,6 @@
 #include "BitmapFont.h"
 #include "TestCharacter.h"
 #include "CharacterComponent.h"
-#include "Catapult.h"
 #include "RaidTheCastleContactListener.h"
 #include "Game.h"
 #include <Arduino.h>
@@ -34,8 +33,11 @@
 #include <PuppetCharacter.h>
 #include <PuppetController.h>
 
-PuppetScene::PuppetScene(Game * _game):
+#include "RaidTheCastle.h"
+
+PuppetScene::PuppetScene(Game * _game, float seconds):
 	LayeredScene(_game, 3),
+	time(seconds * 6000),
 	cl(new RaidTheCastleContactListener(this)),
 	world(new Box2DWorld(b2Vec2(0, -9.8f * 2))),
 	drawer(new Box2DDebugDraw(this, world)),
@@ -154,13 +156,6 @@ PuppetScene::PuppetScene(Game * _game):
 	addChild(michael, 1);
 	michael->addToLayeredScene(this, 1);
 	michael->translateComponents(glm::vec3(1,0,0));
-	
-	catapult = new Catapult(world, STRUCTURE, STRUCTURE | ITEM | BOUNDARY | PLAYER, -10);
-	catapult->setShader(shader, true);
-	catapult->addToLayeredScene(this, 1);
-	addChild(catapult, 1);
-
-	catapult->translateComponents(glm::vec3(-10,0,0));
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");
@@ -226,6 +221,14 @@ void PuppetScene::update(Step * _step){
 	
 	Scene::update(_step);
 	world->update(_step);
+
+	time -= _step->deltaTimeCorrection;
+	if(time <= 0 && !game->switchingScene){
+		/*game->scenes.at(game->newScene)->unload();
+		game->scenes.erase(game->currentScene);
+		game->scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(game)));
+		game->switchScene(game->scenes.at(game->scenes.at());*/
+	}
 
 	arduino->update(_step);
 	puppetController->update(_step);
@@ -298,4 +301,5 @@ void PuppetScene::update(Step * _step){
 
 void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	LayeredScene::render(_matrixStack, _renderStack);
+
 }
