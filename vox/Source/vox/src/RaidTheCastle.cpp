@@ -1,6 +1,9 @@
 #pragma once
 
 #include "RaidTheCastle.h"
+#include "PuppetCharacter.h"
+#include "Behaviour.h"
+#include "Behaviours.h"
 #include "Boulder.h"
 #include "Catapult.h"
 #include "Box2DSprite.h"
@@ -13,6 +16,7 @@
 RaidTheCastle::RaidTheCastle(Game* _game):
 	PuppetScene(_game)
 {
+	playerCharacter->behaviourManager.addBehaviour(new Behaviour(Behaviours::followX, 5, PuppetScene::kPLAYER));
 	loadCatapult();
 }
 
@@ -23,6 +27,10 @@ void RaidTheCastle::update(Step* _step){
 	PuppetScene::update(_step);
 	if(catapult->ready && !catapult->boulderLoaded){
 		loadCatapult();
+	}
+	if(keyboard->keyDown(GLFW_KEY_B)){
+		playerCharacter->behaviourManager.behaviours.at(0)->targets.clear();
+		playerCharacter->behaviourManager.behaviours.at(0)->active = false;
 	}
 
 	if(keyboard->keyDown(GLFW_KEY_F)){

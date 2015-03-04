@@ -68,10 +68,8 @@ void RaidTheCastleContactListener::BeginContact(b2Contact* contact){
 
 		if(behaviourFixture != nullptr){
 			Behaviour * b = ((Behaviour *)behaviourFixture->GetUserData());
-			//if(b->target == typeid(otherFixture->GetUserData()).hash_code()){
-				b->active = true;
-				std::cout << "activate behaviour" << std::endl;
-			//}
+			b->targets.push_back(otherFixture->GetUserData());
+			b->active = true;
 		}
 	}else{
 		// do nothing
@@ -191,11 +189,15 @@ void RaidTheCastleContactListener::EndContact(b2Contact* contact){
 
 		if(behaviourFixture != nullptr){
 			Behaviour * b = ((Behaviour *)behaviourFixture->GetUserData());
-			//std::cout << b->target << std::endl;
-			//if(b->target == typeid(otherFixture->GetUserData()).hash_code()){
+			for(unsigned long int i = b->targets.size(); i > 0; --i){
+				if(b->targets.at(i-1) == otherFixture->GetUserData()){
+					b->targets.erase (b->targets.begin()+(i-1));
+					//break;
+				}
+			}
+			if(b->targets.size() == 0){
 				b->active = false;
-			//	std::cout << "deactivate behaviour" << std::endl;
-			//}
+			}
 		}
 
 	}else{

@@ -196,8 +196,6 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	// flip left side
 	armLeft->transform->scale(-1, 1, 1);
 	handLeft->transform->scale(-1, 1, 1); 
-	
-	behaviourManager.addBehaviour(new Behaviour(Behaviours::followX, 5, typeid(PuppetCharacter).hash_code()));
 }
 
 
