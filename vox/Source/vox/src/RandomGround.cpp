@@ -10,7 +10,7 @@
 
 
 RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold):
-	 Box2DMeshEntity(_world, new MeshInterface(GL_POLYGON, GL_STATIC_DRAW), b2_staticBody, false),
+	 Box2DMeshEntity(_world, new MeshInterface(GL_TRIANGLE_FAN, GL_STATIC_DRAW), b2_staticBody, false),
 	 NodeTransformable(new Transform()),
 	 NodeRenderable(),
 	 NodeChild(nullptr)
@@ -21,18 +21,23 @@ RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold
 
 	for(int i = 0; i < _numPoints; ++i) {
 		p[i] = b2Vec2(0, 0);
-		p[i].x = static_cast<float>(i);
+		p[i].x = static_cast<float>(i * 0.5f);
 		if (i > 1) {
 			slope = p[i-1].y-p[i-2].y + vox::NumberUtils::randomFloat(-_threshold, _threshold);
 			slope = std::max(-_threshold, std::min(_threshold, slope));
 			p[i].y = p[i-1].y + slope;
+			if(p[i].y < 0.1f){
+				p[i].y = 0.1f;
+			}
 		}else if (i == 1) {
 			p[i].y = p[0].y + vox::NumberUtils::randomFloat(-_threshold, _threshold);
 		}else {
-			p[i].y = vox::NumberUtils::randomFloat(0, 1);
+			p[i].y = -0.1f;
 		}
     }
-	p[_numPoints-1].x = 1;
+	p[_numPoints-2].y = -0.1f;
+	p[_numPoints-1].y = -0.1f;
+	p[_numPoints-1].x = p[0].x;
 	
 	for(auto i = 0; i < _numPoints; i++){
 		mesh->pushVert(Vertex(glm::vec3(p[i].x, p[i].y, 1)));

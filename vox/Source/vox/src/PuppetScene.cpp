@@ -49,7 +49,7 @@ PuppetScene::PuppetScene(Game * _game):
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
 	mouseCam(false),
-	randomGround(new RandomGround(world, 100, 0.2f))
+	randomGround(new RandomGround(world, 100, 0.4f))
 {
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new TextureShaderComponent());
@@ -213,7 +213,7 @@ PuppetScene::PuppetScene(Game * _game):
 	addChild(drawer, 2);
 
 	randomGround->setShader(shader, true);
-	randomGround->transform->translate(0.0f, -1.0f, 0.0f);
+	randomGround->setTranslationPhysical(0.0f, 0.0f, 0.0f);
 
 	world->addToWorld(randomGround);
 	addChild(randomGround, 1);
