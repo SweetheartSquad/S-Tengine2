@@ -2,6 +2,7 @@
 
 #include "LayeredScene.h"
 
+class RandomGround;
 class MousePerspectiveCamera;
 class PerspectiveCamera;
 class MeshEntity;
@@ -47,6 +48,7 @@ public:
 
 	Catapult * catapult;
 	Box2DMeshEntity * ground;
+	RandomGround * randomGround;
 	MeshEntity * background;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;

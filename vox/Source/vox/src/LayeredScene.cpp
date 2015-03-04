@@ -65,11 +65,10 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	}
 }
 
-
-
 void LayeredScene::addChild(Entity* _child){
 	std::cout << "LayeredScene::addChild not implemented; call didn't do anything" << std::endl;
 }
+
 void LayeredScene::addChild(Entity* _child, unsigned long int _layer){
 	if(_layer < numLayers){
 		children.push_back(_child);
