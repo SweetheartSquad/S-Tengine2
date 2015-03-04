@@ -6,6 +6,11 @@
 #include <GameJamCharacter.h>
 #include "Box2DWorld.h"
 #include "Item.h"
+#include "Behaviour.h"
+#include "Behaviours.h"
+
+#include <typeinfo>
+
 PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, bool _ai):
 	Box2DSuperSprite(_world, _categoryBits, _maskBits),
 	NodeTransformable(new Transform()),
@@ -16,7 +21,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	targetRoll(0),
 	itemToPickup(nullptr),
 	heldItem(nullptr),
-	itemJoint(nullptr)
+	itemJoint(nullptr),
+	behaviourManager(this)
 {
 	
 	GameJamCharacter::texture_packs character = GameJamCharacter::kKNIGHT;
@@ -190,7 +196,10 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	// flip left side
 	armLeft->transform->scale(-1, 1, 1);
 	handLeft->transform->scale(-1, 1, 1); 
+	
+	behaviourManager.addBehaviour(new Behaviour(Behaviours::followX, 5, typeid(PuppetCharacter).hash_code()));
 }
+
 
 PuppetCharacter::~PuppetCharacter(){
 }
@@ -219,9 +228,13 @@ void PuppetCharacter::update(Step* _step){
 	//headgear->body->SetTransform(head->body->GetPosition(), head->body->GetAngle());
 	//face->body->SetTransform(head->body->GetPosition(), head->body->GetAngle());
 
+	
 	if(itemToPickup != nullptr){
 		pickupItem(itemToPickup);
 	}
+
+
+	behaviourManager.update(_step);
 }
 
 void PuppetCharacter::jump(){

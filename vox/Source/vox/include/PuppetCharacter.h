@@ -3,10 +3,12 @@
 #include <Box2D/Box2D.h>
 
 #include "Box2DSuperSprite.h"
+#include "BehaviourManager.h"
 
 class Box2DSprite;
 class Box2DWorld;
 class Item;
+
 class PuppetCharacter : public Box2DSuperSprite {
 public:
 	bool ai;
@@ -40,4 +42,6 @@ public:
 	Item * heldItem;
 	b2WeldJoint * itemJoint;
 	void pickupItem(Item * _item);
+
+	BehaviourManager behaviourManager;
 };
