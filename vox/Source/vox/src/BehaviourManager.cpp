@@ -20,3 +20,7 @@ void BehaviourManager::update(Step * _step){
 		behaviours.at(i)->functionCallback(target);
 	}
 }
+
+void BehaviourManager::addBehaviour(Behaviour * _behaviour){
+	behaviours.push_back(_behaviour);
+}
