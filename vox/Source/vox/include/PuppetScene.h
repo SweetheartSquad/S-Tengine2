@@ -2,6 +2,7 @@
 
 #include "LayeredScene.h"
 
+class RandomGround;
 class MousePerspectiveCamera;
 class PerspectiveCamera;
 class MeshEntity;
@@ -47,6 +48,7 @@ public:
 	PuppetController * puppetController4;
 
 	Box2DMeshEntity * ground;
+	RandomGround * randomGround;
 	MeshEntity * background;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
@@ -70,10 +72,17 @@ public:
 	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
 	
 	enum HURLYBURLY_CATEGORY{
-		BOUNDARY = 0x0001,
-		STRUCTURE = 0x0002,
-		ITEM = 0x0004,
-		GROUND = 0x0006,
-		PLAYER = 0x00010
+		kBOUNDARY = 0x0001,
+		kSTRUCTURE = 0x0002,
+		kITEM = 0x0004,
+		kGROUND = 0x0008,
+		kPLAYER = 0x00010,
+		kBEHAVIOUR = 0x00020,
+		kCAT7 = 0x00040,
+		kCAT8 = 0x00080,
+		kCAT9 = 0x00100,
+		kCAT10 = 0x00200,
+		kCAT11 = 0x00400,
+		kCAT12 = 0x00800
 	};
 };

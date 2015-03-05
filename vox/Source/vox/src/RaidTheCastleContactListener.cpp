@@ -13,6 +13,8 @@
 #include <Box2D/Box2D.h>
 #include <Box2D\Dynamics\Joints\b2RevoluteJoint.h>
 
+#include "Behaviour.h"
+
 /*bool GameJamContactListener:: ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB){
 	if(fixtureA->GetFilterData().maskBits == 1 || fixtureB->GetFilterData().maskBits == 1){
 		// collide
@@ -30,30 +32,38 @@ void RaidTheCastleContactListener::BeginContact(b2Contact* contact){
 	if(contact->GetFixtureA()->IsSensor() || contact->GetFixtureB()->IsSensor()){
 		b2Filter fA = contact->GetFixtureA()->GetFilterData();
 		b2Filter fB = contact->GetFixtureB()->GetFilterData();
-		b2Fixture * playerFixture;
-		b2Fixture * otherFixture;
-		bool player = false;
-		if(fA.categoryBits == PuppetScene::PLAYER){
+		b2Fixture * playerFixture = nullptr;
+		b2Fixture * otherFixture = nullptr;
+		if(fA.categoryBits == PuppetScene::kPLAYER){
 			playerFixture = contact->GetFixtureA();
 			otherFixture = contact->GetFixtureB();
-			player = true;
-		}else if(fB.categoryBits == PuppetScene::PLAYER){
+		}else if(fB.categoryBits == PuppetScene::kPLAYER){
 			playerFixture = contact->GetFixtureB();
 			otherFixture = contact->GetFixtureA();
-			player = true;
 		}
 
-		if(player){
-			if(fA.categoryBits == PuppetScene::PLAYER && fB.categoryBits == PuppetScene::PLAYER){
+		std::cout << fA.categoryBits << " | " << fB.categoryBits << std::endl;
+
+		// if a thrown item hits the ground, make it not thrown
+		if(fA.categoryBits == PuppetScene::kGROUND && fB.categoryBits == PuppetScene::kITEM){
+			std::cout << "item hit ground" << std::endl;
+			((Item *)contact->GetFixtureB()->GetUserData())->thrown = false;
+		}else if(fB.categoryBits == PuppetScene::kGROUND && fA.categoryBits == PuppetScene::kITEM){
+			std::cout << "item hit ground" << std::endl;
+			((Item *)contact->GetFixtureA()->GetUserData())->thrown = false;
+		}
+
+		if(playerFixture != nullptr){
+			if(fA.categoryBits == PuppetScene::kPLAYER && fB.categoryBits == PuppetScene::kPLAYER){
 				// Player-Player collision
 				playerPlayerContact(contact);
-			}else if(fA.categoryBits == PuppetScene::ITEM || fB.categoryBits == PuppetScene::ITEM){
+			}else if(fA.categoryBits == PuppetScene::kITEM || fB.categoryBits == PuppetScene::kITEM){
 				// Player-Item collision
 				playerItemContact(contact, playerFixture, otherFixture);
-			}else if(fA.categoryBits == PuppetScene::STRUCTURE || fB.categoryBits == PuppetScene::STRUCTURE){
+			}else if(fA.categoryBits == PuppetScene::kSTRUCTURE || fB.categoryBits == PuppetScene::kSTRUCTURE){
 				// Player-Structure collision
 				playerStructureContact(contact, playerFixture, otherFixture);
-			}else if(fA.categoryBits == PuppetScene::GROUND || fB.categoryBits == PuppetScene::GROUND){
+			}else if(fA.categoryBits == PuppetScene::kGROUND || fB.categoryBits == PuppetScene::kGROUND){
 				// Player-Ground collision
 				playerGroundContact(contact, playerFixture, otherFixture);
 			}
@@ -62,11 +72,11 @@ void RaidTheCastleContactListener::BeginContact(b2Contact* contact){
 			b2Fixture * structureFixture;
 			b2Fixture * itemFixture;
 			bool structure = false;
-			if(fA.categoryBits == PuppetScene::STRUCTURE && fB.categoryBits == PuppetScene::ITEM){
+			if(fA.categoryBits == PuppetScene::kSTRUCTURE && fB.categoryBits == PuppetScene::kITEM){
 				structureFixture = contact->GetFixtureA();
 				itemFixture = contact->GetFixtureB();
 				structure = true;
-			}else if(fB.categoryBits == PuppetScene::STRUCTURE && fA.categoryBits == PuppetScene::ITEM){
+			}else if(fB.categoryBits == PuppetScene::kSTRUCTURE && fA.categoryBits == PuppetScene::kITEM){
 				structureFixture = contact->GetFixtureB();
 				itemFixture = contact->GetFixtureA();
 				structure = true;
@@ -76,7 +86,22 @@ void RaidTheCastleContactListener::BeginContact(b2Contact* contact){
 				structureItemContact(contact, structureFixture, itemFixture);
 			}
 		}
+		// behaviour stuff
+		b2Fixture * behaviourFixture = nullptr;
 
+		if(fA.categoryBits == PuppetScene::kBEHAVIOUR){
+			behaviourFixture = contact->GetFixtureA();
+			otherFixture = contact->GetFixtureB();
+		}else if(fB.categoryBits == PuppetScene::kBEHAVIOUR){
+			behaviourFixture = contact->GetFixtureB();
+			otherFixture = contact->GetFixtureA();
+		}
+
+		if(behaviourFixture != nullptr){
+			Behaviour * b = ((Behaviour *)behaviourFixture->GetUserData());
+			b->targets.push_back(otherFixture->GetUserData());
+			b->active = true;
+		}
 	}else{
 		// do nothing
 	}
@@ -96,23 +121,15 @@ void RaidTheCastleContactListener::playerPlayerContact(b2Contact * contact){
 
 void RaidTheCastleContactListener::playerItemContact(b2Contact * contact, b2Fixture * playerFixture, b2Fixture * itemContact){
 	std::cout << "Player-Item Collision" << std::endl;
-	
-	//((PuppetCharacter *)playerFixture->GetUserData())->pickupItem(((Item *)itemContact->GetUserData());
-		((PuppetCharacter *)playerFixture->GetUserData())->itemToPickup = (Item *)itemContact->GetUserData();
-
-	
-
-	/*puppet = static_cast<PuppetCharacter *>( fxA->GetBody()->GetUserData() );
-	if(puppet != nullptr){
-		item = static_cast<Item *>( fxB->GetBody()->GetUserData() );
-	}else{
-		puppet = static_cast<PuppetCharacter *>( fxB->GetBody()->GetUserData() );
-		item = static_cast<Item *>( fxA->GetBody()->GetUserData() );
+	PuppetCharacter * p = ((PuppetCharacter *)playerFixture->GetUserData());
+	Item * item = (Item *)itemContact->GetUserData();
+	if(item->thrown){
+		// do some sort of damage thing here
+		p->torso->applyLinearImpulseUp(500);
+		std::cout << "damage?" << std::endl;
+	}else if(p->heldItem == nullptr && !item->held){
+		p->itemToPickup = item;
 	}
-
-	if(puppet != nullptr && item != nullptr){
-		// Stuff
-	}*/
 }
 
 void RaidTheCastleContactListener::playerStructureContact(b2Contact * contact, b2Fixture * playerFixture, b2Fixture * structureFixture){
@@ -175,20 +192,47 @@ void RaidTheCastleContactListener::EndContact(b2Contact* contact){
 		}else if((fA.maskBits == 2 + 4 && fB.maskBits == 4) || (fA.maskBits == 4 && fB.maskBits == 2 + 4)){
 			// player character and prop
 			int i = 1;
-		}else if(fA.categoryBits == PuppetScene::PLAYER && fB.categoryBits == PuppetScene::GROUND || fB.categoryBits == PuppetScene::PLAYER && fA.categoryBits == PuppetScene::GROUND){
+		}else if(fA.categoryBits == PuppetScene::kPLAYER && fB.categoryBits == PuppetScene::kGROUND || fB.categoryBits == PuppetScene::kPLAYER && fA.categoryBits == PuppetScene::kGROUND){
 			PuppetCharacter * puppet;
-			if(contact->GetFixtureA()->GetFilterData().categoryBits == PuppetScene::PLAYER){
+			if(contact->GetFixtureA()->GetFilterData().categoryBits == PuppetScene::kPLAYER){
 				puppet = static_cast<PuppetCharacter *>( contact->GetFixtureA()->GetUserData());
 				if(puppet != nullptr){
 					puppet->canJump = false;
 				}
-			}else if(contact->GetFixtureB()->GetFilterData().categoryBits == PuppetScene::PLAYER){
+			}else if(contact->GetFixtureB()->GetFilterData().categoryBits == PuppetScene::kPLAYER){
 				puppet = static_cast<PuppetCharacter *>( contact->GetFixtureB()->GetUserData());
 				if(puppet != nullptr){
 					puppet->canJump = false;
 				}
 			}
 		}
+
+
+		// behaviour stuff
+		b2Fixture * behaviourFixture = nullptr;
+		b2Fixture * otherFixture = nullptr;
+
+		if(fA.categoryBits == PuppetScene::kBEHAVIOUR){
+			behaviourFixture = contact->GetFixtureA();
+			otherFixture = contact->GetFixtureB();
+		}else if(fB.categoryBits == PuppetScene::kBEHAVIOUR){
+			behaviourFixture = contact->GetFixtureB();
+			otherFixture = contact->GetFixtureA();
+		}
+
+		if(behaviourFixture != nullptr){
+			Behaviour * b = ((Behaviour *)behaviourFixture->GetUserData());
+			for(unsigned long int i = b->targets.size(); i > 0; --i){
+				if(b->targets.at(i-1) == otherFixture->GetUserData()){
+					b->targets.erase (b->targets.begin()+(i-1));
+					//break;
+				}
+			}
+			if(b->targets.size() == 0){
+				b->active = false;
+			}
+		}
+
 	}else{
 		// do nothing
 	}

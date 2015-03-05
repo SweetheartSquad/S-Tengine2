@@ -75,7 +75,7 @@ public:
 	Box2DSprite * rightUpperLeg;
 	Box2DSprite * rightLowerLeg;
 
-	explicit GameJamCharacter(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, bool _ai = true);
+	explicit GameJamCharacter(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupBits = 0, bool _ai = true);
 	
 	~GameJamCharacter();
 

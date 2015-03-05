@@ -32,6 +32,7 @@
 
 #include <PuppetCharacter.h>
 #include <PuppetController.h>
+#include <RandomGround.h>
 
 #include "RaidTheCastle.h"
 
@@ -41,15 +42,16 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	cl(new RaidTheCastleContactListener(this)),
 	world(new Box2DWorld(b2Vec2(0, -9.8f * 2))),
 	drawer(new Box2DDebugDraw(this, world)),
-	playerCharacter(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),
-	playerCharacter2(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),
-	playerCharacter3(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),
-	playerCharacter4(new PuppetCharacter(world, PLAYER, GROUND | STRUCTURE | ITEM | PLAYER, false)),
+	playerCharacter(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -1, false)),
+	playerCharacter2(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -1, false)),
+	playerCharacter3(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -3, false)),
+	playerCharacter4(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -4, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
-	mouseCam(false)
+	mouseCam(false),
+	randomGround(new RandomGround(world, 100, 0.4f))
 {
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new TextureShaderComponent());
@@ -65,7 +67,6 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 
 	addChild(background, 0);
 
-	
 	ground->setShader(shader, true);
 	ground->setTranslationPhysical(0, 0, 0);
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
@@ -97,7 +98,7 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	groundFixture->SetUserData(this);
 	
 	b2Filter sf;
-	sf.categoryBits = GROUND;
+	sf.categoryBits = kGROUND;
 	groundFixture->SetFilterData(sf);
 
 	Texture * treeTex1 = new Texture("../assets/hurly-burly/Foliage/Tree1-ds.png", 1024, 1024, true, true);
@@ -132,29 +133,31 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	addChild(playerCharacter, 1);
 	playerCharacter->addToLayeredScene(this, 1);
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
+	playerCharacter->translateComponents(glm::vec3(20.0f, 5.f, 0.f));
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
 	playerCharacter2->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter2->translateComponents(glm::vec3(5.0f, 0.f, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(5.0f, 5.f, 0.f));
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
 	playerCharacter3->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter3->translateComponents(glm::vec3(10.0f, 0.f, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(10.0f, 5.f, 0.f));
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
 	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter4->translateComponents(glm::vec3(15.0f, 0.f, 0.f));
+	playerCharacter4->translateComponents(glm::vec3(15.0f, 5.f, 0.f));
 
-	TestCharacter * michael = new TestCharacter(world, false, PLAYER, STRUCTURE | ITEM | PLAYER);
+	TestCharacter * michael = new TestCharacter(world, false, kPLAYER, kSTRUCTURE | kITEM | kPLAYER, -1);
 	michael->setShader(shader, true);
 	addChild(michael, 1);
 	michael->addToLayeredScene(this, 1);
+
 	michael->translateComponents(glm::vec3(1,0,0));
 
 	//Arduino 
@@ -204,6 +207,15 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	drawer->AppendFlags(b2Draw::e_jointBit);
 	//drawer->AppendFlags(b2Draw::e_pairBit);
 	addChild(drawer, 2);
+
+	randomGround->setShader(shader, true);
+	randomGround->setTranslationPhysical(0.0f, 0.0f, 0.0f);
+	randomGround->mesh->uvEdgeMode = GL_REPEAT;
+
+	randomGround->mesh->pushTexture2D(new Texture("../assets/paper.png", 512, 512, true, true));
+
+	world->addToWorld(randomGround);
+	addChild(randomGround, 1);
 }
 
 PuppetScene::~PuppetScene(){

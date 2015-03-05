@@ -2,6 +2,9 @@
 
 #include "RaidTheCastle.h"
 #include "Castle.h"
+#include "PuppetCharacter.h"
+#include "Behaviour.h"
+#include "Behaviours.h"
 #include "Boulder.h"
 #include "Catapult.h"
 #include "Box2DSprite.h"
@@ -14,19 +17,19 @@
 RaidTheCastle::RaidTheCastle(Game* _game):
 	PuppetScene(_game, 0.5)
 {
-	castle = new Castle(world, STRUCTURE, ITEM, 10);
+	castle = new Castle(world, kSTRUCTURE, kITEM, 10);
 	castle->setShader(shader, true);
 	castle->addToLayeredScene(this, 1);
 	addChild(castle, 1);
 
 	castle->translateComponents(glm::vec3(20, 0, 0));
 
-	catapult = new Catapult(world, STRUCTURE, STRUCTURE | ITEM | BOUNDARY | PLAYER, -10);
+	catapult = new Catapult(world, kSTRUCTURE, kSTRUCTURE | kITEM | kBOUNDARY | kPLAYER, -10);
 	catapult->setShader(shader, true);
 	catapult->addToLayeredScene(this, 1);
 	addChild(catapult, 1);
 
-	catapult->translateComponents(glm::vec3(-30,0,0));
+	catapult->translateComponents(glm::vec3(-10,0,0));
 
 	loadCatapult();
 }
@@ -38,6 +41,10 @@ void RaidTheCastle::update(Step* _step){
 	PuppetScene::update(_step);
 	if(catapult->ready && !catapult->boulderLoaded){
 		loadCatapult();
+	}
+	if(keyboard->keyDown(GLFW_KEY_B)){
+		playerCharacter->behaviourManager.behaviours.at(0)->targets.clear();
+		playerCharacter->behaviourManager.behaviours.at(0)->active = false;
 	}
 
 	if(keyboard->keyDown(GLFW_KEY_F)){
@@ -67,7 +74,7 @@ void RaidTheCastle::unload(){
 }
 
 void RaidTheCastle::loadCatapult(){
-	Boulder * boulder = new Boulder(world, PuppetScene::ITEM, PuppetScene::PLAYER | PuppetScene::STRUCTURE | PuppetScene::ITEM, catapult->groupIndex);
+	Boulder * boulder = new Boulder(world, PuppetScene::kITEM, PuppetScene::kPLAYER | PuppetScene::kSTRUCTURE | PuppetScene::kITEM | PuppetScene::kGROUND, catapult->groupIndex);
 	boulder->setShader(shader, true);
 	addChild(boulder, 1);
 	boulder->addToLayeredScene(this, 1);

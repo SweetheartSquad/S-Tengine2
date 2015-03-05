@@ -10,7 +10,9 @@ Item::Item(bool _pickupable, Box2DWorld * _world, int16 _categoryBits, int16 _ma
 	damage(_damage),
 	handleX(_handleX),
 	handleY(_handleY),
-	pickupable(_pickupable)
+	pickupable(_pickupable),
+	held(false),
+	thrown(false)
 {
 }
 

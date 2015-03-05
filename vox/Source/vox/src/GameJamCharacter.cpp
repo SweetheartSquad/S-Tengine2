@@ -80,8 +80,8 @@ void GameJamCharacter::init(){
 	lowerLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/PonytailLL.png", 512, 512, true, true),		 110,	205));
 }
 
-GameJamCharacter::GameJamCharacter(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, bool _ai) :
-	Box2DSuperSprite(_world, _categoryBits, _maskBits),
+GameJamCharacter::GameJamCharacter(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex, bool _ai) :
+	Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	text(new BitmapFont(new Texture("../assets/arial.bmp", 1024, 1024, true, true), 32, 16, 16 )),
