@@ -131,7 +131,7 @@ PuppetScene::PuppetScene(Game * _game):
 	addChild(playerCharacter, 1);
 	playerCharacter->addToLayeredScene(this, 1);
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter->translateComponents(glm::vec3(2.0f, 5.f, 0.f));
+	playerCharacter->translateComponents(glm::vec3(20.0f, 5.f, 0.f));
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
