@@ -39,6 +39,17 @@ void RaidTheCastleContactListener::BeginContact(b2Contact* contact){
 			otherFixture = contact->GetFixtureA();
 		}
 
+		std::cout << fA.categoryBits << " | " << fB.categoryBits << std::endl;
+
+		// if a thrown item hits the ground, make it not thrown
+		if(fA.categoryBits == PuppetScene::kGROUND && fB.categoryBits == PuppetScene::kITEM){
+			std::cout << "item hit ground" << std::endl;
+			((Item *)contact->GetFixtureB()->GetUserData())->thrown = false;
+		}else if(fB.categoryBits == PuppetScene::kGROUND && fA.categoryBits == PuppetScene::kITEM){
+			std::cout << "item hit ground" << std::endl;
+			((Item *)contact->GetFixtureA()->GetUserData())->thrown = false;
+		}
+
 		if(playerFixture != nullptr){
 			if(fA.categoryBits == PuppetScene::kPLAYER && fB.categoryBits == PuppetScene::kPLAYER){
 				// Player-Player collision
@@ -94,6 +105,8 @@ void RaidTheCastleContactListener::playerItemContact(b2Contact * contact, b2Fixt
 	Item * item = (Item *)itemContact->GetUserData();
 	if(item->thrown){
 		// do some sort of damage thing here
+		p->torso->applyLinearImpulseUp(500);
+		std::cout << "damage?" << std::endl;
 	}else if(p->heldItem == nullptr && !item->held){
 		p->itemToPickup = item;
 	}
