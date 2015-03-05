@@ -38,7 +38,7 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	
 	b2Fixture * sensor = base->body->CreateFixture(&tShape, 1);
 	sensor->SetSensor(true);
-	sensor->SetUserData(dynamic_cast<Structure *>(this));
+	sensor->SetUserData(this);
 
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
@@ -60,6 +60,7 @@ void Castle::update(Step * _step){
 
 	if(damage > 0){
 		health -= damage;
+		damage = 0;
 		if((int)health <= 0){
 			//die();
 			translateComponents(glm::vec3(0, -10, 0));

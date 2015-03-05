@@ -9,6 +9,7 @@
 #include "Box2dWorld.h"
 #include "Item.h"
 #include "Box2DSprite.h"
+#include "Box2DSuperSprite.h"
 #include <Box2D/Box2D.h>
 #include <Box2D\Dynamics\Joints\b2RevoluteJoint.h>
 
@@ -154,13 +155,12 @@ void RaidTheCastleContactListener::playerGroundContact(b2Contact * _contact, b2F
 }
 
 void RaidTheCastleContactListener::structureItemContact(b2Contact * _contact, b2Fixture * _structureFixture, b2Fixture * _itemFixture){
-	Structure * structure = (Structure *)( _structureFixture->GetBody()->GetUserData() );
-    Item * item = (Item *)( _itemFixture->GetBody()->GetUserData() );
+	Structure * structure = static_cast<Structure *>( _structureFixture->GetUserData() );
+    Item * item = static_cast<Item *>( _itemFixture->GetUserData() );
 
 	Castle * castle = dynamic_cast<Castle *>(structure);
-	Boulder * boulder = dynamic_cast<Boulder *>(item);
-	if(castle != nullptr && boulder!= nullptr){
-		castle->damage = boulder->damage;
+	if(castle != nullptr){
+		castle->damage = item->damage;
 	}
 }
 
