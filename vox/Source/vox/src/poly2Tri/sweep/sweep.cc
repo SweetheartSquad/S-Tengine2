@@ -29,10 +29,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include <stdexcept>
-#include "sweep.h"
-#include "sweep_context.h"
-#include "advancing_front.h"
-#include "../common/utils.h"
+#include "poly2Tri/sweep/sweep.h"
+#include "poly2Tri/sweep/sweep_context.h"
+#include "poly2Tri/sweep/advancing_front.h"
+#include "poly2Tri/common/utils.h"
 
 namespace p2t {
 
