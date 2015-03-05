@@ -214,6 +214,9 @@ PuppetScene::PuppetScene(Game * _game):
 
 	randomGround->setShader(shader, true);
 	randomGround->setTranslationPhysical(0.0f, 0.0f, 0.0f);
+	randomGround->mesh->uvEdgeMode = GL_REPEAT;
+
+	randomGround->mesh->pushTexture2D(new Texture("../assets/hurly-burly/StageFloor.png", 1024, 1024, true, true));
 
 	world->addToWorld(randomGround);
 	addChild(randomGround, 1);

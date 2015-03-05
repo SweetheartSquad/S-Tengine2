@@ -9,7 +9,7 @@
 #include <PuppetScene.h>
 
 
-RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold):
+RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold, Texture * _texture):
 	 Box2DMeshEntity(_world, new MeshInterface(GL_QUADS, GL_STATIC_DRAW), b2_staticBody, false),
 	 NodeTransformable(new Transform()),
 	 NodeRenderable(),
@@ -37,16 +37,22 @@ RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold
 	p[_numPoints-1].y = -0.1f;
 	p[_numPoints-1].x = p[0].x;
 	
-	for(auto i = 0; i < _numPoints; ++i){
-		if( i > 0){
-			if(i %2 == 0){
-				mesh->pushVert(Vertex(glm::vec3(p[i].x, -0.1, 1)));
-				mesh->pushVert(Vertex(glm::vec3(p[i].x, p[i].y, 1)));
-			}else{
-				mesh->pushVert(Vertex(glm::vec3(p[i].x - 1, p[i - 1].y /* - p[i - 1].y*/, 1)));
-				mesh->pushVert(Vertex(glm::vec3(p[i].x - 1, -0.1, 1)));
-			}
+	if(_texture != nullptr){
+		mesh->pushTexture2D(_texture);
+	}
+
+	for(auto i = 1; i < _numPoints - 1; ++i){
+		if(i % 2 == 0){
+			mesh->pushVert(Vertex(glm::vec3(p[i].x, -0.1, 1), glm::vec2(p[i].x, -0.1)));
+			mesh->pushVert(Vertex(glm::vec3(p[i].x, p[i].y, 1), glm::vec2(p[i].x, std::max(p[i].y, p[i + 1].y))));
+		}else{
+			mesh->pushVert(Vertex(glm::vec3(p[i].x - 1, p[i - 1].y, 1), glm::vec2(p[i].x, std::max(p[i].y, p[i + 1].y))));
+			mesh->pushVert(Vertex(glm::vec3(p[i].x - 1, -0.1, 1), glm::vec2(p[i].x, -0.1)));
 		}
+	}
+
+	for(auto v : mesh->vertices){
+		std::cout<< v.x <<", " <<v.y <<"\n";
 	}
 
 	//Weird problem with chain's destructor being called twice
