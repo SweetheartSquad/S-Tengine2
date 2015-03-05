@@ -90,23 +90,13 @@ void RaidTheCastleContactListener::playerPlayerContact(b2Contact * contact){
 
 void RaidTheCastleContactListener::playerItemContact(b2Contact * contact, b2Fixture * playerFixture, b2Fixture * itemContact){
 	std::cout << "Player-Item Collision" << std::endl;
-	
-	//((PuppetCharacter *)playerFixture->GetUserData())->pickupItem(((Item *)itemContact->GetUserData());
-		((PuppetCharacter *)playerFixture->GetUserData())->itemToPickup = (Item *)itemContact->GetUserData();
-
-	
-
-	/*puppet = static_cast<PuppetCharacter *>( fxA->GetBody()->GetUserData() );
-	if(puppet != nullptr){
-		item = static_cast<Item *>( fxB->GetBody()->GetUserData() );
-	}else{
-		puppet = static_cast<PuppetCharacter *>( fxB->GetBody()->GetUserData() );
-		item = static_cast<Item *>( fxA->GetBody()->GetUserData() );
+	PuppetCharacter * p = ((PuppetCharacter *)playerFixture->GetUserData());
+	Item * item = (Item *)itemContact->GetUserData();
+	if(item->thrown){
+		// do some sort of damage thing here
+	}else if(p->heldItem == nullptr && !item->held){
+		p->itemToPickup = item;
 	}
-
-	if(puppet != nullptr && item != nullptr){
-		// Stuff
-	}*/
 }
 
 void RaidTheCastleContactListener::playerStructureContact(b2Contact * contact, b2Fixture * playerFixture, b2Fixture * structureFixture){

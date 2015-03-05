@@ -20,7 +20,7 @@ ComponentTexture::ComponentTexture(Texture * _texture, float _width, float _heig
 {
 }
 
-Character::Character(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, bool _ai) :
+Character::Character(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex, bool _ai) :
 	MeshEntity(nullptr, transform), // THERE ARE TWO TRANSFORM NODES HERE WHEN THERE SHOULD BE ONE
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),

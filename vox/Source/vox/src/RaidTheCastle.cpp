@@ -16,7 +16,7 @@
 RaidTheCastle::RaidTheCastle(Game* _game):
 	PuppetScene(_game)
 {
-	playerCharacter->behaviourManager.addBehaviour(new Behaviour(Behaviours::followX, 5, PuppetScene::kPLAYER));
+	//playerCharacter->behaviourManager.addBehaviour(new Behaviour(Behaviours::followX, 5, PuppetScene::kPLAYER));
 	loadCatapult();
 }
 

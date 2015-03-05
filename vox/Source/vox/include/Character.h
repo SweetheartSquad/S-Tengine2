@@ -34,7 +34,7 @@ public:
 
 	std::vector<CharacterComponent **> components;
 
-	explicit Character(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, bool _ai = true);
+	explicit Character(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0, bool _ai = true);
 	
 	~Character();
 

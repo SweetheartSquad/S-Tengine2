@@ -11,6 +11,12 @@ public:
 
 	bool pickupable;
 
+	// Whether the item is currently held by a character
+	bool held;
+
+	// Whether the item has been thrown and has not landed yet
+	bool thrown;
+
 	explicit Item(bool _pickupable, Box2DWorld * _world, int16 _categoryBits = PuppetScene::kITEM, int16 _maskBits = -1, int16 _groupIndex = 0, int _damage = 0, float _handleX = 0.f, float _handleY = 0.f);
 	
 	~Item ();
