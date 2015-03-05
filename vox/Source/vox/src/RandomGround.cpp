@@ -33,6 +33,7 @@ RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold
 			p[i].y = -0.1f;
 		}
     }
+
 	p[_numPoints-2].y = -0.1f;
 	p[_numPoints-1].y = -0.1f;
 	p[_numPoints-1].x = p[0].x;
@@ -41,20 +42,21 @@ RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold
 		mesh->pushTexture2D(_texture);
 	}
 
+	float maxY = 0.0f;
+	for(auto v : mesh->vertices){
+		maxY = std::max(v.y, maxY);
+	}
+
 	for(auto i = 1; i < _numPoints - 1; ++i){
 		if(i % 2 == 0){
-			mesh->pushVert(Vertex(glm::vec3(p[i].x, -0.1, 1), glm::vec2(p[i].x, -0.1)));
-			mesh->pushVert(Vertex(glm::vec3(p[i].x, p[i].y, 1), glm::vec2(p[i].x, std::max(p[i].y, p[i + 1].y))));
+			mesh->pushVert(Vertex(glm::vec3(p[i].x, -0.1, 1), glm::vec2(p[i].x / _numPoints, -0.1)));
+			mesh->pushVert(Vertex(glm::vec3(p[i].x, p[i].y, 1), glm::vec2(p[i].x  / _numPoints, p[i].y / maxY)));
 		}else{
-			mesh->pushVert(Vertex(glm::vec3(p[i].x - 1, p[i - 1].y, 1), glm::vec2(p[i].x, std::max(p[i].y, p[i + 1].y))));
-			mesh->pushVert(Vertex(glm::vec3(p[i].x - 1, -0.1, 1), glm::vec2(p[i].x, -0.1)));
+			mesh->pushVert(Vertex(glm::vec3(p[i].x - 1, p[i - 1].y, 1), glm::vec2(p[i].x  / _numPoints,   p[i].y / maxY)));
+			mesh->pushVert(Vertex(glm::vec3(p[i].x - 1, -0.1, 1), glm::vec2(p[i].x  / _numPoints, -0.1)));
 		}
 	}
-
-	for(auto v : mesh->vertices){
-		std::cout<< v.x <<", " <<v.y <<"\n";
-	}
-
+	
 	//Weird problem with chain's destructor being called twice
 	//This works but it may be a memory leak
 	b2ChainShape * chain = new b2ChainShape();
