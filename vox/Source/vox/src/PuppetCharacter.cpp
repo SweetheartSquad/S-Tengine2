@@ -6,8 +6,13 @@
 #include <GameJamCharacter.h>
 #include "Box2DWorld.h"
 #include "Item.h"
-PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, bool _ai):
-	Box2DSuperSprite(_world, _categoryBits, _maskBits),
+#include "Behaviour.h"
+#include "Behaviours.h"
+
+#include <typeinfo>
+
+PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex, bool _ai):
+	Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable(),
@@ -16,7 +21,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	targetRoll(0),
 	itemToPickup(nullptr),
 	heldItem(nullptr),
-	itemJoint(nullptr)
+	itemJoint(nullptr),
+	behaviourManager(this)
 {
 	
 	GameJamCharacter::texture_packs character = GameJamCharacter::kKNIGHT;
@@ -49,9 +55,11 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	b2Fixture * s = torso->body->CreateFixture(&tShape, 1);*/
 	
 	
+
+
 	b2PolygonShape tShapeLeft;
 	tShapeLeft.SetAsBox(std::abs(handLeft->width*transform->scaleVector.x)*handLeft->scale*2.f, std::abs(handLeft->height*transform->scaleVector.y)*handLeft->scale*2.f);
-	
+
 	b2Fixture * sensorLeft = handLeft->body->CreateFixture(&tShapeLeft, 1);
 	sensorLeft->SetSensor(true);
 	sensorLeft->SetUserData(this);
@@ -63,11 +71,6 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	sensorRight->SetSensor(true);
 	sensorRight->SetUserData(this);
 	
-	b2Filter sf;
-	sf.categoryBits = categoryBits;
-	if(maskBits != (int16)-1){
-		sf.maskBits = maskBits;
-	}
 
 	b2PolygonShape torsoShape = torso->getFixtureShape();
 	b2Fixture * sensorTorso = torso->body->CreateFixture(&torsoShape, 1);
@@ -78,7 +81,13 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	b2Fixture * sensorHead = head->body->CreateFixture(&torsoShape, 1);
 	sensorHead->SetSensor(true);
 	sensorHead->SetUserData(this);
-
+	
+	b2Filter sf;
+	sf.categoryBits = categoryBits;
+	if(maskBits != (int16)-1){
+		sf.maskBits = maskBits;
+	}
+	sf.groupIndex = _groupIndex;
 	sensorLeft->SetFilterData(sf);
 	sensorRight->SetFilterData(sf);
 	sensorTorso->SetFilterData(sf);
@@ -192,6 +201,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	handLeft->transform->scale(-1, 1, 1); 
 }
 
+
 PuppetCharacter::~PuppetCharacter(){
 }
 
@@ -219,9 +229,13 @@ void PuppetCharacter::update(Step* _step){
 	//headgear->body->SetTransform(head->body->GetPosition(), head->body->GetAngle());
 	//face->body->SetTransform(head->body->GetPosition(), head->body->GetAngle());
 
+	
 	if(itemToPickup != nullptr){
 		pickupItem(itemToPickup);
 	}
+
+
+	behaviourManager.update(_step);
 }
 
 void PuppetCharacter::jump(){
@@ -245,6 +259,9 @@ void PuppetCharacter::action(){
 			}else{
 				(*heldItem->components.at(0))->applyLinearImpulseRight(100*(1-cos(t)));
 			}
+			heldItem->thrown = true;
+			heldItem->held = false;
+
 			heldItem = nullptr;
 			itemJoint = nullptr;
 		}
@@ -261,7 +278,23 @@ void PuppetCharacter::load(){
 
 void PuppetCharacter::pickupItem(Item * _item){
 	if(_item != heldItem){
-		action();
+		if(heldItem != nullptr){
+			action();
+		}
+		
+		// set the item's group index to match character's so that they won't collide anymore (doesn't work?)
+		for(Box2DSprite ** bs : _item->components){
+			std::cout << (*bs)->body->GetFixtureList()->GetFilterData().groupIndex;
+			std::cout << " vs. " << this->groupIndex << std::endl;
+			b2Filter b1 = (*bs)->body->GetFixtureList()->GetFilterData();
+			b1.groupIndex = this->groupIndex;
+			(*bs)->body->GetFixtureList()->SetFilterData(b1);
+			(*bs)->body->GetFixtureList()->Refilter();
+			std::cout << (*bs)->body->GetFixtureList()->GetFilterData().groupIndex;
+			std::cout << " vs. " << this->groupIndex << std::endl;
+		}
+
+
 		b2WeldJointDef jd;
 		jd.bodyA = armRight->body;
 		jd.bodyB = (*_item->components.at(0))->body;
@@ -272,5 +305,7 @@ void PuppetCharacter::pickupItem(Item * _item){
 		itemJoint = (b2WeldJoint *)world->b2world->CreateJoint(&jd);
 		heldItem = _item;
 		itemToPickup = nullptr;
+		_item->held = true;
+		
 	}
 }

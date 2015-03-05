@@ -49,7 +49,7 @@ GameJamScene::GameJamScene(Game * _game):
 	world(new Box2DWorld(b2Vec2(0, -60))),
 	drawer(new Box2DDebugDraw(this, world)),
 
-	playerCharacter(new TestCharacter(world, false, PLAYER, PROP | NPC)),
+	playerCharacter(new TestCharacter(world, false, PLAYER, PROP | NPC, -1)),
 	
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	shader(new BaseComponentShader()),

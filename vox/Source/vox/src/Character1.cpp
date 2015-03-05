@@ -5,8 +5,8 @@
 #include "Box2DSprite.h"
 #include "CharacterComponent.h"
 
-Character1::Character1(Box2DWorld * _world, bool _ai, int16 _categoryBits, int16 _maskBits):
-	GameJamCharacter(_world, _categoryBits, _maskBits, _ai),
+Character1::Character1(Box2DWorld * _world, bool _ai, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+	GameJamCharacter(_world, _categoryBits, _maskBits, _groupIndex, _ai),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()

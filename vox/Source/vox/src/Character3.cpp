@@ -6,8 +6,8 @@
 #include "Texture.h"
 #include "CharacterComponent.h"
 
-Character3::Character3(Box2DWorld * _world, bool _ai, int16 _categoryBits, int16 _maskBits):
-	GameJamCharacter(_world, _categoryBits, _maskBits , _ai),
+Character3::Character3(Box2DWorld * _world, bool _ai, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+	GameJamCharacter(_world, _categoryBits, _maskBits, _groupIndex, _ai),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()
