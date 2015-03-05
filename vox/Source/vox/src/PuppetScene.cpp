@@ -155,7 +155,7 @@ PuppetScene::PuppetScene(Game * _game):
 	michael->setShader(shader, true);
 	addChild(michael, 1);
 	michael->addToLayeredScene(this, 1);
-	michael->translateComponents(glm::vec3(1,0,0));
+	michael->translateComponents(glm::vec3(1,10,0));
 	
 	catapult = new Catapult(world, kSTRUCTURE, kSTRUCTURE | kITEM | kBOUNDARY | kPLAYER, -10);
 	catapult->setShader(shader, true);

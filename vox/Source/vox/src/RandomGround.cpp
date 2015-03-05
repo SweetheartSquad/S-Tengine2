@@ -64,7 +64,7 @@ RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold
 	b2Fixture * f = getNewFixture(*chain, 1);
 
 	b2Filter sf;
-	sf.categoryBits = PuppetScene::GROUND;
+	sf.categoryBits = PuppetScene::kGROUND;
 	f->SetFilterData(sf);
 }
 
