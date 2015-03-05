@@ -10,7 +10,7 @@
 
 
 RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold):
-	 Box2DMeshEntity(_world, new MeshInterface(GL_TRIANGLE_FAN, GL_STATIC_DRAW), b2_staticBody, false),
+	 Box2DMeshEntity(_world, new MeshInterface(GL_POLYGON, GL_STATIC_DRAW), b2_staticBody, false),
 	 NodeTransformable(new Transform()),
 	 NodeRenderable(),
 	 NodeChild(nullptr)
