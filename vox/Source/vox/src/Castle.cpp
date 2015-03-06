@@ -27,25 +27,18 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	
 	components.push_back(&base);
 	
-	for(Box2DSprite ** c : components){
-		(*c)->createFixture(groupIndex);
-	}
-
-	base->setTranslationPhysical(0.f, base->getCorrectedHeight(), 0.f);
-	
-	b2PolygonShape tShape;
-	tShape.SetAsBox(base->width*std::abs(transform->scaleVector.x)*base->scale*2.f, std::abs(base->height*transform->scaleVector.y)*base->scale*2.f);
-	
-	b2Fixture * sensor = base->body->CreateFixture(&tShape, 1);
-	sensor->SetSensor(true);
-	sensor->SetUserData(this);
-
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
 	if(maskBits != (int16)-1){
 		sf.maskBits = maskBits;
 	}
-	sensor->SetFilterData(sf);
+
+	for(Box2DSprite ** c : components){
+		(*c)->createFixture(sf);
+	}
+	setUserData(this);
+
+	base->setTranslationPhysical(0.f, base->getCorrectedHeight(), 0.f);
 }
 
 Castle::~Castle(){
