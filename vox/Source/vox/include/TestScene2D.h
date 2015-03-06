@@ -12,7 +12,7 @@ class Texture;
 class Sprite;
 class Box2DWorld;
 
-class TestScene2D : public Scene
+class TestScene2D : private Scene
 {
 public:
 	
