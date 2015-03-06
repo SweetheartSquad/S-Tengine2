@@ -22,7 +22,7 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	health(MAX_HEALTH),
 	damage(0)
 {
-	componentScale = 0.008f;
+	componentScale = 0.01f;
 	
 	TextureSampler baseTex = TextureSampler(new Texture("../assets/structure components/castle/CastleNorm_State1.png", 1024, 1024, true, true), 973, 619);
 	Texture * baseSpriteSheetTex = new Texture("../assets/structure components/castle/Castle_SpriteSheet.png", 2048, 2048, true, true);
@@ -30,15 +30,12 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	base = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), baseTex.width, baseTex.height, baseTex.texture, componentScale);
 	components.push_back(&base);
 	
-	
 	for(Box2DSprite ** c : components){
 		(*c)->createFixture(groupIndex);
 	}
 	
 	base->mesh->textures.pop_back();
-	SpriteSheetAnimation * spriteSheet = new SpriteSheetAnimation(baseSpriteSheetTex, 1);
-
-	//spriteSheet->secondsPerFrame = 10000;
+	SpriteSheetAnimation * spriteSheet = new SpriteSheetAnimation(baseSpriteSheetTex, 0);
 
 	// sprite sheet animation
 	int f[] = {0,1,2,3};
@@ -46,9 +43,7 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 
 	spriteSheet->pushFramesInRange(0, 3, 973, 619, 973 * 2);
 	
-
 	base->addAnimation("castleStates", spriteSheet, true);
-
 
 	base->setTranslationPhysical(0.f, base->getCorrectedHeight(), 0.f);
 	
@@ -85,10 +80,11 @@ void Castle::update(Step * _step){
 
 		if(state != kDAMAGED && health <= MAX_HEALTH * 0.5){
 			state == kDAMAGED;
-			
+			base->currentAnimation->currentFrame = 2;
 		}
 		if(state != kDEAD && health <= 0){
 			state == kDEAD;
+			base->currentAnimation->currentFrame = 3;
 			translateComponents(glm::vec3(0, 0, -10));
 		}
 	}
