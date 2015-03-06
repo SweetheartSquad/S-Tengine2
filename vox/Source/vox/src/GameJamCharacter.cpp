@@ -220,8 +220,16 @@ void GameJamCharacter::attachJoints(){
 		dynamic_cast<Box2DSprite *>(s)->transform->scale(5,5,1);
 	}*/
 
-	torso->createFixture(groupIndex);
-	head->createFixture(groupIndex);
+	b2Filter sf;
+	sf.categoryBits = categoryBits;
+	if(maskBits != (int16)-1){
+		sf.maskBits = maskBits;
+	}
+	sf.groupIndex = groupIndex;
+
+	torso->createFixture(sf);
+	head->createFixture(sf);
+	/*
 
 	// sensor
 	b2PolygonShape tShape;
@@ -229,13 +237,9 @@ void GameJamCharacter::attachJoints(){
 
 	b2Fixture * s = torso->body->CreateFixture(&tShape, 1); // physical fixture
 	s->SetSensor(true);
+	s->SetFilterData(sf);*/
 
-	b2Filter sf;
-	sf.categoryBits = categoryBits;
-	if(maskBits != (int16)-1){
-		sf.maskBits = maskBits;
-	}
-	s->SetFilterData(sf);
+	
 	
 	float correctedTorsoWidth = torso->getCorrectedWidth();
 	float correctedTorsoHeight = torso->getCorrectedHeight();
@@ -257,7 +261,7 @@ void GameJamCharacter::attachJoints(){
 	world->b2world->CreateJoint(&jth);
 
 	// left shoulder
-	leftUpperArm->createFixture(groupIndex);
+	leftUpperArm->createFixture(sf);
 	b2RevoluteJointDef latj;
 	latj.bodyA = torso->body;
 	latj.bodyB = leftUpperArm->body;
@@ -272,7 +276,7 @@ void GameJamCharacter::attachJoints(){
 	
 
 	// right shoulder
-	rightUpperArm->createFixture(groupIndex);
+	rightUpperArm->createFixture(sf);
 	b2RevoluteJointDef ratj;
 	ratj.bodyA = torso->body;
 	ratj.bodyB = rightUpperArm->body;
@@ -287,7 +291,7 @@ void GameJamCharacter::attachJoints(){
 	
 	
 	// left elbow
-	leftLowerArm->createFixture(groupIndex);
+	leftLowerArm->createFixture(sf);
 	b2RevoluteJointDef lelsj;
 	lelsj.bodyA = leftUpperArm->body;
 	lelsj.bodyB = leftLowerArm->body;
@@ -301,7 +305,7 @@ void GameJamCharacter::attachJoints(){
 	world->b2world->CreateJoint(&lelsj);
 
 	// right elbow
-	rightLowerArm->createFixture(groupIndex);
+	rightLowerArm->createFixture(sf);
 	b2RevoluteJointDef rersj;
 	rersj.bodyA = rightUpperArm->body;
 	rersj.bodyB = rightLowerArm->body;
@@ -315,7 +319,7 @@ void GameJamCharacter::attachJoints(){
 	world->b2world->CreateJoint(&rersj);
 
 	// left hand
-	leftHand->createFixture(groupIndex);
+	leftHand->createFixture(sf);
 	b2RevoluteJointDef lhlej;
 	lhlej.bodyA = leftLowerArm->body;
 	lhlej.bodyB = leftHand->body;
@@ -329,7 +333,7 @@ void GameJamCharacter::attachJoints(){
 	world->b2world->CreateJoint(&lhlej);
 
 	// right hand
-	rightHand->createFixture(groupIndex);
+	rightHand->createFixture(sf);
 	b2RevoluteJointDef rhrej;
 	rhrej.bodyA = rightLowerArm->body;
 	rhrej.bodyB = rightHand->body;
@@ -343,7 +347,7 @@ void GameJamCharacter::attachJoints(){
 	world->b2world->CreateJoint(&rhrej);
 
 	// left hip
-	leftUpperLeg->createFixture(groupIndex);
+	leftUpperLeg->createFixture(sf);
 	b2RevoluteJointDef lltj;
 	lltj.bodyA = torso->body;
 	lltj.bodyB = leftUpperLeg->body;
@@ -356,7 +360,7 @@ void GameJamCharacter::attachJoints(){
 	world->b2world->CreateJoint(&lltj);
 	
 	// right hip
-	rightUpperLeg->createFixture(groupIndex);
+	rightUpperLeg->createFixture(sf);
 	b2RevoluteJointDef lrtj;
 	lrtj.bodyA = torso->body;
 	lrtj.bodyB = rightUpperLeg->body;
@@ -369,7 +373,7 @@ void GameJamCharacter::attachJoints(){
 	world->b2world->CreateJoint(&lrtj);
 
 	// left knee
-	leftLowerLeg->createFixture(groupIndex);
+	leftLowerLeg->createFixture(sf);
 	b2RevoluteJointDef llltj;
 	llltj.bodyA = leftUpperLeg->body;
 	llltj.bodyB = leftLowerLeg->body;
@@ -382,7 +386,7 @@ void GameJamCharacter::attachJoints(){
 	world->b2world->CreateJoint(&llltj);
 	
 	// right knee
-	rightLowerLeg->createFixture(groupIndex);
+	rightLowerLeg->createFixture(sf);
 	b2RevoluteJointDef lrltj;
 	lrltj.bodyA = rightUpperLeg->body;
 	lrltj.bodyB = rightLowerLeg->body;
@@ -413,6 +417,8 @@ void GameJamCharacter::attachJoints(){
 
 	torso->body->SetLinearDamping(0.9f);
 	torso->body->SetGravityScale(0.5f);
+
+	setUserData(this);
 }
 
 

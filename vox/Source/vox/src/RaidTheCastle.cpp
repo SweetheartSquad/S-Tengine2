@@ -19,8 +19,8 @@ RaidTheCastle::RaidTheCastle(Game* _game):
 {
 	castle = new Castle(world, kSTRUCTURE, kITEM, 30);
 	castle->setShader(shader, true);
-	castle->addToLayeredScene(this, 1);
-	addChild(castle, 1);
+	castle->addToLayeredScene(this, 0);
+	addChild(castle, 0);
 
 	castle->translateComponents(glm::vec3(50, 0, 0));
 
@@ -56,6 +56,16 @@ void RaidTheCastle::update(Step* _step){
 		if(catapult->boulderJoint != nullptr){
 			world->b2world->DestroyJoint(catapult->boulderJoint);
 			catapult->boulderJoint = nullptr;
+			
+
+			// set the item's group index to zero so that it can collide normally
+			for(Box2DSprite ** bs : catapult->boulder->components){
+				b2Filter b1 = (*bs)->body->GetFixtureList()->GetFilterData();
+				b1.groupIndex = 0;
+				(*bs)->body->GetFixtureList()->SetFilterData(b1);
+				(*bs)->body->GetFixtureList()->Refilter();
+			}
+
 			catapult->boulder = nullptr;
 		}
 	}
@@ -74,7 +84,7 @@ void RaidTheCastle::unload(){
 }
 
 void RaidTheCastle::loadCatapult(){
-	Boulder * boulder = new Boulder(world, PuppetScene::kITEM, PuppetScene::kPLAYER | PuppetScene::kSTRUCTURE | PuppetScene::kITEM | PuppetScene::kGROUND, catapult->groupIndex);
+	Boulder * boulder = new Boulder(world, PuppetScene::kITEM, PuppetScene::kITEM | PuppetScene::kPLAYER | PuppetScene::kSTRUCTURE | PuppetScene::kGROUND, catapult->groupIndex);
 	boulder->setShader(shader, true);
 	addChild(boulder, 1);
 	boulder->addToLayeredScene(this, 1);

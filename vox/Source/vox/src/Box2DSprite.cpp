@@ -30,16 +30,14 @@ float Box2DSprite::getCorrectedWidth(){
 	return width*std::abs(transform->scaleVector.x)*scale*2.f;
 }
 
-void Box2DSprite::createFixture(int16 _groupIndex){
+void Box2DSprite::createFixture(b2Filter _filter){
 	b2PolygonShape tShape;
 	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f);
 
 	b2Fixture * f = body->CreateFixture(&tShape, 1); // physical fixture
 
 	// physical fixture
-	b2Filter tf;
-	tf.groupIndex = _groupIndex;
-	f->SetFilterData(tf);
+	f->SetFilterData(_filter);
 
 	b2Vec2 v1 = tShape.GetVertex(0);
 	b2Vec2 v2 = tShape.GetVertex(1);

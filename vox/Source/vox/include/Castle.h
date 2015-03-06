@@ -10,8 +10,8 @@ class Box2DWorld;
 class Castle : public Structure{
 public:
 
-	unsigned int health;
-	unsigned int damage;
+	float health;
+	float damage;
 
 	Box2DSprite * base;
 
@@ -24,7 +24,7 @@ public:
 	void load() override;
 
 	enum state_t{
-		kGOOD,
+		kNORMAL,
 		kDAMAGED,
 		kDEAD
 	} state;

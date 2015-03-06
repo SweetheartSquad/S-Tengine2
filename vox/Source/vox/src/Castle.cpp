@@ -20,9 +20,10 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	NodeChild(nullptr),
 	NodeRenderable(),
 	health(MAX_HEALTH),
-	damage(0)
+	state(kNORMAL),
+	damage(0.f)
 {
-	componentScale = 0.01f;
+	componentScale = 0.015f;
 	
 	TextureSampler baseTex = TextureSampler(new Texture("../assets/structure components/castle/CastleNorm_State1.png", 1024, 1024, true, true), 973, 619);
 	Texture * baseSpriteSheetTex = new Texture("../assets/structure components/castle/Castle_SpriteSheet.png", 2048, 2048, true, true);
@@ -30,9 +31,16 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	base = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), baseTex.width, baseTex.height, baseTex.texture, componentScale);
 	components.push_back(&base);
 	
-	for(Box2DSprite ** c : components){
-		(*c)->createFixture(groupIndex);
+	b2Filter sf;
+	sf.categoryBits = categoryBits;
+	if(maskBits != (int16)-1){
+		sf.maskBits = maskBits;
 	}
+	sf.groupIndex = groupIndex;
+	for(Box2DSprite ** c : components){
+		(*c)->createFixture(sf);
+	}
+	setUserData(this);
 	
 	base->mesh->textures.pop_back();
 	SpriteSheetAnimation * spriteSheet = new SpriteSheetAnimation(baseSpriteSheetTex, 0);
@@ -46,22 +54,6 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	base->addAnimation("castleStates", spriteSheet, true);
 
 	base->setTranslationPhysical(0.f, base->getCorrectedHeight(), 0.f);
-	
-	b2PolygonShape tShape;
-	tShape.SetAsBox(base->width*std::abs(transform->scaleVector.x)*base->scale*2.f, std::abs(base->height*transform->scaleVector.y)*base->scale*2.f);
-	
-	b2Fixture * sensor = base->body->CreateFixture(&tShape, 1);
-	sensor->SetSensor(true);
-	sensor->SetUserData(this);
-
-	b2Filter sf;
-	sf.categoryBits = categoryBits;
-	if(maskBits != (int16)-1){
-		sf.maskBits = maskBits;
-	}
-	sensor->SetFilterData(sf);
-
-	
 }
 
 Castle::~Castle(){
@@ -78,15 +70,15 @@ void Castle::update(Step * _step){
 		health -= damage;
 		damage = 0;
 
-		if(state != kDAMAGED && health <= MAX_HEALTH * 0.5){
-			state == kDAMAGED;
-			base->currentAnimation->currentFrame = 2;
-		}
 		if(state != kDEAD && health <= 0){
-			state == kDEAD;
+			state = kDEAD;
 			base->currentAnimation->currentFrame = 3;
-			translateComponents(glm::vec3(0, 0, -10));
+			translateComponents(glm::vec3(0, -10, 0));
+		}else if(state != kDAMAGED && state != kDEAD && health <= MAX_HEALTH * 0.5){
+			state = kDAMAGED;
+			base->currentAnimation->currentFrame = 1;
 		}
+		
 	}
 }
 

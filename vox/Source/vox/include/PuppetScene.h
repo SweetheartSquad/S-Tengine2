@@ -71,11 +71,12 @@ public:
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
 	
+
 	enum HURLYBURLY_CATEGORY{
 		kBOUNDARY = 0x0001,
 		kSTRUCTURE = 0x0002,
-		kITEM = 0x0004,
-		kGROUND = 0x0008,
+		kITEM = 0x0004,		
+		kGROUND = 0x0008,	
 		kPLAYER = 0x00010,
 		kBEHAVIOUR = 0x00020,
 		kCAT7 = 0x00040,
