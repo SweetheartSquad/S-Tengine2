@@ -2,11 +2,14 @@
 #include "PuppetScene.h"
 
 #include "Scene.h"
+#include "Castle.h"
+#include "Boulder.h"
 #include "Catapult.h"
 #include "PuppetCharacter.h"
 #include "Box2dWorld.h"
 #include "Item.h"
 #include "Box2DSprite.h"
+#include "Box2DSuperSprite.h"
 #include <Box2D/Box2D.h>
 #include <Box2D\Dynamics\Joints\b2RevoluteJoint.h>
 
@@ -64,8 +67,25 @@ void RaidTheCastleContactListener::BeginContact(b2Contact* contact){
 				// Player-Ground collision
 				playerGroundContact(contact, playerFixture, otherFixture);
 			}
-		}
+		}else{
+			// structure - item?
+			b2Fixture * structureFixture;
+			b2Fixture * itemFixture;
+			bool structure = false;
+			if(fA.categoryBits == PuppetScene::kSTRUCTURE && fB.categoryBits == PuppetScene::kITEM){
+				structureFixture = contact->GetFixtureA();
+				itemFixture = contact->GetFixtureB();
+				structure = true;
+			}else if(fB.categoryBits == PuppetScene::kSTRUCTURE && fA.categoryBits == PuppetScene::kITEM){
+				structureFixture = contact->GetFixtureB();
+				itemFixture = contact->GetFixtureA();
+				structure = true;
+			}
 
+			if(structure){
+				structureItemContact(contact, structureFixture, itemFixture);
+			}
+		}
 		// behaviour stuff
 		b2Fixture * behaviourFixture = nullptr;
 
@@ -126,6 +146,16 @@ void RaidTheCastleContactListener::playerGroundContact(b2Contact * _contact, b2F
 	PuppetCharacter * puppet = static_cast<PuppetCharacter *>( _playerFixture->GetUserData());
 	if(puppet != nullptr){
 		puppet->canJump = true;
+	}
+}
+
+void RaidTheCastleContactListener::structureItemContact(b2Contact * _contact, b2Fixture * _structureFixture, b2Fixture * _itemFixture){
+	Structure * structure = static_cast<Structure *>( _structureFixture->GetUserData() );
+    Item * item = static_cast<Item *>( _itemFixture->GetUserData() );
+
+	Castle * castle = dynamic_cast<Castle *>(structure);
+	if(castle != nullptr){
+		castle->damage = item->damage;
 	}
 }
 

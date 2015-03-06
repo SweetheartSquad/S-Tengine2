@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RaidTheCastle.h"
+#include "Castle.h"
 #include "PuppetCharacter.h"
 #include "Behaviour.h"
 #include "Behaviours.h"
@@ -14,9 +15,22 @@
 #include <glfw\glfw3.h>
 
 RaidTheCastle::RaidTheCastle(Game* _game):
-	PuppetScene(_game)
+	PuppetScene(_game, 0.5)
 {
-	//playerCharacter->behaviourManager.addBehaviour(new Behaviour(Behaviours::followX, 5, PuppetScene::kPLAYER));
+	castle = new Castle(world, kSTRUCTURE, kITEM, 10);
+	castle->setShader(shader, true);
+	castle->addToLayeredScene(this, 1);
+	addChild(castle, 1);
+
+	castle->translateComponents(glm::vec3(20, 0, 0));
+
+	catapult = new Catapult(world, kSTRUCTURE, kSTRUCTURE | kITEM | kBOUNDARY | kPLAYER, -10);
+	catapult->setShader(shader, true);
+	catapult->addToLayeredScene(this, 1);
+	addChild(catapult, 1);
+
+	catapult->translateComponents(glm::vec3(-10,0,0));
+
 	loadCatapult();
 }
 
@@ -74,7 +88,15 @@ void RaidTheCastle::loadCatapult(){
 	boulder->setShader(shader, true);
 	addChild(boulder, 1);
 	boulder->addToLayeredScene(this, 1);
+	
+	b2Vec2 jointPosB = ((b2RevoluteJoint *)catapult->arm->body->GetJointList()->joint)->GetLocalAnchorB();
 	//boulder->boulder->body->SetTransform(catapult->arm->body->GetPosition(), std::rand());
+	b2Vec2 armPos = catapult->arm->body->GetPosition();
+	
+	b2Vec2 boulderPos = b2Vec2(armPos.x + catapult->arm->getCorrectedWidth() * 2.0 + jointPosB.x, armPos.y + jointPosB.y);
+	//b2Vec2 boulderPos = b2Vec2(catapult->base->transform->translationVector.x - catapult->arm->getCorrectedWidth() * 2.0 * 0.8, catapult->base->getCorrectedHeight() * 2.0 * 0.9);
+	//boulder->translateComponents(glm::vec3(boulderPos.x, boulderPos.y, 0));
+
 	boulder->translateComponents(glm::vec3(-21, 6, 0)); // this is hard-coded, should not be
 	//boulder->boulder->body->SetTransform(b2Vec2(-36, 6), 0);
 	catapult->cooldownCnt = 0.f;

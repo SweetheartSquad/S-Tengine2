@@ -35,6 +35,7 @@
     <ClCompile Include="..\src\Box2DSuperSprite.cpp" />
     <ClCompile Include="..\src\Box2DWorld.cpp" />
     <ClCompile Include="..\src\Camera.cpp" />
+    <ClCompile Include="..\src\Castle.cpp" />
     <ClCompile Include="..\src\Catapult.cpp" />
     <ClCompile Include="..\src\Character.cpp" />
     <ClCompile Include="..\src\Character1.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="..\include\Box2DSuperSprite.h" />
     <ClInclude Include="..\include\Box2DWorld.h" />
     <ClInclude Include="..\include\Camera.h" />
+    <ClInclude Include="..\include\Castle.h" />
     <ClInclude Include="..\include\Catapult.h" />
     <ClInclude Include="..\include\Character.h" />
     <ClInclude Include="..\include\Character1.h" />

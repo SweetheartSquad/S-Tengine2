@@ -6,7 +6,11 @@
 #include "Box2DWorld.h"
 
 Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+<<<<<<< HEAD
 	Item(true, _world, _categoryBits, _maskBits, _groupIndex, 10.f, 0, 36),
+=======
+	Item(true, _world, _categoryBits, _maskBits, _groupIndex, 10.f, 10),
+>>>>>>> origin/master
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()
