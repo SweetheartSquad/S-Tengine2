@@ -19,8 +19,8 @@ RaidTheCastle::RaidTheCastle(Game* _game):
 {
 	castle = new Castle(world, kSTRUCTURE, kITEM, 10);
 	castle->setShader(shader, true);
-	castle->addToLayeredScene(this, 1);
-	addChild(castle, 1);
+	castle->addToLayeredScene(this, 0);
+	addChild(castle, 0);
 
 	castle->translateComponents(glm::vec3(100, 0, 0));
 
