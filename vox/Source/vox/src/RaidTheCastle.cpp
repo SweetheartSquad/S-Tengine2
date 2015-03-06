@@ -9,14 +9,30 @@
 #include "Catapult.h"
 #include "Box2DSprite.h"
 #include "Box2DWorld.h"
+#include "MeshEntity.h"
+#include "MeshInterface.h"
+#include "MeshFactory.h"
 #include "shader/BaseComponentShader.h"
 #include "keyboard.h"
+#include <Texture.h>
 
 #include <glfw\glfw3.h>
 
 RaidTheCastle::RaidTheCastle(Game* _game):
-	PuppetScene(_game, 0.5)
+	PuppetScene(_game, 0.5),
+	sky(new MeshEntity(MeshFactory::getPlaneMesh()))
 {
+	sky->setShader(shader, true);
+	sky->transform->translate(0.0f, 25.f, -10.0f);
+	sky->transform->scale(125, 25, 1);
+
+	sky->mesh->pushTexture2D(new Texture("../assets/hurly-burly/Sky_All.png", 1024, 1024, true, true));
+	//sky->mesh->setUV(
+	sky->mesh->uvEdgeMode = GL_REPEAT;
+	sky->mesh->dirty = true;
+
+	addChild(sky, 0);
+
 	castle = new Castle(world, kSTRUCTURE, kITEM, 30);
 	castle->setShader(shader, true);
 	castle->addToLayeredScene(this, 0);

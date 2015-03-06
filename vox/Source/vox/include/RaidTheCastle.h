@@ -2,12 +2,14 @@
 
 #include "PuppetScene.h"
 
+class MeshEntity;
 class Castle;
 class Catapult;
 
 class RaidTheCastle : public PuppetScene{
 public:
 
+	MeshEntity * sky;
 	Castle * castle;
 	Catapult * catapult;
 

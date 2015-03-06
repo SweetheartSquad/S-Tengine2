@@ -14,19 +14,19 @@ vox::Rectangle::~Rectangle(){
 }
 
 vox::Point vox::Rectangle::getTopLeft(){
-	return Point(x, y);
+	return Point(x, y+height);
 }
 
 vox::Point vox::Rectangle::getTopRight(){
-	return vox::Point(x + width, y);
+	return vox::Point(x + width, y+height);
 }
 
 vox::Point vox::Rectangle::getBottomLeft(){
-	return vox::Point(x, y + height);
+	return vox::Point(x, y);
 }
 
 vox::Point vox::Rectangle::getBottomRight(){
-	return vox::Point(x + width, y + height);
+	return vox::Point(x + width, y);
 }
 
 float vox::Rectangle::getArea(){

@@ -69,7 +69,7 @@ void SpriteSheetAnimation::pushFramesInRange(unsigned long int _min, unsigned lo
 		if((curCol - colOffset + 1) * _width > _textureWidth){
 			curRow++;
 			if(colInRow == -1){
-				colInRow = curCol;	
+				colInRow = curCol;
 			}
 			colOffset += colInRow;
 		}
