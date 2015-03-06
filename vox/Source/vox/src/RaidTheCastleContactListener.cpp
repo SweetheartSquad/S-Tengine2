@@ -29,7 +29,7 @@ RaidTheCastleContactListener::RaidTheCastleContactListener(PuppetScene * _scene)
 }
 
 void RaidTheCastleContactListener::BeginContact(b2Contact* contact){
-	if(contact->GetFixtureA()->IsSensor() || contact->GetFixtureB()->IsSensor()){
+	//if(contact->GetFixtureA()->IsSensor() || contact->GetFixtureB()->IsSensor()){
 		b2Filter fA = contact->GetFixtureA()->GetFilterData();
 		b2Filter fB = contact->GetFixtureB()->GetFilterData();
 		b2Fixture * playerFixture = nullptr;
@@ -102,9 +102,9 @@ void RaidTheCastleContactListener::BeginContact(b2Contact* contact){
 			b->targets.push_back(otherFixture->GetUserData());
 			b->active = true;
 		}
-	}else{
+	/*}else{
 		// do nothing
-	}
+	}*/
 }
 
 void RaidTheCastleContactListener::playerPlayerContact(b2Contact * contact){
@@ -129,6 +129,7 @@ void RaidTheCastleContactListener::playerItemContact(b2Contact * contact, b2Fixt
 		std::cout << "damage?" << std::endl;
 	}else if(p->heldItem == nullptr && !item->held){
 		p->itemToPickup = item;
+		// multiple players might be able to pick it up in one update
 	}
 }
 
@@ -139,29 +140,6 @@ void RaidTheCastleContactListener::playerStructureContact(b2Contact * contact, b
 	// need to actually check if the structure is the catapult
 	((Catapult *)structureFixture->GetUserData())->fireCatapult();
 
-	/*std::cout << typeid (fxA->GetUserData()).name() << std::endl;
-	if(typeid (fxA->GetUserData()) == typeid (Catapult *)){
-		((Catapult *)fxA->GetUserData())->fireCatapult();
-	std::cout << "FIRE THE CATAPULT!" << std::endl;
-	}
-	if(typeid (fxB->GetUserData()) == typeid (Catapult *)){
-		((Catapult *)fxB->GetUserData())->fireCatapult();
-	std::cout << "FIRE THE CATAPULT!" << std::endl;
-	}*/
-	/*PuppetCharacter * puppet;
-	Catapult * catapult;
-
-	puppet = static_cast<PuppetCharacter *>( fxA->GetUserData() );
-	if(puppet != nullptr){
-		catapult = static_cast<Catapult *>( fxB->GetUserData() );
-	}else{
-		puppet = static_cast<PuppetCharacter *>( fxB->GetUserData() );
-		catapult = static_cast<Catapult *>( fxA->GetUserData() );
-	}
-	
-	if(puppet != nullptr && catapult != nullptr){
-		catapult->fireCatapult();
-	}*/
 }
 
 void RaidTheCastleContactListener::playerGroundContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _groundFixture){

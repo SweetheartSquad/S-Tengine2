@@ -46,7 +46,7 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	playerCharacter2(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -1, false)),
 	playerCharacter3(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -3, false)),
 	playerCharacter4(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -4, false)),
-	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
+	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, false)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
@@ -94,11 +94,12 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	dynamicBox.SetAsBox(1.0f * std::abs(ground->transform->scaleVector.x), 1.0f * std::abs(ground->transform->scaleVector.y));	
 	b2Fixture * groundFixture = ground->getNewFixture(dynamicBox, 1.0f);
 	
-	groundFixture->SetSensor(true);
+	groundFixture->SetSensor(false);
 	groundFixture->SetUserData(this);
 	
 	b2Filter sf;
 	sf.categoryBits = kGROUND;
+	sf.maskBits = kSTRUCTURE | kITEM | kPLAYER;
 	groundFixture->SetFilterData(sf);
 
 	Texture * treeTex1 = new Texture("../assets/hurly-burly/Foliage/Tree1-ds.png", 1024, 1024, true, true);
@@ -133,7 +134,7 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	addChild(playerCharacter, 1);
 	playerCharacter->addToLayeredScene(this, 1);
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter->translateComponents(glm::vec3(20.0f, 5.f, 0.f));
+	playerCharacter->translateComponents(glm::vec3(0.0f, 5.f, 0.f));
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
@@ -209,7 +210,7 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	addChild(drawer, 2);
 
 	randomGround->setShader(shader, true);
-	randomGround->setTranslationPhysical(0.0f, 0.0f, 0.0f);
+	randomGround->setTranslationPhysical(20.0f, 0.0f, 0.0f);
 	randomGround->mesh->uvEdgeMode = GL_REPEAT;
 
 	randomGround->mesh->pushTexture2D(new Texture("../assets/paper.png", 512, 512, true, true));

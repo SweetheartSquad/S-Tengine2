@@ -58,7 +58,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	
 
 
-	b2PolygonShape tShapeLeft;
+	/*b2PolygonShape tShapeLeft;
 	tShapeLeft.SetAsBox(std::abs(handLeft->width*transform->scaleVector.x)*handLeft->scale*2.f, std::abs(handLeft->height*transform->scaleVector.y)*handLeft->scale*2.f);
 
 	b2Fixture * sensorLeft = handLeft->body->CreateFixture(&tShapeLeft, 1);
@@ -82,7 +82,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	b2PolygonShape headShape = head->getFixtureShape();
 	b2Fixture * sensorHead = head->body->CreateFixture(&torsoShape, 1);
 	sensorHead->SetSensor(true);
-	sensorHead->SetUserData(this);
+	sensorHead->SetUserData(this);*/
 	
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
@@ -90,14 +90,16 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 		sf.maskBits = maskBits;
 	}
 	sf.groupIndex = _groupIndex;
-	sensorLeft->SetFilterData(sf);
+	/*sensorLeft->SetFilterData(sf);
 	sensorRight->SetFilterData(sf);
 	sensorTorso->SetFilterData(sf);
-	sensorHead->SetFilterData(sf);
+	sensorHead->SetFilterData(sf);*/
 
 	for(Box2DSprite ** c : components){
-		(*c)->createFixture(groupIndex);
+		(*c)->createFixture(sf);
 	}
+
+	setUserData(this);
 	
 	// neck
 	b2RevoluteJointDef jth;
@@ -286,14 +288,10 @@ void PuppetCharacter::pickupItem(Item * _item){
 		
 		// set the item's group index to match character's so that they won't collide anymore (doesn't work?)
 		for(Box2DSprite ** bs : _item->components){
-			std::cout << (*bs)->body->GetFixtureList()->GetFilterData().groupIndex;
-			std::cout << " vs. " << this->groupIndex << std::endl;
 			b2Filter b1 = (*bs)->body->GetFixtureList()->GetFilterData();
 			b1.groupIndex = this->groupIndex;
 			(*bs)->body->GetFixtureList()->SetFilterData(b1);
 			(*bs)->body->GetFixtureList()->Refilter();
-			std::cout << (*bs)->body->GetFixtureList()->GetFilterData().groupIndex;
-			std::cout << " vs. " << this->groupIndex << std::endl;
 		}
 
 
@@ -301,7 +299,7 @@ void PuppetCharacter::pickupItem(Item * _item){
 		jd.bodyA = armRight->body;
 		jd.bodyB = (*_item->components.at(0))->body;
 		jd.localAnchorA.Set(0, 0);
-		jd.localAnchorB.Set(0, 0);
+		jd.localAnchorB.Set(_item->handleX*componentScale, _item->handleY*componentScale);
 		jd.collideConnected = false;
 		jd.referenceAngle = 0.f;
 		itemJoint = (b2WeldJoint *)world->b2world->CreateJoint(&jd);

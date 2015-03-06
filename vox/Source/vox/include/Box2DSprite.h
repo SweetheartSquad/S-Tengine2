@@ -24,7 +24,7 @@ public:
 	virtual float getCorrectedHeight();
 	virtual float getCorrectedWidth();
 
-	virtual void createFixture(int16 _groupIndex);
+	virtual void createFixture(b2Filter _filter);
 
 	//Creates a rectangular shape that fits the sprite
 	b2PolygonShape getFixtureShape();
