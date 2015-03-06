@@ -6,7 +6,7 @@
 #include "Box2DWorld.h"
 
 Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
-	Item(true, _world, _categoryBits, _maskBits, _groupIndex, 10.f),
+	Item(true, _world, _categoryBits, _maskBits, _groupIndex, 10.f, 0, 36),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()
@@ -19,25 +19,20 @@ Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16
 	
 	components.push_back(&boulder);
 	
-	for(Box2DSprite ** c : components){
-		(*c)->createFixture(groupIndex);
-	}
-	
-	b2PolygonShape tShape;
-	tShape.SetAsBox(boulder->width*std::abs(transform->scaleVector.x)*boulder->scale*2.f, std::abs(boulder->height*transform->scaleVector.y)*boulder->scale*2.f);
-	
-	b2Fixture * sensor = boulder->body->CreateFixture(&tShape, 1);
-	sensor->SetSensor(true);
-	sensor->SetUserData(this);
-	sensor->SetDensity(10.f);
-	
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
 	if(maskBits != (int16)-1){
 		sf.maskBits = maskBits;
+	}else{
+		sf.maskBits = 0;
 	}
 	sf.groupIndex = groupIndex;
-	sensor->SetFilterData(sf);
+	
+	for(Box2DSprite ** c : components){
+		(*c)->createFixture(sf);
+	}
+
+	setUserData(this);
 }
 
 Boulder::~Boulder(){

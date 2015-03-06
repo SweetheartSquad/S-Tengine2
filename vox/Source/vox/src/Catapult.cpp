@@ -34,27 +34,31 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int
 	components.push_back(&arm);
 	components.push_back(&base);
 	
-	for(Box2DSprite ** c : components){
-		(*c)->createFixture(groupIndex);
-	}
-
-	base->setTranslationPhysical(0.f, base->getCorrectedHeight(), 0.f);
-	
-	b2PolygonShape tShape;
-	tShape.SetAsBox(base->width*std::abs(transform->scaleVector.x)*base->scale*2.f, std::abs(base->height*transform->scaleVector.y)*base->scale*2.f);
-	
-	b2Fixture * sensor = base->body->CreateFixture(&tShape, 1);
-	sensor->SetSensor(true);
-	sensor->SetUserData(this);
-	
-	arm->body->GetFixtureList()->SetDensity(10.f);
-
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
 	if(maskBits != (int16)-1){
 		sf.maskBits = maskBits;
 	}
-	sensor->SetFilterData(sf);
+	sf.groupIndex = groupIndex;
+
+	for(Box2DSprite ** c : components){
+		(*c)->createFixture(sf);
+	}
+
+	setUserData(this);
+
+	base->setTranslationPhysical(0.f, base->getCorrectedHeight(), 0.f);
+	
+	/*b2PolygonShape tShape;
+	tShape.SetAsBox(base->width*std::abs(transform->scaleVector.x)*base->scale*2.f, std::abs(base->height*transform->scaleVector.y)*base->scale*2.f);
+	
+	b2Fixture * sensor = base->body->CreateFixture(&tShape, 1);
+	sensor->SetSensor(true);
+	sensor->SetUserData(this);
+
+	sensor->SetFilterData(sf);*/
+	
+	arm->body->GetFixtureList()->SetDensity(10.f);
 
 	// axel
 	b2RevoluteJointDef jth;

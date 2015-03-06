@@ -49,5 +49,5 @@ public:
 	virtual void addToLayeredScene(LayeredScene * _scene, unsigned long int _layer);
 
 	void translateComponents(glm::vec3 _translateVector);
-
+	void setUserData(void * _data);
 };
