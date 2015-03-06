@@ -17,12 +17,12 @@
 RaidTheCastle::RaidTheCastle(Game* _game):
 	PuppetScene(_game, 0.5)
 {
-	castle = new Castle(world, kSTRUCTURE, kITEM, 10);
+	castle = new Castle(world, kSTRUCTURE, kITEM, 30);
 	castle->setShader(shader, true);
 	castle->addToLayeredScene(this, 1);
 	addChild(castle, 1);
 
-	castle->translateComponents(glm::vec3(20, 0, 0));
+	castle->translateComponents(glm::vec3(50, 0, 0));
 
 	catapult = new Catapult(world, kSTRUCTURE, kSTRUCTURE | kITEM | kBOUNDARY | kPLAYER, -10);
 	catapult->setShader(shader, true);

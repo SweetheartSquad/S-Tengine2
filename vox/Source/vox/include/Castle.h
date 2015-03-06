@@ -22,4 +22,10 @@ public:
 	void update(Step* _step) override;
 	void unload() override;
 	void load() override;
+
+	enum state_t{
+		kGOOD,
+		kDAMAGED,
+		kDEAD
+	} state;
 };
