@@ -22,19 +22,20 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	health(MAX_HEALTH),
 	damage(0)
 {
-	componentScale = 0.01f;
+	componentScale = 0.008f;
 	
 	TextureSampler baseTex = TextureSampler(new Texture("../assets/structure components/castle/CastleNorm_State1.png", 1024, 1024, true, true), 973, 619);
 	Texture * baseSpriteSheetTex = new Texture("../assets/structure components/castle/Castle_SpriteSheet.png", 2048, 2048, true, true);
 
 	base = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), baseTex.width, baseTex.height, baseTex.texture, componentScale);
+	components.push_back(&base);
 	
 	
 	for(Box2DSprite ** c : components){
 		(*c)->createFixture(groupIndex);
 	}
 	
-	
+	base->mesh->textures.pop_back();
 	SpriteSheetAnimation * spriteSheet = new SpriteSheetAnimation(baseSpriteSheetTex, 1);
 
 	//spriteSheet->secondsPerFrame = 10000;
@@ -48,8 +49,6 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 
 	base->addAnimation("castleStates", spriteSheet, true);
 
-	components.push_back(&base);
-	
 
 	base->setTranslationPhysical(0.f, base->getCorrectedHeight(), 0.f);
 	
@@ -67,7 +66,7 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	}
 	sensor->SetFilterData(sf);
 
-	base->mesh->textures.pop_back();
+	
 }
 
 Castle::~Castle(){
