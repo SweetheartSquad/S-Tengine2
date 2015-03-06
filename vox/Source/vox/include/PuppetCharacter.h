@@ -16,6 +16,8 @@ public:
 
 	float targetRoll;
 
+	unsigned int health;
+
 	Box2DSprite * head;
 	Box2DSprite * torso;
 	Box2DSprite * armLeft;

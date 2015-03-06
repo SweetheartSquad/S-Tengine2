@@ -22,7 +22,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),
-	behaviourManager(this)
+	behaviourManager(this),
+	health(1.0f)
 {
 	
 	GameJamCharacter::texture_packs character = GameJamCharacter::kKNIGHT;
@@ -74,6 +75,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 
 	b2PolygonShape torsoShape = torso->getFixtureShape();
 	b2Fixture * sensorTorso = torso->body->CreateFixture(&torsoShape, 1);
+	sensorTorso->SetFriction(200);
 	sensorTorso->SetSensor(true);
 	sensorTorso->SetUserData(this);
 
