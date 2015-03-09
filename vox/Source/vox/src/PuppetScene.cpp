@@ -181,15 +181,8 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	puppetController3 = new PuppetController(acc3, playerCharacter3);
 	puppetController4 = new PuppetController(acc4, playerCharacter4);
 
-	gameCam = new FollowCamera(glm::vec3(0, 8.f, 0), 0, 0);
-	gameCam->addTarget(playerCharacter->torso);
 
 	//Set up cameras
-	gameCam->farClip = 1000.f;
-	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
-	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
-	gameCam->yaw = 90.0f;
-	gameCam->pitch = -10.0f;
 	
 	mouseCamera = new MousePerspectiveCamera();
 
@@ -198,9 +191,8 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	mouseCamera->transform->translate(5.0f, 1.5f, 22.5f);
 	mouseCamera->yaw = 90.0f;
 	mouseCamera->pitch = -10.0f;
-
-	camera = gameCam;
-
+	
+	
 	
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);
@@ -218,6 +210,19 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 
 	world->addToWorld(randomGround);
 	addChild(randomGround, 1);
+
+	gameCam = new FollowCamera(glm::vec3(0, 0, 0), 0, 0);
+	gameCam->addTarget(playerCharacter->torso);
+	gameCam->addTarget(playerCharacter2->torso);
+	gameCam->addTarget(playerCharacter3->torso);
+	gameCam->addTarget(playerCharacter4->torso);
+	gameCam->addTarget(michael);
+	gameCam->farClip = 1000.f;
+	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
+	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
+	gameCam->yaw = 90.0f;
+	gameCam->pitch = -10.0f;
+	camera = gameCam;
 }
 
 PuppetScene::~PuppetScene(){

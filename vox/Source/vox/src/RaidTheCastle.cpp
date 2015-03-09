@@ -3,6 +3,7 @@
 #include "RaidTheCastle.h"
 #include "Castle.h"
 #include "PuppetCharacter.h"
+#include "FollowCamera.h"
 #include "Behaviour.h"
 #include "Behaviours.h"
 #include "Boulder.h"
@@ -65,7 +66,8 @@ void RaidTheCastle::update(Step* _step){
 				(*bs)->body->GetFixtureList()->SetFilterData(b1);
 				(*bs)->body->GetFixtureList()->Refilter();
 			}
-
+			
+			((FollowCamera *)gameCam)->addTarget(catapult->boulder);
 			catapult->boulder = nullptr;
 		}
 	}
@@ -88,7 +90,8 @@ void RaidTheCastle::loadCatapult(){
 	boulder->setShader(shader, true);
 	addChild(boulder, 1);
 	boulder->addToLayeredScene(this, 1);
-	
+
+
 	b2Vec2 jointPosB = ((b2RevoluteJoint *)catapult->arm->body->GetJointList()->joint)->GetLocalAnchorB();
 	//boulder->boulder->body->SetTransform(catapult->arm->body->GetPosition(), std::rand());
 	b2Vec2 armPos = catapult->arm->body->GetPosition();

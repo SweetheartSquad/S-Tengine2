@@ -48,5 +48,8 @@ public:
 	float deadZoneY;
 	// Tolerable depth difference between the follow targets and the current lookAt
 	float deadZoneZ;
+
+	// Minimum zoom
+	float minimumZoom;
 };
 //  zoom = max(max(w/width, h/height) + 0.1, 10) + zoomModifier;
