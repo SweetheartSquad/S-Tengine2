@@ -5,6 +5,7 @@
 class RandomGround;
 class MousePerspectiveCamera;
 class PerspectiveCamera;
+class FollowCamera;
 class MeshEntity;
 class PuppetController;
 class PuppetCharacter;
@@ -54,7 +55,7 @@ public:
 	SoundManager * soundManager;
 	AccelerometerParser * arduino;
 
-	PerspectiveCamera * perspectiveCamera;
+	FollowCamera * gameCam;
 	MousePerspectiveCamera * mouseCamera;
 
 	Box2DSprite * tempCatapault;

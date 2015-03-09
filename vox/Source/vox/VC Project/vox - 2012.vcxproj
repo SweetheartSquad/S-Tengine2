@@ -63,7 +63,7 @@
     <ClCompile Include="..\src\GameJamSceneIndoor.cpp" />
     <ClCompile Include="..\src\GameJamSceneOutdoor.cpp" />
     <ClCompile Include="..\src\GLUtils.cpp" />
-    <ClCompile Include="..\src\GroupFollowCamera.cpp" />
+    <ClCompile Include="..\src\FollowCamera.cpp" />
     <ClCompile Include="..\src\Item.cpp" />
     <ClCompile Include="..\src\jsoncpp.cpp" />
     <ClCompile Include="..\src\Keyboard.cpp" />
@@ -202,7 +202,7 @@
     <ClInclude Include="..\include\GameJamScene.h" />
     <ClInclude Include="..\include\GameJamSceneOutdoor.h" />
     <ClInclude Include="..\include\GLUtils.h" />
-    <ClInclude Include="..\include\GroupFollowCamera.h" />
+    <ClInclude Include="..\include\FollowCamera.h" />
     <ClInclude Include="..\include\Item.h" />
     <ClInclude Include="..\include\json\json-forwards.h" />
     <ClInclude Include="..\include\json\json.h" />
