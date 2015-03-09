@@ -50,4 +50,7 @@ public:
 
 	void translateComponents(glm::vec3 _translateVector);
 	void setUserData(void * _data);
+
+	// Sets the group index on all components
+	void setGroupIndex(int16 _groupIndex);
 };

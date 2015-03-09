@@ -88,3 +88,9 @@ void Box2DSuperSprite::setUserData(void * _data){
 		}
 	}
 }
+
+void Box2DSuperSprite::setGroupIndex(int16 _groupIndex){
+	for(Box2DSprite ** c : components){
+		(*c)->setGroupIndex(_groupIndex);
+	}
+}

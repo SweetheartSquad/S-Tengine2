@@ -285,12 +285,7 @@ void PuppetCharacter::pickupItem(Item * _item){
 		}
 		
 		// set the item's group index to match character's so that they won't collide anymore (doesn't work?)
-		for(Box2DSprite ** bs : _item->components){
-			b2Filter b1 = (*bs)->body->GetFixtureList()->GetFilterData();
-			b1.groupIndex = this->groupIndex;
-			(*bs)->body->GetFixtureList()->SetFilterData(b1);
-			(*bs)->body->GetFixtureList()->Refilter();
-		}
+		_item->setGroupIndex(this->groupIndex);
 
 
 		b2WeldJointDef jd;

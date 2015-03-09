@@ -28,4 +28,7 @@ public:
 
 	//Creates a rectangular shape that fits the sprite
 	b2PolygonShape getFixtureShape();
+
+	// We seem to need this fairly often
+	void setGroupIndex(int16 _groupIndex);
 };

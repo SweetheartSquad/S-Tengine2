@@ -44,13 +44,15 @@ void RaidTheCastleContactListener::BeginContact(b2Contact* contact){
 
 		std::cout << fA.categoryBits << " | " << fB.categoryBits << std::endl;
 
-		// if a thrown item hits the ground, make it not thrown
+		// if a thrown item hits the ground, make it not thrown and able to collide regularly
 		if(fA.categoryBits == PuppetScene::kGROUND && fB.categoryBits == PuppetScene::kITEM){
 			std::cout << "item hit ground" << std::endl;
 			((Item *)contact->GetFixtureB()->GetUserData())->thrown = false;
+			((Item *)contact->GetFixtureB()->GetUserData())->setGroupIndex(0);
 		}else if(fB.categoryBits == PuppetScene::kGROUND && fA.categoryBits == PuppetScene::kITEM){
 			std::cout << "item hit ground" << std::endl;
 			((Item *)contact->GetFixtureA()->GetUserData())->thrown = false;
+			((Item *)contact->GetFixtureB()->GetUserData())->setGroupIndex(0);
 		}
 
 		if(playerFixture != nullptr){
@@ -121,8 +123,8 @@ void RaidTheCastleContactListener::playerPlayerContact(b2Contact * contact){
 
 void RaidTheCastleContactListener::playerItemContact(b2Contact * contact, b2Fixture * playerFixture, b2Fixture * itemContact){
 	std::cout << "Player-Item Collision" << std::endl;
-	PuppetCharacter * p = ((PuppetCharacter *)playerFixture->GetUserData());
-	Item * item = (Item *)itemContact->GetUserData();
+	PuppetCharacter * p = static_cast<PuppetCharacter *>(playerFixture->GetUserData());
+	Item * item = static_cast<Item *>(itemContact->GetUserData());
 	if(item->thrown){
 		// do some sort of damage thing here
 		p->torso->applyLinearImpulseUp(500);
