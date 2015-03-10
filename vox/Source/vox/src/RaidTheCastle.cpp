@@ -22,11 +22,7 @@ RaidTheCastle::RaidTheCastle(Game* _game):
 	castle->addToLayeredScene(this, 0);
 	addChild(castle, 0);
 
-<<<<<<< HEAD
-	castle->translateComponents(glm::vec3(100, 0, 0));
-=======
 	castle->translateComponents(glm::vec3(50, 0, 0));
->>>>>>> 8ec075e434656f238248925f34476ae44a291cab
 
 	catapult = new Catapult(world, kSTRUCTURE, kSTRUCTURE | kITEM | kBOUNDARY | kPLAYER, -10);
 	catapult->setShader(shader, true);

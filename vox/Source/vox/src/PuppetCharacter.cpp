@@ -9,8 +9,6 @@
 #include "Behaviour.h"
 #include "Behaviours.h"
 
-#include <typeinfo>
-
 PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex, bool _ai):
 	Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
@@ -23,9 +21,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	heldItem(nullptr),
 	itemJoint(nullptr),
 	behaviourManager(this),
-	health(1.0f)
-{
-	
+	health(1.0f){
+
 	GameJamCharacter::texture_packs character = GameJamCharacter::kKNIGHT;
 	head = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::headTexPacks[character]->width, GameJamCharacter::headTexPacks[character]->height, GameJamCharacter::headTexPacks[character]->texture, componentScale);
 	
@@ -35,7 +32,6 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	handLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::handTexPacks[character]->width, GameJamCharacter::handTexPacks[character]->height, GameJamCharacter::handTexPacks[character]->texture, componentScale);
 	handRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::handTexPacks[character]->width, GameJamCharacter::handTexPacks[character]->height, GameJamCharacter::handTexPacks[character]->texture, componentScale);
 	
-
 	TextureSampler * faceTex = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Face1.png", 512,512, true, true), 67, 72);
 	TextureSampler * helmetTex = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Helmet1.png", 512,512, true, true), 114, 165);
 	face = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), faceTex->width, faceTex->height, faceTex->texture, componentScale);
@@ -50,68 +46,26 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	components.push_back(&face);
 	components.push_back(&headgear);
 	
-	/*b2CircleShape tShape;
-	tShape.m_radius = glm::length(glm::vec2(transform->scaleVector.x,transform->scaleVector.y));
-	tShape.m_p = b2Vec2(0,0);
-	b2Fixture * s = torso->body->CreateFixture(&tShape, 1);*/
-	
-	
-
-
-	/*b2PolygonShape tShapeLeft;
-	tShapeLeft.SetAsBox(std::abs(handLeft->width*transform->scaleVector.x)*handLeft->scale*2.f, std::abs(handLeft->height*transform->scaleVector.y)*handLeft->scale*2.f);
-
-	b2Fixture * sensorLeft = handLeft->body->CreateFixture(&tShapeLeft, 1);
-	sensorLeft->SetSensor(true);
-	sensorLeft->SetUserData(this);
-
-	b2PolygonShape tShapeRight;
-	tShapeRight.SetAsBox(std::abs(handRight->width*transform->scaleVector.x)*handRight->scale*2.f, std::abs(handRight->height*transform->scaleVector.y)*handRight->scale*2.f);
-	
-	b2Fixture * sensorRight = handRight->body->CreateFixture(&tShapeRight, 1);
-	sensorRight->SetSensor(true);
-	sensorRight->SetUserData(this);
-	
-
-	b2PolygonShape torsoShape = torso->getFixtureShape();
-	b2Fixture * sensorTorso = torso->body->CreateFixture(&torsoShape, 1);
-	sensorTorso->SetFriction(200);
-	sensorTorso->SetSensor(true);
-	sensorTorso->SetUserData(this);
-
-	b2PolygonShape headShape = head->getFixtureShape();
-	b2Fixture * sensorHead = head->body->CreateFixture(&torsoShape, 1);
-	sensorHead->SetSensor(true);
-	sensorHead->SetUserData(this);*/
-	
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
 	if(maskBits != (int16)-1){
 		sf.maskBits = maskBits;
 	}
 	sf.groupIndex = _groupIndex;
-	/*sensorLeft->SetFilterData(sf);
-	sensorRight->SetFilterData(sf);
-	sensorTorso->SetFilterData(sf);
-	sensorHead->SetFilterData(sf);*/
 
-	for(Box2DSprite ** c : components){
-	//	(*c)->createFixture(sf, b2Vec2(0.0f, 0.0f));
-	}
+	torso->createFixture	 (sf, b2Vec2(0.0f, -1.0f), this); 
+	armLeft->createFixture	 (sf, b2Vec2(0.0f, 0.0f),  this); 
+	armRight->createFixture	 (sf, b2Vec2(0.0f, 0.0f),  this);
+	handLeft->createFixture  (sf, b2Vec2(0.0f, 0.0f),  this);
+	handRight->createFixture (sf, b2Vec2(0.0f, 0.0f),  this);
+	face->createFixture		 (sf, b2Vec2(0.0f, 0.0f),  this);
+	headgear->createFixture	 (sf, b2Vec2(0.0f, 0.0f),  this);
+	head->createFixture		 (sf, b2Vec2(0.0f, 0.0f),  this);
 
-	torso->createFixture(sf, b2Vec2(0.0f, 0.0f)); 
-	armLeft->createFixture(sf, b2Vec2(0.0f, 0.0f)); 
-	armRight->createFixture(sf, b2Vec2(0.0f, 0.0f));
-	handLeft->createFixture(sf, b2Vec2(0.0f, 0.0f));
-	handRight->createFixture(sf, b2Vec2(0.0f, 0.0f));
-	face->createFixture(sf, b2Vec2(0.0f, 0.0f));
-	headgear->createFixture(sf, b2Vec2(0.0f, 0.0f));
-	head->createFixture(sf, b2Vec2(0.0f, 0.0f));
-	
 	b2RevoluteJointDef jth;
 	jth.bodyA = torso->body;
 	jth.bodyB = head->body;
-	jth.localAnchorA.Set(0, 0.9f * torso->getCorrectedHeight());
+	jth.localAnchorA.Set(0, 0.4f * torso->getCorrectedHeight());
 	jth.localAnchorB.Set(0, -0.9f * head->getCorrectedHeight());
 	jth.collideConnected = false;
 	jth.enableLimit = true;
@@ -133,6 +87,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	jhf.enableLimit = true;
 	jhf.referenceAngle = 0;
 	world->b2world->CreateJoint(&jhf);
+	
 	// headgear
 	b2RevoluteJointDef jhh;
 	jhh.bodyA = head->body;
@@ -143,13 +98,12 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	jhh.enableLimit = true;
 	jhh.referenceAngle = 0;
 	world->b2world->CreateJoint(&jhh);
-
 	
 	// right arm
 	b2RevoluteJointDef jtar;
 	jtar.bodyA = torso->body;
 	jtar.bodyB = armRight->body;
-	jtar.localAnchorA.Set(0.9 * torso->getCorrectedWidth(), 0.8f * torso->getCorrectedHeight());
+	jtar.localAnchorA.Set(0.9 * torso->getCorrectedWidth(), 0.3f * torso->getCorrectedHeight());
 	jtar.localAnchorB.Set(0, 0.6 * armRight->getCorrectedHeight());
 	jtar.collideConnected = false;
 	jtar.enableLimit = true;
@@ -160,13 +114,12 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	jtar.lowerAngle = glm::radians(-10.f);
 	jtar.upperAngle = glm::radians(10.f);
 	world->b2world->CreateJoint(&jtar);
-
 	
 	// left arm
 	b2RevoluteJointDef jtal;
 	jtal.bodyA = torso->body;
 	jtal.bodyB = armLeft->body;
-	jtal.localAnchorA.Set(-0.9 * torso->getCorrectedWidth(), 0.8f * torso->getCorrectedHeight());
+	jtal.localAnchorA.Set(-0.9 * torso->getCorrectedWidth(), 0.3f * torso->getCorrectedHeight());
 	jtal.localAnchorB.Set(0, 0.6 * armLeft->getCorrectedHeight());
 	jtal.collideConnected = false;
 	jtal.enableLimit = true;
@@ -177,9 +130,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	jtal.lowerAngle = glm::radians(-10.f);
 	jtal.upperAngle = glm::radians(10.f);
 	world->b2world->CreateJoint(&jtal);
-
 	
-
 	// right hand
 	b2RevoluteJointDef rhrej;
 	rhrej.bodyA = armRight->body;
@@ -221,25 +172,14 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 
 void PuppetCharacter::update(Step* _step){
 	Box2DSuperSprite::update(_step);
-	//neck
-	//b2RevoluteJoint * neck = ((b2RevoluteJoint *)head->body->GetJointList()->joint);
-	//float angle = neck->GetJointAngle();
-
-	//neck->SetMotorSpeed(-angle*360);
-	//neck->SetMaxMotorTorque(head->body->GetMass()*750*(std::abs(angle)*5));
-
+	
 	//body
 	float bodAngle = (torso)->body->GetAngle() + targetRoll;
 	(torso->body->SetAngularVelocity(-bodAngle * 10));
 	if((torso->body->GetPosition().y < 0)){
 		(torso)->applyLinearImpulseUp(250);
 	}
-	//torso->body->SetTransform(torso->body->GetPosition(), targetRoll);
-	
-	//headgear->body->SetTransform(head->body->GetPosition(), head->body->GetAngle());
-	//face->body->SetTransform(head->body->GetPosition(), head->body->GetAngle());
 
-	
 	if(itemToPickup != nullptr){
 		pickupItem(itemToPickup);
 	}
