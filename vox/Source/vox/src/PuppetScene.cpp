@@ -159,7 +159,7 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	addChild(michael, 1);
 	michael->addToLayeredScene(this, 1);
 
-	michael->translateComponents(glm::vec3(1,0,0));
+	michael->translateComponents(glm::vec3(1,50,0));
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");
@@ -216,7 +216,7 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	gameCam->addTarget(playerCharacter2->torso);
 	gameCam->addTarget(playerCharacter3->torso);
 	gameCam->addTarget(playerCharacter4->torso);
-	gameCam->addTarget(michael);
+	gameCam->addTarget(michael->torso);
 	gameCam->farClip = 1000.f;
 	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
 	gameCam->transform->translate(5.0f, 1.5f, 22.5f);

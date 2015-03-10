@@ -67,7 +67,7 @@ void RaidTheCastle::update(Step* _step){
 				(*bs)->body->GetFixtureList()->Refilter();
 			}
 			
-			((FollowCamera *)gameCam)->addTarget(catapult->boulder);
+			((FollowCamera *)gameCam)->addTarget(catapult->boulder->boulder);
 			catapult->boulder = nullptr;
 		}
 	}
