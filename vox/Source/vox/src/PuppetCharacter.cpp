@@ -96,12 +96,18 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	sensorHead->SetFilterData(sf);*/
 
 	for(Box2DSprite ** c : components){
-		(*c)->createFixture(sf);
+	//	(*c)->createFixture(sf, b2Vec2(0.0f, 0.0f));
 	}
 
-	setUserData(this);
+	torso->createFixture(sf, b2Vec2(0.0f, 0.0f)); 
+	armLeft->createFixture(sf, b2Vec2(0.0f, 0.0f)); 
+	armRight->createFixture(sf, b2Vec2(0.0f, 0.0f));
+	handLeft->createFixture(sf, b2Vec2(0.0f, 0.0f));
+	handRight->createFixture(sf, b2Vec2(0.0f, 0.0f));
+	face->createFixture(sf, b2Vec2(0.0f, 0.0f));
+	headgear->createFixture(sf, b2Vec2(0.0f, 0.0f));
+	head->createFixture(sf, b2Vec2(0.0f, 0.0f));
 	
-	// neck
 	b2RevoluteJointDef jth;
 	jth.bodyA = torso->body;
 	jth.bodyB = head->body;
@@ -250,6 +256,7 @@ void PuppetCharacter::jump(){
 	}else{
 		torso->applyLinearImpulseRight(100*(1-cos(t)));
 	}
+	canJump = false;
 }
 
 void PuppetCharacter::action(){

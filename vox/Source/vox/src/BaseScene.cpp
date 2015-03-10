@@ -27,6 +27,7 @@
 #include "RenderSurface.h"
 #include "Sprite.h"
 #include "Game.h"
+#include <MousePerspectiveCamera.h>
 
 BaseScene::BaseScene(Game * _game):
 	Scene(_game),
@@ -81,9 +82,9 @@ BaseScene::BaseScene(Game * _game):
 	//Add it to the scene
 	lights.push_back(keyLight);
 	
-	monkeyMesh = Resource::loadMeshFromObj("../assets/monkey.vox");
+	monkeyMesh = Resource::loadMeshFromObj("../assets/woola.vox");
 	//Load the monkeys mesh from the monkey obj
-	monkey->mesh = Resource::loadMeshFromObj("../assets/monkey.vox");
+	monkey->mesh = monkeyMesh;
 	monkey->mesh->pushMaterial(material);
 	monkey->setShader(shader, true);
 
@@ -132,7 +133,7 @@ BaseScene::BaseScene(Game * _game):
 	//Add a material
 	voxelMonkey->mesh->pushMaterial(material);
 	voxelMonkey->transform->translate(0.0f, 0.0f, 3.0f);
-	addChild(voxelMonkey);
+	//addChild(voxelMonkey);
 
 
 	sprite->setShader(shader, true);
@@ -146,6 +147,8 @@ BaseScene::BaseScene(Game * _game):
 	renderSurfaceShader = new Shader("../assets/RenderSurface", false, true);
 	//Instantiate the render surface
 	renderSurface = new RenderSurface(renderSurfaceShader);
+
+	camera = new MousePerspectiveCamera();
 }
 
 
@@ -161,19 +164,19 @@ void BaseScene::update(Step * _step){
 	
 	Scene::update(_step);
 
-	/*//Add movement to the camera
+	//Add movement to the camera
 	if(keyboard->keyDown(GLFW_KEY_W)){
-		camera->transform->translate((camera->forwardVectorRotated) * static_cast<PerspectiveCamera *>(camera)->speed);
+		camera->transform->translate((camera->forwardVectorRotated) * 0.1f);
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
-		camera->transform->translate((camera->forwardVectorRotated) * -static_cast<PerspectiveCamera *>(camera)->speed);	
+		camera->transform->translate((camera->forwardVectorRotated) * -0.1f);	
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		camera->transform->translate((camera->rightVectorRotated) * -static_cast<PerspectiveCamera *>(camera)->speed);		
+		camera->transform->translate((camera->rightVectorRotated) * -0.1f);		
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		camera->transform->translate((camera->rightVectorRotated) * static_cast<PerspectiveCamera *>(camera)->speed);	
-	}*/
+		camera->transform->translate((camera->rightVectorRotated) * 0.1f);	
+	}
 	
 	//Toggle fullscreen
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
