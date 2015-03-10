@@ -36,11 +36,11 @@ void FollowCamera::update(Step * _step){
 	rightVectorRotated	   = transform->orientation * rightVectorLocal;
 	upVectorRotated		   = transform->orientation * upVectorLocal;
 	
-	lookAtSpot = glm::vec3(0,0,0);
-	float minX = 9999999999;
-	float minY = 9999999999;
-	float maxX = -9999999999;
-	float maxY = -9999999999;
+	lookAtSpot = glm::vec3(0.f, 0.f, 0.f);
+	float minX = 9999999999.f;
+	float minY = 9999999999.f;
+	float maxX = -9999999999.f;
+	float maxY = -9999999999.f;
 	for(ShiftKiddie * nt : targets){
 		glm::vec3 pos = nt->getPos(false);
 		//lookAtSpot += pos;
@@ -65,15 +65,15 @@ void FollowCamera::update(Step * _step){
 		zoom = std::max(minimumZoom, screenHeight);
 	}
 
-	float dist = zoom / (tan(glm::radians(fieldOfView) / 2.f) * 2.f);
+	float dist = zoom / (tan(glm::radians(fieldOfView) * 0.5f) * 2.f);
 	
 	std::cout << std::endl;
 	glm::vec3 oldLookAt = lookAtSpot;
 
 
 	// move camera
-	lookAtSpot.x = transform->translationVector.x = minX + screenWidth/2.f;
-	lookAtSpot.y = transform->translationVector.y = minY + screenHeight/2.f;
+	lookAtSpot.x = transform->translationVector.x = minX + screenWidth * 0.5f;
+	lookAtSpot.y = transform->translationVector.y = minY + screenHeight* 0.5f;
 	transform->translationVector.z = dist;
 
 	/*float xDif = (lookAtSpot.x - transform->translationVector.x);

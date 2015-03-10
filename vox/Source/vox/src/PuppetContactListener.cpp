@@ -84,6 +84,7 @@ void PuppetContactListener::BeginContact(b2Contact * _contact){
 			structureItemContact(_contact, structureFixture, itemFixture);
 		}
 	}
+
 	// behaviour stuff
 	b2Fixture * behaviourFixture = nullptr;
 
@@ -96,9 +97,7 @@ void PuppetContactListener::BeginContact(b2Contact * _contact){
 	}
 
 	if(behaviourFixture != nullptr){
-		Behaviour * b = ((Behaviour *)behaviourFixture->GetUserData());
-		b->targets.push_back(otherFixture->GetUserData());
-		b->active = true;
+		static_cast<Behaviour *>(behaviourFixture->GetUserData())->evaluateBeginContact(otherFixture);
 	}
 }
 
@@ -183,15 +182,6 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 	}
 
 	if(behaviourFixture != nullptr){
-		Behaviour * b = ((Behaviour *)behaviourFixture->GetUserData());
-		for(unsigned long int i = b->targets.size(); i > 0; --i){
-			if(b->targets.at(i-1) == otherFixture->GetUserData()){
-				b->targets.erase (b->targets.begin()+(i-1));
-				//break;
-			}
-		}
-		if(b->targets.size() == 0){
-			b->active = false;
-		}
+		static_cast<Behaviour *>(behaviourFixture->GetUserData())->evaluateEndContact(otherFixture);
 	}
 }

@@ -6,7 +6,7 @@
 #include "PuppetCharacter.h"
 #include "FollowCamera.h"
 #include "Behaviour.h"
-#include "Behaviours.h"
+#include "BehaviourFollow.h"
 #include "Boulder.h"
 #include "Catapult.h"
 #include "Box2DSprite.h"
@@ -34,6 +34,8 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	catapult->translateComponents(glm::vec3(-10,0,0));
 
 	loadCatapult();
+
+	playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow<PuppetCharacter>(playerCharacter4, 10, PuppetGame::kPLAYER));
 }
 
 RaidTheCastle::~RaidTheCastle(){
@@ -45,8 +47,8 @@ void RaidTheCastle::update(Step* _step){
 		loadCatapult();
 	}
 	if(keyboard->keyDown(GLFW_KEY_B)){
-		playerCharacter->behaviourManager.behaviours.at(0)->targets.clear();
-		playerCharacter->behaviourManager.behaviours.at(0)->active = false;
+		//playerCharacter->behaviourManager.behaviours.at(0)->targets.clear();
+		//playerCharacter->behaviourManager.behaviours.at(0)->active = false;
 	}
 
 	if(keyboard->keyDown(GLFW_KEY_F)){
@@ -97,7 +99,7 @@ void RaidTheCastle::loadCatapult(){
 	//boulder->boulder->body->SetTransform(catapult->arm->body->GetPosition(), std::rand());
 	b2Vec2 armPos = catapult->arm->body->GetPosition();
 	
-	b2Vec2 boulderPos = b2Vec2(armPos.x + catapult->arm->getCorrectedWidth() * 2.0 + jointPosB.x, armPos.y + jointPosB.y);
+	b2Vec2 boulderPos = b2Vec2(armPos.x + catapult->arm->getCorrectedWidth() * 2.f + jointPosB.x, armPos.y + jointPosB.y);
 	//b2Vec2 boulderPos = b2Vec2(catapult->base->transform->translationVector.x - catapult->arm->getCorrectedWidth() * 2.0 * 0.8, catapult->base->getCorrectedHeight() * 2.0 * 0.9);
 	//boulder->translateComponents(glm::vec3(boulderPos.x, boulderPos.y, 0));
 
@@ -108,7 +110,7 @@ void RaidTheCastle::loadCatapult(){
 	catapult->boulderLoaded = true;
 	catapult->boulder = boulder;
 
-	// axel
+	// axle
 	b2WeldJointDef abpj;
 	abpj.bodyA = catapult->arm->body;
 	abpj.bodyB = boulder->boulder->body;

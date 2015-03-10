@@ -24,8 +24,8 @@
     <ClCompile Include="..\src\Arduino.cpp" />
     <ClCompile Include="..\src\BaseScene.cpp" />
     <ClCompile Include="..\src\Behaviour.cpp" />
+    <ClCompile Include="..\src\BehaviourFollow.cpp" />
     <ClCompile Include="..\src\BehaviourManager.cpp" />
-    <ClCompile Include="..\src\Behaviours.cpp" />
     <ClCompile Include="..\src\BitmapFont.cpp" />
     <ClCompile Include="..\src\Boulder.cpp" />
     <ClCompile Include="..\src\Box2DDebugDraw.cpp" />
@@ -162,8 +162,8 @@
     <ClInclude Include="..\include\Arduino.h" />
     <ClInclude Include="..\include\BaseScene.h" />
     <ClInclude Include="..\include\Behaviour.h" />
+    <ClInclude Include="..\include\BehaviourFollow.h" />
     <ClInclude Include="..\include\BehaviourManager.h" />
-    <ClInclude Include="..\include\Behaviours.h" />
     <ClInclude Include="..\include\BitmapFont.h" />
     <ClInclude Include="..\include\Boulder.h" />
     <ClInclude Include="..\include\Box2DDebugDraw.h" />

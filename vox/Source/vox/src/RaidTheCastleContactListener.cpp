@@ -60,7 +60,7 @@ void RaidTheCastleContactListener::structureItemContact(b2Contact * _contact, b2
 
 	Castle * castle = dynamic_cast<Castle *>(structure);
 	if(castle != nullptr){
-		castle->damage = item->damage;
+		castle->damage = item->damage; // what is going on here?
 	}
 }
 

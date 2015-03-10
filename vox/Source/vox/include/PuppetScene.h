@@ -43,6 +43,7 @@ public:
 	PuppetCharacter * playerCharacter2;
 	PuppetCharacter * playerCharacter3;
 	PuppetCharacter * playerCharacter4;
+	TestCharacter * michael;
 
 	PuppetController * puppetController;
 	PuppetController * puppetController2;

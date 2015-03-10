@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Behaviour.h"
+#include <Behaviour.h>
+#include <Box2D\Box2D.h>
 
-Behaviour::Behaviour(std::function<void(PuppetCharacter *)> _callback, float _radius, PuppetGame::BOX2D_CATEGORY _filter) :
-	functionCallback(_callback),
+Behaviour::Behaviour(PuppetCharacter * _source, float _radius, PuppetGame::BOX2D_CATEGORY _filter) :
+	source(_source),
 	radius(_radius),
 	filter(_filter),
 	active(false)
@@ -11,4 +12,12 @@ Behaviour::Behaviour(std::function<void(PuppetCharacter *)> _callback, float _ra
 }
 
 Behaviour::~Behaviour(){
+}
+
+void Behaviour::evaluateBeginContact(b2Fixture * _target){
+	active = true;
+}
+
+void Behaviour::evaluateEndContact(b2Fixture * _target){
+	
 }

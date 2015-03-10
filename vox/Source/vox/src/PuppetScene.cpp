@@ -89,7 +89,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	ground->mesh->vertices.at(3).z -= 250;
 	ground->mesh->dirty = true;
 
-	//Set UVs so the texture isn't stetched
+	//Set UVs so the texture isn't stretched
 	ground->mesh->setUV(0, 0.0,  0.0);
 	ground->mesh->setUV(1, 0.0,  40.0);
 	ground->mesh->setUV(2, 40.0, 40.0);
@@ -101,10 +101,8 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	b2PolygonShape dynamicBox;
 	dynamicBox.SetAsBox(1.0f * std::abs(ground->transform->scaleVector.x), 1.0f * std::abs(ground->transform->scaleVector.y));	
 	b2Fixture * groundFixture = ground->getNewFixture(dynamicBox, 1.0f);
-	
 	groundFixture->SetSensor(false);
 	groundFixture->SetUserData(this);
-	
 	b2Filter sf;
 	sf.categoryBits = PuppetGame::kGROUND;
 	sf.maskBits = PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER;
@@ -162,7 +160,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter4->translateComponents(glm::vec3(15.0f, 5.f, 0.f));
 
-	TestCharacter * michael = new TestCharacter(world, false, PuppetGame::kPLAYER, PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER, -5);
+	michael = new TestCharacter(world, false, PuppetGame::kPLAYER, PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER, -5);
 	michael->setShader(shader, true);
 	addChild(michael, 1);
 	michael->addToLayeredScene(this, 1);

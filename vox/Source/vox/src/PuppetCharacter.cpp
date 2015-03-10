@@ -7,7 +7,6 @@
 #include "Box2DWorld.h"
 #include "Item.h"
 #include "Behaviour.h"
-#include "Behaviours.h"
 
 #include <typeinfo>
 
@@ -141,8 +140,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	b2RevoluteJointDef jtar;
 	jtar.bodyA = torso->body;
 	jtar.bodyB = armRight->body;
-	jtar.localAnchorA.Set(0.9 * torso->getCorrectedWidth(), 0.8f * torso->getCorrectedHeight());
-	jtar.localAnchorB.Set(0, 0.6 * armRight->getCorrectedHeight());
+	jtar.localAnchorA.Set(0.9f * torso->getCorrectedWidth(), 0.8f * torso->getCorrectedHeight());
+	jtar.localAnchorB.Set(0, 0.6f * armRight->getCorrectedHeight());
 	jtar.collideConnected = false;
 	jtar.enableLimit = true;
 	jtar.enableMotor = true;
@@ -158,8 +157,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	b2RevoluteJointDef jtal;
 	jtal.bodyA = torso->body;
 	jtal.bodyB = armLeft->body;
-	jtal.localAnchorA.Set(-0.9 * torso->getCorrectedWidth(), 0.8f * torso->getCorrectedHeight());
-	jtal.localAnchorB.Set(0, 0.6 * armLeft->getCorrectedHeight());
+	jtal.localAnchorA.Set(-0.9f * torso->getCorrectedWidth(), 0.8f * torso->getCorrectedHeight());
+	jtal.localAnchorB.Set(0, 0.6f * armLeft->getCorrectedHeight());
 	jtal.collideConnected = false;
 	jtal.enableLimit = true;
 	jtal.enableMotor = true;
