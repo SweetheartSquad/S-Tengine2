@@ -5,17 +5,12 @@
 #include "System.h"
 #include "Transform.h"
 
-PerspectiveCamera::PerspectiveCamera(Entity * _trans, glm::vec3 _offset, float _deadZoneX, float _deadZoneY, float _deadZoneZ):
+PerspectiveCamera::PerspectiveCamera():
 	Camera(),
 	NodeTransformable(new Transform()),
 	NodeAnimatable(),
 	NodeUpdatable(),
-	lastOrientation(1.f, 0.f, 0.f, 0.f),
-	trans(_trans),
-	offset(_offset),
-	deadZoneX(_deadZoneX),
-	deadZoneY(_deadZoneY),
-	deadZoneZ(_deadZoneZ)
+	lastOrientation(1.f, 0.f, 0.f, 0.f)
 {
 }
 
@@ -36,27 +31,14 @@ void PerspectiveCamera::update(Step * _step){
 	rightVectorRotated	   = transform->orientation * rightVectorLocal;
 	upVectorRotated		   = transform->orientation * upVectorLocal;
 
-	if(trans != nullptr){
-		glm::vec3 oldLookAt = lookAtSpot;
-		float xDif = (trans->transform->translationVector.x - transform->translationVector.x);
-		if(xDif > deadZoneX){
-			transform->translationVector.x += (xDif-deadZoneX);
-			lookAtSpot.x += xDif-deadZoneX;
-		}else if(xDif < -deadZoneX){
-			transform->translationVector.x += (xDif+deadZoneX);
-			lookAtSpot.x += xDif+deadZoneX;
-		}
-		//lookAtSpot.y = trans->transform->translationVector.y;
-	}else{
-		lookAtSpot = transform->translationVector+forwardVectorRotated;
-	}
+	lookAtSpot = transform->translationVector+forwardVectorRotated;
 }
 
 glm::mat4 PerspectiveCamera::getViewMatrix(){
 	return glm::lookAt(
 		transform->translationVector,	// Camera is here
-		offset + lookAtSpot, // and looks here : at the same position, plus "direction"
-		upVectorRotated				// Head is up (set to 0,-1,0 to look upside-down)
+		lookAtSpot,						// and looks here : at the same position, plus "direction"
+		upVectorRotated					// Head is up (set to 0,-1,0 to look upside-down)
 		);
 }
 

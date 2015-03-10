@@ -81,3 +81,14 @@ void Box2DSprite::update(Step * _step){
 	NodeBox2DBody::update(_step);
 	Sprite::update(_step);
 }
+
+void Box2DSprite::setGroupIndex(int16 _groupIndex){
+	b2Fixture * f = body->GetFixtureList();
+	while(f != nullptr){
+		b2Filter bf = f->GetFilterData();
+		bf.groupIndex = _groupIndex;
+		f->SetFilterData(bf);
+		f->Refilter(); // is this necessary?
+		f = f->GetNext();
+	}
+}

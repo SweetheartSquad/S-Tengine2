@@ -1,4 +1,4 @@
-#include "TestGame.h"
+#include "PuppetGame.h"
 #include "RaidTheCastle.h"
 
 #include "GameJamCharacter.h"
@@ -10,7 +10,7 @@
 #include <BaseScene.h>
 
 
-TestGame::TestGame(bool _running):
+PuppetGame::PuppetGame(bool _running):
 	Game(_running)
 {
 	std::srand((unsigned long int)std::time(0));
@@ -23,13 +23,13 @@ TestGame::TestGame(bool _running):
 	currentScene = scenes.at("Raid the Castle");
 }
 
-TestGame::~TestGame(){
+PuppetGame::~PuppetGame(){
 }
 
-void TestGame::update(){
+void PuppetGame::update(){
 	Game::update();
 }
 
-void TestGame::draw(){
+void PuppetGame::draw(){
 	Game::draw();
 }

@@ -6,7 +6,7 @@
 #include "NumberUtils.h"
 
 #include <glew/glew.h>
-#include <PuppetScene.h>
+#include <PuppetGame.h>
 
 
 RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold, Texture * _texture):
@@ -64,7 +64,7 @@ RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold
 	b2Fixture * f = getNewFixture(*chain, 1);
 
 	b2Filter sf;
-	sf.categoryBits = PuppetScene::kGROUND;
+	sf.categoryBits = PuppetGame::kGROUND;
 	f->SetFilterData(sf);
 }
 

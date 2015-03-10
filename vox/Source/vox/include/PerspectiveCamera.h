@@ -6,21 +6,14 @@
 
 #include "Camera.h"
 
-class Mouse;
-class Sprite;
-class Entity;
 /****************************
 *
 * A perspective camera class, i.e. objects seem smaller the farther they are away from this camera.
-* For now this also has mouse movement thrown in as well
 *
 *****************************/
 class PerspectiveCamera : public Camera {
 public:
-	
-
-	/** trans is the target for following with lookAt */
-	explicit PerspectiveCamera(Entity * _trans = nullptr, glm::vec3 _offset = glm::vec3(0,0,0), float _deadZoneX = 0, float _deadZoneY = 0, float _deadZoneZ = 0);
+	explicit PerspectiveCamera();
 	~PerspectiveCamera();
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
@@ -38,19 +31,7 @@ public:
 	* @return The projection matrix of the camera 
 	*/
 	glm::mat4 getProjectionMatrix() override;
-	
 
-	// Sprite to follow
-	Entity * trans;
-	// Look at the sprite offset by this
-	glm::vec3 offset;
-	// Tolerable horizontal difference between the follow target and the current lookAt
-	float deadZoneX;
-	// Tolerable vertical difference between the follow target and the current lookAt
-	float deadZoneY;
-	// Tolerable depth difference between the follow target and the current lookAt
-	float deadZoneZ;
-
+	// I think this is typically called the center of interest?
 	glm::vec3 lookAtSpot;
-	
 };

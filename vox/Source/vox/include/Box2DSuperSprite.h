@@ -35,6 +35,9 @@ public:
 
 	std::vector<Box2DSprite **> components;
 
+	// Component to which others are relative (ex: character torso, item handle)
+	Box2DSprite * rootComponent;
+
 	explicit Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	
 	~Box2DSuperSprite();
@@ -50,4 +53,7 @@ public:
 
 	void translateComponents(glm::vec3 _translateVector);
 	void setUserData(void * _data);
+
+	// Sets the group index on all components
+	void setGroupIndex(int16 _groupIndex);
 };

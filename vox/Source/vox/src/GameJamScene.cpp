@@ -26,7 +26,7 @@
 #include <Box2DDebugDraw.h>
 #include "Box2DMeshEntity.h"
 #include "MeshFactory.h"
-#include "PerspectiveCamera.h"
+#include "FollowCamera.h"
 #include "MousePerspectiveCamera.h"
 #include "BitmapFont.h"
 #include "CylinderScreen.h"
@@ -216,12 +216,14 @@ GameJamScene::GameJamScene(Game * _game):
 	addChild(midgroundScreen, 0);
 	addChild(ground, 0);
 	//addChild(foregroundScreen, 2);
-	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 0, 0);
+	camera = new FollowCamera(glm::vec3(0, 0, 0), 0, 0);
+	static_cast<FollowCamera*>(camera)->addTarget(playerCharacter->torso);
+	static_cast<FollowCamera*>(camera)->minimumZoom = 25.f;
 	//camera = new MousePerspectiveCamera();
 	camera->farClip = 1000.f;
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
 	
-	camera->transform->translate(5.0f, 0.f, 15.0f);
+	camera->transform->translate(5.f, 0.f, 15.f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
 

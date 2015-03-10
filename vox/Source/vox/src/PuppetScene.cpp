@@ -19,13 +19,14 @@
 #include <Box2DDebugDraw.h>
 #include "Box2DMeshEntity.h"
 #include "MeshFactory.h"
-#include "PerspectiveCamera.h"
+#include "FollowCamera.h"
 #include "MousePerspectiveCamera.h"
 #include "BitmapFont.h"
 #include "TestCharacter.h"
 #include "CharacterComponent.h"
 #include "RaidTheCastleContactListener.h"
 #include "Game.h"
+#include "PuppetGame.h"
 #include <Arduino.h>
 #include <AccelerometerParser.h>
 #include <Accelerometer.h>
@@ -36,16 +37,16 @@
 
 #include "RaidTheCastle.h"
 
-PuppetScene::PuppetScene(Game * _game, float seconds):
+PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	LayeredScene(_game, 3),
 	time(seconds * 6000),
 	cl(new RaidTheCastleContactListener(this)),
 	world(new Box2DWorld(b2Vec2(0, -9.8f * 2))),
 	drawer(new Box2DDebugDraw(this, world)),
-	playerCharacter(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -1, false)),
-	playerCharacter2(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -1, false)),
-	playerCharacter3(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -3, false)),
-	playerCharacter4(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -4, false)),
+	playerCharacter(new PuppetCharacter(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -1, false)),
+	playerCharacter2(new PuppetCharacter(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -2, false)),
+	playerCharacter3(new PuppetCharacter(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -3, false)),
+	playerCharacter4(new PuppetCharacter(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -4, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, false)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
@@ -65,6 +66,13 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	background->mesh->uvEdgeMode = GL_REPEAT;
 	background->mesh->dirty = true;
 
+	int timeOfDayOptions = 4;
+	int timeOfDay = std::rand()%timeOfDayOptions;
+	background->mesh->setUV(0, (float)timeOfDay/timeOfDayOptions, 0);
+	background->mesh->setUV(1, (float)(timeOfDay+1)/timeOfDayOptions, 0);
+	background->mesh->setUV(2, (float)(timeOfDay+1)/timeOfDayOptions, 1);
+	background->mesh->setUV(3, (float)timeOfDay/timeOfDayOptions, 1);
+
 	addChild(background, 0);
 
 	ground->setShader(shader, true);
@@ -81,7 +89,7 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	ground->mesh->vertices.at(3).z -= 250;
 	ground->mesh->dirty = true;
 
-	//Set UVs so the texture isn't stetched
+	//Set UVs so the texture isn't stretched
 	ground->mesh->setUV(0, 0.0,  0.0);
 	ground->mesh->setUV(1, 0.0,  40.0);
 	ground->mesh->setUV(2, 40.0, 40.0);
@@ -93,13 +101,11 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	b2PolygonShape dynamicBox;
 	dynamicBox.SetAsBox(1.0f * std::abs(ground->transform->scaleVector.x), 1.0f * std::abs(ground->transform->scaleVector.y));	
 	b2Fixture * groundFixture = ground->getNewFixture(dynamicBox, 1.0f);
-	
 	groundFixture->SetSensor(false);
 	groundFixture->SetUserData(this);
-	
 	b2Filter sf;
-	sf.categoryBits = kGROUND;
-	sf.maskBits = kSTRUCTURE | kITEM | kPLAYER;
+	sf.categoryBits = PuppetGame::kGROUND;
+	sf.maskBits = PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER;
 	groundFixture->SetFilterData(sf);
 
 	Texture * treeTex1 = new Texture("../assets/hurly-burly/Foliage/Tree1-ds.png", 1024, 1024, true, true);
@@ -154,12 +160,12 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter4->translateComponents(glm::vec3(15.0f, 5.f, 0.f));
 
-	TestCharacter * michael = new TestCharacter(world, false, kPLAYER, kSTRUCTURE | kITEM | kPLAYER, -1);
+	michael = new TestCharacter(world, false, PuppetGame::kPLAYER, PuppetGame::kSTRUCTURE | /*PuppetGame::kITEM | */PuppetGame::kPLAYER, -5);
 	michael->setShader(shader, true);
 	addChild(michael, 1);
 	michael->addToLayeredScene(this, 1);
 
-	michael->translateComponents(glm::vec3(1,0,0));
+	michael->translateComponents(glm::vec3(1,50,0));
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");
@@ -181,25 +187,9 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	puppetController3 = new PuppetController(acc3, playerCharacter3);
 	puppetController4 = new PuppetController(acc4, playerCharacter4);
 
-	perspectiveCamera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 8.f, 0), 0, 0);
+
 	
-	//Set up cameras
-	perspectiveCamera->farClip = 1000.f;
-	perspectiveCamera->transform->rotate(90, 0, 1, 0, kWORLD);
-	perspectiveCamera->transform->translate(5.0f, 1.5f, 22.5f);
-	perspectiveCamera->yaw = 90.0f;
-	perspectiveCamera->pitch = -10.0f;
 	
-	mouseCamera = new MousePerspectiveCamera();
-
-	mouseCamera->farClip = 1000.f;
-	mouseCamera->transform->rotate(90, 0, 1, 0, kWORLD);
-	mouseCamera->transform->translate(5.0f, 1.5f, 22.5f);
-	mouseCamera->yaw = 90.0f;
-	mouseCamera->pitch = -10.0f;
-
-	camera =  perspectiveCamera;
-
 	
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);
@@ -217,8 +207,28 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 
 	world->addToWorld(randomGround);
 	addChild(randomGround, 1);
+	
+	//Set up cameras
+	mouseCamera = new MousePerspectiveCamera();
+	mouseCamera->farClip = 1000.f;
+	mouseCamera->transform->rotate(90, 0, 1, 0, kWORLD);
+	mouseCamera->transform->translate(5.0f, 1.5f, 22.5f);
+	mouseCamera->yaw = 90.0f;
+	mouseCamera->pitch = -10.0f;
 
-	playerCharacter->die();
+	gameCam = new FollowCamera(glm::vec3(0, 0, 0), 0, 0);
+	gameCam->addTarget(playerCharacter->torso);
+	gameCam->addTarget(playerCharacter2->torso);
+	gameCam->addTarget(playerCharacter3->torso);
+	gameCam->addTarget(playerCharacter4->torso);
+	gameCam->addTarget(michael->torso);
+	gameCam->farClip = 1000.f;
+	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
+	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
+	gameCam->minimumZoom = 22.5f;
+	gameCam->yaw = 90.0f;
+	gameCam->pitch = -10.0f;
+	camera = gameCam;
 }
 
 PuppetScene::~PuppetScene(){
@@ -266,7 +276,7 @@ void PuppetScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_1)){
 		mouseCam = !mouseCam;
 		if(!mouseCam){
-			camera = perspectiveCamera;
+			camera = gameCam;
 		}else{
 			camera = mouseCamera;			
 		}

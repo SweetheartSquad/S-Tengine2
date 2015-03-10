@@ -28,7 +28,7 @@
 #include <Box2DDebugDraw.h>
 #include "Box2DMeshEntity.h"
 #include "MeshFactory.h"
-#include "PerspectiveCamera.h"
+#include "FollowCamera.h"
 #include "MousePerspectiveCamera.h"
 #include "RenderOptions.h"
 
@@ -92,7 +92,8 @@ TestScene2D::TestScene2D(Game * _game):
 	arduino = new Arduino("COM3");
 	
 	//camera = new MousePerspectiveCamera();
-	camera = new PerspectiveCamera(sprite, glm::vec3(0, 10, 0), 5, 0);
+	camera = new FollowCamera(glm::vec3(0, 10, 0), 5, 0);
+	((FollowCamera*)camera)->addTarget(sprite);
 	camera->transform->translate(5.0f, 0.0f, 20.0f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;

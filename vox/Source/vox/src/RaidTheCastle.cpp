@@ -2,9 +2,11 @@
 
 #include "RaidTheCastle.h"
 #include "Castle.h"
+#include "PuppetGame.h"
 #include "PuppetCharacter.h"
+#include "FollowCamera.h"
 #include "Behaviour.h"
-#include "Behaviours.h"
+#include "BehaviourFollow.h"
 #include "Boulder.h"
 #include "Catapult.h"
 #include "Box2DSprite.h"
@@ -14,17 +16,17 @@
 
 #include <glfw\glfw3.h>
 
-RaidTheCastle::RaidTheCastle(Game* _game):
+RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	PuppetScene(_game, 0.5)
 {
-	castle = new Castle(world, kSTRUCTURE, kITEM, 30);
+	castle = new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30);
 	castle->setShader(shader, true);
 	castle->addToLayeredScene(this, 0);
 	addChild(castle, 0);
 
 	castle->translateComponents(glm::vec3(50, 0, 0));
 
-	catapult = new Catapult(world, kSTRUCTURE, kSTRUCTURE | kITEM | kBOUNDARY | kPLAYER, -10);
+	catapult = new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kBOUNDARY | PuppetGame::kPLAYER, -10);
 	catapult->setShader(shader, true);
 	catapult->addToLayeredScene(this, 1);
 	addChild(catapult, 1);
@@ -32,6 +34,8 @@ RaidTheCastle::RaidTheCastle(Game* _game):
 	catapult->translateComponents(glm::vec3(-10,0,0));
 
 	loadCatapult();
+
+	playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter4, 10, PuppetGame::kPLAYER));
 }
 
 RaidTheCastle::~RaidTheCastle(){
@@ -43,8 +47,8 @@ void RaidTheCastle::update(Step* _step){
 		loadCatapult();
 	}
 	if(keyboard->keyDown(GLFW_KEY_B)){
-		playerCharacter->behaviourManager.behaviours.at(0)->targets.clear();
-		playerCharacter->behaviourManager.behaviours.at(0)->active = false;
+		//playerCharacter->behaviourManager.behaviours.at(0)->targets.clear();
+		//playerCharacter->behaviourManager.behaviours.at(0)->active = false;
 	}
 
 	if(keyboard->keyDown(GLFW_KEY_F)){
@@ -65,7 +69,8 @@ void RaidTheCastle::update(Step* _step){
 				(*bs)->body->GetFixtureList()->SetFilterData(b1);
 				(*bs)->body->GetFixtureList()->Refilter();
 			}
-
+			
+			((FollowCamera *)gameCam)->addTarget(catapult->boulder->boulder);
 			catapult->boulder = nullptr;
 		}
 	}
@@ -84,16 +89,17 @@ void RaidTheCastle::unload(){
 }
 
 void RaidTheCastle::loadCatapult(){
-	Boulder * boulder = new Boulder(world, PuppetScene::kITEM, PuppetScene::kITEM | PuppetScene::kPLAYER | PuppetScene::kSTRUCTURE | PuppetScene::kGROUND, catapult->groupIndex);
+	Boulder * boulder = new Boulder(world, PuppetGame::kITEM, PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, catapult->groupIndex);
 	boulder->setShader(shader, true);
 	addChild(boulder, 1);
 	boulder->addToLayeredScene(this, 1);
-	
+
+
 	b2Vec2 jointPosB = ((b2RevoluteJoint *)catapult->arm->body->GetJointList()->joint)->GetLocalAnchorB();
 	//boulder->boulder->body->SetTransform(catapult->arm->body->GetPosition(), std::rand());
 	b2Vec2 armPos = catapult->arm->body->GetPosition();
 	
-	b2Vec2 boulderPos = b2Vec2(armPos.x + catapult->arm->getCorrectedWidth() * 2.0 + jointPosB.x, armPos.y + jointPosB.y);
+	b2Vec2 boulderPos = b2Vec2(armPos.x + catapult->arm->getCorrectedWidth() * 2.f + jointPosB.x, armPos.y + jointPosB.y);
 	//b2Vec2 boulderPos = b2Vec2(catapult->base->transform->translationVector.x - catapult->arm->getCorrectedWidth() * 2.0 * 0.8, catapult->base->getCorrectedHeight() * 2.0 * 0.9);
 	//boulder->translateComponents(glm::vec3(boulderPos.x, boulderPos.y, 0));
 
@@ -104,7 +110,7 @@ void RaidTheCastle::loadCatapult(){
 	catapult->boulderLoaded = true;
 	catapult->boulder = boulder;
 
-	// axel
+	// axle
 	b2WeldJointDef abpj;
 	abpj.bodyA = catapult->arm->body;
 	abpj.bodyB = boulder->boulder->body;

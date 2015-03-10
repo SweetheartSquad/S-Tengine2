@@ -27,7 +27,8 @@ Box2DSuperSprite::Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int
 	componentScale(0.0025f),
 	groupIndex(_groupIndex),
 	categoryBits(_categoryBits),
-	maskBits(_maskBits)
+	maskBits(_maskBits),
+	rootComponent(nullptr)
 {
 }
 
@@ -86,5 +87,11 @@ void Box2DSuperSprite::setUserData(void * _data){
 			f->SetUserData(this);
 			f = f->GetNext();
 		}
+	}
+}
+
+void Box2DSuperSprite::setGroupIndex(int16 _groupIndex){
+	for(Box2DSprite ** c : components){
+		(*c)->setGroupIndex(_groupIndex);
 	}
 }

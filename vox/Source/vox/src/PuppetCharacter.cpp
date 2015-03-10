@@ -7,7 +7,6 @@
 #include "Box2DWorld.h"
 #include "Item.h"
 #include "Behaviour.h"
-#include "Behaviours.h"
 
 PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex, bool _ai):
 	Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex),
@@ -47,6 +46,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	components.push_back(&head);
 	components.push_back(&face);
 	components.push_back(&headgear);
+
+	rootComponent = torso;
 
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
@@ -106,8 +107,10 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	b2RevoluteJointDef jtar;
 	jtar.bodyA = torso->body;
 	jtar.bodyB = armRight->body;
+
 	jtar.localAnchorA.Set(0.9 * torso->getCorrectedWidth(), 0.3f * torso->getCorrectedHeight());
 	jtar.localAnchorB.Set(0, 0.6 * armRight->getCorrectedHeight());
+
 	jtar.collideConnected = false;
 	jtar.enableLimit = true;
 	jtar.enableMotor = true;
@@ -122,8 +125,10 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	b2RevoluteJointDef jtal;
 	jtal.bodyA = torso->body;
 	jtal.bodyB = armLeft->body;
+
 	jtal.localAnchorA.Set(-0.9 * torso->getCorrectedWidth(), 0.3f * torso->getCorrectedHeight());
 	jtal.localAnchorB.Set(0, 0.6 * armLeft->getCorrectedHeight());
+
 	jtal.collideConnected = false;
 	jtal.enableLimit = true;
 	jtal.enableMotor = true;
@@ -246,12 +251,7 @@ void PuppetCharacter::pickupItem(Item * _item){
 		}
 
 		// set the item's group index to match character's so that they won't collide anymore (doesn't work?)
-		for(Box2DSprite ** bs : _item->components){
-			b2Filter b1 = (*bs)->body->GetFixtureList()->GetFilterData();
-			b1.groupIndex = this->groupIndex;
-			(*bs)->body->GetFixtureList()->SetFilterData(b1);
-			(*bs)->body->GetFixtureList()->Refilter();
-		}
+		_item->setGroupIndex(this->groupIndex);
 
 		b2WeldJointDef jd;
 		jd.bodyA = armRight->body;

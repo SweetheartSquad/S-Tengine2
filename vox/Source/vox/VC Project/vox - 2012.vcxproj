@@ -24,8 +24,8 @@
     <ClCompile Include="..\src\Arduino.cpp" />
     <ClCompile Include="..\src\BaseScene.cpp" />
     <ClCompile Include="..\src\Behaviour.cpp" />
+    <ClCompile Include="..\src\BehaviourFollow.cpp" />
     <ClCompile Include="..\src\BehaviourManager.cpp" />
-    <ClCompile Include="..\src\Behaviours.cpp" />
     <ClCompile Include="..\src\BitmapFont.cpp" />
     <ClCompile Include="..\src\Boulder.cpp" />
     <ClCompile Include="..\src\Box2DDebugDraw.cpp" />
@@ -59,11 +59,12 @@
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\GameJamCharacter.cpp" />
     <ClCompile Include="..\src\GameJamContactListener.cpp" />
+    <ClCompile Include="..\src\GameJamGame.cpp" />
     <ClCompile Include="..\src\GameJamScene.cpp" />
     <ClCompile Include="..\src\GameJamSceneIndoor.cpp" />
     <ClCompile Include="..\src\GameJamSceneOutdoor.cpp" />
     <ClCompile Include="..\src\GLUtils.cpp" />
-    <ClCompile Include="..\src\GroupFollowCamera.cpp" />
+    <ClCompile Include="..\src\FollowCamera.cpp" />
     <ClCompile Include="..\src\Item.cpp" />
     <ClCompile Include="..\src\jsoncpp.cpp" />
     <ClCompile Include="..\src\Keyboard.cpp" />
@@ -102,6 +103,7 @@
     <ClCompile Include="..\src\poly2Tri\sweep\sweep.cc" />
     <ClCompile Include="..\src\poly2Tri\sweep\sweep_context.cc" />
     <ClCompile Include="..\src\PuppetCharacter.cpp" />
+    <ClCompile Include="..\src\PuppetContactListener.cpp" />
     <ClCompile Include="..\src\PuppetController.cpp" />
     <ClCompile Include="..\src\PuppetScene.cpp" />
     <ClCompile Include="..\src\RaidTheCastle.cpp" />
@@ -142,7 +144,7 @@
     <ClCompile Include="..\src\Structure.cpp" />
     <ClCompile Include="..\src\System.cpp" />
     <ClCompile Include="..\src\TestCharacter.cpp" />
-    <ClCompile Include="..\src\TestGame.cpp" />
+    <ClCompile Include="..\src\PuppetGame.cpp" />
     <ClCompile Include="..\src\TestScene2D.cpp" />
     <ClCompile Include="..\src\TextChunk.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
@@ -160,8 +162,8 @@
     <ClInclude Include="..\include\Arduino.h" />
     <ClInclude Include="..\include\BaseScene.h" />
     <ClInclude Include="..\include\Behaviour.h" />
+    <ClInclude Include="..\include\BehaviourFollow.h" />
     <ClInclude Include="..\include\BehaviourManager.h" />
-    <ClInclude Include="..\include\Behaviours.h" />
     <ClInclude Include="..\include\BitmapFont.h" />
     <ClInclude Include="..\include\Boulder.h" />
     <ClInclude Include="..\include\Box2DDebugDraw.h" />
@@ -199,10 +201,11 @@
     <ClInclude Include="..\include\GameJamCategory.h" />
     <ClInclude Include="..\include\GameJamCharacter.h" />
     <ClInclude Include="..\include\GameJamContactListener.h" />
+    <ClInclude Include="..\include\GameJamGame.h" />
     <ClInclude Include="..\include\GameJamScene.h" />
     <ClInclude Include="..\include\GameJamSceneOutdoor.h" />
     <ClInclude Include="..\include\GLUtils.h" />
-    <ClInclude Include="..\include\GroupFollowCamera.h" />
+    <ClInclude Include="..\include\FollowCamera.h" />
     <ClInclude Include="..\include\Item.h" />
     <ClInclude Include="..\include\json\json-forwards.h" />
     <ClInclude Include="..\include\json\json.h" />
@@ -245,6 +248,7 @@
     <ClInclude Include="..\include\poly2Tri\sweep\sweep_context.h" />
     <ClInclude Include="..\include\Props.h" />
     <ClInclude Include="..\include\PuppetCharacter.h" />
+    <ClInclude Include="..\include\PuppetContactListener.h" />
     <ClInclude Include="..\include\PuppetController.h" />
     <ClInclude Include="..\include\PuppetScene.h" />
     <ClInclude Include="..\include\RaidTheCastle.h" />
@@ -286,7 +290,7 @@
     <ClInclude Include="..\include\Structure.h" />
     <ClInclude Include="..\include\System.h" />
     <ClInclude Include="..\include\TestCharacter.h" />
-    <ClInclude Include="..\include\TestGame.h" />
+    <ClInclude Include="..\include\PuppetGame.h" />
     <ClInclude Include="..\include\TestScene2D.h" />
     <ClInclude Include="..\include\TextChunk.h" />
     <ClInclude Include="..\include\Texture.h" />

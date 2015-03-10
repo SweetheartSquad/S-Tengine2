@@ -1,21 +1,24 @@
 #pragma once
 
-#include "PuppetScene.h"
+#include <PuppetGame.h>
+#include <node/NodeUpdatable.h>
 
-#include <functional>
-#include <typeinfo>
 #include <vector>
 
 class PuppetCharacter;
+class b2Fixture;
 
-class Behaviour {
+class Behaviour abstract : public NodeUpdatable {
 public:
+	PuppetCharacter * source;
 	bool active;
 	float radius;
-	PuppetScene::HURLYBURLY_CATEGORY filter;
-	std::vector<void *> targets;
-	std::function<void(PuppetCharacter * )> functionCallback;
+	PuppetGame::BOX2D_CATEGORY filter;
+	
+	virtual void evaluateBeginContact(b2Fixture * _target);
+	virtual void evaluateEndContact(b2Fixture * _target);
+	virtual void update(Step * _step) = 0;
 
-	Behaviour(std::function<void(PuppetCharacter *)> _callback, float _radius, PuppetScene::HURLYBURLY_CATEGORY _filter);
+	Behaviour(PuppetCharacter * _source, float _radius, PuppetGame::BOX2D_CATEGORY _filter);
 	~Behaviour();
 };

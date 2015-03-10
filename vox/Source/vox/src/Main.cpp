@@ -1,15 +1,17 @@
 #pragma once
 
-#include "TestGame.h"
+#include "PuppetGame.h"
+#include "GameJamGame.h"
 #include "Vox.h"
 
-TestGame * game;
+Game * game;
 
 int main(void){
 
 	vox::initialize("Vox");
-
-	game = new TestGame(true);
+	
+	game = new PuppetGame(true);
+	//game = new GameJamGame(true);
 
 	while (game->isRunning){
 		game->performGameLoop();

@@ -16,7 +16,7 @@ Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16
 	TextureSampler boulderTex = TextureSampler(new Texture("../assets/structure components/catapult/Boulder1.png", 512, 512, true, true), 108, 103);
 	
 	boulder = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), boulderTex.width, boulderTex.height, boulderTex.texture, componentScale);
-	
+	rootComponent = boulder;
 	components.push_back(&boulder);
 	
 	b2Filter sf;
