@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene2D.h"
+#include "LayeredScene.h"
 
 class DialogHandler;
 class Arduino;
@@ -21,9 +21,8 @@ class Character3;
 class Character4;
 class GameJamCharacter;
 
- class GameJamScene abstract : public Scene{
+ class GameJamScene abstract : public LayeredScene{
 public:
-	bool debugDraw;
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
 	GameJamCharacter * playerCharacter;

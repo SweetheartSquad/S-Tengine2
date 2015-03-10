@@ -103,7 +103,7 @@ void Animation<T>::update(Step * _step){
 		currentAnimationTime += (float)_step->getDeltaTime();
 		//ci::app::console() << "Animation.update() time: " << time << std::endl;
 	}
-	if(tweens.size() > 0){
+	if(tweens.size() > 0 && (float)_step->getDeltaTime() > 0){
 		currentTweenTime += (float)_step->getDeltaTime();
 		if(_step->getReverse()){
 			while(currentTweenTime <= 0){

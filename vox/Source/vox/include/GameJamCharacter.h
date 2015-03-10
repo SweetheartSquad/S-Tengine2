@@ -83,5 +83,5 @@ public:
 	void update(Step* _step) override;
 	void attachJoints();
 	void setShader(Shader* _shader, bool _configureDefaultVertexAttributes) override;
-	void addToScene(Scene* _scene) override;
+	void addToLayeredScene(LayeredScene* _scene, unsigned long int _layer) override;
 };

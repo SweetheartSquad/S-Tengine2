@@ -21,8 +21,10 @@ SpriteSheetAnimation::~SpriteSheetAnimation(){
 }
 
 void SpriteSheetAnimation::update(Step* _step){
-	frameIndices.update(_step);
-	currentFrame = frameIndices.currentTween;
+	if(secondsPerFrame != 0){
+		frameIndices.update(_step);
+		currentFrame = frameIndices.currentTween;
+	}
 }
 
 void SpriteSheetAnimation::pushFrame(unsigned long int _column, unsigned long int _row, float _width, float _height){
