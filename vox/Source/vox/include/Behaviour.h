@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PuppetScene.h"
+#include "PuppetGame.h"
 
 #include <functional>
 #include <typeinfo>
@@ -12,10 +12,10 @@ class Behaviour {
 public:
 	bool active;
 	float radius;
-	PuppetScene::HURLYBURLY_CATEGORY filter;
+	PuppetGame::BOX2D_CATEGORY filter;
 	std::vector<void *> targets;
 	std::function<void(PuppetCharacter * )> functionCallback;
 
-	Behaviour(std::function<void(PuppetCharacter *)> _callback, float _radius, PuppetScene::HURLYBURLY_CATEGORY _filter);
+	Behaviour(std::function<void(PuppetCharacter *)> _callback, float _radius, PuppetGame::BOX2D_CATEGORY _filter);
 	~Behaviour();
 };

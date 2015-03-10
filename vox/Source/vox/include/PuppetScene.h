@@ -29,6 +29,7 @@ class Character1;
 class Character2;
 class Character3;
 class Character4;
+class PuppetGame;
 
  class PuppetScene abstract : public LayeredScene{
 public:
@@ -58,33 +59,15 @@ public:
 	FollowCamera * gameCam;
 	MousePerspectiveCamera * mouseCamera;
 
-	Box2DSprite * tempCatapault;
-
 	bool mouseCam;
 
 	std::vector<Box2DSprite *> items;
 
-	explicit PuppetScene(Game * _game, float time);
+	explicit PuppetScene(PuppetGame * _game, float time);
 	virtual ~PuppetScene();
 
 	virtual void load() override;
 	virtual void unload() override;
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
-	
-
-	enum HURLYBURLY_CATEGORY{
-		kBOUNDARY = 0x0001,
-		kSTRUCTURE = 0x0002,
-		kITEM = 0x0004,		
-		kGROUND = 0x0008,	
-		kPLAYER = 0x00010,
-		kBEHAVIOUR = 0x00020,
-		kCAT7 = 0x00040,
-		kCAT8 = 0x00080,
-		kCAT9 = 0x00100,
-		kCAT10 = 0x00200,
-		kCAT11 = 0x00400,
-		kCAT12 = 0x00800
-	};
 };

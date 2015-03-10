@@ -38,7 +38,7 @@ void BehaviourManager::addBehaviour(Behaviour * _behaviour){
 	sensorTorso->SetSensor(true);
 	sensorTorso->SetUserData(_behaviour);
 	b2Filter f;
-	f.categoryBits = PuppetScene::kBEHAVIOUR;
+	f.categoryBits = PuppetGame::kBEHAVIOUR;
 	f.maskBits = _behaviour->filter;
 	f.groupIndex = target->groupIndex;
 	sensorTorso->SetFilterData(f);

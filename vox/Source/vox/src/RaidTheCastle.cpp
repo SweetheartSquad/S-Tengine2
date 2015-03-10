@@ -2,6 +2,7 @@
 
 #include "RaidTheCastle.h"
 #include "Castle.h"
+#include "PuppetGame.h"
 #include "PuppetCharacter.h"
 #include "FollowCamera.h"
 #include "Behaviour.h"
@@ -15,17 +16,17 @@
 
 #include <glfw\glfw3.h>
 
-RaidTheCastle::RaidTheCastle(Game* _game):
+RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	PuppetScene(_game, 0.5)
 {
-	castle = new Castle(world, kSTRUCTURE, kITEM, 30);
+	castle = new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30);
 	castle->setShader(shader, true);
 	castle->addToLayeredScene(this, 0);
 	addChild(castle, 0);
 
 	castle->translateComponents(glm::vec3(50, 0, 0));
 
-	catapult = new Catapult(world, kSTRUCTURE, kSTRUCTURE | kITEM | kBOUNDARY | kPLAYER, -10);
+	catapult = new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kBOUNDARY | PuppetGame::kPLAYER, -10);
 	catapult->setShader(shader, true);
 	catapult->addToLayeredScene(this, 1);
 	addChild(catapult, 1);
@@ -86,7 +87,7 @@ void RaidTheCastle::unload(){
 }
 
 void RaidTheCastle::loadCatapult(){
-	Boulder * boulder = new Boulder(world, PuppetScene::kITEM, PuppetScene::kITEM | PuppetScene::kPLAYER | PuppetScene::kSTRUCTURE | PuppetScene::kGROUND, catapult->groupIndex);
+	Boulder * boulder = new Boulder(world, PuppetGame::kITEM, PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, catapult->groupIndex);
 	boulder->setShader(shader, true);
 	addChild(boulder, 1);
 	boulder->addToLayeredScene(this, 1);
