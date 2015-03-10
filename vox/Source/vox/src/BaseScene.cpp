@@ -82,7 +82,7 @@ BaseScene::BaseScene(Game * _game):
 	//Add it to the scene
 	lights.push_back(keyLight);
 	
-	monkeyMesh = Resource::loadMeshFromObj("../assets/woola.vox");
+	monkeyMesh = Resource::loadMeshFromObj("../assets/monkey.vox");
 	//Load the monkeys mesh from the monkey obj
 	monkey->mesh = monkeyMesh;
 	monkey->mesh->pushMaterial(material);
@@ -133,7 +133,7 @@ BaseScene::BaseScene(Game * _game):
 	//Add a material
 	voxelMonkey->mesh->pushMaterial(material);
 	voxelMonkey->transform->translate(0.0f, 0.0f, 3.0f);
-	//addChild(voxelMonkey);
+	addChild(voxelMonkey);
 
 
 	sprite->setShader(shader, true);

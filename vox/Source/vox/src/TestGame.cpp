@@ -14,7 +14,7 @@ TestGame::TestGame(bool _running):
 {
 	std::srand((unsigned long int)std::time(0));
 	GameJamCharacter::init();
-	scenes.insert(std::make_pair("Raid the Castle", new BaseScene(this)));
+	scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(this)));
 	//((GameJamSceneIndoor *)scenes.at("Raid the Castle"))->debugDraw = true;
 	currentScene = scenes.at("Raid the Castle");
 }
