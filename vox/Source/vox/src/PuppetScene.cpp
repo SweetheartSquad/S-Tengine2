@@ -160,7 +160,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter4->translateComponents(glm::vec3(15.0f, 5.f, 0.f));
 
-	michael = new TestCharacter(world, false, PuppetGame::kPLAYER, PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER, -5);
+	michael = new TestCharacter(world, false, PuppetGame::kPLAYER, PuppetGame::kSTRUCTURE | /*PuppetGame::kITEM | */PuppetGame::kPLAYER, -5);
 	michael->setShader(shader, true);
 	addChild(michael, 1);
 	michael->addToLayeredScene(this, 1);
@@ -188,15 +188,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	puppetController4 = new PuppetController(acc4, playerCharacter4);
 
 
-	//Set up cameras
-	
-	mouseCamera = new MousePerspectiveCamera();
-
-	mouseCamera->farClip = 1000.f;
-	mouseCamera->transform->rotate(90, 0, 1, 0, kWORLD);
-	mouseCamera->transform->translate(5.0f, 1.5f, 22.5f);
-	mouseCamera->yaw = 90.0f;
-	mouseCamera->pitch = -10.0f;
 	
 	
 	
@@ -216,6 +207,14 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 
 	world->addToWorld(randomGround);
 	addChild(randomGround, 1);
+	
+	//Set up cameras
+	mouseCamera = new MousePerspectiveCamera();
+	mouseCamera->farClip = 1000.f;
+	mouseCamera->transform->rotate(90, 0, 1, 0, kWORLD);
+	mouseCamera->transform->translate(5.0f, 1.5f, 22.5f);
+	mouseCamera->yaw = 90.0f;
+	mouseCamera->pitch = -10.0f;
 
 	gameCam = new FollowCamera(glm::vec3(0, 0, 0), 0, 0);
 	gameCam->addTarget(playerCharacter->torso);

@@ -33,6 +33,7 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int
 	
 	components.push_back(&arm);
 	components.push_back(&base);
+	rootComponent = base;
 	
 	b2Filter sf;
 	sf.categoryBits = categoryBits;

@@ -148,6 +148,7 @@ GameJamCharacter::GameJamCharacter(Box2DWorld * _world, int16 _categoryBits, int
 	components.push_back(&rightUpperArm);
 	components.push_back(&rightLowerArm);
 	components.push_back(&rightHand);
+	rootComponent = torso;
 
 }
 

@@ -35,7 +35,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	loadCatapult();
 
-	playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow<PuppetCharacter>(playerCharacter4, 10, PuppetGame::kPLAYER));
+	playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter4, 10, PuppetGame::kPLAYER));
 }
 
 RaidTheCastle::~RaidTheCastle(){

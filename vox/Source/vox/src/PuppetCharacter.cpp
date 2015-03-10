@@ -47,7 +47,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	components.push_back(&head);
 	components.push_back(&face);
 	components.push_back(&headgear);
-	
+	rootComponent = torso;
+
 	/*b2CircleShape tShape;
 	tShape.m_radius = glm::length(glm::vec2(transform->scaleVector.x,transform->scaleVector.y));
 	tShape.m_p = b2Vec2(0,0);
