@@ -66,6 +66,13 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	background->mesh->uvEdgeMode = GL_REPEAT;
 	background->mesh->dirty = true;
 
+	int timeOfDayOptions = 4;
+	int timeOfDay = std::rand()%timeOfDayOptions;
+	background->mesh->setUV(0, (float)timeOfDay/timeOfDayOptions, 0);
+	background->mesh->setUV(1, (float)(timeOfDay+1)/timeOfDayOptions, 0);
+	background->mesh->setUV(2, (float)(timeOfDay+1)/timeOfDayOptions, 1);
+	background->mesh->setUV(3, (float)timeOfDay/timeOfDayOptions, 1);
+
 	addChild(background, 0);
 
 	ground->setShader(shader, true);

@@ -65,7 +65,6 @@ void FollowCamera::update(Step * _step){
 		zoom = std::max(minimumZoom, screenHeight);
 	}
 
-
 	float dist = zoom / (tan(glm::radians(fieldOfView) / 2.f) * 2.f);
 	
 	std::cout << std::endl;
@@ -89,7 +88,7 @@ void FollowCamera::update(Step * _step){
 
 glm::mat4 FollowCamera::getViewMatrix(){
 	return glm::lookAt(
-		transform->translationVector,	// Camera is here
+		offset + transform->translationVector,	// Camera is here
 		offset + lookAtSpot, // and looks here : at the same position, plus "direction"
 		upVectorRotated				// Head is up (set to 0,-1,0 to look upside-down)
 		);
