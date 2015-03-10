@@ -51,19 +51,31 @@ void FollowCamera::update(Step * _step){
 	}
 	float screenWidth = maxX - minX;
 	float screenHeight = maxY - minY;
-	float zoom = std::max(minimumZoom, std::max(screenWidth, screenHeight));
 
-	/*if(targets.size() > 1){
-		lookAtSpot /= targets.size();
-	}*/
-	std::cout << screenWidth << "\t" << screenHeight << std::endl;
+	// account for FoV (the camera FoV seems to be vertical, so if the screen w > screen h, we need to take the h / the intended aspect ratio)
+	float ar1 = screenWidth/screenHeight;
+	Dimension screenDimensions = vox::getScreenDimensions();
+	float ar2 = static_cast<float>(screenDimensions.width)/static_cast<float>(screenDimensions.height);
+	float zoom;
+	if(ar1 > ar2){
+		zoom = std::max(minimumZoom, screenWidth / ar2);
+	}else if(ar1 < ar2){
+		zoom = std::max(minimumZoom, screenHeight);
+	}else{
+		zoom = std::max(minimumZoom, screenHeight);
+	}
+
+
+	float dist = zoom / (tan(glm::radians(fieldOfView) / 2.f) * 2.f);
+	
+	std::cout << std::endl;
 	glm::vec3 oldLookAt = lookAtSpot;
 
 
 	// move camera
 	lookAtSpot.x = transform->translationVector.x = minX + screenWidth/2.f;
 	lookAtSpot.y = transform->translationVector.y = minY + screenHeight/2.f;
-	transform->translationVector.z = zoom;
+	transform->translationVector.z = dist;
 
 	/*float xDif = (lookAtSpot.x - transform->translationVector.x);
 	if(xDif > deadZoneX){
