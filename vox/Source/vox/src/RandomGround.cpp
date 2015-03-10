@@ -18,7 +18,7 @@ RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold
 	float slope = 0;
 	b2Vec2 * p = static_cast<b2Vec2 *>(calloc(_numPoints, sizeof (b2Vec2)));
 	for(int i = 0; i < _numPoints; ++i) {
-		p[i] = b2Vec2(0, 0);
+		p[i] = b2Vec2(0, 0);																																									
 		p[i].x = static_cast<float>(i);
 		if (i > 1) {
 			slope = p[i-1].y-p[i-2].y + vox::NumberUtils::randomFloat(-_threshold, _threshold);
@@ -49,11 +49,20 @@ RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold
 
 	for(auto i = 1; i < _numPoints - 1; ++i){
 		if(i % 2 == 0){
-			mesh->pushVert(Vertex(glm::vec3(p[i].x, -0.1, 1), glm::vec2(p[i].x / _numPoints, -0.1)));
-			mesh->pushVert(Vertex(glm::vec3(p[i].x, p[i].y, 1), glm::vec2(p[i].x  / _numPoints, p[i].y / maxY)));
+			mesh->pushVert(Vertex(glm::vec3(p[i].x, -0.1, 1), glm::vec2(p[i].x / static_cast<float>(_numPoints), 0.0f)));
+			mesh->pushVert(Vertex(glm::vec3(p[i].x, p[i].y, 1), glm::vec2(p[i].x  / static_cast<float>(_numPoints), p[i].y / static_cast<float>(_numPoints))));
+			
+			mesh->indices.push_back(mesh->vertices.size() - 2);
+			mesh->indices.push_back(mesh->vertices.size() - 1);
+
 		}else{
-			mesh->pushVert(Vertex(glm::vec3(p[i].x - 1, p[i - 1].y, 1), glm::vec2(p[i].x  / _numPoints,   p[i].y / maxY)));
-			mesh->pushVert(Vertex(glm::vec3(p[i].x - 1, -0.1, 1), glm::vec2(p[i].x  / _numPoints, -0.1)));
+			mesh->pushVert(Vertex(glm::vec3(p[i].x, p[i].y, 1), glm::vec2(p[i].x  / static_cast<float>(_numPoints), p[i].y / static_cast<float>(_numPoints))));
+			mesh->pushVert(Vertex(glm::vec3(p[i].x, -0.1, 1), glm::vec2(p[i].x  / static_cast<float>(_numPoints), 0.0f)));
+
+			if(i > 2){
+				mesh->indices.push_back(mesh->vertices.size() - 2);
+				mesh->indices.push_back(mesh->vertices.size() - 1);
+			}
 		}
 	}
 	

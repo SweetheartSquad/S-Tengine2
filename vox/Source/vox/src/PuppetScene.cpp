@@ -201,8 +201,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 
 	randomGround->setShader(shader, true);
 	randomGround->setTranslationPhysical(20.0f, 0.0f, 0.0f);
-	randomGround->mesh->uvEdgeMode = GL_REPEAT;
-
+	//randomGround->mesh->uvEdgeMode = GL_REPEAT;
 	randomGround->mesh->pushTexture2D(new Texture("../assets/paper.png", 512, 512, true, true));
 
 	world->addToWorld(randomGround);
