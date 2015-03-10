@@ -88,8 +88,9 @@ void Sprite::load(){
 		for(auto s : animations) {
 			s.second->load();
 		}
-		MeshEntity::load();
+		
 	}
+	MeshEntity::load();
 }
 
 void Sprite::unload(){
@@ -97,8 +98,8 @@ void Sprite::unload(){
 		for(auto s : animations) {
 			s.second->unload();
 		}	
-		MeshEntity::load();
 	}
+	MeshEntity::unload();
 }
 
 void Sprite::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){

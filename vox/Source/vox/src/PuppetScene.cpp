@@ -41,7 +41,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	LayeredScene(_game, 3),
 	time(seconds * 6000),
 	cl(new RaidTheCastleContactListener(this)),
-	world(new Box2DWorld(b2Vec2(0, -9.8f * 2))),
+	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
 	playerCharacter(new PuppetCharacter(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -1, false)),
 	playerCharacter2(new PuppetCharacter(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -2, false)),
