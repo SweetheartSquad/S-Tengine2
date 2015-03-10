@@ -43,7 +43,7 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	world(new Box2DWorld(b2Vec2(0, -9.8f * 2))),
 	drawer(new Box2DDebugDraw(this, world)),
 	playerCharacter(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -1, false)),
-	playerCharacter2(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -1, false)),
+	playerCharacter2(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -2, false)),
 	playerCharacter3(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -3, false)),
 	playerCharacter4(new PuppetCharacter(world, kPLAYER, kGROUND | kSTRUCTURE | kITEM | kPLAYER | kBEHAVIOUR, -4, false)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, false)),
@@ -154,7 +154,7 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter4->translateComponents(glm::vec3(15.0f, 5.f, 0.f));
 
-	TestCharacter * michael = new TestCharacter(world, false, kPLAYER, kSTRUCTURE | kITEM | kPLAYER, -1);
+	TestCharacter * michael = new TestCharacter(world, false, kPLAYER, kSTRUCTURE | kITEM | kPLAYER, -5);
 	michael->setShader(shader, true);
 	addChild(michael, 1);
 	michael->addToLayeredScene(this, 1);
