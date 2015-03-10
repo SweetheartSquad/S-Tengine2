@@ -13,6 +13,8 @@ class PuppetCharacter : public Box2DSuperSprite {
 public:
 	bool ai;
 	bool canJump;
+	bool dead;
+	bool deathPending;
 
 	float targetRoll;
 
@@ -29,8 +31,8 @@ public:
 	Box2DSprite * headgear;
 
 	PuppetCharacter(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0, bool _ai = true);
-	~PuppetCharacter();	
-	
+	~PuppetCharacter();
+
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
 	void update(Step* _step) override;
 	void unload() override;
@@ -39,6 +41,7 @@ public:
 	void jump();
 	//Called when the controller is thrust forward
 	void action();
+	void die();
 
 	Item * itemToPickup;
 	Item * heldItem;

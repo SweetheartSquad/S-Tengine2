@@ -217,6 +217,8 @@ PuppetScene::PuppetScene(Game * _game, float seconds):
 
 	world->addToWorld(randomGround);
 	addChild(randomGround, 1);
+
+	playerCharacter->die();
 }
 
 PuppetScene::~PuppetScene(){

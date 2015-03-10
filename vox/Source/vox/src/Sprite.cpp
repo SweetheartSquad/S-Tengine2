@@ -1,4 +1,4 @@
-#pragma once 
+#pragma once
 
 #include "Sprite.h"
 #include "Rectangle.h"
@@ -59,7 +59,7 @@ Vertex * Sprite::getBottomRight(){
 	return &mesh->vertices.at(2);
 }
 
-void Sprite::setUvs(float _topLeftU, float _topLeftV, float _topRightU, float _topRightV, 
+void Sprite::setUvs(float _topLeftU, float _topLeftV, float _topRightU, float _topRightV,
 					float _bottomLeftU, float _bottomLeftV, float _bottomRightU, float _bottomRightV){
 	getBottomLeft()->u    = _bottomLeftU;
 	getBottomLeft()->v    = _bottomLeftV;
@@ -71,7 +71,7 @@ void Sprite::setUvs(float _topLeftU, float _topLeftV, float _topRightU, float _t
 	getBottomRight()->v   = _bottomRightV;
 }
 
-void Sprite::setUvs(vox::Rectangle _rect){	
+void Sprite::setUvs(vox::Rectangle _rect){
 	mesh->vertices.at(0).u  = _rect.getTopLeft().x;
 	mesh->vertices.at(0).v  = _rect.getTopLeft().y;
 	mesh->vertices.at(1).u  = _rect.getTopRight().x;
@@ -82,6 +82,24 @@ void Sprite::setUvs(vox::Rectangle _rect){
 	mesh->vertices.at(3).v  = _rect.getBottomLeft().y;
 }
 
+
+void Sprite::load(){
+	if(!loaded){
+		for(auto s : animations) {
+			s.second->load();
+		}
+		MeshEntity::load();
+	}
+}
+
+void Sprite::unload(){
+	if(loaded){
+		for(auto s : animations) {
+			s.second->unload();
+		}	
+		MeshEntity::load();
+	}
+}
 
 void Sprite::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
    MeshEntity::render(_matrixStack, _renderStack);

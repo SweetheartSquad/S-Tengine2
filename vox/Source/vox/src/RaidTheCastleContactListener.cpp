@@ -14,6 +14,7 @@
 #include <Box2D\Dynamics\Joints\b2RevoluteJoint.h>
 
 #include "Behaviour.h"
+#include <iostream>
 
 /*bool GameJamContactListener:: ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB){
 	if(fixtureA->GetFilterData().maskBits == 1 || fixtureB->GetFilterData().maskBits == 1){
@@ -102,9 +103,6 @@ void RaidTheCastleContactListener::BeginContact(b2Contact* contact){
 			b->targets.push_back(otherFixture->GetUserData());
 			b->active = true;
 		}
-	/*}else{
-		// do nothing
-	}*/
 }
 
 void RaidTheCastleContactListener::playerPlayerContact(b2Contact * contact){
@@ -126,7 +124,9 @@ void RaidTheCastleContactListener::playerItemContact(b2Contact * contact, b2Fixt
 	if(item->thrown){
 		// do some sort of damage thing here
 		p->torso->applyLinearImpulseUp(500);
-		std::cout << "damage?" << std::endl;
+		if(!p->dead){
+			p->deathPending = true;
+		}
 	}else if(p->heldItem == nullptr && !item->held){
 		p->itemToPickup = item;
 		// multiple players might be able to pick it up in one update
@@ -134,9 +134,9 @@ void RaidTheCastleContactListener::playerItemContact(b2Contact * contact, b2Fixt
 }
 
 void RaidTheCastleContactListener::playerStructureContact(b2Contact * contact, b2Fixture * playerFixture, b2Fixture * structureFixture){
-	
+
 	std::cout << "Player-Structure Collision" << std::endl;
-	
+
 	// need to actually check if the structure is the catapult
 	((Catapult *)structureFixture->GetUserData())->fireCatapult();
 
@@ -160,58 +160,68 @@ void RaidTheCastleContactListener::structureItemContact(b2Contact * _contact, b2
 }
 
 void RaidTheCastleContactListener::EndContact(b2Contact* contact){
-	if(contact->GetFixtureA()->IsSensor() || contact->GetFixtureB()->IsSensor()){
-		b2Filter fA = contact->GetFixtureA()->GetFilterData();
-		b2Filter fB = contact->GetFixtureB()->GetFilterData();
+	
+	b2Filter fA = contact->GetFixtureA()->GetFilterData();
+	b2Filter fB = contact->GetFixtureB()->GetFilterData();
 
-		if((fA.maskBits == 2 + 4 && fB.maskBits == 4) || (fA.maskBits = 4 && fB.maskBits == 2 + 4)){
-			// Player character and character
-			int i = 0;
-		}else if((fA.maskBits == 2 + 4 && fB.maskBits == 4) || (fA.maskBits == 4 && fB.maskBits == 2 + 4)){
-			// player character and prop
-			int i = 1;
-		}else if(fA.categoryBits == PuppetScene::kPLAYER && fB.categoryBits == PuppetScene::kGROUND || fB.categoryBits == PuppetScene::kPLAYER && fA.categoryBits == PuppetScene::kGROUND){
-			PuppetCharacter * puppet;
-			if(contact->GetFixtureA()->GetFilterData().categoryBits == PuppetScene::kPLAYER){
-				puppet = static_cast<PuppetCharacter *>( contact->GetFixtureA()->GetUserData());
-				if(puppet != nullptr){
-					puppet->canJump = false;
-				}
-			}else if(contact->GetFixtureB()->GetFilterData().categoryBits == PuppetScene::kPLAYER){
-				puppet = static_cast<PuppetCharacter *>( contact->GetFixtureB()->GetUserData());
-				if(puppet != nullptr){
-					puppet->canJump = false;
-				}
-			}
-		}
-
-
-		// behaviour stuff
-		b2Fixture * behaviourFixture = nullptr;
-		b2Fixture * otherFixture = nullptr;
-
-		if(fA.categoryBits == PuppetScene::kBEHAVIOUR){
-			behaviourFixture = contact->GetFixtureA();
-			otherFixture = contact->GetFixtureB();
-		}else if(fB.categoryBits == PuppetScene::kBEHAVIOUR){
-			behaviourFixture = contact->GetFixtureB();
-			otherFixture = contact->GetFixtureA();
-		}
-
-		if(behaviourFixture != nullptr){
-			Behaviour * b = ((Behaviour *)behaviourFixture->GetUserData());
-			for(unsigned long int i = b->targets.size(); i > 0; --i){
-				if(b->targets.at(i-1) == otherFixture->GetUserData()){
-					b->targets.erase (b->targets.begin()+(i-1));
-					//break;
-				}
-			}
-			if(b->targets.size() == 0){
-				b->active = false;
-			}
-		}
-
-	}else{
-		// do nothing
+	b2Fixture * playerFixture = nullptr;
+	if(fA.categoryBits == PuppetScene::kPLAYER){
+		playerFixture = contact->GetFixtureA();
+	}else if(fB.categoryBits == PuppetScene::kPLAYER){
+		playerFixture = contact->GetFixtureB();
 	}
+
+	if(playerFixture != nullptr){
+		PuppetCharacter * player = (PuppetCharacter *)(playerFixture->GetUserData());
+		if(player != nullptr && player->deathPending){
+			//player->die();
+		}
+	}
+
+	if((fA.maskBits == 2 + 4 && fB.maskBits == 4) || (fA.maskBits = 4 && fB.maskBits == 2 + 4)){
+		// Player character and character
+		int i = 0;
+	}else if((fA.maskBits == 2 + 4 && fB.maskBits == 4) || (fA.maskBits == 4 && fB.maskBits == 2 + 4)){
+		// player character and prop
+		int i = 1;
+	}else if(fA.categoryBits == PuppetScene::kPLAYER && fB.categoryBits == PuppetScene::kGROUND || fB.categoryBits == PuppetScene::kPLAYER && fA.categoryBits == PuppetScene::kGROUND){
+		PuppetCharacter * puppet;
+		if(contact->GetFixtureA()->GetFilterData().categoryBits == PuppetScene::kPLAYER){
+			puppet = static_cast<PuppetCharacter *>( contact->GetFixtureA()->GetUserData());
+			if(puppet != nullptr){
+				puppet->canJump = false;
+			}
+		}else if(contact->GetFixtureB()->GetFilterData().categoryBits == PuppetScene::kPLAYER){
+			puppet = static_cast<PuppetCharacter *>( contact->GetFixtureB()->GetUserData());
+			if(puppet != nullptr){
+				puppet->canJump = false;
+			}
+		}
+	}
+
+	// behaviour stuff
+	b2Fixture * behaviourFixture = nullptr;
+	b2Fixture * otherFixture = nullptr;
+
+	if(fA.categoryBits == PuppetScene::kBEHAVIOUR){
+		behaviourFixture = contact->GetFixtureA();
+		otherFixture = contact->GetFixtureB();
+	}else if(fB.categoryBits == PuppetScene::kBEHAVIOUR){
+		behaviourFixture = contact->GetFixtureB();
+		otherFixture = contact->GetFixtureA();
+	}
+
+	if(behaviourFixture != nullptr){
+		Behaviour * b = ((Behaviour *)behaviourFixture->GetUserData());
+		for(unsigned long int i = b->targets.size(); i > 0; --i){
+			if(b->targets.at(i-1) == otherFixture->GetUserData()){
+				b->targets.erase (b->targets.begin()+(i-1));
+				//break;
+			}
+		}
+		if(b->targets.size() == 0){
+			b->active = false;
+		}
+	}
+
 }

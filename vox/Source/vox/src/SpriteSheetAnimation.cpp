@@ -9,6 +9,7 @@
 
 SpriteSheetAnimation::SpriteSheetAnimation(Texture * _texture, float _secondsPerFrame):
 	NodeUpdatable(),
+	NodeLoadable(),
 	frameIndices(Animation<unsigned long int>(&currentFrame)),
 	texture(_texture),
 	currentFrame(0),
@@ -51,12 +52,22 @@ void SpriteSheetAnimation::pushMultipleFrames(std::vector<unsigned long int> _fr
 		if((curCol - colOffset + 1) * _width > _textureWidth){
 			curRow++;
 			if(colInRow == -1){
-				colInRow = curCol;	
+				colInRow = curCol;
 			}
 			colOffset += colInRow;
 		}
 		pushFrame(curCol - colOffset, curRow, _width, _height);
 	}
+}
+
+void SpriteSheetAnimation::load(){
+	NodeLoadable::load();
+	texture->load();
+}
+
+void SpriteSheetAnimation::unload(){
+	NodeLoadable::unload();
+	texture->unload();
 }
 
 void SpriteSheetAnimation::pushFramesInRange(unsigned long int _min, unsigned long int _max, float _width, float _height, float _textureWidth){
@@ -69,7 +80,7 @@ void SpriteSheetAnimation::pushFramesInRange(unsigned long int _min, unsigned lo
 		if((curCol - colOffset + 1) * _width > _textureWidth){
 			curRow++;
 			if(colInRow == -1){
-				colInRow = curCol;	
+				colInRow = curCol;
 			}
 			colOffset += colInRow;
 		}

@@ -16,22 +16,24 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	NodeRenderable(),
 	ai(ai),
 	canJump(false),
+	dead(false),
+	deathPending(false),
 	targetRoll(0),
+	health(1.0f),
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),
-	behaviourManager(this),
-	health(1.0f){
+	behaviourManager(this){
 
 	GameJamCharacter::texture_packs character = GameJamCharacter::kKNIGHT;
 	head = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::headTexPacks[character]->width, GameJamCharacter::headTexPacks[character]->height, GameJamCharacter::headTexPacks[character]->texture, componentScale);
-	
+
 	torso = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::torsoTexPacks[character]->width, GameJamCharacter::torsoTexPacks[character]->height, GameJamCharacter::torsoTexPacks[character]->texture, componentScale);
 	armLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::upperArmTexPacks[character]->width, GameJamCharacter::upperArmTexPacks[character]->height, GameJamCharacter::upperArmTexPacks[character]->texture, componentScale);
 	armRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::upperArmTexPacks[character]->width, GameJamCharacter::upperArmTexPacks[character]->height, GameJamCharacter::upperArmTexPacks[character]->texture, componentScale);
 	handLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::handTexPacks[character]->width, GameJamCharacter::handTexPacks[character]->height, GameJamCharacter::handTexPacks[character]->texture, componentScale);
 	handRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::handTexPacks[character]->width, GameJamCharacter::handTexPacks[character]->height, GameJamCharacter::handTexPacks[character]->texture, componentScale);
-	
+
 	TextureSampler * faceTex = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Face1.png", 512,512, true, true), 67, 72);
 	TextureSampler * helmetTex = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Helmet1.png", 512,512, true, true), 114, 165);
 	face = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), faceTex->width, faceTex->height, faceTex->texture, componentScale);
@@ -45,16 +47,17 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	components.push_back(&head);
 	components.push_back(&face);
 	components.push_back(&headgear);
-	
+
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
-	if(maskBits != (int16)-1){
+	if(maskBits != static_cast<int16>(-1)){
 		sf.maskBits = maskBits;
 	}
+
 	sf.groupIndex = _groupIndex;
 
-	torso->createFixture	 (sf, b2Vec2(0.0f, -1.0f), this); 
-	armLeft->createFixture	 (sf, b2Vec2(0.0f, 0.0f),  this); 
+	torso->createFixture	 (sf, b2Vec2(0.0f, -1.0f), this);
+	armLeft->createFixture	 (sf, b2Vec2(0.0f, 0.0f),  this);
 	armRight->createFixture	 (sf, b2Vec2(0.0f, 0.0f),  this);
 	handLeft->createFixture  (sf, b2Vec2(0.0f, 0.0f),  this);
 	handRight->createFixture (sf, b2Vec2(0.0f, 0.0f),  this);
@@ -76,7 +79,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	jth.lowerAngle = glm::radians(-15.f);
 	jth.upperAngle = glm::radians(15.f);
 	world->b2world->CreateJoint(&jth);
-	
+
 	// face
 	b2RevoluteJointDef jhf;
 	jhf.bodyA = head->body;
@@ -87,7 +90,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	jhf.enableLimit = true;
 	jhf.referenceAngle = 0;
 	world->b2world->CreateJoint(&jhf);
-	
+
 	// headgear
 	b2RevoluteJointDef jhh;
 	jhh.bodyA = head->body;
@@ -98,7 +101,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	jhh.enableLimit = true;
 	jhh.referenceAngle = 0;
 	world->b2world->CreateJoint(&jhh);
-	
+
 	// right arm
 	b2RevoluteJointDef jtar;
 	jtar.bodyA = torso->body;
@@ -114,7 +117,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	jtar.lowerAngle = glm::radians(-10.f);
 	jtar.upperAngle = glm::radians(10.f);
 	world->b2world->CreateJoint(&jtar);
-	
+
 	// left arm
 	b2RevoluteJointDef jtal;
 	jtal.bodyA = torso->body;
@@ -130,7 +133,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	jtal.lowerAngle = glm::radians(-10.f);
 	jtal.upperAngle = glm::radians(10.f);
 	world->b2world->CreateJoint(&jtal);
-	
+
 	// right hand
 	b2RevoluteJointDef rhrej;
 	rhrej.bodyA = armRight->body;
@@ -143,7 +146,7 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	rhrej.lowerAngle = glm::radians(-20.f);
 	rhrej.upperAngle = glm::radians(20.f);
 	world->b2world->CreateJoint(&rhrej);
-	
+
 	// left hand
 	b2RevoluteJointDef lhlej;
 	lhlej.bodyA = armLeft->body;
@@ -159,9 +162,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 
 	// flip left side
 	armLeft->transform->scale(-1, 1, 1);
-	handLeft->transform->scale(-1, 1, 1); 
+	handLeft->transform->scale(-1, 1, 1);
 }
-
 
 PuppetCharacter::~PuppetCharacter(){
 }
@@ -172,19 +174,20 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 
 void PuppetCharacter::update(Step* _step){
 	Box2DSuperSprite::update(_step);
-	
-	//body
 	float bodAngle = (torso)->body->GetAngle() + targetRoll;
 	(torso->body->SetAngularVelocity(-bodAngle * 10));
-	if((torso->body->GetPosition().y < 0)){
-		(torso)->applyLinearImpulseUp(250);
+	if(!dead){
+		//body
+		if((torso->body->GetPosition().y < 0)){
+			(torso)->applyLinearImpulseUp(250);
+		}
+		if(itemToPickup != nullptr){
+			pickupItem(itemToPickup);
+		}
+	}else {
+		torso->setTranslationPhysical(torso->body->GetPosition().x, 8.0f, torso->transform->translationVector.z);
+		torso->body->ApplyForce(b2Vec2(-bodAngle * 50.0f, 0), torso->body->GetWorldCenter(), true);
 	}
-
-	if(itemToPickup != nullptr){
-		pickupItem(itemToPickup);
-	}
-
-
 	behaviourManager.update(_step);
 }
 
@@ -219,6 +222,15 @@ void PuppetCharacter::action(){
 	}
 }
 
+void PuppetCharacter::die(){
+	dead = true;
+	deathPending = false;
+	for(Box2DSprite ** c : components) {
+		(*c)->body->SetGravityScale(0.0f);
+	}
+	torso->setTranslationPhysical(torso->body->GetPosition().x, 2.0f, torso->transform->translationVector.z);
+}
+
 void PuppetCharacter::unload(){
 	Box2DSuperSprite::unload();
 }
@@ -232,7 +244,7 @@ void PuppetCharacter::pickupItem(Item * _item){
 		if(heldItem != nullptr){
 			action();
 		}
-		
+
 		// set the item's group index to match character's so that they won't collide anymore (doesn't work?)
 		for(Box2DSprite ** bs : _item->components){
 			b2Filter b1 = (*bs)->body->GetFixtureList()->GetFilterData();
@@ -240,7 +252,6 @@ void PuppetCharacter::pickupItem(Item * _item){
 			(*bs)->body->GetFixtureList()->SetFilterData(b1);
 			(*bs)->body->GetFixtureList()->Refilter();
 		}
-
 
 		b2WeldJointDef jd;
 		jd.bodyA = armRight->body;
@@ -253,6 +264,6 @@ void PuppetCharacter::pickupItem(Item * _item){
 		heldItem = _item;
 		itemToPickup = nullptr;
 		_item->held = true;
-		
+
 	}
 }

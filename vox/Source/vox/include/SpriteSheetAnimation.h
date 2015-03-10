@@ -3,11 +3,12 @@
 #include "node/NodeUpdatable.h"
 #include "Animation.h"
 #include "Rectangle.h"
+#include <node/NodeLoadable.h>
 
 class Texture;
 class SpriteSheet;
 
-class SpriteSheetAnimation : NodeUpdatable
+class SpriteSheetAnimation : NodeUpdatable, NodeLoadable
 {
 public:
 	Animation<unsigned long int> frameIndices;
@@ -27,4 +28,7 @@ public:
 	
 	void pushMultipleFrames(std::vector<unsigned long int> _frames, float _width, float _height, float _textureWidth);
 	void pushFramesInRange(unsigned long int _min, unsigned long int _max, float _width, float _height, float _textureWidth);
+
+	void load() override;
+	void unload() override;
 };
