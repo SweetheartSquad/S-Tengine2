@@ -32,6 +32,8 @@ public:
 	float componentScale;
 	
 	Box2DWorld * world;
+	Scene * scene;
+	signed long int sceneLayer;
 
 	std::vector<Box2DSprite **> components;
 
@@ -56,4 +58,6 @@ public:
 
 	// Sets the group index on all components
 	void setGroupIndex(int16 _groupIndex);
+
+	void addComponent(Box2DSprite * _component);
 };
