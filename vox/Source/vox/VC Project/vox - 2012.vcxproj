@@ -24,8 +24,10 @@
     <ClCompile Include="..\src\Arduino.cpp" />
     <ClCompile Include="..\src\BaseScene.cpp" />
     <ClCompile Include="..\src\Behaviour.cpp" />
+    <ClCompile Include="..\src\BehaviourAttack.cpp" />
     <ClCompile Include="..\src\BehaviourFollow.cpp" />
     <ClCompile Include="..\src\BehaviourManager.cpp" />
+    <ClCompile Include="..\src\BehaviourPatrol.cpp" />
     <ClCompile Include="..\src\BitmapFont.cpp" />
     <ClCompile Include="..\src\Boulder.cpp" />
     <ClCompile Include="..\src\Box2DDebugDraw.cpp" />
@@ -104,6 +106,7 @@
     <ClCompile Include="..\src\poly2Tri\sweep\sweep.cc" />
     <ClCompile Include="..\src\poly2Tri\sweep\sweep_context.cc" />
     <ClCompile Include="..\src\PuppetCharacter.cpp" />
+    <ClCompile Include="..\src\PuppetCharacterCastleChampion.cpp" />
     <ClCompile Include="..\src\PuppetContactListener.cpp" />
     <ClCompile Include="..\src\PuppetController.cpp" />
     <ClCompile Include="..\src\PuppetResourceManager.cpp" />
@@ -167,8 +170,10 @@
     <ClInclude Include="..\include\Arduino.h" />
     <ClInclude Include="..\include\BaseScene.h" />
     <ClInclude Include="..\include\Behaviour.h" />
+    <ClInclude Include="..\include\BehaviourAttack.h" />
     <ClInclude Include="..\include\BehaviourFollow.h" />
     <ClInclude Include="..\include\BehaviourManager.h" />
+    <ClInclude Include="..\include\BehaviourPatrol.h" />
     <ClInclude Include="..\include\BitmapFont.h" />
     <ClInclude Include="..\include\Boulder.h" />
     <ClInclude Include="..\include\Box2DDebugDraw.h" />
@@ -254,6 +259,7 @@
     <ClInclude Include="..\include\poly2Tri\sweep\sweep_context.h" />
     <ClInclude Include="..\include\Props.h" />
     <ClInclude Include="..\include\PuppetCharacter.h" />
+    <ClInclude Include="..\include\PuppetCharacterCastleChampion.h" />
     <ClInclude Include="..\include\PuppetContactListener.h" />
     <ClInclude Include="..\include\PuppetController.h" />
     <ClInclude Include="..\include\PuppetResourceManager.h" />

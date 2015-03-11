@@ -7,19 +7,26 @@
 #include "FollowCamera.h"
 #include "Behaviour.h"
 #include "BehaviourFollow.h"
+#include <BehaviourPatrol.h>
 #include "Boulder.h"
 #include "Catapult.h"
 #include "Box2DSprite.h"
 #include "Box2DWorld.h"
+#include "MeshEntity.h"
+#include "MeshInterface.h"
+#include "MeshFactory.h"
 #include "shader/BaseComponentShader.h"
 #include "keyboard.h"
+#include <Texture.h>
 
 #include <glfw\glfw3.h>
+
 
 RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	PuppetScene(_game, 0.5)
 {
 	castle = new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30);
+	
 	castle->setShader(shader, true);
 	castle->addToLayeredScene(this, 0);
 	addChild(castle, 0);
@@ -35,7 +42,8 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	loadCatapult();
 
-	playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter4, 10, PuppetGame::kPLAYER));
+	//playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter4, 10, PuppetGame::kPLAYER));
+	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(0,0,0), glm::vec3(50,0,0), playerCharacter4, 10));
 
 	gameCam->addTarget(castle->rootComponent);
 	gameCam->addTarget(catapult->rootComponent);
@@ -54,9 +62,9 @@ void RaidTheCastle::update(Step* _step){
 		//playerCharacter->behaviourManager.behaviours.at(0)->active = false;
 	}
 
-	if(keyboard->keyDown(GLFW_KEY_F)){
+	/*if(keyboard->keyDown(GLFW_KEY_F)){
 		catapult->fireCatapult();
-	}
+	}*/
 	if(catapult->fireBoulder){
 		catapult->fireBoulder = false;
 		catapult->boulderLoaded = false;

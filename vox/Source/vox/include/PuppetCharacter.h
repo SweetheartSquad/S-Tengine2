@@ -39,10 +39,10 @@ public:
 	void unload() override;
 	void load() override;
 
-	void jump();
+	virtual void jump();
 	//Called when the controller is thrust forward
-	void action();
-	void die();
+	virtual void action();
+	virtual void die();
 
 	Item * itemToPickup;
 	Item * heldItem;

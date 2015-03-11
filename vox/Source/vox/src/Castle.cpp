@@ -49,7 +49,7 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	int f[] = {0,1,2,3};
 	std::vector<int> ff(std::begin(f), std::end(f));
 
-	spriteSheet->pushFramesInRange(0, 3, 973, 619, 973 * 2);
+	spriteSheet->pushFramesInRange(0, 3, baseTex.width, baseTex.height, baseSpriteSheetTex->width);
 	
 	rootComponent->addAnimation("castleStates", spriteSheet, true);
 
