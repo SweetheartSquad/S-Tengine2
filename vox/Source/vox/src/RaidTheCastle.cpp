@@ -22,7 +22,7 @@
 
 
 RaidTheCastle::RaidTheCastle(PuppetGame* _game):
-	PuppetScene(_game, 0.5)
+	PuppetScene(_game, 10)
 {
 	castle = new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30);
 	

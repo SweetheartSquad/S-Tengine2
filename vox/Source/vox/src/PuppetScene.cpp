@@ -39,7 +39,8 @@
 
 PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	LayeredScene(_game, 3),
-	time(seconds * 6000),
+	duration(seconds),
+	currentTime(0),
 	cl(new RaidTheCastleContactListener(this)),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
@@ -256,14 +257,16 @@ void PuppetScene::update(Step * _step){
 	Scene::update(_step);
 	world->update(_step);
 
-	time -= _step->deltaTimeCorrection;
-	if(time <= 0 && !game->switchingScene){
-		/*game->scenes.at(game->newScene)->unload();
-		game->scenes.erase(game->currentScene);
-		game->scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(game)));
-		game->switchScene(game->scenes.at(game->scenes.at());*/
-	}
+	if(this == game->currentScene){
+		currentTime += _step->deltaTime;
 
+		if(currentTime > duration){
+			game->scenes.insert(std::make_pair("Raid the Castle2", new RaidTheCastle(dynamic_cast<PuppetGame *>(game))));
+			Scene * oldScene = game->currentScene;
+		
+			game->switchScene("Raid the Castle2");
+		}
+	}
 	arduino->update(_step);
 	puppetController->update(_step);
 	puppetController2->update(_step);

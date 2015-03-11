@@ -35,7 +35,9 @@ class Item;
  class PuppetScene abstract : public LayeredScene{
 public:
 
-	float time;
+	float duration;
+	float currentTime;
+
 	RaidTheCastleContactListener * cl;
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;

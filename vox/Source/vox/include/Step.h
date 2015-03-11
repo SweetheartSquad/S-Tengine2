@@ -9,12 +9,11 @@ public:
 	double time;
 	double deltaTimeCorrection;
 	double lastTimestamp;
-
+	double deltaTime;
 
 	void setDeltaTime(double _deltaTime);
 	double getDeltaTime();
 	bool getReverse();
 private:
-	double deltaTime;
 	bool reverse;
 };
