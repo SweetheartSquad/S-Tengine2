@@ -60,9 +60,9 @@ void RaidTheCastle::update(Step* _step){
 		//playerCharacter->behaviourManager.behaviours.at(0)->active = false;
 	}
 
-	if(keyboard->keyDown(GLFW_KEY_F)){
+	/*if(keyboard->keyDown(GLFW_KEY_F)){
 		catapult->fireCatapult();
-	}
+	}*/
 	if(catapult->fireBoulder){
 		catapult->fireBoulder = false;
 		catapult->boulderLoaded = false;
