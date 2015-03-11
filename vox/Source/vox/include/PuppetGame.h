@@ -2,10 +2,10 @@
 
 #include <iostream>
 #include "Game.h"
+#include "PuppetResourceManager.h"
 
 class PuppetGame:public Game{
 public:
-
 	explicit PuppetGame(bool _running);
 	~PuppetGame();
 	void update() override;

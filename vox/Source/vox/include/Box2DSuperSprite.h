@@ -16,6 +16,7 @@ class TextureSampler{
 public:
 
 	Texture * texture;
+
 	float width;
 	float height;
 

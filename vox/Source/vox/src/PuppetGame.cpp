@@ -10,6 +10,8 @@
 #include <BaseScene.h>
 
 
+ResourceManager * Game::resourceManager = new PuppetResourceManager();
+
 PuppetGame::PuppetGame(bool _running):
 	Game(_running)
 {

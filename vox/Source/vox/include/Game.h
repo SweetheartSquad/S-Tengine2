@@ -9,6 +9,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Scene.h"
+#include "ResourceManager.h"
 
 /*************************************************************************
 *
@@ -18,7 +19,7 @@
 *
 **************************************************************************/
 
-class Game{
+class Game {
 private:
 	/**
 	* Prints the frames per second which this game class
@@ -47,6 +48,8 @@ public:
 	Scene * currentScene;
 	/** List of references to scenes in the game */
 	std::map<std::string, Scene*> scenes;
+
+	static ResourceManager * resourceManager;
 
 	/**Perorms a full game loop*/
 	void performGameLoop();

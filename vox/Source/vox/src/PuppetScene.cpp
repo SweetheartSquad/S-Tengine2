@@ -36,6 +36,7 @@
 #include <RandomGround.h>
 
 #include "RaidTheCastle.h"
+#include <PuppetResourceManager.h>
 
 PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	LayeredScene(_game, 3),
@@ -62,7 +63,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	background->setShader(shader, true);
 	background->transform->translate(0.0f, 25.f, -10.0f);
 	background->transform->scale(125, 25, 1);
-	background->mesh->pushTexture2D(new Texture("../assets/hurly-burly/Sky.png", 1024, 1024, true, true));
+	background->mesh->pushTexture2D(PuppetResourceManager::sky);
 	background->mesh->uvEdgeMode = GL_REPEAT;
 	background->mesh->dirty = true;
 
@@ -81,7 +82,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	ground->transform->rotate(90.f, 0, 0, 1, kOBJECT);
 	ground->transform->scale(250, 250, 1);
 	ground->mesh->uvEdgeMode = GL_REPEAT;
-	ground->mesh->pushTexture2D(new Texture("../assets/hurly-burly/StageFloor.png", 1024, 1024, true, true));
+	ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
 	ground->body->SetTransform(b2Vec2(0, -250), 0);
 	ground->mesh->vertices.at(0).z -= 250;
 	ground->mesh->vertices.at(1).z -= 250;
@@ -186,9 +187,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	puppetController2 = new PuppetController(acc2, playerCharacter2);
 	puppetController3 = new PuppetController(acc3, playerCharacter3);
 	puppetController4 = new PuppetController(acc4, playerCharacter4);
-
-
-	
 	
 	
 	world->b2world->SetDebugDraw(drawer);
