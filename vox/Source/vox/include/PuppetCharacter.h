@@ -17,6 +17,7 @@ public:
 	bool deathPending;
 
 	float targetRoll;
+	float score;
 
 	unsigned int health;
 

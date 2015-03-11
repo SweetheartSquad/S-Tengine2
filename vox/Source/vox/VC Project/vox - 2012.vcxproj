@@ -93,6 +93,7 @@
     <ClCompile Include="..\src\node\ShiftKiddie.cpp" />
     <ClCompile Include="..\src\NumberUtils.cpp" />
     <ClCompile Include="..\src\OrthographicCamera.cpp" />
+    <ClCompile Include="..\src\ParticleSystem.cpp" />
     <ClCompile Include="..\src\PerspectiveCamera.cpp" />
     <ClCompile Include="..\src\Plane.cpp" />
     <ClCompile Include="..\src\Point.cpp" />
@@ -149,6 +150,7 @@
     <ClCompile Include="..\src\TextChunk.cpp" />
     <ClCompile Include="..\src\Texture.cpp" />
     <ClCompile Include="..\src\Transform.cpp" />
+    <ClCompile Include="..\src\VictoryScene.cpp" />
     <ClCompile Include="..\src\Vox.cpp" />
     <ClCompile Include="..\src\VoxelJoint.cpp" />
     <ClCompile Include="..\src\VoxelMesh.cpp" />
@@ -235,6 +237,7 @@
     <ClInclude Include="..\include\node\ShiftKiddie.h" />
     <ClInclude Include="..\include\NumberUtils.h" />
     <ClInclude Include="..\include\OrthographicCamera.h" />
+    <ClInclude Include="..\include\ParticleSystem.h" />
     <ClInclude Include="..\include\PerspectiveCamera.h" />
     <ClInclude Include="..\include\Plane.h" />
     <ClInclude Include="..\include\Point.h" />
@@ -297,6 +300,7 @@
     <ClInclude Include="..\include\Transform.h" />
     <ClInclude Include="..\include\Tween.h" />
     <ClInclude Include="..\include\Vertex.h" />
+    <ClInclude Include="..\include\VictoryScene.h" />
     <ClInclude Include="..\include\Vox.h" />
     <ClInclude Include="..\include\VoxelJoint.h" />
     <ClInclude Include="..\include\VoxelMesh.h" />

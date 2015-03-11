@@ -22,7 +22,9 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),
-	behaviourManager(this){
+	behaviourManager(this),
+	score(0.f)
+{
 
 	GameJamCharacter::texture_packs character = GameJamCharacter::kKNIGHT;
 	head = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), GameJamCharacter::headTexPacks[character]->width, GameJamCharacter::headTexPacks[character]->height, GameJamCharacter::headTexPacks[character]->texture, componentScale);

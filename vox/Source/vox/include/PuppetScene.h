@@ -73,6 +73,7 @@ public:
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
 
+	virtual void complete();
 
 	void destroyItem(Item * item);
 };

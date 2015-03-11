@@ -337,6 +337,10 @@ void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderS
 	LayeredScene::render(_matrixStack, _renderStack);
 }
 
+void PuppetScene::complete(){
+	
+}
+
 void PuppetScene::destroyItem(Item * _item){
 	// remove the item from the children list
 	for(signed long int j = children.size()-1; j >= 0; --j){
