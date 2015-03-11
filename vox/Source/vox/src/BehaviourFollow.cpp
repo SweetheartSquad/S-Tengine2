@@ -16,6 +16,7 @@ void BehaviourFollow::evaluateBeginContact(b2Fixture * _target){
 	Behaviour::evaluateBeginContact(_target);
 	targets.push_back(static_cast<Box2DSuperSprite *>(_target->GetUserData()));
 }
+
 void BehaviourFollow::evaluateEndContact(b2Fixture * _target){
 	Behaviour::evaluateEndContact(_target);
 	for(unsigned long int i = targets.size(); i > 0; --i){

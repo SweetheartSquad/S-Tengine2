@@ -63,12 +63,12 @@ void RaidTheCastle::update(Step* _step){
 			
 
 			// set the item's group index to zero so that it can collide normally
-			for(Box2DSprite ** bs : catapult->boulder->components){
+			/*for(Box2DSprite ** bs : catapult->boulder->components){
 				b2Filter b1 = (*bs)->body->GetFixtureList()->GetFilterData();
 				b1.groupIndex = 0;
 				(*bs)->body->GetFixtureList()->SetFilterData(b1);
 				(*bs)->body->GetFixtureList()->Refilter();
-			}
+			}*/
 			
 			((FollowCamera *)gameCam)->addTarget(catapult->boulder->boulder);
 			catapult->boulder = nullptr;
@@ -93,7 +93,7 @@ void RaidTheCastle::loadCatapult(){
 	boulder->setShader(shader, true);
 	addChild(boulder, 1);
 	boulder->addToLayeredScene(this, 1);
-
+	items.push_back(boulder);
 
 	b2Vec2 jointPosB = ((b2RevoluteJoint *)catapult->arm->body->GetJointList()->joint)->GetLocalAnchorB();
 	//boulder->boulder->body->SetTransform(catapult->arm->body->GetPosition(), std::rand());

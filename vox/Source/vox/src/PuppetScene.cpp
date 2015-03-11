@@ -14,7 +14,6 @@
 #include "RenderOptions.h"
 #include "MeshEntity.h"
 
-#include <array>
 #include <Box2D/Box2D.h>
 #include <Box2DDebugDraw.h>
 #include "Box2DMeshEntity.h"
@@ -27,6 +26,7 @@
 #include "RaidTheCastleContactListener.h"
 #include "Game.h"
 #include "PuppetGame.h"
+#include <Item.h>
 #include <Arduino.h>
 #include <AccelerometerParser.h>
 #include <Accelerometer.h>
@@ -108,7 +108,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	sf.maskBits = PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER;
 	groundFixture->SetFilterData(sf);
 
-	Texture * treeTex1 = new Texture("../assets/hurly-burly/Foliage/Tree1-ds.png", 1024, 1024, true, true);
+	/*Texture * treeTex1 = new Texture("../assets/hurly-burly/Foliage/Tree1-ds.png", 1024, 1024, true, true);
 	Texture * treeTex2 = new Texture("../assets/hurly-burly/Foliage/Tree2-ds.png", 1024, 1024, true, true);
 	Texture * bushTex1 = new Texture("../assets/hurly-burly/Foliage/Bush1-ds.png", 1024, 1024, true, true);
 	Texture * bushTex2 = new Texture("../assets/hurly-burly/Foliage/Bush2-ds.png", 1024, 1024, true, true);
@@ -134,7 +134,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 				break;
 		}
 		addChild(foliage, 0);
-	}
+	}*/
 
 	playerCharacter->setShader(shader, true);
 	addChild(playerCharacter, 1);
@@ -243,6 +243,16 @@ void PuppetScene::unload(){
 
 void PuppetScene::update(Step * _step){
 	
+	// destroy used up items
+	for(signed long int i = items.size()-1; i >= 0; --i){
+		Item * item = items.at(i);
+		
+		if(item->destroy){
+			destroyItem(item);
+			items.erase(items.begin() + i);
+		}
+	}
+
 	Scene::update(_step);
 	world->update(_step);
 
@@ -325,5 +335,47 @@ void PuppetScene::update(Step * _step){
 
 void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	LayeredScene::render(_matrixStack, _renderStack);
+}
 
+void PuppetScene::destroyItem(Item * _item){
+	// remove the item from the children list
+	for(signed long int j = children.size()-1; j >= 0; --j){
+		if(children.at(j) == _item){
+			children.erase(children.begin() + j);
+		}else{
+			for(signed long int k = _item->components.size()-1; k >= 0; --k){
+				if(children.at(j) == *_item->components.at(k)){
+					children.erase(children.begin() + j);
+				}
+			}
+		}
+	}
+	for(std::vector<Entity *> * layer : layers){
+		for(signed long int j = layer->size()-1; j >= 0; --j){
+			if(layer->at(j) == _item){
+				layer->erase(layer->begin() + j);
+			}else{
+				for(signed long int k = _item->components.size()-1; k >= 0; --k){
+					if(layer->at(j) == *_item->components.at(k)){
+						layer->erase(layer->begin() + j);
+					}
+				}
+			}
+		}
+	}
+	for(signed long int j = gameCam->targets.size()-1; j >= 0; --j){
+		if(gameCam->targets.at(j) == _item){
+				gameCam->targets.erase(gameCam->targets.begin() + j);
+		}else{
+			for(signed long int k = _item->components.size()-1; k >= 0; --k){
+				if(gameCam->targets.at(j) == *_item->components.at(k)){
+					gameCam->targets.erase(gameCam->targets.begin() + j);
+				}
+			}
+		}
+	}
+
+	//maybe use something like children.erase(std::remove(children.begin(), children.end(), item), children.end());
+
+	delete _item;
 }

@@ -30,6 +30,7 @@ class Character2;
 class Character3;
 class Character4;
 class PuppetGame;
+class Item;
 
  class PuppetScene abstract : public LayeredScene{
 public:
@@ -62,7 +63,7 @@ public:
 
 	bool mouseCam;
 
-	std::vector<Box2DSprite *> items;
+	std::vector<Item *> items;
 
 	explicit PuppetScene(PuppetGame * _game, float time);
 	virtual ~PuppetScene();
@@ -71,4 +72,7 @@ public:
 	virtual void unload() override;
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+
+
+	void destroyItem(Item * item);
 };

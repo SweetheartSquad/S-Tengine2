@@ -67,7 +67,6 @@ void FollowCamera::update(Step * _step){
 
 	float dist = zoom / (tan(glm::radians(fieldOfView) * 0.5f) * 2.f);
 	
-	std::cout << std::endl;
 	glm::vec3 oldLookAt = lookAtSpot;
 
 

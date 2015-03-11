@@ -42,13 +42,11 @@ void PuppetContactListener::BeginContact(b2Contact * _contact){
 
 	// if a thrown item hits the ground, make it not thrown and able to collide regularly
 	if(fA.categoryBits == PuppetGame::kGROUND && fB.categoryBits == PuppetGame::kITEM){
-		std::cout << "item hit ground" << std::endl;
-		((Item *)_contact->GetFixtureB()->GetUserData())->thrown = false;
-		((Item *)_contact->GetFixtureB()->GetUserData())->setGroupIndex(0);
+		Item * item = static_cast<Item *>(_contact->GetFixtureB()->GetUserData());
+		item->hitGround();
 	}else if(fB.categoryBits == PuppetGame::kGROUND && fA.categoryBits == PuppetGame::kITEM){
-		std::cout << "item hit ground" << std::endl;
-		((Item *)_contact->GetFixtureA()->GetUserData())->thrown = false;
-		((Item *)_contact->GetFixtureB()->GetUserData())->setGroupIndex(0);
+		Item * item = static_cast<Item *>(_contact->GetFixtureB()->GetUserData());
+		item->hitGround();
 	}
 
 	if(playerFixture != nullptr){
@@ -113,10 +111,12 @@ void PuppetContactListener::playerPlayerContact(b2Contact * _contact){
 	}
 }
 
-void PuppetContactListener::playerItemContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _itemContact){
+void PuppetContactListener::playerItemContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _itemFixture){
 	std::cout << "Player-Item Collision" << std::endl;
 	PuppetCharacter * p = static_cast<PuppetCharacter *>(_playerFixture->GetUserData());
-	Item * item = static_cast<Item *>(_itemContact->GetUserData());
+	Item * item = static_cast<Item *>(_itemFixture->GetUserData());
+
+	static_cast<Item *>(item)->hitPlayer();
 	if(item->thrown){
 		// do some sort of damage thing here
 		p->torso->applyLinearImpulseUp(500);
@@ -140,7 +140,7 @@ void PuppetContactListener::playerGroundContact(b2Contact * _contact, b2Fixture 
 }
 
 void PuppetContactListener::structureItemContact(b2Contact * _contact, b2Fixture * _structureFixture, b2Fixture * _itemFixture){
-	
+	static_cast<Item *>(_itemFixture->GetUserData())->hitStructure();
 }
 
 void PuppetContactListener::EndContact(b2Contact* _contact){
