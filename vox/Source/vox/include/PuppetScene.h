@@ -37,6 +37,7 @@ public:
 
 	float duration;
 	float currentTime;
+	unsigned int countDown;
 
 	RaidTheCastleContactListener * cl;
 	Box2DWorld * world;
