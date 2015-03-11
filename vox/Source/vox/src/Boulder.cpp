@@ -5,6 +5,9 @@
 #include <Texture.h>
 #include "Box2DWorld.h"
 
+TextureSampler * Boulder::boulderTexSampler = nullptr;
+Texture * Boulder::boulderTex = nullptr;
+
 Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Item(true, _world, _categoryBits, _maskBits, _groupIndex, 10.f, 50, 56),
 	NodeTransformable(new Transform()),
@@ -13,9 +16,13 @@ Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16
 {
 	componentScale = 0.008f;
 
-	TextureSampler boulderTex = TextureSampler(new Texture("../assets/structure components/catapult/Boulder1.png", 512, 512, true, true), 108, 103);
+	if(boulderTex == nullptr){
+		boulderTex = new Texture("../assets/structure components/catapult/Boulder1.png", 512, 512, true, true);
+	}if(boulderTexSampler == nullptr){
+		boulderTexSampler = new TextureSampler(boulderTex, 108, 103);
+	}
 	
-	boulder = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), boulderTex.width, boulderTex.height, boulderTex.texture, componentScale);
+	boulder = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), boulderTexSampler->width, boulderTexSampler->height, boulderTexSampler->texture, componentScale);
 	rootComponent = boulder;
 	components.push_back(&boulder);
 	

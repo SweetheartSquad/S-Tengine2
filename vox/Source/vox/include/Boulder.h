@@ -9,6 +9,9 @@ class Box2DWorld;
 
 class Boulder : public Item{
 public:
+	static TextureSampler * boulderTexSampler;
+	static Texture * boulderTex;
+	
 
 	Box2DSprite * boulder;
 
