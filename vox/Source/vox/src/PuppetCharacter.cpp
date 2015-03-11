@@ -200,11 +200,11 @@ void PuppetCharacter::update(Step* _step){
 
 void PuppetCharacter::jump(){
 	float t = torso->body->GetAngle();
-	torso->applyLinearImpulseUp(200);
+	torso->applyLinearImpulseUp(5000);
 	if(torso->body->GetAngle() > 0){
-		torso->applyLinearImpulseLeft(100*(1-cos(t)));
+		torso->applyLinearImpulseLeft(200*(1-cos(t)));
 	}else{
-		torso->applyLinearImpulseRight(100*(1-cos(t)));
+		torso->applyLinearImpulseRight(200*(1-cos(t)));
 	}
 	canJump = false;
 }

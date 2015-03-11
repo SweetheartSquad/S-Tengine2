@@ -7,6 +7,7 @@
 #include "FollowCamera.h"
 #include "Behaviour.h"
 #include "BehaviourFollow.h"
+#include <BehaviourPatrol.h>
 #include "Boulder.h"
 #include "Catapult.h"
 #include "Box2DSprite.h"
@@ -41,7 +42,8 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	loadCatapult();
 
-	playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter4, 10, PuppetGame::kPLAYER));
+	//playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter4, 10, PuppetGame::kPLAYER));
+	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(0,0,0), glm::vec3(50,0,0), playerCharacter4, 10));
 
 	gameCam->addTarget(castle->rootComponent);
 	gameCam->addTarget(catapult->rootComponent);

@@ -13,13 +13,13 @@ class BehaviourPatrol : public Behaviour {
 public:
 	std::vector<glm::vec3> wayPoints;
 	bool forward;
-	glm::vec3 * nextWayPoint;
+	unsigned long int nextWayPoint;
 	
 	//void evaluateBeginContact(b2Fixture * _target) override;
 	//void evaluateEndContact(b2Fixture * _target) override;
 	void update(Step * _step) override;
 
-	BehaviourPatrol(glm::vec3 _startPoint, glm::vec3 _endPoint, PuppetCharacter * _source, float _radius, PuppetGame::BOX2D_CATEGORY _filter);
+	BehaviourPatrol(glm::vec3 _startPoint, glm::vec3 _endPoint, PuppetCharacter * _source, float _radius);
 	void addWayPoint(glm::vec3 _wayPoint);
 	void addWayPoint(glm::vec3 _wayPoint, unsigned long int _index);
 };
