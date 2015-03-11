@@ -72,8 +72,9 @@ b2PolygonShape Box2DSprite::getFixtureShape(){
 }
 
 Box2DSprite::~Box2DSprite(){
-	if(world != nullptr) {
+	if(world != nullptr && body != nullptr) {
 		world->b2world->DestroyBody(body);
+		body = nullptr;
 	}
 }
 

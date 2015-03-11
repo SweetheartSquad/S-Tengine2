@@ -18,8 +18,9 @@ NodeBox2DBody::NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType, bool _de
 }
 
 NodeBox2DBody::~NodeBox2DBody(){
-	if(body != nullptr){
+	if(world != nullptr && body != nullptr) {
 		world->b2world->DestroyBody(body);
+		body = nullptr;
 	}
 }
 
