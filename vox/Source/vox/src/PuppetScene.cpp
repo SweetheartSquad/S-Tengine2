@@ -44,10 +44,10 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	cl(new RaidTheCastleContactListener(this)),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
-	playerCharacter(new PuppetCharacter(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -1, false)),
-	playerCharacter2(new PuppetCharacter(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -2, false)),
-	playerCharacter3(new PuppetCharacter(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -3, false)),
-	playerCharacter4(new PuppetCharacter(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -4, false)),
+	playerCharacter(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -1)),
+	playerCharacter2(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -2)),
+	playerCharacter3(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -3)),
+	playerCharacter4(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -4)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, false)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
@@ -250,6 +250,13 @@ void PuppetScene::update(Step * _step){
 			items.erase(items.begin() + i);
 		}
 	}
+	
+
+	arduino->update(_step);
+	puppetController->update(_step);
+	puppetController2->update(_step);
+	puppetController3->update(_step);
+	puppetController4->update(_step);
 
 	Scene::update(_step);
 	world->update(_step);
@@ -262,14 +269,9 @@ void PuppetScene::update(Step * _step){
 		game->switchScene(game->scenes.at(game->scenes.at());*/
 	}
 
-	arduino->update(_step);
-	puppetController->update(_step);
-	puppetController2->update(_step);
-	puppetController3->update(_step);
-	puppetController4->update(_step);
-
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
-		if(playerCharacter->torso->body->GetPosition().y < 8){
+		playerCharacter->jump();
+		/*if(playerCharacter->torso->body->GetPosition().y < 8){
 			float t = playerCharacter->torso->body->GetAngle();
 			playerCharacter->torso->applyLinearImpulseUp(50*(1-sin(t)));
 			if(playerCharacter->torso->body->GetAngle() > 0){
@@ -277,7 +279,7 @@ void PuppetScene::update(Step * _step){
 			}else{
 				playerCharacter->torso->applyLinearImpulseRight(150*(1-cos(t)));
 			}
-		}
+		}*/
 	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_1)){
@@ -290,16 +292,18 @@ void PuppetScene::update(Step * _step){
 	}
 
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		playerCharacter->head->applyLinearImpulseLeft(25);
+		playerCharacter->targetRoll = glm::radians(45.f);
+		/*playerCharacter->head->applyLinearImpulseLeft(25);
 		if(playerCharacter->transform->scaleVector.x < 0){
 			playerCharacter->transform->scaleX(-1);
-		}
+		}*/
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		playerCharacter->head->applyLinearImpulseRight(25);
+		playerCharacter->targetRoll = glm::radians(-45.f);
+		/*playerCharacter->head->applyLinearImpulseRight(25);
 		if(playerCharacter->transform->scaleVector.x > 0){
 			playerCharacter->transform->scaleX(-1);
-		}
+		}*/
 	}
 	if(keyboard->keyJustDown(GLFW_KEY_T)){
 		playerCharacter->action();
@@ -329,6 +333,7 @@ void PuppetScene::update(Step * _step){
 			drawer->unload();
 		}*/
 	}
+	//std::cout << "update\n";
 }
 
 void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){

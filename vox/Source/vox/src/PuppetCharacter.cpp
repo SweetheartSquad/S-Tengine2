@@ -8,12 +8,12 @@
 #include "Item.h"
 #include "Behaviour.h"
 
-PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex, bool _ai):
+PuppetCharacter::PuppetCharacter(bool _ai, Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable(),
-	ai(ai),
+	ai(_ai),
 	canJump(false),
 	dead(false),
 	deathPending(false),
@@ -110,8 +110,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	jtar.bodyA = torso->body;
 	jtar.bodyB = armRight->body;
 
-	jtar.localAnchorA.Set(0.9 * torso->getCorrectedWidth(), 0.3f * torso->getCorrectedHeight());
-	jtar.localAnchorB.Set(0, 0.6 * armRight->getCorrectedHeight());
+	jtar.localAnchorA.Set(0.9f * torso->getCorrectedWidth(), 0.3f * torso->getCorrectedHeight());
+	jtar.localAnchorB.Set(0, 0.6f * armRight->getCorrectedHeight());
 
 	jtar.collideConnected = false;
 	jtar.enableLimit = true;
@@ -128,8 +128,8 @@ PuppetCharacter::PuppetCharacter(Box2DWorld* _world, int16 _categoryBits, int16 
 	jtal.bodyA = torso->body;
 	jtal.bodyB = armLeft->body;
 
-	jtal.localAnchorA.Set(-0.9 * torso->getCorrectedWidth(), 0.3f * torso->getCorrectedHeight());
-	jtal.localAnchorB.Set(0, 0.6 * armLeft->getCorrectedHeight());
+	jtal.localAnchorA.Set(-0.9f * torso->getCorrectedWidth(), 0.3f * torso->getCorrectedHeight());
+	jtal.localAnchorB.Set(0, 0.6f * armLeft->getCorrectedHeight());
 
 	jtal.collideConnected = false;
 	jtal.enableLimit = true;
@@ -191,7 +191,7 @@ void PuppetCharacter::update(Step* _step){
 		if(itemToPickup != nullptr){
 			pickupItem(itemToPickup);
 		}
-	}else {
+	}else{
 		torso->setTranslationPhysical(torso->body->GetPosition().x, 8.0f, torso->transform->translationVector.z);
 		torso->body->ApplyForce(b2Vec2(-bodAngle * 50.0f, 0), torso->body->GetWorldCenter(), true);
 	}
@@ -199,14 +199,17 @@ void PuppetCharacter::update(Step* _step){
 }
 
 void PuppetCharacter::jump(){
-	float t = torso->body->GetAngle();
-	torso->applyLinearImpulseUp(5000);
-	if(torso->body->GetAngle() > 0){
-		torso->applyLinearImpulseLeft(200*(1-cos(t)));
-	}else{
-		torso->applyLinearImpulseRight(200*(1-cos(t)));
+	if(canJump){
+		std::cout << "jump called for " << &torso << "\n";
+		float t = torso->body->GetAngle();
+		torso->applyLinearImpulseUp(50000*(cos(t)*0.5 + 0.5));
+		if(torso->body->GetAngle() > 0){
+			torso->applyLinearImpulseLeft(200*(1-cos(t)));
+		}else{
+			torso->applyLinearImpulseRight(200*(1-cos(t)));
+		}
 	}
-	canJump = false;
+	//canJump = false;
 }
 
 void PuppetCharacter::action(){

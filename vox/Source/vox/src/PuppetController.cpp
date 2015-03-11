@@ -22,9 +22,7 @@ void PuppetController::update(Step* _step){
 		}
 		if(abs(accelerometer->x - accelerometer->lx) > 10.f 
 			|| abs(accelerometer->y - accelerometer->ly) > 10.f) {
-			if(puppetCharacter->canJump){
-				puppetCharacter->jump();
-			}
+			puppetCharacter->jump();
 		}
 		puppetCharacter->targetRoll = accelerometer->getRoll();
 	}

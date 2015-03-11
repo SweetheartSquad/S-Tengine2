@@ -36,9 +36,9 @@ void BehaviourPatrol::update(Step * _step){
 	}
 
 	//source->rootComponent->applyLinearImpulseRight(150*glm::sign(dif));
-	if(source->canJump){
-		source->jump();
-	}
+
+	source->jump();
+	
 }
 
 void BehaviourPatrol::addWayPoint(glm::vec3 _wayPoint){

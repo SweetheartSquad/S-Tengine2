@@ -11,7 +11,7 @@ public:
 	Accelerometer * accelerometer;
 	PuppetCharacter * puppetCharacter;
 
-	float trendY;
+	//float trendY;
 
 	PuppetController(Accelerometer * _accelerometer, PuppetCharacter * _puppetCharacter);
 	~PuppetController();

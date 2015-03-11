@@ -66,15 +66,25 @@ RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold
 		}
 	}
 	
+	b2Filter sf;
+	sf.categoryBits = PuppetGame::kGROUND;
+
+	b2ChainShape chain;
+	chain.CreateChain(p, _numPoints);
+	body->CreateFixture(&chain, 1.f);
+	body->GetFixtureList()->SetFilterData(sf);
+
+
 	//Weird problem with chain's destructor being called twice
 	//This works but it may be a memory leak
-	b2ChainShape * chain = new b2ChainShape();
+	/*b2ChainShape * chain = new b2ChainShape();
+
 	chain->CreateChain(p, _numPoints);
 	b2Fixture * f = getNewFixture(*chain, 1);
 
 	b2Filter sf;
 	sf.categoryBits = PuppetGame::kGROUND;
-	f->SetFilterData(sf);
+	f->SetFilterData(sf);*/
 }
 
 RandomGround::~RandomGround(){

@@ -5,7 +5,7 @@
 #include <BehaviourAttack.h>
 
 PuppetCharacterCastleChampion::PuppetCharacterCastleChampion(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
-	PuppetCharacter(_world, _categoryBits, _maskBits, _groupIndex, true),
+	PuppetCharacter(true, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {

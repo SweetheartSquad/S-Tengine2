@@ -31,7 +31,7 @@ public:
 	Box2DSprite * face;
 	Box2DSprite * headgear;
 
-	PuppetCharacter(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0, bool _ai = true);
+	PuppetCharacter(bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	~PuppetCharacter();
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;

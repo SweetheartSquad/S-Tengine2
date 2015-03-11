@@ -44,6 +44,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	//playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter4, 10, PuppetGame::kPLAYER));
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(0,0,0), glm::vec3(50,0,0), playerCharacter4, 10));
+	playerCharacter4->ai = true;
 
 	gameCam->addTarget(castle->rootComponent);
 	gameCam->addTarget(catapult->rootComponent);
@@ -53,7 +54,6 @@ RaidTheCastle::~RaidTheCastle(){
 }
 
 void RaidTheCastle::update(Step* _step){
-	PuppetScene::update(_step);
 	if(catapult->ready && !catapult->boulderLoaded){
 		loadCatapult();
 	}
@@ -85,6 +85,7 @@ void RaidTheCastle::update(Step* _step){
 			catapult->boulder = nullptr;
 		}
 	}
+	PuppetScene::update(_step);
 }
 
 void RaidTheCastle::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
