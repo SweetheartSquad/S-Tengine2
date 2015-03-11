@@ -3,11 +3,11 @@
 #include <iostream>
 #include "Game.h"
 
-class TestGame:public Game{
+class GameJamGame:public Game{
 public:
 
-	explicit TestGame(bool _running);
-	~TestGame();
+	explicit GameJamGame(bool _running);
+	~GameJamGame();
 	void update() override;
 	void draw() override;
 };

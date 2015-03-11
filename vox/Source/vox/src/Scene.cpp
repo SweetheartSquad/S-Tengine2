@@ -128,8 +128,6 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 		e->render(matrixStack, renderOptions);
 	}
 	
-	
-
 	GLUtils::checkForError(0,__FILE__,__LINE__);
     //glDisable(GL_POLYGON_OFFSET_FILL);
 }

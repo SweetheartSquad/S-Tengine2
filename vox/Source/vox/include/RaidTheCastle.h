@@ -13,7 +13,7 @@ public:
 	Castle * castle;
 	Catapult * catapult;
 
-	explicit RaidTheCastle(Game * _game);
+	explicit RaidTheCastle(PuppetGame * _game);
 	~RaidTheCastle();
 
 	virtual void update(Step * _step) override;

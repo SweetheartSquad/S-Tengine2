@@ -42,7 +42,7 @@ std::string TextureShaderComponent::getFragmentBodyString(){
 			"		modFrag = mix(modFrag, texture(" + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[i], " + GL_IN_OUT_FRAG_UV + ").rgba, 0.5)" + SEMI_ENDL + 
 			"	}" + ENDL + 
 			"}" + ENDL +
-		"}";
+		"}" + ENDL;
 }
 
 std::string TextureShaderComponent::getOutColorMod(){

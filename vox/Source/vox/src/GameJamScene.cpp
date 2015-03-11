@@ -26,7 +26,7 @@
 #include <Box2DDebugDraw.h>
 #include "Box2DMeshEntity.h"
 #include "MeshFactory.h"
-#include "PerspectiveCamera.h"
+#include "FollowCamera.h"
 #include "MousePerspectiveCamera.h"
 #include "BitmapFont.h"
 #include "CylinderScreen.h"
@@ -45,16 +45,15 @@
 GameJamContactListener cl;
 
 GameJamScene::GameJamScene(Game * _game):
-	Scene(_game),
+	LayeredScene(_game, 3),
 	world(new Box2DWorld(b2Vec2(0, -60))),
 	drawer(new Box2DDebugDraw(this, world)),
 
-	playerCharacter(new TestCharacter(world, false, PLAYER, PROP | NPC, -1)),
+	playerCharacter(new TestCharacter(world, false, PLAYER, PROP | NPC | BOUNDARY, -1)),
 	
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
-	debugDraw(false),
 	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4)),
 	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4)),
 	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4))
@@ -207,59 +206,58 @@ GameJamScene::GameJamScene(Game * _game):
 	}
 	foregroundScreen->mesh->dirty = true;
 	foregroundScreen->setShader(shader, true);
-	addChild(midgroundScreen);
 	
 	for(Box2DSprite * s : items){
-		addChild(s);
+		addChild(s, 1);
 	}
-	addChild(ground);
 	//addChild(foregroundScreen);
 	//addChild(fontM);
-	addChild(backgroundScreen);
-	camera = new PerspectiveCamera(playerCharacter->torso, glm::vec3(0, 7.5, 0), 0, 0);
+	addChild(backgroundScreen, 0);
+	addChild(midgroundScreen, 0);
+	addChild(ground, 0);
+	//addChild(foregroundScreen, 2);
+	camera = new FollowCamera(glm::vec3(0, 0, 0), 0, 0);
+	static_cast<FollowCamera*>(camera)->addTarget(playerCharacter->torso);
+	static_cast<FollowCamera*>(camera)->minimumZoom = 25.f;
 	//camera = new MousePerspectiveCamera();
 	camera->farClip = 1000.f;
 	camera->transform->rotate(90, 0, 1, 0, kWORLD);
 	
-	camera->transform->translate(5.0f, 0.f, 15.0f);
+	camera->transform->translate(5.f, 0.f, 15.f);
 	camera->yaw = 90.0f;
 	camera->pitch = -10.0f;
 
 	world->b2world->SetDebugDraw(drawer);
 	drawer->SetFlags(b2Draw::e_shapeBit);
-	addChild(drawer);
+	addChild(drawer, 1);
 
 	//keep a vector of the characters, for the dialogHandlert
 	std::vector<GameJamCharacter *> sceneCharacters;
 
-	playerCharacter->setShader(shader, true);
-	addChild(playerCharacter);
-	playerCharacter->addToScene(this);
-	playerCharacter->torso->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 
-	Character1 * char1 = new Character1(world, true, NPC);
+	GameJamCharacter * char1 = new Character1(world, true, NPC, NPC | BOUNDARY | PLAYER | PROP, -2);
 	char1->setShader(shader, true);
-	char1->addToScene(this);
-	addChild(char1);
-	char1->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
+	char1->addToLayeredScene(this, 1);
+	addChild(char1, 1);
+	char1->translateComponents(glm::vec3(std::rand()%150, std::rand()%1250, 0));
 
-	Character2 * char2 = new Character2(world, true, NPC);
+	GameJamCharacter * char2 = new Character2(world, true, NPC, NPC | BOUNDARY | PLAYER | PROP, -3);
 	char2->setShader(shader, true);
-	char2->addToScene(this);
-	addChild(char2);
-	char2->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
+	char2->addToLayeredScene(this, 1);
+	addChild(char2, 1);
+	char2->translateComponents(glm::vec3(std::rand()%150, std::rand()%1250, 0));
 
-	Character3 * char3 = new Character3(world, true, NPC);
+	GameJamCharacter * char3 = new Character3(world, true, NPC, NPC | BOUNDARY | PLAYER | PROP, -4);
 	char3->setShader(shader, true);
-	char3->addToScene(this);
-	addChild(char3);
+	char3->addToLayeredScene(this, 1);
+	addChild(char3, 1);
+	char3->translateComponents(glm::vec3(std::rand()%150, std::rand()%1250, 0));
 
-	Character4 * char4 = new Character4(world, true, NPC);
-	char3->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
+	GameJamCharacter * char4 = new Character4(world, true, NPC, NPC | BOUNDARY | PLAYER | PROP, -5);
 	char4->setShader(shader, true);
-	char4->addToScene(this);
-	char4->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
-	addChild(char4);
+	char4->addToLayeredScene(this, 1);
+	char4->translateComponents(glm::vec3(std::rand()%150, std::rand()%1250, 0));
+	addChild(char4, 1);
 
 	sceneCharacters.push_back(char1);
 	sceneCharacters.push_back(char2);
@@ -271,12 +269,12 @@ GameJamScene::GameJamScene(Game * _game):
 
 	playerCharacter->text->setText("Howdy Ya'll, My Name's Baby Legs Hetman");
 	
-	for(unsigned long int i = 0; i < (unsigned long int)std::rand()%5; ++i){
-		RandomCharacter * dude1 = new RandomCharacter(world, true);
+	for(signed long int i = 0; i < 10; ++i){
+		RandomCharacter * dude1 = new RandomCharacter(world, true, NPC, NPC | BOUNDARY | PLAYER | PROP, -(6+i));
 		dude1->setShader(shader, true);
-		dude1->addToScene(this);
-		dude1->translateComponents(glm::vec3(std::rand()%1500, std::rand()%1250, 0));
-		addChild(dude1);
+		dude1->addToLayeredScene(this, 1);
+		dude1->translateComponents(glm::vec3(std::rand()%200, std::rand()%1250, 0));
+		addChild(dude1, 1);
 
 		sceneCharacters.push_back(dude1);
 		
@@ -287,6 +285,10 @@ GameJamScene::GameJamScene(Game * _game):
 			dude1->reactiveBody = false;
 		}
 	}
+	playerCharacter->setShader(shader, true);
+	addChild(playerCharacter, 1);
+	playerCharacter->addToLayeredScene(this, 1);
+	playerCharacter->torso->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 
 	int present = glfwJoystickPresent(GLFW_JOYSTICK_1);
 	std::cout<<"ds";
@@ -416,8 +418,8 @@ void GameJamScene::update(Step * _step){
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
 	}
-	if(keyboard->keyJustUp(GLFW_KEY_F1)){
-		debugDraw = !debugDraw;
+	if(keyboard->keyJustUp(GLFW_KEY_2)){
+		drawer->drawing = !drawer->drawing;
 	}
 	
 	int count;
@@ -428,14 +430,10 @@ void GameJamScene::update(Step * _step){
 		std::cout<<i<<std::string(" ")<<(int)axes[i]<<std::endl;
 	}
 
-	if(keyboard->keyJustUp(GLFW_KEY_F11)){
-		debugDraw = !debugDraw;
-	}
-
 	//DIALOG
 	dialogHandler->update(_step);
 }
 
 void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	Scene::render(_matrixStack, _renderStack);
+	LayeredScene::render(_matrixStack, _renderStack);
 }

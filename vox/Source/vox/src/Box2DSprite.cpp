@@ -30,14 +30,15 @@ float Box2DSprite::getCorrectedWidth(){
 	return width*std::abs(transform->scaleVector.x)*scale*2.f;
 }
 
-void Box2DSprite::createFixture(b2Filter _filter){
+void Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * _userData){
 	b2PolygonShape tShape;
-	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f);
+tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f, _offset, 0.0f);
 
 	b2Fixture * f = body->CreateFixture(&tShape, 1); // physical fixture
 
 	// physical fixture
 	f->SetFilterData(_filter);
+	f->SetUserData(_userData);
 
 	b2Vec2 v1 = tShape.GetVertex(0);
 	b2Vec2 v2 = tShape.GetVertex(1);
@@ -71,12 +72,24 @@ b2PolygonShape Box2DSprite::getFixtureShape(){
 }
 
 Box2DSprite::~Box2DSprite(){
-	if(world != nullptr) {
+	if(world != nullptr && body != nullptr) {
 		world->b2world->DestroyBody(body);
+		body = nullptr;
 	}
 }
 
 void Box2DSprite::update(Step * _step){
 	NodeBox2DBody::update(_step);
 	Sprite::update(_step);
+}
+
+void Box2DSprite::setGroupIndex(int16 _groupIndex){
+	b2Fixture * f = body->GetFixtureList();
+	while(f != nullptr){
+		b2Filter bf = f->GetFilterData();
+		bf.groupIndex = _groupIndex;
+		f->SetFilterData(bf);
+		f->Refilter(); // is this necessary?
+		f = f->GetNext();
+	}
 }

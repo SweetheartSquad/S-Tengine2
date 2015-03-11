@@ -24,11 +24,15 @@ public:
 	Vertex * getBottomRight();
 
 	void setUvs(float _topLeftU, float _topLeftV, float _topRightU, float _topRightV, 
-		float _bottomLeftU, float _bottomLeftV, float _bottomRightU, float _bottomRightV);
+	float _bottomLeftU, float _bottomLeftV, float _bottomRightU, float _bottomRightV);
 	void setUvs(vox::Rectangle _rect);
 	virtual void update(Step* _step) override;
 	void addAnimation(std::string _name, SpriteSheetAnimation * _animation, bool _makeCurrent);
 	void setCurrentAnimation(std::string _name);
 	
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
+
+	virtual void load() override;
+	virtual void unload() override;
+
 };

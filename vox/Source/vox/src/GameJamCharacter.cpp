@@ -6,6 +6,7 @@
 #include "shader/Shader.h"
 #include "Box2DSprite.h"
 #include "Scene.h"
+#include "LayeredScene.h"
 #include "BitmapFont.h"
 
 #include "Texture.h"
@@ -42,6 +43,7 @@ void GameJamCharacter::init(){
 
 	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/pArm.png", 512, 512, true, true),	45,	155));
 	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Arm1.png", 512, 512, true, true),	40,	105)); 
+	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MichaelUpperArm.png", 512, 512, true, true),	55,	205));
 	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MoustacheUA.png", 512, 512, true, true),	55,	205));
 	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/AfroUA.png", 512, 512, true, true),			50,	200));
 	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/HoodieUA.png", 512, 512, true, true),		65,	165));
@@ -64,7 +66,7 @@ void GameJamCharacter::init(){
 	handTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/PonytailHand.png", 512, 512, true, true),	60,	80));
 	
 	upperLegTexPacks.push_back(nullptr);
-	lowerArmTexPacks.push_back(nullptr);
+	upperLegTexPacks.push_back(nullptr);
 	upperLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MichaelUpperLeg.png", 512, 512, true, true), 64,	218));
 	upperLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MoustacheUL.png", 512, 512, true, true),	 70,	215));
 	upperLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/AfroUL.png", 512, 512, true, true),			 60,	200));
@@ -72,7 +74,7 @@ void GameJamCharacter::init(){
 	upperLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/PonytailUL.png", 512, 512, true, true),		 80,	185));
 	
 	lowerLegTexPacks.push_back(nullptr);
-	lowerArmTexPacks.push_back(nullptr);
+	lowerLegTexPacks.push_back(nullptr);
 	lowerLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MichaelLowerLeg.png", 512, 512, true, true), 135,	281));
 	lowerLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MoustacheLL.png", 512, 512, true, true),	 135,	285));
 	lowerLegTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/AfroLL.png", 512, 512, true, true),			 105,	255));
@@ -100,8 +102,6 @@ GameJamCharacter::GameJamCharacter(Box2DWorld * _world, int16 _categoryBits, int
 	rightLowerLeg(nullptr),
 	ai(ai)
 {
-	
-
 	ratioX_neck_to_torso = 0.0f;
 	ratioY_neck_to_torso = 0.8f;
 	ratioX_torso_to_neck = 0.0f;
@@ -148,6 +148,7 @@ GameJamCharacter::GameJamCharacter(Box2DWorld * _world, int16 _categoryBits, int
 	components.push_back(&rightUpperArm);
 	components.push_back(&rightLowerArm);
 	components.push_back(&rightHand);
+	rootComponent = torso;
 
 }
 
@@ -427,7 +428,7 @@ void GameJamCharacter::setShader(Shader * _shader, bool _configureDefaultVertexA
 	text->setShader(_shader ,_configureDefaultVertexAttributes);
 }
 
-void GameJamCharacter::addToScene(Scene * _scene){
-	Box2DSuperSprite::addToScene(_scene);
-	_scene->addChild(text);
+void GameJamCharacter::addToLayeredScene(LayeredScene * _scene, unsigned long int _layer){
+	Box2DSuperSprite::addToLayeredScene(_scene, _layer);
+	_scene->addChild(text, _layer);
 }

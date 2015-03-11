@@ -22,8 +22,8 @@ BehaviourManager::~BehaviourManager(){
 void BehaviourManager::update(Step * _step){
 	for(unsigned long int i = 0; i < behaviours.size(); ++i){
 		if(behaviours.at(i)->active){
-			std::cout << behaviours.at(i)->targets.size() << std::endl;
-			behaviours.at(i)->functionCallback(target);
+			//std::cout << behaviours.at(i)->targets.size() << std::endl;
+			behaviours.at(i)->update(_step);
 		}
 	}
 }
@@ -38,7 +38,7 @@ void BehaviourManager::addBehaviour(Behaviour * _behaviour){
 	sensorTorso->SetSensor(true);
 	sensorTorso->SetUserData(_behaviour);
 	b2Filter f;
-	f.categoryBits = PuppetScene::kBEHAVIOUR;
+	f.categoryBits = PuppetGame::kBEHAVIOUR;
 	f.maskBits = _behaviour->filter;
 	f.groupIndex = target->groupIndex;
 	sensorTorso->SetFilterData(f);

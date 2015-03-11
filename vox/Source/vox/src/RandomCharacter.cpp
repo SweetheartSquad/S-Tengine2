@@ -5,36 +5,49 @@
 #include "Texture.h"
 #include "CharacterComponent.h"
 
-RandomCharacter::RandomCharacter(Box2DWorld * _world, bool _ai):
-	GameJamCharacter(_world, _ai),
+RandomCharacter::RandomCharacter(Box2DWorld * _world, bool _ai, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+	GameJamCharacter(_world, _categoryBits, _maskBits, _groupIndex, _ai),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()
 {
 	texture_packs character = (texture_packs)(std::rand()%torsoTexPacks.size());
-	torso	      = new CharacterComponent(componentScale, torsoTexPacks[character]->width,		torsoTexPacks[character]->height,		torsoTexPacks[character]->texture, _world, b2_dynamicBody, false);
+	torso	      = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), torsoTexPacks[character]->width,		torsoTexPacks[character]->height,		torsoTexPacks[character]->texture, componentScale);
 	character = (texture_packs)(std::rand()%headTexPacks.size());
-	head		  = new CharacterComponent(componentScale, headTexPacks[character]->width,		headTexPacks[character]->height,		headTexPacks[character]->texture, _world, b2_dynamicBody, false);
+	head		  = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), headTexPacks[character]->width,		headTexPacks[character]->height,		headTexPacks[character]->texture, componentScale);
 	character = (texture_packs)(std::rand()%upperArmTexPacks.size());
-	leftUpperArm  = new CharacterComponent(componentScale, upperArmTexPacks[character]->width,	upperArmTexPacks[character]->height,	upperArmTexPacks[character]->texture,_world, b2_dynamicBody, false);
-	character = (texture_packs)(std::rand()%lowerArmTexPacks.size());
-	leftLowerArm  = new CharacterComponent(componentScale, lowerArmTexPacks[character]->width,	lowerArmTexPacks[character]->height,	lowerArmTexPacks[character]->texture,_world, b2_dynamicBody, false);
+	leftUpperArm  = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), upperArmTexPacks[character]->width,	upperArmTexPacks[character]->height,	upperArmTexPacks[character]->texture, componentScale);
+	do{
+		character = (texture_packs)(std::rand()%lowerArmTexPacks.size());
+	}while(character == kPUPPET || character == kKNIGHT );
+	leftLowerArm  = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), lowerArmTexPacks[character]->width,	lowerArmTexPacks[character]->height,	lowerArmTexPacks[character]->texture, componentScale);
 	character = (texture_packs)(std::rand()%handTexPacks.size());
-	leftHand	  = new CharacterComponent(componentScale, handTexPacks[character]->width,		handTexPacks[character]->height,		handTexPacks[character]->texture,_world, b2_dynamicBody, false);
+	leftHand	  = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), handTexPacks[character]->width,		handTexPacks[character]->height,		handTexPacks[character]->texture, componentScale);
 	character = (texture_packs)(std::rand()%upperArmTexPacks.size());
-	rightUpperArm = new CharacterComponent(componentScale, upperArmTexPacks[character]->width,	upperArmTexPacks[character]->height,	upperArmTexPacks[character]->texture,_world, b2_dynamicBody, false);
-	character = (texture_packs)(std::rand()%lowerArmTexPacks.size());
-	rightLowerArm = new CharacterComponent(componentScale, lowerArmTexPacks[character]->width,	lowerArmTexPacks[character]->height,	lowerArmTexPacks[character]->texture,_world, b2_dynamicBody, false);
+	rightUpperArm = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), upperArmTexPacks[character]->width,	upperArmTexPacks[character]->height,	upperArmTexPacks[character]->texture, componentScale);
+	do{
+		character = (texture_packs)(std::rand()%lowerArmTexPacks.size());
+	}while(character == kPUPPET || character == kKNIGHT );
+	rightLowerArm = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), lowerArmTexPacks[character]->width,	lowerArmTexPacks[character]->height,	lowerArmTexPacks[character]->texture, componentScale);
 	character = (texture_packs)(std::rand()%handTexPacks.size());
-	rightHand	  = new CharacterComponent(componentScale, handTexPacks[character]->width,		handTexPacks[character]->height,		handTexPacks[character]->texture,_world, b2_dynamicBody, false);
-	character = (texture_packs)(std::rand()%upperLegTexPacks.size());
-	leftUpperLeg  = new CharacterComponent(componentScale, upperLegTexPacks[character]->width,	upperLegTexPacks[character]->height,	upperLegTexPacks[character]->texture,_world, b2_dynamicBody, false);
-	character = (texture_packs)(std::rand()%lowerLegTexPacks.size());
-	leftLowerLeg  = new CharacterComponent(componentScale, lowerLegTexPacks[character]->width,	lowerLegTexPacks[character]->height,	lowerLegTexPacks[character]->texture,_world, b2_dynamicBody, false);
-	character = (texture_packs)(std::rand()%upperLegTexPacks.size());
-	rightUpperLeg = new CharacterComponent(componentScale, upperLegTexPacks[character]->width,	upperLegTexPacks[character]->height,	upperLegTexPacks[character]->texture,_world, b2_dynamicBody, false);
-	character = (texture_packs)(std::rand()%lowerLegTexPacks.size());
-	rightLowerLeg = new CharacterComponent(componentScale, lowerLegTexPacks[character]->width,	lowerLegTexPacks[character]->height,	lowerLegTexPacks[character]->texture,_world, b2_dynamicBody, false);
+	rightHand	  = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), handTexPacks[character]->width,		handTexPacks[character]->height,		handTexPacks[character]->texture, componentScale);
+	
+	do{
+		character = (texture_packs)(std::rand()%upperLegTexPacks.size());
+	}while(character == kPUPPET || character == kKNIGHT );
+	leftUpperLeg  = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), upperLegTexPacks[character]->width,	upperLegTexPacks[character]->height,	upperLegTexPacks[character]->texture, componentScale);
+	do{
+		character = (texture_packs)(std::rand()%upperLegTexPacks.size());
+	}while(character == kPUPPET || character == kKNIGHT );
+	leftLowerLeg  = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), lowerLegTexPacks[character]->width,	lowerLegTexPacks[character]->height,	lowerLegTexPacks[character]->texture, componentScale);
+	do{
+		character = (texture_packs)(std::rand()%upperLegTexPacks.size());
+	}while(character == kPUPPET || character == kKNIGHT );
+	rightUpperLeg = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), upperLegTexPacks[character]->width,	upperLegTexPacks[character]->height,	upperLegTexPacks[character]->texture, componentScale);
+	do{
+		character = (texture_packs)(std::rand()%lowerLegTexPacks.size());
+	}while(character == kPUPPET || character == kKNIGHT );
+	rightLowerLeg = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), lowerLegTexPacks[character]->width,	lowerLegTexPacks[character]->height,	lowerLegTexPacks[character]->texture, componentScale);
 
 	leftUpperLeg->transform->scale(-1, 1, 1);
 	leftLowerLeg->transform->scale(-1, 1, 1); 
