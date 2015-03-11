@@ -121,7 +121,7 @@ void PuppetContactListener::playerItemContact(b2Contact * _contact, b2Fixture * 
 		// do some sort of damage thing here
 		p->torso->applyLinearImpulseUp(500);
 		std::cout << "damage?" << std::endl;
-	}else if(p->heldItem == nullptr && !item->held){
+	}else if(p->heldItem == nullptr && !item->held && !item->destroy){
 		p->itemToPickup = item;
 		// multiple players might be able to pick it up in one update
 	}

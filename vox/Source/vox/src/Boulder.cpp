@@ -43,6 +43,7 @@ Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16
 }
 
 Boulder::~Boulder(){
+
 }
 
 void Boulder::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
