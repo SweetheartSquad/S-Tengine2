@@ -28,14 +28,9 @@ public:
 	* @return The view matrix of the camera
 	*/
 	glm::mat4 getViewMatrix() override;
-
-	/**
-	* @return The projection matrix of the camera 
-	*/
-	glm::mat4 getProjectionMatrix() override;
 	
-
 	void addTarget(ShiftKiddie * _target);
+	void removeTarget(ShiftKiddie * _target);
 
 	// Things to follow
 	std::vector<ShiftKiddie *> targets;
@@ -52,4 +47,3 @@ public:
 	// Minimum zoom
 	float minimumZoom;
 };
-//  zoom = max(max(w/width, h/height) + 0.1, 10) + zoomModifier;

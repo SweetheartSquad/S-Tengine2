@@ -367,16 +367,10 @@ void PuppetScene::destroyItem(Item * _item){
 			}
 		}
 	}
-	for(signed long int j = gameCam->targets.size()-1; j >= 0; --j){
-		if(gameCam->targets.at(j) == _item){
-				gameCam->targets.erase(gameCam->targets.begin() + j);
-		}else{
-			for(signed long int k = _item->components.size()-1; k >= 0; --k){
-				if(gameCam->targets.at(j) == *_item->components.at(k)){
-					gameCam->targets.erase(gameCam->targets.begin() + j);
-				}
-			}
-		}
+	// remove from follow cam
+	gameCam->removeTarget(_item);
+	for(signed long int j = _item->components.size()-1; j >= 0; --j){
+		gameCam->removeTarget(*_item->components.at(j));
 	}
 
 	//maybe use something like children.erase(std::remove(children.begin(), children.end(), item), children.end());

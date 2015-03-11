@@ -93,12 +93,13 @@ glm::mat4 FollowCamera::getViewMatrix(){
 		);
 }
 
-glm::mat4 FollowCamera::getProjectionMatrix(){
-	Dimension screenDimensions = vox::getScreenDimensions();
-	// Projection matrix : 45° Field of View, ratio, near-far clip : 0.1 unit <-> 100 units
-	return glm::perspective(fieldOfView, static_cast<float>(screenDimensions.width)/static_cast<float>(screenDimensions.height), nearClip, farClip);
-}
-
 void FollowCamera::addTarget(ShiftKiddie * _target){
 	targets.push_back(_target);
+}
+void FollowCamera::removeTarget(ShiftKiddie * _target){
+	for(signed long int i = targets.size()-1; i >= 0; --i){
+		if(targets.at(i) == _target){
+			targets.erase(targets.begin() + i);
+		}
+	}
 }
