@@ -96,10 +96,10 @@ void Catapult::update(Step * _step){
 	
 	if(!ready){
 		if(firing){
-			if(angle <= glm::radians(-70.f)){
+			if(angle <= glm::radians(-45.f)){
 				fireBoulder = true;
 			}
-			if(angle <= glm::radians(-80.f)){
+			if(angle <= glm::radians(-85.f)){
 				arm->body->SetAngularVelocity(0);
 				firing = false;
 			}
@@ -119,7 +119,7 @@ void Catapult::load(){
 
 void Catapult::fireCatapult(){
 	b2RevoluteJoint * j = (b2RevoluteJoint *)base->body->GetJointList()->joint;
-	arm->body->SetAngularVelocity(-50);
+	arm->body->SetAngularVelocity(-20);
 	firing = true;
 	ready = false;
 }

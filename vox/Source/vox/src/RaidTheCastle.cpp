@@ -24,7 +24,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	castle->addToLayeredScene(this, 0);
 	addChild(castle, 0);
 
-	castle->translateComponents(glm::vec3(50, 0, 0));
+	castle->translateComponents(glm::vec3(150, 0, 0));
 
 	catapult = new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kBOUNDARY | PuppetGame::kPLAYER, -10);
 	catapult->setShader(shader, true);
@@ -36,6 +36,9 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	loadCatapult();
 
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter4, 10, PuppetGame::kPLAYER));
+
+	gameCam->addTarget(castle->rootComponent);
+	gameCam->addTarget(catapult->rootComponent);
 }
 
 RaidTheCastle::~RaidTheCastle(){

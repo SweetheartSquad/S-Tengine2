@@ -51,6 +51,10 @@ void Boulder::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack
 
 void Boulder::update(Step* _step){
 	Item::update(_step);
+
+	if(transform->translationVector.x > 200 || transform->translationVector.y < 0){
+		destroy = true;
+	}
 }
 
 void Boulder::unload(){
