@@ -37,6 +37,10 @@ public:
 	static TextureSampler * knightYellowTorso;
 	static TextureSampler * knightYellowArm;
 	static TextureSampler * knightYellowHelmet;
+
+	static TextureSampler * castleChampionTorso;
+	static TextureSampler * castleChampionArm;
+	static TextureSampler * castleChampionHelmet;
 	
 	static void init();
 	//RaidTheCastleResourceManager();

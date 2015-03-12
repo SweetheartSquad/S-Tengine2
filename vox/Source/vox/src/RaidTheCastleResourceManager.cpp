@@ -25,6 +25,10 @@ TextureSampler * RaidTheCastleResourceManager::knightYellowTorso	= new TextureSa
 TextureSampler * RaidTheCastleResourceManager::knightYellowArm		= new TextureSampler(new Texture("../assets/hurly-burly/NormalKnightAssets/yellowKnightArm.png", 1024, 1024, true, true), 92, 327);
 TextureSampler * RaidTheCastleResourceManager::knightYellowHelmet	= new TextureSampler(new Texture("../assets/hurly-burly/NormalKnightAssets/yellowKnightHelmet.png", 1024, 1024, true, true), 233, 254);
 
+TextureSampler * RaidTheCastleResourceManager::castleChampionTorso	= new TextureSampler(new Texture("../assets/hurly-burly/CastleChampionAssets/CCBody.png", 1024, 1024, true, true), 275, 806);
+TextureSampler * RaidTheCastleResourceManager::castleChampionArm	= new TextureSampler(new Texture("../assets/hurly-burly/CastleChampionAssets/CCArm.png", 1024, 1024, true, true), 67, 200);
+TextureSampler * RaidTheCastleResourceManager::castleChampionHelmet	= new TextureSampler(new Texture("../assets/hurly-burly/CastleChampionAssets/CCHelmet.png", 1024, 1024, true, true), 229, 295);
+
 
 /*
 TextureSampler * RaidTheCastleResourceManager::goldenBreastPlateStick = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/BreastplateStick1.png", 512, 512, true, true),	145, 405); 
@@ -56,4 +60,8 @@ void RaidTheCastleResourceManager::init(){
 	resources.push_back(knightYellowTorso);
 	resources.push_back(knightYellowArm);
 	resources.push_back(knightYellowHelmet);
+	
+	resources.push_back(castleChampionTorso);
+	resources.push_back(castleChampionArm);
+	resources.push_back(castleChampionHelmet);
 }

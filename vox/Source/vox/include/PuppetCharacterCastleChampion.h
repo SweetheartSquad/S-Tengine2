@@ -11,4 +11,6 @@ public:
 	~PuppetCharacterCastleChampion();
 
 	void action() override;
+
+	void update(Step * _step) override;
 };
