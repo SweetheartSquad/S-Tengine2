@@ -19,7 +19,7 @@ public:
 	float targetRoll;
 	float score;
 
-	unsigned int health;
+	float health;
 
 	Box2DSprite * head;
 	Box2DSprite * torso;
@@ -31,7 +31,7 @@ public:
 	Box2DSprite * face;
 	Box2DSprite * headgear;
 
-	PuppetCharacter(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0, bool _ai = true);
+	PuppetCharacter(bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	~PuppetCharacter();
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
@@ -39,10 +39,10 @@ public:
 	void unload() override;
 	void load() override;
 
-	void jump();
+	virtual void jump();
 	//Called when the controller is thrust forward
-	void action();
-	void die();
+	virtual void action();
+	virtual void die();
 
 	Item * itemToPickup;
 	Item * heldItem;

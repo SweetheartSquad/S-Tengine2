@@ -9,7 +9,7 @@
 #include <PuppetGame.h>
 
 
-RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold, Texture * _texture):
+RandomGround::RandomGround(Box2DWorld * _world, unsigned long int _numPoints, float _threshold, Texture * _texture, float _width, float _height):
 	 Box2DMeshEntity(_world, new MeshInterface(GL_QUADS, GL_STATIC_DRAW), b2_staticBody, false),
 	 NodeTransformable(new Transform()),
 	 NodeRenderable(),
@@ -47,6 +47,11 @@ RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold
 		maxY = std::max(v.y, maxY);
 	}
 
+	for(unsigned long int i = 0; i < _numPoints; ++i){
+		p[i].x *= _width;
+		p[i].y *= _height;
+	}
+
 	for(auto i = 1; i < _numPoints - 1; ++i){
 		if(i % 2 == 0){
 			mesh->pushVert(Vertex(glm::vec3(p[i].x, -0.1, 1), glm::vec2(p[i].x / static_cast<float>(_numPoints), 0.0f)));
@@ -66,15 +71,32 @@ RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold
 		}
 	}
 	
+	b2Filter sf;
+	sf.categoryBits = PuppetGame::kGROUND;
+	b2ChainShape chain;
+	chain.CreateChain(p, _numPoints);
+
+	b2FixtureDef fd;
+	fd.shape = &chain;
+	fd.filter = sf;
+	fd.density = 1;
+	fd.friction = 1;
+	fd.restitution = 0;
+	fd.userData = this;
+	fd.isSensor = false;
+	body->CreateFixture(&fd);
+
+
 	//Weird problem with chain's destructor being called twice
 	//This works but it may be a memory leak
-	b2ChainShape * chain = new b2ChainShape();
+	/*b2ChainShape * chain = new b2ChainShape();
+
 	chain->CreateChain(p, _numPoints);
 	b2Fixture * f = getNewFixture(*chain, 1);
 
 	b2Filter sf;
 	sf.categoryBits = PuppetGame::kGROUND;
-	f->SetFilterData(sf);
+	f->SetFilterData(sf);*/
 }
 
 RandomGround::~RandomGround(){

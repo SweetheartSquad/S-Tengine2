@@ -11,8 +11,8 @@
 #include <glm/gtc/matrix_transform.inl>
 
 
-DepthMapShader::DepthMapShader(bool _autoRelease)
-	:Shader(getVertString(), getFragString(), _autoRelease)
+DepthMapShader::DepthMapShader(bool _autoRelease) :
+	Shader(getVertString(), getFragString(), _autoRelease)
 {
 }
 

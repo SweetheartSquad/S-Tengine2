@@ -32,13 +32,23 @@ float Box2DSprite::getCorrectedWidth(){
 
 void Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * _userData){
 	b2PolygonShape tShape;
-tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f, _offset, 0.0f);
+	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f, _offset, 0.0f);
 
-	b2Fixture * f = body->CreateFixture(&tShape, 1); // physical fixture
+	b2FixtureDef fd;
+	fd.shape = &tShape;
+	fd.restitution = 0;
+	fd.friction = 0.5;
+	fd.isSensor = false;
+	fd.density = 1;
+	fd.userData = _userData;
+	fd.filter = _filter;
+
+	b2Fixture * f = body->CreateFixture(&fd);
 
 	// physical fixture
-	f->SetFilterData(_filter);
-	f->SetUserData(_userData);
+	//b2Fixture * f = body->CreateFixture(&tShape, 1); // physical fixture
+	//..f->SetFilterData(_filter);
+	//f->SetUserData(_userData);
 
 	b2Vec2 v1 = tShape.GetVertex(0);
 	b2Vec2 v2 = tShape.GetVertex(1);
@@ -65,6 +75,8 @@ tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(hei
 	mesh->vertices.at(0).v = height/mag;
 }
 
+
+// shouldn't this dereference the fixture and just return its shape?
 b2PolygonShape Box2DSprite::getFixtureShape(){
 	b2PolygonShape tShape;
 	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f);

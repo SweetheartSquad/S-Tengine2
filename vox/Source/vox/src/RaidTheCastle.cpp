@@ -7,6 +7,7 @@
 #include "FollowCamera.h"
 #include "Behaviour.h"
 #include "BehaviourFollow.h"
+#include <BehaviourPatrol.h>
 #include "Boulder.h"
 #include "Catapult.h"
 #include "Box2DSprite.h"
@@ -17,22 +18,23 @@
 #include "shader/BaseComponentShader.h"
 #include "keyboard.h"
 #include <Texture.h>
+#include <PuppetCharacterCastleChampion.h>
 
 #include <glfw\glfw3.h>
 
 
 RaidTheCastle::RaidTheCastle(PuppetGame* _game):
-	PuppetScene(_game, 10)
+	PuppetScene(_game, 10),
+	castle(new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30)),
+	catapult(new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kBOUNDARY | PuppetGame::kPLAYER, -10)),
+	champion(new PuppetCharacterCastleChampion(world, PuppetGame::kPLAYER, -1, -20))
 {
-	castle = new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30);
-	
 	castle->setShader(shader, true);
 	castle->addToLayeredScene(this, 0);
 	addChild(castle, 0);
 
 	castle->translateComponents(glm::vec3(150, 0, 0));
 
-	catapult = new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kBOUNDARY | PuppetGame::kPLAYER, -10);
 	catapult->setShader(shader, true);
 	catapult->addToLayeredScene(this, 1);
 	addChild(catapult, 1);
@@ -41,7 +43,15 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	loadCatapult();
 
-	playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter4, 10, PuppetGame::kPLAYER));
+	champion->setShader(shader, true);
+	addChild(champion, 0);
+	champion->addToLayeredScene(this, 1);
+	champion->head->maxVelocity = b2Vec2(10, 10);
+	champion->translateComponents(glm::vec3(100,15,0));
+
+	//playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter4, 10, PuppetGame::kPLAYER));
+	//playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
+	//playerCharacter4->ai = true;
 
 	gameCam->addTarget(castle->rootComponent);
 	gameCam->addTarget(catapult->rootComponent);
@@ -51,7 +61,6 @@ RaidTheCastle::~RaidTheCastle(){
 }
 
 void RaidTheCastle::update(Step* _step){
-	PuppetScene::update(_step);
 	if(catapult->ready && !catapult->boulderLoaded){
 		loadCatapult();
 	}
@@ -60,9 +69,9 @@ void RaidTheCastle::update(Step* _step){
 		//playerCharacter->behaviourManager.behaviours.at(0)->active = false;
 	}
 
-	if(keyboard->keyDown(GLFW_KEY_F)){
+	/*if(keyboard->keyDown(GLFW_KEY_F)){
 		catapult->fireCatapult();
-	}
+	}*/
 	if(catapult->fireBoulder){
 		catapult->fireBoulder = false;
 		catapult->boulderLoaded = false;
@@ -83,6 +92,7 @@ void RaidTheCastle::update(Step* _step){
 			catapult->boulder = nullptr;
 		}
 	}
+	PuppetScene::update(_step);
 }
 
 void RaidTheCastle::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){

@@ -8,8 +8,8 @@ public:
 	bool ai;
 	static void init();
 	static enum texture_packs{
-		kPUPPET,
-		kKNIGHT,
+		//kPUPPET,
+		//kKNIGHT,
 		kMICHAEL,
 		kMOUSTACHE,
 		kAFRO,

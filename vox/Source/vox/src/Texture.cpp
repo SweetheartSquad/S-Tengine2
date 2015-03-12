@@ -13,7 +13,7 @@ Texture::Texture(const char* _src, unsigned long int _width, unsigned long int _
 	data(nullptr),
 	channels(nullptr)
 {
-	load();
+
 }
 
 Texture::~Texture(){

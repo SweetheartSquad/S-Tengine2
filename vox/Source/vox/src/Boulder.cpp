@@ -16,10 +16,8 @@ Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16
 {
 	componentScale = 0.008f;
 
-	if(boulderTex == nullptr){
-		boulderTex = new Texture("../assets/structure components/catapult/Boulder1.png", 512, 512, true, true);
-	}if(boulderTexSampler == nullptr){
-		boulderTexSampler = new TextureSampler(boulderTex, 108, 103);
+	if(boulderTexSampler == nullptr){
+		boulderTexSampler = RaidTheCastleResourceManager::boulder;
 	}
 	
 	boulder = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), boulderTexSampler->width, boulderTexSampler->height, boulderTexSampler->texture, componentScale);
@@ -43,6 +41,7 @@ Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16
 }
 
 Boulder::~Boulder(){
+
 }
 
 void Boulder::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){

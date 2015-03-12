@@ -36,6 +36,7 @@
 #include <RandomGround.h>
 
 #include "RaidTheCastle.h"
+#include <PuppetResourceManager.h>
 
 PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	LayeredScene(_game, 3),
@@ -45,16 +46,16 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	cl(new RaidTheCastleContactListener(this)),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
-	playerCharacter(new PuppetCharacter(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -1, false)),
-	playerCharacter2(new PuppetCharacter(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -2, false)),
-	playerCharacter3(new PuppetCharacter(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -3, false)),
-	playerCharacter4(new PuppetCharacter(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -4, false)),
+	playerCharacter(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -1)),
+	playerCharacter2(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -2)),
+	playerCharacter3(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -3)),
+	playerCharacter4(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -4)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, false)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
 	mouseCam(false),
-	randomGround(new RandomGround(world, 100, 0.4f))
+	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::ground1, 1, 1))
 {
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new TextureShaderComponent());
@@ -64,7 +65,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	background->setShader(shader, true);
 	background->transform->translate(0.0f, 25.f, -10.0f);
 	background->transform->scale(125, 25, 1);
-	background->mesh->pushTexture2D(new Texture("../assets/hurly-burly/Sky.png", 1024, 1024, true, true));
+	background->mesh->pushTexture2D(PuppetResourceManager::sky);
 	background->mesh->uvEdgeMode = GL_REPEAT;
 	background->mesh->dirty = true;
 
@@ -83,7 +84,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	ground->transform->rotate(90.f, 0, 0, 1, kOBJECT);
 	ground->transform->scale(250, 250, 1);
 	ground->mesh->uvEdgeMode = GL_REPEAT;
-	ground->mesh->pushTexture2D(new Texture("../assets/hurly-burly/StageFloor.png", 1024, 1024, true, true));
+	ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
 	ground->body->SetTransform(b2Vec2(0, -250), 0);
 	ground->mesh->vertices.at(0).z -= 250;
 	ground->mesh->vertices.at(1).z -= 250;
@@ -142,32 +143,25 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	addChild(playerCharacter, 1);
 	playerCharacter->addToLayeredScene(this, 1);
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter->translateComponents(glm::vec3(0.0f, 5.f, 0.f));
+	playerCharacter->translateComponents(glm::vec3(0.0f, 15.f, 0.f));
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
 	playerCharacter2->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter2->translateComponents(glm::vec3(5.0f, 5.f, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(10.0f, 15.f, 0.f));
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
 	playerCharacter3->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter3->translateComponents(glm::vec3(10.0f, 5.f, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(20.0f, 15.f, 0.f));
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
 	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter4->translateComponents(glm::vec3(15.0f, 5.f, 0.f));
-
-	michael = new TestCharacter(world, false, PuppetGame::kPLAYER, PuppetGame::kSTRUCTURE | /*PuppetGame::kITEM | */PuppetGame::kPLAYER, -5);
-	michael->setShader(shader, true);
-	addChild(michael, 1);
-	michael->addToLayeredScene(this, 1);
-
-	michael->translateComponents(glm::vec3(1,50,0));
+	playerCharacter4->translateComponents(glm::vec3(30.0f, 15.f, 0.f));
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");
@@ -188,9 +182,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	puppetController2 = new PuppetController(acc2, playerCharacter2);
 	puppetController3 = new PuppetController(acc3, playerCharacter3);
 	puppetController4 = new PuppetController(acc4, playerCharacter4);
-
-
-	
 	
 	
 	world->b2world->SetDebugDraw(drawer);
@@ -202,9 +193,8 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	addChild(drawer, 2);
 
 	randomGround->setShader(shader, true);
-	randomGround->setTranslationPhysical(20.0f, 0.0f, 0.0f);
+	randomGround->setTranslationPhysical(0.0f, 0.0f, 0.0f);
 	//randomGround->mesh->uvEdgeMode = GL_REPEAT;
-	randomGround->mesh->pushTexture2D(new Texture("../assets/paper.png", 512, 512, true, true));
 
 	world->addToWorld(randomGround);
 	addChild(randomGround, 1);
@@ -222,7 +212,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	gameCam->addTarget(playerCharacter2->torso);
 	gameCam->addTarget(playerCharacter3->torso);
 	gameCam->addTarget(playerCharacter4->torso);
-	gameCam->addTarget(michael->torso);
 	gameCam->farClip = 1000.f;
 	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
 	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
@@ -266,6 +255,7 @@ void PuppetScene::unload(){
 }
 
 void PuppetScene::update(Step * _step){
+	Scene::update(_step);
 	
 	// destroy used up items
 	for(signed long int i = items.size()-1; i >= 0; --i){
@@ -276,8 +266,14 @@ void PuppetScene::update(Step * _step){
 			items.erase(items.begin() + i);
 		}
 	}
+	
 
-	Scene::update(_step);
+	arduino->update(_step);
+	puppetController->update(_step);
+	puppetController2->update(_step);
+	puppetController3->update(_step);
+	puppetController4->update(_step);
+
 	world->update(_step);
 
 	if(this == game->currentScene){
@@ -290,14 +286,10 @@ void PuppetScene::update(Step * _step){
 			}
 		}
 	}
-	arduino->update(_step);
-	puppetController->update(_step);
-	puppetController2->update(_step);
-	puppetController3->update(_step);
-	puppetController4->update(_step);
 
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
-		if(playerCharacter->torso->body->GetPosition().y < 8){
+		playerCharacter->jump();
+		/*if(playerCharacter->torso->body->GetPosition().y < 8){
 			float t = playerCharacter->torso->body->GetAngle();
 			playerCharacter->torso->applyLinearImpulseUp(50*(1-sin(t)));
 			if(playerCharacter->torso->body->GetAngle() > 0){
@@ -305,7 +297,7 @@ void PuppetScene::update(Step * _step){
 			}else{
 				playerCharacter->torso->applyLinearImpulseRight(150*(1-cos(t)));
 			}
-		}
+		}*/
 	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_1)){
@@ -318,16 +310,18 @@ void PuppetScene::update(Step * _step){
 	}
 
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		playerCharacter->head->applyLinearImpulseLeft(25);
+		playerCharacter->targetRoll = glm::radians(-45.f);
+		/*playerCharacter->head->applyLinearImpulseLeft(25);
 		if(playerCharacter->transform->scaleVector.x < 0){
 			playerCharacter->transform->scaleX(-1);
-		}
+		}*/
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		playerCharacter->head->applyLinearImpulseRight(25);
+		playerCharacter->targetRoll = glm::radians(45.f);
+		/*playerCharacter->head->applyLinearImpulseRight(25);
 		if(playerCharacter->transform->scaleVector.x > 0){
 			playerCharacter->transform->scaleX(-1);
-		}
+		}*/
 	}
 	if(keyboard->keyJustDown(GLFW_KEY_T)){
 		playerCharacter->action();
@@ -357,6 +351,7 @@ void PuppetScene::update(Step * _step){
 			drawer->unload();
 		}*/
 	}
+	//std::cout << "update\n";
 }
 
 void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){

@@ -7,7 +7,6 @@
 Game * game;
 
 int main(void){
-
 	vox::initialize("Vox");
 	
 	game = new PuppetGame(true);

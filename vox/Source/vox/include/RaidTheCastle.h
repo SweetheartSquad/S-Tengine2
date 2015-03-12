@@ -5,6 +5,7 @@
 class MeshEntity;
 class Castle;
 class Catapult;
+class PuppetCharacterCastleChampion;
 
 class RaidTheCastle : public PuppetScene{
 public:
@@ -12,6 +13,7 @@ public:
 	MeshEntity * sky;
 	Castle * castle;
 	Catapult * catapult;
+	PuppetCharacterCastleChampion * champion;
 
 	explicit RaidTheCastle(PuppetGame * _game);
 	~RaidTheCastle();

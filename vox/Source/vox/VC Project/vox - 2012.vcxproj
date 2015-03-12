@@ -24,8 +24,10 @@
     <ClCompile Include="..\src\Arduino.cpp" />
     <ClCompile Include="..\src\BaseScene.cpp" />
     <ClCompile Include="..\src\Behaviour.cpp" />
+    <ClCompile Include="..\src\BehaviourAttack.cpp" />
     <ClCompile Include="..\src\BehaviourFollow.cpp" />
     <ClCompile Include="..\src\BehaviourManager.cpp" />
+    <ClCompile Include="..\src\BehaviourPatrol.cpp" />
     <ClCompile Include="..\src\BitmapFont.cpp" />
     <ClCompile Include="..\src\Boulder.cpp" />
     <ClCompile Include="..\src\Box2DDebugDraw.cpp" />
@@ -104,17 +106,21 @@
     <ClCompile Include="..\src\poly2Tri\sweep\sweep.cc" />
     <ClCompile Include="..\src\poly2Tri\sweep\sweep_context.cc" />
     <ClCompile Include="..\src\PuppetCharacter.cpp" />
+    <ClCompile Include="..\src\PuppetCharacterCastleChampion.cpp" />
     <ClCompile Include="..\src\PuppetContactListener.cpp" />
     <ClCompile Include="..\src\PuppetController.cpp" />
+    <ClCompile Include="..\src\PuppetResourceManager.cpp" />
     <ClCompile Include="..\src\PuppetScene.cpp" />
     <ClCompile Include="..\src\RaidTheCastle.cpp" />
     <ClCompile Include="..\src\RaidTheCastleContactListener.cpp" />
+    <ClCompile Include="..\src\RaidTheCastleResourceManager.cpp" />
     <ClCompile Include="..\src\RandomCharacter.cpp" />
     <ClCompile Include="..\src\RandomGround.cpp" />
     <ClCompile Include="..\src\Rectangle.cpp" />
     <ClCompile Include="..\src\RenderOptions.cpp" />
     <ClCompile Include="..\src\RenderSurface.cpp" />
     <ClCompile Include="..\src\Resource.cpp" />
+    <ClCompile Include="..\src\ResourceManager.cpp" />
     <ClCompile Include="..\src\SayAction.cpp" />
     <ClCompile Include="..\src\Scene.cpp" />
     <ClCompile Include="..\src\Scene2D.cpp" />
@@ -164,8 +170,10 @@
     <ClInclude Include="..\include\Arduino.h" />
     <ClInclude Include="..\include\BaseScene.h" />
     <ClInclude Include="..\include\Behaviour.h" />
+    <ClInclude Include="..\include\BehaviourAttack.h" />
     <ClInclude Include="..\include\BehaviourFollow.h" />
     <ClInclude Include="..\include\BehaviourManager.h" />
+    <ClInclude Include="..\include\BehaviourPatrol.h" />
     <ClInclude Include="..\include\BitmapFont.h" />
     <ClInclude Include="..\include\Boulder.h" />
     <ClInclude Include="..\include\Box2DDebugDraw.h" />
@@ -249,19 +257,22 @@
     <ClInclude Include="..\include\poly2Tri\sweep\cdt.h" />
     <ClInclude Include="..\include\poly2Tri\sweep\sweep.h" />
     <ClInclude Include="..\include\poly2Tri\sweep\sweep_context.h" />
-    <ClInclude Include="..\include\Props.h" />
     <ClInclude Include="..\include\PuppetCharacter.h" />
+    <ClInclude Include="..\include\PuppetCharacterCastleChampion.h" />
     <ClInclude Include="..\include\PuppetContactListener.h" />
     <ClInclude Include="..\include\PuppetController.h" />
+    <ClInclude Include="..\include\PuppetResourceManager.h" />
     <ClInclude Include="..\include\PuppetScene.h" />
     <ClInclude Include="..\include\RaidTheCastle.h" />
     <ClInclude Include="..\include\RaidTheCastleContactListener.h" />
+    <ClInclude Include="..\include\RaidTheCastleResourceManager.h" />
     <ClInclude Include="..\include\RandomCharacter.h" />
     <ClInclude Include="..\include\RandomGround.h" />
     <ClInclude Include="..\include\Rectangle.h" />
     <ClInclude Include="..\include\RenderOptions.h" />
     <ClInclude Include="..\include\RenderSurface.h" />
     <ClInclude Include="..\include\Resource.h" />
+    <ClInclude Include="..\include\ResourceManager.h" />
     <ClInclude Include="..\include\SayAction.h" />
     <ClInclude Include="..\include\Scene.h" />
     <ClInclude Include="..\include\Scene2D.h" />
@@ -407,6 +418,8 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
       <EnablePREfast>false</EnablePREfast>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

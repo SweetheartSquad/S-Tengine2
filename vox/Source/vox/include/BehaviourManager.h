@@ -17,6 +17,6 @@ public:
 
 	void update(Step * _step) override;
 
-	BehaviourManager(PuppetCharacter * _target);
+	explicit BehaviourManager(PuppetCharacter * _target);
 	~BehaviourManager();
 };

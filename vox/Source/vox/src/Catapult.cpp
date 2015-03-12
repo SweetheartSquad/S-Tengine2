@@ -25,11 +25,11 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int
 {
 	componentScale = 0.008f;
 
-	TextureSampler baseTex = TextureSampler(new Texture("../assets/structure components/catapult/CatapultBase.png", 512, 512, true, true), 418, 264);
-	TextureSampler armTex = TextureSampler(new Texture("../assets/structure components/catapult/CatapultFlinger.png", 512, 512, true, true), 429, 76);
+	TextureSampler * baseTex = RaidTheCastleResourceManager::catapultBody;
+	TextureSampler * armTex = RaidTheCastleResourceManager::catapultArm;
 
-	base = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), baseTex.width, baseTex.height, baseTex.texture, componentScale);
-	arm = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), armTex.width, armTex.height, armTex.texture, componentScale);
+	base = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), baseTex->width, baseTex->height, baseTex->texture, componentScale);
+	arm = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), armTex->width, armTex->height, armTex->texture, componentScale);
 	
 	components.push_back(&arm);
 	components.push_back(&base);
@@ -96,16 +96,20 @@ void Catapult::update(Step * _step){
 	
 	if(!ready){
 		if(firing){
+			arm->body->SetAngularVelocity(-20);
 			if(angle <= glm::radians(-45.f)){
 				fireBoulder = true;
 			}
-			if(angle <= glm::radians(-85.f)){
-				arm->body->SetAngularVelocity(0);
+			if(angle <= glm::radians(-75.f)){
+				arm->body->SetAngularVelocity(1);
 				firing = false;
 			}
-		}else if(angle >= -0.00001f){
+		}else if(angle >= -0.0001f){
+			arm->body->SetAngularVelocity(1);
 			ready = true;
 		}
+	}else{
+		arm->body->SetAngularVelocity(1);
 	}
 }
 
@@ -119,7 +123,7 @@ void Catapult::load(){
 
 void Catapult::fireCatapult(){
 	b2RevoluteJoint * j = (b2RevoluteJoint *)base->body->GetJointList()->joint;
-	arm->body->SetAngularVelocity(-20);
+	//arm->body->SetAngularVelocity(-20);
 	firing = true;
 	ready = false;
 }
