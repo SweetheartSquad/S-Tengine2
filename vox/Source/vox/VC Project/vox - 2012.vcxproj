@@ -107,10 +107,12 @@
     <ClCompile Include="..\src\poly2Tri\sweep\sweep_context.cc" />
     <ClCompile Include="..\src\PuppetCharacter.cpp" />
     <ClCompile Include="..\src\PuppetCharacterCastleChampion.cpp" />
+    <ClCompile Include="..\src\PuppetCharacterKnight.cpp" />
     <ClCompile Include="..\src\PuppetContactListener.cpp" />
     <ClCompile Include="..\src\PuppetController.cpp" />
     <ClCompile Include="..\src\PuppetResourceManager.cpp" />
     <ClCompile Include="..\src\PuppetScene.cpp" />
+    <ClCompile Include="..\src\PuppetTexturePack.cpp" />
     <ClCompile Include="..\src\RaidTheCastle.cpp" />
     <ClCompile Include="..\src\RaidTheCastleContactListener.cpp" />
     <ClCompile Include="..\src\RaidTheCastleResourceManager.cpp" />
@@ -259,10 +261,12 @@
     <ClInclude Include="..\include\poly2Tri\sweep\sweep_context.h" />
     <ClInclude Include="..\include\PuppetCharacter.h" />
     <ClInclude Include="..\include\PuppetCharacterCastleChampion.h" />
+    <ClInclude Include="..\include\PuppetCharacterKnight.h" />
     <ClInclude Include="..\include\PuppetContactListener.h" />
     <ClInclude Include="..\include\PuppetController.h" />
     <ClInclude Include="..\include\PuppetResourceManager.h" />
     <ClInclude Include="..\include\PuppetScene.h" />
+    <ClInclude Include="..\include\PuppetTexturePack.h" />
     <ClInclude Include="..\include\RaidTheCastle.h" />
     <ClInclude Include="..\include\RaidTheCastleContactListener.h" />
     <ClInclude Include="..\include\RaidTheCastleResourceManager.h" />

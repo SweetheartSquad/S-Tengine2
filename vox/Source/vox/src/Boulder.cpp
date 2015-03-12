@@ -5,9 +5,6 @@
 #include <Texture.h>
 #include "Box2DWorld.h"
 
-TextureSampler * Boulder::boulderTexSampler = nullptr;
-Texture * Boulder::boulderTex = nullptr;
-
 Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Item(true, _world, _categoryBits, _maskBits, _groupIndex, 10.f, 50, 56),
 	NodeTransformable(new Transform()),
@@ -16,9 +13,7 @@ Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16
 {
 	componentScale = 0.008f;
 
-	if(boulderTexSampler == nullptr){
-		boulderTexSampler = RaidTheCastleResourceManager::boulder;
-	}
+	TextureSampler * boulderTexSampler = RaidTheCastleResourceManager::boulder;
 	
 	boulder = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), boulderTexSampler->width, boulderTexSampler->height, boulderTexSampler->texture, componentScale);
 	rootComponent = boulder;

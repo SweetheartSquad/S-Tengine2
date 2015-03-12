@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RaidTheCastle.h"
+#include <RaidTheCastleContactListener.h>
 #include "Castle.h"
 #include "PuppetGame.h"
 #include "PuppetCharacter.h"
@@ -19,16 +20,58 @@
 #include "keyboard.h"
 #include <Texture.h>
 #include <PuppetCharacterCastleChampion.h>
+#include <PuppetCharacterKnight.h>
+#include <PuppetTexturePack.h>
+#include <PuppetController.h>
 
 #include <glfw\glfw3.h>
 
 
 RaidTheCastle::RaidTheCastle(PuppetGame* _game):
-	PuppetScene(_game, 0.5),
+	PuppetScene(_game, 10),
 	castle(new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30)),
 	catapult(new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kBOUNDARY | PuppetGame::kPLAYER, -10)),
-	champion(new PuppetCharacterCastleChampion(world, PuppetGame::kPLAYER, -1, -20))
+	champion(new PuppetCharacterCastleChampion(world, PuppetGame::kPLAYER, -1, -20)),
+	playerCharacter(new PuppetCharacterKnight(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -1)),
+	playerCharacter2(new PuppetCharacterKnight(true, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -2)),
+	playerCharacter3(new PuppetCharacterKnight(true, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -3)),
+	playerCharacter4(new PuppetCharacterKnight(true, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -4))
 {
+	cl = new RaidTheCastleContactListener(this);
+
+	playerCharacter->setShader(shader, true);
+	addChild(playerCharacter, 1);
+	playerCharacter->addToLayeredScene(this, 1);
+	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
+	playerCharacter->translateComponents(glm::vec3(0.0f, 15.f, 0.f));
+	puppetController->puppetCharacter = playerCharacter;
+
+	playerCharacter2->setShader(shader, true);
+	addChild(playerCharacter2, 1);
+	playerCharacter2->addToLayeredScene(this, 1);
+	playerCharacter2->head->maxVelocity = b2Vec2(10, 10);
+	playerCharacter2->translateComponents(glm::vec3(10.0f, 15.f, 0.f));
+	puppetController2->puppetCharacter = playerCharacter2;
+
+	playerCharacter3->setShader(shader, true);
+	addChild(playerCharacter3, 1);
+	playerCharacter3->addToLayeredScene(this, 1);
+	playerCharacter3->head->maxVelocity = b2Vec2(10, 10);
+	playerCharacter3->translateComponents(glm::vec3(20.0f, 15.f, 0.f));
+	puppetController3->puppetCharacter = playerCharacter3;
+
+	playerCharacter4->setShader(shader, true);
+	addChild(playerCharacter4, 1);
+	playerCharacter4->addToLayeredScene(this, 1);
+	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
+	playerCharacter4->translateComponents(glm::vec3(30.0f, 15.f, 0.f));
+	puppetController4->puppetCharacter = playerCharacter4;
+
+	gameCam->addTarget(playerCharacter->torso);
+	gameCam->addTarget(playerCharacter2->torso);
+	gameCam->addTarget(playerCharacter3->torso);
+	gameCam->addTarget(playerCharacter4->torso);
+
 	castle->setShader(shader, true);
 	castle->addToLayeredScene(this, 0);
 	addChild(castle, 0);
@@ -61,6 +104,7 @@ RaidTheCastle::~RaidTheCastle(){
 }
 
 void RaidTheCastle::update(Step* _step){
+	PuppetScene::update(_step);
 	if(catapult->ready && !catapult->boulderLoaded){
 		loadCatapult();
 	}
@@ -92,7 +136,35 @@ void RaidTheCastle::update(Step* _step){
 			catapult->boulder = nullptr;
 		}
 	}
-	PuppetScene::update(_step);
+
+	if(keyboard->keyJustDown(GLFW_KEY_W)){
+		playerCharacter->jump();
+		/*if(playerCharacter->torso->body->GetPosition().y < 8){
+			float t = playerCharacter->torso->body->GetAngle();
+			playerCharacter->torso->applyLinearImpulseUp(50*(1-sin(t)));
+			if(playerCharacter->torso->body->GetAngle() > 0){
+				playerCharacter->torso->applyLinearImpulseLeft(150*(1-cos(t)));
+			}else{
+				playerCharacter->torso->applyLinearImpulseRight(150*(1-cos(t)));
+			}
+		}*/
+	}if(keyboard->keyDown(GLFW_KEY_A)){
+		playerCharacter->targetRoll = glm::radians(-45.f);
+		/*playerCharacter->head->applyLinearImpulseLeft(25);
+		if(playerCharacter->transform->scaleVector.x < 0){
+			playerCharacter->transform->scaleX(-1);
+		}*/
+	}
+	if(keyboard->keyDown(GLFW_KEY_D)){
+		playerCharacter->targetRoll = glm::radians(45.f);
+		/*playerCharacter->head->applyLinearImpulseRight(25);
+		if(playerCharacter->transform->scaleVector.x > 0){
+			playerCharacter->transform->scaleX(-1);
+		}*/
+	}
+	if(keyboard->keyJustDown(GLFW_KEY_T)){
+		playerCharacter->action();
+	}
 }
 
 void RaidTheCastle::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){

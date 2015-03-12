@@ -5,6 +5,7 @@
 #include "Box2DSuperSprite.h"
 #include "BehaviourManager.h"
 
+class PuppetTexturePack;
 class Box2DSprite;
 class Box2DWorld;
 class Item;
@@ -21,6 +22,8 @@ public:
 
 	float health;
 
+	PuppetTexturePack * texPack;
+
 	Box2DSprite * head;
 	Box2DSprite * torso;
 	Box2DSprite * armLeft;
@@ -31,7 +34,7 @@ public:
 	Box2DSprite * face;
 	Box2DSprite * headgear;
 
-	PuppetCharacter(bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
+	PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	~PuppetCharacter();
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;

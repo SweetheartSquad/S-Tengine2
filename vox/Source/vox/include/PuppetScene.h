@@ -11,7 +11,7 @@ class PuppetController;
 class PuppetCharacter;
 class GameJamCharacter;
 class Catapult;
-class RaidTheCastleContactListener;
+class PuppetContactListener;
 class DialogHandler;
 class AccelerometerParser;
 class Box2DMeshEntity;
@@ -35,15 +35,14 @@ class Item;
  class PuppetScene abstract : public LayeredScene{
 public:
 
-	float time;
-	RaidTheCastleContactListener * cl;
+	float duration;
+	float currentTime;
+	unsigned int countDown;
+	std::vector<Box2DSprite *> countDownNumbers;
+
+	PuppetContactListener * cl;
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
-
-	PuppetCharacter * playerCharacter;
-	PuppetCharacter * playerCharacter2;
-	PuppetCharacter * playerCharacter3;
-	PuppetCharacter * playerCharacter4;
 
 	PuppetController * puppetController;
 	PuppetController * puppetController2;
@@ -75,4 +74,5 @@ public:
 	virtual void complete();
 
 	void destroyItem(Item * item);
+	void doCountDown();
 };

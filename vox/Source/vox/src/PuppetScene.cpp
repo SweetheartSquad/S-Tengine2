@@ -40,14 +40,12 @@
 
 PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	LayeredScene(_game, 3),
-	time(seconds * 6000),
-	cl(new RaidTheCastleContactListener(this)),
+	duration(seconds),
+	currentTime(0),
+	countDown(5),
+	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
-	playerCharacter(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -1)),
-	playerCharacter2(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -2)),
-	playerCharacter3(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -3)),
-	playerCharacter4(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -4)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, false)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
@@ -137,30 +135,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 		addChild(foliage, 0);
 	}*/
 
-	playerCharacter->setShader(shader, true);
-	addChild(playerCharacter, 1);
-	playerCharacter->addToLayeredScene(this, 1);
-	//playerCharacter->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter->translateComponents(glm::vec3(0.0f, 15.f, 0.f));
-
-	playerCharacter2->setShader(shader, true);
-	addChild(playerCharacter2, 1);
-	playerCharacter2->addToLayeredScene(this, 1);
-	//playerCharacter2->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter2->translateComponents(glm::vec3(10.0f, 15.f, 0.f));
-
-	playerCharacter3->setShader(shader, true);
-	addChild(playerCharacter3, 1);
-	playerCharacter3->addToLayeredScene(this, 1);
-	//playerCharacter3->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter3->translateComponents(glm::vec3(20.0f, 15.f, 0.f));
-
-	playerCharacter4->setShader(shader, true);
-	addChild(playerCharacter4, 1);
-	playerCharacter4->addToLayeredScene(this, 1);
-	//playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter4->translateComponents(glm::vec3(30.0f, 15.f, 0.f));
-
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");
 
@@ -176,11 +150,10 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	Accelerometer * acc4 = new Accelerometer(arduino);
 	arduino->addAccelerometer(acc4);
 	
-	puppetController =  new PuppetController(acc, playerCharacter);
-	puppetController2 = new PuppetController(acc2, playerCharacter2);
-	puppetController3 = new PuppetController(acc3, playerCharacter3);
-	puppetController4 = new PuppetController(acc4, playerCharacter4);
-	
+	puppetController =  new PuppetController(acc, nullptr);
+	puppetController2 = new PuppetController(acc2, nullptr);
+	puppetController3 = new PuppetController(acc3, nullptr);
+	puppetController4 = new PuppetController(acc4, nullptr);
 	
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);
@@ -206,10 +179,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	mouseCamera->pitch = -10.0f;
 
 	gameCam = new FollowCamera(glm::vec3(0, 0, 0), 0, 0);
-	gameCam->addTarget(playerCharacter->torso);
-	gameCam->addTarget(playerCharacter2->torso);
-	gameCam->addTarget(playerCharacter3->torso);
-	gameCam->addTarget(playerCharacter4->torso);
 	gameCam->farClip = 1000.f;
 	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
 	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
@@ -217,6 +186,34 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	gameCam->yaw = 90.0f;
 	gameCam->pitch = -10.0f;
 	camera = gameCam;
+
+	TextureSampler * countDown1TextureSampler = PuppetResourceManager::countDown1;
+	TextureSampler * countDown2TextureSampler = PuppetResourceManager::countDown2;
+	TextureSampler * countDown3TextureSampler = PuppetResourceManager::countDown3;
+	TextureSampler * countDown4TextureSampler = PuppetResourceManager::countDown4;
+	TextureSampler * countDown5TextureSampler = PuppetResourceManager::countDown5;
+
+	Box2DSprite * countDown1 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown1TextureSampler->width, countDown1TextureSampler->height, countDown1TextureSampler->texture, 1.f);
+	Box2DSprite * countDown2 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown2TextureSampler->width, countDown2TextureSampler->height, countDown2TextureSampler->texture, 1.f);
+	Box2DSprite * countDown3 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown3TextureSampler->width, countDown3TextureSampler->height, countDown3TextureSampler->texture, 1.f);
+	Box2DSprite * countDown4 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown4TextureSampler->width, countDown4TextureSampler->height, countDown4TextureSampler->texture, 1.f);
+	Box2DSprite * countDown5 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown5TextureSampler->width, countDown5TextureSampler->height, countDown5TextureSampler->texture, 1.f);
+
+	countDown1->transform->scale(glm::vec3(1000, 1000, 1000));
+	countDown2->transform->scale(glm::vec3(1000, 1000, 1000));
+	countDown3->transform->scale(glm::vec3(1000, 1000, 1000));
+	countDown4->transform->scale(glm::vec3(1000, 1000, 1000));
+	countDown5->transform->scale(glm::vec3(1000, 1000, 1000));
+
+	countDownNumbers.push_back(countDown1);
+	countDownNumbers.push_back(countDown2);
+	countDownNumbers.push_back(countDown3);
+	countDownNumbers.push_back(countDown4);
+	countDownNumbers.push_back(countDown5);
+
+	for(Box2DSprite * n : countDownNumbers){
+		n->setShader(shader, true);
+	}
 }
 
 PuppetScene::~PuppetScene(){
@@ -252,26 +249,18 @@ void PuppetScene::update(Step * _step){
 
 	world->update(_step);
 
-	time -= _step->deltaTimeCorrection;
-	if(time <= 0 && !game->switchingScene){
-		/*game->scenes.at(game->newScene)->unload();
-		game->scenes.erase(game->currentScene);
-		game->scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(game)));
-		game->switchScene(game->scenes.at(game->scenes.at());*/
+	if(this == game->currentScene){
+		currentTime += _step->deltaTime;
+		if(currentTime > duration){
+			//complete();
+		}else if (currentTime > duration - 5){
+			if(duration - currentTime < countDown){
+				doCountDown();	
+			}
+		}
 	}
 
-	if(keyboard->keyJustDown(GLFW_KEY_W)){
-		playerCharacter->jump();
-		/*if(playerCharacter->torso->body->GetPosition().y < 8){
-			float t = playerCharacter->torso->body->GetAngle();
-			playerCharacter->torso->applyLinearImpulseUp(50*(1-sin(t)));
-			if(playerCharacter->torso->body->GetAngle() > 0){
-				playerCharacter->torso->applyLinearImpulseLeft(150*(1-cos(t)));
-			}else{
-				playerCharacter->torso->applyLinearImpulseRight(150*(1-cos(t)));
-			}
-		}*/
-	}
+	
 
 	if(keyboard->keyJustUp(GLFW_KEY_1)){
 		mouseCam = !mouseCam;
@@ -282,23 +271,7 @@ void PuppetScene::update(Step * _step){
 		}
 	}
 
-	if(keyboard->keyDown(GLFW_KEY_A)){
-		playerCharacter->targetRoll = glm::radians(-45.f);
-		/*playerCharacter->head->applyLinearImpulseLeft(25);
-		if(playerCharacter->transform->scaleVector.x < 0){
-			playerCharacter->transform->scaleX(-1);
-		}*/
-	}
-	if(keyboard->keyDown(GLFW_KEY_D)){
-		playerCharacter->targetRoll = glm::radians(45.f);
-		/*playerCharacter->head->applyLinearImpulseRight(25);
-		if(playerCharacter->transform->scaleVector.x > 0){
-			playerCharacter->transform->scaleX(-1);
-		}*/
-	}
-	if(keyboard->keyJustDown(GLFW_KEY_T)){
-		playerCharacter->action();
-	}
+	
 
 	// camera controls
 	if(keyboard->keyDown(GLFW_KEY_UP)){
@@ -332,7 +305,14 @@ void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderS
 }
 
 void PuppetScene::complete(){
-	
+	// select new scene, based on if this is a victory scene or a gameplay scene?
+	// switch to next scene
+	// delete this scene
+
+	// temporary stuff
+	game->scenes.insert(std::make_pair("Raid the Castle2", new RaidTheCastle(static_cast<PuppetGame *>(game))));
+	Scene * oldScene = game->currentScene;
+	game->switchScene("Raid the Castle2");
 }
 
 void PuppetScene::destroyItem(Item * _item){
@@ -370,4 +350,36 @@ void PuppetScene::destroyItem(Item * _item){
 	//maybe use something like children.erase(std::remove(children.begin(), children.end(), item), children.end());
 
 	delete _item;
+}
+
+void PuppetScene::doCountDown(){
+	// Remove previous number
+	if (countDown <= countDownNumbers.size() - 1){
+		// Remove previous number from scene
+		// Just copying destroyItem stuff for now
+		for(signed long int j = children.size()-1; j >= 0; --j){
+			if(children.at(j) == countDownNumbers.at(countDown)){
+				children.erase(children.begin() + j);
+			}
+		}
+		for(std::vector<Entity *> * layer : layers){
+			for(signed long int j = layer->size()-1; j >= 0; --j){
+				if(layer->at(j) == countDownNumbers.at(countDown)){
+					layer->erase(layer->begin() + j);
+				}
+			}
+		}
+	}
+	
+	// Decrease countdown
+	-- countDown;
+	
+	// Display countdown
+	std::cout << "=========================" << std::endl;
+	std::cout << countDown << std::endl;
+	std::cout << "idx: " << countDown << std::endl;
+	std::cout << "=========================" << std::endl;
+
+	// Add new number to scene
+	addChild(countDownNumbers.at(countDown), 2);
 }
