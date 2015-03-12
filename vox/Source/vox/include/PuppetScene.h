@@ -44,11 +44,6 @@ public:
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
 
-	PuppetCharacter * playerCharacter;
-	PuppetCharacter * playerCharacter2;
-	PuppetCharacter * playerCharacter3;
-	PuppetCharacter * playerCharacter4;
-
 	PuppetController * puppetController;
 	PuppetController * puppetController2;
 	PuppetController * puppetController3;

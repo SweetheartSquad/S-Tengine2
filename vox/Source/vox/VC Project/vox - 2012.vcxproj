@@ -107,6 +107,7 @@
     <ClCompile Include="..\src\poly2Tri\sweep\sweep_context.cc" />
     <ClCompile Include="..\src\PuppetCharacter.cpp" />
     <ClCompile Include="..\src\PuppetCharacterCastleChampion.cpp" />
+    <ClCompile Include="..\src\PuppetCharacterKnight.cpp" />
     <ClCompile Include="..\src\PuppetContactListener.cpp" />
     <ClCompile Include="..\src\PuppetController.cpp" />
     <ClCompile Include="..\src\PuppetResourceManager.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="..\include\poly2Tri\sweep\sweep_context.h" />
     <ClInclude Include="..\include\PuppetCharacter.h" />
     <ClInclude Include="..\include\PuppetCharacterCastleChampion.h" />
+    <ClInclude Include="..\include\PuppetCharacterKnight.h" />
     <ClInclude Include="..\include\PuppetContactListener.h" />
     <ClInclude Include="..\include\PuppetController.h" />
     <ClInclude Include="..\include\PuppetResourceManager.h" />
