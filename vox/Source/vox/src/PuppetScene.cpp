@@ -237,11 +237,11 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	TextureSampler countDown4Tex = TextureSampler(new Texture("../assets/hurly-burly/Countdown/4.png", 512, 512, true, true), 200, 200);
 	TextureSampler countDown5Tex = TextureSampler(new Texture("../assets/hurly-burly/Countdown/5.png", 512, 512, true, true), 200, 200);
 
-	Box2DSprite * countDown1 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown1Tex.width, countDown1Tex.height, countDown1Tex.texture, 100.f);
-	Box2DSprite * countDown2 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown2Tex.width, countDown2Tex.height, countDown2Tex.texture, 100.f);
-	Box2DSprite * countDown3 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown3Tex.width, countDown3Tex.height, countDown3Tex.texture, 100.f);
-	Box2DSprite * countDown4 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown4Tex.width, countDown4Tex.height, countDown4Tex.texture, 100.f);
-	Box2DSprite * countDown5 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown5Tex.width, countDown5Tex.height, countDown5Tex.texture, 100.f);
+	Box2DSprite * countDown1 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown1Tex.width, countDown1Tex.height, countDown1Tex.texture, 0.1f);
+	Box2DSprite * countDown2 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown2Tex.width, countDown2Tex.height, countDown2Tex.texture, 0.1f);
+	Box2DSprite * countDown3 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown3Tex.width, countDown3Tex.height, countDown3Tex.texture, 0.1f);
+	Box2DSprite * countDown4 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown4Tex.width, countDown4Tex.height, countDown4Tex.texture, 0.1f);
+	Box2DSprite * countDown5 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown5Tex.width, countDown5Tex.height, countDown5Tex.texture, 0.1f);
 
 	countDownNumbers.push_back(countDown1);
 	countDownNumbers.push_back(countDown2);
@@ -283,9 +283,7 @@ void PuppetScene::update(Step * _step){
 	if(this == game->currentScene){
 		currentTime += _step->deltaTime;
 		if(currentTime > duration){
-			game->scenes.insert(std::make_pair("Raid the Castle2", new RaidTheCastle(static_cast<PuppetGame *>(game))));
-			Scene * oldScene = game->currentScene;
-			game->switchScene("Raid the Castle2");
+			complete();
 		}else if (currentTime > duration - 5){
 			if(duration - currentTime < countDown){
 				doCountDown();	
@@ -366,7 +364,14 @@ void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderS
 }
 
 void PuppetScene::complete(){
-	
+	// select new scene, based on if this is a victory scene or a gameplay scene?
+	// switch to next scene
+	// delete this scene
+
+	// temporary stuff
+	game->scenes.insert(std::make_pair("Raid the Castle2", new RaidTheCastle(static_cast<PuppetGame *>(game))));
+	Scene * oldScene = game->currentScene;
+	game->switchScene("Raid the Castle2");
 }
 
 void PuppetScene::destroyItem(Item * _item){
