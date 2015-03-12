@@ -1,3 +1,5 @@
+#include <iostream>
+
 //Arduino Sketch
 const int  acclPin0 = 0;  // the pin that the pushbutton is attached to
 const int  acclPin1 = 1;  // the pin that the pushbutton is attached to
@@ -98,6 +100,7 @@ void loop() {
     analogRead(acclPin3), analogRead(acclPin4), analogRead(acclPin5),
     analogRead(acclPin6), analogRead(acclPin7), analogRead(acclPin8),
     analogRead(acclPin9), analogRead(acclPin10), analogRead(acclPin11));
+    Serial.flush();
   }
 }
 

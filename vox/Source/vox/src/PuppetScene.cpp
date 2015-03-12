@@ -140,25 +140,25 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	playerCharacter->setShader(shader, true);
 	addChild(playerCharacter, 1);
 	playerCharacter->addToLayeredScene(this, 1);
-	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
+	//playerCharacter->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter->translateComponents(glm::vec3(0.0f, 15.f, 0.f));
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
-	playerCharacter2->head->maxVelocity = b2Vec2(10, 10);
+	//playerCharacter2->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter2->translateComponents(glm::vec3(10.0f, 15.f, 0.f));
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
-	playerCharacter3->head->maxVelocity = b2Vec2(10, 10);
+	//playerCharacter3->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter3->translateComponents(glm::vec3(20.0f, 15.f, 0.f));
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
-	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
+	//playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter4->translateComponents(glm::vec3(30.0f, 15.f, 0.f));
 
 	//Arduino 
