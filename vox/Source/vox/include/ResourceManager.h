@@ -9,6 +9,6 @@ class ResourceManager abstract : public NodeLoadable{
 public:	
 	std::vector<NodeResource *> resources;
 	std::vector<ResourceManager *> subManagers;
-	void load() override;
-	void unload() override;
+	virtual void load() override;
+	virtual void unload() override;
 };

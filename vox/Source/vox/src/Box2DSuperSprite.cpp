@@ -7,16 +7,28 @@
 #include "Scene.h"
 #include "LayeredScene.h"
 #include "BitmapFont.h"
-
+#include <node/NodeResource.h>
 #include "Texture.h"
 
 int16 Box2DSuperSprite::gGroupIndex = 0;
 
+
 TextureSampler::TextureSampler(Texture * _texture, float _width, float _height) :
+	NodeResource(true),
 	texture(_texture),
 	width(_width),
 	height(_height)
 {
+}
+
+void TextureSampler::load(){
+	texture->load();
+	NodeResource::load();
+}
+
+void TextureSampler::unload(){
+	texture->unload();
+	NodeResource::unload();
 }
 
 Box2DSuperSprite::Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :

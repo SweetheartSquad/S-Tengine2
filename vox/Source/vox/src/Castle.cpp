@@ -25,10 +25,10 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 {
 	componentScale = 0.015f;
 	
-	TextureSampler baseTex = TextureSampler(new Texture("../assets/structure components/castle/CastleNorm_State1.png", 1024, 1024, true, true), 973, 619);
-	Texture * baseSpriteSheetTex = new Texture("../assets/structure components/castle/Castle_SpriteSheet.png", 2048, 2048, true, true);
+	TextureSampler * baseTex = RaidTheCastleResourceManager::castleBase;
+	Texture * baseSpriteSheetTex = RaidTheCastleResourceManager::castleSpriteSheet;
 
-	rootComponent = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), baseTex.width, baseTex.height, baseTex.texture, componentScale);
+	rootComponent = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), baseTex->width, baseTex->height, baseTex->texture, componentScale);
 	components.push_back(&rootComponent);
 	
 	b2Filter sf;
@@ -49,7 +49,7 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	int f[] = {0,1,2,3};
 	std::vector<int> ff(std::begin(f), std::end(f));
 
-	spriteSheet->pushFramesInRange(0, 3, baseTex.width, baseTex.height, baseSpriteSheetTex->width);
+	spriteSheet->pushFramesInRange(0, 3, baseTex->width, baseTex->height, baseSpriteSheetTex->width);
 	
 	rootComponent->addAnimation("castleStates", spriteSheet, true);
 

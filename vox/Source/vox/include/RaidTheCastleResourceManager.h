@@ -10,12 +10,12 @@ class Texture;
 
 class RaidTheCastleResourceManager : public ResourceManager{
 public:
-
-	static Texture * castle;
+	static Texture * castleSpriteSheet;
 
 	static TextureSampler * catapultArm;
 	static TextureSampler * catapultBody;
 	static TextureSampler * boulder;
-
+	static TextureSampler * castleBase;
+	
 	RaidTheCastleResourceManager();
 };

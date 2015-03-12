@@ -2,6 +2,7 @@
 
 #include "MeshEntity.h"
 #include <Box2D/Box2D.h>
+#include <node/NodeResource.h>
 
 class BitmapFont;
 class Scene;
@@ -12,7 +13,7 @@ class Box2DSprite;
 class CharacterComponent;
 class Texture;
 
-class TextureSampler{
+class TextureSampler : public NodeResource{
 public:
 
 	Texture * texture;
@@ -21,6 +22,9 @@ public:
 	float height;
 
 	TextureSampler(Texture * _texture, float _width, float _height);
+
+	void load() override;
+	void unload() override;
 };
 
 class Box2DSuperSprite : public MeshEntity {

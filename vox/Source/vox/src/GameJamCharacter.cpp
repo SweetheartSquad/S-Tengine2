@@ -10,6 +10,7 @@
 #include "BitmapFont.h"
 
 #include "Texture.h"
+#include <PuppetResourceManager.h>
 
 std::vector<TextureSampler *> GameJamCharacter::torsoTexPacks;
 std::vector<TextureSampler *> GameJamCharacter::headTexPacks;
@@ -21,7 +22,7 @@ std::vector<TextureSampler *> GameJamCharacter::lowerLegTexPacks;
 
 void GameJamCharacter::init(){
 	torsoTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/pTorso.png", 512, 512, true, true),	123,	185)); 
-	torsoTexPacks.push_back(new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/BreastplateStick1.png", 512, 512, true, true),	145,	405)); 
+	torsoTexPacks.push_back(PuppetResourceManager::goldenBreastPlateStick); 
 	torsoTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MichaelTorso.png", 512, 512, true, true),	145,	362)); 
 	torsoTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MoustacheTorso.png", 512, 512, true, true),	160,	290));
 	torsoTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/AfroTorso.png", 512, 512, true, true),		190,	325));
@@ -29,7 +30,7 @@ void GameJamCharacter::init(){
 	torsoTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/PonytailTorso.png", 512, 512, true, true),	160,	355));
 	
 	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/pHead.png", 512, 512, true, true),   214,	186));
-	headTexPacks.push_back(new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Head1.png", 512, 512, true, true), 106, 111)); 
+	headTexPacks.push_back(PuppetResourceManager::head1); 
 	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MichaelHead.png", 512, 512, true, true),   200,	270));
 	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MoustacheHead.png", 512, 512, true, true), 160,	270));
 	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/AfroHead.png", 512, 512, true, true),	   260,	250));
@@ -42,7 +43,7 @@ void GameJamCharacter::init(){
 	headTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/BowlcutHead.png", 512, 512, true, true),		272,	243));
 
 	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/pArm.png", 512, 512, true, true),	45,	155));
-	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Arm1.png", 512, 512, true, true),	40,	105)); 
+	upperArmTexPacks.push_back(PuppetResourceManager::goldenArm); 
 	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MichaelUpperArm.png", 512, 512, true, true),	55,	205));
 	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MoustacheUA.png", 512, 512, true, true),	55,	205));
 	upperArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/AfroUA.png", 512, 512, true, true),			50,	200));
@@ -58,7 +59,7 @@ void GameJamCharacter::init(){
 	lowerArmTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/PonytailLA.png", 512, 512, true, true),		55,	160));
 	
 	handTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/pHand.png", 512, 512, true, true), 80,	85));
-	handTexPacks.push_back(new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Hand1.png", 512, 512, true, true), 38,	32));
+	handTexPacks.push_back(PuppetResourceManager::hand1);
 	handTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MichaelHand.png", 512, 512, true, true),	50,	82));
 	handTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/MoustacheHand.png", 512, 512, true, true),	55,	85));
 	handTexPacks.push_back(new TextureSampler(new Texture("../assets/character components/AfroHand.png", 512, 512, true, true),		55,	70));
