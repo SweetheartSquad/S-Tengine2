@@ -111,6 +111,7 @@
     <ClCompile Include="..\src\PuppetController.cpp" />
     <ClCompile Include="..\src\PuppetResourceManager.cpp" />
     <ClCompile Include="..\src\PuppetScene.cpp" />
+    <ClCompile Include="..\src\PuppetTexturePack.cpp" />
     <ClCompile Include="..\src\RaidTheCastle.cpp" />
     <ClCompile Include="..\src\RaidTheCastleContactListener.cpp" />
     <ClCompile Include="..\src\RaidTheCastleResourceManager.cpp" />
@@ -263,6 +264,7 @@
     <ClInclude Include="..\include\PuppetController.h" />
     <ClInclude Include="..\include\PuppetResourceManager.h" />
     <ClInclude Include="..\include\PuppetScene.h" />
+    <ClInclude Include="..\include\PuppetTexturePack.h" />
     <ClInclude Include="..\include\RaidTheCastle.h" />
     <ClInclude Include="..\include\RaidTheCastleContactListener.h" />
     <ClInclude Include="..\include\RaidTheCastleResourceManager.h" />

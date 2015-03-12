@@ -19,6 +19,7 @@
 #include "keyboard.h"
 #include <Texture.h>
 #include <PuppetCharacterCastleChampion.h>
+#include <PuppetTexturePack.h>
 
 #include <glfw\glfw3.h>
 
@@ -29,6 +30,8 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	catapult(new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kBOUNDARY | PuppetGame::kPLAYER, -10)),
 	champion(new PuppetCharacterCastleChampion(world, PuppetGame::kPLAYER, -1, -20))
 {
+
+
 	castle->setShader(shader, true);
 	castle->addToLayeredScene(this, 0);
 	addChild(castle, 0);
