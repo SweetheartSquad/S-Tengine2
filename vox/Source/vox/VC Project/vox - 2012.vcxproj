@@ -257,7 +257,6 @@
     <ClInclude Include="..\include\poly2Tri\sweep\cdt.h" />
     <ClInclude Include="..\include\poly2Tri\sweep\sweep.h" />
     <ClInclude Include="..\include\poly2Tri\sweep\sweep_context.h" />
-    <ClInclude Include="..\include\Props.h" />
     <ClInclude Include="..\include\PuppetCharacter.h" />
     <ClInclude Include="..\include\PuppetCharacterCastleChampion.h" />
     <ClInclude Include="..\include\PuppetContactListener.h" />
