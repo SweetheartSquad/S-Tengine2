@@ -38,6 +38,7 @@ public:
 	float duration;
 	float currentTime;
 	unsigned int countDown;
+	std::vector<Box2DSprite *> countDownNumbers;
 
 	RaidTheCastleContactListener * cl;
 	Box2DWorld * world;
@@ -79,4 +80,5 @@ public:
 	virtual void complete();
 
 	void destroyItem(Item * item);
+	void doCountDown();
 };

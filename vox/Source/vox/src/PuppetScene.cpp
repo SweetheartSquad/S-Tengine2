@@ -230,6 +230,28 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	gameCam->yaw = 90.0f;
 	gameCam->pitch = -10.0f;
 	camera = gameCam;
+
+	TextureSampler countDown1Tex = TextureSampler(new Texture("../assets/hurly-burly/Countdown/1.png", 512, 512, true, true), 200, 200);
+	TextureSampler countDown2Tex = TextureSampler(new Texture("../assets/hurly-burly/Countdown/2.png", 512, 512, true, true), 200, 200);
+	TextureSampler countDown3Tex = TextureSampler(new Texture("../assets/hurly-burly/Countdown/3.png", 512, 512, true, true), 200, 200);
+	TextureSampler countDown4Tex = TextureSampler(new Texture("../assets/hurly-burly/Countdown/4.png", 512, 512, true, true), 200, 200);
+	TextureSampler countDown5Tex = TextureSampler(new Texture("../assets/hurly-burly/Countdown/5.png", 512, 512, true, true), 200, 200);
+
+	Box2DSprite * countDown1 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown1Tex.width, countDown1Tex.height, countDown1Tex.texture, 100.f);
+	Box2DSprite * countDown2 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown2Tex.width, countDown2Tex.height, countDown2Tex.texture, 100.f);
+	Box2DSprite * countDown3 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown3Tex.width, countDown3Tex.height, countDown3Tex.texture, 100.f);
+	Box2DSprite * countDown4 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown4Tex.width, countDown4Tex.height, countDown4Tex.texture, 100.f);
+	Box2DSprite * countDown5 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown5Tex.width, countDown5Tex.height, countDown5Tex.texture, 100.f);
+
+	countDownNumbers.push_back(countDown1);
+	countDownNumbers.push_back(countDown2);
+	countDownNumbers.push_back(countDown3);
+	countDownNumbers.push_back(countDown4);
+	countDownNumbers.push_back(countDown5);
+
+	for(Box2DSprite * n : countDownNumbers){
+		n->setShader(shader, true);
+	}
 }
 
 PuppetScene::~PuppetScene(){
@@ -261,16 +283,12 @@ void PuppetScene::update(Step * _step){
 	if(this == game->currentScene){
 		currentTime += _step->deltaTime;
 		if(currentTime > duration){
-			game->scenes.insert(std::make_pair("Raid the Castle2", new RaidTheCastle(dynamic_cast<PuppetGame *>(game))));
+			game->scenes.insert(std::make_pair("Raid the Castle2", new RaidTheCastle(static_cast<PuppetGame *>(game))));
 			Scene * oldScene = game->currentScene;
-		
 			game->switchScene("Raid the Castle2");
 		}else if (currentTime > duration - 5){
 			if(duration - currentTime < countDown){
-				std::cout << "=========================" << std::endl;
-				std::cout << countDown << std::endl;
-				std::cout << "=========================" << std::endl;
-				-- countDown;
+				doCountDown();	
 			}
 		}
 	}
@@ -386,4 +404,37 @@ void PuppetScene::destroyItem(Item * _item){
 	//maybe use something like children.erase(std::remove(children.begin(), children.end(), item), children.end());
 
 	delete _item;
+}
+
+void PuppetScene::doCountDown(){
+	// Remove previous number
+	if (countDown <= countDownNumbers.size() - 1){
+		// Remove previous number from scene
+		// Just copying destroyItem stuff for now
+		for(signed long int j = children.size()-1; j >= 0; --j){
+			if(children.at(j) == countDownNumbers.at(countDown)){
+				children.erase(children.begin() + j);
+			}
+		}
+		for(std::vector<Entity *> * layer : layers){
+			for(signed long int j = layer->size()-1; j >= 0; --j){
+				if(layer->at(j) == countDownNumbers.at(countDown)){
+					layer->erase(layer->begin() + j);
+				}
+			}
+		}
+	}
+	
+	// Decrease countdown
+	-- countDown;
+	
+	// Display countdown
+	std::cout << "=========================" << std::endl;
+	std::cout << countDown << std::endl;
+	std::cout << "idx: " << countDown << std::endl;
+	std::cout << "=========================" << std::endl;
+
+	// Add new number to scene
+	addChild(countDownNumbers.at(countDown), 0);
+	countDownNumbers.at(countDown)->setTranslationPhysical(glm::vec3(0, 10, 0), true);
 }
