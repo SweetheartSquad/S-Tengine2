@@ -53,7 +53,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
 	mouseCam(false),
-	randomGround(new RandomGround(world, 100, 0.4f))
+	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::ground1, 1, 1))
 {
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new TextureShaderComponent());
@@ -141,25 +141,25 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	addChild(playerCharacter, 1);
 	playerCharacter->addToLayeredScene(this, 1);
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter->translateComponents(glm::vec3(0.0f, 5.f, 0.f));
+	playerCharacter->translateComponents(glm::vec3(0.0f, 15.f, 0.f));
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
 	playerCharacter2->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter2->translateComponents(glm::vec3(5.0f, 5.f, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(10.0f, 15.f, 0.f));
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
 	playerCharacter3->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter3->translateComponents(glm::vec3(10.0f, 5.f, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(20.0f, 15.f, 0.f));
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
 	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter4->translateComponents(glm::vec3(15.0f, 5.f, 0.f));
+	playerCharacter4->translateComponents(glm::vec3(30.0f, 15.f, 0.f));
 
 	michael = new TestCharacter(world, false, PuppetGame::kPLAYER, PuppetGame::kSTRUCTURE | /*PuppetGame::kITEM | */PuppetGame::kPLAYER, -5);
 	michael->setShader(shader, true);
@@ -198,9 +198,8 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	addChild(drawer, 2);
 
 	randomGround->setShader(shader, true);
-	randomGround->setTranslationPhysical(20.0f, 0.0f, 0.0f);
+	randomGround->setTranslationPhysical(0.0f, 0.0f, 0.0f);
 	//randomGround->mesh->uvEdgeMode = GL_REPEAT;
-	randomGround->mesh->pushTexture2D(PuppetResourceManager::ground1);
 
 	world->addToWorld(randomGround);
 	addChild(randomGround, 1);

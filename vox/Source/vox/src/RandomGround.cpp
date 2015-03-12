@@ -9,7 +9,7 @@
 #include <PuppetGame.h>
 
 
-RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold, Texture * _texture):
+RandomGround::RandomGround(Box2DWorld * _world, unsigned long int _numPoints, float _threshold, Texture * _texture, float _width, float _height):
 	 Box2DMeshEntity(_world, new MeshInterface(GL_QUADS, GL_STATIC_DRAW), b2_staticBody, false),
 	 NodeTransformable(new Transform()),
 	 NodeRenderable(),
@@ -45,6 +45,11 @@ RandomGround::RandomGround(Box2DWorld * _world, int _numPoints, float _threshold
 	float maxY = 0.0f;
 	for(auto v : mesh->vertices){
 		maxY = std::max(v.y, maxY);
+	}
+
+	for(unsigned long int i = 0; i < _numPoints; ++i){
+		p[i].x *= _width;
+		p[i].y *= _height;
 	}
 
 	for(auto i = 1; i < _numPoints - 1; ++i){

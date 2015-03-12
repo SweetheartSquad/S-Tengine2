@@ -19,7 +19,7 @@ public:
 	float targetRoll;
 	float score;
 
-	unsigned int health;
+	float health;
 
 	Box2DSprite * head;
 	Box2DSprite * torso;
