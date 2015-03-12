@@ -11,6 +11,8 @@ class Box2DSuperSprite;
 class BehaviourAttack : public Behaviour {
 public:
 	std::vector<Box2DSuperSprite *> targets;
+
+	bool forward;
 	
 	void evaluateBeginContact(b2Fixture * _target) override;
 	void evaluateEndContact(b2Fixture * _target) override;

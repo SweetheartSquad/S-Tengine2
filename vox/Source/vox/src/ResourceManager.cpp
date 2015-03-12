@@ -2,6 +2,9 @@
 
 #include "ResourceManager.h"
 
+std::vector<NodeResource *> ResourceManager::resources;
+std::vector<ResourceManager *> ResourceManager::subManagers;
+
 void ResourceManager::load(){
 	NodeLoadable::load();
 	for(auto res : resources){

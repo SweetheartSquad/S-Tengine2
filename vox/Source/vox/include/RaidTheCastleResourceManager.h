@@ -8,7 +8,7 @@
 class TextureSampler;
 class Texture;
 
-class RaidTheCastleResourceManager : public ResourceManager{
+class RaidTheCastleResourceManager abstract : public ResourceManager{
 public:
 	static Texture * castleSpriteSheet;
 
@@ -37,6 +37,11 @@ public:
 	static TextureSampler * knightYellowTorso;
 	static TextureSampler * knightYellowArm;
 	static TextureSampler * knightYellowHelmet;
+
+	static TextureSampler * castleChampionTorso;
+	static TextureSampler * castleChampionArm;
+	static TextureSampler * castleChampionHelmet;
 	
-	RaidTheCastleResourceManager();
+	static void init();
+	//RaidTheCastleResourceManager();
 };

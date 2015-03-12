@@ -46,10 +46,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
-	playerCharacter(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -1)),
-	playerCharacter2(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -2)),
-	playerCharacter3(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -3)),
-	playerCharacter4(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -4)),
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, false)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
@@ -139,29 +135,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 		addChild(foliage, 0);
 	}*/
 
-	playerCharacter->setShader(shader, true);
-	addChild(playerCharacter, 1);
-	playerCharacter->addToLayeredScene(this, 1);
-	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter->translateComponents(glm::vec3(0.0f, 15.f, 0.f));
-
-	playerCharacter2->setShader(shader, true);
-	addChild(playerCharacter2, 1);
-	playerCharacter2->addToLayeredScene(this, 1);
-	playerCharacter2->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter2->translateComponents(glm::vec3(10.0f, 15.f, 0.f));
-
-	playerCharacter3->setShader(shader, true);
-	addChild(playerCharacter3, 1);
-	playerCharacter3->addToLayeredScene(this, 1);
-	playerCharacter3->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter3->translateComponents(glm::vec3(20.0f, 15.f, 0.f));
-
-	playerCharacter4->setShader(shader, true);
-	addChild(playerCharacter4, 1);
-	playerCharacter4->addToLayeredScene(this, 1);
-	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter4->translateComponents(glm::vec3(30.0f, 15.f, 0.f));
+	
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");
@@ -178,11 +152,10 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	Accelerometer * acc4 = new Accelerometer(arduino);
 	arduino->addAccelerometer(acc4);
 	
-	puppetController =  new PuppetController(acc, playerCharacter);
-	puppetController2 = new PuppetController(acc2, playerCharacter2);
-	puppetController3 = new PuppetController(acc3, playerCharacter3);
-	puppetController4 = new PuppetController(acc4, playerCharacter4);
-	
+	puppetController =  new PuppetController(acc, nullptr);
+	puppetController2 = new PuppetController(acc2, nullptr);
+	puppetController3 = new PuppetController(acc3, nullptr);
+	puppetController4 = new PuppetController(acc4, nullptr);
 	
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);
@@ -208,10 +181,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	mouseCamera->pitch = -10.0f;
 
 	gameCam = new FollowCamera(glm::vec3(0, 0, 0), 0, 0);
-	gameCam->addTarget(playerCharacter->torso);
-	gameCam->addTarget(playerCharacter2->torso);
-	gameCam->addTarget(playerCharacter3->torso);
-	gameCam->addTarget(playerCharacter4->torso);
 	gameCam->farClip = 1000.f;
 	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
 	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
@@ -287,18 +256,7 @@ void PuppetScene::update(Step * _step){
 		}
 	}
 
-	if(keyboard->keyJustDown(GLFW_KEY_W)){
-		playerCharacter->jump();
-		/*if(playerCharacter->torso->body->GetPosition().y < 8){
-			float t = playerCharacter->torso->body->GetAngle();
-			playerCharacter->torso->applyLinearImpulseUp(50*(1-sin(t)));
-			if(playerCharacter->torso->body->GetAngle() > 0){
-				playerCharacter->torso->applyLinearImpulseLeft(150*(1-cos(t)));
-			}else{
-				playerCharacter->torso->applyLinearImpulseRight(150*(1-cos(t)));
-			}
-		}*/
-	}
+	
 
 	if(keyboard->keyJustUp(GLFW_KEY_1)){
 		mouseCam = !mouseCam;
@@ -309,23 +267,7 @@ void PuppetScene::update(Step * _step){
 		}
 	}
 
-	if(keyboard->keyDown(GLFW_KEY_A)){
-		playerCharacter->targetRoll = glm::radians(-45.f);
-		/*playerCharacter->head->applyLinearImpulseLeft(25);
-		if(playerCharacter->transform->scaleVector.x < 0){
-			playerCharacter->transform->scaleX(-1);
-		}*/
-	}
-	if(keyboard->keyDown(GLFW_KEY_D)){
-		playerCharacter->targetRoll = glm::radians(45.f);
-		/*playerCharacter->head->applyLinearImpulseRight(25);
-		if(playerCharacter->transform->scaleVector.x > 0){
-			playerCharacter->transform->scaleX(-1);
-		}*/
-	}
-	if(keyboard->keyJustDown(GLFW_KEY_T)){
-		playerCharacter->action();
-	}
+	
 
 	// camera controls
 	if(keyboard->keyDown(GLFW_KEY_UP)){

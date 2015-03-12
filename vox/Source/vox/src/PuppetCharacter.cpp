@@ -7,12 +7,14 @@
 #include "Box2DWorld.h"
 #include "Item.h"
 #include "Behaviour.h"
+#include <PuppetTexturePack.h>
 
-PuppetCharacter::PuppetCharacter(bool _ai, Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable(),
+	texPack(_texturePack),
 	ai(_ai),
 	canJump(false),
 	dead(false),
@@ -25,46 +27,25 @@ PuppetCharacter::PuppetCharacter(bool _ai, Box2DWorld* _world, int16 _categoryBi
 	behaviourManager(this),
 	score(0.f)
 {
-	TextureSampler * torsoTex, * armTex, * headgearTex, * handTex, * headTex, * faceTex;
-	
-	headTex = PuppetResourceManager::head1;
-	faceTex = PuppetResourceManager::face1;
-	handTex = PuppetResourceManager::hand1;
-	
-	switch(abs(groupIndex) % 4){
-	default:
-	case 0:
-		torsoTex = RaidTheCastleResourceManager::knightRedTorso;
-		armTex = RaidTheCastleResourceManager::knightRedArm;
-		headgearTex = RaidTheCastleResourceManager::knightRedHelmet;
-		break;
-	case 1:
-		torsoTex = RaidTheCastleResourceManager::knightGreenTorso;
-		armTex = RaidTheCastleResourceManager::knightGreenArm;
-		headgearTex = RaidTheCastleResourceManager::knightGreenHelmet;
-		break;
-	case 2:
-		torsoTex = RaidTheCastleResourceManager::knightBlueTorso;
-		armTex = RaidTheCastleResourceManager::knightBlueArm;
-		headgearTex = RaidTheCastleResourceManager::knightBlueHelmet;
-		break;
-	case 3:
-		torsoTex = RaidTheCastleResourceManager::knightYellowTorso;
-		armTex = RaidTheCastleResourceManager::knightYellowArm;
-		headgearTex = RaidTheCastleResourceManager::knightYellowHelmet;
-		break;
+	bool defaultTex = false;
+	if(texPack == nullptr){
+		defaultTex = true;
+		texPack = new PuppetTexturePack(
+			RaidTheCastleResourceManager::knightRedTorso,
+			RaidTheCastleResourceManager::knightRedArm,
+			RaidTheCastleResourceManager::knightRedHelmet
+		);
 	}
 
-	//GameJamCharacter::texture_packs character = GameJamCharacter::kKNIGHT;
-	head = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), headTex->width, headTex->height, headTex->texture, componentScale);
-	face = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), faceTex->width, faceTex->height, faceTex->texture, componentScale);
-	handLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), handTex->width, handTex->height, handTex->texture, componentScale);
-	handRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), handTex->width, handTex->height, handTex->texture, componentScale);
+	head = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->headTex->width, texPack->headTex->height, texPack->headTex->texture, componentScale);
+	face = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->faceTex->width, texPack->faceTex->height, texPack->faceTex->texture, componentScale);
+	handLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->handTex->width, texPack->handTex->height, texPack->handTex->texture, componentScale);
+	handRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->handTex->width, texPack->handTex->height, texPack->handTex->texture, componentScale);
 
-	torso = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), torsoTex->width, torsoTex->height, torsoTex->texture, componentScale*0.5);
-	armLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), armTex->width, armTex->height, armTex->texture, componentScale*0.5);
-	armRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), armTex->width, armTex->height, armTex->texture, componentScale*0.5);
-	headgear = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), headgearTex->width, headgearTex->height, headgearTex->texture, componentScale*0.5);
+	torso = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->torsoTex->width, texPack->torsoTex->height, texPack->torsoTex->texture, componentScale*0.5f);
+	armLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->armTex->width, texPack->armTex->height, texPack->armTex->texture, componentScale*0.5f);
+	armRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->armTex->width, texPack->armTex->height, texPack->armTex->texture, componentScale*0.5f);
+	headgear = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->headgearTex->width, texPack->headgearTex->height, texPack->headgearTex->texture, componentScale*0.5f);
 
 	components.push_back(&armLeft);
 	components.push_back(&armRight);
@@ -200,6 +181,7 @@ PuppetCharacter::PuppetCharacter(bool _ai, Box2DWorld* _world, int16 _categoryBi
 }
 
 PuppetCharacter::~PuppetCharacter(){
+	delete texPack;
 }
 
 void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){

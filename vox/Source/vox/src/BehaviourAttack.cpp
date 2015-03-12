@@ -7,7 +7,8 @@
 #include <Box2DSprite.h>
 
 BehaviourAttack::BehaviourAttack(PuppetCharacter * _source, float _radius, PuppetGame::BOX2D_CATEGORY _filter) :
-	Behaviour(_source, _radius, _filter)
+	Behaviour(_source, _radius, _filter),
+	forward(true)
 {
 
 }
@@ -45,12 +46,15 @@ void BehaviourAttack::update(Step * _step){
 		}
 	}
 
-	/*if(closest != nullptr && closestDist > radius/2.f){
-		closestDir = glm::normalize(closestDir);
-		float speed = 25.f;
-		source->torso->applyLinearImpulseLeft(closestDir.x*speed);
-		//source->torso->applyLinearImpulseUp(closestDir.y*speed);
-
-		// actual lean/jump stuff should be here instead
-	}*/
+	if(closest != nullptr){
+		float t = source->torso->body->GetAngle();
+		if(forward ? (t > glm::radians(60.f)) : (t < glm::radians(-60.f))){
+			forward = !forward;
+		}
+		if(forward){
+			source->targetRoll = glm::radians(-90.f);
+		}else{
+			source->targetRoll = glm::radians(90.f);
+		}
+	}
 }
