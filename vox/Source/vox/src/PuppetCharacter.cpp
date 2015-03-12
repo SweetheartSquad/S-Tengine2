@@ -14,6 +14,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable(),
+	texPack(_texturePack),
 	ai(_ai),
 	canJump(false),
 	dead(false),
@@ -27,28 +28,24 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	score(0.f)
 {
 	bool defaultTex = false;
-	if(_texturePack == nullptr){
+	if(texPack == nullptr){
 		defaultTex = true;
-		_texturePack = new PuppetTexturePack(
+		texPack = new PuppetTexturePack(
 			RaidTheCastleResourceManager::knightRedTorso,
 			RaidTheCastleResourceManager::knightRedArm,
 			RaidTheCastleResourceManager::knightRedHelmet
 		);
 	}
 
-	head = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), _texturePack->headTex->width, _texturePack->headTex->height, _texturePack->headTex->texture, componentScale);
-	face = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), _texturePack->faceTex->width, _texturePack->faceTex->height, _texturePack->faceTex->texture, componentScale);
-	handLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), _texturePack->handTex->width, _texturePack->handTex->height, _texturePack->handTex->texture, componentScale);
-	handRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), _texturePack->handTex->width, _texturePack->handTex->height, _texturePack->handTex->texture, componentScale);
+	head = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->headTex->width, texPack->headTex->height, texPack->headTex->texture, componentScale);
+	face = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->faceTex->width, texPack->faceTex->height, texPack->faceTex->texture, componentScale);
+	handLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->handTex->width, texPack->handTex->height, texPack->handTex->texture, componentScale);
+	handRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->handTex->width, texPack->handTex->height, texPack->handTex->texture, componentScale);
 
-	torso = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), _texturePack->torsoTex->width, _texturePack->torsoTex->height, _texturePack->torsoTex->texture, componentScale*0.5);
-	armLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), _texturePack->armTex->width, _texturePack->armTex->height, _texturePack->armTex->texture, componentScale*0.5);
-	armRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), _texturePack->armTex->width, _texturePack->armTex->height, _texturePack->armTex->texture, componentScale*0.5);
-	headgear = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), _texturePack->headgearTex->width, _texturePack->headgearTex->height, _texturePack->headgearTex->texture, componentScale*0.5);
-
-	if(defaultTex){
-		delete _texturePack;
-	}
+	torso = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->torsoTex->width, texPack->torsoTex->height, texPack->torsoTex->texture, componentScale*0.5);
+	armLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->armTex->width, texPack->armTex->height, texPack->armTex->texture, componentScale*0.5);
+	armRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->armTex->width, texPack->armTex->height, texPack->armTex->texture, componentScale*0.5);
+	headgear = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->headgearTex->width, texPack->headgearTex->height, texPack->headgearTex->texture, componentScale*0.5);
 
 	components.push_back(&armLeft);
 	components.push_back(&armRight);
@@ -184,6 +181,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 }
 
 PuppetCharacter::~PuppetCharacter(){
+	delete texPack;
 }
 
 void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){

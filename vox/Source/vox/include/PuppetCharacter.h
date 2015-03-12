@@ -22,6 +22,8 @@ public:
 
 	float health;
 
+	PuppetTexturePack * texPack;
+
 	Box2DSprite * head;
 	Box2DSprite * torso;
 	Box2DSprite * armLeft;

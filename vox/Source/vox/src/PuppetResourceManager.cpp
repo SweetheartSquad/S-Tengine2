@@ -5,7 +5,7 @@
 #include "Box2DSuperSprite.h"
 #include "RaidTheCastleResourceManager.h"
 
-RaidTheCastleResourceManager * PuppetResourceManager::raidTheCastle = new RaidTheCastleResourceManager(); 
+//RaidTheCastleResourceManager * PuppetResourceManager::raidTheCastle = new RaidTheCastleResourceManager(); 
 
 Texture * PuppetResourceManager::stageFloor = new Texture("../assets/hurly-burly/StageFloor.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::sky		= new Texture("../assets/hurly-burly/Sky.png", 1024, 1024, true, true);
@@ -17,6 +17,7 @@ TextureSampler * PuppetResourceManager::hand1 = new TextureSampler(new Texture("
 
 
 PuppetResourceManager::PuppetResourceManager(){
+	RaidTheCastleResourceManager::init();
 	resources.push_back(stageFloor);
 	resources.push_back(sky);
 	resources.push_back(ground1);
@@ -26,6 +27,6 @@ PuppetResourceManager::PuppetResourceManager(){
 	resources.push_back(hand1);
 
 	//Not sure why I need to call the constructor here 
-	raidTheCastle = new RaidTheCastleResourceManager(); 
-	subManagers.push_back(raidTheCastle);
+	//raidTheCastle = new RaidTheCastleResourceManager(); 
+	//subManagers.push_back(raidTheCastle);
 }

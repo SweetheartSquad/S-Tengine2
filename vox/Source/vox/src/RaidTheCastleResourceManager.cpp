@@ -31,7 +31,7 @@ TextureSampler * RaidTheCastleResourceManager::goldenBreastPlateStick = new Text
 TextureSampler * RaidTheCastleResourceManager::goldenArm     = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Arm1.png", 512, 512, true, true), 40, 105); 
 TextureSampler * RaidTheCastleResourceManager::goldenHelmet  = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Helmet1.png", 512,512, true, true), 114, 165);
 */
-RaidTheCastleResourceManager::RaidTheCastleResourceManager(){
+void RaidTheCastleResourceManager::init(){
 	resources.push_back(catapultArm);
 	resources.push_back(catapultBody);
 	resources.push_back(boulder);
