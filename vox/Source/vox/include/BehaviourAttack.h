@@ -8,7 +8,7 @@ class PuppetCharacter;
 class b2Fixture;
 class Box2DSuperSprite;
 
-class BehaviourFollow : public Behaviour {
+class BehaviourAttack : public Behaviour {
 public:
 	std::vector<Box2DSuperSprite *> targets;
 	
@@ -16,5 +16,5 @@ public:
 	void evaluateEndContact(b2Fixture * _target) override;
 	void update(Step * _step) override;
 
-	BehaviourFollow(PuppetCharacter * _source, float _radius, PuppetGame::BOX2D_CATEGORY _filter);
+	BehaviourAttack(PuppetCharacter * _source, float _radius, PuppetGame::BOX2D_CATEGORY _filter);
 };

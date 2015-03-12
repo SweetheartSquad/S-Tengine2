@@ -193,9 +193,6 @@ void Game::printFps(){
 	}
 }
 
-
-
-
 void Game::switchScene(std::string _newScene){
 	if(scenes.count(_newScene) > 0){
 		switchingScene = true;

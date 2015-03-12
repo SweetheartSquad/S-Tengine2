@@ -240,6 +240,7 @@ void PuppetScene::unload(){
 }
 
 void PuppetScene::update(Step * _step){
+	Scene::update(_step);
 	
 	// destroy used up items
 	for(signed long int i = items.size()-1; i >= 0; --i){
@@ -258,7 +259,6 @@ void PuppetScene::update(Step * _step){
 	puppetController3->update(_step);
 	puppetController4->update(_step);
 
-	Scene::update(_step);
 	world->update(_step);
 
 	time -= _step->deltaTimeCorrection;
