@@ -15,11 +15,11 @@ public:
 	static TextureSampler * face1;
 	static TextureSampler * hand1;
 
-	static TextureSampler * countDown1Tex;
-	static TextureSampler * countDown2Tex;
-	static TextureSampler * countDown3Tex;
-	static TextureSampler * countDown4Tex;
-	static TextureSampler * countDown5Tex;
+	static TextureSampler * countDown1;
+	static TextureSampler * countDown2;
+	static TextureSampler * countDown3;
+	static TextureSampler * countDown4;
+	static TextureSampler * countDown5;
 
 	
 	PuppetResourceManager();
