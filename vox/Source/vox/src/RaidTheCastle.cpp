@@ -18,22 +18,23 @@
 #include "shader/BaseComponentShader.h"
 #include "keyboard.h"
 #include <Texture.h>
+#include <PuppetCharacterCastleChampion.h>
 
 #include <glfw\glfw3.h>
 
 
 RaidTheCastle::RaidTheCastle(PuppetGame* _game):
-	PuppetScene(_game, 0.5)
+	PuppetScene(_game, 0.5),
+	castle(new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30)),
+	catapult(new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kBOUNDARY | PuppetGame::kPLAYER, -10)),
+	champion(new PuppetCharacterCastleChampion(world, PuppetGame::kPLAYER, -1, -20))
 {
-	castle = new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30);
-	
 	castle->setShader(shader, true);
 	castle->addToLayeredScene(this, 0);
 	addChild(castle, 0);
 
 	castle->translateComponents(glm::vec3(150, 0, 0));
 
-	catapult = new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kBOUNDARY | PuppetGame::kPLAYER, -10);
 	catapult->setShader(shader, true);
 	catapult->addToLayeredScene(this, 1);
 	addChild(catapult, 1);
@@ -42,9 +43,15 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	loadCatapult();
 
+	champion->setShader(shader, true);
+	addChild(champion, 0);
+	champion->addToLayeredScene(this, 1);
+	champion->head->maxVelocity = b2Vec2(10, 10);
+	champion->translateComponents(glm::vec3(100,15,0));
+
 	//playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter4, 10, PuppetGame::kPLAYER));
-	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(0,0,0), glm::vec3(50,0,0), playerCharacter4, 10));
-	playerCharacter4->ai = true;
+	//playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
+	//playerCharacter4->ai = true;
 
 	gameCam->addTarget(castle->rootComponent);
 	gameCam->addTarget(catapult->rootComponent);

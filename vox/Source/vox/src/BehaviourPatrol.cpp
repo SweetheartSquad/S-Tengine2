@@ -28,17 +28,9 @@ void BehaviourPatrol::update(Step * _step){
 			--nextWayPoint;
 		}
 	}
-
-	if(dif > 0){
-		source->targetRoll = glm::radians(45.f);
-	}else{
-		source->targetRoll = glm::radians(-45.f);
-	}
-
-	//source->rootComponent->applyLinearImpulseRight(150*glm::sign(dif));
-
-	source->jump();
 	
+	source->targetRoll = glm::radians(((std::rand()%15)+30) * glm::sign(dif));
+	source->jump();
 }
 
 void BehaviourPatrol::addWayPoint(glm::vec3 _wayPoint){

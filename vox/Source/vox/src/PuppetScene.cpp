@@ -161,13 +161,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter4->translateComponents(glm::vec3(30.0f, 15.f, 0.f));
 
-	michael = new TestCharacter(world, false, PuppetGame::kPLAYER, PuppetGame::kSTRUCTURE | /*PuppetGame::kITEM | */PuppetGame::kPLAYER, -5);
-	michael->setShader(shader, true);
-	addChild(michael, 1);
-	michael->addToLayeredScene(this, 1);
-
-	michael->translateComponents(glm::vec3(1,50,0));
-
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");
 
@@ -217,7 +210,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	gameCam->addTarget(playerCharacter2->torso);
 	gameCam->addTarget(playerCharacter3->torso);
 	gameCam->addTarget(playerCharacter4->torso);
-	gameCam->addTarget(michael->torso);
 	gameCam->farClip = 1000.f;
 	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
 	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
@@ -291,14 +283,14 @@ void PuppetScene::update(Step * _step){
 	}
 
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		playerCharacter->targetRoll = glm::radians(45.f);
+		playerCharacter->targetRoll = glm::radians(-45.f);
 		/*playerCharacter->head->applyLinearImpulseLeft(25);
 		if(playerCharacter->transform->scaleVector.x < 0){
 			playerCharacter->transform->scaleX(-1);
 		}*/
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		playerCharacter->targetRoll = glm::radians(-45.f);
+		playerCharacter->targetRoll = glm::radians(45.f);
 		/*playerCharacter->head->applyLinearImpulseRight(25);
 		if(playerCharacter->transform->scaleVector.x > 0){
 			playerCharacter->transform->scaleX(-1);

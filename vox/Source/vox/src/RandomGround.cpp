@@ -73,11 +73,18 @@ RandomGround::RandomGround(Box2DWorld * _world, unsigned long int _numPoints, fl
 	
 	b2Filter sf;
 	sf.categoryBits = PuppetGame::kGROUND;
-
 	b2ChainShape chain;
 	chain.CreateChain(p, _numPoints);
-	body->CreateFixture(&chain, 1.f);
-	body->GetFixtureList()->SetFilterData(sf);
+
+	b2FixtureDef fd;
+	fd.shape = &chain;
+	fd.filter = sf;
+	fd.density = 1;
+	fd.friction = 1;
+	fd.restitution = 0;
+	fd.userData = this;
+	fd.isSensor = false;
+	body->CreateFixture(&fd);
 
 
 	//Weird problem with chain's destructor being called twice
