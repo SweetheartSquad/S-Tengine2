@@ -34,7 +34,7 @@ void BehaviourManager::addBehaviour(Behaviour * _behaviour){
 	b2CircleShape torsoShape;
 	torsoShape.m_radius = _behaviour->radius;
 
-	b2Fixture * sensorTorso = target->torso->body->CreateFixture(&torsoShape, 1);
+	b2Fixture * sensorTorso = target->torso->body->CreateFixture(&torsoShape, 0);
 	sensorTorso->SetSensor(true);
 	sensorTorso->SetUserData(_behaviour);
 	b2Filter f;
