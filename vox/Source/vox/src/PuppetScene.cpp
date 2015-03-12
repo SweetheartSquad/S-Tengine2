@@ -43,7 +43,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	duration(seconds),
 	currentTime(0),
 	countDown(5),
-	cl(new RaidTheCastleContactListener(this)),
+	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
 	playerCharacter(new PuppetCharacter(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -1)),
@@ -220,17 +220,17 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	gameCam->pitch = -10.0f;
 	camera = gameCam;
 
-	TextureSampler countDown1Tex = TextureSampler(new Texture("../assets/hurly-burly/Countdown/1.png", 512, 512, true, true), 200, 200);
-	TextureSampler countDown2Tex = TextureSampler(new Texture("../assets/hurly-burly/Countdown/2.png", 512, 512, true, true), 200, 200);
-	TextureSampler countDown3Tex = TextureSampler(new Texture("../assets/hurly-burly/Countdown/3.png", 512, 512, true, true), 200, 200);
-	TextureSampler countDown4Tex = TextureSampler(new Texture("../assets/hurly-burly/Countdown/4.png", 512, 512, true, true), 200, 200);
-	TextureSampler countDown5Tex = TextureSampler(new Texture("../assets/hurly-burly/Countdown/5.png", 512, 512, true, true), 200, 200);
+	TextureSampler * countDown1TextureSampler = PuppetResourceManager::countDown1Tex;
+	TextureSampler * countDown2TextureSampler = PuppetResourceManager::countDown2Tex;
+	TextureSampler * countDown3TextureSampler = PuppetResourceManager::countDown3Tex;
+	TextureSampler * countDown4TextureSampler = PuppetResourceManager::countDown4Tex;
+	TextureSampler * countDown5TextureSampler = PuppetResourceManager::countDown5Tex;
 
-	Box2DSprite * countDown1 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown1Tex.width, countDown1Tex.height, countDown1Tex.texture, 0.1f);
-	Box2DSprite * countDown2 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown2Tex.width, countDown2Tex.height, countDown2Tex.texture, 0.1f);
-	Box2DSprite * countDown3 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown3Tex.width, countDown3Tex.height, countDown3Tex.texture, 0.1f);
-	Box2DSprite * countDown4 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown4Tex.width, countDown4Tex.height, countDown4Tex.texture, 0.1f);
-	Box2DSprite * countDown5 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown5Tex.width, countDown5Tex.height, countDown5Tex.texture, 0.1f);
+	Box2DSprite * countDown1 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown1TextureSampler->width, countDown1TextureSampler->height, countDown1TextureSampler->texture, 0.1f);
+	Box2DSprite * countDown2 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown2TextureSampler->width, countDown2TextureSampler->height, countDown2TextureSampler->texture, 0.1f);
+	Box2DSprite * countDown3 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown3TextureSampler->width, countDown3TextureSampler->height, countDown3TextureSampler->texture, 0.1f);
+	Box2DSprite * countDown4 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown4TextureSampler->width, countDown4TextureSampler->height, countDown4TextureSampler->texture, 0.1f);
+	Box2DSprite * countDown5 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown5TextureSampler->width, countDown5TextureSampler->height, countDown5TextureSampler->texture, 0.1f);
 
 	countDownNumbers.push_back(countDown1);
 	countDownNumbers.push_back(countDown2);

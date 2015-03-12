@@ -11,7 +11,7 @@ class PuppetController;
 class PuppetCharacter;
 class GameJamCharacter;
 class Catapult;
-class RaidTheCastleContactListener;
+class PuppetContactListener;
 class DialogHandler;
 class AccelerometerParser;
 class Box2DMeshEntity;
@@ -40,7 +40,7 @@ public:
 	unsigned int countDown;
 	std::vector<Box2DSprite *> countDownNumbers;
 
-	RaidTheCastleContactListener * cl;
+	PuppetContactListener * cl;
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
 

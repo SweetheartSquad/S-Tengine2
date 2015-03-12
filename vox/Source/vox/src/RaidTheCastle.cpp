@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RaidTheCastle.h"
+#include <RaidTheCastleContactListener.h>
 #include "Castle.h"
 #include "PuppetGame.h"
 #include "PuppetCharacter.h"
@@ -29,6 +30,8 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	catapult(new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kBOUNDARY | PuppetGame::kPLAYER, -10)),
 	champion(new PuppetCharacterCastleChampion(world, PuppetGame::kPLAYER, -1, -20))
 {
+	cl = new RaidTheCastleContactListener(this);
+
 	castle->setShader(shader, true);
 	castle->addToLayeredScene(this, 0);
 	addChild(castle, 0);
