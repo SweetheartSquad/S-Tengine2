@@ -39,7 +39,7 @@ PuppetCharacterKnight::PuppetCharacterKnight(bool _ai, unsigned long int _id, Bo
 		(*c)->createFixture(sf);
 	}
 
-	itemToPickup->setUserData(this);
+	itemToPickup->setUserData(itemToPickup);
 
 }
 
