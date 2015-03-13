@@ -38,7 +38,11 @@ public:
 	float duration;
 	float currentTime;
 	unsigned int countDown;
-	std::vector<Box2DSprite *> countDownNumbers;
+	std::vector<Sprite *> countDownNumbers;
+
+	Sprite * splashMessage;
+	bool displayingSplash;
+	float splashDuration;
 
 	PuppetContactListener * cl;
 	Box2DWorld * world;

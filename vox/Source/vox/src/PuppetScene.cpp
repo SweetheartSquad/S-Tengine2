@@ -30,7 +30,7 @@
 #include <Arduino.h>
 #include <AccelerometerParser.h>
 #include <Accelerometer.h>
-
+#include <FollowCamera.h>
 #include <PuppetCharacter.h>
 #include <PuppetController.h>
 #include <RandomGround.h>
@@ -43,6 +43,9 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	duration(seconds),
 	currentTime(0),
 	countDown(5),
+	displayingSplash(false),
+	splashMessage(nullptr),
+	splashDuration(3.f),
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
@@ -203,26 +206,34 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	TextureSampler * countDown4TextureSampler = PuppetResourceManager::countDown4;
 	TextureSampler * countDown5TextureSampler = PuppetResourceManager::countDown5;
 
-	Box2DSprite * countDown1 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown1TextureSampler->width, countDown1TextureSampler->height, countDown1TextureSampler->texture, 1.f);
-	Box2DSprite * countDown2 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown2TextureSampler->width, countDown2TextureSampler->height, countDown2TextureSampler->texture, 1.f);
-	Box2DSprite * countDown3 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown3TextureSampler->width, countDown3TextureSampler->height, countDown3TextureSampler->texture, 1.f);
-	Box2DSprite * countDown4 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown4TextureSampler->width, countDown4TextureSampler->height, countDown4TextureSampler->texture, 1.f);
-	Box2DSprite * countDown5 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown5TextureSampler->width, countDown5TextureSampler->height, countDown5TextureSampler->texture, 1.f);
 
-	countDown1->transform->scale(glm::vec3(1000, 1000, 1000));
-	countDown2->transform->scale(glm::vec3(1000, 1000, 1000));
-	countDown3->transform->scale(glm::vec3(1000, 1000, 1000));
-	countDown4->transform->scale(glm::vec3(1000, 1000, 1000));
-	countDown5->transform->scale(glm::vec3(1000, 1000, 1000));
+	Sprite * countDown1 = new Sprite(nullptr, new Transform());
+	Sprite * countDown2 = new Sprite(nullptr, new Transform());
+	Sprite * countDown3 = new Sprite(nullptr, new Transform());
+	Sprite * countDown4 = new Sprite(nullptr, new Transform());
+	Sprite * countDown5 = new Sprite(nullptr, new Transform());
+
+	countDown1->transform->scale(glm::vec3(3, 3, 0));
+	countDown2->transform->scale(glm::vec3(3, 3, 0));
+	countDown3->transform->scale(glm::vec3(3, 3, 0));
+	countDown4->transform->scale(glm::vec3(3, 3, 0));
+	countDown5->transform->scale(glm::vec3(3, 3, 0));
+	
+	countDown1->mesh->pushTexture2D(countDown1TextureSampler->texture);
+	countDown2->mesh->pushTexture2D(countDown2TextureSampler->texture);
+	countDown3->mesh->pushTexture2D(countDown3TextureSampler->texture);
+	countDown4->mesh->pushTexture2D(countDown4TextureSampler->texture);
+	countDown5->mesh->pushTexture2D(countDown5TextureSampler->texture);
 
 	countDownNumbers.push_back(countDown1);
 	countDownNumbers.push_back(countDown2);
 	countDownNumbers.push_back(countDown3);
 	countDownNumbers.push_back(countDown4);
 	countDownNumbers.push_back(countDown5);
-
-	for(Box2DSprite * n : countDownNumbers){
+	
+	for(Sprite * n : countDownNumbers){
 		n->setShader(shader, true);
+		n->transform->scale(-1, 1, 1);
 	}
 }
 
@@ -239,6 +250,45 @@ void PuppetScene::unload(){
 
 void PuppetScene::update(Step * _step){
 	Scene::update(_step);
+
+	if(splashMessage != nullptr){
+		if(currentTime < splashDuration){
+			if(displayingSplash){
+				// the factor of 15 is only there because I can't load this thing at the correct size...
+				float scale = 15 * (splashDuration - currentTime)/splashDuration;
+				splashMessage->transform->scaleVector = glm::vec3(-scale, scale, 1);
+			}else{
+				addChild(splashMessage, 2);
+				displayingSplash = true;
+			}
+
+			splashMessage->transform->translationVector.x = gameCam->transform->translationVector.x;
+			splashMessage->transform->translationVector.y = gameCam->transform->translationVector.y;
+			splashMessage->transform->translationVector.z = 0;
+
+		}else{
+			// Remove previous number from scene
+			// Just copying destroyItem stuff for now
+			for(signed long int j = children.size()-1; j >= 0; --j){
+				if(children.at(j) == splashMessage){
+					children.erase(children.begin() + j);
+				}
+			}
+			for(std::vector<Entity *> * layer : layers){
+				for(signed long int j = layer->size()-1; j >= 0; --j){
+					if(layer->at(j) == splashMessage){
+						layer->erase(layer->begin() + j);
+					}
+				}
+			}
+		}
+	}
+
+	for(Sprite * n : countDownNumbers){
+		n->transform->translationVector.x = gameCam->transform->translationVector.x;
+		n->transform->translationVector.y = gameCam->transform->translationVector.y;
+		n->transform->translationVector.z = 0;
+	}
 	
 	// destroy used up items
 	for(signed long int i = items.size()-1; i >= 0; --i){

@@ -39,6 +39,13 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 {
 	cl = new RaidTheCastleContactListener(this);
 
+	TextureSampler * splashMessageTextureSampler = RaidTheCastleResourceManager::splashMessage;
+	splashMessage = new Sprite(nullptr, new Transform());
+	splashMessage->transform->scale(glm::vec3(3, 3, 0));
+	splashMessage->mesh->pushTexture2D(splashMessageTextureSampler->texture);
+	splashMessage->setShader(shader, true);
+	splashMessage->transform->scale(-1, 1, 1);
+
 	playerCharacter->setShader(shader, true);
 	addChild(playerCharacter, 1);
 	playerCharacter->addToLayeredScene(this, 1);

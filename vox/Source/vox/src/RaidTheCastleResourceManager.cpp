@@ -29,6 +29,7 @@ TextureSampler * RaidTheCastleResourceManager::castleChampionTorso	= new Texture
 TextureSampler * RaidTheCastleResourceManager::castleChampionArm	= new TextureSampler(new Texture("../assets/hurly-burly/CastleChampionAssets/CCArm.png", 1024, 1024, true, true), 67, 200);
 TextureSampler * RaidTheCastleResourceManager::castleChampionHelmet	= new TextureSampler(new Texture("../assets/hurly-burly/CastleChampionAssets/CCHelmet.png", 1024, 1024, true, true), 229, 295);
 
+TextureSampler * RaidTheCastleResourceManager::splashMessage	= new TextureSampler(new Texture("../assets/hurly-burly/SplashMessages/RaidTheCastle.png", 1024, 1024, true, true), 300, 100);
 
 TextureSampler * RaidTheCastleResourceManager::itemAxe	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Axe.png", 1024, 1024, true, true), 230, 395);
 TextureSampler * RaidTheCastleResourceManager::itemClub	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Club.png", 1024, 1024, true, true), 83, 515);
@@ -43,6 +44,9 @@ TextureSampler * RaidTheCastleResourceManager::goldenArm     = new TextureSample
 TextureSampler * RaidTheCastleResourceManager::goldenHelmet  = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Helmet1.png", 512,512, true, true), 114, 165);
 */
 void RaidTheCastleResourceManager::init(){
+
+	resources.push_back(splashMessage);
+
 	resources.push_back(catapultArm);
 	resources.push_back(catapultBody);
 	resources.push_back(boulder);
