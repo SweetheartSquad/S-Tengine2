@@ -49,8 +49,6 @@ public:
 	/** List of references to scenes in the game */
 	std::map<std::string, Scene*> scenes;
 
-	static ResourceManager * resourceManager;
-
 	/**Perorms a full game loop*/
 	void performGameLoop();
 

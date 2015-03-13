@@ -49,10 +49,11 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
-	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, false)),
+	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, true)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
+	countdownSoundManager(new SoundManager()),
 	mouseCam(false),
 	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::ground1, 1, 1))
 {
@@ -61,27 +62,26 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	
+	countdownSoundManager->addNewSound("1", "../assets/hurly-burly/test.wav");
+	countdownSoundManager->addNewSound("2", "../assets/hurly-burly/test.wav");
+	countdownSoundManager->addNewSound("3", "../assets/hurly-burly/test.wav");
+	countdownSoundManager->addNewSound("4", "../assets/hurly-burly/test.wav");
+	countdownSoundManager->addNewSound("5", "../assets/hurly-burly/test.wav");
+
+	countdownSoundManager->play("1");
+
 	background->setShader(shader, true);
-	background->transform->translate(0.0f, 25.f, -10.0f);
-	background->transform->scale(125, 25, 1);
+	background->transform->translate(0.0f, 50.f, -10.0f);
+	background->transform->scale(125 * 5, 50, 1);
 	background->mesh->pushTexture2D(PuppetResourceManager::sky);
 	background->mesh->uvEdgeMode = GL_REPEAT;
 	background->mesh->dirty = true;
-
-	int timeOfDayOptions = 4;
-	int timeOfDay = std::rand()%timeOfDayOptions;
-	background->mesh->setUV(0, (float)timeOfDay/timeOfDayOptions, 0);
-	background->mesh->setUV(1, (float)(timeOfDay+1)/timeOfDayOptions, 0);
-	background->mesh->setUV(2, (float)(timeOfDay+1)/timeOfDayOptions, 1);
-	background->mesh->setUV(3, (float)timeOfDay/timeOfDayOptions, 1);
-
-	addChild(background, 0);
 
 	ground->setShader(shader, true);
 	ground->setTranslationPhysical(0, 0, 0);
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
 	ground->transform->rotate(90.f, 0, 0, 1, kOBJECT);
-	ground->transform->scale(250, 250, 1);
+	ground->transform->scale(25, 250, 1);
 	ground->mesh->uvEdgeMode = GL_REPEAT;
 	ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
 	ground->body->SetTransform(b2Vec2(0, -250), 0);
@@ -93,12 +93,23 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 
 	//Set UVs so the texture isn't stretched
 	ground->mesh->setUV(0, 0.0,  0.0);
-	ground->mesh->setUV(1, 0.0,  40.0);
-	ground->mesh->setUV(2, 40.0, 40.0);
+	ground->mesh->setUV(1, 0.0,  4.0);
+	ground->mesh->setUV(2, 40.0, 4.0);
 	ground->mesh->setUV(3, 40.0, 0.0);
 
 	world->addToWorld(ground, 2);
 	addChild(ground, 0);
+	ground->body->GetFixtureList()->SetFriction(1);
+	ground->body->GetFixtureList()->SetRestitution(0);
+
+	int timeOfDayOptions = 4;
+	int timeOfDay = std::rand()%timeOfDayOptions;
+	background->mesh->setUV(0, (float)timeOfDay/timeOfDayOptions, 0);
+	background->mesh->setUV(1, (float)(timeOfDay+1)/timeOfDayOptions, 0);
+	background->mesh->setUV(2, (float)(timeOfDay+1)/timeOfDayOptions, 1);
+	background->mesh->setUV(3, (float)timeOfDay/timeOfDayOptions, 1);
+
+	addChild(background, 0);
 
 	b2PolygonShape dynamicBox;
 	dynamicBox.SetAsBox(1.0f * std::abs(ground->transform->scaleVector.x), 1.0f * std::abs(ground->transform->scaleVector.y));	
@@ -137,8 +148,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 		}
 		addChild(foliage, 0);
 	}*/
-
-	
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");
@@ -197,13 +206,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	TextureSampler * countDown3TextureSampler = PuppetResourceManager::countDown3;
 	TextureSampler * countDown4TextureSampler = PuppetResourceManager::countDown4;
 	TextureSampler * countDown5TextureSampler = PuppetResourceManager::countDown5;
-	/*
-	Box2DSprite * countDown1 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown1TextureSampler->width, countDown1TextureSampler->height, countDown1TextureSampler->texture, 1.f);
-	Box2DSprite * countDown2 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown2TextureSampler->width, countDown2TextureSampler->height, countDown2TextureSampler->texture, 1.f);
-	Box2DSprite * countDown3 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown3TextureSampler->width, countDown3TextureSampler->height, countDown3TextureSampler->texture, 1.f);
-	Box2DSprite * countDown4 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown4TextureSampler->width, countDown4TextureSampler->height, countDown4TextureSampler->texture, 1.f);
-	Box2DSprite * countDown5 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown5TextureSampler->width, countDown5TextureSampler->height, countDown5TextureSampler->texture, 1.f);
-	*/
 
 	Sprite * countDown1 = new Sprite(nullptr, new Transform());
 	Sprite * countDown2 = new Sprite(nullptr, new Transform());
@@ -222,13 +224,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	countDown3->mesh->pushTexture2D(countDown3TextureSampler->texture);
 	countDown4->mesh->pushTexture2D(countDown4TextureSampler->texture);
 	countDown5->mesh->pushTexture2D(countDown5TextureSampler->texture);
-	/*
-	countDown1->setUvs(vox::Rectangle(0, 0, 0.95, 0.1));
-	countDown2->setUvs(vox::Rectangle(0, 0, 0.95, 0.1));
-	countDown3->setUvs(vox::Rectangle(0, 0, 0.95, 0.1));
-	countDown4->setUvs(vox::Rectangle(0, 0, 0.95, 0.1));
-	countDown5->setUvs(vox::Rectangle(0, 0, 0.95, 0.1));
-	*/
+
 	countDownNumbers.push_back(countDown1);
 	countDownNumbers.push_back(countDown2);
 	countDownNumbers.push_back(countDown3);
@@ -238,26 +234,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	for(Sprite * n : countDownNumbers){
 		n->setShader(shader, true);
 		n->transform->scale(-1, 1, 1);
-		//n->transform = mouseCamera->transform;
-		/*n->mesh->vertices.at(0).x *= 100;
-		n->mesh->vertices.at(0).y *= 100;
-		n->mesh->vertices.at(0).z *= 100;
-		n->mesh->vertices.at(1).x *= 100;
-		n->mesh->vertices.at(1).y *= 100;
-		n->mesh->vertices.at(1).z *= 100;
-		n->mesh->vertices.at(2).x *= 100;
-		n->mesh->vertices.at(2).y *= 100;
-		n->mesh->vertices.at(2).z *= 100;
-		n->mesh->vertices.at(3).x *= 100;
-		n->mesh->vertices.at(3).y *= 100;
-		n->mesh->vertices.at(3).z *= 100;*/
-		/*
-		n->mesh->vertices.at(0).x -= 10;
-		n->mesh->vertices.at(1).x -= 10;
-		n->mesh->vertices.at(2).x -= 10;
-		n->mesh->vertices.at(3).x -= 10;
-		n->mesh->dirty=true;
-		*/
 	}
 }
 
@@ -356,7 +332,6 @@ void PuppetScene::update(Step * _step){
 	}
 
 	
-
 	// camera controls
 	if(keyboard->keyDown(GLFW_KEY_UP)){
 		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
@@ -464,7 +439,8 @@ void PuppetScene::doCountDown(){
 	std::cout << "idx: " << countDown << std::endl;
 	std::cout << "=========================" << std::endl;
 
+	countdownSoundManager->play("1");
+
 	// Add new number to scene
 	addChild(countDownNumbers.at(countDown), 2);
-
 }

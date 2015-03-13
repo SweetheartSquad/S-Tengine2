@@ -53,4 +53,7 @@ public:
 	void pickupItem(Item * _item);
 
 	BehaviourManager behaviourManager;
+
+	virtual void addToLayeredScene(LayeredScene * _scene, unsigned long int _layer) override;
+	virtual void setShader(Shader * _shader, bool _configureDefaultAttributes) override;
 };

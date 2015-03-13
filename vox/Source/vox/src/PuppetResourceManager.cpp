@@ -21,7 +21,7 @@ TextureSampler * PuppetResourceManager::countDown3 = new TextureSampler(new Text
 TextureSampler * PuppetResourceManager::countDown4 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/4.png", 512, 512, true, true), 48, 60);
 TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/5.png", 512, 512, true, true), 42, 61);
 
-PuppetResourceManager::PuppetResourceManager(){
+void PuppetResourceManager::init(){
 	RaidTheCastleResourceManager::init();
 	resources.push_back(stageFloor);
 	resources.push_back(sky);

@@ -23,6 +23,7 @@
 PuppetContactListener::PuppetContactListener(PuppetScene * _scene) :
 	scene(_scene)
 {
+	_scene->world->b2world->SetContactListener(this);
 }
 
 void PuppetContactListener::BeginContact(b2Contact * _contact){

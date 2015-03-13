@@ -10,6 +10,8 @@ class Texture;
 
 class RaidTheCastleResourceManager abstract : public ResourceManager{
 public:
+	static TextureSampler * splashMessage;
+
 	static Texture * castleSpriteSheet;
 
 	static TextureSampler * catapultArm;
@@ -42,7 +44,12 @@ public:
 	static TextureSampler * castleChampionArm;
 	static TextureSampler * castleChampionHelmet;
 
-	static TextureSampler * splashMessage;
+	static TextureSampler * itemAxe;
+	static TextureSampler * itemClub;
+	static TextureSampler * itemMace;
+	static TextureSampler * itemSword;
+	static TextureSampler * itemScimitar;
+	static TextureSampler * itemFlailGrip;
 	
 	static void init();
 	//RaidTheCastleResourceManager();

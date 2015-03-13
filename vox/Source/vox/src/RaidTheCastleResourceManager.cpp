@@ -31,12 +31,22 @@ TextureSampler * RaidTheCastleResourceManager::castleChampionHelmet	= new Textur
 
 TextureSampler * RaidTheCastleResourceManager::splashMessage	= new TextureSampler(new Texture("../assets/hurly-burly/SplashMessages/RaidTheCastle.png", 1024, 1024, true, true), 300, 100);
 
+TextureSampler * RaidTheCastleResourceManager::itemAxe	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Axe.png", 1024, 1024, true, true), 230, 395);
+TextureSampler * RaidTheCastleResourceManager::itemClub	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Club.png", 1024, 1024, true, true), 83, 515);
+TextureSampler * RaidTheCastleResourceManager::itemMace	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Mace.png", 1024, 1024, true, true), 178, 516);
+TextureSampler * RaidTheCastleResourceManager::itemSword	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Sword.png", 1024, 1024, true, true), 81, 382);
+TextureSampler * RaidTheCastleResourceManager::itemScimitar	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Scimitar.png", 1024, 1024, true, true), 79, 401);
+TextureSampler * RaidTheCastleResourceManager::itemFlailGrip	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/FlailGrip.png", 1024, 1024, true, true), 51, 134);
+
 /*
 TextureSampler * RaidTheCastleResourceManager::goldenBreastPlateStick = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/BreastplateStick1.png", 512, 512, true, true),	145, 405); 
 TextureSampler * RaidTheCastleResourceManager::goldenArm     = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Arm1.png", 512, 512, true, true), 40, 105); 
 TextureSampler * RaidTheCastleResourceManager::goldenHelmet  = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Helmet1.png", 512,512, true, true), 114, 165);
 */
 void RaidTheCastleResourceManager::init(){
+
+	resources.push_back(splashMessage);
+
 	resources.push_back(catapultArm);
 	resources.push_back(catapultBody);
 	resources.push_back(boulder);
@@ -65,6 +75,11 @@ void RaidTheCastleResourceManager::init(){
 	resources.push_back(castleChampionTorso);
 	resources.push_back(castleChampionArm);
 	resources.push_back(castleChampionHelmet);
-
-	resources.push_back(splashMessage);
+	
+	resources.push_back(itemAxe);
+	resources.push_back(itemClub);
+	resources.push_back(itemMace);
+	resources.push_back(itemSword);
+	resources.push_back(itemScimitar);
+	resources.push_back(itemFlailGrip);
 }

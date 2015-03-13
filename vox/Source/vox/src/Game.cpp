@@ -30,8 +30,6 @@ Game::Game(bool _isRunning):
 	viewPortHeight = height;
 	viewPortX = 0;
 	viewPortY = 0;
-
-	resourceManager->load();
 }
 
 Game::~Game(void){
@@ -245,7 +243,7 @@ void Game::toggleFullScreen(){
 	viewPortX = 0;
 	viewPortY = 0;
 	
-	resourceManager->unload();
+	ResourceManager::unload();
 
 	for(std::pair<std::string, Scene *> s : scenes){
 		s.second->unload();
@@ -253,8 +251,9 @@ void Game::toggleFullScreen(){
 	for(std::pair<std::string, Scene *> s : scenes){
 		s.second->load();
 	}
-
-	resourceManager->load();
+	
+	ResourceManager::load();
+	//resourceManager->load();
 
 	GLUtils::checkForError(0,__FILE__,__LINE__);
 }

@@ -4,7 +4,7 @@
 #include "Texture.h"
 #include "RaidTheCastleResourceManager.h"
 
-class PuppetResourceManager : public ResourceManager{
+class PuppetResourceManager abstract : public ResourceManager{
 public:	
 	static RaidTheCastleResourceManager * raidTheCastle;
 
@@ -20,7 +20,6 @@ public:
 	static TextureSampler * countDown3;
 	static TextureSampler * countDown4;
 	static TextureSampler * countDown5;
-
 	
-	PuppetResourceManager();
+	static void init();
 };

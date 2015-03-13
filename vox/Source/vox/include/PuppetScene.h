@@ -58,6 +58,7 @@ public:
 	MeshEntity * background;
 	BaseComponentShader* shader;
 	SoundManager * soundManager;
+	SoundManager * countdownSoundManager;
 	AccelerometerParser * arduino;
 
 	FollowCamera * gameCam;
