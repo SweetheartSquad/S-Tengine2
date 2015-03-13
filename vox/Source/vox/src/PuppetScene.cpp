@@ -272,7 +272,6 @@ void PuppetScene::update(Step * _step){
 	}
 
 	
-
 	// camera controls
 	if(keyboard->keyDown(GLFW_KEY_UP)){
 		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
