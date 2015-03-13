@@ -40,6 +40,10 @@ public:
 	unsigned int countDown;
 	std::vector<Sprite *> countDownNumbers;
 
+	Sprite * splashMessage;
+	bool displayingSplash;
+	float splashDuration;
+
 	PuppetContactListener * cl;
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;

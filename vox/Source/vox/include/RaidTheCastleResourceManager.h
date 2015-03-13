@@ -41,6 +41,8 @@ public:
 	static TextureSampler * castleChampionTorso;
 	static TextureSampler * castleChampionArm;
 	static TextureSampler * castleChampionHelmet;
+
+	static TextureSampler * splashMessage;
 	
 	static void init();
 	//RaidTheCastleResourceManager();

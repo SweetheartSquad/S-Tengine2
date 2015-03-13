@@ -29,6 +29,7 @@ TextureSampler * RaidTheCastleResourceManager::castleChampionTorso	= new Texture
 TextureSampler * RaidTheCastleResourceManager::castleChampionArm	= new TextureSampler(new Texture("../assets/hurly-burly/CastleChampionAssets/CCArm.png", 1024, 1024, true, true), 67, 200);
 TextureSampler * RaidTheCastleResourceManager::castleChampionHelmet	= new TextureSampler(new Texture("../assets/hurly-burly/CastleChampionAssets/CCHelmet.png", 1024, 1024, true, true), 229, 295);
 
+TextureSampler * RaidTheCastleResourceManager::splashMessage	= new TextureSampler(new Texture("../assets/hurly-burly/SplashMessages/RaidTheCastle.png", 1024, 1024, true, true), 300, 100);
 
 /*
 TextureSampler * RaidTheCastleResourceManager::goldenBreastPlateStick = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/BreastplateStick1.png", 512, 512, true, true),	145, 405); 
@@ -64,4 +65,6 @@ void RaidTheCastleResourceManager::init(){
 	resources.push_back(castleChampionTorso);
 	resources.push_back(castleChampionArm);
 	resources.push_back(castleChampionHelmet);
+
+	resources.push_back(splashMessage);
 }

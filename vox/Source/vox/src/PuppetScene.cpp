@@ -43,6 +43,9 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	duration(seconds),
 	currentTime(0),
 	countDown(5),
+	displayingSplash(false),
+	splashMessage(nullptr),
+	splashDuration(3.f),
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
@@ -271,6 +274,40 @@ void PuppetScene::unload(){
 
 void PuppetScene::update(Step * _step){
 	Scene::update(_step);
+
+	if(splashMessage != nullptr){
+		if(currentTime < splashDuration){
+			if(displayingSplash){
+				// the factor of 15 is only there because I can't load this thing at the correct size...
+				float scale = 15 * (splashDuration - currentTime)/splashDuration;
+				splashMessage->transform->scaleVector = glm::vec3(-scale, scale, 1);
+			}else{
+				addChild(splashMessage, 2);
+				displayingSplash = true;
+			}
+
+			splashMessage->transform->translationVector.x = gameCam->transform->translationVector.x;
+			splashMessage->transform->translationVector.y = gameCam->transform->translationVector.y;
+			splashMessage->transform->translationVector.z = 0;
+
+		}else{
+			// Remove previous number from scene
+			// Just copying destroyItem stuff for now
+			for(signed long int j = children.size()-1; j >= 0; --j){
+				if(children.at(j) == splashMessage){
+					children.erase(children.begin() + j);
+				}
+			}
+			for(std::vector<Entity *> * layer : layers){
+				for(signed long int j = layer->size()-1; j >= 0; --j){
+					if(layer->at(j) == splashMessage){
+						layer->erase(layer->begin() + j);
+					}
+				}
+			}
+		}
+	}
+
 	for(Sprite * n : countDownNumbers){
 		n->transform->translationVector.x = gameCam->transform->translationVector.x;
 		n->transform->translationVector.y = gameCam->transform->translationVector.y;
