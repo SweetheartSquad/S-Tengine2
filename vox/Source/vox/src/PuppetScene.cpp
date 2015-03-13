@@ -59,13 +59,12 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	
-	countdownSoundManager->addNewSound("1", "../assets/hurly-burly/test.wav");
-	countdownSoundManager->addNewSound("2", "../assets/hurly-burly/test.wav");
-	countdownSoundManager->addNewSound("3", "../assets/hurly-burly/test.wav");
-	countdownSoundManager->addNewSound("4", "../assets/hurly-burly/test.wav");
-	countdownSoundManager->addNewSound("5", "../assets/hurly-burly/test.wav");
+	countdownSoundManager->addNewSound("1", "../assets/hurly-burly/audio/HighCountdown_One.ogg");
+	countdownSoundManager->addNewSound("2", "../assets/hurly-burly/audio/HighCountdown_Two.ogg");
+	countdownSoundManager->addNewSound("3", "../assets/hurly-burly/audio/HighCountdown_Three.ogg");
+	countdownSoundManager->addNewSound("4", "../assets/hurly-burly/audio/HighCountdown_Four.ogg");
+	countdownSoundManager->addNewSound("5", "../assets/hurly-burly/audio/HighCountdown_5.ogg");
 
-	countdownSoundManager->play("1");
 
 	background->setShader(shader, true);
 	background->transform->translate(0.0f, 50.f, -10.0f);
@@ -204,17 +203,17 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	TextureSampler * countDown4TextureSampler = PuppetResourceManager::countDown4;
 	TextureSampler * countDown5TextureSampler = PuppetResourceManager::countDown5;
 
-	Box2DSprite * countDown1 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown1TextureSampler->width, countDown1TextureSampler->height, countDown1TextureSampler->texture);
-	Box2DSprite * countDown2 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown2TextureSampler->width, countDown2TextureSampler->height, countDown2TextureSampler->texture);
-	Box2DSprite * countDown3 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown3TextureSampler->width, countDown3TextureSampler->height, countDown3TextureSampler->texture);
-	Box2DSprite * countDown4 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown4TextureSampler->width, countDown4TextureSampler->height, countDown4TextureSampler->texture);
-	Box2DSprite * countDown5 = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), countDown5TextureSampler->width, countDown5TextureSampler->height, countDown5TextureSampler->texture);
+	Box2DSprite * countDown1 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown1TextureSampler->width, countDown1TextureSampler->height, countDown1TextureSampler->texture, 1.f);
+	Box2DSprite * countDown2 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown2TextureSampler->width, countDown2TextureSampler->height, countDown2TextureSampler->texture, 1.f);
+	Box2DSprite * countDown3 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown3TextureSampler->width, countDown3TextureSampler->height, countDown3TextureSampler->texture, 1.f);
+	Box2DSprite * countDown4 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown4TextureSampler->width, countDown4TextureSampler->height, countDown4TextureSampler->texture, 1.f);
+	Box2DSprite * countDown5 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown5TextureSampler->width, countDown5TextureSampler->height, countDown5TextureSampler->texture, 1.f);
 
-	countDown1->transform->scale(glm::vec3(-100, 100, 1));
-	countDown2->transform->scale(glm::vec3(-100, 100, 1));
-	countDown3->transform->scale(glm::vec3(-100, 100, 1));
-	countDown4->transform->scale(glm::vec3(-100, 100, 1));
-	countDown5->transform->scale(glm::vec3(-100, 100, 1));
+	countDown1->transform->scale(glm::vec3(1000, 1000, 1000));
+	countDown2->transform->scale(glm::vec3(1000, 1000, 1000));
+	countDown3->transform->scale(glm::vec3(1000, 1000, 1000));
+	countDown4->transform->scale(glm::vec3(1000, 1000, 1000));
+	countDown5->transform->scale(glm::vec3(1000, 1000, 1000));
 
 	countDownNumbers.push_back(countDown1);
 	countDownNumbers.push_back(countDown2);
@@ -224,7 +223,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 
 	for(Box2DSprite * n : countDownNumbers){
 		n->setShader(shader, true);
-		n->createFixture(b2Filter());
 	}
 }
 
@@ -391,8 +389,8 @@ void PuppetScene::doCountDown(){
 	std::cout << "idx: " << countDown << std::endl;
 	std::cout << "=========================" << std::endl;
 
-	countdownSoundManager->play("1");
+	countdownSoundManager->play(std::to_string(countDown + 1));
 
 	// Add new number to scene
-	addChild(countDownNumbers.at(countDown), 1);
+	addChild(countDownNumbers.at(countDown), 2);
 }
