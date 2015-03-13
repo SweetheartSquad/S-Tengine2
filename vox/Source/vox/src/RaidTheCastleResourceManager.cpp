@@ -37,6 +37,8 @@ TextureSampler * RaidTheCastleResourceManager::itemMace	= new TextureSampler(new
 TextureSampler * RaidTheCastleResourceManager::itemSword	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Sword.png", 1024, 1024, true, true), 81, 382);
 TextureSampler * RaidTheCastleResourceManager::itemScimitar	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Scimitar.png", 1024, 1024, true, true), 79, 401);
 TextureSampler * RaidTheCastleResourceManager::itemFlailGrip	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/FlailGrip.png", 1024, 1024, true, true), 51, 134);
+TextureSampler * RaidTheCastleResourceManager::itemFlailJoint	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/FlailJoint.png", 1024, 1024, true, true), 67, 66);
+TextureSampler * RaidTheCastleResourceManager::itemFlailHead	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/FlailHead.png", 1024, 1024, true, true), 178, 178);
 
 /*
 TextureSampler * RaidTheCastleResourceManager::goldenBreastPlateStick = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/BreastplateStick1.png", 512, 512, true, true),	145, 405); 
@@ -82,4 +84,6 @@ void RaidTheCastleResourceManager::init(){
 	resources.push_back(itemSword);
 	resources.push_back(itemScimitar);
 	resources.push_back(itemFlailGrip);
+	resources.push_back(itemFlailJoint);
+	resources.push_back(itemFlailHead);
 }
