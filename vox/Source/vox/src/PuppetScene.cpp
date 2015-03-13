@@ -132,12 +132,12 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	Texture * bushTex1 = PuppetResourceManager::bush1;
 	Texture * bushTex2 = PuppetResourceManager::bush2;
 
-	int numFoliage = std::rand()%500 + 10;
+	int numFoliage = 60;
 	for(signed long int i = 0; i < numFoliage; ++i){
 		float height = std::rand()%500/50.f+5.f;
 		MeshEntity * foliage = new MeshEntity(MeshFactory::getPlaneMesh());
 		foliage->setShader(shader, true);
-		foliage->transform->translate((std::rand()%500/2.f)-25.f, height, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
+		foliage->transform->translate((std::rand()%500/3.f)-25.f, height, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
 		foliage->transform->scale(height, height, 1);
 		int tex = i % 4;
 		switch(tex){
