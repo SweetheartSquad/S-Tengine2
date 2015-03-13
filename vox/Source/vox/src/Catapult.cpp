@@ -21,6 +21,7 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int
 	fireBoulder(false),
 	boulderLoaded(false),
 	boulderJoint(nullptr),
+	playerWhoFired(nullptr),
 	cooldownCnt(0.f)
 {
 	componentScale = 0.008f;
@@ -121,9 +122,10 @@ void Catapult::load(){
 	Structure::load();
 }
 
-void Catapult::fireCatapult(){
+void Catapult::fireCatapult(PuppetCharacter * _playerWhoFired){
 	b2RevoluteJoint * j = (b2RevoluteJoint *)base->body->GetJointList()->joint;
 	//arm->body->SetAngularVelocity(-20);
 	firing = true;
 	ready = false;
+	playerWhoFired = _playerWhoFired;
 }

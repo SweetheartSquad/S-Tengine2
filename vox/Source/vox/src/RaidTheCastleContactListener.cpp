@@ -44,7 +44,7 @@ void RaidTheCastleContactListener::playerStructureContact(b2Contact * _contact, 
 	PuppetContactListener::playerStructureContact(_contact, _playerFixture, _structureFixture);
 	
 	// need to actually check if the structure is the catapult
-	static_cast<Catapult *>(_structureFixture->GetUserData())->fireCatapult();
+	static_cast<Catapult *>(_structureFixture->GetUserData())->fireCatapult(static_cast<PuppetCharacter *>(_playerFixture->GetUserData()));
 
 }
 
@@ -61,6 +61,10 @@ void RaidTheCastleContactListener::structureItemContact(b2Contact * _contact, b2
 	Castle * castle = dynamic_cast<Castle *>(structure);
 	if(castle != nullptr){
 		castle->damage = item->damage; // what is going on here?
+		Boulder * boulder = dynamic_cast<Boulder *>(item);
+		if(boulder != nullptr){
+			boulder->playerWhoFired->score += boulder->damage;
+		}
 	}
 }
 

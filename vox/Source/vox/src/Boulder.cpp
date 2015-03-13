@@ -4,9 +4,11 @@
 #include <Box2DSprite.h>
 #include <Texture.h>
 #include "Box2DWorld.h"
+#include <PuppetCharacter.h>
 
 Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Item(true, _world, _categoryBits, _maskBits, _groupIndex, 10.f, 50, 56),
+	playerWhoFired(nullptr),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()

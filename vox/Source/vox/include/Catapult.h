@@ -18,6 +18,8 @@ public:
 	bool boulderLoaded;
 	float cooldownCnt;
 
+	PuppetCharacter * playerWhoFired;
+
 	Boulder * boulder;
 	b2WeldJoint * boulderJoint;
 
@@ -32,5 +34,5 @@ public:
 	void unload() override;
 	void load() override;
 
-	void fireCatapult();
+	void fireCatapult(PuppetCharacter * playerWhoLaunched);
 };

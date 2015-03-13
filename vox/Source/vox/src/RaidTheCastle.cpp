@@ -140,7 +140,9 @@ void RaidTheCastle::update(Step* _step){
 			}*/
 			
 			((FollowCamera *)gameCam)->addTarget(catapult->boulder->boulder);
+			catapult->boulder->playerWhoFired = catapult->playerWhoFired;
 			catapult->boulder = nullptr;
+			catapult->playerWhoFired = nullptr;
 		}
 	}
 
