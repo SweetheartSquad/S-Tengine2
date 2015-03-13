@@ -1,0 +1,359 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="../src/Accelerometer.cpp" />
+    <ClCompile Include="../src/AccelerometerParser.cpp" />
+    <ClCompile Include="../src/Arduino.cpp" />
+    <ClCompile Include="../src/BaseScene.cpp" />
+    <ClCompile Include="../src/Behaviour.cpp" />
+    <ClCompile Include="../src/BehaviourAttack.cpp" />
+    <ClCompile Include="../src/BehaviourFollow.cpp" />
+    <ClCompile Include="../src/BehaviourManager.cpp" />
+    <ClCompile Include="../src/BehaviourPatrol.cpp" />
+    <ClCompile Include="../src/BitmapFont.cpp" />
+    <ClCompile Include="../src/Boulder.cpp" />
+    <ClCompile Include="../src/Box2DDebugDraw.cpp" />
+    <ClCompile Include="../src/Box2DJoint.cpp" />
+    <ClCompile Include="../src/Box2DMeshEntity.cpp" />
+    <ClCompile Include="../src/Box2DSprite.cpp" />
+    <ClCompile Include="../src/Box2DSuperSprite.cpp" />
+    <ClCompile Include="../src/Box2DWorld.cpp" />
+    <ClCompile Include="../src/Camera.cpp" />
+    <ClCompile Include="../src/Castle.cpp" />
+    <ClCompile Include="../src/Catapult.cpp" />
+    <ClCompile Include="../src/Character.cpp" />
+    <ClCompile Include="../src/Character1.cpp" />
+    <ClCompile Include="../src/Character2.cpp" />
+    <ClCompile Include="../src/Character3.cpp" />
+    <ClCompile Include="../src/Character4.cpp" />
+    <ClCompile Include="../src/CharacterComponent.cpp" />
+    <ClCompile Include="../src/ControllableOrthographicCamera.cpp" />
+    <ClCompile Include="../src/Cube.cpp" />
+    <ClCompile Include="../src/CylinderScreen.cpp" />
+    <ClCompile Include="../src/DepthFrameBuffer.cpp" />
+    <ClCompile Include="../src/DialogAction.cpp" />
+    <ClCompile Include="../src/DialogEvent.cpp" />
+    <ClCompile Include="../src/DialogHandler.cpp" />
+    <ClCompile Include="../src/DirectionalLight.cpp" />
+    <ClCompile Include="../src/Entity.cpp" />
+    <ClCompile Include="../src/FakeAnimation.cpp" />
+    <ClCompile Include="../src/FileUtils.cpp" />
+    <ClCompile Include="../src/FrameBufferChannel.cpp" />
+    <ClCompile Include="../src/FrameBufferInterface.cpp" />
+    <ClCompile Include="../src/Game.cpp" />
+    <ClCompile Include="../src/GameJamCharacter.cpp" />
+    <ClCompile Include="../src/GameJamContactListener.cpp" />
+    <ClCompile Include="../src/GameJamGame.cpp" />
+    <ClCompile Include="../src/GameJamScene.cpp" />
+    <ClCompile Include="../src/GameJamSceneIndoor.cpp" />
+    <ClCompile Include="../src/GameJamSceneOutdoor.cpp" />
+    <ClCompile Include="../src/GLUtils.cpp" />
+    <ClCompile Include="../src/FollowCamera.cpp" />
+    <ClCompile Include="../src/Item.cpp" />
+    <ClCompile Include="../src/ItemFlail.cpp" />
+    <ClCompile Include="../src/jsoncpp.cpp" />
+    <ClCompile Include="../src/Keyboard.cpp" />
+    <ClCompile Include="../src/LayeredScene.cpp" />
+    <ClCompile Include="../src/Light.cpp" />
+    <ClCompile Include="../src/ListenAction.cpp" />
+    <ClCompile Include="../src/Main.cpp" />
+    <ClCompile Include="../src/Material.cpp" />
+    <ClCompile Include="../src/MatrixStack.cpp" />
+    <ClCompile Include="../src/MeshEntity.cpp" />
+    <ClCompile Include="../src/MeshFactory.cpp" />
+    <ClCompile Include="../src/MeshInterface.cpp" />
+    <ClCompile Include="../src/Mouse.cpp" />
+    <ClCompile Include="../src/MousePerspectiveCamera.cpp" />
+    <ClCompile Include="../src/node/Node.cpp" />
+    <ClCompile Include="../src/node/NodeAnimatable.cpp" />
+    <ClCompile Include="../src/node/NodeBox2DBody.cpp" />
+    <ClCompile Include="../src/node/NodeChild.cpp" />
+    <ClCompile Include="../src/node/NodeHierarchical.cpp" />
+    <ClCompile Include="../src/node/NodeLoadable.cpp" />
+    <ClCompile Include="../src/node/NodeParent.cpp" />
+    <ClCompile Include="../src/node/NodeRenderable.cpp" />
+    <ClCompile Include="../src/node/NodeResource.cpp" />
+    <ClCompile Include="../src/node/NodeSelectable.cpp" />
+    <ClCompile Include="../src/node/NodeUpdatable.cpp" />
+    <ClCompile Include="../src/node/ShiftKiddie.cpp" />
+    <ClCompile Include="../src/NumberUtils.cpp" />
+    <ClCompile Include="../src/OrthographicCamera.cpp" />
+    <ClCompile Include="../src/ParticleSystem.cpp" />
+    <ClCompile Include="../src/PerspectiveCamera.cpp" />
+    <ClCompile Include="../src/Plane.cpp" />
+    <ClCompile Include="../src/Point.cpp" />
+    <ClCompile Include="../src/PointLight.cpp" />
+    <ClCompile Include="../src/poly2Tri/common/shapes.cc" />
+    <ClCompile Include="../src/poly2Tri/sweep/advancing_front.cc" />
+    <ClCompile Include="../src/poly2Tri/sweep/cdt.cc" />
+    <ClCompile Include="../src/poly2Tri/sweep/sweep.cc" />
+    <ClCompile Include="../src/poly2Tri/sweep/sweep_context.cc" />
+    <ClCompile Include="../src/PuppetCharacter.cpp" />
+    <ClCompile Include="../src/PuppetCharacterCastleChampion.cpp" />
+    <ClCompile Include="../src/PuppetCharacterKnight.cpp" />
+    <ClCompile Include="../src/PuppetContactListener.cpp" />
+    <ClCompile Include="../src/PuppetController.cpp" />
+    <ClCompile Include="../src/PuppetResourceManager.cpp" />
+    <ClCompile Include="../src/PuppetScene.cpp" />
+    <ClCompile Include="../src/PuppetTexturePack.cpp" />
+    <ClCompile Include="../src/RaidTheCastle.cpp" />
+    <ClCompile Include="../src/RaidTheCastleContactListener.cpp" />
+    <ClCompile Include="../src/RaidTheCastleResourceManager.cpp" />
+    <ClCompile Include="../src/RandomCharacter.cpp" />
+    <ClCompile Include="../src/RandomGround.cpp" />
+    <ClCompile Include="../src/Rectangle.cpp" />
+    <ClCompile Include="../src/RenderOptions.cpp" />
+    <ClCompile Include="../src/RenderSurface.cpp" />
+    <ClCompile Include="../src/Resource.cpp" />
+    <ClCompile Include="../src/ResourceManager.cpp" />
+    <ClCompile Include="../src/SayAction.cpp" />
+    <ClCompile Include="../src/Scene.cpp" />
+    <ClCompile Include="../src/Scene2D.cpp" />
+    <ClCompile Include="../src/SceneRoot.cpp" />
+    <ClCompile Include="../src/shader/BaseComponentShader.cpp" />
+    <ClCompile Include="../src/shader/BlinnShaderComponent.cpp" />
+    <ClCompile Include="../src/shader/BlurShader.cpp" />
+    <ClCompile Include="../src/shader/DepthMapShader.cpp" />
+    <ClCompile Include="../src/shader/DiffuseShaderComponent.cpp" />
+    <ClCompile Include="../src/shader/GeometryComponent.cpp" />
+    <ClCompile Include="../src/shader/PhongShaderComponent.cpp" />
+    <ClCompile Include="../src/shader/Shader.cpp" />
+    <ClCompile Include="../src/shader/ShaderComponent.cpp" />
+    <ClCompile Include="../src/shader/ShaderLoader.cpp" />
+    <ClCompile Include="../src/shader/ShadowShaderComponent.cpp" />
+    <ClCompile Include="../src/shader/SharedComponentShaderMethods.cpp" />
+    <ClCompile Include="../src/shader/TextureShaderComponent.cpp" />
+    <ClCompile Include="../src/shader/VoxelComponent.cpp" />
+    <ClCompile Include="../src/Sound.cpp" />
+    <ClCompile Include="../src/SoundManager.cpp" />
+    <ClCompile Include="../src/Sprite.cpp" />
+    <ClCompile Include="../src/SpriteMesh.cpp" />
+    <ClCompile Include="../src/SpriteSheet.cpp" />
+    <ClCompile Include="../src/SpriteSheetAnimation.cpp" />
+    <ClCompile Include="../src/StandardFrameBuffer.cpp" />
+    <ClCompile Include="../src/Step.cpp" />
+    <ClCompile Include="../src/StringUtils.cpp" />
+    <ClCompile Include="../src/Structure.cpp" />
+    <ClCompile Include="../src/System.cpp" />
+    <ClCompile Include="../src/TestCharacter.cpp" />
+    <ClCompile Include="../src/PuppetGame.cpp" />
+    <ClCompile Include="../src/TestScene2D.cpp" />
+    <ClCompile Include="../src/TextChunk.cpp" />
+    <ClCompile Include="../src/Texture.cpp" />
+    <ClCompile Include="../src/Transform.cpp" />
+    <ClCompile Include="../src/VictoryScene.cpp" />
+    <ClCompile Include="../src/Vox.cpp" />
+    <ClCompile Include="../src/VoxelJoint.cpp" />
+    <ClCompile Include="../src/VoxelMesh.cpp" />
+    <ClCompile Include="../src/VoxMatrices.cpp" />
+    <ClCompile Include="../src/VoxRenderOptions.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="../include/Castle.h" />
+    <ClInclude Include="../include/Catapult.h" />
+    <ClInclude Include="../include/Character.h" />
+    <ClInclude Include="../include/Character1.h" />
+    <ClInclude Include="../include/Character2.h" />
+    <ClInclude Include="../include/Character3.h" />
+    <ClInclude Include="../include/Character4.h" />
+    <ClInclude Include="../include/CharacterComponent.h" />
+    <ClInclude Include="../include/ControllableOrthographicCamera.h" />
+    <ClInclude Include="../include/Cube.h" />
+    <ClInclude Include="../include/CylinderScreen.h" />
+    <ClInclude Include="../include/DepthFrameBuffer.h" />
+    <ClInclude Include="../include/DialogAction.h" />
+    <ClInclude Include="../include/DialogEvent.h" />
+    <ClInclude Include="../include/DialogHandler.h" />
+    <ClInclude Include="../include/Dimension.h" />
+    <ClInclude Include="../include/DirectionalLight.h" />
+    <ClInclude Include="../include/Easing.h" />
+    <ClInclude Include="../include/Entity.h" />
+    <ClInclude Include="../include/FakeAnimation.h" />
+    <ClInclude Include="../include/FileUtils.h" />
+    <ClInclude Include="../include/FrameBufferChannel.h" />
+    <ClInclude Include="../include/FrameBufferInterface.h" />
+    <ClInclude Include="../include/FrameBufferVertex.h" />
+    <ClInclude Include="../include/Game.h" />
+    <ClInclude Include="../include/GameJamCategory.h" />
+    <ClInclude Include="../include/GameJamCharacter.h" />
+    <ClInclude Include="../include/GameJamContactListener.h" />
+    <ClInclude Include="../include/GameJamGame.h" />
+    <ClInclude Include="../include/GameJamScene.h" />
+    <ClInclude Include="../include/GameJamSceneOutdoor.h" />
+    <ClInclude Include="../include/GLUtils.h" />
+    <ClInclude Include="../include/FollowCamera.h" />
+    <ClInclude Include="../include/Item.h" />
+    <ClInclude Include="../include/ItemFlail.h" />
+    <ClInclude Include="../include/json/json-forwards.h" />
+    <ClInclude Include="../include/json/json.h" />
+    <ClInclude Include="../include/Keyboard.h" />
+    <ClInclude Include="../include/LayeredScene.h" />
+    <ClInclude Include="../include/Light.h" />
+    <ClInclude Include="../include/ListenAction.h" />
+    <ClInclude Include="../include/Material.h" />
+    <ClInclude Include="../include/MatrixStack.h" />
+    <ClInclude Include="../include/MeshEntity.h" />
+    <ClInclude Include="../include/MeshFactory.h" />
+    <ClInclude Include="../include/MeshInterface.h" />
+    <ClInclude Include="../include/Mouse.h" />
+    <ClInclude Include="../include/MousePerspectiveCamera.h" />
+    <ClInclude Include="../include/node/Node.h" />
+    <ClInclude Include="../include/node/NodeAnimatable.h" />
+    <ClInclude Include="../include/node/NodeBox2DBody.h" />
+    <ClInclude Include="../include/node/NodeChild.h" />
+    <ClInclude Include="../include/node/NodeHierarchical.h" />
+    <ClInclude Include="../include/node/NodeLoadable.h" />
+    <ClInclude Include="../include/node/NodeParent.h" />
+    <ClInclude Include="../include/node/NodeRenderable.h" />
+    <ClInclude Include="../include/node/NodeResource.h" />
+    <ClInclude Include="../include/node/NodeSelectable.h" />
+    <ClInclude Include="../include/node/NodeTransformable.h" />
+    <ClInclude Include="../include/node/NodeUpdatable.h" />
+    <ClInclude Include="../include/node/ShiftKiddie.h" />
+    <ClInclude Include="../include/NumberUtils.h" />
+    <ClInclude Include="../include/OrthographicCamera.h" />
+    <ClInclude Include="../include/ParticleSystem.h" />
+    <ClInclude Include="../include/PerspectiveCamera.h" />
+    <ClInclude Include="../include/Plane.h" />
+    <ClInclude Include="../include/Point.h" />
+    <ClInclude Include="../include/PointLight.h" />
+    <ClInclude Include="../include/poly2Tri/common/shapes.h" />
+    <ClInclude Include="../include/poly2Tri/common/utils.h" />
+    <ClInclude Include="../include/poly2Tri/poly2tri.h" />
+    <ClInclude Include="../include/poly2Tri/sweep/advancing_front.h" />
+    <ClInclude Include="../include/poly2Tri/sweep/cdt.h" />
+    <ClInclude Include="../include/poly2Tri/sweep/sweep.h" />
+    <ClInclude Include="../include/poly2Tri/sweep/sweep_context.h" />
+    <ClInclude Include="../include/PuppetCharacter.h" />
+    <ClInclude Include="../include/PuppetCharacterCastleChampion.h" />
+    <ClInclude Include="../include/PuppetCharacterKnight.h" />
+    <ClInclude Include="../include/PuppetContactListener.h" />
+    <ClInclude Include="../include/PuppetController.h" />
+    <ClInclude Include="../include/PuppetResourceManager.h" />
+    <ClInclude Include="../include/PuppetScene.h" />
+    <ClInclude Include="../include/PuppetTexturePack.h" />
+    <ClInclude Include="../include/RaidTheCastle.h" />
+    <ClInclude Include="../include/RaidTheCastleContactListener.h" />
+    <ClInclude Include="../include/RaidTheCastleResourceManager.h" />
+    <ClInclude Include="../include/RandomCharacter.h" />
+    <ClInclude Include="../include/RandomGround.h" />
+    <ClInclude Include="../include/Rectangle.h" />
+    <ClInclude Include="../include/RenderOptions.h" />
+    <ClInclude Include="../include/RenderSurface.h" />
+    <ClInclude Include="../include/Resource.h" />
+    <ClInclude Include="../include/ResourceManager.h" />
+    <ClInclude Include="../include/SayAction.h" />
+    <ClInclude Include="../include/Scene.h" />
+    <ClInclude Include="../include/Scene2D.h" />
+    <ClInclude Include="../include/SceneRoot.h" />
+    <ClInclude Include="../include/shader/DepthMapShader.h" />
+    <ClInclude Include="../include/shader/DiffuseShaderComponent.h" />
+    <ClInclude Include="../include/shader/GeometryComponent.h" />
+    <ClInclude Include="../include/shader/PhongShaderComponent.h" />
+    <ClInclude Include="../include/shader/Shader.h" />
+    <ClInclude Include="../include/shader/ShaderComponent.h" />
+    <ClInclude Include="../include/shader/ShaderLoader.h" />
+    <ClInclude Include="../include/shader/ShaderVariables.h" />
+    <ClInclude Include="../include/shader/ShadowShaderComponent.h" />
+    <ClInclude Include="../include/shader/SharedComponentShaderMethods.h" />
+    <ClInclude Include="../include/shader/TextureShaderComponent.h" />
+    <ClInclude Include="../include/shader/VoxelComponent.h" />
+    <ClInclude Include="../include/Sound.h" />
+    <ClInclude Include="../include/SoundManager.h" />
+    <ClInclude Include="../include/Sprite.h" />
+    <ClInclude Include="../include/SpriteMesh.h" />
+    <ClInclude Include="../include/SpriteSheet.h" />
+    <ClInclude Include="../include/SpriteSheetAnimation.h" />
+    <ClInclude Include="../include/StandardFrameBuffer.h" />
+    <ClInclude Include="../include/Step.h" />
+    <ClInclude Include="../include/StringUtils.h" />
+    <ClInclude Include="../include/Structure.h" />
+    <ClInclude Include="../include/System.h" />
+    <ClInclude Include="../include/TestCharacter.h" />
+    <ClInclude Include="../include/PuppetGame.h" />
+    <ClInclude Include="../include/TestScene2D.h" />
+    <ClInclude Include="../include/TextChunk.h" />
+    <ClInclude Include="../include/Texture.h" />
+    <ClInclude Include="../include/Transform.h" />
+    <ClInclude Include="../include/Tween.h" />
+    <ClInclude Include="../include/Vertex.h" />
+    <ClInclude Include="../include/VictoryScene.h" />
+    <ClInclude Include="../include/Vox.h" />
+    <ClInclude Include="../include/VoxelJoint.h" />
+    <ClInclude Include="../include/VoxelMesh.h" />
+    <ClInclude Include="../include/VoxMatrices.h" />
+    <ClInclude Include="../include/VoxRenderOptions.h" />
+    <ClInclude Include="../src/GameJamSceneIndoor.h" />
+    <ClInclude Include="../include/Accelerometer.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/AccelerometerParser.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/Animation.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/Arduino.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/shader/BaseComponentShader.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/BaseScene.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/Behaviour.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/BehaviourAttack.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/BehaviourFollow.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/BehaviourManager.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/BehaviourPatrol.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/BitmapFont.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/shader/BlinnShaderComponent.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/shader/BlurShader.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/Boulder.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/Box2DDebugDraw.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/Box2DJoint.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/Box2DSprite.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/Box2DMeshEntity.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/Box2DWorld.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/Box2DSuperSprite.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="../include/Camera.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Include">
+      <UniqueIdentifier>{414b3ce6-799b-4480-8529-0b699ffe1d9c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

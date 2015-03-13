@@ -127,17 +127,17 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	sf.maskBits = PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER;
 	groundFixture->SetFilterData(sf);
 
-	/*Texture * treeTex1 = new Texture("../assets/hurly-burly/Foliage/Tree1-ds.png", 1024, 1024, true, true);
-	Texture * treeTex2 = new Texture("../assets/hurly-burly/Foliage/Tree2-ds.png", 1024, 1024, true, true);
-	Texture * bushTex1 = new Texture("../assets/hurly-burly/Foliage/Bush1-ds.png", 1024, 1024, true, true);
-	Texture * bushTex2 = new Texture("../assets/hurly-burly/Foliage/Bush2-ds.png", 1024, 1024, true, true);
+	Texture * treeTex1 = PuppetResourceManager::tree1;
+	Texture * treeTex2 = PuppetResourceManager::tree2;
+	Texture * bushTex1 = PuppetResourceManager::bush1;
+	Texture * bushTex2 = PuppetResourceManager::bush2;
 
-	int numFoliage = std::rand()%500/50 + 10;
+	int numFoliage = std::rand()%500 + 10;
 	for(signed long int i = 0; i < numFoliage; ++i){
 		float height = std::rand()%500/50.f+5.f;
 		MeshEntity * foliage = new MeshEntity(MeshFactory::getPlaneMesh());
 		foliage->setShader(shader, true);
-		foliage->transform->translate((std::rand()%500/10.f)-25.f, height, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
+		foliage->transform->translate((std::rand()%500/2.f)-25.f, height, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
 		foliage->transform->scale(height, height, 1);
 		int tex = i % 4;
 		switch(tex){
@@ -153,7 +153,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 				break;
 		}
 		addChild(foliage, 0);
-	}*/
+	}
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");
