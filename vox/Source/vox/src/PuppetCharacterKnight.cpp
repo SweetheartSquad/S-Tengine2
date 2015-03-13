@@ -16,14 +16,14 @@ PuppetCharacterKnight::PuppetCharacterKnight(bool _ai, unsigned long int _id, Bo
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {
-
-	itemToPickup = new Item(false, _world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, _groupIndex);
+	
+	TextureSampler * weapon = RaidTheCastleResourceManager::itemScimitar;
+	itemToPickup = new Item(false, _world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, _groupIndex, 0, 0, -weapon->height/2.f);
 
 	componentScale = 0.008f;
 
-	TextureSampler * boulderTexSampler = RaidTheCastleResourceManager::itemAxe;
 	
-	itemToPickup->rootComponent = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), boulderTexSampler->width, boulderTexSampler->height, boulderTexSampler->texture, componentScale);
+	itemToPickup->rootComponent = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), weapon->width, weapon->height, weapon->texture, componentScale/4);
 	itemToPickup->components.push_back(&itemToPickup->rootComponent);
 	
 	b2Filter sf;

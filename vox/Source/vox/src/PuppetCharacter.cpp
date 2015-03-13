@@ -277,7 +277,7 @@ void PuppetCharacter::pickupItem(Item * _item){
 		jd.localAnchorA.Set(0, 0);
 		jd.localAnchorB.Set(_item->handleX*componentScale, _item->handleY*componentScale);
 		jd.collideConnected = false;
-		jd.referenceAngle = 0.f;
+		jd.referenceAngle = glm::radians(-90.f);
 		itemJoint = (b2WeldJoint *)world->b2world->CreateJoint(&jd);
 		heldItem = _item;
 		itemToPickup = nullptr;
