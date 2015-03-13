@@ -50,6 +50,8 @@ public:
 	static TextureSampler * itemSword;
 	static TextureSampler * itemScimitar;
 	static TextureSampler * itemFlailGrip;
+	static TextureSampler * itemFlailJoint;
+	static TextureSampler * itemFlailHead;
 	
 	static void init();
 	//RaidTheCastleResourceManager();
