@@ -37,6 +37,7 @@
 
 #include "RaidTheCastle.h"
 #include <PuppetResourceManager.h>
+#include <NumberUtils.h>
 
 PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	LayeredScene(_game, 3),
@@ -53,6 +54,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
+	backgroundSoundManager(new SoundManager()),
 	countdownSoundManager(new SoundManager()),
 	mouseCam(false),
 	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::ground1, 1, 1))
@@ -62,12 +64,17 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	
+	//Add Audio
 	countdownSoundManager->addNewSound("1", "../assets/hurly-burly/audio/HighCountdown_One.ogg");
 	countdownSoundManager->addNewSound("2", "../assets/hurly-burly/audio/HighCountdown_Two.ogg");
 	countdownSoundManager->addNewSound("3", "../assets/hurly-burly/audio/HighCountdown_Three.ogg");
 	countdownSoundManager->addNewSound("4", "../assets/hurly-burly/audio/HighCountdown_Four.ogg");
 	countdownSoundManager->addNewSound("5", "../assets/hurly-burly/audio/HighCountdown_5.ogg");
 
+	//Since these are chosen randomly its easiest to just use numbers as the keys and generate a random number
+	backgroundSoundManager->addNewSound("1", "../assets/hurly-burly/audio/songs/WesternSong.ogg");
+	backgroundSoundManager->addNewSound("2", "../assets/hurly-burly/audio/songs/FastSong.ogg");
+	backgroundSoundManager->addNewSound("3", "../assets/hurly-burly/audio/songs/MelodicaSong.ogg");
 
 	background->setShader(shader, true);
 	background->transform->translate(0.0f, 50.f, -10.0f);
@@ -443,4 +450,9 @@ void PuppetScene::doCountDown(){
 
 	// Add new number to scene
 	addChild(countDownNumbers.at(countDown), 2);
+}
+
+void PuppetScene::playRandomBackgroundMusic(){
+	int rand = vox::NumberUtils::randomInt(1, backgroundSoundManager->sounds.size());
+	backgroundSoundManager->play(std::to_string(rand));
 }

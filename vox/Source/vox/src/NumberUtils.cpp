@@ -9,3 +9,7 @@ float vox::NumberUtils::randomFloat(float _min, float _max){
     float r = random * diff;
     return _min + r;
 }
+
+float vox::NumberUtils::randomInt(int _min, int _max){
+	return _min + (rand() % static_cast<int>(_max - _min + 1));
+}

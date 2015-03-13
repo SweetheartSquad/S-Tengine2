@@ -105,6 +105,8 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	//gameCam->addTarget(castle->rootComponent);
 	//gameCam->addTarget(catapult->rootComponent);
+
+	playRandomBackgroundMusic();
 }
 
 RaidTheCastle::~RaidTheCastle(){

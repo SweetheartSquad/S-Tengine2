@@ -57,8 +57,11 @@ public:
 	RandomGround * randomGround;
 	MeshEntity * background;
 	BaseComponentShader* shader;
+
 	SoundManager * soundManager;
 	SoundManager * countdownSoundManager;
+	SoundManager * backgroundSoundManager;
+
 	AccelerometerParser * arduino;
 
 	FollowCamera * gameCam;
@@ -80,4 +83,5 @@ public:
 
 	void destroyItem(Item * item);
 	void doCountDown();
+	void playRandomBackgroundMusic();
 };
