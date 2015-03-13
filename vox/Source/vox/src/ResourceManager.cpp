@@ -6,7 +6,7 @@ std::vector<NodeResource *> ResourceManager::resources;
 std::vector<ResourceManager *> ResourceManager::subManagers;
 
 void ResourceManager::load(){
-	NodeLoadable::load();
+	//NodeLoadable::load();
 	for(auto res : resources){
 		res->load();
 	}
@@ -16,7 +16,7 @@ void ResourceManager::load(){
 }
 
 void ResourceManager::unload(){
-	NodeLoadable::unload();
+	//NodeLoadable::unload();
 	for(auto res : resources){
 		res->unload();
 	}
