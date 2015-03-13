@@ -46,7 +46,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
-	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, false)),
+	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, true)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
@@ -88,6 +88,8 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 
 	world->addToWorld(ground, 2);
 	addChild(ground, 0);
+	ground->body->GetFixtureList()->SetFriction(1);
+	ground->body->GetFixtureList()->SetRestitution(0);
 
 	int timeOfDayOptions = 4;
 	int timeOfDay = std::rand()%timeOfDayOptions;

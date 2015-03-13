@@ -96,8 +96,8 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	//playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
 	//playerCharacter4->ai = true;
 
-	gameCam->addTarget(castle->rootComponent);
-	gameCam->addTarget(catapult->rootComponent);
+	//gameCam->addTarget(castle->rootComponent);
+	//gameCam->addTarget(catapult->rootComponent);
 }
 
 RaidTheCastle::~RaidTheCastle(){
