@@ -177,7 +177,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);
-	drawer->AppendFlags(b2Draw::e_shapeBit);
+	//drawer->AppendFlags(b2Draw::e_shapeBit);
 	drawer->AppendFlags(b2Draw::e_centerOfMassBit);
 	drawer->AppendFlags(b2Draw::e_jointBit);
 	//drawer->AppendFlags(b2Draw::e_pairBit);
@@ -198,7 +198,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	mouseCamera->yaw = 90.0f;
 	mouseCamera->pitch = -10.0f;
 
-	gameCam = new FollowCamera(glm::vec3(0, 0, 0), 0, 0);
+	gameCam = new FollowCamera(10, glm::vec3(0, 0, 0), 0, 0);
 	gameCam->farClip = 1000.f;
 	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
 	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
@@ -271,7 +271,7 @@ void PuppetScene::update(Step * _step){
 
 			splashMessage->transform->translationVector.x = gameCam->transform->translationVector.x;
 			splashMessage->transform->translationVector.y = gameCam->transform->translationVector.y;
-			splashMessage->transform->translationVector.z = 0;
+			splashMessage->transform->translationVector.z = gameCam->transform->translationVector.z - 10;
 
 		}else{
 			// Remove previous number from scene
@@ -294,7 +294,7 @@ void PuppetScene::update(Step * _step){
 	for(Sprite * n : countDownNumbers){
 		n->transform->translationVector.x = gameCam->transform->translationVector.x;
 		n->transform->translationVector.y = gameCam->transform->translationVector.y;
-		n->transform->translationVector.z = 0;
+		n->transform->translationVector.z = gameCam->transform->translationVector.z - 10;
 	}
 	
 	// destroy used up items
