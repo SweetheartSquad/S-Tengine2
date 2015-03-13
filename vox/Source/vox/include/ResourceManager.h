@@ -5,10 +5,10 @@
 
 #include <vector>
 
-class ResourceManager abstract : public NodeLoadable{
+class ResourceManager abstract{
 public:	
 	static std::vector<NodeResource *> resources;
 	static std::vector<ResourceManager *> subManagers;
-	virtual void load() override;
-	virtual void unload() override;
+	static void load();
+	static void unload();
 };

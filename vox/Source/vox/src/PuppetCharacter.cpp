@@ -285,3 +285,16 @@ void PuppetCharacter::pickupItem(Item * _item){
 
 	}
 }
+
+void PuppetCharacter::addToLayeredScene(LayeredScene * _scene, unsigned long int _layer){
+	Box2DSuperSprite::addToLayeredScene(_scene, _layer);
+	if(itemToPickup != nullptr){
+		itemToPickup->addToLayeredScene(_scene, _layer);
+	}
+}
+void PuppetCharacter::setShader(Shader * _shader, bool _configureDefaultAttributes){
+	Box2DSuperSprite::setShader(_shader, _configureDefaultAttributes);
+	if(itemToPickup != nullptr){
+		itemToPickup->setShader(_shader, _configureDefaultAttributes);
+	}
+}

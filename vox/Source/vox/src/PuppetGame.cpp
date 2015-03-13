@@ -9,14 +9,13 @@
 #include <ctime>
 #include <BaseScene.h>
 
-
-ResourceManager * Game::resourceManager = new PuppetResourceManager();
-
 PuppetGame::PuppetGame(bool _running):
 	Game(_running)
 {
 	std::srand((unsigned long int)std::time(0));
-	GameJamCharacter::init();
+	//GameJamCharacter::init();
+	PuppetResourceManager::init();
+	PuppetResourceManager::load();
 	//scenes.insert(std::make_pair("indoors", new GameJamSceneIndoor(this)));
 	//scenes.insert(std::make_pair("outdoors", new GameJamSceneOutdoor(this)));
 	scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(this)));
