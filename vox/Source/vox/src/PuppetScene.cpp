@@ -30,7 +30,7 @@
 #include <Arduino.h>
 #include <AccelerometerParser.h>
 #include <Accelerometer.h>
-
+#include <FollowCamera.h>
 #include <PuppetCharacter.h>
 #include <PuppetController.h>
 #include <RandomGround.h>
@@ -194,27 +194,67 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	TextureSampler * countDown3TextureSampler = PuppetResourceManager::countDown3;
 	TextureSampler * countDown4TextureSampler = PuppetResourceManager::countDown4;
 	TextureSampler * countDown5TextureSampler = PuppetResourceManager::countDown5;
-
+	/*
 	Box2DSprite * countDown1 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown1TextureSampler->width, countDown1TextureSampler->height, countDown1TextureSampler->texture, 1.f);
 	Box2DSprite * countDown2 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown2TextureSampler->width, countDown2TextureSampler->height, countDown2TextureSampler->texture, 1.f);
 	Box2DSprite * countDown3 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown3TextureSampler->width, countDown3TextureSampler->height, countDown3TextureSampler->texture, 1.f);
 	Box2DSprite * countDown4 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown4TextureSampler->width, countDown4TextureSampler->height, countDown4TextureSampler->texture, 1.f);
 	Box2DSprite * countDown5 = new Box2DSprite(world, b2_staticBody, true, nullptr, new Transform(), countDown5TextureSampler->width, countDown5TextureSampler->height, countDown5TextureSampler->texture, 1.f);
+	*/
 
-	countDown1->transform->scale(glm::vec3(1000, 1000, 1000));
-	countDown2->transform->scale(glm::vec3(1000, 1000, 1000));
-	countDown3->transform->scale(glm::vec3(1000, 1000, 1000));
-	countDown4->transform->scale(glm::vec3(1000, 1000, 1000));
-	countDown5->transform->scale(glm::vec3(1000, 1000, 1000));
+	Sprite * countDown1 = new Sprite(nullptr, new Transform());
+	Sprite * countDown2 = new Sprite(nullptr, new Transform());
+	Sprite * countDown3 = new Sprite(nullptr, new Transform());
+	Sprite * countDown4 = new Sprite(nullptr, new Transform());
+	Sprite * countDown5 = new Sprite(nullptr, new Transform());
 
+	countDown1->transform->scale(glm::vec3(3, 3, 0));
+	countDown2->transform->scale(glm::vec3(3, 3, 0));
+	countDown3->transform->scale(glm::vec3(3, 3, 0));
+	countDown4->transform->scale(glm::vec3(3, 3, 0));
+	countDown5->transform->scale(glm::vec3(3, 3, 0));
+	
+	countDown1->mesh->pushTexture2D(countDown1TextureSampler->texture);
+	countDown2->mesh->pushTexture2D(countDown2TextureSampler->texture);
+	countDown3->mesh->pushTexture2D(countDown3TextureSampler->texture);
+	countDown4->mesh->pushTexture2D(countDown4TextureSampler->texture);
+	countDown5->mesh->pushTexture2D(countDown5TextureSampler->texture);
+	/*
+	countDown1->setUvs(vox::Rectangle(0, 0, 0.95, 0.1));
+	countDown2->setUvs(vox::Rectangle(0, 0, 0.95, 0.1));
+	countDown3->setUvs(vox::Rectangle(0, 0, 0.95, 0.1));
+	countDown4->setUvs(vox::Rectangle(0, 0, 0.95, 0.1));
+	countDown5->setUvs(vox::Rectangle(0, 0, 0.95, 0.1));
+	*/
 	countDownNumbers.push_back(countDown1);
 	countDownNumbers.push_back(countDown2);
 	countDownNumbers.push_back(countDown3);
 	countDownNumbers.push_back(countDown4);
 	countDownNumbers.push_back(countDown5);
-
-	for(Box2DSprite * n : countDownNumbers){
+	
+	for(Sprite * n : countDownNumbers){
 		n->setShader(shader, true);
+		n->transform->scale(-1, 1, 1);
+		//n->transform = mouseCamera->transform;
+		/*n->mesh->vertices.at(0).x *= 100;
+		n->mesh->vertices.at(0).y *= 100;
+		n->mesh->vertices.at(0).z *= 100;
+		n->mesh->vertices.at(1).x *= 100;
+		n->mesh->vertices.at(1).y *= 100;
+		n->mesh->vertices.at(1).z *= 100;
+		n->mesh->vertices.at(2).x *= 100;
+		n->mesh->vertices.at(2).y *= 100;
+		n->mesh->vertices.at(2).z *= 100;
+		n->mesh->vertices.at(3).x *= 100;
+		n->mesh->vertices.at(3).y *= 100;
+		n->mesh->vertices.at(3).z *= 100;*/
+		/*
+		n->mesh->vertices.at(0).x -= 10;
+		n->mesh->vertices.at(1).x -= 10;
+		n->mesh->vertices.at(2).x -= 10;
+		n->mesh->vertices.at(3).x -= 10;
+		n->mesh->dirty=true;
+		*/
 	}
 }
 
@@ -231,6 +271,11 @@ void PuppetScene::unload(){
 
 void PuppetScene::update(Step * _step){
 	Scene::update(_step);
+	for(Sprite * n : countDownNumbers){
+		n->transform->translationVector.x = gameCam->transform->translationVector.x;
+		n->transform->translationVector.y = gameCam->transform->translationVector.y;
+		n->transform->translationVector.z = 0;
+	}
 	
 	// destroy used up items
 	for(signed long int i = items.size()-1; i >= 0; --i){
@@ -384,4 +429,5 @@ void PuppetScene::doCountDown(){
 
 	// Add new number to scene
 	addChild(countDownNumbers.at(countDown), 2);
+
 }
