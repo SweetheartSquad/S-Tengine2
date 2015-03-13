@@ -50,6 +50,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
+	countdownSoundManager(new SoundManager()),
 	mouseCam(false),
 	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::ground1, 1, 1))
 {
@@ -58,13 +59,20 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	
+	countdownSoundManager->addNewSound("1", "../assets/hurly-burly/test.wav");
+	countdownSoundManager->addNewSound("2", "../assets/hurly-burly/test.wav");
+	countdownSoundManager->addNewSound("3", "../assets/hurly-burly/test.wav");
+	countdownSoundManager->addNewSound("4", "../assets/hurly-burly/test.wav");
+	countdownSoundManager->addNewSound("5", "../assets/hurly-burly/test.wav");
+
+	countdownSoundManager->play("1");
+
 	background->setShader(shader, true);
 	background->transform->translate(0.0f, 50.f, -10.0f);
 	background->transform->scale(125 * 5, 50, 1);
 	background->mesh->pushTexture2D(PuppetResourceManager::sky);
 	background->mesh->uvEdgeMode = GL_REPEAT;
 	background->mesh->dirty = true;
-
 
 	ground->setShader(shader, true);
 	ground->setTranslationPhysical(0, 0, 0);
@@ -381,6 +389,8 @@ void PuppetScene::doCountDown(){
 	std::cout << countDown << std::endl;
 	std::cout << "idx: " << countDown << std::endl;
 	std::cout << "=========================" << std::endl;
+
+	countdownSoundManager->play("1");
 
 	// Add new number to scene
 	addChild(countDownNumbers.at(countDown), 2);

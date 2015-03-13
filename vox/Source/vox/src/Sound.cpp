@@ -39,7 +39,7 @@ void Sound::addFile(std::string _file){
 	int result = player->OpenFile(_file.c_str(), libZPlay::sfAutodetect);
     if(result == 0)
     {
-		std::cout<<player->GetError();
+		std::cout << player->GetError();
         player->Release();
     }
 }
