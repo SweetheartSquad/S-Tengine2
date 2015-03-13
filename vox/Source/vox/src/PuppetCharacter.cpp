@@ -25,7 +25,8 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	heldItem(nullptr),
 	itemJoint(nullptr),
 	behaviourManager(this),
-	score(0.f)
+	score(0.f),
+	control(1.f)
 {
 	bool defaultTex = false;
 	if(texPack == nullptr){
@@ -150,29 +151,23 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	world->b2world->CreateJoint(&jtal);
 
 	// right hand
-	b2RevoluteJointDef rhrej;
+	b2WeldJointDef rhrej;
 	rhrej.bodyA = armRight->body;
 	rhrej.bodyB = handRight->body;
 	rhrej.localAnchorA.Set(0.f, -0.9f * armRight->getCorrectedHeight());
 	rhrej.localAnchorB.Set(0.f, 0.f);
 	rhrej.collideConnected = false;
-	rhrej.enableLimit = true;
 	rhrej.referenceAngle = glm::radians(0.f);
-	rhrej.lowerAngle = glm::radians(-20.f);
-	rhrej.upperAngle = glm::radians(20.f);
 	world->b2world->CreateJoint(&rhrej);
 
 	// left hand
-	b2RevoluteJointDef lhlej;
+	b2WeldJointDef lhlej;
 	lhlej.bodyA = armLeft->body;
 	lhlej.bodyB = handLeft->body;
 	lhlej.localAnchorA.Set(0.f, -0.9f * armLeft->getCorrectedHeight());
-	lhlej.localAnchorB.Set(-0.f, 0.f);
+	lhlej.localAnchorB.Set(0.f, 0.f);
 	lhlej.collideConnected = false;
-	lhlej.enableLimit = true;
 	lhlej.referenceAngle = glm::radians(0.f);
-	lhlej.lowerAngle = glm::radians(-20.f);
-	lhlej.upperAngle = glm::radians(20.f);
 	world->b2world->CreateJoint(&lhlej);
 
 	// flip left side
@@ -190,7 +185,7 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 
 void PuppetCharacter::update(Step* _step){
 	Box2DSuperSprite::update(_step);
-	float bodAngle = (torso)->body->GetAngle() + targetRoll;
+	float bodAngle = ((torso)->body->GetAngle() + targetRoll) * control;// + glm::radians(90.f);
 	(torso->body->SetAngularVelocity(-bodAngle * 10));
 
 	if(!dead){
@@ -206,6 +201,8 @@ void PuppetCharacter::update(Step* _step){
 		torso->body->ApplyForce(b2Vec2(-bodAngle * 50.0f, 0), torso->body->GetWorldCenter(), true);
 	}
 	behaviourManager.update(_step);
+
+	control = std::min(1.f, control+0.05f);
 }
 
 void PuppetCharacter::jump(){
@@ -274,10 +271,11 @@ void PuppetCharacter::pickupItem(Item * _item){
 		b2WeldJointDef jd;
 		jd.bodyA = armRight->body;
 		jd.bodyB = (*_item->components.at(0))->body;
-		jd.localAnchorA.Set(0, 0);
+		jd.localAnchorA.Set(0.f, -0.9f * armRight->getCorrectedHeight());
 		jd.localAnchorB.Set(_item->handleX*componentScale, _item->handleY*componentScale);
 		jd.collideConnected = false;
 		jd.referenceAngle = glm::radians(-90.f);
+		jd.dampingRatio = 0;
 		itemJoint = (b2WeldJoint *)world->b2world->CreateJoint(&jd);
 		heldItem = _item;
 		itemToPickup = nullptr;

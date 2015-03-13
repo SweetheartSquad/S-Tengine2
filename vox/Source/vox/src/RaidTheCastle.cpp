@@ -99,9 +99,17 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	champion->head->maxVelocity = b2Vec2(10, 10);
 	champion->translateComponents(glm::vec3(100,15,0));
 
-	//playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter4, 10, PuppetGame::kPLAYER));
-	//playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
-	//playerCharacter4->ai = true;
+	playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter4, 10, PuppetGame::kPLAYER));
+	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
+	playerCharacter4->ai = true;
+
+	playerCharacter3->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter3, 10, PuppetGame::kPLAYER));
+	playerCharacter3->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
+	playerCharacter3->ai = true;
+
+	playerCharacter2->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter2, 10, PuppetGame::kPLAYER));
+	playerCharacter2->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
+	playerCharacter2->ai = true;
 
 	//gameCam->addTarget(castle->rootComponent);
 	//gameCam->addTarget(catapult->rootComponent);
@@ -118,6 +126,9 @@ void RaidTheCastle::update(Step* _step){
 		loadCatapult();
 	}
 	if(keyboard->keyDown(GLFW_KEY_B)){
+		champion->control = 0;
+		playerCharacter->control = 0;
+		playerCharacter2->control = 0;
 		//playerCharacter->behaviourManager.behaviours.at(0)->targets.clear();
 		//playerCharacter->behaviourManager.behaviours.at(0)->active = false;
 	}

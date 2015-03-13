@@ -87,3 +87,20 @@ void RaidTheCastleResourceManager::init(){
 	resources.push_back(itemFlailJoint);
 	resources.push_back(itemFlailHead);
 }
+
+TextureSampler * RaidTheCastleResourceManager::getRandomWeapon(){
+	unsigned long int i = std::rand() % 5;
+	switch(i){
+	default:
+	case 0:
+		return itemAxe;
+	case 1:
+		return itemClub;
+	case 2:
+		return itemMace;
+	case 3:
+		return itemSword;
+	case 4:
+		return itemScimitar;
+	}
+}
