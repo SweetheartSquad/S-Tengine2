@@ -46,7 +46,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
-	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, false)),
+	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, true)),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
@@ -59,26 +59,18 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	renderOptions->alphaSorting = true;
 	
 	background->setShader(shader, true);
-	background->transform->translate(0.0f, 25.f, -10.0f);
-	background->transform->scale(125, 25, 1);
+	background->transform->translate(0.0f, 50.f, -10.0f);
+	background->transform->scale(125 * 5, 50, 1);
 	background->mesh->pushTexture2D(PuppetResourceManager::sky);
 	background->mesh->uvEdgeMode = GL_REPEAT;
 	background->mesh->dirty = true;
 
-	int timeOfDayOptions = 4;
-	int timeOfDay = std::rand()%timeOfDayOptions;
-	background->mesh->setUV(0, (float)timeOfDay/timeOfDayOptions, 0);
-	background->mesh->setUV(1, (float)(timeOfDay+1)/timeOfDayOptions, 0);
-	background->mesh->setUV(2, (float)(timeOfDay+1)/timeOfDayOptions, 1);
-	background->mesh->setUV(3, (float)timeOfDay/timeOfDayOptions, 1);
-
-	addChild(background, 0);
 
 	ground->setShader(shader, true);
 	ground->setTranslationPhysical(0, 0, 0);
 	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
 	ground->transform->rotate(90.f, 0, 0, 1, kOBJECT);
-	ground->transform->scale(250, 250, 1);
+	ground->transform->scale(25, 250, 1);
 	ground->mesh->uvEdgeMode = GL_REPEAT;
 	ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
 	ground->body->SetTransform(b2Vec2(0, -250), 0);
@@ -90,12 +82,23 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 
 	//Set UVs so the texture isn't stretched
 	ground->mesh->setUV(0, 0.0,  0.0);
-	ground->mesh->setUV(1, 0.0,  40.0);
-	ground->mesh->setUV(2, 40.0, 40.0);
+	ground->mesh->setUV(1, 0.0,  4.0);
+	ground->mesh->setUV(2, 40.0, 4.0);
 	ground->mesh->setUV(3, 40.0, 0.0);
 
 	world->addToWorld(ground, 2);
 	addChild(ground, 0);
+	ground->body->GetFixtureList()->SetFriction(1);
+	ground->body->GetFixtureList()->SetRestitution(0);
+
+	int timeOfDayOptions = 4;
+	int timeOfDay = std::rand()%timeOfDayOptions;
+	background->mesh->setUV(0, (float)timeOfDay/timeOfDayOptions, 0);
+	background->mesh->setUV(1, (float)(timeOfDay+1)/timeOfDayOptions, 0);
+	background->mesh->setUV(2, (float)(timeOfDay+1)/timeOfDayOptions, 1);
+	background->mesh->setUV(3, (float)timeOfDay/timeOfDayOptions, 1);
+
+	addChild(background, 0);
 
 	b2PolygonShape dynamicBox;
 	dynamicBox.SetAsBox(1.0f * std::abs(ground->transform->scaleVector.x), 1.0f * std::abs(ground->transform->scaleVector.y));	
@@ -134,8 +137,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 		}
 		addChild(foliage, 0);
 	}*/
-
-	
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");
@@ -275,7 +276,6 @@ void PuppetScene::update(Step * _step){
 	}
 
 	
-
 	// camera controls
 	if(keyboard->keyDown(GLFW_KEY_UP)){
 		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
