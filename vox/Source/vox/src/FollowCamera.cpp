@@ -74,7 +74,14 @@ void FollowCamera::update(Step * _step){
 	// move camera
 	lookAtSpot.x = transform->translationVector.x = minX + screenWidth * 0.5f;
 	lookAtSpot.y = transform->translationVector.y = minY + screenHeight* 0.5f;
-	transform->translationVector.z = dist;
+	
+	targetZoom = dist;
+	if( targetZoom < transform->translationVector.z){
+		transform->translationVector.z += (dist - transform->translationVector.z) * 0.01f;
+	}else{
+		transform->translationVector.z = targetZoom;
+	}
+	//transform->translationVector.z = dist;
 
 	/*float xDif = (lookAtSpot.x - transform->translationVector.x);
 	if(xDif > deadZoneX){

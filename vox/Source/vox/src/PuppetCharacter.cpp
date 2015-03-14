@@ -207,7 +207,6 @@ void PuppetCharacter::update(Step* _step){
 
 void PuppetCharacter::jump(){
 	if(canJump){
-		std::cout << "jump called for " << &torso << "\n";
 		float t = torso->body->GetAngle();
 		b2Vec2 p = torso->body->GetWorldPoint(b2Vec2(0, 1));
 		//torso->applyLinearImpulse(250*(1-cos(t))*glm::sign(-t), 250*(cos(t)*0.5 + 0.5), p.x, p.y);
