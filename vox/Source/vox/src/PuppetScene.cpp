@@ -51,7 +51,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
-	ground(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stage.obj"))),
+	ground(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stage.vox"))),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
