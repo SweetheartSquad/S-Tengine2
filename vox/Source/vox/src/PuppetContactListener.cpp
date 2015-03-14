@@ -41,21 +41,13 @@ void PuppetContactListener::BeginContact(b2Contact * _contact){
 
 	//std::cout << fA.categoryBits << " | " << fB.categoryBits << std::endl;
 
-	// if a thrown item hits the ground, make it not thrown and able to collide regularly
-	if((fA.categoryBits & PuppetGame::kGROUND) != 0 && (fB.categoryBits & PuppetGame::kITEM) != 0){
-		Item * item = static_cast<Item *>(_contact->GetFixtureB()->GetUserData());
-		item->hitGround();
-	}else if((fB.categoryBits & PuppetGame::kGROUND) != 0 && (fA.categoryBits & PuppetGame::kITEM) !=0){
-		Item * item = static_cast<Item *>(_contact->GetFixtureA()->GetUserData());
-		item->hitGround();
-	}
-
 	if(playerFixture != nullptr){
 		if((fA.categoryBits & PuppetGame::kPLAYER) != 0 && (fB.categoryBits & PuppetGame::kPLAYER) != 0){
 			// Player-Player collision
 			playerPlayerContact(_contact);
 		}else if((fA.categoryBits & PuppetGame::kITEM) != 0 || (fB.categoryBits & PuppetGame::kITEM) != 0){
 			// Player-Item collision
+			std::cout << fA.categoryBits << "|" << fB.categoryBits << std::endl;
 			playerItemContact(_contact, playerFixture, otherFixture);
 		}else if((fA.categoryBits & PuppetGame::kSTRUCTURE) != 0 || (fB.categoryBits & PuppetGame::kSTRUCTURE) != 0){
 			// Player-Structure collision
@@ -65,6 +57,17 @@ void PuppetContactListener::BeginContact(b2Contact * _contact){
 			playerGroundContact(_contact, playerFixture, otherFixture);
 		}
 	}else{
+		// neither of the fixtures is a player
+
+		// if a thrown item hits the ground, make it not thrown and able to collide regularly
+		if((fA.categoryBits & PuppetGame::kGROUND) != 0 && (fB.categoryBits & PuppetGame::kITEM) != 0){
+			Item * item = static_cast<Item *>(_contact->GetFixtureB()->GetUserData());
+			item->hitGround();
+		}else if((fB.categoryBits & PuppetGame::kGROUND) != 0 && (fA.categoryBits & PuppetGame::kITEM) !=0){
+			Item * item = static_cast<Item *>(_contact->GetFixtureA()->GetUserData());
+			item->hitGround();
+		}
+
 		// structure - item?
 		b2Fixture * structureFixture;
 		b2Fixture * itemFixture;
@@ -101,7 +104,7 @@ void PuppetContactListener::BeginContact(b2Contact * _contact){
 }
 
 void PuppetContactListener::playerPlayerContact(b2Contact * _contact){
-	b2Fixture * fxA = _contact->GetFixtureA();
+	/*b2Fixture * fxA = _contact->GetFixtureA();
 	b2Fixture * fxB = _contact->GetFixtureB();
 
 	PuppetCharacter * puppetA = reinterpret_cast<PuppetCharacter *>( fxA->GetBody()->GetUserData() );
@@ -109,7 +112,7 @@ void PuppetContactListener::playerPlayerContact(b2Contact * _contact){
 
 	if(puppetA != nullptr && puppetB != nullptr){
 		// Stuff
-	}
+	}*/
 }
 
 void PuppetContactListener::playerItemContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _itemFixture){
@@ -118,7 +121,7 @@ void PuppetContactListener::playerItemContact(b2Contact * _contact, b2Fixture * 
 	Item * item = static_cast<Item *>(_itemFixture->GetUserData());
 
 	static_cast<Item *>(item)->hitPlayer();
-	if(item->thrown || item->held && item != p->heldItem){
+	if(item->thrown || (item->held && item != p->heldItem)){
 		// do some sort of damage thing here
 		p->rootComponent->applyLinearImpulseUp(500);
 		std::cout << "damage?" << std::endl;

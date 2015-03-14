@@ -66,13 +66,14 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	if(maskBits != static_cast<int16>(-1)){
 		sf.maskBits = maskBits;
 	}
+	sf.groupIndex = groupIndex;
 
 	b2CircleShape testshape;
 	testshape.m_radius = 1.f;
-	testshape.m_p = b2Vec2(0, -2.f);
+	testshape.m_p = b2Vec2(0, -2.25f);
 	b2FixtureDef test;
 	test.shape = &testshape;
-	test.density = 100.f;
+	test.density = 150.f;
 	test.userData = this;
 	test.friction = 1;
 	test.filter = sf;
@@ -119,7 +120,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	//b2RevoluteJointDef jhh;
 	jhh.bodyA = head->body;
 	jhh.bodyB = headgear->body;
-	jhh.localAnchorA.Set(0, 1.0f * head->getCorrectedHeight());
+	jhh.localAnchorA.Set(0, 0.5f * head->getCorrectedHeight());
 	jhh.localAnchorB.Set(0, -0.1f * headgear->getCorrectedHeight());
 	jhh.collideConnected = false;
 	//jhh.enableLimit = true;
@@ -224,7 +225,7 @@ void PuppetCharacter::jump(){
 		float t = torso->body->GetAngle();
 		b2Vec2 p = torso->body->GetWorldPoint(b2Vec2(0, 1));
 		//torso->applyLinearImpulse(250*(1-cos(t))*glm::sign(-t), 250*(cos(t)*0.5 + 0.5), p.x, p.y);
-		torso->applyLinearImpulseUp(175 * 2 *(cos(t)*0.5 + 0.5));
+		torso->applyLinearImpulseUp(5000 * 2 *(cos(t)*0.5 + 0.5));
 		if(torso->body->GetAngle() > 0){
 			//torso->applyLinearImpulseLeft(250*(1-cos(t)));
 			torso->body->SetLinearVelocity(b2Vec2(-25*(1-cos(t)), torso->body->GetLinearVelocity().y));

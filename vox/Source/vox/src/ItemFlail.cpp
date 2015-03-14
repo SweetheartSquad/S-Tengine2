@@ -33,6 +33,8 @@ ItemFlail::ItemFlail(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, 
 	
 	for(Box2DSprite ** c : components){
 		(*c)->createFixture(sf);
+		(*c)->body->GetFixtureList()->SetDensity(0.01f);
+		(*c)->body->ResetMassData();
 	}
 
 	setUserData(this);

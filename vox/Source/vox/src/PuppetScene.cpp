@@ -103,18 +103,19 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	
-	float width = 170;
-	float height = 50;
+	float width = 170.f;
+	float height = 50.f;
+	float size = 3.f;
 
-	boundaries.at(0)->transform->scale(3, height/2.f, 3.f);
-	boundaries.at(1)->transform->scale(3, height/2.f, 3.f);
-	boundaries.at(2)->transform->scale(width/2.f, 3.f, 3.f);
-	boundaries.at(3)->transform->scale(width/2.f, 3.f, 3.f);
+	boundaries.at(0)->transform->scale(size, height/2.f, size);
+	boundaries.at(1)->transform->scale(size, height/2.f, size);
+	boundaries.at(2)->transform->scale(width/2.f, size, size);
+	boundaries.at(3)->transform->scale(width/2.f, size, size);
 
 	boundaries.at(0)->setTranslationPhysical(width, height/2.f, 0);
 	boundaries.at(1)->setTranslationPhysical(0, height/2.f, 0);
-	boundaries.at(2)->setTranslationPhysical(width/2.f, height, 0);
-	boundaries.at(3)->setTranslationPhysical(width/2.f, 0, 0);
+	boundaries.at(2)->setTranslationPhysical(width/2.f, height-size, 0);
+	boundaries.at(3)->setTranslationPhysical(width/2.f, -size, 0);
 	
 	addChild(boundaries.at(0));
 	addChild(boundaries.at(1));
@@ -173,7 +174,8 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	Texture * treeTex2 = PuppetResourceManager::tree2;
 	Texture * bushTex1 = PuppetResourceManager::bush1;
 	Texture * bushTex2 = PuppetResourceManager::bush2;
-
+	
+	addChild(randomGround, 0);
 	int numFoliage = 60;
 	for(signed long int i = 0; i < numFoliage; ++i){
 		float height = std::rand()%500/50.f+5.f;
@@ -230,7 +232,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	//randomGround->mesh->uvEdgeMode = GL_REPEAT;
 
 	//world->addToWorld(randomGround);
-	addChild(randomGround, 1);
 	
 	//Set up cameras
 	mouseCamera = new MousePerspectiveCamera();

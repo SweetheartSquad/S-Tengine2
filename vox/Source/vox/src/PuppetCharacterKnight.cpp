@@ -29,9 +29,9 @@ PuppetCharacterKnight::PuppetCharacterKnight(bool _ai, unsigned long int _id, Bo
 	itemToPickup->components.push_back(&itemToPickup->rootComponent);
 	
 	b2Filter sf;
-	sf.categoryBits = categoryBits;
-	if(maskBits != (int16)-1){
-		sf.maskBits = maskBits;
+	sf.categoryBits = itemToPickup->categoryBits;
+	if(itemToPickup->maskBits != (int16)-1){
+		sf.maskBits = itemToPickup->maskBits;
 	}else{
 		sf.maskBits = 0;
 	}
