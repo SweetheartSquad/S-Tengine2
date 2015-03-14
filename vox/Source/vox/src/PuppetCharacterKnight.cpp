@@ -45,6 +45,7 @@ PuppetCharacterKnight::PuppetCharacterKnight(bool _ai, unsigned long int _id, Bo
 
 	itemToPickup->setUserData(itemToPickup);
 
+	//itemToPickup->snapComponents(handRight);
 }
 
 PuppetCharacterKnight::~PuppetCharacterKnight(){
