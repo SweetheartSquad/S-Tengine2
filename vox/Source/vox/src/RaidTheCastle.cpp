@@ -51,29 +51,35 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	addChild(playerCharacter, 1);
 	playerCharacter->addToLayeredScene(this, 1);
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter->translateComponents(glm::vec3(0.0f, 25.f, 0.f));
+	playerCharacter->translateComponents(glm::vec3(20.0f, 35, 0.f));
 	puppetController->puppetCharacter = playerCharacter;
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
 	playerCharacter2->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter2->translateComponents(glm::vec3(10.0f, 25.f, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(40.0f, 35, 0.f));
 	puppetController2->puppetCharacter = playerCharacter2;
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
 	playerCharacter3->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter3->translateComponents(glm::vec3(20.0f, 25.f, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(60.0f, 35, 0.f));
 	puppetController3->puppetCharacter = playerCharacter3;
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
 	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter4->translateComponents(glm::vec3(30.0f, 25.f, 0.f));
+	playerCharacter4->translateComponents(glm::vec3(80.0f, 35, 0.f));
 	puppetController4->puppetCharacter = playerCharacter4;
+
+	champion->setShader(shader, true);
+	addChild(champion, 0);
+	champion->addToLayeredScene(this, 1);
+	champion->head->maxVelocity = b2Vec2(10, 10);
+	champion->translateComponents(glm::vec3(100.f, 35, 0));
 
 	gameCam->addTarget(playerCharacter->torso);
 	gameCam->addTarget(playerCharacter2->torso);
@@ -84,20 +90,15 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	castle->addToLayeredScene(this, 0);
 	addChild(castle, 0);
 
-	castle->translateComponents(glm::vec3(150, 0, 0));
+	castle->translateComponents(glm::vec3(170, 0, 0));
 
 	catapult->setShader(shader, true);
 	catapult->addToLayeredScene(this, 1);
 	addChild(catapult, 1);
 
-	catapult->translateComponents(glm::vec3(-10,0,0));
+	catapult->translateComponents(glm::vec3(10,0,0));
 
 
-	champion->setShader(shader, true);
-	addChild(champion, 0);
-	champion->addToLayeredScene(this, 1);
-	champion->head->maxVelocity = b2Vec2(10, 10);
-	champion->translateComponents(glm::vec3(100,15,0));
 
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 10, PuppetGame::kPLAYER));
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
