@@ -61,6 +61,10 @@ const std::string GL_UNIFORM_ID_SHADOW_MAP_SAMPLER    = "shadowMapSampler";
 const std::string GL_UNIFORM_ID_NUM_MATERIALS	      =	"numMaterials";
 const std::string GL_UNIFORM_ID_MATERIAL_TYPE         = "materials[].materialType";
 const std::string GL_UNIFORM_ID_LIGHTS_NO_ARRAY       = "lights";
+const std::string GL_UNIFORM_ID_HUE					  = "hue";
+const std::string GL_UNIFORM_ID_SATURATION			  = "saturation";
+const std::string GL_UNIFORM_ID_VALUE				  = "value";
+const std::string GL_UNIFORM_ID_ALPHA				  = "alpha";
 
 //Attribute variable names
 const std::string GL_ATTRIBUTE_ID_VERTEX_POSITION	  = "aVertexPosition";
@@ -84,6 +88,7 @@ const std::string SHADER_COMPONENT_AMBIENT			  = "SHADER_COMPONENT_AMBIENT";
 const std::string SHADER_COMPONENT_DIFFUSE			  = "SHADER_COMPONENT_DIFFUSE";
 const std::string SHADER_COMPONENT_BLINN			  = "SHADER_COMPONENT_BLINN";
 const std::string SHADER_COMPONENT_VOXEL			  = "SHADER_COMPONENT_VOXEL";
+const std::string SHADER_COMPONENT_HSV				  = "SHADER_COMPONENT_HSV";
 
 
 const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGHT + "\n"

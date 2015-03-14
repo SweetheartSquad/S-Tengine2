@@ -134,6 +134,7 @@
     <ClCompile Include="..\src\shader\DepthMapShader.cpp" />
     <ClCompile Include="..\src\shader\DiffuseShaderComponent.cpp" />
     <ClCompile Include="..\src\shader\GeometryComponent.cpp" />
+    <ClCompile Include="..\src\shader\HsvShaderComponent.cpp" />
     <ClCompile Include="..\src\shader\PhongShaderComponent.cpp" />
     <ClCompile Include="..\src\shader\Shader.cpp" />
     <ClCompile Include="..\src\shader\ShaderComponent.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="..\include\shader\DepthMapShader.h" />
     <ClInclude Include="..\include\shader\DiffuseShaderComponent.h" />
     <ClInclude Include="..\include\shader\GeometryComponent.h" />
+    <ClInclude Include="..\include\shader\HsvShaderComponent.h" />
     <ClInclude Include="..\include\shader\PhongShaderComponent.h" />
     <ClInclude Include="..\include\shader\Shader.h" />
     <ClInclude Include="..\include\shader\ShaderComponent.h" />

@@ -17,14 +17,12 @@ PuppetCharacterKnight::PuppetCharacterKnight(bool _ai, unsigned long int _id, Bo
 	NodeChild(nullptr)
 {
 	
-	TextureSampler * weapon = RaidTheCastleResourceManager::getRandomWeapon();
-	itemToPickup = new Item(false, _world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, _groupIndex, 0, 0, -weapon->height/2.5f);
-
 	//itemToPickup->translateComponents(torso->transform->translationVector);
 
 	componentScale = 0.008f;
+	TextureSampler * weapon = RaidTheCastleResourceManager::getRandomWeapon();
+	itemToPickup = new Item(false, _world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, _groupIndex, 0, 0, -weapon->height/2.5f);
 
-	
 	itemToPickup->rootComponent = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), weapon->width, weapon->height, weapon->texture, componentScale/4);
 	itemToPickup->components.push_back(&itemToPickup->rootComponent);
 	

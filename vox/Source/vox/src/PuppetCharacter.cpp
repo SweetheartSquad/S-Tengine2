@@ -8,6 +8,10 @@
 #include "Item.h"
 #include "Behaviour.h"
 #include <PuppetTexturePack.h>
+#include <shader\HsvShaderComponent.h>
+#include <shader\BaseComponentShader.h>
+#include <shader\Shader.h>
+#include <RenderOptions.h>
 
 PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex),
@@ -195,11 +199,23 @@ PuppetCharacter::~PuppetCharacter(){
 }
 
 void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
+	static_cast<HsvShaderComponent *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->saturation = 2-control;
 	Box2DSuperSprite::render(_matrixStack, _renderStack);
+	for(Box2DSprite ** c : components){
+		if(*c != nullptr){
+			(*c)->render(_matrixStack, _renderStack);
+		}
+	}
+	static_cast<HsvShaderComponent *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->saturation = 1;
 }
 
 void PuppetCharacter::update(Step* _step){
 	Box2DSuperSprite::update(_step);
+	for(Box2DSprite ** c : components){
+		if(*c != nullptr){
+			(*c)->update(_step);
+		}
+	}
 	float bodAngle = ((torso)->body->GetAngle() + targetRoll) * control;// + glm::radians(90.f);
 	(torso->body->SetAngularVelocity(-bodAngle * 10));
 
@@ -299,10 +315,10 @@ void PuppetCharacter::pickupItem(Item * _item){
 }
 
 void PuppetCharacter::addToLayeredScene(LayeredScene * _scene, unsigned long int _layer){
-	Box2DSuperSprite::addToLayeredScene(_scene, _layer);
+	/*Box2DSuperSprite::addToLayeredScene(_scene, _layer);
 	if(itemToPickup != nullptr){
 		itemToPickup->addToLayeredScene(_scene, _layer);
-	}
+	}*/
 }
 void PuppetCharacter::setShader(Shader * _shader, bool _configureDefaultAttributes){
 	Box2DSuperSprite::setShader(_shader, _configureDefaultAttributes);

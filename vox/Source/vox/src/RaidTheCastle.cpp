@@ -99,7 +99,6 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	catapult->translateComponents(glm::vec3(0,0,0));
 
 
-
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 10, PuppetGame::kPLAYER));
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
 	playerCharacter4->ai = true;
