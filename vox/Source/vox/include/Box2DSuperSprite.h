@@ -65,4 +65,6 @@ public:
 	void setGroupIndex(int16 _groupIndex);
 
 	void addComponent(Box2DSprite * _component);
+
+	void snapComponents(Box2DSprite * _sprite);
 };
