@@ -1,17 +1,19 @@
 #pragma once
 
-#include "Boulder.h"
+#include <Boulder.h>
 #include <Box2DSprite.h>
 #include <Texture.h>
-#include "Box2DWorld.h"
 #include <PuppetCharacter.h>
+#include <Box2DWorld.h>
+#include <Catapult.h>
 
 Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Item(true, _world, _categoryBits, _maskBits, _groupIndex, 10.f, 50, 56),
 	playerWhoFired(nullptr),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
-	NodeRenderable()
+	NodeRenderable(),
+	catapult(nullptr)
 {
 	componentScale = 0.008f;
 
@@ -34,11 +36,17 @@ Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16
 		(*c)->createFixture(sf);
 	}
 
+	boulder->body->SetBullet(true);
+
 	setUserData(this);
 }
 
 Boulder::~Boulder(){
-
+	if(catapult != nullptr){
+		world->b2world->DestroyJoint(catapult->boulderJoint);
+		catapult->boulderJoint = nullptr;
+		catapult->boulder = nullptr;
+	}
 }
 
 void Boulder::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){

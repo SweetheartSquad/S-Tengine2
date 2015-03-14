@@ -31,6 +31,7 @@ class Character3;
 class Character4;
 class PuppetGame;
 class Item;
+class NodeBox2DBody;
 
  class PuppetScene abstract : public LayeredScene{
 public:
@@ -53,12 +54,17 @@ public:
 	PuppetController * puppetController3;
 	PuppetController * puppetController4;
 
-	Box2DMeshEntity * ground;
+	MeshEntity * ground;
 	RandomGround * randomGround;
 	MeshEntity * background;
 	BaseComponentShader* shader;
+
+	std::vector<Box2DMeshEntity *> boundaries;
+
 	SoundManager * soundManager;
 	SoundManager * countdownSoundManager;
+	SoundManager * backgroundSoundManager;
+
 	AccelerometerParser * arduino;
 
 	FollowCamera * gameCam;
@@ -80,4 +86,5 @@ public:
 
 	void destroyItem(Item * item);
 	void doCountDown();
+	void playRandomBackgroundMusic();
 };

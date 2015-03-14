@@ -5,11 +5,12 @@
 #include "System.h"
 #include "Transform.h"
 
-FollowCamera::FollowCamera(glm::vec3 _offset, float _deadZoneX, float _deadZoneY, float _deadZoneZ):
+FollowCamera::FollowCamera(float _buffer, glm::vec3 _offset, float _deadZoneX, float _deadZoneY, float _deadZoneZ):
 	PerspectiveCamera(),
 	NodeTransformable(new Transform()),
 	NodeAnimatable(),
 	NodeUpdatable(),
+	buffer(_buffer),
 	lastOrientation(1.f, 0.f, 0.f, 0.f),
 	offset(_offset),
 	deadZoneX(_deadZoneX),
@@ -44,10 +45,10 @@ void FollowCamera::update(Step * _step){
 	for(ShiftKiddie * nt : targets){
 		glm::vec3 pos = nt->getPos(false);
 		//lookAtSpot += pos;
-		minX = std::min(pos.x, minX);
-		maxX = std::max(pos.x, maxX);
-		minY = std::min(pos.y, minY);
-		maxY = std::max(pos.y, maxY);
+		minX = std::min(pos.x-buffer, minX);
+		maxX = std::max(pos.x+buffer, maxX);
+		minY = std::min(pos.y-buffer, minY);
+		maxY = std::max(pos.y+buffer, maxY);
 	}
 	float screenWidth = maxX - minX;
 	float screenHeight = maxY - minY;
@@ -73,7 +74,14 @@ void FollowCamera::update(Step * _step){
 	// move camera
 	lookAtSpot.x = transform->translationVector.x = minX + screenWidth * 0.5f;
 	lookAtSpot.y = transform->translationVector.y = minY + screenHeight* 0.5f;
-	transform->translationVector.z = dist;
+	
+	targetZoom = dist;
+	if( targetZoom < transform->translationVector.z){
+		transform->translationVector.z += (dist - transform->translationVector.z) * 0.01f;
+	}else{
+		transform->translationVector.z = targetZoom;
+	}
+	//transform->translationVector.z = dist;
 
 	/*float xDif = (lookAtSpot.x - transform->translationVector.x);
 	if(xDif > deadZoneX){

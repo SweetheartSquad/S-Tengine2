@@ -7,10 +7,12 @@
 class Box2DSprite;
 class Box2DWorld;
 class PuppetCharacter;
+class Catapult;
 
 class Boulder : public Item{
 public:
 	Box2DSprite * boulder;
+	Catapult * catapult;
 
 	PuppetCharacter * playerWhoFired;
 

@@ -15,7 +15,7 @@ class ShiftKiddie;
 *****************************/
 class FollowCamera : public PerspectiveCamera {
 public:
-	explicit FollowCamera(glm::vec3 _offset = glm::vec3(0,0,0), float _deadZoneX = 0, float _deadZoneY = 0, float _deadZoneZ = 0);
+	explicit FollowCamera(float _buffer = 0, glm::vec3 _offset = glm::vec3(0,0,0), float _deadZoneX = 0, float _deadZoneY = 0, float _deadZoneZ = 0);
 	~FollowCamera();
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
@@ -35,6 +35,8 @@ public:
 	// Things to follow
 	std::vector<ShiftKiddie *> targets;
 	
+	// How much extra space is given around targets
+	float buffer;
 	// Look at the sprite offset by this
 	glm::vec3 offset;
 	// Tolerable horizontal difference between the follow targets and the current lookAt
@@ -46,4 +48,6 @@ public:
 
 	// Minimum zoom
 	float minimumZoom;
+
+	float targetZoom;
 };

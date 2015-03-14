@@ -216,7 +216,7 @@ GameJamScene::GameJamScene(Game * _game):
 	addChild(midgroundScreen, 0);
 	addChild(ground, 0);
 	//addChild(foregroundScreen, 2);
-	camera = new FollowCamera(glm::vec3(0, 0, 0), 0, 0);
+	camera = new FollowCamera(50, glm::vec3(0, 0, 0), 0, 0);
 	static_cast<FollowCamera*>(camera)->addTarget(playerCharacter->torso);
 	static_cast<FollowCamera*>(camera)->minimumZoom = 25.f;
 	//camera = new MousePerspectiveCamera();

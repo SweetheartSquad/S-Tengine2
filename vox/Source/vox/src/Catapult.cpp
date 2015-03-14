@@ -23,7 +23,10 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int
 	boulderLoaded(false),
 	boulderJoint(nullptr),
 	playerWhoFired(nullptr),
-	cooldownCnt(0.f)
+	cooldownCnt(0.f),
+	boulder(nullptr),
+	arm(nullptr),
+	base(nullptr)
 {
 	componentScale = 0.008f;
 

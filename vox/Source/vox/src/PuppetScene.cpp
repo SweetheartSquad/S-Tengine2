@@ -37,6 +37,8 @@
 
 #include "RaidTheCastle.h"
 #include <PuppetResourceManager.h>
+#include <NumberUtils.h>
+#include <Resource.h>
 
 PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	LayeredScene(_game, 3),
@@ -49,10 +51,11 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
-	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, true)),
+	ground(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stage.obj"))),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
+	backgroundSoundManager(new SoundManager()),
 	countdownSoundManager(new SoundManager()),
 	mouseCam(false),
 	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::ground1, 1, 1))
@@ -62,45 +65,90 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	
-	countdownSoundManager->addNewSound("1", "../assets/hurly-burly/test.wav");
-	countdownSoundManager->addNewSound("2", "../assets/hurly-burly/test.wav");
-	countdownSoundManager->addNewSound("3", "../assets/hurly-burly/test.wav");
-	countdownSoundManager->addNewSound("4", "../assets/hurly-burly/test.wav");
-	countdownSoundManager->addNewSound("5", "../assets/hurly-burly/test.wav");
+	//Add Audio
+	countdownSoundManager->addNewSound("1", "../assets/hurly-burly/audio/HighCountdown_One.ogg");
+	countdownSoundManager->addNewSound("2", "../assets/hurly-burly/audio/HighCountdown_Two.ogg");
+	countdownSoundManager->addNewSound("3", "../assets/hurly-burly/audio/HighCountdown_Three.ogg");
+	countdownSoundManager->addNewSound("4", "../assets/hurly-burly/audio/HighCountdown_Four.ogg");
+	countdownSoundManager->addNewSound("5", "../assets/hurly-burly/audio/HighCountdown_5.ogg");
 
-	countdownSoundManager->play("1");
+	//Since these are chosen randomly its easiest to just use numbers as the keys and generate a random number
+	backgroundSoundManager->addNewSound("1", "../assets/hurly-burly/audio/songs/WesternSong.ogg");
+	backgroundSoundManager->addNewSound("2", "../assets/hurly-burly/audio/songs/FastSong.ogg");
+	backgroundSoundManager->addNewSound("3", "../assets/hurly-burly/audio/songs/MelodicaSong.ogg");
 
 	background->setShader(shader, true);
-	background->transform->translate(0.0f, 50.f, -10.0f);
+	background->transform->translate(0.0f, 50.f, -15.f/2.f);
 	background->transform->scale(125 * 5, 50, 1);
 	background->mesh->pushTexture2D(PuppetResourceManager::sky);
 	background->mesh->uvEdgeMode = GL_REPEAT;
 	background->mesh->dirty = true;
 
 	ground->setShader(shader, true);
-	ground->setTranslationPhysical(0, 0, 0);
-	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
-	ground->transform->rotate(90.f, 0, 0, 1, kOBJECT);
-	ground->transform->scale(25, 250, 1);
+	//ground->setTranslationPhysical(0, 0, 0);
+	//ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
+	//ground->transform->rotate(90.f, 0, 0, 1, kOBJECT);
+	ground->transform->scale(1000, 100, 100);
+	ground->transform->translate(50.f/2.f, 0, -15.f/2.f);
 	ground->mesh->uvEdgeMode = GL_REPEAT;
 	ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
-	ground->body->SetTransform(b2Vec2(0, -250), 0);
-	ground->mesh->vertices.at(0).z -= 250;
+	for(Vertex & v : ground->mesh->vertices){
+		v.u *= 10;
+		v.v *= 100;
+	}
+	ground->mesh->dirty = true;
+	
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	
+	boundaries.at(0)->transform->scale(1, 50, 1);
+	boundaries.at(1)->transform->scale(1, 50, 1);
+	boundaries.at(2)->transform->scale(50, 1, 1);
+	boundaries.at(3)->transform->scale(50, 1, 1);
+
+	boundaries.at(0)->setTranslationPhysical(50, 0, 0);
+	boundaries.at(1)->setTranslationPhysical(-50, 0, 0);
+	boundaries.at(2)->setTranslationPhysical(0, 50, 0);
+	boundaries.at(3)->setTranslationPhysical(0, 0, 0);
+	
+	addChild(boundaries.at(0));
+	addChild(boundaries.at(1));
+	addChild(boundaries.at(2));
+	addChild(boundaries.at(3));
+	
+	world->addToWorld(boundaries.at(0));
+	world->addToWorld(boundaries.at(1));
+	world->addToWorld(boundaries.at(2));
+	world->addToWorld(boundaries.at(3));
+
+	b2Filter sf;
+	sf.categoryBits = PuppetGame::kBOUNDARY;
+	sf.maskBits = -1;
+	boundaries.at(0)->body->GetFixtureList()->SetFilterData(sf);
+	boundaries.at(1)->body->GetFixtureList()->SetFilterData(sf);
+	boundaries.at(2)->body->GetFixtureList()->SetFilterData(sf);
+	sf.categoryBits = PuppetGame::kBOUNDARY | PuppetGame::kGROUND;
+	boundaries.at(3)->body->GetFixtureList()->SetFilterData(sf);
+	boundaries.at(3)->body->GetFixtureList()->SetFriction(1);
+	boundaries.at(3)->body->GetFixtureList()->SetRestitution(0);
+
+	//ground->body->SetTransform(b2Vec2(0, -250), 0);
+	/*ground->mesh->vertices.at(0).z -= 250;
 	ground->mesh->vertices.at(1).z -= 250;
 	ground->mesh->vertices.at(2).z -= 250;
 	ground->mesh->vertices.at(3).z -= 250;
-	ground->mesh->dirty = true;
+	ground->mesh->dirty = true;*/
 
 	//Set UVs so the texture isn't stretched
-	ground->mesh->setUV(0, 0.0,  0.0);
+	/*ground->mesh->setUV(0, 0.0,  0.0);
 	ground->mesh->setUV(1, 0.0,  4.0);
 	ground->mesh->setUV(2, 40.0, 4.0);
-	ground->mesh->setUV(3, 40.0, 0.0);
+	ground->mesh->setUV(3, 40.0, 0.0);*/
 
-	world->addToWorld(ground, 2);
+	//world->addToWorld(ground, 2);
 	addChild(ground, 0);
-	ground->body->GetFixtureList()->SetFriction(1);
-	ground->body->GetFixtureList()->SetRestitution(0);
 
 	int timeOfDayOptions = 4;
 	int timeOfDay = std::rand()%timeOfDayOptions;
@@ -111,27 +159,24 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 
 	addChild(background, 0);
 
-	b2PolygonShape dynamicBox;
+	/*b2PolygonShape dynamicBox;
 	dynamicBox.SetAsBox(1.0f * std::abs(ground->transform->scaleVector.x), 1.0f * std::abs(ground->transform->scaleVector.y));	
 	b2Fixture * groundFixture = ground->getNewFixture(dynamicBox, 1.0f);
 	groundFixture->SetSensor(false);
 	groundFixture->SetUserData(this);
-	b2Filter sf;
-	sf.categoryBits = PuppetGame::kGROUND;
-	sf.maskBits = PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER;
-	groundFixture->SetFilterData(sf);
+	*/
 
-	/*Texture * treeTex1 = new Texture("../assets/hurly-burly/Foliage/Tree1-ds.png", 1024, 1024, true, true);
-	Texture * treeTex2 = new Texture("../assets/hurly-burly/Foliage/Tree2-ds.png", 1024, 1024, true, true);
-	Texture * bushTex1 = new Texture("../assets/hurly-burly/Foliage/Bush1-ds.png", 1024, 1024, true, true);
-	Texture * bushTex2 = new Texture("../assets/hurly-burly/Foliage/Bush2-ds.png", 1024, 1024, true, true);
+	Texture * treeTex1 = PuppetResourceManager::tree1;
+	Texture * treeTex2 = PuppetResourceManager::tree2;
+	Texture * bushTex1 = PuppetResourceManager::bush1;
+	Texture * bushTex2 = PuppetResourceManager::bush2;
 
-	int numFoliage = std::rand()%500/50 + 10;
+	int numFoliage = 60;
 	for(signed long int i = 0; i < numFoliage; ++i){
 		float height = std::rand()%500/50.f+5.f;
 		MeshEntity * foliage = new MeshEntity(MeshFactory::getPlaneMesh());
 		foliage->setShader(shader, true);
-		foliage->transform->translate((std::rand()%500/10.f)-25.f, height, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
+		foliage->transform->translate((std::rand()%500/3.f)-25.f, height, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
 		foliage->transform->scale(height, height, 1);
 		int tex = i % 4;
 		switch(tex){
@@ -147,7 +192,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 				break;
 		}
 		addChild(foliage, 0);
-	}*/
+	}
 
 	//Arduino 
 	arduino = new AccelerometerParser("COM4");
@@ -192,7 +237,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	mouseCamera->yaw = 90.0f;
 	mouseCamera->pitch = -10.0f;
 
-	gameCam = new FollowCamera(glm::vec3(0, 0, 0), 0, 0);
+	gameCam = new FollowCamera(10, glm::vec3(0, 0, 0), 0, 0);
 	gameCam->farClip = 1000.f;
 	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
 	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
@@ -206,6 +251,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	TextureSampler * countDown3TextureSampler = PuppetResourceManager::countDown3;
 	TextureSampler * countDown4TextureSampler = PuppetResourceManager::countDown4;
 	TextureSampler * countDown5TextureSampler = PuppetResourceManager::countDown5;
+
 
 	Sprite * countDown1 = new Sprite(nullptr, new Transform());
 	Sprite * countDown2 = new Sprite(nullptr, new Transform());
@@ -264,7 +310,7 @@ void PuppetScene::update(Step * _step){
 
 			splashMessage->transform->translationVector.x = gameCam->transform->translationVector.x;
 			splashMessage->transform->translationVector.y = gameCam->transform->translationVector.y;
-			splashMessage->transform->translationVector.z = 0;
+			splashMessage->transform->translationVector.z = gameCam->transform->translationVector.z - 10;
 
 		}else{
 			// Remove previous number from scene
@@ -287,7 +333,7 @@ void PuppetScene::update(Step * _step){
 	for(Sprite * n : countDownNumbers){
 		n->transform->translationVector.x = gameCam->transform->translationVector.x;
 		n->transform->translationVector.y = gameCam->transform->translationVector.y;
-		n->transform->translationVector.z = 0;
+		n->transform->translationVector.z = gameCam->transform->translationVector.z - 10;
 	}
 	
 	// destroy used up items
@@ -439,8 +485,13 @@ void PuppetScene::doCountDown(){
 	std::cout << "idx: " << countDown << std::endl;
 	std::cout << "=========================" << std::endl;
 
-	countdownSoundManager->play("1");
+	countdownSoundManager->play(std::to_string(countDown + 1));
 
 	// Add new number to scene
 	addChild(countDownNumbers.at(countDown), 2);
+}
+
+void PuppetScene::playRandomBackgroundMusic(){
+	int rand = vox::NumberUtils::randomInt(1, backgroundSoundManager->sounds.size());
+	backgroundSoundManager->play(std::to_string(rand));
 }

@@ -11,6 +11,11 @@ public:
 	static Texture * stageFloor;
 	static Texture * sky;
 	static Texture * ground1;
+	static Texture * PuppetResourceManager::tree1; 
+	static Texture * PuppetResourceManager::tree2;	
+	static Texture * PuppetResourceManager::bush1;
+	static Texture * PuppetResourceManager::bush2;
+
 	static TextureSampler * head1;
 	static TextureSampler * face1;
 	static TextureSampler * hand1;
@@ -20,6 +25,7 @@ public:
 	static TextureSampler * countDown3;
 	static TextureSampler * countDown4;
 	static TextureSampler * countDown5;
+
 	
 	static void init();
 };

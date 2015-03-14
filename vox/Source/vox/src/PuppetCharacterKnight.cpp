@@ -17,8 +17,10 @@ PuppetCharacterKnight::PuppetCharacterKnight(bool _ai, unsigned long int _id, Bo
 	NodeChild(nullptr)
 {
 	
-	TextureSampler * weapon = RaidTheCastleResourceManager::itemScimitar;
-	itemToPickup = new Item(false, _world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, _groupIndex, 0, 0, -weapon->height/2.f);
+	TextureSampler * weapon = RaidTheCastleResourceManager::getRandomWeapon();
+	itemToPickup = new Item(false, _world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, _groupIndex, 0, 0, -weapon->height/2.5f);
+
+	//itemToPickup->translateComponents(torso->transform->translationVector);
 
 	componentScale = 0.008f;
 
@@ -39,7 +41,7 @@ PuppetCharacterKnight::PuppetCharacterKnight(bool _ai, unsigned long int _id, Bo
 		(*c)->createFixture(sf);
 	}
 
-	itemToPickup->setUserData(this);
+	itemToPickup->setUserData(itemToPickup);
 
 }
 
