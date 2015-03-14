@@ -6,6 +6,7 @@
 #include "Box2DWorld.h"
 #include "Boulder.h"
 #include "PuppetScene.h"
+#include <PuppetCharacter.h>
 #include <iostream>
 
 #define COOLDOWN 10

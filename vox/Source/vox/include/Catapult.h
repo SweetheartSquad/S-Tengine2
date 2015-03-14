@@ -8,6 +8,7 @@ class Box2DSprite;
 class Box2DWorld;
 
 class Boulder;
+class PuppetCharacter;
 
 class Catapult : public Structure{
 public:
@@ -34,5 +35,5 @@ public:
 	void unload() override;
 	void load() override;
 
-	void fireCatapult(PuppetCharacter * playerWhoLaunched);
+	void fireCatapult(PuppetCharacter * playerWhoFired);
 };
