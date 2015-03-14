@@ -38,6 +38,7 @@
 #include "RaidTheCastle.h"
 #include <PuppetResourceManager.h>
 #include <NumberUtils.h>
+#include <Resource.h>
 
 PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	LayeredScene(_game, 3),
@@ -50,7 +51,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
-	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody, true)),
+	ground(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stage.obj"))),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
@@ -77,36 +78,77 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	backgroundSoundManager->addNewSound("3", "../assets/hurly-burly/audio/songs/MelodicaSong.ogg");
 
 	background->setShader(shader, true);
-	background->transform->translate(0.0f, 50.f, -10.0f);
+	background->transform->translate(0.0f, 50.f, -15.f/2.f);
 	background->transform->scale(125 * 5, 50, 1);
 	background->mesh->pushTexture2D(PuppetResourceManager::sky);
 	background->mesh->uvEdgeMode = GL_REPEAT;
 	background->mesh->dirty = true;
 
 	ground->setShader(shader, true);
-	ground->setTranslationPhysical(0, 0, 0);
-	ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
-	ground->transform->rotate(90.f, 0, 0, 1, kOBJECT);
-	ground->transform->scale(25, 250, 1);
+	//ground->setTranslationPhysical(0, 0, 0);
+	//ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
+	//ground->transform->rotate(90.f, 0, 0, 1, kOBJECT);
+	ground->transform->scale(1000, 100, 100);
+	ground->transform->translate(50.f/2.f, 0, -15.f/2.f);
 	ground->mesh->uvEdgeMode = GL_REPEAT;
 	ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
-	ground->body->SetTransform(b2Vec2(0, -250), 0);
-	ground->mesh->vertices.at(0).z -= 250;
+	for(Vertex & v : ground->mesh->vertices){
+		v.u *= 10;
+		v.v *= 100;
+	}
+	ground->mesh->dirty = true;
+	
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	
+	boundaries.at(0)->transform->scale(1, 50, 1);
+	boundaries.at(1)->transform->scale(1, 50, 1);
+	boundaries.at(2)->transform->scale(50, 1, 1);
+	boundaries.at(3)->transform->scale(50, 1, 1);
+
+	boundaries.at(0)->setTranslationPhysical(50, 0, 0);
+	boundaries.at(1)->setTranslationPhysical(-50, 0, 0);
+	boundaries.at(2)->setTranslationPhysical(0, 50, 0);
+	boundaries.at(3)->setTranslationPhysical(0, 0, 0);
+	
+	addChild(boundaries.at(0));
+	addChild(boundaries.at(1));
+	addChild(boundaries.at(2));
+	addChild(boundaries.at(3));
+	
+	world->addToWorld(boundaries.at(0));
+	world->addToWorld(boundaries.at(1));
+	world->addToWorld(boundaries.at(2));
+	world->addToWorld(boundaries.at(3));
+
+	b2Filter sf;
+	sf.categoryBits = PuppetGame::kBOUNDARY;
+	sf.maskBits = -1;
+	boundaries.at(0)->body->GetFixtureList()->SetFilterData(sf);
+	boundaries.at(1)->body->GetFixtureList()->SetFilterData(sf);
+	boundaries.at(2)->body->GetFixtureList()->SetFilterData(sf);
+	sf.categoryBits = PuppetGame::kBOUNDARY | PuppetGame::kGROUND;
+	boundaries.at(3)->body->GetFixtureList()->SetFilterData(sf);
+	boundaries.at(3)->body->GetFixtureList()->SetFriction(1);
+	boundaries.at(3)->body->GetFixtureList()->SetRestitution(0);
+
+	//ground->body->SetTransform(b2Vec2(0, -250), 0);
+	/*ground->mesh->vertices.at(0).z -= 250;
 	ground->mesh->vertices.at(1).z -= 250;
 	ground->mesh->vertices.at(2).z -= 250;
 	ground->mesh->vertices.at(3).z -= 250;
-	ground->mesh->dirty = true;
+	ground->mesh->dirty = true;*/
 
 	//Set UVs so the texture isn't stretched
-	ground->mesh->setUV(0, 0.0,  0.0);
+	/*ground->mesh->setUV(0, 0.0,  0.0);
 	ground->mesh->setUV(1, 0.0,  4.0);
 	ground->mesh->setUV(2, 40.0, 4.0);
-	ground->mesh->setUV(3, 40.0, 0.0);
+	ground->mesh->setUV(3, 40.0, 0.0);*/
 
-	world->addToWorld(ground, 2);
+	//world->addToWorld(ground, 2);
 	addChild(ground, 0);
-	ground->body->GetFixtureList()->SetFriction(1);
-	ground->body->GetFixtureList()->SetRestitution(0);
 
 	int timeOfDayOptions = 4;
 	int timeOfDay = std::rand()%timeOfDayOptions;
@@ -117,15 +159,12 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 
 	addChild(background, 0);
 
-	b2PolygonShape dynamicBox;
+	/*b2PolygonShape dynamicBox;
 	dynamicBox.SetAsBox(1.0f * std::abs(ground->transform->scaleVector.x), 1.0f * std::abs(ground->transform->scaleVector.y));	
 	b2Fixture * groundFixture = ground->getNewFixture(dynamicBox, 1.0f);
 	groundFixture->SetSensor(false);
 	groundFixture->SetUserData(this);
-	b2Filter sf;
-	sf.categoryBits = PuppetGame::kGROUND;
-	sf.maskBits = PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER;
-	groundFixture->SetFilterData(sf);
+	*/
 
 	Texture * treeTex1 = PuppetResourceManager::tree1;
 	Texture * treeTex2 = PuppetResourceManager::tree2;
@@ -177,7 +216,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);
-	//drawer->AppendFlags(b2Draw::e_shapeBit);
+	drawer->AppendFlags(b2Draw::e_shapeBit);
 	drawer->AppendFlags(b2Draw::e_centerOfMassBit);
 	drawer->AppendFlags(b2Draw::e_jointBit);
 	//drawer->AppendFlags(b2Draw::e_pairBit);
