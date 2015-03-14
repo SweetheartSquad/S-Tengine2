@@ -151,9 +151,9 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 	b2Filter fB = _contact->GetFixtureB()->GetFilterData();
 
 	b2Fixture * playerFixture = nullptr;
-	if(fA.categoryBits == PuppetGame::kPLAYER){
+	if((fA.categoryBits & PuppetGame::kPLAYER) != 0){
 		playerFixture = _contact->GetFixtureA();
-	}else if(fB.categoryBits == PuppetGame::kPLAYER){
+	}else if((fB.categoryBits & PuppetGame::kPLAYER) != 0){
 		playerFixture = _contact->GetFixtureB();
 	}
 
@@ -163,7 +163,7 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 			//player->die();
 		}
 
-		if(fB.categoryBits == PuppetGame::kGROUND || fA.categoryBits == PuppetGame::kGROUND){
+		if((fB.categoryBits & PuppetGame::kGROUND) != 0 || (fA.categoryBits & PuppetGame::kGROUND) != 0){
 			player->canJump = false;
 		}
 	}
@@ -172,10 +172,10 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 	b2Fixture * behaviourFixture = nullptr;
 	b2Fixture * otherFixture = nullptr;
 
-	if(fA.categoryBits == PuppetGame::kBEHAVIOUR){
+	if((fA.categoryBits & PuppetGame::kBEHAVIOUR) != 0){
 		behaviourFixture = _contact->GetFixtureA();
 		otherFixture = _contact->GetFixtureB();
-	}else if(fB.categoryBits == PuppetGame::kBEHAVIOUR){
+	}else if((fB.categoryBits & PuppetGame::kBEHAVIOUR) != 0){
 		behaviourFixture = _contact->GetFixtureB();
 		otherFixture = _contact->GetFixtureA();
 	}
