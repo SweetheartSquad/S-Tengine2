@@ -1,23 +1,24 @@
 #pragma once
 
-#include "RaidTheCastle.h"
+#include <RaidTheCastle.h>
 #include <RaidTheCastleContactListener.h>
-#include "Castle.h"
-#include "PuppetGame.h"
-#include "PuppetCharacter.h"
-#include "FollowCamera.h"
-#include "Behaviour.h"
-#include "BehaviourFollow.h"
+#include <Castle.h>
+#include <PuppetGame.h>
+#include <PuppetCharacter.h>
+#include <FollowCamera.h>
+#include <Behaviour.h>
+#include <BehaviourFollow.h>
 #include <BehaviourPatrol.h>
-#include "Boulder.h"
-#include "Catapult.h"
-#include "Box2DSprite.h"
-#include "Box2DWorld.h"
-#include "MeshEntity.h"
-#include "MeshInterface.h"
-#include "MeshFactory.h"
-#include "shader/BaseComponentShader.h"
-#include "keyboard.h"
+#include <BehaviourAttack.h>
+#include <Boulder.h>
+#include <Catapult.h>
+#include <Box2DSprite.h>
+#include <Box2DWorld.h>
+#include <MeshEntity.h>
+#include <MeshInterface.h>
+#include <MeshFactory.h>
+#include <shader/BaseComponentShader.h>
+#include <keyboard.h>
 #include <Texture.h>
 #include <PuppetCharacterCastleChampion.h>
 #include <PuppetCharacterKnight.h>
@@ -50,28 +51,28 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	addChild(playerCharacter, 1);
 	playerCharacter->addToLayeredScene(this, 1);
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter->translateComponents(glm::vec3(0.0f, 15.f, 0.f));
+	playerCharacter->translateComponents(glm::vec3(0.0f, 25.f, 0.f));
 	puppetController->puppetCharacter = playerCharacter;
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
 	playerCharacter2->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter2->translateComponents(glm::vec3(10.0f, 15.f, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(10.0f, 25.f, 0.f));
 	puppetController2->puppetCharacter = playerCharacter2;
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
 	playerCharacter3->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter3->translateComponents(glm::vec3(20.0f, 15.f, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(20.0f, 25.f, 0.f));
 	puppetController3->puppetCharacter = playerCharacter3;
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
 	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter4->translateComponents(glm::vec3(30.0f, 15.f, 0.f));
+	playerCharacter4->translateComponents(glm::vec3(30.0f, 25.f, 0.f));
 	puppetController4->puppetCharacter = playerCharacter4;
 
 	gameCam->addTarget(playerCharacter->torso);
@@ -91,7 +92,6 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	catapult->translateComponents(glm::vec3(-10,0,0));
 
-	loadCatapult();
 
 	champion->setShader(shader, true);
 	addChild(champion, 0);
@@ -99,15 +99,15 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	champion->head->maxVelocity = b2Vec2(10, 10);
 	champion->translateComponents(glm::vec3(100,15,0));
 
-	playerCharacter4->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter4, 10, PuppetGame::kPLAYER));
+	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 10, PuppetGame::kPLAYER));
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
 	playerCharacter4->ai = true;
 
-	playerCharacter3->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter3, 10, PuppetGame::kPLAYER));
+	playerCharacter3->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter3, 10, PuppetGame::kPLAYER));
 	playerCharacter3->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
 	playerCharacter3->ai = true;
 
-	playerCharacter2->behaviourManager.addBehaviour(new BehaviourFollow(playerCharacter2, 10, PuppetGame::kPLAYER));
+	playerCharacter2->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter2, 10, PuppetGame::kPLAYER));
 	playerCharacter2->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
 	playerCharacter2->ai = true;
 
@@ -115,6 +115,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	//gameCam->addTarget(catapult->rootComponent);
 
 	playRandomBackgroundMusic();
+	loadCatapult();
 }
 
 RaidTheCastle::~RaidTheCastle(){
@@ -122,9 +123,6 @@ RaidTheCastle::~RaidTheCastle(){
 
 void RaidTheCastle::update(Step* _step){
 	PuppetScene::update(_step);
-	if(catapult->ready && !catapult->boulderLoaded){
-		loadCatapult();
-	}
 	if(keyboard->keyDown(GLFW_KEY_B)){
 		champion->control = 0;
 		playerCharacter->control = 0;
@@ -138,10 +136,12 @@ void RaidTheCastle::update(Step* _step){
 	}*/
 	if(catapult->fireBoulder){
 		catapult->fireBoulder = false;
-		catapult->boulderLoaded = false;
-		if(catapult->boulderJoint != nullptr){
+		if(catapult->boulderLoaded && catapult->boulderJoint != nullptr){
 			world->b2world->DestroyJoint(catapult->boulderJoint);
 			catapult->boulderJoint = nullptr;
+			catapult->boulder->catapult = nullptr;
+			((FollowCamera *)gameCam)->addTarget(catapult->boulder->rootComponent);
+			catapult->boulder = nullptr;
 			
 
 			// set the item's group index to zero so that it can collide normally
@@ -152,9 +152,11 @@ void RaidTheCastle::update(Step* _step){
 				(*bs)->body->GetFixtureList()->Refilter();
 			}*/
 			
-			((FollowCamera *)gameCam)->addTarget(catapult->boulder->boulder);
-			catapult->boulder = nullptr;
 		}
+		catapult->boulderLoaded = false;
+	}
+	if(catapult->ready && !catapult->boulderLoaded){
+		loadCatapult();
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
@@ -230,4 +232,5 @@ void RaidTheCastle::loadCatapult(){
 	abpj.collideConnected = false;
 	abpj.referenceAngle = 0.f;
 	catapult->boulderJoint = (b2WeldJoint *)world->b2world->CreateJoint(&abpj);
+	boulder->catapult = catapult;
 }
