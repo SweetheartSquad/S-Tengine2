@@ -4,7 +4,7 @@
 
 #include <Box2DSprite.h>
 #include <Box2DWorld.h>
-#include <RapunzelResourceManager .h>
+#include <RapunzelResourceManager.h>
 
 Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Structure(_world, _categoryBits, _maskBits, _groupIndex),
@@ -50,10 +50,43 @@ Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _gr
 	jth.enableLimit = true;
 	jth.referenceAngle = 0.f;
 	jth.lowerAngle = glm::radians(-80.f);
-	//jth.upperAngle = 0.f;
 	world->b2world->CreateJoint(&jth);
 }
 
 Lever::~Lever()
 {
+}
+
+void Lever::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
+	Structure::render(_matrixStack, _renderStack);
+}
+
+void Lever::update(Step * _step){
+	Structure::update(_step);
+
+	b2RevoluteJoint * jk = (b2RevoluteJoint *)base->body->GetJointList()->joint;
+	float angle = jk->GetJointAngle();
+	
+	if(!ready){
+		if(triggered){
+			handle->body->SetAngularVelocity(-20);
+			if(angle <= glm::radians(-75.f)){
+				handle->body->SetAngularVelocity(1);
+				triggered = false;
+			}
+		}else if(angle >= -0.0001f){
+			handle->body->SetAngularVelocity(1);
+			ready = true;
+		}
+	}else{
+		handle->body->SetAngularVelocity(1);
+	}
+}
+
+void Lever::unload(){
+	Structure::unload();
+}
+
+void Lever::load(){
+	Structure::load();
 }

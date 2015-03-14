@@ -95,9 +95,6 @@ void Catapult::update(Step * _step){
 
 	b2RevoluteJoint * jk = (b2RevoluteJoint *)base->body->GetJointList()->joint;
 	float angle = jk->GetJointAngle();
-	//std::cout << glm::degrees(angle) << std::endl;
-	//std::cout << ready << std::endl;
-	//std::cout << firing << std::endl;
 	
 	if(!ready){
 		if(firing){

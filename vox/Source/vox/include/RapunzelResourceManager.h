@@ -20,11 +20,6 @@ public:
 	static TextureSampler * hair;
 
 	/*
-	static TextureSampler * goldenBreastPlateStick;
-	static TextureSampler * goldenArm;
-	static TextureSampler * goldenHelmet;
-	*/
-	/*
 	static TextureSampler * knightRedTorso;
 	static TextureSampler * knightRedArm;
 	static TextureSampler * knightRedHelmet;
@@ -41,11 +36,24 @@ public:
 	static TextureSampler * knightYellowTorso;
 	static TextureSampler * knightYellowArm;
 	static TextureSampler * knightYellowHelmet;
-
-	static TextureSampler * castleChampionTorso;
-	static TextureSampler * castleChampionArm;
-	static TextureSampler * castleChampionHelmet;
 	*/
+
+	static TextureSampler * rapunzelRedTorso;
+	static TextureSampler * rapunzelRedArm;
+	static TextureSampler * rapunzelRedHelmet;
+
+	static TextureSampler * rapunzelGreenTorso;
+	static TextureSampler * rapunzelGreenArm;
+	static TextureSampler * rapunzelGreenHelmet;
+
+	static TextureSampler * rapunzelBlueTorso;
+	static TextureSampler * rapunzelBlueArm;
+	static TextureSampler * rapunzelBlueHelmet;
+
+	static TextureSampler * rapunzelYellowTorso;
+	static TextureSampler * rapunzelYellowArm;
+	static TextureSampler * rapunzelYellowHelmet;
+	
 	static TextureSampler * itemAxe;
 	static TextureSampler * itemClub;
 	static TextureSampler * itemMace;

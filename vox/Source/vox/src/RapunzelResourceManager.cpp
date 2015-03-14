@@ -1,6 +1,6 @@
 #pragma once
 
-#include <RapunzelResourceManager .h>
+#include <RapunzelResourceManager.h>
 
 TextureSampler * RapunzelResourceManager::splashMessage	= new TextureSampler(new Texture("../assets/hurly-burly/SplashMessages/Rapunzel.png", 1024, 1024, true, true), 300, 100);
 
@@ -27,11 +27,22 @@ TextureSampler * RapunzelResourceManager::knightBlueHelmet	= new TextureSampler(
 TextureSampler * RapunzelResourceManager::knightYellowTorso	= new TextureSampler(new Texture("../assets/hurly-burly/NormalKnightAssets/yellowKnightBreastplate.png", 1024, 1024, true, true), 268, 776);
 TextureSampler * RapunzelResourceManager::knightYellowArm		= new TextureSampler(new Texture("../assets/hurly-burly/NormalKnightAssets/yellowKnightArm.png", 1024, 1024, true, true), 92, 327);
 TextureSampler * RapunzelResourceManager::knightYellowHelmet	= new TextureSampler(new Texture("../assets/hurly-burly/NormalKnightAssets/yellowKnightHelmet.png", 1024, 1024, true, true), 233, 254);
-
-TextureSampler * RapunzelResourceManager::castleChampionTorso	= new TextureSampler(new Texture("../assets/hurly-burly/CastleChampionAssets/CCBody.png", 1024, 1024, true, true), 275, 806);
-TextureSampler * RapunzelResourceManager::castleChampionArm	= new TextureSampler(new Texture("../assets/hurly-burly/CastleChampionAssets/CCArm.png", 1024, 1024, true, true), 67, 200);
-TextureSampler * RapunzelResourceManager::castleChampionHelmet	= new TextureSampler(new Texture("../assets/hurly-burly/CastleChampionAssets/CCHelmet.png", 1024, 1024, true, true), 229, 295);
 */
+TextureSampler * RapunzelResourceManager::rapunzelRedTorso	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCBody.png", 1024, 1024, true, true), 275, 806);
+TextureSampler * RapunzelResourceManager::rapunzelRedArm	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCArm.png", 1024, 1024, true, true), 67, 200);
+TextureSampler * RapunzelResourceManager::rapunzelRedHelmet	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCHelmet.png", 1024, 1024, true, true), 229, 295);
+
+TextureSampler * RapunzelResourceManager::rapunzelGreenTorso	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCBody.png", 1024, 1024, true, true), 275, 806);
+TextureSampler * RapunzelResourceManager::rapunzelGreenArm	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCArm.png", 1024, 1024, true, true), 67, 200);
+TextureSampler * RapunzelResourceManager::rapunzelGreenHelmet	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCHelmet.png", 1024, 1024, true, true), 229, 295);
+
+TextureSampler * RapunzelResourceManager::rapunzelBlueTorso	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCBody.png", 1024, 1024, true, true), 275, 806);
+TextureSampler * RapunzelResourceManager::rapunzelBlueArm	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCArm.png", 1024, 1024, true, true), 67, 200);
+TextureSampler * RapunzelResourceManager::rapunzelBlueHelmet	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCHelmet.png", 1024, 1024, true, true), 229, 295);
+
+TextureSampler * RapunzelResourceManager::rapunzelYellowTorso	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCBody.png", 1024, 1024, true, true), 275, 806);
+TextureSampler * RapunzelResourceManager::rapunzelYellowArm	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCArm.png", 1024, 1024, true, true), 67, 200);
+TextureSampler * RapunzelResourceManager::rapunzelYellowHelmet	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCHelmet.png", 1024, 1024, true, true), 229, 295);
 
 TextureSampler * RapunzelResourceManager::itemAxe	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Axe.png", 1024, 1024, true, true), 230, 395);
 TextureSampler * RapunzelResourceManager::itemClub	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Club.png", 1024, 1024, true, true), 83, 515);
@@ -39,11 +50,6 @@ TextureSampler * RapunzelResourceManager::itemMace	= new TextureSampler(new Text
 TextureSampler * RapunzelResourceManager::itemSword	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Sword.png", 1024, 1024, true, true), 81, 382);
 TextureSampler * RapunzelResourceManager::itemScimitar	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Scimitar.png", 1024, 1024, true, true), 79, 401);
 
-/*
-TextureSampler * RapunzelResourceManager::goldenBreastPlateStick = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/BreastplateStick1.png", 512, 512, true, true),	145, 405); 
-TextureSampler * RapunzelResourceManager::goldenArm     = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Arm1.png", 512, 512, true, true), 40, 105); 
-TextureSampler * RapunzelResourceManager::goldenHelmet  = new TextureSampler(new Texture("../assets/hurly-burly/KnightAssets/Helmet1.png", 512,512, true, true), 114, 165);
-*/
 void RapunzelResourceManager::init(){
 
 	resources.push_back(splashMessage);

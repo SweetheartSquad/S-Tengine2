@@ -6,7 +6,7 @@ class Lever :public Structure
 {
 public:
 	bool ready;
-	bool triggering;
+	bool triggered;
 	bool pullingLever;
 	float cooldownCnt;
 	
@@ -15,6 +15,11 @@ public:
 
 	Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex);
 	~Lever();
+	
+	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+	void update(Step* _step) override;
+	void unload() override;
+	void load() override;
 
 	virtual void pullLever();
 

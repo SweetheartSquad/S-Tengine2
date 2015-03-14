@@ -5,6 +5,7 @@
 #include "Hair.h"
 #include "Lever.h"
 #include "PuppetCharacter.h"
+#include <PuppetCharacterRapunzel.h>
 #include "Box2dWorld.h"
 #include "Item.h"
 #include "Box2DSprite.h"
@@ -37,8 +38,9 @@ void RapunzelContactListener::playerStructureContact(b2Contact * _contact, b2Fix
 	PuppetCharacter * puppet = static_cast<PuppetCharacter *>(_playerFixture->GetUserData());
 	Structure * structure = static_cast<Structure *>(_structureFixture->GetUserData());
 
+	PuppetCharacterRapunzel * rapunzel = dynamic_cast<PuppetCharacterRapunzel *>(puppet);
 	// if character is Rapunzel
-	if(1 == 1){
+	if(rapunzel != nullptr){
 		Lever * lever = dynamic_cast<Lever *>(structure);
 		if(lever != nullptr){
 			lever->pullLever();
