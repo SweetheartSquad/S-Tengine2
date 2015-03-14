@@ -6,6 +6,7 @@
 #include "Box2DWorld.h"
 #include "Boulder.h"
 #include "PuppetScene.h"
+#include <PuppetCharacter.h>
 #include <iostream>
 
 #define COOLDOWN 10
@@ -21,6 +22,7 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int
 	fireBoulder(false),
 	boulderLoaded(false),
 	boulderJoint(nullptr),
+	playerWhoFired(nullptr),
 	cooldownCnt(0.f),
 	boulder(nullptr),
 	arm(nullptr),
@@ -124,9 +126,10 @@ void Catapult::load(){
 	Structure::load();
 }
 
-void Catapult::fireCatapult(){
+void Catapult::fireCatapult(PuppetCharacter * _playerWhoFired){
 	b2RevoluteJoint * j = (b2RevoluteJoint *)base->body->GetJointList()->joint;
 	//arm->body->SetAngularVelocity(-20);
 	firing = true;
 	ready = false;
+	playerWhoFired = _playerWhoFired;
 }

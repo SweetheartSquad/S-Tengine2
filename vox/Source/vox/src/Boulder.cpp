@@ -3,11 +3,13 @@
 #include <Boulder.h>
 #include <Box2DSprite.h>
 #include <Texture.h>
+#include <PuppetCharacter.h>
 #include <Box2DWorld.h>
 #include <Catapult.h>
 
 Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Item(true, _world, _categoryBits, _maskBits, _groupIndex, 10.f, 50, 56),
+	playerWhoFired(nullptr),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable(),

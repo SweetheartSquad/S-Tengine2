@@ -8,6 +8,7 @@ class Box2DSprite;
 class Box2DWorld;
 
 class Boulder;
+class PuppetCharacter;
 
 class Catapult : public Structure{
 public:
@@ -17,6 +18,8 @@ public:
 	bool fireBoulder;
 	bool boulderLoaded;
 	float cooldownCnt;
+
+	PuppetCharacter * playerWhoFired;
 
 	Boulder * boulder;
 	b2WeldJoint * boulderJoint;
@@ -32,5 +35,5 @@ public:
 	void unload() override;
 	void load() override;
 
-	void fireCatapult();
+	void fireCatapult(PuppetCharacter * playerWhoFired);
 };

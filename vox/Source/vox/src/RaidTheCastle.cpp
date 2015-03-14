@@ -142,9 +142,10 @@ void RaidTheCastle::update(Step* _step){
 			catapult->boulderJoint = nullptr;
 			catapult->boulder->catapult = nullptr;
 			((FollowCamera *)gameCam)->addTarget(catapult->boulder->rootComponent);
+			catapult->boulder->playerWhoFired = catapult->playerWhoFired;
 			catapult->boulder = nullptr;
+			catapult->playerWhoFired = nullptr;
 			
-
 			// set the item's group index to zero so that it can collide normally
 			/*for(Box2DSprite ** bs : catapult->boulder->components){
 				b2Filter b1 = (*bs)->body->GetFixtureList()->GetFilterData();
@@ -152,7 +153,6 @@ void RaidTheCastle::update(Step* _step){
 				(*bs)->body->GetFixtureList()->SetFilterData(b1);
 				(*bs)->body->GetFixtureList()->Refilter();
 			}*/
-			
 		}
 		catapult->boulderLoaded = false;
 	}
@@ -213,12 +213,13 @@ void RaidTheCastle::loadCatapult(){
 	//boulder->boulder->body->SetTransform(catapult->arm->body->GetPosition(), std::rand());
 	b2Vec2 armPos = catapult->arm->body->GetPosition();
 	
-	b2Vec2 boulderPos = b2Vec2(armPos.x + catapult->arm->getCorrectedWidth() * 2.f + jointPosB.x, armPos.y + jointPosB.y);
-	//b2Vec2 boulderPos = b2Vec2(catapult->base->transform->translationVector.x - catapult->arm->getCorrectedWidth() * 2.0 * 0.8, catapult->base->getCorrectedHeight() * 2.0 * 0.9);
+	b2Vec2 cPos = catapult->base->body->GetPosition();
+	b2Vec2 aSize = b2Vec2(catapult->arm->getCorrectedWidth(), catapult->arm->getCorrectedHeight());
+	//b2Vec2 boulderPos = b2Vec2(armPos.x + catapult->arm->getCorrectedWidth() * 2.f + jointPosB.x, armPos.y + jointPosB.y);
+	b2Vec2 boulderPos = b2Vec2(catapult->base->body->GetPosition().x - catapult->arm->getCorrectedWidth() * 0.8, catapult->base->body->GetPosition().y + catapult->base->getCorrectedHeight() * 0.9);
 	//boulder->translateComponents(glm::vec3(boulderPos.x, boulderPos.y, 0));
-
-	boulder->translateComponents(glm::vec3(-21, 6, 0)); // this is hard-coded, should not be
-	//boulder->boulder->body->SetTransform(b2Vec2(-36, 6), 0);
+	boulder->snapComponents(catapult->base);
+	//boulder->translateComponents(glm::vec3(-21, 6, 0)); // this is hard-coded, should not be
 	catapult->cooldownCnt = 0.f;
 	catapult->ready = true;
 	catapult->boulderLoaded = true;
