@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NumberUtils.h"s
+#include <NumberUtils.h>
 #include <random>
 
 float vox::NumberUtils::randomFloat(float _min, float _max){
@@ -10,6 +10,6 @@ float vox::NumberUtils::randomFloat(float _min, float _max){
     return _min + r;
 }
 
-float vox::NumberUtils::randomInt(int _min, int _max){
-	return _min + (rand() % static_cast<int>(_max - _min + 1));
+int vox::NumberUtils::randomInt(int _min, int _max){
+	return _min + (rand() % (_max - _min + 1));
 }
