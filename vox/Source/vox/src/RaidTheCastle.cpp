@@ -34,9 +34,9 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	catapult(new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kBOUNDARY | PuppetGame::kPLAYER, -10)),
 	champion(new PuppetCharacterCastleChampion(world, PuppetGame::kPLAYER, -1, -20)),
 	playerCharacter(new PuppetCharacterKnight(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -1)),
-	playerCharacter2(new PuppetCharacterKnight(true, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -2)),
-	playerCharacter3(new PuppetCharacterKnight(true, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -3)),
-	playerCharacter4(new PuppetCharacterKnight(true, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -4))
+	playerCharacter2(new PuppetCharacterKnight(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -2)),
+	playerCharacter3(new PuppetCharacterKnight(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -3)),
+	playerCharacter4(new PuppetCharacterKnight(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR, -4))
 {
 	cl = new RaidTheCastleContactListener(this);
 
@@ -107,9 +107,9 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	playerCharacter3->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
 	playerCharacter3->ai = true;
 
-	playerCharacter2->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter2, 10, PuppetGame::kPLAYER));
-	playerCharacter2->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
-	playerCharacter2->ai = true;
+	//playerCharacter2->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter2, 10, PuppetGame::kPLAYER));
+	//playerCharacter2->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
+	//playerCharacter2->ai = true;
 
 	//gameCam->addTarget(castle->rootComponent);
 	//gameCam->addTarget(catapult->rootComponent);

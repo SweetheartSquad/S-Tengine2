@@ -210,7 +210,7 @@ void PuppetCharacter::jump(){
 		float t = torso->body->GetAngle();
 		b2Vec2 p = torso->body->GetWorldPoint(b2Vec2(0, 1));
 		//torso->applyLinearImpulse(250*(1-cos(t))*glm::sign(-t), 250*(cos(t)*0.5 + 0.5), p.x, p.y);
-		torso->applyLinearImpulseUp(175*(cos(t)*0.5 + 0.5));
+		torso->applyLinearImpulseUp(175 * 4  *(cos(t)*0.5 + 0.5));
 		if(torso->body->GetAngle() > 0){
 			//torso->applyLinearImpulseLeft(250*(1-cos(t)));
 			torso->body->SetLinearVelocity(b2Vec2(-25*(1-cos(t)), torso->body->GetLinearVelocity().y));
