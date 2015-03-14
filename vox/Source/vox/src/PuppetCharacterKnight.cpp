@@ -18,7 +18,7 @@ PuppetCharacterKnight::PuppetCharacterKnight(bool _ai, unsigned long int _id, Bo
 {
 	
 	TextureSampler * weapon = RaidTheCastleResourceManager::getRandomWeapon();
-	itemToPickup = new Item(false, _world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, _groupIndex, 0, 0, -weapon->height/2.5f);
+	itemToPickup = new Item(false, _world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, _groupIndex, 0, 0, -weapon->height/2.5f);
 
 	//itemToPickup->translateComponents(torso->transform->translationVector);
 
@@ -36,9 +36,11 @@ PuppetCharacterKnight::PuppetCharacterKnight(bool _ai, unsigned long int _id, Bo
 		sf.maskBits = 0;
 	}
 	sf.groupIndex = groupIndex;
-	
+
 	for(Box2DSprite ** c : itemToPickup->components){
 		(*c)->createFixture(sf);
+		(*c)->body->GetFixtureList()->SetDensity(0.01f);
+		(*c)->body->ResetMassData();
 	}
 
 	itemToPickup->setUserData(itemToPickup);

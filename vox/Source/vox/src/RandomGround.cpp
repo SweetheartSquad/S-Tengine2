@@ -84,7 +84,7 @@ RandomGround::RandomGround(Box2DWorld * _world, unsigned long int _numPoints, fl
 	fd.restitution = 0;
 	fd.userData = this;
 	fd.isSensor = false;
-	body->CreateFixture(&fd);
+	//body->CreateFixture(&fd);
 
 
 	//Weird problem with chain's destructor being called twice

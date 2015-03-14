@@ -106,10 +106,10 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	float width = 170;
 	float height = 50;
 
-	boundaries.at(0)->transform->scale(1, height/2.f, 1);
-	boundaries.at(1)->transform->scale(1, height/2.f, 1);
-	boundaries.at(2)->transform->scale(width/2.f, 1, 1);
-	boundaries.at(3)->transform->scale(width/2.f, 1, 1);
+	boundaries.at(0)->transform->scale(3, height/2.f, 3.f);
+	boundaries.at(1)->transform->scale(3, height/2.f, 3.f);
+	boundaries.at(2)->transform->scale(width/2.f, 3.f, 3.f);
+	boundaries.at(3)->transform->scale(width/2.f, 3.f, 3.f);
 
 	boundaries.at(0)->setTranslationPhysical(width, height/2.f, 0);
 	boundaries.at(1)->setTranslationPhysical(0, height/2.f, 0);
@@ -226,10 +226,10 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	addChild(drawer, 2);
 
 	randomGround->setShader(shader, true);
-	randomGround->setTranslationPhysical(0.0f, 0.0f, 0.0f);
+	randomGround->setTranslationPhysical(0.0f, 0.0f, -5.0f);
 	//randomGround->mesh->uvEdgeMode = GL_REPEAT;
 
-	world->addToWorld(randomGround);
+	//world->addToWorld(randomGround);
 	addChild(randomGround, 1);
 	
 	//Set up cameras

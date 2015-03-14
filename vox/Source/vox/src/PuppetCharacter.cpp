@@ -48,6 +48,8 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	armRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->armTex->width, texPack->armTex->height, texPack->armTex->texture, componentScale*0.5f);
 	headgear = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->headgearTex->width, texPack->headgearTex->height, texPack->headgearTex->texture, componentScale*0.5f);
 
+	
+
 	components.push_back(&armLeft);
 	components.push_back(&armRight);
 	components.push_back(&handLeft);
@@ -65,6 +67,16 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 		sf.maskBits = maskBits;
 	}
 
+	b2CircleShape testshape;
+	testshape.m_radius = 1.f;
+	testshape.m_p = b2Vec2(0, -2.f);
+	b2FixtureDef test;
+	test.shape = &testshape;
+	test.density = 100.f;
+	test.userData = this;
+	test.friction = 1;
+	test.filter = sf;
+	b2Fixture * testf = torso->body->CreateFixture(&test);
 	sf.groupIndex = _groupIndex;
 
 	torso->createFixture	 (sf, b2Vec2(0.0f, -1.f), this);
@@ -173,6 +185,8 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	// flip left side
 	armLeft->transform->scale(-1, 1, 1);
 	handLeft->transform->scale(-1, 1, 1);
+
+
 }
 
 PuppetCharacter::~PuppetCharacter(){
@@ -210,7 +224,7 @@ void PuppetCharacter::jump(){
 		float t = torso->body->GetAngle();
 		b2Vec2 p = torso->body->GetWorldPoint(b2Vec2(0, 1));
 		//torso->applyLinearImpulse(250*(1-cos(t))*glm::sign(-t), 250*(cos(t)*0.5 + 0.5), p.x, p.y);
-		torso->applyLinearImpulseUp(175 * 4  *(cos(t)*0.5 + 0.5));
+		torso->applyLinearImpulseUp(175 * 2 *(cos(t)*0.5 + 0.5));
 		if(torso->body->GetAngle() > 0){
 			//torso->applyLinearImpulseLeft(250*(1-cos(t)));
 			torso->body->SetLinearVelocity(b2Vec2(-25*(1-cos(t)), torso->body->GetLinearVelocity().y));
@@ -237,6 +251,7 @@ void PuppetCharacter::action(){
 
 			heldItem = nullptr;
 			itemJoint = nullptr;
+			itemToPickup = nullptr;
 		}
 	}
 }
