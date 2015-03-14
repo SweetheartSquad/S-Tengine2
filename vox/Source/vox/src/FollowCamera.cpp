@@ -4,6 +4,7 @@
 #include "FollowCamera.h"
 #include "System.h"
 #include "Transform.h"
+#include <algorithm>
 
 FollowCamera::FollowCamera(float _buffer, glm::vec3 _offset, float _deadZoneX, float _deadZoneY, float _deadZoneZ):
 	PerspectiveCamera(),
