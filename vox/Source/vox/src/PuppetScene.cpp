@@ -51,7 +51,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(new Box2DDebugDraw(this, world)),
-	ground(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stage.obj"))),
+	ground(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stage.vox"))),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager()),
@@ -103,15 +103,18 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	
-	boundaries.at(0)->transform->scale(1, 50, 1);
-	boundaries.at(1)->transform->scale(1, 50, 1);
-	boundaries.at(2)->transform->scale(50, 1, 1);
-	boundaries.at(3)->transform->scale(50, 1, 1);
+	float width = 170;
+	float height = 50;
 
-	boundaries.at(0)->setTranslationPhysical(50, 0, 0);
-	boundaries.at(1)->setTranslationPhysical(-50, 0, 0);
-	boundaries.at(2)->setTranslationPhysical(0, 50, 0);
-	boundaries.at(3)->setTranslationPhysical(0, 0, 0);
+	boundaries.at(0)->transform->scale(1, height/2.f, 1);
+	boundaries.at(1)->transform->scale(1, height/2.f, 1);
+	boundaries.at(2)->transform->scale(width/2.f, 1, 1);
+	boundaries.at(3)->transform->scale(width/2.f, 1, 1);
+
+	boundaries.at(0)->setTranslationPhysical(width, height/2.f, 0);
+	boundaries.at(1)->setTranslationPhysical(0, height/2.f, 0);
+	boundaries.at(2)->setTranslationPhysical(width/2.f, height, 0);
+	boundaries.at(3)->setTranslationPhysical(width/2.f, 0, 0);
 	
 	addChild(boundaries.at(0));
 	addChild(boundaries.at(1));
