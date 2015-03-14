@@ -25,6 +25,7 @@ PuppetCharacterCastleChampion::PuppetCharacterCastleChampion(Box2DWorld * _world
 
 	itemToPickup = new ItemFlail(_world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, _groupIndex, 0, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
 	
+	//itemToPickup->snapComponents(handRight);
 }
 
 PuppetCharacterCastleChampion::~PuppetCharacterCastleChampion(){

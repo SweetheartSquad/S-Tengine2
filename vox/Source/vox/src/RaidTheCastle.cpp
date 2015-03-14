@@ -209,16 +209,11 @@ void RaidTheCastle::loadCatapult(){
 	boulder->addToLayeredScene(this, 1);
 	items.push_back(boulder);
 
-	b2Vec2 jointPosB = ((b2RevoluteJoint *)catapult->arm->body->GetJointList()->joint)->GetLocalAnchorB();
-	//boulder->boulder->body->SetTransform(catapult->arm->body->GetPosition(), std::rand());
-	b2Vec2 armPos = catapult->arm->body->GetPosition();
-	
-	b2Vec2 cPos = catapult->base->body->GetPosition();
-	b2Vec2 aSize = b2Vec2(catapult->arm->getCorrectedWidth(), catapult->arm->getCorrectedHeight());
-	//b2Vec2 boulderPos = b2Vec2(armPos.x + catapult->arm->getCorrectedWidth() * 2.f + jointPosB.x, armPos.y + jointPosB.y);
-	b2Vec2 boulderPos = b2Vec2(catapult->base->body->GetPosition().x - catapult->arm->getCorrectedWidth() * 0.8, catapult->base->body->GetPosition().y + catapult->base->getCorrectedHeight() * 0.9);
-	//boulder->translateComponents(glm::vec3(boulderPos.x, boulderPos.y, 0));
+	b2Vec2 armPos = b2Vec2(-catapult->arm->getCorrectedWidth() * 0.8, catapult->base->getCorrectedHeight() * 0.9);
+	// snap to capatult base
 	boulder->snapComponents(catapult->base);
+	// translate to arm position from base
+	boulder->translateComponents(glm::vec3(armPos.x*2, armPos.y, 0));
 	//boulder->translateComponents(glm::vec3(-21, 6, 0)); // this is hard-coded, should not be
 	catapult->cooldownCnt = 0.f;
 	catapult->ready = true;

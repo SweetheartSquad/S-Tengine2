@@ -66,5 +66,6 @@ public:
 
 	void addComponent(Box2DSprite * _component);
 
+	// Can't use this with the way we have things set up, things like the catapult arm and puppet hand don't store their actual world position since they're positioned with joints
 	void snapComponents(Box2DSprite * _sprite);
 };

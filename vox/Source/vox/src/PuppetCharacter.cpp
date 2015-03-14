@@ -295,7 +295,6 @@ void PuppetCharacter::pickupItem(Item * _item){
 		heldItem = _item;
 		itemToPickup = nullptr;
 		_item->held = true;
-
 	}
 }
 
@@ -309,5 +308,15 @@ void PuppetCharacter::setShader(Shader * _shader, bool _configureDefaultAttribut
 	Box2DSuperSprite::setShader(_shader, _configureDefaultAttributes);
 	if(itemToPickup != nullptr){
 		itemToPickup->setShader(_shader, _configureDefaultAttributes);
+	}
+}
+
+
+void PuppetCharacter::translateComponents(glm::vec3 _translationVector){
+	Box2DSuperSprite::translateComponents(_translationVector);
+	if(heldItem != nullptr){
+		heldItem->translateComponents(_translationVector);
+	}if(itemToPickup != nullptr){
+		itemToPickup->translateComponents(_translationVector);
 	}
 }

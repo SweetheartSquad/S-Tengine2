@@ -58,4 +58,6 @@ public:
 
 	virtual void addToLayeredScene(LayeredScene * _scene, unsigned long int _layer) override;
 	virtual void setShader(Shader * _shader, bool _configureDefaultAttributes) override;
+
+	void translateComponents(glm::vec3 _translationVector);
 };
