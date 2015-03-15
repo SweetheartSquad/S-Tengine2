@@ -200,7 +200,7 @@ PuppetCharacter::~PuppetCharacter(){
 
 void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	float sat = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getSaturation();
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat + 1-control);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat + (1-control)*3);
 	Box2DSuperSprite::render(_matrixStack, _renderStack);
 	for(Box2DSprite ** c : components){
 		if(*c != nullptr){
@@ -237,7 +237,7 @@ void PuppetCharacter::update(Step* _step){
 	}
 	behaviourManager.update(_step);
 
-	control = std::min(1.f, control+0.05f);
+	control = std::min(1.f, control+0.01f);
 }
 
 void PuppetCharacter::jump(){
