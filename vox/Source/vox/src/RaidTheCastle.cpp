@@ -126,7 +126,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	for(PuppetCharacter * p : players){
 		TextureSampler * weaponTex = RaidTheCastleResourceManager::getRandomWeapon();
-		Item * weapon = p->itemToPickup = new Item(false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height/2.f);
+		Item * weapon = p->itemToPickup = new Item(false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
 
 		weapon->rootComponent = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), weaponTex->width, weaponTex->height, weaponTex->texture, p->componentScale);
 		weapon->components.push_back(&weapon->rootComponent);
