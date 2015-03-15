@@ -189,10 +189,10 @@ void RaidTheCastle::update(Step* _step){
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
 		playerCharacter->jump();
 	}if(keyboard->keyDown(GLFW_KEY_A)){
-		playerCharacter->targetRoll = glm::radians(-90.f);
+		playerCharacter->targetRoll = glm::radians(-45.f);
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		playerCharacter->targetRoll = glm::radians(90.f);
+		playerCharacter->targetRoll = glm::radians(45.f);
 	}
 	if(keyboard->keyJustDown(GLFW_KEY_T)){
 		playerCharacter->action();

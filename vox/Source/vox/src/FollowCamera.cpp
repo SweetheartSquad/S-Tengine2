@@ -51,6 +51,25 @@ void FollowCamera::update(Step * _step){
 		minY = std::min(pos.y-buffer, minY);
 		maxY = std::max(pos.y+buffer, maxY);
 	}
+	
+	for(signed long int i = interpolators.size()-1; i > 0; --i){
+		if(i < targets.size()){
+			interpolators.at(i) += (targets.at(i)->getPos(false) - interpolators.at(i))*1.f;
+		}else{
+			interpolators.at(i) += (transform->translationVector - interpolators.at(i))*0.01f;
+			
+		}
+
+		glm::vec3 pos = interpolators.at(i);
+		if(glm::distance(pos, transform->translationVector) < 1){
+			interpolators.erase(interpolators.begin() + i);
+			continue;
+		}
+		minX = std::min(pos.x-buffer, minX);
+		maxX = std::max(pos.x+buffer, maxX);
+		minY = std::min(pos.y-buffer, minY);
+		maxY = std::max(pos.y+buffer, maxY);
+	}
 	float screenWidth = maxX - minX;
 	float screenHeight = maxY - minY;
 
@@ -77,11 +96,11 @@ void FollowCamera::update(Step * _step){
 	lookAtSpot.y = transform->translationVector.y = minY + screenHeight* 0.5f;
 	
 	targetZoom = dist;
-	if( targetZoom < transform->translationVector.z){
-		transform->translationVector.z += (dist - transform->translationVector.z) * 0.01f;
-	}else{
+	//if( targetZoom < transform->translationVector.z){
+	//	transform->translationVector.z += (dist - transform->translationVector.z) * 0.01f;
+	//}else{
 		transform->translationVector.z = targetZoom;
-	}
+	//}
 	//transform->translationVector.z = dist;
 
 	/*float xDif = (lookAtSpot.x - transform->translationVector.x);
@@ -104,6 +123,7 @@ glm::mat4 FollowCamera::getViewMatrix(){
 
 void FollowCamera::addTarget(ShiftKiddie * _target){
 	targets.push_back(_target);
+	interpolators.push_back(glm::vec3(transform->translationVector));
 }
 void FollowCamera::removeTarget(ShiftKiddie * _target){
 	for(signed long int i = targets.size()-1; i >= 0; --i){

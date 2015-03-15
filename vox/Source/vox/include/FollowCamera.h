@@ -34,6 +34,7 @@ public:
 
 	// Things to follow
 	std::vector<ShiftKiddie *> targets;
+	std::vector<glm::vec3> interpolators;
 	
 	// How much extra space is given around targets
 	float buffer;
