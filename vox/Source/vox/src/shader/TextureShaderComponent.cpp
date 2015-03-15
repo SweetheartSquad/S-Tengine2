@@ -11,7 +11,8 @@
 #include "SpriteSheetAnimation.h"
 #include "SpriteMesh.h"
 
-TextureShaderComponent::TextureShaderComponent() : ShaderComponent(){
+TextureShaderComponent::TextureShaderComponent(Shader * _shader) :
+	ShaderComponent(_shader){
 }
 
 TextureShaderComponent::~TextureShaderComponent(){
@@ -47,6 +48,10 @@ std::string TextureShaderComponent::getFragmentBodyString(){
 
 std::string TextureShaderComponent::getOutColorMod(){
 	return GL_OUT_OUT_COLOR + " *= modFrag" + SEMI_ENDL;
+}
+
+void TextureShaderComponent::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+	configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 }
 
 void TextureShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){

@@ -40,9 +40,9 @@ BaseScene::BaseScene(Game * _game):
 	sprite(new Sprite(nullptr, new Transform()))
 {
 	//Add shader components
-	shader->components.push_back(new TextureShaderComponent());
-	shader->components.push_back(new PhongShaderComponent());
-	shader->components.push_back(new ShadowShaderComponent());
+	shader->components.push_back(new TextureShaderComponent(shader));
+	shader->components.push_back(new PhongShaderComponent(shader));
+	shader->components.push_back(new ShadowShaderComponent(shader));
 	
 	//Compile the shader
 	shader->compileShader();
@@ -94,10 +94,10 @@ BaseScene::BaseScene(Game * _game):
 
 	//Lets create a voxel shader by using the voxel geometry component
 	BaseComponentShader * voxelShader = new BaseComponentShader();
-	voxelShader->components.push_back(new TextureShaderComponent());
-	voxelShader->components.push_back(new ShadowShaderComponent());
-	voxelShader->components.push_back(new PhongShaderComponent());
-	voxelShader->geometryComponent = new VoxelComponent();
+	voxelShader->components.push_back(new TextureShaderComponent(shader));
+	voxelShader->components.push_back(new ShadowShaderComponent(shader));
+	voxelShader->components.push_back(new PhongShaderComponent(shader));
+	voxelShader->geometryComponent = new VoxelComponent(shader);
 	voxelShader->compileShader();
 
 	//Load a voxel joint from voo.json

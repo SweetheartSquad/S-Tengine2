@@ -15,7 +15,7 @@
 *******************************************************************************/
 class ShadowShaderComponent : public ShaderComponent{
 public:
-	ShadowShaderComponent();
+	ShadowShaderComponent(Shader * _shader);
 	~ShadowShaderComponent() override;
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;

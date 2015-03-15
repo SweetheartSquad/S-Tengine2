@@ -4,7 +4,7 @@
 
 class DiffuseShaderComponent : public ShaderComponent{
 public:
-	DiffuseShaderComponent();
+	DiffuseShaderComponent(Shader * _shader);
 	~DiffuseShaderComponent() override;
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;

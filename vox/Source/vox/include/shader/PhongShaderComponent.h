@@ -15,7 +15,7 @@
 
 class PhongShaderComponent : public ShaderComponent{
 public:
-	PhongShaderComponent();
+	PhongShaderComponent(Shader * _shader);
 	~PhongShaderComponent() override;
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;

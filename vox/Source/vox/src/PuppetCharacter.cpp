@@ -8,7 +8,7 @@
 #include "Item.h"
 #include "Behaviour.h"
 #include <PuppetTexturePack.h>
-#include <shader\HsvShaderComponent.h>
+#include <shader\ShaderComponentHsv.h>
 #include <shader\BaseComponentShader.h>
 #include <shader\Shader.h>
 #include <RenderOptions.h>
@@ -199,14 +199,15 @@ PuppetCharacter::~PuppetCharacter(){
 }
 
 void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	static_cast<HsvShaderComponent *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->saturation = 2-control;
+	float sat = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getSaturation();
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat + 1-control);
 	Box2DSuperSprite::render(_matrixStack, _renderStack);
 	for(Box2DSprite ** c : components){
 		if(*c != nullptr){
 			(*c)->render(_matrixStack, _renderStack);
 		}
 	}
-	static_cast<HsvShaderComponent *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->saturation = 1;
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);
 }
 
 void PuppetCharacter::update(Step* _step){
@@ -241,7 +242,7 @@ void PuppetCharacter::jump(){
 		float t = torso->body->GetAngle();
 		b2Vec2 p = torso->body->GetWorldPoint(b2Vec2(0, 1));
 		//torso->applyLinearImpulse(250*(1-cos(t))*glm::sign(-t), 250*(cos(t)*0.5 + 0.5), p.x, p.y);
-		torso->applyLinearImpulseUp(5000 * 2 *(cos(t)*0.5 + 0.5));
+		torso->applyLinearImpulseUp(5000.f * 2 *(cos(t)*0.5f + 0.5f));
 		if(torso->body->GetAngle() > 0){
 			//torso->applyLinearImpulseLeft(250*(1-cos(t)));
 			torso->body->SetLinearVelocity(b2Vec2(-25*(1-cos(t)), torso->body->GetLinearVelocity().y));

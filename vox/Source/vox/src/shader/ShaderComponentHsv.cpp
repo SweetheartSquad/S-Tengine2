@@ -1,6 +1,6 @@
 #pragma once
 
-#include <shader\HsvShaderComponent.h>
+#include <shader\ShaderComponentHsv.h>
 #include <shader\ShaderVariables.h>
 #include <GLUtils.h>
 #include <RenderOptions.h>
@@ -9,8 +9,8 @@
 #include <glew\glew.h>
 
 
-HsvShaderComponent::HsvShaderComponent(float _hue, float _saturation, float _value, float _alpha):
-	ShaderComponent(),
+ShaderComponentHsv::ShaderComponentHsv(Shader * _shader, float _hue, float _saturation, float _value, float _alpha):
+	ShaderComponent(_shader),
 	hue(_hue),
 	saturation(_saturation),
 	value(_value),
@@ -18,14 +18,14 @@ HsvShaderComponent::HsvShaderComponent(float _hue, float _saturation, float _val
 {
 }
 
-HsvShaderComponent::~HsvShaderComponent(){
+ShaderComponentHsv::~ShaderComponentHsv(){
 }
 	
-std::string HsvShaderComponent::getVertexVariablesString(){
+std::string ShaderComponentHsv::getVertexVariablesString(){
 	return DEFINE + SHADER_COMPONENT_HSV + ENDL;
 }
 
-std::string HsvShaderComponent::getFragmentVariablesString(){
+std::string ShaderComponentHsv::getFragmentVariablesString(){
 	return 
 		DEFINE + SHADER_COMPONENT_HSV + ENDL +
 		"uniform float " + GL_UNIFORM_ID_HUE + SEMI_ENDL + 
@@ -34,15 +34,15 @@ std::string HsvShaderComponent::getFragmentVariablesString(){
 		"uniform float " + GL_UNIFORM_ID_ALPHA + SEMI_ENDL;
 }
 
-std::string HsvShaderComponent::getVertexBodyString(){
+std::string ShaderComponentHsv::getVertexBodyString(){
 	return "";
 }
 
-std::string HsvShaderComponent::getFragmentBodyString(){
+std::string ShaderComponentHsv::getFragmentBodyString(){
 	return "";
 }
 
-std::string HsvShaderComponent::getOutColorMod(){
+std::string ShaderComponentHsv::getOutColorMod(){
 	return
 		"// convert current outColor to HSV\n"
 		"vec4 hsvOutColor = outColor" + SEMI_ENDL + 
@@ -68,7 +68,7 @@ std::string HsvShaderComponent::getOutColorMod(){
 
 }
 
-void HsvShaderComponent::configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
+void ShaderComponentHsv::configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
 	while(hue > 1.f){
 		hue -= 1.f;
 	}
@@ -76,4 +76,26 @@ void HsvShaderComponent::configureUniforms(vox::MatrixStack * _matrixStack, Rend
 	glUniform1f(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_SATURATION.c_str()), saturation);
 	glUniform1f(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_VALUE.c_str()), value);
 	glUniform1f(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_ALPHA.c_str()), alpha);
+}
+
+void ShaderComponentHsv::setHue(float _hue){
+	hue = _hue;
+	makeDirty();
+}
+void ShaderComponentHsv::setSaturation(float _sat){
+	saturation = _sat;
+	makeDirty();
+}
+void ShaderComponentHsv::setValue(float _val){
+	value = _val;
+	makeDirty();
+}
+float ShaderComponentHsv::getHue(){
+	return hue;
+}
+float ShaderComponentHsv::getSaturation(){
+	return saturation;
+}
+float ShaderComponentHsv::getValue(){
+	return value;
 }

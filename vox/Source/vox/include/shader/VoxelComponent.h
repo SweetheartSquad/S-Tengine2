@@ -5,7 +5,7 @@
 class VoxelComponent : public GeometryComponent
 {
 public:
-	VoxelComponent();
+	VoxelComponent(Shader * _shader);
 	std::string getGeometryShader() override;
 	std::string getVertexVariablesString() override;
 	std::string getVertexBodyString() override;

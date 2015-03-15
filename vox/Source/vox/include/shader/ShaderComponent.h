@@ -9,6 +9,7 @@ namespace vox{
 }
 
 class RenderOptions;
+class Shader;
 
 /********************************************************
 *
@@ -22,7 +23,10 @@ class RenderOptions;
 *********************************************************/
 class ShaderComponent abstract{
 public:
-	ShaderComponent();
+
+	Shader * shader;
+
+	ShaderComponent(Shader * _shader);
 	virtual ~ShaderComponent();
 
 	/**
@@ -52,4 +56,8 @@ public:
 	virtual std::string getOutColorMod() = 0;
 
 	virtual void configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable) = 0;
+	virtual void clean(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable);
+	void makeDirty();
+private:
+	bool dirty;
 };

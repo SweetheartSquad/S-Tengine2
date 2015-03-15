@@ -14,7 +14,9 @@
 
 class VoxRenderOptions;
 
-ShadowShaderComponent::ShadowShaderComponent() : ShaderComponent(){
+ShadowShaderComponent::ShadowShaderComponent(Shader * _shader) :
+	ShaderComponent(_shader)
+{
 }
 
 ShadowShaderComponent::~ShadowShaderComponent(){

@@ -60,7 +60,7 @@ TestScene2D::TestScene2D(Game * _game):
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	soundManager->play("green_chair");
 	
-	shader->components.push_back(new TextureShaderComponent());
+	shader->components.push_back(new TextureShaderComponent(shader));
 	shader->compileShader();
 
 	sprite->setShader(shader, true);

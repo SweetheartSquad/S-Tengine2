@@ -6,7 +6,7 @@
 #include "Sprite.h"
 #include "shader/BaseComponentShader.h"
 #include "shader/TextureShaderComponent.h"
-#include "shader/HsvShaderComponent.h"
+#include "shader/ShaderComponentHsv.h"
 #include "Keyboard.h"
 #include "SoundManager.h"
 #include "Box2DSprite.h"
@@ -62,8 +62,8 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::ground1, 1, 1))
 {
 	world->b2world->SetContactListener(cl);
-	shader->components.push_back(new TextureShaderComponent());
-	shader->components.push_back(new HsvShaderComponent(0, 1, 1, 1));
+	shader->components.push_back(new TextureShaderComponent(shader));
+	shader->components.push_back(new ShaderComponentHsv(shader, 0, 1, 1, 1));
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	

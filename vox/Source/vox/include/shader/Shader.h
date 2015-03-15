@@ -35,6 +35,7 @@ private:
 	GLuint programId;
 
 	bool hasGeometryShader;
+	bool dirty;
 
 public:
 
@@ -70,6 +71,8 @@ public:
 	GLint get_aVertexUVs();
 
 	virtual void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
+	virtual void clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
+	virtual void makeDirty();
 
 	void load() override;
 	void unload() override;

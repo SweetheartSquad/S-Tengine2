@@ -6,7 +6,9 @@
 #include "RenderOptions.h"
 #include "shader/SharedComponentShaderMethods.h"
 
-DiffuseShaderComponent::DiffuseShaderComponent() : ShaderComponent(){
+DiffuseShaderComponent::DiffuseShaderComponent(Shader * _shader) :
+	ShaderComponent(_shader)
+{
 }
 
 DiffuseShaderComponent::~DiffuseShaderComponent(){

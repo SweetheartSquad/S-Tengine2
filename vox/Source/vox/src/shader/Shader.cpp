@@ -9,6 +9,7 @@ void Shader::init(std::string _vertexShaderSource, std::string _fragmentShaderSo
 	hasGeometryShader = false;
 	load();
 	isCompiled = false;
+	dirty = true;
 }
 
 void Shader::init(std::string _vertexShaderSource, std::string _fragmentShaderSource, std::string _geometryShaderSource){
@@ -18,6 +19,7 @@ void Shader::init(std::string _vertexShaderSource, std::string _fragmentShaderSo
 	hasGeometryShader = true;
 	load();
 	isCompiled = false;
+	dirty = true;
 }
 
 Shader::Shader(bool _autoRelease) : NodeResource(_autoRelease){
@@ -145,6 +147,7 @@ void Shader::unload(){
 		aVertexColor = -1;
 		aVertexNormals = -1;
 		aVertexUVs = -1;
+		dirty = true;
 	}
 	
 	NodeLoadable::unload();
@@ -212,4 +215,15 @@ GLint Shader::get_aVertexUVs(){
 
 void Shader::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	//leave unimplemented
+}
+
+void Shader::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+	if(dirty){
+		configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
+		dirty = false;
+	}
+}
+
+void Shader::makeDirty(){
+	dirty = true;
 }

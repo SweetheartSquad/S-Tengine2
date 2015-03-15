@@ -59,7 +59,7 @@ GameJamScene::GameJamScene(Game * _game):
 	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4))
 {
 	world->b2world->SetContactListener(&cl);
-	shader->components.push_back(new TextureShaderComponent());
+	shader->components.push_back(new TextureShaderComponent(shader));
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 

@@ -10,7 +10,9 @@
 
 #include <glm/glm.hpp>
 
-VoxelComponent::VoxelComponent(){
+VoxelComponent::VoxelComponent(Shader * _shader) :
+	GeometryComponent(_shader)
+{
 }
 
 std::string VoxelComponent::getVertexVariablesString(){

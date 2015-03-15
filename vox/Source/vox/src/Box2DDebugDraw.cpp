@@ -26,7 +26,7 @@ Box2DDebugDraw::Box2DDebugDraw(Scene * _scene, Box2DWorld * _world):
 	NodeChild(nullptr),
 	drawing(false)
 {
-	shader->components.push_back(new TextureShaderComponent());
+	shader->components.push_back(new TextureShaderComponent(shader));
 	shader->compileShader();
 	
 	//sprite->setShader(shader, true);
@@ -141,6 +141,7 @@ void Box2DDebugDraw::load(){
 //		sprite->load();
 		spriteSegment->load();
 		spriteTransform->load();
+		spriteCircle->load();
 		shader->load();
 	}
 
@@ -154,6 +155,7 @@ void Box2DDebugDraw::unload(){
 //		sprite->unload();
 		spriteSegment->unload();
 		spriteTransform->unload();
+		spriteCircle->unload();
 		shader->unload();
 	}
 	

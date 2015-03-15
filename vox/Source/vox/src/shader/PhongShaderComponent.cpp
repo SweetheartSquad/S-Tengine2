@@ -9,7 +9,9 @@
 #include "RenderOptions.h"
 #include "shader/SharedComponentShaderMethods.h"
 
-PhongShaderComponent::PhongShaderComponent() : ShaderComponent(){
+PhongShaderComponent::PhongShaderComponent(Shader * _shader) :
+	ShaderComponent(_shader)
+{
 }
 
 PhongShaderComponent::~PhongShaderComponent(){
