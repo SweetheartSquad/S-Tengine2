@@ -218,18 +218,8 @@ void PuppetCharacter::update(Step* _step){
 		}
 	}
 	float bodAngle = (rootComponent)->body->GetAngle();
-	/*while(bodAngle > glm::pi<float>()){
-		bodAngle -= glm::pi<float>();
-	}while(bodAngle < -glm::pi<float>()){
-		bodAngle += glm::pi<float>();
-	}*/
 	rootComponent->body->SetTransform(rootComponent->body->GetPosition(), bodAngle);
 	float angularVel = -((bodAngle + targetRoll) * control) * 10;// + glm::radians(90.f);
-	
-	std::cout << "Angle: " << bodAngle << "\tVel: " << angularVel << std::endl;
-	//while(abs(angularVel) > 2*glm::pi<float>()){
-	//	angularVel *= 0.9f;
-	//}
 
 	rootComponent->body->SetAngularVelocity(angularVel);
 
@@ -276,13 +266,13 @@ void PuppetCharacter::action(){
 				itemToPickup = nullptr;
 			}
 			float t = rootComponent->body->GetAngle();
-			(*projectile->components.at(0))->applyLinearImpulseUp(200);
+			projectile->rootComponent->body->SetTransform(projectile->rootComponent->body->GetPosition(), t);
+			projectile->rootComponent->applyLinearImpulseUp(50);
 			if(rootComponent->body->GetAngle() > 0){
-				(*projectile->components.at(0))->applyLinearImpulseLeft(100*(1-cos(t)));
+				projectile->rootComponent->applyLinearImpulseLeft(50*(1-cos(t)));
 			}else{
-				(*projectile->components.at(0))->applyLinearImpulseRight(100*(1-cos(t)));
+				projectile->rootComponent->applyLinearImpulseRight(50*(1-cos(t)));
 			}
-
 		}
 	}
 }

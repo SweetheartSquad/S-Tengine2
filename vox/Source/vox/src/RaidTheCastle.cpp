@@ -27,6 +27,7 @@
 #include <Item.h>
 #include <ItemFlail.h>
 #include <ItemSimpleWeapon.h>
+#include <ItemProjectileWeapon.h>
 
 #include <glfw\glfw3.h>
 
@@ -117,9 +118,18 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	//gameCam->addTarget(castle->rootComponent);
 	//gameCam->addTarget(catapult->rootComponent);
 
-	for(PuppetCharacter * p : players){
+	/*for(PuppetCharacter * p : players){
 		TextureSampler * weaponTex = RaidTheCastleResourceManager::getRandomWeapon();
 		ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
+		weapon->addToLayeredScene(this, 1);
+		weapon->setShader(shader, true);
+		p->itemToPickup = weapon;
+	}*/
+	for(PuppetCharacter * p : players){
+		TextureSampler * weaponTex = RaidTheCastleResourceManager::getRandomWeapon();
+		TextureSampler * projTex = RaidTheCastleResourceManager::getRandomWeapon();
+		
+		ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
 		weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);
 		p->itemToPickup = weapon;
