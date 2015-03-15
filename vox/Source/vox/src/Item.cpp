@@ -47,6 +47,7 @@ void Item::hitGround(){
 			std::cout << "item hit ground" << std::endl;
 		}else{
 			destroy = true;
+			std::cout << "item hit ground; should die" << std::endl;
 		}
 	}
 }
