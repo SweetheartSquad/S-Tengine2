@@ -24,6 +24,7 @@
 #include <PuppetCharacterKnight.h>
 #include <PuppetTexturePack.h>
 #include <PuppetController.h>
+#include <ItemFlail.h>
 
 #include <glfw\glfw3.h>
 
@@ -84,6 +85,11 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	champion->addToLayeredScene(this, 1);
 	champion->head->maxVelocity = b2Vec2(10, 10);
 	champion->translateComponents(glm::vec3(100.f, 35, 0));
+	
+	champion->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, champion->groupIndex, 0, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
+	addChild(champion->itemToPickup, 1);
+	champion->itemToPickup->addToLayeredScene(this, 1);
+	champion->itemToPickup->setShader(shader, true);
 
 	gameCam->addTarget(playerCharacter->torso);
 	gameCam->addTarget(playerCharacter2->torso);
@@ -120,7 +126,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	for(PuppetCharacter * p : players){
 		TextureSampler * weaponTex = RaidTheCastleResourceManager::getRandomWeapon();
-		Item * weapon = p->itemToPickup = new Item(false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height/2.5f);
+		Item * weapon = p->itemToPickup = new Item(false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height/2.f);
 
 		weapon->rootComponent = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), weaponTex->width, weaponTex->height, weaponTex->texture, p->componentScale);
 		weapon->components.push_back(&weapon->rootComponent);

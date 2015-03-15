@@ -5,8 +5,6 @@
 #include <BehaviourPatrol.h>
 #include <BehaviourAttack.h>
 #include <BehaviourManager.h>
-#include <Item.h>
-#include <ItemFlail.h>
 #include <Box2D\Box2D.h>
 #include <Box2DWorld.h>
 
@@ -21,11 +19,6 @@ PuppetCharacterCastleChampion::PuppetCharacterCastleChampion(Box2DWorld * _world
 {
 	behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), this, 10));
 	behaviourManager.addBehaviour(new BehaviourAttack(this, 10, PuppetGame::kPLAYER));
-	//behaviourManager.addBehaviour(new BehaviourFollow(this, 10, PuppetGame::kPLAYER));
-
-	itemToPickup = new ItemFlail(_world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, _groupIndex, 0, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
-	
-	//itemToPickup->snapComponents(handRight);
 }
 
 PuppetCharacterCastleChampion::~PuppetCharacterCastleChampion(){
