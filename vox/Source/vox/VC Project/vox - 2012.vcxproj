@@ -113,6 +113,7 @@
     <ClCompile Include="..\src\PuppetCharacter.cpp" />
     <ClCompile Include="..\src\PuppetCharacterCastleChampion.cpp" />
     <ClCompile Include="..\src\PuppetCharacterKnight.cpp" />
+    <ClCompile Include="..\src\PuppetCharacterRapunzel.cpp" />
     <ClCompile Include="..\src\PuppetContactListener.cpp" />
     <ClCompile Include="..\src\PuppetController.cpp" />
     <ClCompile Include="..\src\PuppetResourceManager.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="..\include\PuppetCharacter.h" />
     <ClInclude Include="..\include\PuppetCharacterCastleChampion.h" />
     <ClInclude Include="..\include\PuppetCharacterKnight.h" />
+    <ClInclude Include="..\include\PuppetCharacterRapunzel.h" />
     <ClInclude Include="..\include\PuppetContactListener.h" />
     <ClInclude Include="..\include\PuppetController.h" />
     <ClInclude Include="..\include\PuppetResourceManager.h" />
@@ -286,7 +288,7 @@
     <ClInclude Include="..\include\RandomCharacter.h" />
     <ClInclude Include="..\include\RandomGround.h" />
     <ClInclude Include="..\include\RapunzelContactListener.h" />
-    <ClInclude Include="..\include\RapunzelResourceManager .h" />
+    <ClInclude Include="..\include\RapunzelResourceManager.h" />
     <ClInclude Include="..\include\Rectangle.h" />
     <ClInclude Include="..\include\RenderOptions.h" />
     <ClInclude Include="..\include\RenderSurface.h" />

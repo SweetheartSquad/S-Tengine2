@@ -4,7 +4,7 @@
 
 #include <Box2DSprite.h>
 #include <Box2DWorld.h>
-#include <RapunzelResourceManager .h>
+#include <RapunzelResourceManager.h>
 
 Hair::Hair(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Structure(_world, _categoryBits, _maskBits, _groupIndex),

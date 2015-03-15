@@ -90,3 +90,7 @@ void Lever::unload(){
 void Lever::load(){
 	Structure::load();
 }
+
+void Lever::pullLever(){
+
+}

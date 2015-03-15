@@ -60,18 +60,6 @@ void RapunzelContactListener::playerGroundContact(b2Contact * _contact, b2Fixtur
 
 void RapunzelContactListener::structureItemContact(b2Contact * _contact, b2Fixture * _structureFixture, b2Fixture * _itemFixture){
 	PuppetContactListener::structureItemContact(_contact, _structureFixture, _itemFixture);
-
-	Structure * structure = static_cast<Structure *>( _structureFixture->GetUserData() );
-    Item * item = static_cast<Item *>( _itemFixture->GetUserData() );
-
-	Castle * castle = dynamic_cast<Castle *>(structure);
-	if(castle != nullptr){
-		castle->damage = item->damage; // what is going on here?
-		Boulder * boulder = dynamic_cast<Boulder *>(item);
-		if(boulder != nullptr){
-			boulder->playerWhoFired->score += boulder->damage;
-		}
-	}
 }
 
 void RapunzelContactListener::EndContact(b2Contact * _contact){
