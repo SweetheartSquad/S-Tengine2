@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Item.h"
+#include <Box2DWorld.h>
 
 Item::Item(bool _singleUse, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex, int _damage, float _handleX, float _handleY):
 	NodeTransformable(new Transform()),
@@ -13,7 +14,8 @@ Item::Item(bool _singleUse, Box2DWorld * _world, int16 _categoryBits, int16 _mas
 	singleUse(_singleUse),
 	held(false),
 	thrown(false),
-	destroy(false)
+	destroy(false),
+	playerJoint(nullptr)
 {
 }
 
@@ -47,4 +49,14 @@ void Item::hitGround(){
 			destroy = true;
 		}
 	}
+}
+
+Item * Item::getProjectile(){
+	if(playerJoint != nullptr){
+		world->b2world->DestroyJoint(playerJoint);
+		playerJoint = nullptr;
+		thrown = true;
+		held = false;
+	}
+	return this;
 }

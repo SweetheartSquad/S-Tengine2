@@ -27,4 +27,8 @@ public:
 	virtual void hitStructure();
 	virtual void hitPlayer();
 	virtual void hitGround();
+	
+	b2WeldJoint * playerJoint;
+	// for a default item, this will destroy the player's item joint and return the item itself
+	Item * getProjectile();
 };

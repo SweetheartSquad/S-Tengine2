@@ -256,20 +256,20 @@ void PuppetCharacter::jump(){
 void PuppetCharacter::action(){
 	if(heldItem != nullptr){
 		if(itemJoint != nullptr){
-			world->b2world->DestroyJoint(itemJoint);
-			float t = torso->body->GetAngle();
-			(*heldItem->components.at(0))->applyLinearImpulseUp(200);
-			if(torso->body->GetAngle() > 0){
-				(*heldItem->components.at(0))->applyLinearImpulseLeft(100*(1-cos(t)));
-			}else{
-				(*heldItem->components.at(0))->applyLinearImpulseRight(100*(1-cos(t)));
+			Item * projectile = heldItem->getProjectile();
+			if(projectile == heldItem){
+				heldItem = nullptr;
+				itemJoint = nullptr;
+				itemToPickup = nullptr;
 			}
-			heldItem->thrown = true;
-			heldItem->held = false;
+			float t = torso->body->GetAngle();
+			(*projectile->components.at(0))->applyLinearImpulseUp(200);
+			if(torso->body->GetAngle() > 0){
+				(*projectile->components.at(0))->applyLinearImpulseLeft(100*(1-cos(t)));
+			}else{
+				(*projectile->components.at(0))->applyLinearImpulseRight(100*(1-cos(t)));
+			}
 
-			heldItem = nullptr;
-			itemJoint = nullptr;
-			itemToPickup = nullptr;
 		}
 	}
 }
@@ -308,7 +308,7 @@ void PuppetCharacter::pickupItem(Item * _item){
 		jd.collideConnected = false;
 		jd.referenceAngle = glm::radians(-90.f);
 		jd.dampingRatio = 0;
-		itemJoint = (b2WeldJoint *)world->b2world->CreateJoint(&jd);
+		itemJoint = _item->playerJoint = (b2WeldJoint *)world->b2world->CreateJoint(&jd);
 		heldItem = _item;
 		itemToPickup = nullptr;
 		_item->held = true;
