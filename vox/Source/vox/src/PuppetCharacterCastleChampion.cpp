@@ -18,7 +18,7 @@ PuppetCharacterCastleChampion::PuppetCharacterCastleChampion(Box2DWorld * _world
 	NodeChild(nullptr)
 {
 	behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), this, 10));
-	behaviourManager.addBehaviour(new BehaviourAttack(this, 10, PuppetGame::kPLAYER));
+	behaviourManager.addBehaviour(new BehaviourAttack(this, 3, PuppetGame::kPLAYER));
 }
 
 PuppetCharacterCastleChampion::~PuppetCharacterCastleChampion(){

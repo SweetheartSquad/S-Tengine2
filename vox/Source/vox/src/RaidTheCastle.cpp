@@ -48,43 +48,39 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	splashMessage->setShader(shader, true);
 	splashMessage->transform->scale(-1, 1, 1);
 
+	players.push_back(playerCharacter);
+	players.push_back(playerCharacter2);
+	players.push_back(playerCharacter3);
+	players.push_back(playerCharacter4);
+
 	playerCharacter->setShader(shader, true);
 	addChild(playerCharacter, 1);
 	playerCharacter->addToLayeredScene(this, 1);
-	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter->translateComponents(glm::vec3(20.0f, 35, 0.f));
+	playerCharacter->rootComponent->maxVelocity = b2Vec2(10, 10);
 	puppetController->puppetCharacter = playerCharacter;
-	players.push_back(playerCharacter);
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
-	playerCharacter2->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter2->translateComponents(glm::vec3(40.0f, 35, 0.f));
+	playerCharacter2->rootComponent->maxVelocity = b2Vec2(10, 10);
 	puppetController2->puppetCharacter = playerCharacter2;
-	players.push_back(playerCharacter2);
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
-	playerCharacter3->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter3->translateComponents(glm::vec3(60.0f, 35, 0.f));
+	playerCharacter3->rootComponent->maxVelocity = b2Vec2(10, 10);
 	puppetController3->puppetCharacter = playerCharacter3;
-	players.push_back(playerCharacter3);
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
-	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
-	playerCharacter4->translateComponents(glm::vec3(80.0f, 35, 0.f));
+	playerCharacter4->rootComponent->maxVelocity = b2Vec2(10, 10);
 	puppetController4->puppetCharacter = playerCharacter4;
-	players.push_back(playerCharacter4);
 
 	champion->setShader(shader, true);
 	addChild(champion, 0);
 	champion->addToLayeredScene(this, 1);
-	champion->head->maxVelocity = b2Vec2(10, 10);
-	champion->translateComponents(glm::vec3(100.f, 35, 0));
+	champion->rootComponent->maxVelocity = b2Vec2(10, 10);
 	
 	champion->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, champion->groupIndex, 0, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
 	addChild(champion->itemToPickup, 1);
@@ -107,19 +103,14 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	addChild(catapult, 1);
 
 	catapult->translateComponents(glm::vec3(0,0,0));
-
-
-	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 10, PuppetGame::kPLAYER));
-	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
-	playerCharacter4->ai = true;
-
-	playerCharacter3->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter3, 10, PuppetGame::kPLAYER));
-	playerCharacter3->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
+	
+	playerCharacter3->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
+	playerCharacter3->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter3, 3, PuppetGame::kPLAYER));
 	playerCharacter3->ai = true;
 
-	//playerCharacter2->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter2, 10, PuppetGame::kPLAYER));
-	//playerCharacter2->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
-	//playerCharacter2->ai = true;
+	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
+	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
+	playerCharacter4->ai = true;
 
 	//gameCam->addTarget(castle->rootComponent);
 	//gameCam->addTarget(catapult->rootComponent);
@@ -151,6 +142,12 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 		weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);
 	}
+	
+	playerCharacter->translateComponents(glm::vec3(20.0f, 35, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(40.0f, 35, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(60.0f, 35, 0.f));
+	playerCharacter4->translateComponents(glm::vec3(80.0f, 35, 0.f));
+	champion->translateComponents(glm::vec3(100.f, 35, 0));
 
 	playRandomBackgroundMusic();
 	loadCatapult();
