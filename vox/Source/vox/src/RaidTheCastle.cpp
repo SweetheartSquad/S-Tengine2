@@ -24,7 +24,9 @@
 #include <PuppetCharacterKnight.h>
 #include <PuppetTexturePack.h>
 #include <PuppetController.h>
+#include <Item.h>
 #include <ItemFlail.h>
+#include <ItemSimpleWeapon.h>
 
 #include <glfw\glfw3.h>
 
@@ -117,30 +119,10 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	for(PuppetCharacter * p : players){
 		TextureSampler * weaponTex = RaidTheCastleResourceManager::getRandomWeapon();
-		Item * weapon = p->itemToPickup = new Item(false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
-
-		weapon->rootComponent = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), weaponTex->width, weaponTex->height, weaponTex->texture, p->componentScale);
-		weapon->components.push_back(&weapon->rootComponent);
-	
-		b2Filter sf;
-		sf.categoryBits = weapon->categoryBits;
-		if(weapon->maskBits != (int16)-1){
-			sf.maskBits = weapon->maskBits;
-		}else{
-			sf.maskBits = 0;
-		}
-		sf.groupIndex = weapon->groupIndex;
-
-		for(Box2DSprite ** c : weapon->components){
-			(*c)->createFixture(sf);
-			(*c)->body->GetFixtureList()->SetDensity(0.01f);
-			(*c)->body->ResetMassData();
-		}
-
-		weapon->setUserData(weapon);
-		addChild(weapon, 1);
+		ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
 		weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);
+		p->itemToPickup = weapon;
 	}
 	
 	playerCharacter->translateComponents(glm::vec3(20.0f, 35, 0.f));
