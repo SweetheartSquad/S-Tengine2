@@ -304,13 +304,11 @@ void PuppetScene::unload(){
 void PuppetScene::update(Step * _step){
 	Scene::update(_step);
 
-
-
 	if(splashMessage != nullptr){
 		if(currentTime < splashDuration){
 			if(displayingSplash){
 				// the factor of 15 is only there because I can't load this thing at the correct size...
-				float scale = 15 * (splashDuration - currentTime)/splashDuration;
+				float scale = Easing::easeOutBack(splashDuration - currentTime, 0, 10, splashDuration);
 				splashMessage->transform->scaleVector = glm::vec3(-scale, scale, 1);
 			}else{
 				addChild(splashMessage, 2);
@@ -372,13 +370,14 @@ void PuppetScene::update(Step * _step){
 			if(duration - currentTime < countDown){
 				doCountDown();	
 			}
+			if(countDown < 5){
+				float scale = Easing::easeOutElastic(fmod(currentTime, 1), 0, 5, 1);
+				countDownNumbers.at(countDown)->transform->scaleVector = glm::vec3(-scale, scale, 1);
+			}
 		}
 	}
 	
-	if(countDown < 5){
-		float scale = Easing::easeOutElastic(fmod(currentTime, 1), 0, 1, 1);
-		countDownNumbers.at(countDown)->transform->scaleVector = glm::vec3(-scale, scale, scale);
-	}
+	
 
 	if(keyboard->keyJustUp(GLFW_KEY_1)){
 		mouseCam = !mouseCam;
