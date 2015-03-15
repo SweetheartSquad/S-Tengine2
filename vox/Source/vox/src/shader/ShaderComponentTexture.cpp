@@ -1,6 +1,6 @@
 #pragma 
 
-#include "shader/TextureShaderComponent.h"
+#include "shader/ShaderComponentTexture.h"
 #include "shader/ShaderVariables.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
@@ -11,29 +11,29 @@
 #include "SpriteSheetAnimation.h"
 #include "SpriteMesh.h"
 
-TextureShaderComponent::TextureShaderComponent(Shader * _shader) :
+ShaderComponentTexture::ShaderComponentTexture(Shader * _shader) :
 	ShaderComponent(_shader){
 }
 
-TextureShaderComponent::~TextureShaderComponent(){
+ShaderComponentTexture::~ShaderComponentTexture(){
 }
 
-std::string TextureShaderComponent::getVertexVariablesString(){
+std::string ShaderComponentTexture::getVertexVariablesString(){
 	return DEFINE + SHADER_COMPONENT_TEXTURE + ENDL;
 }
 
-std::string TextureShaderComponent::getFragmentVariablesString(){
+std::string ShaderComponentTexture::getFragmentVariablesString(){
 	return 
 		DEFINE + SHADER_COMPONENT_TEXTURE + ENDL + 
 		"uniform sampler2D " + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[" + std::to_string(MAX_LIGHTS) + "]" + SEMI_ENDL + 
 		"uniform int " + GL_UNIFORM_ID_NUM_TEXTURES + SEMI_ENDL;
 }
 
-std::string TextureShaderComponent::getVertexBodyString(){
+std::string ShaderComponentTexture::getVertexBodyString(){
 	return "";
 }
 
-std::string TextureShaderComponent::getFragmentBodyString(){
+std::string ShaderComponentTexture::getFragmentBodyString(){
 	return
 		"if(" + GL_UNIFORM_ID_NUM_TEXTURES + " > 0){" + SEMI_ENDL +
 			"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_TEXTURES + "; i++){" + ENDL + 
@@ -46,17 +46,17 @@ std::string TextureShaderComponent::getFragmentBodyString(){
 		"}" + ENDL;
 }
 
-std::string TextureShaderComponent::getOutColorMod(){
+std::string ShaderComponentTexture::getOutColorMod(){
 	return GL_OUT_OUT_COLOR + " *= modFrag" + SEMI_ENDL;
 }
 
-void TextureShaderComponent::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentTexture::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	//ShaderComponent::clean(_matrixStack, _renderOption, _nodeRenderable);
 	configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 	shader->configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 }
 
-void TextureShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentTexture::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 	int numTextures = 0;
 	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), 0);

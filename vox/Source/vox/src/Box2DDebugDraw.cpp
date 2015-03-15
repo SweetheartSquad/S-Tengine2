@@ -5,7 +5,7 @@
 #include "Sprite.h"
 #include "SpriteMesh.h"
 #include "shader/BaseComponentShader.h"
-#include "shader/TextureShaderComponent.h"
+#include "shader/ShaderComponentTexture.h"
 
 #include "GameJamScene.h"
 #include "Box2DWorld.h"
@@ -26,7 +26,7 @@ Box2DDebugDraw::Box2DDebugDraw(Scene * _scene, Box2DWorld * _world):
 	NodeChild(nullptr),
 	drawing(false)
 {
-	shader->components.push_back(new TextureShaderComponent(shader));
+	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->compileShader();
 	
 	//sprite->setShader(shader, true);

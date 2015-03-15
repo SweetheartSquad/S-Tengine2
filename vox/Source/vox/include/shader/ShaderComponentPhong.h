@@ -4,19 +4,19 @@
 
 /******************************************************************************
 *
-* Adds shadow support to the shader that this component is added to
+* Adds phong material support to the shader that this component is added to.
 *
-* In order for shadows to be rendered the renderShadow method of scene must be 
-* called. This is because this method will render a depth map which is used to determine
-* how the shadows will be rendered
+* In order for the phong effect to occur the Mesh that is being rendered must
+* have a material applied to it
 *
 * See ShaderComponent for method descriptions
 *
 *******************************************************************************/
-class ShadowShaderComponent : public ShaderComponent{
+
+class ShaderComponentPhong : public ShaderComponent{
 public:
-	ShadowShaderComponent(Shader * _shader);
-	~ShadowShaderComponent() override;
+	ShaderComponentPhong(Shader * _shader);
+	~ShaderComponentPhong() override;
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;
 	std::string getVertexBodyString() override;

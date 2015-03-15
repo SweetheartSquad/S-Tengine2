@@ -1,34 +1,34 @@
 #pragma once 
 
-#include "shader/DiffuseShaderComponent.h"
+#include "shader/ShaderComponentDiffuse.h"
 #include "shader/ShaderVariables.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
 #include "shader/SharedComponentShaderMethods.h"
 
-DiffuseShaderComponent::DiffuseShaderComponent(Shader * _shader) :
+ShaderComponentDiffuse::ShaderComponentDiffuse(Shader * _shader) :
 	ShaderComponent(_shader)
 {
 }
 
-DiffuseShaderComponent::~DiffuseShaderComponent(){
+ShaderComponentDiffuse::~ShaderComponentDiffuse(){
 }
 
-std::string DiffuseShaderComponent::getVertexVariablesString(){
+std::string ShaderComponentDiffuse::getVertexVariablesString(){
 	return DEFINE + SHADER_COMPONENT_DIFFUSE + ENDL;
 }
 
-std::string DiffuseShaderComponent::getFragmentVariablesString(){
+std::string ShaderComponentDiffuse::getFragmentVariablesString(){
 	return 
 		DEFINE + SHADER_COMPONENT_DIFFUSE + ENDL +
 		SHADER_INCLUDE_LIGHT;
 }
 
-std::string DiffuseShaderComponent::getVertexBodyString(){
+std::string ShaderComponentDiffuse::getVertexBodyString(){
 	return EMPTY;
 }
 
-std::string DiffuseShaderComponent::getFragmentBodyString(){
+std::string ShaderComponentDiffuse::getFragmentBodyString(){
 	return
 		IF_NOT_DEFINED + SHADER_COMPONENT_BLINN + ENDL +
 		IF_NOT_DEFINED + SHADER_COMPONENT_PHONG + ENDL + 
@@ -49,7 +49,7 @@ std::string DiffuseShaderComponent::getFragmentBodyString(){
 		END_IF + ENDL;
 }
 
-std::string DiffuseShaderComponent::getOutColorMod(){
+std::string ShaderComponentDiffuse::getOutColorMod(){
 	return 
 		IF_NOT_DEFINED + SHADER_COMPONENT_BLINN + ENDL +
 		IF_NOT_DEFINED + SHADER_COMPONENT_PHONG + ENDL + 
@@ -58,7 +58,7 @@ std::string DiffuseShaderComponent::getOutColorMod(){
 		END_IF + ENDL;
 }
 
-void DiffuseShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentDiffuse::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	SharedComponentShaderMethods::configureLights(_matrixStack, _renderOption, _nodeRenderable);
 }
 

@@ -1,25 +1,26 @@
-#pragma once 
+#pragma once
 
 #include "ShaderComponent.h"
 
 /******************************************************************************
 *
-* Adds Texture support to the shader that this component is added to 
+* Adds shadow support to the shader that this component is added to
 *
-* In order for textures to appear they must be added to rendered Mesh's texture vector
+* In order for shadows to be rendered the renderShadow method of scene must be 
+* called. This is because this method will render a depth map which is used to determine
+* how the shadows will be rendered
 *
 * See ShaderComponent for method descriptions
 *
-******************************************************************************/
-class TextureShaderComponent : public ShaderComponent{
+*******************************************************************************/
+class ShaderComponentShadow : public ShaderComponent{
 public:
-	TextureShaderComponent(Shader * _shader);
-	~TextureShaderComponent() override;
+	ShaderComponentShadow(Shader * _shader);
+	~ShaderComponentShadow() override;
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;
 	std::string getVertexBodyString() override;
 	std::string getFragmentBodyString() override;
 	std::string getOutColorMod() override;
 	void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
-	virtual void clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 };

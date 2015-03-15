@@ -5,9 +5,9 @@
 #include "Texture.h"
 #include "Sprite.h"
 #include "shader/BaseComponentShader.h"
-#include "shader/TextureShaderComponent.h"
-#include "shader/ShadowShaderComponent.h"
-#include "shader/PhongShaderComponent.h"
+#include "shader/ShaderComponentTexture.h"
+#include "shader/ShaderComponentShadow.h"
+#include "shader/ShaderComponentPhong.h"
 #include "Keyboard.h"
 #include "SpriteSheet.h"
 #include "Rectangle.h"
@@ -59,7 +59,7 @@ GameJamScene::GameJamScene(Game * _game):
 	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4))
 {
 	world->b2world->SetContactListener(&cl);
-	shader->components.push_back(new TextureShaderComponent(shader));
+	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 

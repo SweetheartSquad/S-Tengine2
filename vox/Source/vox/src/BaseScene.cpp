@@ -3,15 +3,15 @@
 #include "BaseScene.h"
 #include "Cube.h"
 #include "shader/BaseComponentShader.h"
-#include "shader/TextureShaderComponent.h"
+#include "shader/ShaderComponentTexture.h"
 #include "MeshInterface.h"
 #include "Texture.h"
 #include "Plane.h"
 #include "Keyboard.h"
 #include "Camera.h"
-#include "shader/ShadowShaderComponent.h"
-#include "shader/PhongShaderComponent.h"
-#include "shader/DiffuseShaderComponent.h"
+#include "shader/ShaderComponentShadow.h"
+#include "shader/ShaderComponentPhong.h"
+#include "shader/ShaderComponentDiffuse.h"
 #include "Material.h"
 #include "PointLight.h"
 #include "PerspectiveCamera.h"
@@ -40,9 +40,9 @@ BaseScene::BaseScene(Game * _game):
 	sprite(new Sprite(nullptr, new Transform()))
 {
 	//Add shader components
-	shader->components.push_back(new TextureShaderComponent(shader));
-	shader->components.push_back(new PhongShaderComponent(shader));
-	shader->components.push_back(new ShadowShaderComponent(shader));
+	shader->components.push_back(new ShaderComponentTexture(shader));
+	shader->components.push_back(new ShaderComponentPhong(shader));
+	shader->components.push_back(new ShaderComponentShadow(shader));
 	
 	//Compile the shader
 	shader->compileShader();
@@ -94,9 +94,9 @@ BaseScene::BaseScene(Game * _game):
 
 	//Lets create a voxel shader by using the voxel geometry component
 	BaseComponentShader * voxelShader = new BaseComponentShader();
-	voxelShader->components.push_back(new TextureShaderComponent(shader));
-	voxelShader->components.push_back(new ShadowShaderComponent(shader));
-	voxelShader->components.push_back(new PhongShaderComponent(shader));
+	voxelShader->components.push_back(new ShaderComponentTexture(shader));
+	voxelShader->components.push_back(new ShaderComponentShadow(shader));
+	voxelShader->components.push_back(new ShaderComponentPhong(shader));
 	voxelShader->geometryComponent = new VoxelComponent(shader);
 	voxelShader->compileShader();
 

@@ -1,34 +1,34 @@
 #pragma once
 
-#include "shader/BlinnShaderComponent.h"
+#include "shader/ShaderComponentBlinn.h"
 #include "shader/ShaderVariables.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
 #include "shader/SharedComponentShaderMethods.h"
 
-BlinnShaderComponent::BlinnShaderComponent(Shader * _shader) :
+ShaderComponentBlinn::ShaderComponentBlinn(Shader * _shader) :
 	ShaderComponent(_shader)
 {
 }
 
-BlinnShaderComponent::~BlinnShaderComponent(){
+ShaderComponentBlinn::~ShaderComponentBlinn(){
 }
 
-std::string BlinnShaderComponent::getVertexVariablesString(){
+std::string ShaderComponentBlinn::getVertexVariablesString(){
 	return DEFINE + SHADER_COMPONENT_BLINN + ENDL;
 }
 
-std::string BlinnShaderComponent::getFragmentVariablesString(){
+std::string ShaderComponentBlinn::getFragmentVariablesString(){
 	return DEFINE + SHADER_COMPONENT_BLINN + ENDL 
 		   + SHADER_INCLUDE_LIGHT
 		   + SHADER_INCLUDE_MATERIAL;	
 }
 
-std::string BlinnShaderComponent::getVertexBodyString(){
+std::string ShaderComponentBlinn::getVertexBodyString(){
 	return EMPTY;
 }
 
-std::string BlinnShaderComponent::getFragmentBodyString(){
+std::string ShaderComponentBlinn::getFragmentBodyString(){
 	return
 	IF_NOT_DEFINED + SHADER_COMPONENT_PHONG + ENDL + 
 	VAR_MAT3 + " normalMatrix = transpose(inverse(mat3(model)))" + SEMI_ENDL +
@@ -91,14 +91,14 @@ std::string BlinnShaderComponent::getFragmentBodyString(){
 	END_IF + ENDL;
 }
 
-std::string BlinnShaderComponent::getOutColorMod(){
+std::string ShaderComponentBlinn::getOutColorMod(){
 	return 
 		IF_NOT_DEFINED + SHADER_COMPONENT_PHONG + ENDL + 
 		GL_OUT_OUT_COLOR + "*= outColorBlinn" + SEMI_ENDL + 
 		END_IF + ENDL;
 }
 
-void BlinnShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentBlinn::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	SharedComponentShaderMethods::configureLights(_matrixStack, _renderOption, _nodeRenderable);
 	SharedComponentShaderMethods::configureMaterials(_matrixStack, _renderOption, _nodeRenderable);
 }

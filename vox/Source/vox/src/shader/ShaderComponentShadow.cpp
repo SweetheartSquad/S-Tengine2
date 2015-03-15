@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shader/ShadowShaderComponent.h"
+#include "shader/ShaderComponentShadow.h"
 #include "shader/ShaderVariables.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
@@ -14,15 +14,15 @@
 
 class VoxRenderOptions;
 
-ShadowShaderComponent::ShadowShaderComponent(Shader * _shader) :
+ShaderComponentShadow::ShaderComponentShadow(Shader * _shader) :
 	ShaderComponent(_shader)
 {
 }
 
-ShadowShaderComponent::~ShadowShaderComponent(){
+ShaderComponentShadow::~ShaderComponentShadow(){
 }
 
-std::string ShadowShaderComponent::getVertexVariablesString(){
+std::string ShaderComponentShadow::getVertexVariablesString(){
 	return 
 		DEFINE + SHADER_COMPONENT_SHADOW + ENDL + 
 		IF_DEFINED + SHADER_COMPONENT_VOXEL + ENDL +
@@ -33,7 +33,7 @@ std::string ShadowShaderComponent::getVertexVariablesString(){
 		"uniform mat4 " + GL_UNIFORM_ID_DEPTH_MVP + SEMI_ENDL;
 }
 
-std::string ShadowShaderComponent::getFragmentVariablesString(){
+std::string ShaderComponentShadow::getFragmentVariablesString(){
 	return
 		DEFINE + SHADER_COMPONENT_SHADOW + ENDL +
 		"uniform int hasShadows" + SEMI_ENDL + 
@@ -60,7 +60,7 @@ std::string ShadowShaderComponent::getFragmentVariablesString(){
 		")" + SEMI_ENDL;
 }
 
-std::string ShadowShaderComponent::getVertexBodyString(){
+std::string ShaderComponentShadow::getVertexBodyString(){
 	return 	
 		IF_DEFINED + SHADER_COMPONENT_VOXEL + ENDL +
 			GL_IN_OUT_SHADOW_COORD + GEO + " = " + GL_UNIFORM_ID_DEPTH_MVP + " * vec4(aVertexPosition, 1.0)" + SEMI_ENDL +
@@ -69,7 +69,7 @@ std::string ShadowShaderComponent::getVertexBodyString(){
 		END_IF + ENDL;
 }
 
-std::string ShadowShaderComponent::getFragmentBodyString(){
+std::string ShaderComponentShadow::getFragmentBodyString(){
 	return 
 		TAB + "float visibility = 1.0" + SEMI_ENDL + 
 		"if(hasShadows == 1){ " + ENDL + 
@@ -93,14 +93,14 @@ std::string ShadowShaderComponent::getFragmentBodyString(){
 		"}" + ENDL;
 }
 
-std::string ShadowShaderComponent::getOutColorMod(){
+std::string ShaderComponentShadow::getOutColorMod(){
 	return
 		"if(hasShadows == 1){ " + ENDL + 
 			GL_OUT_OUT_COLOR + " *= vec4(clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1), clamp(visibility, 0.5, 1) , 1)" + SEMI_ENDL +
 		"}" + ENDL;
 }
 
-void ShadowShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentShadow::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 

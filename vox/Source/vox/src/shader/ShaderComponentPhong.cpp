@@ -1,6 +1,6 @@
 #pragma once 
 
-#include "shader/PhongShaderComponent.h"
+#include "shader/ShaderComponentPhong.h"
 #include "shader/ShaderVariables.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
@@ -9,30 +9,30 @@
 #include "RenderOptions.h"
 #include "shader/SharedComponentShaderMethods.h"
 
-PhongShaderComponent::PhongShaderComponent(Shader * _shader) :
+ShaderComponentPhong::ShaderComponentPhong(Shader * _shader) :
 	ShaderComponent(_shader)
 {
 }
 
-PhongShaderComponent::~PhongShaderComponent(){
+ShaderComponentPhong::~ShaderComponentPhong(){
 }
 
-std::string PhongShaderComponent::getVertexVariablesString(){
+std::string ShaderComponentPhong::getVertexVariablesString(){
 	return DEFINE + SHADER_COMPONENT_PHONG + ENDL;
 }
 
-std::string PhongShaderComponent::getFragmentVariablesString(){
+std::string ShaderComponentPhong::getFragmentVariablesString(){
 	return 
 		DEFINE + SHADER_COMPONENT_PHONG + ENDL
 		+ SHADER_INCLUDE_LIGHT
 		+ SHADER_INCLUDE_MATERIAL;
 }
 
-std::string PhongShaderComponent::getVertexBodyString(){
+std::string ShaderComponentPhong::getVertexBodyString(){
 	return EMPTY;
 }
 
-std::string PhongShaderComponent::getFragmentBodyString(){
+std::string ShaderComponentPhong::getFragmentBodyString(){
 	return 
 	IF_NOT_DEFINED + SHADER_COMPONENT_BLINN + ENDL + 
 	"mat3 normalMatrix = transpose(inverse(mat3(model)))" + SEMI_ENDL +
@@ -90,14 +90,14 @@ std::string PhongShaderComponent::getFragmentBodyString(){
 	END_IF + ENDL;
 }
 
-std::string PhongShaderComponent::getOutColorMod(){
+std::string ShaderComponentPhong::getOutColorMod(){
 	return 
 		IF_NOT_DEFINED + SHADER_COMPONENT_BLINN + ENDL + 
 		GL_OUT_OUT_COLOR + " *= outColorPhong;" + SEMI_ENDL + 
 		END_IF + ENDL;	
 }
 
-void PhongShaderComponent::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentPhong::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	SharedComponentShaderMethods::configureLights(_matrixStack, _renderOption, _nodeRenderable);
 	SharedComponentShaderMethods::configureMaterials(_matrixStack, _renderOption, _nodeRenderable);
 }

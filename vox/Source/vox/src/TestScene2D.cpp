@@ -8,9 +8,9 @@
 #include "Texture.h"
 #include "Sprite.h"
 #include "shader/BaseComponentShader.h"
-#include "shader/TextureShaderComponent.h"
-#include "shader/ShadowShaderComponent.h"
-#include "shader/PhongShaderComponent.h"
+#include "shader/ShaderComponentTexture.h"
+#include "shader/ShaderComponentShadow.h"
+#include "shader/ShaderComponentPhong.h"
 #include "Keyboard.h"
 #include "SpriteSheet.h"
 #include "Rectangle.h"
@@ -60,7 +60,7 @@ TestScene2D::TestScene2D(Game * _game):
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
 	soundManager->play("green_chair");
 	
-	shader->components.push_back(new TextureShaderComponent(shader));
+	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->compileShader();
 
 	sprite->setShader(shader, true);

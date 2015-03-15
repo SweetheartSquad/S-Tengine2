@@ -2,10 +2,10 @@
 
 #include "ShaderComponent.h"
 
-class BlinnShaderComponent : public ShaderComponent{	
+class ShaderComponentDiffuse : public ShaderComponent{
 public:
-	BlinnShaderComponent(Shader * _shader);
-	~BlinnShaderComponent() override;
+	ShaderComponentDiffuse(Shader * _shader);
+	~ShaderComponentDiffuse() override;
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;
 	std::string getVertexBodyString() override;
