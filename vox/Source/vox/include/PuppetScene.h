@@ -54,6 +54,8 @@ public:
 	PuppetController * puppetController3;
 	PuppetController * puppetController4;
 
+	std::vector<PuppetCharacter *> players;
+
 	MeshEntity * ground;
 	RandomGround * randomGround;
 	MeshEntity * background;

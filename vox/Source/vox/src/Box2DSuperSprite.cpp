@@ -132,3 +132,16 @@ void Box2DSuperSprite::snapComponents(Box2DSprite * _sprite){
 	
 	translateComponents(glm::vec3(snapPos.x - currentPos.x, snapPos.y - currentPos.y, 0));
 }
+
+void Box2DSuperSprite::load(){
+	MeshEntity::load();
+	for(Box2DSprite ** c : components){
+		(*c)->load();
+	}
+}
+void Box2DSuperSprite::unload(){
+	MeshEntity::unload();
+	for(Box2DSprite ** c : components){
+		(*c)->unload();
+	}
+}

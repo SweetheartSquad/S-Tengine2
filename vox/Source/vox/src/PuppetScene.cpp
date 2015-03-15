@@ -119,10 +119,10 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	boundaries.at(2)->setTranslationPhysical(width/2.f, height-size, 0);
 	boundaries.at(3)->setTranslationPhysical(width/2.f, -size, 0);
 	
-	addChild(boundaries.at(0));
-	addChild(boundaries.at(1));
-	addChild(boundaries.at(2));
-	addChild(boundaries.at(3));
+	/*addChild(boundaries.at(0), 0);
+	addChild(boundaries.at(1), 0);
+	addChild(boundaries.at(2), 0);
+	addChild(boundaries.at(3), 0);*/
 	
 	world->addToWorld(boundaries.at(0));
 	world->addToWorld(boundaries.at(1));
