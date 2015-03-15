@@ -40,24 +40,28 @@ ItemFlail::ItemFlail(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, 
 	setUserData(this);
 	//itemToPickup->rootComponent
 
-	b2RevoluteJointDef rhrej;
-	rhrej.bodyA = rootComponent->body;
-	rhrej.bodyB = joint->body;
-	rhrej.localAnchorA.Set(0.f, 0.9f * joint->getCorrectedHeight());
-	rhrej.localAnchorB.Set(0.f, -0.9f);
-	rhrej.collideConnected = false;
-	rhrej.enableLimit = false;
-	rhrej.referenceAngle = glm::radians(0.f);
-	_world->b2world->CreateJoint(&rhrej);
+	b2RevoluteJointDef jointDef;
+	jointDef.bodyA = rootComponent->body;
+	jointDef.bodyB = joint->body;
+	jointDef.localAnchorA.Set(0.f, 0.9f * joint->getCorrectedHeight());
+	jointDef.localAnchorB.Set(0.f, -0.9f);
+	jointDef.collideConnected = false;
+	jointDef.enableLimit = false;
+	jointDef.referenceAngle = glm::radians(0.f);
+	//jointDef.upperAngle = glm::radians(20.f);
+	//jointDef.lowerAngle = glm::radians(-20.f);
+	_world->b2world->CreateJoint(&jointDef);
 
-	rhrej.bodyA = joint->body;
-	rhrej.bodyB = head->body;
-	rhrej.localAnchorA.Set(0.f, 0.9f * joint->getCorrectedHeight());
-	rhrej.localAnchorB.Set(0.f, -0.9f);
-	rhrej.collideConnected = false;
-	rhrej.enableLimit = false;
-	rhrej.referenceAngle = glm::radians(0.f);
-	_world->b2world->CreateJoint(&rhrej);
+	jointDef.bodyA = joint->body;
+	jointDef.bodyB = head->body;
+	jointDef.localAnchorA.Set(0.f, 0.9f * joint->getCorrectedHeight());
+	jointDef.localAnchorB.Set(0.f, -0.9f);
+	jointDef.collideConnected = false;
+	jointDef.enableLimit = false;
+	jointDef.referenceAngle = glm::radians(0.f);
+	//jointDef.upperAngle = glm::radians(20.f);
+	//jointDef.lowerAngle = glm::radians(-20.f);
+	_world->b2world->CreateJoint(&jointDef);
 }
 
 ItemFlail::~ItemFlail(){
