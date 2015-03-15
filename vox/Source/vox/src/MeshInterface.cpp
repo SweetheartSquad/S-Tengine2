@@ -120,7 +120,6 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 
 					GLUtils::checkForError(0,__FILE__,__LINE__);
 
-					_renderOption->shader->makeDirty();
 					_renderOption->shader->clean(_matrixStack, _renderOption, this);
 					
 					//Alpha blending
