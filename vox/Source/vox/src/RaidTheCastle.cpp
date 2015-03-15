@@ -193,28 +193,11 @@ void RaidTheCastle::update(Step* _step){
 
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
 		playerCharacter->jump();
-		/*if(playerCharacter->torso->body->GetPosition().y < 8){
-			float t = playerCharacter->torso->body->GetAngle();
-			playerCharacter->torso->applyLinearImpulseUp(50*(1-sin(t)));
-			if(playerCharacter->torso->body->GetAngle() > 0){
-				playerCharacter->torso->applyLinearImpulseLeft(150*(1-cos(t)));
-			}else{
-				playerCharacter->torso->applyLinearImpulseRight(150*(1-cos(t)));
-			}
-		}*/
 	}if(keyboard->keyDown(GLFW_KEY_A)){
-		playerCharacter->targetRoll = glm::radians(-45.f);
-		/*playerCharacter->head->applyLinearImpulseLeft(25);
-		if(playerCharacter->transform->scaleVector.x < 0){
-			playerCharacter->transform->scaleX(-1);
-		}*/
+		playerCharacter->targetRoll = glm::radians(-90.f);
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		playerCharacter->targetRoll = glm::radians(45.f);
-		/*playerCharacter->head->applyLinearImpulseRight(25);
-		if(playerCharacter->transform->scaleVector.x > 0){
-			playerCharacter->transform->scaleX(-1);
-		}*/
+		playerCharacter->targetRoll = glm::radians(90.f);
 	}
 	if(keyboard->keyJustDown(GLFW_KEY_T)){
 		playerCharacter->action();
@@ -240,7 +223,7 @@ void RaidTheCastle::loadCatapult(){
 	boulder->addToLayeredScene(this, 1);
 	items.push_back(boulder);
 
-	b2Vec2 armPos = b2Vec2(-catapult->arm->getCorrectedWidth() * 0.8, catapult->base->getCorrectedHeight() * 0.9);
+	b2Vec2 armPos = b2Vec2(-catapult->arm->getCorrectedWidth() * 0.8f, catapult->base->getCorrectedHeight() * 0.9f);
 	// snap to capatult base
 	boulder->snapComponents(catapult->base);
 	// translate to arm position from base
