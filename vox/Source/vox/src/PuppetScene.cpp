@@ -40,6 +40,7 @@
 #include <PuppetResourceManager.h>
 #include <NumberUtils.h>
 #include <Resource.h>
+#include <Easing.h>
 
 PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	LayeredScene(_game, 3),
@@ -304,6 +305,7 @@ void PuppetScene::update(Step * _step){
 	Scene::update(_step);
 
 
+
 	if(splashMessage != nullptr){
 		if(currentTime < splashDuration){
 			if(displayingSplash){
@@ -372,8 +374,11 @@ void PuppetScene::update(Step * _step){
 			}
 		}
 	}
-
 	
+	if(countDown < 5){
+		float scale = Easing::easeOutElastic(fmod(currentTime, 1), 0, 1, 1);
+		countDownNumbers.at(countDown)->transform->scaleVector = glm::vec3(-scale, scale, scale);
+	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_1)){
 		mouseCam = !mouseCam;
