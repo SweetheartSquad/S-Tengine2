@@ -30,5 +30,5 @@ public:
 	
 	b2WeldJoint * playerJoint;
 	// for a default item, this will destroy the player's item joint and return the item itself
-	Item * getProjectile();
+	virtual Item * getProjectile();
 };
