@@ -53,6 +53,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	playerCharacter->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter->translateComponents(glm::vec3(20.0f, 35, 0.f));
 	puppetController->puppetCharacter = playerCharacter;
+	players.push_back(playerCharacter);
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
@@ -60,6 +61,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	playerCharacter2->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter2->translateComponents(glm::vec3(40.0f, 35, 0.f));
 	puppetController2->puppetCharacter = playerCharacter2;
+	players.push_back(playerCharacter2);
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
@@ -67,6 +69,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	playerCharacter3->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter3->translateComponents(glm::vec3(60.0f, 35, 0.f));
 	puppetController3->puppetCharacter = playerCharacter3;
+	players.push_back(playerCharacter3);
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
@@ -74,6 +77,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	playerCharacter4->head->maxVelocity = b2Vec2(10, 10);
 	playerCharacter4->translateComponents(glm::vec3(80.0f, 35, 0.f));
 	puppetController4->puppetCharacter = playerCharacter4;
+	players.push_back(playerCharacter4);
 
 	champion->setShader(shader, true);
 	addChild(champion, 0);
@@ -113,6 +117,34 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	//gameCam->addTarget(castle->rootComponent);
 	//gameCam->addTarget(catapult->rootComponent);
+
+	for(PuppetCharacter * p : players){
+		TextureSampler * weaponTex = RaidTheCastleResourceManager::getRandomWeapon();
+		Item * weapon = p->itemToPickup = new Item(false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height/2.5f);
+
+		weapon->rootComponent = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), weaponTex->width, weaponTex->height, weaponTex->texture, p->componentScale);
+		weapon->components.push_back(&weapon->rootComponent);
+	
+		b2Filter sf;
+		sf.categoryBits = weapon->categoryBits;
+		if(weapon->maskBits != (int16)-1){
+			sf.maskBits = weapon->maskBits;
+		}else{
+			sf.maskBits = 0;
+		}
+		sf.groupIndex = weapon->groupIndex;
+
+		for(Box2DSprite ** c : weapon->components){
+			(*c)->createFixture(sf);
+			(*c)->body->GetFixtureList()->SetDensity(0.01f);
+			(*c)->body->ResetMassData();
+		}
+
+		weapon->setUserData(weapon);
+		addChild(weapon, 1);
+		weapon->addToLayeredScene(this, 1);
+		weapon->setShader(shader, true);
+	}
 
 	playRandomBackgroundMusic();
 	loadCatapult();

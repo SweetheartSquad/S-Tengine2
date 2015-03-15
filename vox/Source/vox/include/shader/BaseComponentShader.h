@@ -17,8 +17,6 @@ public:
 	std::vector<ShaderComponent *> components;
 	GeometryComponent * geometryComponent;
 
-
-
 	void compileShader();
 
 	virtual void configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable) override;
