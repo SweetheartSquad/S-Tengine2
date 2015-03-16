@@ -49,7 +49,7 @@ public:
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
 
-	PuppetController * puppetController;
+	PuppetController * puppetController1;
 	PuppetController * puppetController2;
 	PuppetController * puppetController3;
 	PuppetController * puppetController4;

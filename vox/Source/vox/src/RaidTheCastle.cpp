@@ -37,7 +37,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	castle(new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30)),
 	catapult(new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM | PuppetGame::kPLAYER, -10)),
 	champion(new PuppetCharacterCastleChampion(world, PuppetGame::kPLAYER, -1, -20)),
-	playerCharacter(new PuppetCharacterKnight(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
+	playerCharacter1(new PuppetCharacterKnight(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterKnight(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
 	playerCharacter3(new PuppetCharacterKnight(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
 	playerCharacter4(new PuppetCharacterKnight(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
@@ -51,16 +51,16 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	splashMessage->setShader(shader, true);
 	splashMessage->transform->scale(-1, 1, 1);
 
-	players.push_back(playerCharacter);
+	players.push_back(playerCharacter1);
 	players.push_back(playerCharacter2);
 	players.push_back(playerCharacter3);
 	players.push_back(playerCharacter4);
 
-	playerCharacter->setShader(shader, true);
-	addChild(playerCharacter, 1);
-	playerCharacter->addToLayeredScene(this, 1);
-	playerCharacter->rootComponent->maxVelocity = b2Vec2(10, 10);
-	puppetController->puppetCharacter = playerCharacter;
+	playerCharacter1->setShader(shader, true);
+	addChild(playerCharacter1, 1);
+	playerCharacter1->addToLayeredScene(this, 1);
+	playerCharacter1->rootComponent->maxVelocity = b2Vec2(10, 10);
+	puppetController1->puppetCharacter = playerCharacter1;
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
@@ -90,7 +90,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	champion->itemToPickup->addToLayeredScene(this, 1);
 	champion->itemToPickup->setShader(shader, true);
 
-	gameCam->addTarget(playerCharacter->torso);
+	gameCam->addTarget(playerCharacter1->torso);
 	gameCam->addTarget(playerCharacter2->torso);
 	gameCam->addTarget(playerCharacter3->torso);
 	gameCam->addTarget(playerCharacter4->torso);
@@ -135,7 +135,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 		p->itemToPickup = weapon;
 	}
 	
-	playerCharacter->translateComponents(glm::vec3(20.0f, 35, 0.f));
+	playerCharacter1->translateComponents(glm::vec3(20.0f, 35, 0.f));
 	playerCharacter2->translateComponents(glm::vec3(40.0f, 35, 0.f));
 	playerCharacter3->translateComponents(glm::vec3(60.0f, 35, 0.f));
 	playerCharacter4->translateComponents(glm::vec3(80.0f, 35, 0.f));
@@ -152,7 +152,7 @@ void RaidTheCastle::update(Step* _step){
 	PuppetScene::update(_step);
 	if(keyboard->keyDown(GLFW_KEY_B)){
 		champion->control = 0;
-		playerCharacter->control = 0;
+		playerCharacter1->control = 0;
 		playerCharacter2->control = 0;
 		//playerCharacter->behaviourManager.behaviours.at(0)->targets.clear();
 		//playerCharacter->behaviourManager.behaviours.at(0)->active = false;
@@ -187,15 +187,15 @@ void RaidTheCastle::update(Step* _step){
 	}
 
 	if(keyboard->keyJustDown(GLFW_KEY_W)){
-		playerCharacter->jump();
+		playerCharacter1->jump();
 	}if(keyboard->keyDown(GLFW_KEY_A)){
-		playerCharacter->targetRoll = glm::radians(-45.f);
+		playerCharacter1->targetRoll = glm::radians(-45.f);
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		playerCharacter->targetRoll = glm::radians(45.f);
+		playerCharacter1->targetRoll = glm::radians(45.f);
 	}
 	if(keyboard->keyJustDown(GLFW_KEY_T)){
-		playerCharacter->action();
+		playerCharacter1->action();
 	}
 }
 

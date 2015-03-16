@@ -217,7 +217,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	Accelerometer * acc4 = new Accelerometer(arduino);
 	arduino->addAccelerometer(acc4);
 	
-	puppetController =  new PuppetController(acc, nullptr);
+	puppetController1 = new PuppetController(acc, nullptr);
 	puppetController2 = new PuppetController(acc2, nullptr);
 	puppetController3 = new PuppetController(acc3, nullptr);
 	puppetController4 = new PuppetController(acc4, nullptr);
@@ -355,7 +355,7 @@ void PuppetScene::update(Step * _step){
 	
 
 	arduino->update(_step);
-	puppetController->update(_step);
+	puppetController1->update(_step);
 	puppetController2->update(_step);
 	puppetController3->update(_step);
 	puppetController4->update(_step);

@@ -18,7 +18,7 @@ public:
 
 	
 
-	PuppetCharacterKnight * playerCharacter;
+	PuppetCharacterKnight * playerCharacter1;
 	PuppetCharacterKnight * playerCharacter2;
 	PuppetCharacterKnight * playerCharacter3;
 	PuppetCharacterKnight * playerCharacter4;

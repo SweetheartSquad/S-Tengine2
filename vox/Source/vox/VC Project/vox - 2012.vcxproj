@@ -112,8 +112,10 @@
     <ClCompile Include="..\src\poly2Tri\sweep\sweep_context.cc" />
     <ClCompile Include="..\src\PuppetCharacter.cpp" />
     <ClCompile Include="..\src\PuppetCharacterCastleChampion.cpp" />
+    <ClCompile Include="..\src\PuppetCharacterGuard.cpp" />
     <ClCompile Include="..\src\PuppetCharacterKnight.cpp" />
     <ClCompile Include="..\src\PuppetCharacterRapunzel.cpp" />
+    <ClCompile Include="..\src\PuppetCharacterThief.cpp" />
     <ClCompile Include="..\src\PuppetContactListener.cpp" />
     <ClCompile Include="..\src\PuppetController.cpp" />
     <ClCompile Include="..\src\PuppetResourceManager.cpp" />
@@ -124,6 +126,7 @@
     <ClCompile Include="..\src\RaidTheCastleResourceManager.cpp" />
     <ClCompile Include="..\src\RandomCharacter.cpp" />
     <ClCompile Include="..\src\RandomGround.cpp" />
+    <ClCompile Include="..\src\Rapunzel.cpp" />
     <ClCompile Include="..\src\RapunzelContactListener.cpp" />
     <ClCompile Include="..\src\RapunzelResourceManager.cpp" />
     <ClCompile Include="..\src\Rectangle.cpp" />
@@ -275,8 +278,10 @@
     <ClInclude Include="..\include\poly2Tri\sweep\sweep_context.h" />
     <ClInclude Include="..\include\PuppetCharacter.h" />
     <ClInclude Include="..\include\PuppetCharacterCastleChampion.h" />
+    <ClInclude Include="..\include\PuppetCharacterGuard.h" />
     <ClInclude Include="..\include\PuppetCharacterKnight.h" />
     <ClInclude Include="..\include\PuppetCharacterRapunzel.h" />
+    <ClInclude Include="..\include\PuppetCharacterThief.h" />
     <ClInclude Include="..\include\PuppetContactListener.h" />
     <ClInclude Include="..\include\PuppetController.h" />
     <ClInclude Include="..\include\PuppetResourceManager.h" />
@@ -287,6 +292,7 @@
     <ClInclude Include="..\include\RaidTheCastleResourceManager.h" />
     <ClInclude Include="..\include\RandomCharacter.h" />
     <ClInclude Include="..\include\RandomGround.h" />
+    <ClInclude Include="..\include\Rapunzel.h" />
     <ClInclude Include="..\include\RapunzelContactListener.h" />
     <ClInclude Include="..\include\RapunzelResourceManager.h" />
     <ClInclude Include="..\include\Rectangle.h" />
