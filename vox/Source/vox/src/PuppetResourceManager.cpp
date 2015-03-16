@@ -8,9 +8,10 @@
 
 //RaidTheCastleResourceManager * PuppetResourceManager::raidTheCastle = new RaidTheCastleResourceManager(); 
 
+Texture * PuppetResourceManager::blank = new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true);
 Texture * PuppetResourceManager::stageFloor = new Texture("../assets/hurly-burly/StageFloor.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::sky		= new Texture("../assets/hurly-burly/Sky.png", 1024, 1024, true, true);
-Texture * PuppetResourceManager::ground1	= new Texture("../assets/paper.png", 512, 512, true, true);
+Texture * PuppetResourceManager::ground1	= new Texture("../assets/hurly-burly/paper.png", 512, 512, true, true);
 Texture * PuppetResourceManager::tree1  = new Texture("../assets/hurly-burly/Foliage/Tree1-ds.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::tree2	= new Texture("../assets/hurly-burly/Foliage/Tree2-ds.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::bush1	= new Texture("../assets/hurly-burly/Foliage/Bush1-ds.png", 1024, 1024, true, true);
@@ -20,6 +21,7 @@ TextureSampler * PuppetResourceManager::head1 = new TextureSampler(new Texture("
 TextureSampler * PuppetResourceManager::face1 = new TextureSampler(new Texture("../assets/hurly-burly/Face1.png", 512,512, true, true), 67, 72);
 TextureSampler * PuppetResourceManager::hand1 = new TextureSampler(new Texture("../assets/hurly-burly/Hand1.png", 512, 512, true, true), 38, 32);
 
+TextureSampler * PuppetResourceManager::countDown0 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/0.png", 1024, 1024, true, true), 1024, 1024);
 TextureSampler * PuppetResourceManager::countDown1 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/1.png", 1024, 1024, true, true), 1024, 1024);
 TextureSampler * PuppetResourceManager::countDown2 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/2.png", 1024, 1024, true, true), 1024, 1024);
 TextureSampler * PuppetResourceManager::countDown3 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/3.png", 1024, 1024, true, true), 1024, 1024);
@@ -28,7 +30,9 @@ TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Text
 
 void PuppetResourceManager::init(){
 	RaidTheCastleResourceManager::init();
-	//RapunzelResourceManager::init();
+	RapunzelResourceManager::init();
+
+	resources.push_back(blank);
 	resources.push_back(stageFloor);
 	resources.push_back(sky);
 	resources.push_back(ground1);
@@ -40,7 +44,8 @@ void PuppetResourceManager::init(){
 	resources.push_back(head1);
 	resources.push_back(face1);
 	resources.push_back(hand1);
-
+	
+	resources.push_back(countDown0);
 	resources.push_back(countDown1);
 	resources.push_back(countDown2);
 	resources.push_back(countDown3);

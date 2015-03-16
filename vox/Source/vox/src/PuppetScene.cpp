@@ -48,7 +48,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	LayeredScene(_game, 3),
 	duration(seconds),
 	currentTime(0),
-	countDown(5),
+	countDown(0),
 	displayingSplash(false),
 	splashMessage(nullptr),
 	splashDuration(3.f),
@@ -71,11 +71,13 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	renderOptions->alphaSorting = true;
 	
 	//Add Audio
-	countdownSoundManager->addNewSound("1", "../assets/hurly-burly/audio/HighCountdown_One.ogg");
-	countdownSoundManager->addNewSound("2", "../assets/hurly-burly/audio/HighCountdown_Two.ogg");
-	countdownSoundManager->addNewSound("3", "../assets/hurly-burly/audio/HighCountdown_Three.ogg");
-	countdownSoundManager->addNewSound("4", "../assets/hurly-burly/audio/HighCountdown_Four.ogg");
-	countdownSoundManager->addNewSound("5", "../assets/hurly-burly/audio/HighCountdown_5.ogg");
+	countdownSoundManager->addNewSound("0", "../assets/hurly-burly/audio/HighCountdown_Zero.ogg");
+	countdownSoundManager->addNewSound("1", "../assets/hurly-burly/audio/silence.ogg");
+	countdownSoundManager->addNewSound("2", "../assets/hurly-burly/audio/HighCountdown_One.ogg");
+	countdownSoundManager->addNewSound("3", "../assets/hurly-burly/audio/HighCountdown_Two.ogg");
+	countdownSoundManager->addNewSound("4", "../assets/hurly-burly/audio/HighCountdown_Three.ogg");
+	countdownSoundManager->addNewSound("5", "../assets/hurly-burly/audio/HighCountdown_Four.ogg");
+	countdownSoundManager->addNewSound("6", "../assets/hurly-burly/audio/HighCountdown_Five.ogg");
 
 	//Since these are chosen randomly its easiest to just use numbers as the keys and generate a random number
 	backgroundSoundManager->addNewSound("1", "../assets/hurly-burly/audio/songs/WesternSong.ogg");
@@ -180,7 +182,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	Texture * bushTex1 = PuppetResourceManager::bush1;
 	Texture * bushTex2 = PuppetResourceManager::bush2;
 	
-	addChild(randomGround, 0);
 	int numFoliage = 60;
 	for(signed long int i = 0; i < numFoliage; ++i){
 		float height = std::rand()%500/50.f+5.f;
@@ -202,6 +203,11 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 				break;
 		}
 		addChild(foliage, 0);
+
+		if(i == numFoliage/2){
+			randomGround->setTranslationPhysical(0.0f, 0.0f, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
+			addChild(randomGround, 0);
+		}
 	}
 	
 	world->b2world->SetDebugDraw(drawer);
@@ -213,7 +219,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	addChild(drawer, 2);
 
 	randomGround->setShader(shader, true);
-	randomGround->setTranslationPhysical(0.0f, 0.0f, -5.0f);
 	//randomGround->mesh->uvEdgeMode = GL_REPEAT;
 
 	//world->addToWorld(randomGround);
@@ -234,37 +239,38 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	gameCam->yaw = 90.0f;
 	gameCam->pitch = -10.0f;
 	camera = gameCam;
-
-	TextureSampler * countDown1TextureSampler = PuppetResourceManager::countDown1;
-	TextureSampler * countDown2TextureSampler = PuppetResourceManager::countDown2;
-	TextureSampler * countDown3TextureSampler = PuppetResourceManager::countDown3;
-	TextureSampler * countDown4TextureSampler = PuppetResourceManager::countDown4;
-	TextureSampler * countDown5TextureSampler = PuppetResourceManager::countDown5;
-
-
+	
+	Sprite * countDown0 = new Sprite(nullptr, new Transform());
+	Sprite * countDownWait = new Sprite(nullptr, new Transform());
 	Sprite * countDown1 = new Sprite(nullptr, new Transform());
 	Sprite * countDown2 = new Sprite(nullptr, new Transform());
 	Sprite * countDown3 = new Sprite(nullptr, new Transform());
 	Sprite * countDown4 = new Sprite(nullptr, new Transform());
 	Sprite * countDown5 = new Sprite(nullptr, new Transform());
-
+	
+	countDown0->transform->scale(glm::vec3(3, 3, 0));
 	countDown1->transform->scale(glm::vec3(3, 3, 0));
 	countDown2->transform->scale(glm::vec3(3, 3, 0));
 	countDown3->transform->scale(glm::vec3(3, 3, 0));
 	countDown4->transform->scale(glm::vec3(3, 3, 0));
 	countDown5->transform->scale(glm::vec3(3, 3, 0));
 	
-	countDown1->mesh->pushTexture2D(countDown1TextureSampler->texture);
-	countDown2->mesh->pushTexture2D(countDown2TextureSampler->texture);
-	countDown3->mesh->pushTexture2D(countDown3TextureSampler->texture);
-	countDown4->mesh->pushTexture2D(countDown4TextureSampler->texture);
-	countDown5->mesh->pushTexture2D(countDown5TextureSampler->texture);
-
+	countDown0->mesh->pushTexture2D(PuppetResourceManager::countDown0->texture);
+	countDownWait->mesh->pushTexture2D(PuppetResourceManager::blank);
+	countDown1->mesh->pushTexture2D(PuppetResourceManager::countDown1->texture);
+	countDown2->mesh->pushTexture2D(PuppetResourceManager::countDown2->texture);
+	countDown3->mesh->pushTexture2D(PuppetResourceManager::countDown3->texture);
+	countDown4->mesh->pushTexture2D(PuppetResourceManager::countDown4->texture);
+	countDown5->mesh->pushTexture2D(PuppetResourceManager::countDown5->texture);
+	
+	countDownNumbers.push_back(countDown0);
+	countDownNumbers.push_back(countDownWait);
 	countDownNumbers.push_back(countDown1);
 	countDownNumbers.push_back(countDown2);
 	countDownNumbers.push_back(countDown3);
 	countDownNumbers.push_back(countDown4);
 	countDownNumbers.push_back(countDown5);
+	countDown = countDownNumbers.size();
 	
 	for(Sprite * n : countDownNumbers){
 		n->setShader(shader, true);
@@ -345,13 +351,19 @@ void PuppetScene::update(Step * _step){
 		currentTime += _step->deltaTime;
 		if(currentTime > duration){
 			complete();
-		}else if (currentTime > duration - 5){
+		}else if (currentTime > duration - countDownNumbers.size()){
 			if(duration - currentTime < countDown){
 				doCountDown();	
 			}
-			if(countDown < 5){
-				float scale = Easing::easeOutElastic(fmod(currentTime, 1), 0, 5, 1);
-				countDownNumbers.at(countDown)->transform->scaleVector = glm::vec3(-scale, scale, 1);
+			if(countDown < countDownNumbers.size()){
+				float displayTime = fmod(currentTime, 1.f);
+				if(displayTime < 0.5f){
+					float scale = Easing::easeOutElastic(displayTime, 0.f, 5.f, 0.5f);
+					countDownNumbers.at(countDown)->transform->scaleVector = glm::vec3(-scale, scale, 1.f);
+				}else{
+					float scale = Easing::easeInCirc(displayTime-0.5f, 5.f, -5.f, 0.5f);
+					countDownNumbers.at(countDown)->transform->scaleVector = glm::vec3(-scale, scale, 1.f);
+				}
 			}
 		}
 	}
@@ -482,7 +494,7 @@ void PuppetScene::doCountDown(){
 	std::cout << "idx: " << countDown << std::endl;
 	std::cout << "=========================" << std::endl;
 
-	countdownSoundManager->play(std::to_string(countDown + 1));
+	countdownSoundManager->play(std::to_string(countDown));
 
 	// Add new number to scene
 	addChild(countDownNumbers.at(countDown), 2);
