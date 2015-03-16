@@ -4,8 +4,18 @@
 #include "Game.h"
 #include "PuppetResourceManager.h"
 
+class PuppetController;
+class AccelerometerParser;
+
 class PuppetGame:public Game{
 public:
+	AccelerometerParser * arduino;
+
+	PuppetController * puppetController1;
+	PuppetController * puppetController2;
+	PuppetController * puppetController3;
+	PuppetController * puppetController4;
+
 	explicit PuppetGame(bool _running);
 	~PuppetGame();
 	void update() override;

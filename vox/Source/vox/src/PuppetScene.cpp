@@ -203,26 +203,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 		}
 		addChild(foliage, 0);
 	}
-
-	//Arduino 
-	arduino = new AccelerometerParser("COM4");
-
-	Accelerometer * acc = new Accelerometer(arduino);
-	arduino->addAccelerometer(acc);
-
-	Accelerometer * acc2 = new Accelerometer(arduino);
-	arduino->addAccelerometer(acc2);
-
-	Accelerometer * acc3 = new Accelerometer(arduino);
-	arduino->addAccelerometer(acc3);
-	
-	Accelerometer * acc4 = new Accelerometer(arduino);
-	arduino->addAccelerometer(acc4);
-	
-	puppetController1 = new PuppetController(acc, nullptr);
-	puppetController2 = new PuppetController(acc2, nullptr);
-	puppetController3 = new PuppetController(acc3, nullptr);
-	puppetController4 = new PuppetController(acc4, nullptr);
 	
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);
@@ -296,11 +276,6 @@ PuppetScene::~PuppetScene(){
 	delete soundManager;
 	delete countdownSoundManager;
 	delete backgroundSoundManager;
-
-	delete puppetController1;
-	delete puppetController2;
-	delete puppetController3;
-	delete puppetController4;
 }
 
 void PuppetScene::load(){
@@ -363,13 +338,7 @@ void PuppetScene::update(Step * _step){
 		}
 	}
 	
-
-	arduino->update(_step);
-	puppetController1->update(_step);
-	puppetController2->update(_step);
-	puppetController3->update(_step);
-	puppetController4->update(_step);
-
+	
 	world->update(_step);
 
 	if(this == game->currentScene){

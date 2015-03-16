@@ -61,25 +61,25 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
 	playerCharacter1->rootComponent->maxVelocity = b2Vec2(10, 10);
-	puppetController1->puppetCharacter = playerCharacter1;
+	static_cast<PuppetGame *>(game)->puppetController1->puppetCharacter = playerCharacter1;
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
 	playerCharacter2->rootComponent->maxVelocity = b2Vec2(10, 10);
-	puppetController2->puppetCharacter = playerCharacter2;
+	static_cast<PuppetGame *>(game)->puppetController2->puppetCharacter = playerCharacter2;
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
 	playerCharacter3->rootComponent->maxVelocity = b2Vec2(10, 10);
-	puppetController3->puppetCharacter = playerCharacter3;
+	static_cast<PuppetGame *>(game)->puppetController3->puppetCharacter = playerCharacter3;
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
 	playerCharacter4->rootComponent->maxVelocity = b2Vec2(10, 10);
-	puppetController4->puppetCharacter = playerCharacter4;
+	static_cast<PuppetGame *>(game)->puppetController4->puppetCharacter = playerCharacter4;
 
 	champion->setShader(shader, true);
 	addChild(champion, 0);

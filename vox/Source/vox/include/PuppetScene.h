@@ -49,11 +49,6 @@ public:
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
 
-	PuppetController * puppetController1;
-	PuppetController * puppetController2;
-	PuppetController * puppetController3;
-	PuppetController * puppetController4;
-
 	std::vector<PuppetCharacter *> players;
 
 	MeshEntity * ground;
@@ -66,8 +61,6 @@ public:
 	SoundManager * soundManager;
 	SoundManager * countdownSoundManager;
 	SoundManager * backgroundSoundManager;
-
-	AccelerometerParser * arduino;
 
 	FollowCamera * gameCam;
 	MousePerspectiveCamera * mouseCamera;
