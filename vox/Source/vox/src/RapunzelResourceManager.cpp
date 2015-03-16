@@ -2,14 +2,14 @@
 
 #include <RapunzelResourceManager.h>
 
-TextureSampler * RapunzelResourceManager::splashMessage	= new TextureSampler(new Texture("../assets/hurly-burly/SplashMessages/Rapunzel.png", 1024, 1024, true, true), 300, 100);
+TextureSampler * RapunzelResourceManager::splashMessage	= new TextureSampler(new Texture("../assets/hurly-burly/SplashMessages/Rapunzel.png", 1024, 1024, true, true), 1024, 1024);
 
 Texture * RapunzelResourceManager::goldSpriteSheet    = new Texture("../assets/structure components/gold/gold_SpriteSheet.png", 2048, 2048, true, true);
 
-TextureSampler * RapunzelResourceManager::leverHandle   = new TextureSampler(new Texture("../assets/structure components/lever/LeverHandle.png", 512, 512, true, true), 429, 76);;
-TextureSampler * RapunzelResourceManager::leverBase  = new TextureSampler(new Texture("../assets/structure components/lever/LeverBase.png", 512, 512, true, true), 418, 264);
+TextureSampler * RapunzelResourceManager::leverHandle   = new TextureSampler(new Texture("../assets/hurly-burly/Lever/LeverHandle.png", 512, 512, true, true), 32, 101);
+TextureSampler * RapunzelResourceManager::leverBase  = new TextureSampler(new Texture("../assets/hurly-burly/Lever/LeverBase.png", 512, 512, true, true), 104, 23);
 
-TextureSampler * RapunzelResourceManager::hair  = new TextureSampler(new Texture("../assets/structure components/hair/Hair.png", 512, 512, true, true), 418, 264);
+TextureSampler * RapunzelResourceManager::hair  = new TextureSampler(new Texture("../assets/hurly-burly/Hair/Hair.png", 1024, 1024, true, true), 233, 475);
 
 
 TextureSampler * RapunzelResourceManager::thiefRedTorso		= new TextureSampler(new Texture("../assets/hurly-burly/NormalKnightAssets/redKnightBreastplate.png", 1024, 1024, true, true), 268, 776);
@@ -77,6 +77,22 @@ void RapunzelResourceManager::init(){
 	resources.push_back(thiefYellowTorso);
 	resources.push_back(thiefYellowArm);
 	resources.push_back(thiefYellowHelmet);
+	
+	resources.push_back(rapunzelRedTorso);
+	resources.push_back(rapunzelRedArm);
+	resources.push_back(rapunzelRedHelmet);
+						
+	resources.push_back(rapunzelGreenTorso);
+	resources.push_back(rapunzelGreenArm);
+	resources.push_back(rapunzelGreenHelmet);
+						
+	resources.push_back(rapunzelBlueTorso);
+	resources.push_back(rapunzelBlueArm);
+	resources.push_back(rapunzelBlueHelmet);
+						
+	resources.push_back(rapunzelYellowTorso);
+	resources.push_back(rapunzelYellowArm);
+	resources.push_back(rapunzelYellowHelmet);
 	
 	resources.push_back(itemAxe);
 	resources.push_back(itemClub);
