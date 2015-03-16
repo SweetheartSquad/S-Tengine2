@@ -1,9 +1,10 @@
 #pragma once
 
-#include "PuppetResourceManager.h"
-#include "Texture.h"
-#include "Box2DSuperSprite.h"
-#include "RaidTheCastleResourceManager.h"
+#include <PuppetResourceManager.h>
+#include <Texture.h>
+#include <Box2DSuperSprite.h>
+#include <RaidTheCastleResourceManager.h>
+#include <RapunzelResourceManager.h>
 
 //RaidTheCastleResourceManager * PuppetResourceManager::raidTheCastle = new RaidTheCastleResourceManager(); 
 
@@ -27,6 +28,7 @@ TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Text
 
 void PuppetResourceManager::init(){
 	RaidTheCastleResourceManager::init();
+	//RapunzelResourceManager::init();
 	resources.push_back(stageFloor);
 	resources.push_back(sky);
 	resources.push_back(ground1);

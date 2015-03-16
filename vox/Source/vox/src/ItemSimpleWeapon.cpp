@@ -2,6 +2,7 @@
 
 #include <ItemSimpleWeapon.h>
 #include <Box2DWorld.h>
+#include <Box2DSprite.h>
 
 ItemSimpleWeapon::ItemSimpleWeapon(TextureSampler * _tex, bool _singleUse, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex, int _damage, float _handleX, float _handleY):
 	Item(_singleUse, _world, _categoryBits, _maskBits, _groupIndex, _damage, _handleX, _handleY),

@@ -8,6 +8,8 @@
 #include <Box2D\Box2D.h>
 #include <Box2DWorld.h>
 
+#include <RaidTheCastleResourceManager.h>
+
 PuppetCharacterCastleChampion::PuppetCharacterCastleChampion(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	PuppetCharacter(new PuppetTexturePack(
 		RaidTheCastleResourceManager::castleChampionTorso,

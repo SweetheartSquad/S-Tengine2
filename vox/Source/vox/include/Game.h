@@ -46,6 +46,8 @@ public:
 
 	/** Reference to the game's current scene */
 	Scene * currentScene;
+	// Key of the current scene in scenemap
+	std::string currentSceneKey;
 	/** List of references to scenes in the game */
 	std::map<std::string, Scene*> scenes;
 
@@ -63,8 +65,9 @@ public:
 	virtual void draw(void);
 
 	bool switchingScene;
-	std::string newScene;
-	void switchScene(std::string _newScene);
+	std::string newSceneKey;
+	bool deleteOldScene;
+	void switchScene(std::string _newSceneKey, bool _deleteOldScene);
 	
 	/** 
 	* Calls update on the mouse and keyboard 

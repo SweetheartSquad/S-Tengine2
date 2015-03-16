@@ -59,7 +59,7 @@ public:
 	MeshEntity * ground;
 	RandomGround * randomGround;
 	MeshEntity * background;
-	BaseComponentShader* shader;
+	BaseComponentShader * shader;
 
 	std::vector<Box2DMeshEntity *> boundaries;
 

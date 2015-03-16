@@ -36,7 +36,9 @@
 #include <PuppetController.h>
 #include <RandomGround.h>
 
-#include "RaidTheCastle.h"
+#include <RaidTheCastle.h>
+#include <Rapunzel.h>
+
 #include <PuppetResourceManager.h>
 #include <NumberUtils.h>
 #include <Resource.h>
@@ -291,6 +293,14 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 }
 
 PuppetScene::~PuppetScene(){
+	delete soundManager;
+	delete countdownSoundManager;
+	delete backgroundSoundManager;
+
+	delete puppetController1;
+	delete puppetController2;
+	delete puppetController3;
+	delete puppetController4;
 }
 
 void PuppetScene::load(){
@@ -365,7 +375,7 @@ void PuppetScene::update(Step * _step){
 	if(this == game->currentScene){
 		currentTime += _step->deltaTime;
 		if(currentTime > duration){
-			//complete();
+			complete();
 		}else if (currentTime > duration - 5){
 			if(duration - currentTime < countDown){
 				doCountDown();	
@@ -426,9 +436,16 @@ void PuppetScene::complete(){
 	// delete this scene
 
 	// temporary stuff
-	game->scenes.insert(std::make_pair("Raid the Castle2", new RaidTheCastle(static_cast<PuppetGame *>(game))));
-	Scene * oldScene = game->currentScene;
-	game->switchScene("Raid the Castle2");
+
+	if(dynamic_cast<RaidTheCastle *>(this) != nullptr){
+		game->scenes.insert(std::make_pair("Rapunzel", new Rapunzel(static_cast<PuppetGame *>(game))));
+		game->switchScene("Rapunzel", true);
+	}else{
+		game->scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(static_cast<PuppetGame *>(game))));
+		game->switchScene("Raid the Castle", true);
+	}
+
+	//Scene * oldScene = game->currentScene;
 }
 
 void PuppetScene::destroyItem(Item * _item){

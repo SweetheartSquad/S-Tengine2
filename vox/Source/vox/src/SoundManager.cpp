@@ -6,6 +6,10 @@ SoundManager::SoundManager(){
 }
 
 SoundManager::~SoundManager(){
+	for(auto sound : sounds){
+		sound.second.stop();
+	}
+	sounds.clear();
 }
 
 void SoundManager::addNewSound(std::string _name){

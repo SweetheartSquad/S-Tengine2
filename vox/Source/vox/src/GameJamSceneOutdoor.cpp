@@ -55,6 +55,6 @@ GameJamSceneOutdoor::GameJamSceneOutdoor(Game * _game):
 void GameJamSceneOutdoor::update(Step * _step){
 	GameJamScene::update(_step);
 	if(keyboard->keyJustDown(GLFW_KEY_SPACE)/* || fmod(_step->time, 100) > 99*/){
-		game->switchScene("indoors");
+		game->switchScene("indoors", false);
 	}
 }

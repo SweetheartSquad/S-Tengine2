@@ -11,7 +11,8 @@
 #include "SpriteSheetAnimation.h"
 #include <iostream>
 
-#define COOLDOWN 10
+#include <RaidTheCastleResourceManager.h>
+
 #define MAX_HEALTH 100
 
 Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):

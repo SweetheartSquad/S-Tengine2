@@ -9,6 +9,8 @@
 #include <PuppetCharacter.h>
 #include <iostream>
 
+#include <RaidTheCastleResourceManager.h>
+
 #define COOLDOWN 10
 
 

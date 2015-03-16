@@ -5,6 +5,8 @@
 #include <BehaviourPatrol.h>
 #include <BehaviourAttack.h>
 
+#include <RaidTheCastleResourceManager.h>
+
 #include <Item.h>
 
 PuppetCharacterGuard::PuppetCharacterGuard(bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):

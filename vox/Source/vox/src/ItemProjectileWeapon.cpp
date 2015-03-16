@@ -2,6 +2,7 @@
 
 #include <ItemProjectileWeapon.h>
 #include <Box2DWorld.h>
+#include <Box2DSprite.h>
 #include <LayeredScene.h>
 #include <PuppetScene.h>
 #include <shader\BaseComponentShader.h>

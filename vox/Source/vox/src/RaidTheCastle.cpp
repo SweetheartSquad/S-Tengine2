@@ -2,6 +2,7 @@
 
 #include <RaidTheCastle.h>
 #include <RaidTheCastleContactListener.h>
+#include <RaidTheCastleResourceManager.h>
 #include <Castle.h>
 #include <PuppetGame.h>
 #include <PuppetCharacter.h>

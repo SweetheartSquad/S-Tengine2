@@ -21,7 +21,8 @@ PuppetGame::PuppetGame(bool _running):
 	scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(this)));
 	//((GameJamSceneIndoor *)scenes.at("Raid the Castle"))->debugDraw = true;
 	//currentScene = scenes.at("indoors");
-	currentScene = scenes.at("Raid the Castle");
+	currentSceneKey = "Raid the Castle";
+	currentScene = scenes.at(currentSceneKey);
 }
 
 PuppetGame::~PuppetGame(){

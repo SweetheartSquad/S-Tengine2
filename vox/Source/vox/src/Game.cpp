@@ -22,7 +22,11 @@ Game::Game(bool _isRunning):
 	kc_lastKey(0),
 	kc_code(0),
 	kc_active(false),
-	switchingScene(false)
+	switchingScene(false),
+	currentScene(nullptr),
+	currentSceneKey(""),
+	newSceneKey(""),
+	deleteOldScene(false)
 {
 	int width, height;
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
@@ -36,6 +40,7 @@ Game::~Game(void){
 	for(auto scene : scenes){
 		delete scene.second;
 	}
+	scenes.clear();
 }
 
 void Game::performGameLoop(){
@@ -49,9 +54,14 @@ void Game::performGameLoop(){
 	isRunning = !glfwWindowShouldClose(vox::currentContext);
 
 	if(switchingScene){
-		currentScene = scenes.at(newScene);
+		if(deleteOldScene){
+			scenes.erase(currentSceneKey);
+			delete currentScene;
+		}
+		currentSceneKey = newSceneKey;
+		currentScene = scenes.at(currentSceneKey);
 		switchingScene = false;
-		newScene = "";
+		newSceneKey = "";
 	}
 }
 
@@ -191,13 +201,14 @@ void Game::printFps(){
 	}
 }
 
-void Game::switchScene(std::string _newScene){
-	if(scenes.count(_newScene) > 0){
+void Game::switchScene(std::string _newSceneKey, bool _deleteOldScene){
+	deleteOldScene = _deleteOldScene;
+	if(scenes.count(_newSceneKey) > 0){
 		switchingScene = true;
-		newScene = _newScene;
+		newSceneKey = _newSceneKey;
 	}else{
 		switchingScene = false;
-		newScene = "";
+		newSceneKey = "";
 	}
 }
 

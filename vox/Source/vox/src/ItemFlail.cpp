@@ -3,6 +3,8 @@
 #include <ItemFlail.h>
 #include <Box2DWorld.h>
 
+#include <RaidTheCastleResourceManager.h>
+
 ItemFlail::ItemFlail(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex, int _damage, float _handleX, float _handleY):
 	Item(false, _world, _categoryBits, _maskBits, _groupIndex, _damage, _handleX, _handleY),
 	NodeTransformable(new Transform()),

@@ -2,6 +2,7 @@
 
 #include <Rapunzel.h>
 #include <RapunzelContactListener.h>
+#include <RapunzelResourceManager.h>
 #include <Castle.h>
 #include <PuppetGame.h>
 #include <PuppetCharacter.h>
@@ -43,7 +44,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 {
 	cl = new RapunzelContactListener(this);
 
-	TextureSampler * splashMessageTextureSampler = RaidTheCastleResourceManager::splashMessage;
+	TextureSampler * splashMessageTextureSampler = RapunzelResourceManager::splashMessage;
 	splashMessage = new Sprite(nullptr, new Transform());
 	splashMessage->transform->scale(glm::vec3(3, 3, 0));
 	splashMessage->mesh->pushTexture2D(splashMessageTextureSampler->texture);
@@ -84,10 +85,10 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	guard->addToLayeredScene(this, 1);
 	guard->rootComponent->maxVelocity = b2Vec2(10, 10);
 	
-	guard->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, guard->groupIndex, 0, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
+	/*guard->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, guard->groupIndex, 0, 0, -RapunzelResourceManager::itemFlailGrip->height/2.f);
 	addChild(guard->itemToPickup, 1);
 	guard->itemToPickup->addToLayeredScene(this, 1);
-	guard->itemToPickup->setShader(shader, true);
+	guard->itemToPickup->setShader(shader, true);*/
 
 	gameCam->addTarget(playerCharacter1->torso);
 	gameCam->addTarget(playerCharacter2->torso);
@@ -103,8 +104,8 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter4->ai = true;
 
 	for(PuppetCharacter * p : players){
-		TextureSampler * weaponTex = RaidTheCastleResourceManager::getRandomWeapon();
-		TextureSampler * projTex = RaidTheCastleResourceManager::getRandomWeapon();
+		TextureSampler * weaponTex = RapunzelResourceManager::getRandomWeapon();
+		TextureSampler * projTex = RapunzelResourceManager::getRandomWeapon();
 		
 		ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
 		weapon->addToLayeredScene(this, 1);
