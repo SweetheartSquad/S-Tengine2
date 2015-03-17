@@ -473,6 +473,9 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"
 copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
     </PreBuildEvent>
     <PostBuildEvent />
+    <PostBuildEvent>
+      <Command>..\..\..\..\VCProjer\dist\VCProjer.exe "vox - 2013.vcxproj" "vox - 2012.vcxproj"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'">
     <ClCompile>
@@ -501,8 +504,7 @@ copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)vox\include" "$(TargetDir)..\..\..\include" /S /I /Y
-xcopy  "$(SolutionDir)..\Output\vox-LibDebug" "$(SolutionDir)..\..\lib"  /Y /I</Command>
+      <Command>..\..\..\..\VCProjer\dist\VCProjer.exe "vox - 2013.vcxproj" "vox - 2012.vcxproj"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -528,8 +530,7 @@ copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"
 copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>..\..\..\..\VCProjer\dist\VCProjer.exe "vox - 2013.vcxproj" "vox - 2012.vcxproj"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'">
@@ -554,8 +555,7 @@ copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)vox\include" "$(TargetDir)..\..\..\include" /S /I /Y
-xcopy  "$(SolutionDir)..\Output\vox-LibRelease" "$(SolutionDir)..\..\lib"  /Y /I</Command>
+      <Command>..\..\..\..\VCProjer\dist\VCProjer.exe "vox - 2013.vcxproj" "vox - 2012.vcxproj"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
