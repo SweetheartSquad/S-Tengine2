@@ -470,11 +470,13 @@
     <PreBuildEvent>
       <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
 copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"
-copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
+copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
+..\..\..\..\VCProjer\dist\VCProjer.exe "vox - 2013.vcxproj" "vox - 2012.vcxproj"</Command>
     </PreBuildEvent>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>..\..\..\..\VCProjer\dist\VCProjer.exe "vox - 2013.vcxproj" "vox - 2012.vcxproj"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'">
@@ -500,11 +502,14 @@ copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
+copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"
+copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
+..\..\..\..\VCProjer\dist\VCProjer.exe "vox - 2013.vcxproj" "vox - 2012.vcxproj"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>..\..\..\..\VCProjer\dist\VCProjer.exe "vox - 2013.vcxproj" "vox - 2012.vcxproj"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -525,12 +530,14 @@ copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;libzplay.lib;Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>copy /Y "$(GLEW_DIR)\bin\$(Configuration)\$(Platform)\glew32.dll" "$(TargetDir)\glew32.dll"
+      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
 copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"
-copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
+copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
+..\..\..\..\VCProjer\dist\VCProjer.exe "vox - 2013.vcxproj" "vox - 2012.vcxproj"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>..\..\..\..\VCProjer\dist\VCProjer.exe "vox - 2013.vcxproj" "vox - 2012.vcxproj"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'">
@@ -551,11 +558,14 @@ copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
+copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"
+copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
+..\..\..\..\VCProjer\dist\VCProjer.exe "vox - 2013.vcxproj" "vox - 2012.vcxproj"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>..\..\..\..\VCProjer\dist\VCProjer.exe "vox - 2013.vcxproj" "vox - 2012.vcxproj"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

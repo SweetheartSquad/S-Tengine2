@@ -76,7 +76,8 @@ Arduino::~Arduino(){
 }
 
 int Arduino::ReadData(char *buffer, unsigned int nbChar){
-    //Number of bytes we'll have read
+    //Number of bytes we'll have read.
+
     DWORD bytesRead;
     //Number of bytes we'll really ask to read
     unsigned int toRead;

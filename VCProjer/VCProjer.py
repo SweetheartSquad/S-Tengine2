@@ -29,7 +29,6 @@ if len(sys.argv) >= 3:
     try:
         with open(sys.argv[1] + ".filters", "r") as mainFiltersFile:
             mainFiltersString = mainFiltersFile.read()
-            mainFiltersString = mainFiltersString.replace("\\", "/")
     except IOError:
         if mainFiltersString is None:
             print "Problem occurred when reading file " + sys.argv[1] + ".filters"
