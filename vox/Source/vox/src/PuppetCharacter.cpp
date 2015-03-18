@@ -125,94 +125,6 @@ PuppetCharacter::~PuppetCharacter(){
 	delete texPack;
 }
 
-void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	float sat = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getSaturation();
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat + (1-control)*3);
-	Box2DSuperSprite::render(_matrixStack, _renderStack);
-	for(Box2DSprite ** c : components){
-		if(*c != nullptr){
-			(*c)->render(_matrixStack, _renderStack);
-		}
-	}
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);
-}
-
-void PuppetCharacter::update(Step* _step){
-	Box2DSuperSprite::update(_step);
-	for(Box2DSprite ** c : components){
-		if(*c != nullptr){
-			(*c)->update(_step);
-		}
-	}
-	float bodAngle = (rootComponent)->body->GetAngle();
-	rootComponent->body->SetTransform(rootComponent->body->GetPosition(), bodAngle);
-	float angularVel = -((bodAngle + targetRoll) * control) * 10;// + glm::radians(90.f);
-
-	rootComponent->body->SetAngularVelocity(angularVel);
-
-	if(!dead){
-		//body
-		if((rootComponent->body->GetPosition().y < 0)){
-			rootComponent->applyLinearImpulseUp(250);
-		}
-		if(itemToPickup != nullptr){
-			pickupItem(itemToPickup);
-		}
-	}else{
-		rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, 8.0f, rootComponent->transform->translationVector.z);
-		rootComponent->body->ApplyForce(b2Vec2(-bodAngle * 50.0f, 0), rootComponent->body->GetWorldCenter(), true);
-	}
-	behaviourManager.update(_step);
-
-	control = std::min(1.f, control+0.01f);
-}
-
-void PuppetCharacter::jump(){
-	if(canJump){
-		float t = rootComponent->body->GetAngle();
-		b2Vec2 p = rootComponent->body->GetWorldPoint(b2Vec2(0, 1));
-		//torso->applyLinearImpulse(250*(1-cos(t))*glm::sign(-t), 250*(cos(t)*0.5 + 0.5), p.x, p.y);
-		rootComponent->applyLinearImpulseUp(5000.f * 2 *(cos(t)*0.5f + 0.5f));
-		if(rootComponent->body->GetAngle() > 0){
-			//torso->applyLinearImpulseLeft(250*(1-cos(t)));
-			rootComponent->body->SetLinearVelocity(b2Vec2(-25*(1-cos(t)), rootComponent->body->GetLinearVelocity().y));
-		}else{
-			rootComponent->body->SetLinearVelocity(b2Vec2(25*(1-cos(t)), rootComponent->body->GetLinearVelocity().y));
-		}
-	}
-	//canJump = false;
-}
-
-void PuppetCharacter::action(){
-	if(heldItem != nullptr){
-		if(itemJoint != nullptr){
-			Item * projectile = heldItem->getProjectile();
-			if(projectile == heldItem){
-				heldItem = nullptr;
-				itemJoint = nullptr;
-				itemToPickup = nullptr;
-			}
-			float t = rootComponent->body->GetAngle();
-			projectile->rootComponent->body->SetTransform(projectile->rootComponent->body->GetPosition(), t);
-			projectile->rootComponent->applyLinearImpulseUp(50);
-			if(rootComponent->body->GetAngle() > 0){
-				projectile->rootComponent->applyLinearImpulseLeft(50*(1-cos(t)));
-			}else{
-				projectile->rootComponent->applyLinearImpulseRight(50*(1-cos(t)));
-			}
-		}
-	}
-}
-
-void PuppetCharacter::die(){
-	dead = true;
-	deathPending = false;
-	for(Box2DSprite ** c : components) {
-		(*c)->body->SetGravityScale(0.0f);
-	}
-	rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, 2.0f, rootComponent->transform->translationVector.z);
-}
-
 void PuppetCharacter::attachJoints(){
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
@@ -339,7 +251,94 @@ void PuppetCharacter::attachJoints(){
 	// flip left side
 	armLeft->transform->scale(-1, 1, 1);
 	handLeft->transform->scale(-1, 1, 1);
+}
 
+void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
+	float sat = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getSaturation();
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat + (1-control)*3);
+	Box2DSuperSprite::render(_matrixStack, _renderStack);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);
+}
+
+void PuppetCharacter::update(Step* _step){
+	Box2DSuperSprite::update(_step);
+	for(Box2DSprite ** c : components){
+		if(*c != nullptr){
+			(*c)->update(_step);
+		}
+	}
+	float bodAngle = (rootComponent)->body->GetAngle();
+	rootComponent->body->SetTransform(rootComponent->body->GetPosition(), bodAngle);
+	float angularVel = -((bodAngle + targetRoll) * control) * 10;// + glm::radians(90.f);
+
+	rootComponent->body->SetAngularVelocity(angularVel);
+
+	if(!dead){
+		//body
+		if((rootComponent->body->GetPosition().y < 0)){
+			rootComponent->applyLinearImpulseUp(250);
+		}
+		if(itemToPickup != nullptr){
+			pickupItem(itemToPickup);
+		}
+	}else{
+		rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, 8.0f, rootComponent->transform->translationVector.z);
+		rootComponent->body->ApplyForce(b2Vec2(-bodAngle * 50.0f, 0), rootComponent->body->GetWorldCenter(), true);
+	}
+	behaviourManager.update(_step);
+
+	control = std::min(1.f, control+0.01f);
+}
+
+void PuppetCharacter::jump(){
+	if(canJump){
+		float t = rootComponent->body->GetAngle();
+		b2Vec2 p = rootComponent->body->GetWorldPoint(b2Vec2(0, 1));
+		//torso->applyLinearImpulse(250*(1-cos(t))*glm::sign(-t), 250*(cos(t)*0.5 + 0.5), p.x, p.y);
+		rootComponent->applyLinearImpulseUp(5000.f * 2 *(cos(t)*0.5f + 0.5f));
+		if(rootComponent->body->GetAngle() > 0){
+			//torso->applyLinearImpulseLeft(250*(1-cos(t)));
+			rootComponent->body->SetLinearVelocity(b2Vec2(-25*(1-cos(t)), rootComponent->body->GetLinearVelocity().y));
+		}else{
+			rootComponent->body->SetLinearVelocity(b2Vec2(25*(1-cos(t)), rootComponent->body->GetLinearVelocity().y));
+		}
+	}
+	//canJump = false;
+}
+
+void PuppetCharacter::action(){
+	if(heldItem != nullptr){
+		if(itemJoint != nullptr){
+			Item * projectile = heldItem->getProjectile();
+			if(projectile == heldItem){
+				heldItem = nullptr;
+				itemJoint = nullptr;
+				itemToPickup = nullptr;
+			}
+			float t = rootComponent->body->GetAngle();
+			projectile->rootComponent->body->SetTransform(projectile->rootComponent->body->GetPosition(), t);
+			projectile->rootComponent->applyLinearImpulseUp(50);
+			if(rootComponent->body->GetAngle() > 0){
+				projectile->rootComponent->applyLinearImpulseLeft(50*(1-cos(t)));
+			}else{
+				projectile->rootComponent->applyLinearImpulseRight(50*(1-cos(t)));
+			}
+		}
+	}
+}
+
+void PuppetCharacter::die(){
+	dead = true;
+	deathPending = false;
+	for(Box2DSprite ** c : components) {
+		(*c)->body->SetGravityScale(0.0f);
+	}
+	rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, 2.0f, rootComponent->transform->translationVector.z);
+}
+
+void PuppetCharacter::takeDamage(){
+    //rootComponent->applyLinearImpulseUp(500);
+    control = std::max(0.f, control - 0.1f);
 }
 
 void PuppetCharacter::unload(){

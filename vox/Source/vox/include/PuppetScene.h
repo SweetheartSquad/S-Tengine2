@@ -32,6 +32,7 @@ class Character4;
 class PuppetGame;
 class Item;
 class NodeBox2DBody;
+class ParticleSystem;
 
  class PuppetScene abstract : public LayeredScene{
 public:
@@ -68,6 +69,8 @@ public:
 	bool mouseCam;
 
 	std::vector<Item *> items;
+
+    ParticleSystem * particleSystem;
 
 	explicit PuppetScene(PuppetGame * _game, float time);
 	virtual ~PuppetScene();

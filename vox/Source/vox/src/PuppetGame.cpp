@@ -1,5 +1,6 @@
 #include "PuppetGame.h"
 #include "RaidTheCastle.h"
+#include <Rapunzel.h>
 
 #include "GameJamCharacter.h"
 #include "GameJamSceneIndoor.h"
@@ -41,7 +42,7 @@ PuppetGame::PuppetGame(bool _running):
 
 	//scenes.insert(std::make_pair("indoors", new GameJamSceneIndoor(this)));
 	//scenes.insert(std::make_pair("outdoors", new GameJamSceneOutdoor(this)));
-	scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(this)));
+	scenes.insert(std::make_pair("Raid the Castle", new Rapunzel(this)));
 	//((GameJamSceneIndoor *)scenes.at("Raid the Castle"))->debugDraw = true;
 	//currentScene = scenes.at("indoors");
 	currentSceneKey = "Raid the Castle";
@@ -52,13 +53,13 @@ PuppetGame::~PuppetGame(){
 }
 
 void PuppetGame::update(){
-	Game::update();
+    arduino->update(&vox::step);
+    puppetController1->update(&vox::step);
+    puppetController2->update(&vox::step);
+    puppetController3->update(&vox::step);
+    puppetController4->update(&vox::step);
 
-	arduino->update(&vox::step);
-	puppetController1->update(&vox::step);
-	puppetController2->update(&vox::step);
-	puppetController3->update(&vox::step);
-	puppetController4->update(&vox::step);
+	Game::update();
 }
 
 void PuppetGame::draw(){

@@ -52,6 +52,8 @@ public:
 
 	void attachJoints();
 
+    virtual void takeDamage();
+
 	Item * itemToPickup;
 	Item * heldItem;
 	b2WeldJoint * itemJoint;
