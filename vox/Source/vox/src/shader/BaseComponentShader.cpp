@@ -26,12 +26,17 @@ std::string BaseComponentShader::buildVertexShader(){
 		modGeo = GEO;
 	}
 
-	std::string shaderString  = "#version 150" + ENDL + 
-							    "#extension GL_ARB_explicit_attrib_location : enable" + ENDL + 
+	std::string shaderString  = "#version 330" + ENDL + 
+							    /*"#extension GL_ARB_explicit_attrib_location : enable" + ENDL + 
 								"layout(location = 1) in vec3 aVertexPosition" + SEMI_ENDL +
 								"layout(location = 2) in vec4 aVertexColor" + SEMI_ENDL +
 								"layout(location = 3) in vec3 aVertexNormals" + SEMI_ENDL +
-								"layout(location = 4) in vec2 aVertexUVs" + SEMI_ENDL +
+								"layout(location = 4) in vec2 aVertexUVs" + SEMI_ENDL +*/
+
+                                "in vec3 aVertexPosition" + SEMI_ENDL +
+                                "in vec4 aVertexColor" + SEMI_ENDL +
+                                "in vec3 aVertexNormals" + SEMI_ENDL +
+                                "in vec2 aVertexUVs" + SEMI_ENDL +
 
 								"uniform mat4 MVP" + SEMI_ENDL +
 								
@@ -68,7 +73,7 @@ std::string BaseComponentShader::buildVertexShader(){
 }
 
 std::string BaseComponentShader::buildFragmentShader(){
-	std::string shaderString  = "#version 150\n"
+	std::string shaderString  = "#version 330\n"
 
 								"in vec3 fragVert;\n"
 								"in vec3 fragNormal;\n"
