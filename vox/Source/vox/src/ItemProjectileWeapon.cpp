@@ -67,7 +67,7 @@ Item * ItemProjectileWeapon::getProjectile(){
 
 	static_cast<PuppetScene *>(scene)->addChild(projectile, 1);
 	static_cast<PuppetScene *>(scene)->items.push_back(projectile);
-	projectile->addToLayeredScene(static_cast<PuppetScene *>(scene), 1);
+	//projectile->addToLayeredScene(static_cast<PuppetScene *>(scene), 1);
 	projectile->setShader(static_cast<PuppetScene *>(scene)->shader, true);
 
 	projectile->snapComponents(this->rootComponent);

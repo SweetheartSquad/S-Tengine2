@@ -9,9 +9,10 @@
 ParticleSystem::ParticleSystem(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :
     Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex),
     NodeTransformable(new Transform()),
-    NodeChild(nullptr)
+    NodeChild(nullptr),
+    emissionAmount(0),
+    emissionRate(0)
 {
-
 }
 
 ParticleSystem::~ParticleSystem(){
@@ -26,8 +27,12 @@ void ParticleSystem::update(Step * _step){
 }
 
 void ParticleSystem::addParticle(){
-    /*Particle * p = new Particle(world, nullptr, PuppetResourceManager::bush1);
+    Box2DSprite ** test = new Box2DSprite*[1];
+    Particle * p = new Particle(world, PuppetResourceManager::face1);
+    test[0] = p;
+    p->setTranslationPhysical(20, 20, 0);
     p->applyLinearImpulse(std::rand(), std::rand(), p->body->GetPosition().x, p->body->GetPosition().y);
-    p->setShader(getShader(), false);
-    addComponent(p);*/
+    p->setShader(getShader(), true);
+    //p->createFixture(b2Filter());
+    components.push_back(test);
 }

@@ -2,9 +2,10 @@
 
 #include <Box2DSuperSprite.h>
 
+class Box2DSprite;
 class ParticleSystem : public Box2DSuperSprite{
 public:
-	float emmissionRate;
+	float emissionRate;
 	float emissionAmount;
 	
 	void addParticle();
