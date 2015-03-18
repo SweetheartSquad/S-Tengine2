@@ -34,7 +34,7 @@
 
 
 RaidTheCastle::RaidTheCastle(PuppetGame* _game):
-	PuppetScene(_game, 60),
+	PuppetScene(_game, 10),
 	castle(new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30)),
 	catapult(new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM | PuppetGame::kPLAYER, -10)),
 	champion(new PuppetCharacterCastleChampion(world, PuppetGame::kPLAYER, -1, -20)),

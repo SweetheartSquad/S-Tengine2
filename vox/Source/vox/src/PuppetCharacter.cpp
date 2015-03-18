@@ -55,7 +55,58 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	armRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->armTex->width, texPack->armTex->height, texPack->armTex->texture, componentScale*0.5f);
 	headgear = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->headgearTex->width, texPack->headgearTex->height, texPack->headgearTex->texture, componentScale*0.5f);
 
-	
+	components.push_back(&armLeft);
+	components.push_back(&armRight);
+	components.push_back(&handLeft);
+	components.push_back(&handRight);
+	components.push_back(&torso);
+	components.push_back(&head);
+	components.push_back(&face);
+	components.push_back(&headgear);
+
+	rootComponent = torso;
+
+	attachJoints();
+}
+
+PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _world):
+	Box2DSuperSprite(_world, _character->categoryBits, _character->maskBits, _character->groupIndex),
+	NodeTransformable(new Transform()),
+	NodeChild(nullptr),
+	NodeRenderable(),
+	behaviourManager(this),
+	texPack(_character->texPack),
+	ai(_character->ai),
+	canJump(_character->canJump),
+	dead(_character->dead),
+	deathPending(_character->deathPending),
+	targetRoll(_character->targetRoll),
+	health(1.0f),
+	itemToPickup(nullptr),
+	heldItem(nullptr),
+	itemJoint(nullptr),
+	score(_character->score),
+	control(1.f)
+{
+	bool defaultTex = false;
+	if(texPack == nullptr){
+		defaultTex = true;
+		texPack = new PuppetTexturePack(
+			RaidTheCastleResourceManager::knightRedTorso,
+			RaidTheCastleResourceManager::knightRedArm,
+			RaidTheCastleResourceManager::knightRedHelmet
+		);
+	}
+
+	head = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->headTex->width, texPack->headTex->height, texPack->headTex->texture, componentScale);
+	face = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->faceTex->width, texPack->faceTex->height, texPack->faceTex->texture, componentScale);
+	handLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->handTex->width, texPack->handTex->height, texPack->handTex->texture, componentScale);
+	handRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->handTex->width, texPack->handTex->height, texPack->handTex->texture, componentScale);
+
+	torso = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->torsoTex->width, texPack->torsoTex->height, texPack->torsoTex->texture, componentScale*0.5f);
+	armLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->armTex->width, texPack->armTex->height, texPack->armTex->texture, componentScale*0.5f);
+	armRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->armTex->width, texPack->armTex->height, texPack->armTex->texture, componentScale*0.5f);
+	headgear = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->headgearTex->width, texPack->headgearTex->height, texPack->headgearTex->texture, componentScale*0.5f);
 
 	components.push_back(&armLeft);
 	components.push_back(&armRight);
@@ -68,6 +119,14 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 
 	rootComponent = torso;
 
+	attachJoints();
+}
+
+PuppetCharacter::~PuppetCharacter(){
+	delete texPack;
+}
+
+void PuppetCharacter::attachJoints(){
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
 	if(maskBits != static_cast<int16>(-1)){
@@ -85,7 +144,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	test.friction = 1;
 	test.filter = sf;
 	b2Fixture * testf = torso->body->CreateFixture(&test);
-	sf.groupIndex = _groupIndex;
+	sf.groupIndex = groupIndex;
 
 	torso->createFixture	 (sf, b2Vec2(0.0f, -1.f), this);
 	armLeft->createFixture	 (sf, b2Vec2(0.0f, 0.0f), this);
@@ -193,12 +252,6 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	// flip left side
 	armLeft->transform->scale(-1, 1, 1);
 	handLeft->transform->scale(-1, 1, 1);
-
-
-}
-
-PuppetCharacter::~PuppetCharacter(){
-	delete texPack;
 }
 
 void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){

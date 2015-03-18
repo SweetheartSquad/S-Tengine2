@@ -41,8 +41,11 @@ ItemProjectileWeapon::~ItemProjectileWeapon(){
 Item * ItemProjectileWeapon::getProjectile(){
 	//Item * projectile = new Item(true, projectileTemplate->world, projectileTemplate->categoryBits, projectileTemplate->maskBits, projectileTemplate->groupIndex, projectileTemplate->damage, projectileTemplate->handleX, projectileTemplate->handleY);
 	Item * projectile = new Item(true, world, categoryBits, maskBits, groupIndex, damage, handleX, handleY);
-	projectile->rootComponent = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), projectileTex->width, projectileTex->height, projectileTex->texture, componentScale);
-	projectile->components.push_back(&projectile->rootComponent);
+	
+	Box2DSprite ** test = new Box2DSprite*[1];
+	test[0] = projectile->rootComponent = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), projectileTex->width, projectileTex->height, projectileTex->texture, componentScale);
+
+	projectile->components.push_back(test);
 	
 
 	b2Filter sf;

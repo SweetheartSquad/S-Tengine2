@@ -5,7 +5,7 @@
 class PuppetScene;
 
 //main collision call back function
-class PuppetContactListener abstract : public b2ContactListener{
+class PuppetContactListener : public b2ContactListener{
 public:
 	PuppetContactListener(PuppetScene * _scene);
 

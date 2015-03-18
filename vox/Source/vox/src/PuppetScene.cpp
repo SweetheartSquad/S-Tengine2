@@ -44,6 +44,7 @@
 #include <NumberUtils.h>
 #include <Resource.h>
 #include <Easing.h>
+#include <VictoryScene.h>
 
 #include <ParticleSystem.h>
 
@@ -359,7 +360,6 @@ void PuppetScene::update(Step * _step){
 		}
 	}
 	
-	
 	world->update(_step);
 
 	if(this == game->currentScene){
@@ -437,9 +437,12 @@ void PuppetScene::complete(){
 		game->scenes.insert(std::make_pair("SlayTheDragon", new SlayTheDragon(static_cast<PuppetGame *>(game))));
 		game->switchScene("SlayTheDragon", true);
 	}else{
-		game->scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(static_cast<PuppetGame *>(game))));
-		game->switchScene("Raid the Castle", true);
+		//game->scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(static_cast<PuppetGame *>(game))));
+		//game->switchScene("Raid the Castle", true);
 	}
+
+	game->scenes.insert(std::make_pair("Victory", new VictoryScene(static_cast<PuppetGame *>(game), players)));
+	game->switchScene("Victory", true);
 
 	//Scene * oldScene = game->currentScene;
 }

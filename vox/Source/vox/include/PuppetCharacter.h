@@ -39,6 +39,7 @@ public:
 	Box2DSprite * headgear;
 
 	PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0, unsigned long int _id = 0);
+	explicit PuppetCharacter(PuppetCharacter * _character, Box2DWorld *_world);
 	~PuppetCharacter();
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
@@ -50,6 +51,8 @@ public:
 	//Called when the controller is thrust forward
 	virtual void action();
 	virtual void die();
+
+	void attachJoints();
 
     virtual void takeDamage();
 
@@ -63,5 +66,5 @@ public:
 	virtual void addToLayeredScene(LayeredScene * _scene, unsigned long int _layer) override;
 	virtual void setShader(Shader * _shader, bool _configureDefaultAttributes) override;
 
-	void translateComponents(glm::vec3 _translationVector);
+	virtual void translateComponents(glm::vec3 _translationVector) override;
 };

@@ -1,6 +1,7 @@
 #include "PuppetGame.h"
 #include "RaidTheCastle.h"
 #include <SlayTheDragon.h>
+#include <Rapunzel.h>
 
 #include "GameJamCharacter.h"
 #include "GameJamSceneIndoor.h"
@@ -42,6 +43,7 @@ PuppetGame::PuppetGame(bool _running):
 
 	//scenes.insert(std::make_pair("indoors", new GameJamSceneIndoor(this)));
 	//scenes.insert(std::make_pair("outdoors", new GameJamSceneOutdoor(this)));
+
 	scenes.insert(std::make_pair("Slay the Dragon", new SlayTheDragon(this)));
 	//((GameJamSceneIndoor *)scenes.at("Raid the Castle"))->debugDraw = true;
 	//currentScene = scenes.at("indoors");
