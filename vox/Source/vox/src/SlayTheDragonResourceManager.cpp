@@ -6,21 +6,36 @@ TextureSampler * SlayTheDragonResourceManager::splashMessage	= new TextureSample
 
 Texture * SlayTheDragonResourceManager::fortificationSpriteSheet = new Texture("../assets/structure components/fortification/fortification_SpriteSheet.png", 2048, 2048, true, true);
 
-TextureSampler * SlayTheDragonResourceManager::archerTorso		= new TextureSampler(new Texture("../assets/hurly-burly/ArcherAssets/archerBreastplate.png", 1024, 1024, true, true), 268, 776);
-TextureSampler * SlayTheDragonResourceManager::archerArm		= new TextureSampler(new Texture("../assets/hurly-burly/ArcherAssets/archerArm.png", 1024, 1024, true, true), 92, 327);
-TextureSampler * SlayTheDragonResourceManager::archerHelmet		= new TextureSampler(new Texture("../assets/hurly-burly/ArcherAssets/archerHelmet.png", 1024, 1024, true, true), 233, 254);
+TextureSampler * SlayTheDragonResourceManager::archerTorso		= new TextureSampler(new Texture("../assets/hurly-burly/ArcherAssets/ArcherTorso.png", 1024, 1024, true, true), 275, 765);
+TextureSampler * SlayTheDragonResourceManager::archerArm		= new TextureSampler(new Texture("../assets/hurly-burly/ArcherAssets/ArcherArm.png", 1024, 1024, true, true), 64, 228);
+TextureSampler * SlayTheDragonResourceManager::archerHat		= new TextureSampler(new Texture("../assets/hurly-burly/ArcherAssets/ArcherHat.png", 1024, 1024, true, true), 191, 149);
 
-TextureSampler * SlayTheDragonResourceManager::dragonHead		= new TextureSampler(new Texture("../assets/hurly-burly/DragonAssets/dragonHead.png", 1024, 1024, true, true), 268, 776);
-TextureSampler * SlayTheDragonResourceManager::dragonMouth		= new TextureSampler(new Texture("../assets/hurly-burly/DragonAssets/dragonMouth.png", 1024, 1024, true, true), 268, 776);
-TextureSampler * SlayTheDragonResourceManager::dragonTorso		= new TextureSampler(new Texture("../assets/hurly-burly/DragonAssets/dragonTorso.png", 1024, 1024, true, true), 92, 327);
-TextureSampler * SlayTheDragonResourceManager::dragonUpperWing	= new TextureSampler(new Texture("../assets/hurly-burly/DragonAssets/dragonUpperWing.png", 1024, 1024, true, true), 233, 254);
-TextureSampler * SlayTheDragonResourceManager::dragonLowerWing	= new TextureSampler(new Texture("../assets/hurly-burly/DragonAssets/dragonLowerWing.png", 1024, 1024, true, true), 268, 776);
+TextureSampler * SlayTheDragonResourceManager::dragonHead		= new TextureSampler(new Texture("../assets/hurly-burly/DragonAssets/DragonHead.png", 1024, 1024, true, true), 552, 388);
+TextureSampler * SlayTheDragonResourceManager::dragonMouth		= new TextureSampler(new Texture("../assets/hurly-burly/DragonAssets/DragonMouth.png", 1024, 1024, true, true), 262, 270);
+TextureSampler * SlayTheDragonResourceManager::dragonTorso		= new TextureSampler(new Texture("../assets/hurly-burly/DragonAssets/DragonTorso.png", 1024, 1024, true, true), 417, 797);
+TextureSampler * SlayTheDragonResourceManager::dragonUpperWing	= new TextureSampler(new Texture("../assets/hurly-burly/DragonAssets/DragonUpperWing.png", 1024, 1024, true, true), 580, 326);
+TextureSampler * SlayTheDragonResourceManager::dragonLowerWing	= new TextureSampler(new Texture("../assets/hurly-burly/DragonAssets/DragonLowerWing.png", 1024, 1024, true, true), 578, 298);
 
-TextureSampler * SlayTheDragonResourceManager::itemBow	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Bow.png", 1024, 1024, true, true), 230, 395);
-TextureSampler * SlayTheDragonResourceManager::itemArrow	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Arrow.png", 1024, 1024, true, true), 83, 515);
-TextureSampler * SlayTheDragonResourceManager::itemFireball	= new TextureSampler(new Texture("../assets/hurly-burly/DragonAssets/Fireball.png", 1024, 1024, true, true), 83, 515);
+TextureSampler * SlayTheDragonResourceManager::itemBow	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Bow.png", 1024, 1024, true, true), 99, 474);
+TextureSampler * SlayTheDragonResourceManager::itemArrow	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Arrow.png", 1024, 1024, true, true), 77, 539);
+TextureSampler * SlayTheDragonResourceManager::itemFireball	= new TextureSampler(new Texture("../assets/hurly-burly/DragonAssets/Fireball.png", 1024, 1024, true, true), 309, 302);
 TextureSampler * SlayTheDragonResourceManager::itemNone	= new TextureSampler(new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true), 1, 1);
 
 void SlayTheDragonResourceManager::init(){
+	//resources.push_back(splashMessage);
+	
+	resources.push_back(archerTorso);
+	resources.push_back(archerArm);
+	resources.push_back(archerHat);
+	
+	resources.push_back(dragonHead);
+	resources.push_back(dragonMouth);
+	resources.push_back(dragonTorso);
+	resources.push_back(dragonUpperWing);
+	resources.push_back(dragonLowerWing);
 
+	resources.push_back(itemBow);
+	resources.push_back(itemArrow);
+	resources.push_back(itemFireball);
+	resources.push_back(itemNone);
 }

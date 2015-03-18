@@ -202,7 +202,11 @@ PuppetCharacter::~PuppetCharacter(){
 
 void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	float sat = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getSaturation();
+	//float hue = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getHue();
+	
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat + (1-control)*3);
+	//static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(sat + (1-control)*3);
+	
 	Box2DSuperSprite::render(_matrixStack, _renderStack);
 	for(Box2DSprite ** c : components){
 		if(*c != nullptr){

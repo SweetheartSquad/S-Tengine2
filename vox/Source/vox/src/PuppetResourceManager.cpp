@@ -5,6 +5,7 @@
 #include <Box2DSuperSprite.h>
 #include <RaidTheCastleResourceManager.h>
 #include <RapunzelResourceManager.h>
+#include <SlayTheDragonResourceManager.h>
 
 Texture * PuppetResourceManager::blank = new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true);
 Texture * PuppetResourceManager::stageFloor = new Texture("../assets/hurly-burly/StageFloor.png", 1024, 1024, true, true);
@@ -29,6 +30,7 @@ TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Text
 void PuppetResourceManager::init(){
 	RaidTheCastleResourceManager::init();
 	RapunzelResourceManager::init();
+	SlayTheDragonResourceManager::init();
 
 	resources.push_back(blank);
 	resources.push_back(stageFloor);

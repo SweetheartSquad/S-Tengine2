@@ -3,18 +3,20 @@
 #include "PuppetScene.h"
 
 class MeshEntity;
+class PuppetCharacterDragon;
+class PuppetCharacterArcher;
 
 class SlayTheDragon : public PuppetScene{
 public:
 
 	MeshEntity * sky;
 
-	PuppetCharacter * dragon;
+	PuppetCharacterDragon * dragon;
 
-	PuppetCharacter * playerCharacter1;
-	PuppetCharacter * playerCharacter2;
-	PuppetCharacter * playerCharacter3;
-	PuppetCharacter * playerCharacter4;
+	PuppetCharacterArcher * playerCharacter1;
+	PuppetCharacterArcher * playerCharacter2;
+	PuppetCharacterArcher * playerCharacter3;
+	PuppetCharacterArcher * playerCharacter4;
 
 	explicit SlayTheDragon(PuppetGame * _game);
 	~SlayTheDragon();

@@ -16,7 +16,7 @@ public:
 	
 	static TextureSampler * archerTorso;
 	static TextureSampler * archerArm;
-	static TextureSampler * archerHelmet;
+	static TextureSampler * archerHat;
 	
 	static TextureSampler * dragonHead;
 	static TextureSampler * dragonMouth;

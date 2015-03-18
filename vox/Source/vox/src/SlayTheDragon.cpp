@@ -29,7 +29,6 @@
 #include <ItemFlail.h>
 #include <ItemSimpleWeapon.h>
 #include <ItemProjectileWeapon.h>
-#include <PuppetCharacterKnight.h>
 
 
 #include <glfw\glfw3.h>
@@ -44,14 +43,14 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	playerCharacter4(new PuppetCharacterArcher(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
 	cl = new SlayTheDragonContactListener(this);
-
+	/*
 	TextureSampler * splashMessageTextureSampler = SlayTheDragonResourceManager::splashMessage;
 	splashMessage = new Sprite(nullptr, new Transform());
 	splashMessage->transform->scale(glm::vec3(3, 3, 0));
 	splashMessage->mesh->pushTexture2D(splashMessageTextureSampler->texture);
 	splashMessage->setShader(shader, true);
 	splashMessage->transform->scale(-1, 1, 1);
-
+	*/
 	players.push_back(playerCharacter1);
 	players.push_back(playerCharacter2);
 	players.push_back(playerCharacter3);
@@ -85,6 +84,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	addChild(dragon, 0);
 	dragon->addToLayeredScene(this, 1);
 	dragon->rootComponent->maxVelocity = b2Vec2(10, 10);
+	dragon->translateComponents(glm::vec3(0, 10, 0));
 	
 	TextureSampler * emptyWeaponTex = SlayTheDragonResourceManager::itemNone;
 	TextureSampler * fireBallTex = SlayTheDragonResourceManager::itemFireball;
@@ -97,6 +97,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	gameCam->addTarget(playerCharacter2->torso);
 	gameCam->addTarget(playerCharacter3->torso);
 	gameCam->addTarget(playerCharacter4->torso);
+	gameCam->addTarget(dragon->torso);
 
 	playerCharacter3->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
 	playerCharacter3->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter3, 3, PuppetGame::kPLAYER));

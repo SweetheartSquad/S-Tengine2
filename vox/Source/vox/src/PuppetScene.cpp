@@ -38,6 +38,7 @@
 
 #include <RaidTheCastle.h>
 #include <Rapunzel.h>
+#include <SlayTheDragon.h>
 
 #include <PuppetResourceManager.h>
 #include <NumberUtils.h>
@@ -419,8 +420,8 @@ void PuppetScene::complete(){
 	// temporary stuff
 
 	if(dynamic_cast<RaidTheCastle *>(this) != nullptr){
-		game->scenes.insert(std::make_pair("Rapunzel", new Rapunzel(static_cast<PuppetGame *>(game))));
-		game->switchScene("Rapunzel", true);
+		game->scenes.insert(std::make_pair("SlayTheDragon", new SlayTheDragon(static_cast<PuppetGame *>(game))));
+		game->switchScene("SlayTheDragon", true);
 	}else{
 		game->scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(static_cast<PuppetGame *>(game))));
 		game->switchScene("Raid the Castle", true);
