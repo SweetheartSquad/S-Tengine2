@@ -43,6 +43,7 @@
 #include <NumberUtils.h>
 #include <Resource.h>
 #include <Easing.h>
+#include <VictoryScene.h>
 
 PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	LayeredScene(_game, 3),
@@ -344,7 +345,6 @@ void PuppetScene::update(Step * _step){
 		}
 	}
 	
-	
 	world->update(_step);
 
 	if(this == game->currentScene){
@@ -419,12 +419,15 @@ void PuppetScene::complete(){
 	// temporary stuff
 
 	if(dynamic_cast<RaidTheCastle *>(this) != nullptr){
-		game->scenes.insert(std::make_pair("Rapunzel", new Rapunzel(static_cast<PuppetGame *>(game))));
-		game->switchScene("Rapunzel", true);
+		//game->scenes.insert(std::make_pair("Rapunzel", new Rapunzel(static_cast<PuppetGame *>(game))));
+		//game->switchScene("Rapunzel", true);
 	}else{
-		game->scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(static_cast<PuppetGame *>(game))));
-		game->switchScene("Raid the Castle", true);
+		//game->scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(static_cast<PuppetGame *>(game))));
+		//game->switchScene("Raid the Castle", true);
 	}
+
+	game->scenes.insert(std::make_pair("Victory", new VictoryScene(static_cast<PuppetGame *>(game), players)));
+	game->switchScene("Victory", true);
 
 	//Scene * oldScene = game->currentScene;
 }

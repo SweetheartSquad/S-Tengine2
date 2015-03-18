@@ -6,13 +6,7 @@ class PuppetGame;
 
 class VictoryScene : public PuppetScene{
 public:
-
-	PuppetCharacter * playerCharacter1;
-	PuppetCharacter * playerCharacter2;
-	PuppetCharacter * playerCharacter3;
-	PuppetCharacter * playerCharacter4;
-
-	VictoryScene(PuppetGame * _game, PuppetCharacter * _p1, PuppetCharacter * _p2, PuppetCharacter * _p3, PuppetCharacter * _p4);
+	VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> players);
 	~VictoryScene();
 
 	virtual void update(Step * _step) override;
