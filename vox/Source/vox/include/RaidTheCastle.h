@@ -16,8 +16,6 @@ public:
 	Catapult * catapult;
 	PuppetCharacterCastleChampion * champion;
 
-	
-
 	PuppetCharacterKnight * playerCharacter1;
 	PuppetCharacterKnight * playerCharacter2;
 	PuppetCharacterKnight * playerCharacter3;

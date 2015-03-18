@@ -58,7 +58,7 @@ public:
 
 	virtual void addToLayeredScene(LayeredScene * _scene, unsigned long int _layer);
 
-	void translateComponents(glm::vec3 _translateVector);
+	virtual void translateComponents(glm::vec3 _translateVector);
 	void setUserData(void * _data);
 
 	// Sets the group index on all components

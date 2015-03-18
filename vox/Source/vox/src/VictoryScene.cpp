@@ -4,11 +4,27 @@
 
 #include <PuppetController.h>
 
-VictoryScene::VictoryScene(PuppetGame * _game) :
-	PuppetScene(_game, 6000)
+
+VictoryScene::VictoryScene(PuppetGame* _game, PuppetCharacter* _p1, PuppetCharacter* _p2, PuppetCharacter* _p3, PuppetCharacter* _p4):
+	PuppetScene(_game, 60),
+	playerCharacter1(_p1),
+	playerCharacter2(_p2),
+	playerCharacter3(_p3),
+	playerCharacter4(_p4)
 {
-	/*puppetController =  new PuppetController(acc, playerCharacter);
-	puppetController2 = new PuppetController(acc2, playerCharacter2);
-	puppetController3 = new PuppetController(acc3, playerCharacter3);
-	puppetController4 = new PuppetController(acc4, playerCharacter4);*/
+}
+
+VictoryScene::~VictoryScene(){
+}
+
+void VictoryScene::update(Step* _step){
+}
+
+void VictoryScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
+}
+
+void VictoryScene::load(){
+}
+
+void VictoryScene::unload(){
 }
