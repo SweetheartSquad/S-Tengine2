@@ -66,7 +66,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 {
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new ShaderComponentTexture(shader));
-	shader->components.push_back(new ShaderComponentHsv(shader, 0, 1, 1, 1));
+	shader->components.push_back(new ShaderComponentHsv(shader, 0, 1.25, 1.4, 1));
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	
@@ -204,7 +204,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 		}
 		addChild(foliage, 0);
 
-		if(i == numFoliage/2){
+		if(i == 3){
 			randomGround->setTranslationPhysical(0.0f, 0.0f, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
 			addChild(randomGround, 0);
 		}
