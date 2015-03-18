@@ -35,7 +35,7 @@
 
 
 Rapunzel::Rapunzel(PuppetGame* _game):
-	PuppetScene(_game, 10),
+	PuppetScene(_game, 60),
 	guard(new PuppetCharacterGuard(true, world, PuppetGame::kPLAYER, -1, -20)),
 	playerCharacter1(new PuppetCharacterThief(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterThief(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
@@ -111,6 +111,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 		weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);
 		p->itemToPickup = weapon;
+        addChild(weapon, 1);
 	}
 	
 	playerCharacter1->translateComponents(glm::vec3(20.0f, 35, 0.f));
@@ -126,6 +127,18 @@ Rapunzel::~Rapunzel(){
 }
 
 void Rapunzel::update(Step* _step){
+    if (keyboard->keyJustDown(GLFW_KEY_W)){
+        playerCharacter1->jump();
+    }if (keyboard->keyDown(GLFW_KEY_A)){
+        playerCharacter1->targetRoll = glm::radians(-45.f);
+    }
+    if (keyboard->keyDown(GLFW_KEY_D)){
+        playerCharacter1->targetRoll = glm::radians(45.f);
+    }
+    if (keyboard->keyJustDown(GLFW_KEY_T)){
+        playerCharacter1->action();
+    }
+
 	PuppetScene::update(_step);
 	if(keyboard->keyDown(GLFW_KEY_B)){
 		guard->control = 0;
@@ -133,18 +146,6 @@ void Rapunzel::update(Step* _step){
 		playerCharacter2->control = 0;
 		//playerCharacter->behaviourManager.behaviours.at(0)->targets.clear();
 		//playerCharacter->behaviourManager.behaviours.at(0)->active = false;
-	}
-
-	if(keyboard->keyJustDown(GLFW_KEY_W)){
-		playerCharacter1->jump();
-	}if(keyboard->keyDown(GLFW_KEY_A)){
-		playerCharacter1->targetRoll = glm::radians(-45.f);
-	}
-	if(keyboard->keyDown(GLFW_KEY_D)){
-		playerCharacter1->targetRoll = glm::radians(45.f);
-	}
-	if(keyboard->keyJustDown(GLFW_KEY_T)){
-		playerCharacter1->action();
 	}
 }
 

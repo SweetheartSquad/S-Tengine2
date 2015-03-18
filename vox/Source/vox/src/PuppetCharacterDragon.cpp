@@ -5,7 +5,6 @@
 #include <BehaviourPatrol.h>
 #include <BehaviourAttack.h>
 #include <BehaviourManager.h>
-#include <Box2D\Box2D.h>
 #include <Box2DWorld.h>
 
 #include <SlayTheDragonResourceManager.h>

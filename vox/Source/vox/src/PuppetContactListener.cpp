@@ -123,9 +123,7 @@ void PuppetContactListener::playerItemContact(b2Contact * _contact, b2Fixture * 
 	static_cast<Item *>(item)->hitPlayer();
 	if(item->thrown || (item->held && item != p->heldItem)){
 		// do some sort of damage thing here
-		p->rootComponent->applyLinearImpulseUp(500);
-		std::cout << "damage?" << std::endl;
-		p->control = std::max(0.f, p->control - 0.1f);
+        p->takeDamage();
 	}else if(p->heldItem == nullptr && !item->held && !item->destroy){
 		p->itemToPickup = item;
 		// multiple players might be able to pick it up in one update

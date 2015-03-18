@@ -27,11 +27,16 @@ std::string BaseComponentShader::buildVertexShader(){
 	}
 
 	std::string shaderString  = "#version 150" + ENDL + 
-							    "#extension GL_ARB_explicit_attrib_location : enable" + ENDL + 
+							    /*"#extension GL_ARB_explicit_attrib_location : enable" + ENDL + 
 								"layout(location = 1) in vec3 aVertexPosition" + SEMI_ENDL +
 								"layout(location = 2) in vec4 aVertexColor" + SEMI_ENDL +
 								"layout(location = 3) in vec3 aVertexNormals" + SEMI_ENDL +
-								"layout(location = 4) in vec2 aVertexUVs" + SEMI_ENDL +
+								"layout(location = 4) in vec2 aVertexUVs" + SEMI_ENDL +*/
+
+                                "in vec3 aVertexPosition" + SEMI_ENDL +
+                                "in vec4 aVertexColor" + SEMI_ENDL +
+                                "in vec3 aVertexNormals" + SEMI_ENDL +
+                                "in vec2 aVertexUVs" + SEMI_ENDL +
 
 								"uniform mat4 MVP" + SEMI_ENDL +
 								

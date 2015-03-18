@@ -212,12 +212,7 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 	}
 
 	Box2DSuperSprite::render(_matrixStack, _renderStack);
-	for(Box2DSprite ** c : components){
-		if(*c != nullptr){
-			(*c)->render(_matrixStack, _renderStack);
-		}
-	}
-	
+
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(hue);
 }
@@ -296,6 +291,11 @@ void PuppetCharacter::die(){
 		(*c)->body->SetGravityScale(0.0f);
 	}
 	rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, 2.0f, rootComponent->transform->translationVector.z);
+}
+
+void PuppetCharacter::takeDamage(){
+    //rootComponent->applyLinearImpulseUp(500);
+    control = std::max(0.f, control - 0.1f);
 }
 
 void PuppetCharacter::unload(){

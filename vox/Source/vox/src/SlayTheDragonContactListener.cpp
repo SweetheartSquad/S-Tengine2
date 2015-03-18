@@ -1,3 +1,5 @@
+#pragma once
+
 #include "SlayTheDragonContactListener.h"
 #include "PuppetScene.h"
 

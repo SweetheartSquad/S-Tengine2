@@ -19,7 +19,7 @@ public:
 	explicit Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType = b2_dynamicBody, bool _defaultFixture = true, Shader * _shader = nullptr, Transform * _transform = new Transform(), float _width = 1.f, float _height = 1.f, Texture * _texture = nullptr, float _componentScale = 0.0025f);
 	~Box2DSprite();	
 
-	void update(Step * _step) override;
+	virtual void update(Step * _step) override;
 
 	virtual float getCorrectedHeight();
 	virtual float getCorrectedWidth();

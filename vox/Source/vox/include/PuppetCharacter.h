@@ -51,6 +51,8 @@ public:
 	virtual void action();
 	virtual void die();
 
+    virtual void takeDamage();
+
 	Item * itemToPickup;
 	Item * heldItem;
 	b2WeldJoint * itemJoint;
