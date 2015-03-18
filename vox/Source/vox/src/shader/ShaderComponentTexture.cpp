@@ -25,7 +25,7 @@ std::string ShaderComponentTexture::getVertexVariablesString(){
 std::string ShaderComponentTexture::getFragmentVariablesString(){
 	return 
 		DEFINE + SHADER_COMPONENT_TEXTURE + ENDL + 
-		"uniform sampler2D " + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[" + std::to_string(MAX_LIGHTS) + "]" + SEMI_ENDL + 
+		"uniform sampler2D " + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[" + std::to_string(MAX_TEXTURES) + "]" + SEMI_ENDL + 
 		"uniform int " + GL_UNIFORM_ID_NUM_TEXTURES + SEMI_ENDL;
 }
 
