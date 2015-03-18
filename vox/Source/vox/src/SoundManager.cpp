@@ -45,7 +45,9 @@ void SoundManager::resume(std::string _name){
 	sounds.at(_name).resume();
 }
 
-Sound * SoundManager::getRandomSound(){
-	std::iterator<Sound> item = sounds.begin();
-	std::advance(item, vox::NumberUtils::randomInt(0, sounds.size()));
+void SoundManager::playRandomSound(){
+	auto it = sounds.begin();
+	std::advance(it, vox::NumberUtils::randomInt(0, sounds.size() - 1));
+	auto s = it->second;
+	s.play();
 }
