@@ -18,15 +18,16 @@ public:
 	static TextureSampler * archerArm;
 	static TextureSampler * archerHelmet;
 	
-	static TextureSampler * dragonTorso;
-	static TextureSampler * dragonArm;
-	static TextureSampler * dragonHand;
-	static TextureSampler * dragonLeg;
 	static TextureSampler * dragonHead;
+	static TextureSampler * dragonMouth;
+	static TextureSampler * dragonTorso;
+	static TextureSampler * dragonUpperWing;
+	static TextureSampler * dragonLowerWing;
 	
 	static TextureSampler * itemBow;
 	static TextureSampler * itemArrow;
 	static TextureSampler * itemFireball;
+	static TextureSampler * itemNone;
 	
 	static void init();
 };

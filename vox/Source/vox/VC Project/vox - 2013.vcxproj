@@ -111,7 +111,9 @@
     <ClCompile Include="../src/poly2Tri/sweep/sweep.cc" />
     <ClCompile Include="../src/poly2Tri/sweep/sweep_context.cc" />
     <ClCompile Include="../src/PuppetCharacter.cpp" />
+    <ClCompile Include="../src/PuppetCharacterArcher.cpp" />
     <ClCompile Include="../src/PuppetCharacterCastleChampion.cpp" />
+    <ClCompile Include="../src/PuppetCharacterDragon.cpp" />
     <ClCompile Include="../src/PuppetCharacterGuard.cpp" />
     <ClCompile Include="../src/PuppetCharacterKnight.cpp" />
     <ClCompile Include="../src/PuppetCharacterRapunzel.cpp" />
@@ -280,7 +282,9 @@
     <ClInclude Include="../include/poly2Tri/sweep/sweep.h" />
     <ClInclude Include="../include/poly2Tri/sweep/sweep_context.h" />
     <ClInclude Include="../include/PuppetCharacter.h" />
+    <ClInclude Include="../include/PuppetCharacterArcher.h" />
     <ClInclude Include="../include/PuppetCharacterCastleChampion.h" />
+    <ClInclude Include="../include/PuppetCharacterDragon.h" />
     <ClInclude Include="../include/PuppetCharacterGuard.h" />
     <ClInclude Include="../include/PuppetCharacterKnight.h" />
     <ClInclude Include="../include/PuppetCharacterRapunzel.h" />

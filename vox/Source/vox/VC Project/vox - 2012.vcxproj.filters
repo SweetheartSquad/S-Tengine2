@@ -481,6 +481,12 @@
     <ClCompile Include="..\src\shader\GeometryComponent.cpp">
       <Filter>Source\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\PuppetCharacterArcher.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PuppetCharacterDragon.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Accelerometer.h">
@@ -995,6 +1001,12 @@
     </ClInclude>
     <ClInclude Include="..\include\shader\BlurShader.h">
       <Filter>Include\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\PuppetCharacterArcher.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\PuppetCharacterDragon.h">
+      <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

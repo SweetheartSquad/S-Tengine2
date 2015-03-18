@@ -9,6 +9,8 @@ public:
 
 	MeshEntity * sky;
 
+	PuppetCharacter * dragon;
+
 	PuppetCharacter * playerCharacter1;
 	PuppetCharacter * playerCharacter2;
 	PuppetCharacter * playerCharacter3;

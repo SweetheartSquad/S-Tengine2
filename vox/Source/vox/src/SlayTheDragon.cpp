@@ -2,7 +2,7 @@
 
 #include <SlayTheDragon.h>
 #include <SlayTheDragonContactListener.h>
-#include <RapunzelResourceManager.h>
+#include <SlayTheDragonResourceManager.h>
 #include <Castle.h>
 #include <PuppetGame.h>
 #include <PuppetCharacter.h>
@@ -21,9 +21,8 @@
 #include <shader/BaseComponentShader.h>
 #include <keyboard.h>
 #include <Texture.h>
-#include <PuppetCharacterGuard.h>
-#include <PuppetCharacterRapunzel.h>
-#include <PuppetCharacterThief.h>
+#include <PuppetCharacterDragon.h>
+#include <PuppetCharacterArcher.h>
 #include <PuppetTexturePack.h>
 #include <PuppetController.h>
 #include <Item.h>
@@ -38,19 +37,20 @@
 
 SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	PuppetScene(_game, 10),
-	playerCharacter1(new PuppetCharacterKnight(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
-	playerCharacter2(new PuppetCharacterKnight(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
-	playerCharacter3(new PuppetCharacterKnight(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
-	playerCharacter4(new PuppetCharacterKnight(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
+	dragon(new PuppetCharacterDragon(world, PuppetGame::kPLAYER, -1, -20)),
+	playerCharacter1(new PuppetCharacterArcher(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
+	playerCharacter2(new PuppetCharacterArcher(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
+	playerCharacter3(new PuppetCharacterArcher(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
+	playerCharacter4(new PuppetCharacterArcher(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
 	cl = new SlayTheDragonContactListener(this);
 
-	/*TextureSampler * splashMessageTextureSampler = RapunzelResourceManager::splashMessage;
+	TextureSampler * splashMessageTextureSampler = SlayTheDragonResourceManager::splashMessage;
 	splashMessage = new Sprite(nullptr, new Transform());
 	splashMessage->transform->scale(glm::vec3(3, 3, 0));
 	splashMessage->mesh->pushTexture2D(splashMessageTextureSampler->texture);
 	splashMessage->setShader(shader, true);
-	splashMessage->transform->scale(-1, 1, 1);*/
+	splashMessage->transform->scale(-1, 1, 1);
 
 	players.push_back(playerCharacter1);
 	players.push_back(playerCharacter2);
@@ -81,6 +81,18 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	playerCharacter4->rootComponent->maxVelocity = b2Vec2(10, 10);
 	static_cast<PuppetGame *>(game)->puppetController4->puppetCharacter = playerCharacter4;
 
+	dragon->setShader(shader, true);
+	addChild(dragon, 0);
+	dragon->addToLayeredScene(this, 1);
+	dragon->rootComponent->maxVelocity = b2Vec2(10, 10);
+	
+	TextureSampler * emptyWeaponTex = SlayTheDragonResourceManager::itemNone;
+	TextureSampler * fireBallTex = SlayTheDragonResourceManager::itemFireball;
+	dragon->itemToPickup = new ItemProjectileWeapon(fireBallTex, emptyWeaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, dragon->groupIndex, 0, 0, -emptyWeaponTex->height);
+	addChild(dragon->itemToPickup, 1);
+	dragon->itemToPickup->addToLayeredScene(this, 1);
+	dragon->itemToPickup->setShader(shader, true);
+
 	gameCam->addTarget(playerCharacter1->torso);
 	gameCam->addTarget(playerCharacter2->torso);
 	gameCam->addTarget(playerCharacter3->torso);
@@ -94,6 +106,15 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
 	playerCharacter4->ai = true;
 	
+	for(PuppetCharacter * p : players){
+		TextureSampler * weaponTex = SlayTheDragonResourceManager::itemBow;
+		TextureSampler * projectileTex = SlayTheDragonResourceManager::itemArrow;
+		ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projectileTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
+		weapon->addToLayeredScene(this, 1);
+		weapon->setShader(shader, true);
+		p->itemToPickup = weapon;
+	}
+
 	playerCharacter1->translateComponents(glm::vec3(20.0f, 35, 0.f));
 	playerCharacter2->translateComponents(glm::vec3(40.0f, 35, 0.f));
 	playerCharacter3->translateComponents(glm::vec3(60.0f, 35, 0.f));
