@@ -34,16 +34,20 @@ std::string ShaderComponentTexture::getVertexBodyString(){
 }
 
 std::string ShaderComponentTexture::getFragmentBodyString(){
-	return
-		"if(" + GL_UNIFORM_ID_NUM_TEXTURES + " > 0){" + SEMI_ENDL +
-			"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_TEXTURES + "; i++){" + ENDL + 
-			"	if(i == 0){" + ENDL + 
-			"		modFrag = texture(" + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[i], " + GL_IN_OUT_FRAG_UV + ").rgba" + SEMI_ENDL + 
-			"	}else{" + ENDL + 
-			"		modFrag = mix(modFrag, texture(" + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[i], " + GL_IN_OUT_FRAG_UV + ").rgba, 0.5)" + SEMI_ENDL + 
-			"	}" + ENDL + 
-			"}" + ENDL +
-		"}" + ENDL;
+    std::stringstream res;
+    res << "if(" << GL_UNIFORM_ID_NUM_TEXTURES << " > 0){" << ENDL;
+        for (unsigned long int i = 0; i < MAX_TEXTURES; ++i){
+            res << "\tif (numTextures > " << i << "){" << ENDL;
+                if(i == 0){
+                    res << "\t\tmodFrag = texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << ").rgba" << SEMI_ENDL;
+                }
+                else{
+                    res << "\t\tmodFrag = mix(modFrag, texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << ").rgba, 0.5)" << SEMI_ENDL;
+                }
+            res << "\t}" << ENDL;
+        }
+    res << "}" << ENDL;
+    return res.str();
 }
 
 std::string ShaderComponentTexture::getOutColorMod(){
