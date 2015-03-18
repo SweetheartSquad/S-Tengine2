@@ -255,19 +255,42 @@ void PuppetCharacter::attachJoints(){
 }
 
 void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
+	// save the current shader settings
 	float sat = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getSaturation();
 	float hue = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getHue();
 	
+	// change the shader settings based on current damage and player id
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue((float(id) * 60.f)/360.f);
-
 	if(!ai){
 		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat + (1-control)*3);
 	}
 
-	Box2DSuperSprite::render(_matrixStack, _renderStack);
+	armLeft->render(_matrixStack, _renderStack);
+	armRight->render(_matrixStack, _renderStack);
+	torso->render(_matrixStack, _renderStack);
+	//Box2DSuperSprite::render(_matrixStack, _renderStack);
 
+	// revert the shader settings
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(hue);
+
+	head->render(_matrixStack, _renderStack);
+	face->render(_matrixStack, _renderStack);
+	handLeft->render(_matrixStack, _renderStack);
+	handRight->render(_matrixStack, _renderStack);
+
+
+	
+	// change the shader settings based on current damage and player id
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue((float(id) * 60.f)/360.f);
+	if(!ai){
+		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat + (1-control)*3);
+	}
+	headgear->render(_matrixStack, _renderStack);
+	// revert the shader settings
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(hue);
+
 }
 
 void PuppetCharacter::update(Step* _step){
