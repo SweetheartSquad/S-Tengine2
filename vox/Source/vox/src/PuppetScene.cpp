@@ -501,6 +501,5 @@ void PuppetScene::doCountDown(){
 }
 
 void PuppetScene::playRandomBackgroundMusic(){
-	int rand = vox::NumberUtils::randomInt(1, backgroundSoundManager->sounds.size());
-	backgroundSoundManager->play(std::to_string(rand));
+	backgroundSoundManager->playRandomSound();
 }
