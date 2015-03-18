@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vox - 2012", "vox\VC Project\vox - 2012.vcxproj", "{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vox-2013", "vox\VC Project\vox - 2013.vcxproj", "{E178CAF8-5E96-478C-812C-DCBA942FC878}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vox - 2012", "vox\VC Project\vox - 2013.vcxproj", "{E178CAF8-5E96-478C-812C-DCBA942FC878}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Header", "Header", "{DC575FAA-5E2A-4DD9-8A26-D640BDD8BF7D}"
 	ProjectSection(SolutionItems) = preProject
@@ -330,8 +330,5 @@ Global
 		{3317FB04-EB3A-4BA2-A7E1-794157100FB7} = {DC575FAA-5E2A-4DD9-8A26-D640BDD8BF7D}
 		{4BC9923C-EE43-4C28-B829-B1F66B3AC915} = {D301E6F7-B31B-45D9-9194-87C287376DD8}
 		{C5F91370-EB97-439B-A16B-43BCF666AB4A} = {D301E6F7-B31B-45D9-9194-87C287376DD8}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
