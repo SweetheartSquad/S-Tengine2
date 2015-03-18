@@ -44,6 +44,8 @@
 #include <Resource.h>
 #include <Easing.h>
 
+#include <ParticleSystem.h>
+
 PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	LayeredScene(_game, 3),
 	duration(seconds),
@@ -64,6 +66,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	mouseCam(false),
 	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::ground1, 1, 1))
 {
+
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->components.push_back(new ShaderComponentHsv(shader, 0, 1.25, 1.4, 1));
@@ -275,7 +278,12 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	for(Sprite * n : countDownNumbers){
 		n->setShader(shader, true);
 		n->transform->scale(-1, 1, 1);
-	}
+    }
+
+    particleSystem = new ParticleSystem(world, 0, 0, 0);
+    particleSystem->addToLayeredScene(this, 1);
+    addChild(particleSystem, 1);
+    particleSystem->setShader(shader, true);
 }
 
 PuppetScene::~PuppetScene(){
@@ -294,6 +302,12 @@ void PuppetScene::unload(){
 
 void PuppetScene::update(Step * _step){
 	Scene::update(_step);
+
+    //Box2DSprite * test = new Box2DSprite(world);
+    //test->setShader(shader, this);
+    //particleSystem->addComponent(test);
+    particleSystem->addParticle();
+
 
 	if(splashMessage != nullptr){
 		if(currentTime < splashDuration){

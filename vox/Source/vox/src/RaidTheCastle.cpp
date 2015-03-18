@@ -130,10 +130,13 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 		TextureSampler * weaponTex = RaidTheCastleResourceManager::getRandomWeapon();
 		TextureSampler * projTex = RaidTheCastleResourceManager::getRandomWeapon();
 		
-		ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
-		weapon->addToLayeredScene(this, 1);
+		//ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
+        ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
+
+        weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);
 		p->itemToPickup = weapon;
+        addChild(weapon, 1);
 	}
 	
 	playerCharacter1->translateComponents(glm::vec3(20.0f, 35, 0.f));
@@ -150,6 +153,18 @@ RaidTheCastle::~RaidTheCastle(){
 }
 
 void RaidTheCastle::update(Step* _step){
+    if (keyboard->keyJustDown(GLFW_KEY_W)){
+        playerCharacter1->jump();
+    }if (keyboard->keyDown(GLFW_KEY_A)){
+        playerCharacter1->targetRoll = glm::radians(-45.f);
+    }
+    if (keyboard->keyDown(GLFW_KEY_D)){
+        playerCharacter1->targetRoll = glm::radians(45.f);
+    }
+    if (keyboard->keyJustDown(GLFW_KEY_T)){
+        playerCharacter1->action();
+    }
+
 	PuppetScene::update(_step);
 	if(keyboard->keyDown(GLFW_KEY_B)){
 		champion->control = 0;
@@ -185,18 +200,6 @@ void RaidTheCastle::update(Step* _step){
 	}
 	if(catapult->ready && !catapult->boulderLoaded){
 		loadCatapult();
-	}
-
-	if(keyboard->keyJustDown(GLFW_KEY_W)){
-		playerCharacter1->jump();
-	}if(keyboard->keyDown(GLFW_KEY_A)){
-		playerCharacter1->targetRoll = glm::radians(-45.f);
-	}
-	if(keyboard->keyDown(GLFW_KEY_D)){
-		playerCharacter1->targetRoll = glm::radians(45.f);
-	}
-	if(keyboard->keyJustDown(GLFW_KEY_T)){
-		playerCharacter1->action();
 	}
 }
 

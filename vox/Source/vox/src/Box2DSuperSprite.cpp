@@ -56,10 +56,21 @@ Box2DSuperSprite::~Box2DSuperSprite(){
 
 void Box2DSuperSprite::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
 	MeshEntity::render(_matrixStack, _renderStack);
+
+    for (Box2DSprite ** c : components){
+        if (*c != nullptr){
+            (*c)->render(_matrixStack, _renderStack);
+        }
+    }
 }
 
 void Box2DSuperSprite::update(Step * _step){
-	MeshEntity::update(_step);
+    MeshEntity::update(_step);
+    for (Box2DSprite ** c : components){
+        if (*c != nullptr){
+            (*c)->update(_step);
+        }
+    }
 }
 
 
@@ -75,20 +86,20 @@ void Box2DSuperSprite::setShader(Shader * _shader, bool _configureDefaultVertexA
 void Box2DSuperSprite::addToScene(Scene * _scene){
 	scene = _scene;
 	sceneLayer = -1;
-	for(Box2DSprite ** c : components){
+	/*for(Box2DSprite ** c : components){
 		if(*c != nullptr){
 			_scene->addChild(*c);
 		}
-	}
+	}*/
 }
 void Box2DSuperSprite::addToLayeredScene(LayeredScene * _scene, unsigned long int _layer){
 	scene = _scene;
 	sceneLayer = _layer;
-	for(Box2DSprite ** c : components){
+	/*for(Box2DSprite ** c : components){
 		if(*c != nullptr){
 			_scene->addChild(*c, _layer);
 		}
-	}
+	}*/
 }
 
 void Box2DSuperSprite::translateComponents(glm::vec3 _translateVector){
@@ -117,13 +128,13 @@ void Box2DSuperSprite::setGroupIndex(int16 _groupIndex){
 
 void Box2DSuperSprite::addComponent(Box2DSprite * _component){
 	components.push_back(&_component);
-	if(scene != nullptr){
+	/*if(scene != nullptr){
 		if(sceneLayer != -1){
 			static_cast<LayeredScene *>(scene)->addChild(_component, sceneLayer);
 		}else{
 			scene->addChild(_component);
 		}
-	}
+    }*/
 }
 
 void Box2DSuperSprite::snapComponents(Box2DSprite * _sprite){

@@ -52,13 +52,13 @@ PuppetGame::~PuppetGame(){
 }
 
 void PuppetGame::update(){
-	Game::update();
+    arduino->update(&vox::step);
+    puppetController1->update(&vox::step);
+    puppetController2->update(&vox::step);
+    puppetController3->update(&vox::step);
+    puppetController4->update(&vox::step);
 
-	arduino->update(&vox::step);
-	puppetController1->update(&vox::step);
-	puppetController2->update(&vox::step);
-	puppetController3->update(&vox::step);
-	puppetController4->update(&vox::step);
+	Game::update();
 }
 
 void PuppetGame::draw(){
