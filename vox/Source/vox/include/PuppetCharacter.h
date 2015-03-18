@@ -17,6 +17,8 @@ public:
 	bool dead;
 	bool deathPending;
 
+	unsigned long int id;
+
 	float targetRoll;
 	float score;
 
@@ -36,7 +38,7 @@ public:
 	Box2DSprite * face;
 	Box2DSprite * headgear;
 
-	PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
+	PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0, unsigned long int _id = 0);
 	~PuppetCharacter();
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
