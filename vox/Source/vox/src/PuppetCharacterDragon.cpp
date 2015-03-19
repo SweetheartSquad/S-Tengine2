@@ -41,12 +41,12 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, unsigned long int _id, Bo
 	rhrej.bodyA = armRight->body;
 	rhrej.bodyB = handRight->body;
 	rhrej.localAnchorA.Set(armRight->getCorrectedWidth(), -0.2 * armRight->getCorrectedHeight());
-	rhrej.localAnchorB.Set(0.6 * handRight->getCorrectedWidth(), 0.9 * handRight->getCorrectedHeight());
+	rhrej.localAnchorB.Set(0.6 * handRight->getCorrectedWidth(), 0.8 * handRight->getCorrectedHeight());
 	rhrej.collideConnected = false;
 	rhrej.enableLimit = true;
 	rhrej.referenceAngle = glm::radians(0.f);
-	rhrej.lowerAngle = glm::radians(-45.f);
-	rhrej.upperAngle = glm::radians(0.f);
+	rhrej.lowerAngle = glm::radians(-6.9f);
+	rhrej.upperAngle = glm::radians(6.2f);
 	world->b2world->CreateJoint(&rhrej);
 
 	// left wing
@@ -54,12 +54,12 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, unsigned long int _id, Bo
 	lhlej.bodyA = armLeft->body;
 	lhlej.bodyB = handLeft->body;
 	lhlej.localAnchorA.Set(-armLeft->getCorrectedWidth(), -0.2 * armLeft->getCorrectedHeight());
-	lhlej.localAnchorB.Set(-0.6 * handLeft->getCorrectedWidth(), 0.9 * handLeft->getCorrectedHeight());
+	lhlej.localAnchorB.Set(-0.6 * handLeft->getCorrectedWidth(), 0.8 * handLeft->getCorrectedHeight());
 	lhlej.collideConnected = false;
 	lhlej.enableLimit = true;
 	lhlej.referenceAngle = glm::radians(0.f);
-	lhlej.lowerAngle = glm::radians(0.f);
-	lhlej.upperAngle = glm::radians(45.f);
+	lhlej.lowerAngle = glm::radians(-6.2f);
+	lhlej.upperAngle = glm::radians(6.9f);
 	world->b2world->CreateJoint(&lhlej);
 }
 
@@ -78,7 +78,15 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat + (1-control)*3);
 	}
 
-	Box2DSuperSprite::render(_matrixStack, _renderStack);
+	// lower wing behind upper wing
+	handLeft->render(_matrixStack, _renderStack);
+	handRight->render(_matrixStack, _renderStack);
+	armLeft->render(_matrixStack, _renderStack);
+	armRight->render(_matrixStack, _renderStack);
+	torso->render(_matrixStack, _renderStack);
+	head->render(_matrixStack, _renderStack);
+	headgear->render(_matrixStack, _renderStack),
+	// This is scary face->render(_matrixStack, _renderStack);
 
 	// revert the shader settings
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);

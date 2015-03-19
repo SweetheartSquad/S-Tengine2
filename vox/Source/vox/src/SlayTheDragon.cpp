@@ -122,6 +122,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 		weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);
 		p->itemToPickup = weapon;
+		addChild(weapon, 1);
 		p->translateComponents(glm::vec3(40.f + (pCnt * 20), fort->rootComponent->getCorrectedHeight() * 2, 0));
 	}
 	/*
