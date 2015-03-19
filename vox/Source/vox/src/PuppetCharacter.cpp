@@ -45,8 +45,8 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 		);
 	}
 
-	head = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->headTex->width, texPack->headTex->height, texPack->headTex->texture, componentScale * texPack->scale);
-	face = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->faceTex->width, texPack->faceTex->height, texPack->faceTex->texture, componentScale * texPack->scale);
+	head = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->headTex->width, texPack->headTex->height, texPack->headTex->texture, componentScale*0.5f * texPack->scale);
+	face = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->faceTex->width, texPack->faceTex->height, texPack->faceTex->texture, componentScale*0.5f * texPack->scale);
 	handLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->handTex->width, texPack->handTex->height, texPack->handTex->texture, componentScale*0.5f * texPack->scale);
 	handRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->handTex->width, texPack->handTex->height, texPack->handTex->texture, componentScale*0.5f * texPack->scale);
 
