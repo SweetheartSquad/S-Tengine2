@@ -6,6 +6,10 @@
 #include <BehaviourAttack.h>
 #include <BehaviourManager.h>
 #include <Box2DWorld.h>
+#include <shader\ShaderComponentHsv.h>
+#include <shader\BaseComponentShader.h>
+#include <shader\Shader.h>
+#include <RenderOptions.h>
 
 #include <SlayTheDragonResourceManager.h>
 
@@ -61,6 +65,25 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, unsigned long int _id, Bo
 
 PuppetCharacterDragon::~PuppetCharacterDragon(){
 	//delete texPack;
+}
+
+void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
+	// save the current shader settings
+	float sat = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getSaturation();
+	float hue = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getHue();
+	
+	// change the shader settings based on current damage and player id
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue((float(id) * 60.f)/360.f);
+	if(!ai){
+		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat + (1-control)*3);
+	}
+
+	Box2DSuperSprite::render(_matrixStack, _renderStack);
+
+	// revert the shader settings
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(hue);
+
 }
 
 void PuppetCharacterDragon::update(Step * _step){
