@@ -65,7 +65,6 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	components.push_back(&headgear);
 
 	rootComponent = torso;
-
 	attachJoints();
 }
 
