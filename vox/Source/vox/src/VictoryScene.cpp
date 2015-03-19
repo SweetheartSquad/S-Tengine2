@@ -13,6 +13,7 @@
 VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _players):
 	PuppetScene(_game, 10)
 {
+	populateBackground();
 	cl = new PuppetContactListener(this);
 	for(unsigned long int i=0; i<_players.size(); ++i){
 		players.push_back(new PuppetCharacter(_players.at(i), world));

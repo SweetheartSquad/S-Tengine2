@@ -85,4 +85,6 @@ public:
 	void destroyItem(Item * item);
 	void doCountDown();
 	void playRandomBackgroundMusic();
+
+	 virtual void populateBackground();
 };

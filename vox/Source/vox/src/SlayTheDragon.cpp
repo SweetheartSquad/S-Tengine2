@@ -40,7 +40,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	playerCharacter4(new PuppetCharacterArcher(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
 	cl = new SlayTheDragonContactListener(this);
-	
+	populateBackground();
 	TextureSampler * splashMessageTextureSampler = SlayTheDragonResourceManager::splashMessage;
 	splashMessage = new Sprite(nullptr, new Transform());
 	splashMessage->transform->scale(glm::vec3(3, 3, 0));
@@ -174,4 +174,7 @@ void SlayTheDragon::load(){
 
 void SlayTheDragon::unload(){
 	PuppetScene::unload();
+}
+
+void SlayTheDragon::populateBackground(){
 }

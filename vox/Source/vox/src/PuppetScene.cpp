@@ -98,20 +98,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	background->mesh->pushTexture2D(PuppetResourceManager::sky);
 	background->mesh->uvEdgeMode = GL_REPEAT;
 	background->mesh->dirty = true;
-
-	ground->setShader(shader, true);
-	//ground->setTranslationPhysical(0, 0, 0);
-	//ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
-	//ground->transform->rotate(90.f, 0, 0, 1, kOBJECT);
-	ground->transform->scale(1000, 100, 100);
-	ground->transform->translate(50.f/2.f, 0, -15.f/2.f);
-	ground->mesh->uvEdgeMode = GL_REPEAT;
-	ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
-	for(Vertex & v : ground->mesh->vertices){
-		v.u *= 10;
-		v.v *= 100;
-	}
-	ground->mesh->dirty = true;
 	
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
@@ -163,7 +149,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	ground->mesh->setUV(3, 40.0, 0.0);*/
 
 	//world->addToWorld(ground, 2);
-	addChild(ground, 0);
 
 	int timeOfDayOptions = 4;
 	int timeOfDay = std::rand()%timeOfDayOptions;
@@ -181,39 +166,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	groundFixture->SetUserData(this);
 	*/
 
-	Texture * treeTex1 = PuppetResourceManager::tree1;
-	Texture * treeTex2 = PuppetResourceManager::tree2;
-	Texture * bushTex1 = PuppetResourceManager::bush1;
-	Texture * bushTex2 = PuppetResourceManager::bush2;
-	
-	int numFoliage = 60;
-	for(signed long int i = 0; i < numFoliage; ++i){
-		float height = std::rand()%500/50.f+5.f;
-		MeshEntity * foliage = new MeshEntity(MeshFactory::getPlaneMesh());
-		foliage->setShader(shader, true);
-		foliage->transform->translate((std::rand()%500/3.f)-25.f, height, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
-		foliage->transform->scale(height, height, 1);
-		int tex = i % 4;
-		switch(tex){
-			case 0:
-				foliage->mesh->pushTexture2D(treeTex1); break;
-			case 1:
-				foliage->mesh->pushTexture2D(treeTex2); break;
-			case 2:
-				foliage->mesh->pushTexture2D(bushTex1); break;
-			case 3:
-				foliage->mesh->pushTexture2D(bushTex2); break;
-			default:
-				break;
-		}
-		addChild(foliage, 0);
-
-		if(i == 3){
-			randomGround->setTranslationPhysical(0.0f, 0.0f, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
-			addChild(randomGround, 0);
-		}
-	}
-	
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);
 	drawer->AppendFlags(b2Draw::e_shapeBit);
@@ -222,7 +174,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	//drawer->AppendFlags(b2Draw::e_pairBit);
 	addChild(drawer, 2);
 
-	randomGround->setShader(shader, true);
 	//randomGround->mesh->uvEdgeMode = GL_REPEAT;
 
 	//world->addToWorld(randomGround);
@@ -381,8 +332,6 @@ void PuppetScene::update(Step * _step){
 			}
 		}
 	}
-	
-	
 
 	if(keyboard->keyJustUp(GLFW_KEY_1)){
 		mouseCam = !mouseCam;
@@ -521,4 +470,55 @@ void PuppetScene::doCountDown(){
 
 void PuppetScene::playRandomBackgroundMusic(){
 	backgroundSoundManager->playRandomSound();
+}
+
+void PuppetScene::populateBackground(){
+	ground->setShader(shader, true);
+	//ground->setTranslationPhysical(0, 0, 0);
+	//ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
+	//ground->transform->rotate(90.f, 0, 0, 1, kOBJECT);
+	ground->transform->scale(1000, 100, 100);
+	ground->transform->translate(50.f/2.f, 0, -15.f/2.f);
+	ground->mesh->uvEdgeMode = GL_REPEAT;
+	ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
+	for(Vertex & v : ground->mesh->vertices){
+		v.u *= 10;
+		v.v *= 100;
+	}
+	
+	ground->mesh->dirty = true;
+
+	Texture * treeTex1 = PuppetResourceManager::tree1;
+	Texture * treeTex2 = PuppetResourceManager::tree2;
+	Texture * bushTex1 = PuppetResourceManager::bush1;
+	Texture * bushTex2 = PuppetResourceManager::bush2;
+	
+	int numFoliage = 60;
+	for(signed long int i = 0; i < numFoliage; ++i){
+		float height = std::rand()%500/50.f+5.f;
+		MeshEntity * foliage = new MeshEntity(MeshFactory::getPlaneMesh());
+		foliage->setShader(shader, true);
+		foliage->transform->translate((std::rand()%500/3.f)-25.f, height, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
+		foliage->transform->scale(height, height, 1);
+		int tex = i % 4;
+		switch(tex){
+			case 0:
+				foliage->mesh->pushTexture2D(treeTex1); break;
+			case 1:
+				foliage->mesh->pushTexture2D(treeTex2); break;
+			case 2:
+				foliage->mesh->pushTexture2D(bushTex1); break;
+			case 3:
+				foliage->mesh->pushTexture2D(bushTex2); break;
+			default:
+				break;
+		}
+		addChild(foliage, 0);
+		randomGround->setShader(shader, true);
+		if(i == 3){
+			randomGround->setTranslationPhysical(0.0f, 0.0f, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
+			addChild(randomGround, 0);
+		}
+	}
+	addChild(ground, 0);
 }

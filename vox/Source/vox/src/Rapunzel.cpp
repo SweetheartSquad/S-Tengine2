@@ -33,7 +33,6 @@
 
 #include <glfw\glfw3.h>
 
-
 Rapunzel::Rapunzel(PuppetGame* _game):
 	PuppetScene(_game, 10),
 	guard(new PuppetCharacterGuard(true, world, PuppetGame::kPLAYER, -1, -20)),
@@ -43,7 +42,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter4(new PuppetCharacterRapunzel(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
 	cl = new RapunzelContactListener(this);
-
+	populateBackground();
 	TextureSampler * splashMessageTextureSampler = RapunzelResourceManager::splashMessage;
 	splashMessage = new Sprite(nullptr, new Transform());
 	splashMessage->transform->scale(glm::vec3(3, 3, 0));
