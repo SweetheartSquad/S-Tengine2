@@ -150,12 +150,12 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 
 	//world->addToWorld(ground, 2);
 
-	int timeOfDayOptions = 4;
+	int timeOfDayOptions = PuppetResourceManager::sky->width;
 	int timeOfDay = std::rand()%timeOfDayOptions;
-	background->mesh->setUV(0, (float)timeOfDay/timeOfDayOptions, 0);
-	background->mesh->setUV(1, (float)(timeOfDay+1)/timeOfDayOptions, 0);
-	background->mesh->setUV(2, (float)(timeOfDay+1)/timeOfDayOptions, 1);
-	background->mesh->setUV(3, (float)timeOfDay/timeOfDayOptions, 1);
+	background->mesh->setUV(0, (float)timeOfDay / timeOfDayOptions, 0);
+	background->mesh->setUV(1, (float)timeOfDay / timeOfDayOptions, 0);
+	background->mesh->setUV(2, (float)timeOfDay / timeOfDayOptions, 1);
+	background->mesh->setUV(3, (float)timeOfDay / timeOfDayOptions, 1);
 
 	addChild(background, 0);
 
@@ -235,7 +235,9 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
     particleSystem = new ParticleSystem(world, 0, 0, 0);
     particleSystem->addToLayeredScene(this, 1);
     addChild(particleSystem, 1);
-    particleSystem->setShader(shader, true);
+	particleSystem->setShader(shader, true);
+	particleSystem->emissionRate = 1;
+	particleSystem->emissionAmount = 3;
 }
 
 PuppetScene::~PuppetScene(){
