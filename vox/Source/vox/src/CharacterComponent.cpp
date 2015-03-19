@@ -36,12 +36,10 @@ void CharacterComponent::createFixture(int16 _groupIndex){
 	tf.groupIndex = _groupIndex;
 	f->SetFilterData(tf);
 
-
 	b2Vec2 v1 = tShape.GetVertex(0);
 	b2Vec2 v2 = tShape.GetVertex(1);
 	b2Vec2 v3 = tShape.GetVertex(2);
 	b2Vec2 v4 = tShape.GetVertex(3);
-
 
 	/*mesh->vertices.at(0).x = (-width/2.f)*transform->scaleVector.x*scale;
 	mesh->vertices.at(0).y = (-height/2.f)*transform->scaleVector.y*scale;

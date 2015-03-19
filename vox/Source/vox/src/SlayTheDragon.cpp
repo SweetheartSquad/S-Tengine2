@@ -40,7 +40,9 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	playerCharacter4(new PuppetCharacterDragon(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2))
 {
 	cl = new SlayTheDragonContactListener(this);
+	
 	populateBackground();
+	
 	TextureSampler * splashMessageTextureSampler = SlayTheDragonResourceManager::splashMessage;
 	splashMessage = new Sprite(nullptr, new Transform());
 	splashMessage->transform->scale(glm::vec3(3, 3, 0));
@@ -131,10 +133,18 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	/**/
 	//dragon->translateComponents(glm::vec3(0.f, fort->rootComponent->getPos().y + fort->rootComponent->getCorrectedHeight() + fort->roof->getPos().y + fort->rootComponent->getCorrectedHeight() + 10.f, 0.f));
 	
+	Sprite * fortBg = new Sprite();
+	fort->addToLayeredScene(this, 1);
+	addChild(fortBg, 1);
+	fortBg->setShader(shader, true);
+	fortBg->pushTextureSampler(SlayTheDragonResourceManager::fortBackground);
+	fortBg->transform->translate(62.5f, 20.0f, 0.0f);
+	fortBg->transform->scale(3.0f, 3.0f, 1.0f);
+
 	fort->setShader(shader, true);
 	fort->addToLayeredScene(this, 1);
 	addChild(fort, 1);
-	fort->translateComponents(glm::vec3(80, 0.f, 0.f));
+	fort->translateComponents(glm::vec3(80.0f, 0.f, 0.f));
 
 	playRandomBackgroundMusic();
 }

@@ -43,6 +43,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	playerCharacter3(new PuppetCharacterKnight(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
 	playerCharacter4(new PuppetCharacterKnight(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
+	populateBackground();
 	cl = new RaidTheCastleContactListener(this);
 
 	TextureSampler * splashMessageTextureSampler = RaidTheCastleResourceManager::splashMessage;
