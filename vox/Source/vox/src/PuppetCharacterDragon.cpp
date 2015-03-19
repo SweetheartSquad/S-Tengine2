@@ -12,10 +12,10 @@
 PuppetCharacterDragon::PuppetCharacterDragon(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	PuppetCharacter(new PuppetTexturePack(\
 		SlayTheDragonResourceManager::dragonTorso,
-		SlayTheDragonResourceManager::dragonLowerWing,
+		SlayTheDragonResourceManager::dragonUpperWing,
 		SlayTheDragonResourceManager::dragonHead,
-		PuppetResourceManager::head1, 
-		PuppetResourceManager::hand1,
+		SlayTheDragonResourceManager::dragonMouth, 
+		SlayTheDragonResourceManager::dragonLowerWing,
 		PuppetResourceManager::face1,
 		5.0f
 	), true, _world, _categoryBits, _maskBits, _groupIndex),
@@ -28,6 +28,30 @@ PuppetCharacterDragon::PuppetCharacterDragon(Box2DWorld * _world, int16 _categor
 	for(auto c : components) {
 		(*c)->body->SetGravityScale(0.0f);
 	}
+	
+	world->b2world->DestroyJoint(handRight->body->GetJointList()->joint);
+	world->b2world->DestroyJoint(handLeft->body->GetJointList()->joint);
+
+	// right wing
+	b2WeldJointDef rhrej;
+	rhrej.bodyA = armRight->body;
+	rhrej.bodyB = handRight->body;
+	rhrej.localAnchorA.Set(armRight->getCorrectedWidth(), -0.2 * armRight->getCorrectedHeight());
+	rhrej.localAnchorB.Set(0.6 * handRight->getCorrectedWidth(), 0.9 * handRight->getCorrectedHeight());
+	rhrej.collideConnected = false;
+	rhrej.referenceAngle = glm::radians(0.f);
+	world->b2world->CreateJoint(&rhrej);
+
+	// left wing
+	b2WeldJointDef lhlej;
+	lhlej.bodyA = armLeft->body;
+	lhlej.bodyB = handLeft->body;
+	lhlej.localAnchorA.Set(-armLeft->getCorrectedWidth(), -0.2 * armLeft->getCorrectedHeight());
+	lhlej.localAnchorB.Set(-0.6 * handLeft->getCorrectedWidth(), 0.9 * handLeft->getCorrectedHeight());
+	lhlej.collideConnected = false;
+	lhlej.referenceAngle = glm::radians(0.f);
+	world->b2world->CreateJoint(&lhlej);
+	
 	//torso->body->SetGravityScale(0.0f);
 }
 

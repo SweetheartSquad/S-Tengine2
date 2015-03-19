@@ -32,7 +32,7 @@
 
 SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	PuppetScene(_game, 60),
-	fort(new Fortification(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30)),
+	fort(new Fortification(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 10)),
 	dragon(new PuppetCharacterDragon(world, PuppetGame::kPLAYER, -1, -20)),
 	playerCharacter1(new PuppetCharacterArcher(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterArcher(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
@@ -50,8 +50,8 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	*/
 	
 	fort->setShader(shader, true);
-	fort->addToLayeredScene(this, 1);
-	addChild(fort, 1);
+	//fort->addToLayeredScene(this, 1);
+	//addChild(fort, 1);
 	fort->translateComponents(glm::vec3(40, 0.f, 0.f));
 
 	players.push_back(playerCharacter1);
