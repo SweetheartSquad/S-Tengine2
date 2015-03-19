@@ -15,7 +15,7 @@ alive(true)
 }
 void Particle::update(Step * _step){
     Box2DSprite::update(_step);
-    age += 0.001f;
+    age += _step->deltaTime;
     if (age > life){
         alive = false;
     }

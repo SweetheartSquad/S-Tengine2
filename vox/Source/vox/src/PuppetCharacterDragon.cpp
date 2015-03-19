@@ -13,7 +13,7 @@
 #include <Item.h>
 #include <SlayTheDragonResourceManager.h>
 
-PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, unsigned long int _id, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	PuppetCharacter(new PuppetTexturePack(
 		SlayTheDragonResourceManager::dragonTorso,
 		SlayTheDragonResourceManager::dragonUpperWing,
@@ -22,7 +22,7 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, unsigned long int _id, Bo
 		SlayTheDragonResourceManager::dragonLowerWing,
 		PuppetResourceManager::face1,
 		4.0f
-	), _ai, _world, _categoryBits, _maskBits, _groupIndex, _id),
+	), _ai, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {
@@ -69,14 +69,18 @@ PuppetCharacterDragon::~PuppetCharacterDragon(){
 
 void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	// save the current shader settings
-	float sat = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getSaturation();
 	float hue = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getHue();
-	
+	float sat = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getSaturation();
+	float val = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getValue();
+
 	// change the shader settings based on current damage and player id
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue((float(id) * 60.f)/360.f);
-	if(!ai){
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat + (1-control)*3);
+	if (!ai){
+		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(float(id) * 0.167f);
 	}
+	else{
+		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(0.f);
+	}
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setValue(val - (1 - control) * 3);
 
 	// lower wing behind upper wing
 	handLeft->render(_matrixStack, _renderStack);
@@ -89,8 +93,9 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	// This is scary face->render(_matrixStack, _renderStack);
 
 	// revert the shader settings
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(hue);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setValue(val);
 
 }
 

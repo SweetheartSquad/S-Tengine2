@@ -25,7 +25,7 @@ TextureSampler * SlayTheDragonResourceManager::itemFireball	= new TextureSampler
 TextureSampler * SlayTheDragonResourceManager::itemNone	= new TextureSampler(new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true), 1, 1);
 
 void SlayTheDragonResourceManager::init(){
-	//resources.push_back(splashMessage);
+	resources.push_back(splashMessage);
 	
 	resources.push_back(fortBackground);
 	resources.push_back(fortForeground);

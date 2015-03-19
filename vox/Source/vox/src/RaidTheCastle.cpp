@@ -61,25 +61,25 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
 	playerCharacter1->rootComponent->maxVelocity = b2Vec2(10, 10);
-	static_cast<PuppetGame *>(game)->puppetController1->puppetCharacter = playerCharacter1;
+	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
 	playerCharacter2->rootComponent->maxVelocity = b2Vec2(10, 10);
-	static_cast<PuppetGame *>(game)->puppetController2->puppetCharacter = playerCharacter2;
+	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
 	playerCharacter3->rootComponent->maxVelocity = b2Vec2(10, 10);
-	static_cast<PuppetGame *>(game)->puppetController3->puppetCharacter = playerCharacter3;
+	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
 	playerCharacter4->rootComponent->maxVelocity = b2Vec2(10, 10);
-	static_cast<PuppetGame *>(game)->puppetController4->puppetCharacter = playerCharacter4;
+	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
 
 	champion->setShader(shader, true);
 	addChild(champion, 0);
@@ -153,27 +153,7 @@ RaidTheCastle::~RaidTheCastle(){
 }
 
 void RaidTheCastle::update(Step* _step){
-    if (keyboard->keyJustDown(GLFW_KEY_W)){
-        playerCharacter1->jump();
-    }if (keyboard->keyDown(GLFW_KEY_A)){
-        playerCharacter1->targetRoll = glm::radians(-45.f);
-    }
-    if (keyboard->keyDown(GLFW_KEY_D)){
-        playerCharacter1->targetRoll = glm::radians(45.f);
-    }
-    if (keyboard->keyJustDown(GLFW_KEY_T)){
-        playerCharacter1->action();
-    }
-
 	PuppetScene::update(_step);
-	if(keyboard->keyDown(GLFW_KEY_B)){
-		champion->control = 0;
-		playerCharacter1->control = 0;
-		playerCharacter2->control = 0;
-		//playerCharacter->behaviourManager.behaviours.at(0)->targets.clear();
-		//playerCharacter->behaviourManager.behaviours.at(0)->active = false;
-	}
-
 	/*if(keyboard->keyDown(GLFW_KEY_F)){
 		catapult->fireCatapult();
 	}*/

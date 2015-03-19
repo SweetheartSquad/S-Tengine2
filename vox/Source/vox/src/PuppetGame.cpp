@@ -36,10 +36,10 @@ PuppetGame::PuppetGame(bool _running):
 	Accelerometer * acc4 = new Accelerometer(arduino);
 	arduino->addAccelerometer(acc4);
 	
-	puppetController1 = new PuppetController(acc,  nullptr);
-	puppetController2 = new PuppetController(acc2, nullptr);
-	puppetController3 = new PuppetController(acc3, nullptr);
-	puppetController4 = new PuppetController(acc4, nullptr);
+	puppetControllers.push_back(new PuppetController(acc));
+	puppetControllers.push_back(new PuppetController(acc2));
+	puppetControllers.push_back(new PuppetController(acc3));
+	puppetControllers.push_back(new PuppetController(acc4));
 
 	//scenes.insert(std::make_pair("indoors", new GameJamSceneIndoor(this)));
 	//scenes.insert(std::make_pair("outdoors", new GameJamSceneOutdoor(this)));
@@ -56,10 +56,9 @@ PuppetGame::~PuppetGame(){
 
 void PuppetGame::update(){
     arduino->update(&vox::step);
-    puppetController1->update(&vox::step);
-    puppetController2->update(&vox::step);
-    puppetController3->update(&vox::step);
-    puppetController4->update(&vox::step);
+	for (PuppetController * pc : puppetControllers){
+		pc->update(&vox::step);
+	}
 
 	Game::update();
 }

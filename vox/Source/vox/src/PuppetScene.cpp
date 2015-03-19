@@ -185,6 +185,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	mouseCamera->transform->translate(5.0f, 1.5f, 22.5f);
 	mouseCamera->yaw = 90.0f;
 	mouseCamera->pitch = -10.0f;
+	mouseCamera->speed = 1;
 
 	gameCam = new FollowCamera(10, glm::vec3(0, 0, 0), 0, 0);
 	gameCam->farClip = 1000.f;
@@ -255,6 +256,42 @@ void PuppetScene::unload(){
 }
 
 void PuppetScene::update(Step * _step){
+
+	// player controls
+	if (players.size() > 0){
+		if (keyboard->keyJustDown(GLFW_KEY_W)){
+			players.at(0)->jump();
+		}if (keyboard->keyDown(GLFW_KEY_A)){
+			players.at(0)->targetRoll = glm::radians(-45.f);
+		}
+		if (keyboard->keyDown(GLFW_KEY_D)){
+			players.at(0)->targetRoll = glm::radians(45.f);
+		}
+		if (keyboard->keyJustDown(GLFW_KEY_T)){
+			players.at(0)->action();
+		}
+
+		if (keyboard->keyDown(GLFW_KEY_B)){
+			for (PuppetCharacter * p : players){
+				p->control = 0;
+			}
+		}
+	}
+
+	// camera controls
+	if (keyboard->keyDown(GLFW_KEY_UP)){
+		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
+	}
+	if (keyboard->keyDown(GLFW_KEY_DOWN)){
+		camera->transform->translate((camera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);
+	}
+	if (keyboard->keyDown(GLFW_KEY_LEFT)){
+		camera->transform->translate((camera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);
+	}
+	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
+		camera->transform->translate((camera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
+	}
+
 	Scene::update(_step);
 
     //Box2DSprite * test = new Box2DSprite(world);
@@ -335,41 +372,32 @@ void PuppetScene::update(Step * _step){
 		}
 	}
 
-	if(keyboard->keyJustUp(GLFW_KEY_1)){
+
+	// camera control
+	if (keyboard->keyJustUp(GLFW_KEY_1)){
 		mouseCam = !mouseCam;
-		if(!mouseCam){
+		if (!mouseCam){
 			camera = gameCam;
-		}else{
-			camera = mouseCamera;			
+		}
+		else{
+			camera = mouseCamera;
 		}
 	}
 
+	// trigger countdown
+	if (keyboard->keyJustUp(GLFW_KEY_ENTER)){
+		currentTime = duration - countDownNumbers.size();
+		countDown = countDownNumbers.size();
+	}
+
 	
-	// camera controls
-	if(keyboard->keyDown(GLFW_KEY_UP)){
-		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
-	}
-	if(keyboard->keyDown(GLFW_KEY_DOWN)){
-		camera->transform->translate((camera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);	
-	}
-	if(keyboard->keyDown(GLFW_KEY_LEFT)){
-		camera->transform->translate((camera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);		
-	}
-	if(keyboard->keyDown(GLFW_KEY_RIGHT)){
-		camera->transform->translate((camera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);	
-	}
+	
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_2)){
 		drawer->drawing = !drawer->drawing;
-		/*if (drawer->drawing){
-			drawer->load();
-		}else{
-			drawer->unload();
-		}*/
 	}
-	//std::cout << "update\n";
 }
 
 void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
@@ -377,24 +405,31 @@ void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderS
 }
 
 void PuppetScene::complete(){
+	PuppetGame * pg = static_cast<PuppetGame *>(game);
+
+	pg->puppetControllers.at(0)->unassign();
+	pg->puppetControllers.at(1)->unassign();
+	pg->puppetControllers.at(2)->unassign();
+	pg->puppetControllers.at(3)->unassign();
+
 	if(dynamic_cast<VictoryScene *>(this) != nullptr){
 		int r = vox::NumberUtils::randomInt(0, 2);
 		switch(r) {
 		case 0:
-			game->scenes.insert(std::make_pair("Raid The Castle", new RaidTheCastle(static_cast<PuppetGame *>(game))));
+			game->scenes.insert(std::make_pair("Raid The Castle", new RaidTheCastle(pg)));
 			game->switchScene("Raid The Castle", true);
 			break;
 		case 1:
-			game->scenes.insert(std::make_pair("Rapunzel", new Rapunzel(static_cast<PuppetGame *>(game))));
+			game->scenes.insert(std::make_pair("Rapunzel", new Rapunzel(pg)));
 			game->switchScene("Rapunzel", true);
 			break;
 		case 2:
-			game->scenes.insert(std::make_pair("Slay The Dragon", new SlayTheDragon(static_cast<PuppetGame *>(game))));
+			game->scenes.insert(std::make_pair("Slay The Dragon", new SlayTheDragon(pg)));
 			game->switchScene("Slay The Dragon", true);
 			break;
 		}
 	}else{
-		game->scenes.insert(std::make_pair("Victory", new VictoryScene(static_cast<PuppetGame *>(game), players)));
+		game->scenes.insert(std::make_pair("Victory", new VictoryScene(pg, players)));
 		game->switchScene("Victory", true);
 	}
 }

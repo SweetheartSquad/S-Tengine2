@@ -32,12 +32,12 @@
 
 SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	PuppetScene(_game, 60, 170.f, 120.f),
-	fort(new Fortification(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM | PuppetGame::kPLAYER, -10)),
-	playerCharacter1(new PuppetCharacterArcher(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
+	fort(new Fortification(world, PuppetGame::kGROUND, PuppetGame::kITEM | PuppetGame::kPLAYER, -10)),
+	playerCharacter1(new PuppetCharacterArcher(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	//playerCharacter2(new PuppetCharacterArcher(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
-	playerCharacter2(new PuppetCharacterDragon(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
-	playerCharacter3(new PuppetCharacterArcher(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
-	playerCharacter4(new PuppetCharacterArcher(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
+	playerCharacter2(new PuppetCharacterArcher(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4)),
+	playerCharacter3(new PuppetCharacterArcher(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
+	playerCharacter4(new PuppetCharacterDragon(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2))
 {
 	cl = new SlayTheDragonContactListener(this);
 	populateBackground();
@@ -58,31 +58,31 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
 	playerCharacter1->rootComponent->maxVelocity = b2Vec2(10, 10);
-	static_cast<PuppetGame *>(game)->puppetController1->puppetCharacter = playerCharacter1;
+	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->puppetCharacter = playerCharacter1;
 	*/
 	playerCharacter1->setShader(shader, true);
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
 	playerCharacter1->rootComponent->maxVelocity = b2Vec2(10, 10);
-	static_cast<PuppetGame *>(game)->puppetController1->puppetCharacter = playerCharacter1;
+	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
 	playerCharacter2->rootComponent->maxVelocity = b2Vec2(10, 10);
-	static_cast<PuppetGame *>(game)->puppetController2->puppetCharacter = playerCharacter2;
+	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
 	playerCharacter3->rootComponent->maxVelocity = b2Vec2(10, 10);
-	static_cast<PuppetGame *>(game)->puppetController3->puppetCharacter = playerCharacter3;
+	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
 	playerCharacter4->rootComponent->maxVelocity = b2Vec2(10, 10);
-	static_cast<PuppetGame *>(game)->puppetController4->puppetCharacter = playerCharacter4;
+	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
 	
 	gameCam->addTarget(playerCharacter1->torso);
 	gameCam->addTarget(playerCharacter2->torso);
@@ -97,7 +97,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
 	playerCharacter4->ai = true;
 	
-	dragon = static_cast<PuppetCharacterDragon * >(playerCharacter2);
+	dragon = static_cast<PuppetCharacterDragon * >(playerCharacter4);
 
 	TextureSampler * bowTex = SlayTheDragonResourceManager::itemBow;
 	TextureSampler * arrowTex = SlayTheDragonResourceManager::itemArrow;
@@ -126,8 +126,8 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	//playerCharacter1->translateComponents(glm::vec3(40.0f, fort->rootComponent->getCorrectedHeight() * 2, 0.f));
 	//playerCharacter2->translateComponents(glm::vec3(40.f, fort->rootComponent->getCorrectedHeight() * 2, 0));
 	playerCharacter1->translateComponents(glm::vec3(20.f, fort->rootComponent->getCorrectedHeight() * 1.2, 0.f));
-	playerCharacter3->translateComponents(glm::vec3(30.f, fort->rootComponent->getCorrectedHeight() * 1.2, 0.f));
-	playerCharacter4->translateComponents(glm::vec3(40.f, fort->rootComponent->getCorrectedHeight() * 1.2, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(30.f, fort->rootComponent->getCorrectedHeight() * 1.2, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(40.f, fort->rootComponent->getCorrectedHeight() * 1.2, 0.f));
 	/**/
 	//dragon->translateComponents(glm::vec3(0.f, fort->rootComponent->getPos().y + fort->rootComponent->getCorrectedHeight() + fort->roof->getPos().y + fort->rootComponent->getCorrectedHeight() + 10.f, 0.f));
 	
@@ -144,24 +144,6 @@ SlayTheDragon::~SlayTheDragon(){
 
 void SlayTheDragon::update(Step* _step){
 	PuppetScene::update(_step);
-	if(keyboard->keyDown(GLFW_KEY_B)){
-		playerCharacter1->control = 0;
-		playerCharacter2->control = 0;
-		//playerCharacter->behaviourManager.behaviours.at(0)->targets.clear();
-		//playerCharacter->behaviourManager.behaviours.at(0)->active = false;
-	}
-
-	if(keyboard->keyJustDown(GLFW_KEY_W)){
-		playerCharacter1->jump();
-	}if(keyboard->keyDown(GLFW_KEY_A)){
-		playerCharacter1->targetRoll = glm::radians(-45.f);
-	}
-	if(keyboard->keyDown(GLFW_KEY_D)){
-		playerCharacter1->targetRoll = glm::radians(45.f);
-	}
-	if(keyboard->keyJustDown(GLFW_KEY_T)){
-		playerCharacter1->action();
-	}
 }
 
 void SlayTheDragon::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
