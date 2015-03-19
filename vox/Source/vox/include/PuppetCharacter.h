@@ -59,7 +59,7 @@ public:
 	Item * itemToPickup;
 	Item * heldItem;
 	b2WeldJoint * itemJoint;
-	void pickupItem(Item * _item);
+	virtual void pickupItem(Item * _item);
 
 	BehaviourManager behaviourManager;
 

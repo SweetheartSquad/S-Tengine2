@@ -46,7 +46,6 @@ Item * ItemProjectileWeapon::getProjectile(){
 	test[0] = projectile->rootComponent = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), projectileTex->width, projectileTex->height, projectileTex->texture, componentScale);
 
 	projectile->components.push_back(test);
-	
 
 	b2Filter sf;
 	sf.categoryBits = projectile->categoryBits;

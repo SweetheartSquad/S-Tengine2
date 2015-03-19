@@ -394,7 +394,7 @@ void PuppetCharacter::pickupItem(Item * _item){
 		jd.bodyA = armRight->body;
 		jd.bodyB = (*_item->components.at(0))->body;
 		jd.localAnchorA.Set(0.f, -0.9f * armRight->getCorrectedHeight());
-		jd.localAnchorB.Set(_item->handleX*componentScale, _item->handleY*componentScale);
+		jd.localAnchorB.Set(_item->handleX * componentScale, _item->handleY * componentScale);
 		jd.collideConnected = false;
 		jd.referenceAngle = glm::radians(-90.f);
 		jd.dampingRatio = 0;

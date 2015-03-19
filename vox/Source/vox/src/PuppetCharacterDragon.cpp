@@ -10,7 +10,7 @@
 #include <shader\BaseComponentShader.h>
 #include <shader\Shader.h>
 #include <RenderOptions.h>
-
+#include <Item.h>
 #include <SlayTheDragonResourceManager.h>
 
 PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, unsigned long int _id, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
@@ -105,5 +105,49 @@ void PuppetCharacterDragon::update(Step * _step){
 		}else{
 			behaviourManager.behaviours.at(0)->active = true;
 		}
+	}
+}
+void PuppetCharacterDragon::action(){
+	if(heldItem != nullptr){
+		if(itemJoint != nullptr){
+			Item * projectile = heldItem->getProjectile();
+			if(projectile == heldItem){
+				heldItem = nullptr;
+				itemJoint = nullptr;
+				itemToPickup = nullptr;
+			}
+			float t = rootComponent->body->GetAngle();
+			projectile->rootComponent->body->SetTransform(projectile->rootComponent->body->GetPosition(), t);
+			projectile->rootComponent->applyLinearImpulseDown(50);
+			if(rootComponent->body->GetAngle() > 0){
+				projectile->rootComponent->applyLinearImpulseLeft(50*(1-cos(t)));
+			}else{
+				projectile->rootComponent->applyLinearImpulseRight(50*(1-cos(t)));
+			}
+		}
+	}
+}
+
+void PuppetCharacterDragon::pickupItem(Item * _item){
+	if(_item != heldItem){
+		if(heldItem != nullptr){
+			action();
+		}
+
+		// set the item's group index to match character's so that they won't collide anymore (doesn't work?)
+		_item->setGroupIndex(this->groupIndex);
+
+		b2WeldJointDef jd;
+		jd.bodyA = face->body;
+		jd.bodyB = (*_item->components.at(0))->body;
+		jd.localAnchorA.Set(0.f, -0.9f * face->getCorrectedHeight());
+		jd.localAnchorB.Set(_item->handleX * componentScale, _item->handleY * componentScale);
+		jd.collideConnected = false;
+		jd.referenceAngle = glm::radians(-90.f);
+		jd.dampingRatio = 0;
+		itemJoint = _item->playerJoint = (b2WeldJoint *)world->b2world->CreateJoint(&jd);
+		heldItem = _item;
+		itemToPickup = nullptr;
+		_item->held = true;
 	}
 }
