@@ -35,7 +35,7 @@
 
 
 SlayTheDragon::SlayTheDragon(PuppetGame* _game):
-	PuppetScene(_game, 10),
+	PuppetScene(_game, 60),
 	dragon(new PuppetCharacterDragon(world, PuppetGame::kPLAYER, -1, -20)),
 	playerCharacter1(new PuppetCharacterArcher(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterArcher(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
@@ -84,7 +84,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	addChild(dragon, 0);
 	dragon->addToLayeredScene(this, 1);
 	dragon->rootComponent->maxVelocity = b2Vec2(10, 10);
-	dragon->translateComponents(glm::vec3(0, 10, 0));
+	dragon->translateComponents(glm::vec3(50, 40, 0));
 	
 	TextureSampler * emptyWeaponTex = SlayTheDragonResourceManager::itemNone;
 	TextureSampler * fireBallTex = SlayTheDragonResourceManager::itemFireball;

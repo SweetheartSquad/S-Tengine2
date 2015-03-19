@@ -10,16 +10,25 @@
 #include <SlayTheDragonResourceManager.h>
 
 PuppetCharacterDragon::PuppetCharacterDragon(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
-	PuppetCharacter(new PuppetTexturePack(
+	PuppetCharacter(new PuppetTexturePack(\
 		SlayTheDragonResourceManager::dragonTorso,
 		SlayTheDragonResourceManager::dragonLowerWing,
-		SlayTheDragonResourceManager::dragonHead
+		SlayTheDragonResourceManager::dragonHead,
+		PuppetResourceManager::head1, 
+		PuppetResourceManager::hand1,
+		PuppetResourceManager::face1,
+		5.0f
 	), true, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {
 	behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), this, 10));
 	behaviourManager.addBehaviour(new BehaviourAttack(this, 3, PuppetGame::kPLAYER));
+
+	for(auto c : components) {
+		(*c)->body->SetGravityScale(0.0f);
+	}
+	//torso->body->SetGravityScale(0.0f);
 }
 
 PuppetCharacterDragon::~PuppetCharacterDragon(){
