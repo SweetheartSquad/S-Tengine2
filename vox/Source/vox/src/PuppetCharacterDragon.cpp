@@ -9,16 +9,16 @@
 
 #include <SlayTheDragonResourceManager.h>
 
-PuppetCharacterDragon::PuppetCharacterDragon(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
-	PuppetCharacter(new PuppetTexturePack(\
+PuppetCharacterDragon::PuppetCharacterDragon(Box2DWorld * _world, bool _ai, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+	PuppetCharacter(new PuppetTexturePack(
 		SlayTheDragonResourceManager::dragonTorso,
 		SlayTheDragonResourceManager::dragonLowerWing,
 		SlayTheDragonResourceManager::dragonHead,
 		PuppetResourceManager::head1, 
 		PuppetResourceManager::hand1,
 		PuppetResourceManager::face1,
-		5.0f
-	), true, _world, _categoryBits, _maskBits, _groupIndex),
+		4.0f
+	), _ai, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {
@@ -28,7 +28,6 @@ PuppetCharacterDragon::PuppetCharacterDragon(Box2DWorld * _world, int16 _categor
 	for(auto c : components) {
 		(*c)->body->SetGravityScale(0.0f);
 	}
-	//torso->body->SetGravityScale(0.0f);
 }
 
 PuppetCharacterDragon::~PuppetCharacterDragon(){
@@ -41,10 +40,14 @@ void PuppetCharacterDragon::action(){
 
 void PuppetCharacterDragon::update(Step * _step){
 	PuppetCharacter::update(_step);
-
-	if(behaviourManager.behaviours.at(1)->active){
-		behaviourManager.behaviours.at(0)->active = false;
-	}else{
-		behaviourManager.behaviours.at(0)->active = true;
+	b2Vec2 center = torso->body->GetWorldCenter();
+	torso->applyForce(torso->body->GetAngle() * -5000.0f, 0.0f, center.x, center.y);
+	torso->body->SetTransform(b2Vec2(torso->body->GetPosition().x, 30.0f), torso->body->GetAngle());
+	if(ai){
+		if(behaviourManager.behaviours.at(1)->active){
+			behaviourManager.behaviours.at(0)->active = false;
+		}else{
+			behaviourManager.behaviours.at(0)->active = true;
+		}
 	}
 }
