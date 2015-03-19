@@ -47,6 +47,9 @@
 #include <VictoryScene.h>
 
 #include <ParticleSystem.h>
+#include <SlayTheDragon.h>
+
+class SlayTheDragon;
 
 PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	LayeredScene(_game, 3),
@@ -308,7 +311,7 @@ void PuppetScene::update(Step * _step){
     //Box2DSprite * test = new Box2DSprite(world);
     //test->setShader(shader, this);
     //particleSystem->addComponent(test);
-    particleSystem->addParticle();
+    //particleSystem->addParticle();
 
 
 	if(splashMessage != nullptr){
@@ -427,24 +430,26 @@ void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderS
 }
 
 void PuppetScene::complete(){
-	// select new scene, based on if this is a victory scene or a gameplay scene?
-	// switch to next scene
-	// delete this scene
-
-	// temporary stuff
-
-	if(dynamic_cast<RaidTheCastle *>(this) != nullptr){
-		game->scenes.insert(std::make_pair("SlayTheDragon", new SlayTheDragon(static_cast<PuppetGame *>(game))));
-		game->switchScene("SlayTheDragon", true);
+	if(dynamic_cast<VictoryScene *>(this) != nullptr){
+		int r = vox::NumberUtils::randomInt(0, 2);
+		switch(r) {
+		case 0:
+			game->scenes.insert(std::make_pair("Raid The Castle", new RaidTheCastle(static_cast<PuppetGame *>(game))));
+			game->switchScene("Raid The Castle", true);
+			break;
+		case 1:
+			game->scenes.insert(std::make_pair("Rapunzel", new Rapunzel(static_cast<PuppetGame *>(game))));
+			game->switchScene("Rapunzel", true);
+			break;
+		case 2:
+			game->scenes.insert(std::make_pair("Slay The Dragon", new SlayTheDragon(static_cast<PuppetGame *>(game))));
+			game->switchScene("Slay The Dragon", true);
+			break;
+		}
 	}else{
-		//game->scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(static_cast<PuppetGame *>(game))));
-		//game->switchScene("Raid the Castle", true);
+		game->scenes.insert(std::make_pair("Victory", new VictoryScene(static_cast<PuppetGame *>(game), players)));
+		game->switchScene("Victory", true);
 	}
-
-	game->scenes.insert(std::make_pair("Victory", new VictoryScene(static_cast<PuppetGame *>(game), players)));
-	game->switchScene("Victory", true);
-
-	//Scene * oldScene = game->currentScene;
 }
 
 void PuppetScene::destroyItem(Item * _item){

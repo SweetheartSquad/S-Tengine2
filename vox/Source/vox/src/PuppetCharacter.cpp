@@ -86,7 +86,8 @@ PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _wor
 	heldItem(nullptr),
 	itemJoint(nullptr),
 	score(_character->score),
-	control(1.f)
+	control(1.f),
+	id(_character->id)
 {
 	bool defaultTex = false;
 	if(texPack == nullptr){
