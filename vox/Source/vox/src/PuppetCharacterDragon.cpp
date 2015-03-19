@@ -9,16 +9,16 @@
 
 #include <SlayTheDragonResourceManager.h>
 
-PuppetCharacterDragon::PuppetCharacterDragon(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex, unsigned long int _id):
-	PuppetCharacter(new PuppetTexturePack(\
+PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, unsigned long int _id, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+	PuppetCharacter(new PuppetTexturePack(
 		SlayTheDragonResourceManager::dragonTorso,
 		SlayTheDragonResourceManager::dragonUpperWing,
 		SlayTheDragonResourceManager::dragonHead,
 		SlayTheDragonResourceManager::dragonMouth, 
 		SlayTheDragonResourceManager::dragonLowerWing,
 		PuppetResourceManager::face1,
-		5.0f
-	), true, _world, _categoryBits, _maskBits, _groupIndex, _id),
+		4.0f
+	), _ai, _world, _categoryBits, _maskBits, _groupIndex, _id),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {
@@ -28,7 +28,7 @@ PuppetCharacterDragon::PuppetCharacterDragon(Box2DWorld * _world, int16 _categor
 	for(auto c : components) {
 		(*c)->body->SetGravityScale(0.0f);
 	}
-	
+
 	world->b2world->DestroyJoint(handRight->body->GetJointList()->joint);
 	world->b2world->DestroyJoint(handLeft->body->GetJointList()->joint);
 
@@ -57,8 +57,6 @@ PuppetCharacterDragon::PuppetCharacterDragon(Box2DWorld * _world, int16 _categor
 	lhlej.lowerAngle = glm::radians(0.f);
 	lhlej.upperAngle = glm::radians(45.f);
 	world->b2world->CreateJoint(&lhlej);
-	
-	//torso->body->SetGravityScale(0.0f);
 }
 
 PuppetCharacterDragon::~PuppetCharacterDragon(){
@@ -67,10 +65,14 @@ PuppetCharacterDragon::~PuppetCharacterDragon(){
 
 void PuppetCharacterDragon::update(Step * _step){
 	PuppetCharacter::update(_step);
-
-	if(behaviourManager.behaviours.at(1)->active){
-		behaviourManager.behaviours.at(0)->active = false;
-	}else{
-		behaviourManager.behaviours.at(0)->active = true;
+	b2Vec2 center = torso->body->GetWorldCenter();
+	torso->applyForce(torso->body->GetAngle() * -5000.0f, 0.0f, center.x, center.y);
+	torso->body->SetTransform(b2Vec2(torso->body->GetPosition().x, 30.0f), torso->body->GetAngle());
+	if(ai){
+		if(behaviourManager.behaviours.at(1)->active){
+			behaviourManager.behaviours.at(0)->active = false;
+		}else{
+			behaviourManager.behaviours.at(0)->active = true;
+		}
 	}
 }
