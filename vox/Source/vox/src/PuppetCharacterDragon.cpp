@@ -98,7 +98,7 @@ void PuppetCharacterDragon::update(Step * _step){
 	PuppetCharacter::update(_step);
 	b2Vec2 center = torso->body->GetWorldCenter();
 	torso->applyForce(torso->body->GetAngle() * -5000.0f, 0.0f, center.x, center.y);
-	torso->body->SetTransform(b2Vec2(torso->body->GetPosition().x, 30.0f), torso->body->GetAngle());
+	torso->body->SetTransform(b2Vec2(torso->body->GetPosition().x, 60.0f), torso->body->GetAngle());
 	if(ai){
 		if(behaviourManager.behaviours.at(1)->active){
 			behaviourManager.behaviours.at(0)->active = false;

@@ -35,7 +35,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	fort(new Fortification(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM | PuppetGame::kPLAYER, -10)),
 	playerCharacter1(new PuppetCharacterArcher(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	//playerCharacter2(new PuppetCharacterArcher(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
-	playerCharacter2(new PuppetCharacterDragon(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
+	playerCharacter2(new PuppetCharacterDragon(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
 	playerCharacter3(new PuppetCharacterArcher(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
 	playerCharacter4(new PuppetCharacterArcher(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
@@ -47,11 +47,6 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	splashMessage->mesh->pushTexture2D(splashMessageTextureSampler->texture);
 	splashMessage->setShader(shader, true);
 	splashMessage->transform->scale(-1, 1, 1);
-	
-	fort->setShader(shader, true);
-	fort->addToLayeredScene(this, 1);
-	addChild(fort, 1);
-	fort->translateComponents(glm::vec3(80, 0.f, 0.f));
 
 	players.push_back(playerCharacter1);
 	players.push_back(playerCharacter2);
@@ -114,7 +109,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 		int y = fort->rootComponent->getCorrectedHeight() * 2;
 		ItemProjectileWeapon * weapon;
 		if(p == dragon){
-			weapon = new ItemProjectileWeapon(fireballTex, noneTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -noneTex->height);
+			weapon = new ItemProjectileWeapon(fireballTex, noneTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE| PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -noneTex->height);
 			y = fort->rootComponent->getPos().y + fort->rootComponent->getCorrectedHeight() + fort->roof->getPos().y + fort->rootComponent->getCorrectedHeight() + 10.f;
 		}else{
 			weapon = new ItemProjectileWeapon(arrowTex, bowTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -bowTex->height);
@@ -125,17 +120,22 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 		addChild(weapon, 1);
 		p->translateComponents(glm::vec3(40.f + (pCnt * 20), fort->rootComponent->getCorrectedHeight() * 2, 0));
 	}
-	/*
-	dragon->translateComponents(glm::vec3(0, 100, 0));
+	
+	//dragon->translateComponents(glm::vec3(0, 100, 0));
 
 	//playerCharacter1->translateComponents(glm::vec3(40.0f, fort->rootComponent->getCorrectedHeight() * 2, 0.f));
-	playerCharacter2->translateComponents(glm::vec3(40.f, fort->rootComponent->getCorrectedHeight() * 2, 0));
-	playerCharacter1->translateComponents(glm::vec3(60.f, fort->rootComponent->getCorrectedHeight() * 2, 0.f));
-	playerCharacter3->translateComponents(glm::vec3(80.f, fort->rootComponent->getCorrectedHeight() * 2, 0.f));
-	playerCharacter4->translateComponents(glm::vec3(100.f, fort->rootComponent->getCorrectedHeight() * 2, 0.f));
-	*/
+	//playerCharacter2->translateComponents(glm::vec3(40.f, fort->rootComponent->getCorrectedHeight() * 2, 0));
+	playerCharacter1->translateComponents(glm::vec3(20.f, fort->rootComponent->getCorrectedHeight() * 1.2, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(30.f, fort->rootComponent->getCorrectedHeight() * 1.2, 0.f));
+	playerCharacter4->translateComponents(glm::vec3(40.f, fort->rootComponent->getCorrectedHeight() * 1.2, 0.f));
+	/**/
 	//dragon->translateComponents(glm::vec3(0.f, fort->rootComponent->getPos().y + fort->rootComponent->getCorrectedHeight() + fort->roof->getPos().y + fort->rootComponent->getCorrectedHeight() + 10.f, 0.f));
 	
+	fort->setShader(shader, true);
+	fort->addToLayeredScene(this, 1);
+	addChild(fort, 1);
+	fort->translateComponents(glm::vec3(80, 0.f, 0.f));
+
 	playRandomBackgroundMusic();
 }
 
