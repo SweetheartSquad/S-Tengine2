@@ -9,7 +9,7 @@
 
 #include <SlayTheDragonResourceManager.h>
 
-PuppetCharacterDragon::PuppetCharacterDragon(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+PuppetCharacterDragon::PuppetCharacterDragon(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex, unsigned long int _id):
 	PuppetCharacter(new PuppetTexturePack(\
 		SlayTheDragonResourceManager::dragonTorso,
 		SlayTheDragonResourceManager::dragonUpperWing,
@@ -18,7 +18,7 @@ PuppetCharacterDragon::PuppetCharacterDragon(Box2DWorld * _world, int16 _categor
 		SlayTheDragonResourceManager::dragonLowerWing,
 		PuppetResourceManager::face1,
 		5.0f
-	), true, _world, _categoryBits, _maskBits, _groupIndex),
+	), true, _world, _categoryBits, _maskBits, _groupIndex, _id),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {
@@ -63,10 +63,6 @@ PuppetCharacterDragon::PuppetCharacterDragon(Box2DWorld * _world, int16 _categor
 
 PuppetCharacterDragon::~PuppetCharacterDragon(){
 	//delete texPack;
-}
-
-void PuppetCharacterDragon::action(){
-	// the castle champion isn't allowed to throw their weapon
 }
 
 void PuppetCharacterDragon::update(Step * _step){
