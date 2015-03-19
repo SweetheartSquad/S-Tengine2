@@ -3,16 +3,14 @@
 #include <SlayTheDragon.h>
 #include <SlayTheDragonContactListener.h>
 #include <SlayTheDragonResourceManager.h>
-#include <Castle.h>
 #include <PuppetGame.h>
+#include <Fortification.h>
 #include <PuppetCharacter.h>
 #include <FollowCamera.h>
 #include <Behaviour.h>
 #include <BehaviourFollow.h>
 #include <BehaviourPatrol.h>
 #include <BehaviourAttack.h>
-#include <Boulder.h>
-#include <Catapult.h>
 #include <Box2DSprite.h>
 #include <Box2DWorld.h>
 #include <MeshEntity.h>
@@ -25,8 +23,6 @@
 #include <PuppetCharacterArcher.h>
 #include <PuppetTexturePack.h>
 #include <PuppetController.h>
-#include <Item.h>
-#include <ItemFlail.h>
 #include <ItemSimpleWeapon.h>
 #include <ItemProjectileWeapon.h>
 
@@ -36,6 +32,7 @@
 
 SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	PuppetScene(_game, 60),
+	fort(new Fortification(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30)),
 	dragon(new PuppetCharacterDragon(world, PuppetGame::kPLAYER, -1, -20)),
 	playerCharacter1(new PuppetCharacterArcher(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterArcher(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
@@ -51,6 +48,12 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	splashMessage->setShader(shader, true);
 	splashMessage->transform->scale(-1, 1, 1);
 	*/
+	
+	fort->setShader(shader, true);
+	fort->addToLayeredScene(this, 1);
+	addChild(fort, 1);
+	fort->translateComponents(glm::vec3(40, 0.f, 0.f));
+
 	players.push_back(playerCharacter1);
 	players.push_back(playerCharacter2);
 	players.push_back(playerCharacter3);
@@ -116,10 +119,10 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 		p->itemToPickup = weapon;
 	}
 
-	playerCharacter1->translateComponents(glm::vec3(20.0f, 35, 0.f));
-	playerCharacter2->translateComponents(glm::vec3(40.0f, 35, 0.f));
-	playerCharacter3->translateComponents(glm::vec3(60.0f, 35, 0.f));
-	playerCharacter4->translateComponents(glm::vec3(80.0f, 35, 0.f));
+	playerCharacter1->translateComponents(glm::vec3(20.0f, fort->rootComponent->getCorrectedHeight() * 2, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(40.0f, fort->rootComponent->getCorrectedHeight() * 2, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(60.0f, fort->rootComponent->getCorrectedHeight() * 2, 0.f));
+	playerCharacter4->translateComponents(glm::vec3(80.0f, fort->rootComponent->getCorrectedHeight() * 2, 0.f));
 
 	playRandomBackgroundMusic();
 }

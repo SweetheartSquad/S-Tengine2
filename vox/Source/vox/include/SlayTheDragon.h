@@ -5,11 +5,16 @@
 class MeshEntity;
 class PuppetCharacterDragon;
 class PuppetCharacterArcher;
+class Fortification;
 
 class SlayTheDragon : public PuppetScene{
 public:
 
 	MeshEntity * sky;
+
+	Sprite * fortBackground;
+	Box2DSprite * fortForeground;
+	Fortification * fort;
 
 	PuppetCharacterDragon * dragon;
 

@@ -182,6 +182,7 @@
     <ClCompile Include="../src/VoxMatrices.cpp" />
     <ClCompile Include="../src/VoxRenderOptions.cpp" />
     <ClCompile Include="../src/Particle.cpp" />
+    <ClCompile Include="../src/Fortification.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -357,6 +358,7 @@
     <ClInclude Include="../include/VoxMatrices.h" />
     <ClInclude Include="../include/VoxRenderOptions.h" />
     <ClInclude Include="../src/GameJamSceneIndoor.h" />
+    <ClInclude Include="../include/Fortification.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E178CAF8-5E96-478C-812C-DCBA942FC878}</ProjectGuid>
