@@ -250,10 +250,18 @@ PuppetScene::~PuppetScene(){
 
 void PuppetScene::load(){
 	Scene::load();
+
+	for(Sprite * s : countDownNumbers){
+		s->load();
+	}
 }
 
 void PuppetScene::unload(){
 	Scene::unload();
+	
+	for(Sprite * s : countDownNumbers){
+		s->unload();
+	}
 }
 
 void PuppetScene::update(Step * _step){

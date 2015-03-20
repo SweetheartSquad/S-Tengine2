@@ -34,7 +34,7 @@
 
 
 SlayTheDragon::SlayTheDragon(PuppetGame* _game):
-	PuppetScene(_game, 60, 170.f, 120.f),
+	PuppetScene(_game, 30, 170.f, 120.f),
 	fort(new Fortification(world, PuppetGame::kGROUND, PuppetGame::kITEM | PuppetGame::kPLAYER, -10)),
 	playerCharacter1(new PuppetCharacterArcher(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	//playerCharacter2(new PuppetCharacterArcher(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
