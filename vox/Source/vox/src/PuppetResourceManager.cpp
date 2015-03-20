@@ -40,7 +40,7 @@ TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Text
 
 SoundManager * PuppetResourceManager::jumpSounds   = new SoundManager(1.0);
 SoundManager * PuppetResourceManager::hitSounds    = new SoundManager(1.0);
-SoundManager * PuppetResourceManager::splashSounds = new SoundManager();
+SoundManager * PuppetResourceManager::splashSounds = new SoundManager(-1);
 
 void PuppetResourceManager::init(){
 	RaidTheCastleResourceManager::init();

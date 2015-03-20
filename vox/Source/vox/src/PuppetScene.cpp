@@ -66,9 +66,9 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	ground(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stage.vox"))),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
-	soundManager(new SoundManager()),
-	backgroundSoundManager(new SoundManager()),
-	countdownSoundManager(new SoundManager()),
+	soundManager(new SoundManager(-1)),
+	backgroundSoundManager(new SoundManager(-1)),
+	countdownSoundManager(new SoundManager(-1)),
 	mouseCam(false),
 	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::ground1, 1, 1))
 {

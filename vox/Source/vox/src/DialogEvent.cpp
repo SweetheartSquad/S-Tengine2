@@ -7,7 +7,7 @@ DialogEvent::DialogEvent():
 	NodeUpdatable(),
 	running(false),
 	currentAction(0),
-	soundManager(new SoundManager())
+	soundManager(new SoundManager(-1))
 {
 	soundManager->addNewSound("1", "../assets/Voice1.ogg");
 	soundManager->addNewSound("2", "../assets/Voice2.ogg");

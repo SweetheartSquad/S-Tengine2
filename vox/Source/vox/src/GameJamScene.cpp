@@ -53,7 +53,7 @@ GameJamScene::GameJamScene(Game * _game):
 	
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	shader(new BaseComponentShader()),
-	soundManager(new SoundManager()),
+	soundManager(new SoundManager(-1)),
 	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4)),
 	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4)),
 	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4))

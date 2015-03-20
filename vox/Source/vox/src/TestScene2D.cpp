@@ -45,7 +45,7 @@ TestScene2D::TestScene2D(Game * _game):
 	frame(new Sprite()),
 	tex(new Texture("../assets/spritesheet.png", 1024, 1024, true, true)),
 	shader(new BaseComponentShader()),
-	soundManager(new SoundManager()),
+	soundManager(new SoundManager(-1)),
 	layer1(new Sprite()),
 	layer2(new Sprite())
 {

@@ -12,7 +12,7 @@ public:
 
 	std::map<std::string, Sound> sounds;
 
-	SoundManager(double _throttle = 0.0);
+	explicit SoundManager(double _throttle);
 	~SoundManager();
 
 	void addNewSound(std::string _name);
