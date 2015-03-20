@@ -87,4 +87,5 @@ public:
 	void playRandomBackgroundMusic();
 
 	 virtual void populateBackground();
+	 virtual void populateClouds();
 };

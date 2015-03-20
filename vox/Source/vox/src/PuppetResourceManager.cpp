@@ -12,10 +12,16 @@ Texture * PuppetResourceManager::blank = new Texture("../assets/hurly-burly/blan
 Texture * PuppetResourceManager::stageFloor = new Texture("../assets/hurly-burly/StageFloor.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::sky		= new Texture("../assets/hurly-burly/Sky.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::ground1	= new Texture("../assets/hurly-burly/paper.png", 512, 512, true, true);
+
 Texture * PuppetResourceManager::tree1  = new Texture("../assets/hurly-burly/Foliage/Tree1.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::tree2	= new Texture("../assets/hurly-burly/Foliage/Tree2.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::bush1	= new Texture("../assets/hurly-burly/Foliage/Bush1.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::bush2	= new Texture("../assets/hurly-burly/Foliage/Bush2.png", 1024, 1024, true, true);
+
+Texture * PuppetResourceManager::cloud1	= new Texture("../assets/hurly-burly/Clouds/Cloud1.png", 1024, 1024, true, true);
+Texture * PuppetResourceManager::cloud2	= new Texture("../assets/hurly-burly/Clouds/Cloud2.png", 1024, 1024, true, true);
+Texture * PuppetResourceManager::cloud3	= new Texture("../assets/hurly-burly/Clouds/Cloud3.png", 1024, 1024, true, true);
+Texture * PuppetResourceManager::cloud4	= new Texture("../assets/hurly-burly/Clouds/Cloud4.png", 1024, 1024, true, true);
 
 TextureSampler * PuppetResourceManager::dustParticle = new TextureSampler(new Texture("../assets/hurly-burly/dustParticle.png", 512, 512, true, true), 333, 291);
 
@@ -30,9 +36,9 @@ TextureSampler * PuppetResourceManager::countDown3 = new TextureSampler(new Text
 TextureSampler * PuppetResourceManager::countDown4 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/4.png", 1024, 1024, true, true), 1024, 1024);
 TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/5.png", 1024, 1024, true, true), 1024, 1024);
 
-SoundManager * PuppetResourceManager::jumpSounds = new SoundManager();
-SoundManager * PuppetResourceManager::hitSounds = new SoundManager();
-SoundManager * PuppetResourceManager::attackSounds = new SoundManager();
+SoundManager * PuppetResourceManager::jumpSounds   = new SoundManager(1.0);
+SoundManager * PuppetResourceManager::hitSounds    = new SoundManager(1.0);
+SoundManager * PuppetResourceManager::attackSounds = new SoundManager(1.0);
 
 void PuppetResourceManager::init(){
 	RaidTheCastleResourceManager::init();
@@ -67,4 +73,36 @@ void PuppetResourceManager::init(){
 	resources.push_back(attackSounds);
 	resources.push_back(hitSounds);
 	resources.push_back(jumpSounds);
+
+	jumpSounds->addNewSound("jump1", "../assets/hurly-burly/audio/jump/jumpSound1.ogg");
+	jumpSounds->addNewSound("jump2", "../assets/hurly-burly/audio/jump/jumpSound2.ogg");
+	jumpSounds->addNewSound("jump3", "../assets/hurly-burly/audio/jump/jumpSound3.ogg");
+	jumpSounds->addNewSound("jump4", "../assets/hurly-burly/audio/jump/jumpSound4.ogg");
+	jumpSounds->addNewSound("jump5", "../assets/hurly-burly/audio/jump/jumpSound5.ogg");
+	jumpSounds->addNewSound("jump6", "../assets/hurly-burly/audio/jump/jumpSound6.ogg");
+	jumpSounds->addNewSound("jump7", "../assets/hurly-burly/audio/jump/jumpSound7.ogg");
+	jumpSounds->addNewSound("jump8", "../assets/hurly-burly/audio/jump/jumpSound8.ogg");
+	jumpSounds->addNewSound("jump9", "../assets/hurly-burly/audio/jump/jumpSound9.ogg");
+	jumpSounds->addNewSound("jump10", "../assets/hurly-burly/audio/jump/jumpSound10.ogg");
+	
+	hitSounds->addNewSound("hit1", "../assets/hurly-burly/audio/hit/hitSound1.ogg");
+	hitSounds->addNewSound("hit2", "../assets/hurly-burly/audio/hit/hitSound2.ogg");
+	hitSounds->addNewSound("hit3", "../assets/hurly-burly/audio/hit/hitSound3.ogg");
+	hitSounds->addNewSound("hit4", "../assets/hurly-burly/audio/hit/hitSound4.ogg");
+	hitSounds->addNewSound("hit5", "../assets/hurly-burly/audio/hit/hitSound5.ogg");
+	hitSounds->addNewSound("hit6", "../assets/hurly-burly/audio/hit/hitSound6.ogg");
+	hitSounds->addNewSound("hit7", "../assets/hurly-burly/audio/hit/hitSound7.ogg");
+	hitSounds->addNewSound("hit8", "../assets/hurly-burly/audio/hit/hitSound8.ogg");
+	hitSounds->addNewSound("hit9", "../assets/hurly-burly/audio/hit/hitSound9.ogg");
+	hitSounds->addNewSound("hit10", "../assets/hurly-burly/audio/hit/hitSound10.ogg");
+	hitSounds->addNewSound("hit11", "../assets/hurly-burly/audio/hit/hitSound11.ogg");
+	hitSounds->addNewSound("hit12", "../assets/hurly-burly/audio/hit/hitSound12.ogg");
+	hitSounds->addNewSound("hit13", "../assets/hurly-burly/audio/hit/hitSound13.ogg");
+	hitSounds->addNewSound("hit14", "../assets/hurly-burly/audio/hit/hitSound14.ogg");
+	hitSounds->addNewSound("hit15", "../assets/hurly-burly/audio/hit/hitSound15.ogg");
+	hitSounds->addNewSound("hit16", "../assets/hurly-burly/audio/hit/hitSound16.ogg");
+	hitSounds->addNewSound("hit17", "../assets/hurly-burly/audio/hit/hitSound17.ogg");
+	hitSounds->addNewSound("hit18", "../assets/hurly-burly/audio/hit/hitSound18.ogg");
+	hitSounds->addNewSound("hit19", "../assets/hurly-burly/audio/hit/hitSound19.ogg");
+	hitSounds->addNewSound("hit10", "../assets/hurly-burly/audio/hit/hitSound20.ogg");
 }

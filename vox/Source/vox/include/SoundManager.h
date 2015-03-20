@@ -7,9 +7,12 @@
 class SoundManager : public NodeResource{
 public:
 
+	double throttle;
+	double lastTimeStamp;
+
 	std::map<std::string, Sound> sounds;
 
-	SoundManager();
+	SoundManager(double _throttle = 0.0);
 	~SoundManager();
 
 	void addNewSound(std::string _name);

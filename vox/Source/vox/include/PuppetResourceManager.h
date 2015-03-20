@@ -17,6 +17,11 @@ public:
 	static Texture * bush1;
 	static Texture * bush2;
 
+	static Texture * cloud1;
+	static Texture * cloud2;
+	static Texture * cloud3;
+	static Texture * cloud4;
+
 	static TextureSampler * dustParticle;
 
 	static TextureSampler * head1;

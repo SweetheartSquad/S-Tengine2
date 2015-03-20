@@ -559,3 +559,33 @@ void PuppetScene::populateBackground(){
 	}
 	addChild(ground, 0);
 }
+
+void PuppetScene::populateClouds(){
+	int numClouds = 60;
+	for(signed long int i = 0; i < numClouds; ++i){
+		float height = std::rand()%500/50.f+5.f;
+		MeshEntity * cloud = new MeshEntity(MeshFactory::getPlaneMesh());
+		cloud->setShader(shader, true);
+		cloud->transform->translate((std::rand()%500/3.f)-25.f, height, max(-9, -(float)(numClouds-i)/numClouds)*8.f - 1.f);
+		cloud->transform->scale(height, height, 1);
+		int tex = i % 4;
+		switch(tex){
+			case 0:
+				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud1); break;
+			case 1:
+				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud2); break;
+			case 2:
+				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud3); break;
+			case 3:
+				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud4); break;
+			default:
+				break;
+		}
+		addChild(cloud, 0);
+		randomGround->setShader(shader, true);
+		if(i == 3){
+			randomGround->setTranslationPhysical(0.0f, 0.0f, max(-9, -(float)(numClouds-i)/numClouds)*8.f - 1.f);
+			addChild(randomGround, 0);
+		}
+	}
+}
