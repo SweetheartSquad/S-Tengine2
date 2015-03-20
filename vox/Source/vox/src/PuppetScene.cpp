@@ -310,7 +310,7 @@ void PuppetScene::update(Step * _step){
 				// the factor of 15 is only there because I can't load this thing at the correct size...
 				//float scale = Easing::easeOutBack(splashDuration - currentTime, 0, 10, splashDuration);
 				float easeTime = splashDuration - currentTime;
-				float scale = (easeTime > splashDuration / 2.f) ? Easing::easeOutElastic(easeTime, 0, 10, splashDuration / 2.f) : Easing::easeInCubic(easeTime - splashDuration/2.f, 10, -10, splashDuration / 2.f);
+				float scale = (easeTime < splashDuration / 2.f) ? Easing::easeOutCubic(easeTime, 0, 10, splashDuration / 2.f) : Easing::easeInElastic(easeTime - splashDuration / 2.f, 10, -10, splashDuration / 2.f);
 				splashMessage->transform->scaleVector = glm::vec3(-scale, scale, 1);
 			}else{
 				addChild(splashMessage, 2);
