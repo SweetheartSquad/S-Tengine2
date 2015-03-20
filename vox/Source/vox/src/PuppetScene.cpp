@@ -57,6 +57,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	currentTime(0),
 	countDown(0),
 	displayingSplash(false),
+	splashSoundPlayed(false),
 	splashMessage(nullptr),
 	splashDuration(3.f),
 	cl(nullptr),
