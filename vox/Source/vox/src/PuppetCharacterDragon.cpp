@@ -12,6 +12,8 @@
 #include <RenderOptions.h>
 #include <Item.h>
 #include <SlayTheDragonResourceManager.h>
+#include <PuppetScene.h>
+#include <ParticleSystem.h>
 
 PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	PuppetCharacter(new PuppetTexturePack(
@@ -24,7 +26,8 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 		4.0f
 	), _ai, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
-	NodeChild(nullptr)
+	NodeChild(nullptr),
+	fireball(nullptr)
 {
 	behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), this, 10));
 	behaviourManager.addBehaviour(new BehaviourAttack(this, 3, PuppetGame::kPLAYER));
@@ -115,19 +118,26 @@ void PuppetCharacterDragon::update(Step * _step){
 void PuppetCharacterDragon::action(){
 	if(heldItem != nullptr){
 		if(itemJoint != nullptr){
-			Item * projectile = heldItem->getProjectile();
-			if(projectile == heldItem){
-				heldItem = nullptr;
-				itemJoint = nullptr;
-				itemToPickup = nullptr;
-			}
-			float t = rootComponent->body->GetAngle();
-			projectile->rootComponent->body->SetTransform(projectile->rootComponent->body->GetPosition(), t);
-			projectile->rootComponent->applyLinearImpulseDown(50);
-			if(rootComponent->body->GetAngle() > 0){
-				projectile->rootComponent->applyLinearImpulseLeft(50*(1-cos(t)));
-			}else{
-				projectile->rootComponent->applyLinearImpulseRight(50*(1-cos(t)));
+			/*try{
+				static_cast<PuppetScene *>(scene)->particleSystem->addParticle(PuppetResourceManager::dustParticle, fireball->getPos(false));
+			}catch (std::exception){
+				fireball = nullptr;
+			}*/
+			if (fireball == nullptr){
+				fireball = heldItem->getProjectile();
+				if (fireball == heldItem){
+					heldItem = nullptr;
+					itemJoint = nullptr;
+					itemToPickup = nullptr;
+				}
+				float t = rootComponent->body->GetAngle();
+				fireball->rootComponent->body->SetTransform(fireball->rootComponent->body->GetPosition(), t);
+				fireball->rootComponent->applyLinearImpulseDown(50);
+				if(rootComponent->body->GetAngle() > 0){
+					fireball->rootComponent->applyLinearImpulseLeft(50 * (1 - cos(t)));
+				}else{
+					fireball->rootComponent->applyLinearImpulseRight(50 * (1 - cos(t)));
+				}
 			}
 		}
 	}

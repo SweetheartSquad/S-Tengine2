@@ -30,7 +30,6 @@ public:
 	static TextureSampler * itemBow;
 	static TextureSampler * itemArrow;
 	static TextureSampler * itemFireball;
-	static TextureSampler * itemNone;
 	
 	static void init();
 };

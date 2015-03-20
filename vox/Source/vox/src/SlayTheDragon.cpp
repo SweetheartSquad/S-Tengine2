@@ -11,6 +11,7 @@
 #include <BehaviourFollow.h>
 #include <BehaviourPatrol.h>
 #include <BehaviourAttack.h>
+#include <BehaviourAttackThrow.h>
 #include <Box2DSprite.h>
 #include <Box2DWorld.h>
 #include <MeshEntity.h>
@@ -25,6 +26,7 @@
 #include <PuppetController.h>
 #include <ItemSimpleWeapon.h>
 #include <ItemProjectileWeapon.h>
+#include <ItemFireballLauncher.h>
 
 
 #include <glfw\glfw3.h>
@@ -36,9 +38,9 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	fort(new Fortification(world, PuppetGame::kGROUND, PuppetGame::kITEM | PuppetGame::kPLAYER, -10)),
 	playerCharacter1(new PuppetCharacterArcher(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	//playerCharacter2(new PuppetCharacterArcher(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
-	playerCharacter2(new PuppetCharacterArcher(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4)),
+	playerCharacter2(new PuppetCharacterArcher(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
 	playerCharacter3(new PuppetCharacterArcher(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
-	playerCharacter4(new PuppetCharacterDragon(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2))
+	playerCharacter4(new PuppetCharacterDragon(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
 	cl = new SlayTheDragonContactListener(this);
 	
@@ -46,7 +48,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	
 	Sprite * fortBg = new Sprite();
 	fort->addToLayeredScene(this, 1);
-	addChild(fortBg, 1);
+	addChild(fortBg, 0);
 	fortBg->setShader(shader, true);
 	fortBg->pushTextureSampler(SlayTheDragonResourceManager::fortBackground);
 	fortBg->transform->translate(65.0f, 20.0f, 0.0f);
@@ -101,11 +103,11 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	gameCam->addTarget(playerCharacter4->torso);
 
 	playerCharacter3->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
-	playerCharacter3->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter3, 3, PuppetGame::kPLAYER));
+	playerCharacter3->behaviourManager.addBehaviour(new BehaviourAttackThrow(false, playerCharacter3, 3, PuppetGame::kPLAYER));
 	playerCharacter3->ai = true;
 
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
-	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
+	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttackThrow(true, playerCharacter4, 100, PuppetGame::kPLAYER));
 	playerCharacter4->ai = true;
 	
 	dragon = static_cast<PuppetCharacterDragon * >(playerCharacter4);
@@ -113,14 +115,13 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	TextureSampler * bowTex = SlayTheDragonResourceManager::itemBow;
 	TextureSampler * arrowTex = SlayTheDragonResourceManager::itemArrow;
 	TextureSampler * fireballTex = SlayTheDragonResourceManager::itemFireball;
-	TextureSampler * noneTex = SlayTheDragonResourceManager::itemNone;
 
 	unsigned int pCnt = 0;
 	for(PuppetCharacter * p : players){
 		int y = fort->rootComponent->getCorrectedHeight() * 2;
 		ItemProjectileWeapon * weapon;
 		if(p == dragon){
-			weapon = new ItemProjectileWeapon(fireballTex, noneTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE| PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -noneTex->height);
+			weapon = new ItemFireballLauncher(dragon, world);
 			y = fort->rootComponent->getPos().y + fort->rootComponent->getCorrectedHeight() + fort->roof->getPos().y + fort->rootComponent->getCorrectedHeight() + 10.f;
 		}else{
 			weapon = new ItemProjectileWeapon(arrowTex, bowTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -bowTex->height);

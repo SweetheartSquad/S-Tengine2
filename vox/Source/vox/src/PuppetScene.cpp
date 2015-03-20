@@ -234,12 +234,12 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 		n->transform->scale(-1, 1, 1);
     }
 
-    particleSystem = new ParticleSystem(world, 0, 0, 0);
+    particleSystem = new ParticleSystem(PuppetResourceManager::dustParticle, world, 0, 0, 0);
     particleSystem->addToLayeredScene(this, 1);
     addChild(particleSystem, 1);
 	particleSystem->setShader(shader, true);
-	particleSystem->emissionRate = 0.1f;
-	particleSystem->emissionAmount = 3;
+	particleSystem->emissionRate = -1;
+	particleSystem->emissionAmount = 0;
 }
 
 PuppetScene::~PuppetScene(){
@@ -270,6 +270,9 @@ void PuppetScene::update(Step * _step){
 		}
 		if (keyboard->keyJustDown(GLFW_KEY_T)){
 			players.at(0)->action();
+			players.at(3)->action();
+			players.at(2)->action();
+			players.at(1)->action();
 		}
 
 		if (keyboard->keyDown(GLFW_KEY_B)){
@@ -305,7 +308,9 @@ void PuppetScene::update(Step * _step){
 		if(currentTime < splashDuration){
 			if(displayingSplash){
 				// the factor of 15 is only there because I can't load this thing at the correct size...
-				float scale = Easing::easeOutBack(splashDuration - currentTime, 0, 10, splashDuration);
+				//float scale = Easing::easeOutBack(splashDuration - currentTime, 0, 10, splashDuration);
+				float easeTime = splashDuration - currentTime;
+				float scale = (easeTime > splashDuration / 2.f) ? Easing::easeOutElastic(easeTime, 0, 10, splashDuration / 2.f) : Easing::easeInCubic(easeTime - splashDuration/2.f, 10, -10, splashDuration / 2.f);
 				splashMessage->transform->scaleVector = glm::vec3(-scale, scale, 1);
 			}else{
 				addChild(splashMessage, 2);
@@ -344,7 +349,10 @@ void PuppetScene::update(Step * _step){
 	for(signed long int i = items.size()-1; i >= 0; --i){
 		Item * item = items.at(i);
 		
-		if(item->destroy){
+		if (item->destroy){
+			for (unsigned long int i = 0; i < std::rand() % 5; ++i){
+				particleSystem->addParticle(PuppetResourceManager::dustParticle, item->rootComponent->getPos(false));
+			}
 			destroyItem(item);
 			items.erase(items.begin() + i);
 		}
@@ -385,6 +393,7 @@ void PuppetScene::update(Step * _step){
 		}
 	}
 
+	
 	// trigger countdown
 	if (keyboard->keyJustUp(GLFW_KEY_ENTER)){
 		currentTime = duration - countDownNumbers.size();
