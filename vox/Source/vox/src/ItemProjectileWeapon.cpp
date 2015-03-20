@@ -72,6 +72,7 @@ Item * ItemProjectileWeapon::getProjectile(){
 	projectile->snapComponents(this->rootComponent);
 	//projectile->translateComponents(glm::vec3(20,20,0));
 
+	projectile->owner = owner;
 	projectile->thrown = true;
 	projectile->held = false;
 

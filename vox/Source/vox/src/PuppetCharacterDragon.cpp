@@ -163,5 +163,6 @@ void PuppetCharacterDragon::pickupItem(Item * _item){
 		heldItem = _item;
 		itemToPickup = nullptr;
 		_item->held = true;
+		_item->owner = this;
 	}
 }

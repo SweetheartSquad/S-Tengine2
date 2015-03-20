@@ -53,6 +53,7 @@ Item * ItemFireballLauncher::getProjectile(){
 
 	projectile->thrown = true;
 	projectile->held = false;
+	projectile->owner = owner;
 
 	return projectile;
 }

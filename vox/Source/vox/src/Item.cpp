@@ -13,6 +13,7 @@ Item::Item(bool _singleUse, Box2DWorld * _world, int16 _categoryBits, int16 _mas
 	handleY(_handleY),
 	singleUse(_singleUse),
 	held(false),
+	owner(nullptr),
 	thrown(false),
 	destroy(false),
 	playerJoint(nullptr)

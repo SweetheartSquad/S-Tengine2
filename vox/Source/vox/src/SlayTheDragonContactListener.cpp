@@ -31,6 +31,11 @@ void SlayTheDragonContactListener::playerPlayerContact(b2Contact * _contact){
 
 void SlayTheDragonContactListener::playerItemContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _itemFixture){
 	PuppetContactListener::playerItemContact(_contact, _playerFixture, _itemFixture);
+	
+	PuppetCharacter * player = static_cast<PuppetCharacter *>( _playerFixture->GetUserData() );
+    Item * item = static_cast<Item *>( _itemFixture->GetUserData() );
+
+
 }
 
 void SlayTheDragonContactListener::playerStructureContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _structureFixture){

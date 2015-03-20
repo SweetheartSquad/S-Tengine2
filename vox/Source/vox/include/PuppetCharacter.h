@@ -41,6 +41,8 @@ public:
 	Box2DSprite * face;
 	Box2DSprite * headgear;
 
+	static bool compareByScore(PuppetCharacter * _a, PuppetCharacter * _b);
+
 	PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	explicit PuppetCharacter(PuppetCharacter * _character, Box2DWorld *_world);
 	~PuppetCharacter();
@@ -57,7 +59,7 @@ public:
 
 	void attachJoints();
 
-    virtual void takeDamage();
+    virtual void takeDamage(float _damage);
 
 	Item * itemToPickup;
 	Item * heldItem;

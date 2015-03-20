@@ -36,6 +36,11 @@ public:
 	static TextureSampler * countDown4;
 	static TextureSampler * countDown5;
 
+	static TextureSampler * redWins;
+	static TextureSampler * yellowWins;
+	static TextureSampler * greenWins;
+	static TextureSampler * blueWins;
+
 	static SoundManager * jumpSounds;
 	static SoundManager * hitSounds;
 	static SoundManager * splashSounds;

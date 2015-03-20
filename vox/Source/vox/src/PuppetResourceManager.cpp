@@ -38,6 +38,11 @@ TextureSampler * PuppetResourceManager::countDown3 = new TextureSampler(new Text
 TextureSampler * PuppetResourceManager::countDown4 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/4.png", 1024, 1024, true, true), 1024, 1024);
 TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/5.png", 1024, 1024, true, true), 1024, 1024);
 
+TextureSampler * PuppetResourceManager::redWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/redWins.png", 1024, 1024, true, true), 1024, 1024);
+TextureSampler * PuppetResourceManager::yellowWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/yellowWins.png", 1024, 1024, true, true), 1024, 1024);
+TextureSampler * PuppetResourceManager::greenWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/greenWins.png", 1024, 1024, true, true), 1024, 1024);
+TextureSampler * PuppetResourceManager::blueWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/blueWins.png", 1024, 1024, true, true), 1024, 1024);
+
 SoundManager * PuppetResourceManager::jumpSounds   = new SoundManager(1.0);
 SoundManager * PuppetResourceManager::hitSounds    = new SoundManager(1.0);
 SoundManager * PuppetResourceManager::splashSounds = new SoundManager(-1);
@@ -72,6 +77,11 @@ void PuppetResourceManager::init(){
 	//Not sure why I need to call the constructor here 
 	//raidTheCastle = new RaidTheCastleResourceManager(); 
 	//subManagers.push_back(raidTheCastle);
+	
+	resources.push_back(redWins);
+	resources.push_back(yellowWins);
+	resources.push_back(greenWins);
+	resources.push_back(blueWins);
 
 	resources.push_back(splashSounds);
 	resources.push_back(hitSounds);

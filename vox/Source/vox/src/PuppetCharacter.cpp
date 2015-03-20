@@ -15,6 +15,10 @@
 #include <SoundManager.h>
 #include <RaidTheCastleResourceManager.h>
 
+bool PuppetCharacter::compareByScore(PuppetCharacter * _a, PuppetCharacter * _b){
+	return (_a->score < _b->score);
+}
+
 PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
@@ -26,7 +30,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	dead(false),
 	deathPending(false),
 	targetRoll(0),
-	health(1.0f),
+	health(100.0f),
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),
@@ -388,8 +392,9 @@ void PuppetCharacter::die(){
 	rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, 2.0f, rootComponent->transform->translationVector.z);
 }
 
-void PuppetCharacter::takeDamage(){
+void PuppetCharacter::takeDamage(float _damage){
     //rootComponent->applyLinearImpulseUp(500);
+	health -= _damage;
     control = std::max(0.f, control - 0.1f);
 }
 
@@ -422,6 +427,7 @@ void PuppetCharacter::pickupItem(Item * _item){
 		heldItem = _item;
 		itemToPickup = nullptr;
 		_item->held = true;
+		_item->owner = this;
 	}
 }
 
