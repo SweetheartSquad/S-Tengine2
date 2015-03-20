@@ -17,6 +17,9 @@ public:
 	bool dead;
 	bool deathPending;
 
+	double actionThrottle;
+	double lastActionTime;
+
 	signed long int id;
 
 	float targetRoll;

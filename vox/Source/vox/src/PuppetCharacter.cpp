@@ -33,7 +33,9 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	behaviourManager(this),
 	score(0.f),
 	control(1.f),
-	id(-1)
+	id(-1),
+	actionThrottle(0.333),
+	lastActionTime(0.0)
 {
 	bool defaultTex = false;
 	if(texPack == nullptr){
@@ -86,7 +88,9 @@ PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _wor
 	itemJoint(nullptr),
 	score(_character->score),
 	control(1.f),
-	id(_character->id)
+	id(_character->id),
+	actionThrottle(0.333),
+	lastActionTime(0.0)
 {
 	bool defaultTex = false;
 	if(texPack == nullptr){
@@ -346,21 +350,24 @@ void PuppetCharacter::jump(){
 }
 
 void PuppetCharacter::action(){
-	if(heldItem != nullptr){
-		if(itemJoint != nullptr){
-			Item * projectile = heldItem->getProjectile();
-			if(projectile == heldItem){
-				heldItem = nullptr;
-				itemJoint = nullptr;
-				itemToPickup = nullptr;
-			}
-			float t = rootComponent->body->GetAngle();
-			projectile->rootComponent->body->SetTransform(projectile->rootComponent->body->GetPosition(), t);
-			projectile->rootComponent->applyLinearImpulseUp(50);
-			if(rootComponent->body->GetAngle() > 0){
-				projectile->rootComponent->applyLinearImpulseLeft(50*(1-cos(t)));
-			}else{
-				projectile->rootComponent->applyLinearImpulseRight(50*(1-cos(t)));
+	if(vox::step.time - lastActionTime > actionThrottle){
+		lastActionTime = vox::step.time;
+		if(heldItem != nullptr){
+			if(itemJoint != nullptr){
+				Item * projectile = heldItem->getProjectile();
+				if(projectile == heldItem){
+					heldItem = nullptr;
+					itemJoint = nullptr;
+					itemToPickup = nullptr;
+				}
+				float t = rootComponent->body->GetAngle();
+				projectile->rootComponent->body->SetTransform(projectile->rootComponent->body->GetPosition(), t);
+				projectile->rootComponent->applyLinearImpulseUp(50);
+				if(rootComponent->body->GetAngle() > 0){
+					projectile->rootComponent->applyLinearImpulseLeft(50*(1-cos(t)));
+				}else{
+					projectile->rootComponent->applyLinearImpulseRight(50*(1-cos(t)));
+				}
 			}
 		}
 	}
