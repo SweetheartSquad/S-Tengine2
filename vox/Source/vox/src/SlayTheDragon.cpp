@@ -43,6 +43,14 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	
 	populateBackground();
 	
+	Sprite * fortBg = new Sprite();
+	fort->addToLayeredScene(this, 1);
+	addChild(fortBg, 1);
+	fortBg->setShader(shader, true);
+	fortBg->pushTextureSampler(SlayTheDragonResourceManager::fortBackground);
+	fortBg->transform->translate(65.0f, 20.0f, 0.0f);
+	fortBg->transform->scale(2.6f, 2.6f, 1.0f);
+
 	TextureSampler * splashMessageTextureSampler = SlayTheDragonResourceManager::splashMessage;
 	splashMessage = new Sprite(nullptr, new Transform());
 	splashMessage->transform->scale(glm::vec3(3, 3, 0));
@@ -132,14 +140,6 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	playerCharacter3->translateComponents(glm::vec3(40.f, fort->rootComponent->getCorrectedHeight() * 1.2, 0.f));
 	/**/
 	//dragon->translateComponents(glm::vec3(0.f, fort->rootComponent->getPos().y + fort->rootComponent->getCorrectedHeight() + fort->roof->getPos().y + fort->rootComponent->getCorrectedHeight() + 10.f, 0.f));
-	
-	Sprite * fortBg = new Sprite();
-	fort->addToLayeredScene(this, 1);
-	addChild(fortBg, 1);
-	fortBg->setShader(shader, true);
-	fortBg->pushTextureSampler(SlayTheDragonResourceManager::fortBackground);
-	fortBg->transform->translate(62.5f, 20.0f, 0.0f);
-	fortBg->transform->scale(3.0f, 3.0f, 1.0f);
 
 	fort->setShader(shader, true);
 	fort->addToLayeredScene(this, 1);

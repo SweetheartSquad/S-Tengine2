@@ -12,7 +12,7 @@
 #include <shader\BaseComponentShader.h>
 #include <shader\Shader.h>
 #include <RenderOptions.h>
-
+#include <SoundManager.h>
 #include <RaidTheCastleResourceManager.h>
 
 PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
@@ -330,6 +330,7 @@ void PuppetCharacter::update(Step* _step){
 
 void PuppetCharacter::jump(){
 	if(canJump){
+		PuppetResourceManager::jumpSounds->playRandomSound();
 		float t = rootComponent->body->GetAngle();
 		b2Vec2 p = rootComponent->body->GetWorldPoint(b2Vec2(0, 1));
 		//torso->applyLinearImpulse(250*(1-cos(t))*glm::sign(-t), 250*(cos(t)*0.5 + 0.5), p.x, p.y);

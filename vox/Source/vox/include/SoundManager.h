@@ -1,9 +1,10 @@
 #pragma once
 #include <map>
 
-#include "Sound.h"
+#include <Sound.h>
+#include <node/NodeResource.h>
 
-class SoundManager{
+class SoundManager : public NodeResource{
 public:
 
 	std::map<std::string, Sound> sounds;
@@ -20,4 +21,7 @@ public:
 	void stop(std::string _name);
 	void resume(std::string _name);
 	void playRandomSound();
+
+	void load() override;
+	void unload() override;
 };

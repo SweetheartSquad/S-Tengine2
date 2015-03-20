@@ -3,7 +3,9 @@
 #include "SoundManager.h"
 #include <NumberUtils.h>
 
-SoundManager::SoundManager(){
+SoundManager::SoundManager():
+	NodeResource(true)
+{
 }
 
 SoundManager::~SoundManager(){
@@ -45,9 +47,17 @@ void SoundManager::resume(std::string _name){
 	sounds.at(_name).resume();
 }
 
+void SoundManager::load(){
+}
+
+void SoundManager::unload(){
+}
+
 void SoundManager::playRandomSound(){
-	auto it = sounds.begin();
-	std::advance(it, vox::NumberUtils::randomInt(0, sounds.size() - 1));
-	auto s = it->second;
-	s.play();
+	if(sounds.size() > 0){
+		auto it = sounds.begin();
+		std::advance(it, vox::NumberUtils::randomInt(0, sounds.size() - 1));
+		auto s = it->second;
+		s.play();
+	}
 }

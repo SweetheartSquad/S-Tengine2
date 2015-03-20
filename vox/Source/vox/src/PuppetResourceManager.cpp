@@ -6,6 +6,7 @@
 #include <RaidTheCastleResourceManager.h>
 #include <RapunzelResourceManager.h>
 #include <SlayTheDragonResourceManager.h>
+#include <SoundManager.h>
 
 Texture * PuppetResourceManager::blank = new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true);
 Texture * PuppetResourceManager::stageFloor = new Texture("../assets/hurly-burly/StageFloor.png", 1024, 1024, true, true);
@@ -26,6 +27,10 @@ TextureSampler * PuppetResourceManager::countDown2 = new TextureSampler(new Text
 TextureSampler * PuppetResourceManager::countDown3 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/3.png", 1024, 1024, true, true), 1024, 1024);
 TextureSampler * PuppetResourceManager::countDown4 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/4.png", 1024, 1024, true, true), 1024, 1024);
 TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/5.png", 1024, 1024, true, true), 1024, 1024);
+
+SoundManager * PuppetResourceManager::jumpSounds = new SoundManager();
+SoundManager * PuppetResourceManager::hitSounds = new SoundManager();
+SoundManager * PuppetResourceManager::attackSounds = new SoundManager();
 
 void PuppetResourceManager::init(){
 	RaidTheCastleResourceManager::init();
@@ -54,4 +59,8 @@ void PuppetResourceManager::init(){
 	//Not sure why I need to call the constructor here 
 	//raidTheCastle = new RaidTheCastleResourceManager(); 
 	//subManagers.push_back(raidTheCastle);
+
+	resources.push_back(attackSounds);
+	resources.push_back(hitSounds);
+	resources.push_back(jumpSounds);
 }

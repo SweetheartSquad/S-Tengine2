@@ -2,6 +2,7 @@
 
 #include <ResourceManager.h>
 
+class SoundManager;
 class Texture;
 class TextureSampler;
 
@@ -27,6 +28,9 @@ public:
 	static TextureSampler * countDown4;
 	static TextureSampler * countDown5;
 
+	static SoundManager * jumpSounds;
+	static SoundManager * hitSounds;
+	static SoundManager * attackSounds;
 	
 	static void init();
 };
