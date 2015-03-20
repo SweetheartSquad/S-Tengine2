@@ -125,7 +125,7 @@ void PuppetContactListener::playerItemContact(b2Contact * _contact, b2Fixture * 
 	static_cast<Item *>(item)->hitPlayer();
 	if(item->thrown || (item->held && item != p->heldItem)){
 		// do some sort of damage thing here
-		PuppetResourceManager::hitSounds->playRandomSound();
+		//PuppetResourceManager::hitSounds->playRandomSound();
         p->takeDamage();
 	}else if(p->heldItem == nullptr && !item->held && !item->destroy){
 		p->itemToPickup = item;

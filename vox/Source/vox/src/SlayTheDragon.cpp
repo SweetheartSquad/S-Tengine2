@@ -30,6 +30,7 @@
 
 
 #include <glfw\glfw3.h>
+#include <SoundManager.h>
 
 
 SlayTheDragon::SlayTheDragon(PuppetGame* _game):
@@ -155,6 +156,10 @@ SlayTheDragon::~SlayTheDragon(){
 
 void SlayTheDragon::update(Step* _step){
 	PuppetScene::update(_step);
+	if(!splashSoundPlayed){
+		PuppetResourceManager::splashSounds->play("SlayTheDragon");
+		splashSoundPlayed = true;
+	}
 }
 
 void SlayTheDragon::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){

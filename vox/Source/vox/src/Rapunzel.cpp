@@ -32,6 +32,7 @@
 #include <ItemProjectileWeapon.h>
 
 #include <glfw\glfw3.h>
+#include <SoundManager.h>
 
 Rapunzel::Rapunzel(PuppetGame* _game):
 	PuppetScene(_game, 10),
@@ -131,6 +132,12 @@ Rapunzel::~Rapunzel(){
 
 void Rapunzel::update(Step* _step){
 	PuppetScene::update(_step);
+
+	if(!splashSoundPlayed){
+		PuppetResourceManager::splashSounds->play("RaidTheCastle");
+		splashSoundPlayed = true;
+	}
+
 	if(keyboard->keyDown(GLFW_KEY_B)){
 		guard->control = 0;
 		playerCharacter1->control = 0;

@@ -18,6 +18,11 @@ public:
 	static Texture * bush1;
 	static Texture * bush2;
 
+	static Texture * cloud1;
+	static Texture * cloud2;
+	static Texture * cloud3;
+	static Texture * cloud4;
+
 	static TextureSampler * dustParticle;
 
 	static TextureSampler * head1;
@@ -33,7 +38,7 @@ public:
 
 	static SoundManager * jumpSounds;
 	static SoundManager * hitSounds;
-	static SoundManager * attackSounds;
+	static SoundManager * splashSounds;
 	
 	static void init();
 };

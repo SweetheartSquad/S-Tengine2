@@ -44,6 +44,7 @@ public:
 
 	Sprite * splashMessage;
 	bool displayingSplash;
+	bool splashSoundPlayed;
 	float splashDuration;
 
 	PuppetContactListener * cl;
@@ -87,4 +88,5 @@ public:
 	void playRandomBackgroundMusic();
 
 	 virtual void populateBackground();
+	 virtual void populateClouds();
 };

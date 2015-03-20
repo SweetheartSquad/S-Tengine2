@@ -57,6 +57,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	currentTime(0),
 	countDown(0),
 	displayingSplash(false),
+	splashSoundPlayed(false),
 	splashMessage(nullptr),
 	splashDuration(3.f),
 	cl(nullptr),
@@ -307,7 +308,9 @@ void PuppetScene::update(Step * _step){
 		if(currentTime < splashDuration){
 			if(displayingSplash){
 				// the factor of 15 is only there because I can't load this thing at the correct size...
-				float scale = Easing::easeOutBack(splashDuration - currentTime, 0, 10, splashDuration);
+				//float scale = Easing::easeOutBack(splashDuration - currentTime, 0, 10, splashDuration);
+				float easeTime = splashDuration - currentTime;
+				float scale = (easeTime > splashDuration / 2.f) ? Easing::easeOutElastic(easeTime, 0, 10, splashDuration / 2.f) : Easing::easeInCubic(easeTime - splashDuration/2.f, 10, -10, splashDuration / 2.f);
 				splashMessage->transform->scaleVector = glm::vec3(-scale, scale, 1);
 			}else{
 				addChild(splashMessage, 2);
@@ -565,4 +568,34 @@ void PuppetScene::populateBackground(){
 		}
 	}
 	addChild(ground, 0);
+}
+
+void PuppetScene::populateClouds(){
+	int numClouds = 60;
+	for(signed long int i = 0; i < numClouds; ++i){
+		float height = std::rand()%500/50.f+5.f;
+		MeshEntity * cloud = new MeshEntity(MeshFactory::getPlaneMesh());
+		cloud->setShader(shader, true);
+		cloud->transform->translate((std::rand()%500/3.f)-25.f, height, max(-9, -(float)(numClouds-i)/numClouds)*8.f - 1.f);
+		cloud->transform->scale(height, height, 1);
+		int tex = i % 4;
+		switch(tex){
+			case 0:
+				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud1); break;
+			case 1:
+				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud2); break;
+			case 2:
+				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud3); break;
+			case 3:
+				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud4); break;
+			default:
+				break;
+		}
+		addChild(cloud, 0);
+		randomGround->setShader(shader, true);
+		if(i == 3){
+			randomGround->setTranslationPhysical(0.0f, 0.0f, max(-9, -(float)(numClouds-i)/numClouds)*8.f - 1.f);
+			addChild(randomGround, 0);
+		}
+	}
 }

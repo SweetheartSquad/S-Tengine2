@@ -29,7 +29,7 @@
 #include <ItemFlail.h>
 #include <ItemSimpleWeapon.h>
 #include <ItemProjectileWeapon.h>
-
+#include <SoundManager.h>
 #include <glfw\glfw3.h>
 
 
@@ -158,6 +158,12 @@ void RaidTheCastle::update(Step* _step){
 	/*if(keyboard->keyDown(GLFW_KEY_F)){
 		catapult->fireCatapult();
 	}*/
+
+	if(!splashSoundPlayed){
+		PuppetResourceManager::splashSounds->play("RaidTheCastle");
+		splashSoundPlayed = true;
+	}
+
 	if(catapult->fireBoulder){
 		catapult->fireBoulder = false;
 		if(catapult->boulderLoaded && catapult->boulderJoint != nullptr){
