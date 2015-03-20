@@ -358,7 +358,7 @@ void PuppetScene::update(Step * _step){
 		Item * item = items.at(i);
 		
 		if (item->destroy){
-			for (unsigned long int i = 0; i < std::rand() % 5; ++i){
+			for (signed long int j = 0; j < std::rand() % 5 + 1; ++j){
 				particleSystem->addParticle(PuppetResourceManager::dustParticle, item->rootComponent->getPos(false));
 			}
 			destroyItem(item);
@@ -431,24 +431,10 @@ void PuppetScene::complete(){
 	pg->puppetControllers.at(3)->unassign();
 
 	if(dynamic_cast<VictoryScene *>(this) != nullptr){
-		int r = vox::NumberUtils::randomInt(0, 2);
-		switch(r) {
-		case 0:
-			game->scenes.insert(std::make_pair("Raid The Castle", new RaidTheCastle(pg)));
-			game->switchScene("Raid The Castle", true);
-			break;
-		case 1:
-			game->scenes.insert(std::make_pair("Rapunzel", new Rapunzel(pg)));
-			game->switchScene("Rapunzel", true);
-			break;
-		case 2:
-			game->scenes.insert(std::make_pair("Slay The Dragon", new SlayTheDragon(pg)));
-			game->switchScene("Slay The Dragon", true);
-			break;
-		}
+		pg->loadRandomScene();
 	}else{
-		game->scenes.insert(std::make_pair("Victory", new VictoryScene(pg, players)));
-		game->switchScene("Victory", true);
+		pg->scenes.insert(std::make_pair("Victory", new VictoryScene(pg, players)));
+		pg->switchScene("Victory", true);
 	}
 }
 

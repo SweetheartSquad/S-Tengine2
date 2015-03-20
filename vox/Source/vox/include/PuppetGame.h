@@ -11,12 +11,16 @@ class PuppetGame:public Game{
 public:
 	AccelerometerParser * arduino;
 
+	unsigned long int lastScene;
+
 	std::vector<PuppetController *> puppetControllers;
 
 	explicit PuppetGame(bool _running);
 	~PuppetGame();
 	void update() override;
 	void draw() override;
+	
+	void loadRandomScene();
 
 	enum BOX2D_CATEGORY{
 		kBOUNDARY = 0x0001,

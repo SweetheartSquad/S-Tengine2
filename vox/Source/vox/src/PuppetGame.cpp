@@ -7,6 +7,8 @@
 #include "GameJamSceneIndoor.h"
 #include "GameJamSceneOutdoor.h"
 
+#include <NumberUtils.h>
+
 #include <cstdlib>
 #include <ctime>
 #include <BaseScene.h>
@@ -16,7 +18,8 @@
 
 PuppetGame::PuppetGame(bool _running):
 	Game(_running),
-	arduino(new AccelerometerParser("COM4"))
+	arduino(new AccelerometerParser("COM4")),
+	lastScene(-1)
 {
 	std::srand((unsigned long int)std::time(0));
 	//GameJamCharacter::init();
@@ -44,11 +47,16 @@ PuppetGame::PuppetGame(bool _running):
 	//scenes.insert(std::make_pair("indoors", new GameJamSceneIndoor(this)));
 	//scenes.insert(std::make_pair("outdoors", new GameJamSceneOutdoor(this)));
 
-	scenes.insert(std::make_pair("Slay the Dragon", new SlayTheDragon(this)));
+	//scenes.insert(std::make_pair("Slay the Dragon", new SlayTheDragon(this)));
 	//((GameJamSceneIndoor *)scenes.at("Raid the Castle"))->debugDraw = true;
 	//currentScene = scenes.at("indoors");
-	currentSceneKey = "Slay the Dragon";
+	//currentSceneKey = "Slay the Dragon";
+
+	loadRandomScene();
+
+	currentSceneKey = newSceneKey;
 	currentScene = scenes.at(currentSceneKey);
+	switchingScene = false;
 }
 
 PuppetGame::~PuppetGame(){
@@ -65,4 +73,27 @@ void PuppetGame::update(){
 
 void PuppetGame::draw(){
 	Game::draw();
+}
+
+void PuppetGame::loadRandomScene(){
+	int r;
+	do{
+		r = vox::NumberUtils::randomInt(0, 2);
+	}while(r == lastScene);
+
+	switch(r) {
+	case 0:
+		scenes.insert(std::make_pair("Raid The Castle", new RaidTheCastle(this)));
+		switchScene("Raid The Castle", true);
+		break;
+	case 1:
+		scenes.insert(std::make_pair("Rapunzel", new Rapunzel(this)));
+		switchScene("Rapunzel", true);
+		break;
+	case 2:
+		scenes.insert(std::make_pair("Slay The Dragon", new SlayTheDragon(this)));
+		switchScene("Slay The Dragon", true);
+		break;
+	}
+	lastScene = r;
 }
