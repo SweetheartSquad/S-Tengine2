@@ -37,7 +37,7 @@ public:
 
 	static SoundManager * jumpSounds;
 	static SoundManager * hitSounds;
-	static SoundManager * attackSounds;
+	static SoundManager * splashSounds;
 	
 	static void init();
 };

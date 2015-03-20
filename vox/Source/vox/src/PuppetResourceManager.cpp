@@ -38,7 +38,7 @@ TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Text
 
 SoundManager * PuppetResourceManager::jumpSounds   = new SoundManager(1.0);
 SoundManager * PuppetResourceManager::hitSounds    = new SoundManager(1.0);
-SoundManager * PuppetResourceManager::attackSounds = new SoundManager(1.0);
+SoundManager * PuppetResourceManager::splashSounds = new SoundManager();
 
 void PuppetResourceManager::init(){
 	RaidTheCastleResourceManager::init();
@@ -70,7 +70,7 @@ void PuppetResourceManager::init(){
 	//raidTheCastle = new RaidTheCastleResourceManager(); 
 	//subManagers.push_back(raidTheCastle);
 
-	resources.push_back(attackSounds);
+	resources.push_back(splashSounds);
 	resources.push_back(hitSounds);
 	resources.push_back(jumpSounds);
 
@@ -105,4 +105,10 @@ void PuppetResourceManager::init(){
 	hitSounds->addNewSound("hit18", "../assets/hurly-burly/audio/hit/hitSound18.ogg");
 	hitSounds->addNewSound("hit19", "../assets/hurly-burly/audio/hit/hitSound19.ogg");
 	hitSounds->addNewSound("hit10", "../assets/hurly-burly/audio/hit/hitSound20.ogg");
+
+	splashSounds->addNewSound("FightYourFriends", "../assets/hurly-burly/audio/splash/FightYourFriends.ogg");
+	splashSounds->addNewSound("Joust", "../assets/hurly-burly/audio/splash/Joust.ogg");
+	splashSounds->addNewSound("RaidTheCastle", "../assets/hurly-burly/audio/splash/RaidTheCastle.ogg");
+	splashSounds->addNewSound("Rapunzel", "../assets/hurly-burly/audio/splash/Rapunzel.ogg");
+	splashSounds->addNewSound("SlayTheDragon", "../assets/hurly-burly/audio/splash/SlayTheDragon.ogg");
 }
