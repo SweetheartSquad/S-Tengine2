@@ -6,7 +6,8 @@ class Box2DSprite;
 class ParticleSystem : public Box2DSuperSprite{
 public:
 	float emissionRate;
-	float emissionAmount;
+	unsigned long int emissionAmount;
+	float emissionTimer;
 	
 	void addParticle();
 

@@ -11,10 +11,7 @@ class PuppetGame:public Game{
 public:
 	AccelerometerParser * arduino;
 
-	PuppetController * puppetController1;
-	PuppetController * puppetController2;
-	PuppetController * puppetController3;
-	PuppetController * puppetController4;
+	std::vector<PuppetController *> puppetControllers;
 
 	explicit PuppetGame(bool _running);
 	~PuppetGame();

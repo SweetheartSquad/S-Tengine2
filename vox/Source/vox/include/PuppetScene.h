@@ -72,7 +72,7 @@ public:
 
     ParticleSystem * particleSystem;
 
-	explicit PuppetScene(PuppetGame * _game, float time);
+	explicit PuppetScene(PuppetGame * _game, float time, float _width = 170.f, float _height = 50.f, float _size = 3.f);
 	virtual ~PuppetScene();
 
 	virtual void load() override;
@@ -85,4 +85,6 @@ public:
 	void destroyItem(Item * item);
 	void doCountDown();
 	void playRandomBackgroundMusic();
+
+	 virtual void populateBackground();
 };

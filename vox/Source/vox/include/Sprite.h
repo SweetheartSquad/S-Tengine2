@@ -5,6 +5,7 @@
 
 #include <map>
 
+class TextureSampler;
 class SpriteSheetAnimation;
 class Rectangle;
 class SpriteMesh;
@@ -29,6 +30,7 @@ public:
 	virtual void update(Step* _step) override;
 	void addAnimation(std::string _name, SpriteSheetAnimation * _animation, bool _makeCurrent);
 	void setCurrentAnimation(std::string _name);
+	void pushTextureSampler(TextureSampler * _sampler);
 	
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 

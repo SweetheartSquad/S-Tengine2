@@ -47,8 +47,11 @@
 #include <VictoryScene.h>
 
 #include <ParticleSystem.h>
+#include <SlayTheDragon.h>
 
-PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
+class SlayTheDragon;
+
+PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float _height, float _size):
 	LayeredScene(_game, 3),
 	duration(seconds),
 	currentTime(0),
@@ -95,39 +98,21 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	background->mesh->pushTexture2D(PuppetResourceManager::sky);
 	background->mesh->uvEdgeMode = GL_REPEAT;
 	background->mesh->dirty = true;
-
-	ground->setShader(shader, true);
-	//ground->setTranslationPhysical(0, 0, 0);
-	//ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
-	//ground->transform->rotate(90.f, 0, 0, 1, kOBJECT);
-	ground->transform->scale(1000, 100, 100);
-	ground->transform->translate(50.f/2.f, 0, -15.f/2.f);
-	ground->mesh->uvEdgeMode = GL_REPEAT;
-	ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
-	for(Vertex & v : ground->mesh->vertices){
-		v.u *= 10;
-		v.v *= 100;
-	}
-	ground->mesh->dirty = true;
 	
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
-	
-	float width = 170.f;
-	float height = 50.f;
-	float size = 3.f;
 
-	boundaries.at(0)->transform->scale(size, height/2.f, size);
-	boundaries.at(1)->transform->scale(size, height/2.f, size);
-	boundaries.at(2)->transform->scale(width/2.f, size, size);
-	boundaries.at(3)->transform->scale(width/2.f, size, size);
+	boundaries.at(0)->transform->scale(_size, _height/2.f, _size);
+	boundaries.at(1)->transform->scale(_size, _height/2.f, _size);
+	boundaries.at(2)->transform->scale(_width/2.f, _size, _size);
+	boundaries.at(3)->transform->scale(_width/2.f, _size, _size);
 
-	boundaries.at(0)->setTranslationPhysical(width, height/2.f, 0);
-	boundaries.at(1)->setTranslationPhysical(0, height/2.f, 0);
-	boundaries.at(2)->setTranslationPhysical(width/2.f, height-size, 0);
-	boundaries.at(3)->setTranslationPhysical(width/2.f, -size, 0);
+	boundaries.at(0)->setTranslationPhysical(_width, _height/2.f, 0);
+	boundaries.at(1)->setTranslationPhysical(0, _height/2.f, 0);
+	boundaries.at(2)->setTranslationPhysical(_width/2.f, _height-_size, 0);
+	boundaries.at(3)->setTranslationPhysical(_width/2.f, -_size, 0);
 	
 	/*addChild(boundaries.at(0), 0);
 	addChild(boundaries.at(1), 0);
@@ -164,14 +149,13 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	ground->mesh->setUV(3, 40.0, 0.0);*/
 
 	//world->addToWorld(ground, 2);
-	addChild(ground, 0);
 
-	int timeOfDayOptions = 4;
+	int timeOfDayOptions = PuppetResourceManager::sky->width;
 	int timeOfDay = std::rand()%timeOfDayOptions;
-	background->mesh->setUV(0, (float)timeOfDay/timeOfDayOptions, 0);
-	background->mesh->setUV(1, (float)(timeOfDay+1)/timeOfDayOptions, 0);
-	background->mesh->setUV(2, (float)(timeOfDay+1)/timeOfDayOptions, 1);
-	background->mesh->setUV(3, (float)timeOfDay/timeOfDayOptions, 1);
+	background->mesh->setUV(0, (float)timeOfDay / timeOfDayOptions, 0);
+	background->mesh->setUV(1, (float)timeOfDay / timeOfDayOptions, 0);
+	background->mesh->setUV(2, (float)timeOfDay / timeOfDayOptions, 1);
+	background->mesh->setUV(3, (float)timeOfDay / timeOfDayOptions, 1);
 
 	addChild(background, 0);
 
@@ -182,39 +166,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	groundFixture->SetUserData(this);
 	*/
 
-	Texture * treeTex1 = PuppetResourceManager::tree1;
-	Texture * treeTex2 = PuppetResourceManager::tree2;
-	Texture * bushTex1 = PuppetResourceManager::bush1;
-	Texture * bushTex2 = PuppetResourceManager::bush2;
-	
-	int numFoliage = 60;
-	for(signed long int i = 0; i < numFoliage; ++i){
-		float height = std::rand()%500/50.f+5.f;
-		MeshEntity * foliage = new MeshEntity(MeshFactory::getPlaneMesh());
-		foliage->setShader(shader, true);
-		foliage->transform->translate((std::rand()%500/3.f)-25.f, height, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
-		foliage->transform->scale(height, height, 1);
-		int tex = i % 4;
-		switch(tex){
-			case 0:
-				foliage->mesh->pushTexture2D(treeTex1); break;
-			case 1:
-				foliage->mesh->pushTexture2D(treeTex2); break;
-			case 2:
-				foliage->mesh->pushTexture2D(bushTex1); break;
-			case 3:
-				foliage->mesh->pushTexture2D(bushTex2); break;
-			default:
-				break;
-		}
-		addChild(foliage, 0);
-
-		if(i == 3){
-			randomGround->setTranslationPhysical(0.0f, 0.0f, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
-			addChild(randomGround, 0);
-		}
-	}
-	
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);
 	drawer->AppendFlags(b2Draw::e_shapeBit);
@@ -223,7 +174,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	//drawer->AppendFlags(b2Draw::e_pairBit);
 	addChild(drawer, 2);
 
-	randomGround->setShader(shader, true);
 	//randomGround->mesh->uvEdgeMode = GL_REPEAT;
 
 	//world->addToWorld(randomGround);
@@ -235,6 +185,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
 	mouseCamera->transform->translate(5.0f, 1.5f, 22.5f);
 	mouseCamera->yaw = 90.0f;
 	mouseCamera->pitch = -10.0f;
+	mouseCamera->speed = 1;
 
 	gameCam = new FollowCamera(10, glm::vec3(0, 0, 0), 0, 0);
 	gameCam->farClip = 1000.f;
@@ -285,7 +236,9 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds):
     particleSystem = new ParticleSystem(world, 0, 0, 0);
     particleSystem->addToLayeredScene(this, 1);
     addChild(particleSystem, 1);
-    particleSystem->setShader(shader, true);
+	particleSystem->setShader(shader, true);
+	particleSystem->emissionRate = 0.1f;
+	particleSystem->emissionAmount = 3;
 }
 
 PuppetScene::~PuppetScene(){
@@ -303,12 +256,48 @@ void PuppetScene::unload(){
 }
 
 void PuppetScene::update(Step * _step){
+
+	// player controls
+	if (players.size() > 0){
+		if (keyboard->keyJustDown(GLFW_KEY_W)){
+			players.at(0)->jump();
+		}if (keyboard->keyDown(GLFW_KEY_A)){
+			players.at(0)->targetRoll = glm::radians(-45.f);
+		}
+		if (keyboard->keyDown(GLFW_KEY_D)){
+			players.at(0)->targetRoll = glm::radians(45.f);
+		}
+		if (keyboard->keyJustDown(GLFW_KEY_T)){
+			players.at(0)->action();
+		}
+
+		if (keyboard->keyDown(GLFW_KEY_B)){
+			for (PuppetCharacter * p : players){
+				p->control = 0;
+			}
+		}
+	}
+
+	// camera controls
+	if (keyboard->keyDown(GLFW_KEY_UP)){
+		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
+	}
+	if (keyboard->keyDown(GLFW_KEY_DOWN)){
+		camera->transform->translate((camera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);
+	}
+	if (keyboard->keyDown(GLFW_KEY_LEFT)){
+		camera->transform->translate((camera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);
+	}
+	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
+		camera->transform->translate((camera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
+	}
+
 	Scene::update(_step);
 
     //Box2DSprite * test = new Box2DSprite(world);
     //test->setShader(shader, this);
     //particleSystem->addComponent(test);
-    particleSystem->addParticle();
+    //particleSystem->addParticle();
 
 
 	if(splashMessage != nullptr){
@@ -382,44 +371,33 @@ void PuppetScene::update(Step * _step){
 			}
 		}
 	}
-	
-	
 
-	if(keyboard->keyJustUp(GLFW_KEY_1)){
+
+	// camera control
+	if (keyboard->keyJustUp(GLFW_KEY_1)){
 		mouseCam = !mouseCam;
-		if(!mouseCam){
+		if (!mouseCam){
 			camera = gameCam;
-		}else{
-			camera = mouseCamera;			
+		}
+		else{
+			camera = mouseCamera;
 		}
 	}
 
+	// trigger countdown
+	if (keyboard->keyJustUp(GLFW_KEY_ENTER)){
+		currentTime = duration - countDownNumbers.size();
+		countDown = countDownNumbers.size();
+	}
+
 	
-	// camera controls
-	if(keyboard->keyDown(GLFW_KEY_UP)){
-		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
-	}
-	if(keyboard->keyDown(GLFW_KEY_DOWN)){
-		camera->transform->translate((camera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);	
-	}
-	if(keyboard->keyDown(GLFW_KEY_LEFT)){
-		camera->transform->translate((camera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);		
-	}
-	if(keyboard->keyDown(GLFW_KEY_RIGHT)){
-		camera->transform->translate((camera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);	
-	}
+	
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_2)){
 		drawer->drawing = !drawer->drawing;
-		/*if (drawer->drawing){
-			drawer->load();
-		}else{
-			drawer->unload();
-		}*/
 	}
-	//std::cout << "update\n";
 }
 
 void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
@@ -427,24 +405,33 @@ void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderS
 }
 
 void PuppetScene::complete(){
-	// select new scene, based on if this is a victory scene or a gameplay scene?
-	// switch to next scene
-	// delete this scene
+	PuppetGame * pg = static_cast<PuppetGame *>(game);
 
-	// temporary stuff
+	pg->puppetControllers.at(0)->unassign();
+	pg->puppetControllers.at(1)->unassign();
+	pg->puppetControllers.at(2)->unassign();
+	pg->puppetControllers.at(3)->unassign();
 
-	if(dynamic_cast<RaidTheCastle *>(this) != nullptr){
-		game->scenes.insert(std::make_pair("SlayTheDragon", new SlayTheDragon(static_cast<PuppetGame *>(game))));
-		game->switchScene("SlayTheDragon", true);
+	if(dynamic_cast<VictoryScene *>(this) != nullptr){
+		int r = vox::NumberUtils::randomInt(0, 2);
+		switch(r) {
+		case 0:
+			game->scenes.insert(std::make_pair("Raid The Castle", new RaidTheCastle(pg)));
+			game->switchScene("Raid The Castle", true);
+			break;
+		case 1:
+			game->scenes.insert(std::make_pair("Rapunzel", new Rapunzel(pg)));
+			game->switchScene("Rapunzel", true);
+			break;
+		case 2:
+			game->scenes.insert(std::make_pair("Slay The Dragon", new SlayTheDragon(pg)));
+			game->switchScene("Slay The Dragon", true);
+			break;
+		}
 	}else{
-		//game->scenes.insert(std::make_pair("Raid the Castle", new RaidTheCastle(static_cast<PuppetGame *>(game))));
-		//game->switchScene("Raid the Castle", true);
+		game->scenes.insert(std::make_pair("Victory", new VictoryScene(pg, players)));
+		game->switchScene("Victory", true);
 	}
-
-	game->scenes.insert(std::make_pair("Victory", new VictoryScene(static_cast<PuppetGame *>(game), players)));
-	game->switchScene("Victory", true);
-
-	//Scene * oldScene = game->currentScene;
 }
 
 void PuppetScene::destroyItem(Item * _item){
@@ -520,4 +507,55 @@ void PuppetScene::doCountDown(){
 
 void PuppetScene::playRandomBackgroundMusic(){
 	backgroundSoundManager->playRandomSound();
+}
+
+void PuppetScene::populateBackground(){
+	ground->setShader(shader, true);
+	//ground->setTranslationPhysical(0, 0, 0);
+	//ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
+	//ground->transform->rotate(90.f, 0, 0, 1, kOBJECT);
+	ground->transform->scale(1000, 100, 100);
+	ground->transform->translate(50.f/2.f, 0, -15.f/2.f);
+	ground->mesh->uvEdgeMode = GL_REPEAT;
+	ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
+	for(Vertex & v : ground->mesh->vertices){
+		v.u *= 10;
+		v.v *= 100;
+	}
+	
+	ground->mesh->dirty = true;
+
+	Texture * treeTex1 = PuppetResourceManager::tree1;
+	Texture * treeTex2 = PuppetResourceManager::tree2;
+	Texture * bushTex1 = PuppetResourceManager::bush1;
+	Texture * bushTex2 = PuppetResourceManager::bush2;
+	
+	int numFoliage = 60;
+	for(signed long int i = 0; i < numFoliage; ++i){
+		float height = std::rand()%500/50.f+5.f;
+		MeshEntity * foliage = new MeshEntity(MeshFactory::getPlaneMesh());
+		foliage->setShader(shader, true);
+		foliage->transform->translate((std::rand()%500/3.f)-25.f, height, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
+		foliage->transform->scale(height, height, 1);
+		int tex = i % 4;
+		switch(tex){
+			case 0:
+				foliage->mesh->pushTexture2D(treeTex1); break;
+			case 1:
+				foliage->mesh->pushTexture2D(treeTex2); break;
+			case 2:
+				foliage->mesh->pushTexture2D(bushTex1); break;
+			case 3:
+				foliage->mesh->pushTexture2D(bushTex2); break;
+			default:
+				break;
+		}
+		addChild(foliage, 0);
+		randomGround->setShader(shader, true);
+		if(i == 3){
+			randomGround->setTranslationPhysical(0.0f, 0.0f, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
+			addChild(randomGround, 0);
+		}
+	}
+	addChild(ground, 0);
 }

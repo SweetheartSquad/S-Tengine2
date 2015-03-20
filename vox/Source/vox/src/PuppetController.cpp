@@ -5,10 +5,31 @@
 #include "Accelerometer.h"
 #include "CharacterComponent.h"
 
-PuppetController::PuppetController(Accelerometer* _accelerometer, PuppetCharacter* _puppetCharacter):
+std::vector<bool> PuppetController::idsAvailable = std::vector<bool>(4, true);
+
+void PuppetController::setPuppetCharacter(PuppetCharacter * _puppetCharacter){
+	puppetCharacter = _puppetCharacter;
+	for (unsigned long int i = 0; i < idsAvailable.size(); ++i){
+		if (idsAvailable.at(i)){
+			puppetCharacter->id = i;
+			idsAvailable.at(i) = false;
+			break;
+		}
+	}
+}
+
+void PuppetController::unassign(){
+	if (puppetCharacter != nullptr){
+		idsAvailable.at(puppetCharacter->id) = true;
+		puppetCharacter->id = -1;
+		puppetCharacter = nullptr;
+	}
+}
+
+PuppetController::PuppetController(Accelerometer* _accelerometer):
 	NodeUpdatable(),
 	accelerometer(_accelerometer),
-	puppetCharacter(_puppetCharacter)
+	puppetCharacter(nullptr)
 {
 }
 

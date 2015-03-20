@@ -49,6 +49,7 @@ Box2DSuperSprite::Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int
 Box2DSuperSprite::~Box2DSuperSprite(){
 	while(components.size() > 0){
 		delete *components.back();
+		delete components.back();
 		components.pop_back();
 	}
 	components.clear();

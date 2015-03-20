@@ -33,9 +33,8 @@
 
 #include <glfw\glfw3.h>
 
-
 Rapunzel::Rapunzel(PuppetGame* _game):
-	PuppetScene(_game, 60),
+	PuppetScene(_game, 10),
 	guard(new PuppetCharacterGuard(true, world, PuppetGame::kPLAYER, -1, -20)),
 	playerCharacter1(new PuppetCharacterThief(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterThief(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
@@ -43,7 +42,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter4(new PuppetCharacterRapunzel(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
 	cl = new RapunzelContactListener(this);
-
+	populateBackground();
 	TextureSampler * splashMessageTextureSampler = RapunzelResourceManager::splashMessage;
 	splashMessage = new Sprite(nullptr, new Transform());
 	splashMessage->transform->scale(glm::vec3(3, 3, 0));
@@ -60,25 +59,25 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
 	playerCharacter1->rootComponent->maxVelocity = b2Vec2(10, 10);
-	static_cast<PuppetGame *>(game)->puppetController1->puppetCharacter = playerCharacter1;
+	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
 	playerCharacter2->rootComponent->maxVelocity = b2Vec2(10, 10);
-	static_cast<PuppetGame *>(game)->puppetController2->puppetCharacter = playerCharacter2;
+	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
 	playerCharacter3->rootComponent->maxVelocity = b2Vec2(10, 10);
-	static_cast<PuppetGame *>(game)->puppetController3->puppetCharacter = playerCharacter3;
+	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
 	playerCharacter4->rootComponent->maxVelocity = b2Vec2(10, 10);
-	static_cast<PuppetGame *>(game)->puppetController4->puppetCharacter = playerCharacter4;
+	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
 
 	guard->setShader(shader, true);
 	addChild(guard, 0);
@@ -99,9 +98,13 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter3->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter3, 3, PuppetGame::kPLAYER));
 	playerCharacter3->ai = true;
 
-	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
+	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50, 0, 0), glm::vec3(100, 0, 0), playerCharacter4, 10));
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
 	playerCharacter4->ai = true;
+
+	guard->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50, 0, 0), glm::vec3(100, 0, 0), playerCharacter4, 10));
+	guard->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
+	guard->ai = true;
 
 	for(PuppetCharacter * p : players){
 		TextureSampler * weaponTex = RapunzelResourceManager::getRandomWeapon();
@@ -127,18 +130,6 @@ Rapunzel::~Rapunzel(){
 }
 
 void Rapunzel::update(Step* _step){
-    if (keyboard->keyJustDown(GLFW_KEY_W)){
-        playerCharacter1->jump();
-    }if (keyboard->keyDown(GLFW_KEY_A)){
-        playerCharacter1->targetRoll = glm::radians(-45.f);
-    }
-    if (keyboard->keyDown(GLFW_KEY_D)){
-        playerCharacter1->targetRoll = glm::radians(45.f);
-    }
-    if (keyboard->keyJustDown(GLFW_KEY_T)){
-        playerCharacter1->action();
-    }
-
 	PuppetScene::update(_step);
 	if(keyboard->keyDown(GLFW_KEY_B)){
 		guard->control = 0;

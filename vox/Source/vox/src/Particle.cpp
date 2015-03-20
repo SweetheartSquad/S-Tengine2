@@ -11,14 +11,21 @@ life(1),
 age(0),
 alive(true)
 {
-    createFixture(b2Filter(), b2Vec2(0,0), this);
+	b2Filter f;
+	f.categoryBits = 0;
+	f.groupIndex = 0;
+	f.maskBits = 0;
+    createFixture(f, b2Vec2(0,0), this);
 }
 void Particle::update(Step * _step){
     Box2DSprite::update(_step);
-    age += 0.001f;
+    age += _step->deltaTime;
     if (age > life){
         alive = false;
-    }
+	}else{
+		transform->scaleVector.x = 1.f - age / life;
+		transform->scaleVector.y = 1.f - age / life;
+	}
 }
 
 Particle::~Particle(){

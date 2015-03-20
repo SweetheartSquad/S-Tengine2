@@ -12,6 +12,9 @@ class SlayTheDragonResourceManager abstract : public ResourceManager{
 public:
 	static TextureSampler * splashMessage;
 
+	static TextureSampler * fortBackground;
+	static TextureSampler * fortForeground;
+	static TextureSampler * fortStructure;
 	static Texture * fortificationSpriteSheet;
 	
 	static TextureSampler * archerTorso;
