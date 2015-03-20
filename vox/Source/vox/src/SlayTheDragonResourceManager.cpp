@@ -22,7 +22,6 @@ TextureSampler * SlayTheDragonResourceManager::dragonLowerWing	= new TextureSamp
 TextureSampler * SlayTheDragonResourceManager::itemBow	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Bow.png", 1024, 1024, true, true), 99, 474);
 TextureSampler * SlayTheDragonResourceManager::itemArrow	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Arrow.png", 1024, 1024, true, true), 77, 539);
 TextureSampler * SlayTheDragonResourceManager::itemFireball	= new TextureSampler(new Texture("../assets/hurly-burly/DragonAssets/Fireball.png", 1024, 1024, true, true), 309, 302);
-TextureSampler * SlayTheDragonResourceManager::itemNone	= new TextureSampler(new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true), 1, 1);
 
 void SlayTheDragonResourceManager::init(){
 	resources.push_back(splashMessage);
@@ -44,5 +43,4 @@ void SlayTheDragonResourceManager::init(){
 	resources.push_back(itemBow);
 	resources.push_back(itemArrow);
 	resources.push_back(itemFireball);
-	resources.push_back(itemNone);
 }

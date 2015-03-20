@@ -9,6 +9,8 @@
 #include <SoundManager.h>
 
 Texture * PuppetResourceManager::blank = new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true);
+TextureSampler * PuppetResourceManager::itemNone = new TextureSampler(new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true), 1, 1);
+
 Texture * PuppetResourceManager::stageFloor = new Texture("../assets/hurly-burly/StageFloor.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::sky		= new Texture("../assets/hurly-burly/Sky.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::ground1	= new Texture("../assets/hurly-burly/paper.png", 512, 512, true, true);
@@ -40,6 +42,7 @@ void PuppetResourceManager::init(){
 	SlayTheDragonResourceManager::init();
 
 	resources.push_back(blank);
+	resources.push_back(itemNone);
 	resources.push_back(stageFloor);
 	resources.push_back(sky);
 	resources.push_back(ground1);

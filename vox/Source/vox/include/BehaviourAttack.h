@@ -14,9 +14,9 @@ public:
 
 	bool forward;
 	
-	void evaluateBeginContact(b2Fixture * _target) override;
-	void evaluateEndContact(b2Fixture * _target) override;
-	void update(Step * _step) override;
+	virtual void evaluateBeginContact(b2Fixture * _target) override;
+	virtual void evaluateEndContact(b2Fixture * _target) override;
+	virtual void update(Step * _step) override;
 
 	BehaviourAttack(PuppetCharacter * _source, float _radius, PuppetGame::BOX2D_CATEGORY _filter);
 };

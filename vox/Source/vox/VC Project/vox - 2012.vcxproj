@@ -183,6 +183,9 @@
     <ClCompile Include="../src/VoxRenderOptions.cpp" />
     <ClCompile Include="../src/Particle.cpp" />
     <ClCompile Include="../src/Fortification.cpp" />
+    <ClCompile Include="../src/BehaviourAttackThrow.cpp" />
+    <ClCompile Include="../src/ItemFireball.cpp" />
+    <ClCompile Include="../src/ItemFireballLauncher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -359,6 +362,9 @@
     <ClInclude Include="../include/VoxRenderOptions.h" />
     <ClInclude Include="../src/GameJamSceneIndoor.h" />
     <ClInclude Include="../include/Fortification.h" />
+    <ClInclude Include="../include/BehaviourAttackThrow.h" />
+    <ClInclude Include="../include/ItemFireball.h" />
+    <ClInclude Include="../include/ItemFireballLauncher.h" />
     <ClInclude Include="../include/Particle.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

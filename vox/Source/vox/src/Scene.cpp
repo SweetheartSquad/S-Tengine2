@@ -55,7 +55,9 @@ void Scene::update(Step * _step){
 		load();
 	}
 	camera->update(_step);
-	for(Entity * e : children){
+	//for (Entity * e : children){
+	for (unsigned long int i = 0; i < children.size(); ++i){
+		Entity * e = children.at(i);
 		e->update(&vox::step);
 	}
 }

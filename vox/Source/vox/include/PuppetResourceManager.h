@@ -9,6 +9,7 @@ class TextureSampler;
 class PuppetResourceManager abstract : public ResourceManager{
 public:	
 	static Texture * blank;
+	static TextureSampler * itemNone;
 	static Texture * stageFloor;
 	static Texture * sky;
 	static Texture * ground1;
