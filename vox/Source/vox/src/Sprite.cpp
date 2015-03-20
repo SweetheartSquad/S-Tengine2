@@ -49,8 +49,8 @@ void Sprite::setCurrentAnimation(std::string _name){
 }
 
 void Sprite::pushTextureSampler(TextureSampler* _sampler){
-	vox::Rectangle rect(0, 0, _sampler->width * std::abs(transform->scaleVector.x) * 0.025, 
-		std::abs(_sampler->height*transform->scaleVector.y) * 0.025);
+	vox::Rectangle rect(0, 0, _sampler->width * std::abs(transform->scaleVector.x) * 0.025f, 
+		std::abs(_sampler->height*transform->scaleVector.y) * 0.025f);
 	
 	mesh->pushTexture2D(_sampler->texture);
 

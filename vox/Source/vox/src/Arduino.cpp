@@ -14,7 +14,7 @@ Arduino::Arduino(std::string portName){
 
     //Try to connect to the given port throuh CreateFile
 	std::wstring portName_t;
-	for(int i = 0; i < portName.length(); ++i){
+	for(unsigned long int i = 0; i < portName.length(); ++i){
 	  portName_t += wchar_t(portName[i]);
 	}
 

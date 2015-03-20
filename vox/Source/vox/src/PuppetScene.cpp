@@ -75,7 +75,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new ShaderComponentTexture(shader));
-	shader->components.push_back(new ShaderComponentHsv(shader, 0, 1.25, 1.4, 1));
+	shader->components.push_back(new ShaderComponentHsv(shader, 0.f, 1.25f, 1.4f, 1.f));
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	
