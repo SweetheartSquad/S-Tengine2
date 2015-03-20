@@ -44,10 +44,10 @@ void Item::hitGround(){
 			// set the item to be picked up again
 			thrown = false;
 			setGroupIndex(0);
-			std::cout << "item hit ground" << std::endl;
+			//std::cout << "item hit ground" << std::endl;
 		}else{
 			destroy = true;
-			std::cout << "item hit ground; should die" << std::endl;
+			//std::cout << "item hit ground; should die" << std::endl;
 		}
 	}
 }

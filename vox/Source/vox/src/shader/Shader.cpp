@@ -184,7 +184,7 @@ GLuint Shader::compileShader(GLenum _shaderType, char const* _source, int _lengt
 		glDeleteShader(shaderId); //Don't leak the shader.
 		return -1;
 	}else{
-		std::cout << "Shader compiled succesfully." << std::endl << std::endl << _source << std::endl << std::endl;
+		//std::cout << "Shader compiled succesfully." << std::endl << std::endl << _source << std::endl << std::endl;
 	}
 	GLUtils::checkForError(true,__FILE__,__LINE__);
 	

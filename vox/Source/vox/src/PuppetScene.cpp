@@ -62,7 +62,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	splashDuration(3.f),
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
-	drawer(new Box2DDebugDraw(this, world)),
+	drawer(nullptr),
 	ground(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stage.vox"))),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
@@ -167,13 +167,14 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	groundFixture->SetUserData(this);
 	*/
 
+	/*drawer = new Box2DDebugDraw(this, world);
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);
 	drawer->AppendFlags(b2Draw::e_shapeBit);
 	drawer->AppendFlags(b2Draw::e_centerOfMassBit);
 	drawer->AppendFlags(b2Draw::e_jointBit);
 	//drawer->AppendFlags(b2Draw::e_pairBit);
-	addChild(drawer, 2);
+	addChild(drawer, 2);*/
 
 	//randomGround->mesh->uvEdgeMode = GL_REPEAT;
 
@@ -188,7 +189,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	mouseCamera->pitch = -10.0f;
 	mouseCamera->speed = 1;
 
-	gameCam = new FollowCamera(10, glm::vec3(0, 0, 0), 0, 0);
+	gameCam = new FollowCamera(15, glm::vec3(0, 0, 0), 0, 0);
 	gameCam->farClip = 1000.f;
 	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
 	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
@@ -414,7 +415,9 @@ void PuppetScene::update(Step * _step){
 		game->toggleFullScreen();
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_2)){
-		drawer->drawing = !drawer->drawing;
+		if(drawer != nullptr){
+			drawer->drawing = !drawer->drawing;
+		}
 	}
 }
 

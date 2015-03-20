@@ -8,11 +8,11 @@
 
 #include <Item.h>
 
-PuppetCharacterRapunzel::PuppetCharacterRapunzel(bool _ai, unsigned long int _id, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+PuppetCharacterRapunzel::PuppetCharacterRapunzel(bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	PuppetCharacter(new PuppetTexturePack(
-		(_id == 0) ? RapunzelResourceManager::rapunzelRedTorso : (_id == 1 ? RapunzelResourceManager::rapunzelGreenTorso : (_id == 2 ? RapunzelResourceManager::rapunzelBlueTorso : RapunzelResourceManager::rapunzelYellowTorso)),
-		(_id == 0) ? RapunzelResourceManager::rapunzelRedArm : (_id == 1 ? RapunzelResourceManager::rapunzelGreenArm : (_id == 2 ? RapunzelResourceManager::rapunzelBlueArm : RapunzelResourceManager::rapunzelYellowArm)),
-		(_id == 0) ? RapunzelResourceManager::rapunzelRedHelmet : (_id == 1 ? RapunzelResourceManager::rapunzelGreenHelmet : (_id == 2 ? RapunzelResourceManager::rapunzelBlueHelmet : RapunzelResourceManager::rapunzelYellowHelmet))
+		RapunzelResourceManager::rapunzelRedTorso,
+		RapunzelResourceManager::rapunzelRedArm,
+		RapunzelResourceManager::rapunzelRedHelmet
 	), _ai, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)

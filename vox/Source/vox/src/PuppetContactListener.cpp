@@ -49,7 +49,7 @@ void PuppetContactListener::BeginContact(b2Contact * _contact){
 			playerPlayerContact(_contact);
 		}else if((fA.categoryBits & PuppetGame::kITEM) != 0 || (fB.categoryBits & PuppetGame::kITEM) != 0){
 			// Player-Item collision
-			std::cout << fA.categoryBits << "|" << fB.categoryBits << std::endl;
+			//std::cout << fA.categoryBits << "|" << fB.categoryBits << std::endl;
 			playerItemContact(_contact, playerFixture, otherFixture);
 		}else if((fA.categoryBits & PuppetGame::kSTRUCTURE) != 0 || (fB.categoryBits & PuppetGame::kSTRUCTURE) != 0){
 			// Player-Structure collision

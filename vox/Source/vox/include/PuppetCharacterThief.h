@@ -7,6 +7,6 @@ class PuppetTexturePack;
 class PuppetCharacterThief : public PuppetCharacter{
 public:
 
-	PuppetCharacterThief(bool _ai, unsigned long int _id, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
+	PuppetCharacterThief(bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	~PuppetCharacterThief();
 };
