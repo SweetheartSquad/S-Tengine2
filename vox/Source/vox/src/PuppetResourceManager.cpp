@@ -17,6 +17,8 @@ Texture * PuppetResourceManager::tree2	= new Texture("../assets/hurly-burly/Foli
 Texture * PuppetResourceManager::bush1	= new Texture("../assets/hurly-burly/Foliage/Bush1.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::bush2	= new Texture("../assets/hurly-burly/Foliage/Bush2.png", 1024, 1024, true, true);
 
+TextureSampler * PuppetResourceManager::dustParticle = new TextureSampler(new Texture("../assets/hurly-burly/dustParticle.png", 512, 512, true, true), 333, 291);
+
 TextureSampler * PuppetResourceManager::head1 = new TextureSampler(new Texture("../assets/hurly-burly/Head1.png", 512, 512, true, true), 212, 222); 
 TextureSampler * PuppetResourceManager::face1 = new TextureSampler(new Texture("../assets/hurly-burly/Face1.png", 512,512, true, true), 134, 144);
 TextureSampler * PuppetResourceManager::hand1 = new TextureSampler(new Texture("../assets/hurly-burly/Hand1.png", 512, 512, true, true), 76, 64);
@@ -45,6 +47,8 @@ void PuppetResourceManager::init(){
 	resources.push_back(tree2);
 	resources.push_back(bush1);
 	resources.push_back(bush2);
+
+	resources.push_back(dustParticle);
 
 	resources.push_back(head1);
 	resources.push_back(face1);

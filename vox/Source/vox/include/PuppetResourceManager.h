@@ -17,6 +17,8 @@ public:
 	static Texture * bush1;
 	static Texture * bush2;
 
+	static TextureSampler * dustParticle;
+
 	static TextureSampler * head1;
 	static TextureSampler * face1;
 	static TextureSampler * hand1;

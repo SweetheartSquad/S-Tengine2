@@ -41,10 +41,13 @@ void ParticleSystem::update(Step * _step){
 
 void ParticleSystem::addParticle(){
     Box2DSprite ** test = new Box2DSprite*[1];
-    Particle * p = new Particle(world, PuppetResourceManager::head1);
+	Particle * p = new Particle(world, PuppetResourceManager::dustParticle);
     test[0] = p;
-    p->setTranslationPhysical(20, 20, 0);
-    p->applyLinearImpulse(std::rand(), std::rand(), p->body->GetPosition().x, p->body->GetPosition().y);
+	p->setTranslationPhysical(20, 20, 0);
+	float mass = p->body->GetMass();
+	b2Vec2 pos = p->body->GetPosition();
+	p->applyLinearImpulse((std::rand() % 20 - 10)*mass, (std::rand() % 20 - 10)*mass, pos.x, pos.y);
+	p->applyAngularImpulse((std::rand() % 20 - 10)*mass);
     p->setShader(getShader(), true);
     //p->createFixture(b2Filter());
     components.push_back(test);

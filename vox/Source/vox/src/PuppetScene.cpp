@@ -237,7 +237,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
     particleSystem->addToLayeredScene(this, 1);
     addChild(particleSystem, 1);
 	particleSystem->setShader(shader, true);
-	particleSystem->emissionRate = 1;
+	particleSystem->emissionRate = 0.1f;
 	particleSystem->emissionAmount = 3;
 }
 

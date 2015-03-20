@@ -359,6 +359,7 @@
     <ClInclude Include="../include/VoxRenderOptions.h" />
     <ClInclude Include="../src/GameJamSceneIndoor.h" />
     <ClInclude Include="../include/Fortification.h" />
+    <ClInclude Include="../include/Particle.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>
