@@ -118,11 +118,9 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 
 	unsigned int pCnt = 0;
 	for(PuppetCharacter * p : players){
-		int y = fort->rootComponent->getCorrectedHeight() * 2;
 		ItemProjectileWeapon * weapon;
 		if(p == dragon){
 			weapon = new ItemFireballLauncher(dragon, world);
-			y = fort->rootComponent->getPos().y + fort->rootComponent->getCorrectedHeight() + fort->roof->getPos().y + fort->rootComponent->getCorrectedHeight() + 10.f;
 		}else{
 			weapon = new ItemProjectileWeapon(arrowTex, bowTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -bowTex->height);
 		}

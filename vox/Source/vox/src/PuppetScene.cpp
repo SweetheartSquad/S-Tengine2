@@ -7,6 +7,7 @@
 #include "shader/BaseComponentShader.h"
 #include "shader/ShaderComponentTexture.h"
 #include "shader/ShaderComponentHsv.h"
+#include "shader/ShaderComponentTint.h"
 #include "Keyboard.h"
 #include "SoundManager.h"
 #include "Box2DSprite.h"
@@ -76,6 +77,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->components.push_back(new ShaderComponentHsv(shader, 0.f, 1.25f, 1.4f, 1.f));
+	shader->components.push_back(new ShaderComponentTint(shader, 0.f, 0.f, 0.f));
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	
@@ -266,7 +268,6 @@ void PuppetScene::unload(){
 }
 
 void PuppetScene::update(Step * _step){
-
 	// player controls
 	if (players.size() > 0){
 		if (keyboard->keyJustDown(GLFW_KEY_W)){
@@ -360,7 +361,7 @@ void PuppetScene::update(Step * _step){
 		
 		if (item->destroy){
 			for (signed long int j = 0; j < std::rand() % 5 + 1; ++j){
-				particleSystem->addParticle(PuppetResourceManager::dustParticle, item->rootComponent->getPos(false));
+				particleSystem->addParticle(item->rootComponent->getPos(false), PuppetResourceManager::dustParticle);
 			}
 			destroyItem(item);
 			items.erase(items.begin() + i);
@@ -403,10 +404,14 @@ void PuppetScene::update(Step * _step){
 	}
 
 	
-	// trigger countdown
+	// trigger/speed-up countdown
 	if (keyboard->keyJustUp(GLFW_KEY_ENTER)){
-		currentTime = duration - countDownNumbers.size();
-		countDown = countDownNumbers.size();
+		if(currentTime < duration - countDownNumbers.size()){
+			currentTime = duration - countDownNumbers.size();
+			countDown = countDownNumbers.size();
+		}else{
+			currentTime += 1;
+		}
 	}
 
 	

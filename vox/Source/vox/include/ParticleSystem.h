@@ -12,7 +12,7 @@ public:
 
 	TextureSampler * defaultTex;
 	
-	void addParticle(TextureSampler * _texture, glm::vec3 _pos);
+	void addParticle(glm::vec3 _pos, TextureSampler * _texture = nullptr);
 
     virtual void update(Step * _step) override;
 

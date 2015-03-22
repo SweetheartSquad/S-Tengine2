@@ -13,7 +13,8 @@ ParticleSystem::ParticleSystem(TextureSampler * _texture, Box2DWorld * _world, i
     NodeChild(nullptr),
     emissionAmount(0),
     emissionRate(0),
-	emissionTimer(0)
+	emissionTimer(0),
+	defaultTex(_texture)
 {
 }
 
@@ -28,7 +29,7 @@ void ParticleSystem::update(Step * _step){
 		while (emissionTimer > emissionRate){
 			emissionTimer -= emissionRate;
 			for (unsigned long int i = 0; i < emissionAmount; ++i){
-				addParticle(defaultTex, glm::vec3(0, 0, 0));
+				addParticle(glm::vec3(0, 0, 0));
 			}
 		}
 	}
@@ -42,7 +43,10 @@ void ParticleSystem::update(Step * _step){
 	}
 }
 
-void ParticleSystem::addParticle(TextureSampler * _texture, glm::vec3 _pos){
+void ParticleSystem::addParticle(glm::vec3 _pos, TextureSampler * _texture){
+	if(_texture == nullptr){
+		_texture = defaultTex;
+	}
     Box2DSprite ** test = new Box2DSprite*[1];
 	Particle * p = new Particle(world, _texture);
     test[0] = p;

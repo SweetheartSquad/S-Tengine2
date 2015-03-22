@@ -48,7 +48,7 @@ void SharedComponentShaderMethods::configureMaterials(vox::MatrixStack* _matrixS
 			std::string spec = GLUtils::buildGLArrayReferenceString("materials[].specularColor", i);
 			GLuint shinyUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), shin.c_str());
 
-			int materialShininess = mesh->materials.at(i)->data.shininess;
+			float materialShininess = mesh->materials.at(i)->data.shininess;
 			glUniform1f(shinyUniformLocation, materialShininess);
 			GLuint specColorUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), spec.c_str());
 			glUniform3f(specColorUniformLocation, mesh->materials.at(i)->data.specularColor.x, mesh->materials.at(i)->data.specularColor.y, mesh->materials.at(i)->data.specularColor.z);

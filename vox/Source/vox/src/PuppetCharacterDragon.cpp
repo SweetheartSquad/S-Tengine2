@@ -7,6 +7,7 @@
 #include <BehaviourManager.h>
 #include <Box2DWorld.h>
 #include <shader\ShaderComponentHsv.h>
+#include <shader\ShaderComponentTint.h>
 #include <shader\BaseComponentShader.h>
 #include <shader\Shader.h>
 #include <RenderOptions.h>
@@ -27,7 +28,8 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 	), _ai, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
-	fireball(nullptr)
+	fireball(nullptr),
+	fireParticles(new ParticleSystem(SlayTheDragonResourceManager::itemFireball, _world, 0, 0, _groupIndex))
 {
 	behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), this, 10));
 	behaviourManager.addBehaviour(new BehaviourAttack(this, 3, PuppetGame::kPLAYER));
@@ -68,13 +70,16 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 
 PuppetCharacterDragon::~PuppetCharacterDragon(){
 	//delete texPack;
+	delete fireParticles;
 }
 
 void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	// save the current shader settings
 	float hue = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getHue();
 	float sat = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getSaturation();
-	float val = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getValue();
+	float red = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->getRed();
+
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setRed(red + (1 - control) * 3);
 
 	// change the shader settings based on current damage and player id
 	if (!ai){
@@ -83,7 +88,6 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	else{
 		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(0.f);
 	}
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setValue(val - (1 - control) * 3);
 
 	// lower wing behind upper wing
 	handLeft->render(_matrixStack, _renderStack);
@@ -92,13 +96,22 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	armRight->render(_matrixStack, _renderStack);
 	torso->render(_matrixStack, _renderStack);
 	head->render(_matrixStack, _renderStack);
-	headgear->render(_matrixStack, _renderStack),
+	headgear->render(_matrixStack, _renderStack);
 	// This is scary face->render(_matrixStack, _renderStack);
+
+	
 
 	// revert the shader settings
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(hue);
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setValue(val);
+
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setRed(red);
+
+	if(fireball != nullptr){
+		fireParticles->addParticle(fireball->rootComponent->getPos(false));
+	}
+	fireParticles->setShader(getShader(), true);
+	fireParticles->render(_matrixStack, _renderStack);
 }
 
 void PuppetCharacterDragon::update(Step * _step){
@@ -113,6 +126,7 @@ void PuppetCharacterDragon::update(Step * _step){
 			behaviourManager.behaviours.at(0)->active = true;
 		}
 	}
+	fireParticles->update(_step);
 }
 void PuppetCharacterDragon::action(){
 	if(heldItem != nullptr){
