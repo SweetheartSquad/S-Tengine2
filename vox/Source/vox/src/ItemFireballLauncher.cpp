@@ -7,17 +7,22 @@
 
 #include <SlayTheDragonResourceManager.h>
 #include <PuppetResourceManager.h>
+#include <PuppetCharacterDragon.h>
 
 ItemFireballLauncher::ItemFireballLauncher(PuppetCharacterDragon * _dragon, Box2DWorld * _world) :
 	ItemProjectileWeapon(SlayTheDragonResourceManager::itemFireball, PuppetResourceManager::itemNone, _world, PuppetGame::kITEM),
 	NodeTransformable(new Transform()),
-	NodeChild(nullptr),
-	dragon(_dragon)
+	NodeChild(nullptr)
 {
+	owner = _dragon;
 }
 
 Item * ItemFireballLauncher::getProjectile(){
 	//Item * projectile = new Item(true, projectileTemplate->world, projectileTemplate->categoryBits, projectileTemplate->maskBits, projectileTemplate->groupIndex, projectileTemplate->damage, projectileTemplate->handleX, projectileTemplate->handleY);
+	PuppetCharacterDragon * dragon = dynamic_cast<PuppetCharacterDragon *>(owner);
+	if(dragon == nullptr){
+		throw "not a dragon!";
+	}
 	ItemFireball * projectile = new ItemFireball(dragon, world);
 
 	Box2DSprite ** test = new Box2DSprite*[1];
