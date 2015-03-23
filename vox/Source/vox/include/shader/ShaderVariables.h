@@ -93,6 +93,7 @@ const std::string SHADER_COMPONENT_BLINN			  = "SHADER_COMPONENT_BLINN";
 const std::string SHADER_COMPONENT_VOXEL			  = "SHADER_COMPONENT_VOXEL";
 const std::string SHADER_COMPONENT_TINT				  = "SHADER_COMPONENT_TINT";
 const std::string SHADER_COMPONENT_HSV				  = "SHADER_COMPONENT_HSV";
+const std::string SHADER_COMPONENT_ALPHA			  = "SHADER_COMPONENT_ALPHA";
 
 
 const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGHT + "\n"

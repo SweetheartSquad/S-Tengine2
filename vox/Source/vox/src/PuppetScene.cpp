@@ -8,6 +8,7 @@
 #include "shader/ShaderComponentTexture.h"
 #include "shader/ShaderComponentHsv.h"
 #include "shader/ShaderComponentTint.h"
+#include "shader/ShaderComponentAlpha.h"
 #include "Keyboard.h"
 #include "SoundManager.h"
 #include "Box2DSprite.h"
@@ -76,8 +77,9 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new ShaderComponentTexture(shader));
-	shader->components.push_back(new ShaderComponentHsv(shader, 0.f, 1.25f, 1.4f, 1.f));
+	shader->components.push_back(new ShaderComponentHsv(shader, 0.f, 1.25f, 1.4f));
 	shader->components.push_back(new ShaderComponentTint(shader, 0.f, 0.f, 0.f));
+	//shader->components.push_back(new ShaderComponentAlpha(shader, 0.5f));
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	
@@ -169,14 +171,14 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	groundFixture->SetUserData(this);
 	*/
 
-	/*drawer = new Box2DDebugDraw(this, world);
+	drawer = new Box2DDebugDraw(this, world);
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);
 	drawer->AppendFlags(b2Draw::e_shapeBit);
 	drawer->AppendFlags(b2Draw::e_centerOfMassBit);
 	drawer->AppendFlags(b2Draw::e_jointBit);
 	//drawer->AppendFlags(b2Draw::e_pairBit);
-	addChild(drawer, 2);*/
+	addChild(drawer, 2);
 
 	//randomGround->mesh->uvEdgeMode = GL_REPEAT;
 

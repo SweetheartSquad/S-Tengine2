@@ -169,6 +169,7 @@
     <ClCompile Include="../src/ItemFireball.cpp" />
     <ClCompile Include="../src/ItemFireballLauncher.cpp" />
     <ClCompile Include="..\src\shader\ShaderComponentTint.cpp" />
+    <ClCompile Include="..\src\shader\ShaderComponentAlpha.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -350,6 +351,7 @@
     <ClInclude Include="../include/ItemFireballLauncher.h" />
     <ClInclude Include="../include/Particle.h" />
     <ClInclude Include="..\include\shader\ShaderComponentTint.h" />
+    <ClInclude Include="..\include\shader\ShaderComponentAlpha.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Include">
