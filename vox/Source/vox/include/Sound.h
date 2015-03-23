@@ -7,6 +7,8 @@ namespace libZPlay{
 
 class Sound{
 public:
+	// value is 0 - 100
+	static unsigned long int masterVolume;
 
 	libZPlay::ZPlay * player;
 
