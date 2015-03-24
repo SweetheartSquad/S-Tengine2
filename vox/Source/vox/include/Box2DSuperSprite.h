@@ -12,20 +12,7 @@ class Box2DWorld;
 class Box2DSprite;
 class CharacterComponent;
 class Texture;
-
-class TextureSampler : public NodeResource{
-public:
-
-	Texture * texture;
-
-	float width;
-	float height;
-
-	TextureSampler(Texture * _texture, float _width, float _height);
-
-	void load() override;
-	void unload() override;
-};
+class TextureSampler;
 
 class Box2DSuperSprite : public MeshEntity {
 public:

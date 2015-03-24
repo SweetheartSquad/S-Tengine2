@@ -5,13 +5,15 @@
 #include "Texture.h"
 #include "MeshInterface.h"
 
-Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform, float _width, float _height, Texture * _texture, float _componentScale):
+Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform, Texture * _texture = nullptr, float _width, float _height, float _u, float _v, float _componentScale):
 	NodeTransformable(_transform),
 	NodeChild(nullptr),
 	NodeBox2DBody(_world, _bodyType, _defaultFixture, _transform),
 	width(_width),
 	height(_height),
-	scale(_componentScale)
+	scale(_componentScale),
+	u(_u),
+	v(_v)
 {
 	bodyDef.position.Set(_transform->translationVector.x, _transform->translationVector.y);
 	bodyDef.type = _bodyType;
@@ -65,14 +67,14 @@ void Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * _userDa
 	mesh->vertices.at(3).y = v4.y;
 	
 	float mag = std::max(mesh->textures.at(0)->width, mesh->textures.at(0)->height);
-	mesh->vertices.at(3).u = 0;
-	mesh->vertices.at(3).v = 0;
-	mesh->vertices.at(2).u = width/mag;
-	mesh->vertices.at(2).v = 0;
-	mesh->vertices.at(1).u = width/mag;
-	mesh->vertices.at(1).v = height/mag;
-	mesh->vertices.at(0).u = 0;
-	mesh->vertices.at(0).v = height/mag;
+	mesh->vertices.at(3).u = u/mag;
+	mesh->vertices.at(3).v = v/mag;
+	mesh->vertices.at(2).u = (u + width)/mag;
+	mesh->vertices.at(2).v = v/mag;
+	mesh->vertices.at(1).u = (u + width)/mag;
+	mesh->vertices.at(1).v = (v + height)/mag;
+	mesh->vertices.at(0).u = u/mag;
+	mesh->vertices.at(0).v = (v + height)/mag;
 }
 
 
