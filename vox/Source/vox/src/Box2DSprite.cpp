@@ -3,9 +3,10 @@
 #include "Box2DSprite.h"
 #include "Box2DWorld.h"
 #include "Texture.h"
+#include <TextureSampler.h>
 #include "MeshInterface.h"
 
-Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform, TextureSampler * _textureSampler, float _componentScale) :
+Box2DSprite::Box2DSprite(Box2DWorld * _world, TextureSampler * _textureSampler, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform, float _componentScale) :
 	NodeTransformable(_transform),
 	NodeChild(nullptr),
 	NodeBox2DBody(_world, _bodyType, _defaultFixture, _transform),
@@ -15,9 +16,13 @@ Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaul
 	u(_textureSampler->u),
 	v(_textureSampler->v)
 {
+	if(_textureSampler->texture != nullptr){
+		mesh->pushTexture2D(_textureSampler->texture);
+	}
 
+	body->SetUserData(this);
 }
-Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform, Texture * _texture = nullptr, float _width, float _height, float _u, float _v, float _componentScale):
+Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform, Texture * _texture, float _width, float _height, float _u, float _v, float _componentScale):
 	NodeTransformable(_transform),
 	NodeChild(nullptr),
 	NodeBox2DBody(_world, _bodyType, _defaultFixture, _transform),

@@ -35,11 +35,10 @@ Fortification::Fortification(Box2DWorld* _world, int16 _categoryBits, int16 _mas
 	componentScale = 0.015f;
 	
 	TextureSampler * baseTex = SlayTheDragonResourceManager::fortForeground;
-	TextureSampler * bgTex = SlayTheDragonResourceManager::fortBackground;
 	TextureSampler * roofTex = SlayTheDragonResourceManager::fortStructure;
 
-	rootComponent = base = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), baseTex->width, baseTex->height, baseTex->texture, componentScale);
-	roof = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), roofTex->width, roofTex->height, roofTex->texture, componentScale);
+	rootComponent = base = new Box2DSprite(_world, baseTex, b2_staticBody, false, nullptr, new Transform(), componentScale);
+	roof = new Box2DSprite(_world, roofTex, b2_staticBody, false, nullptr, new Transform(), componentScale);
 
 	components.push_back(&rootComponent);
 	components.push_back(&roof);

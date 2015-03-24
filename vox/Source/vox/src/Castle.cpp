@@ -4,6 +4,7 @@
 #include <Box2DSprite.h>
 #include "MeshInterface.h"
 #include <Texture.h>
+#include <TextureSampler.h>
 #include "Box2DWorld.h"
 #include "Boulder.h"
 #include "PuppetScene.h"
@@ -29,7 +30,7 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	TextureSampler * baseTex = RaidTheCastleResourceManager::castleBase;
 	Texture * baseSpriteSheetTex = RaidTheCastleResourceManager::castleSpriteSheet;
 
-	rootComponent = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), baseTex->width, baseTex->height, baseTex->texture, componentScale);
+	rootComponent = new Box2DSprite(_world, baseTex, b2_staticBody, false, nullptr, new Transform(), componentScale);
 	components.push_back(&rootComponent);
 	
 	b2Filter sf;
