@@ -1,6 +1,7 @@
 #pragma once
 
 #include <RapunzelResourceManager.h>
+#include <TextureSampler.h>
 
 TextureSampler * RapunzelResourceManager::splashMessage	= new TextureSampler(new Texture("../assets/hurly-burly/SplashMessages/Rapunzel.png", 1024, 1024, true, true), 1024, 1024);
 

@@ -7,6 +7,7 @@
 #include <RapunzelResourceManager.h>
 #include <SlayTheDragonResourceManager.h>
 #include <SoundManager.h>
+#include <TextureSampler.h>
 
 Texture * PuppetResourceManager::blank = new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true);
 TextureSampler * PuppetResourceManager::itemNone = new TextureSampler(new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true), 1, 1);

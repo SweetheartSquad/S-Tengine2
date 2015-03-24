@@ -16,7 +16,7 @@ Hair::Hair(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _grou
 	
 	TextureSampler * hairTex = RapunzelResourceManager::hair;
 
-	rootComponent = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), hairTex->width, hairTex->height, hairTex->texture, componentScale);
+	rootComponent = new Box2DSprite(_world, hairTex, b2_staticBody, false, nullptr, new Transform(), componentScale);
 	components.push_back(&rootComponent);
 	
 	b2Filter sf;

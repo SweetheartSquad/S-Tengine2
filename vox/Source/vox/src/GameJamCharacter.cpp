@@ -11,6 +11,7 @@
 
 #include "Texture.h"
 #include <PuppetResourceManager.h>
+#include <TextureSampler.h>
 
 std::vector<TextureSampler *> GameJamCharacter::torsoTexPacks;
 std::vector<TextureSampler *> GameJamCharacter::headTexPacks;

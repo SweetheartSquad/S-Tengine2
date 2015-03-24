@@ -2,7 +2,8 @@
 
 #include "PuppetScene.h"
 
-#include "Texture.h"
+#include <Texture.h>
+#include <TextureSampler.h>
 #include "Sprite.h"
 #include "shader/BaseComponentShader.h"
 #include "shader/ShaderComponentTexture.h"

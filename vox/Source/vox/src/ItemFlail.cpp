@@ -4,6 +4,7 @@
 #include <Box2DWorld.h>
 
 #include <RaidTheCastleResourceManager.h>
+#include <TextureSampler.h>
 
 ItemFlail::ItemFlail(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex, int _damage, float _handleX, float _handleY):
 	Item(false, _world, _categoryBits, _maskBits, _groupIndex, _damage, _handleX, _handleY),
@@ -17,9 +18,9 @@ ItemFlail::ItemFlail(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, 
 	
 	componentScale = 0.008f;
 
-	rootComponent = handle = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), weapon->width, weapon->height, weapon->texture, componentScale/4);
-	joint = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), weapon2->width, weapon2->height, weapon2->texture, componentScale/4);
-	head = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), weapon3->width, weapon3->height, weapon3->texture, componentScale/4);
+	rootComponent = handle = new Box2DSprite(_world, weapon, b2_dynamicBody, false, nullptr, new Transform(), componentScale/4);
+	joint = new Box2DSprite(_world, weapon2, b2_dynamicBody, false, nullptr, new Transform(), componentScale/4);
+	head = new Box2DSprite(_world, weapon3, b2_dynamicBody, false, nullptr, new Transform(), componentScale/4);
 	components.push_back(&rootComponent);
 	components.push_back(&joint);
 	components.push_back(&head);

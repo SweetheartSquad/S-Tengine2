@@ -21,6 +21,7 @@
 #include <shader/BaseComponentShader.h>
 #include <keyboard.h>
 #include <Texture.h>
+#include <TextureSampler.h>
 #include <PuppetCharacterGuard.h>
 #include <PuppetCharacterRapunzel.h>
 #include <PuppetCharacterThief.h>

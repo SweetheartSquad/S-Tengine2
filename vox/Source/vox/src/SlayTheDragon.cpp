@@ -20,6 +20,7 @@
 #include <shader/BaseComponentShader.h>
 #include <keyboard.h>
 #include <Texture.h>
+#include <TextureSampler.h>
 #include <PuppetCharacterDragon.h>
 #include <PuppetCharacterArcher.h>
 #include <PuppetTexturePack.h>

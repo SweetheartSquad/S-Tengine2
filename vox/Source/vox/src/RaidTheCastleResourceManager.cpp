@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RaidTheCastleResourceManager.h"
+#include <TextureSampler.h>
 
 Texture * RaidTheCastleResourceManager::castleSpriteSheet    = new Texture("../assets/structure components/castle/Castle_SpriteSheet.png", 2048, 2048, true, true);
 

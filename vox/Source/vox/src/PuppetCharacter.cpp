@@ -15,6 +15,7 @@
 #include <RenderOptions.h>
 #include <SoundManager.h>
 #include <RaidTheCastleResourceManager.h>
+#include <TextureSampler.h>
 
 bool PuppetCharacter::compareByScore(PuppetCharacter * _a, PuppetCharacter * _b){
 	return (_a->score < _b->score);
@@ -52,15 +53,15 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 		);
 	}
 
-	head = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->headTex->width, texPack->headTex->height, texPack->headTex->texture, componentScale*0.5f * texPack->scale);
-	face = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->faceTex->width, texPack->faceTex->height, texPack->faceTex->texture, componentScale*0.5f * texPack->scale);
-	handLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->handTex->width, texPack->handTex->height, texPack->handTex->texture, componentScale*0.5f * texPack->scale);
-	handRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->handTex->width, texPack->handTex->height, texPack->handTex->texture, componentScale*0.5f * texPack->scale);
+	head = new Box2DSprite(_world, texPack->headTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
+	face = new Box2DSprite(_world, texPack->faceTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
+	handLeft = new Box2DSprite(_world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
+	handRight = new Box2DSprite(_world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
 
-	torso = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->torsoTex->width, texPack->torsoTex->height, texPack->torsoTex->texture, componentScale*0.5f * texPack->scale);
-	armLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->armTex->width, texPack->armTex->height, texPack->armTex->texture, componentScale*0.5f * texPack->scale);
-	armRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->armTex->width, texPack->armTex->height, texPack->armTex->texture, componentScale*0.5f * texPack->scale);
-	headgear = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->headgearTex->width, texPack->headgearTex->height, texPack->headgearTex->texture, componentScale*0.5f * texPack->scale);
+	torso = new Box2DSprite(_world, texPack->torsoTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
+	armLeft = new Box2DSprite(_world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
+	armRight = new Box2DSprite(_world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
+	headgear = new Box2DSprite(_world, texPack->headgearTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
 
 	components.push_back(&armLeft);
 	components.push_back(&armRight);
@@ -107,15 +108,15 @@ PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _wor
 		);
 	}
 
-	head = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->headTex->width, texPack->headTex->height, texPack->headTex->texture, componentScale*0.5f);
-	face = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->faceTex->width, texPack->faceTex->height, texPack->faceTex->texture, componentScale*0.5f);
-	handLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->handTex->width, texPack->handTex->height, texPack->handTex->texture, componentScale*0.5f);
-	handRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->handTex->width, texPack->handTex->height, texPack->handTex->texture, componentScale*0.5f);
+	head = new Box2DSprite(_world, texPack->headTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
+	face = new Box2DSprite(_world, texPack->faceTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
+	handLeft = new Box2DSprite(_world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
+	handRight = new Box2DSprite(_world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
 
-	torso = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->torsoTex->width, texPack->torsoTex->height, texPack->torsoTex->texture, componentScale*0.5f);
-	armLeft = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->armTex->width, texPack->armTex->height, texPack->armTex->texture, componentScale*0.5f);
-	armRight = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->armTex->width, texPack->armTex->height, texPack->armTex->texture, componentScale*0.5f);
-	headgear = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), texPack->headgearTex->width, texPack->headgearTex->height, texPack->headgearTex->texture, componentScale*0.5f);
+	torso = new Box2DSprite(_world, texPack->torsoTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
+	armLeft = new Box2DSprite(_world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
+	armRight = new Box2DSprite(_world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
+	headgear = new Box2DSprite(_world, texPack->headgearTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
 
 	components.push_back(&armLeft);
 	components.push_back(&armRight);

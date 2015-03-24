@@ -8,6 +8,7 @@
 #include "Rectangle.h"
 #include "Box2DSuperSprite.h"
 #include <Texture.h>
+#include <TextureSampler.h>
 
 struct b2Vec2;
 

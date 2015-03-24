@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SlayTheDragonResourceManager.h>
+#include <TextureSampler.h>
 
 TextureSampler * SlayTheDragonResourceManager::splashMessage	= new TextureSampler(new Texture("../assets/hurly-burly/SplashMessages/SlayTheDragon.png", 1024, 1024, true, true), 1024, 1024);
 

@@ -8,6 +8,7 @@
 #include <SlayTheDragonResourceManager.h>
 #include <PuppetResourceManager.h>
 #include <PuppetCharacterDragon.h>
+#include <TextureSampler.h>
 
 ItemFireballLauncher::ItemFireballLauncher(PuppetCharacterDragon * _dragon, Box2DWorld * _world) :
 	ItemProjectileWeapon(SlayTheDragonResourceManager::itemFireball, PuppetResourceManager::itemNone, _world, PuppetGame::kITEM),
@@ -26,7 +27,7 @@ Item * ItemFireballLauncher::getProjectile(){
 	ItemFireball * projectile = new ItemFireball(dragon, world);
 
 	Box2DSprite ** test = new Box2DSprite*[1];
-	test[0] = projectile->rootComponent = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), projectileTex->width, projectileTex->height, projectileTex->texture, componentScale);
+	test[0] = projectile->rootComponent = new Box2DSprite(world, projectileTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 
 	projectile->components.push_back(test);
 

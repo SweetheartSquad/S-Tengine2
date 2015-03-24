@@ -10,6 +10,7 @@
 #include <FollowCamera.h>
 #include <PuppetContactListener.h>
 #include <MeshInterface.h>
+#include <TextureSampler.h>
 
 VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _players):
 	PuppetScene(_game, 10)
@@ -47,7 +48,7 @@ void VictoryScene::podium(std::vector<PuppetCharacter *> _sortedPuppets){
 		for(unsigned long int i = 0; i < _sortedPuppets.size(); ++i){
 			float height = maxHeight / (i + 1);
 
-			Box2DSprite * podiumStand = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), PuppetResourceManager::head1->width, PuppetResourceManager::head1->height, PuppetResourceManager::head1->texture);
+			Box2DSprite * podiumStand = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), PuppetResourceManager::head1->texture, PuppetResourceManager::head1->width, PuppetResourceManager::head1->height, PuppetResourceManager::head1->u, PuppetResourceManager::head1->v);
 			podiumStand->transform->scale(1, height, 1);
 			podiumStand->mesh->uvEdgeMode = GL_REPEAT;
 			podiumStand->setShader(shader, true);

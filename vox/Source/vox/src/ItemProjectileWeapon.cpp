@@ -14,7 +14,7 @@ ItemProjectileWeapon::ItemProjectileWeapon(TextureSampler * _projectileTex, Text
 	NodeRenderable(),
 	projectileTex(_projectileTex)
 {
-	rootComponent = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), _weaponTex->width, _weaponTex->height, _weaponTex->texture, componentScale);
+	rootComponent = new Box2DSprite(_world, _weaponTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 	components.push_back(&rootComponent);
 	
 	b2Filter sf;
@@ -43,7 +43,7 @@ Item * ItemProjectileWeapon::getProjectile(){
 	Item * projectile = new Item(true, world, categoryBits, maskBits, groupIndex, damage, handleX, handleY);
 	
 	Box2DSprite ** test = new Box2DSprite*[1];
-	test[0] = projectile->rootComponent = new Box2DSprite(world, b2_dynamicBody, false, nullptr, new Transform(), projectileTex->width, projectileTex->height, projectileTex->texture, componentScale);
+	test[0] = projectile->rootComponent = new Box2DSprite(world, projectileTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 
 	projectile->components.push_back(test);
 

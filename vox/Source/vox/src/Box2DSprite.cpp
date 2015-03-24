@@ -5,6 +5,18 @@
 #include "Texture.h"
 #include "MeshInterface.h"
 
+Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform, TextureSampler * _textureSampler, float _componentScale) :
+	NodeTransformable(_transform),
+	NodeChild(nullptr),
+	NodeBox2DBody(_world, _bodyType, _defaultFixture, _transform),
+	width(_textureSampler->width),
+	height(_textureSampler->height),
+	scale(_componentScale),
+	u(_textureSampler->u),
+	v(_textureSampler->v)
+{
+
+}
 Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform, Texture * _texture = nullptr, float _width, float _height, float _u, float _v, float _componentScale):
 	NodeTransformable(_transform),
 	NodeChild(nullptr),
@@ -15,9 +27,6 @@ Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaul
 	u(_u),
 	v(_v)
 {
-	bodyDef.position.Set(_transform->translationVector.x, _transform->translationVector.y);
-	bodyDef.type = _bodyType;
-
 	if(_texture != nullptr){
 		mesh->pushTexture2D(_texture);
 	}
