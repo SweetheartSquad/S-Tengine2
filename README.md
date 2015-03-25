@@ -1,10 +1,22 @@
 ﻿# Hurly Burly Puppet Party #
+﻿
+This is a work-in-progress interactive installation project.
 
-Interactive installation project (in progress).
+![](https://github.com/RyanBluth/Hurly-Burly-Puppet-Party/blob/master/HurlyBurly_Logo.png)
+
+
+Hurly Burly Puppet Party is a medieval-themed virtual puppet show where players control on-screen avatars using Arduino-based controllers to compete and collaborate while attempting to complete various scenes.
+
+## Current Scene Listing
+* Raid the Castle
+* Slay the Dragon
+* Rapunzel
 
 
 
-Engine Stuff:
+<hr>
+
+# Engine Stuff:
 ```
 
  __   __   ______     __  __    
@@ -23,7 +35,7 @@ Engine Stuff:
 
 # Vox Sample Project #
 
-A sample project has been included as a zip file(SampleProject.zip) in the repository. This project is designed to run without any configuration. Simply open the project and click run. This will build and run the project. The project contains a sample scene which demonstrates the basic features of the Vox engine. These features include...
+A sample project has been included as a zip file (SampleProject.zip) in the repository. This project is designed to run without any configuration. Simply open the project and click run. This will build and run the project. The project contains a sample scene which demonstrates the basic features of the Vox engine. These features include...
 
 * Entities
 * Shaders/Shader Components
@@ -46,17 +58,17 @@ This sample project also has many comments which should clarify what is being do
 
 
 # Vox Set-up Instructions #
+1. Download the necessary libraries (links provided below)
+2. Open solution file
+3. Rename voxSettings.props.template to voxSettings.props
+4. Change the various directory items in voxSettings.props to point to your local installation of each library
 
-Open project
 
-Rename voxSettings.props.template to voxSettings.props
-
-
-## VOX library pack  
+## VOX library pack (recommended)  
 
 https://drive.google.com/file/d/0B2VyAXziLJJtNXJ2Y0REU3RrSm8/view?usp=sharing
 
-## Individual Libraries ##
+## Individual Libraries (manual) ##
 
 ### GLEW ###
 * Download glew 1.11.0 
@@ -91,5 +103,8 @@ http://www.lonesock.net/files/soil.zip
 * Open the SOIL.sln file in Visual Studio. You will have to upgrade the project.
 
 * Once it is open, click Build to build the lib file.
+
+### Some more that we haven't added yet ###
+Box2D
 
 **The project should now build**
