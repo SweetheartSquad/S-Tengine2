@@ -26,6 +26,25 @@ void fileSelected(File selection) {
     test = trim(loadImage(selection.getAbsolutePath()));
     size(test.width, test.height);
     frame.setSize(test.width+50, test.height+50);
+    //draw();
+    //save("test.png");
+    
+    int size = max(test.width, test.height);
+    size = (int)pow(2, ceil(log(size)/log(2)));
+    PGraphics graphics = createGraphics(size, size);
+    graphics.clear();
+    graphics.image(test, 0, 0);
+    graphics.save(selection.getAbsolutePath());
+    
+    JSONObject json = new JSONObject();
+
+    json.setString("texture", selection.getName());
+    json.setInt("width", test.width);
+    json.setInt("height", test.height);
+    json.setInt("u", 0);
+    json.setInt("v", 0);
+  
+    saveJSONObject(json, selection.getAbsolutePath()+".def");
   }
 }
 

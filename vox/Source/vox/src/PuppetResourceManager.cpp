@@ -28,8 +28,7 @@ Texture * PuppetResourceManager::cloud4	= new Texture("../assets/hurly-burly/Clo
 
 TextureSampler * PuppetResourceManager::dustParticle = new TextureSampler(new Texture("../assets/hurly-burly/dustParticle.png", 512, 512, true, true), 333, 291);
 
-//TextureSampler * PuppetResourceManager::head1 = new TextureSampler(new Texture("../assets/hurly-burly/Head1.png", 512, 512, true, true), 212, 222); 
-TextureSampler * PuppetResourceManager::head1 = new TextureSampler(new Texture("../assets/hurly-burly/Head1.png", 512, 512, true, true), 212, 222); 
+TextureSampler * PuppetResourceManager::head1 = new TextureSampler("../assets/hurly-burly/", "Head1.png.def"); 
 TextureSampler * PuppetResourceManager::face1 = new TextureSampler(new Texture("../assets/hurly-burly/Face1.png", 512,512, true, true), 134, 144);
 TextureSampler * PuppetResourceManager::hand1 = new TextureSampler(new Texture("../assets/hurly-burly/Hand1.png", 512, 512, true, true), 76, 64);
 

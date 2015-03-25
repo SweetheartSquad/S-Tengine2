@@ -5,6 +5,8 @@
 #include <GLUtils.h>
 #include <SOIL.h>
 
+// maybe replace chars with strings
+
 Texture::Texture(const char* _src, unsigned long int _width, unsigned long int _height, bool _storeData, bool _autoRelease) :
 	NodeResource(_autoRelease),
 	src(_src),
