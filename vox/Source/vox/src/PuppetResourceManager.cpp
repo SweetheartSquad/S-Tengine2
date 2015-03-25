@@ -26,11 +26,11 @@ Texture * PuppetResourceManager::cloud2	= new Texture("../assets/hurly-burly/Clo
 Texture * PuppetResourceManager::cloud3	= new Texture("../assets/hurly-burly/Clouds/Cloud3.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::cloud4	= new Texture("../assets/hurly-burly/Clouds/Cloud4.png", 1024, 1024, true, true);
 
-TextureSampler * PuppetResourceManager::dustParticle = new TextureSampler(new Texture("../assets/hurly-burly/dustParticle.png", 512, 512, true, true), 333, 291);
+TextureSampler * PuppetResourceManager::dustParticle = new TextureSampler("../assets/hurly-burly/", "dustParticle.png.def");
 
 TextureSampler * PuppetResourceManager::head1 = new TextureSampler("../assets/hurly-burly/", "Head1.png.def"); 
-TextureSampler * PuppetResourceManager::face1 = new TextureSampler(new Texture("../assets/hurly-burly/Face1.png", 512,512, true, true), 134, 144);
-TextureSampler * PuppetResourceManager::hand1 = new TextureSampler(new Texture("../assets/hurly-burly/Hand1.png", 512, 512, true, true), 76, 64);
+TextureSampler * PuppetResourceManager::face1 = new TextureSampler("../assets/hurly-burly/", "Face1.png.def");
+TextureSampler * PuppetResourceManager::hand1 = new TextureSampler("../assets/hurly-burly/", "Hand1.png.def");
 
 TextureSampler * PuppetResourceManager::countDown0 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/0.png", 1024, 1024, true, true), 1024, 1024);
 TextureSampler * PuppetResourceManager::countDown1 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/1.png", 1024, 1024, true, true), 1024, 1024);

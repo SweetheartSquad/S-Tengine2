@@ -23,7 +23,6 @@ TextureSampler::TextureSampler(std::string _definitionDir, std::string _definiti
 	u(0),
 	v(0)
 {
-	{
 	if(!_definitionName.empty()){
 		std::string jsonString = FileUtils::voxReadFile(_definitionDir + _definitionName);
 		Json::Value root;
@@ -44,7 +43,6 @@ TextureSampler::TextureSampler(std::string _definitionDir, std::string _definiti
 		strncpy(tab2, tex.c_str(), sizeof(tab2));
 		tab2[sizeof(tab2) - 1] = 0;
 		texture = new Texture(tab2, s, s, true, true);
-	}
 	}
 }
 

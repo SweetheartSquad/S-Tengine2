@@ -1,5 +1,21 @@
+import processing.core.*; 
+import processing.data.*; 
+import processing.event.*; 
+import processing.opengl.*; 
+
+import java.util.HashMap; 
+import java.util.ArrayList; 
+import java.io.File; 
+import java.io.BufferedReader; 
+import java.io.PrintWriter; 
+import java.io.InputStream; 
+import java.io.OutputStream; 
+import java.io.IOException; 
+
+public class Spritely extends PApplet {
+
 PImage test;
-void setup() {
+public void setup() {
   size(1024, 1024);
   test = null;
   for(int i = 0; i < args.length; i++){
@@ -8,7 +24,7 @@ void setup() {
   }
 }
 
-void draw() {
+public void draw() {
   /*clear();
   if (test != null) {
     //println (test.width);
@@ -18,11 +34,11 @@ void draw() {
   }*/
 }
 
-void mousePressed() {
+public void mousePressed() {
   selectInput("Select a file to process:", "fileSelected");
 }
 
-void fileSelected(File selection) {
+public void fileSelected(File selection) {
   if (selection == null) {
     println("Window was closed or the user hit cancel.");
   } else {
@@ -54,7 +70,7 @@ void fileSelected(File selection) {
 }
 
 
-PImage trim(PImage in) {
+public PImage trim(PImage in) {
   in.loadPixels();
   int xMin = in.width;
   int yMin = in.height;
@@ -83,3 +99,12 @@ PImage trim(PImage in) {
   return in.get(xMin, yMin, xMax-xMin, yMax-yMin);
 }
 
+  static public void main(String[] passedArgs) {
+    String[] appletArgs = new String[] { "Spritely" };
+    if (passedArgs != null) {
+      PApplet.main(concat(appletArgs, passedArgs));
+    } else {
+      PApplet.main(appletArgs);
+    }
+  }
+}
