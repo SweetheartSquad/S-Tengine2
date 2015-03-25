@@ -46,17 +46,15 @@ PuppetGame::PuppetGame(bool _running):
 
 	//scenes.insert(std::make_pair("indoors", new GameJamSceneIndoor(this)));
 	//scenes.insert(std::make_pair("outdoors", new GameJamSceneOutdoor(this)));
+	
+	currentSceneKey = "Rapunzel";
+	scenes.insert(std::make_pair(currentSceneKey, new Rapunzel(this)));
+	currentScene = scenes.at(currentSceneKey);
 
-	//scenes.insert(std::make_pair("Slay the Dragon", new SlayTheDragon(this)));
-	//((GameJamSceneIndoor *)scenes.at("Raid the Castle"))->debugDraw = true;
-	//currentScene = scenes.at("indoors");
-	//currentSceneKey = "Slay the Dragon";
-
-	loadRandomScene();
-
+	/*loadRandomScene();
 	currentSceneKey = newSceneKey;
 	currentScene = scenes.at(currentSceneKey);
-	switchingScene = false;
+	switchingScene = false;*/
 }
 
 PuppetGame::~PuppetGame(){

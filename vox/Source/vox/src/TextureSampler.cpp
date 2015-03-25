@@ -38,11 +38,9 @@ TextureSampler::TextureSampler(std::string _definitionDir, std::string _definiti
 		width = root.get("w", 0).asFloat();
 		height = root.get("h", 0).asFloat();
 		float s = root.get("s", 0).asFloat();
-		std::string tex = _definitionDir + root.get("t", 0).asString();
-		char tab2[1024];
-		strncpy(tab2, tex.c_str(), sizeof(tab2));
-		tab2[sizeof(tab2) - 1] = 0;
-		texture = new Texture(tab2, s, s, true, true);
+		std::string tex = _definitionDir;
+		tex.append(root.get("t", 0).asString());
+		texture = new Texture(tex, s, s, true, true);
 	}
 }
 

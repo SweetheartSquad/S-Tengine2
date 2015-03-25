@@ -31,6 +31,7 @@
 #include <ItemFlail.h>
 #include <ItemSimpleWeapon.h>
 #include <ItemProjectileWeapon.h>
+#include <Hair.h>
 
 #include <glfw\glfw3.h>
 #include <SoundManager.h>
@@ -119,13 +120,18 @@ Rapunzel::Rapunzel(PuppetGame* _game):
         addChild(weapon, 1);
 	}
 	
-	playerCharacter1->translateComponents(glm::vec3(20.0f, 35, 0.f));
-	playerCharacter2->translateComponents(glm::vec3(40.0f, 35, 0.f));
-	playerCharacter3->translateComponents(glm::vec3(60.0f, 35, 0.f));
-	playerCharacter4->translateComponents(glm::vec3(80.0f, 35, 0.f));
-	guard->translateComponents(glm::vec3(100.f, 35, 0));
+	playerCharacter1->translateComponents(glm::vec3(20.f, 35.f, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(40.f, 35.f, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(60.f, 35.f, 0.f));
+	playerCharacter4->translateComponents(glm::vec3(80.f, 35.f, 0.f));
+	guard->translateComponents(glm::vec3(100.f, 35.f, 0.f));
 
 	playRandomBackgroundMusic();
+
+
+	Hair * hair = new Hair(world, PuppetGame::kGROUND, PuppetGame::kPLAYER, 0);
+	addChild(hair, 1);
+	hair->setShader(shader, true);
 }
 
 Rapunzel::~Rapunzel(){

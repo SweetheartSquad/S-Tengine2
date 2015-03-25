@@ -5,13 +5,12 @@
 
 TextureSampler * RapunzelResourceManager::splashMessage	= new TextureSampler(new Texture("../assets/hurly-burly/SplashMessages/Rapunzel.png", 1024, 1024, true, true), 1024, 1024);
 
-Texture * RapunzelResourceManager::goldSpriteSheet    = new Texture("../assets/structure components/gold/gold_SpriteSheet.png", 2048, 2048, true, true);
+Texture * RapunzelResourceManager::goldSpriteSheet    = new Texture("../assets/hurly-burly/Gold/GoldSpritesheet.png", 1024, 1024, true, true);
 
 TextureSampler * RapunzelResourceManager::leverHandle   = new TextureSampler(new Texture("../assets/hurly-burly/Lever/LeverHandle.png", 512, 512, true, true), 32, 101);
 TextureSampler * RapunzelResourceManager::leverBase  = new TextureSampler(new Texture("../assets/hurly-burly/Lever/LeverBase.png", 512, 512, true, true), 104, 23);
 
-TextureSampler * RapunzelResourceManager::hair  = new TextureSampler(new Texture("../assets/hurly-burly/Hair/Hair.png", 1024, 1024, true, true), 233, 475);
-
+TextureSampler * RapunzelResourceManager::hair  = new TextureSampler("../assets/hurly-burly/Hair/", "Hair.png.def");
 
 TextureSampler * RapunzelResourceManager::thiefRedTorso		= new TextureSampler(new Texture("../assets/hurly-burly/NormalKnightAssets/redKnightBreastplate.png", 1024, 1024, true, true), 268, 776);
 TextureSampler * RapunzelResourceManager::thiefRedArm		= new TextureSampler(new Texture("../assets/hurly-burly/NormalKnightAssets/redKnightArm.png", 1024, 1024, true, true), 92, 327);
@@ -57,6 +56,8 @@ void RapunzelResourceManager::init(){
 
 	resources.push_back(leverHandle);
 	resources.push_back(leverBase);
+	resources.push_back(hair);
+	resources.push_back(goldSpriteSheet);
 
 	/*resources.push_back(goldenArm);
 	resources.push_back(hand1);
