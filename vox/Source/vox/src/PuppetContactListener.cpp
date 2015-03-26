@@ -110,8 +110,8 @@ void PuppetContactListener::playerPlayerContact(b2Contact * _contact){
 	b2Fixture * fxB = _contact->GetFixtureB();
 
 	if(fxA->GetBody()->GetUserData() != nullptr && fxB->GetBody()->GetUserData() != nullptr){
-		PuppetCharacter * puppetA = static_cast<PuppetCharacter *>(fxA->GetBody()->GetUserData());
-		PuppetCharacter * puppetB = static_cast<PuppetCharacter *>(fxB->GetBody()->GetUserData());
+		PuppetCharacter * puppetA = static_cast<PuppetCharacter *>(fxA->GetUserData());
+		PuppetCharacter * puppetB = static_cast<PuppetCharacter *>(fxB->GetUserData());
 		if(puppetA->control < 0.3f && puppetB->control > 0.3f){
 			puppetB->canJump = true;
 		}else if(puppetB->control < 0.3f && puppetA->control > 0.3f){
