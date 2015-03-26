@@ -30,6 +30,7 @@ void NodeAnimatable::update(Step * _step){
 	scaleY->update(		_step);
 	scaleZ->update(		_step);
 }
+
 NodeAnimatable::~NodeAnimatable(){
 	delete translateX;
 	translateX = nullptr;

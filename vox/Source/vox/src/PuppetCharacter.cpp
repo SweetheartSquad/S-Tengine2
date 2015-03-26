@@ -355,10 +355,8 @@ void PuppetCharacter::jump(){
 		PuppetResourceManager::jumpSounds->playRandomSound();
 		float t = rootComponent->body->GetAngle();
 		b2Vec2 p = rootComponent->body->GetWorldPoint(b2Vec2(0, 1));
-		//torso->applyLinearImpulse(250*(1-cos(t))*glm::sign(-t), 250*(cos(t)*0.5 + 0.5), p.x, p.y);
 		rootComponent->applyLinearImpulseUp(5000.f * 2 *(cos(t)*0.5f + 0.5f));
 		if(rootComponent->body->GetAngle() > 0){
-			//torso->applyLinearImpulseLeft(250*(1-cos(t)));
 			rootComponent->body->SetLinearVelocity(b2Vec2(-25*(1-cos(t)), rootComponent->body->GetLinearVelocity().y));
 		}else{
 			rootComponent->body->SetLinearVelocity(b2Vec2(25*(1-cos(t)), rootComponent->body->GetLinearVelocity().y));
@@ -389,6 +387,32 @@ void PuppetCharacter::action(){
 			}
 		}
 	}
+}
+
+void PuppetCharacter::removeCollision(PuppetGame::BOX2D_CATEGORY _category){
+	int idx = -1;
+	for(unsigned long int i = 0; i < collisionTypes.size(); ++i) {
+		if(collisionTypes.at(i) == _category) {
+			idx = i;
+			break;
+		}
+	}
+	if(idx >= 0) {
+		collisionTypes.erase(collisionTypes.begin() + idx);
+	}
+}
+
+void PuppetCharacter::addCollision(PuppetGame::BOX2D_CATEGORY _category){
+	collisionTypes.push_back(_category);
+}
+
+bool PuppetCharacter::isCollidingWith(PuppetGame::BOX2D_CATEGORY _category){
+	for(unsigned long int i = 0; i < collisionTypes.size(); ++i) {
+		if(collisionTypes.at(i) == _category) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void PuppetCharacter::die(){

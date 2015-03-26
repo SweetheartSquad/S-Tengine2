@@ -4,6 +4,7 @@
 
 #include "Box2DSuperSprite.h"
 #include "BehaviourManager.h"
+#include "PuppetGame.h"
 
 class PuppetTexturePack;
 class Box2DSprite;
@@ -41,6 +42,8 @@ public:
 	Box2DSprite * face;
 	Box2DSprite * headgear;
 
+	std::vector<PuppetGame::BOX2D_CATEGORY> collisionTypes;
+
 	static bool compareByScore(PuppetCharacter * _a, PuppetCharacter * _b);
 
 	PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
@@ -56,6 +59,10 @@ public:
 	//Called when the controller is thrust forward
 	virtual void action();
 	virtual void die();
+
+	void removeCollision(PuppetGame::BOX2D_CATEGORY _category);
+	void addCollision(PuppetGame::BOX2D_CATEGORY _category);
+	bool isCollidingWith(PuppetGame::BOX2D_CATEGORY _category);
 
 	void attachJoints();
 
