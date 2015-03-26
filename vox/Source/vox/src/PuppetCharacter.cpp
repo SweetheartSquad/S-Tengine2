@@ -41,7 +41,8 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	control(1.f),
 	id(-1),
 	actionThrottle(0.333),
-	lastActionTime(0.0)
+	lastActionTime(0.0),
+	collisionTypes(new std::vector<int>())
 {
 	bool defaultTex = false;
 	if(texPack == nullptr){
@@ -96,7 +97,8 @@ PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _wor
 	control(1.f),
 	id(_character->id),
 	actionThrottle(0.333),
-	lastActionTime(0.0)
+	lastActionTime(0.0),
+	collisionTypes(new std::vector<int>())
 {
 	bool defaultTex = false;
 	if(texPack == nullptr){
@@ -134,6 +136,7 @@ PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _wor
 
 PuppetCharacter::~PuppetCharacter(){
 	delete texPack;
+	delete collisionTypes;
 }
 
 void PuppetCharacter::attachJoints(){
@@ -391,24 +394,26 @@ void PuppetCharacter::action(){
 
 void PuppetCharacter::removeCollision(PuppetGame::BOX2D_CATEGORY _category){
 	int idx = -1;
-	for(unsigned long int i = 0; i < collisionTypes.size(); ++i) {
-		if(collisionTypes.at(i) == _category) {
+	for(unsigned long int i = 0; i < collisionTypes->size(); ++i) {
+		if(collisionTypes->at(i) == _category) {
 			idx = i;
 			break;
 		}
 	}
 	if(idx >= 0) {
-		collisionTypes.erase(collisionTypes.begin() + idx);
+		collisionTypes->erase(collisionTypes->begin() + idx);
 	}
 }
 
 void PuppetCharacter::addCollision(PuppetGame::BOX2D_CATEGORY _category){
-	collisionTypes.push_back(_category);
+	//if(!isCollidingWith(_category)){
+		collisionTypes->push_back(static_cast<int>(_category));
+	//}
 }
 
 bool PuppetCharacter::isCollidingWith(PuppetGame::BOX2D_CATEGORY _category){
-	for(unsigned long int i = 0; i < collisionTypes.size(); ++i) {
-		if(collisionTypes.at(i) == _category) {
+	for(unsigned long int i = 0; i < collisionTypes->size(); ++i) {
+		if(collisionTypes->at(i) == _category) {
 			return true;
 		}
 	}

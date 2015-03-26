@@ -109,10 +109,9 @@ void PuppetContactListener::playerPlayerContact(b2Contact * _contact){
 	b2Fixture * fxA = _contact->GetFixtureA();
 	b2Fixture * fxB = _contact->GetFixtureB();
 
-	PuppetCharacter * puppetA = reinterpret_cast<PuppetCharacter *>( fxA->GetBody()->GetUserData() );
-    PuppetCharacter * puppetB = reinterpret_cast<PuppetCharacter *>( fxB->GetBody()->GetUserData() );
-
-	if(puppetA != nullptr && puppetB != nullptr){
+	if(fxA->GetBody()->GetUserData() != nullptr && fxB->GetBody()->GetUserData() != nullptr){
+		PuppetCharacter * puppetA = static_cast<PuppetCharacter *>(fxA->GetBody()->GetUserData());
+		PuppetCharacter * puppetB = static_cast<PuppetCharacter *>(fxB->GetBody()->GetUserData());
 		if(puppetA->control < 0.3f && puppetB->control > 0.3f){
 			puppetB->canJump = true;
 		}else if(puppetB->control < 0.3f && puppetA->control > 0.3f){
@@ -172,30 +171,47 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 		playerFixture = _contact->GetFixtureA();
 		//We pretty much know its a puppet character because of the category bits
 		player = static_cast<PuppetCharacter *>(playerFixture->GetUserData());
-	}else if((fB.categoryBits & PuppetGame::kPLAYER) != 0){
+		if(player != nullptr) {
+			if((fB.categoryBits & PuppetGame::kPLAYER) != 0) {
+				player->removeCollision(PuppetGame::kPLAYER);
+			}
+			if((fB.categoryBits & PuppetGame::kGROUND) != 0) {
+				player->removeCollision(PuppetGame::kGROUND);
+			}
+			if((fB.categoryBits & PuppetGame::kSTRUCTURE) != 0) {
+				player->removeCollision(PuppetGame::kSTRUCTURE);
+			}
+			if((fB.categoryBits & PuppetGame::kITEM) != 0) {
+				player->removeCollision(PuppetGame::kITEM);
+			}
+		}
+	}
+	if((fB.categoryBits & PuppetGame::kPLAYER) != 0){
 		playerFixture = _contact->GetFixtureB();
 		player = static_cast<PuppetCharacter *>(playerFixture->GetUserData());
+		if(player != nullptr) {
+			if((fA.categoryBits & PuppetGame::kPLAYER) != 0) {
+				player->removeCollision(PuppetGame::kPLAYER);
+			}
+			if((fA.categoryBits & PuppetGame::kGROUND) != 0) {
+				player->removeCollision(PuppetGame::kGROUND);
+			}
+			if((fA.categoryBits & PuppetGame::kSTRUCTURE) != 0) {
+				player->removeCollision(PuppetGame::kSTRUCTURE);
+			}
+			if((fA.categoryBits & PuppetGame::kITEM) != 0) {
+				player->removeCollision(PuppetGame::kITEM);
+			}
+		}
 	}
-	if(player != nullptr) {
-		if((fB.categoryBits & PuppetGame::kPLAYER) != 0) {
-			player->removeCollision(PuppetGame::kPLAYER);
-		}
-		if((fB.categoryBits & PuppetGame::kGROUND) != 0) {
-			player->removeCollision(PuppetGame::kGROUND);
-		}
-		if((fB.categoryBits & PuppetGame::kSTRUCTURE) != 0) {
-			player->removeCollision(PuppetGame::kSTRUCTURE);
-		}
-		if((fB.categoryBits & PuppetGame::kITEM) != 0) {
-			player->removeCollision(PuppetGame::kITEM);
-		}
-	}
+	
 	if(playerFixture != nullptr){
 		PuppetCharacter * player = static_cast<PuppetCharacter *>(playerFixture->GetUserData());
 		if(player != nullptr && player->deathPending){
 			//player->die();
 		}
-		if(!player->isCollidingWith(PuppetGame::kGROUND) && !player->isCollidingWith(PuppetGame::kPLAYER)){
+		//&& !player->isCollidingWith(PuppetGame::kPLAYER)
+		if(!player->isCollidingWith(PuppetGame::kGROUND) ){
 			player->canJump = false;
 		}
 	}

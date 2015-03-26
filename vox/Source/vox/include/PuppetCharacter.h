@@ -5,6 +5,7 @@
 #include "Box2DSuperSprite.h"
 #include "BehaviourManager.h"
 #include "PuppetGame.h"
+#include <vector>
 
 class PuppetTexturePack;
 class Box2DSprite;
@@ -42,7 +43,7 @@ public:
 	Box2DSprite * face;
 	Box2DSprite * headgear;
 
-	std::vector<PuppetGame::BOX2D_CATEGORY> collisionTypes;
+	std::vector<int> * collisionTypes;
 
 	static bool compareByScore(PuppetCharacter * _a, PuppetCharacter * _b);
 
