@@ -35,4 +35,6 @@ public:
 
 	// We seem to need this fairly often
 	void setGroupIndex(int16 _groupIndex);
+
+	void setUserData(void * _data);
 };

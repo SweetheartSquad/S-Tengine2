@@ -98,11 +98,7 @@ void Box2DSuperSprite::translateComponents(glm::vec3 _translateVector){
 
 void Box2DSuperSprite::setUserData(void * _data){
 	for(Box2DSprite ** c : components){
-		b2Fixture * f = (*c)->body->GetFixtureList();
-		while(f != nullptr){
-			f->SetUserData(this);
-			f = f->GetNext();
-		}
+		(*c)->setUserData(_data);
 	}
 }
 

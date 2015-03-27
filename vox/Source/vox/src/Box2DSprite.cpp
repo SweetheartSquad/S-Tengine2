@@ -20,7 +20,7 @@ Box2DSprite::Box2DSprite(Box2DWorld * _world, TextureSampler * _textureSampler, 
 		mesh->pushTexture2D(_textureSampler->texture);
 	}
 
-	body->SetUserData(this);
+	setUserData(this);
 }
 Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform, Texture * _texture, float _width, float _height, float _u, float _v, float _componentScale):
 	NodeTransformable(_transform),
@@ -36,7 +36,7 @@ Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaul
 		mesh->pushTexture2D(_texture);
 	}
 
-	body->SetUserData(this);
+	setUserData(this);
 }
 
 float Box2DSprite::getCorrectedHeight(){
@@ -118,6 +118,14 @@ void Box2DSprite::setGroupIndex(int16 _groupIndex){
 		bf.groupIndex = _groupIndex;
 		f->SetFilterData(bf);
 		f->Refilter(); // is this necessary?
+		f = f->GetNext();
+	}
+}
+
+void Box2DSprite::setUserData(void * _data){
+	b2Fixture * f = body->GetFixtureList();
+	while(f != nullptr){
+		f->SetUserData(_data);
 		f = f->GetNext();
 	}
 }
