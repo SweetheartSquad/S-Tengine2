@@ -33,10 +33,10 @@ void PuppetContactListener::BeginContact(b2Contact * _contact){
 	b2Filter fB = _contact->GetFixtureB()->GetFilterData();
 	b2Fixture * playerFixture = nullptr;
 	b2Fixture * otherFixture = nullptr;
-	if(fA.categoryBits == PuppetGame::kPLAYER){
+	if((fA.categoryBits & PuppetGame::kPLAYER) != 0){
 		playerFixture = _contact->GetFixtureA();
 		otherFixture = _contact->GetFixtureB();
-	}else if(fB.categoryBits == PuppetGame::kPLAYER){
+	}else if((fB.categoryBits & PuppetGame::kPLAYER) != 0){
 		playerFixture = _contact->GetFixtureB();
 		otherFixture = _contact->GetFixtureA();
 	}
@@ -71,8 +71,8 @@ void PuppetContactListener::BeginContact(b2Contact * _contact){
 		}
 
 		// structure - item?
-		b2Fixture * structureFixture;
-		b2Fixture * itemFixture;
+		b2Fixture * structureFixture = nullptr;
+		b2Fixture * itemFixture = nullptr;
 		bool structure = false;
 		if((fA.categoryBits & PuppetGame::kSTRUCTURE) != 0 && (fB.categoryBits & PuppetGame::kITEM) != 0){
 			structureFixture = _contact->GetFixtureA();

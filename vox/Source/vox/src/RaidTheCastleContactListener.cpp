@@ -64,7 +64,7 @@ void RaidTheCastleContactListener::structureItemContact(b2Contact * _contact, b2
 		Boulder * boulder = dynamic_cast<Boulder *>(item);
 		if(boulder != nullptr){
 			boulder->playerWhoFired->score += boulder->damage;
-			if(castle->state == Castle::state_t::kDEAD){
+			if(castle->state == StructureBreakable::kDEAD){
 				boulder->playerWhoFired->score += 100000;
 			}
 		}

@@ -36,7 +36,7 @@
 
 SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	PuppetScene(_game, 30, 170.f, 120.f),
-	fort(new Fortification(world, PuppetGame::kGROUND, PuppetGame::kITEM | PuppetGame::kPLAYER, -10)),
+	fort(new Fortification(world, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE, PuppetGame::kITEM | PuppetGame::kPLAYER, -10)),
 	playerCharacter1(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT ,world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
 	playerCharacter3(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),

@@ -188,6 +188,7 @@
     <ClCompile Include="../src/ItemFireballLauncher.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentAlpha.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentTint.cpp" />
+    <ClCompile Include="../src/StructureBreakable.cpp" />
     <ClCompile Include="../src/TextureSampler.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -369,6 +370,7 @@
     <ClInclude Include="../include/ItemFireball.h" />
     <ClInclude Include="../include/ItemFireballLauncher.h" />
     <ClInclude Include="../include/Particle.h" />
+    <ClInclude Include="../include/StructureBreakable.h" />
     <ClInclude Include="../include/shader/ShaderComponentAlpha.h" />
     <ClInclude Include="../include/shader/ShaderComponentTint.h" />
     <ClInclude Include="../include/TextureSampler.h" />
