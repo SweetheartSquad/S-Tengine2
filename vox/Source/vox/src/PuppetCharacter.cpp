@@ -48,9 +48,9 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	if(texPack == nullptr){
 		defaultTex = true;
 		texPack = new PuppetTexturePack(
-			RaidTheCastleResourceManager::knightRedTorso,
-			RaidTheCastleResourceManager::knightRedArm,
-			RaidTheCastleResourceManager::knightRedHelmet
+			RaidTheCastleResourceManager::knightTorso,
+			RaidTheCastleResourceManager::knightArm,
+			RaidTheCastleResourceManager::knightHelmet
 		);
 	}
 
@@ -104,9 +104,9 @@ PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _wor
 	if(texPack == nullptr){
 		defaultTex = true;
 		texPack = new PuppetTexturePack(
-			RaidTheCastleResourceManager::knightRedTorso,
-			RaidTheCastleResourceManager::knightRedArm,
-			RaidTheCastleResourceManager::knightRedHelmet
+			RaidTheCastleResourceManager::knightTorso,
+			RaidTheCastleResourceManager::knightArm,
+			RaidTheCastleResourceManager::knightHelmet
 		);
 	}
 
@@ -355,7 +355,7 @@ void PuppetCharacter::update(Step* _step){
 
 void PuppetCharacter::jump(){
 	if(canJump){
-		PuppetResourceManager::jumpSounds->playRandomSound();
+		//PuppetResourceManager::jumpSounds->playRandomSound();
 		float t = rootComponent->body->GetAngle();
 		b2Vec2 p = rootComponent->body->GetWorldPoint(b2Vec2(0, 1));
 		rootComponent->applyLinearImpulseUp(5000.f * 2 *(cos(t)*0.5f + 0.5f));
@@ -430,9 +430,11 @@ void PuppetCharacter::die(){
 }
 
 void PuppetCharacter::takeDamage(float _damage){
-    //rootComponent->applyLinearImpulseUp(500);
+	if(control > 0.75f){
+		PuppetResourceManager::hitSounds->playRandomSound();
+	}//rootComponent->applyLinearImpulseUp(500);
 	health -= _damage;
-    control = std::max(0.f, control - 0.1f);
+    control = std::max(0.f, control - 0.05f);
 }
 
 void PuppetCharacter::unload(){

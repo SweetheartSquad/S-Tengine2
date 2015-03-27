@@ -44,8 +44,8 @@ TextureSampler * PuppetResourceManager::yellowWins = new TextureSampler(new Text
 TextureSampler * PuppetResourceManager::greenWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/greenWins.png", 1024, 1024, true, true), 1024, 1024);
 TextureSampler * PuppetResourceManager::blueWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/blueWins.png", 1024, 1024, true, true), 1024, 1024);
 
-SoundManager * PuppetResourceManager::jumpSounds   = new SoundManager(1.0);
-SoundManager * PuppetResourceManager::hitSounds    = new SoundManager(1.0);
+SoundManager * PuppetResourceManager::jumpSounds   = new SoundManager(-1);
+SoundManager * PuppetResourceManager::hitSounds    = new SoundManager(-1);
 SoundManager * PuppetResourceManager::splashSounds = new SoundManager(-1);
 
 void PuppetResourceManager::init(){

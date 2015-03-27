@@ -166,6 +166,7 @@ void RaidTheCastle::update(Step* _step){
 	}
 
 	if(catapult->fireBoulder){
+		RaidTheCastleResourceManager::catapultSounds->playRandomSound();
 		catapult->fireBoulder = false;
 		if(catapult->boulderLoaded && catapult->boulderJoint != nullptr){
 			world->b2world->DestroyJoint(catapult->boulderJoint);

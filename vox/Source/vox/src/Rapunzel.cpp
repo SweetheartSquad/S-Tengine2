@@ -132,6 +132,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	Hair * hair = new Hair(world, PuppetGame::kGROUND, PuppetGame::kPLAYER, 0);
 	addChild(hair, 1);
 	hair->setShader(shader, true);
+	hair->translateComponents(glm::vec3(50.f, 0.f, 0.f));
 }
 
 Rapunzel::~Rapunzel(){

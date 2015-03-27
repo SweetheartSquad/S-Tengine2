@@ -11,9 +11,9 @@
 
 PuppetCharacterGuard::PuppetCharacterGuard(bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	PuppetCharacter(new PuppetTexturePack(
-	RaidTheCastleResourceManager::knightRedTorso,
-	RaidTheCastleResourceManager::knightRedArm,
-	RaidTheCastleResourceManager::knightRedHelmet
+	RaidTheCastleResourceManager::knightTorso,
+	RaidTheCastleResourceManager::knightArm,
+	RaidTheCastleResourceManager::knightHelmet
 	), _ai, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
