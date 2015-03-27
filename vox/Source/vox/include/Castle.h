@@ -2,28 +2,14 @@
 
 #include <Box2D/Box2D.h>
 
-#include "Structure.h"
+#include "StructureBreakable.h"
 
 class Box2DSprite;
 class Box2DWorld;
 
-class Castle : public Structure{
+class Castle : public StructureBreakable{
 public:
-
-	float health;
-	float damage;
-
 	Castle(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
-	~Castle();	
 	
-	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
-	void update(Step* _step) override;
-	void unload() override;
-	void load() override;
-
-	enum state_t{
-		kNORMAL,
-		kDAMAGED,
-		kDEAD
-	} state;
+	void takeDamage(float _damage) override;
 };

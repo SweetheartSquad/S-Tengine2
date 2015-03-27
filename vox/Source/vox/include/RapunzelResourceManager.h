@@ -3,7 +3,6 @@
 #include "ResourceManager.h"
 #include "Texture.h"
 #include "CharacterComponent.h"
-#include "Box2DSuperSprite.h"
 
 class TextureSampler;
 class Texture;
@@ -20,23 +19,9 @@ public:
 	static TextureSampler * hair;
 
 	
-	static TextureSampler * thiefRedTorso;
-	static TextureSampler * thiefRedArm;
-	static TextureSampler * thiefRedHelmet;
-							
-	static TextureSampler * thiefGreenTorso;
-	static TextureSampler * thiefGreenArm;
-	static TextureSampler * thiefGreenHand;
-	static TextureSampler * thiefGreenHelmet;
-							
-	static TextureSampler * thiefBlueTorso;
-	static TextureSampler * thiefBlueArm;
-	static TextureSampler * thiefBlueHelmet;
-							
-	static TextureSampler * thiefYellowTorso;
-	static TextureSampler * thiefYellowArm;
-	static TextureSampler * thiefYellowHelmet;
-	
+	static TextureSampler * thiefTorso;
+	static TextureSampler * thiefArm;
+	static TextureSampler * thiefHelmet;
 
 	static TextureSampler * rapunzelRedTorso;
 	static TextureSampler * rapunzelRedArm;

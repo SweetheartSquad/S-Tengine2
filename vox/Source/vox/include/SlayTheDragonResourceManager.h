@@ -3,8 +3,8 @@
 #include "ResourceManager.h"
 #include "Texture.h"
 #include "CharacterComponent.h"
-#include "Box2DSuperSprite.h"
 
+class SoundManager;
 class TextureSampler;
 class Texture;
 
@@ -30,6 +30,9 @@ public:
 	static TextureSampler * itemBow;
 	static TextureSampler * itemArrow;
 	static TextureSampler * itemFireball;
+	static TextureSampler * itemFireParticle;
 	
+	static SoundManager * dragonSounds;
+
 	static void init();
 };

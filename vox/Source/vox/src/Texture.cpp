@@ -5,7 +5,9 @@
 #include <GLUtils.h>
 #include <SOIL.h>
 
-Texture::Texture(const char* _src, unsigned long int _width, unsigned long int _height, bool _storeData, bool _autoRelease) :
+// maybe replace chars with strings
+
+Texture::Texture(std::string _src, unsigned long int _width, unsigned long int _height, bool _storeData, bool _autoRelease) :
 	NodeResource(_autoRelease),
 	src(_src),
 	width(_width),
@@ -37,7 +39,7 @@ void Texture::load(){
 		if(data != nullptr){
 			tempData = data;
 		}else{
-			tempData = Resource::loadImage(src, width, height, SOIL_LOAD_AUTO, channels);
+			tempData = Resource::loadImage(src.c_str(), width, height, SOIL_LOAD_AUTO, channels);
 			if(storeData){
 				data = tempData;
 			}

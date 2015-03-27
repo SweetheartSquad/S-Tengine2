@@ -4,6 +4,8 @@
 
 #include "Box2DSuperSprite.h"
 #include "BehaviourManager.h"
+#include "PuppetGame.h"
+#include <vector>
 
 class PuppetTexturePack;
 class Box2DSprite;
@@ -28,6 +30,7 @@ public:
 	float health;
 
 	float control;
+	float ghostPosition;
 
 	PuppetTexturePack * texPack;
 
@@ -40,8 +43,14 @@ public:
 
 	Box2DSprite * face;
 	Box2DSprite * headgear;
+	Box2DSprite * itemHolder;
 
-	PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
+	std::vector<int> * collisionTypes;
+
+	static bool compareByScore(PuppetCharacter * _a, PuppetCharacter * _b);
+	
+	void init();
+	PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostPosition, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	explicit PuppetCharacter(PuppetCharacter * _character, Box2DWorld *_world);
 	~PuppetCharacter();
 
@@ -55,9 +64,12 @@ public:
 	virtual void action();
 	virtual void die();
 
-	void attachJoints();
+	void removeCollision(PuppetGame::BOX2D_CATEGORY _category);
+	void addCollision(PuppetGame::BOX2D_CATEGORY _category);
+	bool isCollidingWith(PuppetGame::BOX2D_CATEGORY _category);
 
-    virtual void takeDamage();
+
+    virtual void takeDamage(float _damage);
 
 	Item * itemToPickup;
 	Item * heldItem;

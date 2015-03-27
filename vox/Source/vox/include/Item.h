@@ -3,6 +3,8 @@
 #include "Box2DSuperSprite.h"
 #include "PuppetGame.h"
 
+class PuppetCharacter;
+
 class Item : public Box2DSuperSprite {
 public:
 	unsigned int damage;
@@ -14,6 +16,9 @@ public:
 
 	// Whether the item is currently held by a character
 	bool held;
+
+	// Owner of the item if held
+	PuppetCharacter * owner;
 
 	// Whether the item has been thrown and has not landed yet
 	bool thrown;

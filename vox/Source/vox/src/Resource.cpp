@@ -70,6 +70,7 @@ struct FizzXBody{
 unsigned char* Resource::loadImage(const char* _src, int _width, int _height, int _SOILLoadMode, int * _channels){
 	unsigned char* res = SOIL_load_image(_src, &_width, &_height, _channels, _SOILLoadMode);
 	if(res == 0){
+		std::cout << _src << std::endl;
 		throw;
 	}
 	return res;

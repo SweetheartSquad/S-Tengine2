@@ -14,10 +14,13 @@ class Box2DSprite : public Sprite, public NodeBox2DBody{
 public:
 	float width;
 	float height;
+	float u;
+	float v;
 
 	float scale;
 
-	explicit Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType = b2_dynamicBody, bool _defaultFixture = true, Shader * _shader = nullptr, Transform * _transform = new Transform(), float _width = 1.f, float _height = 1.f, Texture * _texture = nullptr, float _componentScale = 0.0025f);
+	explicit Box2DSprite(Box2DWorld * _world, TextureSampler * _textureSampler, b2BodyType _bodyType = b2_dynamicBody, bool _defaultFixture = true, Shader* _shader = nullptr, Transform* _transform = new Transform(), float _componentScale = 0.005f);
+	explicit Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType = b2_dynamicBody, bool _defaultFixture = true, Shader * _shader = nullptr, Transform * _transform = new Transform(), Texture * _texture = nullptr, float _width = 1.f, float _height = 1.f, float _u = 0.f, float _v = 0.f, float _componentScale = 0.005f);
 	~Box2DSprite();	
 
 	virtual void update(Step * _step) override;
@@ -32,4 +35,6 @@ public:
 
 	// We seem to need this fairly often
 	void setGroupIndex(int16 _groupIndex);
+
+	void setUserData(void * _data);
 };

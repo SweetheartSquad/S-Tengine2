@@ -2,11 +2,14 @@
 
 #include "PuppetScene.h"
 
-#include "Texture.h"
+#include <Texture.h>
+#include <TextureSampler.h>
 #include "Sprite.h"
 #include "shader/BaseComponentShader.h"
 #include "shader/ShaderComponentTexture.h"
 #include "shader/ShaderComponentHsv.h"
+#include "shader/ShaderComponentTint.h"
+#include "shader/ShaderComponentAlpha.h"
 #include "Keyboard.h"
 #include "SoundManager.h"
 #include "Box2DSprite.h"
@@ -70,12 +73,15 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	backgroundSoundManager(new SoundManager(-1)),
 	countdownSoundManager(new SoundManager(-1)),
 	mouseCam(false),
-	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::ground1, 1, 1))
+	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::paper->texture, 3, 1)),
+	victoryTriggered(false)
 {
 
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new ShaderComponentTexture(shader));
-	shader->components.push_back(new ShaderComponentHsv(shader, 0.f, 1.25f, 1.4f, 1.f));
+	shader->components.push_back(new ShaderComponentHsv(shader, 0.f, 1.25f, 1.4f));
+	shader->components.push_back(new ShaderComponentTint(shader, 0.f, 0.f, 0.f));
+	//shader->components.push_back(new ShaderComponentAlpha(shader, 0.5f));
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	
@@ -167,14 +173,14 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	groundFixture->SetUserData(this);
 	*/
 
-	/*drawer = new Box2DDebugDraw(this, world);
+	drawer = new Box2DDebugDraw(this, world);
 	world->b2world->SetDebugDraw(drawer);
 	//drawer->AppendFlags(b2Draw::e_aabbBit);
 	drawer->AppendFlags(b2Draw::e_shapeBit);
 	drawer->AppendFlags(b2Draw::e_centerOfMassBit);
 	drawer->AppendFlags(b2Draw::e_jointBit);
 	//drawer->AppendFlags(b2Draw::e_pairBit);
-	addChild(drawer, 2);*/
+	addChild(drawer, 2);
 
 	//randomGround->mesh->uvEdgeMode = GL_REPEAT;
 
@@ -266,7 +272,6 @@ void PuppetScene::unload(){
 }
 
 void PuppetScene::update(Step * _step){
-
 	// player controls
 	if (players.size() > 0){
 		if (keyboard->keyJustDown(GLFW_KEY_W)){
@@ -290,7 +295,6 @@ void PuppetScene::update(Step * _step){
 			}
 		}
 	}
-
 	// camera controls
 	if (keyboard->keyDown(GLFW_KEY_UP)){
 		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
@@ -360,7 +364,7 @@ void PuppetScene::update(Step * _step){
 		
 		if (item->destroy){
 			for (signed long int j = 0; j < std::rand() % 5 + 1; ++j){
-				particleSystem->addParticle(PuppetResourceManager::dustParticle, item->rootComponent->getPos(false));
+				particleSystem->addParticle(item->rootComponent->getPos(false), PuppetResourceManager::dustParticle);
 			}
 			destroyItem(item);
 			items.erase(items.begin() + i);
@@ -403,10 +407,14 @@ void PuppetScene::update(Step * _step){
 	}
 
 	
-	// trigger countdown
+	// trigger/speed-up countdown
 	if (keyboard->keyJustUp(GLFW_KEY_ENTER)){
-		currentTime = duration - countDownNumbers.size();
-		countDown = countDownNumbers.size();
+		if(currentTime < duration - countDownNumbers.size()){
+			currentTime = duration - countDownNumbers.size();
+			countDown = countDownNumbers.size();
+		}else{
+			currentTime += 1;
+		}
 	}
 
 	
@@ -419,21 +427,41 @@ void PuppetScene::update(Step * _step){
 			drawer->drawing = !drawer->drawing;
 		}
 	}
+
+	bool everyonesDead = true;
+	for(auto p : players){
+		if(!p->dead){
+			everyonesDead = false;
+			break;
+		}
+	}
+	if(everyonesDead){
+		triggerVictoryState();
+	}
 }
 
 void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	LayeredScene::render(_matrixStack, _renderStack);
 }
 
+void PuppetScene::triggerVictoryState(){
+	if(!victoryTriggered){
+		if(currentTime < duration - 1){
+			currentTime = duration - 1;
+			countDown = 1;
+			doCountDown();
+		}
+	}
+}
 void PuppetScene::complete(){
 	PuppetGame * pg = static_cast<PuppetGame *>(game);
 
-	pg->puppetControllers.at(0)->unassign();
-	pg->puppetControllers.at(1)->unassign();
-	pg->puppetControllers.at(2)->unassign();
-	pg->puppetControllers.at(3)->unassign();
-
 	if(dynamic_cast<VictoryScene *>(this) != nullptr){
+		pg->puppetControllers.at(0)->unassign();
+		pg->puppetControllers.at(1)->unassign();
+		pg->puppetControllers.at(2)->unassign();
+		pg->puppetControllers.at(3)->unassign();
+
 		pg->loadRandomScene();
 	}else{
 		pg->scenes.insert(std::make_pair("Victory", new VictoryScene(pg, players)));
@@ -481,6 +509,10 @@ void PuppetScene::destroyItem(Item * _item){
 void PuppetScene::doCountDown(){
 	// Remove previous number
 	if (countDown <= countDownNumbers.size() - 1){
+		// make things get
+		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setSaturation(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getSaturation() + 0.2f);
+		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setValue(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getValue() + 0.2f);
+		
 		// Remove previous number from scene
 		// Just copying destroyItem stuff for now
 		for(signed long int j = children.size()-1; j >= 0; --j){

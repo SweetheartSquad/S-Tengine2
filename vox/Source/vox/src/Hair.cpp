@@ -12,11 +12,11 @@ Hair::Hair(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _grou
 	NodeChild(nullptr),
 	NodeRenderable()
 {
-	componentScale = 0.015f;
+	componentScale = 0.03f;
 	
 	TextureSampler * hairTex = RapunzelResourceManager::hair;
 
-	rootComponent = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), hairTex->width, hairTex->height, hairTex->texture, componentScale);
+	rootComponent = new Box2DSprite(_world, hairTex, b2_staticBody, false, nullptr, new Transform(), componentScale);
 	components.push_back(&rootComponent);
 	
 	b2Filter sf;
@@ -27,6 +27,7 @@ Hair::Hair(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _grou
 	sf.groupIndex = groupIndex;
 	for(Box2DSprite ** c : components){
 		(*c)->createFixture(sf);
+		(*c)->body->GetFixtureList()->SetFriction(20.0f);
 	}
 	setUserData(this);
 

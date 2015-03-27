@@ -4,6 +4,7 @@
 #include <Box2DSprite.h>
 #include "MeshInterface.h"
 #include <Texture.h>
+#include <TextureSampler.h>
 #include "Box2DWorld.h"
 #include "Boulder.h"
 #include "PuppetScene.h"
@@ -13,23 +14,18 @@
 
 #include <RaidTheCastleResourceManager.h>
 
-#define MAX_HEALTH 100
-
 Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
-	Structure(_world, _categoryBits, _maskBits, _groupIndex),
+	StructureBreakable(100.f, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
-	NodeRenderable(),
-	health(MAX_HEALTH),
-	state(kNORMAL),
-	damage(0.f)
+	NodeRenderable()
 {
-	componentScale = 0.015f;
+	componentScale = 0.03f;
 	
 	TextureSampler * baseTex = RaidTheCastleResourceManager::castleBase;
 	Texture * baseSpriteSheetTex = RaidTheCastleResourceManager::castleSpriteSheet;
 
-	rootComponent = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), baseTex->width, baseTex->height, baseTex->texture, componentScale);
+	rootComponent = new Box2DSprite(_world, baseTex, b2_staticBody, false, nullptr, new Transform(), componentScale);
 	components.push_back(&rootComponent);
 	
 	b2Filter sf;
@@ -57,36 +53,19 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	rootComponent->setTranslationPhysical(0.f, rootComponent->getCorrectedHeight(), 0.f);
 }
 
-Castle::~Castle(){
-}
 
-void Castle::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	Structure::render(_matrixStack, _renderStack);
-}
-
-void Castle::update(Step * _step){
-	Structure::update(_step);
-
-	if(damage > 0){
-		health -= damage;
-		damage = 0;
-
-		if(state != kDEAD && health <= 0){
-			state = kDEAD;
-			rootComponent->currentAnimation->currentFrame = 3;
-			translateComponents(glm::vec3(0, -10, 0));
-		}else if(state != kDAMAGED && state != kDEAD && health <= MAX_HEALTH * 0.5){
-			state = kDAMAGED;
-			rootComponent->currentAnimation->currentFrame = 1;
-		}
-		
+void Castle::takeDamage(float _damage){
+	StructureBreakable::takeDamage(_damage);
+	switch (state){
+	default:
+	case StructureBreakable::kNORMAL:
+		rootComponent->currentAnimation->currentFrame = 0;
+		break;
+	case StructureBreakable::kDAMAGED:
+		rootComponent->currentAnimation->currentFrame = 1;
+		break;
+	case StructureBreakable::kDEAD:
+		rootComponent->currentAnimation->currentFrame = 3;
+		break;
 	}
-}
-
-void Castle::unload(){
-	Structure::unload();
-}
-
-void Castle::load(){
-	Structure::load();
 }

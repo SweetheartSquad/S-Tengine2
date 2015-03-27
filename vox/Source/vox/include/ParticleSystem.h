@@ -4,6 +4,7 @@
 
 class Box2DSprite;
 class TextureSampler;
+class Particle;
 class ParticleSystem : public Box2DSuperSprite{
 public:
 	float emissionRate;
@@ -12,7 +13,7 @@ public:
 
 	TextureSampler * defaultTex;
 	
-	void addParticle(TextureSampler * _texture, glm::vec3 _pos);
+	Particle * addParticle(glm::vec3 _pos, TextureSampler * _texture = nullptr);
 
     virtual void update(Step * _step) override;
 

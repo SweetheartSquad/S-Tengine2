@@ -12,7 +12,7 @@ public:
 	static TextureSampler * itemNone;
 	static Texture * stageFloor;
 	static Texture * sky;
-	static Texture * ground1;
+	static TextureSampler * paper;
 	static Texture * tree1; 
 	static Texture * tree2;	
 	static Texture * bush1;
@@ -36,9 +36,16 @@ public:
 	static TextureSampler * countDown4;
 	static TextureSampler * countDown5;
 
+	//static TextureSampler * redWins;
+	//static TextureSampler * yellowWins;
+	//static TextureSampler * greenWins;
+	//static TextureSampler * blueWins;
+	static std::vector<TextureSampler *> winSplashes;
+
 	static SoundManager * jumpSounds;
 	static SoundManager * hitSounds;
 	static SoundManager * splashSounds;
+	static SoundManager * cheerSounds;
 	
 	static void init();
 };

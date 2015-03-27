@@ -8,11 +8,11 @@
 
 class Texture : public virtual NodeResource{
 public:
-	Texture(const char* _src, unsigned long int _width, unsigned long int _height, bool _storeData, bool _autoRelease);
+	Texture(std::string _src, unsigned long int _width, unsigned long int _height, bool _storeData, bool _autoRelease);
 	~Texture();
 
 	/**Source file location */
-	const char* src;
+	std::string src;
 	/**Texture Width */
 	unsigned long int width;
 	/**Texture Height */

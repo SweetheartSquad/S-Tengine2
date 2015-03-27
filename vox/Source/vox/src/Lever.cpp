@@ -12,13 +12,11 @@ Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _gr
 	NodeChild(nullptr),
 	NodeRenderable()
 {
-	componentScale = 0.008f;
-
 	TextureSampler * baseTextureSampler = RapunzelResourceManager::leverBase;
 	TextureSampler * handleTextureSampler = RapunzelResourceManager::leverHandle;
 
-	rootComponent = base = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), baseTextureSampler->width, baseTextureSampler->height, baseTextureSampler->texture, componentScale);
-	handle = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), handleTextureSampler->width, handleTextureSampler->height, handleTextureSampler->texture, componentScale);
+	rootComponent = base = new Box2DSprite(_world, baseTextureSampler, b2_staticBody, false, nullptr, new Transform(), componentScale);
+	handle = new Box2DSprite(_world, handleTextureSampler, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 	
 	components.push_back(&base);
 	components.push_back(&handle);

@@ -4,7 +4,7 @@
 #include <Box2DSuperSprite.h>
 
 Particle::Particle(Box2DWorld * _world, TextureSampler * _texture, Transform * _transform) :
-Box2DSprite(_world, b2_dynamicBody, false, nullptr, _transform, _texture->width, _texture->height, _texture->texture),
+Box2DSprite(_world, _texture, b2_dynamicBody, false, nullptr, _transform),
 NodeTransformable(_transform),
 NodeChild(nullptr),
 life(1),

@@ -9,27 +9,9 @@
 #include "BitmapFont.h"
 #include <node/NodeResource.h>
 #include "Texture.h"
+#include <TextureSampler.h>
 
 int16 Box2DSuperSprite::gGroupIndex = 0;
-
-
-TextureSampler::TextureSampler(Texture * _texture, float _width, float _height) :
-	NodeResource(true),
-	texture(_texture),
-	width(_width),
-	height(_height)
-{
-}
-
-void TextureSampler::load(){
-	texture->load();
-	NodeResource::load();
-}
-
-void TextureSampler::unload(){
-	texture->unload();
-	NodeResource::unload();
-}
 
 Box2DSuperSprite::Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :
 	MeshEntity(nullptr, transform), // THERE ARE TWO TRANSFORM NODES HERE WHEN THERE SHOULD BE ONE
@@ -116,11 +98,7 @@ void Box2DSuperSprite::translateComponents(glm::vec3 _translateVector){
 
 void Box2DSuperSprite::setUserData(void * _data){
 	for(Box2DSprite ** c : components){
-		b2Fixture * f = (*c)->body->GetFixtureList();
-		while(f != nullptr){
-			f->SetUserData(this);
-			f = f->GetNext();
-		}
+		(*c)->setUserData(_data);
 	}
 }
 

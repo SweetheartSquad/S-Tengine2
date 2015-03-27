@@ -17,11 +17,11 @@ Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16
 	NodeRenderable(),
 	catapult(nullptr)
 {
-	componentScale = 0.008f;
+	componentScale = 0.016f;
 
 	TextureSampler * boulderTexSampler = RaidTheCastleResourceManager::boulder;
 	
-	boulder = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), boulderTexSampler->width, boulderTexSampler->height, boulderTexSampler->texture, componentScale);
+	boulder = new Box2DSprite(_world, boulderTexSampler, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 	rootComponent = boulder;
 	components.push_back(&boulder);
 	

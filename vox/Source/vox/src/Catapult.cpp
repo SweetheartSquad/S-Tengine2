@@ -30,13 +30,13 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int
 	arm(nullptr),
 	base(nullptr)
 {
-	componentScale = 0.008f;
+	componentScale = 0.016f;
 
 	TextureSampler * baseTex = RaidTheCastleResourceManager::catapultBody;
 	TextureSampler * armTex = RaidTheCastleResourceManager::catapultArm;
 
-	base = new Box2DSprite(_world, b2_staticBody, false, nullptr, new Transform(), baseTex->width, baseTex->height, baseTex->texture, componentScale);
-	arm = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), armTex->width, armTex->height, armTex->texture, componentScale);
+	base = new Box2DSprite(_world, baseTex, b2_staticBody, false, nullptr, new Transform(), componentScale);
+	arm = new Box2DSprite(_world, armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 	
 	components.push_back(&arm);
 	components.push_back(&base);

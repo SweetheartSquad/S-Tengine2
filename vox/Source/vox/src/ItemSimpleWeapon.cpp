@@ -10,7 +10,7 @@ ItemSimpleWeapon::ItemSimpleWeapon(TextureSampler * _tex, bool _singleUse, Box2D
 	NodeChild(nullptr),
 	NodeRenderable()
 {
-	rootComponent = new Box2DSprite(_world, b2_dynamicBody, false, nullptr, new Transform(), _tex->width, _tex->height, _tex->texture, componentScale);
+	rootComponent = new Box2DSprite(_world, _tex, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 	components.push_back(&rootComponent);
 	
 	b2Filter sf;

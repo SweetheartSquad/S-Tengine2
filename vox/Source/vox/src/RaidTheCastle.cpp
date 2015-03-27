@@ -21,6 +21,7 @@
 #include <shader/BaseComponentShader.h>
 #include <keyboard.h>
 #include <Texture.h>
+#include <TextureSampler.h>
 #include <PuppetCharacterCastleChampion.h>
 #include <PuppetCharacterKnight.h>
 #include <PuppetTexturePack.h>
@@ -37,11 +38,11 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	PuppetScene(_game, 30),
 	castle(new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30)),
 	catapult(new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM | PuppetGame::kPLAYER, -10)),
-	champion(new PuppetCharacterCastleChampion(world, PuppetGame::kPLAYER, -1, -20)),
-	playerCharacter1(new PuppetCharacterKnight(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
-	playerCharacter2(new PuppetCharacterKnight(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
-	playerCharacter3(new PuppetCharacterKnight(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
-	playerCharacter4(new PuppetCharacterKnight(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
+	champion(new PuppetCharacterCastleChampion(world, RAID_CASTLE_GHOST_HEIGHT, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -20)),
+	playerCharacter1(new PuppetCharacterKnight(false, 0, RAID_CASTLE_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
+	playerCharacter2(new PuppetCharacterKnight(false, 1, RAID_CASTLE_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
+	playerCharacter3(new PuppetCharacterKnight(false, 2, RAID_CASTLE_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
+	playerCharacter4(new PuppetCharacterKnight(false, 3, RAID_CASTLE_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
 	populateBackground();
 	cl = new RaidTheCastleContactListener(this);
@@ -61,33 +62,33 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	playerCharacter1->setShader(shader, true);
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
-	playerCharacter1->rootComponent->maxVelocity = b2Vec2(10, 10);
+	playerCharacter1->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
-	playerCharacter2->rootComponent->maxVelocity = b2Vec2(10, 10);
+	playerCharacter2->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
-	playerCharacter3->rootComponent->maxVelocity = b2Vec2(10, 10);
+	playerCharacter3->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
-	playerCharacter4->rootComponent->maxVelocity = b2Vec2(10, 10);
+	playerCharacter4->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
 
 	champion->setShader(shader, true);
 	addChild(champion, 0);
 	champion->addToLayeredScene(this, 1);
-	champion->rootComponent->maxVelocity = b2Vec2(10, 10);
+	champion->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	
-	champion->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, champion->groupIndex, 0, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
+	champion->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, champion->groupIndex, 1, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
 	addChild(champion->itemToPickup, 1);
 	champion->itemToPickup->addToLayeredScene(this, 1);
 	champion->itemToPickup->setShader(shader, true);
@@ -132,7 +133,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 		TextureSampler * projTex = RaidTheCastleResourceManager::getRandomWeapon();
 		
 		//ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
-        ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
+        ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -weaponTex->height);
 
         weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);
@@ -165,6 +166,7 @@ void RaidTheCastle::update(Step* _step){
 	}
 
 	if(catapult->fireBoulder){
+		RaidTheCastleResourceManager::catapultSounds->playRandomSound();
 		catapult->fireBoulder = false;
 		if(catapult->boulderLoaded && catapult->boulderJoint != nullptr){
 			world->b2world->DestroyJoint(catapult->boulderJoint);
@@ -187,6 +189,10 @@ void RaidTheCastle::update(Step* _step){
 	}
 	if(catapult->ready && !catapult->boulderLoaded){
 		loadCatapult();
+	}
+
+	if(castle->state == Castle::state_t::kDEAD){
+		triggerVictoryState();
 	}
 }
 

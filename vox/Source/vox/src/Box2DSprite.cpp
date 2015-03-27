@@ -3,43 +3,59 @@
 #include "Box2DSprite.h"
 #include "Box2DWorld.h"
 #include "Texture.h"
+#include <TextureSampler.h>
 #include "MeshInterface.h"
 
-Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform, float _width, float _height, Texture * _texture, float _componentScale):
+Box2DSprite::Box2DSprite(Box2DWorld * _world, TextureSampler * _textureSampler, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform, float _componentScale) :
+	NodeTransformable(_transform),
+	NodeChild(nullptr),
+	NodeBox2DBody(_world, _bodyType, _defaultFixture, _transform),
+	width(_textureSampler->width),
+	height(_textureSampler->height),
+	scale(_componentScale),
+	u(_textureSampler->u),
+	v(_textureSampler->v)
+{
+	if(_textureSampler->texture != nullptr){
+		mesh->pushTexture2D(_textureSampler->texture);
+	}
+
+	setUserData(this);
+}
+Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform, Texture * _texture, float _width, float _height, float _u, float _v, float _componentScale):
 	NodeTransformable(_transform),
 	NodeChild(nullptr),
 	NodeBox2DBody(_world, _bodyType, _defaultFixture, _transform),
 	width(_width),
 	height(_height),
-	scale(_componentScale)
+	scale(_componentScale),
+	u(_u),
+	v(_v)
 {
-	bodyDef.position.Set(_transform->translationVector.x, _transform->translationVector.y);
-	bodyDef.type = _bodyType;
-
 	if(_texture != nullptr){
 		mesh->pushTexture2D(_texture);
 	}
 
-	body->SetUserData(this);
+	setUserData(this);
 }
 
 float Box2DSprite::getCorrectedHeight(){
-	return height*std::abs(transform->scaleVector.y)*scale*2.f;
+	return height*std::abs(transform->scaleVector.y)*scale;
 }
 float Box2DSprite::getCorrectedWidth(){
-	return width*std::abs(transform->scaleVector.x)*scale*2.f;
+	return width*std::abs(transform->scaleVector.x)*scale;
 }
 
 void Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * _userData){
 	b2PolygonShape tShape;
-	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f, _offset, 0.0f);
+	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale, std::abs(height*transform->scaleVector.y)*scale, _offset, 0.0f);
 
 	b2FixtureDef fd;
 	fd.shape = &tShape;
-	fd.restitution = 0;
-	fd.friction = 0.5;
+	fd.restitution = 0.f;
+	fd.friction = 0.5f;
 	fd.isSensor = false;
-	fd.density = 1;
+	fd.density = 1.f;
 	fd.userData = _userData;
 	fd.filter = _filter;
 
@@ -65,14 +81,14 @@ void Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * _userDa
 	mesh->vertices.at(3).y = v4.y;
 	
 	float mag = std::max(mesh->textures.at(0)->width, mesh->textures.at(0)->height);
-	mesh->vertices.at(3).u = 0;
-	mesh->vertices.at(3).v = 0;
-	mesh->vertices.at(2).u = width/mag;
-	mesh->vertices.at(2).v = 0;
-	mesh->vertices.at(1).u = width/mag;
-	mesh->vertices.at(1).v = height/mag;
-	mesh->vertices.at(0).u = 0;
-	mesh->vertices.at(0).v = height/mag;
+	mesh->vertices.at(0).u = u/mag;
+	mesh->vertices.at(0).v = (v + height)/mag;
+	mesh->vertices.at(1).u = (u + width)/mag;
+	mesh->vertices.at(1).v = (v + height)/mag;
+	mesh->vertices.at(2).u = (u + width)/mag;
+	mesh->vertices.at(2).v = v/mag;
+	mesh->vertices.at(3).u = u/mag;
+	mesh->vertices.at(3).v = v/mag;
 }
 
 
@@ -102,6 +118,14 @@ void Box2DSprite::setGroupIndex(int16 _groupIndex){
 		bf.groupIndex = _groupIndex;
 		f->SetFilterData(bf);
 		f->Refilter(); // is this necessary?
+		f = f->GetNext();
+	}
+}
+
+void Box2DSprite::setUserData(void * _data){
+	b2Fixture * f = body->GetFixtureList();
+	while(f != nullptr){
+		f->SetUserData(_data);
 		f = f->GetNext();
 	}
 }

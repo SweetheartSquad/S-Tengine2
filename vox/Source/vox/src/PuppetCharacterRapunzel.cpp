@@ -8,18 +8,15 @@
 
 #include <Item.h>
 
-PuppetCharacterRapunzel::PuppetCharacterRapunzel(bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+PuppetCharacterRapunzel::PuppetCharacterRapunzel(bool _ai, float _ghostPosition, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	PuppetCharacter(new PuppetTexturePack(
 		RapunzelResourceManager::rapunzelRedTorso,
 		RapunzelResourceManager::rapunzelRedArm,
 		RapunzelResourceManager::rapunzelRedHelmet
-	), _ai, _world, _categoryBits, _maskBits, _groupIndex),
+	), _ghostPosition, _ai, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {
-
-	componentScale = 0.008f;
-
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
 	if(maskBits != (int16)-1){

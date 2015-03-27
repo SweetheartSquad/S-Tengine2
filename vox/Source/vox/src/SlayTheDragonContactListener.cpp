@@ -15,6 +15,8 @@
 #include <Box2D\Dynamics\Joints\b2RevoluteJoint.h>
 
 #include "Behaviour.h"
+#include <Fortification.h>
+#include <ItemFireball.h>
 
 SlayTheDragonContactListener::SlayTheDragonContactListener(PuppetScene * _scene) :
 	PuppetContactListener(_scene)
@@ -31,6 +33,11 @@ void SlayTheDragonContactListener::playerPlayerContact(b2Contact * _contact){
 
 void SlayTheDragonContactListener::playerItemContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _itemFixture){
 	PuppetContactListener::playerItemContact(_contact, _playerFixture, _itemFixture);
+	
+	PuppetCharacter * player = static_cast<PuppetCharacter *>( _playerFixture->GetUserData() );
+    Item * item = static_cast<Item *>( _itemFixture->GetUserData() );
+
+
 }
 
 void SlayTheDragonContactListener::playerStructureContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _structureFixture){
@@ -43,6 +50,23 @@ void SlayTheDragonContactListener::playerGroundContact(b2Contact * _contact, b2F
 
 void SlayTheDragonContactListener::structureItemContact(b2Contact * _contact, b2Fixture * _structureFixture, b2Fixture * _itemFixture){
 	PuppetContactListener::structureItemContact(_contact, _structureFixture, _itemFixture);
+
+	Structure * structure = static_cast<Structure *>( _structureFixture->GetUserData() );
+    Item * item = static_cast<Item *>( _itemFixture->GetUserData() );
+
+	Fortification * fort = dynamic_cast<Fortification *>(structure);
+	if(fort != nullptr){
+		// need to filter by roof vs. base (base shouldn't take damage)
+
+		fort->takeDamage(item->damage); // what is going on here?
+		/*ItemFireball * fireball = dynamic_cast<ItemFireball *>(item);
+		if(fireball != nullptr){
+			//fireball->playerWhoFired->score += boulder->damage;
+			if(fort->state == StructureBreakable::kDEAD){
+				fireball->playerWhoFired->score += 100000;
+			}
+		}*/
+	}
 }
 
 void SlayTheDragonContactListener::EndContact(b2Contact * _contact){

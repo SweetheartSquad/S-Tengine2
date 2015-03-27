@@ -4,7 +4,7 @@
 
 class ShaderComponentHsv : public ShaderComponent{
 private:
-	float hue, saturation, value, alpha;
+	float hue, saturation, value;
 public:
 	float getHue();
 	float getSaturation();
@@ -13,8 +13,8 @@ public:
 	void setSaturation(float _sat);
 	void setValue(float _val);
 
-	// all values are given as 0 - 1, h += hue, s *= sat, v *= val, a *= alpha
-	ShaderComponentHsv(Shader * _shader, float _hue, float _saturation, float _value, float _alpha = 1.f);
+	// all values are given as 0 - 1, h += hue, s *= sat, v *= val
+	ShaderComponentHsv(Shader * _shader, float _hue, float _saturation, float _value);
 	~ShaderComponentHsv();
 	
 	std::string getVertexVariablesString() override;

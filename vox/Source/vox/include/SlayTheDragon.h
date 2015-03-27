@@ -2,6 +2,8 @@
 
 #include "PuppetScene.h"
 
+#define SLAY_DRAGON_GHOST_HEIGHT 30.0f
+
 class MeshEntity;
 class PuppetCharacter;
 class PuppetCharacterDragon;

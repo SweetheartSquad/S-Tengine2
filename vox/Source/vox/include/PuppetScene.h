@@ -46,6 +46,7 @@ public:
 	bool displayingSplash;
 	bool splashSoundPlayed;
 	float splashDuration;
+	bool victoryTriggered;
 
 	PuppetContactListener * cl;
 	Box2DWorld * world;
@@ -80,11 +81,12 @@ public:
 	virtual void unload() override;
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
-
+	
+	virtual void triggerVictoryState();
 	virtual void complete();
 
 	void destroyItem(Item * item);
-	void doCountDown();
+	virtual void doCountDown();
 	void playRandomBackgroundMusic();
 
 	 virtual void populateBackground();

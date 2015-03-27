@@ -6,13 +6,17 @@
 ItemFireball::ItemFireball(PuppetCharacterDragon * _dragon, Box2DWorld * _world) :
 Item(true, _world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND),
 	NodeTransformable(new Transform()),
-	NodeChild(nullptr),
-	dragon(_dragon)
+	NodeChild(nullptr)
 {
-	groupIndex = dragon->groupIndex;
-	setGroupIndex(dragon->groupIndex);
+	owner = _dragon;
+	groupIndex = owner->groupIndex;
+	setGroupIndex(owner->groupIndex);
 }
 
 ItemFireball::~ItemFireball(){
+	PuppetCharacterDragon * dragon = dynamic_cast<PuppetCharacterDragon *>(owner);
+	if(dragon == nullptr){
+		throw "not a dragon!";
+	}
 	dragon->fireball = nullptr;
 }

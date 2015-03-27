@@ -21,6 +21,7 @@
 #include <shader/BaseComponentShader.h>
 #include <keyboard.h>
 #include <Texture.h>
+#include <TextureSampler.h>
 #include <PuppetCharacterGuard.h>
 #include <PuppetCharacterRapunzel.h>
 #include <PuppetCharacterThief.h>
@@ -30,17 +31,18 @@
 #include <ItemFlail.h>
 #include <ItemSimpleWeapon.h>
 #include <ItemProjectileWeapon.h>
+#include <Hair.h>
 
 #include <glfw\glfw3.h>
 #include <SoundManager.h>
 
 Rapunzel::Rapunzel(PuppetGame* _game):
 	PuppetScene(_game, 30),
-	guard(new PuppetCharacterGuard(true, world, PuppetGame::kPLAYER, -1, -20)),
-	playerCharacter1(new PuppetCharacterThief(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
-	playerCharacter2(new PuppetCharacterThief(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
-	playerCharacter3(new PuppetCharacterThief(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
-	playerCharacter4(new PuppetCharacterRapunzel(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
+	guard(new PuppetCharacterGuard(true, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, -1, -20)),
+	playerCharacter1(new PuppetCharacterThief(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
+	playerCharacter2(new PuppetCharacterThief(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
+	playerCharacter3(new PuppetCharacterThief(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
+	playerCharacter4(new PuppetCharacterRapunzel(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
 	cl = new RapunzelContactListener(this);
 	populateBackground();
@@ -59,31 +61,31 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter1->setShader(shader, true);
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
-	playerCharacter1->rootComponent->maxVelocity = b2Vec2(10, 10);
+	playerCharacter1->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
-	playerCharacter2->rootComponent->maxVelocity = b2Vec2(10, 10);
+	playerCharacter2->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
-	playerCharacter3->rootComponent->maxVelocity = b2Vec2(10, 10);
+	playerCharacter3->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
-	playerCharacter4->rootComponent->maxVelocity = b2Vec2(10, 10);
+	playerCharacter4->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
 
 	guard->setShader(shader, true);
 	addChild(guard, 0);
 	guard->addToLayeredScene(this, 1);
-	guard->rootComponent->maxVelocity = b2Vec2(10, 10);
+	guard->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	
 	/*guard->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, guard->groupIndex, 0, 0, -RapunzelResourceManager::itemFlailGrip->height/2.f);
 	addChild(guard->itemToPickup, 1);
@@ -111,20 +113,26 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 		TextureSampler * weaponTex = RapunzelResourceManager::getRandomWeapon();
 		TextureSampler * projTex = RapunzelResourceManager::getRandomWeapon();
 		
-		ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
+		ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -weaponTex->height);
 		weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);
 		p->itemToPickup = weapon;
         addChild(weapon, 1);
 	}
 	
-	playerCharacter1->translateComponents(glm::vec3(20.0f, 35, 0.f));
-	playerCharacter2->translateComponents(glm::vec3(40.0f, 35, 0.f));
-	playerCharacter3->translateComponents(glm::vec3(60.0f, 35, 0.f));
-	playerCharacter4->translateComponents(glm::vec3(80.0f, 35, 0.f));
-	guard->translateComponents(glm::vec3(100.f, 35, 0));
+	playerCharacter1->translateComponents(glm::vec3(20.f, 35.f, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(40.f, 35.f, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(60.f, 35.f, 0.f));
+	playerCharacter4->translateComponents(glm::vec3(80.f, 35.f, 0.f));
+	guard->translateComponents(glm::vec3(100.f, 35.f, 0.f));
 
 	playRandomBackgroundMusic();
+
+
+	Hair * hair = new Hair(world, PuppetGame::kGROUND, PuppetGame::kPLAYER, 0);
+	addChild(hair, 1);
+	hair->setShader(shader, true);
+	hair->translateComponents(glm::vec3(50.f, 0.f, 0.f));
 }
 
 Rapunzel::~Rapunzel(){

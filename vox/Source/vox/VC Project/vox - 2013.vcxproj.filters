@@ -165,9 +165,13 @@
     <ClCompile Include="../src/VoxRenderOptions.cpp" />
     <ClCompile Include="../src/Particle.cpp" />
     <ClCompile Include="../src/Fortification.cpp" />
-    <ClCompile Include="..\src\BehaviourAttackThrow.cpp" />
-    <ClCompile Include="..\src\ItemFireball.cpp" />
-    <ClCompile Include="..\src\ItemFireballLauncher.cpp" />
+    <ClCompile Include="../src/BehaviourAttackThrow.cpp" />
+    <ClCompile Include="../src/ItemFireball.cpp" />
+    <ClCompile Include="../src/ItemFireballLauncher.cpp" />
+    <ClCompile Include="..\src\shader\ShaderComponentTint.cpp" />
+    <ClCompile Include="..\src\shader\ShaderComponentAlpha.cpp" />
+    <ClCompile Include="..\src\TextureSampler.cpp" />
+    <ClCompile Include="..\src\StructureBreakable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -344,10 +348,14 @@
     <ClInclude Include="../include/VoxRenderOptions.h" />
     <ClInclude Include="../src/GameJamSceneIndoor.h" />
     <ClInclude Include="../include/Fortification.h" />
-    <ClInclude Include="..\include\Particle.h" />
-    <ClInclude Include="..\include\BehaviourAttackThrow.h" />
-    <ClInclude Include="..\include\ItemFireball.h" />
-    <ClInclude Include="..\include\ItemFireballLauncher.h" />
+    <ClInclude Include="../include/BehaviourAttackThrow.h" />
+    <ClInclude Include="../include/ItemFireball.h" />
+    <ClInclude Include="../include/ItemFireballLauncher.h" />
+    <ClInclude Include="../include/Particle.h" />
+    <ClInclude Include="..\include\shader\ShaderComponentTint.h" />
+    <ClInclude Include="..\include\shader\ShaderComponentAlpha.h" />
+    <ClInclude Include="..\include\TextureSampler.h" />
+    <ClInclude Include="..\include\StructureBreakable.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Include">
