@@ -416,17 +416,36 @@ void PuppetScene::update(Step * _step){
 			currentTime += 1;
 		}
     }
+    PuppetGame * pg = static_cast<PuppetGame *>(game);
     if (keyboard->keyJustUp(GLFW_KEY_8)){
-        game->scenes.insert(std::make_pair("RaidTheCastle", new RaidTheCastle((PuppetGame *)game)));
-        game->switchScene("RaidTheCastle", true);
+        if (game->currentSceneKey != "Raid The Castle"){
+            pg->puppetControllers.at(0)->unassign();
+            pg->puppetControllers.at(1)->unassign();
+            pg->puppetControllers.at(2)->unassign();
+            pg->puppetControllers.at(3)->unassign();
+            game->scenes.insert(std::make_pair("Raid The Castle", new RaidTheCastle((PuppetGame *)game)));
+            complete("Raid The Castle");
+        }
     }
     if (keyboard->keyJustUp(GLFW_KEY_9)){
-        game->scenes.insert(std::make_pair("Rapunzel", new Rapunzel((PuppetGame *)game)));
-        game->switchScene("Rapunzel", true);
+        if (game->currentSceneKey != "Rapunzel"){
+            pg->puppetControllers.at(0)->unassign();
+            pg->puppetControllers.at(1)->unassign();
+            pg->puppetControllers.at(2)->unassign();
+            pg->puppetControllers.at(3)->unassign();
+            game->scenes.insert(std::make_pair("Rapunzel", new Rapunzel((PuppetGame *)game)));
+            complete("Rapunzel");
+        }
     }
     if (keyboard->keyJustUp(GLFW_KEY_0)){
-        game->scenes.insert(std::make_pair("SlayTheDragon", new SlayTheDragon((PuppetGame *)game)));
-        game->switchScene("SlayTheDragon", true);
+        if (game->currentSceneKey != "Slay The Dragon"){
+            pg->puppetControllers.at(0)->unassign();
+            pg->puppetControllers.at(1)->unassign();
+            pg->puppetControllers.at(2)->unassign();
+            pg->puppetControllers.at(3)->unassign();
+            game->scenes.insert(std::make_pair("Slay The Dragon", new SlayTheDragon((PuppetGame *)game)));
+            complete("Slay The Dragon");
+        }
     }
 
 	
@@ -465,20 +484,23 @@ void PuppetScene::triggerVictoryState(){
 		}
 	}
 }
-void PuppetScene::complete(){
-	PuppetGame * pg = static_cast<PuppetGame *>(game);
+void PuppetScene::complete(std::string _switchTo){
+    PuppetGame * pg = static_cast<PuppetGame *>(game);
+    if (_switchTo != ""){
+        pg->switchScene(_switchTo, true);
+    } else{
+	    if(dynamic_cast<VictoryScene *>(this) != nullptr){
+		    pg->puppetControllers.at(0)->unassign();
+		    pg->puppetControllers.at(1)->unassign();
+		    pg->puppetControllers.at(2)->unassign();
+		    pg->puppetControllers.at(3)->unassign();
 
-	if(dynamic_cast<VictoryScene *>(this) != nullptr){
-		pg->puppetControllers.at(0)->unassign();
-		pg->puppetControllers.at(1)->unassign();
-		pg->puppetControllers.at(2)->unassign();
-		pg->puppetControllers.at(3)->unassign();
-
-		pg->loadRandomScene();
-	}else{
-		pg->scenes.insert(std::make_pair("Victory", new VictoryScene(pg, players)));
-		pg->switchScene("Victory", true);
-	}
+		    pg->loadRandomScene();
+	    }else{
+		    pg->scenes.insert(std::make_pair("Victory", new VictoryScene(pg, players)));
+		    pg->switchScene("Victory", true);
+	    }
+    }
 }
 
 void PuppetScene::destroyItem(Item * _item){

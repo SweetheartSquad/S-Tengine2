@@ -38,9 +38,13 @@ ItemProjectileWeapon::ItemProjectileWeapon(TextureSampler * _projectileTex, Text
 ItemProjectileWeapon::~ItemProjectileWeapon(){
 }
 
-Item * ItemProjectileWeapon::getProjectile(){
+Item * ItemProjectileWeapon::getProjectile(bool _forceDrop){
 	//Item * projectile = new Item(true, projectileTemplate->world, projectileTemplate->categoryBits, projectileTemplate->maskBits, projectileTemplate->groupIndex, projectileTemplate->damage, projectileTemplate->handleX, projectileTemplate->handleY);
-	Item * projectile = new Item(true, world, categoryBits, maskBits, groupIndex, damage, handleX, handleY);
+    if (_forceDrop){
+        return Item::getProjectile(_forceDrop);
+    }
+    
+    Item * projectile = new Item(true, world, categoryBits, maskBits, groupIndex, damage, handleX, handleY);
 	
 	Box2DSprite ** test = new Box2DSprite*[1];
 	test[0] = projectile->rootComponent = new Box2DSprite(world, projectileTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale);

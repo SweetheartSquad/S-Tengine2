@@ -19,7 +19,7 @@ ItemFireballLauncher::ItemFireballLauncher(PuppetCharacterDragon * _dragon, Box2
 	owner = _dragon;
 }
 
-Item * ItemFireballLauncher::getProjectile(){
+Item * ItemFireballLauncher::getProjectile(bool _forceDrop){
 	//Item * projectile = new Item(true, projectileTemplate->world, projectileTemplate->categoryBits, projectileTemplate->maskBits, projectileTemplate->groupIndex, projectileTemplate->damage, projectileTemplate->handleX, projectileTemplate->handleY);
 	PuppetCharacterDragon * dragon = dynamic_cast<PuppetCharacterDragon *>(owner);
 	if(dragon == nullptr){

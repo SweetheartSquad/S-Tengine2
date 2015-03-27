@@ -32,7 +32,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	dead(false),
 	deathPending(false),
 	targetRoll(0),
-	health(1000.0f),
+	health(100.0f),
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),
@@ -60,7 +60,7 @@ PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _wor
 	dead(false),
 	deathPending(false),
 	targetRoll(0.0f),
-	health(1000.0f),
+	health(100.0f),
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),
@@ -301,9 +301,15 @@ void PuppetCharacter::update(Step* _step){
 			(*c)->update(_step);
 		}
 	}
+    if (control < 0.5f){
+        targetRoll = glm::radians(90.f);
+        action(true);
+    }
+
 	float bodAngle = (rootComponent)->body->GetAngle();
 	rootComponent->body->SetTransform(rootComponent->body->GetPosition(), bodAngle);
 	float angularVel = -((bodAngle + targetRoll) * control) * 10;// + glm::radians(90.f);
+    
 
 	rootComponent->body->SetAngularVelocity(angularVel);
 
@@ -344,12 +350,12 @@ void PuppetCharacter::jump(){
 	//canJump = false;
 }
 
-void PuppetCharacter::action(){
+void PuppetCharacter::action(bool _forceDrop){
 	if(vox::step.time - lastActionTime > actionThrottle){
 		lastActionTime = vox::step.time;
 		if(heldItem != nullptr){
 			if(itemJoint != nullptr){
-				Item * projectile = heldItem->getProjectile();
+                Item * projectile = heldItem->getProjectile(_forceDrop);
 				if(projectile == heldItem){
 					heldItem = nullptr;
 					itemJoint = nullptr;

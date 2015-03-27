@@ -54,7 +54,7 @@ void Item::hitGround(){
 	}
 }
 
-Item * Item::getProjectile(){
+Item * Item::getProjectile(bool _forceDrop){
 	if(playerJoint != nullptr){
 		world->b2world->DestroyJoint(playerJoint);
 		playerJoint = nullptr;

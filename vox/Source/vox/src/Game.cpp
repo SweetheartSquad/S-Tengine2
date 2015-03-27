@@ -202,9 +202,6 @@ void Game::printFps(){
 }
 
 void Game::switchScene(std::string _newSceneKey, bool _deleteOldScene){
-    if (_newSceneKey == currentSceneKey){
-        _newSceneKey.append("'");
-    }
 	deleteOldScene = _deleteOldScene;
 	if(scenes.count(_newSceneKey) > 0){
 		switchingScene = true;

@@ -36,7 +36,6 @@ class ParticleSystem;
 
  class PuppetScene abstract : public LayeredScene{
 public:
-
 	float duration;
 	float currentTime;
 	unsigned int countDown;
@@ -83,7 +82,7 @@ public:
 	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
 	
 	virtual void triggerVictoryState();
-	virtual void complete();
+    virtual void complete(std::string _switchTo = "");
 
 	void destroyItem(Item * item);
 	virtual void doCountDown();

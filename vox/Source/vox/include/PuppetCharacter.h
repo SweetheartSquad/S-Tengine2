@@ -61,7 +61,7 @@ public:
 
 	virtual void jump();
 	//Called when the controller is thrust forward
-	virtual void action();
+	virtual void action(bool _forceDrop = false);
 	virtual void die();
 
 	void removeCollision(PuppetGame::BOX2D_CATEGORY _category);

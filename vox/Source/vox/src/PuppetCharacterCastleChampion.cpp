@@ -29,7 +29,7 @@ PuppetCharacterCastleChampion::~PuppetCharacterCastleChampion(){
 	//delete texPack;
 }
 
-void PuppetCharacterCastleChampion::action(){
+void PuppetCharacterCastleChampion::action(bool _forceDrop){
 	// the castle champion isn't allowed to throw their weapon
 }
 

@@ -165,7 +165,7 @@ void PuppetCharacterDragon::update(Step * _step){
     }
 }
 
-void PuppetCharacterDragon::action(){
+void PuppetCharacterDragon::action(bool _forceDrop){
 	if(heldItem != nullptr){
 		if(itemJoint != nullptr){
 			/*try{
@@ -175,7 +175,7 @@ void PuppetCharacterDragon::action(){
 			}*/
 			if (fireball == nullptr){
 				SlayTheDragonResourceManager::dragonSounds->playRandomSound();
-				fireball = heldItem->getProjectile();
+				fireball = heldItem->getProjectile(_forceDrop);
 				if (fireball == heldItem){
 					heldItem = nullptr;
 					itemJoint = nullptr;

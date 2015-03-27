@@ -15,6 +15,6 @@ public:
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
 	void update(Step * _step) override;
-	void action() override;
+    void action(bool _forceDrop = false) override;
 	void pickupItem(Item * _item) override;
 };
