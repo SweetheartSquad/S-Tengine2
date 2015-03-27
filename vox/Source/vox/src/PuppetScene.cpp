@@ -426,12 +426,30 @@ void PuppetScene::update(Step * _step){
 			drawer->drawing = !drawer->drawing;
 		}
 	}
+
+	bool everyonesDead = true;
+	for(auto p : players){
+		if(!p->dead){
+			everyonesDead = false;
+			break;
+		}
+	}
+	if(everyonesDead){
+		triggerVictoryState();
+	}
 }
 
 void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	LayeredScene::render(_matrixStack, _renderStack);
 }
 
+void PuppetScene::triggerVictoryState(){
+	if(currentTime < duration - 1){
+		currentTime = duration - 1;
+		countDown = 1;
+		doCountDown();
+	}
+}
 void PuppetScene::complete(){
 	PuppetGame * pg = static_cast<PuppetGame *>(game);
 
