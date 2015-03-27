@@ -12,13 +12,21 @@
 #include <MeshInterface.h>
 #include <TextureSampler.h>
 
+#define SCENE_WIDTH 100
+
 VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _players):
-	PuppetScene(_game, 10)
+	PuppetScene(_game, 10, SCENE_WIDTH, 150.f)
 {
 	populateBackground();
 	cl = new PuppetContactListener(this);
 
 	std::vector<PuppetCharacter *> sortedPlayers;
+
+	float maxScore = 1.f;
+
+	for(unsigned long int i=0; i<_players.size(); ++i){
+		maxScore = std::max(maxScore, _players.at(i)->score);
+	}
 
 	for(unsigned long int i=0; i<_players.size(); ++i){
 		players.push_back(new PuppetCharacter(_players.at(i), world));
@@ -31,36 +39,36 @@ VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _p
 		players.at(i)->translateComponents(glm::vec3(20.0f * (i+1), 35, 0.f));
 		gameCam->addTarget(players.at(i)->torso);
 		static_cast<PuppetGame *>(game)->puppetControllers.at(i)->setPuppetCharacter(players.at(i));
+
+		players.at(i)->score /= maxScore;
 	}
 
-	std::sort(sortedPlayers.begin(), sortedPlayers.end(), PuppetCharacter::compareByScore);
-	podium(sortedPlayers);
-}
+	/*std::sort(sortedPlayers.begin(), sortedPlayers.end(), PuppetCharacter::compareByScore);
+	podium(sortedPlayers);*/
 
-VictoryScene::~VictoryScene(){
-}
-
-void VictoryScene::podium(std::vector<PuppetCharacter *> _sortedPuppets){
-	float maxHeight = 10.f;
+	float maxHeight = 5.f;
 
 	// should have a better way, what about ai characters?
-	if(_sortedPuppets.front()->score != _sortedPuppets.back()->score){
-		for(unsigned long int i = 0; i < _sortedPuppets.size(); ++i){
-			float height = maxHeight / (i + 1);
-
-			Box2DSprite * podiumStand = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), PuppetResourceManager::head1->texture, PuppetResourceManager::head1->width, PuppetResourceManager::head1->height, PuppetResourceManager::head1->u, PuppetResourceManager::head1->v);
-			podiumStand->transform->scale(1, height, 1);
+	//if(_sortedPuppets.front()->score != _sortedPuppets.back()->score){
+		for(unsigned long int i = 0; i < players.size(); ++i){
+			float height = maxHeight * (players.at(i)->score + 0.25);
+			float width = SCENE_WIDTH / (players.size()*2);
+			Box2DSprite * podiumStand = new Box2DSprite(world, b2_staticBody, false, nullptr, new Transform(), PuppetResourceManager::ground1, 512/2.f, 512/2.f, 0, 0);
+			podiumStand->transform->scale(width, height, 1);
 			podiumStand->mesh->uvEdgeMode = GL_REPEAT;
 			podiumStand->setShader(shader, true);
-			podiumStand->setTranslationPhysical(_sortedPuppets.at(i)->rootComponent->body->GetPosition().x, podiumStand->getCorrectedHeight(), 0.f);
+			podiumStand->setTranslationPhysical(players.at(i)->rootComponent->body->GetPosition().x, podiumStand->getCorrectedHeight(), 0.f);
 			podiumStand->createFixture(b2Filter());
 			addChild(podiumStand, 1);
 
-			_sortedPuppets.at(i)->translateComponents(glm::vec3(0.f, podiumStand->getCorrectedHeight(), 0.f));
+			players.at(i)->translateComponents(glm::vec3(0.f, podiumStand->getCorrectedHeight(), 0.f));
 		}
-	}else{
+	/*}else{
 		// NO WINNER!
-	}
+	}*/
+}
+
+VictoryScene::~VictoryScene(){
 }
 
 void VictoryScene::update(Step * _step){
