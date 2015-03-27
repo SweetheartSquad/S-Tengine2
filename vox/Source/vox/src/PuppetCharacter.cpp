@@ -88,7 +88,7 @@ PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _wor
 	canJump(_character->canJump),
 	dead(_character->dead),
 	deathPending(_character->deathPending),
-	targetRoll(_character->targetRoll),
+	targetRoll(0),
 	health(1.0f),
 	itemToPickup(nullptr),
 	heldItem(nullptr),

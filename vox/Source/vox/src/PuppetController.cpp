@@ -11,11 +11,18 @@ void PuppetController::setPuppetCharacter(PuppetCharacter * _puppetCharacter){
 	puppetCharacter = _puppetCharacter;
 	for (unsigned long int i = 0; i < idsAvailable.size(); ++i){
 		if (idsAvailable.at(i)){
-			puppetCharacter->id = i;
-			idsAvailable.at(i) = false;
+			setPuppetCharacter(_puppetCharacter, i);
 			break;
 		}
 	}
+}
+void PuppetController::setPuppetCharacter(PuppetCharacter * _puppetCharacter, signed long int _id){
+	if(_id > idsAvailable.size() || _id < 0){
+		throw "id outside range";
+	}
+	puppetCharacter = _puppetCharacter;
+	puppetCharacter->id = _id;
+	idsAvailable.at(_id) = false;
 }
 
 void PuppetController::unassign(){
@@ -48,5 +55,11 @@ void PuppetController::update(Step* _step){
 			}
 			puppetCharacter->targetRoll = accelerometer->getRoll();
 		}
+	}
+}
+
+void PuppetController::reset(){
+	for (unsigned long int i = 0; i < idsAvailable.size(); ++i){
+		idsAvailable.at(i) = true;
 	}
 }

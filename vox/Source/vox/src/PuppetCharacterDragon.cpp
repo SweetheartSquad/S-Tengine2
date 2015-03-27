@@ -14,7 +14,9 @@
 #include <Item.h>
 #include <SlayTheDragonResourceManager.h>
 #include <PuppetScene.h>
+#include <SoundManager.h>
 #include <ParticleSystem.h>
+#include <Particle.h>
 
 PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	PuppetCharacter(new PuppetTexturePack(
@@ -29,7 +31,7 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	fireball(nullptr),
-	fireParticles(new ParticleSystem(SlayTheDragonResourceManager::itemFireball, _world, 0, 0, _groupIndex))
+	fireParticles(new ParticleSystem(SlayTheDragonResourceManager::itemFireParticle, _world, 0, 0, _groupIndex))
 {
 	behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), this, 10));
 	behaviourManager.addBehaviour(new BehaviourAttack(this, 3, PuppetGame::kPLAYER));
@@ -45,8 +47,8 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 	b2RevoluteJointDef rhrej;
 	rhrej.bodyA = armRight->body;
 	rhrej.bodyB = handRight->body;
-	rhrej.localAnchorA.Set(armRight->getCorrectedWidth(), -0.2 * armRight->getCorrectedHeight());
-	rhrej.localAnchorB.Set(0.6 * handRight->getCorrectedWidth(), 0.8 * handRight->getCorrectedHeight());
+	rhrej.localAnchorA.Set(armRight->getCorrectedWidth(), -0.2f * armRight->getCorrectedHeight());
+	rhrej.localAnchorB.Set(0.6f * handRight->getCorrectedWidth(), 0.8f * handRight->getCorrectedHeight());
 	rhrej.collideConnected = false;
 	rhrej.enableLimit = true;
 	rhrej.referenceAngle = glm::radians(0.f);
@@ -58,8 +60,8 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 	b2RevoluteJointDef lhlej;
 	lhlej.bodyA = armLeft->body;
 	lhlej.bodyB = handLeft->body;
-	lhlej.localAnchorA.Set(-armLeft->getCorrectedWidth(), -0.2 * armLeft->getCorrectedHeight());
-	lhlej.localAnchorB.Set(-0.6 * handLeft->getCorrectedWidth(), 0.8 * handLeft->getCorrectedHeight());
+	lhlej.localAnchorA.Set(-armLeft->getCorrectedWidth(), -0.2f * armLeft->getCorrectedHeight());
+	lhlej.localAnchorB.Set(-0.6f * handLeft->getCorrectedWidth(), 0.8f * handLeft->getCorrectedHeight());
 	lhlej.collideConnected = false;
 	lhlej.enableLimit = true;
 	lhlej.referenceAngle = glm::radians(0.f);
@@ -78,8 +80,12 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	float hue = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getHue();
 	float sat = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getSaturation();
 	float red = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->getRed();
-
+	float green = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->getGreen();
+	float blue = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->getBlue();
+	
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setRed(red + (1 - control) * 3);
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setGreen(green - (1 - control) * 3);
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setBlue(blue - (1 - control) * 3);
 
 	// change the shader settings based on current damage and player id
 	if (!ai){
@@ -104,11 +110,14 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	// revert the shader settings
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(hue);
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);
-
+	
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setRed(red);
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setGreen(green);
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setBlue(blue);
 
 	if(fireball != nullptr){
-		fireParticles->addParticle(fireball->rootComponent->getPos(false));
+		Particle * p = fireParticles->addParticle(fireball->rootComponent->getPos(false));
+		p->body->SetGravityScale(-0.1f);
 	}
 	fireParticles->setShader(getShader(), true);
 	fireParticles->render(_matrixStack, _renderStack);
@@ -137,6 +146,7 @@ void PuppetCharacterDragon::action(){
 				fireball = nullptr;
 			}*/
 			if (fireball == nullptr){
+				SlayTheDragonResourceManager::dragonSounds->playRandomSound();
 				fireball = heldItem->getProjectile();
 				if (fireball == heldItem){
 					heldItem = nullptr;
@@ -145,11 +155,12 @@ void PuppetCharacterDragon::action(){
 				}
 				float t = rootComponent->body->GetAngle();
 				fireball->rootComponent->body->SetTransform(fireball->rootComponent->body->GetPosition(), t);
-				fireball->rootComponent->applyLinearImpulseDown(50);
+				fireball->rootComponent->applyLinearImpulseDown(2.5f);
+				fireball->rootComponent->body->SetGravityScale(0.025f);
 				if(rootComponent->body->GetAngle() > 0){
-					fireball->rootComponent->applyLinearImpulseLeft(50 * (1 - cos(t)));
+					fireball->rootComponent->applyLinearImpulseLeft(5 * (1 - cos(t)));
 				}else{
-					fireball->rootComponent->applyLinearImpulseRight(50 * (1 - cos(t)));
+					fireball->rootComponent->applyLinearImpulseRight(5 * (1 - cos(t)));
 				}
 			}
 		}

@@ -73,7 +73,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	backgroundSoundManager(new SoundManager(-1)),
 	countdownSoundManager(new SoundManager(-1)),
 	mouseCam(false),
-	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::ground1, 1, 1))
+	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::paper->texture, 3, 1))
 {
 
 	world->b2world->SetContactListener(cl);
@@ -435,12 +435,12 @@ void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderS
 void PuppetScene::complete(){
 	PuppetGame * pg = static_cast<PuppetGame *>(game);
 
-	pg->puppetControllers.at(0)->unassign();
-	pg->puppetControllers.at(1)->unassign();
-	pg->puppetControllers.at(2)->unassign();
-	pg->puppetControllers.at(3)->unassign();
-
 	if(dynamic_cast<VictoryScene *>(this) != nullptr){
+		pg->puppetControllers.at(0)->unassign();
+		pg->puppetControllers.at(1)->unassign();
+		pg->puppetControllers.at(2)->unassign();
+		pg->puppetControllers.at(3)->unassign();
+
 		pg->loadRandomScene();
 	}else{
 		pg->scenes.insert(std::make_pair("Victory", new VictoryScene(pg, players)));

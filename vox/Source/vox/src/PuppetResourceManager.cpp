@@ -14,7 +14,7 @@ TextureSampler * PuppetResourceManager::itemNone = new TextureSampler(new Textur
 
 Texture * PuppetResourceManager::stageFloor = new Texture("../assets/hurly-burly/StageFloor.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::sky		= new Texture("../assets/hurly-burly/Sky.png", 1024, 1024, true, true);
-Texture * PuppetResourceManager::ground1	= new Texture("../assets/hurly-burly/paper.png", 512, 512, true, true);
+TextureSampler * PuppetResourceManager::paper	= new TextureSampler("../assets/hurly-burly/", "paper.png.def");
 
 Texture * PuppetResourceManager::tree1  = new Texture("../assets/hurly-burly/Foliage/Tree1.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::tree2	= new Texture("../assets/hurly-burly/Foliage/Tree2.png", 1024, 1024, true, true);
@@ -39,14 +39,16 @@ TextureSampler * PuppetResourceManager::countDown3 = new TextureSampler(new Text
 TextureSampler * PuppetResourceManager::countDown4 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/4.png", 1024, 1024, true, true), 1024, 1024);
 TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/5.png", 1024, 1024, true, true), 1024, 1024);
 
-TextureSampler * PuppetResourceManager::redWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/redWins.png", 1024, 1024, true, true), 1024, 1024);
-TextureSampler * PuppetResourceManager::yellowWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/yellowWins.png", 1024, 1024, true, true), 1024, 1024);
-TextureSampler * PuppetResourceManager::greenWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/greenWins.png", 1024, 1024, true, true), 1024, 1024);
-TextureSampler * PuppetResourceManager::blueWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/blueWins.png", 1024, 1024, true, true), 1024, 1024);
+//TextureSampler * PuppetResourceManager::redWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/redWins.png", 1024, 1024, true, true), 1024, 1024);
+//TextureSampler * PuppetResourceManager::yellowWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/yellowWins.png", 1024, 1024, true, true), 1024, 1024);
+//TextureSampler * PuppetResourceManager::greenWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/greenWins.png", 1024, 1024, true, true), 1024, 1024);
+//TextureSampler * PuppetResourceManager::blueWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/blueWins.png", 1024, 1024, true, true), 1024, 1024);
+std::vector<TextureSampler *> PuppetResourceManager::winSplashes;
 
 SoundManager * PuppetResourceManager::jumpSounds   = new SoundManager(-1);
 SoundManager * PuppetResourceManager::hitSounds    = new SoundManager(-1);
 SoundManager * PuppetResourceManager::splashSounds = new SoundManager(-1);
+SoundManager * PuppetResourceManager::cheerSounds = new SoundManager(-1);
 
 void PuppetResourceManager::init(){
 	RaidTheCastleResourceManager::init();
@@ -57,7 +59,7 @@ void PuppetResourceManager::init(){
 	resources.push_back(itemNone);
 	resources.push_back(stageFloor);
 	resources.push_back(sky);
-	resources.push_back(ground1);
+	resources.push_back(paper);
 	resources.push_back(tree1);
 	resources.push_back(tree2);
 	resources.push_back(bush1);
@@ -79,14 +81,14 @@ void PuppetResourceManager::init(){
 	//raidTheCastle = new RaidTheCastleResourceManager(); 
 	//subManagers.push_back(raidTheCastle);
 	
-	resources.push_back(redWins);
-	resources.push_back(yellowWins);
-	resources.push_back(greenWins);
-	resources.push_back(blueWins);
+	winSplashes.push_back(new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/yellowWins.png", 1024, 1024, true, true), 1024, 1024));
+	winSplashes.push_back(new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/greenWins.png", 1024, 1024, true, true), 1024, 1024));
+	winSplashes.push_back(new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/blueWins.png", 1024, 1024, true, true), 1024, 1024));
+	winSplashes.push_back(new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/redWins.png", 1024, 1024, true, true), 1024, 1024));
+	for(auto i : winSplashes){
+		resources.push_back(i);
+	}
 
-	resources.push_back(splashSounds);
-	resources.push_back(hitSounds);
-	resources.push_back(jumpSounds);
 
 	jumpSounds->addNewSound("jump1", "../assets/hurly-burly/audio/jump/jumpSound1.ogg");
 	jumpSounds->addNewSound("jump2", "../assets/hurly-burly/audio/jump/jumpSound2.ogg");
@@ -98,6 +100,7 @@ void PuppetResourceManager::init(){
 	jumpSounds->addNewSound("jump8", "../assets/hurly-burly/audio/jump/jumpSound8.ogg");
 	jumpSounds->addNewSound("jump9", "../assets/hurly-burly/audio/jump/jumpSound9.ogg");
 	jumpSounds->addNewSound("jump10", "../assets/hurly-burly/audio/jump/jumpSound10.ogg");
+	resources.push_back(jumpSounds);
 	
 	hitSounds->addNewSound("hit1", "../assets/hurly-burly/audio/hit/hitSound1.ogg");
 	hitSounds->addNewSound("hit2", "../assets/hurly-burly/audio/hit/hitSound2.ogg");
@@ -119,10 +122,19 @@ void PuppetResourceManager::init(){
 	hitSounds->addNewSound("hit18", "../assets/hurly-burly/audio/hit/hitSound18.ogg");
 	hitSounds->addNewSound("hit19", "../assets/hurly-burly/audio/hit/hitSound19.ogg");
 	hitSounds->addNewSound("hit10", "../assets/hurly-burly/audio/hit/hitSound20.ogg");
+	resources.push_back(hitSounds);
 
 	splashSounds->addNewSound("FightYourFriends", "../assets/hurly-burly/audio/splash/FightYourFriends.ogg");
 	splashSounds->addNewSound("Joust", "../assets/hurly-burly/audio/splash/Joust.ogg");
 	splashSounds->addNewSound("RaidTheCastle", "../assets/hurly-burly/audio/splash/RaidTheCastle.ogg");
 	splashSounds->addNewSound("Rapunzel", "../assets/hurly-burly/audio/splash/Rapunzel.ogg");
 	splashSounds->addNewSound("SlayTheDragon", "../assets/hurly-burly/audio/splash/SlayTheDragon.ogg");
+	resources.push_back(splashSounds);
+
+	
+	resources.push_back(cheerSounds);
+	cheerSounds->addNewSound("0", "../assets/hurly-burly/audio/yellowCheer/yellowCheerMain.ogg");
+	cheerSounds->addNewSound("1", "../assets/hurly-burly/audio/greenCheer/greenCheerMain.ogg");
+	cheerSounds->addNewSound("2", "../assets/hurly-burly/audio/blueCheer/blueCheerMain.ogg");
+	cheerSounds->addNewSound("3", "../assets/hurly-burly/audio/redCheer/redCheerMain.ogg");
 }
