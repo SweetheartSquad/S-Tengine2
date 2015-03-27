@@ -11,7 +11,7 @@ class Castle : public Structure{
 public:
 
 	float health;
-	float damage;
+	//float damage;
 
 	Castle(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	~Castle();	
@@ -20,6 +20,8 @@ public:
 	void update(Step* _step) override;
 	void unload() override;
 	void load() override;
+
+	void takeDamage(float _damage);
 
 	enum state_t{
 		kNORMAL,

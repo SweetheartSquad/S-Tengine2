@@ -190,6 +190,10 @@ void RaidTheCastle::update(Step* _step){
 	if(catapult->ready && !catapult->boulderLoaded){
 		loadCatapult();
 	}
+
+	if(castle->state == Castle::state_t::kDEAD){
+		complete();
+	}
 }
 
 void RaidTheCastle::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){

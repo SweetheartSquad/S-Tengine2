@@ -22,8 +22,7 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	NodeChild(nullptr),
 	NodeRenderable(),
 	health(MAX_HEALTH),
-	state(kNORMAL),
-	damage(0.f)
+	state(kNORMAL)
 {
 	componentScale = 0.03f;
 	
@@ -68,19 +67,19 @@ void Castle::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack)
 void Castle::update(Step * _step){
 	Structure::update(_step);
 
-	if(damage > 0){
-		health -= damage;
-		damage = 0;
+	
+}
 
-		if(state != kDEAD && health <= 0){
-			state = kDEAD;
-			rootComponent->currentAnimation->currentFrame = 3;
-			translateComponents(glm::vec3(0, -10, 0));
-		}else if(state != kDAMAGED && state != kDEAD && health <= MAX_HEALTH * 0.5){
-			state = kDAMAGED;
-			rootComponent->currentAnimation->currentFrame = 1;
-		}
-		
+void Castle::takeDamage(float _damage){
+	health -= _damage;
+
+	if(state != kDEAD && health <= 0){
+		state = kDEAD;
+		rootComponent->currentAnimation->currentFrame = 3;
+		//translateComponents(glm::vec3(0, -10, 0));
+	}else if(state != kDAMAGED && state != kDEAD && health <= MAX_HEALTH * 0.5){
+		state = kDAMAGED;
+		rootComponent->currentAnimation->currentFrame = 1;
 	}
 }
 
