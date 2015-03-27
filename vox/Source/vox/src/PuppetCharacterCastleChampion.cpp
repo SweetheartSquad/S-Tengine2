@@ -10,12 +10,12 @@
 
 #include <RaidTheCastleResourceManager.h>
 
-PuppetCharacterCastleChampion::PuppetCharacterCastleChampion(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+PuppetCharacterCastleChampion::PuppetCharacterCastleChampion(Box2DWorld * _world,  float _ghostPosition, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	PuppetCharacter(new PuppetTexturePack(
 		RaidTheCastleResourceManager::castleChampionTorso,
 		RaidTheCastleResourceManager::castleChampionArm,
 		RaidTheCastleResourceManager::castleChampionHelmet
-	), true, _world, _categoryBits, _maskBits, _groupIndex),
+	), _ghostPosition, true, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {

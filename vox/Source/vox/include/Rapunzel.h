@@ -2,6 +2,8 @@
 
 #include "PuppetScene.h"
 
+#define RAPUNZEL_GHOST_HEIGHT 12.0f
+
 class MeshEntity;
 class Lever;
 class PuppetCharacterGuard;

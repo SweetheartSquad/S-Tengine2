@@ -9,12 +9,12 @@
 
 #include <Item.h>
 
-PuppetCharacterKnight::PuppetCharacterKnight(bool _ai, unsigned long int _id, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+PuppetCharacterKnight::PuppetCharacterKnight(bool _ai, unsigned long int _id,  float _ghostPosition,  Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	PuppetCharacter(new PuppetTexturePack(
 		RaidTheCastleResourceManager::knightRedTorso,
 		RaidTheCastleResourceManager::knightRedArm,
 		RaidTheCastleResourceManager::knightRedHelmet
-	), _ai, _world, _categoryBits, _maskBits, _groupIndex),
+	), _ghostPosition, _ai, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {

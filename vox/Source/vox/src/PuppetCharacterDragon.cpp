@@ -25,7 +25,7 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 		SlayTheDragonResourceManager::dragonLowerWing,
 		PuppetResourceManager::face1,
 		4.0f
-	), _ai, _world, _categoryBits, _maskBits, _groupIndex),
+	), 60.0f, _ai, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	fireball(nullptr),
