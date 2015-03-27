@@ -12,9 +12,9 @@ TextureSampler * RapunzelResourceManager::leverBase  = new TextureSampler(new Te
 
 TextureSampler * RapunzelResourceManager::hair  = new TextureSampler("../assets/hurly-burly/Hair/", "Hair.png.def");
 
-TextureSampler * RapunzelResourceManager::thiefTorso	= new TextureSampler("../assets/hurly-burly/ThiefAssets/", "ThiefTorso.png");
-TextureSampler * RapunzelResourceManager::thiefArm		= new TextureSampler("../assets/hurly-burly/ThiefAssets/", "ThiefArm.png");
-TextureSampler * RapunzelResourceManager::thiefHelmet	= new TextureSampler("../assets/hurly-burly/ThiefAssets/", "ThiefHelmet.png");
+TextureSampler * RapunzelResourceManager::thiefTorso	= new TextureSampler("../assets/hurly-burly/ThiefAssets/", "ThiefTorso.png.def");
+TextureSampler * RapunzelResourceManager::thiefArm		= new TextureSampler("../assets/hurly-burly/ThiefAssets/", "ThiefArm.png.def");
+TextureSampler * RapunzelResourceManager::thiefHelmet	= new TextureSampler("../assets/hurly-burly/ThiefAssets/", "ThiefHelmet.png.def");
 										  
 TextureSampler * RapunzelResourceManager::rapunzelRedTorso	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCBody.png", 1024, 1024, true, true), 275, 806);
 TextureSampler * RapunzelResourceManager::rapunzelRedArm	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCArm.png", 1024, 1024, true, true), 67, 200);
