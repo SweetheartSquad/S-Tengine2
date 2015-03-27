@@ -147,6 +147,25 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	fort->translateComponents(glm::vec3(80.0f, 0.f, 0.f));
 
 	playRandomBackgroundMusic();
+
+
+	// handle dragon victory
+	bool archersDead = true;
+	for(unsigned long int i = 0; i < players.size()-1; ++i){
+		if(!players.at(i)->dead){
+			archersDead = false;
+			break;
+		}
+	}
+	if(archersDead){
+		dragon->score += 100000;
+		triggerVictoryState();
+	}
+
+	// handle archer's victory state
+	if(dragon->dead){
+		triggerVictoryState();
+	}
 }
 
 SlayTheDragon::~SlayTheDragon(){
