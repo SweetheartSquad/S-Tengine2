@@ -211,7 +211,7 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 			//player->die();
 		}
 		//&& !player->isCollidingWith(PuppetGame::kPLAYER)
-		if(!player->isCollidingWith(PuppetGame::kGROUND) ){
+		if(!player->isCollidingWith(PuppetGame::kGROUND)){
 			player->canJump = false;
 		}
 	}

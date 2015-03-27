@@ -37,10 +37,9 @@
 SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	PuppetScene(_game, 30, 170.f, 120.f),
 	fort(new Fortification(world, PuppetGame::kGROUND, PuppetGame::kITEM | PuppetGame::kPLAYER, -10)),
-	playerCharacter1(new PuppetCharacterArcher(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
-	//playerCharacter2(new PuppetCharacterArcher(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
-	playerCharacter2(new PuppetCharacterArcher(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
-	playerCharacter3(new PuppetCharacterArcher(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
+	playerCharacter1(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT ,world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
+	playerCharacter2(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
+	playerCharacter3(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
 	playerCharacter4(new PuppetCharacterDragon(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
 	cl = new SlayTheDragonContactListener(this);
@@ -123,7 +122,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 		if(p == dragon){
 			weapon = new ItemFireballLauncher(dragon, world);
 		}else{
-			weapon = new ItemProjectileWeapon(arrowTex, bowTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -bowTex->height);
+			weapon = new ItemProjectileWeapon(arrowTex, bowTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -bowTex->height);
 		}
 		weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);

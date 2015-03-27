@@ -38,11 +38,11 @@
 
 Rapunzel::Rapunzel(PuppetGame* _game):
 	PuppetScene(_game, 30),
-	guard(new PuppetCharacterGuard(true, world, PuppetGame::kPLAYER, -1, -20)),
-	playerCharacter1(new PuppetCharacterThief(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
-	playerCharacter2(new PuppetCharacterThief(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
-	playerCharacter3(new PuppetCharacterThief(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
-	playerCharacter4(new PuppetCharacterRapunzel(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
+	guard(new PuppetCharacterGuard(true, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, -1, -20)),
+	playerCharacter1(new PuppetCharacterThief(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
+	playerCharacter2(new PuppetCharacterThief(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
+	playerCharacter3(new PuppetCharacterThief(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
+	playerCharacter4(new PuppetCharacterRapunzel(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
 	cl = new RapunzelContactListener(this);
 	populateBackground();
@@ -113,7 +113,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 		TextureSampler * weaponTex = RapunzelResourceManager::getRandomWeapon();
 		TextureSampler * projTex = RapunzelResourceManager::getRandomWeapon();
 		
-		ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
+		ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -weaponTex->height);
 		weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);
 		p->itemToPickup = weapon;

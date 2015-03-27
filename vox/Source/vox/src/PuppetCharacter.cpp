@@ -21,7 +21,7 @@ bool PuppetCharacter::compareByScore(PuppetCharacter * _a, PuppetCharacter * _b)
 	return (_a->score < _b->score);
 }
 
-PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostPosition, bool _ai, Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
@@ -32,7 +32,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	dead(false),
 	deathPending(false),
 	targetRoll(0),
-	health(100.0f),
+	health(1000.0f),
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),
@@ -42,7 +42,8 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	id(-1),
 	actionThrottle(0.333),
 	lastActionTime(0.0),
-	collisionTypes(new std::vector<int>())
+	collisionTypes(new std::vector<int>()),
+	ghostPosition(_ghostPosition)
 {
 	bool defaultTex = false;
 	if(texPack == nullptr){
@@ -86,10 +87,10 @@ PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _wor
 	texPack(_character->texPack),
 	ai(_character->ai),
 	canJump(_character->canJump),
-	dead(_character->dead),
-	deathPending(_character->deathPending),
-	targetRoll(0),
-	health(1.0f),
+	dead(false),
+	deathPending(false),
+	targetRoll(0.0f),
+	health(1000.0f),
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),
@@ -345,20 +346,25 @@ void PuppetCharacter::update(Step* _step){
 			pickupItem(itemToPickup);
 		}
 	}else{
-		rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, 8.0f, rootComponent->transform->translationVector.z);
+		rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, ghostPosition, rootComponent->transform->translationVector.z);
 		rootComponent->body->ApplyForce(b2Vec2(-bodAngle * 50.0f, 0), rootComponent->body->GetWorldCenter(), true);
 	}
 	behaviourManager.update(_step);
 
 	control = std::min(1.f, control+0.01f);
+
+	if(health <= 0.0f) {
+		die();
+	}
 }
 
 void PuppetCharacter::jump(){
-	if(canJump){
+	if(canJump && abs(rootComponent->body->GetLinearVelocity().y) < 1.5f){
+		//PuppetResourceManager::jumpSounds->playRandomSound();
 		//PuppetResourceManager::jumpSounds->playRandomSound();
 		float t = rootComponent->body->GetAngle();
 		b2Vec2 p = rootComponent->body->GetWorldPoint(b2Vec2(0, 1));
-		rootComponent->applyLinearImpulseUp(5000.f * 2 *(cos(t)*0.5f + 0.5f));
+		rootComponent->applyLinearImpulseUp(5000.f *(cos(t)*0.5f + 0.5f));
 		if(rootComponent->body->GetAngle() > 0){
 			rootComponent->body->SetLinearVelocity(b2Vec2(-25*(1-cos(t)), rootComponent->body->GetLinearVelocity().y));
 		}else{
@@ -426,7 +432,7 @@ void PuppetCharacter::die(){
 	for(Box2DSprite ** c : components) {
 		(*c)->body->SetGravityScale(0.0f);
 	}
-	rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, 2.0f, rootComponent->transform->translationVector.z);
+	rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, ghostPosition, rootComponent->transform->translationVector.z);
 }
 
 void PuppetCharacter::takeDamage(float _damage){
