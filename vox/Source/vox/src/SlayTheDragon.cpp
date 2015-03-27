@@ -148,23 +148,23 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 
 	playRandomBackgroundMusic();
 
-
-	// handle dragon victory
-	bool archersDead = true;
-	for(unsigned long int i = 0; i < players.size()-1; ++i){
-		if(!players.at(i)->dead){
-			archersDead = false;
-			break;
-		}
-	}
-	if(archersDead){
-		dragon->score += 100000;
-		triggerVictoryState();
-	}
-
+	
 	// handle archer's victory state
 	if(dragon->dead){
 		triggerVictoryState();
+	}else{
+		// handle dragon victory
+		bool archersDead = true;
+		for(unsigned long int i = 0; i < players.size()-1; ++i){
+			if(!players.at(i)->dead){
+				archersDead = false;
+				break;
+			}
+		}
+		if(archersDead){
+			dragon->score += 100000;
+			triggerVictoryState();
+		}
 	}
 }
 

@@ -73,7 +73,8 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	backgroundSoundManager(new SoundManager(-1)),
 	countdownSoundManager(new SoundManager(-1)),
 	mouseCam(false),
-	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::paper->texture, 3, 1))
+	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::paper->texture, 3, 1)),
+	victoryTriggered(false)
 {
 
 	world->b2world->SetContactListener(cl);
@@ -444,10 +445,12 @@ void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderS
 }
 
 void PuppetScene::triggerVictoryState(){
-	if(currentTime < duration - 1){
-		currentTime = duration - 1;
-		countDown = 1;
-		doCountDown();
+	if(!victoryTriggered){
+		if(currentTime < duration - 1){
+			currentTime = duration - 1;
+			countDown = 1;
+			doCountDown();
+		}
 	}
 }
 void PuppetScene::complete(){

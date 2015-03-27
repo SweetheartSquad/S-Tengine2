@@ -46,6 +46,7 @@ public:
 	bool displayingSplash;
 	bool splashSoundPlayed;
 	float splashDuration;
+	bool victoryTriggered;
 
 	PuppetContactListener * cl;
 	Box2DWorld * world;
