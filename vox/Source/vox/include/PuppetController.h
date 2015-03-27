@@ -13,12 +13,15 @@ private:
 	PuppetCharacter * puppetCharacter;
 public:
 
-
+	
 	void setPuppetCharacter(PuppetCharacter * _puppet);
+	void setPuppetCharacter(PuppetCharacter * _puppet, signed long int _id);
 	void unassign();
 	PuppetController(Accelerometer * _accelerometer);
 	~PuppetController();
 
 	void update(Step* _step) override;
+
+	static void reset();
 
 };

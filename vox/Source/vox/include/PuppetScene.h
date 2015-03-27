@@ -84,7 +84,7 @@ public:
 	virtual void complete();
 
 	void destroyItem(Item * item);
-	void doCountDown();
+	virtual void doCountDown();
 	void playRandomBackgroundMusic();
 
 	 virtual void populateBackground();

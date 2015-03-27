@@ -4,6 +4,7 @@
 #include "Texture.h"
 #include "CharacterComponent.h"
 
+class SoundManager;
 class TextureSampler;
 class Texture;
 
@@ -29,6 +30,9 @@ public:
 	static TextureSampler * itemBow;
 	static TextureSampler * itemArrow;
 	static TextureSampler * itemFireball;
+	static TextureSampler * itemFireParticle;
 	
+	static SoundManager * dragonSounds;
+
 	static void init();
 };

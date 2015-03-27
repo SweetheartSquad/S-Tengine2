@@ -43,7 +43,7 @@ void ParticleSystem::update(Step * _step){
 	}
 }
 
-void ParticleSystem::addParticle(glm::vec3 _pos, TextureSampler * _texture){
+Particle * ParticleSystem::addParticle(glm::vec3 _pos, TextureSampler * _texture){
 	if(_texture == nullptr){
 		_texture = defaultTex;
 	}
@@ -57,4 +57,5 @@ void ParticleSystem::addParticle(glm::vec3 _pos, TextureSampler * _texture){
 	p->applyAngularImpulse((std::rand() % 20 - 10)*mass);
     p->setShader(getShader(), true);
     components.push_back(test);
+	return p;
 }

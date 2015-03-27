@@ -2,6 +2,7 @@
 
 #include <SlayTheDragonResourceManager.h>
 #include <TextureSampler.h>
+#include <SoundManager.h>
 
 TextureSampler * SlayTheDragonResourceManager::splashMessage	= new TextureSampler(new Texture("../assets/hurly-burly/SplashMessages/SlayTheDragon.png", 1024, 1024, true, true), 1024, 1024);
 
@@ -23,6 +24,9 @@ TextureSampler * SlayTheDragonResourceManager::dragonLowerWing	= new TextureSamp
 TextureSampler * SlayTheDragonResourceManager::itemBow	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Bow.png", 1024, 1024, true, true), 99, 474);
 TextureSampler * SlayTheDragonResourceManager::itemArrow	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Arrow.png", 1024, 1024, true, true), 77, 539);
 TextureSampler * SlayTheDragonResourceManager::itemFireball	= new TextureSampler(new Texture("../assets/hurly-burly/DragonAssets/Fireball.png", 1024, 1024, true, true), 309, 302);
+TextureSampler * SlayTheDragonResourceManager::itemFireParticle	= new TextureSampler("../assets/hurly-burly/DragonAssets/", "FireParticle.png.def");
+
+SoundManager * SlayTheDragonResourceManager::dragonSounds = new SoundManager(-1);
 
 void SlayTheDragonResourceManager::init(){
 	resources.push_back(splashMessage);
@@ -44,4 +48,22 @@ void SlayTheDragonResourceManager::init(){
 	resources.push_back(itemBow);
 	resources.push_back(itemArrow);
 	resources.push_back(itemFireball);
+	resources.push_back(itemFireParticle);
+
+	resources.push_back(dragonSounds);
+	
+	dragonSounds->addNewSound("1", "../assets/hurly-burly/audio/dragon/dragonSound1.ogg");
+	dragonSounds->addNewSound("2", "../assets/hurly-burly/audio/dragon/dragonSound2.ogg");
+	dragonSounds->addNewSound("3", "../assets/hurly-burly/audio/dragon/dragonSound3.ogg");
+	dragonSounds->addNewSound("4", "../assets/hurly-burly/audio/dragon/dragonSound4.ogg");
+	dragonSounds->addNewSound("5", "../assets/hurly-burly/audio/dragon/dragonSound5.ogg");
+	dragonSounds->addNewSound("6", "../assets/hurly-burly/audio/dragon/dragonSound6.ogg");
+	dragonSounds->addNewSound("7", "../assets/hurly-burly/audio/dragon/dragonSound7.ogg");
+	dragonSounds->addNewSound("8", "../assets/hurly-burly/audio/dragon/dragonSound8.ogg");
+	dragonSounds->addNewSound("9", "../assets/hurly-burly/audio/dragon/dragonSound9.ogg");
+	dragonSounds->addNewSound("10", "../assets/hurly-burly/audio/dragon/dragonSound10.ogg");
+	dragonSounds->addNewSound("11", "../assets/hurly-burly/audio/dragon/dragonSound11.ogg");
+	dragonSounds->addNewSound("12", "../assets/hurly-burly/audio/dragon/dragonSound12.ogg");
+	dragonSounds->addNewSound("13", "../assets/hurly-burly/audio/dragon/dragonSound13.ogg");
+	dragonSounds->addNewSound("14", "../assets/hurly-burly/audio/dragon/dragonSound14.ogg");
 }
