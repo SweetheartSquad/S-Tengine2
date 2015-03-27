@@ -9,6 +9,7 @@
 #include <PuppetResourceManager.h>
 #include <PuppetCharacterDragon.h>
 #include <TextureSampler.h>
+#include <NumberUtils.h>
 
 ItemFireballLauncher::ItemFireballLauncher(PuppetCharacterDragon * _dragon, Box2DWorld * _world) :
 	ItemProjectileWeapon(SlayTheDragonResourceManager::itemFireball, PuppetResourceManager::itemNone, _world, PuppetGame::kITEM),
@@ -47,9 +48,10 @@ Item * ItemFireballLauncher::getProjectile(){
 		(*c)->body->ResetMassData();
 	}
 
+    projectile->rootComponent->applyAngularImpulse(vox::NumberUtils::randomFloat(-25.0f, 25.0f));
 	projectile->setUserData(projectile);
 
-	static_cast<PuppetScene *>(scene)->addChild(projectile, 1);
+	//static_cast<PuppetScene *>(scene)->addChild(projectile, 1);
 	static_cast<PuppetScene *>(scene)->items.push_back(projectile);
 	//projectile->addToLayeredScene(static_cast<PuppetScene *>(scene), 1);
 	projectile->setShader(static_cast<PuppetScene *>(scene)->shader, true);

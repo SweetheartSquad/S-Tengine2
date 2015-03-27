@@ -184,6 +184,9 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 			if((fB.categoryBits & PuppetGame::kITEM) != 0) {
 				player->removeCollision(PuppetGame::kITEM);
 			}
+            if (!player->isCollidingWith(PuppetGame::kGROUND)){
+                player->canJump = false;
+            }
 		}
 	}
 	if((fB.categoryBits & PuppetGame::kPLAYER) != 0){
@@ -202,6 +205,9 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 			if((fA.categoryBits & PuppetGame::kITEM) != 0) {
 				player->removeCollision(PuppetGame::kITEM);
 			}
+            if (!player->isCollidingWith(PuppetGame::kGROUND)){
+                player->canJump = false;
+            }
 		}
 	}
 	
@@ -211,9 +217,6 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 			//player->die();
 		}
 		//&& !player->isCollidingWith(PuppetGame::kPLAYER)
-		if(!player->isCollidingWith(PuppetGame::kGROUND)){
-			player->canJump = false;
-		}
 	}
 
 	// behaviour stuff

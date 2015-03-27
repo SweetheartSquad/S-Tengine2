@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -186,10 +186,10 @@
     <ClCompile Include="../src/BehaviourAttackThrow.cpp" />
     <ClCompile Include="../src/ItemFireball.cpp" />
     <ClCompile Include="../src/ItemFireballLauncher.cpp" />
-    <ClCompile Include="..\src\shader\ShaderComponentAlpha.cpp" />
-    <ClCompile Include="..\src\shader\ShaderComponentTint.cpp" />
-    <ClCompile Include="..\src\StructureBreakable.cpp" />
-    <ClCompile Include="..\src\TextureSampler.cpp" />
+    <ClCompile Include="../src/shader/ShaderComponentAlpha.cpp" />
+    <ClCompile Include="../src/shader/ShaderComponentTint.cpp" />
+    <ClCompile Include="../src/StructureBreakable.cpp" />
+    <ClCompile Include="../src/TextureSampler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -370,10 +370,10 @@
     <ClInclude Include="../include/ItemFireball.h" />
     <ClInclude Include="../include/ItemFireballLauncher.h" />
     <ClInclude Include="../include/Particle.h" />
-    <ClInclude Include="..\include\StructureBreakable.h" />
-    <ClInclude Include="..\include\shader\ShaderComponentAlpha.h" />
-    <ClInclude Include="..\include\shader\ShaderComponentTint.h" />
-    <ClInclude Include="..\include\TextureSampler.h" />
+    <ClInclude Include="../include/StructureBreakable.h" />
+    <ClInclude Include="../include/shader/ShaderComponentAlpha.h" />
+    <ClInclude Include="../include/shader/ShaderComponentTint.h" />
+    <ClInclude Include="../include/TextureSampler.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>
@@ -385,26 +385,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>

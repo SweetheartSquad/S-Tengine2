@@ -120,24 +120,19 @@ std::string Arduino::ReadDataUntil(char _until, bool * _forced){
 	return ret;
 }
 
-bool Arduino::WriteData(char *buffer, unsigned int nbChar)
-{
+bool Arduino::WriteData(char *buffer, unsigned int nbChar){
     DWORD bytesSend;
 
     //Try to write the buffer on the Serial port
-    if(!WriteFile(this->hSerial, static_cast<void *>(buffer), nbChar, &bytesSend, 0))
-    {
+    if(!WriteFile(this->hSerial, static_cast<void *>(buffer), nbChar, &bytesSend, 0)){
         //In case it don't work get comm error and return false
         ClearCommError(this->hSerial, &this->errors, &this->status);
-
         return false;
     }
-    else
-        return true;
+    return true;
 }
 
-bool Arduino::IsConnected()
-{
+bool Arduino::IsConnected(){
     //Simply return the connection status
     return this->connected;
 }

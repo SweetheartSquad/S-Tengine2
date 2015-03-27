@@ -1,9 +1,0 @@
-diff a/vox/Source/vox.sln b/vox/Source/vox.sln	(rejected hunks)
-@@ -42,4 +42,7 @@
- 		{B6AFC105-EAF0-41B3-BD41-75D4570CD35A} = {A445FC11-3045-4268-B44D-959EDDFB3B94}
- 		{E178CAF8-5E96-478C-812C-DCBA942FC878} = {A445FC11-3045-4268-B44D-959EDDFB3B94}
- 	EndGlobalSection
-+	GlobalSection(Performance) = preSolution
-+		HasPerformanceSessions = true
-+	EndGlobalSection
- EndGlobal

@@ -28,15 +28,12 @@ Fortification::Fortification(Box2DWorld* _world, int16 _categoryBits, int16 _mas
 	*/
 
 	componentScale = 0.03f;
-	
-	TextureSampler * baseTex = SlayTheDragonResourceManager::fortForeground;
+
 	TextureSampler * roofTex = SlayTheDragonResourceManager::fortStructure;
 
-	rootComponent = base = new Box2DSprite(_world, baseTex, b2_staticBody, false, nullptr, new Transform(), componentScale);
-	roof = new Box2DSprite(_world, roofTex, b2_staticBody, false, nullptr, new Transform(), componentScale);
+	rootComponent = new Box2DSprite(_world, roofTex, b2_staticBody, false, nullptr, new Transform(), componentScale);
 
 	components.push_back(&rootComponent);
-	components.push_back(&roof);
 	
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
@@ -62,8 +59,6 @@ Fortification::Fortification(Box2DWorld* _world, int16 _categoryBits, int16 _mas
 	roof->addAnimation("castleStates", spriteSheet, true);
 	*/
 
-	roof->setTranslationPhysical(0.f, rootComponent->getCorrectedHeight() + roof->getCorrectedHeight() + 15.f, 0.f);
-	translateComponents(glm::vec3(0, rootComponent->getCorrectedHeight(), 0));
 }
 
 void Fortification::takeDamage(float _damage){
@@ -71,16 +66,16 @@ void Fortification::takeDamage(float _damage){
 	switch (state){
 	default:
 	case StructureBreakable::kNORMAL:
-		roof->transform->scaleVector.x = 5;
-		roof->transform->scaleVector.y = 1;
+		rootComponent->transform->scaleVector.x = 5;
+		rootComponent->transform->scaleVector.y = 1;
 		break;
 	case StructureBreakable::kDAMAGED:
-		roof->transform->scaleVector.x = 1;
-		roof->transform->scaleVector.y = 1;
+        rootComponent->transform->scaleVector.x = 1;
+        rootComponent->transform->scaleVector.y = 1;
 		break;
 	case StructureBreakable::kDEAD:
-		roof->transform->scaleVector.x = 1;
-		roof->transform->scaleVector.y = 5;
+        rootComponent->transform->scaleVector.x = 1;
+        rootComponent->transform->scaleVector.y = 5;
 		break;
 	}
 }

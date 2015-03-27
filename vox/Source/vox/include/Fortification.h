@@ -10,9 +10,6 @@ class Box2DWorld;
 
 class Fortification : public StructureBreakable{
 public:
-	Box2DSprite * base;
-	Box2DSprite * roof;
-
 	Fortification(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	void takeDamage(float _damage) override;
 };

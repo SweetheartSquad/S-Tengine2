@@ -17,6 +17,7 @@
 #include <SoundManager.h>
 #include <ParticleSystem.h>
 #include <Particle.h>
+#include <NumberUtils.h>
 
 PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	PuppetCharacter(new PuppetTexturePack(
@@ -113,13 +114,12 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setGreen(green);
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setBlue(blue);
 
-	if(fireball != nullptr){
-		Particle * p = fireParticles->addParticle(fireball->rootComponent->getPos(false));
-		p->body->SetGravityScale(-0.1f);
-	}
 	fireParticles->setShader(getShader(), true);
 	fireParticles->render(_matrixStack, _renderStack);
 
+    if (fireball != nullptr){
+        fireball->render(_matrixStack, _renderStack);
+    }
 
 	// render head on top
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setRed(red + (1 - control) * 3);
@@ -140,8 +140,6 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setRed(red);
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setGreen(green);
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setBlue(blue);
-
-
 }
 
 void PuppetCharacterDragon::update(Step * _step){
@@ -157,7 +155,16 @@ void PuppetCharacterDragon::update(Step * _step){
 		}
 	}
 	fireParticles->update(_step);
+    if (fireball != nullptr){
+        Particle * p = fireParticles->addParticle(fireball->rootComponent->getPos(false));
+        p->body->SetGravityScale(-0.1f);
+        p->applyAngularImpulse(vox::NumberUtils::randomFloat(-25.0f, 25.0f));
+        p->setTranslationPhysical(glm::vec3(vox::NumberUtils::randomFloat(-2.f, 2.f), vox::NumberUtils::randomFloat(0.75f, 1.25f), vox::NumberUtils::randomFloat(-2.f, 2.f)), true);
+
+        fireball->update(_step);
+    }
 }
+
 void PuppetCharacterDragon::action(){
 	if(heldItem != nullptr){
 		if(itemJoint != nullptr){
@@ -178,6 +185,7 @@ void PuppetCharacterDragon::action(){
 				fireball->rootComponent->body->SetTransform(fireball->rootComponent->body->GetPosition(), t);
 				fireball->rootComponent->applyLinearImpulseDown(2.5f);
 				fireball->rootComponent->body->SetGravityScale(0.025f);
+
 				if(rootComponent->body->GetAngle() > 0){
 					fireball->rootComponent->applyLinearImpulseLeft(10 * (1 - cos(t)));
 				}else{

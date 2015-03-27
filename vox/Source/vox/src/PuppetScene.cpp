@@ -415,7 +415,19 @@ void PuppetScene::update(Step * _step){
 		}else{
 			currentTime += 1;
 		}
-	}
+    }
+    if (keyboard->keyJustUp(GLFW_KEY_8)){
+        game->scenes.insert(std::make_pair("RaidTheCastle", new RaidTheCastle((PuppetGame *)game)));
+        game->switchScene("RaidTheCastle", true);
+    }
+    if (keyboard->keyJustUp(GLFW_KEY_9)){
+        game->scenes.insert(std::make_pair("Rapunzel", new Rapunzel((PuppetGame *)game)));
+        game->switchScene("Rapunzel", true);
+    }
+    if (keyboard->keyJustUp(GLFW_KEY_0)){
+        game->scenes.insert(std::make_pair("SlayTheDragon", new SlayTheDragon((PuppetGame *)game)));
+        game->switchScene("SlayTheDragon", true);
+    }
 
 	
 	
