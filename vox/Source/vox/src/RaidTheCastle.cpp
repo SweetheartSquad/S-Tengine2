@@ -192,7 +192,7 @@ void RaidTheCastle::update(Step* _step){
 	}
 
 	if(castle->state == Castle::state_t::kDEAD){
-		complete();
+		triggerVictoryState();
 	}
 }
 

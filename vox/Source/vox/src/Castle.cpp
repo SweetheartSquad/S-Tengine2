@@ -14,7 +14,7 @@
 
 #include <RaidTheCastleResourceManager.h>
 
-#define MAX_HEALTH 100
+#define MAX_HEALTH 10
 
 Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Structure(_world, _categoryBits, _maskBits, _groupIndex),
