@@ -40,22 +40,22 @@ Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaul
 }
 
 float Box2DSprite::getCorrectedHeight(){
-	return height*std::abs(transform->scaleVector.y)*scale*2.f;
+	return height*std::abs(transform->scaleVector.y)*scale;
 }
 float Box2DSprite::getCorrectedWidth(){
-	return width*std::abs(transform->scaleVector.x)*scale*2.f;
+	return width*std::abs(transform->scaleVector.x)*scale;
 }
 
 void Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * _userData){
 	b2PolygonShape tShape;
-	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f, _offset, 0.0f);
+	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale, std::abs(height*transform->scaleVector.y)*scale, _offset, 0.0f);
 
 	b2FixtureDef fd;
 	fd.shape = &tShape;
-	fd.restitution = 0;
-	fd.friction = 0.5;
+	fd.restitution = 0.f;
+	fd.friction = 0.5f;
 	fd.isSensor = false;
-	fd.density = 1;
+	fd.density = 1.f;
 	fd.userData = _userData;
 	fd.filter = _filter;
 

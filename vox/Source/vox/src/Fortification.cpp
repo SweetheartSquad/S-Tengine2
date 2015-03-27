@@ -32,7 +32,7 @@ Fortification::Fortification(Box2DWorld* _world, int16 _categoryBits, int16 _mas
 	fortBackground->transform->translate(glm::vec3(0, 30, 0));
 	*/
 
-	componentScale = 0.015f;
+	componentScale = 0.03f;
 	
 	TextureSampler * baseTex = SlayTheDragonResourceManager::fortForeground;
 	TextureSampler * roofTex = SlayTheDragonResourceManager::fortStructure;

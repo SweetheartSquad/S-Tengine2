@@ -18,6 +18,7 @@ Item::Item(bool _singleUse, Box2DWorld * _world, int16 _categoryBits, int16 _mas
 	destroy(false),
 	playerJoint(nullptr)
 {
+	componentScale *= 2.f;
 }
 
 Item::~Item(){

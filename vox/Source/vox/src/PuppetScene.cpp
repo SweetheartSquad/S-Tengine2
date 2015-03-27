@@ -488,6 +488,10 @@ void PuppetScene::destroyItem(Item * _item){
 void PuppetScene::doCountDown(){
 	// Remove previous number
 	if (countDown <= countDownNumbers.size() - 1){
+		// make things get
+		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setSaturation(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getSaturation() + 0.2f);
+		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setValue(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getValue() + 0.2f);
+		
 		// Remove previous number from scene
 		// Just copying destroyItem stuff for now
 		for(signed long int j = children.size()-1; j >= 0; --j){

@@ -26,13 +26,14 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 		SlayTheDragonResourceManager::dragonMouth, 
 		SlayTheDragonResourceManager::dragonLowerWing,
 		PuppetResourceManager::face1,
-		4.0f
+		4.f
 	), 60.0f, _ai, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	fireball(nullptr),
 	fireParticles(new ParticleSystem(SlayTheDragonResourceManager::itemFireParticle, _world, 0, 0, _groupIndex))
 {
+
 	behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), this, 10));
 	behaviourManager.addBehaviour(new BehaviourAttack(this, 3, PuppetGame::kPLAYER));
 
@@ -158,9 +159,9 @@ void PuppetCharacterDragon::action(){
 				fireball->rootComponent->applyLinearImpulseDown(2.5f);
 				fireball->rootComponent->body->SetGravityScale(0.025f);
 				if(rootComponent->body->GetAngle() > 0){
-					fireball->rootComponent->applyLinearImpulseLeft(5 * (1 - cos(t)));
+					fireball->rootComponent->applyLinearImpulseLeft(10 * (1 - cos(t)));
 				}else{
-					fireball->rootComponent->applyLinearImpulseRight(5 * (1 - cos(t)));
+					fireball->rootComponent->applyLinearImpulseRight(10 * (1 - cos(t)));
 				}
 			}
 		}

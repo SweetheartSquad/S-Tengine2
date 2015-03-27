@@ -25,7 +25,7 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	state(kNORMAL),
 	damage(0.f)
 {
-	componentScale = 0.015f;
+	componentScale = 0.03f;
 	
 	TextureSampler * baseTex = RaidTheCastleResourceManager::castleBase;
 	Texture * baseSpriteSheetTex = RaidTheCastleResourceManager::castleSpriteSheet;

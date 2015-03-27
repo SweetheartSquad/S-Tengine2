@@ -17,9 +17,6 @@ PuppetCharacterRapunzel::PuppetCharacterRapunzel(bool _ai, float _ghostPosition,
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {
-
-	componentScale = 0.008f;
-
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
 	if(maskBits != (int16)-1){
