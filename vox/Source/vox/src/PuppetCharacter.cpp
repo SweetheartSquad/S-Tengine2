@@ -356,19 +356,28 @@ void PuppetCharacter::update(Step* _step){
 	if(health <= 0.0f) {
 		die();
 	}
+	if(control >= 0.995f) {
+		for(Box2DSprite ** c : components){
+			if(*c != nullptr){
+				b2Filter b = (*c)->body->GetFixtureList()->GetFilterData();
+				b.groupIndex = groupIndex;
+				(*c)->body->GetFixtureList()->SetFilterData(b);
+			}
+		}
+	}
 }
 
 void PuppetCharacter::jump(){
-	if(canJump && abs(rootComponent->body->GetLinearVelocity().y) < 1.5f){
+	if(canJump){
 		//PuppetResourceManager::jumpSounds->playRandomSound();
 		//PuppetResourceManager::jumpSounds->playRandomSound();
 		float t = rootComponent->body->GetAngle();
 		b2Vec2 p = rootComponent->body->GetWorldPoint(b2Vec2(0, 1));
-		rootComponent->applyLinearImpulseUp(5000.f *(cos(t)*0.5f + 0.5f));
+		rootComponent->applyLinearImpulseUp(6000.f *(cos(t)*0.5f + 0.5f));
 		if(rootComponent->body->GetAngle() > 0){
-			rootComponent->body->SetLinearVelocity(b2Vec2(-25*(1-cos(t)), rootComponent->body->GetLinearVelocity().y));
+			rootComponent->body->SetLinearVelocity(b2Vec2(-80*(1-cos(t)), rootComponent->body->GetLinearVelocity().y));
 		}else{
-			rootComponent->body->SetLinearVelocity(b2Vec2(25*(1-cos(t)), rootComponent->body->GetLinearVelocity().y));
+			rootComponent->body->SetLinearVelocity(b2Vec2(80*(1-cos(t)), rootComponent->body->GetLinearVelocity().y));
 		}
 	}
 	//canJump = false;

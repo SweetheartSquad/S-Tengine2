@@ -109,13 +109,27 @@ void PuppetContactListener::playerPlayerContact(b2Contact * _contact){
 	b2Fixture * fxA = _contact->GetFixtureA();
 	b2Fixture * fxB = _contact->GetFixtureB();
 
-	if(fxA->GetBody()->GetUserData() != nullptr && fxB->GetBody()->GetUserData() != nullptr){
+	if(fxA->GetUserData() != nullptr && fxB->GetUserData() != nullptr){
 		PuppetCharacter * puppetA = static_cast<PuppetCharacter *>(fxA->GetUserData());
 		PuppetCharacter * puppetB = static_cast<PuppetCharacter *>(fxB->GetUserData());
-		if(puppetA->control < 0.3f && puppetB->control > 0.3f){
-			puppetB->canJump = true;
-		}else if(puppetB->control < 0.3f && puppetA->control > 0.3f){
-			puppetA->canJump = true;
+		if(puppetA->control < 0.4f){
+			//puppetB->canJump = true;
+			for(Box2DSprite ** c : puppetB->components){
+				if(*c != nullptr){
+					b2Filter b = (*c)->body->GetFixtureList()->GetFilterData();
+					b.groupIndex = puppetA->groupIndex;
+					(*c)->body->GetFixtureList()->SetFilterData(b);
+				}
+			}
+		}else if(puppetB->control < 0.4f){
+			//puppetA->canJump = true;
+			for(Box2DSprite ** c : puppetA->components){
+				if(*c != nullptr){
+					b2Filter b = (*c)->body->GetFixtureList()->GetFilterData();
+					b.groupIndex = puppetB->groupIndex;
+					(*c)->body->GetFixtureList()->SetFilterData(b);
+				}
+			}
 		}
 		puppetA->addCollision(PuppetGame::kPLAYER);
 		puppetB->addCollision(PuppetGame::kPLAYER);
@@ -184,6 +198,9 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 			if((fB.categoryBits & PuppetGame::kITEM) != 0) {
 				player->removeCollision(PuppetGame::kITEM);
 			}
+			if(!player->isCollidingWith(PuppetGame::kGROUND)){
+				player->canJump = false;
+			}
 		}
 	}
 	if((fB.categoryBits & PuppetGame::kPLAYER) != 0){
@@ -202,6 +219,9 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 			if((fA.categoryBits & PuppetGame::kITEM) != 0) {
 				player->removeCollision(PuppetGame::kITEM);
 			}
+			if(!player->isCollidingWith(PuppetGame::kGROUND)){
+				player->canJump = false;
+			}
 		}
 	}
 	
@@ -211,9 +231,7 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 			//player->die();
 		}
 		//&& !player->isCollidingWith(PuppetGame::kPLAYER)
-		if(!player->isCollidingWith(PuppetGame::kGROUND)){
-			player->canJump = false;
-		}
+		
 	}
 
 	// behaviour stuff
