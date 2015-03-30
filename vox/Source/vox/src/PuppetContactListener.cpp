@@ -40,7 +40,6 @@ void PuppetContactListener::BeginContact(b2Contact * _contact){
 		playerFixture = _contact->GetFixtureB();
 		otherFixture = _contact->GetFixtureA();
 	}
-
 	//std::cout << fA.categoryBits << " | " << fB.categoryBits << std::endl;
 
 	if(playerFixture != nullptr){
@@ -57,6 +56,9 @@ void PuppetContactListener::BeginContact(b2Contact * _contact){
 		}else if((fA.categoryBits & PuppetGame::kGROUND) != 0 || (fB.categoryBits & PuppetGame::kGROUND) != 0){
 			// Player-Ground collision
 			playerGroundContact(_contact, playerFixture, otherFixture);
+		}else if((fA.categoryBits & PuppetGame::kDEAD_ZONE) != 0 || (fB.categoryBits & PuppetGame::kDEAD_ZONE) != 0){
+			// Player-Dead Zone collision
+			playerDeadZoneContact(_contact, playerFixture, otherFixture);
 		}
 	}else{
 		// neither of the fixtures is a player
@@ -156,6 +158,13 @@ void PuppetContactListener::playerGroundContact(b2Contact * _contact, b2Fixture 
 	if(puppet != nullptr){
 		puppet->addCollision(PuppetGame::kGROUND);
 		puppet->canJump = true;
+	}
+}
+
+void PuppetContactListener::playerDeadZoneContact(b2Contact* b2_contact, b2Fixture* player_fixture, b2Fixture* other_fixture){
+	PuppetCharacter * player = static_cast<PuppetCharacter*>(player_fixture->GetUserData());
+	if(player != nullptr) {
+		player->deathPending = true;
 	}
 }
 

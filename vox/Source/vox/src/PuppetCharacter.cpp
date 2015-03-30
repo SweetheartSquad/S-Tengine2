@@ -329,7 +329,7 @@ void PuppetCharacter::update(Step* _step){
 
 	control = std::min(1.f, control+0.01f);
 
-	if(health <= 0.0f) {
+	if(health <= 0.0f || deathPending) {
 		die();
 	}
 	if(control >= 0.995f) {

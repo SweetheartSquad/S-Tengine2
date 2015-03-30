@@ -29,7 +29,7 @@ public:
 		kGROUND = 0x0008,	
 		kPLAYER = 0x00010,
 		kBEHAVIOUR = 0x00020,
-		kCAT7 = 0x00040,
+		kDEAD_ZONE = 0x00040,
 		kCAT8 = 0x00080,
 		kCAT9 = 0x00100,
 		kCAT10 = 0x00200,

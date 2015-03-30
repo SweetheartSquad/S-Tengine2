@@ -32,15 +32,16 @@
 
 #include <glfw\glfw3.h>
 #include <SoundManager.h>
+#include <Box2DMeshEntity.h>
 
 
 SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	PuppetScene(_game, 30, 170.f, 120.f),
 	fort(new Fortification(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM | PuppetGame::kPLAYER)),
     fortForeground(new Box2DSprite(world, SlayTheDragonResourceManager::fortForeground, b2_staticBody, false, nullptr, new Transform(), 0.03f)),
-	playerCharacter1(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
-	playerCharacter2(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
-	playerCharacter3(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
+	playerCharacter1(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY | PuppetGame::kDEAD_ZONE, -1)),
+	playerCharacter2(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY | PuppetGame::kDEAD_ZONE, -2)),
+	playerCharacter3(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY | PuppetGame::kDEAD_ZONE, -3)),
 	playerCharacter4(new PuppetCharacterDragon(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
 	cl = new SlayTheDragonContactListener(this);
@@ -163,13 +164,14 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
     fort->translateComponents(glm::vec3(80.0f, 0.f, 0.f));
     fortForeground->setTranslationPhysical(glm::vec3(80.0f, 0.f, 0.f), true);
 
-	Box2DSprite * deathBounds = new Box2DSprite(world);
-	deathBounds->transform->scale(100.f, 30.f, 1.f);
+	Box2DMeshEntity * deathBounds = new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody);
+	deathBounds->transform->scale(100.f, 18.f, 1.f);
+	deathBounds->setTranslationPhysical(60.f, 0.f, 0.f);
+	world->addToWorld(deathBounds);
 	b2Filter sfd;
-	sfd.categoryBits = PuppetGame::kBOUNDARY;
-	deathBounds->createFixture(sfd);
-	deathBounds->mesh->pushTexture2D(PuppetResourceManager::blank);
-	addChild(deathBounds);
+	sfd.categoryBits = PuppetGame::kDEAD_ZONE;
+	//sfd.maskBits = -1;
+	deathBounds->body->GetFixtureList()->SetFilterData(sfd);
 
 	playRandomBackgroundMusic();
 }
