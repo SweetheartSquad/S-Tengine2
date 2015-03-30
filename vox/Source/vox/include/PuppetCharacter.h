@@ -43,11 +43,13 @@ public:
 
 	Box2DSprite * face;
 	Box2DSprite * headgear;
+	Box2DSprite * itemHolder;
 
 	std::vector<int> * collisionTypes;
 
 	static bool compareByScore(PuppetCharacter * _a, PuppetCharacter * _b);
-
+	
+	void init();
 	PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostPosition, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	explicit PuppetCharacter(PuppetCharacter * _character, Box2DWorld *_world);
 	~PuppetCharacter();
@@ -59,14 +61,13 @@ public:
 
 	virtual void jump();
 	//Called when the controller is thrust forward
-	virtual void action();
+	virtual void action(bool _forceDrop = false);
 	virtual void die();
 
 	void removeCollision(PuppetGame::BOX2D_CATEGORY _category);
 	void addCollision(PuppetGame::BOX2D_CATEGORY _category);
 	bool isCollidingWith(PuppetGame::BOX2D_CATEGORY _category);
 
-	void attachJoints();
 
     virtual void takeDamage(float _damage);
 

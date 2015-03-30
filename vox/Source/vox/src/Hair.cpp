@@ -12,7 +12,7 @@ Hair::Hair(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _grou
 	NodeChild(nullptr),
 	NodeRenderable()
 {
-	componentScale = 0.015f;
+	componentScale = 0.03f;
 	
 	TextureSampler * hairTex = RapunzelResourceManager::hair;
 

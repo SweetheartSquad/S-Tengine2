@@ -36,8 +36,9 @@
 
 SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	PuppetScene(_game, 30, 170.f, 120.f),
-	fort(new Fortification(world, PuppetGame::kGROUND, PuppetGame::kITEM | PuppetGame::kPLAYER, -10)),
-	playerCharacter1(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT ,world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
+	fort(new Fortification(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM | PuppetGame::kPLAYER)),
+    fortForeground(new Box2DSprite(world, SlayTheDragonResourceManager::fortForeground, b2_staticBody, false, nullptr, new Transform(), 0.03f)),
+	playerCharacter1(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
 	playerCharacter3(new PuppetCharacterArcher(false, SLAY_DRAGON_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
 	playerCharacter4(new PuppetCharacterDragon(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
@@ -65,6 +66,21 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	players.push_back(playerCharacter2);
 	players.push_back(playerCharacter3);
 	players.push_back(playerCharacter4);
+
+
+    b2Filter sf;
+    sf.categoryBits = PuppetGame::kGROUND;
+    sf.groupIndex = 0;
+    sf.maskBits = PuppetGame::kITEM | PuppetGame::kPLAYER;
+
+    fortForeground->createFixture(sf, b2Vec2(0, 0), fortForeground);
+    fortForeground->setShader(shader, true);
+    addChild(fortForeground, 2);
+
+    fortForeground->setTranslationPhysical(glm::vec3(0, fortForeground->getCorrectedHeight(), 0));
+
+
+    fort->translateComponents(glm::vec3(0.f, fortForeground->getCorrectedHeight() + 25.f, 0.f));
 
 	/*
 	playerCharacter1->setShader(shader, true);
@@ -122,13 +138,13 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 		if(p == dragon){
 			weapon = new ItemFireballLauncher(dragon, world);
 		}else{
-			weapon = new ItemProjectileWeapon(arrowTex, bowTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -bowTex->height);
+			weapon = new ItemProjectileWeapon(arrowTex, bowTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND | PuppetGame::kSTRUCTURE, p->groupIndex, 1, 0, -bowTex->height);
 		}
 		weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);
 		p->itemToPickup = weapon;
 		addChild(weapon, 1);
-		p->translateComponents(glm::vec3(40.f + (pCnt * 20), fort->rootComponent->getCorrectedHeight() * 2, 0));
+		p->translateComponents(glm::vec3(40.f + (pCnt * 20), fortForeground->getCorrectedHeight() * 2, 0));
 	}
 	
 	//dragon->translateComponents(glm::vec3(0, 100, 0));
@@ -144,7 +160,16 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	fort->setShader(shader, true);
 	fort->addToLayeredScene(this, 1);
 	addChild(fort, 1);
-	fort->translateComponents(glm::vec3(80.0f, 0.f, 0.f));
+    fort->translateComponents(glm::vec3(80.0f, 0.f, 0.f));
+    fortForeground->setTranslationPhysical(glm::vec3(80.0f, 0.f, 0.f), true);
+
+	Box2DSprite * deathBounds = new Box2DSprite(world);
+	deathBounds->transform->scale(100.f, 30.f, 1.f);
+	b2Filter sfd;
+	sfd.categoryBits = PuppetGame::kBOUNDARY;
+	deathBounds->createFixture(sfd);
+	deathBounds->mesh->pushTexture2D(PuppetResourceManager::blank);
+	addChild(deathBounds);
 
 	playRandomBackgroundMusic();
 }
@@ -158,6 +183,25 @@ void SlayTheDragon::update(Step* _step){
 		PuppetResourceManager::splashSounds->play("SlayTheDragon");
 		splashSoundPlayed = true;
 	}
+
+    // handle archer's victory state
+    if (dragon->dead){
+        triggerVictoryState();
+    }
+    else{
+        // handle dragon victory
+        bool archersDead = true;
+        for (unsigned long int i = 0; i < players.size() - 1; ++i){
+            if (!players.at(i)->dead){
+                archersDead = false;
+                break;
+            }
+        }
+        if (archersDead){
+            dragon->score += 100000;
+            triggerVictoryState();
+        }
+    }
 }
 
 void SlayTheDragon::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){

@@ -32,7 +32,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	dead(false),
 	deathPending(false),
 	targetRoll(0),
-	health(1000.0f),
+	health(100.0f),
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),
@@ -45,37 +45,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	collisionTypes(new std::vector<int>()),
 	ghostPosition(_ghostPosition)
 {
-	bool defaultTex = false;
-	if(texPack == nullptr){
-		defaultTex = true;
-		texPack = new PuppetTexturePack(
-			RaidTheCastleResourceManager::knightTorso,
-			RaidTheCastleResourceManager::knightArm,
-			RaidTheCastleResourceManager::knightHelmet
-		);
-	}
-
-	head = new Box2DSprite(_world, texPack->headTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
-	face = new Box2DSprite(_world, texPack->faceTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
-	handLeft = new Box2DSprite(_world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
-	handRight = new Box2DSprite(_world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
-
-	torso = new Box2DSprite(_world, texPack->torsoTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
-	armLeft = new Box2DSprite(_world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
-	armRight = new Box2DSprite(_world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
-	headgear = new Box2DSprite(_world, texPack->headgearTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f * texPack->scale);
-
-	components.push_back(&armLeft);
-	components.push_back(&armRight);
-	components.push_back(&handLeft);
-	components.push_back(&handRight);
-	components.push_back(&torso);
-	components.push_back(&head);
-	components.push_back(&face);
-	components.push_back(&headgear);
-
-	rootComponent = torso;
-	attachJoints();
+	init();
 }
 
 PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _world):
@@ -90,7 +60,7 @@ PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _wor
 	dead(false),
 	deathPending(false),
 	targetRoll(0.0f),
-	health(1000.0f),
+	health(100.0f),
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),
@@ -101,6 +71,15 @@ PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _wor
 	lastActionTime(0.0),
 	collisionTypes(new std::vector<int>())
 {
+	init();
+}
+
+PuppetCharacter::~PuppetCharacter(){
+	delete texPack;
+	delete collisionTypes;
+}
+
+void PuppetCharacter::init(){
 	bool defaultTex = false;
 	if(texPack == nullptr){
 		defaultTex = true;
@@ -111,15 +90,15 @@ PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _wor
 		);
 	}
 
-	head = new Box2DSprite(_world, texPack->headTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
-	face = new Box2DSprite(_world, texPack->faceTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
-	handLeft = new Box2DSprite(_world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
-	handRight = new Box2DSprite(_world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
+	head = new Box2DSprite(world, texPack->headTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
+	face = new Box2DSprite(world, texPack->faceTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
+	handLeft = new Box2DSprite(world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
+	handRight = new Box2DSprite(world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 
-	torso = new Box2DSprite(_world, texPack->torsoTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
-	armLeft = new Box2DSprite(_world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
-	armRight = new Box2DSprite(_world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
-	headgear = new Box2DSprite(_world, texPack->headgearTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*0.5f);
+	torso = new Box2DSprite(world, texPack->torsoTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
+	armLeft = new Box2DSprite(world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
+	armRight = itemHolder = new Box2DSprite(world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
+	headgear = new Box2DSprite(world, texPack->headgearTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 
 	components.push_back(&armLeft);
 	components.push_back(&armRight);
@@ -132,15 +111,6 @@ PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _wor
 
 	rootComponent = torso;
 
-	attachJoints();
-}
-
-PuppetCharacter::~PuppetCharacter(){
-	delete texPack;
-	delete collisionTypes;
-}
-
-void PuppetCharacter::attachJoints(){
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
 	if(maskBits != static_cast<int16>(-1)){
@@ -331,9 +301,15 @@ void PuppetCharacter::update(Step* _step){
 			(*c)->update(_step);
 		}
 	}
+    if (control < 0.5f){
+        targetRoll = glm::radians(90.f);
+        action(true);
+    }
+
 	float bodAngle = (rootComponent)->body->GetAngle();
 	rootComponent->body->SetTransform(rootComponent->body->GetPosition(), bodAngle);
 	float angularVel = -((bodAngle + targetRoll) * control) * 10;// + glm::radians(90.f);
+    
 
 	rootComponent->body->SetAngularVelocity(angularVel);
 
@@ -383,12 +359,12 @@ void PuppetCharacter::jump(){
 	//canJump = false;
 }
 
-void PuppetCharacter::action(){
+void PuppetCharacter::action(bool _forceDrop){
 	if(vox::step.time - lastActionTime > actionThrottle){
 		lastActionTime = vox::step.time;
 		if(heldItem != nullptr){
 			if(itemJoint != nullptr){
-				Item * projectile = heldItem->getProjectile();
+                Item * projectile = heldItem->getProjectile(_forceDrop);
 				if(projectile == heldItem){
 					heldItem = nullptr;
 					itemJoint = nullptr;
@@ -470,9 +446,9 @@ void PuppetCharacter::pickupItem(Item * _item){
 		_item->setGroupIndex(this->groupIndex);
 
 		b2WeldJointDef jd;
-		jd.bodyA = armRight->body;
+		jd.bodyA = itemHolder->body;
 		jd.bodyB = (*_item->components.at(0))->body;
-		jd.localAnchorA.Set(0.f, -0.9f * armRight->getCorrectedHeight());
+		jd.localAnchorA.Set(0.f, -0.9f * itemHolder->getCorrectedHeight());
 		jd.localAnchorB.Set(_item->handleX * componentScale, _item->handleY * componentScale);
 		jd.collideConnected = false;
 		jd.referenceAngle = glm::radians(-90.f);

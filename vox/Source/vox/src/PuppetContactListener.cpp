@@ -33,10 +33,10 @@ void PuppetContactListener::BeginContact(b2Contact * _contact){
 	b2Filter fB = _contact->GetFixtureB()->GetFilterData();
 	b2Fixture * playerFixture = nullptr;
 	b2Fixture * otherFixture = nullptr;
-	if(fA.categoryBits == PuppetGame::kPLAYER){
+	if((fA.categoryBits & PuppetGame::kPLAYER) != 0){
 		playerFixture = _contact->GetFixtureA();
 		otherFixture = _contact->GetFixtureB();
-	}else if(fB.categoryBits == PuppetGame::kPLAYER){
+	}else if((fB.categoryBits & PuppetGame::kPLAYER) != 0){
 		playerFixture = _contact->GetFixtureB();
 		otherFixture = _contact->GetFixtureA();
 	}
@@ -71,8 +71,8 @@ void PuppetContactListener::BeginContact(b2Contact * _contact){
 		}
 
 		// structure - item?
-		b2Fixture * structureFixture;
-		b2Fixture * itemFixture;
+		b2Fixture * structureFixture = nullptr;
+		b2Fixture * itemFixture = nullptr;
 		bool structure = false;
 		if((fA.categoryBits & PuppetGame::kSTRUCTURE) != 0 && (fB.categoryBits & PuppetGame::kITEM) != 0){
 			structureFixture = _contact->GetFixtureA();
@@ -112,25 +112,13 @@ void PuppetContactListener::playerPlayerContact(b2Contact * _contact){
 	if(fxA->GetUserData() != nullptr && fxB->GetUserData() != nullptr){
 		PuppetCharacter * puppetA = static_cast<PuppetCharacter *>(fxA->GetUserData());
 		PuppetCharacter * puppetB = static_cast<PuppetCharacter *>(fxB->GetUserData());
-		if(puppetA->control < 0.4f){
-			//puppetB->canJump = true;
-			for(Box2DSprite ** c : puppetB->components){
-				if(*c != nullptr){
-					b2Filter b = (*c)->body->GetFixtureList()->GetFilterData();
-					b.groupIndex = puppetA->groupIndex;
-					(*c)->body->GetFixtureList()->SetFilterData(b);
-				}
-			}
-		}else if(puppetB->control < 0.4f){
-			//puppetA->canJump = true;
-			for(Box2DSprite ** c : puppetA->components){
-				if(*c != nullptr){
-					b2Filter b = (*c)->body->GetFixtureList()->GetFilterData();
-					b.groupIndex = puppetB->groupIndex;
-					(*c)->body->GetFixtureList()->SetFilterData(b);
-				}
-			}
-		}
+		/*if(puppetA->control < 0.5f && puppetB->control > 0.5f){
+			puppetB->canJump = true;
+		}else if(puppetB->control < 0.5f && puppetA->control > 0.5f){
+			puppetA->canJump = true;
+		}*/
+        puppetA->canJump = true;
+        puppetB->canJump = true;
 		puppetA->addCollision(PuppetGame::kPLAYER);
 		puppetB->addCollision(PuppetGame::kPLAYER);
 	}
@@ -198,9 +186,9 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 			if((fB.categoryBits & PuppetGame::kITEM) != 0) {
 				player->removeCollision(PuppetGame::kITEM);
 			}
-			if(!player->isCollidingWith(PuppetGame::kGROUND)){
-				player->canJump = false;
-			}
+            if (!player->isCollidingWith(PuppetGame::kGROUND) && !player->isCollidingWith(PuppetGame::kPLAYER)){
+                player->canJump = false;
+            }
 		}
 	}
 	if((fB.categoryBits & PuppetGame::kPLAYER) != 0){
@@ -219,9 +207,9 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 			if((fA.categoryBits & PuppetGame::kITEM) != 0) {
 				player->removeCollision(PuppetGame::kITEM);
 			}
-			if(!player->isCollidingWith(PuppetGame::kGROUND)){
-				player->canJump = false;
-			}
+            if (!player->isCollidingWith(PuppetGame::kGROUND)){
+                player->canJump = false;
+            }
 		}
 	}
 	
@@ -231,7 +219,6 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 			//player->die();
 		}
 		//&& !player->isCollidingWith(PuppetGame::kPLAYER)
-		
 	}
 
 	// behaviour stuff

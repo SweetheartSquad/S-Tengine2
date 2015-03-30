@@ -16,21 +16,9 @@ TextureSampler * RapunzelResourceManager::thiefTorso	= new TextureSampler("../as
 TextureSampler * RapunzelResourceManager::thiefArm		= new TextureSampler("../assets/hurly-burly/ThiefAssets/", "ThiefArm.png.def");
 TextureSampler * RapunzelResourceManager::thiefHelmet	= new TextureSampler("../assets/hurly-burly/ThiefAssets/", "ThiefHelmet.png.def");
 										  
-TextureSampler * RapunzelResourceManager::rapunzelRedTorso	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCBody.png", 1024, 1024, true, true), 275, 806);
-TextureSampler * RapunzelResourceManager::rapunzelRedArm	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCArm.png", 1024, 1024, true, true), 67, 200);
-TextureSampler * RapunzelResourceManager::rapunzelRedHelmet	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCHelmet.png", 1024, 1024, true, true), 229, 295);
-
-TextureSampler * RapunzelResourceManager::rapunzelGreenTorso	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCBody.png", 1024, 1024, true, true), 275, 806);
-TextureSampler * RapunzelResourceManager::rapunzelGreenArm	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCArm.png", 1024, 1024, true, true), 67, 200);
-TextureSampler * RapunzelResourceManager::rapunzelGreenHelmet	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCHelmet.png", 1024, 1024, true, true), 229, 295);
-
-TextureSampler * RapunzelResourceManager::rapunzelBlueTorso	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCBody.png", 1024, 1024, true, true), 275, 806);
-TextureSampler * RapunzelResourceManager::rapunzelBlueArm	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCArm.png", 1024, 1024, true, true), 67, 200);
-TextureSampler * RapunzelResourceManager::rapunzelBlueHelmet	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCHelmet.png", 1024, 1024, true, true), 229, 295);
-
-TextureSampler * RapunzelResourceManager::rapunzelYellowTorso	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCBody.png", 1024, 1024, true, true), 275, 806);
-TextureSampler * RapunzelResourceManager::rapunzelYellowArm	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCArm.png", 1024, 1024, true, true), 67, 200);
-TextureSampler * RapunzelResourceManager::rapunzelYellowHelmet	= new TextureSampler(new Texture("../assets/hurly-burly/RapunzelAssets/CCHelmet.png", 1024, 1024, true, true), 229, 295);
+TextureSampler * RapunzelResourceManager::rapunzelTorso	    = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelDress.png.def");
+TextureSampler * RapunzelResourceManager::rapunzelArm	    = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelArm.png.def");
+TextureSampler * RapunzelResourceManager::rapunzelHelmet    = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelHat.png.def");
 
 TextureSampler * RapunzelResourceManager::itemAxe	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Axe.png", 1024, 1024, true, true), 230, 395);
 TextureSampler * RapunzelResourceManager::itemClub	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Club.png", 1024, 1024, true, true), 83, 515);
@@ -47,30 +35,13 @@ void RapunzelResourceManager::init(){
 	resources.push_back(hair);
 	resources.push_back(goldSpriteSheet);
 
-	/*resources.push_back(goldenArm);
-	resources.push_back(hand1);
-	resources.push_back(face1);
-	resources.push_back(goldenHelmet);*/
-	
 	resources.push_back(thiefTorso);
 	resources.push_back(thiefArm);
 	resources.push_back(thiefHelmet);
 	
-	resources.push_back(rapunzelRedTorso);
-	resources.push_back(rapunzelRedArm);
-	resources.push_back(rapunzelRedHelmet);
-						
-	resources.push_back(rapunzelGreenTorso);
-	resources.push_back(rapunzelGreenArm);
-	resources.push_back(rapunzelGreenHelmet);
-						
-	resources.push_back(rapunzelBlueTorso);
-	resources.push_back(rapunzelBlueArm);
-	resources.push_back(rapunzelBlueHelmet);
-						
-	resources.push_back(rapunzelYellowTorso);
-	resources.push_back(rapunzelYellowArm);
-	resources.push_back(rapunzelYellowHelmet);
+	resources.push_back(rapunzelTorso);
+	resources.push_back(rapunzelArm);
+	resources.push_back(rapunzelHelmet);
 	
 	resources.push_back(itemAxe);
 	resources.push_back(itemClub);

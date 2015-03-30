@@ -61,30 +61,54 @@ VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _p
 	/*std::sort(sortedPlayers.begin(), sortedPlayers.end(), PuppetCharacter::compareByScore);
 	podium(sortedPlayers);*/
 
-	float maxHeight = 5.f;
+	float maxHeight = 9.f;
 
 	// should have a better way, what about ai characters?
 	//if(_sortedPuppets.front()->score != _sortedPuppets.back()->score){
-		for(unsigned long int i = 0; i < players.size(); ++i){
-			//float height = maxHeight * (players.at(i)->score + 0.25) / 4;
-			//float width = SCENE_WIDTH / (players.size()*4);
-			Box2DSprite * podiumStand = new Box2DSprite(world, PuppetResourceManager::hand1, b2_staticBody, false, nullptr, new Transform());
-			//podiumStand->transform->scale(width, height, 1);
-			podiumStand->mesh->uvEdgeMode = GL_REPEAT;
-			podiumStand->setShader(shader, true);
-			podiumStand->setTranslationPhysical(players.at(i)->rootComponent->body->GetPosition().x, podiumStand->getCorrectedHeight(), 0.f);
-			
-			
-			b2Filter sf;
-			sf.categoryBits = PuppetGame::kGROUND;
-			podiumStand->createFixture(sf);
-			addChild(podiumStand, 1);
+	for(unsigned long int i = 0; i < players.size(); ++i){
+		b2Vec2 * verts = new b2Vec2[4];
 
-			players.at(i)->translateComponents(glm::vec3(0.f, podiumStand->getCorrectedHeight(), 0.f));
+		verts[0].x = (i+0.5f) * 20.f;
+		verts[1].x = (i+0.5f) * 20.f;
+		verts[2].x = (i+1.5f) * 20.f;
+		verts[3].x = (i+1.5f) * 20.f;
+		
+		float height = maxHeight * players.at(i)->score+1.f;
+		verts[0].y = 0;
+		verts[1].y = height;
+		verts[2].y = height;
+		verts[3].y = 0;
+
+		b2PolygonShape shape;
+		shape.Set(verts, 4);
+
+		Box2DSprite * podiumStand = new Box2DSprite(world, b2_staticBody, false);
+        podiumStand->mesh->vertices.clear();
+        float r = (players.at(i)->id == 0 || players.at(i)->id == 3) ? 1 : 0;
+        float g = (players.at(i)->id == 0 || players.at(i)->id == 1) ? 1 : 0;
+        float b = (players.at(i)->id == 2) ? 1 : 0;
+		for(int j = 0; j < 4; ++j){
+			podiumStand->mesh->pushVert(Vertex(verts[j].x, verts[j].y, 0, r, g, b, 1.f));
 		}
-	/*}else{
-		// NO WINNER!
-	}*/
+		podiumStand->mesh->polygonalDrawMode = GL_QUADS;
+		podiumStand->mesh->dirty = true;
+		podiumStand->setShader(shader, true);
+
+		b2FixtureDef fd;
+		fd.shape = &shape;
+		fd.density = 1.f;
+
+		b2Filter sf;
+		sf.categoryBits = PuppetGame::kGROUND;
+		fd.filter = sf;
+		podiumStand->body->CreateFixture(&fd);
+
+		addChild(podiumStand, 0);
+
+		players.at(i)->translateComponents(glm::vec3(0.f, height, 0.f));
+
+		delete verts;
+	}
 }
 
 VictoryScene::~VictoryScene(){

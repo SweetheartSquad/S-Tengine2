@@ -73,7 +73,8 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	backgroundSoundManager(new SoundManager(-1)),
 	countdownSoundManager(new SoundManager(-1)),
 	mouseCam(false),
-	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::paper->texture, 3, 1))
+	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::paper->texture, 3, 1)),
+	victoryTriggered(false)
 {
 
 	world->b2world->SetContactListener(cl);
@@ -414,7 +415,38 @@ void PuppetScene::update(Step * _step){
 		}else{
 			currentTime += 1;
 		}
-	}
+    }
+    PuppetGame * pg = static_cast<PuppetGame *>(game);
+    if (keyboard->keyJustUp(GLFW_KEY_8)){
+        if (game->currentSceneKey != "Raid The Castle"){
+            pg->puppetControllers.at(0)->unassign();
+            pg->puppetControllers.at(1)->unassign();
+            pg->puppetControllers.at(2)->unassign();
+            pg->puppetControllers.at(3)->unassign();
+            game->scenes.insert(std::make_pair("Raid The Castle", new RaidTheCastle((PuppetGame *)game)));
+            complete("Raid The Castle");
+        }
+    }
+    if (keyboard->keyJustUp(GLFW_KEY_9)){
+        if (game->currentSceneKey != "Rapunzel"){
+            pg->puppetControllers.at(0)->unassign();
+            pg->puppetControllers.at(1)->unassign();
+            pg->puppetControllers.at(2)->unassign();
+            pg->puppetControllers.at(3)->unassign();
+            game->scenes.insert(std::make_pair("Rapunzel", new Rapunzel((PuppetGame *)game)));
+            complete("Rapunzel");
+        }
+    }
+    if (keyboard->keyJustUp(GLFW_KEY_0)){
+        if (game->currentSceneKey != "Slay The Dragon"){
+            pg->puppetControllers.at(0)->unassign();
+            pg->puppetControllers.at(1)->unassign();
+            pg->puppetControllers.at(2)->unassign();
+            pg->puppetControllers.at(3)->unassign();
+            game->scenes.insert(std::make_pair("Slay The Dragon", new SlayTheDragon((PuppetGame *)game)));
+            complete("Slay The Dragon");
+        }
+    }
 
 	
 	
@@ -426,26 +458,49 @@ void PuppetScene::update(Step * _step){
 			drawer->drawing = !drawer->drawing;
 		}
 	}
+
+	bool everyonesDead = true;
+	for(auto p : players){
+		if(!p->dead){
+			everyonesDead = false;
+			break;
+		}
+	}
+	if(everyonesDead){
+		triggerVictoryState();
+	}
 }
 
 void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	LayeredScene::render(_matrixStack, _renderStack);
 }
 
-void PuppetScene::complete(){
-	PuppetGame * pg = static_cast<PuppetGame *>(game);
-
-	if(dynamic_cast<VictoryScene *>(this) != nullptr){
-		pg->puppetControllers.at(0)->unassign();
-		pg->puppetControllers.at(1)->unassign();
-		pg->puppetControllers.at(2)->unassign();
-		pg->puppetControllers.at(3)->unassign();
-
-		pg->loadRandomScene();
-	}else{
-		pg->scenes.insert(std::make_pair("Victory", new VictoryScene(pg, players)));
-		pg->switchScene("Victory", true);
+void PuppetScene::triggerVictoryState(){
+	if(!victoryTriggered){
+		if(currentTime < duration - 1){
+			currentTime = duration - 1;
+			countDown = 1;
+			doCountDown();
+		}
 	}
+}
+void PuppetScene::complete(std::string _switchTo){
+    PuppetGame * pg = static_cast<PuppetGame *>(game);
+    if (_switchTo != ""){
+        pg->switchScene(_switchTo, true);
+    } else{
+	    if(dynamic_cast<VictoryScene *>(this) != nullptr){
+		    pg->puppetControllers.at(0)->unassign();
+		    pg->puppetControllers.at(1)->unassign();
+		    pg->puppetControllers.at(2)->unassign();
+		    pg->puppetControllers.at(3)->unassign();
+
+		    pg->loadRandomScene();
+	    }else{
+		    pg->scenes.insert(std::make_pair("Victory", new VictoryScene(pg, players)));
+		    pg->switchScene("Victory", true);
+	    }
+    }
 }
 
 void PuppetScene::destroyItem(Item * _item){
@@ -488,6 +543,10 @@ void PuppetScene::destroyItem(Item * _item){
 void PuppetScene::doCountDown(){
 	// Remove previous number
 	if (countDown <= countDownNumbers.size() - 1){
+		// make things get
+		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setSaturation(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getSaturation() + 0.2f);
+		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setValue(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getValue() + 0.2f);
+		
 		// Remove previous number from scene
 		// Just copying destroyItem stuff for now
 		for(signed long int j = children.size()-1; j >= 0; --j){

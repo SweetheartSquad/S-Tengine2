@@ -15,12 +15,10 @@ ItemFlail::ItemFlail(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, 
 	TextureSampler * weapon = RaidTheCastleResourceManager::itemFlailGrip;
 	TextureSampler * weapon2 = RaidTheCastleResourceManager::itemFlailJoint;
 	TextureSampler * weapon3 = RaidTheCastleResourceManager::itemFlailHead;
-	
-	componentScale = 0.008f;
 
-	rootComponent = handle = new Box2DSprite(_world, weapon, b2_dynamicBody, false, nullptr, new Transform(), componentScale/4);
-	joint = new Box2DSprite(_world, weapon2, b2_dynamicBody, false, nullptr, new Transform(), componentScale/4);
-	head = new Box2DSprite(_world, weapon3, b2_dynamicBody, false, nullptr, new Transform(), componentScale/4);
+	rootComponent = handle = new Box2DSprite(_world, weapon, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
+	joint = new Box2DSprite(_world, weapon2, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
+	head = new Box2DSprite(_world, weapon3, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 	components.push_back(&rootComponent);
 	components.push_back(&joint);
 	components.push_back(&head);
@@ -46,8 +44,8 @@ ItemFlail::ItemFlail(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, 
 	b2RevoluteJointDef jointDef;
 	jointDef.bodyA = rootComponent->body;
 	jointDef.bodyB = joint->body;
-	jointDef.localAnchorA.Set(0.f, 0.9f * joint->getCorrectedHeight());
-	jointDef.localAnchorB.Set(0.f, -0.9f);
+	jointDef.localAnchorA.Set(0.f, 0.75f * joint->getCorrectedHeight());
+	jointDef.localAnchorB.Set(0.f, -0.75f);
 	jointDef.collideConnected = false;
 	jointDef.enableLimit = false;
 	jointDef.referenceAngle = glm::radians(0.f);
@@ -57,8 +55,8 @@ ItemFlail::ItemFlail(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, 
 
 	jointDef.bodyA = joint->body;
 	jointDef.bodyB = head->body;
-	jointDef.localAnchorA.Set(0.f, 0.9f * joint->getCorrectedHeight());
-	jointDef.localAnchorB.Set(0.f, -0.9f);
+	jointDef.localAnchorA.Set(0.f, 0.5f * joint->getCorrectedHeight());
+	jointDef.localAnchorB.Set(0.f, -0.5f);
 	jointDef.collideConnected = false;
 	jointDef.enableLimit = false;
 	jointDef.referenceAngle = glm::radians(0.f);

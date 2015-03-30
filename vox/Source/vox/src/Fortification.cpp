@@ -13,16 +13,11 @@
 
 #include <SlayTheDragonResourceManager.h>
 
-#define MAX_HEALTH 100
-
 Fortification::Fortification(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
-	Structure(_world, _categoryBits, _maskBits, _groupIndex),
+	StructureBreakable(50.f, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
-	NodeRenderable(),
-	health(MAX_HEALTH),
-	state(kNORMAL),
-	damage(0.f)
+	NodeRenderable()
 {
 
 	/*
@@ -32,16 +27,13 @@ Fortification::Fortification(Box2DWorld* _world, int16 _categoryBits, int16 _mas
 	fortBackground->transform->translate(glm::vec3(0, 30, 0));
 	*/
 
-	componentScale = 0.015f;
-	
-	TextureSampler * baseTex = SlayTheDragonResourceManager::fortForeground;
+	componentScale = 0.03f;
+
 	TextureSampler * roofTex = SlayTheDragonResourceManager::fortStructure;
 
-	rootComponent = base = new Box2DSprite(_world, baseTex, b2_staticBody, false, nullptr, new Transform(), componentScale);
-	roof = new Box2DSprite(_world, roofTex, b2_staticBody, false, nullptr, new Transform(), componentScale);
+	rootComponent = new Box2DSprite(_world, roofTex, b2_staticBody, false, nullptr, new Transform(), componentScale);
 
 	components.push_back(&rootComponent);
-	components.push_back(&roof);
 	
 	b2Filter sf;
 	sf.categoryBits = categoryBits;
@@ -67,42 +59,23 @@ Fortification::Fortification(Box2DWorld* _world, int16 _categoryBits, int16 _mas
 	roof->addAnimation("castleStates", spriteSheet, true);
 	*/
 
-	roof->setTranslationPhysical(0.f, rootComponent->getCorrectedHeight() + roof->getCorrectedHeight() + 15.f, 0.f);
-	translateComponents(glm::vec3(0, rootComponent->getCorrectedHeight(), 0));
 }
 
-Fortification::~Fortification(){
-}
-
-void Fortification::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	Structure::render(_matrixStack, _renderStack);
-}
-
-void Fortification::update(Step * _step){
-	Structure::update(_step);
-
-	/*//TODO
-	if(damage > 0){
-		health -= damage;
-		damage = 0;
-
-		if(state != kDEAD && health <= 0){
-			state = kDEAD;
-			rootComponent->currentAnimation->currentFrame = 3;
-			translateComponents(glm::vec3(0, -10, 0));
-		}else if(state != kDAMAGED && state != kDEAD && health <= MAX_HEALTH * 0.5){
-			state = kDAMAGED;
-			rootComponent->currentAnimation->currentFrame = 1;
-		}
-		
+void Fortification::takeDamage(float _damage){
+	StructureBreakable::takeDamage(_damage);
+	switch (state){
+	default:
+	case StructureBreakable::kNORMAL:
+		rootComponent->transform->scaleVector.x = 5;
+		rootComponent->transform->scaleVector.y = 1;
+		break;
+	case StructureBreakable::kDAMAGED:
+        rootComponent->transform->scaleVector.x = 1;
+        rootComponent->transform->scaleVector.y = 1;
+		break;
+	case StructureBreakable::kDEAD:
+        rootComponent->transform->scaleVector.x = 1;
+        rootComponent->transform->scaleVector.y = 5;
+		break;
 	}
-	*/
-}
-
-void Fortification::unload(){
-	Structure::unload();
-}
-
-void Fortification::load(){
-	Structure::load();
 }

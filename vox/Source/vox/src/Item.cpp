@@ -18,6 +18,7 @@ Item::Item(bool _singleUse, Box2DWorld * _world, int16 _categoryBits, int16 _mas
 	destroy(false),
 	playerJoint(nullptr)
 {
+	componentScale *= 2.f;
 }
 
 Item::~Item(){
@@ -53,7 +54,7 @@ void Item::hitGround(){
 	}
 }
 
-Item * Item::getProjectile(){
+Item * Item::getProjectile(bool _forceDrop){
 	if(playerJoint != nullptr){
 		world->b2world->DestroyJoint(playerJoint);
 		playerJoint = nullptr;

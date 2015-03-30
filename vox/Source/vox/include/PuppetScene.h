@@ -36,7 +36,6 @@ class ParticleSystem;
 
  class PuppetScene abstract : public LayeredScene{
 public:
-
 	float duration;
 	float currentTime;
 	unsigned int countDown;
@@ -46,6 +45,7 @@ public:
 	bool displayingSplash;
 	bool splashSoundPlayed;
 	float splashDuration;
+	bool victoryTriggered;
 
 	PuppetContactListener * cl;
 	Box2DWorld * world;
@@ -80,8 +80,9 @@ public:
 	virtual void unload() override;
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
-
-	virtual void complete();
+	
+	virtual void triggerVictoryState();
+    virtual void complete(std::string _switchTo = "");
 
 	void destroyItem(Item * item);
 	virtual void doCountDown();

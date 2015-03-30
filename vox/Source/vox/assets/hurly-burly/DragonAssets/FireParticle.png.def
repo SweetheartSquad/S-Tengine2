@@ -1,8 +1,8 @@
 {
-  "s": 512,
-  "t": "FireParticle.png",
-  "u": 0,
+  "w": 705,
   "v": 0,
-  "w": 411,
-  "h": 378
+  "u": 0,
+  "t": "FireParticle.png",
+  "s": 1024,
+  "h": 640
 }

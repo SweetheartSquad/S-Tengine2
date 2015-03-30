@@ -8,5 +8,5 @@ class ItemFireballLauncher : public ItemProjectileWeapon{
 public:
 	ItemFireballLauncher(PuppetCharacterDragon * _dragon, Box2DWorld * _world);
 
-	virtual Item * getProjectile() override;
+	virtual Item * getProjectile(bool _forceDrop) override;
 };

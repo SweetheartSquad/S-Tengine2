@@ -12,8 +12,6 @@ Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _gr
 	NodeChild(nullptr),
 	NodeRenderable()
 {
-	componentScale = 0.008f;
-
 	TextureSampler * baseTextureSampler = RapunzelResourceManager::leverBase;
 	TextureSampler * handleTextureSampler = RapunzelResourceManager::leverHandle;
 

@@ -18,7 +18,7 @@
 
 PuppetGame::PuppetGame(bool _running):
 	Game(_running),
-	arduino(new AccelerometerParser("COM4")),
+	arduino(new AccelerometerParser("COM3")),
 	lastScene(-1)
 {
 	std::srand((unsigned long int)std::time(0));

@@ -17,6 +17,7 @@
 #include <SoundManager.h>
 #include <ParticleSystem.h>
 #include <Particle.h>
+#include <NumberUtils.h>
 
 PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	PuppetCharacter(new PuppetTexturePack(
@@ -26,13 +27,14 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 		SlayTheDragonResourceManager::dragonMouth, 
 		SlayTheDragonResourceManager::dragonLowerWing,
 		PuppetResourceManager::face1,
-		4.0f
+		4.f
 	), 60.0f, _ai, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	fireball(nullptr),
 	fireParticles(new ParticleSystem(SlayTheDragonResourceManager::itemFireParticle, _world, 0, 0, _groupIndex))
 {
+
 	behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), this, 10));
 	behaviourManager.addBehaviour(new BehaviourAttack(this, 3, PuppetGame::kPLAYER));
 
@@ -90,8 +92,7 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	// change the shader settings based on current damage and player id
 	if (!ai){
 		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(float(id) * 0.167f);
-	}
-	else{
+	}else{
 		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(0.f);
 	}
 
@@ -102,10 +103,8 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	armRight->render(_matrixStack, _renderStack);
 	torso->render(_matrixStack, _renderStack);
 	head->render(_matrixStack, _renderStack);
-	headgear->render(_matrixStack, _renderStack);
-	// This is scary face->render(_matrixStack, _renderStack);
-
-	
+	// This is scary
+	//face->render(_matrixStack, _renderStack);
 
 	// revert the shader settings
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(hue);
@@ -115,12 +114,32 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setGreen(green);
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setBlue(blue);
 
-	if(fireball != nullptr){
-		Particle * p = fireParticles->addParticle(fireball->rootComponent->getPos(false));
-		p->body->SetGravityScale(-0.1f);
-	}
 	fireParticles->setShader(getShader(), true);
 	fireParticles->render(_matrixStack, _renderStack);
+
+    if (fireball != nullptr){
+        fireball->render(_matrixStack, _renderStack);
+    }
+
+	// render head on top
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setRed(red + (1 - control) * 3);
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setGreen(green - (1 - control) * 3);
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setBlue(blue - (1 - control) * 3);
+
+	// change the shader settings based on current damage and player id
+	if (!ai){
+		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(float(id) * 0.167f);
+	}else{
+		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(0.f);
+	}
+	headgear->render(_matrixStack, _renderStack);
+	// revert the shader settings
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(hue);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);
+	
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setRed(red);
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setGreen(green);
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setBlue(blue);
 }
 
 void PuppetCharacterDragon::update(Step * _step){
@@ -136,8 +155,17 @@ void PuppetCharacterDragon::update(Step * _step){
 		}
 	}
 	fireParticles->update(_step);
+    if (fireball != nullptr){
+        Particle * p = fireParticles->addParticle(fireball->rootComponent->getPos(false));
+        p->body->SetGravityScale(-0.1f);
+        p->applyAngularImpulse(vox::NumberUtils::randomFloat(-25.0f, 25.0f));
+        p->setTranslationPhysical(glm::vec3(vox::NumberUtils::randomFloat(-2.f, 2.f), vox::NumberUtils::randomFloat(0.75f, 1.25f), vox::NumberUtils::randomFloat(-2.f, 2.f)), true);
+
+        fireball->update(_step);
+    }
 }
-void PuppetCharacterDragon::action(){
+
+void PuppetCharacterDragon::action(bool _forceDrop){
 	if(heldItem != nullptr){
 		if(itemJoint != nullptr){
 			/*try{
@@ -147,7 +175,7 @@ void PuppetCharacterDragon::action(){
 			}*/
 			if (fireball == nullptr){
 				SlayTheDragonResourceManager::dragonSounds->playRandomSound();
-				fireball = heldItem->getProjectile();
+				fireball = heldItem->getProjectile(_forceDrop);
 				if (fireball == heldItem){
 					heldItem = nullptr;
 					itemJoint = nullptr;
@@ -157,10 +185,11 @@ void PuppetCharacterDragon::action(){
 				fireball->rootComponent->body->SetTransform(fireball->rootComponent->body->GetPosition(), t);
 				fireball->rootComponent->applyLinearImpulseDown(2.5f);
 				fireball->rootComponent->body->SetGravityScale(0.025f);
+
 				if(rootComponent->body->GetAngle() > 0){
-					fireball->rootComponent->applyLinearImpulseLeft(5 * (1 - cos(t)));
+					fireball->rootComponent->applyLinearImpulseLeft(10 * (1 - cos(t)));
 				}else{
-					fireball->rootComponent->applyLinearImpulseRight(5 * (1 - cos(t)));
+					fireball->rootComponent->applyLinearImpulseRight(10 * (1 - cos(t)));
 				}
 			}
 		}

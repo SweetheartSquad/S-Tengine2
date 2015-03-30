@@ -30,7 +30,7 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int
 	arm(nullptr),
 	base(nullptr)
 {
-	componentScale = 0.008f;
+	componentScale = 0.016f;
 
 	TextureSampler * baseTex = RaidTheCastleResourceManager::catapultBody;
 	TextureSampler * armTex = RaidTheCastleResourceManager::catapultArm;

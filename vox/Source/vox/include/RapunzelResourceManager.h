@@ -23,21 +23,9 @@ public:
 	static TextureSampler * thiefArm;
 	static TextureSampler * thiefHelmet;
 
-	static TextureSampler * rapunzelRedTorso;
-	static TextureSampler * rapunzelRedArm;
-	static TextureSampler * rapunzelRedHelmet;
-
-	static TextureSampler * rapunzelGreenTorso;
-	static TextureSampler * rapunzelGreenArm;
-	static TextureSampler * rapunzelGreenHelmet;
-
-	static TextureSampler * rapunzelBlueTorso;
-	static TextureSampler * rapunzelBlueArm;
-	static TextureSampler * rapunzelBlueHelmet;
-
-	static TextureSampler * rapunzelYellowTorso;
-	static TextureSampler * rapunzelYellowArm;
-	static TextureSampler * rapunzelYellowHelmet;
+	static TextureSampler * rapunzelTorso;
+	static TextureSampler * rapunzelArm;
+	static TextureSampler * rapunzelHelmet;
 	
 	static TextureSampler * itemAxe;
 	static TextureSampler * itemClub;
