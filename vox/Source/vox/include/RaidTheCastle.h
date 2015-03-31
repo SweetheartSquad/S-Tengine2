@@ -18,6 +18,8 @@ public:
 	Catapult * catapult;
 	PuppetCharacterCastleChampion * champion;
 
+	bool camTargetsRemoved;
+
 	PuppetCharacterKnight * playerCharacter1;
 	PuppetCharacterKnight * playerCharacter2;
 	PuppetCharacterKnight * playerCharacter3;

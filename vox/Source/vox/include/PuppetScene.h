@@ -45,6 +45,7 @@ public:
 	bool displayingSplash;
 	bool splashSoundPlayed;
 	float splashDuration;
+	double sceneStart;
 	bool victoryTriggered;
 
 	PuppetContactListener * cl;

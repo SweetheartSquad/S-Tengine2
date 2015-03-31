@@ -42,7 +42,8 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	playerCharacter1(new PuppetCharacterKnight(false, 0, RAID_CASTLE_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterKnight(false, 1, RAID_CASTLE_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
 	playerCharacter3(new PuppetCharacterKnight(false, 2, RAID_CASTLE_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
-	playerCharacter4(new PuppetCharacterKnight(false, 3, RAID_CASTLE_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
+	playerCharacter4(new PuppetCharacterKnight(false, 3, RAID_CASTLE_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4)),
+	camTargetsRemoved(false)
 {
 	populateBackground();
 	cl = new RaidTheCastleContactListener(this);
@@ -98,11 +99,14 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	gameCam->addTarget(playerCharacter3->torso);
 	gameCam->addTarget(playerCharacter4->torso);
 
+	gameCam->addTarget(catapult);
+	gameCam->addTarget(castle);
+
 	castle->setShader(shader, true);
 	castle->addToLayeredScene(this, 0);
 	addChild(castle, 0);
 
-	castle->translateComponents(glm::vec3(170, 0, 0));
+	castle->translateComponents(glm::vec3(120, 0, 0));
 
 	catapult->setShader(shader, true);
 	catapult->addToLayeredScene(this, 1);
@@ -159,6 +163,12 @@ void RaidTheCastle::update(Step* _step){
 	/*if(keyboard->keyDown(GLFW_KEY_F)){
 		catapult->fireCatapult();
 	}*/
+
+	if(!camTargetsRemoved && _step->time - sceneStart > 15.0) {
+		gameCam->removeTarget(castle);
+		gameCam->removeTarget(catapult);
+		camTargetsRemoved = true;
+	}
 
 	if(!splashSoundPlayed){
 		PuppetResourceManager::splashSounds->play("RaidTheCastle");
