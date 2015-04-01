@@ -126,7 +126,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
 	playerCharacter4->ai = true;
 
-	guard->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50, 0, 0), glm::vec3(100, 0, 0), playerCharacter4, 10));
+	guard->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(0, 0, 0), glm::vec3(40.f, 0, 0), playerCharacter4, 10));
 	guard->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
 	guard->ai = true;
 
@@ -148,11 +148,11 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 
     castleCatwalk->setTranslationPhysical(glm::vec3(tower->rootComponent->getPos().x - castleCatwalk->getCorrectedWidth() - tower->rootComponent->getCorrectedWidth() * 0.75f, tower->rootComponent->getPos().y - tower->rootComponent->getCorrectedHeight() * 0.08, 0));
 	
-	playerCharacter1->translateComponents(glm::vec3(20.f, 5.f, 0.f));
-	playerCharacter2->translateComponents(glm::vec3(30.f, 5.f, 0.f));
-	playerCharacter3->translateComponents(glm::vec3(40.f, 5.f, 0.f));
+	playerCharacter1->translateComponents(glm::vec3(10.f, 5.f, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(20.f, 5.f, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(30.f, 5.f, 0.f));
 	playerCharacter4->translateComponents(glm::vec3(castleCatwalk->getPos().x, tower->rootComponent->getPos().y + tower->rootComponent->getCorrectedHeight(), 0.f));
-	guard->translateComponents(glm::vec3(80.f, 35.f, 0.f));
+	guard->translateComponents(glm::vec3(50.f, 5.f, 0.f));
 
 	playRandomBackgroundMusic();
 
