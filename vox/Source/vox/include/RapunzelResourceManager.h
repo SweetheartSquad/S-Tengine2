@@ -21,7 +21,8 @@ public:
 	static TextureSampler * towerTower;
 
 	static TextureSampler * hair;
-
+	static TextureSampler * hairLink;
+	static TextureSampler * hairEnd;
 	
 	static TextureSampler * thiefTorso;
 	static TextureSampler * thiefArm;

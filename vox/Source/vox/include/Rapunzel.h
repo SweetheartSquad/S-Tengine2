@@ -5,7 +5,6 @@
 #define RAPUNZEL_GHOST_HEIGHT 12.0f
 
 class MeshEntity;
-class Tower;
 class Lever;
 class PuppetCharacterGuard;
 class PuppetCharacterThief;
@@ -17,7 +16,7 @@ public:
 	MeshEntity * sky;
 	
 	Box2DSprite * castleCatwalk;
-	Tower * tower;
+	Box2DSprite * tower;
 
 	Lever * lever1;
 	Lever * lever2;

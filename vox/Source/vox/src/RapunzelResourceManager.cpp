@@ -16,6 +16,9 @@ TextureSampler * RapunzelResourceManager::leverBase  = new TextureSampler(new Te
 
 TextureSampler * RapunzelResourceManager::hair  = new TextureSampler("../assets/hurly-burly/Hair/", "Hair.png.def");
 
+TextureSampler * RapunzelResourceManager::hairLink  = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelHairLink.png.def");
+TextureSampler * RapunzelResourceManager::hairEnd  = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelHairEnd.png.def");
+
 TextureSampler * RapunzelResourceManager::thiefTorso	= new TextureSampler("../assets/hurly-burly/ThiefAssets/", "ThiefTorso.png.def");
 TextureSampler * RapunzelResourceManager::thiefArm		= new TextureSampler("../assets/hurly-burly/ThiefAssets/", "ThiefArm.png.def");
 TextureSampler * RapunzelResourceManager::thiefHelmet	= new TextureSampler("../assets/hurly-burly/ThiefAssets/", "ThiefHelmet.png.def");
@@ -36,7 +39,11 @@ void RapunzelResourceManager::init(){
 
 	resources.push_back(leverHandle);
 	resources.push_back(leverBase);
+
 	resources.push_back(hair);
+	resources.push_back(hairLink);
+	resources.push_back(hairEnd);
+
 	resources.push_back(goldSpriteSheet);
 
 	resources.push_back(towerBackground);
