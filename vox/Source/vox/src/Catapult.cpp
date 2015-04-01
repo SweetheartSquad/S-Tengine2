@@ -85,31 +85,33 @@ void Catapult::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStac
 	Structure::render(_matrixStack, _renderStack);
 }
 
-void Catapult::update(Step * _step){
-	StructureInteractable::update(_step);
-
-	b2RevoluteJoint * jk = (b2RevoluteJoint *)base->body->GetJointList()->joint;
-	float angle = jk->GetJointAngle();
-	
+void Catapult::evaluateState(){
 	if(!ready){
-		if(triggering){
-			arm->body->SetAngularVelocity(-20);
-			if(angle <= glm::radians(-45.f)){
-				fireBoulder = true;
-			}
-			if(angle <= glm::radians(-75.f)){
-				arm->body->SetAngularVelocity(1);
-				triggering = false;
-			}
-		}else if(angle >= -0.0001f){
+		arm->body->SetAngularVelocity(1);
+		
+		b2RevoluteJoint * jk = (b2RevoluteJoint *)base->body->GetJointList()->joint;
+		float angle = jk->GetJointAngle();
+
+		if(!triggering && angle >= -0.0001f){
 			arm->body->SetAngularVelocity(1);
 			ready = true;
 		}
-	}else{
-		arm->body->SetAngularVelocity(1);
 	}
 
 	
+	b2RevoluteJoint * jk = (b2RevoluteJoint *)base->body->GetJointList()->joint;
+	float angle = jk->GetJointAngle();
+	if(triggering){
+		arm->body->SetAngularVelocity(-20);
+		if(angle <= glm::radians(-45.f)){
+			fireBoulder = true;
+		}
+		if(angle <= glm::radians(-75.f)){
+			arm->body->SetAngularVelocity(1);
+			triggering = false;
+		}
+	}
+
 	RaidTheCastle * rtc = static_cast<RaidTheCastle *>(scene);
 	if(fireBoulder){
 		RaidTheCastleResourceManager::catapultSounds->playRandomSound();
@@ -124,7 +126,6 @@ void Catapult::update(Step * _step){
 			playerWhoTriggered = nullptr;
 		}
 	}
-
 }
 
 void Catapult::unload(){
@@ -171,6 +172,9 @@ void Catapult::prepare(){
 	StructureInteractable::prepare();
 }
 
-void Catapult::interact(){
-	StructureInteractable::interact();
+void Catapult::attemptInteract(){
+	StructureInteractable::attemptInteract();
+}
+void Catapult::actuallyInteract(){
+	StructureInteractable::actuallyInteract();
 }

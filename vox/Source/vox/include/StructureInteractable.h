@@ -21,9 +21,13 @@ public:
 
 	StructureInteractable(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	
+	// override this and manage the ready variable
+	virtual void evaluateState() = 0;
+	
 	virtual void prepare();
 	virtual void trigger(PuppetCharacter * _playerWhoTriggered);
-	virtual void interact();
+	virtual void attemptInteract();
+	virtual void actuallyInteract();
 
 	virtual void update(Step * _step) override;
 };

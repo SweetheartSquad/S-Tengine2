@@ -25,11 +25,12 @@ public:
 	Catapult(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
-	void update(Step* _step) override;
 	void unload() override;
 	void load() override;
 	
+	void evaluateState() override;
 	void trigger(PuppetCharacter * _playerWhoTriggered) override;
 	void prepare() override;
-	void interact() override;
+	void attemptInteract() override;
+	void actuallyInteract() override;
 };

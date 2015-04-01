@@ -23,19 +23,28 @@ void StructureInteractable::trigger(PuppetCharacter * _playerWhoTriggered){
 void StructureInteractable::update(Step * _step){
 	Structure::update(_step);
 
+	evaluateState();
+
 	if(ready && !prepared){
 		prepare();
 	}
 
-	if(triggering && prepared){
-		interact();
+	if(triggering){
+		attemptInteract();
 	}
 }
+
 
 void StructureInteractable::prepare(){
 	prepared = true;
 }
 
-void StructureInteractable::interact(){
+void StructureInteractable::attemptInteract(){
+	if(prepared){
+		actuallyInteract();
+	}
 	prepared = false;
+}
+void StructureInteractable::actuallyInteract(){
+
 }
