@@ -32,6 +32,7 @@
 #include <ItemSimpleWeapon.h>
 #include <ItemProjectileWeapon.h>
 #include <Hair.h>
+#include <Lever.h>
 
 #include <glfw\glfw3.h>
 #include <SoundManager.h>
@@ -126,13 +127,18 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter4->translateComponents(glm::vec3(80.f, 35.f, 0.f));
 	guard->translateComponents(glm::vec3(100.f, 35.f, 0.f));
 
-	playRandomBackgroundMusic();
-
-
 	Hair * hair = new Hair(world, PuppetGame::kGROUND, PuppetGame::kPLAYER, 0);
 	addChild(hair, 1);
 	hair->setShader(shader, true);
 	hair->translateComponents(glm::vec3(50.f, 0.f, 0.f));
+
+	lever1 = new Lever(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, 0);
+	addChild(lever1, 1);
+	lever1->addToLayeredScene(this, 1);
+	lever1->setShader(shader, true);
+	lever1->translateComponents(glm::vec3(10.f, 2.f, 0));
+
+	playRandomBackgroundMusic();
 }
 
 Rapunzel::~Rapunzel(){

@@ -1,12 +1,9 @@
 #pragma once
 
-#include <Structure.h>
+#include <StructureInteractable.h>
 
-class Lever :public Structure
-{
+class Lever : public StructureInteractable{
 public:
-	bool ready;
-	bool triggered;
 	bool pullingLever;
 	float cooldownCnt;
 	
@@ -16,13 +13,8 @@ public:
 	Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex);
 	~Lever();
 	
+	void evaluateState() override;
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
-	void update(Step* _step) override;
 	void unload() override;
 	void load() override;
-
-	virtual void pullLever();
-
-private:
-
 };

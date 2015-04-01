@@ -7,16 +7,15 @@
 #include <RapunzelResourceManager.h>
 
 Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
-	Structure(_world, _categoryBits, _maskBits, _groupIndex),
+	StructureInteractable(_world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()
 {
-	TextureSampler * baseTextureSampler = RapunzelResourceManager::leverBase;
-	TextureSampler * handleTextureSampler = RapunzelResourceManager::leverHandle;
+	componentScale = 0.025f;
 
-	rootComponent = base = new Box2DSprite(_world, baseTextureSampler, b2_staticBody, false, nullptr, new Transform(), componentScale);
-	handle = new Box2DSprite(_world, handleTextureSampler, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
+	rootComponent = base = new Box2DSprite(_world, RapunzelResourceManager::leverBase, b2_staticBody, false, nullptr, new Transform(), componentScale);
+	handle = new Box2DSprite(_world, RapunzelResourceManager::leverHandle, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 	
 	components.push_back(&base);
 	components.push_back(&handle);
@@ -29,7 +28,8 @@ Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _gr
 	sf.groupIndex = groupIndex;
 
 	for(Box2DSprite ** c : components){
-		(*c)->createFixture(sf);
+		b2Fixture * f = (*c)->createFixture(sf);
+		f->SetSensor(true);
 	}
 
 	setUserData(this);
@@ -38,12 +38,12 @@ Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _gr
 	
 	handle->body->GetFixtureList()->SetDensity(10.f);
 
-	// axel
+	// handle
 	b2RevoluteJointDef jth;
 	jth.bodyA = base->body;
 	jth.bodyB = handle->body;
 	jth.localAnchorA.Set(0.f, 0.9f * base->getCorrectedHeight());
-	jth.localAnchorB.Set(0.f, 0.1f * handle->getCorrectedHeight());
+	jth.localAnchorB.Set(0.f, -0.9f * handle->getCorrectedHeight());
 	jth.collideConnected = false;
 	jth.enableLimit = true;
 	jth.referenceAngle = 0.f;
@@ -51,26 +51,23 @@ Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _gr
 	world->b2world->CreateJoint(&jth);
 }
 
-Lever::~Lever()
-{
+Lever::~Lever(){
 }
 
 void Lever::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Structure::render(_matrixStack, _renderStack);
 }
 
-void Lever::update(Step * _step){
-	Structure::update(_step);
-
+void Lever::evaluateState(){
 	b2RevoluteJoint * jk = (b2RevoluteJoint *)base->body->GetJointList()->joint;
 	float angle = jk->GetJointAngle();
 	
 	if(!ready){
-		if(triggered){
+		if(triggering){
 			handle->body->SetAngularVelocity(-20);
 			if(angle <= glm::radians(-75.f)){
 				handle->body->SetAngularVelocity(1);
-				triggered = false;
+				triggering = false;
 			}
 		}else if(angle >= -0.0001f){
 			handle->body->SetAngularVelocity(1);
@@ -87,8 +84,4 @@ void Lever::unload(){
 
 void Lever::load(){
 	Structure::load();
-}
-
-void Lever::pullLever(){
-
 }

@@ -34,24 +34,6 @@ void RapunzelContactListener::playerItemContact(b2Contact * _contact, b2Fixture 
 
 void RapunzelContactListener::playerStructureContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _structureFixture){
 	PuppetContactListener::playerStructureContact(_contact, _playerFixture, _structureFixture);
-	
-	PuppetCharacter * puppet = static_cast<PuppetCharacter *>(_playerFixture->GetUserData());
-	Structure * structure = static_cast<Structure *>(_structureFixture->GetUserData());
-
-	PuppetCharacterRapunzel * rapunzel = dynamic_cast<PuppetCharacterRapunzel *>(puppet);
-	// if character is Rapunzel
-	if(rapunzel != nullptr){
-		Lever * lever = dynamic_cast<Lever *>(structure);
-		if(lever != nullptr){
-			lever->pullLever();
-		}
-	}else{
-		Hair * hair = dynamic_cast<Hair *>(structure);
-		if(hair != nullptr){
-			// check that puppet isn't Rapunzel
-			// move puppet up/down?
-		}
-	}	
 }
 
 void RapunzelContactListener::playerGroundContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _groundFixture){

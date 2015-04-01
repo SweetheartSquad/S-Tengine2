@@ -9,6 +9,7 @@
 #include "Box2DSuperSprite.h"
 #include <Box2D/Box2D.h>
 #include <SoundManager.h>
+#include <StructureInteractable.h>
 
 #include <Box2D\Dynamics\Joints\b2RevoluteJoint.h>
 
@@ -149,6 +150,12 @@ void PuppetContactListener::playerStructureContact(b2Contact * _contact, b2Fixtu
 	PuppetCharacter * p = static_cast<PuppetCharacter *>(_playerFixture->GetUserData());
 	if(p != nullptr) {
 		p->addCollision(PuppetGame::kSTRUCTURE);	
+
+		StructureInteractable * si = dynamic_cast<StructureInteractable *>(static_cast<Structure *>(_structureFixture->GetUserData()));
+		if(si != nullptr){
+			// need to actually check if the structure is the catapult
+			si->trigger(p);
+		}
 	}
 }
 
