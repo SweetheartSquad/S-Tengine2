@@ -111,33 +111,37 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 	if(glIsVertexArray(vaoId) == GL_TRUE){
 		if(glIsBuffer(vboId) == GL_TRUE){
 			if(glIsBuffer(iboId) == GL_TRUE){
-				if(_renderOption->shader != nullptr){				
-					// Bind VAO
-					glBindVertexArray(vaoId);
-					GLUtils::checkForError(0,__FILE__,__LINE__);
+				if(_renderOption->shader != nullptr){			
+					if(_renderOption->currentVao != vaoId){
+						_renderOption->currentVao = vaoId;	
+						// Bind VAO
+						glBindVertexArray(vaoId);
+						GLUtils::checkForError(0,__FILE__,__LINE__);
 				
-					glUseProgram(_renderOption->shader->getProgramId());
+						glUseProgram(_renderOption->shader->getProgramId());
 
-					GLUtils::checkForError(0,__FILE__,__LINE__);
+						GLUtils::checkForError(0,__FILE__,__LINE__);
 
-					_renderOption->shader->clean(_matrixStack, _renderOption, this);
+						_renderOption->shader->clean(_matrixStack, _renderOption, this);
 					
-					//Alpha blending
-					// Should these be here or only once in the main render loop?
-					glEnable (GL_BLEND);
-					glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+						//Alpha blending
+						// Should these be here or only once in the main render loop?
+						glEnable (GL_BLEND);
+						glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-					//Texture repeat
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, uvEdgeMode);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, uvEdgeMode);
+						//Texture repeat
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, uvEdgeMode);
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, uvEdgeMode);
+
+					}
 
 					// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
 					glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
+					//glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
 					//glDrawElements(drawMode, vertices.size(), GL_UNSIGNED_BYTE, 0);
 					GLUtils::checkForError(0,__FILE__,__LINE__);
-
 					// Disable VAO
-					glBindVertexArray(0);
+					//glBindVertexArray(0);
 				}else{
 					std::cout << "no shader" << std::endl << std::endl;	
 				}
