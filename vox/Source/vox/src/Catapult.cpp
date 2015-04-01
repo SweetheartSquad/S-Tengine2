@@ -9,22 +9,21 @@
 #include <PuppetCharacter.h>
 #include <iostream>
 
+#include <RaidTheCastle.h>
 #include <RaidTheCastleResourceManager.h>
+#include <SoundManager.h>
+#include <FollowCamera.h>
 
 #define COOLDOWN 10
 
 
 Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
-	Structure(_world, _categoryBits, _maskBits, _groupIndex),
+	StructureInteractable(_world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable(),
-	ready(true),
-	firing(false),
 	fireBoulder(false),
-	boulderLoaded(false),
 	boulderJoint(nullptr),
-	playerWhoFired(nullptr),
 	cooldownCnt(0.f),
 	boulder(nullptr),
 	arm(nullptr),
@@ -32,11 +31,8 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int
 {
 	componentScale = 0.016f;
 
-	TextureSampler * baseTex = RaidTheCastleResourceManager::catapultBody;
-	TextureSampler * armTex = RaidTheCastleResourceManager::catapultArm;
-
-	base = new Box2DSprite(_world, baseTex, b2_staticBody, false, nullptr, new Transform(), componentScale);
-	arm = new Box2DSprite(_world, armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
+	base = new Box2DSprite(_world, RaidTheCastleResourceManager::catapultBody, b2_staticBody, false, nullptr, new Transform(), componentScale);
+	arm = new Box2DSprite(_world, RaidTheCastleResourceManager::catapultArm, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 	
 	components.push_back(&arm);
 	components.push_back(&base);
@@ -85,28 +81,25 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int
 	world->b2world->CreateJoint(&jth);
 }
 
-Catapult::~Catapult(){
-}
-
 void Catapult::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
 	Structure::render(_matrixStack, _renderStack);
 }
 
 void Catapult::update(Step * _step){
-	Structure::update(_step);
+	StructureInteractable::update(_step);
 
 	b2RevoluteJoint * jk = (b2RevoluteJoint *)base->body->GetJointList()->joint;
 	float angle = jk->GetJointAngle();
 	
 	if(!ready){
-		if(firing){
+		if(triggering){
 			arm->body->SetAngularVelocity(-20);
 			if(angle <= glm::radians(-45.f)){
 				fireBoulder = true;
 			}
 			if(angle <= glm::radians(-75.f)){
 				arm->body->SetAngularVelocity(1);
-				firing = false;
+				triggering = false;
 			}
 		}else if(angle >= -0.0001f){
 			arm->body->SetAngularVelocity(1);
@@ -115,6 +108,23 @@ void Catapult::update(Step * _step){
 	}else{
 		arm->body->SetAngularVelocity(1);
 	}
+
+	
+	RaidTheCastle * rtc = static_cast<RaidTheCastle *>(scene);
+	if(fireBoulder){
+		RaidTheCastleResourceManager::catapultSounds->playRandomSound();
+		fireBoulder = false;
+		if(boulderJoint != nullptr){
+			world->b2world->DestroyJoint(boulderJoint);
+			boulderJoint = nullptr;
+			boulder->catapult = nullptr;
+			((FollowCamera *)rtc->gameCam)->addTarget(boulder->rootComponent);
+			boulder->playerWhoFired = playerWhoTriggered;
+			boulder = nullptr;
+			playerWhoTriggered = nullptr;
+		}
+	}
+
 }
 
 void Catapult::unload(){
@@ -125,10 +135,42 @@ void Catapult::load(){
 	Structure::load();
 }
 
-void Catapult::fireCatapult(PuppetCharacter * _playerWhoFired){
+void Catapult::trigger(PuppetCharacter * _playerWhoTriggered){
+	StructureInteractable::trigger(_playerWhoTriggered);
 	b2RevoluteJoint * j = (b2RevoluteJoint *)base->body->GetJointList()->joint;
-	//arm->body->SetAngularVelocity(-20);
-	firing = true;
-	ready = false;
-	playerWhoFired = _playerWhoFired;
+}
+
+void Catapult::prepare(){
+	RaidTheCastle * rtc = static_cast<RaidTheCastle *>(scene);
+
+	boulder = new Boulder(world, PuppetGame::kITEM, PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, groupIndex);
+	boulder->setShader((Shader *)rtc->shader, true);
+	rtc->addChild(boulder, 1);
+	boulder->addToLayeredScene(rtc, 1);
+	rtc->items.push_back(boulder);
+
+	b2Vec2 armPos = b2Vec2(-arm->getCorrectedWidth() * 0.8f, base->getCorrectedHeight() * 0.9f);
+	// snap to capatult base
+	boulder->snapComponents(base);
+	// translate to arm position from base
+	boulder->translateComponents(glm::vec3(armPos.x*2, armPos.y, 0.f));
+	//boulder->translateComponents(glm::vec3(-21, 6, 0)); // this is hard-coded, should not be
+	cooldownCnt = 0.f;
+
+	// axle
+	b2WeldJointDef abpj;
+	abpj.bodyA = arm->body;
+	abpj.bodyB = boulder->boulder->body;
+	abpj.localAnchorA.Set(-0.7f * arm->getCorrectedWidth(), 0.0f * arm->getCorrectedHeight());
+	abpj.localAnchorB.Set(0.0f * boulder->boulder->getCorrectedWidth(), 0.f * boulder->boulder->getCorrectedHeight());
+	abpj.collideConnected = false;
+	abpj.referenceAngle = 0.f;
+	boulderJoint = (b2WeldJoint *)world->b2world->CreateJoint(&abpj);
+	boulder->catapult = this;
+
+	StructureInteractable::prepare();
+}
+
+void Catapult::interact(){
+	StructureInteractable::interact();
 }

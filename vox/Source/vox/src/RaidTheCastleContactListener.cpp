@@ -44,7 +44,7 @@ void RaidTheCastleContactListener::playerStructureContact(b2Contact * _contact, 
 	PuppetContactListener::playerStructureContact(_contact, _playerFixture, _structureFixture);
 	
 	// need to actually check if the structure is the catapult
-	static_cast<Catapult *>(_structureFixture->GetUserData())->fireCatapult(static_cast<PuppetCharacter *>(_playerFixture->GetUserData()));
+	static_cast<Catapult *>(_structureFixture->GetUserData())->trigger(static_cast<PuppetCharacter *>(_playerFixture->GetUserData()));
 
 }
 
