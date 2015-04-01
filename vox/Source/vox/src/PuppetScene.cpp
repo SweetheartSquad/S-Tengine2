@@ -56,6 +56,8 @@ class SlayTheDragon;
 
 PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float _height, float _size):
 	LayeredScene(_game, 3),
+	sceneHeight(_height),
+	sceneWidth(_width),
 	duration(seconds),
 	currentTime(0),
 	countDown(0),
@@ -112,15 +114,15 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 
-	boundaries.at(0)->transform->scale(_size, _height/2.f, _size);
-	boundaries.at(1)->transform->scale(_size, _height/2.f, _size);
-	boundaries.at(2)->transform->scale(_width/2.f, _size, _size);
-	boundaries.at(3)->transform->scale(_width/2.f, _size, _size);
+	boundaries.at(0)->transform->scale(_size, sceneHeight/2.f, _size);
+	boundaries.at(1)->transform->scale(_size, sceneHeight/2.f, _size);
+	boundaries.at(2)->transform->scale(sceneWidth/2.f, _size, _size);
+	boundaries.at(3)->transform->scale(sceneWidth/2.f, _size, _size);
 
-	boundaries.at(0)->setTranslationPhysical(_width, _height/2.f, 0);
-	boundaries.at(1)->setTranslationPhysical(0, _height/2.f, 0);
-	boundaries.at(2)->setTranslationPhysical(_width/2.f, _height-_size, 0);
-	boundaries.at(3)->setTranslationPhysical(_width/2.f, -_size, 0);
+	boundaries.at(0)->setTranslationPhysical(sceneWidth, sceneHeight/2.f, 0);
+	boundaries.at(1)->setTranslationPhysical(0, sceneHeight/2.f, 0);
+	boundaries.at(2)->setTranslationPhysical(sceneWidth/2.f, sceneHeight-_size, 0);
+	boundaries.at(3)->setTranslationPhysical(sceneWidth/2.f, -_size, 0);
 	
 	/*addChild(boundaries.at(0), 0);
 	addChild(boundaries.at(1), 0);

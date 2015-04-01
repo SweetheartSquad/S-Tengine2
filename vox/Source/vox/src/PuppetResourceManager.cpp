@@ -8,6 +8,7 @@
 #include <SlayTheDragonResourceManager.h>
 #include <SoundManager.h>
 #include <TextureSampler.h>
+#include <NumberUtils.h>
 
 Texture * PuppetResourceManager::blank = new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true);
 TextureSampler * PuppetResourceManager::itemNone = new TextureSampler(new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true), 1, 1);
@@ -29,7 +30,7 @@ Texture * PuppetResourceManager::cloud4	= new Texture("../assets/hurly-burly/Clo
 TextureSampler * PuppetResourceManager::dustParticle = new TextureSampler("../assets/hurly-burly/", "dustParticle.png.def");
 
 TextureSampler * PuppetResourceManager::head1 = new TextureSampler("../assets/hurly-burly/", "Head1.png.def"); 
-TextureSampler * PuppetResourceManager::face1 = new TextureSampler("../assets/hurly-burly/", "Face1.png.def");
+std::vector<TextureSampler *> PuppetResourceManager::faces;
 TextureSampler * PuppetResourceManager::hand1 = new TextureSampler("../assets/hurly-burly/", "Hand1.png.def");
 
 TextureSampler * PuppetResourceManager::countDown0 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/0.png", 1024, 1024, true, true), 1024, 1024);
@@ -68,8 +69,18 @@ void PuppetResourceManager::init(){
 	resources.push_back(dustParticle);
 
 	resources.push_back(head1);
-	resources.push_back(face1);
 	resources.push_back(hand1);
+	
+	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face1.png.def"));
+	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face2.png.def"));
+	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face3.png.def"));
+	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face4.png.def"));
+	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face5.png.def"));
+	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face6.png.def"));
+	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face7.png.def"));
+	for(auto i : faces){
+		resources.push_back(i);
+	}
 	
 	resources.push_back(countDown0);
 	resources.push_back(countDown1);
@@ -137,4 +148,8 @@ void PuppetResourceManager::init(){
 	cheerSounds->addNewSound("1", "../assets/hurly-burly/audio/greenCheer/greenCheerMain.ogg");
 	cheerSounds->addNewSound("2", "../assets/hurly-burly/audio/blueCheer/blueCheerMain.ogg");
 	cheerSounds->addNewSound("3", "../assets/hurly-burly/audio/redCheer/redCheerMain.ogg");
+}
+
+TextureSampler * PuppetResourceManager::getRandomFace(){
+	return faces.at(vox::NumberUtils::randomInt(0, faces.size()-1));
 }

@@ -36,6 +36,8 @@ class ParticleSystem;
 
  class PuppetScene abstract : public LayeredScene{
 public:
+	const float sceneHeight;
+	const float sceneWidth;
 	float duration;
 	float currentTime;
 	unsigned int countDown;

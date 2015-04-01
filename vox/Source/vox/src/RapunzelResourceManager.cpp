@@ -7,6 +7,8 @@ TextureSampler * RapunzelResourceManager::splashMessage	= new TextureSampler(new
 
 Texture * RapunzelResourceManager::goldSpriteSheet    = new Texture("../assets/hurly-burly/Gold/GoldSpritesheet.png", 1024, 1024, true, true);
 
+TextureSampler * RapunzelResourceManager::goldBrick   = new TextureSampler("../assets/hurly-burly/Gold/", "goldBrick.png.def");
+
 TextureSampler * RapunzelResourceManager::leverHandle   = new TextureSampler(new Texture("../assets/hurly-burly/Lever/LeverHandle.png", 512, 512, true, true), 32, 101);
 TextureSampler * RapunzelResourceManager::leverBase  = new TextureSampler(new Texture("../assets/hurly-burly/Lever/LeverBase.png", 512, 512, true, true), 104, 23);
 
@@ -34,6 +36,7 @@ void RapunzelResourceManager::init(){
 	resources.push_back(leverBase);
 	resources.push_back(hair);
 	resources.push_back(goldSpriteSheet);
+	resources.push_back(goldBrick);
 
 	resources.push_back(thiefTorso);
 	resources.push_back(thiefArm);

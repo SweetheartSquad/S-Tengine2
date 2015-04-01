@@ -26,7 +26,7 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 		SlayTheDragonResourceManager::dragonHead,
 		SlayTheDragonResourceManager::dragonMouth, 
 		SlayTheDragonResourceManager::dragonLowerWing,
-		PuppetResourceManager::face1,
+		PuppetResourceManager::getRandomFace(),
 		4.f
 	), 60.0f, _ai, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),

@@ -33,6 +33,8 @@
 #include <ItemProjectileWeapon.h>
 #include <Hair.h>
 #include <Lever.h>
+#include <ItemGold.h>
+#include <NumberUtils.h>
 
 #include <glfw\glfw3.h>
 #include <SoundManager.h>
@@ -164,12 +166,12 @@ void Rapunzel::update(Step* _step){
 		splashSoundPlayed = true;
 	}
 
-	if(keyboard->keyDown(GLFW_KEY_B)){
-		guard->control = 0;
-		playerCharacter1->control = 0;
-		playerCharacter2->control = 0;
-		//playerCharacter->behaviourManager.behaviours.at(0)->targets.clear();
-		//playerCharacter->behaviourManager.behaviours.at(0)->active = false;
+	if(keyboard->keyDown(GLFW_KEY_G)){
+		ItemGold * g = new ItemGold(world);
+		g->addToLayeredScene(this, 1);
+		g->setShader(shader, true);
+        addChild(g, 1);
+		g->translateComponents(glm::vec3(vox::NumberUtils::randomFloat(0, sceneWidth), vox::NumberUtils::randomFloat(0, sceneHeight), 0));
 	}
 }
 

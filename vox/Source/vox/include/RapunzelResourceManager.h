@@ -10,8 +10,9 @@ class Texture;
 class RapunzelResourceManager abstract : public ResourceManager{
 public:
 	static TextureSampler * splashMessage;
-
+	
 	static Texture * goldSpriteSheet;
+	static TextureSampler * goldBrick;
 
 	static TextureSampler * leverHandle;
 	static TextureSampler * leverBase;
