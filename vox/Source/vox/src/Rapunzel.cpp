@@ -32,12 +32,15 @@
 #include <ItemSimpleWeapon.h>
 #include <ItemProjectileWeapon.h>
 #include <Hair.h>
+#include <Tower.h>
 
 #include <glfw\glfw3.h>
 #include <SoundManager.h>
 
 Rapunzel::Rapunzel(PuppetGame* _game):
-	PuppetScene(_game, 30),
+	PuppetScene(_game, 50.f, 100.f),
+	tower(new Tower(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER)),
+	castleCatwalk(new Box2DSprite(world, RapunzelResourceManager::towerCatwalk, b2_staticBody, false, nullptr, new Transform(), 0.03f)),
 	guard(new PuppetCharacterGuard(true, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, -1, -20)),
 	playerCharacter1(new PuppetCharacterThief(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterThief(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
@@ -46,6 +49,15 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 {
 	cl = new RapunzelContactListener(this);
 	populateBackground();
+
+	Sprite * towerBg = new Sprite();
+	tower->addToLayeredScene(this, 1);
+	addChild(towerBg, 0);
+	towerBg->setShader(shader, true);
+	towerBg->pushTextureSampler(RapunzelResourceManager::towerBackground);
+	towerBg->transform->translate(0.f, 0.f, 0.0f);
+	towerBg->transform->scale(2.6f, 2.6f, 1.0f);
+
 	TextureSampler * splashMessageTextureSampler = RapunzelResourceManager::splashMessage;
 	splashMessage = new Sprite(nullptr, new Transform());
 	splashMessage->transform->scale(glm::vec3(3, 3, 0));
@@ -57,6 +69,15 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	players.push_back(playerCharacter2);
 	players.push_back(playerCharacter3);
 	players.push_back(playerCharacter4);
+
+	b2Filter sf;
+    sf.categoryBits = PuppetGame::kGROUND;
+    sf.groupIndex = 0;
+    sf.maskBits = PuppetGame::kITEM | PuppetGame::kPLAYER;
+
+	castleCatwalk->createFixture(sf, b2Vec2(0, 0), castleCatwalk);
+    castleCatwalk->setShader(shader, true);
+    addChild(castleCatwalk, 2);
 
 	playerCharacter1->setShader(shader, true);
 	addChild(playerCharacter1, 1);
@@ -120,11 +141,18 @@ Rapunzel::Rapunzel(PuppetGame* _game):
         addChild(weapon, 1);
 	}
 	
-	playerCharacter1->translateComponents(glm::vec3(20.f, 35.f, 0.f));
-	playerCharacter2->translateComponents(glm::vec3(40.f, 35.f, 0.f));
-	playerCharacter3->translateComponents(glm::vec3(60.f, 35.f, 0.f));
-	playerCharacter4->translateComponents(glm::vec3(80.f, 35.f, 0.f));
-	guard->translateComponents(glm::vec3(100.f, 35.f, 0.f));
+	tower->setShader(shader, true);
+	tower->addToLayeredScene(this, 1);
+	addChild(tower, 1);
+    tower->translateComponents(glm::vec3(60.f, 0.f, 0.f));
+
+    castleCatwalk->setTranslationPhysical(glm::vec3(tower->rootComponent->getPos().x - castleCatwalk->getCorrectedWidth() - tower->rootComponent->getCorrectedWidth() * 0.75f, tower->rootComponent->getPos().y - tower->rootComponent->getCorrectedHeight() * 0.08, 0));
+	
+	playerCharacter1->translateComponents(glm::vec3(20.f, 5.f, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(30.f, 5.f, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(40.f, 5.f, 0.f));
+	playerCharacter4->translateComponents(glm::vec3(castleCatwalk->getPos().x, tower->rootComponent->getPos().y + tower->rootComponent->getCorrectedHeight(), 0.f));
+	guard->translateComponents(glm::vec3(80.f, 35.f, 0.f));
 
 	playRandomBackgroundMusic();
 
@@ -132,7 +160,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	Hair * hair = new Hair(world, PuppetGame::kGROUND, PuppetGame::kPLAYER, 0);
 	addChild(hair, 1);
 	hair->setShader(shader, true);
-	hair->translateComponents(glm::vec3(50.f, 0.f, 0.f));
+	hair->translateComponents(glm::vec3(50.f, tower->rootComponent->getPos().x - hair->rootComponent->getCorrectedWidth() * 1.2f, 0.f));
 }
 
 Rapunzel::~Rapunzel(){

@@ -190,6 +190,7 @@
     <ClCompile Include="../src/shader/ShaderComponentTint.cpp" />
     <ClCompile Include="../src/StructureBreakable.cpp" />
     <ClCompile Include="../src/TextureSampler.cpp" />
+    <ClCompile Include="../src/Tower.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -374,6 +375,7 @@
     <ClInclude Include="../include/shader/ShaderComponentAlpha.h" />
     <ClInclude Include="../include/shader/ShaderComponentTint.h" />
     <ClInclude Include="../include/TextureSampler.h" />
+    <ClInclude Include="../include/Tower.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E178CAF8-5E96-478C-812C-DCBA942FC878}</ProjectGuid>

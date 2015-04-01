@@ -16,6 +16,10 @@ public:
 	static TextureSampler * leverHandle;
 	static TextureSampler * leverBase;
 
+	static TextureSampler * towerBackground;
+	static TextureSampler * towerCatwalk;	
+	static TextureSampler * towerTower;
+
 	static TextureSampler * hair;
 
 	
