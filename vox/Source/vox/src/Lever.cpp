@@ -13,6 +13,7 @@ Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _gr
 	NodeRenderable()
 {
 	componentScale = 0.025f;
+	type = std::rand() % 3;
 
 	rootComponent = base = new Box2DSprite(_world, RapunzelResourceManager::leverBase, b2_staticBody, false, nullptr, new Transform(), componentScale);
 	handle = new Box2DSprite(_world, RapunzelResourceManager::leverHandle, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
@@ -48,6 +49,7 @@ Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _gr
 	jth.enableLimit = true;
 	jth.referenceAngle = 0.f;
 	jth.lowerAngle = glm::radians(-80.f);
+	jth.upperAngle = glm::radians(0.f);
 	world->b2world->CreateJoint(&jth);
 }
 
@@ -55,33 +57,27 @@ Lever::~Lever(){
 }
 
 void Lever::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	Structure::render(_matrixStack, _renderStack);
+	StructureInteractable::render(_matrixStack, _renderStack);
 }
 
 void Lever::evaluateState(){
 	b2RevoluteJoint * jk = (b2RevoluteJoint *)base->body->GetJointList()->joint;
 	float angle = jk->GetJointAngle();
 	
-	if(!ready){
-		if(triggering){
-			handle->body->SetAngularVelocity(-20);
-			if(angle <= glm::radians(-75.f)){
-				handle->body->SetAngularVelocity(1);
-				triggering = false;
-			}
-		}else if(angle >= -0.0001f){
-			handle->body->SetAngularVelocity(1);
-			ready = true;
+	handle->body->SetAngularVelocity(2.5);
+
+	if(triggering){
+		handle->body->SetAngularVelocity(-20);
+		if(angle <= glm::radians(-75.f)){
+			triggering = false;
 		}
 	}else{
-		handle->body->SetAngularVelocity(1);
+		if(angle >= -0.0001f){
+			ready = true;
+		}
 	}
 }
 
-void Lever::unload(){
-	Structure::unload();
-}
-
-void Lever::load(){
-	Structure::load();
+void Lever::actuallyInteract(){
+	std::cout << type << std::endl;
 }

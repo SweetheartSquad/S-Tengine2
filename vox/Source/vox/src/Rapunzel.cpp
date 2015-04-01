@@ -131,12 +131,24 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	addChild(hair, 1);
 	hair->setShader(shader, true);
 	hair->translateComponents(glm::vec3(50.f, 0.f, 0.f));
-
+	
 	lever1 = new Lever(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, 0);
 	addChild(lever1, 1);
 	lever1->addToLayeredScene(this, 1);
 	lever1->setShader(shader, true);
 	lever1->translateComponents(glm::vec3(10.f, 2.f, 0));
+	
+	lever2 = new Lever(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, 0);
+	addChild(lever2, 1);
+	lever2->addToLayeredScene(this, 1);
+	lever2->setShader(shader, true);
+	lever2->translateComponents(glm::vec3(30.f, 2.f, 0));
+
+	lever3 = new Lever(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, 0);
+	addChild(lever3, 1);
+	lever3->addToLayeredScene(this, 1);
+	lever3->setShader(shader, true);
+	lever3->translateComponents(glm::vec3(50.f, 2.f, 0));
 
 	playRandomBackgroundMusic();
 }
