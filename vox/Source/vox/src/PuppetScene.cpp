@@ -62,7 +62,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	displayingSplash(false),
 	splashSoundPlayed(false),
 	splashMessage(nullptr),
-	splashDuration(3.f),
+	splashDuration(2.f),
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(nullptr),

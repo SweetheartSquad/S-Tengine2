@@ -55,7 +55,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	addChild(towerBg, 0);
 	towerBg->setShader(shader, true);
 	towerBg->pushTextureSampler(RapunzelResourceManager::towerBackground);
-	towerBg->transform->translate(0.f, 0.f, 0.0f);
+	towerBg->transform->translate(2.f, 0.f, 0.0f);
 	towerBg->transform->scale(2.6f, 2.6f, 1.0f);
 
 	TextureSampler * splashMessageTextureSampler = RapunzelResourceManager::splashMessage;
@@ -160,7 +160,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	Hair * hair = new Hair(world, PuppetGame::kGROUND, PuppetGame::kPLAYER, 0);
 	addChild(hair, 1);
 	hair->setShader(shader, true);
-	hair->translateComponents(glm::vec3(50.f, tower->rootComponent->getPos().x - hair->rootComponent->getCorrectedWidth() * 1.2f, 0.f));
+	hair->translateComponents(glm::vec3(castleCatwalk->getPos().x + castleCatwalk->getCorrectedWidth() * 0.6, 0.f, 0.f));
 }
 
 Rapunzel::~Rapunzel(){
