@@ -132,3 +132,12 @@ void FollowCamera::removeTarget(ShiftKiddie * _target){
 		}
 	}
 }
+
+bool FollowCamera::hasTarget(ShiftKiddie * _target){
+	for(ShiftKiddie * sk : targets){
+		if(sk == _target){
+			return true;
+		}
+	}
+	return false;
+}

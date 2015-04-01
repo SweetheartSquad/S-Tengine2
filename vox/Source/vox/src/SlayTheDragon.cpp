@@ -166,7 +166,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 
 	Box2DMeshEntity * deathBounds = new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody);
 	deathBounds->transform->scale(100.f, 18.f, 1.f);
-	deathBounds->setTranslationPhysical(60.f, 0.f, 0.f);
+	deathBounds->setTranslationPhysical(60.f, -18.f, 0.f);
 	world->addToWorld(deathBounds);
 	b2Filter sfd;
 	sfd.categoryBits = PuppetGame::kDEAD_ZONE;
@@ -181,6 +181,25 @@ SlayTheDragon::~SlayTheDragon(){
 
 void SlayTheDragon::update(Step* _step){
 	PuppetScene::update(_step);
+
+	if(playerCharacter1->torso->transform->translationVector.y < 25.0f && gameCam->hasTarget(playerCharacter1->torso)){
+		gameCam->removeTarget(playerCharacter1->torso);
+	}else if(!gameCam->hasTarget(playerCharacter1->torso) && playerCharacter1->torso->transform->translationVector.y > 25.0f){
+		gameCam->addTarget(playerCharacter1->torso);
+	}
+
+	if(playerCharacter2->torso->transform->translationVector.y < 25.0f && gameCam->hasTarget(playerCharacter2->torso)){
+		gameCam->removeTarget(playerCharacter2->torso);
+	}else if(!gameCam->hasTarget(playerCharacter2->torso) && playerCharacter2->torso->transform->translationVector.y > 25.0f){
+		gameCam->addTarget(playerCharacter2->torso);
+	}
+
+	if(playerCharacter3->torso->transform->translationVector.y < 25.0f && gameCam->hasTarget(playerCharacter3->torso)){
+		gameCam->removeTarget(playerCharacter3->torso);
+	}else if(!gameCam->hasTarget(playerCharacter3->torso) && playerCharacter3->torso->transform->translationVector.y > 25.0f){
+		gameCam->addTarget(playerCharacter3->torso);
+	}
+
 	if(!splashSoundPlayed){
 		PuppetResourceManager::splashSounds->play("SlayTheDragon");
 		splashSoundPlayed = true;
