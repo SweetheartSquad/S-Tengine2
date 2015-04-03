@@ -42,28 +42,28 @@ public:
 	/**
 	* currentModelMatrix = currentModelMatrix * _scaleMatrix 
 	*
-	* @param _scaleMatrix The scale matrix to push onto the stack
+	* @param _scaleMatrix The scale matrix to apply
 	*/
 	void scale(			glm::mat4 _scaleMatrix);
 
 	/**
 	* currentModelMatrix = currentModelMatrix * _rotationMatrix 
 	*
-	* @param _scaleMatrix The rotation matrix to push onto the stack
+	* @param _scaleMatrix The rotation matrix to apply
 	*/
 	void rotate(		glm::mat4 _rotationMatrix);
 
 	/**
 	* currentModelMatrix = currentModelMatrix * _translationMatrix 
 	*
-	* @param _scaleMatrix The translation matrix to push onto the stack
+	* @param _scaleMatrix The translation matrix to apply
 	*/
 	void translate(		glm::mat4 _translationMatrix);
 
 	/**
 	* currentModelMatrix = currentModelMatrix * _modelMatrix 
 	*
-	* @param _scaleMatrix The model matrix to push onto the stack
+	* @param _scaleMatrix The model matrix to apply
 	*/
 	void applyMatrix(	glm::mat4 _modelMatrix);
 };

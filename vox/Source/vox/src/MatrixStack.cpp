@@ -13,13 +13,8 @@ vox::MatrixStack::~MatrixStack(){
 
 void vox::MatrixStack::popMatrix(){
 	if(matrixStack.size() > 0){
-		if(matrixStack.size() > 0){
-			currentModelMatrix = matrixStack.at(matrixStack.size() - 1);
-			matrixStack.pop_back();
-		}else{
-			currentModelMatrix = glm::mat4(1);
-			throw;
-		}
+		currentModelMatrix = matrixStack.at(matrixStack.size() - 1);
+		matrixStack.pop_back();
 	}else{
 		currentModelMatrix = glm::mat4(1);
 		throw;
