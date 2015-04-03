@@ -22,13 +22,10 @@ public:
 	void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) override;
 	void DrawTransform(const b2Transform& xf) override;
 
-	virtual void load() override;
-	virtual void unload() override;
-	
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 private:
 	BaseComponentShader * shader;
-	Sprite * spriteSegment, * spriteTransform, * spriteCircle;
+	Sprite * spriteSegment, * spriteTransform, * spriteCircle, * spritePoly;
 	Scene * scene;
 	Box2DWorld * world;
 };
