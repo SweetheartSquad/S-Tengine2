@@ -54,9 +54,9 @@ GameJamScene::GameJamScene(Game * _game):
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager(-1)),
-	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4)),
-	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4)),
-	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4))
+	backgroundScreen(new CylinderScreen(75, playerCharacter->torso->transform, 4)),
+	midgroundScreen(new CylinderScreen(50, playerCharacter->torso->transform, 4)),
+	foregroundScreen(new CylinderScreen(50, playerCharacter->torso->transform, 4))
 {
 	world->b2world->SetContactListener(&cl);
 	shader->components.push_back(new ShaderComponentTexture(shader));
@@ -327,7 +327,7 @@ void GameJamScene::update(Step * _step){
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
 		playerCharacter->torso->applyLinearImpulseLeft(25);
-		if(playerCharacter->transform->scaleVector.x < 0){
+		if(playerCharacter->transform->getScaleVector().x < 0){
 			playerCharacter->transform->scale(-1, 0, 0);
 		}
 		//playerCharacter->playAnimation = true;
@@ -365,7 +365,7 @@ void GameJamScene::update(Step * _step){
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		playerCharacter->torso->applyLinearImpulseRight(25);
-		if(playerCharacter->transform->scaleVector.x > 0){
+		if(playerCharacter->transform->getScaleVector().x > 0){
 			playerCharacter->transform->scale(-1, 0, 0);
 		}
 		//playerCharacter->setCurrentAnimation("run");

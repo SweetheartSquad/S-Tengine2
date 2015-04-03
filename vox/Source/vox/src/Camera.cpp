@@ -17,7 +17,7 @@ Camera::Camera():
 	fieldOfView(60.0f),
 	pitch(0.0f),
 	yaw(-30.f),
-	NodeAnimatable(),
+	//NodeAnimatable(),
 	nearClip(1.f),
 	farClip(100.f)
 {

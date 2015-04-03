@@ -19,15 +19,16 @@ CharacterComponent::CharacterComponent(float _componentScale, float _width, floa
 }
 
 float CharacterComponent::getCorrectedHeight(){
-	return height*std::abs(transform->scaleVector.y)*scale*2.f;
+	return height*std::abs(transform->getScaleVector().y)*scale*2.f;
 }
 float CharacterComponent::getCorrectedWidth(){
-	return width*std::abs(transform->scaleVector.x)*scale*2.f;
+	return width*std::abs(transform->getScaleVector().x)*scale*2.f;
 }
 
 void CharacterComponent::createFixture(int16 _groupIndex){
 	b2PolygonShape tShape;
-	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f);
+	glm::vec3 sv = transform->getScaleVector();
+	tShape.SetAsBox(width*std::abs(sv.x)*scale*2.f, height*std::abs(sv.y)*scale*2.f);
 
 	b2Fixture * f = body->CreateFixture(&tShape, 1); // physical fixture
 

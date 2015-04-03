@@ -68,7 +68,9 @@ public:
 	WORLD:	Rotates the orientation quaternion by _rotation in world-space (i.e. orientation = orientation * _rotation)
 	*/
 	void rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space);
-
+	
+	void setOrientation(glm::quat _orientation);
+	
 	/**
 	* Resets the translation, orientation, and scale to their defaults
 	*/

@@ -10,7 +10,7 @@
 
 Entity::Entity(Transform * _transform) :
 	NodeTransformable(_transform),
-	NodeAnimatable(),
+	//NodeAnimatable(),
 	NodeHierarchical(),
 	NodeLoadable(),
 	NodeChild(nullptr)
@@ -32,7 +32,6 @@ void Entity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStac
 }
 
 void Entity::update(Step * _step){
-	NodeAnimatable::update(_step);
 	for(unsigned long int i = 0; i < children.size(); ++i){
 		NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(children.at(i));
 		if(nu != nullptr){

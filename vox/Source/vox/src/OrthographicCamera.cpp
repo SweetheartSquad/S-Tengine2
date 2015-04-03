@@ -9,7 +9,7 @@
 OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom, float _top, float _near, float _far):
 	Camera(),
 	NodeTransformable(new Transform),
-	NodeAnimatable(),
+	//NodeAnimatable(),
 	NodeUpdatable(),
 	left(_left),
 	top(_top),

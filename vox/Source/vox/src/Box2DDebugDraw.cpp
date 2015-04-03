@@ -76,7 +76,7 @@ void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, cons
 	sprite->mesh->vertices.clear();
 	sprite->mesh->indices.clear();
 	sprite->setShader(shader, true);
-	sprite->transform->translationVector = glm::vec3(0, 0, 0);
+	sprite->transform->translate(glm::vec3(0, 0, 0), false);
 
 	for (int32 i = 0; i < vertexCount; ++i) {
 		sprite->mesh->pushVert(Vertex(vertices[i].x, vertices[i].y, 0.0001f, color.r, color.g, color.b, 1.f));
@@ -113,8 +113,8 @@ void Box2DDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Co
 
 void Box2DDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color){
 	spriteCircle->mesh->polygonalDrawMode = GL_LINE_STRIP;//GL_POLYGON;
-	spriteCircle->transform->translationVector = glm::vec3(center.x, center.y, 0);
-	spriteCircle->transform->scaleVector = glm::vec3(radius, radius, radius);
+	spriteCircle->transform->translate(glm::vec3(center.x, center.y, 0), false);
+	spriteCircle->transform->scale(glm::vec3(radius, radius, radius), false);
 	spriteCircle->render(scene->matrixStack, scene->renderOptions);
 }
 

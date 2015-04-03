@@ -7,7 +7,7 @@
 ControllableOrthographicCamera::ControllableOrthographicCamera(float left, float right, float bottom, float top, float near, float far):
 	OrthographicCamera(left, right, bottom, top, near, far),
 	NodeTransformable(new Transform()),
-	NodeAnimatable(),
+	//NodeAnimatable(),
 	NodeUpdatable(),
 	target(nullptr),
 	deadZone(2)

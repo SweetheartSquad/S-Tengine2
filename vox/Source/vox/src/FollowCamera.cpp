@@ -9,7 +9,7 @@
 FollowCamera::FollowCamera(float _buffer, glm::vec3 _offset, float _deadZoneX, float _deadZoneY, float _deadZoneZ):
 	PerspectiveCamera(),
 	NodeTransformable(new Transform()),
-	NodeAnimatable(),
+	//NodeAnimatable(),
 	NodeUpdatable(),
 	buffer(_buffer),
 	lastOrientation(1.f, 0.f, 0.f, 0.f),
@@ -25,18 +25,18 @@ FollowCamera::~FollowCamera(){
 }
 
 void FollowCamera::update(Step * _step){
+	
+	lastOrientation = transform->getOrientationQuat();
+	glm::quat newOrientation = glm::quat(1.f, 0.f, 0.f, 0.f);
+	newOrientation = glm::rotate(newOrientation, yaw, upVectorLocal);
+	newOrientation = glm::rotate(newOrientation, pitch, rightVectorLocal);
 
-	lastOrientation = transform->getOrientationQuat;
+	newOrientation = glm::slerp(lastOrientation, newOrientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
+	transform->setOrientation(newOrientation);
 
-	transform->orientation = glm::quat(1.f, 0.f, 0.f, 0.f);
-	transform->orientation = glm::rotate(transform->orientation, yaw, upVectorLocal);
-	transform->orientation = glm::rotate(transform->orientation, pitch, rightVectorLocal);
-
-	transform->orientation = glm::slerp(lastOrientation, transform->getOrientationQuat, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
-
-	forwardVectorRotated   = transform->orientation * forwardVectorLocal;
-	rightVectorRotated	   = transform->orientation * rightVectorLocal;
-	upVectorRotated		   = transform->orientation * upVectorLocal;
+	forwardVectorRotated   = newOrientation * forwardVectorLocal;
+	rightVectorRotated	   = newOrientation * rightVectorLocal;
+	upVectorRotated		   = newOrientation * upVectorLocal;
 	
 	lookAtSpot = glm::vec3(0.f, 0.f, 0.f);
 	float minX = 9999999999.f;

@@ -1,12 +1,12 @@
 #include "CylinderScreen.h"
 
-CylinderScreen::CylinderScreen(float _speed, float * _control, int _numLevels, Texture * _texture, MeshInterface * _mesh, Transform * _transform, Shader * _shader):
+CylinderScreen::CylinderScreen(float _speed, Transform * _control, int _numLevels, Texture * _texture, MeshInterface * _mesh, Transform * _transform, Shader * _shader):
 	MeshEntity(_mesh, _transform, _shader),
 	NodeTransformable(_transform),
 	NodeChild(nullptr),
 	NodeRenderable(),
 	control(_control),
-	prevControlValue(*control),
+	prevControlValue(control->getTranslationVector().x),
 	speed(_speed),
 	numLevels(_numLevels)
 {
@@ -25,7 +25,7 @@ CylinderScreen::CylinderScreen(float _speed, float * _control, int _numLevels, T
 void CylinderScreen::update(Step * _step){
 	MeshEntity::update(_step);
 
-	float dif = *control - prevControlValue;
+	float dif = control->getTranslationVector().x - prevControlValue;
 	float layers = 1.f/numLevels;
 	for(unsigned long int i = 0; i < mesh->getVertCount(); i += 3){
 		float x1 = mesh->vertices.at(i).u+(dif)/speed;//_step->deltaTimeCorrection*-0.0005;//i/(float)3;//;
@@ -68,9 +68,9 @@ void CylinderScreen::update(Step * _step){
 		mesh->setUV(i+2, x3, y3);
 	}
 	mesh->dirty = true;
-	prevControlValue = *control;
+	prevControlValue = control->getTranslationVector().x;
 	
 	glm::vec3 tv = transform->getTranslationVector();
-	tv.x = *control;
+	tv.x = prevControlValue;
 	transform->translate(tv, false);
 }

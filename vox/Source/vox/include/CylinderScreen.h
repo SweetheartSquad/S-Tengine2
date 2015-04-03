@@ -7,12 +7,12 @@ class Step;
 class CylinderScreen : public MeshEntity{
 public:
 	
-	float * control;
+	Transform * control;
 	float prevControlValue;
 	float speed;
 	int numLevels;
 
 	void update(Step * _step);
 
-	CylinderScreen(float _speed, float * _control, int _numLevels = 4, Texture * _texture = nullptr, MeshInterface * _mesh = Resource::loadMeshFromObj("../assets/layer.vox"), Transform * _transform = new Transform(), Shader * _shader = nullptr);
+	CylinderScreen(float _speed, Transform * _control, int _numLevels = 4, Texture * _texture = nullptr, MeshInterface * _mesh = Resource::loadMeshFromObj("../assets/layer.vox"), Transform * _transform = new Transform(), Shader * _shader = nullptr);
 };

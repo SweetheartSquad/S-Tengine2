@@ -48,7 +48,10 @@ void Transform::rotate(glm::quat _rotation, CoordinateSpace _space){
 }
 
 void Transform::rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space){
-	this->rotate(glm::quat(glm::angleAxis(_angle, glm::vec3(_x, _y, _z))), _space);
+	rotate(glm::quat(glm::angleAxis(_angle, glm::vec3(_x, _y, _z))), _space);
+}
+void Transform::setOrientation(glm::quat _orientation){
+	orientation = _orientation;
 }
 
 glm::mat4 Transform::getTranslationMatrix(){

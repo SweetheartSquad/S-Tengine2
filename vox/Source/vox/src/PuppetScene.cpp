@@ -344,7 +344,8 @@ void PuppetScene::update(Step * _step){
 				displayingSplash = true;
 			}
 
-			splashMessage->transform->translate(gameCam->transform->getTranslationVector() - glm::vec3(0,0,-10), false);
+			splashMessage->transform->translate(gameCam->transform->getTranslationVector(), false);
+			splashMessage->transform->translate(glm::vec3(0,0,-10));
 		}else{
 			// Remove previous number from scene
 			// Just copying destroyItem stuff for now
@@ -364,7 +365,8 @@ void PuppetScene::update(Step * _step){
 	}
 
 	for(Sprite * n : countDownNumbers){
-		n->transform->translate(gameCam->transform->getTranslationVector() - glm::vec3(0,0,-10), false);
+		n->transform->translate(gameCam->transform->getTranslationVector(), false);
+		n->transform->translate(glm::vec3(0,0,-10));
 	}
 	
 	// destroy used up items

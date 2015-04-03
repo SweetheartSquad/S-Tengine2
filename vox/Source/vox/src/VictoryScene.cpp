@@ -84,11 +84,13 @@ VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _p
 
 		Box2DSprite * podiumStand = new Box2DSprite(world, b2_staticBody, false);
         podiumStand->mesh->vertices.clear();
-        float r = (players.at(i)->id == 0 || players.at(i)->id == 3) ? 1 : 0;
-        float g = (players.at(i)->id == 0 || players.at(i)->id == 1) ? 1 : 0;
-        float b = (players.at(i)->id == 2) ? 1 : 0;
+        float r = (players.at(i)->id == 0 || players.at(i)->id == 3) ? 1.f : 0.f;
+        float g = (players.at(i)->id == 0 || players.at(i)->id == 1) ? 1.f : 0.f;
+        float b = (players.at(i)->id == 2) ? 1.f : 0.f;
 		for(int j = 0; j < 4; ++j){
-			podiumStand->mesh->pushVert(Vertex(verts[j].x, verts[j].y, 0, r, g, b, 1.f));
+			podiumStand->mesh->pushVert(Vertex(
+				verts[j].x, verts[j].y, 0.f,
+				r, g, b, 1.f));
 		}
 		podiumStand->mesh->polygonalDrawMode = GL_QUADS;
 		podiumStand->mesh->dirty = true;
