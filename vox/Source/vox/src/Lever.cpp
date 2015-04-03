@@ -5,6 +5,8 @@
 #include <Box2DSprite.h>
 #include <Box2DWorld.h>
 #include <RapunzelResourceManager.h>
+#include <Item.h>
+#include <PuppetScene.h>
 
 Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	StructureInteractable(_world, _categoryBits, _maskBits, _groupIndex),
@@ -13,7 +15,7 @@ Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _gr
 	NodeRenderable()
 {
 	componentScale = 0.025f;
-	type = std::rand() % 3;
+	type = -1;
 
 	rootComponent = base = new Box2DSprite(_world, RapunzelResourceManager::leverBase, b2_staticBody, false, nullptr, new Transform(), componentScale);
 	handle = new Box2DSprite(_world, RapunzelResourceManager::leverHandle, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
@@ -80,4 +82,37 @@ void Lever::evaluateState(){
 
 void Lever::actuallyInteract(){
 	std::cout << type << std::endl;
+
+	if(type == 1){
+		Item * projectile = new Item(true, world, categoryBits, maskBits, groupIndex);
+	
+		Box2DSprite ** test = new Box2DSprite*[1];
+		test[0] = projectile->rootComponent = new Box2DSprite(world, RapunzelResourceManager::itemScimitar, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
+
+		projectile->components.push_back(test);
+
+		b2Filter sf;
+		sf.categoryBits = projectile->categoryBits;
+		if(projectile->maskBits != (int16)-1){
+			sf.maskBits = projectile->maskBits;
+		}else{
+			sf.maskBits = 0;
+		}
+		sf.groupIndex = projectile->groupIndex;
+	
+		for(Box2DSprite ** c : projectile->components){
+			(*c)->createFixture(sf);
+			(*c)->body->GetFixtureList()->SetDensity(0.01f);
+			(*c)->body->ResetMassData();
+		}
+
+		projectile->setUserData(projectile);
+		projectile->setUserData(projectile);
+		projectile->rootComponent->applyLinearImpulseRight(100.f);
+
+		static_cast<PuppetScene *>(scene)->addChild(projectile, 1);
+		static_cast<PuppetScene *>(scene)->items.push_back(projectile);
+		//projectile->addToLayeredScene(static_cast<PuppetScene *>(scene), 1);
+		projectile->setShader((Shader *)static_cast<PuppetScene *>(scene)->shader, true);
+	}
 }
