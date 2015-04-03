@@ -30,8 +30,8 @@ BitmapFont::BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _c
 BitmapFont::~BitmapFont(){
 }
 
-void BitmapFont::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	MeshEntity::render(_matrixStack, _renderStack);
+void BitmapFont::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	MeshEntity::render(_matrixStack, _renderOptions);
 }
 
 void BitmapFont::setText(std::string _text){

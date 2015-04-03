@@ -181,7 +181,7 @@ void RaidTheCastle::update(Step* _step){
 	}
 }
 
-void RaidTheCastle::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
+void RaidTheCastle::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	PuppetScene::render(_matrixStack, renderOptions);
 }
 

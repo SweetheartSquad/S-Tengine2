@@ -51,8 +51,8 @@ Boulder::~Boulder(){
 	}
 }
 
-void Boulder::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	Item::render(_matrixStack, _renderStack);
+void Boulder::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	Item::render(_matrixStack, _renderOptions);
 }
 
 void Boulder::update(Step* _step){

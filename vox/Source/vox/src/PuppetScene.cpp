@@ -474,8 +474,8 @@ void PuppetScene::update(Step * _step){
 	}
 }
 
-void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	LayeredScene::render(_matrixStack, _renderStack);
+void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	LayeredScene::render(_matrixStack, _renderOptions);
 }
 
 void PuppetScene::triggerVictoryState(){

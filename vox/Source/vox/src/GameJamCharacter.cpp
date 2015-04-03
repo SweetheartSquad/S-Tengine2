@@ -157,8 +157,8 @@ GameJamCharacter::GameJamCharacter(Box2DWorld * _world, int16 _categoryBits, int
 GameJamCharacter::~GameJamCharacter(){
 }
 
-void GameJamCharacter::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
-	Box2DSuperSprite::render(_matrixStack, _renderStack);
+void GameJamCharacter::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	Box2DSuperSprite::render(_matrixStack, _renderOptions);
 }
 
 void GameJamCharacter::update(Step * _step){

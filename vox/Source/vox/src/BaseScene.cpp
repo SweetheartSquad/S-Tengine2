@@ -184,14 +184,14 @@ void BaseScene::update(Step * _step){
 	}
 }
 
-void BaseScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void BaseScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	//Render the shadows
-	Scene::renderShadows(_matrixStack, _renderStack);
+	Scene::renderShadows(_matrixStack, _renderOptions);
 	frameBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer
 	frameBuffer->bindFrameBuffer();
 	//render the scene to the buffer
-	Scene::render(_matrixStack, _renderStack);
+	Scene::render(_matrixStack, _renderOptions);
 
 	//Render the buffer to the render surface
 	renderSurface->render(frameBuffer->getTextureId());

@@ -22,11 +22,11 @@ Entity::~Entity(void){
 	transform = nullptr;
 }
 
-void Entity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void Entity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	for(unsigned long int i = 0; i < children.size(); i++){
 		NodeRenderable * nr = dynamic_cast<NodeRenderable *>(children.at(i));
 		if(nr != nullptr){
-			nr->render(_matrixStack, _renderStack);	
+			nr->render(_matrixStack, _renderOptions);	
 		}
 	}
 }

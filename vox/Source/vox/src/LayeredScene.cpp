@@ -21,7 +21,7 @@ void LayeredScene::update(Step * _step){
 	Scene::update(_step);
 }
 
-void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	//glfwGetFramebufferSize(glfwGetCurrentContext(), &w, &h);
 	glfwMakeContextCurrent(glfwGetCurrentContext());
 	float ratio;

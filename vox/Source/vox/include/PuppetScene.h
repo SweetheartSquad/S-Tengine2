@@ -82,7 +82,7 @@ public:
 	virtual void load() override;
 	virtual void unload() override;
 	virtual void update(Step * _step) override;
-	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	
 	virtual void triggerVictoryState();
     virtual void complete(std::string _switchTo = "");

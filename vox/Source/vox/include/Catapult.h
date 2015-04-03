@@ -24,7 +24,7 @@ public:
 
 	Catapult(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	
-	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	void unload() override;
 	void load() override;
 	

@@ -118,8 +118,8 @@ void VictoryScene::update(Step * _step){
 	PuppetScene::update(_step);
 }
 
-void VictoryScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
-	PuppetScene::render(_matrixStack, _renderStack);
+void VictoryScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	PuppetScene::render(_matrixStack, _renderOptions);
 }
 
 void VictoryScene::load(){

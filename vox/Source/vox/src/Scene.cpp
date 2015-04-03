@@ -87,7 +87,7 @@ void Scene::unload(){
 }
 
 
-void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	//glfwGetFramebufferSize(glfwGetCurrentContext(), &w, &h);
 	glfwMakeContextCurrent(glfwGetCurrentContext());
 	float ratio;
@@ -138,12 +138,12 @@ void Scene::addChild(Entity* _child){
 	children.push_back(_child);
 }
 
-void Scene::renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void Scene::renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	Shader * backupOverride = renderOptions->overrideShader;
 	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	depthBuffer->bindFrameBuffer();
 	renderOptions->overrideShader = depthShader;
-	Scene::render(_matrixStack, _renderStack);
+	Scene::render(_matrixStack, _renderOptions);
 
 	shadowBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	shadowBuffer->bindFrameBuffer();

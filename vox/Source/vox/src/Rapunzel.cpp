@@ -178,7 +178,7 @@ void Rapunzel::update(Step* _step){
 	}
 }
 
-void Rapunzel::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
+void Rapunzel::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	PuppetScene::render(_matrixStack, renderOptions);
 }
 

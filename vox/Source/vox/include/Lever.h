@@ -15,6 +15,6 @@ public:
 	~Lever();
 	
 	void evaluateState() override;
-	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	void actuallyInteract() override;
 };

@@ -58,8 +58,8 @@ Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _gr
 Lever::~Lever(){
 }
 
-void Lever::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	StructureInteractable::render(_matrixStack, _renderStack);
+void Lever::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	StructureInteractable::render(_matrixStack, _renderOptions);
 }
 
 void Lever::evaluateState(){

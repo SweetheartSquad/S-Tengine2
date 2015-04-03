@@ -434,6 +434,6 @@ void GameJamScene::update(Step * _step){
 	dialogHandler->update(_step);
 }
 
-void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	LayeredScene::render(_matrixStack, _renderStack);
+void GameJamScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	LayeredScene::render(_matrixStack, _renderOptions);
 }

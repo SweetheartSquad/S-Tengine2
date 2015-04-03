@@ -49,11 +49,11 @@ public:
 	/** Calls update on the attached camera */
 	virtual void update(Step * _step) override;
 	/** Tells the RenderSystem to render the attached children to the vox::currentContext using the camera's view-projection matrix */
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
+	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	/** Adds a reference to an entity to the attached list of children */
 	virtual void addChild(Entity * _child);
 
-	virtual void renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack);
+	virtual void renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 
 	float clearColor[4];
 

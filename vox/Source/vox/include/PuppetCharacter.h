@@ -54,7 +54,7 @@ public:
 	explicit PuppetCharacter(PuppetCharacter * _character, Box2DWorld *_world);
 	~PuppetCharacter();
 
-	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	void update(Step* _step) override;
 	void unload() override;
 	void load() override;

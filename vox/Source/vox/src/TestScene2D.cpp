@@ -219,8 +219,8 @@ void TestScene2D::update(Step * _step){
 	
 }
 
-void TestScene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	Scene::render(_matrixStack, _renderStack);
+void TestScene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	Scene::render(_matrixStack, _renderOptions);
 	world->b2world->DrawDebugData();
 }
 

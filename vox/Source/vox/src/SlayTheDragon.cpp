@@ -225,7 +225,7 @@ void SlayTheDragon::update(Step* _step){
     }
 }
 
-void SlayTheDragon::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
+void SlayTheDragon::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	PuppetScene::render(_matrixStack, renderOptions);
 }
 

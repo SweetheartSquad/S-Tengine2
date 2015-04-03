@@ -79,7 +79,7 @@ public:
 	
 	~GameJamCharacter();
 
-	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	void update(Step* _step) override;
 	void attachJoints();
 	void setShader(Shader* _shader, bool _configureDefaultVertexAttributes) override;

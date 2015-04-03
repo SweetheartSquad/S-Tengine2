@@ -81,8 +81,8 @@ Catapult::Catapult(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int
 	world->b2world->CreateJoint(&jth);
 }
 
-void Catapult::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	Structure::render(_matrixStack, _renderStack);
+void Catapult::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	Structure::render(_matrixStack, _renderOptions);
 }
 
 void Catapult::evaluateState(){
