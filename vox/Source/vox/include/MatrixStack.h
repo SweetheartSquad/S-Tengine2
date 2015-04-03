@@ -47,7 +47,9 @@ public:
 	/** Restores the current model matrix to the last stored value and pops it off the stack */
 	void popMatrix();
 	/** Returns the value of the current model matrix */
-	glm::mat4 getCurrentMatrix();
+	glm::mat4 getModelMatrix();
+	glm::mat4 getViewMatrix();
+	glm::mat4 getProjectionMatrix();
 	/** Sets the calue of the current model matrix to the identity matrix */
 	void resetCurrentMatrix();
 	/** Clears the model matrix stack */

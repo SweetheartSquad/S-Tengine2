@@ -31,8 +31,14 @@ void vox::MatrixStack::pushMatrix(){
 	matrixStack.push_back(currentModelMatrix);
 }
 
-glm::mat4 vox::MatrixStack::getCurrentMatrix(){
+glm::mat4 vox::MatrixStack::getModelMatrix(){
 	return currentModelMatrix;
+}
+glm::mat4 vox::MatrixStack::getViewMatrix(){
+	return viewMatrix;
+}
+glm::mat4 vox::MatrixStack::getProjectionMatrix(){
+	return projectionMatrix;
 }
 
 void vox::MatrixStack::setProjectionMatrix(glm::mat4 _projectionMatrix){
