@@ -2,7 +2,7 @@
 #include <string>
 
 // check OpenGL error
-void GLUtils::checkForError(bool _printSuccess = false, std::string _file = "", int _line = 0){
+/*void GLUtils::checkForError(bool _printSuccess = false, std::string _file = "", int _line = 0){
 	GLenum err;
 	std::string errString;
 	while ((err = glGetError()) != GL_NO_ERROR) {
@@ -20,7 +20,7 @@ void GLUtils::checkForError(bool _printSuccess = false, std::string _file = "", 
 			//std::cout << glewGetErrorString(err) << std::endl;
 		}
 	}
-}
+}*/
 
 std::string GLUtils::buildGLArrayReferenceString(std::string _value, unsigned long int _index){
 	std::string r;
@@ -46,6 +46,6 @@ void GLUtils::configureVertexAttributes(GLint _vertexHandle, unsigned long _arit
 		glVertexAttribPointer(_vertexHandle, _arity, GL_FLOAT, GL_FALSE, _stride, BUFFER_OFFSET(_bufferOffset));
 
 		glBindVertexArray(0);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
+		checkForGlError(0,__FILE__,__LINE__);
 	}
 }

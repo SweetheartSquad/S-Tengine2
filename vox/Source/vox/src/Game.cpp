@@ -266,7 +266,7 @@ void Game::toggleFullScreen(){
 	ResourceManager::load();
 	//resourceManager->load();
 
-	GLUtils::checkForError(0,__FILE__,__LINE__);
+	checkForGlError(0,__FILE__,__LINE__);
 }
 
 void Game::setViewport(float _x, float _y, float _w, float _h){

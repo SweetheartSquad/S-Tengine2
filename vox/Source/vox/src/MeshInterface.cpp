@@ -32,7 +32,7 @@ MeshInterface::~MeshInterface(){
 	vaoId = 0;
 	vboId = 0;
 	iboId = 0;
-	GLUtils::checkForError(0,__FILE__,__LINE__);
+	checkForGlError(0,__FILE__,__LINE__);
 }
 
 GLsizei MeshInterface::getStride(){
@@ -68,7 +68,7 @@ void MeshInterface::load(){
 
 		// Disable VAO
 		glBindVertexArray(0);
-		GLUtils::checkForError(true,__FILE__,__LINE__);
+		checkForGlError(0,__FILE__,__LINE__);
 	}
 	
 	NodeLoadable::load();
@@ -97,12 +97,12 @@ void MeshInterface::clean(){
 		// Vertex Buffer Object (VBO)
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * (vertices.size()), vertices.data(), GL_DYNAMIC_DRAW);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
+		checkForGlError(0,__FILE__,__LINE__);
 
 		// Index Buffer Object (IBO)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * (indices.size()), indices.data(), GL_DYNAMIC_DRAW);
-		GLUtils::checkForError(0,__FILE__,__LINE__);
+		checkForGlError(0,__FILE__,__LINE__);
 		dirty = false;
 	}
 }
@@ -114,11 +114,11 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 				if(_renderOption->shader != nullptr){				
 					// Bind VAO
 					glBindVertexArray(vaoId);
-					GLUtils::checkForError(0,__FILE__,__LINE__);
+					checkForGlError(0,__FILE__,__LINE__);
 				
 					glUseProgram(_renderOption->shader->getProgramId());
 
-					GLUtils::checkForError(0,__FILE__,__LINE__);
+					checkForGlError(0,__FILE__,__LINE__);
 
 					_renderOption->shader->clean(_matrixStack, _renderOption, this);
 					
@@ -134,7 +134,7 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 					// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
 					glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
 					//glDrawElements(drawMode, vertices.size(), GL_UNSIGNED_BYTE, 0);
-					GLUtils::checkForError(0,__FILE__,__LINE__);
+					checkForGlError(0,__FILE__,__LINE__);
 
 					// Disable VAO
 					glBindVertexArray(0);

@@ -30,9 +30,9 @@ void Texture::load(){
 		}
 
 		glGenTextures(1, &textureId);
-				GLUtils::checkForError(0,__FILE__,__LINE__);
+				checkForGlError(0,__FILE__,__LINE__);
 		glBindTexture(GL_TEXTURE_2D, textureId);
-				GLUtils::checkForError(0,__FILE__,__LINE__);
+				checkForGlError(0,__FILE__,__LINE__);
 
 		unsigned char * tempData;
 
