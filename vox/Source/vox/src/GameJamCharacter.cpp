@@ -213,8 +213,7 @@ void GameJamCharacter::update(Step * _step){
 			}
 		}
 	}
-	text->transform->translationVector.x = (torso->transform->translationVector.x) - 2.0f;
-	text->transform->translationVector.y = 7;
+	text->transform->translate((torso->transform->getTranslationVector().x) - 2.0f, 7, text->transform->getTranslationVector().z, false);
 }
 
 void GameJamCharacter::attachJoints(){

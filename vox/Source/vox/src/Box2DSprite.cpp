@@ -42,15 +42,16 @@ Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaul
 }
 
 float Box2DSprite::getCorrectedHeight(){
-	return height*std::abs(transform->scaleVector.y)*scale;
+	return height*std::abs(transform->getScaleVector().y)*scale;
 }
 float Box2DSprite::getCorrectedWidth(){
-	return width*std::abs(transform->scaleVector.x)*scale;
+	return width*std::abs(transform->getScaleVector().x)*scale;
 }
 
 b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * _userData){
 	b2PolygonShape tShape;
-	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale, std::abs(height*transform->scaleVector.y)*scale, _offset, 0.0f);
+	glm::vec3 scaleVec = transform->getScaleVector();
+	tShape.SetAsBox(width*std::abs(scaleVec.x)*scale, height*std::abs(scaleVec.y)*scale, _offset, 0.0f);
 
 	b2FixtureDef fd;
 	fd.shape = &tShape;
@@ -99,7 +100,8 @@ b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * 
 // shouldn't this dereference the fixture and just return its shape?
 b2PolygonShape Box2DSprite::getFixtureShape(){
 	b2PolygonShape tShape;
-	tShape.SetAsBox(width*std::abs(transform->scaleVector.x)*scale*2.f, std::abs(height*transform->scaleVector.y)*scale*2.f);
+	glm::vec3 scaleVec = transform->getScaleVector();
+	tShape.SetAsBox(width*std::abs(scaleVec.x)*scale*2.f, height*std::abs(scaleVec.y)*scale*2.f);
 	return tShape;
 }
 

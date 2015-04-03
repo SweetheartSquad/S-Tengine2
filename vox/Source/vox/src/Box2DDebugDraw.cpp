@@ -93,7 +93,7 @@ void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount
 	sprite->mesh->vertices.clear();
 	sprite->mesh->indices.clear();
 	sprite->setShader(shader, true);
-	sprite->transform->translationVector = glm::vec3(0, 0, 0);
+	sprite->transform->translate(glm::vec3(0, 0, 0), false);
 
 	for (int32 i = 0; i < vertexCount; ++i) {
 		sprite->mesh->pushVert(Vertex(vertices[i].x, vertices[i].y, 0.0001f, color.r, color.g, color.b, 1.f));
@@ -106,8 +106,8 @@ void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount
 
 void Box2DDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color){
 	spriteCircle->mesh->polygonalDrawMode = GL_LINE_STRIP;//GL_POLYGON;
-	spriteCircle->transform->translationVector = glm::vec3(center.x, center.y, 0);
-	spriteCircle->transform->scaleVector = glm::vec3(radius, radius, radius);
+	spriteCircle->transform->translate(glm::vec3(center.x, center.y, 0), false);
+	spriteCircle->transform->scale(glm::vec3(radius, radius, radius), false);
 	spriteCircle->render(scene->matrixStack, scene->renderOptions);
 }
 
@@ -120,12 +120,12 @@ void Box2DDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const
 
 void Box2DDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color){
 	spriteSegment->transform->reset();
-	spriteSegment->transform->translationVector = glm::vec3(p1.x, p1.y, 0);
+	spriteSegment->transform->translate(glm::vec3(p1.x, p1.y, 0), false);
 	float x = p2.x - p1.x;
 	float y = p2.y - p1.y;
 	float mag = sqrt(x*x + y*y);
 	spriteSegment->transform->rotate(glm::degrees(atan2(y, x)), 0, 0, 1, kOBJECT);
-	spriteSegment->transform->scaleVector = glm::vec3(mag, mag, mag);
+	spriteSegment->transform->scale(glm::vec3(mag, mag, mag), false);
 	spriteSegment->render(scene->matrixStack, scene->renderOptions);
 }
 

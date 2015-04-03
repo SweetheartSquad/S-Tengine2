@@ -182,21 +182,22 @@ SlayTheDragon::~SlayTheDragon(){
 void SlayTheDragon::update(Step* _step){
 	PuppetScene::update(_step);
 
-	if(playerCharacter1->torso->transform->translationVector.y < 25.0f && gameCam->hasTarget(playerCharacter1->torso)){
+
+	if(playerCharacter1->torso->transform->getTranslationVector().y < 25.0f && gameCam->hasTarget(playerCharacter1->torso)){
 		gameCam->removeTarget(playerCharacter1->torso);
-	}else if(!gameCam->hasTarget(playerCharacter1->torso) && playerCharacter1->torso->transform->translationVector.y > 25.0f){
+	}else if(!gameCam->hasTarget(playerCharacter1->torso) && playerCharacter1->torso->transform->getTranslationVector().y > 25.0f){
 		gameCam->addTarget(playerCharacter1->torso);
 	}
 
-	if(playerCharacter2->torso->transform->translationVector.y < 25.0f && gameCam->hasTarget(playerCharacter2->torso)){
+	if(playerCharacter2->torso->transform->getTranslationVector().y < 25.0f && gameCam->hasTarget(playerCharacter2->torso)){
 		gameCam->removeTarget(playerCharacter2->torso);
-	}else if(!gameCam->hasTarget(playerCharacter2->torso) && playerCharacter2->torso->transform->translationVector.y > 25.0f){
+	}else if(!gameCam->hasTarget(playerCharacter2->torso) && playerCharacter2->torso->transform->getTranslationVector().y > 25.0f){
 		gameCam->addTarget(playerCharacter2->torso);
 	}
 
-	if(playerCharacter3->torso->transform->translationVector.y < 25.0f && gameCam->hasTarget(playerCharacter3->torso)){
+	if(playerCharacter3->torso->transform->getTranslationVector().y < 25.0f && gameCam->hasTarget(playerCharacter3->torso)){
 		gameCam->removeTarget(playerCharacter3->torso);
-	}else if(!gameCam->hasTarget(playerCharacter3->torso) && playerCharacter3->torso->transform->translationVector.y > 25.0f){
+	}else if(!gameCam->hasTarget(playerCharacter3->torso) && playerCharacter3->torso->transform->getTranslationVector().y > 25.0f){
 		gameCam->addTarget(playerCharacter3->torso);
 	}
 

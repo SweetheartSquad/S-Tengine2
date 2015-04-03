@@ -12,7 +12,8 @@ NodeBox2DBody::NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType, bool _de
 	prevAngle(0),
 	world(_world)
 {
-	bodyDef.position.Set(_transform->translationVector.x, _transform->translationVector.y);
+	glm::vec3 tv = _transform->getTranslationVector();
+	bodyDef.position.Set(tv.x, tv.y);
 	bodyDef.type = _bodyType;
 	body = world->b2world->CreateBody(&bodyDef);
 }
@@ -26,8 +27,7 @@ NodeBox2DBody::~NodeBox2DBody(){
 
 void NodeBox2DBody::update(Step * _step){
 	if(body != nullptr){
-		transform->translationVector.x = body->GetPosition().x;	
-		transform->translationVector.y = body->GetPosition().y;	
+		transform->translate(body->GetPosition().x, body->GetPosition().y, transform->getTranslationVector().z, false);
 		float lvx = body->GetLinearVelocity().x;
 		float lvy = body->GetLinearVelocity().y;
 		if(maxVelocity.x != -1 && abs(lvx) > abs(maxVelocity.x)){
@@ -53,14 +53,14 @@ b2Fixture * NodeBox2DBody::getNewFixture(b2ChainShape _shape, float _density){
 }
 
 void NodeBox2DBody::setTranslationPhysical(glm::vec3 _translation, bool _relative){
+	transform->translate(_translation, _relative);
+	glm::vec3 tv = transform->getTranslationVector();
 	if(_relative){
-		transform->translate(_translation);
 		if(body != nullptr){
-			body->SetTransform(b2Vec2(transform->translationVector.x, transform->translationVector.y), body->GetAngle());
+			body->SetTransform(b2Vec2(tv.x, tv.y), body->GetAngle());
 		}
 	}else{
-		transform->translationVector = _translation;
-		bodyDef.position.Set(transform->translationVector.x, transform->translationVector.y);
+		bodyDef.position.Set(tv.x, tv.y);
 		if(body != nullptr){
 			body->SetTransform(b2Vec2(_translation.x, _translation.y), body->GetAngle());
 		}

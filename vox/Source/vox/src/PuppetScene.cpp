@@ -51,6 +51,7 @@
 
 #include <ParticleSystem.h>
 #include <SlayTheDragon.h>
+#include <ItemGold.h>
 
 class SlayTheDragon;
 
@@ -311,6 +312,16 @@ void PuppetScene::update(Step * _step){
 	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
 		camera->transform->translate((camera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
 	}
+	
+
+	if(keyboard->keyDown(GLFW_KEY_G)){
+		Item * g = new ItemGold(world);
+		g->addToLayeredScene(this, 1);
+		g->setShader(shader, true);
+        addChild(g, 1);
+		g->translateComponents(glm::vec3(vox::NumberUtils::randomFloat(0, sceneWidth), vox::NumberUtils::randomFloat(0, sceneHeight), 0));
+	}
+
 
 	Scene::update(_step);
 
@@ -327,16 +338,13 @@ void PuppetScene::update(Step * _step){
 				//float scale = Easing::easeOutBack(splashDuration - currentTime, 0, 10, splashDuration);
 				float easeTime = splashDuration - currentTime;
 				float scale = (easeTime < splashDuration / 2.f) ? Easing::easeOutCubic(easeTime, 0, 10, splashDuration / 2.f) : Easing::easeInElastic(easeTime - splashDuration / 2.f, 10, -10, splashDuration / 2.f);
-				splashMessage->transform->scaleVector = glm::vec3(-scale, scale, 1);
+				splashMessage->transform->scale(glm::vec3(-scale, scale, 1), false);
 			}else{
 				addChild(splashMessage, 2);
 				displayingSplash = true;
 			}
 
-			splashMessage->transform->translationVector.x = gameCam->transform->translationVector.x;
-			splashMessage->transform->translationVector.y = gameCam->transform->translationVector.y;
-			splashMessage->transform->translationVector.z = gameCam->transform->translationVector.z - 10;
-
+			splashMessage->transform->translate(gameCam->transform->getTranslationVector() - glm::vec3(0,0,-10), false);
 		}else{
 			// Remove previous number from scene
 			// Just copying destroyItem stuff for now
@@ -356,9 +364,7 @@ void PuppetScene::update(Step * _step){
 	}
 
 	for(Sprite * n : countDownNumbers){
-		n->transform->translationVector.x = gameCam->transform->translationVector.x;
-		n->transform->translationVector.y = gameCam->transform->translationVector.y;
-		n->transform->translationVector.z = gameCam->transform->translationVector.z - 10;
+		n->transform->translate(gameCam->transform->getTranslationVector() - glm::vec3(0,0,-10), false);
 	}
 	
 	// destroy used up items
@@ -388,10 +394,10 @@ void PuppetScene::update(Step * _step){
 				float displayTime = fmod(currentTime, 1.f);
 				if(displayTime < 0.5f){
 					float scale = Easing::easeOutElastic(displayTime, 0.f, 5.f, 0.5f);
-					countDownNumbers.at(countDown)->transform->scaleVector = glm::vec3(-scale, scale, 1.f);
+					countDownNumbers.at(countDown)->transform->scale(glm::vec3(-scale, scale, 1.f), false);
 				}else{
 					float scale = Easing::easeInCirc(displayTime-0.5f, 5.f, -5.f, 0.5f);
-					countDownNumbers.at(countDown)->transform->scaleVector = glm::vec3(-scale, scale, 1.f);
+					countDownNumbers.at(countDown)->transform->scale(glm::vec3(-scale, scale, 1.f), false);
 				}
 			}
 		}

@@ -25,7 +25,8 @@ void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStac
 			GLuint typeUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), typ.c_str());
 			glUniform1i(typeUniformLocation, static_cast<int>(_renderOption->lights->at(i)->data.type));
 			GLuint positionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), pos.c_str());
-			glUniform3f(positionUniformLocation, _renderOption->lights->at(i)->transform->translationVector.x, _renderOption->lights->at(i)->transform->translationVector.y, _renderOption->lights->at(i)->transform->translationVector.z);
+			glm::vec3 t = _renderOption->lights->at(i)->transform->getTranslationVector();
+			glUniform3f(positionUniformLocation, t.x, t.y, t.z);
 			GLuint intensitiesUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), ins.c_str());
 			glUniform3f(intensitiesUniformLocation, _renderOption->lights->at(i)->data.intensities.x, _renderOption->lights->at(i)->data.intensities.y, _renderOption->lights->at(i)->data.intensities.z);
 			GLuint ambientUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), amb.c_str());

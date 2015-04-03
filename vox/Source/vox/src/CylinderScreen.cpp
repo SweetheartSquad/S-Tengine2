@@ -69,6 +69,8 @@ void CylinderScreen::update(Step * _step){
 	}
 	mesh->dirty = true;
 	prevControlValue = *control;
-
-	transform->translationVector.x = *control;
+	
+	glm::vec3 tv = transform->getTranslationVector();
+	tv.x = *control;
+	transform->translate(tv, false);
 }
