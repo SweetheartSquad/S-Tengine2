@@ -5,7 +5,11 @@
 Transform::Transform():
 	translationVector(0.f, 0.f, 0.f),
 	scaleVector(1.f, 1.f, 1.f),
-	orientation(1.f, 0.f, 0.f, 0.f)
+	orientation(1.f, 0.f, 0.f, 0.f),
+	tDirty(true),
+	sDirty(true),
+	oDirty(true),
+	mDirty(true)
 {
 }
 
@@ -22,6 +26,8 @@ void Transform::scale(glm::vec3 _scale, bool relative){
 	}else{
 		scaleVector = _scale;
 	}
+	sDirty = true;
+	mDirty = true;
 }
 
 void Transform::translate(float _translateX, float _translateY, float _translateZ, bool _relative){
@@ -34,15 +40,17 @@ void Transform::translate(glm::vec3 _translate, bool _relative){
 	}else{
 		translationVector = _translate;
 	}
+	tDirty = true;
+	mDirty = true;
 }
 
 void Transform::rotate(glm::quat _rotation, CoordinateSpace _space){
 	switch(_space){
 	case kWORLD:
-		orientation = _rotation * orientation;
+		setOrientation(_rotation * orientation);
 		break;
 	case kOBJECT:
-		orientation = orientation * _rotation;
+		setOrientation(orientation * _rotation);
 		break;
 	}
 }
@@ -52,28 +60,47 @@ void Transform::rotate(float _angle, float _x, float _y, float _z, CoordinateSpa
 }
 void Transform::setOrientation(glm::quat _orientation){
 	orientation = _orientation;
+	oDirty = true;
+	mDirty = true;
 }
 
 glm::mat4 Transform::getTranslationMatrix(){
-	return glm::translate(translationVector);
+	if(tDirty){
+		tMatrix = glm::translate(translationVector);
+		tDirty = false;
+	}
+	return tMatrix;
 }
 
 glm::mat4 Transform::getScaleMatrix(){
-	return glm::scale(scaleVector);
+	if(sDirty){
+		sMatrix = glm::scale(scaleVector);
+		sDirty = false;
+	}
+	return sMatrix;
 }
 
 glm::mat4 Transform::getOrientationMatrix(){
-	return glm::toMat4(orientation);
+	if(oDirty){
+		oMatrix = glm::toMat4(orientation);
+		oDirty = false;
+	}
+	return oMatrix;
 }
 
+
 glm::mat4 Transform::getModelMatrix(){
-	return getTranslationMatrix() * getOrientationMatrix() * getScaleMatrix();
+	if(mDirty){
+		mMatrix = getTranslationMatrix() * getOrientationMatrix() * getScaleMatrix();
+		mDirty = false;
+	}
+	return mMatrix;
 }
 
 void Transform::reset(){
-	translationVector = glm::vec3(0.f, 0.f, 0.f);
-	scaleVector = glm::vec3(1.f, 1.f, 1.f);
-	orientation = glm::quat(1.f, 0.f, 0.f, 0.f);
+	translate(glm::vec3(0.f, 0.f, 0.f), false);
+	scale(glm::vec3(1.f, 1.f, 1.f), false);
+	setOrientation(glm::quat(1.f, 0.f, 0.f, 0.f));
 }
 
 glm::vec3 Transform::getTranslationVector(){

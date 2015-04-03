@@ -13,7 +13,10 @@ namespace vox{
 ***********************************************/
 
 class MatrixStack{
-
+private:
+	/** Current Model-View-Projection matrix */
+	glm::mat4 mvp;
+	bool mvpDirty;
 public:
 
 	MatrixStack();
@@ -27,6 +30,8 @@ public:
 	glm::mat4 viewMatrix;
 	/**Projection matrix*/ 
 	glm::mat4 projectionMatrix;
+
+	glm::mat4 getMVP();
 
 	/** Pushes the current model matrix onto the stack */
 	void pushMatrix();

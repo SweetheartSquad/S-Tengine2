@@ -2,10 +2,13 @@
 
 #include "MatrixStack.h"
 
-vox::MatrixStack::MatrixStack():
+vox::MatrixStack::MatrixStack() :
 	currentModelMatrix(glm::mat4(1)),
 	projectionMatrix(glm::mat4(1)),
-	viewMatrix(glm::mat4(1)){
+	viewMatrix(glm::mat4(1)),
+	mvp(glm::mat4(1)),
+	mvpDirty(false)
+{
 }
 
 vox::MatrixStack::~MatrixStack(){
@@ -19,6 +22,7 @@ void vox::MatrixStack::popMatrix(){
 		currentModelMatrix = glm::mat4(1);
 		throw;
 	}
+	mvpDirty = true;
 }
 
 void vox::MatrixStack::pushMatrix(){
@@ -31,23 +35,36 @@ glm::mat4 vox::MatrixStack::getCurrentMatrix(){
 
 void vox::MatrixStack::scale(glm::mat4 _scaleMatrix){
 	currentModelMatrix = currentModelMatrix * _scaleMatrix;
+	mvpDirty = true;
 }
 
 void vox::MatrixStack::rotate(glm::mat4 _rotationMatrix){
 	currentModelMatrix = currentModelMatrix * _rotationMatrix;
+	mvpDirty = true;
 }
 
 void vox::MatrixStack::translate(glm::mat4 _translationMatrix){
 	currentModelMatrix = currentModelMatrix * _translationMatrix;
+	mvpDirty = true;
 }
 
 void vox::MatrixStack::applyMatrix(glm::mat4 _modelMatrix){
 	currentModelMatrix = currentModelMatrix * _modelMatrix;
+	mvpDirty = true;
 }
 
 void vox::MatrixStack::resetCurrentMatrix(){
 	currentModelMatrix = glm::mat4(1);
+	mvpDirty = true;
 }
 void vox::MatrixStack::clearMatrixStack(){
 	matrixStack.clear();
+}
+
+glm::mat4 vox::MatrixStack::getMVP(){
+	if(mvpDirty){
+		mvp = projectionMatrix * viewMatrix * currentModelMatrix;
+		mvpDirty = false;
+	}
+	return mvp;
 }

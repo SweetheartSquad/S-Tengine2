@@ -26,6 +26,14 @@ private:
 	/** Orientation */
 	glm::quat orientation;
 	
+	bool tDirty;
+	glm::mat4 tMatrix;
+	bool sDirty;
+	glm::mat4 sMatrix;
+	bool oDirty;
+	glm::mat4 oMatrix;
+	bool mDirty;
+	glm::mat4 mMatrix;
 public:
 	
 	Transform();
@@ -80,6 +88,7 @@ public:
 	* Converts the translation vector to a 4x4 matrix and returns the result 
 	*/
 	glm::mat4 getTranslationMatrix();
+
 	glm::vec3 getTranslationVector();
 	glm::vec3 getScaleVector();
 	glm::quat getOrientationQuat();

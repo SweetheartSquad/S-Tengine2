@@ -27,19 +27,23 @@ NodeBox2DBody::~NodeBox2DBody(){
 
 void NodeBox2DBody::update(Step * _step){
 	if(body != nullptr){
-		transform->translate(body->GetPosition().x, body->GetPosition().y, transform->getTranslationVector().z, false);
-		float lvx = body->GetLinearVelocity().x;
-		float lvy = body->GetLinearVelocity().y;
-		if(maxVelocity.x != -1 && abs(lvx) > abs(maxVelocity.x)){
-			lvx = maxVelocity.x * (lvx < 0 ? -1 : 1);
-		}
-		if(maxVelocity.y != -1 && lvy > maxVelocity.y){
-			lvy = maxVelocity.y * (lvy < 0 ? -1 : 1);
-		}
-		body->SetLinearVelocity(b2Vec2(lvx, lvy));
-		if(abs(body->GetAngle() - prevAngle) > 0.00005f){
-			transform->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
-			prevAngle = body->GetAngle();
+		if(body->IsAwake()){
+			transform->translate(body->GetPosition().x, body->GetPosition().y, transform->getTranslationVector().z, false);
+			
+			b2Vec2 lv = body->GetLinearVelocity();
+			if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
+				lv.x = maxVelocity.x * (lv.x < 0 ? -1 : 1);
+			}
+			if(maxVelocity.y != -1 && lv.y > maxVelocity.y){
+				lv.y = maxVelocity.y * (lv.y < 0 ? -1 : 1);
+			}
+			body->SetLinearVelocity(lv);
+			
+			if(abs(body->GetAngle() - prevAngle) > 0.00005f){
+				transform->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
+				prevAngle = body->GetAngle();
+			}
+
 		}
 	}
 }

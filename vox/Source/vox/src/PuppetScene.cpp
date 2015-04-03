@@ -390,7 +390,7 @@ void PuppetScene::update(Step * _step){
 			complete();
 		}else if (currentTime > duration - countDownNumbers.size()){
 			if(duration - currentTime < countDown){
-				doCountDown();	
+				doCountDown();
 			}
 			if(countDown < countDownNumbers.size()){
 				float displayTime = fmod(currentTime, 1.f);
@@ -411,8 +411,7 @@ void PuppetScene::update(Step * _step){
 		mouseCam = !mouseCam;
 		if (!mouseCam){
 			camera = gameCam;
-		}
-		else{
+		}else{
 			camera = mouseCamera;
 		}
 	}
