@@ -123,8 +123,8 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 
 	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
-	matrixStack->projectionMatrix = camera->getProjectionMatrix();
-	matrixStack->viewMatrix		  = camera->getViewMatrix();
+	matrixStack->setProjectionMatrix(camera->getProjectionMatrix());
+	matrixStack->setViewMatrix(camera->getViewMatrix());
 
 	for(Entity * e : children){
 		e->render(matrixStack, renderOptions);

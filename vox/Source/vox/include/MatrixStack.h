@@ -14,9 +14,20 @@ namespace vox{
 
 class MatrixStack{
 private:
+	/** Current model matrix */
+	glm::mat4 currentModelMatrix;
+
+	/** View Matrix*/
+	glm::mat4 viewMatrix;
+	/**Projection matrix*/ 
+	glm::mat4 projectionMatrix;
+
 	/** Current Model-View-Projection matrix */
 	glm::mat4 mvp;
 	bool mvpDirty;
+	/** Current View-Projection matrix */
+	glm::mat4 vp;
+	bool vpDirty;
 public:
 
 	MatrixStack();
@@ -24,14 +35,12 @@ public:
 
 	/** Model matrix stack (replaces the OpenGL stack) */
 	std::vector<glm::mat4> matrixStack;
-	/** Current model matrix */
-	glm::mat4 currentModelMatrix;
-	/** View Matrix*/
-	glm::mat4 viewMatrix;
-	/**Projection matrix*/ 
-	glm::mat4 projectionMatrix;
-
+	
 	glm::mat4 getMVP();
+	glm::mat4 getVP();
+	
+	void setViewMatrix(glm::mat4 _viewMatrix);
+	void setProjectionMatrix(glm::mat4 _projectionMatrix);
 
 	/** Pushes the current model matrix onto the stack */
 	void pushMatrix();

@@ -120,7 +120,7 @@ void BaseComponentShader::configureUniforms(vox::MatrixStack* _matrixStack, Rend
 	glm::mat4 mvp = _matrixStack->getMVP();
 	GLuint mvpUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(),  GL_UNIFORM_ID_MODEL_VIEW_PROJECTION.c_str());
 	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
-	glm::mat4 model = _matrixStack->currentModelMatrix;
+	glm::mat4 model = _matrixStack->getCurrentMatrix();
 	GLuint modelUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX.c_str());
 	glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
 	GLUtils::checkForError(0,__FILE__,__LINE__);
