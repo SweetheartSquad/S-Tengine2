@@ -29,3 +29,9 @@ Cloud::Cloud(Shader * _shader) :
 		break;
 	}
 }
+
+void Cloud::update(Step * _step){
+	MeshEntity::update(_step);
+
+	transform->translate(sin(_step->time) / (10*transform->getScaleVector().x), 0, 0);
+}

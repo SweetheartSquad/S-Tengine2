@@ -18,6 +18,7 @@ public:
 	bool canJump;
 	bool dead;
 	bool deathPending;
+	bool justTookDamage;
 
 	double actionThrottle;
 	double lastActionTime;
@@ -78,7 +79,6 @@ public:
 
 	BehaviourManager behaviourManager;
 
-	virtual void addToLayeredScene(LayeredScene * _scene, unsigned long int _layer) override;
 	virtual void setShader(Shader * _shader, bool _configureDefaultAttributes) override;
 
 	virtual void translateComponents(glm::vec3 _translationVector) override;

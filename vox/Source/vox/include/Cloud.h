@@ -5,5 +5,8 @@
 class Shader;
 
 class Cloud : public MeshEntity{
-	Cloud(Shader * _shade);
+public:
+	Cloud(Shader * _shader);
+
+	void update(Step * _step) override;
 };

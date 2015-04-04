@@ -52,6 +52,7 @@
 #include <ParticleSystem.h>
 #include <SlayTheDragon.h>
 #include <ItemGold.h>
+#include <Cloud.h>
 
 class SlayTheDragon;
 
@@ -647,30 +648,8 @@ void PuppetScene::populateClouds(){
 	int numClouds = std::rand() % 5 + 2;
 	for(signed long int i = 0; i < numClouds; ++i){
 		float height = vox::NumberUtils::randomFloat(sceneHeight / 4.f, sceneHeight);
-		MeshEntity * cloud = new MeshEntity(MeshFactory::getPlaneMesh());
-		cloud->setShader(shader, true);
+		Cloud * cloud = new Cloud(shader);
 		cloud->transform->translate(vox::NumberUtils::randomFloat(0, sceneWidth), height, max(-9, -(float)(numClouds-i)/numClouds)*8.f - 1.f);
-		
-		float scale = vox::NumberUtils::randomFloat(0.5, 1.5)*10.f;
-		cloud->transform->scale(scale, scale, 1);
-		int tex = i % 4;
-		switch(tex){
-			case 0:
-				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud1); break;
-			case 1:
-				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud2); break;
-			case 2:
-				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud3); break;
-			case 3:
-				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud4); break;
-			default:
-				break;
-		}
 		addChild(cloud, 0);
-		randomGround->setShader(shader, true);
-		if(i == 3){
-			randomGround->setTranslationPhysical(0.0f, 0.0f, max(-9, -(float)(numClouds-i)/numClouds)*8.f - 1.f);
-			addChild(randomGround, 0);
-		}
 	}
 }
