@@ -436,12 +436,13 @@ void PuppetCharacter::die(){
 	action(true);
 	for(Box2DSprite ** c : components){
 		(*c)->body->SetGravityScale(0.0f);
-		b2Filter sf = (*c)->body->GetFixtureList()->GetFilterData();
-		sf.maskBits = 0x000;
-		sf.categoryBits = 0x000;
-		//Do we still need contact listeners for ghosts?
-		(*c)->body->GetFixtureList()->SetFilterData(sf);
-		(*c)->body->GetFixtureList()->SetSensor(true);
+		for (b2Fixture* f = (*c)->body->GetFixtureList(); f != nullptr; f = f->GetNext()){
+			b2Filter sf = f->GetFilterData();
+			if((sf.categoryBits & PuppetGame::kPLAYER) != 0){
+				sf.maskBits = PuppetGame::kBOUNDARY;
+				f->SetFilterData(sf);
+			}
+		}
 	}
 }
 

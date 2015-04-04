@@ -189,7 +189,8 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 		playerFixture = _contact->GetFixtureA();
 		//We pretty much know its a puppet character because of the category bits
 		player = static_cast<PuppetCharacter *>(playerFixture->GetUserData());
-		if(player != nullptr) {
+		if(player != nullptr){
+			//	NodeTransformable * s = reinterpret_cast<NodeTransformable *>(player);
 			if((fB.categoryBits & PuppetGame::kPLAYER) != 0) {
 				player->removeCollision(PuppetGame::kPLAYER);
 			}

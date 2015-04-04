@@ -53,7 +53,6 @@ void RaidTheCastleContactListener::structureItemContact(b2Contact * _contact, b2
 
 	Structure * structure = static_cast<Structure *>( _structureFixture->GetUserData() );
     Item * item = static_cast<Item *>( _itemFixture->GetUserData() );
-
 	Castle * castle = dynamic_cast<Castle *>(structure);
 	if(castle != nullptr){
 		castle->takeDamage(item->damage); // what is going on here?
