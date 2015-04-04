@@ -65,7 +65,6 @@ void MeshInterface::load(){
 		for (Texture * texture : textures){
 			texture->load();
 		}
-
 		// Disable VAO
 		glBindVertexArray(0);
 		checkForGlError(0,__FILE__,__LINE__);
