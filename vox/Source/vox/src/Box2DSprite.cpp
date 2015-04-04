@@ -48,7 +48,7 @@ float Box2DSprite::getCorrectedWidth(){
 	return width*std::abs(transform->getScaleVector().x)*scale;
 }
 
-b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * _userData){
+b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * _userData, bool _isSensor){
 	b2PolygonShape tShape;
 	glm::vec3 scaleVec = transform->getScaleVector();
 	tShape.SetAsBox(width*std::abs(scaleVec.x)*scale, height*std::abs(scaleVec.y)*scale, _offset, 0.0f);
@@ -57,7 +57,7 @@ b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * 
 	fd.shape = &tShape;
 	fd.restitution = 0.f;
 	fd.friction = 0.5f;
-	fd.isSensor = false;
+	fd.isSensor = _isSensor;
 	fd.density = 1.f;
 	fd.userData = _userData;
 	fd.filter = _filter;

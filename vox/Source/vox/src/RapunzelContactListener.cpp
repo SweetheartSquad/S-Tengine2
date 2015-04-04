@@ -6,6 +6,7 @@
 #include "Lever.h"
 #include "PuppetCharacter.h"
 #include <PuppetCharacterRapunzel.h>
+#include <PuppetCharacterGuard.h>
 #include "Box2dWorld.h"
 #include "Item.h"
 #include "Box2DSprite.h"

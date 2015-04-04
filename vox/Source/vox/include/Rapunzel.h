@@ -16,6 +16,9 @@ public:
 
 	MeshEntity * sky;
 	
+	Box2DSprite * castleCatwalk;
+	Box2DSprite * tower;
+
 	Lever * lever1;
 	Lever * lever2;
 	Lever * lever3;
