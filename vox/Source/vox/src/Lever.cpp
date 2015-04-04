@@ -19,7 +19,7 @@ Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _gr
 	NodeChild(nullptr),
 	NodeRenderable()
 {
-	componentScale = 0.025f;
+	componentScale = 0.005f;
 	type = -1;
 
 	rootComponent = base = new Box2DSprite(_world, RapunzelResourceManager::leverBase, b2_staticBody, false, nullptr, new Transform(), componentScale);
@@ -131,7 +131,7 @@ void Lever::actuallyInteract(){
 		g->ai = true;
 		ps->addChild(g, 1);
 		g->setShader(ps->shader, true);
-		g->translateComponents(glm::vec3(100, 20, 0));
+		g->translateComponents(glm::vec3(50, 10, 0));
 	}else{
 		throw "um";
 	}

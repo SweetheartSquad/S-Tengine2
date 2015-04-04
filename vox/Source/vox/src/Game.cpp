@@ -46,7 +46,9 @@ Game::~Game(void){
 void Game::performGameLoop(){
 	glfwPollEvents();
 
-	update();
+	vox::calculateDeltaTimeCorrection();
+
+	update(&vox::step);
 	draw();
 
 	glfwSwapBuffers(vox::currentContext);
@@ -65,8 +67,8 @@ void Game::performGameLoop(){
 	}
 }
 
-void Game::update(void){
-	vox::calculateDeltaTimeCorrection();
+void Game::update(Step * _step){
+
 	if(printFPS){
 		printFps();
 	}
@@ -172,7 +174,7 @@ void Game::update(void){
 	}
 	
 	if(currentScene != nullptr/* && vox::step.deltaTimeCorrection < 5*/){
-		currentScene->update(&vox::step);
+		currentScene->update(_step);
 	}
 }
 

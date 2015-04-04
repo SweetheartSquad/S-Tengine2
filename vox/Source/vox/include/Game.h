@@ -18,8 +18,8 @@
 * in the main render loop in the Main class
 *
 **************************************************************************/
-
-class Game {
+class Step;
+class Game : public NodeUpdatable{
 private:
 	/**
 	* Prints the frames per second which this game class
@@ -57,7 +57,7 @@ public:
 	/** 
 	* Updates the deltaTime correction, prints FPS, checks for ESC, and calls update on the current scene 
 	*/
-	virtual void update(void);
+	virtual void update(Step * _step) override;
 	
 	/** 
 	* Draws the current scene 

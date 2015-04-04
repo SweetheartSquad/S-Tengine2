@@ -17,7 +17,7 @@ public:
 
 	explicit PuppetGame(bool _running);
 	~PuppetGame();
-	void update() override;
+	virtual void update(Step * _step) override;
 	void draw() override;
 	
 	void loadRandomScene();

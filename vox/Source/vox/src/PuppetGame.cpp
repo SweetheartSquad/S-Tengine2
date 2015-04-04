@@ -60,13 +60,13 @@ PuppetGame::PuppetGame(bool _running):
 PuppetGame::~PuppetGame(){
 }
 
-void PuppetGame::update(){
-    arduino->update(&vox::step);
+void PuppetGame::update(Step * _step){
+	arduino->update(_step);
 	for (PuppetController * pc : puppetControllers){
-		pc->update(&vox::step);
+		pc->update(_step);
 	}
 
-	Game::update();
+	Game::update(_step);
 }
 
 void PuppetGame::draw(){

@@ -22,8 +22,8 @@ GameJamGame::GameJamGame(bool _running):
 GameJamGame::~GameJamGame(){
 }
 
-void GameJamGame::update(){
-	Game::update();
+void GameJamGame::update(Step * _step){
+	Game::update(_step);
 }
 
 void GameJamGame::draw(){

@@ -8,6 +8,6 @@ public:
 
 	explicit GameJamGame(bool _running);
 	~GameJamGame();
-	void update() override;
+	void update(Step * _step) override;
 	void draw() override;
 };

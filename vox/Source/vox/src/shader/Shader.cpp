@@ -63,7 +63,7 @@ void Shader::load(){
 		int vl = vertSource.length();
 		memcpy(v, vertSource.c_str(), vl + 1);
 		GLuint vertexShader = compileShader(GL_VERTEX_SHADER, v, vl);
-		checkForGlError(true,__FILE__,__LINE__);
+		checkForGlError(0,__FILE__,__LINE__);
 		delete v;
 
 		//frag
@@ -71,7 +71,7 @@ void Shader::load(){
 		int fl = fragSource.length();
 		memcpy(f, fragSource.c_str(), fl + 1);
 		GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, f, fl);
-		checkForGlError(true,__FILE__,__LINE__);
+		checkForGlError(0,__FILE__,__LINE__);
 		delete f;
 
 		GLuint geometryShader = 0;
@@ -80,21 +80,21 @@ void Shader::load(){
 			int gl = geomSource.length();
 			memcpy(g, geomSource.c_str(), gl + 1);
 			geometryShader = compileShader(GL_GEOMETRY_SHADER, g, gl);
-			checkForGlError(true,__FILE__,__LINE__);
+			checkForGlError(0,__FILE__,__LINE__);
 			delete g;
 		}
 
-		checkForGlError(true,__FILE__,__LINE__);
+		checkForGlError(0,__FILE__,__LINE__);
 		programId = glCreateProgram();
 		glAttachShader(programId, vertexShader);
-		checkForGlError(true,__FILE__,__LINE__);
+		checkForGlError(0,__FILE__,__LINE__);
 		glAttachShader(programId, fragmentShader);
-		checkForGlError(true,__FILE__,__LINE__);
+		checkForGlError(0,__FILE__,__LINE__);
 		if (hasGeometryShader){
 			glAttachShader(programId, geometryShader);
 		}
 		glLinkProgram(programId);
-		checkForGlError(true,__FILE__,__LINE__);
+		checkForGlError(0,__FILE__,__LINE__);
 
 		// Check for error with glLinkProgram
 		GLint isLinked = 0;
@@ -116,7 +116,7 @@ void Shader::load(){
 			}
 			// Exit with failure.
 		}
-		checkForGlError(true,__FILE__,__LINE__);
+		checkForGlError(0,__FILE__,__LINE__);
 
 		// Once the program is created, we don't need the actual shaders, so detach and delete them
 		glDetachShader(programId, vertexShader);
@@ -126,7 +126,7 @@ void Shader::load(){
 		if (hasGeometryShader){
 			glDeleteShader(geometryShader);
 		}
-		checkForGlError(true,__FILE__,__LINE__);
+		checkForGlError(0,__FILE__,__LINE__);
 
 		// What happens if these aren't in the shader?
 		aVertexPosition		= glGetAttribLocation(programId, GL_ATTRIBUTE_ID_VERTEX_POSITION.c_str());
@@ -154,17 +154,17 @@ void Shader::unload(){
 }
 
 GLuint Shader::compileShader(GLenum _shaderType, char const* _source, int _length){
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(0,__FILE__,__LINE__);
 	GLuint shaderId = glCreateShader(_shaderType);
 	glShaderSource(shaderId, 1, &_source, &_length);
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(0,__FILE__,__LINE__);
 	glCompileShader(shaderId);
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(0,__FILE__,__LINE__);
 
 	GLint status = 0;
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(0,__FILE__,__LINE__);
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &status);
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(0,__FILE__,__LINE__);
 	if(status == GL_FALSE){
 		std::cout << "\tERROR: Shader could not be compiled." << std::endl << std::endl << _source << std::endl << std::endl;
 		GLint maxLength = 0;
@@ -186,7 +186,7 @@ GLuint Shader::compileShader(GLenum _shaderType, char const* _source, int _lengt
 	}else{
 		//std::cout << "Shader compiled succesfully." << std::endl << std::endl << _source << std::endl << std::endl;
 	}
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(0,__FILE__,__LINE__);
 	
 	isCompiled = true;
 	return shaderId;

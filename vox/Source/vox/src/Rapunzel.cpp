@@ -50,8 +50,8 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter3(new PuppetCharacterThief(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
 	playerCharacter4(new PuppetCharacterRapunzel(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
-	cl = new RapunzelContactListener(this);
 	populateBackground();
+	cl = new RapunzelContactListener(this);
 
 	Sprite * towerBg = new Sprite();
 	addChild(towerBg, 0);

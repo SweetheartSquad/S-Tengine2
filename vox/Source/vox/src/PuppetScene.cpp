@@ -600,7 +600,7 @@ void PuppetScene::populateBackground(){
 	ground->transform->scale(1000, 100, 100);
 	ground->transform->translate(50.f/2.f, 0, -15.f/2.f);
 	ground->mesh->uvEdgeMode = GL_REPEAT;
-	ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
+	//ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
 	for(Vertex & v : ground->mesh->vertices){
 		v.u *= 10;
 		v.v *= 100;
