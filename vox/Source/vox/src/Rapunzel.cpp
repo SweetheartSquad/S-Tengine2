@@ -35,6 +35,7 @@
 #include <Lever.h>
 #include <ItemGold.h>
 #include <NumberUtils.h>
+#include <StructureBoxingGlove.h>
 
 #include <glfw\glfw3.h>
 #include <SoundManager.h>
@@ -108,8 +109,8 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
 	playerCharacter4->ai = true;
 
-	guard->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50, 0, 0), glm::vec3(100, 0, 0), playerCharacter4, 10));
-	guard->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
+	guard->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50, 0, 0), glm::vec3(100, 0, 0), guard, 10));
+	guard->behaviourManager.addBehaviour(new BehaviourAttack(guard, 3, PuppetGame::kPLAYER));
 	guard->ai = true;
 
 	for(PuppetCharacter * p : players){
@@ -154,6 +155,12 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	lever3->setShader(shader, true);
 	lever3->translateComponents(glm::vec3(15.f, 2.f, 0));
 	lever3->type = 3;
+
+	glove = new StructureBoxingGlove(world);
+	glove->translateComponents(glm::vec3(50.f, 25.f, 0.f));
+	addChild(glove, 1);
+	glove->setShader(shader, true);
+	glove->addToLayeredScene(this, 1);
 
 	playRandomBackgroundMusic();
 }

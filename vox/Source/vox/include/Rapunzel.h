@@ -9,6 +9,7 @@ class Lever;
 class PuppetCharacterGuard;
 class PuppetCharacterThief;
 class PuppetCharacterRapunzel;
+class StructureBoxingGlove;
 
 class Rapunzel : public PuppetScene{
 public:
@@ -24,6 +25,8 @@ public:
 	PuppetCharacterThief * playerCharacter2;
 	PuppetCharacterThief * playerCharacter3;
 	PuppetCharacterRapunzel * playerCharacter4;
+
+	StructureBoxingGlove * glove;
 
 	explicit Rapunzel(PuppetGame * _game);
 	~Rapunzel();

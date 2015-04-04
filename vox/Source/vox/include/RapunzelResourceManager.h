@@ -13,6 +13,9 @@ public:
 	
 	static Texture * goldSpriteSheet;
 	static TextureSampler * goldBrick;
+	
+	static TextureSampler * glove;
+	static TextureSampler * spring;
 
 	static TextureSampler * leverHandle;
 	static TextureSampler * leverBase;
@@ -28,6 +31,7 @@ public:
 	static TextureSampler * rapunzelArm;
 	static TextureSampler * rapunzelHelmet;
 	
+	static TextureSampler * itemSpear;
 	static TextureSampler * itemAxe;
 	static TextureSampler * itemClub;
 	static TextureSampler * itemMace;
