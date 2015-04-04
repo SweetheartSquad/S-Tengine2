@@ -8,6 +8,8 @@ TextureSampler * RapunzelResourceManager::splashMessage	= new TextureSampler(new
 Texture * RapunzelResourceManager::goldSpriteSheet    = new Texture("../assets/hurly-burly/Gold/GoldSpritesheet.png", 1024, 1024, true, true);
 
 TextureSampler * RapunzelResourceManager::goldBrick   = new TextureSampler("../assets/hurly-burly/Gold/", "goldBrick.png.def");
+TextureSampler * RapunzelResourceManager::glove   = new TextureSampler("../assets/hurly-burly/RapCastleAssets/", "RapCastleGlove.png.def");
+TextureSampler * RapunzelResourceManager::spring   = new TextureSampler("../assets/hurly-burly/RapCastleAssets/", "RapCastleSpring.png.def");
 
 TextureSampler * RapunzelResourceManager::leverHandle   = new TextureSampler(new Texture("../assets/hurly-burly/Lever/LeverHandle.png", 512, 512, true, true), 32, 101);
 TextureSampler * RapunzelResourceManager::leverBase  = new TextureSampler(new Texture("../assets/hurly-burly/Lever/LeverBase.png", 512, 512, true, true), 104, 23);
@@ -22,6 +24,7 @@ TextureSampler * RapunzelResourceManager::rapunzelTorso	    = new TextureSampler
 TextureSampler * RapunzelResourceManager::rapunzelArm	    = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelArm.png.def");
 TextureSampler * RapunzelResourceManager::rapunzelHelmet    = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelHat.png.def");
 
+TextureSampler * RapunzelResourceManager::itemSpear	= new TextureSampler("../assets/hurly-burly/WeaponAssets/", "Arrow.png.def");
 TextureSampler * RapunzelResourceManager::itemAxe	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Axe.png", 1024, 1024, true, true), 230, 395);
 TextureSampler * RapunzelResourceManager::itemClub	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Club.png", 1024, 1024, true, true), 83, 515);
 TextureSampler * RapunzelResourceManager::itemMace	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Mace.png", 1024, 1024, true, true), 178, 516);
@@ -37,6 +40,8 @@ void RapunzelResourceManager::init(){
 	resources.push_back(hair);
 	resources.push_back(goldSpriteSheet);
 	resources.push_back(goldBrick);
+	resources.push_back(glove);
+	resources.push_back(spring);
 
 	resources.push_back(thiefTorso);
 	resources.push_back(thiefArm);
@@ -46,6 +51,7 @@ void RapunzelResourceManager::init(){
 	resources.push_back(rapunzelArm);
 	resources.push_back(rapunzelHelmet);
 	
+	resources.push_back(itemSpear);
 	resources.push_back(itemAxe);
 	resources.push_back(itemClub);
 	resources.push_back(itemMace);
