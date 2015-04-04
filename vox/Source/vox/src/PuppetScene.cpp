@@ -85,7 +85,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->components.push_back(new ShaderComponentHsv(shader, 0.f, 1.25f, 1.4f));
 	shader->components.push_back(new ShaderComponentTint(shader, 0.f, 0.f, 0.f));
-	//shader->components.push_back(new ShaderComponentAlpha(shader, 0.5f));
+	shader->components.push_back(new ShaderComponentAlpha(shader, 1.f));
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	
