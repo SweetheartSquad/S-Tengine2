@@ -111,17 +111,24 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 	if(glIsVertexArray(vaoId) == GL_TRUE){
 		if(glIsBuffer(vboId) == GL_TRUE){
 			if(glIsBuffer(iboId) == GL_TRUE){
-				if(_renderOption->shader != nullptr){				
-					// Bind VAO
-					glBindVertexArray(vaoId);
-					checkForGlError(0,__FILE__,__LINE__);
-				
-					glUseProgram(_renderOption->shader->getProgramId());
 
-					checkForGlError(0,__FILE__,__LINE__);
+				if(_renderOption->shader != nullptr){		
+					if(_renderOption->currentVao != vaoId){
+						_renderOption->currentVao = vaoId;	
+						// Bind VAO
+						glBindVertexArray(vaoId);
+						checkForGlError(0,__FILE__, __LINE__);
+					}
 
-					_renderOption->shader->clean(_matrixStack, _renderOption, this);
-					
+					//This should help performance but there's a bit of a problem with it at the moment so I'll comment it out
+					//if(_renderOption->shader->getProgramId() != _renderOption->currentlyBoundShaderId) {
+						_renderOption->currentlyBoundShaderId = _renderOption->shader->getProgramId();
+						glUseProgram(_renderOption->shader->getProgramId());
+						checkForGlError(0,__FILE__,__LINE__);
+					//}
+
+					_renderOption->shader->clean(_matrixStack, _renderOption, this);	
+
 					//Alpha blending
 					// Should these be here or only once in the main render loop?
 					glEnable (GL_BLEND);
@@ -131,13 +138,16 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, uvEdgeMode);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, uvEdgeMode);
 
+					//}
+
 					// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
 					glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
+					//glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
 					//glDrawElements(drawMode, vertices.size(), GL_UNSIGNED_BYTE, 0);
 					checkForGlError(0,__FILE__,__LINE__);
 
 					// Disable VAO
-					glBindVertexArray(0);
+					//glBindVertexArray(0);
 				}else{
 					std::cout << "no shader" << std::endl << std::endl;	
 				}
@@ -166,12 +176,29 @@ void MeshInterface::pushVert(Vertex _vertex){
 	dirty = true;
 }
 
+void MeshInterface::popTexture2D(){
+	textures.pop_back();
+}
+
+void MeshInterface::removeTextureAt(int _idx){
+	textures.erase(textures.begin() + _idx);
+}
+
 void MeshInterface::pushTexture2D(Texture* _texture){
 	++_texture->referenceCount;
 	textures.push_back(_texture);
+	texturesDirty = true;
 }
 
-void MeshInterface::pushMaterial(Material* _material){
+int MeshInterface::textureCount(){
+	return textures.size();
+}
+ 
+Texture * MeshInterface::getTexture(int _idx){
+	return textures.at(_idx);
+}
+
+void MeshInterface::pushMaterial(Material * _material){
 	++_material->referenceCount;
 	materials.push_back(_material);
 }

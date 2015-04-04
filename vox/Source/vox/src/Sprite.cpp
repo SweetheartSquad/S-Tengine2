@@ -50,8 +50,9 @@ void Sprite::setCurrentAnimation(std::string _name){
 }
 
 void Sprite::pushTextureSampler(TextureSampler* _sampler){
-	vox::Rectangle rect(0, 0, _sampler->width * std::abs(transform->scaleVector.x) * 0.025f, 
-		std::abs(_sampler->height*transform->scaleVector.y) * 0.025f);
+	glm::vec3 sv = transform->getScaleVector();
+	vox::Rectangle rect(0, 0, _sampler->width * std::abs(sv.x) * 0.025f, 
+		_sampler->height * std::abs(sv.y) * 0.025f);
 	
 	mesh->pushTexture2D(_sampler->texture);
 
@@ -69,7 +70,7 @@ void Sprite::pushTextureSampler(TextureSampler* _sampler){
 	mesh->vertices.at(3).x = v4.x;
 	mesh->vertices.at(3).y = v4.y;
 	
-	float mag = std::max(mesh->textures.at(mesh->textures.size() - 1)->width, mesh->textures.at(mesh->textures.size() - 1)->height);
+	float mag = std::max(mesh->getTexture(mesh->textureCount() - 1)->width, mesh->getTexture(mesh->textureCount() - 1)->height);
 	mesh->vertices.at(3).u = 0;
 	mesh->vertices.at(3).v = 0;
 	mesh->vertices.at(2).u = _sampler->width/mag;

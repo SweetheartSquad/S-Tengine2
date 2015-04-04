@@ -37,8 +37,10 @@ std::string BaseComponentShader::buildVertexShader(){
                                 "in vec4 aVertexColor" + SEMI_ENDL +
                                 "in vec3 aVertexNormals" + SEMI_ENDL +
                                 "in vec2 aVertexUVs" + SEMI_ENDL +
-
-								"uniform mat4 MVP" + SEMI_ENDL +
+								
+								"uniform mat4 " + GL_UNIFORM_ID_MODEL_MATRIX + SEMI_ENDL +
+								"uniform mat4 " + GL_UNIFORM_ID_VIEW_MATRIX + SEMI_ENDL +
+								"uniform mat4 " + GL_UNIFORM_ID_PROJECTION_MATRIX + SEMI_ENDL +
 								
 								"out vec3 fragVert" + modGeo + SEMI_ENDL +
 								"out vec3 fragNormal" + modGeo + SEMI_ENDL +
@@ -54,11 +56,13 @@ std::string BaseComponentShader::buildVertexShader(){
 	}
 
 	shaderString += "void main(){\n"
-						"fragVert" + modGeo + "= aVertexPosition;\n"
-						"fragNormal" + modGeo + " = aVertexNormals;\n"
-						"fragColor" + modGeo + "= aVertexColor;\n"
-						"fragUV" + modGeo + " = aVertexUVs;\n"
-						"gl_Position = MVP * vec4(aVertexPosition, 1.0);\n";
+						"fragVert" + modGeo + "= aVertexPosition" + SEMI_ENDL +
+						"fragNormal" + modGeo + " = aVertexNormals" + SEMI_ENDL +
+						"fragColor" + modGeo + "= aVertexColor" + SEMI_ENDL +
+						"fragUV" + modGeo + " = aVertexUVs" + SEMI_ENDL +
+						//"mat4 MVP = " + GL_UNIFORM_ID_MODEL_MATRIX +" * " + GL_UNIFORM_ID_VIEW_MATRIX + " * " + GL_UNIFORM_ID_PROJECTION_MATRIX + SEMI_ENDL +
+						"mat4 MVP = " + GL_UNIFORM_ID_PROJECTION_MATRIX +" * " + GL_UNIFORM_ID_VIEW_MATRIX + " * " + GL_UNIFORM_ID_MODEL_MATRIX + SEMI_ENDL +
+						"gl_Position = MVP * vec4(aVertexPosition, 1.0)" + SEMI_ENDL;
 
 	for(unsigned long int i = 0; i < components.size(); i++){
 		shaderString += components.at(i)->getVertexBodyString();
@@ -75,14 +79,14 @@ std::string BaseComponentShader::buildVertexShader(){
 std::string BaseComponentShader::buildFragmentShader(){
 	std::string shaderString  = "#version 150\n"
 
-								"in vec3 fragVert;\n"
-								"in vec3 fragNormal;\n"
-								"in vec4 fragColor;\n"
-								"in vec2 fragUV;\n"
+								"in vec3 fragVert" + SEMI_ENDL +
+								"in vec3 fragNormal" + SEMI_ENDL +
+								"in vec4 fragColor" + SEMI_ENDL +
+								"in vec2 fragUV" + SEMI_ENDL +
 								
-								"out vec4 outColor;\n"
+								"out vec4 outColor" + SEMI_ENDL +
 								
-								"uniform mat4 model;\n";
+								"uniform mat4 " + GL_UNIFORM_ID_MODEL_MATRIX + SEMI_ENDL;
 
 	for(unsigned long int i = 0; i < components.size(); i++){
 		shaderString += components.at(i)->getFragmentVariablesString();
@@ -117,12 +121,21 @@ void BaseComponentShader::compileShader(){
 }
 
 void BaseComponentShader::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
-	glm::mat4 mvp = _matrixStack->projectionMatrix * _matrixStack->viewMatrix * _matrixStack->currentModelMatrix;
-	GLuint mvpUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(),  GL_UNIFORM_ID_MODEL_VIEW_PROJECTION.c_str());
-	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
-	glm::mat4 model = _matrixStack->currentModelMatrix;
+	//glm::mat4 mvp = _matrixStack->getMVP();
+	//GLuint mvpUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(),  GL_UNIFORM_ID_MODEL_VIEW_PROJECTION.c_str());
+	//glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
+	glm::mat4 model = _matrixStack->getModelMatrix();
 	GLuint modelUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX.c_str());
 	glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);
+	
+	glm::mat4 view = _matrixStack->getViewMatrix();
+	GLuint viewUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_VIEW_MATRIX.c_str());
+	glUniformMatrix4fv(viewUniformLocation, 1, GL_FALSE, &view[0][0]);
+	
+	glm::mat4 projection = _matrixStack->getProjectionMatrix();
+	GLuint projectionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_PROJECTION_MATRIX.c_str());
+	glUniformMatrix4fv(projectionUniformLocation, 1, GL_FALSE, &projection[0][0]);
+	
 	checkForGlError(0,__FILE__,__LINE__);
 }
 

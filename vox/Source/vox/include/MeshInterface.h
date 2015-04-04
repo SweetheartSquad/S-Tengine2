@@ -25,16 +25,13 @@ class MeshInterface : public virtual NodeRenderable, public virtual NodeLoadable
 public:
 	/** Whether the vbo and ibo contain up-to-date vertex and index data */
 	bool dirty;
+	bool texturesDirty;
 	/** Vertex data for the vbo */
 	std::vector<Vertex> vertices;
 	/** Index data for the ibo */
 	std::vector<GLuint> indices;
-	/** Textures */
-	std::vector<Texture *> textures;
 	/** Materials */
 	std::vector<Material *> materials;
-
-public:
 	/**
 	GL_REPEAT
 	GL_MIRRORED_REPEAT
@@ -99,7 +96,15 @@ public:
 	/** Adds _vertex to the list of vertices*/
 	void pushVert(Vertex _vertex);
 	void pushTexture2D(Texture * _texture);
+	void popTexture2D();
+	void removeTextureAt(int _idx);
 	void pushMaterial(Material * _material);
+	int textureCount();
+	Texture * getTexture(int _idx);
+
+private:
+	/** Textures */
+	std::vector<Texture *> textures;
 };
 
 /** MeshInterface preset for triangle meshes */

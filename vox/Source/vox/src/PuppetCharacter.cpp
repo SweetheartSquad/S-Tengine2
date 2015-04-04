@@ -91,7 +91,7 @@ void PuppetCharacter::init(){
 	}
 
 	head = new Box2DSprite(world, texPack->headTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
-	face = new Box2DSprite(world, texPack->faceTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale*0.5);
+	face = new Box2DSprite(world, texPack->faceTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale*0.5f);
 	handLeft = new Box2DSprite(world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 	handRight = new Box2DSprite(world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 
@@ -322,7 +322,7 @@ void PuppetCharacter::update(Step* _step){
 			pickupItem(itemToPickup);
 		}
 	}else{
-		rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, ghostPosition, rootComponent->transform->translationVector.z);
+		rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, ghostPosition, rootComponent->transform->getTranslationVector().z);
 		rootComponent->body->ApplyForce(b2Vec2(-bodAngle * 50.0f, 0), rootComponent->body->GetWorldCenter(), true);
 	}
 	behaviourManager.update(_step);
@@ -417,7 +417,9 @@ void PuppetCharacter::die(){
 	for(Box2DSprite ** c : components) {
 		(*c)->body->SetGravityScale(0.0f);
 	}
-	rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, ghostPosition, rootComponent->transform->translationVector.z);
+	glm::vec3 tv = rootComponent->transform->getTranslationVector();
+	tv.y = ghostPosition;
+	rootComponent->setTranslationPhysical(tv);
 }
 
 void PuppetCharacter::takeDamage(float _damage){

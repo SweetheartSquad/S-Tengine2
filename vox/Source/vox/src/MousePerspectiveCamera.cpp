@@ -6,15 +6,15 @@
 MousePerspectiveCamera::MousePerspectiveCamera():
 	PerspectiveCamera(),
 	NodeTransformable(new Transform()),
-	NodeAnimatable(),
+	//NodeAnimatable(),
 	NodeUpdatable(),
 	mouse(&Mouse::getInstance()),
 	speed(0.1f),
 	mouseSpeed(0.05f)
 {
 	Dimension screenDimensions = vox::getScreenDimensions();
-	lastMouseY   = screenDimensions.height/2;
-	lastMouseX	= screenDimensions.width/2;
+	lastMouseY = screenDimensions.height/2;
+	lastMouseX = screenDimensions.width/2;
 }
 
 MousePerspectiveCamera::~MousePerspectiveCamera(){

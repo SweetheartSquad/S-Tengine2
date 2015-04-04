@@ -21,14 +21,11 @@ public:
 	void DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color) override;
 	void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) override;
 	void DrawTransform(const b2Transform& xf) override;
+	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
 
-	virtual void load() override;
-	virtual void unload() override;
-	
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 private:
 	BaseComponentShader * shader;
-	Sprite * spriteSegment, * spriteTransform, * spriteCircle;
+	Sprite * spriteSegment, * spriteTransform, * spriteCircle, * spritePoly;
 	Scene * scene;
 	Box2DWorld * world;
 };

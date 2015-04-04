@@ -1,6 +1,7 @@
 #pragma once 
 
 #include <vector>
+#include <glew\glew.h>
 
 class Shader;
 class Light;
@@ -14,6 +15,9 @@ public:
 
 	std::vector<Light*> * lights;
 	
+	GLuint currentVao;
+	GLuint currentlyBoundShaderId;
+
 	Shader * shader;
 	Shader * overrideShader;
 

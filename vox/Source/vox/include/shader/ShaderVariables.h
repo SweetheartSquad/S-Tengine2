@@ -51,7 +51,9 @@ const std::string VAR_INT							  = "int ";
 //Uniform variable names
 const std::string GL_UNIFORM_ID_TEXTURE_SAMPLER       = "textureSampler";
 const std::string GL_UNIFORM_ID_NUM_TEXTURES 		  = "numTextures";
-const std::string GL_UNIFORM_ID_MODEL_MATRIX		  =	"model";
+const std::string GL_UNIFORM_ID_MODEL_MATRIX		  =	"modelMat";
+const std::string GL_UNIFORM_ID_VIEW_MATRIX			  =	"viewMat";
+const std::string GL_UNIFORM_ID_PROJECTION_MATRIX     =	"projectionMat";
 const std::string GL_UNIFORM_ID_MODEL_VIEW_PROJECTION = "MVP";
 const std::string GL_UNIFORM_ID_NUM_LIGHTS			  = "numLights";
 const std::string GL_UNIFORM_ID_LIGHTS_POSITION		  = "lights[].position";

@@ -39,7 +39,7 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	}
 	setUserData(this);
 	
-	rootComponent->mesh->textures.pop_back();
+	rootComponent->mesh->popTexture2D();
 	SpriteSheetAnimation * spriteSheet = new SpriteSheetAnimation(baseSpriteSheetTex, 0);
 
 	// sprite sheet animation

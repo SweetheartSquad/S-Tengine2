@@ -8,7 +8,7 @@
 PerspectiveCamera::PerspectiveCamera():
 	Camera(),
 	NodeTransformable(new Transform()),
-	NodeAnimatable(),
+	//NodeAnimatable(),
 	NodeUpdatable(),
 	lastOrientation(1.f, 0.f, 0.f, 0.f)
 {
@@ -18,25 +18,26 @@ PerspectiveCamera::~PerspectiveCamera(){
 }
 
 void PerspectiveCamera::update(Step * _step){
+	lastOrientation = transform->getOrientationQuat();
+	glm::quat newOrientation = glm::quat(1.f, 0.f, 0.f, 0.f);
+	newOrientation = glm::rotate(newOrientation, yaw, upVectorLocal);
+	newOrientation = glm::rotate(newOrientation, pitch, rightVectorLocal);
+	
+	glm::rotate(transform->getOrientationQuat(), pitch, rightVectorLocal);
 
-	lastOrientation = transform->orientation;
+	newOrientation = glm::slerp(lastOrientation, newOrientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
+	transform->setOrientation(newOrientation);
 
-	transform->orientation = glm::quat(1.f, 0.f, 0.f, 0.f);
-	transform->orientation = glm::rotate(transform->orientation, yaw, upVectorLocal);
-	transform->orientation = glm::rotate(transform->orientation, pitch, rightVectorLocal);
+	forwardVectorRotated   = newOrientation * forwardVectorLocal;
+	rightVectorRotated	   = newOrientation * rightVectorLocal;
+	upVectorRotated		   = newOrientation * upVectorLocal;
 
-	transform->orientation = glm::slerp(lastOrientation, transform->orientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
-
-	forwardVectorRotated   = transform->orientation * forwardVectorLocal;
-	rightVectorRotated	   = transform->orientation * rightVectorLocal;
-	upVectorRotated		   = transform->orientation * upVectorLocal;
-
-	lookAtSpot = transform->translationVector+forwardVectorRotated;
+	lookAtSpot = transform->getTranslationVector()+forwardVectorRotated;
 }
 
 glm::mat4 PerspectiveCamera::getViewMatrix(){
 	return glm::lookAt(
-		transform->translationVector,	// Camera is here
+		transform->getTranslationVector(),	// Camera is here
 		lookAtSpot,						// and looks here : at the same position, plus "direction"
 		upVectorRotated					// Head is up (set to 0,-1,0 to look upside-down)
 		);

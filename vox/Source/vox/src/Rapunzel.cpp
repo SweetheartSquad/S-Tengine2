@@ -168,14 +168,6 @@ void Rapunzel::update(Step* _step){
 		PuppetResourceManager::splashSounds->play("Rapunzel");
 		splashSoundPlayed = true;
 	}
-
-	if(keyboard->keyDown(GLFW_KEY_G)){
-		ItemGold * g = new ItemGold(world);
-		g->addToLayeredScene(this, 1);
-		g->setShader(shader, true);
-        addChild(g, 1);
-		g->translateComponents(glm::vec3(vox::NumberUtils::randomFloat(0, sceneWidth), vox::NumberUtils::randomFloat(0, sceneHeight), 0));
-	}
 }
 
 void Rapunzel::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){

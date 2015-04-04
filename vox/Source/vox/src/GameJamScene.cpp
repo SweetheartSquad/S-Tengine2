@@ -54,9 +54,9 @@ GameJamScene::GameJamScene(Game * _game):
 	ground(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody)),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager(-1)),
-	backgroundScreen(new CylinderScreen(75, &playerCharacter->torso->transform->translationVector.x, 4)),
-	midgroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4)),
-	foregroundScreen(new CylinderScreen(50, &playerCharacter->torso->transform->translationVector.x, 4))
+	backgroundScreen(new CylinderScreen(75, playerCharacter->torso->transform, 4)),
+	midgroundScreen(new CylinderScreen(50, playerCharacter->torso->transform, 4)),
+	foregroundScreen(new CylinderScreen(50, playerCharacter->torso->transform, 4))
 {
 	world->b2world->SetContactListener(&cl);
 	shader->components.push_back(new ShaderComponentTexture(shader));
@@ -115,11 +115,14 @@ GameJamScene::GameJamScene(Game * _game):
 
 		b2PolygonShape tShape;
 
-		float scaleVec = ((std::rand()%50)/50.f)+0.5f;
-		s->transform->scale(scaleVec, scaleVec, scaleVec);
-		tShape.SetAsBox(width*std::abs(s->transform->scaleVector.x)*scale*2.f, std::abs(height*s->transform->scaleVector.y)*scale*2.f);
+		float scaleMult = ((std::rand()%50)/50.f)+0.5f;
+		s->transform->scale(scaleMult, scaleMult, scaleMult);
+
+		glm::vec3 scaleVec = s->transform->getScaleVector();
+
+		tShape.SetAsBox(width*std::abs(scaleVec.x)*scale*2.f, height*std::abs(scaleVec.y)*scale*2.f);
 		b2PolygonShape tsShape;
-		tsShape.SetAsBox(width*std::abs(s->transform->scaleVector.x)*scale*2.f, std::abs(height*s->transform->scaleVector.y)*scale*2.f);
+		tsShape.SetAsBox(width*std::abs(scaleVec.x)*scale*2.f, height*std::abs(scaleVec.y)*scale*2.f);
 		b2Fixture * sfx = s->body->CreateFixture(&tShape, 1); // physical
 		b2Fixture * ssfx = s->body->CreateFixture(&tsShape, 1); // sensor
 		ssfx->SetSensor(true);
@@ -149,7 +152,7 @@ GameJamScene::GameJamScene(Game * _game):
 		s->mesh->vertices.at(3).x = v4.x;
 		s->mesh->vertices.at(3).y = v4.y;
 	
-		unsigned long int mag = std::max(s->mesh->textures.at(0)->width, s->mesh->textures.at(0)->height);
+		unsigned long int mag = std::max(s->mesh->getTexture(0)->width, s->mesh->getTexture(0)->height);
 		s->mesh->vertices.at(3).u = 0;
 		s->mesh->vertices.at(3).v = 0;
 		s->mesh->vertices.at(2).u = (float)width/mag;
@@ -324,8 +327,8 @@ void GameJamScene::update(Step * _step){
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
 		playerCharacter->torso->applyLinearImpulseLeft(25);
-		if(playerCharacter->transform->scaleVector.x < 0){
-			playerCharacter->transform->scaleX(-1);
+		if(playerCharacter->transform->getScaleVector().x < 0){
+			playerCharacter->transform->scale(-1, 0, 0);
 		}
 		//playerCharacter->playAnimation = true;
 		//playerCharacter->setCurrentAnimation("run");
@@ -362,8 +365,8 @@ void GameJamScene::update(Step * _step){
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		playerCharacter->torso->applyLinearImpulseRight(25);
-		if(playerCharacter->transform->scaleVector.x > 0){
-			playerCharacter->transform->scaleX(-1);
+		if(playerCharacter->transform->getScaleVector().x > 0){
+			playerCharacter->transform->scale(-1, 0, 0);
 		}
 		//playerCharacter->setCurrentAnimation("run");
 		//playerCharacter->playAnimation = true;

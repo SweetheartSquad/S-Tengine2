@@ -22,7 +22,6 @@
     <ClCompile Include="../src/Accelerometer.cpp" />
     <ClCompile Include="../src/AccelerometerParser.cpp" />
     <ClCompile Include="../src/Arduino.cpp" />
-    <ClCompile Include="../src/BaseScene.cpp" />
     <ClCompile Include="../src/Behaviour.cpp" />
     <ClCompile Include="../src/BehaviourAttack.cpp" />
     <ClCompile Include="../src/BehaviourFollow.cpp" />
@@ -87,7 +86,6 @@
     <ClCompile Include="../src/Mouse.cpp" />
     <ClCompile Include="../src/MousePerspectiveCamera.cpp" />
     <ClCompile Include="../src/node/Node.cpp" />
-    <ClCompile Include="../src/node/NodeAnimatable.cpp" />
     <ClCompile Include="../src/node/NodeBox2DBody.cpp" />
     <ClCompile Include="../src/node/NodeChild.cpp" />
     <ClCompile Include="../src/node/NodeHierarchical.cpp" />
@@ -96,7 +94,6 @@
     <ClCompile Include="../src/node/NodeRenderable.cpp" />
     <ClCompile Include="../src/node/NodeResource.cpp" />
     <ClCompile Include="../src/node/NodeSelectable.cpp" />
-    <ClCompile Include="../src/node/NodeUpdatable.cpp" />
     <ClCompile Include="../src/node/ShiftKiddie.cpp" />
     <ClCompile Include="../src/NumberUtils.cpp" />
     <ClCompile Include="../src/OrthographicCamera.cpp" />
@@ -199,7 +196,6 @@
     <ClInclude Include="../include/AccelerometerParser.h" />
     <ClInclude Include="../include/Animation.h" />
     <ClInclude Include="../include/Arduino.h" />
-    <ClInclude Include="../include/BaseScene.h" />
     <ClInclude Include="../include/Behaviour.h" />
     <ClInclude Include="../include/BehaviourAttack.h" />
     <ClInclude Include="../include/BehaviourFollow.h" />
@@ -267,7 +263,6 @@
     <ClInclude Include="../include/Mouse.h" />
     <ClInclude Include="../include/MousePerspectiveCamera.h" />
     <ClInclude Include="../include/node/Node.h" />
-    <ClInclude Include="../include/node/NodeAnimatable.h" />
     <ClInclude Include="../include/node/NodeBox2DBody.h" />
     <ClInclude Include="../include/node/NodeChild.h" />
     <ClInclude Include="../include/node/NodeHierarchical.h" />
@@ -491,6 +486,7 @@
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
       <AdditionalLibraryDirectories>C:\dev\glfw\lib-msvc110;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>

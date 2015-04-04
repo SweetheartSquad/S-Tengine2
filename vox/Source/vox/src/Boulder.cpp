@@ -58,7 +58,9 @@ void Boulder::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptio
 void Boulder::update(Step* _step){
 	Item::update(_step);
 
-	if(transform->translationVector.x > 200 || transform->translationVector.y < 0){
+	// in case the boulder misses
+	glm::vec3 tv = transform->getTranslationVector();
+	if(tv.x > 200 || tv.y < 0){
 		destroy = true;
 	}
 }

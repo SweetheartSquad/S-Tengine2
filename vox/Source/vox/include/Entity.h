@@ -5,13 +5,13 @@
 #include "node/Node.h"
 #include "node/NodeHierarchical.h"
 #include "Vox.h"
-#include "node/NodeAnimatable.h"
+#include "node/NodeUpdatable.h"
 #include "node/NodeRenderable.h"
 #include "node/NodeLoadable.h"
 #include "node/ShiftKiddie.h"
 
 /** A basic entity node. Stores references to a mesh, transform, shader, parent, and list of references to children */
-class Entity : public virtual NodeAnimatable, public virtual NodeHierarchical, public virtual NodeRenderable, public virtual NodeLoadable, public virtual ShiftKiddie{
+class Entity : public virtual NodeUpdatable, public virtual NodeHierarchical, public virtual NodeRenderable, public virtual NodeLoadable, public virtual ShiftKiddie{
 public:
 
 	explicit Entity(Transform * _transform = nullptr);

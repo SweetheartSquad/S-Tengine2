@@ -97,7 +97,6 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptio
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//glBlendFunc(GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
 
-
 	//glBlendFunc(GL_ONE, GL_ZERO);
 	glEnable (GL_BLEND);
 
@@ -115,7 +114,7 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptio
 
 	glEnable(GL_DEPTH_TEST);
      //glAlphaFunc ( GL_GREATER, 0.1 ) ;
-     glEnable ( GL_ALPHA_TEST ) ;
+    glEnable ( GL_ALPHA_TEST ) ;
 
 	//Back-face culling
 	//glEnable (GL_CULL_FACE); // cull face
@@ -123,8 +122,8 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptio
 
 	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
-	matrixStack->projectionMatrix = camera->getProjectionMatrix();
-	matrixStack->viewMatrix		  = camera->getViewMatrix();
+	matrixStack->setProjectionMatrix(camera->getProjectionMatrix());
+	matrixStack->setViewMatrix(camera->getViewMatrix());
 
 	for(Entity * e : children){
 		e->render(matrixStack, renderOptions);

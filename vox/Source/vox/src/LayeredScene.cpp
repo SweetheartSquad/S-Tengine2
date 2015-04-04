@@ -57,8 +57,8 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 
 	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
-	matrixStack->projectionMatrix = camera->getProjectionMatrix();
-	matrixStack->viewMatrix		  = camera->getViewMatrix();
+	matrixStack->setProjectionMatrix(camera->getProjectionMatrix());
+	matrixStack->setViewMatrix(camera->getViewMatrix());
 
     glDisable(GL_DEPTH_TEST);
 	for(std::vector<Entity *> * layer : layers){
