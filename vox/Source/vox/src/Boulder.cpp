@@ -10,7 +10,7 @@
 #include <RaidTheCastleResourceManager.h>
 
 Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
-	Item(true, _world, _categoryBits, _maskBits, _groupIndex, 10.f, 50, 56),
+	Item(true, _world, _categoryBits, _maskBits, _groupIndex, 10.f, 50.f, 56.f),
 	playerWhoFired(nullptr),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
@@ -51,14 +51,16 @@ Boulder::~Boulder(){
 	}
 }
 
-void Boulder::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	Item::render(_matrixStack, _renderStack);
+void Boulder::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	Item::render(_matrixStack, _renderOptions);
 }
 
 void Boulder::update(Step* _step){
 	Item::update(_step);
 
-	if(transform->translationVector.x > 200 || transform->translationVector.y < 0){
+	// in case the boulder misses
+	glm::vec3 tv = transform->getTranslationVector();
+	if(tv.x > 200 || tv.y < 0){
 		destroy = true;
 	}
 }

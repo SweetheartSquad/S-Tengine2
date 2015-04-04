@@ -157,8 +157,8 @@ GameJamCharacter::GameJamCharacter(Box2DWorld * _world, int16 _categoryBits, int
 GameJamCharacter::~GameJamCharacter(){
 }
 
-void GameJamCharacter::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
-	Box2DSuperSprite::render(_matrixStack, _renderStack);
+void GameJamCharacter::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	Box2DSuperSprite::render(_matrixStack, _renderOptions);
 }
 
 void GameJamCharacter::update(Step * _step){
@@ -213,8 +213,7 @@ void GameJamCharacter::update(Step * _step){
 			}
 		}
 	}
-	text->transform->translationVector.x = (torso->transform->translationVector.x) - 2.0f;
-	text->transform->translationVector.y = 7;
+	text->transform->translate((torso->transform->getTranslationVector().x) - 2.0f, 7, text->transform->getTranslationVector().z, false);
 }
 
 void GameJamCharacter::attachJoints(){

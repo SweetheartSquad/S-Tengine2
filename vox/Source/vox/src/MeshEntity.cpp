@@ -30,9 +30,9 @@ MeshEntity::~MeshEntity(void){
 	shader = nullptr;
 }
 
-void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	//push transform
-	if(_matrixStack != nullptr && _renderStack != nullptr){
+	if(_matrixStack != nullptr && _renderOptions != nullptr){
 		_matrixStack->pushMatrix();
 		_matrixStack->applyMatrix(transform->getModelMatrix());
 	
@@ -40,15 +40,15 @@ void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 			mesh->load();
 			mesh->clean();
 		}
-		if(_renderStack->overrideShader == nullptr){
-			_renderStack->shader = shader;
+		if(_renderOptions->overrideShader == nullptr){
+			_renderOptions->shader = shader;
 		}else{
-			_renderStack->shader = _renderStack->overrideShader;
+			_renderOptions->shader = _renderOptions->overrideShader;
 		}
 		if(mesh != nullptr){
-			mesh->render(_matrixStack, _renderStack);
+			mesh->render(_matrixStack, _renderOptions);
 		}
-		Entity::render(_matrixStack, _renderStack);
+		Entity::render(_matrixStack, _renderOptions);
 		//pop transform
 		_matrixStack->popMatrix();
 	}

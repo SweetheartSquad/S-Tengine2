@@ -1,6 +1,8 @@
 #pragma once
 
-#include "node/NodeAnimatable.h"
+#include <node\NodeUpdatable.h>
+#include <node\NodeTransformable.h>
+#include <glm\glm.hpp>
 
 /****************************
 *
@@ -8,7 +10,7 @@
 * The camera's rotation is restricted on the x axis so that It can not flip upside down
 *
 *****************************/
-class Camera abstract : public virtual NodeAnimatable {
+class Camera abstract : public virtual NodeUpdatable, public virtual NodeTransformable {
 public:
 
 	Camera();

@@ -31,6 +31,7 @@ public:
 	
 	void addTarget(ShiftKiddie * _target);
 	void removeTarget(ShiftKiddie * _target);
+	bool hasTarget(ShiftKiddie * _target);
 
 	// Things to follow
 	std::vector<ShiftKiddie *> targets;

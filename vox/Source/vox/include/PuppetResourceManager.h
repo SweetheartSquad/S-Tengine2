@@ -26,8 +26,9 @@ public:
 	static TextureSampler * dustParticle;
 
 	static TextureSampler * head1;
-	static TextureSampler * face1;
+	static std::vector<TextureSampler *> faces;
 	static TextureSampler * hand1;
+	static TextureSampler * getRandomFace();
 	
 	static TextureSampler * countDown0;
 	static TextureSampler * countDown1;

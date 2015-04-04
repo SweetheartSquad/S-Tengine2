@@ -12,7 +12,7 @@ ShiftKiddie::ShiftKiddie() :
 }
 
 glm::vec3 ShiftKiddie::getPos(bool _relative){
-	glm::vec4 res(transform->translationVector.x, transform->translationVector.y, transform->translationVector.z, 1);
+	glm::vec4 res(transform->getTranslationVector(), 1);
 	if(!_relative){
 		NodeParent * _parent = parent;
 		std::vector<glm::mat4> modelMatrixStack;
@@ -43,7 +43,7 @@ void ShiftKiddie::setPos(glm::vec3 _pos, bool _convertToRelative){
 	if(_convertToRelative){
 		newPos = getInverseModelMatrixHierarchical() * newPos;
 	}
-	transform->translationVector = glm::vec3(newPos.x, newPos.y, newPos.z);
+	transform->translate(glm::vec3(newPos.x, newPos.y, newPos.z), false);
 }
 
 glm::mat4 ShiftKiddie::getInverseModelMatrixHierarchical(){

@@ -5,7 +5,7 @@ ShaderLoader::ShaderLoader(std::string _vertexShaderSource, std::string _fragmen
 	char * v = new char[_vertexShaderSource.size() + 1];
 	int vl = _vertexShaderSource.length();
 	memcpy(v, _vertexShaderSource.c_str(), _vertexShaderSource.size() + 1);
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	checkForGlError(true,__FILE__,__LINE__);
 	GLuint vertexShader = compileShader(GL_VERTEX_SHADER, v, vl);
 	delete v;
 
@@ -13,19 +13,19 @@ ShaderLoader::ShaderLoader(std::string _vertexShaderSource, std::string _fragmen
 	char * f = new char[_fragmentShaderSource.size() + 1];
 	int fl = _fragmentShaderSource.length();
 	memcpy(f, _fragmentShaderSource.c_str(), _fragmentShaderSource.size() + 1);
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	checkForGlError(true,__FILE__,__LINE__);
 	GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, f, fl);
 	delete f;
 
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	checkForGlError(true,__FILE__,__LINE__);
 
 	programId = glCreateProgram();
 	glAttachShader(programId, vertexShader);
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	checkForGlError(true,__FILE__,__LINE__);
 	glAttachShader(programId, fragmentShader);
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	checkForGlError(true,__FILE__,__LINE__);
 	glLinkProgram(programId);
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	checkForGlError(true,__FILE__,__LINE__);
 
 	//check for error with glLinkProgram
 	GLint isLinked = 0;
@@ -47,11 +47,11 @@ ShaderLoader::ShaderLoader(std::string _vertexShaderSource, std::string _fragmen
 		}
 		//Exit with failure.
 	}
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	checkForGlError(true,__FILE__,__LINE__);
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	checkForGlError(true,__FILE__,__LINE__);
 }
 
 ShaderLoader::~ShaderLoader(void){}
@@ -61,17 +61,17 @@ GLuint ShaderLoader::getProgramId(){
 }
 
 GLuint ShaderLoader::compileShader(GLenum _shaderType, const char* _source, int _length){
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	checkForGlError(true,__FILE__,__LINE__);
 	GLuint shaderId = glCreateShader(_shaderType);
 	glShaderSource(shaderId, 1, &_source, &_length);
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	checkForGlError(true,__FILE__,__LINE__);
 	glCompileShader(shaderId);
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	checkForGlError(true,__FILE__,__LINE__);
 
 	GLint status = 0;
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	checkForGlError(true,__FILE__,__LINE__);
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &status);
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	checkForGlError(true,__FILE__,__LINE__);
 	if(status == GL_FALSE){
 		std::cout << "\tERROR: Shader could not be compiled." << std::endl << std::endl << _source << std::endl << std::endl;
 		GLint maxLength = 0;
@@ -93,7 +93,7 @@ GLuint ShaderLoader::compileShader(GLenum _shaderType, const char* _source, int 
 	}else{
 		std::cout << "Shader compiled succesfully." << std::endl << std::endl << _source << std::endl << std::endl;
 	}
-	GLUtils::checkForError(true,__FILE__,__LINE__);
+	checkForGlError(true,__FILE__,__LINE__);
 
 	return shaderId;
 }

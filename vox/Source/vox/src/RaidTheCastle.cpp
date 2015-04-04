@@ -36,7 +36,7 @@
 
 RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	PuppetScene(_game, 30),
-	castle(new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 30)),
+	castle(new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 120)),
 	catapult(new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM | PuppetGame::kPLAYER, -10)),
 	champion(new PuppetCharacterCastleChampion(world, RAID_CASTLE_GHOST_HEIGHT, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -20)),
 	playerCharacter1(new PuppetCharacterKnight(false, 0, RAID_CASTLE_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
@@ -152,7 +152,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	champion->translateComponents(glm::vec3(100.f, 35, 0));
 
 	playRandomBackgroundMusic();
-	loadCatapult();
+	catapult->prepare();
 }
 
 RaidTheCastle::~RaidTheCastle(){
@@ -175,38 +175,13 @@ void RaidTheCastle::update(Step* _step){
 		splashSoundPlayed = true;
 	}
 
-	if(catapult->fireBoulder){
-		RaidTheCastleResourceManager::catapultSounds->playRandomSound();
-		catapult->fireBoulder = false;
-		if(catapult->boulderLoaded && catapult->boulderJoint != nullptr){
-			world->b2world->DestroyJoint(catapult->boulderJoint);
-			catapult->boulderJoint = nullptr;
-			catapult->boulder->catapult = nullptr;
-			((FollowCamera *)gameCam)->addTarget(catapult->boulder->rootComponent);
-			catapult->boulder->playerWhoFired = catapult->playerWhoFired;
-			catapult->boulder = nullptr;
-			catapult->playerWhoFired = nullptr;
-			
-			// set the item's group index to zero so that it can collide normally
-			/*for(Box2DSprite ** bs : catapult->boulder->components){
-				b2Filter b1 = (*bs)->body->GetFixtureList()->GetFilterData();
-				b1.groupIndex = 0;
-				(*bs)->body->GetFixtureList()->SetFilterData(b1);
-				(*bs)->body->GetFixtureList()->Refilter();
-			}*/
-		}
-		catapult->boulderLoaded = false;
-	}
-	if(catapult->ready && !catapult->boulderLoaded){
-		loadCatapult();
-	}
 
 	if(castle->state == Castle::state_t::kDEAD){
 		triggerVictoryState();
 	}
 }
 
-void RaidTheCastle::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
+void RaidTheCastle::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	PuppetScene::render(_matrixStack, renderOptions);
 }
 
@@ -216,34 +191,4 @@ void RaidTheCastle::load(){
 
 void RaidTheCastle::unload(){
 	PuppetScene::unload();
-}
-
-void RaidTheCastle::loadCatapult(){
-	Boulder * boulder = new Boulder(world, PuppetGame::kITEM, PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, catapult->groupIndex);
-	boulder->setShader(shader, true);
-	addChild(boulder, 1);
-	boulder->addToLayeredScene(this, 1);
-	items.push_back(boulder);
-
-	b2Vec2 armPos = b2Vec2(-catapult->arm->getCorrectedWidth() * 0.8f, catapult->base->getCorrectedHeight() * 0.9f);
-	// snap to capatult base
-	boulder->snapComponents(catapult->base);
-	// translate to arm position from base
-	boulder->translateComponents(glm::vec3(armPos.x*2, armPos.y, 0));
-	//boulder->translateComponents(glm::vec3(-21, 6, 0)); // this is hard-coded, should not be
-	catapult->cooldownCnt = 0.f;
-	catapult->ready = true;
-	catapult->boulderLoaded = true;
-	catapult->boulder = boulder;
-
-	// axle
-	b2WeldJointDef abpj;
-	abpj.bodyA = catapult->arm->body;
-	abpj.bodyB = boulder->boulder->body;
-	abpj.localAnchorA.Set(-0.7f * catapult->arm->getCorrectedWidth(), 0.0f * catapult->arm->getCorrectedHeight());
-	abpj.localAnchorB.Set(0.0f * boulder->boulder->getCorrectedWidth(), 0.f * boulder->boulder->getCorrectedHeight());
-	abpj.collideConnected = false;
-	abpj.referenceAngle = 0.f;
-	catapult->boulderJoint = (b2WeldJoint *)world->b2world->CreateJoint(&abpj);
-	boulder->catapult = catapult;
 }

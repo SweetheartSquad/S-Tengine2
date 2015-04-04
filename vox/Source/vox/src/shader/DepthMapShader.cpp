@@ -21,7 +21,7 @@ void DepthMapShader::configureUniforms(vox::MatrixStack* _matrixStack, RenderOpt
 	glm::mat4 depthViewMatrix = glm::lookAt(lightInvDir, glm::vec3(0,0,0), glm::vec3(0,1,0));
 
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
-	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * _matrixStack->getCurrentMatrix();
+	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * _matrixStack->getModelMatrix();
 	depthMVP = BIAS_MATRIX * depthMVP;
 	glUniformMatrix4fv(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_DEPTH_MVP.c_str()), 1, GL_FALSE, &depthMVP[0][0]);
 }

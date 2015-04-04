@@ -87,7 +87,7 @@ void Scene::unload(){
 }
 
 
-void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	//glfwGetFramebufferSize(glfwGetCurrentContext(), &w, &h);
 	glfwMakeContextCurrent(glfwGetCurrentContext());
 	float ratio;
@@ -96,7 +96,6 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 	glEnable(GL_SCISSOR_TEST);
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//glBlendFunc(GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
-
 
 	//glBlendFunc(GL_ONE, GL_ZERO);
 	glEnable (GL_BLEND);
@@ -115,7 +114,7 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 
 	glEnable(GL_DEPTH_TEST);
      //glAlphaFunc ( GL_GREATER, 0.1 ) ;
-     glEnable ( GL_ALPHA_TEST ) ;
+    glEnable ( GL_ALPHA_TEST ) ;
 
 	//Back-face culling
 	//glEnable (GL_CULL_FACE); // cull face
@@ -123,14 +122,14 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack
 
 	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
-	matrixStack->projectionMatrix = camera->getProjectionMatrix();
-	matrixStack->viewMatrix		  = camera->getViewMatrix();
+	matrixStack->setProjectionMatrix(camera->getProjectionMatrix());
+	matrixStack->setViewMatrix(camera->getViewMatrix());
 
 	for(Entity * e : children){
 		e->render(matrixStack, renderOptions);
 	}
 	
-	GLUtils::checkForError(0,__FILE__,__LINE__);
+	checkForGlError(0,__FILE__,__LINE__);
     //glDisable(GL_POLYGON_OFFSET_FILL);
 }
 
@@ -138,12 +137,12 @@ void Scene::addChild(Entity* _child){
 	children.push_back(_child);
 }
 
-void Scene::renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void Scene::renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	Shader * backupOverride = renderOptions->overrideShader;
 	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	depthBuffer->bindFrameBuffer();
 	renderOptions->overrideShader = depthShader;
-	Scene::render(_matrixStack, _renderStack);
+	Scene::render(_matrixStack, _renderOptions);
 
 	shadowBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	shadowBuffer->bindFrameBuffer();

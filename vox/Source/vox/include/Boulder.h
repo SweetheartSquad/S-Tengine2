@@ -19,7 +19,7 @@ public:
 	Boulder(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	~Boulder();	
 	
-	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
+	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	void update(Step* _step) override;
 	void unload() override;
 	void load() override;

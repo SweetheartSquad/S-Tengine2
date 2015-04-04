@@ -13,7 +13,7 @@ public:
 	PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	~PuppetCharacterDragon();
 
-	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	void update(Step * _step) override;
     void action(bool _forceDrop = false) override;
 	void pickupItem(Item * _item) override;

@@ -23,8 +23,10 @@ void Particle::update(Step * _step){
     if (age > life){
         alive = false;
 	}else{
-		transform->scaleVector.x = 1.f - age / life;
-		transform->scaleVector.y = 1.f - age / life;
+		glm::vec3 sv = transform->getScaleVector();
+		sv.x = 1.f - age / life;
+		sv.y = 1.f - age / life;
+		transform->scale(sv, false);
 	}
 }
 

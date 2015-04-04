@@ -32,6 +32,10 @@
 #include <ItemSimpleWeapon.h>
 #include <ItemProjectileWeapon.h>
 #include <Hair.h>
+#include <Lever.h>
+#include <ItemGold.h>
+#include <NumberUtils.h>
+#include <StructureBoxingGlove.h>
 
 #include <glfw\glfw3.h>
 #include <SoundManager.h>
@@ -133,8 +137,8 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
 	playerCharacter4->ai = true;
 
-	guard->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(0, 0, 0), glm::vec3(40.f, 0, 0), playerCharacter4, 10));
-	guard->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
+	guard->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(0, 0, 0), glm::vec3(40.f, 0, 0), guard, 10));
+	guard->behaviourManager.addBehaviour(new BehaviourAttack(guard, 3, PuppetGame::kPLAYER));
 	guard->ai = true;
 
 	for(PuppetCharacter * p : players){
@@ -157,13 +161,39 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter4->translateComponents(glm::vec3(castleCatwalk->getPos().x, tower->getPos().y + tower->getCorrectedHeight(), 0.f));
 	guard->translateComponents(glm::vec3(50.f, 5.f, 0.f));
 
-	playRandomBackgroundMusic();
-
-
 	Hair * hair = new Hair(world, PuppetGame::kGROUND, PuppetGame::kPLAYER, 0);
 	addChild(hair, 1);
 	hair->setShader(shader, true);
 	hair->translateComponents(glm::vec3(tower->getPos().x, tower->getPos().y - tower->getCorrectedHeight() * 0.75, 0.f));
+	
+	lever1 = new Lever(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, 0);
+	addChild(lever1, 1);
+	lever1->addToLayeredScene(this, 1);
+	lever1->setShader(shader, true);
+	lever1->translateComponents(glm::vec3(5.f, 2.f, 0));
+	lever1->type = 1;
+	
+	lever2 = new Lever(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, 0);
+	addChild(lever2, 1);
+	lever2->addToLayeredScene(this, 1);
+	lever2->setShader(shader, true);
+	lever2->translateComponents(glm::vec3(10.f, 2.f, 0));
+	lever2->type = 2;
+
+	lever3 = new Lever(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, 0);
+	addChild(lever3, 1);
+	lever3->addToLayeredScene(this, 1);
+	lever3->setShader(shader, true);
+	lever3->translateComponents(glm::vec3(15.f, 2.f, 0));
+	lever3->type = 3;
+
+	glove = new StructureBoxingGlove(world);
+	glove->translateComponents(glm::vec3(50.f, 25.f, 0.f));
+	addChild(glove, 1);
+	glove->setShader(shader, true);
+	glove->addToLayeredScene(this, 1);
+
+	playRandomBackgroundMusic();
 }
 
 Rapunzel::~Rapunzel(){
@@ -176,17 +206,9 @@ void Rapunzel::update(Step* _step){
 		PuppetResourceManager::splashSounds->play("Rapunzel");
 		splashSoundPlayed = true;
 	}
-
-	if(keyboard->keyDown(GLFW_KEY_B)){
-		guard->control = 0;
-		playerCharacter1->control = 0;
-		playerCharacter2->control = 0;
-		//playerCharacter->behaviourManager.behaviours.at(0)->targets.clear();
-		//playerCharacter->behaviourManager.behaviours.at(0)->active = false;
-	}
 }
 
-void Rapunzel::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
+void Rapunzel::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	PuppetScene::render(_matrixStack, renderOptions);
 }
 

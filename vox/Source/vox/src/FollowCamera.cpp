@@ -9,7 +9,7 @@
 FollowCamera::FollowCamera(float _buffer, glm::vec3 _offset, float _deadZoneX, float _deadZoneY, float _deadZoneZ):
 	PerspectiveCamera(),
 	NodeTransformable(new Transform()),
-	NodeAnimatable(),
+	//NodeAnimatable(),
 	NodeUpdatable(),
 	buffer(_buffer),
 	lastOrientation(1.f, 0.f, 0.f, 0.f),
@@ -25,18 +25,18 @@ FollowCamera::~FollowCamera(){
 }
 
 void FollowCamera::update(Step * _step){
+	
+	lastOrientation = transform->getOrientationQuat();
+	glm::quat newOrientation = glm::quat(1.f, 0.f, 0.f, 0.f);
+	newOrientation = glm::rotate(newOrientation, yaw, upVectorLocal);
+	newOrientation = glm::rotate(newOrientation, pitch, rightVectorLocal);
 
-	lastOrientation = transform->orientation;
+	newOrientation = glm::slerp(lastOrientation, newOrientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
+	transform->setOrientation(newOrientation);
 
-	transform->orientation = glm::quat(1.f, 0.f, 0.f, 0.f);
-	transform->orientation = glm::rotate(transform->orientation, yaw, upVectorLocal);
-	transform->orientation = glm::rotate(transform->orientation, pitch, rightVectorLocal);
-
-	transform->orientation = glm::slerp(lastOrientation, transform->orientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
-
-	forwardVectorRotated   = transform->orientation * forwardVectorLocal;
-	rightVectorRotated	   = transform->orientation * rightVectorLocal;
-	upVectorRotated		   = transform->orientation * upVectorLocal;
+	forwardVectorRotated   = newOrientation * forwardVectorLocal;
+	rightVectorRotated	   = newOrientation * rightVectorLocal;
+	upVectorRotated		   = newOrientation * upVectorLocal;
 	
 	lookAtSpot = glm::vec3(0.f, 0.f, 0.f);
 	float minX = 9999999999.f;
@@ -56,12 +56,12 @@ void FollowCamera::update(Step * _step){
 		if(i < targets.size()){
 			interpolators.at(i) += (targets.at(i)->getPos(false) - interpolators.at(i))*1.f;
 		}else{
-			interpolators.at(i) += (transform->translationVector - interpolators.at(i))*0.01f;
+			interpolators.at(i) += (transform->getTranslationVector() - interpolators.at(i))*0.01f;
 			
 		}
 
 		glm::vec3 pos = interpolators.at(i);
-		if(glm::distance(pos, transform->translationVector) < 1){
+		if(glm::distance(pos, transform->getTranslationVector()) < 1){
 			interpolators.erase(interpolators.begin() + i);
 			continue;
 		}
@@ -92,30 +92,15 @@ void FollowCamera::update(Step * _step){
 
 
 	// move camera
-	lookAtSpot.x = transform->translationVector.x = minX + screenWidth * 0.5f;
-	lookAtSpot.y = transform->translationVector.y = minY + screenHeight* 0.5f;
+	lookAtSpot.x = minX + screenWidth * 0.5f;
+	lookAtSpot.y = minY + screenHeight* 0.5f;
 	
-	targetZoom = dist;
-	//if( targetZoom < transform->translationVector.z){
-	//	transform->translationVector.z += (dist - transform->translationVector.z) * 0.01f;
-	//}else{
-		transform->translationVector.z = targetZoom;
-	//}
-	//transform->translationVector.z = dist;
-
-	/*float xDif = (lookAtSpot.x - transform->translationVector.x);
-	if(xDif > deadZoneX){
-		transform->translationVector.x += (xDif-deadZoneX);
-		lookAtSpot.x += xDif-deadZoneX;
-	}else if(xDif < -deadZoneX){
-		transform->translationVector.x += (xDif+deadZoneX);
-		lookAtSpot.x += xDif+deadZoneX;
-	}*/
+	transform->translate(lookAtSpot.x, lookAtSpot.y, dist, false);
 }
 
 glm::mat4 FollowCamera::getViewMatrix(){
 	return glm::lookAt(
-		offset + transform->translationVector,	// Camera is here
+		offset + transform->getTranslationVector(),	// Camera is here
 		offset + lookAtSpot, // and looks here : at the same position, plus "direction"
 		upVectorRotated				// Head is up (set to 0,-1,0 to look upside-down)
 		);
@@ -123,7 +108,7 @@ glm::mat4 FollowCamera::getViewMatrix(){
 
 void FollowCamera::addTarget(ShiftKiddie * _target){
 	targets.push_back(_target);
-	interpolators.push_back(glm::vec3(transform->translationVector));
+	interpolators.push_back(glm::vec3(transform->getTranslationVector()));
 }
 void FollowCamera::removeTarget(ShiftKiddie * _target){
 	for(signed long int i = targets.size()-1; i >= 0; --i){
@@ -131,4 +116,13 @@ void FollowCamera::removeTarget(ShiftKiddie * _target){
 			targets.erase(targets.begin() + i);
 		}
 	}
+}
+
+bool FollowCamera::hasTarget(ShiftKiddie * _target){
+	for(ShiftKiddie * sk : targets){
+		if(sk == _target){
+			return true;
+		}
+	}
+	return false;
 }

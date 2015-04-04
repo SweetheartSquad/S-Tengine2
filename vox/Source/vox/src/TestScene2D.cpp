@@ -160,7 +160,7 @@ void TestScene2D::unload(){
 	Scene::unload();
 }
 void TestScene2D::update(Step * _step){
-	float oldX = sprite->transform->translationVector.x;
+	float oldX = sprite->transform->getTranslationVector().x;
 
 	Scene::update(_step);
 
@@ -177,16 +177,16 @@ void TestScene2D::update(Step * _step){
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
 		sprite->applyLinearImpulseLeft(50);
-		if(sprite->transform->scaleVector.x < 0){
-			sprite->transform->scaleX(-1);
+		if(sprite->transform->getScaleVector().x < 0){
+			sprite->transform->scale(-1, 0, 0);
 		}
 		//sprite->playAnimation = true;
 		//sprite->setCurrentAnimation("run");
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
 		sprite->applyLinearImpulseRight(50);
-		if(sprite->transform->scaleVector.x > 0){
-			sprite->transform->scaleX(-1);
+		if(sprite->transform->getScaleVector().x > 0){
+			sprite->transform->scale(-1, 0, 0);
 		}
 		//sprite->setCurrentAnimation("run");
 		//sprite->playAnimation = true;
@@ -219,8 +219,8 @@ void TestScene2D::update(Step * _step){
 	
 }
 
-void TestScene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	Scene::render(_matrixStack, _renderStack);
+void TestScene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	Scene::render(_matrixStack, _renderOptions);
 	world->b2world->DrawDebugData();
 }
 

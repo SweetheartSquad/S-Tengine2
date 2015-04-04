@@ -32,7 +32,7 @@ public:
 	void setCurrentAnimation(std::string _name);
 	void pushTextureSampler(TextureSampler * _sampler);
 	
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
+	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 
 	virtual void load() override;
 	virtual void unload() override;

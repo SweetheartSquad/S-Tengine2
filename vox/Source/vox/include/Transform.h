@@ -18,52 +18,50 @@ typedef enum{
 
 /** A basic transform node */
 class Transform{
-public:
-	
+private:
 	/** Position */
 	glm::vec3 translationVector;
 	/** Scale */
 	glm::vec3 scaleVector;
 	/** Orientation */
 	glm::quat orientation;
-
+	
+	bool tDirty;
+	glm::mat4 tMatrix;
+	bool sDirty;
+	glm::mat4 sMatrix;
+	bool oDirty;
+	glm::mat4 oMatrix;
+	bool mDirty;
+	glm::mat4 mMatrix;
+public:
+	
 	Transform();
 	virtual ~Transform();
 
 	/** 
 	* Multiplies the x, y, and z component of the scale vector by _scaleX, _scaleY, and _scaleZ, respectively 
+	  If relative = false, sets the scale to the provided values
 	*/
-	void scale(float _scaleX, float _scaleY, float _scaleZ);
+	void scale(float _scaleX, float _scaleY, float _scaleZ, bool relative = true);
 	
 	/** 
 	* Multiplies the scale vector by _scale 
+	  If relative = false, sets the scale to the provided values
 	*/
-	void scale(glm::vec3 _scale);
-	
-	/** 
-	* Multiplies the x component of the scale vector by _scaleX 
-	*/
-	void scaleX(float _scaleX);
-	
-	/**
-	* Multiplies the y component of the scale vector by _scaleY 
-	*/
-	void scaleY(float _scaleY);
-	
-	/** 
-	* Multiplies the z component of the scale vector by _scaleZ 
-	*/
-	void scaleZ(float _scaleZ);
+	void scale(glm::vec3 _scale, bool relative = true);
 
 	/**
 	* Adds _translateX, _translateY, and _translateZ to the x, y, and z component of the translation vector, respectively 
+	  If relative = false, sets the translation to the provided values
 	*/
-	void translate(float _translateX, float _translateY, float _translateZ);
+	void translate(float _translateX, float _translateY, float _translateZ, bool relative = true);
 	
 	/** 
 	* Adds _translate to the translation vector 
+	  If relative = false, sets the translation to the provided values
 	*/
-	void translate(glm::vec3 _translate);
+	void translate(glm::vec3 _translate, bool relative = true);
 
 	/** 
 	OBJECT:	Rotates the orientation quaternion by _rotation in object-space (i.e. orientation = _rotation * orientation) 
@@ -78,7 +76,9 @@ public:
 	WORLD:	Rotates the orientation quaternion by _rotation in world-space (i.e. orientation = orientation * _rotation)
 	*/
 	void rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space);
-
+	
+	void setOrientation(glm::quat _orientation);
+	
 	/**
 	* Resets the translation, orientation, and scale to their defaults
 	*/
@@ -88,6 +88,10 @@ public:
 	* Converts the translation vector to a 4x4 matrix and returns the result 
 	*/
 	glm::mat4 getTranslationMatrix();
+
+	glm::vec3 getTranslationVector();
+	glm::vec3 getScaleVector();
+	glm::quat getOrientationQuat();
 	
 	/** 
 	* Converts the scale vector to a 4x4 matrix and returns the result 

@@ -40,8 +40,8 @@ Character::~Character(){
 	components.clear();
 }
 
-void Character::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
-	MeshEntity::render(_matrixStack, _renderStack);
+void Character::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	MeshEntity::render(_matrixStack, _renderOptions);
 }
 
 void Character::update(Step * _step){

@@ -36,7 +36,7 @@ public:
 	
 	~Box2DSuperSprite();
 
-	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	virtual void update(Step* _step) override;
 
 	virtual void setShader(Shader * _shader, bool _configureDefaultVertexAttributes) override;

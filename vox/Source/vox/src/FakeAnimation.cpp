@@ -35,13 +35,13 @@ FakeAnimation::~FakeAnimation(){
 	delete getShader();
 }
 
-void FakeAnimation::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack){
+void FakeAnimation::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	//push transform
 	_matrixStack->pushMatrix();
 	_matrixStack->applyMatrix(transform->getModelMatrix());
 
 	//for(Entity * child : children){
-		dynamic_cast<Entity *>(children.at(frame))->render(_matrixStack, _renderStack);
+		dynamic_cast<Entity *>(children.at(frame))->render(_matrixStack, _renderOptions);
 	//}
 
 	//pop transform

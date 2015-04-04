@@ -51,11 +51,14 @@
 
 #include <ParticleSystem.h>
 #include <SlayTheDragon.h>
+#include <ItemGold.h>
 
 class SlayTheDragon;
 
 PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float _height, float _size):
 	LayeredScene(_game, 3),
+	sceneHeight(_height),
+	sceneWidth(_width),
 	duration(seconds),
 	currentTime(0),
 	countDown(0),
@@ -82,7 +85,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->components.push_back(new ShaderComponentHsv(shader, 0.f, 1.25f, 1.4f));
 	shader->components.push_back(new ShaderComponentTint(shader, 0.f, 0.f, 0.f));
-	//shader->components.push_back(new ShaderComponentAlpha(shader, 0.5f));
+	shader->components.push_back(new ShaderComponentAlpha(shader, 1.f));
 	shader->compileShader();
 	renderOptions->alphaSorting = true;
 	
@@ -112,15 +115,15 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 
-	boundaries.at(0)->transform->scale(_size, _height/2.f, _size);
-	boundaries.at(1)->transform->scale(_size, _height/2.f, _size);
-	boundaries.at(2)->transform->scale(_width/2.f, _size, _size);
-	boundaries.at(3)->transform->scale(_width/2.f, _size, _size);
+	boundaries.at(0)->transform->scale(_size, sceneHeight/2.f, _size);
+	boundaries.at(1)->transform->scale(_size, sceneHeight/2.f, _size);
+	boundaries.at(2)->transform->scale(sceneWidth/2.f, _size, _size);
+	boundaries.at(3)->transform->scale(sceneWidth/2.f, _size, _size);
 
-	boundaries.at(0)->setTranslationPhysical(_width, _height/2.f, 0);
-	boundaries.at(1)->setTranslationPhysical(0, _height/2.f, 0);
-	boundaries.at(2)->setTranslationPhysical(_width/2.f, _height-_size, 0);
-	boundaries.at(3)->setTranslationPhysical(_width/2.f, -_size, 0);
+	boundaries.at(0)->setTranslationPhysical(sceneWidth, sceneHeight/2.f, 0);
+	boundaries.at(1)->setTranslationPhysical(0, sceneHeight/2.f, 0);
+	boundaries.at(2)->setTranslationPhysical(sceneWidth/2.f, sceneHeight-_size, 0);
+	boundaries.at(3)->setTranslationPhysical(sceneWidth/2.f, -_size, 0);
 	
 	/*addChild(boundaries.at(0), 0);
 	addChild(boundaries.at(1), 0);
@@ -309,6 +312,16 @@ void PuppetScene::update(Step * _step){
 	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
 		camera->transform->translate((camera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
 	}
+	
+
+	if(keyboard->keyDown(GLFW_KEY_G)){
+		Item * g = new ItemGold(world);
+		g->addToLayeredScene(this, 1);
+		g->setShader(shader, true);
+        addChild(g, 1);
+		g->translateComponents(glm::vec3(vox::NumberUtils::randomFloat(0, sceneWidth), vox::NumberUtils::randomFloat(0, sceneHeight), 0));
+	}
+
 
 	Scene::update(_step);
 
@@ -325,16 +338,14 @@ void PuppetScene::update(Step * _step){
 				//float scale = Easing::easeOutBack(splashDuration - currentTime, 0, 10, splashDuration);
 				float easeTime = splashDuration - currentTime;
 				float scale = (easeTime < splashDuration / 2.f) ? Easing::easeOutCubic(easeTime, 0, 10, splashDuration / 2.f) : Easing::easeInElastic(easeTime - splashDuration / 2.f, 10, -10, splashDuration / 2.f);
-				splashMessage->transform->scaleVector = glm::vec3(-scale, scale, 1);
+				splashMessage->transform->scale(glm::vec3(-scale, scale, 1), false);
 			}else{
 				addChild(splashMessage, 2);
 				displayingSplash = true;
 			}
 
-			splashMessage->transform->translationVector.x = gameCam->transform->translationVector.x;
-			splashMessage->transform->translationVector.y = gameCam->transform->translationVector.y;
-			splashMessage->transform->translationVector.z = gameCam->transform->translationVector.z - 10;
-
+			splashMessage->transform->translate(gameCam->transform->getTranslationVector(), false);
+			splashMessage->transform->translate(glm::vec3(0,0,-10));
 		}else{
 			// Remove previous number from scene
 			// Just copying destroyItem stuff for now
@@ -354,9 +365,8 @@ void PuppetScene::update(Step * _step){
 	}
 
 	for(Sprite * n : countDownNumbers){
-		n->transform->translationVector.x = gameCam->transform->translationVector.x;
-		n->transform->translationVector.y = gameCam->transform->translationVector.y;
-		n->transform->translationVector.z = gameCam->transform->translationVector.z - 10;
+		n->transform->translate(gameCam->transform->getTranslationVector(), false);
+		n->transform->translate(glm::vec3(0,0,-10));
 	}
 	
 	// destroy used up items
@@ -380,16 +390,16 @@ void PuppetScene::update(Step * _step){
 			complete();
 		}else if (currentTime > duration - countDownNumbers.size()){
 			if(duration - currentTime < countDown){
-				doCountDown();	
+				doCountDown();
 			}
 			if(countDown < countDownNumbers.size()){
 				float displayTime = fmod(currentTime, 1.f);
 				if(displayTime < 0.5f){
 					float scale = Easing::easeOutElastic(displayTime, 0.f, 5.f, 0.5f);
-					countDownNumbers.at(countDown)->transform->scaleVector = glm::vec3(-scale, scale, 1.f);
+					countDownNumbers.at(countDown)->transform->scale(glm::vec3(-scale, scale, 1.f), false);
 				}else{
 					float scale = Easing::easeInCirc(displayTime-0.5f, 5.f, -5.f, 0.5f);
-					countDownNumbers.at(countDown)->transform->scaleVector = glm::vec3(-scale, scale, 1.f);
+					countDownNumbers.at(countDown)->transform->scale(glm::vec3(-scale, scale, 1.f), false);
 				}
 			}
 		}
@@ -401,8 +411,7 @@ void PuppetScene::update(Step * _step){
 		mouseCam = !mouseCam;
 		if (!mouseCam){
 			camera = gameCam;
-		}
-		else{
+		}else{
 			camera = mouseCamera;
 		}
 	}
@@ -472,8 +481,8 @@ void PuppetScene::update(Step * _step){
 	}
 }
 
-void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	LayeredScene::render(_matrixStack, _renderStack);
+void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	LayeredScene::render(_matrixStack, _renderOptions);
 }
 
 void PuppetScene::triggerVictoryState(){

@@ -16,6 +16,7 @@
 #include <SoundManager.h>
 #include <RaidTheCastleResourceManager.h>
 #include <TextureSampler.h>
+#include <shader/ShaderComponentAlpha.h>
 
 bool PuppetCharacter::compareByScore(PuppetCharacter * _a, PuppetCharacter * _b){
 	return (_a->score < _b->score);
@@ -32,7 +33,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	dead(false),
 	deathPending(false),
 	targetRoll(0),
-	health(100.0f),
+	health(10.0f),
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),
@@ -91,7 +92,7 @@ void PuppetCharacter::init(){
 	}
 
 	head = new Box2DSprite(world, texPack->headTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
-	face = new Box2DSprite(world, texPack->faceTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
+	face = new Box2DSprite(world, texPack->faceTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale*0.5f);
 	handLeft = new Box2DSprite(world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 	handRight = new Box2DSprite(world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 
@@ -238,60 +239,73 @@ void PuppetCharacter::init(){
 	handLeft->transform->scale(-1, 1, 1);
 }
 
-void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
+void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	// save the current shader settings
-	float hue = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getHue();
-	float sat = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->getSaturation();
-	float red = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->getRed();
-	float green = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->getGreen();
-	float blue = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->getBlue();
-	
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setRed(red + (1 - control) * 3);
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setGreen(green - (1 - control) * 3);
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setBlue(blue - (1 - control) * 3);
+	float hue = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->getHue();
+	float sat = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->getSaturation();
+	float red = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->getRed();
+	float green = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->getGreen();
+	float blue = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->getBlue();
+	float alpha = static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->getAlpha();
+
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setRed(red + (1 - control) * 3);
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setGreen(green - (1 - control) * 3);
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue - (1 - control) * 3);
 
 
 	// change the shader settings based on current damage and player id
-	if (!ai){
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(float(id+1) * 0.167f);
-		if(id == 0){
-			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat + 1);
+	if(!dead){
+		if (!ai){
+			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(float(id+1) * 0.167f);
+			if(id == 0){
+				static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat + 1);
+			}
+		}else{
+			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
 		}
-	}else{
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(0.f);
+	}else {
+		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
+		static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->setAlpha(0.5f);
 	}
 
-	armLeft->render(_matrixStack, _renderStack);
-	armRight->render(_matrixStack, _renderStack);
-	torso->render(_matrixStack, _renderStack);
-	//Box2DSuperSprite::render(_matrixStack, _renderStack);
+	armLeft->render(_matrixStack, _renderOptions);
+	armRight->render(_matrixStack, _renderOptions);
+	torso->render(_matrixStack, _renderOptions);
+	//Box2DSuperSprite::render(_matrixStack, _renderOptions);
 
 	// revert the shader settings
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(hue);
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(hue);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat);
 
-	head->render(_matrixStack, _renderStack);
-	face->render(_matrixStack, _renderStack);
-	handLeft->render(_matrixStack, _renderStack);
-	handRight->render(_matrixStack, _renderStack);
+	head->render(_matrixStack, _renderOptions);
+	face->render(_matrixStack, _renderOptions);
+	handLeft->render(_matrixStack, _renderOptions);
+	handRight->render(_matrixStack, _renderOptions);
 	
-	// change the shader settings based on current damage and player id
-	if (!ai){
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(float(id+1) * 0.167f);
-		if(id == 0){
-			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat + 1);
+	if(!dead){
+		// change the shader settings based on current damage and player id
+		if (!ai){
+			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(float(id+1) * 0.167f);
+			if(id == 0){
+				static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat + 1);
+			}
+		} else{
+			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
 		}
-	} else{
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(0.f);
+	}else {
+		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
+		static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->setAlpha(0.5f);
 	}
-	headgear->render(_matrixStack, _renderStack);
+	headgear->render(_matrixStack, _renderOptions);
 	// revert the shader settings
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setHue(hue);
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(1))->setSaturation(sat);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(hue);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat);
 	
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setRed(red);
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setGreen(green);
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderStack->shader)->components.at(2))->setBlue(blue);
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setRed(red);
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setGreen(green);
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue);
+	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue);
+	static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->setAlpha(alpha);
 }
 
 void PuppetCharacter::update(Step* _step){
@@ -322,7 +336,12 @@ void PuppetCharacter::update(Step* _step){
 			pickupItem(itemToPickup);
 		}
 	}else{
-		rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, ghostPosition, rootComponent->transform->translationVector.z);
+		if(rootComponent->body->GetPosition().y < ghostPosition) {
+			rootComponent->applyForceUp(500.f);
+		}else{
+			rootComponent->applyForceDown(500.f);
+		}
+	//	rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, ghostPosition, rootComponent->transform->getTranslationVector().z);
 		rootComponent->body->ApplyForce(b2Vec2(-bodAngle * 50.0f, 0), rootComponent->body->GetWorldCenter(), true);
 	}
 	behaviourManager.update(_step);
@@ -414,10 +433,16 @@ bool PuppetCharacter::isCollidingWith(PuppetGame::BOX2D_CATEGORY _category){
 void PuppetCharacter::die(){
 	dead = true;
 	deathPending = false;
-	for(Box2DSprite ** c : components) {
+	action(true);
+	for(Box2DSprite ** c : components){
 		(*c)->body->SetGravityScale(0.0f);
+		b2Filter sf = (*c)->body->GetFixtureList()->GetFilterData();
+		sf.maskBits = 0x000;
+		sf.categoryBits = 0x000;
+		//Do we still need contact listeners for ghosts?
+		(*c)->body->GetFixtureList()->SetFilterData(sf);
+		(*c)->body->GetFixtureList()->SetSensor(true);
 	}
-	rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, ghostPosition, rootComponent->transform->translationVector.z);
 }
 
 void PuppetCharacter::takeDamage(float _damage){
@@ -441,7 +466,6 @@ void PuppetCharacter::pickupItem(Item * _item){
 		if(heldItem != nullptr){
 			action();
 		}
-
 		// set the item's group index to match character's so that they won't collide anymore (doesn't work?)
 		_item->setGroupIndex(this->groupIndex);
 

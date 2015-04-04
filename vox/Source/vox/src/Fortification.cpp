@@ -63,19 +63,21 @@ Fortification::Fortification(Box2DWorld* _world, int16 _categoryBits, int16 _mas
 
 void Fortification::takeDamage(float _damage){
 	StructureBreakable::takeDamage(_damage);
+	glm::vec3 sv = rootComponent->transform->getScaleVector();
 	switch (state){
 	default:
 	case StructureBreakable::kNORMAL:
-		rootComponent->transform->scaleVector.x = 5;
-		rootComponent->transform->scaleVector.y = 1;
+		sv.x = 5;
+		sv.y = 1;
 		break;
 	case StructureBreakable::kDAMAGED:
-        rootComponent->transform->scaleVector.x = 1;
-        rootComponent->transform->scaleVector.y = 1;
+        sv.x = 1;
+        sv.y = 1;
 		break;
 	case StructureBreakable::kDEAD:
-        rootComponent->transform->scaleVector.x = 1;
-        rootComponent->transform->scaleVector.y = 5;
+        sv.x = 1;
+        sv.y = 5;
 		break;
 	}
+	rootComponent->transform->scale(sv, false);
 }

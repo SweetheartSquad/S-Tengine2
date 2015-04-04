@@ -9,6 +9,7 @@ class Lever;
 class PuppetCharacterGuard;
 class PuppetCharacterThief;
 class PuppetCharacterRapunzel;
+class StructureBoxingGlove;
 
 class Rapunzel : public PuppetScene{
 public:
@@ -28,11 +29,13 @@ public:
 	PuppetCharacterThief * playerCharacter3;
 	PuppetCharacterRapunzel * playerCharacter4;
 
+	StructureBoxingGlove * glove;
+
 	explicit Rapunzel(PuppetGame * _game);
 	~Rapunzel();
 
 	virtual void update(Step * _step) override;
-	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack) override;
+	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	virtual void load() override;
 	virtual void unload() override;
 };

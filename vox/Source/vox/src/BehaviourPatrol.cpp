@@ -17,7 +17,7 @@ BehaviourPatrol::BehaviourPatrol(glm::vec3 _startPoint, glm::vec3 _endPoint, Pup
 }
 
 void BehaviourPatrol::update(Step * _step){
-	float dif = wayPoints.at(nextWayPoint).x - source->rootComponent->transform->translationVector.x;
+	float dif = wayPoints.at(nextWayPoint).x - source->rootComponent->transform->getTranslationVector().x;
 	if(abs(dif) < radius){
 		if(nextWayPoint == (forward ? wayPoints.size()-1 : 0)){
 			forward = !forward;

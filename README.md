@@ -108,3 +108,7 @@ http://www.lonesock.net/files/soil.zip
 Box2D
 
 **The project should now build**
+
+
+### Useful Resources ###
+http://www.slideshare.net/Mark_Kilgard/using-vertex-bufferobjectswell

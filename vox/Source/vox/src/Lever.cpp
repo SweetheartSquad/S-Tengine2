@@ -5,18 +5,25 @@
 #include <Box2DSprite.h>
 #include <Box2DWorld.h>
 #include <RapunzelResourceManager.h>
+#include <Item.h>
+#include <Rapunzel.h>
+#include <PuppetCharacterGuard.h>
+#include <BehaviourAttack.h>
+#include <BehaviourPatrol.h>
+#include <shader\BaseComponentShader.h>
+#include <StructureBoxingGlove.h>
 
 Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
-	Structure(_world, _categoryBits, _maskBits, _groupIndex),
+	StructureInteractable(_world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()
 {
-	TextureSampler * baseTextureSampler = RapunzelResourceManager::leverBase;
-	TextureSampler * handleTextureSampler = RapunzelResourceManager::leverHandle;
+	componentScale = 0.025f;
+	type = -1;
 
-	rootComponent = base = new Box2DSprite(_world, baseTextureSampler, b2_staticBody, false, nullptr, new Transform(), componentScale);
-	handle = new Box2DSprite(_world, handleTextureSampler, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
+	rootComponent = base = new Box2DSprite(_world, RapunzelResourceManager::leverBase, b2_staticBody, false, nullptr, new Transform(), componentScale);
+	handle = new Box2DSprite(_world, RapunzelResourceManager::leverHandle, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 	
 	components.push_back(&base);
 	components.push_back(&handle);
@@ -29,7 +36,8 @@ Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _gr
 	sf.groupIndex = groupIndex;
 
 	for(Box2DSprite ** c : components){
-		(*c)->createFixture(sf);
+		b2Fixture * f = (*c)->createFixture(sf);
+		f->SetSensor(true);
 	}
 
 	setUserData(this);
@@ -38,57 +46,93 @@ Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _gr
 	
 	handle->body->GetFixtureList()->SetDensity(10.f);
 
-	// axel
+	// handle
 	b2RevoluteJointDef jth;
 	jth.bodyA = base->body;
 	jth.bodyB = handle->body;
 	jth.localAnchorA.Set(0.f, 0.9f * base->getCorrectedHeight());
-	jth.localAnchorB.Set(0.f, 0.1f * handle->getCorrectedHeight());
+	jth.localAnchorB.Set(0.f, -0.9f * handle->getCorrectedHeight());
 	jth.collideConnected = false;
 	jth.enableLimit = true;
 	jth.referenceAngle = 0.f;
 	jth.lowerAngle = glm::radians(-80.f);
+	jth.upperAngle = glm::radians(0.f);
 	world->b2world->CreateJoint(&jth);
 }
 
-Lever::~Lever()
-{
+Lever::~Lever(){
 }
 
-void Lever::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderStack){
-	Structure::render(_matrixStack, _renderStack);
+void Lever::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	StructureInteractable::render(_matrixStack, _renderOptions);
 }
 
-void Lever::update(Step * _step){
-	Structure::update(_step);
-
+void Lever::evaluateState(){
 	b2RevoluteJoint * jk = (b2RevoluteJoint *)base->body->GetJointList()->joint;
 	float angle = jk->GetJointAngle();
 	
-	if(!ready){
-		if(triggered){
-			handle->body->SetAngularVelocity(-20);
-			if(angle <= glm::radians(-75.f)){
-				handle->body->SetAngularVelocity(1);
-				triggered = false;
-			}
-		}else if(angle >= -0.0001f){
-			handle->body->SetAngularVelocity(1);
-			ready = true;
+	handle->body->SetAngularVelocity(2.5);
+
+	if(triggering){
+		handle->body->SetAngularVelocity(-20);
+		if(angle <= glm::radians(-75.f)){
+			triggering = false;
 		}
 	}else{
-		handle->body->SetAngularVelocity(1);
+		if(angle >= -0.0001f){
+			ready = true;
+		}
 	}
 }
 
-void Lever::unload(){
-	Structure::unload();
-}
+void Lever::actuallyInteract(){
+	std::cout << type << std::endl;
+	Rapunzel * ps = static_cast<Rapunzel *>(scene);
+	if(type == 1){
+		Item * projectile = new Item(true, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY, groupIndex);
+	
+		Box2DSprite ** test = new Box2DSprite*[1];
+		test[0] = projectile->rootComponent = new Box2DSprite(world, RapunzelResourceManager::itemSpear, b2_dynamicBody, false, nullptr, new Transform(), componentScale/4);
+		projectile->rootComponent->body->SetTransform(projectile->rootComponent->body->GetPosition(), glm::radians(80.f));
+		projectile->components.push_back(test);
 
-void Lever::load(){
-	Structure::load();
-}
+		projectile->translateComponents(glm::vec3(100.f, 15.f, 0.f));
 
-void Lever::pullLever(){
+		b2Filter sf;
+		sf.categoryBits = projectile->categoryBits;
+		if(projectile->maskBits != (int16)-1){
+			sf.maskBits = projectile->maskBits;
+		}else{
+			sf.maskBits = 0;
+		}
+		sf.groupIndex = projectile->groupIndex;
+	
+		for(Box2DSprite ** c : projectile->components){
+			(*c)->createFixture(sf);
+			(*c)->body->GetFixtureList()->SetDensity(0.01f);
+			(*c)->body->ResetMassData();
+		}
 
+		projectile->setUserData(projectile);
+		projectile->setUserData(projectile);
+		projectile->rootComponent->applyLinearImpulseRight(-50.f);
+
+		ps->addChild(projectile, 1);
+		ps->items.push_back(projectile);
+		//projectile->addToLayeredScene(static_cast<PuppetScene *>(scene), 1);
+		projectile->setShader((Shader *)ps->shader, true);
+	}else if(type == 2){
+		ps->glove->punch();
+	}else if(type == 3){
+		PuppetCharacterGuard * g = new PuppetCharacterGuard(true, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -10);
+		
+		g->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50, 0, 0), glm::vec3(100, 0, 0), g, 10));
+		g->behaviourManager.addBehaviour(new BehaviourAttack(g, 3, PuppetGame::kPLAYER));
+		g->ai = true;
+		ps->addChild(g, 1);
+		g->setShader(ps->shader, true);
+		g->translateComponents(glm::vec3(100, 20, 0));
+	}else{
+		throw "um";
+	}
 }

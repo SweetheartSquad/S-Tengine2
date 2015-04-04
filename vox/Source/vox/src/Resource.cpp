@@ -219,24 +219,24 @@ TriMesh * Resource::loadMeshFromObj(std::string _objSrc){
 	}
 	return mesh;
 }
-
+/*
 VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
 
 	VoxelJoint * mainJoint = new VoxelJoint(_node[_index]["id"].asInt(), new VoxelMesh(GL_STATIC_DRAW), new Transform());
 	
-	mainJoint->transform->translationVector = glm::vec3(
+	mainJoint->transform->translate(glm::vec3(
 		_node[_index]["transform"]["pos"].get("x", 0).asFloat(),
 		_node[_index]["transform"]["pos"].get("y", 0).asFloat(),
-		_node[_index]["transform"]["pos"].get("z", 0).asFloat());
-	mainJoint->transform->orientation = glm::quat(
+		_node[_index]["transform"]["pos"].get("z", 0).asFloat()), false);
+	mainJoint->transform->setOrientation(glm::quat(
 		_node[_index]["transform"]["orientation"].get("w", 1).asFloat(),
 		_node[_index]["transform"]["orientation"].get("x", 0).asFloat(),
 		_node[_index]["transform"]["orientation"].get("y", 0).asFloat(),
-		_node[_index]["transform"]["orientation"].get("z", 0).asFloat());
-	mainJoint->transform->scaleVector = glm::vec3(
+		_node[_index]["transform"]["orientation"].get("z", 0).asFloat()));
+	mainJoint->transform->scale(glm::vec3(
 		_node[_index]["transform"]["scaleVector"].get("x", 1).asFloat(),
 		_node[_index]["transform"]["scaleVector"].get("y", 1).asFloat(),
-		_node[_index]["transform"]["scaleVector"].get("z", 1).asFloat());
+		_node[_index]["transform"]["scaleVector"].get("z", 1).asFloat()), false);
 	
 	mainJoint->translateX->hasStart = _node[_index]["animations"]["translateX"].get("hasStart", 0).asBool();
 	mainJoint->translateY->hasStart = _node[_index]["animations"]["translateY"].get("hasStart", 0).asBool();
@@ -380,7 +380,7 @@ VoxelJoint * Resource::loadVoxelModel(std::string _jsonSrc){
 	
 	return mainJoint;
 }
-
+*/
 /*Box2DLevel * Resource::loadFizzXLevel(std::string _jsonSrc, std::string _imageLocation){
 
 	Box2DLevel * level = new Box2DLevel();
