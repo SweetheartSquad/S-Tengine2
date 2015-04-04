@@ -51,8 +51,8 @@ public:
 	
 	void init();
 	PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostPosition, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
-	explicit PuppetCharacter(PuppetCharacter * _character, Box2DWorld *_world);
 	~PuppetCharacter();
+	virtual PuppetCharacter * clone(Box2DWorld * _world);
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	void update(Step* _step) override;

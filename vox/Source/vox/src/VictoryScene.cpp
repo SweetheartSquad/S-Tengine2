@@ -45,7 +45,7 @@ VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _p
 		// tie
 	}
 	for(unsigned long int i=0; i < _players.size(); ++i){
-		players.push_back(new PuppetCharacter(_players.at(i), world));
+		players.push_back(_players.at(i)->clone(world));
 
 		players.at(i)->setShader(shader, true);
 		addChild(players.at(i), 1);

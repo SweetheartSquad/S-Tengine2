@@ -49,30 +49,11 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	init();
 }
 
-PuppetCharacter::PuppetCharacter(PuppetCharacter * _character, Box2DWorld * _world):
-	Box2DSuperSprite(_world, _character->categoryBits, _character->maskBits, _character->groupIndex),
-	NodeTransformable(new Transform()),
-	NodeChild(nullptr),
-	NodeRenderable(),
-	behaviourManager(this),
-	texPack(_character->texPack),
-	ai(_character->ai),
-	canJump(_character->canJump),
-	dead(false),
-	deathPending(false),
-	targetRoll(0.0f),
-	health(100.0f),
-	itemToPickup(nullptr),
-	heldItem(nullptr),
-	itemJoint(nullptr),
-	score(_character->score),
-	control(1.f),
-	id(_character->id),
-	actionThrottle(0.333),
-	lastActionTime(0.0),
-	collisionTypes(new std::vector<int>())
-{
-	init();
+PuppetCharacter * PuppetCharacter::clone(Box2DWorld * _world){
+	PuppetCharacter * res = new PuppetCharacter(texPack, ghostPosition, ai, _world, categoryBits, maskBits, groupIndex);
+	res->id = id;
+	res->score = score;
+	return res;
 }
 
 PuppetCharacter::~PuppetCharacter(){

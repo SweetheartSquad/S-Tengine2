@@ -59,7 +59,7 @@ void Boulder::update(Step* _step){
 	Item::update(_step);
 
 	// in case the boulder misses
-	glm::vec3 tv = transform->getTranslationVector();
+	glm::vec3 tv = rootComponent->transform->getTranslationVector();
 	if(tv.x > 200 || tv.y < 0){
 		destroy = true;
 	}

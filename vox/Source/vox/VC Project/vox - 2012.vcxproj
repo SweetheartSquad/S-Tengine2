@@ -187,10 +187,10 @@
     <ClCompile Include="../src/shader/ShaderComponentTint.cpp" />
     <ClCompile Include="../src/StructureBreakable.cpp" />
     <ClCompile Include="../src/TextureSampler.cpp" />
-    <ClCompile Include="..\src\StructureBoxingGlove.cpp" />
-    <ClCompile Include="..\src\ItemGold.cpp" />
-    <ClCompile Include="..\src\StructureGold.cpp" />
-    <ClCompile Include="..\src\StructureInteractable.cpp" />
+    <ClCompile Include="../src/StructureBoxingGlove.cpp" />
+    <ClCompile Include="../src/ItemGold.cpp" />
+    <ClCompile Include="../src/StructureGold.cpp" />
+    <ClCompile Include="../src/StructureInteractable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -373,10 +373,10 @@
     <ClInclude Include="../include/shader/ShaderComponentAlpha.h" />
     <ClInclude Include="../include/shader/ShaderComponentTint.h" />
     <ClInclude Include="../include/TextureSampler.h" />
-    <ClInclude Include="..\include\StructureBoxingGlove.h" />
-    <ClInclude Include="..\include\ItemGold.h" />
-    <ClInclude Include="..\include\StructureGold.h" />
-    <ClInclude Include="..\include\StructureInteractable.h" />
+    <ClInclude Include="../include/StructureBoxingGlove.h" />
+    <ClInclude Include="../include/ItemGold.h" />
+    <ClInclude Include="../include/StructureGold.h" />
+    <ClInclude Include="../include/StructureInteractable.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>

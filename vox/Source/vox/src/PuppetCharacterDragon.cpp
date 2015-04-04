@@ -32,7 +32,8 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	fireball(nullptr),
-	fireParticles(new ParticleSystem(SlayTheDragonResourceManager::itemFireParticle, _world, 0, 0, _groupIndex))
+	fireParticles(new ParticleSystem(SlayTheDragonResourceManager::itemFireParticle, _world, 0, 0, _groupIndex)),
+	altitude(60.f)
 {
 
 	behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), this, 10));
@@ -70,6 +71,20 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 	lhlej.lowerAngle = glm::radians(-6.2f);
 	lhlej.upperAngle = glm::radians(6.9f);
 	world->b2world->CreateJoint(&lhlej);
+}
+
+PuppetCharacter * PuppetCharacterDragon::clone(Box2DWorld * _world){
+	PuppetCharacterDragon * res = new PuppetCharacterDragon(ai, _world, categoryBits, maskBits, groupIndex);
+	res->id = id;
+	res->score = score;
+	/*while (res->behaviourManager.behaviours.size() > 0){
+		res->behaviourManager.behaviours.pop_back();
+	}*/
+	res->altitude = -1;
+
+
+
+	return res;
 }
 
 PuppetCharacterDragon::~PuppetCharacterDragon(){
@@ -146,7 +161,9 @@ void PuppetCharacterDragon::update(Step * _step){
 	PuppetCharacter::update(_step);
 	b2Vec2 center = torso->body->GetWorldCenter();
 	torso->applyForce(torso->body->GetAngle() * -5000.0f, 0.0f, center.x, center.y);
-	torso->body->SetTransform(b2Vec2(torso->body->GetPosition().x, 60.0f), torso->body->GetAngle());
+	if (altitude > 0){
+		torso->body->SetTransform(b2Vec2(torso->body->GetPosition().x, altitude), torso->body->GetAngle());
+	}
 	if(ai){
 		if(behaviourManager.behaviours.at(1)->active){
 			behaviourManager.behaviours.at(0)->active = false;
