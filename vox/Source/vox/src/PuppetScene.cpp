@@ -51,6 +51,8 @@
 
 #include <ParticleSystem.h>
 #include <SlayTheDragon.h>
+#include <RenderSurface.h>
+#include <StandardFrameBuffer.h>
 
 class SlayTheDragon;
 
@@ -77,7 +79,11 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	mouseCam(false),
 	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::paper->texture, 3, 1)),
 	victoryTriggered(false),
-	sceneStart(vox::step.time)
+	sceneStart(vox::step.time),
+	screenShaderSetting(3),
+	screenSurfaceShader(new Shader("../assets/RenderSurfacePlus", false, true)),
+	screenSurface(new RenderSurface(screenSurfaceShader)),
+	screenFBO(new StandardFrameBuffer(true))
 {
 
 	world->b2world->SetContactListener(cl);
@@ -275,6 +281,19 @@ void PuppetScene::unload(){
 }
 
 void PuppetScene::update(Step * _step){
+	if(game->kc_just_active){
+		screenShaderSetting = currentTime;
+	}
+	if(game->kc_active){
+		if(currentTime > screenShaderSetting){
+			screenShaderSetting = currentTime + std::rand() % 5 + 1;
+			glUniform1i(glGetUniformLocation(screenSurfaceShader->getProgramId(), "distortion"), std::rand() % 6 + 1);
+		}
+	}else{
+		glUniform1i(glGetUniformLocation(screenSurfaceShader->getProgramId(), "distortion"), 0);
+	}
+	glUniform1f(glGetUniformLocation(screenSurfaceShader->getProgramId(), "time"), (float)vox::lastTimestamp);
+
 	// player controls
 	if (players.size() > 0){
 		if (keyboard->keyJustDown(GLFW_KEY_W)){
@@ -475,7 +494,15 @@ void PuppetScene::update(Step * _step){
 }
 
 void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	
+	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
+	//Bind frameBuffer
+	screenFBO->bindFrameBuffer();
+	//render the scene to the buffer
 	LayeredScene::render(_matrixStack, _renderOptions);
+
+	//Render the buffer to the render surface
+	screenSurface->render(screenFBO->getTextureId());
 }
 
 void PuppetScene::triggerVictoryState(){
