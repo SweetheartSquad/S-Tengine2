@@ -83,7 +83,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new ShaderComponentTexture(shader));
-	shader->components.push_back(new ShaderComponentHsv(shader, 0.f, 1.25f, 1.4f));
+	shader->components.push_back(new ShaderComponentHsv(shader, 0.f, 1.25f, 1.25f));
 	shader->components.push_back(new ShaderComponentTint(shader, 0.f, 0.f, 0.f));
 	shader->components.push_back(new ShaderComponentAlpha(shader, 1.f));
 	shader->compileShader();
@@ -644,13 +644,15 @@ void PuppetScene::populateBackground(){
 }
 
 void PuppetScene::populateClouds(){
-	int numClouds = 60;
+	int numClouds = std::rand() % 5 + 2;
 	for(signed long int i = 0; i < numClouds; ++i){
-		float height = std::rand()%500/50.f+5.f;
+		float height = vox::NumberUtils::randomFloat(sceneHeight / 4.f, sceneHeight);
 		MeshEntity * cloud = new MeshEntity(MeshFactory::getPlaneMesh());
 		cloud->setShader(shader, true);
-		cloud->transform->translate((std::rand()%500/3.f)-25.f, height, max(-9, -(float)(numClouds-i)/numClouds)*8.f - 1.f);
-		cloud->transform->scale(height, height, 1);
+		cloud->transform->translate(vox::NumberUtils::randomFloat(0, sceneWidth), height, max(-9, -(float)(numClouds-i)/numClouds)*8.f - 1.f);
+		
+		float scale = vox::NumberUtils::randomFloat(0.5, 1.5)*10.f;
+		cloud->transform->scale(scale, scale, 1);
 		int tex = i % 4;
 		switch(tex){
 			case 0:

@@ -144,6 +144,8 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	playRandomBackgroundMusic();
 	catapult->prepare();
+
+	populateClouds();
 }
 
 RaidTheCastle::~RaidTheCastle(){

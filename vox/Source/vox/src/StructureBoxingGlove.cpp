@@ -13,7 +13,7 @@ StructureBoxingGlove::StructureBoxingGlove(Box2DWorld * _world) :
 	
 	componentScale = 0.016f;
 	
-	glove = new Box2DSprite(world, RapunzelResourceManager::glove, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
+	glove = new Box2DSprite(world, RapunzelResourceManager::glove, b2_dynamicBody, false, nullptr, new Transform(), componentScale/4.f);
 	spring = new Box2DSprite(world, RapunzelResourceManager::spring, b2_staticBody, false, nullptr, new Transform(), componentScale);
 	
 	components.push_back(&glove);
