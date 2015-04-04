@@ -15,7 +15,7 @@ TextureSampler * RapunzelResourceManager::goldBrick   = new TextureSampler("../a
 TextureSampler * RapunzelResourceManager::glove   = new TextureSampler("../assets/hurly-burly/BoxingGlove/", "BoxingGlove.png.def");
 TextureSampler * RapunzelResourceManager::spring   = new TextureSampler("../assets/hurly-burly/RapCastleAssets/", "RapCastleSpring.png.def");
 
-TextureSampler * RapunzelResourceManager::leverHandle   = new TextureSampler("../assets/hurly-burly/Lever/", "LeverArm.png.def");
+TextureSampler * RapunzelResourceManager::leverHandle   = new TextureSampler("../assets/hurly-burly/Lever/", "LeverHandle.png.def");
 TextureSampler * RapunzelResourceManager::leverBase = new TextureSampler("../assets/hurly-burly/Lever/", "LeverBase.png.def");
 
 TextureSampler * RapunzelResourceManager::hair  = new TextureSampler("../assets/hurly-burly/Hair/", "Hair.png.def");
