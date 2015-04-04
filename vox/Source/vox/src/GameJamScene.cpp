@@ -152,7 +152,7 @@ GameJamScene::GameJamScene(Game * _game):
 		s->mesh->vertices.at(3).x = v4.x;
 		s->mesh->vertices.at(3).y = v4.y;
 	
-		unsigned long int mag = std::max(s->mesh->textures.at(0)->width, s->mesh->textures.at(0)->height);
+		unsigned long int mag = std::max(s->mesh->getTexture(0)->width, s->mesh->getTexture(0)->height);
 		s->mesh->vertices.at(3).u = 0;
 		s->mesh->vertices.at(3).v = 0;
 		s->mesh->vertices.at(2).u = (float)width/mag;

@@ -65,15 +65,16 @@ void ShaderComponentTexture::configureUniforms(vox::MatrixStack* _matrixStack, R
 	int numTextures = 0;
 	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), 0);
 	if(mesh != nullptr){
-		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), mesh->textures.size());
+		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), mesh->textureCount());
 		// Bind each texture to the texture sampler array in the frag _shader
-		for(unsigned long int i = 0; i < mesh->textures.size(); i++){
+		for(unsigned long int i = 0; i < mesh->textureCount(); i++){
 			glActiveTexture(GL_TEXTURE0 + i);
-			glBindTexture(GL_TEXTURE_2D, mesh->textures.at(i)->textureId);
+			glBindTexture(GL_TEXTURE_2D, mesh->getTexture(i)->textureId);
 			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str()), i);
 		}
-		numTextures = mesh->textures.size();
+		numTextures = mesh->textureCount();
 	}
+
 	SpriteMesh * spriteMesh = dynamic_cast<SpriteMesh *>(_nodeRenderable);
 	//Setup the texture for the current animation
 	if(spriteMesh != nullptr){	

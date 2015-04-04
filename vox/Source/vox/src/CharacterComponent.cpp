@@ -60,7 +60,7 @@ void CharacterComponent::createFixture(int16 _groupIndex){
 	mesh->vertices.at(3).x = v4.x;
 	mesh->vertices.at(3).y = v4.y;
 	
-	float mag = std::max(mesh->textures.at(0)->width, mesh->textures.at(0)->height);
+	float mag = std::max(mesh->getTexture(0)->width, mesh->getTexture(0)->height);
 	mesh->vertices.at(3).u = 0;
 	mesh->vertices.at(3).v = 0;
 	mesh->vertices.at(2).u = width/mag;

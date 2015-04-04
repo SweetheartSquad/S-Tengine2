@@ -16,6 +16,7 @@ public:
 	std::vector<Light*> * lights;
 	
 	GLuint currentVao;
+	GLuint currentlyBoundShaderId;
 
 	Shader * shader;
 	Shader * overrideShader;

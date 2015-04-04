@@ -125,9 +125,9 @@ void BitmapFont::createQuads(){
 		}
 	}
 
-	int textWidth = meshQ->textures.at(0)->width/columns;
-	int textHeight = meshQ->textures.at(0)->width/rows;
-	pushMultipleFrames(chars, textWidth, textHeight, meshQ->textures.at(0)->width);
+	int textWidth = meshQ->getTexture(0)->width/columns;
+	int textHeight = meshQ->getTexture(0)->width/rows;
+	pushMultipleFrames(chars, textWidth, textHeight, meshQ->getTexture(0)->width);
 	int col = 0;
 	int row = 0;
 	int count = 0;
@@ -198,8 +198,8 @@ void BitmapFont::pushMultipleFrames(std::vector<int> _frames, float _width, floa
 
 void BitmapFont::pushFrame(int _column, int _row, float _width, float _height){
 	float u, v, rW, rH;
-	rW = _width / meshQ->textures.at(0)->width;
-	rH = _height / meshQ->textures.at(0)->height;
+	rW = _width / meshQ->getTexture(0)->width;
+	rH = _height / meshQ->getTexture(0)->height;
 	u = rW * _column;
 	v = rH * _row;
 	frames.push_back(vox::Rectangle(u, v, rW, rH));

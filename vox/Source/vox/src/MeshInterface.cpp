@@ -111,27 +111,31 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 	if(glIsVertexArray(vaoId) == GL_TRUE){
 		if(glIsBuffer(vboId) == GL_TRUE){
 			if(glIsBuffer(iboId) == GL_TRUE){
-				if(_renderOption->shader != nullptr){			
-					//if(_renderOption->currentVao != vaoId){
-					//	_renderOption->currentVao = vaoId;	
+				if(_renderOption->shader != nullptr){		
+					if(_renderOption->currentVao != vaoId){
+						_renderOption->currentVao = vaoId;	
 						// Bind VAO
 						glBindVertexArray(vaoId);
-						GLUtils::checkForError(0,__FILE__,__LINE__);
-				
+						GLUtils::checkForError(0,__FILE__, __LINE__);
+					}
+
+					//This should help performance but there's a bit of a problem with it at the moment so I'll comment it out
+					//if(_renderOption->shader->getProgramId() != _renderOption->currentlyBoundShaderId) {
+						_renderOption->currentlyBoundShaderId = _renderOption->shader->getProgramId();
 						glUseProgram(_renderOption->shader->getProgramId());
-
 						GLUtils::checkForError(0,__FILE__,__LINE__);
+					//}
 
-						_renderOption->shader->clean(_matrixStack, _renderOption, this);
+					_renderOption->shader->clean(_matrixStack, _renderOption, this);	
 					
-						//Alpha blending
-						// Should these be here or only once in the main render loop?
-						glEnable (GL_BLEND);
-						glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					//Alpha blending
+					// Should these be here or only once in the main render loop?
+					glEnable (GL_BLEND);
+					glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-						//Texture repeat
-						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, uvEdgeMode);
-						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, uvEdgeMode);
+					//Texture repeat
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, uvEdgeMode);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, uvEdgeMode);
 
 					//}
 
@@ -170,12 +174,29 @@ void MeshInterface::pushVert(Vertex _vertex){
 	dirty = true;
 }
 
+void MeshInterface::popTexture2D(){
+	textures.pop_back();
+}
+
+void MeshInterface::removeTextureAt(int _idx){
+	textures.erase(textures.begin() + _idx);
+}
+
 void MeshInterface::pushTexture2D(Texture* _texture){
 	++_texture->referenceCount;
 	textures.push_back(_texture);
+	texturesDirty = true;
 }
 
-void MeshInterface::pushMaterial(Material* _material){
+int MeshInterface::textureCount(){
+	return textures.size();
+}
+ 
+Texture * MeshInterface::getTexture(int _idx){
+	return textures.at(_idx);
+}
+
+void MeshInterface::pushMaterial(Material * _material){
 	++_material->referenceCount;
 	materials.push_back(_material);
 }

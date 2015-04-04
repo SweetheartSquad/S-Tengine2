@@ -123,9 +123,9 @@ void ShaderComponentShadow::configureUniforms(vox::MatrixStack* _matrixStack, Re
 		glUniformMatrix4fv(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_DEPTH_MVP.c_str()), 1, GL_FALSE, &depthMVP[0][0]);
 
 		if(static_cast<VoxRenderOptions *>(_renderOption)->shadowMapTextureId != 0){
-			glActiveTexture(GL_TEXTURE0 + mesh->textures.size());
+			glActiveTexture(GL_TEXTURE0 + mesh->textureCount());
 			glBindTexture(GL_TEXTURE_2D, static_cast<VoxRenderOptions *>(_renderOption)->shadowMapTextureId);
-			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_SHADOW_MAP_SAMPLER.c_str()), mesh->textures.size());
+			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_SHADOW_MAP_SAMPLER.c_str()), mesh->textureCount());
 		}
 		hasShadows = 1;
 	}
