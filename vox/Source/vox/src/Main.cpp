@@ -4,6 +4,7 @@
 #include "GameJamGame.h"
 #include <Vox.h>
 #include <node\Node.h>
+#include <typeinfo>
 
 int main(void){
 	vox::initialize("Vox");
@@ -19,5 +20,10 @@ int main(void){
 	game = nullptr;
 	ResourceManager::destruct();
 	std::cout << "Final node count: " << Node::count << std::endl;
+
+	for(auto n : Node::nodes){
+		std::cout << typeid(*n).name() << std::endl;
+	}
+
 	vox::destruct();
 }
