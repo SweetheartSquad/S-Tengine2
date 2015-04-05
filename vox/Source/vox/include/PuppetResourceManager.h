@@ -22,8 +22,10 @@ public:
 	static Texture * cloud2;
 	static Texture * cloud3;
 	static Texture * cloud4;
-
+	
 	static TextureSampler * dustParticle;
+	static std::vector<TextureSampler *> scoreParticles;
+	static TextureSampler * getRandomScoreParticles();
 
 	static TextureSampler * head1;
 	static std::vector<TextureSampler *> faces;

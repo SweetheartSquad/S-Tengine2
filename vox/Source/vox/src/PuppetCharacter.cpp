@@ -43,6 +43,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	itemJoint(nullptr),
 	behaviourManager(this),
 	score(0.f),
+	lastUpdateScore(0.f),
 	control(1.f),
 	id(-1),
 	actionThrottle(0.333),
@@ -351,13 +352,20 @@ void PuppetCharacter::update(Step* _step){
 	}
 
 	// spray some particles to show hits more
+	PuppetScene * ps = dynamic_cast<PuppetScene *>(scene);
 	if (justTookDamage){
-		PuppetScene * ps = dynamic_cast<PuppetScene *>(scene);
 		if (ps != nullptr){
-			Particle * p = ps->particleSystem->addParticle(rootComponent->getPos(false), ps->particleSystem->defaultTex);
-			justTookDamage = false;
+			Particle * p = ps->particleSystem->addParticle(rootComponent->getPos(false));
 			p->applyLinearImpulse(vox::NumberUtils::randomFloat(-750, 750), vox::NumberUtils::randomFloat(1000, 1500), p->body->GetPosition().x, p->body->GetPosition().y);
 		}
+		justTookDamage = false;
+	}
+	
+	// spray some particles to show score
+	while(lastUpdateScore < score){
+		lastUpdateScore += 1;
+		Particle * p = ps->particleSystem->addParticle(rootComponent->getPos(false), PuppetResourceManager::getRandomScoreParticles());
+		p->applyLinearImpulse(vox::NumberUtils::randomFloat(-250, 250), vox::NumberUtils::randomFloat(500, 750), p->body->GetPosition().x, p->body->GetPosition().y);
 	}
 }
 

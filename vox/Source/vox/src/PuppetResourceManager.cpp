@@ -28,6 +28,7 @@ Texture * PuppetResourceManager::cloud3	= new Texture("../assets/hurly-burly/Clo
 Texture * PuppetResourceManager::cloud4	= new Texture("../assets/hurly-burly/Clouds/Cloud4.png", 1024, 1024, true, true);
 
 TextureSampler * PuppetResourceManager::dustParticle = new TextureSampler("../assets/hurly-burly/", "dustParticle.png.def");
+std::vector<TextureSampler *> PuppetResourceManager::scoreParticles;
 
 TextureSampler * PuppetResourceManager::head1 = new TextureSampler("../assets/hurly-burly/", "Head1.png.def"); 
 std::vector<TextureSampler *> PuppetResourceManager::faces;
@@ -70,8 +71,15 @@ void PuppetResourceManager::init(){
 	resources.push_back(cloud2);
 	resources.push_back(cloud3);
 	resources.push_back(cloud4);
-
+	
 	resources.push_back(dustParticle);
+	
+	scoreParticles.push_back(new TextureSampler("../assets/hurly-burly/Score/", "plusOne1.png.def"));
+	scoreParticles.push_back(new TextureSampler("../assets/hurly-burly/Score/", "plusOne2.png.def"));
+	scoreParticles.push_back(new TextureSampler("../assets/hurly-burly/Score/", "plusOne3.png.def"));
+	for(auto i : scoreParticles){
+		resources.push_back(i);
+	}
 
 	resources.push_back(head1);
 	resources.push_back(hand1);
@@ -153,6 +161,10 @@ void PuppetResourceManager::init(){
 	cheerSounds->addNewSound("1", "../assets/hurly-burly/audio/greenCheer/greenCheerMain.ogg");
 	cheerSounds->addNewSound("2", "../assets/hurly-burly/audio/blueCheer/blueCheerMain.ogg");
 	cheerSounds->addNewSound("3", "../assets/hurly-burly/audio/redCheer/redCheerMain.ogg");
+}
+
+TextureSampler * PuppetResourceManager::getRandomScoreParticles(){
+	return scoreParticles.at(vox::NumberUtils::randomInt(0, scoreParticles.size()-1));
 }
 
 TextureSampler * PuppetResourceManager::getRandomFace(){

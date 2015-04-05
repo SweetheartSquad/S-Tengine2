@@ -27,6 +27,7 @@ public:
 
 	float targetRoll;
 	float score;
+	float lastUpdateScore;
 
 	float health;
 
