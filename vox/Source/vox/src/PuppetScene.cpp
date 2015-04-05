@@ -254,10 +254,18 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 }
 
 PuppetScene::~PuppetScene(){
+	while(countDownNumbers.size() > 0){
+		// just in case the scene was deleted while the countdown was going, remove them from the children list to avoid deleting them twice
+		removeChild(countDownNumbers.back());
+		delete countDownNumbers.back();
+		countDownNumbers.pop_back();
+	}
+
 	while(children.size() > 0){
 		delete children.back();
 		children.pop_back();
 	}
+
 
 	delete soundManager;
 	delete countdownSoundManager;
@@ -412,9 +420,7 @@ void PuppetScene::update(Step * _step){
 
 	if(this == game->currentScene){
 		currentTime += _step->deltaTime;
-		if(currentTime > duration){
-			complete();
-		}else if (currentTime > duration - countDownNumbers.size()){
+		if (currentTime > duration - countDownNumbers.size()){
 			if(duration - currentTime < countDown){
 				doCountDown();
 			}
@@ -427,6 +433,9 @@ void PuppetScene::update(Step * _step){
 					float scale = Easing::easeInCirc(displayTime-0.5f, 5.f, -5.f, 0.5f);
 					countDownNumbers.at(countDown)->transform->scale(glm::vec3(-scale, scale, 1.f), false);
 				}
+			}
+			if(currentTime > duration){
+				complete();
 			}
 		}
 	}
@@ -604,22 +613,26 @@ void PuppetScene::doCountDown(){
 		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setSaturation(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getSaturation() + 0.2f);
 		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setValue(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getValue() + 0.2f);
 		
-		removeChild(countDownNumbers.at(countDown));
+		removeChild(countDownNumbers.back());
+		delete countDownNumbers.back();
+		countDownNumbers.pop_back();
 	}
 	
-	// Decrease countdown
-	-- countDown;
-	
-	// Display countdown
-	std::cout << "=========================" << std::endl;
-	std::cout << countDown << std::endl;
-	std::cout << "idx: " << countDown << std::endl;
-	std::cout << "=========================" << std::endl;
+	if(countDown > 0){
+		// Decrease countdown
+		-- countDown;
 
-	countdownSoundManager->play(std::to_string(countDown));
+		// Display countdown
+		std::cout << "=========================" << std::endl;
+		std::cout << countDown << std::endl;
+		std::cout << "idx: " << countDown << std::endl;
+		std::cout << "=========================" << std::endl;
 
-	// Add new number to scene
-	addChild(countDownNumbers.at(countDown), 2);
+		countdownSoundManager->play(std::to_string(countDown));
+
+		// Add new number to scene
+		addChild(countDownNumbers.at(countDown), 2);
+	}
 }
 
 void PuppetScene::playRandomBackgroundMusic(){
