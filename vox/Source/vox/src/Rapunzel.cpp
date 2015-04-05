@@ -195,15 +195,14 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	glove->addToLayeredScene(this, 1);
 
 	goldPile = new StructureGoldPile(world);
-	goldPile->translateComponents(glm::vec3(50.f, 25.f, 0.f));
 	addChild(goldPile, 1);
 	goldPile->setShader(shader, true);
 	goldPile->addToLayeredScene(this, 1);
-	
-	goldPile->rootComponent->transform->scale(20.0f, 20.0f, 1.0f);
-
+	//Uncomment to place on castle
+	//goldPile->translateComponents(glm::vec3(15.f, 23.f, 0.f));
+	goldPile->translateComponents(glm::vec3(10.f, 2.f, 0.f));
+	goldPile->rootComponent->transform->scale(10.0f, 10.0f, 1.0f);
 	gameCam->addTarget(goldPile);
-
 	playRandomBackgroundMusic();
 }
 

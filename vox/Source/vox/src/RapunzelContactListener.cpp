@@ -15,6 +15,7 @@
 #include <Box2D\Dynamics\Joints\b2RevoluteJoint.h>
 
 #include "Behaviour.h"
+#include <StructureGoldPile.h>
 
 RapunzelContactListener::RapunzelContactListener(PuppetScene * _scene) :
 	PuppetContactListener(_scene)
@@ -35,6 +36,16 @@ void RapunzelContactListener::playerItemContact(b2Contact * _contact, b2Fixture 
 
 void RapunzelContactListener::playerStructureContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _structureFixture){
 	PuppetContactListener::playerStructureContact(_contact, _playerFixture, _structureFixture);
+
+	PuppetCharacter * puppet = static_cast<PuppetCharacter *>(_playerFixture->GetUserData());
+	Structure * structure = static_cast<StructureGoldPile *>(_structureFixture->GetUserData());
+	StructureGoldPile * goldPile = dynamic_cast<StructureGoldPile *>(structure);
+
+	if(goldPile != nullptr) {
+		if(!puppet->dead){
+			goldPile->loseGold();
+		}
+	}
 }
 
 void RapunzelContactListener::playerGroundContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _groundFixture){

@@ -122,7 +122,6 @@ void Sprite::setUvs(vox::Rectangle _rect){
 	mesh->vertices.at(3).v  = _rect.getBottomLeft().y;
 }
 
-
 void Sprite::load(){
 	if(!loaded){
 		for(auto s : animations) {
