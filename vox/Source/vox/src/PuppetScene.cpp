@@ -132,22 +132,15 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	boundaries.at(2)->setTranslationPhysical(sceneWidth/2.f, sceneHeight-_size, 0);
 	boundaries.at(3)->setTranslationPhysical(sceneWidth/2.f, -_size, 0);
 	
-	/*addChild(boundaries.at(0), 0);
-	addChild(boundaries.at(1), 0);
-	addChild(boundaries.at(2), 0);
-	addChild(boundaries.at(3), 0);*/
-	
-	world->addToWorld(boundaries.at(0));
-	world->addToWorld(boundaries.at(1));
-	world->addToWorld(boundaries.at(2));
-	world->addToWorld(boundaries.at(3));
-
 	b2Filter sf;
 	sf.categoryBits = PuppetGame::kBOUNDARY;
 	sf.maskBits = -1;
-	boundaries.at(0)->body->GetFixtureList()->SetFilterData(sf);
-	boundaries.at(1)->body->GetFixtureList()->SetFilterData(sf);
-	boundaries.at(2)->body->GetFixtureList()->SetFilterData(sf);
+	for(auto b : boundaries){
+		addChild(b, 0);
+		b->setShader(shader, true);
+		world->addToWorld(b);
+		b->body->GetFixtureList()->SetFilterData(sf);
+	}
 	sf.categoryBits = PuppetGame::kBOUNDARY | PuppetGame::kGROUND;
 	boundaries.at(3)->body->GetFixtureList()->SetFilterData(sf);
 	boundaries.at(3)->body->GetFixtureList()->SetFriction(1);

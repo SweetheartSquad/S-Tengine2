@@ -101,6 +101,6 @@ public:
 	virtual void doCountDown();
 	void playRandomBackgroundMusic();
 
-	 virtual void populateBackground();
-	 virtual void populateClouds();
+	virtual void populateBackground();
+	virtual void populateClouds();
 };
