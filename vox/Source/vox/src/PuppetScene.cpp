@@ -393,19 +393,7 @@ void PuppetScene::update(Step * _step){
 			splashMessage->transform->translate(glm::vec3(0,0,-10));
 		}else{
 			// Remove previous number from scene
-			// Just copying destroyItem stuff for now
-			for(signed long int j = children.size()-1; j >= 0; --j){
-				if(children.at(j) == splashMessage){
-					children.erase(children.begin() + j);
-				}
-			}
-			for(std::vector<Entity *> * layer : layers){
-				for(signed long int j = layer->size()-1; j >= 0; --j){
-					if(layer->at(j) == splashMessage){
-						layer->erase(layer->begin() + j);
-					}
-				}
-			}
+			removeChild(splashMessage);
 			delete splashMessage;
 			splashMessage = nullptr;
 		}

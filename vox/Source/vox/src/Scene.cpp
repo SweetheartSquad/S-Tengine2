@@ -144,6 +144,14 @@ void Scene::addChild(Entity* _child){
 	children.push_back(_child);
 }
 
+void Scene::removeChild(Entity* _child){
+	for(signed long int j = children.size()-1; j >= 0; --j){
+		if(children.at(j) == _child){
+			children.erase(children.begin() + j);
+		}
+	}
+}
+
 void Scene::renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	Shader * backupOverride = renderOptions->overrideShader;
 	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);

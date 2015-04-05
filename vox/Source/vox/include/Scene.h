@@ -54,6 +54,9 @@ public:
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	/** Adds a reference to an entity to the attached list of children */
 	virtual void addChild(Entity * _child);
+	/** Searches the list of children and removes _child
+	(searches whole array, so if child is added more than once, removes every instance) */
+	virtual void removeChild(Entity * _child);
 
 	virtual void renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 

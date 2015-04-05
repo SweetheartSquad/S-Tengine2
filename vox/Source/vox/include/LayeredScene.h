@@ -16,6 +16,9 @@ public:
 	/** DOESN'T DO ANYTHING! */
 	void addChild(Entity * _child) override;
 
+	/** In addition to removing from child list, also searches each layer individually and removes as well */
+	void removeChild(Entity * _child) override;
+
 	/** Adds an entity to the specified layer */
 	void addChild(Entity * _child, unsigned long int _layer);
 };

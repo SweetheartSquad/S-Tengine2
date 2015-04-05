@@ -72,6 +72,17 @@ void LayeredScene::addChild(Entity* _child){
 	std::cout << "LayeredScene::addChild not implemented; call didn't do anything" << std::endl;
 }
 
+void LayeredScene::removeChild(Entity* _child){
+	Scene::removeChild(_child);
+	for(std::vector<Entity *> * layer : layers){
+		for(signed long int j = layer->size()-1; j >= 0; --j){
+			if(layer->at(j) == _child){
+				layer->erase(layer->begin() + j);
+			}
+		}
+	}
+}
+
 void LayeredScene::addChild(Entity* _child, unsigned long int _layer){
 	if(_layer < numLayers){
 		children.push_back(_child);
