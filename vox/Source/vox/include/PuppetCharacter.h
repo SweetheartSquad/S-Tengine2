@@ -60,7 +60,7 @@ public:
 	void unload() override;
 	void load() override;
 
-	void delegateToContactComplete(std::function<void(PuppetCharacter *, void* [])> _function, void * _args[]);
+	void delegateToContactComplete(std::function<void(PuppetCharacter *)> _func);
 
 	virtual void jump();
 	//Called when the controller is thrust forward
@@ -86,6 +86,5 @@ public:
 	virtual void translateComponents(glm::vec3 _translationVector) override;
 
 private:
-	std::function<void(PuppetCharacter *, void * [])> contactDelegate;
-	void ** delegateArgs;
+	std::function<void(PuppetCharacter *)> contactDelegate;
 };

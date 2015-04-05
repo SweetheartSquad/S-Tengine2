@@ -344,8 +344,9 @@ void PuppetCharacter::update(Step* _step){
 			}
 		}
 	}
+
 	if(contactDelegate != nullptr) {
-		contactDelegate(this, delegateArgs);
+		contactDelegate(this);
 		contactDelegate = nullptr;
 	}
 
@@ -462,9 +463,8 @@ void PuppetCharacter::load(){
 	Box2DSuperSprite::load();
 }
 
-void PuppetCharacter::delegateToContactComplete(std::function<void(PuppetCharacter*, void*[])> _function, void * _args[]){
-	contactDelegate = _function;
-	delegateArgs = _args;
+void PuppetCharacter::delegateToContactComplete(std::function<void(PuppetCharacter*)> _func){
+		contactDelegate = _func;
 }
 
 void PuppetCharacter::pickupItem(Item * _item){
