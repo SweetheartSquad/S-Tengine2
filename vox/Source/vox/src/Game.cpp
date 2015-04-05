@@ -22,6 +22,7 @@ Game::Game(bool _isRunning):
 	kc_lastKey(0),
 	kc_code(0),
 	kc_active(false),
+	kc_just_active(false),
 	switchingScene(false),
 	currentScene(nullptr),
 	currentSceneKey(""),
@@ -75,7 +76,9 @@ void Game::update(Step * _step){
 	if(keyboard->keyDown(GLFW_KEY_ESCAPE)){
 		glfwSetWindowShouldClose(vox::currentContext, true);
 	}
-
+	if(kc_just_active){
+		kc_just_active = false;
+	}
 	switch(kc_code){
 	case 0:
 		if(keyboard->keyJustUp(GLFW_KEY_UP)){
@@ -167,6 +170,7 @@ void Game::update(Step * _step){
 		if(keyboard->keyJustUp(GLFW_KEY_A)){
 			if(kc_lastKey == GLFW_KEY_B){
 				kc_active = !kc_active;
+				kc_just_active = true;
 			}
 			kc_code = 0;
 		}

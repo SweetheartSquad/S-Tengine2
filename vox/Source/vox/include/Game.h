@@ -85,4 +85,5 @@ public:
 	unsigned long int kc_lastKey;
 	unsigned long int kc_code;
 	bool kc_active;
+	bool kc_just_active;
 };

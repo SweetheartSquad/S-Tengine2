@@ -34,6 +34,9 @@ class Item;
 class NodeBox2DBody;
 class ParticleSystem;
 class StructureBreakable;
+class StandardFrameBuffer;
+class RenderSurface;
+class Shader;
 
  class PuppetScene abstract : public LayeredScene{
 public:
@@ -77,6 +80,11 @@ public:
 	std::vector<StructureBreakable *> structures;
 
     ParticleSystem * particleSystem;
+
+	Shader * screenSurfaceShader;
+	RenderSurface * screenSurface;
+	StandardFrameBuffer * screenFBO;
+	float screenShaderSetting;
 
 	explicit PuppetScene(PuppetGame * _game, float time, float _width = 170.f, float _height = 50.f, float _size = 3.f);
 	virtual ~PuppetScene();
