@@ -11,10 +11,7 @@ LayeredScene::LayeredScene(Game * _game, unsigned long int _numLayers) :
 	Scene(_game),
 	numLayers(_numLayers)
 {
-	while(_numLayers > 0){
-		layers.push_back(new std::vector<Entity *>());
-		--_numLayers;
-	}
+	layers.resize(_numLayers);
 }
 
 void LayeredScene::update(Step * _step){
@@ -61,8 +58,8 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	matrixStack->setViewMatrix(activeCamera->getViewMatrix());
 
     glDisable(GL_DEPTH_TEST);
-	for(std::vector<Entity *> * layer : layers){
-		for(Entity * e : *layer){
+	for(std::vector<Entity *> & layer : layers){
+		for(Entity * e : layer){
 			e->render(matrixStack, renderOptions);
 		}
 	}
@@ -74,10 +71,10 @@ void LayeredScene::addChild(Entity* _child){
 
 void LayeredScene::removeChild(Entity* _child){
 	Scene::removeChild(_child);
-	for(std::vector<Entity *> * layer : layers){
-		for(signed long int j = layer->size()-1; j >= 0; --j){
-			if(layer->at(j) == _child){
-				layer->erase(layer->begin() + j);
+	for(std::vector<Entity *> & layer : layers){
+		for(signed long int j = layer.size()-1; j >= 0; --j){
+			if(layer.at(j) == _child){
+				layer.erase(layer.begin() + j);
 			}
 		}
 	}
@@ -86,7 +83,7 @@ void LayeredScene::removeChild(Entity* _child){
 void LayeredScene::addChild(Entity* _child, unsigned long int _layer){
 	if(_layer < numLayers){
 		children.push_back(_child);
-		layers.at(_layer)->push_back(_child);
+		layers.at(_layer).push_back(_child);
 	}else{
 		std::cout << "Scene does not have a layer " << _layer << std::endl;
 	}

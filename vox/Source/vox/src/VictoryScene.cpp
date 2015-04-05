@@ -137,18 +137,7 @@ void VictoryScene::doCountDown(){
 	if (countDown <= countDownNumbers.size() - 1){
 		// Remove previous number from scene
 		// Just copying destroyItem stuff for now
-		for(signed long int j = children.size()-1; j >= 0; --j){
-			if(children.at(j) == countDownNumbers.at(countDown)){
-				children.erase(children.begin() + j);
-			}
-		}
-		for(std::vector<Entity *> * layer : layers){
-			for(signed long int j = layer->size()-1; j >= 0; --j){
-				if(layer->at(j) == countDownNumbers.at(countDown)){
-					layer->erase(layer->begin() + j);
-				}
-			}
-		}
+		removeChild(countDownNumbers.at(countDown));
 	}
 	
 	// Decrease countdown

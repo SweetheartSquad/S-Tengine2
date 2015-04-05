@@ -7,7 +7,7 @@ public:
 	explicit LayeredScene(Game * _game, unsigned long int _numLayers);
 
 	unsigned long int numLayers;
-	std::vector<std::vector<Entity *> *> layers;
+	std::vector<std::vector<Entity *>> layers;
 	
 	/** Calls update on the attached camera */
 	virtual void update(Step * _step);

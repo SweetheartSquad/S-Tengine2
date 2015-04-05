@@ -45,6 +45,11 @@ Scene::~Scene(void){
 		cameras.pop_back();
 	}
 	activeCamera = nullptr;
+
+	while(lights.size() > 0){
+		delete lights.back();
+		lights.pop_back();
+	}
 	
 	delete matrixStack;
 	delete renderOptions;
@@ -52,9 +57,6 @@ Scene::~Scene(void){
 	delete shadowBuffer;
 	delete depthShader;
 	delete shadowSurface;
-	for(auto light : lights){
-		delete light;
-	}
 }
 
 void Scene::update(Step * _step){

@@ -573,14 +573,14 @@ void PuppetScene::destroyItem(Item * _item){
 			}
 		}
 	}
-	for(std::vector<Entity *> * layer : layers){
-		for(signed long int j = layer->size()-1; j >= 0; --j){
-			if(layer->at(j) == _item){
-				layer->erase(layer->begin() + j);
+	for(std::vector<Entity *> & layer : layers){
+		for(signed long int j = layer.size()-1; j >= 0; --j){
+			if(layer.at(j) == _item){
+				layer.erase(layer.begin() + j);
 			}else{
 				for(signed long int k = _item->components.size()-1; k >= 0; --k){
-					if(layer->at(j) == *_item->components.at(k)){
-						layer->erase(layer->begin() + j);
+					if(layer.at(j) == *_item->components.at(k)){
+						layer.erase(layer.begin() + j);
 					}
 				}
 			}
@@ -604,20 +604,7 @@ void PuppetScene::doCountDown(){
 		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setSaturation(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getSaturation() + 0.2f);
 		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setValue(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getValue() + 0.2f);
 		
-		// Remove previous number from scene
-		// Just copying destroyItem stuff for now
-		for(signed long int j = children.size()-1; j >= 0; --j){
-			if(children.at(j) == countDownNumbers.at(countDown)){
-				children.erase(children.begin() + j);
-			}
-		}
-		for(std::vector<Entity *> * layer : layers){
-			for(signed long int j = layer->size()-1; j >= 0; --j){
-				if(layer->at(j) == countDownNumbers.at(countDown)){
-					layer->erase(layer->begin() + j);
-				}
-			}
-		}
+		removeChild(countDownNumbers.at(countDown));
 	}
 	
 	// Decrease countdown
