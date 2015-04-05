@@ -11,6 +11,7 @@
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
 	NodeRenderable(),
 	dirty(true),
+	texturesDirty(true),
 	drawMode(drawMode),
 	polygonalDrawMode(polygonalDrawMode),
 	uvEdgeMode(GL_CLAMP_TO_EDGE)

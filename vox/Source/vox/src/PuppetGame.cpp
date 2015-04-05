@@ -47,8 +47,8 @@ PuppetGame::PuppetGame(bool _running):
 	//scenes.insert(std::make_pair("indoors", new GameJamSceneIndoor(this)));
 	//scenes.insert(std::make_pair("outdoors", new GameJamSceneOutdoor(this)));
 	
-	currentSceneKey = "Raid The Castle";
-	scenes.insert(std::make_pair(currentSceneKey, new RaidTheCastle(this)));
+	currentSceneKey = "Rapunzel";
+	scenes.insert(std::make_pair(currentSceneKey, new Rapunzel(this)));
 	currentScene = scenes.at(currentSceneKey);
 
 	/*loadRandomScene();

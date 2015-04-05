@@ -39,6 +39,7 @@
 
 #include <glfw\glfw3.h>
 #include <SoundManager.h>
+#include <StructureGoldPile.h>
 
 Rapunzel::Rapunzel(PuppetGame* _game):
 	PuppetScene(_game, 50.f, 100.f),
@@ -193,6 +194,16 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	glove->setShader(shader, true);
 	glove->addToLayeredScene(this, 1);
 
+	goldPile = new StructureGoldPile(world);
+	goldPile->translateComponents(glm::vec3(50.f, 25.f, 0.f));
+	addChild(goldPile, 1);
+	goldPile->setShader(shader, true);
+	goldPile->addToLayeredScene(this, 1);
+	
+	goldPile->rootComponent->transform->scale(20.0f, 20.0f, 1.0f);
+
+	gameCam->addTarget(goldPile);
+
 	playRandomBackgroundMusic();
 }
 
@@ -201,6 +212,10 @@ Rapunzel::~Rapunzel(){
 
 void Rapunzel::update(Step* _step){
 	PuppetScene::update(_step);
+
+	if(keyboard->keyJustUp(GLFW_KEY_N)){
+		goldPile->loseGold();
+	}
 
 	if(!splashSoundPlayed){
 		PuppetResourceManager::splashSounds->play("Rapunzel");

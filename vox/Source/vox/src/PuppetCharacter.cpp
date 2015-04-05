@@ -235,17 +235,16 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 
 
 	// change the shader settings based on current damage and player id
-	if(!dead){
-		if (!ai){
-			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(float(id+1) * 0.167f);
-			if(id == 0){
-				static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat + 1);
-			}
-		}else{
-			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
+	if (!ai){
+		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(float(id+1) * 0.167f);
+		if(id == 0){
+			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat + 1);
 		}
-	}else {
+	}else{
 		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
+	}
+	
+	if(dead){
 		static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->setAlpha(0.5f);
 	}
 
@@ -263,18 +262,16 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 	handLeft->render(_matrixStack, _renderOptions);
 	handRight->render(_matrixStack, _renderOptions);
 	
-	if(!dead){
-		// change the shader settings based on current damage and player id
-		if (!ai){
-			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(float(id+1) * 0.167f);
-			if(id == 0){
-				static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat + 1);
-			}
-		} else{
-			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
+	// change the shader settings based on current damage and player id
+	if (!ai){
+		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(float(id+1) * 0.167f);
+		if(id == 0){
+			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat + 1);
 		}
-	}else {
+	} else{
 		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
+	}
+	if(dead){
 		static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->setAlpha(0.5f);
 	}
 	headgear->render(_matrixStack, _renderOptions);
@@ -332,7 +329,7 @@ void PuppetCharacter::update(Step* _step){
 	if(health <= 0.0f || deathPending) {
 		die();
 	}
-	if(control >= 0.995f) {
+	if(control >= 0.995f){
 		for(Box2DSprite ** c : components){
 			if(*c != nullptr){
 				b2Filter b = (*c)->body->GetFixtureList()->GetFilterData();

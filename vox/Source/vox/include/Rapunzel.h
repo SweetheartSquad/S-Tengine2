@@ -4,6 +4,7 @@
 
 #define RAPUNZEL_GHOST_HEIGHT 12.0f
 
+class StructureGoldPile;
 class MeshEntity;
 class Lever;
 class PuppetCharacterGuard;
@@ -22,6 +23,7 @@ public:
 	Lever * lever1;
 	Lever * lever2;
 	Lever * lever3;
+	StructureGoldPile * goldPile;
 	PuppetCharacterGuard * guard;
 
 	PuppetCharacterThief * playerCharacter1;

@@ -173,6 +173,7 @@
     <ClCompile Include="../src/ItemGold.cpp" />
     <ClCompile Include="../src/StructureGold.cpp" />
     <ClCompile Include="../src/StructureInteractable.cpp" />
+    <ClCompile Include="..\src\StructureGoldPile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -359,6 +360,7 @@
     <ClInclude Include="../include/ItemGold.h" />
     <ClInclude Include="../include/StructureGold.h" />
     <ClInclude Include="../include/StructureInteractable.h" />
+    <ClInclude Include="..\include\StructureGoldPile.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Include">

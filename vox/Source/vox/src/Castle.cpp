@@ -37,6 +37,7 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	for(Box2DSprite ** c : components){
 		(*c)->createFixture(sf);
 	}
+
 	setUserData(this);
 	
 	rootComponent->mesh->popTexture2D();
@@ -45,12 +46,10 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	// sprite sheet animation
 	int f[] = {0,1,2,3};
 	std::vector<int> ff(std::begin(f), std::end(f));
-
 	spriteSheet->pushFramesInRange(0, 3, baseTex->width, baseTex->height, baseSpriteSheetTex->width);
-	
 	rootComponent->addAnimation("castleStates", spriteSheet, true);
-
 	rootComponent->setTranslationPhysical(0.f, rootComponent->getCorrectedHeight(), 0.f);
+
 }
 
 
