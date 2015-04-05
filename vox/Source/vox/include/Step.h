@@ -1,6 +1,8 @@
 #pragma once
 
-class Step{
+#include <node\Node.h>
+
+class Step : public Node{
 public:
 	Step();
 	~Step();
