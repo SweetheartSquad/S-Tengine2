@@ -144,9 +144,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 
 	for(PuppetCharacter * p : players){
 		TextureSampler * weaponTex = RapunzelResourceManager::getRandomWeapon();
-		TextureSampler * projTex = RapunzelResourceManager::getRandomWeapon();
-		
-		ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -weaponTex->height);
+		ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -weaponTex->height);
 		weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);
 		p->itemToPickup = weapon;

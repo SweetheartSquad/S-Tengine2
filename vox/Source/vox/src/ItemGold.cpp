@@ -17,11 +17,11 @@ ItemGold::ItemGold(Box2DWorld * _world) :
 	NodeChild(nullptr),
 	NodeRenderable()
 {
-	//if(goldMesh == nullptr){
+	/*//if(goldMesh == nullptr){
 		goldMesh = MeshFactory::getCubeMesh();//new SpriteMesh(GL_QUADS);
 	//}
 	delete rootComponent->mesh;
-	rootComponent->mesh = goldMesh;
+	rootComponent->mesh = goldMesh;*/
 
 	/*if(goldMesh == nullptr){
 		goldMesh = rootComponent->mesh;
