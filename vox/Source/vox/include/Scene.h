@@ -23,6 +23,7 @@ class DepthFrameBuffer;
 class Mouse;
 class Game;
 class Entity;
+class BlurShader;
 
 class Scene : public virtual NodeRenderable, public virtual NodeLoadable, public virtual NodeUpdatable{
 public:
@@ -41,6 +42,7 @@ public:
 	StandardFrameBuffer	* depthBuffer;
 	StandardFrameBuffer * shadowBuffer;
 	DepthMapShader		* depthShader;
+	BlurShader			* shadowShader;
 	RenderSurface       * shadowSurface;
 	/** Reference to a list of references to entitites included in this scene */
 	std::vector<Entity *> children;

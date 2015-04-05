@@ -28,7 +28,8 @@ Scene::Scene(Game * _game):
 	shadowBuffer(new StandardFrameBuffer(true)),
 	depthShader(new DepthMapShader(true)),
 	//Singletons
-	shadowSurface(new RenderSurface(new BlurShader(true))),
+	shadowShader(new BlurShader(true)),
+	shadowSurface(new RenderSurface(shadowShader)),
 	matrixStack(new vox::MatrixStack())
 {
 	clearColor[0] = 0.0;
@@ -57,6 +58,7 @@ Scene::~Scene(void){
 	delete shadowBuffer;
 	delete depthShader;
 	delete shadowSurface;
+	delete shadowShader;
 }
 
 void Scene::update(Step * _step){

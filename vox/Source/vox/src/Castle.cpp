@@ -41,7 +41,7 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	setUserData(this);
 	
 	rootComponent->mesh->popTexture2D();
-	SpriteSheetAnimation * spriteSheet = new SpriteSheetAnimation(baseSpriteSheetTex, 0);
+	spriteSheet = new SpriteSheetAnimation(baseSpriteSheetTex, 0);
 
 	// sprite sheet animation
 	int f[] = {0,1,2,3};
@@ -50,6 +50,10 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	rootComponent->addAnimation("castleStates", spriteSheet, true);
 	rootComponent->setTranslationPhysical(0.f, rootComponent->getCorrectedHeight(), 0.f);
 	rootComponent->mesh->uvEdgeMode = GL_MIRRORED_REPEAT_ARB;
+}
+
+Castle::~Castle(){
+	delete spriteSheet;
 }
 
 

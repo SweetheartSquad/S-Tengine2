@@ -33,7 +33,7 @@ StructureGoldPile::StructureGoldPile(Box2DWorld* _world):
 	}
 	setUserData(this);
 	rootComponent->mesh->popTexture2D();
-	SpriteSheetAnimation * spriteSheet = new SpriteSheetAnimation(baseSpriteSheetTex, 0);
+	spriteSheet = new SpriteSheetAnimation(baseSpriteSheetTex, 0);
 
 	// sprite sheet animation
 	int f[] = {0,1,2,3,4,5};
@@ -51,6 +51,7 @@ StructureGoldPile::StructureGoldPile(Box2DWorld* _world):
 }
 
 StructureGoldPile::~StructureGoldPile(){
+	delete spriteSheet;
 }
 
 void StructureGoldPile::loseGold(){

@@ -15,7 +15,7 @@ public:
 	explicit AccelerometerParser(std::string portName);
 	~AccelerometerParser();
 
-	void addAccelerometer(Accelerometer * _accelerometer);
+	Accelerometer *  addAccelerometer();
 
 	virtual void update(Step * _step) override;
 

@@ -21,10 +21,15 @@ AccelerometerParser::AccelerometerParser(std::string portName):
 }
 
 AccelerometerParser::~AccelerometerParser(){
+	while(accelerometers.size() > 0){
+		delete accelerometers.back();
+		accelerometers.pop_back();
+	}
 }
 
-void AccelerometerParser::addAccelerometer(Accelerometer* _accelerometer){
-	accelerometers.push_back(_accelerometer);
+Accelerometer * AccelerometerParser::addAccelerometer(){
+	accelerometers.push_back(new Accelerometer(this));
+	return accelerometers.back();
 }
 
 void AccelerometerParser::update(Step* _step){

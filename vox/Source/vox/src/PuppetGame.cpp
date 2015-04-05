@@ -26,22 +26,10 @@ PuppetGame::PuppetGame(bool _running):
 	PuppetResourceManager::load();
 
 	//Arduino stuff must be setup before the first scene is intiailized
-	Accelerometer * acc = new Accelerometer(arduino);
-	arduino->addAccelerometer(acc);
-
-	Accelerometer * acc2 = new Accelerometer(arduino);
-	arduino->addAccelerometer(acc2);
-
-	Accelerometer * acc3 = new Accelerometer(arduino);
-	arduino->addAccelerometer(acc3);
-	
-	Accelerometer * acc4 = new Accelerometer(arduino);
-	arduino->addAccelerometer(acc4);
-	
-	puppetControllers.push_back(new PuppetController(acc));
-	puppetControllers.push_back(new PuppetController(acc2));
-	puppetControllers.push_back(new PuppetController(acc3));
-	puppetControllers.push_back(new PuppetController(acc4));
+	puppetControllers.push_back(new PuppetController(arduino->addAccelerometer()));
+	puppetControllers.push_back(new PuppetController(arduino->addAccelerometer()));
+	puppetControllers.push_back(new PuppetController(arduino->addAccelerometer()));
+	puppetControllers.push_back(new PuppetController(arduino->addAccelerometer()));
 
 	//scenes.insert(std::make_pair("indoors", new GameJamSceneIndoor(this)));
 	//scenes.insert(std::make_pair("outdoors", new GameJamSceneOutdoor(this)));
@@ -57,6 +45,12 @@ PuppetGame::PuppetGame(bool _running):
 }
 
 PuppetGame::~PuppetGame(){
+	while(puppetControllers.size() > 0){
+		delete puppetControllers.back();
+		puppetControllers.pop_back();
+	}
+
+	delete arduino;
 }
 
 void PuppetGame::update(Step * _step){

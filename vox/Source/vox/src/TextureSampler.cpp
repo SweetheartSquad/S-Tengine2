@@ -44,6 +44,10 @@ TextureSampler::TextureSampler(std::string _definitionDir, std::string _definiti
 	}
 }
 
+TextureSampler::~TextureSampler(){
+	texture->decrementAndDelete();
+}
+
 void TextureSampler::load(){
 	texture->load();
 	NodeResource::load();
