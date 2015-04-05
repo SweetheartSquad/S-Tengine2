@@ -46,6 +46,8 @@ StructureGoldPile::StructureGoldPile(Box2DWorld* _world):
 	rootComponent->currentAnimation->currentFrame = 0;
 	rootComponent->update(&vox::step);
 	rootComponent->playAnimation = false;
+
+	rootComponent->body->GetFixtureList()->SetSensor(true);
 }
 
 StructureGoldPile::~StructureGoldPile(){
