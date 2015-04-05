@@ -26,6 +26,7 @@
 #include <PuppetCharacterKnight.h>
 #include <PuppetTexturePack.h>
 #include <PuppetController.h>
+#include <ParticleSystem.h>
 #include <Item.h>
 #include <ItemFlail.h>
 #include <ItemSimpleWeapon.h>
@@ -122,16 +123,6 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
 	playerCharacter4->ai = true;
 
-	//gameCam->addTarget(castle->rootComponent);
-	//gameCam->addTarget(catapult->rootComponent);
-
-	/*for(PuppetCharacter * p : players){
-		TextureSampler * weaponTex = RaidTheCastleResourceManager::getRandomWeapon();
-		ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
-		weapon->addToLayeredScene(this, 1);
-		weapon->setShader(shader, true);
-		p->itemToPickup = weapon;
-	}*/
 	for(PuppetCharacter * p : players){
 		TextureSampler * weaponTex = RaidTheCastleResourceManager::getRandomWeapon();
 		TextureSampler * projTex = RaidTheCastleResourceManager::getRandomWeapon();
@@ -153,6 +144,8 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	playRandomBackgroundMusic();
 	catapult->prepare();
+
+	populateClouds();
 }
 
 RaidTheCastle::~RaidTheCastle(){
@@ -177,6 +170,10 @@ void RaidTheCastle::update(Step* _step){
 
 
 	if(castle->state == Castle::state_t::kDEAD){
+		for (signed long int j = 0; j < std::rand() % 5 + 1; ++j){
+			particleSystem->addParticle(castle->rootComponent->getPos(false), PuppetResourceManager::dustParticle);
+		};
+		
 		triggerVictoryState();
 	}
 }

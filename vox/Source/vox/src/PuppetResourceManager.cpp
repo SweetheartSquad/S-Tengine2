@@ -66,6 +66,11 @@ void PuppetResourceManager::init(){
 	resources.push_back(bush1);
 	resources.push_back(bush2);
 
+	resources.push_back(cloud1);
+	resources.push_back(cloud2);
+	resources.push_back(cloud3);
+	resources.push_back(cloud4);
+
 	resources.push_back(dustParticle);
 
 	resources.push_back(head1);

@@ -72,20 +72,10 @@ void Box2DSuperSprite::setShader(Shader * _shader, bool _configureDefaultVertexA
 void Box2DSuperSprite::addToScene(Scene * _scene){
 	scene = _scene;
 	sceneLayer = -1;
-	/*for(Box2DSprite ** c : components){
-		if(*c != nullptr){
-			_scene->addChild(*c);
-		}
-	}*/
 }
 void Box2DSuperSprite::addToLayeredScene(LayeredScene * _scene, unsigned long int _layer){
 	scene = _scene;
 	sceneLayer = _layer;
-	/*for(Box2DSprite ** c : components){
-		if(*c != nullptr){
-			_scene->addChild(*c, _layer);
-		}
-	}*/
 }
 
 void Box2DSuperSprite::translateComponents(glm::vec3 _translateVector){

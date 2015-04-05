@@ -52,6 +52,7 @@
 #include <ParticleSystem.h>
 #include <SlayTheDragon.h>
 #include <ItemGold.h>
+#include <Cloud.h>
 
 class SlayTheDragon;
 
@@ -83,7 +84,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new ShaderComponentTexture(shader));
-	shader->components.push_back(new ShaderComponentHsv(shader, 0.f, 1.25f, 1.4f));
+	shader->components.push_back(new ShaderComponentHsv(shader, 0.f, 1.25f, 1.25f));
 	shader->components.push_back(new ShaderComponentTint(shader, 0.f, 0.f, 0.f));
 	shader->components.push_back(new ShaderComponentAlpha(shader, 1.f));
 	shader->compileShader();
@@ -644,31 +645,11 @@ void PuppetScene::populateBackground(){
 }
 
 void PuppetScene::populateClouds(){
-	int numClouds = 60;
+	int numClouds = std::rand() % 5 + 2;
 	for(signed long int i = 0; i < numClouds; ++i){
-		float height = std::rand()%500/50.f+5.f;
-		MeshEntity * cloud = new MeshEntity(MeshFactory::getPlaneMesh());
-		cloud->setShader(shader, true);
-		cloud->transform->translate((std::rand()%500/3.f)-25.f, height, max(-9, -(float)(numClouds-i)/numClouds)*8.f - 1.f);
-		cloud->transform->scale(height, height, 1);
-		int tex = i % 4;
-		switch(tex){
-			case 0:
-				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud1); break;
-			case 1:
-				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud2); break;
-			case 2:
-				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud3); break;
-			case 3:
-				cloud->mesh->pushTexture2D(PuppetResourceManager::cloud4); break;
-			default:
-				break;
-		}
+		float height = vox::NumberUtils::randomFloat(sceneHeight / 4.f, sceneHeight);
+		Cloud * cloud = new Cloud(shader);
+		cloud->transform->translate(vox::NumberUtils::randomFloat(0, sceneWidth), height, max(-9, -(float)(numClouds-i)/numClouds)*8.f - 1.f);
 		addChild(cloud, 0);
-		randomGround->setShader(shader, true);
-		if(i == 3){
-			randomGround->setTranslationPhysical(0.0f, 0.0f, max(-9, -(float)(numClouds-i)/numClouds)*8.f - 1.f);
-			addChild(randomGround, 0);
-		}
 	}
 }

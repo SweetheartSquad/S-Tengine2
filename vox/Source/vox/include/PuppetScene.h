@@ -33,6 +33,7 @@ class PuppetGame;
 class Item;
 class NodeBox2DBody;
 class ParticleSystem;
+class StructureBreakable;
 
  class PuppetScene abstract : public LayeredScene{
 public:
@@ -73,6 +74,7 @@ public:
 	bool mouseCam;
 
 	std::vector<Item *> items;
+	std::vector<StructureBreakable *> structures;
 
     ParticleSystem * particleSystem;
 

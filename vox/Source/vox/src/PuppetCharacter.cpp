@@ -16,7 +16,11 @@
 #include <SoundManager.h>
 #include <RaidTheCastleResourceManager.h>
 #include <TextureSampler.h>
-#include <shader/ShaderComponentAlpha.h>
+#include <shader\ShaderComponentAlpha.h>
+#include <PuppetScene.h>
+#include <ParticleSystem.h>
+#include <Particle.h>
+#include <NumberUtils.h>
 
 bool PuppetCharacter::compareByScore(PuppetCharacter * _a, PuppetCharacter * _b){
 	return (_a->score < _b->score);
@@ -45,7 +49,8 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	lastActionTime(0.0),
 	collisionTypes(new std::vector<int>()),
 	ghostPosition(_ghostPosition),
-	contactDelegate(nullptr)
+	contactDelegate(nullptr),
+	justTookDamage(false)
 {
 	init();
 }
@@ -343,6 +348,16 @@ void PuppetCharacter::update(Step* _step){
 		contactDelegate(this, delegateArgs);
 		contactDelegate = nullptr;
 	}
+
+	// spray some particles to show hits more
+	if (justTookDamage){
+		PuppetScene * ps = dynamic_cast<PuppetScene *>(scene);
+		if (ps != nullptr){
+			Particle * p = ps->particleSystem->addParticle(rootComponent->getPos(false), ps->particleSystem->defaultTex);
+			justTookDamage = false;
+			p->applyLinearImpulse(vox::NumberUtils::randomFloat(-750, 750), vox::NumberUtils::randomFloat(1000, 1500), p->body->GetPosition().x, p->body->GetPosition().y);
+		}
+	}
 }
 
 void PuppetCharacter::jump(){
@@ -435,6 +450,8 @@ void PuppetCharacter::takeDamage(float _damage){
 	}//rootComponent->applyLinearImpulseUp(500);
 	health -= _damage;
     control = std::max(0.f, control - 0.05f);
+
+	justTookDamage = true;
 }
 
 void PuppetCharacter::unload(){
@@ -474,12 +491,6 @@ void PuppetCharacter::pickupItem(Item * _item){
 	}
 }
 
-void PuppetCharacter::addToLayeredScene(LayeredScene * _scene, unsigned long int _layer){
-	/*Box2DSuperSprite::addToLayeredScene(_scene, _layer);
-	if(itemToPickup != nullptr){
-		itemToPickup->addToLayeredScene(_scene, _layer);
-	}*/
-}
 void PuppetCharacter::setShader(Shader * _shader, bool _configureDefaultAttributes){
 	Box2DSuperSprite::setShader(_shader, _configureDefaultAttributes);
 	if(itemToPickup != nullptr){
