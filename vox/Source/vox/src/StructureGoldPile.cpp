@@ -49,7 +49,6 @@ StructureGoldPile::StructureGoldPile(Box2DWorld* _world):
 }
 
 StructureGoldPile::~StructureGoldPile(){
-	
 }
 
 void StructureGoldPile::loseGold(){

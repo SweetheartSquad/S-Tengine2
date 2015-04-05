@@ -11,6 +11,7 @@ class PuppetCharacterGuard;
 class PuppetCharacterThief;
 class PuppetCharacterRapunzel;
 class StructureBoxingGlove;
+class ItemGold;
 
 class Rapunzel : public PuppetScene{
 public:

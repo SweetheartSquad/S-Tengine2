@@ -16,6 +16,8 @@
 
 #include "Behaviour.h"
 #include <StructureGoldPile.h>
+#include <ItemGold.h>
+#include <Rapunzel.h>
 
 RapunzelContactListener::RapunzelContactListener(PuppetScene * _scene) :
 	PuppetContactListener(_scene)
@@ -44,6 +46,18 @@ void RapunzelContactListener::playerStructureContact(b2Contact * _contact, b2Fix
 	if(goldPile != nullptr) {
 		if(!puppet->dead){
 			goldPile->loseGold();
+			if(goldPile->goldTaken < goldPile->totalGold){
+			static void * args[1] = {scene};
+			std::function<void(PuppetCharacter *, void* [])> fn = [](PuppetCharacter * _puppet, void * _args[]){
+				PuppetScene * pScene = static_cast<PuppetScene *>(_args[0]);
+				ItemGold * gold = new ItemGold(pScene->world);
+				gold->setShader(reinterpret_cast<Shader *>(pScene->shader), true);
+				gold->rootComponent->setTranslationPhysical(_puppet->torso->body->GetPosition().x, _puppet->torso->body->GetPosition().y, 0);
+				static_cast<LayeredScene *>(_args[0])->addChild(gold, 0);
+				_puppet->action(true);
+			};
+			puppet->delegateToContactComplete(fn, args);
+			}
 		}
 	}
 }

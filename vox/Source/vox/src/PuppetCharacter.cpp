@@ -44,7 +44,8 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	actionThrottle(0.333),
 	lastActionTime(0.0),
 	collisionTypes(new std::vector<int>()),
-	ghostPosition(_ghostPosition)
+	ghostPosition(_ghostPosition),
+	contactDelegate(nullptr)
 {
 	init();
 }
@@ -338,6 +339,10 @@ void PuppetCharacter::update(Step* _step){
 			}
 		}
 	}
+	if(contactDelegate != nullptr) {
+		contactDelegate(this, delegateArgs);
+		contactDelegate = nullptr;
+	}
 }
 
 void PuppetCharacter::jump(){
@@ -438,6 +443,11 @@ void PuppetCharacter::unload(){
 
 void PuppetCharacter::load(){
 	Box2DSuperSprite::load();
+}
+
+void PuppetCharacter::delegateToContactComplete(std::function<void(PuppetCharacter*, void*[])> _function, void * _args[]){
+	contactDelegate = _function;
+	delegateArgs = _args;
 }
 
 void PuppetCharacter::pickupItem(Item * _item){
