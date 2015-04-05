@@ -296,6 +296,9 @@ void PuppetScene::load(){
 	for(Sprite * s : countDownNumbers){
 		s->load();
 	}
+
+	screenSurface->load();
+	screenFBO->load();
 }
 
 void PuppetScene::unload(){
@@ -304,6 +307,9 @@ void PuppetScene::unload(){
 	for(Sprite * s : countDownNumbers){
 		s->unload();
 	}
+
+	screenSurface->unload();
+	screenFBO->unload();
 }
 
 void PuppetScene::update(Step * _step){
