@@ -2,7 +2,7 @@
 
 #include "PuppetGame.h"
 #include "GameJamGame.h"
-#include "Vox.h"
+#include <Vox.h>
 #include <node\Node.h>
 
 int main(void){
@@ -17,6 +17,7 @@ int main(void){
 	
 	delete game;
 	game = nullptr;
+	ResourceManager::destruct();
 	std::cout << "Final node count: " << Node::count << std::endl;
 	vox::destruct();
 }

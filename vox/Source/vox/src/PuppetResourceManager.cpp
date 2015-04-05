@@ -34,12 +34,12 @@ TextureSampler * PuppetResourceManager::head1 = new TextureSampler("../assets/hu
 std::vector<TextureSampler *> PuppetResourceManager::faces;
 TextureSampler * PuppetResourceManager::hand1 = new TextureSampler("../assets/hurly-burly/", "Hand1.png.def");
 
-TextureSampler * PuppetResourceManager::countDown0 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/0.png", 1024, 1024, true, true), 1024, 1024);
-TextureSampler * PuppetResourceManager::countDown1 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/1.png", 1024, 1024, true, true), 1024, 1024);
-TextureSampler * PuppetResourceManager::countDown2 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/2.png", 1024, 1024, true, true), 1024, 1024);
-TextureSampler * PuppetResourceManager::countDown3 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/3.png", 1024, 1024, true, true), 1024, 1024);
-TextureSampler * PuppetResourceManager::countDown4 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/4.png", 1024, 1024, true, true), 1024, 1024);
-TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/5.png", 1024, 1024, true, true), 1024, 1024);
+TextureSampler * PuppetResourceManager::countDown0 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/0.png", 1024, 1024, true, false), 1024, 1024);
+TextureSampler * PuppetResourceManager::countDown1 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/1.png", 1024, 1024, true, false), 1024, 1024);
+TextureSampler * PuppetResourceManager::countDown2 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/2.png", 1024, 1024, true, false), 1024, 1024);
+TextureSampler * PuppetResourceManager::countDown3 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/3.png", 1024, 1024, true, false), 1024, 1024);
+TextureSampler * PuppetResourceManager::countDown4 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/4.png", 1024, 1024, true, false), 1024, 1024);
+TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/5.png", 1024, 1024, true, false), 1024, 1024);
 
 //TextureSampler * PuppetResourceManager::redWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/redWins.png", 1024, 1024, true, true), 1024, 1024);
 //TextureSampler * PuppetResourceManager::yellowWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/yellowWins.png", 1024, 1024, true, true), 1024, 1024);
@@ -101,9 +101,6 @@ void PuppetResourceManager::init(){
 	resources.push_back(countDown3);
 	resources.push_back(countDown4);
 	resources.push_back(countDown5);
-	//Not sure why I need to call the constructor here 
-	//raidTheCastle = new RaidTheCastleResourceManager(); 
-	//subManagers.push_back(raidTheCastle);
 	
 	winSplashes.push_back(new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/yellowWins.png", 1024, 1024, true, true), 1024, 1024));
 	winSplashes.push_back(new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/greenWins.png", 1024, 1024, true, true), 1024, 1024));
@@ -155,12 +152,11 @@ void PuppetResourceManager::init(){
 	splashSounds->addNewSound("SlayTheDragon", "../assets/hurly-burly/audio/splash/SlayTheDragon.ogg");
 	resources.push_back(splashSounds);
 
-	
-	resources.push_back(cheerSounds);
 	cheerSounds->addNewSound("0", "../assets/hurly-burly/audio/yellowCheer/yellowCheerMain.ogg");
 	cheerSounds->addNewSound("1", "../assets/hurly-burly/audio/greenCheer/greenCheerMain.ogg");
 	cheerSounds->addNewSound("2", "../assets/hurly-burly/audio/blueCheer/blueCheerMain.ogg");
 	cheerSounds->addNewSound("3", "../assets/hurly-burly/audio/redCheer/redCheerMain.ogg");
+	resources.push_back(cheerSounds);
 }
 
 TextureSampler * PuppetResourceManager::getRandomScoreParticles(){

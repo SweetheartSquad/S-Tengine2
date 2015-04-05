@@ -24,3 +24,11 @@ void ResourceManager::unload(){
 		sub->unload();
 	}
 }
+
+
+void ResourceManager::destruct(){
+	while(resources.size() > 0){
+		delete resources.back();
+		resources.pop_back();
+	}
+}

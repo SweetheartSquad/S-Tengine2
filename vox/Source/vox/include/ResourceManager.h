@@ -11,4 +11,5 @@ public:
 	static std::vector<ResourceManager *> subManagers;
 	static void load();
 	static void unload();
+	static void destruct();
 };

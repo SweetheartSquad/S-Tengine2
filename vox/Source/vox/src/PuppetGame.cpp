@@ -22,7 +22,6 @@ PuppetGame::PuppetGame(bool _running):
 	lastScene(-1)
 {
 	std::srand((unsigned long int)std::time(0));
-	//GameJamCharacter::init();
 	PuppetResourceManager::init();
 	PuppetResourceManager::load();
 
