@@ -33,8 +33,10 @@ public:
 	Mouse * mouse;
 	/** Reference to keyboard singleton */
 	Keyboard * keyboard;
-	/** Reference to this scene's camera */
-	Camera * camera;
+	/** Reference to this scene's active camera */
+	Camera * activeCamera;
+	std::vector<Camera *> cameras;
+
 	RenderOptions       * renderOptions;
 	StandardFrameBuffer	* depthBuffer;
 	StandardFrameBuffer * shadowBuffer;

@@ -219,16 +219,18 @@ GameJamScene::GameJamScene(Game * _game):
 	addChild(midgroundScreen, 0);
 	addChild(ground, 0);
 	//addChild(foregroundScreen, 2);
-	camera = new FollowCamera(50, glm::vec3(0, 0, 0), 0, 0);
-	static_cast<FollowCamera*>(camera)->addTarget(playerCharacter->torso);
-	static_cast<FollowCamera*>(camera)->minimumZoom = 25.f;
-	//camera = new MousePerspectiveCamera();
-	camera->farClip = 1000.f;
-	camera->transform->rotate(90, 0, 1, 0, kWORLD);
+	FollowCamera * followCam = new FollowCamera(50, glm::vec3(0, 0, 0), 0, 0);
+	cameras.push_back(followCam);
+	followCam->addTarget(playerCharacter->torso);
+	followCam->minimumZoom = 25.f;
+	followCam->farClip = 1000.f;
+	followCam->transform->rotate(90, 0, 1, 0, kWORLD);
 	
-	camera->transform->translate(5.f, 0.f, 15.f);
-	camera->yaw = 90.0f;
-	camera->pitch = -10.0f;
+	followCam->transform->translate(5.f, 0.f, 15.f);
+	followCam->yaw = 90.0f;
+	followCam->pitch = -10.0f;
+
+	activeCamera = followCam;
 
 	world->b2world->SetDebugDraw(drawer);
 	drawer->SetFlags(b2Draw::e_shapeBit);
@@ -407,16 +409,16 @@ void GameJamScene::update(Step * _step){
 
 	// camera controls
 	if(keyboard->keyDown(GLFW_KEY_UP)){
-		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
+		activeCamera->transform->translate((activeCamera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
 	if(keyboard->keyDown(GLFW_KEY_DOWN)){
-		camera->transform->translate((camera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);	
+		activeCamera->transform->translate((activeCamera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);	
 	}
 	if(keyboard->keyDown(GLFW_KEY_LEFT)){
-		camera->transform->translate((camera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);		
+		activeCamera->transform->translate((activeCamera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);		
 	}
 	if(keyboard->keyDown(GLFW_KEY_RIGHT)){
-		camera->transform->translate((camera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);	
+		activeCamera->transform->translate((activeCamera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);	
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();

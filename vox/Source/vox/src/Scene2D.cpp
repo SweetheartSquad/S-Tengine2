@@ -6,7 +6,8 @@
 Scene2D::Scene2D(Game * _game):
 	Scene(_game)
 {
-	camera = (new OrthographicCamera(10, -10, -10, 10, -10, 10));
+	activeCamera = new OrthographicCamera(10, -10, -10, 10, -10, 10);
+	cameras.push_back(activeCamera);
 }
 
 Scene2D::~Scene2D(){

@@ -199,6 +199,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	
 	//Set up cameras
 	mouseCamera = new MousePerspectiveCamera();
+	cameras.push_back(mouseCamera);
 	mouseCamera->farClip = 1000.f;
 	mouseCamera->transform->rotate(90, 0, 1, 0, kWORLD);
 	mouseCamera->transform->translate(5.0f, 1.5f, 22.5f);
@@ -207,13 +208,14 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	mouseCamera->speed = 1;
 
 	gameCam = new FollowCamera(15, glm::vec3(0, 0, 0), 0, 0);
+	cameras.push_back(gameCam);
 	gameCam->farClip = 1000.f;
 	gameCam->transform->rotate(90, 0, 1, 0, kWORLD);
 	gameCam->transform->translate(5.0f, 1.5f, 22.5f);
 	gameCam->minimumZoom = 22.5f;
 	gameCam->yaw = 90.0f;
 	gameCam->pitch = -10.0f;
-	camera = gameCam;
+	activeCamera = gameCam;
 	
 	Sprite * countDown0 = new Sprite(nullptr, new Transform());
 	Sprite * countDownWait = new Sprite(nullptr, new Transform());
@@ -283,6 +285,10 @@ PuppetScene::~PuppetScene(){
 	delete shader;
 
 	delete world;
+	delete cl;
+	delete screenSurface;
+	delete screenSurfaceShader;
+	delete screenFBO;
 }
 
 void PuppetScene::load(){
@@ -340,16 +346,16 @@ void PuppetScene::update(Step * _step){
 	}
 	// camera controls
 	if (keyboard->keyDown(GLFW_KEY_UP)){
-		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
+		activeCamera->transform->translate((activeCamera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_DOWN)){
-		camera->transform->translate((camera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);
+		activeCamera->transform->translate((activeCamera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_LEFT)){
-		camera->transform->translate((camera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);
+		activeCamera->transform->translate((activeCamera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
-		camera->transform->translate((camera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
+		activeCamera->transform->translate((activeCamera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
 	
 
@@ -451,9 +457,9 @@ void PuppetScene::update(Step * _step){
 	if (keyboard->keyJustUp(GLFW_KEY_1)){
 		mouseCam = !mouseCam;
 		if (!mouseCam){
-			camera = gameCam;
+			activeCamera = gameCam;
 		}else{
-			camera = mouseCamera;
+			activeCamera = mouseCamera;
 		}
 	}
 

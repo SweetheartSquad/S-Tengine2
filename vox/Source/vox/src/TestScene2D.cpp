@@ -54,7 +54,7 @@ TestScene2D::TestScene2D(Game * _game):
 
 	//static_cast<ControllableOrthographicCamera*>(camera)->follow(sprite);
 
-	camera->transform->rotate(90, 0, 1, 0, kWORLD);
+	activeCamera->transform->rotate(90, 0, 1, 0, kWORLD);
 	
 
 	soundManager->addNewSound("green_chair", "../assets/test.wav");
@@ -92,11 +92,11 @@ TestScene2D::TestScene2D(Game * _game):
 	arduino = new Arduino("COM3");
 	
 	//camera = new MousePerspectiveCamera();
-	camera = new FollowCamera(50, glm::vec3(0, 10, 0), 5, 0);
-	((FollowCamera*)camera)->addTarget(sprite);
-	camera->transform->translate(5.0f, 0.0f, 20.0f);
-	camera->yaw = 90.0f;
-	camera->pitch = -10.0f;
+	activeCamera = new FollowCamera(50, glm::vec3(0, 10, 0), 5, 0);
+	((FollowCamera*)activeCamera)->addTarget(sprite);
+	activeCamera->transform->translate(5.0f, 0.0f, 20.0f);
+	activeCamera->yaw = 90.0f;
+	activeCamera->pitch = -10.0f;
 
 	layer1->setShader(shader, true);
 	layer2->setShader(shader, true);
@@ -194,16 +194,16 @@ void TestScene2D::update(Step * _step){
 
 	//Add movement to the camera
 	/*if(keyboard->keyDown(GLFW_KEY_W)){
-		camera->transform->translate((camera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
+		camera->transform->translate((activeCamera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);
 	}
 	if(keyboard->keyDown(GLFW_KEY_S)){
-		camera->transform->translate((camera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);	
+		camera->transform->translate((activeCamera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);	
 	}
 	if(keyboard->keyDown(GLFW_KEY_A)){
-		camera->transform->translate((camera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);		
+		camera->transform->translate((activeCamera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(camera)->speed);		
 	}
 	if(keyboard->keyDown(GLFW_KEY_D)){
-		camera->transform->translate((camera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);	
+		camera->transform->translate((activeCamera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(camera)->speed);	
 	}*/
 
 	/*if(arduino->IsConnected()) {

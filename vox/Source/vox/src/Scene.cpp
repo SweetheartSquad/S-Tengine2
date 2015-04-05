@@ -22,7 +22,7 @@ Scene::Scene(Game * _game):
 	game(_game),
 	mouse(&Mouse::getInstance()),
 	keyboard(&Keyboard::getInstance()),
-	camera(new PerspectiveCamera()),
+	activeCamera(new PerspectiveCamera()),
 	renderOptions(new RenderOptions(nullptr, &lights)),
 	depthBuffer(new StandardFrameBuffer(true)),
 	shadowBuffer(new StandardFrameBuffer(true)),
@@ -35,10 +35,17 @@ Scene::Scene(Game * _game):
 	clearColor[1] = 0.0;
 	clearColor[2] = 0.0;
 	clearColor[3] = 1.0;
+
+	cameras.push_back(activeCamera);
 }
 
 Scene::~Scene(void){
-	delete camera;
+	while(cameras.size() > 0){
+		delete cameras.back();
+		cameras.pop_back();
+	}
+	activeCamera = nullptr;
+	
 	delete matrixStack;
 	delete renderOptions;
 	delete depthBuffer;
@@ -54,7 +61,7 @@ void Scene::update(Step * _step){
 	if(!loaded){
 		load();
 	}
-	camera->update(_step);
+	activeCamera->update(_step);
 	//for (Entity * e : children){
 	for (unsigned long int i = 0; i < children.size(); ++i){
 		Entity * e = children.at(i);
@@ -122,8 +129,8 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptio
 
 	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
-	matrixStack->setProjectionMatrix(camera->getProjectionMatrix());
-	matrixStack->setViewMatrix(camera->getViewMatrix());
+	matrixStack->setProjectionMatrix(activeCamera->getProjectionMatrix());
+	matrixStack->setViewMatrix(activeCamera->getViewMatrix());
 
 	for(Entity * e : children){
 		e->render(matrixStack, renderOptions);
