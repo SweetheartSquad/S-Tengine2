@@ -21,6 +21,7 @@
 #include <ParticleSystem.h>
 #include <Particle.h>
 #include <NumberUtils.h>
+#include <BehaviourManager.h>
 
 bool PuppetCharacter::compareByScore(PuppetCharacter * _a, PuppetCharacter * _b){
 	return (_a->score < _b->score);
@@ -41,7 +42,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),
-	behaviourManager(this),
+	behaviourManager(new BehaviourManager(this)),
 	score(0.f),
 	lastUpdateScore(0.f),
 	control(1.f),
@@ -64,7 +65,8 @@ PuppetCharacter * PuppetCharacter::clone(Box2DWorld * _world){
 }
 
 PuppetCharacter::~PuppetCharacter(){
-	delete texPack;
+	delete behaviourManager;
+	//delete texPack;
 	delete collisionTypes;
 }
 
@@ -329,7 +331,7 @@ void PuppetCharacter::update(Step* _step){
 	//	rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, ghostPosition, rootComponent->transform->getTranslationVector().z);
 		rootComponent->body->ApplyForce(b2Vec2(-bodAngle * 50.0f, 0), rootComponent->body->GetWorldCenter(), true);
 	}
-	behaviourManager.update(_step);
+	behaviourManager->update(_step);
 
 	control = std::min(1.f, control+0.01f);
 

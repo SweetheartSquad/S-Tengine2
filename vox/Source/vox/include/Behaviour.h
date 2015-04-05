@@ -11,6 +11,7 @@ class b2Fixture;
 class Behaviour abstract : public NodeUpdatable {
 public:
 	PuppetCharacter * source;
+	b2Fixture * fixture;
 	bool active;
 	float radius;
 	PuppetGame::BOX2D_CATEGORY filter;

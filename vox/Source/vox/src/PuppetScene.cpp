@@ -114,7 +114,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	background->transform->translate(0.0f, 50.f, -15.f/2.f);
 	background->transform->scale(125 * 5, 50, 1);
 	background->mesh->pushTexture2D(PuppetResourceManager::sky);
-	background->mesh->uvEdgeMode = GL_REPEAT;
+	background->mesh->uvEdgeMode = GL_MIRRORED_REPEAT_ARB;
 	background->mesh->dirty = true;
 	
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
@@ -261,9 +261,28 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 }
 
 PuppetScene::~PuppetScene(){
+	while(children.size() > 0){
+		delete children.back();
+		children.pop_back();
+	}
+
 	delete soundManager;
 	delete countdownSoundManager;
 	delete backgroundSoundManager;
+	//delete splashMessage;
+	//delete drawer;
+
+
+	/*while(players.size() > 0){
+		delete players.back();
+		players.pop_back();
+	}*/
+//	delete ground;
+//	delete randomGround;
+//	delete background;
+	delete shader;
+
+	delete world;
 }
 
 void PuppetScene::load(){
@@ -381,6 +400,8 @@ void PuppetScene::update(Step * _step){
 					}
 				}
 			}
+			delete splashMessage;
+			splashMessage = nullptr;
 		}
 	}
 

@@ -19,8 +19,8 @@ PuppetCharacterCastleChampion::PuppetCharacterCastleChampion(Box2DWorld * _world
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {
-	behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), this, 10));
-	behaviourManager.addBehaviour(new BehaviourAttack(this, 3, PuppetGame::kPLAYER));
+	behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), this, 10));
+	behaviourManager->addBehaviour(new BehaviourAttack(this, 3, PuppetGame::kPLAYER));
 
 	itemHolder = armLeft;
 }
@@ -36,9 +36,9 @@ void PuppetCharacterCastleChampion::action(bool _forceDrop){
 void PuppetCharacterCastleChampion::update(Step * _step){
 	PuppetCharacter::update(_step);
 
-	if(behaviourManager.behaviours.at(1)->active){
-		behaviourManager.behaviours.at(0)->active = false;
+	if(behaviourManager->behaviours.at(1)->active){
+		behaviourManager->behaviours.at(0)->active = false;
 	}else{
-		behaviourManager.behaviours.at(0)->active = true;
+		behaviourManager->behaviours.at(0)->active = true;
 	}
 }

@@ -6,5 +6,5 @@ public:
 	static unsigned long int count;
 
 	Node();
-	virtual ~Node() = 0;
+	virtual ~Node();
 };

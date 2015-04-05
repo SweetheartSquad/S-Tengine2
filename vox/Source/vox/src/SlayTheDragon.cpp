@@ -7,6 +7,7 @@
 #include <Fortification.h>
 #include <PuppetCharacter.h>
 #include <FollowCamera.h>
+#include <BehaviourManager.h>
 #include <Behaviour.h>
 #include <BehaviourFollow.h>
 #include <BehaviourPatrol.h>
@@ -28,7 +29,6 @@
 #include <ItemSimpleWeapon.h>
 #include <ItemProjectileWeapon.h>
 #include <ItemFireballLauncher.h>
-
 
 #include <glfw\glfw3.h>
 #include <SoundManager.h>
@@ -119,12 +119,12 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	gameCam->addTarget(playerCharacter3->torso);
 	gameCam->addTarget(playerCharacter4->torso);
 
-	playerCharacter3->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
-	playerCharacter3->behaviourManager.addBehaviour(new BehaviourAttackThrow(false, playerCharacter3, 3, PuppetGame::kPLAYER));
+	playerCharacter3->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
+	playerCharacter3->behaviourManager->addBehaviour(new BehaviourAttackThrow(false, playerCharacter3, 3, PuppetGame::kPLAYER));
 	playerCharacter3->ai = true;
 
-	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
-	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttackThrow(true, playerCharacter4, 100, PuppetGame::kPLAYER));
+	playerCharacter4->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
+	playerCharacter4->behaviourManager->addBehaviour(new BehaviourAttackThrow(true, playerCharacter4, 100, PuppetGame::kPLAYER));
 	playerCharacter4->ai = true;
 	
 	dragon = static_cast<PuppetCharacterDragon * >(playerCharacter4);

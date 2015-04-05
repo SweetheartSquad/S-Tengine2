@@ -12,7 +12,7 @@
 MeshInterface * ItemGold::goldMesh = nullptr;
 
 ItemGold::ItemGold(Box2DWorld * _world) :
-	ItemSimpleWeapon(RapunzelResourceManager::goldBrick, false, _world, PuppetGame::kITEM, PuppetGame::kGROUND | PuppetGame::kPLAYER),
+	ItemSimpleWeapon(RapunzelResourceManager::goldBrick, false, _world, PuppetGame::kITEM, PuppetGame::kGROUND | PuppetGame::kPLAYER, 1),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()

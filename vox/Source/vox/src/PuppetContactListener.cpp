@@ -251,6 +251,7 @@ void PuppetContactListener::EndContact(b2Contact* _contact){
 	}
 
 	if(behaviourFixture != nullptr){
-		static_cast<Behaviour *>(behaviourFixture->GetUserData())->evaluateEndContact(otherFixture);
+		Behaviour * b = static_cast<Behaviour *>(behaviourFixture->GetUserData());
+		b->evaluateEndContact(otherFixture);
 	}
 }

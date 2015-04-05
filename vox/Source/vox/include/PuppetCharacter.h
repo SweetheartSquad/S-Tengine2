@@ -3,7 +3,6 @@
 #include <Box2D/Box2D.h>
 
 #include "Box2DSuperSprite.h"
-#include "BehaviourManager.h"
 #include "PuppetGame.h"
 #include <vector>
 
@@ -11,6 +10,7 @@ class PuppetTexturePack;
 class Box2DSprite;
 class Box2DWorld;
 class Item;
+class BehaviourManager;
 
 class PuppetCharacter : public Box2DSuperSprite {
 public:
@@ -80,7 +80,7 @@ public:
 	b2WeldJoint * itemJoint;
 	virtual void pickupItem(Item * _item);
 
-	BehaviourManager behaviourManager;
+	BehaviourManager * behaviourManager;
 
 	virtual void setShader(Shader * _shader, bool _configureDefaultAttributes) override;
 

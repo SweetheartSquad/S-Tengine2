@@ -36,8 +36,8 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 	altitude(60.f)
 {
 
-	behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), this, 10));
-	behaviourManager.addBehaviour(new BehaviourAttack(this, 3, PuppetGame::kPLAYER));
+	behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), this, 10));
+	behaviourManager->addBehaviour(new BehaviourAttack(this, 3, PuppetGame::kPLAYER));
 
 	for(auto c : components) {
 		(*c)->body->SetGravityScale(0.0f);
@@ -77,8 +77,8 @@ PuppetCharacter * PuppetCharacterDragon::clone(Box2DWorld * _world){
 	PuppetCharacterDragon * res = new PuppetCharacterDragon(ai, _world, categoryBits, maskBits, groupIndex);
 	res->id = id;
 	res->score = score;
-	/*while (res->behaviourManager.behaviours.size() > 0){
-		res->behaviourManager.behaviours.pop_back();
+	/*while (res->behaviourManager->behaviours.size() > 0){
+		res->behaviourManager->behaviours.pop_back();
 	}*/
 	res->altitude = -1;
 
@@ -165,10 +165,10 @@ void PuppetCharacterDragon::update(Step * _step){
 		torso->body->SetTransform(b2Vec2(torso->body->GetPosition().x, altitude), torso->body->GetAngle());
 	}
 	if(ai){
-		if(behaviourManager.behaviours.at(1)->active){
-			behaviourManager.behaviours.at(0)->active = false;
+		if(behaviourManager->behaviours.at(1)->active){
+			behaviourManager->behaviours.at(0)->active = false;
 		}else{
-			behaviourManager.behaviours.at(0)->active = true;
+			behaviourManager->behaviours.at(0)->active = true;
 		}
 	}
 	fireParticles->update(_step);

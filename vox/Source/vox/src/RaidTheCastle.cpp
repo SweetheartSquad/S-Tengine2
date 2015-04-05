@@ -7,6 +7,7 @@
 #include <PuppetGame.h>
 #include <PuppetCharacter.h>
 #include <FollowCamera.h>
+#include <BehaviourManager.h>
 #include <Behaviour.h>
 #include <BehaviourFollow.h>
 #include <BehaviourPatrol.h>
@@ -115,12 +116,12 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	catapult->translateComponents(glm::vec3(0,0,0));
 	
-	playerCharacter3->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
-	playerCharacter3->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter3, 3, PuppetGame::kPLAYER));
+	playerCharacter3->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
+	playerCharacter3->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter3, 3, PuppetGame::kPLAYER));
 	playerCharacter3->ai = true;
 
-	playerCharacter4->behaviourManager.addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
-	playerCharacter4->behaviourManager.addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
+	playerCharacter4->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
+	playerCharacter4->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
 	playerCharacter4->ai = true;
 
 	for(PuppetCharacter * p : players){

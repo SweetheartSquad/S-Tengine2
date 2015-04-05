@@ -7,7 +7,8 @@ Behaviour::Behaviour(PuppetCharacter * _source, float _radius, PuppetGame::BOX2D
 	source(_source),
 	radius(_radius),
 	filter(_filter),
-	active(false)
+	active(false),
+	fixture(nullptr)
 {
 }
 
