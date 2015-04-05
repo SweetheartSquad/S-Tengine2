@@ -184,15 +184,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	groundFixture->SetUserData(this);
 	*/
 
-	drawer = new Box2DDebugDraw(this, world);
-	world->b2world->SetDebugDraw(drawer);
-	//drawer->AppendFlags(b2Draw::e_aabbBit);
-	drawer->AppendFlags(b2Draw::e_shapeBit);
-	drawer->AppendFlags(b2Draw::e_centerOfMassBit);
-	drawer->AppendFlags(b2Draw::e_jointBit);
-	//drawer->AppendFlags(b2Draw::e_pairBit);
-	addChild(drawer, 2);
-
 	//randomGround->mesh->uvEdgeMode = GL_REPEAT;
 
 	//world->addToWorld(randomGround);
@@ -500,7 +491,20 @@ void PuppetScene::update(Step * _step){
 	}
 	if(keyboard->keyJustUp(GLFW_KEY_2)){
 		if(drawer != nullptr){
-			drawer->drawing = !drawer->drawing;
+			world->b2world->SetDebugDraw(nullptr);
+			removeChild(drawer);
+			delete drawer;
+			drawer = nullptr;
+		}else{
+			drawer = new Box2DDebugDraw(this, world);
+			world->b2world->SetDebugDraw(drawer);
+			drawer->drawing = true;
+			//drawer->AppendFlags(b2Draw::e_aabbBit);
+			drawer->AppendFlags(b2Draw::e_shapeBit);
+			drawer->AppendFlags(b2Draw::e_centerOfMassBit);
+			drawer->AppendFlags(b2Draw::e_jointBit);
+			//drawer->AppendFlags(b2Draw::e_pairBit);
+			addChild(drawer, 2);
 		}
 	}
 
