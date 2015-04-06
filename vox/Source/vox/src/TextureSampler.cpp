@@ -6,22 +6,24 @@
 #include <json\json.h>
 #include <FileUtils.h>
 
-TextureSampler::TextureSampler(Texture * _texture, float _width, float _height, float _u, float _v) :
+TextureSampler::TextureSampler(Texture * _texture, float _width, float _height, float _u, float _v, bool _releaseTexture) :
 	NodeResource(true),
 	texture(_texture),
 	width(_width),
 	height(_height),
 	u(_u),
-	v(_v)
+	v(_v),
+	releaseTexture(_releaseTexture)
 {
 }
-TextureSampler::TextureSampler(std::string _definitionDir, std::string _definitionName) :
+TextureSampler::TextureSampler(std::string _definitionDir, std::string _definitionName, bool _releaseTexture) :
 	NodeResource(true),
 	texture(nullptr),
 	width(0),
 	height(0),
 	u(0),
-	v(0)
+	v(0),
+	releaseTexture(_releaseTexture)
 {
 	if(!_definitionName.empty()){
 		std::string jsonString = FileUtils::voxReadFile(_definitionDir + _definitionName);
@@ -45,7 +47,9 @@ TextureSampler::TextureSampler(std::string _definitionDir, std::string _definiti
 }
 
 TextureSampler::~TextureSampler(){
-	texture->decrementAndDelete();
+	if(releaseTexture){
+		delete texture;
+	}
 }
 
 void TextureSampler::load(){
