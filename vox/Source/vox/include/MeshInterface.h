@@ -111,12 +111,12 @@ private:
 class TriMesh : public MeshInterface{
 public:
 	void pushTri(GLuint _v0, GLuint _v1, GLuint _v2);
-	explicit TriMesh(GLenum _polygonalDrawMode = GL_TRIANGLES, GLenum _drawMode = GL_STATIC_DRAW):MeshInterface(_polygonalDrawMode, _drawMode){};
+	explicit TriMesh(GLenum _polygonalDrawMode = GL_TRIANGLES, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode){};
 };
 
 /** MeshInterface preset for quad meshes */
 class QuadMesh : public MeshInterface{
 public:
 	void pushQuad(GLuint _v0, GLuint _v1, GLuint _v2, GLuint _v3);
-	explicit QuadMesh(GLenum _polygonalDrawMode = GL_QUADS, GLenum _drawMode = GL_STATIC_DRAW):MeshInterface(_polygonalDrawMode, _drawMode){};
+	explicit QuadMesh(GLenum _polygonalDrawMode = GL_QUADS, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode){};
 };
