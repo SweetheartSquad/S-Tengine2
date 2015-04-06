@@ -56,12 +56,18 @@ void RenderSurface::unload(){
 }
 
 void RenderSurface::render(GLuint _textureId, GLint _renderTo){
+
 	glUseProgram(shader->getProgramId());
 	glBindFramebuffer(GL_FRAMEBUFFER, _renderTo);
 	glBindVertexArray(vaoId);
 	glDisable(GL_DEPTH_TEST);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _textureId);
+	
+	//Texture repeat
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 	glDrawArrays(GL_QUADS, 0, vertices.size());
 	glEnable(GL_DEPTH_TEST);
 	glBindVertexArray(0);

@@ -46,7 +46,6 @@ bool NodeParent::hasChild(NodeChild * _child){
 	for (unsigned long int i = 0; i < children.size(); ++i){
 		if (_child == children.at(i)){
 			return true;
-			break;
 		}
 	}
 	return false;
@@ -59,11 +58,12 @@ bool NodeParent::hasDescendant(NodeChild *_child) {
 	for (unsigned long int i = 0; i < children.size(); ++i){
 		if (_child == children.at(i)){
 			return true;
-			break;
 		}else{
 			NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(children.at(i));
 			if(nh != nullptr){
-				if(nh->hasDescendant(_child));
+				if(nh->hasDescendant(_child)){
+					return true;
+				}
 			}
 		}
 	}

@@ -11,10 +11,6 @@ CharacterComponent::CharacterComponent(float _componentScale, float _width, floa
 	scale(_componentScale)
 {
 	mesh->pushTexture2D(_texture);
-	
-	float fullW = _texture->width;
-	float fullH = _texture->height;
-
 	body->SetUserData(this);
 }
 
