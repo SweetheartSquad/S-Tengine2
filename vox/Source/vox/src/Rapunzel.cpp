@@ -115,6 +115,9 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter4->addToLayeredScene(this, 1);
 	playerCharacter4->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
+	// start Rapunzel with a ridiculous score so if the time runs out they win regardless of how well the thieves play
+	playerCharacter4->score = 1000000;
+	playerCharacter4->lastUpdateScore = 1000000; 
 
 	guard->setShader(shader, true);
 	addChild(guard, 0);
@@ -211,13 +214,19 @@ Rapunzel::~Rapunzel(){
 void Rapunzel::update(Step* _step){
 	PuppetScene::update(_step);
 
-	if(keyboard->keyJustUp(GLFW_KEY_N)){
+	if(keyboard->keyJustDown(GLFW_KEY_N)){
 		goldPile->actuallyInteract();
 	}
 
 	if(!splashSoundPlayed){
 		PuppetResourceManager::splashSounds->play("Rapunzel");
 		splashSoundPlayed = true;
+	}
+
+	// trigger victory (thieves should win, since gold is gone)
+	if(goldPile->goldTaken >= goldPile->totalGold){
+		playerCharacter4->score = 0;
+        triggerVictoryState();
 	}
 }
 

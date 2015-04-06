@@ -47,7 +47,7 @@ public:
 	Box2DSprite * headgear;
 	Box2DSprite * itemHolder;
 
-	std::vector<int> * collisionTypes;
+	std::vector<PuppetGame::BOX2D_CATEGORY> collisionTypes;
 
 	static bool compareByScore(PuppetCharacter * _a, PuppetCharacter * _b);
 	

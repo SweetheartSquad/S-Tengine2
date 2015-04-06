@@ -49,7 +49,6 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	id(-1),
 	actionThrottle(0.333),
 	lastActionTime(0.0),
-	collisionTypes(new std::vector<int>()),
 	ghostPosition(_ghostPosition),
 	contactDelegate(nullptr),
 	justTookDamage(false)
@@ -67,7 +66,6 @@ PuppetCharacter * PuppetCharacter::clone(Box2DWorld * _world){
 PuppetCharacter::~PuppetCharacter(){
 	delete behaviourManager;
 	//delete texPack;
-	delete collisionTypes;
 }
 
 void PuppetCharacter::init(){
@@ -364,7 +362,7 @@ void PuppetCharacter::update(Step* _step){
 	}
 	
 	// spray some particles to show score
-	while(lastUpdateScore < score){
+	if(lastUpdateScore < score){
 		lastUpdateScore += 1;
 		Particle * p = ps->particleSystem->addParticle(rootComponent->getPos(false), PuppetResourceManager::getRandomScoreParticles());
 		p->applyLinearImpulse(vox::NumberUtils::randomFloat(-250, 250), vox::NumberUtils::randomFloat(500, 750), p->body->GetPosition().x, p->body->GetPosition().y);
@@ -413,26 +411,26 @@ void PuppetCharacter::action(bool _forceDrop){
 
 void PuppetCharacter::removeCollision(PuppetGame::BOX2D_CATEGORY _category){
 	int idx = -1;
-	for(unsigned long int i = 0; i < collisionTypes->size(); ++i) {
-		if(collisionTypes->at(i) == _category) {
+	for(unsigned long int i = 0; i < collisionTypes.size(); ++i) {
+		if(collisionTypes.at(i) == _category) {
 			idx = i;
 			break;
 		}
 	}
 	if(idx >= 0) {
-		collisionTypes->erase(collisionTypes->begin() + idx);
+		collisionTypes.erase(collisionTypes.begin() + idx);
 	}
 }
 
 void PuppetCharacter::addCollision(PuppetGame::BOX2D_CATEGORY _category){
 	//if(!isCollidingWith(_category)){
-		collisionTypes->push_back(static_cast<int>(_category));
+		collisionTypes.push_back(_category);
 	//}
 }
 
 bool PuppetCharacter::isCollidingWith(PuppetGame::BOX2D_CATEGORY _category){
-	for(unsigned long int i = 0; i < collisionTypes->size(); ++i) {
-		if(collisionTypes->at(i) == _category) {
+	for(unsigned long int i = 0; i < collisionTypes.size(); ++i) {
+		if(collisionTypes.at(i) == _category) {
 			return true;
 		}
 	}
