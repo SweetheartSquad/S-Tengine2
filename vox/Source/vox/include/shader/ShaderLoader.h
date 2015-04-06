@@ -8,7 +8,9 @@
 
 #include "GLUtils.h"
 
-class ShaderLoader{
+#include <node/Node.h>
+
+class ShaderLoader : public Node{
 private:
 	GLuint programId;
 	GLuint compileShader(GLenum _shaderType, const char *_source, int _length);

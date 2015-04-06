@@ -10,7 +10,7 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 
-Step vox::step = Step();
+Step vox::step;
 
 double vox::lastTimestamp = 0;
 double vox::deltaTimeCorrection = 1;

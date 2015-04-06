@@ -1,11 +1,13 @@
 #pragma once
 #include <string>
 
+#include <node\Node.h>
+
 namespace libZPlay{
 	class ZPlay;
 }
 
-class Sound{
+class Sound : public Node{
 public:
 	// value is 0 - 100
 	static unsigned long int masterVolume;

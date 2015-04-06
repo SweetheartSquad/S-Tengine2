@@ -3,9 +3,10 @@
 #include "node/NodeLoadable.h"
 #include "node/NodeResource.h"
 
+#include <node\Node.h>
 #include <vector>
 
-class ResourceManager abstract{
+class ResourceManager abstract : public Node{
 public:	
 	static std::vector<NodeResource *> resources;
 	static std::vector<ResourceManager *> subManagers;

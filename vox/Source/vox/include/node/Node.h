@@ -5,7 +5,7 @@
 /** Abstract node */
 class Node abstract{
 public:
-	static unsigned long int count;
+	static signed long int count;
 	static std::vector<Node *> nodes;
 
 	Node();

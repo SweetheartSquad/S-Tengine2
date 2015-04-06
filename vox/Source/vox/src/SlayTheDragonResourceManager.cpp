@@ -9,7 +9,6 @@ TextureSampler * SlayTheDragonResourceManager::splashMessage	= new TextureSample
 TextureSampler * SlayTheDragonResourceManager::fortBackground		= new TextureSampler(new Texture("../assets/hurly-burly/Fortification/FortBackground.png", 1024, 1024, true, true), 453, 307);
 TextureSampler * SlayTheDragonResourceManager::fortForeground		= new TextureSampler(new Texture("../assets/hurly-burly/Fortification/FortForeground.png", 1024, 1024, true, true), 1024, 413);
 TextureSampler * SlayTheDragonResourceManager::fortStructure		= new TextureSampler(new Texture("../assets/hurly-burly/Fortification/FortStructure.png", 1024, 1024, true, true), 683, 127);
-Texture * SlayTheDragonResourceManager::fortificationSpriteSheet	= new Texture("../assets/Fortification/Fortification_SpriteSheet.png", 2048, 2048, true, true);
 
 TextureSampler * SlayTheDragonResourceManager::archerTorso		= new TextureSampler(new Texture("../assets/hurly-burly/ArcherAssets/ArcherTorso.png", 1024, 1024, true, true), 275, 765);
 TextureSampler * SlayTheDragonResourceManager::archerArm		= new TextureSampler(new Texture("../assets/hurly-burly/ArcherAssets/ArcherArm.png", 1024, 1024, true, true), 64, 228);

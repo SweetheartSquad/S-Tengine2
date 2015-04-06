@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <node/Node.h>
 
 class NodeRenderable;
 
@@ -21,7 +22,7 @@ class Shader;
 * are present in BaseComponentShader's component vector
 *
 *********************************************************/
-class ShaderComponent abstract{
+class ShaderComponent abstract : public Node{
 public:
 
 	Shader * shader;

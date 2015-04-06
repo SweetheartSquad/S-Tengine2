@@ -35,10 +35,11 @@ SoundManager * RaidTheCastleResourceManager::catapultSounds = new SoundManager(-
 void RaidTheCastleResourceManager::init(){
 
 	resources.push_back(splashMessage);
-
+	resources.push_back(castleSpriteSheet);
 	resources.push_back(catapultArm);
 	resources.push_back(catapultBody);
 	resources.push_back(boulder);
+	resources.push_back(castleBase);
 
 	resources.push_back(knightTorso);
 	resources.push_back(knightArm);

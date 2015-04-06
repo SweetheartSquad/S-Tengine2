@@ -1,23 +1,24 @@
 #pragma once
 
-#include "node/Node.h"
+#include <node/Node.h>
+//#include <iostream>
 //#include <cinder\app\AppBasic.h>
 
-unsigned long int Node::count = 0;
+//signed long int Node::count = 0;
 std::vector<Node *>Node::nodes;
 
 Node::~Node(){
-	--count;
+	//--count;
 
 	for(signed long int j = nodes.size()-1; j >= 0; --j){
 		if(nodes.at(j) == this){
 			nodes.erase(nodes.begin() + j);
 		}
 	}
-	//ci::app::console() << "~Node()\t" << this << "\t" << count << std::endl;
+	//std::cout << "~Node()\t" << this << "\t" << nodes.size() << std::endl;
 }
 Node::Node(){
-	++count;
+	//++count;
 	nodes.push_back(this);
-	//ci::app::console() << "Node()\t" << this << "\t" << count << std::endl;
+	//std::cout << "Node()\t" << this << "\t" << nodes.size() << std::endl;
 }

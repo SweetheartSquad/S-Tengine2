@@ -15,7 +15,6 @@ public:
 	static TextureSampler * fortBackground;
 	static TextureSampler * fortForeground;
 	static TextureSampler * fortStructure;
-	static Texture * fortificationSpriteSheet;
 	
 	static TextureSampler * archerTorso;
 	static TextureSampler * archerArm;

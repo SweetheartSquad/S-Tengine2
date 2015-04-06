@@ -4,8 +4,7 @@
 
 #include <string>
 
-class SayAction : public DialogAction
-{
+class SayAction : public DialogAction{
 public:
 	std::string text;
 	float duration;

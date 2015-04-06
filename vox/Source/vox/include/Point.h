@@ -1,7 +1,9 @@
 #pragma once
 
+#include <node\Node.h>
+
 namespace vox {
-	class Point{
+	class Point : public Node{
 	public:	
 		float x, y;
 

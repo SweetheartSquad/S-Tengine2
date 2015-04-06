@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Point.h"
+#include <node\Node.h>
 
 namespace vox {
-	class Rectangle{
+	class Rectangle : public Node{
 	public:
 
 		float x, y, width, height;

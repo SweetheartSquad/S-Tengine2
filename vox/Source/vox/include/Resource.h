@@ -1,13 +1,13 @@
 #pragma once
 
+#include <node\Node.h>
 #include <string>
 
 class VoxelJoint;
 class VoxelMesh;
 class TriMesh;
 
-class Resource
-{
+class Resource : public Node{
 private:
 	Resource();
 public:
