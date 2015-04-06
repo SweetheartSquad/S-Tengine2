@@ -20,6 +20,7 @@ public:
 	ParticleSystem * particleSystem;
 
 	StructureBreakable(float _maxHealth, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
+	~StructureBreakable();
 	
 	virtual void takeDamage(float _damage);
 

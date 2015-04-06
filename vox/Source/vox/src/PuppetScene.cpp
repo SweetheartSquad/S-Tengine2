@@ -79,7 +79,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	backgroundSoundManager(new SoundManager(-1)),
 	countdownSoundManager(new SoundManager(-1)),
 	mouseCam(false),
-	randomGround(new RandomGround(world, 100, 0.4f, PuppetResourceManager::paper->texture, 3, 1)),
+	randomGround(nullptr),
 	victoryTriggered(false),
 	sceneStart(vox::step.time),
 	screenShaderSetting(3),
@@ -672,9 +672,10 @@ void PuppetScene::populateBackground(){
 				break;
 		}
 		addChild(foliage, 0);
-		randomGround->setShader(shader, true);
 		if(i == 3){
+			randomGround = new RandomGround(world, 100, 0.4f, PuppetResourceManager::paper->texture, 3, 1);
 			randomGround->setTranslationPhysical(0.0f, 0.0f, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
+			randomGround->setShader(shader, true);
 			addChild(randomGround, 0);
 		}
 	}

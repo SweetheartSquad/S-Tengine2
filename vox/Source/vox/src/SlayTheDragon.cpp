@@ -56,10 +56,9 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	fortBg->transform->translate(65.0f, 20.0f, 0.0f);
 	fortBg->transform->scale(2.6f, 2.6f, 1.0f);
 
-	TextureSampler * splashMessageTextureSampler = SlayTheDragonResourceManager::splashMessage;
 	splashMessage = new Sprite(nullptr, new Transform());
 	splashMessage->transform->scale(glm::vec3(3, 3, 0));
-	splashMessage->mesh->pushTexture2D(splashMessageTextureSampler->texture);
+	splashMessage->mesh->pushTexture2D(SlayTheDragonResourceManager::splashMessage->texture);
 	splashMessage->setShader(shader, true);
 	splashMessage->transform->scale(-1, 1, 1);
 
@@ -123,8 +122,6 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	playerCharacter3->behaviourManager->addBehaviour(new BehaviourAttackThrow(false, playerCharacter3, 3, PuppetGame::kPLAYER));
 	playerCharacter3->ai = true;
 
-	playerCharacter4->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
-	playerCharacter4->behaviourManager->addBehaviour(new BehaviourAttackThrow(true, playerCharacter4, 100, PuppetGame::kPLAYER));
 	playerCharacter4->ai = true;
 	
 	dragon = static_cast<PuppetCharacterDragon * >(playerCharacter4);
@@ -172,6 +169,8 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	sfd.categoryBits = PuppetGame::kDEAD_ZONE;
 	//sfd.maskBits = -1;
 	deathBounds->body->GetFixtureList()->SetFilterData(sfd);
+	addChild(deathBounds, 2);
+	deathBounds->setShader(shader, true);
 
 	playRandomBackgroundMusic();
 }
@@ -181,7 +180,6 @@ SlayTheDragon::~SlayTheDragon(){
 
 void SlayTheDragon::update(Step* _step){
 	PuppetScene::update(_step);
-
 
 	if(playerCharacter1->torso->transform->getTranslationVector().y < 25.0f && gameCam->hasTarget(playerCharacter1->torso)){
 		gameCam->removeTarget(playerCharacter1->torso);

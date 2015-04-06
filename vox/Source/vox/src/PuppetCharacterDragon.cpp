@@ -3,7 +3,7 @@
 #include <PuppetCharacterDragon.h>
 #include <PuppetTexturePack.h>
 #include <BehaviourPatrol.h>
-#include <BehaviourAttack.h>
+#include <BehaviourAttackThrow.h>
 #include <BehaviourManager.h>
 #include <Box2DWorld.h>
 #include <shader\ShaderComponentHsv.h>
@@ -37,7 +37,7 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 {
 
 	behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), this, 10));
-	behaviourManager->addBehaviour(new BehaviourAttack(this, 3, PuppetGame::kPLAYER));
+	behaviourManager->addBehaviour(new BehaviourAttackThrow(true, this, 100, PuppetGame::kPLAYER));
 
 	for(auto c : components) {
 		(*c)->body->SetGravityScale(0.0f);
@@ -90,6 +90,7 @@ PuppetCharacter * PuppetCharacterDragon::clone(Box2DWorld * _world){
 PuppetCharacterDragon::~PuppetCharacterDragon(){
 	//delete texPack;
 	delete fireParticles;
+	delete fireball;
 }
 
 void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
