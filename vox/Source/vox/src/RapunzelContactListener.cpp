@@ -40,7 +40,7 @@ void RapunzelContactListener::playerItemContact(b2Contact * _contact, b2Fixture 
 void RapunzelContactListener::playerStructureContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _structureFixture){
 	PuppetContactListener::playerStructureContact(_contact, _playerFixture, _structureFixture);
 
-	PuppetCharacter * puppet = static_cast<PuppetCharacter *>(_playerFixture->GetUserData());
+	/*PuppetCharacter * puppet = static_cast<PuppetCharacter *>(_playerFixture->GetUserData());
 	Structure * structure = static_cast<StructureGoldPile *>(_structureFixture->GetUserData());
 	StructureGoldPile * goldPile = dynamic_cast<StructureGoldPile *>(structure);
 
@@ -59,7 +59,7 @@ void RapunzelContactListener::playerStructureContact(b2Contact * _contact, b2Fix
 				puppet->delegateToContactComplete(fn);
 			}
 		}
-	}
+	}*/
 }
 
 void RapunzelContactListener::playerGroundContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _groundFixture){

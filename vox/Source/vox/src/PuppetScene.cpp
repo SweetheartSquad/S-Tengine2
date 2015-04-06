@@ -259,21 +259,10 @@ PuppetScene::~PuppetScene(){
 		children.pop_back();
 	}
 
-
 	delete soundManager;
 	delete countdownSoundManager;
 	delete backgroundSoundManager;
-	//delete splashMessage;
-	//delete drawer;
 
-
-	/*while(players.size() > 0){
-		delete players.back();
-		players.pop_back();
-	}*/
-//	delete ground;
-//	delete randomGround;
-//	delete background;
 	delete shader;
 
 	delete world;
@@ -363,6 +352,7 @@ void PuppetScene::update(Step * _step){
 		g->setShader(shader, true);
         addChild(g, 1);
 		g->translateComponents(glm::vec3(vox::NumberUtils::randomFloat(0, sceneWidth), vox::NumberUtils::randomFloat(0, sceneHeight), 0));
+		items.push_back(g);
 	}
 
 
@@ -411,6 +401,7 @@ void PuppetScene::update(Step * _step){
 				particleSystem->addParticle(item->rootComponent->getPos(false), PuppetResourceManager::dustParticle);
 			}
 			destroyItem(item);
+			item = nullptr;
 			items.erase(items.begin() + i);
 		}
 	}
@@ -603,6 +594,7 @@ void PuppetScene::destroyItem(Item * _item){
 	//maybe use something like children.erase(std::remove(children.begin(), children.end(), item), children.end());
 
 	delete _item;
+	_item = nullptr;
 }
 
 void PuppetScene::doCountDown(){

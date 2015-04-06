@@ -8,6 +8,7 @@
 #include <RapunzelResourceManager.h>
 
 #include <Item.h>
+#include <ItemGold.h>
 
 PuppetCharacterThief::PuppetCharacterThief(bool _ai,  float _ghostPosition, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	PuppetCharacter(new PuppetTexturePack(
@@ -22,4 +23,16 @@ PuppetCharacterThief::PuppetCharacterThief(bool _ai,  float _ghostPosition, Box2
 }
 
 PuppetCharacterThief::~PuppetCharacterThief(){
+}
+
+void PuppetCharacterThief::pickupItem(Item * _itemToPickup){
+	ItemGold * gold = dynamic_cast<ItemGold *>(_itemToPickup);
+
+	if(gold != nullptr){
+		gold->destroy = true;
+		score += 1;
+		itemToPickup = nullptr;
+	}else{
+		PuppetCharacter::pickupItem(_itemToPickup);
+	}
 }

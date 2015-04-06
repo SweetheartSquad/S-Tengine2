@@ -130,6 +130,7 @@ void Lever::actuallyInteract(){
 		g->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50, 0, 0), glm::vec3(100, 0, 0), g, 10));
 		g->behaviourManager->addBehaviour(new BehaviourAttack(g, 3, PuppetGame::kPLAYER));
 		g->ai = true;
+		g->addToLayeredScene(ps, 1);
 		ps->addChild(g, 1);
 		g->setShader(ps->shader, true);
 		g->translateComponents(glm::vec3(50, 10, 0));

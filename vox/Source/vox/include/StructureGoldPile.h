@@ -1,10 +1,10 @@
 #pragma once 
 
-#include <Structure.h>
+#include <StructureInteractable.h>
 
 class SpriteSheetAnimation;
 
-class StructureGoldPile : public Structure{
+class StructureGoldPile : public StructureInteractable{
 public:
 
 	int totalGold;
@@ -15,5 +15,6 @@ public:
 	explicit StructureGoldPile(Box2DWorld* _world);
 	~StructureGoldPile();
 
-	void loseGold();
+	void actuallyInteract() override;
+	void evaluateState() override;
 };

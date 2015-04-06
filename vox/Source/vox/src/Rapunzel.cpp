@@ -199,7 +199,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	goldPile->addToLayeredScene(this, 1);
 	//Uncomment to place on castle
 	//goldPile->translateComponents(glm::vec3(15.f, 23.f, 0.f));
-	goldPile->translateComponents(glm::vec3(10.f, 2.f, 0.f));
+	goldPile->translateComponents(glm::vec3(30.f, 2.f, 0.f));
 	goldPile->rootComponent->transform->scale(10.0f, 10.0f, 1.0f);
 	gameCam->addTarget(goldPile);
 	playRandomBackgroundMusic();
@@ -212,7 +212,7 @@ void Rapunzel::update(Step* _step){
 	PuppetScene::update(_step);
 
 	if(keyboard->keyJustUp(GLFW_KEY_N)){
-		goldPile->loseGold();
+		goldPile->actuallyInteract();
 	}
 
 	if(!splashSoundPlayed){

@@ -132,16 +132,19 @@ void PuppetContactListener::playerItemContact(b2Contact * _contact, b2Fixture * 
 	PuppetCharacter * p = static_cast<PuppetCharacter *>(_playerFixture->GetUserData());
 	Item * item = static_cast<Item *>(_itemFixture->GetUserData());
 
-	p->addCollision(PuppetGame::kITEM);
-	static_cast<Item *>(item)->hitPlayer();
-	if(item->thrown || (item->held && item != p->heldItem)){
-		// do some sort of damage thing here
-		//PuppetResourceManager::hitSounds->playRandomSound();
-        p->takeDamage(item->damage);
-		item->owner->score += item->damage;
-	}else if(p->heldItem == nullptr && !item->held && !item->destroy){
-		p->itemToPickup = item;
-		// multiple players might be able to pick it up in one update
+	// if an item is triggered as dead, don't trigger a proper contact
+	if(!item->destroy){
+		p->addCollision(PuppetGame::kITEM);
+		static_cast<Item *>(item)->hitPlayer();
+		if(item->thrown || (item->held && item != p->heldItem)){
+			// do some sort of damage thing here
+			//PuppetResourceManager::hitSounds->playRandomSound();
+			p->takeDamage(item->damage);
+			item->owner->score += item->damage;
+		}else if(p->heldItem == nullptr && !item->held && !item->destroy){
+			p->itemToPickup = item;
+			// multiple players might be able to pick it up in one update
+		}
 	}
 }
 
@@ -153,7 +156,6 @@ void PuppetContactListener::playerStructureContact(b2Contact * _contact, b2Fixtu
 
 		StructureInteractable * si = dynamic_cast<StructureInteractable *>(static_cast<Structure *>(_structureFixture->GetUserData()));
 		if(si != nullptr){
-			// need to actually check if the structure is the catapult
 			si->trigger(p);
 		}
 	}
