@@ -173,6 +173,8 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	deathBounds->setShader(shader, true);
 
 	playRandomBackgroundMusic();
+
+	populateClouds();
 }
 
 SlayTheDragon::~SlayTheDragon(){
