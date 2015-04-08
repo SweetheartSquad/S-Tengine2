@@ -56,8 +56,8 @@ StructureBoxingGlove::StructureBoxingGlove(Box2DWorld * _world) :
 	jth.lowerTranslation = 0;
 	jth.upperTranslation = 10;
 	jth.localAxisA = b2Vec2(1, 0);
-	jth.maxMotorForce = 1000000.f;
-	jth.motorSpeed = 100.f;
+	jth.maxMotorForce = 1000.f;
+	jth.motorSpeed = -100.f;
 	jth.referenceAngle = 0.f;
 	world->b2world->CreateJoint(&jth);
 }

@@ -36,6 +36,13 @@ public:
 	static TextureSampler * rapunzelArm;
 	static TextureSampler * rapunzelHelmet;
 	
+	static TextureSampler * guard1Torso;
+	static TextureSampler * guard1Arm;
+	static TextureSampler * guard1Helmet;
+	static TextureSampler * guard2Torso;
+	static TextureSampler * guard2Arm;
+	static TextureSampler * guard2Helmet;
+	
 	static TextureSampler * itemSpear;
 	static TextureSampler * itemAxe;
 	static TextureSampler * itemClub;

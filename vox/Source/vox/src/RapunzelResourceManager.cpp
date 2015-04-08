@@ -30,6 +30,13 @@ TextureSampler * RapunzelResourceManager::thiefHelmet	= new TextureSampler("../a
 TextureSampler * RapunzelResourceManager::rapunzelTorso	    = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelDress.png.def");
 TextureSampler * RapunzelResourceManager::rapunzelArm	    = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelArm.png.def");
 TextureSampler * RapunzelResourceManager::rapunzelHelmet    = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelHat.png.def");
+										  
+TextureSampler * RapunzelResourceManager::guard1Torso	= new TextureSampler("../assets/hurly-burly/FancyKnight1/", "FK1Breastplate.png.def");
+TextureSampler * RapunzelResourceManager::guard1Arm	    = new TextureSampler("../assets/hurly-burly/FancyKnight1/", "FK1Arm.png.def");
+TextureSampler * RapunzelResourceManager::guard1Helmet   = new TextureSampler("../assets/hurly-burly/FancyKnight1/", "FK1Helmet.png.def");
+TextureSampler * RapunzelResourceManager::guard2Torso	= new TextureSampler("../assets/hurly-burly/FancyKnight2/", "FK2Breastplate.png.def");
+TextureSampler * RapunzelResourceManager::guard2Arm	    = new TextureSampler("../assets/hurly-burly/FancyKnight2/", "FK2Arm.png.def");
+TextureSampler * RapunzelResourceManager::guard2Helmet   = new TextureSampler("../assets/hurly-burly/FancyKnight2/", "FK2Helmet.png.def");
 
 TextureSampler * RapunzelResourceManager::itemSpear	= new TextureSampler("../assets/hurly-burly/WeaponAssets/", "Arrow.png.def");
 TextureSampler * RapunzelResourceManager::itemAxe	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Axe.png", 1024, 1024, true, true), 230, 395);
@@ -66,6 +73,13 @@ void RapunzelResourceManager::init(){
 	resources.push_back(rapunzelArm);
 	resources.push_back(rapunzelHelmet);
 	
+	resources.push_back(guard1Torso);
+	resources.push_back(guard1Arm);	  
+	resources.push_back(guard1Helmet);
+	resources.push_back(guard2Torso);
+	resources.push_back(guard2Arm);	  
+	resources.push_back(guard2Helmet);
+
 	resources.push_back(itemSpear);
 	resources.push_back(itemAxe);
 	resources.push_back(itemClub);
