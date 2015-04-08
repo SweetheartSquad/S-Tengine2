@@ -63,17 +63,20 @@ void MeshEntity::removeChildAtIndex(int _index){
 }
 
 void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
-	if(_shader->isCompiled){
-		shader = _shader;
-		if(_configureDefaultAttributes){
-			if(mesh != nullptr){
-				load();
+	if(_shader != nullptr){
+		if(_shader->isCompiled){
+			shader = _shader;
+			if(_configureDefaultAttributes){
+				if(mesh != nullptr){
+					load();
+				}
 			}
+		}else{
+			throw "shader not compiled; cannot setShader";
 		}
-	}else{
-		throw "shader not compiled; cannot setShader";
 	}
 }
+
 Shader* MeshEntity::getShader(){
 	return shader;
 }

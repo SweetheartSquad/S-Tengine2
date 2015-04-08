@@ -105,10 +105,10 @@ void PuppetResourceManager::init(){
 	resources.push_back(countDown4);
 	resources.push_back(countDown5);
 	
-	indicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "redIndicator1.png.def"));
-	indicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "redIndicator1.png.def"));
-	indicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "redIndicator1.png.def"));
-	indicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "redIndicator1.png.def"));
+	indicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "indicator1.png.def"));
+	indicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "indicator2.png.def"));
+	indicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "indicator3.png.def"));
+	indicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "indicator4.png.def"));
 	for(auto i : indicators){
 		resources.push_back(i);
 	}

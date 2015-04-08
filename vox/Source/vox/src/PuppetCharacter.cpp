@@ -62,6 +62,7 @@ PuppetCharacter * PuppetCharacter::clone(Box2DWorld * _world){
 	PuppetCharacter * res = new PuppetCharacter(texPack, ghostPosition, ai, _world, categoryBits, maskBits, groupIndex);
 	res->id = id;
 	res->score = score;
+	res->createIndicator(res->id);
 	return res;
 }
 
@@ -422,7 +423,7 @@ void PuppetCharacter::update(Step* _step){
 	}
 
 	if(indicator != nullptr){
-		indicator->setPos(rootComponent->getPos(false) + glm::vec3(0.f, 3.f, 0.f));
+		indicator->setPos(headgear->getPos(false) + glm::vec3(0.f, 3.f, 0.f));
 		//indicator->transform->setOrientation(glm::quat(1,0,0,0));
 	}
 }
@@ -523,10 +524,18 @@ void PuppetCharacter::takeDamage(float _damage){
 
 void PuppetCharacter::unload(){
 	Box2DSuperSprite::unload();
+
+	if(indicator != nullptr){
+		indicator->unload();
+	}
 }
 
 void PuppetCharacter::load(){
 	Box2DSuperSprite::load();
+
+	if(indicator != nullptr){
+		indicator->load();
+	}
 }
 
 void PuppetCharacter::delegateToContactComplete(std::function<void(PuppetCharacter*)> _func){
@@ -561,6 +570,9 @@ void PuppetCharacter::setShader(Shader * _shader, bool _configureDefaultAttribut
 	Box2DSuperSprite::setShader(_shader, _configureDefaultAttributes);
 	if(itemToPickup != nullptr){
 		itemToPickup->setShader(_shader, _configureDefaultAttributes);
+	}
+	if(indicator != nullptr){
+		indicator->setShader(_shader, _configureDefaultAttributes);
 	}
 }
 

@@ -15,7 +15,8 @@ ItemGold::ItemGold(Box2DWorld * _world) :
 	ItemSimpleWeapon(RapunzelResourceManager::goldBrick, false, _world, PuppetGame::kITEM, PuppetGame::kPLAYER, 1),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
-	NodeRenderable()
+	NodeRenderable(),
+	passed(false)
 {
 	/*//if(goldMesh == nullptr){
 		goldMesh = MeshFactory::getCubeMesh();//new SpriteMesh(GL_QUADS);
@@ -39,7 +40,10 @@ void ItemGold::update(Step * _step){
 	ItemSimpleWeapon::update(_step);
 	
 	glm::vec3 pos = rootComponent->transform->getTranslationVector();
-	if(pos.y < 0){
-		translateComponents(glm::vec3(0.f, -pos.y, 0.f));
+	if(pos.y < 2.5f && !passed){
+		passed = true;
+		b2Filter sf = rootComponent->body->GetFixtureList()->GetFilterData();
+		sf.maskBits = PuppetGame::kPLAYER | PuppetGame::kGROUND;
+		rootComponent->body->GetFixtureList()->SetFilterData(sf);
 	}
 }
