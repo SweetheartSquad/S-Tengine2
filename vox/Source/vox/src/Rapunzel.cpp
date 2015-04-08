@@ -165,12 +165,14 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter3->translateComponents(glm::vec3(30.f, 5.f, 0.f));
 	playerCharacter4->translateComponents(catwalkPos + glm::vec3(0.f, 5.f, 0.f));
 	guard->translateComponents(glm::vec3(50.f, 5.f, 0.f));
+	
+	Lever::towerPos = tower->getPos(false);
 
 	Hair * hair = new Hair(world, PuppetGame::kGROUND, PuppetGame::kPLAYER, 0);
 	addChild(hair, 1);
 	hair->setShader(shader, true);
-	hair->translateComponents(glm::vec3(tower->getPos().x, tower->getPos().y - tower->getCorrectedHeight() * 0.75, 0.f));
-	
+	hair->translateComponents(glm::vec3(Lever::towerPos.x, Lever::towerPos.y - tower->getCorrectedHeight() * 0.75, 0.f));
+
 	lever1 = new Lever(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, 0);
 	addChild(lever1, 1);
 	lever1->addToLayeredScene(this, 1);

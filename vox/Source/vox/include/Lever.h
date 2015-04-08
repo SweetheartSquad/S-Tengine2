@@ -7,6 +7,8 @@ public:
 	bool pullingLever;
 	float cooldownCnt;
 	
+	static glm::vec3 towerPos;
+
 	Box2DSprite * base;
 	Box2DSprite * handle;
 	int type;
