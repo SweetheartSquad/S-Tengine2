@@ -423,7 +423,11 @@ void PuppetCharacter::update(Step* _step){
 	}
 
 	if(indicator != nullptr){
-		indicator->setPos(headgear->getPos(false) + glm::vec3(0.f, 3.f, 0.f));
+		glm::vec3 iPos = indicator->getPos(false);
+		glm::vec3 hPos = headgear->getPos(false) + glm::vec3(0.f, 3.f, 0.f);
+
+
+		indicator->setPos(iPos + (hPos - iPos)*0.1f);
 		//indicator->transform->setOrientation(glm::quat(1,0,0,0));
 	}
 }
