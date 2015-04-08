@@ -39,8 +39,9 @@ Hair::Hair(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _grou
 	sf.groupIndex = groupIndex;
 	
 	for(Box2DSprite ** c : components){
-		(*c)->createFixture(sf, b2Vec2(0.0f, 0.0f), nullptr, true);
-		(*c)->body->GetFixtureList()->SetFriction(20.0f);
+		b2Fixture * f = (*c)->createFixture(sf, b2Vec2(0.0f, 0.0f), nullptr, true);
+		f->SetFriction(20.0f);
+		//(*c)->body->GetFixtureList()->SetFriction(20.0f);
 	}
 	setUserData(this);
 

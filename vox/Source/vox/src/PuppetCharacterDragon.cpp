@@ -101,16 +101,30 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	float green = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->getGreen();
 	float blue = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->getBlue();
 	
+	
+	float newHue = hue, newSat = sat;
+	if(id == 0){
+		newSat = sat + 0.8f;
+		newHue = 0.125f;
+	}else if(id == 1){
+		newHue = 0.3056f;
+	}else if(id == 2){
+		newHue = 0.64;
+		newSat = sat +0.55f;
+	}else if(id == 3){
+		newHue = 0;
+	}
+	if(ai){
+		newSat = 0.f;
+	}
+
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setRed(red + (1 - control) * 3);
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setGreen(green - (1 - control) * 3);
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue - (1 - control) * 3);
 
 	// change the shader settings based on current damage and player id
-	if (!ai){
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(float(id) * 0.167f);
-	}else{
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
-	}
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(newHue);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(newSat);
 
 	// lower wing behind upper wing
 	handLeft->render(_matrixStack, _renderOptions);
@@ -143,12 +157,12 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue - (1 - control) * 3);
 
 	// change the shader settings based on current damage and player id
-	if (!ai){
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(float(id) * 0.167f);
-	}else{
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
-	}
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(newHue);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(newSat);
+	
 	headgear->render(_matrixStack, _renderOptions);
+	indicator->render(_matrixStack, _renderOptions);
+
 	// revert the shader settings
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(hue);
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat);

@@ -38,7 +38,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	dead(false),
 	deathPending(false),
 	targetRoll(0),
-	health(10.0f),
+	health(50.0f),
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),
@@ -88,6 +88,8 @@ void PuppetCharacter::init(){
 	armLeft = new Box2DSprite(world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 	armRight = itemHolder = new Box2DSprite(world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 	headgear = new Box2DSprite(world, texPack->headgearTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
+	indicator = new Box2DSprite(world, PuppetResourceManager::head1, b2_dynamicBody, true, nullptr, new Transform(), componentScale);
+
 
 	components.push_back(&armLeft);
 	components.push_back(&armRight);
@@ -97,6 +99,7 @@ void PuppetCharacter::init(){
 	components.push_back(&head);
 	components.push_back(&face);
 	components.push_back(&headgear);
+	components.push_back(&indicator);
 
 	rootComponent = torso;
 
@@ -127,6 +130,11 @@ void PuppetCharacter::init(){
 	face->createFixture		 (sf, b2Vec2(0.0f, 0.0f), this);
 	headgear->createFixture	 (sf, b2Vec2(0.0f, 0.0f), this);
 	head->createFixture		 (sf, b2Vec2(0.0f, 0.0f), this);
+	b2Fixture * f = indicator->createFixture (sf, b2Vec2(0.0f, 0.0f), this);
+
+	sf.categoryBits = 0;
+	sf.maskBits = 0;
+	f->SetFilterData(sf);
 
 	b2RevoluteJointDef jth;
 	jth.bodyA = torso->body;
@@ -153,7 +161,7 @@ void PuppetCharacter::init(){
 	jhf.enableLimit = true;
 	jhf.referenceAngle = 0;
 	world->b2world->CreateJoint(&jhf);
-
+	
 	// headgear
 	b2WeldJointDef jhh;
 	//b2RevoluteJointDef jhh;
@@ -165,6 +173,18 @@ void PuppetCharacter::init(){
 	//jhh.enableLimit = true;
 	jhh.referenceAngle = 0;
 	world->b2world->CreateJoint(&jhh);
+
+	// indicator
+	b2WeldJointDef jhi;
+	//b2RevoluteJointDef jhh;
+	jhi.bodyA = head->body;
+	jhi.bodyB = indicator->body;
+	jhi.localAnchorA.Set(0, 0.5f * head->getCorrectedHeight());
+	jhi.localAnchorB.Set(0, -0.1f * indicator->getCorrectedHeight());
+	jhi.collideConnected = false;
+	//jhi.enableLimit = true;
+	jhi.referenceAngle = 0;
+	world->b2world->CreateJoint(&jhi);
 
 	// right arm
 	b2RevoluteJointDef jtar;
@@ -236,20 +256,30 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 	float blue = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->getBlue();
 	float alpha = static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->getAlpha();
 
+	float newHue = hue, newSat = sat;
+	if(id == 0){
+		newSat = sat + 0.8f;
+		newHue = 0.125f;
+	}else if(id == 1){
+		newHue = 0.3056f;
+	}else if(id == 2){
+		newHue = 0.64;
+		newSat = sat +0.55f;
+	}else if(id == 3){
+		newHue = 0;
+	}
+	if(ai){
+		newSat = 0.f;
+	}
+
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setRed(red + (1 - control) * 3);
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setGreen(green - (1 - control) * 3);
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue - (1 - control) * 3);
 
 
 	// change the shader settings based on current damage and player id
-	if (!ai){
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(float(id+1) * 0.167f);
-		if(id == 0){
-			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat + 1);
-		}
-	}else{
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
-	}
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(newHue);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(newSat);
 	
 	if(dead){
 		static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->setAlpha(0.5f);
@@ -270,18 +300,14 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 	handRight->render(_matrixStack, _renderOptions);
 	
 	// change the shader settings based on current damage and player id
-	if (!ai){
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(float(id+1) * 0.167f);
-		if(id == 0){
-			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat + 1);
-		}
-	} else{
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
-	}
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(newHue);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(newSat);
+
 	if(dead){
 		static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->setAlpha(0.5f);
 	}
 	headgear->render(_matrixStack, _renderOptions);
+	indicator->render(_matrixStack, _renderOptions);
 	// revert the shader settings
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(hue);
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat);
@@ -294,6 +320,19 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 }
 
 void PuppetCharacter::update(Step* _step){
+	if(canJump){
+		for(Box2DSprite ** c : components){
+			if(*c != nullptr){
+				(*c)->maxVelocity = b2Vec2(10, 10);
+			}
+		}
+	}else{
+		for(Box2DSprite ** c : components){
+			if(*c != nullptr){
+				(*c)->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
+			}
+		}
+	}
 	Box2DSuperSprite::update(_step);
 	for(Box2DSprite ** c : components){
 		if(*c != nullptr){

@@ -82,35 +82,24 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 
     fort->translateComponents(glm::vec3(0.f, fortForeground->getCorrectedHeight() + 25.f, 0.f));
 
-	/*
 	playerCharacter1->setShader(shader, true);
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
-	playerCharacter1->rootComponent->maxVelocity = b2Vec2(10, 10);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->puppetCharacter = playerCharacter1;
-	*/
-	playerCharacter1->setShader(shader, true);
-	addChild(playerCharacter1, 1);
-	playerCharacter1->addToLayeredScene(this, 1);
-	playerCharacter1->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
-	playerCharacter2->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
-	playerCharacter3->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
-	playerCharacter4->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
 	
 	gameCam->addTarget(playerCharacter1->torso);
@@ -118,11 +107,11 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	gameCam->addTarget(playerCharacter3->torso);
 	gameCam->addTarget(playerCharacter4->torso);
 
-	playerCharacter3->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
-	playerCharacter3->behaviourManager->addBehaviour(new BehaviourAttackThrow(false, playerCharacter3, 3, PuppetGame::kPLAYER));
-	playerCharacter3->ai = true;
+	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
+	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourAttackThrow(false, playerCharacter3, 3, PuppetGame::kPLAYER));
+	//playerCharacter3->ai = true;
 
-	playerCharacter4->ai = true;
+	//->ai = true;
 	
 	dragon = static_cast<PuppetCharacterDragon * >(playerCharacter4);
 

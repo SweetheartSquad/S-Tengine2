@@ -46,6 +46,7 @@ public:
 	Box2DSprite * face;
 	Box2DSprite * headgear;
 	Box2DSprite * itemHolder;
+	Box2DSprite * indicator;
 
 	std::vector<PuppetGame::BOX2D_CATEGORY> collisionTypes;
 
