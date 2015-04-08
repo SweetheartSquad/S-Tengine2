@@ -232,12 +232,7 @@ void PuppetCharacter::init(){
 void PuppetCharacter::createIndicator(unsigned long _id){
 	// headgear
 
-	TextureSampler * tex = nullptr;
-	if(_id == 0){
-		tex = PuppetResourceManager::indicator1;
-	}else{
-		tex = PuppetResourceManager::indicator1;
-	}
+	TextureSampler * tex = PuppetResourceManager::indicators.at(_id);
 
 	indicator = new Box2DSprite(world, tex, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 	

@@ -86,21 +86,25 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
+	playerCharacter1->createIndicator(playerCharacter1->id);
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
+	playerCharacter2->createIndicator(playerCharacter2->id);
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
+	playerCharacter3->createIndicator(playerCharacter3->id);
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
+	playerCharacter4->createIndicator(playerCharacter4->id);
 	
 	gameCam->addTarget(playerCharacter1->torso);
 	gameCam->addTarget(playerCharacter2->torso);

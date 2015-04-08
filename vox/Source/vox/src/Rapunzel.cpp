@@ -95,19 +95,19 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
-	playerCharacter1->createIndicator(1);
+	playerCharacter1->createIndicator(playerCharacter1->id);
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
-	playerCharacter2->createIndicator(2);
+	playerCharacter2->createIndicator(playerCharacter2->id);
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
-	playerCharacter3->createIndicator(3);
+	playerCharacter3->createIndicator(playerCharacter3->id);
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
@@ -116,7 +116,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	// start Rapunzel with a ridiculous score so if the time runs out they win regardless of how well the thieves play
 	playerCharacter4->score = 1000000;
 	playerCharacter4->lastUpdateScore = 1000000;
-	playerCharacter4->createIndicator(4);
+	playerCharacter4->createIndicator(playerCharacter4->id);
 
 	guard->setShader(shader, true);
 	addChild(guard, 0);
@@ -175,21 +175,21 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	addChild(lever1, 1);
 	lever1->addToLayeredScene(this, 1);
 	lever1->setShader(shader, true);
-	lever1->translateComponents(catwalkPos + glm::vec3(5.f, 0, 0));
+	lever1->translateComponents(catwalkPos - glm::vec3(10.f, 0, 0));
 	lever1->type = 1;
 	
 	lever2 = new Lever(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, 0);
 	addChild(lever2, 1);
 	lever2->addToLayeredScene(this, 1);
 	lever2->setShader(shader, true);
-	lever2->translateComponents(catwalkPos + glm::vec3(10.f, 0, 0));
+	lever2->translateComponents(catwalkPos - glm::vec3(0.f, 0, 0));
 	lever2->type = 2;
 
 	lever3 = new Lever(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, 0);
 	addChild(lever3, 1);
 	lever3->addToLayeredScene(this, 1);
 	lever3->setShader(shader, true);
-	lever3->translateComponents(catwalkPos + glm::vec3(15.f, 0, 0));
+	lever3->translateComponents(catwalkPos + glm::vec3(10.f, 0, 0));
 	lever3->type = 3;
 
 	glove = new StructureBoxingGlove(world);
@@ -201,10 +201,10 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	goldPile = new StructureGoldPile(world);
 	addChild(goldPile, 1);
 	goldPile->setShader(shader, true);
+	goldPile->translateComponents(catwalkPos - glm::vec3(20.f, 0, 0));
 	goldPile->addToLayeredScene(this, 1);
 	//Uncomment to place on castle
 	//goldPile->translateComponents(glm::vec3(15.f, 23.f, 0.f));
-	goldPile->translateComponents(glm::vec3(30.f, 2.f, 0.f));
 	goldPile->rootComponent->transform->scale(10.0f, 10.0f, 1.0f);
 	gameCam->addTarget(goldPile);
 	playRandomBackgroundMusic();

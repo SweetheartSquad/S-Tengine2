@@ -12,7 +12,7 @@
 MeshInterface * ItemGold::goldMesh = nullptr;
 
 ItemGold::ItemGold(Box2DWorld * _world) :
-	ItemSimpleWeapon(RapunzelResourceManager::goldBrick, false, _world, PuppetGame::kITEM, PuppetGame::kGROUND | PuppetGame::kPLAYER, 1),
+	ItemSimpleWeapon(RapunzelResourceManager::goldBrick, false, _world, PuppetGame::kITEM, PuppetGame::kPLAYER, 1),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()
@@ -33,4 +33,13 @@ ItemGold::ItemGold(Box2DWorld * _world) :
 
 void ItemGold::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption){
 	ItemSimpleWeapon::render(_matrixStack, _renderOption);
+}
+
+void ItemGold::update(Step * _step){
+	ItemSimpleWeapon::update(_step);
+	
+	glm::vec3 pos = rootComponent->transform->getTranslationVector();
+	if(pos.y < 0){
+		translateComponents(glm::vec3(0.f, -pos.y, 0.f));
+	}
 }

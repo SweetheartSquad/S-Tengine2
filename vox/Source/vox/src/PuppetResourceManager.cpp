@@ -42,9 +42,7 @@ TextureSampler * PuppetResourceManager::countDown4 = new TextureSampler(new Text
 TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/5.png", 1024, 1024, true, true), 1024, 1024);
 
 
-TextureSampler * PuppetResourceManager::indicator1 = new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "redIndicator1.png.def");
-TextureSampler * PuppetResourceManager::indicator2 = new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "redIndicator2.png.def");
-TextureSampler * PuppetResourceManager::indicator3 = new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "redIndicator3.png.def");
+std::vector<TextureSampler *> PuppetResourceManager::indicators;
 
 //TextureSampler * PuppetResourceManager::redWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/redWins.png", 1024, 1024, true, true), 1024, 1024);
 //TextureSampler * PuppetResourceManager::yellowWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/yellowWins.png", 1024, 1024, true, true), 1024, 1024);
@@ -107,10 +105,14 @@ void PuppetResourceManager::init(){
 	resources.push_back(countDown4);
 	resources.push_back(countDown5);
 	
-	resources.push_back(indicator1);
-	resources.push_back(indicator2);
-	resources.push_back(indicator3);
-	
+	indicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "redIndicator1.png.def"));
+	indicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "redIndicator1.png.def"));
+	indicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "redIndicator1.png.def"));
+	indicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "redIndicator1.png.def"));
+	for(auto i : indicators){
+		resources.push_back(i);
+	}
+
 	winSplashes.push_back(new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/yellowWins.png", 1024, 1024, true, true), 1024, 1024));
 	winSplashes.push_back(new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/greenWins.png", 1024, 1024, true, true), 1024, 1024));
 	winSplashes.push_back(new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/blueWins.png", 1024, 1024, true, true), 1024, 1024));
