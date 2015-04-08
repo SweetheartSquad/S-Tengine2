@@ -41,6 +41,11 @@ TextureSampler * PuppetResourceManager::countDown3 = new TextureSampler(new Text
 TextureSampler * PuppetResourceManager::countDown4 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/4.png", 1024, 1024, true, true), 1024, 1024);
 TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/5.png", 1024, 1024, true, true), 1024, 1024);
 
+
+TextureSampler * PuppetResourceManager::indicator1 = new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "redIndicator1.png.def");
+TextureSampler * PuppetResourceManager::indicator2 = new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "redIndicator2.png.def");
+TextureSampler * PuppetResourceManager::indicator3 = new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "redIndicator3.png.def");
+
 //TextureSampler * PuppetResourceManager::redWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/redWins.png", 1024, 1024, true, true), 1024, 1024);
 //TextureSampler * PuppetResourceManager::yellowWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/yellowWins.png", 1024, 1024, true, true), 1024, 1024);
 //TextureSampler * PuppetResourceManager::greenWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/greenWins.png", 1024, 1024, true, true), 1024, 1024);
@@ -101,6 +106,10 @@ void PuppetResourceManager::init(){
 	resources.push_back(countDown3);
 	resources.push_back(countDown4);
 	resources.push_back(countDown5);
+	
+	resources.push_back(indicator1);
+	resources.push_back(indicator2);
+	resources.push_back(indicator3);
 	
 	winSplashes.push_back(new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/yellowWins.png", 1024, 1024, true, true), 1024, 1024));
 	winSplashes.push_back(new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/greenWins.png", 1024, 1024, true, true), 1024, 1024));

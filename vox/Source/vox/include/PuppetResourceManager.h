@@ -38,7 +38,11 @@ public:
 	static TextureSampler * countDown3;
 	static TextureSampler * countDown4;
 	static TextureSampler * countDown5;
-
+	
+	static TextureSampler * indicator1;
+	static TextureSampler * indicator2;
+	static TextureSampler * indicator3;
+	
 	//static TextureSampler * redWins;
 	//static TextureSampler * yellowWins;
 	//static TextureSampler * greenWins;

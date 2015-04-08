@@ -62,10 +62,9 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	towerBg->transform->translate(2.f, 0.f, 0.0f);
 	towerBg->transform->scale(2.6f, 2.6f, 1.0f);
 
-	TextureSampler * splashMessageTextureSampler = RapunzelResourceManager::splashMessage;
 	splashMessage = new Sprite(nullptr, new Transform());
 	splashMessage->transform->scale(glm::vec3(3, 3, 0));
-	splashMessage->mesh->pushTexture2D(splashMessageTextureSampler->texture);
+	splashMessage->mesh->pushTexture2D(RapunzelResourceManager::splashMessage->texture);
 	splashMessage->setShader(shader, true);
 	splashMessage->transform->scale(-1, 1, 1);
 
@@ -96,16 +95,19 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
+	playerCharacter1->createIndicator(1);
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
+	playerCharacter2->createIndicator(2);
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
+	playerCharacter3->createIndicator(3);
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
@@ -113,7 +115,8 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
 	// start Rapunzel with a ridiculous score so if the time runs out they win regardless of how well the thieves play
 	playerCharacter4->score = 1000000;
-	playerCharacter4->lastUpdateScore = 1000000; 
+	playerCharacter4->lastUpdateScore = 1000000;
+	playerCharacter4->createIndicator(4);
 
 	guard->setShader(shader, true);
 	addChild(guard, 0);
@@ -155,10 +158,12 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	tower->setTranslationPhysical(glm::vec3(glm::vec3(60.f, tower->getCorrectedHeight(), 0.f)));
     castleCatwalk->setTranslationPhysical(glm::vec3(tower->getPos().x - castleCatwalk->getCorrectedWidth() - tower->getCorrectedWidth() * 0.75f, tower->getPos().y - tower->getCorrectedHeight() * 0.08, 0));
 	
+	glm::vec3 catwalkPos = glm::vec3(castleCatwalk->getPos().x, castleCatwalk->getPos().y + castleCatwalk->getCorrectedHeight(), 0.f);
+
 	playerCharacter1->translateComponents(glm::vec3(10.f, 5.f, 0.f));
 	playerCharacter2->translateComponents(glm::vec3(20.f, 5.f, 0.f));
 	playerCharacter3->translateComponents(glm::vec3(30.f, 5.f, 0.f));
-	playerCharacter4->translateComponents(glm::vec3(castleCatwalk->getPos().x, tower->getPos().y + tower->getCorrectedHeight(), 0.f));
+	playerCharacter4->translateComponents(catwalkPos + glm::vec3(0.f, 5.f, 0.f));
 	guard->translateComponents(glm::vec3(50.f, 5.f, 0.f));
 
 	Hair * hair = new Hair(world, PuppetGame::kGROUND, PuppetGame::kPLAYER, 0);
@@ -170,21 +175,21 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	addChild(lever1, 1);
 	lever1->addToLayeredScene(this, 1);
 	lever1->setShader(shader, true);
-	lever1->translateComponents(glm::vec3(5.f, 2.f, 0));
+	lever1->translateComponents(catwalkPos + glm::vec3(5.f, 0, 0));
 	lever1->type = 1;
 	
 	lever2 = new Lever(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, 0);
 	addChild(lever2, 1);
 	lever2->addToLayeredScene(this, 1);
 	lever2->setShader(shader, true);
-	lever2->translateComponents(glm::vec3(10.f, 2.f, 0));
+	lever2->translateComponents(catwalkPos + glm::vec3(10.f, 0, 0));
 	lever2->type = 2;
 
 	lever3 = new Lever(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, 0);
 	addChild(lever3, 1);
 	lever3->addToLayeredScene(this, 1);
 	lever3->setShader(shader, true);
-	lever3->translateComponents(glm::vec3(15.f, 2.f, 0));
+	lever3->translateComponents(catwalkPos + glm::vec3(15.f, 0, 0));
 	lever3->type = 3;
 
 	glove = new StructureBoxingGlove(world);

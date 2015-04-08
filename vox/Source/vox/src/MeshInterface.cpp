@@ -190,7 +190,7 @@ void MeshInterface::pushTexture2D(Texture* _texture){
 	texturesDirty = true;
 }
 
-int MeshInterface::textureCount(){
+unsigned long int MeshInterface::textureCount(){
 	return textures.size();
 }
  

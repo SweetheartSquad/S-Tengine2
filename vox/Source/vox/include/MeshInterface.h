@@ -99,7 +99,7 @@ public:
 	void popTexture2D();
 	void removeTextureAt(int _idx);
 	void pushMaterial(Material * _material);
-	int textureCount();
+	unsigned long int textureCount();
 	Texture * getTexture(int _idx);
 
 private:

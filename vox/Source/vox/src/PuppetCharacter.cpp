@@ -22,6 +22,7 @@
 #include <Particle.h>
 #include <NumberUtils.h>
 #include <BehaviourManager.h>
+#include <Sprite.h>
 
 bool PuppetCharacter::compareByScore(PuppetCharacter * _a, PuppetCharacter * _b){
 	return (_a->score < _b->score);
@@ -51,7 +52,8 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	lastActionTime(0.0),
 	ghostPosition(_ghostPosition),
 	contactDelegate(nullptr),
-	justTookDamage(false)
+	justTookDamage(false),
+	indicator(nullptr)
 {
 	init();
 }
@@ -88,8 +90,6 @@ void PuppetCharacter::init(){
 	armLeft = new Box2DSprite(world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 	armRight = itemHolder = new Box2DSprite(world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 	headgear = new Box2DSprite(world, texPack->headgearTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
-	indicator = new Box2DSprite(world, PuppetResourceManager::head1, b2_dynamicBody, true, nullptr, new Transform(), componentScale);
-
 
 	components.push_back(&armLeft);
 	components.push_back(&armRight);
@@ -99,7 +99,6 @@ void PuppetCharacter::init(){
 	components.push_back(&head);
 	components.push_back(&face);
 	components.push_back(&headgear);
-	components.push_back(&indicator);
 
 	rootComponent = torso;
 
@@ -130,11 +129,6 @@ void PuppetCharacter::init(){
 	face->createFixture		 (sf, b2Vec2(0.0f, 0.0f), this);
 	headgear->createFixture	 (sf, b2Vec2(0.0f, 0.0f), this);
 	head->createFixture		 (sf, b2Vec2(0.0f, 0.0f), this);
-	b2Fixture * f = indicator->createFixture (sf, b2Vec2(0.0f, 0.0f), this);
-
-	sf.categoryBits = 0;
-	sf.maskBits = 0;
-	f->SetFilterData(sf);
 
 	b2RevoluteJointDef jth;
 	jth.bodyA = torso->body;
@@ -173,18 +167,6 @@ void PuppetCharacter::init(){
 	//jhh.enableLimit = true;
 	jhh.referenceAngle = 0;
 	world->b2world->CreateJoint(&jhh);
-
-	// indicator
-	b2WeldJointDef jhi;
-	//b2RevoluteJointDef jhh;
-	jhi.bodyA = head->body;
-	jhi.bodyB = indicator->body;
-	jhi.localAnchorA.Set(0, 0.5f * head->getCorrectedHeight());
-	jhi.localAnchorB.Set(0, -0.1f * indicator->getCorrectedHeight());
-	jhi.collideConnected = false;
-	//jhi.enableLimit = true;
-	jhi.referenceAngle = 0;
-	world->b2world->CreateJoint(&jhi);
 
 	// right arm
 	b2RevoluteJointDef jtar;
@@ -247,6 +229,40 @@ void PuppetCharacter::init(){
 	handLeft->transform->scale(-1, 1, 1);
 }
 
+void PuppetCharacter::createIndicator(unsigned long _id){
+	// headgear
+
+	TextureSampler * tex = nullptr;
+	if(_id == 0){
+		tex = PuppetResourceManager::indicator1;
+	}else{
+		tex = PuppetResourceManager::indicator1;
+	}
+
+	indicator = new Box2DSprite(world, tex, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
+	
+	b2Filter sf;
+	sf.categoryBits = 0;
+	sf.maskBits = 0;
+	sf.groupIndex = groupIndex;
+	b2Fixture * f = indicator->createFixture(sf, b2Vec2(0.0f, 0.0f), this);
+	f->SetSensor(true);
+
+	/*b2WeldJointDef jhi;
+	//b2RevoluteJointDef jhi;
+	jhi.bodyA = torso->body;
+	jhi.bodyB = indicator->body;
+	jhi.localAnchorA.Set(0, -0.f * torso->getCorrectedHeight());
+	jhi.localAnchorB.Set(0, 0);
+	jhi.collideConnected = false;
+	//jhi.enableLimit = true;
+	jhi.referenceAngle = 0;
+	world->b2world->CreateJoint(&jhi);*/
+
+	indicator->setShader(getShader(), true);
+}
+
+
 void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	// save the current shader settings
 	float hue = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->getHue();
@@ -307,7 +323,10 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 		static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->setAlpha(0.5f);
 	}
 	headgear->render(_matrixStack, _renderOptions);
-	indicator->render(_matrixStack, _renderOptions);
+
+	if(indicator != nullptr){
+		indicator->render(_matrixStack, _renderOptions);
+	}
 	// revert the shader settings
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(hue);
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat);
@@ -405,6 +424,11 @@ void PuppetCharacter::update(Step* _step){
 		lastUpdateScore += 1;
 		Particle * p = ps->particleSystem->addParticle(rootComponent->getPos(false), PuppetResourceManager::getRandomScoreParticles());
 		p->applyLinearImpulse(vox::NumberUtils::randomFloat(-250, 250), vox::NumberUtils::randomFloat(500, 750), p->body->GetPosition().x, p->body->GetPosition().y);
+	}
+
+	if(indicator != nullptr){
+		indicator->setPos(rootComponent->getPos(false) + glm::vec3(0.f, 3.f, 0.f));
+		//indicator->transform->setOrientation(glm::quat(1,0,0,0));
 	}
 }
 
