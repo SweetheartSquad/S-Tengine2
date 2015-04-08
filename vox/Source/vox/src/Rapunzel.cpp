@@ -197,7 +197,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	lever3->type = 3;
 
 	glove = new StructureBoxingGlove(world);
-	glove->translateComponents(Lever::towerPos + glm::vec3(10.f, -10.f, 0.f));
+	glove->translateComponents(Lever::towerPos + glm::vec3(3.f, -10.f, 0.f));
 	addChild(glove, 1);
 	glove->setShader(shader, true);
 	glove->addToLayeredScene(this, 1);

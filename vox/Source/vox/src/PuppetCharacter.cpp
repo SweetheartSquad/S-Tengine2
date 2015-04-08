@@ -334,6 +334,8 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 }
 
 void PuppetCharacter::update(Step* _step){
+	PuppetScene * ps = dynamic_cast<PuppetScene *>(scene);
+
 	if(canJump){
 		for(Box2DSprite ** c : components){
 			if(*c != nullptr){

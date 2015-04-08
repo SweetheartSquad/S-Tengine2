@@ -27,9 +27,11 @@ StructureBoxingGlove::StructureBoxingGlove(Box2DWorld * _world) :
 	}
 	sf.groupIndex = groupIndex;
 
-	for(Box2DSprite ** c : components){
-		(*c)->createFixture(sf);
-	}
+	glove->createFixture(sf);
+
+	sf.maskBits = 0;
+
+	spring->createFixture(sf);
 
 	setUserData(this);
 	
@@ -53,15 +55,15 @@ StructureBoxingGlove::StructureBoxingGlove(Box2DWorld * _world) :
 	jth.collideConnected = false;
 	jth.enableLimit = true;
 	jth.enableMotor = true;
-	jth.lowerTranslation = 0;
-	jth.upperTranslation = 10;
+	jth.lowerTranslation = -20;
+	jth.upperTranslation = 0;
 	jth.localAxisA = b2Vec2(1, 0);
 	jth.maxMotorForce = 1000.f;
-	jth.motorSpeed = -100.f;
+	jth.motorSpeed = 100.f;
 	jth.referenceAngle = 0.f;
 	world->b2world->CreateJoint(&jth);
 }
 
 void StructureBoxingGlove::punch(){
-	glove->applyLinearImpulseLeft(1000);
+	glove->applyLinearImpulseLeft(2000);
 }
