@@ -28,7 +28,7 @@ bool PuppetCharacter::compareByScore(PuppetCharacter * _a, PuppetCharacter * _b)
 	return (_a->score < _b->score);
 }
 
-PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostPosition, bool _ai, Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
@@ -50,7 +50,6 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	id(-1),
 	actionThrottle(0.333),
 	lastActionTime(0.0),
-	ghostPosition(_ghostPosition),
 	contactDelegate(nullptr),
 	justTookDamage(false),
 	indicator(nullptr)
@@ -59,7 +58,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 }
 
 PuppetCharacter * PuppetCharacter::clone(Box2DWorld * _world){
-	PuppetCharacter * res = new PuppetCharacter(texPack, ghostPosition, ai, _world, categoryBits, maskBits, groupIndex);
+	PuppetCharacter * res = new PuppetCharacter(texPack, ai, _world, categoryBits, maskBits, groupIndex);
 	res->id = id;
 	res->score = score;
 	res->createIndicator(res->id);
@@ -375,7 +374,7 @@ void PuppetCharacter::update(Step* _step){
 			pickupItem(itemToPickup);
 		}
 	}else{
-		if(rootComponent->body->GetPosition().y < ghostPosition) {
+		if(rootComponent->body->GetPosition().y < ps->ghostPosition) {
 			rootComponent->applyForceUp(500.f);
 		}else{
 			rootComponent->applyForceDown(500.f);
@@ -406,7 +405,6 @@ void PuppetCharacter::update(Step* _step){
 	}
 
 	// spray some particles to show hits more
-	PuppetScene * ps = dynamic_cast<PuppetScene *>(scene);
 	if (justTookDamage){
 		if (ps != nullptr){
 			Particle * p = ps->particleSystem->addParticle(rootComponent->getPos(false));

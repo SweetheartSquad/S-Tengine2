@@ -2,8 +2,6 @@
 
 #include "PuppetScene.h"
 
-#define RAID_CASTLE_GHOST_HEIGHT 12.0f
-
 class MeshEntity;
 class Castle;
 class Catapult;

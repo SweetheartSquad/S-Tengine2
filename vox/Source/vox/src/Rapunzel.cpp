@@ -46,12 +46,14 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	PuppetScene(_game, 50.f, 100.f),
 	tower(new Box2DSprite(world, RapunzelResourceManager::towerTower, b2_staticBody, false, nullptr, new Transform(), 0.03f)),
 	castleCatwalk(new Box2DSprite(world, RapunzelResourceManager::towerCatwalk, b2_staticBody, false, nullptr, new Transform(), 0.03f)),
-	guard(new PuppetCharacterGuard(true, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -20)),
-	playerCharacter1(new PuppetCharacterThief(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
-	playerCharacter2(new PuppetCharacterThief(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
-	playerCharacter3(new PuppetCharacterThief(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
-	playerCharacter4(new PuppetCharacterRapunzel(false, RAPUNZEL_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
+	guard(new PuppetCharacterGuard(true, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -20)),
+	playerCharacter1(new PuppetCharacterThief(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
+	playerCharacter2(new PuppetCharacterThief(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
+	playerCharacter3(new PuppetCharacterThief(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
+	playerCharacter4(new PuppetCharacterRapunzel(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
+	ghostPosition = 12.0f;
+
 	populateBackground();
 	cl = new RapunzelContactListener(this);
 
@@ -191,11 +193,11 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	addChild(lever3, 1);
 	lever3->addToLayeredScene(this, 1);
 	lever3->setShader(shader, true);
-	lever3->translateComponents(catwalkPos + glm::vec3(10.f, 0, 0));
+	lever3->translateComponents(catwalkPos + glm::vec3(10.f, 0.f, 0.f));
 	lever3->type = 3;
 
 	glove = new StructureBoxingGlove(world);
-	glove->translateComponents(glm::vec3(50.f, 25.f, 0.f));
+	glove->translateComponents(Lever::towerPos + glm::vec3(10.f, -10.f, 0.f));
 	addChild(glove, 1);
 	glove->setShader(shader, true);
 	glove->addToLayeredScene(this, 1);
@@ -203,7 +205,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	goldPile = new StructureGoldPile(world);
 	addChild(goldPile, 1);
 	goldPile->setShader(shader, true);
-	goldPile->translateComponents(catwalkPos - glm::vec3(20.f, -2.f, 0));
+	goldPile->translateComponents(catwalkPos - glm::vec3(20.f, -2.f, 0.f));
 	goldPile->addToLayeredScene(this, 1);
 	//Uncomment to place on castle
 	//goldPile->translateComponents(glm::vec3(15.f, 23.f, 0.f));

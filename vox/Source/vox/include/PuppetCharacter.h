@@ -32,7 +32,6 @@ public:
 	float health;
 
 	float control;
-	float ghostPosition;
 
 	PuppetTexturePack * texPack;
 
@@ -53,7 +52,7 @@ public:
 	static bool compareByScore(PuppetCharacter * _a, PuppetCharacter * _b);
 	
 	void init();
-	PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostPosition, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
+	PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	~PuppetCharacter();
 	virtual PuppetCharacter * clone(Box2DWorld * _world);
 

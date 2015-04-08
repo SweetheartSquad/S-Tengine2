@@ -85,7 +85,8 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	screenShaderSetting(3),
 	screenSurfaceShader(new Shader("../assets/RenderSurfacePlus", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
-	screenFBO(new StandardFrameBuffer(true))
+	screenFBO(new StandardFrameBuffer(true)),
+	ghostPosition(0)
 {
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new ShaderComponentTexture(shader));
@@ -309,13 +310,13 @@ void PuppetScene::update(Step * _step){
 
 	// player controls
 	if (players.size() > 0){
-		if (keyboard->keyJustDown(GLFW_KEY_W)){
+		if (keyboard->keyDown(GLFW_KEY_W)){
 			players.at(0)->jump();
 		}if (keyboard->keyDown(GLFW_KEY_A)){
-			players.at(0)->targetRoll = glm::radians(-45.f);
+			players.at(0)->targetRoll = glm::radians(-75.f);
 		}
 		if (keyboard->keyDown(GLFW_KEY_D)){
-			players.at(0)->targetRoll = glm::radians(45.f);
+			players.at(0)->targetRoll = glm::radians(75.f);
 		}
 		if (keyboard->keyJustDown(GLFW_KEY_T)){
 			players.at(0)->action();
