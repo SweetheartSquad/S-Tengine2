@@ -21,11 +21,6 @@ TextureSampler * RaidTheCastleResourceManager::castleChampionHelmet	= new Textur
 
 TextureSampler * RaidTheCastleResourceManager::splashMessage	= new TextureSampler(new Texture("../assets/hurly-burly/SplashMessages/RaidTheCastle.png", 1024, 1024, true, true), 1024, 1024);
 
-TextureSampler * RaidTheCastleResourceManager::itemAxe	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Axe.png", 1024, 1024, true, true), 230, 395);
-TextureSampler * RaidTheCastleResourceManager::itemClub	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Club.png", 1024, 1024, true, true), 83, 515);
-TextureSampler * RaidTheCastleResourceManager::itemMace	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Mace.png", 1024, 1024, true, true), 178, 516);
-TextureSampler * RaidTheCastleResourceManager::itemSword	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Sword.png", 1024, 1024, true, true), 81, 382);
-TextureSampler * RaidTheCastleResourceManager::itemScimitar	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Scimitar.png", 1024, 1024, true, true), 79, 401);
 TextureSampler * RaidTheCastleResourceManager::itemFlailGrip	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/FlailGrip.png", 1024, 1024, true, true), 51, 134);
 TextureSampler * RaidTheCastleResourceManager::itemFlailJoint	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/FlailJoint.png", 1024, 1024, true, true), 67, 66);
 TextureSampler * RaidTheCastleResourceManager::itemFlailHead	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/FlailHead.png", 1024, 1024, true, true), 178, 178);
@@ -51,11 +46,6 @@ void RaidTheCastleResourceManager::init(){
 	resources.push_back(castleChampionArm);
 	resources.push_back(castleChampionHelmet);
 	
-	resources.push_back(itemAxe);
-	resources.push_back(itemClub);
-	resources.push_back(itemMace);
-	resources.push_back(itemSword);
-	resources.push_back(itemScimitar);
 	resources.push_back(itemFlailGrip);
 	resources.push_back(itemFlailJoint);
 	resources.push_back(itemFlailHead);
@@ -92,21 +82,4 @@ void RaidTheCastleResourceManager::init(){
 	catapultWhistleSounds->addNewSound("14", "../assets/hurly-burly/audio/puppetDialog_Castle/fireBoulder13.ogg");
 	resources.push_back(catapultWhistleSounds);
 
-}
-
-TextureSampler * RaidTheCastleResourceManager::getRandomWeapon(){
-	unsigned long int i = std::rand() % 5;
-	switch(i){
-	default:
-	case 0:
-		return itemAxe;
-	case 1:
-		return itemClub;
-	case 2:
-		return itemMace;
-	case 3:
-		return itemSword;
-	case 4:
-		return itemScimitar;
-	}
 }

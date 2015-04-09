@@ -49,6 +49,16 @@ public:
 	//static TextureSampler * blueWins;
 	static std::vector<TextureSampler *> winSplashes;
 
+	
+	
+	static TextureSampler * itemSpear;
+	static TextureSampler * itemAxe;
+	static TextureSampler * itemClub;
+	static TextureSampler * itemMace;
+	static TextureSampler * itemSword;
+	static TextureSampler * itemScimitar;
+	static TextureSampler * getRandomWeapon();
+
 	static SoundManager * jumpSounds;
 	static SoundManager * hitSounds;
 	static SoundManager * splashSounds;

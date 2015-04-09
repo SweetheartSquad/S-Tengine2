@@ -43,15 +43,7 @@ public:
 	static TextureSampler * guard2Torso;
 	static TextureSampler * guard2Arm;
 	static TextureSampler * guard2Helmet;
-	
-	static TextureSampler * itemSpear;
-	static TextureSampler * itemAxe;
-	static TextureSampler * itemClub;
-	static TextureSampler * itemMace;
-	static TextureSampler * itemSword;
-	static TextureSampler * itemScimitar;
 
-	static TextureSampler * getRandomWeapon();
 	
 	static SoundManager * gloveSounds;
 	static SoundManager * spearSounds;

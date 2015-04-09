@@ -51,6 +51,16 @@ std::vector<TextureSampler *> PuppetResourceManager::indicators;
 //TextureSampler * PuppetResourceManager::blueWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/blueWins.png", 1024, 1024, true, true), 1024, 1024);
 std::vector<TextureSampler *> PuppetResourceManager::winSplashes;
 
+
+TextureSampler * PuppetResourceManager::itemSpear	= new TextureSampler("../assets/hurly-burly/WeaponAssets/", "Arrow.png.def");
+TextureSampler * PuppetResourceManager::itemAxe	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Axe.png", 1024, 1024, true, true), 230, 395);
+TextureSampler * PuppetResourceManager::itemClub	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Club.png", 1024, 1024, true, true), 83, 515);
+TextureSampler * PuppetResourceManager::itemMace	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Mace.png", 1024, 1024, true, true), 178, 516);
+TextureSampler * PuppetResourceManager::itemSword	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Sword.png", 1024, 1024, true, true), 81, 382);
+TextureSampler * PuppetResourceManager::itemScimitar	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Scimitar.png", 1024, 1024, true, true), 79, 401);
+
+
+
 SoundManager * PuppetResourceManager::jumpSounds   = new SoundManager(-1);
 SoundManager * PuppetResourceManager::hitSounds    = new SoundManager(-1);
 SoundManager * PuppetResourceManager::splashSounds = new SoundManager(-1);
@@ -123,7 +133,14 @@ void PuppetResourceManager::init(){
 	for(auto i : winSplashes){
 		resources.push_back(i);
 	}
+	
 
+	resources.push_back(itemSpear);
+	resources.push_back(itemAxe);
+	resources.push_back(itemClub);
+	resources.push_back(itemMace);
+	resources.push_back(itemSword);
+	resources.push_back(itemScimitar);
 
 	jumpSounds->addNewSound("jump1", "../assets/hurly-burly/audio/jump/jumpSound1.ogg");
 	jumpSounds->addNewSound("jump2", "../assets/hurly-burly/audio/jump/jumpSound2.ogg");
@@ -185,4 +202,21 @@ TextureSampler * PuppetResourceManager::getRandomScoreParticles(){
 
 TextureSampler * PuppetResourceManager::getRandomFace(){
 	return faces.at(vox::NumberUtils::randomInt(0, faces.size()-1));
+}
+
+TextureSampler * PuppetResourceManager::getRandomWeapon(){
+	unsigned long int i = std::rand() % 5;
+	switch(i){
+	default:
+	case 0:
+		return itemAxe;
+	case 1:
+		return itemClub;
+	case 2:
+		return itemMace;
+	case 3:
+		return itemSword;
+	case 4:
+		return itemScimitar;
+	}
 }

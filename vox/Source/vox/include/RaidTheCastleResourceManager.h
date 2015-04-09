@@ -27,16 +27,9 @@ public:
 	static TextureSampler * castleChampionArm;
 	static TextureSampler * castleChampionHelmet;
 
-	static TextureSampler * itemAxe;
-	static TextureSampler * itemClub;
-	static TextureSampler * itemMace;
-	static TextureSampler * itemSword;
-	static TextureSampler * itemScimitar;
 	static TextureSampler * itemFlailGrip;
 	static TextureSampler * itemFlailJoint;
 	static TextureSampler * itemFlailHead;
-
-	static TextureSampler * getRandomWeapon();
 	
 	static SoundManager * catapultWhistleSounds;
 	static SoundManager * catapultHitSounds;

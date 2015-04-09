@@ -39,13 +39,6 @@ TextureSampler * RapunzelResourceManager::guard2Torso	= new TextureSampler("../a
 TextureSampler * RapunzelResourceManager::guard2Arm	    = new TextureSampler("../assets/hurly-burly/FancyKnight2/", "FK2Arm.png.def");
 TextureSampler * RapunzelResourceManager::guard2Helmet   = new TextureSampler("../assets/hurly-burly/FancyKnight2/", "FK2Helmet.png.def");
 
-TextureSampler * RapunzelResourceManager::itemSpear	= new TextureSampler("../assets/hurly-burly/WeaponAssets/", "Arrow.png.def");
-TextureSampler * RapunzelResourceManager::itemAxe	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Axe.png", 1024, 1024, true, true), 230, 395);
-TextureSampler * RapunzelResourceManager::itemClub	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Club.png", 1024, 1024, true, true), 83, 515);
-TextureSampler * RapunzelResourceManager::itemMace	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Mace.png", 1024, 1024, true, true), 178, 516);
-TextureSampler * RapunzelResourceManager::itemSword	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Sword.png", 1024, 1024, true, true), 81, 382);
-TextureSampler * RapunzelResourceManager::itemScimitar	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Scimitar.png", 1024, 1024, true, true), 79, 401);
-
 SoundManager * RapunzelResourceManager::gloveSounds	= new SoundManager(-1);
 SoundManager * RapunzelResourceManager::spearSounds	= new SoundManager(-1);
 SoundManager * RapunzelResourceManager::tauntSounds	= new SoundManager(-1);
@@ -84,13 +77,6 @@ void RapunzelResourceManager::init(){
 	resources.push_back(guard2Torso);
 	resources.push_back(guard2Arm);	  
 	resources.push_back(guard2Helmet);
-
-	resources.push_back(itemSpear);
-	resources.push_back(itemAxe);
-	resources.push_back(itemClub);
-	resources.push_back(itemMace);
-	resources.push_back(itemSword);
-	resources.push_back(itemScimitar);
 	
 	gloveSounds->addNewSound("1", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_glove1.ogg");
 	gloveSounds->addNewSound("2", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_glove2.ogg");
@@ -108,21 +94,4 @@ void RapunzelResourceManager::init(){
 	tauntSounds->addNewSound("4", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_myGold.ogg");
 	tauntSounds->addNewSound("5", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_getOff.ogg");
 	resources.push_back(tauntSounds);
-}
-
-TextureSampler * RapunzelResourceManager::getRandomWeapon(){
-	unsigned long int i = std::rand() % 5;
-	switch(i){
-	default:
-	case 0:
-		return itemAxe;
-	case 1:
-		return itemClub;
-	case 2:
-		return itemMace;
-	case 3:
-		return itemSword;
-	case 4:
-		return itemScimitar;
-	}
 }

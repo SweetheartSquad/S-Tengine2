@@ -97,7 +97,7 @@ void Lever::actuallyInteract(){
 		Item * projectile = new Item(true, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY, groupIndex);
 	
 		Box2DSprite ** test = new Box2DSprite*[1];
-		test[0] = projectile->rootComponent = new Box2DSprite(world, RapunzelResourceManager::itemSpear, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
+		test[0] = projectile->rootComponent = new Box2DSprite(world, PuppetResourceManager::itemSpear, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 		projectile->rootComponent->body->SetTransform(projectile->rootComponent->body->GetPosition(), glm::radians(80.f));
 		projectile->components.push_back(test);
 
