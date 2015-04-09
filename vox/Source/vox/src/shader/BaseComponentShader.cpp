@@ -41,6 +41,7 @@ std::string BaseComponentShader::buildVertexShader(){
 								"uniform mat4 " + GL_UNIFORM_ID_MODEL_MATRIX + SEMI_ENDL +
 								"uniform mat4 " + GL_UNIFORM_ID_VIEW_MATRIX + SEMI_ENDL +
 								"uniform mat4 " + GL_UNIFORM_ID_PROJECTION_MATRIX + SEMI_ENDL +
+								"uniform mat4 " + GL_UNIFORM_ID_MODEL_VIEW_PROJECTION + SEMI_ENDL +
 								
 								"out vec3 fragVert" + modGeo + SEMI_ENDL +
 								"out vec3 fragNormal" + modGeo + SEMI_ENDL +
@@ -61,8 +62,7 @@ std::string BaseComponentShader::buildVertexShader(){
 						"fragColor" + modGeo + "= aVertexColor" + SEMI_ENDL +
 						"fragUV" + modGeo + " = aVertexUVs" + SEMI_ENDL +
 						//"mat4 MVP = " + GL_UNIFORM_ID_MODEL_MATRIX +" * " + GL_UNIFORM_ID_VIEW_MATRIX + " * " + GL_UNIFORM_ID_PROJECTION_MATRIX + SEMI_ENDL +
-						"mat4 MVP = " + GL_UNIFORM_ID_PROJECTION_MATRIX +" * " + GL_UNIFORM_ID_VIEW_MATRIX + " * " + GL_UNIFORM_ID_MODEL_MATRIX + SEMI_ENDL +
-						"gl_Position = MVP * vec4(aVertexPosition, 1.0)" + SEMI_ENDL;
+						"gl_Position = " + GL_UNIFORM_ID_MODEL_VIEW_PROJECTION + " * vec4(aVertexPosition, 1.0)" + SEMI_ENDL;
 
 	for(unsigned long int i = 0; i < components.size(); i++){
 		shaderString += components.at(i)->getVertexBodyString();
@@ -135,6 +135,10 @@ void BaseComponentShader::configureUniforms(vox::MatrixStack* _matrixStack, Rend
 	glm::mat4 projection = _matrixStack->getProjectionMatrix();
 	GLuint projectionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_PROJECTION_MATRIX.c_str());
 	glUniformMatrix4fv(projectionUniformLocation, 1, GL_FALSE, &projection[0][0]);
+
+	GLuint mvpUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_MODEL_VIEW_PROJECTION.c_str());
+	glm::mat4 mvp = projection * view * model;
+	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
 	
 	checkForGlError(0,__FILE__,__LINE__);
 }
