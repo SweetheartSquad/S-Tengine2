@@ -46,7 +46,6 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	PuppetScene(_game, 50.f, 100.f),
 	tower(new Box2DSprite(world, RapunzelResourceManager::towerTower, b2_staticBody, false, nullptr, new Transform(), 0.03f)),
 	castleCatwalk(new Box2DSprite(world, RapunzelResourceManager::towerCatwalk, b2_staticBody, false, nullptr, new Transform(), 0.03f)),
-	guard(new PuppetCharacterGuard(true, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -20)),
 	playerCharacter1(new PuppetCharacterThief(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterThief(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
 	playerCharacter3(new PuppetCharacterThief(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
@@ -119,16 +118,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter4->score = 1000000;
 	playerCharacter4->lastUpdateScore = 1000000;
 	playerCharacter4->createIndicator(playerCharacter4->id);
-
-	guard->setShader(shader, true);
-	addChild(guard, 0);
-	guard->addToLayeredScene(this, 1);
 	
-	/*guard->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, guard->groupIndex, 0, 0, -RapunzelResourceManager::itemFlailGrip->height/2.f);
-	addChild(guard->itemToPickup, 1);
-	guard->itemToPickup->addToLayeredScene(this, 1);
-	guard->itemToPickup->setShader(shader, true);*/
-
 	gameCam->addTarget(playerCharacter1->torso);
 	gameCam->addTarget(playerCharacter2->torso);
 	gameCam->addTarget(playerCharacter3->torso);
@@ -141,10 +131,6 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	//playerCharacter4->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50, 0, 0), glm::vec3(100, 0, 0), playerCharacter4, 10));
 	//playerCharacter4->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
 	//playerCharacter4->ai = true;
-
-	guard->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(0, 0, 0), glm::vec3(40.f, 0, 0), guard, 10));
-	guard->behaviourManager->addBehaviour(new BehaviourAttack(guard, 3, PuppetGame::kPLAYER));
-	guard->ai = true;
 
 	for(PuppetCharacter * p : players){
 		if(p != playerCharacter4){
@@ -166,7 +152,6 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playerCharacter2->translateComponents(glm::vec3(20.f, 5.f, 0.f));
 	playerCharacter3->translateComponents(glm::vec3(30.f, 5.f, 0.f));
 	playerCharacter4->translateComponents(catwalkPos + glm::vec3(0.f, 5.f, 0.f));
-	guard->translateComponents(glm::vec3(50.f, 5.f, 0.f));
 	
 	Lever::towerPos = tower->getPos(false);
 
@@ -197,7 +182,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	lever3->type = 3;
 
 	glove = new StructureBoxingGlove(world);
-	glove->translateComponents(Lever::towerPos + glm::vec3(3.f, -10.f, 0.f));
+	glove->translateComponents(Lever::towerPos + glm::vec3(3.f, -12.f, 0.f));
 	addChild(glove, 1);
 	glove->setShader(shader, true);
 	glove->addToLayeredScene(this, 1);

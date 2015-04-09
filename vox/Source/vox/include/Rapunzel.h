@@ -23,7 +23,6 @@ public:
 	Lever * lever2;
 	Lever * lever3;
 	StructureGoldPile * goldPile;
-	PuppetCharacterGuard * guard;
 
 	PuppetCharacterThief * playerCharacter1;
 	PuppetCharacterThief * playerCharacter2;

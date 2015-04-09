@@ -14,6 +14,9 @@
 #include <shader\BaseComponentShader.h>
 #include <StructureBoxingGlove.h>
 #include <SoundManager.h>
+#include <ItemSimpleWeapon.h>
+#include <PuppetScene.h>
+#include <TextureSampler.h>
 
 glm::vec3 Lever::towerPos;
 
@@ -101,7 +104,7 @@ void Lever::actuallyInteract(){
 		projectile->rootComponent->body->SetTransform(projectile->rootComponent->body->GetPosition(), glm::radians(80.f));
 		projectile->components.push_back(test);
 
-		projectile->translateComponents(towerPos - glm::vec3(0.f, 5.f, 0.f));
+		projectile->translateComponents(towerPos - glm::vec3(0.f, 15.f, 0.f));
 
 		b2Filter sf;
 		sf.categoryBits = projectile->categoryBits;
@@ -130,15 +133,22 @@ void Lever::actuallyInteract(){
 		RapunzelResourceManager::gloveSounds->playRandomSound();
 		ps->glove->punch();
 	}else if(type == 3){
-		PuppetCharacterGuard * g = new PuppetCharacterGuard(true, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -10);
+		PuppetCharacterGuard * g = new PuppetCharacterGuard(true, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4);
 		
-		g->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50, 0, 0), glm::vec3(100, 0, 0), g, 10));
-		g->behaviourManager->addBehaviour(new BehaviourAttack(g, 3, PuppetGame::kPLAYER));
-		g->ai = true;
 		g->addToLayeredScene(ps, 1);
 		ps->addChild(g, 1);
 		g->setShader(ps->shader, true);
 		g->translateComponents(towerPos + glm::vec3(-1.f, -1.f, 0.f));
+
+		TextureSampler * weaponTex = PuppetResourceManager::getRandomMeleeWeapon();
+		PuppetScene * ps = static_cast<PuppetScene *>(scene);
+		ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, g->groupIndex, 1, 0, -weaponTex->height);
+		weapon->addToLayeredScene(ps, 1);
+		weapon->setShader(getShader(), true);
+		g->itemToPickup = weapon;
+		ps->addChild(weapon, 1);
+		weapon->snapComponents(g->itemHolder);
+
 	}else{
 		throw "um";
 	}

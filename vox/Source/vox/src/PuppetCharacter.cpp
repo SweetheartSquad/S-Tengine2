@@ -226,8 +226,8 @@ void PuppetCharacter::init(){
 	world->b2world->CreateJoint(&lhlej);
 
 	// flip left side
-	armLeft->transform->scale(-1, 1, 1);
-	handLeft->transform->scale(-1, 1, 1);
+	armLeft->transform->scale(-1, -1, 1);
+	handLeft->transform->scale(-1, -1, 1);
 }
 
 void PuppetCharacter::createIndicator(signed long _id){
@@ -331,7 +331,6 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 	
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setRed(red);
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setGreen(green);
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue);
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue);
 	static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->setAlpha(alpha);
 }
