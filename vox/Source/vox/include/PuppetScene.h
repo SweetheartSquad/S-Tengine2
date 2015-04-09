@@ -60,6 +60,7 @@ public:
 	Box2DDebugDraw * drawer;
 
 	std::vector<PuppetCharacter *> players;
+	std::vector<Sprite *> scoreIndicators;
 
 	MeshEntity * stageFloor;
 	MeshEntity * stageFront;

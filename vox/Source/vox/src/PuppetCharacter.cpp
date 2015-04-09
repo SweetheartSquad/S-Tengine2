@@ -24,6 +24,7 @@
 #include <BehaviourManager.h>
 #include <Sprite.h>
 #include <MeshInterface.h>
+#include <Camera.h>
 
 bool PuppetCharacter::compareByScore(PuppetCharacter * _a, PuppetCharacter * _b){
 	return (_a->score < _b->score);
@@ -254,6 +255,14 @@ void PuppetCharacter::createIndicator(signed long _id){
 	scoreIndicator->mesh->pushTexture2D(PuppetResourceManager::scoreIndicators.at(id)->texture);
 
 	indicator->setShader(getShader(), true);
+
+	// score indicator
+	scoreIndicator = new Sprite(nullptr, new Transform());
+	scoreIndicator->mesh->pushTexture2D(PuppetResourceManager::scoreIndicators.at(id)->texture);
+
+	scoreIndicator->setShader(getShader(), true);
+
+	dynamic_cast<PuppetScene *>(scene)->scoreIndicators.push_back(scoreIndicator);
 }
 
 
