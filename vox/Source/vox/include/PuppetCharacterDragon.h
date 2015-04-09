@@ -8,6 +8,7 @@ class PuppetTexturePack;
 class PuppetCharacterDragon : public PuppetCharacter{
 public:
 	Item * fireball;
+	PuppetCharacter * playerOnFire;
 	ParticleSystem * fireParticles;
 	float altitude;
 

@@ -56,7 +56,7 @@ public:
 	~PuppetCharacter();
 	virtual PuppetCharacter * clone(Box2DWorld * _world);
 
-	void createIndicator(unsigned long int _id);
+	void createIndicator(signed long int _id);
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	void update(Step* _step) override;

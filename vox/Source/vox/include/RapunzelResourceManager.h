@@ -17,6 +17,7 @@ public:
 	
 	static TextureSampler * glove;
 	static TextureSampler * spring;
+	static TextureSampler * itemSpear;
 
 	static TextureSampler * leverHandle;
 	static TextureSampler * leverBase;

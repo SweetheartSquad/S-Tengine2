@@ -126,8 +126,8 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	//playerCharacter4->ai = true;
 
 	for(PuppetCharacter * p : players){
-		TextureSampler * weaponTex = PuppetResourceManager::getRandomWeapon();
-		TextureSampler * projTex = PuppetResourceManager::getRandomWeapon();
+		TextureSampler * weaponTex = PuppetResourceManager::getRandomMeleeWeapon();
+		TextureSampler * projTex = PuppetResourceManager::getRandomMeleeWeapon();
 		
 		//ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
         ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -weaponTex->height);

@@ -230,9 +230,11 @@ void PuppetCharacter::init(){
 	handLeft->transform->scale(-1, 1, 1);
 }
 
-void PuppetCharacter::createIndicator(unsigned long _id){
+void PuppetCharacter::createIndicator(signed long _id){
 	// headgear
-
+	if(_id == -1){
+		_id = 0;
+	}
 	TextureSampler * tex = PuppetResourceManager::indicators.at(_id);
 
 	indicator = new Box2DSprite(world, tex, b2_dynamicBody, false, nullptr, new Transform(), componentScale);

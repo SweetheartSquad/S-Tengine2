@@ -32,6 +32,7 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	fireball(nullptr),
+	playerOnFire(nullptr),
 	fireParticles(new ParticleSystem(SlayTheDragonResourceManager::itemFireParticle, _world, 0, 0, _groupIndex)),
 	altitude(60.f)
 {
@@ -197,6 +198,13 @@ void PuppetCharacterDragon::update(Step * _step){
 
         fireball->update(_step);
     }
+	if(playerOnFire != nullptr){
+        Particle * p = fireParticles->addParticle(playerOnFire->rootComponent->getPos(false));
+        p->body->SetGravityScale(-0.1f);
+        p->applyAngularImpulse(vox::NumberUtils::randomFloat(-25.0f, 25.0f));
+        p->setTranslationPhysical(glm::vec3(vox::NumberUtils::randomFloat(-2.f, 2.f), vox::NumberUtils::randomFloat(0.75f, 1.25f), vox::NumberUtils::randomFloat(-2.f, 2.f)), true);
+
+	}
 }
 
 void PuppetCharacterDragon::action(bool _forceDrop){
