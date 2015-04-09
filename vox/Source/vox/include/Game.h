@@ -11,6 +11,8 @@
 #include "Scene.h"
 #include "ResourceManager.h"
 
+#define VOX_LIMIT_FRAMERATE 1
+
 /*************************************************************************
 *
 * The Game class for VOX. There should only ever be one instance of Game.

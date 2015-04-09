@@ -46,13 +46,14 @@ Game::~Game(void){
 }
 
 void Game::performGameLoop(){
-//#ifdef VOX_LIMIT_FRAMERATE
+#ifdef VOX_LIMIT_FRAMERATE
 	double time = glfwGetTime();
 	accumulator += time - lastTimestep;
+	lastTimestep = time;
+	//std::cout << accumulator << std::endl;
 	if(accumulator >= vox::step.targetFrameDuration){
-		accumulator = 0.0;
-		lastTimestep = time;
-//#endif
+		accumulator -= vox::step.targetFrameDuration;
+#endif
 		vox::calculateDeltaTimeCorrection();
 		glfwPollEvents();
 		update(&vox::step);
@@ -72,9 +73,9 @@ void Game::performGameLoop(){
 			switchingScene = false;
 			newSceneKey = "";
 		}	
-//#ifdef VOX_LIMIT_FRAMERATE
+#ifdef VOX_LIMIT_FRAMERATE
 	}
-//#endif
+#endif
 }
 
 void Game::update(Step * _step){

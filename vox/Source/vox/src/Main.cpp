@@ -1,7 +1,5 @@
 #pragma once
 
-#define VOX_LIMIT_FRAMERATE
-
 #include "PuppetGame.h"
 #include "GameJamGame.h"
 #include <Vox.h>
