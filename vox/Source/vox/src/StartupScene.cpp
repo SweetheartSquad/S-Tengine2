@@ -17,6 +17,8 @@ StartupScene::StartupScene(PuppetGame * _game) :
 	splashMessage->mesh->pushTexture2D(PuppetResourceManager::startupSplash);
 	splashMessage->setShader(shader, true);
 	splashMessage->transform->scale(-1, 1, 1);
+
+	populateBackground();
 }
 void StartupScene::complete(std::string _switchTo){
 	if (_switchTo == ""){
@@ -36,4 +38,10 @@ void StartupScene::update(Step * _step){
 }
 void StartupScene::triggerVictoryState(){
 	// intentionally left blank: since there are no players, this function will be called automatically at the start of the scene
+}
+
+void StartupScene::populateBackground(){
+	Sprite * curtain1 = new Sprite();
+	curtain1->pushTextureSampler(PuppetResourceManager::stageCurtain);
+	addChild(curtain1, 0);
 }

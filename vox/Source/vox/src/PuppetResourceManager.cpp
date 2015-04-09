@@ -23,11 +23,17 @@ Texture * PuppetResourceManager::tree1  = new Texture("../assets/hurly-burly/Fol
 Texture * PuppetResourceManager::tree2	= new Texture("../assets/hurly-burly/Foliage/Tree2.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::bush1	= new Texture("../assets/hurly-burly/Foliage/Bush1.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::bush2	= new Texture("../assets/hurly-burly/Foliage/Bush2.png", 1024, 1024, true, true);
-																												   
-Texture * PuppetResourceManager::cloud1	= new Texture("../assets/hurly-burly/Clouds/Cloud1.png", 1024, 1024, true, true);
-Texture * PuppetResourceManager::cloud2	= new Texture("../assets/hurly-burly/Clouds/Cloud2.png", 1024, 1024, true, true);
-Texture * PuppetResourceManager::cloud3	= new Texture("../assets/hurly-burly/Clouds/Cloud3.png", 1024, 1024, true, true);
-Texture * PuppetResourceManager::cloud4	= new Texture("../assets/hurly-burly/Clouds/Cloud4.png", 1024, 1024, true, true);
+
+Texture * PuppetResourceManager::cloud1 = new Texture("../assets/hurly-burly/Clouds/Cloud1.png", 1024, 1024, true, true);
+Texture * PuppetResourceManager::cloud2 = new Texture("../assets/hurly-burly/Clouds/Cloud2.png", 1024, 1024, true, true);
+Texture * PuppetResourceManager::cloud3 = new Texture("../assets/hurly-burly/Clouds/Cloud3.png", 1024, 1024, true, true);
+Texture * PuppetResourceManager::cloud4 = new Texture("../assets/hurly-burly/Clouds/Cloud4.png", 1024, 1024, true, true);
+
+
+TextureSampler * PuppetResourceManager::stageCurtain		= new TextureSampler("../assets/hurly-burly/StageAssets/", "curtain.png.def");
+TextureSampler * PuppetResourceManager::stageCurtainCenter	= new TextureSampler("../assets/hurly-burly/StageAssets/", "curtainCenter.png.def");
+TextureSampler * PuppetResourceManager::stageCurtainTop		= new TextureSampler("../assets/hurly-burly/StageAssets/", "topCurtain.png.def");
+TextureSampler * PuppetResourceManager::stageSpotlight		= new TextureSampler("../assets/hurly-burly/StageAssets/", "spotlight.png.def");
 
 TextureSampler * PuppetResourceManager::dustParticle = new TextureSampler("../assets/hurly-burly/", "dustParticle.png.def");
 std::vector<TextureSampler *> PuppetResourceManager::scoreParticles;
@@ -84,6 +90,11 @@ void PuppetResourceManager::init(){
 	resources.push_back(cloud2);
 	resources.push_back(cloud3);
 	resources.push_back(cloud4);
+
+	resources.push_back(stageCurtain);
+	resources.push_back(stageCurtainCenter);
+	resources.push_back(stageCurtainTop);
+	resources.push_back(stageSpotlight);
 	
 	resources.push_back(dustParticle);
 	

@@ -22,7 +22,7 @@ PuppetCharacterGuard::PuppetCharacterGuard(bool _ai, Box2DWorld * _world, int16 
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {
-	itemHolder = armLeft;
+	//itemHolder = armLeft;
 
 
 	behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(-40, 0, 0), glm::vec3(0.f, 0, 0), this, 10));

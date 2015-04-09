@@ -133,7 +133,7 @@ void Lever::actuallyInteract(){
 		RapunzelResourceManager::gloveSounds->playRandomSound();
 		ps->glove->punch();
 	}else if(type == 3){
-		PuppetCharacterGuard * g = new PuppetCharacterGuard(true, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4);
+		PuppetCharacterGuard * g = new PuppetCharacterGuard(true, world, PuppetGame::kPLAYER, /*PuppetGame::kGROUND | */PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4);
 		
 		g->addToLayeredScene(ps, 1);
 		ps->addChild(g, 1);
@@ -148,7 +148,6 @@ void Lever::actuallyInteract(){
 		g->itemToPickup = weapon;
 		ps->addChild(weapon, 1);
 		weapon->snapComponents(g->itemHolder);
-
 	}else{
 		throw "um";
 	}

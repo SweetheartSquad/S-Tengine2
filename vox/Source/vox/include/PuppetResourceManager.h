@@ -25,6 +25,11 @@ public:
 	static Texture * cloud2;
 	static Texture * cloud3;
 	static Texture * cloud4;
+
+	static TextureSampler * stageCurtain;
+	static TextureSampler * stageCurtainCenter;
+	static TextureSampler * stageCurtainTop;
+	static TextureSampler * stageSpotlight;
 	
 	static TextureSampler * dustParticle;
 	static std::vector<TextureSampler *> scoreParticles;
