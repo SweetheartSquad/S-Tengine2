@@ -40,14 +40,13 @@ Box2DSuperSprite::~Box2DSuperSprite(){
 	components.clear();
 }
 
-void Box2DSuperSprite::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	MeshEntity::render(_matrixStack, _renderOptions);
-
+void Box2DSuperSprite::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){	
     for (Box2DSprite ** c : components){
         if (*c != nullptr){
             (*c)->render(_matrixStack, _renderOptions);
         }
     }
+	MeshEntity::render(_matrixStack, _renderOptions);
 }
 
 void Box2DSuperSprite::update(Step * _step){
@@ -100,13 +99,6 @@ void Box2DSuperSprite::setGroupIndex(int16 _groupIndex){
 
 void Box2DSuperSprite::addComponent(Box2DSprite * _component){
 	components.push_back(&_component);
-	/*if(scene != nullptr){
-		if(sceneLayer != -1){
-			static_cast<LayeredScene *>(scene)->addChild(_component, sceneLayer);
-		}else{
-			scene->addChild(_component);
-		}
-    }*/
 }
 
 void Box2DSuperSprite::snapComponents(Box2DSprite * _sprite){

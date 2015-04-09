@@ -4,6 +4,8 @@
 #include <ParticleSystem.h>
 #include <PuppetResourceManager.h>
 #include <Box2DSprite.h>
+#include <Particle.h>
+#include <NumberUtils.h>
 
 StructureBreakable::StructureBreakable(float _maxHealth, Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Structure(_world, _categoryBits, _maskBits, _groupIndex),
@@ -31,8 +33,11 @@ void StructureBreakable::update(Step* _step){
 	Structure::update(_step);
 
 	if(dead){
-		for (signed long int j = 0; j < std::rand() % 5 + 1; ++j){
-			particleSystem->addParticle(rootComponent->getPos(false), PuppetResourceManager::dustParticle);
+		for (signed long int j = 0; j < std::rand() % 20 + 100; ++j){
+			Particle * p = particleSystem->addParticle(rootComponent->getPos(false));
+			p->setTranslationPhysical(vox::NumberUtils::randomFloat(getPos().x - rootComponent->getCorrectedWidth(), getPos().x + rootComponent->getCorrectedWidth()), vox::NumberUtils::randomFloat(getPos().y - rootComponent->getCorrectedHeight(), getPos().y + rootComponent->getCorrectedHeight()), 0, true);
+			p->applyLinearImpulse(vox::NumberUtils::randomFloat(-750, 750), vox::NumberUtils::randomFloat(1000, 1500), p->body->GetPosition().x, p->body->GetPosition().y);
+			
 		}
 		dead = false;
 		scattering = true;
@@ -69,4 +74,3 @@ void StructureBreakable::setShader(Shader * _shader, bool _configureDefaultVerte
 	Structure::setShader(_shader, _configureDefaultVertexAttributes);
 	particleSystem->setShader(_shader, _configureDefaultVertexAttributes);
 }
-

@@ -72,14 +72,14 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(nullptr),
-	ground(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stage.vox"))),
+	stageFloor(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFloor.vox"))),
+	stageFront(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFront.vox"))),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager(-1)),
 	backgroundSoundManager(new SoundManager(-1)),
 	countdownSoundManager(new SoundManager(-1)),
 	mouseCam(false),
-	randomGround(nullptr),
 	victoryTriggered(false),
 	sceneStart(vox::step.time),
 	screenShaderSetting(3),
@@ -532,8 +532,8 @@ void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderO
 void PuppetScene::triggerVictoryState(){
 	if(!victoryTriggered){
 		if(currentTime < duration - 1){
-			currentTime = duration - 1;
-			countDown = 1;
+			currentTime = duration - 2;
+			countDown = 2;
 			doCountDown();
 		}
 	}
@@ -629,20 +629,28 @@ void PuppetScene::playRandomBackgroundMusic(){
 }
 
 void PuppetScene::populateBackground(){
-	ground->setShader(shader, true);
-	//ground->setTranslationPhysical(0, 0, 0);
-	//ground->transform->rotate(90.f, 1, 0, 0, kOBJECT);
-	//ground->transform->rotate(90.f, 0, 0, 1, kOBJECT);
-	ground->transform->scale(1000, 100, 100);
-	ground->transform->translate(50.f/2.f, 0, -15.f/2.f);
-	ground->mesh->uvEdgeMode = GL_REPEAT;
-	ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
-	for(Vertex & v : ground->mesh->vertices){
+	stageFloor->setShader(shader, true);
+	stageFloor->transform->scale(1000, 100, 100);
+	stageFloor->transform->translate(50.f / 2.f, 0, -15.f / 2.f);
+	stageFloor->mesh->uvEdgeMode = GL_REPEAT;
+	stageFloor->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
+	for (Vertex & v : stageFloor->mesh->vertices){
 		v.u *= 10;
 		v.v *= 100;
 	}
-	
-	ground->mesh->dirty = true;
+	stageFloor->mesh->dirty = true;
+
+
+	stageFront->setShader(shader, true);
+	stageFront->transform->scale(1000, 100, 100);
+	stageFront->transform->translate(50.f / 2.f, 0, -15.f / 2.f);
+	stageFront->mesh->uvEdgeMode = GL_REPEAT;
+	stageFront->mesh->pushTexture2D(PuppetResourceManager::stageFront);
+	for (Vertex & v : stageFront->mesh->vertices){
+		v.u *= 10;
+		v.v *= 100;
+	}
+	stageFront->mesh->dirty = true;
 
 	Texture * treeTex1 = PuppetResourceManager::tree1;
 	Texture * treeTex2 = PuppetResourceManager::tree2;
@@ -671,13 +679,14 @@ void PuppetScene::populateBackground(){
 		}
 		addChild(foliage, 0);
 		if(i == 3){
-			randomGround = new RandomGround(world, 100, 0.4f, PuppetResourceManager::paper->texture, 3, 1);
+			RandomGround * randomGround = new RandomGround(world, 100, 0.4f, PuppetResourceManager::paper->texture, 3, 1);
 			randomGround->setTranslationPhysical(0.0f, 0.0f, max(-9, -(float)(numFoliage-i)/numFoliage)*8.f - 1.f);
 			randomGround->setShader(shader, true);
 			addChild(randomGround, 0);
 		}
 	}
-	addChild(ground, 0);
+	addChild(stageFloor, 0);
+	addChild(stageFront, 0);
 }
 
 void PuppetScene::populateClouds(){
