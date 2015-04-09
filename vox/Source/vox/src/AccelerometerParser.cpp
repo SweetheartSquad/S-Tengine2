@@ -54,20 +54,21 @@ void AccelerometerParser::update(Step* _step){
 					char x[4];
 					char y[4];
 					char z[4];
-						
-					x[0] = src[0];
-					x[1] = src[1];
-					x[2] = src[2];
+					
+					int mod = i * 9;
+					x[0] = src[0 + mod];
+					x[1] = src[1 + mod];
+					x[2] = src[2 + mod];
 					x[3] = '\0';
 						
-					y[0] = src[3];
-					y[1] = src[4];
-					y[2] = src[5];
+					y[0] = src[3 + mod];
+					y[1] = src[4 + mod];
+					y[2] = src[5 + mod];
 					y[3] = '\0';
 						
-					z[0] = src[6];
-					z[1] = src[7];
-					z[2] = src[8];
+					z[0] = src[6 + mod];
+					z[1] = src[7 + mod];
+					z[2] = src[8 + mod];
 					z[3] = '\0';
 
 					accelerometers.at(i)->lx = accelerometers.at(i)->x;
