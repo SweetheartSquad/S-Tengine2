@@ -78,12 +78,8 @@ PuppetCharacter * PuppetCharacterDragon::clone(Box2DWorld * _world){
 	PuppetCharacterDragon * res = new PuppetCharacterDragon(ai, _world, categoryBits, maskBits, groupIndex);
 	res->id = id;
 	res->score = score;
-	/*while (res->behaviourManager->behaviours.size() > 0){
-		res->behaviourManager->behaviours.pop_back();
-	}*/
 	res->altitude = -1;
-
-
+	res->createIndicator(res->id);
 
 	return res;
 }
@@ -201,7 +197,7 @@ void PuppetCharacterDragon::update(Step * _step){
 
         fireball->update(_step);
     }
-	if(playerOnFire != nullptr){
+	if(playerOnFire != nullptr && !playerOnFire->dead){
         Particle * p = fireParticles->addParticle(playerOnFire->rootComponent->getPos(false));
         p->body->SetGravityScale(-0.1f);
         p->applyAngularImpulse(vox::NumberUtils::randomFloat(-25.0f, 25.0f));
