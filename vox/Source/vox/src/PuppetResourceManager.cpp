@@ -124,10 +124,10 @@ void PuppetResourceManager::init(){
 	}
 
 	
-	scoreIndicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators", "indicator1-circle.png.def"));
-	scoreIndicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators", "indicator2-circle.png.def"));
-	scoreIndicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators", "indicator3-circle.png.def"));
-	scoreIndicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators", "indicator4-circle.png.def"));
+	scoreIndicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "indicator1-circle.png.def"));
+	scoreIndicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "indicator2-circle.png.def"));
+	scoreIndicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "indicator3-circle.png.def"));
+	scoreIndicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "indicator4-circle.png.def"));
 	for(auto i : scoreIndicators){
 		resources.push_back(i);
 	}

@@ -231,10 +231,6 @@ void PuppetCharacter::init(){
 	// flip left side
 	armLeft->transform->scale(-1, 1, 1);
 	handLeft->transform->scale(-1, 1, 1);
-
-	// score indicator
-	scoreIndicator = new Sprite(nullptr, new Transform());
-	scoreIndicator->mesh->pushTexture2D(PuppetResourceManager::scoreIndicators.at(id)->texture);
 }
 
 void PuppetCharacter::createIndicator(signed long _id){
@@ -253,16 +249,9 @@ void PuppetCharacter::createIndicator(signed long _id){
 	b2Fixture * f = indicator->createFixture(sf, b2Vec2(0.0f, 0.0f), this);
 	f->SetSensor(true);
 
-	/*b2WeldJointDef jhi;
-	//b2RevoluteJointDef jhi;
-	jhi.bodyA = torso->body;
-	jhi.bodyB = indicator->body;
-	jhi.localAnchorA.Set(0, -0.f * torso->getCorrectedHeight());
-	jhi.localAnchorB.Set(0, 0);
-	jhi.collideConnected = false;
-	//jhi.enableLimit = true;
-	jhi.referenceAngle = 0;
-	world->b2world->CreateJoint(&jhi);*/
+	// score indicator
+	scoreIndicator = new Sprite(nullptr, new Transform());
+	scoreIndicator->mesh->pushTexture2D(PuppetResourceManager::scoreIndicators.at(id)->texture);
 
 	indicator->setShader(getShader(), true);
 }
