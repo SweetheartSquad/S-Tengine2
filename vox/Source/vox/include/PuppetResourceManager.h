@@ -13,6 +13,7 @@ public:
 	static Texture * blank;
 	static TextureSampler * itemNone;
 	static Texture * stageFloor;
+	static Texture * stageFront;
 	static Texture * sky;
 	static TextureSampler * paper;
 	static Texture * tree1; 

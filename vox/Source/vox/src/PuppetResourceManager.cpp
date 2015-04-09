@@ -15,6 +15,7 @@ Texture * PuppetResourceManager::blank = new Texture("../assets/hurly-burly/blan
 TextureSampler * PuppetResourceManager::itemNone = new TextureSampler(new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true), 1, 1);
 
 Texture * PuppetResourceManager::stageFloor = new Texture("../assets/hurly-burly/StageFloor.png", 1024, 1024, true, true);
+Texture * PuppetResourceManager::stageFront = new Texture("../assets/hurly-burly/StageFront.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::sky		= new Texture("../assets/hurly-burly/Sky.png", 1024, 1024, true, true);
 TextureSampler * PuppetResourceManager::paper	= new TextureSampler("../assets/hurly-burly/", "paper.png.def");
 
@@ -69,6 +70,7 @@ void PuppetResourceManager::init(){
 	resources.push_back(blank);
 	resources.push_back(itemNone);
 	resources.push_back(stageFloor);
+	resources.push_back(stageFront);
 	resources.push_back(sky);
 	resources.push_back(paper);
 	resources.push_back(tree1);

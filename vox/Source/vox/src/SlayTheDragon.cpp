@@ -171,7 +171,8 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 }
 
 SlayTheDragon::~SlayTheDragon(){
-	delete ground; // have to do this here because the ground is never added and therefore not deleted as one of the scene children
+	delete stageFloor; // have to do this here because the ground is never added and therefore not deleted as one of the scene children
+	delete stageFront; // have to do this here because the ground is never added and therefore not deleted as one of the scene children
 }
 
 void SlayTheDragon::update(Step* _step){

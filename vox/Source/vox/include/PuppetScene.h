@@ -61,8 +61,8 @@ public:
 
 	std::vector<PuppetCharacter *> players;
 
-	MeshEntity * ground;
-	RandomGround * randomGround;
+	MeshEntity * stageFloor;
+	MeshEntity * stageFront;
 	MeshEntity * background;
 	BaseComponentShader * shader;
 
