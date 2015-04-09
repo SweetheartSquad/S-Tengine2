@@ -6,6 +6,7 @@
 
 class TextureSampler;
 class Texture;
+class SoundManager;
 
 class RapunzelResourceManager abstract : public ResourceManager{
 public:
@@ -16,6 +17,7 @@ public:
 	
 	static TextureSampler * glove;
 	static TextureSampler * spring;
+	static TextureSampler * itemSpear;
 
 	static TextureSampler * leverHandle;
 	static TextureSampler * leverBase;
@@ -36,14 +38,17 @@ public:
 	static TextureSampler * rapunzelArm;
 	static TextureSampler * rapunzelHelmet;
 	
-	static TextureSampler * itemSpear;
-	static TextureSampler * itemAxe;
-	static TextureSampler * itemClub;
-	static TextureSampler * itemMace;
-	static TextureSampler * itemSword;
-	static TextureSampler * itemScimitar;
+	static TextureSampler * guard1Torso;
+	static TextureSampler * guard1Arm;
+	static TextureSampler * guard1Helmet;
+	static TextureSampler * guard2Torso;
+	static TextureSampler * guard2Arm;
+	static TextureSampler * guard2Helmet;
 
-	static TextureSampler * getRandomWeapon();
+	
+	static SoundManager * gloveSounds;
+	static SoundManager * spearSounds;
+	static SoundManager * tauntSounds;
 	
 	static void init();
 };

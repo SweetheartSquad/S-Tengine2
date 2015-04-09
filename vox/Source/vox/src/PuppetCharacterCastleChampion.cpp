@@ -10,12 +10,12 @@
 
 #include <RaidTheCastleResourceManager.h>
 
-PuppetCharacterCastleChampion::PuppetCharacterCastleChampion(Box2DWorld * _world,  float _ghostPosition, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+PuppetCharacterCastleChampion::PuppetCharacterCastleChampion(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	PuppetCharacter(new PuppetTexturePack(
 		RaidTheCastleResourceManager::castleChampionTorso,
 		RaidTheCastleResourceManager::castleChampionArm,
 		RaidTheCastleResourceManager::castleChampionHelmet
-	), _ghostPosition, true, _world, _categoryBits, _maskBits, _groupIndex),
+	), true, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {
@@ -30,7 +30,10 @@ PuppetCharacterCastleChampion::~PuppetCharacterCastleChampion(){
 }
 
 void PuppetCharacterCastleChampion::action(bool _forceDrop){
-	// the castle champion isn't allowed to throw their weapon
+	// the castle champion isn't allowed to throw their weapon as a projectile
+	if(_forceDrop){
+		PuppetCharacter::action(true);
+	}
 }
 
 void PuppetCharacterCastleChampion::update(Step * _step){

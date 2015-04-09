@@ -21,16 +21,13 @@ TextureSampler * RaidTheCastleResourceManager::castleChampionHelmet	= new Textur
 
 TextureSampler * RaidTheCastleResourceManager::splashMessage	= new TextureSampler(new Texture("../assets/hurly-burly/SplashMessages/RaidTheCastle.png", 1024, 1024, true, true), 1024, 1024);
 
-TextureSampler * RaidTheCastleResourceManager::itemAxe	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Axe.png", 1024, 1024, true, true), 230, 395);
-TextureSampler * RaidTheCastleResourceManager::itemClub	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Club.png", 1024, 1024, true, true), 83, 515);
-TextureSampler * RaidTheCastleResourceManager::itemMace	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Mace.png", 1024, 1024, true, true), 178, 516);
-TextureSampler * RaidTheCastleResourceManager::itemSword	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Sword.png", 1024, 1024, true, true), 81, 382);
-TextureSampler * RaidTheCastleResourceManager::itemScimitar	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Scimitar.png", 1024, 1024, true, true), 79, 401);
 TextureSampler * RaidTheCastleResourceManager::itemFlailGrip	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/FlailGrip.png", 1024, 1024, true, true), 51, 134);
 TextureSampler * RaidTheCastleResourceManager::itemFlailJoint	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/FlailJoint.png", 1024, 1024, true, true), 67, 66);
 TextureSampler * RaidTheCastleResourceManager::itemFlailHead	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/FlailHead.png", 1024, 1024, true, true), 178, 178);
 
-SoundManager * RaidTheCastleResourceManager::catapultSounds = new SoundManager(-1);
+SoundManager * RaidTheCastleResourceManager::catapultHitSounds = new SoundManager(-1);
+SoundManager * RaidTheCastleResourceManager::catapultThrowSounds = new SoundManager(-1);
+SoundManager * RaidTheCastleResourceManager::catapultWhistleSounds = new SoundManager(-1);
 
 void RaidTheCastleResourceManager::init(){
 
@@ -49,33 +46,40 @@ void RaidTheCastleResourceManager::init(){
 	resources.push_back(castleChampionArm);
 	resources.push_back(castleChampionHelmet);
 	
-	resources.push_back(itemAxe);
-	resources.push_back(itemClub);
-	resources.push_back(itemMace);
-	resources.push_back(itemSword);
-	resources.push_back(itemScimitar);
 	resources.push_back(itemFlailGrip);
 	resources.push_back(itemFlailJoint);
 	resources.push_back(itemFlailHead);
+	
+	catapultHitSounds->addNewSound("1", "../assets/hurly-burly/audio/catapultAudio/crash1.ogg");
+	catapultHitSounds->addNewSound("2", "../assets/hurly-burly/audio/catapultAudio/crash2.ogg");
+	catapultHitSounds->addNewSound("3", "../assets/hurly-burly/audio/catapultAudio/crash3.ogg");
+	catapultHitSounds->addNewSound("4", "../assets/hurly-burly/audio/catapultAudio/crash4.ogg");
+	catapultHitSounds->addNewSound("5", "../assets/hurly-burly/audio/catapultAudio/crash5.ogg");
+	catapultHitSounds->addNewSound("6", "../assets/hurly-burly/audio/catapultAudio/crash6.ogg");
+	catapultHitSounds->addNewSound("7", "../assets/hurly-burly/audio/puppetDialog_Castle/castleHit1.ogg");
+	catapultHitSounds->addNewSound("8", "../assets/hurly-burly/audio/puppetDialog_Castle/castleHit2.ogg");
+	catapultHitSounds->addNewSound("9", "../assets/hurly-burly/audio/puppetDialog_Castle/castleHit3.ogg");
+	catapultHitSounds->addNewSound("10", "../assets/hurly-burly/audio/puppetDialog_Castle/castleHit4.ogg");
+	resources.push_back(catapultHitSounds);
+	
+	catapultThrowSounds->addNewSound("1", "../assets/hurly-burly/audio/catapultAudio/throw1.ogg");
+	resources.push_back(catapultThrowSounds);
 
-	resources.push_back(catapultSounds);
+	catapultWhistleSounds->addNewSound("1", "../assets/hurly-burly/audio/catapultAudio/whistle1.ogg");
+	catapultWhistleSounds->addNewSound("15", "../assets/hurly-burly/audio/catapultAudio/whistle2.ogg");
+	catapultWhistleSounds->addNewSound("2", "../assets/hurly-burly/audio/puppetDialog_Castle/fireBoulder1.ogg");
+	catapultWhistleSounds->addNewSound("3", "../assets/hurly-burly/audio/puppetDialog_Castle/fireBoulder2.ogg");
+	catapultWhistleSounds->addNewSound("4", "../assets/hurly-burly/audio/puppetDialog_Castle/fireBoulder3.ogg");
+	catapultWhistleSounds->addNewSound("5", "../assets/hurly-burly/audio/puppetDialog_Castle/fireBoulder4.ogg");
+	catapultWhistleSounds->addNewSound("6", "../assets/hurly-burly/audio/puppetDialog_Castle/fireBoulder5.ogg");
+	catapultWhistleSounds->addNewSound("7", "../assets/hurly-burly/audio/puppetDialog_Castle/fireBoulder6.ogg");
+	catapultWhistleSounds->addNewSound("8", "../assets/hurly-burly/audio/puppetDialog_Castle/fireBoulder7.ogg");
+	catapultWhistleSounds->addNewSound("9", "../assets/hurly-burly/audio/puppetDialog_Castle/fireBoulder8.ogg");
+	catapultWhistleSounds->addNewSound("10", "../assets/hurly-burly/audio/puppetDialog_Castle/fireBoulder9.ogg");
+	catapultWhistleSounds->addNewSound("11", "../assets/hurly-burly/audio/puppetDialog_Castle/fireBoulder10.ogg");
+	catapultWhistleSounds->addNewSound("12", "../assets/hurly-burly/audio/puppetDialog_Castle/fireBoulder11.ogg");
+	catapultWhistleSounds->addNewSound("13", "../assets/hurly-burly/audio/puppetDialog_Castle/fireBoulder12.ogg");
+	catapultWhistleSounds->addNewSound("14", "../assets/hurly-burly/audio/puppetDialog_Castle/fireBoulder13.ogg");
+	resources.push_back(catapultWhistleSounds);
 
-	catapultSounds->addNewSound("1", "../assets/hurly-burly/audio/dragon/dragonSound12.ogg");
-}
-
-TextureSampler * RaidTheCastleResourceManager::getRandomWeapon(){
-	unsigned long int i = std::rand() % 5;
-	switch(i){
-	default:
-	case 0:
-		return itemAxe;
-	case 1:
-		return itemClub;
-	case 2:
-		return itemMace;
-	case 3:
-		return itemSword;
-	case 4:
-		return itemScimitar;
-	}
 }

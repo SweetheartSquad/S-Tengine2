@@ -14,7 +14,7 @@ StructureGoldPile::StructureGoldPile(Box2DWorld* _world):
 	StructureInteractable(_world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, -25),
 	NodeChild(nullptr),
 	NodeTransformable(new Transform()),
-	totalGold(60),
+	totalGold(20),
 	goldTaken(0)
 {
 	componentScale = 0.0025f;
@@ -63,7 +63,7 @@ void StructureGoldPile::actuallyInteract(){
 		if(goldTaken < totalGold){
 			goldTaken++;
 		
-			int goldPerState = totalGold / 6;
+			int goldPerState = totalGold / 5;
 			int frame = goldTaken/goldPerState;
 			if(frame <= 5) {
 				rootComponent->currentAnimation->currentFrame = frame;

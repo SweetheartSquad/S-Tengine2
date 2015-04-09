@@ -22,12 +22,13 @@
 #include <Particle.h>
 #include <NumberUtils.h>
 #include <BehaviourManager.h>
+#include <Sprite.h>
 
 bool PuppetCharacter::compareByScore(PuppetCharacter * _a, PuppetCharacter * _b){
 	return (_a->score < _b->score);
 }
 
-PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostPosition, bool _ai, Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
+PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
@@ -38,7 +39,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	dead(false),
 	deathPending(false),
 	targetRoll(0),
-	health(10.0f),
+	health(50.0f),
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),
@@ -49,22 +50,24 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostP
 	id(-1),
 	actionThrottle(0.333),
 	lastActionTime(0.0),
-	ghostPosition(_ghostPosition),
 	contactDelegate(nullptr),
-	justTookDamage(false)
+	justTookDamage(false),
+	indicator(nullptr)
 {
 	init();
 }
 
 PuppetCharacter * PuppetCharacter::clone(Box2DWorld * _world){
-	PuppetCharacter * res = new PuppetCharacter(texPack, ghostPosition, ai, _world, categoryBits, maskBits, groupIndex);
+	PuppetCharacter * res = new PuppetCharacter(texPack, ai, _world, categoryBits, maskBits, groupIndex);
 	res->id = id;
 	res->score = score;
+	res->createIndicator(res->id);
 	return res;
 }
 
 PuppetCharacter::~PuppetCharacter(){
 	delete behaviourManager;
+	delete indicator;
 	//delete texPack;
 }
 
@@ -153,7 +156,7 @@ void PuppetCharacter::init(){
 	jhf.enableLimit = true;
 	jhf.referenceAngle = 0;
 	world->b2world->CreateJoint(&jhf);
-
+	
 	// headgear
 	b2WeldJointDef jhh;
 	//b2RevoluteJointDef jhh;
@@ -227,6 +230,37 @@ void PuppetCharacter::init(){
 	handLeft->transform->scale(-1, 1, 1);
 }
 
+void PuppetCharacter::createIndicator(signed long _id){
+	// headgear
+	if(_id == -1){
+		_id = 0;
+	}
+	TextureSampler * tex = PuppetResourceManager::indicators.at(_id);
+
+	indicator = new Box2DSprite(world, tex, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
+	
+	b2Filter sf;
+	sf.categoryBits = 0;
+	sf.maskBits = 0;
+	sf.groupIndex = groupIndex;
+	b2Fixture * f = indicator->createFixture(sf, b2Vec2(0.0f, 0.0f), this);
+	f->SetSensor(true);
+
+	/*b2WeldJointDef jhi;
+	//b2RevoluteJointDef jhi;
+	jhi.bodyA = torso->body;
+	jhi.bodyB = indicator->body;
+	jhi.localAnchorA.Set(0, -0.f * torso->getCorrectedHeight());
+	jhi.localAnchorB.Set(0, 0);
+	jhi.collideConnected = false;
+	//jhi.enableLimit = true;
+	jhi.referenceAngle = 0;
+	world->b2world->CreateJoint(&jhi);*/
+
+	indicator->setShader(getShader(), true);
+}
+
+
 void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	// save the current shader settings
 	float hue = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->getHue();
@@ -236,20 +270,30 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 	float blue = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->getBlue();
 	float alpha = static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->getAlpha();
 
+	float newHue = hue, newSat = sat;
+	if(id == 0){
+		newSat = sat + 0.8f;
+		newHue = 0.125f;
+	}else if(id == 1){
+		newHue = 0.3056f;
+	}else if(id == 2){
+		newHue = 0.64;
+		newSat = sat +0.55f;
+	}else if(id == 3){
+		newHue = 0;
+	}
+	if(ai){
+		newSat = 0.f;
+	}
+
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setRed(red + (1 - control) * 3);
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setGreen(green - (1 - control) * 3);
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue - (1 - control) * 3);
 
 
 	// change the shader settings based on current damage and player id
-	if (!ai){
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(float(id+1) * 0.167f);
-		if(id == 0){
-			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat + 1);
-		}
-	}else{
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
-	}
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(newHue);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(newSat);
 	
 	if(dead){
 		static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->setAlpha(0.5f);
@@ -270,18 +314,17 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 	handRight->render(_matrixStack, _renderOptions);
 	
 	// change the shader settings based on current damage and player id
-	if (!ai){
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(float(id+1) * 0.167f);
-		if(id == 0){
-			static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat + 1);
-		}
-	} else{
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
-	}
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(newHue);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(newSat);
+
 	if(dead){
 		static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->setAlpha(0.5f);
 	}
 	headgear->render(_matrixStack, _renderOptions);
+
+	if(indicator != nullptr){
+		indicator->render(_matrixStack, _renderOptions);
+	}
 	// revert the shader settings
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(hue);
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat);
@@ -294,6 +337,21 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 }
 
 void PuppetCharacter::update(Step* _step){
+	PuppetScene * ps = dynamic_cast<PuppetScene *>(scene);
+
+	if(canJump){
+		for(Box2DSprite ** c : components){
+			if(*c != nullptr){
+				(*c)->maxVelocity = b2Vec2(10, 10);
+			}
+		}
+	}else{
+		for(Box2DSprite ** c : components){
+			if(*c != nullptr){
+				(*c)->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
+			}
+		}
+	}
 	Box2DSuperSprite::update(_step);
 	for(Box2DSprite ** c : components){
 		if(*c != nullptr){
@@ -321,7 +379,7 @@ void PuppetCharacter::update(Step* _step){
 			pickupItem(itemToPickup);
 		}
 	}else{
-		if(rootComponent->body->GetPosition().y < ghostPosition) {
+		if(rootComponent->body->GetPosition().y < ps->ghostPosition) {
 			rootComponent->applyForceUp(500.f);
 		}else{
 			rootComponent->applyForceDown(500.f);
@@ -352,7 +410,6 @@ void PuppetCharacter::update(Step* _step){
 	}
 
 	// spray some particles to show hits more
-	PuppetScene * ps = dynamic_cast<PuppetScene *>(scene);
 	if (justTookDamage){
 		if (ps != nullptr){
 			Particle * p = ps->particleSystem->addParticle(rootComponent->getPos(false));
@@ -366,6 +423,15 @@ void PuppetCharacter::update(Step* _step){
 		lastUpdateScore += 1;
 		Particle * p = ps->particleSystem->addParticle(rootComponent->getPos(false), PuppetResourceManager::getRandomScoreParticles());
 		p->applyLinearImpulse(vox::NumberUtils::randomFloat(-250, 250), vox::NumberUtils::randomFloat(500, 750), p->body->GetPosition().x, p->body->GetPosition().y);
+	}
+
+	if(indicator != nullptr){
+		glm::vec3 iPos = indicator->getPos(false);
+		glm::vec3 hPos = headgear->getPos(false) + glm::vec3(0.f, 3.f, 0.f);
+
+
+		indicator->setPos(iPos + (hPos - iPos)*0.1f);
+		//indicator->transform->setOrientation(glm::quat(1,0,0,0));
 	}
 }
 
@@ -465,10 +531,18 @@ void PuppetCharacter::takeDamage(float _damage){
 
 void PuppetCharacter::unload(){
 	Box2DSuperSprite::unload();
+
+	if(indicator != nullptr){
+		indicator->unload();
+	}
 }
 
 void PuppetCharacter::load(){
 	Box2DSuperSprite::load();
+
+	if(indicator != nullptr){
+		indicator->load();
+	}
 }
 
 void PuppetCharacter::delegateToContactComplete(std::function<void(PuppetCharacter*)> _func){
@@ -503,6 +577,9 @@ void PuppetCharacter::setShader(Shader * _shader, bool _configureDefaultAttribut
 	Box2DSuperSprite::setShader(_shader, _configureDefaultAttributes);
 	if(itemToPickup != nullptr){
 		itemToPickup->setShader(_shader, _configureDefaultAttributes);
+	}
+	if(indicator != nullptr){
+		indicator->setShader(_shader, _configureDefaultAttributes);
 	}
 }
 

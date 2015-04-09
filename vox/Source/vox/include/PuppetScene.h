@@ -53,6 +53,7 @@ public:
 	float splashDuration;
 	double sceneStart;
 	bool victoryTriggered;
+	float ghostPosition;
 
 	PuppetContactListener * cl;
 	Box2DWorld * world;

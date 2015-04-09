@@ -10,6 +10,7 @@
 #include "SpriteSheet.h"
 #include "SpriteSheetAnimation.h"
 #include <iostream>
+#include <SoundManager.h>
 
 #include <SlayTheDragonResourceManager.h>
 
@@ -46,38 +47,46 @@ Fortification::Fortification(Box2DWorld* _world, int16 _categoryBits, int16 _mas
 	}
 	setUserData(this);
 	
-	/*// TODO
-	roof->mesh->textures.pop_back();
-	SpriteSheetAnimation * spriteSheet = new SpriteSheetAnimation(baseSpriteSheetTex, 0);
-
 	// sprite sheet animation
-	int f[] = {0,1,2,3};
-	std::vector<int> ff(std::begin(f), std::end(f));
-
-	spriteSheet->pushFramesInRange(0, 3, baseTex->width, baseTex->height, baseSpriteSheetTex->width);
+	rootComponent->mesh->popTexture2D();
 	
-	roof->addAnimation("castleStates", spriteSheet, true);
-	*/
+	SpriteSheetAnimation * spriteSheet = new SpriteSheetAnimation(SlayTheDragonResourceManager::fortificationSpriteSheet, 0);
+
+	spriteSheet->pushFramesInRange(0, 3, 1024, 187, 1024);
+	rootComponent->addAnimation("fortStates", spriteSheet, true);
+	rootComponent->mesh->uvEdgeMode = GL_MIRRORED_REPEAT_ARB;
 
 }
 
 void Fortification::takeDamage(float _damage){
 	StructureBreakable::takeDamage(_damage);
 	glm::vec3 sv = rootComponent->transform->getScaleVector();
+	unsigned long int lastFrame = rootComponent->currentAnimation->currentFrame;
 	switch (state){
 	default:
 	case StructureBreakable::kNORMAL:
-		sv.x = 5;
-		sv.y = 1;
+		rootComponent->currentAnimation->currentFrame = 0;
 		break;
 	case StructureBreakable::kDAMAGED:
-        sv.x = 1;
-        sv.y = 1;
+		if(lastFrame != 2){
+			rootComponent->currentAnimation->currentFrame = 2;
+			SlayTheDragonResourceManager::miscSounds->play("damaged");
+		}
 		break;
 	case StructureBreakable::kDEAD:
-        sv.x = 1;
-        sv.y = 5;
+		if(lastFrame != 3){
+			rootComponent->currentAnimation->currentFrame = 3;
+			SlayTheDragonResourceManager::miscSounds->play("broken");
+			b2Filter sf;
+			sf.groupIndex = groupIndex;
+			sf.categoryBits = PuppetGame::kSTRUCTURE;
+			sf.maskBits = 0;
+			for(Box2DSprite ** c : components){
+				(*c)->body->GetFixtureList()->SetFilterData(sf);
+			}
+		}
 		break;
 	}
+
 	rootComponent->transform->scale(sv, false);
 }

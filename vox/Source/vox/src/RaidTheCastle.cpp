@@ -34,19 +34,21 @@
 #include <ItemProjectileWeapon.h>
 #include <SoundManager.h>
 #include <glfw\glfw3.h>
-
+#include <NumberUtils.h>
+#include <Particle.h>
 
 RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	PuppetScene(_game, 30),
 	castle(new Castle(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM, 120)),
 	catapult(new Catapult(world, PuppetGame::kSTRUCTURE, PuppetGame::kITEM | PuppetGame::kPLAYER, -10)),
-	champion(new PuppetCharacterCastleChampion(world, RAID_CASTLE_GHOST_HEIGHT, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -20)),
-	playerCharacter1(new PuppetCharacterKnight(false, 0, RAID_CASTLE_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
-	playerCharacter2(new PuppetCharacterKnight(false, 1, RAID_CASTLE_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
-	playerCharacter3(new PuppetCharacterKnight(false, 2, RAID_CASTLE_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
-	playerCharacter4(new PuppetCharacterKnight(false, 3, RAID_CASTLE_GHOST_HEIGHT, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4)),
+	champion(new PuppetCharacterCastleChampion(world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -20)),
+	playerCharacter1(new PuppetCharacterKnight(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
+	playerCharacter2(new PuppetCharacterKnight(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
+	playerCharacter3(new PuppetCharacterKnight(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
+	playerCharacter4(new PuppetCharacterKnight(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4)),
 	camTargetsRemoved(false)
 {
+	ghostPosition = 12.0f;
 	populateBackground();
 	cl = new RaidTheCastleContactListener(this);
 
@@ -65,33 +67,32 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	playerCharacter1->setShader(shader, true);
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
-	playerCharacter1->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
+	playerCharacter1->createIndicator(playerCharacter1->id);;
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
-	playerCharacter2->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
+	playerCharacter2->createIndicator(playerCharacter2->id);
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
-	playerCharacter3->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
+	playerCharacter3->createIndicator(playerCharacter3->id);
 
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
-	playerCharacter4->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
+	playerCharacter4->createIndicator(playerCharacter4->id);
 
 	champion->setShader(shader, true);
 	addChild(champion, 0);
 	champion->addToLayeredScene(this, 1);
-	champion->rootComponent->maxVelocity = b2Vec2(10, NO_VELOCITY_LIMIT);
 	
-	champion->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kGROUND, champion->groupIndex, 1, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
+	champion->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kGROUND, champion->groupIndex, 1, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
 	addChild(champion->itemToPickup, 1);
 	champion->itemToPickup->addToLayeredScene(this, 1);
 	champion->itemToPickup->setShader(shader, true);
@@ -116,20 +117,20 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	catapult->translateComponents(glm::vec3(0,0,0));
 	
-	playerCharacter3->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
-	playerCharacter3->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter3, 3, PuppetGame::kPLAYER));
-	playerCharacter3->ai = true;
+	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
+	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter3, 3, PuppetGame::kPLAYER));
+	//playerCharacter3->ai = true;
 
-	playerCharacter4->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
-	playerCharacter4->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
-	playerCharacter4->ai = true;
+	//playerCharacter4->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
+	//playerCharacter4->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
+	//playerCharacter4->ai = true;
 
 	for(PuppetCharacter * p : players){
-		TextureSampler * weaponTex = RaidTheCastleResourceManager::getRandomWeapon();
-		TextureSampler * projTex = RaidTheCastleResourceManager::getRandomWeapon();
+		TextureSampler * weaponTex = PuppetResourceManager::getRandomMeleeWeapon();
+		TextureSampler * projTex = PuppetResourceManager::getRandomMeleeWeapon();
 		
 		//ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
-        ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -weaponTex->height);
+        ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -weaponTex->height);
 
         weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);
@@ -171,9 +172,18 @@ void RaidTheCastle::update(Step* _step){
 
 
 	if(castle->state == Castle::state_t::kDEAD){
-		for (signed long int j = 0; j < std::rand() % 5 + 1; ++j){
-			particleSystem->addParticle(castle->rootComponent->getPos(false), PuppetResourceManager::dustParticle);
-		};
+		if(gameCam->targets.size() != 1){
+			gameCam->targets.clear();
+			gameCam->interpolators.clear();
+			gameCam->addTarget(castle->rootComponent);
+		}
+		if(std::rand() % 5 == 4){
+			for (signed long int j = 0; j < std::rand() % 10 + 1; ++j){
+				Particle * p = particleSystem->addParticle(castle->rootComponent->getPos(false), PuppetResourceManager::dustParticle);
+				p->setTranslationPhysical(std::rand() % 50 - 25, std::rand() % 50 - 25, 0, true);
+				p->applyLinearImpulse(vox::NumberUtils::randomFloat(-750, 750), vox::NumberUtils::randomFloat(1000, 1500), p->body->GetPosition().x, p->body->GetPosition().y);
+			}
+		}
 		
 		triggerVictoryState();
 	}

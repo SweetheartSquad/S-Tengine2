@@ -8,6 +8,8 @@ class TextureSampler;
 
 class PuppetResourceManager abstract : public ResourceManager{
 public:	
+	static Texture * startupSplash;
+
 	static Texture * blank;
 	static TextureSampler * itemNone;
 	static Texture * stageFloor;
@@ -38,17 +40,23 @@ public:
 	static TextureSampler * countDown3;
 	static TextureSampler * countDown4;
 	static TextureSampler * countDown5;
-
+	
+	static std::vector<TextureSampler *> indicators;
+	
 	//static TextureSampler * redWins;
 	//static TextureSampler * yellowWins;
 	//static TextureSampler * greenWins;
 	//static TextureSampler * blueWins;
 	static std::vector<TextureSampler *> winSplashes;
 
+	static std::vector<TextureSampler *> itemMeleeWeapons;
+	static TextureSampler * getRandomMeleeWeapon();
+
 	static SoundManager * jumpSounds;
 	static SoundManager * hitSounds;
 	static SoundManager * splashSounds;
 	static SoundManager * cheerSounds;
+	static SoundManager * fallingSounds;
 	
 	static void init();
 };

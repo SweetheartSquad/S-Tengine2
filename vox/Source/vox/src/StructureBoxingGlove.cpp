@@ -27,9 +27,11 @@ StructureBoxingGlove::StructureBoxingGlove(Box2DWorld * _world) :
 	}
 	sf.groupIndex = groupIndex;
 
-	for(Box2DSprite ** c : components){
-		(*c)->createFixture(sf);
-	}
+	glove->createFixture(sf);
+
+	sf.maskBits = 0;
+
+	spring->createFixture(sf);
 
 	setUserData(this);
 	
@@ -45,22 +47,23 @@ StructureBoxingGlove::StructureBoxingGlove(Box2DWorld * _world) :
 	spring->body->GetFixtureList()->SetDensity(10.f);
 
 	// axel
-	b2RevoluteJointDef jth;
+	b2PrismaticJointDef jth;
 	jth.bodyA = spring->body;
 	jth.bodyB = glove->body;
-	jth.localAnchorA.Set(0.9f * spring->getCorrectedWidth(), 0.f * spring->getCorrectedHeight());
-	jth.localAnchorB.Set(-0.9f * glove->getCorrectedWidth(), 0.f * glove->getCorrectedHeight());
+	jth.localAnchorA.Set(0.0f * spring->getCorrectedWidth(), 0.f * spring->getCorrectedHeight());
+	jth.localAnchorB.Set(-0.0f * glove->getCorrectedWidth(), 0.f * glove->getCorrectedHeight());
 	jth.collideConnected = false;
 	jth.enableLimit = true;
-	/*jth.enableMotor = true;
-	jth.maxMotorTorque = 0.f;
-	jth.motorSpeed = 0.f;*/
+	jth.enableMotor = true;
+	jth.lowerTranslation = -10.f;
+	jth.upperTranslation = 0;
+	jth.localAxisA = b2Vec2(1, 0);
+	jth.maxMotorForce = 1000.f;
+	jth.motorSpeed = 100.f;
 	jth.referenceAngle = 0.f;
-	jth.lowerAngle = glm::radians(-80.f);
-	//jth.upperAngle = 0.f;
 	world->b2world->CreateJoint(&jth);
 }
 
 void StructureBoxingGlove::punch(){
-	std::cout << "punch!" << std::endl;
+	glove->applyLinearImpulseLeft(2000);
 }

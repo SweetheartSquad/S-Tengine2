@@ -193,6 +193,7 @@
     <ClCompile Include="../src/StructureInteractable.cpp" />
     <ClCompile Include="../src/StructureGoldPile.cpp" />
     <ClCompile Include="../src/Cloud.cpp" />
+    <ClCompile Include="..\src\StartupScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -381,6 +382,7 @@
     <ClInclude Include="../include/StructureInteractable.h" />
     <ClInclude Include="../include/StructureGoldPile.h" />
     <ClInclude Include="../include/Cloud.h" />
+    <ClInclude Include="..\include\StartupScene.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>

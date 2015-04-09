@@ -32,7 +32,6 @@ public:
 	float health;
 
 	float control;
-	float ghostPosition;
 
 	PuppetTexturePack * texPack;
 
@@ -46,15 +45,18 @@ public:
 	Box2DSprite * face;
 	Box2DSprite * headgear;
 	Box2DSprite * itemHolder;
+	Box2DSprite * indicator;
 
 	std::vector<PuppetGame::BOX2D_CATEGORY> collisionTypes;
 
 	static bool compareByScore(PuppetCharacter * _a, PuppetCharacter * _b);
 	
 	void init();
-	PuppetCharacter(PuppetTexturePack * _texturePack, float _ghostPosition, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
+	PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	~PuppetCharacter();
 	virtual PuppetCharacter * clone(Box2DWorld * _world);
+
+	void createIndicator(signed long int _id);
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	void update(Step* _step) override;

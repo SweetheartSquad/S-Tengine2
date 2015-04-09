@@ -114,7 +114,7 @@ void Catapult::evaluateState(){
 
 	RaidTheCastle * rtc = static_cast<RaidTheCastle *>(scene);
 	if(fireBoulder){
-		RaidTheCastleResourceManager::catapultSounds->playRandomSound();
+		RaidTheCastleResourceManager::catapultThrowSounds->playRandomSound();
 		fireBoulder = false;
 		if(boulderJoint != nullptr){
 			world->b2world->DestroyJoint(boulderJoint);
@@ -177,4 +177,5 @@ void Catapult::attemptInteract(){
 }
 void Catapult::actuallyInteract(){
 	StructureInteractable::actuallyInteract();
+	RaidTheCastleResourceManager::catapultWhistleSounds->playRandomSound();
 }

@@ -28,10 +28,11 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 		SlayTheDragonResourceManager::dragonLowerWing,
 		PuppetResourceManager::getRandomFace(),
 		4.f
-	), 60.0f, _ai, _world, _categoryBits, _maskBits, _groupIndex),
+	), _ai, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	fireball(nullptr),
+	playerOnFire(nullptr),
 	fireParticles(new ParticleSystem(SlayTheDragonResourceManager::itemFireParticle, _world, 0, 0, _groupIndex)),
 	altitude(60.f)
 {
@@ -101,16 +102,30 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	float green = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->getGreen();
 	float blue = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->getBlue();
 	
+	
+	float newHue = hue, newSat = sat;
+	if(id == 0){
+		newSat = sat + 0.8f;
+		newHue = 0.125f;
+	}else if(id == 1){
+		newHue = 0.3056f;
+	}else if(id == 2){
+		newHue = 0.64;
+		newSat = sat +0.55f;
+	}else if(id == 3){
+		newHue = 0;
+	}
+	if(ai){
+		newSat = 0.f;
+	}
+
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setRed(red + (1 - control) * 3);
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setGreen(green - (1 - control) * 3);
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue - (1 - control) * 3);
 
 	// change the shader settings based on current damage and player id
-	if (!ai){
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(float(id) * 0.167f);
-	}else{
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
-	}
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(newHue);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(newSat);
 
 	// lower wing behind upper wing
 	handLeft->render(_matrixStack, _renderOptions);
@@ -143,12 +158,14 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue - (1 - control) * 3);
 
 	// change the shader settings based on current damage and player id
-	if (!ai){
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(float(id) * 0.167f);
-	}else{
-		static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(0.f);
-	}
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(newHue);
+	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(newSat);
+	
 	headgear->render(_matrixStack, _renderOptions);
+	if(indicator != nullptr){
+		indicator->render(_matrixStack, _renderOptions);
+	}
+
 	// revert the shader settings
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(hue);
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat);
@@ -181,6 +198,13 @@ void PuppetCharacterDragon::update(Step * _step){
 
         fireball->update(_step);
     }
+	if(playerOnFire != nullptr){
+        Particle * p = fireParticles->addParticle(playerOnFire->rootComponent->getPos(false));
+        p->body->SetGravityScale(-0.1f);
+        p->applyAngularImpulse(vox::NumberUtils::randomFloat(-25.0f, 25.0f));
+        p->setTranslationPhysical(glm::vec3(vox::NumberUtils::randomFloat(-2.f, 2.f), vox::NumberUtils::randomFloat(0.75f, 1.25f), vox::NumberUtils::randomFloat(-2.f, 2.f)), true);
+
+	}
 }
 
 void PuppetCharacterDragon::action(bool _forceDrop){

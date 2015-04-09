@@ -13,6 +13,9 @@
 #include <BehaviourPatrol.h>
 #include <shader\BaseComponentShader.h>
 #include <StructureBoxingGlove.h>
+#include <SoundManager.h>
+
+glm::vec3 Lever::towerPos;
 
 Lever::Lever(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
 	StructureInteractable(_world, _categoryBits, _maskBits, _groupIndex),
@@ -90,14 +93,15 @@ void Lever::actuallyInteract(){
 	std::cout << type << std::endl;
 	Rapunzel * ps = static_cast<Rapunzel *>(scene);
 	if(type == 1){
+		RapunzelResourceManager::spearSounds->playRandomSound();
 		Item * projectile = new Item(true, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY, groupIndex);
 	
 		Box2DSprite ** test = new Box2DSprite*[1];
-		test[0] = projectile->rootComponent = new Box2DSprite(world, RapunzelResourceManager::itemSpear, b2_dynamicBody, false, nullptr, new Transform(), componentScale/4);
+		test[0] = projectile->rootComponent = new Box2DSprite(world, RapunzelResourceManager::itemSpear, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 		projectile->rootComponent->body->SetTransform(projectile->rootComponent->body->GetPosition(), glm::radians(80.f));
 		projectile->components.push_back(test);
 
-		projectile->translateComponents(glm::vec3(100.f, 15.f, 0.f));
+		projectile->translateComponents(towerPos - glm::vec3(0.f, 5.f, 0.f));
 
 		b2Filter sf;
 		sf.categoryBits = projectile->categoryBits;
@@ -123,9 +127,10 @@ void Lever::actuallyInteract(){
 		//projectile->addToLayeredScene(static_cast<PuppetScene *>(scene), 1);
 		projectile->setShader((Shader *)ps->shader, true);
 	}else if(type == 2){
+		RapunzelResourceManager::gloveSounds->playRandomSound();
 		ps->glove->punch();
 	}else if(type == 3){
-		PuppetCharacterGuard * g = new PuppetCharacterGuard(true, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -10);
+		PuppetCharacterGuard * g = new PuppetCharacterGuard(true, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -10);
 		
 		g->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50, 0, 0), glm::vec3(100, 0, 0), g, 10));
 		g->behaviourManager->addBehaviour(new BehaviourAttack(g, 3, PuppetGame::kPLAYER));
@@ -133,7 +138,7 @@ void Lever::actuallyInteract(){
 		g->addToLayeredScene(ps, 1);
 		ps->addChild(g, 1);
 		g->setShader(ps->shader, true);
-		g->translateComponents(glm::vec3(50, 10, 0));
+		g->translateComponents(towerPos + glm::vec3(-1.f, -1.f, 0.f));
 	}else{
 		throw "um";
 	}

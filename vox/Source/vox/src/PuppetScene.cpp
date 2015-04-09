@@ -58,7 +58,7 @@
 
 class SlayTheDragon;
 
-PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float _height, float _size):
+PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float _height, float _size) :
 	LayeredScene(_game, 3),
 	sceneHeight(_height),
 	sceneWidth(_width),
@@ -85,9 +85,9 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	screenShaderSetting(3),
 	screenSurfaceShader(new Shader("../assets/RenderSurfacePlus", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
-	screenFBO(new StandardFrameBuffer(true))
+	screenFBO(new StandardFrameBuffer(true)),
+	ghostPosition(0)
 {
-
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->components.push_back(new ShaderComponentHsv(shader, 0.f, 1.25f, 1.25f));
@@ -310,13 +310,13 @@ void PuppetScene::update(Step * _step){
 
 	// player controls
 	if (players.size() > 0){
-		if (keyboard->keyJustDown(GLFW_KEY_W)){
+		if (keyboard->keyDown(GLFW_KEY_W)){
 			players.at(0)->jump();
 		}if (keyboard->keyDown(GLFW_KEY_A)){
-			players.at(0)->targetRoll = glm::radians(-45.f);
+			players.at(0)->targetRoll = glm::radians(-75.f);
 		}
 		if (keyboard->keyDown(GLFW_KEY_D)){
-			players.at(0)->targetRoll = glm::radians(45.f);
+			players.at(0)->targetRoll = glm::radians(75.f);
 		}
 		if (keyboard->keyJustDown(GLFW_KEY_T)){
 			players.at(0)->action();
@@ -601,8 +601,8 @@ void PuppetScene::doCountDown(){
 	// Remove previous number
 	if (countDown <= countDownNumbers.size() - 1){
 		// make things get
-		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setSaturation(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getSaturation() + 0.2f);
-		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setValue(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getValue() + 0.2f);
+		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setSaturation(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getSaturation() - 0.15f);
+		//static_cast<ShaderComponentHsv *>(shader->components.at(1))->setValue(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getValue() + 0.2f);
 		
 		removeChild(countDownNumbers.back());
 		delete countDownNumbers.back();
@@ -638,7 +638,7 @@ void PuppetScene::populateBackground(){
 	ground->transform->scale(1000, 100, 100);
 	ground->transform->translate(50.f/2.f, 0, -15.f/2.f);
 	ground->mesh->uvEdgeMode = GL_REPEAT;
-	//ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
+	ground->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
 	for(Vertex & v : ground->mesh->vertices){
 		v.u *= 10;
 		v.v *= 100;

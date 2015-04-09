@@ -1,6 +1,7 @@
 #include "PuppetGame.h"
 #include "RaidTheCastle.h"
 #include <SlayTheDragon.h>
+#include <StartupScene.h>
 #include <Rapunzel.h>
 
 #include "GameJamCharacter.h"
@@ -18,7 +19,7 @@
 
 PuppetGame::PuppetGame(bool _running):
 	Game(_running),
-	arduino(new AccelerometerParser("COM3")),
+	arduino(new AccelerometerParser("COM4")),
 	lastScene(-1)
 {
 	std::srand((unsigned long int)std::time(0));
@@ -34,8 +35,8 @@ PuppetGame::PuppetGame(bool _running):
 	//scenes.insert(std::make_pair("indoors", new GameJamSceneIndoor(this)));
 	//scenes.insert(std::make_pair("outdoors", new GameJamSceneOutdoor(this)));
 	
-	currentSceneKey = "Rapunzel";
-	scenes.insert(std::make_pair(currentSceneKey, new Rapunzel(this)));
+	currentSceneKey = "Startup";
+	scenes.insert(std::make_pair(currentSceneKey, new StartupScene(this)));
 	currentScene = scenes.at(currentSceneKey);
 
 	/*loadRandomScene();

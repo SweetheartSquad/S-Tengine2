@@ -174,6 +174,7 @@ void PuppetContactListener::playerDeadZoneContact(b2Contact* b2_contact, b2Fixtu
 	PuppetCharacter * player = static_cast<PuppetCharacter*>(player_fixture->GetUserData());
 	if(player != nullptr) {
 		player->deathPending = true;
+		PuppetResourceManager::fallingSounds->playRandomSound();
 	}
 }
 

@@ -39,25 +39,25 @@ void FollowCamera::update(Step * _step){
 	upVectorRotated		   = newOrientation * upVectorLocal;
 	
 	lookAtSpot = glm::vec3(0.f, 0.f, 0.f);
-	float minX = 9999999999.f;
-	float minY = 9999999999.f;
-	float maxX = -9999999999.f;
-	float maxY = -9999999999.f;
+	float targetMinX = 9999999999.f;
+	float targetMinY = 9999999999.f;
+	float targetMaxX = -9999999999.f;
+	float targetMaxY = -9999999999.f;
+	
 	for(ShiftKiddie * nt : targets){
 		glm::vec3 pos = nt->getPos(false);
 		//lookAtSpot += pos;
-		minX = std::min(pos.x-buffer, minX);
-		maxX = std::max(pos.x+buffer, maxX);
-		minY = std::min(pos.y-buffer, minY);
-		maxY = std::max(pos.y+buffer, maxY);
+		targetMinX = std::min(pos.x-buffer, targetMinX);
+		targetMaxX = std::max(pos.x+buffer, targetMaxX);
+		targetMinY = std::min(pos.y-buffer, targetMinY);
+		targetMaxY = std::max(pos.y+buffer, targetMaxY);
 	}
-	
+
 	for(signed long int i = interpolators.size()-1; i > 0; --i){
 		if(i < targets.size()){
 			interpolators.at(i) += (targets.at(i)->getPos(false) - interpolators.at(i))*1.f;
 		}else{
 			interpolators.at(i) += (transform->getTranslationVector() - interpolators.at(i))*0.01f;
-			
 		}
 
 		glm::vec3 pos = interpolators.at(i);
@@ -65,13 +65,14 @@ void FollowCamera::update(Step * _step){
 			interpolators.erase(interpolators.begin() + i);
 			continue;
 		}
-		minX = std::min(pos.x-buffer, minX);
-		maxX = std::max(pos.x+buffer, maxX);
-		minY = std::min(pos.y-buffer, minY);
-		maxY = std::max(pos.y+buffer, maxY);
+		targetMinX = std::min(pos.x-buffer, targetMinX);
+		targetMaxX = std::max(pos.x+buffer, targetMaxX);
+		targetMinY = std::min(pos.y-buffer, targetMinY);
+		targetMaxY = std::max(pos.y+buffer, targetMaxY);
 	}
-	float screenWidth = maxX - minX;
-	float screenHeight = maxY - minY;
+
+	float screenWidth = targetMaxX - targetMinX;
+	float screenHeight = targetMaxY - targetMinY;
 
 	// account for FoV (the camera FoV seems to be vertical, so if the screen w > screen h, we need to take the h / the intended aspect ratio)
 	float ar1 = screenWidth/screenHeight;
@@ -92,8 +93,8 @@ void FollowCamera::update(Step * _step){
 
 
 	// move camera
-	lookAtSpot.x = minX + screenWidth * 0.5f;
-	lookAtSpot.y = minY + screenHeight* 0.5f;
+	lookAtSpot.x = targetMinX + screenWidth * 0.5f;
+	lookAtSpot.y = targetMinY + screenHeight* 0.5f;
 	
 	transform->translate(lookAtSpot.x, lookAtSpot.y, dist, false);
 }
