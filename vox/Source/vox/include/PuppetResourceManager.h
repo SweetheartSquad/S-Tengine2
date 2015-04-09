@@ -51,6 +51,7 @@ public:
 	static SoundManager * hitSounds;
 	static SoundManager * splashSounds;
 	static SoundManager * cheerSounds;
+	static SoundManager * fallingSounds;
 	
 	static void init();
 };

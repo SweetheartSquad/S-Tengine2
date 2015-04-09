@@ -15,6 +15,7 @@ public:
 	static TextureSampler * fortBackground;
 	static TextureSampler * fortForeground;
 	static TextureSampler * fortStructure;
+	static Texture * fortificationSpriteSheet;
 	
 	static TextureSampler * archerTorso;
 	static TextureSampler * archerArm;
@@ -32,6 +33,8 @@ public:
 	static TextureSampler * itemFireParticle;
 	
 	static SoundManager * dragonSounds;
+	static SoundManager * fireSounds;
+	static SoundManager * miscSounds;
 
 	static void init();
 };

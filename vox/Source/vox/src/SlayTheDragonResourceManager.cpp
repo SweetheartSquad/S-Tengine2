@@ -9,6 +9,7 @@ TextureSampler * SlayTheDragonResourceManager::splashMessage	= new TextureSample
 TextureSampler * SlayTheDragonResourceManager::fortBackground		= new TextureSampler(new Texture("../assets/hurly-burly/Fortification/FortBackground.png", 1024, 1024, true, true), 453, 307);
 TextureSampler * SlayTheDragonResourceManager::fortForeground		= new TextureSampler(new Texture("../assets/hurly-burly/Fortification/FortForeground.png", 1024, 1024, true, true), 1024, 413);
 TextureSampler * SlayTheDragonResourceManager::fortStructure		= new TextureSampler(new Texture("../assets/hurly-burly/Fortification/FortStructure.png", 1024, 1024, true, true), 683, 127);
+Texture * SlayTheDragonResourceManager::fortificationSpriteSheet	= new Texture("../assets/hurly-burly/Fortification/FortSpriteSheet.png", 1024, 1024, true, true);
 
 TextureSampler * SlayTheDragonResourceManager::archerTorso		= new TextureSampler(new Texture("../assets/hurly-burly/ArcherAssets/ArcherTorso.png", 1024, 1024, true, true), 275, 765);
 TextureSampler * SlayTheDragonResourceManager::archerArm		= new TextureSampler(new Texture("../assets/hurly-burly/ArcherAssets/ArcherArm.png", 1024, 1024, true, true), 64, 228);
@@ -26,6 +27,8 @@ TextureSampler * SlayTheDragonResourceManager::itemFireball	= new TextureSampler
 TextureSampler * SlayTheDragonResourceManager::itemFireParticle	= new TextureSampler("../assets/hurly-burly/DragonAssets/", "FireParticle.png.def");
 
 SoundManager * SlayTheDragonResourceManager::dragonSounds = new SoundManager(-1);
+SoundManager * SlayTheDragonResourceManager::fireSounds = new SoundManager(-1);
+SoundManager * SlayTheDragonResourceManager::miscSounds = new SoundManager(-1);
 
 void SlayTheDragonResourceManager::init(){
 	resources.push_back(splashMessage);
@@ -33,6 +36,7 @@ void SlayTheDragonResourceManager::init(){
 	resources.push_back(fortBackground);
 	resources.push_back(fortForeground);
 	resources.push_back(fortStructure);
+	resources.push_back(fortificationSpriteSheet);
 
 	resources.push_back(archerTorso);
 	resources.push_back(archerArm);
@@ -49,7 +53,6 @@ void SlayTheDragonResourceManager::init(){
 	resources.push_back(itemFireball);
 	resources.push_back(itemFireParticle);
 
-	resources.push_back(dragonSounds);
 	
 	dragonSounds->addNewSound("1", "../assets/hurly-burly/audio/dragon/dragonSound1.ogg");
 	dragonSounds->addNewSound("2", "../assets/hurly-burly/audio/dragon/dragonSound2.ogg");
@@ -65,4 +68,23 @@ void SlayTheDragonResourceManager::init(){
 	dragonSounds->addNewSound("12", "../assets/hurly-burly/audio/dragon/dragonSound12.ogg");
 	dragonSounds->addNewSound("13", "../assets/hurly-burly/audio/dragon/dragonSound13.ogg");
 	dragonSounds->addNewSound("14", "../assets/hurly-burly/audio/dragon/dragonSound14.ogg");
+	dragonSounds->addNewSound("15", "../assets/hurly-burly/audio/puppetDialog_Dragon/fire1.ogg");
+	dragonSounds->addNewSound("16", "../assets/hurly-burly/audio/puppetDialog_Dragon/lookOut1.ogg");
+	dragonSounds->addNewSound("17", "../assets/hurly-burly/audio/puppetDialog_Dragon/lookOut2.ogg");
+	dragonSounds->addNewSound("18", "../assets/hurly-burly/audio/puppetDialog_Dragon/ohNo1.ogg");
+	dragonSounds->addNewSound("19", "../assets/hurly-burly/audio/puppetDialog_Dragon/ohNo2.ogg");
+	dragonSounds->addNewSound("20", "../assets/hurly-burly/audio/puppetDialog_Dragon/ohNo3.ogg");
+	resources.push_back(dragonSounds);
+
+	fireSounds->addNewSound("1", "../assets/hurly-burly/audio/puppetDialog_Dragon/onFire1.ogg");
+	fireSounds->addNewSound("2", "../assets/hurly-burly/audio/puppetDialog_Dragon/onFire2.ogg");
+	fireSounds->addNewSound("3", "../assets/hurly-burly/audio/puppetDialog_Dragon/onFire3.ogg");
+	fireSounds->addNewSound("4", "../assets/hurly-burly/audio/puppetDialog_Dragon/onFire4.ogg");
+	fireSounds->addNewSound("5", "../assets/hurly-burly/audio/puppetDialog_Dragon/onFire5.ogg");
+	fireSounds->addNewSound("6", "../assets/hurly-burly/audio/puppetDialog_Dragon/onFire6.ogg");
+	resources.push_back(fireSounds);
+
+	miscSounds->addNewSound("damaged", "../assets/hurly-burly/audio/puppetDialog_Dragon/castleAboutToBreak.ogg");
+	miscSounds->addNewSound("broken", "../assets/hurly-burly/audio/puppetDialog_Dragon/castleBroken.ogg");
+	resources.push_back(miscSounds);
 }
