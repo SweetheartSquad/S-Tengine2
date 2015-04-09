@@ -130,7 +130,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 		if(p == dragon){
 			weapon = new ItemFireballLauncher(dragon, world);
 		}else{
-			weapon = new ItemProjectileWeapon(arrowTex, bowTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND | PuppetGame::kSTRUCTURE, p->groupIndex, 1, 0, -bowTex->height);
+			weapon = new ItemProjectileWeapon(arrowTex, bowTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND | PuppetGame::kSTRUCTURE, p->groupIndex, 3, 0, -bowTex->height);
 		}
 		weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);

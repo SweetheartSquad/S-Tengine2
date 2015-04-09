@@ -15,7 +15,7 @@
 #include <SlayTheDragonResourceManager.h>
 
 Fortification::Fortification(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
-	StructureBreakable(50.f, _world, _categoryBits, _maskBits, _groupIndex),
+	StructureBreakable(250.f, _world, _categoryBits, _maskBits, _groupIndex),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable()
