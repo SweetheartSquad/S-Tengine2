@@ -61,6 +61,8 @@ void vox::initWindow(GLFWwindow * _w){
 
 void vox::initialize(std::string _title){
 
+	step.targetFrameDuration = 0.1667;
+
 	vox::setGlfwWindowHints();
 
 	GLFWwindow * window;

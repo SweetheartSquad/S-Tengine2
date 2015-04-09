@@ -7,7 +7,7 @@ class PuppetCharacter;
 
 class Item : public Box2DSuperSprite {
 public:
-	unsigned int damage;
+	float damage;
 	float handleX;
 	float handleY;
 

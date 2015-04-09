@@ -15,19 +15,21 @@ double lastTime = glfwGetTime();
 int nbFrames = 0;
 
 Game::Game(bool _isRunning):
+	accumulator(0.0),
+	lastTime(0.0),
 	mouse(&Mouse::getInstance()),
 	keyboard(&Keyboard::getInstance()),
 	isRunning(_isRunning),
 	printFPS(true),
+	currentScene(nullptr),
+	currentSceneKey(""),
+	switchingScene(false),
+	newSceneKey(""),
+	deleteOldScene(false),
 	kc_lastKey(0),
 	kc_code(0),
 	kc_active(false),
-	kc_just_active(false),
-	switchingScene(false),
-	currentScene(nullptr),
-	currentSceneKey(""),
-	newSceneKey(""),
-	deleteOldScene(false)
+	kc_just_active(false)
 {
 	int width, height;
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
@@ -45,27 +47,35 @@ Game::~Game(void){
 }
 
 void Game::performGameLoop(){
-	glfwPollEvents();
+//#ifdef VOX_LIMIT_FRAMERATE
+	double time = glfwGetTime();
+	accumulator += time - lastTime;
+	if(accumulator >= vox::step.targetFrameDuration){
+		accumulator = 0.0;
+		lastTime = time;
+//#endif
+		vox::calculateDeltaTimeCorrection();
+		glfwPollEvents();
+		update(&vox::step);
+		draw();
 
-	vox::calculateDeltaTimeCorrection();
+		glfwSwapBuffers(vox::currentContext);
+		manageInput();
+		isRunning = !glfwWindowShouldClose(vox::currentContext);
 
-	update(&vox::step);
-	draw();
-
-	glfwSwapBuffers(vox::currentContext);
-	manageInput();
-	isRunning = !glfwWindowShouldClose(vox::currentContext);
-
-	if(switchingScene){
-		if(deleteOldScene){
-			scenes.erase(currentSceneKey);
-			delete currentScene;
-		}
-		currentSceneKey = newSceneKey;
-		currentScene = scenes.at(currentSceneKey);
-		switchingScene = false;
-		newSceneKey = "";
+		if(switchingScene){
+			if(deleteOldScene){
+				scenes.erase(currentSceneKey);
+				delete currentScene;
+			}
+			currentSceneKey = newSceneKey;
+			currentScene = scenes.at(currentSceneKey);
+			switchingScene = false;
+			newSceneKey = "";
+		}	
+//#ifdef VOX_LIMIT_FRAMERATE
 	}
+//#endif
 }
 
 void Game::update(Step * _step){

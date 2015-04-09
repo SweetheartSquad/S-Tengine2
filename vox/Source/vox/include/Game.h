@@ -26,6 +26,9 @@ private:
 	* is running to the console
 	*/
 	void printFps();
+	
+	double accumulator;
+	double lastTime;
 public:
 
 	explicit Game(bool _running);
