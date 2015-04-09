@@ -254,15 +254,8 @@ void PuppetCharacter::createIndicator(signed long _id){
 	scoreIndicator = new Sprite(nullptr, new Transform());
 	scoreIndicator->mesh->pushTexture2D(PuppetResourceManager::scoreIndicators.at(id)->texture);
 
-	indicator->setShader(getShader(), true);
-
-	// score indicator
-	scoreIndicator = new Sprite(nullptr, new Transform());
-	scoreIndicator->mesh->pushTexture2D(PuppetResourceManager::scoreIndicators.at(id)->texture);
-
-	scoreIndicator->setShader(getShader(), true);
-
 	dynamic_cast<PuppetScene *>(scene)->scoreIndicators.push_back(scoreIndicator);
+	scene->addChild(scoreIndicator);
 }
 
 
@@ -329,6 +322,10 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 
 	if(indicator != nullptr){
 		indicator->render(_matrixStack, _renderOptions);
+	}
+
+	if(scoreIndicator != nullptr){
+		scoreIndicator->render(_matrixStack, _renderOptions);
 	}
 	// revert the shader settings
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(hue);
@@ -584,6 +581,9 @@ void PuppetCharacter::setShader(Shader * _shader, bool _configureDefaultAttribut
 	}
 	if(indicator != nullptr){
 		indicator->setShader(_shader, _configureDefaultAttributes);
+	}
+	if(scoreIndicator != nullptr){
+		scoreIndicator->setShader(_shader, _configureDefaultAttributes);
 	}
 }
 
