@@ -532,8 +532,8 @@ void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderO
 void PuppetScene::triggerVictoryState(){
 	if(!victoryTriggered){
 		if(currentTime < duration - 1){
-			currentTime = duration - 2;
-			countDown = 2;
+			currentTime = duration - 1;
+			countDown = 1;
 			doCountDown();
 		}
 	}

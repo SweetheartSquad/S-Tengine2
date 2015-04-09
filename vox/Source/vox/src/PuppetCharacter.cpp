@@ -23,6 +23,7 @@
 #include <NumberUtils.h>
 #include <BehaviourManager.h>
 #include <Sprite.h>
+#include <MeshInterface.h>
 
 bool PuppetCharacter::compareByScore(PuppetCharacter * _a, PuppetCharacter * _b){
 	return (_a->score < _b->score);
@@ -52,7 +53,8 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	lastActionTime(0.0),
 	contactDelegate(nullptr),
 	justTookDamage(false),
-	indicator(nullptr)
+	indicator(nullptr),
+	scoreIndicator(nullptr)
 {
 	init();
 }
@@ -68,6 +70,7 @@ PuppetCharacter * PuppetCharacter::clone(Box2DWorld * _world){
 PuppetCharacter::~PuppetCharacter(){
 	delete behaviourManager;
 	delete indicator;
+	delete scoreIndicator;
 	//delete texPack;
 }
 
@@ -228,6 +231,10 @@ void PuppetCharacter::init(){
 	// flip left side
 	armLeft->transform->scale(-1, 1, 1);
 	handLeft->transform->scale(-1, 1, 1);
+
+	// score indicator
+	scoreIndicator = new Sprite(nullptr, new Transform());
+	scoreIndicator->mesh->pushTexture2D(PuppetResourceManager::scoreIndicators.at(id)->texture);
 }
 
 void PuppetCharacter::createIndicator(signed long _id){
