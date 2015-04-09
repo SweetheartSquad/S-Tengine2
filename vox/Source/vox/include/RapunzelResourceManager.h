@@ -6,6 +6,7 @@
 
 class TextureSampler;
 class Texture;
+class SoundManager;
 
 class RapunzelResourceManager abstract : public ResourceManager{
 public:
@@ -51,6 +52,10 @@ public:
 	static TextureSampler * itemScimitar;
 
 	static TextureSampler * getRandomWeapon();
+	
+	static SoundManager * gloveSounds;
+	static SoundManager * spearSounds;
+	static SoundManager * tauntSounds;
 	
 	static void init();
 };

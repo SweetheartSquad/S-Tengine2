@@ -34,7 +34,8 @@
 #include <ItemProjectileWeapon.h>
 #include <SoundManager.h>
 #include <glfw\glfw3.h>
-
+#include <NumberUtils.h>
+#include <Particle.h>
 
 RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	PuppetScene(_game, 30),
@@ -171,9 +172,18 @@ void RaidTheCastle::update(Step* _step){
 
 
 	if(castle->state == Castle::state_t::kDEAD){
-		for (signed long int j = 0; j < std::rand() % 5 + 1; ++j){
-			particleSystem->addParticle(castle->rootComponent->getPos(false), PuppetResourceManager::dustParticle);
-		};
+		if(gameCam->targets.size() != 1){
+			gameCam->targets.clear();
+			gameCam->interpolators.clear();
+			gameCam->addTarget(castle->rootComponent);
+		}
+		if(std::rand() % 5 == 4){
+			for (signed long int j = 0; j < std::rand() % 10 + 1; ++j){
+				Particle * p = particleSystem->addParticle(castle->rootComponent->getPos(false), PuppetResourceManager::dustParticle);
+				p->setTranslationPhysical(std::rand() % 50 - 25, std::rand() % 50 - 25, 0, true);
+				p->applyLinearImpulse(vox::NumberUtils::randomFloat(-750, 750), vox::NumberUtils::randomFloat(1000, 1500), p->body->GetPosition().x, p->body->GetPosition().y);
+			}
+		}
 		
 		triggerVictoryState();
 	}

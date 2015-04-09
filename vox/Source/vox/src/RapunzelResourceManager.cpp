@@ -2,6 +2,7 @@
 
 #include <RapunzelResourceManager.h>
 #include <TextureSampler.h>
+#include <SoundManager.h>
 
 TextureSampler * RapunzelResourceManager::splashMessage	= new TextureSampler(new Texture("../assets/hurly-burly/SplashMessages/Rapunzel.png", 1024, 1024, true, true), 1024, 1024);
 
@@ -45,6 +46,10 @@ TextureSampler * RapunzelResourceManager::itemMace	= new TextureSampler(new Text
 TextureSampler * RapunzelResourceManager::itemSword	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Sword.png", 1024, 1024, true, true), 81, 382);
 TextureSampler * RapunzelResourceManager::itemScimitar	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Scimitar.png", 1024, 1024, true, true), 79, 401);
 
+SoundManager * RapunzelResourceManager::gloveSounds	= new SoundManager(-1);
+SoundManager * RapunzelResourceManager::spearSounds	= new SoundManager(-1);
+SoundManager * RapunzelResourceManager::tauntSounds	= new SoundManager(-1);
+
 void RapunzelResourceManager::init(){
 
 	resources.push_back(splashMessage);
@@ -86,6 +91,23 @@ void RapunzelResourceManager::init(){
 	resources.push_back(itemMace);
 	resources.push_back(itemSword);
 	resources.push_back(itemScimitar);
+	
+	gloveSounds->addNewSound("1", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_glove1.ogg");
+	gloveSounds->addNewSound("2", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_glove2.ogg");
+	gloveSounds->addNewSound("3", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_glove3.ogg");
+	resources.push_back(gloveSounds);						  
+															  
+	spearSounds->addNewSound("1", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_spear1.ogg");
+	spearSounds->addNewSound("2", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_spear2.ogg");
+	spearSounds->addNewSound("3", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_spear3.ogg");
+	resources.push_back(spearSounds);						  
+															  
+	tauntSounds->addNewSound("1", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_throw1.ogg");
+	tauntSounds->addNewSound("2", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_throw2.ogg");
+	tauntSounds->addNewSound("3", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_throw3.ogg");
+	tauntSounds->addNewSound("4", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_myGold.ogg");
+	tauntSounds->addNewSound("5", "../assets/hurly-burly/audio/RapunzelAudio/rapunzel_getOff.ogg");
+	resources.push_back(tauntSounds);
 }
 
 TextureSampler * RapunzelResourceManager::getRandomWeapon(){

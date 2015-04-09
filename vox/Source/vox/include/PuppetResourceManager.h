@@ -8,6 +8,8 @@ class TextureSampler;
 
 class PuppetResourceManager abstract : public ResourceManager{
 public:	
+	static Texture * startupSplash;
+
 	static Texture * blank;
 	static TextureSampler * itemNone;
 	static Texture * stageFloor;

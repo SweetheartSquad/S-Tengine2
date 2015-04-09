@@ -13,6 +13,7 @@
 #include <BehaviourPatrol.h>
 #include <shader\BaseComponentShader.h>
 #include <StructureBoxingGlove.h>
+#include <SoundManager.h>
 
 glm::vec3 Lever::towerPos;
 
@@ -92,6 +93,7 @@ void Lever::actuallyInteract(){
 	std::cout << type << std::endl;
 	Rapunzel * ps = static_cast<Rapunzel *>(scene);
 	if(type == 1){
+		RapunzelResourceManager::spearSounds->playRandomSound();
 		Item * projectile = new Item(true, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY, groupIndex);
 	
 		Box2DSprite ** test = new Box2DSprite*[1];
@@ -125,6 +127,7 @@ void Lever::actuallyInteract(){
 		//projectile->addToLayeredScene(static_cast<PuppetScene *>(scene), 1);
 		projectile->setShader((Shader *)ps->shader, true);
 	}else if(type == 2){
+		RapunzelResourceManager::gloveSounds->playRandomSound();
 		ps->glove->punch();
 	}else if(type == 3){
 		PuppetCharacterGuard * g = new PuppetCharacterGuard(true, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -10);

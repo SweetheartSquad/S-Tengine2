@@ -215,6 +215,7 @@ void SlayTheDragon::update(Step* _step){
         }
         if (archersDead){
             dragon->score += 100000;
+			dragon->lastUpdateScore = dragon->score;
             triggerVictoryState();
         }
     }

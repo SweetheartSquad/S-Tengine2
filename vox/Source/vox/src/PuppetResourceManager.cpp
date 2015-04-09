@@ -10,6 +10,7 @@
 #include <TextureSampler.h>
 #include <NumberUtils.h>
 
+Texture * PuppetResourceManager::startupSplash = new Texture("../assets/hurly-burly/SplashMessages/Startup.png", 2096, 2096, true, true);
 Texture * PuppetResourceManager::blank = new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true);
 TextureSampler * PuppetResourceManager::itemNone = new TextureSampler(new Texture("../assets/hurly-burly/blank.png", 1, 1, true, true), 1, 1);
 
@@ -60,7 +61,8 @@ void PuppetResourceManager::init(){
 	RaidTheCastleResourceManager::init();
 	RapunzelResourceManager::init();
 	SlayTheDragonResourceManager::init();
-
+	
+	resources.push_back(startupSplash);
 	resources.push_back(blank);
 	resources.push_back(itemNone);
 	resources.push_back(stageFloor);
@@ -162,6 +164,8 @@ void PuppetResourceManager::init(){
 	splashSounds->addNewSound("RaidTheCastle", "../assets/hurly-burly/audio/splash/RaidTheCastle.ogg");
 	splashSounds->addNewSound("Rapunzel", "../assets/hurly-burly/audio/splash/Rapunzel.ogg");
 	splashSounds->addNewSound("SlayTheDragon", "../assets/hurly-burly/audio/splash/SlayTheDragon.ogg");
+	splashSounds->addNewSound("Startup", "../assets/hurly-burly/audio/splash/HurlyBurlyPuppetParty.ogg");
+	splashSounds->addNewSound("Startup-alt", "../assets/hurly-burly/audio/splash/HurlyBurlyPuppetParty-processed.ogg");
 	resources.push_back(splashSounds);
 
 	cheerSounds->addNewSound("0", "../assets/hurly-burly/audio/yellowCheer/yellowCheerMain.ogg");
