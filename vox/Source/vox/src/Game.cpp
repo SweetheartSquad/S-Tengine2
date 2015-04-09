@@ -10,13 +10,10 @@
 #include "VoxRenderOptions.h"
 #include "GLUtils.h"
 
-//these shouldn't be global
-double lastTime = glfwGetTime();
-int nbFrames = 0;
 
 Game::Game(bool _isRunning):
 	accumulator(0.0),
-	lastTime(0.0),
+	lastTimestep(0.0),
 	mouse(&Mouse::getInstance()),
 	keyboard(&Keyboard::getInstance()),
 	isRunning(_isRunning),
@@ -37,6 +34,8 @@ Game::Game(bool _isRunning):
 	viewPortHeight = height;
 	viewPortX = 0;
 	viewPortY = 0;
+	lastTime = glfwGetTime();
+	nbFrames = 0;
 }
 
 Game::~Game(void){
@@ -49,10 +48,10 @@ Game::~Game(void){
 void Game::performGameLoop(){
 //#ifdef VOX_LIMIT_FRAMERATE
 	double time = glfwGetTime();
-	accumulator += time - lastTime;
+	accumulator += time - lastTimestep;
 	if(accumulator >= vox::step.targetFrameDuration){
 		accumulator = 0.0;
-		lastTime = time;
+		lastTimestep = time;
 //#endif
 		vox::calculateDeltaTimeCorrection();
 		glfwPollEvents();

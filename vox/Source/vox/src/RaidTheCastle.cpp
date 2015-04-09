@@ -177,13 +177,6 @@ void RaidTheCastle::update(Step* _step){
 			gameCam->interpolators.clear();
 			gameCam->addTarget(castle->rootComponent);
 		}
-		if(std::rand() % 5 == 4){
-			for (signed long int j = 0; j < std::rand() % 10 + 1; ++j){
-				Particle * p = particleSystem->addParticle(castle->rootComponent->getPos(false), PuppetResourceManager::dustParticle);
-				p->setTranslationPhysical(std::rand() % 50 - 25, std::rand() % 50 - 25, 0, true);
-				p->applyLinearImpulse(vox::NumberUtils::randomFloat(-750, 750), vox::NumberUtils::randomFloat(1000, 1500), p->body->GetPosition().x, p->body->GetPosition().y);
-			}
-		}
 		
 		triggerVictoryState();
 	}

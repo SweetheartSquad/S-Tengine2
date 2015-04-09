@@ -28,7 +28,10 @@ private:
 	void printFps();
 	
 	double accumulator;
+	double lastTimestep;
+
 	double lastTime;
+	int nbFrames;
 public:
 
 	explicit Game(bool _running);
