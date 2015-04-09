@@ -93,15 +93,15 @@ int aprintf(const char *str, ...) {
 }
 
 void loop() {
-  if(Serial.available() > 0){
-    Serial.read();
+  //if(Serial.available() > 0){
+    //Serial.read();
     aprintf(":%d%d%d%d%d%d%d%d%d%d%d%d",
-    analogRead(acclPin0), analogRead(acclPin1), analogRead(acclPin2),
-    analogRead(acclPin3), analogRead(acclPin4), analogRead(acclPin5),
-    analogRead(acclPin6), analogRead(acclPin7), analogRead(acclPin8),
+    analogRead(acclPin0), analogRead(acclPin1),  analogRead(acclPin2),
+    analogRead(acclPin3), analogRead(acclPin4),  analogRead(acclPin5),
+    analogRead(acclPin6), analogRead(acclPin7),  analogRead(acclPin8),
     analogRead(acclPin9), analogRead(acclPin10), analogRead(acclPin11));
-    Serial.flush();
-  }
+    //Serial.flush();
+  //}
 }
 
 

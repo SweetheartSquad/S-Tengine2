@@ -43,6 +43,7 @@ public:
 	static TextureSampler * countDown5;
 	
 	static std::vector<TextureSampler *> indicators;
+	static std::vector<TextureSampler *> scoreIndicators;
 	
 	//static TextureSampler * redWins;
 	//static TextureSampler * yellowWins;
