@@ -35,18 +35,22 @@ Accelerometer * AccelerometerParser::addAccelerometer(){
 void AccelerometerParser::update(Step* _step){
 	Arduino::update(_step);
 	if(IsConnected()) {
-		bool dataRead = false;
-		char buffer[LINE_SIZE];
-		if(firstPing) {
+		if(firstPing){
 			ClearCommError(this->hSerial, &this->errors, &this->status);
+			firstPing = false;
+			char ping[1] = {'1'};
+			WriteData(ping, 1);
 		}
-		if(this->status.cbInQue == LINE_SIZE){
-			int numRead = ReadData(buffer, LINE_SIZE);
-			if(numRead == LINE_SIZE && buffer[0] == ':'){
-				dataRead = true;
-				firstPing = false;
+		ClearCommError(this->hSerial, &this->errors, &this->status);
+		int inQ = status.cbInQue;
+		if(inQ >= LINE_SIZE){
+			char * buffer = new char[inQ]();
+			int numRead = ReadData(buffer, inQ);
+			accumlator += buffer;
+			std::string src = getLatestData(accumlator);
+			if(src.size() >= LINE_SIZE - 1){
+				accumlator.clear();
 				for(unsigned long int i = 0; i < accelerometers.size(); ++i){
-					char * src = buffer + (i*9) + 1;
 					char x[4];
 					char y[4];
 					char z[4];
@@ -75,14 +79,17 @@ void AccelerometerParser::update(Step* _step){
 					accelerometers.at(i)->update(_step);
 				}
 			}
-		}else {
-			if(this->status.cbInQue > 0){
-				char * buff = new char[this->status.cbInQue];
-				ReadData(buff, this->status.cbInQue);
-				delete buff;
+		}
+	}		
+}
+
+std::string AccelerometerParser::getLatestData(std::string _acc){
+	for(signed long int i = _acc.size() - 1; i >= 0; --i) {
+		if(_acc.at(i) == ':') {
+			if(_acc.size() - i >= LINE_SIZE) {
+				return _acc.substr(i + 1, LINE_SIZE - 1);
 			}
 		}
-		char ping[1] = {'1'};
-		WriteData(ping, 1);
-	}		
+	}
+	return "";
 }

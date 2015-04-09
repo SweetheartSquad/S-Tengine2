@@ -20,5 +20,8 @@ public:
 	virtual void update(Step * _step) override;
 
 private:
+	std::string accumlator;
+
 	std::vector<Accelerometer *> accelerometers;
+	std::string AccelerometerParser::getLatestData(std::string _acc);
 };
