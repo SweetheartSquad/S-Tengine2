@@ -4,7 +4,7 @@
 #include <PuppetCharacterDragon.h>
 
 ItemFireball::ItemFireball(PuppetCharacterDragon * _dragon, Box2DWorld * _world) :
-Item(true, _world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND),
+Item(true, _world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND,(int16)0, 5),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr)
 {

@@ -35,6 +35,7 @@ void StructureBreakable::update(Step* _step){
 			particleSystem->addParticle(rootComponent->getPos(false), PuppetResourceManager::dustParticle);
 		}
 		dead = false;
+		scattering = true;
 	}
 
 	if(scattering){
@@ -47,17 +48,25 @@ void StructureBreakable::update(Step* _step){
 }
 
 void StructureBreakable::takeDamage(float _damage){
-	health -= _damage;
-	if(health <= 0.f){
-		state = kDEAD;
-		health = 0;
-		destroy = true;
-	}else if(health <= maxHealth * 0.5f){
-		state = kDAMAGED;
-	}else{
-		state = kNORMAL;
-		if(health >= maxHealth){
-			health = maxHealth;
+	if(state != kDEAD){
+		health -= _damage;
+		if(health <= 0.f){
+			state = kDEAD;
+			health = 0;
+			dead = true;
+		}else if(health <= maxHealth * 0.5f){
+			state = kDAMAGED;
+		}else{
+			state = kNORMAL;
+			if(health >= maxHealth){
+				health = maxHealth;
+			}
 		}
 	}
 }
+
+void StructureBreakable::setShader(Shader * _shader, bool _configureDefaultVertexAttributes){
+	Structure::setShader(_shader, _configureDefaultVertexAttributes);
+	particleSystem->setShader(_shader, _configureDefaultVertexAttributes);
+}
+

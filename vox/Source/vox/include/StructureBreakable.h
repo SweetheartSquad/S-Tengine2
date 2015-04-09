@@ -26,6 +26,8 @@ public:
 
 	void update(Step* _step) override;
 
+	void setShader(Shader * _shader, bool _configureDefaultVertexAttributes) override;
+
 	enum state_t{
 		kNORMAL,
 		kDAMAGED,
