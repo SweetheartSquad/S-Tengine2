@@ -377,7 +377,7 @@ void PuppetScene::update(Step * _step){
 				displayingSplash = true;
 			}
 
-			splashMessage->transform->translate(gameCam->transform->getTranslationVector(), false);
+			splashMessage->transform->translate(activeCamera->transform->getTranslationVector(), false);
 			splashMessage->transform->translate(glm::vec3(0,0,-10));
 		}else{
 			// Remove previous number from scene
@@ -387,15 +387,8 @@ void PuppetScene::update(Step * _step){
 		}
 	}
 
-	float spacing = 10.f;
-	for(Sprite * s : scoreIndicators){
-		// snap score indicator to camera
-		s->transform->translate(gameCam->transform->getTranslationVector(), false);
-		s->transform->translate(glm::vec3(spacing,0,-10));
-	}
-
 	for(Sprite * n : countDownNumbers){
-		n->transform->translate(gameCam->transform->getTranslationVector(), false);
+		n->transform->translate(activeCamera->transform->getTranslationVector(), false);
 		n->transform->translate(glm::vec3(0,0,-10));
 	}
 	

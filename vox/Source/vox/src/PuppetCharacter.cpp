@@ -252,10 +252,11 @@ void PuppetCharacter::createIndicator(signed long _id){
 
 	// score indicator
 	scoreIndicator = new Sprite(nullptr, new Transform());
+	scoreIndicator->transform->scale(-1, 1, 1);
 	scoreIndicator->mesh->pushTexture2D(PuppetResourceManager::scoreIndicators.at(id)->texture);
 
-	dynamic_cast<PuppetScene *>(scene)->scoreIndicators.push_back(scoreIndicator);
-	scene->addChild(scoreIndicator);
+	scoreIndicator->setShader(getShader(), true);
+	indicator->setShader(getShader(), true);
 }
 
 
@@ -427,12 +428,17 @@ void PuppetCharacter::update(Step* _step){
 	}
 
 	if(indicator != nullptr){
+		//indicator->update(_step);
 		glm::vec3 iPos = indicator->getPos(false);
 		glm::vec3 hPos = headgear->getPos(false) + glm::vec3(0.f, 3.f, 0.f);
 
 
 		indicator->setPos(iPos + (hPos - iPos)*0.1f);
 		//indicator->transform->setOrientation(glm::quat(1,0,0,0));
+	}
+	if (scoreIndicator != nullptr){
+		scoreIndicator->transform->translate(ps->activeCamera->transform->getTranslationVector() + glm::vec3((id-1.5)*5.f, -5, -10), false);
+		//scoreIndicator->update(_step);
 	}
 }
 

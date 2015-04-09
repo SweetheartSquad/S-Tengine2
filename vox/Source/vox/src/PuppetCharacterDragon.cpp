@@ -162,8 +162,11 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(newSat);
 	
 	headgear->render(_matrixStack, _renderOptions);
-	if(indicator != nullptr){
+	if (indicator != nullptr){
 		indicator->render(_matrixStack, _renderOptions);
+	}
+	if (scoreIndicator != nullptr){
+		scoreIndicator->render(_matrixStack, _renderOptions);
 	}
 
 	// revert the shader settings

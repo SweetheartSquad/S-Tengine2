@@ -76,7 +76,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 
     fortForeground->createFixture(sf, b2Vec2(0, 0), fortForeground);
     fortForeground->setShader(shader, true);
-    addChild(fortForeground, 2);
+    addChild(fortForeground, 1);
 
     fortForeground->setTranslationPhysical(glm::vec3(0, fortForeground->getCorrectedHeight(), 0));
 
