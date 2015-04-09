@@ -6,7 +6,6 @@
 #include <PuppetCharacter.h>
 #include <Box2DWorld.h>
 #include <Catapult.h>
-
 #include <RaidTheCastleResourceManager.h>
 
 Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):

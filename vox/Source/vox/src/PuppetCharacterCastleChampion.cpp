@@ -30,7 +30,10 @@ PuppetCharacterCastleChampion::~PuppetCharacterCastleChampion(){
 }
 
 void PuppetCharacterCastleChampion::action(bool _forceDrop){
-	// the castle champion isn't allowed to throw their weapon
+	// the castle champion isn't allowed to throw their weapon as a projectile
+	if(_forceDrop){
+		PuppetCharacter::action(true);
+	}
 }
 
 void PuppetCharacterCastleChampion::update(Step * _step){

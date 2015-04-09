@@ -50,12 +50,12 @@ StructureBoxingGlove::StructureBoxingGlove(Box2DWorld * _world) :
 	b2PrismaticJointDef jth;
 	jth.bodyA = spring->body;
 	jth.bodyB = glove->body;
-	jth.localAnchorA.Set(0.9f * spring->getCorrectedWidth(), 0.f * spring->getCorrectedHeight());
-	jth.localAnchorB.Set(-0.9f * glove->getCorrectedWidth(), 0.f * glove->getCorrectedHeight());
+	jth.localAnchorA.Set(0.0f * spring->getCorrectedWidth(), 0.f * spring->getCorrectedHeight());
+	jth.localAnchorB.Set(-0.0f * glove->getCorrectedWidth(), 0.f * glove->getCorrectedHeight());
 	jth.collideConnected = false;
 	jth.enableLimit = true;
 	jth.enableMotor = true;
-	jth.lowerTranslation = -20;
+	jth.lowerTranslation = -10.f;
 	jth.upperTranslation = 0;
 	jth.localAxisA = b2Vec2(1, 0);
 	jth.maxMotorForce = 1000.f;

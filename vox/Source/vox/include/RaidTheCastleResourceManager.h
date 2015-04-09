@@ -38,7 +38,9 @@ public:
 
 	static TextureSampler * getRandomWeapon();
 	
-	static SoundManager * catapultSounds;
+	static SoundManager * catapultWhistleSounds;
+	static SoundManager * catapultHitSounds;
+	static SoundManager * catapultThrowSounds;
 	
 	static void init();
 	//RaidTheCastleResourceManager();

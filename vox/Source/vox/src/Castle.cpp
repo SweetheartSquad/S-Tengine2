@@ -11,6 +11,7 @@
 #include "SpriteSheet.h"
 #include "SpriteSheetAnimation.h"
 #include <iostream>
+#include <SoundManager.h>
 
 #include <RaidTheCastleResourceManager.h>
 
@@ -58,6 +59,7 @@ Castle::~Castle(){
 
 
 void Castle::takeDamage(float _damage){
+	RaidTheCastleResourceManager::catapultHitSounds->playRandomSound();
 	StructureBreakable::takeDamage(_damage);
 	switch (state){
 	default:

@@ -67,6 +67,7 @@ PuppetCharacter * PuppetCharacter::clone(Box2DWorld * _world){
 
 PuppetCharacter::~PuppetCharacter(){
 	delete behaviourManager;
+	delete indicator;
 	//delete texPack;
 }
 
