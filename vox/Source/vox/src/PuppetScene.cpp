@@ -461,8 +461,7 @@ void PuppetScene::update(Step * _step){
             game->scenes.insert(std::make_pair("Raid The Castle", new RaidTheCastle((PuppetGame *)game)));
             complete("Raid The Castle");
         }
-    }
-    else if (keyboard->keyJustUp(GLFW_KEY_9)){
+    }else if (keyboard->keyJustUp(GLFW_KEY_9)){
         if (game->currentSceneKey != "Rapunzel"){
             pg->puppetControllers.at(0)->unassign();
             pg->puppetControllers.at(1)->unassign();
@@ -471,8 +470,7 @@ void PuppetScene::update(Step * _step){
             game->scenes.insert(std::make_pair("Rapunzel", new Rapunzel((PuppetGame *)game)));
             complete("Rapunzel");
         }
-    }
-    else if (keyboard->keyJustUp(GLFW_KEY_0)){
+    }else if (keyboard->keyJustUp(GLFW_KEY_0)){
         if (game->currentSceneKey != "Slay The Dragon"){
             pg->puppetControllers.at(0)->unassign();
             pg->puppetControllers.at(1)->unassign();

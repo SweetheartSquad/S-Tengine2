@@ -7,6 +7,7 @@
 #include <MeshInterface.h>
 #include <shader\BaseComponentShader.h>
 #include <SoundManager.h>
+#include <PuppetController.h>
 
 StartupScene::StartupScene(PuppetGame * _game) :
 	PuppetScene(_game, 20.f)
@@ -18,8 +19,12 @@ StartupScene::StartupScene(PuppetGame * _game) :
 	splashMessage->transform->scale(-1, 1, 1);
 }
 void StartupScene::complete(std::string _switchTo){
+	if (_switchTo == ""){
     PuppetGame * pg = static_cast<PuppetGame *>(game);
 	pg->loadRandomScene();
+	}else{
+		PuppetScene::complete(_switchTo);
+	}
 }
 
 void StartupScene::update(Step * _step){
