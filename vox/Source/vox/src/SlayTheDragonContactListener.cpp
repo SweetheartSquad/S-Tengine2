@@ -6,7 +6,7 @@
 #include "Scene.h"
 #include "Hair.h"
 #include "Lever.h"
-#include "PuppetCharacter.h"
+#include "PuppetCharacterArcher.h"
 #include <PuppetCharacterDragon.h>
 #include "Box2dWorld.h"
 #include "Item.h"
@@ -15,6 +15,8 @@
 #include <Box2D/Box2D.h>
 #include <Box2D\Dynamics\Joints\b2RevoluteJoint.h>
 
+#include <SoundManager.h>
+#include <SlayTheDragonResourceManager.h>
 #include "Behaviour.h"
 #include <Fortification.h>
 #include <ItemFireball.h>
@@ -35,12 +37,13 @@ void SlayTheDragonContactListener::playerPlayerContact(b2Contact * _contact){
 void SlayTheDragonContactListener::playerItemContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _itemFixture){
 	PuppetContactListener::playerItemContact(_contact, _playerFixture, _itemFixture);
 	
-	PuppetCharacter * player = static_cast<PuppetCharacter *>( _playerFixture->GetUserData() );
+	PuppetCharacterArcher * player = static_cast<PuppetCharacterArcher *>( _playerFixture->GetUserData() );
     Item * item = static_cast<Item *>( _itemFixture->GetUserData() );
 
 	ItemFireball * fb = dynamic_cast<ItemFireball *>(item);
 	if(fb != nullptr){
 		static_cast<PuppetCharacterDragon *>(fb->owner)->playerOnFire = player;
+		player->onFire = true;
 	}
 }
 
