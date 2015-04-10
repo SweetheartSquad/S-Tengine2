@@ -38,7 +38,7 @@
 #include <Particle.h>
 
 FightYourFriends::FightYourFriends(PuppetGame* _game):
-	PuppetScene(_game, 30),
+	PuppetScene(_game, 30, 100.f, 100.f),
 	playerCharacter1(new PuppetCharacterKnight(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterKnight(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
 	playerCharacter3(new PuppetCharacterKnight(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
@@ -90,14 +90,6 @@ FightYourFriends::FightYourFriends(PuppetGame* _game):
 	gameCam->addTarget(playerCharacter3->torso);
 	gameCam->addTarget(playerCharacter4->torso);
 
-	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
-	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter3, 3, PuppetGame::kPLAYER));
-	//playerCharacter3->ai = true;
-
-	//playerCharacter4->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter4, 10));
-	//playerCharacter4->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
-	//playerCharacter4->ai = true;
-
 	for(PuppetCharacter * p : players){
 		TextureSampler * weaponTex = PuppetResourceManager::getRandomMeleeWeapon();
 		TextureSampler * projTex = PuppetResourceManager::getRandomMeleeWeapon();
@@ -143,4 +135,41 @@ void FightYourFriends::load(){
 
 void FightYourFriends::unload(){
 	PuppetScene::unload();
+}
+
+void FightYourFriends::populateBackground(){
+	addChild(stageFloor, 0);
+	addChild(stageFront, 0);
+	
+	stageFloor->setShader(shader, true);
+	stageFloor->transform->scale(1000, 100, 100);
+	stageFloor->transform->translate(50.f / 2.f, 0, -15.f / 2.f);
+	stageFloor->mesh->uvEdgeMode = GL_REPEAT;
+	stageFloor->mesh->pushTexture2D(PuppetResourceManager::stageFloor);
+	for (Vertex & v : stageFloor->mesh->vertices){
+		v.u *= 10;
+		v.v *= 100;
+	}
+	stageFloor->mesh->dirty = true;
+
+
+	stageFront->setShader(shader, true);
+	stageFront->transform->scale(1000, 100, 100);
+	stageFront->transform->translate(50.f / 2.f, 0, -15.f / 2.f);
+	stageFront->mesh->uvEdgeMode = GL_REPEAT;
+	stageFront->mesh->pushTexture2D(PuppetResourceManager::stageFront);
+	for (Vertex & v : stageFront->mesh->vertices){
+		v.u *= 10;
+		v.v *= 100;
+	}
+	stageFront->mesh->dirty = true;
+
+
+	MeshEntity * arena = new MeshEntity(MeshFactory::getPlaneMesh());
+	float scale = sceneWidth*0.8f;
+	arena->transform->translate(1024/2 * scale * 0.001f, -1024/8 * scale * 0.001f, -5);
+	arena->transform->scale(scale, scale, 1);
+	arena->mesh->pushTexture2D(FightYourFriendsResourceManager::arena);
+	arena->setShader(shader, true);
+	addChild(arena, 0);
 }

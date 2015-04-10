@@ -20,4 +20,6 @@ public:
 	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	virtual void load() override;
 	virtual void unload() override;
+
+	void populateBackground() override;
 };

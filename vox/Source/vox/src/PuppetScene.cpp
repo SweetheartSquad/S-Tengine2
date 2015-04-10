@@ -42,15 +42,15 @@
 #include <RaidTheCastle.h>
 #include <Rapunzel.h>
 #include <SlayTheDragon.h>
+#include <FightYourFriends.h>
+#include <VictoryScene.h>
 
 #include <PuppetResourceManager.h>
 #include <NumberUtils.h>
 #include <Resource.h>
 #include <Easing.h>
-#include <VictoryScene.h>
 
 #include <ParticleSystem.h>
-#include <SlayTheDragon.h>
 #include <ItemGold.h>
 #include <Cloud.h>
 #include <RenderSurface.h>
@@ -452,7 +452,16 @@ void PuppetScene::update(Step * _step){
 		}
     }
     PuppetGame * pg = static_cast<PuppetGame *>(game);
-    if (keyboard->keyJustUp(GLFW_KEY_8)){
+    if (keyboard->keyJustUp(GLFW_KEY_7)){
+        if (game->currentSceneKey != "Fight Your Friends"){
+            pg->puppetControllers.at(0)->unassign();
+            pg->puppetControllers.at(1)->unassign();
+            pg->puppetControllers.at(2)->unassign();
+            pg->puppetControllers.at(3)->unassign();
+            game->scenes.insert(std::make_pair("Fight Your Friends", new FightYourFriends((PuppetGame *)game)));
+            complete("Fight Your Friends");
+        }
+    }else if (keyboard->keyJustUp(GLFW_KEY_8)){
         if (game->currentSceneKey != "Raid The Castle"){
             pg->puppetControllers.at(0)->unassign();
             pg->puppetControllers.at(1)->unassign();
