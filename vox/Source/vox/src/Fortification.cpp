@@ -52,10 +52,9 @@ Fortification::Fortification(Box2DWorld* _world, int16 _categoryBits, int16 _mas
 	
 	SpriteSheetAnimation * spriteSheet = new SpriteSheetAnimation(SlayTheDragonResourceManager::fortificationSpriteSheet, 0);
 
-	spriteSheet->pushFramesInRange(0, 3, 1024, 187, 1024);
+	spriteSheet->pushFramesInRange(0, 3, 1024, 188, 1024);
 	rootComponent->addAnimation("fortStates", spriteSheet, true);
 	rootComponent->mesh->uvEdgeMode = GL_MIRRORED_REPEAT_ARB;
-
 }
 
 void Fortification::takeDamage(float _damage){
