@@ -5,6 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "PerspectiveCamera.h"
+#include <Rectangle.h>
 
 class Mouse;
 class ShiftKiddie;
@@ -60,4 +61,7 @@ public:
 	float minimumZoom;
 
 	float targetZoom;
+
+	bool useBounds;
+	vox::Rectangle minBounds;
 };

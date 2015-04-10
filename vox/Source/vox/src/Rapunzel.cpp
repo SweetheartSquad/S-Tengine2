@@ -43,7 +43,7 @@
 #include <StructureGoldPile.h>
 
 Rapunzel::Rapunzel(PuppetGame* _game):
-	PuppetScene(_game, 50.f, 100.f),
+	PuppetScene(_game, 50.f, 68.f),
 	tower(new Box2DSprite(world, RapunzelResourceManager::towerTower, b2_staticBody, false, nullptr, new Transform(), 0.03f)),
 	castleCatwalk(new Box2DSprite(world, RapunzelResourceManager::towerCatwalk, b2_staticBody, false, nullptr, new Transform(), 0.03f)),
 	playerCharacter1(new PuppetCharacterThief(false, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
@@ -197,6 +197,12 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	goldPile->rootComponent->transform->scale(10.0f, 10.0f, 1.0f);
 	gameCam->addTarget(goldPile);
 	playRandomBackgroundMusic();
+	
+	gameCam->useBounds = true;
+	gameCam->minBounds.x = 23;
+	gameCam->minBounds.y = -10;
+	gameCam->minBounds.height = sceneHeight;
+	gameCam->minBounds.width = sceneWidth;
 }
 
 Rapunzel::~Rapunzel(){

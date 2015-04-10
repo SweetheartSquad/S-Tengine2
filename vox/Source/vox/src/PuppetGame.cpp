@@ -1,6 +1,7 @@
 #include "PuppetGame.h"
 #include "RaidTheCastle.h"
 #include <SlayTheDragon.h>
+#include <FightYourFriends.h>
 #include <StartupScene.h>
 #include <Rapunzel.h>
 
@@ -70,7 +71,7 @@ void PuppetGame::draw(){
 void PuppetGame::loadRandomScene(){
 	int r;
 	do{
-		r = vox::NumberUtils::randomInt(0, 2);
+		r = vox::NumberUtils::randomInt(0, 3);
 	}while(r == lastScene);
 
 	switch(r) {
@@ -85,6 +86,10 @@ void PuppetGame::loadRandomScene(){
 	case 2:
 		scenes.insert(std::make_pair("Slay The Dragon", new SlayTheDragon(this)));
 		switchScene("Slay The Dragon", true);
+		break;
+	case 3:
+		scenes.insert(std::make_pair("Fight Your Friends", new FightYourFriends(this)));
+		switchScene("Fight Your Friends", true);
 		break;
 	}
 	lastScene = r;

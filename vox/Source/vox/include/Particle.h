@@ -11,6 +11,9 @@ public:
 	float * prop;
     bool alive;
 
+	float startSize;
+	float deltaSize;
+
     explicit Particle(Box2DWorld * _world, TextureSampler * _texture = nullptr, Transform * _transform = new Transform());
     ~Particle();
 

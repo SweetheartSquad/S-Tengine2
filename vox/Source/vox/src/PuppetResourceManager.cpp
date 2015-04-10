@@ -6,6 +6,7 @@
 #include <RaidTheCastleResourceManager.h>
 #include <RapunzelResourceManager.h>
 #include <SlayTheDragonResourceManager.h>
+#include <FightYourFriendsResourceManager.h>
 #include <SoundManager.h>
 #include <TextureSampler.h>
 #include <NumberUtils.h>
@@ -73,6 +74,7 @@ void PuppetResourceManager::init(){
 	RaidTheCastleResourceManager::init();
 	RapunzelResourceManager::init();
 	SlayTheDragonResourceManager::init();
+	FightYourFriendsResourceManager::init();
 	
 	resources.push_back(startupSplash);
 	resources.push_back(blank);

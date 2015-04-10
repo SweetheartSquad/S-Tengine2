@@ -13,9 +13,6 @@ class ItemGold;
 
 class Rapunzel : public PuppetScene{
 public:
-
-	MeshEntity * sky;
-	
 	Box2DSprite * castleCatwalk;
 	Box2DSprite * tower;
 

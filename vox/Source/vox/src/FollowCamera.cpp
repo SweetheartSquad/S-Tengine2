@@ -17,7 +17,9 @@ FollowCamera::FollowCamera(float _buffer, glm::vec3 _offset, float _deadZoneX, f
 	deadZoneX(_deadZoneX),
 	deadZoneY(_deadZoneY),
 	deadZoneZ(_deadZoneZ),
-	minimumZoom(10)
+	minimumZoom(10),
+	minBounds(0,0,0,0),
+	useBounds(false)
 {
 }
 
@@ -69,8 +71,49 @@ void FollowCamera::update(Step * _step){
 
 	float screenWidth = targetMaxX - targetMinX;
 	float screenHeight = targetMaxY - targetMinY;
+	
+	//glm::vec3 oldLookAt = lookAtSpot;
 
-	// account for FoV (the camera FoV seems to be vertical, so if the screen w > screen h, we need to take the h / the intended aspect ratio)
+	// move camera
+	lookAtSpot.x = targetMinX;// + screenWidth * 0.5f;
+	lookAtSpot.y = targetMinY;// + screenHeight* 0.5f;
+	
+	lookAtSpot += offset;
+	
+	if(useBounds){
+		if(lookAtSpot.x < minBounds.x){
+			lookAtSpot.x = minBounds.x;
+		}
+	
+		if(lookAtSpot.x + screenWidth > minBounds.x + minBounds.width){
+			lookAtSpot.x -= (lookAtSpot.x + screenWidth - (minBounds.x + minBounds.width));
+		}
+	
+		if(lookAtSpot.x < minBounds.x){
+			screenWidth -= minBounds.x - lookAtSpot.x;
+			lookAtSpot.x = minBounds.x;
+		}
+	
+		//
+		if(lookAtSpot.y < minBounds.y){
+			lookAtSpot.y = minBounds.y;
+		}
+	
+		if(lookAtSpot.y + screenHeight > minBounds.x + minBounds.height){
+			lookAtSpot.y -= (lookAtSpot.y + screenHeight - (minBounds.y + minBounds.height));
+		}
+	
+		if(lookAtSpot.y < minBounds.y){
+			screenHeight -= minBounds.y - lookAtSpot.y;
+			lookAtSpot.y = minBounds.y;
+		}
+	}
+
+	lookAtSpot.x += screenWidth * 0.5f;
+	lookAtSpot.y += screenHeight * 0.5f;
+
+	
+	// calculate zoom and account for FoV (the camera FoV seems to be vertical, so if the screen w > screen h, we need to take the h / the intended aspect ratio)
 	float ar1 = screenWidth/screenHeight;
 	Dimension screenDimensions = vox::getScreenDimensions();
 	float ar2 = static_cast<float>(screenDimensions.width)/static_cast<float>(screenDimensions.height);
@@ -84,14 +127,7 @@ void FollowCamera::update(Step * _step){
 	}
 
 	float dist = zoom / (tan(glm::radians(fieldOfView) * 0.5f) * 2.f);
-	
-	glm::vec3 oldLookAt = lookAtSpot;
 
-	// move camera
-	lookAtSpot.x = targetMinX + screenWidth * 0.5f;
-	lookAtSpot.y = targetMinY + screenHeight* 0.5f;
-	
-	lookAtSpot += offset;
 
 	transform->translate(lookAtSpot.x, lookAtSpot.y, dist, false);
 	transform->translate(offset);

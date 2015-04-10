@@ -40,6 +40,6 @@ float vox::Rectangle::getPerimeter(){
 bool vox::Rectangle::intersects(vox::Rectangle _rect){
 	return (getTopLeft().x > _rect.getTopRight().x && 
 		    getTopRight().x < _rect.getTopLeft().x &&
-			getTopLeft().y  >_rect.getBottomRight().y && 
+			getTopLeft().y >_rect.getBottomRight().y && 
 			getBottomRight().y < _rect.getTopLeft().y);
 }

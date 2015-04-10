@@ -431,8 +431,13 @@ void PuppetCharacter::update(Step* _step){
 	// spray some particles to show score
 	if(lastUpdateScore < score){
 		lastUpdateScore += 1;
-		Particle * p = ps->particleSystem->addParticle(rootComponent->getPos(false), PuppetResourceManager::getRandomScoreParticles());
-		p->applyLinearImpulse(vox::NumberUtils::randomFloat(-250, 250), vox::NumberUtils::randomFloat(500, 750), p->body->GetPosition().x, p->body->GetPosition().y);
+		if(scoreIndicator != nullptr){
+			Particle * p = ps->particleSystem->addParticle(scoreIndicator->getPos(false), PuppetResourceManager::getRandomScoreParticles());
+			p->transform->scale(0.1f, 0.1f, 1.f);
+			p->startSize = 0.1f;
+			p->deltaSize = -0.1f;
+			p->applyLinearImpulse(vox::NumberUtils::randomFloat(-0.1, 0.1), vox::NumberUtils::randomFloat(420, 430), p->body->GetPosition().x, p->body->GetPosition().y);
+		}
 	}
 
 	if(indicator != nullptr){
