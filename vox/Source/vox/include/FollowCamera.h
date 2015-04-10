@@ -8,6 +8,15 @@
 
 class Mouse;
 class ShiftKiddie;
+
+
+struct Target{
+	glm::vec3 pos;
+	ShiftKiddie * target;
+	float weight;
+	bool active;
+};
+
 /****************************
 *
 * A perspective camera class that will automatically move to frame a list of targets
@@ -29,13 +38,12 @@ public:
 	*/
 	glm::mat4 getViewMatrix() override;
 	
-	void addTarget(ShiftKiddie * _target);
+	void addTarget(ShiftKiddie * _target, float _weight = 0.f);
 	void removeTarget(ShiftKiddie * _target);
 	bool hasTarget(ShiftKiddie * _target);
 
 	// Things to follow
-	std::vector<ShiftKiddie *> targets;
-	std::vector<glm::vec3> interpolators;
+	std::vector<Target> targets;
 	
 	// How much extra space is given around targets
 	float buffer;

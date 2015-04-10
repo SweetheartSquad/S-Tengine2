@@ -174,7 +174,6 @@ void RaidTheCastle::update(Step* _step){
 	if(castle->state == Castle::state_t::kDEAD){
 		if(gameCam->targets.size() != 1){
 			gameCam->targets.clear();
-			gameCam->interpolators.clear();
 			gameCam->addTarget(castle->rootComponent);
 		}
 		

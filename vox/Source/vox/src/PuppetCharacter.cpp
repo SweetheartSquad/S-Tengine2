@@ -388,6 +388,14 @@ void PuppetCharacter::update(Step* _step){
 		}
 	//	rootComponent->setTranslationPhysical(rootComponent->body->GetPosition().x, ghostPosition, rootComponent->transform->getTranslationVector().z);
 		rootComponent->body->ApplyForce(b2Vec2(-bodAngle * 50.0f, 0), rootComponent->body->GetWorldCenter(), true);
+
+		float t = rootComponent->body->GetAngle();
+		b2Vec2 p = rootComponent->body->GetWorldPoint(b2Vec2(0, 1));
+		if(rootComponent->body->GetAngle() > 0){
+			rootComponent->body->SetLinearVelocity(b2Vec2(-10*(1-cos(t)), rootComponent->body->GetLinearVelocity().y));
+		}else{
+			rootComponent->body->SetLinearVelocity(b2Vec2(10*(1-cos(t)), rootComponent->body->GetLinearVelocity().y));
+		}
 	}
 	behaviourManager->update(_step);
 
@@ -445,7 +453,6 @@ void PuppetCharacter::update(Step* _step){
 void PuppetCharacter::jump(){
 	if(canJump){
 		//PuppetResourceManager::jumpSounds->playRandomSound();
-		//PuppetResourceManager::jumpSounds->playRandomSound();
 		float t = rootComponent->body->GetAngle();
 		b2Vec2 p = rootComponent->body->GetWorldPoint(b2Vec2(0, 1));
 		rootComponent->applyLinearImpulseUp(6000.f *(cos(t)*0.5f + 0.5f));
@@ -455,7 +462,6 @@ void PuppetCharacter::jump(){
 			rootComponent->body->SetLinearVelocity(b2Vec2(80*(1-cos(t)), rootComponent->body->GetLinearVelocity().y));
 		}
 	}
-	//canJump = false;
 }
 
 void PuppetCharacter::action(bool _forceDrop){
@@ -538,7 +544,7 @@ void PuppetCharacter::takeDamage(float _damage){
 
 void PuppetCharacter::unload(){
 	Box2DSuperSprite::unload();
-
+	
 	if(indicator != nullptr){
 		indicator->unload();
 	}
@@ -549,7 +555,7 @@ void PuppetCharacter::unload(){
 
 void PuppetCharacter::load(){
 	Box2DSuperSprite::load();
-
+	
 	if(indicator != nullptr){
 		indicator->load();
 	}

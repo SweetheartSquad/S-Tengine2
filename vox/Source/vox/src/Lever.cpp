@@ -138,7 +138,7 @@ void Lever::actuallyInteract(){
 		g->addToLayeredScene(ps, 1);
 		ps->addChild(g, 1);
 		g->setShader(ps->shader, true);
-		g->translateComponents(towerPos + glm::vec3(-1.f, -1.f, 0.f));
+		g->translateComponents(towerPos + glm::vec3(-1.f, 2.f, 0.f));
 
 		TextureSampler * weaponTex = PuppetResourceManager::getRandomMeleeWeapon();
 		PuppetScene * ps = static_cast<PuppetScene *>(scene);
