@@ -44,31 +44,27 @@ void FollowCamera::update(Step * _step){
 	float targetMaxX = -9999999999.f;
 	float targetMaxY = -9999999999.f;
 	
-	for(ShiftKiddie * nt : targets){
-		glm::vec3 pos = nt->getPos(false);
-		//lookAtSpot += pos;
-		targetMinX = std::min(pos.x-buffer, targetMinX);
-		targetMaxX = std::max(pos.x+buffer, targetMaxX);
-		targetMinY = std::min(pos.y-buffer, targetMinY);
-		targetMaxY = std::max(pos.y+buffer, targetMaxY);
+	for(signed long int i = targets.size()-1; i >= 0; --i){
+		if(!targets.at(i).active){
+			if(targets.at(i).weight <= 0.001f){
+				targets.erase(targets.begin() + i);
+			}
+		}else{
+			targets.at(i).pos = targets.at(i).target->getPos(false);
+		}
 	}
 
-	for(signed long int i = interpolators.size()-1; i > 0; --i){
-		if(i < targets.size()){
-			interpolators.at(i) += (targets.at(i)->getPos(false) - interpolators.at(i))*1.f;
-		}else{
-			interpolators.at(i) += (transform->getTranslationVector() - interpolators.at(i))*0.01f;
-		}
+	for(Target & t : targets){
+		targetMinX = std::min((t.pos.x-buffer)*t.weight, targetMinX);
+		targetMaxX = std::max((t.pos.x+buffer)*t.weight, targetMaxX);
+		targetMinY = std::min((t.pos.y-buffer)*t.weight, targetMinY);
+		targetMaxY = std::max((t.pos.y+buffer)*t.weight, targetMaxY);
 
-		glm::vec3 pos = interpolators.at(i);
-		if(glm::distance(pos, transform->getTranslationVector()) < 1){
-			interpolators.erase(interpolators.begin() + i);
-			continue;
+		if(t.active){
+			t.weight = std::min(1.f, t.weight + 0.05f);
+		}else{
+			t.weight = std::max(0.f, t.weight - 0.01f);
 		}
-		targetMinX = std::min(pos.x-buffer, targetMinX);
-		targetMaxX = std::max(pos.x+buffer, targetMaxX);
-		targetMinY = std::min(pos.y-buffer, targetMinY);
-		targetMaxY = std::max(pos.y+buffer, targetMaxY);
 	}
 
 	float screenWidth = targetMaxX - targetMinX;
@@ -91,37 +87,43 @@ void FollowCamera::update(Step * _step){
 	
 	glm::vec3 oldLookAt = lookAtSpot;
 
-
 	// move camera
 	lookAtSpot.x = targetMinX + screenWidth * 0.5f;
 	lookAtSpot.y = targetMinY + screenHeight* 0.5f;
 	
+	lookAtSpot += offset;
+
 	transform->translate(lookAtSpot.x, lookAtSpot.y, dist, false);
+	transform->translate(offset);
 }
 
 glm::mat4 FollowCamera::getViewMatrix(){
 	return glm::lookAt(
-		offset + transform->getTranslationVector(),	// Camera is here
-		offset + lookAtSpot, // and looks here : at the same position, plus "direction"
+		/*offset + */transform->getTranslationVector(),	// Camera is here
+		/*offset + */lookAtSpot, // and looks here : at the same position, plus "direction"
 		upVectorRotated				// Head is up (set to 0,-1,0 to look upside-down)
 		);
 }
 
-void FollowCamera::addTarget(ShiftKiddie * _target){
-	targets.push_back(_target);
-	interpolators.push_back(glm::vec3(transform->getTranslationVector()));
+void FollowCamera::addTarget(ShiftKiddie * _target, float _weight){
+	Target t;
+	t.target = _target;
+	t.weight = _weight;
+	t.active = true;
+	targets.push_back(t);
 }
 void FollowCamera::removeTarget(ShiftKiddie * _target){
 	for(signed long int i = targets.size()-1; i >= 0; --i){
-		if(targets.at(i) == _target){
-			targets.erase(targets.begin() + i);
+		if(targets.at(i).target == _target){
+			//targets.erase(targets.begin() + i);
+			targets.at(i).active = false;
 		}
 	}
 }
 
 bool FollowCamera::hasTarget(ShiftKiddie * _target){
-	for(ShiftKiddie * sk : targets){
-		if(sk == _target){
+	for(Target & t : targets){
+		if(t.target == _target){
 			return true;
 		}
 	}
