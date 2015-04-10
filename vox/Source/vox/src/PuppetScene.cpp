@@ -629,6 +629,9 @@ void PuppetScene::playRandomBackgroundMusic(){
 }
 
 void PuppetScene::populateBackground(){
+	addChild(stageFloor, 0);
+	addChild(stageFront, 0);
+
 	stageFloor->setShader(shader, true);
 	stageFloor->transform->scale(1000, 100, 100);
 	stageFloor->transform->translate(50.f / 2.f, 0, -15.f / 2.f);
@@ -685,8 +688,6 @@ void PuppetScene::populateBackground(){
 			addChild(randomGround, 0);
 		}
 	}
-	addChild(stageFloor, 0);
-	addChild(stageFront, 0);
 }
 
 void PuppetScene::populateClouds(){
