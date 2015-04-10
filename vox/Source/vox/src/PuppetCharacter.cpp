@@ -542,6 +542,9 @@ void PuppetCharacter::unload(){
 	if(indicator != nullptr){
 		indicator->unload();
 	}
+	if(scoreIndicator != nullptr){
+		scoreIndicator->unload();
+	}
 }
 
 void PuppetCharacter::load(){
@@ -549,6 +552,9 @@ void PuppetCharacter::load(){
 
 	if(indicator != nullptr){
 		indicator->load();
+	}
+	if(scoreIndicator != nullptr){
+		scoreIndicator->load();
 	}
 }
 
