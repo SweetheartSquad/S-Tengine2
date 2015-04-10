@@ -23,9 +23,7 @@ PuppetCharacterGuard::PuppetCharacterGuard(bool _ai, Box2DWorld * _world, int16 
 	NodeChild(nullptr)
 {
 	//itemHolder = armLeft;
-
-
-	behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(-40, 0, 0), glm::vec3(0.f, 0, 0), this, 10));
+	behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(0, 0, 0), glm::vec3(70.f, 0, 0), this, 10));
 	behaviourManager->addBehaviour(new BehaviourAttack(this, 3, PuppetGame::kPLAYER));
 }
 
