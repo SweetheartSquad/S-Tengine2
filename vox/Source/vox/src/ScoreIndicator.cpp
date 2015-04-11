@@ -16,7 +16,7 @@ ScoreIndicator::ScoreIndicator(unsigned long int _id) :
 {
 	float scale = 100;
 	transform->scale(scale, scale, 1);
-	transform->translate(-(id+0.5f) * 1920.f*0.25f, scale*1.1f, 10.f);
+	transform->translate((3.5f-id) * 1920.f*0.25f, scale*1.1f, 10.f);
 	//scoreIndicator->transform->rotate(90, 0, 1, 0, kOBJECT);
 	mesh->pushTexture2D(PuppetResourceManager::scoreIndicators.at(id)->texture);
 }

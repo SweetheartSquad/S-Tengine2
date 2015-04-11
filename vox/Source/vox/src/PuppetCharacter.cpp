@@ -277,10 +277,10 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 	}else if(id == 1){
 		newHue = 0.3056f;
 	}else if(id == 2){
-		newHue = 0.64;
+		newHue = 0.64f;
 		newSat = sat +0.55f;
 	}else if(id == 3){
-		newHue = 0;
+		newHue = 0.f;
 	}
 	if(ai){
 		newSat = 0.f;
