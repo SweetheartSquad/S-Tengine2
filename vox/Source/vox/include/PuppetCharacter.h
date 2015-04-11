@@ -12,6 +12,8 @@ class Box2DWorld;
 class Item;
 class BehaviourManager;
 class Sprite;
+class PuppetScene;
+class ScoreIndicator;
 
 class PuppetCharacter : public Box2DSuperSprite {
 public:
@@ -47,7 +49,7 @@ public:
 	Box2DSprite * headgear;
 	Box2DSprite * itemHolder;
 	Box2DSprite * indicator;
-	Sprite * scoreIndicator;
+	ScoreIndicator * scoreIndicator;
 
 	std::vector<PuppetGame::BOX2D_CATEGORY> collisionTypes;
 
@@ -56,7 +58,7 @@ public:
 	void init();
 	PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	~PuppetCharacter();
-	virtual PuppetCharacter * clone(Box2DWorld * _world);
+	virtual PuppetCharacter * clone(Box2DWorld * _world, PuppetScene * _scene);
 
 	void createIndicator(signed long int _id);
 

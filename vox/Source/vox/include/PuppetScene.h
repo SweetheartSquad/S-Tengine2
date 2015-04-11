@@ -87,7 +87,7 @@ public:
 	StandardFrameBuffer * screenFBO;
 	float screenShaderSetting;
 
-	explicit PuppetScene(PuppetGame * _game, float time, float _width = 170.f, float _height = 50.f, float _size = 3.f);
+	explicit PuppetScene(PuppetGame * _game, float time, float _width = 170.f, float _height = 50.f, float _size = 100.f);
 	virtual ~PuppetScene();
 
 	virtual void load() override;

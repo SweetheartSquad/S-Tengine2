@@ -74,8 +74,9 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 	world->b2world->CreateJoint(&lhlej);
 }
 
-PuppetCharacter * PuppetCharacterDragon::clone(Box2DWorld * _world){
+PuppetCharacter * PuppetCharacterDragon::clone(Box2DWorld * _world, PuppetScene * _scene){
 	PuppetCharacterDragon * res = new PuppetCharacterDragon(ai, _world, categoryBits, maskBits, groupIndex);
+	res->scene = _scene;
 	res->id = id;
 	res->score = score;
 	res->altitude = -1;
@@ -91,12 +92,14 @@ PuppetCharacterDragon::~PuppetCharacterDragon(){
 }
 
 void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	ShaderComponentHsv * hsvShader = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(getShader())->components.at(1));
+	ShaderComponentTint * tintShader = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(getShader())->components.at(2));
 	// save the current shader settings
-	float hue = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->getHue();
-	float sat = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->getSaturation();
-	float red = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->getRed();
-	float green = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->getGreen();
-	float blue = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->getBlue();
+	float hue = hsvShader->getHue();
+	float sat = hsvShader->getSaturation();
+	float red = tintShader->getRed();
+	float green = tintShader->getGreen();
+	float blue = tintShader->getBlue();
 	
 	
 	float newHue = hue, newSat = sat;
@@ -106,7 +109,7 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	}else if(id == 1){
 		newHue = 0.3056f;
 	}else if(id == 2){
-		newHue = 0.64;
+		newHue = 0.64f;
 		newSat = sat +0.55f;
 	}else if(id == 3){
 		newHue = 0;
@@ -115,13 +118,13 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 		newSat = 0.f;
 	}
 
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setRed(red + (1 - control) * 3);
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setGreen(green - (1 - control) * 3);
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue - (1 - control) * 3);
+	tintShader->setRed(red + (1 - control) * 3);
+	tintShader->setGreen(green - (1 - control) * 3);
+	tintShader->setBlue(blue - (1 - control) * 3);
 
 	// change the shader settings based on current damage and player id
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(newHue);
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(newSat);
+	hsvShader->setHue(newHue);
+	hsvShader->setSaturation(newSat);
 
 	// lower wing behind upper wing
 	handLeft->render(_matrixStack, _renderOptions);
@@ -134,12 +137,12 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 	//face->render(_matrixStack, _renderOptions);
 
 	// revert the shader settings
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(hue);
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat);
+	hsvShader->setHue(hue);
+	hsvShader->setSaturation(sat);
 	
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setRed(red);
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setGreen(green);
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue);
+	tintShader->setRed(red);
+	tintShader->setGreen(green);
+	tintShader->setBlue(blue);
 
 	fireParticles->setShader(getShader(), true);
 	fireParticles->render(_matrixStack, _renderOptions);
@@ -149,29 +152,26 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
     }
 
 	// render head on top
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setRed(red + (1 - control) * 3);
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setGreen(green - (1 - control) * 3);
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue - (1 - control) * 3);
+	tintShader->setRed(red + (1 - control) * 3);
+	tintShader->setGreen(green - (1 - control) * 3);
+	tintShader->setBlue(blue - (1 - control) * 3);
 
 	// change the shader settings based on current damage and player id
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(newHue);
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(newSat);
+	hsvShader->setHue(newHue);
+	hsvShader->setSaturation(newSat);
 	
 	headgear->render(_matrixStack, _renderOptions);
 	if (indicator != nullptr){
 		indicator->render(_matrixStack, _renderOptions);
 	}
-	if (scoreIndicator != nullptr){
-		scoreIndicator->render(_matrixStack, _renderOptions);
-	}
 
 	// revert the shader settings
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(hue);
-	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat);
+	hsvShader->setHue(hue);
+	hsvShader->setSaturation(sat);
 	
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setRed(red);
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setGreen(green);
-	static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(2))->setBlue(blue);
+	tintShader->setRed(red);
+	tintShader->setGreen(green);
+	tintShader->setBlue(blue);
 }
 
 void PuppetCharacterDragon::update(Step * _step){

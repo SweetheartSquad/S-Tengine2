@@ -79,39 +79,40 @@ void FollowCamera::update(Step * _step){
 	lookAtSpot.y = targetMinY;// + screenHeight* 0.5f;
 	
 	lookAtSpot += offset;
+
+
+	//std::cout << lookAtSpot.x << " " << screenWidth << std::endl;
 	
 	if(useBounds){
-		if(lookAtSpot.x < minBounds.x){
-			lookAtSpot.x = minBounds.x;
+		if(minBounds.height != 0){
+			if(lookAtSpot.y < minBounds.y){
+				lookAtSpot.y = minBounds.y;
+			}
+			if(lookAtSpot.y + screenHeight > minBounds.x + minBounds.height){
+				lookAtSpot.y -= (lookAtSpot.y + screenHeight - (minBounds.y + minBounds.height));
+			}
+			if(lookAtSpot.y < minBounds.y){
+				screenHeight -= minBounds.y - lookAtSpot.y;
+				lookAtSpot.y = minBounds.y;
+			}
 		}
-	
-		if(lookAtSpot.x + screenWidth > minBounds.x + minBounds.width){
-			lookAtSpot.x -= (lookAtSpot.x + screenWidth - (minBounds.x + minBounds.width));
-		}
-	
-		if(lookAtSpot.x < minBounds.x){
-			screenWidth -= minBounds.x - lookAtSpot.x;
-			lookAtSpot.x = minBounds.x;
-		}
-	
 		//
-		if(lookAtSpot.y < minBounds.y){
-			lookAtSpot.y = minBounds.y;
-		}
-	
-		if(lookAtSpot.y + screenHeight > minBounds.x + minBounds.height){
-			lookAtSpot.y -= (lookAtSpot.y + screenHeight - (minBounds.y + minBounds.height));
-		}
-	
-		if(lookAtSpot.y < minBounds.y){
-			screenHeight -= minBounds.y - lookAtSpot.y;
-			lookAtSpot.y = minBounds.y;
+		if(minBounds.width != 0){
+			if(lookAtSpot.x < minBounds.x){
+				lookAtSpot.x = minBounds.x;
+			}
+			if(lookAtSpot.x + screenWidth > minBounds.x + minBounds.width){
+				lookAtSpot.x -= (lookAtSpot.x + screenWidth - (minBounds.x + minBounds.width));
+			}
+			if(lookAtSpot.x < minBounds.x){
+				screenWidth -= minBounds.x - lookAtSpot.x;
+				lookAtSpot.x = minBounds.x;
+			}
 		}
 	}
 
-	lookAtSpot.x += screenWidth * 0.5f;
-	lookAtSpot.y += screenHeight * 0.5f;
 
+	//std::cout << lookAtSpot.x << " " << screenWidth << std::endl << std::endl;
 	
 	// calculate zoom and account for FoV (the camera FoV seems to be vertical, so if the screen w > screen h, we need to take the h / the intended aspect ratio)
 	float ar1 = screenWidth/screenHeight;
@@ -125,6 +126,11 @@ void FollowCamera::update(Step * _step){
 	}else{
 		zoom = std::max(minimumZoom, screenHeight);
 	}
+
+	lookAtSpot.x += screenWidth * 0.5f;
+	lookAtSpot.y += screenHeight * 0.5f;
+
+	//std::cout << lookAtSpot.x << " " << screenWidth << std::endl << std::endl;
 
 	float dist = zoom / (tan(glm::radians(fieldOfView) * 0.5f) * 2.f);
 

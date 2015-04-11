@@ -27,8 +27,8 @@ void Particle::update(Step * _step){
         alive = false;
 	}else{
 		glm::vec3 sv = transform->getScaleVector();
-		sv.x = Easing::easeInOutCubic(age, startSize, deltaSize, life);//1.f - age / life;
-		sv.y = sv.x;
+		sv.x = -Easing::none(age, startSize, deltaSize, life);//1.f - age / life;
+		sv.y = -sv.x;
 		transform->scale(sv, false);
 	}
 }

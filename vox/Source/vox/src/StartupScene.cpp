@@ -13,10 +13,9 @@ StartupScene::StartupScene(PuppetGame * _game) :
 	PuppetScene(_game, 20.f)
 {
 	splashMessage = new Sprite(nullptr, new Transform());
-	splashMessage->transform->scale(glm::vec3(3, 3, 0));
 	splashMessage->mesh->pushTexture2D(PuppetResourceManager::startupSplash);
 	splashMessage->setShader(shader, true);
-	splashMessage->transform->scale(-1, 1, 1);
+	splashMessage->transform->translate(1920.f*0.5, 1080.f*0.5f, 0);
 
 	populateBackground();
 }

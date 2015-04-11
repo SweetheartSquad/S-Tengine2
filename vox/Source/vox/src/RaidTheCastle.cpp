@@ -54,10 +54,9 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	TextureSampler * splashMessageTextureSampler = RaidTheCastleResourceManager::splashMessage;
 	splashMessage = new Sprite(nullptr, new Transform());
-	splashMessage->transform->scale(glm::vec3(3, 3, 0));
 	splashMessage->mesh->pushTexture2D(splashMessageTextureSampler->texture);
 	splashMessage->setShader(shader, true);
-	splashMessage->transform->scale(-1, 1, 1);
+	splashMessage->transform->translate(1920.f*0.5, 1080.f*0.5f, 0);
 
 	players.push_back(playerCharacter1);
 	players.push_back(playerCharacter2);
@@ -148,6 +147,12 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	catapult->prepare();
 
 	populateClouds();
+
+	gameCam->useBounds = true;
+	gameCam->minBounds.x = 0;
+	gameCam->minBounds.width = sceneWidth;
+	gameCam->minBounds.y = 0;
+	gameCam->minBounds.height = sceneHeight;
 }
 
 RaidTheCastle::~RaidTheCastle(){

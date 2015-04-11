@@ -72,8 +72,8 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(nullptr),
-	stageFloor(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFloor.vox"))),
-	stageFront(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFront.vox"))),
+	stageFloor(nullptr),
+	stageFront(nullptr),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager(-1)),
@@ -110,41 +110,55 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	backgroundSoundManager->addNewSound("2", "../assets/hurly-burly/audio/songs/FastSong.ogg");
 	backgroundSoundManager->addNewSound("3", "../assets/hurly-burly/audio/songs/MelodicaSong.ogg");
 
-	background->setShader(shader, true);
-	background->transform->translate(0.0f, 50.f, -15.f/2.f);
-	background->transform->scale(125 * 5, 50, 1);
-	background->mesh->pushTexture2D(PuppetResourceManager::sky);
-	background->mesh->uvEdgeMode = GL_MIRRORED_REPEAT_ARB;
-	background->mesh->dirty = true;
 	
+
+	
+	Sprite * curtain = new Sprite();
+	float scale = 100;
+	curtain->transform->translate(sceneWidth - 29, 1, 5);
+	curtain->transform->scale(30, sceneHeight, 1);
+	curtain->mesh->pushTexture2D(PuppetResourceManager::stageCurtain->texture);
+	curtain->setShader(shader, true);
+	addChild(curtain, 2);
+	
+	curtain = new Sprite();
+	curtain->transform->translate(29, 1, 5);
+	curtain->transform->scale(-30, sceneHeight, 1);
+	curtain->mesh->pushTexture2D(PuppetResourceManager::stageCurtain->texture);
+	curtain->setShader(shader, true);
+	addChild(curtain, 2);
+
+
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 
-	boundaries.at(0)->transform->scale(_size, sceneHeight/2.f, _size);
-	boundaries.at(1)->transform->scale(_size, sceneHeight/2.f, _size);
-	boundaries.at(2)->transform->scale(sceneWidth/2.f, _size, _size);
-	boundaries.at(3)->transform->scale(sceneWidth/2.f, _size, _size);
+	boundaries.at(0)->transform->scale(_size, sceneHeight*0.5f + _size*2.f, _size);
+	boundaries.at(1)->transform->scale(_size, sceneHeight*0.5f + _size*2.f, _size);
+	boundaries.at(2)->transform->scale(sceneWidth*0.5f + _size*2.f, _size, _size);
+	boundaries.at(3)->transform->scale(sceneWidth*0.5f + _size*2.f, _size, _size);
 
-	boundaries.at(0)->setTranslationPhysical(sceneWidth, sceneHeight/2.f, 0);
-	boundaries.at(1)->setTranslationPhysical(0, sceneHeight/2.f, 0);
-	boundaries.at(2)->setTranslationPhysical(sceneWidth/2.f, sceneHeight-_size, 0);
-	boundaries.at(3)->setTranslationPhysical(sceneWidth/2.f, -_size, 0);
+	boundaries.at(0)->setTranslationPhysical(sceneWidth+_size, sceneHeight*0.5f, 5);
+	boundaries.at(1)->setTranslationPhysical(-_size, sceneHeight*0.5f, 5);
+	boundaries.at(2)->setTranslationPhysical(sceneWidth*0.5f, sceneHeight+_size, 5);
+	boundaries.at(3)->setTranslationPhysical(sceneWidth*0.5f, -_size, 5);
 	
 	b2Filter sf;
 	sf.categoryBits = PuppetGame::kBOUNDARY;
 	sf.maskBits = -1;
 	for(auto b : boundaries){
-		addChild(b, 0);
+		addChild(b, 2);
 		b->setShader(shader, true);
 		world->addToWorld(b);
 		b->body->GetFixtureList()->SetFilterData(sf);
+		b->mesh->pushTexture2D(PuppetResourceManager::stageFront);
 	}
 	sf.categoryBits = PuppetGame::kBOUNDARY | PuppetGame::kGROUND;
 	boundaries.at(3)->body->GetFixtureList()->SetFilterData(sf);
 	boundaries.at(3)->body->GetFixtureList()->SetFriction(1);
 	boundaries.at(3)->body->GetFixtureList()->SetRestitution(0);
+
 
 	//ground->body->SetTransform(b2Vec2(0, -250), 0);
 	/*ground->mesh->vertices.at(0).z -= 250;
@@ -160,6 +174,14 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	ground->mesh->setUV(3, 40.0, 0.0);*/
 
 	//world->addToWorld(ground, 2);
+
+	
+	background->setShader(shader, true);
+	background->transform->translate(0.0f, 50.f, -15.f/2.f);
+	background->transform->scale(125 * 5, 50, 1);
+	background->mesh->pushTexture2D(PuppetResourceManager::sky);
+	background->mesh->uvEdgeMode = GL_MIRRORED_REPEAT_ARB;
+	background->mesh->dirty = true;
 
 	int timeOfDayOptions = PuppetResourceManager::sky->width;
 	int timeOfDay = std::rand()%timeOfDayOptions;
@@ -209,13 +231,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	Sprite * countDown4 = new Sprite(nullptr, new Transform());
 	Sprite * countDown5 = new Sprite(nullptr, new Transform());
 	
-	countDown0->transform->scale(glm::vec3(3, 3, 0));
-	countDown1->transform->scale(glm::vec3(3, 3, 0));
-	countDown2->transform->scale(glm::vec3(3, 3, 0));
-	countDown3->transform->scale(glm::vec3(3, 3, 0));
-	countDown4->transform->scale(glm::vec3(3, 3, 0));
-	countDown5->transform->scale(glm::vec3(3, 3, 0));
-	
 	countDown0->mesh->pushTexture2D(PuppetResourceManager::countDown0->texture);
 	countDownWait->mesh->pushTexture2D(PuppetResourceManager::blank);
 	countDown1->mesh->pushTexture2D(PuppetResourceManager::countDown1->texture);
@@ -235,7 +250,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	
 	for(Sprite * n : countDownNumbers){
 		n->setShader(shader, true);
-		n->transform->scale(-1, 1, 1);
+		n->transform->translate(1920.f*0.5, 1080.f*0.5f, 0);
     }
 
     particleSystem = new ParticleSystem(PuppetResourceManager::dustParticle, world, 0, 0, 0);
@@ -370,27 +385,28 @@ void PuppetScene::update(Step * _step){
 				// the factor of 15 is only there because I can't load this thing at the correct size...
 				//float scale = Easing::easeOutBack(splashDuration - currentTime, 0, 10, splashDuration);
 				float easeTime = splashDuration - currentTime;
-				float scale = (easeTime < splashDuration / 2.f) ? Easing::easeOutCubic(easeTime, 0, 10, splashDuration / 2.f) : Easing::easeInElastic(easeTime - splashDuration / 2.f, 10, -10, splashDuration / 2.f);
-				splashMessage->transform->scale(glm::vec3(-scale, scale, 1), false);
+				float scale = (easeTime < splashDuration / 2.f) ? Easing::easeOutCubic(easeTime, 0, 1024, splashDuration / 2.f) : Easing::easeInElastic(easeTime - splashDuration / 2.f, 1024, -1024, splashDuration / 2.f);
+				splashMessage->transform->scale(glm::vec3(scale, scale, 1), false);
 			}else{
-				addChild(splashMessage, 2);
+				//addChild(splashMessage, 2);
+				addUIChild(splashMessage);
 				displayingSplash = true;
 			}
 
-			splashMessage->transform->translate(activeCamera->transform->getTranslationVector(), false);
-			splashMessage->transform->translate(glm::vec3(0,0,-10));
+			//splashMessage->transform->translate(activeCamera->transform->getTranslationVector(), false);
+			//splashMessage->transform->translate(glm::vec3(0,0,-10));
 		}else{
 			// Remove previous number from scene
-			removeChild(splashMessage);
+			removeUIChild(splashMessage);
 			delete splashMessage;
 			splashMessage = nullptr;
 		}
 	}
 
-	for(Sprite * n : countDownNumbers){
+	/*for(Sprite * n : countDownNumbers){
 		n->transform->translate(activeCamera->transform->getTranslationVector(), false);
 		n->transform->translate(glm::vec3(0,0,-10));
-	}
+	}*/
 	
 	// destroy used up items
 	for(signed long int i = items.size()-1; i >= 0; --i){
@@ -417,11 +433,11 @@ void PuppetScene::update(Step * _step){
 			if(countDown < countDownNumbers.size()){
 				float displayTime = fmod(currentTime, 1.f);
 				if(displayTime < 0.5f){
-					float scale = Easing::easeOutElastic(displayTime, 0.f, 5.f, 0.5f);
-					countDownNumbers.at(countDown)->transform->scale(glm::vec3(-scale, scale, 1.f), false);
+					float scale = Easing::easeOutElastic(displayTime, 0.f, 1024.f, 0.5f);
+					countDownNumbers.at(countDown)->transform->scale(glm::vec3(scale, scale, 1.f), false);
 				}else{
-					float scale = Easing::easeInCirc(displayTime-0.5f, 5.f, -5.f, 0.5f);
-					countDownNumbers.at(countDown)->transform->scale(glm::vec3(-scale, scale, 1.f), false);
+					float scale = Easing::easeInCirc(displayTime-0.5f, 1024.f, -1024.f, 0.5f);
+					countDownNumbers.at(countDown)->transform->scale(glm::vec3(scale, scale, 1.f), false);
 				}
 			}
 			if(currentTime > duration){
@@ -533,7 +549,7 @@ void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderO
 	screenFBO->bindFrameBuffer();
 	//render the scene to the buffer
 	LayeredScene::render(_matrixStack, _renderOptions);
-
+	
 	//Render the buffer to the render surface
 	screenSurface->render(screenFBO->getTextureId());
 }
@@ -611,7 +627,7 @@ void PuppetScene::doCountDown(){
 		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setSaturation(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getSaturation() - 0.15f);
 		//static_cast<ShaderComponentHsv *>(shader->components.at(1))->setValue(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getValue() + 0.2f);
 		
-		removeChild(countDownNumbers.back());
+		removeUIChild(countDownNumbers.back());
 		delete countDownNumbers.back();
 		countDownNumbers.pop_back();
 	}
@@ -629,7 +645,7 @@ void PuppetScene::doCountDown(){
 		countdownSoundManager->play(std::to_string(countDown));
 
 		// Add new number to scene
-		addChild(countDownNumbers.at(countDown), 2);
+		addUIChild(countDownNumbers.at(countDown));
 	}
 }
 
@@ -638,6 +654,9 @@ void PuppetScene::playRandomBackgroundMusic(){
 }
 
 void PuppetScene::populateBackground(){
+	stageFloor = new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFloor.vox"));
+	stageFront = new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFront.vox"));
+
 	addChild(stageFloor, 0);
 	addChild(stageFront, 0);
 

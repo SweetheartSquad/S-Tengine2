@@ -6,6 +6,7 @@
 #include "MatrixStack.h"
 #include "Entity.h"
 #include "Camera.h"
+#include <OrthographicCamera.h>
 
 LayeredScene::LayeredScene(Game * _game, unsigned long int _numLayers) :
 	Scene(_game),
@@ -63,6 +64,16 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 			e->render(matrixStack, renderOptions);
 		}
 	}
+	
+	
+	OrthographicCamera cam(-1920.f, 0, 0, 1080.f, -1000.f, 1000.f);
+	
+	matrixStack->setProjectionMatrix(cam.getProjectionMatrix());
+	matrixStack->setViewMatrix(cam.getViewMatrix());
+
+	for(Entity * e : uiLayer){
+		e->render(matrixStack, renderOptions);
+	}
 }
 
 void LayeredScene::addChild(Entity* _child){
@@ -76,6 +87,20 @@ void LayeredScene::removeChild(Entity* _child){
 			if(layer.at(j) == _child){
 				layer.erase(layer.begin() + j);
 			}
+		}
+	}
+}
+
+
+void LayeredScene::addUIChild(Entity* _child){
+	children.push_back(_child);
+	uiLayer.push_back(_child);
+}
+void LayeredScene::removeUIChild(Entity* _child){
+	Scene::removeChild(_child);
+	for(signed long int j = uiLayer.size()-1; j >= 0; --j){
+		if(uiLayer.at(j) == _child){
+			uiLayer.erase(uiLayer.begin() + j);
 		}
 	}
 }

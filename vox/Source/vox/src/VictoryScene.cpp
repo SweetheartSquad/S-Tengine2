@@ -16,7 +16,7 @@
 #define SCENE_WIDTH 100
 
 VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _players):
-	PuppetScene(_game, 10, SCENE_WIDTH, 150.f)
+	PuppetScene(_game, 10, SCENE_WIDTH, 25.f)
 {
 	populateBackground();
 	cl = new PuppetContactListener(this);
@@ -37,15 +37,14 @@ VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _p
 		PuppetResourceManager::cheerSounds->play(soundName.str());
 		TextureSampler * splashMessageTextureSampler = PuppetResourceManager::winSplashes.at(winner);
 		splashMessage = new Sprite(nullptr, new Transform());
-		splashMessage->transform->scale(glm::vec3(3, 3, 0));
 		splashMessage->mesh->pushTexture2D(splashMessageTextureSampler->texture);
 		splashMessage->setShader(shader, true);
-		splashMessage->transform->scale(-1, 1, 1);
+		splashMessage->transform->translate(1920.f*0.5, 1080.f*0.5f, 0);
 	}else{
 		// tie
 	}
 	for(unsigned long int i=0; i < _players.size(); ++i){
-		players.push_back(_players.at(i)->clone(world));
+		players.push_back(_players.at(i)->clone(world, this));
 
 		players.at(i)->setShader(shader, true);
 		addChild(players.at(i), 1);
@@ -111,6 +110,10 @@ VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _p
 
 		delete verts;
 	}
+
+	gameCam->useBounds = true;
+	gameCam->minBounds.y = 0;
+	gameCam->minBounds.height = sceneHeight;
 }
 
 VictoryScene::~VictoryScene(){

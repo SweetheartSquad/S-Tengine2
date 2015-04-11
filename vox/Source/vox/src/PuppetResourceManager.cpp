@@ -117,6 +117,7 @@ void PuppetResourceManager::init(){
 	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face5.png.def"));
 	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face6.png.def"));
 	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face7.png.def"));
+	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "blondeHairBigger.png.def"));
 	for(auto i : faces){
 		resources.push_back(i);
 	}
@@ -164,6 +165,7 @@ void PuppetResourceManager::init(){
 	itemMeleeWeapons.push_back(new TextureSampler("../assets/hurly-burly/WeaponAssets/", "carrot.png.def"));
 	itemMeleeWeapons.push_back(new TextureSampler("../assets/hurly-burly/WeaponAssets/", "hamBone.png.def"));
 	itemMeleeWeapons.push_back(new TextureSampler("../assets/hurly-burly/WeaponAssets/", "stringHam.png.def"));
+	itemMeleeWeapons.push_back(new TextureSampler("../assets/hurly-burly/WeaponAssets/", "mandolin.png.def"));
 	for(auto i : itemMeleeWeapons){
 		resources.push_back(i);
 	}
