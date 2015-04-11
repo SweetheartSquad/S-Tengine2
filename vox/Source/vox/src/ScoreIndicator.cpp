@@ -14,8 +14,9 @@ ScoreIndicator::ScoreIndicator(unsigned long int _id) :
 	NodeTransformable(new Transform()),
 	id(_id)
 {
-	transform->scale(100, 100, 1);
-	transform->translate((1.5f-id)*1920.f*0.25f, -1080.f*0.4f, 5);
+	float scale = 100;
+	transform->scale(scale, scale, 1);
+	transform->translate(-(id+0.5f) * 1920.f*0.25f, scale*1.1f, 10.f);
 	//scoreIndicator->transform->rotate(90, 0, 1, 0, kOBJECT);
 	mesh->pushTexture2D(PuppetResourceManager::scoreIndicators.at(id)->texture);
 }
@@ -30,10 +31,10 @@ void ScoreIndicator::render(vox::MatrixStack* _matrixStack, RenderOptions* _rend
 	}else if(id == 1){
 		newHue = 0.3056f;
 	}else if(id == 2){
-		newHue = 0.64;
+		newHue = 0.64f;
 		newSat = sat +0.55f;
 	}else if(id == 3){
-		newHue = 0;
+		newHue = 0.f;
 	}
 
 	// change the shader settings based player id
