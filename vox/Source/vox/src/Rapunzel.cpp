@@ -56,17 +56,17 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	populateBackground();
 	cl = new RapunzelContactListener(this);
 
+	splashMessage = new Sprite(nullptr, new Transform());
+	splashMessage->mesh->pushTexture2D(RapunzelResourceManager::splashMessage->texture);
+	splashMessage->setShader(shader, true);
+	splashMessage->transform->translate(1920.f*0.5, 1080.f*0.5f, 0.f);
+
 	Sprite * towerBg = new Sprite();
 	addChild(towerBg, 0);
 	towerBg->setShader(shader, true);
 	towerBg->pushTextureSampler(RapunzelResourceManager::towerBackground);
-	towerBg->transform->translate(2.f, 0.f, 0.0f);
-	towerBg->transform->scale(2.6f, 2.6f, 1.0f);
-
-	splashMessage = new Sprite(nullptr, new Transform());
-	splashMessage->mesh->pushTexture2D(RapunzelResourceManager::splashMessage->texture);
-	splashMessage->setShader(shader, true);
-	splashMessage->transform->translate(1920.f*0.5, 1080.f*0.5f, 0);
+	towerBg->transform->translate(2.f, 0.f, 0.f);
+	towerBg->transform->scale(2.6f, 2.6f, 1.f);
 
 	players.push_back(playerCharacter1);
 	players.push_back(playerCharacter2);
@@ -89,8 +89,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 
 	castleCatwalk->createFixture(sf, b2Vec2(0, 0), castleCatwalk);
     castleCatwalk->setShader(shader, true);
-    addChild(castleCatwalk, 1);
-
+	
 	playerCharacter1->setShader(shader, true);
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
@@ -143,7 +142,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	}
 	
 	tower->setTranslationPhysical(glm::vec3(glm::vec3(60.f, tower->getCorrectedHeight(), 0.f)));
-    castleCatwalk->setTranslationPhysical(glm::vec3(tower->getPos().x - castleCatwalk->getCorrectedWidth() - tower->getCorrectedWidth() * 0.75f, tower->getPos().y - tower->getCorrectedHeight() * 0.08, 0));
+    castleCatwalk->setTranslationPhysical(glm::vec3(tower->getPos().x - castleCatwalk->getCorrectedWidth() - 3.5f, tower->getPos().y - tower->getCorrectedHeight() * 0.08, 0));
 	
 	glm::vec3 catwalkPos = glm::vec3(castleCatwalk->getPos().x, castleCatwalk->getPos().y + castleCatwalk->getCorrectedHeight(), 0.f);
 
@@ -163,21 +162,21 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	addChild(lever1, 1);
 	lever1->addToLayeredScene(this, 1);
 	lever1->setShader(shader, true);
-	lever1->translateComponents(catwalkPos - glm::vec3(10.f, 0, 0));
+	lever1->translateComponents(catwalkPos + glm::vec3(-10.f, -0.25f, 0));
 	lever1->type = 1;
 	
 	lever2 = new Lever(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, 0);
 	addChild(lever2, 1);
 	lever2->addToLayeredScene(this, 1);
 	lever2->setShader(shader, true);
-	lever2->translateComponents(catwalkPos - glm::vec3(0.f, 0, 0));
+	lever2->translateComponents(catwalkPos + glm::vec3(0.f, -0.1f, 0));
 	lever2->type = 2;
 
 	lever3 = new Lever(world, PuppetGame::kSTRUCTURE, PuppetGame::kPLAYER, 0);
 	addChild(lever3, 1);
 	lever3->addToLayeredScene(this, 1);
 	lever3->setShader(shader, true);
-	lever3->translateComponents(catwalkPos + glm::vec3(10.f, 0.f, 0.f));
+	lever3->translateComponents(catwalkPos + glm::vec3(10.f, -0.25f, 0.f));
 	lever3->type = 3;
 
 	glove = new StructureBoxingGlove(world);
@@ -189,10 +188,8 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	goldPile = new StructureGoldPile(world);
 	addChild(goldPile, 1);
 	goldPile->setShader(shader, true);
-	goldPile->translateComponents(catwalkPos - glm::vec3(20.f, -2.f, 0.f));
+	goldPile->translateComponents(catwalkPos - glm::vec3(20.f, -1.5f, 0.f));
 	goldPile->addToLayeredScene(this, 1);
-	//Uncomment to place on castle
-	//goldPile->translateComponents(glm::vec3(15.f, 23.f, 0.f));
 	goldPile->rootComponent->transform->scale(10.0f, 10.0f, 1.0f);
 	gameCam->addTarget(goldPile);
 	playRandomBackgroundMusic();
@@ -202,8 +199,12 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	gameCam->minBounds.y = -10;
 	gameCam->minBounds.height = 0;//sceneHeight;
 	gameCam->minBounds.width = sceneWidth-8;
-	gameCam->minimumZoom = 0;
-	gameCam->buffer = 2;
+	gameCam->minimumZoom = 30;
+	gameCam->buffer = 0;
+	
+    addChild(castleCatwalk, 1);
+	
+
 }
 
 Rapunzel::~Rapunzel(){
