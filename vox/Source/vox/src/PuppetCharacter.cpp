@@ -73,8 +73,6 @@ PuppetCharacter * PuppetCharacter::clone(Box2DWorld * _world, PuppetScene * _sce
 PuppetCharacter::~PuppetCharacter(){
 	delete behaviourManager;
 	delete indicator;
-	delete scoreIndicator;
-	//delete texPack;
 }
 
 void PuppetCharacter::init(){
@@ -257,7 +255,7 @@ void PuppetCharacter::createIndicator(signed long _id){
 	scoreIndicator->setShader(getShader(), true);
 	indicator->setShader(getShader(), true);
 
-	static_cast<LayeredScene *>(scene)->uiLayer.push_back(scoreIndicator);
+	static_cast<LayeredScene *>(scene)->addUIChild(scoreIndicator);
 }
 
 
@@ -446,10 +444,6 @@ void PuppetCharacter::update(Step* _step){
 
 		indicator->setPos(iPos + (hPos - iPos)*0.1f);
 		//indicator->transform->setOrientation(glm::quat(1,0,0,0));
-	}
-
-	if(scoreIndicator != nullptr){
-		scoreIndicator->update(_step);//scoreIndicator->transform->rotate(1, 0, 1, 0, kOBJECT);
 	}
 }
 

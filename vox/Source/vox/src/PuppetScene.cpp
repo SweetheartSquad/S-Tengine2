@@ -231,13 +231,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	Sprite * countDown4 = new Sprite(nullptr, new Transform());
 	Sprite * countDown5 = new Sprite(nullptr, new Transform());
 	
-	countDown0->transform->scale(glm::vec3(3, 3, 0));
-	countDown1->transform->scale(glm::vec3(3, 3, 0));
-	countDown2->transform->scale(glm::vec3(3, 3, 0));
-	countDown3->transform->scale(glm::vec3(3, 3, 0));
-	countDown4->transform->scale(glm::vec3(3, 3, 0));
-	countDown5->transform->scale(glm::vec3(3, 3, 0));
-	
 	countDown0->mesh->pushTexture2D(PuppetResourceManager::countDown0->texture);
 	countDownWait->mesh->pushTexture2D(PuppetResourceManager::blank);
 	countDown1->mesh->pushTexture2D(PuppetResourceManager::countDown1->texture);
@@ -257,7 +250,7 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	
 	for(Sprite * n : countDownNumbers){
 		n->setShader(shader, true);
-		n->transform->scale(-1, 1, 1);
+		n->transform->translate(1920.f*0.5, 1080.f*0.5f, 0);
     }
 
     particleSystem = new ParticleSystem(PuppetResourceManager::dustParticle, world, 0, 0, 0);
@@ -392,27 +385,28 @@ void PuppetScene::update(Step * _step){
 				// the factor of 15 is only there because I can't load this thing at the correct size...
 				//float scale = Easing::easeOutBack(splashDuration - currentTime, 0, 10, splashDuration);
 				float easeTime = splashDuration - currentTime;
-				float scale = (easeTime < splashDuration / 2.f) ? Easing::easeOutCubic(easeTime, 0, 8, splashDuration / 2.f) : Easing::easeInElastic(easeTime - splashDuration / 2.f, 8, -8, splashDuration / 2.f);
-				splashMessage->transform->scale(glm::vec3(-scale, scale, 1), false);
+				float scale = (easeTime < splashDuration / 2.f) ? Easing::easeOutCubic(easeTime, 0, 1024, splashDuration / 2.f) : Easing::easeInElastic(easeTime - splashDuration / 2.f, 1024, -1024, splashDuration / 2.f);
+				splashMessage->transform->scale(glm::vec3(scale, scale, 1), false);
 			}else{
-				addChild(splashMessage, 2);
+				//addChild(splashMessage, 2);
+				addUIChild(splashMessage);
 				displayingSplash = true;
 			}
 
-			splashMessage->transform->translate(activeCamera->transform->getTranslationVector(), false);
-			splashMessage->transform->translate(glm::vec3(0,0,-10));
+			//splashMessage->transform->translate(activeCamera->transform->getTranslationVector(), false);
+			//splashMessage->transform->translate(glm::vec3(0,0,-10));
 		}else{
 			// Remove previous number from scene
-			removeChild(splashMessage);
+			removeUIChild(splashMessage);
 			delete splashMessage;
 			splashMessage = nullptr;
 		}
 	}
 
-	for(Sprite * n : countDownNumbers){
+	/*for(Sprite * n : countDownNumbers){
 		n->transform->translate(activeCamera->transform->getTranslationVector(), false);
 		n->transform->translate(glm::vec3(0,0,-10));
-	}
+	}*/
 	
 	// destroy used up items
 	for(signed long int i = items.size()-1; i >= 0; --i){
@@ -439,11 +433,11 @@ void PuppetScene::update(Step * _step){
 			if(countDown < countDownNumbers.size()){
 				float displayTime = fmod(currentTime, 1.f);
 				if(displayTime < 0.5f){
-					float scale = Easing::easeOutElastic(displayTime, 0.f, 5.f, 0.5f);
-					countDownNumbers.at(countDown)->transform->scale(glm::vec3(-scale, scale, 1.f), false);
+					float scale = Easing::easeOutElastic(displayTime, 0.f, 1024.f, 0.5f);
+					countDownNumbers.at(countDown)->transform->scale(glm::vec3(scale, scale, 1.f), false);
 				}else{
-					float scale = Easing::easeInCirc(displayTime-0.5f, 5.f, -5.f, 0.5f);
-					countDownNumbers.at(countDown)->transform->scale(glm::vec3(-scale, scale, 1.f), false);
+					float scale = Easing::easeInCirc(displayTime-0.5f, 1024.f, -1024.f, 0.5f);
+					countDownNumbers.at(countDown)->transform->scale(glm::vec3(scale, scale, 1.f), false);
 				}
 			}
 			if(currentTime > duration){
@@ -633,7 +627,7 @@ void PuppetScene::doCountDown(){
 		static_cast<ShaderComponentHsv *>(shader->components.at(1))->setSaturation(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getSaturation() - 0.15f);
 		//static_cast<ShaderComponentHsv *>(shader->components.at(1))->setValue(static_cast<ShaderComponentHsv *>(shader->components.at(1))->getValue() + 0.2f);
 		
-		removeChild(countDownNumbers.back());
+		removeUIChild(countDownNumbers.back());
 		delete countDownNumbers.back();
 		countDownNumbers.pop_back();
 	}
@@ -651,7 +645,7 @@ void PuppetScene::doCountDown(){
 		countdownSoundManager->play(std::to_string(countDown));
 
 		// Add new number to scene
-		addChild(countDownNumbers.at(countDown), 2);
+		addUIChild(countDownNumbers.at(countDown));
 	}
 }
 

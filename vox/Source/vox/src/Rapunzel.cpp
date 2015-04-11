@@ -64,10 +64,9 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	towerBg->transform->scale(2.6f, 2.6f, 1.0f);
 
 	splashMessage = new Sprite(nullptr, new Transform());
-	splashMessage->transform->scale(glm::vec3(3, 3, 0));
 	splashMessage->mesh->pushTexture2D(RapunzelResourceManager::splashMessage->texture);
 	splashMessage->setShader(shader, true);
-	splashMessage->transform->scale(-1, 1, 1);
+	splashMessage->transform->translate(1920.f*0.5, 1080.f*0.5f, 0);
 
 	players.push_back(playerCharacter1);
 	players.push_back(playerCharacter2);
