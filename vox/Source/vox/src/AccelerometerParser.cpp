@@ -43,7 +43,7 @@ void AccelerometerParser::update(Step* _step){
 		}
 		ClearCommError(this->hSerial, &this->errors, &this->status);
 		int inQ = status.cbInQue;
-		if(inQ >= LINE_SIZE){
+		if(inQ >= LINE_SIZE * 2){
 			char * buffer = new char[inQ]();
 			int numRead = ReadData(buffer, inQ);
 			accumlator += buffer;
@@ -85,10 +85,15 @@ void AccelerometerParser::update(Step* _step){
 }
 
 std::string AccelerometerParser::getLatestData(std::string _acc){
+	bool firstPassed = false;
 	for(signed long int i = _acc.size() - 1; i >= 0; --i) {
 		if(_acc.at(i) == ':') {
-			if(_acc.size() - i >= LINE_SIZE) {
-				return _acc.substr(i + 1, LINE_SIZE - 1);
+			if(!firstPassed){
+				firstPassed = true;
+			}else{
+				if(_acc.size() - i >= LINE_SIZE) {
+					return _acc.substr(i + 1, LINE_SIZE - 1);
+				}
 			}
 		}
 	}
