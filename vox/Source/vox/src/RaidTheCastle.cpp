@@ -148,6 +148,12 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	catapult->prepare();
 
 	populateClouds();
+
+	gameCam->useBounds = true;
+	gameCam->minBounds.x = 0;
+	gameCam->minBounds.width = sceneWidth;
+	gameCam->minBounds.y = 0;
+	gameCam->minBounds.height = sceneHeight;
 }
 
 RaidTheCastle::~RaidTheCastle(){

@@ -146,6 +146,21 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	boundaries.at(3)->body->GetFixtureList()->SetFriction(1);
 	boundaries.at(3)->body->GetFixtureList()->SetRestitution(0);
 
+	Sprite * curtain = new Sprite();
+	float scale = 100;
+	curtain->transform->translate(sceneWidth - 30, /*scale * 0.001f*/0, 5);
+	curtain->transform->scale(30, sceneHeight, 1);
+	curtain->mesh->pushTexture2D(PuppetResourceManager::stageCurtain->texture);
+	curtain->setShader(shader, true);
+	addChild(curtain, 2);
+	
+	curtain = new Sprite();
+	curtain->transform->translate(30, -/*scale * 0.001f*/0, 5);
+	curtain->transform->scale(-30, sceneHeight, 1);
+	curtain->mesh->pushTexture2D(PuppetResourceManager::stageCurtain->texture);
+	curtain->setShader(shader, true);
+	addChild(curtain, 2);
+
 	//ground->body->SetTransform(b2Vec2(0, -250), 0);
 	/*ground->mesh->vertices.at(0).z -= 250;
 	ground->mesh->vertices.at(1).z -= 250;

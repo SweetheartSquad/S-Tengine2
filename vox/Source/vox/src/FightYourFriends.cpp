@@ -38,7 +38,7 @@
 #include <Particle.h>
 
 FightYourFriends::FightYourFriends(PuppetGame* _game):
-	PuppetScene(_game, 30, 100.f, 100.f),
+	PuppetScene(_game, 30, 50.f, 100.f),
 	playerCharacter1(new PuppetCharacterKnight(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterKnight(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
 	playerCharacter3(new PuppetCharacterKnight(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
@@ -103,10 +103,10 @@ FightYourFriends::FightYourFriends(PuppetGame* _game):
         addChild(weapon, 1);
 	}
 	
-	playerCharacter1->translateComponents(glm::vec3(20.0f, 35, 0.f));
-	playerCharacter2->translateComponents(glm::vec3(40.0f, 35, 0.f));
-	playerCharacter3->translateComponents(glm::vec3(60.0f, 35, 0.f));
-	playerCharacter4->translateComponents(glm::vec3(80.0f, 35, 0.f));
+	playerCharacter1->translateComponents(glm::vec3(sceneWidth/4 * 0 + sceneWidth/8, 35, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(sceneWidth/4 * 1 + sceneWidth/8, 35, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(sceneWidth/4 * 2 + sceneWidth/8, 35, 0.f));
+	playerCharacter4->translateComponents(glm::vec3(sceneWidth/4 * 3 + sceneWidth/8, 35, 0.f));
 
 	playRandomBackgroundMusic();
 
@@ -165,7 +165,7 @@ void FightYourFriends::populateBackground(){
 	stageFront->mesh->dirty = true;
 
 
-	MeshEntity * arena = new MeshEntity(MeshFactory::getPlaneMesh());
+	Sprite * arena = new Sprite();
 	float scale = sceneWidth*0.8f;
 	arena->transform->translate(1024/2 * scale * 0.001f, -1024/8 * scale * 0.001f, -5);
 	arena->transform->scale(scale, scale, 1);

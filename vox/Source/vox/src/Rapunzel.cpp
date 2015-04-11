@@ -90,7 +90,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 
 	castleCatwalk->createFixture(sf, b2Vec2(0, 0), castleCatwalk);
     castleCatwalk->setShader(shader, true);
-    addChild(castleCatwalk, 2);
+    addChild(castleCatwalk, 1);
 
 	playerCharacter1->setShader(shader, true);
 	addChild(playerCharacter1, 1);
@@ -199,10 +199,12 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playRandomBackgroundMusic();
 	
 	gameCam->useBounds = true;
-	gameCam->minBounds.x = 23;
+	gameCam->minBounds.x = 15;
 	gameCam->minBounds.y = -10;
-	gameCam->minBounds.height = sceneHeight;
-	gameCam->minBounds.width = sceneWidth;
+	gameCam->minBounds.height = 0;//sceneHeight;
+	gameCam->minBounds.width = sceneWidth-25;
+	gameCam->minimumZoom = 0;
+	gameCam->buffer = 4;
 }
 
 Rapunzel::~Rapunzel(){
