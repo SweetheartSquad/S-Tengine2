@@ -81,7 +81,7 @@ void FollowCamera::update(Step * _step){
 	lookAtSpot += offset;
 
 
-	std::cout << lookAtSpot.x << " " << screenWidth << std::endl;
+	//std::cout << lookAtSpot.x << " " << screenWidth << std::endl;
 	
 	if(useBounds){
 		if(minBounds.height != 0){
@@ -112,7 +112,7 @@ void FollowCamera::update(Step * _step){
 	}
 
 
-	std::cout << lookAtSpot.x << " " << screenWidth << std::endl << std::endl;
+	//std::cout << lookAtSpot.x << " " << screenWidth << std::endl << std::endl;
 	
 	// calculate zoom and account for FoV (the camera FoV seems to be vertical, so if the screen w > screen h, we need to take the h / the intended aspect ratio)
 	float ar1 = screenWidth/screenHeight;
@@ -130,7 +130,7 @@ void FollowCamera::update(Step * _step){
 	lookAtSpot.x += screenWidth * 0.5f;
 	lookAtSpot.y += screenHeight * 0.5f;
 
-	std::cout << lookAtSpot.x << " " << screenWidth << std::endl << std::endl;
+	//std::cout << lookAtSpot.x << " " << screenWidth << std::endl << std::endl;
 
 	float dist = zoom / (tan(glm::radians(fieldOfView) * 0.5f) * 2.f);
 

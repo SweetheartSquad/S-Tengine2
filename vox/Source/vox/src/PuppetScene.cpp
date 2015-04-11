@@ -72,8 +72,8 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	cl(nullptr),
 	world(new Box2DWorld(b2Vec2(0.f, -98.0f))),
 	drawer(nullptr),
-	stageFloor(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFloor.vox"))),
-	stageFront(new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFront.vox"))),
+	stageFloor(nullptr),
+	stageFront(nullptr),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	shader(new BaseComponentShader()),
 	soundManager(new SoundManager(-1)),
@@ -110,56 +110,55 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	backgroundSoundManager->addNewSound("2", "../assets/hurly-burly/audio/songs/FastSong.ogg");
 	backgroundSoundManager->addNewSound("3", "../assets/hurly-burly/audio/songs/MelodicaSong.ogg");
 
-	background->setShader(shader, true);
-	background->transform->translate(0.0f, 50.f, -15.f/2.f);
-	background->transform->scale(125 * 5, 50, 1);
-	background->mesh->pushTexture2D(PuppetResourceManager::sky);
-	background->mesh->uvEdgeMode = GL_MIRRORED_REPEAT_ARB;
-	background->mesh->dirty = true;
 	
-	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 
-	boundaries.at(0)->transform->scale(_size, sceneHeight/2.f, _size);
-	boundaries.at(1)->transform->scale(_size, sceneHeight/2.f, _size);
-	boundaries.at(2)->transform->scale(sceneWidth/2.f, _size, _size);
-	boundaries.at(3)->transform->scale(sceneWidth/2.f, _size, _size);
-
-	boundaries.at(0)->setTranslationPhysical(sceneWidth, sceneHeight/2.f, 0);
-	boundaries.at(1)->setTranslationPhysical(0, sceneHeight/2.f, 0);
-	boundaries.at(2)->setTranslationPhysical(sceneWidth/2.f, sceneHeight-_size, 0);
-	boundaries.at(3)->setTranslationPhysical(sceneWidth/2.f, -_size, 0);
 	
-	b2Filter sf;
-	sf.categoryBits = PuppetGame::kBOUNDARY;
-	sf.maskBits = -1;
-	for(auto b : boundaries){
-		addChild(b, 0);
-		b->setShader(shader, true);
-		world->addToWorld(b);
-		b->body->GetFixtureList()->SetFilterData(sf);
-	}
-	sf.categoryBits = PuppetGame::kBOUNDARY | PuppetGame::kGROUND;
-	boundaries.at(3)->body->GetFixtureList()->SetFilterData(sf);
-	boundaries.at(3)->body->GetFixtureList()->SetFriction(1);
-	boundaries.at(3)->body->GetFixtureList()->SetRestitution(0);
-
 	Sprite * curtain = new Sprite();
 	float scale = 100;
-	curtain->transform->translate(sceneWidth - 30, /*scale * 0.001f*/0, 5);
+	curtain->transform->translate(sceneWidth - 29, 1, 5);
 	curtain->transform->scale(30, sceneHeight, 1);
 	curtain->mesh->pushTexture2D(PuppetResourceManager::stageCurtain->texture);
 	curtain->setShader(shader, true);
 	addChild(curtain, 2);
 	
 	curtain = new Sprite();
-	curtain->transform->translate(30, -/*scale * 0.001f*/0, 5);
+	curtain->transform->translate(29, 1, 5);
 	curtain->transform->scale(-30, sceneHeight, 1);
 	curtain->mesh->pushTexture2D(PuppetResourceManager::stageCurtain->texture);
 	curtain->setShader(shader, true);
 	addChild(curtain, 2);
+
+
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+
+	boundaries.at(0)->transform->scale(_size, sceneHeight*0.5f + _size*2.f, _size);
+	boundaries.at(1)->transform->scale(_size, sceneHeight*0.5f + _size*2.f, _size);
+	boundaries.at(2)->transform->scale(sceneWidth*0.5f + _size*2.f, _size, _size);
+	boundaries.at(3)->transform->scale(sceneWidth*0.5f + _size*2.f, _size, _size);
+
+	boundaries.at(0)->setTranslationPhysical(sceneWidth+_size, sceneHeight*0.5f, 5);
+	boundaries.at(1)->setTranslationPhysical(-_size, sceneHeight*0.5f, 5);
+	boundaries.at(2)->setTranslationPhysical(sceneWidth*0.5f, sceneHeight+_size, 5);
+	boundaries.at(3)->setTranslationPhysical(sceneWidth*0.5f, -_size, 5);
+	
+	b2Filter sf;
+	sf.categoryBits = PuppetGame::kBOUNDARY;
+	sf.maskBits = -1;
+	for(auto b : boundaries){
+		addChild(b, 2);
+		b->setShader(shader, true);
+		world->addToWorld(b);
+		b->body->GetFixtureList()->SetFilterData(sf);
+		b->mesh->pushTexture2D(PuppetResourceManager::stageFront);
+	}
+	sf.categoryBits = PuppetGame::kBOUNDARY | PuppetGame::kGROUND;
+	boundaries.at(3)->body->GetFixtureList()->SetFilterData(sf);
+	boundaries.at(3)->body->GetFixtureList()->SetFriction(1);
+	boundaries.at(3)->body->GetFixtureList()->SetRestitution(0);
+
 
 	//ground->body->SetTransform(b2Vec2(0, -250), 0);
 	/*ground->mesh->vertices.at(0).z -= 250;
@@ -175,6 +174,14 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	ground->mesh->setUV(3, 40.0, 0.0);*/
 
 	//world->addToWorld(ground, 2);
+
+	
+	background->setShader(shader, true);
+	background->transform->translate(0.0f, 50.f, -15.f/2.f);
+	background->transform->scale(125 * 5, 50, 1);
+	background->mesh->pushTexture2D(PuppetResourceManager::sky);
+	background->mesh->uvEdgeMode = GL_MIRRORED_REPEAT_ARB;
+	background->mesh->dirty = true;
 
 	int timeOfDayOptions = PuppetResourceManager::sky->width;
 	int timeOfDay = std::rand()%timeOfDayOptions;
@@ -548,7 +555,7 @@ void PuppetScene::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderO
 	screenFBO->bindFrameBuffer();
 	//render the scene to the buffer
 	LayeredScene::render(_matrixStack, _renderOptions);
-
+	
 	//Render the buffer to the render surface
 	screenSurface->render(screenFBO->getTextureId());
 }
@@ -653,6 +660,9 @@ void PuppetScene::playRandomBackgroundMusic(){
 }
 
 void PuppetScene::populateBackground(){
+	stageFloor = new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFloor.vox"));
+	stageFront = new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFront.vox"));
+
 	addChild(stageFloor, 0);
 	addChild(stageFront, 0);
 

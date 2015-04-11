@@ -16,7 +16,7 @@
 #define SCENE_WIDTH 100
 
 VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _players):
-	PuppetScene(_game, 10, SCENE_WIDTH, 150.f)
+	PuppetScene(_game, 10, SCENE_WIDTH, 25.f)
 {
 	populateBackground();
 	cl = new PuppetContactListener(this);
@@ -111,6 +111,10 @@ VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _p
 
 		delete verts;
 	}
+
+	gameCam->useBounds = true;
+	gameCam->minBounds.y = 0;
+	gameCam->minBounds.height = sceneHeight;
 }
 
 VictoryScene::~VictoryScene(){

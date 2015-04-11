@@ -199,12 +199,12 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	playRandomBackgroundMusic();
 	
 	gameCam->useBounds = true;
-	gameCam->minBounds.x = 15;
+	gameCam->minBounds.x = 4;
 	gameCam->minBounds.y = -10;
 	gameCam->minBounds.height = 0;//sceneHeight;
-	gameCam->minBounds.width = sceneWidth-25;
+	gameCam->minBounds.width = sceneWidth-8;
 	gameCam->minimumZoom = 0;
-	gameCam->buffer = 4;
+	gameCam->buffer = 2;
 }
 
 Rapunzel::~Rapunzel(){

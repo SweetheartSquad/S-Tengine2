@@ -36,6 +36,7 @@
 #include <glfw\glfw3.h>
 #include <NumberUtils.h>
 #include <Particle.h>
+#include <Resource.h>
 
 FightYourFriends::FightYourFriends(PuppetGame* _game):
 	PuppetScene(_game, 30, 50.f, 100.f),
@@ -138,6 +139,9 @@ void FightYourFriends::unload(){
 }
 
 void FightYourFriends::populateBackground(){
+	stageFloor = new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFloor.vox"));
+	stageFront = new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFront.vox"));
+
 	addChild(stageFloor, 0);
 	addChild(stageFront, 0);
 	
