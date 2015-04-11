@@ -13,6 +13,7 @@ class Item;
 class BehaviourManager;
 class Sprite;
 class PuppetScene;
+class ScoreIndicator;
 
 class PuppetCharacter : public Box2DSuperSprite {
 public:
@@ -48,7 +49,7 @@ public:
 	Box2DSprite * headgear;
 	Box2DSprite * itemHolder;
 	Box2DSprite * indicator;
-	Sprite * scoreIndicator;
+	ScoreIndicator * scoreIndicator;
 
 	std::vector<PuppetGame::BOX2D_CATEGORY> collisionTypes;
 

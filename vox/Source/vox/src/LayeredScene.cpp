@@ -67,7 +67,6 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	
 	
 	OrthographicCamera cam(-1920.f, 0, 0, 1080.f, -1000.f, 1000.f);
-	//cam.
 	
 	matrixStack->setProjectionMatrix(cam.getProjectionMatrix());
 	matrixStack->setViewMatrix(cam.getViewMatrix());
