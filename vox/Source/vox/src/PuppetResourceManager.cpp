@@ -117,7 +117,7 @@ void PuppetResourceManager::init(){
 	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face5.png.def"));
 	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face6.png.def"));
 	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face7.png.def"));
-	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "blondeHair.png.def"));
+	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "blondeHairBigger.png.def"));
 	for(auto i : faces){
 		resources.push_back(i);
 	}

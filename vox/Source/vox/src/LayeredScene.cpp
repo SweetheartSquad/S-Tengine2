@@ -6,6 +6,7 @@
 #include "MatrixStack.h"
 #include "Entity.h"
 #include "Camera.h"
+#include <OrthographicCamera.h>
 
 LayeredScene::LayeredScene(Game * _game, unsigned long int _numLayers) :
 	Scene(_game),
@@ -62,6 +63,17 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 		for(Entity * e : layer){
 			e->render(matrixStack, renderOptions);
 		}
+	}
+	
+	
+	OrthographicCamera cam(-1920.f*0.5f, 1920.f*0.5f, -1080.f*0.5f, 1080.f*0.5f, 0.01f, 1000.f);
+	//cam.
+	
+	matrixStack->setProjectionMatrix(cam.getProjectionMatrix());
+	matrixStack->setViewMatrix(cam.getViewMatrix());
+
+	for(Entity * e : uiLayer){
+		e->render(matrixStack, renderOptions);
 	}
 }
 

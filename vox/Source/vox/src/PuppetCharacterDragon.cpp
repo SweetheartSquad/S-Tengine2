@@ -74,8 +74,9 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 	world->b2world->CreateJoint(&lhlej);
 }
 
-PuppetCharacter * PuppetCharacterDragon::clone(Box2DWorld * _world){
+PuppetCharacter * PuppetCharacterDragon::clone(Box2DWorld * _world, PuppetScene * _scene){
 	PuppetCharacterDragon * res = new PuppetCharacterDragon(ai, _world, categoryBits, maskBits, groupIndex);
+	res->scene = _scene;
 	res->id = id;
 	res->score = score;
 	res->altitude = -1;

@@ -8,6 +8,7 @@ public:
 
 	unsigned long int numLayers;
 	std::vector<std::vector<Entity *>> layers;
+	std::vector<Entity *> uiLayer;
 	
 	/** Calls update on the attached camera */
 	virtual void update(Step * _step);

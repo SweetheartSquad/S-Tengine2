@@ -195,6 +195,7 @@
     <ClCompile Include="../src/Cloud.cpp" />
     <ClCompile Include="../src/FightYourFriends.cpp" />
     <ClCompile Include="../src/FightYourFriendsResourceManager.cpp" />
+    <ClCompile Include="../src/ScoreIndicator.cpp" />
     <ClCompile Include="../src/StartupScene.cpp" />
 <<<<<<< HEAD
     <ClCompile Include="../src/Accelerometer.cpp" />
@@ -373,6 +374,7 @@
     <ClCompile Include="../src/Cloud.cpp" />
     <ClCompile Include="../src/FightYourFriends.cpp" />
     <ClCompile Include="../src/FightYourFriendsResourceManager.cpp" />
+    <ClCompile Include="../src/ScoreIndicator.cpp" />
     <ClCompile Include="../src/StartupScene.cpp" />
 =======
     <ClCompile Include="../src/Accelerometer.cpp" />
@@ -551,6 +553,7 @@
     <ClCompile Include="../src/Cloud.cpp" />
     <ClCompile Include="../src/FightYourFriends.cpp" />
     <ClCompile Include="../src/FightYourFriendsResourceManager.cpp" />
+    <ClCompile Include="../src/ScoreIndicator.cpp" />
     <ClCompile Include="../src/StartupScene.cpp" />
 >>>>>>> ecadd1d294afbb7e9d747eda757c631d31385df3
   </ItemGroup>
@@ -743,6 +746,7 @@
     <ClInclude Include="../include/Cloud.h" />
     <ClInclude Include="../include/FightYourFriends.h" />
     <ClInclude Include="../include/FightYourFriendsResourceManager.h" />
+    <ClInclude Include="../include/ScoreIndicator.h" />
     <ClInclude Include="../include/StartupScene.h" />
 <<<<<<< HEAD
     <ClInclude Include="../include/Accelerometer.h" />
@@ -933,6 +937,7 @@
     <ClInclude Include="../include/Cloud.h" />
     <ClInclude Include="../include/FightYourFriends.h" />
     <ClInclude Include="../include/FightYourFriendsResourceManager.h" />
+    <ClInclude Include="../include/ScoreIndicator.h" />
     <ClInclude Include="../include/StartupScene.h" />
 =======
     <ClInclude Include="../include/Accelerometer.h" />
@@ -1123,6 +1128,7 @@
     <ClInclude Include="../include/Cloud.h" />
     <ClInclude Include="../include/FightYourFriends.h" />
     <ClInclude Include="../include/FightYourFriendsResourceManager.h" />
+    <ClInclude Include="../include/ScoreIndicator.h" />
     <ClInclude Include="../include/StartupScene.h" />
 >>>>>>> ecadd1d294afbb7e9d747eda757c631d31385df3
   </ItemGroup>

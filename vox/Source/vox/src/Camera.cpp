@@ -16,7 +16,7 @@ Camera::Camera():
 	rightVectorRotated(0.f, 0.f, 1.f),
 	fieldOfView(60.0f),
 	pitch(0.0f),
-	yaw(-30.f),
+	yaw(0.f),
 	//NodeAnimatable(),
 	nearClip(1.f),
 	farClip(100.f)

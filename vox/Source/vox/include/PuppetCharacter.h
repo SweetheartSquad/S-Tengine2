@@ -12,6 +12,7 @@ class Box2DWorld;
 class Item;
 class BehaviourManager;
 class Sprite;
+class PuppetScene;
 
 class PuppetCharacter : public Box2DSuperSprite {
 public:
@@ -56,7 +57,7 @@ public:
 	void init();
 	PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits = -1, int16 _groupIndex = 0);
 	~PuppetCharacter();
-	virtual PuppetCharacter * clone(Box2DWorld * _world);
+	virtual PuppetCharacter * clone(Box2DWorld * _world, PuppetScene * _scene);
 
 	void createIndicator(signed long int _id);
 

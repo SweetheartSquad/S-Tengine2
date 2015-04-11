@@ -25,6 +25,7 @@
 #include <Sprite.h>
 #include <MeshInterface.h>
 #include <Camera.h>
+#include <ScoreIndicator.h>
 
 bool PuppetCharacter::compareByScore(PuppetCharacter * _a, PuppetCharacter * _b){
 	return (_a->score < _b->score);
@@ -60,8 +61,9 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	init();
 }
 
-PuppetCharacter * PuppetCharacter::clone(Box2DWorld * _world){
+PuppetCharacter * PuppetCharacter::clone(Box2DWorld * _world, PuppetScene * _scene){
 	PuppetCharacter * res = new PuppetCharacter(texPack, ai, _world, categoryBits, maskBits, groupIndex);
+	res->scene = _scene;
 	res->id = id;
 	res->score = score;
 	res->createIndicator(res->id);
@@ -251,12 +253,11 @@ void PuppetCharacter::createIndicator(signed long _id){
 	f->SetSensor(true);
 
 	// score indicator
-	scoreIndicator = new Sprite(nullptr, new Transform());
-	scoreIndicator->transform->scale(-1, 1, 1);
-	scoreIndicator->mesh->pushTexture2D(PuppetResourceManager::scoreIndicators.at(id)->texture);
-
+	scoreIndicator = new ScoreIndicator(_id);
 	scoreIndicator->setShader(getShader(), true);
 	indicator->setShader(getShader(), true);
+
+	static_cast<LayeredScene *>(scene)->uiLayer.push_back(scoreIndicator);
 }
 
 
@@ -325,9 +326,6 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 		indicator->render(_matrixStack, _renderOptions);
 	}
 
-	if(scoreIndicator != nullptr){
-		scoreIndicator->render(_matrixStack, _renderOptions);
-	}
 	// revert the shader settings
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setHue(hue);
 	static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(1))->setSaturation(sat);
@@ -449,9 +447,9 @@ void PuppetCharacter::update(Step* _step){
 		indicator->setPos(iPos + (hPos - iPos)*0.1f);
 		//indicator->transform->setOrientation(glm::quat(1,0,0,0));
 	}
-	if (scoreIndicator != nullptr){
-		scoreIndicator->transform->translate(ps->activeCamera->transform->getTranslationVector() + glm::vec3((id-1.5)*5.f, -5, -10), false);
-		//scoreIndicator->update(_step);
+
+	if(scoreIndicator != nullptr){
+		scoreIndicator->update(_step);//scoreIndicator->transform->rotate(1, 0, 1, 0, kOBJECT);
 	}
 }
 
