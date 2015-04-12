@@ -39,15 +39,15 @@
 #include <Resource.h>
 
 FightYourFriends::FightYourFriends(PuppetGame* _game):
-	PuppetScene(_game, 30, 50.f, 100.f),
+	PuppetScene(_game, 30, 50.f, 50.f),
 	playerCharacter1(new PuppetCharacterKnight(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterKnight(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
 	playerCharacter3(new PuppetCharacterKnight(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
 	playerCharacter4(new PuppetCharacterKnight(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4)),
-	camTargetsRemoved(false)
+	camTargetsRemoved(false),
+	itemDropFreq(0.0025f)
 {
 	ghostPosition = 12.0f;
-	populateBackground();
 	cl = new PuppetContactListener(this);
 
 	TextureSampler * splashMessageTextureSampler = FightYourFriendsResourceManager::splashMessage;
@@ -92,10 +92,7 @@ FightYourFriends::FightYourFriends(PuppetGame* _game):
 
 	for(PuppetCharacter * p : players){
 		TextureSampler * weaponTex = PuppetResourceManager::getRandomMeleeWeapon();
-		TextureSampler * projTex = PuppetResourceManager::getRandomMeleeWeapon();
-		
-		//ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
-        ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -weaponTex->height);
+		ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -weaponTex->height);
 
         weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);
@@ -103,13 +100,14 @@ FightYourFriends::FightYourFriends(PuppetGame* _game):
         addChild(weapon, 1);
 	}
 	
-	playerCharacter1->translateComponents(glm::vec3(sceneWidth/4 * 0 + sceneWidth/8, 35, 0.f));
-	playerCharacter2->translateComponents(glm::vec3(sceneWidth/4 * 1 + sceneWidth/8, 35, 0.f));
-	playerCharacter3->translateComponents(glm::vec3(sceneWidth/4 * 2 + sceneWidth/8, 35, 0.f));
-	playerCharacter4->translateComponents(glm::vec3(sceneWidth/4 * 3 + sceneWidth/8, 35, 0.f));
+	playerCharacter1->translateComponents(glm::vec3(sceneWidth/4 * 0 + sceneWidth/8, sceneHeight*0.75f, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(sceneWidth/4 * 1 + sceneWidth/8, sceneHeight*0.75f, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(sceneWidth/4 * 2 + sceneWidth/8, sceneHeight*0.75f, 0.f));
+	playerCharacter4->translateComponents(glm::vec3(sceneWidth/4 * 3 + sceneWidth/8, sceneHeight*0.75f, 0.f));
 
 	playRandomBackgroundMusic();
-
+	
+	populateBackground();
 	populateClouds();
 }
 
@@ -122,6 +120,17 @@ void FightYourFriends::update(Step* _step){
 	if(!splashSoundPlayed){
 		PuppetResourceManager::splashSounds->play("FightYourFriends");
 		splashSoundPlayed = true;
+	}
+
+	// randomly drop weapons
+	if(vox::NumberUtils::randomFloat(0.f, 1.f) <= itemDropFreq){
+		TextureSampler * weaponTex = PuppetResourceManager::getRandomMeleeWeapon();
+		ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, 0, 1, 0, -weaponTex->height);
+
+        weapon->addToLayeredScene(this, 1);
+		weapon->setShader(shader, true);
+		weapon->translateComponents(vox::NumberUtils::randomFloat(sceneWidth*0.1f, sceneWidth*0.9f), sceneHeight*0.8f, 0);
+		addChild(weapon, 1);
 	}
 }
 
@@ -168,11 +177,35 @@ void FightYourFriends::populateBackground(){
 	stageFront->mesh->dirty = true;
 
 
-	Sprite * arena = new Sprite();
-	float scale = sceneWidth*0.8f;
-	arena->transform->translate(1024/2 * scale * 0.001f, -1024/8 * scale * 0.001f, -5);
-	arena->transform->scale(scale, scale, 1);
-	arena->mesh->pushTexture2D(FightYourFriendsResourceManager::arena);
-	arena->setShader(shader, true);
-	addChild(arena, 0);
+	if(std::rand() % 2 == 0){
+		Sprite * arenaBg = new Sprite();
+		float scale = sceneWidth*0.8f;
+		arenaBg->transform->translate(1024/2 * scale * 0.001f, -1024/8 * scale * 0.001f, -5);
+		arenaBg->transform->scale(scale, scale, 1);
+		arenaBg->mesh->pushTexture2D(FightYourFriendsResourceManager::arena1);
+		arenaBg->setShader(shader, true);
+		addChild(arenaBg, 0);
+	}else{
+		Sprite * arenaBg = new Sprite();
+		float scale = sceneWidth*0.8f;
+		arenaBg->transform->translate(/*1024/2 * scale * 0.001f*/25, 35, -5);
+		arenaBg->transform->scale(scale, scale, 1);
+		arenaBg->mesh->pushTexture2D(FightYourFriendsResourceManager::arena2Bg);
+		arenaBg->setShader(shader, true);
+		addChild(arenaBg, 0);
+
+		Box2DSprite * arenaFg = new Box2DSprite(world, FightYourFriendsResourceManager::arena2Fg, b2_staticBody, false, nullptr, new Transform(), 0.03f);
+		arenaFg->setTranslationPhysical(arenaFg->getCorrectedWidth()/2.f + 12.f, sceneHeight*0.25f, 0);
+		for(unsigned long int i = 0; i < arenaFg->mesh->vertices.size(); ++i){
+			arenaFg->mesh->vertices.at(i).y += 25.f;
+		}
+		arenaFg->mesh->dirty = true;
+	b2Filter sf;
+    sf.categoryBits = PuppetGame::kGROUND;
+    sf.groupIndex = 0;
+    sf.maskBits = PuppetGame::kITEM | PuppetGame::kPLAYER;
+		arenaFg->createFixture(sf);
+		arenaFg->setShader(shader, true);
+		addChild(arenaFg, 1);
+	}
 }

@@ -40,7 +40,4 @@ void StartupScene::triggerVictoryState(){
 }
 
 void StartupScene::populateBackground(){
-	Sprite * curtain1 = new Sprite();
-	curtain1->pushTextureSampler(PuppetResourceManager::stageCurtain);
-	addChild(curtain1, 0);
 }

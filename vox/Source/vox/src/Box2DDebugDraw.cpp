@@ -77,7 +77,7 @@ Box2DDebugDraw::~Box2DDebugDraw(){
 }
 
 void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color){
-	/*spritePoly->mesh->vertices.clear();
+	spritePoly->mesh->vertices.clear();
 	spritePoly->mesh->indices.clear();
 	spritePoly->mesh->polygonalDrawMode = GL_LINE_STRIP;
 
@@ -86,11 +86,11 @@ void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, cons
 	}
 	spritePoly->mesh->indices.push_back(0);
 
-	spritePoly->render(scene->matrixStack, scene->renderOptions);*/
+	spritePoly->render(scene->matrixStack, scene->renderOptions);
 }
 
 void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount, const b2Color& color){
-	/*spritePoly->mesh->vertices.clear();
+	spritePoly->mesh->vertices.clear();
 	spritePoly->mesh->indices.clear();
 	spritePoly->mesh->polygonalDrawMode = GL_LINE_STRIP;
 	
@@ -99,7 +99,7 @@ void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount
 	}
 	spritePoly->mesh->indices.push_back(0);
 
-	spritePoly->render(scene->matrixStack, scene->renderOptions);*/
+	spritePoly->render(scene->matrixStack, scene->renderOptions);
 }
 
 void Box2DDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color){

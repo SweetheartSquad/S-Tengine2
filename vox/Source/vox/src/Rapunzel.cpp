@@ -213,10 +213,6 @@ Rapunzel::~Rapunzel(){
 void Rapunzel::update(Step* _step){
 	PuppetScene::update(_step);
 
-	if(keyboard->keyJustDown(GLFW_KEY_N)){
-		goldPile->actuallyInteract();
-	}
-
 	if(!splashSoundPlayed){
 		PuppetResourceManager::splashSounds->play("Rapunzel");
 		splashSoundPlayed = true;

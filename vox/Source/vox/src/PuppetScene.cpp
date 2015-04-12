@@ -177,8 +177,8 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 
 	
 	background->setShader(shader, true);
-	background->transform->translate(0.0f, 50.f, -15.f/2.f);
-	background->transform->scale(125 * 5, 50, 1);
+	background->transform->translate(-sceneWidth/2.f, sceneHeight/2.f, -15.f/2.f);
+	background->transform->scale(sceneWidth*2.f, sceneHeight, 1);
 	background->mesh->pushTexture2D(PuppetResourceManager::sky);
 	background->mesh->uvEdgeMode = GL_MIRRORED_REPEAT_ARB;
 	background->mesh->dirty = true;
@@ -433,10 +433,10 @@ void PuppetScene::update(Step * _step){
 			if(countDown < countDownNumbers.size()){
 				float displayTime = fmod(currentTime, 1.f);
 				if(displayTime < 0.5f){
-					float scale = Easing::easeOutElastic(displayTime, 0.f, 1024.f, 0.5f);
+					float scale = Easing::easeOutElastic(displayTime, 0.f, 512.f, 0.5f);
 					countDownNumbers.at(countDown)->transform->scale(glm::vec3(scale, scale, 1.f), false);
 				}else{
-					float scale = Easing::easeInCirc(displayTime-0.5f, 1024.f, -1024.f, 0.5f);
+					float scale = Easing::easeInCirc(displayTime-0.5f, 512.f, -512.f, 0.5f);
 					countDownNumbers.at(countDown)->transform->scale(glm::vec3(scale, scale, 1.f), false);
 				}
 			}

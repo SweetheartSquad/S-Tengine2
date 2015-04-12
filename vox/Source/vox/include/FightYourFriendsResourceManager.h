@@ -11,7 +11,9 @@ class Texture;
 class FightYourFriendsResourceManager abstract : public ResourceManager{
 public:
 	static TextureSampler * splashMessage;
-	static Texture * arena;
+	static Texture * arena1;
+	static Texture * arena2Bg;
+	static TextureSampler * arena2Fg;
 
 	static void init();
 };
