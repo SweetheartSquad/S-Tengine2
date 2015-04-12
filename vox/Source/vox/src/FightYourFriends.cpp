@@ -137,16 +137,16 @@ void FightYourFriends::update(Step* _step){
 		addChild(weapon, 1);
 	}
 
-	// handle dragon victory
+	// handle last one standing
     PuppetCharacter * p;
 	unsigned int survivors = 0;
-    for (unsigned long int i = 0; i < players.size() - 1; ++i){
+    for (unsigned long int i = 0; i < players.size(); ++i){
         if (!players.at(i)->dead){
             ++survivors;
             p = players.at(i);
         }
     }
-    if (survivors == 1){
+    if(survivors == 1){
         p->score += 100000;
 		p->lastUpdateScore = p->score;
         triggerVictoryState();
