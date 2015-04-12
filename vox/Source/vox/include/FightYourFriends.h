@@ -7,6 +7,7 @@ class PuppetCharacterKnight;
 class FightYourFriends : public PuppetScene{
 public:
 	bool camTargetsRemoved;
+	float itemDropFreq;
 
 	PuppetCharacterKnight * playerCharacter1;
 	PuppetCharacterKnight * playerCharacter2;

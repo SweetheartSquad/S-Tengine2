@@ -44,8 +44,9 @@ public:
 	virtual void addToScene(Scene * _scene);
 
 	virtual void addToLayeredScene(LayeredScene * _scene, unsigned long int _layer);
-
+	
 	virtual void translateComponents(glm::vec3 _translateVector);
+	virtual void translateComponents(float _x, float _y, float _z);
 	void setUserData(void * _data);
 
 	// Sets the group index on all components

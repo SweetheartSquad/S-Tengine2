@@ -77,6 +77,9 @@ void Box2DSuperSprite::addToLayeredScene(LayeredScene * _scene, unsigned long in
 	sceneLayer = _layer;
 }
 
+void Box2DSuperSprite::translateComponents(float _x, float _y, float _z){
+	translateComponents(glm::vec3(_x, _y, _z));
+}
 void Box2DSuperSprite::translateComponents(glm::vec3 _translateVector){
 	for(Box2DSprite ** c : components){
 		if(*c != nullptr){

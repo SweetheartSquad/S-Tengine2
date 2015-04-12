@@ -23,19 +23,23 @@ ScoreIndicator::ScoreIndicator(unsigned long int _id, Box2DWorld * _world) :
 	mesh->pushTexture2D(PuppetResourceManager::scoreIndicators.at(id)->texture);
 }
 
+ScoreIndicator::~ScoreIndicator(){
+	delete scoreParticles;
+}
+
 void ScoreIndicator::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	ShaderComponentHsv * hsvShader = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(getShader())->components.at(1));
 	float hue = hsvShader->getHue();
 	float sat = hsvShader->getSaturation();
-	float newHue = hue, newSat = sat;
+	float newHue = hue, newSat = 1;
 	if(id == 0){
-		newSat = sat + 0.8f;
+		newSat = 1 + 0.8f;
 		newHue = 0.125f;
 	}else if(id == 1){
 		newHue = 0.3056f;
 	}else if(id == 2){
 		newHue = 0.64f;
-		newSat = sat +0.55f;
+		newSat = 1 +0.55f;
 	}else if(id == 3){
 		newHue = 0.f;
 	}
