@@ -46,7 +46,7 @@ PuppetController::~PuppetController(){
 void PuppetController::update(Step* _step){
 	if(puppetCharacter != nullptr){
 		if(!puppetCharacter->ai){
-			if(accelerometer->pitch > 1.5f && accelerometer->z > 550.0f){
+			if(accelerometer->pitch > 2.0f && accelerometer->z > 600.0f){
 				puppetCharacter->action();
 			}
 			if(abs(accelerometer->x - accelerometer->lx) > 15.f 

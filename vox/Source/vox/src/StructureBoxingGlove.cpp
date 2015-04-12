@@ -44,7 +44,7 @@ StructureBoxingGlove::StructureBoxingGlove(Box2DWorld * _world) :
 
 	sensor->SetFilterData(sf);*/
 	
-	spring->body->GetFixtureList()->SetDensity(10.f);
+	spring->body->GetFixtureList()->SetDensity(10000000.f);
 
 	// axel
 	b2PrismaticJointDef jth;
@@ -59,11 +59,11 @@ StructureBoxingGlove::StructureBoxingGlove(Box2DWorld * _world) :
 	jth.upperTranslation = 0;
 	jth.localAxisA = b2Vec2(1, 0);
 	jth.maxMotorForce = 1000.f;
-	jth.motorSpeed = 100.f;
+	jth.motorSpeed = 1000.f;
 	jth.referenceAngle = 0.f;
 	world->b2world->CreateJoint(&jth);
 }
 
 void StructureBoxingGlove::punch(){
-	glove->applyLinearImpulseLeft(2000);
+	glove->applyLinearImpulseLeft(2000000000000000.0f);
 }

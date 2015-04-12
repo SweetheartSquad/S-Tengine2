@@ -67,7 +67,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
-	playerCharacter1->createIndicator(playerCharacter1->id);;
+	playerCharacter1->createIndicator(playerCharacter1->id);
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
