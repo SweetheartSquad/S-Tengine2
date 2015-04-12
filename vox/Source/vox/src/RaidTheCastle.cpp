@@ -48,6 +48,10 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	playerCharacter3(new PuppetCharacterKnight(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
 	playerCharacter4(new PuppetCharacterKnight(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
+	castle->setShader(shader, true);
+	castle->addToLayeredScene(this, 0);
+	addChild(castle, 0);
+
 	ghostPosition = 12.0f;
 	populateBackground();
 	cl = new RaidTheCastleContactListener(this);
@@ -91,14 +95,11 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	addChild(champion, 0);
 	champion->addToLayeredScene(this, 1);
 	
-	champion->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kGROUND, champion->groupIndex, 10, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
+	champion->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kGROUND | PuppetGame::kBOUNDARY, champion->groupIndex, 10, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
 	addChild(champion->itemToPickup, 1);
 	champion->itemToPickup->addToLayeredScene(this, 1);
 	champion->itemToPickup->setShader(shader, true);
 
-	castle->setShader(shader, true);
-	castle->addToLayeredScene(this, 0);
-	addChild(castle, 0);
 
 	castle->translateComponents(glm::vec3(120.f, 0.f, 0.f));
 
@@ -121,7 +122,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 		TextureSampler * projTex = PuppetResourceManager::getRandomMeleeWeapon();
 		
 		//ItemProjectileWeapon * weapon = new ItemProjectileWeapon(projTex, weaponTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 0, 0, -weaponTex->height);
-        ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -weaponTex->height);
+        ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND | PuppetGame::kSTRUCTURE, p->groupIndex, 1, 0, -weaponTex->height);
 
         weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);

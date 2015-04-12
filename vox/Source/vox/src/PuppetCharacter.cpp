@@ -65,7 +65,8 @@ PuppetCharacter * PuppetCharacter::clone(Box2DWorld * _world, PuppetScene * _sce
 	PuppetCharacter * res = new PuppetCharacter(texPack, ai, _world, categoryBits, maskBits, groupIndex);
 	res->scene = _scene;
 	res->id = id;
-	res->score = score;
+	res->score = std::max(0.f, score);
+	res->lastUpdateScore = res->score;
 	res->createIndicator(res->id);
 	return res;
 }
@@ -273,74 +274,10 @@ void PuppetCharacter::init(){
 	armLeft->transform->scale(-1, 1, 1);
 	handLeft->transform->scale(-1, 1, 1);
 
-
-	
 	whiteArmLeft->body->SetGravityScale(0);
 	whiteArmRight->body->SetGravityScale(0);
 	whiteHead->body->SetGravityScale(0);
 	whiteTorso->body->SetGravityScale(0);
-
-	
-	// headw
-	/*b2RevoluteJointDef jhw;
-	jhw.bodyA = head->body;
-	jhw.bodyB = whiteHead->body;
-	jhw.localAnchorA.Set(0, 0);
-	jhw.localAnchorB.Set(0, 0);
-	jhw.collideConnected = false;
-	jhw.enableLimit = true;
-	jhw.referenceAngle = 0;
-	world->b2world->CreateJoint(&jhw);
-	
-	// torsow
-	b2RevoluteJointDef jhwt;
-	jhwt.bodyA = torso->body;
-	jhwt.bodyB = whiteTorso->body;
-	jhwt.localAnchorA.Set(0, 0);
-	jhwt.localAnchorB.Set(0, 0);
-	jhwt.collideConnected = false;
-	jhwt.enableLimit = true;
-	jhwt.referenceAngle = 0;
-	world->b2world->CreateJoint(&jhwt);
-	{
-	// armw
-	b2RevoluteJointDef j;
-	j.bodyA = armLeft->body;
-	j.bodyB = whiteArmLeft->body;
-	j.localAnchorA.Set(0, 0);
-	j.localAnchorB.Set(0, 0);
-	j.collideConnected = false;
-	j.enableLimit = true;
-	j.referenceAngle = 0;
-	world->b2world->CreateJoint(&j);
-	}
-	{
-	// armw
-	b2RevoluteJointDef j;
-	j.bodyA = armRight->body;
-	j.bodyB = whiteArmRight->body;
-	j.localAnchorA.Set(0, 0);
-	j.localAnchorB.Set(0, 0);
-	j.collideConnected = false;
-	j.enableLimit = true;
-	j.referenceAngle = 0;
-	world->b2world->CreateJoint(&j);
-	}
-	// flip left side
-	whiteArmLeft->transform->scale(-1, 1, 1);
-	//handLeft->transform->scale(-1, 1, 1);
-	*/
-	/*delete whiteArmLeft->transform;
-	whiteArmLeft->transform = armLeft->transform;
-
-	delete whiteArmRight->transform;
-	whiteArmRight->transform = armRight->transform;
-
-	delete whiteHead->transform;
-	whiteHead->transform = head->transform;
-
-	delete whiteTorso->transform;
-	whiteTorso->transform = torso->transform;*/
 }
 
 void PuppetCharacter::createIndicator(signed long _id){
@@ -650,6 +587,7 @@ bool PuppetCharacter::isCollidingWith(PuppetGame::BOX2D_CATEGORY _category){
 }
 
 void PuppetCharacter::die(){
+	score -= 25.f;
 	dead = true;
 	deathPending = false;
 	action(true);

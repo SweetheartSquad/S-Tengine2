@@ -8,9 +8,8 @@
 #include <Catapult.h>
 #include <RaidTheCastleResourceManager.h>
 
-Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex):
-	Item(true, _world, _categoryBits, _maskBits, _groupIndex, 10.f, 50.f, 56.f),
-	playerWhoFired(nullptr),
+Boulder::Boulder(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :
+	Item(true, _world, _categoryBits, _maskBits, _groupIndex, 25.f, 50.f, 56.f),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable(),

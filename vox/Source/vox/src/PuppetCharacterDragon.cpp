@@ -279,6 +279,7 @@ void PuppetCharacterDragon::unload(){
 }
 
 void PuppetCharacterDragon::die(){
+	score = 0;
 	for(Box2DSprite ** c : components){
 		b2JointEdge * je = (*c)->body->GetJointList();
 		while(je != nullptr){

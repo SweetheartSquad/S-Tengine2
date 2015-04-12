@@ -78,7 +78,10 @@ void Lever::evaluateState(){
 	b2RevoluteJoint * jk = (b2RevoluteJoint *)base->body->GetJointList()->joint;
 	float angle = jk->GetJointAngle();
 	
-	handle->body->SetAngularVelocity(2.5);
+	handle->body->SetAngularVelocity(2.5f);
+	if(type == 3){
+		handle->body->SetAngularVelocity(1.5f);
+	}
 
 	if(triggering){
 		handle->body->SetAngularVelocity(-20);

@@ -121,7 +121,7 @@ void Catapult::evaluateState(){
 			boulderJoint = nullptr;
 			boulder->catapult = nullptr;
 			((FollowCamera *)rtc->gameCam)->addTarget(boulder->rootComponent);
-			boulder->playerWhoFired = playerWhoTriggered;
+			boulder->owner = playerWhoTriggered;
 			boulder = nullptr;
 			playerWhoTriggered = nullptr;
 		}
