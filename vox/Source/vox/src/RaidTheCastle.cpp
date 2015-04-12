@@ -152,7 +152,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	gameCam->useBounds = true;
 	gameCam->minBounds.x = 0;
 	gameCam->minBounds.width = sceneWidth;
-	gameCam->minBounds.y = 0;
+	gameCam->minBounds.y = -3;
 	gameCam->minBounds.height = sceneHeight;
 }
 

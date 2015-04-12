@@ -26,16 +26,10 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	ratio = game->viewPortWidth / static_cast<float>(game->viewPortHeight);
 
 	glEnable(GL_SCISSOR_TEST);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glBlendFunc(GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
 
-
-	//glBlendFunc(GL_ONE, GL_ZERO);
-	glEnable (GL_BLEND);
-
-	//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	//glBlendFunc(GL_ONE_MINUS_DST_ALPHA, GL_ONE);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	//glEnable(GL_ALPHA_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBlendEquation(GL_FUNC_ADD);
 
 	glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
@@ -44,16 +38,6 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	glScissor(game->viewPortX, game->viewPortY, game->viewPortWidth, game->viewPortHeight);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	//glEnable(GL_DEPTH_TEST);
-     //glAlphaFunc ( GL_GREATER, 0.1 ) ;
-     glEnable ( GL_ALPHA_TEST ) ;
-
-	//Back-face culling
-	//glEnable (GL_CULL_FACE); // cull face
-    //glCullFace (GL_BACK); // cull back face
-
-	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
 	matrixStack->setProjectionMatrix(activeCamera->getProjectionMatrix());
 	matrixStack->setViewMatrix(activeCamera->getViewMatrix());

@@ -24,7 +24,8 @@
 }*/
 
 PuppetContactListener::PuppetContactListener(PuppetScene * _scene) :
-	scene(_scene)
+	scene(_scene),
+	damageScoreMult(0.f)
 {
 	_scene->world->b2world->SetContactListener(this);
 }
@@ -140,7 +141,7 @@ void PuppetContactListener::playerItemContact(b2Contact * _contact, b2Fixture * 
 			// do some sort of damage thing here
 			//PuppetResourceManager::hitSounds->playRandomSound();
 			p->takeDamage(item->damage);
-			item->owner->score += item->damage;
+			item->owner->score += item->damage * damageScoreMult;
 		}else if(p->heldItem == nullptr && !item->held && !item->destroy){
 			p->itemToPickup = item;
 			// multiple players might be able to pick it up in one update

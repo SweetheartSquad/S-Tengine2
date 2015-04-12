@@ -55,10 +55,12 @@ void RaidTheCastleContactListener::structureItemContact(b2Contact * _contact, b2
     Item * item = static_cast<Item *>( _itemFixture->GetUserData() );
 	Castle * castle = dynamic_cast<Castle *>(structure);
 	if(castle != nullptr){
-		castle->takeDamage(item->damage); // what is going on here?
+		castle->takeDamage(item->damage);
+		if(item->owner != nullptr){
+			item->owner->score += item->damage;
+		}
 		Boulder * boulder = dynamic_cast<Boulder *>(item);
 		if(boulder != nullptr){
-			boulder->playerWhoFired->score += boulder->damage;
 			if(castle->state == StructureBreakable::kDEAD){
 				boulder->playerWhoFired->score += 100000;
 				boulder->playerWhoFired->lastUpdateScore = boulder->playerWhoFired->score;

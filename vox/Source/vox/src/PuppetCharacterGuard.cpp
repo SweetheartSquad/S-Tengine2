@@ -46,6 +46,13 @@ void PuppetCharacterGuard::render(vox::MatrixStack * _matrixStack, RenderOptions
 		static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(_renderOptions->shader)->components.at(3))->setAlpha(0.5f);
 	}
 
+	popsicleStick->render(_matrixStack, _renderOptions);
+
+	whiteHead->render(_matrixStack, _renderOptions);
+	whiteTorso->render(_matrixStack, _renderOptions);
+	whiteArmLeft->render(_matrixStack, _renderOptions);
+	whiteArmRight->render(_matrixStack, _renderOptions);
+
 
 	armLeft->render(_matrixStack, _renderOptions);
 	armRight->render(_matrixStack, _renderOptions);

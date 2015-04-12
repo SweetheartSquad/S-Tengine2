@@ -7,12 +7,13 @@
 #include <PuppetScene.h>
 #include <shader\BaseComponentShader.h>
 
-ItemProjectileWeapon::ItemProjectileWeapon(TextureSampler * _projectileTex, TextureSampler * _weaponTex, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex, int _damage, float _handleX, float _handleY):
+ItemProjectileWeapon::ItemProjectileWeapon(TextureSampler * _projectileTex, TextureSampler * _weaponTex, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex, float _damage, float _projectileDamage, float _handleX, float _handleY):
 	Item(false, _world, _categoryBits, _maskBits, _groupIndex, _damage, _handleX, _handleY),
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
 	NodeRenderable(),
-	projectileTex(_projectileTex)
+	projectileTex(_projectileTex),
+	projectileDamage(_projectileDamage)
 {
 	rootComponent = new Box2DSprite(_world, _weaponTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale);
 	components.push_back(&rootComponent);
@@ -44,7 +45,7 @@ Item * ItemProjectileWeapon::getProjectile(bool _forceDrop){
         return Item::getProjectile(_forceDrop);
     }
     
-    Item * projectile = new Item(true, world, categoryBits, maskBits, groupIndex, damage, handleX, handleY);
+	Item * projectile = new Item(true, world, categoryBits, maskBits, groupIndex, projectileDamage, handleX, handleY);
 	
 	Box2DSprite ** test = new Box2DSprite*[1];
 	test[0] = projectile->rootComponent = new Box2DSprite(world, projectileTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale);

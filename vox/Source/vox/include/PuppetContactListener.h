@@ -9,6 +9,7 @@ class PuppetContactListener : public b2ContactListener{
 public:
 	PuppetContactListener(PuppetScene * _scene);
 
+	float damageScoreMult;
 
 	//ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB);
 	virtual void BeginContact(b2Contact* _contact) override;

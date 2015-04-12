@@ -58,7 +58,7 @@
 
 class SlayTheDragon;
 
-PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float _height, float _size) :
+PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float _height, float _size, bool _fullCurtains) :
 	LayeredScene(_game, 3),
 	sceneHeight(_height),
 	sceneWidth(_width),
@@ -110,6 +110,33 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	backgroundSoundManager->addNewSound("2", "../assets/hurly-burly/audio/songs/FastSong.ogg");
 	backgroundSoundManager->addNewSound("3", "../assets/hurly-burly/audio/songs/MelodicaSong.ogg");
 	
+	if(_fullCurtains){
+		Sprite * spotlight = new Sprite();
+	
+		spotlight->transform->translate(0, 1, 5);
+		spotlight->transform->scale(sceneWidth, sceneHeight, 1);
+		spotlight->mesh->pushTexture2D(PuppetResourceManager::stageSpotlight->texture);
+		spotlight->setShader(shader, true);
+		addChild(spotlight, 2);
+
+		Sprite * curtainCenter = new Sprite();
+	
+		curtainCenter->transform->translate(0, 1, 5);
+		curtainCenter->transform->scale(sceneWidth * 0.5, 30, 1);
+		curtainCenter->transform->translate((sceneWidth - curtainCenter->transform->getScaleVector().x) * 0.8, 0, 0);
+		curtainCenter->mesh->pushTexture2D(PuppetResourceManager::stageCurtainCenter->texture);
+		curtainCenter->setShader(shader, true);
+		addChild(curtainCenter, 2);
+
+		Sprite * topCurtain = new Sprite();
+	
+		topCurtain->transform->translate(0, 1, 5);
+		topCurtain->transform->scale(sceneWidth, sceneHeight, 1);
+		topCurtain->mesh->pushTexture2D(PuppetResourceManager::stageCurtainTop->texture);
+		topCurtain->setShader(shader, true);
+		addChild(topCurtain, 2);
+	}
+
 	Sprite * curtain = new Sprite();
 	float scale = 100;
 	curtain->transform->translate(sceneWidth - 29, 1, 5);
@@ -124,6 +151,8 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	curtain->mesh->pushTexture2D(PuppetResourceManager::stageCurtain->texture);
 	curtain->setShader(shader, true);
 	addChild(curtain, 2);
+
+
 
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
