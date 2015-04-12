@@ -21,7 +21,8 @@ MeshEntity::MeshEntity(MeshInterface * _mesh, Transform * _transform, Shader * _
 
 MeshEntity::~MeshEntity(void){
 	delete transform;
-	delete mesh;	
+	transform = nullptr;
+	delete mesh;
 	if(shader != nullptr){
 		shader->decrementAndDelete();		
 	}

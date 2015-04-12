@@ -265,9 +265,36 @@ void PuppetCharacterDragon::pickupItem(Item * _item){
 void PuppetCharacterDragon::load(){
 	PuppetCharacter::load();
 	fireParticles->load();
+	if(fireball != nullptr){
+		fireball->load();
+	}
 }
 
 void PuppetCharacterDragon::unload(){
 	PuppetCharacter::unload();
 	fireParticles->unload();
+	if(fireball != nullptr){
+		fireball->unload();
+	}
+}
+
+void PuppetCharacterDragon::die(){
+	for(Box2DSprite ** c : components){
+		b2JointEdge * je = (*c)->body->GetJointList();
+		while(je != nullptr){
+			b2Joint * j = je->joint;
+			je = je->next;
+			world->b2world->DestroyJoint(j);
+		}
+	}
+	
+	for(Box2DSprite ** c : components){
+		(*c)->applyLinearImpulseUp(vox::NumberUtils::randomFloat(10, 50));
+		(*c)->applyLinearImpulseLeft(vox::NumberUtils::randomFloat(-100, 100));
+	}
+
+	PuppetCharacter::die();
+	for(Box2DSprite ** c : components){
+		(*c)->body->SetGravityScale(1);
+	}
 }

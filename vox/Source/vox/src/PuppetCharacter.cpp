@@ -274,12 +274,15 @@ void PuppetCharacter::init(){
 	handLeft->transform->scale(-1, 1, 1);
 
 
-
-
+	
+	whiteArmLeft->body->SetGravityScale(0);
+	whiteArmRight->body->SetGravityScale(0);
+	whiteHead->body->SetGravityScale(0);
+	whiteTorso->body->SetGravityScale(0);
 
 	
 	// headw
-	b2RevoluteJointDef jhw;
+	/*b2RevoluteJointDef jhw;
 	jhw.bodyA = head->body;
 	jhw.bodyB = whiteHead->body;
 	jhw.localAnchorA.Set(0, 0);
@@ -326,6 +329,18 @@ void PuppetCharacter::init(){
 	// flip left side
 	whiteArmLeft->transform->scale(-1, 1, 1);
 	//handLeft->transform->scale(-1, 1, 1);
+	*/
+	/*delete whiteArmLeft->transform;
+	whiteArmLeft->transform = armLeft->transform;
+
+	delete whiteArmRight->transform;
+	whiteArmRight->transform = armRight->transform;
+
+	delete whiteHead->transform;
+	whiteHead->transform = head->transform;
+
+	delete whiteTorso->transform;
+	whiteTorso->transform = torso->transform;*/
 }
 
 void PuppetCharacter::createIndicator(signed long _id){
@@ -354,12 +369,6 @@ void PuppetCharacter::createIndicator(signed long _id){
 
 
 void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
-	popsicleStick->render(_matrixStack, _renderOptions);
-
-	whiteHead->render(_matrixStack, _renderOptions);
-	whiteTorso->render(_matrixStack, _renderOptions);
-	whiteArmLeft->render(_matrixStack, _renderOptions);
-	whiteArmRight->render(_matrixStack, _renderOptions);
 
 	ShaderComponentHsv * hsvShader = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(getShader())->components.at(1));
 	ShaderComponentTint * tintShader = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(getShader())->components.at(2));
@@ -388,14 +397,23 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 	if(ai){
 		newSat = 0.f;
 	}
+	
+	if(dead){
+		alphaShader->setAlpha(0.5f);
+	}
+
+	popsicleStick->render(_matrixStack, _renderOptions);
+
+	whiteHead->render(_matrixStack, _renderOptions);
+	whiteTorso->render(_matrixStack, _renderOptions);
+	whiteArmLeft->render(_matrixStack, _renderOptions);
+	whiteArmRight->render(_matrixStack, _renderOptions);
+	
 
 	tintShader->setRed(red + (1 - control) * 3);
 	tintShader->setGreen(green - (1 - control) * 3);
 	tintShader->setBlue(blue - (1 - control) * 3);
 	
-	if(dead){
-		alphaShader->setAlpha(0.5f);
-	}
 
 
 	// change the shader settings based on current damage and player id
@@ -441,6 +459,7 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 }
 
 void PuppetCharacter::update(Step* _step){
+
 	PuppetScene * ps = dynamic_cast<PuppetScene *>(scene);
 
 	if(canJump){
@@ -557,6 +576,11 @@ void PuppetCharacter::update(Step* _step){
 		indicator->setPos(iPos + (hPos - iPos)*0.1f);
 		//indicator->transform->setOrientation(glm::quat(1,0,0,0));
 	}
+	
+	*whiteArmLeft->transform = *armLeft->transform;
+	*whiteArmRight->transform = *armRight->transform;
+	*whiteHead->transform = *head->transform;
+	*whiteTorso->transform = *torso->transform;
 }
 
 void PuppetCharacter::jump(){
