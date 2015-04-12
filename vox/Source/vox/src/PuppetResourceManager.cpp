@@ -59,7 +59,7 @@ TextureSampler * PuppetResourceManager::countDown5 = new TextureSampler(new Text
 
 std::vector<TextureSampler *> PuppetResourceManager::indicators;
 
-std::vector<TextureSampler *> PuppetResourceManager::scoreIndicators;
+std::vector<Texture *> PuppetResourceManager::scoreIndicators;
 
 //TextureSampler * PuppetResourceManager::redWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/redWins.png", 1024, 1024, true, true), 1024, 1024);
 //TextureSampler * PuppetResourceManager::yellowWins = new TextureSampler(new Texture("../assets/hurly-burly/VictorySplashMessages/yellowWins.png", 1024, 1024, true, true), 1024, 1024);
@@ -145,10 +145,10 @@ void PuppetResourceManager::init(){
 	}
 
 	
-	scoreIndicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "indicator1-circle.png.def"));
-	scoreIndicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "indicator2-circle.png.def"));
-	scoreIndicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "indicator3-circle.png.def"));
-	scoreIndicators.push_back(new TextureSampler("../assets/hurly-burly/PlayerIndicators/", "indicator4-circle.png.def"));
+	scoreIndicators.push_back(new Texture("../assets/hurly-burly/PlayerIndicators/indicator1-circle.png", 1024, 1024, true, true));
+	scoreIndicators.push_back(new Texture("../assets/hurly-burly/PlayerIndicators/indicator2-circle.png", 1024, 1024, true, true));
+	scoreIndicators.push_back(new Texture("../assets/hurly-burly/PlayerIndicators/indicator3-circle.png", 1024, 1024, true, true));
+	scoreIndicators.push_back(new Texture("../assets/hurly-burly/PlayerIndicators/indicator4-circle.png", 1024, 1024, true, true));
 	for(auto i : scoreIndicators){
 		resources.push_back(i);
 	}

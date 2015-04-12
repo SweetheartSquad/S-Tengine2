@@ -20,7 +20,7 @@ ScoreIndicator::ScoreIndicator(unsigned long int _id, Box2DWorld * _world) :
 	transform->scale(pixels, pixels, 1);
 	transform->translate((3.5f-id) * 1920.f*0.25f, pixels*1.1f, 10.f);
 	//scoreIndicator->transform->rotate(90, 0, 1, 0, kOBJECT);
-	mesh->pushTexture2D(PuppetResourceManager::scoreIndicators.at(id)->texture);
+	mesh->pushTexture2D(PuppetResourceManager::scoreIndicators.at(id));
 }
 
 ScoreIndicator::~ScoreIndicator(){
