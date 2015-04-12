@@ -95,7 +95,9 @@ int aprintf(const char *str, ...) {
 void loop() {
   //if(Serial.available() > 0){
     //Serial.read();
+    //delay(100);
     aprintf(":%d%d%d%d%d%d%d%d%d%d%d%d",
+    //aprintf(":%d %d %d - %d %d %d - %d %d %d - %d %d %d\n",
     analogRead(acclPin0), analogRead(acclPin1),  analogRead(acclPin2),
     analogRead(acclPin3), analogRead(acclPin4),  analogRead(acclPin5),
     analogRead(acclPin6), analogRead(acclPin7),  analogRead(acclPin8),

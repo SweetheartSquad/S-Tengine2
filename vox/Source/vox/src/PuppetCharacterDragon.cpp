@@ -37,8 +37,8 @@ PuppetCharacterDragon::PuppetCharacterDragon(bool _ai, Box2DWorld * _world, int1
 	altitude(60.f)
 {
 
-	behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(35,0,0), glm::vec3(125,0,0), this, 1));
-	behaviourManager->addBehaviour(new BehaviourAttackThrow(true, this, 100, PuppetGame::kPLAYER));
+	//behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(35,0,0), glm::vec3(125,0,0), this, 1));
+	//behaviourManager->addBehaviour(new BehaviourAttackThrow(true, this, 100, PuppetGame::kPLAYER));
 
 	for(auto c : components) {
 		(*c)->body->SetGravityScale(0.0f);
@@ -177,7 +177,7 @@ void PuppetCharacterDragon::render(vox::MatrixStack* _matrixStack, RenderOptions
 void PuppetCharacterDragon::update(Step * _step){
 	PuppetCharacter::update(_step);
 	b2Vec2 center = torso->body->GetWorldCenter();
-	torso->applyForce(torso->body->GetAngle() * -5000.0f, 0.0f, center.x, center.y);
+	torso->applyForce(torso->body->GetAngle() * -15000.0f, 0.0f, center.x, center.y);
 	if (altitude > 0){
 		torso->body->SetTransform(b2Vec2(torso->body->GetPosition().x, altitude), torso->body->GetAngle());
 	}
