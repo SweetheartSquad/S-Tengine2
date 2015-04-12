@@ -136,6 +136,21 @@ void FightYourFriends::update(Step* _step){
 		weapon->translateComponents(vox::NumberUtils::randomFloat(sceneWidth*0.1f, sceneWidth*0.9f), sceneHeight*0.8f, 0);
 		addChild(weapon, 1);
 	}
+
+	// handle dragon victory
+    PuppetCharacter * p;
+	unsigned int survivors = 0;
+    for (unsigned long int i = 0; i < players.size() - 1; ++i){
+        if (!players.at(i)->dead){
+            ++survivors;
+            p = players.at(i);
+        }
+    }
+    if (survivors == 1){
+        p->score += 100000;
+		p->lastUpdateScore = p->score;
+        triggerVictoryState();
+    }
 }
 
 void FightYourFriends::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
