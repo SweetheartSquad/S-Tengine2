@@ -106,7 +106,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	catapult->addToLayeredScene(this, 1);
 	addChild(catapult, 1);
 
-	catapult->translateComponents(glm::vec3(12.0f, 0.f, 0.f));
+	catapult->translateComponents(glm::vec3(14.0f, 0.f, 0.f));
 	
 	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
 	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter3, 3, PuppetGame::kPLAYER));
@@ -129,10 +129,10 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
         addChild(weapon, 1);
 	}
 	
-	playerCharacter1->translateComponents(glm::vec3(20.0f, 35, 0.f));
-	playerCharacter2->translateComponents(glm::vec3(40.0f, 35, 0.f));
-	playerCharacter3->translateComponents(glm::vec3(60.0f, 35, 0.f));
-	playerCharacter4->translateComponents(glm::vec3(80.0f, 35, 0.f));
+	playerCharacter1->translateComponents(glm::vec3(0.5f* sceneWidth*0.065f + 20.f, 35, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(1.5f* sceneWidth*0.065f + 20.f, 35, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(2.5f* sceneWidth*0.065f + 20.f, 35, 0.f));
+	playerCharacter4->translateComponents(glm::vec3(3.5f* sceneWidth*0.065f + 20.f, 35, 0.f));
 	champion->translateComponents(glm::vec3(100.f, 35, 0));
 
 	playRandomBackgroundMusic();
