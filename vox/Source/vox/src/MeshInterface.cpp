@@ -214,6 +214,8 @@ void MeshInterface::setNormal(unsigned long int _vertId, float _x, float _y, flo
 void MeshInterface::setUV(unsigned long _vertId, float _u, float _v){
 	vertices.at(_vertId).u = _u;
 	vertices.at(_vertId).v = _v;
+
+	dirty = true;
 }
 void TriMesh::pushTri(GLuint _v0, GLuint _v1, GLuint _v2){
 	indices.push_back(_v0);

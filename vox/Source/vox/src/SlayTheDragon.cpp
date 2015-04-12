@@ -80,7 +80,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
     fortForeground->setTranslationPhysical(glm::vec3(0, fortForeground->getCorrectedHeight(), 0));
 
 
-    fort->translateComponents(glm::vec3(0.f, fortForeground->getCorrectedHeight() + 25.f, 0.f));
+    fort->translateComponents(glm::vec3(0.f, fortForeground->getCorrectedHeight() + 31.f, 0.f));
 	
 	// dragon needs to be first bc the fire particles should draw underneath other players
 	playerCharacter4->setShader(shader, true);

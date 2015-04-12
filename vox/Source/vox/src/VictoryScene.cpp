@@ -114,6 +114,8 @@ VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _p
 	gameCam->useBounds = true;
 	gameCam->minBounds.y = 0;
 	gameCam->minBounds.height = sceneHeight;
+
+	
 }
 
 VictoryScene::~VictoryScene(){

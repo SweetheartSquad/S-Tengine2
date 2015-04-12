@@ -109,9 +109,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	backgroundSoundManager->addNewSound("1", "../assets/hurly-burly/audio/songs/WesternSong.ogg");
 	backgroundSoundManager->addNewSound("2", "../assets/hurly-burly/audio/songs/FastSong.ogg");
 	backgroundSoundManager->addNewSound("3", "../assets/hurly-burly/audio/songs/MelodicaSong.ogg");
-
-	
-
 	
 	Sprite * curtain = new Sprite();
 	float scale = 100;
@@ -127,7 +124,6 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	curtain->mesh->pushTexture2D(PuppetResourceManager::stageCurtain->texture);
 	curtain->setShader(shader, true);
 	addChild(curtain, 2);
-
 
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
@@ -175,21 +171,19 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 
 	//world->addToWorld(ground, 2);
 
-	
 	background->setShader(shader, true);
 	background->transform->translate(-sceneWidth/2.f, sceneHeight/2.f, -15.f/2.f);
 	background->transform->scale(sceneWidth*2.f, sceneHeight, 1);
 	background->mesh->pushTexture2D(PuppetResourceManager::sky);
 	background->mesh->uvEdgeMode = GL_MIRRORED_REPEAT_ARB;
-	background->mesh->dirty = true;
 
 	int timeOfDayOptions = PuppetResourceManager::sky->width;
 	int timeOfDay = std::rand()%timeOfDayOptions;
-	background->mesh->setUV(0, (float)timeOfDay / timeOfDayOptions, 0);
-	background->mesh->setUV(1, (float)timeOfDay / timeOfDayOptions, 0);
-	background->mesh->setUV(2, (float)timeOfDay / timeOfDayOptions, 1);
-	background->mesh->setUV(3, (float)timeOfDay / timeOfDayOptions, 1);
-
+	background->mesh->setUV(0, static_cast<float>(timeOfDay) / timeOfDayOptions, 0);
+	background->mesh->setUV(1, static_cast<float>(timeOfDay) / timeOfDayOptions, 0);
+	background->mesh->setUV(2, static_cast<float>(timeOfDay) / timeOfDayOptions, 1);
+	background->mesh->setUV(3, static_cast<float>(timeOfDay) / timeOfDayOptions, 1);
+	
 	addChild(background, 0);
 
 	/*b2PolygonShape dynamicBox;

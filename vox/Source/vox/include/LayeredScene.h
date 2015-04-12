@@ -11,7 +11,7 @@ public:
 	std::vector<Entity *> uiLayer;
 	
 	/** Calls update on the attached camera */
-	virtual void update(Step * _step);
+	virtual void update(Step * _step) override;
 	/** Tells the RenderSystem to render the attached children to the vox::currentContext using the camera's view-projection matrix */
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	/** DOESN'T DO ANYTHING! */
