@@ -16,7 +16,7 @@
 #define SCENE_WIDTH 100
 
 VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _players):
-	PuppetScene(_game, 10, SCENE_WIDTH, 25.f)
+	PuppetScene(_game, 10, 50, 25.f, 100.f, true)
 {
 	populateBackground();
 	cl = new PuppetContactListener(this);
