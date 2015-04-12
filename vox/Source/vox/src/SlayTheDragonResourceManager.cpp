@@ -21,8 +21,8 @@ TextureSampler * SlayTheDragonResourceManager::dragonTorso		= new TextureSampler
 TextureSampler * SlayTheDragonResourceManager::dragonUpperWing	= new TextureSampler("../assets/hurly-burly/DragonAssets/", "DragonUpperWing.png.def");
 TextureSampler * SlayTheDragonResourceManager::dragonLowerWing	= new TextureSampler("../assets/hurly-burly/DragonAssets/", "DragonLowerWing.png.def");
 
-TextureSampler * SlayTheDragonResourceManager::itemBow	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Bow.png", 1024, 1024, true, true), 99, 474);
-TextureSampler * SlayTheDragonResourceManager::itemArrow	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/Arrow.png", 1024, 1024, true, true), 77, 539);
+TextureSampler * SlayTheDragonResourceManager::itemBow	= new TextureSampler("../assets/hurly-burly/WeaponAssets/", "Bow.png.def");
+TextureSampler * SlayTheDragonResourceManager::itemArrow	= new TextureSampler("../assets/hurly-burly/WeaponAssets/", "Arrow.png.def");
 TextureSampler * SlayTheDragonResourceManager::itemFireball	= new TextureSampler("../assets/hurly-burly/DragonAssets/", "Fireball.png.def");
 TextureSampler * SlayTheDragonResourceManager::itemFireParticle	= new TextureSampler("../assets/hurly-burly/DragonAssets/", "FireParticle.png.def");
 

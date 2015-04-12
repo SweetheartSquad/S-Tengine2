@@ -173,6 +173,10 @@ void PuppetResourceManager::init(){
 	itemMeleeWeapons.push_back(new TextureSampler("../assets/hurly-burly/WeaponAssets/", "hamBone.png.def"));
 	itemMeleeWeapons.push_back(new TextureSampler("../assets/hurly-burly/WeaponAssets/", "stringHam.png.def"));
 	itemMeleeWeapons.push_back(new TextureSampler("../assets/hurly-burly/WeaponAssets/", "mandolin.png.def"));
+	itemMeleeWeapons.push_back(new TextureSampler("../assets/hurly-burly/WeaponAssets/", "broom.png.def"));
+	itemMeleeWeapons.push_back(new TextureSampler("../assets/hurly-burly/WeaponAssets/", "foldingChair.png.def"));
+	itemMeleeWeapons.push_back(new TextureSampler("../assets/hurly-burly/WeaponAssets/", "plunger.png.def"));
+	itemMeleeWeapons.push_back(new TextureSampler("../assets/hurly-burly/WeaponAssets/", "lamp.png.def"));
 	for(auto i : itemMeleeWeapons){
 		resources.push_back(i);
 	}

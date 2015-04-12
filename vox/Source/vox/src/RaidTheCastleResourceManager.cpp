@@ -21,9 +21,9 @@ TextureSampler * RaidTheCastleResourceManager::castleChampionHelmet	= new Textur
 
 TextureSampler * RaidTheCastleResourceManager::splashMessage	= new TextureSampler(new Texture("../assets/hurly-burly/SplashMessages/RaidTheCastle.png", 1024, 1024, true, true), 1024, 1024);
 
-TextureSampler * RaidTheCastleResourceManager::itemFlailGrip	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/FlailGrip.png", 1024, 1024, true, true), 51, 134);
-TextureSampler * RaidTheCastleResourceManager::itemFlailJoint	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/FlailJoint.png", 1024, 1024, true, true), 67, 66);
-TextureSampler * RaidTheCastleResourceManager::itemFlailHead	= new TextureSampler(new Texture("../assets/hurly-burly/WeaponAssets/FlailHead.png", 1024, 1024, true, true), 178, 178);
+TextureSampler * RaidTheCastleResourceManager::itemFlailGrip	= new TextureSampler("../assets/hurly-burly/WeaponAssets/", "FlailGrip.png.def");
+TextureSampler * RaidTheCastleResourceManager::itemFlailJoint	= new TextureSampler("../assets/hurly-burly/WeaponAssets/", "FlailJoint.png.def");
+TextureSampler * RaidTheCastleResourceManager::itemFlailHead	= new TextureSampler("../assets/hurly-burly/WeaponAssets/", "FlailHead.png.def");
 
 SoundManager * RaidTheCastleResourceManager::catapultHitSounds = new SoundManager(-1);
 SoundManager * RaidTheCastleResourceManager::catapultThrowSounds = new SoundManager(-1);
