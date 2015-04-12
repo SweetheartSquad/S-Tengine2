@@ -91,7 +91,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	addChild(champion, 0);
 	champion->addToLayeredScene(this, 1);
 	
-	champion->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kGROUND, champion->groupIndex, 1, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
+	champion->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kGROUND, champion->groupIndex, 10, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
 	addChild(champion->itemToPickup, 1);
 	champion->itemToPickup->addToLayeredScene(this, 1);
 	champion->itemToPickup->setShader(shader, true);

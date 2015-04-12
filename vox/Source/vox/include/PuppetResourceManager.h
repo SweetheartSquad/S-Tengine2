@@ -35,10 +35,15 @@ public:
 	static std::vector<TextureSampler *> scoreParticles;
 	static TextureSampler * getRandomScoreParticles();
 
-	static TextureSampler * head1;
+	static TextureSampler * head;
+	static TextureSampler * hand;
+	static TextureSampler * popsicleStick;
 	static std::vector<TextureSampler *> faces;
-	static TextureSampler * hand1;
 	static TextureSampler * getRandomFace();
+	
+	static TextureSampler * whiteHead;
+	static TextureSampler * whiteTorso;
+	static TextureSampler * whiteArm;
 	
 	static TextureSampler * countDown0;
 	static TextureSampler * countDown1;
