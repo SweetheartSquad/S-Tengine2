@@ -5,9 +5,9 @@
 #include <SoundManager.h>
 
 
-TextureSampler * RaidTheCastleResourceManager::catapultArm   = new TextureSampler(new Texture("../assets/hurly-burly/Catapult/CatapultFlinger.png", 512, 512, true, true), 429, 76);
-TextureSampler * RaidTheCastleResourceManager::catapultBody  = new TextureSampler(new Texture("../assets/hurly-burly/Catapult/CatapultBase.png", 512, 512, true, true), 418, 264);
-TextureSampler * RaidTheCastleResourceManager::boulder		 = new TextureSampler(new Texture("../assets/hurly-burly/Catapult/Boulder1.png", 512, 512, true, true), 108, 103);
+TextureSampler * RaidTheCastleResourceManager::catapultArm   = new TextureSampler("../assets/hurly-burly/Catapult/", "CatapultFlinger.png.def");
+TextureSampler * RaidTheCastleResourceManager::catapultBody  = new TextureSampler("../assets/hurly-burly/Catapult/", "CatapultBase.png.def");
+TextureSampler * RaidTheCastleResourceManager::boulder		 = new TextureSampler("../assets/hurly-burly/Catapult/", "Boulder1.png.def");
 TextureSampler * RaidTheCastleResourceManager::castleBase = new TextureSampler(new Texture("../assets/hurly-burly/Castle/CastleNorm_State1.png", 1024, 1024, true, true), 973, 619);
 Texture * RaidTheCastleResourceManager::castleSpriteSheet = new Texture("../assets/hurly-burly/Castle/Castle_SpriteSheet.png", 2048, 2048, true, true);
 

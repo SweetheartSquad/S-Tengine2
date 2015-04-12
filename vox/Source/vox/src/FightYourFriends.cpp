@@ -200,7 +200,7 @@ void FightYourFriends::populateBackground(){
 	if(std::rand() % 2 == 0){
 		Sprite * arenaBg = new Sprite();
 		float scale = sceneWidth*0.8f;
-		arenaBg->transform->translate(25, 35, -5);
+		arenaBg->transform->translate(25, 40, -5);
 		arenaBg->transform->scale(scale, scale, 1);
 		arenaBg->mesh->pushTexture2D(FightYourFriendsResourceManager::arena1);
 		arenaBg->setShader(shader, true);
