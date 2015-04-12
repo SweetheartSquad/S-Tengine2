@@ -138,6 +138,13 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 			weapon->setShader(shader, true);
 			p->itemToPickup = weapon;
 			addChild(weapon, 1);
+		}else{
+			TextureSampler * weaponTex = PuppetResourceManager::itemMeleeWeapons.at(11);
+			ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kSTRUCTURE | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -weaponTex->height);
+			weapon->addToLayeredScene(this, 1);
+			weapon->setShader(shader, true);
+			p->itemToPickup = weapon;
+			addChild(weapon, 1);
 		}
 	}
 	

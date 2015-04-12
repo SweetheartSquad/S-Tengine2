@@ -29,8 +29,8 @@ TextureSampler * RapunzelResourceManager::thiefTorso	= new TextureSampler("../as
 TextureSampler * RapunzelResourceManager::thiefArm		= new TextureSampler("../assets/hurly-burly/ThiefAssets/", "ThiefArm.png.def");
 TextureSampler * RapunzelResourceManager::thiefHelmet	= new TextureSampler("../assets/hurly-burly/ThiefAssets/", "ThiefHelmet.png.def");
 										  
-TextureSampler * RapunzelResourceManager::rapunzelTorso	    = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelDress.png.def");
-TextureSampler * RapunzelResourceManager::rapunzelArm	    = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelArm.png.def");
+TextureSampler * RapunzelResourceManager::rapunzelTorso	   = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelDress.png.def");
+TextureSampler * RapunzelResourceManager::rapunzelArm	   = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelArm.png.def");
 TextureSampler * RapunzelResourceManager::rapunzelHelmet    = new TextureSampler("../assets/hurly-burly/RapunzelAssets/", "RapunzelHat.png.def");
 										  
 TextureSampler * RapunzelResourceManager::guard1Torso	= new TextureSampler("../assets/hurly-burly/FancyKnight1/", "FK1Breastplate.png.def");
