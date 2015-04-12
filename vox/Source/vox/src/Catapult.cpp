@@ -102,7 +102,7 @@ void Catapult::evaluateState(){
 	b2RevoluteJoint * jk = (b2RevoluteJoint *)base->body->GetJointList()->joint;
 	float angle = jk->GetJointAngle();
 	if(triggering){
-		arm->body->SetAngularVelocity(-20);
+		arm->body->SetAngularVelocity(-12.5f);
 		if(angle <= glm::radians(-45.f)){
 			fireBoulder = true;
 		}

@@ -49,6 +49,11 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	rootComponent->addAnimation("castleStates", spriteSheet, true);
 	rootComponent->setTranslationPhysical(0.f, rootComponent->getCorrectedHeight(), 0.f);
 	rootComponent->mesh->uvEdgeMode = GL_MIRRORED_REPEAT_ARB;
+
+	for(unsigned long int i = 0; i < rootComponent->mesh->vertices.size(); ++i){
+		rootComponent->mesh->vertices.at(i).x *= 1.1f;
+		rootComponent->mesh->vertices.at(i).y *= 1.1f;
+	}
 }
 
 Castle::~Castle(){
