@@ -23,4 +23,6 @@ public:
 
 	void load() override;
 	void unload() override;
+
+	void die() override;
 };
