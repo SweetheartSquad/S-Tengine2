@@ -210,8 +210,6 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	gameCam->buffer = 0;
 	
     addChild(castleCatwalk, 1);
-	
-
 }
 
 Rapunzel::~Rapunzel(){
@@ -229,6 +227,20 @@ void Rapunzel::update(Step* _step){
 	if(goldPile->goldTaken >= goldPile->totalGold){
 		playerCharacter4->score = 0;
         triggerVictoryState();
+	}else{
+		PuppetCharacter * p;
+		unsigned long int survivors = 0;
+		for (unsigned long int i = 0; i < players.size(); ++i){
+			if (!players.at(i)->dead){
+				++survivors;
+				p = players.at(i);
+			}
+		}
+		if(survivors == 1){
+			p->score += 100000;
+			p->lastUpdateScore = p->score;
+			triggerVictoryState();
+		}
 	}
 }
 

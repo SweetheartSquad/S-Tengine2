@@ -43,6 +43,7 @@ VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _p
 	}else{
 		// tie
 	}
+
 	for(unsigned long int i=0; i < _players.size(); ++i){
 		players.push_back(_players.at(i)->clone(world, this));
 
@@ -54,11 +55,51 @@ VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _p
 		gameCam->addTarget(players.at(i)->torso);
 		static_cast<PuppetGame *>(game)->puppetControllers.at(i)->setPuppetCharacter(players.at(i), players.at(i)->id);
 
-		players.at(i)->score /= maxScore;
+		//players.at(i)->score /= maxScore;
 	}
+	
+	std::vector<PuppetCharacter *> playerList;
+	for(unsigned long int i = 0; i < players.size(); ++i){
+		playerList.push_back(players.at(i));
+	}
+	
+	int playerPos = 0;
+	PuppetCharacter * player1 = playerList.at(0);
+	for(unsigned long int i = 0; i < playerList.size(); ++i){
+		if(playerList.at(i)->score > player1->score){
+			player1 = playerList.at(i);
+			playerPos = i;
+		}
+	}
+	playerList.erase(playerList.begin() + playerPos);
+	playerPos = 0;
+	PuppetCharacter * player2 = playerList.at(0);
+	for(unsigned long int i = 0; i < playerList.size(); ++i){
+		if(playerList.at(i)->score > player2->score){
+			player2 = playerList.at(i);
+			playerPos = i;
+		}
+	}
+	playerList.erase(playerList.begin() + playerPos);
+	playerPos = 0;
+	PuppetCharacter * player3 = playerList.at(0);
+	for(unsigned long int i = 0; i < playerList.size(); ++i){
+		if(playerList.at(i)->score > player3->score){
+			player3 = playerList.at(i);
+			playerPos = i;
+		}
+	}
+	playerList.erase(playerList.begin() + playerPos);
+	PuppetCharacter * player4 = playerList.at(0);
+	
+	player1->score = 1.f;
+	player2->score = 0.6f;
+	player3->score = 0.3f;
+	player4->score = 0.1f;
 
 	/*std::sort(sortedPlayers.begin(), sortedPlayers.end(), PuppetCharacter::compareByScore);
 	podium(sortedPlayers);*/
+
 
 	float maxHeight = 9.f;
 
@@ -72,7 +113,7 @@ VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _p
 		verts[2].x = (i+1.5f) * 20.f;
 		verts[3].x = (i+1.5f) * 20.f;
 		
-		float height = maxHeight * players.at(i)->score+1.f;
+		float height = maxHeight * players.at(i)->score;
 		verts[0].y = 0;
 		verts[1].y = height;
 		verts[2].y = height;

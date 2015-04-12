@@ -49,6 +49,7 @@ FightYourFriends::FightYourFriends(PuppetGame* _game):
 {
 	ghostPosition = 12.0f;
 	cl = new PuppetContactListener(this);
+	cl->damageScoreMult = 1.f;
 
 	TextureSampler * splashMessageTextureSampler = FightYourFriendsResourceManager::splashMessage;
 	splashMessage = new Sprite(nullptr, new Transform());

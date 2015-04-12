@@ -80,7 +80,7 @@ void Lever::evaluateState(){
 	
 	handle->body->SetAngularVelocity(2.5f);
 	if(type == 3){
-		handle->body->SetAngularVelocity(1.5f);
+		handle->body->SetAngularVelocity(2.25f);
 	}
 
 	if(triggering){

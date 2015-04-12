@@ -48,13 +48,14 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	playerCharacter3(new PuppetCharacterKnight(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
 	playerCharacter4(new PuppetCharacterKnight(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
-	castle->setShader(shader, true);
-	castle->addToLayeredScene(this, 0);
-	addChild(castle, 0);
 
 	ghostPosition = 12.0f;
 	populateBackground();
 	cl = new RaidTheCastleContactListener(this);
+	
+	castle->setShader(shader, true);
+	castle->addToLayeredScene(this, 0);
+	addChild(castle, 0);
 
 	TextureSampler * splashMessageTextureSampler = RaidTheCastleResourceManager::splashMessage;
 	splashMessage = new Sprite(nullptr, new Transform());
@@ -95,7 +96,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	addChild(champion, 0);
 	champion->addToLayeredScene(this, 1);
 	
-	champion->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kGROUND | PuppetGame::kBOUNDARY, champion->groupIndex, 10, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
+	champion->itemToPickup = new ItemFlail(world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kGROUND | PuppetGame::kBOUNDARY, champion->groupIndex, 5, 0, -RaidTheCastleResourceManager::itemFlailGrip->height/2.f);
 	addChild(champion->itemToPickup, 1);
 	champion->itemToPickup->addToLayeredScene(this, 1);
 	champion->itemToPickup->setShader(shader, true);

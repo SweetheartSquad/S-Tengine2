@@ -65,7 +65,7 @@ PuppetCharacter * PuppetCharacter::clone(Box2DWorld * _world, PuppetScene * _sce
 	PuppetCharacter * res = new PuppetCharacter(texPack, ai, _world, categoryBits, maskBits, groupIndex);
 	res->scene = _scene;
 	res->id = id;
-	res->score = std::max(0.f, score);
+	res->score = std::max(0.0001f, score);
 	res->lastUpdateScore = res->score;
 	res->createIndicator(res->id);
 	return res;
