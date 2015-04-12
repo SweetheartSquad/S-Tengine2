@@ -46,6 +46,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 {
 	ghostPosition = 30.0f;
 	cl = new SlayTheDragonContactListener(this);
+	cl->damageScoreMult = 1;
 	
 	populateBackground();
 	
