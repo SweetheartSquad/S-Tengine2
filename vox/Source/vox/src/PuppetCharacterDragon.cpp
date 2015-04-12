@@ -261,3 +261,13 @@ void PuppetCharacterDragon::pickupItem(Item * _item){
 		_item->owner = this;
 	}
 }
+
+void PuppetCharacterDragon::load(){
+	PuppetCharacter::load();
+	fireParticles->load();
+}
+
+void PuppetCharacterDragon::unload(){
+	PuppetCharacter::unload();
+	fireParticles->unload();
+}

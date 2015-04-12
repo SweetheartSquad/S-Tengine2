@@ -651,8 +651,6 @@ void PuppetScene::populateBackground(){
 	stageFloor = new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFloor.vox"));
 	stageFront = new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFront.vox"));
 
-	addChild(stageFloor, 0);
-	addChild(stageFront, 0);
 
 	stageFloor->setShader(shader, true);
 	stageFloor->transform->scale(1000, 100, 100);
@@ -676,6 +674,9 @@ void PuppetScene::populateBackground(){
 		v.v *= 100;
 	}
 	stageFront->mesh->dirty = true;
+
+	addChild(stageFloor, 0);
+	addChild(stageFront, 0);
 
 	Texture * treeTex1 = PuppetResourceManager::tree1;
 	Texture * treeTex2 = PuppetResourceManager::tree2;

@@ -22,6 +22,9 @@ public:
 	void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) override;
 	void DrawTransform(const b2Transform& xf) override;
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderStack) override;
+	
+	void load() override;
+	void unload() override;
 
 private:
 	BaseComponentShader * shader;

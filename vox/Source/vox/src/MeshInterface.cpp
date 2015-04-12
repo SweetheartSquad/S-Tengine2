@@ -8,7 +8,7 @@
 #include "VoxRenderOptions.h"
 #include "Transform.h"
 
-MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode):
+MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode) :
 	NodeRenderable(),
 	dirty(true),
 	texturesDirty(true),
@@ -46,6 +46,8 @@ GLsizei MeshInterface::getVertCount(){
 
 void MeshInterface::load(){
 	if(!loaded){
+		checkForGlError(0,__FILE__,__LINE__);
+
 		glBindVertexArray(0);
 
 		// Vertex Array Object (VAO)
@@ -61,6 +63,8 @@ void MeshInterface::load(){
 		glGenBuffers(1, &iboId);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * indices.size(), indices.data(), drawMode);
+		
+		checkForGlError(0,__FILE__,__LINE__);
 
 		// Initialize textures
 		for (Texture * texture : textures){
@@ -87,6 +91,7 @@ void MeshInterface::unload(){
 		vaoId = 0;
 
 		dirty = true;
+		checkForGlError(0,__FILE__,__LINE__);
 	}
 	
 	NodeLoadable::unload();

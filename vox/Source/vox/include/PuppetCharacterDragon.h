@@ -20,4 +20,7 @@ public:
 	void update(Step * _step) override;
     void action(bool _forceDrop = false) override;
 	void pickupItem(Item * _item) override;
+
+	void load() override;
+	void unload() override;
 };

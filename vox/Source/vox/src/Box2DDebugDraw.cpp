@@ -138,3 +138,17 @@ void Box2DDebugDraw::render(vox::MatrixStack * _matrixStack, RenderOptions * _re
 		world->b2world->DrawDebugData();
 	}
 }
+
+void Box2DDebugDraw::load(){
+	spriteTransform->load();
+	spriteCircle->load();
+	spritePoly->load();
+	spriteSegment->load();
+}
+
+void Box2DDebugDraw::unload(){
+	spriteTransform->unload();
+	spriteCircle->unload();
+	spritePoly->unload();
+	spriteSegment->unload();
+}

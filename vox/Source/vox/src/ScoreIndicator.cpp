@@ -64,3 +64,13 @@ void ScoreIndicator::setShader(Shader * _shader, bool _configure){
 	Sprite::setShader(_shader, _configure);
 	scoreParticles->setShader(_shader, _configure);
 }
+
+void ScoreIndicator::load(){
+	Sprite::load();
+	scoreParticles->load();
+}
+
+void ScoreIndicator::unload(){
+	Sprite::unload();
+	scoreParticles->unload();
+}

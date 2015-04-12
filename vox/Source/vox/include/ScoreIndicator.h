@@ -13,5 +13,9 @@ public:
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	void update(Step * _step) override;
 	void setShader(Shader * _shader, bool _configure) override;
+
+	void load() override;
+	void unload() override;
+
 	unsigned long int id;
 };

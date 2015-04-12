@@ -71,10 +71,6 @@ SoundManager * PuppetResourceManager::cheerSounds = new SoundManager(-1);
 SoundManager * PuppetResourceManager::fallingSounds = new SoundManager(-1);
 
 void PuppetResourceManager::init(){
-	RaidTheCastleResourceManager::init();
-	RapunzelResourceManager::init();
-	SlayTheDragonResourceManager::init();
-	FightYourFriendsResourceManager::init();
 	
 	resources.push_back(startupSplash);
 	resources.push_back(blank);
@@ -222,6 +218,11 @@ void PuppetResourceManager::init(){
 	fallingSounds->addNewSound("1", "../assets/hurly-burly/audio/puppetDialog_Dragon/falling1.ogg");
 	fallingSounds->addNewSound("2", "../assets/hurly-burly/audio/puppetDialog_Dragon/falling2.ogg");
 	resources.push_back(fallingSounds);
+
+	RaidTheCastleResourceManager::init();
+	RapunzelResourceManager::init();
+	SlayTheDragonResourceManager::init();
+	FightYourFriendsResourceManager::init();
 }
 
 TextureSampler * PuppetResourceManager::getRandomScoreParticles(){

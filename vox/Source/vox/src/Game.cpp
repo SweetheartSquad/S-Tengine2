@@ -11,7 +11,7 @@
 #include "GLUtils.h"
 
 
-Game::Game(bool _isRunning):
+Game::Game(bool _isRunning) :
 	accumulator(0.0),
 	lastTimestep(0.0),
 	mouse(&Mouse::getInstance()),
@@ -270,16 +270,16 @@ void Game::toggleFullScreen(){
 	viewPortX = 0;
 	viewPortY = 0;
 	
-	ResourceManager::unload();
 
 	for(std::pair<std::string, Scene *> s : scenes){
 		s.second->unload();
 	}
+	ResourceManager::unload();
+	
+	ResourceManager::load();
 	for(std::pair<std::string, Scene *> s : scenes){
 		s.second->load();
 	}
-	
-	ResourceManager::load();
 	//resourceManager->load();
 
 	checkForGlError(0,__FILE__,__LINE__);

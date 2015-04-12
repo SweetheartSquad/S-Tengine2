@@ -28,13 +28,14 @@ void Texture::load(){
 		if(channels == nullptr){
 			channels = new int(0);
 		}
-
+		
+				checkForGlError(0,__FILE__,__LINE__);
 		glGenTextures(1, &textureId);
 				checkForGlError(0,__FILE__,__LINE__);
 		glBindTexture(GL_TEXTURE_2D, textureId);
 				checkForGlError(0,__FILE__,__LINE__);
 
-		unsigned char * tempData;
+		unsigned char * tempData = nullptr;
 
 		if(data != nullptr){
 			tempData = data;
@@ -62,6 +63,8 @@ void Texture::unload(){
 	if(loaded){
 		glDeleteTextures(1, &textureId);
 		textureId = 0;
+		checkForGlError(0,__FILE__,__LINE__);
+		std::cout << loaded << " tex: " << this->src << std::endl;
 	}
 	
 	NodeLoadable::unload();
