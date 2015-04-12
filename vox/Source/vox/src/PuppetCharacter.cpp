@@ -42,7 +42,7 @@ PuppetCharacter::PuppetCharacter(PuppetTexturePack * _texturePack, bool _ai, Box
 	dead(false),
 	deathPending(false),
 	targetRoll(0),
-	health(50.0f),
+	health(100.0f),
 	itemToPickup(nullptr),
 	heldItem(nullptr),
 	itemJoint(nullptr),

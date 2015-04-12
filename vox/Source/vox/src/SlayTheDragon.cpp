@@ -73,8 +73,14 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
     sf.maskBits = PuppetGame::kITEM | PuppetGame::kPLAYER;
 
     fortForeground->createFixture(sf, b2Vec2(0, 0), fortForeground);
+	
+	for(unsigned long int i = 0; i < fortForeground->mesh->vertices.size(); ++i){
+		fortForeground->mesh->vertices.at(i).y += 2.0f;
+	}
+	fortForeground->mesh->dirty = true;
+
     fortForeground->setShader(shader, true);
-    addChild(fortForeground, 1);
+    addChild(fortForeground, 2);
 
     fortForeground->setTranslationPhysical(glm::vec3(0, fortForeground->getCorrectedHeight(), 0));
 
@@ -109,6 +115,8 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	playerCharacter4->addToLayeredScene(this, 1);
 	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
 	playerCharacter4->createIndicator(playerCharacter4->id);
+	playerCharacter4->score = 10000;
+	playerCharacter4->lastUpdateScore = playerCharacter4->score;
 	
 	gameCam->addTarget(playerCharacter1->torso);
 	gameCam->addTarget(playerCharacter2->torso);
@@ -133,7 +141,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 		if(p == dragon){
 			weapon = new ItemFireballLauncher(dragon, world);
 		}else{
-			weapon = new ItemProjectileWeapon(arrowTex, bowTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND | PuppetGame::kSTRUCTURE, p->groupIndex, 3, 0, -bowTex->height);
+			weapon = new ItemProjectileWeapon(arrowTex, bowTex, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND | PuppetGame::kSTRUCTURE, p->groupIndex, 0.1, 3, 0, -bowTex->height);
 		}
 		weapon->addToLayeredScene(this, 1);
 		weapon->setShader(shader, true);

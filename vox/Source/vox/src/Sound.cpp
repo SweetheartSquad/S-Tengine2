@@ -5,7 +5,7 @@
 #include <iostream>
 #include <libzplay.h>
 
-unsigned long int Sound::masterVolume = 0;
+unsigned long int Sound::masterVolume = 100;
 
 Sound::Sound() :
 	player(libZPlay::CreateZPlay())

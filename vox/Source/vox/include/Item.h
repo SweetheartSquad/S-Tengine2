@@ -26,7 +26,7 @@ public:
 	// Whether the item should be destroyed in the next update
 	bool destroy;
 
-	explicit Item(bool _singleUse, Box2DWorld * _world, int16 _categoryBits = PuppetGame::kITEM, int16 _maskBits = -1, int16 _groupIndex = 0, int _damage = 0, float _handleX = 0.f, float _handleY = 0.f);
+	explicit Item(bool _singleUse, Box2DWorld * _world, int16 _categoryBits = PuppetGame::kITEM, int16 _maskBits = -1, int16 _groupIndex = 0, float _damage = 0, float _handleX = 0.f, float _handleY = 0.f);
 	~Item();
 
 	virtual void hitStructure();
