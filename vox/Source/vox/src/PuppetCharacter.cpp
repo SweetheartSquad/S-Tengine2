@@ -86,6 +86,7 @@ void PuppetCharacter::init(){
 		);
 	}
 	
+	popsicleStick = new Box2DSprite(world, PuppetResourceManager::popsicleStick, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 	head = new Box2DSprite(world, texPack->headTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 	
 	
@@ -109,7 +110,8 @@ void PuppetCharacter::init(){
 	components.push_back(&whiteTorso);
 	components.push_back(&whiteArmLeft);
 	components.push_back(&whiteArmRight);
-
+	
+	components.push_back(&popsicleStick);
 	components.push_back(&armLeft);
 	components.push_back(&armRight);
 	components.push_back(&handLeft);
@@ -140,14 +142,15 @@ void PuppetCharacter::init(){
 	b2Fixture * testf = torso->body->CreateFixture(&test);
 	sf.groupIndex = groupIndex;
 
-	torso->createFixture	 (sf, b2Vec2(0.0f, -1.f), this);
-	armLeft->createFixture	 (sf, b2Vec2(0.0f, 0.0f), this);
-	armRight->createFixture	 (sf, b2Vec2(0.0f, 0.0f), this);
-	handLeft->createFixture  (sf, b2Vec2(0.0f, 0.0f), this);
-	handRight->createFixture (sf, b2Vec2(0.0f, 0.0f), this);
-	face->createFixture		 (sf, b2Vec2(0.0f, 0.0f), this);
-	headgear->createFixture	 (sf, b2Vec2(0.0f, 0.0f), this);
-	head->createFixture		 (sf, b2Vec2(0.0f, 0.0f), this);
+	torso->createFixture	 (sf, b2Vec2(0.f, -1.f), this);
+	popsicleStick->createFixture(sf, b2Vec2(0.f, -1.5f), this);
+	armLeft->createFixture	 (sf, b2Vec2(0.f, 0.f), this);
+	armRight->createFixture	 (sf, b2Vec2(0.f, 0.f), this);
+	handLeft->createFixture  (sf, b2Vec2(0.f, 0.f), this);
+	handRight->createFixture (sf, b2Vec2(0.f, 0.f), this);
+	face->createFixture		 (sf, b2Vec2(0.f, 0.f), this);
+	headgear->createFixture	 (sf, b2Vec2(0.f, 0.f), this);
+	head->createFixture		 (sf, b2Vec2(0.f, 0.f), this);
 
 	b2Filter whitesf;
 	whitesf.categoryBits = 0;
@@ -173,6 +176,19 @@ void PuppetCharacter::init(){
 	jth.lowerAngle = glm::radians(-15.f);
 	jth.upperAngle = glm::radians(15.f);
 	world->b2world->CreateJoint(&jth);
+	
+	{
+	// stick
+	b2RevoluteJointDef j;
+	j.bodyA = torso->body;
+	j.bodyB = popsicleStick->body;
+	j.localAnchorA.Set(0, 0);
+	j.localAnchorB.Set(0, 0);
+	j.collideConnected = false;
+	j.enableLimit = true;
+	j.referenceAngle = 0;
+	world->b2world->CreateJoint(&j);
+	}
 
 	// face
 	b2RevoluteJointDef jhf;
@@ -338,6 +354,8 @@ void PuppetCharacter::createIndicator(signed long _id){
 
 
 void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	popsicleStick->render(_matrixStack, _renderOptions);
+
 	whiteHead->render(_matrixStack, _renderOptions);
 	whiteTorso->render(_matrixStack, _renderOptions);
 	whiteArmLeft->render(_matrixStack, _renderOptions);
@@ -374,15 +392,16 @@ void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _ren
 	tintShader->setRed(red + (1 - control) * 3);
 	tintShader->setGreen(green - (1 - control) * 3);
 	tintShader->setBlue(blue - (1 - control) * 3);
+	
+	if(dead){
+		alphaShader->setAlpha(0.5f);
+	}
 
 
 	// change the shader settings based on current damage and player id
 	hsvShader->setHue(newHue);
 	hsvShader->setSaturation(newSat);
 	
-	if(dead){
-		alphaShader->setAlpha(0.5f);
-	}
 
 	armLeft->render(_matrixStack, _renderOptions);
 	armRight->render(_matrixStack, _renderOptions);

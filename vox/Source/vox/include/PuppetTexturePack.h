@@ -7,7 +7,7 @@ class TextureSampler;
 
 class PuppetTexturePack/* : public NodeResource*/{
 public:
-	PuppetTexturePack(TextureSampler * _torso = nullptr, TextureSampler * _armTex = nullptr, TextureSampler * _headgearTex = nullptr, TextureSampler * _headTex = PuppetResourceManager::head1, TextureSampler * _handTex = PuppetResourceManager::hand1, TextureSampler * _faceTex = PuppetResourceManager::getRandomFace(), float _scale = 1.0f);
+	PuppetTexturePack(TextureSampler * _torso = nullptr, TextureSampler * _armTex = nullptr, TextureSampler * _headgearTex = nullptr, TextureSampler * _headTex = PuppetResourceManager::head, TextureSampler * _handTex = PuppetResourceManager::hand, TextureSampler * _faceTex = PuppetResourceManager::getRandomFace(), float _scale = 1.0f);
 
 	TextureSampler * headTex;
 	TextureSampler * handTex;

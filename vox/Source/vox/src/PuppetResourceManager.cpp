@@ -39,9 +39,10 @@ TextureSampler * PuppetResourceManager::stageSpotlight		= new TextureSampler("..
 TextureSampler * PuppetResourceManager::dustParticle = new TextureSampler("../assets/hurly-burly/", "dustParticle.png.def");
 std::vector<TextureSampler *> PuppetResourceManager::scoreParticles;
 
-TextureSampler * PuppetResourceManager::head1 = new TextureSampler("../assets/hurly-burly/", "Head1.png.def"); 
+TextureSampler * PuppetResourceManager::head = new TextureSampler("../assets/hurly-burly/", "Head1.png.def"); 
+TextureSampler * PuppetResourceManager::hand = new TextureSampler("../assets/hurly-burly/", "Hand1.png.def");
+TextureSampler * PuppetResourceManager::popsicleStick = new TextureSampler("../assets/hurly-burly/", "popsicleStick.png.def");
 std::vector<TextureSampler *> PuppetResourceManager::faces;
-TextureSampler * PuppetResourceManager::hand1 = new TextureSampler("../assets/hurly-burly/", "Hand1.png.def");
 
 
 TextureSampler * PuppetResourceManager::whiteHead = new TextureSampler("../assets/hurly-burly/white/", "head.png.def"); 
@@ -112,8 +113,9 @@ void PuppetResourceManager::init(){
 		resources.push_back(i);
 	}
 	
-	resources.push_back(head1);
-	resources.push_back(hand1);
+	resources.push_back(head);
+	resources.push_back(hand);
+	resources.push_back(popsicleStick);
 	
 	resources.push_back(whiteHead);
 	resources.push_back(whiteTorso);

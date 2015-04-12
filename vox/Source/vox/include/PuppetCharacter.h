@@ -38,6 +38,7 @@ public:
 
 	PuppetTexturePack * texPack;
 	
+	Box2DSprite * popsicleStick;
 	Box2DSprite * head;
 	Box2DSprite * torso;
 	Box2DSprite * armLeft;
