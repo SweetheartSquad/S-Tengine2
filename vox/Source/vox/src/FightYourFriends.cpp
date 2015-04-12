@@ -85,11 +85,6 @@ FightYourFriends::FightYourFriends(PuppetGame* _game):
 	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
 	playerCharacter4->createIndicator(playerCharacter4->id);
 
-	gameCam->addTarget(playerCharacter1->torso);
-	gameCam->addTarget(playerCharacter2->torso);
-	gameCam->addTarget(playerCharacter3->torso);
-	gameCam->addTarget(playerCharacter4->torso);
-
 	for(PuppetCharacter * p : players){
 		TextureSampler * weaponTex = PuppetResourceManager::getRandomMeleeWeapon();
 		ItemSimpleWeapon * weapon = new ItemSimpleWeapon(weaponTex, false, world, PuppetGame::kITEM, PuppetGame::kPLAYER | PuppetGame::kBOUNDARY | PuppetGame::kGROUND, p->groupIndex, 1, 0, -weaponTex->height);
@@ -109,6 +104,15 @@ FightYourFriends::FightYourFriends(PuppetGame* _game):
 	
 	populateBackground();
 	populateClouds();
+
+	gameCam->addTarget(playerCharacter1->torso);
+	gameCam->addTarget(playerCharacter2->torso);
+	gameCam->addTarget(playerCharacter3->torso);
+	gameCam->addTarget(playerCharacter4->torso);
+
+	gameCam->useBounds = true;
+	gameCam->minBounds.y = -2.f;
+	gameCam->minBounds.height = sceneHeight;
 }
 
 FightYourFriends::~FightYourFriends(){
@@ -180,7 +184,7 @@ void FightYourFriends::populateBackground(){
 	if(std::rand() % 2 == 0){
 		Sprite * arenaBg = new Sprite();
 		float scale = sceneWidth*0.8f;
-		arenaBg->transform->translate(1024/2 * scale * 0.001f, -1024/8 * scale * 0.001f, -5);
+		arenaBg->transform->translate(25, 35, -5);
 		arenaBg->transform->scale(scale, scale, 1);
 		arenaBg->mesh->pushTexture2D(FightYourFriendsResourceManager::arena1);
 		arenaBg->setShader(shader, true);
@@ -196,10 +200,7 @@ void FightYourFriends::populateBackground(){
 
 		Box2DSprite * arenaFg = new Box2DSprite(world, FightYourFriendsResourceManager::arena2Fg, b2_staticBody, false, nullptr, new Transform(), 0.03f);
 		arenaFg->setTranslationPhysical(arenaFg->getCorrectedWidth()/2.f + 12.f, sceneHeight*0.25f, 0);
-		for(unsigned long int i = 0; i < arenaFg->mesh->vertices.size(); ++i){
-			arenaFg->mesh->vertices.at(i).y += 25.f;
-		}
-		arenaFg->mesh->dirty = true;
+		
 	b2Filter sf;
     sf.categoryBits = PuppetGame::kGROUND;
     sf.groupIndex = 0;
@@ -207,5 +208,10 @@ void FightYourFriends::populateBackground(){
 		arenaFg->createFixture(sf);
 		arenaFg->setShader(shader, true);
 		addChild(arenaFg, 1);
+
+		for(unsigned long int i = 0; i < arenaFg->mesh->vertices.size(); ++i){
+			arenaFg->mesh->vertices.at(i).y += 2.5f;
+		}
+		arenaFg->mesh->dirty = true;
 	}
 }

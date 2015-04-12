@@ -96,25 +96,17 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	champion->itemToPickup->addToLayeredScene(this, 1);
 	champion->itemToPickup->setShader(shader, true);
 
-	gameCam->addTarget(playerCharacter1->torso);
-	gameCam->addTarget(playerCharacter2->torso);
-	gameCam->addTarget(playerCharacter3->torso);
-	gameCam->addTarget(playerCharacter4->torso);
-
-	gameCam->addTarget(catapult);
-	gameCam->addTarget(castle);
-
 	castle->setShader(shader, true);
 	castle->addToLayeredScene(this, 0);
 	addChild(castle, 0);
 
-	castle->translateComponents(glm::vec3(120, 0, 0));
+	castle->translateComponents(glm::vec3(120.f, 0.f, 0.f));
 
 	catapult->setShader(shader, true);
 	catapult->addToLayeredScene(this, 1);
 	addChild(catapult, 1);
 
-	catapult->translateComponents(glm::vec3(10.0f,0,0));
+	catapult->translateComponents(glm::vec3(12.0f, 0.f, 0.f));
 	
 	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
 	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter3, 3, PuppetGame::kPLAYER));
@@ -147,6 +139,15 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	catapult->prepare();
 
 	populateClouds();
+	
+
+	gameCam->addTarget(playerCharacter1->torso);
+	gameCam->addTarget(playerCharacter2->torso);
+	gameCam->addTarget(playerCharacter3->torso);
+	gameCam->addTarget(playerCharacter4->torso);
+
+	gameCam->addTarget(catapult);
+	gameCam->addTarget(castle);
 
 	gameCam->useBounds = true;
 	gameCam->minBounds.x = 0;

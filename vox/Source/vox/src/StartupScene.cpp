@@ -16,11 +16,11 @@
 #include <BehaviourManager.h>
 
 StartupScene::StartupScene(PuppetGame * _game) :
-	PuppetScene(_game, 20.f)
-	/*playerCharacter1(new PuppetCharacterKnight(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
+	PuppetScene(_game, 20.f, 30.f, 20.f),
+	playerCharacter1(new PuppetCharacterKnight(false, 0, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -1)),
 	playerCharacter2(new PuppetCharacterKnight(false, 1, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -2)),
 	playerCharacter3(new PuppetCharacterKnight(false, 2, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -3)),
-	playerCharacter4(new PuppetCharacterKnight(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))*/
+	playerCharacter4(new PuppetCharacterKnight(false, 3, world, PuppetGame::kPLAYER, PuppetGame::kGROUND | PuppetGame::kSTRUCTURE | PuppetGame::kITEM | PuppetGame::kPLAYER | PuppetGame::kBEHAVIOUR | PuppetGame::kBOUNDARY, -4))
 {
 	splashMessage = new Sprite(nullptr, new Transform());
 	splashMessage->mesh->pushTexture2D(PuppetResourceManager::startupSplash);
@@ -31,7 +31,7 @@ StartupScene::StartupScene(PuppetGame * _game) :
 
 	//Do we want some guys in here?
 	
-	/*playerCharacter1->setShader(shader, true);
+	playerCharacter1->setShader(shader, true);
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
 	playerCharacter1->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter1, 3, PuppetGame::kPLAYER));
@@ -52,24 +52,25 @@ StartupScene::StartupScene(PuppetGame * _game) :
 	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
-
 	playerCharacter4->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter3, 3, PuppetGame::kPLAYER));
 	playerCharacter4->ai = true;
 
-	gameCam->addTarget(playerCharacter1->torso);
+	/*gameCam->addTarget(playerCharacter1->torso);
 	gameCam->addTarget(playerCharacter2->torso);
 	gameCam->addTarget(playerCharacter3->torso);
-	gameCam->addTarget(playerCharacter4->torso);
+	gameCam->addTarget(playerCharacter4->torso);*/
 
-	playerCharacter1->translateComponents(glm::vec3(20.0f, 35, 0.f));
-	playerCharacter2->translateComponents(glm::vec3(40.0f, 35, 0.f));
-	playerCharacter3->translateComponents(glm::vec3(60.0f, 35, 0.f));
-	playerCharacter4->translateComponents(glm::vec3(80.0f, 35, 0.f));*/
+	playerCharacter1->translateComponents(glm::vec3(0.5f * sceneWidth*0.25f, 35, 0.f));
+	playerCharacter2->translateComponents(glm::vec3(1.5f * sceneWidth*0.25f, 35, 0.f));
+	playerCharacter3->translateComponents(glm::vec3(2.5f * sceneWidth*0.25f, 35, 0.f));
+	playerCharacter4->translateComponents(glm::vec3(3.5f * sceneWidth*0.25f, 35, 0.f));
+
+	gameCam->offset = glm::vec3(sceneWidth*0.5f, sceneHeight*0.5f, 0);
 }
 void StartupScene::complete(std::string _switchTo){
 	if (_switchTo == ""){
-    PuppetGame * pg = static_cast<PuppetGame *>(game);
-	pg->loadRandomScene();
+		PuppetGame * pg = static_cast<PuppetGame *>(game);
+		pg->loadRandomScene();
 	}else{
 		PuppetScene::complete(_switchTo);
 	}
