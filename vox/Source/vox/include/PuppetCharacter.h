@@ -37,13 +37,20 @@ public:
 	float control;
 
 	PuppetTexturePack * texPack;
-
+	
 	Box2DSprite * head;
 	Box2DSprite * torso;
 	Box2DSprite * armLeft;
 	Box2DSprite * armRight;
 	Box2DSprite * handLeft;
 	Box2DSprite * handRight;
+	
+	Box2DSprite * whiteHead;
+	Box2DSprite * whiteTorso;
+	Box2DSprite * whiteArmLeft;
+	Box2DSprite * whiteArmRight;
+	Box2DSprite * whiteHandLeft;
+	Box2DSprite * whiteHandRight;
 
 	Box2DSprite * face;
 	Box2DSprite * headgear;

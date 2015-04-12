@@ -40,6 +40,10 @@ public:
 	static TextureSampler * hand1;
 	static TextureSampler * getRandomFace();
 	
+	static TextureSampler * whiteHead;
+	static TextureSampler * whiteTorso;
+	static TextureSampler * whiteArm;
+	
 	static TextureSampler * countDown0;
 	static TextureSampler * countDown1;
 	static TextureSampler * countDown2;

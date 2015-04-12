@@ -85,8 +85,10 @@ void PuppetCharacter::init(){
 			RaidTheCastleResourceManager::knightHelmet
 		);
 	}
-
+	
 	head = new Box2DSprite(world, texPack->headTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
+	
+	
 	face = new Box2DSprite(world, texPack->faceTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale*0.5f);
 	handLeft = new Box2DSprite(world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 	handRight = new Box2DSprite(world, texPack->handTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
@@ -95,6 +97,18 @@ void PuppetCharacter::init(){
 	armLeft = new Box2DSprite(world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 	armRight = itemHolder = new Box2DSprite(world, texPack->armTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
 	headgear = new Box2DSprite(world, texPack->headgearTex, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
+	
+	whiteHead = new Box2DSprite(world, PuppetResourceManager::whiteHead, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
+	whiteTorso = new Box2DSprite(world, PuppetResourceManager::whiteTorso, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
+	whiteArmLeft = new Box2DSprite(world, PuppetResourceManager::whiteArm, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
+	whiteArmRight = new Box2DSprite(world, PuppetResourceManager::whiteArm, b2_dynamicBody, false, nullptr, new Transform(), componentScale*texPack->scale);
+	
+
+	
+	components.push_back(&whiteHead);
+	components.push_back(&whiteTorso);
+	components.push_back(&whiteArmLeft);
+	components.push_back(&whiteArmRight);
 
 	components.push_back(&armLeft);
 	components.push_back(&armRight);
@@ -134,6 +148,16 @@ void PuppetCharacter::init(){
 	face->createFixture		 (sf, b2Vec2(0.0f, 0.0f), this);
 	headgear->createFixture	 (sf, b2Vec2(0.0f, 0.0f), this);
 	head->createFixture		 (sf, b2Vec2(0.0f, 0.0f), this);
+
+	b2Filter whitesf;
+	whitesf.categoryBits = 0;
+	whitesf.maskBits = 0;
+	whitesf.groupIndex = groupIndex;
+	
+	whiteTorso->createFixture	 (whitesf, b2Vec2(0.0f, -1.f), this);
+	whiteHead->createFixture		 (whitesf, b2Vec2(0.0f, 0.0f), this);
+	whiteArmLeft->createFixture		 (whitesf, b2Vec2(0.0f, 0.0f), this);
+	whiteArmRight->createFixture		 (whitesf, b2Vec2(0.0f, 0.0f), this);
 
 	b2RevoluteJointDef jth;
 	jth.bodyA = torso->body;
@@ -232,6 +256,60 @@ void PuppetCharacter::init(){
 	// flip left side
 	armLeft->transform->scale(-1, 1, 1);
 	handLeft->transform->scale(-1, 1, 1);
+
+
+
+
+
+	
+	// headw
+	b2RevoluteJointDef jhw;
+	jhw.bodyA = head->body;
+	jhw.bodyB = whiteHead->body;
+	jhw.localAnchorA.Set(0, 0);
+	jhw.localAnchorB.Set(0, 0);
+	jhw.collideConnected = false;
+	jhw.enableLimit = true;
+	jhw.referenceAngle = 0;
+	world->b2world->CreateJoint(&jhw);
+	
+	// torsow
+	b2RevoluteJointDef jhwt;
+	jhwt.bodyA = torso->body;
+	jhwt.bodyB = whiteTorso->body;
+	jhwt.localAnchorA.Set(0, 0);
+	jhwt.localAnchorB.Set(0, 0);
+	jhwt.collideConnected = false;
+	jhwt.enableLimit = true;
+	jhwt.referenceAngle = 0;
+	world->b2world->CreateJoint(&jhwt);
+	{
+	// armw
+	b2RevoluteJointDef j;
+	j.bodyA = armLeft->body;
+	j.bodyB = whiteArmLeft->body;
+	j.localAnchorA.Set(0, 0);
+	j.localAnchorB.Set(0, 0);
+	j.collideConnected = false;
+	j.enableLimit = true;
+	j.referenceAngle = 0;
+	world->b2world->CreateJoint(&j);
+	}
+	{
+	// armw
+	b2RevoluteJointDef j;
+	j.bodyA = armRight->body;
+	j.bodyB = whiteArmRight->body;
+	j.localAnchorA.Set(0, 0);
+	j.localAnchorB.Set(0, 0);
+	j.collideConnected = false;
+	j.enableLimit = true;
+	j.referenceAngle = 0;
+	world->b2world->CreateJoint(&j);
+	}
+	// flip left side
+	whiteArmLeft->transform->scale(-1, 1, 1);
+	//handLeft->transform->scale(-1, 1, 1);
 }
 
 void PuppetCharacter::createIndicator(signed long _id){
@@ -260,6 +338,11 @@ void PuppetCharacter::createIndicator(signed long _id){
 
 
 void PuppetCharacter::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	whiteHead->render(_matrixStack, _renderOptions);
+	whiteTorso->render(_matrixStack, _renderOptions);
+	whiteArmLeft->render(_matrixStack, _renderOptions);
+	whiteArmRight->render(_matrixStack, _renderOptions);
+
 	ShaderComponentHsv * hsvShader = static_cast<ShaderComponentHsv *>(static_cast<BaseComponentShader *>(getShader())->components.at(1));
 	ShaderComponentTint * tintShader = static_cast<ShaderComponentTint *>(static_cast<BaseComponentShader *>(getShader())->components.at(2));
 	ShaderComponentAlpha * alphaShader = static_cast<ShaderComponentAlpha *>(static_cast<BaseComponentShader *>(getShader())->components.at(3));

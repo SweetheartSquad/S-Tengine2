@@ -43,6 +43,11 @@ TextureSampler * PuppetResourceManager::head1 = new TextureSampler("../assets/hu
 std::vector<TextureSampler *> PuppetResourceManager::faces;
 TextureSampler * PuppetResourceManager::hand1 = new TextureSampler("../assets/hurly-burly/", "Hand1.png.def");
 
+
+TextureSampler * PuppetResourceManager::whiteHead = new TextureSampler("../assets/hurly-burly/white/", "head.png.def"); 
+TextureSampler * PuppetResourceManager::whiteTorso = new TextureSampler("../assets/hurly-burly/white/", "torso.png.def"); 
+TextureSampler * PuppetResourceManager::whiteArm = new TextureSampler("../assets/hurly-burly/white/", "arm.png.def"); 
+
 TextureSampler * PuppetResourceManager::countDown0 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/0.png", 1024, 1024, true, true), 1024, 1024);
 TextureSampler * PuppetResourceManager::countDown1 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/1.png", 1024, 1024, true, true), 1024, 1024);
 TextureSampler * PuppetResourceManager::countDown2 = new TextureSampler(new Texture("../assets/hurly-burly/Countdown/2.png", 1024, 1024, true, true), 1024, 1024);
@@ -106,9 +111,13 @@ void PuppetResourceManager::init(){
 	for(auto i : scoreParticles){
 		resources.push_back(i);
 	}
-
+	
 	resources.push_back(head1);
 	resources.push_back(hand1);
+	
+	resources.push_back(whiteHead);
+	resources.push_back(whiteTorso);
+	resources.push_back(whiteArm);
 	
 	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face1.png.def"));
 	faces.push_back(new TextureSampler("../assets/hurly-burly/Face/", "Face2.png.def"));
