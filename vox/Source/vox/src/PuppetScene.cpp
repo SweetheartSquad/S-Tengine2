@@ -314,11 +314,12 @@ PuppetScene::~PuppetScene(){
 
 void PuppetScene::assignControllers(){
 	// standard
-	/*static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
-	*/
+	//static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(players.at(0));
+	//static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(players.at(1));
+	//static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(players.at(2));
+	//static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(players.at(3));
+	
+	
 
 	// random
 	std::vector<PuppetCharacter *> chars;
@@ -326,10 +327,13 @@ void PuppetScene::assignControllers(){
 		chars.push_back(p);
 	}
 
+	int c = 0;
 	while(chars.size() > 0){
 		int ch = vox::NumberUtils::randomInt(0, chars.size()-1);
-		static_cast<PuppetGame *>(game)->puppetControllers.at(chars.size()-1)->setPuppetCharacter(chars.at(ch));
+		chars.at(ch)->id = c;
+		static_cast<PuppetGame *>(game)->puppetControllers.at(c)->setPuppetCharacter(chars.at(ch));
 		chars.erase(chars.begin() + ch);
+		c++;
 	}
 }
 
@@ -783,4 +787,11 @@ void PuppetScene::populateClouds(){
 		cloud->transform->translate(vox::NumberUtils::randomFloat(0, sceneWidth), height, max(-9, -(float)(numClouds-i)/numClouds)*8.f - 1.f);
 		addChild(cloud, 0);
 	}
+}
+
+bool PuppetScene::comparePuppetId(PuppetCharacter * p1, PuppetCharacter * p2){
+	if(p1->id < p2->id){
+		return true;
+	}
+	return false;
 }

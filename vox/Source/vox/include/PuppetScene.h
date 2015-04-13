@@ -107,4 +107,6 @@ public:
 
 	virtual void populateBackground();
 	virtual void populateClouds();
+
+	static bool comparePuppetId(PuppetCharacter * p1, PuppetCharacter * p2);
 };

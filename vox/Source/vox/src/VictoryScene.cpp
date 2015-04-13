@@ -44,6 +44,7 @@ VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _p
 		// tie
 	}
 
+	std::sort(_players.begin(), _players.end(), comparePuppetId);	
 	for(unsigned long int i=0; i < _players.size(); ++i){
 		players.push_back(_players.at(i)->clone(world, this));
 
@@ -53,6 +54,7 @@ VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _p
 		players.at(i)->rootComponent->maxVelocity = b2Vec2(10, 10);
 		players.at(i)->translateComponents(glm::vec3(20.0f * (i+1), 35, 0.f));
 		gameCam->addTarget(players.at(i)->torso);
+		
 		static_cast<PuppetGame *>(game)->puppetControllers.at(i)->setPuppetCharacter(players.at(i), players.at(i)->id);
 
 		//players.at(i)->score /= maxScore;
