@@ -116,7 +116,7 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	chars.push_back(playerCharacter4);
 
 	while(chars.size() > 0){
-		int ch = vox::NumberUtils::randomInt(0, chars.size());
+		int ch = vox::NumberUtils::randomInt(0, chars.size()-1);
 		static_cast<PuppetGame *>(game)->puppetControllers.at(chars.size()-1)->setPuppetCharacter(chars.at(ch));
 		chars.erase(chars.begin() + ch);
 	}
