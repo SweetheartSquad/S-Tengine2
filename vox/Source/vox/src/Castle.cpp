@@ -36,7 +36,8 @@ Castle::Castle(Box2DWorld* _world, int16 _categoryBits, int16 _maskBits, int16 _
 	}
 	sf.groupIndex = groupIndex;
 	for(Box2DSprite ** c : components){
-		(*c)->createFixture(sf);
+		b2Fixture * f = (*c)->createFixture(sf);
+		f->SetSensor(true);
 	}
 
 	setUserData(this);
