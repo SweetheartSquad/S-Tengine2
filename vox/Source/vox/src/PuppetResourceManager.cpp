@@ -24,6 +24,7 @@ Texture * PuppetResourceManager::tree1  = new Texture("../assets/hurly-burly/Fol
 Texture * PuppetResourceManager::tree2	= new Texture("../assets/hurly-burly/Foliage/Tree2.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::bush1	= new Texture("../assets/hurly-burly/Foliage/Bush1.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::bush2	= new Texture("../assets/hurly-burly/Foliage/Bush2.png", 1024, 1024, true, true);
+Texture * PuppetResourceManager::sun	= new Texture("../assets/hurly-burly/Sun.png", 1024, 1024, true, true);
 
 Texture * PuppetResourceManager::cloud1 = new Texture("../assets/hurly-burly/Clouds/Cloud1.png", 1024, 1024, true, true);
 Texture * PuppetResourceManager::cloud2 = new Texture("../assets/hurly-burly/Clouds/Cloud2.png", 1024, 1024, true, true);
@@ -89,6 +90,7 @@ void PuppetResourceManager::init(){
 	resources.push_back(tree2);
 	resources.push_back(bush1);
 	resources.push_back(bush2);
+	resources.push_back(sun);
 
 	resources.push_back(cloud1);
 	resources.push_back(cloud2);

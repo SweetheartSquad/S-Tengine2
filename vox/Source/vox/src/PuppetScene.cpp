@@ -86,7 +86,8 @@ PuppetScene::PuppetScene(PuppetGame * _game, float seconds, float _width, float 
 	screenSurfaceShader(new Shader("../assets/RenderSurfacePlus", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
-	ghostPosition(0)
+	ghostPosition(0),
+	sun(nullptr)
 {
 	world->b2world->SetContactListener(cl);
 	shader->components.push_back(new ShaderComponentTexture(shader));
@@ -469,6 +470,10 @@ void PuppetScene::update(Step * _step){
 		}
 	}
 
+	if(sun != nullptr){
+		sun->transform->rotate(_step->deltaTimeCorrection*0.05f, 0, 0, 1, kOBJECT);
+//		sun->transform->setOrientation(glm::quat(glm::angleAxis(sin(currentTime)*6.28f, glm::vec3(0, 0, 1))));
+	}
 
 	// camera control
 	if (keyboard->keyJustUp(GLFW_KEY_1)){
@@ -680,7 +685,6 @@ void PuppetScene::populateBackground(){
 	stageFloor = new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFloor.vox"));
 	stageFront = new MeshEntity(Resource::loadMeshFromObj("../assets/hurly-burly/stageFront.vox"));
 
-
 	stageFloor->setShader(shader, true);
 	stageFloor->transform->scale(1000, 100, 100);
 	stageFloor->transform->translate(50.f / 2.f, 0, -15.f / 2.f);
@@ -691,7 +695,6 @@ void PuppetScene::populateBackground(){
 		v.v *= 100;
 	}
 	stageFloor->mesh->dirty = true;
-
 
 	stageFront->setShader(shader, true);
 	stageFront->transform->scale(1000, 100, 100);
@@ -740,6 +743,13 @@ void PuppetScene::populateBackground(){
 			addChild(randomGround, 0);
 		}
 	}
+	
+	sun = new MeshEntity(MeshFactory::getPlaneMesh());
+	sun->setShader(shader, true);
+	sun->transform->translate(10, sceneHeight-10, 0.f);
+	sun->transform->scale(12, 12, 1);
+	sun->mesh->pushTexture2D(PuppetResourceManager::sun);
+	addChild(sun, 0);
 }
 
 void PuppetScene::populateClouds(){

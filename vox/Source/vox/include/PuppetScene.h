@@ -85,6 +85,7 @@ public:
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;
 	StandardFrameBuffer * screenFBO;
+	MeshEntity * sun;
 	float screenShaderSetting;
 
 	explicit PuppetScene(PuppetGame * _game, float time, float _width = 170.f, float _height = 50.f, float _size = 100.f, bool _fullCurtains = false);

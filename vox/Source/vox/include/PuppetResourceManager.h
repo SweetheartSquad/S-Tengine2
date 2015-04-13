@@ -20,6 +20,7 @@ public:
 	static Texture * tree2;	
 	static Texture * bush1;
 	static Texture * bush2;
+	static Texture * sun;
 
 	static Texture * cloud1;
 	static Texture * cloud2;
