@@ -734,7 +734,7 @@ void PuppetScene::populateBackground(){
 	
 	sun = new MeshEntity(MeshFactory::getPlaneMesh());
 	sun->setShader(shader, true);
-	sun->transform->translate(10, sceneHeight-10, 0.f);
+	sun->transform->translate(10, sceneHeight-10, -7.f);
 	sun->transform->scale(12, 12, 1);
 	sun->mesh->pushTexture2D(PuppetResourceManager::sun);
 	addChild(sun, 0);
