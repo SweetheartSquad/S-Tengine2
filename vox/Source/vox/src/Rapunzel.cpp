@@ -90,45 +90,28 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 	castleCatwalk->createFixture(sf, b2Vec2(0, 0), castleCatwalk);
     castleCatwalk->setShader(shader, true);
 	
-	playerCharacter1->setShader(shader, true);
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
-	playerCharacter1->createIndicator(playerCharacter1->id);
 
-	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
-	playerCharacter2->createIndicator(playerCharacter2->id);
 
-	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
-	playerCharacter3->createIndicator(playerCharacter3->id);
 
-	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
 	// start Rapunzel with a ridiculous score so if the time runs out they win regardless of how well the thieves play
 	playerCharacter4->score = 1000000;
 	playerCharacter4->lastUpdateScore = 1000000;
-	playerCharacter4->createIndicator(playerCharacter4->id);
 	
-	gameCam->addTarget(playerCharacter1->torso);
-	gameCam->addTarget(playerCharacter2->torso);
-	gameCam->addTarget(playerCharacter3->torso);
-	gameCam->addTarget(playerCharacter4->torso);
+	assignControllers();
 
-	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
-	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter3, 3, PuppetGame::kPLAYER));
-	//playerCharacter3->ai = true;
-
-	//playerCharacter4->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50, 0, 0), glm::vec3(100, 0, 0), playerCharacter4, 10));
-	//playerCharacter4->behaviourManager->addBehaviour(new BehaviourAttack(playerCharacter4, 3, PuppetGame::kPLAYER));
-	//playerCharacter4->ai = true;
+	// create indicators and add to followcam
+	for(PuppetCharacter * p : players){
+		p->createIndicator(p->id);
+		gameCam->addTarget(p->indicator);
+	}
 
 	for(PuppetCharacter * p : players){
 		if(p != playerCharacter4){
@@ -146,6 +129,7 @@ Rapunzel::Rapunzel(PuppetGame* _game):
 			p->itemToPickup = weapon;
 			addChild(weapon, 1);
 		}
+		p->setShader(shader, true);
 	}
 	
 	tower->setTranslationPhysical(glm::vec3(glm::vec3(60.f, tower->getCorrectedHeight(), 0.f)));

@@ -92,10 +92,10 @@ VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _p
 	playerList.erase(playerList.begin() + playerPos);
 	PuppetCharacter * player4 = playerList.at(0);
 	
-	player1->score = 1.f;
-	player2->score = 0.6f;
-	player3->score = 0.3f;
-	player4->score = 0.1f;
+	player1->score = player1->lastUpdateScore = 1.f;
+	player2->score = player2->lastUpdateScore = 0.6f;
+	player3->score = player3->lastUpdateScore = 0.3f;
+	player4->score = player4->lastUpdateScore = 0.1f;
 
 	/*std::sort(sortedPlayers.begin(), sortedPlayers.end(), PuppetCharacter::compareByScore);
 	podium(sortedPlayers);*/

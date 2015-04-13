@@ -16,6 +16,11 @@ void PuppetController::setPuppetCharacter(PuppetCharacter * _puppetCharacter){
 		}
 	}
 }
+
+PuppetCharacter * const PuppetController::getPuppetCharacter(){
+	return puppetCharacter;
+}
+
 void PuppetController::setPuppetCharacter(PuppetCharacter * _puppetCharacter, signed long int _id){
 	if(_id > idsAvailable.size() || _id < 0){
 		throw "id outside range";

@@ -50,8 +50,6 @@ public:
 	Box2DSprite * whiteTorso;
 	Box2DSprite * whiteArmLeft;
 	Box2DSprite * whiteArmRight;
-	Box2DSprite * whiteHandLeft;
-	Box2DSprite * whiteHandRight;
 
 	Box2DSprite * face;
 	Box2DSprite * headgear;

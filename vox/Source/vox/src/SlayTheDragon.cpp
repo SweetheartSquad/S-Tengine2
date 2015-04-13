@@ -63,7 +63,9 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	splashMessage->mesh->pushTexture2D(SlayTheDragonResourceManager::splashMessage->texture);
 	splashMessage->setShader(shader, true);
 	splashMessage->transform->translate(1920.f*0.5, 1080.f*0.5f, 0);
-
+	
+	// dragon needs to be first bc the fire particles should draw underneath other players
+	
 	players.push_back(playerCharacter1);
 	players.push_back(playerCharacter2);
 	players.push_back(playerCharacter3);
@@ -88,61 +90,22 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 
     fort->translateComponents(glm::vec3(0.f, fortForeground->getCorrectedHeight() + 31.f, 0.f));
 	
-	// dragon needs to be first bc the fire particles should draw underneath other players
-	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
-
-	playerCharacter1->setShader(shader, true);
+	playerCharacter4->addToLayeredScene(this, 1);
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
-
-	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
-
-	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
-	
-	playerCharacter4->addToLayeredScene(this, 1);
+
 	playerCharacter4->score = 10000;
 	playerCharacter4->lastUpdateScore = playerCharacter4->score;
 	
-	// assign controllers
-	std::vector<PuppetCharacter *> chars;
-	chars.push_back(playerCharacter1);
-	chars.push_back(playerCharacter2);
-	chars.push_back(playerCharacter3);
-	chars.push_back(playerCharacter4);
-
-	while(chars.size() > 0){
-		int ch = vox::NumberUtils::randomInt(0, chars.size()-1);
-		static_cast<PuppetGame *>(game)->puppetControllers.at(chars.size()-1)->setPuppetCharacter(chars.at(ch));
-		chars.erase(chars.begin() + ch);
-	}
 
 
-	/*static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
-	*/
-	// create indicators
-	playerCharacter1->createIndicator(playerCharacter1->id);
-	playerCharacter2->createIndicator(playerCharacter2->id);
-	playerCharacter3->createIndicator(playerCharacter3->id);
-	playerCharacter4->createIndicator(playerCharacter4->id);
+	assignControllers();
 
-	gameCam->addTarget(playerCharacter1->torso);
-	gameCam->addTarget(playerCharacter2->torso);
-	gameCam->addTarget(playerCharacter3->torso);
-	gameCam->addTarget(playerCharacter4->torso);
-
-	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
-	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourAttackThrow(false, playerCharacter3, 3, PuppetGame::kPLAYER));
-	//playerCharacter3->ai = true;
-
-	//->ai = true;
 	
 	dragon = static_cast<PuppetCharacterDragon * >(playerCharacter4);
 
@@ -163,17 +126,13 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 		p->itemToPickup = weapon;
 		addChild(weapon, 1);
 		p->translateComponents(glm::vec3(40.f + (pCnt * 20), fortForeground->getCorrectedHeight() * 2, 0));
+		p->setShader(shader, true);
 	}
 	
-	//dragon->translateComponents(glm::vec3(0, 100, 0));
-
-	//playerCharacter1->translateComponents(glm::vec3(40.0f, fort->rootComponent->getCorrectedHeight() * 2, 0.f));
-	//playerCharacter2->translateComponents(glm::vec3(40.f, fort->rootComponent->getCorrectedHeight() * 2, 0));
 	playerCharacter1->translateComponents(glm::vec3(20.f, fort->rootComponent->getCorrectedHeight() * 1.2, 0.f));
 	playerCharacter2->translateComponents(glm::vec3(30.f, fort->rootComponent->getCorrectedHeight() * 1.2, 0.f));
 	playerCharacter3->translateComponents(glm::vec3(40.f, fort->rootComponent->getCorrectedHeight() * 1.2, 0.f));
-	//dragon->translateComponents(glm::vec3(0.f, fort->rootComponent->getPos().y + fort->rootComponent->getCorrectedHeight() + fort->roof->getPos().y + fort->rootComponent->getCorrectedHeight() + 10.f, 0.f));
-
+	
 	fort->setShader(shader, true);
 	fort->addToLayeredScene(this, 1);
 	addChild(fort, 1);
@@ -194,6 +153,17 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 	playRandomBackgroundMusic();
 
 	populateClouds();
+
+	
+	// create indicators and add to followcam
+	for(PuppetCharacter * p : players){
+		p->createIndicator(p->id);
+		gameCam->addTarget(p->indicator);
+	}
+
+	gameCam->useBounds = true;
+	gameCam->minBounds.y = sceneHeight/8.f;
+	gameCam->minBounds.height = sceneHeight/2.f;
 }
 
 SlayTheDragon::~SlayTheDragon(){
@@ -203,24 +173,6 @@ SlayTheDragon::~SlayTheDragon(){
 
 void SlayTheDragon::update(Step* _step){
 	PuppetScene::update(_step);
-
-	if(playerCharacter1->torso->transform->getTranslationVector().y < 25.0f && gameCam->hasTarget(playerCharacter1->torso)){
-		gameCam->removeTarget(playerCharacter1->torso);
-	}else if(!gameCam->hasTarget(playerCharacter1->torso) && playerCharacter1->torso->transform->getTranslationVector().y > 25.0f){
-		gameCam->addTarget(playerCharacter1->torso);
-	}
-
-	if(playerCharacter2->torso->transform->getTranslationVector().y < 25.0f && gameCam->hasTarget(playerCharacter2->torso)){
-		gameCam->removeTarget(playerCharacter2->torso);
-	}else if(!gameCam->hasTarget(playerCharacter2->torso) && playerCharacter2->torso->transform->getTranslationVector().y > 25.0f){
-		gameCam->addTarget(playerCharacter2->torso);
-	}
-
-	if(playerCharacter3->torso->transform->getTranslationVector().y < 25.0f && gameCam->hasTarget(playerCharacter3->torso)){
-		gameCam->removeTarget(playerCharacter3->torso);
-	}else if(!gameCam->hasTarget(playerCharacter3->torso) && playerCharacter3->torso->transform->getTranslationVector().y > 25.0f){
-		gameCam->addTarget(playerCharacter3->torso);
-	}
 
 	if(!splashSoundPlayed){
 		PuppetResourceManager::splashSounds->play("SlayTheDragon");
@@ -241,8 +193,6 @@ void SlayTheDragon::update(Step* _step){
             }
         }
         if (archersDead){
-            dragon->score += 100000;
-			dragon->lastUpdateScore = dragon->score;
             triggerVictoryState();
         }
     }

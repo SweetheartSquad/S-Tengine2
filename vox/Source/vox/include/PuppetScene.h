@@ -50,10 +50,11 @@ public:
 	Sprite * splashMessage;
 	bool displayingSplash;
 	bool splashSoundPlayed;
-	float splashDuration;
-	double sceneStart;
 	bool victoryTriggered;
+
+	float splashDuration;
 	float ghostPosition;
+	double sceneStart;
 
 	PuppetContactListener * cl;
 	Box2DWorld * world;
@@ -96,6 +97,7 @@ public:
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	
+	void assignControllers();
 	virtual void triggerVictoryState();
     virtual void complete(std::string _switchTo = "");
 

@@ -439,6 +439,9 @@ void PuppetCharacter::update(Step* _step){
 			pickupItem(itemToPickup);
 		}
 	}else{
+		// force ghosts to throw items away
+		action(true);
+
 		if(rootComponent->body->GetPosition().y < ps->ghostPosition) {
 			rootComponent->applyForceUp(500.f);
 		}else{

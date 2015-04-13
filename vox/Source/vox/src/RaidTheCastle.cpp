@@ -53,6 +53,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	populateBackground();
 	cl = new RaidTheCastleContactListener(this);
 	
+	castle->translateComponents(glm::vec3(120.f, 0.f, 0.f));
 	castle->setShader(shader, true);
 	castle->addToLayeredScene(this, 0);
 	addChild(castle, 0);
@@ -68,29 +69,19 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	players.push_back(playerCharacter3);
 	players.push_back(playerCharacter4);
 
-	playerCharacter1->setShader(shader, true);
 	addChild(playerCharacter1, 1);
 	playerCharacter1->addToLayeredScene(this, 1);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
-	playerCharacter1->createIndicator(playerCharacter1->id);
 
-	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
 	playerCharacter2->addToLayeredScene(this, 1);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
-	playerCharacter2->createIndicator(playerCharacter2->id);
 
-	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
 	playerCharacter3->addToLayeredScene(this, 1);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
-	playerCharacter3->createIndicator(playerCharacter3->id);
 
-	playerCharacter4->setShader(shader, true);
 	addChild(playerCharacter4, 1);
 	playerCharacter4->addToLayeredScene(this, 1);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
-	playerCharacter4->createIndicator(playerCharacter4->id);
+
+	assignControllers();
 
 	champion->setShader(shader, true);
 	addChild(champion, 0);
@@ -102,12 +93,9 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 	champion->itemToPickup->setShader(shader, true);
 
 
-	castle->translateComponents(glm::vec3(120.f, 0.f, 0.f));
-
 	catapult->setShader(shader, true);
 	catapult->addToLayeredScene(this, 1);
 	addChild(catapult, 1);
-
 	catapult->translateComponents(glm::vec3(14.0f, 0.f, 0.f));
 	
 	//playerCharacter3->behaviourManager->addBehaviour(new BehaviourPatrol(glm::vec3(50,0,0), glm::vec3(100,0,0), playerCharacter3, 10));
@@ -129,6 +117,7 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 		weapon->setShader(shader, true);
 		p->itemToPickup = weapon;
         addChild(weapon, 1);
+		p->setShader(shader, true);
 	}
 	
 	playerCharacter1->translateComponents(glm::vec3(0.5f* sceneWidth*0.065f + 20.f, 35, 0.f));
@@ -142,11 +131,12 @@ RaidTheCastle::RaidTheCastle(PuppetGame* _game):
 
 	populateClouds();
 	
-
-	gameCam->addTarget(playerCharacter1->torso);
-	gameCam->addTarget(playerCharacter2->torso);
-	gameCam->addTarget(playerCharacter3->torso);
-	gameCam->addTarget(playerCharacter4->torso);
+	
+	// create indicators and add to followcam
+	for(PuppetCharacter * p : players){
+		p->createIndicator(p->id);
+		gameCam->addTarget(p->indicator);
+	}
 
 	gameCam->addTarget(catapult);
 	gameCam->addTarget(castle);
@@ -180,9 +170,9 @@ void RaidTheCastle::update(Step* _step){
 
 
 	if(castle->state == Castle::state_t::kDEAD){
+		gameCam->addTarget(castle->rootComponent);
 		/*if(gameCam->targets.size() != 1){
 			gameCam->targets.clear();
-			gameCam->addTarget(castle->rootComponent);
 		}*/
 		
 		triggerVictoryState();

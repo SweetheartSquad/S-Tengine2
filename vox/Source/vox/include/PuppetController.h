@@ -13,7 +13,7 @@ private:
 	PuppetCharacter * puppetCharacter;
 public:
 
-	
+	PuppetCharacter * const getPuppetCharacter();
 	void setPuppetCharacter(PuppetCharacter * _puppet);
 	void setPuppetCharacter(PuppetCharacter * _puppet, signed long int _id);
 	void unassign();

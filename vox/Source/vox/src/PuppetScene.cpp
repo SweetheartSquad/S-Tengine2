@@ -311,6 +311,28 @@ PuppetScene::~PuppetScene(){
 	delete screenFBO;
 }
 
+
+void PuppetScene::assignControllers(){
+	// standard
+	/*static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
+	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
+	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
+	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
+	*/
+
+	// random
+	std::vector<PuppetCharacter *> chars;
+	for(PuppetCharacter * p : players){
+		chars.push_back(p);
+	}
+
+	while(chars.size() > 0){
+		int ch = vox::NumberUtils::randomInt(0, chars.size()-1);
+		static_cast<PuppetGame *>(game)->puppetControllers.at(chars.size()-1)->setPuppetCharacter(chars.at(ch));
+		chars.erase(chars.begin() + ch);
+	}
+}
+
 void PuppetScene::load(){
 	Scene::load();
 
@@ -334,6 +356,7 @@ void PuppetScene::unload(){
 }
 
 void PuppetScene::update(Step * _step){
+    PuppetGame * pg = static_cast<PuppetGame *>(game);
 	if(game->kc_just_active){
 		screenShaderSetting = currentTime;
 	}
@@ -350,18 +373,18 @@ void PuppetScene::update(Step * _step){
 	// player controls
 	if (players.size() > 0){
 		if (keyboard->keyDown(GLFW_KEY_W)){
-			players.at(0)->jump();
+			pg->puppetControllers.at(0)->getPuppetCharacter()->jump();
 		}if (keyboard->keyDown(GLFW_KEY_A)){
-			players.at(0)->targetRoll = glm::radians(-75.f);
+			pg->puppetControllers.at(0)->getPuppetCharacter()->targetRoll = glm::radians(-75.f);
 		}
 		if (keyboard->keyDown(GLFW_KEY_D)){
-			players.at(0)->targetRoll = glm::radians(75.f);
+			pg->puppetControllers.at(0)->getPuppetCharacter()->targetRoll = glm::radians(75.f);
 		}
 		if (keyboard->keyJustDown(GLFW_KEY_T)){
-			players.at(0)->action();
 			players.at(3)->action();
 			players.at(2)->action();
 			players.at(1)->action();
+			players.at(0)->action();
 		}
 
 		if (keyboard->keyDown(GLFW_KEY_B)){
@@ -495,7 +518,6 @@ void PuppetScene::update(Step * _step){
 			currentTime += 1;
 		}
     }
-    PuppetGame * pg = static_cast<PuppetGame *>(game);
     if (keyboard->keyJustUp(GLFW_KEY_7)){
         if (game->currentSceneKey != "Fight Your Friends"){
             pg->puppetControllers.at(0)->unassign();
@@ -709,6 +731,13 @@ void PuppetScene::populateBackground(){
 
 	addChild(stageFloor, 0);
 	addChild(stageFront, 0);
+	
+	sun = new MeshEntity(MeshFactory::getPlaneMesh());
+	sun->setShader(shader, true);
+	sun->transform->translate(10, sceneHeight-10, 0.f);
+	sun->transform->scale(12, 12, 1);
+	sun->mesh->pushTexture2D(PuppetResourceManager::sun);
+	addChild(sun, 0);
 
 	Texture * treeTex1 = PuppetResourceManager::tree1;
 	Texture * treeTex2 = PuppetResourceManager::tree2;
@@ -744,12 +773,6 @@ void PuppetScene::populateBackground(){
 		}
 	}
 	
-	sun = new MeshEntity(MeshFactory::getPlaneMesh());
-	sun->setShader(shader, true);
-	sun->transform->translate(10, sceneHeight-10, 0.f);
-	sun->transform->scale(12, 12, 1);
-	sun->mesh->pushTexture2D(PuppetResourceManager::sun);
-	addChild(sun, 0);
 }
 
 void PuppetScene::populateClouds(){
