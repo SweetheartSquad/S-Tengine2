@@ -29,6 +29,7 @@
 #include <ItemSimpleWeapon.h>
 #include <ItemProjectileWeapon.h>
 #include <ItemFireballLauncher.h>
+#include <NumberUtils.h>
 
 #include <glfw\glfw3.h>
 #include <SoundManager.h>
@@ -93,32 +94,45 @@ SlayTheDragon::SlayTheDragon(PuppetGame* _game):
 
 	playerCharacter1->setShader(shader, true);
 	addChild(playerCharacter1, 1);
-	playerCharacter1->id = 0;
 	playerCharacter1->addToLayeredScene(this, 1);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
-	playerCharacter1->createIndicator(playerCharacter1->id);
 
 	playerCharacter2->setShader(shader, true);
 	addChild(playerCharacter2, 1);
-	playerCharacter2->id = 1;
 	playerCharacter2->addToLayeredScene(this, 1);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
-	playerCharacter2->createIndicator(playerCharacter2->id);
 
 	playerCharacter3->setShader(shader, true);
 	addChild(playerCharacter3, 1);
-	playerCharacter3->id = 2;
 	playerCharacter3->addToLayeredScene(this, 1);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
-	playerCharacter3->createIndicator(playerCharacter3->id);
-
-	playerCharacter4->id = 3;
+	
 	playerCharacter4->addToLayeredScene(this, 1);
-	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
-	playerCharacter4->createIndicator(playerCharacter4->id);
 	playerCharacter4->score = 10000;
 	playerCharacter4->lastUpdateScore = playerCharacter4->score;
 	
+	// assign controllers
+	std::vector<PuppetCharacter *> chars;
+	chars.push_back(playerCharacter1);
+	chars.push_back(playerCharacter2);
+	chars.push_back(playerCharacter3);
+	chars.push_back(playerCharacter4);
+
+	while(chars.size() > 0){
+		int ch = vox::NumberUtils::randomInt(0, chars.size());
+		static_cast<PuppetGame *>(game)->puppetControllers.at(chars.size()-1)->setPuppetCharacter(chars.at(ch));
+		chars.erase(chars.begin() + ch);
+	}
+
+
+	/*static_cast<PuppetGame *>(game)->puppetControllers.at(0)->setPuppetCharacter(playerCharacter1);
+	static_cast<PuppetGame *>(game)->puppetControllers.at(1)->setPuppetCharacter(playerCharacter2);
+	static_cast<PuppetGame *>(game)->puppetControllers.at(2)->setPuppetCharacter(playerCharacter3);
+	static_cast<PuppetGame *>(game)->puppetControllers.at(3)->setPuppetCharacter(playerCharacter4);
+	*/
+	// create indicators
+	playerCharacter1->createIndicator(playerCharacter1->id);
+	playerCharacter2->createIndicator(playerCharacter2->id);
+	playerCharacter3->createIndicator(playerCharacter3->id);
+	playerCharacter4->createIndicator(playerCharacter4->id);
+
 	gameCam->addTarget(playerCharacter1->torso);
 	gameCam->addTarget(playerCharacter2->torso);
 	gameCam->addTarget(playerCharacter3->torso);
