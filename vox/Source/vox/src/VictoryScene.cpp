@@ -16,13 +16,13 @@
 #define SCENE_WIDTH 100
 
 VictoryScene::VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> _players):
-	PuppetScene(_game, 10, SCENE_WIDTH, 25.f, 100.f, true)
+	PuppetScene(_game, 10, SCENE_WIDTH, 25.f, 100.f, true),
+	winner(-1)
 {
 	populateBackground();
 	cl = new PuppetContactListener(this);
 
 	float maxScore = 1.f;
-	int winner = -1;
 
 	for(unsigned long int i = 0; i < _players.size(); ++i){
 		if(_players.at(i)->score > maxScore){
@@ -164,6 +164,9 @@ VictoryScene::~VictoryScene(){
 
 void VictoryScene::update(Step * _step){
 	PuppetScene::update(_step);
+	if(winner != -1 && currentTime < duration*0.66f){
+		PuppetResourceManager::miscCheerSounds.at(winner)->playRandomSound();
+	}
 }
 
 void VictoryScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){

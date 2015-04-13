@@ -75,6 +75,7 @@ SoundManager * PuppetResourceManager::jumpSounds   = new SoundManager(-1);
 SoundManager * PuppetResourceManager::hitSounds    = new SoundManager(-1);
 SoundManager * PuppetResourceManager::splashSounds = new SoundManager(-1);
 SoundManager * PuppetResourceManager::cheerSounds = new SoundManager(-1);
+std::vector<SoundManager *> PuppetResourceManager::miscCheerSounds;
 SoundManager * PuppetResourceManager::fallingSounds = new SoundManager(-1);
 
 void PuppetResourceManager::init(){
@@ -235,6 +236,42 @@ void PuppetResourceManager::init(){
 	fallingSounds->addNewSound("1", "../assets/hurly-burly/audio/puppetDialog_Dragon/falling1.ogg");
 	fallingSounds->addNewSound("2", "../assets/hurly-burly/audio/puppetDialog_Dragon/falling2.ogg");
 	resources.push_back(fallingSounds);
+
+	SoundManager * s = new SoundManager(1);
+	s->addNewSound("1", "../assets/hurly-burly/audio/yellowCheer/yellowCheer1.ogg");
+	s->addNewSound("2", "../assets/hurly-burly/audio/yellowCheer/yellowCheer2.ogg");
+	s->addNewSound("3", "../assets/hurly-burly/audio/yellowCheer/yellowCheer3.ogg");
+	resources.push_back(s);
+	miscCheerSounds.push_back(s);
+
+	s = new SoundManager(1);
+	s->addNewSound("1", "../assets/hurly-burly/audio/greenCheer/greenCheer1.ogg");
+	s->addNewSound("2", "../assets/hurly-burly/audio/greenCheer/greenCheer2.ogg");
+	s->addNewSound("3", "../assets/hurly-burly/audio/greenCheer/greenCheer3.ogg");
+	s->addNewSound("4", "../assets/hurly-burly/audio/greenCheer/greenCheer4.ogg");
+	resources.push_back(s);
+	miscCheerSounds.push_back(s);
+
+	s = new SoundManager(1);
+	s->addNewSound("1", "../assets/hurly-burly/audio/blueCheer/blueCheer1.ogg");
+	s->addNewSound("2", "../assets/hurly-burly/audio/blueCheer/blueCheer2.ogg");
+	s->addNewSound("3", "../assets/hurly-burly/audio/blueCheer/blueCheer3.ogg");
+	s->addNewSound("4", "../assets/hurly-burly/audio/blueCheer/blueCheer4.ogg");
+	s->addNewSound("5", "../assets/hurly-burly/audio/blueCheer/blueCheer5.ogg");
+	s->addNewSound("6", "../assets/hurly-burly/audio/blueCheer/blueCheer6.ogg");
+	s->addNewSound("7", "../assets/hurly-burly/audio/blueCheer/blueCheer7.ogg");
+	resources.push_back(s);
+	miscCheerSounds.push_back(s);
+
+	s = new SoundManager(1);
+	s->addNewSound("1", "../assets/hurly-burly/audio/redCheer/redCheer1.ogg");
+	s->addNewSound("2", "../assets/hurly-burly/audio/redCheer/redCheer2.ogg");
+	s->addNewSound("3", "../assets/hurly-burly/audio/redCheer/redCheer3.ogg");
+	s->addNewSound("4", "../assets/hurly-burly/audio/redCheer/redCheer4.ogg");
+	s->addNewSound("5", "../assets/hurly-burly/audio/redCheer/redCheer5.ogg");
+	resources.push_back(s);
+	miscCheerSounds.push_back(s);
+
 
 	RaidTheCastleResourceManager::init();
 	RapunzelResourceManager::init();

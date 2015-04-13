@@ -68,8 +68,10 @@ public:
 	static SoundManager * jumpSounds;
 	static SoundManager * hitSounds;
 	static SoundManager * splashSounds;
-	static SoundManager * cheerSounds;
 	static SoundManager * fallingSounds;
+
+	static SoundManager * cheerSounds;
+	static std::vector<SoundManager *> miscCheerSounds;
 	
 	static void init();
 };

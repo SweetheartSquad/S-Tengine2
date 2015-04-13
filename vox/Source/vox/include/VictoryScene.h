@@ -6,7 +6,7 @@ class PuppetGame;
 
 class VictoryScene : public PuppetScene{
 public:
-
+	unsigned long int winner;
 	VictoryScene(PuppetGame * _game, std::vector<PuppetCharacter *> players);
 	~VictoryScene();
 
