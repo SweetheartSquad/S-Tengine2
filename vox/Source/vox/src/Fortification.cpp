@@ -28,7 +28,7 @@ Fortification::Fortification(Box2DWorld* _world, int16 _categoryBits, int16 _mas
 	fortBackground->transform->translate(glm::vec3(0, 30, 0));
 	*/
 
-	componentScale = 0.03f;
+	componentScale = 0.025f;
 
 	TextureSampler * roofTex = SlayTheDragonResourceManager::fortStructure;
 
@@ -45,6 +45,13 @@ Fortification::Fortification(Box2DWorld* _world, int16 _categoryBits, int16 _mas
 	for(Box2DSprite ** c : components){
 		(*c)->createFixture(sf);
 	}
+	
+	for(unsigned long int i = 0; i < rootComponent->mesh->vertices.size(); ++i){
+		rootComponent->mesh->vertices.at(i).y *= 1.4f;
+		rootComponent->mesh->vertices.at(i).x *= 1.4f;
+	}
+	rootComponent->mesh->dirty = true;
+
 	setUserData(this);
 	
 	// sprite sheet animation
