@@ -66,7 +66,7 @@ std::string ShaderComponentBlinn::getFragmentBodyString(){
 			TAB + TAB + "//only calculate specular for the front side of the surface" + ENDL +
 			TAB + TAB + "if(diffuseCoefficient > 0.0){" + ENDL +
 				TAB + TAB + TAB + VAR_VEC3 + " lightDirection = normalize(-surfaceToLight)" + SEMI_ENDL +
-				TAB + TAB + TAB + VAR_VEC3 + " viewDirection = normalize(surfaceToCamera)" + SEMI_ENDL +
+				TAB + TAB + TAB + VAR_VEC3 + " viewDirection = normalize(-surfaceToCamera)" + SEMI_ENDL +
 				TAB + TAB + TAB + VAR_VEC3 + " halfAngle = normalize(lightDirection + viewDirection)" + SEMI_ENDL +
 
 				TAB + TAB + TAB + "specularCoefficient = pow(max(0.0, dot(halfAngle, normal)), materials[j].shininess)" + SEMI_ENDL +
