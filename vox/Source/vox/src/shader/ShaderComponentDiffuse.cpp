@@ -32,13 +32,13 @@ std::string ShaderComponentDiffuse::getFragmentBodyString(){
 	return
 		IF_NOT_DEFINED + SHADER_COMPONENT_BLINN + ENDL +
 		IF_NOT_DEFINED + SHADER_COMPONENT_PHONG + ENDL + 
-		"mat3 normalMatrix = transpose(inverse(mat3(model)))" + SEMI_ENDL +
+		"mat3 normalMatrix = transpose(inverse(mat3(" + GL_UNIFORM_ID_MODEL_MATRIX + ")))" + SEMI_ENDL +
 		"vec3 normal = normalize(normalMatrix * fragNormal)" + SEMI_ENDL +
-		"vec3 fragWorldPosition = vec3(model * vec4(fragVert, 1))" + SEMI_ENDL +
+		"vec3 fragWorldPosition = vec3(" + GL_UNIFORM_ID_MODEL_MATRIX + " * vec4(fragVert, 1))" + SEMI_ENDL +
 		"float brightness = 0" + SEMI_ENDL +
 		"vec3 outIntensities = vec3(0,0,0)" + SEMI_ENDL +
 
-		"for(int i = 0; i < numLights; i++){" + ENDL +
+		"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_LIGHTS + "; i++){" + ENDL +
 			"vec3 surfaceToLight = lights[i].position - fragWorldPosition" + SEMI_ENDL +
 			"brightness += dot(normal, surfaceToLight) / (length(surfaceToLight) * length(normal))" + SEMI_ENDL +
 			"outIntensities += vec3(lights[i].intensities)" + SEMI_ENDL +

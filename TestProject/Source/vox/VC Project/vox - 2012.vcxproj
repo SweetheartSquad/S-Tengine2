@@ -19,6 +19,10 @@
     <ClInclude Include="..\include\TestGame.h" />
     <ClInclude Include="..\include\TestScene.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\assets\test.frag" />
+    <None Include="..\assets\test.vert" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

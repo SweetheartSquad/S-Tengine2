@@ -31,9 +31,9 @@ std::string ShaderComponentBlinn::getVertexBodyString(){
 std::string ShaderComponentBlinn::getFragmentBodyString(){
 	return
 	IF_NOT_DEFINED + SHADER_COMPONENT_PHONG + ENDL + 
-	VAR_MAT3 + " normalMatrix = transpose(inverse(mat3(model)))" + SEMI_ENDL +
+	VAR_MAT3 + " normalMatrix = transpose(inverse(mat3(" + GL_UNIFORM_ID_MODEL_MATRIX + ")))" + SEMI_ENDL +
 	VAR_VEC3 + " normal = normalize(normalMatrix * fragNormal)" + SEMI_ENDL +
-	VAR_VEC3 + " fragWorldPosition = vec3(model * vec4(fragVert, 1))" + SEMI_ENDL +
+	VAR_VEC3 + " fragWorldPosition = vec3(" + GL_UNIFORM_ID_MODEL_MATRIX + " * vec4(fragVert, 1))" + SEMI_ENDL +
 	VAR_VEC3 + " surfaceToCamera = fragVert - fragWorldPosition" + SEMI_ENDL +
 	
 	VAR_VEC4 + " outColorBlinn = vec4(0,0,0,1)" + SEMI_ENDL +
@@ -41,8 +41,8 @@ std::string ShaderComponentBlinn::getFragmentBodyString(){
 	"vec3 surfaceToLight = vec3(0,0,0)" + SEMI_ENDL +
 	"float attenuation = 1.0" + SEMI_ENDL +
 
-	"for(int i = 0; i < numLights; i++){" + ENDL +
-		"for(int j = 0; j < numMaterials; j++){" + ENDL +
+	"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_LIGHTS + "; i++){" + ENDL +
+		"for(int j = 0; j < " + GL_UNIFORM_ID_NUM_MATERIALS + "; j++){" + ENDL +
 			"if(lights[i].type == 1){" + ENDL +
 				"//DIRECTIONAL" + ENDL +
 				"surfaceToLight = normalize(lights[i].position)" + SEMI_ENDL +

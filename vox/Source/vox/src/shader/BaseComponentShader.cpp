@@ -56,7 +56,7 @@ std::string BaseComponentShader::buildVertexShader(){
 		shaderString += components.at(i)->getVertexVariablesString();
 	}
 
-	shaderString += "void main(){\n"
+	shaderString += "void main(){" + ENDL +
 						"fragVert" + modGeo + "= aVertexPosition" + SEMI_ENDL +
 						"fragNormal" + modGeo + " = aVertexNormals" + SEMI_ENDL +
 						"fragColor" + modGeo + "= aVertexColor" + SEMI_ENDL +
@@ -77,7 +77,7 @@ std::string BaseComponentShader::buildVertexShader(){
 }
 
 std::string BaseComponentShader::buildFragmentShader(){
-	std::string shaderString  = "#version 150\n"
+	std::string shaderString  = "#version 150" + ENDL +
 
 								"in vec3 fragVert" + SEMI_ENDL +
 								"in vec3 fragNormal" + SEMI_ENDL +

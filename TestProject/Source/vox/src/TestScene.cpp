@@ -4,10 +4,18 @@
 
 
 #include <MeshEntity.h>
+#include <MeshInterface.h>
 #include <MeshFactory.h>
+#include <Resource.h>
+
+#include <DirectionalLight.h>
+#include <PointLight.h>
+#include <Material.h>
 
 #include <shader\BaseComponentShader.h>
 #include <shader\ShaderComponentTexture.h>
+#include <shader\ShaderComponentPhong.h>
+#include <shader\ShaderComponentShadow.h>
 
 #include <MousePerspectiveCamera.h>
 #include <FollowCamera.h>
@@ -20,9 +28,8 @@ TestScene::TestScene(Game * _game) :
 	shader(new BaseComponentShader())
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
-	//shader->components.push_back(new ShaderComponentHsv(shader, 0.f, 1.25f, 1.25f));
-	//shader->components.push_back(new ShaderComponentTint(shader, 0.f, 0.f, 0.f));
-	//shader->components.push_back(new ShaderComponentAlpha(shader, 1.f));
+	shader->components.push_back(new ShaderComponentPhong(shader));
+	//shader->components.push_back(new ShaderComponentShadow(shader));
 	shader->compileShader();
 
 	
@@ -45,10 +52,37 @@ TestScene::TestScene(Game * _game) :
 	gameCam->yaw = 90.0f;
 	gameCam->pitch = -10.0f;
 	activeCamera = gameCam;
+	
+	//lights.push_back(new DirectionalLight(glm::vec3(1,0,0), glm::vec3(1,1,1), 1));
+	
+	
+	//Setup point light - lets make it red
+	Light * pointLight = new PointLight(glm::vec3(-5.0f, 1.0f, 1.f), glm::vec3(0.8f, 0.0f, 0.0f), 0.005f, 0.2f);
+	//Add it to the scene's list of lights
+	lights.push_back(pointLight);
 
+	//intialize key light
+	DirectionalLight * keyLight = new DirectionalLight(glm::vec3(0.5f, 0.8f, 0.6f), glm::vec3(0.1f, 0.1f, 0.5f), 0.005f);
+	//Set it as the key light so it casts shadows
+	keyLight->isKeyLight = true;
+	//Add it to the scene
+	lights.push_back(keyLight);
+
+	Material * phong = new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true);
+	{
 	MeshEntity * m = new MeshEntity(MeshFactory::getCubeMesh());
 	m->setShader(shader, true);
+	m->transform->translate(15,0,0);
+	m->mesh->pushMaterial(phong);
 	addChild(m);
+	}
+	{
+	MeshEntity * m = new MeshEntity(Resource::loadMeshFromObj("../assets/thing.vox"));
+	m->setShader(shader, true);
+	m->transform->scale(10, 10, 10);
+	m->mesh->pushMaterial(phong);
+	addChild(m);
+	}
 }
 
 TestScene::~TestScene(){
