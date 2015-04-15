@@ -7,10 +7,12 @@
 #include <Game.h>
 #include <ResourceManager.h>
 
+#include <TestGame.h>
+
 int main(void){
 	vox::initialize("Vox");
 	
-	Game * game = new Game(true);
+	TestGame * game = new TestGame();
 
 	while (game->isRunning){
 		game->performGameLoop();

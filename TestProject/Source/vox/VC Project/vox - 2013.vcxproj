@@ -47,6 +47,7 @@
     <ClCompile Include="../src/Keyboard.cpp" />
     <ClCompile Include="../src/LayeredScene.cpp" />
     <ClCompile Include="../src/Light.cpp" />
+    <ClCompile Include="../src/Main.cpp" />
     <ClCompile Include="../src/Material.cpp" />
     <ClCompile Include="../src/MatrixStack.cpp" />
     <ClCompile Include="../src/MeshEntity.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="../src/Keyboard.cpp" />
     <ClCompile Include="../src/LayeredScene.cpp" />
     <ClCompile Include="../src/Light.cpp" />
+    <ClCompile Include="../src/Main.cpp" />
     <ClCompile Include="../src/Material.cpp" />
     <ClCompile Include="../src/MatrixStack.cpp" />
     <ClCompile Include="../src/MeshEntity.cpp" />
@@ -253,6 +255,7 @@
     <ClCompile Include="../src/Keyboard.cpp" />
     <ClCompile Include="../src/LayeredScene.cpp" />
     <ClCompile Include="../src/Light.cpp" />
+    <ClCompile Include="../src/Main.cpp" />
     <ClCompile Include="../src/Material.cpp" />
     <ClCompile Include="../src/MatrixStack.cpp" />
     <ClCompile Include="../src/MeshEntity.cpp" />
