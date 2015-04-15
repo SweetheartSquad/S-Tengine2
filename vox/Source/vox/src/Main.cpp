@@ -1,17 +1,16 @@
 #pragma once
 
-#include "PuppetGame.h"
-#include "GameJamGame.h"
 #include <Vox.h>
 #include <node\Node.h>
 #include <typeinfo>
 #include <Texture.h>
+#include <Game.h>
+#include <ResourceManager.h>
 
 int main(void){
 	vox::initialize("Vox");
 	
-	Game * game = new PuppetGame(true);
-	//game = new GameJamGame(true);
+	Game * game = new Game(true);
 
 	while (game->isRunning){
 		game->performGameLoop();

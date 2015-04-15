@@ -7,7 +7,6 @@
 #include "shader/BaseComponentShader.h"
 #include "shader/ShaderComponentTexture.h"
 
-#include "GameJamScene.h"
 #include "Box2DWorld.h"
 
 #include "MatrixStack.h"

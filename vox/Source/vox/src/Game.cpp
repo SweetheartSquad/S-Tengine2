@@ -196,7 +196,9 @@ void Game::draw(void){
 	vox::MatrixStack ms;
 	VoxRenderOptions ro(nullptr, nullptr, nullptr);
 	ro.kc_active = kc_active;
-	currentScene->render(&ms, &ro);
+	if(currentScene != nullptr){
+		currentScene->render(&ms, &ro);
+	}
 }
 
 void Game::manageInput(){

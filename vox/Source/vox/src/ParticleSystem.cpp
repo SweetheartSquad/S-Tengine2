@@ -4,7 +4,6 @@
 
 #include <Box2DSprite.h>
 #include <Particle.h>
-#include <PuppetResourceManager.h>
 #include <Box2DWorld.h>
 
 ParticleSystem::ParticleSystem(TextureSampler * _texture, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :

@@ -1,16 +1,6 @@
-﻿# Hurly Burly Puppet Party #
+﻿# Test Repo #
 ﻿
-This is a work-in-progress interactive installation project.
-
-![](https://github.com/RyanBluth/Hurly-Burly-Puppet-Party/blob/master/HurlyBurly_Logo.png)
-
-
-Hurly Burly Puppet Party is a medieval-themed virtual puppet show where players control on-screen avatars using Arduino-based controllers to compete and collaborate while attempting to complete various scenes.
-
-## Current Scene Listing
-* Raid the Castle
-* Slay the Dragon
-* Rapunzel
+Forked from the hurly-burly repo to attempt to clean things up.
 
 
 
