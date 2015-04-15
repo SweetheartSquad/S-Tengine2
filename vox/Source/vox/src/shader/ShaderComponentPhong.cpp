@@ -38,7 +38,8 @@ std::string ShaderComponentPhong::getFragmentBodyString(){
 	"mat3 normalMatrix = transpose(inverse(mat3(" + GL_UNIFORM_ID_MODEL_MATRIX + ")))" + SEMI_ENDL +
 	"vec3 normal = normalize(normalMatrix * fragNormal)" + SEMI_ENDL +
 	"vec3 fragWorldPosition = vec3(" + GL_UNIFORM_ID_MODEL_MATRIX + " * vec4(fragVert, 1))" + SEMI_ENDL +
-	"vec3 surfaceToCamera = normalize(fragVert - fragWorldPosition)" + SEMI_ENDL +
+	"vec3 cameraPosition = -" + GL_UNIFORM_ID_VIEW_MATRIX + "[3].xyz * mat3(" + GL_UNIFORM_ID_VIEW_MATRIX + ")" + SEMI_ENDL +
+	"vec3 surfaceToCamera = normalize(cameraPosition - fragWorldPosition)" + SEMI_ENDL +
 	"vec4 outColorPhong = vec4(0,0,0,1)" + SEMI_ENDL +
 
 	"vec3 surfaceToLight = vec3(0,0,0)" + SEMI_ENDL +

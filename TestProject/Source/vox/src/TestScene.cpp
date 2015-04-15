@@ -15,6 +15,7 @@
 #include <shader\BaseComponentShader.h>
 #include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentPhong.h>
+#include <shader\ShaderComponentBlinn.h>
 #include <shader\ShaderComponentShadow.h>
 
 #include <MousePerspectiveCamera.h>
@@ -68,7 +69,7 @@ TestScene::TestScene(Game * _game) :
 	//Add it to the scene
 	lights.push_back(keyLight);
 
-	Material * phong = new Material(80.0, glm::vec3(1.f, 1.f, 1.f), true);
+	Material * phong = new Material(45.0, glm::vec3(1.f, 1.f, 1.f), true);
 	{
 	MeshEntity * m = new MeshEntity(MeshFactory::getCubeMesh());
 	m->setShader(shader, true);

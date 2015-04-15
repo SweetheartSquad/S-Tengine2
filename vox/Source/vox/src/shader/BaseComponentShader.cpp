@@ -86,21 +86,24 @@ std::string BaseComponentShader::buildFragmentShader(){
 								
 								"out vec4 outColor" + SEMI_ENDL +
 								
-								"uniform mat4 " + GL_UNIFORM_ID_MODEL_MATRIX + SEMI_ENDL;
+								"uniform mat4 " + GL_UNIFORM_ID_MODEL_MATRIX + SEMI_ENDL +
+								"uniform mat4 " + GL_UNIFORM_ID_VIEW_MATRIX + SEMI_ENDL +
+								"uniform mat4 " + GL_UNIFORM_ID_PROJECTION_MATRIX + SEMI_ENDL +
+								"uniform mat4 " + GL_UNIFORM_ID_MODEL_VIEW_PROJECTION + SEMI_ENDL;
 
 	for(unsigned long int i = 0; i < components.size(); i++){
 		shaderString += components.at(i)->getFragmentVariablesString();
 	}
 
-	shaderString += "void main(){\n";
+	shaderString += "void main(){" + ENDL;
 
-	shaderString += "vec4 modFrag = fragColor;\n";
+	shaderString += "vec4 modFrag = fragColor" + SEMI_ENDL;
 
 	for(unsigned long int i = 0; i < components.size(); i++){
 		shaderString += components.at(i)->getFragmentBodyString();
 	}
 
-	shaderString += "outColor = vec4(1, 1, 1, 1);\n";
+	shaderString += GL_OUT_OUT_COLOR + " = vec4(1, 1, 1, 1)" + SEMI_ENDL;
 
 	for(unsigned long int i = 0; i < components.size(); i++){
 		shaderString += components.at(i)->getOutColorMod();
@@ -121,9 +124,6 @@ void BaseComponentShader::compileShader(){
 }
 
 void BaseComponentShader::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
-	//glm::mat4 mvp = _matrixStack->getMVP();
-	//GLuint mvpUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(),  GL_UNIFORM_ID_MODEL_VIEW_PROJECTION.c_str());
-	//glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
 	glm::mat4 model = _matrixStack->getModelMatrix();
 	GLuint modelUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX.c_str());
 	glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &model[0][0]);

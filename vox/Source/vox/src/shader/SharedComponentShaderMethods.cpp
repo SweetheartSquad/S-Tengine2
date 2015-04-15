@@ -41,7 +41,7 @@ void SharedComponentShaderMethods::configureMaterials(vox::MatrixStack* _matrixS
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 	if(mesh != nullptr){
 		// Pass the _shader the number of materials
-		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), "numMaterials"), mesh->materials.size());
+		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_MATERIALS.c_str()), mesh->materials.size());
 
 		// Pass each material to the _shader
 		for(unsigned long int i = 0; i < mesh->materials.size(); i++){
