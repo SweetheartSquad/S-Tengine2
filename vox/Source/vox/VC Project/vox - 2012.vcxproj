@@ -255,7 +255,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -268,7 +268,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -304,11 +304,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(IncludePath)</IncludePath>
+    <IncludePath>..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(ZPLAY_DIR);$(BOX2D_DIR);$(IncludePath)</IncludePath>
     <SourcePath>..\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\lib;$(ZPLAY_DIR);$(BOX2D_DIR)\Build\vs2013\bin\x32\Debug;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\projects\VC9\Debug;$(ZPLAY_DIR);$(BOX2D_DIR)\Build\vs2013\bin\x32\Debug;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <TargetName>$(ProjectName)d</TargetName>
@@ -323,11 +323,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(IncludePath)</IncludePath>
+    <IncludePath>..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(ZPLAY_DIR);$(BOX2D_DIR);$(IncludePath)</IncludePath>
     <SourcePath>..\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\lib;$(ZPLAY_DIR);$(BOX2D_DIR)\Build\vs2013\bin\x32\Release;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\projects\VC9\Release;$(ZPLAY_DIR);$(BOX2D_DIR)\Build\vs2013\bin\x32\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
