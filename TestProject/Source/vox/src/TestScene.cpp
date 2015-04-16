@@ -2,6 +2,7 @@
 
 #include <TestScene.h>
 
+#include <TestGame.h>
 
 #include <MeshEntity.h>
 #include <MeshInterface.h>
@@ -92,6 +93,10 @@ TestScene::~TestScene(){
 
 void TestScene::update(Step * _step){
 	
+	if(keyboard->keyJustUp(GLFW_KEY_F11)){
+		game->toggleFullScreen();
+	}
+
 	// camera controls
 	if (keyboard->keyDown(GLFW_KEY_UP)){
 		activeCamera->transform->translate((activeCamera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
