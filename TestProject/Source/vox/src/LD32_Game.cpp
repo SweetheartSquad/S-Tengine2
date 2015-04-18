@@ -6,7 +6,9 @@
 LD32_Game::LD32_Game() :
 	Game(true)
 {
+	currentSceneKey = "1";
 	currentScene = new LD32_Scene(this);
+	scenes.insert(std::pair<std::string, Scene * >(currentSceneKey, currentScene));
 }
 
 LD32_Game::~LD32_Game(){

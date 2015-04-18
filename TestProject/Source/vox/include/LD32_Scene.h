@@ -26,7 +26,6 @@ public:
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
 	Box2DMeshEntity * player;
-	SoundManager music;
 
 	float sceneHeight;
 	float sceneWidth;

@@ -5,13 +5,13 @@
 #include <typeinfo>
 #include <Texture.h>
 #include <Game.h>
-#include <ResourceManager.h>
+#include <LD32_ResourceManager.h>
 
 #include <LD32_Game.h>
 
 int main(void){
 	vox::initialize("Vox");
-	
+	LD32_ResourceManager::init();
 	LD32_Game * game = new LD32_Game();
 
 	while (game->isRunning){
@@ -20,7 +20,7 @@ int main(void){
 	
 	delete game;
 	game = nullptr;
-	ResourceManager::destruct();
+	LD32_ResourceManager::destruct();
 #ifdef _DEBUG
 	std::cout << "Final node count: " << Node::nodes.size() << std::endl;
 

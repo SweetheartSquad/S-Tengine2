@@ -1,8 +1,8 @@
 #pragma once
 
 #include <LD32_Scene.h>
-
 #include <LD32_Game.h>
+#include <LD32_ResourceManager.h>
 
 #include <MeshEntity.h>
 #include <MeshInterface.h>
@@ -40,7 +40,6 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	world(new Box2DWorld(b2Vec2(0,0))),
 	drawer(nullptr),
 	player(nullptr),
-	music(-1),
 	sceneHeight(150),
 	sceneWidth(50)
 {
@@ -152,8 +151,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	}
 	
 	Sound::masterVolume = 0;
-	music.addNewSound("bgm", "../assets/thing6 - guitar.ogg");
-	music.play("bgm");
+	LD32_ResourceManager::music->play("bgm");
 	
 	for(int i = 0; i < numHarmonics; ++i){
 		MeshEntity * m = new MeshEntity(MeshFactory::getPlaneMesh());
@@ -212,7 +210,7 @@ void LD32_Scene::update(Step * _step){
 	int fftDataL[numHarmonics];
 	int fftDataR[numHarmonics];
 
-	music.sounds.at("bgm").player->GetFFTData(numFFTsamples, libZPlay::TFFTWindow::fwBlackmanNuttall, nullptr, nullptr, fftDataL, fftDataR, nullptr, nullptr);
+	LD32_ResourceManager::music->sounds.at("bgm").player->GetFFTData(numFFTsamples, libZPlay::TFFTWindow::fwBlackmanNuttall, nullptr, nullptr, fftDataL, fftDataR, nullptr, nullptr);
 	
 	lights.at(0)->data.intensities = glm::vec3(fftDataL[10]/100.f, 0 , fftDataR[10]/100.f);
 	
