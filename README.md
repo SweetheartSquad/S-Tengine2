@@ -1,8 +1,5 @@
-﻿# Test Repo #
-﻿
-Forked from the hurly-burly repo to attempt to clean things up.
-
-
+﻿# Ludum Dare 32 #
+﻿Theme: An Unconventional Weapon
 
 <hr>
 
