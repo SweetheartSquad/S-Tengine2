@@ -27,6 +27,8 @@
 #include <MousePerspectiveCamera.h>
 #include <FollowCamera.h>
 
+#include <libzplay.h>
+
 #include <Keyboard.h>
 #include <GLFW\glfw3.h>
 #include <MatrixStack.h>
@@ -36,7 +38,10 @@ TestScene::TestScene(Game * _game) :
 	shader(new BaseComponentShader()),
 	world(new Box2DWorld(b2Vec2(0,0))),
 	drawer(nullptr),
-	player(nullptr)
+	player(nullptr),
+	music(-1),
+	sceneHeight(150),
+	sceneWidth(50)
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	//shader->components.push_back(new ShaderComponentPhong(shader));
@@ -68,8 +73,6 @@ TestScene::TestScene(Game * _game) :
 	clearColor[0] = 0.5f;
 
 
-	float sceneHeight = 150;
-	float sceneWidth = 150;
 	float _size = 3;
 	std::vector<Box2DMeshEntity *> boundaries;
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
@@ -133,13 +136,45 @@ TestScene::TestScene(Game * _game) :
 	}
 
 	{
-	Box2DMeshEntity * m = new Box2DMeshEntity(world, Resource::loadMeshFromObj("../assets/torus.obj"), b2_dynamicBody, false);
+	Box2DMeshEntity * m = new Box2DMeshEntity(world, Resource::loadMeshFromObj("../assets/torus.vox"), b2_dynamicBody, false);
 	m->transform->scale(1, 1, 1);
 	m->mesh->pushMaterial(phong);
 	world->addToWorld(m);
 	m->createFixture();
 	m->setShader(shader, true);
 	addChild(m);
+	}
+
+	music.addNewSound("bgm", "../assets/thing6 - guitar.ogg");
+	music.play("bgm");
+	
+	for(int i = 0; i < numHarmonics; ++i){
+		MeshEntity * m = new MeshEntity(MeshFactory::getPlaneMesh());
+		for(Vertex & v : m->mesh->vertices){
+			if(v.y < 0.f){
+				v.y += 1.f;
+			}
+			v.red = 1;
+		}
+		m->mesh->dirty = true;
+		m->transform->translate(sceneWidth/numHarmonics * (i+0.5f), 0, 1);
+		m->setShader(shader, true);
+		addChild(m);
+		audioVisualizer.push_back(m);
+	}
+	for(int i = 0; i < numHarmonics; ++i){
+		MeshEntity * m = new MeshEntity(MeshFactory::getPlaneMesh());
+		for(Vertex & v : m->mesh->vertices){
+			if(v.y < 0.f){
+				v.y += 1.f;
+			}
+			v.blue = 1;
+		}
+		m->mesh->dirty = true;
+		m->transform->translate(sceneWidth/numHarmonics * (i+0.5f), 0, 1);
+		m->setShader(shader, true);
+		addChild(m);
+		audioVisualizer.push_back(m);
 	}
 }
 
@@ -149,6 +184,37 @@ TestScene::~TestScene(){
 
 void TestScene::update(Step * _step){
 	
+
+	/*const int numFFTPoints = 16;
+	const int numHarmonics = numFFTPoints/2 + 1;
+	int * harmonicNumber	= new int(numFFTPoints),
+		* harmonicFreq		= new int(numFFTPoints),
+		* leftAmplitude		= new int(numFFTPoints),
+		* rightAmplitude	= new int(numFFTPoints),
+		* leftPhase			= new int(numFFTPoints),
+		* rightPhase		= new int(numFFTPoints);
+	
+
+	music.sounds.at(0).player->GetFFTData(numFFTPoints, libZPlay::TFFTWindow::fwRectangular, harmonicNumber, harmonicFreq, leftAmplitude, rightAmplitude, leftPhase, rightPhase);
+
+	delete harmonicNumber;
+	delete harmonicFreq;
+	delete leftAmplitude;	
+	delete rightAmplitude;
+	delete leftPhase;
+	delete rightPhase;*/
+	
+	int fftDataL[numHarmonics];
+	int fftDataR[numHarmonics];
+	//fwBartlett
+	//fwBlackmanHarris
+	music.sounds.at("bgm").player->GetFFTData(numFFTsamples, libZPlay::TFFTWindow::fwBlackmanNuttall, nullptr, nullptr, fftDataL, fftDataR, nullptr, nullptr);
+	for(int i = 0; i < numHarmonics; ++i){
+		audioVisualizer.at(i)->transform->scale(sceneWidth / numHarmonics / 2.f, (fftDataL[i]) / 10.f, 1, false);
+	}for(int i = 0; i < numHarmonics; ++i){
+		audioVisualizer.at(i+numHarmonics)->transform->scale(sceneWidth / numHarmonics / 2.f, -(fftDataR[i]) / 10.f, 1, false);
+	}
+
 	shader->components.at(1)->makeDirty();
 
 	clearColor[0] = sin(_step->time)*0.5f + 0.5f;
