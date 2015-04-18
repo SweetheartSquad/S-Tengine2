@@ -12,7 +12,6 @@
 ****************************************************************************************************/
 class PointLight : public Light{
 public:
-
 	PointLight(glm::vec3 position, glm::vec3 intensities, float ambientCoefficient, float attenuation);
 	~PointLight();
 };

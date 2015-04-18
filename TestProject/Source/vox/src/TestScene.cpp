@@ -15,6 +15,7 @@
 
 #include <shader\BaseComponentShader.h>
 #include <shader\ShaderComponentTexture.h>
+#include <shader\ShaderComponentDiffuse.h>
 #include <shader\ShaderComponentPhong.h>
 #include <shader\ShaderComponentBlinn.h>
 #include <shader\ShaderComponentShadow.h>
@@ -38,7 +39,8 @@ TestScene::TestScene(Game * _game) :
 	player(nullptr)
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
-	shader->components.push_back(new ShaderComponentPhong(shader));
+	//shader->components.push_back(new ShaderComponentPhong(shader));
+	shader->components.push_back(new ShaderComponentDiffuse(shader));
 	//shader->components.push_back(new ShaderComponentShadow(shader));
 	shader->compileShader();
 
@@ -105,37 +107,38 @@ TestScene::TestScene(Game * _game) :
 	//lights.push_back(new DirectionalLight(glm::vec3(1,0,0), glm::vec3(1,1,1), 1));
 	
 	
-	//Setup point light - lets make it red
-	Light * pointLight = new PointLight(glm::vec3(-5.0f, 1.0f, 1.f), glm::vec3(0.8f, 0.0f, 0.0f), 0.005f, 0.2f);
-	//Add it to the scene's list of lights
-	lights.push_back(pointLight);
 
 	//intialize key light
-	DirectionalLight * keyLight = new DirectionalLight(glm::vec3(0.5f, 0.8f, 0.6f), glm::vec3(1.f, 1.f, 1.f), 0.005f);
+	DirectionalLight * keyLight = new DirectionalLight(glm::vec3(0.5f, 0.8f, 0.6f), glm::vec3(1.f, 1.f, 1.f), 1.005f);
 	//Set it as the key light so it casts shadows
 	keyLight->isKeyLight = true;
 	//Add it to the scene
 	lights.push_back(keyLight);
 
-	Material * phong = new Material(45.0, glm::vec3(1.f, 1.f, 1.f), true);
+	Material * phong = new Material(45.0, glm::vec3(1.f, 1.f, 0.f), true);
 	{
 	Box2DMeshEntity * m = new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_dynamicBody, false);
-	m->setShader(shader, true);
 	m->transform->translate(15,0,0);
 	m->mesh->pushMaterial(phong);
 	world->addToWorld(m);
 	m->createFixture();
 	player = m;
+	m->setShader(shader, true);
 	addChild(m);
 	gameCam->addTarget(player, 1);
+	PointLight * pointLight = new PointLight(glm::vec3(0.0f, 0.0f, 5.f), glm::vec3(0.0f, 0.0f, 1.0f), 0.005f, 0.2f);
+	//Add it to the scene's list of lights
+	lights.push_back(pointLight);
+	m->addChild(pointLight);
 	}
+
 	{
 	Box2DMeshEntity * m = new Box2DMeshEntity(world, Resource::loadMeshFromObj("../assets/torus.obj"), b2_dynamicBody, false);
-	m->setShader(shader, true);
 	m->transform->scale(1, 1, 1);
 	m->mesh->pushMaterial(phong);
 	world->addToWorld(m);
 	m->createFixture();
+	m->setShader(shader, true);
 	addChild(m);
 	}
 }
@@ -146,6 +149,8 @@ TestScene::~TestScene(){
 
 void TestScene::update(Step * _step){
 	
+	shader->components.at(1)->makeDirty();
+
 	clearColor[0] = sin(_step->time)*0.5f + 0.5f;
 	clearColor[2] = cos(_step->time)*0.5f + 0.5f;
 
@@ -166,7 +171,7 @@ void TestScene::update(Step * _step){
 	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
 		activeCamera->transform->translate((activeCamera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
-
+	
 	// player controls
 	if(player != nullptr){
 		if (keyboard->keyDown(GLFW_KEY_W)){

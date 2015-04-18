@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "node/NodeTransformable.h"
+#include "node/ShiftKiddie.h"
 
 enum LightType {
 	kPOINT_LIGHT = 0,
@@ -25,7 +25,7 @@ struct LightData {
 * position, color, ambient coefficient, and attentuation. 
 *
 ****************************************************************************************************/
-class Light abstract : public NodeTransformable{
+class Light abstract : public ShiftKiddie{
 public:
 
 	explicit Light(LightType _type, glm::vec3 _position, glm::vec3 intensities, float ambientCoefficient, float attenuation, Transform * _transform = nullptr);

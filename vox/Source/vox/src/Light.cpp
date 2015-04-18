@@ -11,10 +11,10 @@ LightData::LightData(LightType _type, glm::vec3 _intensities, float _ambientCoef
 
 Light::Light(LightType _type, glm::vec3 _position, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, Transform * _transform):
 	NodeTransformable(_transform == nullptr ? new Transform() : _transform),
-	Node(),
+	NodeChild(nullptr),
 	data(_type, _intensities, _ambientCoefficient, _attenuation)
 {
-	_transform->translate(_position);
+	_transform->translate(_position, false);
 }
 
 Light::~Light() {
