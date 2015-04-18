@@ -28,12 +28,14 @@
 
 #include <Keyboard.h>
 #include <GLFW\glfw3.h>
+#include <MatrixStack.h>
 
 TestScene::TestScene(Game * _game) :
 	Scene(_game),
 	shader(new BaseComponentShader()),
-	world(new Box2DWorld()),
-	drawer(nullptr)
+	world(new Box2DWorld(b2Vec2(0,0))),
+	drawer(nullptr),
+	player(nullptr)
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->components.push_back(new ShaderComponentPhong(shader));
@@ -61,6 +63,45 @@ TestScene::TestScene(Game * _game) :
 	gameCam->pitch = -10.0f;
 	activeCamera = gameCam;
 	
+	clearColor[0] = 0.5f;
+
+
+	float sceneHeight = 150;
+	float sceneWidth = 150;
+	float _size = 3;
+	std::vector<Box2DMeshEntity *> boundaries;
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+
+	boundaries.at(0)->transform->scale(_size, sceneHeight*0.5f + _size*2.f, _size);
+	boundaries.at(1)->transform->scale(_size, sceneHeight*0.5f + _size*2.f, _size);
+	boundaries.at(2)->transform->scale(sceneWidth*0.5f + _size*2.f, _size, _size);
+	boundaries.at(3)->transform->scale(sceneWidth*0.5f + _size*2.f, _size, _size);
+
+	boundaries.at(0)->setTranslationPhysical(sceneWidth+_size, sceneHeight*0.5f, 0);
+	boundaries.at(1)->setTranslationPhysical(-_size, sceneHeight*0.5f, 0);
+	boundaries.at(2)->setTranslationPhysical(sceneWidth*0.5f, sceneHeight+_size, 0);
+	boundaries.at(3)->setTranslationPhysical(sceneWidth*0.5f, -_size, 0);
+	
+	b2Filter sf;
+	//sf.categoryBits = PuppetGame::kBOUNDARY;
+	//sf.maskBits = -1;
+	for(auto b : boundaries){
+		addChild(b);
+		b->setShader(shader, true);
+		world->addToWorld(b);
+		b->body->GetFixtureList()->SetFilterData(sf);
+		//b->mesh->pushTexture2D(PuppetResourceManager::stageFront);
+	}
+	//sf.categoryBits = PuppetGame::kBOUNDARY | PuppetGame::kGROUND;
+	boundaries.at(3)->body->GetFixtureList()->SetFilterData(sf);
+	boundaries.at(3)->body->GetFixtureList()->SetFriction(1);
+	boundaries.at(3)->body->GetFixtureList()->SetRestitution(0);
+
+
+
 	//lights.push_back(new DirectionalLight(glm::vec3(1,0,0), glm::vec3(1,1,1), 1));
 	
 	
@@ -78,17 +119,23 @@ TestScene::TestScene(Game * _game) :
 
 	Material * phong = new Material(45.0, glm::vec3(1.f, 1.f, 1.f), true);
 	{
-	MeshEntity * m = new MeshEntity(MeshFactory::getCubeMesh());
+	Box2DMeshEntity * m = new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_dynamicBody, false);
 	m->setShader(shader, true);
 	m->transform->translate(15,0,0);
 	m->mesh->pushMaterial(phong);
+	world->addToWorld(m);
+	m->createFixture();
+	player = m;
 	addChild(m);
+	gameCam->addTarget(player, 1);
 	}
 	{
-	MeshEntity * m = new MeshEntity(Resource::loadMeshFromObj("../assets/thing.vox"));
+	Box2DMeshEntity * m = new Box2DMeshEntity(world, Resource::loadMeshFromObj("../assets/torus.obj"), b2_dynamicBody, false);
 	m->setShader(shader, true);
-	m->transform->scale(10, 10, 10);
+	m->transform->scale(1, 1, 1);
 	m->mesh->pushMaterial(phong);
+	world->addToWorld(m);
+	m->createFixture();
 	addChild(m);
 	}
 }
@@ -99,6 +146,9 @@ TestScene::~TestScene(){
 
 void TestScene::update(Step * _step){
 	
+	clearColor[0] = sin(_step->time)*0.5f + 0.5f;
+	clearColor[2] = cos(_step->time)*0.5f + 0.5f;
+
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
 	}
@@ -117,6 +167,24 @@ void TestScene::update(Step * _step){
 		activeCamera->transform->translate((activeCamera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
 
+	// player controls
+	if(player != nullptr){
+		if (keyboard->keyDown(GLFW_KEY_W)){
+			player->applyLinearImpulseUp(5);
+		}
+		if (keyboard->keyDown(GLFW_KEY_S)){
+			player->applyLinearImpulseDown(5);
+		}
+		if (keyboard->keyDown(GLFW_KEY_A)){
+			player->applyLinearImpulseLeft(5);
+		}
+		if (keyboard->keyDown(GLFW_KEY_D)){
+			player->applyLinearImpulseRight(5);
+		}
+	}
+
+
+	// debug controls
 	if(keyboard->keyJustDown(GLFW_KEY_1)){
 		if(activeCamera == gameCam){
 			activeCamera = mouseCam;
@@ -146,4 +214,8 @@ void TestScene::update(Step * _step){
 	Scene::update(_step);
 
 	world->update(_step);
+}
+
+void TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	Scene::render(_matrixStack, _renderOptions);
 }
