@@ -7,12 +7,12 @@
 #include <Game.h>
 #include <ResourceManager.h>
 
-#include <TestGame.h>
+#include <LD32_Game.h>
 
 int main(void){
 	vox::initialize("Vox");
 	
-	TestGame * game = new TestGame();
+	LD32_Game * game = new LD32_Game();
 
 	while (game->isRunning){
 		game->performGameLoop();

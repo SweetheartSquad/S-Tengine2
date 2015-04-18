@@ -16,7 +16,7 @@ class MeshEntity;
 #define numFFTsamples (256)
 #define numHarmonics (numFFTsamples / 2 + 1)
 
-class TestScene : public Scene{
+class LD32_Scene : public Scene{
 public:
 	BaseComponentShader * shader;
 	MousePerspectiveCamera * mouseCam;
@@ -36,6 +36,6 @@ public:
 	
 	std::vector<MeshEntity *> audioVisualizer;
 
-	TestScene(Game * _game);
-	~TestScene();
+	LD32_Scene(Game * _game);
+	~LD32_Scene();
 };

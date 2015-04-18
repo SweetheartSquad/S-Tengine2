@@ -1,8 +1,8 @@
 #pragma once
 
-#include <TestScene.h>
+#include <LD32_Scene.h>
 
-#include <TestGame.h>
+#include <LD32_Game.h>
 
 #include <MeshEntity.h>
 #include <MeshInterface.h>
@@ -34,7 +34,7 @@
 #include <GLFW\glfw3.h>
 #include <MatrixStack.h>
 
-TestScene::TestScene(Game * _game) :
+LD32_Scene::LD32_Scene(Game * _game) :
 	Scene(_game),
 	shader(new BaseComponentShader()),
 	world(new Box2DWorld(b2Vec2(0,0))),
@@ -151,7 +151,7 @@ TestScene::TestScene(Game * _game) :
 	m->body->SetAngularDamping(5.f);
 	}
 	
-	Sound::masterVolume = 100;
+	Sound::masterVolume = 0;
 	music.addNewSound("bgm", "../assets/thing6 - guitar.ogg");
 	music.play("bgm");
 	
@@ -197,7 +197,7 @@ TestScene::TestScene(Game * _game) :
 	mouseCam->rightVectorLocal = glm::vec3(0, -1, 0);
 }
 
-TestScene::~TestScene(){
+LD32_Scene::~LD32_Scene(){
 	while(children.size() > 0){
 		NodeHierarchical::deleteRecursively(children.back());
 		children.pop_back();
@@ -208,7 +208,7 @@ TestScene::~TestScene(){
 	delete world;
 }
 
-void TestScene::update(Step * _step){
+void LD32_Scene::update(Step * _step){
 	int fftDataL[numHarmonics];
 	int fftDataR[numHarmonics];
 
@@ -309,6 +309,6 @@ void TestScene::update(Step * _step){
 	world->update(_step);
 }
 
-void TestScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void LD32_Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	Scene::render(_matrixStack, _renderOptions);
 }
