@@ -9,4 +9,6 @@ public:
 	~Box2DMeshEntity();
 
 	void update(Step* _step) override;
+
+	b2Fixture * createFixture();
 };
