@@ -27,6 +27,7 @@
 #include <MousePerspectiveCamera.h>
 #include <FollowCamera.h>
 
+#include <Sound.h>
 #include <libzplay.h>
 
 #include <Keyboard.h>
@@ -144,7 +145,8 @@ TestScene::TestScene(Game * _game) :
 	m->setShader(shader, true);
 	addChild(m);
 	}
-
+	
+	Sound::masterVolume = 0;
 	music.addNewSound("bgm", "../assets/thing6 - guitar.ogg");
 	music.play("bgm");
 	
@@ -179,6 +181,13 @@ TestScene::TestScene(Game * _game) :
 }
 
 TestScene::~TestScene(){
+	while(children.size() > 0){
+		NodeHierarchical::deleteRecursively(children.back());
+		children.pop_back();
+	}
+	
+	delete shader;
+
 	delete world;
 }
 
