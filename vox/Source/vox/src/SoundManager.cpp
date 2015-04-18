@@ -34,9 +34,9 @@ void SoundManager::addFile(std::string _name, std::string _fileName){
 	sounds.at(_name).addFile(_fileName);
 }
 
-void SoundManager::play(std::string _name){
+void SoundManager::play(std::string _name, bool _loop){
 	if(vox::step.time - lastTimeStamp > throttle){
-		sounds.at(_name).play();
+		sounds.at(_name).play(_loop);
 		lastTimeStamp = vox::step.time;
 	}
 }

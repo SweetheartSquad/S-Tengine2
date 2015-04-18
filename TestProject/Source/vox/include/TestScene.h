@@ -20,6 +20,7 @@ class TestScene : public Scene{
 public:
 	BaseComponentShader * shader;
 	MousePerspectiveCamera * mouseCam;
+	MousePerspectiveCamera * debugCam;
 	FollowCamera * gameCam;
 
 	Box2DWorld * world;

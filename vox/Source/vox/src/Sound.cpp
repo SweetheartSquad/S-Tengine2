@@ -21,9 +21,20 @@ Sound::Sound(std::string _file) :
 Sound::~Sound(){
 }
 
-void Sound::play(){
-	player->Play();
-	player->SetPlayerVolume(masterVolume, masterVolume);
+void Sound::play(bool _loop){
+	if(_loop){
+		libZPlay::TStreamTime start;
+		libZPlay::TStreamTime end;
+		libZPlay::TStreamInfo info;
+		player->GetStreamInfo(&info);
+		start.ms = 0;
+		end.ms = info.Length.ms-25;
+
+		player->PlayLoop(libZPlay::TTimeFormat::tfMillisecond, &start, libZPlay::TTimeFormat::tfMillisecond, &end, -1, 0);
+	}else{
+		player->Play();
+		player->SetPlayerVolume(masterVolume, masterVolume);
+	}
 }
 
 void Sound::pause(){

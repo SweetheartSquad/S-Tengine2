@@ -55,11 +55,21 @@ TestScene::TestScene(Game * _game) :
 	mouseCam = new MousePerspectiveCamera();
 	cameras.push_back(mouseCam);
 	mouseCam->farClip = 1000.f;
+	mouseCam->nearClip = 0.001f;
 	mouseCam->transform->rotate(90, 0, 1, 0, kWORLD);
 	mouseCam->transform->translate(5.0f, 1.5f, 22.5f);
 	mouseCam->yaw = 90.0f;
 	mouseCam->pitch = -10.0f;
 	mouseCam->speed = 1;
+
+	debugCam = new MousePerspectiveCamera();
+	cameras.push_back(debugCam);
+	debugCam->farClip = 1000.f;
+	debugCam->transform->rotate(90, 0, 1, 0, kWORLD);
+	debugCam->transform->translate(5.0f, 1.5f, 22.5f);
+	debugCam->yaw = 90.0f;
+	debugCam->pitch = -10.0f;
+	debugCam->speed = 1;
 
 	gameCam = new FollowCamera(15, glm::vec3(0, 0, 0), 0, 0);
 	cameras.push_back(gameCam);
@@ -71,9 +81,6 @@ TestScene::TestScene(Game * _game) :
 	gameCam->pitch = -10.0f;
 	activeCamera = gameCam;
 	
-	clearColor[0] = 0.5f;
-
-
 	float _size = 3;
 	std::vector<Box2DMeshEntity *> boundaries;
 	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
@@ -112,12 +119,6 @@ TestScene::TestScene(Game * _game) :
 	
 	
 
-	//intialize key light
-	DirectionalLight * keyLight = new DirectionalLight(glm::vec3(0.5f, 0.8f, 0.6f), glm::vec3(1.f, 1.f, 1.f), 1.005f);
-	//Set it as the key light so it casts shadows
-	keyLight->isKeyLight = true;
-	//Add it to the scene
-	lights.push_back(keyLight);
 
 	Material * phong = new Material(45.0, glm::vec3(1.f, 1.f, 0.f), true);
 	{
@@ -130,10 +131,12 @@ TestScene::TestScene(Game * _game) :
 	m->setShader(shader, true);
 	addChild(m);
 	gameCam->addTarget(player, 1);
-	PointLight * pointLight = new PointLight(glm::vec3(0.0f, 0.0f, 5.f), glm::vec3(0.0f, 0.0f, 1.0f), 0.005f, 0.2f);
+	PointLight * pointLight = new PointLight(glm::vec3(0.0f, 0.0f, 5.f), glm::vec3(0.0f, 0.0f, 1.0f), 0.000f, 0.1f);
 	//Add it to the scene's list of lights
 	lights.push_back(pointLight);
 	m->addChild(pointLight);
+	m->body->SetLinearDamping(5.f);
+	m->body->SetAngularDamping(5.f);
 	}
 
 	{
@@ -144,9 +147,11 @@ TestScene::TestScene(Game * _game) :
 	m->createFixture();
 	m->setShader(shader, true);
 	addChild(m);
+	m->body->SetLinearDamping(5.f);
+	m->body->SetAngularDamping(5.f);
 	}
 	
-	Sound::masterVolume = 0;
+	Sound::masterVolume = 100;
 	music.addNewSound("bgm", "../assets/thing6 - guitar.ogg");
 	music.play("bgm");
 	
@@ -178,6 +183,18 @@ TestScene::TestScene(Game * _game) :
 		addChild(m);
 		audioVisualizer.push_back(m);
 	}
+
+	
+	//intialize key light
+	DirectionalLight * keyLight = new DirectionalLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.f);
+	//Set it as the key light so it casts shadows
+	keyLight->isKeyLight = true;
+	//Add it to the scene
+	lights.push_back(keyLight);
+	
+	mouseCam->upVectorLocal = glm::vec3(0, 0, 1);
+	mouseCam->forwardVectorLocal = glm::vec3(1, 0, 0);
+	mouseCam->rightVectorLocal = glm::vec3(0, -1, 0);
 }
 
 TestScene::~TestScene(){
@@ -192,32 +209,13 @@ TestScene::~TestScene(){
 }
 
 void TestScene::update(Step * _step){
-	
-
-	/*const int numFFTPoints = 16;
-	const int numHarmonics = numFFTPoints/2 + 1;
-	int * harmonicNumber	= new int(numFFTPoints),
-		* harmonicFreq		= new int(numFFTPoints),
-		* leftAmplitude		= new int(numFFTPoints),
-		* rightAmplitude	= new int(numFFTPoints),
-		* leftPhase			= new int(numFFTPoints),
-		* rightPhase		= new int(numFFTPoints);
-	
-
-	music.sounds.at(0).player->GetFFTData(numFFTPoints, libZPlay::TFFTWindow::fwRectangular, harmonicNumber, harmonicFreq, leftAmplitude, rightAmplitude, leftPhase, rightPhase);
-
-	delete harmonicNumber;
-	delete harmonicFreq;
-	delete leftAmplitude;	
-	delete rightAmplitude;
-	delete leftPhase;
-	delete rightPhase;*/
-	
 	int fftDataL[numHarmonics];
 	int fftDataR[numHarmonics];
-	//fwBartlett
-	//fwBlackmanHarris
+
 	music.sounds.at("bgm").player->GetFFTData(numFFTsamples, libZPlay::TFFTWindow::fwBlackmanNuttall, nullptr, nullptr, fftDataL, fftDataR, nullptr, nullptr);
+	
+	lights.at(0)->data.intensities = glm::vec3(fftDataL[10]/100.f, 0 , fftDataR[10]/100.f);
+	
 	for(int i = 0; i < numHarmonics; ++i){
 		audioVisualizer.at(i)->transform->scale(sceneWidth / numHarmonics / 2.f, (fftDataL[i]) / 10.f, 1, false);
 	}for(int i = 0; i < numHarmonics; ++i){
@@ -225,9 +223,6 @@ void TestScene::update(Step * _step){
 	}
 
 	shader->components.at(1)->makeDirty();
-
-	clearColor[0] = sin(_step->time)*0.5f + 0.5f;
-	clearColor[2] = cos(_step->time)*0.5f + 0.5f;
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
@@ -249,17 +244,33 @@ void TestScene::update(Step * _step){
 	
 	// player controls
 	if(player != nullptr){
+		float playerSpeed = 5.f;
+		float mass = player->body->GetMass();
+		float angle = atan2(mouseCam->forwardVectorRotated.y, mouseCam->forwardVectorRotated.x);
+
+		if(activeCamera != mouseCam){
+			angle = glm::radians(90.f);
+		}
+
+		mouseCam->transform->translate(player->getPos(false) + glm::vec3(0, 0, player->transform->getScaleVector().z*1.25f), false);
+		mouseCam->lookAtOffset = glm::vec3(0, 0, -player->transform->getScaleVector().z*0.25f);
+		
+		
 		if (keyboard->keyDown(GLFW_KEY_W)){
-			player->applyLinearImpulseUp(5);
+			player->applyLinearImpulseUp(playerSpeed * mass * sin(angle));
+			player->applyLinearImpulseRight(playerSpeed * mass * cos(angle));
 		}
 		if (keyboard->keyDown(GLFW_KEY_S)){
-			player->applyLinearImpulseDown(5);
+			player->applyLinearImpulseDown(playerSpeed * mass * sin(angle));
+			player->applyLinearImpulseLeft(playerSpeed * mass * cos(angle));
 		}
 		if (keyboard->keyDown(GLFW_KEY_A)){
-			player->applyLinearImpulseLeft(5);
+			player->applyLinearImpulseUp(playerSpeed * mass * cos(angle));
+			player->applyLinearImpulseLeft(playerSpeed * mass * sin(angle));
 		}
 		if (keyboard->keyDown(GLFW_KEY_D)){
-			player->applyLinearImpulseRight(5);
+			player->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
+			player->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
 		}
 	}
 
@@ -268,6 +279,8 @@ void TestScene::update(Step * _step){
 	if(keyboard->keyJustDown(GLFW_KEY_1)){
 		if(activeCamera == gameCam){
 			activeCamera = mouseCam;
+		}else if(activeCamera == mouseCam){
+			activeCamera = debugCam;
 		}else{
 			activeCamera = gameCam;
 		}

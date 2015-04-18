@@ -19,13 +19,12 @@ PerspectiveCamera::~PerspectiveCamera(){
 
 void PerspectiveCamera::update(Step * _step){
 	lastOrientation = transform->getOrientationQuat();
+
 	glm::quat newOrientation = glm::quat(1.f, 0.f, 0.f, 0.f);
 	newOrientation = glm::rotate(newOrientation, yaw, upVectorLocal);
 	newOrientation = glm::rotate(newOrientation, pitch, rightVectorLocal);
-	
-	glm::rotate(transform->getOrientationQuat(), pitch, rightVectorLocal);
-
 	newOrientation = glm::slerp(lastOrientation, newOrientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
+
 	transform->setOrientation(newOrientation);
 
 	forwardVectorRotated   = newOrientation * forwardVectorLocal;
@@ -38,8 +37,8 @@ void PerspectiveCamera::update(Step * _step){
 glm::mat4 PerspectiveCamera::getViewMatrix(){
 	return glm::lookAt(
 		transform->getTranslationVector(),	// Camera is here
-		lookAtSpot,						// and looks here : at the same position, plus "direction"
-		upVectorRotated					// Head is up (set to 0,-1,0 to look upside-down)
+		lookAtSpot + lookAtOffset,			// and looks here : at the same position, plus "direction"
+		upVectorRotated						// Head is up (set to 0,-1,0 to look upside-down)
 		);
 }
 

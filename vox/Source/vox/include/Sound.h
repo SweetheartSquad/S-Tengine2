@@ -19,7 +19,7 @@ public:
 	~Sound();
 
 	void addFile(std::string _file);
-	void play();
+	void play(bool _loop = false);
 	void pause();
 	void stop();
 	void resume();

@@ -19,7 +19,7 @@ public:
 	void addNewSound(std::string _name, std::string _fileName);
 	void addSound(std::string _name, Sound sound);
 	void addFile(std::string _name, std::string _fileName);
-	void play(std::string _name);
+	void play(std::string _name, bool _loop = false);
 	void pause(std::string _name);
 	void stop(std::string _name);
 	void resume(std::string _name);

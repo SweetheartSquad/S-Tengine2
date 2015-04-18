@@ -34,4 +34,6 @@ public:
 
 	// I think this is typically called the center of interest?
 	glm::vec3 lookAtSpot;
+
+	glm::vec3 lookAtOffset;
 };

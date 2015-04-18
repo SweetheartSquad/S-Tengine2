@@ -33,9 +33,19 @@ b2Fixture * Box2DMeshEntity::createFixture(){
 		minV.y = std::min(i.y, minV.y);
 		minV.z = std::min(i.z, minV.z);
 	}
+	
+	float width = maxV.x - minV.x;
+	float height = maxV.y - minV.y;
+
+	b2Vec2 verts[4];
+	verts[0] = b2Vec2(minV.x, minV.y);
+	verts[1] = b2Vec2(minV.x + width, minV.y);
+	verts[2] = b2Vec2(minV.x + width, minV.y + height);
+	verts[3] = b2Vec2(minV.x, minV.y + height);
 
 	b2PolygonShape t;
-	t.SetAsBox((maxV.x - minV.x) * transform->getScaleVector().x * 0.5f, (maxV.y - minV.y) * transform->getScaleVector().y * 0.5f);
+	t.Set(verts, 4);
+
 	b2FixtureDef d;
 	d.density = 1;
 	d.shape = &t;
