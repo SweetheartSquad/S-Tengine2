@@ -19,6 +19,10 @@
 #include <shader\ShaderComponentBlinn.h>
 #include <shader\ShaderComponentShadow.h>
 
+#include <Box2DWorld.h>
+#include <Box2DMeshEntity.h>
+#include <Box2DDebugDraw.h>
+
 #include <MousePerspectiveCamera.h>
 #include <FollowCamera.h>
 
@@ -27,7 +31,9 @@
 
 TestScene::TestScene(Game * _game) :
 	Scene(_game),
-	shader(new BaseComponentShader())
+	shader(new BaseComponentShader()),
+	world(new Box2DWorld()),
+	drawer(nullptr)
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->components.push_back(new ShaderComponentPhong(shader));
@@ -64,7 +70,7 @@ TestScene::TestScene(Game * _game) :
 	lights.push_back(pointLight);
 
 	//intialize key light
-	DirectionalLight * keyLight = new DirectionalLight(glm::vec3(0.5f, 0.8f, 0.6f), glm::vec3(0.1f, 0.1f, 0.5f), 0.005f);
+	DirectionalLight * keyLight = new DirectionalLight(glm::vec3(0.5f, 0.8f, 0.6f), glm::vec3(1.f, 1.f, 1.f), 0.005f);
 	//Set it as the key light so it casts shadows
 	keyLight->isKeyLight = true;
 	//Add it to the scene
@@ -88,7 +94,7 @@ TestScene::TestScene(Game * _game) :
 }
 
 TestScene::~TestScene(){
-
+	delete world;
 }
 
 void TestScene::update(Step * _step){
@@ -118,8 +124,26 @@ void TestScene::update(Step * _step){
 			activeCamera = gameCam;
 		}
 	}
-
-
+	if(keyboard->keyJustUp(GLFW_KEY_2)){
+		if(drawer != nullptr){
+			world->b2world->SetDebugDraw(nullptr);
+			removeChild(drawer);
+			delete drawer;
+			drawer = nullptr;
+		}else{
+			drawer = new Box2DDebugDraw(this, world);
+			world->b2world->SetDebugDraw(drawer);
+			drawer->drawing = true;
+			//drawer->AppendFlags(b2Draw::e_aabbBit);
+			drawer->AppendFlags(b2Draw::e_shapeBit);
+			drawer->AppendFlags(b2Draw::e_centerOfMassBit);
+			drawer->AppendFlags(b2Draw::e_jointBit);
+			//drawer->AppendFlags(b2Draw::e_pairBit);
+			addChild(drawer);
+		}
+	}
 
 	Scene::update(_step);
+
+	world->update(_step);
 }
