@@ -102,12 +102,12 @@ void MeshInterface::clean(){
 	if(dirty){
 		// Vertex Buffer Object (VBO)
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * (vertices.size()), vertices.data(), GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * (vertices.size()), vertices.data(), drawMode);
 		checkForGlError(0,__FILE__,__LINE__);
 
 		// Index Buffer Object (IBO)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * (indices.size()), indices.data(), GL_DYNAMIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * (indices.size()), indices.data(), drawMode);
 		checkForGlError(0,__FILE__,__LINE__);
 		dirty = false;
 	}
