@@ -202,7 +202,7 @@ LD32_Scene::~LD32_Scene(){
 		children.pop_back();
 	}
 	
-	//shader->safeDelete();
+	shader->safeDelete();
 	//delete phongMat;
 	delete world;
 
