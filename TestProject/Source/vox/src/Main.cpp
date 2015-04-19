@@ -12,6 +12,7 @@
 int main(void){
 	vox::initialize("Vox");
 	LD32_ResourceManager::init();
+	LD32_ResourceManager::load();
 	LD32_Game * game = new LD32_Game();
 
 	while (game->isRunning){

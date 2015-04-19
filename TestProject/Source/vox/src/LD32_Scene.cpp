@@ -136,15 +136,25 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	m->addChild(pointLight);
 	m->body->SetLinearDamping(5.f);
 	m->body->SetAngularDamping(5.f);
+
+	MeshEntity * test = new MeshEntity(MeshFactory::getCubeMesh());
+	test->setShader(shader, true);
+	test->transform->translate(0, 0, 5);
+	test->transform->scale(0.1f, 0.1f, 0.1f);
+	m->addChild(test);
 	}
 
 	{
-	Box2DMeshEntity * m = new Box2DMeshEntity(world, Resource::loadMeshFromObj("../assets/torus.vox"), b2_dynamicBody, false);
+	Box2DMeshEntity * m = new Box2DMeshEntity(world, Resource::loadMeshFromObj("../assets/donutTop.obj"), b2_dynamicBody, false);
+	MeshEntity * c = new MeshEntity(Resource::loadMeshFromObj("../assets/donutBot.obj"));
+	m->addChild(c);
 	m->transform->scale(1, 1, 1);
 	m->mesh->pushMaterial(phong);
+	m->mesh->pushTexture2D(LD32_ResourceManager::donutTop);
+	c->mesh->pushTexture2D(LD32_ResourceManager::donutBot);
 	world->addToWorld(m);
 	m->createFixture();
-	m->setShader(shader, true);
+	m->setShaderOnChildren(shader);
 	addChild(m);
 	m->body->SetLinearDamping(5.f);
 	m->body->SetAngularDamping(5.f);
@@ -207,6 +217,8 @@ LD32_Scene::~LD32_Scene(){
 }
 
 void LD32_Scene::update(Step * _step){
+	clearColor[2] = 0.5f;
+
 	int fftDataL[numHarmonics];
 	int fftDataR[numHarmonics];
 
@@ -219,7 +231,8 @@ void LD32_Scene::update(Step * _step){
 	}for(int i = 0; i < numHarmonics; ++i){
 		audioVisualizer.at(i+numHarmonics)->transform->scale(sceneWidth / numHarmonics / 2.f, -(fftDataR[i]) / 10.f, 1, false);
 	}
-
+	
+	shader->components.at(0)->makeDirty();
 	shader->components.at(1)->makeDirty();
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
