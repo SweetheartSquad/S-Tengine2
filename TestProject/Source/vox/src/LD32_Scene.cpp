@@ -34,6 +34,9 @@
 #include <GLFW\glfw3.h>
 #include <MatrixStack.h>
 
+#include <RenderSurface.h>
+#include <StandardFrameBuffer.h>
+
 LD32_Scene::LD32_Scene(Game * _game) :
 	Scene(_game),
 	shader(new BaseComponentShader()),
@@ -41,10 +44,13 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	drawer(nullptr),
 	player(nullptr),
 	sceneHeight(150),
-	sceneWidth(50)
+	sceneWidth(50),
+	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
+	screenSurface(new RenderSurface(screenSurfaceShader)),
+	screenFBO(new StandardFrameBuffer(true))
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
-	//shader->components.push_back(new ShaderComponentPhong(shader));
+	shader->components.push_back(new ShaderComponentPhong(shader));
 	//shader->components.push_back(new ShaderComponentDiffuse(shader));
 	//shader->components.push_back(new ShaderComponentShadow(shader));
 	shader->compileShader();
@@ -322,5 +328,25 @@ void LD32_Scene::update(Step * _step){
 }
 
 void LD32_Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
+	//Bind frameBuffer
+	screenFBO->bindFrameBuffer();
+	//render the scene to the buffer
 	Scene::render(_matrixStack, _renderOptions);
+	//Render the buffer to the render surface
+	screenSurface->render(screenFBO->getTextureId());
+}
+
+void LD32_Scene::load(){
+	Scene::load();	
+
+	screenSurface->load();
+	screenFBO->load();
+}
+
+void LD32_Scene::unload(){
+	Scene::unload();	
+
+	screenSurface->unload();
+	screenFBO->unload();
 }
