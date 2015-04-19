@@ -21,7 +21,7 @@ void Box2DMeshEntity::update(Step* _step){
 }
 
 b2Fixture * Box2DMeshEntity::createFixture(){
-	vox::Box bb = mesh->calcBoundingBox();
+	vox::Box bb = calcOverallBoundingBox();
 	
 	float scaleX = transform->getScaleVector().x;
 	float scaleY = transform->getScaleVector().y;

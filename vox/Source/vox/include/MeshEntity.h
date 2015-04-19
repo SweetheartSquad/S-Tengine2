@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include "Transform.h"
+#include <Box.h>
 
 class Shader;
 class MeshInterface;
@@ -12,6 +13,9 @@ public:
 
 	/** Reference to this entity's mesh */
 	MeshInterface * mesh;
+
+	// returns a box which covers the verts of the mesh and all of its children
+	vox::Box calcOverallBoundingBox();
 
 	explicit MeshEntity(MeshInterface * _mesh = nullptr, Transform * _transform = new Transform(), Shader * _shader = nullptr);
 	virtual ~MeshEntity(void);

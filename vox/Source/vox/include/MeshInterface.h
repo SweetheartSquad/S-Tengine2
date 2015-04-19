@@ -103,6 +103,7 @@ public:
 	unsigned long int textureCount();
 	Texture * getTexture(int _idx);
 
+	// returns a box which covers the verts of the mesh
 	vox::Box calcBoundingBox();
 
 private:
