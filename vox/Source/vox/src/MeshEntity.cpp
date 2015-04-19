@@ -19,6 +19,9 @@ MeshEntity::MeshEntity(MeshInterface * _mesh, Transform * _transform, Shader * _
 	if(mesh != nullptr){
 		++mesh->referenceCount;
 	}
+	if(shader != nullptr){
+		++shader->referenceCount;
+	}
 }
 
 MeshEntity::~MeshEntity(void){
