@@ -9,6 +9,8 @@ public:
 	virtual ~Box2DMeshEntity();
 
 	void update(Step* _step) override;
-
-	b2Fixture * createFixture();
+	
+	// if _circle = true, creates a bounding circle
+	// else, creates a bounding box
+	b2Fixture * createFixture(bool _circle = false);
 };
