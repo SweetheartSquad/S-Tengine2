@@ -183,7 +183,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	}
 	
 	//intialize key light
-	PointLight * keyLight = new PointLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.5f, 0.1f);
+	PointLight * keyLight = new PointLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.1f, 0.25f);
 	//Set it as the key light so it casts shadows
 	//keyLight->isKeyLight = true;
 	//Add it to the scene
@@ -211,7 +211,9 @@ LD32_Scene::~LD32_Scene(){
 }
 
 void LD32_Scene::update(Step * _step){
-	//clearColor[2] = 0.5f;
+	clearColor[0] = 0.1f;
+	clearColor[1] = 0.1f;
+	clearColor[2] = 0.1f;
 
 	int fftDataL[numHarmonics];
 	int fftDataR[numHarmonics];
@@ -282,11 +284,19 @@ void LD32_Scene::update(Step * _step){
 		
 		if (keyboard->keyJustDown(GLFW_KEY_G)){
 			LD32_Donut * donut = new LD32_Donut(world);
-			donut->setShaderOnChildren(shader);
 			donut->setTranslationPhysical(player->getPos(false));
 			donut->setTranslationPhysical(vox::NumberUtils::randomFloat(-10, 10), vox::NumberUtils::randomFloat(-10, 10), 0, true);
 			donut->applyLinearImpulse(vox::NumberUtils::randomFloat(-150, 150), vox::NumberUtils::randomFloat(-150, 150), donut->getPos(false).x, donut->getPos(false).y);
+			donut->setShaderOnChildren(shader); // <- this is the problem?
 			addChild(donut);
+		}
+		if (keyboard->keyJustDown(GLFW_KEY_H)){
+			LD32_Donut * donut = new LD32_Donut(world);
+			//donut->setShaderOnChildren(shader);
+			//donut->setTranslationPhysical(player->getPos(false));
+			//donut->setTranslationPhysical(vox::NumberUtils::randomFloat(-10, 10), vox::NumberUtils::randomFloat(-10, 10), 0, true);
+			//donut->applyLinearImpulse(vox::NumberUtils::randomFloat(-150, 150), vox::NumberUtils::randomFloat(-150, 150), donut->getPos(false).x, donut->getPos(false).y);
+			//addChild(donut);
 		}
 	}
 

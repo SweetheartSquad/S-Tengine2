@@ -11,7 +11,7 @@ public:
 	static MeshInterface * donutBotMesh;
 	static Material * donutMat;
 	
-	static MeshEntity * bot;
+	MeshEntity * bot;
 
 	LD32_Donut(Box2DWorld * _world);
 	~LD32_Donut();

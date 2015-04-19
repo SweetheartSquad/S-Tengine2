@@ -123,7 +123,7 @@ void MeshEntity::load(){
 	
 		if(shader != nullptr){
 			shader->load();
-			if(mesh != nullptr ){
+			if(mesh != nullptr){
 				mesh->configureDefaultVertexAttributes(shader);
 			}
 		}
