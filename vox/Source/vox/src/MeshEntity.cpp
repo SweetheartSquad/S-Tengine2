@@ -67,8 +67,13 @@ void MeshEntity::removeChildAtIndex(int _index){
 void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
 	if(_shader != nullptr){
 		if(_shader->isCompiled){
-			shader = _shader;
-			++shader->referenceCount;
+			if(shader != _shader){
+				if(shader != nullptr){
+					shader->decrementAndDelete();
+				}
+				shader = _shader;
+				++shader->referenceCount;
+			}
 			if(_configureDefaultAttributes){
 				if(mesh != nullptr){
 					load();
