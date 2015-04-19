@@ -120,7 +120,7 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 
 				if(_renderOption->shader != nullptr){		
 					if(_renderOption->currentVao != vaoId){
-						_renderOption->currentVao = vaoId;	
+						_renderOption->currentVao = vaoId;
 						// Bind VAO
 						glBindVertexArray(vaoId);
 						checkForGlError(0,__FILE__, __LINE__);

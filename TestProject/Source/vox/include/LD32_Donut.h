@@ -11,7 +11,11 @@ public:
 	static MeshInterface * donutBotMesh;
 	static Material * donutMat;
 	
-	MeshEntity * bot;
+	static MeshEntity * bot;
 
 	LD32_Donut(Box2DWorld * _world);
+	~LD32_Donut();
+	
+	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+	void setShader(Shader * _shader, bool _def) override;
 };

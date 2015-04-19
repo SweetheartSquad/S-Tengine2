@@ -53,8 +53,8 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	phongMat(new Material(15.0, glm::vec3(1.f, 1.f, 1.f), true))
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
-	//shader->components.push_back(new ShaderComponentDiffuse(shader));
-	shader->components.push_back(new ShaderComponentPhong(shader));
+	shader->components.push_back(new ShaderComponentDiffuse(shader));
+	//shader->components.push_back(new ShaderComponentPhong(shader));
 	//shader->components.push_back(new ShaderComponentBlinn(shader));
 	//shader->components.push_back(new ShaderComponentShadow(shader));
 	shader->compileShader();
@@ -183,7 +183,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	}
 	
 	//intialize key light
-	PointLight * keyLight = new PointLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.0f, 0.1f);
+	PointLight * keyLight = new PointLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.5f, 0.1f);
 	//Set it as the key light so it casts shadows
 	//keyLight->isKeyLight = true;
 	//Add it to the scene
@@ -280,12 +280,12 @@ void LD32_Scene::update(Step * _step){
 		}
 
 		
-		if (keyboard->keyDown(GLFW_KEY_G)){
+		if (keyboard->keyJustDown(GLFW_KEY_G)){
 			LD32_Donut * donut = new LD32_Donut(world);
 			donut->setShaderOnChildren(shader);
 			donut->setTranslationPhysical(player->getPos(false));
-			donut->setTranslationPhysical(vox::NumberUtils::randomFloat(-5, 5), vox::NumberUtils::randomFloat(-5, 5), 0, true);
-			donut->applyLinearImpulse(vox::NumberUtils::randomFloat(-50, 50), vox::NumberUtils::randomFloat(-50, 50), donut->getPos(false).x, donut->getPos(false).y);
+			donut->setTranslationPhysical(vox::NumberUtils::randomFloat(-10, 10), vox::NumberUtils::randomFloat(-10, 10), 0, true);
+			donut->applyLinearImpulse(vox::NumberUtils::randomFloat(-150, 150), vox::NumberUtils::randomFloat(-150, 150), donut->getPos(false).x, donut->getPos(false).y);
 			addChild(donut);
 		}
 	}
@@ -331,6 +331,7 @@ void LD32_Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 	screenFBO->bindFrameBuffer();
 	//render the scene to the buffer
 	Scene::render(_matrixStack, _renderOptions);
+
 	//Render the buffer to the render surface
 	screenSurface->render(screenFBO->getTextureId());
 }
