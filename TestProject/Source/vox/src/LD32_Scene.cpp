@@ -152,31 +152,30 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	}
 
 	Sound::masterVolume = 100;
-	LD32_ResourceManager::music->play("bgm");
+	LD32_ResourceManager::music->play("bgm", true);
 	
-	for(int i = 0; i < numHarmonics; ++i){
-		MeshEntity * m = new MeshEntity(MeshFactory::getPlaneMesh());
-		for(Vertex & v : m->mesh->vertices){
-			if(v.y < 0.f){
-				v.y += 1.f;
-			}
-			v.red = 1;
+	MeshInterface * avMesh = MeshFactory::getPlaneMesh();
+	for(Vertex & v : avMesh->vertices){
+		if(v.y < 0.f){
+			v.y += 1.f;
 		}
-		m->mesh->dirty = true;
+		v.red = 1;
+		v.green = 0;
+		v.blue = v.y;
+		v.alpha = 1-v.y;
+	}
+	avMesh->dirty = true;
+	for(int i = 0; i < numHarmonics; ++i){
+		MeshEntity * m = new MeshEntity(avMesh);
+		
 		m->transform->translate(sceneWidth/numHarmonics * (i+0.5f), 0, 1);
 		m->setShader(shader, true);
 		addChild(m);
 		audioVisualizer.push_back(m);
 	}
 	for(int i = 0; i < numHarmonics; ++i){
-		MeshEntity * m = new MeshEntity(MeshFactory::getPlaneMesh());
-		for(Vertex & v : m->mesh->vertices){
-			if(v.y < 0.f){
-				v.y += 1.f;
-			}
-			v.blue = 1;
-		}
-		m->mesh->dirty = true;
+		MeshEntity * m = new MeshEntity(avMesh);
+
 		m->transform->translate(sceneWidth/numHarmonics * (i+0.5f), 0, 1);
 		m->setShader(shader, true);
 		addChild(m);
