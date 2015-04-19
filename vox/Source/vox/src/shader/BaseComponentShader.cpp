@@ -103,7 +103,7 @@ std::string BaseComponentShader::buildFragmentShader(){
 		shaderString += components.at(i)->getFragmentBodyString();
 	}
 
-	shaderString += GL_OUT_OUT_COLOR + " = vec4(1, 1, 1, 1)" + SEMI_ENDL;
+	shaderString += GL_OUT_OUT_COLOR + " = vec4(1)" + SEMI_ENDL;
 
 	for(unsigned long int i = 0; i < components.size(); i++){
 		shaderString += components.at(i)->getOutColorMod();

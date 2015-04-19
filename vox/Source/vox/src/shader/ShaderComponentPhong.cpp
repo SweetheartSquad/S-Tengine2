@@ -4,9 +4,6 @@
 #include "shader/ShaderVariables.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
-#include "MatrixStack.h"
-#include "RenderOptions.h"
-#include "RenderOptions.h"
 #include "shader/SharedComponentShaderMethods.h"
 
 ShaderComponentPhong::ShaderComponentPhong(Shader * _shader) :
@@ -23,9 +20,9 @@ std::string ShaderComponentPhong::getVertexVariablesString(){
 
 std::string ShaderComponentPhong::getFragmentVariablesString(){
 	return 
-		DEFINE + SHADER_COMPONENT_PHONG + ENDL
-		+ SHADER_INCLUDE_LIGHT
-		+ SHADER_INCLUDE_MATERIAL;
+		DEFINE + SHADER_COMPONENT_PHONG + ENDL +
+		SHADER_INCLUDE_LIGHT +
+		SHADER_INCLUDE_MATERIAL;
 }
 
 std::string ShaderComponentPhong::getVertexBodyString(){
@@ -42,7 +39,7 @@ std::string ShaderComponentPhong::getFragmentBodyString(){
 	"vec3 surfaceToCamera = normalize(cameraPosition - fragWorldPosition)" + SEMI_ENDL +
 	"vec4 outColorPhong = vec4(0,0,0,1)" + SEMI_ENDL +
 
-	"vec3 surfaceToLight = vec3(0,0,0)" + SEMI_ENDL +
+	"vec3 surfaceToLight = vec3(0)" + SEMI_ENDL +
 	"float attenuation = 1.0" + SEMI_ENDL +
 
 	"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_LIGHTS + "; i++){" + ENDL +
