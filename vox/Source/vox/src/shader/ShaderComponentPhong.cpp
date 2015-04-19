@@ -37,7 +37,7 @@ std::string ShaderComponentPhong::getFragmentBodyString(){
 	"vec3 fragWorldPosition = vec3(" + GL_UNIFORM_ID_MODEL_MATRIX + " * vec4(fragVert, 1))" + SEMI_ENDL +
 	"vec3 cameraPosition = -" + GL_UNIFORM_ID_VIEW_MATRIX + "[3].xyz * mat3(" + GL_UNIFORM_ID_VIEW_MATRIX + ")" + SEMI_ENDL +
 	"vec3 surfaceToCamera = normalize(cameraPosition - fragWorldPosition)" + SEMI_ENDL +
-	"vec4 outColorPhong = vec4(0,0,0,1)" + SEMI_ENDL +
+	"vec3 outColorPhong = vec3(0)" + SEMI_ENDL +
 
 	"vec3 surfaceToLight = vec3(0)" + SEMI_ENDL +
 	"float attenuation = 1.0" + SEMI_ENDL +
@@ -57,6 +57,7 @@ std::string ShaderComponentPhong::getFragmentBodyString(){
 			"}" + ENDL +
 
 			"vec3 ambient = lights[i].ambientCoefficient * modFrag.rgb * lights[i].intensities" + SEMI_ENDL +
+			
 			"//diffuse" + ENDL +
 			"float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))" + SEMI_ENDL +
 			"vec3 diffuse = diffuseCoefficient * modFrag.rgb * lights[i].intensities" + SEMI_ENDL +
@@ -67,22 +68,18 @@ std::string ShaderComponentPhong::getFragmentBodyString(){
 			"if(diffuseCoefficient > 0.0){" + ENDL +
 				"vec3 reflectDirection = reflect(-surfaceToLight, normal)" + SEMI_ENDL +
 				"vec3 viewDirection = surfaceToCamera;" + ENDL +
-				"specularCoefficient = pow(max(0.0,dot(reflectDirection, viewDirection)), materials[j].shininess)" + SEMI_ENDL +
+				"specularCoefficient = pow(max(0.0, dot(reflectDirection, viewDirection)), materials[j].shininess)" + SEMI_ENDL +
 			"}\n"
 			"vec3 specular = specularCoefficient * materials[j].specularColor * lights[i].intensities" + SEMI_ENDL +
 			"specular = clamp(specular, 0.0, 1.0);" + ENDL +
 
-			"//attenuation" + ENDL +
-			"float distanceToLight = length(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
-			"float attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2))" + SEMI_ENDL +
-		
 			"//linear color (color before gamma correction)" + ENDL +
 			"vec3 linearColor = ambient + attenuation * (diffuse + specular)" + SEMI_ENDL +
     
 			"//final color (after gamma correction)" + ENDL +
 			"vec3 gamma = vec3(1.0/2.2, 1.0/2.2, 1.0/2.2)" + SEMI_ENDL +
 			"vec3 gammaColor = pow(linearColor, gamma)" + SEMI_ENDL +
-			"outColorPhong = outColorPhong + vec4(gammaColor, 1)" + SEMI_ENDL +
+			"outColorPhong += gammaColor" + SEMI_ENDL +
 		"}" + ENDL +
 	"}" + ENDL +
 	END_IF + ENDL;
@@ -91,7 +88,7 @@ std::string ShaderComponentPhong::getFragmentBodyString(){
 std::string ShaderComponentPhong::getOutColorMod(){
 	return 
 		IF_NOT_DEFINED + SHADER_COMPONENT_BLINN + ENDL + 
-		GL_OUT_OUT_COLOR + " *= outColorPhong;" + SEMI_ENDL + 
+		GL_OUT_OUT_COLOR + " *= vec4(outColorPhong, 1)" + SEMI_ENDL + 
 		END_IF + ENDL;	
 }
 

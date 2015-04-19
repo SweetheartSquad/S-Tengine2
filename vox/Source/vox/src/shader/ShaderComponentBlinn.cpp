@@ -19,9 +19,9 @@ std::string ShaderComponentBlinn::getVertexVariablesString(){
 }
 
 std::string ShaderComponentBlinn::getFragmentVariablesString(){
-	return DEFINE + SHADER_COMPONENT_BLINN + ENDL 
-		   + SHADER_INCLUDE_LIGHT
-		   + SHADER_INCLUDE_MATERIAL;	
+	return DEFINE + SHADER_COMPONENT_BLINN + ENDL +
+		SHADER_INCLUDE_LIGHT +
+		SHADER_INCLUDE_MATERIAL;	
 }
 
 std::string ShaderComponentBlinn::getVertexBodyString(){
@@ -36,9 +36,9 @@ std::string ShaderComponentBlinn::getFragmentBodyString(){
 	VAR_VEC3 + " fragWorldPosition = vec3(" + GL_UNIFORM_ID_MODEL_MATRIX + " * vec4(fragVert, 1))" + SEMI_ENDL +
 	VAR_VEC3 + " cameraPosition = -" + GL_UNIFORM_ID_VIEW_MATRIX + "[3].xyz * mat3(" + GL_UNIFORM_ID_VIEW_MATRIX + ")" + SEMI_ENDL +
 	VAR_VEC3 + " surfaceToCamera = normalize(cameraPosition - fragWorldPosition)" + SEMI_ENDL +
-	VAR_VEC4 + " outColorBlinn = vec4(0,0,0,1)" + SEMI_ENDL +
+	VAR_VEC3 + " outColorBlinn = vec3(0)" + SEMI_ENDL +
 
-	"vec3 surfaceToLight = vec3(0,0,0)" + SEMI_ENDL +
+	"vec3 surfaceToLight = vec3(0)" + SEMI_ENDL +
 	"float attenuation = 1.0" + SEMI_ENDL +
 
 	"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_LIGHTS + "; i++){" + ENDL +
@@ -56,11 +56,11 @@ std::string ShaderComponentBlinn::getFragmentBodyString(){
 			"}" + ENDL +
 
 			TAB + TAB + VAR_VEC3 + " ambient = lights[i].ambientCoefficient * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
+			
 			TAB + TAB + "//diffuse" + ENDL +
 			TAB + TAB + VAR_FLOAT + " diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))" + SEMI_ENDL +
 			TAB + TAB + VAR_VEC3 + " diffuse = diffuseCoefficient * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
-			TAB + TAB + "diffuse = clamp(diffuse, 0.0, 1.0)" + SEMI_ENDL +
-
+			
 			TAB + TAB + "//specular" + ENDL +
 			TAB + TAB + VAR_FLOAT + " specularCoefficient = 0.0" + SEMI_ENDL +
 			TAB + TAB + "//only calculate specular for the front side of the surface" + ENDL +
@@ -72,19 +72,15 @@ std::string ShaderComponentBlinn::getFragmentBodyString(){
 				TAB + TAB + TAB + "specularCoefficient = pow(max(0.0, dot(halfAngle, normal)), materials[j].shininess)" + SEMI_ENDL +
 			TAB + TAB +"}" + ENDL +
 			TAB + TAB + VAR_VEC3 + " specular = specularCoefficient * materials[j].specularColor * lights[i].intensities" + SEMI_ENDL +
-			TAB + TAB + "//specular = clamp(specular, 0.0, 1.0)" + SEMI_ENDL +
+			TAB + TAB + "specular = clamp(specular, 0.0, 1.0)" + SEMI_ENDL +
 			
-			TAB + TAB + "//attenuation" + ENDL +
-			TAB + TAB + VAR_FLOAT + " distanceToLight = length(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
-			TAB + TAB + VAR_FLOAT + " attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2))" + SEMI_ENDL +
-		
 			TAB + TAB + "//linear color (color before gamma correction)" + ENDL +
 			TAB + TAB + VAR_VEC3 + " linearColor = ambient + attenuation * (diffuse + specular)" + SEMI_ENDL +
     
 			TAB + TAB + "//final color (after gamma correction)" + ENDL +
 			TAB + TAB + VAR_VEC3 + " gamma = vec3(1.0/2.2, 1.0/2.2, 1.0/2.2)" + SEMI_ENDL +
 			TAB + TAB + VAR_VEC3 + " gammaColor = pow(linearColor, gamma)" + SEMI_ENDL +
-			TAB + TAB + "outColorBlinn = outColorBlinn + vec4(gammaColor, 1)" + SEMI_ENDL +
+			TAB + TAB + "outColorBlinn += gammaColor" + SEMI_ENDL +
 		TAB + "}" + ENDL +
 	"}" + ENDL + 
 	END_IF + ENDL;
@@ -93,8 +89,12 @@ std::string ShaderComponentBlinn::getFragmentBodyString(){
 std::string ShaderComponentBlinn::getOutColorMod(){
 	return 
 		IF_NOT_DEFINED + SHADER_COMPONENT_PHONG + ENDL + 
-		GL_OUT_OUT_COLOR + " *= outColorBlinn" + SEMI_ENDL + 
+		GL_OUT_OUT_COLOR + " *= vec4(outColorBlinn, 1)" + SEMI_ENDL + 
 		END_IF + ENDL;
+}
+
+void ShaderComponentBlinn::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+	configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 }
 
 void ShaderComponentBlinn::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){

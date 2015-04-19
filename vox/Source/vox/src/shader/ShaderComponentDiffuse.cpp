@@ -35,16 +35,47 @@ std::string ShaderComponentDiffuse::getFragmentBodyString(){
 		"mat3 normalMatrix = transpose(inverse(mat3(" + GL_UNIFORM_ID_MODEL_MATRIX + ")))" + SEMI_ENDL +
 		"vec3 normal = normalize(normalMatrix * fragNormal)" + SEMI_ENDL +
 		"vec3 fragWorldPosition = vec3(" + GL_UNIFORM_ID_MODEL_MATRIX + " * vec4(fragVert, 1))" + SEMI_ENDL +
-		"float brightness = 0" + SEMI_ENDL +
-		"vec3 outIntensities = vec3(0)" + SEMI_ENDL +
+		//"float brightness = 0" + SEMI_ENDL +
+		"vec3 outDiffuse = vec3(0)" + SEMI_ENDL +
+		"float attenuation = 1.0" + SEMI_ENDL +
+		"vec3 surfaceToLight = vec3(0)" + SEMI_ENDL +
 
 		"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_LIGHTS + "; i++){" + ENDL +
+			
+			"if(lights[i].type == 1){" + ENDL +
+				"//DIRECTIONAL" + ENDL +
+				"surfaceToLight = normalize(lights[i].position)" + SEMI_ENDL +
+				"attenuation = lights[i].attenuation" + SEMI_ENDL +
+			"} else {" + ENDL +	
+				"//POINT" + ENDL +
+				"surfaceToLight = normalize(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
+				"//attenuation" + ENDL +
+				"float distanceToLight = length(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
+				"attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2))" + SEMI_ENDL +
+			"}" + ENDL +
+
+
+			"vec3 ambient = vec3(lights[i].ambientCoefficient) * modFrag.rgb * lights[i].intensities" + SEMI_ENDL +
+			"//diffuse" + ENDL +
+			"float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))" + SEMI_ENDL +
+			"vec3 diffuse = diffuseCoefficient * modFrag.rgb * lights[i].intensities" + SEMI_ENDL +
+
+			
+			"//linear color (color before gamma correction)" + ENDL +
+			"vec3 linearColor = ambient + attenuation * (diffuse)" + SEMI_ENDL +
+    
+			"//final color (after gamma correction)" + ENDL +
+			"vec3 gamma = vec3(1.0/2.2, 1.0/2.2, 1.0/2.2)" + SEMI_ENDL +
+			"vec3 gammaColor = pow(linearColor, gamma)" + SEMI_ENDL +
+			"outDiffuse += gammaColor" + SEMI_ENDL +
+
+			/*
 			"vec3 surfaceToLight = lights[i].position - fragWorldPosition" + SEMI_ENDL +
 			"brightness += dot(normal, surfaceToLight) / (length(surfaceToLight) * length(normal))" + SEMI_ENDL +
-			"outIntensities += vec3(lights[i].intensities)" + SEMI_ENDL +
+			"outIntensities += vec3(lights[i].intensities)" + SEMI_ENDL +*/
 		"}" + ENDL +
 
-		"brightness = clamp(brightness, 0.1, 1)" + SEMI_ENDL + 
+		//"brightness = clamp(brightness, 0.1, 1)" + SEMI_ENDL + 
 		END_IF + ENDL +
 		END_IF + ENDL;
 }
@@ -53,7 +84,7 @@ std::string ShaderComponentDiffuse::getOutColorMod(){
 	return 
 		IF_NOT_DEFINED + SHADER_COMPONENT_BLINN + ENDL +
 		IF_NOT_DEFINED + SHADER_COMPONENT_PHONG + ENDL + 
-		GL_OUT_OUT_COLOR + " *= vec4(vec3(outIntensities), 1) * vec4(vec3(brightness), 1)" + SEMI_ENDL +
+		GL_OUT_OUT_COLOR + " *= vec4(outDiffuse, 1)" + SEMI_ENDL +
 		END_IF + ENDL + 
 		END_IF + ENDL;
 }

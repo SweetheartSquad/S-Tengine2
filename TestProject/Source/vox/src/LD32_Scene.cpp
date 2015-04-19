@@ -49,11 +49,12 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
-	phongMat(new Material(45.0, glm::vec3(1.f, 1.f, 0.f), true))
+	phongMat(new Material(15.0, glm::vec3(1.f, 1.f, 1.f), true))
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
-	//shader->components.push_back(new ShaderComponentPhong(shader));
-	shader->components.push_back(new ShaderComponentDiffuse(shader));
+	//shader->components.push_back(new ShaderComponentDiffuse(shader));
+	shader->components.push_back(new ShaderComponentPhong(shader));
+	//shader->components.push_back(new ShaderComponentBlinn(shader));
 	//shader->components.push_back(new ShaderComponentShadow(shader));
 	shader->compileShader();
 
@@ -183,11 +184,12 @@ LD32_Scene::LD32_Scene(Game * _game) :
 
 	
 	//intialize key light
-	DirectionalLight * keyLight = new DirectionalLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.f);
+	PointLight * keyLight = new PointLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.0f, 0.1f);
 	//Set it as the key light so it casts shadows
 	//keyLight->isKeyLight = true;
 	//Add it to the scene
 	lights.push_back(keyLight);
+	player->addChild(keyLight);
 	
 	mouseCam->upVectorLocal = glm::vec3(0, 0, 1);
 	mouseCam->forwardVectorLocal = glm::vec3(1, 0, 0);
@@ -210,7 +212,7 @@ LD32_Scene::~LD32_Scene(){
 }
 
 void LD32_Scene::update(Step * _step){
-	clearColor[2] = 0.5f;
+	//clearColor[2] = 0.5f;
 
 	int fftDataL[numHarmonics];
 	int fftDataR[numHarmonics];
@@ -218,7 +220,7 @@ void LD32_Scene::update(Step * _step){
 	LD32_ResourceManager::music->sounds.at("bgm").player->GetFFTData(numFFTsamples, libZPlay::TFFTWindow::fwBlackmanNuttall, nullptr, nullptr, fftDataL, fftDataR, nullptr, nullptr);
 	
 	lights.at(0)->data.intensities = glm::vec3(fftDataL[10]/100.f, 0.5f, fftDataR[10]/100.f);
-	lights.at(0)->transform->translate(mouseCam->forwardVectorRotated, false);
+	//lights.at(0)->transform->translate(-mouseCam->forwardVectorRotated, false);
 
 	for(int i = 0; i < numHarmonics; ++i){
 		audioVisualizer.at(i)->transform->scale(sceneWidth / numHarmonics / 2.f, (fftDataL[i]) / 10.f, 1, false);
