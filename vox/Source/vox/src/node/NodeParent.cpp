@@ -25,7 +25,7 @@ void NodeParent::addChildAtIndex(NodeChild * _child, int _index){
 }
 
 void NodeParent::removeChildAtIndex(int _index){
-	children.erase(children.begin() + _index - 1);
+	children.erase(children.begin() + _index);
 }
 
 
