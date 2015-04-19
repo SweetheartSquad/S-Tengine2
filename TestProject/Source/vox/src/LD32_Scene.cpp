@@ -308,7 +308,7 @@ void LD32_Scene::update(Step * _step){
 			delete drawer;
 			drawer = nullptr;
 		}else{
-			drawer = new Box2DDebugDraw(this, world);
+			drawer = new Box2DDebugDraw(world);
 			world->b2world->SetDebugDraw(drawer);
 			drawer->drawing = true;
 			//drawer->AppendFlags(b2Draw::e_aabbBit);
