@@ -14,7 +14,7 @@
 #include <GL/glew.h>
 
 Box2DDebugDraw::Box2DDebugDraw(Scene * _scene, Box2DWorld * _world):
-	shader(new BaseComponentShader()),
+	shader(new BaseComponentShader(false)),
 	scene(_scene),
 	world(_world),
 	spriteSegment(new Sprite()),

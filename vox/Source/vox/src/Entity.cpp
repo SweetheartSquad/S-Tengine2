@@ -18,7 +18,7 @@ Entity::Entity(Transform * _transform) :
 }
 
 Entity::~Entity(void){
-	delete transform;	
+	delete transform;
 	transform = nullptr;
 }
 

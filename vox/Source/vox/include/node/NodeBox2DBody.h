@@ -24,7 +24,7 @@ public:
 	bool defaultFixture;
 
 	explicit NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType = b2_dynamicBody, bool _defaultFixture = true, Transform * _transform = new Transform());
-	~NodeBox2DBody();	
+	virtual ~NodeBox2DBody();	
 
 	void update(Step* _step) override;
 

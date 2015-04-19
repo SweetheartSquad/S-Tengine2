@@ -9,8 +9,8 @@ class GeometryComponent;
 
 class BaseComponentShader : public Shader{
 public:	
-	BaseComponentShader();
-	explicit BaseComponentShader(std::vector<ShaderComponent *> _components);
+	BaseComponentShader(bool _autoRelease);
+	explicit BaseComponentShader(std::vector<ShaderComponent *> _components, bool _autoRelease);
 
 	virtual ~BaseComponentShader();
 

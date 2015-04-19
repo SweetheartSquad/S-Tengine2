@@ -1,21 +1,22 @@
 #include "node/NodeResource.h"
 
 NodeResource::NodeResource(bool _autoRelease) :
-	autoRelease(_autoRelease)
+	autoRelease(_autoRelease),
+	referenceCount(0)
 {
 }
 
 bool NodeResource::safeDelete(){
-	if(referenceCount == 0 && autoRelease){
+	if((referenceCount == 0 || referenceCount == -1) && autoRelease){
 		delete this;
 		return true;
 	}
 	return false;
 }
 
-void NodeResource::decrementAndDelete(){
+bool NodeResource::decrementAndDelete(){
 	--referenceCount;
-	safeDelete();
+	return safeDelete();
 }
 
 bool NodeResource::isAutoReleasing(){

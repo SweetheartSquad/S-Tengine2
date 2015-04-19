@@ -22,6 +22,7 @@ NodeBox2DBody::~NodeBox2DBody(){
 	if(world != nullptr && body != nullptr) {
 		world->b2world->DestroyBody(body);
 		body = nullptr;
+		world = nullptr;
 	}
 }
 

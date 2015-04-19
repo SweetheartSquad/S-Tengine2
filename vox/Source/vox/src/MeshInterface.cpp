@@ -10,6 +10,7 @@
 
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode) :
 	NodeRenderable(),
+	NodeResource(true),
 	dirty(true),
 	texturesDirty(true),
 	drawMode(drawMode),

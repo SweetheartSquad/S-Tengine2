@@ -6,6 +6,7 @@
 SpriteMesh::SpriteMesh(GLenum _drawMode) :
 	MeshInterface(GL_QUADS, _drawMode),
 	NodeRenderable(),
+	NodeResource(true),
 	animatedTexture(nullptr)
 {
 	//Top left

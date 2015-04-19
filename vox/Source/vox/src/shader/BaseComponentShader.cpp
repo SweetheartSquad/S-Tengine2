@@ -7,13 +7,13 @@
 #include "RenderOptions.h"
 #include "shader/GeometryComponent.h"
 
-BaseComponentShader::BaseComponentShader() :
-	Shader(false),
+BaseComponentShader::BaseComponentShader(bool _autoRelease) :
+	Shader(_autoRelease),
 	geometryComponent(nullptr){
 }
 
-BaseComponentShader::BaseComponentShader(std::vector<ShaderComponent*> _components) :
-	Shader(false),
+BaseComponentShader::BaseComponentShader(std::vector<ShaderComponent*> _components, bool _autoRelease) :
+	Shader(_autoRelease),
 	components(_components),
 	geometryComponent(nullptr)
 {

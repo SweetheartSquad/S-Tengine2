@@ -3,6 +3,7 @@
 #include <LD32_Scene.h>
 #include <LD32_Game.h>
 #include <LD32_ResourceManager.h>
+#include <LD32_Donut.h>
 
 #include <MeshEntity.h>
 #include <MeshInterface.h>
@@ -40,7 +41,7 @@
 
 LD32_Scene::LD32_Scene(Game * _game) :
 	Scene(_game),
-	shader(new BaseComponentShader()),
+	shader(new BaseComponentShader(true)),
 	world(new Box2DWorld(b2Vec2(0,0))),
 	drawer(nullptr),
 	player(nullptr),
@@ -181,7 +182,6 @@ LD32_Scene::LD32_Scene(Game * _game) :
 		addChild(m);
 		audioVisualizer.push_back(m);
 	}
-
 	
 	//intialize key light
 	PointLight * keyLight = new PointLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.0f, 0.1f);
@@ -202,13 +202,13 @@ LD32_Scene::~LD32_Scene(){
 		children.pop_back();
 	}
 	
-	delete shader;
-	delete phongMat;
+	//shader->safeDelete();
+	//delete phongMat;
 	delete world;
 
 	delete screenSurface;
-	delete screenSurfaceShader;
-	delete screenFBO;
+	screenSurfaceShader->safeDelete();
+	screenFBO->safeDelete();
 }
 
 void LD32_Scene::update(Step * _step){
@@ -282,27 +282,12 @@ void LD32_Scene::update(Step * _step){
 
 		
 		if (keyboard->keyDown(GLFW_KEY_G)){
-			{
-			Box2DMeshEntity * m = new Box2DMeshEntity(world, Resource::loadMeshFromObj("../assets/donutTop.obj"), b2_dynamicBody, false);
-			MeshEntity * c = new MeshEntity(Resource::loadMeshFromObj("../assets/donutBot.obj"));
-			m->addChild(c);
-			m->transform->scale(1, 1, 1);
-			m->mesh->pushMaterial(phongMat);
-			c->mesh->pushMaterial(phongMat);
-			m->mesh->pushTexture2D(LD32_ResourceManager::donutTop);
-			c->mesh->pushTexture2D(LD32_ResourceManager::donutBot);
-			m->mesh->dirty = true;
-			c->mesh->dirty = true;
-			world->addToWorld(m);
-			m->createFixture();
-			m->setShaderOnChildren(shader);
-			addChild(m);
-			m->body->SetLinearDamping(5.f);
-			m->body->SetAngularDamping(5.f);
-			m->setTranslationPhysical(player->getPos(false));
-			m->setTranslationPhysical(vox::NumberUtils::randomFloat(-10, 10), vox::NumberUtils::randomFloat(-10, 10), 0, true);
-			m->applyLinearImpulse(vox::NumberUtils::randomFloat(-10, 10), vox::NumberUtils::randomFloat(-10, 10), m->getPos(false).x, m->getPos(false).y);
-			}
+			LD32_Donut * donut = new LD32_Donut(world);
+			donut->setShaderOnChildren(shader);
+			donut->setTranslationPhysical(player->getPos(false));
+			donut->setTranslationPhysical(vox::NumberUtils::randomFloat(-5, 5), vox::NumberUtils::randomFloat(-5, 5), 0, true);
+			donut->applyLinearImpulse(vox::NumberUtils::randomFloat(-50, 50), vox::NumberUtils::randomFloat(-50, 50), donut->getPos(false).x, donut->getPos(false).y);
+			addChild(donut);
 		}
 	}
 

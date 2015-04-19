@@ -12,8 +12,9 @@
 #include "Vertex.h"
 #include "Light.h"
 #include "GLUtils.h"
-#include "node/NodeRenderable.h"
-#include "node/NodeLoadable.h"
+#include <node\NodeRenderable.h>
+#include <node\NodeLoadable.h>
+#include <node\NodeResource.h>
 #include "shader/ShaderVariables.h"
 #include <Box.h>
 
@@ -22,7 +23,7 @@ class Material;
 class MatrixStack;
 
 
-class MeshInterface : public virtual NodeRenderable, public virtual NodeLoadable{
+class MeshInterface : public virtual NodeRenderable, public virtual NodeLoadable, public virtual NodeResource{
 public:
 	/** Whether the vbo and ibo contain up-to-date vertex and index data */
 	bool dirty;
@@ -78,7 +79,7 @@ public:
 	_drawMode: GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS, GL_QUAD_STRIP, GL_POLYGON
 	*/
 	MeshInterface(GLenum _polygonalDrawMode, GLenum _drawMode);
-	~MeshInterface();
+	virtual ~MeshInterface();
 
 	/** If unloaded, generates the VAO, VBO, IBO and flags as loaded */
 	void load() override;
@@ -115,12 +116,12 @@ private:
 class TriMesh : public MeshInterface{
 public:
 	void pushTri(GLuint _v0, GLuint _v1, GLuint _v2);
-	explicit TriMesh(GLenum _polygonalDrawMode = GL_TRIANGLES, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode){};
+	explicit TriMesh(GLenum _polygonalDrawMode = GL_TRIANGLES, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode), NodeResource(true){};
 };
 
 /** MeshInterface preset for quad meshes */
 class QuadMesh : public MeshInterface{
 public:
 	void pushQuad(GLuint _v0, GLuint _v1, GLuint _v2, GLuint _v3);
-	explicit QuadMesh(GLenum _polygonalDrawMode = GL_QUADS, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode){};
+	explicit QuadMesh(GLenum _polygonalDrawMode = GL_QUADS, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode), NodeResource(true){};
 };

@@ -54,11 +54,11 @@ Scene::~Scene(void){
 	
 	delete matrixStack;
 	delete renderOptions;
-	delete depthBuffer;
-	delete shadowBuffer;
-	delete depthShader;
+	depthBuffer->safeDelete();
+	shadowBuffer->safeDelete();
+	depthShader->safeDelete();
 	delete shadowSurface;
-	delete shadowShader;
+	shadowShader->safeDelete();
 }
 
 void Scene::update(Step * _step){

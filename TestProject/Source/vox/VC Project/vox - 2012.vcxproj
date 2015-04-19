@@ -11,12 +11,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\LD32_Donut.cpp" />
     <ClCompile Include="..\src\LD32_ResourceManager.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="..\src\LD32_Game.cpp" />
     <ClCompile Include="..\src\LD32_Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\LD32_Donut.h" />
     <ClInclude Include="..\include\LD32_ResourceManager.h" />
     <ClInclude Include="..\include\LD32_Game.h" />
     <ClInclude Include="..\include\LD32_Scene.h" />

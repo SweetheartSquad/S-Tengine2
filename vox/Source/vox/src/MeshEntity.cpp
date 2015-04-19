@@ -16,19 +16,20 @@ MeshEntity::MeshEntity(MeshInterface * _mesh, Transform * _transform, Shader * _
 	mesh(_mesh),
 	shader(_shader)
 {
-
+	if(mesh != nullptr){
+		++mesh->referenceCount;
+	}
 }
 
 MeshEntity::~MeshEntity(void){
-	delete transform;
-	transform = nullptr;
-	delete mesh;
+	if(mesh != nullptr){
+		mesh->decrementAndDelete();
+		mesh = nullptr;
+	}
 	if(shader != nullptr){
 		shader->decrementAndDelete();		
+		shader = nullptr;
 	}
-	transform = nullptr;
-	mesh = nullptr;
-	shader = nullptr;
 }
 
 void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
@@ -67,6 +68,7 @@ void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
 	if(_shader != nullptr){
 		if(_shader->isCompiled){
 			shader = _shader;
+			++shader->referenceCount;
 			if(_configureDefaultAttributes){
 				if(mesh != nullptr){
 					load();

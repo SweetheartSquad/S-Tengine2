@@ -14,7 +14,9 @@ public:
 	/** Returns true if this was deleted and false if it wasn't */
 	bool safeDelete();
 	/** Simply calls dereference followed by safeDelete */
-	void decrementAndDelete();
+	/** Returns true if this was deleted and false if it wasn't */
+	bool decrementAndDelete();
+
 	/** Number of references to this */
 	unsigned long int referenceCount;
 	bool isAutoReleasing();
