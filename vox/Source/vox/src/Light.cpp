@@ -5,7 +5,9 @@ LightData::LightData(LightType _type, glm::vec3 _intensities, float _ambientCoef
 	type(_type),
 	intensities(_intensities),
 	ambientCoefficient(_ambientCoefficient),
-	attenuation(_attenuation)
+	attenuation(_attenuation),
+	dirty(true),
+	lastPos(0,0,0)
 {
 }
 

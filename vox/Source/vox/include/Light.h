@@ -15,6 +15,9 @@ struct LightData {
 	float ambientCoefficient;
 	float attenuation;
 
+	glm::vec3 lastPos;
+	bool dirty;
+
 	LightData(LightType _type, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation);
 };
 

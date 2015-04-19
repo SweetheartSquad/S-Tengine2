@@ -15,6 +15,7 @@ public:
 	~RenderOptions();
 
 	std::vector<Light*> * lights;
+	unsigned long int lastNumLights;
 	
 	GLuint currentVao;
 	GLuint currentlyBoundShaderId;

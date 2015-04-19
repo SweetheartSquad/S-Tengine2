@@ -36,6 +36,7 @@
 
 #include <RenderSurface.h>
 #include <StandardFrameBuffer.h>
+#include <NumberUtils.h>
 
 LD32_Scene::LD32_Scene(Game * _game) :
 	Scene(_game),
@@ -151,25 +152,6 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	m->addChild(test);
 	}
 
-	{
-	Box2DMeshEntity * m = new Box2DMeshEntity(world, Resource::loadMeshFromObj("../assets/donutTop.obj"), b2_dynamicBody, false);
-	MeshEntity * c = new MeshEntity(Resource::loadMeshFromObj("../assets/donutBot.obj"));
-	m->addChild(c);
-	m->transform->scale(1, 1, 1);
-	m->mesh->pushMaterial(phongMat);
-	c->mesh->pushMaterial(phongMat);
-	m->mesh->pushTexture2D(LD32_ResourceManager::donutTop);
-	c->mesh->pushTexture2D(LD32_ResourceManager::donutBot);
-	m->mesh->dirty = true;
-	c->mesh->dirty = true;
-	world->addToWorld(m);
-	m->createFixture();
-	m->setShaderOnChildren(shader);
-	addChild(m);
-	m->body->SetLinearDamping(5.f);
-	m->body->SetAngularDamping(5.f);
-	}
-	
 	Sound::masterVolume = 0;
 	LD32_ResourceManager::music->play("bgm");
 	
@@ -296,6 +278,31 @@ void LD32_Scene::update(Step * _step){
 		if (keyboard->keyDown(GLFW_KEY_D)){
 			player->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
 			player->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
+		}
+
+		
+		if (keyboard->keyDown(GLFW_KEY_G)){
+			{
+			Box2DMeshEntity * m = new Box2DMeshEntity(world, Resource::loadMeshFromObj("../assets/donutTop.obj"), b2_dynamicBody, false);
+			MeshEntity * c = new MeshEntity(Resource::loadMeshFromObj("../assets/donutBot.obj"));
+			m->addChild(c);
+			m->transform->scale(1, 1, 1);
+			m->mesh->pushMaterial(phongMat);
+			c->mesh->pushMaterial(phongMat);
+			m->mesh->pushTexture2D(LD32_ResourceManager::donutTop);
+			c->mesh->pushTexture2D(LD32_ResourceManager::donutBot);
+			m->mesh->dirty = true;
+			c->mesh->dirty = true;
+			world->addToWorld(m);
+			m->createFixture();
+			m->setShaderOnChildren(shader);
+			addChild(m);
+			m->body->SetLinearDamping(5.f);
+			m->body->SetAngularDamping(5.f);
+			m->setTranslationPhysical(player->getPos(false));
+			m->setTranslationPhysical(vox::NumberUtils::randomFloat(-10, 10), vox::NumberUtils::randomFloat(-10, 10), 0, true);
+			m->applyLinearImpulse(vox::NumberUtils::randomFloat(-10, 10), vox::NumberUtils::randomFloat(-10, 10), m->getPos(false).x, m->getPos(false).y);
+			}
 		}
 	}
 
