@@ -47,11 +47,12 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	sceneWidth(50),
 	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
-	screenFBO(new StandardFrameBuffer(true))
+	screenFBO(new StandardFrameBuffer(true)),
+	phongMat(new Material(45.0, glm::vec3(1.f, 1.f, 0.f), true))
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
-	//shader->components.push_back(new ShaderComponentPhong(shader));
-	shader->components.push_back(new ShaderComponentDiffuse(shader));
+	shader->components.push_back(new ShaderComponentPhong(shader));
+	//shader->components.push_back(new ShaderComponentDiffuse(shader));
 	//shader->components.push_back(new ShaderComponentShadow(shader));
 	shader->compileShader();
 
@@ -124,13 +125,11 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	
 	
 
-
-	Material * phong = new Material(45.0, glm::vec3(1.f, 1.f, 0.f), true);
 	{
 	Box2DMeshEntity * m = new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_dynamicBody, false);
 	m->transform->scale(0.1f, 0.1f, 1.f);
 	m->transform->translate(15,0,0);
-	m->mesh->pushMaterial(phong);
+	m->mesh->pushMaterial(phongMat);
 	m->mesh->dirty = true;
 	world->addToWorld(m);
 	m->createFixture();
@@ -157,8 +156,8 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	MeshEntity * c = new MeshEntity(Resource::loadMeshFromObj("../assets/donutBot.obj"));
 	m->addChild(c);
 	m->transform->scale(1, 1, 1);
-	m->mesh->pushMaterial(phong);
-	c->mesh->pushMaterial(phong);
+	m->mesh->pushMaterial(phongMat);
+	c->mesh->pushMaterial(phongMat);
 	m->mesh->pushTexture2D(LD32_ResourceManager::donutTop);
 	c->mesh->pushTexture2D(LD32_ResourceManager::donutBot);
 	m->mesh->dirty = true;
@@ -223,8 +222,12 @@ LD32_Scene::~LD32_Scene(){
 	}
 	
 	delete shader;
-
+	delete phongMat;
 	delete world;
+
+	delete screenSurface;
+	delete screenSurfaceShader;
+	delete screenFBO;
 }
 
 void LD32_Scene::update(Step * _step){

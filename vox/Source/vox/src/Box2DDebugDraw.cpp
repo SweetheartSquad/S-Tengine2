@@ -68,10 +68,10 @@ Box2DDebugDraw::Box2DDebugDraw(Scene * _scene, Box2DWorld * _world):
 }
 
 Box2DDebugDraw::~Box2DDebugDraw(){
-	delete spriteSegment;
+/*	delete spriteSegment;
 	delete spriteTransform;
 	delete spriteCircle;
-	delete spritePoly;
+	delete spritePoly;*/
 	delete shader;
 }
 

@@ -20,11 +20,12 @@ unsigned long int NodeHierarchical::calculateDepth(){
 }
 
 void NodeHierarchical::deleteRecursively(NodeParent * _node){
-	for (unsigned long int i = 0; i < _node->children.size(); ++i){
-		NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(_node->children.at(i));
+	while (_node->children.size() > 0){
+		NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(_node->children.back());
 		if(nh != nullptr){
 			deleteRecursively(nh);
 		}
+		_node->children.pop_back();
 	}
 	delete _node;
 	_node = nullptr;

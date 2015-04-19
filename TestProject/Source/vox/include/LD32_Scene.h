@@ -15,6 +15,7 @@ class MeshEntity;
 class Shader;
 class RenderSurface;
 class StandardFrameBuffer;
+class Material;
 
 #define numFFTsamples (256)
 #define numHarmonics (numFFTsamples / 2 + 1)
@@ -33,6 +34,7 @@ public:
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;
 	StandardFrameBuffer * screenFBO;
+	Material * phongMat;
 
 	float sceneHeight;
 	float sceneWidth;
