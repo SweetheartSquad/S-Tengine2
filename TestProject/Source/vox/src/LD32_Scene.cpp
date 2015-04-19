@@ -45,7 +45,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	//shader->components.push_back(new ShaderComponentPhong(shader));
-	shader->components.push_back(new ShaderComponentDiffuse(shader));
+	//shader->components.push_back(new ShaderComponentDiffuse(shader));
 	//shader->components.push_back(new ShaderComponentShadow(shader));
 	shader->compileShader();
 
@@ -122,6 +122,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	Material * phong = new Material(45.0, glm::vec3(1.f, 1.f, 0.f), true);
 	{
 	Box2DMeshEntity * m = new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_dynamicBody, false);
+	m->transform->scale(0.1f, 0.1f, 1.f);
 	m->transform->translate(15,0,0);
 	m->mesh->pushMaterial(phong);
 	world->addToWorld(m);
@@ -233,7 +234,7 @@ void LD32_Scene::update(Step * _step){
 	}
 	
 	shader->components.at(0)->makeDirty();
-	shader->components.at(1)->makeDirty();
+	//shader->components.at(1)->makeDirty();
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
@@ -255,7 +256,7 @@ void LD32_Scene::update(Step * _step){
 	
 	// player controls
 	if(player != nullptr){
-		float playerSpeed = 5.f;
+		float playerSpeed = 2.5f;
 		float mass = player->body->GetMass();
 		float angle = atan2(mouseCam->forwardVectorRotated.y, mouseCam->forwardVectorRotated.x);
 

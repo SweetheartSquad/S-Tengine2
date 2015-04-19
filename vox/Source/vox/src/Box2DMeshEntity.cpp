@@ -36,12 +36,14 @@ b2Fixture * Box2DMeshEntity::createFixture(){
 	
 	float width = maxV.x - minV.x;
 	float height = maxV.y - minV.y;
+	float scaleX = transform->getScaleVector().x;
+	float scaleY = transform->getScaleVector().y;
 
 	b2Vec2 verts[4];
-	verts[0] = b2Vec2(minV.x, minV.y);
-	verts[1] = b2Vec2(minV.x + width, minV.y);
-	verts[2] = b2Vec2(minV.x + width, minV.y + height);
-	verts[3] = b2Vec2(minV.x, minV.y + height);
+	verts[0] = b2Vec2(minV.x * scaleX, minV.y * scaleY);
+	verts[1] = b2Vec2((minV.x + width) * scaleX, minV.y * scaleY);
+	verts[2] = b2Vec2((minV.x + width) * scaleX, (minV.y + height) * scaleY);
+	verts[3] = b2Vec2(minV.x * scaleX, (minV.y + height) * scaleY);
 
 	b2PolygonShape t;
 	t.Set(verts, 4);
