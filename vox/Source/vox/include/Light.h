@@ -14,11 +14,11 @@ struct LightData {
 	glm::vec3 intensities;
 	float ambientCoefficient;
 	float attenuation;
-
-	glm::vec3 lastPos;
-	bool dirty;
-
+	
 	LightData(LightType _type, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation);
+	
+	bool operator==(const LightData &other) const;
+	bool operator!=(const LightData &other) const;
 };
 
 /**************************************************************************************************
@@ -39,4 +39,9 @@ public:
 	* This should be copied in the shader
 	*/
 	LightData data;
+	// used to check if the light needs to be updated on the GPU
+	LightData lastData;
+	glm::vec3 lastPos;
+
+	bool dirty;
 };

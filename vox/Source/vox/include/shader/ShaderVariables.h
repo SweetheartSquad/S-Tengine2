@@ -49,26 +49,34 @@ const std::string VAR_FLOAT						      = "float ";
 const std::string VAR_INT							  = "int ";
 
 //Uniform variable names
-const std::string GL_UNIFORM_ID_TEXTURE_SAMPLER       = "textureSampler";
-const std::string GL_UNIFORM_ID_NUM_TEXTURES 		  = "numTextures";
 const std::string GL_UNIFORM_ID_MODEL_MATRIX		  =	"modelMat";
 const std::string GL_UNIFORM_ID_VIEW_MATRIX			  =	"viewMat";
 const std::string GL_UNIFORM_ID_PROJECTION_MATRIX     =	"projectionMat";
 const std::string GL_UNIFORM_ID_MODEL_VIEW_PROJECTION = "MVP";
+
+const std::string GL_UNIFORM_ID_TEXTURE_SAMPLER       = "textureSampler";
+const std::string GL_UNIFORM_ID_NUM_TEXTURES 		  = "numTextures";
+
 const std::string GL_UNIFORM_ID_NUM_LIGHTS			  = "numLights";
-const std::string GL_UNIFORM_ID_LIGHTS_POSITION		  = "lights[].position";
-const std::string GL_UNIFORM_ID_LIGHTS_INTENSITIES    =	"lights[].intensities";
+const std::string GL_UNIFORM_ID_LIGHTS_NO_ARRAY       = "lights";
+const std::string GL_UNIFORM_ID_LIGHTS_POSITION		  = GL_UNIFORM_ID_LIGHTS_NO_ARRAY+"[].position";
+const std::string GL_UNIFORM_ID_LIGHTS_INTENSITIES    =	GL_UNIFORM_ID_LIGHTS_NO_ARRAY+"[].intensities";
+
 const std::string GL_UNIFORM_ID_DEPTH_MVP	          =	"depthMVP";
 const std::string GL_UNIFORM_ID_SHADOW_MAP_SAMPLER    = "shadowMapSampler";
+
 const std::string GL_UNIFORM_ID_NUM_MATERIALS	      =	"numMaterials";
-const std::string GL_UNIFORM_ID_MATERIAL_TYPE         = "materials[].materialType";
-const std::string GL_UNIFORM_ID_LIGHTS_NO_ARRAY       = "lights";
+const std::string GL_UNIFORM_ID_MATERIALS_NO_ARRAY    = "materials";
+const std::string GL_UNIFORM_ID_MATERIAL_TYPE         = GL_UNIFORM_ID_MATERIALS_NO_ARRAY + "[].materialType";
+
 const std::string GL_UNIFORM_ID_TINT_RED			  = "tintRed";
 const std::string GL_UNIFORM_ID_TINT_GREEN			  = "tintGreen";
 const std::string GL_UNIFORM_ID_TINT_BLUE			  = "tintBlue";
+
 const std::string GL_UNIFORM_ID_HUE					  = "hue";
 const std::string GL_UNIFORM_ID_SATURATION			  = "saturation";
 const std::string GL_UNIFORM_ID_VALUE				  = "value";
+
 const std::string GL_UNIFORM_ID_ALPHA				  = "alpha";
 
 //Attribute variable names
@@ -98,8 +106,8 @@ const std::string SHADER_COMPONENT_HSV				  = "SHADER_COMPONENT_HSV";
 const std::string SHADER_COMPONENT_ALPHA			  = "SHADER_COMPONENT_ALPHA";
 
 
-const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGHT + "\n"
-														"#define " + SHADER_COMPONENT_LIGHT + "\n"
+const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGHT + ENDL +
+														"#define " + SHADER_COMPONENT_LIGHT + ENDL +
 														"struct Light{\n"
 														"	int type;\n"
 														"	vec3 position;\n"
@@ -107,8 +115,8 @@ const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGH
 														"	float ambientCoefficient;\n"
 														"	float attenuation;"
 														"};\n"
-														"uniform Light " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[ " + std::to_string(MAX_LIGHTS) + " ];\n"
-														"uniform int " + GL_UNIFORM_ID_NUM_LIGHTS + ";\n"
+														"uniform Light " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[" + std::to_string(MAX_LIGHTS) + "]" + SEMI_ENDL +
+														"uniform int " + GL_UNIFORM_ID_NUM_LIGHTS + SEMI_ENDL +
 														"#endif\n";
 
 const std::string SHADER_INCLUDE_MATERIAL			  = "#ifndef " + SHADER_COMPONENT_MATERIAL + "\n"
@@ -117,6 +125,6 @@ const std::string SHADER_INCLUDE_MATERIAL			  = "#ifndef " + SHADER_COMPONENT_MA
 														"	float shininess;\n"
 														"	vec3 specularColor;\n"
 														"};\n"
-														"uniform Material materials[5];\n"
-														"uniform int numMaterials;\n"
+														"uniform Material " + GL_UNIFORM_ID_MATERIALS_NO_ARRAY + "[" + std::to_string(MAX_MATERIALS) + "]" + SEMI_ENDL +
+														"uniform int " + GL_UNIFORM_ID_NUM_MATERIALS + SEMI_ENDL +
 														"#endif\n";
