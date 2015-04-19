@@ -63,16 +63,17 @@ void ShaderComponentTexture::clean(vox::MatrixStack* _matrixStack, RenderOptions
 void ShaderComponentTexture::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 	int numTextures = 0;
-	glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), 0);
 	if(mesh != nullptr){
-		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), mesh->textureCount());
+		numTextures = mesh->textureCount();
+		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), numTextures);
 		// Bind each texture to the texture sampler array in the frag _shader
 		for(unsigned long int i = 0; i < mesh->textureCount(); i++){
 			glActiveTexture(GL_TEXTURE0 + i);
 			glBindTexture(GL_TEXTURE_2D, mesh->getTexture(i)->textureId);
 			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str()), i);
 		}
-		numTextures = mesh->textureCount();
+	}else{
+		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), numTextures);
 	}
 
 	SpriteMesh * spriteMesh = dynamic_cast<SpriteMesh *>(_nodeRenderable);

@@ -21,29 +21,16 @@ void Box2DMeshEntity::update(Step* _step){
 }
 
 b2Fixture * Box2DMeshEntity::createFixture(){
-	glm::vec3 maxV(-99999, -99999, -99999);
-	glm::vec3 minV(99999, 99999, 99999);
-
-	for(auto i : mesh->vertices){
-		maxV.x = std::max(i.x, maxV.x);
-		maxV.y = std::max(i.y, maxV.y);
-		maxV.z = std::max(i.z, maxV.z);
-
-		minV.x = std::min(i.x, minV.x);
-		minV.y = std::min(i.y, minV.y);
-		minV.z = std::min(i.z, minV.z);
-	}
+	vox::Box bb = mesh->calcBoundingBox();
 	
-	float width = maxV.x - minV.x;
-	float height = maxV.y - minV.y;
 	float scaleX = transform->getScaleVector().x;
 	float scaleY = transform->getScaleVector().y;
 
 	b2Vec2 verts[4];
-	verts[0] = b2Vec2(minV.x * scaleX, minV.y * scaleY);
-	verts[1] = b2Vec2((minV.x + width) * scaleX, minV.y * scaleY);
-	verts[2] = b2Vec2((minV.x + width) * scaleX, (minV.y + height) * scaleY);
-	verts[3] = b2Vec2(minV.x * scaleX, (minV.y + height) * scaleY);
+	verts[0] = b2Vec2(bb.x * scaleX, bb.y * scaleY);
+	verts[1] = b2Vec2((bb.x + bb.width) * scaleX, bb.y * scaleY);
+	verts[2] = b2Vec2((bb.x + bb.width) * scaleX, (bb.y + bb.height) * scaleY);
+	verts[3] = b2Vec2(bb.x * scaleX, (bb.y + bb.height) * scaleY);
 
 	b2PolygonShape t;
 	t.Set(verts, 4);

@@ -50,8 +50,8 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	screenFBO(new StandardFrameBuffer(true))
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
-	shader->components.push_back(new ShaderComponentPhong(shader));
-	//shader->components.push_back(new ShaderComponentDiffuse(shader));
+	//shader->components.push_back(new ShaderComponentPhong(shader));
+	shader->components.push_back(new ShaderComponentDiffuse(shader));
 	//shader->components.push_back(new ShaderComponentShadow(shader));
 	shader->compileShader();
 
@@ -131,6 +131,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	m->transform->scale(0.1f, 0.1f, 1.f);
 	m->transform->translate(15,0,0);
 	m->mesh->pushMaterial(phong);
+	m->mesh->dirty = true;
 	world->addToWorld(m);
 	m->createFixture();
 	player = m;
@@ -157,8 +158,11 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	m->addChild(c);
 	m->transform->scale(1, 1, 1);
 	m->mesh->pushMaterial(phong);
+	c->mesh->pushMaterial(phong);
 	m->mesh->pushTexture2D(LD32_ResourceManager::donutTop);
 	c->mesh->pushTexture2D(LD32_ResourceManager::donutBot);
+	m->mesh->dirty = true;
+	c->mesh->dirty = true;
 	world->addToWorld(m);
 	m->createFixture();
 	m->setShaderOnChildren(shader);
@@ -240,7 +244,7 @@ void LD32_Scene::update(Step * _step){
 	}
 	
 	shader->components.at(0)->makeDirty();
-	//shader->components.at(1)->makeDirty();
+	shader->components.at(1)->makeDirty();
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();

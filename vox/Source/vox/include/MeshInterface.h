@@ -15,6 +15,7 @@
 #include "node/NodeRenderable.h"
 #include "node/NodeLoadable.h"
 #include "shader/ShaderVariables.h"
+#include <Box.h>
 
 class Texture;
 class Material;
@@ -101,6 +102,8 @@ public:
 	void pushMaterial(Material * _material);
 	unsigned long int textureCount();
 	Texture * getTexture(int _idx);
+
+	vox::Box calcBoundingBox();
 
 private:
 	/** Textures */

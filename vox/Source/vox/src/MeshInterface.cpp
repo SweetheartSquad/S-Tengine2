@@ -237,3 +237,20 @@ void QuadMesh::pushQuad(GLuint _v0, GLuint _v1, GLuint _v2, GLuint _v3){
 
 	dirty = true;
 }
+
+vox::Box MeshInterface::calcBoundingBox(){
+	float minX = 99999, minY= 99999, minZ = 99999,
+		maxX = -99999, maxY = -99999, maxZ = -99999;
+
+	for(auto i : vertices){
+		maxX = std::max(i.x, maxX);
+		maxY = std::max(i.y, maxY);
+		maxZ = std::max(i.z, maxZ);
+
+		minX = std::min(i.x, minX);
+		minY = std::min(i.y, minY);
+		minZ = std::min(i.z, minZ);
+	}
+
+	return vox::Box(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ);
+}

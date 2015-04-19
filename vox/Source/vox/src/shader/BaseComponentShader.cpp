@@ -57,12 +57,12 @@ std::string BaseComponentShader::buildVertexShader(){
 	}
 
 	shaderString += "void main(){" + ENDL +
-						"fragVert" + modGeo + "= aVertexPosition" + SEMI_ENDL +
-						"fragNormal" + modGeo + " = aVertexNormals" + SEMI_ENDL +
-						"fragColor" + modGeo + "= aVertexColor" + SEMI_ENDL +
-						"fragUV" + modGeo + " = aVertexUVs" + SEMI_ENDL +
-						//"mat4 MVP = " + GL_UNIFORM_ID_MODEL_MATRIX +" * " + GL_UNIFORM_ID_VIEW_MATRIX + " * " + GL_UNIFORM_ID_PROJECTION_MATRIX + SEMI_ENDL +
-						"gl_Position = " + GL_UNIFORM_ID_MODEL_VIEW_PROJECTION + " * vec4(aVertexPosition, 1.0)" + SEMI_ENDL;
+						TAB + "fragVert" + modGeo + "= aVertexPosition" + SEMI_ENDL +
+						TAB + "fragNormal" + modGeo + " = aVertexNormals" + SEMI_ENDL +
+						TAB + "fragColor" + modGeo + "= aVertexColor" + SEMI_ENDL +
+						TAB + "fragUV" + modGeo + " = aVertexUVs" + SEMI_ENDL +
+						TAB + //"mat4 MVP = " + GL_UNIFORM_ID_MODEL_MATRIX +" * " + GL_UNIFORM_ID_VIEW_MATRIX + " * " + GL_UNIFORM_ID_PROJECTION_MATRIX + SEMI_ENDL +
+						TAB + "gl_Position = " + GL_UNIFORM_ID_MODEL_VIEW_PROJECTION + " * vec4(aVertexPosition, 1.0)" + SEMI_ENDL;
 
 	for(unsigned long int i = 0; i < components.size(); i++){
 		shaderString += components.at(i)->getVertexBodyString();

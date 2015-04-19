@@ -121,6 +121,7 @@
     <ClCompile Include="../src/shader/ShaderComponentAlpha.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentTint.cpp" />
     <ClCompile Include="../src/TextureSampler.cpp" />
+    <ClCompile Include="../src/Box.cpp" />
 <<<<<<< HEAD
     <ClCompile Include="../src/Accelerometer.cpp" />
     <ClCompile Include="../src/AccelerometerParser.cpp" />
@@ -224,6 +225,7 @@
     <ClCompile Include="../src/shader/ShaderComponentAlpha.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentTint.cpp" />
     <ClCompile Include="../src/TextureSampler.cpp" />
+    <ClCompile Include="../src/Box.cpp" />
 =======
     <ClCompile Include="../src/Accelerometer.cpp" />
     <ClCompile Include="../src/AccelerometerParser.cpp" />
@@ -327,6 +329,7 @@
     <ClCompile Include="../src/shader/ShaderComponentAlpha.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentTint.cpp" />
     <ClCompile Include="../src/TextureSampler.cpp" />
+    <ClCompile Include="../src/Box.cpp" />
 >>>>>>> ecadd1d294afbb7e9d747eda757c631d31385df3
   </ItemGroup>
   <ItemGroup>
@@ -444,6 +447,7 @@
     <ClInclude Include="../include/shader/ShaderComponentAlpha.h" />
     <ClInclude Include="../include/shader/ShaderComponentTint.h" />
     <ClInclude Include="../include/TextureSampler.h" />
+    <ClInclude Include="../include/Box.h" />
 <<<<<<< HEAD
     <ClInclude Include="../include/Accelerometer.h" />
     <ClInclude Include="../include/AccelerometerParser.h" />
@@ -559,6 +563,7 @@
     <ClInclude Include="../include/shader/ShaderComponentAlpha.h" />
     <ClInclude Include="../include/shader/ShaderComponentTint.h" />
     <ClInclude Include="../include/TextureSampler.h" />
+    <ClInclude Include="../include/Box.h" />
 =======
     <ClInclude Include="../include/Accelerometer.h" />
     <ClInclude Include="../include/AccelerometerParser.h" />
@@ -674,6 +679,7 @@
     <ClInclude Include="../include/shader/ShaderComponentAlpha.h" />
     <ClInclude Include="../include/shader/ShaderComponentTint.h" />
     <ClInclude Include="../include/TextureSampler.h" />
+    <ClInclude Include="../include/Box.h" />
 >>>>>>> ecadd1d294afbb7e9d747eda757c631d31385df3
   </ItemGroup>
   <PropertyGroup Label="Globals">
