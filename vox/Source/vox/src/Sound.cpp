@@ -33,8 +33,8 @@ void Sound::play(bool _loop){
 		player->PlayLoop(libZPlay::TTimeFormat::tfMillisecond, &start, libZPlay::TTimeFormat::tfMillisecond, &end, -1, 0);
 	}else{
 		player->Play();
-		player->SetPlayerVolume(masterVolume, masterVolume);
 	}
+	player->SetPlayerVolume(masterVolume, masterVolume);
 }
 
 void Sound::pause(){
