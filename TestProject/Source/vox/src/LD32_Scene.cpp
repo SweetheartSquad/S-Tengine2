@@ -143,11 +143,15 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	addChild(player);
 	player->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 2.f, 0, false);
 
-	Sound::masterVolume = 100;
+	Sound::masterVolume = 0;
 	LD32_ResourceManager::music->play("bgm", true);
 	LD32_ResourceManager::music->play("bgm2", true);
 	LD32_ResourceManager::music->play("bgm3", true);
 	LD32_ResourceManager::music->play("bgm4", true);
+	Sound::masterVolume = 100;
+	/*for(auto m : LD32_ResourceManager::music->sounds){
+		m.second.player->SetPlayerVolume(0, 0);
+	}*/
 	
 	MeshInterface * avMesh = MeshFactory::getPlaneMesh();
 	for(Vertex & v : avMesh->vertices){

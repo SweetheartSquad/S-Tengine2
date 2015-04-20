@@ -17,6 +17,7 @@
     <ClCompile Include="..\src\LD32_Monster.cpp" />
     <ClCompile Include="..\src\LD32_Player.cpp" />
     <ClCompile Include="..\src\LD32_ResourceManager.cpp" />
+    <ClCompile Include="..\src\LD32_StartupScene.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="..\src\LD32_Game.cpp" />
     <ClCompile Include="..\src\LD32_Scene.cpp" />
@@ -30,6 +31,7 @@
     <ClInclude Include="..\include\LD32_ResourceManager.h" />
     <ClInclude Include="..\include\LD32_Game.h" />
     <ClInclude Include="..\include\LD32_Scene.h" />
+    <ClInclude Include="..\include\LD32_StartupScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\assets\test.frag" />
