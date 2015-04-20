@@ -126,7 +126,7 @@ void LD32_ContactListener::playerBoundaryContact(b2Contact * _contact, b2Fixture
 void LD32_ContactListener::playerEnemyContact(b2Contact* b2_contact, b2Fixture * _playerFixture, b2Fixture * _enemyFixture){
 	LD32_Player * player = static_cast<LD32_Player*>(_playerFixture->GetUserData());
 	if (player != nullptr) {
-		LD32_ResourceManager::miscSounds->play("damage");
+		LD32_ResourceManager::enemySfx->playRandomSound();
 	}
 }
 void LD32_ContactListener::playerDeadZoneContact(b2Contact* b2_contact, b2Fixture* _playerFixture, b2Fixture* _deadZoneFixture){

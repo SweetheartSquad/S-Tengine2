@@ -23,7 +23,7 @@ LD32_Enemy::LD32_Enemy(Box2DWorld * _world) :
 
 	world->addToWorld(this);
 	b2Fixture * f = createFixture(true);
-	f->SetRestitution(2.5f);
+	f->SetRestitution(1.f);
 	f->SetUserData(this);
 	f->SetFilterData(sf);
 	body->SetUserData(this);

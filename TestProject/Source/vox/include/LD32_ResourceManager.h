@@ -10,6 +10,7 @@ public:
 	static SoundManager * sfx;
 	static SoundManager * miscSounds;
 	static SoundManager * bumperSfx;
+	static SoundManager * enemySfx;
 	static Texture * donutTop;
 	static Texture * donutBot;
 
