@@ -21,6 +21,7 @@
 #include <shader\ShaderComponentPhong.h>
 #include <shader\ShaderComponentBlinn.h>
 #include <shader\ShaderComponentShadow.h>
+#include <shader\ShaderComponentHsv.h>
 
 #include <Box2DWorld.h>
 #include <Box2DMeshEntity.h>
@@ -39,11 +40,12 @@
 #include <RenderSurface.h>
 #include <StandardFrameBuffer.h>
 #include <NumberUtils.h>
+#include <LD32_Monster.h>
 
 LD32_Scene::LD32_Scene(Game * _game) :
 	Scene(_game),
 	shader(new BaseComponentShader(true)),
-	world(new Box2DWorld(b2Vec2(0, -20))),
+	world(new Box2DWorld(b2Vec2(0, -10))),
 	drawer(nullptr),
 	player(nullptr),
 	sceneHeight(150),
@@ -55,12 +57,12 @@ LD32_Scene::LD32_Scene(Game * _game) :
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->components.push_back(new ShaderComponentDiffuse(shader));
+	shader->components.push_back(new ShaderComponentHsv(shader, 0, 0, 2));
 	//shader->components.push_back(new ShaderComponentPhong(shader));
 	//shader->components.push_back(new ShaderComponentBlinn(shader));
 	//shader->components.push_back(new ShaderComponentShadow(shader));
 	shader->compileShader();
 
-	
 	//Set up cameras
 	mouseCam = new MousePerspectiveCamera();
 	cameras.push_back(mouseCam);
@@ -171,7 +173,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	}
 	
 	//intialize key light
-	PointLight * keyLight = new PointLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.1f, -0.01f, -10.f);
+	PointLight * keyLight = new PointLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.00f, -0.01f, -10.f);
 	//Set it as the key light so it casts shadows
 	//keyLight->isKeyLight = true;
 	//Add it to the scene
@@ -181,6 +183,13 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	mouseCam->upVectorLocal = glm::vec3(0, 0, 1);
 	mouseCam->forwardVectorLocal = glm::vec3(1, 0, 0);
 	mouseCam->rightVectorLocal = glm::vec3(0, -1, 0);
+
+	LD32_Monster * monster = new LD32_Monster(world);
+	monster->setShader(shader, true);
+	monster->transform->rotate(90, 1.f, 0.f, 0.f, kOBJECT);
+	monster->setTranslationPhysical(sceneWidth * 0.5, sceneHeight * 0.5, 1.f, false);
+	monster->transform->scale(2.0f, 2.0f, 2.0f, true);
+	addChild(monster);
 }
 
 LD32_Scene::~LD32_Scene(){
