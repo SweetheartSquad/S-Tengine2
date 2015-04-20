@@ -11,6 +11,7 @@ public:
 	std::vector<Box2DMeshEntity *> things;
 
 	std::vector<b2PrismaticJoint *> joints;
+	int hits;
 	bool deathPending;
 	bool won;
 

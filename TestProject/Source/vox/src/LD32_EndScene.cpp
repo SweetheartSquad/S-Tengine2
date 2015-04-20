@@ -12,7 +12,7 @@
 #include <shader\ShaderComponentTexture.h>
 #include <OrthographicCamera.h>
 
-LD32_EndScene::LD32_EndScene(Game * _game) :
+LD32_EndScene::LD32_EndScene(Game * _game, bool _won) :
 	Scene(_game)
 {
 	
@@ -21,7 +21,7 @@ LD32_EndScene::LD32_EndScene(Game * _game) :
 
 	shader->compileShader();
 	Sprite * splash = new Sprite();
-	splash->mesh->pushTexture2D(LD32_ResourceManager::endSplash);
+	splash->mesh->pushTexture2D(_won ? LD32_ResourceManager::endSplash : LD32_ResourceManager::endSplashBad);
 	addChild(splash);
 	splash->setShader(shader, true);
 	splash->transform->translate(-1024,512,-5);
@@ -33,6 +33,7 @@ LD32_EndScene::LD32_EndScene(Game * _game) :
 	clearColor[0] = 1;
 	clearColor[1] = 1;
 	clearColor[2] = 1;
+
 }
 
 void LD32_EndScene::update(Step * _step){

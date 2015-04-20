@@ -13,7 +13,8 @@ LD32_Player::LD32_Player(Box2DWorld * _world) :
 	NodeTransformable(new Transform()),
 	playerMat(new Material(15, glm::vec3(1,1,1), true)),
 	deathPending(false),
-	won(false)
+	won(false),
+	hits(0)
 {
 	b2Filter sf;
 	sf.groupIndex = -1;

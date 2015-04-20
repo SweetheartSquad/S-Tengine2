@@ -143,9 +143,9 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	player->setShader(shader, true);
 	gameCam->addTarget(player, 1);
 	addChild(player);
-	player->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 1.5f, 0, false);
+	player->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 8.f, 0, false);
 	for(auto i : player->things){
-		i->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 1.5f, 0, false);
+		i->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 8.f, 0, false);
 	}
 
 	Sound::masterVolume = 0;
@@ -273,6 +273,7 @@ void LD32_Scene::update(Step * _step){
 	// player controls
 	if(player != nullptr){
 		float playerSpeed = 0.1f;
+		float playerRotSpeed = 0.5f;
 		float mass = player->body->GetMass();
 		float angle = atan2(mouseCam->forwardVectorRotated.y, mouseCam->forwardVectorRotated.x);
 
@@ -297,7 +298,7 @@ void LD32_Scene::update(Step * _step){
 			player->applyLinearImpulseUp(playerSpeed * mass * cos(angle));
 			player->applyLinearImpulseLeft(playerSpeed * mass * sin(angle));
 
-			player->body->ApplyAngularImpulse(playerSpeed * mass, true);
+			player->body->ApplyAngularImpulse(playerRotSpeed * mass, true);
 			LD32_ResourceManager::music->sounds.at("bgm3").player->GetPlayerVolume(&p1, &p2);
 			if(p1 < 100){
 				LD32_ResourceManager::music->sounds.at("bgm3").player->SetPlayerVolume(p1+1, p2+1);
@@ -312,7 +313,7 @@ void LD32_Scene::update(Step * _step){
 			player->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
 			player->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
 
-			player->body->ApplyAngularImpulse(-playerSpeed * mass, true);
+			player->body->ApplyAngularImpulse(-playerRotSpeed * mass, true);
 			LD32_ResourceManager::music->sounds.at("bgm2").player->GetPlayerVolume(&p1, &p2);
 			if(p1 < 100){
 				LD32_ResourceManager::music->sounds.at("bgm2").player->SetPlayerVolume(p1+1, p2+1);
@@ -418,7 +419,11 @@ void LD32_Scene::update(Step * _step){
 	}
 	
 	if(player->won){
-		game->scenes.insert(std::pair<std::string, Scene *>("end", new LD32_EndScene(game)));
+		game->scenes.insert(std::pair<std::string, Scene *>("end", new LD32_EndScene(game, true)));
+		game->switchScene("end", true);
+	}
+	if(player->deathPending){
+		game->scenes.insert(std::pair<std::string, Scene *>("end", new LD32_EndScene(game, false)));
 		game->switchScene("end", true);
 	}
 

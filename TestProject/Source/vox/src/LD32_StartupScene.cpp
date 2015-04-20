@@ -33,6 +33,8 @@ LD32_StartupScene::LD32_StartupScene(Game * _game) :
 	clearColor[0] = 1;
 	clearColor[1] = 1;
 	clearColor[2] = 1;
+
+	//LD32_ResourceManager::miscSounds->play("start");
 }
 
 void LD32_StartupScene::update(Step * _step){

@@ -4,6 +4,7 @@
 
 Texture * LD32_ResourceManager::startSplash = new Texture("../assets/startSplash.png", 1024, 1024, true, false);
 Texture * LD32_ResourceManager::endSplash = new Texture("../assets/endSplash.png", 1024, 1024, true, false);
+Texture * LD32_ResourceManager::endSplashBad = new Texture("../assets/endSplashBad.png", 1024, 1024, true, false);
 SoundManager * LD32_ResourceManager::music = new SoundManager(-1);
 SoundManager * LD32_ResourceManager::sfx = new SoundManager(-1);
 SoundManager * LD32_ResourceManager::bumperSfx = new SoundManager(-1);
@@ -15,6 +16,7 @@ Texture * LD32_ResourceManager::donutBot = new Texture("../assets/donutBot.png",
 void LD32_ResourceManager::init(){
 	resources.push_back(startSplash);
 	resources.push_back(endSplash);
+	resources.push_back(endSplashBad);
 
 	music->addNewSound("bgm", "../assets/Birdy-baseloop.ogg");
 	music->addNewSound("bgm2", "../assets/Birdy-birds.ogg");
@@ -27,8 +29,9 @@ void LD32_ResourceManager::init(){
 	sfx->addNewSound("7", "../assets/SF7.ogg");
 	resources.push_back(sfx);
 	
-	miscSounds->addNewSound("start", "../assets/SF9.ogg");
+	miscSounds->addNewSound("start", "../assets/SF1.ogg");
 	miscSounds->addNewSound("death", "../assets/death.ogg");
+	miscSounds->addNewSound("win", "../assets/death.ogg");
 	resources.push_back(miscSounds);
 	
 	bumperSfx->addNewSound("bumper1", "../assets/SF2.ogg");
