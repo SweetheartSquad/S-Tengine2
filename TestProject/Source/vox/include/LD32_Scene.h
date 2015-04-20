@@ -20,6 +20,8 @@ class Material;
 #define numFFTsamples (32)
 #define numHarmonics (numFFTsamples / 2 + 1)
 
+class LD32_Player;
+
 class LD32_Scene : public Scene{
 public:
 	BaseComponentShader * shader;
@@ -29,7 +31,7 @@ public:
 
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
-	Box2DMeshEntity * player;
+	LD32_Player * player;
 	
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;

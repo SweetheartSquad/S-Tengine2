@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\LD32_Donut.cpp" />
+    <ClCompile Include="..\src\LD32_Player.cpp" />
+    <ClCompile Include="..\src\LD32_ResourceManager.cpp" />
+    <ClCompile Include="..\src\Main.cpp" />
+    <ClCompile Include="..\src\LD32_Game.cpp" />
+    <ClCompile Include="..\src\LD32_Scene.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\LD32_Donut.h" />
+    <ClInclude Include="..\include\LD32_Player.h" />
+    <ClInclude Include="..\include\LD32_ResourceManager.h" />
+    <ClInclude Include="..\include\LD32_Game.h" />
+    <ClInclude Include="..\include\LD32_Scene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\assets\test.frag" />
+    <None Include="..\assets\test.vert" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>vox</RootNamespace>
+    <ProjectName>vox - 2013</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\voxSettings.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\voxSettings.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ENGINE_DIR)\Source\vox\include;..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(ZPLAY_DIR);$(BOX2D_DIR);$(IncludePath)</IncludePath>
+    <SourcePath>..\src;$(SourcePath)</SourcePath>
+    <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
+    <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
+    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\projects\VC9\Debug;$(ZPLAY_DIR);$(BOX2D_DIR)\Build\vs2013\bin\x32\Debug;$(LibraryPath)</LibraryPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ENGINE_DIR)\Source\vox\include;..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(ZPLAY_DIR);$(BOX2D_DIR);$(IncludePath)</IncludePath>
+    <SourcePath>..\src;$(SourcePath)</SourcePath>
+    <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
+    <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
+    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\projects\VC9\Release;$(ZPLAY_DIR);$(BOX2D_DIR)\Build\vs2013\bin\x32\Release;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BrowseInformation>true</BrowseInformation>
+      <EnablePREfast>false</EnablePREfast>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;libzplay.lib;Box2D.lib;vox - 2013d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <PerUserRedirection>true</PerUserRedirection>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <AdditionalLibraryDirectories>C:\dev\glfw\lib-msvc110;$(ENGINE_DIR)\Output\vox - 2013-LibDebug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
+    </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+    <PreBuildEvent>
+      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
+copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"
+copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
+    </PreBuildEvent>
+    <PostBuildEvent />
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;libzplay.lib;Box2D.lib;vox - 2012.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ENGINE_DIR)\Output\vox - 2012-LibRelease;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
+copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"
+copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"</Command>
+    </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

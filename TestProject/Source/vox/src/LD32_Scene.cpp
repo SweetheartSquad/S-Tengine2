@@ -4,6 +4,7 @@
 #include <LD32_Game.h>
 #include <LD32_ResourceManager.h>
 #include <LD32_Donut.h>
+#include <LD32_Player.h>
 
 #include <MeshEntity.h>
 #include <MeshInterface.h>
@@ -92,10 +93,11 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	
 	float _size = 3;
 	std::vector<Box2DMeshEntity *> boundaries;
-	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
-	boundaries.push_back(new Box2DMeshEntity(world, MeshFactory::getPlaneMesh(), b2_staticBody));
+	MeshInterface * boundaryMesh = MeshFactory::getPlaneMesh();
+	boundaries.push_back(new Box2DMeshEntity(world, boundaryMesh, b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, boundaryMesh, b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, boundaryMesh, b2_staticBody));
+	boundaries.push_back(new Box2DMeshEntity(world, boundaryMesh, b2_staticBody));
 
 	boundaries.at(0)->transform->scale(_size, sceneHeight*0.5f + _size*2.f, _size);
 	boundaries.at(1)->transform->scale(_size, sceneHeight*0.5f + _size*2.f, _size);
@@ -122,34 +124,20 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	boundaries.at(3)->body->GetFixtureList()->SetFriction(1);
 	boundaries.at(3)->body->GetFixtureList()->SetRestitution(0);
 
+	MeshEntity * ground = new MeshEntity(MeshFactory::getPlaneMesh());
+	ground->transform->translate(sceneWidth/2.f, sceneHeight/2.f, -0.5f);
+	ground->transform->scale(sceneWidth, sceneHeight, 1);
+	ground->setShader(shader, true);
+	addChild(ground);
 
 
 	//lights.push_back(new DirectionalLight(glm::vec3(1,0,0), glm::vec3(1,1,1), 1));
 	
-	
-
-	{
-	Box2DMeshEntity * m = new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_dynamicBody, false);
-	m->transform->scale(0.25f, 0.25f, 1.f);
-	m->mesh->pushMaterial(phongMat);
-	m->mesh->dirty = true;
-	world->addToWorld(m);
-	m->createFixture();
-	player = m;
-	m->setShader(shader, true);
-	addChild(m);
+	player = new LD32_Player(world);
+	player->setShader(shader, true);
 	gameCam->addTarget(player, 1);
-	m->setTranslationPhysical(sceneWidth/2.f, sceneHeight/2.f, 0, false);
-	
-	m->body->SetLinearDamping(5.f);
-	m->body->SetAngularDamping(5.f);
-
-	MeshEntity * test = new MeshEntity(MeshFactory::getCubeMesh());
-	test->setShader(shader, true);
-	test->transform->translate(0, 0, 5);
-	test->transform->scale(0.1f, 0.1f, 0.1f);
-	m->addChild(test);
-	}
+	addChild(player);
+	player->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 2.f, 0, false);
 
 	Sound::masterVolume = 100;
 	LD32_ResourceManager::music->play("bgm", true);
@@ -183,7 +171,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	}
 	
 	//intialize key light
-	PointLight * keyLight = new PointLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.0f, 0.5f, 10.f);
+	PointLight * keyLight = new PointLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.1f, -0.01f, -10.f);
 	//Set it as the key light so it casts shadows
 	//keyLight->isKeyLight = true;
 	//Add it to the scene
@@ -221,7 +209,8 @@ void LD32_Scene::update(Step * _step){
 	LD32_ResourceManager::music->sounds.at("bgm").player->GetFFTData(numFFTsamples, libZPlay::TFFTWindow::fwBlackmanNuttall, nullptr, nullptr, fftDataL, fftDataR, nullptr, nullptr);
 	
 	lights.at(0)->data.intensities = glm::vec3(fftDataL[10]/100.f, 0.5f, fftDataR[10]/100.f);
-	lights.at(0)->data.cutoff = fftDataL[2]/5.f;
+	//lights.at(0)->data.cutoff = fftDataL[2]/5.f;
+	lights.at(0)->data.attenuation = -0.01f + fftDataL[1] / 100000.f;
 	//lights.at(0)->transform->translate(-mouseCam->forwardVectorRotated, false);
 
 	for(int i = 0; i < numHarmonics; ++i){
@@ -280,6 +269,18 @@ void LD32_Scene::update(Step * _step){
 		if (keyboard->keyDown(GLFW_KEY_D)){
 			player->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
 			player->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
+		}
+		if (keyboard->keyDown(GLFW_KEY_SPACE)){
+			//player->thing1->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
+			//player->thing1->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
+			for (auto j : player->joints){
+				j->SetMotorSpeed(100);
+			}
+		}
+		else{
+			for (auto j : player->joints){
+				j->SetMotorSpeed(100);
+			}
 		}
 
 		

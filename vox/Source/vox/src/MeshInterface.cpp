@@ -7,6 +7,7 @@
 #include "MatrixStack.h"
 #include "VoxRenderOptions.h"
 #include "Transform.h"
+#include <algorithm>
 
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode) :
 	NodeRenderable(),
