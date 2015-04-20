@@ -6,6 +6,8 @@
 #include "Sprite.h"
 #include "node\NodeLoadable.h"
 
+#define CIRCLE_VERTS 16
+
 class Scene;
 class Box2DWorld;
 

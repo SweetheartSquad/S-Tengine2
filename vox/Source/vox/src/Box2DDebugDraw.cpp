@@ -49,8 +49,8 @@ Box2DDebugDraw::Box2DDebugDraw(Box2DWorld * _world):
 	spriteCircle->mesh->polygonalDrawMode = GL_POLYGON;
 	spriteCircle->mesh->vertices.clear();
 	spriteCircle->mesh->indices.clear();
-	for (int32 i = 0; i < 30; ++i){
-		float percent = (i / static_cast<float>(30-1));
+	for (int32 i = 0; i < CIRCLE_VERTS; ++i){
+		float percent = (i / static_cast<float>(CIRCLE_VERTS-1));
 		float rad = percent * 2 * 3.14159f;
 		float x = cos(rad);
 		float y = sin(rad);
