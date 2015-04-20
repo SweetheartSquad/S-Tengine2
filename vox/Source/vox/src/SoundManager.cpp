@@ -66,6 +66,7 @@ void SoundManager::playRandomSound(){
 		do{
 			soundToPlay = vox::NumberUtils::randomInt(0, sounds.size() - 1);
 		}while(soundToPlay == lastPlayed);
+		lastPlayed = soundToPlay;
 		auto it = sounds.begin();
 		std::advance(it, soundToPlay);
 		auto s = it->first;
