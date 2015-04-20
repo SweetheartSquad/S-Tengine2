@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\LD32_ContactListener.cpp" />
     <ClCompile Include="..\src\LD32_Donut.cpp" />
     <ClCompile Include="..\src\LD32_Player.cpp" />
     <ClCompile Include="..\src\LD32_ResourceManager.cpp" />
@@ -19,6 +20,7 @@
     <ClCompile Include="..\src\LD32_Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\LD32_ContactListener.h" />
     <ClInclude Include="..\include\LD32_Donut.h" />
     <ClInclude Include="..\include\LD32_Player.h" />
     <ClInclude Include="..\include\LD32_ResourceManager.h" />

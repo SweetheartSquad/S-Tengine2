@@ -43,7 +43,7 @@
 LD32_Scene::LD32_Scene(Game * _game) :
 	Scene(_game),
 	shader(new BaseComponentShader(true)),
-	world(new Box2DWorld(b2Vec2(0,0))),
+	world(new Box2DWorld(b2Vec2(0, -20))),
 	drawer(nullptr),
 	player(nullptr),
 	sceneHeight(150),
@@ -254,32 +254,38 @@ void LD32_Scene::update(Step * _step){
 		mouseCam->lookAtOffset = glm::vec3(0, 0, -player->transform->getScaleVector().z*0.25f);
 		
 		
-		if (keyboard->keyDown(GLFW_KEY_W)){
+		/*if (keyboard->keyDown(GLFW_KEY_W)){
 			player->applyLinearImpulseUp(playerSpeed * mass * sin(angle));
 			player->applyLinearImpulseRight(playerSpeed * mass * cos(angle));
 		}
 		if (keyboard->keyDown(GLFW_KEY_S)){
-			player->applyLinearImpulseDown(playerSpeed * mass * sin(angle));
-			player->applyLinearImpulseLeft(playerSpeed * mass * cos(angle));
-		}
+			//player->applyLinearImpulseDown(playerSpeed * mass * sin(angle));
+			//player->applyLinearImpulseLeft(playerSpeed * mass * cos(angle));
+		}*/
 		if (keyboard->keyDown(GLFW_KEY_A)){
-			player->applyLinearImpulseUp(playerSpeed * mass * cos(angle));
-			player->applyLinearImpulseLeft(playerSpeed * mass * sin(angle));
+			//player->applyLinearImpulseUp(playerSpeed * mass * cos(angle));
+			//player->applyLinearImpulseLeft(playerSpeed * mass * sin(angle));
+			player->body->ApplyAngularImpulse(playerSpeed * mass, true);
 		}
 		if (keyboard->keyDown(GLFW_KEY_D)){
-			player->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
-			player->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
+			//player->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
+			//player->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
+			player->body->ApplyAngularImpulse(-playerSpeed * mass, true);
 		}
+		if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
+			LD32_ResourceManager::sfx->playRandomSound();
+		}
+
 		if (keyboard->keyDown(GLFW_KEY_SPACE)){
 			//player->thing1->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
 			//player->thing1->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
 			for (auto j : player->joints){
-				j->SetMotorSpeed(100);
+				j->SetMotorSpeed(1000);
 			}
 		}
 		else{
 			for (auto j : player->joints){
-				j->SetMotorSpeed(100);
+				j->SetMotorSpeed(-1000);
 			}
 		}
 

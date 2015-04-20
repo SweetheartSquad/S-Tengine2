@@ -13,7 +13,7 @@ MeshInterface * LD32_Donut::donutBotMesh = nullptr;
 Material * LD32_Donut::donutMat = new Material(15.f, glm::vec3(1,1,1), true);
 	
 LD32_Donut::LD32_Donut(Box2DWorld * _world) :
-	Box2DMeshEntity(_world, nullptr, b2_dynamicBody, false, nullptr, transform),
+	Box2DMeshEntity(_world, nullptr, b2_staticBody, false, nullptr, transform),
 	NodeChild(nullptr),
 	NodeTransformable(new Transform()),
 	bot(nullptr)
@@ -37,10 +37,8 @@ LD32_Donut::LD32_Donut(Box2DWorld * _world) :
 	++donutTopMesh->referenceCount;
 
 	world->addToWorld(this);
-	createFixture(true);
-
-	body->SetLinearDamping(5.f);
-	body->SetAngularDamping(5.f);
+	b2Fixture * f = createFixture(true);
+	f->SetRestitution(2.5f);
 }
 
 void LD32_Donut::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){

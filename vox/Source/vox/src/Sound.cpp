@@ -28,7 +28,7 @@ void Sound::play(bool _loop){
 		libZPlay::TStreamInfo info;
 		player->GetStreamInfo(&info);
 		start.ms = 0;
-		end.ms = info.Length.ms-25;
+		end.ms = info.Length.ms-100;
 
 		player->PlayLoop(libZPlay::TTimeFormat::tfMillisecond, &start, libZPlay::TTimeFormat::tfMillisecond, &end, -1, 0);
 	}else{

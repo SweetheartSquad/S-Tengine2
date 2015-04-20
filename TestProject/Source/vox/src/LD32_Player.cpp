@@ -20,13 +20,10 @@ LD32_Player::LD32_Player(Box2DWorld * _world) :
 	b2Fixture * f = createFixture();
 	f->SetFilterData(sf);
 
-	body->SetLinearDamping(5.f);
-	body->SetAngularDamping(5.f);
-
 	for (unsigned long int i = 0; i < 4; ++i){
 
 	Box2DMeshEntity * thing1 = new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_dynamicBody, false);
-	thing1->transform->scale(2.f, 1.f, 1.f);
+	thing1->transform->scale(1.f, 1.f, 1.f);
 	thing1->mesh->pushMaterial(playerMat);
 	thing1->mesh->dirty = true;
 	world->addToWorld(thing1);
@@ -58,7 +55,7 @@ LD32_Player::LD32_Player(Box2DWorld * _world) :
 	j.lowerTranslation = 0;
 	j.upperTranslation = 1;
 	j.motorSpeed = -1;
-	j.maxMotorForce = 1000;
+	j.maxMotorForce = 10000;
 	joints.push_back(dynamic_cast<b2PrismaticJoint *>(world->b2world->CreateJoint(&j)));
 	}
 }
