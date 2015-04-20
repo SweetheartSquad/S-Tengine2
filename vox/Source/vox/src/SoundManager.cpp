@@ -7,7 +7,8 @@
 SoundManager::SoundManager(double _throttle):
 	NodeResource(true),
 	throttle(_throttle),
-	lastTimeStamp(0.0)
+	lastTimeStamp(0.0),
+	lastPlayed(0)
 {
 }
 
@@ -60,10 +61,16 @@ void SoundManager::unload(){
 }
 
 void SoundManager::playRandomSound(){
-	if(sounds.size() > 0){
+	if(sounds.size() > 1){
+		unsigned long int soundToPlay;
+		do{
+			soundToPlay = vox::NumberUtils::randomInt(0, sounds.size() - 1);
+		}while(soundToPlay == lastPlayed);
 		auto it = sounds.begin();
-		std::advance(it, vox::NumberUtils::randomInt(0, sounds.size() - 1));
+		std::advance(it, soundToPlay);
 		auto s = it->first;
 		play(s);
+	}else if(sounds.size() == 1){
+		play(sounds.begin()->first);
 	}
 }

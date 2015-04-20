@@ -9,6 +9,7 @@ public:
 
 	double throttle;
 	double lastTimeStamp;
+	unsigned long int lastPlayed;
 
 	std::map<std::string, Sound> sounds;
 
