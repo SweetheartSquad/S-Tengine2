@@ -8,6 +8,8 @@ class LD32_ResourceManager : public ResourceManager{
 public:
 	static SoundManager * music;
 	static SoundManager * sfx;
+	static SoundManager * miscSounds;
+	static SoundManager * bumperSfx;
 	static Texture * donutTop;
 	static Texture * donutBot;
 

@@ -11,14 +11,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\LD32_ContactListener.cpp" />
     <ClCompile Include="..\src\LD32_Donut.cpp" />
+    <ClCompile Include="..\src\LD32_Enemy.cpp" />
+    <ClCompile Include="..\src\LD32_Player.cpp" />
     <ClCompile Include="..\src\LD32_ResourceManager.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="..\src\LD32_Game.cpp" />
     <ClCompile Include="..\src\LD32_Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\LD32_ContactListener.h" />
     <ClInclude Include="..\include\LD32_Donut.h" />
+    <ClInclude Include="..\include\LD32_Enemy.h" />
+    <ClInclude Include="..\include\LD32_Player.h" />
     <ClInclude Include="..\include\LD32_ResourceManager.h" />
     <ClInclude Include="..\include\LD32_Game.h" />
     <ClInclude Include="..\include\LD32_Scene.h" />
@@ -28,7 +34,7 @@
     <None Include="..\assets\test.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>
+    <ProjectGuid>{96FE28A2-BB06-4424-ADED-0DEDAEAF84B5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>vox</RootNamespace>
     <ProjectName>vox - 2012</ProjectName>

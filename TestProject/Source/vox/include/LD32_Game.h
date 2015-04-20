@@ -12,7 +12,7 @@ public:
 		kPLAYER = 0x0002,
 		kBUMPER = 0x0004,
 		kENEMY = 0x0008,
-		kCAT5 = 0x00010,
+		kDEAD_ZONE = 0x00010,
 		kCAT6 = 0x00020,
 		kCAT7 = 0x00040,
 		kCAT8 = 0x00080,

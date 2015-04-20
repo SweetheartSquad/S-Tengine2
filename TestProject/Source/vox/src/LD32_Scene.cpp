@@ -5,6 +5,8 @@
 #include <LD32_ResourceManager.h>
 #include <LD32_Donut.h>
 #include <LD32_Player.h>
+#include <LD32_Enemy.h>
+#include <LD32_ContactListener.h>
 
 #include <MeshEntity.h>
 #include <MeshInterface.h>
@@ -141,6 +143,9 @@ LD32_Scene::LD32_Scene(Game * _game) :
 
 	Sound::masterVolume = 100;
 	LD32_ResourceManager::music->play("bgm", true);
+	LD32_ResourceManager::music->play("bgm2", true);
+	LD32_ResourceManager::music->play("bgm3", true);
+	LD32_ResourceManager::music->play("bgm4", true);
 	
 	MeshInterface * avMesh = MeshFactory::getPlaneMesh();
 	for(Vertex & v : avMesh->vertices){
@@ -156,7 +161,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	for(int i = 0; i < numHarmonics; ++i){
 		MeshEntity * m = new MeshEntity(avMesh);
 		
-		m->transform->translate(sceneWidth/numHarmonics * (i+0.5f), 0, 1);
+		m->transform->translate(sceneWidth/numHarmonics/2.f * (i+0.5f), 0, 1);
 		m->setShader(shader, true);
 		addChild(m);
 		audioVisualizer.push_back(m);
@@ -164,7 +169,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	for(int i = 0; i < numHarmonics; ++i){
 		MeshEntity * m = new MeshEntity(avMesh);
 
-		m->transform->translate(sceneWidth/numHarmonics * (i+0.5f), 0, 1);
+		m->transform->translate(sceneWidth - (sceneWidth/numHarmonics)/2.f * (i+0.5f), 0, 1);
 		m->setShader(shader, true);
 		addChild(m);
 		audioVisualizer.push_back(m);
@@ -181,6 +186,9 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	mouseCam->upVectorLocal = glm::vec3(0, 0, 1);
 	mouseCam->forwardVectorLocal = glm::vec3(1, 0, 0);
 	mouseCam->rightVectorLocal = glm::vec3(0, -1, 0);
+
+	LD32_ContactListener * cl = new LD32_ContactListener(this);
+	world->b2world->SetContactListener(cl);
 }
 
 LD32_Scene::~LD32_Scene(){
@@ -208,15 +216,15 @@ void LD32_Scene::update(Step * _step){
 
 	LD32_ResourceManager::music->sounds.at("bgm").player->GetFFTData(numFFTsamples, libZPlay::TFFTWindow::fwBlackmanNuttall, nullptr, nullptr, fftDataL, fftDataR, nullptr, nullptr);
 	
-	lights.at(0)->data.intensities = glm::vec3(fftDataL[10]/100.f, 0.5f, fftDataR[10]/100.f);
+	lights.at(0)->data.intensities = glm::vec3(fftDataL[1]/200.f, fftDataL[2]/200.f, fftDataR[1]/200.f) + glm::vec3(0.5f, 0.5f, 0.5f);
 	//lights.at(0)->data.cutoff = fftDataL[2]/5.f;
-	lights.at(0)->data.attenuation = -0.01f + fftDataL[1] / 100000.f;
+	lights.at(0)->data.attenuation = -0.005f + fftDataL[1] / 50000.f;
 	//lights.at(0)->transform->translate(-mouseCam->forwardVectorRotated, false);
 
 	for(int i = 0; i < numHarmonics; ++i){
 		audioVisualizer.at(i)->transform->scale(sceneWidth / numHarmonics / 2.f, (fftDataL[i]) / 10.f, 1, false);
 	}for(int i = 0; i < numHarmonics; ++i){
-		audioVisualizer.at(i+numHarmonics)->transform->scale(sceneWidth / numHarmonics / 2.f, -(fftDataR[i]) / 10.f, 1, false);
+		audioVisualizer.at(i+numHarmonics)->transform->scale(sceneWidth / numHarmonics / 2.f, (fftDataR[i]) / 10.f, 1, false);
 	}
 	
 	//shader->components.at(0)->makeDirty();
@@ -262,15 +270,35 @@ void LD32_Scene::update(Step * _step){
 			//player->applyLinearImpulseDown(playerSpeed * mass * sin(angle));
 			//player->applyLinearImpulseLeft(playerSpeed * mass * cos(angle));
 		}*/
+		unsigned int p1, p2;
 		if (keyboard->keyDown(GLFW_KEY_A)){
 			//player->applyLinearImpulseUp(playerSpeed * mass * cos(angle));
 			//player->applyLinearImpulseLeft(playerSpeed * mass * sin(angle));
 			player->body->ApplyAngularImpulse(playerSpeed * mass, true);
+			LD32_ResourceManager::music->sounds.at("bgm3").player->GetPlayerVolume(&p1, &p2);
+			if(p1 < 100){
+				LD32_ResourceManager::music->sounds.at("bgm3").player->SetPlayerVolume(p1+1, p2+1);
+			}
+		}else{
+			
+			LD32_ResourceManager::music->sounds.at("bgm3").player->GetPlayerVolume(&p1, &p2);
+			if(p1 > 50){
+				LD32_ResourceManager::music->sounds.at("bgm3").player->SetPlayerVolume(p1-1, p2-1);
+			}
 		}
 		if (keyboard->keyDown(GLFW_KEY_D)){
 			//player->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
 			//player->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
 			player->body->ApplyAngularImpulse(-playerSpeed * mass, true);
+			LD32_ResourceManager::music->sounds.at("bgm2").player->GetPlayerVolume(&p1, &p2);
+			if(p1 < 100){
+				LD32_ResourceManager::music->sounds.at("bgm2").player->SetPlayerVolume(p1+1, p2+1);
+			}
+		}else{
+			LD32_ResourceManager::music->sounds.at("bgm2").player->GetPlayerVolume(&p1, &p2);
+			if(p1 > 50){
+				LD32_ResourceManager::music->sounds.at("bgm2").player->SetPlayerVolume(p1-1, p2-1);
+			}
 		}
 		if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
 			LD32_ResourceManager::sfx->playRandomSound();
@@ -282,10 +310,26 @@ void LD32_Scene::update(Step * _step){
 			for (auto j : player->joints){
 				j->SetMotorSpeed(1000);
 			}
-		}
-		else{
+			unsigned int p1, p2;
+			LD32_ResourceManager::music->sounds.at("bgm").player->GetPlayerVolume(&p1, &p2);
+			if(p1 < 100){
+				LD32_ResourceManager::music->sounds.at("bgm").player->SetPlayerVolume(p1+1, p2+1);
+			}
+			LD32_ResourceManager::music->sounds.at("bgm4").player->GetPlayerVolume(&p1, &p2);
+			if(p1 < 100){
+				LD32_ResourceManager::music->sounds.at("bgm4").player->SetPlayerVolume(p1+1, p2+1);
+			}
+		}else{
 			for (auto j : player->joints){
 				j->SetMotorSpeed(-1000);
+			}
+			LD32_ResourceManager::music->sounds.at("bgm").player->GetPlayerVolume(&p1, &p2);
+			if(p1 > 75){
+				LD32_ResourceManager::music->sounds.at("bgm").player->SetPlayerVolume(p1-1, p2-1);
+			}
+			LD32_ResourceManager::music->sounds.at("bgm4").player->GetPlayerVolume(&p1, &p2);
+			if(p1 > 50){
+				LD32_ResourceManager::music->sounds.at("bgm4").player->SetPlayerVolume(p1-1, p2-1);
 			}
 		}
 
@@ -297,6 +341,14 @@ void LD32_Scene::update(Step * _step){
 			donut->applyLinearImpulse(vox::NumberUtils::randomFloat(-150, 150), vox::NumberUtils::randomFloat(-150, 150), donut->getPos(false).x, donut->getPos(false).y);
 			donut->setShaderOnChildren(shader); // <- this is the problem?
 			addChild(donut);
+		}
+		if (keyboard->keyJustDown(GLFW_KEY_E)){
+			LD32_Enemy * enemy = new LD32_Enemy(world);
+			enemy->setTranslationPhysical(player->getPos(false));
+			enemy->setTranslationPhysical(vox::NumberUtils::randomFloat(-10, 10), vox::NumberUtils::randomFloat(-10, 10), 0, true);
+			enemy->applyLinearImpulse(vox::NumberUtils::randomFloat(-150, 150), vox::NumberUtils::randomFloat(-150, 150), enemy->getPos(false).x, enemy->getPos(false).y);
+			enemy->setShaderOnChildren(shader); // <- this is the problem?
+			addChild(enemy);
 		}
 		if (keyboard->keyJustDown(GLFW_KEY_H)){
 			LD32_Donut * donut = new LD32_Donut(world);

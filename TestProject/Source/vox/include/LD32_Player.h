@@ -11,6 +11,7 @@ public:
 	std::vector<Box2DMeshEntity *> things;
 
 	std::vector<b2PrismaticJoint *> joints;
+	bool deathPending;
 
 	LD32_Player(Box2DWorld * _world);
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <LD32_Player.h>
+#include <LD32_Game.h>
 #include <MeshInterface.h>
 #include <Box2DWorld.h>
 #include <Material.h>
@@ -13,51 +14,57 @@ LD32_Player::LD32_Player(Box2DWorld * _world) :
 {
 	b2Filter sf;
 	sf.groupIndex = -1;
+	sf.categoryBits = LD32_Game::kPLAYER;
+
 	transform->scale(1.f, 1.f, 1.f);
 	mesh->pushMaterial(playerMat);
 	mesh->dirty = true;
 	world->addToWorld(this);
 	b2Fixture * f = createFixture();
 	f->SetFilterData(sf);
+	f->SetUserData(this);
 
 	for (unsigned long int i = 0; i < 4; ++i){
+		Box2DMeshEntity * thing1 = new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_dynamicBody, false);
+		thing1->transform->scale(1.f, 1.f, 1.f);
+		thing1->mesh->pushMaterial(playerMat);
+		thing1->mesh->dirty = true;
+		world->addToWorld(thing1);
+		f = thing1->createFixture();
+		f->SetDensity(0.1f);
+		f->SetFilterData(sf);
+		things.push_back(thing1);
+		f->SetUserData(this);
+		thing1->body->SetUserData(this);
 
-	Box2DMeshEntity * thing1 = new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_dynamicBody, false);
-	thing1->transform->scale(1.f, 1.f, 1.f);
-	thing1->mesh->pushMaterial(playerMat);
-	thing1->mesh->dirty = true;
-	world->addToWorld(thing1);
-	f = thing1->createFixture();
-	f->SetDensity(0.1f);
-	f->SetFilterData(sf);
-	things.push_back(thing1);
+		b2PrismaticJointDef j;
+		j.bodyA = body;
+		j.bodyB = thing1->body;
+		j.collideConnected = false;
+		j.enableLimit = true;
+		j.enableMotor = true;
+		switch (i){
+		case 0:
+			j.localAxisA = b2Vec2(0, 1);
+			break;
+		case 1:
+			j.localAxisA = b2Vec2(1, 0);
+			break;
+		case 2:
+			j.localAxisA = b2Vec2(0, -1);
+			break;
+		case 3:
+			j.localAxisA = b2Vec2(-1, 0);
+			break;
+		}
+		j.lowerTranslation = 0;
+		j.upperTranslation = 1;
+		j.motorSpeed = -1;
+		j.maxMotorForce = 5000;
+		joints.push_back(dynamic_cast<b2PrismaticJoint *>(world->b2world->CreateJoint(&j)));
+	}
 
-	b2PrismaticJointDef j;
-	j.bodyA = body;
-	j.bodyB = thing1->body;
-	j.collideConnected = false;
-	j.enableLimit = true;
-	j.enableMotor = true;
-	switch (i){
-	case 0:
-		j.localAxisA = b2Vec2(0, 1);
-		break;
-	case 1:
-		j.localAxisA = b2Vec2(1, 0);
-		break;
-	case 2:
-		j.localAxisA = b2Vec2(0, -1);
-		break;
-	case 3:
-		j.localAxisA = b2Vec2(-1, 0);
-		break;
-	}
-	j.lowerTranslation = 0;
-	j.upperTranslation = 1;
-	j.motorSpeed = -1;
-	j.maxMotorForce = 10000;
-	joints.push_back(dynamic_cast<b2PrismaticJoint *>(world->b2world->CreateJoint(&j)));
-	}
+	body->SetUserData(this);
 }
 
 void LD32_Player::update(Step * _step){
