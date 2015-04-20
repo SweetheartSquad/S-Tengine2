@@ -12,6 +12,7 @@ public:
 
 	std::vector<b2PrismaticJoint *> joints;
 	bool deathPending;
+	bool won;
 
 	LD32_Player(Box2DWorld * _world);
 

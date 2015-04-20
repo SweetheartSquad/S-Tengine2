@@ -11,7 +11,9 @@ LD32_Player::LD32_Player(Box2DWorld * _world) :
 	Box2DMeshEntity(_world, Resource::loadMeshFromObj("../assets/player.vox"), b2_dynamicBody, false),
 	NodeChild(nullptr),
 	NodeTransformable(new Transform()),
-	playerMat(new Material(15, glm::vec3(1,1,1), true))
+	playerMat(new Material(15, glm::vec3(1,1,1), true)),
+	deathPending(false),
+	won(false)
 {
 	b2Filter sf;
 	sf.groupIndex = -1;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <LD32_Scene.h>
+#include <LD32_EndScene.h>
 #include <LD32_Game.h>
 #include <LD32_ResourceManager.h>
 #include <LD32_Donut.h>
@@ -142,7 +143,10 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	player->setShader(shader, true);
 	gameCam->addTarget(player, 1);
 	addChild(player);
-	player->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 2.f, 0, false);
+	player->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 1.5f, 0, false);
+	for(auto i : player->things){
+		i->setTranslationPhysical(sceneWidth / 2.f, sceneHeight / 1.5f, 0, false);
+	}
 
 	Sound::masterVolume = 0;
 	LD32_ResourceManager::music->play("bgm", true);
@@ -268,7 +272,7 @@ void LD32_Scene::update(Step * _step){
 	
 	// player controls
 	if(player != nullptr){
-		float playerSpeed = 2.5f;
+		float playerSpeed = 0.1f;
 		float mass = player->body->GetMass();
 		float angle = atan2(mouseCam->forwardVectorRotated.y, mouseCam->forwardVectorRotated.x);
 
@@ -280,18 +284,19 @@ void LD32_Scene::update(Step * _step){
 		mouseCam->lookAtOffset = glm::vec3(0, 0, -player->transform->getScaleVector().z*0.25f);
 		
 		
-		/*if (keyboard->keyDown(GLFW_KEY_W)){
+		if (keyboard->keyDown(GLFW_KEY_W)){
 			player->applyLinearImpulseUp(playerSpeed * mass * sin(angle));
 			player->applyLinearImpulseRight(playerSpeed * mass * cos(angle));
 		}
 		if (keyboard->keyDown(GLFW_KEY_S)){
-			//player->applyLinearImpulseDown(playerSpeed * mass * sin(angle));
-			//player->applyLinearImpulseLeft(playerSpeed * mass * cos(angle));
-		}*/
+			player->applyLinearImpulseDown(playerSpeed * mass * sin(angle));
+			player->applyLinearImpulseLeft(playerSpeed * mass * cos(angle));
+		}
 		unsigned int p1, p2;
 		if (keyboard->keyDown(GLFW_KEY_A)){
-			//player->applyLinearImpulseUp(playerSpeed * mass * cos(angle));
-			//player->applyLinearImpulseLeft(playerSpeed * mass * sin(angle));
+			player->applyLinearImpulseUp(playerSpeed * mass * cos(angle));
+			player->applyLinearImpulseLeft(playerSpeed * mass * sin(angle));
+
 			player->body->ApplyAngularImpulse(playerSpeed * mass, true);
 			LD32_ResourceManager::music->sounds.at("bgm3").player->GetPlayerVolume(&p1, &p2);
 			if(p1 < 100){
@@ -304,8 +309,9 @@ void LD32_Scene::update(Step * _step){
 			}
 		}
 		if (keyboard->keyDown(GLFW_KEY_D)){
-			//player->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
-			//player->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
+			player->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
+			player->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
+
 			player->body->ApplyAngularImpulse(-playerSpeed * mass, true);
 			LD32_ResourceManager::music->sounds.at("bgm2").player->GetPlayerVolume(&p1, &p2);
 			if(p1 < 100){
@@ -410,10 +416,17 @@ void LD32_Scene::update(Step * _step){
 			addChild(drawer);
 		}
 	}
+	
+	if(player->won){
+		game->scenes.insert(std::pair<std::string, Scene *>("end", new LD32_EndScene(game)));
+		game->switchScene("end", true);
+	}
 
 	Scene::update(_step);
 
 	world->update(_step);
+
+	
 }
 
 void LD32_Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){

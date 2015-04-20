@@ -38,18 +38,15 @@ void LD32_ContactListener::BeginContact(b2Contact * _contact){
 
 	if (playerFixture != nullptr){
 		if ((fA.categoryBits & LD32_Game::kENEMY) != 0 || (fB.categoryBits & LD32_Game::kENEMY) != 0){
-			// Player-Item collision
-			//std::cout << fA.categoryBits << "|" << fB.categoryBits << std::endl;
 			playerEnemyContact(_contact, playerFixture, otherFixture);
 		} if ((fA.categoryBits & LD32_Game::kBUMPER) != 0 || (fB.categoryBits & LD32_Game::kBUMPER) != 0){
-			// Player-Structure collision
 			playerBumperContact(_contact, playerFixture, otherFixture);
 		} if ((fA.categoryBits & LD32_Game::kBOUNDARY) != 0 || (fB.categoryBits & LD32_Game::kBOUNDARY) != 0){
-			// Player-Ground collision
 			playerBoundaryContact(_contact, playerFixture, otherFixture);
 		} if ((fA.categoryBits & LD32_Game::kDEAD_ZONE) != 0 || (fB.categoryBits & LD32_Game::kDEAD_ZONE) != 0){
-			// Player-Dead Zone collision
 			playerDeadZoneContact(_contact, playerFixture, otherFixture);
+		} if ((fA.categoryBits & LD32_Game::kMONSTER) != 0 || (fB.categoryBits & LD32_Game::kMONSTER) != 0){
+			playerMonsterContact(_contact, playerFixture, otherFixture);
 		}
 	}else{
 		
@@ -135,6 +132,13 @@ void LD32_ContactListener::playerDeadZoneContact(b2Contact* b2_contact, b2Fixtur
 	LD32_Player * player = static_cast<LD32_Player*>(_playerFixture->GetUserData());
 	if (player != nullptr) {
 		player->deathPending = true;
+		LD32_ResourceManager::miscSounds->play("death");
+	}
+}
+void LD32_ContactListener::playerMonsterContact(b2Contact* b2_contact, b2Fixture* _playerFixture, b2Fixture* _monsterFixture){
+	LD32_Player * player = static_cast<LD32_Player*>(_playerFixture->GetUserData());
+	if (player != nullptr) {
+		player->won = true;
 		LD32_ResourceManager::miscSounds->play("death");
 	}
 }

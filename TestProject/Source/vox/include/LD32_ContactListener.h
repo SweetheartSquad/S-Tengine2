@@ -17,7 +17,8 @@ public:
 	virtual void playerBumperContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _bumperFixture);
 	virtual void playerBoundaryContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _boundaryFixture);
 	virtual void playerEnemyContact(b2Contact* b2_contact, b2Fixture * _playerFixture, b2Fixture * _enemyFixture);
-	virtual	void playerDeadZoneContact(b2Contact* b2_contact, b2Fixture* player_fixture, b2Fixture* other_fixture);
+	virtual	void playerDeadZoneContact(b2Contact* b2_contact, b2Fixture* player_fixture, b2Fixture* _deadZonefixture);
+	virtual	void playerMonsterContact(b2Contact* b2_contact, b2Fixture* player_fixture, b2Fixture* _monsterfixture);
 
 	virtual void EndContact(b2Contact* _contact) override;
 

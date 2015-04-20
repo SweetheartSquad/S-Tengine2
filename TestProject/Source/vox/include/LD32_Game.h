@@ -13,7 +13,7 @@ public:
 		kBUMPER = 0x0004,
 		kENEMY = 0x0008,
 		kDEAD_ZONE = 0x00010,
-		kCAT6 = 0x00020,
+		kMONSTER = 0x00020,
 		kCAT7 = 0x00040,
 		kCAT8 = 0x00080,
 		kCAT9 = 0x00100,

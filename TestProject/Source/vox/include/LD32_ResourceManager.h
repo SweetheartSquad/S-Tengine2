@@ -7,6 +7,7 @@
 class LD32_ResourceManager : public ResourceManager{
 public:
 	static Texture * startSplash;
+	static Texture * endSplash;
 	static SoundManager * music;
 	static SoundManager * sfx;
 	static SoundManager * miscSounds;
