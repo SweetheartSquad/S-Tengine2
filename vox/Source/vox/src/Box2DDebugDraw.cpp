@@ -56,48 +56,61 @@ Box2DDebugDraw::Box2DDebugDraw(Box2DWorld * _world):
 		float y = sin(rad);
 		spriteCircle->mesh->pushVert(Vertex(x, y, 0.0001f, 0, 1.f, 1.f, 1.f));
 	}
+
+	spritePoly->mesh->polygonalDrawMode = GL_LINE_STRIP;
+	spritePoly->mesh->vertices.clear();
+	spritePoly->mesh->indices.clear();
+	spritePoly->mesh->pushVert(Vertex(0, 0, 0.0001f, 0.8, 0.5, 0.6, 1.f));
+	spritePoly->mesh->pushVert(Vertex(1, 0, 0.0001f, 0.8, 0.5, 0.6, 1.f));
+	spritePoly->mesh->pushVert(Vertex(1, 1, 0.0001f, 0.8, 0.5, 0.6, 1.f));
+	spritePoly->mesh->pushVert(Vertex(0, 1, 0.0001f, 0.8, 0.5, 0.6, 1.f));
+	spritePoly->mesh->indices.push_back(0); // close the loop
 	
 	spriteSegment->setShader(shader, true);
 	spriteTransform->setShader(shader, true);
 	spriteCircle->setShader(shader, true);
 	spritePoly->setShader(shader, true);
 
-	addChild(spriteSegment);
+	/*addChild(spriteSegment);
 	addChild(spriteTransform);
 	addChild(spriteCircle);
-	addChild(spritePoly);
+	addChild(spritePoly);*/
 }
 
 Box2DDebugDraw::~Box2DDebugDraw(){
-/*	delete spriteSegment;
+	delete spriteSegment;
 	delete spriteTransform;
 	delete spriteCircle;
-	delete spritePoly;*/
+	delete spritePoly;
 	delete shader;
 }
 
 void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color){
-	spritePoly->mesh->vertices.clear();
-	spritePoly->mesh->indices.clear();
 	spritePoly->mesh->polygonalDrawMode = GL_LINE_STRIP;
-
-	for (int32 i = 0; i < vertexCount; ++i) {
-		spritePoly->mesh->pushVert(Vertex(vertices[i].x, vertices[i].y, 0.0001f, color.r, color.g, color.b, 1.f));
+	
+	if(vertexCount == 4){
+		spritePoly->transform->reset();
+		spritePoly->transform->translate(vertices[0].x, vertices[0].y, 0.0001f, false);
+		b2Vec2 s1(vertices[1].y - vertices[0].y, vertices[1].x - vertices[0].x);
+		b2Vec2 s2(vertices[3].y - vertices[0].y, vertices[3].x - vertices[0].x);
+		spritePoly->transform->rotate(glm::degrees(atan2(s1.x, s1.y)), 0, 0, 1, kOBJECT);
+		spritePoly->transform->scale(s1.Length(), s2.Length(), 1, false);
 	}
-	spritePoly->mesh->indices.push_back(0);
 
 	spritePoly->render(matrixStack, renderOptions);
 }
 
 void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount, const b2Color& color){
-	spritePoly->mesh->vertices.clear();
-	spritePoly->mesh->indices.clear();
 	spritePoly->mesh->polygonalDrawMode = GL_LINE_STRIP;
 	
-	for (int32 i = 0; i < vertexCount; ++i) {
-		spritePoly->mesh->pushVert(Vertex(vertices[i].x, vertices[i].y, 0.0001f, color.r, color.g, color.b, 1.f));
+	if(vertexCount == 4){
+		spritePoly->transform->reset();
+		spritePoly->transform->translate(vertices[0].x, vertices[0].y, 0.0001f, false);
+		b2Vec2 s1(vertices[1].y - vertices[0].y, vertices[1].x - vertices[0].x);
+		b2Vec2 s2(vertices[3].y - vertices[0].y, vertices[3].x - vertices[0].x);
+		spritePoly->transform->rotate(glm::degrees(atan2(s1.x, s1.y)), 0, 0, 1, kOBJECT);
+		spritePoly->transform->scale(s1.Length(), s2.Length(), 1, false);
 	}
-	spritePoly->mesh->indices.push_back(0);
 
 	spritePoly->render(matrixStack, renderOptions);
 }

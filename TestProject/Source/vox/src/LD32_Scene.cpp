@@ -130,7 +130,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 
 	{
 	Box2DMeshEntity * m = new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_dynamicBody, false);
-	m->transform->scale(0.1f, 0.1f, 1.f);
+	m->transform->scale(0.25f, 0.25f, 1.f);
 	m->transform->translate(15,0,0);
 	m->mesh->pushMaterial(phongMat);
 	m->mesh->dirty = true;
