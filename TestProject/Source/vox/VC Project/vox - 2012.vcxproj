@@ -14,6 +14,7 @@
     <ClCompile Include="..\src\LD32_ContactListener.cpp" />
     <ClCompile Include="..\src\LD32_Donut.cpp" />
     <ClCompile Include="..\src\LD32_Enemy.cpp" />
+    <ClCompile Include="..\src\LD32_Monster.cpp" />
     <ClCompile Include="..\src\LD32_Player.cpp" />
     <ClCompile Include="..\src\LD32_ResourceManager.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
@@ -24,6 +25,7 @@
     <ClInclude Include="..\include\LD32_ContactListener.h" />
     <ClInclude Include="..\include\LD32_Donut.h" />
     <ClInclude Include="..\include\LD32_Enemy.h" />
+    <ClInclude Include="..\include\LD32_Monster.h" />
     <ClInclude Include="..\include\LD32_Player.h" />
     <ClInclude Include="..\include\LD32_ResourceManager.h" />
     <ClInclude Include="..\include\LD32_Game.h" />
