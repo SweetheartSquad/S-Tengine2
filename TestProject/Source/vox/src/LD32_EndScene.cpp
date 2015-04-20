@@ -38,7 +38,7 @@ LD32_EndScene::LD32_EndScene(Game * _game) :
 void LD32_EndScene::update(Step * _step){
 	Scene::update(_step);
 
-	if(keyboard->keyJustUp(GLFW_KEY_SPACE)){
+	if(keyboard->keyJustUp(GLFW_KEY_ENTER)){
 		game->scenes.insert(std::pair<std::string, Scene *>("game", new LD32_Scene(game)));
 		game->switchScene("game", true);
 	}

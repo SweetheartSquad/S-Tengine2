@@ -19,7 +19,8 @@ LD32_Donut::LD32_Donut(Box2DWorld * _world) :
 	Box2DMeshEntity(_world, nullptr, b2_staticBody, false, nullptr, transform),
 	NodeChild(nullptr),
 	NodeTransformable(new Transform()),
-	bot(nullptr)
+	bot(nullptr),
+	rotSpeed(vox::NumberUtils::randomFloat(-0.1f, 0.1f))
 {
 	b2Filter sf;
 	sf.categoryBits = LD32_Game::kBUMPER;
@@ -59,7 +60,7 @@ void LD32_Donut::update(Step * _step){
 
 	float size = Easing::easeOutElastic(std::min(1.0, _step->time - lastHit), 2.5f, -1.5, 1);
 	transform->scale(size, size, size, false);
-
+	body->SetTransform(body->GetPosition(), body->GetAngle() + rotSpeed);
 
 	Box2DMeshEntity::update(_step);
 }

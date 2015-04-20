@@ -16,6 +16,8 @@ public:
 	bool justHit;
 	float lastHit;
 
+	float rotSpeed;
+
 	LD32_Donut(Box2DWorld * _world);
 	~LD32_Donut();
 
