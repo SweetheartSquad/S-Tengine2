@@ -17,7 +17,7 @@ void LD32_ResourceManager::init(){
 	music->addNewSound("bgm4", "../assets/Birdy-synth.ogg");
 	resources.push_back(music);
 
-	sfx->addNewSound("1", "../assets/SF1.ogg");
+	//sfx->addNewSound("1", "../assets/SF1.ogg");
 	sfx->addNewSound("5", "../assets/SF5.ogg");
 	sfx->addNewSound("6", "../assets/SF6.ogg");
 	sfx->addNewSound("7", "../assets/SF7.ogg");

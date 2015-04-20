@@ -178,7 +178,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	}
 	
 	//intialize key light
-	PointLight * keyLight = new PointLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.00f, -0.01f, -10.f);
+	PointLight * keyLight = new PointLight(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(1.f, 1.f, 1.f), 0.00f, -0.01f, -10.f);
 	//Set it as the key light so it casts shadows
 	//keyLight->isKeyLight = true;
 	//Add it to the scene
@@ -289,7 +289,6 @@ void LD32_Scene::update(Step * _step){
 				LD32_ResourceManager::music->sounds.at("bgm3").player->SetPlayerVolume(p1+1, p2+1);
 			}
 		}else{
-			
 			LD32_ResourceManager::music->sounds.at("bgm3").player->GetPlayerVolume(&p1, &p2);
 			if(p1 > 50){
 				LD32_ResourceManager::music->sounds.at("bgm3").player->SetPlayerVolume(p1-1, p2-1);
@@ -317,7 +316,7 @@ void LD32_Scene::update(Step * _step){
 			//player->thing1->applyLinearImpulseDown(playerSpeed * mass * cos(angle));
 			//player->thing1->applyLinearImpulseRight(playerSpeed * mass * sin(angle));
 			for (auto j : player->joints){
-				j->SetMotorSpeed(1000);
+				j->SetLimits(0, 1.5);
 			}
 			unsigned int p1, p2;
 			LD32_ResourceManager::music->sounds.at("bgm").player->GetPlayerVolume(&p1, &p2);
@@ -330,7 +329,7 @@ void LD32_Scene::update(Step * _step){
 			}
 		}else{
 			for (auto j : player->joints){
-				j->SetMotorSpeed(-1000);
+				j->SetLimits(0, 0);
 			}
 			LD32_ResourceManager::music->sounds.at("bgm").player->GetPlayerVolume(&p1, &p2);
 			if(p1 > 75){

@@ -2,12 +2,13 @@
 
 #include <LD32_Player.h>
 #include <LD32_Game.h>
+#include <Resource.h>
 #include <MeshInterface.h>
 #include <Box2DWorld.h>
 #include <Material.h>
 #include <MeshFactory.h>
 LD32_Player::LD32_Player(Box2DWorld * _world) :
-	Box2DMeshEntity(_world, MeshFactory::getCubeMesh(), b2_dynamicBody, false),
+	Box2DMeshEntity(_world, Resource::loadMeshFromObj("../assets/player.vox"), b2_dynamicBody, false),
 	NodeChild(nullptr),
 	NodeTransformable(new Transform()),
 	playerMat(new Material(15, glm::vec3(1,1,1), true))
@@ -20,17 +21,17 @@ LD32_Player::LD32_Player(Box2DWorld * _world) :
 	mesh->pushMaterial(playerMat);
 	mesh->dirty = true;
 	world->addToWorld(this);
-	b2Fixture * f = createFixture();
+	b2Fixture * f = createFixture(true);
 	f->SetFilterData(sf);
 	f->SetUserData(this);
 
 	for (unsigned long int i = 0; i < 4; ++i){
-		Box2DMeshEntity * thing1 = new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_dynamicBody, false);
+		Box2DMeshEntity * thing1 = new Box2DMeshEntity(world, Resource::loadMeshFromObj("../assets/playerThing.vox"), b2_dynamicBody, false);
 		thing1->transform->scale(1.f, 1.f, 1.f);
 		thing1->mesh->pushMaterial(playerMat);
 		thing1->mesh->dirty = true;
 		world->addToWorld(thing1);
-		f = thing1->createFixture();
+		f = thing1->createFixture(true);
 		f->SetDensity(0.1f);
 		f->SetFilterData(sf);
 		things.push_back(thing1);
@@ -43,6 +44,7 @@ LD32_Player::LD32_Player(Box2DWorld * _world) :
 		j.collideConnected = false;
 		j.enableLimit = true;
 		j.enableMotor = true;
+		j.referenceAngle = 0;
 		switch (i){
 		case 0:
 			j.localAxisA = b2Vec2(0, 1);
@@ -58,9 +60,9 @@ LD32_Player::LD32_Player(Box2DWorld * _world) :
 			break;
 		}
 		j.lowerTranslation = 0;
-		j.upperTranslation = 1;
-		j.motorSpeed = -1;
-		j.maxMotorForce = 5000;
+		j.upperTranslation = 1.5;
+		j.motorSpeed = 500;
+		j.maxMotorForce = 2500;
 		joints.push_back(dynamic_cast<b2PrismaticJoint *>(world->b2world->CreateJoint(&j)));
 	}
 
