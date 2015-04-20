@@ -3,6 +3,7 @@
 #include <LD32_Game.h>
 #include <LD32_ResourceManager.h>
 #include <LD32_Player.h>
+#include <LD32_Donut.h>
 
 #include "Scene.h"
 #include "Box2dWorld.h"
@@ -113,9 +114,10 @@ void LD32_ContactListener::EndContact(b2Contact* _contact){
 
 void LD32_ContactListener::playerBumperContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _bumperFixture){
 	LD32_Player * player = static_cast<LD32_Player*>(_playerFixture->GetUserData());
-	if (player != nullptr) {
-		LD32_ResourceManager::bumperSfx->playRandomSound();
-	}
+	LD32_Donut * donut = static_cast<LD32_Donut*>(_bumperFixture->GetUserData());
+	
+	LD32_ResourceManager::bumperSfx->playRandomSound();
+	donut->hit();
 }
 void LD32_ContactListener::playerBoundaryContact(b2Contact * _contact, b2Fixture * _playerFixture, b2Fixture * _boundaryFixture){
 	/*LD32_Player * player = static_cast<LD32_Player*>(player_fixture->GetUserData());

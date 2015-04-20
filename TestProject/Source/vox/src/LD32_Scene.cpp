@@ -55,11 +55,12 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
-	phongMat(new Material(15.0, glm::vec3(1.f, 1.f, 1.f), true))
+	phongMat(new Material(15.0, glm::vec3(1.f, 1.f, 1.f), true)),
+	hsvComponent(new ShaderComponentHsv(shader, 0, 0, 0))
 {
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->components.push_back(new ShaderComponentDiffuse(shader));
-	shader->components.push_back(new ShaderComponentHsv(shader, 0, 0, 2));
+	shader->components.push_back(hsvComponent);
 	//shader->components.push_back(new ShaderComponentPhong(shader));
 	//shader->components.push_back(new ShaderComponentBlinn(shader));
 	//shader->components.push_back(new ShaderComponentShadow(shader));
@@ -233,6 +234,10 @@ void LD32_Scene::update(Step * _step){
 	//lights.at(0)->data.cutoff = fftDataL[2]/5.f;
 	lights.at(0)->data.attenuation = -0.005f + fftDataL[1] / 50000.f;
 	//lights.at(0)->transform->translate(-mouseCam->forwardVectorRotated, false);
+	
+	hsvComponent->setValue((fftDataL[1] + fftDataR[1]) / 100.f);
+	hsvComponent->setSaturation((fftDataL[numHarmonics-1] + fftDataR[numHarmonics-1]) / 200.f + 0.25f);
+	hsvComponent->setHue(hsvComponent->getHue() + (fftDataL[4] + fftDataR[4]) / 1000.f);
 
 	for(int i = 0; i < numHarmonics; ++i){
 		audioVisualizer.at(i)->transform->scale(sceneWidth / numHarmonics / 2.f, (fftDataL[i]) / 10.f, 1, false);
@@ -338,10 +343,14 @@ void LD32_Scene::update(Step * _step){
 			LD32_ResourceManager::music->sounds.at("bgm").player->GetPlayerVolume(&p1, &p2);
 			if(p1 > 75){
 				LD32_ResourceManager::music->sounds.at("bgm").player->SetPlayerVolume(p1-1, p2-1);
+			}else if(p1 < 75){
+				LD32_ResourceManager::music->sounds.at("bgm").player->SetPlayerVolume(p1+1, p2+1);
 			}
 			LD32_ResourceManager::music->sounds.at("bgm4").player->GetPlayerVolume(&p1, &p2);
 			if(p1 > 50){
 				LD32_ResourceManager::music->sounds.at("bgm4").player->SetPlayerVolume(p1-1, p2-1);
+			}else if(p1 < 50){
+				LD32_ResourceManager::music->sounds.at("bgm4").player->SetPlayerVolume(p1+1, p2+1);
 			}
 		}
 

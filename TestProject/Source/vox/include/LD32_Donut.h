@@ -13,10 +13,15 @@ public:
 	
 	MeshEntity * bot;
 
+	bool justHit;
+	float lastHit;
+
 	LD32_Donut(Box2DWorld * _world);
 	~LD32_Donut();
+
+	void hit();
 	
-	void update(Step * _step);
+	void update(Step * _step) override;
 	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	void setShader(Shader * _shader, bool _def) override;
 };

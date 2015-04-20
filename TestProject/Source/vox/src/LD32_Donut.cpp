@@ -8,11 +8,13 @@
 #include <Resource.h>
 #include <MeshInterface.h>
 #include <Material.h>
+#include <Easing.h>
 
 MeshInterface * LD32_Donut::donutTopMesh = nullptr;
 MeshInterface * LD32_Donut::donutBotMesh = nullptr;
 Material * LD32_Donut::donutMat = new Material(15.f, glm::vec3(1,1,1), true);
-	
+
+
 LD32_Donut::LD32_Donut(Box2DWorld * _world) :
 	Box2DMeshEntity(_world, nullptr, b2_staticBody, false, nullptr, transform),
 	NodeChild(nullptr),
@@ -46,9 +48,19 @@ LD32_Donut::LD32_Donut(Box2DWorld * _world) :
 	f->SetUserData(this);
 	f->SetFilterData(sf);
 	body->SetUserData(this);
+	body->SetTransform(body->GetPosition(), vox::NumberUtils::randomFloat(0, 6.28));
 }
 
 void LD32_Donut::update(Step * _step){
+	if(justHit){
+		lastHit = _step->time;
+		justHit = false;
+	}
+
+	float size = Easing::easeOutElastic(std::min(1.0, _step->time - lastHit), 2.5f, -1.5, 1);
+	transform->scale(size, size, size, false);
+
+
 	Box2DMeshEntity::update(_step);
 }
 
@@ -64,4 +76,8 @@ void LD32_Donut::setShader(Shader * _shader, bool _def){
 }
 
 LD32_Donut::~LD32_Donut(){
+}
+
+void LD32_Donut::hit(){
+	justHit = true;
 }

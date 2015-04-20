@@ -12,6 +12,8 @@ class Box2DDebugDraw;
 class Box2DMeshEntity;
 class MeshEntity;
 
+class ShaderComponentHsv;
+
 class Shader;
 class RenderSurface;
 class StandardFrameBuffer;
@@ -25,6 +27,7 @@ class LD32_Player;
 class LD32_Scene : public Scene{
 public:
 	BaseComponentShader * shader;
+	ShaderComponentHsv * hsvComponent;
 	MousePerspectiveCamera * mouseCam;
 	MousePerspectiveCamera * debugCam;
 	FollowCamera * gameCam;
