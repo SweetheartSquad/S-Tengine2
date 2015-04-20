@@ -131,7 +131,6 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	{
 	Box2DMeshEntity * m = new Box2DMeshEntity(world, MeshFactory::getCubeMesh(), b2_dynamicBody, false);
 	m->transform->scale(0.25f, 0.25f, 1.f);
-	m->transform->translate(15,0,0);
 	m->mesh->pushMaterial(phongMat);
 	m->mesh->dirty = true;
 	world->addToWorld(m);
@@ -140,6 +139,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	m->setShader(shader, true);
 	addChild(m);
 	gameCam->addTarget(player, 1);
+	m->setTranslationPhysical(sceneWidth/2.f, sceneHeight/2.f, 0, false);
 	
 	m->body->SetLinearDamping(5.f);
 	m->body->SetAngularDamping(5.f);
@@ -183,7 +183,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	}
 	
 	//intialize key light
-	PointLight * keyLight = new PointLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.1f, 0.25f);
+	PointLight * keyLight = new PointLight(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.f, 1.f, 1.f), 0.0f, 0.5f, 10.f);
 	//Set it as the key light so it casts shadows
 	//keyLight->isKeyLight = true;
 	//Add it to the scene
@@ -211,9 +211,9 @@ LD32_Scene::~LD32_Scene(){
 }
 
 void LD32_Scene::update(Step * _step){
-	clearColor[0] = 0.1f;
+	/*clearColor[0] = 0.1f;
 	clearColor[1] = 0.1f;
-	clearColor[2] = 0.1f;
+	clearColor[2] = 0.1f;*/
 
 	int fftDataL[numHarmonics];
 	int fftDataR[numHarmonics];
@@ -221,6 +221,7 @@ void LD32_Scene::update(Step * _step){
 	LD32_ResourceManager::music->sounds.at("bgm").player->GetFFTData(numFFTsamples, libZPlay::TFFTWindow::fwBlackmanNuttall, nullptr, nullptr, fftDataL, fftDataR, nullptr, nullptr);
 	
 	lights.at(0)->data.intensities = glm::vec3(fftDataL[10]/100.f, 0.5f, fftDataR[10]/100.f);
+	lights.at(0)->data.cutoff = fftDataL[2]/5.f;
 	//lights.at(0)->transform->translate(-mouseCam->forwardVectorRotated, false);
 
 	for(int i = 0; i < numHarmonics; ++i){
@@ -229,8 +230,8 @@ void LD32_Scene::update(Step * _step){
 		audioVisualizer.at(i+numHarmonics)->transform->scale(sceneWidth / numHarmonics / 2.f, -(fftDataR[i]) / 10.f, 1, false);
 	}
 	
-	shader->components.at(0)->makeDirty();
-	shader->components.at(1)->makeDirty();
+	//shader->components.at(0)->makeDirty();
+	//shader->components.at(1)->makeDirty();
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();

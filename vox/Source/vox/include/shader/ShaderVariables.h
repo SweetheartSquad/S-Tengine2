@@ -113,11 +113,34 @@ const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGH
 														"	vec3 position;\n"
 														"	vec3 intensities;\n"
 														"	float ambientCoefficient;\n"
-														"	float attenuation;"
+														"	float attenuation;\n"
+														"	float cutoff;\n"
 														"};\n"
 														"uniform Light " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[" + std::to_string(MAX_LIGHTS) + "]" + SEMI_ENDL +
 														"uniform int " + GL_UNIFORM_ID_NUM_LIGHTS + SEMI_ENDL +
 														"#endif\n";
+
+// calculates the surfaceToLight vector and attenuation coefficient for lights[i]
+const std::string SHADER_LIGHT_DISTANCE_AND_ATTENUATION = 
+			"if(lights[i].type == 1){" + ENDL +
+				TAB +"//DIRECTIONAL" + ENDL +
+				TAB +"surfaceToLight = normalize(lights[i].position)" + SEMI_ENDL +
+				TAB +"attenuation = lights[i].attenuation" + SEMI_ENDL +
+			"} else {" + ENDL +	
+				TAB + "//POINT" + ENDL +
+				TAB + "surfaceToLight = normalize(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
+				TAB + "//attenuation" + ENDL +
+				TAB + "float distanceToLight = length(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
+				TAB + "if(lights[i].cutoff > 0){" + ENDL +
+				TAB + TAB + "distanceToLight = min(distanceToLight, lights[i].cutoff)" + SEMI_ENDL +
+				TAB + TAB + "attenuation = 1.0 - distanceToLight / lights[i].cutoff" + SEMI_ENDL +
+				TAB + TAB + "attenuation = pow(lights[i].attenuation * attenuation, 2)" + SEMI_ENDL +
+				TAB + "}else{" + ENDL +
+				TAB + TAB + "attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2))" + SEMI_ENDL +
+				//TAB + TAB + "attenuation = (attenuation - lights[i].cutoff) / (1 - lights[i].cutoff)" + SEMI_ENDL +
+				//TAB + TAB + "attenuation = max(attenuation, 0)" + SEMI_ENDL +
+				TAB + "}" + ENDL +
+			"}";
 
 const std::string SHADER_INCLUDE_MATERIAL			  = "#ifndef " + SHADER_COMPONENT_MATERIAL + "\n"
 														"#define " + SHADER_COMPONENT_MATERIAL + "\n"

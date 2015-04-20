@@ -17,7 +17,7 @@ class RenderSurface;
 class StandardFrameBuffer;
 class Material;
 
-#define numFFTsamples (256)
+#define numFFTsamples (32)
 #define numHarmonics (numFFTsamples / 2 + 1)
 
 class LD32_Scene : public Scene{

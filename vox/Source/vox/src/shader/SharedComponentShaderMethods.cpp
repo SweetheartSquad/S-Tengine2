@@ -8,6 +8,7 @@
 #include "MeshInterface.h"
 #include "Material.h"
 #include "Transform.h"
+
 void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStack, RenderOptions * _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 	if(mesh != nullptr){
@@ -36,6 +37,7 @@ void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStac
 				std::string ins = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_INTENSITIES, i);
 				std::string amb = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].ambientCoefficient", i);
 				std::string att = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].attenuation", i);
+				std::string cut = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].cutoff", i);
 				GLuint typeUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), typ.c_str());
 				glUniform1i(typeUniformLocation, static_cast<int>(l->data.type));
 				GLuint positionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), pos.c_str());
@@ -46,6 +48,8 @@ void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStac
 				glUniform1f(ambientUniformLocation, l->data.ambientCoefficient);
 				GLuint attenuationUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), att.c_str());
 				glUniform1f(attenuationUniformLocation, l->data.attenuation);
+				GLuint cutoffUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), cut.c_str());
+				glUniform1f(cutoffUniformLocation, l->data.cutoff);
 				l->dirty = false;
 			}
 		}

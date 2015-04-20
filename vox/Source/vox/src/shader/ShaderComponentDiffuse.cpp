@@ -42,18 +42,7 @@ std::string ShaderComponentDiffuse::getFragmentBodyString(){
 
 		"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_LIGHTS + "; i++){" + ENDL +
 			
-			"if(lights[i].type == 1){" + ENDL +
-				"//DIRECTIONAL" + ENDL +
-				"surfaceToLight = normalize(lights[i].position)" + SEMI_ENDL +
-				"attenuation = lights[i].attenuation" + SEMI_ENDL +
-			"} else {" + ENDL +	
-				"//POINT" + ENDL +
-				"surfaceToLight = normalize(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
-				"//attenuation" + ENDL +
-				"float distanceToLight = length(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
-				"attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2))" + SEMI_ENDL +
-			"}" + ENDL +
-
+			SHADER_LIGHT_DISTANCE_AND_ATTENUATION +
 
 			"vec3 ambient = vec3(lights[i].ambientCoefficient) * modFrag.rgb * lights[i].intensities" + SEMI_ENDL +
 			"//diffuse" + ENDL +
@@ -87,6 +76,10 @@ std::string ShaderComponentDiffuse::getOutColorMod(){
 		GL_OUT_OUT_COLOR + " *= vec4(outDiffuse, 1)" + SEMI_ENDL +
 		END_IF + ENDL + 
 		END_IF + ENDL;
+}
+
+void ShaderComponentDiffuse::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+	configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 }
 
 void ShaderComponentDiffuse::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){

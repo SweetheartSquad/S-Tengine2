@@ -12,4 +12,5 @@ public:
 	std::string getFragmentBodyString() override;
 	std::string getOutColorMod() override;
 	void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
+	void clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 };

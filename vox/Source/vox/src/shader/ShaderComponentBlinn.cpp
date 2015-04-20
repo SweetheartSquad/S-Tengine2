@@ -43,17 +43,8 @@ std::string ShaderComponentBlinn::getFragmentBodyString(){
 
 	"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_LIGHTS + "; i++){" + ENDL +
 		"for(int j = 0; j < " + GL_UNIFORM_ID_NUM_MATERIALS + "; j++){" + ENDL +
-			"if(lights[i].type == 1){" + ENDL +
-				"//DIRECTIONAL" + ENDL +
-				"surfaceToLight = normalize(lights[i].position)" + SEMI_ENDL +
-				"attenuation = lights[i].attenuation" + SEMI_ENDL +
-			"} else {" + ENDL +	
-				"//POINT" + ENDL +
-				"surfaceToLight = normalize(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
-				"//attenuation" + ENDL +
-				"float distanceToLight = length(lights[i].position - fragWorldPosition)" + SEMI_ENDL +
-				"attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2))" + SEMI_ENDL +
-			"}" + ENDL +
+			
+			SHADER_LIGHT_DISTANCE_AND_ATTENUATION +
 
 			TAB + TAB + VAR_VEC3 + " ambient = lights[i].ambientCoefficient * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 			

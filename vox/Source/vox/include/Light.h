@@ -14,8 +14,9 @@ struct LightData {
 	glm::vec3 intensities;
 	float ambientCoefficient;
 	float attenuation;
+	float cutoff;
 	
-	LightData(LightType _type, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation);
+	LightData(LightType _type, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff);
 	
 	bool operator==(const LightData &other) const;
 	bool operator!=(const LightData &other) const;
@@ -31,7 +32,7 @@ struct LightData {
 class Light abstract : public ShiftKiddie{
 public:
 
-	explicit Light(LightType _type, glm::vec3 _position, glm::vec3 intensities, float ambientCoefficient, float attenuation, Transform * _transform = nullptr);
+	explicit Light(LightType _type, glm::vec3 _position, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff, Transform * _transform = nullptr);
 	~Light();
 
 	/**
