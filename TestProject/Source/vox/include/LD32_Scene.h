@@ -13,6 +13,7 @@ class Box2DMeshEntity;
 class MeshEntity;
 
 class ShaderComponentHsv;
+class LD32_Monster;
 
 class Shader;
 class RenderSurface;
@@ -35,6 +36,7 @@ public:
 	Box2DWorld * world;
 	Box2DDebugDraw * drawer;
 	LD32_Player * player;
+	LD32_Monster * monster;
 	
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;

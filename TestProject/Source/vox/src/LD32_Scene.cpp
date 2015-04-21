@@ -185,6 +185,19 @@ LD32_Scene::LD32_Scene(Game * _game) :
 		addChild(m);
 		audioVisualizer.push_back(m);
 	}
+
+	for(float i = 1; i < sceneHeight-1; i += 6){
+		{LD32_Donut * donut = new LD32_Donut(world);
+		donut->setTranslationPhysical(sceneWidth/2.f + (i+3)/sceneHeight*sceneWidth/2.f + (fmod(i+13, 15)+1), i, 0);
+		donut->setShaderOnChildren(shader);
+		addChild(donut);}
+
+		{LD32_Donut * donut = new LD32_Donut(world);
+		donut->setTranslationPhysical(sceneWidth/2.f - (i+3)/sceneHeight*sceneWidth/2.f - (fmod(i+13, 15)+1), i, 0);
+		donut->setShaderOnChildren(shader);
+		addChild(donut);}
+	}
+
 	
 	//intialize key light
 	PointLight * keyLight = new PointLight(glm::vec3(0.0f, 0.0f, 2.0f), glm::vec3(1.f, 1.f, 1.f), 0.00f, -0.01f, -10.f);
@@ -201,7 +214,7 @@ LD32_Scene::LD32_Scene(Game * _game) :
 	LD32_ContactListener * cl = new LD32_ContactListener(this);
 	world->b2world->SetContactListener(cl);
 
-	LD32_Monster * monster = new LD32_Monster(world);
+	monster = new LD32_Monster(world);
 	monster->setShader(shader, true);
 	monster->transform->rotate(90, 1.f, 0.f, 0.f, kOBJECT);
 	monster->setTranslationPhysical(sceneWidth * 0.5, sceneHeight * 0.5, 1.f, false);
@@ -362,14 +375,14 @@ void LD32_Scene::update(Step * _step){
 		}
 
 		
-		if (keyboard->keyJustDown(GLFW_KEY_G)){
+		/*if (keyboard->keyJustDown(GLFW_KEY_G)){
 			LD32_Donut * donut = new LD32_Donut(world);
 			donut->setTranslationPhysical(player->getPos(false));
 			donut->setTranslationPhysical(vox::NumberUtils::randomFloat(-10, 10), vox::NumberUtils::randomFloat(-10, 10), 0, true);
 			donut->applyLinearImpulse(vox::NumberUtils::randomFloat(-150, 150), vox::NumberUtils::randomFloat(-150, 150), donut->getPos(false).x, donut->getPos(false).y);
 			donut->setShaderOnChildren(shader); // <- this is the problem?
 			addChild(donut);
-		}
+		}*/
 		if (keyboard->keyJustDown(GLFW_KEY_E)){
 			LD32_Enemy * enemy = new LD32_Enemy(world);
 			enemy->setTranslationPhysical(player->getPos(false));
@@ -387,6 +400,10 @@ void LD32_Scene::update(Step * _step){
 			//addChild(donut);
 		}
 	}
+
+	b2Vec2 dir = player->body->GetPosition() - monster->body->GetPosition();
+	//monster->transform->setOrientation(glm::quat(glm::angleAxis(atan2(dir.y, dir.x), glm::vec3(0, 0, 1))));
+	monster->body->SetTransform(monster->body->GetPosition(), atan2(dir.y, dir.x)); 
 
 
 	// debug controls

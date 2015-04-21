@@ -27,7 +27,11 @@ LD32_Monster::LD32_Monster(Box2DWorld * _world) :
 }
 
 void LD32_Monster::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	glm::quat t = transform->getOrientationQuat();
+	transform->rotate(-90, 1, 0, 0, kWORLD);
+	transform->rotate(90, 0, 0, 1, kWORLD);
 	Box2DMeshEntity::render(_matrixStack, _renderOptions);
+	transform->setOrientation(t);
 }
 
 void LD32_Monster::setShader(Shader * _shader, bool _def){
