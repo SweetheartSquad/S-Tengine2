@@ -14,6 +14,7 @@ class MeshEntity;
 
 class ShaderComponentHsv;
 class LD32_Monster;
+class LD32_Enemy;
 
 class Shader;
 class RenderSurface;
@@ -37,6 +38,7 @@ public:
 	Box2DDebugDraw * drawer;
 	LD32_Player * player;
 	LD32_Monster * monster;
+	std::vector<LD32_Enemy *> enemies;
 	
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;

@@ -7,7 +7,9 @@ class Material;
 
 class LD32_Monster : public Box2DMeshEntity{
 public:
+	float spawnEnemy;
 	
+
 	LD32_Monster(Box2DWorld * _world);
 	~LD32_Monster();
 	

@@ -1,6 +1,7 @@
 #include <LD32_ContactListener.h>
 #include <LD32_Scene.h>
 #include <LD32_Game.h>
+#include <LD32_Enemy.h>
 #include <LD32_ResourceManager.h>
 #include <LD32_Player.h>
 #include <LD32_Donut.h>
@@ -124,6 +125,7 @@ void LD32_ContactListener::playerBoundaryContact(b2Contact * _contact, b2Fixture
 }
 void LD32_ContactListener::playerEnemyContact(b2Contact* b2_contact, b2Fixture * _playerFixture, b2Fixture * _enemyFixture){
 	LD32_Player * player = static_cast<LD32_Player*>(_playerFixture->GetUserData());
+	LD32_Enemy * enemy = static_cast<LD32_Enemy*>(_enemyFixture->GetUserData());
 	if (player != nullptr) {
 		++player->hits;
 		if(player->hits > 3){
@@ -132,6 +134,9 @@ void LD32_ContactListener::playerEnemyContact(b2Contact* b2_contact, b2Fixture *
 		}else{
 			LD32_ResourceManager::enemySfx->playRandomSound();
 		}
+	}
+	if(enemy != nullptr){
+		enemy->heDed = true;
 	}
 }
 void LD32_ContactListener::playerDeadZoneContact(b2Contact* b2_contact, b2Fixture* _playerFixture, b2Fixture* _deadZoneFixture){

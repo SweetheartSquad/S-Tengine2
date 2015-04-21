@@ -30,6 +30,7 @@ void LD32_ResourceManager::init(){
 	resources.push_back(sfx);
 	
 	miscSounds->addNewSound("start", "../assets/SF1.ogg");
+	miscSounds->addNewSound("spawn", "../assets/SF1.ogg");
 	miscSounds->addNewSound("death", "../assets/death.ogg");
 	miscSounds->addNewSound("win", "../assets/death.ogg");
 	resources.push_back(miscSounds);

@@ -12,10 +12,12 @@
 LD32_Monster::LD32_Monster(Box2DWorld * _world) :
 	Box2DMeshEntity(_world, Resource::loadMeshFromObj("../assets/monster1.vox"), b2_staticBody, false, nullptr, transform),
 	NodeChild(nullptr),
-	NodeTransformable(new Transform())
+	NodeTransformable(new Transform()),
+	spawnEnemy(0)
 {
 	b2Filter sf;
 	sf.categoryBits = LD32_Game::kMONSTER;
+	sf.maskBits = LD32_Game::kPLAYER;
 	mesh->pushMaterial(new Material(15.f, glm::vec3(1,1,1), true));
 
 	world->addToWorld(this);

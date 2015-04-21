@@ -10,7 +10,8 @@
 LD32_Enemy::LD32_Enemy(Box2DWorld * _world) :
 	Box2DMeshEntity(_world, nullptr, b2_dynamicBody, false, nullptr, transform),
 	NodeChild(nullptr),
-	NodeTransformable(new Transform())
+	NodeTransformable(new Transform()),
+	heDed(false)
 {
 	b2Filter sf;
 	sf.categoryBits = LD32_Game::kENEMY;

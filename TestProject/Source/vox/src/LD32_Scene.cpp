@@ -249,7 +249,7 @@ void LD32_Scene::update(Step * _step){
 	
 	lights.at(0)->data.intensities = glm::vec3(fftDataL[1]/200.f, fftDataL[2]/200.f, fftDataR[1]/200.f) + glm::vec3(0.5f, 0.5f, 0.5f);
 	//lights.at(0)->data.cutoff = fftDataL[2]/5.f;
-	lights.at(0)->data.attenuation = -0.005f + fftDataL[1] / 50000.f;
+	lights.at(0)->data.attenuation = (-0.005f + fftDataL[1] / 50000.f) * (player->hits+1);
 	//lights.at(0)->transform->translate(-mouseCam->forwardVectorRotated, false);
 	
 	hsvComponent->setValue((fftDataL[1] + fftDataR[1]) / 100.f);
@@ -374,37 +374,34 @@ void LD32_Scene::update(Step * _step){
 			}
 		}
 
-		
-		/*if (keyboard->keyJustDown(GLFW_KEY_G)){
-			LD32_Donut * donut = new LD32_Donut(world);
-			donut->setTranslationPhysical(player->getPos(false));
-			donut->setTranslationPhysical(vox::NumberUtils::randomFloat(-10, 10), vox::NumberUtils::randomFloat(-10, 10), 0, true);
-			donut->applyLinearImpulse(vox::NumberUtils::randomFloat(-150, 150), vox::NumberUtils::randomFloat(-150, 150), donut->getPos(false).x, donut->getPos(false).y);
-			donut->setShaderOnChildren(shader); // <- this is the problem?
-			addChild(donut);
-		}*/
-		if (keyboard->keyJustDown(GLFW_KEY_E)){
-			LD32_Enemy * enemy = new LD32_Enemy(world);
-			enemy->setTranslationPhysical(player->getPos(false));
-			enemy->setTranslationPhysical(vox::NumberUtils::randomFloat(-10, 10), vox::NumberUtils::randomFloat(-10, 10), 0, true);
-			enemy->applyLinearImpulse(vox::NumberUtils::randomFloat(-150, 150), vox::NumberUtils::randomFloat(-150, 150), enemy->getPos(false).x, enemy->getPos(false).y);
-			enemy->setShaderOnChildren(shader); // <- this is the problem?
-			addChild(enemy);
-		}
-		if (keyboard->keyJustDown(GLFW_KEY_H)){
-			LD32_Donut * donut = new LD32_Donut(world);
-			//donut->setShaderOnChildren(shader);
-			//donut->setTranslationPhysical(player->getPos(false));
-			//donut->setTranslationPhysical(vox::NumberUtils::randomFloat(-10, 10), vox::NumberUtils::randomFloat(-10, 10), 0, true);
-			//donut->applyLinearImpulse(vox::NumberUtils::randomFloat(-150, 150), vox::NumberUtils::randomFloat(-150, 150), donut->getPos(false).x, donut->getPos(false).y);
-			//addChild(donut);
-		}
 	}
 
 	b2Vec2 dir = player->body->GetPosition() - monster->body->GetPosition();
 	//monster->transform->setOrientation(glm::quat(glm::angleAxis(atan2(dir.y, dir.x), glm::vec3(0, 0, 1))));
 	monster->body->SetTransform(monster->body->GetPosition(), atan2(dir.y, dir.x)); 
 
+
+	if(monster->spawnEnemy > 10){
+		LD32_Enemy * enemy = new LD32_Enemy(world);
+		enemy->setTranslationPhysical(monster->getPos(false));
+		//enemy->setTranslationPhysical(dir.x*3, dir.y*3, 0, true);
+		enemy->applyLinearImpulse(dir.x*10, dir.y*10, enemy->getPos(false).x, enemy->getPos(false).y);
+		enemy->setShaderOnChildren(shader); // <- this is the problem?
+		addChild(enemy);
+		enemies.push_back(enemy);
+		LD32_ResourceManager::miscSounds->play("spawn");
+		monster->spawnEnemy = 0;
+	}else{
+		monster->spawnEnemy += _step->deltaTime;
+	}
+
+	for(signed long int i = enemies.size()-1; i > 0; --i){
+		if(enemies.at(i)->heDed){
+			removeChild(enemies.at(i));
+			delete enemies.at(i);
+			enemies.erase(enemies.begin() + i);
+		}
+	}
 
 	// debug controls
 	if(keyboard->keyJustDown(GLFW_KEY_1)){
