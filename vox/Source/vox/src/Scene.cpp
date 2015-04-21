@@ -52,13 +52,19 @@ Scene::~Scene(void){
 		lights.pop_back();
 	}
 	
+	std::cout << "test1";
 	delete matrixStack;
+	std::cout << "test2";
 	delete renderOptions;
+	std::cout << "test3";
 	depthBuffer->safeDelete();
+	std::cout << "test4";
 	shadowBuffer->safeDelete();
+	std::cout << "test5";
 	depthShader->safeDelete();
+	std::cout << "test6";
 	delete shadowSurface;
-	shadowShader->safeDelete();
+	std::cout << "test7";
 }
 
 void Scene::update(Step * _step){

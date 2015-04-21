@@ -233,7 +233,7 @@ LD32_Scene::~LD32_Scene(){
 	delete world;
 
 	delete screenSurface;
-	screenSurfaceShader->safeDelete();
+	//screenSurfaceShader->safeDelete();
 	screenFBO->safeDelete();
 }
 
