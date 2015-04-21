@@ -186,14 +186,14 @@ LD32_Scene::LD32_Scene(Game * _game) :
 		audioVisualizer.push_back(m);
 	}
 
-	for(float i = 1; i < sceneHeight-1; i += 6){
+	for(float i = 1; i < sceneHeight-10; i += 6){
 		{LD32_Donut * donut = new LD32_Donut(world);
-		donut->setTranslationPhysical(sceneWidth/2.f + (i+3)/sceneHeight*sceneWidth/2.f + (fmod(i+13, 15)+1), i, 0);
+		donut->setTranslationPhysical(sceneWidth/2.f + (i+3)/sceneHeight*sceneWidth/2.f + (fmod(i+13, 15)+1), i+1, 0);
 		donut->setShaderOnChildren(shader);
 		addChild(donut);}
 
 		{LD32_Donut * donut = new LD32_Donut(world);
-		donut->setTranslationPhysical(sceneWidth/2.f - (i+3)/sceneHeight*sceneWidth/2.f - (fmod(i+13, 15)+1), i, 0);
+		donut->setTranslationPhysical(sceneWidth/2.f - (i+3)/sceneHeight*sceneWidth/2.f - (fmod(i+13, 15)+1), i+1, 0);
 		donut->setShaderOnChildren(shader);
 		addChild(donut);}
 	}
