@@ -126,17 +126,19 @@ void LD32_ContactListener::playerBoundaryContact(b2Contact * _contact, b2Fixture
 void LD32_ContactListener::playerEnemyContact(b2Contact* b2_contact, b2Fixture * _playerFixture, b2Fixture * _enemyFixture){
 	LD32_Player * player = static_cast<LD32_Player*>(_playerFixture->GetUserData());
 	LD32_Enemy * enemy = static_cast<LD32_Enemy*>(_enemyFixture->GetUserData());
-	if (player != nullptr) {
-		++player->hits;
-		if(player->hits > 3){
-			player->deathPending = true;
-			LD32_ResourceManager::miscSounds->play("death");
-		}else{
-			LD32_ResourceManager::enemySfx->playRandomSound();
-		}
-	}
 	if(enemy != nullptr){
-		enemy->heDed = true;
+		if(!enemy->heDed){
+			if (player != nullptr) {
+				++player->hits;
+				if(player->hits > 3){
+					player->deathPending = true;
+					LD32_ResourceManager::miscSounds->play("death");
+				}else{
+					LD32_ResourceManager::enemySfx->playRandomSound();
+				}
+			}
+			enemy->heDed = true;
+		}
 	}
 }
 void LD32_ContactListener::playerDeadZoneContact(b2Contact* b2_contact, b2Fixture* _playerFixture, b2Fixture* _deadZoneFixture){
