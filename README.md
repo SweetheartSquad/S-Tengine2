@@ -1,7 +1,4 @@
-﻿# Ludum Dare 32 #
-﻿Theme: An Unconventional Weapon
-
-<hr>
+#S-Tengine 2#
 
 # Engine Stuff:
 ```
