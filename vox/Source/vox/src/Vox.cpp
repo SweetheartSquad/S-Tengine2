@@ -97,7 +97,7 @@ void vox::initialize(std::string _title){
 	GLenum err = glewInit();
 	if (GLEW_OK != err){
 		/* Problem: glewInit failed, something is seriously wrong. */
-		fprintf(stderr, "\tERROR: %s\n", glewGetErrorString(err));
+		fprintf(stderr, "\tERROR: %p\n", glewGetErrorString(err));
 	}
 
 	int screenHeight;

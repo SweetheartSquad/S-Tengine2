@@ -6,9 +6,14 @@
 #include "node/NodeResource.h"
 #include "node/NodeLoadable.h"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_GLYPH_H
+
 class Texture : public virtual NodeResource{
 public:
 	Texture(std::string _src, unsigned long int _width, unsigned long int _height, bool _storeData, bool _autoRelease);
+	Texture(FT_Bitmap _glyph, bool _storeDate, bool _autoRelease); 
 	~Texture();
 
 	/**Source file location */

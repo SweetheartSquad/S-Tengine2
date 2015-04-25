@@ -18,6 +18,17 @@ Texture::Texture(std::string _src, unsigned long int _width, unsigned long int _
 
 }
 
+Texture::Texture(FT_Bitmap _glyph, bool _storeDate, bool _autoRelease):
+	NodeResource(_autoRelease),
+	width(_glyph.width),
+	height(_glyph.rows),
+	storeData(_storeDate),
+	data(_glyph.buffer),
+	channels(new int(4))
+{
+
+}
+
 Texture::~Texture(){
 	delete channels;
 	delete data;
@@ -49,11 +60,11 @@ void Texture::load(){
 		if(*channels == 3){
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, tempData);
 		}else if(*channels == 4){
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tempData);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, tempData);
 		}else{
 			throw "Invalid number of image channels";
 		}
-		glGenerateMipmap(GL_TEXTURE_2D);
+		//glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	
 	NodeLoadable::load();
