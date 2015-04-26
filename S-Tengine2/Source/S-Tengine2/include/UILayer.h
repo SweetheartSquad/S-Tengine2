@@ -12,4 +12,6 @@ public:
 	UILayer();
 	~UILayer();
 	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+
+	bool addChild(NodeChild * _child) override;
 };
