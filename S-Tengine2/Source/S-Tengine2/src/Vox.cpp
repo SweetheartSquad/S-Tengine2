@@ -56,6 +56,7 @@ void vox::initWindow(GLFWwindow * _w){
 		glfwSetKeyCallback(_w, keyCallback);
 		glfwSetMouseButtonCallback(_w, mouseButtonCallback);
 		glfwSetCursorPosCallback(_w, mousePostionCallback);
+		glfwSetInputMode(_w, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 }
 
@@ -99,12 +100,6 @@ void vox::initialize(std::string _title){
 		/* Problem: glewInit failed, something is seriously wrong. */
 		fprintf(stderr, "\tERROR: %s\n", glewGetErrorString(err));
 	}
-
-	int screenHeight;
-	int screenWidth;
-
-	glfwGetWindowSize(window, &screenWidth, &screenHeight);
-	glfwSetCursorPos(window, screenWidth/2, screenHeight/2);
 }
 
 void vox::destruct(){

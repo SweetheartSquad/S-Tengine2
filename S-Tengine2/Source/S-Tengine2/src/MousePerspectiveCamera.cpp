@@ -30,15 +30,15 @@ void MousePerspectiveCamera::update(Step* _step){
 	double offsetX = 0.;
 	double offsetY = 0.;
 
-	if(abs(centerX - mouse->mouseX()) > 0.01){
-		offsetX = centerX - mouse->mouseX();
+	if(abs(- (mouse->mouseX(false) - lastMouseX)) > 0.01){
+		offsetX = - (mouse->mouseX(false) - lastMouseX);
 	}
-	if(abs(centerY - mouse->mouseY()) > 0.01){
-		offsetY = centerY - mouse->mouseY();
+	if(abs(- (mouse->mouseY(false) - lastMouseY)) > 0.01){
+		offsetY = - (mouse->mouseY(false) - lastMouseY);
 	}
 
-	double deltaX = lastMouseX - offsetX;
-	double deltaY = lastMouseY - offsetY;
+	double deltaX = - offsetX;
+	double deltaY = - offsetY;
 
 	if(deltaX != 0){
 		pitch += (mouseSpeed * static_cast<float>(offsetY));
@@ -48,8 +48,8 @@ void MousePerspectiveCamera::update(Step* _step){
 
 	PerspectiveCamera::update(_step);
 
-	glfwSetCursorPos(vox::currentContext, centerX, centerY);
+	//glfwSetCursorPos(vox::currentContext, centerX, centerY);
 
-	lastMouseX = offsetX;
-	lastMouseY = offsetY;
+	lastMouseX = mouse->mouseX(false);
+	lastMouseY = mouse->mouseY(false);
 }

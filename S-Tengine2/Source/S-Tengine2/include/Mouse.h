@@ -58,18 +58,22 @@ public:
 	bool rightDown();
 
 	/**
-	* Returns the mouse's current X coordinate
+	* Returns the mouse's current X coordinate. If _clamped, the value will always be within the screen coordinates
 	*
 	* @return The mouse's X coordinate
 	*/
-	double mouseX();
+	double mouseX(bool _clamped = true);
+	// Sets mouse's X coordinate
+	void mouseX(double _x);
 
 	/**
-	* Returns the mouse's current Y coordinate
+	* Returns the mouse's current Y coordinate. If _clamped, the value will always be within the screen coordinates
 	*
 	* @return The mouse's Y coordinate
 	*/
-	double mouseY();
+	double mouseY(bool _clamped = true);
+	// Sets mouse's Y coordinate
+	void mouseY(double _y);
 
 	/**
 	* Clears the maps of justPressed and justReleased buttons
@@ -122,4 +126,7 @@ private:
 	double x;
 	/** The mouse's current Y coordinate */
 	double y;
+	
+	double clampedX;
+	double clampedY;
 };

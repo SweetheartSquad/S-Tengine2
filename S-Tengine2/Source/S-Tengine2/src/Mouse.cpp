@@ -1,8 +1,15 @@
-#include "Mouse.h"
+#pragma once
+
+#include <Mouse.h>
+
+#include <System.h>
+#include <algorithm>
 
 Mouse::Mouse():
 	x(NULL),
-	y(NULL)
+	y(NULL),
+	clampedX(NULL),
+	clampedY(NULL)
 {
 }
 
@@ -33,12 +40,18 @@ bool Mouse::rightDown(){
 	return pressedButtons.find(GLFW_MOUSE_BUTTON_RIGHT) != pressedButtons.end();
 }
 
-double Mouse::mouseX(){
-	return x;
+double Mouse::mouseX(bool _clamped){
+	return _clamped ? clampedX : x;
+}
+void Mouse::mouseX(double _x){
+	
 }
 
-double Mouse::mouseY(){
-	return y;
+double Mouse::mouseY(bool _clamped){
+	return _clamped ? clampedY : y;
+}
+void Mouse::mouseY(double _y){
+	
 }
 
 void Mouse::update(){
@@ -64,8 +77,12 @@ void Mouse::mouseUpListener(int _glfwMouseCode){
 }
 
 void Mouse::mousePositionListener(double _x, double _y){
-	this->x = _x;
-	this->y = _y;
+	glm::uvec2 sd = vox::getScreenDimensions();
+	clampedX = std::max(0., std::min(clampedX + _x - x, (double)sd.x));
+	clampedY = std::max(0., std::min(clampedY + _y - y, (double)sd.y));
+
+	x = _x;
+	y = _y;
 }
 
 Mouse& Mouse::getInstance(){
