@@ -43,15 +43,14 @@ bool Mouse::rightDown(){
 double Mouse::mouseX(bool _clamped){
 	return _clamped ? clampedX : x;
 }
-void Mouse::mouseX(double _x){
-	
-}
 
 double Mouse::mouseY(bool _clamped){
 	return _clamped ? clampedY : y;
 }
-void Mouse::mouseY(double _y){
-	
+
+void Mouse::translate(glm::vec2 _v){
+	glfwSetCursorPos(vox::currentContext, x+_v.x, y+_v.y);
+	mousePositionListener(x+_v.x, y+_v.y);
 }
 
 void Mouse::update(){
@@ -87,7 +86,7 @@ void Mouse::mousePositionListener(double _x, double _y){
 
 Mouse& Mouse::getInstance(){
 	static Mouse *mouse;
-	if(mouse == 0){
+	if(mouse == nullptr){
 		mouse = new Mouse();
 	}
 	return *mouse;

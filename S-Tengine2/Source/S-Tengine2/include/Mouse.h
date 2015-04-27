@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <glm\glm.hpp>
 #include <GLFW/glfw3.h>
 #include <map>
 
@@ -63,8 +64,6 @@ public:
 	* @return The mouse's X coordinate
 	*/
 	double mouseX(bool _clamped = true);
-	// Sets mouse's X coordinate
-	void mouseX(double _x);
 
 	/**
 	* Returns the mouse's current Y coordinate. If _clamped, the value will always be within the screen coordinates
@@ -72,8 +71,8 @@ public:
 	* @return The mouse's Y coordinate
 	*/
 	double mouseY(bool _clamped = true);
-	// Sets mouse's Y coordinate
-	void mouseY(double _y);
+	
+	void translate(glm::vec2 _v);
 
 	/**
 	* Clears the maps of justPressed and justReleased buttons
