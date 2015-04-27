@@ -9,7 +9,9 @@ class JoystickManager : public NodeUpdatable{
 public:
 	Joystick * joysticks[GLFW_JOYSTICK_LAST];
 
-	JoystickManager();
+	float deadZone;
+
+	JoystickManager(float _deadZone = 0.25f);
 	~JoystickManager();
 
 	void update(Step * _step) override;

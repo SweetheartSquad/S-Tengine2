@@ -2,7 +2,9 @@
 
 #include <JoystickManager.h>
 
-JoystickManager::JoystickManager(){
+JoystickManager::JoystickManager(float _deadZone) :
+	deadZone(_deadZone)
+{
 	for(unsigned long int i = 0; i < GLFW_JOYSTICK_LAST; ++i){
 		joysticks[i] = nullptr;
 	}
@@ -21,7 +23,7 @@ void JoystickManager::update(Step * _step){
 		// handle connections
 		if(glfwJoystickPresent(i)){
 			if(joysticks[i] == nullptr){
-				joysticks[i] = new Joystick(i);
+				joysticks[i] = new Joystick(i, deadZone);
 			}
 		}else{
 			if(joysticks[i] != nullptr){

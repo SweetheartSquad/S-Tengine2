@@ -39,6 +39,8 @@ public:
 		kRY
 	};
 
+	float deadZone;
+
 	int id;
 	std::string name;
 
@@ -67,6 +69,7 @@ public:
 	bool buttonJustDown(int _code);
 
 	// Returns the value of the given axis
+	// If the absolute value is less than the deadZone, returns 0
 	// If the axis doesn't exist, returns 0
 	float getAxis(int _code);
 
@@ -90,7 +93,7 @@ public:
 	void buttonUpListener(int _code);
 
 	/* _id is GLFW_JOYSTICK_1 through GLFW_JOYSTICK_LAST */
-	Joystick(int _id);
+	Joystick(int _id, float _deadZone = 0.25f);
 	~Joystick();
 private:
 

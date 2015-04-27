@@ -4,9 +4,10 @@
 
 #include <GLFW\glfw3.h>
 
-Joystick::Joystick(int _id) : 
+Joystick::Joystick(int _id, float _deadZone) : 
 	id(_id),
-	name("No controller found")
+	name("No controller found"),
+	deadZone(_deadZone)
 {
 	int present = glfwJoystickPresent(id);
 	if(present){
@@ -48,11 +49,7 @@ void Joystick::buttonUpListener(int _glfwKeyCode){
 
 float Joystick::getAxis(int _code){
 	auto res = axesValues.find(_code);
-	if (res != axesValues.end()){
-		return res->second;
-	}else{
-		return 0;
-	}
+	return (res != axesValues.end() && std::abs(res->second) > deadZone) ? res->second : 0;
 }
 
 void Joystick::update(Step * _step){
