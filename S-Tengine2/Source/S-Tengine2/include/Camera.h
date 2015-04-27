@@ -51,5 +51,5 @@ public:
 	*/
 	virtual glm::mat4 getProjectionMatrix() = 0;
 
-	virtual glm::vec2 worldToScreen(glm::vec3 _coords);
+	virtual glm::vec2 worldToScreen(glm::vec3 _coords, glm::uvec2 _screen);
 };
