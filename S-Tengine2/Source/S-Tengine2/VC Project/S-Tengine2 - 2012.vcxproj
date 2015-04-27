@@ -113,6 +113,7 @@
     <ClCompile Include="../src/TextureSampler.cpp" />
     <ClCompile Include="../src/Box.cpp" />
     <ClCompile Include="..\src\Joystick.cpp" />
+    <ClCompile Include="..\src\JoystickManager.cpp" />
     <ClCompile Include="..\src\UILayer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -230,6 +231,7 @@
     <ClInclude Include="../include/TextureSampler.h" />
     <ClInclude Include="../include/Box.h" />
     <ClInclude Include="..\include\Joystick.h" />
+    <ClInclude Include="..\include\JoystickManager.h" />
     <ClInclude Include="..\include\UILayer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

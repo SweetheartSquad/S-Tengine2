@@ -15,6 +15,10 @@ Joystick::Joystick(int _id) :
 }
 
 Joystick::~Joystick(){
+	pressedButtons.clear();
+	justPressedButtons.clear();
+	justReleasedButtons.clear();
+	axesValues.clear();
 }
 
 bool Joystick::buttonJustUp(int _glfwKeyCode){

@@ -91,8 +91,8 @@ public:
 
 	/* _id is GLFW_JOYSTICK_1 through GLFW_JOYSTICK_LAST */
 	Joystick(int _id);
-private:
 	~Joystick();
+private:
 
 	/** Map of buttons which are currently pressed down */
 	std::map<int, int> pressedButtons;
