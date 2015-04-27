@@ -87,6 +87,11 @@ public:
 	*/
 	void toggleFullScreen();
 
+	// whether the game will call resize on draw and fullscreen calls
+	bool autoResize;
+	// sets the viewport to match the current window size
+	void resize();
+
 	virtual void setViewport(float _x, float _y, float _width, float _height);
 	int viewPortX, viewPortY, viewPortWidth, viewPortHeight;
 	

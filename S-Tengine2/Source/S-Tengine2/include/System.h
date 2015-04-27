@@ -1,7 +1,6 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
-#include "Dimension.h"
 
 #include "Vox.h"
 
@@ -14,15 +13,15 @@ namespace vox{
 	/**
 	* @returns the width of the current context in pixels 
 	*/
-	int getScreenWidth();
+	unsigned long int getScreenWidth();
 	
 	/**
 	* @returns the height of the current context in pixels 
 	*/
-	int getScreenHeight();
+	unsigned long int getScreenHeight();
 	
 	/**
 	* @returns the width and height of the current context in pixels as a Dimension object 
 	*/
-	Dimension getScreenDimensions();
+	glm::uvec2 getScreenDimensions();
 };

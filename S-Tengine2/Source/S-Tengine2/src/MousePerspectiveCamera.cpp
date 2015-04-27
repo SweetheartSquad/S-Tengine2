@@ -12,9 +12,9 @@ MousePerspectiveCamera::MousePerspectiveCamera():
 	speed(0.1f),
 	mouseSpeed(0.05f)
 {
-	Dimension screenDimensions = vox::getScreenDimensions();
-	lastMouseY = screenDimensions.height/2;
-	lastMouseX = screenDimensions.width/2;
+	glm::vec2 screenDimensions = vox::getScreenDimensions();
+	lastMouseY = screenDimensions.y/2;
+	lastMouseX = screenDimensions.x/2;
 }
 
 MousePerspectiveCamera::~MousePerspectiveCamera(){
@@ -22,10 +22,10 @@ MousePerspectiveCamera::~MousePerspectiveCamera(){
 
 void MousePerspectiveCamera::update(Step* _step){
 
-	Dimension screenDimensions = vox::getScreenDimensions();
+	glm::vec2 screenDimensions = vox::getScreenDimensions();
 
-	double centerX = static_cast<double>(screenDimensions.width)*0.5;
-	double centerY = static_cast<double>(screenDimensions.height)*0.5;
+	double centerX = static_cast<double>(screenDimensions.x)*0.5;
+	double centerY = static_cast<double>(screenDimensions.y)*0.5;
 
 	double offsetX = 0.;
 	double offsetY = 0.;

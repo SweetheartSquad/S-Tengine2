@@ -132,7 +132,6 @@
     <ClInclude Include="../include/Cube.h" />
     <ClInclude Include="../include/CylinderScreen.h" />
     <ClInclude Include="../include/DepthFrameBuffer.h" />
-    <ClInclude Include="../include/Dimension.h" />
     <ClInclude Include="../include/DirectionalLight.h" />
     <ClInclude Include="../include/Easing.h" />
     <ClInclude Include="../include/Entity.h" />

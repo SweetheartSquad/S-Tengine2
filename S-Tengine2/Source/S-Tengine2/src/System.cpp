@@ -1,18 +1,18 @@
 #include "System.h"
 
-int vox::getScreenWidth(){
-	return getScreenDimensions().height;
+unsigned long int vox::getScreenWidth(){
+	return getScreenDimensions().y;
 }
 
-int vox::getScreenHeight(){
-	return getScreenDimensions().width;
+unsigned long int vox::getScreenHeight(){
+	return getScreenDimensions().x;
 }
 
-Dimension vox::getScreenDimensions(){
+glm::uvec2 vox::getScreenDimensions(){
 	int screenHeight;
 	int screenWidth;
 
 	glfwGetWindowSize(vox::currentContext, &screenWidth, &screenHeight);
 
-	return Dimension(screenWidth, screenHeight);
+	return glm::uvec2(screenWidth, screenHeight);
 }

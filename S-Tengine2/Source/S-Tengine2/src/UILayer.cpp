@@ -6,14 +6,19 @@
 #include <MatrixStack.h>
 #include <RenderOptions.h>
 #include <shader\ShaderComponentTexture.h>
+#include <System.h>
 
-UILayer::UILayer() : 
+UILayer::UILayer(float _left, float _right, float _top, float _bottom) : 
 	NodeChild(nullptr),
 	NodeTransformable(new Transform()),
 	Entity(nullptr),
-	cam(-1920.f, 0, 0, 1080.f, -1000.f, 1000.f),
+	cam(-_right, -_left, _bottom, _top, -1000.f, 1000.f),
 	shader(new BaseComponentShader(true))
 {
+	glm::vec2 sd = vox::getScreenDimensions();
+	cam.left = -sd.x;
+	cam.top = sd.y;
+
 	shader->components.push_back(new ShaderComponentTexture(shader));
 	shader->compileShader();
 }
@@ -31,6 +36,12 @@ UILayer::~UILayer(){
 
 
 void UILayer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
+	
+	if(depth == GL_TRUE){
+		glDisable(GL_DEPTH_TEST);
+	}
+
 	Shader * prev = _renderOptions->overrideShader;
 	glm::mat4 p = _matrixStack->getProjectionMatrix();
 	glm::mat4 v = _matrixStack->getViewMatrix();
@@ -46,6 +57,17 @@ void UILayer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 	_matrixStack->popMatrix();
 
 	_renderOptions->overrideShader = prev;
+
+	if(depth == GL_TRUE){
+		glEnable(GL_DEPTH_TEST);
+	}
+}
+
+void UILayer::resize(float _left, float _right, float _top, float _bottom){
+	cam.left = -_right;
+	cam.right = -_left;
+	cam.top = _bottom;
+	cam.bottom = _top;
 }
 
 bool UILayer::addChild(NodeChild * _child){

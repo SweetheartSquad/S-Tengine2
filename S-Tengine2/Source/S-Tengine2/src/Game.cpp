@@ -9,6 +9,7 @@
 #include "MatrixStack.h"
 #include "VoxRenderOptions.h"
 #include "GLUtils.h"
+#include <System.h>
 
 
 Game::Game(bool _isRunning) :
@@ -26,7 +27,8 @@ Game::Game(bool _isRunning) :
 	kc_lastKey(0),
 	kc_code(0),
 	kc_active(false),
-	kc_just_active(false)
+	kc_just_active(false),
+	autoResize(true)
 {
 	int width, height;
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
@@ -193,6 +195,9 @@ void Game::update(Step * _step){
 }
 
 void Game::draw(void){
+	if(autoResize){
+		resize();
+	}
 	vox::MatrixStack ms;
 	VoxRenderOptions ro(nullptr, nullptr, nullptr);
 	ro.kc_active = kc_active;
@@ -264,13 +269,10 @@ void Game::toggleFullScreen(){
 	glfwDestroyWindow(vox::currentContext);
 	glfwMakeContextCurrent(window);
 	vox::currentContext = window;
-
-	int width, height;
-	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
-	viewPortWidth = width;
-	viewPortHeight = height;
-	viewPortX = 0;
-	viewPortY = 0;
+	
+	if(autoResize){
+		resize();
+	}
 	
 
 	for(std::pair<std::string, Scene *> s : scenes){
@@ -285,6 +287,11 @@ void Game::toggleFullScreen(){
 	//resourceManager->load();
 
 	checkForGlError(0,__FILE__,__LINE__);
+}
+
+void Game::resize(){
+	glm::vec2 screenDimensions = vox::getScreenDimensions();
+	setViewport(0, 0, screenDimensions.x, screenDimensions.y);
 }
 
 void Game::setViewport(float _x, float _y, float _w, float _h){

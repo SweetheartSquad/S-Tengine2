@@ -16,7 +16,6 @@ OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom,
 	bottom(_bottom),
 	right(_right)
 {
-	Dimension screenDimensions = vox::getScreenDimensions();
 	forwardVectorRotated = glm::vec3(0.f, 0.f, 1.f);
 
 	nearClip = _near;

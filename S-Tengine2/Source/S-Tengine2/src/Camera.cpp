@@ -24,8 +24,19 @@ Camera::Camera():
 	transform->translate(-5.f, 0.f, 0.f);
 	transform->translate(0.f, 3.f, 0.f);
 
-	Dimension screenDimensions = vox::getScreenDimensions();
 }
 
 Camera::~Camera(){
+}
+
+glm::vec2 Camera::worldToScreen(glm::vec3 _coords){
+	glm::vec4 newPos(_coords, 1);
+	newPos = getProjectionMatrix() * getViewMatrix() * newPos;
+	
+	glm::uvec2 screenDimensions = vox::getScreenDimensions();
+
+	return glm::uvec2(
+		screenDimensions.x * (1 - newPos.x)*0.5f,
+		screenDimensions.y * (newPos.y + 1.f)*0.5f
+	);
 }

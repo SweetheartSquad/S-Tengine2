@@ -33,11 +33,6 @@ public:
 	
 	/** The orientation quaternian from the last update loop*/
 	glm::quat lastOrientation;
-
-	/**
-	* @return The view matrix of the camera
-	*/
-	glm::mat4 getViewMatrix() override;
 	
 	void addTarget(ShiftKiddie * _target, float _weight = 0.f);
 	void removeTarget(ShiftKiddie * _target);

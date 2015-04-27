@@ -50,4 +50,6 @@ public:
 	* @return The projection matrix of the camera. Pure virtual; to be implemented only in derived classes
 	*/
 	virtual glm::mat4 getProjectionMatrix() = 0;
+
+	virtual glm::vec2 worldToScreen(glm::vec3 _coords);
 };

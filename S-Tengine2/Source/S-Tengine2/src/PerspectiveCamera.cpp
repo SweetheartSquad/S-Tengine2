@@ -43,7 +43,7 @@ glm::mat4 PerspectiveCamera::getViewMatrix(){
 }
 
 glm::mat4 PerspectiveCamera::getProjectionMatrix(){
-	Dimension screenDimensions = vox::getScreenDimensions();
+	glm::vec2 screenDimensions = vox::getScreenDimensions();
 	// Projection matrix : 45° Field of View, ratio, near-far clip : 0.1 unit <-> 100 units
-	return glm::perspective(fieldOfView, static_cast<float>(screenDimensions.width)/static_cast<float>(screenDimensions.height), nearClip, farClip);
+	return glm::perspective(fieldOfView, static_cast<float>(screenDimensions.x)/static_cast<float>(screenDimensions.y), nearClip, farClip);
 }

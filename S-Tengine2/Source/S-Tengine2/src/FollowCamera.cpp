@@ -116,8 +116,8 @@ void FollowCamera::update(Step * _step){
 	
 	// calculate zoom and account for FoV (the camera FoV seems to be vertical, so if the screen w > screen h, we need to take the h / the intended aspect ratio)
 	float ar1 = screenWidth/screenHeight;
-	Dimension screenDimensions = vox::getScreenDimensions();
-	float ar2 = static_cast<float>(screenDimensions.width)/static_cast<float>(screenDimensions.height);
+	glm::vec2 screenDimensions = vox::getScreenDimensions();
+	float ar2 = static_cast<float>(screenDimensions.x)/static_cast<float>(screenDimensions.y);
 	float zoom;
 	if(ar1 > ar2){
 		zoom = std::max(minimumZoom, screenWidth / ar2);
@@ -139,14 +139,6 @@ void FollowCamera::update(Step * _step){
 
 	transform->translate(lookAtSpot.x, lookAtSpot.y, dist, false);
 	//transform->translate(offset);
-}
-
-glm::mat4 FollowCamera::getViewMatrix(){
-	return glm::lookAt(
-		/*offset + */transform->getTranslationVector(),	// Camera is here
-		/*offset + */lookAtSpot, // and looks here : at the same position, plus "direction"
-		upVectorRotated				// Head is up (set to 0,-1,0 to look upside-down)
-		);
 }
 
 void FollowCamera::addTarget(ShiftKiddie * _target, float _weight){
