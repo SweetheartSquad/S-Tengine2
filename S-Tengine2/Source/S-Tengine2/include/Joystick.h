@@ -35,8 +35,8 @@ public:
 		kLX,
 		kLY,
 		kBUMPERS,
-		kRX,
-		kRY
+		kRY,
+		kRX
 	};
 
 	float deadZone;
