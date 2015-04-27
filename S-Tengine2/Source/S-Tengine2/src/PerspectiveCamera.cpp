@@ -39,7 +39,7 @@ glm::mat4 PerspectiveCamera::getViewMatrix(){
 		transform->getTranslationVector(),	// Camera is here
 		lookAtSpot + lookAtOffset,			// and looks here : at the same position, plus "direction"
 		upVectorRotated						// Head is up (set to 0,-1,0 to look upside-down)
-		);
+	);
 }
 
 glm::mat4 PerspectiveCamera::getProjectionMatrix(){

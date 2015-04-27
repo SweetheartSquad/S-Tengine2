@@ -36,7 +36,7 @@ glm::vec2 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen){
 	glm::uvec2 screenDimensions = vox::getScreenDimensions();
 
 	return glm::uvec2(
-		_screen.x * (1 - newPos.x)*0.5f,
-		_screen.y * (newPos.y + 1.f)*0.5f
+		_screen.x * (1 - newPos.x/newPos.w)*0.5f,
+		_screen.y * (newPos.y/newPos.w + 1)*0.5f
 	);
 }
