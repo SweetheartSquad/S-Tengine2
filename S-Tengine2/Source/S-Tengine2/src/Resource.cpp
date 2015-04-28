@@ -21,6 +21,8 @@
 #include "Box2DWorld.h"
 #include "Texture.h"
 
+#include <tiny_obj_loader.h>
+
 Resource::Resource(){}
 Resource::~Resource(){}
 
@@ -80,8 +82,86 @@ void Resource::freeImageData(unsigned char* _image){
 	SOIL_free_image_data(_image);
 }
 
-TriMesh * Resource::loadMeshFromObj(std::string _objSrc){
+std::vector<TriMesh *> Resource::loadMeshFromObj(std::string _objSrc){
 
+	std::string inputfile = FileUtils::voxReadFile(_objSrc);
+	
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materials;
+
+	std::string err = tinyobj::LoadObj(shapes, materials, _objSrc.c_str());
+	
+	if (!err.empty()) {
+	  std::cerr << err << std::endl;
+	  exit(1);
+	}
+	std::cout << "# of shapes    : " << shapes.size() << std::endl;
+	std::cout << "# of materials : " << materials.size() << std::endl;
+	
+	std::vector<TriMesh *> res;
+	for (tinyobj::shape_t s : shapes) {
+		TriMesh* mesh = new TriMesh(GL_TRIANGLES, GL_STATIC_DRAW);
+//		printf("shape[%ld].name = %s\n", i, s.name.c_str());
+//		printf("Size of shape[%ld].indices: %ld\n", i, s.mesh.indices.size());
+//		printf("Size of shape[%ld].material_ids: %ld\n", i, s.mesh.material_ids.size());
+		assert((s.mesh.indices.size() % 3) == 0);
+		for (size_t f = 0; f < s.mesh.indices.size() / 3; ++f) {
+//			printf("  idx[%ld] = %d, %d, %d. mat_id = %d\n", f, s.mesh.indices[3*f+0], s.mesh.indices[3*f+1], s.mesh.indices[3*f+2], s.mesh.material_ids[f]);
+			mesh->pushTri(s.mesh.indices[3*f+0], s.mesh.indices[3*f+1], s.mesh.indices[3*f+2]);
+		}
+		assert(1==0);
+//		printf("shape[%ld].vertices: %ld\n", i, s.mesh.positions.size());
+		assert((s.mesh.positions.size() % 3) == 0);
+		for (size_t v = 0; v < s.mesh.positions.size() / 3; ++v) {
+			Vertex vert(
+				s.mesh.positions[3*v+0],
+				s.mesh.positions[3*v+1],
+				s.mesh.positions[3*v+2],
+				1,1,1,1
+			);
+			if(s.mesh.normals.size() == s.mesh.positions.size()){
+				vert.nx = s.mesh.normals[3*v+0];
+				vert.ny = s.mesh.normals[3*v+1];
+				vert.nz = s.mesh.normals[3*v+2];
+			}
+			if(s.mesh.texcoords.size() == s.mesh.positions.size() * 2 / 3){
+				vert.u = s.mesh.texcoords[(3*v)/2+0];
+				vert.v = s.mesh.texcoords[(3*v)/2+1];
+			}
+//			printf("  v[%ld] = (%f, %f, %f)\n", v,
+//			s.mesh.positions[3*v+0],
+//			s.mesh.positions[3*v+1],
+//			s.mesh.positions[3*v+2]);
+			mesh->pushVert(vert);
+		}
+		res.push_back(mesh);
+	}
+
+	/*for (size_t i = 0; i < materials.size(); i++) {
+		printf("material[%ld].name = %s\n", i, materials[i].name.c_str());
+		printf("  material.Ka = (%f, %f ,%f)\n", materials[i].ambient[0], materials[i].ambient[1], materials[i].ambient[2]);
+		printf("  material.Kd = (%f, %f ,%f)\n", materials[i].diffuse[0], materials[i].diffuse[1], materials[i].diffuse[2]);
+		printf("  material.Ks = (%f, %f ,%f)\n", materials[i].specular[0], materials[i].specular[1], materials[i].specular[2]);
+		printf("  material.Tr = (%f, %f ,%f)\n", materials[i].transmittance[0], materials[i].transmittance[1], materials[i].transmittance[2]);
+		printf("  material.Ke = (%f, %f ,%f)\n", materials[i].emission[0], materials[i].emission[1], materials[i].emission[2]);
+		printf("  material.Ns = %f\n", materials[i].shininess);
+		printf("  material.Ni = %f\n", materials[i].ior);
+		printf("  material.dissolve = %f\n", materials[i].dissolve);
+		printf("  material.illum = %d\n", materials[i].illum);
+		printf("  material.map_Ka = %s\n", materials[i].ambient_texname.c_str());
+		printf("  material.map_Kd = %s\n", materials[i].diffuse_texname.c_str());
+		printf("  material.map_Ks = %s\n", materials[i].specular_texname.c_str());
+		printf("  material.map_Ns = %s\n", materials[i].normal_texname.c_str());
+		std::map<std::string, std::string>::const_iterator it(materials[i].unknown_parameter.begin());
+		std::map<std::string, std::string>::const_iterator itEnd(materials[i].unknown_parameter.end());
+		for (; it != itEnd; it++) {
+			printf("  material.%s = %s\n", it->first.c_str(), it->second.c_str());
+		}
+		printf("\n");
+	}*/
+
+	return res;
+	/*
 	std::istringstream stream(FileUtils::voxReadFile(_objSrc));
 	std::vector<glm::vec3> verts;
 	std::vector<glm::vec3> normals;
@@ -217,7 +297,7 @@ TriMesh * Resource::loadMeshFromObj(std::string _objSrc){
 				mesh->vertices.size()-1);
 		}
 	}
-	return mesh;
+	return mesh;*/
 }
 /*
 VoxelJoint * parseJoint(Json::Value _node, Json::ArrayIndex _index){
