@@ -29,14 +29,14 @@ Camera::Camera():
 Camera::~Camera(){
 }
 
-glm::vec2 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen){
+glm::vec3 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen){
 	glm::vec4 newPos(_coords, 1);
 	newPos = getProjectionMatrix() * getViewMatrix() * newPos;
 	
 	glm::uvec2 screenDimensions = vox::getScreenDimensions();
-
-	return glm::uvec2(
+	return glm::vec3(
 		_screen.x * (1 - newPos.x/newPos.w)*0.5f,
-		_screen.y * (newPos.y/newPos.w + 1)*0.5f
+		_screen.y * (newPos.y/newPos.w + 1)*0.5f,
+		newPos.z
 	);
 }

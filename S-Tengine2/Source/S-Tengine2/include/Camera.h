@@ -51,5 +51,6 @@ public:
 	*/
 	virtual glm::mat4 getProjectionMatrix() = 0;
 
-	virtual glm::vec2 worldToScreen(glm::vec3 _coords, glm::uvec2 _screen);
+	// projects the world-space _coords into _screen space (x and y are the pixel coordinates, sign of z indicates whether the camera is facing towards or away from _coords)
+	virtual glm::vec3 worldToScreen(glm::vec3 _coords, glm::uvec2 _screen);
 };
