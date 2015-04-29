@@ -41,6 +41,27 @@ public:
 	GL_CLAMP_TO_BORDER
 	*/
 	GLenum uvEdgeMode;
+	/**
+	The texture magnification function is used when the pixel being textured maps to an area less than or equal to one texture element.
+	i.e. Filter when scaling up textures
+
+	GL_NEAREST: Returns the value of the texture element that is nearest (in Manhattan distance) to the center of the pixel being textured.
+	GL_LINEAR: Returns the weighted average of the four texture elements that are closest to the center of the pixel being textured.
+	*/
+	GLenum scaleModeMag;
+
+	/**
+	The texture minifying function is used whenever the pixel being textured maps to an area greater than one texture element.
+	i.e. Filter when scaling down textures
+
+	GL_NEAREST: Returns the value of the texture element that is nearest (in Manhattan distance) to the center of the pixel being textured.
+	GL_LINEAR: Returns the weighted average of the four texture elements that are closest to the center of the pixel being textured.
+	GL_NEAREST_MIPMAP_NEAREST: Chooses the mipmap that most closely matches the size of the pixel being textured and uses the GL_NEAREST criterion (the texture element nearest to the center of the pixel) to produce a texture value.
+	GL_LINEAR_MIPMAP_NEAREST: Chooses the mipmap that most closely matches the size of the pixel being textured and uses the GL_LINEAR criterion (a weighted average of the four texture elements that are closest to the center of the pixel) to produce a texture value.
+	GL_NEAREST_MIPMAP_LINEAR: Chooses the two mipmaps that most closely match the size of the pixel being textured and uses the GL_NEAREST criterion (the texture element nearest to the center of the pixel) to produce a texture value from each mipmap. The final texture value is a weighted average of those two values.
+	GL_LINEAR_MIPMAP_LINEAR: Chooses the two mipmaps that most closely match the size of the pixel being textured and uses the GL_LINEAR criterion (a weighted average of the four texture elements that are closest to the center of the pixel) to produce a texture value from each mipmap. The final texture value is a weighted average of those two values.
+	*/
+	GLenum scaleModeMin;
 
 	/** ID of the vertex array object */
 	GLuint vaoId;
