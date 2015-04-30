@@ -10,7 +10,8 @@ PerspectiveCamera::PerspectiveCamera():
 	NodeTransformable(new Transform()),
 	//NodeAnimatable(),
 	NodeUpdatable(),
-	lastOrientation(1.f, 0.f, 0.f, 0.f)
+	lastOrientation(1.f, 0.f, 0.f, 0.f),
+	interpolation(0.15f)
 {
 }
 
@@ -20,10 +21,8 @@ PerspectiveCamera::~PerspectiveCamera(){
 void PerspectiveCamera::update(Step * _step){
 	lastOrientation = transform->getOrientationQuat();
 
-	glm::quat newOrientation = glm::quat(1.f, 0.f, 0.f, 0.f);
-	newOrientation = glm::rotate(newOrientation, yaw, upVectorLocal);
-	newOrientation = glm::rotate(newOrientation, pitch, rightVectorLocal);
-	newOrientation = glm::slerp(lastOrientation, newOrientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
+	glm::quat newOrientation = calcOrientation();
+	newOrientation = glm::slerp(lastOrientation, newOrientation, interpolation * static_cast<float>(vox::deltaTimeCorrection));
 
 	transform->setOrientation(newOrientation);
 

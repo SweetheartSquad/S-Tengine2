@@ -16,6 +16,9 @@ public:
 	explicit PerspectiveCamera();
 	~PerspectiveCamera();
 
+	// how much the camera slerps from its last orientation to the intended current orientation
+	float interpolation;
+
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
 	void update(Step * _step) override;
 	
