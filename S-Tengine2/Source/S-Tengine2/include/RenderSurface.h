@@ -16,10 +16,10 @@ class Shader;
 *
 ******************************************************/
 class RenderSurface : public NodeLoadable{
-private:
-	/** The surface verties */
-	std::vector<FrameBufferVertex> vertices;
 public:
+	/** The surface vertices */
+	std::vector<FrameBufferVertex> vertices;
+	bool dirty;
 
 	/**
 	* @param The shader to be used when rendering the surface
@@ -69,6 +69,11 @@ public:
 	* Also unloads the shader id it is loaded
 	*/
 	void unload() override;
+
+	/**
+	* Updates the vertex data
+	*/
+	void clean();
 
 	/**
 	* Renders a frame buffers texture buffer to this surface using the

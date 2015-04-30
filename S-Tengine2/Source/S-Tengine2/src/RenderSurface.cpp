@@ -7,7 +7,8 @@
 RenderSurface::RenderSurface(Shader * _shader):
 	shader(_shader),
 	scaleModeMag(GL_LINEAR),
-	scaleModeMin(GL_LINEAR)
+	scaleModeMin(GL_LINEAR),
+	dirty(false)
 {
 	vertices.push_back(FrameBufferVertex(-1.0,  1.0, 0.0, 1.0));
 	vertices.push_back(FrameBufferVertex( 1.0,  1.0, 1.0, 1.0));
@@ -15,6 +16,7 @@ RenderSurface::RenderSurface(Shader * _shader):
 	vertices.push_back(FrameBufferVertex(-1.0, -1.0, 0.0, 0.0));
 
 	load();
+	clean();
 }
 
 RenderSurface::~RenderSurface(){
@@ -74,7 +76,19 @@ void RenderSurface::render(GLuint _textureId, GLint _renderTo){
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, scaleModeMag);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, scaleModeMin);
 
+	clean();
+
 	glDrawArrays(GL_QUADS, 0, vertices.size());
 	glEnable(GL_DEPTH_TEST);
 	glBindVertexArray(0);
+}
+
+void RenderSurface::clean(){
+	if (dirty){
+		// Vertex Buffer Object (VBO)
+		glBindBuffer(GL_ARRAY_BUFFER, vboId);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(FrameBufferVertex) * (vertices.size()), vertices.data(), GL_STATIC_DRAW);
+		checkForGlError(0, __FILE__, __LINE__);
+		dirty = false;
+	}
 }
