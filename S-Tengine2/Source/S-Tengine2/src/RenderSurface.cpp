@@ -10,10 +10,30 @@ RenderSurface::RenderSurface(Shader * _shader):
 	scaleModeMin(GL_LINEAR),
 	dirty(false)
 {
-	vertices.push_back(FrameBufferVertex(-1.0,  1.0, 0.0, 1.0));
-	vertices.push_back(FrameBufferVertex( 1.0,  1.0, 1.0, 1.0));
-	vertices.push_back(FrameBufferVertex( 1.0, -1.0, 1.0, 0.0));
-	vertices.push_back(FrameBufferVertex(-1.0, -1.0, 0.0, 0.0));
+	vertices.push_back(Vertex(
+		-1.f, 1.f, 0.f,
+		1, 1, 1, 1,
+		0, 0, 1,
+		0, 1
+		));
+	vertices.push_back(Vertex(
+		1.f, 1.f, 0.f,
+		1, 1, 1, 1,
+		0, 0, 1,
+		1, 1
+		));
+	vertices.push_back(Vertex(
+		1.f, -1.f, 0.f,
+		1, 1, 1, 1,
+		0, 0, 1,
+		1, 0
+		));
+	vertices.push_back(Vertex(
+		-1.f, -1.f, 0.f,
+		1, 1, 1, 1,
+		0, 0, 1,
+		0, 0
+		));
 
 	load();
 	clean();
@@ -35,13 +55,12 @@ void RenderSurface::load(){
 		// Vertex Auffer Object (VBO)
 		glGenBuffers(1, &vboId);
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(FrameBufferVertex) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), vertices.data(), GL_STATIC_DRAW);
 
-		GLint aVertexPosition	= shader->get_aVertexPosition();
-		GLint aVertexUvs		= shader->get_aVertexUVs();
-
-		GLUtils::configureVertexAttributes(aVertexPosition, 2, 0, vaoId, sizeof(FrameBufferVertex));
-		GLUtils::configureVertexAttributes(aVertexUvs, 2, sizeof(float) * 2, vaoId, sizeof(FrameBufferVertex));
+		GLUtils::configureVertexAttributes(shader->get_aVertexPosition(), 3, 0, vaoId, sizeof(Vertex));
+		GLUtils::configureVertexAttributes(shader->get_aVertexColor(), 4, sizeof(float) * 3, vaoId, sizeof(Vertex));
+		GLUtils::configureVertexAttributes(shader->get_aVertexNormals(), 3, sizeof(float) * 7, vaoId, sizeof(Vertex));
+		GLUtils::configureVertexAttributes(shader->get_aVertexUVs(), 2, sizeof(float) * 10, vaoId, sizeof(Vertex));
 		glBindVertexArray(0);
 	}
 	
@@ -87,7 +106,7 @@ void RenderSurface::clean(){
 	if (dirty){
 		// Vertex Buffer Object (VBO)
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(FrameBufferVertex) * (vertices.size()), vertices.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * (vertices.size()), vertices.data(), GL_STATIC_DRAW);
 		checkForGlError(0, __FILE__, __LINE__);
 		dirty = false;
 	}

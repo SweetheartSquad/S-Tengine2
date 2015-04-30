@@ -3,9 +3,8 @@
 #include<GL/glew.h>
 #include <vector>
 
-#include "FrameBufferVertex.h"
-#include "FrameBufferInterface.h"
 #include "node\NodeLoadable.h"
+#include <MeshInterface.h>
 
 class Shader;
 
@@ -18,7 +17,7 @@ class Shader;
 class RenderSurface : public NodeLoadable{
 public:
 	/** The surface vertices */
-	std::vector<FrameBufferVertex> vertices;
+	std::vector<Vertex> vertices;
 	bool dirty;
 
 	/**
