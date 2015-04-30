@@ -94,7 +94,7 @@ SceneSplash::~SceneSplash(){
 	}
 	
 	shader->safeDelete();
-	delete screenSurface;
+	screenSurface->safeDelete();
 	//screenSurfaceShader->safeDelete();
 	screenFBO->safeDelete();
 }

@@ -16,7 +16,7 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode) :
 	texturesDirty(true),
 	drawMode(drawMode),
 	polygonalDrawMode(polygonalDrawMode),
-	uvEdgeMode(GL_CLAMP_TO_EDGE),
+	uvEdgeMode(GL_REPEAT),
 	scaleModeMag(GL_LINEAR),
 	scaleModeMin(GL_LINEAR_MIPMAP_LINEAR)
 {
