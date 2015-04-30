@@ -5,7 +5,9 @@ FrameBufferInterface::FrameBufferInterface(std::vector<FrameBufferChannel> _fram
 	NodeResource(_autoRelease),
 	width(_width),
 	height(_height),
-	frameBufferChannels(_frameBufferChannels)
+	frameBufferChannels(_frameBufferChannels),
+	scaleModeMag(GL_LINEAR),
+	scaleModeMin(GL_LINEAR)
 {
 	load();
 }
@@ -25,8 +27,10 @@ void FrameBufferInterface::load(){
 			glBindTexture(GL_TEXTURE_2D, frameBufferChannels.at(i).id);
 			glTexImage2D(GL_TEXTURE_2D, 0, frameBufferChannels.at(i).internalFormat, width, height, 0,
 				frameBufferChannels.at(i).format, frameBufferChannels.at(i).size, 0);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+			// Texture scaling mode
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, scaleModeMag);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, scaleModeMin);
 			if(frameBufferChannels.at(i).attachmentType == GL_COLOR_ATTACHMENT0){
 				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + colorAttachmentCount, GL_TEXTURE_2D, frameBufferChannels.at(i).id, 0);
 			}else{

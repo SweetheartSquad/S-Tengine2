@@ -18,8 +18,7 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode) :
 	polygonalDrawMode(polygonalDrawMode),
 	uvEdgeMode(GL_CLAMP_TO_EDGE),
 	scaleModeMag(GL_LINEAR),
-	//scaleModeMin(GL_NEAREST_MIPMAP_LINEAR)
-	scaleModeMin(GL_LINEAR)
+	scaleModeMin(GL_LINEAR_MIPMAP_LINEAR)
 {
 	load();
 	clean();
@@ -123,12 +122,12 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 			if(glIsBuffer(iboId) == GL_TRUE){
 
 				if(_renderOption->shader != nullptr){		
-					if(_renderOption->currentVao != vaoId){
+					//if(_renderOption->currentVao != vaoId){
 						_renderOption->currentVao = vaoId;
 						// Bind VAO
 						glBindVertexArray(vaoId);
 						checkForGlError(0,__FILE__, __LINE__);
-					}
+					//}
 
 					//This should help performance but there's a bit of a problem with it at the moment so I'll comment it out
 					//if(_renderOption->shader->getProgramId() != _renderOption->currentlyBoundShaderId) {
@@ -156,12 +155,10 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 
 					// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
 					glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
-					//glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
-					//glDrawElements(drawMode, vertices.size(), GL_UNSIGNED_BYTE, 0);
 					checkForGlError(0,__FILE__,__LINE__);
 
 					// Disable VAO
-					//glBindVertexArray(0);
+					glBindVertexArray(0);
 				}else{
 					std::cout << "no shader" << std::endl << std::endl;	
 				}

@@ -5,7 +5,9 @@
 #include "shader/Shader.h"
 
 RenderSurface::RenderSurface(Shader * _shader):
-	shader(_shader)
+	shader(_shader),
+	scaleModeMag(GL_LINEAR),
+	scaleModeMin(GL_LINEAR)
 {
 	vertices.push_back(FrameBufferVertex(-1.0,  1.0, 0.0, 1.0));
 	vertices.push_back(FrameBufferVertex( 1.0,  1.0, 1.0, 1.0));
@@ -64,9 +66,13 @@ void RenderSurface::render(GLuint _textureId, GLint _renderTo){
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, _textureId);
 	
-	//Texture repeat
+	// Texture repeat
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	
+	// Texture scaling mode
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, scaleModeMag);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, scaleModeMin);
 
 	glDrawArrays(GL_QUADS, 0, vertices.size());
 	glEnable(GL_DEPTH_TEST);
