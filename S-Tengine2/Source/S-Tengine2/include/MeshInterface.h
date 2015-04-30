@@ -96,18 +96,18 @@ public:
 	/** Returns sizeof(Vertex) */
 	GLsizei getStride();
 	/**
-	_polygonalDrawMode: STATIC, STREAM, DYNAMIC
-	_drawMode: GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS, GL_QUAD_STRIP, GL_POLYGON
+	_polygonalDrawMode: GL_POINTS, GL_LINES, GL_LINE_STRIP, GL_LINE_LOOP, GL_TRIANGLES, GL_TRIANGLE_STRIP, GL_TRIANGLE_FAN, GL_QUADS, GL_QUAD_STRIP, GL_POLYGON
+	_drawMode: STATIC, STREAM, DYNAMIC
 	*/
 	MeshInterface(GLenum _polygonalDrawMode, GLenum _drawMode);
 	virtual ~MeshInterface();
 
 	/** If unloaded, generates the VAO, VBO, IBO and flags as loaded */
-	void load() override;
+	virtual void load() override;
 	/** If loaded, deletes the VAO, VBO, IBO and flags as not loaded and dirty */
-	void unload() override;
+	virtual void unload() override;
 	/** If dirty, copies data from vertices and indices to VBO and IBO and flags as clean */
-	void clean();
+	virtual void clean();
 	/** Renders the vao using the given shader, model-view-projection and lights */
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
 	/** A helper method to configure all the starndard vertex attributes - Position, Colours, Normals */
