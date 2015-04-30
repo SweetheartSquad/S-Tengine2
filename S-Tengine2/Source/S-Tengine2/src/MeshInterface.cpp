@@ -117,6 +117,9 @@ void MeshInterface::clean(){
 }
 
 void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption){
+	load();
+	clean();
+
 	if(glIsVertexArray(vaoId) == GL_TRUE){
 		if(glIsBuffer(vboId) == GL_TRUE){
 			if(glIsBuffer(iboId) == GL_TRUE){

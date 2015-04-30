@@ -43,10 +43,6 @@ void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 		_matrixStack->pushMatrix();
 		_matrixStack->applyMatrix(transform->getModelMatrix());
 	
-		if(mesh != nullptr){
-			mesh->load();
-			mesh->clean();
-		}
 		if(_renderOptions->overrideShader == nullptr){
 			_renderOptions->shader = shader;
 		}else{
