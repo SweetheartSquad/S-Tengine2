@@ -80,7 +80,7 @@ std::vector<TriMesh *> Resource::loadMeshFromObj(std::string _objSrc){
 		for(unsigned long int v = 0; v < s.mesh.texcoords.size(); v += 2){
 			mesh->setUV(v/2,
 				s.mesh.texcoords[v],
-				s.mesh.texcoords[v+1]
+				1-s.mesh.texcoords[v+1]
 			);
 		}
 
