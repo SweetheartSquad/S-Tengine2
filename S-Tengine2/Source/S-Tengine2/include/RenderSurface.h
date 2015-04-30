@@ -15,7 +15,7 @@ class Shader;
 * likely be used to render a frame buffer
 *
 ******************************************************/
-class RenderSurface : public virtual NodeLoadable, virtual NodeResource{
+class RenderSurface : public MeshInterface{
 public:
 	/** The surface vertices */
 	std::vector<Vertex> vertices2;

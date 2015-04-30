@@ -5,7 +5,7 @@
 #include "shader/Shader.h"
 
 RenderSurface::RenderSurface(Shader * _shader) :
-	//MeshInterface(GL_QUADS, GL_STATIC_DRAW),
+	MeshInterface(GL_QUADS, GL_STATIC_DRAW),
 	NodeResource(false),
 	shader2(_shader)
 {
@@ -41,6 +41,8 @@ RenderSurface::RenderSurface(Shader * _shader) :
 	indices2.push_back(3);
 
 	dirty2 = true;
+
+	loaded = false;
 
 	load();
 	clean();
@@ -99,44 +101,40 @@ void RenderSurface::render(GLuint _textureId, GLint _renderTo){
 	if (glIsVertexArray(vaoId2) == GL_TRUE){
 		if (glIsBuffer(vboId2) == GL_TRUE){
 			if (glIsBuffer(iboId2) == GL_TRUE){
-
-	glUseProgram(shader2->getProgramId());
-	glBindFramebuffer(GL_FRAMEBUFFER, _renderTo);
-	glBindVertexArray(vaoId2);
-	glDisable(GL_DEPTH_TEST);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, _textureId);
+				glUseProgram(shader2->getProgramId());
+				glBindFramebuffer(GL_FRAMEBUFFER, _renderTo);
+				glBindVertexArray(vaoId2);
+				glDisable(GL_DEPTH_TEST);
+				glActiveTexture(GL_TEXTURE0);
+				glBindTexture(GL_TEXTURE_2D, _textureId);
 	
-	// Texture repeat
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				// Texture repeat
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	
-	// Texture scaling mode
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, scaleModeMag2);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, scaleModeMin2);
+				// Texture scaling mode
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, scaleModeMag2);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, scaleModeMin2);
 
-	clean();
+				clean();
 
-	//glDrawArrays(GL_QUADS, 0, vertices2.size());
-	// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
-	glDrawRangeElements(GL_QUADS, 0, indices2.size(), indices2.size(), GL_UNSIGNED_INT, 0);
+				//glDrawArrays(GL_QUADS, 0, vertices2.size());
+				// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
+				glDrawRangeElements(GL_QUADS, 0, indices2.size(), indices2.size(), GL_UNSIGNED_INT, 0);
 	
-	checkForGlError(0, __FILE__, __LINE__);
-	glEnable(GL_DEPTH_TEST);
-	checkForGlError(0, __FILE__, __LINE__);
-	glBindVertexArray(0);
-	checkForGlError(0, __FILE__, __LINE__);
-			}
-			else{
+				checkForGlError(0, __FILE__, __LINE__);
+				glEnable(GL_DEPTH_TEST);
+				checkForGlError(0, __FILE__, __LINE__);
+				glBindVertexArray(0);
+				checkForGlError(0, __FILE__, __LINE__);
+			}else{
 				std::cout << "ibo bad" << std::endl << std::endl;
 			}
-		}
-		else{
+		}else{
 			std::cout << "vbo bad" << std::endl << std::endl;
 		}
-	}
-	else{
-		std::cout << "vao bad" << std::endl << std::endl;
+	}else{
+		std::cout << "vao bad " << __FILE__ << std::endl << std::endl;
 	}
 }
 
