@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "node\NodeLoadable.h"
+#include "node\NodeResource.h"
 #include <MeshInterface.h>
 
 class Shader;
@@ -14,11 +15,13 @@ class Shader;
 * likely be used to render a frame buffer
 *
 ******************************************************/
-class RenderSurface : public NodeLoadable{
+class RenderSurface : public virtual NodeLoadable, virtual NodeResource{
 public:
 	/** The surface vertices */
-	std::vector<Vertex> vertices;
-	bool dirty;
+	std::vector<Vertex> vertices2;
+	/** Index data for the ibo */
+	std::vector<GLuint> indices2;
+	bool dirty2;
 
 	/**
 	* @param The shader to be used when rendering the surface
@@ -26,11 +29,13 @@ public:
 	explicit RenderSurface(Shader * _shader);
 	~RenderSurface();
 	/** ID of the vertex array object */
-	GLuint vaoId;
+	GLuint vaoId2;
 	/** ID of the vertex buffer object */
-	GLuint vboId;
+	GLuint vboId2;
+	/** ID of the index buffer object */
+	GLuint iboId2;
 	/**Shader to use when rendering the 2D surface*/
-	Shader * shader;
+	Shader * shader2;
 
 
 	/**
@@ -40,7 +45,7 @@ public:
 	GL_NEAREST: Returns the value of the texture element that is nearest (in Manhattan distance) to the center of the pixel being textured.
 	GL_LINEAR: Returns the weighted average of the four texture elements that are closest to the center of the pixel being textured.
 	*/
-	GLenum scaleModeMag;
+	GLenum scaleModeMag2;
 
 	/**
 	The texture minifying function is used whenever the pixel being textured maps to an area greater than one texture element.
@@ -53,9 +58,7 @@ public:
 	GL_NEAREST_MIPMAP_LINEAR: Chooses the two mipmaps that most closely match the size of the pixel being textured and uses the GL_NEAREST criterion (the texture element nearest to the center of the pixel) to produce a texture value from each mipmap. The final texture value is a weighted average of those two values.
 	GL_LINEAR_MIPMAP_LINEAR: Chooses the two mipmaps that most closely match the size of the pixel being textured and uses the GL_LINEAR criterion (a weighted average of the four texture elements that are closest to the center of the pixel) to produce a texture value from each mipmap. The final texture value is a weighted average of those two values.
 	*/
-	GLenum scaleModeMin;
-
-
+	GLenum scaleModeMin2;
 
 	/**
 	* Intializes the render surface quad along with the vertex array object
