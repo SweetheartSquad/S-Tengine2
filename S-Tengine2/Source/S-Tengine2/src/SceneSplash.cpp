@@ -1,6 +1,9 @@
 #pragma once
 
 #include <SceneSplash.h>
+
+#include <algorithm>
+
 #include <Game.h>
 
 #include <MeshEntity.h>
