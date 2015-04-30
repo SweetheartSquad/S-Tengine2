@@ -113,6 +113,7 @@
     <ClCompile Include="../src/Box.cpp" />
     <ClCompile Include="../src/Joystick.cpp" />
     <ClCompile Include="../src/JoystickManager.cpp" />
+    <ClCompile Include="../src/SceneSplash.cpp" />
     <ClCompile Include="../src/tiny_obj_loader.cc" />
     <ClCompile Include="../src/UILayer.cpp" />
   </ItemGroup>
@@ -230,6 +231,7 @@
     <ClInclude Include="../include/Box.h" />
     <ClInclude Include="../include/Joystick.h" />
     <ClInclude Include="../include/JoystickManager.h" />
+    <ClInclude Include="../include/SceneSplash.h" />
     <ClInclude Include="../include/tiny_obj_loader.h" />
     <ClInclude Include="../include/UILayer.h" />
   </ItemGroup>

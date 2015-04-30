@@ -35,8 +35,9 @@ private:
 	double lastTime;
 	int nbFrames;
 public:
+	bool splashScreen;
 
-	explicit Game(bool _running);
+	explicit Game(bool _running, std::pair<std::string, Scene *> _firstScene, bool _splashScreen = true);
 	virtual ~Game(void);
 
 	/** Reference to mouse singleton */

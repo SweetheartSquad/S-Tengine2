@@ -11,8 +11,11 @@
 #include "GLUtils.h"
 #include <System.h>
 
+#include <SceneSplash.h>
 
-Game::Game(bool _isRunning) :
+
+Game::Game(bool _isRunning, std::pair<std::string, Scene *> _firstScene, bool _splashScreen) :
+	splashScreen(_splashScreen),
 	accumulator(0.0),
 	lastTimestep(0.0),
 	mouse(&Mouse::getInstance()),
@@ -38,6 +41,18 @@ Game::Game(bool _isRunning) :
 	viewPortY = 0;
 	lastTime = glfwGetTime();
 	nbFrames = 0;
+	
+	scenes.insert(_firstScene);
+	if(splashScreen){
+		currentSceneKey = "SPLASH!";
+		SceneSplash * ss = new SceneSplash(this);
+		ss->nextScene = _firstScene.first;
+		currentScene = ss;
+		scenes.insert(std::pair<std::string, Scene * >(currentSceneKey, ss));
+	}else{
+		currentSceneKey = _firstScene.first;
+		currentScene = _firstScene.second;
+	}
 }
 
 Game::~Game(void){
