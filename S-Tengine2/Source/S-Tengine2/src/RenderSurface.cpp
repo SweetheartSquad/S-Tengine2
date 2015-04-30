@@ -58,24 +58,24 @@ void RenderSurface::load(){
 		shader2->load();
 		glUseProgram(shader2->getProgramId());
 		// Vertex Array Object (VAO)
-		glGenVertexArrays(1, &vaoId2);
-		glBindVertexArray(vaoId2);
+		glGenVertexArrays(1, &vaoId);
+		glBindVertexArray(vaoId);
 
 		// Vertex Buffer Object (VBO)
-		glGenBuffers(1, &vboId2);
-		glBindBuffer(GL_ARRAY_BUFFER, vboId2);
+		glGenBuffers(1, &vboId);
+		glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices2.size(), vertices2.data(), GL_STATIC_DRAW);
 
 		// Index Buffer Object (IBO)
-		glGenBuffers(1, &iboId2);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId2);
+		glGenBuffers(1, &iboId);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * indices2.size(), indices2.data(), GL_STATIC_DRAW);
 
 		checkForGlError(0, __FILE__, __LINE__);
-		GLUtils::configureVertexAttributes(shader2->get_aVertexPosition(), 3, 0, vaoId2, sizeof(Vertex));
-		GLUtils::configureVertexAttributes(shader2->get_aVertexColor(), 4, sizeof(float) * 3, vaoId2, sizeof(Vertex));
-		GLUtils::configureVertexAttributes(shader2->get_aVertexNormals(), 3, sizeof(float) * 7, vaoId2, sizeof(Vertex));
-		GLUtils::configureVertexAttributes(shader2->get_aVertexUVs(), 2, sizeof(float) * 10, vaoId2, sizeof(Vertex));
+		GLUtils::configureVertexAttributes(shader2->get_aVertexPosition(), 3, 0, vaoId, sizeof(Vertex));
+		GLUtils::configureVertexAttributes(shader2->get_aVertexColor(), 4, sizeof(float) * 3, vaoId, sizeof(Vertex));
+		GLUtils::configureVertexAttributes(shader2->get_aVertexNormals(), 3, sizeof(float) * 7, vaoId, sizeof(Vertex));
+		GLUtils::configureVertexAttributes(shader2->get_aVertexUVs(), 2, sizeof(float) * 10, vaoId, sizeof(Vertex));
 		glBindVertexArray(0);
 		checkForGlError(0, __FILE__, __LINE__);
 	}
@@ -85,11 +85,11 @@ void RenderSurface::load(){
 
 void RenderSurface::unload(){
 	if (loaded){
-		glDeleteBuffers(1, &iboId2);
-		glDeleteBuffers(1, &vboId2);
-		glDeleteVertexArrays(1, &vaoId2);
-		vboId2 = 0;
-		vaoId2 = 0;
+		glDeleteBuffers(1, &iboId);
+		glDeleteBuffers(1, &vboId);
+		glDeleteVertexArrays(1, &vaoId);
+		vboId = 0;
+		vaoId = 0;
 		shader2->unload();
 		checkForGlError(0, __FILE__, __LINE__);
 	}
@@ -98,12 +98,12 @@ void RenderSurface::unload(){
 
 void RenderSurface::render(GLuint _textureId, GLint _renderTo){
 
-	if (glIsVertexArray(vaoId2) == GL_TRUE){
-		if (glIsBuffer(vboId2) == GL_TRUE){
-			if (glIsBuffer(iboId2) == GL_TRUE){
+	if (glIsVertexArray(vaoId) == GL_TRUE){
+		if (glIsBuffer(vboId) == GL_TRUE){
+			if (glIsBuffer(iboId) == GL_TRUE){
 				glUseProgram(shader2->getProgramId());
 				glBindFramebuffer(GL_FRAMEBUFFER, _renderTo);
-				glBindVertexArray(vaoId2);
+				glBindVertexArray(vaoId);
 				glDisable(GL_DEPTH_TEST);
 				glActiveTexture(GL_TEXTURE0);
 				glBindTexture(GL_TEXTURE_2D, _textureId);
@@ -141,12 +141,12 @@ void RenderSurface::render(GLuint _textureId, GLint _renderTo){
 void RenderSurface::clean(){
 	if (dirty2){
 		// Vertex Buffer Object (VBO)
-		glBindBuffer(GL_ARRAY_BUFFER, vboId2);
+		glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * (vertices2.size()), vertices2.data(), GL_STATIC_DRAW);
 		checkForGlError(0, __FILE__, __LINE__);
 
 		// Index Buffer Object (IBO)
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId2);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * (indices2.size()), indices2.data(), GL_STATIC_DRAW);
 		checkForGlError(0, __FILE__, __LINE__);
 		dirty2 = false;

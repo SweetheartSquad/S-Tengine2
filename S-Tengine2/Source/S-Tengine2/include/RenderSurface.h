@@ -28,12 +28,6 @@ public:
 	*/
 	explicit RenderSurface(Shader * _shader);
 	~RenderSurface();
-	/** ID of the vertex array object */
-	GLuint vaoId2;
-	/** ID of the vertex buffer object */
-	GLuint vboId2;
-	/** ID of the index buffer object */
-	GLuint iboId2;
 	/**Shader to use when rendering the 2D surface*/
 	Shader * shader2;
 
