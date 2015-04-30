@@ -314,4 +314,7 @@ void Game::setViewport(float _x, float _y, float _w, float _h){
 	viewPortY = _y;
 	viewPortWidth = _w;
 	viewPortHeight = _h;
+
+	glViewport(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
+	glScissor(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
 }

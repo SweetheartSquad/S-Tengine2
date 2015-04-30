@@ -98,39 +98,22 @@ void Scene::unload(){
 
 
 void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	//glfwGetFramebufferSize(glfwGetCurrentContext(), &w, &h);
-	glfwMakeContextCurrent(glfwGetCurrentContext());
-	float ratio;
-	ratio = game->viewPortWidth / static_cast<float>(game->viewPortHeight);
-
 	glEnable(GL_SCISSOR_TEST);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glBlendFunc(GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
-
-	//glBlendFunc(GL_ONE, GL_ZERO);
-	glEnable (GL_BLEND);
-
-	//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	//glBlendFunc(GL_ONE_MINUS_DST_ALPHA, GL_ONE);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	glBlendEquation(GL_FUNC_ADD);
-
-	glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
-
-	glViewport(game->viewPortX, game->viewPortY, game->viewPortWidth, game->viewPortHeight);
-	glScissor(game->viewPortX, game->viewPortY, game->viewPortWidth, game->viewPortHeight);
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
 	glEnable(GL_DEPTH_TEST);
-     //glAlphaFunc ( GL_GREATER, 0.1 ) ;
-    glEnable ( GL_ALPHA_TEST ) ;
+	glEnable(GL_ALPHA_TEST);
+	//glAlphaFunc ( GL_GREATER, 0.1 ) ;
+	glEnable(GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendEquation(GL_FUNC_ADD);
 
 	//Back-face culling
 	//glEnable (GL_CULL_FACE); // cull face
-    //glCullFace (GL_BACK); // cull back face
+	//glCullFace (GL_BACK); // cull back face
 
 	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
+
+	glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	matrixStack->setProjectionMatrix(activeCamera->getProjectionMatrix());
 	matrixStack->setViewMatrix(activeCamera->getViewMatrix());
@@ -140,7 +123,6 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptio
 	}
 	
 	checkForGlError(0,__FILE__,__LINE__);
-    //glDisable(GL_POLYGON_OFFSET_FILL);
 }
 
 void Scene::addChild(Entity* _child){
