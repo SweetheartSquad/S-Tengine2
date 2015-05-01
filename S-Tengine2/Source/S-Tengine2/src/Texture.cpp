@@ -73,9 +73,7 @@ void Texture::unload(){
 		glDeleteTextures(1, &textureId);
 		textureId = 0;
 		checkForGlError(0,__FILE__,__LINE__);
-#ifdef _DEBUG
 		std::cout << loaded << " tex: " << this->src << std::endl;
 	}
-#endif
 	NodeLoadable::unload();
 }
