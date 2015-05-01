@@ -40,7 +40,7 @@
 SceneSplash::SceneSplash(Game * _game) :
 	Scene(_game),
 	shader(new BaseComponentShader(true)),
-	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
+	screenSurfaceShader(new Shader("../assets/LogoRenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
 	uiLayer(0,0,0,0)
@@ -100,18 +100,36 @@ SceneSplash::~SceneSplash(){
 }
 
 void SceneSplash::update(Step * _step){
-	//float b;
-	/*if(_step->time-3 < 3){
-		b = Easing::easeInQuad(std::max(0.0, _step->time-3), 0, 1, 3);
+	float b;
+	if(_step->time-2 < 2){
+		b = Easing::easeInQuad(std::max(0.0, _step->time-2), 0, 1, 2) - std::rand() % 100 / 1000.f;
 	}else{
-		b = Easing::easeOutQuad(std::max(0.0, _step->time-8), 1, -1, 1);
-	}*/
+		b = Easing::easeOutQuad(std::max(0.0, _step->time - 8), 1, -1, 1) - std::rand() % 100 / 1000.f;
+	}
 
-	//hsvShader->setValue(b);
+	float thing = std::rand() % 100 / 10000.f;
 
-	/*if(_step->time-3 > 6){
+	//glUniform1f(glGetUniformLocation(screenSurfaceShader->getProgramId(), "amount"), std::rand() % 100 / 1000.f);
+	//glUniform1f(glGetUniformLocation(screenSurfaceShader->getProgramId(), "center"), 0.5f);
+
+	if (_step->time <= 6){
+		screenSurface->vertices.at(0).v = thing + Easing::easeOutCubic(std::min(5.0, _step->time), 0, -50, 5) + 1;
+		screenSurface->vertices.at(1).v = thing + Easing::easeOutCubic(std::min(5.0, _step->time), 0, -50, 5) + 1;
+		screenSurface->vertices.at(2).v = thing + Easing::easeOutCubic(std::min(5.0, _step->time), 0, -50, 5);
+		screenSurface->vertices.at(3).v = thing + Easing::easeOutCubic(std::min(5.0, _step->time), 0, -50, 5);
+	}else{
+		screenSurface->vertices.at(0).v = thing + Easing::easeInCubic(std::max(0.0, _step->time - 7), 0, -25, 2) + 1;
+		screenSurface->vertices.at(1).v = thing + Easing::easeInCubic(std::max(0.0, _step->time - 7), 0, -25, 2) + 1;
+		screenSurface->vertices.at(2).v = thing + Easing::easeInCubic(std::max(0.0, _step->time - 7), 0, -25, 2);
+		screenSurface->vertices.at(3).v = thing + Easing::easeInCubic(std::max(0.0, _step->time - 7), 0, -25, 2);
+	}
+	screenSurface->dirty = true;
+
+	hsvShader->setValue(b);
+
+	if(_step->time > 9){
 		game->switchScene(nextScene, true);
-	}*/
+	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
@@ -145,14 +163,16 @@ void SceneSplash::update(Step * _step){
 }
 
 void SceneSplash::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	//screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
+	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer
-	//screenFBO->bindFrameBuffer();
+	screenFBO->bindFrameBuffer();
 	//render the scene to the buffer
 	Scene::render(_matrixStack, _renderOptions);
-	uiLayer.render(_matrixStack, _renderOptions);
 	//Render the buffer to the render surface
-	//screenSurface->render(screenFBO->getTextureId());
+	screenSurface->render(screenFBO->getTextureId());
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	uiLayer.render(_matrixStack, _renderOptions);
 }
 
 void SceneSplash::load(){
