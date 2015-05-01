@@ -140,7 +140,6 @@ void Text::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions)
 
 			textureT = new Texture(glyph->bitmap, true, false);
 		}
-
 		
 		checkForGlError(0,__FILE__,__LINE__);
 
