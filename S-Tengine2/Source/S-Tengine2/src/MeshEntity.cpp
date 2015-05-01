@@ -145,3 +145,17 @@ vox::Box MeshEntity::calcOverallBoundingBox(){
 	}
 	return res;
 }
+
+void MeshEntity::freezeTransformation(){
+	glm::mat4 m = transform->getModelMatrix();
+
+	for(auto & v : mesh->vertices){
+		glm::vec4 newV(v.x, v.y, v.z, 0);
+		newV = m * newV;
+		v.x = newV.x;
+		v.y = newV.y;
+		v.z = newV.z;
+	}
+	mesh->dirty = true;
+	transform->reset();
+}

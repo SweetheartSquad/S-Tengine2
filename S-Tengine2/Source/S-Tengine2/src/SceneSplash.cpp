@@ -145,14 +145,14 @@ void SceneSplash::update(Step * _step){
 }
 
 void SceneSplash::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
+	//screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer
-	screenFBO->bindFrameBuffer();
+	//screenFBO->bindFrameBuffer();
 	//render the scene to the buffer
 	Scene::render(_matrixStack, _renderOptions);
 	uiLayer.render(_matrixStack, _renderOptions);
 	//Render the buffer to the render surface
-	screenSurface->render(screenFBO->getTextureId());
+	//screenSurface->render(screenFBO->getTextureId());
 }
 
 void SceneSplash::load(){
