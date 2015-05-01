@@ -60,7 +60,7 @@ void SoundManager::load(){
 void SoundManager::unload(){
 }
 
-void SoundManager::playRandomSound(){
+Sound & SoundManager::playRandomSound(){
 	if(sounds.size() > 1){
 		unsigned long int soundToPlay;
 		do{
@@ -71,7 +71,9 @@ void SoundManager::playRandomSound(){
 		std::advance(it, soundToPlay);
 		auto s = it->first;
 		play(s);
+		return it->second;
 	}else if(sounds.size() == 1){
 		play(sounds.begin()->first);
+		return sounds.begin()->second;
 	}
 }
