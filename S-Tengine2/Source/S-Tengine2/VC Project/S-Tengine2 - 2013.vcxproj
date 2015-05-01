@@ -111,6 +111,7 @@
     <ClCompile Include="../src/shader/ShaderComponentTint.cpp" />
     <ClCompile Include="../src/TextureSampler.cpp" />
     <ClCompile Include="../src/Box.cpp" />
+    <ClCompile Include="../src/Text.cpp" />
     <ClCompile Include="../src/Joystick.cpp" />
     <ClCompile Include="../src/JoystickManager.cpp" />
     <ClCompile Include="../src/SceneSplash.cpp" />
@@ -228,6 +229,7 @@
     <ClInclude Include="../include/shader/ShaderComponentTint.h" />
     <ClInclude Include="../include/TextureSampler.h" />
     <ClInclude Include="../include/Box.h" />
+    <ClInclude Include="../include/Text.h" />
     <ClInclude Include="../include/Joystick.h" />
     <ClInclude Include="../include/JoystickManager.h" />
     <ClInclude Include="../include/SceneSplash.h" />

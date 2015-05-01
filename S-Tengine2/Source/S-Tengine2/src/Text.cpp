@@ -40,7 +40,7 @@ Text::Text(std::string _fontSrc):
 	cam.yaw = 90.0f;
 	cam.pitch = 10.0f;
 
-	texture = new Texture("../assets/endSplash.png", 1024, 1024, true, true);
+	texture = new Texture("../assets/S-Tengine2_logo.png", 2048, 2048, true, true);
 	
 }
 
