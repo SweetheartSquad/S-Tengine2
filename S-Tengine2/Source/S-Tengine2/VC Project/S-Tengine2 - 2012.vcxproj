@@ -116,7 +116,7 @@
     <ClCompile Include="../src/SceneSplash.cpp" />
     <ClCompile Include="../src/tiny_obj_loader.cc" />
     <ClCompile Include="../src/UILayer.cpp" />
-    <ClCompile Include="..\src\BulletDebugDrawer.cpp" />
+    <ClCompile Include="../src/BulletDebugDrawer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -234,7 +234,7 @@
     <ClInclude Include="../include/SceneSplash.h" />
     <ClInclude Include="../include/tiny_obj_loader.h" />
     <ClInclude Include="../include/UILayer.h" />
-    <ClInclude Include="..\include\BulletDebugDrawer.h" />
+    <ClInclude Include="../include/BulletDebugDrawer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>
