@@ -28,6 +28,8 @@ public:
 	/** Whether the vbo and ibo contain up-to-date vertex and index data */
 	bool dirty;
 	bool texturesDirty;
+	/** Textures */
+	std::vector<Texture *> textures;
 	/** Vertex data for the vbo */
 	std::vector<Vertex> vertices;
 	/** Index data for the ibo */
@@ -107,9 +109,7 @@ public:
 	// returns a box which covers the verts of the mesh
 	vox::Box calcBoundingBox();
 
-private:
-	/** Textures */
-	std::vector<Texture *> textures;
+	
 };
 
 /** MeshInterface preset for triangle meshes */

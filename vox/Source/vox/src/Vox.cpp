@@ -17,6 +17,8 @@ double vox::deltaTimeCorrection = 1;
 
 bool vox::fullscreen = false;
 
+FT_Library vox::freeTypeLibrary = nullptr;
+
 GLFWwindow * vox::currentContext = nullptr;
 
 void vox::setGlfwWindowHints(){
@@ -105,6 +107,11 @@ void vox::initialize(std::string _title){
 
 	glfwGetWindowSize(window, &screenWidth, &screenHeight);
 	glfwSetCursorPos(window, screenWidth/2, screenHeight/2);
+
+	//Initialize freetype
+	if(FT_Init_FreeType(&freeTypeLibrary) != 0) {
+		std::cerr << "Couldn't initialize FreeType library\n";
+	}
 }
 
 void vox::destruct(){

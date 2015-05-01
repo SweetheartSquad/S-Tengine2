@@ -4,6 +4,9 @@
 	#define FPS 60
 #endif
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include <string>
 
 #include "VoxMatrices.h"
@@ -28,6 +31,11 @@ namespace vox{
 	* Stores a reference to the main window 
 	*/
 	extern GLFWwindow * currentContext;
+
+	/**
+	* Stores a reference to the global freetype instance
+	*/
+	extern FT_Library freeTypeLibrary;
 	
 	/** 
 	* Whether the main window is fullscreen or not 

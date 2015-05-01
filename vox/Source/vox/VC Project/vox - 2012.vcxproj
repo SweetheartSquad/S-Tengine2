@@ -120,6 +120,7 @@
     <ClCompile Include="../src/shader/ShaderComponentTint.cpp" />
     <ClCompile Include="../src/TextureSampler.cpp" />
     <ClCompile Include="../src/Box.cpp" />
+    <ClCompile Include="..\src\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -235,6 +236,7 @@
     <ClInclude Include="../include/shader/ShaderComponentTint.h" />
     <ClInclude Include="../include/TextureSampler.h" />
     <ClInclude Include="../include/Box.h" />
+    <ClInclude Include="..\include\Text.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>

@@ -13,7 +13,7 @@ Texture::Texture(std::string _src, unsigned long int _width, unsigned long int _
 	width(_width),
 	height(_height),
 	data(nullptr),
-	channels(nullptr)
+	channels(0)
 {
 
 }
@@ -24,22 +24,17 @@ Texture::Texture(FT_Bitmap _glyph, bool _storeDate, bool _autoRelease):
 	height(_glyph.rows),
 	storeData(_storeDate),
 	data(_glyph.buffer),
-	channels(new int(4))
+	channels(2)
 {
 
 }
 
 Texture::~Texture(){
-	delete channels;
 	delete data;
 }
 
 void Texture::load(){
 	if(!loaded){
-		if(channels == nullptr){
-			channels = new int(0);
-		}
-		
 				checkForGlError(0,__FILE__,__LINE__);
 		glGenTextures(1, &textureId);
 				checkForGlError(0,__FILE__,__LINE__);
@@ -51,20 +46,23 @@ void Texture::load(){
 		if(data != nullptr){
 			tempData = data;
 		}else{
-			tempData = Resource::loadImage(src.c_str(), width, height, SOIL_LOAD_AUTO, channels);
+			tempData = Resource::loadImage(src.c_str(), width, height, SOIL_LOAD_AUTO, &channels);
 			if(storeData){
 				data = tempData;
 			}
 		}
 
-		if(*channels == 3){
+		if(channels == 2) {
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, tempData);
+		}else if(channels == 3){
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, tempData);
-		}else if(*channels == 4){
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, tempData);
+		}else if(channels == 4){
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tempData);
 		}else{
 			throw "Invalid number of image channels";
 		}
-		//glGenerateMipmap(GL_TEXTURE_2D);
+		
+		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	
 	NodeLoadable::load();
@@ -75,8 +73,9 @@ void Texture::unload(){
 		glDeleteTextures(1, &textureId);
 		textureId = 0;
 		checkForGlError(0,__FILE__,__LINE__);
+#ifdef _DEBUG
 		std::cout << loaded << " tex: " << this->src << std::endl;
 	}
-	
+#endif
 	NodeLoadable::unload();
 }

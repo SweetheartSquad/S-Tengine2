@@ -28,9 +28,9 @@ public:
 	If you we are going to be re biniding the data a lot this may be useful*/
 	bool storeData;
 	/**The image data */
-	unsigned char* data;
+	unsigned char * data;
 	/** Num channels (can't be unsigned long because of SOIL) */
-	int * channels;
+	int channels;
 	/**Initializes the texture. Can be called to recreate the texture
 	if the context is destroyed*/
 	void load() override;

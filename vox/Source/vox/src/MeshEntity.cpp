@@ -120,6 +120,7 @@ void MeshEntity::load(){
 	if(!loaded){
 		if(mesh != nullptr){
 			mesh->load();
+			checkForGlError(0,__FILE__,__LINE__);
 			mesh->clean();	
 		}
 	
