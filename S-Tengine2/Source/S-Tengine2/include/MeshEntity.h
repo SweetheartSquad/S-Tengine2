@@ -44,7 +44,8 @@ public:
 	/** Loads and cleans mesh, configures default vertex attributes, deletes and reloads shader, and calls unload on all children (recursive) */
 	virtual void load() override;
 
-
+	// bakes the transformation matrices into the mesh's verts and resets the transform
+	void freezeTransformation();
 private:
 	
 	/** Reference to this entity's shader */
