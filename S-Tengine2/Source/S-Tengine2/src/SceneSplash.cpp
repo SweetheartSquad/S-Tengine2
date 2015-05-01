@@ -56,9 +56,9 @@ SceneSplash::SceneSplash(Game * _game) :
 	fc->farClip = 1000.f;
 	fc->nearClip = 0.001f;
 	fc->transform->rotate(90, 0, 1, 0, kWORLD);
-	fc->transform->translate(5.0f, 1.5f, 22.5f);
-	fc->yaw = 90.0f;
-	fc->pitch = -10.0f;
+	fc->transform->translate(-12.5f, -2.0f, 17.36f);
+	fc->yaw = 60.0f;
+	fc->pitch = -4.0f;
 	activeCamera = fc;
 
 
@@ -78,7 +78,7 @@ SceneSplash::SceneSplash(Game * _game) :
 	}
 	mouseIndicator->mesh->dirty = true;
 	
-	Texture * t = new Texture("../assets/S-Tengine2_logo.png", 2048, 2048, true, true);
+	Texture * t = new Texture("../assets/S-Tengine2_logo.png", 1024, 1024, true, true);
 	t->load();
 	logo = new MeshEntity(Resource::loadMeshFromObj("../assets/S-Tengine2_logo.vox").at(0));
 	logo->mesh->pushTexture2D(t);
@@ -100,18 +100,18 @@ SceneSplash::~SceneSplash(){
 }
 
 void SceneSplash::update(Step * _step){
-	float b;
-	if(_step->time-3 < 3){
+	//float b;
+	/*if(_step->time-3 < 3){
 		b = Easing::easeInQuad(std::max(0.0, _step->time-3), 0, 1, 3);
 	}else{
 		b = Easing::easeOutQuad(std::max(0.0, _step->time-8), 1, -1, 1);
-	}
+	}*/
 
-	hsvShader->setValue(b);
+	//hsvShader->setValue(b);
 
-	if(_step->time-3 > 6){
+	/*if(_step->time-3 > 6){
 		game->switchScene(nextScene, true);
-	}
+	}*/
 
 	if(keyboard->keyJustUp(GLFW_KEY_F11)){
 		game->toggleFullScreen();
