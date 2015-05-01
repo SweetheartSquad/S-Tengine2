@@ -39,7 +39,7 @@ std::string ShaderComponentTexture::getFragmentBodyString(){
         for (unsigned long int i = 0; i < MAX_TEXTURES; ++i){
             res << "\tif (" + GL_UNIFORM_ID_NUM_TEXTURES + " > " << i << "){" << ENDL;
                 if(i == 0){
-                    res << "\t\tmodFrag = vec4(texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << ").rgba)" << SEMI_ENDL;
+                    res << "\t\tmodFrag = vec4(1,1,1,texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << ").r)" << SEMI_ENDL;
                 }
                 else{
                     res << "\t\tmodFrag = mix(modFrag, texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << ").rgba, 0.5)" << SEMI_ENDL;

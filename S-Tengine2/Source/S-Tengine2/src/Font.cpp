@@ -1,5 +1,6 @@
 #include <Font.h>
 #include <Vox.h>
+#include <MeshFactory.h>
 
 Font::Font(std::string _fontSrc, int _size):
 	NodeLoadable()
@@ -50,27 +51,47 @@ Texture * Font::getTextureForChar(char _char){
 
 MeshInterface* Font::getMeshInterfaceForChar(char _char){
 	if(!meshes.count(_char)){
-		MeshInterface * mesh = new MeshInterface(GL_QUADS, GL_STATIC_DRAW);
-	
-		float x = 0.0f;
-		float y = 0.0f;
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-		float sx = 2.0f/640.0f;
-		float sy = 2.0f/480.0f;
-
-		float vx = x + face->glyph->bitmap_left * sx;
-		float vy = y + face->glyph->bitmap_top * sy;
-		float w = face->glyph->bitmap.width * sx;
-		float h = face->glyph->bitmap.rows * sy;
-
-		mesh->pushVert(Vertex(glm::vec3(vx, vy, -2.f), glm::vec2(0.f, 0.f)));
-		mesh->pushVert(Vertex(glm::vec3(vx + w, vy, -2.f), glm::vec2(1.f, 0.f)));
-		mesh->pushVert(Vertex(glm::vec3(vx + w, vy - h, -2.f), glm::vec2(1.f, 1.f)));
-		mesh->pushVert(Vertex(glm::vec3(vx, vy-h, -2.f), glm::vec2(0.f, 1.f)));
-
+		MeshInterface * mesh = MeshFactory::getPlaneMesh();
 		mesh->pushTexture2D(getTextureForChar(_char));
+
+		float vx = face->glyph->bitmap_left;
+		float vy = face->glyph->bitmap_top;
+		float w = face->glyph->bitmap.width;
+		float h = face->glyph->bitmap.rows;
+		
+		mesh->vertices.at(0).x = vx;
+		mesh->vertices.at(0).y = vy;
+
+		mesh->vertices.at(1).x = vx + w;
+		mesh->vertices.at(1).y = vy;
+
+		mesh->vertices.at(2).x = vx + w;
+		mesh->vertices.at(2).y = vy - h;
+
+		mesh->vertices.at(3).x = vx;
+		mesh->vertices.at(3).y = vy-h;
+
+		/*mesh->pushVert(Vertex(glm::vec3(vx, vy, 0.f),       glm::vec2(0.f, 0.f)));
+		mesh->pushVert(Vertex(glm::vec3(vx + w, vy, 0.f),     glm::vec2(1.f, 0.f)));
+		mesh->pushVert(Vertex(glm::vec3(vx + w, vy - h, 0.f), glm::vec2(1.f, 1.f)));
+		mesh->pushVert(Vertex(glm::vec3(vx, vy-h, 0.f),       glm::vec2(0.f, 1.f)));*/
+		
+		mesh->dirty = true;
+
+		mesh->unload();
+		mesh->load();
 		
 		meshes[_char] = mesh;
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	}
 	return meshes.at(_char);
+}
+
+glm::vec2 Font::getGlyphWidthHeight(char _char){
+	FT_Set_Pixel_Sizes(face, 0, size);
+	FT_GlyphSlot glyph = face->glyph;
+	FT_Load_Char(face, _char, FT_LOAD_RENDER);
+	return glm::vec2(face->glyph->bitmap.width + face->glyph->bitmap_left, face->glyph->bitmap.rows + face->glyph->bitmap_top);
 }

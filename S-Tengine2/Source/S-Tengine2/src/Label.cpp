@@ -6,23 +6,34 @@
 Label::Label(Font * _font, Shader * _shader):
 	NodeTransformable(new Transform()),
 	NodeChild(nullptr),
-	Entity(transform)
+	Entity(transform),
+	textDirty(false)
 {
 	font = _font;
 	shader = _shader;
 }
 
 void Label::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
-	for(char c : text){
-		MeshInterface * mi = font->getMeshInterfaceForChar(c);
-		MeshEntity * me = new MeshEntity(mi);
-		me->setShader(shader, true);
-		addChild(me);
-	}
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	Entity::render(_matrixStack, _renderOptions);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 }
 
 void Label::update(Step * _step){
+	if(textDirty){
+		float acc = 0.f;
+		textDirty = false;
+		children.clear();
+		for(char c : text){
+			MeshInterface * mi = font->getMeshInterfaceForChar(c);
+			MeshEntity * me = new MeshEntity(mi);
+			me->setShader(shader, true);
+			addChild(me);
+			me->transform->translate(acc, 0.f, 0.f);
+			glm::vec2 wH = font->getGlyphWidthHeight(c);
+			acc += wH.x;
+		}
+	}
 	Entity::update(_step);
 }
 
@@ -41,4 +52,5 @@ Label::~Label(){
 
 void Label::setText(std::string _text){
 	text = _text;
+	textDirty = true;
 }

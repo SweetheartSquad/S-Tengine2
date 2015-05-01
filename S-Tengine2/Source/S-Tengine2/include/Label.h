@@ -24,5 +24,5 @@ public:
 
 private:
 	std::string text;
-	MeshEntity * getPlaneForChar(char _char);
+	bool textDirty;
 };

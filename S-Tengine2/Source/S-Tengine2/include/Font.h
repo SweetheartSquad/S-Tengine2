@@ -17,11 +17,12 @@ public:
 	explicit Font(std::string _fontSrc, int size);
 	~Font();
 	
-	Texture * getTextureForChar(char _char);
-	MeshInterface * getMeshInterfaceForChar(char _char);
-
 	void load() override;
 	void unload() override;
+
+	Texture * getTextureForChar(char _char);
+	MeshInterface * getMeshInterfaceForChar(char _char);
+	glm::vec2 getGlyphWidthHeight(char _char);
 
 private:
 	int size;
