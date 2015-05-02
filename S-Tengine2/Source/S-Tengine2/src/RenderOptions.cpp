@@ -8,8 +8,7 @@ RenderOptions::RenderOptions(Shader* _shader, std::vector<Light *> *_lights, Sha
 	overrideShader(_overrideShader),
 	alphaSorting(false),
 	currentVao(0),
-	currentlyBoundShaderId(0),
-	lastNumLights(0)
+	currentlyBoundShaderId(0)
 {
 }
 

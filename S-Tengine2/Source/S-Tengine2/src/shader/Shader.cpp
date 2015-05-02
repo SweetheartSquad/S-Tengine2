@@ -7,7 +7,7 @@ void Shader::init(std::string _vertexShaderSource, std::string _fragmentShaderSo
 	vertSource = _vertexShaderSource;
 	fragSource = _fragmentShaderSource;
 	hasGeometryShader = false;
-	load();
+	//load();
 	isCompiled = false;
 	dirty = true;
 }
@@ -17,7 +17,7 @@ void Shader::init(std::string _vertexShaderSource, std::string _fragmentShaderSo
 	fragSource = _fragmentShaderSource;
 	geomSource = _geometryShaderSource;
 	hasGeometryShader = true;
-	load();
+	//load();
 	isCompiled = false;
 	dirty = true;
 }
@@ -49,7 +49,8 @@ Shader::Shader(std::string _vertexShaderSource, std::string _fragmentShaderSourc
 
 Shader::Shader(std::string _vertexShaderSource, std::string _fragmentShaderSource, std::string _geometryShaderSource, bool _autoRelease) :
 	NodeResource(_autoRelease),
-	hasGeometryShader(true){
+	hasGeometryShader(true)
+{
 		init(_vertexShaderSource, _fragmentShaderSource, _geometryShaderSource);
 }
 
@@ -109,6 +110,7 @@ void Shader::load(){
 
 			// The program is useless now. So delete it.
 			glDeleteProgram(programId);
+			assert(false);
 
 			// Provide the infolog in whatever manor you deem best.
 			for(unsigned long int i = 0; i < infoLog.size(); ++i){
@@ -141,20 +143,25 @@ void Shader::load(){
 
 void Shader::unload(){
 	if(loaded){
-		glDeleteProgram(programId);
-		programId = 0;
-		aVertexPosition = -1;
-		aVertexColor = -1;
-		aVertexNormals = -1;
-		aVertexUVs = -1;
-		dirty = true;
+		if(glIsProgram(programId) == GL_TRUE){
+			glDeleteProgram(programId);
+			checkForGlError(0,__FILE__,__LINE__);
+			programId = 0;
+			aVertexPosition = -1;
+			aVertexColor = -1;
+			aVertexNormals = -1;
+			aVertexUVs = -1;
+			dirty = true;
+			isCompiled = false;
+		}else{
+			std::cout << "not actually a shader?" << std::endl << std::endl;
+		}
 	}
 	
 	NodeLoadable::unload();
 }
 
 GLuint Shader::compileShader(GLenum _shaderType, char const* _source, int _length){
-	checkForGlError(0,__FILE__,__LINE__);
 	GLuint shaderId = glCreateShader(_shaderType);
 	glShaderSource(shaderId, 1, &_source, &_length);
 	checkForGlError(0,__FILE__,__LINE__);
@@ -188,7 +195,7 @@ GLuint Shader::compileShader(GLenum _shaderType, char const* _source, int _lengt
 	}
 	checkForGlError(0,__FILE__,__LINE__);
 	
-	isCompiled = true;
+	//isCompiled = true;
 	return shaderId;
 }
 

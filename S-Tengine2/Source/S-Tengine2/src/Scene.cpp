@@ -68,30 +68,34 @@ void Scene::update(Step * _step){
 	//for (Entity * e : children){
 	for (unsigned long int i = 0; i < children.size(); ++i){
 		Entity * e = children.at(i);
-		e->update(&vox::step);
+		e->update(_step);
 	}
 }
 
 void Scene::load(){
+	shadowSurface->load();
+	depthShader->load();
+	shadowBuffer->load();
+	depthBuffer->load();
 	for(Entity * e : children){
 		e->load();
 	}
-	depthBuffer->load();
-	shadowBuffer->load();
-	depthShader->load();
-	shadowSurface->load();
 	
 	NodeLoadable::load();
 }
 
 void Scene::unload(){
-	for(Entity * e : children){
-		e->unload();
+	for(signed long int i = children.size()-1; i >= 0; --i){
+		children.at(i)->unload();
 	}
 	depthBuffer->unload();
 	shadowBuffer->unload();
 	depthShader->unload();
 	shadowSurface->unload();
+
+	for(Light * l : lights){
+		l->dirty = true;
+	}
 
 	NodeLoadable::unload();
 }
@@ -117,6 +121,8 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptio
 
 	matrixStack->setProjectionMatrix(activeCamera->getProjectionMatrix());
 	matrixStack->setViewMatrix(activeCamera->getViewMatrix());
+
+	renderOptions->lights = &lights;
 
 	for(Entity * e : children){
 		e->render(matrixStack, renderOptions);

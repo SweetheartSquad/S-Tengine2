@@ -30,7 +30,7 @@ Text::Text(std::string _fontSrc):
 	}
  
 	shader = new BaseComponentShader(true);
-	shader->components.push_back(new ShaderComponentTexture(shader));
+	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->compileShader();
 	m = new MeshEntity(new MeshInterface(GL_QUADS, GL_STATIC_DRAW));
 

@@ -17,7 +17,7 @@ class SceneSplash : public Scene{
 public:
 	BaseComponentShader * shader;
 	ShaderComponentHsv * hsvShader;
-
+	
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;
 	StandardFrameBuffer * screenFBO;

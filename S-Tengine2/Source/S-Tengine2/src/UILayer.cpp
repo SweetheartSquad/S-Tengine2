@@ -19,7 +19,7 @@ UILayer::UILayer(float _left, float _right, float _top, float _bottom) :
 	cam.left = -sd.x;
 	cam.top = sd.y;
 
-	shader->components.push_back(new ShaderComponentTexture(shader));
+	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->compileShader();
 }
 

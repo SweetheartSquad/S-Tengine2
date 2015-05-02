@@ -254,6 +254,13 @@ void Game::switchScene(std::string _newSceneKey, bool _deleteOldScene){
 
 
 void Game::toggleFullScreen(){
+	// unload everything
+	ResourceManager::unload();
+	for(std::pair<std::string, Scene *> s : scenes){
+		s.second->unload();
+	}
+
+
 	// Toggle fullscreen flag.
 	vox::fullscreen = !vox::fullscreen;
 	//get size
@@ -290,16 +297,11 @@ void Game::toggleFullScreen(){
 	}
 	
 
-	for(std::pair<std::string, Scene *> s : scenes){
-		s.second->unload();
-	}
-	ResourceManager::unload();
-	
-	ResourceManager::load();
+	// reload everything
 	for(std::pair<std::string, Scene *> s : scenes){
 		s.second->load();
 	}
-	//resourceManager->load();
+	ResourceManager::load();
 
 	checkForGlError(0,__FILE__,__LINE__);
 }

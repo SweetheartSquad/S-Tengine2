@@ -13,7 +13,7 @@
 
 #include <GL/glew.h>
 
-Box2DDebugDraw::Box2DDebugDraw(Box2DWorld * _world):
+Box2DDebugDraw::Box2DDebugDraw(Box2DWorld * _world) :
 	shader(new BaseComponentShader(false)),
 	world(_world),
 	spriteSegment(new Sprite()),
@@ -26,9 +26,8 @@ Box2DDebugDraw::Box2DDebugDraw(Box2DWorld * _world):
 	matrixStack(nullptr),
 	renderOptions(nullptr)
 {
-	shader->components.push_back(new ShaderComponentTexture(shader));
+	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->compileShader();
-	
 	
 	spriteSegment->mesh->vertices.clear();
 	spriteSegment->mesh->indices.clear();
@@ -146,14 +145,22 @@ void Box2DDebugDraw::DrawTransform(const b2Transform& xf){
 }
 
 void Box2DDebugDraw::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	GLfloat oldWidth;
+	glGetFloatv(GL_LINE_WIDTH, &oldWidth);
 	glLineWidth(2.5f);
 	if(drawing){
+		_matrixStack->pushMatrix();
+		_matrixStack->applyMatrix(transform->getModelMatrix());
+
 		matrixStack = _matrixStack;
 		renderOptions = _renderOptions;
 		world->b2world->DrawDebugData();
 		matrixStack = nullptr;
 		renderOptions = nullptr;
+
+		_matrixStack->popMatrix();
 	}
+	glLineWidth(oldWidth);
 }
 
 void Box2DDebugDraw::load(){
