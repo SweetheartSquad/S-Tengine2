@@ -17,6 +17,8 @@ Label::Label(Font * _font, Shader * _shader):
 }
 
 void Label::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
 	if(depth == GL_TRUE){
 		glDisable(GL_DEPTH_TEST);
@@ -65,9 +67,11 @@ void Label::updateText(){
 		me->setShader(shader, true);
 		addChild(me);
 		me->transform->translate(acc, 0.f, 0.f);
-		glm::vec2 offset = font->getGlyphWidthHeight(c) + font->getGlyphXY(c);
-		acc += offset.x;
+		//glm::vec2 offset = font->getGlyphWidthHeight(c) + font->getGlyphXY(c);
+		font->loadGlyph(c);
+		acc += font->face->glyph->advance.x/64;//offset.x;
 	}
+
 	//Render in reverse so that letters overlap properly.
 	//This is important for things like calligraphy fonts
 	children.reserve(children.size());

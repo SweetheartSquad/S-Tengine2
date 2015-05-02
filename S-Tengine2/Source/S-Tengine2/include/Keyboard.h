@@ -64,14 +64,14 @@ public:
 	*/
 	static Keyboard& getInstance();
 
-private:
-	Keyboard();
-	~Keyboard();
-
 	/** Map of keys which are currently pressed down */
 	std::map<int, int> pressedKeys;
 	/** Map of keys which were pressed down since the keyboard's last call to update */
 	std::map<int, int> justPressedKeys;
 	/** Map of keys which were released since the keyboard's last call to update */
 	std::map<int, int> justReleasedKeys;
+
+private:
+	Keyboard();
+	~Keyboard();
 };
