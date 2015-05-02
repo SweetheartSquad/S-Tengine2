@@ -40,14 +40,14 @@
 SceneSplash::SceneSplash(Game * _game) :
 	Scene(_game),
 	shader(new BaseComponentShader(true)),
-	screenSurfaceShader(new Shader("../assets/LogoRenderSurface", false, true)),
+	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
 	uiLayer(0,0,0,0)
 {
-	shader->components.push_back(new ShaderComponentTexture(shader));
+	shader->addComponent(new ShaderComponentTexture(shader));
 	hsvShader = new ShaderComponentHsv(shader, 0, 1, 1);
-	shader->components.push_back(hsvShader);
+	shader->addComponent(hsvShader);
 	shader->compileShader();
 
 	//Set up cameras
@@ -59,6 +59,8 @@ SceneSplash::SceneSplash(Game * _game) :
 	fc->transform->translate(-12.5f, -2.0f, 17.36f);
 	fc->yaw = 60.0f;
 	fc->pitch = -4.0f;
+	fc->lastOrientation = fc->calcOrientation();
+	fc->transform->setOrientation(fc->lastOrientation);
 	activeCamera = fc;
 
 
@@ -78,8 +80,9 @@ SceneSplash::SceneSplash(Game * _game) :
 	}
 	mouseIndicator->mesh->dirty = true;
 	
-	Texture * t = new Texture("../assets/S-Tengine2_logo.png", 1024, 1024, true, true);
+	Texture * t = new Texture("../assets/S-Tengine2_logo.png", 1024, 1024, true, false);
 	t->load();
+	ResourceManager::resources.push_back(t);
 	logo = new MeshEntity(Resource::loadMeshFromObj("../assets/S-Tengine2_logo.vox").at(0));
 	logo->mesh->pushTexture2D(t);
 	logo->transform->scale(25,25,25);

@@ -7,13 +7,18 @@
 #include <MatrixStack.h>
 #include <RenderOptions.h>
 #include <shader\Shader.h>
+#include <shader\BaseComponentShader.h>
+#include <shader\ShaderComponentTexture.h>
 
 BulletDebugDrawer::BulletDebugDrawer(btCollisionWorld * _world) :
 	NodeChild(nullptr),
 	NodeTransformable(new Transform()),
 	m_debugMode(0),
-	world(_world)
+	world(_world),
+	shader(new BaseComponentShader(false))
 {
+	shader->addComponent(new ShaderComponentTexture(shader));
+	shader->compileShader();
 }
 
 BulletDebugDrawer::~BulletDebugDrawer(){
@@ -109,10 +114,20 @@ void BulletDebugDrawer::drawContactPoint(const btVector3& pointOnB,const btVecto
 
 
 void BulletDebugDrawer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	GLfloat oldWidth;
+	glGetFloatv(GL_LINE_WIDTH, &oldWidth);
+	glLineWidth(2.5f);
+
+	_matrixStack->pushMatrix();
+	_matrixStack->applyMatrix(transform->getModelMatrix());
+
 	matrixStack = _matrixStack;
 	renderOptions = _renderOptions;
-	renderOptions->shader->clean(_matrixStack, _renderOptions, nullptr);
+	shader->clean(_matrixStack, _renderOptions, this); // remove this later, just here because everything is in immediate mode
 	world->debugDrawWorld();
 	matrixStack = nullptr;
 	renderOptions = nullptr;
+
+	_matrixStack->popMatrix();
+	glLineWidth(oldWidth);
 }

@@ -14,14 +14,15 @@ public:
 
 	virtual ~BaseComponentShader();
 
-	std::vector<ShaderComponent *> components;
 	GeometryComponent * geometryComponent;
 
 	void compileShader();
+	void addComponent(ShaderComponent * _component);
 
 	virtual void configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable) override;
 	virtual void clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 private:
+	std::vector<ShaderComponent *> components;
 	std::string buildVertexShader();
 	std::string buildFragmentShader();
 };

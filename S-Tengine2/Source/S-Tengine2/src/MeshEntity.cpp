@@ -106,7 +106,7 @@ void MeshEntity::unload(){
 			mesh->unload();
 		}
 		if(shader != nullptr){
-			shader->unload();	
+			shader->unload();
 		}
 	}
 	Entity::unload();

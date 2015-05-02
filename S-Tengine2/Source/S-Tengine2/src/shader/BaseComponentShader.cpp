@@ -114,7 +114,7 @@ std::string BaseComponentShader::buildFragmentShader(){
 }
 
 void BaseComponentShader::compileShader(){
-	Shader::unload();
+	//Shader::unload();
 	if(geometryComponent != nullptr){
 		init(buildVertexShader(), buildFragmentShader(), geometryComponent->getGeometryShader());	
 	}else{
@@ -144,9 +144,14 @@ void BaseComponentShader::configureUniforms(vox::MatrixStack* _matrixStack, Rend
 }
 
 BaseComponentShader::~BaseComponentShader(){
-	for(unsigned long int i = 0; i < components.size(); i++){
-		delete components.at(i);
+	while(components.size() > 0){
+		delete components.back();
+		components.pop_back();
 	}
+}
+
+void BaseComponentShader::addComponent(ShaderComponent * _component){
+	components.push_back(_component);
 }
 
 void BaseComponentShader::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
