@@ -117,9 +117,13 @@
     <ClCompile Include="../src/SceneSplash.cpp" />
     <ClCompile Include="../src/tiny_obj_loader.cc" />
     <ClCompile Include="../src/UILayer.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="..\src\Font.cpp" />
     <ClCompile Include="..\src\Label.cpp" />
     <ClCompile Include="..\src\BulletDebugDrawer.cpp" />
+=======
+    <ClCompile Include="../src/BulletDebugDrawer.cpp" />
+>>>>>>> 127719095b6f6a89f0043917bcf7da251e1bd504
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -240,7 +244,7 @@
     <ClInclude Include="../include/SceneSplash.h" />
     <ClInclude Include="../include/tiny_obj_loader.h" />
     <ClInclude Include="../include/UILayer.h" />
-    <ClInclude Include="..\include\BulletDebugDrawer.h" />
+    <ClInclude Include="../include/BulletDebugDrawer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>

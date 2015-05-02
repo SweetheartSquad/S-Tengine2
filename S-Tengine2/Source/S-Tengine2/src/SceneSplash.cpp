@@ -40,7 +40,7 @@
 SceneSplash::SceneSplash(Game * _game) :
 	Scene(_game),
 	shader(new BaseComponentShader(true)),
-	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
+	screenSurfaceShader(new Shader("../assets/LogoRenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
 	uiLayer(0,0,0,0)
@@ -56,9 +56,9 @@ SceneSplash::SceneSplash(Game * _game) :
 	fc->farClip = 1000.f;
 	fc->nearClip = 0.001f;
 	fc->transform->rotate(90, 0, 1, 0, kWORLD);
-	fc->transform->translate(5.0f, 1.5f, 22.5f);
-	fc->yaw = 90.0f;
-	fc->pitch = -10.0f;
+	fc->transform->translate(-12.5f, -2.0f, 17.36f);
+	fc->yaw = 60.0f;
+	fc->pitch = -4.0f;
 	activeCamera = fc;
 
 
@@ -78,7 +78,7 @@ SceneSplash::SceneSplash(Game * _game) :
 	}
 	mouseIndicator->mesh->dirty = true;
 	
-	Texture * t = new Texture("../assets/S-Tengine2_logo.png", 2048, 2048, true, true);
+	Texture * t = new Texture("../assets/S-Tengine2_logo.png", 1024, 1024, true, true);
 	t->load();
 	logo = new MeshEntity(Resource::loadMeshFromObj("../assets/S-Tengine2_logo.vox").at(0));
 	logo->mesh->pushTexture2D(t);
@@ -101,15 +101,33 @@ SceneSplash::~SceneSplash(){
 
 void SceneSplash::update(Step * _step){
 	float b;
-	if(_step->time-3 < 3){
-		b = Easing::easeInQuad(std::max(0.0, _step->time-3), 0, 1, 3);
+	if(_step->time-2 < 2){
+		b = Easing::easeInQuad(std::max(0.0, _step->time-2), 0, 1, 2) - std::rand() % 100 / 1000.f;
 	}else{
-		b = Easing::easeOutQuad(std::max(0.0, _step->time-8), 1, -1, 1);
+		b = Easing::easeOutQuad(std::max(0.0, _step->time - 8), 1, -1, 1) - std::rand() % 100 / 1000.f;
 	}
+
+	float thing = std::rand() % 100 / 10000.f;
+
+	//glUniform1f(glGetUniformLocation(screenSurfaceShader->getProgramId(), "amount"), std::rand() % 100 / 1000.f);
+	//glUniform1f(glGetUniformLocation(screenSurfaceShader->getProgramId(), "center"), 0.5f);
+
+	if (_step->time <= 6){
+		screenSurface->vertices.at(0).v = thing + Easing::easeOutCubic(std::min(5.0, _step->time), 0, -50, 5) + 1;
+		screenSurface->vertices.at(1).v = thing + Easing::easeOutCubic(std::min(5.0, _step->time), 0, -50, 5) + 1;
+		screenSurface->vertices.at(2).v = thing + Easing::easeOutCubic(std::min(5.0, _step->time), 0, -50, 5);
+		screenSurface->vertices.at(3).v = thing + Easing::easeOutCubic(std::min(5.0, _step->time), 0, -50, 5);
+	}else{
+		screenSurface->vertices.at(0).v = thing + Easing::easeInCubic(std::max(0.0, _step->time - 7), 0, -25, 2) + 1;
+		screenSurface->vertices.at(1).v = thing + Easing::easeInCubic(std::max(0.0, _step->time - 7), 0, -25, 2) + 1;
+		screenSurface->vertices.at(2).v = thing + Easing::easeInCubic(std::max(0.0, _step->time - 7), 0, -25, 2);
+		screenSurface->vertices.at(3).v = thing + Easing::easeInCubic(std::max(0.0, _step->time - 7), 0, -25, 2);
+	}
+	screenSurface->dirty = true;
 
 	hsvShader->setValue(b);
 
-	if(_step->time-3 > 6){
+	if(_step->time > 9){
 		game->switchScene(nextScene, true);
 	}
 
@@ -145,14 +163,16 @@ void SceneSplash::update(Step * _step){
 }
 
 void SceneSplash::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	//screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
+	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer
-	//screenFBO->bindFrameBuffer();
+	screenFBO->bindFrameBuffer();
 	//render the scene to the buffer
 	Scene::render(_matrixStack, _renderOptions);
-	uiLayer.render(_matrixStack, _renderOptions);
 	//Render the buffer to the render surface
-	//screenSurface->render(screenFBO->getTextureId());
+	screenSurface->render(screenFBO->getTextureId());
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	uiLayer.render(_matrixStack, _renderOptions);
 }
 
 void SceneSplash::load(){
