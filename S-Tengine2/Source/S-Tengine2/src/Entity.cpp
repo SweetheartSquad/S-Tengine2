@@ -23,12 +23,17 @@ Entity::~Entity(void){
 }
 
 void Entity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	_matrixStack->pushMatrix();
+	_matrixStack->applyMatrix(transform->getModelMatrix());
+	
 	for(unsigned long int i = 0; i < children.size(); i++){
 		NodeRenderable * nr = dynamic_cast<NodeRenderable *>(children.at(i));
 		if(nr != nullptr){
 			nr->render(_matrixStack, _renderOptions);	
 		}
 	}
+	//pop transform
+	_matrixStack->popMatrix();
 }
 
 void Entity::update(Step * _step){

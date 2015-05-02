@@ -13,6 +13,7 @@
 #include <RenderSurface.h>
 #include <OrthographicCamera.h>
 #include <FollowCamera.h>
+#include <Font.h>
 
 Text::Text(std::string _fontSrc):
 	NodeLoadable(),
@@ -132,13 +133,13 @@ void Text::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions)
 		//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		
 		if(textureT == nullptr) {
-			textureT = new Texture(glyph->bitmap, true, false);
+			textureT = new GlyphTexture(glyph->bitmap, true, false);
 		}else {
 			//textureT->data = glyph->bitmap.buffer;
 			//textureT->unload();
 			//textureT->load();
 
-			textureT = new Texture(glyph->bitmap, true, false);
+			textureT = new GlyphTexture(glyph->bitmap, true, false);
 		}
 		
 		checkForGlError(0,__FILE__,__LINE__);

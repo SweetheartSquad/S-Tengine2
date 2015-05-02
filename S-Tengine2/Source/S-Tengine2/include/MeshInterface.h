@@ -17,6 +17,7 @@
 #include <node\NodeResource.h>
 #include "shader/ShaderVariables.h"
 #include <Box.h>
+#include <ostream>
 
 class Texture;
 class Material;
@@ -129,8 +130,6 @@ public:
 
 	// returns a box which covers the verts of the mesh
 	vox::Box calcBoundingBox();
-
-	
 };
 
 /** MeshInterface preset for triangle meshes */

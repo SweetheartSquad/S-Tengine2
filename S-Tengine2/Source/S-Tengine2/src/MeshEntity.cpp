@@ -51,9 +51,9 @@ void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 		if(mesh != nullptr){
 			mesh->render(_matrixStack, _renderOptions);
 		}
-		Entity::render(_matrixStack, _renderOptions);
 		//pop transform
 		_matrixStack->popMatrix();
+		Entity::render(_matrixStack, _renderOptions);
 	}
 }
 
@@ -83,10 +83,12 @@ void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
 		}else{
 			throw "shader not compiled; cannot setShader";
 		}
+	}else{
+		shader = nullptr;
 	}
 }
 
-Shader* MeshEntity::getShader(){
+Shader * MeshEntity::getShader(){
 	return shader;
 }
 

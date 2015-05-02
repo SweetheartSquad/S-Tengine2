@@ -13,7 +13,7 @@
 class Texture : public virtual NodeResource{
 public:
 	Texture(std::string _src, unsigned long int _width, unsigned long int _height, bool _storeData, bool _autoRelease);
-	Texture(FT_Bitmap _glyph, bool _storeDate, bool _autoRelease); 
+	Texture(bool _storeData, bool _autoRelease);
 	~Texture();
 
 	/**Source file location */
@@ -33,7 +33,7 @@ public:
 	int channels;
 	/**Initializes the texture. Can be called to recreate the texture
 	if the context is destroyed*/
-	void load() override;
+	virtual void load() override;
 	/**Destroy the texture objects relation to the opengl context */
-	void unload() override;
+	virtual void unload() override;
 };

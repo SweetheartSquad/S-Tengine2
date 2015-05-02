@@ -13,20 +13,15 @@ Texture::Texture(std::string _src, unsigned long int _width, unsigned long int _
 	width(_width),
 	height(_height),
 	data(nullptr),
-	channels(0)
+	channels(0),
+	storeData(_storeData)
 {
-
 }
 
-Texture::Texture(FT_Bitmap _glyph, bool _storeDate, bool _autoRelease):
+Texture::Texture(bool _storeData, bool _autoRelease) :
 	NodeResource(_autoRelease),
-	width(_glyph.width),
-	height(_glyph.rows),
-	storeData(_storeDate),
-	data(_glyph.buffer),
-	channels(2)
-{
-
+	storeData(_storeData)
+{	
 }
 
 Texture::~Texture(){

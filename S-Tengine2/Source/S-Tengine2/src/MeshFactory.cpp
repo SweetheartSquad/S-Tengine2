@@ -104,7 +104,6 @@ MeshInterface* MeshFactory::getPlaneMesh(GLenum _polygonalDrawMode, GLenum _draw
 	m->pushVert(Vertex(1.f, 1.f, 0.f));
 	m->pushVert(Vertex(1.f, -1.f, 0.f));
 	m->pushVert(Vertex(-1.f, -1.f, 0.f));
-	m->pushQuad(0, 1, 2, 3);
 	m->setNormal(0, 0.0, 0.0, 1.0);
 	m->setNormal(1, 0.0, 0.0, 1.0);
 	m->setNormal(2, 0.0, 0.0, 1.0);
