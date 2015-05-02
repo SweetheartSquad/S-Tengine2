@@ -44,6 +44,7 @@ GLsizei MeshInterface::getStride(){
 	return sizeof(Vertex);
 }
 
+
 GLsizei MeshInterface::getVertCount(){
 	return vertices.size();
 }
@@ -97,12 +98,12 @@ void MeshInterface::unload(){
 		dirty = true;
 		checkForGlError(0,__FILE__,__LINE__);
 	}
-	
 	NodeLoadable::unload();
 }
 
 void MeshInterface::clean(){
 	if(dirty){
+		glBindVertexArray(0);
 		// Vertex Buffer Object (VBO)
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * (vertices.size()), vertices.data(), drawMode);
@@ -129,8 +130,17 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 						_renderOption->currentVao = vaoId;
 						// Bind VAO
 						glBindVertexArray(vaoId);
+						//glBindBuffer(GL_ARRAY_BUFFER, vboId);
+						//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
+
 						checkForGlError(0,__FILE__, __LINE__);
 					//}
+					int p;
+					glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &p);
+					int c;
+					glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &c);
+					std::cout<<"VAO, "<<p;
+					std::cout<<"VBO"<<c<<std::endl;
 
 					//This should help performance but there's a bit of a problem with it at the moment so I'll comment it out
 					//if(_renderOption->shader->getProgramId() != _renderOption->currentlyBoundShaderId) {
@@ -266,3 +276,35 @@ vox::Box MeshInterface::calcBoundingBox(){
 
 	return vox::Box(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ);
 }
+
+std::ostream& operator<<(std::ostream& os, const MeshInterface& obj){
+		os
+			<< static_cast<const NodeRenderable&>(obj)<< std::endl
+			<< ' ' << static_cast<const NodeLoadable&>(obj)<< std::endl
+			<< ' ' << static_cast<const NodeResource&>(obj)<< std::endl
+			<< " dirty: " << obj.dirty<< std::endl
+			<< " texturesDirty: " << obj.texturesDirty<< std::endl
+			<< " uvEdgeMode: " << obj.uvEdgeMode<< std::endl
+			<< " scaleModeMag: " << obj.scaleModeMag<< std::endl
+			<< " scaleModeMin: " << obj.scaleModeMin<< std::endl
+			<< " vaoId: " << obj.vaoId<< std::endl
+			<< " vboId: " << obj.vboId<< std::endl
+			<< " iboId: " << obj.iboId<< std::endl
+			<< " drawMode: " << obj.drawMode<< std::endl
+			<< " polygonalDrawMode: " << obj.polygonalDrawMode << std::endl
+			<< " Vertices: " << std::endl;
+			for(auto v : obj.vertices){
+				os<<v<< std::endl;
+			}
+
+			os << "Textures: " << std::endl;
+			for(auto t : obj.textures){
+				os<<t<< std::endl;
+			}
+
+			os << "Materials: " << std::endl;
+			for(auto m : obj.materials){
+				os<<m << std::endl;
+			}
+			return os;
+	}

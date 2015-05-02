@@ -42,7 +42,7 @@ std::string ShaderComponentText::getFragmentBodyString(){
     std::stringstream res;
 	res << "vec4 textModFrag = vec4(0, 0, 0, 0)" << SEMI_ENDL;
     res << "if(" << GL_UNIFORM_ID_NUM_TEXTURES << " > 0){" << ENDL;
-		res << "textModFrag = vec4(" << GL_UNIFORM_ID_TEXT_COLOR << ".rgb, texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << 0 << "], " << GL_IN_OUT_FRAG_UV << ").r)" << SEMI_ENDL;
+		res << "textModFrag = vec4(" << GL_UNIFORM_ID_TEXT_COLOR << ".rgb, texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << 0 << "], " << GL_IN_OUT_FRAG_UV << ").r+0.5)" << SEMI_ENDL;
     res << "}" << ENDL;
     return res.str();
 }

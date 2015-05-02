@@ -92,7 +92,7 @@ MeshInterface* Font::getMeshInterfaceForChar(char _char){
 		loadGlyph(_char);
 
 		MeshInterface * mesh = MeshFactory::getPlaneMesh();
-		
+		mesh->autoRelease = false;
 		mesh->pushTexture2D(getTextureForChar(_char));
 
 		float vx = face->glyph->bitmap_left;
@@ -113,10 +113,6 @@ MeshInterface* Font::getMeshInterfaceForChar(char _char){
 		mesh->vertices.at(3).y = vy - h;
 
 		mesh->dirty = true;
-		//mesh->loaded = false;
-		//mesh->unload();
-		//mesh->load();
-		mesh->referenceCount++;
 
 		meshes.insert(std::pair<char, MeshInterface *>(_char, mesh));
 		res = mesh;

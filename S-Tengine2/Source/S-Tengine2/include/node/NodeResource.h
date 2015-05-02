@@ -2,12 +2,12 @@
 
 #include <vector>
 #include "node/NodeLoadable.h"
+#include <ostream>
 
 class NodeResource abstract : public virtual NodeLoadable{
-protected:
+public:
 	/** Whether safeDelete can be called or not */
 	bool autoRelease;
-public:
 
 	explicit NodeResource(bool _autoRelease);
 	/** Will cause this to delete itself if references is empty */
@@ -20,4 +20,12 @@ public:
 	/** Number of references to this */
 	unsigned long int referenceCount;
 	bool isAutoReleasing();
+
+
+	friend std::ostream& operator<<(std::ostream& os, const NodeResource& obj){
+		return os
+			<< static_cast<const NodeLoadable&>(obj)
+			<< " autoRelease: " << obj.autoRelease
+			<< " referenceCount: " << obj.referenceCount;
+	}
 };

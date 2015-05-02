@@ -10,8 +10,12 @@
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
+#include <string>
+#include <ostream>
+
 class Texture : public virtual NodeResource{
 public:
+	
 	Texture(std::string _src, unsigned long int _width, unsigned long int _height, bool _storeData, bool _autoRelease);
 	Texture(bool _storeData, bool _autoRelease);
 	~Texture();
@@ -36,4 +40,16 @@ public:
 	virtual void load() override;
 	/**Destroy the texture objects relation to the opengl context */
 	virtual void unload() override;
+
+	friend std::ostream& operator<<(std::ostream& os, const Texture& obj){
+		return os
+			<< static_cast<const NodeResource&>(obj)
+			<< " src: " << obj.src
+			<< " width: " << obj.width
+			<< " height: " << obj.height
+			<< " textureId: " << obj.textureId
+			<< " storeData: " << obj.storeData
+			<< " data: " << obj.data
+			<< " channels: " << obj.channels;
+	}
 };

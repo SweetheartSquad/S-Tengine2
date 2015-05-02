@@ -23,7 +23,6 @@ class Texture;
 class Material;
 class MatrixStack;
 
-
 class MeshInterface : public virtual NodeRenderable, public virtual NodeLoadable, public virtual NodeResource{
 public:
 	/** Whether the vbo and ibo contain up-to-date vertex and index data */
@@ -130,6 +129,8 @@ public:
 
 	// returns a box which covers the verts of the mesh
 	vox::Box calcBoundingBox();
+
+	friend std::ostream& operator<<(std::ostream& os, const MeshInterface& obj);
 };
 
 /** MeshInterface preset for triangle meshes */

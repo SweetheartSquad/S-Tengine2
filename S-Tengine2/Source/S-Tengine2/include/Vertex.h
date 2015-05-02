@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <ostream>
 
 struct Vertex{
 	/** Position */
@@ -127,5 +128,21 @@ struct Vertex{
 		u(0.f),
 		v(0.f)
 	{
+	}
+
+	friend std::ostream& operator<<(std::ostream& os, const Vertex& obj){
+		return os
+			<< "x: " << obj.x
+			<< " y: " << obj.y
+			<< " z: " << obj.z
+			<< " red: " << obj.red
+			<< " green: " << obj.green
+			<< " blue: " << obj.blue
+			<< " alpha: " << obj.alpha
+			<< " nx: " << obj.nx
+			<< " ny: " << obj.ny
+			<< " nz: " << obj.nz
+			<< " u: " << obj.u
+			<< " v: " << obj.v;
 	}
 };

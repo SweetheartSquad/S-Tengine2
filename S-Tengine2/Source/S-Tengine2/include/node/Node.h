@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <ostream>
 
 /** Abstract node */
 class Node abstract{
@@ -11,4 +12,8 @@ public:
 
 	Node();
 	virtual ~Node();
+
+	friend std::ostream& operator<<(std::ostream& os, const Node& obj){
+		return os;
+	}
 };
