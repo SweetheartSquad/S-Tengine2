@@ -13,7 +13,7 @@
 
 ShaderComponentText::ShaderComponentText(Shader * _shader) :
 	ShaderComponent(_shader),
-	color(0, 1, 0)					
+	color(0, 0, 1)					
 {
 }
 
@@ -30,7 +30,8 @@ std::string ShaderComponentText::getFragmentVariablesString(){
 		IF_NOT_DEFINED + SHADER_COMPONENT_TEXTURE + ENDL + 
 		"uniform sampler2D " + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[" + std::to_string(MAX_TEXTURES) + "]" + SEMI_ENDL + 
 		"uniform int " + GL_UNIFORM_ID_NUM_TEXTURES + SEMI_ENDL + 
-		END_IF + ENDL;
+		END_IF + ENDL +
+		"uniform vec3 " + GL_UNIFORM_ID_TEXT_COLOR + SEMI_ENDL;
 }
 
 std::string ShaderComponentText::getVertexBodyString(){
@@ -38,17 +39,25 @@ std::string ShaderComponentText::getVertexBodyString(){
 }
 
 std::string ShaderComponentText::getFragmentBodyString(){
-	color.y = 1;
     std::stringstream res;
 	res << "vec4 textModFrag = vec4(0, 0, 0, 0)" << SEMI_ENDL;
-    //res << "if(" << GL_UNIFORM_ID_NUM_TEXTURES << " > 0){" << ENDL;
-		res << "textModFrag = vec4(" << color.x << "," << 1 << "," << color.z << ", 0 * texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << 0 << "], " << GL_IN_OUT_FRAG_UV << ").r)" << SEMI_ENDL;
-  //  res << "}" << ENDL;
+    res << "if(" << GL_UNIFORM_ID_NUM_TEXTURES << " > 0){" << ENDL;
+		res << "textModFrag = vec4(" << GL_UNIFORM_ID_TEXT_COLOR << ".rgb, texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << 0 << "], " << GL_IN_OUT_FRAG_UV << ").r)" << SEMI_ENDL;
+    res << "}" << ENDL;
     return res.str();
 }
 
 std::string ShaderComponentText::getOutColorMod(){
 	return GL_OUT_OUT_COLOR + " *= textModFrag" + SEMI_ENDL;
+}
+
+glm::vec3 ShaderComponentText::getColor(){
+	return color;
+}
+
+void ShaderComponentText::setColor(glm::vec3 _color){
+	color = _color;
+	makeDirty();
 }
 
 void ShaderComponentText::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
@@ -72,4 +81,5 @@ void ShaderComponentText::configureUniforms(vox::MatrixStack* _matrixStack, Rend
 	}else{
 		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), numTextures);
 	}
+	glUniform3f(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXT_COLOR.c_str()), color.x, color.y, color.z);
 }

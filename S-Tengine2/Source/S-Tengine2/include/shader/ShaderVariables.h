@@ -79,6 +79,9 @@ const std::string GL_UNIFORM_ID_VALUE				  = "value";
 
 const std::string GL_UNIFORM_ID_ALPHA				  = "alpha";
 
+const std::string GL_UNIFORM_ID_TEXT_COLOR			  = "textColor";
+
+
 //Attribute variable names
 const std::string GL_ATTRIBUTE_ID_VERTEX_POSITION	  = "aVertexPosition";
 const std::string GL_ATTRIBUTE_ID_VERTEX_COLOR	      =	"aVertexColor";
@@ -104,6 +107,7 @@ const std::string SHADER_COMPONENT_VOXEL			  = "SHADER_COMPONENT_VOXEL";
 const std::string SHADER_COMPONENT_TINT				  = "SHADER_COMPONENT_TINT";
 const std::string SHADER_COMPONENT_HSV				  = "SHADER_COMPONENT_HSV";
 const std::string SHADER_COMPONENT_ALPHA			  = "SHADER_COMPONENT_ALPHA";
+const std::string SHADER_COMPONENT_TEXT				  = "SHADER_COMPONENT_TEXT";
 
 
 const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGHT + ENDL +

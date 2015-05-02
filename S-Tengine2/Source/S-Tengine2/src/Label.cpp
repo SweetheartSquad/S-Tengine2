@@ -2,6 +2,9 @@
 #include <Font.h>
 #include <MeshInterface.h>
 #include <MeshEntity.h>
+#include <shader/BaseComponentShader.h>
+#include <shader/ShaderComponentText.h>
+#include <shader/ShaderComponentTexture.h>
 
 Label::Label(Font * _font, Shader * _shader):
 	NodeTransformable(new Transform()),
@@ -14,9 +17,7 @@ Label::Label(Font * _font, Shader * _shader):
 }
 
 void Label::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	Entity::render(_matrixStack, _renderOptions);
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 }
 
 void Label::update(Step * _step){

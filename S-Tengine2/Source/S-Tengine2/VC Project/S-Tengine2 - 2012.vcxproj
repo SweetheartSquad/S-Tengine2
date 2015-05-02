@@ -117,13 +117,11 @@
     <ClCompile Include="../src/SceneSplash.cpp" />
     <ClCompile Include="../src/tiny_obj_loader.cc" />
     <ClCompile Include="../src/UILayer.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="..\src\Font.cpp" />
     <ClCompile Include="..\src\Label.cpp" />
     <ClCompile Include="..\src\BulletDebugDrawer.cpp" />
-=======
     <ClCompile Include="../src/BulletDebugDrawer.cpp" />
->>>>>>> 127719095b6f6a89f0043917bcf7da251e1bd504
+    <ClCompile Include="..\src\shader\ShaderComponentText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -238,6 +236,7 @@
     <ClInclude Include="../include/Box.h" />
     <ClInclude Include="..\include\Font.h" />
     <ClInclude Include="..\include\Label.h" />
+    <ClInclude Include="..\include\shader\ShaderComponentText.h" />
     <ClInclude Include="..\include\Text.h" />
     <ClInclude Include="../include/Joystick.h" />
     <ClInclude Include="../include/JoystickManager.h" />

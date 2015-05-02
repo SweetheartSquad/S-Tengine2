@@ -7,7 +7,7 @@ class ShaderComponentText : public ShaderComponent{
 public:
 
 	glm::vec3 color;
-
+	
 	ShaderComponentText(Shader * _shader);
 	~ShaderComponentText() override;
 	std::string getVertexVariablesString() override;
@@ -17,4 +17,7 @@ public:
 	std::string getOutColorMod() override;
 	void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 	virtual void clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
+	
+	glm::vec3 getColor();
+	void setColor(glm::vec3 _color);
 };
