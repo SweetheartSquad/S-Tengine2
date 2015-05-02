@@ -23,6 +23,8 @@ public:
 	Texture * getTextureForChar(char _char);
 	MeshInterface * getMeshInterfaceForChar(char _char);
 	glm::vec2 getGlyphWidthHeight(char _char);
+	glm::vec2 getGlyphXY(char _char);
+	void loadGlyph(char _char);
 
 private:
 	int size;

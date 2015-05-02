@@ -17,24 +17,17 @@ Label::Label(Font * _font, Shader * _shader):
 }
 
 void Label::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
+	if(depth == GL_TRUE){
+		glDisable(GL_DEPTH_TEST);
+	}
 	Entity::render(_matrixStack, _renderOptions);
+	if(depth == GL_TRUE){
+		glEnable(GL_DEPTH_TEST);
+	}
 }
 
 void Label::update(Step * _step){
-	if(textDirty){
-		float acc = 0.f;
-		textDirty = false;
-		children.clear();
-		for(char c : text){
-			MeshInterface * mi = font->getMeshInterfaceForChar(c);
-			MeshEntity * me = new MeshEntity(mi);
-			me->setShader(shader, true);
-			addChild(me);
-			me->transform->translate(acc, 0.f, 0.f);
-			glm::vec2 wH = font->getGlyphWidthHeight(c);
-			acc += wH.x;
-		}
-	}
 	Entity::update(_step);
 }
 
@@ -51,7 +44,37 @@ void Label::load(){
 Label::~Label(){
 }
 
+void Label::appendText(std::string _text){
+	text += _text;
+	textDirty = true;
+	updateText();
+}
+
+std::string Label::getText(){
+	return text;
+}
+
+void Label::updateText(){
+	float acc = 0.f;
+	textDirty = false;
+	// Don't need to delete the elements in the vector because they are being managed by the font
+	children.clear();
+	for(char c : text){
+		MeshInterface * mi = font->getMeshInterfaceForChar(c);
+		MeshEntity * me = new MeshEntity(mi);
+		me->setShader(shader, true);
+		addChild(me);
+		me->transform->translate(acc, 0.f, 0.f);
+		glm::vec2 offset = font->getGlyphWidthHeight(c) + font->getGlyphXY(c);
+		acc += offset.x;
+	}
+	//Render in reverse so that letters overlap properly.
+	//This is important for things like calligraphy fonts
+	children.reserve(children.size());
+}
+
 void Label::setText(std::string _text){
 	text = _text;
 	textDirty = true;
+	updateText();
 }

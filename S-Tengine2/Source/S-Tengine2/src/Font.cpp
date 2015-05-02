@@ -73,11 +73,6 @@ MeshInterface* Font::getMeshInterfaceForChar(char _char){
 		mesh->vertices.at(3).x = vx;
 		mesh->vertices.at(3).y = vy-h;
 
-		/*mesh->pushVert(Vertex(glm::vec3(vx, vy, 0.f),       glm::vec2(0.f, 0.f)));
-		mesh->pushVert(Vertex(glm::vec3(vx + w, vy, 0.f),     glm::vec2(1.f, 0.f)));
-		mesh->pushVert(Vertex(glm::vec3(vx + w, vy - h, 0.f), glm::vec2(1.f, 1.f)));
-		mesh->pushVert(Vertex(glm::vec3(vx, vy-h, 0.f),       glm::vec2(0.f, 1.f)));*/
-		
 		mesh->dirty = true;
 
 		mesh->unload();
@@ -90,8 +85,16 @@ MeshInterface* Font::getMeshInterfaceForChar(char _char){
 }
 
 glm::vec2 Font::getGlyphWidthHeight(char _char){
+	loadGlyph(_char);
+	return glm::vec2(face->glyph->bitmap.width, face->glyph->bitmap.rows);
+}
+
+glm::vec2 Font::getGlyphXY(char _char){
+	loadGlyph(_char);
+	return glm::vec2(face->glyph->bitmap_left, face->glyph->bitmap_top);
+}
+
+void Font::loadGlyph(char _char){
 	FT_Set_Pixel_Sizes(face, 0, size);
-	FT_GlyphSlot glyph = face->glyph;
 	FT_Load_Char(face, _char, FT_LOAD_RENDER);
-	return glm::vec2(face->glyph->bitmap.width + face->glyph->bitmap_left, face->glyph->bitmap.rows + face->glyph->bitmap_top);
 }

@@ -21,6 +21,9 @@ public:
 	void load() override;
 
 	void setText(std::string _text);
+	void appendText(std::string _text);
+	std::string getText();
+	void updateText();
 
 private:
 	std::string text;
