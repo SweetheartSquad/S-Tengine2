@@ -152,6 +152,7 @@ void Shader::unload(){
 			aVertexNormals = -1;
 			aVertexUVs = -1;
 			dirty = true;
+			isCompiled = false;
 		}else{
 			std::cout << "not actually a shader?" << std::endl << std::endl;
 		}
@@ -161,7 +162,6 @@ void Shader::unload(){
 }
 
 GLuint Shader::compileShader(GLenum _shaderType, char const* _source, int _length){
-	checkForGlError(0,__FILE__,__LINE__);
 	GLuint shaderId = glCreateShader(_shaderType);
 	glShaderSource(shaderId, 1, &_source, &_length);
 	checkForGlError(0,__FILE__,__LINE__);
@@ -195,7 +195,7 @@ GLuint Shader::compileShader(GLenum _shaderType, char const* _source, int _lengt
 	}
 	checkForGlError(0,__FILE__,__LINE__);
 	
-	isCompiled = true;
+	//isCompiled = true;
 	return shaderId;
 }
 

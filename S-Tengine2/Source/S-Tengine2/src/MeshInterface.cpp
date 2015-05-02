@@ -61,12 +61,10 @@ void MeshInterface::load(){
 		// Vertex Auffer Object (VBO)
 		glGenBuffers(1, &vboId);
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * vertices.size(), vertices.data(), drawMode);
 
 		// Index Buffer Object (IBO)
 		glGenBuffers(1, &iboId);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * indices.size(), indices.data(), drawMode);
 		
 		checkForGlError(0,__FILE__,__LINE__);
 
@@ -77,6 +75,8 @@ void MeshInterface::load(){
 		// Disable VAO
 		glBindVertexArray(0);
 		checkForGlError(0,__FILE__,__LINE__);
+
+		clean();
 	}
 	
 	NodeLoadable::load();

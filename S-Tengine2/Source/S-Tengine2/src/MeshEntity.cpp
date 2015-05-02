@@ -102,11 +102,12 @@ void MeshEntity::setShaderOnChildren(Shader * _shader){
 
 void MeshEntity::unload(){
 	if(loaded){
-		if(mesh != nullptr){
-			mesh->unload();
-		}
 		if(shader != nullptr){
 			shader->unload();
+		}
+
+		if(mesh != nullptr){
+			mesh->unload();
 		}
 	}
 	Entity::unload();
@@ -116,7 +117,7 @@ void MeshEntity::load(){
 	if(!loaded){
 		if(mesh != nullptr){
 			mesh->load();
-			mesh->clean();	
+			mesh->clean();
 		}
 	
 		if(shader != nullptr){

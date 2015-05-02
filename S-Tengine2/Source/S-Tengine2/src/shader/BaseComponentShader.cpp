@@ -164,3 +164,17 @@ void BaseComponentShader::clean(vox::MatrixStack* _matrixStack, RenderOptions* _
 		geometryComponent->clean(_matrixStack, _renderOption, _nodeRenderable);
 	}
 }
+
+void BaseComponentShader::unload(){
+	Shader::unload();
+	makeDirty();
+	for(unsigned long int i = 0; i < components.size(); i++){
+		components.at(i)->makeDirty();
+	}
+	
+}
+
+void BaseComponentShader::load(){
+	Shader::load();
+	compileShader();
+}

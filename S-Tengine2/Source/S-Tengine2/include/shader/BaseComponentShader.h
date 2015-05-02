@@ -21,6 +21,9 @@ public:
 
 	virtual void configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable) override;
 	virtual void clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
+	
+	virtual void load() override;
+	virtual void unload() override;
 private:
 	std::vector<ShaderComponent *> components;
 	std::string buildVertexShader();

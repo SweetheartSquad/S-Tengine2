@@ -14,10 +14,7 @@ void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStac
 	if(mesh != nullptr){
 		// Pass the _shader the number of lights
 		if(_renderOption->lights != nullptr){
-			if(_renderOption->lights->size() != _renderOption->lastNumLights){
-				_renderOption->lastNumLights = _renderOption->lights->size();
-				glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_LIGHTS.c_str()), _renderOption->lights->size());
-			}
+			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_LIGHTS.c_str()), _renderOption->lights->size());
 			// Pass the paramaters for each light to the _shader
 			for(unsigned long int i = 0; i < _renderOption->lights->size(); i++){
 				Light * l = _renderOption->lights->at(i);
