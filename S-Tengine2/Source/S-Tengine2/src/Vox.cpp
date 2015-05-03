@@ -119,7 +119,8 @@ void vox::initialize(std::string _title){
 void vox::destruct(){
 	glfwDestroyWindow(vox::currentContext);
 	glfwTerminate();
-	exit(EXIT_SUCCESS);
+
+	FT_Done_FreeType(freeTypeLibrary);
 }
 
 /////////// Delta Time Begin //////////////
