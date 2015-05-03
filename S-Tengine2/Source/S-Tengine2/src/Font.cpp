@@ -4,6 +4,66 @@
 #include <Vox.h>
 #include <MeshFactory.h>
 
+Glyph::Glyph(FT_GlyphSlot _glyph) :
+	MeshInterface(GL_QUADS, GL_STATIC_DRAW),
+	NodeResource(false)
+{
+	float vx = _glyph->bitmap_left;
+	float vy = _glyph->bitmap_top;
+	float w = _glyph->bitmap.width;
+	float h = _glyph->bitmap.rows;
+	advance = _glyph->advance;
+		
+	pushVert(Vertex(vx, vy, 0));
+	pushVert(Vertex(vx + w, vy, 0));
+	pushVert(Vertex(vx + w, vy - h, 0));
+	pushVert(Vertex(vx, vy - h, 0));
+	setNormal(0, 0.0, 0.0, 1.0);
+	setNormal(1, 0.0, 0.0, 1.0);
+	setNormal(2, 0.0, 0.0, 1.0);
+	setNormal(3, 0.0, 0.0, 1.0);
+	setUV(0, 0.0, 0.0);
+	setUV(1, 1.0, 0.0);
+	setUV(2, 1.0, 1.0);
+	setUV(3, 0.0, 1.0);
+}
+
+
+
+GlyphTexture::GlyphTexture(FT_Bitmap _glyph, bool _autoRelease) :
+	Texture(true, _autoRelease),
+	NodeResource(_autoRelease)
+{
+	width = _glyph.width;
+	height = _glyph.rows;
+	data = _glyph.buffer;
+	channels = 2;
+}
+GlyphTexture::~GlyphTexture(){
+	data = nullptr; // freetype will free this data (I think? It's just a reference to face->glyph->bitmap anyway)
+}
+
+void GlyphTexture::load(){
+	if(!loaded){
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		glGenTextures(1, &textureId);
+		checkForGlError(0,__FILE__,__LINE__);
+		glBindTexture(GL_TEXTURE_2D, textureId);
+		checkForGlError(0,__FILE__,__LINE__);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
+		
+		glGenerateMipmap(GL_TEXTURE_2D);
+
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+	}
+	
+	NodeLoadable::load();
+}
+
+
+
+
 Font::Font(std::string _fontSrc, int _size, bool _autoRelease) :
 	NodeResource(_autoRelease),
 	face(nullptr)
@@ -42,38 +102,6 @@ void Font::unload(){
 	}
 }
 
-GlyphTexture::GlyphTexture(FT_Bitmap _glyph, bool _autoRelease) :
-	Texture(true, _autoRelease),
-	NodeResource(_autoRelease)
-{
-	width = _glyph.width;
-	height = _glyph.rows;
-	data = _glyph.buffer;
-	channels = 2;
-}
-GlyphTexture::~GlyphTexture(){
-	data = nullptr; // freetype will free this data (I think? It's just a reference to face->glyph->bitmap anyway)
-}
-
-void GlyphTexture::load(){
-	if(!loaded){
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		glGenTextures(1, &textureId);
-		checkForGlError(0,__FILE__,__LINE__);
-		glBindTexture(GL_TEXTURE_2D, textureId);
-		checkForGlError(0,__FILE__,__LINE__);
-
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
-		
-		glGenerateMipmap(GL_TEXTURE_2D);
-
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-	}
-	
-	NodeLoadable::load();
-}
-
-
 GlyphTexture * Font::getTextureForChar(char _char){
 	loadGlyph(_char);
 	auto t = textures.find(_char);
@@ -92,35 +120,17 @@ GlyphTexture * Font::getTextureForChar(char _char){
 	return res;
 }
 
-MeshInterface* Font::getMeshInterfaceForChar(char _char){
+Glyph* Font::getMeshInterfaceForChar(char _char){
 	auto t = meshes.find(_char);
-	MeshInterface * res;
+	Glyph * res;
 	if(t == meshes.end()){
-
-		MeshInterface * mesh = MeshFactory::getPlaneMesh();
+		
+		loadGlyph(_char);
+		Glyph * mesh = new Glyph(face->glyph);
 		mesh->autoRelease = false;
 		mesh->pushTexture2D(getTextureForChar(_char));
 
-		float vx = face->glyph->bitmap_left;
-		float vy = face->glyph->bitmap_top;
-		float w = face->glyph->bitmap.width;
-		float h = face->glyph->bitmap.rows;
-		
-		mesh->vertices.at(0).x = vx;
-		mesh->vertices.at(0).y = vy;
-
-		mesh->vertices.at(1).x = vx + w;
-		mesh->vertices.at(1).y = vy;
-
-		mesh->vertices.at(2).x = vx + w;
-		mesh->vertices.at(2).y = vy - h;
-
-		mesh->vertices.at(3).x = vx;
-		mesh->vertices.at(3).y = vy - h;
-
-		mesh->dirty = true;
-
-		meshes.insert(std::pair<char, MeshInterface *>(_char, mesh));
+		meshes.insert(std::pair<char, Glyph *>(_char, mesh));
 		res = mesh;
 	}else{
 		res = t->second;

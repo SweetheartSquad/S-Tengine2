@@ -74,18 +74,13 @@ void Label::updateText(){
 	}
 
 	for(char c : text){
-		MeshInterface * mi = font->getMeshInterfaceForChar(c);
+		Glyph * mi = font->getMeshInterfaceForChar(c);
 		MeshEntity * me = new MeshEntity(mi);
 		me->setShader(shader, true);
 		addChildAtIndex(me, 0); // Needs to render in reverse so that letters overlap properly, so letters are added to the start of the array
 		me->transform->translate(acc, 0.f, 0.f);
-		//glm::vec2 offset = font->getGlyphWidthHeight(c) + font->getGlyphXY(c);
-		font->loadGlyph(c);
-		acc += font->face->glyph->advance.x/64;//offset.x;
+		acc += mi->advance.x/64;
 	}
-
-	//This is important for things like calligraphy fonts
-	//children.reverse(children.size());
 }
 
 void Label::setText(std::string _text){
