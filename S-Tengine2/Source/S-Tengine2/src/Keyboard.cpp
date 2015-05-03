@@ -1,6 +1,13 @@
-#include "Keyboard.h"
+#pragma once
 
-Keyboard::Keyboard(){
+#include <Keyboard.h>
+
+Keyboard::Keyboard() :
+	shift(false),
+	control(false),
+	alt(false),
+	super(false)
+{
 }
 
 Keyboard::~Keyboard(){

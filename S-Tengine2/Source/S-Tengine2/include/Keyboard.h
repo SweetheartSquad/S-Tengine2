@@ -71,6 +71,15 @@ public:
 	/** Map of keys which were released since the keyboard's last call to update */
 	std::map<int, int> justReleasedKeys;
 
+	// whether shift is down
+	bool shift;
+	// whether control is down
+	bool control;
+	// whether alt is down
+	bool alt;
+	// whether super (windows key) is down
+	bool super;
+
 private:
 	Keyboard();
 	~Keyboard();

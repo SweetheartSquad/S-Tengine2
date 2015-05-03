@@ -29,6 +29,10 @@ void vox::setGlfwWindowHints(){
 
 static void keyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods){
 	Keyboard * keyboard = &Keyboard::getInstance();
+	keyboard->alt = _mods & GLFW_MOD_ALT;
+	keyboard->shift = _mods & GLFW_MOD_SHIFT;
+	keyboard->control = _mods & GLFW_MOD_CONTROL;
+	keyboard->super = _mods & GLFW_MOD_SUPER;
 	if(_action == GLFW_PRESS){
 		keyboard->keyDownListener(_key);
 	}else if(_action == GLFW_RELEASE){

@@ -68,14 +68,10 @@ void Label::updateText(){
 	float acc = 0.f;
 	textDirty = false;
 
-	for(auto c : children){
-		MeshEntity * m = dynamic_cast<MeshEntity *>(c);
-		if(m != nullptr){
-			m->setShader(nullptr, false);
-		}
-		delete c;
+	while(children.size() > 0){
+		delete children.back();
+		children.pop_back();
 	}
-	children.clear();
 
 	for(char c : text){
 		MeshInterface * mi = font->getMeshInterfaceForChar(c);
@@ -84,7 +80,7 @@ void Label::updateText(){
 		addChildAtIndex(me, 0); // Needs to render in reverse so that letters overlap properly, so letters are added to the start of the array
 		me->transform->translate(acc, 0.f, 0.f);
 		//glm::vec2 offset = font->getGlyphWidthHeight(c) + font->getGlyphXY(c);
-		//font->loadGlyph(c);
+		font->loadGlyph(c);
 		acc += font->face->glyph->advance.x/64;//offset.x;
 	}
 
