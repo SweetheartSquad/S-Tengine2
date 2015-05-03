@@ -82,9 +82,9 @@ void vox::initialize(std::string _title){
 #ifdef _DEBUG
 	w = mode->width/2;
 	h = mode->height/2;
-	window = glfwCreateWindow(w, h, "VOX", nullptr, nullptr);
+	window = glfwCreateWindow(w, h, _title.c_str(), nullptr, nullptr);
 #else
-	window = glfwCreateWindow(w, h, "VOX", vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	window = glfwCreateWindow(w, h, _title.c_str(), vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 #endif
 
 	if (!window){
