@@ -26,6 +26,7 @@ Texture::Texture(bool _storeData, bool _autoRelease) :
 
 Texture::~Texture(){
 	delete data;
+	data = nullptr;
 }
 
 void Texture::load(){
@@ -54,6 +55,7 @@ void Texture::load(){
 		glGenerateMipmap(GL_TEXTURE_2D);
 
 		if(!storeData){
+			delete data;
 			data = nullptr;
 		}
 	}
