@@ -164,6 +164,7 @@ void SceneSplash::update(Step * _step){
 }
 
 void SceneSplash::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	clear();
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer
 	screenFBO->bindFrameBuffer();
@@ -171,8 +172,6 @@ void SceneSplash::render(vox::MatrixStack * _matrixStack, RenderOptions * _rende
 	Scene::render(_matrixStack, _renderOptions);
 	//Render the buffer to the render surface
 	screenSurface->render(screenFBO->getTextureId());
-
-	screenFBO->checkFrameBufferStatus();
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	uiLayer.render(_matrixStack, _renderOptions);
