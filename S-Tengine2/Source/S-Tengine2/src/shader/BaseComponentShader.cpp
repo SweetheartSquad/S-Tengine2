@@ -137,7 +137,7 @@ void BaseComponentShader::configureUniforms(vox::MatrixStack* _matrixStack, Rend
 	glUniformMatrix4fv(projectionUniformLocation, 1, GL_FALSE, &projection[0][0]);
 
 	GLuint mvpUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_MODEL_VIEW_PROJECTION.c_str());
-	glm::mat4 mvp = projection * view * model;
+	glm::mat4 mvp = _matrixStack->getMVP();
 	glUniformMatrix4fv(mvpUniformLocation, 1, GL_FALSE, &mvp[0][0]);
 	
 	checkForGlError(0,__FILE__,__LINE__);
