@@ -4,23 +4,24 @@
 #include <map>
 
 #include <Texture.h>
-#include <node/NodeLoadable.h>
+#include <node/NodeResource.h>
 #include "MeshInterface.h"
 
 class GlyphTexture : public Texture{
 public:
-	GlyphTexture(FT_Bitmap _glyph, bool _storeDate, bool _autoRelease);
+	GlyphTexture(FT_Bitmap _glyph, bool _autoRelease);
+	~GlyphTexture();
 	virtual void load() override;
 };
 
-class Font : public NodeLoadable{
+class Font : public NodeResource{
 public:	
 	
 	FT_Face face;
 	std::map<char, GlyphTexture *> textures;
 	std::map<char, MeshInterface *> meshes;
 
-	explicit Font(std::string _fontSrc, int size);
+	explicit Font(std::string _fontSrc, int size, bool _autoRelease);
 	~Font();
 	
 	void load() override;

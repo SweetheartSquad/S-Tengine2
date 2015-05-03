@@ -4,23 +4,24 @@
 #include <Vox.h>
 #include <MeshFactory.h>
 
-Font::Font(std::string _fontSrc, int _size):
-	NodeLoadable()
+Font::Font(std::string _fontSrc, int _size, bool _autoRelease) :
+	NodeResource(_autoRelease),
+	face(nullptr)
 {
-	face = nullptr;
 	if(FT_New_Face(vox::freeTypeLibrary, _fontSrc.c_str(), 0, &face) != 0) {
-		std::cerr << "Couldn't load font " << _fontSrc;
+		std::cerr << "Couldn't load font: " << _fontSrc;
 	}
 	size = _size;
 }
 
 Font::~Font(){
-	for(auto c : textures){
-		delete c.second;
-	}
 	for(auto c : meshes){
 		delete c.second;
 	}
+	for(auto c : textures){
+		delete c.second;
+	}
+	FT_Done_Face(face);
 }
 
 void Font::load(){
@@ -41,14 +42,17 @@ void Font::unload(){
 	}
 }
 
-GlyphTexture::GlyphTexture(FT_Bitmap _glyph, bool _storeData, bool _autoRelease) :
-	Texture(_storeData, _autoRelease),
+GlyphTexture::GlyphTexture(FT_Bitmap _glyph, bool _autoRelease) :
+	Texture(true, _autoRelease),
 	NodeResource(_autoRelease)
 {
 	width = _glyph.width;
 	height = _glyph.rows;
 	data = _glyph.buffer;
 	channels = 2;
+}
+GlyphTexture::~GlyphTexture(){
+	data = nullptr; // freetype will free this data (I think? It's just a reference to face->glyph->bitmap anyway)
 }
 
 void GlyphTexture::load(){
@@ -63,9 +67,6 @@ void GlyphTexture::load(){
 		
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		if(!storeData){
-			data = nullptr;
-		}
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 	}
 	
@@ -74,22 +75,27 @@ void GlyphTexture::load(){
 
 
 GlyphTexture * Font::getTextureForChar(char _char){
-	if(textures.count(_char) < 1){
+	loadGlyph(_char);
+	auto t = textures.find(_char);
+	GlyphTexture * res;
+	if(t == textures.end()){
 		FT_Set_Pixel_Sizes(face, 0, size);
 		FT_Load_Char(face, _char, FT_LOAD_RENDER);
-		GlyphTexture * tex = new GlyphTexture(face->glyph->bitmap, true, false);
+		GlyphTexture * tex = new GlyphTexture(face->glyph->bitmap, false);
 		textures.insert(std::pair<char, GlyphTexture *>(_char, tex));
 		tex->unload();
 		tex->load();
+		res = tex;
+	}else{
+		res = t->second;
 	}
-	return textures.at(_char);
+	return res;
 }
 
 MeshInterface* Font::getMeshInterfaceForChar(char _char){
 	auto t = meshes.find(_char);
 	MeshInterface * res;
 	if(t == meshes.end()){
-		loadGlyph(_char);
 
 		MeshInterface * mesh = MeshFactory::getPlaneMesh();
 		mesh->autoRelease = false;
