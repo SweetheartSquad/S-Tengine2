@@ -17,7 +17,6 @@ void FakeAnimation::pushFrame(MeshEntity * _frame){
 
 FakeAnimation::FakeAnimation(Transform * _transform, Shader * _shader) :
 	NodeTransformable(_transform),
-	NodeChild(nullptr),
 	MeshEntity(nullptr, _transform, _shader),
 	frame(0),
 	delay(3),

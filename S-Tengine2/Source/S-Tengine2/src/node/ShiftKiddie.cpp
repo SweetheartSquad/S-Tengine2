@@ -6,7 +6,6 @@
 #include "node/NodeHierarchical.h"
 
 ShiftKiddie::ShiftKiddie() :
-	NodeChild(nullptr),
 	NodeTransformable(nullptr)
 {
 }

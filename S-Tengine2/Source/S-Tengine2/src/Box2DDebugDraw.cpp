@@ -21,7 +21,6 @@ Box2DDebugDraw::Box2DDebugDraw(Box2DWorld * _world) :
 	spriteCircle(new Sprite()),
 	spritePoly(new Sprite()),
 	NodeTransformable(new Transform()),
-	NodeChild(nullptr),
 	drawing(false),
 	matrixStack(nullptr),
 	renderOptions(nullptr)
@@ -81,7 +80,7 @@ Box2DDebugDraw::~Box2DDebugDraw(){
 	delete spriteTransform;
 	delete spriteCircle;
 	delete spritePoly;
-	delete shader;
+	shader->decrementAndDelete();
 }
 
 void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color){

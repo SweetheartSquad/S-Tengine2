@@ -13,7 +13,6 @@
 
 Label::Label(Font * _font, Shader * _shader):
 	NodeTransformable(new Transform()),
-	NodeChild(nullptr),
 	Entity(transform),
 	textDirty(false)
 {

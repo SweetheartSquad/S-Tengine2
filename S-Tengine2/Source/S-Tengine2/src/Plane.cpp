@@ -4,7 +4,6 @@
 
 Plane::Plane(glm::vec3 _center, float _size) :
 	NodeTransformable(new Transform()),
-	NodeChild(nullptr),
 	MeshEntity(MeshFactory::getPlaneMesh(), transform)
 {
 	transform->scale(_size, _size, _size);

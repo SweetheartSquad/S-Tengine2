@@ -172,6 +172,8 @@ void SceneSplash::render(vox::MatrixStack * _matrixStack, RenderOptions * _rende
 	//Render the buffer to the render surface
 	screenSurface->render(screenFBO->getTextureId());
 
+	screenFBO->checkFrameBufferStatus();
+
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	uiLayer.render(_matrixStack, _renderOptions);
 	

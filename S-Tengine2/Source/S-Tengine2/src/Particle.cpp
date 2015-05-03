@@ -7,7 +7,6 @@
 Particle::Particle(Box2DWorld * _world, TextureSampler * _texture, Transform * _transform) :
 	Box2DSprite(_world, _texture, b2_dynamicBody, false, nullptr, _transform),
 	NodeTransformable(_transform),
-	NodeChild(nullptr),
 	life(1),
 	age(0),
 	alive(true),

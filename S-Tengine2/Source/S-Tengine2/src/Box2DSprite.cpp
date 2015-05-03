@@ -9,7 +9,6 @@
 Box2DSprite::Box2DSprite(Box2DWorld * _world, TextureSampler * _textureSampler, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform, float _componentScale) :
 	Sprite(_shader, _transform),
 	NodeTransformable(_transform),
-	NodeChild(nullptr),
 	NodeBox2DBody(_world, _bodyType, _defaultFixture, _transform),
 	width(_textureSampler->width),
 	height(_textureSampler->height),
@@ -26,7 +25,6 @@ Box2DSprite::Box2DSprite(Box2DWorld * _world, TextureSampler * _textureSampler, 
 Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Transform* _transform, Texture * _texture, float _width, float _height, float _u, float _v, float _componentScale):
 	Sprite(_shader, _transform),
 	NodeTransformable(_transform),
-	NodeChild(nullptr),
 	NodeBox2DBody(_world, _bodyType, _defaultFixture, _transform),
 	width(_width),
 	height(_height),

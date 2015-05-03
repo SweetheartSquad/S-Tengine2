@@ -16,7 +16,6 @@ int16 Box2DSuperSprite::gGroupIndex = 0;
 Box2DSuperSprite::Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :
 	MeshEntity(nullptr, transform), // THERE ARE TWO TRANSFORM NODES HERE WHEN THERE SHOULD BE ONE
 	NodeTransformable(new Transform()),
-	NodeChild(nullptr),
 	world(_world),
 	componentScale(0.0025f),
 	groupIndex(_groupIndex),

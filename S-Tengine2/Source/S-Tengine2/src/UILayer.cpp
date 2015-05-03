@@ -9,7 +9,6 @@
 #include <System.h>
 
 UILayer::UILayer(float _left, float _right, float _top, float _bottom) : 
-	NodeChild(nullptr),
 	NodeTransformable(new Transform()),
 	Entity(nullptr),
 	cam(-_right, -_left, _bottom, _top, -1000.f, 1000.f),

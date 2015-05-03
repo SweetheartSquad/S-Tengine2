@@ -10,7 +10,6 @@
 BitmapFont::BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _columns, bool _padFront, WrapMode _wrapMode):
 	MeshEntity(),
 	NodeTransformable(new Transform()),
-	NodeChild(nullptr),
 	NodeRenderable(),
 	asciiStart(_asciiStart),
 	rows(_rows),

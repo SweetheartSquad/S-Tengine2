@@ -3,7 +3,6 @@
 #include "MeshFactory.h"
 
 Cube::Cube(glm::vec3 _center, float _scale) :
-	NodeChild(nullptr),
 	NodeTransformable(new Transform()),
 	MeshEntity(MeshFactory::getCubeMesh(), transform)
 {

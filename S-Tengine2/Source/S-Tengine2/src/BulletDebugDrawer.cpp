@@ -11,7 +11,6 @@
 #include <shader\ShaderComponentTexture.h>
 
 BulletDebugDrawer::BulletDebugDrawer(btCollisionWorld * _world) :
-	NodeChild(nullptr),
 	NodeTransformable(new Transform()),
 	m_debugMode(0),
 	world(_world),
@@ -22,6 +21,7 @@ BulletDebugDrawer::BulletDebugDrawer(btCollisionWorld * _world) :
 }
 
 BulletDebugDrawer::~BulletDebugDrawer(){
+	delete shader;
 }
 
 void BulletDebugDrawer::drawLine(const btVector3& from,const btVector3& to,const btVector3& fromColor, const btVector3& toColor){

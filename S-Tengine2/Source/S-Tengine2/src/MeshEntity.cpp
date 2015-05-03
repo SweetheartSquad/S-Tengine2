@@ -13,7 +13,6 @@
 MeshEntity::MeshEntity(MeshInterface * _mesh, Transform * _transform, Shader * _shader):
 	Entity(_transform),
 	NodeTransformable(_transform),
-	NodeChild(nullptr),
 	NodeRenderable(),
 	mesh(_mesh),
 	shader(_shader)

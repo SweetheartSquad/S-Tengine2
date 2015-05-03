@@ -6,7 +6,7 @@
 class NodeChild abstract : public virtual Node{
 public:
 
-	explicit NodeChild(NodeParent * _parent);
+	explicit NodeChild(NodeParent * _parent = nullptr);
 
 	// Returns whether or not _parent is an ancestor of this node (i.e. is its parent, is its parent's parent, etc.)
 	// If _parent = nullptr, returns false

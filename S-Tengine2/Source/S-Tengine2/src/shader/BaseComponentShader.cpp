@@ -175,7 +175,6 @@ void BaseComponentShader::unload(){
 	for(unsigned long int i = 0; i < components.size(); i++){
 		components.at(i)->makeDirty();
 	}
-	
 }
 
 void BaseComponentShader::load(){
