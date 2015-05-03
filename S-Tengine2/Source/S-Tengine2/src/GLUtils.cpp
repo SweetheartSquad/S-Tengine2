@@ -38,14 +38,21 @@ std::string GLUtils::buildGLArrayReferenceString(std::string _value, unsigned lo
 	throw "string not an array reference";
 }
 
-void GLUtils::configureVertexAttributes(GLint _vertexHandle, unsigned long _arity, int _bufferOffset, GLuint _vaoId, GLsizei _stride){
+void GLUtils::configureVertexAttributes(GLint _vertexHandle, unsigned long _arity, int _bufferOffset, GLuint _vaoId, GLuint _vboId, GLsizei _stride){
 	if (_vertexHandle != -1){
+		GLint prev;
+		glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &prev);
 		glBindVertexArray(_vaoId);
+
+		GLint prev2;
+		glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &prev2);
+		glBindBuffer(GL_ARRAY_BUFFER, _vboId);
 
 		glEnableVertexAttribArray(_vertexHandle);
 		glVertexAttribPointer(_vertexHandle, _arity, GL_FLOAT, GL_FALSE, _stride, BUFFER_OFFSET(_bufferOffset));
-
-		glBindVertexArray(0);
+		
+		glBindVertexArray(prev);
 		checkForGlError(0,__FILE__,__LINE__);
+		GL_BGRA;
 	}
 }

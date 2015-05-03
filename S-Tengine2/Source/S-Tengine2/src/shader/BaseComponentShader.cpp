@@ -33,10 +33,10 @@ std::string BaseComponentShader::buildVertexShader(){
 								"layout(location = 3) in vec3 aVertexNormals" + SEMI_ENDL +
 								"layout(location = 4) in vec2 aVertexUVs" + SEMI_ENDL +*/
 
-                                "in vec3 aVertexPosition" + SEMI_ENDL +
-                                "in vec4 aVertexColor" + SEMI_ENDL +
-                                "in vec3 aVertexNormals" + SEMI_ENDL +
-                                "in vec2 aVertexUVs" + SEMI_ENDL +
+                                "in vec3 " + GL_ATTRIBUTE_ID_VERTEX_POSITION + SEMI_ENDL +
+                                "in vec4 " + GL_ATTRIBUTE_ID_VERTEX_COLOR + SEMI_ENDL +
+                                "in vec3 " + GL_ATTRIBUTE_ID_VERTEX_NORMALS + SEMI_ENDL +
+                                "in vec2 " + GL_ATTRIBUTE_ID_VERTEX_UVS + SEMI_ENDL +
 								
 								"uniform mat4 " + GL_UNIFORM_ID_MODEL_MATRIX + SEMI_ENDL +
 								"uniform mat4 " + GL_UNIFORM_ID_VIEW_MATRIX + SEMI_ENDL +

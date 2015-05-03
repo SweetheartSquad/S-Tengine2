@@ -60,11 +60,7 @@ void RenderSurface::load(){
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * indices.size(), indices.data(), drawMode);
 
-		checkForGlError(0, __FILE__, __LINE__);
-		GLUtils::configureVertexAttributes(shader->get_aVertexPosition(), 3, 0, vaoId, sizeof(Vertex));
-		GLUtils::configureVertexAttributes(shader->get_aVertexColor(), 4, sizeof(float) * 3, vaoId, sizeof(Vertex));
-		GLUtils::configureVertexAttributes(shader->get_aVertexNormals(), 3, sizeof(float) * 7, vaoId, sizeof(Vertex));
-		GLUtils::configureVertexAttributes(shader->get_aVertexUVs(), 2, sizeof(float) * 10, vaoId, sizeof(Vertex));
+		configureDefaultVertexAttributes(shader);
 		glBindVertexArray(0);
 		checkForGlError(0, __FILE__, __LINE__);
 	}

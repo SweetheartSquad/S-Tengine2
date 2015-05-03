@@ -62,6 +62,8 @@ public:
 
 	virtual void renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 
+	void clear();
+
 	float clearColor[4];
 
 	virtual void load() override;

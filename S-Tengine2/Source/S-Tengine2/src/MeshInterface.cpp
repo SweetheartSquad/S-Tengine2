@@ -52,20 +52,22 @@ GLsizei MeshInterface::getVertCount(){
 void MeshInterface::load(){
 	if(!loaded){
 		checkForGlError(0,__FILE__,__LINE__);
+		
+		GLint prev;
+		glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &prev);
+		GLint prev2;
+		glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &prev2);
+		GLint prev3;
+		glGetIntegerv(GL_ELEMENT_ARRAY_BUFFER_BINDING, &prev3);
 
 		glBindVertexArray(0);
 
 		// Vertex Array Object (VAO)
 		glGenVertexArrays(1, &vaoId);
-		glBindVertexArray(vaoId);
-
-		// Vertex Auffer Object (VBO)
+		// Vertex Buffer Object (VBO)
 		glGenBuffers(1, &vboId);
-		glBindBuffer(GL_ARRAY_BUFFER, vboId);
-
 		// Index Buffer Object (IBO)
 		glGenBuffers(1, &iboId);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 		
 		checkForGlError(0,__FILE__,__LINE__);
 
@@ -73,8 +75,13 @@ void MeshInterface::load(){
 		for (Texture * texture : textures){
 			texture->load();
 		}
+		glBindVertexArray(vaoId);
+		glBindBuffer(GL_ARRAY_BUFFER, vboId);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 		// Disable VAO
-		glBindVertexArray(0);
+		glBindVertexArray(prev);
+		glBindBuffer(GL_ARRAY_BUFFER, prev2);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, prev3);
 		checkForGlError(0,__FILE__,__LINE__);
 
 		clean();
@@ -103,6 +110,8 @@ void MeshInterface::unload(){
 
 void MeshInterface::clean(){
 	if(dirty){
+		GLint prev;
+		glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &prev);
 		glBindVertexArray(0);
 		// Vertex Buffer Object (VBO)
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
@@ -112,8 +121,9 @@ void MeshInterface::clean(){
 		// Index Buffer Object (IBO)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * (indices.size()), indices.data(), drawMode);
-		checkForGlError(0,__FILE__,__LINE__);
 		dirty = false;
+		glBindVertexArray(prev);
+		checkForGlError(0,__FILE__,__LINE__);
 	}
 }
 
@@ -129,26 +139,19 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 					//if(_renderOption->currentVao != vaoId){
 						_renderOption->currentVao = vaoId;
 						// Bind VAO
+						GLint prev;
+						glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &prev);
 						glBindVertexArray(vaoId);
+						checkForGlError(0,__FILE__,__LINE__);
 						//glBindBuffer(GL_ARRAY_BUFFER, vboId);
 						//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 
-						checkForGlError(0,__FILE__, __LINE__);
 					//}
-					int p;
-					glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &p);
-					int c;
-					glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &c);
-					std::cout<<"VAO, "<<p;
-					std::cout<<"VBO"<<c<<std::endl;
-
 					//This should help performance but there's a bit of a problem with it at the moment so I'll comment it out
 					//if(_renderOption->shader->getProgramId() != _renderOption->currentlyBoundShaderId) {
 						_renderOption->currentlyBoundShaderId = _renderOption->shader->getProgramId();
 						glUseProgram(_renderOption->shader->getProgramId());
-						checkForGlError(0,__FILE__,__LINE__);
 					//}
-
 					_renderOption->shader->clean(_matrixStack, _renderOption, this);	
 
 					// Alpha blending
@@ -162,7 +165,6 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 
 					 glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-
 					//}
 
 					// Texture scaling mode
@@ -174,7 +176,7 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 					checkForGlError(0,__FILE__,__LINE__);
 
 					// Disable VAO
-					glBindVertexArray(0);
+					glBindVertexArray(prev);
 				}else{
 					std::cout << "no shader" << std::endl << std::endl;	
 				}
@@ -191,10 +193,10 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 
 
 void MeshInterface::configureDefaultVertexAttributes(Shader *_shader){
-	GLUtils::configureVertexAttributes(_shader->get_aVertexPosition(), 3, 0, vaoId, getStride());
-	GLUtils::configureVertexAttributes(_shader->get_aVertexColor(), 4, sizeof(float) * 3, vaoId, getStride());
-	GLUtils::configureVertexAttributes(_shader->get_aVertexNormals(), 3, sizeof(float) * 7, vaoId, getStride());
-	GLUtils::configureVertexAttributes(_shader->get_aVertexUVs(), 2, sizeof(float) * 10, vaoId, getStride());
+	GLUtils::configureVertexAttributes(_shader->get_aVertexPosition(), 3, 0, vaoId, vboId, getStride());
+	GLUtils::configureVertexAttributes(_shader->get_aVertexColor(), 4, sizeof(float) * 3, vaoId, vboId, getStride());
+	GLUtils::configureVertexAttributes(_shader->get_aVertexNormals(), 3, sizeof(float) * 7, vaoId, vboId, getStride());
+	GLUtils::configureVertexAttributes(_shader->get_aVertexUVs(), 2, sizeof(float) * 10, vaoId, vboId, getStride());
 }
 
 void MeshInterface::pushVert(Vertex _vertex){
@@ -293,18 +295,18 @@ std::ostream& operator<<(std::ostream& os, const MeshInterface& obj){
 			<< " drawMode: " << obj.drawMode<< std::endl
 			<< " polygonalDrawMode: " << obj.polygonalDrawMode << std::endl
 			<< " Vertices: " << std::endl;
-			for(auto v : obj.vertices){
-				os<<v<< std::endl;
-			}
+		for(auto v : obj.vertices){
+			os<<v<< std::endl;
+		}
 
-			os << "Textures: " << std::endl;
-			for(auto t : obj.textures){
-				os<<t<< std::endl;
-			}
+		os << "Textures: " << std::endl;
+		for(auto t : obj.textures){
+			os<<t<< std::endl;
+		}
 
-			os << "Materials: " << std::endl;
-			for(auto m : obj.materials){
-				os<<m << std::endl;
-			}
-			return os;
-	}
+		os << "Materials: " << std::endl;
+		for(auto m : obj.materials){
+			os<<m << std::endl;
+		}
+		return os;
+}

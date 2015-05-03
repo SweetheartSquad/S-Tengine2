@@ -36,11 +36,13 @@ GlyphTexture::GlyphTexture(FT_Bitmap _glyph, bool _autoRelease) :
 {
 	width = _glyph.width;
 	height = _glyph.rows;
-	data = _glyph.buffer;
+	data = new unsigned char[_glyph.rows*_glyph.width];
+	memcpy(data, _glyph.buffer, _glyph.rows*_glyph.width);
+	//data = _glyph.buffer;
 	channels = 2;
 }
 GlyphTexture::~GlyphTexture(){
-	data = nullptr; // freetype will free this data (I think? It's just a reference to face->glyph->bitmap anyway)
+	//data = nullptr; // freetype will free this data (I think? It's just a reference to face->glyph->bitmap anyway)
 }
 
 void GlyphTexture::load(){

@@ -41,5 +41,5 @@ public:
 	*/
 	static std::string buildGLArrayReferenceString(std::string _value, unsigned long int _index);
 
-	static void configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset, GLuint _vaoId, GLsizei _stride);
+	static void configureVertexAttributes(GLint _vertexHandle, unsigned long int _arity, int _bufferOffset, GLuint _vaoId, GLuint _vboId, GLsizei _stride);
 };

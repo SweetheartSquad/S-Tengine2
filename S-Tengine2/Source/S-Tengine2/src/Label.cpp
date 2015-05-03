@@ -10,6 +10,7 @@
 #include <shader/ShaderComponentTexture.h>
 #include <ostream>
 #include <string>
+#include <MeshFactory.h>
 
 Label::Label(Font * _font, Shader * _shader):
 	NodeTransformable(new Transform()),
@@ -75,11 +76,13 @@ void Label::updateText(){
 
 	for(char c : text){
 		Glyph * mi = font->getMeshInterfaceForChar(c);
+		
 		MeshEntity * me = new MeshEntity(mi);
 		me->setShader(shader, true);
-		addChildAtIndex(me, 0); // Needs to render in reverse so that letters overlap properly, so letters are added to the start of the array
+		addChild(me);
 		me->transform->translate(acc, 0.f, 0.f);
 		acc += mi->advance.x/64;
+
 	}
 }
 
