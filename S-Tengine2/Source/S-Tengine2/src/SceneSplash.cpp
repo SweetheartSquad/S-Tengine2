@@ -55,12 +55,12 @@ SceneSplash::SceneSplash(Game * _game) :
 	cameras.push_back(fc);
 	fc->farClip = 1000.f;
 	fc->nearClip = 0.001f;
-	fc->transform->rotate(90, 0, 1, 0, kWORLD);
-	fc->transform->translate(-12.5f, -2.0f, 17.36f);
+	fc->parent->rotate(90, 0, 1, 0, kWORLD);
+	fc->parent->translate(-12.5f, -2.0f, 17.36f);
 	fc->yaw = 60.0f;
 	fc->pitch = -4.0f;
 	fc->lastOrientation = fc->calcOrientation();
-	fc->transform->setOrientation(fc->lastOrientation);
+	fc->parent->setOrientation(fc->lastOrientation);
 	activeCamera = fc;
 
 	Texture * c = new Texture("../assets/cursor.png", 32, 32, true, false);
@@ -72,8 +72,8 @@ SceneSplash::SceneSplash(Game * _game) :
 	
 	mouseIndicator = new Sprite();
 	mouseIndicator->mesh->pushTexture2D(c);
-	mouseIndicator->transform->scale(16,16,1);
-	uiLayer.addChild(mouseIndicator);
+	mouseIndicator->parent->scale(16,16,1);
+	uiLayer.childButNotReally->addChild(mouseIndicator);
 
 	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
 		mouseIndicator->mesh->vertices[i].x -= 1.25;
@@ -83,17 +83,12 @@ SceneSplash::SceneSplash(Game * _game) :
 	
 	logo = new MeshEntity(Resource::loadMeshFromObj("../assets/S-Tengine2_logo.vox").at(0));
 	logo->mesh->pushTexture2D(t);
-	logo->transform->scale(25,25,25);
+	logo->parent->scale(25,25,25);
 	logo->setShader(shader, true);
-	addChild(logo);
+	childButNotReally->addChild(logo);
 }
 
 SceneSplash::~SceneSplash(){
-	while(children.size() > 0){
-		NodeHierarchical::deleteRecursively(children.back());
-		children.pop_back();
-	}
-	
 	shader->safeDelete();
 	screenSurface->safeDelete();
 	//screenSurfaceShader->safeDelete();
@@ -142,16 +137,16 @@ void SceneSplash::update(Step * _step){
 	
 	// camera controls
 	if (keyboard->keyDown(GLFW_KEY_UP)){
-		activeCamera->transform->translate((activeCamera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parent->translate((activeCamera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_DOWN)){
-		activeCamera->transform->translate((activeCamera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parent->translate((activeCamera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_LEFT)){
-		activeCamera->transform->translate((activeCamera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parent->translate((activeCamera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
-		activeCamera->transform->translate((activeCamera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parent->translate((activeCamera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
 	}
 
 	Scene::update(_step);
@@ -160,7 +155,7 @@ void SceneSplash::update(Step * _step){
 	uiLayer.resize(0, sd.x, 0, sd.y);
 	uiLayer.update(_step);
 	
-	mouseIndicator->transform->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0.f, false);
+	mouseIndicator->parent->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0.f, false);
 }
 
 void SceneSplash::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){

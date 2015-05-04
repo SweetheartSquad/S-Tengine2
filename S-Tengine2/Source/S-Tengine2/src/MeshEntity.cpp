@@ -10,9 +10,8 @@
 
 #include <algorithm>
 
-MeshEntity::MeshEntity(MeshInterface * _mesh, Transform * _transform, Shader * _shader):
-	Entity(_transform),
-	NodeTransformable(_transform),
+MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader) :
+	Entity(),
 	NodeRenderable(),
 	mesh(_mesh),
 	shader(_shader)
@@ -40,7 +39,7 @@ void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 	//push transform
 	if(_matrixStack != nullptr && _renderOptions != nullptr){
 		_matrixStack->pushMatrix();
-		_matrixStack->applyMatrix(transform->getModelMatrix());
+		_matrixStack->applyMatrix(parent->getModelMatrix());
 	
 		if(_renderOptions->overrideShader == nullptr){
 			_renderOptions->shader = shader;
@@ -58,10 +57,6 @@ void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 
 void MeshEntity::update(Step * _step){
 	Entity::update(_step);
-}
-
-void MeshEntity::removeChildAtIndex(int _index){
-	NodeHierarchical::removeChildAtIndex(_index);
 }
 
 void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
@@ -92,7 +87,7 @@ Shader * MeshEntity::getShader(){
 }
 
 void MeshEntity::setShaderOnChildren(Shader * _shader){
-	for(NodeChild * child : children){
+	for(NodeChild * child : childButNotReally->children){
 		MeshEntity * me = dynamic_cast<MeshEntity*>(child);
 		if(me != nullptr){
 			me->setShaderOnChildren(_shader);
@@ -132,7 +127,7 @@ void MeshEntity::load(){
 
 vox::Box MeshEntity::calcOverallBoundingBox(){
 	vox::Box res = mesh->calcBoundingBox();
-	for(auto c : children){
+	for(auto c : childButNotReally->children){
 		MeshEntity * me = dynamic_cast<MeshEntity *>(c);
 		if(me != nullptr){
 			vox::Box t = me->calcOverallBoundingBox();
@@ -148,7 +143,7 @@ vox::Box MeshEntity::calcOverallBoundingBox(){
 }
 
 void MeshEntity::freezeTransformation(){
-	glm::mat4 m = transform->getModelMatrix();
+	glm::mat4 m = parent->getModelMatrix();
 
 	for(auto & v : mesh->vertices){
 		glm::vec4 newV(v.x, v.y, v.z, 0);
@@ -158,5 +153,5 @@ void MeshEntity::freezeTransformation(){
 		v.z = newV.z;
 	}
 	mesh->dirty = true;
-	transform->reset();
+	parent->reset();
 }

@@ -1,19 +1,16 @@
 #pragma once
 
-#include "node/NodeBox2DBody.h"
-#include "Box2DWorld.h"
+#include <node/NodeBox2DBody.h>
+#include <Box2DWorld.h>
 
-NodeBox2DBody::NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Transform* _transform):
-	NodeTransformable(_transform),
-	NodeUpdatable(),
+NodeBox2DBody::NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture) :
 	body(nullptr),
 	defaultFixture(_defaultFixture),
 	maxVelocity(b2Vec2(-1, -1)),
 	prevAngle(0),
 	world(_world)
 {
-	glm::vec3 tv = _transform->getTranslationVector();
-	bodyDef.position.Set(tv.x, tv.y);
+	bodyDef.position.Set(0, 0);
 	bodyDef.type = _bodyType;
 	body = world->b2world->CreateBody(&bodyDef);
 }
@@ -29,7 +26,7 @@ NodeBox2DBody::~NodeBox2DBody(){
 void NodeBox2DBody::update(Step * _step){
 	if(body != nullptr){
 		if(body->IsAwake()){
-			transform->translate(body->GetPosition().x, body->GetPosition().y, transform->getTranslationVector().z, false);
+			parent->translate(body->GetPosition().x, body->GetPosition().y, parent->getTranslationVector().z, false);
 			
 			b2Vec2 lv = body->GetLinearVelocity();
 			if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
@@ -41,10 +38,9 @@ void NodeBox2DBody::update(Step * _step){
 			body->SetLinearVelocity(lv);
 			
 			if(abs(body->GetAngle() - prevAngle) > 0.00005f){
-				transform->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
+				parent->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
 				prevAngle = body->GetAngle();
 			}
-
 		}
 	}
 }
@@ -58,8 +54,8 @@ b2Fixture * NodeBox2DBody::getNewFixture(b2ChainShape _shape, float _density){
 }
 
 void NodeBox2DBody::setTranslationPhysical(glm::vec3 _translation, bool _relative){
-	transform->translate(_translation, _relative);
-	glm::vec3 tv = transform->getTranslationVector();
+	parent->translate(_translation, _relative);
+	glm::vec3 tv = parent->getTranslationVector();
 	if(_relative){
 		if(body != nullptr){
 			body->SetTransform(b2Vec2(tv.x, tv.y), body->GetAngle());

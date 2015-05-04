@@ -1,5 +1,7 @@
-#include "Light.h"
-#include "Transform.h"
+#pragma once
+
+#include <Light.h>
+#include <Transform.h>
 
 LightData::LightData(LightType _type, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff) :
 	type(_type),
@@ -22,7 +24,6 @@ bool LightData::operator!=(const LightData &other) const{
 }
 
 Light::Light(LightType _type, glm::vec3 _position, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff, Transform * _transform):
-	NodeTransformable(_transform == nullptr ? new Transform() : _transform),
 	data(_type, _intensities, _ambientCoefficient, _attenuation, _cutoff),
 	lastData(_type, _intensities, _ambientCoefficient, _attenuation, _cutoff),
 	dirty(true)
@@ -32,6 +33,4 @@ Light::Light(LightType _type, glm::vec3 _position, glm::vec3 _intensities, float
 }
 
 Light::~Light() {
-	delete transform;
-	transform = nullptr;
 }

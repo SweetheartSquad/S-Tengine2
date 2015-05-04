@@ -13,8 +13,6 @@
 #include <MeshFactory.h>
 
 Label::Label(Font * _font, Shader * _shader):
-	NodeTransformable(new Transform()),
-	Entity(transform),
 	textDirty(false)
 {
 	font = _font;
@@ -69,20 +67,20 @@ void Label::updateText(){
 	float acc = 0.f;
 	textDirty = false;
 
-	while(children.size() > 0){
-		delete children.back();
-		children.pop_back();
+	while(childButNotReally->children.size() > 0){
+		delete childButNotReally->children.back();
+		childButNotReally->children.pop_back();
 	}
 
 	for(char c : text){
 		Glyph * mi = font->getMeshInterfaceForChar(c);
-		
+		Transform * t = new Transform();
 		MeshEntity * me = new MeshEntity(mi);
 		me->setShader(shader, true);
-		addChild(me);
-		me->transform->translate(acc, 0.f, 0.f);
+		t->addChild(me);
+		childButNotReally->addChild(t);
+		t->translate(acc, 0.f, 0.f);
 		acc += mi->advance.x/64;
-
 	}
 }
 

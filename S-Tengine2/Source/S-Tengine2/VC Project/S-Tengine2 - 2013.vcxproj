@@ -25,8 +25,6 @@
     <ClCompile Include="../src/Cube.cpp" />
     <ClCompile Include="../src/DepthFrameBuffer.cpp" />
     <ClCompile Include="../src/DirectionalLight.cpp" />
-    <ClCompile Include="../src/Entity.cpp" />
-    <ClCompile Include="../src/FakeAnimation.cpp" />
     <ClCompile Include="../src/FileUtils.cpp" />
     <ClCompile Include="../src/FrameBufferChannel.cpp" />
     <ClCompile Include="../src/FrameBufferInterface.cpp" />
@@ -47,13 +45,10 @@
     <ClCompile Include="../src/node/Node.cpp" />
     <ClCompile Include="../src/node/NodeBox2DBody.cpp" />
     <ClCompile Include="../src/node/NodeChild.cpp" />
-    <ClCompile Include="../src/node/NodeHierarchical.cpp" />
     <ClCompile Include="../src/node/NodeLoadable.cpp" />
-    <ClCompile Include="../src/node/NodeParent.cpp" />
     <ClCompile Include="../src/node/NodeRenderable.cpp" />
     <ClCompile Include="../src/node/NodeResource.cpp" />
     <ClCompile Include="../src/node/NodeSelectable.cpp" />
-    <ClCompile Include="../src/node/ShiftKiddie.cpp" />
     <ClCompile Include="../src/NumberUtils.cpp" />
     <ClCompile Include="../src/OrthographicCamera.cpp" />
     <ClCompile Include="../src/ParticleSystem.cpp" />
@@ -73,7 +68,6 @@
     <ClCompile Include="../src/ResourceManager.cpp" />
     <ClCompile Include="../src/Scene.cpp" />
     <ClCompile Include="../src/Scene2D.cpp" />
-    <ClCompile Include="../src/SceneRoot.cpp" />
     <ClCompile Include="../src/shader/BaseComponentShader.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentBlinn.cpp" />
     <ClCompile Include="../src/shader/BlurShader.cpp" />
@@ -118,6 +112,7 @@
     <ClCompile Include="../src/tiny_obj_loader.cc" />
     <ClCompile Include="../src/UILayer.cpp" />
     <ClCompile Include="../src/CharacterUtils.cpp" />
+    <ClCompile Include="../src/Entity.cpp" />
     <ClCompile Include="../src/Font.cpp" />
     <ClCompile Include="../src/Label.cpp" />
     <ClCompile Include="../src/BulletDebugDrawer.cpp" />
@@ -141,8 +136,6 @@
     <ClInclude Include="../include/DepthFrameBuffer.h" />
     <ClInclude Include="../include/DirectionalLight.h" />
     <ClInclude Include="../include/Easing.h" />
-    <ClInclude Include="../include/Entity.h" />
-    <ClInclude Include="../include/FakeAnimation.h" />
     <ClInclude Include="../include/FileUtils.h" />
     <ClInclude Include="../include/FrameBufferChannel.h" />
     <ClInclude Include="../include/FrameBufferInterface.h" />
@@ -164,15 +157,11 @@
     <ClInclude Include="../include/node/Node.h" />
     <ClInclude Include="../include/node/NodeBox2DBody.h" />
     <ClInclude Include="../include/node/NodeChild.h" />
-    <ClInclude Include="../include/node/NodeHierarchical.h" />
     <ClInclude Include="../include/node/NodeLoadable.h" />
-    <ClInclude Include="../include/node/NodeParent.h" />
     <ClInclude Include="../include/node/NodeRenderable.h" />
     <ClInclude Include="../include/node/NodeResource.h" />
     <ClInclude Include="../include/node/NodeSelectable.h" />
-    <ClInclude Include="../include/node/NodeTransformable.h" />
     <ClInclude Include="../include/node/NodeUpdatable.h" />
-    <ClInclude Include="../include/node/ShiftKiddie.h" />
     <ClInclude Include="../include/NumberUtils.h" />
     <ClInclude Include="../include/OrthographicCamera.h" />
     <ClInclude Include="../include/ParticleSystem.h" />
@@ -194,7 +183,6 @@
     <ClInclude Include="../include/ResourceManager.h" />
     <ClInclude Include="../include/Scene.h" />
     <ClInclude Include="../include/Scene2D.h" />
-    <ClInclude Include="../include/SceneRoot.h" />
     <ClInclude Include="../include/shader/BaseComponentShader.h" />
     <ClInclude Include="../include/shader/ShaderComponentBlinn.h" />
     <ClInclude Include="../include/shader/BlurShader.h" />
@@ -236,6 +224,7 @@
     <ClInclude Include="../include/TextureSampler.h" />
     <ClInclude Include="../include/Box.h" />
     <ClInclude Include="../include/CharacterUtils.h" />
+    <ClInclude Include="../include/Entity.h" />
     <ClInclude Include="../include/Font.h" />
     <ClInclude Include="../include/Label.h" />
     <ClInclude Include="../include/shader/ShaderComponentText.h" />

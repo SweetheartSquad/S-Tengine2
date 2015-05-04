@@ -6,9 +6,6 @@
 
 ControllableOrthographicCamera::ControllableOrthographicCamera(float left, float right, float bottom, float top, float near, float far):
 	OrthographicCamera(left, right, bottom, top, near, far),
-	NodeTransformable(new Transform()),
-	//NodeAnimatable(),
-	NodeUpdatable(),
 	target(nullptr),
 	deadZone(2)
 {
@@ -20,8 +17,8 @@ ControllableOrthographicCamera::~ControllableOrthographicCamera(){
 void ControllableOrthographicCamera::update(Step* _step){
 	OrthographicCamera::update(_step);
 	if(target != nullptr){
-		glm::vec3 targettv = target->transform->getTranslationVector();
-		glm::vec3 tv = target->transform->getTranslationVector();
+		glm::vec3 targettv = target->parent->getTranslationVector();
+		glm::vec3 tv = target->parent->getTranslationVector();
 
 		if(targettv.x > (abs(deadZone) + tv.x)){
 			tv.x = targettv.x - deadZone;	
@@ -36,10 +33,10 @@ void ControllableOrthographicCamera::update(Step* _step){
 			tv.y = targettv.y + deadZone;		
 		}
 
-		transform->translate(tv, false);
+		parent->translate(tv, false);
 	}
 }
 
-void ControllableOrthographicCamera::follow(NodeTransformable* _nodeTransformable){
-	target = _nodeTransformable;
+void ControllableOrthographicCamera::follow(Transform * _target){
+	target = _target;
 }

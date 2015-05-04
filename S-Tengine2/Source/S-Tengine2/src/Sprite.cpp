@@ -14,7 +14,6 @@ struct b2Vec2;
 
 Sprite::Sprite(Shader * _shader, Transform * _transform):
 	MeshEntity(new SpriteMesh(GL_STATIC_DRAW)),
-	NodeTransformable(_transform),
 	currentAnimation(nullptr),
 	playAnimation(true)
 {
@@ -49,7 +48,7 @@ void Sprite::setCurrentAnimation(std::string _name){
 }
 
 void Sprite::pushTextureSampler(TextureSampler* _sampler){
-	glm::vec3 sv = transform->getScaleVector();
+	glm::vec3 sv = parent->getScaleVector();
 	vox::Rectangle rect(0, 0, _sampler->width * std::abs(sv.x) * 0.025f, 
 		_sampler->height * std::abs(sv.y) * 0.025f);
 	

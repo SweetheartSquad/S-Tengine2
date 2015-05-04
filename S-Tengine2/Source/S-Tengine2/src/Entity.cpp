@@ -8,65 +8,30 @@
 
 #include "glew\glew.h"
 
-Entity::Entity(Transform * _transform) :
-	NodeTransformable(_transform),
-	//NodeAnimatable(),
-	NodeHierarchical(),
-	NodeLoadable(),
-	NodeChild(nullptr)
-{
+Entity::Entity(){
 }
 
 Entity::~Entity(void){
-	delete transform;
-	transform = nullptr;
+	delete childButNotReally;
+	childButNotReally = nullptr;
 }
 
 void Entity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	_matrixStack->pushMatrix();
-	_matrixStack->applyMatrix(transform->getModelMatrix());
-	
-	for(unsigned long int i = 0; i < children.size(); i++){
-		NodeRenderable * nr = dynamic_cast<NodeRenderable *>(children.at(i));
-		if(nr != nullptr){
-			nr->render(_matrixStack, _renderOptions);	
-		}
-	}
-	//pop transform
-	_matrixStack->popMatrix();
+	childButNotReally->render(_matrixStack, _renderOptions);
 }
 
 void Entity::update(Step * _step){
-	for(unsigned long int i = 0; i < children.size(); ++i){
-		NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(children.at(i));
-		if(nu != nullptr){
-			nu->update(_step);	
-		}
-	}
-}
-
-void Entity::removeChildAtIndex(int _index){
-	NodeHierarchical::removeChildAtIndex(_index);
+	childButNotReally->update(_step);
 }
 
 void Entity::unload(){
-	for(NodeChild * child : children){
-		NodeLoadable * nl = dynamic_cast<NodeLoadable *>(child);
-		if(nl != nullptr){
-			nl->unload();	
-		}
-	}
+	childButNotReally->unload();
 	
 	NodeLoadable::unload();
 }
 
 void Entity::load(){
-	for(NodeChild * child : children){
-		NodeLoadable * nl = dynamic_cast<NodeLoadable *>(child);
-		if(nl != nullptr){
-			nl->load();	
-		}
-	}
+	childButNotReally->load();
 	
 	NodeLoadable::load();
 }

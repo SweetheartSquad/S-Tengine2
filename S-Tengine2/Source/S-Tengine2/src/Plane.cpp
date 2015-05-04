@@ -3,11 +3,10 @@
 #include "MeshFactory.h"
 
 Plane::Plane(glm::vec3 _center, float _size) :
-	NodeTransformable(new Transform()),
-	MeshEntity(MeshFactory::getPlaneMesh(), transform)
+	MeshEntity(MeshFactory::getPlaneMesh())
 {
-	transform->scale(_size, _size, _size);
-	transform->translate(_center);
+	parent->scale(_size, _size, _size);
+	parent->translate(_center);
 }
 
 Plane::~Plane(){

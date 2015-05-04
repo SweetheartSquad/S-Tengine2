@@ -7,10 +7,6 @@
 #include <algorithm>
 
 FollowCamera::FollowCamera(float _buffer, glm::vec3 _offset, float _deadZoneX, float _deadZoneY, float _deadZoneZ):
-	PerspectiveCamera(),
-	NodeTransformable(new Transform()),
-	//NodeAnimatable(),
-	NodeUpdatable(),
 	buffer(_buffer),
 	lastOrientation(1.f, 0.f, 0.f, 0.f),
 	offset(_offset),
@@ -28,13 +24,13 @@ FollowCamera::~FollowCamera(){
 
 void FollowCamera::update(Step * _step){
 	
-	lastOrientation = transform->getOrientationQuat();
+	lastOrientation = parent->getOrientationQuat();
 	glm::quat newOrientation = glm::quat(1.f, 0.f, 0.f, 0.f);
 	newOrientation = glm::rotate(newOrientation, yaw, upVectorLocal);
 	newOrientation = glm::rotate(newOrientation, pitch, rightVectorLocal);
 
 	newOrientation = glm::slerp(lastOrientation, newOrientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
-	transform->setOrientation(newOrientation);
+	parent->setOrientation(newOrientation);
 
 	forwardVectorRotated   = newOrientation * forwardVectorLocal;
 	rightVectorRotated	   = newOrientation * rightVectorLocal;
@@ -137,18 +133,18 @@ void FollowCamera::update(Step * _step){
 	float dist = zoom / (tan(glm::radians(fieldOfView) * 0.5f) * 2.f);
 
 
-	transform->translate(lookAtSpot.x, lookAtSpot.y, dist, false);
+	parent->translate(lookAtSpot.x, lookAtSpot.y, dist, false);
 	//transform->translate(offset);
 }
 
-void FollowCamera::addTarget(ShiftKiddie * _target, float _weight){
+void FollowCamera::addTarget(Transform * _target, float _weight){
 	Target t;
 	t.target = _target;
 	t.weight = _weight;
 	t.active = true;
 	targets.push_back(t);
 }
-void FollowCamera::removeTarget(ShiftKiddie * _target){
+void FollowCamera::removeTarget(Transform * _target){
 	for(signed long int i = targets.size()-1; i >= 0; --i){
 		if(targets.at(i).target == _target){
 			//targets.erase(targets.begin() + i);
@@ -157,7 +153,7 @@ void FollowCamera::removeTarget(ShiftKiddie * _target){
 	}
 }
 
-bool FollowCamera::hasTarget(ShiftKiddie * _target){
+bool FollowCamera::hasTarget(Transform * _target){
 	for(Target & t : targets){
 		if(t.target == _target){
 			return true;

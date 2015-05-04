@@ -1,7 +1,7 @@
 #pragma once 
 
 #include <Entity.h>
-#include "shader/Shader.h"
+#include <shader/Shader.h>
 
 class MeshEntity;
 class Font;

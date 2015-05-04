@@ -2,15 +2,11 @@
 
 #include <vector>
 
-#include "BitmapFont.h"
-#include "Rectangle.h"
-#include "node/NodeTransformable.h"
-#include "Texture.h"
+#include <BitmapFont.h>
+#include <Rectangle.h>
+#include <Texture.h>
 
 BitmapFont::BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _columns, bool _padFront, WrapMode _wrapMode):
-	MeshEntity(),
-	NodeTransformable(new Transform()),
-	NodeRenderable(),
 	asciiStart(_asciiStart),
 	rows(_rows),
 	kerning(0.f),

@@ -20,7 +20,6 @@ Box2DDebugDraw::Box2DDebugDraw(Box2DWorld * _world) :
 	spriteTransform(new Sprite()),
 	spriteCircle(new Sprite()),
 	spritePoly(new Sprite()),
-	NodeTransformable(new Transform()),
 	drawing(false),
 	matrixStack(nullptr),
 	renderOptions(nullptr)
@@ -69,10 +68,18 @@ Box2DDebugDraw::Box2DDebugDraw(Box2DWorld * _world) :
 	spriteCircle->setShader(shader, true);
 	spritePoly->setShader(shader, true);
 
-	/*addChild(spriteSegment);
-	addChild(spriteTransform);
-	addChild(spriteCircle);
-	addChild(spritePoly);*/
+	Transform * t = new Transform();
+	t->addChild(spriteSegment);
+	childButNotReally->addChild(t);
+	t = new Transform();
+	t->addChild(spriteTransform);
+	childButNotReally->addChild(t);
+	t = new Transform();
+	t->addChild(spriteCircle);
+	childButNotReally->addChild(t);
+	t = new Transform();
+	t->addChild(spritePoly);
+	childButNotReally->addChild(t);
 }
 
 Box2DDebugDraw::~Box2DDebugDraw(){
@@ -87,12 +94,12 @@ void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, cons
 	spritePoly->mesh->polygonalDrawMode = GL_LINE_STRIP;
 	
 	if(vertexCount == 4){
-		spritePoly->transform->reset();
-		spritePoly->transform->translate(vertices[0].x, vertices[0].y, 0.0001f, false);
+		spritePoly->parent->reset();
+		spritePoly->parent->translate(vertices[0].x, vertices[0].y, 0.0001f, false);
 		b2Vec2 s1(vertices[1].y - vertices[0].y, vertices[1].x - vertices[0].x);
 		b2Vec2 s2(vertices[3].y - vertices[0].y, vertices[3].x - vertices[0].x);
-		spritePoly->transform->rotate(glm::degrees(atan2(s1.x, s1.y)), 0, 0, 1, kOBJECT);
-		spritePoly->transform->scale(s1.Length(), s2.Length(), 1, false);
+		spritePoly->parent->rotate(glm::degrees(atan2(s1.x, s1.y)), 0, 0, 1, kOBJECT);
+		spritePoly->parent->scale(s1.Length(), s2.Length(), 1, false);
 	}
 
 	spritePoly->render(matrixStack, renderOptions);
@@ -102,12 +109,12 @@ void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount
 	spritePoly->mesh->polygonalDrawMode = GL_LINE_STRIP;
 	
 	if(vertexCount == 4){
-		spritePoly->transform->reset();
-		spritePoly->transform->translate(vertices[0].x, vertices[0].y, 0.0001f, false);
+		spritePoly->parent->reset();
+		spritePoly->parent->translate(vertices[0].x, vertices[0].y, 0.0001f, false);
 		b2Vec2 s1(vertices[1].y - vertices[0].y, vertices[1].x - vertices[0].x);
 		b2Vec2 s2(vertices[3].y - vertices[0].y, vertices[3].x - vertices[0].x);
-		spritePoly->transform->rotate(glm::degrees(atan2(s1.x, s1.y)), 0, 0, 1, kOBJECT);
-		spritePoly->transform->scale(s1.Length(), s2.Length(), 1, false);
+		spritePoly->parent->rotate(glm::degrees(atan2(s1.x, s1.y)), 0, 0, 1, kOBJECT);
+		spritePoly->parent->scale(s1.Length(), s2.Length(), 1, false);
 	}
 
 	spritePoly->render(matrixStack, renderOptions);
@@ -115,31 +122,31 @@ void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount
 
 void Box2DDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color){
 	spriteCircle->mesh->polygonalDrawMode = GL_LINE_STRIP;//GL_POLYGON;
-	spriteCircle->transform->translate(glm::vec3(center.x, center.y, 0), false);
-	spriteCircle->transform->scale(glm::vec3(radius, radius, radius), false);
+	spriteCircle->parent->translate(glm::vec3(center.x, center.y, 0), false);
+	spriteCircle->parent->scale(glm::vec3(radius, radius, radius), false);
 	spriteCircle->render(matrixStack, renderOptions);
 }
 
 void Box2DDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color){
 	spriteCircle->mesh->polygonalDrawMode = GL_LINE_STRIP;//GL_POLYGON;
-	spriteCircle->transform->translate(glm::vec3(center.x, center.y, 0), false);
-	spriteCircle->transform->scale(glm::vec3(radius, radius, radius), false);
+	spriteCircle->parent->translate(glm::vec3(center.x, center.y, 0), false);
+	spriteCircle->parent->scale(glm::vec3(radius, radius, radius), false);
 	spriteCircle->render(matrixStack, renderOptions);
 }
 
 void Box2DDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color){
-	spriteSegment->transform->translate(glm::vec3(p1.x, p1.y, 0), false);
+	spriteSegment->parent->translate(glm::vec3(p1.x, p1.y, 0), false);
 	float x = p2.x - p1.x;
 	float y = p2.y - p1.y;
 	float mag = sqrt(x*x + y*y);
-	spriteSegment->transform->setOrientation(glm::quat(glm::angleAxis(glm::degrees(atan2(y, x)), glm::vec3(0, 0, 1))));
-	spriteSegment->transform->scale(glm::vec3(mag, mag, mag), false);
+	spriteSegment->parent->setOrientation(glm::quat(glm::angleAxis(glm::degrees(atan2(y, x)), glm::vec3(0, 0, 1))));
+	spriteSegment->parent->scale(glm::vec3(mag, mag, mag), false);
 	spriteSegment->render(matrixStack, renderOptions);
 }
 
 void Box2DDebugDraw::DrawTransform(const b2Transform& xf){
-	spriteTransform->transform->translate(xf.p.x, xf.p.y, 0, false);
-	spriteTransform->transform->setOrientation(glm::quat(glm::angleAxis(glm::degrees(xf.q.GetAngle()), glm::vec3(0, 0, 1))));
+	spriteTransform->parent->translate(xf.p.x, xf.p.y, 0, false);
+	spriteTransform->parent->setOrientation(glm::quat(glm::angleAxis(glm::degrees(xf.q.GetAngle()), glm::vec3(0, 0, 1))));
 	spriteTransform->render(matrixStack, renderOptions);
 }
 
@@ -148,16 +155,11 @@ void Box2DDebugDraw::render(vox::MatrixStack * _matrixStack, RenderOptions * _re
 	glGetFloatv(GL_LINE_WIDTH, &oldWidth);
 	glLineWidth(2.5f);
 	if(drawing){
-		_matrixStack->pushMatrix();
-		_matrixStack->applyMatrix(transform->getModelMatrix());
-
 		matrixStack = _matrixStack;
 		renderOptions = _renderOptions;
 		world->b2world->DrawDebugData();
 		matrixStack = nullptr;
 		renderOptions = nullptr;
-
-		_matrixStack->popMatrix();
 	}
 	glLineWidth(oldWidth);
 }

@@ -9,8 +9,7 @@
 #include <System.h>
 
 UILayer::UILayer(float _left, float _right, float _top, float _bottom) : 
-	NodeTransformable(new Transform()),
-	Entity(nullptr),
+	Entity(),
 	cam(-_right, -_left, _bottom, _top, -1000.f, 1000.f),
 	shader(new BaseComponentShader(true))
 {
@@ -23,14 +22,6 @@ UILayer::UILayer(float _left, float _right, float _top, float _bottom) :
 }
 
 UILayer::~UILayer(){
-	while(children.size() > 0){
-		NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(children.back());
-		if(nh != nullptr){
-			NodeHierarchical::deleteRecursively(nh);
-		}else{
-			delete children.back();	
-		}children.pop_back();
-	}
 }
 
 
@@ -69,7 +60,7 @@ void UILayer::resize(float _left, float _right, float _top, float _bottom){
 	cam.bottom = _top;
 }
 
-bool UILayer::addChild(NodeChild * _child){
+/*bool UILayer::addChild(NodeChild * _child){
 	bool success = NodeHierarchical::addChild(_child);
 	if(success){
 		MeshEntity * me = dynamic_cast<MeshEntity *>(_child);
@@ -78,4 +69,4 @@ bool UILayer::addChild(NodeChild * _child){
 		}
 	}
 	return success;
-}
+}*/

@@ -11,7 +11,6 @@
 #include <shader\ShaderComponentTexture.h>
 
 BulletDebugDrawer::BulletDebugDrawer(btCollisionWorld * _world) :
-	NodeTransformable(new Transform()),
 	m_debugMode(0),
 	world(_world),
 	shader(new BaseComponentShader(false))
@@ -118,9 +117,6 @@ void BulletDebugDrawer::render(vox::MatrixStack * _matrixStack, RenderOptions * 
 	glGetFloatv(GL_LINE_WIDTH, &oldWidth);
 	glLineWidth(2.5f);
 
-	_matrixStack->pushMatrix();
-	_matrixStack->applyMatrix(transform->getModelMatrix());
-
 	matrixStack = _matrixStack;
 	renderOptions = _renderOptions;
 	shader->clean(_matrixStack, _renderOptions, this); // remove this later, just here because everything is in immediate mode
@@ -128,6 +124,5 @@ void BulletDebugDrawer::render(vox::MatrixStack * _matrixStack, RenderOptions * 
 	matrixStack = nullptr;
 	renderOptions = nullptr;
 
-	_matrixStack->popMatrix();
 	glLineWidth(oldWidth);
 }

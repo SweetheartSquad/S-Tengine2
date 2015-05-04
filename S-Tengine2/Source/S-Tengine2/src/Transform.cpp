@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Transform.h"
+#include <Transform.h>
+
+#include <MatrixStack.h>
 
 Transform::Transform():
 	translationVector(0.f, 0.f, 0.f),
@@ -111,4 +113,162 @@ glm::vec3 Transform::getScaleVector(){
 }
 glm::quat Transform::getOrientationQuat(){
 	return orientation;
+}
+
+
+
+void Transform::update(Step * _step){
+	for(unsigned long int i = 0; i < children.size(); ++i){
+		NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(children.at(i));
+		if(nu != nullptr){
+			nu->update(_step);	
+		}
+	}
+}
+
+
+
+void Transform::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	_matrixStack->pushMatrix();
+	_matrixStack->applyMatrix(getModelMatrix());
+	
+	for(unsigned long int i = 0; i < children.size(); i++){
+		NodeRenderable * nr = dynamic_cast<NodeRenderable *>(children.at(i));
+		if(nr != nullptr){
+			nr->render(_matrixStack, _renderOptions);	
+		}
+	}
+	//pop transform
+	_matrixStack->popMatrix();
+}
+
+void Transform::unload(){
+	for(NodeChild * child : children){
+		NodeLoadable * nl = dynamic_cast<NodeLoadable *>(child);
+		if(nl != nullptr){
+			nl->unload();	
+		}
+	}
+	
+	NodeLoadable::unload();
+}
+
+void Transform::load(){
+	for(NodeChild * child : children){
+		NodeLoadable * nl = dynamic_cast<NodeLoadable *>(child);
+		if(nl != nullptr){
+			nl->load();	
+		}
+	}
+	
+	NodeLoadable::load();
+}
+
+
+void Transform::addChildAtIndex(NodeChild * _child, int _index){
+	children.insert(children.begin() + _index, _child);
+}
+
+void Transform::removeChildAtIndex(int _index){
+	children.erase(children.begin() + _index);
+}
+
+
+unsigned long int Transform::removeChild(NodeChild * _child){
+	for(unsigned long int i = 0; i < children.size(); ++i){
+		if(_child == children.at(i)){
+			children.erase(children.begin() + i);
+			return i;
+		}
+	}
+	return -1;
+}
+
+bool Transform::hasChild(NodeChild * _child){
+	if(_child == nullptr){
+		return false;
+	}
+	for (unsigned long int i = 0; i < children.size(); ++i){
+		if (_child == children.at(i)){
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Transform::hasDescendant(NodeChild *_child) {
+	if(_child == nullptr){
+		return false;
+	}
+	for (unsigned long int i = 0; i < children.size(); ++i){
+		if (_child == children.at(i)){
+			return true;
+		}else{
+			Transform * t = dynamic_cast<Transform *>(children.at(i));
+			if(t != nullptr){
+				if(t->hasDescendant(_child)){
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+/*void Transform::doRecursively(std::function<void(Node *, void * args[])> _toDo, void * _args[]){
+	_toDo(this, _args);
+	for(unsigned long int i = 0; i < children.size(); i++){
+		Transform * t = dynamic_cast<Transform *>(children.at(i));
+		if(t != nullptr){
+			t->doRecursively(_toDo, _args);
+		}else{
+			_toDo(children.at(i), _args);
+		}
+	}
+}*/
+
+
+unsigned long int Transform::calculateDepth(){
+	unsigned long int depth = 0;
+	Transform * t = parent;
+	while(t != nullptr){
+		t = t->parent;
+		depth += 1;
+	}
+	return depth;
+}
+
+void Transform::deleteRecursively(Transform * _node){
+	while (_node->children.size() > 0){
+		Transform * t = dynamic_cast<Transform *>(_node->children.back());
+		if(t != nullptr){
+			deleteRecursively(t);
+		}
+		_node->children.pop_back();
+	}
+	delete _node;
+	_node = nullptr;
+}
+
+bool Transform::addChild(NodeChild * _child){
+	// Check to see if the child is one of the ancestors of this node
+	bool error = hasAncestor(dynamic_cast<Transform *>(_child));
+
+	if(!error){
+		// Remove the first instance of the child in the current list of children
+		for (unsigned long int i = 0; i < children.size(); ++i){
+			if (_child == children.at(i)){
+				children.erase(children.begin() + i);
+				break;
+			}
+		}
+
+		// Add the child to the list of children and set it's parent to this
+		children.push_back(_child);
+		_child->parent = this;
+		return true;
+	}else{
+		// Error Message: Cannot parent a node to one of its descendants
+		return false;
+	}
 }

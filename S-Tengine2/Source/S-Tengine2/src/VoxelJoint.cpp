@@ -3,9 +3,8 @@
 #include "VoxelJoint.h"
 #include "VoxelMesh.h"
 
-VoxelJoint::VoxelJoint(unsigned long int _id, VoxelMesh * _mesh, Transform * _transform, Shader * _shader):
-	NodeTransformable(_transform),
-	MeshEntity(_mesh, _transform, _shader),
+VoxelJoint::VoxelJoint(unsigned long int _id, VoxelMesh * _mesh, Shader * _shader):
+	MeshEntity(_mesh, _shader),
 	NodeRenderable(),
 	id(_id)
 {

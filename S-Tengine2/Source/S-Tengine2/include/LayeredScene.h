@@ -14,11 +14,8 @@ public:
 	virtual void update(Step * _step) override;
 	/** Tells the RenderSystem to render the attached children to the vox::currentContext using the camera's view-projection matrix */
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
-	/** DOESN'T DO ANYTHING! */
-	void addChild(Entity * _child) override;
-	
 	/** In addition to removing from child list, also searches each layer individually and removes as well */
-	void removeChild(Entity * _child) override;
+	void removeChild(Entity * _child);
 	
 	/** Adds _child to uiLayer and the child list */
 	void addUIChild(Entity * _child);

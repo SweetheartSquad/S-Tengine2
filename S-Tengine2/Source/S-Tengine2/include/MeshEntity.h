@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Entity.h"
-#include "Transform.h"
+#include <Transform.h>
+#include <Entity.h>
 #include <Box.h>
 
 class Shader;
@@ -13,11 +13,13 @@ public:
 
 	/** Reference to this entity's mesh */
 	MeshInterface * mesh;
+	/** Reference to this entity's shader */
+	Shader * shader;
 
 	// returns a box which covers the verts of the mesh and all of its children
 	vox::Box calcOverallBoundingBox();
 
-	explicit MeshEntity(MeshInterface * _mesh = nullptr, Transform * _transform = new Transform(), Shader * _shader = nullptr);
+	explicit MeshEntity(MeshInterface * _mesh = nullptr, Shader * _shader = nullptr);
 	virtual ~MeshEntity(void);
 
 	/**
@@ -32,7 +34,6 @@ public:
 	/** Doesn't do anything by default */
 	virtual void update(Step * _step) override;
 
-	virtual void removeChildAtIndex(int _index) override;
 	/**Sets shader to _shader*/
 	virtual void setShader(Shader* _shader, bool _configureDefaultAttributes);
 	/**Get shader*/
@@ -48,6 +49,4 @@ public:
 	void freezeTransformation();
 private:
 	
-	/** Reference to this entity's shader */
-	Shader * shader;
 };
