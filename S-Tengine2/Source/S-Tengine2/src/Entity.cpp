@@ -37,3 +37,8 @@ void Entity::load(){
 	
 	NodeLoadable::load();
 }
+
+void Entity::setParent(Transform * _parent){
+	NodeChild::setParent(_parent);
+	childButNotReally->setParent(_parent);
+}

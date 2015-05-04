@@ -113,16 +113,30 @@ void BulletDebugDrawer::drawContactPoint(const btVector3& pointOnB,const btVecto
 
 
 void BulletDebugDrawer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// save previous line width state and change
 	GLfloat oldWidth;
 	glGetFloatv(GL_LINE_WIDTH, &oldWidth);
 	glLineWidth(2.5f);
 
+	// save previous depth-test state and disable
+	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
+	if(depth == GL_TRUE){
+		glDisable(GL_DEPTH_TEST);
+	}
+
 	matrixStack = _matrixStack;
 	renderOptions = _renderOptions;
+	_renderOptions->shader = shader;
 	//shader->clean(_matrixStack, _renderOptions, this); // remove this later, just here because everything is in immediate mode
 	world->debugDrawWorld();
 	matrixStack = nullptr;
 	renderOptions = nullptr;
 
+	// restore previous depth-test state
+	if(depth == GL_TRUE){
+		glEnable(GL_DEPTH_TEST);
+	}
+
+	// restore previous line width state
 	glLineWidth(oldWidth);
 }

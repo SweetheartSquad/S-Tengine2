@@ -11,6 +11,7 @@ public:
 	virtual void makeDirty();
 	bool transformDirty;
 	glm::vec3 worldPos;
+	glm::mat4 modelMatrixThing;
 
 
 	/** Reference to this node's parent */
@@ -21,6 +22,8 @@ public:
 	// Returns whether or not _parent is an ancestor of this node (i.e. is its parent, is its parent's parent, etc.)
 	// If _parent = nullptr, returns false
 	virtual bool hasAncestor(Transform * _parent);
+
+	virtual void setParent(Transform * _parent);
 
 
 	// Returns the translation vector of the node (if _relative is false, applies all of the transformations of the parent nodes before returning the vector)

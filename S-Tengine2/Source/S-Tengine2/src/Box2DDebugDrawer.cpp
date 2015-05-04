@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Box2DDebugDraw.h"
+#include "Box2DDebugDrawer.h"
 #include "Scene.h"
 #include "Sprite.h"
 #include "SpriteMesh.h"
@@ -13,7 +13,7 @@
 
 #include <GL/glew.h>
 
-Box2DDebugDraw::Box2DDebugDraw(Box2DWorld * _world) :
+Box2DDebugDrawer::Box2DDebugDrawer(Box2DWorld * _world) :
 	shader(new BaseComponentShader(false)),
 	world(_world),
 	spriteSegment(new Sprite()),
@@ -43,7 +43,7 @@ Box2DDebugDraw::Box2DDebugDraw(Box2DWorld * _world) :
 	spriteTransform->mesh->pushVert(Vertex(0, 1, 0.0001f, 0, 255, 0, 1.f));
 
 	
-	spriteCircle->mesh->polygonalDrawMode = GL_POLYGON;
+	spriteCircle->mesh->polygonalDrawMode = GL_LINE_STRIP;
 	spriteCircle->mesh->vertices.clear();
 	spriteCircle->mesh->indices.clear();
 	for (int32 i = 0; i < CIRCLE_VERTS; ++i){
@@ -82,7 +82,7 @@ Box2DDebugDraw::Box2DDebugDraw(Box2DWorld * _world) :
 	childButNotReally->addChild(t);
 }
 
-Box2DDebugDraw::~Box2DDebugDraw(){
+Box2DDebugDrawer::~Box2DDebugDrawer(){
 	delete spriteSegment;
 	delete spriteTransform;
 	delete spriteCircle;
@@ -90,9 +90,7 @@ Box2DDebugDraw::~Box2DDebugDraw(){
 	shader->decrementAndDelete();
 }
 
-void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color){
-	spritePoly->mesh->polygonalDrawMode = GL_LINE_STRIP;
-	
+void Box2DDebugDrawer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color){
 	if(vertexCount == 4){
 		spritePoly->parent->reset();
 		spritePoly->parent->translate(vertices[0].x, vertices[0].y, 0.0001f, false);
@@ -102,12 +100,10 @@ void Box2DDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, cons
 		spritePoly->parent->scale(s1.Length(), s2.Length(), 1, false);
 	}
 
-	spritePoly->render(matrixStack, renderOptions);
+	spritePoly->parent->render(matrixStack, renderOptions);
 }
 
-void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount, const b2Color& color){
-	spritePoly->mesh->polygonalDrawMode = GL_LINE_STRIP;
-	
+void Box2DDebugDrawer::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount, const b2Color& color){
 	if(vertexCount == 4){
 		spritePoly->parent->reset();
 		spritePoly->parent->translate(vertices[0].x, vertices[0].y, 0.0001f, false);
@@ -117,43 +113,49 @@ void Box2DDebugDraw::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount
 		spritePoly->parent->scale(s1.Length(), s2.Length(), 1, false);
 	}
 
-	spritePoly->render(matrixStack, renderOptions);
+	spritePoly->parent->render(matrixStack, renderOptions);
 }
 
-void Box2DDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color){
-	spriteCircle->mesh->polygonalDrawMode = GL_LINE_STRIP;//GL_POLYGON;
+void Box2DDebugDrawer::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color){
 	spriteCircle->parent->translate(glm::vec3(center.x, center.y, 0), false);
 	spriteCircle->parent->scale(glm::vec3(radius, radius, radius), false);
-	spriteCircle->render(matrixStack, renderOptions);
+	spriteCircle->parent->render(matrixStack, renderOptions);
 }
 
-void Box2DDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color){
-	spriteCircle->mesh->polygonalDrawMode = GL_LINE_STRIP;//GL_POLYGON;
+void Box2DDebugDrawer::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color){
 	spriteCircle->parent->translate(glm::vec3(center.x, center.y, 0), false);
 	spriteCircle->parent->scale(glm::vec3(radius, radius, radius), false);
-	spriteCircle->render(matrixStack, renderOptions);
+	spriteCircle->parent->render(matrixStack, renderOptions);
 }
 
-void Box2DDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color){
+void Box2DDebugDrawer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color){
 	spriteSegment->parent->translate(glm::vec3(p1.x, p1.y, 0), false);
 	float x = p2.x - p1.x;
 	float y = p2.y - p1.y;
 	float mag = sqrt(x*x + y*y);
 	spriteSegment->parent->setOrientation(glm::quat(glm::angleAxis(glm::degrees(atan2(y, x)), glm::vec3(0, 0, 1))));
 	spriteSegment->parent->scale(glm::vec3(mag, mag, mag), false);
-	spriteSegment->render(matrixStack, renderOptions);
+	spriteSegment->parent->render(matrixStack, renderOptions);
 }
 
-void Box2DDebugDraw::DrawTransform(const b2Transform& xf){
+void Box2DDebugDrawer::DrawTransform(const b2Transform& xf){
 	spriteTransform->parent->translate(xf.p.x, xf.p.y, 0, false);
 	spriteTransform->parent->setOrientation(glm::quat(glm::angleAxis(glm::degrees(xf.q.GetAngle()), glm::vec3(0, 0, 1))));
-	spriteTransform->render(matrixStack, renderOptions);
+	spriteTransform->parent->render(matrixStack, renderOptions);
 }
 
-void Box2DDebugDraw::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void Box2DDebugDrawer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// save previous line width state and change
 	GLfloat oldWidth;
 	glGetFloatv(GL_LINE_WIDTH, &oldWidth);
 	glLineWidth(2.5f);
+
+	// save previous depth-test state and disable
+	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
+	if(depth == GL_TRUE){
+		glDisable(GL_DEPTH_TEST);
+	}
+
 	if(drawing){
 		matrixStack = _matrixStack;
 		renderOptions = _renderOptions;
@@ -161,17 +163,24 @@ void Box2DDebugDraw::render(vox::MatrixStack * _matrixStack, RenderOptions * _re
 		matrixStack = nullptr;
 		renderOptions = nullptr;
 	}
+
+	// restore previous depth-test state
+	if(depth == GL_TRUE){
+		glEnable(GL_DEPTH_TEST);
+	}
+
+	// restore previous line width state
 	glLineWidth(oldWidth);
 }
 
-void Box2DDebugDraw::load(){
+void Box2DDebugDrawer::load(){
 	spriteTransform->load();
 	spriteCircle->load();
 	spritePoly->load();
 	spriteSegment->load();
 }
 
-void Box2DDebugDraw::unload(){
+void Box2DDebugDrawer::unload(){
 	spriteTransform->unload();
 	spriteCircle->unload();
 	spritePoly->unload();

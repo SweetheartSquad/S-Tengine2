@@ -56,32 +56,13 @@ b2Fixture * NodeBox2DBody::getNewFixture(b2ChainShape _shape, float _density){
 void NodeBox2DBody::setTranslationPhysical(glm::vec3 _translation, bool _relative){
 	parent->translate(_translation, _relative);
 	glm::vec3 tv = parent->getTranslationVector();
-	if(_relative){
-		if(body != nullptr){
-			body->SetTransform(b2Vec2(tv.x, tv.y), body->GetAngle());
-		}
-	}else{
-		bodyDef.position.Set(tv.x, tv.y);
-		if(body != nullptr){
-			body->SetTransform(b2Vec2(_translation.x, _translation.y), body->GetAngle());
-		}
+	if(body != nullptr){
+		body->SetTransform(b2Vec2(tv.x, tv.y), body->GetAngle());
 	}
 }
 
 void NodeBox2DBody::setTranslationPhysical(float _x, float _y, float _z, bool _relative){
 	setTranslationPhysical(glm::vec3(_x, _y, _z), _relative);
-}
-
-void NodeBox2DBody::setXPhysical(float _x){
-	setTranslationPhysical(glm::vec3(_x, 0, 0));
-}
-
-void NodeBox2DBody::setYPhysical(float _y){
-	setTranslationPhysical(glm::vec3(0, _y, 0));
-}
-
-void NodeBox2DBody::setXYPhysical(float _x, float _y){
-	setTranslationPhysical(glm::vec3(_x, _y, 0));
 }
 
 void NodeBox2DBody::applyForce(float _forceX, float _forceY, float _pointX, float _pointY){

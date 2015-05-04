@@ -32,4 +32,5 @@ public:
 	virtual void load() override;
 
 	Transform * childButNotReally;
+	virtual void setParent(Transform * _parent) override;
 };

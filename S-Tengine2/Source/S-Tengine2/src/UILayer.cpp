@@ -38,7 +38,7 @@ void UILayer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 	glm::mat4 p = _matrixStack->getProjectionMatrix();
 	glm::mat4 v = _matrixStack->getViewMatrix();
 
-	_renderOptions->overrideShader = shader;
+	//_renderOptions->overrideShader = shader;
 
 	_matrixStack->pushMatrix();
 	_matrixStack->setProjectionMatrix(cam.getProjectionMatrix());

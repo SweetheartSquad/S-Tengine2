@@ -44,6 +44,7 @@ private:
 protected:
 public:
 	void makeDirty() override;
+	glm::mat4 calcModelMatrixThing();
 	
 	Transform();
 	virtual ~Transform();

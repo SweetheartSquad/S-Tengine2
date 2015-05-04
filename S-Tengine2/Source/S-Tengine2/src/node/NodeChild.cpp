@@ -34,22 +34,18 @@ glm::vec3 NodeChild::getWorldPos(){
 	}
 	if(transformDirty){
 		glm::vec4 res(parent->getTranslationVector(), 1);
-		Transform * p = parent;
-		std::vector<glm::mat4> modelMatrixStack;
-		while (p != nullptr){
-			modelMatrixStack.push_back(p->getModelMatrix());
-			p = p->parent;
+		if(parent->parent != nullptr){
+			res = parent->parent->calcModelMatrixThing() * res;
 		}
-		
-		glm::mat4 modelMatrix(1);
-		for(signed long int i = modelMatrixStack.size()-1; i > 0; --i){
-			modelMatrix = modelMatrix * modelMatrixStack.at(i);
-		}
-		res = modelMatrix * res;
+
 		worldPos = glm::vec3(res);
 		transformDirty = false;
 	}
 	return worldPos;
+}
+
+void NodeChild::setParent(Transform * _parent){
+	this->parent = _parent;
 }
 
 void NodeChild::setPos(glm::vec3 _pos, bool _convertToRelative){

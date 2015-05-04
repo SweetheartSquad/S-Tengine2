@@ -50,8 +50,12 @@ SceneSplash::SceneSplash(Game * _game) :
 	//shader->addComponent(hsvShader);
 	shader->compileShader();
 
+	Transform * t;
+
 	//Set up cameras
 	PerspectiveCamera * fc = new PerspectiveCamera();
+	t = new Transform();
+	t->addChild(fc);
 	cameras.push_back(fc);
 	fc->farClip = 1000.f;
 	fc->nearClip = 0.001f;
@@ -66,14 +70,17 @@ SceneSplash::SceneSplash(Game * _game) :
 	Texture * c = new Texture("../assets/cursor.png", 32, 32, true, false);
 	c->load();
 	ResourceManager::resources.push_back(c);
-	Texture * t = new Texture("../assets/S-Tengine2_logo.png", 1024, 1024, true, false);
-	t->load();
-	ResourceManager::resources.push_back(t);
+	Texture * logoTex = new Texture("../assets/S-Tengine2_logo.png", 1024, 1024, true, false);
+	logoTex->load();
+	ResourceManager::resources.push_back(logoTex);
 	
 	mouseIndicator = new Sprite();
+	t = new Transform();
+	t->addChild(mouseIndicator);
+	uiLayer.childButNotReally->addChild(t);
 	mouseIndicator->mesh->pushTexture2D(c);
 	mouseIndicator->parent->scale(16,16,1);
-	uiLayer.childButNotReally->addChild(mouseIndicator);
+	mouseIndicator->setShader(uiLayer.shader, true);
 
 	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
 		mouseIndicator->mesh->vertices[i].x -= 1.25;
@@ -82,10 +89,12 @@ SceneSplash::SceneSplash(Game * _game) :
 	mouseIndicator->mesh->dirty = true;
 	
 	logo = new MeshEntity(Resource::loadMeshFromObj("../assets/S-Tengine2_logo.vox").at(0));
-	logo->mesh->pushTexture2D(t);
+	t = new Transform();
+	t->addChild(logo);
+	childButNotReally->addChild(t);
+	logo->mesh->pushTexture2D(logoTex);
 	logo->parent->scale(25,25,25);
 	logo->setShader(shader, true);
-	childButNotReally->addChild(logo);
 }
 
 SceneSplash::~SceneSplash(){

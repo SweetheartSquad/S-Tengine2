@@ -55,9 +55,10 @@ std::string ShaderComponentTexture::getOutColorMod(){
 }
 
 void ShaderComponentTexture::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
-	//ShaderComponent::clean(_matrixStack, _renderOption, _nodeRenderable);
-	configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
-	shader->configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
+	makeDirty();
+	ShaderComponent::clean(_matrixStack, _renderOption, _nodeRenderable);
+	//configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
+	//shader->configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 }
 
 void ShaderComponentTexture::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){

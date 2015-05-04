@@ -35,6 +35,20 @@ void Transform::makeDirty(){
 	}
 }
 
+
+glm::mat4 Transform::calcModelMatrixThing(){
+	//if(transformDirty){
+		modelMatrixThing = glm::mat4(1);
+		Transform * p = parent;
+		if(p != nullptr){
+			modelMatrixThing = p->calcModelMatrixThing();
+		}
+
+		modelMatrixThing = modelMatrixThing * getModelMatrix();
+	//}
+	return modelMatrixThing;
+}
+
 void Transform::scale(float _scaleX, float _scaleY, float _scaleZ, bool _relative){
 	scale(glm::vec3(_scaleX, _scaleY, _scaleZ), _relative);
 }
@@ -197,7 +211,7 @@ void Transform::load(){
 
 void Transform::addChildAtIndex(NodeChild * _child, int _index){
 	children.insert(children.begin() + _index, _child);
-	_child->parent = this;
+	_child->setParent(this);
 	_child->makeDirty();
 }
 
@@ -299,7 +313,7 @@ bool Transform::addChild(NodeChild * _child){
 
 		// Add the child to the list of children and set it's parent to this
 		children.push_back(_child);
-		_child->parent = this;
+		_child->setParent(this);
 		_child->makeDirty();
 		return true;
 	}else{
