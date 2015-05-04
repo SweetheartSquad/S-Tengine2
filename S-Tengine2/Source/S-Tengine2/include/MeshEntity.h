@@ -19,7 +19,7 @@ public:
 	// returns a box which covers the verts of the mesh and all of its children
 	vox::Box calcOverallBoundingBox();
 
-	explicit MeshEntity(MeshInterface * _mesh = nullptr, Shader * _shader = nullptr);
+	explicit MeshEntity(MeshInterface * _mesh, Shader * _shader = nullptr);
 	virtual ~MeshEntity(void);
 
 	/**

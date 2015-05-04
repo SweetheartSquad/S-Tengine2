@@ -23,14 +23,13 @@ bool LightData::operator!=(const LightData &other) const{
 	return !(*this == other);
 }
 
-Light::Light(LightType _type, glm::vec3 _position, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff, Transform * _transform):
+Light::Light(LightType _type, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff):
 	data(_type, _intensities, _ambientCoefficient, _attenuation, _cutoff),
 	lastData(_type, _intensities, _ambientCoefficient, _attenuation, _cutoff),
 	dirty(true)
 {
-	_transform->translate(_position, false);
-	lastPos = getPos(false);
+	lastPos = getWorldPos();
 }
 
-Light::~Light() {
+Light::~Light(){
 }

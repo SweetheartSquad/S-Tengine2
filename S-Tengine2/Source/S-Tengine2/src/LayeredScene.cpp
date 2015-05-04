@@ -91,7 +91,7 @@ void LayeredScene::removeUIChild(Entity* _child){
 
 void LayeredScene::addChild(Entity* _child, unsigned long int _layer){
 	if(_layer < numLayers){
-		children.push_back(_child);
+		childButNotReally->addChild(_child);
 		layers.at(_layer).push_back(_child);
 	}else{
 		std::cout << "Scene does not have a layer " << _layer << std::endl;

@@ -16,6 +16,8 @@ UILayer::UILayer(float _left, float _right, float _top, float _bottom) :
 	glm::vec2 sd = vox::getScreenDimensions();
 	cam.left = -sd.x;
 	cam.top = sd.y;
+	Transform * t = new Transform();
+	t->addChild(&cam);
 
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->compileShader();

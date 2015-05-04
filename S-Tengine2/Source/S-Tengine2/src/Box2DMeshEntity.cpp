@@ -21,8 +21,13 @@ void Box2DMeshEntity::update(Step* _step){
 b2Fixture * Box2DMeshEntity::createFixture(bool _circle){
 	vox::Box bb = calcOverallBoundingBox();
 	
-	float scaleX = parent->getScaleVector().x;
-	float scaleY = parent->getScaleVector().y;
+	float scaleX, scaleY;
+	if(parent != nullptr){
+		scaleX = parent->getScaleVector().x;
+		scaleY = parent->getScaleVector().y;
+	}else{
+		scaleX = scaleY = 1;
+	}
 	
 	b2FixtureDef d;
 	d.density = 1;

@@ -48,7 +48,7 @@ void FollowCamera::update(Step * _step){
 				targets.erase(targets.begin() + i);
 			}
 		}else{
-			targets.at(i).pos = targets.at(i).target->getPos(false);
+			targets.at(i).pos = targets.at(i).target->getWorldPos();
 		}
 	}
 

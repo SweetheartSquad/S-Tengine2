@@ -61,11 +61,7 @@ void Scene::update(Step * _step){
 		load();
 	}
 	activeCamera->update(_step);
-	//for (Entity * e : children){
-	for (unsigned long int i = 0; i < children.size(); ++i){
-		Entity * e = children.at(i);
-		e->update(_step);
-	}
+	childButNotReally->update(_step);
 }
 
 void Scene::load(){
@@ -73,17 +69,13 @@ void Scene::load(){
 	depthShader->load();
 	shadowBuffer->load();
 	depthBuffer->load();
-	for(Entity * e : children){
-		e->load();
-	}
+	childButNotReally->load();
 	
 	NodeLoadable::load();
 }
 
 void Scene::unload(){
-	for(signed long int i = children.size()-1; i >= 0; --i){
-		children.at(i)->unload();
-	}
+	childButNotReally->unload();
 	depthBuffer->unload();
 	shadowBuffer->unload();
 	depthShader->unload();

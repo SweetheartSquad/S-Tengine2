@@ -38,7 +38,12 @@ private:
 	glm::mat4 oMatrix;
 	bool mDirty;
 	glm::mat4 mMatrix;
+
+	bool isIdentity;
+
+protected:
 public:
+	void makeDirty() override;
 	
 	Transform();
 	virtual ~Transform();
@@ -157,7 +162,7 @@ public:
 	/** List of references to child entities */
 	std::vector<NodeChild *> children;
 
-//	void doRecursively(std::function<void(Node *, void * args[])> _toDo, void * _args[]);
+	void doRecursively(std::function<void(Node *, void * args[])> _toDo, void * _args[]);
 
 	
 

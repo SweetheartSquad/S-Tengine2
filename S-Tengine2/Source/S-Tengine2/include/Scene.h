@@ -41,8 +41,7 @@ public:
 	DepthMapShader		* depthShader;
 	BlurShader			* shadowShader;
 	RenderSurface       * shadowSurface;
-	/** Reference to a list of references to entitites included in this scene */
-	std::vector<Entity *> children;
+
 	/** The lights for this scene **/
 	std::vector<Light *> lights;
 	/** Calls update on the attached camera */

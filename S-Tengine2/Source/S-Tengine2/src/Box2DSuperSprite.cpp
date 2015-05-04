@@ -103,7 +103,7 @@ void Box2DSuperSprite::addComponent(Box2DSprite * _component){
 }
 
 void Box2DSuperSprite::snapComponents(Box2DSprite * _sprite){
-	glm::vec3 currentPos = getPos(false);
+	glm::vec3 currentPos = getWorldPos();
 	glm::vec3 snapPos = glm::vec3(_sprite->body->GetPosition().x, _sprite->body->GetPosition().y, 0);
 	
 	translateComponents(glm::vec3(snapPos.x - currentPos.x, snapPos.y - currentPos.y, 0));

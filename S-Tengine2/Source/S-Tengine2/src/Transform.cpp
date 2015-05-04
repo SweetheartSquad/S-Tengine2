@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Transform.h>
-
+#include <node\NodeResource.h>
 #include <MatrixStack.h>
 
 Transform::Transform():
@@ -11,11 +11,28 @@ Transform::Transform():
 	tDirty(true),
 	sDirty(true),
 	oDirty(true),
-	mDirty(true)
+	mDirty(true),
+	isIdentity(true)
 {
 }
 
 Transform::~Transform(){
+	//while(children.size() > 0){
+		//NodeResource * nr = dynamic_cast<NodeResource *>(children.back());
+		//if(nr != nullptr){
+		//	nr->decrementAndDelete();
+		//}else{
+		//	delete children.back();
+		//}
+		//children.pop_back();
+	//}
+}
+
+void Transform::makeDirty(){
+	NodeChild::makeDirty();
+	for(unsigned long int i = 0; i < children.size(); ++i){
+		children.at(i)->makeDirty();
+	}
 }
 
 void Transform::scale(float _scaleX, float _scaleY, float _scaleZ, bool _relative){
@@ -30,6 +47,8 @@ void Transform::scale(glm::vec3 _scale, bool relative){
 	}
 	sDirty = true;
 	mDirty = true;
+	isIdentity = false;
+	makeDirty();
 }
 
 void Transform::translate(float _translateX, float _translateY, float _translateZ, bool _relative){
@@ -44,6 +63,8 @@ void Transform::translate(glm::vec3 _translate, bool _relative){
 	}
 	tDirty = true;
 	mDirty = true;
+	isIdentity = false;
+	makeDirty();
 }
 
 void Transform::rotate(glm::quat _rotation, CoordinateSpace _space){
@@ -64,6 +85,8 @@ void Transform::setOrientation(glm::quat _orientation){
 	orientation = _orientation;
 	oDirty = true;
 	mDirty = true;
+	isIdentity = false;
+	makeDirty();
 }
 
 glm::mat4 Transform::getTranslationMatrix(){
@@ -103,6 +126,8 @@ void Transform::reset(){
 	translate(glm::vec3(0.f, 0.f, 0.f), false);
 	scale(glm::vec3(1.f, 1.f, 1.f), false);
 	setOrientation(glm::quat(1.f, 0.f, 0.f, 0.f));
+	isIdentity = true;
+	makeDirty();
 }
 
 glm::vec3 Transform::getTranslationVector(){
@@ -129,16 +154,21 @@ void Transform::update(Step * _step){
 
 
 void Transform::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// save previous matrix state
 	_matrixStack->pushMatrix();
-	_matrixStack->applyMatrix(getModelMatrix());
-	
+	// apply the transform's matrix
+	if(!isIdentity){
+		_matrixStack->applyMatrix(getModelMatrix());
+	}
+
+	// render all of the transform's children
 	for(unsigned long int i = 0; i < children.size(); i++){
 		NodeRenderable * nr = dynamic_cast<NodeRenderable *>(children.at(i));
 		if(nr != nullptr){
 			nr->render(_matrixStack, _renderOptions);	
 		}
 	}
-	//pop transform
+	// restore previous matrix state
 	_matrixStack->popMatrix();
 }
 
@@ -167,10 +197,13 @@ void Transform::load(){
 
 void Transform::addChildAtIndex(NodeChild * _child, int _index){
 	children.insert(children.begin() + _index, _child);
+	_child->parent = this;
+	_child->makeDirty();
 }
 
 void Transform::removeChildAtIndex(int _index){
 	children.erase(children.begin() + _index);
+	children.at(_index)->makeDirty();
 }
 
 
@@ -178,6 +211,7 @@ unsigned long int Transform::removeChild(NodeChild * _child){
 	for(unsigned long int i = 0; i < children.size(); ++i){
 		if(_child == children.at(i)){
 			children.erase(children.begin() + i);
+			_child->makeDirty();
 			return i;
 		}
 	}
@@ -215,7 +249,7 @@ bool Transform::hasDescendant(NodeChild *_child) {
 	return false;
 }
 
-/*void Transform::doRecursively(std::function<void(Node *, void * args[])> _toDo, void * _args[]){
+void Transform::doRecursively(std::function<void(Node *, void * args[])> _toDo, void * _args[]){
 	_toDo(this, _args);
 	for(unsigned long int i = 0; i < children.size(); i++){
 		Transform * t = dynamic_cast<Transform *>(children.at(i));
@@ -225,7 +259,7 @@ bool Transform::hasDescendant(NodeChild *_child) {
 			_toDo(children.at(i), _args);
 		}
 	}
-}*/
+}
 
 
 unsigned long int Transform::calculateDepth(){
@@ -266,6 +300,7 @@ bool Transform::addChild(NodeChild * _child){
 		// Add the child to the list of children and set it's parent to this
 		children.push_back(_child);
 		_child->parent = this;
+		_child->makeDirty();
 		return true;
 	}else{
 		// Error Message: Cannot parent a node to one of its descendants

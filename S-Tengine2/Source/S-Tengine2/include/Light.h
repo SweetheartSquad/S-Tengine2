@@ -32,7 +32,7 @@ struct LightData {
 class Light abstract : public Entity{
 public:
 
-	explicit Light(LightType _type, glm::vec3 _position, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff, Transform * _transform = nullptr);
+	explicit Light(LightType _type, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff);
 	~Light();
 
 	/**

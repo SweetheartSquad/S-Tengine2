@@ -8,7 +8,9 @@
 
 #include "glew\glew.h"
 
-Entity::Entity(){
+Entity::Entity() :
+	childButNotReally(new Transform())
+{
 }
 
 Entity::~Entity(void){

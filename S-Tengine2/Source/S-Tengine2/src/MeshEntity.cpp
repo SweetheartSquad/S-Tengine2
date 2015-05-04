@@ -16,9 +16,8 @@ MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader) :
 	mesh(_mesh),
 	shader(_shader)
 {
-	if(mesh != nullptr){
-		++mesh->referenceCount;
-	}
+	++mesh->referenceCount;
+	childButNotReally->addChild(mesh);
 	if(shader != nullptr){
 		++shader->referenceCount;
 	}
@@ -36,23 +35,12 @@ MeshEntity::~MeshEntity(void){
 }
 
 void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	//push transform
-	if(_matrixStack != nullptr && _renderOptions != nullptr){
-		_matrixStack->pushMatrix();
-		_matrixStack->applyMatrix(parent->getModelMatrix());
-	
-		if(_renderOptions->overrideShader == nullptr){
-			_renderOptions->shader = shader;
-		}else{
-			_renderOptions->shader = _renderOptions->overrideShader;
-		}
-		if(mesh != nullptr){
-			mesh->render(_matrixStack, _renderOptions);
-		}
-		//pop transform
-		_matrixStack->popMatrix();
-		Entity::render(_matrixStack, _renderOptions);
+	if(_renderOptions->overrideShader == nullptr){
+		_renderOptions->shader = shader;
+	}else{
+		_renderOptions->shader = _renderOptions->overrideShader;
 	}
+	Entity::render(_matrixStack, _renderOptions);
 }
 
 void MeshEntity::update(Step * _step){

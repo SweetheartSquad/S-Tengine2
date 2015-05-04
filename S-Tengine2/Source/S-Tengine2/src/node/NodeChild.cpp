@@ -4,8 +4,13 @@
 #include <Transform.h>
 
 NodeChild::NodeChild(Transform * _parent):
-	parent(_parent)
+	parent(_parent),
+	transformDirty(true)
 {
+}
+
+void NodeChild::makeDirty(){
+	transformDirty = true;
 }
 
 bool NodeChild::hasAncestor(Transform * _parent){
@@ -23,9 +28,12 @@ bool NodeChild::hasAncestor(Transform * _parent){
 	return false;
 }
 
-glm::vec3 NodeChild::getPos(bool _relative){
-	glm::vec4 res(parent->getTranslationVector(), 1);
-	if(!_relative){
+glm::vec3 NodeChild::getWorldPos(){
+	if(parent == nullptr){
+		return glm::vec3(0,0,0);
+	}
+	if(transformDirty){
+		glm::vec4 res(parent->getTranslationVector(), 1);
 		Transform * p = parent;
 		std::vector<glm::mat4> modelMatrixStack;
 		while (p != nullptr){
@@ -38,8 +46,10 @@ glm::vec3 NodeChild::getPos(bool _relative){
 			modelMatrix = modelMatrix * modelMatrixStack.at(i);
 		}
 		res = modelMatrix * res;
+		worldPos = glm::vec3(res);
+		transformDirty = false;
 	}
-	return glm::vec3(res);
+	return worldPos;
 }
 
 void NodeChild::setPos(glm::vec3 _pos, bool _convertToRelative){

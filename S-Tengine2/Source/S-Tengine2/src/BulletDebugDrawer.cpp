@@ -119,7 +119,7 @@ void BulletDebugDrawer::render(vox::MatrixStack * _matrixStack, RenderOptions * 
 
 	matrixStack = _matrixStack;
 	renderOptions = _renderOptions;
-	shader->clean(_matrixStack, _renderOptions, this); // remove this later, just here because everything is in immediate mode
+	//shader->clean(_matrixStack, _renderOptions, this); // remove this later, just here because everything is in immediate mode
 	world->debugDrawWorld();
 	matrixStack = nullptr;
 	renderOptions = nullptr;

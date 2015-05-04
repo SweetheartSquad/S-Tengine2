@@ -6,10 +6,15 @@
 class Transform;
 
 class NodeChild abstract : public virtual Node{
+protected:
 public:
+	virtual void makeDirty();
+	bool transformDirty;
+	glm::vec3 worldPos;
+
+
 	/** Reference to this node's parent */
 	Transform * parent;
-
 
 	explicit NodeChild(Transform * _parent = nullptr);
 
@@ -19,7 +24,8 @@ public:
 
 
 	// Returns the translation vector of the node (if _relative is false, applies all of the transformations of the parent nodes before returning the vector)
-	glm::vec3 getPos(bool _relative = true);
+	// If there is no transformation data (i.e. parent == nullptr) a zero vector is returned
+	glm::vec3 getWorldPos();
 	// Sets the translation vector of the node
 	void setPos(glm::vec3 _pos, bool _convertToRelative = true);
 
