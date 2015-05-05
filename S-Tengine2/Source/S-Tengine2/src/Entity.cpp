@@ -42,3 +42,13 @@ void Entity::setParent(Transform * _parent){
 	NodeChild::setParent(_parent);
 	childButNotReally->setParent(_parent);
 }
+
+void Entity::makeCumulativeModelMatrixDirty(){
+	NodeChild::makeCumulativeModelMatrixDirty();
+	childButNotReally->makeCumulativeModelMatrixDirty();
+}
+
+void Entity::printHierarchy(unsigned long int _startDepth){
+	NodeChild::printHierarchy(_startDepth);
+	childButNotReally->printHierarchy(_startDepth);
+}

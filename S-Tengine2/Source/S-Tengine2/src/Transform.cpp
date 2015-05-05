@@ -28,25 +28,25 @@ Transform::~Transform(){
 	//}
 }
 
-void Transform::makeDirty(){
-	NodeChild::makeDirty();
-	for(unsigned long int i = 0; i < children.size(); ++i){
-		children.at(i)->makeDirty();
+void Transform::makeCumulativeModelMatrixDirty(){
+	NodeChild::makeCumulativeModelMatrixDirty();
+	for(NodeChild * child : children){
+		child->makeCumulativeModelMatrixDirty();
 	}
 }
 
 
-glm::mat4 Transform::calcModelMatrixThing(){
-	//if(transformDirty){
-		modelMatrixThing = glm::mat4(1);
+glm::mat4 Transform::getCumulativeModelMatrix(){
+	if(cumulativeModelMatrixDirty){
 		Transform * p = parent;
 		if(p != nullptr){
-			modelMatrixThing = p->calcModelMatrixThing();
+			cumulativeModelMatrix = p->getCumulativeModelMatrix() * getModelMatrix();
+		}else{
+			cumulativeModelMatrix = getModelMatrix();
 		}
-
-		modelMatrixThing = modelMatrixThing * getModelMatrix();
-	//}
-	return modelMatrixThing;
+		cumulativeModelMatrixDirty = false;
+	}
+	return cumulativeModelMatrix;
 }
 
 void Transform::scale(float _scaleX, float _scaleY, float _scaleZ, bool _relative){
@@ -62,7 +62,7 @@ void Transform::scale(glm::vec3 _scale, bool relative){
 	sDirty = true;
 	mDirty = true;
 	isIdentity = false;
-	makeDirty();
+	makeCumulativeModelMatrixDirty();
 }
 
 void Transform::translate(float _translateX, float _translateY, float _translateZ, bool _relative){
@@ -78,7 +78,7 @@ void Transform::translate(glm::vec3 _translate, bool _relative){
 	tDirty = true;
 	mDirty = true;
 	isIdentity = false;
-	makeDirty();
+	makeCumulativeModelMatrixDirty();
 }
 
 void Transform::rotate(glm::quat _rotation, CoordinateSpace _space){
@@ -100,7 +100,7 @@ void Transform::setOrientation(glm::quat _orientation){
 	oDirty = true;
 	mDirty = true;
 	isIdentity = false;
-	makeDirty();
+	makeCumulativeModelMatrixDirty();
 }
 
 glm::mat4 Transform::getTranslationMatrix(){
@@ -136,12 +136,28 @@ glm::mat4 Transform::getModelMatrix(){
 	return mMatrix;
 }
 
+glm::vec3 Transform::getWorldPos(){
+	if(parent == nullptr){
+		return getTranslationVector();
+	}
+	if(cumulativeModelMatrixDirty){
+		glm::vec4 res(getTranslationVector(), 1);
+		if(parent != nullptr){
+			res = parent->getCumulativeModelMatrix() * res;
+		}
+
+		worldPos = glm::vec3(res);
+		cumulativeModelMatrixDirty = false;
+	}
+	return worldPos;
+}
+
 void Transform::reset(){
 	translate(glm::vec3(0.f, 0.f, 0.f), false);
 	scale(glm::vec3(1.f, 1.f, 1.f), false);
 	setOrientation(glm::quat(1.f, 0.f, 0.f, 0.f));
 	isIdentity = true;
-	makeDirty();
+	makeCumulativeModelMatrixDirty();
 }
 
 glm::vec3 Transform::getTranslationVector(){
@@ -212,12 +228,11 @@ void Transform::load(){
 void Transform::addChildAtIndex(NodeChild * _child, int _index){
 	children.insert(children.begin() + _index, _child);
 	_child->setParent(this);
-	_child->makeDirty();
 }
 
 void Transform::removeChildAtIndex(int _index){
 	children.erase(children.begin() + _index);
-	children.at(_index)->makeDirty();
+	children.at(_index)->setParent(nullptr);
 }
 
 
@@ -225,7 +240,7 @@ unsigned long int Transform::removeChild(NodeChild * _child){
 	for(unsigned long int i = 0; i < children.size(); ++i){
 		if(_child == children.at(i)){
 			children.erase(children.begin() + i);
-			_child->makeDirty();
+			_child->setParent(nullptr);
 			return i;
 		}
 	}
@@ -314,10 +329,18 @@ bool Transform::addChild(NodeChild * _child){
 		// Add the child to the list of children and set it's parent to this
 		children.push_back(_child);
 		_child->setParent(this);
-		_child->makeDirty();
 		return true;
 	}else{
 		// Error Message: Cannot parent a node to one of its descendants
 		return false;
+	}
+}
+
+
+
+void Transform::printHierarchy(unsigned long int _startDepth){
+	NodeChild::printHierarchy(_startDepth);
+	for(NodeChild * c : children){
+		c->printHierarchy(_startDepth+1);
 	}
 }

@@ -8,10 +8,10 @@ class Transform;
 class NodeChild abstract : public virtual Node{
 protected:
 public:
-	virtual void makeDirty();
-	bool transformDirty;
+	virtual void makeCumulativeModelMatrixDirty();
+	bool cumulativeModelMatrixDirty;
 	glm::vec3 worldPos;
-	glm::mat4 modelMatrixThing;
+	glm::mat4 cumulativeModelMatrix;
 
 
 	/** Reference to this node's parent */
@@ -25,13 +25,18 @@ public:
 
 	virtual void setParent(Transform * _parent);
 
-
-	// Returns the translation vector of the node (if _relative is false, applies all of the transformations of the parent nodes before returning the vector)
-	// If there is no transformation data (i.e. parent == nullptr) a zero vector is returned
-	glm::vec3 getWorldPos();
+	
+	
+	// applies all of the transformations of the ancestor nodes to the translation vector of the parent node and returns the result
+	// If there is no transformation data (i.e. parent == nullptr), a zero vector is returned
+	virtual glm::vec3 getWorldPos();
 	// Sets the translation vector of the node
 	void setPos(glm::vec3 _pos, bool _convertToRelative = true);
 
 	// Traverses the hierarchy in reverse and returns the inverse model matrix (this * vec4(absolute vector, 1) = relative vector)
 	glm::mat4 getInverseModelMatrixHierarchical();
+
+
+	// prints the hierarchy to the console in ASCII
+	virtual void printHierarchy(unsigned long int _startDepth = 0);
 };

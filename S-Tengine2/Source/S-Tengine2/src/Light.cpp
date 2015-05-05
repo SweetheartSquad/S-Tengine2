@@ -26,10 +26,25 @@ bool LightData::operator!=(const LightData &other) const{
 Light::Light(LightType _type, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff):
 	data(_type, _intensities, _ambientCoefficient, _attenuation, _cutoff),
 	lastData(_type, _intensities, _ambientCoefficient, _attenuation, _cutoff),
-	dirty(true)
+	lightDirty(true)
 {
 	lastPos = getWorldPos();
 }
 
 Light::~Light(){
+}
+
+void Light::update(Step * _step){
+	glm::vec3 curPos = getWorldPos();
+	if(lastPos != curPos){
+		lastPos = curPos;
+		lightDirty = true;
+	}if(lastData != data){
+		lastData = data;
+		lightDirty = true;
+	}
+}
+
+void Light::unload(){
+	lightDirty = true;
 }

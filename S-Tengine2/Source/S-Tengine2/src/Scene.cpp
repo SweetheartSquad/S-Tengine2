@@ -81,10 +81,6 @@ void Scene::unload(){
 	depthShader->unload();
 	shadowSurface->unload();
 
-	for(Light * l : lights){
-		l->dirty = true;
-	}
-
 	NodeLoadable::unload();
 }
 

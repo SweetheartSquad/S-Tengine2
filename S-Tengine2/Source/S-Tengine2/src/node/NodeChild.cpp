@@ -5,12 +5,13 @@
 
 NodeChild::NodeChild(Transform * _parent):
 	parent(_parent),
-	transformDirty(true)
+	cumulativeModelMatrixDirty(true),
+	cumulativeModelMatrix(glm::mat4(1))
 {
 }
 
-void NodeChild::makeDirty(){
-	transformDirty = true;
+void NodeChild::makeCumulativeModelMatrixDirty(){
+	cumulativeModelMatrixDirty = true;
 }
 
 bool NodeChild::hasAncestor(Transform * _parent){
@@ -32,20 +33,23 @@ glm::vec3 NodeChild::getWorldPos(){
 	if(parent == nullptr){
 		return glm::vec3(0,0,0);
 	}
-	if(transformDirty){
+	if(cumulativeModelMatrixDirty){
 		glm::vec4 res(parent->getTranslationVector(), 1);
 		if(parent->parent != nullptr){
-			res = parent->parent->calcModelMatrixThing() * res;
+			res = parent->parent->getCumulativeModelMatrix() * res;
 		}
 
 		worldPos = glm::vec3(res);
-		transformDirty = false;
+		cumulativeModelMatrixDirty = false;
 	}
 	return worldPos;
 }
 
 void NodeChild::setParent(Transform * _parent){
-	this->parent = _parent;
+	if(_parent != parent){
+		this->parent = _parent;
+		makeCumulativeModelMatrixDirty();
+	}
 }
 
 void NodeChild::setPos(glm::vec3 _pos, bool _convertToRelative){
@@ -69,4 +73,15 @@ glm::mat4 NodeChild::getInverseModelMatrixHierarchical(){
 		modelMatrix = modelMatrix * modelMatrixStack.at(i);
 	}
 	return glm::inverse(modelMatrix);
+}
+
+void NodeChild::printHierarchy(unsigned long int _startDepth){
+	for(unsigned long int j = 1; j <= _startDepth; ++j){
+		if(j == _startDepth){
+			std::cout << char(192) << char(196);
+		}else{
+			std::cout << "  ";
+		}
+	}
+	std::cout << this << std::endl;
 }

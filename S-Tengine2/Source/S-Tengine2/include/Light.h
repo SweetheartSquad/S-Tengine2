@@ -32,6 +32,9 @@ struct LightData {
 class Light abstract : public Entity{
 public:
 
+	virtual void update(Step * _step) override;
+	virtual void unload() override;
+
 	explicit Light(LightType _type, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff);
 	~Light();
 
@@ -44,5 +47,5 @@ public:
 	LightData lastData;
 	glm::vec3 lastPos;
 
-	bool dirty;
+	bool lightDirty;
 };

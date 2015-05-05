@@ -13,6 +13,7 @@ class Entity : public virtual NodeUpdatable, public virtual NodeRenderable, publ
 public:
 	explicit Entity();
 	virtual ~Entity(void);
+	void makeCumulativeModelMatrixDirty() override;
 
 	/**
 	* Pushes model matrix stack,
@@ -33,4 +34,8 @@ public:
 
 	Transform * childButNotReally;
 	virtual void setParent(Transform * _parent) override;
+
+
+	// prints the hierarchy to the console in ASCII
+	virtual void printHierarchy(unsigned long int _startDepth = 0);
 };

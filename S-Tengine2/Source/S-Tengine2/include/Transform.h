@@ -39,12 +39,16 @@ private:
 	bool mDirty;
 	glm::mat4 mMatrix;
 
+	// used to optimize out some matrix multiplication if possible
+	// set to true on creation and reset; set to false on any modification
 	bool isIdentity;
-
-protected:
 public:
-	void makeDirty() override;
-	glm::mat4 calcModelMatrixThing();
+	void makeCumulativeModelMatrixDirty() override;
+	glm::mat4 getCumulativeModelMatrix();
+	
+	// applies all of the transformations of the ancestor nodes to the translation vector of this node and returns the result
+	// If there is no transformation data (i.e. parent == nullptr), just the translation vector is returned
+	virtual glm::vec3 getWorldPos();
 	
 	Transform();
 	virtual ~Transform();
@@ -179,4 +183,8 @@ public:
 
 	// Returns the number of Nodes between this node and the top of its hierarchy
 	virtual unsigned long int calculateDepth();
+
+
+	// prints the hierarchy to the console in ASCII
+	virtual void printHierarchy(unsigned long int _startDepth = 0);
 };

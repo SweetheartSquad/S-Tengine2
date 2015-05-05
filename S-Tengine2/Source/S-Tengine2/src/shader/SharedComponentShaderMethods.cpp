@@ -18,17 +18,9 @@ void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStac
 			// Pass the paramaters for each light to the _shader
 			for(unsigned long int i = 0; i < _renderOption->lights->size(); i++){
 				Light * l = _renderOption->lights->at(i);
-				glm::vec3 curPos = l->getWorldPos();
-				//std::cout << curPos.y << " " << l->data.lastPos.y << std::endl;
-				if(l->lastPos != curPos){
-					l->lastPos = curPos;
-					l->dirty = true;
-				}if(l->lastData != l->data){
-					l->lastData = l->data;
-					l->dirty = true;
-				}
 
-				if(l->dirty){
+				if(l->lightDirty){
+					glm::vec3 curPos = l->getWorldPos();
 					//std::cout << "update light " << i << ": " << curPos.x << "," << curPos.y << "," << curPos.z << std::endl;
 					std::string typ = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].type", i);
 					std::string pos = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_POSITION, i);
@@ -48,7 +40,7 @@ void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStac
 					glUniform1f(attenuationUniformLocation, l->data.attenuation);
 					GLuint cutoffUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), cut.c_str());
 					glUniform1f(cutoffUniformLocation, l->data.cutoff);
-					l->dirty = false;
+					l->lightDirty = false;
 				}
 			}
 		}
