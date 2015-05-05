@@ -41,16 +41,19 @@ private:
 	glm::mat4 oMatrix;
 	bool mDirty;
 	glm::mat4 mMatrix;
-	
-	static MeshInterface * transformIndicator;
-	static BaseComponentShader * transformShader;
-	static bool staticInit;
-	static bool drawTransforms;
 
 	// used to optimize out some matrix multiplication if possible
 	// set to true on creation and reset; set to false on any modification
 	bool isIdentity;
+	
+	// whether the transform indicator/shader have been initialized
+	static bool staticInit;
+	// whether to draw the transform indicator on render
+	static bool drawTransforms;
 public:
+	static MeshInterface * transformIndicator;
+	static BaseComponentShader * transformShader;
+
 	void makeCumulativeModelMatrixDirty() override;
 	glm::mat4 getCumulativeModelMatrix();
 	

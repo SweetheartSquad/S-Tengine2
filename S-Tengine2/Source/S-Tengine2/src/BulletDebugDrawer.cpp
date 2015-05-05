@@ -17,6 +17,7 @@ BulletDebugDrawer::BulletDebugDrawer(btCollisionWorld * _world) :
 {
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->compileShader();
+	shader->load();
 }
 
 BulletDebugDrawer::~BulletDebugDrawer(){
@@ -127,7 +128,9 @@ void BulletDebugDrawer::render(vox::MatrixStack * _matrixStack, RenderOptions * 
 	matrixStack = _matrixStack;
 	renderOptions = _renderOptions;
 	_renderOptions->shader = shader;
-	//shader->clean(_matrixStack, _renderOptions, this); // remove this later, just here because everything is in immediate mode
+	glUseProgram(shader->getProgramId());
+	shader->clean(_matrixStack, _renderOptions, this); // remove this later, just here because everything is in immediate mode
+
 	world->debugDrawWorld();
 	matrixStack = nullptr;
 	renderOptions = nullptr;
@@ -139,4 +142,14 @@ void BulletDebugDrawer::render(vox::MatrixStack * _matrixStack, RenderOptions * 
 
 	// restore previous line width state
 	glLineWidth(oldWidth);
+}
+
+
+void BulletDebugDrawer::unload(){
+	shader->unload();
+	Entity::unload();
+}
+void BulletDebugDrawer::load(){
+	shader->load();
+	Entity::load();
 }

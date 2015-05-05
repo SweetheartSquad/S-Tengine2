@@ -2,16 +2,17 @@
 
 #include <stdlib.h>
 
-#include "Game.h"
-#include "Keyboard.h"
-#include "Mouse.h"
-#include "Vox.h"
-#include "MatrixStack.h"
-#include "VoxRenderOptions.h"
-#include "GLUtils.h"
+#include <Game.h>
+#include <Keyboard.h>
+#include <Mouse.h>
+#include <Vox.h>
+#include <MatrixStack.h>
+#include <VoxRenderOptions.h>
+#include <GLUtils.h>
 #include <System.h>
 
 #include <SceneSplash.h>
+#include <MeshInterface.h>
 
 
 Game::Game(bool _isRunning, std::pair<std::string, Scene *> _firstScene, bool _splashScreen) :
@@ -259,6 +260,8 @@ void Game::toggleFullScreen(){
 	for(std::pair<std::string, Scene *> s : scenes){
 		s.second->unload();
 	}
+	Transform::transformIndicator->unload();
+	Transform::transformShader->unload();
 
 
 	// Toggle fullscreen flag.
@@ -296,7 +299,10 @@ void Game::toggleFullScreen(){
 		resize();
 	}
 	
-
+	
+	Transform::transformShader->load();
+	Transform::transformIndicator->load();
+	Transform::transformIndicator->configureDefaultVertexAttributes(Transform::transformShader);
 	// reload everything
 	for(std::pair<std::string, Scene *> s : scenes){
 		s.second->load();
