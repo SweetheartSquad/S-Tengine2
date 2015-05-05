@@ -16,6 +16,10 @@ bool CharacterUtils::isSymbol(char _c){
 	|| (static_cast<int>(_c) >= 123 && static_cast<int>(_c) <= 126));
 }
 
+bool CharacterUtils::isSpace(char _c){
+	return static_cast<int>(_c) == 32;
+}
+
 bool CharacterUtils::isSymbolLetterDigit(char _c){
 	return isDigit(_c) || isLetter(_c) || isSymbol(_c);
 }
