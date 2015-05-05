@@ -53,6 +53,5 @@ void GLUtils::configureVertexAttributes(GLint _vertexHandle, unsigned long _arit
 		
 		glBindVertexArray(prev);
 		checkForGlError(0,__FILE__,__LINE__);
-		GL_BGRA;
 	}
 }

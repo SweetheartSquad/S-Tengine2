@@ -3,6 +3,16 @@
 #include <Transform.h>
 #include <node\NodeResource.h>
 #include <MatrixStack.h>
+#include <RenderOptions.h>
+#include <MeshEntity.h>
+#include <MeshInterface.h>
+#include <shader\BaseComponentShader.h>
+#include <shader\ShaderComponentTexture.h>
+
+MeshInterface * Transform::transformIndicator = nullptr;
+BaseComponentShader * Transform::transformShader = nullptr;
+bool Transform::staticInit = true;
+bool Transform::drawTransforms = true;
 
 Transform::Transform():
 	translationVector(0.f, 0.f, 0.f),
@@ -14,6 +24,21 @@ Transform::Transform():
 	mDirty(true),
 	isIdentity(true)
 {
+	if(staticInit){
+		staticInit = false;
+		transformShader = new BaseComponentShader(false);
+		transformShader->addComponent(new ShaderComponentTexture(transformShader));
+		transformShader->compileShader();
+		transformShader->load();
+		transformIndicator = new MeshInterface(GL_LINES, GL_STATIC_DRAW);
+		transformIndicator->pushVert(Vertex(0,0,0, 1,0,0,1));
+		transformIndicator->pushVert(Vertex(1,0,0, 1,0,0,1));
+		transformIndicator->pushVert(Vertex(0,0,0, 0,1,0,1));
+		transformIndicator->pushVert(Vertex(0,1,0, 0,1,0,1));
+		transformIndicator->pushVert(Vertex(0,0,0, 0,0,1,1));
+		transformIndicator->pushVert(Vertex(0,0,1, 0,0,1,1));
+		transformIndicator->configureDefaultVertexAttributes(transformShader);
+	}
 }
 
 Transform::~Transform(){
@@ -190,6 +215,7 @@ void Transform::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderO
 	if(!isIdentity){
 		_matrixStack->applyMatrix(getModelMatrix());
 	}
+	
 
 	// render all of the transform's children
 	for(unsigned long int i = 0; i < children.size(); i++){
@@ -198,6 +224,11 @@ void Transform::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderO
 			nr->render(_matrixStack, _renderOptions);	
 		}
 	}
+	if(drawTransforms){
+		_renderOptions->shader = transformShader;
+		transformIndicator->render(_matrixStack, _renderOptions);
+	}
+
 	// restore previous matrix state
 	_matrixStack->popMatrix();
 }

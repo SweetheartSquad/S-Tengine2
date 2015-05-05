@@ -15,6 +15,9 @@
 #include <node/NodeRenderable.h>
 #include <node/NodeUpdatable.h>
 
+class MeshInterface;
+class BaseComponentShader;
+
 typedef enum{
 	kWORLD,
 	kOBJECT
@@ -38,6 +41,11 @@ private:
 	glm::mat4 oMatrix;
 	bool mDirty;
 	glm::mat4 mMatrix;
+	
+	static MeshInterface * transformIndicator;
+	static BaseComponentShader * transformShader;
+	static bool staticInit;
+	static bool drawTransforms;
 
 	// used to optimize out some matrix multiplication if possible
 	// set to true on creation and reset; set to false on any modification
