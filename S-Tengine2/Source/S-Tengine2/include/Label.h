@@ -6,13 +6,16 @@
 class MeshEntity;
 class Font;
 
+#define INFINITE_WIDTH -1
+
 class Label : public Entity{
 public:
 	
 	Font * font;
 	Shader * shader;
+	float width;
 
-	explicit Label(Font * _font, Shader * _shader);
+	explicit Label(Font * _font, Shader * _shader, float _width = INFINITE_WIDTH);
 	~Label();
 	
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;

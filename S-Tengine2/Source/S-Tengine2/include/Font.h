@@ -11,6 +11,7 @@ class Glyph : public MeshInterface{
 public:
 	Glyph(FT_GlyphSlot _glyph);
 	FT_Vector advance;
+	FT_Glyph_Metrics metrics;
 };
 
 class GlyphTexture : public Texture{
@@ -26,6 +27,7 @@ public:
 	FT_Face face;
 	std::map<char, GlyphTexture *> textures;
 	std::map<char, Glyph *> meshes;
+	float lineGapRatio;
 
 	explicit Font(std::string _fontSrc, int size, bool _autoRelease);
 	~Font();

@@ -12,9 +12,10 @@
 #include <string>
 #include <MeshFactory.h>
 
-Label::Label(Font * _font, Shader * _shader):
+Label::Label(Font * _font, Shader * _shader, float _width):
 	NodeTransformable(new Transform()),
 	Entity(transform),
+	width(_width),
 	textDirty(false)
 {
 	font = _font;
@@ -66,7 +67,7 @@ std::string Label::getText(){
 }
 
 void Label::updateText(){
-	float acc = 0.f;
+	glm::vec2 offset(0.f, 0.f);
 	textDirty = false;
 
 	while(children.size() > 0){
@@ -80,9 +81,12 @@ void Label::updateText(){
 		MeshEntity * me = new MeshEntity(mi);
 		me->setShader(shader, true);
 		addChild(me);
-		me->transform->translate(acc, 0.f, 0.f);
-		acc += mi->advance.x/64;
-
+		me->transform->translate(offset.x, offset.y, 0.f);
+		offset.x += mi->advance.x/64;
+		if(offset.x > width){
+			offset.x = 0;
+			offset.y -= font->lineGapRatio * ((font->face->size->metrics.ascender + font->face->size->metrics.descender)/64);
+		}
 	}
 }
 

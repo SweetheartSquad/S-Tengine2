@@ -13,7 +13,8 @@ Glyph::Glyph(FT_GlyphSlot _glyph) :
 	float w = _glyph->bitmap.width;
 	float h = _glyph->bitmap.rows;
 	advance = _glyph->advance;
-		
+	metrics = _glyph->metrics;
+
 	pushVert(Vertex(vx, vy, 0));
 	pushVert(Vertex(vx + w, vy, 0));
 	pushVert(Vertex(vx + w, vy - h, 0));
@@ -74,6 +75,7 @@ Font::Font(std::string _fontSrc, int _size, bool _autoRelease) :
 		std::cerr << "Couldn't load font: " << _fontSrc;
 	}
 	size = _size;
+	lineGapRatio = 1.2f;
 }
 
 Font::~Font(){
@@ -126,7 +128,6 @@ Glyph* Font::getMeshInterfaceForChar(char _char){
 	auto t = meshes.find(_char);
 	Glyph * res;
 	if(t == meshes.end()){
-		
 		loadGlyph(_char);
 		Glyph * mesh = new Glyph(face->glyph);
 		mesh->autoRelease = false;
