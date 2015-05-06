@@ -111,12 +111,11 @@
     <ClCompile Include="../src/SceneSplash.cpp" />
     <ClCompile Include="../src/tiny_obj_loader.cc" />
     <ClCompile Include="../src/UILayer.cpp" />
+    <ClCompile Include="..\src\BulletDebugDrawer.cpp" />
     <ClCompile Include="..\src\CharacterUtils.cpp" />
     <ClCompile Include="..\src\Entity.cpp" />
     <ClCompile Include="..\src\Font.cpp" />
     <ClCompile Include="..\src\Label.cpp" />
-    <ClCompile Include="..\src\BulletDebugDrawer.cpp" />
-    <ClCompile Include="../src/BulletDebugDrawer.cpp" />
     <ClCompile Include="..\src\shader\ShaderComponentText.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +222,7 @@
     <ClInclude Include="../include/shader/ShaderComponentTint.h" />
     <ClInclude Include="../include/TextureSampler.h" />
     <ClInclude Include="../include/Box.h" />
+    <ClInclude Include="..\include\BulletDebugDrawer.h" />
     <ClInclude Include="..\include\CharacterUtils.h" />
     <ClInclude Include="..\include\Entity.h" />
     <ClInclude Include="..\include\Font.h" />
@@ -234,7 +234,6 @@
     <ClInclude Include="../include/SceneSplash.h" />
     <ClInclude Include="../include/tiny_obj_loader.h" />
     <ClInclude Include="../include/UILayer.h" />
-    <ClInclude Include="../include/BulletDebugDrawer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>
