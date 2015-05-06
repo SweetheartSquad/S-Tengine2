@@ -102,8 +102,8 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptio
 
 	_matrixStack->pushMatrix();
 	_matrixStack->resetCurrentMatrix();
-	_matrixStack->setProjectionMatrix(activeCamera->getProjectionMatrix());
-	_matrixStack->setViewMatrix(activeCamera->getViewMatrix());
+	_matrixStack->setProjectionMatrix(&activeCamera->getProjectionMatrix());
+	_matrixStack->setViewMatrix(&activeCamera->getViewMatrix());
 
 	_renderOptions->lights = &lights;
 	

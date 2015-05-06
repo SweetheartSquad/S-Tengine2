@@ -147,8 +147,8 @@ void Text::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions)
 		vox::MatrixStack * ms = new vox::MatrixStack();
 		//ms->applyMatrix(vox::matrixStack);
 		ms->pushMatrix();
-		ms->setProjectionMatrix(cam.getProjectionMatrix());
-		ms->setViewMatrix(cam.getViewMatrix());
+		ms->setProjectionMatrix(&cam.getProjectionMatrix());
+		ms->setViewMatrix(&cam.getViewMatrix());
 		
 		m->update(&vox::step);
 

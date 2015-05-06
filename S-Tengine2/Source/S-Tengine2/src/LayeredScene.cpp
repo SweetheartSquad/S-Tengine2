@@ -41,8 +41,8 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 
 	_matrixStack->pushMatrix();
 	_matrixStack->resetCurrentMatrix();
-	_matrixStack->setProjectionMatrix(activeCamera->getProjectionMatrix());
-	_matrixStack->setViewMatrix(activeCamera->getViewMatrix());
+	_matrixStack->setProjectionMatrix(&activeCamera->getProjectionMatrix());
+	_matrixStack->setViewMatrix(&activeCamera->getViewMatrix());
 
     glDisable(GL_DEPTH_TEST);
 	for(std::vector<Entity *> & layer : layers){
@@ -54,8 +54,8 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	
 	OrthographicCamera cam(-1920.f, 0, 0, 1080.f, -1000.f, 1000.f);
 	
-	_matrixStack->setProjectionMatrix(cam.getProjectionMatrix());
-	_matrixStack->setViewMatrix(cam.getViewMatrix());
+	_matrixStack->setProjectionMatrix(&cam.getProjectionMatrix());
+	_matrixStack->setViewMatrix(&cam.getViewMatrix());
 
 	for(Entity * e : uiLayer){
 		e->render(_matrixStack, _renderOptions);
