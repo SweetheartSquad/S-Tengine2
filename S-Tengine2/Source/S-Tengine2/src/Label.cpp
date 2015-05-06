@@ -11,11 +11,13 @@
 #include <ostream>
 #include <string>
 #include <MeshFactory.h>
+#include <CharacterUtils.h>
 
-Label::Label(Font * _font, Shader * _shader, float _width):
+Label::Label(Font * _font, Shader * _shader, WrapMode _wrapMode, float _width):
 	NodeTransformable(new Transform()),
 	Entity(transform),
 	width(_width),
+	wrapMode(_wrapMode),
 	textDirty(false)
 {
 	font = _font;
@@ -75,19 +77,64 @@ void Label::updateText(){
 		children.pop_back();
 	}
 
-	for(char c : text){
-		Glyph * mi = font->getMeshInterfaceForChar(c);
-		
-		MeshEntity * me = new MeshEntity(mi);
-		me->setShader(shader, true);
-		addChild(me);
-		me->transform->translate(offset.x, offset.y, 0.f);
-		offset.x += mi->advance.x/64;
-		if(offset.x > width){
-			offset.x = 0;
-			offset.y -= font->lineGapRatio * ((font->face->size->metrics.ascender + font->face->size->metrics.descender)/64);
+	for(unsigned long int c = 0; c < text.size(); ++c) {
+		auto ch = text.at(c);
+		if(ch == '\n'){
+			newLine(&offset);
+		}else{
+			switch(wrapMode){
+				case CHARACTER_WRAP:
+					updateChar(&offset, ch);
+					if(offset.x > width){
+						newLine(&offset);
+					}
+					break;
+				case CHARACTER_WRAP_HYPHEN:
+					{
+						Glyph * nextGlyph = font->getMeshInterfaceForChar(ch);
+						if(offset.x + nextGlyph->advance.x/64> width){
+							if(!CharacterUtils::isSpace(ch)){
+								updateChar(&offset, '-');
+							}	
+							newLine(&offset);
+							updateChar(&offset, ch);
+						}else {
+							updateChar(&offset, ch);
+						}
+						break;
+					}
+				case WORD_WRAP:
+					if(offset.x > width){
+						for(unsigned long int i = 0; i < text.size() - c; ++i) {
+							updateChar(&offset, text.at(c - 1));
+							if(CharacterUtils::isSpace(text.at(c - 1))){
+								newLine(&offset);
+								break;
+							}
+							++c;
+						}
+					}else {
+						updateChar(&offset, ch);
+					}
+					break;
+				default: break;
+			}
 		}
 	}
+}
+
+void Label::updateChar(glm::vec2 * _offset, char _c){
+	Glyph * glyph = font->getMeshInterfaceForChar(_c);
+	MeshEntity * me = new MeshEntity(glyph);
+	me->setShader(shader, true);
+	addChild(me);
+	me->transform->translate(_offset->x, _offset->y, 0.f);
+	_offset->x += glyph->advance.x/64;
+}
+
+void Label::newLine(glm::vec2 * _offset){
+	_offset->x = 0;
+	_offset->y -= font->lineGapRatio * ((font->face->size->metrics.ascender + font->face->size->metrics.descender)/64);
 }
 
 void Label::setText(std::string _text){
