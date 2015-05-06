@@ -9,7 +9,11 @@
 
 BaseComponentShader::BaseComponentShader(bool _autoRelease) :
 	Shader(_autoRelease),
-	geometryComponent(nullptr){
+	geometryComponent(nullptr),
+	modelUniformLocation(-1),
+	viewUniformLocation(-1),
+	projectionUniformLocation(-1)
+{
 }
 
 BaseComponentShader::BaseComponentShader(std::vector<ShaderComponent*> _components, bool _autoRelease) :
@@ -125,15 +129,12 @@ void BaseComponentShader::compileShader(){
 
 void BaseComponentShader::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	const glm::mat4 * model = _matrixStack->getModelMatrix();
-	GLuint modelUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX.c_str());
 	glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &(*model)[0][0]);
 	
 	const glm::mat4 * view = _matrixStack->getViewMatrix();
-	GLuint viewUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_VIEW_MATRIX.c_str());
 	glUniformMatrix4fv(viewUniformLocation, 1, GL_FALSE, &(*view)[0][0]);
 	
 	const glm::mat4 * projection = _matrixStack->getProjectionMatrix();
-	GLuint projectionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_PROJECTION_MATRIX.c_str());
 	glUniformMatrix4fv(projectionUniformLocation, 1, GL_FALSE, &(*projection)[0][0]);
 
 	GLuint mvpUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_MODEL_VIEW_PROJECTION.c_str());
@@ -180,4 +181,8 @@ void BaseComponentShader::unload(){
 void BaseComponentShader::load(){
 	Shader::load();
 	compileShader();
+	
+	modelUniformLocation = glGetUniformLocation(getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX.c_str());
+	viewUniformLocation = glGetUniformLocation(getProgramId(), GL_UNIFORM_ID_VIEW_MATRIX.c_str());
+	projectionUniformLocation = glGetUniformLocation(getProgramId(), GL_UNIFORM_ID_PROJECTION_MATRIX.c_str());
 }
