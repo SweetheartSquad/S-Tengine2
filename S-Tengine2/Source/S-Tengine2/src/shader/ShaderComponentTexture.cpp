@@ -61,20 +61,29 @@ void ShaderComponentTexture::clean(vox::MatrixStack* _matrixStack, RenderOptions
 	//shader->configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 }
 
+void ShaderComponentTexture::load(){
+	if(!loaded){
+		texNumLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str());
+		texColLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TEXT_COLOR.c_str());
+		texSamLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str());
+	}
+	ShaderComponent::load();
+}
+
 void ShaderComponentTexture::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 	int numTextures = 0;
 	if(mesh != nullptr){
 		numTextures = mesh->textureCount();
-		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), numTextures);
+		glUniform1i(texNumLoc, numTextures);
 		// Bind each texture to the texture sampler array in the frag _shader
 		for(unsigned long int i = 0; i < mesh->textureCount(); i++){
 			glActiveTexture(GL_TEXTURE0 + i);
 			glBindTexture(GL_TEXTURE_2D, mesh->getTexture(i)->textureId);
-			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str()), i);
+			glUniform1i(texSamLoc, i);
 		}
 	}else{
-		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), numTextures);
+		glUniform1i(texNumLoc, numTextures);
 	}
 
 	SpriteMesh * spriteMesh = dynamic_cast<SpriteMesh *>(_nodeRenderable);
@@ -83,8 +92,8 @@ void ShaderComponentTexture::configureUniforms(vox::MatrixStack* _matrixStack, R
 		if(spriteMesh->animatedTexture != nullptr){
 			glActiveTexture(GL_TEXTURE0 + 1 + numTextures);
 			glBindTexture(GL_TEXTURE_2D, spriteMesh->animatedTexture->textureId);
-			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str()), numTextures + 1);
-			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), numTextures + 1);
+			glUniform1i(texSamLoc, numTextures + 1);
+			glUniform1i(texNumLoc, numTextures + 1);
 		}
 	}
 }

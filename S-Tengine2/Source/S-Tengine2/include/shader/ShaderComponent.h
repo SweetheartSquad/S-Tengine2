@@ -1,7 +1,10 @@
 #pragma once
 
+#include <node/NodeLoadable.h>
+
 #include <string>
-#include <node/Node.h>
+
+#include <GL\glew.h> // imported here so we don't have to do it in every derived class with uniforms
 
 class NodeRenderable;
 
@@ -22,7 +25,7 @@ class Shader;
 * are present in BaseComponentShader's component vector
 *
 *********************************************************/
-class ShaderComponent abstract : public Node{
+class ShaderComponent abstract : public NodeLoadable{
 public:
 
 	Shader * shader;

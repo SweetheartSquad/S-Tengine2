@@ -171,6 +171,9 @@ void BaseComponentShader::clean(vox::MatrixStack* _matrixStack, RenderOptions* _
 }
 
 void BaseComponentShader::unload(){
+	for(ShaderComponent * sc : components){
+		sc->unload();
+	}
 	Shader::unload();
 	makeDirty();
 	for(unsigned long int i = 0; i < components.size(); i++){
@@ -180,6 +183,9 @@ void BaseComponentShader::unload(){
 
 void BaseComponentShader::load(){
 	Shader::load();
+	for(ShaderComponent * sc : components){
+		sc->load();
+	}
 	compileShader();
 	
 	modelUniformLocation = glGetUniformLocation(getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX.c_str());

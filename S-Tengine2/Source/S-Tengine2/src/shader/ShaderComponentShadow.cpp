@@ -10,8 +10,6 @@
 #include "DirectionalLight.h"
 #include "Transform.h"
 
-#include "GL/glew.h"
-
 class VoxRenderOptions;
 
 ShaderComponentShadow::ShaderComponentShadow(Shader * _shader) :

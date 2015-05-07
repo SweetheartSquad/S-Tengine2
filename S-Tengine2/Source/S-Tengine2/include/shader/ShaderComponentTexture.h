@@ -12,6 +12,8 @@
 *
 ******************************************************************************/
 class ShaderComponentTexture : public ShaderComponent{
+private:
+	GLint texNumLoc, texColLoc, texSamLoc;
 public:
 	ShaderComponentTexture(Shader * _shader);
 	~ShaderComponentTexture() override;
@@ -20,6 +22,7 @@ public:
 	std::string getVertexBodyString() override;
 	std::string getFragmentBodyString() override;
 	std::string getOutColorMod() override;
+	void load() override;
 	void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 	virtual void clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 };

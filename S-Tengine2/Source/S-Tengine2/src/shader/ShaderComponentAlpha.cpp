@@ -6,12 +6,10 @@
 #include <RenderOptions.h>
 #include <shader\Shader.h>
 
-#include <glew\glew.h>
-
-
 ShaderComponentAlpha::ShaderComponentAlpha(Shader * _shader, float _alpha):
 	ShaderComponent(_shader),
-	alpha(_alpha)
+	alpha(_alpha),
+	alphaLoc(-1)
 {
 }
 
@@ -43,8 +41,16 @@ std::string ShaderComponentAlpha::getOutColorMod(){
 
 }
 
+void ShaderComponentAlpha::load(){
+	if(!loaded){
+		alphaLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_ALPHA.c_str());
+	}
+
+	ShaderComponent::load();
+}
+
 void ShaderComponentAlpha::configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
-	glUniform1f(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_ALPHA.c_str()), alpha);
+	glUniform1f(alphaLoc, alpha);
 }
 
 void ShaderComponentAlpha::setAlpha(float _alpha){
