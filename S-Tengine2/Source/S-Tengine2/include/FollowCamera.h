@@ -12,7 +12,7 @@ class Transform;
 
 struct Target{
 	glm::vec3 pos;
-	Transform * target;
+	NodeChild * target;
 	float weight;
 	bool active;
 };
@@ -33,9 +33,9 @@ public:
 	/** The orientation quaternian from the last update loop*/
 	glm::quat lastOrientation;
 	
-	void addTarget(Transform * _target, float _weight = 0.f);
-	void removeTarget(Transform * _target);
-	bool hasTarget(Transform * _target);
+	void addTarget(NodeChild * _target, float _weight = 0.f);
+	void removeTarget(NodeChild * _target);
+	bool hasTarget(NodeChild * _target);
 
 	// Things to follow
 	std::vector<Target> targets;

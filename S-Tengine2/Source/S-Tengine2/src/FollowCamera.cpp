@@ -68,16 +68,11 @@ void FollowCamera::update(Step * _step){
 	float screenWidth = targetMaxX - targetMinX;
 	float screenHeight = targetMaxY - targetMinY;
 	
-	//glm::vec3 oldLookAt = lookAtSpot;
-
 	// move camera
-	lookAtSpot.x = targetMinX;// + screenWidth * 0.5f;
-	lookAtSpot.y = targetMinY;// + screenHeight* 0.5f;
+	lookAtSpot.x = targetMinX;
+	lookAtSpot.y = targetMinY;
 	
 	lookAtSpot += offset;
-
-
-	//std::cout << lookAtSpot.x << " " << screenWidth << std::endl;
 	
 	if(useBounds){
 		if(minBounds.height != 0){
@@ -107,9 +102,6 @@ void FollowCamera::update(Step * _step){
 		}
 	}
 
-
-	//std::cout << lookAtSpot.x << " " << screenWidth << std::endl << std::endl;
-	
 	// calculate zoom and account for FoV (the camera FoV seems to be vertical, so if the screen w > screen h, we need to take the h / the intended aspect ratio)
 	float ar1 = screenWidth/screenHeight;
 	glm::vec2 screenDimensions = vox::getScreenDimensions();
@@ -128,32 +120,28 @@ void FollowCamera::update(Step * _step){
 
 	lookAtSpot += offset;
 
-	//std::cout << lookAtSpot.x << " " << screenWidth << std::endl << std::endl;
-
 	float dist = zoom / (tan(glm::radians(fieldOfView) * 0.5f) * 2.f);
 
 
 	parent->translate(lookAtSpot.x, lookAtSpot.y, dist, false);
-	//transform->translate(offset);
 }
 
-void FollowCamera::addTarget(Transform * _target, float _weight){
+void FollowCamera::addTarget(NodeChild * _target, float _weight){
 	Target t;
 	t.target = _target;
 	t.weight = _weight;
 	t.active = true;
 	targets.push_back(t);
 }
-void FollowCamera::removeTarget(Transform * _target){
+void FollowCamera::removeTarget(NodeChild * _target){
 	for(signed long int i = targets.size()-1; i >= 0; --i){
 		if(targets.at(i).target == _target){
-			//targets.erase(targets.begin() + i);
 			targets.at(i).active = false;
 		}
 	}
 }
 
-bool FollowCamera::hasTarget(Transform * _target){
+bool FollowCamera::hasTarget(NodeChild * _target){
 	for(Target & t : targets){
 		if(t.target == _target){
 			return true;
