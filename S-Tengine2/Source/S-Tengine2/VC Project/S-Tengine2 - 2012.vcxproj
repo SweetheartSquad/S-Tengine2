@@ -365,10 +365,7 @@ copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <PreBuildEvent>
-      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
-copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"
-copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
-  ..\..\..\..\VCProjer\dist\VCProjer.exe "S-Tengine2 - 2012.vcxproj" "S-Tengine2 - 2013.vcxproj"</Command>
+      <Command>  ..\..\..\..\VCProjer\dist\VCProjer.exe "S-Tengine2 - 2012.vcxproj" "S-Tengine2 - 2013.vcxproj"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>
@@ -422,10 +419,7 @@ copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
       <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
-copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"
-copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
-..\..\..\..\VCProjer\dist\VCProjer.exe "S-Tengine2 - 2012.vcxproj" "S-Tengine2 - 2013.vcxproj"</Command>
+      <Command>..\..\..\..\VCProjer\dist\VCProjer.exe "S-Tengine2 - 2012.vcxproj" "S-Tengine2 - 2013.vcxproj"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>
