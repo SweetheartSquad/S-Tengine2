@@ -57,10 +57,6 @@ public:
 	void makeCumulativeModelMatrixDirty() override;
 	glm::mat4 getCumulativeModelMatrix();
 	
-	// applies all of the transformations of the ancestor nodes to the translation vector of this node and returns the result
-	// If there is no transformation data (i.e. parent == nullptr), just the translation vector is returned
-	virtual glm::vec3 getWorldPos();
-	
 	Transform();
 	virtual ~Transform();
 

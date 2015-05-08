@@ -87,7 +87,7 @@ void FollowCamera::update(Step * _step){
 				lookAtSpot.y = minBounds.y;
 			}
 		}
-		//
+
 		if(minBounds.width != 0){
 			if(lookAtSpot.x < minBounds.x){
 				lookAtSpot.x = minBounds.x;

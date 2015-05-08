@@ -30,16 +30,27 @@ bool NodeChild::hasAncestor(Transform * _parent){
 }
 
 glm::vec3 NodeChild::getWorldPos(){
+	// if the node has no parent, return a zero-vector
 	if(parent == nullptr){
-		return glm::vec3(0,0,0);
+		return glm::vec3(0);
 	}
+
+	// if the cumulative model matrix is out-of-date, then so is the stored world position
 	if(cumulativeModelMatrixDirty){
-		glm::vec4 res(parent->getTranslationVector(), 1);
-		if(parent->parent != nullptr){
-			res = parent->parent->getCumulativeModelMatrix() * res;
+		// find the first non-zero ancestor translation vector
+		glm::vec3 res;
+		Transform * p = parent;
+		do{
+			res = p->getTranslationVector();
+			p = p->parent;
+		}while(res == glm::vec3(0));
+
+		// apply the cumulative matrix of its parent to the vector
+		if(p->parent != nullptr){
+			res = glm::vec3(p->parent->getCumulativeModelMatrix() * glm::vec4(res, 1));
 		}
 
-		worldPos = glm::vec3(res);
+		worldPos = res;
 		cumulativeModelMatrixDirty = false;
 	}
 	return worldPos;

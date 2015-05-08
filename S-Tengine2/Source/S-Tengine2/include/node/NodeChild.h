@@ -27,7 +27,7 @@ public:
 
 	
 	
-	// applies all of the transformations of the ancestor nodes to the translation vector of the parent node and returns the result
+	// finds the first non-zero ancestor translation vector and applies all of the matrices of its ancestors to produce world position
 	// If there is no transformation data (i.e. parent == nullptr), a zero vector is returned
 	virtual glm::vec3 getWorldPos();
 	// Sets the translation vector of the node

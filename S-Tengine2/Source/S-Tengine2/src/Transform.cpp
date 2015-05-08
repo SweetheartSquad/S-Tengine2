@@ -161,22 +161,6 @@ glm::mat4 Transform::getModelMatrix(){
 	return mMatrix;
 }
 
-glm::vec3 Transform::getWorldPos(){
-	if(parent == nullptr){
-		return getTranslationVector();
-	}
-	if(cumulativeModelMatrixDirty){
-		glm::vec4 res(getTranslationVector(), 1);
-		if(parent != nullptr){
-			res = parent->getCumulativeModelMatrix() * res;
-		}
-
-		worldPos = glm::vec3(res);
-		cumulativeModelMatrixDirty = false;
-	}
-	return worldPos;
-}
-
 void Transform::reset(){
 	translate(glm::vec3(0.f, 0.f, 0.f), false);
 	scale(glm::vec3(1.f, 1.f, 1.f), false);
