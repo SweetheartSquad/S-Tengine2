@@ -1,6 +1,7 @@
 #pragma once
 
 #include "StringUtils.h"
+#include <CharacterUtils.h>
 
 std::string StringUtils::trim(std::string _toTrim){
 	std::string retString = "";
@@ -34,7 +35,7 @@ std::string StringUtils::trim(std::string _toTrim){
 std::string StringUtils::removeDigits(std::string _string){
 	std::string retString;
 	for(auto c : _string) {
-		if(c < 48 || c > 57) {
+		if(!CharacterUtils::isDigit(c)) {
 			retString += c;
 		}
 	}
@@ -44,7 +45,7 @@ std::string StringUtils::removeDigits(std::string _string){
 std::string StringUtils::removeSymbols(std::string _string, bool _keepSpaces){
 	std::string retString;
 	for(auto c : _string) {
-		if((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || c == 32) {
+		if(!CharacterUtils::isSymbol(c)) {
 			retString += c;
 		}
 	}
@@ -54,7 +55,7 @@ std::string StringUtils::removeSymbols(std::string _string, bool _keepSpaces){
 std::string StringUtils::removeLetters(std::string _string){
 	std::string retString;
 	for(auto c : _string) {
-		if(c < 65 || c > 90) {
+		if(!CharacterUtils::isLetter(c)) {
 			retString += c;
 		}
 	}

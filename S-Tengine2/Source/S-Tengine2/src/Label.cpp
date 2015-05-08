@@ -105,13 +105,13 @@ void Label::updateText(){
 					}
 				case WORD_WRAP:
 					if(offset.x > width){
-						for(unsigned long int i = 0; i < text.size() - c; ++i) {
-							updateChar(&offset, text.at(c - 1));
-							if(CharacterUtils::isSpace(text.at(c - 1))){
+						for(unsigned long int i = 0; i < text.size() && c < text.size(); ++i) {
+							updateChar(&offset, text.at(c));
+							if(CharacterUtils::isSpace(text.at(c))){
 								newLine(&offset);
 								break;
 							}
-							++c;
+							c++;
 						}
 					}else {
 						updateChar(&offset, ch);
