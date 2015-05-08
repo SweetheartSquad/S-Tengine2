@@ -68,18 +68,10 @@ Box2DDebugDrawer::Box2DDebugDrawer(Box2DWorld * _world) :
 	spriteCircle->setShader(shader, true);
 	spritePoly->setShader(shader, true);
 
-	Transform * t = new Transform();
-	t->addChild(spriteSegment);
-	childButNotReally->addChild(t);
-	t = new Transform();
-	t->addChild(spriteTransform);
-	childButNotReally->addChild(t);
-	t = new Transform();
-	t->addChild(spriteCircle);
-	childButNotReally->addChild(t);
-	t = new Transform();
-	t->addChild(spritePoly);
-	childButNotReally->addChild(t);
+	childTransform->addChild(spriteSegment);
+	childTransform->addChild(spriteTransform);
+	childTransform->addChild(spriteCircle);
+	childTransform->addChild(spritePoly);
 }
 
 Box2DDebugDrawer::~Box2DDebugDrawer(){

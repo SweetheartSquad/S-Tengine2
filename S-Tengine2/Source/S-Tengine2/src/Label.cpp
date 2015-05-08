@@ -67,19 +67,17 @@ void Label::updateText(){
 	float acc = 0.f;
 	textDirty = false;
 
-	while(childButNotReally->children.size() > 0){
-		delete childButNotReally->children.back();
-		childButNotReally->children.pop_back();
+	while(childTransform->children.size() > 0){
+		delete childTransform->children.back();
+		childTransform->children.pop_back();
 	}
 
 	for(char c : text){
 		Glyph * mi = font->getMeshInterfaceForChar(c);
-		Transform * t = new Transform();
 		MeshEntity * me = new MeshEntity(mi);
 		me->setShader(shader, true);
-		t->addChild(me);
-		childButNotReally->addChild(t);
-		t->translate(acc, 0.f, 0.f);
+		childTransform->addChild(me);
+		me->parent->translate(acc, 0.f, 0.f);
 		acc += mi->advance.x/64;
 	}
 }

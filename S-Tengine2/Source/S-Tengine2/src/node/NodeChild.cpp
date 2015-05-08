@@ -38,16 +38,18 @@ glm::vec3 NodeChild::getWorldPos(){
 	// if the cumulative model matrix is out-of-date, then so is the stored world position
 	if(cumulativeModelMatrixDirty){
 		// find the first non-zero ancestor translation vector
-		glm::vec3 res;
+		glm::vec3 res(0);
 		Transform * p = parent;
-		do{
-			res = p->getTranslationVector();
-			p = p->parent;
-		}while(res == glm::vec3(0));
+		if(p != nullptr){
+			do{
+				res = p->getTranslationVector();
+				p = p->parent;
+			}while(res == glm::vec3(0) && p != nullptr);
 
-		// apply the cumulative matrix of its parent to the vector
-		if(p->parent != nullptr){
-			res = glm::vec3(p->parent->getCumulativeModelMatrix() * glm::vec4(res, 1));
+			// apply the cumulative matrix of its parent to the vector
+			if(p != nullptr){
+				res = glm::vec3(p->getCumulativeModelMatrix() * glm::vec4(res, 1));
+			}
 		}
 
 		worldPos = res;

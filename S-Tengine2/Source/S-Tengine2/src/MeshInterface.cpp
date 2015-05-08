@@ -115,7 +115,6 @@ void MeshInterface::clean(){
 		// Vertex Buffer Object (VBO)
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * (vertices.size()), vertices.data(), drawMode);
-		checkForGlError(0,__FILE__,__LINE__);
 
 		// Index Buffer Object (IBO)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);

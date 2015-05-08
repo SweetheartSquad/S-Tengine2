@@ -65,7 +65,7 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 }
 
 void LayeredScene::removeChild(Entity* _child){
-	childButNotReally->removeChild(_child);
+	childTransform->removeChild(_child);
 	for(std::vector<Entity *> & layer : layers){
 		for(signed long int j = layer.size()-1; j >= 0; --j){
 			if(layer.at(j) == _child){
@@ -77,11 +77,11 @@ void LayeredScene::removeChild(Entity* _child){
 
 
 void LayeredScene::addUIChild(Entity* _child){
-	childButNotReally->addChild(_child);
+	childTransform->addChild(_child);
 	uiLayer.push_back(_child);
 }
 void LayeredScene::removeUIChild(Entity* _child){
-	childButNotReally->removeChild(_child);
+	childTransform->removeChild(_child);
 	for(signed long int j = uiLayer.size()-1; j >= 0; --j){
 		if(uiLayer.at(j) == _child){
 			uiLayer.erase(uiLayer.begin() + j);
@@ -91,7 +91,7 @@ void LayeredScene::removeUIChild(Entity* _child){
 
 void LayeredScene::addChild(Entity* _child, unsigned long int _layer){
 	if(_layer < numLayers){
-		childButNotReally->addChild(_child);
+		childTransform->addChild(_child);
 		layers.at(_layer).push_back(_child);
 	}else{
 		std::cout << "Scene does not have a layer " << _layer << std::endl;

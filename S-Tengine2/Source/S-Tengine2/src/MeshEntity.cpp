@@ -17,7 +17,7 @@ MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader) :
 	shader(_shader)
 {
 	++mesh->referenceCount;
-	childButNotReally->addChild(mesh);
+	childTransform->addChild(mesh, false);
 	if(shader != nullptr){
 		++shader->referenceCount;
 	}
@@ -75,7 +75,7 @@ Shader * MeshEntity::getShader(){
 }
 
 void MeshEntity::setShaderOnChildren(Shader * _shader){
-	for(NodeChild * child : childButNotReally->children){
+	for(NodeChild * child : childTransform->children){
 		MeshEntity * me = dynamic_cast<MeshEntity*>(child);
 		if(me != nullptr){
 			me->setShaderOnChildren(_shader);
@@ -115,7 +115,7 @@ void MeshEntity::load(){
 
 vox::Box MeshEntity::calcOverallBoundingBox(){
 	vox::Box res = mesh->calcBoundingBox();
-	for(auto c : childButNotReally->children){
+	for(auto c : childTransform->children){
 		MeshEntity * me = dynamic_cast<MeshEntity *>(c);
 		if(me != nullptr){
 			vox::Box t = me->calcOverallBoundingBox();

@@ -32,7 +32,7 @@ public:
 	/** Calls unload on all children */
 	virtual void load() override;
 
-	Transform * childButNotReally;
+	Transform * childTransform;
 	virtual void setParent(Transform * _parent) override;
 
 

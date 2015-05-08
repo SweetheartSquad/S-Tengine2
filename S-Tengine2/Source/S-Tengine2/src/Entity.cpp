@@ -9,46 +9,44 @@
 #include "glew\glew.h"
 
 Entity::Entity() :
-	childButNotReally(new Transform())
+	childTransform(new Transform())
 {
 }
 
 Entity::~Entity(void){
-	delete childButNotReally;
-	childButNotReally = nullptr;
+	delete childTransform;
+	childTransform = nullptr;
 }
 
 void Entity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	childButNotReally->render(_matrixStack, _renderOptions);
+	childTransform->render(_matrixStack, _renderOptions);
 }
 
 void Entity::update(Step * _step){
-	childButNotReally->update(_step);
+	childTransform->update(_step);
 }
 
 void Entity::unload(){
-	childButNotReally->unload();
-	
+	childTransform->unload();
 	NodeLoadable::unload();
 }
 
 void Entity::load(){
-	childButNotReally->load();
-	
+	childTransform->load();
 	NodeLoadable::load();
 }
 
 void Entity::setParent(Transform * _parent){
 	NodeChild::setParent(_parent);
-	childButNotReally->setParent(_parent);
+	childTransform->setParent(_parent);
 }
 
 void Entity::makeCumulativeModelMatrixDirty(){
 	NodeChild::makeCumulativeModelMatrixDirty();
-	childButNotReally->makeCumulativeModelMatrixDirty();
+	childTransform->makeCumulativeModelMatrixDirty();
 }
 
 void Entity::printHierarchy(unsigned long int _startDepth){
 	NodeChild::printHierarchy(_startDepth);
-	childButNotReally->printHierarchy(_startDepth);
+	childTransform->printHierarchy(_startDepth);
 }

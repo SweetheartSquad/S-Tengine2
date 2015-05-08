@@ -57,11 +57,8 @@ Scene::~Scene(void){
 }
 
 void Scene::update(Step * _step){
-	if(!loaded){
-		load();
-	}
 	activeCamera->update(_step);
-	childButNotReally->update(_step);
+	Entity::update(_step);
 }
 
 void Scene::load(){
@@ -69,19 +66,15 @@ void Scene::load(){
 	depthShader->load();
 	shadowBuffer->load();
 	depthBuffer->load();
-	childButNotReally->load();
-	
-	NodeLoadable::load();
+	Entity::load();
 }
 
 void Scene::unload(){
-	childButNotReally->unload();
 	depthBuffer->unload();
 	shadowBuffer->unload();
 	depthShader->unload();
 	shadowSurface->unload();
-
-	NodeLoadable::unload();
+	Entity::unload();
 }
 
 
@@ -108,8 +101,8 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptio
 	_renderOptions->lights = &lights;
 	
 	clear();
-	childButNotReally->render(_matrixStack, _renderOptions);
-	
+	Entity::render(_matrixStack, _renderOptions);
+
 	_matrixStack->popMatrix();
 
 	checkForGlError(0,__FILE__,__LINE__);

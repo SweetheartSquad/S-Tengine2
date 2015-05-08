@@ -82,12 +82,16 @@ void RenderSurface::unload(){
 }
 
 void RenderSurface::render(GLuint _textureId, GLint _renderTo){
+	load();
+	clean();
+
 	if (glIsVertexArray(vaoId) == GL_TRUE){
 		if (glIsBuffer(vboId) == GL_TRUE){
 			if (glIsBuffer(iboId) == GL_TRUE){
 				glUseProgram(shader->getProgramId());
 				glBindFramebuffer(GL_FRAMEBUFFER, _renderTo);
 				glBindVertexArray(vaoId);
+				checkForGlError(0,__FILE__,__LINE__);
 
 				GLboolean dt = glIsEnabled(GL_DEPTH_TEST);
 				if (dt == GL_TRUE){

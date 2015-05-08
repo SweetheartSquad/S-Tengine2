@@ -75,9 +75,7 @@ SceneSplash::SceneSplash(Game * _game) :
 	ResourceManager::resources.push_back(logoTex);
 	
 	mouseIndicator = new Sprite();
-	t = new Transform();
-	t->addChild(mouseIndicator);
-	uiLayer.childButNotReally->addChild(t);
+	uiLayer.childTransform->addChild(mouseIndicator);
 	mouseIndicator->mesh->pushTexture2D(c);
 	mouseIndicator->parent->scale(16,16,1);
 	mouseIndicator->setShader(uiLayer.shader, true);
@@ -89,9 +87,7 @@ SceneSplash::SceneSplash(Game * _game) :
 	mouseIndicator->mesh->dirty = true;
 	
 	logo = new MeshEntity(Resource::loadMeshFromObj("../assets/S-Tengine2_logo.vox").at(0));
-	t = new Transform();
-	t->addChild(logo);
-	childButNotReally->addChild(t);
+	childTransform->addChild(logo);
 	logo->mesh->pushTexture2D(logoTex);
 	logo->parent->scale(25,25,25);
 	logo->setShader(shader, true);

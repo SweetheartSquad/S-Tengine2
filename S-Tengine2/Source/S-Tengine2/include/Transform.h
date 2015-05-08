@@ -154,7 +154,7 @@ public:
 
 	// Inserts _child into this node's list of children at _index
 	// Note: does not make any checks, so cyclical references and what not are possible
-	virtual void addChildAtIndex(NodeChild * _child, int _index);
+	virtual void addChildAtIndex(NodeChild * _child, int _index, bool _underNewTransform = true);
 
 	// Erases the node at _index from the list of children
 	virtual void removeChildAtIndex(int _index);
@@ -186,7 +186,7 @@ public:
 	// Sets _child->parent = this node
 	// Note: does nothing if this node is a descendant of _child
 	// Returns whether or not the child was successfully added
-	virtual bool addChild(NodeChild * _child);
+	virtual bool addChild(NodeChild * _child, bool _underNewTransform = true);
 
 	// Returns the number of Nodes between this node and the top of its hierarchy
 	virtual unsigned long int calculateDepth();
