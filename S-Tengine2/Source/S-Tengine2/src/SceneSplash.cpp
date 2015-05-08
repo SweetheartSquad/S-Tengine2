@@ -161,7 +161,7 @@ void SceneSplash::update(Step * _step){
 	Scene::update(_step);
 
 	glm::uvec2 sd = vox::getScreenDimensions();
-	uiLayer.resize(0, sd.x, 0, sd.y);
+	uiLayer.resize(0.f, sd.x, 0.f, sd.y);
 	uiLayer.update(_step);
 	
 	mouseIndicator->parent->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0.f, false);
@@ -180,10 +180,10 @@ void SceneSplash::render(vox::MatrixStack * _matrixStack, RenderOptions * _rende
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	uiLayer.render(_matrixStack, _renderOptions);
 	
-	game->setViewport(0, 0, game->viewPortWidth*0.5, game->viewPortHeight*0.5);
+	game->setViewport(0.f, 0.f, game->viewPortWidth*0.5f, game->viewPortHeight*0.5f);
 	Scene::render(_matrixStack, _renderOptions);
 	uiLayer.render(_matrixStack, _renderOptions);
-	game->setViewport(0, 0, game->viewPortWidth*2, game->viewPortHeight*2);
+	game->setViewport(0.f, 0.f, game->viewPortWidth*2.f, game->viewPortHeight*2.f);
 }
 
 void SceneSplash::load(){

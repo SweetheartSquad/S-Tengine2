@@ -40,9 +40,9 @@ float Accelerometer::getPitch(){
 }
 
 void Accelerometer::update(Step* _step){
-	gravX = 0.9 * gravX + 0.1 * x;
-	gravY = 0.9 * gravY + 0.1 * y;
-	gravZ = 0.9 * gravZ + 0.1 * z;
+	gravX = 0.9f * gravX + 0.1f * x;
+	gravY = 0.9f * gravY + 0.1f * y;
+	gravZ = 0.9f * gravZ + 0.1f * z;
 
 	gx -= gravX;
 	gy -= gravY;
@@ -56,11 +56,11 @@ void Accelerometer::update(Step* _step){
     deltaY = deltaY + 0.25f*(diffY);
     deltaZ = deltaZ + 0.25f*(diffZ);
 
-	pitch =  static_cast<float>(atan2(deltaZ, 1 + abs(deltaY)))/0.26f * -M_PI/2.f;
+	pitch = static_cast<float>(atan2(deltaZ, 1 + abs(deltaY)))/0.26f * -M_PI/2.f;
 	//There seems to be a problem with the roll. It always goes to far to the left
 	//this offset fixes it but this could possibly vary based on the accelerometer
 	//We may have to find a better solution or just dial in values for each accelerometer
-	roll  =  0.35f + static_cast<float>(atan2(deltaX, 1.f + abs(deltaY)))/0.26f * M_PI/2.f;
+	roll = 0.35f + static_cast<float>(atan2(deltaX, 1.f + abs(deltaY)))/0.26f * M_PI/2.f;
 }
 
 Accelerometer::~Accelerometer(){

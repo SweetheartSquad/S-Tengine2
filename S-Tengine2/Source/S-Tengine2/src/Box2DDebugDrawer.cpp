@@ -57,10 +57,10 @@ Box2DDebugDrawer::Box2DDebugDrawer(Box2DWorld * _world) :
 	spritePoly->mesh->polygonalDrawMode = GL_LINE_STRIP;
 	spritePoly->mesh->vertices.clear();
 	spritePoly->mesh->indices.clear();
-	spritePoly->mesh->pushVert(Vertex(0, 0, 0.0001f, 0.8, 0.5, 0.6, 1.f));
-	spritePoly->mesh->pushVert(Vertex(1, 0, 0.0001f, 0.8, 0.5, 0.6, 1.f));
-	spritePoly->mesh->pushVert(Vertex(1, 1, 0.0001f, 0.8, 0.5, 0.6, 1.f));
-	spritePoly->mesh->pushVert(Vertex(0, 1, 0.0001f, 0.8, 0.5, 0.6, 1.f));
+	spritePoly->mesh->pushVert(Vertex(0.f, 0.f, 0.0001f, 0.8f, 0.5f, 0.6f, 1.f));
+	spritePoly->mesh->pushVert(Vertex(1.f, 0.f, 0.0001f, 0.8f, 0.5f, 0.6f, 1.f));
+	spritePoly->mesh->pushVert(Vertex(1.f, 1.f, 0.0001f, 0.8f, 0.5f, 0.6f, 1.f));
+	spritePoly->mesh->pushVert(Vertex(0.f, 1.f, 0.0001f, 0.8f, 0.5f, 0.6f, 1.f));
 	spritePoly->mesh->indices.push_back(0); // close the loop
 	
 	spriteSegment->setShader(shader, true);
