@@ -86,7 +86,7 @@ void ShaderComponentTexture::configureUniforms(vox::MatrixStack* _matrixStack, R
 		glUniform1i(texNumLoc, numTextures);
 	}
 
-	SpriteMesh * spriteMesh = dynamic_cast<SpriteMesh *>(_nodeRenderable);
+	/*SpriteMesh * spriteMesh = dynamic_cast<SpriteMesh *>(_nodeRenderable);
 	//Setup the texture for the current animation
 	if(spriteMesh != nullptr){	
 		if(spriteMesh->animatedTexture != nullptr){
@@ -95,5 +95,5 @@ void ShaderComponentTexture::configureUniforms(vox::MatrixStack* _matrixStack, R
 			glUniform1i(texSamLoc, numTextures + 1);
 			glUniform1i(texNumLoc, numTextures + 1);
 		}
-	}
+	}*/
 }
