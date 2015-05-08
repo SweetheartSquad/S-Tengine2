@@ -240,7 +240,13 @@ void Transform::load(){
 }
 
 
-void Transform::addChildAtIndex(NodeChild * _child, int _index){
+void Transform::addChildAtIndex(NodeChild * _child, int _index, bool _underNewTransform){
+	if(_underNewTransform){
+		Transform * t = new Transform();
+		t->addChild(_child, false);
+		_child = t;
+	}
+
 	children.insert(children.begin() + _index, _child);
 	_child->setParent(this);
 }
@@ -328,11 +334,17 @@ void Transform::deleteRecursively(Transform * _node){
 	_node = nullptr;
 }
 
-bool Transform::addChild(NodeChild * _child){
+bool Transform::addChild(NodeChild * _child, bool _underNewTransform){
 	// Check to see if the child is one of the ancestors of this node
 	bool error = hasAncestor(dynamic_cast<Transform *>(_child));
 
 	if(!error){
+		if(_underNewTransform){
+			Transform * t = new Transform();
+			t->addChild(_child, false);
+			_child = t;
+		}
+
 		// Remove the first instance of the child in the current list of children
 		for (unsigned long int i = 0; i < children.size(); ++i){
 			if (_child == children.at(i)){
