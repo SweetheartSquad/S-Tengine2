@@ -104,7 +104,7 @@ void Font::unload(){
 	}
 }
 
-GlyphTexture * Font::getTextureForChar(char _char){
+GlyphTexture * Font::getTextureForChar(wchar_t _char){
 	loadGlyph(_char);
 	auto t = textures.find(_char);
 	GlyphTexture * res;
@@ -112,7 +112,7 @@ GlyphTexture * Font::getTextureForChar(char _char){
 		FT_Set_Pixel_Sizes(face, 0, size);
 		FT_Load_Char(face, _char, FT_LOAD_RENDER);
 		GlyphTexture * tex = new GlyphTexture(face->glyph->bitmap, false);
-		textures.insert(std::pair<char, GlyphTexture *>(_char, tex));
+		textures.insert(std::pair<wchar_t, GlyphTexture *>(_char, tex));
 		tex->unload();
 		tex->load();
 		res = tex;
@@ -122,7 +122,7 @@ GlyphTexture * Font::getTextureForChar(char _char){
 	return res;
 }
 
-Glyph* Font::getMeshInterfaceForChar(char _char){
+Glyph* Font::getMeshInterfaceForChar(wchar_t _char){
 	auto t = meshes.find(_char);
 	Glyph * res;
 	if(t == meshes.end()){
@@ -140,17 +140,17 @@ Glyph* Font::getMeshInterfaceForChar(char _char){
 	return res;
 }
 
-glm::vec2 Font::getGlyphWidthHeight(char _char){
+glm::vec2 Font::getGlyphWidthHeight(wchar_t _char){
 	loadGlyph(_char);
 	return glm::vec2(face->glyph->bitmap.width, face->glyph->bitmap.rows);
 }
 
-glm::vec2 Font::getGlyphXY(char _char){
+glm::vec2 Font::getGlyphXY(wchar_t _char){
 	loadGlyph(_char);
 	return glm::vec2(face->glyph->bitmap_left, face->glyph->bitmap_top);
 }
 
-void Font::loadGlyph(char _char){
+void Font::loadGlyph(wchar_t _char){
 	FT_Set_Pixel_Sizes(face, 0, size);
 	FT_Load_Char(face, _char, FT_LOAD_RENDER);
 }

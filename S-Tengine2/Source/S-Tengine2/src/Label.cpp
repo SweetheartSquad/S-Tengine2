@@ -53,13 +53,13 @@ Label::~Label(){
 	shader->decrementAndDelete();
 }
 
-void Label::appendText(std::string _text){
+void Label::appendText(std::wstring _text){
 	text += _text;
 	textDirty = true;
 	updateText();
 }
 
-std::string Label::getText(){
+std::wstring Label::getText(){
 	return text;
 }
 
@@ -72,7 +72,7 @@ void Label::updateText(){
 		childTransform->children.pop_back();
 	}
 
-	for(char c : text){
+	for(auto c : text){
 		Glyph * mi = font->getMeshInterfaceForChar(c);
 		MeshEntity * me = new MeshEntity(mi);
 		me->setShader(shader, true);
@@ -82,7 +82,7 @@ void Label::updateText(){
 	}
 }
 
-void Label::setText(std::string _text){
+void Label::setText(std::wstring _text){
 	text = _text;
 	textDirty = true;
 	updateText();
