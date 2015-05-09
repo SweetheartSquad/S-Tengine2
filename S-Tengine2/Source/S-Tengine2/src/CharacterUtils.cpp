@@ -1,12 +1,14 @@
+#pragma once
+
 #include <CharacterUtils.h>
+#include <ctype.h>
 
 bool CharacterUtils::isLetter(char _c){
-	return ((static_cast<int>(_c) >= 65 && static_cast<int>(_c) <= 90)
-		||(static_cast<int>(_c) >= 97 && static_cast<int>(_c) <= 122));
+	return isalpha(_c);
 }
 
 bool CharacterUtils::isDigit(char _c){
-	return (static_cast<int>(_c) >= 48 && static_cast<int>(_c) <= 57);
+	return isdigit(_c);
 }
 
 bool CharacterUtils::isSymbol(char _c){
