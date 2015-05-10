@@ -56,8 +56,6 @@ public:
 
 
 	
-	bool cumulativeModelMatrixDirty;
-	glm::vec3 worldPos;
 	glm::mat4 cumulativeModelMatrix;
 
 	void makeCumulativeModelMatrixDirty() override;
@@ -155,8 +153,6 @@ public:
 	/** Calls unload on all children */
 	virtual void load() override;
 
-
-	
 
 	// Child stuff //
 

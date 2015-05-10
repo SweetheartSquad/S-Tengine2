@@ -16,7 +16,7 @@ public:
 	~Camera();
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
-	void update(Step* _step) override = 0;
+	virtual void update(Step* _step);
 	/** Direction the camera's front would be pointing at if it weren't rotated at all */
 	glm::vec3 forwardVectorLocal;
 	/** Direction the camera's front is pointing at (local * orientation) */

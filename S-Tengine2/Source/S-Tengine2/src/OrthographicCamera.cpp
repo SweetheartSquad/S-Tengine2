@@ -21,6 +21,11 @@ OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom,
 OrthographicCamera::~OrthographicCamera(){
 }
 
+
+void OrthographicCamera::update(Step * _step){
+	Camera::update(_step);
+}
+
 glm::mat4 OrthographicCamera::getViewMatrix(){
 	return glm::lookAt(
 		parents.at(0)->getTranslationVector(),							// Camera is here

@@ -13,16 +13,18 @@ public:
 
 	explicit NodeChild();
 	virtual void makeCumulativeModelMatrixDirty();
+	bool cumulativeModelMatrixDirty;
 
 	// Returns whether or not _parent is an ancestor of this node (i.e. is its parent, is its parent's parent, etc.)
 	// If _parent = nullptr, returns false
 	virtual bool hasAncestor(Transform * _parent);
 	
 	virtual void addParent(Transform * _parent);
-
 	// Loops through the vector of parents and removes the first instance of _parent
 	virtual void removeParent(Transform * _parent);
 
+	
+	glm::vec3 worldPos;
 	// finds the first non-zero ancestor translation vector in the _parent hierarchy and applies all of the matrices of its ancestors to produce world position
 	// If there is no transformation data (i.e. parent == nullptr), a zero vector is returned
 	virtual glm::vec3 getWorldPos(unsigned long int _parent = 0);

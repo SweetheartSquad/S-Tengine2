@@ -27,6 +27,7 @@ void PerspectiveCamera::update(Step * _step){
 	upVectorRotated		   = newOrientation * upVectorLocal;
 
 	lookAtSpot = parents.at(0)->getTranslationVector()+forwardVectorRotated;
+	Camera::update(_step);
 }
 
 glm::mat4 PerspectiveCamera::getViewMatrix(){

@@ -41,7 +41,13 @@ void Entity::addParent(Transform * _parent){
 	childTransform->addParent(_parent);
 }
 
+void Entity::removeParent(Transform * _parent){
+	NodeChild::removeParent(_parent);
+	childTransform->removeParent(_parent);
+}
+
 void Entity::makeCumulativeModelMatrixDirty(){
+	NodeChild::makeCumulativeModelMatrixDirty();
 	childTransform->makeCumulativeModelMatrixDirty();
 }
 

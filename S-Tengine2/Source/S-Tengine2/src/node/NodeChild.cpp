@@ -3,11 +3,15 @@
 #include <node\NodeChild.h>
 #include <Transform.h>
 
-NodeChild::NodeChild(){
+NodeChild::NodeChild() :
+	worldPos(0),
+	cumulativeModelMatrixDirty(true)
+{
 }
 
 void NodeChild::makeCumulativeModelMatrixDirty(){
 	// do nothing
+	cumulativeModelMatrixDirty = true;
 }
 
 
@@ -33,7 +37,7 @@ glm::vec3 NodeChild::getWorldPos(unsigned long int _parent){
 	
 	Transform * p = parents.at(_parent);
 	// if the cumulative model matrix is out-of-date, then so is the stored world position
-	if(p->cumulativeModelMatrixDirty){
+	if(cumulativeModelMatrixDirty){
 		// find the first non-zero ancestor translation vector
 		glm::vec3 res(0);
 		do{
@@ -49,14 +53,15 @@ glm::vec3 NodeChild::getWorldPos(unsigned long int _parent){
 			res = glm::vec3(p->parents.at(0)->getCumulativeModelMatrix() * glm::vec4(res, 1));
 		}
 
-		parents.at(_parent)->worldPos = res;
-		parents.at(_parent)->cumulativeModelMatrixDirty = false;
+		worldPos = res;
+		cumulativeModelMatrixDirty = false;
 	}
-	return parents.at(_parent)->worldPos;
+	return worldPos;
 }
 
 void NodeChild::addParent(Transform * _parent){
 	parents.push_back(_parent);
+	makeCumulativeModelMatrixDirty();
 }
 
 void NodeChild::removeParent(Transform * _parent){

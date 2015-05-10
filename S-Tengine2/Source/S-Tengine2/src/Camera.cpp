@@ -24,6 +24,10 @@ Camera::Camera() :
 Camera::~Camera(){
 }
 
+void Camera::update(Step * _step){
+	Entity::update(_step);
+}
+
 glm::vec3 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen){
 	glm::vec4 newPos(_coords, 1);
 	newPos = getProjectionMatrix() * getViewMatrix() * newPos;

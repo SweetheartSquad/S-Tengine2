@@ -43,6 +43,7 @@ void Light::update(Step * _step){
 		lastData = data;
 		lightDirty = true;
 	}
+	Entity::update(_step);
 }
 
 void Light::unload(){

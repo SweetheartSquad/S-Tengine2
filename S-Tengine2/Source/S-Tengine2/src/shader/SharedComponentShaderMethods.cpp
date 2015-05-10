@@ -20,7 +20,7 @@ void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStac
 				Light * l = _renderOption->lights->at(i);
 
 				if(l->lightDirty){
-					glm::vec3 curPos = l->getWorldPos();
+					glm::vec3 curPos = l->lastPos;
 					//std::cout << "update light " << i << ": " << curPos.x << "," << curPos.y << "," << curPos.z << std::endl;
 					std::string typ = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].type", i);
 					std::string pos = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_POSITION, i);

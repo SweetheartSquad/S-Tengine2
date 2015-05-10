@@ -34,6 +34,7 @@ public:
 
 	Transform * childTransform;
 	virtual void addParent(Transform * _parent) override;
+	virtual void removeParent(Transform * _parent) override;
 
 
 	// prints the hierarchy to the console in ASCII

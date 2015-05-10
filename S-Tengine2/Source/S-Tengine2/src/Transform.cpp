@@ -23,9 +23,7 @@ Transform::Transform():
 	oDirty(true),
 	mDirty(true),
 	isIdentity(true),
-	cumulativeModelMatrixDirty(true),
-	cumulativeModelMatrix(1),
-	worldPos(0)
+	cumulativeModelMatrix(1)
 {
 	if(staticInit){
 		staticInit = false;
@@ -57,7 +55,7 @@ Transform::~Transform(){
 }
 
 void Transform::makeCumulativeModelMatrixDirty(){
-	cumulativeModelMatrixDirty = true;
+	NodeChild::makeCumulativeModelMatrixDirty();
 	for(NodeChild * child : children){
 		child->makeCumulativeModelMatrixDirty();
 	}
@@ -69,16 +67,16 @@ glm::mat4 Transform::getCumulativeModelMatrix(){
 	if(parents.size() == 0){
 		return getModelMatrix();
 	}
-	if(parents.at(0)->cumulativeModelMatrixDirty){
-		parents.at(0)->cumulativeModelMatrix = parents.at(0)->getCumulativeModelMatrix() * getModelMatrix();
-		parents.at(0)->cumulativeModelMatrixDirty = false;
+	if(cumulativeModelMatrixDirty){
+		cumulativeModelMatrix = parents.at(0)->getCumulativeModelMatrix() * getModelMatrix();
+		cumulativeModelMatrixDirty = false;
 	}
-	return parents.at(0)->cumulativeModelMatrix;
+	return cumulativeModelMatrix;
 }
 
 void Transform::addParent(Transform * _parent){
+	assert(parents.size() == 0); // transforms should only ever have one parent you dumbo
 	NodeChild::addParent(_parent);
-	makeCumulativeModelMatrixDirty();
 }
 
 
