@@ -84,56 +84,56 @@ Box2DDebugDrawer::~Box2DDebugDrawer(){
 
 void Box2DDebugDrawer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color){
 	if(vertexCount == 4){
-		spritePoly->parent->reset();
-		spritePoly->parent->translate(vertices[0].x, vertices[0].y, 0.0001f, false);
+		spritePoly->parents.at(0)->transform->reset();
+		spritePoly->parents.at(0)->transform->translate(vertices[0].x, vertices[0].y, 0.0001f, false);
 		b2Vec2 s1(vertices[1].y - vertices[0].y, vertices[1].x - vertices[0].x);
 		b2Vec2 s2(vertices[3].y - vertices[0].y, vertices[3].x - vertices[0].x);
-		spritePoly->parent->rotate(glm::degrees(atan2(s1.x, s1.y)), 0, 0, 1, kOBJECT);
-		spritePoly->parent->scale(s1.Length(), s2.Length(), 1, false);
+		spritePoly->parents.at(0)->transform->rotate(glm::degrees(atan2(s1.x, s1.y)), 0, 0, 1, kOBJECT);
+		spritePoly->parents.at(0)->transform->scale(s1.Length(), s2.Length(), 1, false);
 	}
 
-	spritePoly->parent->render(matrixStack, renderOptions);
+	spritePoly->parents.at(0)->transform->render(matrixStack, renderOptions);
 }
 
 void Box2DDebugDrawer::DrawSolidPolygon(const b2Vec2 * vertices, int32 vertexCount, const b2Color& color){
 	if(vertexCount == 4){
-		spritePoly->parent->reset();
-		spritePoly->parent->translate(vertices[0].x, vertices[0].y, 0.0001f, false);
+		spritePoly->parents.at(0)->transform->reset();
+		spritePoly->parents.at(0)->transform->translate(vertices[0].x, vertices[0].y, 0.0001f, false);
 		b2Vec2 s1(vertices[1].y - vertices[0].y, vertices[1].x - vertices[0].x);
 		b2Vec2 s2(vertices[3].y - vertices[0].y, vertices[3].x - vertices[0].x);
-		spritePoly->parent->rotate(glm::degrees(atan2(s1.x, s1.y)), 0, 0, 1, kOBJECT);
-		spritePoly->parent->scale(s1.Length(), s2.Length(), 1, false);
+		spritePoly->parents.at(0)->transform->rotate(glm::degrees(atan2(s1.x, s1.y)), 0, 0, 1, kOBJECT);
+		spritePoly->parents.at(0)->transform->scale(s1.Length(), s2.Length(), 1, false);
 	}
 
-	spritePoly->parent->render(matrixStack, renderOptions);
+	spritePoly->parents.at(0)->transform->render(matrixStack, renderOptions);
 }
 
 void Box2DDebugDrawer::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color){
-	spriteCircle->parent->translate(glm::vec3(center.x, center.y, 0), false);
-	spriteCircle->parent->scale(glm::vec3(radius, radius, radius), false);
-	spriteCircle->parent->render(matrixStack, renderOptions);
+	spriteCircle->parents.at(0)->transform->translate(glm::vec3(center.x, center.y, 0), false);
+	spriteCircle->parents.at(0)->transform->scale(glm::vec3(radius, radius, radius), false);
+	spriteCircle->parents.at(0)->transform->render(matrixStack, renderOptions);
 }
 
 void Box2DDebugDrawer::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color){
-	spriteCircle->parent->translate(glm::vec3(center.x, center.y, 0), false);
-	spriteCircle->parent->scale(glm::vec3(radius, radius, radius), false);
-	spriteCircle->parent->render(matrixStack, renderOptions);
+	spriteCircle->parents.at(0)->transform->translate(glm::vec3(center.x, center.y, 0), false);
+	spriteCircle->parents.at(0)->transform->scale(glm::vec3(radius, radius, radius), false);
+	spriteCircle->parents.at(0)->transform->render(matrixStack, renderOptions);
 }
 
 void Box2DDebugDrawer::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color){
-	spriteSegment->parent->translate(glm::vec3(p1.x, p1.y, 0), false);
+	spriteSegment->parents.at(0)->transform->translate(glm::vec3(p1.x, p1.y, 0), false);
 	float x = p2.x - p1.x;
 	float y = p2.y - p1.y;
 	float mag = sqrt(x*x + y*y);
-	spriteSegment->parent->setOrientation(glm::quat(glm::angleAxis(glm::degrees(atan2(y, x)), glm::vec3(0, 0, 1))));
-	spriteSegment->parent->scale(glm::vec3(mag, mag, mag), false);
-	spriteSegment->parent->render(matrixStack, renderOptions);
+	spriteSegment->parents.at(0)->transform->setOrientation(glm::quat(glm::angleAxis(glm::degrees(atan2(y, x)), glm::vec3(0, 0, 1))));
+	spriteSegment->parents.at(0)->transform->scale(glm::vec3(mag, mag, mag), false);
+	spriteSegment->parents.at(0)->transform->render(matrixStack, renderOptions);
 }
 
 void Box2DDebugDrawer::DrawTransform(const b2Transform& xf){
-	spriteTransform->parent->translate(xf.p.x, xf.p.y, 0, false);
-	spriteTransform->parent->setOrientation(glm::quat(glm::angleAxis(glm::degrees(xf.q.GetAngle()), glm::vec3(0, 0, 1))));
-	spriteTransform->parent->render(matrixStack, renderOptions);
+	spriteTransform->parents.at(0)->transform->translate(xf.p.x, xf.p.y, 0, false);
+	spriteTransform->parents.at(0)->transform->setOrientation(glm::quat(glm::angleAxis(glm::degrees(xf.q.GetAngle()), glm::vec3(0, 0, 1))));
+	spriteTransform->parents.at(0)->transform->render(matrixStack, renderOptions);
 }
 
 void Box2DDebugDrawer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){

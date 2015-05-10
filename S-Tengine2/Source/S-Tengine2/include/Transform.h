@@ -54,7 +54,7 @@ public:
 	static MeshInterface * transformIndicator;
 	static BaseComponentShader * transformShader;
 
-	void makeCumulativeModelMatrixDirty() override;
+	void makeCumulativeModelMatrixDirty(Transform * _parent = nullptr) override;
 	glm::mat4 getCumulativeModelMatrix();
 	
 	Transform();
@@ -152,15 +152,25 @@ public:
 
 	// Child stuff //
 
+	// Removes the first instance of _child if it is already in the child list
+	// Pushes _child onto the node's children stack
+	// adds this node as a parent of _child
+	// Note: asserts that this node is not a descendant of _child
+	// Returns the transform node if created, nullptr otherwise
+	virtual Transform * addChild(NodeChild * _child, bool _underNewTransform = true);
+	
+	// Removes the first instance of _child if it is already in the child list
 	// Inserts _child into this node's list of children at _index
-	// Note: does not make any checks, so cyclical references and what not are possible
-	virtual void addChildAtIndex(NodeChild * _child, int _index, bool _underNewTransform = true);
+	// adds this node as a parent of _child
+	// Note: asserts that this node is not a descendant of _child
+	// Returns the transform node if created, nullptr otherwise
+	virtual Transform * addChildAtIndex(NodeChild * _child, int _index, bool _underNewTransform = true);
 
 	// Erases the node at _index from the list of children
 	virtual void removeChildAtIndex(int _index);
 	
 	// Loops through the node's children and removes the first instance of _child and returns the index
-	// Does NOT change node->parent
+	// This node is removed from the node's parent list
 	// Returns (unsigned long int)(-1) if _child is not a child of this node
 	virtual unsigned long int removeChild(NodeChild * _child);
 	
@@ -180,16 +190,6 @@ public:
 
 	// Calls deleteRecursively on all of _node's children, and then deletes _node
 	static void deleteRecursively(Transform * _node);
-
-	// Loops through the node's children and removes the first instance of _child
-	// Pushes _child onto the node's children stack
-	// Sets _child->parent = this node
-	// Note: does nothing if this node is a descendant of _child
-	// Returns whether or not the child was successfully added
-	virtual bool addChild(NodeChild * _child, bool _underNewTransform = true);
-
-	// Returns the number of Nodes between this node and the top of its hierarchy
-	virtual unsigned long int calculateDepth();
 
 
 	// prints the hierarchy to the console in ASCII

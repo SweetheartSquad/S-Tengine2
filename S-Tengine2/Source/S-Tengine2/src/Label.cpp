@@ -76,8 +76,7 @@ void Label::updateText(){
 		Glyph * mi = font->getMeshInterfaceForChar(c);
 		MeshEntity * me = new MeshEntity(mi);
 		me->setShader(shader, true);
-		childTransform->addChild(me);
-		me->parent->translate(acc, 0.f, 0.f);
+		childTransform->addChild(me)->translate(acc, 0.f, 0.f);
 		acc += mi->advance.x/64;
 	}
 }

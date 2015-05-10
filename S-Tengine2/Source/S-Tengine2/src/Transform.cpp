@@ -53,25 +53,24 @@ Transform::~Transform(){
 	//}
 }
 
-void Transform::makeCumulativeModelMatrixDirty(){
-	NodeChild::makeCumulativeModelMatrixDirty();
+void Transform::makeCumulativeModelMatrixDirty(Transform * _parent){
+	NodeChild::makeCumulativeModelMatrixDirty(nullptr);
 	for(NodeChild * child : children){
-		child->makeCumulativeModelMatrixDirty();
+		child->makeCumulativeModelMatrixDirty(this);
 	}
 }
 
 
 glm::mat4 Transform::getCumulativeModelMatrix(){
-	if(cumulativeModelMatrixDirty){
-		Transform * p = parent;
-		if(p != nullptr){
-			cumulativeModelMatrix = p->getCumulativeModelMatrix() * getModelMatrix();
-		}else{
-			cumulativeModelMatrix = getModelMatrix();
-		}
-		cumulativeModelMatrixDirty = false;
+	// if the transform has no parent, return the identity matrix
+	if(parents.size() == 0){
+		return getModelMatrix();
 	}
-	return cumulativeModelMatrix;
+	if(parents.at(0)->cumulativeModelMatrixDirty){
+		parents.at(0)->cumulativeModelMatrix = parents.at(0)->transform->getCumulativeModelMatrix() * getModelMatrix();
+		parents.at(0)->cumulativeModelMatrixDirty = false;
+	}
+	return parents.at(0)->cumulativeModelMatrix;
 }
 
 void Transform::scale(float _scaleX, float _scaleY, float _scaleZ, bool _relative){
@@ -179,8 +178,6 @@ glm::quat Transform::getOrientationQuat(){
 	return orientation;
 }
 
-
-
 void Transform::update(Step * _step){
 	for(unsigned long int i = 0; i < children.size(); ++i){
 		NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(children.at(i));
@@ -191,7 +188,6 @@ void Transform::update(Step * _step){
 }
 
 
-
 void Transform::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	// save previous matrix state
 	_matrixStack->pushMatrix();
@@ -199,7 +195,6 @@ void Transform::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderO
 	if(!isIdentity){
 		_matrixStack->applyMatrix(getModelMatrix());
 	}
-	
 
 	// render all of the transform's children
 	for(unsigned long int i = 0; i < children.size(); i++){
@@ -221,7 +216,7 @@ void Transform::unload(){
 	for(NodeChild * child : children){
 		NodeLoadable * nl = dynamic_cast<NodeLoadable *>(child);
 		if(nl != nullptr){
-			nl->unload();	
+			nl->unload();
 		}
 	}
 	
@@ -239,29 +234,55 @@ void Transform::load(){
 	NodeLoadable::load();
 }
 
+Transform * Transform::addChild(NodeChild * _child, bool _underNewTransform){
+	// Check to see if the child is one of the ancestors of this node
+	// (Cannot parent a node to one of its descendants)
+	assert(!hasAncestor(dynamic_cast<Transform *>(_child)));
 
-void Transform::addChildAtIndex(NodeChild * _child, int _index, bool _underNewTransform){
+	Transform * t = nullptr;
+	if(_underNewTransform){
+		t = new Transform();
+		t->addChild(_child, false);
+		_child = t;
+	}else{
+		removeChild(_child);
+	}
+
+	// Add the child to the list of children and set it's parent to this
+	children.push_back(_child);
+	_child->addParent(this);
+	return t;
+}
+
+Transform * Transform::addChildAtIndex(NodeChild * _child, int _index, bool _underNewTransform){
+	// Check to see if the child is one of the ancestors of this node
+	// (Cannot parent a node to one of its descendants)
+	assert(!hasAncestor(dynamic_cast<Transform *>(_child)));
+	
+	Transform * t = nullptr;
 	if(_underNewTransform){
 		Transform * t = new Transform();
 		t->addChild(_child, false);
 		_child = t;
+	}else{
+		removeChild(_child);
 	}
 
 	children.insert(children.begin() + _index, _child);
-	_child->setParent(this);
+	_child->addParent(this);
+	return t;
 }
 
 void Transform::removeChildAtIndex(int _index){
 	children.erase(children.begin() + _index);
-	children.at(_index)->setParent(nullptr);
+	children.at(_index)->removeParent(this);
 }
-
 
 unsigned long int Transform::removeChild(NodeChild * _child){
 	for(unsigned long int i = 0; i < children.size(); ++i){
 		if(_child == children.at(i)){
 			children.erase(children.begin() + i);
-			_child->setParent(nullptr);
+			_child->removeParent(this);
 			return i;
 		}
 	}
@@ -311,17 +332,6 @@ void Transform::doRecursively(std::function<void(Node *, void * args[])> _toDo, 
 	}
 }
 
-
-unsigned long int Transform::calculateDepth(){
-	unsigned long int depth = 0;
-	Transform * t = parent;
-	while(t != nullptr){
-		t = t->parent;
-		depth += 1;
-	}
-	return depth;
-}
-
 void Transform::deleteRecursively(Transform * _node){
 	while (_node->children.size() > 0){
 		Transform * t = dynamic_cast<Transform *>(_node->children.back());
@@ -333,37 +343,6 @@ void Transform::deleteRecursively(Transform * _node){
 	delete _node;
 	_node = nullptr;
 }
-
-bool Transform::addChild(NodeChild * _child, bool _underNewTransform){
-	// Check to see if the child is one of the ancestors of this node
-	bool error = hasAncestor(dynamic_cast<Transform *>(_child));
-
-	if(!error){
-		if(_underNewTransform){
-			Transform * t = new Transform();
-			t->addChild(_child, false);
-			_child = t;
-		}
-
-		// Remove the first instance of the child in the current list of children
-		for (unsigned long int i = 0; i < children.size(); ++i){
-			if (_child == children.at(i)){
-				children.erase(children.begin() + i);
-				break;
-			}
-		}
-
-		// Add the child to the list of children and set it's parent to this
-		children.push_back(_child);
-		_child->setParent(this);
-		return true;
-	}else{
-		// Error Message: Cannot parent a node to one of its descendants
-		return false;
-	}
-}
-
-
 
 void Transform::printHierarchy(unsigned long int _startDepth){
 	NodeChild::printHierarchy(_startDepth);

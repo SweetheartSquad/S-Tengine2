@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Cube.h"
 #include "MeshInterface.h"
 #include "MeshFactory.h"
@@ -5,8 +7,8 @@
 Cube::Cube(glm::vec3 _center, float _scale) :
 	MeshEntity(MeshFactory::getCubeMesh())
 {
-	parent->scale(_scale, _scale, _scale);
-	parent->translate(_center);
+	parents.at(0)->transform->scale(_scale, _scale, _scale);
+	parents.at(0)->transform->translate(_center);
 }
 
 Cube::~Cube(void){

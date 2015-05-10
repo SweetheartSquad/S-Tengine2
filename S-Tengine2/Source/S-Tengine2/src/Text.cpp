@@ -36,8 +36,8 @@ Text::Text(std::string _fontSrc):
 	m = new MeshEntity(new MeshInterface(GL_QUADS, GL_STATIC_DRAW));
 
 	cam.farClip = 1000.f;
-	cam.parent->rotate(90, 0, 1, 0, kWORLD);
-	cam.parent->translate(5.0f, 1.5f, 22.5f);
+	cam.parents.at(0)->transform->rotate(90, 0, 1, 0, kWORLD);
+	cam.parents.at(0)->transform->translate(5.0f, 1.5f, 22.5f);
 	cam.yaw = 90.0f;
 	cam.pitch = 10.0f;
 

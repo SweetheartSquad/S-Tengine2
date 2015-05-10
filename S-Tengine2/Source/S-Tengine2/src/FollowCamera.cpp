@@ -24,13 +24,13 @@ FollowCamera::~FollowCamera(){
 
 void FollowCamera::update(Step * _step){
 	
-	lastOrientation = parent->getOrientationQuat();
+	lastOrientation = parents.at(0)->transform->getOrientationQuat();
 	glm::quat newOrientation = glm::quat(1.f, 0.f, 0.f, 0.f);
 	newOrientation = glm::rotate(newOrientation, yaw, upVectorLocal);
 	newOrientation = glm::rotate(newOrientation, pitch, rightVectorLocal);
 
 	newOrientation = glm::slerp(lastOrientation, newOrientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
-	parent->setOrientation(newOrientation);
+	parents.at(0)->transform->setOrientation(newOrientation);
 
 	forwardVectorRotated   = newOrientation * forwardVectorLocal;
 	rightVectorRotated	   = newOrientation * rightVectorLocal;
@@ -123,7 +123,7 @@ void FollowCamera::update(Step * _step){
 	float dist = zoom / (tan(glm::radians(fieldOfView) * 0.5f) * 2.f);
 
 
-	parent->translate(lookAtSpot.x, lookAtSpot.y, dist, false);
+	parents.at(0)->transform->translate(lookAtSpot.x, lookAtSpot.y, dist, false);
 }
 
 void FollowCamera::addTarget(NodeChild * _target, float _weight){

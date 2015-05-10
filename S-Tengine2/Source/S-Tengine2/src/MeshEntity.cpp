@@ -130,7 +130,7 @@ vox::Box MeshEntity::calcOverallBoundingBox(){
 	return res;
 }
 
-void MeshEntity::freezeTransformation(){
+/*void MeshEntity::freezeTransformation(){
 	glm::mat4 m = parent->getModelMatrix();
 
 	for(auto & v : mesh->vertices){
@@ -142,4 +142,4 @@ void MeshEntity::freezeTransformation(){
 	}
 	mesh->dirty = true;
 	parent->reset();
-}
+}*/

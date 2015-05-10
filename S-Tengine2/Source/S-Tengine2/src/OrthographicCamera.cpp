@@ -23,8 +23,8 @@ OrthographicCamera::~OrthographicCamera(){
 
 glm::mat4 OrthographicCamera::getViewMatrix(){
 	return glm::lookAt(
-		parent->getTranslationVector(),							// Camera is here
-		parent->getTranslationVector() + forwardVectorRotated,	// and looks here : at the same position, plus "direction"
+		parents.at(0)->transform->getTranslationVector(),							// Camera is here
+		parents.at(0)->transform->getTranslationVector() + forwardVectorRotated,	// and looks here : at the same position, plus "direction"
 		upVectorRotated												// Head is up (set to 0,-1,0 to look upside-down)
 	);
 }

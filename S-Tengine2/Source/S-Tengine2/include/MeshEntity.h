@@ -46,7 +46,7 @@ public:
 	virtual void load() override;
 
 	// bakes the transformation matrices into the mesh's verts and resets the transform
-	void freezeTransformation();
+	//void freezeTransformation();
 private:
 	
 };

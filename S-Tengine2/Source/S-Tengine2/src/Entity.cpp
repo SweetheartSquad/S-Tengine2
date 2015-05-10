@@ -36,14 +36,14 @@ void Entity::load(){
 	NodeLoadable::load();
 }
 
-void Entity::setParent(Transform * _parent){
-	NodeChild::setParent(_parent);
-	childTransform->setParent(_parent);
+void Entity::addParent(Transform * _parent){
+	NodeChild::addParent(_parent);
+	childTransform->addParent(_parent);
 }
 
-void Entity::makeCumulativeModelMatrixDirty(){
-	NodeChild::makeCumulativeModelMatrixDirty();
-	childTransform->makeCumulativeModelMatrixDirty();
+void Entity::makeCumulativeModelMatrixDirty(Transform * _parent){
+	NodeChild::makeCumulativeModelMatrixDirty(nullptr);
+	childTransform->makeCumulativeModelMatrixDirty(childTransform);
 }
 
 void Entity::printHierarchy(unsigned long int _startDepth){

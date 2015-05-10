@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Plane.h"
 #include "MeshInterface.h"
 #include "MeshFactory.h"
@@ -5,8 +7,8 @@
 Plane::Plane(glm::vec3 _center, float _size) :
 	MeshEntity(MeshFactory::getPlaneMesh())
 {
-	parent->scale(_size, _size, _size);
-	parent->translate(_center);
+	parents.at(0)->transform->scale(_size, _size, _size);
+	parents.at(0)->transform->translate(_center);
 }
 
 Plane::~Plane(){

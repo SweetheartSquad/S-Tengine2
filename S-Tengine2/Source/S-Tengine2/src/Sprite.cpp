@@ -48,7 +48,7 @@ void Sprite::setCurrentAnimation(std::string _name){
 }
 
 void Sprite::pushTextureSampler(TextureSampler* _sampler){
-	glm::vec3 sv = parent->getScaleVector();
+	glm::vec3 sv = parents.at(0)->transform->getScaleVector();
 	vox::Rectangle rect(0, 0, _sampler->width * std::abs(sv.x) * 0.025f, 
 		_sampler->height * std::abs(sv.y) * 0.025f);
 	
