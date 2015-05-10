@@ -27,7 +27,7 @@ bool NodeChild::hasAncestor(Transform * _parent){
 
 glm::vec3 NodeChild::getWorldPos(unsigned long int _parent){
 	// if the node has no parent, return a zero-vector
-	if(parents.size() >= _parent){
+	if(parents.size() <= _parent){
 		return glm::vec3(0);
 	}
 	
