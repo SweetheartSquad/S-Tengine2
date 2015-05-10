@@ -6,14 +6,14 @@
 #include <RenderOptions.h>
 #include <shader\Shader.h>
 
-#include <glew\glew.h>
-
-
 ShaderComponentTint::ShaderComponentTint(Shader * _shader, float _r, float _g, float _b):
 	ShaderComponent(_shader),
 	red(_r),
 	green(_g),
-	blue(_b)
+	blue(_b),
+	redLoc(-1),
+	greenLoc(-1),
+	blueLoc(-1)
 {
 }
 
@@ -48,10 +48,19 @@ std::string ShaderComponentTint::getOutColorMod(){
 		GL_OUT_OUT_COLOR + ".b += " + GL_UNIFORM_ID_TINT_BLUE + SEMI_ENDL;
 }
 
+void ShaderComponentTint::load(){
+	if(!loaded){
+		redLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TINT_RED.c_str());
+		greenLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TINT_GREEN.c_str());
+		blueLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TINT_BLUE.c_str());
+	}
+	ShaderComponent::load();
+}
+
 void ShaderComponentTint::configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
-	glUniform1f(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TINT_RED.c_str()), red);
-	glUniform1f(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TINT_GREEN.c_str()), green);
-	glUniform1f(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TINT_BLUE.c_str()), blue);
+	glUniform1f(redLoc, red);
+	glUniform1f(greenLoc, green);
+	glUniform1f(blueLoc, blue);
 }
 
 void ShaderComponentTint::setRed(float _r){

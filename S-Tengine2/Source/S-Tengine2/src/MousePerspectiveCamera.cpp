@@ -3,11 +3,7 @@
 #include "Transform.h"
 #include "System.h"
 
-MousePerspectiveCamera::MousePerspectiveCamera():
-	PerspectiveCamera(),
-	NodeTransformable(new Transform()),
-	//NodeAnimatable(),
-	NodeUpdatable(),
+MousePerspectiveCamera::MousePerspectiveCamera() :
 	mouse(&Mouse::getInstance()),
 	speed(0.1f),
 	mouseSpeed(0.05f)

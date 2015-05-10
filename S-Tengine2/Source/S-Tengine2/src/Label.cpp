@@ -13,9 +13,7 @@
 #include <MeshFactory.h>
 #include <CharacterUtils.h>
 
-Label::Label(Font * _font, Shader * _shader, WrapMode _wrapMode, float _width):
-	NodeTransformable(new Transform()),
-	Entity(transform),
+Label::Label(Font * _font, Shader * _shader, WrapMode _wrapMode, float _width) :
 	width(_width),
 	wrapMode(_wrapMode),
 	textDirty(false)
@@ -58,13 +56,13 @@ Label::~Label(){
 	shader->decrementAndDelete();
 }
 
-void Label::appendText(std::string _text){
+void Label::appendText(std::wstring _text){
 	text += _text;
 	textDirty = true;
 	updateText();
 }
 
-std::string Label::getText(){
+std::wstring Label::getText(){
 	return text;
 }
 
@@ -72,13 +70,13 @@ void Label::updateText(){
 	glm::vec2 offset(0.f, 0.f);
 	textDirty = false;
 
-	while(children.size() > 0){
-		delete children.back();
-		children.pop_back();
+	while(childTransform->children.size() > 0){
+		delete childTransform->children.back();
+		childTransform->children.pop_back();
 	}
 
 	for(unsigned long int c = 0; c < text.size(); ++c) {
-		auto ch = text.at(c);
+		wchar_t ch = text.at(c);
 		if(ch == '\n'){
 			newLine(&offset);
 		}else{
@@ -123,12 +121,11 @@ void Label::updateText(){
 	}
 }
 
-void Label::updateChar(glm::vec2 * _offset, char _c){
+void Label::updateChar(glm::vec2 * _offset, wchar_t _c){
 	Glyph * glyph = font->getMeshInterfaceForChar(_c);
 	MeshEntity * me = new MeshEntity(glyph);
 	me->setShader(shader, true);
-	addChild(me);
-	me->transform->translate(_offset->x, _offset->y, 0.f);
+	childTransform->addChild(me)->translate(_offset->x, _offset->y, 0.f);
 	_offset->x += glyph->advance.x/64;
 }
 
@@ -137,7 +134,7 @@ void Label::newLine(glm::vec2 * _offset){
 	_offset->y -= font->lineGapRatio * ((font->face->size->metrics.ascender + font->face->size->metrics.descender)/64);
 }
 
-void Label::setText(std::string _text){
+void Label::setText(std::wstring _text){
 	text = _text;
 	textDirty = true;
 	updateText();

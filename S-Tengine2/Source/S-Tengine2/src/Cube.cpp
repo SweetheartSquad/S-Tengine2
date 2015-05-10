@@ -1,14 +1,14 @@
+#pragma once
+
 #include "Cube.h"
 #include "MeshInterface.h"
 #include "MeshFactory.h"
 
 Cube::Cube(glm::vec3 _center, float _scale) :
-	NodeTransformable(new Transform()),
-	MeshEntity(MeshFactory::getCubeMesh(), transform)
+	MeshEntity(MeshFactory::getCubeMesh())
 {
-
-	transform->scale(_scale, _scale, _scale);
-	transform->translate(_center);
+	parents.at(0)->scale(_scale, _scale, _scale);
+	parents.at(0)->translate(_center);
 }
 
 Cube::~Cube(void){

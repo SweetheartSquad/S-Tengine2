@@ -1,5 +1,7 @@
-#include "Light.h"
-#include "Transform.h"
+#pragma once
+
+#include <Light.h>
+#include <Transform.h>
 
 LightData::LightData(LightType _type, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff) :
 	type(_type),
@@ -21,17 +23,29 @@ bool LightData::operator!=(const LightData &other) const{
 	return !(*this == other);
 }
 
-Light::Light(LightType _type, glm::vec3 _position, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff, Transform * _transform):
-	NodeTransformable(_transform == nullptr ? new Transform() : _transform),
+Light::Light(LightType _type, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff):
 	data(_type, _intensities, _ambientCoefficient, _attenuation, _cutoff),
 	lastData(_type, _intensities, _ambientCoefficient, _attenuation, _cutoff),
-	dirty(true)
+	lightDirty(true)
 {
-	_transform->translate(_position, false);
-	lastPos = getPos(false);
+	lastPos = getWorldPos();
 }
 
-Light::~Light() {
-	delete transform;
-	transform = nullptr;
+Light::~Light(){
+}
+
+void Light::update(Step * _step){
+	glm::vec3 curPos = getWorldPos();
+	if(lastPos != curPos){
+		lastPos = curPos;
+		lightDirty = true;
+	}if(lastData != data){
+		lastData = data;
+		lightDirty = true;
+	}
+	Entity::update(_step);
+}
+
+void Light::unload(){
+	lightDirty = true;
 }

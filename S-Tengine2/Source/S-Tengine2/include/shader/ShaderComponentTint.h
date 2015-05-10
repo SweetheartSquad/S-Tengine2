@@ -5,6 +5,7 @@
 class ShaderComponentTint : public ShaderComponent{
 private:
 	float red, green, blue;
+	GLint redLoc, greenLoc, blueLoc;
 public:
 	float getRed();
 	float getGreen();
@@ -22,5 +23,6 @@ public:
 	std::string getVertexBodyString() override;
 	std::string getFragmentBodyString() override;
 	std::string getOutColorMod() override;
+	void load() override;
 	void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 };

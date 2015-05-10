@@ -13,7 +13,10 @@
 
 ShaderComponentText::ShaderComponentText(Shader * _shader) :
 	ShaderComponent(_shader),
-	color(0, 0, 1)					
+	color(0, 0, 1),
+	texNumLoc(-1),
+	texColLoc(-1),
+	texSamLoc(-1)
 {
 }
 
@@ -66,20 +69,29 @@ void ShaderComponentText::clean(vox::MatrixStack* _matrixStack, RenderOptions* _
 	shader->configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 }
 
+void ShaderComponentText::load(){
+	if(!loaded){
+		texNumLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str());
+		texColLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TEXT_COLOR.c_str());
+		texSamLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str());
+	}
+	ShaderComponent::load();
+}
+
 void ShaderComponentText::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 	int numTextures = 0;
 	if(mesh != nullptr){
 		numTextures = mesh->textureCount();
-		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), numTextures);
+		glUniform1i(texNumLoc, numTextures);
 		// Bind each texture to the texture sampler array in the frag _shader
 		for(unsigned long int i = 0; i < mesh->textureCount(); i++){
 			glActiveTexture(GL_TEXTURE0 + i);
 			glBindTexture(GL_TEXTURE_2D, mesh->getTexture(i)->textureId);
-			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str()), i);
+			glUniform1i(texSamLoc, i);
 		}
 	}else{
-		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str()), numTextures);
+		glUniform1i(texNumLoc, numTextures);
 	}
-	glUniform3f(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_TEXT_COLOR.c_str()), color.x, color.y, color.z);
+	glUniform3f(texColLoc, color.x, color.y, color.z);
 }

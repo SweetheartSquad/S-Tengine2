@@ -1,19 +1,16 @@
 #pragma once
 
-#include "node/NodeBox2DBody.h"
-#include "Box2DWorld.h"
+#include <node/NodeBox2DBody.h>
+#include <Box2DWorld.h>
 
-NodeBox2DBody::NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Transform* _transform):
-	NodeTransformable(_transform),
-	NodeUpdatable(),
+NodeBox2DBody::NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture) :
 	body(nullptr),
 	defaultFixture(_defaultFixture),
 	maxVelocity(b2Vec2(-1, -1)),
 	prevAngle(0),
 	world(_world)
 {
-	glm::vec3 tv = _transform->getTranslationVector();
-	bodyDef.position.Set(tv.x, tv.y);
+	bodyDef.position.Set(0, 0);
 	bodyDef.type = _bodyType;
 	body = world->b2world->CreateBody(&bodyDef);
 }
@@ -29,7 +26,7 @@ NodeBox2DBody::~NodeBox2DBody(){
 void NodeBox2DBody::update(Step * _step){
 	if(body != nullptr){
 		if(body->IsAwake()){
-			transform->translate(body->GetPosition().x, body->GetPosition().y, transform->getTranslationVector().z, false);
+			parents.at(0)->translate(body->GetPosition().x, body->GetPosition().y, parents.at(0)->getTranslationVector().z, false);
 			
 			b2Vec2 lv = body->GetLinearVelocity();
 			if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
@@ -41,10 +38,9 @@ void NodeBox2DBody::update(Step * _step){
 			body->SetLinearVelocity(lv);
 			
 			if(abs(body->GetAngle() - prevAngle) > 0.00005f){
-				transform->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
+				parents.at(0)->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
 				prevAngle = body->GetAngle();
 			}
-
 		}
 	}
 }
@@ -58,34 +54,15 @@ b2Fixture * NodeBox2DBody::getNewFixture(b2ChainShape _shape, float _density){
 }
 
 void NodeBox2DBody::setTranslationPhysical(glm::vec3 _translation, bool _relative){
-	transform->translate(_translation, _relative);
-	glm::vec3 tv = transform->getTranslationVector();
-	if(_relative){
-		if(body != nullptr){
-			body->SetTransform(b2Vec2(tv.x, tv.y), body->GetAngle());
-		}
-	}else{
-		bodyDef.position.Set(tv.x, tv.y);
-		if(body != nullptr){
-			body->SetTransform(b2Vec2(_translation.x, _translation.y), body->GetAngle());
-		}
+	parents.at(0)->translate(_translation, _relative);
+	glm::vec3 tv = parents.at(0)->getTranslationVector();
+	if(body != nullptr){
+		body->SetTransform(b2Vec2(tv.x, tv.y), body->GetAngle());
 	}
 }
 
 void NodeBox2DBody::setTranslationPhysical(float _x, float _y, float _z, bool _relative){
 	setTranslationPhysical(glm::vec3(_x, _y, _z), _relative);
-}
-
-void NodeBox2DBody::setXPhysical(float _x){
-	setTranslationPhysical(glm::vec3(_x, 0, 0));
-}
-
-void NodeBox2DBody::setYPhysical(float _y){
-	setTranslationPhysical(glm::vec3(0, _y, 0));
-}
-
-void NodeBox2DBody::setXYPhysical(float _x, float _y){
-	setTranslationPhysical(glm::vec3(_x, _y, 0));
 }
 
 void NodeBox2DBody::applyForce(float _forceX, float _forceY, float _pointX, float _pointY){

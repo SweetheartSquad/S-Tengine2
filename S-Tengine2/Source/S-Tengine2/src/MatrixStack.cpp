@@ -31,23 +31,23 @@ void vox::MatrixStack::pushMatrix(){
 	matrixStack.push_back(currentModelMatrix);
 }
 
-glm::mat4 vox::MatrixStack::getModelMatrix(){
-	return currentModelMatrix;
+const glm::mat4 * vox::MatrixStack::getModelMatrix(){
+	return &currentModelMatrix;
 }
-glm::mat4 vox::MatrixStack::getViewMatrix(){
-	return viewMatrix;
+const glm::mat4 * vox::MatrixStack::getViewMatrix(){
+	return &viewMatrix;
 }
-glm::mat4 vox::MatrixStack::getProjectionMatrix(){
-	return projectionMatrix;
+const glm::mat4 * vox::MatrixStack::getProjectionMatrix(){
+	return &projectionMatrix;
 }
 
-void vox::MatrixStack::setProjectionMatrix(glm::mat4 _projectionMatrix){
-	projectionMatrix = _projectionMatrix;
+void vox::MatrixStack::setProjectionMatrix(const glm::mat4 * _projectionMatrix){
+	projectionMatrix = *_projectionMatrix;
 	vpDirty = true;
 	mvpDirty = true;
 }
-void vox::MatrixStack::setViewMatrix(glm::mat4 _viewMatrix){
-	viewMatrix = _viewMatrix;
+void vox::MatrixStack::setViewMatrix(const glm::mat4 * _viewMatrix){
+	viewMatrix = *_viewMatrix;
 	vpDirty = true;
 	mvpDirty = true;
 }
@@ -80,18 +80,18 @@ void vox::MatrixStack::clearMatrixStack(){
 	matrixStack.clear();
 }
 
-glm::mat4 vox::MatrixStack::getVP(){
+const glm::mat4 * vox::MatrixStack::getVP(){
 	if(vpDirty){
 		vp = projectionMatrix * viewMatrix;
 		vpDirty = false;
 	}
-	return vp;
+	return &vp;
 }
 
-glm::mat4 vox::MatrixStack::getMVP(){
+const glm::mat4 * vox::MatrixStack::getMVP(){
 	if(mvpDirty){
-		mvp = getVP() * currentModelMatrix;
+		mvp = *getVP() * currentModelMatrix;
 		mvpDirty = false;
 	}
-	return mvp;
+	return &mvp;
 }

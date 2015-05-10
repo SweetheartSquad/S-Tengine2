@@ -11,12 +11,12 @@
 class Scene;
 class Box2DWorld;
 
-class Box2DDebugDraw : public b2Draw, public Entity{
+class Box2DDebugDrawer : public b2Draw, public Entity{
 public:
 	bool drawing;
 
-	explicit Box2DDebugDraw(Box2DWorld * _world);
-	~Box2DDebugDraw();
+	explicit Box2DDebugDrawer(Box2DWorld * _world);
+	~Box2DDebugDrawer();
 	void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
 	void DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
 	void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color) override;

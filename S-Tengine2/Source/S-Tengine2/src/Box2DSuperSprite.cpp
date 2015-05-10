@@ -14,8 +14,7 @@
 int16 Box2DSuperSprite::gGroupIndex = 0;
 
 Box2DSuperSprite::Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :
-	MeshEntity(nullptr, transform), // THERE ARE TWO TRANSFORM NODES HERE WHEN THERE SHOULD BE ONE
-	NodeTransformable(new Transform()),
+	MeshEntity(nullptr),
 	world(_world),
 	componentScale(0.0025f),
 	groupIndex(_groupIndex),
@@ -104,7 +103,7 @@ void Box2DSuperSprite::addComponent(Box2DSprite * _component){
 }
 
 void Box2DSuperSprite::snapComponents(Box2DSprite * _sprite){
-	glm::vec3 currentPos = getPos(false);
+	glm::vec3 currentPos = getWorldPos();
 	glm::vec3 snapPos = glm::vec3(_sprite->body->GetPosition().x, _sprite->body->GetPosition().y, 0);
 	
 	translateComponents(glm::vec3(snapPos.x - currentPos.x, snapPos.y - currentPos.y, 0));

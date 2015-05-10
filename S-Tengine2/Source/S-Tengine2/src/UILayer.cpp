@@ -9,28 +9,21 @@
 #include <System.h>
 
 UILayer::UILayer(float _left, float _right, float _top, float _bottom) : 
-	NodeTransformable(new Transform()),
-	Entity(nullptr),
+	Entity(),
 	cam(-_right, -_left, _bottom, _top, -1000.f, 1000.f),
 	shader(new BaseComponentShader(true))
 {
 	glm::vec2 sd = vox::getScreenDimensions();
 	cam.left = -sd.x;
 	cam.top = sd.y;
+	Transform * t = new Transform();
+	t->addChild(&cam);
 
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->compileShader();
 }
 
 UILayer::~UILayer(){
-	while(children.size() > 0){
-		NodeHierarchical * nh = dynamic_cast<NodeHierarchical *>(children.back());
-		if(nh != nullptr){
-			NodeHierarchical::deleteRecursively(nh);
-		}else{
-			delete children.back();	
-		}children.pop_back();
-	}
 }
 
 
@@ -42,14 +35,14 @@ void UILayer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 	}
 
 	Shader * prev = _renderOptions->overrideShader;
-	glm::mat4 p = _matrixStack->getProjectionMatrix();
-	glm::mat4 v = _matrixStack->getViewMatrix();
+	const glm::mat4 * p = _matrixStack->getProjectionMatrix();
+	const glm::mat4 * v = _matrixStack->getViewMatrix();
 
-	_renderOptions->overrideShader = shader;
+	//_renderOptions->overrideShader = shader;
 
 	_matrixStack->pushMatrix();
-	_matrixStack->setProjectionMatrix(cam.getProjectionMatrix());
-	_matrixStack->setViewMatrix(cam.getViewMatrix());
+	_matrixStack->setProjectionMatrix(&cam.getProjectionMatrix());
+	_matrixStack->setViewMatrix(&cam.getViewMatrix());
 	Entity::render(_matrixStack, _renderOptions);
 	_matrixStack->setViewMatrix(v);
 	_matrixStack->setProjectionMatrix(p);
@@ -69,7 +62,7 @@ void UILayer::resize(float _left, float _right, float _top, float _bottom){
 	cam.bottom = _top;
 }
 
-bool UILayer::addChild(NodeChild * _child){
+/*bool UILayer::addChild(NodeChild * _child){
 	bool success = NodeHierarchical::addChild(_child);
 	if(success){
 		MeshEntity * me = dynamic_cast<MeshEntity *>(_child);
@@ -78,4 +71,4 @@ bool UILayer::addChild(NodeChild * _child){
 		}
 	}
 	return success;
-}
+}*/

@@ -23,14 +23,12 @@ Scene::Scene(Game * _game):
 	mouse(&Mouse::getInstance()),
 	keyboard(&Keyboard::getInstance()),
 	activeCamera(new PerspectiveCamera()),
-	renderOptions(new RenderOptions(nullptr, &lights)),
 	depthBuffer(new StandardFrameBuffer(true)),
 	shadowBuffer(new StandardFrameBuffer(true)),
 	depthShader(new DepthMapShader(true)),
 	//Singletons
 	shadowShader(new BlurShader(true)),
-	shadowSurface(new RenderSurface(shadowShader)),
-	matrixStack(new vox::MatrixStack())
+	shadowSurface(new RenderSurface(shadowShader))
 {
 	clearColor[0] = 0.0;
 	clearColor[1] = 0.0;
@@ -52,8 +50,6 @@ Scene::~Scene(void){
 		lights.pop_back();
 	}
 	
-	delete matrixStack;
-	delete renderOptions;
 	depthBuffer->safeDelete();
 	shadowBuffer->safeDelete();
 	depthShader->safeDelete();
@@ -61,15 +57,8 @@ Scene::~Scene(void){
 }
 
 void Scene::update(Step * _step){
-	if(!loaded){
-		load();
-	}
 	activeCamera->update(_step);
-	//for (Entity * e : children){
-	for (unsigned long int i = 0; i < children.size(); ++i){
-		Entity * e = children.at(i);
-		e->update(_step);
-	}
+	Entity::update(_step);
 }
 
 void Scene::load(){
@@ -77,27 +66,15 @@ void Scene::load(){
 	depthShader->load();
 	shadowBuffer->load();
 	depthBuffer->load();
-	for(Entity * e : children){
-		e->load();
-	}
-	
-	NodeLoadable::load();
+	Entity::load();
 }
 
 void Scene::unload(){
-	for(signed long int i = children.size()-1; i >= 0; --i){
-		children.at(i)->unload();
-	}
 	depthBuffer->unload();
 	shadowBuffer->unload();
 	depthShader->unload();
 	shadowSurface->unload();
-
-	for(Light * l : lights){
-		l->dirty = true;
-	}
-
-	NodeLoadable::unload();
+	Entity::unload();
 }
 
 
@@ -116,44 +93,33 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptio
 
 	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
-	clear();
+	_matrixStack->pushMatrix();
+	_matrixStack->resetCurrentMatrix();
+	_matrixStack->setProjectionMatrix(&activeCamera->getProjectionMatrix());
+	_matrixStack->setViewMatrix(&activeCamera->getViewMatrix());
 
-	matrixStack->setProjectionMatrix(activeCamera->getProjectionMatrix());
-	matrixStack->setViewMatrix(activeCamera->getViewMatrix());
-
-	renderOptions->lights = &lights;
-
-	for(Entity * e : children){
-		e->render(matrixStack, renderOptions);
-	}
+	_renderOptions->lights = &lights;
 	
+	clear();
+	Entity::render(_matrixStack, _renderOptions);
+
+	_matrixStack->popMatrix();
+
 	checkForGlError(0,__FILE__,__LINE__);
 }
 
-void Scene::addChild(Entity* _child){
-	children.push_back(_child);
-}
-
-void Scene::removeChild(Entity* _child){
-	for(signed long int j = children.size()-1; j >= 0; --j){
-		if(children.at(j) == _child){
-			children.erase(children.begin() + j);
-		}
-	}
-}
-
 void Scene::renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	Shader * backupOverride = renderOptions->overrideShader;
+	Shader * backupOverride = _renderOptions->overrideShader;
 	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	depthBuffer->bindFrameBuffer();
-	renderOptions->overrideShader = depthShader;
+	_renderOptions->overrideShader = depthShader;
 	Scene::render(_matrixStack, _renderOptions);
 
 	shadowBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	shadowBuffer->bindFrameBuffer();
 	shadowSurface->render(depthBuffer->getTextureId(), shadowBuffer->frameBufferId);
-	static_cast<VoxRenderOptions *>(renderOptions)->shadowMapTextureId = shadowBuffer->getTextureId();
-	renderOptions->overrideShader = backupOverride;
+	static_cast<VoxRenderOptions *>(_renderOptions)->shadowMapTextureId = shadowBuffer->getTextureId();
+	_renderOptions->overrideShader = backupOverride;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

@@ -1,7 +1,7 @@
 #pragma once 
 
 #include <Entity.h>
-#include "shader/Shader.h"
+#include <shader/Shader.h>
 
 class MeshEntity;
 class Font;
@@ -30,14 +30,14 @@ public:
 	void unload() override;
 	void load() override;
 
-	void setText(std::string _text);
-	void appendText(std::string _text);
-	std::string getText();
+	void setText(std::wstring _text);
+	void appendText(std::wstring _text);
+	std::wstring getText();
 	void updateText();
 
 private:
-	std::string text;
+	std::wstring text;
 	bool textDirty;
 	void newLine(glm::vec2 * _offset);
-	void updateChar(glm::vec2 * _offset, char _c);
+	void updateChar(glm::vec2 * _offset, wchar_t _c);
 };

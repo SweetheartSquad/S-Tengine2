@@ -21,7 +21,6 @@ public:
 	bool padFront;
 	WrapMode wrapMode;
 
-	QuadMesh * meshQ;
 	std::vector<vox::Rectangle> frames;
 
 	BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _columns, bool padFront = true, WrapMode _wrapMode = WORD_WRAP);

@@ -1,17 +1,16 @@
 #pragma once
 
 #include <node/NodeUpdatable.h>
-#include <node/NodeTransformable.h>
 #include <Box2D/Box2D.h>
 #include <glm/glm.hpp>
 
-#include "Transform.h"
+#include <Transform.h>
 
 #define NO_VELOCITY_LIMIT -1
 
 class Box2DWorld;
 
-class NodeBox2DBody : public virtual NodeUpdatable, public virtual NodeTransformable {
+class NodeBox2DBody : public virtual NodeUpdatable, public virtual NodeChild{
 public:
 	Box2DWorld * world;
 
@@ -23,7 +22,7 @@ public:
 
 	bool defaultFixture;
 
-	explicit NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType = b2_dynamicBody, bool _defaultFixture = true, Transform * _transform = new Transform());
+	explicit NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType = b2_dynamicBody, bool _defaultFixture = true);
 	virtual ~NodeBox2DBody();	
 
 	void update(Step* _step) override;
@@ -34,9 +33,6 @@ public:
 
 	void setTranslationPhysical(glm::vec3 _translation, bool _relative = false);
 	void setTranslationPhysical(float _x, float _y, float _z, bool _relative = false);
-	void setXPhysical(float _x);
-	void setYPhysical(float _y);
-	void setXYPhysical(float _x, float _y);
 
 	void applyForce(float _forceX, float _forceY, float _pointX, float _pointY);
 	void applyForceLeft(float _force);

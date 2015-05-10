@@ -8,65 +8,50 @@
 
 #include "glew\glew.h"
 
-Entity::Entity(Transform * _transform) :
-	NodeTransformable(_transform),
-	//NodeAnimatable(),
-	NodeHierarchical(),
-	NodeLoadable(),
-	NodeChild(nullptr)
+Entity::Entity() :
+	childTransform(new Transform())
 {
 }
 
 Entity::~Entity(void){
-	delete transform;
-	transform = nullptr;
+	delete childTransform;
+	childTransform = nullptr;
 }
 
 void Entity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	_matrixStack->pushMatrix();
-	_matrixStack->applyMatrix(transform->getModelMatrix());
-	
-	for(unsigned long int i = 0; i < children.size(); i++){
-		NodeRenderable * nr = dynamic_cast<NodeRenderable *>(children.at(i));
-		if(nr != nullptr){
-			nr->render(_matrixStack, _renderOptions);	
-		}
-	}
-	//pop transform
-	_matrixStack->popMatrix();
+	childTransform->render(_matrixStack, _renderOptions);
 }
 
 void Entity::update(Step * _step){
-	for(unsigned long int i = 0; i < children.size(); ++i){
-		NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(children.at(i));
-		if(nu != nullptr){
-			nu->update(_step);	
-		}
-	}
-}
-
-void Entity::removeChildAtIndex(int _index){
-	NodeHierarchical::removeChildAtIndex(_index);
+	childTransform->update(_step);
 }
 
 void Entity::unload(){
-	for(NodeChild * child : children){
-		NodeLoadable * nl = dynamic_cast<NodeLoadable *>(child);
-		if(nl != nullptr){
-			nl->unload();	
-		}
-	}
-	
+	childTransform->unload();
 	NodeLoadable::unload();
 }
 
 void Entity::load(){
-	for(NodeChild * child : children){
-		NodeLoadable * nl = dynamic_cast<NodeLoadable *>(child);
-		if(nl != nullptr){
-			nl->load();	
-		}
-	}
-	
+	childTransform->load();
 	NodeLoadable::load();
+}
+
+void Entity::addParent(Transform * _parent){
+	NodeChild::addParent(_parent);
+	childTransform->addParent(_parent);
+}
+
+void Entity::removeParent(Transform * _parent){
+	NodeChild::removeParent(_parent);
+	childTransform->removeParent(_parent);
+}
+
+void Entity::makeCumulativeModelMatrixDirty(){
+	NodeChild::makeCumulativeModelMatrixDirty();
+	childTransform->makeCumulativeModelMatrixDirty();
+}
+
+void Entity::printHierarchy(unsigned long int _startDepth){
+	NodeChild::printHierarchy(_startDepth);
+	childTransform->printHierarchy(_startDepth);
 }

@@ -14,7 +14,7 @@ public:
 	int velocityIterations;
 	int positionIterations;
 
-	float timeStepAccumulator;
+	double timeStepAccumulator;
 
 	explicit Box2DWorld(b2Vec2 _gravityVector = b2Vec2(0.f, -9.8f));
 	~Box2DWorld();

@@ -85,4 +85,3 @@ void ShaderComponentDiffuse::clean(vox::MatrixStack* _matrixStack, RenderOptions
 void ShaderComponentDiffuse::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	SharedComponentShaderMethods::configureLights(_matrixStack, _renderOption, _nodeRenderable);
 }
-

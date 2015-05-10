@@ -6,7 +6,7 @@
 std::string StringUtils::trim(std::string _toTrim){
 	std::string retString = "";
 	bool started = false;
-	int sinceChar = 0;
+	unsigned long int sinceChar = 0;
 	for(auto c : _toTrim) {
 		if(!started) {
 			if(c == ' ') {

@@ -5,6 +5,7 @@
 class ShaderComponentHsv : public ShaderComponent{
 private:
 	float hue, saturation, value;
+	GLint hueLoc, satLoc, valLoc;
 public:
 	float getHue();
 	float getSaturation();
@@ -22,5 +23,6 @@ public:
 	std::string getVertexBodyString() override;
 	std::string getFragmentBodyString() override;
 	std::string getOutColorMod() override;
+	void load() override;
 	void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 };

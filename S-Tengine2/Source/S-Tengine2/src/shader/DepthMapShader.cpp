@@ -23,8 +23,8 @@ void DepthMapShader::configureUniforms(vox::MatrixStack* _matrixStack, RenderOpt
 	glm::mat4 depthProjectionMatrix = glm::ortho<float>(-10, 10, -10, 10, -10, 20);
 	glm::mat4 depthMVP = depthProjectionMatrix * depthViewMatrix * _matrixStack->getModelMatrix();
 	depthMVP = BIAS_MATRIX * depthMVP;*/
-	glm::mat4 depthMVP = _matrixStack->getMVP();
-	glUniformMatrix4fv(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_DEPTH_MVP.c_str()), 1, GL_FALSE, &depthMVP[0][0]);
+	const glm::mat4 * depthMVP = _matrixStack->getMVP();
+	glUniformMatrix4fv(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_DEPTH_MVP.c_str()), 1, GL_FALSE, &(*depthMVP)[0][0]);
 }
 
 std::string DepthMapShader::getVertString(){

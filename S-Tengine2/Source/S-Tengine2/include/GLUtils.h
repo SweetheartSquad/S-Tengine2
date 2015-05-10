@@ -2,6 +2,7 @@
 
 #include <GL\glew.h>
 #include <iostream>
+#include <assert.h>
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
@@ -23,6 +24,7 @@
 				default: errString = "dunno, but something went wrong?";	break;\
 			}\
 			std::cout << "\tFile: " << (_file) <<", Line: "<< (_line) << ", Log: " << errString << std::endl;\
+			assert(false);\
 		}\
 	}while ((err = glGetError()) != GL_NO_ERROR);\
 }while(false)

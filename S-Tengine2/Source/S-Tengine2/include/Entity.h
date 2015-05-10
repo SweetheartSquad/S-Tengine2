@@ -3,19 +3,17 @@
 #include "Transform.h"
 #include "Vertex.h"
 #include "node/Node.h"
-#include "node/NodeHierarchical.h"
 #include "Vox.h"
 #include "node/NodeUpdatable.h"
 #include "node/NodeRenderable.h"
 #include "node/NodeLoadable.h"
-#include "node/ShiftKiddie.h"
 
 /** A basic entity node. Stores references to a mesh, transform, shader, parent, and list of references to children */
-class Entity : public virtual NodeUpdatable, public virtual NodeHierarchical, public virtual NodeRenderable, public virtual NodeLoadable, public virtual ShiftKiddie{
+class Entity : public virtual NodeUpdatable, public virtual NodeRenderable, public virtual NodeLoadable, public virtual NodeChild{
 public:
-
-	explicit Entity(Transform * _transform = nullptr);
+	explicit Entity();
 	virtual ~Entity(void);
+	void makeCumulativeModelMatrixDirty() override;
 
 	/**
 	* Pushes model matrix stack,
@@ -29,9 +27,16 @@ public:
 	/** Doesn't do anything by default */
 	virtual void update(Step * _step) override;
 
-	virtual void removeChildAtIndex(int _index) override;
 	/** Calls unload on all children */
 	virtual void unload() override;
 	/** Calls unload on all children */
 	virtual void load() override;
+
+	Transform * childTransform;
+	virtual void addParent(Transform * _parent) override;
+	virtual void removeParent(Transform * _parent) override;
+
+
+	// prints the hierarchy to the console in ASCII
+	virtual void printHierarchy(unsigned long int _startDepth = 0);
 };

@@ -7,7 +7,6 @@
 #include <Transform.h>
 
 Camera::Camera() :
-	NodeTransformable(new Transform()),
 	forwardVectorLocal(1.f, 0.f, 0.f),
 	forwardVectorRotated(1.f, 0.f, 0.f),
 	upVectorLocal(0.f, 1.f, 0.f),
@@ -20,11 +19,13 @@ Camera::Camera() :
 	nearClip(1.f),
 	farClip(100.f)
 {
-	transform->translate(-5.f, 0.f, 0.f);
-	transform->translate(0.f, 3.f, 0.f);
 }
 
 Camera::~Camera(){
+}
+
+void Camera::update(Step * _step){
+	Entity::update(_step);
 }
 
 glm::vec3 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen){

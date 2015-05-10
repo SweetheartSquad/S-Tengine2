@@ -25,9 +25,9 @@ class Font : public NodeResource{
 public:	
 	
 	FT_Face face;
-	std::map<char, GlyphTexture *> textures;
-	std::map<char, Glyph *> meshes;
 	float lineGapRatio;
+	std::map<wchar_t, GlyphTexture *> textures;
+	std::map<wchar_t, Glyph *> meshes;
 
 	explicit Font(std::string _fontSrc, int size, bool _autoRelease);
 	~Font();
@@ -35,11 +35,11 @@ public:
 	void load() override;
 	void unload() override;
 
-	GlyphTexture * getTextureForChar(char _char);
-	Glyph * getMeshInterfaceForChar(char _char);
-	glm::vec2 getGlyphWidthHeight(char _char);
-	glm::vec2 getGlyphXY(char _char);
-	void loadGlyph(char _char);
+	GlyphTexture * getTextureForChar(wchar_t _char);
+	Glyph * getMeshInterfaceForChar(wchar_t _char);
+	glm::vec2 getGlyphWidthHeight(wchar_t _char);
+	glm::vec2 getGlyphXY(wchar_t _char);
+	void loadGlyph(wchar_t _char);
 
 private:
 	int size;

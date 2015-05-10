@@ -19,7 +19,7 @@ public:
 	OrthographicCamera(float _left, float _right, float _bottom, float _top, float _nearClip, float _farClip);
 	~OrthographicCamera();
 
-	void update(Step * _step) override {/* empty*/};
+	virtual void update(Step * _step) override;
 
 	/**
 	* @return The view matrix of the camera

@@ -24,7 +24,7 @@ public:
 	void pause(std::string _name);
 	void stop(std::string _name);
 	void resume(std::string _name);
-	Sound & playRandomSound();
+	Sound * playRandomSound();
 
 	void load() override;
 	void unload() override;

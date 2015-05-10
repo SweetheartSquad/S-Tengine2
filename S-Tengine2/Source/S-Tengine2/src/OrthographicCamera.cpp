@@ -6,10 +6,7 @@
 #include "System.h"
 #include "Transform.h"
 
-OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom, float _top, float _near, float _far):
-	Camera(),
-	NodeTransformable(new Transform),
-	NodeUpdatable(),
+OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom, float _top, float _near, float _far) :
 	left(_left),
 	top(_top),
 	bottom(_bottom),
@@ -24,10 +21,15 @@ OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom,
 OrthographicCamera::~OrthographicCamera(){
 }
 
+
+void OrthographicCamera::update(Step * _step){
+	Camera::update(_step);
+}
+
 glm::mat4 OrthographicCamera::getViewMatrix(){
 	return glm::lookAt(
-		transform->getTranslationVector(),							// Camera is here
-		transform->getTranslationVector() + forwardVectorRotated,	// and looks here : at the same position, plus "direction"
+		parents.at(0)->getTranslationVector(),							// Camera is here
+		parents.at(0)->getTranslationVector() + forwardVectorRotated,	// and looks here : at the same position, plus "direction"
 		upVectorRotated												// Head is up (set to 0,-1,0 to look upside-down)
 	);
 }

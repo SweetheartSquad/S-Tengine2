@@ -7,7 +7,7 @@ class VoxelMesh;
 class VoxelJoint : public MeshEntity {
 
 public:
-	explicit VoxelJoint(unsigned long int _id, VoxelMesh * _mesh = nullptr, Transform * _transform = new Transform(), Shader * _shader = nullptr);
+	explicit VoxelJoint(unsigned long int _id, VoxelMesh * _mesh = nullptr, Shader * _shader = nullptr);
 	~VoxelJoint();
 
 	unsigned long int id;

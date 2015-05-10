@@ -23,7 +23,7 @@ class Texture;
 class Material;
 class MatrixStack;
 
-class MeshInterface : public virtual NodeRenderable, public virtual NodeLoadable, public virtual NodeResource{
+class MeshInterface : public virtual NodeRenderable, public virtual NodeLoadable, public virtual NodeResource, public virtual NodeChild{
 public:
 	/** Whether the vbo and ibo contain up-to-date vertex and index data */
 	bool dirty;

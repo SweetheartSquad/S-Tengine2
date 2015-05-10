@@ -8,12 +8,11 @@
 #include <Rectangle.h>
 
 class Mouse;
-class ShiftKiddie;
-
+class Transform;
 
 struct Target{
 	glm::vec3 pos;
-	ShiftKiddie * target;
+	NodeChild * target;
 	float weight;
 	bool active;
 };
@@ -34,9 +33,9 @@ public:
 	/** The orientation quaternian from the last update loop*/
 	glm::quat lastOrientation;
 	
-	void addTarget(ShiftKiddie * _target, float _weight = 0.f);
-	void removeTarget(ShiftKiddie * _target);
-	bool hasTarget(ShiftKiddie * _target);
+	void addTarget(NodeChild * _target, float _weight = 0.f);
+	void removeTarget(NodeChild * _target);
+	bool hasTarget(NodeChild * _target);
 
 	// Things to follow
 	std::vector<Target> targets;

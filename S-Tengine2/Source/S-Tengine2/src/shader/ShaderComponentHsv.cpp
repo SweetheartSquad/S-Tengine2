@@ -6,14 +6,14 @@
 #include <RenderOptions.h>
 #include <shader\Shader.h>
 
-#include <glew\glew.h>
-
-
 ShaderComponentHsv::ShaderComponentHsv(Shader * _shader, float _hue, float _saturation, float _value):
 	ShaderComponent(_shader),
 	hue(_hue),
 	saturation(_saturation),
-	value(_value)
+	value(_value),
+	hueLoc(-1),
+	satLoc(-1),
+	valLoc(-1)
 {
 }
 
@@ -66,13 +66,22 @@ std::string ShaderComponentHsv::getOutColorMod(){
 
 }
 
+void ShaderComponentHsv::load(){
+	if(!loaded){
+		hueLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_HUE.c_str());
+		satLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_SATURATION.c_str());
+		valLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_VALUE.c_str());
+	}
+	ShaderComponent::load();
+}
+
 void ShaderComponentHsv::configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
 	while(hue > 1.f){
 		hue -= 1.f;
 	}
-	glUniform1f(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_HUE.c_str()), hue);
-	glUniform1f(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_SATURATION.c_str()), saturation);
-	glUniform1f(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_VALUE.c_str()), value);
+	glUniform1f(hueLoc, hue);
+	glUniform1f(satLoc, saturation);
+	glUniform1f(valLoc, value);
 }
 
 void ShaderComponentHsv::setHue(float _hue){

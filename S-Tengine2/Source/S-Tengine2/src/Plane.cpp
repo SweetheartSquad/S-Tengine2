@@ -1,13 +1,14 @@
+#pragma once
+
 #include "Plane.h"
 #include "MeshInterface.h"
 #include "MeshFactory.h"
 
 Plane::Plane(glm::vec3 _center, float _size) :
-	NodeTransformable(new Transform()),
-	MeshEntity(MeshFactory::getPlaneMesh(), transform)
+	MeshEntity(MeshFactory::getPlaneMesh())
 {
-	transform->scale(_size, _size, _size);
-	transform->translate(_center);
+	parents.at(0)->scale(_size, _size, _size);
+	parents.at(0)->translate(_center);
 }
 
 Plane::~Plane(){

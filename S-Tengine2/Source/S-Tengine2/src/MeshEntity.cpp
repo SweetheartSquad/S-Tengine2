@@ -10,16 +10,14 @@
 
 #include <algorithm>
 
-MeshEntity::MeshEntity(MeshInterface * _mesh, Transform * _transform, Shader * _shader):
-	Entity(_transform),
-	NodeTransformable(_transform),
+MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader) :
+	Entity(),
 	NodeRenderable(),
 	mesh(_mesh),
 	shader(_shader)
 {
-	if(mesh != nullptr){
-		++mesh->referenceCount;
-	}
+	++mesh->referenceCount;
+	childTransform->addChild(mesh, false);
 	if(shader != nullptr){
 		++shader->referenceCount;
 	}
@@ -37,31 +35,16 @@ MeshEntity::~MeshEntity(void){
 }
 
 void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	//push transform
-	if(_matrixStack != nullptr && _renderOptions != nullptr){
-		_matrixStack->pushMatrix();
-		_matrixStack->applyMatrix(transform->getModelMatrix());
-	
-		if(_renderOptions->overrideShader == nullptr){
-			_renderOptions->shader = shader;
-		}else{
-			_renderOptions->shader = _renderOptions->overrideShader;
-		}
-		if(mesh != nullptr){
-			mesh->render(_matrixStack, _renderOptions);
-		}
-		//pop transform
-		_matrixStack->popMatrix();
-		Entity::render(_matrixStack, _renderOptions);
+	if(_renderOptions->overrideShader == nullptr){
+		_renderOptions->shader = shader;
+	}else{
+		_renderOptions->shader = _renderOptions->overrideShader;
 	}
+	Entity::render(_matrixStack, _renderOptions);
 }
 
 void MeshEntity::update(Step * _step){
 	Entity::update(_step);
-}
-
-void MeshEntity::removeChildAtIndex(int _index){
-	NodeHierarchical::removeChildAtIndex(_index);
 }
 
 void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
@@ -92,7 +75,7 @@ Shader * MeshEntity::getShader(){
 }
 
 void MeshEntity::setShaderOnChildren(Shader * _shader){
-	for(NodeChild * child : children){
+	for(NodeChild * child : childTransform->children){
 		MeshEntity * me = dynamic_cast<MeshEntity*>(child);
 		if(me != nullptr){
 			me->setShaderOnChildren(_shader);
@@ -132,7 +115,7 @@ void MeshEntity::load(){
 
 vox::Box MeshEntity::calcOverallBoundingBox(){
 	vox::Box res = mesh->calcBoundingBox();
-	for(auto c : children){
+	for(auto c : childTransform->children){
 		MeshEntity * me = dynamic_cast<MeshEntity *>(c);
 		if(me != nullptr){
 			vox::Box t = me->calcOverallBoundingBox();
@@ -147,8 +130,8 @@ vox::Box MeshEntity::calcOverallBoundingBox(){
 	return res;
 }
 
-void MeshEntity::freezeTransformation(){
-	glm::mat4 m = transform->getModelMatrix();
+/*void MeshEntity::freezeTransformation(){
+	glm::mat4 m = parent->getModelMatrix();
 
 	for(auto & v : mesh->vertices){
 		glm::vec4 newV(v.x, v.y, v.z, 0);
@@ -158,5 +141,5 @@ void MeshEntity::freezeTransformation(){
 		v.z = newV.z;
 	}
 	mesh->dirty = true;
-	transform->reset();
-}
+	parent->reset();
+}*/

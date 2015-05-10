@@ -36,8 +36,8 @@ Text::Text(std::string _fontSrc):
 	m = new MeshEntity(new MeshInterface(GL_QUADS, GL_STATIC_DRAW));
 
 	cam.farClip = 1000.f;
-	cam.transform->rotate(90, 0, 1, 0, kWORLD);
-	cam.transform->translate(5.0f, 1.5f, 22.5f);
+	cam.parents.at(0)->rotate(90, 0, 1, 0, kWORLD);
+	cam.parents.at(0)->translate(5.0f, 1.5f, 22.5f);
 	cam.yaw = 90.0f;
 	cam.pitch = 10.0f;
 
@@ -147,8 +147,8 @@ void Text::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions)
 		vox::MatrixStack * ms = new vox::MatrixStack();
 		//ms->applyMatrix(vox::matrixStack);
 		ms->pushMatrix();
-		ms->setProjectionMatrix(cam.getProjectionMatrix());
-		ms->setViewMatrix(cam.getViewMatrix());
+		ms->setProjectionMatrix(&cam.getProjectionMatrix());
+		ms->setViewMatrix(&cam.getViewMatrix());
 		
 		m->update(&vox::step);
 

@@ -39,33 +39,33 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-	matrixStack->setProjectionMatrix(activeCamera->getProjectionMatrix());
-	matrixStack->setViewMatrix(activeCamera->getViewMatrix());
+	_matrixStack->pushMatrix();
+	_matrixStack->resetCurrentMatrix();
+	_matrixStack->setProjectionMatrix(&activeCamera->getProjectionMatrix());
+	_matrixStack->setViewMatrix(&activeCamera->getViewMatrix());
 
     glDisable(GL_DEPTH_TEST);
 	for(std::vector<Entity *> & layer : layers){
 		for(Entity * e : layer){
-			e->render(matrixStack, renderOptions);
+			e->render(_matrixStack, _renderOptions);
 		}
 	}
 	
 	
 	OrthographicCamera cam(-1920.f, 0, 0, 1080.f, -1000.f, 1000.f);
 	
-	matrixStack->setProjectionMatrix(cam.getProjectionMatrix());
-	matrixStack->setViewMatrix(cam.getViewMatrix());
+	_matrixStack->setProjectionMatrix(&cam.getProjectionMatrix());
+	_matrixStack->setViewMatrix(&cam.getViewMatrix());
 
 	for(Entity * e : uiLayer){
-		e->render(matrixStack, renderOptions);
+		e->render(_matrixStack, _renderOptions);
 	}
-}
 
-void LayeredScene::addChild(Entity* _child){
-	std::cout << "LayeredScene::addChild not implemented; call didn't do anything" << std::endl;
+	_matrixStack->popMatrix();
 }
 
 void LayeredScene::removeChild(Entity* _child){
-	Scene::removeChild(_child);
+	childTransform->removeChild(_child);
 	for(std::vector<Entity *> & layer : layers){
 		for(signed long int j = layer.size()-1; j >= 0; --j){
 			if(layer.at(j) == _child){
@@ -77,11 +77,11 @@ void LayeredScene::removeChild(Entity* _child){
 
 
 void LayeredScene::addUIChild(Entity* _child){
-	children.push_back(_child);
+	childTransform->addChild(_child);
 	uiLayer.push_back(_child);
 }
 void LayeredScene::removeUIChild(Entity* _child){
-	Scene::removeChild(_child);
+	childTransform->removeChild(_child);
 	for(signed long int j = uiLayer.size()-1; j >= 0; --j){
 		if(uiLayer.at(j) == _child){
 			uiLayer.erase(uiLayer.begin() + j);
@@ -91,7 +91,7 @@ void LayeredScene::removeUIChild(Entity* _child){
 
 void LayeredScene::addChild(Entity* _child, unsigned long int _layer){
 	if(_layer < numLayers){
-		children.push_back(_child);
+		childTransform->addChild(_child);
 		layers.at(_layer).push_back(_child);
 	}else{
 		std::cout << "Scene does not have a layer " << _layer << std::endl;

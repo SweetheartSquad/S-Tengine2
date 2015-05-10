@@ -15,7 +15,7 @@
     <ClCompile Include="../src/AccelerometerParser.cpp" />
     <ClCompile Include="../src/Arduino.cpp" />
     <ClCompile Include="../src/BitmapFont.cpp" />
-    <ClCompile Include="../src/Box2DDebugDraw.cpp" />
+    <ClCompile Include="..\src\Box2DDebugDrawer.cpp" />
     <ClCompile Include="../src/Box2DMeshEntity.cpp" />
     <ClCompile Include="../src/Box2DSprite.cpp" />
     <ClCompile Include="../src/Box2DSuperSprite.cpp" />
@@ -25,8 +25,6 @@
     <ClCompile Include="../src/Cube.cpp" />
     <ClCompile Include="../src/DepthFrameBuffer.cpp" />
     <ClCompile Include="../src/DirectionalLight.cpp" />
-    <ClCompile Include="../src/Entity.cpp" />
-    <ClCompile Include="../src/FakeAnimation.cpp" />
     <ClCompile Include="../src/FileUtils.cpp" />
     <ClCompile Include="../src/FrameBufferChannel.cpp" />
     <ClCompile Include="../src/FrameBufferInterface.cpp" />
@@ -47,13 +45,10 @@
     <ClCompile Include="../src/node/Node.cpp" />
     <ClCompile Include="../src/node/NodeBox2DBody.cpp" />
     <ClCompile Include="../src/node/NodeChild.cpp" />
-    <ClCompile Include="../src/node/NodeHierarchical.cpp" />
     <ClCompile Include="../src/node/NodeLoadable.cpp" />
-    <ClCompile Include="../src/node/NodeParent.cpp" />
     <ClCompile Include="../src/node/NodeRenderable.cpp" />
     <ClCompile Include="../src/node/NodeResource.cpp" />
     <ClCompile Include="../src/node/NodeSelectable.cpp" />
-    <ClCompile Include="../src/node/ShiftKiddie.cpp" />
     <ClCompile Include="../src/NumberUtils.cpp" />
     <ClCompile Include="../src/OrthographicCamera.cpp" />
     <ClCompile Include="../src/ParticleSystem.cpp" />
@@ -73,7 +68,6 @@
     <ClCompile Include="../src/ResourceManager.cpp" />
     <ClCompile Include="../src/Scene.cpp" />
     <ClCompile Include="../src/Scene2D.cpp" />
-    <ClCompile Include="../src/SceneRoot.cpp" />
     <ClCompile Include="../src/shader/BaseComponentShader.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentBlinn.cpp" />
     <ClCompile Include="../src/shader/BlurShader.cpp" />
@@ -117,11 +111,11 @@
     <ClCompile Include="../src/SceneSplash.cpp" />
     <ClCompile Include="../src/tiny_obj_loader.cc" />
     <ClCompile Include="../src/UILayer.cpp" />
+    <ClCompile Include="..\src\BulletDebugDrawer.cpp" />
     <ClCompile Include="..\src\CharacterUtils.cpp" />
+    <ClCompile Include="..\src\Entity.cpp" />
     <ClCompile Include="..\src\Font.cpp" />
     <ClCompile Include="..\src\Label.cpp" />
-    <ClCompile Include="..\src\BulletDebugDrawer.cpp" />
-    <ClCompile Include="../src/BulletDebugDrawer.cpp" />
     <ClCompile Include="..\src\shader\ShaderComponentText.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -130,7 +124,7 @@
     <ClInclude Include="../include/Animation.h" />
     <ClInclude Include="../include/Arduino.h" />
     <ClInclude Include="../include/BitmapFont.h" />
-    <ClInclude Include="../include/Box2DDebugDraw.h" />
+    <ClInclude Include="..\include\Box2DDebugDrawer.h" />
     <ClInclude Include="../include/Box2DMeshEntity.h" />
     <ClInclude Include="../include/Box2DSprite.h" />
     <ClInclude Include="../include/Box2DSuperSprite.h" />
@@ -141,8 +135,6 @@
     <ClInclude Include="../include/DepthFrameBuffer.h" />
     <ClInclude Include="../include/DirectionalLight.h" />
     <ClInclude Include="../include/Easing.h" />
-    <ClInclude Include="../include/Entity.h" />
-    <ClInclude Include="../include/FakeAnimation.h" />
     <ClInclude Include="../include/FileUtils.h" />
     <ClInclude Include="../include/FrameBufferChannel.h" />
     <ClInclude Include="../include/FrameBufferInterface.h" />
@@ -164,15 +156,11 @@
     <ClInclude Include="../include/node/Node.h" />
     <ClInclude Include="../include/node/NodeBox2DBody.h" />
     <ClInclude Include="../include/node/NodeChild.h" />
-    <ClInclude Include="../include/node/NodeHierarchical.h" />
     <ClInclude Include="../include/node/NodeLoadable.h" />
-    <ClInclude Include="../include/node/NodeParent.h" />
     <ClInclude Include="../include/node/NodeRenderable.h" />
     <ClInclude Include="../include/node/NodeResource.h" />
     <ClInclude Include="../include/node/NodeSelectable.h" />
-    <ClInclude Include="../include/node/NodeTransformable.h" />
     <ClInclude Include="../include/node/NodeUpdatable.h" />
-    <ClInclude Include="../include/node/ShiftKiddie.h" />
     <ClInclude Include="../include/NumberUtils.h" />
     <ClInclude Include="../include/OrthographicCamera.h" />
     <ClInclude Include="../include/ParticleSystem.h" />
@@ -194,7 +182,6 @@
     <ClInclude Include="../include/ResourceManager.h" />
     <ClInclude Include="../include/Scene.h" />
     <ClInclude Include="../include/Scene2D.h" />
-    <ClInclude Include="../include/SceneRoot.h" />
     <ClInclude Include="../include/shader/BaseComponentShader.h" />
     <ClInclude Include="../include/shader/ShaderComponentBlinn.h" />
     <ClInclude Include="../include/shader/BlurShader.h" />
@@ -235,7 +222,9 @@
     <ClInclude Include="../include/shader/ShaderComponentTint.h" />
     <ClInclude Include="../include/TextureSampler.h" />
     <ClInclude Include="../include/Box.h" />
+    <ClInclude Include="..\include\BulletDebugDrawer.h" />
     <ClInclude Include="..\include\CharacterUtils.h" />
+    <ClInclude Include="..\include\Entity.h" />
     <ClInclude Include="..\include\Font.h" />
     <ClInclude Include="..\include\Label.h" />
     <ClInclude Include="..\include\shader\ShaderComponentText.h" />
@@ -245,7 +234,6 @@
     <ClInclude Include="../include/SceneSplash.h" />
     <ClInclude Include="../include/tiny_obj_loader.h" />
     <ClInclude Include="../include/UILayer.h" />
-    <ClInclude Include="../include/BulletDebugDrawer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>
@@ -362,6 +350,7 @@ copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
       <EnablePREfast>false</EnablePREfast>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -376,10 +365,7 @@ copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <PreBuildEvent>
-      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
-copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"
-copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
-  ..\..\..\..\VCProjer\dist\VCProjer.exe "S-Tengine2 - 2012.vcxproj" "S-Tengine2 - 2013.vcxproj"</Command>
+      <Command>  ..\..\..\..\VCProjer\dist\VCProjer.exe "S-Tengine2 - 2012.vcxproj" "S-Tengine2 - 2013.vcxproj"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>
@@ -423,6 +409,7 @@ copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -432,10 +419,7 @@ copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
       <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>copy /Y "$(GLEW_DIR)\bin\Release\Win32\glew32.dll" "$(TargetDir)\glew32.dll"
-copy /Y "$(GLFW_DIR)\lib-msvc120\glfw3.dll" "$(TargetDir)\glfw3.dll"
-copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
-..\..\..\..\VCProjer\dist\VCProjer.exe "S-Tengine2 - 2012.vcxproj" "S-Tengine2 - 2013.vcxproj"</Command>
+      <Command>..\..\..\..\VCProjer\dist\VCProjer.exe "S-Tengine2 - 2012.vcxproj" "S-Tengine2 - 2013.vcxproj"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>

@@ -7,10 +7,6 @@
 #include <algorithm>
 
 FollowCamera::FollowCamera(float _buffer, glm::vec3 _offset, float _deadZoneX, float _deadZoneY, float _deadZoneZ):
-	PerspectiveCamera(),
-	NodeTransformable(new Transform()),
-	//NodeAnimatable(),
-	NodeUpdatable(),
 	buffer(_buffer),
 	lastOrientation(1.f, 0.f, 0.f, 0.f),
 	offset(_offset),
@@ -28,13 +24,13 @@ FollowCamera::~FollowCamera(){
 
 void FollowCamera::update(Step * _step){
 	
-	lastOrientation = transform->getOrientationQuat();
+	lastOrientation = parents.at(0)->getOrientationQuat();
 	glm::quat newOrientation = glm::quat(1.f, 0.f, 0.f, 0.f);
 	newOrientation = glm::rotate(newOrientation, yaw, upVectorLocal);
 	newOrientation = glm::rotate(newOrientation, pitch, rightVectorLocal);
 
 	newOrientation = glm::slerp(lastOrientation, newOrientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
-	transform->setOrientation(newOrientation);
+	parents.at(0)->setOrientation(newOrientation);
 
 	forwardVectorRotated   = newOrientation * forwardVectorLocal;
 	rightVectorRotated	   = newOrientation * rightVectorLocal;
@@ -52,7 +48,7 @@ void FollowCamera::update(Step * _step){
 				targets.erase(targets.begin() + i);
 			}
 		}else{
-			targets.at(i).pos = targets.at(i).target->getPos(false);
+			targets.at(i).pos = targets.at(i).target->getWorldPos();
 		}
 	}
 
@@ -72,16 +68,11 @@ void FollowCamera::update(Step * _step){
 	float screenWidth = targetMaxX - targetMinX;
 	float screenHeight = targetMaxY - targetMinY;
 	
-	//glm::vec3 oldLookAt = lookAtSpot;
-
 	// move camera
-	lookAtSpot.x = targetMinX;// + screenWidth * 0.5f;
-	lookAtSpot.y = targetMinY;// + screenHeight* 0.5f;
+	lookAtSpot.x = targetMinX;
+	lookAtSpot.y = targetMinY;
 	
 	lookAtSpot += offset;
-
-
-	//std::cout << lookAtSpot.x << " " << screenWidth << std::endl;
 	
 	if(useBounds){
 		if(minBounds.height != 0){
@@ -96,7 +87,7 @@ void FollowCamera::update(Step * _step){
 				lookAtSpot.y = minBounds.y;
 			}
 		}
-		//
+
 		if(minBounds.width != 0){
 			if(lookAtSpot.x < minBounds.x){
 				lookAtSpot.x = minBounds.x;
@@ -111,9 +102,6 @@ void FollowCamera::update(Step * _step){
 		}
 	}
 
-
-	//std::cout << lookAtSpot.x << " " << screenWidth << std::endl << std::endl;
-	
 	// calculate zoom and account for FoV (the camera FoV seems to be vertical, so if the screen w > screen h, we need to take the h / the intended aspect ratio)
 	float ar1 = screenWidth/screenHeight;
 	glm::vec2 screenDimensions = vox::getScreenDimensions();
@@ -132,32 +120,28 @@ void FollowCamera::update(Step * _step){
 
 	lookAtSpot += offset;
 
-	//std::cout << lookAtSpot.x << " " << screenWidth << std::endl << std::endl;
-
 	float dist = zoom / (tan(glm::radians(fieldOfView) * 0.5f) * 2.f);
 
 
-	transform->translate(lookAtSpot.x, lookAtSpot.y, dist, false);
-	//transform->translate(offset);
+	parents.at(0)->translate(lookAtSpot.x, lookAtSpot.y, dist, false);
 }
 
-void FollowCamera::addTarget(ShiftKiddie * _target, float _weight){
+void FollowCamera::addTarget(NodeChild * _target, float _weight){
 	Target t;
 	t.target = _target;
 	t.weight = _weight;
 	t.active = true;
 	targets.push_back(t);
 }
-void FollowCamera::removeTarget(ShiftKiddie * _target){
+void FollowCamera::removeTarget(NodeChild * _target){
 	for(signed long int i = targets.size()-1; i >= 0; --i){
 		if(targets.at(i).target == _target){
-			//targets.erase(targets.begin() + i);
 			targets.at(i).active = false;
 		}
 	}
 }
 
-bool FollowCamera::hasTarget(ShiftKiddie * _target){
+bool FollowCamera::hasTarget(NodeChild * _target){
 	for(Target & t : targets){
 		if(t.target == _target){
 			return true;

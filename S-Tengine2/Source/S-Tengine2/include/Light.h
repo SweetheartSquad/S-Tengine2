@@ -1,8 +1,8 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include <Entity.h>
 
-#include "node/ShiftKiddie.h"
+#include <glm/glm.hpp>
 
 enum LightType {
 	kPOINT_LIGHT = 0,
@@ -29,10 +29,13 @@ struct LightData {
 * position, color, ambient coefficient, and attentuation. 
 *
 ****************************************************************************************************/
-class Light abstract : public ShiftKiddie{
+class Light abstract : public Entity{
 public:
 
-	explicit Light(LightType _type, glm::vec3 _position, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff, Transform * _transform = nullptr);
+	virtual void update(Step * _step) override;
+	virtual void unload() override;
+
+	explicit Light(LightType _type, glm::vec3 _intensities, float _ambientCoefficient, float _attenuation, float _cutoff);
 	~Light();
 
 	/**
@@ -44,5 +47,5 @@ public:
 	LightData lastData;
 	glm::vec3 lastPos;
 
-	bool dirty;
+	bool lightDirty;
 };

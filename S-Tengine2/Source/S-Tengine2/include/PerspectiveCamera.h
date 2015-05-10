@@ -20,7 +20,7 @@ public:
 	float interpolation;
 
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
-	void update(Step * _step) override;
+	virtual void update(Step * _step) override;
 	
 	/** The orientation quaternian from the last update loop*/
 	glm::quat lastOrientation;

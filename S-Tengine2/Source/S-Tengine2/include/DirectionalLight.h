@@ -13,7 +13,7 @@
 class DirectionalLight : public Light{
 public:
 
-	DirectionalLight(glm::vec3 _direction, glm::vec3 _intensities, float _ambientCoefficient);
+	DirectionalLight(glm::vec3 _intensities, float _ambientCoefficient);
 	~DirectionalLight();
 
 	bool isKeyLight;
