@@ -54,8 +54,16 @@ public:
 	static MeshInterface * transformIndicator;
 	static BaseComponentShader * transformShader;
 
-	void makeCumulativeModelMatrixDirty(Transform * _parent = nullptr) override;
+
+	
+	bool cumulativeModelMatrixDirty;
+	glm::vec3 worldPos;
+	glm::mat4 cumulativeModelMatrix;
+
+	void makeCumulativeModelMatrixDirty() override;
 	glm::mat4 getCumulativeModelMatrix();
+
+	void addParent(Transform * _parent) override;
 	
 	Transform();
 	virtual ~Transform();

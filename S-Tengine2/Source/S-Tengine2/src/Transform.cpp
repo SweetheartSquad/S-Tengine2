@@ -22,7 +22,10 @@ Transform::Transform():
 	sDirty(true),
 	oDirty(true),
 	mDirty(true),
-	isIdentity(true)
+	isIdentity(true),
+	cumulativeModelMatrixDirty(true),
+	cumulativeModelMatrix(1),
+	worldPos(0)
 {
 	if(staticInit){
 		staticInit = false;
@@ -53,10 +56,10 @@ Transform::~Transform(){
 	//}
 }
 
-void Transform::makeCumulativeModelMatrixDirty(Transform * _parent){
-	NodeChild::makeCumulativeModelMatrixDirty(nullptr);
+void Transform::makeCumulativeModelMatrixDirty(){
+	cumulativeModelMatrixDirty = true;
 	for(NodeChild * child : children){
-		child->makeCumulativeModelMatrixDirty(this);
+		child->makeCumulativeModelMatrixDirty();
 	}
 }
 
@@ -67,11 +70,17 @@ glm::mat4 Transform::getCumulativeModelMatrix(){
 		return getModelMatrix();
 	}
 	if(parents.at(0)->cumulativeModelMatrixDirty){
-		parents.at(0)->cumulativeModelMatrix = parents.at(0)->transform->getCumulativeModelMatrix() * getModelMatrix();
+		parents.at(0)->cumulativeModelMatrix = parents.at(0)->getCumulativeModelMatrix() * getModelMatrix();
 		parents.at(0)->cumulativeModelMatrixDirty = false;
 	}
 	return parents.at(0)->cumulativeModelMatrix;
 }
+
+void Transform::addParent(Transform * _parent){
+	NodeChild::addParent(_parent);
+	makeCumulativeModelMatrixDirty();
+}
+
 
 void Transform::scale(float _scaleX, float _scaleY, float _scaleZ, bool _relative){
 	scale(glm::vec3(_scaleX, _scaleY, _scaleZ), _relative);
@@ -279,7 +288,7 @@ void Transform::removeChildAtIndex(int _index){
 }
 
 unsigned long int Transform::removeChild(NodeChild * _child){
-	for(unsigned long int i = 0; i < children.size(); ++i){
+	for(signed long int i = children.size()-1; i >= 0; --i){
 		if(_child == children.at(i)){
 			children.erase(children.begin() + i);
 			_child->removeParent(this);

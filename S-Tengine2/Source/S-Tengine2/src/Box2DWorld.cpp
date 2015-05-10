@@ -30,7 +30,7 @@ void Box2DWorld::update(Step* _step){
 void Box2DWorld::addToWorld(NodeBox2DBody * _nodeBox2D, int _userDataGroup){
 	if(_nodeBox2D->defaultFixture){
 		b2PolygonShape dynamicBox;
-		glm::vec3 sv = _nodeBox2D->parents.at(0)->transform->getScaleVector();
+		glm::vec3 sv = _nodeBox2D->parents.at(0)->getScaleVector();
 		dynamicBox.SetAsBox(1.0f * std::abs(sv.x), 1.0f * std::abs(sv.y));	
 		b2FixtureDef fixtureDef;
 		fixtureDef.shape = &dynamicBox;

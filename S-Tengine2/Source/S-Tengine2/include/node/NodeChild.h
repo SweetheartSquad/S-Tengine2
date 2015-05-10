@@ -1,7 +1,6 @@
 #pragma once
 
 #include <node\Node.h>
-#include <Parent.h>
 #include <glm\glm.hpp>
 #include <vector>
 
@@ -10,9 +9,10 @@ class Transform;
 class NodeChild abstract : public virtual Node{
 public:
 	/** Reference to this node's parents */
-	std::vector<Parent *> parents;
+	std::vector<Transform *> parents;
 
 	explicit NodeChild();
+	virtual void makeCumulativeModelMatrixDirty();
 
 	// Returns whether or not _parent is an ancestor of this node (i.e. is its parent, is its parent's parent, etc.)
 	// If _parent = nullptr, returns false
@@ -22,9 +22,6 @@ public:
 
 	// Loops through the vector of parents and removes the first instance of _parent
 	virtual void removeParent(Transform * _parent);
-
-	
-	virtual void makeCumulativeModelMatrixDirty(Transform * _parent);
 
 	// finds the first non-zero ancestor translation vector in the _parent hierarchy and applies all of the matrices of its ancestors to produce world position
 	// If there is no transformation data (i.e. parent == nullptr), a zero vector is returned

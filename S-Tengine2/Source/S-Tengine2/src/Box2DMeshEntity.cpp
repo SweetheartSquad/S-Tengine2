@@ -23,8 +23,8 @@ b2Fixture * Box2DMeshEntity::createFixture(bool _circle){
 	
 	float scaleX = 1, scaleY = 1;
 	if(parents.size() > 0){
-		scaleX = parents.at(0)->transform->getScaleVector().x;
-		scaleY = parents.at(0)->transform->getScaleVector().y;
+		scaleX = parents.at(0)->getScaleVector().x;
+		scaleY = parents.at(0)->getScaleVector().y;
 	}
 	
 	b2FixtureDef d;

@@ -7,8 +7,8 @@
 Plane::Plane(glm::vec3 _center, float _size) :
 	MeshEntity(MeshFactory::getPlaneMesh())
 {
-	parents.at(0)->transform->scale(_size, _size, _size);
-	parents.at(0)->transform->translate(_center);
+	parents.at(0)->scale(_size, _size, _size);
+	parents.at(0)->translate(_center);
 }
 
 Plane::~Plane(){

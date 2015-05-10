@@ -2,9 +2,12 @@
 
 #include <node\NodeChild.h>
 #include <Transform.h>
-#include <Parent.h>
 
 NodeChild::NodeChild(){
+}
+
+void NodeChild::makeCumulativeModelMatrixDirty(){
+	// do nothing
 }
 
 
@@ -12,32 +15,14 @@ bool NodeChild::hasAncestor(Transform * _parent){
 	if(_parent == nullptr){
 		return false;
 	}
-	for(Parent * p : parents){
-		Transform * t = p->transform;
-		while(t != nullptr){
-			if(t == _parent){
-				return true;
-			}
-			p = t->parents.at(0);
-		}
+	for(Transform * p : parents){
+		Transform * t;
+		do{
+			t = p->parents.at(0);
+		}while(t != nullptr);
 	}
 
 	return false;
-}
-
-void NodeChild::makeCumulativeModelMatrixDirty(Transform * _parent){
-	if(_parent == nullptr){
-		for(unsigned long int i = 0; i < parents.size(); ++i){
-			parents.at(i)->makeCumulativeModelMatrixDirty();
-		}
-	}else{
-		for(unsigned long int i = 0; i < parents.size(); ++i){
-			if(parents.at(i)->transform == _parent){
-				parents.at(i)->makeCumulativeModelMatrixDirty();
-				break;
-			}
-		}
-	}
 }
 
 glm::vec3 NodeChild::getWorldPos(unsigned long int _parent){
@@ -46,22 +31,22 @@ glm::vec3 NodeChild::getWorldPos(unsigned long int _parent){
 		return glm::vec3(0);
 	}
 	
-	Parent * p = parents.at(_parent);
+	Transform * p = parents.at(_parent);
 	// if the cumulative model matrix is out-of-date, then so is the stored world position
 	if(p->cumulativeModelMatrixDirty){
 		// find the first non-zero ancestor translation vector
 		glm::vec3 res(0);
 		do{
-			res = p->transform->getTranslationVector();
-			if(p->transform->parents.size() == 0){
+			res = p->getTranslationVector();
+			if(p->parents.size() == 0){
 				break;
 			}
-			p = p->transform->parents.at(0);
+			p = p->parents.at(0);
 		}while(res == glm::vec3(0));
 
 		// apply the cumulative matrix of its parent to the vector
-		if(p->transform->parents.size() > 0){
-			res = glm::vec3(p->transform->parents.at(0)->transform->getCumulativeModelMatrix() * glm::vec4(res, 1));
+		if(p->parents.size() > 0){
+			res = glm::vec3(p->parents.at(0)->getCumulativeModelMatrix() * glm::vec4(res, 1));
 		}
 
 		parents.at(_parent)->worldPos = res;
@@ -71,14 +56,12 @@ glm::vec3 NodeChild::getWorldPos(unsigned long int _parent){
 }
 
 void NodeChild::addParent(Transform * _parent){
-	parents.push_back(new Parent(_parent));
-	parents.back()->makeCumulativeModelMatrixDirty();
+	parents.push_back(_parent);
 }
 
 void NodeChild::removeParent(Transform * _parent){
 	for(signed long int i = parents.size()-1; i >= 0; --i){
-		if(parents.at(i)->transform == _parent){
-			delete parents.at(i);
+		if(parents.at(i) == _parent){
 			parents.erase(parents.begin() + i);
 			return;
 		}
@@ -121,12 +104,12 @@ void NodeChild::printHierarchy(unsigned long int _startDepth){
 
 unsigned long int NodeChild::calculateDepth(unsigned long int _parent){
 	unsigned long int depth = 0;
-	std::vector<Parent *> * p = &parents;
+	std::vector<Transform *> * p = &parents;
 	if(p->size() > _parent){
-		p = &p->at(_parent)->transform->parents;
+		p = &p->at(_parent)->parents;
 		depth += 1;
 		while(p->size() > 0){
-			p = &p->at(0)->transform->parents;
+			p = &p->at(0)->parents;
 			depth += 1;
 		}
 	}

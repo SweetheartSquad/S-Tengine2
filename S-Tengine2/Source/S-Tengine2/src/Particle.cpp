@@ -24,10 +24,10 @@ void Particle::update(Step * _step){
     if (age > life){
         alive = false;
 	}else{
-		glm::vec3 sv = parents.at(0)->transform->getScaleVector();
+		glm::vec3 sv = parents.at(0)->getScaleVector();
 		sv.x = -Easing::none(age, startSize, deltaSize, life);//1.f - age / life;
 		sv.y = -sv.x;
-		parents.at(0)->transform->scale(sv, false);
+		parents.at(0)->scale(sv, false);
 	}
 }
 

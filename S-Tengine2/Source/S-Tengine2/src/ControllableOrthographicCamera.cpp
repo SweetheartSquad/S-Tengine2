@@ -17,8 +17,8 @@ ControllableOrthographicCamera::~ControllableOrthographicCamera(){
 void ControllableOrthographicCamera::update(Step* _step){
 	OrthographicCamera::update(_step);
 	if(target != nullptr){
-		glm::vec3 targettv = target->parents.at(0)->transform->getTranslationVector();
-		glm::vec3 tv = target->parents.at(0)->transform->getTranslationVector();
+		glm::vec3 targettv = target->parents.at(0)->getTranslationVector();
+		glm::vec3 tv = target->parents.at(0)->getTranslationVector();
 
 		if(targettv.x > (abs(deadZone) + tv.x)){
 			tv.x = targettv.x - deadZone;	
@@ -33,7 +33,7 @@ void ControllableOrthographicCamera::update(Step* _step){
 			tv.y = targettv.y + deadZone;		
 		}
 
-		parents.at(0)->transform->translate(tv, false);
+		parents.at(0)->translate(tv, false);
 	}
 }
 

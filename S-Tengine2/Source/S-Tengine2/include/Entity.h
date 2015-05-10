@@ -13,7 +13,7 @@ class Entity : public virtual NodeUpdatable, public virtual NodeRenderable, publ
 public:
 	explicit Entity();
 	virtual ~Entity(void);
-	void makeCumulativeModelMatrixDirty(Transform * _parent) override;
+	void makeCumulativeModelMatrixDirty() override;
 
 	/**
 	* Pushes model matrix stack,
