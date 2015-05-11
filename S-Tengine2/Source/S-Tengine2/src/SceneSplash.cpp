@@ -60,7 +60,7 @@ SceneSplash::SceneSplash(Game * _game) :
 	fc->farClip = 1000.f;
 	fc->nearClip = 0.001f;
 	fc->parents.at(0)->rotate(90, 0, 1, 0, kWORLD);
-	fc->parents.at(0)->translate(-12.5f, -2.0f, 17.36f);
+	fc->parents.at(0)->translate(-18.5f, -2.0f, 17.36f);
 	fc->yaw = 60.0f;
 	fc->pitch = -4.0f;
 	fc->lastOrientation = fc->calcOrientation();

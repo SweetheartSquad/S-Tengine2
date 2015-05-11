@@ -43,15 +43,15 @@ Transform::Transform():
 }
 
 Transform::~Transform(){
-	//while(children.size() > 0){
-		//NodeResource * nr = dynamic_cast<NodeResource *>(children.back());
-		//if(nr != nullptr){
-		//	nr->decrementAndDelete();
-		//}else{
-		//	delete children.back();
-		//}
-		//children.pop_back();
-	//}
+	while(children.size() > 0){
+		NodeResource * nr = dynamic_cast<NodeResource *>(children.back());
+		if(nr != nullptr){
+			nr->decrementAndDelete();
+		}else{
+			delete children.back();
+		}
+		children.pop_back();
+	}
 }
 
 void Transform::makeCumulativeModelMatrixDirty(){

@@ -24,10 +24,10 @@ MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader) :
 }
 
 MeshEntity::~MeshEntity(void){
-	if(mesh != nullptr){
+	/*if(mesh != nullptr){
 		mesh->decrementAndDelete();
 		mesh = nullptr;
-	}
+	}*/
 	if(shader != nullptr){
 		shader->decrementAndDelete();		
 		shader = nullptr;

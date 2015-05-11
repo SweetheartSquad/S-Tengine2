@@ -45,10 +45,10 @@ Scene::~Scene(void){
 	}
 	activeCamera = nullptr;
 
-	while(lights.size() > 0){
+	/*while(lights.size() > 0){
 		delete lights.back();
 		lights.pop_back();
-	}
+	}*/
 	
 	depthBuffer->safeDelete();
 	shadowBuffer->safeDelete();

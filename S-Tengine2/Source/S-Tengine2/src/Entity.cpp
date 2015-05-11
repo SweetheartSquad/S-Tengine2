@@ -9,13 +9,20 @@
 #include "glew\glew.h"
 
 Entity::Entity() :
-	childTransform(new Transform())
+	childTransform(new Transform()),
+	childTransformExists(true)
 {
 }
 
 Entity::~Entity(void){
-	delete childTransform;
-	childTransform = nullptr;
+	deleteChildTransform();
+}
+
+void Entity::deleteChildTransform(){
+	if(childTransformExists){
+		delete childTransform;
+		childTransformExists = false;
+	}
 }
 
 void Entity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){

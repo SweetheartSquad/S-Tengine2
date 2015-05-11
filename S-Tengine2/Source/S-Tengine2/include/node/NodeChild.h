@@ -12,8 +12,6 @@ public:
 	std::vector<Transform *> parents;
 
 	explicit NodeChild();
-	virtual void makeCumulativeModelMatrixDirty();
-	bool cumulativeModelMatrixDirty;
 
 	// Returns whether or not _parent is an ancestor of this node (i.e. is its parent, is its parent's parent, etc.)
 	// If _parent = nullptr, returns false
@@ -24,6 +22,8 @@ public:
 	virtual void removeParent(Transform * _parent);
 
 	
+	virtual void makeCumulativeModelMatrixDirty();
+	bool cumulativeModelMatrixDirty;
 	glm::vec3 worldPos;
 	// finds the first non-zero ancestor translation vector in the _parent hierarchy and applies all of the matrices of its ancestors to produce world position
 	// If there is no transformation data (i.e. parent == nullptr), a zero vector is returned
