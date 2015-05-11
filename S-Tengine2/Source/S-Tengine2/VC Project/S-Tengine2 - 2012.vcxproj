@@ -112,6 +112,7 @@
     <ClCompile Include="../src/tiny_obj_loader.cc" />
     <ClCompile Include="../src/UILayer.cpp" />
     <ClCompile Include="..\src\BulletDebugDrawer.cpp" />
+    <ClCompile Include="..\src\BulletMeshEntity.cpp" />
     <ClCompile Include="..\src\BulletWorld.cpp" />
     <ClCompile Include="..\src\CharacterUtils.cpp" />
     <ClCompile Include="..\src\Entity.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="../include/TextureSampler.h" />
     <ClInclude Include="../include/Box.h" />
     <ClInclude Include="..\include\BulletDebugDrawer.h" />
+    <ClInclude Include="..\include\BulletMeshEntity.h" />
     <ClInclude Include="..\include\BulletWorld.h" />
     <ClInclude Include="..\include\CharacterUtils.h" />
     <ClInclude Include="..\include\Entity.h" />

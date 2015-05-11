@@ -48,9 +48,10 @@ private:
 	
 	// whether the transform indicator/shader have been initialized
 	static bool staticInit;
+public:
 	// whether to draw the transform indicator on render
 	static bool drawTransforms;
-public:
+
 	static MeshInterface * transformIndicator;
 	static BaseComponentShader * transformShader;
 

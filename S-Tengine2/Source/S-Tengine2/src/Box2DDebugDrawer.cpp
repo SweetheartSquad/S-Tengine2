@@ -75,10 +75,6 @@ Box2DDebugDrawer::Box2DDebugDrawer(Box2DWorld * _world) :
 }
 
 Box2DDebugDrawer::~Box2DDebugDrawer(){
-	delete spriteSegment;
-	delete spriteTransform;
-	delete spriteCircle;
-	delete spritePoly;
 	shader->decrementAndDelete();
 }
 

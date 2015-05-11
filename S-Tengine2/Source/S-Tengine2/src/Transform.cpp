@@ -12,7 +12,7 @@
 MeshInterface * Transform::transformIndicator = nullptr;
 BaseComponentShader * Transform::transformShader = nullptr;
 bool Transform::staticInit = true;
-bool Transform::drawTransforms = true;
+bool Transform::drawTransforms = false;
 
 Transform::Transform():
 	translationVector(0.f, 0.f, 0.f),
