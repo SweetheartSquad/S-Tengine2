@@ -4,14 +4,13 @@
 #include "Vertex.h"
 #include "MeshInterface.h"
 
-MeshInterface* MeshFactory::getCubeMesh(GLenum _polygonalDrawMode, GLenum _drawMode){	
+MeshInterface* MeshFactory::getCubeMesh(float _halfSize, GLenum _polygonalDrawMode, GLenum _drawMode){	
 	QuadMesh * m = new QuadMesh(_polygonalDrawMode, _drawMode);
 	//Top
-	m->pushVert(Vertex(-1.f, 1.f, 1.f));
-	m->pushVert(Vertex(-1.f, 1.f, -1.f));
-	m->pushVert(Vertex(1.f, 1.f, -1.f));
-	m->pushVert(Vertex(1.f, 1.f, 1.f));
-	m->pushQuad(0, 1, 2, 3);
+	m->pushVert(Vertex(-_halfSize, _halfSize, _halfSize));
+	m->pushVert(Vertex(-_halfSize, _halfSize, -_halfSize));
+	m->pushVert(Vertex(_halfSize, _halfSize, -_halfSize));
+	m->pushVert(Vertex(_halfSize, _halfSize, _halfSize));
 	m->setNormal(0, 0.0, 1.0, 0.0);
 	m->setNormal(1, 0.0, 1.0, 0.0);
 	m->setNormal(2, 0.0, 1.0, 0.0);
@@ -22,11 +21,10 @@ MeshInterface* MeshFactory::getCubeMesh(GLenum _polygonalDrawMode, GLenum _drawM
 	m->setUV(3, 1.0, 0.0);
 
 	//Bottom
-	m->pushVert(Vertex(-1.f, -1.f, 1.f));
-	m->pushVert(Vertex(1.f, -1.f, 1.f));
-	m->pushVert(Vertex(1.f, -1.f, -1.f));
-	m->pushVert(Vertex(-1.f, -1.f, -1.f));
-	m->pushQuad(4, 5, 6, 7);
+	m->pushVert(Vertex(-_halfSize, -_halfSize, _halfSize));
+	m->pushVert(Vertex(_halfSize, -_halfSize, _halfSize));
+	m->pushVert(Vertex(_halfSize, -_halfSize, -_halfSize));
+	m->pushVert(Vertex(-_halfSize, -_halfSize, -_halfSize));
 	m->setNormal(4, 0.0, -1.0, 0.0);
 	m->setNormal(5, 0.0, -1.0, 0.0);
 	m->setNormal(6, 0.0, -1.0, 0.0);
@@ -37,11 +35,10 @@ MeshInterface* MeshFactory::getCubeMesh(GLenum _polygonalDrawMode, GLenum _drawM
 	m->setUV(7, 1.0, 0.0);
 
 	//Front
-	m->pushVert(Vertex(-1.f, 1.f, 1.f));
-	m->pushVert(Vertex(1.f, 1.f, 1.f));
-	m->pushVert(Vertex(1.f, -1.f, 1.f));
-	m->pushVert(Vertex(-1.f, -1.f, 1.f));
-	m->pushQuad(8, 9, 10, 11);
+	m->pushVert(Vertex(-_halfSize, _halfSize, _halfSize));
+	m->pushVert(Vertex(_halfSize, _halfSize, _halfSize));
+	m->pushVert(Vertex(_halfSize, -_halfSize, _halfSize));
+	m->pushVert(Vertex(-_halfSize, -_halfSize, _halfSize));
 	m->setNormal(8, 0.0, 0.0, 1.0);
 	m->setNormal(9, 0.0, 0.0, 1.0);
 	m->setNormal(10, 0.0, 0.0, 1.0);
@@ -52,11 +49,10 @@ MeshInterface* MeshFactory::getCubeMesh(GLenum _polygonalDrawMode, GLenum _drawM
 	m->setUV(11, 1.0, 0.0);
 
 	//Back
-	m->pushVert(Vertex(1.f, 1.f, -1.f));
-	m->pushVert(Vertex(-1.f, 1.f, -1.f));
-	m->pushVert(Vertex(-1.f, -1.f, -1.f));
-	m->pushVert(Vertex(1.f, -1.f, -1.f));
-	m->pushQuad(12,13,14,15);
+	m->pushVert(Vertex(_halfSize, _halfSize, -_halfSize));
+	m->pushVert(Vertex(-_halfSize, _halfSize, -_halfSize));
+	m->pushVert(Vertex(-_halfSize, -_halfSize, -_halfSize));
+	m->pushVert(Vertex(_halfSize, -_halfSize, -_halfSize));
 	m->setNormal(12, 0.0, 0.0, -1.0);
 	m->setNormal(13, 0.0, 0.0, -1.0);
 	m->setNormal(14, 0.0, 0.0, -1.0);
@@ -67,11 +63,10 @@ MeshInterface* MeshFactory::getCubeMesh(GLenum _polygonalDrawMode, GLenum _drawM
 	m->setUV(15, 1.0, 0.0);
 
 	//Left
-	m->pushVert(Vertex(-1.f, 1.f, -1.f));
-	m->pushVert(Vertex(-1.f, 1.f, 1.f));
-	m->pushVert(Vertex(-1.f, -1.f, 1.f));
-	m->pushVert(Vertex(-1.f, -1.f, -1.f));
-	m->pushQuad(16,17,18,19);
+	m->pushVert(Vertex(-_halfSize, _halfSize, -_halfSize));
+	m->pushVert(Vertex(-_halfSize, _halfSize, _halfSize));
+	m->pushVert(Vertex(-_halfSize, -_halfSize, _halfSize));
+	m->pushVert(Vertex(-_halfSize, -_halfSize, -_halfSize));
 	m->setNormal(16, -1.0, 0.0, 0.0);
 	m->setNormal(17, -1.0, 0.0, 0.0);
 	m->setNormal(18, -1.0, 0.0, 0.0);
@@ -82,11 +77,10 @@ MeshInterface* MeshFactory::getCubeMesh(GLenum _polygonalDrawMode, GLenum _drawM
 	m->setUV(19, 1.0, 0.0);
 
 	//Right
-	m->pushVert(Vertex(1.f, 1.f, 1.f));
-	m->pushVert(Vertex(1.f, 1.f, -1.f));
-	m->pushVert(Vertex(1.f, -1.f, -1.f));
-	m->pushVert(Vertex(1.f, -1.f, 1.f));
-	m->pushQuad(20, 21, 22, 23);
+	m->pushVert(Vertex(_halfSize, _halfSize, _halfSize));
+	m->pushVert(Vertex(_halfSize, _halfSize, -_halfSize));
+	m->pushVert(Vertex(_halfSize, -_halfSize, -_halfSize));
+	m->pushVert(Vertex(_halfSize, -_halfSize, _halfSize));
 	m->setNormal(20, 1.0, 0.0, 0.0);
 	m->setNormal(21, 1.0, 0.0, 0.0);
 	m->setNormal(22, 1.0, 0.0, 0.0);
@@ -98,12 +92,12 @@ MeshInterface* MeshFactory::getCubeMesh(GLenum _polygonalDrawMode, GLenum _drawM
 	return m;
 }
 
-MeshInterface* MeshFactory::getPlaneMesh(GLenum _polygonalDrawMode, GLenum _drawMode){
+MeshInterface* MeshFactory::getPlaneMesh(float _halfSize, GLenum _polygonalDrawMode, GLenum _drawMode){
 	QuadMesh * m = new QuadMesh(_polygonalDrawMode, _drawMode);
-	m->pushVert(Vertex(-1.f, 1.f, 0.f));
-	m->pushVert(Vertex(1.f, 1.f, 0.f));
-	m->pushVert(Vertex(1.f, -1.f, 0.f));
-	m->pushVert(Vertex(-1.f, -1.f, 0.f));
+	m->pushVert(Vertex(-_halfSize, _halfSize, 0.f));
+	m->pushVert(Vertex(_halfSize, _halfSize, 0.f));
+	m->pushVert(Vertex(_halfSize, -_halfSize, 0.f));
+	m->pushVert(Vertex(-_halfSize, -_halfSize, 0.f));
 	m->setNormal(0, 0.0, 0.0, 1.0);
 	m->setNormal(1, 0.0, 0.0, 1.0);
 	m->setNormal(2, 0.0, 0.0, 1.0);
