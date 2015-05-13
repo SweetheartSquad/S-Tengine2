@@ -4,7 +4,7 @@
 
 BulletMeshEntity::BulletMeshEntity(BulletWorld * _world, MeshInterface * _mesh) :
 	MeshEntity(_mesh),
-	NodeBulletBody(_world, true)
+	NodeBulletBody(_world, false)
 {
 
 }
