@@ -14,10 +14,12 @@ public:
 	NodeBulletBody(BulletWorld * _world, bool _default);
 	~NodeBulletBody();
 
-	void setAsBox(float _halfX = 0.5f, float _halfY = 0.5f, float _halfZ = 0.5f);
-	void setAsSphere(float _radius = 0.5f);
-	void setAsMesh(TriMesh * _colliderMesh, bool _convex);
-	void createRigidBody();
+	void setColliderAsStaticPlane(float _nX = 0.f, float _nY = 1.f, float _nZ = 0.f, float _planeConstant = 0.f);
+	void setColliderAsBox(float _halfX = 0.5f, float _halfY = 0.5f, float _halfZ = 0.5f);
+	void setColliderAsSphere(float _radius = 0.5f);
+	void setColliderAsMesh(TriMesh * _colliderMesh, bool _convex);
+	// a mass of zero makes it static
+	void createRigidBody(float _mass);
 
 	void update(Step * _step) override;
 };
