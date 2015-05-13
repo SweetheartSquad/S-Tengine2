@@ -7,13 +7,14 @@
 class TriMesh;
 
 class NodeBulletBody : public virtual NodeUpdatable, public virtual NodeChild{
-private:
+protected:
 	bool needsToUpdate;
+	btVector3 internalPos;
 public:
 	BulletWorld * world;
 	btRigidBody * body;
 	btCollisionShape * shape;
-	NodeBulletBody(BulletWorld * _world, bool _default);
+	NodeBulletBody(BulletWorld * _world);
 	~NodeBulletBody();
 
 	void setColliderAsStaticPlane(float _normalX = 0.f, float _normalY = 1.f, float _normalZ = 0.f, float _distanceFromOrigin = 0.f);

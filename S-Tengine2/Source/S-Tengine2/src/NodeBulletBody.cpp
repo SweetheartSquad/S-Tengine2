@@ -5,18 +5,13 @@
 #include <Transform.h>
 #include <MeshInterface.h>
 
-NodeBulletBody::NodeBulletBody(BulletWorld * _world, bool _default) :
+NodeBulletBody::NodeBulletBody(BulletWorld * _world) :
 	world(_world),
 	body(nullptr),
 	shape(nullptr),
-	needsToUpdate(true)
+	needsToUpdate(true),
+	internalPos(0,0,0)
 {
-	// right now this just makes a dynamic unit cube with a mass of 1
-	// we'll need to add some stuff to make this properly flexible
-	if(_default){
-		setColliderAsBox();
-		createRigidBody(1);
-	}
 }
 
 NodeBulletBody::~NodeBulletBody(){
@@ -31,9 +26,9 @@ void NodeBulletBody::update(Step * _step){
 	if(body != nullptr){
 		if(body->isActive() || needsToUpdate){
 			btTransform t = body->getWorldTransform();
-			btVector3 pos = t.getOrigin();
+			internalPos = t.getOrigin();
 			btQuaternion angle = t.getRotation();
-			parents.at(0)->translate(pos.x(), pos.y(), pos.z(), false);
+			parents.at(0)->translate(internalPos.x(), internalPos.y(), internalPos.z(), false);
 			
 			/*b2Vec2 lv = body->GetLinearVelocity();
 			if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
@@ -94,11 +89,9 @@ void NodeBulletBody::setColliderAsMesh(TriMesh * _colliderMesh, bool _convex){
 
 void NodeBulletBody::createRigidBody(float _mass){
 	assert(shape != nullptr);
-	btTransform t;
-	t.setIdentity();
-	t.setOrigin(btVector3(0,0,0));
+	btTransform t(btQuaternion(0, 0, 0), internalPos);
 	btMotionState * motion = new btDefaultMotionState(t);
-	btVector3 inertia(0,0,0);
+	btVector3 inertia(0, 0, 0);
 	if(_mass != 0 && !shape->isConcave()){
 		shape->calculateLocalInertia(_mass, inertia);
 	}
