@@ -8,7 +8,8 @@
 NodeBulletBody::NodeBulletBody(BulletWorld * _world, bool _default) :
 	world(_world),
 	body(nullptr),
-	shape(nullptr)
+	shape(nullptr),
+	needsToUpdate(true)
 {
 	// right now this just makes a dynamic unit cube with a mass of 1
 	// we'll need to add some stuff to make this properly flexible
@@ -28,7 +29,7 @@ NodeBulletBody::~NodeBulletBody(){
 
 void NodeBulletBody::update(Step * _step){
 	if(body != nullptr){
-		if(body->isActive()){
+		if(body->isActive() || needsToUpdate){
 			btTransform t = body->getWorldTransform();
 			btVector3 pos = t.getOrigin();
 			btQuaternion angle = t.getRotation();
@@ -44,13 +45,15 @@ void NodeBulletBody::update(Step * _step){
 			body->SetLinearVelocity(lv);*/
 			
 			parents.at(0)->setOrientation(glm::quat(angle.w(), angle.x(), angle.y(), angle.z()));
+
+			needsToUpdate = false;
 		}
 	}
 }
 
-void NodeBulletBody::setColliderAsStaticPlane(float _nX, float _nY, float _nZ, float _planeConstant){
+void NodeBulletBody::setColliderAsStaticPlane(float _normalX, float _normalY, float _normalZ, float _distanceFromOrigin){
 	assert(shape == nullptr);
-	shape = new btStaticPlaneShape(btVector3(_nX, _nY, _nZ), _planeConstant);
+	shape = new btStaticPlaneShape(btVector3(_normalX, _normalY, _normalZ), _distanceFromOrigin);
 }
 
 void NodeBulletBody::setColliderAsBox(float _halfX, float _halfY, float _halfZ){
