@@ -14,6 +14,24 @@ BulletWorld::BulletWorld() :
 }
 
 BulletWorld::~BulletWorld(){
+	// remove and delete constraints
+	for (signed long int i = world->getNumConstraints()-1; i >= 0; i--){
+		btTypedConstraint * constraint = world->getConstraint(i);
+		world->removeConstraint(constraint);
+		delete constraint;
+	}
+
+	// remove the and delete rigidbodies/motionstates
+	for (signed long int i = world->getNumCollisionObjects()-1; i >= 0; i--){
+		btCollisionObject * obj = world->getCollisionObjectArray()[i];
+		btRigidBody * body = btRigidBody::upcast(obj);
+		if (body && body->getMotionState()){
+			delete body->getMotionState();
+		}
+		world->removeCollisionObject(obj);
+		delete obj;
+	}
+
 	delete world;
 	delete solver;
 	delete broadphase;
