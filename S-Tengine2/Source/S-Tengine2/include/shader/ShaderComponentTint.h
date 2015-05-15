@@ -14,7 +14,7 @@ public:
 	void setGreen(float _g);
 	void setBlue(float _b);
 
-	// all values are given as 0 - 1, h += hue, s *= sat, v *= val, a *= alpha
+	// all values are added to the rgb of the fragColor (negative can be used too)
 	ShaderComponentTint(Shader * _shader, float _r, float _g, float _b);
 	~ShaderComponentTint();
 	
