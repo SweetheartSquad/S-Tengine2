@@ -98,4 +98,5 @@ void NodeBulletBody::createRigidBody(float _mass){
 	btRigidBody::btRigidBodyConstructionInfo info(_mass, motion, shape, inertia);
 	body = new btRigidBody(info);
 	world->world->addRigidBody(body);
+	body->setUserPointer(this);
 }
