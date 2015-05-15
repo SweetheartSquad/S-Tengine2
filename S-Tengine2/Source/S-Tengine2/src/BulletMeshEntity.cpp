@@ -23,8 +23,8 @@ void BulletMeshEntity::setColliderAsBoundingBox(){
 	setColliderAsBox(bb.width*0.5f, bb.height*0.5f, bb.depth*0.5f);
 	
 	// this moves the mesh so that it is on top of the collider, and then sets the collider position to be where the mesh was
-	childTransform->translate(-bb.x - bb.width*0.5f, -bb.y - bb.height*0.5f, bb.z - bb.depth*0.5f);
-	internalPos.setValue(-bb.x - bb.width*0.5f, -bb.y - bb.height*0.5f, bb.z - bb.depth*0.5f);
+	childTransform->translate(-bb.x - bb.width*0.5f, -bb.y - bb.height*0.5f, -bb.z - bb.depth*0.5f);
+	internalPos.setValue(bb.x + bb.width*0.5f, bb.y + bb.height*0.5f, bb.z + bb.depth*0.5f);
 }
 
 void BulletMeshEntity::setColliderAsBoundingSphere(bool _encompassBox){
@@ -33,6 +33,6 @@ void BulletMeshEntity::setColliderAsBoundingSphere(bool _encompassBox){
 	setColliderAsSphere(diameter*0.5f);
 
 	// this moves the mesh so that it is on top of the collider, and then sets the collider position to be where the mesh was
-	childTransform->translate(-bb.x - bb.width*0.5f, -bb.y - bb.height*0.5f, bb.z - bb.depth*0.5f);
-	internalPos.setValue(bb.x + bb.width*0.5f, bb.y + bb.height*0.5f, -bb.z + bb.depth*0.5f);
+	childTransform->translate(-bb.x - bb.width*0.5f, -bb.y - bb.height*0.5f, -bb.z - bb.depth*0.5f);
+	internalPos.setValue(bb.x + bb.width*0.5f, bb.y + bb.height*0.5f, bb.z + bb.depth*0.5f);
 }
