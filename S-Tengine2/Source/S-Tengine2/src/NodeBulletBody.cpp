@@ -87,7 +87,7 @@ void NodeBulletBody::setColliderAsMesh(TriMesh * _colliderMesh, bool _convex){
 	}
 }
 
-void NodeBulletBody::createRigidBody(float _mass){
+void NodeBulletBody::createRigidBody(float _mass, unsigned short int _collisionGroup, unsigned short int _collisionMask){
 	assert(shape != nullptr);
 	btTransform t(btQuaternion(0, 0, 0), internalPos);
 	btMotionState * motion = new btDefaultMotionState(t);
@@ -97,6 +97,6 @@ void NodeBulletBody::createRigidBody(float _mass){
 	}
 	btRigidBody::btRigidBodyConstructionInfo info(_mass, motion, shape, inertia);
 	body = new btRigidBody(info);
-	world->world->addRigidBody(body);
+	world->world->addRigidBody(body, _collisionGroup, _collisionMask);
 	body->setUserPointer(this);
 }

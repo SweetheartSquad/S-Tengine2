@@ -22,7 +22,7 @@ public:
 	void setColliderAsSphere(float _radius = 0.5f);
 	void setColliderAsMesh(TriMesh * _colliderMesh, bool _convex);
 	// a mass of zero makes it static
-	void createRigidBody(float _mass);
+	void createRigidBody(float _mass, unsigned short int _collisionGroup = -1, unsigned short int _collisionMask = -1);
 
 	void update(Step * _step) override;
 };
