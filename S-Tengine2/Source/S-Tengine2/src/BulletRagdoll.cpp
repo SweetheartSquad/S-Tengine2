@@ -102,6 +102,9 @@ BulletRagdoll::BulletRagdoll(BulletWorld * _world){
 	float quarterpi = halfpi*0.5f;
 
 	// neck
+	frame1.setIdentity(); frame2.setIdentity();
+	frame1.getBasis().setEulerZYX(0, 0, 0);
+	frame2.getBasis().setEulerZYX(0, 0, 0);
 	frame1.setOrigin(btVector3(0,6,0));
 	frame2.setOrigin(btVector3(0,-3,0));
 	coneConstraint = new btConeTwistConstraint(*body->body, *head->body, frame1, frame2);
@@ -109,18 +112,22 @@ BulletRagdoll::BulletRagdoll(BulletWorld * _world){
 	_world->world->addConstraint(coneConstraint, true);
 	
 	// left hip
+	frame1.setIdentity(); frame2.setIdentity();
+	frame1.getBasis().setEulerZYX(0, halfpi, 0);
+	frame2.getBasis().setEulerZYX(0, halfpi, 0);
 	frame1.setOrigin(btVector3(2,-5,0));
 	frame2.setOrigin(btVector3(0,-3,0));
-	//frame2.setRotation(btQuaternion(0, halfpi, 0));
 	coneConstraint = new btConeTwistConstraint(*body->body, *upperlegLeft->body, frame1, frame2);
 	coneConstraint->setLimit(quarterpi, quarterpi, 0);
 	//coneConstraint->setLimit(0.001, 0.001, 0);
 	_world->world->addConstraint(coneConstraint, true);
 
 	// right hip
+	frame1.setIdentity(); frame2.setIdentity();
+	frame1.getBasis().setEulerZYX(0, halfpi, 0);
+	frame2.getBasis().setEulerZYX(0, halfpi, 0);
 	frame1.setOrigin(btVector3(-2,-5,0));
 	frame2.setOrigin(btVector3(0,-3,0));
-	//frame2.setRotation(btQuaternion(0, halfpi, 0));
 	coneConstraint = new btConeTwistConstraint(*body->body, *upperlegRight->body, frame1, frame2);
 	coneConstraint->setLimit(quarterpi, quarterpi, 0);
 	//coneConstraint->setLimit(0.001, 0.001, 0);
@@ -137,18 +144,22 @@ BulletRagdoll::BulletRagdoll(BulletWorld * _world){
 	_world->world->addConstraint(hingeConstraint, true);
 	
 	// left shoulder
+	frame1.setIdentity(); frame2.setIdentity();
+	frame1.getBasis().setEulerZYX(0, halfpi, 0);
+	frame2.getBasis().setEulerZYX(0, halfpi, 0);
 	frame1.setOrigin(btVector3(4,5,0));
 	frame2.setOrigin(btVector3(0,-3,0));
-	frame2.setRotation(btQuaternion(0, halfpi, 0));
 	coneConstraint = new btConeTwistConstraint(*body->body, *upperarmLeft->body, frame1, frame2);
 	coneConstraint->setLimit(halfpi, halfpi, 0);
 	//coneConstraint->setLimit(0.001, 0.001, 0);
 	_world->world->addConstraint(coneConstraint, true);
 
 	// right shoulder
+	frame1.setIdentity(); frame2.setIdentity();
+	frame1.getBasis().setEulerZYX(0, halfpi, 0);
+	frame2.getBasis().setEulerZYX(0, halfpi, 0);
 	frame1.setOrigin(btVector3(-4,5,0));
 	frame2.setOrigin(btVector3(0,-3,0));
-	//frame2.setRotation(btQuaternion(0, halfpi, 0));
 	coneConstraint = new btConeTwistConstraint(*body->body, *upperarmRight->body, frame1, frame2);
 	coneConstraint->setLimit(halfpi, halfpi, 0);
 	//coneConstraint->setLimit(0.001, 0.001, 0);
