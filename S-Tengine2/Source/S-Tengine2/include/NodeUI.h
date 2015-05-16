@@ -4,9 +4,11 @@
 #include <Entity.h>
 
 class Scene;
+class Mouse;
 
 class NodeUI : public virtual NodeBulletBody, public virtual Entity{
 private:
+	Mouse * mouse;
 	// Whether the button is under the mouse
 	bool isHovered;
 	// Whether the mouse clicked the button (and hasn't been released)

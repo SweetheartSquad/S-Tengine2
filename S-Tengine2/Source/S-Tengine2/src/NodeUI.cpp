@@ -3,13 +3,15 @@
 #include <NodeUI.h>
 #include <Scene.h>
 #include <Camera.h>
+#include <Mouse.h>
 
 NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	NodeBulletBody(_world),
 	scene(_scene),
 	isHovered(false),
 	isDown(false),
-	isActive(false)
+	isActive(false),
+	mouse(&Mouse::getInstance())
 {
 
 }
@@ -57,14 +59,22 @@ void NodeUI::update(Step * _step){
 	rayto.setIdentity(); rayto.setOrigin(rayend);
 	btCollisionWorld::AllHitsRayResultCallback raycb(raystart, rayend);
 	world->world->rayTestSingle(rayfrom, rayto, body, shape, body->getWorldTransform(), raycb);
-
+	
+	
 	if(raycb.hasHit()){
 		if(!isHovered){
 			in();
+		}if(mouse->leftJustPressed()){
+			down();
+		}else if(mouse->leftJustReleased()){
+			up();
 		}
 	}else{
 		if(isHovered){
 			out();
+		}
+		if(isDown && mouse->leftJustReleased()){
+			isDown = false;
 		}
 	}
 
@@ -73,10 +83,12 @@ void NodeUI::update(Step * _step){
 }
 
 void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	if(isDown){
-		renderDown(_matrixStack, _renderOptions);
-	}else if(isHovered){
-		renderOver(_matrixStack, _renderOptions);
+	if(isHovered){
+		if(isDown){
+			renderDown(_matrixStack, _renderOptions);
+		}else{
+			renderOver(_matrixStack, _renderOptions);
+		}
 	}else if(isActive){
 		renderActive(_matrixStack, _renderOptions);
 	}else{
