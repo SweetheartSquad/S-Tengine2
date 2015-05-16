@@ -102,30 +102,32 @@ SceneSplash::~SceneSplash(){
 
 void SceneSplash::update(Step * _step){
 	float b;
-	if(_step->time-2 < 2){
-		b = Easing::easeInQuad(std::max(0.0, _step->time-2), 0, 1, 2) - std::rand() % 100 / 1000.f;
+	// how much time to show just black at the start
+	float buffer = 2;
+	if(_step->time-buffer < 4){
+		b = Easing::easeInQuint(std::max(0.0, _step->time-buffer), 0, 1, 4) - std::rand() % 100 / 1000.f;
 	}else{
-		b = Easing::easeOutQuad(std::max(0.0, _step->time - 9), 1, -1, 1) - std::rand() % 100 / 1000.f;
+		b = Easing::easeOutQuad(std::max(0.0, _step->time -buffer - 9.5), 1, -1, 1) - std::rand() % 100 / 1000.f;
 	}
 
-	float thing = std::rand() % 100 / 10000.f;
+	float thing = std::rand() % 50 / 10000.f;
 
-	if (_step->time <= 7){
-		screenSurface->vertices.at(0).v = thing + Easing::easeOutCubic(std::min(6.0, _step->time), 0, -50, 6) + 1;
-		screenSurface->vertices.at(1).v = thing + Easing::easeOutCubic(std::min(6.0, _step->time), 0, -50, 6) + 1;
-		screenSurface->vertices.at(2).v = thing + Easing::easeOutCubic(std::min(6.0, _step->time), 0, -50, 6);
-		screenSurface->vertices.at(3).v = thing + Easing::easeOutCubic(std::min(6.0, _step->time), 0, -50, 6);
+	if (_step->time-buffer <= 7){
+		screenSurface->vertices.at(0).v = thing + Easing::easeOutCubic(std::min(6.0, _step->time-buffer), 0, -50, 6) + 1;
+		screenSurface->vertices.at(1).v = thing + Easing::easeOutCubic(std::min(6.0, _step->time-buffer), 0, -50, 6) + 1;
+		screenSurface->vertices.at(2).v = thing + Easing::easeOutCubic(std::min(6.0, _step->time-buffer), 0, -50, 6);
+		screenSurface->vertices.at(3).v = thing + Easing::easeOutCubic(std::min(6.0, _step->time-buffer), 0, -50, 6);
 	}else{
-		screenSurface->vertices.at(0).v = thing + Easing::easeInCubic(std::max(0.0, _step->time - 8), 0, -25, 2) + 1;
-		screenSurface->vertices.at(1).v = thing + Easing::easeInCubic(std::max(0.0, _step->time - 8), 0, -25, 2) + 1;
-		screenSurface->vertices.at(2).v = thing + Easing::easeInCubic(std::max(0.0, _step->time - 8), 0, -25, 2);
-		screenSurface->vertices.at(3).v = thing + Easing::easeInCubic(std::max(0.0, _step->time - 8), 0, -25, 2);
+		screenSurface->vertices.at(0).v = thing + Easing::easeInQuint(std::max(0.0, _step->time-buffer - 8), 0, -25, 2.5) + 1;
+		screenSurface->vertices.at(1).v = thing + Easing::easeInQuint(std::max(0.0, _step->time-buffer - 8), 0, -25, 2.5) + 1;
+		screenSurface->vertices.at(2).v = thing + Easing::easeInQuint(std::max(0.0, _step->time-buffer - 8), 0, -25, 2.5);
+		screenSurface->vertices.at(3).v = thing + Easing::easeInQuint(std::max(0.0, _step->time-buffer - 8), 0, -25, 2.5);
 	}
 	screenSurface->dirty = true;
 
 	hsvComponent->setValue(b);
 
-	if(_step->time > 10){
+	if(_step->time-buffer > 10.5){
 		game->switchScene(nextScene, true);
 	}
 
