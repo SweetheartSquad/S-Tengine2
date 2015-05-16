@@ -16,7 +16,7 @@ class Sprite;
 class SceneSplash : public Scene{
 public:
 	BaseComponentShader * shader;
-	ShaderComponentHsv * hsvShader;
+	ShaderComponentHsv * hsvComponent;
 	
 	Shader * screenSurfaceShader;
 	RenderSurface * screenSurface;

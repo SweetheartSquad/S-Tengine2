@@ -110,6 +110,15 @@ void RenderSurface::render(GLuint _textureId, GLint _renderTo){
 
 				clean();
 
+				// we might need to try and optimize this bit
+				if(scaleModeMin == GL_NEAREST_MIPMAP_NEAREST
+					|| scaleModeMin == GL_LINEAR_MIPMAP_NEAREST
+					|| scaleModeMin == GL_NEAREST_MIPMAP_LINEAR
+					|| scaleModeMin == GL_LINEAR_MIPMAP_LINEAR
+					){
+					glGenerateMipmap(GL_TEXTURE_2D);
+				}
+
 				// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
 				glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
 
