@@ -113,34 +113,36 @@ BulletRagdoll::BulletRagdoll(BulletWorld * _world){
 	
 	// left hip
 	frame1.setIdentity(); frame2.setIdentity();
-	frame1.getBasis().setEulerZYX(0, halfpi, 0);
-	frame2.getBasis().setEulerZYX(0, halfpi, 0);
+	frame1.getBasis().setEulerZYX(0, 0, 0);
+	frame2.getBasis().setEulerZYX(0, 0, 0);
 	frame1.setOrigin(btVector3(2,-5,0));
-	frame2.setOrigin(btVector3(0,-3,0));
+	frame2.setOrigin(btVector3(0,3,0));
 	coneConstraint = new btConeTwistConstraint(*body->body, *upperlegLeft->body, frame1, frame2);
-	coneConstraint->setLimit(quarterpi, quarterpi, 0);
-	//coneConstraint->setLimit(0.001, 0.001, 0);
+	//coneConstraint->setLimit(quarterpi, quarterpi, 0);
+	coneConstraint->setLimit(0, 0, 0);
 	_world->world->addConstraint(coneConstraint, true);
 
 	// right hip
 	frame1.setIdentity(); frame2.setIdentity();
-	frame1.getBasis().setEulerZYX(0, halfpi, 0);
-	frame2.getBasis().setEulerZYX(0, halfpi, 0);
+	frame1.getBasis().setEulerZYX(0, 0, 0);
+	frame2.getBasis().setEulerZYX(0, 0, 0);
 	frame1.setOrigin(btVector3(-2,-5,0));
-	frame2.setOrigin(btVector3(0,-3,0));
+	frame2.setOrigin(btVector3(0,3,0));
 	coneConstraint = new btConeTwistConstraint(*body->body, *upperlegRight->body, frame1, frame2);
-	coneConstraint->setLimit(quarterpi, quarterpi, 0);
-	//coneConstraint->setLimit(0.001, 0.001, 0);
+	//coneConstraint->setLimit(quarterpi, quarterpi, 0);
+	coneConstraint->setLimit(0, 0, 0);
 	_world->world->addConstraint(coneConstraint, true);
 
 	// left knee
-	hingeConstraint = new btHingeConstraint(*upperlegLeft->body, *lowerlegLeft->body, btVector3(0,3,0), btVector3(0,-3,0), btVector3(1, 0, 0), btVector3(1, 0, 0), false); 
-	hingeConstraint->setLimit(0, halfpi);
+	hingeConstraint = new btHingeConstraint(*upperlegLeft->body, *lowerlegLeft->body, btVector3(0,-3,0), btVector3(0,3,0), btVector3(-1, 0, 0), btVector3(-1, 0, 0), false); 
+	hingeConstraint->setLimit(0, pi*0.8f);
+	//hingeConstraint->enableAngularMotor(true, 10, 10);
 	_world->world->addConstraint(hingeConstraint, true);
 	
 	// right knee
-	hingeConstraint = new btHingeConstraint(*upperlegRight->body, *lowerlegRight->body, btVector3(0,3,0), btVector3(0,-3,0), btVector3(1, 0, 0), btVector3(1, 0, 0), false); 
-	hingeConstraint->setLimit(0, halfpi);
+	hingeConstraint = new btHingeConstraint(*upperlegRight->body, *lowerlegRight->body, btVector3(0,-3,0), btVector3(0,3,0), btVector3(-1, 0, 0), btVector3(-1, 0, 0), false); 
+	hingeConstraint->setLimit(0, pi*0.8f);
+	//hingeConstraint->enableAngularMotor(true, 10, 10);
 	_world->world->addConstraint(hingeConstraint, true);
 	
 	// left shoulder
@@ -148,7 +150,7 @@ BulletRagdoll::BulletRagdoll(BulletWorld * _world){
 	frame1.getBasis().setEulerZYX(0, halfpi, 0);
 	frame2.getBasis().setEulerZYX(0, halfpi, 0);
 	frame1.setOrigin(btVector3(4,5,0));
-	frame2.setOrigin(btVector3(0,-3,0));
+	frame2.setOrigin(btVector3(0,3,0));
 	coneConstraint = new btConeTwistConstraint(*body->body, *upperarmLeft->body, frame1, frame2);
 	coneConstraint->setLimit(halfpi, halfpi, 0);
 	//coneConstraint->setLimit(0.001, 0.001, 0);
@@ -159,7 +161,7 @@ BulletRagdoll::BulletRagdoll(BulletWorld * _world){
 	frame1.getBasis().setEulerZYX(0, halfpi, 0);
 	frame2.getBasis().setEulerZYX(0, halfpi, 0);
 	frame1.setOrigin(btVector3(-4,5,0));
-	frame2.setOrigin(btVector3(0,-3,0));
+	frame2.setOrigin(btVector3(0,3,0));
 	coneConstraint = new btConeTwistConstraint(*body->body, *upperarmRight->body, frame1, frame2);
 	coneConstraint->setLimit(halfpi, halfpi, 0);
 	//coneConstraint->setLimit(0.001, 0.001, 0);
@@ -167,12 +169,12 @@ BulletRagdoll::BulletRagdoll(BulletWorld * _world){
 	
 	
 	// left elbow
-	hingeConstraint = new btHingeConstraint(*upperarmLeft->body, *lowerarmLeft->body, btVector3(0,3,0), btVector3(0,-3,0), btVector3(1, 0, 0), btVector3(1, 0, 0), false); 
+	hingeConstraint = new btHingeConstraint(*upperarmLeft->body, *lowerarmLeft->body, btVector3(0,-3,0), btVector3(0,3,0), btVector3(1, 0, 0), btVector3(1, 0, 0), false); 
 	hingeConstraint->setLimit(0, halfpi);
 	_world->world->addConstraint(hingeConstraint, true);
 
 	// right elbow
-	hingeConstraint = new btHingeConstraint(*upperarmRight->body, *lowerarmRight->body, btVector3(0,3,0), btVector3(0,-3,0), btVector3(1, 0, 0), btVector3(1, 0, 0), false); 
+	hingeConstraint = new btHingeConstraint(*upperarmRight->body, *lowerarmRight->body, btVector3(0,-3,0), btVector3(0,3,0), btVector3(1, 0, 0), btVector3(1, 0, 0), false); 
 	hingeConstraint->setLimit(0, halfpi);
 	_world->world->addConstraint(hingeConstraint, true);
 
