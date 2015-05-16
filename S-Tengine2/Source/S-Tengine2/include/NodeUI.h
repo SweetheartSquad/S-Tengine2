@@ -7,7 +7,7 @@ class Scene;
 class Mouse;
 
 class NodeUI : public virtual NodeBulletBody, public virtual Entity{
-private:
+protected:
 	Mouse * mouse;
 	// Whether the button is under the mouse
 	bool isHovered;
