@@ -84,6 +84,10 @@ void Transform::scale(float _scaleX, float _scaleY, float _scaleZ, bool _relativ
 	scale(glm::vec3(_scaleX, _scaleY, _scaleZ), _relative);
 }
 
+void Transform::scale(float _scale, bool _relative){
+	scale(glm::vec3(_scale, _scale, _scale), _relative);
+}
+
 void Transform::scale(glm::vec3 _scale, bool relative){
 	if(relative){
 		scaleVector *= _scale;

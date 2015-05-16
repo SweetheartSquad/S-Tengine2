@@ -74,6 +74,12 @@ public:
 	void scale(float _scaleX, float _scaleY, float _scaleZ, bool relative = true);
 	
 	/** 
+	* Multiplies each dimension of the scale vector by _scale 
+	  If relative = false, sets the scale to the provided value
+	*/
+	void scale(float _scale, bool relative = true);
+
+	/** 
 	* Multiplies the scale vector by _scale 
 	  If relative = false, sets the scale to the provided values
 	*/
