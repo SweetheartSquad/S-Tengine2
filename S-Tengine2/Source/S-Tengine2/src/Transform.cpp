@@ -196,6 +196,12 @@ void Transform::update(Step * _step){
 
 
 void Transform::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// don't bother doing any work if we aren't rendering anyway
+	if(!visible){
+		return;
+	}
+
+
 	// save previous matrix state
 	_matrixStack->pushMatrix();
 	// apply the transform's matrix
@@ -206,7 +212,7 @@ void Transform::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderO
 	// render all of the transform's children
 	for(unsigned long int i = 0; i < children.size(); i++){
 		NodeRenderable * nr = dynamic_cast<NodeRenderable *>(children.at(i));
-		if(nr != nullptr){
+		if(nr != nullptr && nr->isVisible()){
 			nr->render(_matrixStack, _renderOptions);	
 		}
 	}
