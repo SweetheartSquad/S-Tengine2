@@ -7,6 +7,7 @@
 
 #include "RenderOptions.h"
 #include "MatrixStack.h"
+#include <Box.h>
 
 #include <algorithm>
 
@@ -118,13 +119,7 @@ vox::Box MeshEntity::calcOverallBoundingBox(){
 	for(auto c : childTransform->children){
 		MeshEntity * me = dynamic_cast<MeshEntity *>(c);
 		if(me != nullptr){
-			vox::Box t = me->calcOverallBoundingBox();
-			res.x = std::min(res.x, t.x);
-			res.y = std::min(res.y, t.y);
-			res.z = std::min(res.z, t.z);
-			res.width = std::max(res.x + res.width, t.x+t.width) - res.x;
-			res.height = std::max(res.y + res.height, t.y+t.height) - res.y;
-			res.depth = std::max(res.z + res.depth, t.z+t.depth) - res.z;
+			res = vox::Box::bound(res, me->calcOverallBoundingBox());
 		}
 	}
 	return res;
