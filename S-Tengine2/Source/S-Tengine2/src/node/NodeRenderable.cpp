@@ -2,5 +2,18 @@
 
 #include "node/NodeRenderable.h"
 
-void NodeRenderable::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+NodeRenderable::NodeRenderable() :
+	visible(true)
+{
 }
+
+void NodeRenderable::setVisible(bool _visible){
+	visible = _visible;
+}
+bool NodeRenderable::isVisible(){
+	return visible;
+}
+
+/*void NodeRenderable::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+}
+*/
