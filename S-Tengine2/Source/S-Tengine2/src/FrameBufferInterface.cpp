@@ -1,5 +1,9 @@
-#include "FrameBufferInterface.h"
+#pragma once
+
+#include <FrameBufferInterface.h>
+
 #include <iostream>
+#include <SOIL.h>
 
 FrameBufferInterface::FrameBufferInterface(std::vector<FrameBufferChannel> _frameBufferChannels, unsigned long int _width, unsigned long int _height, bool _autoRelease):
 	NodeResource(_autoRelease),
@@ -134,4 +138,26 @@ GLenum FrameBufferInterface::checkFrameBufferStatus(){
 		break;
 	}
 	return status;
+}
+
+void FrameBufferInterface::saveToFile(const char * _filename, unsigned long int _fbochannel){
+	glBindTexture(GL_TEXTURE_2D, frameBufferChannels.at(_fbochannel).id);
+	GLint textureWidth, textureHeight;
+	unsigned long int bytes;
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &textureWidth);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &textureHeight);
+	bytes = textureWidth*textureHeight*4;
+	
+	GLfloat * pixels = (GLfloat *)malloc(bytes * sizeof(GLfloat));
+	unsigned char * pixelsSOIL = (unsigned char *)malloc(bytes * sizeof(unsigned char));
+
+	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_FLOAT, pixels);
+	
+	for(unsigned long int i = 0; i < bytes; ++i){
+		pixelsSOIL[i] = pixels[i];
+	}
+	
+	SOIL_save_image(_filename, SOIL_SAVE_TYPE_TGA, textureWidth, textureHeight, 4, pixelsSOIL);
+	
+	free(pixels);
 }

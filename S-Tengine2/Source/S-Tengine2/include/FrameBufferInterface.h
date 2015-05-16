@@ -93,4 +93,6 @@ public:
 	* Prints a string representing the status of the framebuffer
 	*/
 	GLenum checkFrameBufferStatus();
+
+	void saveToFile(const char * _filename, unsigned long int _fbochannel);
 };

@@ -18,6 +18,10 @@
 #include "Game.h"
 #include "Sprite.h"
 
+// for screenshots
+#include <SOIL.h>
+#include <ctime>
+
 Scene::Scene(Game * _game):
 	game(_game),
 	mouse(&Mouse::getInstance()),
@@ -57,6 +61,31 @@ Scene::~Scene(void){
 }
 
 void Scene::update(Step * _step){
+	
+	if(keyboard->keyJustUp(GLFW_KEY_F11)){
+		game->toggleFullScreen();
+	}
+
+	if(keyboard->keyJustDown(GLFW_KEY_F12)){
+		std::stringstream filepath;
+		
+		// create a string with the format "../screenshots/YYYY-MM-DD_TTTTTTTTTT.tga"
+		time_t t = time(0);
+		struct tm now;
+		localtime_s(&now, &t);
+		filepath
+			<< "../screenshots/"
+			<< (now.tm_year + 1900)
+			<< '-'
+			<< (now.tm_mon + 1)
+			<< '-'
+			<< now.tm_mday
+			<< '_'
+			<< t
+			<< ".tga";
+		SOIL_save_screenshot(filepath.str().c_str(), SOIL_SAVE_TYPE_TGA, 0, 0, game->viewPortWidth, game->viewPortHeight);
+	}
+
 	activeCamera->update(_step);
 	Entity::update(_step);
 }

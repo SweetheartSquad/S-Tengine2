@@ -132,9 +132,6 @@ void SceneSplash::update(Step * _step){
 		game->switchScene(nextScene, true);
 	}
 
-	if(keyboard->keyJustUp(GLFW_KEY_F11)){
-		game->toggleFullScreen();
-	}
 
 	if(keyboard->keyJustUp(GLFW_KEY_ENTER)){
 		game->switchScene(nextScene, true);

@@ -110,7 +110,6 @@ void RenderSurface::render(GLuint _textureId, GLint _renderTo){
 
 				clean();
 
-				//glDrawArrays(GL_QUADS, 0, vertices2.size());
 				// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
 				glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
 
