@@ -39,7 +39,7 @@ public:
 
 
 	// prints the hierarchy to the console in ASCII
-	virtual void printHierarchy(unsigned long int _startDepth = 0);
+	virtual void printHierarchy(unsigned long int _startDepth = 0) override;
 
 	void deleteChildTransform();
 private:

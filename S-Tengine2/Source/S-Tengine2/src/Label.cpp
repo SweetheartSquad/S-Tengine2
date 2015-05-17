@@ -70,9 +70,15 @@ void Label::updateText(){
 	glm::vec2 offset(0.f, 0.f);
 	textDirty = false;
 
-	while(childTransform->children.size() > 0){
-		delete childTransform->children.back();
-		childTransform->children.pop_back();
+	//while(childTransform->children.size() > 0){
+	//	delete childTransform->children.back();
+	//	childTransform->children.pop_back();
+	//}
+
+	for(unsigned long int i = text.size(); i < childTransform->children.size(); ++i) {
+		Transform * t = dynamic_cast<Transform *>(childTransform->children.at(i));
+		MeshEntity * me = dynamic_cast<MeshEntity *>(t->children.at(0));
+		me->setVisible(false);
 	}
 
 	for(unsigned long int c = 0; c < text.size(); ++c) {
@@ -82,7 +88,7 @@ void Label::updateText(){
 		}else{
 			switch(wrapMode){
 				case CHARACTER_WRAP:
-					updateChar(&offset, ch);
+					updateChar(&offset, c, ch);
 					if(offset.x > width){
 						newLine(&offset);
 					}
@@ -92,19 +98,19 @@ void Label::updateText(){
 						Glyph * nextGlyph = font->getMeshInterfaceForChar(ch);
 						if(offset.x + nextGlyph->advance.x/64> width){
 							if(!CharacterUtils::isSpace(ch)){
-								updateChar(&offset, '-');
+								updateChar(&offset, c, '-');
 							}	
 							newLine(&offset);
-							updateChar(&offset, ch);
+							updateChar(&offset, c, ch);
 						}else {
-							updateChar(&offset, ch);
+							updateChar(&offset, c, ch);
 						}
 						break;
 					}
 				case WORD_WRAP:
 					if(offset.x > width){
 						for(unsigned long int i = 0; i < text.size() && c < text.size(); ++i) {
-							updateChar(&offset, text.at(c));
+							updateChar(&offset, c, text.at(c));
 							if(CharacterUtils::isSpace(text.at(c))){
 								newLine(&offset);
 								break;
@@ -112,7 +118,7 @@ void Label::updateText(){
 							c++;
 						}
 					}else {
-						updateChar(&offset, ch);
+						updateChar(&offset, c, ch);
 					}
 					break;
 				default: break;
@@ -121,11 +127,20 @@ void Label::updateText(){
 	}
 }
 
-void Label::updateChar(glm::vec2 * _offset, wchar_t _c){
+void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
 	Glyph * glyph = font->getMeshInterfaceForChar(_c);
-	MeshEntity * me = new MeshEntity(glyph);
-	me->setShader(shader, true);
-	childTransform->addChild(me)->translate(_offset->x, _offset->y, 0.f);
+	if(childTransform->children.size() > _index){
+		Transform * t = dynamic_cast<Transform *>(childTransform->children.at(_index));
+		t->translate(_offset->x, _offset->y, 0.f, false);
+		MeshEntity * me = dynamic_cast<MeshEntity *>(t->children.at(0));
+		me->setVisible(true);
+		me->mesh = glyph;
+		std::cout<<me->mesh<<"\n";
+	}else {
+		MeshEntity * me = new MeshEntity(glyph);
+		me->setShader(shader, true);
+		childTransform->addChild(me)->translate(_offset->x, _offset->y, 0.f);
+	}
 	_offset->x += glyph->advance.x/64;
 }
 
