@@ -11,7 +11,8 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	isHovered(false),
 	isDown(false),
 	isActive(false),
-	mouse(&Mouse::getInstance())
+	mouse(&Mouse::getInstance()),
+	onDownFunction(nullptr)
 {
 
 }
@@ -22,6 +23,9 @@ void NodeUI::down(){
 	isDown = true;
 	
     // do event stuff
+	if(onDownFunction != nullptr){
+		onDownFunction(this);
+	}
 }
 void NodeUI::up(){
 	isDown = false;
@@ -97,21 +101,21 @@ void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOpti
 }
 
 void NodeUI::renderDown(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	std::cout << "down" << std::endl;
+	//std::cout << "down" << std::endl;
 	renderDefault(_matrixStack, _renderOptions);
 }
 
 void NodeUI::renderOver(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	std::cout << "over" << std::endl;
+	//std::cout << "over" << std::endl;
 	renderDefault(_matrixStack, _renderOptions);
 }
 
 void NodeUI::renderActive(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	std::cout << "active" << std::endl;
+	//std::cout << "active" << std::endl;
 	renderDefault(_matrixStack, _renderOptions);
 }
 
 void NodeUI::renderDefault(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	std::cout << "default" << std::endl;
+	//std::cout << "default" << std::endl;
 	Entity::render(_matrixStack, _renderOptions);
 }

@@ -27,6 +27,10 @@ protected:
 public:
 	Scene * scene;
 
+	
+	void (*onDownFunction)(NodeUI * _this);
+	//void (*onUpFunction)();
+
 	NodeUI(BulletWorld * _world, Scene * _scene);
 
 	virtual void update(Step * _step) override;
