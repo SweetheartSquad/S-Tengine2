@@ -11,6 +11,7 @@ class ShaderComponentHsv;
 class RenderSurface;
 class StandardFrameBuffer;
 class Sprite;
+class Label;
 
 
 class SceneSplash : public Scene{
@@ -32,6 +33,7 @@ public:
 	UILayer uiLayer;
 	Sprite * mouseIndicator;
 	MeshEntity * logo;
+	Label * textThing;
 
 	SceneSplash(Game * _game);
 	~SceneSplash();
