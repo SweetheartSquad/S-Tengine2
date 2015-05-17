@@ -13,7 +13,7 @@
 
 ShaderComponentText::ShaderComponentText(Shader * _shader) :
 	ShaderComponent(_shader),
-	color(0, 0, 1),
+	color(1, 1, 1),
 	texNumLoc(-1),
 	texColLoc(-1),
 	texSamLoc(-1)
