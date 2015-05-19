@@ -57,6 +57,7 @@ Label::~Label(){
 }
 
 void Label::appendText(std::wstring _text){
+	oldText = text;
 	text += _text;
 	textDirty = true;
 	updateText();
@@ -70,18 +71,27 @@ void Label::updateText(){
 	glm::vec2 offset(0.f, 0.f);
 	textDirty = false;
 
-	//while(childTransform->children.size() > 0){
-	//	delete childTransform->children.back();
-	//	childTransform->children.pop_back();
-	//}
-
 	for(unsigned long int i = text.size(); i < childTransform->children.size(); ++i) {
 		Transform * t = dynamic_cast<Transform *>(childTransform->children.at(i));
 		MeshEntity * me = dynamic_cast<MeshEntity *>(t->children.at(0));
 		me->setVisible(false);
 	}
+	
+	int strOffset = 0;
+	for(unsigned long int i = 0; i < text.size() && i < oldText.size(); i++) {
+		if(text.at(i) != oldText.at(i)) {
+			break;
+		}			
+		strOffset++;
+	}
 
-	for(unsigned long int c = 0; c < text.size(); ++c) {
+	for(unsigned long int i = 0; i > text.size() - strOffset; ++i) {
+		offsetCache.pop_back();
+	}
+
+	offset.x = offsetCache.size() > 0 ? offsetCache.at(strOffset - 1) : 0.f;
+
+	for(unsigned long int c = strOffset; c < text.size(); ++c) {
 		wchar_t ch = text.at(c);
 		if(ch == '\n'){
 			newLine(&offset);
@@ -134,14 +144,16 @@ void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
 		t->translate(_offset->x, _offset->y, 0.f, false);
 		MeshEntity * me = dynamic_cast<MeshEntity *>(t->children.at(0));
 		me->setVisible(true);
-		me->mesh = glyph;
-		std::cout<<me->mesh<<"\n";
+		me->childTransform->children.clear();
+		me->childTransform->children.push_back(glyph);
 	}else {
 		MeshEntity * me = new MeshEntity(glyph);
 		me->setShader(shader, true);
 		childTransform->addChild(me)->translate(_offset->x, _offset->y, 0.f);
 	}
-	_offset->x += glyph->advance.x/64;
+	float adv = glyph->advance.x/64 + (offsetCache.size() > 0 ? offsetCache.at(_index - 1) : 0.f);
+	_offset->x = adv;
+	offsetCache.size() > _index ? offsetCache[_index] = adv : offsetCache.push_back(adv);
 }
 
 void Label::newLine(glm::vec2 * _offset){
@@ -150,6 +162,7 @@ void Label::newLine(glm::vec2 * _offset){
 }
 
 void Label::setText(std::wstring _text){
+	oldText = text;
 	text = _text;
 	textDirty = true;
 	updateText();

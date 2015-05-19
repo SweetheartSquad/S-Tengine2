@@ -24,7 +24,7 @@ public:
 	WrapMode wrapMode;
 	std::map<wchar_t, MeshEntity *> meshEntities;
 
-		explicit Label(Font * _font, Shader * _shader, WrapMode _wrapMode, float _width = INFINITE_WIDTH);
+	explicit Label(Font * _font, Shader * _shader, WrapMode _wrapMode, float _width = INFINITE_WIDTH);
 	~Label();
 	
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
@@ -39,6 +39,8 @@ public:
 
 private:
 	std::wstring text;
+	std::wstring oldText;
+	std::vector<float> offsetCache;
 	bool textDirty;
 	void newLine(glm::vec2 * _offset);
 	void updateChar(glm::vec2 * _offset, int _index, wchar_t _c);
