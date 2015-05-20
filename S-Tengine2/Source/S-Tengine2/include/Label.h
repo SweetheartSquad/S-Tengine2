@@ -40,7 +40,8 @@ public:
 private:
 	std::wstring text;
 	std::wstring oldText;
-	std::vector<float> offsetCache;
+	std::vector<glm::vec2> offsetCache;
+	std::vector<float>lineWidths;
 	bool textDirty;
 	void newLine(glm::vec2 * _offset);
 	void updateChar(glm::vec2 * _offset, int _index, wchar_t _c);

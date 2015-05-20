@@ -81,15 +81,19 @@ void Label::updateText(){
 	for(unsigned long int i = 0; i < text.size() && i < oldText.size(); i++) {
 		if(text.at(i) != oldText.at(i)) {
 			break;
-		}			
+		}	
 		strOffset++;
 	}
 
-	for(unsigned long int i = 0; i > text.size() - strOffset; ++i) {
-		offsetCache.pop_back();
+	if(text.size() < oldText.size()) {
+		for(unsigned long int i = 0; i < oldText.size() - text.size(); i++) {
+			offsetCache.pop_back();
+		}
 	}
 
-	offset.x = offsetCache.size() > 0 ? offsetCache.at(strOffset - 1) : 0.f;
+	if(offsetCache.size() > 0) {
+		offset = offsetCache.at(offsetCache.size() - 1);
+	}
 
 	for(unsigned long int c = strOffset; c < text.size(); ++c) {
 		wchar_t ch = text.at(c);
@@ -151,14 +155,17 @@ void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
 		me->setShader(shader, true);
 		childTransform->addChild(me)->translate(_offset->x, _offset->y, 0.f);
 	}
-	float adv = glyph->advance.x/64 + (offsetCache.size() > 0 ? offsetCache.at(_index - 1) : 0.f);
+
+	float adv = glyph->advance.x/64 + _offset->x;
 	_offset->x = adv;
-	offsetCache.size() > _index ? offsetCache[_index] = adv : offsetCache.push_back(adv);
+	offsetCache.push_back(glm::vec2(adv, _offset->y));
 }
 
 void Label::newLine(glm::vec2 * _offset){
+	lineWidths.push_back(offsetCache.back().x);
 	_offset->x = 0;
 	_offset->y -= font->lineGapRatio * ((font->face->size->metrics.ascender + font->face->size->metrics.descender)/64);
+	offsetCache.push_back(glm::vec2(_offset->x, _offset->y));
 }
 
 void Label::setText(std::wstring _text){
