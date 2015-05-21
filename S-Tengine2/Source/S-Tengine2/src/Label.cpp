@@ -13,18 +13,26 @@
 #include <MeshFactory.h>
 #include <CharacterUtils.h>
 
-Label::Label(Font * _font, Shader * _shader, WrapMode _wrapMode, float _width) :
+Label::Label(Font * _font, Shader * _textShader, Shader * _backgroundShader, WrapMode _wrapMode, float _width) :
 	width(_width),
 	wrapMode(_wrapMode),
-	textDirty(false)
+	textDirty(false),
+	background(new MeshEntity(MeshFactory::getPlaneMesh(1.f)))
 {
 	font = _font;
 	++font->referenceCount;
-	shader = _shader;
-	++shader->referenceCount;
+	textShader = _textShader;
+	backgroundShader = _backgroundShader;
+	++textShader->referenceCount;
+	++backgroundShader->referenceCount;
+
+	Transform * trans = new Transform();
+	trans->addChild(background, true)->scale(100, 100, 100);
+	background->setShader(backgroundShader, true);
 }
 
 void Label::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+	background->parents.at(0)->render(_matrixStack, _renderOptions);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
@@ -38,6 +46,7 @@ void Label::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions
 }
 
 void Label::update(Step * _step){
+	background->parents.at(0)->update(_step);
 	Entity::update(_step);
 }
 
@@ -53,7 +62,8 @@ void Label::load(){
 
 Label::~Label(){
 	font->decrementAndDelete();
-	shader->decrementAndDelete();
+	textShader->decrementAndDelete();
+	backgroundShader->decrementAndDelete();
 }
 
 void Label::appendText(std::wstring _text){
@@ -86,7 +96,12 @@ void Label::updateText(){
 	}
 
 	if(text.size() < oldText.size()) {
+		float lastX = 0.0;
 		for(unsigned long int i = 0; i < oldText.size() - text.size(); i++) {
+			if(lastX < offsetCache.back().x) {
+				lineWidths.pop_back();
+			}
+			lastX = offsetCache.back().x;
 			offsetCache.pop_back();
 		}
 	}
@@ -139,6 +154,17 @@ void Label::updateText(){
 			}
 		}
 	}
+
+	for(unsigned long int i = 0; i < text.size(); i++) {
+		Transform * t = dynamic_cast<Transform *>(childTransform->children.at(i));
+		MeshEntity * me = dynamic_cast<MeshEntity *>(t->children.at(0));
+		me->setVisible(true);
+	}
+
+	background->parents.at(0)->reset();
+	background->parents.at(0)->translate(childTransform->getTranslationVector());
+	background->parents.at(0)->rotate(childTransform->getOrientationQuat(), kOBJECT);
+	background->parents.at(0)->scale(offsetCache.back().x, 100, 1);
 }
 
 void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
@@ -152,7 +178,8 @@ void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
 		me->childTransform->children.push_back(glyph);
 	}else {
 		MeshEntity * me = new MeshEntity(glyph);
-		me->setShader(shader, true);
+		me->setShader(textShader, true);
+		me->setVisible(true);
 		childTransform->addChild(me)->translate(_offset->x, _offset->y, 0.f);
 	}
 
@@ -165,7 +192,7 @@ void Label::newLine(glm::vec2 * _offset){
 	lineWidths.push_back(offsetCache.back().x);
 	_offset->x = 0;
 	_offset->y -= font->lineGapRatio * ((font->face->size->metrics.ascender + font->face->size->metrics.descender)/64);
-	offsetCache.push_back(glm::vec2(_offset->x, _offset->y));
+	offsetCache.back() = glm::vec2(_offset->x, _offset->y);
 }
 
 void Label::setText(std::wstring _text){

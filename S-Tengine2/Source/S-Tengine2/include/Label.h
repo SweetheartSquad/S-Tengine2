@@ -19,12 +19,13 @@ class Label : public Entity{
 public:
 	
 	Font * font;
-	Shader * shader;
+	Shader * textShader;
+	Shader * backgroundShader;
 	float width;
 	WrapMode wrapMode;
 	std::map<wchar_t, MeshEntity *> meshEntities;
 
-	explicit Label(Font * _font, Shader * _shader, WrapMode _wrapMode, float _width = INFINITE_WIDTH);
+	explicit Label(Font * _font, Shader * _textShader, Shader * _backgroundShader, WrapMode _wrapMode, float _width = INFINITE_WIDTH);
 	~Label();
 	
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
@@ -45,4 +46,5 @@ private:
 	bool textDirty;
 	void newLine(glm::vec2 * _offset);
 	void updateChar(glm::vec2 * _offset, int _index, wchar_t _c);
+	MeshEntity * background;
 };
