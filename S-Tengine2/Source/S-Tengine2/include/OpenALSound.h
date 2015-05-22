@@ -2,12 +2,13 @@
 
 #include <node\NodeChild.h>
 #include <node\NodeUpdatable.h>
+#include <node\NodeResource.h>
 #include <AL\alure.h>
 #include <iostream>
 
 //#define NUM_BUFS 32
 
-class OpenAL_Sound : public virtual NodeUpdatable, public virtual NodeChild{
+class OpenAL_Sound : public virtual NodeUpdatable, public virtual NodeResource, public virtual NodeChild{
 private:
 	static bool inited;
 
@@ -27,15 +28,22 @@ public:
 	ALuint sourceId;
 	ALuint bufferId;
 	alureStream * stream;
-	bool loop;
 
-	OpenAL_Sound(const char * _filename, bool _loop);
+	OpenAL_Sound(const char * _filename);
 	~OpenAL_Sound();
-
+	
 	virtual void update(Step * _step) override;
+	virtual void load() override;
+	virtual void unload() override;
 	
 	void setPosition(glm::vec3 _pos);
 	void setDirection(glm::vec3 _forward, glm::vec3 _up);
+
+	
+	void play(bool _loop = false);
+	void pause();
+	void stop();
+	void resume();
 };
 class OpenAL_Stream : public OpenAL_Sound{
 public:

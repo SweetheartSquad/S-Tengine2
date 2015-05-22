@@ -1,7 +1,8 @@
 #pragma once
 
+#include <node/NodeLoadable.h>
+
 #include <vector>
-#include "node/NodeLoadable.h"
 #include <ostream>
 
 class NodeResource abstract : public virtual NodeLoadable{

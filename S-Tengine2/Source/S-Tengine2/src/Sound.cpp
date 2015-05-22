@@ -3,17 +3,16 @@
 #include "Sound.h"
 
 #include <iostream>
-#include <libzplay.h>
 
 unsigned long int Sound::masterVolume = 100;
 
 Sound::Sound() :
-	player(libZPlay::CreateZPlay())
+	player(nullptr)
 {
 }
 
 Sound::Sound(std::string _file) :
-	player(libZPlay::CreateZPlay())
+	player(nullptr)
 {
 	addFile(_file);
 }
@@ -22,7 +21,7 @@ Sound::~Sound(){
 }
 
 void Sound::play(bool _loop){
-	if(_loop){
+	/*if(_loop){
 		libZPlay::TStreamTime start;
 		libZPlay::TStreamTime end;
 		libZPlay::TStreamInfo info;
@@ -36,26 +35,26 @@ void Sound::play(bool _loop){
 		player->Stop();
 		player->Play();
 	}
-	player->SetPlayerVolume(masterVolume, masterVolume);
+	player->SetPlayerVolume(masterVolume, masterVolume);*/
 }
 
 void Sound::pause(){
-	player->Pause();
+	//player->Pause();
 }
 
 void Sound::stop(){
-	player->Stop();
+	//player->Stop();
 }
 
 void Sound::resume(){
-	player->Resume();
+	//player->Resume();
 }
 
 void Sound::addFile(std::string _file){
-	int result = player->OpenFile(_file.c_str(), libZPlay::sfAutodetect);
+	/*int result = player->OpenFile(_file.c_str(), libZPlay::sfAutodetect);
     if(result == 0)
     {
 		std::cout << player->GetError();
         player->Release();
-    }
+    }*/
 }
