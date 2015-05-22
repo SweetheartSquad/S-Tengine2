@@ -16,8 +16,10 @@
 Label::Label(Font * _font, Shader * _textShader, Shader * _backgroundShader, WrapMode _wrapMode, float _width) :
 	width(_width),
 	wrapMode(_wrapMode),
+	measuredWidth(0.0f),
+	measuredHeight(0.0f),
 	textDirty(false),
-	background(new MeshEntity(MeshFactory::getPlaneMesh(1.f)))
+	background(new MeshEntity(MeshFactory::getPlaneMesh(0.5f)))
 {
 	font = _font;
 	++font->referenceCount;
@@ -25,20 +27,20 @@ Label::Label(Font * _font, Shader * _textShader, Shader * _backgroundShader, Wra
 	backgroundShader = _backgroundShader;
 	++textShader->referenceCount;
 	++backgroundShader->referenceCount;
-
+	
 	Transform * trans = new Transform();
-	trans->addChild(background, true)->scale(100, 100, 100);
+	trans->addChild(background, true);
 	background->setShader(backgroundShader, true);
 }
 
 void Label::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
-	background->parents.at(0)->render(_matrixStack, _renderOptions);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
 	if(depth == GL_TRUE){
 		glDisable(GL_DEPTH_TEST);
 	}
+	background->parents.at(0)->render(_matrixStack, _renderOptions);
 	Entity::render(_matrixStack, _renderOptions);
 	if(depth == GL_TRUE){
 		glEnable(GL_DEPTH_TEST);
@@ -161,10 +163,15 @@ void Label::updateText(){
 		me->setVisible(true);
 	}
 
+	if(static_cast<int>(measuredHeight) == 0) {
+		measuredHeight = font->getLineHeight();
+	}
+
 	background->parents.at(0)->reset();
-	background->parents.at(0)->translate(childTransform->getTranslationVector());
+	glm::vec3 transVec = childTransform->getTranslationVector();
+	background->parents.at(0)->translate(transVec.x + measuredWidth * 0.5f, (transVec.y - measuredHeight * 0.5f) + font->getLineHeight(), transVec.z);
 	background->parents.at(0)->rotate(childTransform->getOrientationQuat(), kOBJECT);
-	background->parents.at(0)->scale(offsetCache.back().x, 100, 1);
+	background->parents.at(0)->scale(measuredWidth, measuredHeight, 1);
 }
 
 void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
@@ -185,13 +192,18 @@ void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
 
 	float adv = glyph->advance.x/64 + _offset->x;
 	_offset->x = adv;
+	if(adv > measuredWidth) {
+		measuredWidth = adv;
+	}
 	offsetCache.push_back(glm::vec2(adv, _offset->y));
 }
 
 void Label::newLine(glm::vec2 * _offset){
 	lineWidths.push_back(offsetCache.back().x);
 	_offset->x = 0;
-	_offset->y -= font->lineGapRatio * ((font->face->size->metrics.ascender + font->face->size->metrics.descender)/64);
+	float lineHeight = font->getLineHeight(); 
+	_offset->y -= lineHeight;
+	measuredHeight += lineHeight;
 	offsetCache.back() = glm::vec2(_offset->x, _offset->y);
 }
 

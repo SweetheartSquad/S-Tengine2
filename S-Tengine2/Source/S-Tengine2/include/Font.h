@@ -40,6 +40,7 @@ public:
 	glm::vec2 getGlyphWidthHeight(wchar_t _char);
 	glm::vec2 getGlyphXY(wchar_t _char);
 	void loadGlyph(wchar_t _char);
+	float getLineHeight();
 
 private:
 	int size;

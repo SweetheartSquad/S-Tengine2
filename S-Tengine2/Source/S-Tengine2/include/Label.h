@@ -43,6 +43,8 @@ private:
 	std::wstring oldText;
 	std::vector<glm::vec2> offsetCache;
 	std::vector<float>lineWidths;
+	float measuredWidth;
+	float measuredHeight;
 	bool textDirty;
 	void newLine(glm::vec2 * _offset);
 	void updateChar(glm::vec2 * _offset, int _index, wchar_t _c);
