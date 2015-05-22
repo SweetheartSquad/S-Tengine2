@@ -122,6 +122,7 @@
     <ClCompile Include="../src/Label.cpp" />
     <ClCompile Include="../src/NodeBulletBody.cpp" />
     <ClCompile Include="../src/NodeUI.cpp" />
+    <ClCompile Include="../src/OpenALSound.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentText.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -239,6 +240,7 @@
     <ClInclude Include="../include/Label.h" />
     <ClInclude Include="../include/NodeBulletBody.h" />
     <ClInclude Include="../include/NodeUI.h" />
+    <ClInclude Include="../include/OpenALSound.h" />
     <ClInclude Include="../include/shader/ShaderComponentText.h" />
     <ClInclude Include="../include/Text.h" />
     <ClInclude Include="../include/Joystick.h" />
@@ -281,22 +283,20 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(ZPLAY_DIR);$(BOX2D_DIR);$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
     <SourcePath>..\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(ZPLAY_DIR);$(BOX2D_DIR);$(BULLET_DIR)\lib;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <TargetName>$(ProjectName)d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(BOX2D_DIR);$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
     <SourcePath>..\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\lib;$(ZPLAY_DIR);$(BOX2D_DIR)\Build\vs2013\bin\x32\Release;$(BULLET_DIR)\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'">
     <ClCompile>
