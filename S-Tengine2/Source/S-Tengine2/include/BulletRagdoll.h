@@ -8,7 +8,8 @@ class Shader;
 
 class BulletRagdoll : public Entity{
 public:
-	BulletMeshEntity * body;
+	BulletMeshEntity * upperbody;
+	BulletMeshEntity * lowerbody;
 	BulletMeshEntity * head;
 	BulletMeshEntity * upperlegLeft;
 	BulletMeshEntity * upperlegRight;

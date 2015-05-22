@@ -25,7 +25,6 @@
 #include <Texture.h>
 
 #include <Sound.h>
-#include <libzplay.h>
 
 #include <System.h>
 #include <Mouse.h>
