@@ -102,9 +102,10 @@ void vox::initialize(std::string _title){
 
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
-	if (GLEW_OK != err){
-		/* Problem: glewInit failed, something is seriously wrong. */
-		fprintf(stderr, "\tERROR: %p\n", glewGetErrorString(err));
+	if (err != GLEW_OK){
+		// Problem: glewInit failed, something is seriously wrong.
+		std::cerr << "ERROR: " << glewGetErrorString(err) << std::endl;
+		throw;
 	}
 
 	int screenHeight;
@@ -116,8 +117,8 @@ void vox::initialize(std::string _title){
 	//Initialize freetype
 	if(FT_Init_FreeType(&freeTypeLibrary) != 0) {
 		std::cerr << "Couldn't initialize FreeType library\n";
+		throw;
 	}
-
 }
 
 void vox::destruct(){
