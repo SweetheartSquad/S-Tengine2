@@ -101,7 +101,7 @@ void Label::updateText(){
 		float lastX = 0.0;
 		for(unsigned long int i = 0; i < oldText.size() - text.size(); i++) {
 			if(lastX < offsetCache.back().x) {
-				lineWidths.pop_back();
+				//lineWidths.pop_back();
 			}
 			lastX = offsetCache.back().x;
 			offsetCache.pop_back();
@@ -119,11 +119,14 @@ void Label::updateText(){
 		}else{
 			switch(wrapMode){
 				case CHARACTER_WRAP:
-					updateChar(&offset, c, ch);
-					if(offset.x > width){
-						newLine(&offset);
+					{
+						Glyph * glyph = font->getMeshInterfaceForChar(c);
+						if(offset.x + glyph->advance.x/64 > width){
+							newLine(&offset);
+						}
+						updateChar(&offset, c, ch);
+						break;
 					}
-					break;
 				case CHARACTER_WRAP_HYPHEN:
 					{
 						Glyph * nextGlyph = font->getMeshInterfaceForChar(ch);
@@ -169,9 +172,17 @@ void Label::updateText(){
 
 	background->parents.at(0)->reset();
 	glm::vec3 transVec = childTransform->getTranslationVector();
-	background->parents.at(0)->translate(transVec.x + measuredWidth * 0.5f, (transVec.y - measuredHeight * 0.5f) + font->getLineHeight(), transVec.z);
+
+	if(width == INFINITE_WIDTH) {
+		background->parents.at(0)->translate(transVec.x + measuredWidth * 0.5f, (transVec.y - measuredHeight * 0.5f) + font->getLineHeight(), transVec.z);
+		background->parents.at(0)->scale(measuredWidth, measuredHeight, 1);
+	}else {
+		background->parents.at(0)->translate(transVec.x + width * 0.5f, (transVec.y - measuredHeight * 0.5f) + font->getLineHeight(), transVec.z);
+		background->parents.at(0)->scale(width, measuredHeight, 1);
+	}
+
 	background->parents.at(0)->rotate(childTransform->getOrientationQuat(), kOBJECT);
-	background->parents.at(0)->scale(measuredWidth, measuredHeight, 1);
+	
 }
 
 void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
