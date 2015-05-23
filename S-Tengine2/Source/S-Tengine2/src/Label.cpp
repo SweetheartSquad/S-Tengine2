@@ -130,7 +130,7 @@ void Label::updateText(){
 				case CHARACTER_WRAP_HYPHEN:
 					{
 						Glyph * nextGlyph = font->getMeshInterfaceForChar(ch);
-						if(offset.x + nextGlyph->advance.x/64> width){
+						if(width > 0 && offset.x + nextGlyph->advance.x/64> width){
 							if(!CharacterUtils::isSpace(ch)){
 								updateChar(&offset, c, '-');
 							}	
@@ -142,7 +142,7 @@ void Label::updateText(){
 						break;
 					}
 				case WORD_WRAP:
-					if(offset.x > width){
+					if(width > 0 && offset.x > width){
 						for(unsigned long int i = 0; i < text.size() && c < text.size(); ++i) {
 							updateChar(&offset, c, text.at(c));
 							if(CharacterUtils::isSpace(text.at(c))){

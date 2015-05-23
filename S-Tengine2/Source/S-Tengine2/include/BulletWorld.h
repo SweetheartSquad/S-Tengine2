@@ -2,6 +2,7 @@
 
 #include <node\NodeUpdatable.h>
 #include <btBulletDynamicsCommon.h>
+#include <glm\glm.hpp>
 
 class BulletWorld : public NodeUpdatable{
 public:
@@ -22,7 +23,7 @@ public:
 	btConstraintSolver * solver;
 	btDynamicsWorld * world;
 	
-	BulletWorld();
+	BulletWorld(glm::vec3 _gravity = glm::vec3(0, -9.8, 0));
 	~BulletWorld();
 
 	void update(Step * _step) override;

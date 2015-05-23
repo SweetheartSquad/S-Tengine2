@@ -1,7 +1,7 @@
 #pragma once
 
 #include <node/NodeUpdatable.h>
-#include <Box2D/Box2D.h>
+#include <box2D.h>
 #include <glm/glm.hpp>
 
 #include <Transform.h>

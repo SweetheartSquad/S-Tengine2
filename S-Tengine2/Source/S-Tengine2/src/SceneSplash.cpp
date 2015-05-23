@@ -25,7 +25,6 @@
 #include <Texture.h>
 
 #include <Sound.h>
-#include <libzplay.h>
 
 #include <System.h>
 #include <Mouse.h>
@@ -36,6 +35,10 @@
 #include <RenderSurface.h>
 #include <StandardFrameBuffer.h>
 #include <NumberUtils.h>
+
+#include <Label.h>
+#include <Font.h>
+#include <shader\ShaderComponentText.h>
 
 SceneSplash::SceneSplash(Game * _game) :
 	Scene(_game),
@@ -91,6 +94,17 @@ SceneSplash::SceneSplash(Game * _game) :
 	logo->mesh->pushTexture2D(logoTex);
 	logo->parents.at(0)->scale(25,25,25);
 	logo->setShader(shader, true);
+
+
+
+	BaseComponentShader * textShader = new BaseComponentShader(true);
+	textShader->addComponent(new ShaderComponentText(textShader));
+	textShader->compileShader();
+
+	Font * font = new Font("../assets/arial.ttf", 50, false);
+	textThing = new Label(font, textShader, WrapMode::WORD_WRAP, -1);
+	textThing->setText(L"some text");
+	uiLayer.childTransform->addChild(textThing);
 }
 
 SceneSplash::~SceneSplash(){
@@ -136,18 +150,23 @@ void SceneSplash::update(Step * _step){
 		game->switchScene(nextScene, true);
 	}
 	
+	float speed = 1;
+	MousePerspectiveCamera * cam = dynamic_cast<MousePerspectiveCamera *>(activeCamera);
+	if(cam != nullptr){
+		speed = cam->speed;
+	}
 	// camera controls
 	if (keyboard->keyDown(GLFW_KEY_UP)){
-		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_DOWN)){
-		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->forwardVectorRotated) * -speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_LEFT)){
-		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * -static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * -speed);
 	}
 	if (keyboard->keyDown(GLFW_KEY_RIGHT)){
-		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * static_cast<MousePerspectiveCamera *>(activeCamera)->speed);
+		activeCamera->parents.at(0)->translate((activeCamera->rightVectorRotated) * speed);
 	}
 
 	Scene::update(_step);
@@ -157,6 +176,7 @@ void SceneSplash::update(Step * _step){
 	uiLayer.update(_step);
 	
 	mouseIndicator->parents.at(0)->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0.f, false);
+	textThing->parents.at(0)->translate(game->viewPortWidth*0.5f, game->viewPortHeight*0.8f, 0, false);
 }
 
 void SceneSplash::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){

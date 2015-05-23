@@ -15,8 +15,8 @@
     <ClCompile Include="../src/AccelerometerParser.cpp" />
     <ClCompile Include="../src/Arduino.cpp" />
     <ClCompile Include="../src/BitmapFont.cpp" />
-    <ClCompile Include="..\src\Billboard.cpp" />
-    <ClCompile Include="..\src\Box2DDebugDrawer.cpp" />
+    <ClCompile Include="../src/Billboard.cpp" />
+    <ClCompile Include="../src/Box2DDebugDrawer.cpp" />
     <ClCompile Include="../src/Box2DMeshEntity.cpp" />
     <ClCompile Include="../src/Box2DSprite.cpp" />
     <ClCompile Include="../src/Box2DSuperSprite.cpp" />
@@ -57,11 +57,6 @@
     <ClCompile Include="../src/Plane.cpp" />
     <ClCompile Include="../src/Point.cpp" />
     <ClCompile Include="../src/PointLight.cpp" />
-    <ClCompile Include="../src/poly2Tri/common/shapes.cc" />
-    <ClCompile Include="../src/poly2Tri/sweep/advancing_front.cc" />
-    <ClCompile Include="../src/poly2Tri/sweep/cdt.cc" />
-    <ClCompile Include="../src/poly2Tri/sweep/sweep.cc" />
-    <ClCompile Include="../src/poly2Tri/sweep/sweep_context.cc" />
     <ClCompile Include="../src/Rectangle.cpp" />
     <ClCompile Include="../src/RenderOptions.cpp" />
     <ClCompile Include="../src/RenderSurface.cpp" />
@@ -112,17 +107,18 @@
     <ClCompile Include="../src/SceneSplash.cpp" />
     <ClCompile Include="../src/tiny_obj_loader.cc" />
     <ClCompile Include="../src/UILayer.cpp" />
-    <ClCompile Include="..\src\BulletDebugDrawer.cpp" />
-    <ClCompile Include="..\src\BulletMeshEntity.cpp" />
-    <ClCompile Include="..\src\BulletRagdoll.cpp" />
-    <ClCompile Include="..\src\BulletWorld.cpp" />
-    <ClCompile Include="..\src\CharacterUtils.cpp" />
-    <ClCompile Include="..\src\Entity.cpp" />
-    <ClCompile Include="..\src\Font.cpp" />
-    <ClCompile Include="..\src\Label.cpp" />
-    <ClCompile Include="..\src\NodeBulletBody.cpp" />
-    <ClCompile Include="..\src\NodeUI.cpp" />
-    <ClCompile Include="..\src\shader\ShaderComponentText.cpp" />
+    <ClCompile Include="../src/BulletDebugDrawer.cpp" />
+    <ClCompile Include="../src/BulletMeshEntity.cpp" />
+    <ClCompile Include="../src/BulletRagdoll.cpp" />
+    <ClCompile Include="../src/BulletWorld.cpp" />
+    <ClCompile Include="../src/CharacterUtils.cpp" />
+    <ClCompile Include="../src/Entity.cpp" />
+    <ClCompile Include="../src/Font.cpp" />
+    <ClCompile Include="../src/Label.cpp" />
+    <ClCompile Include="../src/NodeBulletBody.cpp" />
+    <ClCompile Include="../src/NodeUI.cpp" />
+    <ClCompile Include="../src/OpenALSound.cpp" />
+    <ClCompile Include="../src/shader/ShaderComponentText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -130,8 +126,8 @@
     <ClInclude Include="../include/Animation.h" />
     <ClInclude Include="../include/Arduino.h" />
     <ClInclude Include="../include/BitmapFont.h" />
-    <ClInclude Include="..\include\Billboard.h" />
-    <ClInclude Include="..\include\Box2DDebugDrawer.h" />
+    <ClInclude Include="../include/Billboard.h" />
+    <ClInclude Include="../include/Box2DDebugDrawer.h" />
     <ClInclude Include="../include/Box2DMeshEntity.h" />
     <ClInclude Include="../include/Box2DSprite.h" />
     <ClInclude Include="../include/Box2DSuperSprite.h" />
@@ -175,13 +171,7 @@
     <ClInclude Include="../include/Plane.h" />
     <ClInclude Include="../include/Point.h" />
     <ClInclude Include="../include/PointLight.h" />
-    <ClInclude Include="../include/poly2Tri/common/shapes.h" />
     <ClInclude Include="../include/poly2Tri/common/utils.h" />
-    <ClInclude Include="../include/poly2Tri/poly2tri.h" />
-    <ClInclude Include="../include/poly2Tri/sweep/advancing_front.h" />
-    <ClInclude Include="../include/poly2Tri/sweep/cdt.h" />
-    <ClInclude Include="../include/poly2Tri/sweep/sweep.h" />
-    <ClInclude Include="../include/poly2Tri/sweep/sweep_context.h" />
     <ClInclude Include="../include/Rectangle.h" />
     <ClInclude Include="../include/RenderOptions.h" />
     <ClInclude Include="../include/RenderSurface.h" />
@@ -229,18 +219,19 @@
     <ClInclude Include="../include/shader/ShaderComponentTint.h" />
     <ClInclude Include="../include/TextureSampler.h" />
     <ClInclude Include="../include/Box.h" />
-    <ClInclude Include="..\include\BulletDebugDrawer.h" />
-    <ClInclude Include="..\include\BulletMeshEntity.h" />
-    <ClInclude Include="..\include\BulletRagdoll.h" />
-    <ClInclude Include="..\include\BulletWorld.h" />
-    <ClInclude Include="..\include\CharacterUtils.h" />
-    <ClInclude Include="..\include\Entity.h" />
-    <ClInclude Include="..\include\Font.h" />
-    <ClInclude Include="..\include\Label.h" />
-    <ClInclude Include="..\include\NodeBulletBody.h" />
-    <ClInclude Include="..\include\NodeUI.h" />
-    <ClInclude Include="..\include\shader\ShaderComponentText.h" />
-    <ClInclude Include="..\include\Text.h" />
+    <ClInclude Include="../include/BulletDebugDrawer.h" />
+    <ClInclude Include="../include/BulletMeshEntity.h" />
+    <ClInclude Include="../include/BulletRagdoll.h" />
+    <ClInclude Include="../include/BulletWorld.h" />
+    <ClInclude Include="../include/CharacterUtils.h" />
+    <ClInclude Include="../include/Entity.h" />
+    <ClInclude Include="../include/Font.h" />
+    <ClInclude Include="../include/Label.h" />
+    <ClInclude Include="../include/NodeBulletBody.h" />
+    <ClInclude Include="../include/NodeUI.h" />
+    <ClInclude Include="../include/OpenALSound.h" />
+    <ClInclude Include="../include/shader/ShaderComponentText.h" />
+    <ClInclude Include="../include/Text.h" />
     <ClInclude Include="../include/Joystick.h" />
     <ClInclude Include="../include/JoystickManager.h" />
     <ClInclude Include="../include/SceneSplash.h" />
@@ -257,8 +248,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -291,11 +282,10 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(ZPLAY_DIR);$(BOX2D_DIR);$(BULLET_DIR)\src;$(FREETYPE_DIR)\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(FREETYPE_DIR)\include;$(IncludePath)</IncludePath>
     <SourcePath>..\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\projects\VC9\Debug;$(ZPLAY_DIR);$(BOX2D_DIR)\Build\vs2013\bin\x32\Debug;$(BULLET_DIR)\lib;$(FREETYPE_DIR)\objs\vc2012\Win32;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <TargetName>$(ProjectName)d</TargetName>
@@ -310,11 +300,10 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(ZPLAY_DIR);$(BOX2D_DIR);$(BULLET_DIR)\src;$(FREETYPE_DIR)\include;$(IncludePath)</IncludePath>
+    <IncludePath>..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(FREETYPE_DIR)\include;$(IncludePath)</IncludePath>
     <SourcePath>..\src;$(SourcePath)</SourcePath>
     <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
-    <LibraryPath>$(GLEW_DIR)\lib\Release\Win32;$(GLFW_DIR)\lib-msvc110;$(SOIL_DIR)\projects\VC9\Release;$(ZPLAY_DIR);$(BULLET_DIR)\lib;$(BOX2D_DIR)\Build\vs2013\bin\x32\Release;$(FREETYPE_DIR)\objs\vc2012\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -377,7 +366,7 @@ copy /Y "$(ZPLAY_DIR)\..\libzplay.dll" "$(TargetDir)\libzplay.dll"
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
     <PreBuildEvent>
-      <Command>  ..\..\..\..\VCProjer\dist\VCProjer.exe "S-Tengine2 - 2012.vcxproj" "S-Tengine2 - 2013.vcxproj"</Command>
+      <Command>..\..\..\..\VCProjer\dist\VCProjer.exe "S-Tengine2 - 2012.vcxproj" "S-Tengine2 - 2013.vcxproj"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>

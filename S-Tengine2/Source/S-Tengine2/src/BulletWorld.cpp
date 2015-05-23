@@ -3,14 +3,14 @@
 #include <BulletWorld.h>
 #include <Step.h>
 
-BulletWorld::BulletWorld() :
+BulletWorld::BulletWorld(glm::vec3 _gravity) :
 	collisionConfig(new btDefaultCollisionConfiguration()),
 	dispatcher(new btCollisionDispatcher(collisionConfig)),
 	broadphase(new btDbvtBroadphase()),
 	solver(new btSequentialImpulseConstraintSolver()),
 	world(new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig))
 {
-	world->setGravity(btVector3(0, -20, 0));
+	world->setGravity(btVector3(_gravity.x, _gravity.y, _gravity.z));
 }
 
 BulletWorld::~BulletWorld(){

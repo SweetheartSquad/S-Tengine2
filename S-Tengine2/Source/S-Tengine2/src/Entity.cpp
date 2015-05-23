@@ -1,12 +1,12 @@
 #pragma once
 
-#include "Entity.h"
-#include "RenderOptions.h"
-#include "MatrixStack.h"
-#include "node/NodeResource.h"
-#include "Sprite.h"
+#include <Entity.h>
+#include <RenderOptions.h>
+#include <MatrixStack.h>
+#include <node/NodeResource.h>
+#include <Sprite.h>
 
-#include "glew\glew.h"
+#include <GL\glew.h>
 
 Entity::Entity() :
 	childTransform(new Transform()),

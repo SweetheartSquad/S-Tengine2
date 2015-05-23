@@ -2,7 +2,7 @@
 
 #include <node\Node.h>
 #include <vector>
-#include <glew\glew.h>
+#include <GL\glew.h>
 
 class Shader;
 class Light;

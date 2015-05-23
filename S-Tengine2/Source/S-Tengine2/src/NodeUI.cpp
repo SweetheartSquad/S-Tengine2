@@ -11,7 +11,8 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	isHovered(false),
 	isDown(false),
 	isActive(false),
-	mouse(&Mouse::getInstance())
+	mouse(&Mouse::getInstance()),
+	onDownFunction(nullptr)
 {
 
 }
@@ -22,6 +23,9 @@ void NodeUI::down(){
 	isDown = true;
 	
     // do event stuff
+	if(onDownFunction != nullptr){
+		onDownFunction(this);
+	}
 }
 void NodeUI::up(){
 	isDown = false;
@@ -107,7 +111,6 @@ void NodeUI::renderOver(vox::MatrixStack * _matrixStack, RenderOptions * _render
 }
 
 void NodeUI::renderActive(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-//	std::cout << "active" << std::endl;
 	renderDefault(_matrixStack, _renderOptions);
 }
 
