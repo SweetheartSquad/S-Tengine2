@@ -2,9 +2,9 @@
 
 class CharacterUtils{
 public:
-	static bool isLetter(char _c);
-	static bool isDigit(char _c);
-	static bool isSymbol(char _c);
-	static bool isSpace(char _c);
-	static bool isSymbolLetterDigit(char _c);
+	static int isLetter(char _c);
+	static int isDigit(char _c);
+	static int isSymbol(char _c);
+	static int isSpace(char _c);
+	static int isSymbolLetterDigit(char _c);
 };

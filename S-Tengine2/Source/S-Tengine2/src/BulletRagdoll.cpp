@@ -93,6 +93,13 @@ BulletRagdoll::BulletRagdoll(BulletWorld * _world){
 		lowerlegRight->mesh->vertices.at(i).green = 0;
 		upperarmRight->mesh->vertices.at(i).green = 0;
 		lowerarmRight->mesh->vertices.at(i).green = 0;
+		
+		head->mesh->vertices.at(i).red = 0;
+		upperbody->mesh->vertices.at(i).red = 0;
+		lowerbody->mesh->vertices.at(i).red = 0;
+		head->mesh->vertices.at(i).blue = 0;
+		upperbody->mesh->vertices.at(i).blue = 0;
+		lowerbody->mesh->vertices.at(i).blue = 0;
 	}
 	
 	btPoint2PointConstraint * p2pconstraint;

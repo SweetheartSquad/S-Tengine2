@@ -146,7 +146,7 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 		return;
 	}
 	//if(_renderOption->currentVao != vaoId){
-		GLint prev;
+		GLint prev = -1;
 		_renderOption->currentVao = vaoId;
 		// Bind VAO
 		glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &prev);
@@ -171,21 +171,21 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 	// Texture repeat
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, uvEdgeMode);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, uvEdgeMode);
-
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-	//}
-
+	
 	// Texture scaling mode
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, scaleModeMag);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, scaleModeMin);
+	//}
+
 
 	// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
 	glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
 	checkForGlError(0,__FILE__,__LINE__);
 
-	// Disable VAO
-	glBindVertexArray(prev);
+	//if(prev != -1){
+		// Disable VAO
+		glBindVertexArray(prev);
+	//}
 }
 
 
