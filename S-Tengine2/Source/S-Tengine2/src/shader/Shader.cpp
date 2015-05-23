@@ -22,12 +22,17 @@ void Shader::init(std::string _vertexShaderSource, std::string _fragmentShaderSo
 	dirty = true;
 }
 
-Shader::Shader(bool _autoRelease) : NodeResource(_autoRelease){
+Shader::Shader(bool _autoRelease) :
+	NodeResource(_autoRelease),
+	hasGeometryShader(false),
+	numLightsUniformLocation(-1)
+{
 }
 
 Shader::Shader(std::string _shaderSource, bool _hasGeometryShader, bool _autoRelease) :
 	NodeResource(_autoRelease),
-	hasGeometryShader(_hasGeometryShader)
+	hasGeometryShader(_hasGeometryShader),
+	numLightsUniformLocation(-1)
 {
 	std::string _vertexShaderSource = FileUtils::voxReadFile(_shaderSource + ".vert");
 	std::string _fragmentShaderSource = FileUtils::voxReadFile(_shaderSource + ".frag");
@@ -112,7 +117,7 @@ void Shader::load(){
 			glDeleteProgram(programId);
 			assert(false);
 
-			// Provide the infolog in whatever manor you deem best.
+			// Provide the infolog in whatever manner you deem best.
 			for(unsigned long int i = 0; i < infoLog.size(); ++i){
 				std::cout << infoLog.at(i);
 			}
@@ -135,6 +140,7 @@ void Shader::load(){
 		aVertexColor		= glGetAttribLocation(programId, GL_ATTRIBUTE_ID_VERTEX_COLOR.c_str());
 		aVertexNormals		= glGetAttribLocation(programId, GL_ATTRIBUTE_ID_VERTEX_NORMALS.c_str());
 		aVertexUVs			= glGetAttribLocation(programId, GL_ATTRIBUTE_ID_VERTEX_UVS.c_str());
+		numLightsUniformLocation = glGetUniformLocation(programId, GL_UNIFORM_ID_NUM_LIGHTS.c_str());
 	}
 	
 	NodeLoadable::load();
@@ -150,6 +156,7 @@ void Shader::unload(){
 			aVertexColor = -1;
 			aVertexNormals = -1;
 			aVertexUVs = -1;
+			numLightsUniformLocation = -1;
 			dirty = true;
 			isCompiled = false;
 		}else{

@@ -15,13 +15,15 @@ namespace vox{
 class RenderOptions;
 
 class Shader : public NodeResource{
+	friend class SharedComponentShaderMethods;
 
 protected:
 	/** Reads the files at the given location/name and compiles them as a vertex shader and a fragment shader */
 	void init(std::string _vertexSource, std::string _fragmentSource);
 	/** Reads the files at the given location/name and compiles them as a vertex shader and a fragment shader */
 	void init(std::string _vertexShaderSource, std::string _fragmentShaderSource, std::string _geometryShaderSource);
-
+	
+	GLint numLightsUniformLocation;
 private:
 
 	/** The attribute location of the vertex position in the shader */

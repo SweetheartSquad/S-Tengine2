@@ -62,7 +62,7 @@ std::string ShaderComponentBlinn::getFragmentBodyString(){
 
 				TAB + TAB + TAB + "specularCoefficient = pow(max(0.0, dot(halfAngle, normal)), materials[j].shininess)" + SEMI_ENDL +
 			TAB + TAB +"}" + ENDL +
-			TAB + TAB + VAR_VEC3 + " specular = specularCoefficient * materials[j].specularColor * lights[i].intensities" + SEMI_ENDL +
+			TAB + TAB + VAR_VEC3 + " specular = specularCoefficient * materials[j].specularColor * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 			TAB + TAB + "specular = clamp(specular, 0.0, 1.0)" + SEMI_ENDL +
 			
 			TAB + TAB + "//linear color (color before gamma correction)" + ENDL +

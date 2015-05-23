@@ -14,7 +14,7 @@ void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStac
 	if(mesh != nullptr){
 		// Pass the _shader the number of lights
 		if(_renderOption->lights != nullptr){
-			glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_LIGHTS.c_str()), _renderOption->lights->size());
+			glUniform1i(_renderOption->shader->numLightsUniformLocation, _renderOption->lights->size());
 			// Pass the paramaters for each light to the _shader
 			for(unsigned long int i = 0; i < _renderOption->lights->size(); i++){
 				Light * l = _renderOption->lights->at(i);
@@ -22,23 +22,25 @@ void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStac
 				if(l->lightDirty){
 					glm::vec3 curPos = l->lastPos;
 					//std::cout << "update light " << i << ": " << curPos.x << "," << curPos.y << "," << curPos.z << std::endl;
-					std::string typ = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].type", i);
-					std::string pos = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_POSITION, i);
-					std::string ins = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_INTENSITIES, i);
-					std::string amb = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].ambientCoefficient", i);
-					std::string att = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].attenuation", i);
-					std::string cut = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].cutoff", i);
+					const std::string typ = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].type", i);
+					const std::string pos = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_POSITION, i);
+					const std::string ins = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_INTENSITIES, i);
+					const std::string amb = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].ambientCoefficient", i);
+					const std::string att = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].attenuation", i);
+					const std::string cut = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].cutoff", i);
+
 					GLuint typeUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), typ.c_str());
-					glUniform1i(typeUniformLocation, static_cast<int>(l->data.type));
 					GLuint positionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), pos.c_str());
-					glUniform3f(positionUniformLocation, curPos.x, curPos.y, curPos.z);
 					GLuint intensitiesUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), ins.c_str());
-					glUniform3f(intensitiesUniformLocation, l->data.intensities.x, l->data.intensities.y, l->data.intensities.z);
 					GLuint ambientUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), amb.c_str());
-					glUniform1f(ambientUniformLocation, l->data.ambientCoefficient);
 					GLuint attenuationUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), att.c_str());
-					glUniform1f(attenuationUniformLocation, l->data.attenuation);
 					GLuint cutoffUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), cut.c_str());
+
+					glUniform1i(typeUniformLocation, static_cast<int>(l->data.type));
+					glUniform3f(positionUniformLocation, curPos.x, curPos.y, curPos.z);
+					glUniform3f(intensitiesUniformLocation, l->data.intensities.x, l->data.intensities.y, l->data.intensities.z);
+					glUniform1f(ambientUniformLocation, l->data.ambientCoefficient);
+					glUniform1f(attenuationUniformLocation, l->data.attenuation);
 					glUniform1f(cutoffUniformLocation, l->data.cutoff);
 					l->lightDirty = false;
 				}
