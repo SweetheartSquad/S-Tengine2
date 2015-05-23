@@ -57,11 +57,6 @@
     <ClCompile Include="../src/Plane.cpp" />
     <ClCompile Include="../src/Point.cpp" />
     <ClCompile Include="../src/PointLight.cpp" />
-    <ClCompile Include="../src/poly2Tri/common/shapes.cc" />
-    <ClCompile Include="../src/poly2Tri/sweep/advancing_front.cc" />
-    <ClCompile Include="../src/poly2Tri/sweep/cdt.cc" />
-    <ClCompile Include="../src/poly2Tri/sweep/sweep.cc" />
-    <ClCompile Include="../src/poly2Tri/sweep/sweep_context.cc" />
     <ClCompile Include="../src/Rectangle.cpp" />
     <ClCompile Include="../src/RenderOptions.cpp" />
     <ClCompile Include="../src/RenderSurface.cpp" />
@@ -176,13 +171,7 @@
     <ClInclude Include="../include/Plane.h" />
     <ClInclude Include="../include/Point.h" />
     <ClInclude Include="../include/PointLight.h" />
-    <ClInclude Include="../include/poly2Tri/common/shapes.h" />
     <ClInclude Include="../include/poly2Tri/common/utils.h" />
-    <ClInclude Include="../include/poly2Tri/poly2tri.h" />
-    <ClInclude Include="../include/poly2Tri/sweep/advancing_front.h" />
-    <ClInclude Include="../include/poly2Tri/sweep/cdt.h" />
-    <ClInclude Include="../include/poly2Tri/sweep/sweep.h" />
-    <ClInclude Include="../include/poly2Tri/sweep/sweep_context.h" />
     <ClInclude Include="../include/Rectangle.h" />
     <ClInclude Include="../include/RenderOptions.h" />
     <ClInclude Include="../include/RenderSurface.h" />
