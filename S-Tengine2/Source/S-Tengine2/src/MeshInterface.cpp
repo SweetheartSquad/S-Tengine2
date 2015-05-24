@@ -128,65 +128,64 @@ void MeshInterface::clean(){
 void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption){
 	load();
 	clean();
-
-	if(glIsVertexArray(vaoId) == GL_TRUE){
-		if(glIsBuffer(vboId) == GL_TRUE){
-			if(glIsBuffer(iboId) == GL_TRUE){
-
-				if(_renderOption->shader != nullptr){		
-					//if(_renderOption->currentVao != vaoId){
-						_renderOption->currentVao = vaoId;
-						// Bind VAO
-						GLint prev;
-						glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &prev);
-						glBindVertexArray(vaoId);
-						checkForGlError(0,__FILE__,__LINE__);
-						//glBindBuffer(GL_ARRAY_BUFFER, vboId);
-						//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
-
-					//}
-					//This should help performance but there's a bit of a problem with it at the moment so I'll comment it out
-					//if(_renderOption->shader->getProgramId() != _renderOption->currentlyBoundShaderId) {
-						_renderOption->currentlyBoundShaderId = _renderOption->shader->getProgramId();
-						glUseProgram(_renderOption->shader->getProgramId());
-					//}
-					_renderOption->shader->clean(_matrixStack, _renderOption, this);	
-
-					// Alpha blending
-					// Should these be here or only once in the main render loop?
-					glEnable (GL_BLEND);
-					glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-					// Texture repeat
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, uvEdgeMode);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, uvEdgeMode);
-
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-					//}
-
-					// Texture scaling mode
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, scaleModeMag);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, scaleModeMin);
-
-					// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
-					glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
-					checkForGlError(0,__FILE__,__LINE__);
-
-					// Disable VAO
-					glBindVertexArray(prev);
-				}else{
-					std::cout << "no shader" << std::endl << std::endl;	
-				}
-			}else{
-				std::cout << "ibo bad" << std::endl << std::endl;
-			}
-		}else{
-			std::cout << "vbo bad" << std::endl << std::endl;
-		}
-	}else{
+	
+	if(glIsVertexArray(vaoId) != GL_TRUE){
 		std::cout << "vao bad" << std::endl << std::endl;
+		return;
 	}
+	if(glIsBuffer(vboId) != GL_TRUE){
+		std::cout << "vbo bad" << std::endl << std::endl;
+		return;
+	}
+	if(glIsBuffer(iboId) != GL_TRUE){
+		std::cout << "ibo bad" << std::endl << std::endl;
+		return;
+	}
+	if(_renderOption->shader == nullptr){
+		std::cout << "no shader" << std::endl << std::endl;	
+		return;
+	}
+	//if(_renderOption->currentVao != vaoId){
+		GLint prev = -1;
+		_renderOption->currentVao = vaoId;
+		// Bind VAO
+		glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &prev);
+		glBindVertexArray(vaoId);
+		checkForGlError(0,__FILE__,__LINE__);
+		//glBindBuffer(GL_ARRAY_BUFFER, vboId);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
+
+	//}
+	//This should help performance but there's a bit of a problem with it at the moment so I'll comment it out
+	//if(_renderOption->shader->getProgramId() != _renderOption->currentlyBoundShaderId) {
+		_renderOption->currentlyBoundShaderId = _renderOption->shader->getProgramId();
+		glUseProgram(_renderOption->shader->getProgramId());
+	//}
+	_renderOption->shader->clean(_matrixStack, _renderOption, this);	
+
+	// Alpha blending
+	// Should these be here or only once in the main render loop?
+	glEnable (GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	// Texture repeat
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, uvEdgeMode);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, uvEdgeMode);
+	
+	// Texture scaling mode
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, scaleModeMag);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, scaleModeMin);
+	//}
+
+
+	// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
+	glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
+	checkForGlError(0,__FILE__,__LINE__);
+
+	//if(prev != -1){
+		// Disable VAO
+		glBindVertexArray(prev);
+	//}
 }
 
 

@@ -47,11 +47,11 @@ std::string ShaderComponentPhong::getFragmentBodyString(){
 
 			SHADER_LIGHT_DISTANCE_AND_ATTENUATION +
 
-			"vec3 ambient = lights[i].ambientCoefficient * modFrag.rgb * lights[i].intensities" + SEMI_ENDL +
+			"vec3 ambient = " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].ambientCoefficient * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 			
 			"//diffuse" + ENDL +
 			"float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))" + SEMI_ENDL +
-			"vec3 diffuse = diffuseCoefficient * modFrag.rgb * lights[i].intensities" + SEMI_ENDL +
+			"vec3 diffuse = diffuseCoefficient * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 		
 			"//specular" + ENDL +
 			"float specularCoefficient = 0.0" + SEMI_ENDL +
@@ -61,7 +61,7 @@ std::string ShaderComponentPhong::getFragmentBodyString(){
 				"vec3 viewDirection = surfaceToCamera;" + ENDL +
 				"specularCoefficient = pow(max(0.0, dot(reflectDirection, viewDirection)), materials[j].shininess)" + SEMI_ENDL +
 			"}\n"
-			"vec3 specular = specularCoefficient * materials[j].specularColor * lights[i].intensities" + SEMI_ENDL +
+			"vec3 specular = specularCoefficient * materials[j].specularColor * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 			"specular = clamp(specular, 0.0, 1.0);" + ENDL +
 
 			"//linear color (color before gamma correction)" + ENDL +
