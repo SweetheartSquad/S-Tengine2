@@ -160,7 +160,7 @@ void Label::updateText(){
 		}
 	}
 
-	for(unsigned long int i = 0; i < text.size(); i++) {
+	for(unsigned long int i = 0; i < childTransform->children.size(); i++) {
 		Transform * t = dynamic_cast<Transform *>(childTransform->children.at(i));
 		MeshEntity * me = dynamic_cast<MeshEntity *>(t->children.at(0));
 		me->setVisible(true);
@@ -182,6 +182,23 @@ void Label::updateText(){
 	}
 
 	background->parents.at(0)->rotate(childTransform->getOrientationQuat(), kOBJECT);
+
+	float currentLineY = dynamic_cast<Transform*>(childTransform->children.at(0))->getTranslationVector().y;
+	int beginIdx = 0;
+	for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
+		float letterY = dynamic_cast<Transform*>(childTransform->children.at(i))->getTranslationVector().y;
+ 		if(abs(currentLineY - letterY) > 0.005 || i == childTransform->children.size() - 1) {
+			for(unsigned long int j = beginIdx; j <= i; j++) {
+				 Transform * letterTrans = dynamic_cast<Transform*>(childTransform->children.at(j));
+				 float xTrans = (-1 * (offsetCache.at(i - 1).x - width)/2) - offsetCache.at(j).x;
+				 letterTrans->translate(xTrans + offsetCache.at(i - 1).x/2, 
+										letterTrans->getTranslationVector().y, 
+										letterTrans->getTranslationVector().z, false);
+			}
+			beginIdx = i;
+			currentLineY = letterY;
+		}
+	}
 	
 }
 

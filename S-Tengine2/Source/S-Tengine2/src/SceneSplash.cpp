@@ -102,7 +102,7 @@ SceneSplash::SceneSplash(Game * _game) :
 	textShader->compileShader();
 
 	Font * font = new Font("../assets/arial.ttf", 50, false);
-	textThing = new Label(font, textShader, WrapMode::WORD_WRAP, -1);
+	textThing = new Label(font, textShader, shader, WrapMode::WORD_WRAP, -1);
 	textThing->setText(L"some text");
 	uiLayer.childTransform->addChild(textThing);
 }
