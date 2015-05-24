@@ -3,12 +3,16 @@
 #include <OpenALSound.h>
 #include <Transform.h>
 
-ALCcontext * OpenAL_Sound::context = nullptr; 
-ALCdevice * OpenAL_Sound::device = nullptr;
+ALCcontext * NodeOpenAL::context = nullptr; 
+ALCdevice * NodeOpenAL::device = nullptr;
 
-bool OpenAL_Sound::inited = false;
+bool NodeOpenAL::inited = false;
 
-void OpenAL_Sound::initOpenAL(){
+NodeOpenAL::NodeOpenAL(){
+	initOpenAL();
+}
+
+void NodeOpenAL::initOpenAL(){
 	// initialize OpenAL
 	if(!inited){
 		/*alureInitDevice(nullptr, nullptr);*/
@@ -28,7 +32,7 @@ void OpenAL_Sound::initOpenAL(){
 	}
 }
 
-void OpenAL_Sound::uninitOpenAL(){
+void NodeOpenAL::uninitOpenAL(){
 	if(inited){
 		//alureShutdownDevice();
 		alcDestroyContext(context);
@@ -37,22 +41,34 @@ void OpenAL_Sound::uninitOpenAL(){
 	}
 }
 
-void OpenAL_Sound::setListenerPosition(glm::vec3 _position){
-	alListener3f(AL_POSITION, _position.x, _position.y, _position.z);
-}
-void OpenAL_Sound::setListenerVelocity(glm::vec3 _velocity){
-	alListener3f(AL_POSITION, _velocity.x, _velocity.y, _velocity.z);
-}
-void OpenAL_Sound::setListenerOrientation(glm::vec3 _forward, glm::vec3 _up){
-	float orientation[6] = {_forward.x, _forward.y, _forward.z, _up.x, _up.y, _up.z};
-	alListenerfv(AL_ORIENTATION, orientation);
-}
 
-OpenAL_Sound::OpenAL_Sound(const char * _filename) :
+
+OpenAL_Buffer::OpenAL_Buffer(const char * _filename) :
 	NodeResource(false)
 {
-	initOpenAL();
-	
+	// generate buffer
+	alGenBuffers(1, &bufferId);
+
+	ALboolean alureStat = alureBufferDataFromFile(_filename, bufferId);
+	if(alureStat == AL_FALSE){
+		std::cout << "alureBufferDataFromFile() error: " << alureGetErrorString() << std::endl;
+	}
+}
+
+OpenAL_Buffer::~OpenAL_Buffer(){	
+	alDeleteBuffers( 1, &bufferId );
+}
+
+
+
+
+
+OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional) :
+	buffer(_buffer),
+	positional(_positional),
+	NodeResource(false)
+{
+	++_buffer->referenceCount;
 	// generate source
 	alGenSources(1, &sourceId);
 
@@ -70,59 +86,42 @@ OpenAL_Sound::OpenAL_Sound(const char * _filename) :
 		0.f, 1.f, 0.f
 	};
 	alSourcefv(sourceId, AL_DIRECTION, orientation);
+	if(!positional){
+		alSourcei(sourceId, AL_SOURCE_RELATIVE, AL_TRUE);
+	}
 
 	
-	// generate buffer
-	alGenBuffers(1, &bufferId);
-
-	ALboolean alureStat = alureBufferDataFromFile(_filename, bufferId);
-	if(alureStat == AL_FALSE){
-		std::cout << "alureBufferDataFromFile() error: " << alureGetErrorString() << std::endl;
-	}
-   
 	// attach the buffer to the source
-	alSourcei(sourceId, AL_BUFFER, bufferId);
-
-	
-	ALenum error;
-	if ((error = alGetError()) != AL_NO_ERROR){
-		std::cout << "OpenAL_Sound() error : " << error << std::endl;
-	}
+	alSourcei(sourceId, AL_BUFFER, buffer->bufferId);
+	//alSourceQueueBuffers(sourceId, 1, &bufferId);
 }
 
-OpenAL_Sound::~OpenAL_Sound(){
-	//alureDestroyStream(stream, 0, &bufferId);
-	alDeleteSources( 1, &sourceId );
-	alDeleteBuffers( 1, &bufferId );
+OpenAL_Source::~OpenAL_Source(){
+	alDeleteSources(1, &sourceId);
+	buffer->decrementAndDelete();
 }
 
-void OpenAL_Sound::setPosition(glm::vec3 _pos){
+
+void NodeOpenAL::setListenerPosition(glm::vec3 _position){
+	alListener3f(AL_POSITION, _position.x, _position.y, _position.z);
+}
+void NodeOpenAL::setListenerVelocity(glm::vec3 _velocity){
+	alListener3f(AL_POSITION, _velocity.x, _velocity.y, _velocity.z);
+}
+void NodeOpenAL::setListenerOrientation(glm::vec3 _forward, glm::vec3 _up){
+	float orientation[6] = {_forward.x, _forward.y, _forward.z, _up.x, _up.y, _up.z};
+	alListenerfv(AL_ORIENTATION, orientation);
+}
+
+void OpenAL_Source::setPosition(glm::vec3 _pos){
 	alSource3f(sourceId, AL_POSITION, _pos.x, _pos.y, _pos.z);
 }
-void OpenAL_Sound::setDirection(glm::vec3 _forward, glm::vec3 _up){
+void OpenAL_Source::setDirection(glm::vec3 _forward, glm::vec3 _up){
 	float orientation[6] = {_forward.x, _forward.y, _forward.z, _up.x, _up.y, _up.z};
 	alSourcefv(sourceId, AL_ORIENTATION, orientation);
 }
 
-
-
-void OpenAL_Sound::update(Step * _step){
-}
-
-void OpenAL_Sound::load(){
-	if(!loaded){
-		// the OpenAL stuff isn't dependent on the OpenGL context, so we don't actually have to worry about it here
-	}
-	NodeResource::load();
-}
-void OpenAL_Sound::unload(){
-	if(loaded){
-		// the OpenAL stuff isn't dependent on the OpenGL context, so we don't actually have to worry about it here
-	}
-	NodeResource::unload();
-}
-
-void OpenAL_Sound::play(bool _loop){	
+void OpenAL_Source::play(bool _loop){	
 	// set the loop parameter
 	alSourcei(sourceId, AL_LOOPING, _loop);
 
@@ -130,16 +129,16 @@ void OpenAL_Sound::play(bool _loop){
 	alSourcePlay(sourceId);
 }
 
-void OpenAL_Sound::stop(){	
+void OpenAL_Source::stop(){	
 	// Stop playing source
 	alSourceStop(sourceId);
 }
 
-void OpenAL_Sound::pause(){	
+void OpenAL_Source::pause(){	
 	// Pause source
 	alSourcePause(sourceId);
 }
-void OpenAL_Sound::resume(){	
+void OpenAL_Source::resume(){	
 	// Start playing source
 	alSourcePlay(sourceId);
 }
@@ -151,26 +150,49 @@ void OpenAL_Sound::resume(){
 
 
 
+OpenAL_Sound::OpenAL_Sound(OpenAL_Source * _source) :
+	NodeResource(false),
+	source(_source)
+{
+	
+}
+OpenAL_Sound::OpenAL_Sound(const char * _filename, bool _positional) :
+	NodeResource(false),
+	source(new OpenAL_Source(new OpenAL_Buffer(_filename), _positional))
+{
+	
+}
+
+OpenAL_Sound::~OpenAL_Sound(){
+	source->decrementAndDelete();
+}
+
+
+void OpenAL_Sound::update(Step * _step){
+	if(source->positional){
+		//this->parents.at(0)->translate(0.1, 0, 0);
+		source->setPosition(this->getWorldPos());
+		//alListener3f(AL_VELOCITY, vel[0], vel[1], vel[2]);
+		//alListenerfv(AL_ORIENTATION, orientation);
+	}
+}
 
 
 
 
-OpenAL_Stream::OpenAL_Stream(const char * _filename) :
-	OpenAL_Sound(_filename),
+
+
+/*
+OpenAL_Stream::OpenAL_Stream() :
+	OpenAL_Sound(_filename, _positional),
 	NodeResource(false)
 {
 }
 
 
 OpenAL_Stream::~OpenAL_Stream(){
-	//alureDestroyStream(stream, 0, &bufferId);
-	alDeleteSources(1, &sourceId);
-	alDeleteBuffers(1, &bufferId);
 }
 
 void OpenAL_Stream::update(Step * _step){
-	//this->parents.at(0)->translate(0.1, 0, 0);
-	setPosition(this->getWorldPos());
-	//alListener3f(AL_VELOCITY, vel[0], vel[1], vel[2]);
-	//alListenerfv(AL_ORIENTATION, orientation);
-}
+	OpenAL_Sound::update(_step);
+}*/
