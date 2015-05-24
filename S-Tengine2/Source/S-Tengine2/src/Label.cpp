@@ -190,8 +190,8 @@ void Label::updateText(){
  		if(abs(currentLineY - letterY) > 0.005 || i == childTransform->children.size() - 1) {
 			for(unsigned long int j = beginIdx; j <= i; j++) {
 				 Transform * letterTrans = dynamic_cast<Transform*>(childTransform->children.at(j));
-				 float xTrans = (-1 * (offsetCache.at(i - 1).x - width)/2) - offsetCache.at(j).x;
-				 letterTrans->translate(xTrans + offsetCache.at(i - 1).x/2, 
+				 float xTrans = (-1 * (offsetCache.at(i).x - width)/2) - offsetCache.at(j).x;
+				 letterTrans->translate(xTrans + offsetCache.at(i).x, 
 										letterTrans->getTranslationVector().y, 
 										letterTrans->getTranslationVector().z, false);
 			}
@@ -199,7 +199,6 @@ void Label::updateText(){
 			currentLineY = letterY;
 		}
 	}
-	
 }
 
 void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
