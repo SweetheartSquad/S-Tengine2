@@ -14,6 +14,7 @@ private:
 
 	static void initOpenAL();
 	static void uninitOpenAL();
+
 protected:
     static ALCcontext * context;
     static ALCdevice * device;
@@ -26,6 +27,8 @@ public:
 	static void setListenerVelocity(glm::vec3 _velocity);
 	// sets the global OpenAL listener orientation
 	static void setListenerOrientation(glm::vec3 _forward, glm::vec3 _up);
+	// if an OpenAL error is found, prints it to the console
+	static void checkError();
 };
 
 class OpenAL_Buffer : public virtual NodeOpenAL, public virtual NodeResource{
@@ -40,6 +43,7 @@ public:
 	ALuint sourceId;
 	OpenAL_Buffer * buffer;
 	bool positional;
+	bool looping;
 	OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional);
 	~OpenAL_Source();
 	
@@ -49,7 +53,6 @@ public:
 	void play(bool _loop = false);
 	void pause();
 	void stop();
-	void resume();
 };
 
 class OpenAL_Sound : public virtual NodeUpdatable, public virtual NodeResource, public virtual NodeChild{
@@ -63,10 +66,21 @@ public:
 	virtual void update(Step * _step) override;
 };
 
-/*
-class OpenAL_Stream : public OpenAL_Sound{
+
+class OpenAL_Stream : public virtual NodeUpdatable, public virtual NodeResource, public virtual NodeChild{
 public:
+	/*int curbuf;
+	OpenAL_Buffer * buffers[2];*/
+	alureStream * stream;
+	OpenAL_Source * source;
+	ALuint buffers[2];
+	bool active;
+
 	OpenAL_Stream(const char * _filename, bool _positional);
 	~OpenAL_Stream();
 	void update(Step * _step) override;
-};*/
+	
+	void play(bool _loop = false);
+	void pause();
+	void stop();
+};

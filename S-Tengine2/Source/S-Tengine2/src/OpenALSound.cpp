@@ -41,6 +41,35 @@ void NodeOpenAL::uninitOpenAL(){
 	}
 }
 
+void NodeOpenAL::checkError(){
+	ALenum error;
+	if ((error = alGetError()) != AL_NO_ERROR){
+		std::cout << "OpenAL Error: ";
+		switch (error){
+		case AL_NO_ERROR:
+			std::cout << "AL_NO_ERROR";
+			break;
+		case AL_INVALID_NAME:
+			std::cout << "AL_INVALID_NAME";
+			break;
+		case AL_INVALID_ENUM:
+			std::cout << "AL_INVALID_ENUM";
+			break;
+		case AL_INVALID_VALUE:
+			std::cout << "AL_INVALID_VALUE";
+			break;
+		case AL_INVALID_OPERATION:
+			std::cout << "AL_INVALID_OPERATION";
+			break;
+		case AL_OUT_OF_MEMORY:
+			std::cout << "AL_OUT_OF_MEMORY";
+			break;
+		default:
+			break;
+		}
+		std::cout << std::endl;
+	}
+}
 
 
 OpenAL_Buffer::OpenAL_Buffer(const char * _filename) :
@@ -66,9 +95,9 @@ OpenAL_Buffer::~OpenAL_Buffer(){
 OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional) :
 	buffer(_buffer),
 	positional(_positional),
+	looping(false),
 	NodeResource(false)
 {
-	++_buffer->referenceCount;
 	// generate source
 	alGenSources(1, &sourceId);
 
@@ -78,6 +107,7 @@ OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional) :
 	alSourcef(sourceId, AL_GAIN, 1.f);
 	alSource3f(sourceId, AL_POSITION, 0, 0, 0);
 	alSource3f(sourceId, AL_VELOCITY, 0, 0, 0);
+    alSourcef(sourceId, AL_ROLLOFF_FACTOR, 1.0f);
 
 	float orientation[6] = {
 		/*forward vector*/
@@ -90,10 +120,12 @@ OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional) :
 		alSourcei(sourceId, AL_SOURCE_RELATIVE, AL_TRUE);
 	}
 
-	
-	// attach the buffer to the source
-	alSourcei(sourceId, AL_BUFFER, buffer->bufferId);
-	//alSourceQueueBuffers(sourceId, 1, &bufferId);
+	if(_buffer != nullptr){
+		// attach the buffer to the source
+		alSourcei(sourceId, AL_BUFFER, buffer->bufferId);
+		//alSourceQueueBuffers(sourceId, 1, &bufferId);
+		++_buffer->referenceCount;
+	}
 }
 
 OpenAL_Source::~OpenAL_Source(){
@@ -123,6 +155,7 @@ void OpenAL_Source::setDirection(glm::vec3 _forward, glm::vec3 _up){
 
 void OpenAL_Source::play(bool _loop){	
 	// set the loop parameter
+	looping = _loop;
 	alSourcei(sourceId, AL_LOOPING, _loop);
 
 	// Start playing source
@@ -132,15 +165,13 @@ void OpenAL_Source::play(bool _loop){
 void OpenAL_Source::stop(){	
 	// Stop playing source
 	alSourceStop(sourceId);
+	looping = false;
 }
 
 void OpenAL_Source::pause(){	
 	// Pause source
 	alSourcePause(sourceId);
-}
-void OpenAL_Source::resume(){	
-	// Start playing source
-	alSourcePlay(sourceId);
+	looping = false;
 }
 
 
@@ -182,17 +213,84 @@ void OpenAL_Sound::update(Step * _step){
 
 
 
-/*
-OpenAL_Stream::OpenAL_Stream() :
-	OpenAL_Sound(_filename, _positional),
-	NodeResource(false)
+
+OpenAL_Stream::OpenAL_Stream(const char * _filename, bool _positional) :
+	NodeResource(false)/*,
+	curbuf(0)*/,
+	active(false)
 {
+	/*source = new OpenAL_Source(nullptr, _positional);
+	buffers[0] = new OpenAL_Buffer(_filename);
+	buffers[1] = new OpenAL_Buffer(_filename);
+	
+	alSourceQueueBuffers(source->sourceId, 1, &buffers[0]->bufferId);
+	alSourceQueueBuffers(source->sourceId, 1, &buffers[1]->bufferId);*/
+
+	//alGenSources(1, &sourceId);
+	source = new OpenAL_Source(nullptr, _positional);
+	stream = alureCreateStreamFromFile(_filename, 44100/2, 2, buffers);
 }
 
 
 OpenAL_Stream::~OpenAL_Stream(){
+	/*delete source;
+	delete buffers[0];
+	delete buffers[1];*/
+	alureDestroyStream(stream, 2, buffers);
+	source->decrementAndDelete();
 }
 
 void OpenAL_Stream::update(Step * _step){
-	OpenAL_Sound::update(_step);
-}*/
+	if(!active){
+		return;
+	}
+
+	if(source->positional){
+		source->setPosition(this->getWorldPos());
+	}
+
+	ALint state = AL_PLAYING;
+	ALint processed = 0;
+	 
+	alGetSourcei(source->sourceId, AL_SOURCE_STATE, &state);
+	alGetSourcei(source->sourceId, AL_BUFFERS_PROCESSED, &processed);
+	if(processed > 0){
+		ALuint bufs[2];
+		alSourceUnqueueBuffers(source->sourceId, processed, bufs);
+		processed = alureBufferDataFromStream(stream, processed, bufs);
+		if(processed <= 0){
+			alureRewindStream(stream);
+			return; // done streaming
+		}
+	 
+		alSourceQueueBuffers(source->sourceId, processed, bufs);
+	}
+	if(state != AL_PLAYING && source->looping){
+		alureRewindStream(stream);
+		alSourcePlay(source->sourceId);
+	}
+
+	NodeOpenAL::checkError();
+}
+
+void OpenAL_Stream::play(bool _loop){
+	active = true;
+	source->looping = _loop;
+	//alureBufferDataFromStream(stream, 2, buffers);
+	alSourceQueueBuffers(source->sourceId, 2, buffers);
+	alSourcePlay(source->sourceId);
+}
+
+void OpenAL_Stream::stop(){
+	active = false;
+	source->stop();
+	ALint processed = 0;
+	alGetSourcei(source->sourceId, AL_BUFFERS_PROCESSED, &processed);
+	alSourceUnqueueBuffers(source->sourceId, processed, buffers);
+	alureRewindStream(stream);
+}
+
+void OpenAL_Stream::pause(){
+	active = false;
+	source->pause();
+}
