@@ -76,6 +76,9 @@ OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional) :
 	alSourcei(sourceId, AL_LOOPING, AL_FALSE);
 	alSourcef(sourceId, AL_PITCH, 1.f);
 	alSourcef(sourceId, AL_GAIN, 1.f);
+	alSourcef(sourceId, AL_ROLLOFF_FACTOR, 0.05f);
+	alDopplerFactor(1.f);
+	alDopplerVelocity(1.f);
 	alSource3f(sourceId, AL_POSITION, 0, 0, 0);
 	alSource3f(sourceId, AL_VELOCITY, 0, 0, 0);
 
@@ -106,7 +109,7 @@ void NodeOpenAL::setListenerPosition(glm::vec3 _position){
 	alListener3f(AL_POSITION, _position.x, _position.y, _position.z);
 }
 void NodeOpenAL::setListenerVelocity(glm::vec3 _velocity){
-	alListener3f(AL_POSITION, _velocity.x, _velocity.y, _velocity.z);
+	alListener3f(AL_VELOCITY, _velocity.x, _velocity.y, _velocity.z);
 }
 void NodeOpenAL::setListenerOrientation(glm::vec3 _forward, glm::vec3 _up){
 	float orientation[6] = {_forward.x, _forward.y, _forward.z, _up.x, _up.y, _up.z};
