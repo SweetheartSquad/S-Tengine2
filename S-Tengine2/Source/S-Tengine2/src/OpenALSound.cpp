@@ -266,7 +266,8 @@ void OpenAL_Stream::update(Step * _step){
 		alSourceQueueBuffers(source->sourceId, processed, bufs);
 	}
 	if(state != AL_PLAYING && source->looping){
-		alureRewindStream(stream);
+		//alureRewindStream(stream);
+		alSourceQueueBuffers(source->sourceId, 2, buffers);
 		alSourcePlay(source->sourceId);
 	}
 
