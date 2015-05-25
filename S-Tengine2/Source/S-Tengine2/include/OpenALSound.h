@@ -67,22 +67,28 @@ public:
 };
 
 
-#define NUM_BUFS 2
+// number of buffers used for a single OpenAL_Stream
+#define NUM_BUFS 4
 class OpenAL_Stream : public virtual NodeUpdatable, public virtual NodeResource, public virtual NodeChild{
 public:
-	/*int curbuf;
-	OpenAL_Buffer * buffers[2];*/
 	alureStream * stream;
 	OpenAL_Source * source;
 	ALuint buffers[NUM_BUFS];
-	bool active;
-	bool done;
 
 	OpenAL_Stream(const char * _filename, bool _positional);
 	~OpenAL_Stream();
+
 	void update(Step * _step) override;
 	
+	// Starts the audio stream if stopped, resumes if paused, restarts if playing.
 	void play(bool _loop = false);
+	// Pauses the audio stream
 	void pause();
+	// Stops the audio stream + rewinds to the beginning
 	void stop();
+
+	void rewind();
+
+	bool isStreaming;
+	ALenum state;
 };
