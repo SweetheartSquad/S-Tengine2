@@ -67,14 +67,16 @@ public:
 };
 
 
+#define NUM_BUFS 2
 class OpenAL_Stream : public virtual NodeUpdatable, public virtual NodeResource, public virtual NodeChild{
 public:
 	/*int curbuf;
 	OpenAL_Buffer * buffers[2];*/
 	alureStream * stream;
 	OpenAL_Source * source;
-	ALuint buffers[2];
+	ALuint buffers[NUM_BUFS];
 	bool active;
+	bool done;
 
 	OpenAL_Stream(const char * _filename, bool _positional);
 	~OpenAL_Stream();
