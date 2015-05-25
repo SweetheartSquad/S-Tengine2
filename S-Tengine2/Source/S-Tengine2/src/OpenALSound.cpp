@@ -244,6 +244,11 @@ OpenAL_Stream::~OpenAL_Stream(){
 }
 
 void OpenAL_Stream::update(Step * _step){
+	// keep the stream informed of the source state
+	alGetSourcei(source->sourceId, AL_SOURCE_STATE, &state);
+	NodeOpenAL::checkError();
+
+
     // Get the number of buffers that have been processed and are ready for reuse
     ALint numBufs = 0;
 	alGetSourcei(source->sourceId, AL_BUFFERS_PROCESSED, &numBufs);
@@ -314,6 +319,11 @@ void OpenAL_Stream::stop(){
 }
 
 void OpenAL_Stream::pause(){
+	// if we aren't playing, then we can't pause
+	if(state != AL_PLAYING){
+		return;
+	}
+
 	state = AL_PAUSED;
 	if(!isStreaming){
 		// if the stream isn't playing, we can return early

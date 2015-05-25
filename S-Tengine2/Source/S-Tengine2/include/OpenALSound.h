@@ -75,6 +75,11 @@ public:
 	OpenAL_Source * source;
 	ALuint buffers[NUM_BUFS];
 
+	// whether the stream should continue buffering
+	bool isStreaming;
+	// the current state of the stream source
+	ALint state;
+
 	OpenAL_Stream(const char * _filename, bool _positional);
 	~OpenAL_Stream();
 
@@ -88,7 +93,4 @@ public:
 	void stop();
 
 	void rewind();
-
-	bool isStreaming;
-	ALenum state;
 };
