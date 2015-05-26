@@ -266,10 +266,13 @@ void OpenAL_Stream::update(Step * _step){
 			}
 			if(!source->looping){
 				isStreaming = false;
+			}else{
+				// now that the stream is rewound, try to grab a new buffer so that we can continue playing
+				numToQueue = alureBufferDataFromStream(stream, 1, &tempBuf);
 			}
 		}
 		if(isStreaming){
-			alSourceQueueBuffers(source->sourceId, 1, &tempBuf);
+			alSourceQueueBuffers(source->sourceId, numToQueue, &tempBuf);
 			NodeOpenAL::checkError();
 		}
 	}
@@ -280,7 +283,6 @@ void OpenAL_Stream::update(Step * _step){
 }
 
 void OpenAL_Stream::play(bool _loop){
-	source->looping = _loop;
 	if(state == AL_PAUSED){
 		// if the stream is paused, we can simply resume playing and return early
 		state = AL_PLAYING;
@@ -299,10 +301,12 @@ void OpenAL_Stream::play(bool _loop){
 		NodeOpenAL::checkError();
 		isStreaming = true;
 		
+		source->looping = _loop; // we have to set looping to true here because the call to pause() will have set it to false
 		return;
 	}
 	
 	stop();
+	source->looping = _loop; // we have to set looping to true here because stop() sets it to false
 	
 	ALsizei numBuffs = alureBufferDataFromStream(stream, NUM_BUFS, buffers);
 	alSourceQueueBuffers(source->sourceId, numBuffs, buffers);
