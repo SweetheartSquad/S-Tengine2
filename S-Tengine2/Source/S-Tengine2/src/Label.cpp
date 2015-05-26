@@ -182,16 +182,18 @@ void Label::updateText(){
 	}
 
 	background->parents.at(0)->rotate(childTransform->getOrientationQuat(), kOBJECT);
-
+	offsetCache.push_back(glm::vec2());
+	offsetCache.push_back(glm::vec2());
 	float currentLineY = dynamic_cast<Transform*>(childTransform->children.at(0))->getTranslationVector().y;
 	int beginIdx = 0;
 	for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
-		float letterY = dynamic_cast<Transform*>(childTransform->children.at(i))->getTranslationVector().y;
+		float letterY = dynamic_cast<Transform *>(childTransform->children.at(i))->getTranslationVector().y;
  		if(abs(currentLineY - letterY) > 0.005 || i == childTransform->children.size() - 1) {
+			int cacheOffset = i == childTransform->children.size() - 1 ? 0 : -2;
 			for(unsigned long int j = beginIdx; j <= i; j++) {
 				 Transform * letterTrans = dynamic_cast<Transform*>(childTransform->children.at(j));
-				 float xTrans = (-1 * (offsetCache.at(i).x - width)/2) - offsetCache.at(j).x;
-				 letterTrans->translate(xTrans + offsetCache.at(i).x, 
+				 float xTrans = (-1 * (offsetCache.at(i - cacheOffset).x - width)/2) - offsetCache.at(j).x;
+				 letterTrans->translate(xTrans + offsetCache.at(i - cacheOffset).x, 
 										letterTrans->getTranslationVector().y, 
 										letterTrans->getTranslationVector().z, false);
 			}
@@ -199,6 +201,8 @@ void Label::updateText(){
 			currentLineY = letterY;
 		}
 	}
+	offsetCache.pop_back();
+	offsetCache.pop_back();
 }
 
 void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
@@ -227,10 +231,11 @@ void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
 
 void Label::newLine(glm::vec2 * _offset){
 	lineWidths.push_back(offsetCache.back().x);
-	_offset->x = 0;
+
 	float lineHeight = font->getLineHeight(); 
 	_offset->y -= lineHeight;
 	measuredHeight += lineHeight;
+	_offset->x = 0;
 	offsetCache.back() = glm::vec2(_offset->x, _offset->y);
 }
 
