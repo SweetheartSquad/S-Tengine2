@@ -234,7 +234,7 @@ OpenAL_Stream::OpenAL_Stream(const char * _filename, bool _positional) :
 	source(new OpenAL_Source(nullptr, _positional)),
 	stream(nullptr)
 {
-	stream = alureCreateStreamFromFile(_filename, 44100, NUM_BUFS, buffers);
+	stream = alureCreateStreamFromFile(_filename, 44100/10, NUM_BUFS, buffers);
 }
 
 
@@ -258,8 +258,8 @@ void OpenAL_Stream::update(Step * _step){
 		ALuint tempBuf;
 		alSourceUnqueueBuffers(source->sourceId, 1, &tempBuf);
 		NodeOpenAL::checkError();
-		ALsizei numQueued = alureBufferDataFromStream(stream, 1, &tempBuf);
-		if(numQueued <= 0){
+		ALsizei numToQueue = alureBufferDataFromStream(stream, 1, &tempBuf);
+		if(numToQueue <= 0){
 			if(!alureRewindStream(stream)){
 				std::cout << alureGetErrorString();
 				assert(false);
@@ -272,6 +272,10 @@ void OpenAL_Stream::update(Step * _step){
 			alSourceQueueBuffers(source->sourceId, 1, &tempBuf);
 			NodeOpenAL::checkError();
 		}
+	}
+
+	if(isStreaming && state != AL_PLAYING){
+		alSourcePlay(source->sourceId);
 	}
 }
 
