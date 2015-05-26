@@ -119,6 +119,8 @@
     <ClCompile Include="../src/NodeUI.cpp" />
     <ClCompile Include="../src/OpenALSound.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentText.cpp" />
+    <ClCompile Include="../src/sqlite/shell.c" />
+    <ClCompile Include="../src/sqlite/sqlite3.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -237,6 +239,8 @@
     <ClInclude Include="../include/SceneSplash.h" />
     <ClInclude Include="../include/tiny_obj_loader.h" />
     <ClInclude Include="../include/UILayer.h" />
+    <ClInclude Include="../include/sqlite/sqlite3.h" />
+    <ClInclude Include="../include/sqlite/sqlite3ext.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E178CAF8-5E96-478C-812C-DCBA942FC878}</ProjectGuid>
