@@ -5,8 +5,33 @@
 #include <node\NodeResource.h>
 #include <AL\alure.h>
 #include <iostream>
+#include <string>
 
-//#define NUM_BUFS 32
+#ifdef _DEBUG
+// OpenAL error-checking macro (enabled because _DEBUG is defined)
+// If an error is found, it is printed to the console and the application will fail an assertion
+#define checkForAlError(_alFunc) do{\
+	(_alFunc);\
+	ALenum err = alGetError();\
+	if(err != AL_NO_ERROR){\
+		std::string errString;\
+		switch(err){\
+			case AL_NO_ERROR:			errString = "AL_NO_ERROR"; break;\
+			case AL_INVALID_NAME:		errString = "AL_INVALID_NAME"; break;\
+			case AL_INVALID_ENUM:		errString = "AL_INVALID_ENUM"; break;\
+			case AL_INVALID_VALUE:		errString = "AL_INVALID_VALUE"; break;\
+			case AL_INVALID_OPERATION:	errString = "AL_INVALID_OPERATION"; break;\
+			case AL_OUT_OF_MEMORY:		errString = "AL_OUT_OF_MEMORY"; break;\
+			default: break;\
+		}\
+		std::cout << "OpenAL Error - " << err << ": " << errString << std::endl;\
+		assert(false);\
+	}\
+}while(false)
+#else
+// OpenAL error-checking macro (disabled because _DEBUG is not defined)
+#define checkForAlError(_alFunc) (_alFunc)
+#endif
 
 class NodeOpenAL abstract : public Node{
 private:
@@ -27,8 +52,6 @@ public:
 	static void setListenerVelocity(glm::vec3 _velocity);
 	// sets the global OpenAL listener orientation
 	static void setListenerOrientation(glm::vec3 _forward, glm::vec3 _up);
-	// if an OpenAL error is found, prints it to the console
-	static void checkError();
 };
 
 class OpenAL_Buffer : public virtual NodeOpenAL, public virtual NodeResource{
