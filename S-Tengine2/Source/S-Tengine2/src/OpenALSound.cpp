@@ -213,9 +213,13 @@ void OpenAL_Stream::update(Step * _step){
 	
 	while(numBufs--){
 		ALuint tempBuf;
+		// unqueue the processed buffer
 		checkForAlError(alSourceUnqueueBuffers(source->sourceId, 1, &tempBuf));
+		// attempt to fill the unqueued buffer with new data from the stream
 		ALsizei numToQueue = alureBufferDataFromStream(stream, 1, &tempBuf);
 		if(numToQueue <= 0){
+			// if the stream didn't fill any of the buffers,
+			// the stream end has been reached, so we rewind it.
 			if(!alureRewindStream(stream)){
 				std::cout << alureGetErrorString();
 				assert(false);
@@ -223,15 +227,22 @@ void OpenAL_Stream::update(Step * _step){
 			if(!source->looping){
 				isStreaming = false;
 			}else{
-				// now that the stream is rewound, try to grab a new buffer so that we can continue playing
+				// now that the stream is rewound, we can try to grab
+				// a new buffer so that we can loop
 				numToQueue = alureBufferDataFromStream(stream, 1, &tempBuf);
 			}
 		}
+
 		if(isStreaming){
+			// queue the newly filled buffer on the source
 			checkForAlError(alSourceQueueBuffers(source->sourceId, numToQueue, &tempBuf));
 		}
 	}
 
+	// If isStreaming == true, the sound should be playing
+	// but as a result of the source running out of queued
+	// buffers, it will stop playing. We can double-check
+	// the state and restart it if needed.
 	if(isStreaming && state != AL_PLAYING){
 		checkForAlError(alSourcePlay(source->sourceId));
 	}
