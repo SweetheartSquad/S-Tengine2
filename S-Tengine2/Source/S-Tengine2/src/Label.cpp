@@ -13,13 +13,15 @@
 #include <MeshFactory.h>
 #include <CharacterUtils.h>
 
+
 Label::Label(Font * _font, Shader * _textShader, Shader * _backgroundShader, WrapMode _wrapMode, float _width) :
 	width(_width),
 	wrapMode(_wrapMode),
 	measuredWidth(0.0f),
 	measuredHeight(0.0f),
 	textDirty(false),
-	background(new MeshEntity(MeshFactory::getPlaneMesh(0.5f)))
+	background(new MeshEntity(MeshFactory::getPlaneMesh(0.5f))),
+	renderableGlyphs(0)
 {
 	font = _font;
 	++font->referenceCount;
@@ -90,6 +92,7 @@ void Label::updateText(){
 	}
 	
 	int strOffset = 0;
+
 	for(unsigned long int i = 0; i < text.size() && i < oldText.size(); i++) {
 		if(text.at(i) != oldText.at(i)) {
 			break;
@@ -97,32 +100,36 @@ void Label::updateText(){
 		strOffset++;
 	}
 
-	if(text.size() < oldText.size()) {
-		float lastX = 0.0;
-		for(unsigned long int i = 0; i < oldText.size() - text.size(); i++) {
-			if(lastX < offsetCache.back().x) {
-				//lineWidths.pop_back();
-			}
-			lastX = offsetCache.back().x;
-			offsetCache.pop_back();
+	renderableGlyphs = 0;
+	for(unsigned long int i = 0; i < text.size(); ++i) {
+		if(text.at(i) != '\n') {
+			renderableGlyphs++;
+		}
+	}
+
+	int oldRenderableGlyphs = 0;
+	for(unsigned long int i = 0; i < oldText.size(); ++i) {
+		if(oldText.at(i) != '\n') {
+			oldRenderableGlyphs++;
 		}
 	}
 
 	if(offsetCache.size() > 0) {
-		offset = offsetCache.at(offsetCache.size() - 1);
+		offset = offsetCache.at(oldRenderableGlyphs - 1);
 	}
 
+	int renderableIdx = abs(renderableGlyphs - oldRenderableGlyphs);
 	for(unsigned long int c = strOffset; c < text.size(); ++c) {
 		wchar_t ch = text.at(c);
 		if(ch == '\n'){
-			newLine(&offset);
+			newLine(&offset, c);
 		}else{
 			switch(wrapMode){
 				case CHARACTER_WRAP:
 					{
 						Glyph * glyph = font->getMeshInterfaceForChar(c);
 						if(offset.x + glyph->advance.x/64 > width){
-							newLine(&offset);
+							newLine(&offset, c - 1);
 						}
 						updateChar(&offset, c, ch);
 						break;
@@ -134,7 +141,7 @@ void Label::updateText(){
 							if(!CharacterUtils::isSpace(ch)){
 								updateChar(&offset, c, '-');
 							}	
-							newLine(&offset);
+							newLine(&offset, renderableIdx);
 							updateChar(&offset, c, ch);
 						}else {
 							updateChar(&offset, c, ch);
@@ -146,10 +153,11 @@ void Label::updateText(){
 						for(unsigned long int i = 0; i < text.size() && c < text.size(); ++i) {
 							updateChar(&offset, c, text.at(c));
 							if(CharacterUtils::isSpace(text.at(c))){
-								newLine(&offset);
+								newLine(&offset, renderableIdx);
 								break;
 							}
 							c++;
+							renderableIdx++;
 						}
 					}else {
 						updateChar(&offset, c, ch);
@@ -157,6 +165,7 @@ void Label::updateText(){
 					break;
 				default: break;
 			}
+			renderableIdx++;
 		}
 	}
 
@@ -182,27 +191,40 @@ void Label::updateText(){
 	}
 
 	background->parents.at(0)->rotate(childTransform->getOrientationQuat(), kOBJECT);
-	offsetCache.push_back(glm::vec2());
-	offsetCache.push_back(glm::vec2());
+
+	// Set currentLineY to the value of the first childs y translation
 	float currentLineY = dynamic_cast<Transform*>(childTransform->children.at(0))->getTranslationVector().y;
 	int beginIdx = 0;
-	for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
+
+	// loop through each of the children of the child transfom. This will be all of the characters
+	for(unsigned long int i = 0; i < childTransform->children.size(); i++) {
+		// letterY is the y transform of the current child
 		float letterY = dynamic_cast<Transform *>(childTransform->children.at(i))->getTranslationVector().y;
- 		if(abs(currentLineY - letterY) > 0.005 || i == childTransform->children.size() - 1) {
-			int cacheOffset = i == childTransform->children.size() - 1 ? 0 : -2;
+		// We take the absolute of the difference of the two y values
+		float f = abs(currentLineY - letterY);
+		// If there is a difference we know we are on a new line
+		// TODO - What happens for letters which move based on font positioning?
+		// We also want to enter the statement if we are on the last letter
+ 		if(f > 0.005 || i >= childTransform->children.size() - 1) {
+			// Loop through each letter for the row so we can align it
+			// Start from the being idx which starts as 0 and gets set to i
+			// Include i in the loop since it is in the row
 			for(unsigned long int j = beginIdx; j <= i; j++) {
+				 // Get the offset for the letter at j
 				 Transform * letterTrans = dynamic_cast<Transform*>(childTransform->children.at(j));
-				 float xTrans = (-1 * (offsetCache.at(i - cacheOffset).x - width)/2) - offsetCache.at(j).x;
-				 letterTrans->translate(xTrans + offsetCache.at(i - cacheOffset).x, 
+				 // Center the letters based on the current letter's transform and the last letter in the row's transform.
+				 // Again we are using the cache offset here to get the last letter in the previos row if we aren't on the current row
+				 float xTrans = (-1 * (offsetCache.at(i - 1).x - width)/2) - offsetCache.at(j).x;
+				 letterTrans->translate(xTrans + offsetCache.at(i - 1).x, 
 										letterTrans->getTranslationVector().y, 
 										letterTrans->getTranslationVector().z, false);
 			}
+			// Update the begin index to the first letter in the new row
 			beginIdx = i;
+			// Update the currentLineY for the next iteration of the loop
 			currentLineY = letterY;
 		}
 	}
-	offsetCache.pop_back();
-	offsetCache.pop_back();
 }
 
 void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
@@ -226,17 +248,29 @@ void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
 	if(adv > measuredWidth) {
 		measuredWidth = adv;
 	}
-	offsetCache.push_back(glm::vec2(adv, _offset->y));
+
+	if(offsetCache.size() < childTransform->children.size()){
+		offsetCache.push_back(glm::vec2(adv, _offset->y));
+	}else {
+		offsetCache.at(_index) = glm::vec2(adv, _offset->y);
+	}
 }
 
-void Label::newLine(glm::vec2 * _offset){
-	lineWidths.push_back(offsetCache.back().x);
-
+void Label::newLine(glm::vec2 * _offset, int _idx){
 	float lineHeight = font->getLineHeight(); 
 	_offset->y -= lineHeight;
 	measuredHeight += lineHeight;
+
+	//offsetCache.at(_idx) = glm::vec2(_offset->x, _offset->y);
+	
+	/*offsetCache.insert(offsetCache.begin() + _idx, glm::vec2(_offset->x, _offset->y));
+	MeshEntity * newLine = new MeshEntity(new MeshInterface(GL_QUADS, GL_STATIC_DRAW));
+	newLine->setVisible(false);
+	childTransform->addChildAtIndex(newLine, _idx);*/
 	_offset->x = 0;
-	offsetCache.back() = glm::vec2(_offset->x, _offset->y);
+	updateChar(_offset, _idx, L'\n');
+	offsetCache.at(_idx) = glm::vec2(_offset->x, _offset->y);
+	//
 }
 
 void Label::setText(std::wstring _text){

@@ -46,7 +46,8 @@ private:
 	float measuredWidth;
 	float measuredHeight;
 	bool textDirty;
-	void newLine(glm::vec2 * _offset);
+	void newLine(glm::vec2 * _offset, int _idx);
 	void updateChar(glm::vec2 * _offset, int _index, wchar_t _c);
 	MeshEntity * background;
+	int renderableGlyphs;
 };
