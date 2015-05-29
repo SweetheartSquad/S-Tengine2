@@ -21,7 +21,9 @@ public:
 	BulletMeshEntity * lowerarmRight;
 
 
-	BulletRagdoll(BulletWorld * _world);
+	BulletRagdoll(BulletWorld * _world, float gs = 1.f);
 
 	void setShader(Shader * _shader, bool _default);
+
+	void translatePhysical(glm::vec3 _v);
 };
