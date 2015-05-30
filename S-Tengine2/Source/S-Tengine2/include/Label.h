@@ -15,6 +15,11 @@ enum WrapMode {
 	WORD_WRAP
 };
 
+enum Alignment {
+	LEFT,
+	CENTER
+};
+
 class Label : public Entity{
 public:
 	
@@ -37,6 +42,8 @@ public:
 	void appendText(std::wstring _text);
 	std::wstring getText();
 	void updateText();
+	void updateAlignment();
+	void setAlignment(Alignment _alignment);
 
 private:
 	std::wstring text;
@@ -50,4 +57,8 @@ private:
 	void updateChar(glm::vec2 * _offset, int _index, wchar_t _c);
 	MeshEntity * background;
 	int renderableGlyphs;
+	Alignment alignment;
+	std::wstring textInternal;
+	bool wasAppended;
+	int lineCount;
 };
