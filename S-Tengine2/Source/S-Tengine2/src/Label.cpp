@@ -21,10 +21,10 @@ Label::Label(Font * _font, Shader * _textShader, Shader * _backgroundShader, Wra
 	measuredHeight(0.0f),
 	textDirty(false),
 	background(new MeshEntity(MeshFactory::getPlaneMesh(0.5f))),
-	renderableGlyphs(0),
 	alignment(LEFT),
 	wasAppended(false),
-	lineCount(1)
+	lineCount(1),
+	offset(glm::vec2(0.0f, 0.0f))
 {
 	font = _font;
 	++font->referenceCount;
@@ -32,10 +32,9 @@ Label::Label(Font * _font, Shader * _textShader, Shader * _backgroundShader, Wra
 	backgroundShader = _backgroundShader;
 	++textShader->referenceCount;
 	++backgroundShader->referenceCount;
-	
-	Transform * trans = new Transform();
-	trans->addChild(background, true);
+
 	background->setShader(backgroundShader, true);
+	backgroundTransform = childTransform->addChild(background);
 }
 
 void Label::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
@@ -87,43 +86,46 @@ std::wstring Label::getText(){
 }
 
 void Label::updateAlignment(){
-	// Set currentLineY to the value of the first childs y translation
-	float currentLineY = dynamic_cast<Transform*>(childTransform->children.at(0))->getTranslationVector().y;
-	int beginIdx = 0;
-
-	switch (alignment){
-		case CENTER:
-			// loop through each of the children of the child transfom. This will be all of the characters
-			for(unsigned long int i = 0; i < childTransform->children.size(); i++) {
-				// letterY is the y transform of the current child
-				float letterY = dynamic_cast<Transform *>(childTransform->children.at(i))->getTranslationVector().y;
-				// We take the absolute of the difference of the two y values
-				float f = abs(currentLineY - letterY);
-				// If there is a difference we know we are on a new line
-				// TODO - What happens for letters which move based on font positioning?
-				// We also want to enter the statement if we are on the last letter
- 				if(f > 0.005 || i >= childTransform->children.size() - 1) {
-					// Loop through each letter for the row so we can align it
-					// Start from the being idx which starts as 0 and gets set to i
-					// Include i in the loop since it is in the row
-					for(unsigned long int j = beginIdx; j <= i; j++) {
-						 int o = childTransform->children.size() > 1 ? 1 : 0;
-						 // Get the offset for the letter at j
-						 Transform * letterTrans = dynamic_cast<Transform*>(childTransform->children.at(j));
-						 // Center the letters based on the current letter's transform and the last letter in the row's transform.
-						 // Again we are using the cache offset here to get the last letter in the previos row if we aren't on the current row
-						 float xTrans = (-1 * (offsetCache.at(i - o).x - width)/2) - offsetCache.at(j).x;
-						 letterTrans->translate(xTrans + offsetCache.at(i - o).x , 
-												letterTrans->getTranslationVector().y, 
-												letterTrans->getTranslationVector().z, false);
+	if(childTransform->children.size() > 1){
+		// Set currentLineY to the value of the first childs y translation
+		float currentLineY = dynamic_cast<Transform*>(childTransform->children.at(1))->getTranslationVector().y;
+		int beginIdx = 1;
+		switch (alignment){
+			case CENTER:
+				{
+					// loop through each of the children of the child transfom. This will be all of the characters
+					for(unsigned long int i = 1; i < childTransform->children.size(); i++) {
+						// letterY is the y transform of the current child
+						float letterY = dynamic_cast<Transform *>(childTransform->children.at(i))->getTranslationVector().y;
+						// We take the absolute of the difference of the two y values
+						float f = abs(currentLineY - letterY);
+						// If there is a difference we know we are on a new line
+						// TODO - What happens for letters which move based on font positioning?
+						// We also want to enter the statement if we are on the last letter
+ 						if(f > 0.005 || i == childTransform->children.size() - 1) {
+							// Loop through each letter for the row so we can align it
+							// Start from the being idx which starts as 0 and gets set to i
+							// Include i in the loop since it is in the row
+							for(unsigned long int j = beginIdx; j <= i; j++) {
+								 int o = childTransform->children.size() > 2 ? 1 : 0;
+								 // Get the offset for the letter at j
+								 Transform * letterTrans = dynamic_cast<Transform*>(childTransform->children.at(j));
+								 // Center the letters based on the current letter's transform and the last letter in the row's transform.
+								 // Again we are using the cache offset here to get the last letter in the previos row if we aren't on the current row
+								 float xTrans = (-1 * (offsetCache.at((i - 1) - o).x - width)/2) - offsetCache.at(j - 1).x;
+								 letterTrans->translate(xTrans + offsetCache.at((i - 1) - o).x , 
+														letterTrans->getTranslationVector().y, 
+														letterTrans->getTranslationVector().z, false);
+							}
+							// Update the begin index to the first letter in the new row
+							beginIdx = i;
+							// Update the currentLineY for the next iteration of the loop
+							currentLineY = letterY;
+						}
 					}
-					// Update the begin index to the first letter in the new row
-					beginIdx = i;
-					// Update the currentLineY for the next iteration of the loop
-					currentLineY = letterY;
 				}
-			}
-		case LEFT : break;
+			case LEFT : break;
+		}
 	}
 }
 
@@ -134,8 +136,10 @@ void Label::setAlignment(Alignment _alignment){
 
 void Label::updateText(){
 	
-	glm::vec2 offset(0.f, 0.f);
-	
+	wasAppended = false;
+
+	glm::vec2 cacheOffset = glm::vec2(offset);
+
 	textDirty = false;
 	
 	int strOffset = 0;
@@ -143,26 +147,22 @@ void Label::updateText(){
 	if(wasAppended) {
 		strOffset = text.size() - (text.size() - oldText.size());
 		if(offsetCache.size() > 0) {
-			offset = offsetCache.back();	
+			//offset = offsetCache.at(strOffset - 1);	
 		}
 	}else {
 		textInternal.clear();
 		lineCount = 1;
+		offset = glm::vec2(0.f, 0.f);
 	}
-	
-	/*if(!wasAppended){
-		for(unsigned long int i = 0; i <childTransform->children.size() ; i++) {
-			Transform * t = dynamic_cast<Transform *>(childTransform->children.at(i));
-			MeshEntity * me = dynamic_cast<MeshEntity *>(t->children.at(0));
-			me->setVisible(false);
-		}
-	}*/
+
+	int a = 0;
 
 	for(unsigned long int c = strOffset; c < text.size(); ++c) {
 		wchar_t ch = text.at(c);
 		if(ch == '\n'){
 			offset.x = 0.f;
 			textInternal += L'\n';
+			a++;
 		}else{
 			switch(wrapMode){
 				case CHARACTER_WRAP:
@@ -171,61 +171,70 @@ void Label::updateText(){
 						float glyphWidth = glyph->advance.x/64;
 						if(offset.x + glyphWidth > width){
 							textInternal += L'\n';
+							a++;
 							offset.x = 0.f;
+						}
+						offset.x += glyphWidth;
+						textInternal += ch;
+						break;
+					}
+				case CHARACTER_WRAP_HYPHEN:
+					{
+						Glyph * nextGlyph = font->getMeshInterfaceForChar(ch);
+						float glyphWidth = nextGlyph->advance.x/64;
+						if(width > 0 && offset.x + glyphWidth > width){
+							if(!CharacterUtils::isSpace(ch)){
+								textInternal += L'\n';
+							}	
+							textInternal += L'\n';
 						}else {
 							offset.x += glyphWidth;
 							textInternal += ch;
 						}
 						break;
 					}
-				case CHARACTER_WRAP_HYPHEN:
+				case WORD_WRAP:
 					{
 						Glyph * nextGlyph = font->getMeshInterfaceForChar(ch);
-						if(width > 0 && offset.x + nextGlyph->advance.x/64> width){
-							if(!CharacterUtils::isSpace(ch)){
-								//updateChar(&offset, c, '-');
-							}	
-							//newLine(&offset, renderableIdx);
-							textInternal += L'\n';
-							//updateChar(&offset, c, ch);
+						float glyphWidth = nextGlyph->advance.x/64;
+						if(width > 0 && glyphWidth + offset.x > width){
+							for(unsigned long int i = 1; i < text.size() && c < text.size(); ++i) {
+								updateChar(&offset, c, text.at(c));
+								if(CharacterUtils::isSpace(text.at(c))){
+									textInternal += L'\n';
+									break;
+								}
+								c++;
+							}
 						}else {
-							//updateChar(&offset, c, ch);
+							offset.x += glyphWidth;
+							textInternal += ch;
 						}
 						break;
 					}
-				case WORD_WRAP:
-					if(width > 0 && offset.x > width){
-						for(unsigned long int i = 0; i < text.size() && c < text.size(); ++i) {
-							updateChar(&offset, c, text.at(c));
-							if(CharacterUtils::isSpace(text.at(c))){
-								//newLine(&offset, renderableIdx);
-								break;
-							}
-							c++;
-						}
-					}else {
-						updateChar(&offset, c, ch);
-					}
-					break;
 				default: break;
 			}
 		}
 	}
 
 	int updateDiff = 0;
-	offset = glm::vec2(0.f, 0.f);
+
+	offset = cacheOffset;
+
 	if(wasAppended){
-		updateDiff = textInternal.size() - text.size() + strOffset;
-		if(offsetCache.size() > 0){
-			offset = offsetCache.back();
+		updateDiff = strOffset - a;
+		if(offsetCache.size() > 0 && strOffset > 0){
+			//offset = offsetCache.at(strOffset - 1);
 		}
+	}else {
+		offset = glm::vec2(0.f, 0.f);
 	}
 	
 	for(unsigned long int c = updateDiff; c < textInternal.size(); ++c) {
 		wchar_t ch = textInternal.at(c);
 		if(ch == '\n'){
 			newLine(&offset, c);
-			lineCount ++;
+			lineCount++;
 		}else{
 			updateChar(&offset, c, ch);
 		}
@@ -237,23 +246,29 @@ void Label::updateText(){
 		measuredHeight = 0.f;
 	}
 
-	background->parents.at(0)->reset();
 	glm::vec3 transVec = childTransform->getTranslationVector();
 
 	if(width == INFINITE_WIDTH) {
-		background->parents.at(0)->translate(transVec.x + measuredWidth * 0.5f, (transVec.y - measuredHeight * 0.5f) + font->getLineHeight(), transVec.z);
-		background->parents.at(0)->scale(measuredWidth, measuredHeight, 1);
+		backgroundTransform->translate(transVec.x + measuredWidth * 0.5f, (transVec.y - measuredHeight * 0.5f) + font->getLineHeight(), transVec.z, false);
+		backgroundTransform->scale(measuredWidth, measuredHeight, 1, false);
 	}else {
-		background->parents.at(0)->translate(transVec.x + width * 0.5f, (transVec.y - measuredHeight * 0.5f) + font->getLineHeight(), transVec.z);
-		background->parents.at(0)->scale(width, measuredHeight, 1);
+		backgroundTransform->translate(transVec.x + width * 0.5f, (transVec.y - measuredHeight * 0.5f) + font->getLineHeight(), transVec.z, false);
+		backgroundTransform->scale(width, measuredHeight, 1, false);
 	}
 
-	background->parents.at(0)->rotate(childTransform->getOrientationQuat(), kOBJECT);
-
 	updateAlignment();
+
+	//if(!wasAppended){
+		for(unsigned long int i = 1; i < childTransform->children.size(); i++) {
+			Transform * t = dynamic_cast<Transform *>(childTransform->children.at(i));
+			MeshEntity * me = dynamic_cast<MeshEntity *>(t->children.at(0));
+			me->setVisible(true);
+		}
+	//}
 }
 
 void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
+	_index += 1;
 	Glyph * glyph = font->getMeshInterfaceForChar(_c);
 	if(childTransform->children.size() > _index){
 		Transform * t = dynamic_cast<Transform *>(childTransform->children.at(_index));

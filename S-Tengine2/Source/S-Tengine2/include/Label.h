@@ -28,7 +28,6 @@ public:
 	Shader * backgroundShader;
 	float width;
 	WrapMode wrapMode;
-	std::map<wchar_t, MeshEntity *> meshEntities;
 
 	explicit Label(Font * _font, Shader * _textShader, Shader * _backgroundShader, WrapMode _wrapMode, float _width = INFINITE_WIDTH);
 	~Label();
@@ -49,16 +48,16 @@ private:
 	std::wstring text;
 	std::wstring oldText;
 	std::vector<glm::vec2> offsetCache;
-	std::vector<float>lineWidths;
 	float measuredWidth;
 	float measuredHeight;
 	bool textDirty;
 	void newLine(glm::vec2 * _offset, int _idx);
 	void updateChar(glm::vec2 * _offset, int _index, wchar_t _c);
 	MeshEntity * background;
-	int renderableGlyphs;
 	Alignment alignment;
 	std::wstring textInternal;
 	bool wasAppended;
 	int lineCount;
+	glm::vec2 offset;
+	Transform * backgroundTransform;
 };
