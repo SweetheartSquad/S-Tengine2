@@ -14,7 +14,9 @@
 #include <CharacterUtils.h>
 
 
-Label::Label(Font * _font, Shader * _textShader, Shader * _backgroundShader, WrapMode _wrapMode, float _width) :
+Label::Label(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Shader * _textShader, Shader * _backgroundShader, WrapMode _wrapMode, float _width) :
+	NodeUI(_bulletWorld, _scene),
+	NodeBulletBody(_bulletWorld),
 	width(_width),
 	wrapMode(_wrapMode),
 	measuredWidth(0.0f),
@@ -127,6 +129,14 @@ void Label::updateAlignment(){
 			case LEFT : break;
 		}
 	}
+}
+
+float Label::getMeasuredWidth(){
+	return measuredWidth;
+}
+
+float Label::getMeasuredHeight(){
+	return measuredHeight;
 }
 
 void Label::setAlignment(Alignment _alignment){

@@ -44,4 +44,8 @@ public:
 	virtual void renderActive(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 	// called by the functions to render each individual state by default (so if you leave a state unimplemented, this will render instead)
 	virtual void renderDefault(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
+	// Should return the total width of the UI elemnent including attibutes such as padding, overflow, etc
+	virtual float getMeasuredWidth() = 0;
+	// Should return the total width of the UI elemnent including attibutes such as padding, overflow, etc
+	virtual float getMeasuredHeight() = 0;
 };

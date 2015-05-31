@@ -3,6 +3,7 @@
 #include <Entity.h>
 #include <shader/Shader.h>
 #include <map>
+#include "NodeUI.h"
 
 class MeshEntity;
 class Font;
@@ -20,7 +21,7 @@ enum Alignment {
 	CENTER
 };
 
-class Label : public Entity{
+class Label : public NodeUI{
 public:
 	
 	Font * font;
@@ -29,7 +30,7 @@ public:
 	float width;
 	WrapMode wrapMode;
 
-	explicit Label(Font * _font, Shader * _textShader, Shader * _backgroundShader, WrapMode _wrapMode, float _width = INFINITE_WIDTH);
+	explicit Label(BulletWorld * _bulletWorld, Scene * _secne, Font * _font, Shader * _textShader, Shader * _backgroundShader, WrapMode _wrapMode, float _width = INFINITE_WIDTH);
 	~Label();
 	
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
@@ -43,6 +44,8 @@ public:
 	void updateText();
 	void updateAlignment();
 	void setAlignment(Alignment _alignment);
+	float getMeasuredWidth() override;
+	float getMeasuredHeight() override;
 
 private:
 	std::wstring text;
