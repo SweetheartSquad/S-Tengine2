@@ -106,8 +106,11 @@ public:
 
 // number of buffers used for a single OpenAL_Stream
 #define NUM_BUFS 4
+// size of buffers used for streaming
+#define BUFFER_LEN 44100/10
 class OpenAL_Stream : public virtual NodeUpdatable, public virtual NodeResource, public virtual NodeChild{
 public:
+	ALint currentSample;
 	alureStream * stream;
 	OpenAL_Source * source;
 	ALuint buffers[NUM_BUFS];
@@ -128,4 +131,7 @@ public:
 	void stop();
 
 	void rewind();
+
+	// returns the value of the sample at the current offset (in the range -1.0 to 1.0)
+	float getAmplitude();
 };

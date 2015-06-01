@@ -108,7 +108,7 @@ OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional) :
 	// turn off looping by default
 	checkForAlError(alSourcei(sourceId, AL_LOOPING, AL_FALSE));
 	checkForAlError(alSourcef(sourceId, AL_PITCH, 1.f));
-	checkForAlError(alSourcef(sourceId, AL_GAIN, 0.5f));
+	checkForAlError(alSourcef(sourceId, AL_GAIN, 0.1f));
 	checkForAlError(alSourcef(sourceId, AL_ROLLOFF_FACTOR, 0.05f));
 	checkForAlError(alDopplerFactor(1.f));
 	checkForAlError(alDopplerVelocity(1.f));
@@ -226,16 +226,13 @@ OpenAL_Sound::~OpenAL_Sound(){
 void OpenAL_Sound::update(Step * _step){
 	source->update(_step);
 	if(source->positional){
-		//this->parents.at(0)->translate(0.1, 0, 0);
 		source->setPosition(this->getWorldPos());
-		//alListener3f(AL_VELOCITY, vel[0], vel[1], vel[2]);
-		//alListenerfv(AL_ORIENTATION, orientation);
 	}
 }
 
 float OpenAL_Sound::getAmplitude(){
 	ALint t = source->getSampleOffset();
-	if(t == -1){
+	if(t < 0){
 		// if the source isn't sampling anything, the amplitude has to be zero
 		return 0;
 	}
@@ -246,9 +243,13 @@ OpenAL_Stream::OpenAL_Stream(const char * _filename, bool _positional) :
 	NodeResource(false),
 	isStreaming(false),
 	source(new OpenAL_Source(nullptr, _positional)),
-	stream(nullptr)
+	stream(nullptr),
+	currentSample(0)
 {
-	stream = alureCreateStreamFromFile(_filename, 44100/10, NUM_BUFS, buffers);
+	stream = alureCreateStreamFromFile(_filename, BUFFER_LEN, NUM_BUFS, buffers);
+
+	source->buffer = new OpenAL_Buffer(_filename);
+	++source->buffer->referenceCount;
 }
 
 
@@ -267,6 +268,7 @@ void OpenAL_Stream::update(Step * _step){
 	checkForAlError(alGetSourcei(source->sourceId, AL_BUFFERS_PROCESSED, &numBufs));
 	
 	while(numBufs--){
+		currentSample += BUFFER_LEN/2;
 		ALuint tempBuf;
 		// unqueue the processed buffer
 		checkForAlError(alSourceUnqueueBuffers(source->sourceId, 1, &tempBuf));
@@ -279,6 +281,7 @@ void OpenAL_Stream::update(Step * _step){
 				std::cout << alureGetErrorString();
 				assert(false);
 			}
+			currentSample = 0;
 			if(!source->looping){
 				isStreaming = false;
 			}else{
@@ -333,6 +336,7 @@ void OpenAL_Stream::stop(){
 
 	source->stop();
 	rewind();
+	currentSample = 0;
 }
 
 void OpenAL_Stream::pause(){
@@ -356,4 +360,17 @@ void OpenAL_Stream::rewind(){
 		std::cout << alureGetErrorString();
 		assert(false);
 	}
+}
+
+float OpenAL_Stream::getAmplitude(){
+	ALint t = source->getSampleOffset();
+	if(t == -1){
+		t = 0;
+	}
+	t += currentSample;
+	if(t < 0){
+		// if the source isn't sampling anything, the amplitude has to be zero
+		return 0;
+	}
+	return (float)source->buffer->samples.at(std::min(t, source->buffer->numSamples-1))/INT16_MAX;
 }
