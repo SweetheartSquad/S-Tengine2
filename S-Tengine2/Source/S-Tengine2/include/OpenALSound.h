@@ -89,18 +89,34 @@ public:
 	void stop();
 };
 
-class OpenAL_Sound : public virtual NodeUpdatable, public virtual NodeResource, public virtual NodeChild{
+class OpenAL_Sound abstract : public virtual NodeOpenAL, public virtual NodeResource, public virtual NodeUpdatable, public virtual NodeChild{
+protected:
+	ALint samplesPlayed;
 public:
-	OpenAL_Source * source;
-	
 	OpenAL_Sound(OpenAL_Source * _source);
-	OpenAL_Sound(const char * _filename, bool _positional);
 	~OpenAL_Sound();
+	OpenAL_Source * source;
 	
 	virtual void update(Step * _step) override;
 
+	// returns the offset in the raw audio data that corresponds to the currently playing audio (-1 when not playing)
+	virtual ALint getCurrentSample();
 	// returns the value of the sample at the current offset (in the range -1.0 to 1.0)
 	float getAmplitude();
+	
+	// Starts the audio source if stopped, resumes if paused, restarts if playing.
+	virtual void play(bool _loop = false);
+	// Pauses the audio source
+	virtual void pause();
+	// Stops the audio source + rewinds to the beginning
+	virtual void stop();
+};
+
+class OpenAL_SoundSimple : public OpenAL_Sound{
+public:
+	OpenAL_SoundSimple(const char * _filename, bool _positional);
+
+	virtual void update(Step * _step) override;
 };
 
 
@@ -108,30 +124,28 @@ public:
 #define NUM_BUFS 4
 // size of buffers used for streaming
 #define BUFFER_LEN 44100/10
-class OpenAL_Stream : public virtual NodeUpdatable, public virtual NodeResource, public virtual NodeChild{
+class OpenAL_SoundStream : public virtual OpenAL_Sound{
 public:
-	ALint currentSample;
 	alureStream * stream;
-	OpenAL_Source * source;
 	ALuint buffers[NUM_BUFS];
 
 	// whether the stream should continue buffering
 	bool isStreaming;
 
-	OpenAL_Stream(const char * _filename, bool _positional);
-	~OpenAL_Stream();
+	OpenAL_SoundStream(const char * _filename, bool _positional);
+	~OpenAL_SoundStream();
 
-	void update(Step * _step) override;
+	virtual void update(Step * _step) override;
 	
-	// Starts the audio stream if stopped, resumes if paused, restarts if playing.
-	void play(bool _loop = false);
-	// Pauses the audio stream
-	void pause();
-	// Stops the audio stream + rewinds to the beginning
-	void stop();
-
+	// returns the offset in the raw audio data that corresponds to the currently playing audio (-1 when not playing)
+	virtual ALint getCurrentSample() override;
+	
+	// Starts the audio source if stopped, resumes if paused, restarts if playing.
+	virtual void play(bool _loop = false) override;
+	// Pauses the audio source
+	virtual void pause() override;
+	// Stops the audio source + rewinds to the beginning
+	virtual void stop() override;
+	// Unqueues any queued buffers and rewinds the stream
 	void rewind();
-
-	// returns the value of the sample at the current offset (in the range -1.0 to 1.0)
-	float getAmplitude();
 };

@@ -43,6 +43,17 @@ void NodeOpenAL::uninitOpenAL(){
 	}
 }
 
+void NodeOpenAL::setListenerPosition(glm::vec3 _position){
+	checkForAlError(alListener3f(AL_POSITION, _position.x, _position.y, _position.z));
+}
+void NodeOpenAL::setListenerVelocity(glm::vec3 _velocity){
+	checkForAlError(alListener3f(AL_VELOCITY, _velocity.x, _velocity.y, _velocity.z));
+}
+void NodeOpenAL::setListenerOrientation(glm::vec3 _forward, glm::vec3 _up){
+	float orientation[6] = {_forward.x, _forward.y, _forward.z, _up.x, _up.y, _up.z};
+	checkForAlError(alListenerfv(AL_ORIENTATION, orientation));
+}
+
 OpenAL_Buffer::OpenAL_Buffer(const char * _filename) :
 	NodeResource(false),
 	bufferId(0),
@@ -145,17 +156,6 @@ void OpenAL_Source::update(Step * _step){
 	checkForAlError(alGetSourcei(sourceId, AL_SOURCE_STATE, &state));
 }
 
-void NodeOpenAL::setListenerPosition(glm::vec3 _position){
-	checkForAlError(alListener3f(AL_POSITION, _position.x, _position.y, _position.z));
-}
-void NodeOpenAL::setListenerVelocity(glm::vec3 _velocity){
-	checkForAlError(alListener3f(AL_VELOCITY, _velocity.x, _velocity.y, _velocity.z));
-}
-void NodeOpenAL::setListenerOrientation(glm::vec3 _forward, glm::vec3 _up){
-	float orientation[6] = {_forward.x, _forward.y, _forward.z, _up.x, _up.y, _up.z};
-	checkForAlError(alListenerfv(AL_ORIENTATION, orientation));
-}
-
 void OpenAL_Source::setPosition(glm::vec3 _pos){
 	checkForAlError(alSource3f(sourceId, AL_POSITION, _pos.x, _pos.y, _pos.z));
 }
@@ -207,21 +207,14 @@ void OpenAL_Source::pause(){
 
 OpenAL_Sound::OpenAL_Sound(OpenAL_Source * _source) :
 	NodeResource(false),
-	source(_source)
+	source(_source),
+	samplesPlayed(0)
 {
-	
-}
-OpenAL_Sound::OpenAL_Sound(const char * _filename, bool _positional) :
-	NodeResource(false),
-	source(new OpenAL_Source(new OpenAL_Buffer(_filename), _positional))
-{
-	
 }
 
 OpenAL_Sound::~OpenAL_Sound(){
 	source->decrementAndDelete();
 }
-
 
 void OpenAL_Sound::update(Step * _step){
 	source->update(_step);
@@ -230,21 +223,48 @@ void OpenAL_Sound::update(Step * _step){
 	}
 }
 
+void OpenAL_Sound::play(bool _loop){
+	source->play(_loop);
+}void OpenAL_Sound::pause(){
+	source->pause();
+}void OpenAL_Sound::stop(){
+	source->stop();
+}
+
+ALint OpenAL_Sound::getCurrentSample(){
+	return source->getSampleOffset();
+}
+
 float OpenAL_Sound::getAmplitude(){
-	ALint t = source->getSampleOffset();
+	ALint t = getCurrentSample();
 	if(t < 0){
-		// if the source isn't sampling anything, the amplitude has to be zero
 		return 0;
 	}
 	return (float)source->buffer->samples.at(t)/INT16_MAX;
 }
 
-OpenAL_Stream::OpenAL_Stream(const char * _filename, bool _positional) :
+
+
+
+OpenAL_SoundSimple::OpenAL_SoundSimple(const char * _filename, bool _positional) :
+	NodeResource(false),
+	OpenAL_Sound(new OpenAL_Source(new OpenAL_Buffer(_filename), _positional))
+{
+}
+
+void OpenAL_SoundSimple::update(Step * _step){
+	OpenAL_Sound::update(_step);
+	samplesPlayed = source->getSampleOffset();
+}
+
+
+
+
+OpenAL_SoundStream::OpenAL_SoundStream(const char * _filename, bool _positional) :
 	NodeResource(false),
 	isStreaming(false),
-	source(new OpenAL_Source(nullptr, _positional)),
-	stream(nullptr),
-	currentSample(0)
+	OpenAL_Sound(new OpenAL_Source(nullptr, _positional)),
+	stream(nullptr)
 {
 	stream = alureCreateStreamFromFile(_filename, BUFFER_LEN, NUM_BUFS, buffers);
 
@@ -253,22 +273,20 @@ OpenAL_Stream::OpenAL_Stream(const char * _filename, bool _positional) :
 }
 
 
-OpenAL_Stream::~OpenAL_Stream(){
+OpenAL_SoundStream::~OpenAL_SoundStream(){
 	alureDestroyStream(stream, NUM_BUFS, buffers);
-	source->decrementAndDelete();
 }
 
-void OpenAL_Stream::update(Step * _step){
+void OpenAL_SoundStream::update(Step * _step){
 	// keep the stream informed of the source state
-	source->update(_step);
-
+	OpenAL_Sound::update(_step);
 
     // Get the number of buffers that have been processed and are ready for reuse
     ALint numBufs = 0;
 	checkForAlError(alGetSourcei(source->sourceId, AL_BUFFERS_PROCESSED, &numBufs));
 	
 	while(numBufs--){
-		currentSample += BUFFER_LEN/2;
+		samplesPlayed += BUFFER_LEN/2;
 		ALuint tempBuf;
 		// unqueue the processed buffer
 		checkForAlError(alSourceUnqueueBuffers(source->sourceId, 1, &tempBuf));
@@ -281,7 +299,7 @@ void OpenAL_Stream::update(Step * _step){
 				std::cout << alureGetErrorString();
 				assert(false);
 			}
-			currentSample = 0;
+			samplesPlayed = 0;
 			if(!source->looping){
 				isStreaming = false;
 			}else{
@@ -306,7 +324,7 @@ void OpenAL_Stream::update(Step * _step){
 	}
 }
 
-void OpenAL_Stream::play(bool _loop){
+void OpenAL_SoundStream::play(bool _loop){
 	// if the stream is paused, we have to behave differently
 	if(source->state == AL_PAUSED){
 		// if there aren't any buffers queued, queue up some more (otherwise nothing will play)
@@ -316,7 +334,7 @@ void OpenAL_Stream::play(bool _loop){
 			ALsizei numBuffs = alureBufferDataFromStream(stream, NUM_BUFS, buffers);
 			checkForAlError(alSourceQueueBuffers(source->sourceId, numBuffs, buffers));
 		}
-		source->play(false);
+		OpenAL_Sound::play(false);
 		source->looping = _loop; // we can't call play(_loop) because it sets AL_LOOPING to _loop, and you aren't supposed to do that on a streaming source
 
 		isStreaming = true;
@@ -324,33 +342,30 @@ void OpenAL_Stream::play(bool _loop){
 		stop();
 		ALsizei numBuffs = alureBufferDataFromStream(stream, NUM_BUFS, buffers);
 		checkForAlError(alSourceQueueBuffers(source->sourceId, numBuffs, buffers));
-		source->play(false);
+		OpenAL_Sound::play(false);
 		source->looping = _loop; // we can't call play(_loop) because it sets AL_LOOPING to _loop, and you aren't supposed to do that on a streaming source
 
 		isStreaming = true;
 	}
 }
 
-void OpenAL_Stream::stop(){
-	isStreaming = false;
-
-	source->stop();
-	rewind();
-	currentSample = 0;
-}
-
-void OpenAL_Stream::pause(){
+void OpenAL_SoundStream::pause(){
 	// if we aren't playing, then we can't pause
 	if(source->state != AL_PLAYING){
 		return;
 	}
-
+	OpenAL_Sound::pause();
 	isStreaming = false;
-
-	source->pause();
 }
 
-void OpenAL_Stream::rewind(){
+void OpenAL_SoundStream::stop(){
+	OpenAL_Sound::stop();
+	rewind();
+	samplesPlayed = 0;
+	isStreaming = false;
+}
+
+void OpenAL_SoundStream::rewind(){
 	// move to the beginning
 	ALint numQueuedBuffers = 0;
 	checkForAlError(alGetSourcei(source->sourceId, AL_BUFFERS_QUEUED, &numQueuedBuffers));
@@ -362,15 +377,13 @@ void OpenAL_Stream::rewind(){
 	}
 }
 
-float OpenAL_Stream::getAmplitude(){
+
+ALint OpenAL_SoundStream::getCurrentSample(){
 	ALint t = source->getSampleOffset();
-	if(t == -1){
-		t = 0;
+	if(t == -1 && samplesPlayed > 0){
+		t = samplesPlayed;
+	}else{
+		t += samplesPlayed;
 	}
-	t += currentSample;
-	if(t < 0){
-		// if the source isn't sampling anything, the amplitude has to be zero
-		return 0;
-	}
-	return (float)source->buffer->samples.at(std::min(t, source->buffer->numSamples-1))/INT16_MAX;
+	return std::min(t, source->buffer->numSamples-1);
 }
