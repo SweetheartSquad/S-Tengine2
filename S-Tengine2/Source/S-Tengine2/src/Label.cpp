@@ -250,7 +250,7 @@ void Label::updateText(){
 		}
 	}
 
-	if(childTransform->children.size() > 0) {
+	if(childTransform->children.size() > 1) {
 		measuredHeight = font->getLineHeight() * lineCount;
 	}else {
 		measuredHeight = 0.f;
@@ -300,6 +300,10 @@ void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
 		measuredWidth = adv;
 	}
 
+	if(measuredWidth < width) {
+		measuredWidth = width;
+	}
+
 	if(offsetCache.size() < childTransform->children.size()){
 		offsetCache.push_back(glm::vec2(adv, _offset->y));
 	}else {
@@ -310,7 +314,6 @@ void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
 void Label::newLine(glm::vec2 * _offset, int _idx){
 	float lineHeight = font->getLineHeight(); 
 	_offset->y -= lineHeight;
-	measuredHeight += lineHeight;
 	_offset->x = 0.f;
 }
 
