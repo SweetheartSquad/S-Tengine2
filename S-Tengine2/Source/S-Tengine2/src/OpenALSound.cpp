@@ -304,10 +304,8 @@ void OpenAL_Stream::update(Step * _step){
 }
 
 void OpenAL_Stream::play(bool _loop){
+	// if the stream is paused, we have to behave differently
 	if(source->state == AL_PAUSED){
-		// if the stream is paused, we can simply resume playing and return early
-		source->state = AL_PLAYING;
-
 		// if there aren't any buffers queued, queue up some more (otherwise nothing will play)
 		ALint numQueuedBuffers = 0;
 		checkForAlError(alGetSourcei(source->sourceId, AL_BUFFERS_QUEUED, &numQueuedBuffers));
@@ -315,21 +313,19 @@ void OpenAL_Stream::play(bool _loop){
 			ALsizei numBuffs = alureBufferDataFromStream(stream, NUM_BUFS, buffers);
 			checkForAlError(alSourceQueueBuffers(source->sourceId, numBuffs, buffers));
 		}
+		source->play(false);
+		source->looping = _loop; // we can't call play(_loop) because it sets AL_LOOPING to _loop, and you aren't supposed to do that on a streaming source
 
-		checkForAlError(alSourcePlay(source->sourceId));
 		isStreaming = true;
-		
-		source->looping = _loop; // we have to set looping to true here because the call to pause() will have set it to false
-		return;
-	}
-	
-	stop();
-	ALsizei numBuffs = alureBufferDataFromStream(stream, NUM_BUFS, buffers);
-	checkForAlError(alSourceQueueBuffers(source->sourceId, numBuffs, buffers));
-	source->play(false);
-	source->looping = _loop; // we can't call play(_loop) because it sets AL_LOOPING to _loop, and you aren't supposed to do that on a streaming source
+	}else{
+		stop();
+		ALsizei numBuffs = alureBufferDataFromStream(stream, NUM_BUFS, buffers);
+		checkForAlError(alSourceQueueBuffers(source->sourceId, numBuffs, buffers));
+		source->play(false);
+		source->looping = _loop; // we can't call play(_loop) because it sets AL_LOOPING to _loop, and you aren't supposed to do that on a streaming source
 
-	isStreaming = true;
+		isStreaming = true;
+	}
 }
 
 void OpenAL_Stream::stop(){
