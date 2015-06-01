@@ -3,6 +3,8 @@
 #include <OpenALSound.h>
 #include <Transform.h>
 
+#include <sndfile.hh>
+
 ALCcontext * NodeOpenAL::context = nullptr; 
 ALCdevice * NodeOpenAL::device = nullptr;
 
@@ -42,15 +44,47 @@ void NodeOpenAL::uninitOpenAL(){
 }
 
 OpenAL_Buffer::OpenAL_Buffer(const char * _filename) :
-	NodeResource(false)
+	NodeResource(false),
+	bufferId(0),
+	sampleRate(0),
+	numSamples(0)
 {
+	// open the file
+    SF_INFO fileInfo;
+	SNDFILE * file = sf_open(_filename, SFM_READ, &fileInfo);
+
+	/*checkForAlError(alBufferData(bufferId,
+		file.channels() == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16,
+		buffer, BUFFER_LEN * sizeof(short), file.samplerate()));*/
+
+	// get the number of samples and sample rate
+	numSamples = static_cast<ALsizei>(fileInfo.channels * fileInfo.frames);
+    sampleRate = static_cast<ALsizei>(fileInfo.samplerate);
+
+	// read the audio data (as a 16 bit signed integer)
+    samples.resize(numSamples);
+	// sf_read_short returns the number of samples read
+    // if we read zero samples, there must be an error
+	assert(!sf_read_short(file, &samples[0], numSamples) < numSamples); 
+
+	// close the file
+	sf_close(file);
+
+	 // set the format based on the number of channels
+    ALenum format;
+    switch (fileInfo.channels){
+        case 1:  format = AL_FORMAT_MONO16;   break;
+        case 2:  format = AL_FORMAT_STEREO16; break;
+        default: format = 0;
+    }
+	assert(format == AL_FORMAT_MONO16 || format == AL_FORMAT_STEREO16);
+
+	
 	// generate buffer
 	checkForAlError(alGenBuffers(1, &bufferId));
 
-	ALboolean alureStat = alureBufferDataFromFile(_filename, bufferId);
-	if(alureStat == AL_FALSE){
-		std::cout << "alureBufferDataFromFile() error: " << alureGetErrorString() << std::endl;
-	}
+	// fill the buffer with the audio data
+   checkForAlError(alBufferData(bufferId, format, &samples[0], numSamples * sizeof(ALushort), sampleRate));
 }
 
 OpenAL_Buffer::~OpenAL_Buffer(){	
@@ -65,6 +99,7 @@ OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional) :
 	buffer(_buffer),
 	positional(_positional),
 	looping(false),
+	state(AL_STOPPED),
 	NodeResource(false)
 {
 	// generate source
@@ -73,7 +108,7 @@ OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional) :
 	// turn off looping by default
 	checkForAlError(alSourcei(sourceId, AL_LOOPING, AL_FALSE));
 	checkForAlError(alSourcef(sourceId, AL_PITCH, 1.f));
-	checkForAlError(alSourcef(sourceId, AL_GAIN, 0.08f));
+	checkForAlError(alSourcef(sourceId, AL_GAIN, 0.5f));
 	checkForAlError(alSourcef(sourceId, AL_ROLLOFF_FACTOR, 0.05f));
 	checkForAlError(alDopplerFactor(1.f));
 	checkForAlError(alDopplerVelocity(1.f));
@@ -105,6 +140,10 @@ OpenAL_Source::~OpenAL_Source(){
 	buffer->decrementAndDelete();
 }
 
+void OpenAL_Source::update(Step * _step){
+	// keep the source state up-to-date
+	checkForAlError(alGetSourcei(sourceId, AL_SOURCE_STATE, &state));
+}
 
 void NodeOpenAL::setListenerPosition(glm::vec3 _position){
 	checkForAlError(alListener3f(AL_POSITION, _position.x, _position.y, _position.z));
@@ -125,6 +164,16 @@ void OpenAL_Source::setDirection(glm::vec3 _forward, glm::vec3 _up){
 	checkForAlError(alSourcefv(sourceId, AL_ORIENTATION, orientation));
 }
 
+ALint OpenAL_Source::getSampleOffset(){
+	if(state != AL_PLAYING && state != AL_PAUSED){
+		// if the source isn't mid-sound, return -1 to indicate that there is no associated sample
+		return -1;
+	}
+	ALint sampleOffset;
+	checkForAlError(alGetSourcei(sourceId, AL_SAMPLE_OFFSET, &sampleOffset));
+	return sampleOffset;
+}
+
 void OpenAL_Source::play(bool _loop){	
 	// set the loop parameter
 	looping = _loop;
@@ -132,18 +181,21 @@ void OpenAL_Source::play(bool _loop){
 
 	// Start playing source
 	checkForAlError(alSourcePlay(sourceId));
+	state = AL_PLAYING;
 }
 
 void OpenAL_Source::stop(){	
 	// Stop playing source
 	checkForAlError(alSourceStop(sourceId));
 	looping = false;
+	state = AL_STOPPED;
 }
 
 void OpenAL_Source::pause(){	
 	// Pause source
 	checkForAlError(alSourcePause(sourceId));
 	looping = false;
+	state = AL_PAUSED;
 }
 
 
@@ -172,6 +224,7 @@ OpenAL_Sound::~OpenAL_Sound(){
 
 
 void OpenAL_Sound::update(Step * _step){
+	source->update(_step);
 	if(source->positional){
 		//this->parents.at(0)->translate(0.1, 0, 0);
 		source->setPosition(this->getWorldPos());
@@ -180,16 +233,18 @@ void OpenAL_Sound::update(Step * _step){
 	}
 }
 
-
-
-
-
-
+float OpenAL_Sound::getAmplitude(){
+	ALint t = source->getSampleOffset();
+	if(t == -1){
+		// if the source isn't sampling anything, the amplitude has to be zero
+		return 0;
+	}
+	return (float)source->buffer->samples.at(t)/INT16_MAX;
+}
 
 OpenAL_Stream::OpenAL_Stream(const char * _filename, bool _positional) :
 	NodeResource(false),
 	isStreaming(false),
-	state(AL_STOPPED),
 	source(new OpenAL_Source(nullptr, _positional)),
 	stream(nullptr)
 {
@@ -204,7 +259,7 @@ OpenAL_Stream::~OpenAL_Stream(){
 
 void OpenAL_Stream::update(Step * _step){
 	// keep the stream informed of the source state
-	checkForAlError(alGetSourcei(source->sourceId, AL_SOURCE_STATE, &state));
+	source->update(_step);
 
 
     // Get the number of buffers that have been processed and are ready for reuse
@@ -243,15 +298,15 @@ void OpenAL_Stream::update(Step * _step){
 	// but as a result of the source running out of queued
 	// buffers, it will stop playing. We can double-check
 	// the state and restart it if needed.
-	if(isStreaming && state != AL_PLAYING){
+	if(isStreaming && source->state != AL_PLAYING){
 		checkForAlError(alSourcePlay(source->sourceId));
 	}
 }
 
 void OpenAL_Stream::play(bool _loop){
-	if(state == AL_PAUSED){
+	if(source->state == AL_PAUSED){
 		// if the stream is paused, we can simply resume playing and return early
-		state = AL_PLAYING;
+		source->state = AL_PLAYING;
 
 		// if there aren't any buffers queued, queue up some more (otherwise nothing will play)
 		ALint numQueuedBuffers = 0;
@@ -269,17 +324,15 @@ void OpenAL_Stream::play(bool _loop){
 	}
 	
 	stop();
-	source->looping = _loop; // we have to set looping to true here because stop() sets it to false
-	
 	ALsizei numBuffs = alureBufferDataFromStream(stream, NUM_BUFS, buffers);
 	checkForAlError(alSourceQueueBuffers(source->sourceId, numBuffs, buffers));
-	checkForAlError(alSourcePlay(source->sourceId));
+	source->play(false);
+	source->looping = _loop; // we can't call play(_loop) because it sets AL_LOOPING to _loop, and you aren't supposed to do that on a streaming source
 
 	isStreaming = true;
 }
 
 void OpenAL_Stream::stop(){
-	state = AL_STOPPED;
 	isStreaming = false;
 
 	source->stop();
@@ -288,15 +341,10 @@ void OpenAL_Stream::stop(){
 
 void OpenAL_Stream::pause(){
 	// if we aren't playing, then we can't pause
-	if(state != AL_PLAYING){
+	if(source->state != AL_PLAYING){
 		return;
 	}
 
-	state = AL_PAUSED;
-	if(!isStreaming){
-		// if the stream isn't playing, we can return early
-		return;
-	}
 	isStreaming = false;
 
 	source->pause();

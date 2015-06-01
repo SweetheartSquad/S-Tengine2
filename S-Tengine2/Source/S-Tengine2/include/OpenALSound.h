@@ -57,22 +57,33 @@ public:
 class OpenAL_Buffer : public virtual NodeOpenAL, public virtual NodeResource{
 public:
 	ALuint bufferId;
+	ALsizei numSamples, sampleRate;
+	std::vector<ALshort> samples;
 	OpenAL_Buffer(const char * _filename);
 	~OpenAL_Buffer();
 };
 
-class OpenAL_Source : public virtual NodeOpenAL, public virtual NodeResource{
+class OpenAL_Source : public virtual NodeOpenAL, public virtual NodeResource, public virtual NodeUpdatable{
 public:
 	ALuint sourceId;
 	OpenAL_Buffer * buffer;
 	bool positional;
 	bool looping;
+	// the current state of the source
+	ALint state;
 	OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional);
 	~OpenAL_Source();
+	virtual void update(Step * _step) override;
 	
+	// sets the audio source's position
 	void setPosition(glm::vec3 _pos);
+	// sets the audio source's direction
 	void setDirection(glm::vec3 _forward, glm::vec3 _up);
 
+	// returns the current position in the sound data (-1 when not playing/paused)
+	ALint getSampleOffset();
+
+	// start playing from the audio source
 	void play(bool _loop = false);
 	void pause();
 	void stop();
@@ -87,6 +98,9 @@ public:
 	~OpenAL_Sound();
 	
 	virtual void update(Step * _step) override;
+
+	// returns the value of the sample at the current offset (in the range -1.0 to 1.0)
+	float getAmplitude();
 };
 
 
@@ -100,8 +114,6 @@ public:
 
 	// whether the stream should continue buffering
 	bool isStreaming;
-	// the current state of the stream source
-	ALint state;
 
 	OpenAL_Stream(const char * _filename, bool _positional);
 	~OpenAL_Stream();
