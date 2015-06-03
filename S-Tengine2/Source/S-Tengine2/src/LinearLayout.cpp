@@ -3,54 +3,101 @@
 #include <LinearLayout.h>
 #include <NodeUI.h>
 
-LinearLayout::LinearLayout(Orientation _orientation):
-	Transform(),
+
+LinearLayout::LinearLayout(Orientation _orientation, BulletWorld* _world, Scene* _scene):
+	NodeUI(_world, _scene),
+	NodeBulletBody(_world),
 	orientation(_orientation)
 {
+	updateColider();
 }
 
 LinearLayout::~LinearLayout(){
 }
 
 void LinearLayout::update(Step* _step){
-	if(updateRequired) {
+	if(layoutDirty) {
 		if(orientation == HORIZONTAL) {
-			for (unsigned long int i = 0; i < children.size(); ++i){
+			for (unsigned long int i = 0; i < childTransform->children.size(); ++i){
 				if (i == 0) {
-					//children.at(i).x = children.at(i).marginLeft;
+					Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
+					NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
+					trans->translate(ui->getMarginLeft(), 0.f, 0.f);
 				}else {
-					Transform * prevTransform = dynamic_cast<Transform *>(children.at(i - 1));
+					Transform * prevTransform = dynamic_cast<Transform *>(childTransform->children.at(i - 1));
 					NodeUI * prevUiNode = dynamic_cast<NodeUI *>(prevTransform->children.at(0));
 					// Add margins
-					dynamic_cast<Transform *>(children.at(i))->translate(prevTransform->getTranslationVector().x + prevUiNode->getMeasuredWidth(), 0.f, 0.f, false);
+
+					Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
+					NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
+					trans->translate(ui->getMarginLeft(), 0.f, 0.f);
+
+					float x = prevTransform->getTranslationVector().x + prevUiNode->getMeasuredWidth();
+					float y = ui->getMarginTop() + prevUiNode->getMarginBottom();
+					dynamic_cast<Transform *>(trans)->translate(x, y, 0.f, false);
 				}
 			}
 		}else {
-			for(unsigned long int i = 0; i < children.size(); ++i){
+			for(unsigned long int i = 0; i < childTransform->children.size(); ++i){
 				if (i == 0) {
-					//children.at(i).x = children.at(i).marginLeft;
+					Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
+					NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
+					trans->translate(0.f, -ui->getMarginTop(), 0.f);
 				}else {
-					Transform * prevTransform = dynamic_cast<Transform *>(children.at(i - 1));
+					Transform * prevTransform = dynamic_cast<Transform *>(childTransform->children.at(i - 1));
 					NodeUI * prevUiNode = dynamic_cast<NodeUI *>(prevTransform->children.at(0));
 					// Add margins
-					dynamic_cast<Transform *>(children.at(i))->translate(0.f, prevTransform->getTranslationVector().y - prevUiNode->getMeasuredHeight(), 0.f, false);
+
+					Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
+					NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
+					trans->translate(ui->getMarginLeft(), 0.f, 0.f);
+
+					float x = ui->getMarginLeft();
+					float y = prevTransform->getTranslationVector().y - prevUiNode->getMeasuredHeight() - ui->getMarginTop() - prevUiNode->getMarginBottom();
+					dynamic_cast<Transform *>(trans)->translate(x, y, 0.f, false);
 				}
 			}
 		}
+		//updateColider();
+		//updateRequired = false;
 	}
-	Transform::update(_step);
+	NodeUI::update(_step);
 }
 
-Transform * LinearLayout::addChild(NodeChild * _child, bool _underNewTransform){
-	NodeUI * node = dynamic_cast<NodeUI *>(_child);
-	if(node == nullptr){
-		throw "Child must be an instance of or extend NodeUI";
+float LinearLayout::getMeasuredWidth(){
+	float accumulator = 0.0f;
+	for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
+		Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
+		if(trans != nullptr) {
+			if(trans->children.size() > 0) {
+				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
+				accumulator += node->getMeasuredWidth();
+			}
+		}
 	}
-	updateRequired = true;
-	Transform::addChild(_child, _underNewTransform);
+	return accumulator;
+}
+
+float LinearLayout::getMeasuredHeight(){
+	float accumulator = 0.0f;
+	for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
+		Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
+		if(trans != nullptr) {
+			if(trans->children.size() > 0) {
+				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
+				accumulator += node->getMeasuredHeight();
+			}
+		}
+	}
+	return accumulator;
+}
+
+Transform * LinearLayout::addChild(NodeUI* _uiElement){
+	layoutDirty = true;
+	return childTransform->addChild(_uiElement);
 }
 
 void LinearLayout::setOrientation(Orientation _orientation){
 	orientation = _orientation;
-	updateRequired = true;
+	layoutDirty = true;
 }

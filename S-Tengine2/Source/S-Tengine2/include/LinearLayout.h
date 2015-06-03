@@ -1,5 +1,6 @@
 #pragma once
-#include "Entity.h"
+
+#include "NodeUI.h"
 
 class NodeUI;
 
@@ -8,18 +9,19 @@ enum Orientation {
 	VERTICAL
 };
 
-class LinearLayout : public Transform {
+class LinearLayout : public NodeUI {
 public:
-
-	LinearLayout(Orientation _orientation);
+	LinearLayout(Orientation _orientation, BulletWorld * _world, Scene * _scene);
 	~LinearLayout();
+
+	float getMeasuredWidth() override;
+	float getMeasuredHeight() override;
 
 	void update(Step * _step) override;
 
-	Transform * addChild(NodeChild * _child, bool _underNewTransform = true) override;
+	Transform * addChild(NodeUI * _uiElement);
 	void setOrientation(Orientation orientation);
 
 private:
-	bool updateRequired;
 	Orientation orientation;
 };
