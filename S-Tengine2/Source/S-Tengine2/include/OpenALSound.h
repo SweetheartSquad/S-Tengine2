@@ -37,15 +37,13 @@
 class NodeOpenAL abstract : public Node{
 private:
 	static bool inited;
-
-	static void initOpenAL();
-
 protected:
     static ALCcontext * context;
     static ALCdevice * device;
 public:
 	NodeOpenAL();
 	static void destruct();
+	static void initOpenAL();
 
 	// sets the global OpenAL listener position
 	static void setListenerPosition(glm::vec3 _position);

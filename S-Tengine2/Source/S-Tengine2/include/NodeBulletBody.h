@@ -20,6 +20,7 @@ public:
 	void setColliderAsStaticPlane(float _normalX = 0.f, float _normalY = 1.f, float _normalZ = 0.f, float _distanceFromOrigin = 0.f);
 	void setColliderAsBox(float _halfX = 0.5f, float _halfY = 0.5f, float _halfZ = 0.5f);
 	void setColliderAsSphere(float _radius = 0.5f);
+	void setColliderAsCapsule(float _radius = 0.5f, float _height = 0.5f);
 	void setColliderAsMesh(TriMesh * _colliderMesh, bool _convex);
 	// a mass of zero makes it static
 	void createRigidBody(float _mass, unsigned short int _collisionGroup = -1, unsigned short int _collisionMask = -1);
