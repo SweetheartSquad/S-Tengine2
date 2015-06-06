@@ -17,8 +17,6 @@ NodeOpenAL::NodeOpenAL(){
 void NodeOpenAL::initOpenAL(){
 	// initialize OpenAL
 	if(!inited){
-		/*alureInitDevice(nullptr, nullptr);*/
-		
 	   ALCint contextAttr[] = {ALC_FREQUENCY, 44100,0};
 	   device = alcOpenDevice(NULL);
 	   context = alcCreateContext(device, contextAttr);
@@ -34,9 +32,8 @@ void NodeOpenAL::initOpenAL(){
 	}
 }
 
-void NodeOpenAL::uninitOpenAL(){
+void NodeOpenAL::destruct(){
 	if(inited){
-		//alureShutdownDevice();
 		alcDestroyContext(context);
 		alcCloseDevice(device);
 		inited = false;
@@ -64,10 +61,6 @@ OpenAL_Buffer::OpenAL_Buffer(const char * _filename) :
     SF_INFO fileInfo;
 	SNDFILE * file = sf_open(_filename, SFM_READ, &fileInfo);
 
-	/*checkForAlError(alBufferData(bufferId,
-		file.channels() == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16,
-		buffer, BUFFER_LEN * sizeof(short), file.samplerate()));*/
-
 	// get the number of samples and sample rate
 	numSamples = static_cast<ALsizei>(fileInfo.channels * fileInfo.frames);
     sampleRate = static_cast<ALsizei>(fileInfo.samplerate);
@@ -82,7 +75,6 @@ OpenAL_Buffer::OpenAL_Buffer(const char * _filename) :
 	sf_close(file);
 
 	 // set the format based on the number of channels
-    ALenum format;
     switch (fileInfo.channels){
         case 1:  format = AL_FORMAT_MONO16;   break;
         case 2:  format = AL_FORMAT_STEREO16; break;
@@ -141,7 +133,6 @@ OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional) :
 	if(_buffer != nullptr){
 		// attach the buffer to the source
 		checkForAlError(alSourcei(sourceId, AL_BUFFER, buffer->bufferId));
-		//alSourceQueueBuffers(sourceId, 1, &bufferId);
 		++_buffer->referenceCount;
 	}
 }
@@ -258,23 +249,24 @@ void OpenAL_SoundSimple::update(Step * _step){
 }
 
 
-
-
 OpenAL_SoundStream::OpenAL_SoundStream(const char * _filename, bool _positional) :
 	NodeResource(false),
 	isStreaming(false),
 	OpenAL_Sound(new OpenAL_Source(nullptr, _positional)),
-	stream(nullptr)
+	bufferOffset(0),
+	maxBufferOffset(0)
 {
-	stream = alureCreateStreamFromFile(_filename, BUFFER_LEN, NUM_BUFS, buffers);
-
+	alGenBuffers(NUM_BUFS, buffers);
 	source->buffer = new OpenAL_Buffer(_filename);
 	++source->buffer->referenceCount;
+
+	maxBufferOffset = source->buffer->numSamples / BUFFER_LEN;
 }
 
 
 OpenAL_SoundStream::~OpenAL_SoundStream(){
-	alureDestroyStream(stream, NUM_BUFS, buffers);
+	stop();
+	checkForAlError(alDeleteBuffers(NUM_BUFS, buffers));
 }
 
 void OpenAL_SoundStream::update(Step * _step){
@@ -286,26 +278,24 @@ void OpenAL_SoundStream::update(Step * _step){
 	checkForAlError(alGetSourcei(source->sourceId, AL_BUFFERS_PROCESSED, &numBufs));
 	
 	while(numBufs--){
-		samplesPlayed += BUFFER_LEN/2;
+		samplesPlayed += BUFFER_LEN;
 		ALuint tempBuf;
 		// unqueue the processed buffer
 		checkForAlError(alSourceUnqueueBuffers(source->sourceId, 1, &tempBuf));
 		// attempt to fill the unqueued buffer with new data from the stream
-		ALsizei numToQueue = alureBufferDataFromStream(stream, 1, &tempBuf);
+		ALsizei numToQueue = fillBuffer(tempBuf);
 		if(numToQueue <= 0){
 			// if the stream didn't fill any of the buffers,
 			// the stream end has been reached, so we rewind it.
-			if(!alureRewindStream(stream)){
-				std::cout << alureGetErrorString();
-				assert(false);
-			}
+			bufferOffset = 0;
+
 			samplesPlayed = 0;
 			if(!source->looping){
 				isStreaming = false;
 			}else{
 				// now that the stream is rewound, we can try to grab
 				// a new buffer so that we can loop
-				numToQueue = alureBufferDataFromStream(stream, 1, &tempBuf);
+				numToQueue = fillBuffer(tempBuf);
 			}
 		}
 
@@ -331,7 +321,7 @@ void OpenAL_SoundStream::play(bool _loop){
 		ALint numQueuedBuffers = 0;
 		checkForAlError(alGetSourcei(source->sourceId, AL_BUFFERS_QUEUED, &numQueuedBuffers));
 		if(numQueuedBuffers <= 0){
-			ALsizei numBuffs = alureBufferDataFromStream(stream, NUM_BUFS, buffers);
+			ALsizei numBuffs = fillBuffers();
 			checkForAlError(alSourceQueueBuffers(source->sourceId, numBuffs, buffers));
 		}
 		OpenAL_Sound::play(false);
@@ -340,7 +330,7 @@ void OpenAL_SoundStream::play(bool _loop){
 		isStreaming = true;
 	}else{
 		stop();
-		ALsizei numBuffs = alureBufferDataFromStream(stream, NUM_BUFS, buffers);
+		ALsizei numBuffs = fillBuffers();
 		checkForAlError(alSourceQueueBuffers(source->sourceId, numBuffs, buffers));
 		OpenAL_Sound::play(false);
 		source->looping = _loop; // we can't call play(_loop) because it sets AL_LOOPING to _loop, and you aren't supposed to do that on a streaming source
@@ -371,10 +361,7 @@ void OpenAL_SoundStream::rewind(){
 	checkForAlError(alGetSourcei(source->sourceId, AL_BUFFERS_QUEUED, &numQueuedBuffers));
 	ALuint tempBuf[NUM_BUFS];
 	checkForAlError(alSourceUnqueueBuffers(source->sourceId, numQueuedBuffers, tempBuf));
-	if(!alureRewindStream(stream)){
-		std::cout << alureGetErrorString();
-		assert(false);
-	}
+	bufferOffset = 0;
 }
 
 
@@ -386,4 +373,28 @@ ALint OpenAL_SoundStream::getCurrentSample(){
 		t += samplesPlayed;
 	}
 	return std::min(t, source->buffer->numSamples-1);
+}
+
+unsigned long int OpenAL_SoundStream::fillBuffer(ALuint _bufferId){
+	unsigned long int numSamplesToBuffer;
+	if(bufferOffset < maxBufferOffset){
+		numSamplesToBuffer = BUFFER_LEN;
+	}else if(bufferOffset == maxBufferOffset){
+		numSamplesToBuffer = source->buffer->numSamples - bufferOffset*BUFFER_LEN;
+	}else{
+		return 0;
+	}
+	checkForAlError(alBufferData(_bufferId, source->buffer->format, &source->buffer->samples[bufferOffset*BUFFER_LEN], numSamplesToBuffer * sizeof(ALushort), source->buffer->sampleRate));
+	++bufferOffset;
+	return 1;
+}
+
+unsigned long int OpenAL_SoundStream::fillBuffers(){
+	ALsizei numBuffs = 0;
+	while(numBuffs < 4){
+		if(!fillBuffer(buffers[numBuffs++])){
+			break;
+		}
+	}
+	return numBuffs;
 }

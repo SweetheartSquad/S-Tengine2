@@ -10,6 +10,8 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 
+#include <OpenALSound.h>
+
 Step vox::step;
 
 double vox::lastTimestamp = 0;
@@ -126,6 +128,8 @@ void vox::destruct(){
 	glfwTerminate();
 
 	FT_Done_FreeType(freeTypeLibrary);
+	
+	NodeOpenAL::destruct();
 }
 
 /////////// Delta Time Begin //////////////

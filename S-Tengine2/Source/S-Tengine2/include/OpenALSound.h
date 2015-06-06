@@ -3,7 +3,8 @@
 #include <node\NodeChild.h>
 #include <node\NodeUpdatable.h>
 #include <node\NodeResource.h>
-#include <AL\alure.h>
+#include <AL\al.h>
+#include <AL\alc.h>
 #include <iostream>
 #include <string>
 
@@ -38,13 +39,13 @@ private:
 	static bool inited;
 
 	static void initOpenAL();
-	static void uninitOpenAL();
 
 protected:
     static ALCcontext * context;
     static ALCdevice * device;
 public:
 	NodeOpenAL();
+	static void destruct();
 
 	// sets the global OpenAL listener position
 	static void setListenerPosition(glm::vec3 _position);
@@ -58,6 +59,7 @@ class OpenAL_Buffer : public virtual NodeOpenAL, public virtual NodeResource{
 public:
 	ALuint bufferId;
 	ALsizei numSamples, sampleRate;
+    ALenum format;
 	std::vector<ALshort> samples;
 	OpenAL_Buffer(const char * _filename);
 	~OpenAL_Buffer();
@@ -120,14 +122,18 @@ public:
 };
 
 
-// number of buffers used for a single OpenAL_Stream
-#define NUM_BUFS 4
-// size of buffers used for streaming
-#define BUFFER_LEN 44100/10
 class OpenAL_SoundStream : public virtual OpenAL_Sound{
+private:
+	// number of buffers used for a single OpenAL_Stream
+	const static unsigned long int NUM_BUFS = 4;
+	// size of buffers used for streaming
+	const static unsigned long int BUFFER_LEN = 44100/10;
 public:
-	alureStream * stream;
 	ALuint buffers[NUM_BUFS];
+	// the number of buffers of the stream which have already been queued
+	unsigned long int bufferOffset;
+	// maximum number of buffers that could possibly be queued (the number of samples / the number of samples per buffer)
+	unsigned long int maxBufferOffset;
 
 	// whether the stream should continue buffering
 	bool isStreaming;
@@ -148,4 +154,13 @@ public:
 	virtual void stop() override;
 	// Unqueues any queued buffers and rewinds the stream
 	void rewind();
+
+	// attempt to fill the _bufferId with new data from the source
+	// (uses bufferOffset to determine where to start from)
+	// returns the number of buffers filled
+	unsigned long int fillBuffer(ALuint _bufferId);
+	// fills buffers with as much data from the source as possible, limited by maxBufferOffset
+	// (uses bufferOffset to determine where to start from)
+	// returns the number of buffers filled
+	unsigned long int fillBuffers();
 };
