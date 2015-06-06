@@ -38,15 +38,26 @@ Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaul
 }
 
 float Box2DSprite::getCorrectedHeight(){
-	return height*std::abs(parents.at(0)->getScaleVector().y)*scale;
+	glm::vec3 scaleVec(1);
+	if(parents.size() > 0){
+		scaleVec = parents.at(0)->getScaleVector();
+	}
+	return height*std::abs(scaleVec.y)*scale;
 }
 float Box2DSprite::getCorrectedWidth(){
-	return width*std::abs(parents.at(0)->getScaleVector().x)*scale;
+	glm::vec3 scaleVec(1);
+	if(parents.size() > 0){
+		scaleVec = parents.at(0)->getScaleVector();
+	}
+	return width*std::abs(scaleVec.x)*scale;
 }
 
 b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * _userData, bool _isSensor){
 	b2PolygonShape tShape;
-	glm::vec3 scaleVec = parents.at(0)->getScaleVector();
+	glm::vec3 scaleVec(1);
+	if(parents.size() > 0){
+		scaleVec = parents.at(0)->getScaleVector();
+	}
 	tShape.SetAsBox(width*std::abs(scaleVec.x)*scale, height*std::abs(scaleVec.y)*scale, _offset, 0.0f);
 
 	b2FixtureDef fd;
