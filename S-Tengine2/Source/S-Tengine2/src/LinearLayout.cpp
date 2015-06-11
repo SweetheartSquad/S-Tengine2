@@ -2,10 +2,12 @@
 
 #include <LinearLayout.h>
 #include <NodeUI.h>
+#include <MeshFactory.h>
 
 
 LinearLayout::LinearLayout(Orientation _orientation, BulletWorld* _world, Scene* _scene):
 	NodeUI(_world, _scene),
+	MeshEntity(MeshFactory::getPlaneMesh()),
 	NodeBulletBody(_world),
 	orientation(_orientation)
 {
@@ -18,43 +20,46 @@ LinearLayout::~LinearLayout(){
 void LinearLayout::update(Step* _step){
 	if(layoutDirty) {
 		if(orientation == HORIZONTAL) {
-			for (unsigned long int i = 0; i < childTransform->children.size(); ++i){
-				if (i == 0) {
+			for (unsigned long int i = BACKGROUND_OFFSET; i < childTransform->children.size(); ++i){
+				if (i == BACKGROUND_OFFSET) {
 					Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
 					NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
-					trans->translate(ui->getMarginLeft(), 0.f, 0.f);
+					trans->translate(ui->getMarginLeft(), 0.f, 0.f, false);
 				}else {
 					Transform * prevTransform = dynamic_cast<Transform *>(childTransform->children.at(i - 1));
 					NodeUI * prevUiNode = dynamic_cast<NodeUI *>(prevTransform->children.at(0));
-					// Add margins
 
 					Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
 					NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
-					trans->translate(ui->getMarginLeft(), 0.f, 0.f);
 
-					float x = prevTransform->getTranslationVector().x + prevUiNode->getMeasuredWidth();
-					float y = ui->getMarginTop() + prevUiNode->getMarginBottom();
-					dynamic_cast<Transform *>(trans)->translate(x, y, 0.f, false);
+					float x = prevTransform->getTranslationVector().x 
+								+ prevUiNode->getMeasuredWidth()
+								+ prevUiNode->getMarginRight() 
+								+ ui->getMarginLeft();
+
+					float y = -ui->getMarginTop();
+					trans->translate(x, y, 0.f, false);
 				}
 			}
 		}else {
-			for(unsigned long int i = 0; i < childTransform->children.size(); ++i){
-				if (i == 0) {
+			for(unsigned long int i = BACKGROUND_OFFSET; i < childTransform->children.size(); ++i){
+				if (i == BACKGROUND_OFFSET) {
 					Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
 					NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
-					trans->translate(0.f, -ui->getMarginTop(), 0.f);
+					trans->translate(0.f, -ui->getMarginTop(), 0.f, false);
 				}else {
 					Transform * prevTransform = dynamic_cast<Transform *>(childTransform->children.at(i - 1));
 					NodeUI * prevUiNode = dynamic_cast<NodeUI *>(prevTransform->children.at(0));
-					// Add margins
 
 					Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
 					NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
-					trans->translate(ui->getMarginLeft(), 0.f, 0.f);
 
 					float x = ui->getMarginLeft();
-					float y = prevTransform->getTranslationVector().y - prevUiNode->getMeasuredHeight() - ui->getMarginTop() - prevUiNode->getMarginBottom();
-					dynamic_cast<Transform *>(trans)->translate(x, y, 0.f, false);
+					float y = prevTransform->getTranslationVector().y 
+								- prevUiNode->getMeasuredHeight()
+								- ui->getMarginTop()
+								- prevUiNode->getMarginBottom();
+					trans->translate(x, y, 0.f, false);
 				}
 			}
 		}

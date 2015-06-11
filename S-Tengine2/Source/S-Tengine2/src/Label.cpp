@@ -17,6 +17,7 @@
 Label::Label(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Shader * _textShader, Shader * _backgroundShader, WrapMode _wrapMode, float _width) :
 	NodeUI(_bulletWorld, _scene),
 	NodeBulletBody(_bulletWorld),
+	MeshEntity(MeshFactory::getPlaneMesh()),
 	width(_width),
 	wrapMode(_wrapMode),
 	measuredWidth(0.0f),
@@ -234,7 +235,7 @@ void Label::updateText(){
 	if(wasAppended){
 		updateDiff = strOffset - a;
 		if(offsetCache.size() > 0 && strOffset > 0){
-			//offset = offsetCache.at(strOffset - 1);
+			offset = offsetCache.at(strOffset - 1);
 		}
 	}else {
 		offset = glm::vec2(0.f, 0.f);

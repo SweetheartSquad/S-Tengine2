@@ -6,12 +6,14 @@
 #include <Mouse.h>
 
 NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
+	MeshEntity(nullptr),
 	NodeBulletBody(_world),
-	scene(_scene),
+	mouse(&Mouse::getInstance()),
 	isHovered(false),
 	isDown(false),
 	isActive(false),
-	mouse(&Mouse::getInstance()),
+	layoutDirty(true),
+	scene(_scene),
 	onDownFunction(nullptr),
 	marginLeft(0.f),
 	marginRight(0.f),
@@ -20,8 +22,7 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	paddingLeft(0.f),
 	paddingRight(0.f),
 	paddingTop(0.f),
-	paddingBottom(0.f),
-	layoutDirty(true)
+	paddingBottom(0.f)
 {
 
 }

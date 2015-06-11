@@ -1,12 +1,14 @@
 #pragma once
 
 #include <NodeBulletBody.h>
-#include <Entity.h>
+#include <MeshEntity.h>
+
+#define BACKGROUND_OFFSET 1
 
 class Scene;
 class Mouse;
 
-class NodeUI : public virtual NodeBulletBody, public virtual Entity{
+class NodeUI : public virtual NodeBulletBody, public virtual MeshEntity{
 protected:
 	Mouse * mouse;
 	// Whether the button is under the mouse
