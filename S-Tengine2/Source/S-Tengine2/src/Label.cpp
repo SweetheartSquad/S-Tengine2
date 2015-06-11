@@ -36,6 +36,8 @@ Label::Label(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Shader * 
 	++textShader->referenceCount;
 	++backgroundShader->referenceCount;
 
+	setShader(textShader, true);
+
 	background->setShader(backgroundShader, true);
 	backgroundTransform = childTransform->addChild(background);
 }
@@ -89,15 +91,15 @@ std::wstring Label::getText(){
 }
 
 void Label::updateAlignment(){
-	if(childTransform->children.size() > 1){
+	if(childTransform->children.size() > 1 + BACKGROUND_OFFSET){
 		// Set currentLineY to the value of the first childs y translation
-		float currentLineY = dynamic_cast<Transform*>(childTransform->children.at(1))->getTranslationVector().y;
-		int beginIdx = 1;
+		float currentLineY = dynamic_cast<Transform*>(childTransform->children.at(1 + BACKGROUND_OFFSET))->getTranslationVector().y;
+		int beginIdx = 1 + BACKGROUND_OFFSET;
 		switch (alignment){
 			case CENTER:
 				{
 					// loop through each of the children of the child transfom. This will be all of the characters
-					for(unsigned long int i = 1; i < childTransform->children.size(); i++) {
+					for(unsigned long int i = 1 + BACKGROUND_OFFSET; i < childTransform->children.size(); i++) {
 						// letterY is the y transform of the current child
 						float letterY = dynamic_cast<Transform *>(childTransform->children.at(i))->getTranslationVector().y;
 						// We take the absolute of the difference of the two y values
@@ -270,7 +272,7 @@ void Label::updateText(){
 	updateAlignment();
 
 	//if(!wasAppended){
-		for(unsigned long int i = 1; i < childTransform->children.size(); i++) {
+		for(unsigned long int i = 1 + BACKGROUND_OFFSET; i < childTransform->children.size(); i++) {
 			Transform * t = dynamic_cast<Transform *>(childTransform->children.at(i));
 			MeshEntity * me = dynamic_cast<MeshEntity *>(t->children.at(0));
 			me->setVisible(true);
@@ -279,7 +281,7 @@ void Label::updateText(){
 }
 
 void Label::updateChar(glm::vec2 * _offset, int _index, wchar_t _c){
-	_index += 1;
+	_index += 2;
 	Glyph * glyph = font->getMeshInterfaceForChar(_c);
 	if(childTransform->children.size() > _index){
 		Transform * t = dynamic_cast<Transform *>(childTransform->children.at(_index));
