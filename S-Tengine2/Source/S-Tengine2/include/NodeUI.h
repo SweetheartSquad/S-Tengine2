@@ -1,12 +1,14 @@
 #pragma once
 
 #include <NodeBulletBody.h>
-#include <Entity.h>
+#include <MeshEntity.h>
+
+#define BACKGROUND_OFFSET 1
 
 class Scene;
 class Mouse;
 
-class NodeUI : public virtual NodeBulletBody, public virtual Entity{
+class NodeUI : public virtual NodeBulletBody, public virtual MeshEntity{
 protected:
 	Mouse * mouse;
 	// Whether the button is under the mouse
@@ -24,10 +26,13 @@ protected:
 	void in();
     // The function to be called when you mouseout
 	void out();
+
+	bool layoutDirty;
+	
+	void updateColider();
 public:
 	Scene * scene;
 
-	
 	void (*onDownFunction)(NodeUI * _this);
 	//void (*onUpFunction)();
 
@@ -44,4 +49,41 @@ public:
 	virtual void renderActive(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 	// called by the functions to render each individual state by default (so if you leave a state unimplemented, this will render instead)
 	virtual void renderDefault(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
+	// Should return the total width of the UI elemnent including attibutes such as padding, overflow, etc
+	virtual float getMeasuredWidth() = 0;
+	// Should return the total width of the UI elemnent including attibutes such as padding, overflow, etc
+	virtual float getMeasuredHeight() = 0;
+
+	void setMarginLeft(float _margin);
+	void setMarginRight(float _margin);
+	void setMarginTop(float _margin);
+	void setMarginBottom(float _margin);
+
+	void setPaddingLeft(float _padding);
+	void setPaddingRight(float _padding);
+	void setPaddingTop(float _padding);
+	void setPaddingBottom(float _padding);
+
+	float getMarginLeft();
+	float getMarginRight();
+	float getMarginTop();
+	float getMarginBottom();
+
+	float getPaddingLeft();
+	float getPaddingRight();
+	float getPaddingTop();
+	float getPaddingBottom();
+
+	bool isLayoutDirty();
+
+private:
+	float marginLeft;
+	float marginRight;
+	float marginTop;
+	float marginBottom;
+
+	float paddingLeft;
+	float paddingRight;
+	float paddingTop;
+	float paddingBottom;
 };
