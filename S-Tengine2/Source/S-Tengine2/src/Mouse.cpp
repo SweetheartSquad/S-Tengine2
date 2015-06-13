@@ -49,7 +49,8 @@ double Mouse::mouseY(bool _clamped){
 }
 
 void Mouse::translate(glm::vec2 _v){
-	glfwSetCursorPos(vox::currentContext, x+_v.x, y+_v.y);
+	glm::uvec2 sd = vox::getScreenDimensions();
+	glfwSetCursorPos(vox::currentContext, x+_v.x, sd.y - (y+_v.y));
 	mousePositionListener(x+_v.x, y+_v.y);
 }
 

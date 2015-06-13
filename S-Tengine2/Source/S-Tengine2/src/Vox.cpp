@@ -11,6 +11,7 @@
 #include "Mouse.h"
 
 #include <OpenALSound.h>
+#include <System.h>
 
 Step vox::step;
 
@@ -51,7 +52,8 @@ static void mouseButtonCallback(GLFWwindow * _window, int _button, int _action, 
 }
 static void mousePostionCallback(GLFWwindow *_window, double _x, double _y){
 	Mouse * mouse = &Mouse::getInstance();
-	mouse->mousePositionListener(_x, _y);
+	glm::uvec2 sd = vox::getScreenDimensions();
+	mouse->mousePositionListener(_x, sd.y - _y);
 }
 
 static void error_callback(int _error, const char * _description){

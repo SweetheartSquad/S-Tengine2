@@ -9,7 +9,6 @@
 #include "MeshInterface.h"
 #include "Sprite.h"
 #include "SpriteSheetAnimation.h"
-#include "SpriteMesh.h"
 
 ShaderComponentTexture::ShaderComponentTexture(Shader * _shader) :
 	ShaderComponent(_shader){

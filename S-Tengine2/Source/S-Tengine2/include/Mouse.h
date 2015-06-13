@@ -60,6 +60,7 @@ public:
 
 	/**
 	* Returns the mouse's current X coordinate. If _clamped, the value will always be within the screen coordinates
+	* Relative to the left border
 	*
 	* @return The mouse's X coordinate
 	*/
@@ -67,11 +68,16 @@ public:
 
 	/**
 	* Returns the mouse's current Y coordinate. If _clamped, the value will always be within the screen coordinates
+	* Relative to the bottom border
 	*
 	* @return The mouse's Y coordinate
 	*/
 	double mouseY(bool _clamped = true);
 	
+	/**
+	* Moves the mouse by _v
+	* Sets the glfw cursor position and triggers the position listener
+	*/
 	void translate(glm::vec2 _v);
 
 	/**
@@ -94,7 +100,7 @@ public:
 	void mouseUpListener(int _glfwMouseCode);
 
 	/**
-	* Sets the current mouse coordinates to _x and _y
+	* Sets the current mouse coordinates to _x and _y, where (0, 0) is the bottom-left corner
 	*
 	* @param _x The X coordinate for the mouse
 	* @param _y The Y coordinate for the mouse
@@ -109,7 +115,7 @@ public:
 private:
 
 	/**
-	* Initializes the coordinates of the mouse to (0, 0)
+	* Initializes the coordinates of the mouse to (0, 0), the bottom-left corner
 	*/
 	Mouse();
 	~Mouse();
@@ -121,11 +127,13 @@ private:
 	/** Map of mouse buttons which were released since the mouse's last call to update */
 	std::map<int, int> justReleasedButtons;
 
-	/** The mouse's current X coordinate */
+	/** The mouse's current X coordinate, relative to the left border */
 	double x;
-	/** The mouse's current Y coordinate */
+	/** The mouse's current Y coordinate, relative to the bottom border */
 	double y;
 	
+	// The mouse's current X coordinate, relative to the left border and clamped by the screen coordinates
 	double clampedX;
+	// The mouse's current Y coordinate, relative to the bottom border and clamped by the screen coordinates
 	double clampedY;
 };

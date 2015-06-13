@@ -3,7 +3,7 @@
 #include "Box2DDebugDrawer.h"
 #include "Scene.h"
 #include "Sprite.h"
-#include "SpriteMesh.h"
+#include <MeshInterface.h>
 #include "shader/ComponentShaderBase.h"
 #include "shader/ShaderComponentTexture.h"
 
