@@ -16,7 +16,7 @@ public:
 	SpriteSheetAnimation * currentAnimation;
 	bool playAnimation;
 
-	explicit Sprite(Shader * _shader = nullptr, Transform * _transform = new Transform());
+	explicit Sprite(Shader * _shader = nullptr);
 	virtual ~Sprite();
 
 	Vertex * getTopLeft();

@@ -12,7 +12,7 @@
 
 struct b2Vec2;
 
-Sprite::Sprite(Shader * _shader, Transform * _transform):
+Sprite::Sprite(Shader * _shader) :
 	MeshEntity(new SpriteMesh(GL_STATIC_DRAW)),
 	currentAnimation(nullptr),
 	playAnimation(true)
