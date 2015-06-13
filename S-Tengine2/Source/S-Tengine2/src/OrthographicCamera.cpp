@@ -35,5 +35,5 @@ glm::mat4 OrthographicCamera::getViewMatrix(){
 }
 
 glm::mat4 OrthographicCamera::getProjectionMatrix(){
-	return glm::ortho<float>(left, right, bottom, top, nearClip, farClip);
+	return glm::ortho<float>(-left, -right, bottom, top, nearClip, farClip);
 }
