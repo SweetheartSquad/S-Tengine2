@@ -80,12 +80,12 @@ SceneSplash::SceneSplash(Game * _game) :
 	mouseIndicator = new Sprite();
 	uiLayer.childTransform->addChild(mouseIndicator);
 	mouseIndicator->mesh->pushTexture2D(c);
-	mouseIndicator->parents.at(0)->scale(16,16,1);
+	mouseIndicator->parents.at(0)->scale(32,32,1);
 	mouseIndicator->setShader(uiLayer.shader, true);
 
 	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
-		mouseIndicator->mesh->vertices[i].x -= 1.25;
-		mouseIndicator->mesh->vertices[i].y -= 1;
+		mouseIndicator->mesh->vertices[i].x += 0.5f;
+		mouseIndicator->mesh->vertices[i].y -= 0.5f;
 	}
 	mouseIndicator->mesh->dirty = true;
 	
@@ -175,8 +175,8 @@ void SceneSplash::update(Step * _step){
 	uiLayer.resize(0.f, sd.x, 0.f, sd.y);
 	uiLayer.update(_step);
 	
-	mouseIndicator->parents.at(0)->translate(sd.x - mouse->mouseX(), sd.y - mouse->mouseY(), 0.f, false);
-	textThing->parents.at(0)->translate(game->viewPortWidth*0.5f, game->viewPortHeight*0.8f, 0, false);
+	mouseIndicator->parents.at(0)->translate(mouse->mouseX(), mouse->mouseY(), 0.f, false);
+	//textThing->parents.at(0)->translate(game->viewPortWidth*0.5f, game->viewPortHeight*0.8f, 0, false);
 }
 
 void SceneSplash::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
