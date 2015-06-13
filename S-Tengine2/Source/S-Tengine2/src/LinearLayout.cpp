@@ -11,7 +11,7 @@ LinearLayout::LinearLayout(Orientation _orientation, BulletWorld* _world, Scene*
 	NodeBulletBody(_world),
 	orientation(_orientation)
 {
-	updateColider();
+	updateCollider();
 }
 
 LinearLayout::~LinearLayout(){
@@ -63,7 +63,7 @@ void LinearLayout::update(Step* _step){
 				}
 			}
 		}
-		//updateColider();
+		//updateCollider();
 		//updateRequired = false;
 	}
 	NodeUI::update(_step);

@@ -30,7 +30,7 @@ public:
 	float width;
 	WrapMode wrapMode;
 
-	explicit Label(BulletWorld * _bulletWorld, Scene * _secne, Font * _font, Shader * _textShader, Shader * _backgroundShader, WrapMode _wrapMode, float _width = INFINITE_WIDTH);
+	explicit Label(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Shader * _textShader, Shader * _backgroundShader, WrapMode _wrapMode, float _width = INFINITE_WIDTH);
 	~Label();
 	
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
