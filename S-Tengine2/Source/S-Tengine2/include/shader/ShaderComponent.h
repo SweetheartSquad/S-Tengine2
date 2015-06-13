@@ -18,11 +18,11 @@ class Shader;
 /********************************************************
 *
 * An abstract class used to define a shader component
-* These components are used with BaseComponentShader
+* These components are used with ComponentShaderBase
 *
 * Each component should #define its type so that conditional
 * shader compilation can be done depending on whcih components
-* are present in BaseComponentShader's component vector
+* are present in ComponentShaderBase's component vector
 *
 *********************************************************/
 class ShaderComponent abstract : public NodeLoadable{

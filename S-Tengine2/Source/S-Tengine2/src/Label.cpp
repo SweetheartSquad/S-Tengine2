@@ -5,7 +5,7 @@
 #include <MeshInterface.h>
 #include <MeshEntity.h>
 #include <node\NodeChild.h>
-#include <shader/BaseComponentShader.h>
+#include <shader/ComponentShaderBase.h>
 #include <shader/ShaderComponentText.h>
 #include <shader/ShaderComponentTexture.h>
 #include <ostream>

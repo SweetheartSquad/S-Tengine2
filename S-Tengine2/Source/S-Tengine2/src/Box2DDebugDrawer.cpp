@@ -4,7 +4,7 @@
 #include "Scene.h"
 #include "Sprite.h"
 #include "SpriteMesh.h"
-#include "shader/BaseComponentShader.h"
+#include "shader/ComponentShaderBase.h"
 #include "shader/ShaderComponentTexture.h"
 
 #include "Box2DWorld.h"
@@ -14,7 +14,7 @@
 #include <GL/glew.h>
 
 Box2DDebugDrawer::Box2DDebugDrawer(Box2DWorld * _world) :
-	shader(new BaseComponentShader(false)),
+	shader(new ComponentShaderBase(false)),
 	world(_world),
 	spriteSegment(new Sprite()),
 	spriteTransform(new Sprite()),

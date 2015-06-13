@@ -2,12 +2,12 @@
 
 #include <Entity.h>
 #include <OrthographicCamera.h>
-#include <shader\BaseComponentShader.h>
+#include <shader\ComponentShaderBase.h>
 
 class UILayer : public Entity{
 public:
 	OrthographicCamera cam;
-	BaseComponentShader * shader;
+	ComponentShaderBase * shader;
 
 	UILayer(float _left, float _right, float _top, float _bottom);
 	~UILayer();

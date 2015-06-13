@@ -30,7 +30,7 @@ Text::Text(std::string _fontSrc):
 		std::cerr << "Couldn't load font " << _fontSrc;
 	}
  
-	shader = new BaseComponentShader(true);
+	shader = new ComponentShaderBase(true);
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->compileShader();
 	m = new MeshEntity(new MeshInterface(GL_QUADS, GL_STATIC_DRAW));

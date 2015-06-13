@@ -11,7 +11,7 @@
 UILayer::UILayer(float _left, float _right, float _top, float _bottom) : 
 	Entity(),
 	cam(-_right, -_left, _bottom, _top, -1000.f, 1000.f),
-	shader(new BaseComponentShader(true))
+	shader(new ComponentShaderBase(true))
 {
 	glm::vec2 sd = vox::getScreenDimensions();
 	cam.left = -sd.x;

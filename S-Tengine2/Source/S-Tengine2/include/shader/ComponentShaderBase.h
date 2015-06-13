@@ -7,14 +7,14 @@
 
 class GeometryComponent;
 
-class BaseComponentShader : public Shader{
+class ComponentShaderBase : public Shader{
 public:	
 	GLint modelUniformLocation, viewUniformLocation, projectionUniformLocation, mvpUniformLocation;
 
-	BaseComponentShader(bool _autoRelease);
-	explicit BaseComponentShader(std::vector<ShaderComponent *> _components, bool _autoRelease);
+	ComponentShaderBase(bool _autoRelease);
+	explicit ComponentShaderBase(std::vector<ShaderComponent *> _components, bool _autoRelease);
 
-	virtual ~BaseComponentShader();
+	virtual ~ComponentShaderBase();
 
 	GeometryComponent * geometryComponent;
 

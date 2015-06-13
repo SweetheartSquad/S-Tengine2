@@ -16,7 +16,7 @@
 #include <node/NodeUpdatable.h>
 
 class MeshInterface;
-class BaseComponentShader;
+class ComponentShaderBase;
 
 typedef enum{
 	kWORLD,
@@ -53,7 +53,7 @@ public:
 	static bool drawTransforms;
 
 	static MeshInterface * transformIndicator;
-	static BaseComponentShader * transformShader;
+	static ComponentShaderBase * transformShader;
 
 
 	

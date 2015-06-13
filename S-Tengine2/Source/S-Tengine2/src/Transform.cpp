@@ -6,11 +6,11 @@
 #include <RenderOptions.h>
 #include <MeshEntity.h>
 #include <MeshInterface.h>
-#include <shader\BaseComponentShader.h>
+#include <shader\ComponentShaderBase.h>
 #include <shader\ShaderComponentTexture.h>
 
 MeshInterface * Transform::transformIndicator = nullptr;
-BaseComponentShader * Transform::transformShader = nullptr;
+ComponentShaderBase * Transform::transformShader = nullptr;
 bool Transform::staticInit = true;
 bool Transform::drawTransforms = false;
 
@@ -27,7 +27,7 @@ Transform::Transform():
 {
 	if(staticInit){
 		staticInit = false;
-		transformShader = new BaseComponentShader(false);
+		transformShader = new ComponentShaderBase(false);
 		transformShader->addComponent(new ShaderComponentTexture(transformShader));
 		transformShader->compileShader();
 		transformShader->load();

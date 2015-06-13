@@ -8,7 +8,7 @@
 #include <node/NodeRenderable.h>
 #include <node/NodeLoadable.h>
 #include <Texture.h>
-#include <shader/BaseComponentShader.h>
+#include <shader/ComponentShaderBase.h>
 #include <StandardFrameBuffer.h>
 #include "MeshEntity.h"
 #include "OrthographicCamera.h"
@@ -43,5 +43,5 @@ public:
 
 private:
 	std::string text;
-	BaseComponentShader * shader;
+	ComponentShaderBase * shader;
 };
