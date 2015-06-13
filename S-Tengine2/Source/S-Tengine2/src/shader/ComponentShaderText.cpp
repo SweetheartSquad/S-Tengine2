@@ -1,8 +1,9 @@
 #pragma once
 
-#include <ComponentShaderText.h>
+#include <shader\ComponentShaderText.h>
 
-ComponentShaderText::ComponentShaderText() :
+ComponentShaderText::ComponentShaderText(bool _autoRelease) :
+	ComponentShaderBase(_autoRelease),
 	textComponent(new ShaderComponentText(this))
 {
 	addComponent(textComponent);
