@@ -51,7 +51,7 @@ void NodeUI::out(){
 
 void NodeUI::update(Step * _step){
 	
-	/*float raylength = 1000;
+	float raylength = 1000;
 
 	/*Camera * cam = scene->activeCamera;
 		
@@ -70,7 +70,7 @@ void NodeUI::update(Step * _step){
 	if(RayCallback.hasHit()){
 
 	}*/
-	/*btTransform rayfrom;
+	btTransform rayfrom;
 	rayfrom.setIdentity(); rayfrom.setOrigin(raystart);
 	btTransform rayto;
 	rayto.setIdentity(); rayto.setOrigin(rayend);
@@ -94,7 +94,7 @@ void NodeUI::update(Step * _step){
 			isDown = false;
 		}
 	}
-	*/
+	
 	NodeBulletBody::update(_step);
 	Entity::update(_step);
 }

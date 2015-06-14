@@ -22,6 +22,9 @@ LabelV2::LabelV2(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textS
 	childTransform->addChild(background);
 
 	childTransform->addChild(lines, false);
+
+	setColliderAsBox();
+	createRigidBody(0);
 }
 
 void LabelV2::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
