@@ -9,9 +9,9 @@ public:
 	OrthographicCamera cam;
 	ComponentShaderBase * shader;
 
-	UILayer(float _left, float _right, float _top, float _bottom);
+	UILayer(float _left, float _right, float _bottom, float _top);
 	~UILayer();
 	void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
-	void resize(float _left, float _right, float _top, float _bottom);
+	void resize(float _left, float _right, float _bottom, float _top);
 	//bool addChild(NodeChild * _child) override;
 };

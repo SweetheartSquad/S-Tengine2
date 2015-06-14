@@ -8,14 +8,11 @@
 #include <shader\ShaderComponentTexture.h>
 #include <System.h>
 
-UILayer::UILayer(float _left, float _right, float _top, float _bottom) : 
+UILayer::UILayer(float _left, float _right, float _bottom, float _top) : 
 	Entity(),
-	cam(-_right, -_left, _bottom, _top, -1000.f, 1000.f),
+	cam(_left, _right, _bottom, _top, -1000.f, 1000.f),
 	shader(new ComponentShaderBase(true))
 {
-	glm::vec2 sd = vox::getScreenDimensions();
-	cam.left = -sd.x;
-	cam.top = sd.y;
 	Transform * t = new Transform();
 	t->addChild(&cam);
 
@@ -55,11 +52,11 @@ void UILayer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 	}
 }
 
-void UILayer::resize(float _left, float _right, float _top, float _bottom){
-	cam.left = -_right;
-	cam.right = -_left;
-	cam.top = _bottom;
-	cam.bottom = _top;
+void UILayer::resize(float _left, float _right, float _bottom, float _top){
+	cam.left = _left;
+	cam.right = _right;
+	cam.bottom = _bottom;
+	cam.top = _top;
 }
 
 /*bool UILayer::addChild(NodeChild * _child){

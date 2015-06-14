@@ -27,7 +27,7 @@ void MousePerspectiveCamera::update(Step* _step){
 	}
 
 	if(deltaY != 0){
-		pitch += (mouseSpeed * static_cast<float>(deltaY));
+		pitch -= (mouseSpeed * static_cast<float>(deltaY));
 	}if(deltaX != 0){
 		yaw += (mouseSpeed * static_cast<float>(deltaX));
 	}

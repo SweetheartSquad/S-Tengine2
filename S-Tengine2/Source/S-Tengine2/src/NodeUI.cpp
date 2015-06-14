@@ -53,13 +53,17 @@ void NodeUI::update(Step * _step){
 	
 	/*float raylength = 1000;
 
-	Camera * cam = scene->activeCamera;
+	/*Camera * cam = scene->activeCamera;
 		
 	glm::vec3 campos = cam->getWorldPos();
 	glm::vec3 camdir = cam->forwardVectorRotated;
 	btVector3 raystart(campos.x, campos.y, campos.z);
 	btVector3 raydir(camdir.x, camdir.y, camdir.z);
-	btVector3 rayend = raystart + raydir*raylength;
+	btVector3 rayend = raystart + raydir*raylength;*/
+	
+	btVector3 raystart(mouse->mouseX(), mouse->mouseY(), -raylength);
+	btVector3 raydir(0, 0, 1);
+	btVector3 rayend(mouse->mouseX(), mouse->mouseY(), raylength);
 	
 	/*btCollisionWorld::ClosestRayResultCallback RayCallback(raystart, rayend);
 	world->world->rayTest(raystart, rayend, RayCallback);

@@ -4,23 +4,24 @@
 #include "Rectangle.h"
 #include "Point.h"
 #include "SpriteSheetAnimation.h"
-#include "SpriteMesh.h"
 #include "Rectangle.h"
 #include "Box2DSuperSprite.h"
 #include <Texture.h>
 #include <TextureSampler.h>
+#include <MeshFactory.h>
+#include <MeshInterface.h>
 
 struct b2Vec2;
 
 Sprite::Sprite(Shader * _shader) :
-	MeshEntity(new SpriteMesh(GL_STATIC_DRAW)),
+	MeshEntity(MeshFactory::getPlaneMesh()),
 	currentAnimation(nullptr),
+	animatedTexture(nullptr),
 	playAnimation(true)
 {
 }
 
 Sprite::~Sprite(){
-
 }
 
 void Sprite::update(Step* _step){
@@ -29,7 +30,7 @@ void Sprite::update(Step* _step){
 		currentAnimation->update(_step);
 		mesh->dirty = true;
 		setUvs(currentAnimation->frames.at(currentAnimation->currentFrame));
-		dynamic_cast<SpriteMesh *>(mesh)->animatedTexture = currentAnimation->texture;
+		animatedTexture = currentAnimation->texture;
 	}
 }
 
