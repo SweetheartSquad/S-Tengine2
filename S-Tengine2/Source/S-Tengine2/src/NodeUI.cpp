@@ -6,8 +6,8 @@
 #include <Mouse.h>
 
 NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
-	MeshEntity(nullptr),
 	NodeBulletBody(_world),
+	MeshEntity(nullptr),
 	mouse(&Mouse::getInstance()),
 	isHovered(false),
 	isDown(false),
@@ -24,7 +24,6 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	paddingTop(0.f),
 	paddingBottom(0.f)
 {
-
 }
 
 
@@ -52,7 +51,7 @@ void NodeUI::out(){
 
 void NodeUI::update(Step * _step){
 	
-	float raylength = 1000;
+	/*float raylength = 1000;
 
 	Camera * cam = scene->activeCamera;
 		
@@ -67,7 +66,7 @@ void NodeUI::update(Step * _step){
 	if(RayCallback.hasHit()){
 
 	}*/
-	btTransform rayfrom;
+	/*btTransform rayfrom;
 	rayfrom.setIdentity(); rayfrom.setOrigin(raystart);
 	btTransform rayto;
 	rayto.setIdentity(); rayto.setOrigin(rayend);
@@ -91,7 +90,7 @@ void NodeUI::update(Step * _step){
 			isDown = false;
 		}
 	}
-
+	*/
 	NodeBulletBody::update(_step);
 	Entity::update(_step);
 }

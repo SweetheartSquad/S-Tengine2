@@ -4,36 +4,31 @@
 
 #define INFINITE_WIDTH -1
 
+class LabelV2;
 class Font;
-
-enum WrapMode {
-	CHARACTER_WRAP,
-	CHARACTER_WRAP_HYPHEN,
-	WORD_WRAP
-};
-
-enum Alignment {
-	LEFT,
-	CENTER
-};
-
+class Glyph;
 
 class GlyphMeshEntity : public MeshEntity {
 public:
-	float width;
 	wchar_t character; 
 	bool inUse;
+	Glyph * glyph;
 
-	GlyphMeshEntity(MeshInterface* _mesh, Shader* _shader, float _width, wchar_t _character);
+	GlyphMeshEntity(Glyph * _mesh, Shader* _shader, wchar_t _character);
 };
 
 class Line : public Transform {
 public:
+
+	LabelV2* label;
 	float width;
-	bool inUse; 
-	Line();
+	bool inUse;
+	std::vector<NodeChild *> unusedGlyphs;
+
+	explicit Line(LabelV2 * _label);
+	
 	void invalidate();
-	void insertGlyph(GlyphMeshEntity * _glyph, Shader * _textShader);
+	void insertChar(wchar_t _char);
 };
 
 class LabelV2 : public NodeUI{
@@ -44,9 +39,10 @@ public:
 	Shader * textShader;
 	Shader * backgroundShader;
 	float width;
-	WrapMode wrapMode;
+//	WrapMode wrapMode;
+	Transform * lines;
 
-	LabelV2(BulletWorld* _world, Scene* _scene, Font * _font, Shader * _textShader, Shader * _backgroundShader, WrapMode _wrapMode, float _width = INFINITE_WIDTH);
+	LabelV2(BulletWorld* _world, Scene* _scene, Font * _font, Shader * _textShader, Shader * _backgroundShader, float _width = INFINITE_WIDTH);
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	void invalidateAllLines();
@@ -58,7 +54,7 @@ public:
 	void appendText(std::wstring _text);
 	std::wstring getText();
 	void updateAlignment();
-	void setAlignment(Alignment _alignment);
+	//void setAlignment(Alignment _alignment);
 	float getMeasuredWidth() override;
 	float getMeasuredHeight() override;
 
