@@ -30,6 +30,7 @@ public:
 	
 	void invalidate();
 	void insertChar(wchar_t _char);
+	bool canFit(float _width);
 };
 
 class LabelV2 : public NodeUI{

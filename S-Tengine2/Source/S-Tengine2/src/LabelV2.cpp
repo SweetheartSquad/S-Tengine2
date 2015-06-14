@@ -12,7 +12,7 @@ LabelV2::LabelV2(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textS
 	font(_font),
 	textShader(_textShader),
 	backgroundShader(_backgroundShader),
-	width(0.f),
+	width(_width),
 	lines(new Transform()),
 	updateRequired(false)
 {
@@ -48,13 +48,22 @@ void LabelV2::invalidateAllLines(){
 	}
 }
 
-void LabelV2::update(Step* _step){
+void LabelV2::update(Step * _step){
 	if(updateRequired) {
 		Line * curLine = currentLine();
 		for(unsigned long int i = 0; i < text.size(); ++i){
-			curLine->insertChar(text.at(i));
+			if(!curLine->canFit(font->getGlyphWidthHeight(text.at(i)).x)){
+				float curY = curLine->getTranslationVector().y;
+				lines->addChild(new Line(this), false);
+				curLine = currentLine();
+				currentLine()->translate(0.f, curY - font->getLineHeight(), 0.f, false);
+			}
+			curLine->insertChar(text.at(i));	
 		}
-		background->parents.at(0)->scale(getMeasuredWidth(), font->getLineHeight(), 1.0f, false);
+
+		// Adjust the size of the background
+		background->parents.at(0)->scale(getMeasuredWidth(), font->getLineHeight() * lines->children.size(), 1.0f, false);
+		
 		updateRequired = false;
 	}
 	NodeUI::update(_step);
@@ -109,7 +118,7 @@ float LabelV2::getMeasuredHeight(){
 	return 0.f;
 }
 
-Line* LabelV2::currentLine(){
+Line * LabelV2::currentLine(){
 	return dynamic_cast<Line *>(lines->children.back());
 }
 
@@ -170,4 +179,13 @@ void Line::insertChar(wchar_t _char){
 	glyph->setVisible(true);
 	width += glyphMesh->advance.x/64.f;
 	glyph->load();
+}
+
+bool Line::canFit(float _width){
+	if(abs(width - INFINITE_WIDTH) > 0.005){
+		if(_width + width > label->width){
+			return false;
+		}
+	}
+	return true;
 }
