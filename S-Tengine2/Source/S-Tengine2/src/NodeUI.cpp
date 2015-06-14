@@ -1,10 +1,13 @@
 #pragma once
 
+#include <MeshFactory.h>
 #include <NodeUI.h>
 #include <Scene.h>
 #include <Camera.h>
 #include <Mouse.h>
-#include <Plane.h>
+
+#include <shader\ComponentShaderBase.h>
+#include <shader\ShaderComponentTexture.h>
 
 NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	NodeBulletBody(_world),
@@ -24,15 +27,25 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	paddingRight(0.f),
 	paddingTop(0.f),
 	paddingBottom(0.f),
-	background(new Plane()),
+	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	contents(new Transform()),
 	horizontalAlignment(kLEFT),
-	verticalAlignment(kBOTTOM)
+	verticalAlignment(kBOTTOM),
+	autoResizingWidth(false),
+	autoResizingHeight(false),
+	width(0.f),
+	height(0.f)
 {
+	ComponentShaderBase * shader = new ComponentShaderBase(true);
+	shader->addComponent(new ShaderComponentTexture(shader));
+	shader->compileShader();
+	background->setShader(shader, true);
+
 	childTransform->addChild(background, true);
 	childTransform->addChild(contents, false);
-}
 
+	updateCollider();
+}
 
 void NodeUI::down(){
 	isHovered = true;
@@ -53,6 +66,12 @@ void NodeUI::in(){
 }
 void NodeUI::out(){
 	isHovered = false;
+}
+
+
+Transform * NodeUI::addChild(NodeUI* _uiElement){
+	layoutDirty = true;
+	return contents->addChild(_uiElement);
 }
 
 
@@ -214,11 +233,15 @@ bool NodeUI::isLayoutDirty(){
 }
 
 void NodeUI::updateCollider(){
-	world->world->removeRigidBody(body);
-	delete body;
-	body = nullptr;
-	delete shape;
-	shape = nullptr;
+	if(body != nullptr){
+		world->world->removeRigidBody(body);
+		delete body;
+		body = nullptr;
+	}
+	if(shape != nullptr){
+		delete shape;
+		shape = nullptr;
+	}
 	setColliderAsBox(getWidth(true, false) * 0.5f, getHeight(true, false) * 0.5f, 0.1);
 	createRigidBody(0);
 }
@@ -226,8 +249,8 @@ void NodeUI::updateCollider(){
 void NodeUI::autoResize(){
 	if(autoResizingHeight){
 		height = 0.0f;
-		for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
-			Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
+		for(unsigned long int i = 0; i < contents->children.size(); ++i) {
+			Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
 			if(trans != nullptr) {
 				if(trans->children.size() > 0) {
 					NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
@@ -238,8 +261,8 @@ void NodeUI::autoResize(){
 	}
 	if(autoResizingWidth){
 		width = 0.0f;
-		for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
-			Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
+		for(unsigned long int i = 0; i < contents->children.size(); ++i) {
+			Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
 			if(trans != nullptr) {
 				if(trans->children.size() > 0) {
 					NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));

@@ -85,12 +85,14 @@ public:
 
 	// If not autoresizing, returns the fixed width
 	// If autoresizing, returns the total width of the UI element including attibutes such as padding, overflow, etc.
-	virtual float getWidth(bool _includePadding, bool _includeMargin) = 0;
+	virtual float getWidth(bool _includePadding, bool _includeMargin);
 	// If not autoresizing, returns the fixed height
 	// If autoresizing, returns the total height of the UI element including attibutes such as padding, overflow, etc.
-	virtual float getHeight(bool _includePadding, bool _includeMargin) = 0;
+	virtual float getHeight(bool _includePadding, bool _includeMargin);
 
 	bool isLayoutDirty();
+
+	virtual Transform * addChild(NodeUI * _uiElement);
 
 private:
 	float marginLeft;

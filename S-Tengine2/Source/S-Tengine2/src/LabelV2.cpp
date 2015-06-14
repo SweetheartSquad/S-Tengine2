@@ -16,15 +16,14 @@ LabelV2::LabelV2(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textS
 	lines(new Transform()),
 	updateRequired(false)
 {
+	autoResizingWidth = true;
+
 	// Create the background plane
 	background = new MeshEntity(MeshFactory::getPlaneMesh());
 	background->setShader(backgroundShader, true);
 	childTransform->addChild(background);
 
 	childTransform->addChild(lines, false);
-
-	setColliderAsBox();
-	createRigidBody(0);
 }
 
 void LabelV2::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){

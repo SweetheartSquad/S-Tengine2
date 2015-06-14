@@ -54,7 +54,6 @@
     <ClCompile Include="../src/OrthographicCamera.cpp" />
     <ClCompile Include="../src/ParticleSystem.cpp" />
     <ClCompile Include="../src/PerspectiveCamera.cpp" />
-    <ClCompile Include="../src/Plane.cpp" />
     <ClCompile Include="../src/Point.cpp" />
     <ClCompile Include="../src/PointLight.cpp" />
     <ClCompile Include="../src/Rectangle.cpp" />
@@ -178,7 +177,6 @@
     <ClInclude Include="../include/OrthographicCamera.h" />
     <ClInclude Include="../include/ParticleSystem.h" />
     <ClInclude Include="../include/PerspectiveCamera.h" />
-    <ClInclude Include="../include/Plane.h" />
     <ClInclude Include="../include/Point.h" />
     <ClInclude Include="../include/PointLight.h" />
     <ClInclude Include="../include/poly2Tri/common/utils.h" />
