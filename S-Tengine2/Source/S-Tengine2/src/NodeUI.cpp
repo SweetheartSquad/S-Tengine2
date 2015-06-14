@@ -102,7 +102,7 @@ void NodeUI::update(Step * _step){
 	btTransform rayto;
 	rayto.setIdentity(); rayto.setOrigin(rayend);
 	btCollisionWorld::AllHitsRayResultCallback raycb(raystart, rayend);
-	world->world->rayTestSingle(rayfrom, rayto, body, shape, body->getWorldTransform(), raycb);
+	//world->world->rayTestSingle(rayfrom, rayto, body, shape, body->getWorldTransform(), raycb);
 	
 	
 	if(raycb.hasHit()){
