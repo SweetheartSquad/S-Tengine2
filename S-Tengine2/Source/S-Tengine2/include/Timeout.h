@@ -3,15 +3,16 @@
 #include <node\NodeUpdatable.h>
 #include <node\NodeChild.h>
 
+#include <functional>
+
 class Timeout : public virtual NodeChild, public virtual NodeUpdatable{
 public:
 	bool complete;
 	float elapsedSeconds;
 	float targetSeconds;
-	void * userData;
-	void (*onCompleteFunction)(void * _userData, Timeout * _this);
+	std::function<void(Timeout *)> onCompleteFunction;
 
-	Timeout(float _targetSeconds, void * _userData);
+	Timeout(float _targetSeconds);
 
 	// resets the timer to zero and sets complete to false, allowing the onCompleteFunction to trigger again
 	void restart();

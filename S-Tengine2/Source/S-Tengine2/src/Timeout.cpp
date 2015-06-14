@@ -4,9 +4,8 @@
 
 #include <Step.h>
 
-Timeout::Timeout(float _targetSeconds, void * _userData = nullptr) :
+Timeout::Timeout(float _targetSeconds) :
 	onCompleteFunction(nullptr),
-	userData(_userData),
 	targetSeconds(_targetSeconds),
 	elapsedSeconds(0),
 	complete(false)
@@ -24,7 +23,7 @@ void Timeout::update(Step * _step){
 		if(elapsedSeconds > targetSeconds){
 			complete = true;
 			if(onCompleteFunction != nullptr){
-				onCompleteFunction(userData, this);
+				onCompleteFunction(this);
 			}
 		}
 	}
