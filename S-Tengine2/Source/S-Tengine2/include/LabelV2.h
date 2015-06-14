@@ -39,6 +39,7 @@ public:
 	Font * font;
 	Shader * textShader;
 	Shader * backgroundShader;
+	MeshEntity * background;
 	float width;
 //	WrapMode wrapMode;
 	Transform * lines;
