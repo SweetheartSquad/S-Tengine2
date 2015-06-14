@@ -1,27 +1,16 @@
 #pragma once
 
-#include "NodeUI.h"
-
-class NodeUI;
+#include <Layout.h>
 
 enum Orientation {
 	HORIZONTAL,
 	VERTICAL
 };
 
-class LinearLayout : public NodeUI {
+class LinearLayout : public Layout {
 public:
-	LinearLayout(Orientation _orientation, BulletWorld * _world, Scene * _scene);
+	LinearLayout(BulletWorld * _world, Scene * _scene);
 	~LinearLayout();
 
-	float getMeasuredWidth() override;
-	float getMeasuredHeight() override;
-
-	void update(Step * _step) override;
-
-	Transform * addChild(NodeUI * _uiElement);
-	void setOrientation(Orientation orientation);
-
-private:
-	Orientation orientation;
+	Transform * addChild(NodeUI * _uiElement) override;
 };

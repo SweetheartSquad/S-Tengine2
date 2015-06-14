@@ -248,4 +248,6 @@ void NodeUI::autoResize(){
 			}
 		}
 	}
+	// Adjust the size of the background
+	background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
 }

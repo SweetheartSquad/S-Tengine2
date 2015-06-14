@@ -59,8 +59,6 @@ public:
 	std::wstring getText();
 	void updateAlignment();
 	//void setAlignment(Alignment _alignment);
-	float getMeasuredWidth() override;
-	float getMeasuredHeight() override;
 
 	Line * getLine();
 

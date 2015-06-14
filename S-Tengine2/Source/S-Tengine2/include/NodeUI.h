@@ -6,10 +6,9 @@
 class Scene;
 class Mouse;
 
-
 enum VerticalAlignment{
 	kBOTTOM,
-	kCENTER,
+	kMIDDLE,
 	kTOP
 };
 enum HorizontalAlignment{
