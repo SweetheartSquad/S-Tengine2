@@ -33,7 +33,7 @@ protected:
 public:
 	Scene * scene;
 
-	void (*onDownFunction)(NodeUI * _this);
+	std::function<void(NodeUI * _this)> onDownFunction;
 	//void (*onUpFunction)();
 
 	NodeUI(BulletWorld * _world, Scene * _scene);

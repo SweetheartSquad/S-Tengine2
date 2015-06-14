@@ -9,11 +9,10 @@
 #include "MeshInterface.h"
 #include "Sprite.h"
 #include "SpriteSheetAnimation.h"
-#include "SpriteMesh.h"
 
 ShaderComponentText::ShaderComponentText(Shader * _shader) :
 	ShaderComponent(_shader),
-	color(1, 1, 1),
+	color(0, 0, 0),
 	texNumLoc(-1),
 	texColLoc(-1),
 	texSamLoc(-1)
