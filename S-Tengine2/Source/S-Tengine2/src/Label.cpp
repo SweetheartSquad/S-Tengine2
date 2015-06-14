@@ -87,7 +87,7 @@ void Label::appendText(std::wstring _text){
 std::wstring Label::getText(){
 	return text;
 }
-
+#define BACKGROUND_OFFSET 1
 void Label::updateAlignment(){
 	if(childTransform->children.size() > 1 + BACKGROUND_OFFSET){
 		// Set currentLineY to the value of the first childs y translation
@@ -130,14 +130,6 @@ void Label::updateAlignment(){
 			case LEFT : break;
 		}
 	}
-}
-
-float Label::getMeasuredWidth(){
-	return measuredWidth;
-}
-
-float Label::getMeasuredHeight(){
-	return measuredHeight;
 }
 
 void Label::setAlignment(Alignment _alignment){

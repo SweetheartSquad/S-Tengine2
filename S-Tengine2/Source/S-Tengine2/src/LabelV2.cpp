@@ -63,8 +63,6 @@ void LabelV2::update(Step * _step){
 			curLine->insertChar(text.at(i));	
 			curLine->translate(0.f, curY, 0.f, false);
 		}
-		// Adjust the size of the background
-		background->parents.at(0)->scale(getMeasuredWidth(), font->getLineHeight() * lines->children.size() - 1, 1.0f, false);
 		updateRequired = false;
 	}
 	NodeUI::update(_step);
@@ -102,22 +100,6 @@ void LabelV2::updateAlignment(){
 
 //void LabelV2::setAlignment(Alignment _alignment){
 //}
-
-float LabelV2::getMeasuredWidth(){
-	// TODO add margins and padding
-	float max = 0.f;
-	for(unsigned long int i = 0; i < lines->children.size(); ++i) {
-		Line * line = dynamic_cast<Line *>(lines->children.at(i));
-		if(line != nullptr){
-			max = std::max(max, line->width);
-		}
-	}
-	return max;
-}
-
-float LabelV2::getMeasuredHeight(){
-	return 0.f;
-}
 
 Line* LabelV2::getLine() {
 	Line * line = nullptr;

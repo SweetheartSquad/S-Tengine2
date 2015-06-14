@@ -4,6 +4,7 @@
 #include <Scene.h>
 #include <Camera.h>
 #include <Mouse.h>
+#include <Plane.h>
 
 NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	NodeBulletBody(_world),
@@ -22,8 +23,14 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	paddingLeft(0.f),
 	paddingRight(0.f),
 	paddingTop(0.f),
-	paddingBottom(0.f)
+	paddingBottom(0.f),
+	background(new Plane()),
+	contents(new Transform()),
+	horizontalAlignment(kLEFT),
+	verticalAlignment(kBOTTOM)
 {
+	childTransform->addChild(background, true);
+	childTransform->addChild(contents, false);
 }
 
 
@@ -50,7 +57,8 @@ void NodeUI::out(){
 
 
 void NodeUI::update(Step * _step){
-	
+	autoResize();
+
 	float raylength = 1000;
 
 	/*Camera * cam = scene->activeCamera;
@@ -100,31 +108,7 @@ void NodeUI::update(Step * _step){
 }
 
 void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	if(isHovered){
-		if(isDown){
-			renderDown(_matrixStack, _renderOptions);
-		}else{
-			renderOver(_matrixStack, _renderOptions);
-		}
-	}else if(isActive){
-		renderActive(_matrixStack, _renderOptions);
-	}else{
-		renderDefault(_matrixStack, _renderOptions);
-	}
-}
-
-void NodeUI::renderDown(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	//std::cout << "down" << std::endl;
-	renderDefault(_matrixStack, _renderOptions);
-}
-
-void NodeUI::renderOver(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	//std::cout << "over" << std::endl;
-	renderDefault(_matrixStack, _renderOptions);
-}
-
-void NodeUI::renderActive(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	renderDefault(_matrixStack, _renderOptions);
+	Entity::render(_matrixStack, _renderOptions);
 }
 
 void NodeUI::setMarginLeft(float _margin){
@@ -159,6 +143,18 @@ void NodeUI::setPaddingBottom(float _padding){
 	paddingBottom = _padding;
 }
 
+void NodeUI::setWidth(float _width){
+	if(!autoResizingWidth){
+		width = _width;
+	}
+}
+
+void NodeUI::setHeight(float _height){
+	if(!autoResizingHeight){
+		height = _height;
+	}
+}
+
 float NodeUI::getMarginLeft(){
 	return marginLeft;
 }
@@ -191,16 +187,67 @@ float NodeUI::getPaddingBottom(){
 	return paddingBottom;
 }
 
+float NodeUI::getWidth(bool _includePadding, bool _includeMargin){
+	float res = width;
+	if(_includePadding){
+		res += getPaddingLeft() + getPaddingRight();
+	}
+	if(_includeMargin){
+		res += getMarginLeft() + getMarginRight();
+	}
+	return res;
+}
+
+float NodeUI::getHeight(bool _includePadding, bool _includeMargin){
+	float res = height;
+	if(_includePadding){
+		res += getPaddingBottom() + getPaddingTop();
+	}
+	if(_includeMargin){
+		res += getMarginBottom() + getMarginTop();
+	}
+	return res;
+}
+
 bool NodeUI::isLayoutDirty(){
 	return layoutDirty;
 }
 
 void NodeUI::updateCollider(){
-	//setColliderAsBox(getMeasuredWidth() * 0.5f, getMeasuredHeight() *0.5f ,0.1);
-	//createRigidBody(0);
+	world->world->removeRigidBody(body);
+	delete body;
+	body = nullptr;
+	delete shape;
+	shape = nullptr;
+	setColliderAsBox(getWidth(true, false) * 0.5f, getHeight(true, false) * 0.5f, 0.1);
+	createRigidBody(0);
 }
 
-void NodeUI::renderDefault(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	//std::cout << "default" << std::endl;
-	Entity::render(_matrixStack, _renderOptions);
+void NodeUI::autoResize(){
+	if(autoResizingHeight){
+		height = 0.0f;
+		for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
+			Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
+			if(trans != nullptr) {
+				if(trans->children.size() > 0) {
+					NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
+					height += node->getHeight(true, true);
+				}
+			}
+		}
+	}
+	if(autoResizingWidth){
+		width = 0.0f;
+		for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
+			Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
+			if(trans != nullptr) {
+				if(trans->children.size() > 0) {
+					NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
+					width += node->getWidth(true, true);
+				}
+			}
+		}
+	}
+	// Adjust the size of the background
+	background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
 }

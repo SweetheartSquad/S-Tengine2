@@ -7,8 +7,5 @@ public:
 
 	VerticalLinearLayout(BulletWorld * _bulletWorld, Scene * _scene);
 
-	float getMeasuredWidth() override;
-	float getMeasuredHeight() override;
-
 	void update(Step * _step) override;
 };

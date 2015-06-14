@@ -8,36 +8,6 @@ HorizontalLinearLayout::HorizontalLinearLayout(BulletWorld* _bulletWorld, Scene*
 {
 }
 
-float HorizontalLinearLayout::getMeasuredWidth() {
-	float accumulator = 0.0f;
-	for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
-		Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
-		if(trans != nullptr) {
-			if(trans->children.size() > 0) {
-				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
-				accumulator += node->getMeasuredWidth();
-			}
-		}
-	}
-	accumulator = accumulator + getMarginLeft() + getMarginRight() + getPaddingLeft() + getPaddingRight();
-	return accumulator;
-}
-
-float HorizontalLinearLayout::getMeasuredHeight() {
-	float max = 0.0f;
-	for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
-		Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
-		if(trans != nullptr) {
-			if(trans->children.size() > 0) {
-				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
-				max = std::max(max, node->getMeasuredHeight());
-			}
-		}
-	}
-	max = max + getMarginBottom() + getMarginTop() + getPaddingBottom() + getPaddingTop();
-	return max;
-}
-
 void HorizontalLinearLayout::update(Step* _step) {
 	for (unsigned long int i = 0; i < childTransform->children.size(); ++i){
 		if (i == 0) {
@@ -52,7 +22,7 @@ void HorizontalLinearLayout::update(Step* _step) {
 			NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
 
 			float x = prevTransform->getTranslationVector().x 
-						+ prevUiNode->getMeasuredWidth()
+						+ prevUiNode->getWidth(true, false)
 						+ prevUiNode->getMarginRight() 
 						+ ui->getMarginLeft();
 

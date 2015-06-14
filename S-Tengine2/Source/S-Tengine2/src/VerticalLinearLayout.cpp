@@ -8,36 +8,6 @@ VerticalLinearLayout::VerticalLinearLayout(BulletWorld* _bulletWorld, Scene* _sc
 {
 }
 
-float VerticalLinearLayout::getMeasuredWidth() {
-	float max = 0.0f;
-	for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
-		Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
-		if(trans != nullptr) {
-			if(trans->children.size() > 0) {
-				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
-				max = std::max(max, node->getMeasuredWidth());
-			}
-		}
-	}
-	max = max + getMarginLeft() + getMarginRight() + getPaddingLeft() + getPaddingRight();
-	return max;
-}
-
-float VerticalLinearLayout::getMeasuredHeight() {
-	float accumulator = 0.0f;
-	for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
-		Transform * trans = dynamic_cast<Transform *>(childTransform->children.at(i));
-		if(trans != nullptr) {
-			if(trans->children.size() > 0) {
-				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
-				accumulator += node->getMeasuredHeight();
-			}
-		}
-	}
-	accumulator = accumulator + getMarginBottom() + getMarginTop() + getPaddingBottom() + getPaddingTop();
-	return accumulator; 
-}
-
 void VerticalLinearLayout::update(Step* _step) {
 	for(unsigned long int i = 0; i < childTransform->children.size(); ++i){
 		if (i == 0) {
@@ -53,7 +23,7 @@ void VerticalLinearLayout::update(Step* _step) {
 
 			float x = ui->getMarginLeft();
 			float y = prevTransform->getTranslationVector().y 
-						- prevUiNode->getMeasuredHeight()
+						- prevUiNode->getHeight(true, false)
 						- ui->getMarginTop()
 						- prevUiNode->getMarginBottom();
 			trans->translate(x, y, 0.f, false);

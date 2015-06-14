@@ -3,10 +3,19 @@
 #include <NodeBulletBody.h>
 #include <MeshEntity.h>
 
-#define BACKGROUND_OFFSET 1
-
 class Scene;
 class Mouse;
+
+enum VerticalAlignment{
+	kBOTTOM,
+	kMIDDLE,
+	kTOP
+};
+enum HorizontalAlignment{
+	kLEFT,
+	kCENTER,
+	kRIGHT
+};
 
 class NodeUI : public virtual NodeBulletBody, public virtual Entity{
 protected:
@@ -29,7 +38,17 @@ protected:
 
 	bool layoutDirty;
 	
+	// destroys the current rigid body and creates a new one which is sized to match the bounding box of the element
 	void updateCollider();
+	
+	bool autoResizingWidth;
+	bool autoResizingHeight;
+	
+	HorizontalAlignment horizontalAlignment;
+	VerticalAlignment verticalAlignment;
+
+	MeshEntity * background;
+	Transform * contents;
 public:
 	Scene * scene;
 
@@ -40,19 +59,6 @@ public:
 
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
-	
-	// renders the UI element in it's "over" state
-	virtual void renderOver(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
-	// renders the UI element in it's "down" state
-	virtual void renderDown(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
-	// renders the UI element in it's "mousedown" state
-	virtual void renderActive(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
-	// called by the functions to render each individual state by default (so if you leave a state unimplemented, this will render instead)
-	virtual void renderDefault(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
-	// Should return the total width of the UI element including attibutes such as padding, overflow, etc
-	virtual float getMeasuredWidth() = 0;
-	// Should return the total width of the UI element including attibutes such as padding, overflow, etc
-	virtual float getMeasuredHeight() = 0;
 
 	void setMarginLeft(float _margin);
 	void setMarginRight(float _margin);
@@ -64,6 +70,9 @@ public:
 	void setPaddingTop(float _padding);
 	void setPaddingBottom(float _padding);
 
+	void setWidth(float _width);
+	void setHeight(float _height);
+
 	float getMarginLeft();
 	float getMarginRight();
 	float getMarginTop();
@@ -73,6 +82,13 @@ public:
 	float getPaddingRight();
 	float getPaddingTop();
 	float getPaddingBottom();
+
+	// If not autoresizing, returns the fixed width
+	// If autoresizing, returns the total width of the UI element including attibutes such as padding, overflow, etc.
+	virtual float getWidth(bool _includePadding, bool _includeMargin) = 0;
+	// If not autoresizing, returns the fixed height
+	// If autoresizing, returns the total height of the UI element including attibutes such as padding, overflow, etc.
+	virtual float getHeight(bool _includePadding, bool _includeMargin) = 0;
 
 	bool isLayoutDirty();
 
@@ -86,4 +102,9 @@ private:
 	float paddingRight;
 	float paddingTop;
 	float paddingBottom;
+
+	float width;
+	float height;
+
+	void autoResize();
 };

@@ -44,8 +44,6 @@ public:
 	void updateText();
 	void updateAlignment();
 	void setAlignment(Alignment _alignment);
-	float getMeasuredWidth() override;
-	float getMeasuredHeight() override;
 
 private:
 	std::wstring text;
