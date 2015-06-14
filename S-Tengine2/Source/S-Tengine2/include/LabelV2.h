@@ -42,6 +42,7 @@ public:
 	Shader * backgroundShader;
 	MeshEntity * background;
 	float width;
+	std::vector<NodeChild *> unusedLines;
 //	WrapMode wrapMode;
 	Transform * lines;
 
@@ -60,6 +61,8 @@ public:
 	//void setAlignment(Alignment _alignment);
 	float getMeasuredWidth() override;
 	float getMeasuredHeight() override;
+
+	Line * getLine();
 
 private:
 	std::wstring text;

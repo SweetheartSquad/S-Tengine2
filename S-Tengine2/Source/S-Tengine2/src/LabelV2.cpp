@@ -21,9 +21,7 @@ LabelV2::LabelV2(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textS
 	background->setShader(backgroundShader, true);
 	childTransform->addChild(background);
 
-	// Add initial line
 	childTransform->addChild(lines, false);
-	lines->addChild(new Line(this), false);
 }
 
 void LabelV2::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
@@ -50,20 +48,20 @@ void LabelV2::invalidateAllLines(){
 
 void LabelV2::update(Step * _step){
 	if(updateRequired) {
-		Line * curLine = currentLine();
+		Line * curLine = getLine();
+		lines->addChild(curLine, false);
+		float curY = 0.f;
 		for(unsigned long int i = 0; i < text.size(); ++i){
 			if(!curLine->canFit(font->getGlyphWidthHeight(text.at(i)).x)){
-				float curY = curLine->getTranslationVector().y;
-				lines->addChild(new Line(this), false);
-				curLine = currentLine();
-				currentLine()->translate(0.f, curY - font->getLineHeight(), 0.f, false);
+				curY -= font->getLineHeight();
+				curLine = getLine();
+				lines->addChild(curLine);
 			}
 			curLine->insertChar(text.at(i));	
+			curLine->translate(0.f, curY, 0.f, false);
 		}
-
 		// Adjust the size of the background
-		background->parents.at(0)->scale(getMeasuredWidth(), font->getLineHeight() * lines->children.size(), 1.0f, false);
-		
+		background->parents.at(0)->scale(getMeasuredWidth(), font->getLineHeight() * lines->children.size() - 1, 1.0f, false);
 		updateRequired = false;
 	}
 	NodeUI::update(_step);
@@ -118,6 +116,17 @@ float LabelV2::getMeasuredHeight(){
 	return 0.f;
 }
 
+Line* LabelV2::getLine() {
+	Line * line = nullptr;
+	if(unusedLines.size() > 0) {
+		line = dynamic_cast<Line *>(unusedLines.back());
+		unusedLines.pop_back();
+	}else {
+		line = new Line(this);
+	}
+	return line;
+}
+
 Line * LabelV2::currentLine(){
 	return dynamic_cast<Line *>(lines->children.back());
 }
@@ -156,6 +165,8 @@ void Line::invalidate(){
 	unusedGlyphs.insert(unusedGlyphs.end(), children.begin(), children.end());
 	children.clear();
 	width = 0.f;
+	label->lines->removeChild(this);
+	label->unusedLines.push_back(this);
 }
 
 void Line::insertChar(wchar_t _char){
