@@ -21,7 +21,7 @@ public:
 	* @param _center The plane's center position in world space
 	* @param _size The plane's scale
 	*/
-	Plane(glm::vec3 _center, float _scale);
+	Plane(glm::vec3 _center = glm::vec3(0.f, 0.f, 0.f), float _scale = 1.f);
 	~Plane(void);
 
 	/**
