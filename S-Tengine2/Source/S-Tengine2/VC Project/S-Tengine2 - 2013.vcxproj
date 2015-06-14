@@ -64,6 +64,8 @@
     <ClCompile Include="../src/ResourceManager.cpp" />
     <ClCompile Include="../src/Scene.cpp" />
     <ClCompile Include="../src/Scene2D.cpp" />
+    <ClCompile Include="../src/HorizontalLinearLayout.cpp" />
+    <ClCompile Include="../src/Layout.cpp" />
     <ClCompile Include="../src/shader/ComponentShaderBase.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentBlinn.cpp" />
     <ClCompile Include="../src/shader/BlurShader.cpp" />
@@ -124,8 +126,10 @@
     <ClCompile Include="../src/shader/ComponentShaderText.cpp" />
     <ClCompile Include="../src/sqlite/shell.c" />
     <ClCompile Include="../src/sqlite/sqlite3.c" />
+    <ClCompile Include="../src/TextArea.cpp" />
     <ClCompile Include="../src/Timeout.cpp" />
     <ClCompile Include="../src/UIPanel.cpp" />
+    <ClCompile Include="../src/VerticalLinearLayout.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -186,6 +190,8 @@
     <ClInclude Include="../include/ResourceManager.h" />
     <ClInclude Include="../include/Scene.h" />
     <ClInclude Include="../include/Scene2D.h" />
+    <ClInclude Include="../include/HorizontalLinearLayout.h" />
+    <ClInclude Include="../include/Layout.h" />
     <ClInclude Include="../include/shader/ComponentShaderBase.h" />
     <ClInclude Include="../include/shader/ShaderComponentBlinn.h" />
     <ClInclude Include="../include/shader/BlurShader.h" />
@@ -249,8 +255,10 @@
     <ClInclude Include="../include/shader/ComponentShaderText.h" />
     <ClInclude Include="../include/sqlite/sqlite3.h" />
     <ClInclude Include="../include/sqlite/sqlite3ext.h" />
+    <ClInclude Include="../include/TextArea.h" />
     <ClInclude Include="../include/Timeout.h" />
     <ClInclude Include="../include/UIPanel.h" />
+    <ClInclude Include="../include/VerticalLinearLayout.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E178CAF8-5E96-478C-812C-DCBA942FC878}</ProjectGuid>
