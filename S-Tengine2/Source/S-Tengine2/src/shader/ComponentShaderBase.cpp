@@ -1,13 +1,13 @@
 #pragma once 
 
-#include "shader/BaseComponentShader.h"
+#include "shader/ComponentShaderBase.h"
 #include "shader/ShaderVariables.h"
 #include "node/NodeRenderable.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
 #include "shader/GeometryComponent.h"
 
-BaseComponentShader::BaseComponentShader(bool _autoRelease) :
+ComponentShaderBase::ComponentShaderBase(bool _autoRelease) :
 	Shader(_autoRelease),
 	geometryComponent(nullptr),
 	modelUniformLocation(-1),
@@ -17,14 +17,14 @@ BaseComponentShader::BaseComponentShader(bool _autoRelease) :
 {
 }
 
-BaseComponentShader::BaseComponentShader(std::vector<ShaderComponent*> _components, bool _autoRelease) :
+ComponentShaderBase::ComponentShaderBase(std::vector<ShaderComponent*> _components, bool _autoRelease) :
 	Shader(_autoRelease),
 	components(_components),
 	geometryComponent(nullptr)
 {
 }
 
-std::string BaseComponentShader::buildVertexShader(){
+std::string ComponentShaderBase::buildVertexShader(){
 
 	std::string modGeo = "";
 	if(geometryComponent != nullptr){
@@ -81,7 +81,7 @@ std::string BaseComponentShader::buildVertexShader(){
 	return shaderString;
 }
 
-std::string BaseComponentShader::buildFragmentShader(){
+std::string ComponentShaderBase::buildFragmentShader(){
 	std::string shaderString  = "#version 150" + ENDL +
 
 								"in vec3 fragVert" + SEMI_ENDL +
@@ -118,7 +118,7 @@ std::string BaseComponentShader::buildFragmentShader(){
 	return shaderString;
 }
 
-void BaseComponentShader::compileShader(){
+void ComponentShaderBase::compileShader(){
 	//Shader::unload();
 	if(geometryComponent != nullptr){
 		init(buildVertexShader(), buildFragmentShader(), geometryComponent->getGeometryShader());	
@@ -128,7 +128,7 @@ void BaseComponentShader::compileShader(){
 	isCompiled = true;
 }
 
-void BaseComponentShader::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ComponentShaderBase::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	const glm::mat4 * m = _matrixStack->getModelMatrix();
 	glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &(*m)[0][0]);
 	
@@ -144,22 +144,22 @@ void BaseComponentShader::configureUniforms(vox::MatrixStack* _matrixStack, Rend
 	checkForGlError(0,__FILE__,__LINE__);
 }
 
-BaseComponentShader::~BaseComponentShader(){
+ComponentShaderBase::~ComponentShaderBase(){
 	while(components.size() > 0){
 		delete components.back();
 		components.pop_back();
 	}
 }
 
-void BaseComponentShader::addComponent(ShaderComponent * _component){
+void ComponentShaderBase::addComponent(ShaderComponent * _component){
 	components.push_back(_component);
 }
 
-ShaderComponent* BaseComponentShader::getComponentAt(int idx){
+ShaderComponent* ComponentShaderBase::getComponentAt(int idx){
 	return components.at(idx);
 }
 
-void BaseComponentShader::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ComponentShaderBase::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	Shader::clean(_matrixStack, _renderOption, _nodeRenderable);
 	for(unsigned long int i = 0; i < components.size(); i++){
 		components.at(i)->clean(_matrixStack, _renderOption, _nodeRenderable);
@@ -170,7 +170,7 @@ void BaseComponentShader::clean(vox::MatrixStack* _matrixStack, RenderOptions* _
 	}
 }
 
-void BaseComponentShader::unload(){
+void ComponentShaderBase::unload(){
 	for(ShaderComponent * sc : components){
 		sc->unload();
 	}
@@ -181,7 +181,7 @@ void BaseComponentShader::unload(){
 	}
 }
 
-void BaseComponentShader::load(){
+void ComponentShaderBase::load(){
 	Shader::load();
 	for(ShaderComponent * sc : components){
 		sc->load();

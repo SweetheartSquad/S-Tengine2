@@ -61,6 +61,11 @@ void NodeBulletBody::setColliderAsSphere(float _radius){
 	shape = new btSphereShape(_radius);
 }
 
+void NodeBulletBody::setColliderAsCapsule(float _radius, float _height){
+	assert(shape == nullptr);
+	shape = new btCapsuleShape(_radius, _height);
+}
+
 void NodeBulletBody::setColliderAsMesh(TriMesh * _colliderMesh, bool _convex){
 	assert(shape == nullptr);
 	if(_convex){

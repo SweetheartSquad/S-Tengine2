@@ -64,7 +64,7 @@
     <ClCompile Include="../src/ResourceManager.cpp" />
     <ClCompile Include="../src/Scene.cpp" />
     <ClCompile Include="../src/Scene2D.cpp" />
-    <ClCompile Include="../src/shader/BaseComponentShader.cpp" />
+    <ClCompile Include="..\src\shader\ComponentShaderBase.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentBlinn.cpp" />
     <ClCompile Include="../src/shader/BlurShader.cpp" />
     <ClCompile Include="../src/shader/DepthMapShader.cpp" />
@@ -122,6 +122,7 @@
     <ClCompile Include="..\src\DatabaseConnection.cpp" />
     <ClCompile Include="..\src\LabelV2.cpp" />
     <ClCompile Include="..\src\LinearLayout.cpp" />
+    <ClCompile Include="..\src\shader\ComponentShaderText.cpp" />
     <ClCompile Include="..\src\sqlite\shell.c" />
     <ClCompile Include="..\src\sqlite\sqlite3.c" />
   </ItemGroup>
@@ -184,7 +185,7 @@
     <ClInclude Include="../include/ResourceManager.h" />
     <ClInclude Include="../include/Scene.h" />
     <ClInclude Include="../include/Scene2D.h" />
-    <ClInclude Include="../include/shader/BaseComponentShader.h" />
+    <ClInclude Include="..\include\shader\ComponentShaderBase.h" />
     <ClInclude Include="../include/shader/ShaderComponentBlinn.h" />
     <ClInclude Include="../include/shader/BlurShader.h" />
     <ClInclude Include="../include/shader/DepthMapShader.h" />
@@ -245,6 +246,7 @@
     <ClInclude Include="..\include\DatabaseConnection.h" />
     <ClInclude Include="..\include\LabelV2.h" />
     <ClInclude Include="..\include\LinearLayout.h" />
+    <ClInclude Include="..\include\shader\ComponentShaderText.h" />
     <ClInclude Include="..\include\sqlite\sqlite3.h" />
     <ClInclude Include="..\include\sqlite\sqlite3ext.h" />
   </ItemGroup>

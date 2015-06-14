@@ -13,7 +13,7 @@ namespace vox{
 class RenderOptions;
 class Light;
 class DepthMapShader;
-class BaseComponentShader;
+class ComponentShaderBase;
 class RenderSurface;
 class Keyboard;
 class StandardFrameBuffer;

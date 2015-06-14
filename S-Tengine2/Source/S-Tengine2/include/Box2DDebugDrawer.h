@@ -2,7 +2,7 @@
 
 #include <Box2D/Box2D.h>
 
-#include "shader/BaseComponentShader.h"
+#include "shader/ComponentShaderBase.h"
 #include "Sprite.h"
 #include "node\NodeLoadable.h"
 
@@ -29,7 +29,7 @@ public:
 	void unload() override;
 
 private:
-	BaseComponentShader * shader;
+	ComponentShaderBase * shader;
 	Sprite * spriteSegment, * spriteTransform, * spriteCircle, * spritePoly;
 	Scene * scene;
 	Box2DWorld * world;

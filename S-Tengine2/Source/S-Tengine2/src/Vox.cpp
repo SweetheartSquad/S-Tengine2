@@ -10,6 +10,8 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 
+#include <OpenALSound.h>
+
 Step vox::step;
 
 double vox::lastTimestamp = 0;
@@ -114,7 +116,7 @@ void vox::initialize(std::string _title){
 	glfwGetWindowSize(window, &screenWidth, &screenHeight);
 	glfwSetCursorPos(window, screenWidth/2, screenHeight/2);
 
-	//Initialize freetype
+	// Initialize freetype
 	if(FT_Init_FreeType(&freeTypeLibrary) != 0) {
 		std::cerr << "Couldn't initialize FreeType library\n";
 		throw;
@@ -126,6 +128,8 @@ void vox::destruct(){
 	glfwTerminate();
 
 	FT_Done_FreeType(freeTypeLibrary);
+	
+	NodeOpenAL::destruct();
 }
 
 /////////// Delta Time Begin //////////////

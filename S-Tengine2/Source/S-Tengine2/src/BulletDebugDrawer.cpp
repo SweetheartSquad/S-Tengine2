@@ -7,13 +7,13 @@
 #include <MatrixStack.h>
 #include <RenderOptions.h>
 #include <shader\Shader.h>
-#include <shader\BaseComponentShader.h>
+#include <shader\ComponentShaderBase.h>
 #include <shader\ShaderComponentTexture.h>
 
 BulletDebugDrawer::BulletDebugDrawer(btCollisionWorld * _world) :
 	m_debugMode(0),
 	world(_world),
-	shader(new BaseComponentShader(false))
+	shader(new ComponentShaderBase(false))
 {
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->compileShader();

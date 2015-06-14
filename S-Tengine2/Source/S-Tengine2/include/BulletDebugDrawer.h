@@ -4,7 +4,7 @@
 #include <LinearMath/btIDebugDraw.h>
 #include <Entity.h>
 
-class BaseComponentShader;
+class ComponentShaderBase;
 
 class BulletDebugDrawer : public btIDebugDraw, public Entity{
 private:
@@ -29,5 +29,5 @@ public:
 
 	vox::MatrixStack * matrixStack;
 	RenderOptions * renderOptions;
-	BaseComponentShader * shader;
+	ComponentShaderBase * shader;
 };

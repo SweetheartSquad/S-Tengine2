@@ -3,7 +3,8 @@
 #include <node\NodeChild.h>
 #include <node\NodeUpdatable.h>
 #include <node\NodeResource.h>
-#include <AL\alure.h>
+#include <AL\al.h>
+#include <AL\alc.h>
 #include <iostream>
 #include <string>
 
@@ -36,15 +37,13 @@
 class NodeOpenAL abstract : public Node{
 private:
 	static bool inited;
-
-	static void initOpenAL();
-	static void uninitOpenAL();
-
 protected:
     static ALCcontext * context;
     static ALCdevice * device;
 public:
 	NodeOpenAL();
+	static void destruct();
+	static void initOpenAL();
 
 	// sets the global OpenAL listener position
 	static void setListenerPosition(glm::vec3 _position);
@@ -57,63 +56,109 @@ public:
 class OpenAL_Buffer : public virtual NodeOpenAL, public virtual NodeResource{
 public:
 	ALuint bufferId;
+	ALsizei numSamples, sampleRate;
+    ALenum format;
+	std::vector<ALshort> samples;
 	OpenAL_Buffer(const char * _filename);
 	~OpenAL_Buffer();
 };
 
-class OpenAL_Source : public virtual NodeOpenAL, public virtual NodeResource{
+class OpenAL_Source : public virtual NodeOpenAL, public virtual NodeResource, public virtual NodeUpdatable{
 public:
 	ALuint sourceId;
 	OpenAL_Buffer * buffer;
 	bool positional;
 	bool looping;
+	// the current state of the source
+	ALint state;
 	OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional);
 	~OpenAL_Source();
+	virtual void update(Step * _step) override;
 	
+	// sets the audio source's position
 	void setPosition(glm::vec3 _pos);
+	// sets the audio source's direction
 	void setDirection(glm::vec3 _forward, glm::vec3 _up);
 
+	// returns the current position in the sound data (-1 when not playing/paused)
+	ALint getSampleOffset();
+
+	// start playing from the audio source
 	void play(bool _loop = false);
 	void pause();
 	void stop();
 };
 
-class OpenAL_Sound : public virtual NodeUpdatable, public virtual NodeResource, public virtual NodeChild{
+class OpenAL_Sound abstract : public virtual NodeOpenAL, public virtual NodeResource, public virtual NodeUpdatable, public virtual NodeChild{
+protected:
+	ALint samplesPlayed;
 public:
+	OpenAL_Sound(OpenAL_Source * _source);
+	~OpenAL_Sound();
 	OpenAL_Source * source;
 	
-	OpenAL_Sound(OpenAL_Source * _source);
-	OpenAL_Sound(const char * _filename, bool _positional);
-	~OpenAL_Sound();
+	virtual void update(Step * _step) override;
+
+	// returns the offset in the raw audio data that corresponds to the currently playing audio (-1 when not playing)
+	virtual ALint getCurrentSample();
+	// returns the value of the sample at the current offset (in the range -1.0 to 1.0)
+	float getAmplitude();
 	
+	// Starts the audio source if stopped, resumes if paused, restarts if playing.
+	virtual void play(bool _loop = false);
+	// Pauses the audio source
+	virtual void pause();
+	// Stops the audio source + rewinds to the beginning
+	virtual void stop();
+};
+
+class OpenAL_SoundSimple : public OpenAL_Sound{
+public:
+	OpenAL_SoundSimple(const char * _filename, bool _positional);
+
 	virtual void update(Step * _step) override;
 };
 
 
-// number of buffers used for a single OpenAL_Stream
-#define NUM_BUFS 4
-class OpenAL_Stream : public virtual NodeUpdatable, public virtual NodeResource, public virtual NodeChild{
+class OpenAL_SoundStream : public virtual OpenAL_Sound{
+private:
+	// number of buffers used for a single OpenAL_Stream
+	const static unsigned long int NUM_BUFS = 4;
+	// size of buffers used for streaming
+	const static unsigned long int BUFFER_LEN = 44100/10;
 public:
-	alureStream * stream;
-	OpenAL_Source * source;
 	ALuint buffers[NUM_BUFS];
+	// the number of buffers of the stream which have already been queued
+	unsigned long int bufferOffset;
+	// maximum number of buffers that could possibly be queued (the number of samples / the number of samples per buffer)
+	unsigned long int maxBufferOffset;
 
 	// whether the stream should continue buffering
 	bool isStreaming;
-	// the current state of the stream source
-	ALint state;
 
-	OpenAL_Stream(const char * _filename, bool _positional);
-	~OpenAL_Stream();
+	OpenAL_SoundStream(const char * _filename, bool _positional);
+	~OpenAL_SoundStream();
 
-	void update(Step * _step) override;
+	virtual void update(Step * _step) override;
 	
-	// Starts the audio stream if stopped, resumes if paused, restarts if playing.
-	void play(bool _loop = false);
-	// Pauses the audio stream
-	void pause();
-	// Stops the audio stream + rewinds to the beginning
-	void stop();
-
+	// returns the offset in the raw audio data that corresponds to the currently playing audio (-1 when not playing)
+	virtual ALint getCurrentSample() override;
+	
+	// Starts the audio source if stopped, resumes if paused, restarts if playing.
+	virtual void play(bool _loop = false) override;
+	// Pauses the audio source
+	virtual void pause() override;
+	// Stops the audio source + rewinds to the beginning
+	virtual void stop() override;
+	// Unqueues any queued buffers and rewinds the stream
 	void rewind();
+
+	// attempt to fill the _bufferId with new data from the source
+	// (uses bufferOffset to determine where to start from)
+	// returns the number of buffers filled
+	unsigned long int fillBuffer(ALuint _bufferId);
+	// fills buffers with as much data from the source as possible, limited by maxBufferOffset
+	// (uses bufferOffset to determine where to start from)
+	// returns the number of buffers filled
+	unsigned long int fillBuffers();
 };

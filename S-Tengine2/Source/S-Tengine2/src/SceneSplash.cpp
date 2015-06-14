@@ -12,7 +12,7 @@
 #include <Resource.h>
 #include <Easing.h>
 
-#include <shader\BaseComponentShader.h>
+#include <shader\ComponentShaderBase.h>
 #include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentDiffuse.h>
 #include <shader\ShaderComponentHsv.h>
@@ -42,7 +42,7 @@
 
 SceneSplash::SceneSplash(Game * _game) :
 	Scene(_game),
-	shader(new BaseComponentShader(true)),
+	shader(new ComponentShaderBase(true)),
 	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
@@ -97,7 +97,7 @@ SceneSplash::SceneSplash(Game * _game) :
 
 
 
-	BaseComponentShader * textShader = new BaseComponentShader(true);
+	ComponentShaderBase * textShader = new ComponentShaderBase(true);
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
 

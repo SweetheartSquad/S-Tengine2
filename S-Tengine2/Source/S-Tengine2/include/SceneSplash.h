@@ -16,7 +16,7 @@ class Label;
 
 class SceneSplash : public Scene{
 public:
-	BaseComponentShader * shader;
+	ComponentShaderBase * shader;
 	ShaderComponentHsv * hsvComponent;
 	
 	Shader * screenSurfaceShader;

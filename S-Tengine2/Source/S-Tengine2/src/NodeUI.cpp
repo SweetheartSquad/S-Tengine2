@@ -191,7 +191,7 @@ bool NodeUI::isLayoutDirty(){
 	return layoutDirty;
 }
 
-void NodeUI::updateColider(){
+void NodeUI::updateCollider(){
 	setColliderAsBox(getMeasuredWidth() * 0.5f, getMeasuredHeight() *0.5f ,0.1);
 	createRigidBody(0);
 }
