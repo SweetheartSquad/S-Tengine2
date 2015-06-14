@@ -125,7 +125,6 @@
     <ClCompile Include="..\src\sqlite\shell.c" />
     <ClCompile Include="..\src\sqlite\sqlite3.c" />
     <ClCompile Include="..\src\Timeout.cpp" />
-    <ClCompile Include="..\src\UIPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="../include/Accelerometer.h" />
@@ -250,7 +249,6 @@
     <ClInclude Include="..\include\sqlite\sqlite3.h" />
     <ClInclude Include="..\include\sqlite\sqlite3ext.h" />
     <ClInclude Include="..\include\Timeout.h" />
-    <ClInclude Include="..\include\UIPanel.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>
