@@ -5,24 +5,17 @@
 #include <MeshFactory.h>
 #include <Font.h>
 
-LabelV2::LabelV2(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textShader, Shader* _backgroundShader, float _width):
+LabelV2::LabelV2(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textShader, float _width):
 	NodeUI(_world, _scene),
 	Entity(),
 	NodeBulletBody(_world),
 	font(_font),
 	textShader(_textShader),
-	backgroundShader(_backgroundShader),
-	width(_width),
 	lines(new Transform()),
 	updateRequired(false)
 {
 	autoResizingWidth = true;
-
-	// Create the background plane
-	background = new MeshEntity(MeshFactory::getPlaneMesh());
-	background->setShader(backgroundShader, true);
-	childTransform->addChild(background);
-
+	setWidth(_width);
 	childTransform->addChild(lines, false);
 }
 
@@ -70,14 +63,12 @@ void LabelV2::update(Step * _step){
 void LabelV2::unload(){
 	NodeUI::load();
 	textShader->load();
-	backgroundShader->load();
 	font->unload();
 }
 
 void LabelV2::load(){
 	NodeUI::unload();
 	textShader->unload();
-	backgroundShader->unload();
 	font->load();
 }
 
@@ -115,6 +106,20 @@ Line * LabelV2::currentLine(){
 	return dynamic_cast<Line *>(lines->children.back());
 }
 
+void LabelV2::autoResizeHeight(){
+	setHeight(font->getLineHeight());
+}
+
+void LabelV2::autoResizeWidth(){
+	float width = 0;
+	for(unsigned long int i = 0; i < lines->children.size(); ++i){
+		Line * l = dynamic_cast<Line *>(lines->children.at(i));
+		if(l != nullptr){
+			width = std::max(width, l->width);
+		}
+	}
+	setWidth(width);
+}
 
 ///////////////////////////////////////
 // !!! GlyphMeshEntity definitions !!!
@@ -180,7 +185,7 @@ void Line::insertChar(wchar_t _char){
 
 bool Line::canFit(float _width){
 	if(abs(width - INFINITE_WIDTH) > 0.005){
-		if(_width + width > label->width){
+		if(_width + width > label->getWidth(false, false)){
 			return false;
 		}
 	}

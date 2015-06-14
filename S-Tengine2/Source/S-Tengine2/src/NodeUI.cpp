@@ -247,30 +247,36 @@ void NodeUI::updateCollider(){
 }
 
 void NodeUI::autoResize(){
-	if(autoResizingHeight){
-		height = 0.0f;
-		for(unsigned long int i = 0; i < contents->children.size(); ++i) {
-			Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
-			if(trans != nullptr) {
-				if(trans->children.size() > 0) {
-					NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
-					height += node->getHeight(true, true);
-				}
-			}
-		}
-	}
 	if(autoResizingWidth){
-		width = 0.0f;
-		for(unsigned long int i = 0; i < contents->children.size(); ++i) {
-			Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
-			if(trans != nullptr) {
-				if(trans->children.size() > 0) {
-					NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
-					width += node->getWidth(true, true);
-				}
-			}
-		}
+		autoResizeWidth();
+	}
+	if(autoResizingHeight){
+		autoResizeHeight();
 	}
 	// Adjust the size of the background
 	background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
+}
+void NodeUI::autoResizeWidth(){
+	width = 0.0f;
+	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
+		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
+		if(trans != nullptr) {
+			if(trans->children.size() > 0) {
+				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
+				width += node->getWidth(true, true);
+			}
+		}
+	}
+}
+void NodeUI::autoResizeHeight(){
+	height = 0.0f;
+	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
+		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
+		if(trans != nullptr) {
+			if(trans->children.size() > 0) {
+				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
+				height += node->getHeight(true, true);
+			}
+		}
+	}
 }

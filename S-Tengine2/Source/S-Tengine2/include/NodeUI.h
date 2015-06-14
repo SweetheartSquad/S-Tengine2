@@ -47,10 +47,10 @@ protected:
 	HorizontalAlignment horizontalAlignment;
 	VerticalAlignment verticalAlignment;
 
-	MeshEntity * background;
 	Transform * contents;
 public:
 	Scene * scene;
+	MeshEntity * background;
 
 	std::function<void(NodeUI * _this)> onDownFunction;
 	//void (*onUpFunction)();
@@ -107,6 +107,8 @@ private:
 
 	float width;
 	float height;
-
+	
 	void autoResize();
+	virtual void autoResizeWidth();
+	virtual void autoResizeHeight();
 };

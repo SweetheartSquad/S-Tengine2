@@ -39,14 +39,11 @@ public:
 	
 	Font * font;
 	Shader * textShader;
-	Shader * backgroundShader;
-	MeshEntity * background;
-	float width;
 	std::vector<NodeChild *> unusedLines;
 //	WrapMode wrapMode;
 	Transform * lines;
 
-	LabelV2(BulletWorld* _world, Scene* _scene, Font * _font, Shader * _textShader, Shader * _backgroundShader, float _width = INFINITE_WIDTH);
+	LabelV2(BulletWorld* _world, Scene* _scene, Font * _font, Shader * _textShader, float _width = INFINITE_WIDTH);
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	void invalidateAllLines();
@@ -62,6 +59,9 @@ public:
 
 	Line * getLine();
 
+	
+	virtual void autoResizeHeight() override;
+	virtual void autoResizeWidth() override;
 private:
 	std::wstring text;
 	bool updateRequired;
