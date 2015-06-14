@@ -20,23 +20,13 @@ bool NodeChild::hasAncestor(Transform * _parent){
 		return false;
 	}
 	for(Transform * p : parents){
-		/*Transform * t;
-		do{
-			if(p->parents.size() > 0){
-				t = p->parents.at(0);
-				if(t = _parent) {
-					return true;
-				}
-			}else{
-				break;
-			}
-		}while(t != nullptr && p->parents.size() > 0);*/
 		if(p == _parent) {
 			return true;
 		}
-		p->hasAncestor(_parent);
+		if(p->hasAncestor(_parent)){
+			return true;
+		}
 	}
-
 	return false;
 }
 
