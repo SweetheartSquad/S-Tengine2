@@ -116,7 +116,7 @@ float LabelV2::getMeasuredWidth(){
 }
 
 float LabelV2::getMeasuredHeight(){
-	return 0.f;
+	return font->getLineHeight() + getMarginBottom() + getMarginTop();
 }
 
 Line* LabelV2::getLine() {
