@@ -192,6 +192,8 @@ void Line::insertChar(wchar_t _char){
 	}
 	glyph->setVisible(true);
 	width += glyphMesh->advance.x/64.f;
+	
+	glyph->unload();
 	glyph->load();
 }
 

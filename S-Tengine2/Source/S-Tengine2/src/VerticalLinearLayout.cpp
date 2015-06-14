@@ -59,4 +59,5 @@ void VerticalLinearLayout::update(Step* _step) {
 			trans->translate(x, y, 0.f, false);
 		}
 	}
+	NodeUI::update(_step);
 }

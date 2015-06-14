@@ -75,7 +75,7 @@ void NodeUI::update(Step * _step){
 	btTransform rayto;
 	rayto.setIdentity(); rayto.setOrigin(rayend);
 	btCollisionWorld::AllHitsRayResultCallback raycb(raystart, rayend);
-	world->world->rayTestSingle(rayfrom, rayto, body, shape, body->getWorldTransform(), raycb);
+	//world->world->rayTestSingle(rayfrom, rayto, body, shape, body->getWorldTransform(), raycb);
 	
 	
 	if(raycb.hasHit()){
@@ -196,8 +196,8 @@ bool NodeUI::isLayoutDirty(){
 }
 
 void NodeUI::updateCollider(){
-	setColliderAsBox(getMeasuredWidth() * 0.5f, getMeasuredHeight() *0.5f ,0.1);
-	createRigidBody(0);
+	//setColliderAsBox(getMeasuredWidth() * 0.5f, getMeasuredHeight() *0.5f ,0.1);
+	//createRigidBody(0);
 }
 
 void NodeUI::renderDefault(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
