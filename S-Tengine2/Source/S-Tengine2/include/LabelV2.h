@@ -15,6 +15,7 @@ public:
 	Glyph * glyph;
 
 	GlyphMeshEntity(Glyph * _mesh, Shader* _shader, wchar_t _character);
+	void setGlyphMesh(Glyph * _mesh);
 };
 
 class Line : public Transform {

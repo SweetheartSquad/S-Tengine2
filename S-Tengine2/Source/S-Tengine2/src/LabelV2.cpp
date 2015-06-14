@@ -55,9 +55,17 @@ void LabelV2::update(Step* _step){
 }
 
 void LabelV2::unload(){
+	NodeUI::load();
+	textShader->load();
+	backgroundShader->load();
+	font->unload();
 }
 
 void LabelV2::load(){
+	NodeUI::unload();
+	textShader->unload();
+	backgroundShader->unload();
+	font->load();
 }
 
 void LabelV2::setText(std::wstring _text){
@@ -104,6 +112,11 @@ GlyphMeshEntity::GlyphMeshEntity(Glyph * _mesh, Shader* _shader, wchar_t _charac
 {
 }
 
+void GlyphMeshEntity::setGlyphMesh(Glyph* _mesh){
+	childTransform->children.clear();
+	childTransform->addChild(_mesh);
+	glyph = _mesh;
+}
 
 ///////////////////////////////////////
 // !!! Line definitions !!!
@@ -124,28 +137,23 @@ void Line::invalidate(){
 
 void Line::insertChar(wchar_t _char){
 	GlyphMeshEntity * glyph = nullptr;
-	Transform * oldTrans = nullptr;
-	bool isNew = false;
+	Glyph * glyphMesh = label->font->getMeshInterfaceForChar(_char);
 	if(unusedGlyphs.size() > 0) {
-		oldTrans = dynamic_cast<Transform *>(unusedGlyphs.back());
+		Transform * oldTrans = dynamic_cast<Transform *>(unusedGlyphs.back());
 		glyph = dynamic_cast<GlyphMeshEntity *>(oldTrans->children.at(0));
 		glyph->childTransform->children.clear();
-		glyph->childTransform->addChild(label->font->getMeshInterfaceForChar(_char), false);
-	}else{
-		glyph = new GlyphMeshEntity(
-				label->font->getMeshInterfaceForChar(_char),
-				label->textShader,
-				_char);
-		isNew = true;
-	}
-	if(isNew) {
-		addChild(glyph)->translate(width, 0.f, 0.f, false);
-	}else {
-		oldTrans->parents.clear();
-		addChild(oldTrans, false);
+		glyph->setGlyphMesh(glyphMesh);
+		children.push_back(oldTrans);
 		oldTrans->translate(width, 0.f, 0.f, false);
 		unusedGlyphs.pop_back();
+	}else{
+		glyph = new GlyphMeshEntity(
+				glyphMesh,
+				label->textShader,
+				_char);
+		addChild(glyph)->translate(width, 0.f, 0.f, false);
 	}
 	glyph->setVisible(true);
-	width += glyph->glyph->advance.x/64.f;
+	width += glyphMesh->advance.x/64.f;
+	glyph->load();
 }
