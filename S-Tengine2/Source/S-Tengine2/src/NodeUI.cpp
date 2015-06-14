@@ -7,7 +7,7 @@
 
 NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	NodeBulletBody(_world),
-	MeshEntity(nullptr),
+	Entity(),
 	mouse(&Mouse::getInstance()),
 	isHovered(false),
 	isDown(false),

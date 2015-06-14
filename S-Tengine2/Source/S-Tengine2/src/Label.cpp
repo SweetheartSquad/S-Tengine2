@@ -17,7 +17,7 @@
 Label::Label(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Shader * _textShader, Shader * _backgroundShader, WrapMode _wrapMode, float _width) :
 	NodeUI(_bulletWorld, _scene),
 	NodeBulletBody(_bulletWorld),
-	MeshEntity(MeshFactory::getPlaneMesh()),
+	Entity(),
 	width(_width),
 	wrapMode(_wrapMode),
 	measuredWidth(0.0f),
@@ -35,8 +35,6 @@ Label::Label(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Shader * 
 	backgroundShader = _backgroundShader;
 	++textShader->referenceCount;
 	++backgroundShader->referenceCount;
-
-	setShader(textShader, true);
 
 	background->setShader(backgroundShader, true);
 	backgroundTransform = childTransform->addChild(background);

@@ -7,20 +7,20 @@
 UIPanel::UIPanel(float _halfwidth, float _halfheight, BulletWorld * _world, Scene * _scene) :
 	NodeUI(_world, _scene),
 	NodeBulletBody(_world),
-	MeshEntity(MeshFactory::getPlaneMesh(1.f)),
+	Entity(),
 	width(_halfwidth*2.f),
 	height(_halfheight*2.f)
 {
 	setColliderAsBox(_halfwidth, _halfheight, 0.1f);
 	createRigidBody(0);
 
-	for(unsigned long int i = 0; i < mesh->vertices.size(); ++i){
+	/*for(unsigned long int i = 0; i < mesh->vertices.size(); ++i){
 		mesh->vertices[i].x *= _halfwidth;
 		mesh->vertices[i].y *= _halfheight;
 		mesh->vertices[i].x += _halfwidth;
 		mesh->vertices[i].y += _halfheight;
 	}
-	mesh->dirty = true;
+	mesh->dirty = true;*/
 }
 
 float UIPanel::getMeasuredWidth(){

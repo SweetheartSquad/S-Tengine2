@@ -7,7 +7,7 @@
 
 LabelV2::LabelV2(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textShader, Shader* _backgroundShader, float _width):
 	NodeUI(_world, _scene),
-	MeshEntity(MeshFactory::getPlaneMesh()),
+	Entity(),
 	NodeBulletBody(_world),
 	font(_font),
 	textShader(_textShader),

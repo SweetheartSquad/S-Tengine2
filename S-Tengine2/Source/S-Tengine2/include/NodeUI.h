@@ -8,7 +8,7 @@
 class Scene;
 class Mouse;
 
-class NodeUI : public virtual NodeBulletBody, public virtual MeshEntity{
+class NodeUI : public virtual NodeBulletBody, public virtual Entity{
 protected:
 	Mouse * mouse;
 	// Whether the button is under the mouse
