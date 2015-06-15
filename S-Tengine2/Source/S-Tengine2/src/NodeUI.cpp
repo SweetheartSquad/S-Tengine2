@@ -108,17 +108,17 @@ void NodeUI::update(Step * _step){
 	btVector3 raydir(0, 0, 1);
 	btVector3 rayend(mouse->mouseX(), mouse->mouseY(), raylength);
 	
-	/*btCollisionWorld::ClosestRayResultCallback RayCallback(raystart, rayend);
+	btCollisionWorld::ClosestRayResultCallback RayCallback(raystart, rayend);
 	world->world->rayTest(raystart, rayend, RayCallback);
 	if(RayCallback.hasHit()){
 
-	}*/
+	}
 	btTransform rayfrom;
 	rayfrom.setIdentity(); rayfrom.setOrigin(raystart);
 	btTransform rayto;
 	rayto.setIdentity(); rayto.setOrigin(rayend);
 	btCollisionWorld::AllHitsRayResultCallback raycb(raystart, rayend);
-	//world->world->rayTestSingle(rayfrom, rayto, body, shape, body->getWorldTransform(), raycb);
+	world->world->rayTestSingle(rayfrom, rayto, body, shape, body->getWorldTransform(), raycb);
 	
 	
 	if(raycb.hasHit()){
