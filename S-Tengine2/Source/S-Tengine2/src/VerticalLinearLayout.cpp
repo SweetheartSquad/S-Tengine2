@@ -22,3 +22,17 @@ void VerticalLinearLayout::update(Step* _step){
 	}
 	LinearLayout::update(_step);
 }
+
+void VerticalLinearLayout::autoResizeHeight(){
+	float h = 0.0f;
+	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
+		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
+		if(trans != nullptr) {
+			if(trans->children.size() > 0) {
+				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
+				h += node->getHeight(true, true);
+			}
+		}
+	}
+	setHeight(h);
+}

@@ -273,7 +273,7 @@ void NodeUI::autoResizeWidth(){
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
-				width += node->getWidth(true, true);
+				width = std::max(width, node->getWidth(true, true));
 			}
 		}
 	}
@@ -285,7 +285,7 @@ void NodeUI::autoResizeHeight(){
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
-				height += node->getHeight(true, true);
+				height = std::max(height, node->getHeight(true, true));
 			}
 		}
 	}
