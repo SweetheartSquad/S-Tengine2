@@ -15,6 +15,14 @@ TextArea::TextArea(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Sha
 		setHeight(_height);
 	}
 	setWidth(_width);
+	setPaddingBottom(3);
+	setPaddingTop(3);
+	setPaddingRight(3);
+	setPaddingLeft(3);
+	setMarginBottom(3);
+	setMarginTop(3);
+	setMarginRight(3);
+	setMarginLeft(3);
 }
 
 void TextArea::invalidateAllLines(){
