@@ -67,12 +67,20 @@ void TextArea::update(Step * _step){
 		//contents->addChild(curLine->parents.at(0), false);
 		float curY = 0.f;
 		for(unsigned long int i = 0; i < text.size(); ++i){
-			if(!curLine->canFit(font->getGlyphWidthHeight(text.at(i)).x)){
+			if(text.at(i) == '\n'){
+				// 1 these are the same
 				curY -= font->getLineHeight();
 				curLine = getLine();
 				contents->addChild(curLine->parents.at(0), false);
+			}else{
+				if(!curLine->canFit(font->getGlyphWidthHeight(text.at(i)).x)){
+					// 2 these are the same
+					curY -= font->getLineHeight();
+					curLine = getLine();
+					contents->addChild(curLine->parents.at(0), false);
+				}
+				curLine->insertChar(text.at(i));
 			}
-			curLine->insertChar(text.at(i));	
 			curLine->parents.at(0)->translate(0.f, curY, 0.f, false);
 		}
 		updateRequired = false;
