@@ -297,8 +297,22 @@ void NodeUI::updateCollider(){
 		delete shape;
 		shape = nullptr;
 	}
-	setColliderAsBox(getWidth(true, false) * 0.5f, getHeight(true, false) * 0.5f, 1.f);
+	glm::vec3 v = getWorldPos();
+	v.x += getMarginLeft();
+	v.y += getMarginBottom();
+	TriMesh * m = new TriMesh();
+
+	m->pushVert(Vertex(v.x, v.y + getHeight(true, false), 0.f));
+	m->pushVert(Vertex(v.x + getWidth(true, false), v.y + getHeight(true, false), 0.f));
+	m->pushVert(Vertex(v.x + getWidth(true, false), v.y, 0.f));
+	m->pushVert(Vertex(v.x + getWidth(true, false), v.y, 0.f));
+	m->pushVert(Vertex(v.x, v.y, 0.f));
+	m->pushVert(Vertex(v.x, v.y + getHeight(true, false), 0.f));
+	setColliderAsMesh(m, true);
 	createRigidBody(0);
+	// cleanup
+	delete m;
+	m = nullptr;
 }
 
 void NodeUI::autoResize(){
@@ -311,6 +325,9 @@ void NodeUI::autoResize(){
 	// Adjust the size of the background
 	background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
 	repositionChildren();
+	if(autoResizingWidth || autoResizingHeight){
+		updateCollider();
+	}
 }
 void NodeUI::autoResizeWidth(){
 	width = 0.0f;
