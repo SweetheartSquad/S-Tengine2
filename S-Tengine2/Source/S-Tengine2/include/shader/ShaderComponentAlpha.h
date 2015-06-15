@@ -10,7 +10,7 @@ public:
 	float getAlpha();
 	void setAlpha(float _alpha);
 
-	// all values are given as 0 - 1, h += hue, s *= sat, v *= val, a *= alpha
+	// all values are given as 0 - 1, a *= alpha
 	ShaderComponentAlpha(Shader * _shader, float _alpha = 1.f);
 	~ShaderComponentAlpha();
 	
