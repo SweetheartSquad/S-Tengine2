@@ -75,6 +75,13 @@ void ShaderComponentTint::setBlue(float _b){
 	blue = _b;
 	makeDirty();
 }
+void ShaderComponentTint::setRGB(float _r, float _g, float _b){
+	red = _r;
+	green = _g;
+	blue = _b;
+	makeDirty();
+}
+
 float ShaderComponentTint::getRed(){
 	return red;
 }
