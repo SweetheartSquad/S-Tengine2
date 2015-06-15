@@ -11,7 +11,7 @@ VerticalLinearLayout::VerticalLinearLayout(BulletWorld* _bulletWorld, Scene* _sc
 void VerticalLinearLayout::update(Step* _step){
 	float x = 0;
 	float y = 0;
-	for(unsigned long int i = 0; i < contents->children.size(); ++i){
+	for(signed long int i = contents->children.size()-1; i >= 0; --i){
 		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
 		NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
 		x = ui->getMarginLeft();
