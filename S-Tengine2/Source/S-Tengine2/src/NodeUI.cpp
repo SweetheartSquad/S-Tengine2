@@ -55,10 +55,12 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 
 	childTransform->addChild(background, true);
 	childTransform->addChild(contents, false);
-
-	updateCollider();
+	
+	setPadding(5);
+	setMargin(5);
 
 	setBackgroundColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0));
+	updateCollider();
 }
 
 void NodeUI::down(){
@@ -160,6 +162,25 @@ void NodeUI::setMarginBottom(float _margin){
 	marginBottom = _margin;
 }
 
+void NodeUI::setMargin(float _all){
+	setMarginLeft(_all);
+	setMarginRight(_all);
+	setMarginBottom(_all);
+	setMarginTop(_all);
+}
+void NodeUI::setMargin(float _leftAndRight, float _bottomAndTop){
+	setMarginLeft(_leftAndRight);
+	setMarginRight(_leftAndRight);
+	setMarginBottom(_bottomAndTop);
+	setMarginTop(_bottomAndTop);
+}
+void NodeUI::setMargin(float _left, float _right, float _bottom, float _top){
+	setMarginLeft(_left);
+	setMarginRight(_right);
+	setMarginBottom(_bottom);
+	setMarginTop(_top);
+}
+
 void NodeUI::setPaddingLeft(float _padding){
 	paddingLeft = _padding;
 }
@@ -174,6 +195,25 @@ void NodeUI::setPaddingTop(float _padding){
 
 void NodeUI::setPaddingBottom(float _padding){
 	paddingBottom = _padding;
+}
+
+void NodeUI::setPadding(float _all){
+	setPaddingLeft(_all);
+	setPaddingRight(_all);
+	setPaddingBottom(_all);
+	setPaddingTop(_all);
+}
+void NodeUI::setPadding(float _leftAndRight, float _bottomAndTop){
+	setPaddingLeft(_leftAndRight);
+	setPaddingRight(_leftAndRight);
+	setPaddingBottom(_bottomAndTop);
+	setPaddingTop(_bottomAndTop);
+}
+void NodeUI::setPadding(float _left, float _right, float _bottom, float _top){
+	setPaddingLeft(_left);
+	setPaddingRight(_right);
+	setPaddingBottom(_bottom);
+	setPaddingTop(_top);
 }
 
 void NodeUI::setWidth(float _width){

@@ -64,11 +64,17 @@ public:
 	void setMarginRight(float _margin);
 	void setMarginTop(float _margin);
 	void setMarginBottom(float _margin);
+	void setMargin(float _all);
+	void setMargin(float _leftAndRight, float _bottomAndTop);
+	void setMargin(float _left, float _right, float _bottom, float _top);
 
 	void setPaddingLeft(float _padding);
 	void setPaddingRight(float _padding);
 	void setPaddingTop(float _padding);
 	void setPaddingBottom(float _padding);
+	void setPadding(float _all);
+	void setPadding(float _leftAndRight, float _bottomAndTop);
+	void setPadding(float _left, float _right, float _bottom, float _top);
 
 	void setWidth(float _width);
 	void setHeight(float _height);
