@@ -8,6 +8,9 @@
 
 #include <shader\ComponentShaderBase.h>
 #include <shader\ShaderComponentTexture.h>
+#include <shader\ShaderComponentAlpha.h>
+#include <shader\ShaderComponentTint.h>
+
 
 NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	NodeBulletBody(_world),
@@ -38,6 +41,8 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 {
 	ComponentShaderBase * shader = new ComponentShaderBase(true);
 	shader->addComponent(new ShaderComponentTexture(shader));
+	shader->addComponent(new ShaderComponentTint(shader));
+	shader->addComponent(new ShaderComponentAlpha(shader));
 	shader->compileShader();
 	background->setShader(shader, true);
 
@@ -172,6 +177,11 @@ void NodeUI::setHeight(float _height){
 	if(!autoResizingHeight){
 		height = _height;
 	}
+}
+
+void NodeUI::setBackgroundColour(float _r, float _g, float _b, float _a){
+	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->setRGB(_r, _g, _b);
+	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setAlpha(_a);
 }
 
 float NodeUI::getMarginLeft(){

@@ -73,6 +73,8 @@ public:
 	void setWidth(float _width);
 	void setHeight(float _height);
 
+	void setBackgroundColour(float _r, float _g, float _b, float _a = 1.f);
+
 	float getMarginLeft();
 	float getMarginRight();
 	float getMarginTop();
