@@ -90,6 +90,18 @@ Transform * NodeUI::addChild(NodeUI* _uiElement){
 	return contents->addChild(_uiElement);
 }
 
+signed long int NodeUI::removeChild(NodeUI* _uiElement){
+	Transform * t = _uiElement->parents.at(0);
+	signed long int res = contents->removeChild(t);
+	t->removeChild(_uiElement);
+	delete t;
+	
+	if(res >= 0){
+		layoutDirty = true;
+	}
+	return res;
+}
+
 
 void NodeUI::update(Step * _step){
 	autoResize();

@@ -99,8 +99,13 @@ public:
 	virtual float getHeight(bool _includePadding, bool _includeMargin);
 
 	bool isLayoutDirty();
-
+	
 	virtual Transform * addChild(NodeUI * _uiElement);
+	// removes the element from the contents transform and returns the index it was found at
+	// if it wasn't found, returns -1
+	// note that the way this works is that _uiElements first parent is removed from the child list,
+	// then _uiElement is removed from its first parent and orphaned transform is deleted
+	virtual signed long int removeChild(NodeUI * _uiElement);
 
 private:
 	float marginLeft;
