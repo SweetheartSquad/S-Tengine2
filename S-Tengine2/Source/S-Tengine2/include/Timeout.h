@@ -17,5 +17,5 @@ public:
 	// resets the timer to zero and sets complete to false, allowing the onCompleteFunction to trigger again
 	void restart();
 
-	void update(Step * _step) override;
+	virtual void update(Step * _step) override;
 };

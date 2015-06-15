@@ -33,7 +33,7 @@ public:
 
 	std::vector<Tween<T> *> tweens;
 
-	inline void update(Step * _step) override;
+	inline virtual void update(Step * _step) override;
 
 	enum LoopType{
 		kLOOP,

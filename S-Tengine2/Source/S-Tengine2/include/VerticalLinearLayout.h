@@ -7,5 +7,5 @@ public:
 
 	VerticalLinearLayout(BulletWorld * _bulletWorld, Scene * _scene);
 
-	void update(Step * _step) override;
+	virtual void update(Step * _step) override;
 };

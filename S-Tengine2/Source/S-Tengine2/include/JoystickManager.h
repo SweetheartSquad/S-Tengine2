@@ -14,5 +14,5 @@ public:
 	JoystickManager(float _deadZone = 0.25f);
 	~JoystickManager();
 
-	void update(Step * _step) override;
+	virtual void update(Step * _step) override;
 };

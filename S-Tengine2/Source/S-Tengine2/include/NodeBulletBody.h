@@ -25,5 +25,5 @@ public:
 	// a mass of zero makes it static
 	void createRigidBody(float _mass, unsigned short int _collisionGroup = -1, unsigned short int _collisionMask = -1);
 
-	void update(Step * _step) override;
+	virtual void update(Step * _step) override;
 };

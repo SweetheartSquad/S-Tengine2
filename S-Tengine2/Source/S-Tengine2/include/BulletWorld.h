@@ -26,5 +26,5 @@ public:
 	BulletWorld(glm::vec3 _gravity = glm::vec3(0, -9.8, 0));
 	~BulletWorld();
 
-	void update(Step * _step) override;
+	virtual void update(Step * _step) override;
 };

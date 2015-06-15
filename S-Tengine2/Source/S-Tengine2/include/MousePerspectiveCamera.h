@@ -18,7 +18,7 @@ public:
 	MousePerspectiveCamera();
 	~MousePerspectiveCamera();
 	
-	void update(Step * _step) override;
+	virtual void update(Step * _step) override;
 
 private :
 	/** The X position of the mouse from the last update loop*/

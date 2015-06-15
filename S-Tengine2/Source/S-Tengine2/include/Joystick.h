@@ -76,7 +76,7 @@ public:
 	/**
 	* Handles input from glfw
 	*/
-	void update(Step * _step) override;
+	virtual void update(Step * _step) override;
 
 	/**
 	* Inserts _code into the maps of justPressed and pressed buttons
