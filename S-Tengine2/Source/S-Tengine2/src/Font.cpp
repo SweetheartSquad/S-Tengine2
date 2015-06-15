@@ -160,5 +160,5 @@ void Font::loadGlyph(wchar_t _char){
 }
 
 float Font::getLineHeight(){
-	return lineGapRatio * ((face->size->metrics.ascender + face->size->metrics.descender)/64);
+	return lineGapRatio * size;//((face->size->metrics.ascender + face->size->metrics.descender)/64);
 }
