@@ -113,4 +113,5 @@ private:
 	void autoResize();
 	virtual void autoResizeWidth();
 	virtual void autoResizeHeight();
+	virtual void repositionChildren();
 };

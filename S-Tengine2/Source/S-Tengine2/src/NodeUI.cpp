@@ -270,6 +270,7 @@ void NodeUI::autoResize(){
 	}
 	// Adjust the size of the background
 	background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
+	repositionChildren();
 }
 void NodeUI::autoResizeWidth(){
 	width = 0.0f;
@@ -294,4 +295,9 @@ void NodeUI::autoResizeHeight(){
 			}
 		}
 	}
+}
+
+void NodeUI::repositionChildren(){
+	childTransform->translate(getMarginLeft(), getMarginBottom(), 0, false);
+	contents->translate(getPaddingLeft(), getPaddingBottom(), 0, false);
 }
