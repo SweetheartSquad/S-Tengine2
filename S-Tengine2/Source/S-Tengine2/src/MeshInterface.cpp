@@ -203,10 +203,12 @@ void MeshInterface::pushVert(Vertex _vertex){
 }
 
 void MeshInterface::popTexture2D(){
+	textures.back()->decrementAndDelete();
 	textures.pop_back();
 }
 
 void MeshInterface::removeTextureAt(int _idx){
+	textures.at(_idx)->decrementAndDelete();
 	textures.erase(textures.begin() + _idx);
 }
 
