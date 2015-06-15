@@ -222,7 +222,9 @@ void Transform::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderO
 	}
 	if(drawTransforms){
 		_renderOptions->shader = transformShader;
+		glLineWidth(5);
 		transformIndicator->render(_matrixStack, _renderOptions);
+		glLineWidth(1);
 	}
 
 	// restore previous matrix state
