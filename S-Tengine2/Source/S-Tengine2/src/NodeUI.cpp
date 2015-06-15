@@ -5,12 +5,14 @@
 #include <Scene.h>
 #include <Camera.h>
 #include <Mouse.h>
+#include <MeshInterface.h>
 
 #include <shader\ComponentShaderBase.h>
 #include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentAlpha.h>
 #include <shader\ShaderComponentTint.h>
 
+#include <NumberUtils.h>
 
 NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	NodeBulletBody(_world),
@@ -45,11 +47,18 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	shader->addComponent(new ShaderComponentAlpha(shader));
 	shader->compileShader();
 	background->setShader(shader, true);
+	for(unsigned long int i = 0; i < background->mesh->vertices.size(); ++i){
+		background->mesh->vertices.at(i).x += 0.5f;
+		background->mesh->vertices.at(i).y += 0.5f;
+	}
+	background->mesh->dirty = true;
 
 	childTransform->addChild(background, true);
 	childTransform->addChild(contents, false);
 
 	updateCollider();
+
+	setBackgroundColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0));
 }
 
 void NodeUI::down(){
@@ -168,15 +177,11 @@ void NodeUI::setPaddingBottom(float _padding){
 }
 
 void NodeUI::setWidth(float _width){
-	if(!autoResizingWidth){
-		width = _width;
-	}
+	width = _width;
 }
 
 void NodeUI::setHeight(float _height){
-	if(!autoResizingHeight){
-		height = _height;
-	}
+	height = _height;
 }
 
 void NodeUI::setBackgroundColour(float _r, float _g, float _b, float _a){
@@ -252,7 +257,7 @@ void NodeUI::updateCollider(){
 		delete shape;
 		shape = nullptr;
 	}
-	setColliderAsBox(getWidth(true, false) * 0.5f, getHeight(true, false) * 0.5f, 0.1);
+	setColliderAsBox(getWidth(true, false) * 0.5f, getHeight(true, false) * 0.5f, 1.f);
 	createRigidBody(0);
 }
 
