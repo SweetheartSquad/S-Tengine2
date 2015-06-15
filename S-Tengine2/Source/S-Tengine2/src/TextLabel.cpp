@@ -1,11 +1,11 @@
 #pragma once
 
-#include <LabelV2.h>
+#include <TextLabel.h>
 #include <GL/glew.h>
 #include <MeshFactory.h>
 #include <Font.h>
 
-LabelV2::LabelV2(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textShader, float _width):
+TextLabel::TextLabel(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textShader, float _width):
 	NodeUI(_world, _scene),
 	Entity(),
 	NodeBulletBody(_world),
@@ -19,7 +19,7 @@ LabelV2::LabelV2(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textS
 	childTransform->addChild(lines, false);
 }
 
-void LabelV2::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+void TextLabel::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
@@ -32,16 +32,14 @@ void LabelV2::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptio
 	}
 }
 
-void LabelV2::invalidateAllLines(){
+void TextLabel::invalidateAllLines(){
 	for(unsigned long int i = 0; i < lines->children.size(); ++i) {
 		Line * line = dynamic_cast<Line *>(lines->children.at(i));
-		if(line != nullptr) {
-			line->invalidate();
-		}
+		line->invalidate();
 	}
 }
 
-void LabelV2::update(Step * _step){
+void TextLabel::update(Step * _step){
 	if(updateRequired) {
 		Line * curLine = getLine();
 		lines->addChild(curLine, false);
@@ -60,38 +58,38 @@ void LabelV2::update(Step * _step){
 	NodeUI::update(_step);
 }
 
-void LabelV2::unload(){
+void TextLabel::unload(){
 	NodeUI::load();
 	textShader->load();
 	font->unload();
 }
 
-void LabelV2::load(){
+void TextLabel::load(){
 	NodeUI::unload();
 	textShader->unload();
 	font->load();
 }
 
-void LabelV2::setText(std::wstring _text){
+void TextLabel::setText(std::wstring _text){
 	text = _text;
 	invalidateAllLines();	
 	updateRequired = true;
 }
 
-void LabelV2::appendText(std::wstring _text){
+void TextLabel::appendText(std::wstring _text){
 }
 
-std::wstring LabelV2::getText(){
+std::wstring TextLabel::getText(){
 	return text;
 }
 
-void LabelV2::updateAlignment(){
+void TextLabel::updateAlignment(){
 }
 
-//void LabelV2::setAlignment(Alignment _alignment){
+//void TextLabel::setAlignment(Alignment _alignment){
 //}
 
-Line* LabelV2::getLine() {
+Line* TextLabel::getLine() {
 	Line * line = nullptr;
 	if(unusedLines.size() > 0) {
 		line = dynamic_cast<Line *>(unusedLines.back());
@@ -102,21 +100,19 @@ Line* LabelV2::getLine() {
 	return line;
 }
 
-Line * LabelV2::currentLine(){
+Line * TextLabel::currentLine(){
 	return dynamic_cast<Line *>(lines->children.back());
 }
 
-void LabelV2::autoResizeHeight(){
+void TextLabel::autoResizeHeight(){
 	setHeight(font->getLineHeight());
 }
 
-void LabelV2::autoResizeWidth(){
+void TextLabel::autoResizeWidth(){
 	float width = 0;
 	for(unsigned long int i = 0; i < lines->children.size(); ++i){
 		Line * l = dynamic_cast<Line *>(lines->children.at(i));
-		if(l != nullptr){
-			width = std::max(width, l->width);
-		}
+		width = std::max(width, l->width);
 	}
 	setWidth(width);
 }
@@ -143,7 +139,7 @@ void GlyphMeshEntity::setGlyphMesh(Glyph* _mesh){
 // !!! Line definitions !!!
 ///////////////////////////////////////
 
-Line::Line(LabelV2 * _label):
+Line::Line(TextLabel * _label):
 	Transform(),
 	label(_label),
 	width(0.f),

@@ -4,7 +4,7 @@
 
 #define INFINITE_WIDTH -1
 
-class LabelV2;
+class TextLabel;
 class Font;
 class Glyph;
 
@@ -21,19 +21,19 @@ public:
 class Line : public Transform {
 public:
 
-	LabelV2* label;
+	TextLabel* label;
 	float width;
 	bool inUse;
 	std::vector<NodeChild *> unusedGlyphs;
 
-	explicit Line(LabelV2 * _label);
+	explicit Line(TextLabel * _label);
 	
 	void invalidate();
 	void insertChar(wchar_t _char);
 	bool canFit(float _width);
 };
 
-class LabelV2 : public NodeUI{
+class TextLabel : public NodeUI{
 
 public:
 	
@@ -43,7 +43,7 @@ public:
 //	WrapMode wrapMode;
 	Transform * lines;
 
-	LabelV2(BulletWorld* _world, Scene* _scene, Font * _font, Shader * _textShader, float _width = INFINITE_WIDTH);
+	TextLabel(BulletWorld* _world, Scene* _scene, Font * _font, Shader * _textShader, float _width = INFINITE_WIDTH);
 
 	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	void invalidateAllLines();
