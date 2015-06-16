@@ -11,6 +11,7 @@ class Glyph;
 
 class GlyphMeshEntity : public MeshEntity {
 public:
+
 	wchar_t character; 
 	bool inUse;
 	Glyph * glyph;
@@ -21,9 +22,14 @@ public:
 
 class TextLabel : public NodeUI{
 public:
+
 	TextArea * textArea;
 	Font * font;
 	Shader * textShader;
+
+	float lineWidth;
+	bool inUse;
+	std::vector<NodeChild *> unusedGlyphs;
 
 	TextLabel(BulletWorld* _world, Scene* _scene, Font * _font, Shader * _textShader, float _width = UI_INFINITE);
 
@@ -35,22 +41,16 @@ public:
 	void setText(std::wstring _text);
 	void appendText(std::wstring _text);
 	std::wstring getText();
-	void updateAlignment();
-	//void setAlignment(Alignment _alignment);
-
 	
 	virtual void autoResizeHeight() override;
 	virtual void autoResizeWidth() override;
-
-
 	
 	void invalidate();
 	void insertChar(wchar_t _char);
 	bool canFit(float _width);
-	float lineWidth;
-	bool inUse;
-	std::vector<NodeChild *> unusedGlyphs;
+
 private:
+
 	std::wstring text;
 	bool updateRequired;
 };

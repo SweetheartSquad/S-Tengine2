@@ -39,7 +39,7 @@ TextLabel * TextArea::getLine() {
 	TextLabel * line = nullptr;
 	if(unusedLines.size() > 0) {
 		line = dynamic_cast<TextLabel *>(unusedLines.back());
-		//unusedLines.pop_back();
+		unusedLines.pop_back();
 	}else{
 		line = new TextLabel(world, scene, font, textShader, getWidth(false, false));
 		line->textArea = this;

@@ -16,7 +16,7 @@ NodeBulletBody::NodeBulletBody(BulletWorld * _world) :
 
 NodeBulletBody::~NodeBulletBody(){
 	if(world != nullptr && body != nullptr) {
-		world->world->removeRigidBody(body);
+		world->world->removeRigidBody(body);	
 		body = nullptr;
 		world = nullptr;
 	}

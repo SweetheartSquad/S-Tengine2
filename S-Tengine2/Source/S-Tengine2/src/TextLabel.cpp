@@ -60,17 +60,13 @@ void TextLabel::setText(std::wstring _text){
 }
 
 void TextLabel::appendText(std::wstring _text){
+	text += _text;
+	updateRequired = true;
 }
 
 std::wstring TextLabel::getText(){
 	return text;
 }
-
-void TextLabel::updateAlignment(){
-}
-
-//void TextLabel::setAlignment(Alignment _alignment){
-//}
 
 void TextLabel::autoResizeHeight(){
 	setHeight(font->getLineHeight());
@@ -79,28 +75,6 @@ void TextLabel::autoResizeHeight(){
 void TextLabel::autoResizeWidth(){
 	setWidth(lineWidth);
 }
-
-///////////////////////////////////////
-// !!! GlyphMeshEntity definitions !!!
-///////////////////////////////////////
-
-GlyphMeshEntity::GlyphMeshEntity(Glyph * _mesh, Shader* _shader, wchar_t _character):
-	MeshEntity(_mesh, _shader),
-	character(_character),
-	inUse(true),
-	glyph(_mesh)
-{
-}
-
-void GlyphMeshEntity::setGlyphMesh(Glyph* _mesh){
-	childTransform->children.clear();
-	childTransform->addChild(_mesh);
-	glyph = _mesh;
-}
-
-///////////////////////////////////////
-// !!! Line definitions !!!
-///////////////////////////////////////
 
 void TextLabel::invalidate(){
 	unusedGlyphs.insert(unusedGlyphs.end(), contents->children.begin(), contents->children.end());
@@ -118,7 +92,6 @@ void TextLabel::insertChar(wchar_t _char){
 	if(unusedGlyphs.size() > 0) {
 		Transform * oldTrans = dynamic_cast<Transform *>(unusedGlyphs.back());
 		glyph = dynamic_cast<GlyphMeshEntity *>(oldTrans->children.at(0));
-		glyph->childTransform->children.clear();
 		glyph->setGlyphMesh(glyphMesh);
 		contents->addChild(oldTrans, false);
 		oldTrans->translate(lineWidth, 0.f, 0.f, false);
@@ -129,12 +102,9 @@ void TextLabel::insertChar(wchar_t _char){
 				textArea->textShader,
 				_char);
 		contents->addChild(glyph)->translate(lineWidth, 0.f, 0.f, false);
+		glyph->load();
 	}
-	glyph->setVisible(true);
 	lineWidth += glyphMesh->advance.x/64.f;
-	
-	glyph->unload();
-	glyph->load();
 }
 
 bool TextLabel::canFit(float _width){
@@ -144,4 +114,22 @@ bool TextLabel::canFit(float _width){
 		}
 	}
 	return true;
+}
+
+// GlyphMeshEntity definitions //
+
+GlyphMeshEntity::GlyphMeshEntity(Glyph * _mesh, Shader* _shader, wchar_t _character):
+	MeshEntity(_mesh, _shader),
+	character(_character),
+	inUse(true),
+	glyph(_mesh)
+{
+}
+
+void GlyphMeshEntity::setGlyphMesh(Glyph* _mesh){
+	while(childTransform->children.size() > 0) {
+		childTransform->removeChild(childTransform->children.back());
+	}
+	childTransform->addChild(_mesh, false);
+	glyph = _mesh;
 }

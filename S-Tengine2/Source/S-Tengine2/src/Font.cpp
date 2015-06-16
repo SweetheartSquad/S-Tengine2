@@ -118,9 +118,8 @@ GlyphTexture * Font::getTextureForChar(wchar_t _char){
 		FT_Load_Char(face, _char, FT_LOAD_RENDER);
 		GlyphTexture * tex = new GlyphTexture(face->glyph->bitmap, false);
 		textures.insert(std::pair<wchar_t, GlyphTexture *>(_char, tex));
-		tex->unload();
-		tex->load();
 		res = tex;
+		res->load();
 	}else{
 		res = t->second;
 	}
@@ -135,9 +134,9 @@ Glyph* Font::getMeshInterfaceForChar(wchar_t _char){
 		Glyph * mesh = new Glyph(face->glyph);
 		mesh->autoRelease = false;
 		mesh->pushTexture2D(getTextureForChar(_char));
-
 		meshes.insert(std::pair<char, Glyph *>(_char, mesh));
 		res = mesh;
+		res->load();
 	}else{
 		res = t->second;
 	}
