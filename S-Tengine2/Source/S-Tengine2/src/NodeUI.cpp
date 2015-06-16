@@ -309,9 +309,7 @@ void NodeUI::updateCollider(){
 		delete shape;
 		shape = nullptr;
 	}
-	glm::vec3 v = getWorldPos();
-	v.x += getMarginLeft();
-	v.y += getMarginBottom();
+	glm::vec3 v = background->getWorldPos();
 	TriMesh * m = new TriMesh();
 
 	m->pushVert(Vertex(v.x, v.y + getHeight(true, false), 0.f));
@@ -367,6 +365,6 @@ void NodeUI::autoResizeHeight(){
 }
 
 void NodeUI::repositionChildren(){
-	childTransform->translate(getMarginLeft(), getMarginBottom(), 0, false);
-	contents->translate(getPaddingLeft(), getPaddingBottom(), 0, false);
+	background->parents.at(0)->translate(getMarginLeft(), getMarginBottom(), 0, false);
+	contents->translate(getMarginLeft() + getPaddingLeft(), getMarginBottom() + getPaddingBottom(), 0, false);
 }
