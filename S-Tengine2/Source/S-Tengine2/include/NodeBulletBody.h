@@ -24,6 +24,9 @@ public:
 	void setColliderAsMesh(TriMesh * _colliderMesh, bool _convex);
 	// a mass of zero makes it static
 	void createRigidBody(float _mass, unsigned short int _collisionGroup = -1, unsigned short int _collisionMask = -1);
+	
+	void setTranslationPhysical(glm::vec3 _position, bool _relative = false);
+	void setTranslationPhysical(float _x, float _y, float _z, bool _relative = false);
 
 	virtual void update(Step * _step) override;
 };

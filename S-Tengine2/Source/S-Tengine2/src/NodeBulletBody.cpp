@@ -92,6 +92,21 @@ void NodeBulletBody::setColliderAsMesh(TriMesh * _colliderMesh, bool _convex){
 	}
 }
 
+void NodeBulletBody::setTranslationPhysical(glm::vec3 _position, bool _relative){
+	setTranslationPhysical(_position.x, _position.y, _position.z, _relative);
+}
+void NodeBulletBody::setTranslationPhysical(float _x, float _y, float _z, bool _relative){
+	btTransform t = body->getWorldTransform();
+	if(_relative){
+		internalPos = t.getOrigin() + btVector3(_x, _y, _z);
+	}else{
+		internalPos = btVector3(_x, _y, _z);
+	}
+	t.setOrigin(internalPos);
+	body->setWorldTransform(t);
+	parents.at(0)->translate(internalPos.x(), internalPos.y(), internalPos.z(), false);
+}
+
 void NodeBulletBody::createRigidBody(float _mass, unsigned short int _collisionGroup, unsigned short int _collisionMask){
 	assert(shape != nullptr);
 	btTransform t(btQuaternion(0, 0, 0), internalPos);
