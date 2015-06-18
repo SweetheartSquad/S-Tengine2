@@ -70,10 +70,10 @@ SceneSplash::SceneSplash(Game * _game) :
 	fc->parents.at(0)->setOrientation(fc->lastOrientation);
 	activeCamera = fc;
 
-	Texture * c = new Texture("../assets/cursor.png", 32, 32, true, false);
+	Texture * c = new Texture("../assets/engine basics/cursor.png", 32, 32, true, false);
 	c->load();
 	ResourceManager::resources.push_back(c);
-	Texture * logoTex = new Texture("../assets/S-Tengine2_logo.png", 1024, 1024, true, false);
+	Texture * logoTex = new Texture("../assets/engine basics/S-Tengine2_logo.png", 1024, 1024, true, false);
 	logoTex->load();
 	ResourceManager::resources.push_back(logoTex);
 	
@@ -89,10 +89,9 @@ SceneSplash::SceneSplash(Game * _game) :
 	}
 	mouseIndicator->mesh->dirty = true;
 	
-	logo = new MeshEntity(Resource::loadMeshFromObj("../assets/S-Tengine2_logo.vox").at(0));
-	childTransform->addChild(logo);
+	logo = new MeshEntity(Resource::loadMeshFromObj("../assets/engine basics/S-Tengine2_logo.obj").at(0));
+	childTransform->addChild(logo)->scale(25);
 	logo->mesh->pushTexture2D(logoTex);
-	logo->parents.at(0)->scale(25,25,25);
 	logo->setShader(shader, true);
 
 
