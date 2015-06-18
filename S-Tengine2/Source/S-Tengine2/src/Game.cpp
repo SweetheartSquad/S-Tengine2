@@ -12,6 +12,7 @@
 #include <System.h>
 
 #include <SceneSplash.h>
+#include <SceneSweetheartSquad.h>
 #include <MeshInterface.h>
 
 
@@ -45,11 +46,14 @@ Game::Game(bool _isRunning, std::pair<std::string, Scene *> _firstScene, bool _s
 	
 	scenes.insert(_firstScene);
 	if(splashScreen){
-		currentSceneKey = "SPLASH!";
+		currentSceneKey = "S-TENGINE2_SPLASH";
 		SceneSplash * ss = new SceneSplash(this);
-		ss->nextScene = _firstScene.first;
+		SceneSweetheartSquad * sss = new SceneSweetheartSquad(this);
+		ss->nextScene = "SWEETHEARTSQUAD_SPLASH";
+		sss->nextScene = _firstScene.first;
 		currentScene = ss;
 		scenes.insert(std::pair<std::string, Scene * >(currentSceneKey, ss));
+		scenes.insert(std::pair<std::string, Scene * >("SWEETHEARTSQUAD_SPLASH", sss));
 	}else{
 		currentSceneKey = _firstScene.first;
 		currentScene = _firstScene.second;
@@ -249,6 +253,7 @@ void Game::switchScene(std::string _newSceneKey, bool _deleteOldScene){
 		switchingScene = false;
 		newSceneKey = "";
 	}
+	std::cout << "newSceneKey: " << newSceneKey << std::endl;
 }
 
 

@@ -12,11 +12,14 @@ class RenderSurface;
 class StandardFrameBuffer;
 class Sprite;
 class Label;
+class BulletWorld;
+class BulletMeshEntity;
 
 
-class SceneSplash : public Scene{
+class SceneSweetheartSquad : public Scene{
 public:
-	ComponentShaderBase * shader;
+	ComponentShaderBase * diffuseShader;
+	ComponentShaderBase * phongShader;
 	ShaderComponentHsv * hsvComponent;
 	
 	Shader * screenSurfaceShader;
@@ -32,10 +35,12 @@ public:
 
 	UILayer uiLayer;
 	Sprite * mouseIndicator;
-	MeshEntity * logo;
+	Entity * logo;
+	MeshEntity * logo1;
+	MeshEntity * logo2;
 	Label * textThing;
 	float t;
 
-	SceneSplash(Game * _game);
-	~SceneSplash();
+	SceneSweetheartSquad(Game * _game);
+	~SceneSweetheartSquad();
 };

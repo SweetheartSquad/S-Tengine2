@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SceneSplash.h>
+#include <SceneSweetheartSquad.h>
 
 #include <algorithm>
 
@@ -15,6 +15,7 @@
 #include <shader\ComponentShaderBase.h>
 #include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentDiffuse.h>
+#include <shader\ShaderComponentPhong.h>
 #include <shader\ShaderComponentHsv.h>
 
 #include <FollowCamera.h>
@@ -40,19 +41,27 @@
 #include <Font.h>
 #include <shader\ShaderComponentText.h>
 
-SceneSplash::SceneSplash(Game * _game) :
+#include <BulletWorld.h>
+#include <BulletMeshEntity.h>
+
+SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	Scene(_game),
-	shader(new ComponentShaderBase(true)),
+	diffuseShader(new ComponentShaderBase(true)),
+	phongShader(new ComponentShaderBase(true)),
 	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
-	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
+	hsvComponent(new ShaderComponentHsv(diffuseShader, 0, 1, 1)),
 	uiLayer(0,0,0,0),
 	t(0.f)
 {
-	shader->addComponent(new ShaderComponentTexture(shader));
-	shader->addComponent(hsvComponent);
-	shader->compileShader();
+	diffuseShader->addComponent(new ShaderComponentTexture(diffuseShader));
+	diffuseShader->addComponent(new ShaderComponentDiffuse(diffuseShader));
+	diffuseShader->addComponent(hsvComponent);
+	diffuseShader->compileShader();
+	phongShader->addComponent(new ShaderComponentTexture(phongShader));
+	phongShader->addComponent(new ShaderComponentPhong(phongShader));
+	phongShader->compileShader();
 
 	Transform * t;
 
@@ -64,9 +73,9 @@ SceneSplash::SceneSplash(Game * _game) :
 	fc->farClip = 1000.f;
 	fc->nearClip = 0.001f;
 	fc->parents.at(0)->rotate(90, 0, 1, 0, kWORLD);
-	fc->parents.at(0)->translate(-18.5f, -2.0f, 17.36f);
-	fc->yaw = 60.0f;
-	fc->pitch = -4.0f;
+	fc->parents.at(0)->translate(0.1f, -5.f, 18.f);
+	fc->yaw = 90.0f;
+	fc->pitch = 15.0f;
 	fc->lastOrientation = fc->calcOrientation();
 	fc->parents.at(0)->setOrientation(fc->lastOrientation);
 	activeCamera = fc;
@@ -74,7 +83,7 @@ SceneSplash::SceneSplash(Game * _game) :
 	Texture * c = new Texture("../assets/engine basics/cursor.png", 32, 32, true, false);
 	c->load();
 	ResourceManager::resources.push_back(c);
-	Texture * logoTex = new Texture("../assets/engine basics/S-Tengine2_logo.png", 1024, 1024, true, false);
+	Texture * logoTex = new Texture("../assets/engine basics/sweetheartsquad-logo.png", 1024, 1024, true, false);
 	logoTex->load();
 	ResourceManager::resources.push_back(logoTex);
 	
@@ -90,10 +99,21 @@ SceneSplash::SceneSplash(Game * _game) :
 	}
 	mouseIndicator->mesh->dirty = true;
 	
-	logo = new MeshEntity(Resource::loadMeshFromObj("../assets/engine basics/S-Tengine2_logo.obj").at(0));
-	childTransform->addChild(logo)->scale(25);
-	logo->mesh->pushTexture2D(logoTex);
-	logo->setShader(shader, true);
+	logo = new Entity();
+	childTransform->addChild(logo)->scale(10);
+	logo->parents.at(0)->translate(0, 10, 0);
+
+	logo1 = new MeshEntity(Resource::loadMeshFromObj("../assets/engine basics/sweetheartsquad-logo1.obj").at(0));
+	logo1->mesh->pushTexture2D(logoTex);
+	logo1->setShader(diffuseShader, true);
+
+	logo2 = new MeshEntity(Resource::loadMeshFromObj("../assets/engine basics/sweetheartsquad-logo2.obj").at(0));
+	logo2->mesh->pushTexture2D(logoTex);
+	logo2->setShader(diffuseShader, true);
+	
+	logo->childTransform->addChild(logo1, false);
+	logo->childTransform->addChild(logo2, false);
+	logo->childTransform->translate(0, -0.9, 0);
 
 
 
@@ -105,48 +125,41 @@ SceneSplash::SceneSplash(Game * _game) :
 	textThing = new Label(font, textShader, shader, WrapMode::WORD_WRAP, -1);
 	textThing->setText(L"some text");
 	uiLayer.childTransform->addChild(textThing);*/
+
+	PointLight * light = new PointLight(glm::vec3(1,1,1), 0.5f, 0.001f, -1);
+	lights.push_back(light);
+	childTransform->addChild(light)->translate(0, 10, 0);
 }
 
-SceneSplash::~SceneSplash(){
-	shader->safeDelete();
+SceneSweetheartSquad::~SceneSweetheartSquad(){
+	diffuseShader->safeDelete();
+	phongShader->safeDelete();
 	screenSurface->safeDelete();
 	//screenSurfaceShader->safeDelete();
 	screenFBO->safeDelete();
 }
 
-void SceneSplash::update(Step * _step){
-	float b;
+void SceneSweetheartSquad::update(Step * _step){
+	t += _step->deltaTime * 2;
 	// how much time to show just black at the start
-	t += _step->deltaTime;
 	float buffer = 1;
-	if(t-buffer < 4){
-		b = Easing::easeInQuint(std::max(0.f, t-buffer), 0, 1, 4) - std::rand() % 100 / 1000.f;
-	}else{
-		b = Easing::easeOutQuad(std::max(0.f, t-buffer - 9.5f), 1, -1, 1) - std::rand() % 100 / 1000.f;
+	float a = 0.f, b = 1.f, c = 0.f;
+		a = Easing::easeOutElastic(std::max(0.f, t - buffer), -30, 30, 3.0f, 1.2f, -1.f, 1.02f);
+		b = Easing::easeInOutQuint(std::max(0.f, t - buffer), 0, 1, 0.75f);
+		
+	logo->parents.at(0)->setOrientation(glm::quat(glm::vec3(glm::radians(a*3.f + c),0,0)));
+	hsvComponent->setValue(std::min(1.f, b));
+	hsvComponent->setSaturation(std::min(1.f, b));
+
+	if(t - buffer > 4){
+		c = Easing::easeInBack(std::max(0.f, t - buffer - 4), 0, -10, 1.5, 0.75f);
 	}
+	logo->parents.at(0)->translate(0, a + c + 10, (a + c)/3.f, false);
 
-	float thing = std::rand() % 50 / 10000.f;
 
-	if (t-buffer <= 7){
-		screenSurface->vertices.at(0).v = thing + Easing::easeOutCubic(std::min(6.f, t-buffer), 0, -50, 6) + 1;
-		screenSurface->vertices.at(1).v = thing + Easing::easeOutCubic(std::min(6.f, t-buffer), 0, -50, 6) + 1;
-		screenSurface->vertices.at(2).v = thing + Easing::easeOutCubic(std::min(6.f, t-buffer), 0, -50, 6);
-		screenSurface->vertices.at(3).v = thing + Easing::easeOutCubic(std::min(6.f, t-buffer), 0, -50, 6);
-	}else{
-		screenSurface->vertices.at(0).v = thing + Easing::easeInQuint(std::max(0.f, t-buffer - 8), 0, -25, 2.5) + 1;
-		screenSurface->vertices.at(1).v = thing + Easing::easeInQuint(std::max(0.f, t-buffer - 8), 0, -25, 2.5) + 1;
-		screenSurface->vertices.at(2).v = thing + Easing::easeInQuint(std::max(0.f, t-buffer - 8), 0, -25, 2.5);
-		screenSurface->vertices.at(3).v = thing + Easing::easeInQuint(std::max(0.f, t-buffer - 8), 0, -25, 2.5);
-	}
-	screenSurface->dirty = true;
-
-	hsvComponent->setValue(b);
-
-	if(t-buffer > 10.5){
+	if(t > 8){
 		game->switchScene(nextScene, true);
 	}
-
-
 	if(keyboard->keyJustUp(GLFW_KEY_ENTER)){
 		game->switchScene(nextScene, true);
 	}
@@ -180,7 +193,7 @@ void SceneSplash::update(Step * _step){
 	//textThing->parents.at(0)->translate(game->viewPortWidth*0.5f, game->viewPortHeight*0.8f, 0, false);
 }
 
-void SceneSplash::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void SceneSweetheartSquad::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	clear();
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer
@@ -194,7 +207,7 @@ void SceneSplash::render(vox::MatrixStack * _matrixStack, RenderOptions * _rende
 	uiLayer.render(_matrixStack, _renderOptions);
 }
 
-void SceneSplash::load(){
+void SceneSweetheartSquad::load(){
 	Scene::load();	
 
 	screenSurface->load();
@@ -202,7 +215,7 @@ void SceneSplash::load(){
 	uiLayer.load();
 }
 
-void SceneSplash::unload(){
+void SceneSweetheartSquad::unload(){
 	uiLayer.unload();
 	screenFBO->unload();
 	screenSurface->unload();
