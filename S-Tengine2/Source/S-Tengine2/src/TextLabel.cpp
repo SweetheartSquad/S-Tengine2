@@ -79,8 +79,15 @@ void TextLabel::autoResizeWidth(){
 void TextLabel::invalidate(){
 	unusedGlyphs.insert(unusedGlyphs.end(), contents->children.begin(), contents->children.end());
 	while(contents->children.size() > 0){
-		contents->children.back()->removeParent(contents);
-		contents->children.pop_back();
+		Transform * trans = dynamic_cast<Transform *>(contents->children.back());
+		for(unsigned long int i = 0; i < trans->children.size(); ++i) {
+			// We need to make sure that the glyphs aren't keeping to references to the wrong parents
+			GlyphMeshEntity * gme = dynamic_cast<GlyphMeshEntity *>(trans->children.at(i));
+			while (gme->childTransform->children.size() > 0) {
+				gme->childTransform->removeChild(gme->childTransform->children.back());
+			}
+		}
+		contents->removeChild(contents->children.back());
 	}
 	lineWidth = 0.f;
 	textArea->removeLine(this);
@@ -93,9 +100,21 @@ void TextLabel::insertChar(wchar_t _char){
 		Transform * oldTrans = dynamic_cast<Transform *>(unusedGlyphs.back());
 		glyph = dynamic_cast<GlyphMeshEntity *>(oldTrans->children.at(0));
 		glyph->setGlyphMesh(glyphMesh);
+		glyph->parents.clear();
 		contents->addChild(oldTrans, false);
 		oldTrans->translate(lineWidth, 0.f, 0.f, false);
 		unusedGlyphs.pop_back();
+		/*
+		* This is an interesting issue that makes sense but we haven't had often.
+		* Usually we call set shader on a new mesh entity which does this
+		* Since we're reusing mesh entities configureDefaultVertexAttributes
+		* doesn't get called on a mesh when it's swapped in since we've already set the shader.
+		* For this reason we do it here. We check dirty since this indicates that this is the first time 
+		* the mesh is being used
+		*/
+		if(glyphMesh->dirty) {
+			glyphMesh->configureDefaultVertexAttributes(textShader);
+		}
 	}else{
 		glyph = new GlyphMeshEntity(
 				glyphMesh,
@@ -126,10 +145,7 @@ GlyphMeshEntity::GlyphMeshEntity(Glyph * _mesh, Shader* _shader, wchar_t _charac
 {
 }
 
-void GlyphMeshEntity::setGlyphMesh(Glyph* _mesh){
-	while(childTransform->children.size() > 0) {
-		childTransform->removeChild(childTransform->children.back());
-	}
+void GlyphMeshEntity::setGlyphMesh(Glyph * _mesh){
 	childTransform->addChild(_mesh, false);
 	glyph = _mesh;
 }

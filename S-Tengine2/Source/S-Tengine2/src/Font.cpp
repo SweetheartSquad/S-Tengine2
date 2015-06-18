@@ -4,9 +4,10 @@
 #include <Vox.h>
 #include <MeshFactory.h>
 
-Glyph::Glyph(FT_GlyphSlot _glyph) :
+Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _char) :
 	MeshInterface(GL_QUADS, GL_STATIC_DRAW),
-	NodeResource(false)
+	NodeResource(false),
+	character(_char)
 {
 	float vx = _glyph->bitmap_left;
 	float vy = _glyph->bitmap_top;
@@ -131,7 +132,7 @@ Glyph* Font::getMeshInterfaceForChar(wchar_t _char){
 	Glyph * res;
 	if(t == meshes.end()){
 		loadGlyph(_char);
-		Glyph * mesh = new Glyph(face->glyph);
+		Glyph * mesh = new Glyph(face->glyph, _char);
 		mesh->autoRelease = false;
 		mesh->pushTexture2D(getTextureForChar(_char));
 		meshes.insert(std::pair<char, Glyph *>(_char, mesh));

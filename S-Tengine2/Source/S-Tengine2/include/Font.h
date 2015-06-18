@@ -9,9 +9,10 @@
 
 class Glyph : public MeshInterface{
 public:
-	Glyph(FT_GlyphSlot _glyph);
+	Glyph(FT_GlyphSlot _glyph, wchar_t _character);
 	FT_Vector advance;
 	FT_Glyph_Metrics metrics;
+	wchar_t character;
 };
 
 class GlyphTexture : public Texture{
