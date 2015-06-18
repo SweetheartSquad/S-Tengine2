@@ -122,10 +122,13 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptio
 
 	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
+	const glm::mat4 * p = &activeCamera->getProjectionMatrix();
+	const glm::mat4 * v = &activeCamera->getViewMatrix();
+
 	_matrixStack->pushMatrix();
 	_matrixStack->resetCurrentMatrix();
-	_matrixStack->setProjectionMatrix(&activeCamera->getProjectionMatrix());
-	_matrixStack->setViewMatrix(&activeCamera->getViewMatrix());
+	_matrixStack->setProjectionMatrix(p);
+	_matrixStack->setViewMatrix(v);
 
 	_renderOptions->lights = &lights;
 	
