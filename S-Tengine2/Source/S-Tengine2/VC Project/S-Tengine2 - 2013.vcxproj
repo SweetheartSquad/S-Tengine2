@@ -65,6 +65,7 @@
     <ClCompile Include="../src/Scene2D.cpp" />
     <ClCompile Include="../src/HorizontalLinearLayout.cpp" />
     <ClCompile Include="../src/Layout.cpp" />
+    <ClCompile Include="../src/node/NodeMeasurable.cpp" />
     <ClCompile Include="../src/SceneSweetheartSquad.cpp" />
     <ClCompile Include="../src/shader/ComponentShaderBase.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentBlinn.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="../include/Scene2D.h" />
     <ClInclude Include="../include/HorizontalLinearLayout.h" />
     <ClInclude Include="../include/Layout.h" />
+    <ClInclude Include="../include/node/NodeMeasurable.h" />
     <ClInclude Include="../include/SceneSweetheartSquad.h" />
     <ClInclude Include="../include/shader/ComponentShaderBase.h" />
     <ClInclude Include="../include/shader/ShaderComponentBlinn.h" />

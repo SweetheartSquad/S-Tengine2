@@ -8,12 +8,12 @@
 #include <shader\ShaderComponentTexture.h>
 #include <System.h>
 
-UILayer::UILayer(float _left, float _right, float _bottom, float _top) : 
-	Entity(),
+UILayer::UILayer(Scene * _scene, float _left, float _right, float _bottom, float _top) : 
+	NodeUI(world, _scene),
+	NodeBulletBody(new BulletWorld()),
 	cam(_left, _right, _bottom, _top, -1000.f, 1000.f),
 	shader(new ComponentShaderBase(true)),
-	bulletWorld(new BulletWorld()),
-	bulletDebugDrawer(new BulletDebugDrawer(bulletWorld->world))
+	bulletDebugDrawer(new BulletDebugDrawer(world->world))
 {
 	Transform * t = new Transform();
 	t->addChild(&cam);
@@ -22,7 +22,7 @@ UILayer::UILayer(float _left, float _right, float _bottom, float _top) :
 	shader->compileShader();
 
 	bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
-	bulletWorld->world->setDebugDrawer(bulletDebugDrawer);
+	world->world->setDebugDrawer(bulletDebugDrawer);
 	childTransform->addChild(bulletDebugDrawer, false);
 }
 
@@ -65,6 +65,9 @@ void UILayer::resize(float _left, float _right, float _bottom, float _top){
 	cam.right = _right;
 	cam.bottom = _bottom;
 	cam.top = _top;
+	
+	setWidth(_right - _left);
+	setHeight(_top - _bottom);
 }
 
 void UILayer::update(Step * _step){
@@ -74,6 +77,13 @@ void UILayer::update(Step * _step){
 	if(bulletDebugDrawer != childTransform->children.back()){
 		childTransform->addChild(bulletDebugDrawer, false);
 	}
+}
+
+float UILayer::getWidth(){
+	return cam.right - cam.left;
+}
+float UILayer::getHeight(){
+	return cam.top - cam.bottom;
 }
 
 /*bool UILayer::addChild(NodeChild * _child){

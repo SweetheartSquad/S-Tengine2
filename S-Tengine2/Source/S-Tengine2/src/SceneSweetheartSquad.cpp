@@ -52,7 +52,7 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
 	hsvComponent(new ShaderComponentHsv(diffuseShader, 0, 1, 1)),
-	uiLayer(0,0,0,0),
+	uiLayer(this, 0,0,0,0),
 	t(0.f)
 {
 	diffuseShader->addComponent(new ShaderComponentTexture(diffuseShader));

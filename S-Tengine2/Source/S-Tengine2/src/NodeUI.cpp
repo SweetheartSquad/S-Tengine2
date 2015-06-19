@@ -39,7 +39,11 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	autoResizingWidth(false),
 	autoResizingHeight(false),
 	width(0.f),
-	height(0.f)
+	height(0.f),
+	useRationalHeight(false),
+	useRationalWidth(false),
+	rationalHeight(1),
+	rationalWidth(1)
 {
 	ComponentShaderBase * shader = new ComponentShaderBase(true);
 	shader->addComponent(new ShaderComponentTexture(shader));
@@ -56,8 +60,8 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	childTransform->addChild(background, true);
 	childTransform->addChild(contents, false);
 	
-	setPadding(5);
-	setMargin(5);
+	//setPadding(5);
+	//setMargin(5);
 
 	setBackgroundColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0));
 	updateCollider();
@@ -87,6 +91,11 @@ void NodeUI::out(){
 
 Transform * NodeUI::addChild(NodeUI* _uiElement){
 	layoutDirty = true;
+	if(_uiElement->useRationalWidth){
+		_uiElement->setWidth(_uiElement->rationalWidth, this);
+	}if(_uiElement->useRationalHeight){
+		_uiElement->setHeight(_uiElement->rationalHeight, this);
+	}
 	return contents->addChild(_uiElement);
 }
 
@@ -230,10 +239,50 @@ void NodeUI::setPadding(float _left, float _right, float _bottom, float _top){
 
 void NodeUI::setWidth(float _width){
 	width = _width;
+	
+	// check for rational-width children and resize them
+	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
+		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
+		if(trans != nullptr) {
+			if(trans->children.size() > 0) {
+				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
+				if(nui != nullptr){
+					if(nui->useRationalWidth){
+						nui->setWidth(nui->rationalWidth, this);
+					}
+				}
+			}
+		}
+	}
 }
 
 void NodeUI::setHeight(float _height){
 	height = _height;
+	
+	// check for rational-height children and resize them
+	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
+		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
+		if(trans != nullptr) {
+			if(trans->children.size() > 0) {
+				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
+				if(nui != nullptr){
+					if(nui->useRationalHeight){
+						nui->setHeight(nui->rationalHeight, this);
+					}
+				}
+			}
+		}
+	}
+}
+
+void NodeUI::setWidth(float _rationalWidth, NodeUI * _parent){
+	rationalWidth = _rationalWidth;
+	setWidth(_parent->getWidth() * rationalWidth);
+}
+
+void NodeUI::setHeight(float _rationalHeight, NodeUI * _parent){
+	rationalHeight = _rationalHeight;
+	setHeight(_parent->getHeight() * rationalHeight);
 }
 
 void NodeUI::setBackgroundColour(float _r, float _g, float _b, float _a){
@@ -273,8 +322,15 @@ float NodeUI::getPaddingBottom(){
 	return paddingBottom;
 }
 
+float NodeUI::getWidth(){
+	return width;
+}
+float NodeUI::getHeight(){
+	return height;
+}
+
 float NodeUI::getWidth(bool _includePadding, bool _includeMargin){
-	float res = width;
+	float res = getWidth();
 	if(_includePadding){
 		res += getPaddingLeft() + getPaddingRight();
 	}
@@ -285,7 +341,7 @@ float NodeUI::getWidth(bool _includePadding, bool _includeMargin){
 }
 
 float NodeUI::getHeight(bool _includePadding, bool _includeMargin){
-	float res = height;
+	float res = getHeight();
 	if(_includePadding){
 		res += getPaddingBottom() + getPaddingTop();
 	}
@@ -340,28 +396,32 @@ void NodeUI::autoResize(){
 	}
 }
 void NodeUI::autoResizeWidth(){
-	width = 0.0f;
+	float w = 0.0f;
+	// take the maximum of the width of the contents
 	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
 		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
-				width = std::max(width, node->getWidth(true, true));
+				w = std::max(w, node->getWidth(true, true));
 			}
 		}
 	}
+	setWidth(w);
 }
 void NodeUI::autoResizeHeight(){
-	height = 0.0f;
+	float h = 0.0f;
+	// take the maximum of the height of the contents
 	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
 		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
-				height = std::max(height, node->getHeight(true, true));
+				h = std::max(h, node->getHeight(true, true));
 			}
 		}
 	}
+	setHeight(h);
 }
 
 void NodeUI::repositionChildren(){

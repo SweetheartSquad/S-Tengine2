@@ -1,5 +1,6 @@
 #pragma once
 
+#include <node\NodeMeasurable.h>
 #include <NodeBulletBody.h>
 #include <MeshEntity.h>
 
@@ -17,7 +18,7 @@ enum HorizontalAlignment{
 	kRIGHT
 };
 
-class NodeUI : public virtual NodeBulletBody, public virtual Entity{
+class NodeUI : public virtual NodeBulletBody, public virtual NodeMeasurable, public virtual Entity{
 protected:
 	Mouse * mouse;
 	// Whether the button is under the mouse
@@ -40,15 +41,21 @@ protected:
 	
 	// destroys the current rigid body and creates a new one which is sized to match the bounding box of the element
 	void updateCollider();
-	
-	bool autoResizingWidth;
-	bool autoResizingHeight;
-	
+
 	HorizontalAlignment horizontalAlignment;
 	VerticalAlignment verticalAlignment;
 
 	Transform * contents;
+
 public:
+	bool useRationalWidth;
+	bool useRationalHeight;
+	float rationalWidth;
+	float rationalHeight;
+	
+	bool autoResizingWidth;
+	bool autoResizingHeight;
+
 	Scene * scene;
 	MeshEntity * background;
 
@@ -78,6 +85,10 @@ public:
 
 	void setWidth(float _width);
 	void setHeight(float _height);
+	// sets the width as a _rationalWidth * _parent's width
+	void setWidth(float _rationalWidth, NodeUI * _parent);
+	// sets the height as a _rationalWidth * _parent's width
+	void setHeight(float _rationalHeight, NodeUI * _parent);
 
 	void setBackgroundColour(float _r, float _g, float _b, float _a = 1.f);
 
@@ -91,6 +102,9 @@ public:
 	float getPaddingTop();
 	float getPaddingBottom();
 
+	
+	virtual float getWidth() override;
+	virtual float getHeight() override;
 	// If not autoresizing, returns the fixed width
 	// If autoresizing, returns the total width of the UI element including attibutes such as padding, overflow, etc.
 	virtual float getWidth(bool _includePadding, bool _includeMargin);
