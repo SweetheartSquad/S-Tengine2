@@ -59,7 +59,7 @@ public:
 	ALsizei numSamples, sampleRate;
     ALenum format;
 	std::vector<ALshort> samples;
-	OpenAL_Buffer(const char * _filename);
+	OpenAL_Buffer(const char * _filename, bool _autoRelease);
 	~OpenAL_Buffer();
 };
 
@@ -71,7 +71,7 @@ public:
 	bool looping;
 	// the current state of the source
 	ALint state;
-	OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional);
+	OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional, bool _autoRelease);
 	~OpenAL_Source();
 	virtual void update(Step * _step) override;
 	
@@ -93,7 +93,7 @@ class OpenAL_Sound abstract : public virtual NodeOpenAL, public virtual NodeReso
 protected:
 	ALint samplesPlayed;
 public:
-	OpenAL_Sound(OpenAL_Source * _source);
+	OpenAL_Sound(OpenAL_Source * _source, bool _autoRelease);
 	~OpenAL_Sound();
 	OpenAL_Source * source;
 	
@@ -114,14 +114,14 @@ public:
 
 class OpenAL_SoundSimple : public OpenAL_Sound{
 public:
-	OpenAL_SoundSimple(const char * _filename, bool _positional);
+	OpenAL_SoundSimple(const char * _filename, bool _positional, bool _autoRelease);
 
 	virtual void update(Step * _step) override;
 };
 
 
-class OpenAL_SoundStream : public virtual OpenAL_Sound{
-private:
+class OpenAL_SoundStream : public OpenAL_Sound{
+protected:
 	// number of buffers used for a single OpenAL_Stream
 	const static unsigned long int NUM_BUFS = 4;
 	// size of buffers used for streaming
@@ -136,7 +136,7 @@ public:
 	// whether the stream should continue buffering
 	bool isStreaming;
 
-	OpenAL_SoundStream(const char * _filename, bool _positional);
+	OpenAL_SoundStream(const char * _filename, bool _positional, bool _autoRelease);
 	~OpenAL_SoundStream();
 
 	virtual void update(Step * _step) override;
@@ -156,9 +156,25 @@ public:
 	// attempt to fill the _bufferId with new data from the source
 	// (uses bufferOffset to determine where to start from)
 	// returns the number of buffers filled
-	unsigned long int fillBuffer(ALuint _bufferId);
+	virtual unsigned long int fillBuffer(ALuint _bufferId);
 	// fills buffers with as much data from the source as possible, limited by maxBufferOffset
 	// (uses bufferOffset to determine where to start from)
 	// returns the number of buffers filled
 	unsigned long int fillBuffers();
+};
+
+#include <functional>
+class OpenAL_SoundStreamGenerative : public OpenAL_SoundStream{
+public:
+	// converts a float in the range -1 to 1 into an ALShort in the range -32767 to 32767 (the min and max amplitude)
+	static ALshort compressFloat(float _v, float _volume = 0.8f);
+
+	std::function<ALshort(unsigned long int _time)> generativeFunction;
+	
+	OpenAL_SoundStreamGenerative(bool _positional, bool _autoRelease);
+
+	// attempt to fill the _bufferId with new data from the function
+	// (uses bufferOffset to determine where to start from)
+	// returns the number of buffers filled
+	virtual unsigned long int fillBuffer(ALuint _bufferId) override;
 };

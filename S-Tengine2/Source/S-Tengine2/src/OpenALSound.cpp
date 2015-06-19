@@ -51,43 +51,44 @@ void NodeOpenAL::setListenerOrientation(glm::vec3 _forward, glm::vec3 _up){
 	checkForAlError(alListenerfv(AL_ORIENTATION, orientation));
 }
 
-OpenAL_Buffer::OpenAL_Buffer(const char * _filename) :
-	NodeResource(false),
+OpenAL_Buffer::OpenAL_Buffer(const char * _filename, bool _autoRelease) :
+	NodeResource(_autoRelease),
 	bufferId(0),
 	sampleRate(0),
 	numSamples(0)
 {
-	// open the file
-    SF_INFO fileInfo;
-	SNDFILE * file = sf_open(_filename, SFM_READ, &fileInfo);
-
-	// get the number of samples and sample rate
-	numSamples = static_cast<ALsizei>(fileInfo.channels * fileInfo.frames);
-    sampleRate = static_cast<ALsizei>(fileInfo.samplerate);
-
-	// read the audio data (as a 16 bit signed integer)
-    samples.resize(numSamples);
-	// sf_read_short returns the number of samples read
-    // if we read zero samples, there must be an error
-	assert(!sf_read_short(file, &samples[0], numSamples) < numSamples); 
-
-	// close the file
-	sf_close(file);
-
-	 // set the format based on the number of channels
-    switch (fileInfo.channels){
-        case 1:  format = AL_FORMAT_MONO16;   break;
-        case 2:  format = AL_FORMAT_STEREO16; break;
-        default: format = 0;
-    }
-	assert(format == AL_FORMAT_MONO16 || format == AL_FORMAT_STEREO16);
-
-	
 	// generate buffer
 	checkForAlError(alGenBuffers(1, &bufferId));
 
-	// fill the buffer with the audio data
-   checkForAlError(alBufferData(bufferId, format, &samples[0], numSamples * sizeof(ALushort), sampleRate));
+	if(_filename != nullptr){
+		// open the file
+		SF_INFO fileInfo;
+		SNDFILE * file = sf_open(_filename, SFM_READ, &fileInfo);
+
+		// get the number of samples and sample rate
+		numSamples = static_cast<ALsizei>(fileInfo.channels * fileInfo.frames);
+		sampleRate = static_cast<ALsizei>(fileInfo.samplerate);
+
+		// read the audio data (as a 16 bit signed integer)
+		samples.resize(numSamples);
+		// sf_read_short returns the number of samples read
+		// if we read zero samples, there must be an error
+		assert(!sf_read_short(file, &samples[0], numSamples) < numSamples); 
+
+		// close the file
+		sf_close(file);
+
+		 // set the format based on the number of channels
+		switch (fileInfo.channels){
+			case 1:  format = AL_FORMAT_MONO16;   break;
+			case 2:  format = AL_FORMAT_STEREO16; break;
+			default: format = AL_FORMAT_MONO16;
+		}
+		assert(format == AL_FORMAT_MONO16 || format == AL_FORMAT_STEREO16);
+
+		// fill the buffer with the audio data
+		checkForAlError(alBufferData(bufferId, format, &samples[0], numSamples * sizeof(ALushort), sampleRate));
+	}
 }
 
 OpenAL_Buffer::~OpenAL_Buffer(){	
@@ -98,12 +99,12 @@ OpenAL_Buffer::~OpenAL_Buffer(){
 
 
 
-OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional) :
+OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional, bool _autoRelease) :
 	buffer(_buffer),
 	positional(_positional),
 	looping(false),
 	state(AL_STOPPED),
-	NodeResource(false)
+	NodeResource(_autoRelease)
 {
 	// generate source
 	checkForAlError(alGenSources(1, &sourceId));
@@ -196,8 +197,8 @@ void OpenAL_Source::pause(){
 
 
 
-OpenAL_Sound::OpenAL_Sound(OpenAL_Source * _source) :
-	NodeResource(false),
+OpenAL_Sound::OpenAL_Sound(OpenAL_Source * _source, bool _autoRelease) :
+	NodeResource(_autoRelease),
 	source(_source),
 	samplesPlayed(0)
 {
@@ -237,9 +238,9 @@ float OpenAL_Sound::getAmplitude(){
 
 
 
-OpenAL_SoundSimple::OpenAL_SoundSimple(const char * _filename, bool _positional) :
-	NodeResource(false),
-	OpenAL_Sound(new OpenAL_Source(new OpenAL_Buffer(_filename), _positional))
+OpenAL_SoundSimple::OpenAL_SoundSimple(const char * _filename, bool _positional, bool _autoRelease) :
+	OpenAL_Sound(new OpenAL_Source(new OpenAL_Buffer(_filename, _autoRelease), _positional, _autoRelease), _autoRelease),
+	NodeResource(_autoRelease)
 {
 }
 
@@ -249,15 +250,15 @@ void OpenAL_SoundSimple::update(Step * _step){
 }
 
 
-OpenAL_SoundStream::OpenAL_SoundStream(const char * _filename, bool _positional) :
-	NodeResource(false),
+OpenAL_SoundStream::OpenAL_SoundStream(const char * _filename, bool _positional, bool _autoRelease) :
+	NodeResource(_autoRelease),
 	isStreaming(false),
-	OpenAL_Sound(new OpenAL_Source(nullptr, _positional)),
+	OpenAL_Sound(new OpenAL_Source(nullptr, _positional, _autoRelease), _autoRelease),
 	bufferOffset(0),
 	maxBufferOffset(0)
 {
 	alGenBuffers(NUM_BUFS, buffers);
-	source->buffer = new OpenAL_Buffer(_filename);
+	source->buffer = new OpenAL_Buffer(_filename, _autoRelease);
 	++source->buffer->referenceCount;
 
 	maxBufferOffset = source->buffer->numSamples / BUFFER_LEN;
@@ -397,4 +398,37 @@ unsigned long int OpenAL_SoundStream::fillBuffers(){
 		}
 	}
 	return numBuffs;
+}
+
+
+
+
+OpenAL_SoundStreamGenerative::OpenAL_SoundStreamGenerative(bool _positional, bool _autoRelease) :
+	OpenAL_SoundStream(nullptr, _positional, _autoRelease),
+	NodeResource(_autoRelease),
+	generativeFunction(nullptr)
+{
+	maxBufferOffset = -1;
+	source->buffer->samples.resize(BUFFER_LEN);
+	source->buffer->sampleRate = 44100;
+	source->buffer->format = AL_FORMAT_MONO16;
+
+	generativeFunction = [](unsigned long int t){
+		return compressFloat(sin(t/10), 0.2f);
+	};
+}
+
+ALshort OpenAL_SoundStreamGenerative::compressFloat(float _v, float _volume){
+	return _v * 32767 * _volume;
+}
+
+unsigned long int OpenAL_SoundStreamGenerative::fillBuffer(ALuint _bufferId){
+	for(unsigned long int i = 0; i < source->buffer->samples.size(); ++i){
+		unsigned long int t = i + samplesPlayed;
+		source->buffer->samples.at(i) = generativeFunction(t);
+	}
+
+	checkForAlError(alBufferData(_bufferId, source->buffer->format, &source->buffer->samples[0], BUFFER_LEN * sizeof(ALushort), source->buffer->sampleRate));
+	++bufferOffset;
+	return 1;
 }
