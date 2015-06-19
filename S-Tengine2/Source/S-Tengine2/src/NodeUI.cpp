@@ -157,6 +157,21 @@ void NodeUI::update(Step * _step){
 	
 	NodeBulletBody::update(_step);
 	Entity::update(_step);
+
+	
+	
+	// for testing
+	float g = dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->getGreen();
+	float b = dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->getBlue();
+	if(isHovered){
+		if(isDown){
+			setBackgroundColour(-1.f, g, b);
+		}else{
+			setBackgroundColour(-0.5f, g, b);
+		}
+	}else{
+		setBackgroundColour(0.f, g, b);
+	}
 }
 
 void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
@@ -444,18 +459,18 @@ void NodeUI::updateCollider(){
 }
 
 void NodeUI::autoResize(){
-	if(widthMode == kRATIO){
+	if(widthMode == kAUTO){
 		autoResizeWidth();
 	}
-	if(heightMode == kRATIO){
+	if(heightMode == kAUTO){
 		autoResizeHeight();
 	}
 	// Adjust the size of the background
 	background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
 	repositionChildren();
-	if(widthMode == kRATIO || heightMode == kRATIO){
+	//if(widthMode == kAUTO || heightMode == kAUTO || widthMode == kRATIO || heightMode == kRATIO){
 		updateCollider();
-	}
+	//}
 }
 void NodeUI::autoResizeWidth(){
 	float w = 0.0f;

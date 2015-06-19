@@ -30,5 +30,5 @@ void HorizontalLinearLayout::autoResizeWidth(){
 			}
 		}
 	}
-	setWidth(w);
+	measuredWidth = w;
 }

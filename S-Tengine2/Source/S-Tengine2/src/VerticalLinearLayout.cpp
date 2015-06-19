@@ -30,5 +30,5 @@ void VerticalLinearLayout::autoResizeHeight(){
 			}
 		}
 	}
-	setHeight(h);
+	measuredHeight = h;
 }
