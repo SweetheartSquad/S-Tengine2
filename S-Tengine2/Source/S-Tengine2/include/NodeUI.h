@@ -18,6 +18,10 @@ enum HorizontalAlignment{
 	kCENTER,
 	kRIGHT
 };
+enum BoxSizing{
+	kCONTENT_BOX,
+	kBORDER_BOX
+};
 
 class NodeUI : public virtual NodeBulletBody, public virtual Entity{
 protected:
@@ -53,6 +57,7 @@ protected:
 public:
 	Scene * scene;
 	MeshEntity * background;
+	BoxSizing boxSizing;
 
 	std::function<void(NodeUI * _this)> onClickFunction;
 	//void (*onUpFunction)();

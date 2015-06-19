@@ -37,7 +37,7 @@ TextLabel * TextArea::getLine() {
 		line = dynamic_cast<TextLabel *>(unusedLines.back());
 		unusedLines.pop_back();
 	}else{
-		line = new TextLabel(world, scene, font, textShader, getWidth(false, false));
+		line = new TextLabel(world, scene, font, textShader, 1.f);
 		line->textArea = this;
 		Transform * t = new Transform();
 		t->addChild(line, false);

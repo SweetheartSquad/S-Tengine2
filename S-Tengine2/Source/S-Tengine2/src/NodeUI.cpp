@@ -27,7 +27,8 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	contents(new Transform()),
 	horizontalAlignment(kLEFT),
-	verticalAlignment(kBOTTOM)
+	verticalAlignment(kBOTTOM),
+	boxSizing(kBORDER_BOX)
 {
 	ComponentShaderBase * shader = new ComponentShaderBase(true);
 	shader->addComponent(new ShaderComponentTexture(shader));
@@ -325,12 +326,15 @@ void NodeUI::setMeasuredWidths(NodeUI * _root){
 		marginLeft.measuredSize = rootWidth * marginLeft.rationalSize;
 	}if(paddingLeft.sizeMode == kRATIO){
 		paddingLeft.measuredSize = rootWidth * paddingLeft.rationalSize;
-	}if(width.sizeMode == kRATIO){
-		width.measuredSize = rootWidth * width.rationalSize;
 	}if(paddingRight.sizeMode == kRATIO){
 		paddingRight.measuredSize = rootWidth * paddingRight.rationalSize;
 	}if(marginRight.sizeMode == kRATIO){
 		marginRight.measuredSize = rootWidth * marginRight.rationalSize;
+	}if(width.sizeMode == kRATIO){
+		width.measuredSize = rootWidth * width.rationalSize;
+		if(boxSizing == kBORDER_BOX){
+			width.measuredSize -= marginLeft.getSize() + paddingLeft.getSize() + paddingRight.getSize() + marginRight.getSize();
+		}
 	}
 	resizeChildrenWidth();
 }
@@ -343,12 +347,15 @@ void NodeUI::setMeasuredHeights(NodeUI * _root){
 		marginBottom.measuredSize = rootHeight * marginBottom.rationalSize;
 	}if(paddingBottom.sizeMode == kRATIO){
 		paddingBottom.measuredSize = rootHeight * paddingBottom.rationalSize;
-	}if(height.sizeMode == kRATIO){
-		height.measuredSize = rootHeight * height.rationalSize;
 	}if(paddingTop.sizeMode == kRATIO){
 		paddingTop.measuredSize = rootHeight * paddingTop.rationalSize;
 	}if(marginTop.sizeMode == kRATIO){
 		marginTop.measuredSize = rootHeight * marginTop.rationalSize;
+	}if(height.sizeMode == kRATIO){
+		height.measuredSize = rootHeight * height.rationalSize;
+		if(boxSizing == kBORDER_BOX){
+			height.measuredSize -= marginBottom.getSize() + paddingBottom.getSize() + paddingTop.getSize() + marginTop.getSize();
+		}
 	}
 	resizeChildrenHeight();
 }
