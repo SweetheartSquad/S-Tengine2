@@ -9,11 +9,7 @@ TextArea::TextArea(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Sha
 	font(_font),
 	textShader(_textShader)
 {
-	if(_height < 0){
-		autoResizingHeight = true;
-	}else{
-		setHeight(_height);
-	}
+	setHeight(_height);
 	setWidth(_width);
 }
 

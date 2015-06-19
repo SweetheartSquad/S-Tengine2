@@ -79,10 +79,10 @@ void UILayer::update(Step * _step){
 	}
 }
 
-float UILayer::getWidth(){
+float UILayer::getMeasuredWidth(){
 	return cam.right - cam.left;
 }
-float UILayer::getHeight(){
+float UILayer::getMeasuredHeight(){
 	return cam.top - cam.bottom;
 }
 

@@ -3,9 +3,11 @@
 #include <node/Node.h>
 
 class NodeMeasurable abstract : public Node{
-public:
+protected:
 	float measuredWidth, measuredHeight;
 	
-	virtual float getWidth() = 0;
-	virtual float getHeight() = 0;
+	virtual float getMeasuredWidth();
+	virtual float getMeasuredHeight();
+	virtual void setMeasuredWidth(float _width);
+	virtual void setMeasuredHeight(float _height);
 };

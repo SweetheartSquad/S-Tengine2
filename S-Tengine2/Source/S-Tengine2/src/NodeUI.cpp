@@ -36,15 +36,16 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	contents(new Transform()),
 	horizontalAlignment(kLEFT),
 	verticalAlignment(kBOTTOM),
-	autoResizingWidth(false),
-	autoResizingHeight(false),
-	width(0.f),
-	height(0.f),
-	useRationalHeight(false),
-	useRationalWidth(false),
-	rationalHeight(1),
-	rationalWidth(1)
+	widthMode(kPIXEL),
+	heightMode(kPIXEL),
+	pixelWidth(0.f),
+	pixelHeight(0.f),
+	rationalWidth(1.f),
+	rationalHeight(1.f)
 {
+	measuredWidth = 0.0f;
+	measuredHeight = 0.0f;
+
 	ComponentShaderBase * shader = new ComponentShaderBase(true);
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->addComponent(new ShaderComponentTint(shader));
@@ -60,8 +61,8 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	childTransform->addChild(background, true);
 	childTransform->addChild(contents, false);
 	
-	//setPadding(5);
-	//setMargin(5);
+	setPadding(5);
+	setMargin(5);
 
 	setBackgroundColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0));
 	updateCollider();
@@ -91,10 +92,10 @@ void NodeUI::out(){
 
 Transform * NodeUI::addChild(NodeUI* _uiElement){
 	layoutDirty = true;
-	if(_uiElement->useRationalWidth){
-		_uiElement->setWidth(_uiElement->rationalWidth, this);
-	}if(_uiElement->useRationalHeight){
-		_uiElement->setHeight(_uiElement->rationalHeight, this);
+	if(_uiElement->widthMode == kRATIO){
+		_uiElement->setRationalWidth(_uiElement->rationalWidth, this);
+	}if(_uiElement->heightMode == kRATIO){
+		_uiElement->setRationalHeight(_uiElement->rationalHeight, this);
 	}
 	return contents->addChild(_uiElement);
 }
@@ -129,11 +130,6 @@ void NodeUI::update(Step * _step){
 	btVector3 raydir(0, 0, 1);
 	btVector3 rayend(mouse->mouseX(), mouse->mouseY(), raylength);
 	
-	btCollisionWorld::ClosestRayResultCallback RayCallback(raystart, rayend);
-	world->world->rayTest(raystart, rayend, RayCallback);
-	if(RayCallback.hasHit()){
-
-	}
 	btTransform rayfrom;
 	rayfrom.setIdentity(); rayfrom.setOrigin(raystart);
 	btTransform rayto;
@@ -238,8 +234,66 @@ void NodeUI::setPadding(float _left, float _right, float _bottom, float _top){
 }
 
 void NodeUI::setWidth(float _width){
-	width = _width;
-	
+	if(_width < 0){
+		setAutoresizeWidth();
+	}else if(_width <= 1.00001f){
+		setRationalWidth(_width);
+	}else{
+		setPixelWidth(_width);
+	}
+}
+
+void NodeUI::setHeight(float _height){
+	if(_height < 0){
+		setAutoresizeHeight();
+	}else if(_height <= 1.00001f){
+		setRationalHeight(_height);
+	}else{
+		setPixelHeight(_height);
+	}
+}
+
+void NodeUI::setAutoresizeWidth(){
+	widthMode = kAUTO;
+	autoResizeWidth();
+	resizeChildrenWidth();
+}
+void NodeUI::setAutoresizeHeight(){
+	heightMode = kAUTO;
+	autoResizeHeight();
+	resizeChildrenHeight();
+}
+
+void NodeUI::setRationalWidth(float _rationalWidth, NodeUI * _parent){
+	widthMode = kRATIO;
+	rationalWidth = _rationalWidth;
+	if(_parent != nullptr){
+		measuredWidth = _parent->getWidth() * rationalWidth;
+	}
+	resizeChildrenWidth();
+}
+
+void NodeUI::setRationalHeight(float _rationalHeight, NodeUI * _parent){
+	heightMode = kRATIO;
+	rationalHeight = _rationalHeight;
+	if(_parent != nullptr){
+		measuredHeight = _parent->getHeight() * rationalHeight;
+	}
+	resizeChildrenHeight();
+}
+
+void NodeUI::setPixelWidth(float _pixelWidth){
+	widthMode = kPIXEL;
+	pixelWidth = _pixelWidth;
+	resizeChildrenWidth();
+}
+void NodeUI::setPixelHeight(float _pixelHeight){
+	heightMode = kPIXEL;
+	pixelHeight = _pixelHeight;
+	resizeChildrenHeight();
+}
+
+void NodeUI::resizeChildrenWidth(){
 	// check for rational-width children and resize them
 	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
 		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
@@ -247,8 +301,8 @@ void NodeUI::setWidth(float _width){
 			if(trans->children.size() > 0) {
 				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
 				if(nui != nullptr){
-					if(nui->useRationalWidth){
-						nui->setWidth(nui->rationalWidth, this);
+					if(nui->widthMode == kRATIO){
+						nui->setRationalWidth(nui->rationalWidth, this);
 					}
 				}
 			}
@@ -256,9 +310,7 @@ void NodeUI::setWidth(float _width){
 	}
 }
 
-void NodeUI::setHeight(float _height){
-	height = _height;
-	
+void NodeUI::resizeChildrenHeight(){
 	// check for rational-height children and resize them
 	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
 		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
@@ -266,8 +318,8 @@ void NodeUI::setHeight(float _height){
 			if(trans->children.size() > 0) {
 				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
 				if(nui != nullptr){
-					if(nui->useRationalHeight){
-						nui->setHeight(nui->rationalHeight, this);
+					if(nui->heightMode == kRATIO){
+						nui->setRationalHeight(nui->rationalHeight, this);
 					}
 				}
 			}
@@ -275,15 +327,6 @@ void NodeUI::setHeight(float _height){
 	}
 }
 
-void NodeUI::setWidth(float _rationalWidth, NodeUI * _parent){
-	rationalWidth = _rationalWidth;
-	setWidth(_parent->getWidth() * rationalWidth);
-}
-
-void NodeUI::setHeight(float _rationalHeight, NodeUI * _parent){
-	rationalHeight = _rationalHeight;
-	setHeight(_parent->getHeight() * rationalHeight);
-}
 
 void NodeUI::setBackgroundColour(float _r, float _g, float _b, float _a){
 	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->setRGB(_r, _g, _b);
@@ -323,10 +366,29 @@ float NodeUI::getPaddingBottom(){
 }
 
 float NodeUI::getWidth(){
-	return width;
+	switch (widthMode){
+	case kPIXEL:
+		return pixelWidth;
+		break;
+	case kRATIO:
+	case kAUTO:
+	default:
+		return measuredWidth;
+		break;
+	}
 }
+
 float NodeUI::getHeight(){
-	return height;
+	switch (heightMode){
+	case kPIXEL:
+		return pixelHeight;
+		break;
+	case kRATIO:
+	case kAUTO:
+	default:
+		return measuredHeight;
+		break;
+	}
 }
 
 float NodeUI::getWidth(bool _includePadding, bool _includeMargin){
@@ -382,16 +444,16 @@ void NodeUI::updateCollider(){
 }
 
 void NodeUI::autoResize(){
-	if(autoResizingWidth){
+	if(widthMode == kRATIO){
 		autoResizeWidth();
 	}
-	if(autoResizingHeight){
+	if(heightMode == kRATIO){
 		autoResizeHeight();
 	}
 	// Adjust the size of the background
 	background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
 	repositionChildren();
-	if(autoResizingWidth || autoResizingHeight){
+	if(widthMode == kRATIO || heightMode == kRATIO){
 		updateCollider();
 	}
 }
@@ -407,7 +469,7 @@ void NodeUI::autoResizeWidth(){
 			}
 		}
 	}
-	setWidth(w);
+	measuredWidth = w;
 }
 void NodeUI::autoResizeHeight(){
 	float h = 0.0f;
@@ -421,7 +483,7 @@ void NodeUI::autoResizeHeight(){
 			}
 		}
 	}
-	setHeight(h);
+	measuredHeight = h;
 }
 
 void NodeUI::repositionChildren(){

@@ -17,12 +17,8 @@ TextLabel::TextLabel(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _t
 	inUse(true),
 	textArea(nullptr)
 {
-	autoResizingHeight = true;
-	if(_width == UI_INFINITE){
-		autoResizingWidth = true;
-	}else{
-		setWidth(_width);
-	}
+	setAutoresizeHeight();
+	setWidth(_width);
 }
 
 void TextLabel::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
@@ -127,7 +123,7 @@ void TextLabel::insertChar(wchar_t _char){
 }
 
 bool TextLabel::canFit(float _width){
-	if(!autoResizingWidth){
+	if(!widthMode == kAUTO){
 		if(_width + lineWidth > textArea->getWidth(false, false)){
 			return false;
 		}
