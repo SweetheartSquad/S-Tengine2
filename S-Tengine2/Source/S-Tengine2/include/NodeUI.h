@@ -3,6 +3,7 @@
 #include <node\NodeMeasurable.h>
 #include <NodeBulletBody.h>
 #include <MeshEntity.h>
+#include <UIUnit.h>
 
 class Scene;
 class Mouse;
@@ -17,17 +18,9 @@ enum HorizontalAlignment{
 	kCENTER,
 	kRIGHT
 };
-enum SizeMode{
-	kPIXEL,
-	kRATIO,
-	kAUTO
-};
 
 class NodeUI : public virtual NodeBulletBody, public virtual NodeMeasurable, public virtual Entity{
 protected:
-	SizeMode widthMode;
-	SizeMode heightMode;
-
 	Mouse * mouse;
 	// Whether the button is under the mouse
 	bool isHovered;
@@ -54,9 +47,10 @@ protected:
 	VerticalAlignment verticalAlignment;
 
 	Transform * contents;
-
+	
+	UIUnit width;
+	UIUnit height;
 public:
-
 	Scene * scene;
 	MeshEntity * background;
 
@@ -154,19 +148,6 @@ public:
 	virtual signed long int removeChild(NodeUI * _uiElement);
 
 private:
-
-	// if widthMode == kPIXEL, this is the width
-	float pixelWidth;
-	// if heightMode == kPIXEL, this is the height
-	float pixelHeight;
-
-	// if widthMode == kRATIO, this is the ratio of the containing element's width to occupy
-	float rationalWidth;
-	// if heightMode == kRATIO, this is the ratio of the containing element's height to occupy
-	float rationalHeight;
-
-	
-
 	float marginLeft;
 	float marginRight;
 	float marginTop;

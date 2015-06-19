@@ -123,7 +123,7 @@ void TextLabel::insertChar(wchar_t _char){
 }
 
 bool TextLabel::canFit(float _width){
-	if(!widthMode == kAUTO){
+	if(!width.sizeMode == kAUTO){
 		if(_width + lineWidth > textArea->getWidth(false, false)){
 			return false;
 		}

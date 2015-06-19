@@ -35,13 +35,7 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	contents(new Transform()),
 	horizontalAlignment(kLEFT),
-	verticalAlignment(kBOTTOM),
-	widthMode(kPIXEL),
-	heightMode(kPIXEL),
-	pixelWidth(0.f),
-	pixelHeight(0.f),
-	rationalWidth(1.f),
-	rationalHeight(1.f)
+	verticalAlignment(kBOTTOM)
 {
 	measuredWidth = 0.0f;
 	measuredHeight = 0.0f;
@@ -92,10 +86,10 @@ void NodeUI::out(){
 
 Transform * NodeUI::addChild(NodeUI* _uiElement){
 	layoutDirty = true;
-	if(_uiElement->widthMode == kRATIO){
-		_uiElement->setRationalWidth(_uiElement->rationalWidth, this);
-	}if(_uiElement->heightMode == kRATIO){
-		_uiElement->setRationalHeight(_uiElement->rationalHeight, this);
+	if(_uiElement->width.sizeMode == kRATIO){
+		_uiElement->setRationalWidth(_uiElement->width.rationalSize, this);
+	}if(_uiElement->height.sizeMode == kRATIO){
+		_uiElement->setRationalHeight(_uiElement->height.rationalSize, this);
 	}
 	return contents->addChild(_uiElement);
 }
@@ -269,42 +263,38 @@ void NodeUI::setHeight(float _height){
 }
 
 void NodeUI::setAutoresizeWidth(){
-	widthMode = kAUTO;
+	width.setAutoSize();
 	autoResizeWidth();
 	resizeChildrenWidth();
 }
 void NodeUI::setAutoresizeHeight(){
-	heightMode = kAUTO;
+	height.setAutoSize();
 	autoResizeHeight();
 	resizeChildrenHeight();
 }
 
 void NodeUI::setRationalWidth(float _rationalWidth, NodeUI * _parent){
-	widthMode = kRATIO;
-	rationalWidth = _rationalWidth;
+	width.setRationalSize(_rationalWidth);
 	if(_parent != nullptr){
-		measuredWidth = _parent->getWidth() * rationalWidth;
+		measuredWidth = _parent->getWidth() * width.rationalSize;
 	}
 	resizeChildrenWidth();
 }
 
 void NodeUI::setRationalHeight(float _rationalHeight, NodeUI * _parent){
-	heightMode = kRATIO;
-	rationalHeight = _rationalHeight;
+	height.setRationalSize(_rationalHeight);
 	if(_parent != nullptr){
-		measuredHeight = _parent->getHeight() * rationalHeight;
+		measuredHeight = _parent->getHeight() * height.rationalSize;
 	}
 	resizeChildrenHeight();
 }
 
 void NodeUI::setPixelWidth(float _pixelWidth){
-	widthMode = kPIXEL;
-	pixelWidth = _pixelWidth;
+	width.setPixelSize(_pixelWidth);
 	resizeChildrenWidth();
 }
 void NodeUI::setPixelHeight(float _pixelHeight){
-	heightMode = kPIXEL;
-	pixelHeight = _pixelHeight;
+	height.setPixelSize(_pixelHeight);
 	resizeChildrenHeight();
 }
 
@@ -316,8 +306,8 @@ void NodeUI::resizeChildrenWidth(){
 			if(trans->children.size() > 0) {
 				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
 				if(nui != nullptr){
-					if(nui->widthMode == kRATIO){
-						nui->setRationalWidth(nui->rationalWidth, this);
+					if(nui->width.sizeMode == kRATIO){
+						nui->setRationalWidth(nui->width.rationalSize, this);
 					}
 				}
 			}
@@ -333,8 +323,8 @@ void NodeUI::resizeChildrenHeight(){
 			if(trans->children.size() > 0) {
 				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
 				if(nui != nullptr){
-					if(nui->heightMode == kRATIO){
-						nui->setRationalHeight(nui->rationalHeight, this);
+					if(nui->height.sizeMode == kRATIO){
+						nui->setRationalHeight(nui->height.rationalSize, this);
 					}
 				}
 			}
@@ -381,9 +371,9 @@ float NodeUI::getPaddingBottom(){
 }
 
 float NodeUI::getWidth(){
-	switch (widthMode){
+	switch (width.sizeMode){
 	case kPIXEL:
-		return pixelWidth;
+		return width.pixelSize;
 		break;
 	case kRATIO:
 	case kAUTO:
@@ -394,9 +384,9 @@ float NodeUI::getWidth(){
 }
 
 float NodeUI::getHeight(){
-	switch (heightMode){
+	switch (height.sizeMode){
 	case kPIXEL:
-		return pixelHeight;
+		return height.pixelSize;
 		break;
 	case kRATIO:
 	case kAUTO:
@@ -459,10 +449,10 @@ void NodeUI::updateCollider(){
 }
 
 void NodeUI::autoResize(){
-	if(widthMode == kAUTO){
+	if(width.sizeMode == kAUTO){
 		autoResizeWidth();
 	}
-	if(heightMode == kAUTO){
+	if(height.sizeMode == kAUTO){
 		autoResizeHeight();
 	}
 	// Adjust the size of the background
