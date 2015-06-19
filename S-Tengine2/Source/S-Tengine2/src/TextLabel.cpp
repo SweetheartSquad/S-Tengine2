@@ -39,14 +39,14 @@ void TextLabel::update(Step * _step){
 }
 
 void TextLabel::unload(){
-	NodeUI::load();
-	textShader->load();
+	NodeUI::unload();
+	textShader->unload();
 	font->unload();
 }
 
 void TextLabel::load(){
-	NodeUI::unload();
-	textShader->unload();
+	NodeUI::load();
+	textShader->load();
 	font->load();
 }
 
