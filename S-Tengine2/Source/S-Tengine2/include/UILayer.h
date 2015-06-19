@@ -20,7 +20,5 @@ public:
 	void resize(float _left, float _right, float _bottom, float _top);
 	virtual void update(Step * _step) override;
 	
-	virtual float getMeasuredWidth() override;
-	virtual float getMeasuredHeight() override;
 	//bool addChild(NodeChild * _child) override;
 };

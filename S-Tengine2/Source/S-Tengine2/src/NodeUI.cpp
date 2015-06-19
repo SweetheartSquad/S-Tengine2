@@ -24,22 +24,11 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	layoutDirty(true),
 	scene(_scene),
 	onClickFunction(nullptr),
-	marginLeft(0.f),
-	marginRight(0.f),
-	marginTop(0.f),
-	marginBottom(0.f),
-	paddingLeft(0.f),
-	paddingRight(0.f),
-	paddingTop(0.f),
-	paddingBottom(0.f),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	contents(new Transform()),
 	horizontalAlignment(kLEFT),
 	verticalAlignment(kBOTTOM)
 {
-	measuredWidth = 0.0f;
-	measuredHeight = 0.0f;
-
 	ComponentShaderBase * shader = new ComponentShaderBase(true);
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->addComponent(new ShaderComponentTint(shader));
@@ -55,8 +44,8 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	childTransform->addChild(background, true);
 	childTransform->addChild(contents, false);
 	
-	setPadding(5);
-	setMargin(5);
+	setPadding(0);
+	setMargin(0);
 
 	setBackgroundColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0));
 	updateCollider();
@@ -92,11 +81,8 @@ void NodeUI::out(){
 
 Transform * NodeUI::addChild(NodeUI* _uiElement){
 	layoutDirty = true;
-	if(_uiElement->width.sizeMode == kRATIO){
-		_uiElement->setRationalWidth(_uiElement->width.rationalSize, this);
-	}if(_uiElement->height.sizeMode == kRATIO){
-		_uiElement->setRationalHeight(_uiElement->height.rationalSize, this);
-	}
+	_uiElement->setMeasuredWidths(this);
+	_uiElement->setMeasuredHeights(this);
 	return contents->addChild(_uiElement);
 }
 
@@ -179,19 +165,19 @@ void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOpti
 }
 
 void NodeUI::setMarginLeft(float _margin){
-	marginLeft = _margin;
+	marginLeft.setSize(_margin);
 }
 
 void NodeUI::setMarginRight(float _margin){
-	marginRight = _margin;
+	marginRight.setSize(_margin);
 }
 
 void NodeUI::setMarginTop(float _margin){
-	marginTop = _margin;
+	marginTop.setSize(_margin);
 }
 
 void NodeUI::setMarginBottom(float _margin){
-	marginBottom = _margin;
+	marginBottom.setSize(_margin);
 }
 
 void NodeUI::setMargin(float _all){
@@ -214,19 +200,19 @@ void NodeUI::setMargin(float _left, float _right, float _bottom, float _top){
 }
 
 void NodeUI::setPaddingLeft(float _padding){
-	paddingLeft = _padding;
+	paddingLeft.setSize(_padding);
 }
 
 void NodeUI::setPaddingRight(float _padding){
-	paddingRight = _padding;
+	paddingRight.setSize(_padding);
 }
 
 void NodeUI::setPaddingTop(float _padding){
-	paddingTop = _padding;
+	paddingTop.setSize(_padding);
 }
 
 void NodeUI::setPaddingBottom(float _padding){
-	paddingBottom = _padding;
+	paddingBottom.setSize(_padding);
 }
 
 void NodeUI::setPadding(float _all){
@@ -279,19 +265,15 @@ void NodeUI::setAutoresizeHeight(){
 	resizeChildrenHeight();
 }
 
-void NodeUI::setRationalWidth(float _rationalWidth, NodeUI * _parent){
+void NodeUI::setRationalWidth(float _rationalWidth, NodeUI * _root){
 	width.setRationalSize(_rationalWidth);
-	if(_parent != nullptr){
-		measuredWidth = _parent->getWidth() * width.rationalSize;
-	}
+	setMeasuredWidths(_root);
 	resizeChildrenWidth();
 }
 
-void NodeUI::setRationalHeight(float _rationalHeight, NodeUI * _parent){
+void NodeUI::setRationalHeight(float _rationalHeight, NodeUI * _root){
 	height.setRationalSize(_rationalHeight);
-	if(_parent != nullptr){
-		measuredHeight = _parent->getHeight() * height.rationalSize;
-	}
+	setMeasuredHeights(_root);
 	resizeChildrenHeight();
 }
 
@@ -312,9 +294,7 @@ void NodeUI::resizeChildrenWidth(){
 			if(trans->children.size() > 0) {
 				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
 				if(nui != nullptr){
-					if(nui->width.sizeMode == kRATIO){
-						nui->setRationalWidth(nui->width.rationalSize, this);
-					}
+					nui->setMeasuredWidths(this);
 				}
 			}
 		}
@@ -329,13 +309,48 @@ void NodeUI::resizeChildrenHeight(){
 			if(trans->children.size() > 0) {
 				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
 				if(nui != nullptr){
-					if(nui->height.sizeMode == kRATIO){
-						nui->setRationalHeight(nui->height.rationalSize, this);
-					}
+					nui->setMeasuredHeights(this);
 				}
 			}
 		}
 	}
+}
+
+void NodeUI::setMeasuredWidths(NodeUI * _root){
+	float rootWidth = 0.f;
+	if(_root != nullptr){
+		rootWidth = _root->getWidth();
+	}
+	if(marginLeft.sizeMode == kRATIO){
+		marginLeft.measuredSize = rootWidth * marginLeft.rationalSize;
+	}if(paddingLeft.sizeMode == kRATIO){
+		paddingLeft.measuredSize = rootWidth * paddingLeft.rationalSize;
+	}if(width.sizeMode == kRATIO){
+		width.measuredSize = rootWidth * width.rationalSize;
+	}if(paddingRight.sizeMode == kRATIO){
+		paddingRight.measuredSize = rootWidth * paddingRight.rationalSize;
+	}if(marginRight.sizeMode == kRATIO){
+		marginRight.measuredSize = rootWidth * marginRight.rationalSize;
+	}
+	resizeChildrenWidth();
+}
+void NodeUI::setMeasuredHeights(NodeUI * _root){
+	float rootHeight = 0.f;
+	if(_root != nullptr){
+		rootHeight = _root->getHeight();
+	}
+	if(marginBottom.sizeMode == kRATIO){
+		marginBottom.measuredSize = rootHeight * marginBottom.rationalSize;
+	}if(paddingBottom.sizeMode == kRATIO){
+		paddingBottom.measuredSize = rootHeight * paddingBottom.rationalSize;
+	}if(height.sizeMode == kRATIO){
+		height.measuredSize = rootHeight * height.rationalSize;
+	}if(paddingTop.sizeMode == kRATIO){
+		paddingTop.measuredSize = rootHeight * paddingTop.rationalSize;
+	}if(marginTop.sizeMode == kRATIO){
+		marginTop.measuredSize = rootHeight * marginTop.rationalSize;
+	}
+	resizeChildrenHeight();
 }
 
 
@@ -345,61 +360,29 @@ void NodeUI::setBackgroundColour(float _r, float _g, float _b, float _a){
 }
 
 float NodeUI::getMarginLeft(){
-	return marginLeft;
-}
-
-float NodeUI::getMarginRight(){
-	return marginRight;
-}
-
-float NodeUI::getMarginTop(){
-	return marginTop;
-}
-
-float NodeUI::getMarginBottom(){
-	return marginBottom;
+	return marginLeft.getSize();
+}float NodeUI::getMarginRight(){
+	return marginRight.getSize();
+}float NodeUI::getMarginTop(){
+	return marginTop.getSize();
+}float NodeUI::getMarginBottom(){
+	return marginBottom.getSize();
 }
 
 float NodeUI::getPaddingLeft(){
-	return paddingLeft;
-}
-
-float NodeUI::getPaddingRight(){
-	return paddingRight;
-}
-
-float NodeUI::getPaddingTop(){
-	return paddingTop;
-}
-
-float NodeUI::getPaddingBottom(){
-	return paddingBottom;
+	return paddingLeft.getSize();
+}float NodeUI::getPaddingRight(){
+	return paddingRight.getSize();
+}float NodeUI::getPaddingTop(){
+	return paddingTop.getSize();
+}float NodeUI::getPaddingBottom(){
+	return paddingBottom.getSize();
 }
 
 float NodeUI::getWidth(){
-	switch (width.sizeMode){
-	case kPIXEL:
-		return width.pixelSize;
-		break;
-	case kRATIO:
-	case kAUTO:
-	default:
-		return measuredWidth;
-		break;
-	}
-}
-
-float NodeUI::getHeight(){
-	switch (height.sizeMode){
-	case kPIXEL:
-		return height.pixelSize;
-		break;
-	case kRATIO:
-	case kAUTO:
-	default:
-		return measuredHeight;
-		break;
-	}
+	return width.getSize();
+}float NodeUI::getHeight(){
+	return height.getSize();
 }
 
 float NodeUI::getWidth(bool _includePadding, bool _includeMargin){
@@ -480,7 +463,7 @@ void NodeUI::autoResizeWidth(){
 			}
 		}
 	}
-	measuredWidth = w;
+	width.measuredSize = w;
 }
 void NodeUI::autoResizeHeight(){
 	float h = 0.0f;
@@ -494,7 +477,7 @@ void NodeUI::autoResizeHeight(){
 			}
 		}
 	}
-	measuredHeight = h;
+	height.measuredSize = h;
 }
 
 void NodeUI::repositionChildren(){

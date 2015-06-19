@@ -5,9 +5,11 @@
 UIUnit::UIUnit() :
 	sizeMode(kPIXEL),
 	pixelSize(0.f),
-	rationalSize(1.f)
+	rationalSize(1.f),
+	measuredSize(0.f)
 {
 }
+
 void UIUnit::setSize(float _size){
 	if(_size < 0){
 		setAutoSize();
@@ -29,4 +31,15 @@ void UIUnit::setAutoSize(){
 void UIUnit::setPixelSize(float _pixelSize){
 	sizeMode = kPIXEL;
 	pixelSize = _pixelSize;
+}
+
+float UIUnit::getSize(){
+	switch (sizeMode){
+	case kPIXEL:
+		return pixelSize;
+	case kRATIO:
+	case kAUTO:
+	default:
+		return measuredSize;
+	}
 }

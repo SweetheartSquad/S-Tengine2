@@ -19,7 +19,7 @@ enum HorizontalAlignment{
 	kRIGHT
 };
 
-class NodeUI : public virtual NodeBulletBody, public virtual NodeMeasurable, public virtual Entity{
+class NodeUI : public virtual NodeBulletBody, public virtual Entity{
 protected:
 	Mouse * mouse;
 	// Whether the button is under the mouse
@@ -112,6 +112,9 @@ public:
 	// the dimension will be sized as a ratio of its parent's size
 	void setAutoresizeHeight();
 
+	void setMeasuredWidths(NodeUI * _root);
+	void setMeasuredHeights(NodeUI * _root);
+
 	void setBackgroundColour(float _r, float _g, float _b, float _a = 1.f);
 
 	float getMarginLeft();
@@ -148,15 +151,15 @@ public:
 	virtual signed long int removeChild(NodeUI * _uiElement);
 
 private:
-	float marginLeft;
-	float marginRight;
-	float marginTop;
-	float marginBottom;
-
-	float paddingLeft;
-	float paddingRight;
-	float paddingTop;
-	float paddingBottom;
+	UIUnit marginLeft;
+	UIUnit marginRight;
+	UIUnit marginBottom;
+	UIUnit marginTop;
+	
+	UIUnit paddingLeft;
+	UIUnit paddingRight;
+	UIUnit paddingBottom;
+	UIUnit paddingTop;
 	
 	void autoResize();
 	virtual void autoResizeWidth();

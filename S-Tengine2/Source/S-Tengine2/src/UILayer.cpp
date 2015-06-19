@@ -79,13 +79,6 @@ void UILayer::update(Step * _step){
 	}
 }
 
-float UILayer::getMeasuredWidth(){
-	return cam.right - cam.left;
-}
-float UILayer::getMeasuredHeight(){
-	return cam.top - cam.bottom;
-}
-
 /*bool UILayer::addChild(NodeChild * _child){
 	bool success = NodeHierarchical::addChild(_child);
 	if(success){
