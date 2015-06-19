@@ -23,7 +23,7 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	isActive(false),
 	layoutDirty(true),
 	scene(_scene),
-	onDownFunction(nullptr),
+	onClickFunction(nullptr),
 	marginLeft(0.f),
 	marginRight(0.f),
 	marginTop(0.f),
@@ -67,14 +67,20 @@ void NodeUI::down(){
 	isDown = true;
 	
     // do event stuff
-	if(onDownFunction != nullptr){
+	/*if(onDownFunction != nullptr){
 		onDownFunction(this);
-	}
+	}*/
 }
 void NodeUI::up(){
+	if(isHovered && onClickFunction != nullptr){
+		onClickFunction(this);
+	}
 	isDown = false;
 	
 	// do event stuff
+	/*if(onUpFunction != nullptr){
+		onUpFunction(this);
+	}*/
 }
 void NodeUI::in(){
 	isHovered = true;

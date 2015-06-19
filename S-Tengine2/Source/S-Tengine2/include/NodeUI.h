@@ -54,7 +54,7 @@ public:
 	Scene * scene;
 	MeshEntity * background;
 
-	std::function<void(NodeUI * _this)> onDownFunction;
+	std::function<void(NodeUI * _this)> onClickFunction;
 	//void (*onUpFunction)();
 
 	NodeUI(BulletWorld * _world, Scene * _scene);
