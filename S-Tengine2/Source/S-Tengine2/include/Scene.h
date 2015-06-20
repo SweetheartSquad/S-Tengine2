@@ -51,6 +51,25 @@ public:
 	
 	virtual void renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 
+	/**
+	* Renders the children of the scene to its depth buffer
+	* Sets the override shader to an instance of depthMapShader in order 
+	* to render the depth properly
+	*
+	* The currently bound frame buffer will be set back to 0 at the end of this function
+	*/
+	virtual void renderDepth(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
+
+	/**
+	* Convenience fuction for rendering the current depth buffer to the main opengl buffer
+	*
+	* NOTE - The scene is not rendered to the depth buffer as part of this
+	*         function. This can be done using renderDepth
+	*
+	* @param _renderSurface  The surface that the depth buffer will be rendered to
+	*/
+	void renderDepthBufferToSurface(RenderSurface * _renderSurface);
+
 	void clear();
 
 	float clearColor[4];

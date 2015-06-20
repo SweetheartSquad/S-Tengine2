@@ -140,6 +140,57 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptio
 	checkForGlError(0,__FILE__,__LINE__);
 }
 
+void Scene::renderDepth(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
+	// Store a reference to the current override shader so we can restore it 
+	Shader * backupOverride = _renderOptions->overrideShader;
+	
+	// Resize and bind the depth buffer
+	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
+	depthBuffer->bindFrameBuffer();
+
+	// Make sure the depth buffer is actually loaded so this will work
+	if(!depthBuffer->loaded) {
+		depthBuffer->load();
+	}
+
+	// Same for the depth shader
+	if(!depthShader->loaded) {
+		depthShader->load();
+	}
+	
+	// Make the depth shader dirty so it updates it uniforms
+	depthShader->makeDirty();
+
+	// Set the override shader to the depth shader so we can render the depth
+	_renderOptions->overrideShader = depthShader;
+	
+	// Render the scene using this shader 
+	Scene::render(_matrixStack, _renderOptions);
+
+	// Restore the previous override shader 
+	_renderOptions->overrideShader = backupOverride;
+
+	// Binf the main OpenGL buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Scene::renderDepthBufferToSurface(RenderSurface* _renderSurface) {
+	// resize and bind the depth buffer
+	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
+	depthBuffer->bindFrameBuffer();
+
+	// Make sure the depth buffer is actually loaded so this will work
+	if(!depthBuffer->loaded) {
+		depthBuffer->load();
+	}
+	
+	// Render it to the surface 
+	_renderSurface->render(depthBuffer->getTextureId());
+
+	// Re-bind the main OpenGL buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void Scene::renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	Shader * backupOverride = _renderOptions->overrideShader;
 	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
