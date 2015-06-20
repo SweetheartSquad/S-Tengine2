@@ -26,7 +26,8 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	onClickFunction(nullptr),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	contents(new Transform()),
-	boxSizing(kBORDER_BOX)
+	boxSizing(kBORDER_BOX),
+	mouseEnabled(false)
 {
 	ComponentShaderBase * shader = new ComponentShaderBase(true);
 	shader->addComponent(new ShaderComponentTexture(shader));
@@ -101,42 +102,44 @@ signed long int NodeUI::removeChild(NodeUI* _uiElement){
 void NodeUI::update(Step * _step){
 	autoResize();
 
-	float raylength = 1000;
+	if(mouseEnabled){
+		float raylength = 1000;
 
-	/*Camera * cam = scene->activeCamera;
+		/*Camera * cam = scene->activeCamera;
 		
-	glm::vec3 campos = cam->getWorldPos();
-	glm::vec3 camdir = cam->forwardVectorRotated;
-	btVector3 raystart(campos.x, campos.y, campos.z);
-	btVector3 raydir(camdir.x, camdir.y, camdir.z);
-	btVector3 rayend = raystart + raydir*raylength;*/
+		glm::vec3 campos = cam->getWorldPos();
+		glm::vec3 camdir = cam->forwardVectorRotated;
+		btVector3 raystart(campos.x, campos.y, campos.z);
+		btVector3 raydir(camdir.x, camdir.y, camdir.z);
+		btVector3 rayend = raystart + raydir*raylength;*/
 	
-	btVector3 raystart(mouse->mouseX(), mouse->mouseY(), -raylength);
-	btVector3 raydir(0, 0, 1);
-	btVector3 rayend(mouse->mouseX(), mouse->mouseY(), raylength);
+		btVector3 raystart(mouse->mouseX(), mouse->mouseY(), -raylength);
+		btVector3 raydir(0, 0, 1);
+		btVector3 rayend(mouse->mouseX(), mouse->mouseY(), raylength);
 	
-	btTransform rayfrom;
-	rayfrom.setIdentity(); rayfrom.setOrigin(raystart);
-	btTransform rayto;
-	rayto.setIdentity(); rayto.setOrigin(rayend);
-	btCollisionWorld::AllHitsRayResultCallback raycb(raystart, rayend);
-	world->world->rayTestSingle(rayfrom, rayto, body, shape, body->getWorldTransform(), raycb);
+		btTransform rayfrom;
+		rayfrom.setIdentity(); rayfrom.setOrigin(raystart);
+		btTransform rayto;
+		rayto.setIdentity(); rayto.setOrigin(rayend);
+		btCollisionWorld::AllHitsRayResultCallback raycb(raystart, rayend);
+		world->world->rayTestSingle(rayfrom, rayto, body, shape, body->getWorldTransform(), raycb);
 	
 	
-	if(raycb.hasHit()){
-		if(!isHovered){
-			in();
-		}if(mouse->leftJustPressed()){
-			down();
-		}else if(mouse->leftJustReleased()){
-			up();
-		}
-	}else{
-		if(isHovered){
-			out();
-		}
-		if(isDown && mouse->leftJustReleased()){
-			isDown = false;
+		if(raycb.hasHit()){
+			if(!isHovered){
+				in();
+			}if(mouse->leftJustPressed()){
+				down();
+			}else if(mouse->leftJustReleased()){
+				up();
+			}
+		}else{
+			if(isHovered){
+				out();
+			}
+			if(isDown && mouse->leftJustReleased()){
+				isDown = false;
+			}
 		}
 	}
 	
@@ -455,7 +458,9 @@ void NodeUI::autoResize(){
 	background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
 	repositionChildren();
 	//if(widthMode == kAUTO || heightMode == kAUTO || widthMode == kRATIO || heightMode == kRATIO){
+	if(mouseEnabled){
 		updateCollider();
+	}
 	//}
 }
 float NodeUI::getContentsWidth(){

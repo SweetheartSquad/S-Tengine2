@@ -14,6 +14,16 @@ enum BoxSizing{
 
 class NodeUI : public virtual NodeBulletBody, public virtual Entity{
 protected:
+	UIUnit marginLeft;
+	UIUnit marginRight;
+	UIUnit marginBottom;
+	UIUnit marginTop;
+	
+	UIUnit paddingLeft;
+	UIUnit paddingRight;
+	UIUnit paddingBottom;
+	UIUnit paddingTop;
+
 	Mouse * mouse;
 	// Whether the button is under the mouse
 	bool isHovered;
@@ -42,6 +52,7 @@ protected:
 	UIUnit width;
 	UIUnit height;
 public:
+	bool mouseEnabled;
 	Scene * scene;
 	MeshEntity * background;
 
@@ -144,16 +155,6 @@ public:
 	virtual signed long int removeChild(NodeUI * _uiElement);
 
 private:
-	UIUnit marginLeft;
-	UIUnit marginRight;
-	UIUnit marginBottom;
-	UIUnit marginTop;
-	
-	UIUnit paddingLeft;
-	UIUnit paddingRight;
-	UIUnit paddingBottom;
-	UIUnit paddingTop;
-	
 	void autoResize();
 	virtual float getContentsWidth();
 	virtual float getContentsHeight();
