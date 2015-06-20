@@ -93,10 +93,10 @@ public:
 	void setRationalHeight(float _rationalHeight, NodeUI * _parent = nullptr);
 	
 	// enables pixel width
-	// the dimension will be sized as a ratio of its parent's size
+	// the dimension will be sized in pixels
 	void setPixelWidth(float _pixelWidth);
 	// enables pixel height
-	// the dimension will be sized as a ratio of its parent's size
+	// the dimension will be sized in pixels
 	void setPixelHeight(float _pixelHeight);
 	
 	// enables autoresizing width
