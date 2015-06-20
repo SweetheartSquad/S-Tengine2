@@ -122,6 +122,7 @@
     <ClCompile Include="../src/OpenALSound.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentText.cpp" />
     <ClCompile Include="../src/DatabaseConnection.cpp" />
+    <ClCompile Include="../src/shader/NormalsShader.cpp" />
     <ClCompile Include="../src/TextLabel.cpp" />
     <ClCompile Include="../src/LinearLayout.cpp" />
     <ClCompile Include="../src/shader/ComponentShaderText.cpp" />
@@ -252,6 +253,7 @@
     <ClInclude Include="../include/tiny_obj_loader.h" />
     <ClInclude Include="../include/UILayer.h" />
     <ClInclude Include="../include/DatabaseConnection.h" />
+    <ClInclude Include="../include/shader/NormalsShader.h" />
     <ClInclude Include="../include/TextLabel.h" />
     <ClInclude Include="../include/LinearLayout.h" />
     <ClInclude Include="../include/shader/ComponentShaderText.h" />

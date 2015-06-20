@@ -17,6 +17,7 @@
 #include "MatrixStack.h"
 #include "Game.h"
 #include "Sprite.h"
+#include <shader/NormalsShader.h>
 
 // for screenshots
 #include <SOIL.h>
@@ -29,7 +30,9 @@ Scene::Scene(Game * _game):
 	activeCamera(new PerspectiveCamera()),
 	depthBuffer(new StandardFrameBuffer(true)),
 	shadowBuffer(new StandardFrameBuffer(true)),
+	normalBuffer(new StandardFrameBuffer(true)),
 	depthShader(new DepthMapShader(true)),
+	normalsShader(new NormalsShader(true)),
 	//Singletons
 	shadowShader(new BlurShader(true)),
 	shadowSurface(new RenderSurface(shadowShader))
@@ -190,6 +193,58 @@ void Scene::renderDepthBufferToSurface(RenderSurface* _renderSurface) {
 	// Re-bind the main OpenGL buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
+
+void Scene::renderNormals(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
+	// Store a reference to the current override shader so we can restore it 
+	Shader * backupOverride = _renderOptions->overrideShader;
+	
+	// Resize and bind the normal buffer
+	normalBuffer->resize(game->viewPortWidth, game->viewPortHeight);
+	normalBuffer->bindFrameBuffer();
+
+	// Make sure the normal buffer is actually loaded so this will work
+	if(!normalBuffer->loaded) {
+		normalBuffer->load();
+	}
+
+	// Same for the normal shader
+	if(!normalsShader->loaded) {
+		normalsShader->load();
+	}
+	
+	// Make the normal shader dirty so it updates it uniforms
+	normalsShader->makeDirty();
+
+	// Set the override shader to the normal shader so we can render the normal
+	_renderOptions->overrideShader = normalsShader;
+	
+	// Render the scene using this shader 
+	Scene::render(_matrixStack, _renderOptions);
+
+	// Restore the previous override shader 
+	_renderOptions->overrideShader = backupOverride;
+
+	// Binf the main OpenGL buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Scene::renderNormalBufferToSurface(RenderSurface* _renderSurface) {
+	// resize and bind the normal buffer
+	normalBuffer->resize(game->viewPortWidth, game->viewPortHeight);
+	normalBuffer->bindFrameBuffer();
+
+	// Make sure the normal buffer is actually loaded so this will work
+	if(!normalBuffer->loaded) {
+		normalBuffer->load();
+	}
+	
+	// Render it to the surface 
+	_renderSurface->render(normalBuffer->getTextureId());
+
+	// Re-bind the main OpenGL buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 
 void Scene::renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	Shader * backupOverride = _renderOptions->overrideShader;

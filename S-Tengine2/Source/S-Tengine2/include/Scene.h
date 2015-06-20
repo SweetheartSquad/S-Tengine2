@@ -22,31 +22,53 @@ class Mouse;
 class Game;
 class Entity;
 class BlurShader;
+class NormalsShader;
 
 class Scene : public Entity{
 public:
-	explicit Scene(Game * _game);
-	virtual ~Scene(void);
-	Game * game;
-	/** Reference to mouse singleton */
-	Mouse * mouse;
-	/** Reference to keyboard singleton */
-	Keyboard * keyboard;
-	/** Reference to this scene's active camera */
-	Camera * activeCamera;
-	std::vector<Camera *> cameras;
 
 	StandardFrameBuffer	* depthBuffer;
+	StandardFrameBuffer	* normalBuffer;
 	StandardFrameBuffer * shadowBuffer;
 	DepthMapShader		* depthShader;
 	BlurShader			* shadowShader;
+	NormalsShader		* normalsShader;
 	RenderSurface       * shadowSurface;
+	
+	// Reference to the game instance 
+	Game * game;
+	
+	/** Reference to mouse singleton */
+	Mouse * mouse;
+	
+	/** Reference to keyboard singleton */
+	Keyboard * keyboard;
+	
+	/** Reference to this scene's active camera */
+	Camera * activeCamera;
+	
+	// List of cameras for the scene
+	std::vector<Camera *> cameras;
+	
+	// OpenGL color - Defaults to black
+	float clearColor[4];
 
 	/** The lights for this scene **/
 	std::vector<Light *> lights;
-	/** Calls update on the attached camera */
+
+	explicit Scene(Game * _game);
+	
+	virtual ~Scene(void);
+	
+	/** 
+	* Calls update on the attached camera
+	*/
 	virtual void update(Step * _step) override;
-	/** Tells the RenderSystem to render the attached children to the vox::currentContext using the camera's view-projection matrix */
+	
+	/** 
+	* Tells the RenderSystem to render the attached children to 
+	* the vox::currentContext using the camera's view-projection matrix 
+	*/
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	
 	virtual void renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
@@ -61,7 +83,7 @@ public:
 	virtual void renderDepth(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 
 	/**
-	* Convenience fuction for rendering the current depth buffer to the main opengl buffer
+	* Convenience fuction for rendering the current depth buffer to the provided surface
 	*
 	* NOTE - The scene is not rendered to the depth buffer as part of this
 	*         function. This can be done using renderDepth
@@ -69,11 +91,34 @@ public:
 	* @param _renderSurface  The surface that the depth buffer will be rendered to
 	*/
 	void renderDepthBufferToSurface(RenderSurface * _renderSurface);
+	
+	/**
+	* Renders the children of the scene to its normals buffer
+	* Sets the override shader to an instance of normalsShader in order 
+	* to render the normals properly
+	*
+	* The currently bound frame buffer will be set back to 0 at the end of this function
+	*/
+	virtual void renderNormals(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 
+	/**
+	* Convenience fuction for rendering the current normals buffer to the provided surface
+	*
+	* NOTE - The scene is not rendered to the depth buffer as part of this
+	*         function. This can be done using renderDepth
+	*
+	* @param _renderSurface  The surface that the normal buffer will be rendered to
+	*/
+	void renderNormalBufferToSurface(RenderSurface * _renderSurface);
+
+	/**
+	* Clears the currently bound buffer using the valuses of @see clearColor
+	*
+	* Clears the following bits GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT
+	*/
 	void clear();
 
-	float clearColor[4];
-
 	virtual void load() override;
+
 	virtual void unload() override;
 };
