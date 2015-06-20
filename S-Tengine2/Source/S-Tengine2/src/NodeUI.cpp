@@ -43,8 +43,8 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	childTransform->addChild(background, true);
 	childTransform->addChild(contents, false);
 	
-	setPadding(5);
-	setMargin(5);
+	setPadding(0);
+	setMargin(0);
 
 	setBackgroundColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0));
 	updateCollider();
@@ -277,10 +277,16 @@ void NodeUI::setRationalHeight(float _rationalHeight, NodeUI * _root){
 }
 
 void NodeUI::setPixelWidth(float _pixelWidth){
+	if(boxSizing == kBORDER_BOX){
+		_pixelWidth -= getMarginLeft() + getPaddingLeft() + getPaddingRight() + getMarginRight();
+	}
 	width.setPixelSize(_pixelWidth);
 	resizeChildrenWidth();
 }
 void NodeUI::setPixelHeight(float _pixelHeight){
+	if(boxSizing == kBORDER_BOX){
+		_pixelHeight -= getMarginBottom() + getPaddingBottom() + getPaddingTop() + getMarginTop();
+	}
 	height.setPixelSize(_pixelHeight);
 	resizeChildrenHeight();
 }
