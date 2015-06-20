@@ -31,8 +31,6 @@ public:
 	* Pops model matrix stack
 	*/
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
-	/** Doesn't do anything by default */
-	virtual void update(Step * _step) override;
 
 	/**Sets shader to _shader*/
 	virtual void setShader(Shader* _shader, bool _configureDefaultAttributes);

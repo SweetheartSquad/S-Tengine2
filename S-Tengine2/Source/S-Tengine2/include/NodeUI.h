@@ -54,7 +54,6 @@ public:
 	NodeUI(BulletWorld * _world, Scene * _scene);
 
 	virtual void update(Step * _step) override;
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 
 	void setMarginLeft(float _margin);
 	void setMarginRight(float _margin);

@@ -159,10 +159,6 @@ void NodeUI::update(Step * _step){
 	}
 }
 
-void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	Entity::render(_matrixStack, _renderOptions);
-}
-
 void NodeUI::setMarginLeft(float _margin){
 	marginLeft.setSize(_margin);
 }
