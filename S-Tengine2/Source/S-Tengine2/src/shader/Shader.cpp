@@ -115,7 +115,6 @@ void Shader::load(){
 
 			// The program is useless now. So delete it.
 			glDeleteProgram(programId);
-			assert(false);
 
 			// Provide the infolog in whatever manner you deem best.
 			for(unsigned long int i = 0; i < infoLog.size(); ++i){
@@ -224,6 +223,19 @@ GLint Shader::get_aVertexNormals(){
 
 GLint Shader::get_aVertexUVs(){
 	return aVertexUVs;
+}
+
+void Shader::printShader(){
+	std::cout << 
+		"_________VERTEX SHADER_________" << ENDL << ENDL
+		<< vertSource << ENDL << ENDL
+		<< 
+		"_________GEOMETRY SHADER_________" << ENDL << ENDL
+		<< geomSource << ENDL << ENDL 
+		<< 
+		"_________FRAGMENT SHADER_________" << ENDL << ENDL
+		<< fragSource << ENDL << ENDL;
+
 }
 
 void Shader::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){

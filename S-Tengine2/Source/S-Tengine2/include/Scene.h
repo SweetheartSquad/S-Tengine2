@@ -22,7 +22,7 @@ class Mouse;
 class Game;
 class Entity;
 class BlurShader;
-class NormalsShader;
+class NormalsShaderComponent;
 
 class Scene : public Entity{
 public:
@@ -30,9 +30,9 @@ public:
 	StandardFrameBuffer	* depthBuffer;
 	StandardFrameBuffer	* normalBuffer;
 	StandardFrameBuffer * shadowBuffer;
-	DepthMapShader		* depthShader;
+	ComponentShaderBase	* depthShader;
 	BlurShader			* shadowShader;
-	NormalsShader		* normalsShader;
+	ComponentShaderBase * normalsShader;
 	RenderSurface       * shadowSurface;
 	
 	// Reference to the game instance 

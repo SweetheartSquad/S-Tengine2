@@ -17,25 +17,29 @@
 #include "MatrixStack.h"
 #include "Game.h"
 #include "Sprite.h"
-#include <shader/NormalsShader.h>
+#include <shader/ShaderComponentNormals.h>
+#include <shader/ComponentShaderBase.h>
+#include <shader/ShaderComponentDepth.h>
 
 // for screenshots
 #include <SOIL.h>
 #include <ctime>
 
+
+
 Scene::Scene(Game * _game):
+	depthBuffer(new StandardFrameBuffer(true)),
+	normalBuffer(new StandardFrameBuffer(true)),
+	shadowBuffer(new StandardFrameBuffer(true)),
+	depthShader(new ComponentShaderBase(true)),
+	shadowShader(new BlurShader(true)),
+	normalsShader(new ComponentShaderBase(true)),
+	shadowSurface(new RenderSurface(shadowShader)),
 	game(_game),
 	mouse(&Mouse::getInstance()),
-	keyboard(&Keyboard::getInstance()),
-	activeCamera(new PerspectiveCamera()),
-	depthBuffer(new StandardFrameBuffer(true)),
-	shadowBuffer(new StandardFrameBuffer(true)),
-	normalBuffer(new StandardFrameBuffer(true)),
-	depthShader(new DepthMapShader(true)),
-	normalsShader(new NormalsShader(true)),
 	//Singletons
-	shadowShader(new BlurShader(true)),
-	shadowSurface(new RenderSurface(shadowShader))
+	keyboard(&Keyboard::getInstance()),
+	activeCamera(new PerspectiveCamera())
 {
 	clearColor[0] = 0.0;
 	clearColor[1] = 0.0;
@@ -43,6 +47,12 @@ Scene::Scene(Game * _game):
 	clearColor[3] = 1.0;
 
 	cameras.push_back(activeCamera);
+
+	normalsShader->addComponent(new ShaderComponentNormals(normalsShader));
+	normalsShader->compileShader();
+
+	depthShader->addComponent(new ShaderComponentDepth(depthShader));
+	depthShader->compileShader();
 }
 
 Scene::~Scene(void){
@@ -60,6 +70,8 @@ Scene::~Scene(void){
 	depthBuffer->safeDelete();
 	shadowBuffer->safeDelete();
 	depthShader->safeDelete();
+	normalsShader->safeDelete();
+	normalBuffer->safeDelete();
 	delete shadowSurface;
 }
 
@@ -98,6 +110,8 @@ void Scene::load(){
 	depthShader->load();
 	shadowBuffer->load();
 	depthBuffer->load();
+	normalsShader->load();
+	normalBuffer->load();
 	Entity::load();
 }
 
@@ -106,6 +120,8 @@ void Scene::unload(){
 	shadowBuffer->unload();
 	depthShader->unload();
 	shadowSurface->unload();
+	normalsShader->unload();
+	normalBuffer->unload();
 	Entity::unload();
 }
 

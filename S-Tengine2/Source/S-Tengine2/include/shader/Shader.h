@@ -71,6 +71,8 @@ public:
 	GLint get_aVertexNormals();
 	/** Returns the attribute location of the vertex UV in the shader */
 	GLint get_aVertexUVs();
+	/** Prints the shader to the console */
+	void printShader();
 
 	virtual void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
 	virtual void clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
