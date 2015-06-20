@@ -19,8 +19,8 @@ enum HorizontalAlignment{
 	kRIGHT
 };
 enum BoxSizing{
-	kCONTENT_BOX,
-	kBORDER_BOX
+	kCONTENT_BOX, // padding and margin are exterior to width and height
+	kBORDER_BOX // padding and margin are interior to width and height
 };
 
 class NodeUI : public virtual NodeBulletBody, public virtual Entity{
@@ -57,6 +57,8 @@ protected:
 public:
 	Scene * scene;
 	MeshEntity * background;
+
+	// how padding and margin affect width and height
 	BoxSizing boxSizing;
 
 	std::function<void(NodeUI * _this)> onClickFunction;
@@ -117,7 +119,9 @@ public:
 	// the dimension will be sized as a ratio of its parent's size
 	void setAutoresizeHeight();
 
+	// recalculates measuredWidth using _root as the basis for rational sizes
 	void setMeasuredWidths(NodeUI * _root);
+	// recalculates measuredHeight using _root as the basis for rational sizes
 	void setMeasuredHeights(NodeUI * _root);
 
 	void setBackgroundColour(float _r, float _g, float _b, float _a = 1.f);
@@ -139,11 +143,9 @@ public:
 	// otherwise, returns measuredHeight
 	virtual float getHeight();
 
-	// If not autoresizing, returns the fixed width
-	// If autoresizing, returns the total width of the UI element including attibutes such as padding, overflow, etc.
+	// returns the width of the UI element, optionally including the padding and margin
 	virtual float getWidth(bool _includePadding, bool _includeMargin);
-	// If not autoresizing, returns the fixed height
-	// If autoresizing, returns the total height of the UI element including attibutes such as padding, overflow, etc.
+	// returns the height of the UI element, optionally including the padding and margin
 	virtual float getHeight(bool _includePadding, bool _includeMargin);
 
 	bool isLayoutDirty();
@@ -152,7 +154,7 @@ public:
 	// removes the element from the contents transform and returns the index it was found at
 	// if it wasn't found, returns -1
 	// note that the way this works is that _uiElements first parent is removed from the child list,
-	// then _uiElement is removed from its first parent and orphaned transform is deleted
+	// then _uiElement is removed from its first parent and the orphaned transform is deleted
 	virtual signed long int removeChild(NodeUI * _uiElement);
 
 private:

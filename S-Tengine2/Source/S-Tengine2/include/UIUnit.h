@@ -41,7 +41,6 @@ public:
 	void setAutoSize();
 
 	// if kPIXEL, returns the pixelSize
-	// if kRATIO, returns the size of _root's parent * rationalSize
-	// if kAUTO, returns the measured size of _root
+	// otherwise, returns the measuredSize
 	 float getSize();
 };
