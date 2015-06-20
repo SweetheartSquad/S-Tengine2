@@ -9,17 +9,43 @@ HorizontalLinearLayout::HorizontalLinearLayout(BulletWorld* _bulletWorld, Scene*
 }
 
 void HorizontalLinearLayout::update(Step* _step){
-	float x = 0;
+	glm::vec3 rootPos = getRootPos();
+	float x = rootPos.x;
+	float y = rootPos.y;
+
+	switch (horizontalAlignment){
+	default:
+	case kLEFT:
+		break;
+	case kCENTER:
+		x -= getContentsWidth() * 0.5f;
+		break;
+	case kRIGHT:
+		x -= getContentsWidth();
+		break;
+	}
+
 	for(unsigned long int i = 0; i < contents->children.size(); ++i){
 		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
 		NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
-		trans->translate(x, 0, 0.f, false);
+		switch (verticalAlignment){
+			default:
+			case kBOTTOM:
+				break;
+			case kMIDDLE:
+				y = rootPos.y - ui->getHeight(true, true)*0.5f;
+				break;
+			case kTOP:
+				y = rootPos.y - ui->getHeight(true, true);
+				break;
+		}
+		trans->translate(x, y, 0.f, false);
 		x += ui->getWidth(true, true);
 	}
 	LinearLayout::update(_step);
 }
 
-void HorizontalLinearLayout::autoResizeWidth(){
+float HorizontalLinearLayout::getContentsWidth(){
 	float w = 0.0f;
 	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
 		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
@@ -30,5 +56,5 @@ void HorizontalLinearLayout::autoResizeWidth(){
 			}
 		}
 	}
-	width.measuredSize = w;
+	return w;
 }

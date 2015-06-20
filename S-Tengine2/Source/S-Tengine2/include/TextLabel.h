@@ -42,8 +42,8 @@ public:
 	void appendText(std::wstring _text);
 	std::wstring getText();
 	
-	virtual void autoResizeHeight() override;
-	virtual void autoResizeWidth() override;
+	virtual float getContentsHeight() override;
+	virtual float getContentsWidth() override;
 	
 	void invalidate();
 	void insertChar(wchar_t _char);

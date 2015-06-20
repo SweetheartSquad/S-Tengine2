@@ -26,8 +26,6 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	onClickFunction(nullptr),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	contents(new Transform()),
-	horizontalAlignment(kLEFT),
-	verticalAlignment(kBOTTOM),
 	boxSizing(kBORDER_BOX)
 {
 	ComponentShaderBase * shader = new ComponentShaderBase(true);
@@ -45,8 +43,8 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	childTransform->addChild(background, true);
 	childTransform->addChild(contents, false);
 	
-	setPadding(0);
-	setMargin(0);
+	setPadding(5);
+	setMargin(5);
 
 	setBackgroundColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0));
 	updateCollider();
@@ -257,12 +255,12 @@ void NodeUI::setHeight(float _height){
 
 void NodeUI::setAutoresizeWidth(){
 	width.setAutoSize();
-	autoResizeWidth();
+	width.measuredSize = getContentsWidth();
 	resizeChildrenWidth();
 }
 void NodeUI::setAutoresizeHeight(){
 	height.setAutoSize();
-	autoResizeHeight();
+	height.measuredSize = getContentsHeight();
 	resizeChildrenHeight();
 }
 
@@ -446,10 +444,10 @@ void NodeUI::updateCollider(){
 
 void NodeUI::autoResize(){
 	if(width.sizeMode == kAUTO){
-		autoResizeWidth();
+		width.measuredSize = getContentsWidth();
 	}
 	if(height.sizeMode == kAUTO){
-		autoResizeHeight();
+		height.measuredSize = getContentsHeight();
 	}
 	// Adjust the size of the background
 	background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
@@ -458,7 +456,7 @@ void NodeUI::autoResize(){
 		updateCollider();
 	//}
 }
-void NodeUI::autoResizeWidth(){
+float NodeUI::getContentsWidth(){
 	float w = 0.0f;
 	// take the maximum of the width of the contents
 	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
@@ -470,9 +468,9 @@ void NodeUI::autoResizeWidth(){
 			}
 		}
 	}
-	width.measuredSize = w;
+	return w;
 }
-void NodeUI::autoResizeHeight(){
+float NodeUI::getContentsHeight(){
 	float h = 0.0f;
 	// take the maximum of the height of the contents
 	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
@@ -484,10 +482,19 @@ void NodeUI::autoResizeHeight(){
 			}
 		}
 	}
-	height.measuredSize = h;
+	return h;
 }
 
 void NodeUI::repositionChildren(){
-	background->parents.at(0)->translate(getMarginLeft(), getMarginBottom(), 0, false);
-	contents->translate(getMarginLeft() + getPaddingLeft(), getMarginBottom() + getPaddingBottom(), 0, false);
+	glm::vec3 bpos(0);
+	glm::vec3 cpos(0);
+
+	bpos.x = getMarginLeft();
+	cpos.x = getMarginLeft() + getPaddingLeft();
+
+	bpos.y = getMarginBottom();
+	cpos.y = getMarginBottom() + getPaddingBottom();
+
+	background->parents.at(0)->translate(bpos, false);
+	contents->translate(cpos, false);
 }

@@ -64,12 +64,12 @@ std::wstring TextLabel::getText(){
 	return text;
 }
 
-void TextLabel::autoResizeHeight(){
-	setHeight(font->getLineHeight());
+float TextLabel::getContentsHeight(){
+	return font->getLineHeight();
 }
 
-void TextLabel::autoResizeWidth(){
-	setWidth(lineWidth);
+float TextLabel::getContentsWidth(){
+	return lineWidth;
 }
 
 void TextLabel::invalidate(){

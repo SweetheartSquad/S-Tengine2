@@ -7,17 +7,6 @@
 
 class Scene;
 class Mouse;
-
-enum VerticalAlignment{
-	kBOTTOM,
-	kMIDDLE,
-	kTOP
-};
-enum HorizontalAlignment{
-	kLEFT,
-	kCENTER,
-	kRIGHT
-};
 enum BoxSizing{
 	kCONTENT_BOX, // padding and margin are exterior to width and height
 	kBORDER_BOX // padding and margin are interior to width and height
@@ -47,8 +36,6 @@ protected:
 	// destroys the current rigid body and creates a new one which is sized to match the bounding box of the element
 	void updateCollider();
 
-	HorizontalAlignment horizontalAlignment;
-	VerticalAlignment verticalAlignment;
 
 	Transform * contents;
 	
@@ -169,8 +156,8 @@ private:
 	UIUnit paddingTop;
 	
 	void autoResize();
-	virtual void autoResizeWidth();
-	virtual void autoResizeHeight();
+	virtual float getContentsWidth();
+	virtual float getContentsHeight();
 	virtual void repositionChildren();
 	void resizeChildrenWidth();
 	void resizeChildrenHeight();
