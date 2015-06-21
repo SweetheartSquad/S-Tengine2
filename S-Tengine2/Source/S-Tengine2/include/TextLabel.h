@@ -18,6 +18,7 @@ public:
 	
 	virtual void load() override;
 	virtual void unload() override;
+	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 };
 
 class TextLabel : public HorizontalLinearLayout{

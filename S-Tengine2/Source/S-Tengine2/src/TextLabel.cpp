@@ -168,3 +168,6 @@ void UIGlyph::load(){
 void UIGlyph::unload(){
 	MeshEntity::unload();
 }
+void UIGlyph::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	MeshEntity::render(_matrixStack, _renderOptions);
+}
