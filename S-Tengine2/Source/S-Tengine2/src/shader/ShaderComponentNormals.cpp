@@ -36,7 +36,9 @@ std::string ShaderComponentNormals::getFragmentBodyString(){
 }
 
 std::string ShaderComponentNormals::getOutColorMod(){
-	return GL_OUT_OUT_COLOR  + "*=" + "vec4(normalize(fragNormal.rgb), 1.0)" + SEMI_ENDL; 
+	return 
+		"vec3 outNormal = vec3(fragNormal.rgb) * 0.5 + vec3(0.5)" + SEMI_ENDL + 
+		GL_OUT_OUT_COLOR  + "*=" + "vec4(outNormal, 1.0)" + SEMI_ENDL; 
 }
 
 void ShaderComponentNormals::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
