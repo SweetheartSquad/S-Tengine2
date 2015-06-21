@@ -37,6 +37,7 @@ public:
 	virtual void load() override;
 
 	void setText(std::wstring _text);
+	void updateText();
 	
 	virtual float getContentsHeight() override;
 	virtual float getContentsWidth() override;

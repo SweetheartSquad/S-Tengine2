@@ -40,21 +40,17 @@ void TextArea::setText(std::wstring _text){
 
 void TextArea::updateText(){
 	invalidateAllLines();
-	TextLabel * curLine = getCurrentLine();
 	std::wstring textToAdd = text;
-	curLine->setText(textToAdd);
-	textToAdd = curLine->textOverflow;
 
-	while(textToAdd.size() > 0){
+	TextLabel * curLine;
+	do{
 		curLine = getNewLine();
 		curLine->setText(textToAdd);
-		if(curLine->textDisplayed.empty()){
-			break; // if no text was actually added, break to avoid infinite loop (probably a zero-width text-area)
-		}
-
-		textDisplayed += curLine->textDisplayed;
 		textToAdd = curLine->textOverflow;
-	}
+		textDisplayed += curLine->textDisplayed;
+	}while(textToAdd.size() > 0 && !curLine->textDisplayed.empty());
+	// if all the text is added, then the loop is successfull
+	// if no text was actually added to a line, stop to avoid infinite loop (probably a zero-width text-area)
 
 	updateRequired = false;
 }
@@ -65,7 +61,7 @@ TextLabel * TextArea::getNewLine() {
 		line = unusedLines.back();
 		unusedLines.pop_back();
 	}else{
-		line = new TextLabel(world, scene, font, textShader);
+		line = new TextLabel(world, scene, font, textShader, 1.f);
 		line->setRationalWidth(1.f, this);
 	}
 	usedLines.push_back(line);

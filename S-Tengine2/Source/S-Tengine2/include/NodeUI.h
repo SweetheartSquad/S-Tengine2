@@ -51,6 +51,9 @@ protected:
 	
 	UIUnit width;
 	UIUnit height;
+
+	static ComponentShaderBase * bgShader;
+	glm::vec4 bgColour;
 public:
 	bool mouseEnabled;
 	Scene * scene;
@@ -162,7 +165,4 @@ private:
 	virtual void repositionChildren();
 	void resizeChildrenWidth();
 	void resizeChildrenHeight();
-
-	static ComponentShaderBase * bgShader;
-	glm::vec4 bgColour;
 };

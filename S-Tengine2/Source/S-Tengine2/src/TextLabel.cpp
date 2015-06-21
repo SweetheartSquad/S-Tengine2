@@ -33,7 +33,7 @@ void TextLabel::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOpt
 
 void TextLabel::update(Step * _step){
 	if(updateRequired){
-		setText(textAll);
+		updateText();
 	}
 	HorizontalLinearLayout::update(_step);
 }
@@ -58,6 +58,11 @@ void TextLabel::setText(std::wstring _text){
 	invalidate();
 	textAll = _text;
 
+	updateRequired = true;
+	updateText();
+}
+
+void TextLabel::updateText(){
 	// find out where the first overflow in the text would occur
 	unsigned long int i;
 	for(i = 0; i < textAll.size(); ++i){
@@ -74,13 +79,15 @@ void TextLabel::setText(std::wstring _text){
 	}
 	
 	// the start of the text to i fit
-	textDisplayed = textAll.substr(0, i);
+	//textDisplayed = textAll.substr(0, i);
 	// i+1 to the end of the text did not fit
 	if(i < textAll.size()){
 		textOverflow = textAll.substr(i);
 	}else{
 		textOverflow = L"";
 	}
+
+	updateRequired = false;
 }
 
 float TextLabel::getContentsHeight(){
@@ -108,6 +115,7 @@ void TextLabel::insertChar(wchar_t _char){
 	usedGlyphs.push_back(glyph);
 	addChild(glyph);
 	lineWidth += glyphMesh->advance.x/64.f;
+	textDisplayed += _char;
 }
 
 bool TextLabel::canFit(float _width){
@@ -140,7 +148,7 @@ void UIGlyph::setGlyphMesh(Glyph * _newGlyph){
 	contents->addChild(_newGlyph, false);
 	setPixelWidth(glyph->advance.x/64);
 	setPixelHeight(glyph->advance.y/64);
-	setShader(getShader(), true);
+	setShader(shader, true);
 	//setPixelWidth(glyph->metrics.width/64);
 	//setPixelHeight(glyph->metrics.height/64);
 
