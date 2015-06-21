@@ -47,6 +47,8 @@ Scene::Scene(Game * _game):
 	clearColor[3] = 1.0;
 
 	cameras.push_back(activeCamera);
+	Transform * ct = new Transform();
+	ct->addChild(activeCamera, false);
 
 	normalsShader->addComponent(new ShaderComponentNormals(normalsShader));
 	normalsShader->compileShader();
