@@ -13,11 +13,11 @@ void ShaderComponentDepth::configureUniforms(vox::MatrixStack* _matrixStack, Ren
 }
 
 std::string ShaderComponentDepth::getVertexVariablesString(){
-	return DEFINE + SHADER_COMPONENT_NORMAL + ENDL;
+	return DEFINE + SHADER_COMPONENT_DEPTH + ENDL;
 }
 
 std::string ShaderComponentDepth::getFragmentVariablesString(){
-	return DEFINE + SHADER_COMPONENT_NORMAL + ENDL;
+	return DEFINE + SHADER_COMPONENT_DEPTH + ENDL;
 }
 
 std::string ShaderComponentDepth::getVertexBodyString(){

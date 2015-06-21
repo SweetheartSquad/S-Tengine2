@@ -3,6 +3,7 @@
 #include <node\Node.h>
 #include <vector>
 #include <GL\glew.h>
+#include <StandardFrameBuffer.h>
 
 class Shader;
 class Light;
@@ -21,6 +22,9 @@ public:
 
 	Shader * shader;
 	Shader * overrideShader;
+
+	GLuint  depthBufferId;  
+	GLuint  normalBufferId;  
 
 	bool alphaSorting;
 };

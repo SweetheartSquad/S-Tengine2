@@ -65,6 +65,7 @@
     <ClCompile Include="../src/Scene2D.cpp" />
     <ClCompile Include="..\src\HorizontalLinearLayout.cpp" />
     <ClCompile Include="..\src\Layout.cpp" />
+    <ClCompile Include="..\src\Log.cpp" />
     <ClCompile Include="..\src\node\NodeMeasurable.cpp" />
     <ClCompile Include="..\src\SceneSweetheartSquad.cpp" />
     <ClCompile Include="..\src\shader\ComponentShaderBase.cpp" />
@@ -124,6 +125,7 @@
     <ClCompile Include="..\src\DatabaseConnection.cpp" />
     <ClCompile Include="..\src\shader\ShaderComponentDepth.cpp" />
     <ClCompile Include="..\src\shader\ShaderComponentNormals.cpp" />
+    <ClCompile Include="..\src\shader\ShaderComponentSsao.cpp" />
     <ClCompile Include="..\src\TextLabel.cpp" />
     <ClCompile Include="..\src\LinearLayout.cpp" />
     <ClCompile Include="..\src\shader\ComponentShaderText.cpp" />
@@ -194,6 +196,7 @@
     <ClInclude Include="../include/Scene2D.h" />
     <ClInclude Include="..\include\HorizontalLinearLayout.h" />
     <ClInclude Include="..\include\Layout.h" />
+    <ClInclude Include="..\include\Log.h" />
     <ClInclude Include="..\include\node\NodeMeasurable.h" />
     <ClInclude Include="..\include\SceneSweetheartSquad.h" />
     <ClInclude Include="..\include\shader\ComponentShaderBase.h" />
@@ -254,9 +257,9 @@
     <ClInclude Include="../include/tiny_obj_loader.h" />
     <ClInclude Include="../include/UILayer.h" />
     <ClInclude Include="..\include\DatabaseConnection.h" />
-    <ClInclude Include="..\include\shader\Header.h" />
     <ClInclude Include="..\include\shader\ShaderComponentDepth.h" />
     <ClInclude Include="..\include\shader\ShaderComponentNormals.h" />
+    <ClInclude Include="..\include\shader\ShaderComponentSsao.h" />
     <ClInclude Include="..\include\TextLabel.h" />
     <ClInclude Include="..\include\LinearLayout.h" />
     <ClInclude Include="..\include\shader\ComponentShaderText.h" />
