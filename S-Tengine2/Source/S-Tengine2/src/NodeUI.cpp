@@ -14,6 +14,8 @@
 
 #include <NumberUtils.h>
 
+ComponentShaderBase * NodeUI::bgShader = nullptr;
+
 NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	NodeBulletBody(_world),
 	Entity(),
@@ -26,21 +28,23 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	onClickFunction(nullptr),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	contents(new Transform()),
-	horizontalAlignment(kLEFT),
-	verticalAlignment(kBOTTOM),
-	boxSizing(kBORDER_BOX)
+	boxSizing(kBORDER_BOX),
+	mouseEnabled(false),
+	bgColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), 1.f)
 {
-	ComponentShaderBase * shader = new ComponentShaderBase(true);
-	shader->addComponent(new ShaderComponentTexture(shader));
-	shader->addComponent(new ShaderComponentTint(shader));
-	shader->addComponent(new ShaderComponentAlpha(shader));
-	shader->compileShader();
-	background->setShader(shader, true);
+	if(bgShader == nullptr){
+		bgShader = new ComponentShaderBase(true);
+		bgShader->addComponent(new ShaderComponentTexture(bgShader));
+		bgShader->addComponent(new ShaderComponentTint(bgShader));
+		bgShader->addComponent(new ShaderComponentAlpha(bgShader));
+		bgShader->compileShader();
+	}
 	for(unsigned long int i = 0; i < background->mesh->vertices.size(); ++i){
 		background->mesh->vertices.at(i).x += 0.5f;
 		background->mesh->vertices.at(i).y += 0.5f;
 	}
 	background->mesh->dirty = true;
+	background->setShader(bgShader, true);
 
 	childTransform->addChild(background, true);
 	childTransform->addChild(contents, false);
@@ -48,7 +52,6 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	setPadding(0);
 	setMargin(0);
 
-	setBackgroundColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0));
 	updateCollider();
 }
 
@@ -88,13 +91,16 @@ Transform * NodeUI::addChild(NodeUI* _uiElement){
 }
 
 signed long int NodeUI::removeChild(NodeUI* _uiElement){
-	Transform * t = _uiElement->parents.at(0);
-	signed long int res = contents->removeChild(t);
-	t->removeChild(_uiElement);
-	delete t;
+	signed long int res = -1;
+	if(_uiElement->parents.size() > 0){
+		Transform * t = _uiElement->parents.at(0);
+		res = contents->removeChild(t);
+		t->removeChild(_uiElement);
+		delete t;
 	
-	if(res >= 0){
-		layoutDirty = true;
+		if(res >= 0){
+			layoutDirty = true;
+		}
 	}
 	return res;
 }
@@ -103,42 +109,44 @@ signed long int NodeUI::removeChild(NodeUI* _uiElement){
 void NodeUI::update(Step * _step){
 	autoResize();
 
-	float raylength = 1000;
+	if(mouseEnabled){
+		float raylength = 1000;
 
-	/*Camera * cam = scene->activeCamera;
+		/*Camera * cam = scene->activeCamera;
 		
-	glm::vec3 campos = cam->getWorldPos();
-	glm::vec3 camdir = cam->forwardVectorRotated;
-	btVector3 raystart(campos.x, campos.y, campos.z);
-	btVector3 raydir(camdir.x, camdir.y, camdir.z);
-	btVector3 rayend = raystart + raydir*raylength;*/
+		glm::vec3 campos = cam->getWorldPos();
+		glm::vec3 camdir = cam->forwardVectorRotated;
+		btVector3 raystart(campos.x, campos.y, campos.z);
+		btVector3 raydir(camdir.x, camdir.y, camdir.z);
+		btVector3 rayend = raystart + raydir*raylength;*/
 	
-	btVector3 raystart(mouse->mouseX(), mouse->mouseY(), -raylength);
-	btVector3 raydir(0, 0, 1);
-	btVector3 rayend(mouse->mouseX(), mouse->mouseY(), raylength);
+		btVector3 raystart(mouse->mouseX(), mouse->mouseY(), -raylength);
+		btVector3 raydir(0, 0, 1);
+		btVector3 rayend(mouse->mouseX(), mouse->mouseY(), raylength);
 	
-	btTransform rayfrom;
-	rayfrom.setIdentity(); rayfrom.setOrigin(raystart);
-	btTransform rayto;
-	rayto.setIdentity(); rayto.setOrigin(rayend);
-	btCollisionWorld::AllHitsRayResultCallback raycb(raystart, rayend);
-	world->world->rayTestSingle(rayfrom, rayto, body, shape, body->getWorldTransform(), raycb);
+		btTransform rayfrom;
+		rayfrom.setIdentity(); rayfrom.setOrigin(raystart);
+		btTransform rayto;
+		rayto.setIdentity(); rayto.setOrigin(rayend);
+		btCollisionWorld::AllHitsRayResultCallback raycb(raystart, rayend);
+		world->world->rayTestSingle(rayfrom, rayto, body, shape, body->getWorldTransform(), raycb);
 	
 	
-	if(raycb.hasHit()){
-		if(!isHovered){
-			in();
-		}if(mouse->leftJustPressed()){
-			down();
-		}else if(mouse->leftJustReleased()){
-			up();
-		}
-	}else{
-		if(isHovered){
-			out();
-		}
-		if(isDown && mouse->leftJustReleased()){
-			isDown = false;
+		if(raycb.hasHit()){
+			if(!isHovered){
+				in();
+			}if(mouse->leftJustPressed()){
+				down();
+			}else if(mouse->leftJustReleased()){
+				up();
+			}
+		}else{
+			if(isHovered){
+				out();
+			}
+			if(isDown && mouse->leftJustReleased()){
+				isDown = false;
+			}
 		}
 	}
 	
@@ -148,8 +156,8 @@ void NodeUI::update(Step * _step){
 	
 	
 	// for testing
-	float g = dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->getGreen();
-	float b = dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->getBlue();
+	float g = bgColour.y;
+	float b = bgColour.z;
 	if(isHovered){
 		if(isDown){
 			setBackgroundColour(-1.f, g, b);
@@ -162,6 +170,8 @@ void NodeUI::update(Step * _step){
 }
 
 void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->setRGB(bgColour.x, bgColour.y, bgColour.z);
+	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setAlpha(bgColour.w);
 	Entity::render(_matrixStack, _renderOptions);
 }
 
@@ -257,12 +267,12 @@ void NodeUI::setHeight(float _height){
 
 void NodeUI::setAutoresizeWidth(){
 	width.setAutoSize();
-	autoResizeWidth();
+	width.measuredSize = getContentsWidth();
 	resizeChildrenWidth();
 }
 void NodeUI::setAutoresizeHeight(){
 	height.setAutoSize();
-	autoResizeHeight();
+	height.measuredSize = getContentsHeight();
 	resizeChildrenHeight();
 }
 
@@ -279,10 +289,16 @@ void NodeUI::setRationalHeight(float _rationalHeight, NodeUI * _root){
 }
 
 void NodeUI::setPixelWidth(float _pixelWidth){
+	if(boxSizing == kBORDER_BOX){
+		_pixelWidth -= getMarginLeft() + getPaddingLeft() + getPaddingRight() + getMarginRight();
+	}
 	width.setPixelSize(_pixelWidth);
 	resizeChildrenWidth();
 }
 void NodeUI::setPixelHeight(float _pixelHeight){
+	if(boxSizing == kBORDER_BOX){
+		_pixelHeight -= getMarginBottom() + getPaddingBottom() + getPaddingTop() + getMarginTop();
+	}
 	height.setPixelSize(_pixelHeight);
 	resizeChildrenHeight();
 }
@@ -362,8 +378,7 @@ void NodeUI::setMeasuredHeights(NodeUI * _root){
 
 
 void NodeUI::setBackgroundColour(float _r, float _g, float _b, float _a){
-	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->setRGB(_r, _g, _b);
-	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setAlpha(_a);
+	bgColour = glm::vec4(_r, _g, _b, _a);
 }
 
 float NodeUI::getMarginLeft(){
@@ -446,19 +461,21 @@ void NodeUI::updateCollider(){
 
 void NodeUI::autoResize(){
 	if(width.sizeMode == kAUTO){
-		autoResizeWidth();
+		width.measuredSize = getContentsWidth();
 	}
 	if(height.sizeMode == kAUTO){
-		autoResizeHeight();
+		height.measuredSize = getContentsHeight();
 	}
 	// Adjust the size of the background
 	background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
 	repositionChildren();
 	//if(widthMode == kAUTO || heightMode == kAUTO || widthMode == kRATIO || heightMode == kRATIO){
+	if(mouseEnabled){
 		updateCollider();
+	}
 	//}
 }
-void NodeUI::autoResizeWidth(){
+float NodeUI::getContentsWidth(){
 	float w = 0.0f;
 	// take the maximum of the width of the contents
 	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
@@ -470,9 +487,9 @@ void NodeUI::autoResizeWidth(){
 			}
 		}
 	}
-	width.measuredSize = w;
+	return w;
 }
-void NodeUI::autoResizeHeight(){
+float NodeUI::getContentsHeight(){
 	float h = 0.0f;
 	// take the maximum of the height of the contents
 	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
@@ -484,10 +501,19 @@ void NodeUI::autoResizeHeight(){
 			}
 		}
 	}
-	height.measuredSize = h;
+	return h;
 }
 
 void NodeUI::repositionChildren(){
-	background->parents.at(0)->translate(getMarginLeft(), getMarginBottom(), 0, false);
-	contents->translate(getMarginLeft() + getPaddingLeft(), getMarginBottom() + getPaddingBottom(), 0, false);
+	glm::vec3 bpos(0);
+	glm::vec3 cpos(0);
+
+	bpos.x = getMarginLeft();
+	cpos.x = getMarginLeft() + getPaddingLeft();
+
+	bpos.y = getMarginBottom();
+	cpos.y = getMarginBottom() + getPaddingBottom();
+
+	background->parents.at(0)->translate(bpos, false);
+	contents->translate(cpos, false);
 }

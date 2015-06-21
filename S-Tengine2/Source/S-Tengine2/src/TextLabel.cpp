@@ -7,17 +7,14 @@
 #include <Font.h>
 
 TextLabel::TextLabel(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textShader, float _width):
-	NodeUI(_world, _scene),
-	Entity(),
+	HorizontalLinearLayout(_world, _scene),
 	NodeBulletBody(_world),
 	font(_font),
 	textShader(_textShader),
 	updateRequired(false),
-	lineWidth(0.f),
-	inUse(true),
-	textArea(nullptr)
+	lineWidth(0.f)
 {
-	setAutoresizeHeight();
+	setHeight(font->getLineHeight());
 	setWidth(_width);
 }
 
@@ -28,103 +25,103 @@ void TextLabel::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOpt
 	if(depth == GL_TRUE){
 		glDisable(GL_DEPTH_TEST);
 	}
-	NodeUI::render(_matrixStack, _renderOptions);
+	HorizontalLinearLayout::render(_matrixStack, _renderOptions);
 	if(depth == GL_TRUE){
 		glEnable(GL_DEPTH_TEST);
 	}
 }
 
 void TextLabel::update(Step * _step){
-	NodeUI::update(_step);
+	if(updateRequired){
+		updateText();
+	}
+	HorizontalLinearLayout::update(_step);
 }
 
 void TextLabel::unload(){
-	NodeUI::unload();
+	HorizontalLinearLayout::unload();
 	textShader->unload();
 	font->unload();
 }
 
 void TextLabel::load(){
-	NodeUI::load();
+	HorizontalLinearLayout::load();
 	textShader->load();
 	font->load();
 }
 
 void TextLabel::setText(std::wstring _text){
-	text = _text;
+	/*if(textAll == _text){
+		// same text, return early
+		return;
+	}*/
+	invalidate();
+	textAll = _text;
+
 	updateRequired = true;
+	updateText();
 }
 
-void TextLabel::appendText(std::wstring _text){
-	text += _text;
-	updateRequired = true;
+void TextLabel::updateText(){
+	// find out where the first overflow in the text would occur
+	unsigned long int i;
+	for(i = 0; i < textAll.size(); ++i){
+		if(textAll.at(i) == '\n'){
+			++i;
+			textDisplayed += '\n';
+			// newline character
+			break;
+		}else if(!canFit(font->getGlyphWidthHeight(textAll.at(i)).x)){
+			// width overflow
+			break;
+		}else{
+			insertChar(textAll.at(i));
+		}
+	}
+	
+	// the start of the text to i fit
+	//textDisplayed = textAll.substr(0, i);
+	// i+1 to the end of the text did not fit
+	if(i < textAll.size()){
+		textOverflow = textAll.substr(i);
+	}else{
+		textOverflow = L"";
+	}
+
+	updateRequired = false;
 }
 
-std::wstring TextLabel::getText(){
-	return text;
+float TextLabel::getContentsHeight(){
+	return font->getLineHeight();
 }
 
-void TextLabel::autoResizeHeight(){
-	setHeight(font->getLineHeight());
-}
-
-void TextLabel::autoResizeWidth(){
-	setWidth(lineWidth);
+float TextLabel::getContentsWidth(){
+	return lineWidth;
 }
 
 void TextLabel::invalidate(){
-	unusedGlyphs.insert(unusedGlyphs.end(), contents->children.begin(), contents->children.end());
-	while(contents->children.size() > 0){
-		Transform * trans = dynamic_cast<Transform *>(contents->children.back());
-		for(unsigned long int i = 0; i < trans->children.size(); ++i) {
-			// We need to make sure that the glyphs aren't keeping to references to the wrong parents
-			GlyphMeshEntity * gme = dynamic_cast<GlyphMeshEntity *>(trans->children.at(i));
-			while (gme->childTransform->children.size() > 0) {
-				gme->childTransform->removeChild(gme->childTransform->children.back());
-			}
-		}
-		contents->removeChild(contents->children.back());
+	while(usedGlyphs.size() > 0){
+		removeChild(usedGlyphs.back());
+		delete usedGlyphs.back();
+		usedGlyphs.pop_back();
 	}
+
 	lineWidth = 0.f;
-	textArea->removeLine(this);
+	textDisplayed = L"";
 }
 
 void TextLabel::insertChar(wchar_t _char){
-	GlyphMeshEntity * glyph = nullptr;
-	Glyph * glyphMesh = textArea->font->getMeshInterfaceForChar(_char);
-	if(unusedGlyphs.size() > 0) {
-		Transform * oldTrans = dynamic_cast<Transform *>(unusedGlyphs.back());
-		glyph = dynamic_cast<GlyphMeshEntity *>(oldTrans->children.at(0));
-		glyph->setGlyphMesh(glyphMesh);
-		glyph->parents.clear();
-		contents->addChild(oldTrans, false);
-		oldTrans->translate(lineWidth, 0.f, 0.f, false);
-		unusedGlyphs.pop_back();
-		/*
-		* This is an interesting issue that makes sense but we haven't had often.
-		* Usually we call set shader on a new mesh entity which does this
-		* Since we're reusing mesh entities configureDefaultVertexAttributes
-		* doesn't get called on a mesh when it's swapped in since we've already set the shader.
-		* For this reason we do it here. We check dirty since this indicates that this is the first time 
-		* the mesh is being used
-		*/
-		if(glyphMesh->dirty) {
-			glyphMesh->configureDefaultVertexAttributes(textShader);
-		}
-	}else{
-		glyph = new GlyphMeshEntity(
-				glyphMesh,
-				textArea->textShader,
-				_char);
-		contents->addChild(glyph)->translate(lineWidth, 0.f, 0.f, false);
-		glyph->load();
-	}
+	Glyph * glyphMesh = font->getMeshInterfaceForChar(_char);
+	UIGlyph * glyph = new UIGlyph(world, scene, glyphMesh, textShader, _char);
+	usedGlyphs.push_back(glyph);
+	addChild(glyph);
 	lineWidth += glyphMesh->advance.x/64.f;
+	textDisplayed += _char;
 }
 
 bool TextLabel::canFit(float _width){
-	if(!width.sizeMode == kAUTO){
-		if(_width + lineWidth > textArea->getWidth(false, false)){
+	if(width.sizeMode != kAUTO){
+		if(_width + lineWidth > getWidth(false, false)){
 			return false;
 		}
 	}
@@ -133,15 +130,53 @@ bool TextLabel::canFit(float _width){
 
 // GlyphMeshEntity definitions //
 
-GlyphMeshEntity::GlyphMeshEntity(Glyph * _mesh, Shader* _shader, wchar_t _character):
+UIGlyph::UIGlyph(BulletWorld * _world, Scene * _scene, Glyph * _mesh, Shader * _shader, wchar_t _character) :
+	NodeUI(_world, _scene),
+	NodeBulletBody(_world),
 	MeshEntity(_mesh, _shader),
 	character(_character),
-	inUse(true),
-	glyph(_mesh)
+	glyph(nullptr)
 {
+	setGlyphMesh(_mesh);
+	boxSizing = kCONTENT_BOX;
 }
 
-void GlyphMeshEntity::setGlyphMesh(Glyph * _mesh){
-	childTransform->addChild(_mesh, false);
-	glyph = _mesh;
+void UIGlyph::setGlyphMesh(Glyph * _newGlyph){
+	if(glyph != nullptr){
+		contents->removeChild(glyph);
+	}
+	mesh = glyph = _newGlyph;
+	contents->addChild(_newGlyph, false);
+	setPixelWidth(glyph->advance.x/64);
+	setPixelHeight(glyph->advance.y/64);
+	setShader(shader, true);
+	//setPixelWidth(glyph->metrics.width/64);
+	//setPixelHeight(glyph->metrics.height/64);
+
+	//paddingLeft.setPixelSize(glyph->metrics.horiBearingX/64);
+	//paddingRight.setPixelSize((glyph->metrics.horiAdvance - glyph->metrics.width - glyph->metrics.horiBearingX)/64);
+	//paddingBottom.setPixelSize((glyph->metrics.vertAdvance - glyph->metrics.height - glyph->metrics.vertBearingY)/64);
+	//paddingTop.setPixelSize(glyph->metrics.vertBearingY/64);
+	
+	/*paddingLeft.setPixelSize(0);
+	paddingRight.setPixelSize(0);
+	paddingBottom.setPixelSize(0);
+	paddingTop.setPixelSize(0);*/
+
+	/*marginLeft.setPixelSize(2);
+	marginRight.setPixelSize(2);
+	marginBottom.setPixelSize(2);
+	marginTop.setPixelSize(2);*/
+
+	//setMargin(2);
+}
+
+void UIGlyph::load(){
+	MeshEntity::load();
+}
+void UIGlyph::unload(){
+	MeshEntity::unload();
+}
+void UIGlyph::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	MeshEntity::render(_matrixStack, _renderOptions);
 }

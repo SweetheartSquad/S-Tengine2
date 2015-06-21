@@ -91,3 +91,6 @@ float ShaderComponentTint::getGreen(){
 float ShaderComponentTint::getBlue(){
 	return blue;
 }
+glm::vec3 ShaderComponentTint::getRGB(){
+	return glm::vec3(red, green, blue);
+}

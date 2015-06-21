@@ -111,13 +111,14 @@ void Font::unload(){
 }
 
 GlyphTexture * Font::getTextureForChar(wchar_t _char){
+	GlyphTexture * res;
 	loadGlyph(_char);
 	auto t = textures.find(_char);
-	GlyphTexture * res;
 	if(t == textures.end()){
 		FT_Set_Pixel_Sizes(face, 0, size);
 		FT_Load_Char(face, _char, FT_LOAD_RENDER);
 		GlyphTexture * tex = new GlyphTexture(face->glyph->bitmap, false);
+		tex->src = _char;
 		textures.insert(std::pair<wchar_t, GlyphTexture *>(_char, tex));
 		res = tex;
 		res->load();
@@ -128,8 +129,8 @@ GlyphTexture * Font::getTextureForChar(wchar_t _char){
 }
 
 Glyph* Font::getMeshInterfaceForChar(wchar_t _char){
-	auto t = meshes.find(_char);
 	Glyph * res;
+	auto t = meshes.find(_char);
 	if(t == meshes.end()){
 		loadGlyph(_char);
 		Glyph * mesh = new Glyph(face->glyph, _char);

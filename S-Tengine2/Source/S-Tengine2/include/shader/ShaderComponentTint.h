@@ -2,6 +2,8 @@
 
 #include <shader\ShaderComponent.h>
 
+#include <glm\glm.hpp>
+
 class ShaderComponentTint : public ShaderComponent{
 private:
 	float red, green, blue;
@@ -10,6 +12,7 @@ public:
 	float getRed();
 	float getGreen();
 	float getBlue();
+	glm::vec3 getRGB();
 	void setRed(float _r);
 	void setGreen(float _g);
 	void setBlue(float _b);

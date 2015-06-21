@@ -44,10 +44,6 @@ void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _render
 	Entity::render(_matrixStack, _renderOptions);
 }
 
-void MeshEntity::update(Step * _step){
-	Entity::update(_step);
-}
-
 void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
 	if(_shader != nullptr){
 		if(_shader->isCompiled){

@@ -7,17 +7,6 @@
 
 class Scene;
 class Mouse;
-
-enum VerticalAlignment{
-	kBOTTOM,
-	kMIDDLE,
-	kTOP
-};
-enum HorizontalAlignment{
-	kLEFT,
-	kCENTER,
-	kRIGHT
-};
 enum BoxSizing{
 	kCONTENT_BOX, // padding and margin are exterior to width and height
 	kBORDER_BOX // padding and margin are interior to width and height
@@ -25,6 +14,16 @@ enum BoxSizing{
 
 class NodeUI : public virtual NodeBulletBody, public virtual Entity{
 protected:
+	UIUnit marginLeft;
+	UIUnit marginRight;
+	UIUnit marginBottom;
+	UIUnit marginTop;
+	
+	UIUnit paddingLeft;
+	UIUnit paddingRight;
+	UIUnit paddingBottom;
+	UIUnit paddingTop;
+
 	Mouse * mouse;
 	// Whether the button is under the mouse
 	bool isHovered;
@@ -47,14 +46,16 @@ protected:
 	// destroys the current rigid body and creates a new one which is sized to match the bounding box of the element
 	void updateCollider();
 
-	HorizontalAlignment horizontalAlignment;
-	VerticalAlignment verticalAlignment;
 
 	Transform * contents;
 	
 	UIUnit width;
 	UIUnit height;
+
+	static ComponentShaderBase * bgShader;
+	glm::vec4 bgColour;
 public:
+	bool mouseEnabled;
 	Scene * scene;
 	MeshEntity * background;
 
@@ -65,9 +66,9 @@ public:
 	//void (*onUpFunction)();
 
 	NodeUI(BulletWorld * _world, Scene * _scene);
-
+	
 	virtual void update(Step * _step) override;
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
 
 	void setMarginLeft(float _margin);
 	void setMarginRight(float _margin);
@@ -106,10 +107,10 @@ public:
 	void setRationalHeight(float _rationalHeight, NodeUI * _parent = nullptr);
 	
 	// enables pixel width
-	// the dimension will be sized as a ratio of its parent's size
+	// the dimension will be sized in pixels
 	void setPixelWidth(float _pixelWidth);
 	// enables pixel height
-	// the dimension will be sized as a ratio of its parent's size
+	// the dimension will be sized in pixels
 	void setPixelHeight(float _pixelHeight);
 	
 	// enables autoresizing width
@@ -158,19 +159,9 @@ public:
 	virtual signed long int removeChild(NodeUI * _uiElement);
 
 private:
-	UIUnit marginLeft;
-	UIUnit marginRight;
-	UIUnit marginBottom;
-	UIUnit marginTop;
-	
-	UIUnit paddingLeft;
-	UIUnit paddingRight;
-	UIUnit paddingBottom;
-	UIUnit paddingTop;
-	
 	void autoResize();
-	virtual void autoResizeWidth();
-	virtual void autoResizeHeight();
+	virtual float getContentsWidth();
+	virtual float getContentsHeight();
 	virtual void repositionChildren();
 	void resizeChildrenWidth();
 	void resizeChildrenHeight();

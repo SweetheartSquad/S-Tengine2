@@ -29,7 +29,7 @@ public:
 
 	/** Calls unload on all children */
 	virtual void unload() override;
-	/** Calls unload on all children */
+	/** Calls load on all children */
 	virtual void load() override;
 
 	// constant reference to a transform which acts as a container for children of this entity

@@ -8,5 +8,5 @@ public:
 	VerticalLinearLayout(BulletWorld * _bulletWorld, Scene * _scene);
 
 	virtual void update(Step * _step) override;
-	virtual void autoResizeHeight() override;
+	virtual float getContentsHeight() override;
 };
