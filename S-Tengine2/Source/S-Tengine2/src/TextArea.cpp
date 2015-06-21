@@ -48,7 +48,7 @@ void TextArea::updateText(){
 	while(textToAdd.size() > 0){
 		curLine = getNewLine();
 		curLine->setText(textToAdd);
-		if(curLine->textDisplayed.size() > 0){
+		if(curLine->textDisplayed.empty()){
 			break; // if no text was actually added, break to avoid infinite loop (probably a zero-width text-area)
 		}
 
