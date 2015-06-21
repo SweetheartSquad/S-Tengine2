@@ -63,6 +63,8 @@ TextLabel * TextArea::getNewLine() {
 	}else{
 		line = new TextLabel(world, scene, font, textShader, 1.f);
 		line->setRationalWidth(1.f, this);
+		line->horizontalAlignment = horizontalAlignment;
+		line->verticalAlignment = verticalAlignment;
 	}
 	usedLines.push_back(line);
 	addChild(line);
