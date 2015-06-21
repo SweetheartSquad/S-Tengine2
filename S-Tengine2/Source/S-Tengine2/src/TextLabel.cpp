@@ -51,10 +51,10 @@ void TextLabel::load(){
 }
 
 void TextLabel::setText(std::wstring _text){
-	if(textAll == _text){
+	/*if(textAll == _text){
 		// same text, return early
 		return;
-	}
+	}*/
 	invalidate();
 	textAll = _text;
 
