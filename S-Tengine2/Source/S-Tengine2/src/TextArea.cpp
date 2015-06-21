@@ -12,74 +12,71 @@ TextArea::TextArea(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Sha
 	setHeight(_height);
 	setWidth(_width);
 }
-
-void TextArea::invalidateAllLines(){
-	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
-		TextLabel * line = dynamic_cast<TextLabel *>(dynamic_cast<Transform *>(contents->children.at(i))->children.at(0));
-		line->invalidate();
-	}
-}
-
-void TextArea::setText(std::wstring _text){
-	text = _text;
-	invalidateAllLines();	
-	updateRequired = true;
-}
-
-void TextArea::removeLine(TextLabel * _line){
-	contents->removeChild(_line->parents.at(0));
-	unusedLines.push_back(_line);
-}
-
-TextLabel * TextArea::getLine() {
-	TextLabel * line = nullptr;
-	if(unusedLines.size() > 0) {
-		line = dynamic_cast<TextLabel *>(unusedLines.back());
-		unusedLines.pop_back();
-	}else{
-		line = new TextLabel(world, scene, font, textShader, 1.f);
-		line->textArea = this;
-		Transform * t = new Transform();
-		t->addChild(line, false);
-	}
-	return line;
-}
-
 void TextArea::update(Step * _step){
-	if(updateRequired) {
-		TextLabel * curLine = currentLine();
-		if(curLine == nullptr){
-			curLine = getLine();
-			contents->addChild(curLine->parents.at(0), false);
-		}
-		//contents->addChild(curLine->parents.at(0), false);
-		float curY = 0.f;
-		for(unsigned long int i = 0; i < text.size(); ++i){
-			if(text.at(i) == '\n'){
-				// 1 these are the same
-				curY -= font->getLineHeight();
-				curLine = getLine();
-				contents->addChild(curLine->parents.at(0), false);
-			}else{
-				if(!curLine->canFit(font->getGlyphWidthHeight(text.at(i)).x)){
-					// 2 these are the same
-					curY -= font->getLineHeight();
-					curLine = getLine();
-					contents->addChild(curLine->parents.at(0), false);
-				}
-				curLine->insertChar(text.at(i));
-			}
-			curLine->parents.at(0)->translate(0.f, curY, 0.f, false);
-		}
-		updateRequired = false;
+	if(text != textDisplayed){
+		updateRequired = true;
+	}
+	if(updateRequired){
+		updateText();
 	}
 	VerticalLinearLayout::update(_step);
 }
 
-TextLabel * TextArea::currentLine(){
-	if(contents->children.size() > 0){
-		return dynamic_cast<TextLabel *>(dynamic_cast<Transform *>(contents->children.back())->children.at(0));
+void TextArea::invalidateAllLines(){
+	while(usedLines.size() > 0){
+		usedLines.back()->invalidate();
+		removeChild(usedLines.back());
+		unusedLines.push_back(usedLines.back());
+		usedLines.pop_back();
+	}
+	textDisplayed = L"";
+}
+
+void TextArea::setText(std::wstring _text){
+	text = _text;
+	updateRequired = true;
+	updateText();
+}
+
+void TextArea::updateText(){
+	invalidateAllLines();
+	TextLabel * curLine = getCurrentLine();
+	std::wstring textToAdd = text;
+	curLine->setText(textToAdd);
+	textToAdd = curLine->textOverflow;
+
+	while(textToAdd.size() > 0){
+		curLine = getNewLine();
+		curLine->setText(textToAdd);
+		if(curLine->textDisplayed.size() > 0){
+			break; // if no text was actually added, break to avoid infinite loop (probably a zero-width text-area)
+		}
+
+		textDisplayed += curLine->textDisplayed;
+		textToAdd = curLine->textOverflow;
+	}
+
+	updateRequired = false;
+}
+
+TextLabel * TextArea::getNewLine() {
+	TextLabel * line;
+	if(unusedLines.size() > 0) {
+		line = unusedLines.back();
+		unusedLines.pop_back();
 	}else{
-		return nullptr;
+		line = new TextLabel(world, scene, font, textShader);
+		line->setRationalWidth(1.f, this);
+	}
+	usedLines.push_back(line);
+	addChild(line);
+	return line;
+}
+
+TextLabel * TextArea::getCurrentLine(){
+	if(usedLines.size() > 0){
+		return usedLines.back();
+	}else{
+		return getNewLine();
 	}
 }
