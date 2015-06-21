@@ -68,6 +68,7 @@ void TextLabel::updateText(){
 	for(i = 0; i < textAll.size(); ++i){
 		if(textAll.at(i) == '\n'){
 			++i;
+			textDisplayed += '\n';
 			// newline character
 			break;
 		}else if(!canFit(font->getGlyphWidthHeight(textAll.at(i)).x)){
