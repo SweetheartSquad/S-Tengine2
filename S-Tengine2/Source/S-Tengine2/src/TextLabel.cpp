@@ -79,9 +79,7 @@ void TextLabel::updateText(){
 		}
 	}
 	
-	// the start of the text to i fit
-	//textDisplayed = textAll.substr(0, i);
-	// i+1 to the end of the text did not fit
+	// i to the end of the text did not fit
 	if(i < textAll.size()){
 		textOverflow = textAll.substr(i);
 	}else{
@@ -150,25 +148,6 @@ void UIGlyph::setGlyphMesh(Glyph * _newGlyph){
 	setPixelWidth(glyph->advance.x/64);
 	setPixelHeight(glyph->advance.y/64);
 	setShader(shader, true);
-	//setPixelWidth(glyph->metrics.width/64);
-	//setPixelHeight(glyph->metrics.height/64);
-
-	//paddingLeft.setPixelSize(glyph->metrics.horiBearingX/64);
-	//paddingRight.setPixelSize((glyph->metrics.horiAdvance - glyph->metrics.width - glyph->metrics.horiBearingX)/64);
-	//paddingBottom.setPixelSize((glyph->metrics.vertAdvance - glyph->metrics.height - glyph->metrics.vertBearingY)/64);
-	//paddingTop.setPixelSize(glyph->metrics.vertBearingY/64);
-	
-	/*paddingLeft.setPixelSize(0);
-	paddingRight.setPixelSize(0);
-	paddingBottom.setPixelSize(0);
-	paddingTop.setPixelSize(0);*/
-
-	/*marginLeft.setPixelSize(2);
-	marginRight.setPixelSize(2);
-	marginBottom.setPixelSize(2);
-	marginTop.setPixelSize(2);*/
-
-	//setMargin(2);
 }
 
 void UIGlyph::load(){
