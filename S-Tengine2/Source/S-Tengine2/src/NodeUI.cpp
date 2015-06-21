@@ -14,6 +14,8 @@
 
 #include <NumberUtils.h>
 
+ComponentShaderBase * NodeUI::bgShader = nullptr;
+
 NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	NodeBulletBody(_world),
 	Entity(),
@@ -27,19 +29,22 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	contents(new Transform()),
 	boxSizing(kBORDER_BOX),
-	mouseEnabled(false)
+	mouseEnabled(false),
+	bgColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), 1.f)
 {
-	ComponentShaderBase * shader = new ComponentShaderBase(true);
-	shader->addComponent(new ShaderComponentTexture(shader));
-	shader->addComponent(new ShaderComponentTint(shader));
-	shader->addComponent(new ShaderComponentAlpha(shader));
-	shader->compileShader();
-	background->setShader(shader, true);
+	if(bgShader == nullptr){
+		bgShader = new ComponentShaderBase(true);
+		bgShader->addComponent(new ShaderComponentTexture(bgShader));
+		bgShader->addComponent(new ShaderComponentTint(bgShader));
+		bgShader->addComponent(new ShaderComponentAlpha(bgShader));
+		bgShader->compileShader();
+	}
 	for(unsigned long int i = 0; i < background->mesh->vertices.size(); ++i){
 		background->mesh->vertices.at(i).x += 0.5f;
 		background->mesh->vertices.at(i).y += 0.5f;
 	}
 	background->mesh->dirty = true;
+	background->setShader(bgShader, true);
 
 	childTransform->addChild(background, true);
 	childTransform->addChild(contents, false);
@@ -47,7 +52,6 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	setPadding(0);
 	setMargin(0);
 
-	setBackgroundColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0));
 	updateCollider();
 }
 
@@ -149,8 +153,8 @@ void NodeUI::update(Step * _step){
 	
 	
 	// for testing
-	float g = dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->getGreen();
-	float b = dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->getBlue();
+	float g = bgColour.y;
+	float b = bgColour.z;
 	if(isHovered){
 		if(isDown){
 			setBackgroundColour(-1.f, g, b);
@@ -160,6 +164,12 @@ void NodeUI::update(Step * _step){
 	}else{
 		setBackgroundColour(0.f, g, b);
 	}
+}
+
+void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->setRGB(bgColour.x, bgColour.y, bgColour.z);
+	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setAlpha(bgColour.w);
+	Entity::render(_matrixStack, _renderOptions);
 }
 
 void NodeUI::setMarginLeft(float _margin){
@@ -365,8 +375,7 @@ void NodeUI::setMeasuredHeights(NodeUI * _root){
 
 
 void NodeUI::setBackgroundColour(float _r, float _g, float _b, float _a){
-	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->setRGB(_r, _g, _b);
-	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setAlpha(_a);
+	bgColour = glm::vec4(_r, _g, _b, _a);
 }
 
 float NodeUI::getMarginLeft(){

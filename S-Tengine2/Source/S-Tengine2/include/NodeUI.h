@@ -63,8 +63,9 @@ public:
 	//void (*onUpFunction)();
 
 	NodeUI(BulletWorld * _world, Scene * _scene);
-
+	
 	virtual void update(Step * _step) override;
+	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
 
 	void setMarginLeft(float _margin);
 	void setMarginRight(float _margin);
@@ -161,4 +162,7 @@ private:
 	virtual void repositionChildren();
 	void resizeChildrenWidth();
 	void resizeChildrenHeight();
+
+	static ComponentShaderBase * bgShader;
+	glm::vec4 bgColour;
 };
