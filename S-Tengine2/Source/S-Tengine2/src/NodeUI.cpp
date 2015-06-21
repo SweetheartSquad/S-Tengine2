@@ -91,13 +91,16 @@ Transform * NodeUI::addChild(NodeUI* _uiElement){
 }
 
 signed long int NodeUI::removeChild(NodeUI* _uiElement){
-	Transform * t = _uiElement->parents.at(0);
-	signed long int res = contents->removeChild(t);
-	t->removeChild(_uiElement);
-	delete t;
+	signed long int res = -1;
+	if(_uiElement->parents.size() > 0){
+		Transform * t = _uiElement->parents.at(0);
+		res = contents->removeChild(t);
+		t->removeChild(_uiElement);
+		delete t;
 	
-	if(res >= 0){
-		layoutDirty = true;
+		if(res >= 0){
+			layoutDirty = true;
+		}
 	}
 	return res;
 }
