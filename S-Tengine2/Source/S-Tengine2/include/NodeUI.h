@@ -42,14 +42,13 @@ protected:
 	void out();
 
 	bool layoutDirty;
-	
+
 	// destroys the current rigid body and creates a new one which is sized to match the bounding box of the element
 	void updateCollider();
 
 	// if the width or height are kAUTO, sets the measured size to the measurement of the children
 	// also adjusts the background and calls repositionChildren() to match size
 	void autoResize();
-
 
 	Transform * contents;
 	
@@ -58,6 +57,7 @@ protected:
 
 	static ComponentShaderBase * bgShader;
 	glm::vec4 bgColour;
+
 public:
 	bool mouseEnabled;
 	Scene * scene;

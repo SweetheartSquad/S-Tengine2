@@ -124,6 +124,8 @@
     <ClCompile Include="../src/shader/ShaderComponentText.cpp" />
     <ClCompile Include="..\src\DatabaseConnection.cpp" />
     <ClCompile Include="..\src\shader\ShaderComponentDepth.cpp" />
+    <ClCompile Include="..\src\shader\ShaderComponentMask.cpp" />
+    <ClCompile Include="..\src\shader\ShaderComponentMaskRender.cpp" />
     <ClCompile Include="..\src\shader\ShaderComponentNormals.cpp" />
     <ClCompile Include="..\src\shader\ShaderComponentSsao.cpp" />
     <ClCompile Include="..\src\TextLabel.cpp" />
@@ -258,6 +260,8 @@
     <ClInclude Include="../include/UILayer.h" />
     <ClInclude Include="..\include\DatabaseConnection.h" />
     <ClInclude Include="..\include\shader\ShaderComponentDepth.h" />
+    <ClInclude Include="..\include\shader\ShaderComponentMask.h" />
+    <ClInclude Include="..\include\shader\ShaderComponentMaskRender.h" />
     <ClInclude Include="..\include\shader\ShaderComponentNormals.h" />
     <ClInclude Include="..\include\shader\ShaderComponentSsao.h" />
     <ClInclude Include="..\include\TextLabel.h" />
