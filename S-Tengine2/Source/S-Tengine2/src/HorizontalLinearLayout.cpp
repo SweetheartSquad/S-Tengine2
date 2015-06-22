@@ -8,7 +8,7 @@ HorizontalLinearLayout::HorizontalLinearLayout(BulletWorld* _bulletWorld, Scene*
 {
 }
 
-void HorizontalLinearLayout::update(Step* _step){
+void HorizontalLinearLayout::layoutChildren(){
 	glm::vec3 rootPos = getRootPos();
 	float x = rootPos.x;
 	float y = rootPos.y;
@@ -42,7 +42,6 @@ void HorizontalLinearLayout::update(Step* _step){
 		trans->translate(x, y, 0.f, false);
 		x += ui->getWidth(true, true);
 	}
-	LinearLayout::update(_step);
 }
 
 float HorizontalLinearLayout::getContentsWidth(){

@@ -19,5 +19,9 @@ public:
 
 	LinearLayout(BulletWorld * _world, Scene * _scene);
 
+	virtual void update(Step * _step) override;
+
+	virtual void layoutChildren() = 0;
+
 	glm::vec3 getRootPos();
 };

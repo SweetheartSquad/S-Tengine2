@@ -8,7 +8,7 @@ VerticalLinearLayout::VerticalLinearLayout(BulletWorld* _bulletWorld, Scene* _sc
 {
 }
 
-void VerticalLinearLayout::update(Step* _step){
+void VerticalLinearLayout::layoutChildren(){
 	glm::vec3 rootPos = getRootPos();
 	float x = rootPos.x;
 	float y = rootPos.y;
@@ -43,7 +43,6 @@ void VerticalLinearLayout::update(Step* _step){
 		trans->translate(x, y, 0.f, false);
 		y += ui->getHeight(true, true);
 	}
-	LinearLayout::update(_step);
 }
 
 float VerticalLinearLayout::getContentsHeight(){

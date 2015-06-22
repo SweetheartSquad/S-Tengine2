@@ -43,3 +43,8 @@ glm::vec3 LinearLayout::getRootPos(){
 
 	return res;
 }
+
+void LinearLayout::update(Step * _step){
+	layoutChildren();
+	Layout::update(_step);
+}
