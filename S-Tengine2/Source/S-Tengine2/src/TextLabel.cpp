@@ -16,7 +16,6 @@ TextLabel::TextLabel(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _t
 {
 	setHeight(font->getLineHeight());
 	setWidth(_width);
-	setBackgroundColour(1,1,1,0);
 }
 
 void TextLabel::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){

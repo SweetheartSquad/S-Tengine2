@@ -30,7 +30,8 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	contents(new Transform()),
 	boxSizing(kBORDER_BOX),
 	mouseEnabled(false),
-	bgColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), 1.f)
+	//bgColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), 1.f)
+	bgColour(0.f, 0.f, 0.f, 1.f)
 {
 	if(bgShader == nullptr){
 		bgShader = new ComponentShaderBase(true);
@@ -158,25 +159,23 @@ void NodeUI::update(Step * _step){
 			}
 		}
 		NodeBulletBody::update(_step);
+
+		// for testing
+		float g = bgColour.g;
+		float b = bgColour.b;
+		float a = bgColour.a;
+		if(isHovered){
+			if(isDown){
+				setBackgroundColour(-1.f, g, b, a);
+			}else{
+				setBackgroundColour(-0.5f, g, b, a);
+			}
+		}else{
+			setBackgroundColour(0.f, g, b, a);
+		}
 	}
 	
 	Entity::update(_step);
-
-	
-	
-	// for testing
-	float g = bgColour.g;
-	float b = bgColour.b;
-	float a = bgColour.a;
-	if(isHovered){
-		if(isDown){
-			setBackgroundColour(-1.f, g, b, a);
-		}else{
-			setBackgroundColour(-0.5f, g, b, a);
-		}
-	}else{
-		setBackgroundColour(0.f, g, b, a);
-	}
 }
 
 void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
