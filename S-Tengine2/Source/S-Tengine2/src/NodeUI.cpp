@@ -148,9 +148,9 @@ void NodeUI::update(Step * _step){
 				isDown = false;
 			}
 		}
+		NodeBulletBody::update(_step);
 	}
 	
-	NodeBulletBody::update(_step);
 	Entity::update(_step);
 
 	
@@ -178,15 +178,12 @@ void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOpti
 void NodeUI::setMarginLeft(float _margin){
 	marginLeft.setSize(_margin);
 }
-
 void NodeUI::setMarginRight(float _margin){
 	marginRight.setSize(_margin);
 }
-
 void NodeUI::setMarginTop(float _margin){
 	marginTop.setSize(_margin);
 }
-
 void NodeUI::setMarginBottom(float _margin){
 	marginBottom.setSize(_margin);
 }
