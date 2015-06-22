@@ -46,6 +46,10 @@ protected:
 	// destroys the current rigid body and creates a new one which is sized to match the bounding box of the element
 	void updateCollider();
 
+	// if the width or height are kAUTO, sets the measured size to the measurement of the children
+	// also adjusts the background and calls repositionChildren() to match size
+	void autoResize();
+
 
 	Transform * contents;
 	
@@ -159,10 +163,12 @@ public:
 	virtual signed long int removeChild(NodeUI * _uiElement);
 
 private:
-	void autoResize();
 	virtual float getContentsWidth();
 	virtual float getContentsHeight();
 	virtual void repositionChildren();
-	void resizeChildrenWidth();
-	void resizeChildrenHeight();
+
+	// check for rational-width children and resize them based on _root
+	void resizeChildrenWidth(NodeUI * _root);
+	// check for rational-height children and resize them based on _root
+	void resizeChildrenHeight(NodeUI * _root);
 };

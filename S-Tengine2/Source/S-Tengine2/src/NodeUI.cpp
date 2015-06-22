@@ -108,8 +108,8 @@ signed long int NodeUI::removeChild(NodeUI* _uiElement){
 
 void NodeUI::update(Step * _step){
 	autoResize();
-
 	if(mouseEnabled){
+		updateCollider();
 		float raylength = 1000;
 
 		/*Camera * cam = scene->activeCamera;
@@ -265,24 +265,24 @@ void NodeUI::setHeight(float _height){
 void NodeUI::setAutoresizeWidth(){
 	width.setAutoSize();
 	width.measuredSize = getContentsWidth();
-	resizeChildrenWidth();
+	resizeChildrenWidth(this);
 }
 void NodeUI::setAutoresizeHeight(){
 	height.setAutoSize();
 	height.measuredSize = getContentsHeight();
-	resizeChildrenHeight();
+	resizeChildrenHeight(this);
 }
 
 void NodeUI::setRationalWidth(float _rationalWidth, NodeUI * _root){
 	width.setRationalSize(_rationalWidth);
 	setMeasuredWidths(_root);
-	resizeChildrenWidth();
+	resizeChildrenWidth(this);
 }
 
 void NodeUI::setRationalHeight(float _rationalHeight, NodeUI * _root){
 	height.setRationalSize(_rationalHeight);
 	setMeasuredHeights(_root);
-	resizeChildrenHeight();
+	resizeChildrenHeight(this);
 }
 
 void NodeUI::setPixelWidth(float _pixelWidth){
@@ -290,40 +290,38 @@ void NodeUI::setPixelWidth(float _pixelWidth){
 		_pixelWidth -= getMarginLeft() + getPaddingLeft() + getPaddingRight() + getMarginRight();
 	}
 	width.setPixelSize(_pixelWidth);
-	resizeChildrenWidth();
+	resizeChildrenWidth(this);
 }
 void NodeUI::setPixelHeight(float _pixelHeight){
 	if(boxSizing == kBORDER_BOX){
 		_pixelHeight -= getMarginBottom() + getPaddingBottom() + getPaddingTop() + getMarginTop();
 	}
 	height.setPixelSize(_pixelHeight);
-	resizeChildrenHeight();
+	resizeChildrenHeight(this);
 }
 
-void NodeUI::resizeChildrenWidth(){
-	// check for rational-width children and resize them
+void NodeUI::resizeChildrenWidth(NodeUI * _root){
 	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
 		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
 				if(nui != nullptr){
-					nui->setMeasuredWidths(this);
+					nui->setMeasuredWidths(_root);
 				}
 			}
 		}
 	}
 }
 
-void NodeUI::resizeChildrenHeight(){
-	// check for rational-height children and resize them
+void NodeUI::resizeChildrenHeight(NodeUI * _root){
 	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
 		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
 				if(nui != nullptr){
-					nui->setMeasuredHeights(this);
+					nui->setMeasuredHeights(_root);
 				}
 			}
 		}
@@ -331,10 +329,12 @@ void NodeUI::resizeChildrenHeight(){
 }
 
 void NodeUI::setMeasuredWidths(NodeUI * _root){
+	
 	float rootWidth = 0.f;
 	if(_root != nullptr){
 		rootWidth = _root->getWidth();
 	}
+
 	if(marginLeft.sizeMode == kRATIO){
 		marginLeft.measuredSize = rootWidth * marginLeft.rationalSize;
 	}if(paddingLeft.sizeMode == kRATIO){
@@ -349,7 +349,14 @@ void NodeUI::setMeasuredWidths(NodeUI * _root){
 			width.measuredSize -= marginLeft.getSize() + paddingLeft.getSize() + paddingRight.getSize() + marginRight.getSize();
 		}
 	}
-	resizeChildrenWidth();
+
+	if(width.sizeMode == kAUTO){
+		// if the width of this node is auto-sized, the children's width has to be based on the element one level above this one
+		// to avoid the conflict between an auto-sized container and a rational-sized child
+		resizeChildrenWidth(_root);
+	}else{
+		resizeChildrenWidth(this);
+	}
 }
 void NodeUI::setMeasuredHeights(NodeUI * _root){
 	float rootHeight = 0.f;
@@ -370,7 +377,14 @@ void NodeUI::setMeasuredHeights(NodeUI * _root){
 			height.measuredSize -= marginBottom.getSize() + paddingBottom.getSize() + paddingTop.getSize() + marginTop.getSize();
 		}
 	}
-	resizeChildrenHeight();
+
+	if(height.sizeMode == kAUTO){
+		// if the height of this node is auto-sized, the children's height has to be based on the element one level above this one
+		// to avoid the conflict between an auto-sized container and a rational-sized child
+		resizeChildrenHeight(_root);
+	}else{
+		resizeChildrenHeight(this);
+	}
 }
 
 
@@ -466,11 +480,6 @@ void NodeUI::autoResize(){
 	// Adjust the size of the background
 	background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
 	repositionChildren();
-	//if(widthMode == kAUTO || heightMode == kAUTO || widthMode == kRATIO || heightMode == kRATIO){
-	if(mouseEnabled){
-		updateCollider();
-	}
-	//}
 }
 float NodeUI::getContentsWidth(){
 	float w = 0.0f;

@@ -26,8 +26,7 @@ void HorizontalLinearLayout::layoutChildren(){
 	}
 
 	for(unsigned long int i = 0; i < contents->children.size(); ++i){
-		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
-		NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
+		NodeUI * ui = dynamic_cast<NodeUI * >(dynamic_cast<Transform *>(contents->children.at(i))->children.at(0));
 		switch (verticalAlignment){
 			default:
 			case kBOTTOM:
