@@ -38,7 +38,7 @@ void HorizontalLinearLayout::layoutChildren(){
 				y = rootPos.y - ui->getHeight(true, true);
 				break;
 		}
-		ui->setTranslationPhysical(x, y, 0.f, false);
+		trans->translate(x, y, 0.f, false);
 		x += ui->getWidth(true, true);
 	}
 }
