@@ -55,6 +55,15 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	updateCollider();
 }
 
+void NodeUI::load(){
+	Entity::load();
+	bgShader->load();
+}
+void NodeUI::unload(){
+	Entity::unload();
+	bgShader->unload();
+}
+
 void NodeUI::down(){
 	isHovered = true;
 	isDown = true;

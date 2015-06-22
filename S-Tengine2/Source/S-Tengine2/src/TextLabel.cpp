@@ -153,9 +153,11 @@ void UIGlyph::setGlyphMesh(Glyph * _newGlyph){
 
 void UIGlyph::load(){
 	MeshEntity::load();
+	NodeUI::load();
 }
 void UIGlyph::unload(){
 	MeshEntity::unload();
+	NodeUI::unload();
 }
 void UIGlyph::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	MeshEntity::render(_matrixStack, _renderOptions);

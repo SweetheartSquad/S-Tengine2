@@ -73,6 +73,8 @@ public:
 	
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
+	virtual void load() override;
+	virtual void unload() override;
 
 	void setMarginLeft(float _margin);
 	void setMarginRight(float _margin);
