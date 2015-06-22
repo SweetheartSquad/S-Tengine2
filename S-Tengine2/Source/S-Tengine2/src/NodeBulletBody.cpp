@@ -25,23 +25,24 @@ NodeBulletBody::~NodeBulletBody(){
 void NodeBulletBody::update(Step * _step){
 	if(body != nullptr){
 		if(body->isActive() || needsToUpdate){
-			btTransform t = body->getWorldTransform();
-			internalPos = t.getOrigin();
-			btQuaternion angle = t.getRotation();
-			parents.at(0)->translate(internalPos.x(), internalPos.y(), internalPos.z(), false);
+			if(parents.size() > 0){
+				btTransform t = body->getWorldTransform();
+				internalPos = t.getOrigin();
+				btQuaternion angle = t.getRotation();
+				parents.at(0)->translate(internalPos.x(), internalPos.y(), internalPos.z(), false);
 			
-			/*b2Vec2 lv = body->GetLinearVelocity();
-			if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
-				lv.x = maxVelocity.x * (lv.x < 0 ? -1 : 1);
-			}
-			if(maxVelocity.y != -1 && lv.y > maxVelocity.y){
-				lv.y = maxVelocity.y * (lv.y < 0 ? -1 : 1);
-			}
-			body->SetLinearVelocity(lv);*/
+				/*b2Vec2 lv = body->GetLinearVelocity();
+				if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
+					lv.x = maxVelocity.x * (lv.x < 0 ? -1 : 1);
+				}
+				if(maxVelocity.y != -1 && lv.y > maxVelocity.y){
+					lv.y = maxVelocity.y * (lv.y < 0 ? -1 : 1);
+				}
+				body->SetLinearVelocity(lv);*/
 			
-			parents.at(0)->setOrientation(glm::quat(angle.w(), angle.x(), angle.y(), angle.z()));
-
-			needsToUpdate = false;
+				parents.at(0)->setOrientation(glm::quat(angle.w(), angle.x(), angle.y(), angle.z()));
+				needsToUpdate = false;
+			}
 		}
 	}
 }
