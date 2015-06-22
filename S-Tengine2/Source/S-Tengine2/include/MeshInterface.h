@@ -121,7 +121,12 @@ public:
 	/** Adds _vertex to the list of vertices*/
 	void pushVert(Vertex _vertex);
 	void pushTexture2D(Texture * _texture);
-	void popTexture2D();
+	
+	// removes the last texture pushed onto the mesh
+	// decrements and attempts to delete the texture
+	// if the texture is deleted, returns nullptr
+	// otherwise, returns the popped texture
+	Texture * popTexture2D();
 	void removeTextureAt(int _idx);
 	void pushMaterial(Material * _material);
 	unsigned long int textureCount();

@@ -202,9 +202,13 @@ void MeshInterface::pushVert(Vertex _vertex){
 	dirty = true;
 }
 
-void MeshInterface::popTexture2D(){
-	textures.back()->decrementAndDelete();
+Texture * MeshInterface::popTexture2D(){
+	Texture * t = textures.back();
+	if(t->decrementAndDelete()){
+		t = nullptr;
+	}
 	textures.pop_back();
+	return t;
 }
 
 void MeshInterface::removeTextureAt(int _idx){
