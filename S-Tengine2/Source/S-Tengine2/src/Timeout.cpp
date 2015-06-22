@@ -20,11 +20,17 @@ void Timeout::restart(){
 void Timeout::update(Step * _step){
 	if(!complete){
 		elapsedSeconds += _step->deltaTime;
-		if(elapsedSeconds > targetSeconds){
+		if(elapsedSeconds >= targetSeconds){
 			complete = true;
 			if(onCompleteFunction != nullptr){
 				onCompleteFunction(this);
 			}
 		}
 	}
+}
+
+void Timeout::trigger(){
+	onCompleteFunction(this);
+	elapsedSeconds = targetSeconds;
+	complete = true;
 }
