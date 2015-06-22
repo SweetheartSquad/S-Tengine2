@@ -11,6 +11,7 @@ TextArea::TextArea(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Sha
 {
 	setHeight(_height);
 	setWidth(_width);
+	setBackgroundColour(1,1,1,0);
 }
 void TextArea::update(Step * _step){
 	if(text != textDisplayed){

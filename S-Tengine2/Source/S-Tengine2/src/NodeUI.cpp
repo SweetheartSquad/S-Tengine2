@@ -156,22 +156,23 @@ void NodeUI::update(Step * _step){
 	
 	
 	// for testing
-	float g = bgColour.y;
-	float b = bgColour.z;
+	float g = bgColour.g;
+	float b = bgColour.b;
+	float a = bgColour.a;
 	if(isHovered){
 		if(isDown){
-			setBackgroundColour(-1.f, g, b);
+			setBackgroundColour(-1.f, g, b, a);
 		}else{
-			setBackgroundColour(-0.5f, g, b);
+			setBackgroundColour(-0.5f, g, b, a);
 		}
 	}else{
-		setBackgroundColour(0.f, g, b);
+		setBackgroundColour(0.f, g, b, a);
 	}
 }
 
 void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->setRGB(bgColour.x, bgColour.y, bgColour.z);
-	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setAlpha(bgColour.w);
+	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->setRGB(bgColour.r, bgColour.g, bgColour.b);
+	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setAlpha(bgColour.a);
 	Entity::render(_matrixStack, _renderOptions);
 }
 
@@ -389,7 +390,10 @@ void NodeUI::setMeasuredHeights(NodeUI * _root){
 
 
 void NodeUI::setBackgroundColour(float _r, float _g, float _b, float _a){
-	bgColour = glm::vec4(_r, _g, _b, _a);
+	bgColour.r = _r;
+	bgColour.g = _g;
+	bgColour.b = _b;
+	bgColour.a = _a;
 }
 
 float NodeUI::getMarginLeft(){
