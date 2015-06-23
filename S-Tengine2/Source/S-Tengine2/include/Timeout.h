@@ -17,7 +17,7 @@ public:
 	// resets the timer to zero and sets complete to false, allowing the onCompleteFunction to trigger again
 	void restart();
 	// calls the onCompleteFunction, sets elapsedSeconds to targetSeconds, and complete to true
-	void trigger();
+	virtual void trigger();
 
 	virtual void update(Step * _step) override;
 };
