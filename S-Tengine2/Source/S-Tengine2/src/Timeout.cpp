@@ -8,29 +8,44 @@ Timeout::Timeout(float _targetSeconds) :
 	onCompleteFunction(nullptr),
 	targetSeconds(_targetSeconds),
 	elapsedSeconds(0),
-	complete(false)
+	complete(false),
+	active(false)
 {
 }
 
-void Timeout::restart(){
+void Timeout::start(){
+	active = true;
+}
+
+void Timeout::stop(){
+	active = false;
 	elapsedSeconds = 0;
 	complete = false;
 }
 
+void Timeout::pause(){
+	active = false;
+}
+
+void Timeout::restart(){
+	stop();
+	start();
+}
+
 void Timeout::update(Step * _step){
-	if(!complete){
+	if(!complete && active){
 		elapsedSeconds += _step->deltaTime;
 		if(elapsedSeconds >= targetSeconds){
-			complete = true;
-			if(onCompleteFunction != nullptr){
-				onCompleteFunction(this);
-			}
+			trigger();
 		}
 	}
 }
 
 void Timeout::trigger(){
-	onCompleteFunction(this);
+	if(onCompleteFunction != nullptr){
+		onCompleteFunction(this);
+	}
 	elapsedSeconds = targetSeconds;
 	complete = true;
+	// maybe set active to false here too?
 }

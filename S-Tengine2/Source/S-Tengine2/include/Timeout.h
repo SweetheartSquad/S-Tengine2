@@ -8,14 +8,25 @@
 class Timeout : public virtual NodeChild, public virtual NodeUpdatable{
 public:
 	bool complete;
+	bool active;
 	float elapsedSeconds;
 	float targetSeconds;
 	std::function<void(Timeout *)> onCompleteFunction;
 
 	Timeout(float _targetSeconds);
 
-	// resets the timer to zero and sets complete to false, allowing the onCompleteFunction to trigger again
+	// calls stop and then calls start
 	void restart();
+	
+	// sets active to true
+	virtual void start();
+
+	// sets active to false
+	void pause();
+
+	// resets the timer to zero and sets complete and active to false
+	void stop();
+
 	// calls the onCompleteFunction, sets elapsedSeconds to targetSeconds, and complete to true
 	virtual void trigger();
 
