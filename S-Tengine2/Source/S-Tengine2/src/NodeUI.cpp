@@ -193,6 +193,11 @@ void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOpti
 	
 	if(clipOverflow) {
 	
+		Shader * backup = _renderOptions->overrideShader;
+		_renderOptions->overrideShader = bgShader;
+		background->render(_matrixStack, _renderOptions);
+		_renderOptions->overrideShader = backup;
+
 		if(maskBuffer == nullptr) {
 			maskBuffer = new StandardFrameBuffer(false);
 		}
@@ -210,8 +215,8 @@ void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOpti
 
 		if(maskShaderOverride == nullptr) {
 			maskShaderOverride = new ComponentShaderBase(false);
-			maskShaderOverride->addComponent(new ShaderComponentTexture(maskShader));
-			maskShaderOverride->addComponent(new ShaderComponentMask(maskShader));
+			maskShaderOverride->addComponent(new ShaderComponentTexture(maskShaderOverride));
+			maskShaderOverride->addComponent(new ShaderComponentMask(maskShaderOverride));
 			maskShaderOverride->compileShader();
 			maskShaderOverride->load();
 		}
