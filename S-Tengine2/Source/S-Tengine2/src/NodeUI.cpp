@@ -12,7 +12,12 @@
 #include <shader\ShaderComponentAlpha.h>
 #include <shader\ShaderComponentTint.h>
 
+#include <StandardFrameBuffer.h>
+#include <RenderOptions.h>
+
 #include <NumberUtils.h>
+#include <shader/ShaderComponentMaskRender.h>
+#include <shader/ShaderComponentMask.h>
 
 ComponentShaderBase * NodeUI::bgShader = nullptr;
 
@@ -31,7 +36,11 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	boxSizing(kBORDER_BOX),
 	mouseEnabled(false),
 	//bgColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), 1.f)
-	bgColour(0.f, 0.f, 0.f, 1.f)
+	bgColour(0.f, 0.f, 0.f, 1.f),
+	maskBuffer(nullptr),
+	maskShader(nullptr),
+	maskShaderOverride(nullptr),
+	clipOverflow(false)
 {
 	if(bgShader == nullptr){
 		bgShader = new ComponentShaderBase(true);
@@ -181,7 +190,63 @@ void NodeUI::update(Step * _step){
 void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->setRGB(bgColour.r, bgColour.g, bgColour.b);
 	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setAlpha(bgColour.a);
-	Entity::render(_matrixStack, _renderOptions);
+	
+	if(clipOverflow) {
+	
+		if(maskBuffer == nullptr) {
+			maskBuffer = new StandardFrameBuffer(false);
+		}
+		
+		int width, height;
+		glfwGetWindowSize(vox::currentContext, &width, &height);
+		maskBuffer->resize(width, height);
+		
+		if(maskShader == nullptr) {
+			maskShader = new ComponentShaderBase(false);
+			maskShader->addComponent(new ShaderComponentMaskRender(maskShader));
+			maskShader->compileShader();
+			maskShader->load();
+		}
+
+		if(maskShaderOverride == nullptr) {
+			maskShaderOverride = new ComponentShaderBase(false);
+			maskShaderOverride->addComponent(new ShaderComponentTexture(maskShader));
+			maskShaderOverride->addComponent(new ShaderComponentMask(maskShader));
+			maskShaderOverride->compileShader();
+			maskShaderOverride->load();
+		}
+
+		maskShader->makeDirty();
+		maskShaderOverride->makeDirty();
+
+		ShaderComponentMask * cm = static_cast<ShaderComponentMask *>(maskShaderOverride->getComponentAt(1));
+		cm->setMaskTextureId(maskBuffer->getTextureId());
+
+		Shader * backup2 = _renderOptions->overrideShader;
+		_renderOptions->overrideShader = maskShader;
+		bool backgroundVisiblity = background->isVisible();
+		background->setVisible(true);
+		maskBuffer->bindFrameBuffer();
+		background->render(_matrixStack, _renderOptions);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		background->setVisible(backgroundVisiblity);
+		_renderOptions->overrideShader = maskShaderOverride;
+		Entity::render(_matrixStack, _renderOptions);
+		_renderOptions->overrideShader = backup2;
+		/*for(unsigned long int i = 0; i < contents->children.size(); ++i) {
+			Transform * t = dynamic_cast<Transform *>(contents->children.at(i));
+			if(t != nullptr) {
+				if(t->children.size() > 0) {
+					MeshEntity * me = dynamic_cast<MeshEntity *>(t->children.at(0));
+					if(me != nullptr) {
+						
+					}
+				}
+			}
+		}*/
+	}else {
+		Entity::render(_matrixStack, _renderOptions);
+	}
 }
 
 void NodeUI::setMarginLeft(float _margin){

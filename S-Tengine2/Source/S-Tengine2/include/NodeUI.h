@@ -4,6 +4,7 @@
 #include <NodeBulletBody.h>
 #include <MeshEntity.h>
 #include <UIUnit.h>
+#include <StandardFrameBuffer.h>
 
 class Scene;
 class Mouse;
@@ -31,8 +32,7 @@ protected:
 	bool isDown;
 	// Whether the button is active (only affects RADIO and TOGGLE buttons)
 	bool isActive;
-	
-    // The function to be called when you are starting a click
+	// The function to be called when you are starting a click
 	void down();
     // The function to be called when you complete a click
 	void up();
@@ -40,6 +40,15 @@ protected:
 	void in();
     // The function to be called when you mouseout
 	void out();
+	// Frame buffer used for rendering masks	
+	StandardFrameBuffer * maskBuffer;
+	// Whether overflowing elements should be clipped or not
+	bool clipOverflow;
+	// Shader for rendering masks
+	ComponentShaderBase * maskShader;
+
+	// Get rid of this
+	ComponentShaderBase * maskShaderOverride;
 
 	bool layoutDirty;
 

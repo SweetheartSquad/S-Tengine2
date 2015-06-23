@@ -14,6 +14,7 @@ LinearLayout::LinearLayout(BulletWorld* _world, Scene* _scene):
 	setAutoresizeWidth();
 	setAutoresizeHeight();
 	setBackgroundColour(0.f, 0.f, 0.f, 0.f);
+	clipOverflow = true;
 }
 
 glm::vec3 LinearLayout::getRootPos(){
