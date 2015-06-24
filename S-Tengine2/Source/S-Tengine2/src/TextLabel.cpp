@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include <MeshFactory.h>
 #include <Font.h>
+#include <RenderOptions.h>
 
 TextLabel::TextLabel(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textShader, float _width):
 	HorizontalLinearLayout(_world, _scene),
@@ -110,11 +111,17 @@ void TextLabel::invalidate(){
 
 void TextLabel::insertChar(wchar_t _char){
 	Glyph * glyphMesh = font->getMeshInterfaceForChar(_char);
-	UIGlyph * glyph = new UIGlyph(world, scene, glyphMesh, textShader, _char);
+	UIGlyph * glyph = getGlyph(_char, glyphMesh);
 	usedGlyphs.push_back(glyph);
 	addChild(glyph);
 	lineWidth += glyphMesh->advance.x/64.f;
 	textDisplayed += _char;
+}
+
+UIGlyph * TextLabel::getGlyph(wchar_t _char, Glyph * _glyphMesh){
+	UIGlyph * res;
+		res = new UIGlyph(world, scene, _glyphMesh, textShader, _char);
+	return res;
 }
 
 bool TextLabel::canFit(float _width){
@@ -131,7 +138,7 @@ bool TextLabel::canFit(float _width){
 UIGlyph::UIGlyph(BulletWorld * _world, Scene * _scene, Glyph * _mesh, Shader * _shader, wchar_t _character) :
 	NodeUI(_world, _scene),
 	NodeBulletBody(_world),
-	MeshEntity(_mesh, _shader),
+	NodeShadable(_shader),
 	character(_character),
 	glyph(nullptr)
 {
@@ -143,21 +150,23 @@ void UIGlyph::setGlyphMesh(Glyph * _newGlyph){
 	if(glyph != nullptr){
 		contents->removeChild(glyph);
 	}
-	mesh = glyph = _newGlyph;
-	contents->addChild(_newGlyph, false);
+	glyph = _newGlyph;
+
+	contents->addChild(glyph, false);
 	setPixelWidth(glyph->advance.x/64);
 	setPixelHeight(glyph->advance.y/64);
-	setShader(shader, true);
+	
+	glyph->configureDefaultVertexAttributes(shader);
 }
 
 void UIGlyph::load(){
-	MeshEntity::load();
 	NodeUI::load();
 }
 void UIGlyph::unload(){
-	MeshEntity::unload();
 	NodeUI::unload();
 }
 void UIGlyph::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	MeshEntity::render(_matrixStack, _renderOptions);
+	NodeShadable::applyShader(_renderOptions);
+	NodeUI::render(_matrixStack, _renderOptions);
 }

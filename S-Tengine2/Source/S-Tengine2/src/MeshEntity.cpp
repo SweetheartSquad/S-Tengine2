@@ -15,13 +15,10 @@ MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader) :
 	Entity(),
 	NodeRenderable(),
 	mesh(_mesh),
-	shader(_shader)
+	NodeShadable(_shader)
 {
 	++mesh->referenceCount;
 	childTransform->addChild(mesh, false);
-	if(shader != nullptr){
-		++shader->referenceCount;
-	}
 }
 
 MeshEntity::~MeshEntity(void){
@@ -29,18 +26,10 @@ MeshEntity::~MeshEntity(void){
 		mesh->decrementAndDelete();
 		mesh = nullptr;
 	}*/
-	if(shader != nullptr){
-		shader->decrementAndDelete();		
-		shader = nullptr;
-	}
 }
 
 void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	if(_renderOptions->overrideShader == nullptr){
-		_renderOptions->shader = shader;
-	}else{
-		_renderOptions->shader = _renderOptions->overrideShader;
-	}
+	NodeShadable::applyShader(_renderOptions);
 	Entity::render(_matrixStack, _renderOptions);
 }
 

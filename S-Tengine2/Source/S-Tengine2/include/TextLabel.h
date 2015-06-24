@@ -8,7 +8,7 @@ class TextLabel;
 class Font;
 class Glyph;
 
-class UIGlyph : public virtual NodeUI, public virtual MeshEntity {
+class UIGlyph : public virtual NodeUI, public virtual NodeShadable{
 public:
 	wchar_t character;
 	Glyph * glyph;
@@ -51,4 +51,6 @@ public:
 private:
 	std::wstring textAll;
 	bool updateRequired;
+
+	UIGlyph * getGlyph(wchar_t _char, Glyph * _glyphMesh);
 };

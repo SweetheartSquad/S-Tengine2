@@ -3,18 +3,17 @@
 #include <Transform.h>
 #include <Entity.h>
 #include <Box.h>
+#include <node\NodeShadable.h>
 
 class Shader;
 class MeshInterface;
 
 /** A basic entity node. Stores references to a mesh, transform, shader, parent, and list of references to children */
-class MeshEntity : public Entity{
+class MeshEntity : public virtual Entity, public virtual NodeShadable{
 public:
 
 	/** Reference to this entity's mesh */
 	MeshInterface * mesh;
-	/** Reference to this entity's shader */
-	Shader * shader;
 
 	// returns a box which covers the verts of the mesh and all of its children
 	vox::Box calcOverallBoundingBox();
