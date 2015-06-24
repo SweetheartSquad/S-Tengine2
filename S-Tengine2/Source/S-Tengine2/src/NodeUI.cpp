@@ -457,11 +457,6 @@ bool NodeUI::isLayoutDirty(){
 }
 
 void NodeUI::updateCollider(){
-	if(body != nullptr){
-		world->world->removeRigidBody(body);
-		delete body;
-		body = nullptr;
-	}
 	if(shape != nullptr){
 		delete shape;
 		shape = nullptr;
@@ -476,7 +471,18 @@ void NodeUI::updateCollider(){
 	m->pushVert(Vertex(v.x, v.y, 0.f));
 	m->pushVert(Vertex(v.x, v.y + getHeight(true, false), 0.f));
 	setColliderAsMesh(m, true);
-	createRigidBody(0);
+
+	
+	if(body != nullptr){
+		world->world->removeRigidBody(body);
+		//delete body;
+		//body = nullptr;
+		body->setCollisionShape(shape);
+		world->world->addRigidBody(body);
+	}else{
+		createRigidBody(0);
+	}
+
 	// cleanup
 	delete m;
 	m = nullptr;
