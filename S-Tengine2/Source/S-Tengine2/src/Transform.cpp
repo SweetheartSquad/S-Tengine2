@@ -21,6 +21,7 @@ Transform::Transform():
 	tDirty(true),
 	sDirty(true),
 	oDirty(true),
+	osDirty(true),
 	mDirty(true),
 	isIdentity(true),
 	cumulativeModelMatrix(1)
@@ -97,6 +98,7 @@ void Transform::scale(glm::vec3 _scale, bool relative){
 		scaleVector = _scale;
 	}
 	sDirty = true;
+	osDirty = true;
 	mDirty = true;
 	isIdentity = false;
 	makeCumulativeModelMatrixDirty();
@@ -135,12 +137,13 @@ void Transform::rotate(float _angle, float _x, float _y, float _z, CoordinateSpa
 void Transform::setOrientation(glm::quat _orientation){
 	orientation = _orientation;
 	oDirty = true;
+	osDirty = true;
 	mDirty = true;
 	isIdentity = false;
 	makeCumulativeModelMatrixDirty();
 }
 
-glm::mat4 Transform::getTranslationMatrix(){
+const glm::mat4 & Transform::getTranslationMatrix(){
 	if(tDirty){
 		tMatrix = glm::translate(translationVector);
 		tDirty = false;
@@ -148,7 +151,7 @@ glm::mat4 Transform::getTranslationMatrix(){
 	return tMatrix;
 }
 
-glm::mat4 Transform::getScaleMatrix(){
+const glm::mat4 & Transform::getScaleMatrix(){
 	if(sDirty){
 		sMatrix = glm::scale(scaleVector);
 		sDirty = false;
@@ -156,7 +159,7 @@ glm::mat4 Transform::getScaleMatrix(){
 	return sMatrix;
 }
 
-glm::mat4 Transform::getOrientationMatrix(){
+const glm::mat4 & Transform::getOrientationMatrix(){
 	if(oDirty){
 		oMatrix = glm::toMat4(orientation);
 		oDirty = false;
@@ -164,10 +167,17 @@ glm::mat4 Transform::getOrientationMatrix(){
 	return oMatrix;
 }
 
+const glm::mat4 & Transform::getOrientationScaleMatrix(){
+	if(osDirty){
+		osMatrix = getOrientationMatrix() * getScaleMatrix();
+		osDirty = false;
+	}
+	return osMatrix;
+}
 
-glm::mat4 Transform::getModelMatrix(){
+const glm::mat4 & Transform::getModelMatrix(){
 	if(mDirty){
-		mMatrix = getTranslationMatrix() * getOrientationMatrix() * getScaleMatrix();
+		mMatrix = getTranslationMatrix() * getOrientationScaleMatrix();
 		mDirty = false;
 	}
 	return mMatrix;
