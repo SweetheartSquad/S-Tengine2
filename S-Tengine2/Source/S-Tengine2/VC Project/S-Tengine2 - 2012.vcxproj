@@ -68,6 +68,7 @@
     <ClCompile Include="..\src\Layout.cpp" />
     <ClCompile Include="..\src\Log.cpp" />
     <ClCompile Include="..\src\node\NodeMeasurable.cpp" />
+    <ClCompile Include="..\src\node\NodeShadable.cpp" />
     <ClCompile Include="..\src\SceneSweetheartSquad.cpp" />
     <ClCompile Include="..\src\shader\ComponentShaderBase.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentBlinn.cpp" />
@@ -96,7 +97,6 @@
     <ClCompile Include="../src/Texture.cpp" />
     <ClCompile Include="../src/Transform.cpp" />
     <ClCompile Include="../src/Vox.cpp" />
-    <ClCompile Include="../src/VoxelJoint.cpp" />
     <ClCompile Include="../src/VoxelMesh.cpp" />
     <ClCompile Include="../src/VoxMatrices.cpp" />
     <ClCompile Include="../src/VoxRenderOptions.cpp" />
@@ -202,6 +202,7 @@
     <ClInclude Include="..\include\Layout.h" />
     <ClInclude Include="..\include\Log.h" />
     <ClInclude Include="..\include\node\NodeMeasurable.h" />
+    <ClInclude Include="..\include\node\NodeShadable.h" />
     <ClInclude Include="..\include\SceneSweetheartSquad.h" />
     <ClInclude Include="..\include\shader\ComponentShaderBase.h" />
     <ClInclude Include="../include/shader/ShaderComponentBlinn.h" />
@@ -233,7 +234,6 @@
     <ClInclude Include="../include/Tween.h" />
     <ClInclude Include="../include/Vertex.h" />
     <ClInclude Include="../include/Vox.h" />
-    <ClInclude Include="../include/VoxelJoint.h" />
     <ClInclude Include="../include/VoxelMesh.h" />
     <ClInclude Include="../include/VoxMatrices.h" />
     <ClInclude Include="../include/VoxRenderOptions.h" />

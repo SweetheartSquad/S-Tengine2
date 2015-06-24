@@ -33,12 +33,21 @@ private:
 	/** Orientation */
 	glm::quat orientation;
 	
+	// whether the translation matrix is dirty
 	bool tDirty;
 	glm::mat4 tMatrix;
+	// whether the scale matrix is dirty
 	bool sDirty;
 	glm::mat4 sMatrix;
+	// whether the orientation matrix is dirty
 	bool oDirty;
 	glm::mat4 oMatrix;
+	// whether the orientation matrix or the scale matrix is dirty
+	bool osDirty;
+	glm::mat4 osMatrix;
+	// returns orientationMatrix * scaleMatrix
+	const glm::mat4 & getOrientationScaleMatrix();
+	// whether the model matrix (translation, scale, or orientation) is dirty
 	bool mDirty;
 	glm::mat4 mMatrix;
 
@@ -121,7 +130,7 @@ public:
 	/** 
 	* Converts the translation vector to a 4x4 matrix and returns the result 
 	*/
-	glm::mat4 getTranslationMatrix();
+	const glm::mat4 & getTranslationMatrix();
 
 	glm::vec3 getTranslationVector();
 	glm::vec3 getScaleVector();
@@ -130,15 +139,15 @@ public:
 	/** 
 	* Converts the scale vector to a 4x4 matrix and returns the result 
 	*/
-	glm::mat4 getScaleMatrix();
+	const glm::mat4 & getScaleMatrix();
 	
 	/** 
 	* Converts the orientation quaternion to a 4x4 matrix and returns the result 
 	*/
-	glm::mat4 getOrientationMatrix();
+	const glm::mat4 & getOrientationMatrix();
 	
 	/** Calculates a 4x4 model matrix (translation * orientation * scale) and returns the result */
-	glm::mat4 getModelMatrix();
+	const glm::mat4 & getModelMatrix();
 
 
 

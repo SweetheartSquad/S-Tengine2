@@ -52,8 +52,6 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	
 	setPadding(0);
 	setMargin(0);
-
-	updateCollider();
 }
 
 void NodeUI::load(){
@@ -457,29 +455,39 @@ bool NodeUI::isLayoutDirty(){
 }
 
 void NodeUI::updateCollider(){
-	if(body != nullptr){
-		world->world->removeRigidBody(body);
-		delete body;
-		body = nullptr;
+	static TriMesh m;
+
+	glm::vec3 v = background->getWorldPos();
+	if(m.vertices.size() == 0){
+		m.pushVert(Vertex(v.x, v.y + getHeight(true, false), 0.f));
+		m.pushVert(Vertex(v.x + getWidth(true, false), v.y + getHeight(true, false), 0.f));
+		m.pushVert(Vertex(v.x + getWidth(true, false), v.y, 0.f));
+		m.pushVert(Vertex(v.x + getWidth(true, false), v.y, 0.f));
+		m.pushVert(Vertex(v.x, v.y, 0.f));
+		m.pushVert(Vertex(v.x, v.y + getHeight(true, false), 0.f));
+	}else{
+		m.vertices.at(0).x = v.x; m.vertices.at(0).y = v.y + getHeight(true, false);
+		m.vertices.at(1).x = v.x + getWidth(true, false); m.vertices.at(1).y = v.y + getHeight(true, false);
+		m.vertices.at(2).x = v.x + getWidth(true, false); m.vertices.at(2).y = v.y;
+		m.vertices.at(3).x = v.x + getWidth(true, false); m.vertices.at(3).y = v.y;
+		m.vertices.at(4).x = v.x; m.vertices.at(4).y = v.y;
+		m.vertices.at(5).x = v.x; m.vertices.at(5).y = v.y + getHeight(true, false);
 	}
+
 	if(shape != nullptr){
 		delete shape;
 		shape = nullptr;
 	}
-	glm::vec3 v = background->getWorldPos();
-	TriMesh * m = new TriMesh();
+	setColliderAsMesh(&m, true);
 
-	m->pushVert(Vertex(v.x, v.y + getHeight(true, false), 0.f));
-	m->pushVert(Vertex(v.x + getWidth(true, false), v.y + getHeight(true, false), 0.f));
-	m->pushVert(Vertex(v.x + getWidth(true, false), v.y, 0.f));
-	m->pushVert(Vertex(v.x + getWidth(true, false), v.y, 0.f));
-	m->pushVert(Vertex(v.x, v.y, 0.f));
-	m->pushVert(Vertex(v.x, v.y + getHeight(true, false), 0.f));
-	setColliderAsMesh(m, true);
-	createRigidBody(0);
-	// cleanup
-	delete m;
-	m = nullptr;
+	
+	if(body != nullptr){
+		world->world->removeRigidBody(body);
+		body->setCollisionShape(shape);
+		world->world->addRigidBody(body);
+	}else{
+		createRigidBody(0);
+	}
 }
 
 void NodeUI::autoResize(){

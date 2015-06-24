@@ -38,7 +38,7 @@ glm::vec3 NodeChild::getWorldPos(unsigned long int _parent){
 	
 	Transform * p = parents.at(_parent);
 	// if the cumulative model matrix is out-of-date, then so is the stored world position
-	if(cumulativeModelMatrixDirty){
+	//if(cumulativeModelMatrixDirty){
 		// find the first non-zero ancestor translation vector
 		glm::vec3 res(0);
 		do{
@@ -55,8 +55,8 @@ glm::vec3 NodeChild::getWorldPos(unsigned long int _parent){
 		}
 
 		worldPos = res;
-		cumulativeModelMatrixDirty = false;
-	}
+		//cumulativeModelMatrixDirty = false;
+	//}
 	return worldPos;
 }
 

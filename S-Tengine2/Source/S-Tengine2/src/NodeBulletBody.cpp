@@ -109,7 +109,7 @@ void NodeBulletBody::setTranslationPhysical(float _x, float _y, float _z, bool _
 }
 
 void NodeBulletBody::createRigidBody(float _mass, unsigned short int _collisionGroup, unsigned short int _collisionMask){
-	assert(shape != nullptr);
+	assert(shape != nullptr && body == nullptr);
 	btTransform t(btQuaternion(0, 0, 0), internalPos);
 	btMotionState * motion = new btDefaultMotionState(t);
 	btVector3 inertia(0, 0, 0);

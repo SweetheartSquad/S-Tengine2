@@ -15,6 +15,7 @@ struct b2Vec2;
 
 Sprite::Sprite(Shader * _shader) :
 	MeshEntity(MeshFactory::getPlaneMesh()),
+	NodeShadable(_shader),
 	currentAnimation(nullptr),
 	animatedTexture(nullptr),
 	playAnimation(true)

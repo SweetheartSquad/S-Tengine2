@@ -6,6 +6,7 @@
 
 Box2DMeshEntity::Box2DMeshEntity(Box2DWorld * _world, MeshInterface * _mesh, b2BodyType _bodyType, bool _defaultFixture, Shader * _shader):
 	NodeBox2DBody(_world, _bodyType, _defaultFixture),
+	NodeShadable(_shader),
 	MeshEntity(_mesh, _shader)
 {
 }
