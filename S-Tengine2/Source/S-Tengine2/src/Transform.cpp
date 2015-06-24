@@ -55,9 +55,11 @@ Transform::~Transform(){
 }
 
 void Transform::makeCumulativeModelMatrixDirty(){
-	NodeChild::makeCumulativeModelMatrixDirty();
-	for(NodeChild * child : children){
-		child->makeCumulativeModelMatrixDirty();
+	if(!mDirty){
+		NodeChild::makeCumulativeModelMatrixDirty();
+		for(NodeChild * child : children){
+			child->makeCumulativeModelMatrixDirty();
+		}
 	}
 }
 

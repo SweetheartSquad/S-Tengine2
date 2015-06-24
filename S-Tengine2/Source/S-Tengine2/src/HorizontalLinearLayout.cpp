@@ -40,6 +40,7 @@ void HorizontalLinearLayout::layoutChildren(){
 				break;
 		}
 		trans->translate(x, y, 0.f, false);
+		ui->setTranslationPhysical(x, y, 0.f, false);
 		x += ui->getWidth(true, true);
 	}
 }

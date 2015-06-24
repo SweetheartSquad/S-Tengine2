@@ -40,7 +40,7 @@ void VerticalLinearLayout::layoutChildren(){
 				x = rootPos.x - ui->getWidth(true, true);
 				break;
 		}
-		trans->translate(x, y, 0.f, false);
+		ui->setTranslationPhysical(x, y, 0.f, false);
 		y += ui->getHeight(true, true);
 	}
 }
