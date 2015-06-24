@@ -46,9 +46,9 @@ void TextLabel::unload(){
 }
 
 void TextLabel::load(){
-	HorizontalLinearLayout::load();
-	textShader->load();
 	font->load();
+	textShader->load();
+	HorizontalLinearLayout::load();
 }
 
 void TextLabel::setText(std::wstring _text){
@@ -101,7 +101,7 @@ float TextLabel::getContentsWidth(){
 void TextLabel::invalidate(){
 	while(usedGlyphs.size() > 0){
 		removeChild(usedGlyphs.back());
-		delete usedGlyphs.back();
+		unusedGlyphs.push_back(usedGlyphs.back());
 		usedGlyphs.pop_back();
 	}
 
@@ -120,7 +120,13 @@ void TextLabel::insertChar(wchar_t _char){
 
 UIGlyph * TextLabel::getGlyph(wchar_t _char, Glyph * _glyphMesh){
 	UIGlyph * res;
+	if(unusedGlyphs.size() > 0){
+		res = unusedGlyphs.back();
+		res->setGlyphMesh(_glyphMesh);
+		unusedGlyphs.pop_back();
+	}else{
 		res = new UIGlyph(world, scene, _glyphMesh, textShader, _char);
+	}
 	return res;
 }
 
@@ -159,12 +165,6 @@ void UIGlyph::setGlyphMesh(Glyph * _newGlyph){
 	glyph->configureDefaultVertexAttributes(shader);
 }
 
-void UIGlyph::load(){
-	NodeUI::load();
-}
-void UIGlyph::unload(){
-	NodeUI::unload();
-}
 void UIGlyph::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	Shader * prev = _renderOptions->shader;
 	NodeShadable::applyShader(_renderOptions);

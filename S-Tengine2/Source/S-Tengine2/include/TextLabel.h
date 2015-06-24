@@ -16,8 +16,6 @@ public:
 	UIGlyph(BulletWorld * _world, Scene * _scene, Glyph * _mesh, Shader * _shader, wchar_t _character);
 	void setGlyphMesh(Glyph * _mesh);
 	
-	virtual void load() override;
-	virtual void unload() override;
 	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 };
 
@@ -28,6 +26,7 @@ public:
 
 	float lineWidth;
 	std::vector<UIGlyph *> usedGlyphs;
+	std::vector<UIGlyph *> unusedGlyphs;
 
 	TextLabel(BulletWorld* _world, Scene* _scene, Font * _font, Shader * _textShader, float _width = -1);
 	
