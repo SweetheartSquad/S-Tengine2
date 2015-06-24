@@ -52,8 +52,6 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	
 	setPadding(0);
 	setMargin(0);
-
-	updateCollider();
 }
 
 void NodeUI::load(){
