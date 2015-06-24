@@ -23,7 +23,7 @@ public:
 	// returns the last TextLabel inserted into unusedLines
 	// if unusedLines is empty, creates a new TextLabel and returns that instead
 	// the returned line will be added to the contents list automatically
-	TextLabel * getNewLine();
+	virtual TextLabel * getNewLine();
 private:
 	std::wstring text;
 	std::wstring textDisplayed;
