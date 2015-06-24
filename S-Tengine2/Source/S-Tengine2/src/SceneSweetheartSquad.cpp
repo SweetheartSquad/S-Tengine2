@@ -83,7 +83,7 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	Texture * c = new Texture("../assets/engine basics/cursor.png", 32, 32, true, false);
 	c->load();
 	ResourceManager::resources.push_back(c);
-	Texture * logoTex = new Texture("../assets/engine basics/sweetheartsquad-logo.png", 1024, 1024, true, false);
+	Texture * logoTex = new Texture("../assets/engine basics/sweetheartsquad-logo-tex.png", 1024, 1024, true, false);
 	logoTex->load();
 	ResourceManager::resources.push_back(logoTex);
 	
@@ -103,11 +103,11 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	childTransform->addChild(logo)->scale(10);
 	logo->parents.at(0)->translate(0, 10, 0);
 
-	logo1 = new MeshEntity(Resource::loadMeshFromObj("../assets/engine basics/sweetheartsquad-logo1.obj").at(0));
+	logo1 = new MeshEntity(Resource::loadMeshFromObj("../assets/engine basics/sweetheartsquad-logo-noheart.obj").at(0));
 	logo1->mesh->pushTexture2D(logoTex);
 	logo1->setShader(diffuseShader, true);
 
-	logo2 = new MeshEntity(Resource::loadMeshFromObj("../assets/engine basics/sweetheartsquad-logo2.obj").at(0));
+	logo2 = new MeshEntity(Resource::loadMeshFromObj("../assets/engine basics/sweetheartsquad-logo-heartonly.obj").at(0));
 	logo2->mesh->pushTexture2D(logoTex);
 	logo2->setShader(diffuseShader, true);
 	

@@ -74,7 +74,7 @@ SceneSplash::SceneSplash(Game * _game) :
 	Texture * c = new Texture("../assets/engine basics/cursor.png", 32, 32, true, false);
 	c->load();
 	ResourceManager::resources.push_back(c);
-	Texture * logoTex = new Texture("../assets/engine basics/S-Tengine2_logo.png", 1024, 1024, true, false);
+	Texture * logoTex = new Texture("../assets/engine basics/S-Tengine2_logo-tex.png", 1024, 1024, true, false);
 	logoTex->load();
 	ResourceManager::resources.push_back(logoTex);
 	
