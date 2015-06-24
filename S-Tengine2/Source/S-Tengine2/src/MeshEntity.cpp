@@ -29,8 +29,10 @@ MeshEntity::~MeshEntity(void){
 }
 
 void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	Shader * prev = _renderOptions->shader;
 	NodeShadable::applyShader(_renderOptions);
 	Entity::render(_matrixStack, _renderOptions);
+	_renderOptions->shader = prev;
 }
 
 void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){

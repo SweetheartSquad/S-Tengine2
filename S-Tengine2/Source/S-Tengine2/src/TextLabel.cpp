@@ -166,7 +166,8 @@ void UIGlyph::unload(){
 	NodeUI::unload();
 }
 void UIGlyph::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	MeshEntity::render(_matrixStack, _renderOptions);
+	Shader * prev = _renderOptions->shader;
 	NodeShadable::applyShader(_renderOptions);
 	NodeUI::render(_matrixStack, _renderOptions);
+	_renderOptions->shader = prev;
 }
