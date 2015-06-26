@@ -74,7 +74,7 @@ OpenAL_Buffer::OpenAL_Buffer(const char * _filename, bool _autoRelease) :
 		// sf_read_short returns the number of samples read
 		sf_count_t samplesRead = sf_read_short(file, samples, numSamples);
 		// if we read less samples than requested, there must be an error
-		assert(samplesRead < numSamples); 
+		assert(samplesRead == numSamples); 
 
 		// close the file
 		sf_close(file);
