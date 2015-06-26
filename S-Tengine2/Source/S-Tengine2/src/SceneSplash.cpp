@@ -36,7 +36,6 @@
 #include <StandardFrameBuffer.h>
 #include <NumberUtils.h>
 
-#include <Label.h>
 #include <Font.h>
 #include <shader\ShaderComponentText.h>
 
