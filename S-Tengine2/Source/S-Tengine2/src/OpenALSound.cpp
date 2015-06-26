@@ -70,10 +70,11 @@ OpenAL_Buffer::OpenAL_Buffer(const char * _filename, bool _autoRelease) :
 		sampleRate = static_cast<ALsizei>(fileInfo.samplerate);
 
 		// read the audio data (as a 16 bit signed integer)
-		samples.resize(numSamples);
+		samples = (ALshort *)calloc(numSamples, sizeof(ALshort));
 		// sf_read_short returns the number of samples read
-		// if we read zero samples, there must be an error
-		assert(!sf_read_short(file, &samples[0], numSamples) < numSamples); 
+		sf_count_t samplesRead = sf_read_short(file, samples, numSamples);
+		// if we read less samples than requested, there must be an error
+		assert(samplesRead < numSamples); 
 
 		// close the file
 		sf_close(file);
@@ -93,6 +94,7 @@ OpenAL_Buffer::OpenAL_Buffer(const char * _filename, bool _autoRelease) :
 
 OpenAL_Buffer::~OpenAL_Buffer(){	
 	checkForAlError(alDeleteBuffers(1, &bufferId));
+	free(samples);
 }
 
 
@@ -232,7 +234,7 @@ float OpenAL_Sound::getAmplitude(){
 	if(t < 0){
 		return 0;
 	}
-	return (float)source->buffer->samples.at(t)/INT16_MAX;
+	return (float)source->buffer->samples[t]/INT16_MAX;
 }
 
 
@@ -409,7 +411,7 @@ OpenAL_SoundStreamGenerative::OpenAL_SoundStreamGenerative(bool _positional, boo
 	generativeFunction(nullptr)
 {
 	maxBufferOffset = -1;
-	source->buffer->samples.resize(BUFFER_LEN);
+	source->buffer->samples = (ALshort *)calloc(BUFFER_LEN, sizeof(ALshort));
 	source->buffer->sampleRate = 44100;
 	source->buffer->format = AL_FORMAT_MONO16;
 
@@ -423,9 +425,9 @@ ALshort OpenAL_SoundStreamGenerative::compressFloat(float _v, float _volume){
 }
 
 unsigned long int OpenAL_SoundStreamGenerative::fillBuffer(ALuint _bufferId){
-	for(unsigned long int i = 0; i < source->buffer->samples.size(); ++i){
+	for(unsigned long int i = 0; i < source->buffer->numSamples; ++i){
 		unsigned long int t = i + samplesPlayed;
-		source->buffer->samples.at(i) = generativeFunction(t);
+		source->buffer->samples[i] = generativeFunction(t);
 	}
 
 	checkForAlError(alBufferData(_bufferId, source->buffer->format, &source->buffer->samples[0], BUFFER_LEN * sizeof(ALushort), source->buffer->sampleRate));

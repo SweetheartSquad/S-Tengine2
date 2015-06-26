@@ -58,7 +58,7 @@ public:
 	ALuint bufferId;
 	ALsizei numSamples, sampleRate;
     ALenum format;
-	std::vector<ALshort> samples;
+	ALshort * samples;
 	OpenAL_Buffer(const char * _filename, bool _autoRelease);
 	~OpenAL_Buffer();
 };
