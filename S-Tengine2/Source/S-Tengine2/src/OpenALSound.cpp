@@ -252,24 +252,28 @@ void OpenAL_SoundSimple::update(Step * _step){
 }
 
 
-OpenAL_SoundStream::OpenAL_SoundStream(const char * _filename, bool _positional, bool _autoRelease) :
+OpenAL_SoundStream::OpenAL_SoundStream(const char * _filename, bool _positional, bool _autoRelease, unsigned long int _bufferLength, unsigned long int _numBufs) :
 	NodeResource(_autoRelease),
 	isStreaming(false),
 	OpenAL_Sound(new OpenAL_Source(nullptr, _positional, _autoRelease), _autoRelease),
 	bufferOffset(0),
-	maxBufferOffset(0)
+	maxBufferOffset(0),
+	numBuffers(_numBufs),
+	bufferLength(_bufferLength)
 {
-	alGenBuffers(NUM_BUFS, buffers);
+	buffers = (ALuint *)calloc(numBuffers, sizeof(ALuint));
+	alGenBuffers(numBuffers, buffers);
 	source->buffer = new OpenAL_Buffer(_filename, _autoRelease);
 	++source->buffer->referenceCount;
 
-	maxBufferOffset = source->buffer->numSamples / BUFFER_LEN;
+	maxBufferOffset = source->buffer->numSamples / bufferLength;
 }
 
 
 OpenAL_SoundStream::~OpenAL_SoundStream(){
 	stop();
-	checkForAlError(alDeleteBuffers(NUM_BUFS, buffers));
+	checkForAlError(alDeleteBuffers(numBuffers, buffers));
+	free(buffers);
 }
 
 void OpenAL_SoundStream::update(Step * _step){
@@ -281,7 +285,7 @@ void OpenAL_SoundStream::update(Step * _step){
 	checkForAlError(alGetSourcei(source->sourceId, AL_BUFFERS_PROCESSED, &numBufs));
 	
 	while(numBufs--){
-		samplesPlayed += BUFFER_LEN;
+		samplesPlayed += bufferLength;
 		ALuint tempBuf;
 		// unqueue the processed buffer
 		checkForAlError(alSourceUnqueueBuffers(source->sourceId, 1, &tempBuf));
@@ -362,9 +366,10 @@ void OpenAL_SoundStream::rewind(){
 	// move to the beginning
 	ALint numQueuedBuffers = 0;
 	checkForAlError(alGetSourcei(source->sourceId, AL_BUFFERS_QUEUED, &numQueuedBuffers));
-	ALuint tempBuf[NUM_BUFS];
+	ALuint * tempBuf = (ALuint *)calloc(numBuffers, sizeof(ALuint));
 	checkForAlError(alSourceUnqueueBuffers(source->sourceId, numQueuedBuffers, tempBuf));
 	bufferOffset = 0;
+	free(tempBuf);
 }
 
 
@@ -381,13 +386,13 @@ ALint OpenAL_SoundStream::getCurrentSample(){
 unsigned long int OpenAL_SoundStream::fillBuffer(ALuint _bufferId){
 	unsigned long int numSamplesToBuffer;
 	if(bufferOffset < maxBufferOffset){
-		numSamplesToBuffer = BUFFER_LEN;
+		numSamplesToBuffer = bufferLength;
 	}else if(bufferOffset == maxBufferOffset){
-		numSamplesToBuffer = source->buffer->numSamples - bufferOffset*BUFFER_LEN;
+		numSamplesToBuffer = source->buffer->numSamples - bufferOffset*bufferLength;
 	}else{
 		return 0;
 	}
-	checkForAlError(alBufferData(_bufferId, source->buffer->format, &source->buffer->samples[bufferOffset*BUFFER_LEN], numSamplesToBuffer * sizeof(ALushort), source->buffer->sampleRate));
+	checkForAlError(alBufferData(_bufferId, source->buffer->format, &source->buffer->samples[bufferOffset*bufferLength], numSamplesToBuffer * sizeof(ALushort), source->buffer->sampleRate));
 	++bufferOffset;
 	return 1;
 }
@@ -405,13 +410,13 @@ unsigned long int OpenAL_SoundStream::fillBuffers(){
 
 
 
-OpenAL_SoundStreamGenerative::OpenAL_SoundStreamGenerative(bool _positional, bool _autoRelease) :
-	OpenAL_SoundStream(nullptr, _positional, _autoRelease),
+OpenAL_SoundStreamGenerative::OpenAL_SoundStreamGenerative(bool _positional, bool _autoRelease, unsigned long int _bufferLength, unsigned long int _numBufs) :
+	OpenAL_SoundStream(nullptr, _positional, _autoRelease, _bufferLength, _numBufs),
 	NodeResource(_autoRelease),
 	generativeFunction(nullptr)
 {
 	maxBufferOffset = -1;
-	source->buffer->samples = (ALshort *)calloc(BUFFER_LEN, sizeof(ALshort));
+	source->buffer->samples = (ALshort *)calloc(bufferLength, sizeof(ALshort));
 	source->buffer->sampleRate = 44100;
 	source->buffer->format = AL_FORMAT_MONO16;
 
@@ -430,7 +435,7 @@ unsigned long int OpenAL_SoundStreamGenerative::fillBuffer(ALuint _bufferId){
 		source->buffer->samples[i] = generativeFunction(t);
 	}
 
-	checkForAlError(alBufferData(_bufferId, source->buffer->format, &source->buffer->samples[0], BUFFER_LEN * sizeof(ALushort), source->buffer->sampleRate));
+	checkForAlError(alBufferData(_bufferId, source->buffer->format, &source->buffer->samples[0], bufferLength * sizeof(ALushort), source->buffer->sampleRate));
 	++bufferOffset;
 	return 1;
 }

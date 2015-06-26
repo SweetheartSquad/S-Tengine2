@@ -123,11 +123,11 @@ public:
 class OpenAL_SoundStream : public OpenAL_Sound{
 protected:
 	// number of buffers used for a single OpenAL_Stream
-	const static unsigned long int NUM_BUFS = 4;
+	unsigned long int numBuffers;
 	// size of buffers used for streaming
-	const static unsigned long int BUFFER_LEN = 44100/10;
+	unsigned long int bufferLength;
 public:
-	ALuint buffers[NUM_BUFS];
+	ALuint * buffers;
 	// the number of buffers of the stream which have already been queued
 	unsigned long int bufferOffset;
 	// maximum number of buffers that could possibly be queued (the number of samples / the number of samples per buffer)
@@ -136,7 +136,7 @@ public:
 	// whether the stream should continue buffering
 	bool isStreaming;
 
-	OpenAL_SoundStream(const char * _filename, bool _positional, bool _autoRelease);
+	OpenAL_SoundStream(const char * _filename, bool _positional, bool _autoRelease, unsigned long int _bufferLength = 4410, unsigned long int _numBufs = 4);
 	~OpenAL_SoundStream();
 
 	virtual void update(Step * _step) override;
@@ -171,7 +171,7 @@ public:
 
 	std::function<ALshort(unsigned long int _time)> generativeFunction;
 	
-	OpenAL_SoundStreamGenerative(bool _positional, bool _autoRelease);
+	OpenAL_SoundStreamGenerative(bool _positional, bool _autoRelease, unsigned long int _bufferLength = 4410, unsigned long int _numBufs = 4);
 
 	// attempt to fill the _bufferId with new data from the function
 	// (uses bufferOffset to determine where to start from)
