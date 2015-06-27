@@ -10,3 +10,8 @@ ComponentShaderText::ComponentShaderText(bool _autoRelease) :
 	compileShader();
 	load();
 }
+
+void ComponentShaderText::setColor(float _r, float _g, float _b) {
+	textComponent->setColor(glm::vec3(_r, _g, _b));
+	makeDirty();
+}

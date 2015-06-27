@@ -9,4 +9,6 @@ public:
 	ShaderComponentText * textComponent;
 
 	ComponentShaderText(bool _autoRelease);
+
+	void setColor(float _r, float _g, float _b);
 };
