@@ -41,6 +41,7 @@ public:
 	void applyForceDown(float _force);
 
 	void applyLinearImpulse(float _forceX, float _forceY, float _pointX, float _pointY);
+	void applyLinearImpulseToCenter(float _forceX, float _forceY);
 	void applyLinearImpulseLeft(float _force);
 	void applyLinearImpulseRight(float _force);
 	void applyLinearImpulseUp(float _force);

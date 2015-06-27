@@ -101,6 +101,12 @@ void NodeBox2DBody::applyLinearImpulse(float _forceX, float _forceY, float _poin
 	}
 }
 
+void NodeBox2DBody::applyLinearImpulseToCenter(float _forceX, float _forceY){
+	if(body != nullptr){
+		body->ApplyLinearImpulse(b2Vec2(_forceX, _forceY), body->GetWorldCenter(), true);
+	}
+}
+
 void NodeBox2DBody::applyLinearImpulseLeft(float _force){
 	if(body != nullptr){
 		body->ApplyLinearImpulse(b2Vec2(-_force, 0), body->GetWorldCenter(), true);
