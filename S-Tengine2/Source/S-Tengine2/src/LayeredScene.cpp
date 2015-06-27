@@ -10,9 +10,14 @@
 
 LayeredScene::LayeredScene(Game * _game, unsigned long int _numLayers) :
 	Scene(_game),
-	numLayers(_numLayers)
+	numLayers(_numLayers),
+	uiLayer(this, 0.f, 0.f, 0.f, 0.f)
 {
-	layers.resize(_numLayers);
+	for(unsigned long int i = 0; i < _numLayers; ++i) {
+		Transform * trans = new Transform();
+		childTransform->addChild(trans);
+		layers.push_back(trans);
+	}
 }
 
 void LayeredScene::update(Step * _step){
@@ -45,54 +50,34 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	_matrixStack->setViewMatrix(&activeCamera->getViewMatrix());
 
     glDisable(GL_DEPTH_TEST);
-	for(std::vector<Entity *> & layer : layers){
-		for(Entity * e : layer){
-			e->render(_matrixStack, _renderOptions);
-		}
-	}
-	
-	
-	OrthographicCamera cam(-1920.f, 0, 0, 1080.f, -1000.f, 1000.f);
-	
-	_matrixStack->setProjectionMatrix(&cam.getProjectionMatrix());
-	_matrixStack->setViewMatrix(&cam.getViewMatrix());
-
-	for(Entity * e : uiLayer){
+	for(Transform * e : layers){
 		e->render(_matrixStack, _renderOptions);
 	}
 
-	_matrixStack->popMatrix();
+	int sceneWidth, sceneHeight;
+	glfwGetWindowSize(vox::currentContext, &sceneWidth, &sceneHeight);
+	uiLayer.resize(0, sceneWidth, 0, sceneHeight);
+	uiLayer.render(_matrixStack, _renderOptions);
 }
 
-void LayeredScene::removeChild(Entity* _child){
+void LayeredScene::removeChild(NodeChild* _child){
 	childTransform->removeChild(_child);
-	for(std::vector<Entity *> & layer : layers){
-		for(signed long int j = layer.size()-1; j >= 0; --j){
-			if(layer.at(j) == _child){
-				layer.erase(layer.begin() + j);
-			}
-		}
+	for(Transform * layer : layers){
+		layer->removeChild(_child);
 	}
 }
 
 
-void LayeredScene::addUIChild(Entity* _child){
-	childTransform->addChild(_child);
-	uiLayer.push_back(_child);
+void LayeredScene::addUIChild(NodeUI * _child){
+	uiLayer.addChild(_child);
 }
-void LayeredScene::removeUIChild(Entity* _child){
-	childTransform->removeChild(_child);
-	for(signed long int j = uiLayer.size()-1; j >= 0; --j){
-		if(uiLayer.at(j) == _child){
-			uiLayer.erase(uiLayer.begin() + j);
-		}
-	}
+void LayeredScene::removeUIChild(NodeUI * _child){
+	uiLayer.removeChild(_child);
 }
 
-void LayeredScene::addChild(Entity* _child, unsigned long int _layer){
+void LayeredScene::addChild(NodeChild * _child, unsigned long int _layer, bool underNewTransform){
 	if(_layer < numLayers){
-		childTransform->addChild(_child);
-		layers.at(_layer).push_back(_child);
+		layers.at(_layer)->addChild(_child);
 	}else{
 		std::cout << "Scene does not have a layer " << _layer << std::endl;
 	}
