@@ -60,13 +60,11 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	uiLayer.render(_matrixStack, _renderOptions);
 }
 
-void LayeredScene::removeChild(NodeChild* _child){
-	childTransform->removeChild(_child);
+void LayeredScene::removeChild(NodeChild * _child){
 	for(Transform * layer : layers){
 		layer->removeChild(_child);
 	}
 }
-
 
 void LayeredScene::addUIChild(NodeUI * _child){
 	uiLayer.addChild(_child);
