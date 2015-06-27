@@ -92,6 +92,8 @@ public:
 	*/
 	void buttonUpListener(int _code);
 
+	void buttonNullListener(int _code);
+
 	/* _id is GLFW_JOYSTICK_1 through GLFW_JOYSTICK_LAST */
 	Joystick(int _id, float _deadZone = 0.25f);
 	~Joystick();
