@@ -128,6 +128,7 @@
     <ClCompile Include="../src/shader/ShaderComponentMaskRender.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentNormals.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentSsao.cpp" />
+    <ClCompile Include="../src/Slider.cpp" />
     <ClCompile Include="../src/TextLabel.cpp" />
     <ClCompile Include="../src/LinearLayout.cpp" />
     <ClCompile Include="../src/shader/ComponentShaderText.cpp" />
@@ -264,6 +265,7 @@
     <ClInclude Include="../include/shader/ShaderComponentMaskRender.h" />
     <ClInclude Include="../include/shader/ShaderComponentNormals.h" />
     <ClInclude Include="../include/shader/ShaderComponentSsao.h" />
+    <ClInclude Include="../include/Slider.h" />
     <ClInclude Include="../include/TextLabel.h" />
     <ClInclude Include="../include/LinearLayout.h" />
     <ClInclude Include="../include/shader/ComponentShaderText.h" />
