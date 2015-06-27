@@ -32,7 +32,7 @@ void NodeBox2DBody::update(Step * _step){
 			if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
 				lv.x = maxVelocity.x * (lv.x < 0 ? -1 : 1);
 			}
-			if(maxVelocity.y != -1 && lv.y > maxVelocity.y){
+			if(maxVelocity.y != -1 && abs(lv.y) > maxVelocity.y){
 				lv.y = maxVelocity.y * (lv.y < 0 ? -1 : 1);
 			}
 			body->SetLinearVelocity(lv);
