@@ -14,7 +14,6 @@
 int16 Box2DSuperSprite::gGroupIndex = 0;
 
 Box2DSuperSprite::Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :
-	MeshEntity(nullptr),
 	world(_world),
 	componentScale(0.0025f),
 	groupIndex(_groupIndex),
@@ -44,11 +43,11 @@ void Box2DSuperSprite::render(vox::MatrixStack * _matrixStack, RenderOptions * _
             (*c)->render(_matrixStack, _renderOptions);
         }
     }
-	MeshEntity::render(_matrixStack, _renderOptions);
+	Entity::render(_matrixStack, _renderOptions);
 }
 
 void Box2DSuperSprite::update(Step * _step){
-    MeshEntity::update(_step);
+    Entity::update(_step);
     for (Box2DSprite ** c : components){
         if (*c != nullptr){
             (*c)->update(_step);
@@ -58,10 +57,10 @@ void Box2DSuperSprite::update(Step * _step){
 
 
 void Box2DSuperSprite::setShader(Shader * _shader, bool _configureDefaultVertexAttributes){
-	MeshEntity::setShader(_shader, _configureDefaultVertexAttributes);
+	shader = _shader;
 	for(Box2DSprite ** c : components){
 		if(*c != nullptr){
-			(*c)->setShader(_shader, _configureDefaultVertexAttributes);
+			(*c)->setShader(shader, _configureDefaultVertexAttributes);
 		}
 	}
 }
@@ -98,8 +97,9 @@ void Box2DSuperSprite::setGroupIndex(int16 _groupIndex){
 	}
 }
 
-void Box2DSuperSprite::addComponent(Box2DSprite * _component){
-	components.push_back(&_component);
+void Box2DSuperSprite::addComponent(Box2DSprite ** _component){
+	components.push_back(_component);
+	childTransform->addChild(*_component);
 }
 
 void Box2DSuperSprite::snapComponents(Box2DSprite * _sprite){
@@ -110,13 +110,13 @@ void Box2DSuperSprite::snapComponents(Box2DSprite * _sprite){
 }
 
 void Box2DSuperSprite::load(){
-	MeshEntity::load();
+	Entity::load();
 	for(Box2DSprite ** c : components){
 		(*c)->load();
 	}
 }
 void Box2DSuperSprite::unload(){
-	MeshEntity::unload();
+	Entity::unload();
 	for(Box2DSprite ** c : components){
 		(*c)->unload();
 	}

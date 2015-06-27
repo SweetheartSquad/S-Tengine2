@@ -52,7 +52,7 @@ Particle * ParticleSystem::addParticle(glm::vec3 _pos, TextureSampler * _texture
 	b2Vec2 pos = p->body->GetPosition();
 	p->applyLinearImpulse((std::rand() % 20 - 10)*mass, (std::rand() % 20 - 10)*mass, pos.x, pos.y);
 	p->applyAngularImpulse((std::rand() % 20 - 10)*mass);
-    p->setShader(getShader(), true);
+    p->setShader(shader, true);
     components.push_back(test);
 	return p;
 }

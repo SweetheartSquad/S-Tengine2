@@ -3,6 +3,7 @@
 #include "MeshEntity.h"
 #include <Box2D/Box2D.h>
 #include <node/NodeResource.h>
+#include <node\NodeShadable.h>
 
 class BitmapFont;
 class Scene;
@@ -14,7 +15,7 @@ class CharacterComponent;
 class Texture;
 class TextureSampler;
 
-class Box2DSuperSprite : public MeshEntity {
+class Box2DSuperSprite : public virtual Entity, public virtual NodeShadable{
 public:
 	
 	static int16 gGroupIndex;
@@ -39,7 +40,8 @@ public:
 	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	virtual void update(Step* _step) override;
 
-	virtual void setShader(Shader * _shader, bool _configureDefaultVertexAttributes) override;
+	// saves the shader on this supersprite and sets it on all its components
+	virtual void setShader(Shader * _shader, bool _configureDefaultVertexAttributes);
 	
 	virtual void addToScene(Scene * _scene);
 
@@ -52,7 +54,7 @@ public:
 	// Sets the group index on all components
 	void setGroupIndex(int16 _groupIndex);
 
-	virtual void addComponent(Box2DSprite * _component);
+	virtual void addComponent(Box2DSprite ** _component);
 
 	// Can't use this with the way we have things set up, things like the catapult arm and puppet hand don't store their actual world position since they're positioned with joints
 	void snapComponents(Box2DSprite * _sprite);
