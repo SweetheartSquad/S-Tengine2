@@ -38,7 +38,7 @@ Box2DSuperSprite::~Box2DSuperSprite(){
 }
 
 void Box2DSuperSprite::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){	
-    for (Box2DSprite ** c : components){
+	for (Box2DSprite ** c : components){
         if (*c != nullptr){
             (*c)->render(_matrixStack, _renderOptions);
         }
