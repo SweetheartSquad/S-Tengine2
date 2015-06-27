@@ -15,7 +15,7 @@ int16 Box2DSuperSprite::gGroupIndex = 0;
 
 Box2DSuperSprite::Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :
 	world(_world),
-	componentScale(0.0025f),
+	componentScale(1.f),
 	groupIndex(_groupIndex),
 	categoryBits(_categoryBits),
 	maskBits(_maskBits),

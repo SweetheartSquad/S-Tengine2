@@ -55,12 +55,7 @@ float Box2DSprite::getCorrectedWidth(){
 }
 
 b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * _userData, bool _isSensor){
-	b2PolygonShape tShape;
-	glm::vec3 scaleVec(1);
-	if(parents.size() > 0){
-		scaleVec = parents.at(0)->getScaleVector();
-	}
-	tShape.SetAsBox(width*std::abs(scaleVec.x)*scale, height*std::abs(scaleVec.y)*scale, _offset, 0.0f);
+	b2PolygonShape tShape = getFixtureShape();
 
 	b2FixtureDef fd;
 	fd.shape = &tShape;
@@ -109,8 +104,7 @@ b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * 
 // shouldn't this dereference the fixture and just return its shape?
 b2PolygonShape Box2DSprite::getFixtureShape(){
 	b2PolygonShape tShape;
-	glm::vec3 scaleVec = parents.at(0)->getScaleVector();
-	tShape.SetAsBox(width*std::abs(scaleVec.x)*scale*2.f, height*std::abs(scaleVec.y)*scale*2.f);
+	tShape.SetAsBox(getCorrectedWidth()*0.5f, getCorrectedHeight()*0.5f);
 	return tShape;
 }
 
