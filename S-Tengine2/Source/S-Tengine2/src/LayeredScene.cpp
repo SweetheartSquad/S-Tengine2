@@ -73,9 +73,9 @@ void LayeredScene::removeUIChild(NodeUI * _child){
 	uiLayer.removeChild(_child);
 }
 
-void LayeredScene::addChild(NodeChild * _child, unsigned long int _layer, bool underNewTransform){
+void LayeredScene::addChild(NodeChild * _child, unsigned long int _layer, bool _underNewTransform){
 	if(_layer < numLayers){
-		layers.at(_layer)->addChild(_child);
+		layers.at(_layer)->addChild(_child, _underNewTransform);
 	}else{
 		std::cout << "Scene does not have a layer " << _layer << std::endl;
 	}
