@@ -31,10 +31,13 @@ bool Joystick::buttonJustDown(int _glfwKeyCode){
 }
 
 void Joystick::buttonDownListener(int _glfwKeyCode){
+	// if the button was just released last frame, remove it from the justReleased list
 	if(justReleasedButtons.find(_glfwKeyCode) != justReleasedButtons.end()){
 		justReleasedButtons.erase(_glfwKeyCode);
 	}
 
+	// if the button was NOT down last frame, put it in the justPressed list
+	// if the button was just down last frame, remove it from the justPressed list
 	if(pressedButtons.find(_glfwKeyCode) == pressedButtons.end()){
 		justPressedButtons.insert(std::pair<int, int>(_glfwKeyCode, _glfwKeyCode));
 	}else if(justPressedButtons.find(_glfwKeyCode) != justPressedButtons.end()){
@@ -44,20 +47,23 @@ void Joystick::buttonDownListener(int _glfwKeyCode){
 }
 
 void Joystick::buttonUpListener(int _glfwKeyCode){
+	// if the button was just released last frame, remove it from the justReleased list
 	if(justReleasedButtons.find(_glfwKeyCode) != justReleasedButtons.end()){
 		justReleasedButtons.erase(_glfwKeyCode);
 	}
 
+	// if the button was down last frame, remove it from the pressed and justPressed lists and put it in the justReleased list
 	if(pressedButtons.find(_glfwKeyCode) != pressedButtons.end()){
 		pressedButtons.erase(_glfwKeyCode);
+		if(justPressedButtons.find(_glfwKeyCode) != justPressedButtons.end()){
+			justPressedButtons.erase(_glfwKeyCode);
+		}
 		justReleasedButtons.insert(std::pair<int, int>(_glfwKeyCode, _glfwKeyCode));
-	}
-	if(justPressedButtons.find(_glfwKeyCode) != justPressedButtons.end()){
-		justPressedButtons.erase(_glfwKeyCode);
 	}
 }
 
 void Joystick::buttonNullListener(int _glfwKeyCode){
+	// if the button isn't doing anything, remove it from all three lists
 	if(pressedButtons.find(_glfwKeyCode) != pressedButtons.end()){
 		pressedButtons.erase(_glfwKeyCode);
 	}
@@ -75,32 +81,22 @@ float Joystick::getAxis(int _code){
 }
 
 void Joystick::update(Step * _step){
+	// handle buttons
 	int buttonCount;
 	const unsigned char * buttons = glfwGetJoystickButtons(id, &buttonCount);
-
-	//justPressedButtons.clear();
-	//justReleasedButtons.clear();
-	axesValues.clear();
-
 	for(signed long int i = 0; i < buttonCount; ++i){
 		if(buttons[i] == GLFW_PRESS){
 			buttonDownListener(i);
-		if(i == xbox_buttons::kL1){
-			std::cout << "PRESS" << std::endl;
-		}
 		}else if(buttons[i] == GLFW_RELEASE){
 			buttonUpListener(i);
-		if(i == xbox_buttons::kL1){
-			std::cout << "RELEASE" << std::endl;
-		}
 		}else{
+			// this part shouldn't actually fire
 			buttonNullListener(i);
-		if(i == xbox_buttons::kL1){
-			std::cout << "NULL" << std::endl;
-		}
 		}
 	}
-
+	
+	// handle axes
+	axesValues.clear();
 	int axesCount;
 	const float * axes = glfwGetJoystickAxes(id, &axesCount);
 	for(signed long int i = 0; i < axesCount; ++i){
