@@ -37,25 +37,6 @@ Box2DSuperSprite::~Box2DSuperSprite(){
 	components.clear();
 }
 
-void Box2DSuperSprite::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){	
-	for (Box2DSprite ** c : components){
-        if (*c != nullptr){
-            (*c)->render(_matrixStack, _renderOptions);
-        }
-    }
-	Entity::render(_matrixStack, _renderOptions);
-}
-
-void Box2DSuperSprite::update(Step * _step){
-    Entity::update(_step);
-    for (Box2DSprite ** c : components){
-        if (*c != nullptr){
-            (*c)->update(_step);
-        }
-    }
-}
-
-
 void Box2DSuperSprite::setShader(Shader * _shader, bool _configureDefaultVertexAttributes){
 	shader = _shader;
 	for(Box2DSprite ** c : components){

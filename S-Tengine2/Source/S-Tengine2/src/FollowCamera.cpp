@@ -127,6 +127,7 @@ void FollowCamera::update(Step * _step){
 }
 
 void FollowCamera::addTarget(NodeChild * _target, float _weight){
+	assert(_target != nullptr);
 	Target t;
 	t.target = _target;
 	t.weight = _weight;
