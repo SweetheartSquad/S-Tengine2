@@ -7,7 +7,7 @@
 RenderSurface::RenderSurface(Shader * _shader) :
 	MeshInterface(GL_QUADS, GL_STATIC_DRAW),
 	NodeResource(true),
-	shader(_shader)
+	NodeShadable(_shader)
 {
 	pushVert(Vertex(
 		-1.f, 1.f, 0.f,
@@ -39,7 +39,6 @@ RenderSurface::RenderSurface(Shader * _shader) :
 
 RenderSurface::~RenderSurface(){
 	unload();
-	shader->decrementAndDelete();
 }
 
 void RenderSurface::load(){

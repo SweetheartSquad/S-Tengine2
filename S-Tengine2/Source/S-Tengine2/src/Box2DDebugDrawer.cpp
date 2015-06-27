@@ -14,7 +14,7 @@
 #include <GL/glew.h>
 
 Box2DDebugDrawer::Box2DDebugDrawer(Box2DWorld * _world) :
-	shader(new ComponentShaderBase(false)),
+	NodeShadable(new ComponentShaderBase(false)),
 	world(_world),
 	spriteSegment(new Sprite()),
 	spriteTransform(new Sprite()),
@@ -24,8 +24,8 @@ Box2DDebugDrawer::Box2DDebugDrawer(Box2DWorld * _world) :
 	matrixStack(nullptr),
 	renderOptions(nullptr)
 {
-	shader->addComponent(new ShaderComponentTexture(shader));
-	shader->compileShader();
+	dynamic_cast<ComponentShaderBase *>(shader)->addComponent(new ShaderComponentTexture(shader));
+	dynamic_cast<ComponentShaderBase *>(shader)->compileShader();
 	
 	spriteSegment->mesh->vertices.clear();
 	spriteSegment->mesh->indices.clear();
@@ -75,7 +75,6 @@ Box2DDebugDrawer::Box2DDebugDrawer(Box2DWorld * _world) :
 }
 
 Box2DDebugDrawer::~Box2DDebugDrawer(){
-	shader->decrementAndDelete();
 }
 
 void Box2DDebugDrawer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color){

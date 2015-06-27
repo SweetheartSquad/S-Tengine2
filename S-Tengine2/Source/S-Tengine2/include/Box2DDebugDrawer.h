@@ -11,7 +11,7 @@
 class Scene;
 class Box2DWorld;
 
-class Box2DDebugDrawer : public b2Draw, public Entity{
+class Box2DDebugDrawer : public b2Draw, public virtual Entity, public virtual NodeShadable{
 public:
 	bool drawing;
 
@@ -29,7 +29,6 @@ public:
 	void unload() override;
 
 private:
-	ComponentShaderBase * shader;
 	Sprite * spriteSegment, * spriteTransform, * spriteCircle, * spritePoly;
 	Scene * scene;
 	Box2DWorld * world;

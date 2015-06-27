@@ -6,6 +6,7 @@
 #include "node\NodeLoadable.h"
 #include "node\NodeResource.h"
 #include <MeshInterface.h>
+#include <node\NodeShadable.h>
 
 class Shader;
 
@@ -15,15 +16,13 @@ class Shader;
 * likely be used to render a frame buffer
 *
 ******************************************************/
-class RenderSurface : public MeshInterface{
+class RenderSurface : public virtual MeshInterface, public virtual NodeShadable{
 public:
 	/**
 	* @param The shader to be used when rendering the surface
 	*/
 	explicit RenderSurface(Shader * _shader);
 	~RenderSurface();
-	/**Shader to use when rendering the 2D surface*/
-	Shader * shader;
 
 	/**
 	* Intializes the render surface quad along with the vertex array object
