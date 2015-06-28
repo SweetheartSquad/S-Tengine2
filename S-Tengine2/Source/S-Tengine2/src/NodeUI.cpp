@@ -440,31 +440,32 @@ bool NodeUI::isLayoutDirty(){
 	return layoutDirty;
 }
 
+TriMesh * NodeUI::colliderMesh = nullptr;
 void NodeUI::updateCollider(){
-	static TriMesh m;
 
 	glm::vec3 v = background->getWorldPos();
-	if(m.vertices.size() == 0){
-		m.pushVert(Vertex(v.x, v.y + getHeight(true, false), 0.f));
-		m.pushVert(Vertex(v.x + getWidth(true, false), v.y + getHeight(true, false), 0.f));
-		m.pushVert(Vertex(v.x + getWidth(true, false), v.y, 0.f));
-		m.pushVert(Vertex(v.x + getWidth(true, false), v.y, 0.f));
-		m.pushVert(Vertex(v.x, v.y, 0.f));
-		m.pushVert(Vertex(v.x, v.y + getHeight(true, false), 0.f));
+	if(colliderMesh == nullptr){
+		colliderMesh = new TriMesh();
+		colliderMesh->pushVert(Vertex(v.x, v.y + getHeight(true, false), 0.f));
+		colliderMesh->pushVert(Vertex(v.x + getWidth(true, false), v.y + getHeight(true, false), 0.f));
+		colliderMesh->pushVert(Vertex(v.x + getWidth(true, false), v.y, 0.f));
+		colliderMesh->pushVert(Vertex(v.x + getWidth(true, false), v.y, 0.f));
+		colliderMesh->pushVert(Vertex(v.x, v.y, 0.f));
+		colliderMesh->pushVert(Vertex(v.x, v.y + getHeight(true, false), 0.f));
 	}else{
-		m.vertices.at(0).x = v.x; m.vertices.at(0).y = v.y + getHeight(true, false);
-		m.vertices.at(1).x = v.x + getWidth(true, false); m.vertices.at(1).y = v.y + getHeight(true, false);
-		m.vertices.at(2).x = v.x + getWidth(true, false); m.vertices.at(2).y = v.y;
-		m.vertices.at(3).x = v.x + getWidth(true, false); m.vertices.at(3).y = v.y;
-		m.vertices.at(4).x = v.x; m.vertices.at(4).y = v.y;
-		m.vertices.at(5).x = v.x; m.vertices.at(5).y = v.y + getHeight(true, false);
+		colliderMesh->vertices.at(0).x = v.x; colliderMesh->vertices.at(0).y = v.y + getHeight(true, false);
+		colliderMesh->vertices.at(1).x = v.x + getWidth(true, false); colliderMesh->vertices.at(1).y = v.y + getHeight(true, false);
+		colliderMesh->vertices.at(2).x = v.x + getWidth(true, false); colliderMesh->vertices.at(2).y = v.y;
+		colliderMesh->vertices.at(3).x = v.x + getWidth(true, false); colliderMesh->vertices.at(3).y = v.y;
+		colliderMesh->vertices.at(4).x = v.x; colliderMesh->vertices.at(4).y = v.y;
+		colliderMesh->vertices.at(5).x = v.x; colliderMesh->vertices.at(5).y = v.y + getHeight(true, false);
 	}
 
 	if(shape != nullptr){
 		delete shape;
 		shape = nullptr;
 	}
-	setColliderAsMesh(&m, true);
+	setColliderAsMesh(colliderMesh, true);
 
 	
 	if(body != nullptr){

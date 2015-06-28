@@ -42,7 +42,8 @@ protected:
 	void out();
 
 	bool layoutDirty;
-
+	
+	static TriMesh * colliderMesh;
 	// destroys the current rigid body and creates a new one which is sized to match the bounding box of the element
 	void updateCollider();
 
