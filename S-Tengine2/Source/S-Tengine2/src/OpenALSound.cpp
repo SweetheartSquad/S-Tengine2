@@ -114,7 +114,7 @@ OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional, bool _au
 	// turn off looping by default
 	checkForAlError(alSourcei(sourceId, AL_LOOPING, AL_FALSE));
 	checkForAlError(alSourcef(sourceId, AL_PITCH, 1.f));
-	checkForAlError(alSourcef(sourceId, AL_GAIN, 0.1f));
+	checkForAlError(alSourcef(sourceId, AL_GAIN, 1.f));
 	checkForAlError(alSourcef(sourceId, AL_ROLLOFF_FACTOR, 0.05f));
 	checkForAlError(alDopplerFactor(1.f));
 	checkForAlError(alDopplerVelocity(1.f));
