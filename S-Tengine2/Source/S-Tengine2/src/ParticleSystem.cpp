@@ -33,7 +33,8 @@ void ParticleSystem::update(Step * _step){
 	for (signed long int i = components.size() - 1; i >= 0; --i){
 		Particle * p = static_cast<Particle *>(*components.at(i));
 		if (!p->alive){
-			delete p;
+			childTransform->removeChild(p->parents.at(0));
+			delete p->parents.at(0);
 			delete components.at(i);
 			components.erase(components.begin() + i);
 		}
@@ -46,6 +47,7 @@ Particle * ParticleSystem::addParticle(glm::vec3 _pos, TextureSampler * _texture
 	}
     Box2DSprite ** test = new Box2DSprite*[1];
 	Particle * p = new Particle(world, _texture);
+	childTransform->addChild(p);
     test[0] = p;
 	p->setTranslationPhysical(_pos.x, _pos.y, _pos.z);
 	float mass = p->body->GetMass();
