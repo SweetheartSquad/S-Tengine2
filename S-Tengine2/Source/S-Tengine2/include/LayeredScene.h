@@ -9,6 +9,7 @@ public:
 
 	unsigned long int numLayers;
 	std::vector<Transform *> layers;
+	std::vector<bool> depthEnabled;
 	UILayer uiLayer;
 	
 	/** Calls update on the attached camera */

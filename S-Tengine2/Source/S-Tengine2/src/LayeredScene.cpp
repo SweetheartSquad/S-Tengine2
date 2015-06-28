@@ -17,6 +17,7 @@ LayeredScene::LayeredScene(Game * _game, unsigned long int _numLayers) :
 		Transform * trans = new Transform();
 		childTransform->addChild(trans);
 		layers.push_back(trans);
+		depthEnabled.push_back(false);
 	}
 }
 
@@ -49,9 +50,13 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	_matrixStack->setProjectionMatrix(&activeCamera->getProjectionMatrix());
 	_matrixStack->setViewMatrix(&activeCamera->getViewMatrix());
 
-    glDisable(GL_DEPTH_TEST);
-	for(Transform * e : layers){
-		e->render(_matrixStack, _renderOptions);
+	for(unsigned long int i = 0; i < layers.size(); ++i){
+		if(depthEnabled.at(i)){
+			glEnable(GL_DEPTH_TEST);
+		}else{
+			glDisable(GL_DEPTH_TEST);
+		}
+		layers.at(i)->render(_matrixStack, _renderOptions);
 	}
 
 	int sceneWidth, sceneHeight;
