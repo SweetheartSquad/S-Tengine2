@@ -42,10 +42,10 @@ void Timeout::update(Step * _step){
 }
 
 void Timeout::trigger(){
+	complete = true;
 	if(onCompleteFunction != nullptr){
 		onCompleteFunction(this);
 	}
 	elapsedSeconds = targetSeconds;
-	complete = true;
 	// maybe set active to false here too?
 }
