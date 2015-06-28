@@ -20,7 +20,8 @@ namespace Log {
 	extern enum LogLevel{
 		kINFO,
 		kWARN,
-		kERROR
+		kERROR,
+		kNONE
 	} LOG_LEVEL;
 
 	/**

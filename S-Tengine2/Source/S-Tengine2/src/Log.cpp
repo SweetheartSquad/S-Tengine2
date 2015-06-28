@@ -4,7 +4,12 @@
 
 bool Log::THROW_ON_WARN  = false;
 bool Log::THROW_ON_ERROR = false;
+
+#ifdef _DEBUG
 Log::LogLevel Log::LOG_LEVEL = Log::LogLevel::kINFO;
+#else
+Log::LogLevel Log::LOG_LEVEL = Log::LogLevel::kNONE;
+#endif
 
 void Log::warn(std::string _message){
 	if(LOG_LEVEL <= kWARN){
