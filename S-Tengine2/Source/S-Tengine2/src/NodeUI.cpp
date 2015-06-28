@@ -157,20 +157,6 @@ void NodeUI::update(Step * _step){
 			}
 		}
 		NodeBulletBody::update(_step);
-
-		// for testing
-		float g = bgColour.g;
-		float b = bgColour.b;
-		float a = bgColour.a;
-		if(isHovered){
-			if(isDown){
-				setBackgroundColour(-1.f, g, b, a);
-			}else{
-				setBackgroundColour(-0.5f, g, b, a);
-			}
-		}else{
-			setBackgroundColour(0.f, g, b, a);
-		}
 	}
 	
 	Entity::update(_step);
