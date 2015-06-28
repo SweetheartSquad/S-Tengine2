@@ -10,8 +10,7 @@
 
 LayeredScene::LayeredScene(Game * _game, unsigned long int _numLayers) :
 	Scene(_game),
-	numLayers(_numLayers),
-	uiLayer(this, 0.f, 0.f, 0.f, 0.f)
+	numLayers(_numLayers)
 {
 	for(unsigned long int i = 0; i < _numLayers; ++i) {
 		Transform * trans = new Transform();
@@ -61,21 +60,12 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 
 	int sceneWidth, sceneHeight;
 	glfwGetWindowSize(vox::currentContext, &sceneWidth, &sceneHeight);
-	uiLayer.resize(0, sceneWidth, 0, sceneHeight);
-	uiLayer.render(_matrixStack, _renderOptions);
 }
 
 void LayeredScene::removeChild(NodeChild * _child){
 	for(Transform * layer : layers){
 		layer->removeChild(_child);
 	}
-}
-
-void LayeredScene::addUIChild(NodeUI * _child){
-	uiLayer.addChild(_child);
-}
-void LayeredScene::removeUIChild(NodeUI * _child){
-	uiLayer.removeChild(_child);
 }
 
 void LayeredScene::addChild(NodeChild * _child, unsigned long int _layer, bool _underNewTransform){
