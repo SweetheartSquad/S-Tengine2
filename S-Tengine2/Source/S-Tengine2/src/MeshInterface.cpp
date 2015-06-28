@@ -27,6 +27,7 @@ MeshInterface::~MeshInterface(){
 	glDeleteVertexArrays(1, &vaoId);
 	glDeleteBuffers(1, &vboId);
 	glDeleteBuffers(1, &iboId);
+	checkForGlError(0,__FILE__,__LINE__);
 	for(Texture * t : textures){
 		t->decrementAndDelete();
 	}
@@ -36,7 +37,6 @@ MeshInterface::~MeshInterface(){
 	vaoId = 0;
 	vboId = 0;
 	iboId = 0;
-	checkForGlError(0,__FILE__,__LINE__);
 }
 
 GLsizei MeshInterface::getStride(){
@@ -67,7 +67,7 @@ void MeshInterface::load(){
 		glGenBuffers(1, &vboId);
 		// Index Buffer Object (IBO)
 		glGenBuffers(1, &iboId);
-		
+
 		checkForGlError(0,__FILE__,__LINE__);
 
 		// Initialize textures
