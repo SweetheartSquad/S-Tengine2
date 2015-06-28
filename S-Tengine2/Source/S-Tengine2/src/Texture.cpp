@@ -4,6 +4,7 @@
 #include <Resource.h>
 #include <GLUtils.h>
 #include <SOIL.h>
+#include <Log.h>
 
 // maybe replace chars with strings
 
@@ -65,7 +66,7 @@ void Texture::load(){
 
 void Texture::unload(){
 	if(loaded){
-		std::cout << " tex: " << this->src << std::endl;
+		Log::info("Unloading texture: " + this->src);
 		glDeleteTextures(1, &textureId);
 		textureId = 0;
 		checkForGlError(0,__FILE__,__LINE__);

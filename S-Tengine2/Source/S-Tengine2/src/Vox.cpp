@@ -14,6 +14,7 @@
 #include <System.h>
 
 Step vox::step;
+std::string vox::title = "S-Tengine2";
 
 double vox::lastTimestamp = 0;
 double vox::deltaTimeCorrection = 1;
@@ -71,7 +72,7 @@ void vox::initWindow(GLFWwindow * _w){
 }
 
 void vox::initialize(std::string _title){
-
+	title = _title;
 	step.targetFrameDuration = 0.1667;
 
 	vox::setGlfwWindowHints();
@@ -90,9 +91,9 @@ void vox::initialize(std::string _title){
 #ifdef _DEBUG
 	w = mode->width/2;
 	h = mode->height/2;
-	window = glfwCreateWindow(w, h, _title.c_str(), nullptr, nullptr);
+	window = glfwCreateWindow(w, h, title.c_str(), nullptr, nullptr);
 #else
-	window = glfwCreateWindow(w, h, _title.c_str(), vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	window = glfwCreateWindow(w, h, title.c_str(), vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 #endif
 
 	if (!window){

@@ -14,7 +14,7 @@
 #include <SceneSplash.h>
 #include <SceneSweetheartSquad.h>
 #include <MeshInterface.h>
-
+#include <Log.h>
 
 Game::Game(bool _isRunning, std::pair<std::string, Scene *> _firstScene, bool _splashScreen) :
 	splashScreen(_splashScreen),
@@ -238,7 +238,9 @@ void Game::printFps(){
 	if (currentTime - lastTime >= 1.0){
 		// If last printf() was more than 1 sec ago
 		// printf and reset timer
-		printf("%f FPS\n", double(nbFrames));
+		std::stringstream ss;
+		ss << nbFrames << "FPS";
+		Log::info(ss.str());
 		nbFrames = 0;
 		lastTime += 1.0;
 	}
@@ -253,7 +255,7 @@ void Game::switchScene(std::string _newSceneKey, bool _deleteOldScene){
 		switchingScene = false;
 		newSceneKey = "";
 	}
-	std::cout << "newSceneKey: " << newSceneKey << std::endl;
+	Log::info("newSceneKey: " + newSceneKey);
 }
 
 
@@ -286,9 +288,9 @@ void Game::toggleFullScreen(){
 	// Create the new window.
 	GLFWwindow * window;
 #ifdef _DEBUG
-	window = glfwCreateWindow(w, h, "VOX",  nullptr, nullptr);
+	window = glfwCreateWindow(w, h, vox::title.c_str(),  nullptr, nullptr);
 #else
-	window = glfwCreateWindow(w, h, "VOX",  vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	window = glfwCreateWindow(w, h, vox::title.c_str(),  vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 #endif
 	if(!window){
 		glfwTerminate();

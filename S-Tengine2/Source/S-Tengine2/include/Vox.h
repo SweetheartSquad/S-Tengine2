@@ -18,6 +18,7 @@ struct GLFWwindow;
 namespace vox{
 	
 	extern Step step;
+	extern std::string title;
 
 	/** Equal to glfwGetTime() the last time the delta time correction was calculated */
 	extern double lastTimestamp;
