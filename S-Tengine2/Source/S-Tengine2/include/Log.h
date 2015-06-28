@@ -17,6 +17,12 @@ namespace Log {
 	/** Whether or not errors should be thrown */
 	extern bool THROW_ON_ERROR;
 
+	extern enum LogLevel{
+		kINFO,
+		kWARN,
+		kERROR
+	} LOG_LEVEL;
+
 	/**
 	* Logs a warning message - If THROW_ON_WARN is true an exception will be thrown
 	*
