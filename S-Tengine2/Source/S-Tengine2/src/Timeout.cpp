@@ -43,9 +43,9 @@ void Timeout::update(Step * _step){
 
 void Timeout::trigger(){
 	complete = true;
+	elapsedSeconds = targetSeconds;
 	if(onCompleteFunction != nullptr){
 		onCompleteFunction(this);
 	}
-	elapsedSeconds = targetSeconds;
 	// maybe set active to false here too?
 }
