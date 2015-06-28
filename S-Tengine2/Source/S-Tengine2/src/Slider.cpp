@@ -11,12 +11,11 @@ Slider::Slider(BulletWorld* _world, Scene* _scene, float _width, float _height, 
 	setWidth(_width);
 	setHeight(_height);
 
-	setBackgroundColour(0.f, 0.f, 0.f);
+	setBackgroundColour(-1.f, -1.f, -1.f);
 
-	// Fill
-	fill->setRationalWidth(1.f, this);
+	// Fill (defaults empty)
 	fill->setRationalHeight(1.f, this);
-	fill->setBackgroundColour(1.f, 1.f, 1.f);
+	fill->setBackgroundColour(0.f, 0.f, 0.f);
 
 	addChild(fill);
 }
@@ -35,6 +34,7 @@ void Slider::setValue(float _value){
 
 void Slider::updateValue(){
 	if(size > 0){
+		float rW = value / size;
 		fill->setRationalWidth(value / size);
 	}
 }
