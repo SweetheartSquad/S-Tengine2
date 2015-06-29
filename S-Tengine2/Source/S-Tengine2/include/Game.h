@@ -88,6 +88,13 @@ public:
 	*/
 	void toggleFullScreen();
 
+
+	// saves the current viewport with the format "../screenshots/YYYY-MM-DD_TTTTTTTTTT.tga"
+	void takeScreenshot();
+
+	// flags the current glfw context as "should close" so that the game will quit
+	void exit();
+
 	// whether the game will call resize on draw and fullscreen calls
 	bool autoResize;
 	// sets the viewport to match the current window size
