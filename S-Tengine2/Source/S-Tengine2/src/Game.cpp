@@ -342,6 +342,10 @@ void Game::takeScreenshot(){
 	Log::info("Screenshot saved: " + filepath.str());
 }
 
+void Game::exit(){
+	glfwSetWindowShouldClose(vox::currentContext, true);
+}
+
 void Game::resize(){
 	glm::vec2 screenDimensions = vox::getScreenDimensions();
 	setViewport(0, 0, screenDimensions.x, screenDimensions.y);
