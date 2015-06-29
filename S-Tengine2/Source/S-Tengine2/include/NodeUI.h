@@ -33,13 +33,13 @@ protected:
 	bool isActive;
 	
     // The function to be called when you are starting a click
-	void down();
+	virtual void down();
     // The function to be called when you complete a click
-	void up();
+	virtual void up();
     // The function to be called when you mouseover
-	void in();
+	virtual void in();
     // The function to be called when you mouseout
-	void out();
+	virtual void out();
 
 	bool layoutDirty;
 	
