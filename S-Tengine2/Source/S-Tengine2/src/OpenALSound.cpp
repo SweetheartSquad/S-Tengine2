@@ -225,6 +225,13 @@ void OpenAL_Sound::play(bool _loop){
 	source->stop();
 }
 
+void OpenAL_Sound::setPitch(float _pitch){
+	checkForAlError(alSourcef(source->sourceId, AL_PITCH, _pitch));
+}
+void OpenAL_Sound::setGain(float _gain){
+	checkForAlError(alSourcef(source->sourceId, AL_GAIN, _gain));
+}
+
 ALint OpenAL_Sound::getCurrentSample(){
 	return source->getSampleOffset();
 }

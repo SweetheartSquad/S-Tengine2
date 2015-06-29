@@ -110,6 +110,33 @@ public:
 	virtual void pause();
 	// Stops the audio source + rewinds to the beginning
 	virtual void stop();
+	
+	/**
+	 * Source pitch.
+	 * Type:    ALfloat
+	 * Range:   [0.5 - 2.0]
+	 * Default: 1.0
+	 *
+	 * A multiplier for the frequency (sample rate) of the source's buffer.
+	 *
+	 * Note that this alters the source, so if the source is used by multiple sound objects, they will all be modified
+	 */
+	void setPitch(float _pitch);
+	/**
+	 * Source or listener gain.
+	 * Type:  ALfloat
+	 * Range: [0.0 - ]
+	 *
+	 * A value of 1.0 means unattenuated. Each division by 2 equals an attenuation
+	 * of about -6dB. Each multiplicaton by 2 equals an amplification of about
+	 * +6dB.
+	 *
+	 * A value of 0.0 is meaningless with respect to a logarithmic scale; it is
+	 * silent.
+	 *
+	 * Note that this alters the source, so if the source is used by multiple sound objects, they will all be modified
+	 */
+	void setGain(float _gain);
 };
 
 class OpenAL_SoundSimple : public OpenAL_Sound{
