@@ -117,7 +117,7 @@ void SceneSplash::update(Step * _step){
 	float b;
 	// how much time to show just black at the start
 	t += _step->deltaTime;
-	float buffer = 1;
+	float buffer = 0;
 	if(t-buffer < 4){
 		b = Easing::easeInQuint(std::max(0.f, t-buffer), 0, 1, 4) - std::rand() % 100 / 1000.f;
 	}else{
