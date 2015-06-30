@@ -65,6 +65,7 @@
     <ClCompile Include="../src/Scene2D.cpp" />
     <ClCompile Include="../src/FpsDisplay.cpp" />
     <ClCompile Include="../src/HorizontalLinearLayout.cpp" />
+    <ClCompile Include="../src/JoystickVirtual.cpp" />
     <ClCompile Include="../src/Layout.cpp" />
     <ClCompile Include="../src/Log.cpp" />
     <ClCompile Include="../src/node/NodeMeasurable.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="../include/Scene2D.h" />
     <ClInclude Include="../include/FpsDisplay.h" />
     <ClInclude Include="../include/HorizontalLinearLayout.h" />
+    <ClInclude Include="../include/JoystickVirtual.h" />
     <ClInclude Include="../include/Layout.h" />
     <ClInclude Include="../include/Log.h" />
     <ClInclude Include="../include/node/NodeMeasurable.h" />
