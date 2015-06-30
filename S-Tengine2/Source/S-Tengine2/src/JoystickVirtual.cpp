@@ -39,9 +39,9 @@ void JoystickVirtual::update(Step * _step){
 		axesValues[xbox_axes::kRY] = 0.f;
 	}else{
 		if(keyboard->keyJustDown(GLFW_KEY_I)){
-			axesValues[xbox_axes::kRY] = 1.f;
-		}else if(keyboard->keyJustDown(GLFW_KEY_K)){
 			axesValues[xbox_axes::kRY] = -1.f;
+		}else if(keyboard->keyJustDown(GLFW_KEY_K)){
+			axesValues[xbox_axes::kRY] = 1.f;
 		}
 	}
 
