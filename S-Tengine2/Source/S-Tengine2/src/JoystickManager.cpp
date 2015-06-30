@@ -1,6 +1,7 @@
 #pragma once
 
 #include <JoystickManager.h>
+#include <JoystickVirtual.h>
 
 JoystickManager::JoystickManager(float _deadZone) :
 	deadZone(_deadZone)
@@ -27,8 +28,11 @@ void JoystickManager::update(Step * _step){
 			}
 		}else{
 			if(joysticks[i] != nullptr){
-				delete joysticks[i];
-				joysticks[i] = nullptr;
+				JoystickVirtual * j = dynamic_cast<JoystickVirtual *>(joysticks[i]);
+				if(j == nullptr){
+					delete joysticks[i];
+					joysticks[i] = nullptr;
+				}
 			}
 		}
 
