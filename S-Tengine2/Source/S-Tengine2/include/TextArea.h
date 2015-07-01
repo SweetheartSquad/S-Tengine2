@@ -18,6 +18,7 @@ public:
 	
 	void invalidateAllLines();
 	void setText(std::wstring _text);
+	std::wstring getText();
 	void updateText();
 
 	// returns the last TextLabel inserted into unusedLines

@@ -38,6 +38,10 @@ void TextArea::setText(std::wstring _text){
 	updateText();
 }
 
+std::wstring TextArea::getText(){
+	return text;
+}
+
 void TextArea::updateText(){
 	invalidateAllLines();
 	std::wstring textToAdd = text;
