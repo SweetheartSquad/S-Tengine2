@@ -57,9 +57,13 @@ void JoystickVirtual::update(Step * _step){
 
 	// bumpers
 	if(keyboard->keyJustDown(GLFW_KEY_Q)){
-		buttonDown(xbox_buttons::kL1);
+		buttonDownListener(xbox_buttons::kL1);
+	}else{
+		buttonUpListener(xbox_buttons::kL1);
 	}if(keyboard->keyJustDown(GLFW_KEY_E)){
-		buttonDown(xbox_buttons::kR1);
+		buttonDownListener(xbox_buttons::kR1);
+	}else{
+		buttonUpListener(xbox_buttons::kR1);
 	}
 
 	// face buttons
