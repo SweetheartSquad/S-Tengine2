@@ -11,48 +11,34 @@ JoystickVirtual::JoystickVirtual(int _id) :
 }
 
 void JoystickVirtual::update(Step * _step){
-	axesValues.clear();
-
 	// left stick
-	if(keyboard->keyJustDown(GLFW_KEY_W) && keyboard->keyJustDown(GLFW_KEY_S)){
-		axesValues[xbox_axes::kLY] = 0.f;
-	}else{
-		if(keyboard->keyJustDown(GLFW_KEY_W)){
-			axesValues[xbox_axes::kLY] = 1.f;
-		}else if(keyboard->keyJustDown(GLFW_KEY_S)){
-			axesValues[xbox_axes::kLY] = -1.f;
-		}
+	axesValues[xbox_axes::kLY] = 0.f;
+	if(keyboard->keyDown(GLFW_KEY_W)){
+		axesValues[xbox_axes::kLY] -= 1.f;
+	}if(keyboard->keyDown(GLFW_KEY_S)){
+		axesValues[xbox_axes::kLY] += 1.f;
 	}
-
-	if(keyboard->keyJustDown(GLFW_KEY_A) && keyboard->keyJustDown(GLFW_KEY_D)){
-		axesValues[xbox_axes::kLX] = 0.f;
-	}else{
-		if(keyboard->keyJustDown(GLFW_KEY_A)){
-			axesValues[xbox_axes::kLX] = -1.f;
-		}else if(keyboard->keyJustDown(GLFW_KEY_D)){
-			axesValues[xbox_axes::kLX] = 1.f;
-		}
+	
+	axesValues[xbox_axes::kLX] = 0.f;
+	if(keyboard->keyDown(GLFW_KEY_A)){
+		axesValues[xbox_axes::kLX] -= 1.f;
+	}if(keyboard->keyDown(GLFW_KEY_D)){
+		axesValues[xbox_axes::kLX] += 1.f;
 	}
 
 	// right stick
-	if(keyboard->keyJustDown(GLFW_KEY_I) && keyboard->keyJustDown(GLFW_KEY_K)){
-		axesValues[xbox_axes::kRY] = 0.f;
-	}else{
-		if(keyboard->keyJustDown(GLFW_KEY_I)){
-			axesValues[xbox_axes::kRY] = -1.f;
-		}else if(keyboard->keyJustDown(GLFW_KEY_K)){
-			axesValues[xbox_axes::kRY] = 1.f;
-		}
+	axesValues[xbox_axes::kRY] = 0.f;
+	if(keyboard->keyDown(GLFW_KEY_I)){
+		axesValues[xbox_axes::kRY] -= 1.f;
+	}if(keyboard->keyDown(GLFW_KEY_K)){
+		axesValues[xbox_axes::kRY] += 1.f;
 	}
-
-	if(keyboard->keyJustDown(GLFW_KEY_J) && keyboard->keyJustDown(GLFW_KEY_L)){
-		axesValues[xbox_axes::kRX] = 0.f;
-	}else{
-		if(keyboard->keyJustDown(GLFW_KEY_J)){
-			axesValues[xbox_axes::kRX] = -1.f;
-		}else if(keyboard->keyJustDown(GLFW_KEY_L)){
-			axesValues[xbox_axes::kRX] = 1.f;
-		}
+	
+	axesValues[xbox_axes::kRX] = 0.f;
+	if(keyboard->keyDown(GLFW_KEY_J)){
+		axesValues[xbox_axes::kRX] -= 1.f;
+	}if(keyboard->keyDown(GLFW_KEY_L)){
+		axesValues[xbox_axes::kRX] += 1.f;
 	}
 
 	// bumpers
@@ -84,13 +70,4 @@ void JoystickVirtual::update(Step * _step){
 	}else{
 		buttonUpListener(xbox_buttons::kB);
 	}
-	/*if(keyboard->keyJustDown(GLFW_KEY_1)){
-		buttonJustDown(xbox_buttons::kY);
-	}if(keyboard->keyJustDown(GLFW_KEY_2)){
-		buttonJustDown(xbox_buttons::kA);
-	}if(keyboard->keyJustDown(GLFW_KEY_3)){
-		buttonJustDown(xbox_buttons::kX);
-	}if(keyboard->keyJustDown(GLFW_KEY_4)){
-		buttonJustDown(xbox_buttons::kB);
-	}*/
 }
