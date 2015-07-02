@@ -24,21 +24,22 @@ public:
 		kR1,
 		kBACK,
 		kSTART,
-		kL3,
-		kR3,
+		kL3, // pressing the left analog stick
+		kR3, // pressing the right analog stick
 		kDPAD_UP,
 		kDPAD_DOWN,
 		kDPAD_LEFT,
 		kDPAD_RIGHT
 	};
 	static enum xbox_axes{
-		kLX,
-		kLY,
-		kBUMPERS,
-		kRY,
-		kRX
+		kLX, // left-right on the left analog stick
+		kLY, // up-down on the left analog stick
+		kTRIGGERS, // corresponds to L2 and R2
+		kRY, // up-down on the right analog stick
+		kRX // left-right on the right analog stick
 	};
 
+	// when getAxis is called, any value less than deadZone will instead return zero
 	float deadZone;
 
 	int id;
