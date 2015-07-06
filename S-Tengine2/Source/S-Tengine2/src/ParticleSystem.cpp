@@ -49,7 +49,7 @@ Particle * ParticleSystem::addParticle(glm::vec3 _pos, TextureSampler * _texture
 	Particle * p = new Particle(world, _texture);
 	p->startSize = componentScale;
 	p->deltaSize = -componentScale;
-	childTransform->addChild(p);
+	childTransform->addChild(p)->scale(p->startSize, false);
     test[0] = p;
 	p->setTranslationPhysical(_pos.x, _pos.y, _pos.z);
 	float mass = p->body->GetMass();
