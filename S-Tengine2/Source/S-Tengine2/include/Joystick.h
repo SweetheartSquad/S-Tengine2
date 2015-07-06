@@ -77,6 +77,16 @@ public:
 	// If the axis doesn't exist, returns 0
 	float getAxis(int _code);
 
+	// If _axis was above _value last update
+	// and is below _value now, returns true
+	// otherwise, returns false
+	bool axisJustBelow(int _axis, float _value);
+
+	// If _axis was below _value last update
+	// and is above _value now, returns true
+	// otherwise, returns false
+	bool axisJustAbove(int _axis, float _value);
+
 	/**
 	* Handles input from glfw
 	*/
@@ -109,9 +119,11 @@ protected:
 	std::map<int, int> justPressedButtons;
 	/** Map of buttons which were released since the joystick's last call to update */
 	std::map<int, int> justReleasedButtons;
-
+	
 	/** Map of axes values since the joystick's last call to update */
 	std::map<int, float> axesValues;
+	/** Map of axes values previous to the joystick's last call to update */
+	std::map<int, float> axesValuesPrev;
 
 
 	// sets the button codes to correspond with xbox controller layout

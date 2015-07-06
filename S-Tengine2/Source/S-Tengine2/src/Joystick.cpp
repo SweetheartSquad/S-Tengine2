@@ -102,6 +102,32 @@ float Joystick::getAxis(int _code){
 	return (res != axesValues.end() && std::abs(res->second) > deadZone) ? res->second : 0;
 }
 
+bool Joystick::axisJustAbove(int _code, float _value){
+	auto last = axesValuesPrev.find(_code);
+	auto now = axesValues.find(_code);
+
+	// if either value doesn't exist, just warn and return false
+	if(last == axesValuesPrev.end() || now == axesValues.end()){
+		Log::warn("Axis value doesn't exist");
+		return false;
+	}
+
+	return last->second < _value && now->second > _value;
+}
+
+bool Joystick::axisJustBelow(int _code, float _value){
+	auto last = axesValuesPrev.find(_code);
+	auto now = axesValues.find(_code);
+
+	// if either value doesn't exist, just warn and return false
+	if(last == axesValuesPrev.end() || now == axesValues.end()){
+		Log::warn("Axis value doesn't exist");
+		return false;
+	}
+
+	return last->second > _value && now->second < _value;
+}
+
 void Joystick::update(Step * _step){
 	// handle buttons
 	int buttonCount;
@@ -118,6 +144,7 @@ void Joystick::update(Step * _step){
 	}
 	
 	// handle axes
+	axesValuesPrev = axesValues;
 	axesValues.clear();
 	int axesCount;
 	const float * axes = glfwGetJoystickAxes(id, &axesCount);
