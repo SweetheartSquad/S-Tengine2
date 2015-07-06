@@ -57,6 +57,37 @@ static void mousePositionCallback(GLFWwindow *_window, double _x, double _y){
 	mouse->mousePositionListener(_x, sd.y - _y);
 }
 
+static void attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _action, int _mods){
+	// grab the mouse coordinates and the screen size
+	int w, h;
+	double x, y;
+	glfwGetWindowSize(_window, &w, &h);
+	glfwGetCursorPos(_window, &x, &y);
+
+	// only re-attach the event listeners and set the mouse mode if the mouse was pressed while within the screen bounds
+	// this prevents mouse events which took place on the window border from re-capturing the mouse
+	if(x >= 0 && x <= w
+		&& y >= 0 && y <= h){
+		glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwSetKeyCallback(_window, keyCallback);
+		glfwSetMouseButtonCallback(_window, mouseButtonCallback);
+		glfwSetCursorPosCallback(_window, mousePositionCallback);
+	}
+}
+
+static void windowFocusCallback(GLFWwindow * _window, int _focused){
+	if(_focused == GL_TRUE){
+		// gained focus
+		glfwSetMouseButtonCallback(_window, attemptToActuallyRegainFocus);
+	}else{
+		// lost focus
+		glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		glfwSetKeyCallback(_window, nullptr);
+		glfwSetMouseButtonCallback(_window, nullptr);
+		glfwSetCursorPosCallback(_window, nullptr);
+	}
+}
+
 static void error_callback(int _error, const char * _description){
 	fputs(_description, stderr);
 }
@@ -68,6 +99,8 @@ void vox::initWindow(GLFWwindow * _w){
 		glfwSetMouseButtonCallback(_w, mouseButtonCallback);
 		glfwSetCursorPosCallback(_w, mousePositionCallback);
 		glfwSetInputMode(_w, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+		glfwSetWindowFocusCallback(_w, windowFocusCallback);
 	}
 }
 
