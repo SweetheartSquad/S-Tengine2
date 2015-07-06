@@ -2,7 +2,10 @@
 
 #include <Joystick.h>
 
+#include <sstream>
 #include <GLFW\glfw3.h>
+
+#include <Log.h>
 
 Joystick::Joystick(int _id, float _deadZone) : 
 	id(_id),
@@ -12,6 +15,25 @@ Joystick::Joystick(int _id, float _deadZone) :
 	int present = glfwJoystickPresent(id);
 	if(present){
 		name = glfwGetJoystickName(id);
+
+		// we'll need to test a bunch of different devices to bin these properly
+		// only the xbox one has actually been checked
+		if (name.compare("Wireless Controller") == 0){
+			// PS4
+			initPlaystation();
+		}else if (name.compare("PLAYSTATION(R)3 Controller") == 0){
+			// PS3
+			initPlaystation();
+		}else if (name.compare("Microsoft PC-joystick driver") == 0){
+			// XBOX
+			initXbox();
+		}else{
+			// GENERIC
+			initXbox();
+		}
+		std::stringstream ss;
+		ss << "Controller connected to slot " << id << ": " << name;
+		Log::info(ss.str());
 	}
 }
 
@@ -106,4 +128,54 @@ void Joystick::update(Step * _step){
 
 bool Joystick::buttonDown(int _glfwKeyCode){
 	return justPressedButtons.find(_glfwKeyCode) != justPressedButtons.end() || pressedButtons.find(_glfwKeyCode) != pressedButtons.end();
+}
+
+
+
+void Joystick::initXbox(){
+	faceButtonDown = 0;
+	faceButtonRight = 1;
+	faceButtonLeft = 2;
+	faceButtonUp = 3;
+	bumperLeft = 4;
+	bumperRight = 5;
+	centerButtonLeft = 6;
+	centerButtonCenter = -1; // doesn't get polled?
+	centerButtonRight = 7;
+	axisButtonLeft = 8;
+	axisButtonRight = 9;
+	dpadUp = 10;
+	dpadDown = 11;
+	dpadLeft = 12;
+	dpadRight = 13;
+
+	axisLeftX = 0;
+	axisLeftY = 1;
+	axisTriggers = 2;
+	axisRightY = 3;
+	axisRightX = 4;
+}
+
+void Joystick::initPlaystation(){
+	faceButtonDown = -1;
+	faceButtonRight = 0;
+	faceButtonLeft = 3;
+	faceButtonUp = -1;
+	bumperLeft = -1;
+	bumperRight = -1;
+	centerButtonLeft = -1;
+	centerButtonCenter = 1;
+	centerButtonRight = 7;
+	axisButtonLeft = 4; 
+	axisButtonRight = 6;
+	dpadUp = 5;
+	dpadDown = -1;
+	dpadLeft = -1;
+	dpadRight = -1;
+
+	axisLeftX = -1;
+	axisLeftY = -1;
+	axisTriggers = -1;
+	axisRightY = -1;
+	axisRightX = -1;
 }

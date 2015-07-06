@@ -7,65 +7,68 @@
 
 /************************************************************
 *
-* encapsulating joystick events and properties
-*
-* TODO - Add modifier keys to the value section of the maps
+* wrapper for joystick events and properties
 *
 *************************************************************/
 
 class Joystick : public NodeUpdatable{
 public:
-	static enum xbox_buttons{
-		kA,
-		kB,
-		kX,
-		kY,
-		kL1,
-		kR1,
-		kBACK,
-		kSTART,
-		kL3, // pressing the left analog stick
-		kR3, // pressing the right analog stick
-		kDPAD_UP,
-		kDPAD_DOWN,
-		kDPAD_LEFT,
-		kDPAD_RIGHT
-	};
-	static enum xbox_axes{
-		kLX, // left-right on the left analog stick
-		kLY, // up-down on the left analog stick
-		kTRIGGERS, // corresponds to L2 and R2
-		kRY, // up-down on the right analog stick
-		kRX // left-right on the right analog stick
-	};
+	int faceButtonDown,  // A on xbox, X on playstation
+		faceButtonUp,    // Y on xbox, triangle on playstation
+		faceButtonLeft,  // X on xbox, square on playstation
+		faceButtonRight, // B on xbox, circle on playstation
+		
+		axisButtonLeft,  // pressing the left analog stick
+		axisButtonRight, // pressing the right analog stick
+
+		bumperLeft,
+		bumperRight,
+
+		centerButtonLeft,   // back on xbox, select on playstation
+		centerButtonCenter, // XBOX button, PS button (not reliable)
+		centerButtonRight,  // start
+		
+		dpadDown,
+		dpadUp,
+		dpadLeft,
+		dpadRight,
+		
+		axisLeftX, // left-right on the left analog stick
+		axisLeftY, // up-down on the left analog stick
+		axisTriggers, // corresponds to L2 and R2 (note that until GLFW updates the joystick input, we can only use the triggers separately)
+		axisRightY, // up-down on the right analog stick
+		axisRightX; // left-right on the right analog stick
 
 	// when getAxis is called, any value less than deadZone will instead return zero
 	float deadZone;
 
+	// GLFW joystick id
 	int id;
+
+	// human-readable string intended to identify the make/model of a joystick
 	std::string name;
 
 	/**
-	* Returns true if the given key is currently pressed down
+	* Returns true if the given button is currently pressed down
 	*
-	* @param The button code - eg. button_mapping::xbox::kA
-	* @return Whether the key is currently down or not
+	* @param The joystick's button code
+	* @return Whether the button is currently down or not
 	*/
 	bool buttonDown(int _code);
 
 	/**
-	* Returns true if the given key was released since the keyboard's last call to update
+	* Returns true if the given button was released since the last call to update
 	*
-	* @param The button code - eg. button_mapping::xbox::kA
-	* @return Whether the key was released since the last keyboard update
+	* @param The joystick's button code
+	* @return Whether the button was released since the last update
 	*/
 	bool buttonJustUp(int _code);
 
 	/**
-	* Returns true if the given button was pressed down since the keyboard's last call to update
+	* Returns true if the given button was pressed down since the last call to update
 	*
-	* @param The button code - eg. button_mapping::xbox::kA
-	* @return Whether the key was pressed down since the last keyboard update
+	* @param The joystick's button code
+	* @return Whether the button was pressed down since the last update
 	*/
 	bool buttonJustDown(int _code);
 
@@ -82,14 +85,14 @@ public:
 	/**
 	* Inserts _code into the maps of justPressed and pressed buttons
 	*
-	* @param The button code - eg. button_mapping::xbox::kA
+	* @param The button code
 	*/
 	void buttonDownListener(int _code);
 
 	/**
 	* Inserts _code into the map of justPressed buttons and removes it from the maps of justPressed and pressed buttons
 	*
-	* @param The button code - eg. button_mapping::xbox::kA
+	* @param The button code
 	*/
 	void buttonUpListener(int _code);
 
@@ -109,4 +112,10 @@ protected:
 
 	/** Map of axes values since the joystick's last call to update */
 	std::map<int, float> axesValues;
+
+
+	// sets the button codes to correspond with xbox controller layout
+	void initXbox();
+	// sets the button codes to correspond with playstation controller layout
+	void initPlaystation();
 };
