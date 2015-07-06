@@ -47,6 +47,8 @@ Particle * ParticleSystem::addParticle(glm::vec3 _pos, TextureSampler * _texture
 	}
     Box2DSprite ** test = new Box2DSprite*[1];
 	Particle * p = new Particle(world, _texture);
+	p->startSize = componentScale;
+	p->deltaSize = -componentScale;
 	childTransform->addChild(p);
     test[0] = p;
 	p->setTranslationPhysical(_pos.x, _pos.y, _pos.z);
