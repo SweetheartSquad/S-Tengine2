@@ -25,6 +25,14 @@ public:
 	~AssetTexture();
 };
 
+class AssetTextureSampler : public Asset{
+public:
+	TextureSampler * textureSampler;
+
+	AssetTextureSampler(Json::Value _json);
+	~AssetTextureSampler();
+};
+
 class AssetAudio : public Asset{
 public:
 	OpenAL_Sound * sound;

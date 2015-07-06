@@ -24,21 +24,38 @@ Scenario::Scenario(std::string _jsonSrc) :
 
 	Json::Reader reader;
 	Json::Value defTexJson;
-	bool parsingSuccessful = reader.parse(
+	bool parsingSuccessful;
+	
+	
+	/*parsingSuccessful = reader.parse(
 		"{"
 			"\"id\":\"DEFAULT\",\""
 			"\"type\": \"texture\","
 			"\"width\": 256,"
 			"\"height\": 256"
 		"}", defTexJson);
-	textures["DEFAULT"] = new AssetTexture(defTexJson);
+	defaultTexture = new AssetTexture(defTexJson);
+
+	parsingSuccessful = reader.parse(
+		"{"
+			"\"id\":\"DEFAULT\",\""
+			"\"type\": \"textureSampler\","
+			"\"width\": 256,"
+			"\"height\": 256,"
+			"\"u\": 0,"
+			"\"v\": 0,"
+			"\"w\": 256,"
+			"\"h\": 256"
+		"}", defTexJson);
+	defaultTextureSampler = new AssetTextureSampler(defTexJson);
+
 	parsingSuccessful = reader.parse(
 		"{"
 			"\"id\":\"DEFAULT\",\""
 			"\"type\": \"audio\","
 			"\"stream\": false"
 		"}", defTexJson);
-	audio["DEFAULT"] = new AssetAudio(defTexJson);
+	defaultAudio = new AssetAudio(defTexJson);*/
 
 
 	std::string jsonLoaded = FileUtils::voxReadFile(_jsonSrc);
@@ -72,6 +89,8 @@ Scenario::Scenario(std::string _jsonSrc) :
 				 audio[aa->id] = aa;
 				 continue;
 			 }
+
+			 assets[a->id] = a;
 		 }
 	}
 }
@@ -97,7 +116,18 @@ AssetTexture * Scenario::getTexture(std::string _id){
 	if(it != textures.end()){
 		res = it->second;
 	}else{
-		res = textures["DEFAULT"];
+		res = defaultTexture;
+	}
+	return res;
+}
+
+AssetTextureSampler * Scenario::getTextureSampler(std::string _id){
+	AssetTextureSampler * res = nullptr;
+	auto it = audio.find(_id);
+	if(it != audio.end()){
+		res = dynamic_cast<AssetTextureSampler *>(it->second);
+	}else{
+		res = defaultTextureSampler;
 	}
 	return res;
 }
@@ -108,7 +138,7 @@ AssetAudio * Scenario::getAudio(std::string _id){
 	if(it != audio.end()){
 		res = it->second;
 	}else{
-		res = audio["DEFAULT"];
+		res = defaultAudio;
 	}
 	return res;
 }

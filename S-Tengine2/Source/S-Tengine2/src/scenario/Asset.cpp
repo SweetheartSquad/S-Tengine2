@@ -27,6 +27,30 @@ AssetTexture::~AssetTexture(){
 	delete texture;
 }
 
+AssetTextureSampler::AssetTextureSampler(Json::Value _json) :
+	Asset(_json),
+	textureSampler(nullptr)
+{
+	std::string src = _json.get("src", "NO_TEXTURE").asString();
+	if(src == "NO_TEXTURE"){
+		src = "../assets/engine basics/img_cheryl.jpg";
+	}else{
+		src = "../assets/textures/" + src;
+	}
+	int width = _json.get("width", 256).asInt();
+	int height = _json.get("height", 256).asInt();
+	float u = _json.get("u", 0).asFloat();
+	float v = _json.get("v", 0).asFloat();
+	float w = _json.get("w", 256).asFloat();
+	float h = _json.get("h", 256).asFloat();
+	Texture * texture = new Texture(src, width, height, true, false);
+	textureSampler = new TextureSampler(texture, w, h, u, v);
+	textureSampler->load();
+}
+AssetTextureSampler::~AssetTextureSampler(){
+	delete textureSampler;
+}
+
 AssetAudio::AssetAudio(Json::Value _json) :
 	Asset(_json)
 {
@@ -53,6 +77,8 @@ Asset * Asset::getAsset(Json::Value _json){
 	// create a different type of Trigger depending on the value of type
 	if(type == "texture"){
 		res = new AssetTexture(_json);
+	}else if(type == "textureSampler"){
+		res = new AssetTextureSampler(_json);
 	}else if(type == "audio"){
 		res = new AssetAudio(_json);
 	}else{

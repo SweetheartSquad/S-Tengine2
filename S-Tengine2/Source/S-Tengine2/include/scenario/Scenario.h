@@ -27,8 +27,15 @@ public:
 	Json::Value root;
 	std::map<std::string, Conversation *> conversations;
 	std::map<std::string, Character *> characters;
+
+	std::map<std::string, Asset *> assets;
 	std::map<std::string, AssetTexture *> textures;
 	std::map<std::string, AssetAudio *> audio;
+
+	AssetTexture * defaultTexture;
+	AssetTextureSampler * defaultTextureSampler;
+	AssetAudio * defaultAudio;
+
 
 	Conversation * currentConversation;
 	
@@ -36,5 +43,6 @@ public:
 	~Scenario();
 	
 	AssetTexture * getTexture(std::string _id);
+	AssetTextureSampler * getTextureSampler(std::string _id);
 	AssetAudio * getAudio(std::string _id);
 };
