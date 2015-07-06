@@ -51,7 +51,7 @@ static void mouseButtonCallback(GLFWwindow * _window, int _button, int _action, 
 		mouse->mouseUpListener(_button);
 	}
 }
-static void mousePostionCallback(GLFWwindow *_window, double _x, double _y){
+static void mousePositionCallback(GLFWwindow *_window, double _x, double _y){
 	Mouse * mouse = &Mouse::getInstance();
 	glm::uvec2 sd = vox::getScreenDimensions();
 	mouse->mousePositionListener(_x, sd.y - _y);
@@ -66,7 +66,7 @@ void vox::initWindow(GLFWwindow * _w){
 		//glfwMakeContextCurrent(currentContext);
 		glfwSetKeyCallback(_w, keyCallback);
 		glfwSetMouseButtonCallback(_w, mouseButtonCallback);
-		glfwSetCursorPosCallback(_w, mousePostionCallback);
+		glfwSetCursorPosCallback(_w, mousePositionCallback);
 		glfwSetInputMode(_w, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	}
 }
