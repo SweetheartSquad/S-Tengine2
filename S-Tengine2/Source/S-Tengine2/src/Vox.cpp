@@ -72,6 +72,7 @@ static void attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _
 		glfwSetKeyCallback(_window, keyCallback);
 		glfwSetMouseButtonCallback(_window, mouseButtonCallback);
 		glfwSetCursorPosCallback(_window, mousePositionCallback);
+		Mouse::getInstance().active = true;
 	}
 }
 
@@ -85,6 +86,7 @@ static void windowFocusCallback(GLFWwindow * _window, int _focused){
 		glfwSetKeyCallback(_window, nullptr);
 		glfwSetMouseButtonCallback(_window, nullptr);
 		glfwSetCursorPosCallback(_window, nullptr);
+		Mouse::getInstance().active = false;
 	}
 }
 

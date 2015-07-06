@@ -15,6 +15,9 @@
 
 class Mouse{
 public:
+	// whether the mouse will update its position
+	// if you're accessing this, you should probably think twice about what you're doing
+	bool active;
 
 	/**
 	* Returns true if the left mouse button was pressed down since the mouse's last call to update
