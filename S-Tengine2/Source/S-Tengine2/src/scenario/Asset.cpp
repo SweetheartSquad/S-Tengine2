@@ -54,9 +54,9 @@ AssetTextureSampler::~AssetTextureSampler(){
 AssetAudio::AssetAudio(Json::Value _json) :
 	Asset(_json)
 {
-	std::string src = _json.get("src", "NO_TEXTURE").asString();
-	if(src == "NO_TEXTURE"){
-		src = "../assets/audio/blip.ogg";
+	std::string src = _json.get("src", "NO_AUDIO").asString();
+	if(src == "NO_AUDIO"){
+		src = "../assets/engine basics/SCENE.ogg";
 	}else{
 		src = "../assets/audio/" + src;
 	}
