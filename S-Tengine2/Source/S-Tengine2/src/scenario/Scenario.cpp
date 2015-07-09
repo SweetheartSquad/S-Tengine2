@@ -27,35 +27,26 @@ Scenario::Scenario(std::string _jsonSrc) :
 	bool parsingSuccessful;
 	
 	
-	/*parsingSuccessful = reader.parse(
+	parsingSuccessful = reader.parse(
 		"{"
 			"\"id\":\"DEFAULT\",\""
-			"\"type\": \"texture\","
-			"\"width\": 256,"
-			"\"height\": 256"
+			"\"type\": \"texture\""
 		"}", defTexJson);
 	defaultTexture = new AssetTexture(defTexJson);
 
 	parsingSuccessful = reader.parse(
 		"{"
 			"\"id\":\"DEFAULT\",\""
-			"\"type\": \"textureSampler\","
-			"\"width\": 256,"
-			"\"height\": 256,"
-			"\"u\": 0,"
-			"\"v\": 0,"
-			"\"w\": 256,"
-			"\"h\": 256"
+			"\"type\": \"textureSampler\""
 		"}", defTexJson);
 	defaultTextureSampler = new AssetTextureSampler(defTexJson);
 
 	parsingSuccessful = reader.parse(
 		"{"
 			"\"id\":\"DEFAULT\",\""
-			"\"type\": \"audio\","
-			"\"stream\": false"
+			"\"type\": \"audio\""
 		"}", defTexJson);
-	defaultAudio = new AssetAudio(defTexJson);*/
+	defaultAudio = new AssetAudio(defTexJson);
 
 
 	std::string jsonLoaded = FileUtils::voxReadFile(_jsonSrc);
