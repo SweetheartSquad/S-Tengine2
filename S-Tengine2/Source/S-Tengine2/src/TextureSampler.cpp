@@ -6,15 +6,16 @@
 #include <json\json.h>
 #include <FileUtils.h>
 
-TextureSampler::TextureSampler(Texture * _texture, float _width, float _height, float _u, float _v, bool _releaseTexture) :
+TextureSampler::TextureSampler(Texture * _texture, float _width, float _height, float _u, float _v) :
 	NodeResource(true),
 	texture(_texture),
 	width(_width),
 	height(_height),
 	u(_u),
 	v(_v),
-	releaseTexture(_releaseTexture)
+	releaseTexture(_texture->autoRelease)
 {
+	++texture->referenceCount;
 }
 TextureSampler::TextureSampler(std::string _definitionDir, std::string _definitionName, bool _releaseTexture) :
 	NodeResource(true),
@@ -29,8 +30,7 @@ TextureSampler::TextureSampler(std::string _definitionDir, std::string _definiti
 		std::string jsonString = FileUtils::voxReadFile(_definitionDir + _definitionName);
 		Json::Value root;
 		Json::Reader reader;
-		bool parsedSuccess = reader.parse(jsonString, root, false);
-
+		bool parsedSuccess = reader.parse(jsonString, root);
 		if(!parsedSuccess){
 			std::cout << "Unable to parse TextureSampler definition: " << _definitionDir << _definitionName;	
 		}
@@ -41,15 +41,14 @@ TextureSampler::TextureSampler(std::string _definitionDir, std::string _definiti
 		height = root.get("h", 0).asFloat();
 		float s = root.get("s", 0).asFloat();
 		std::string tex = _definitionDir;
-		tex.append(root.get("t", 0).asString());
-		texture = new Texture(tex, s, s, true, true);
+		tex.append(root.get("t", "NO_TEXTURE").asString());
+		texture = new Texture(tex, s, s, true, _releaseTexture);
+		++texture->referenceCount;
 	}
 }
 
 TextureSampler::~TextureSampler(){
-	if(releaseTexture){
-		delete texture;
-	}
+	texture->decrementAndDelete();
 }
 
 void TextureSampler::load(){
