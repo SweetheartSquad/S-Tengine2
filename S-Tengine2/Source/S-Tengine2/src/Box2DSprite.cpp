@@ -14,9 +14,10 @@ Box2DSprite::Box2DSprite(Box2DWorld * _world, TextureSampler * _textureSampler, 
 	height(_textureSampler->height),
 	scale(_componentScale),
 	u(_textureSampler->u),
-	v(_textureSampler->v)
+	v(_textureSampler->v),
+	useTextureSamplerUVs(true)
 {
-	if(_textureSampler->texture != nullptr){
+	if(_textureSampler != nullptr){
 		mesh->pushTexture2D(_textureSampler->texture);
 	}
 
@@ -30,7 +31,8 @@ Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaul
 	height(_height),
 	scale(_componentScale),
 	u(_u),
-	v(_v)
+	v(_v),
+	useTextureSamplerUVs(false)
 {
 	if(_texture != nullptr){
 		mesh->pushTexture2D(_texture);
@@ -87,6 +89,10 @@ b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * 
 	mesh->vertices.at(3).x = v4.x;
 	mesh->vertices.at(3).y = v4.y;
 	
+	if(useTextureSamplerUVs){
+		configureUVs();
+	}
+
 	return f;
 }
 
@@ -100,6 +106,7 @@ void Box2DSprite::configureUVs(){
 	mesh->vertices.at(2).v = v/mag;
 	mesh->vertices.at(3).u = u/mag;
 	mesh->vertices.at(3).v = v/mag;
+	mesh->dirty = true;
 }
 
 

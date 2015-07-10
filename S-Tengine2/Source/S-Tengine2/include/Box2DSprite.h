@@ -12,6 +12,7 @@ class Texture;
 
 class Box2DSprite : public Sprite, public NodeBox2DBody{
 public:
+	bool useTextureSamplerUVs;
 	float width;
 	float height;
 	float u;
