@@ -70,24 +70,11 @@ b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * 
 
 	b2Fixture * f = body->CreateFixture(&fd);
 
-	// physical fixture
-	//b2Fixture * f = body->CreateFixture(&tShape, 1); // physical fixture
-	//..f->SetFilterData(_filter);
-	//f->SetUserData(_userData);
-
-	b2Vec2 v1 = tShape.GetVertex(0);
-	b2Vec2 v2 = tShape.GetVertex(1);
-	b2Vec2 v3 = tShape.GetVertex(2);
-	b2Vec2 v4 = tShape.GetVertex(3);
-
-	mesh->vertices.at(0).x = v1.x;
-	mesh->vertices.at(0).y = v1.y;
-	mesh->vertices.at(1).x = v2.x;
-	mesh->vertices.at(1).y = v2.y;
-	mesh->vertices.at(2).x = v3.x;
-	mesh->vertices.at(2).y = v3.y;
-	mesh->vertices.at(3).x = v4.x;
-	mesh->vertices.at(3).y = v4.y;
+	// reposition mesh vertices to match collider vertices
+	for(unsigned long int i = 0; i < tShape.GetVertexCount(); ++i){
+		mesh->vertices.at(i).x = tShape.GetVertex(i).x;
+		mesh->vertices.at(i).y = tShape.GetVertex(i).y;
+	}
 	
 	if(useTextureSamplerUVs){
 		configureUVs();

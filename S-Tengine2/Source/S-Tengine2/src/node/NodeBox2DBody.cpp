@@ -26,7 +26,8 @@ NodeBox2DBody::~NodeBox2DBody(){
 void NodeBox2DBody::update(Step * _step){
 	if(body != nullptr){
 		if(body->IsAwake()){
-			parents.at(0)->translate(body->GetPosition().x, body->GetPosition().y, parents.at(0)->getTranslationVector().z, false);
+			const b2Vec2 pos = body->GetPosition();
+			parents.at(0)->translate(pos.x, pos.y, parents.at(0)->getTranslationVector().z, false);
 			
 			b2Vec2 lv = body->GetLinearVelocity();
 			if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
