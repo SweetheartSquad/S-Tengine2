@@ -49,40 +49,6 @@ void Sprite::setCurrentAnimation(std::string _name){
 	}
 }
 
-void Sprite::pushTextureSampler(TextureSampler* _sampler){
-	glm::vec3 sv = parents.at(0)->getScaleVector();
-	vox::Rectangle rect(0, 0, _sampler->width * std::abs(sv.x) * 0.025f, 
-		_sampler->height * std::abs(sv.y) * 0.025f);
-	
-	mesh->pushTexture2D(_sampler->texture);
-
-	vox::Point v1 = rect.getBottomLeft();
-	vox::Point v2 = rect.getBottomRight();
-	vox::Point v3 = rect.getTopRight();
-	vox::Point v4 = rect.getTopLeft();
-
-	mesh->vertices.at(0).x = v1.x;
-	mesh->vertices.at(0).y = v1.y;
-	mesh->vertices.at(1).x = v2.x;
-	mesh->vertices.at(1).y = v2.y;
-	mesh->vertices.at(2).x = v3.x;
-	mesh->vertices.at(2).y = v3.y;
-	mesh->vertices.at(3).x = v4.x;
-	mesh->vertices.at(3).y = v4.y;
-	
-	float mag = std::max(mesh->getTexture(mesh->textureCount() - 1)->width, mesh->getTexture(mesh->textureCount() - 1)->height);
-	mesh->vertices.at(3).u = 0;
-	mesh->vertices.at(3).v = 0;
-	mesh->vertices.at(2).u = _sampler->width/mag;
-	mesh->vertices.at(2).v = 0;
-	mesh->vertices.at(1).u = _sampler->width/mag;
-	mesh->vertices.at(1).v = _sampler->height/mag;
-	mesh->vertices.at(0).u = 0;
-	mesh->vertices.at(0).v = _sampler->height/mag;
-
-	mesh->dirty = true;
-}
-
 Vertex * Sprite::getTopLeft(){
 	return &mesh->vertices.at(0);
 }
