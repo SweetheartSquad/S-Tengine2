@@ -106,7 +106,3 @@ void Sprite::unload(){
 	}
 	MeshEntity::unload();
 }
-
-void Sprite::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-   MeshEntity::render(_matrixStack, _renderOptions);
-}
