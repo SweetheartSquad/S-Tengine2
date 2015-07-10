@@ -10,6 +10,7 @@
 #include <TextureSampler.h>
 #include <MeshFactory.h>
 #include <MeshInterface.h>
+#include <Log.h>
 
 struct b2Vec2;
 
@@ -23,6 +24,13 @@ Sprite::Sprite(Shader * _shader) :
 }
 
 Sprite::~Sprite(){
+	for(auto i : animations){
+		delete i.second;
+	}
+	animations.clear();
+	if(animatedTexture != nullptr){
+		animatedTexture->decrementAndDelete();
+	}
 }
 
 void Sprite::update(Step* _step){
@@ -36,16 +44,19 @@ void Sprite::update(Step* _step){
 }
 
 void Sprite::addAnimation(std::string _name, SpriteSheetAnimation* _animation, bool _makeCurrent){
-	animations.insert(std::make_pair(_name, _animation));
+	auto res = animations.insert(std::pair<std::string, SpriteSheetAnimation * >(_name, _animation));
+	if(!res.second){
+		Log::error("Animation with name "+_name+" already exists; not added.");
+	}
 	if(_makeCurrent){
 		currentAnimation = _animation;
 	}
 }
 
 void Sprite::setCurrentAnimation(std::string _name){
-	SpriteSheetAnimation * anim = animations.at(_name);
-	if(anim != nullptr){
-		currentAnimation = anim;
+	auto anim = animations.find(_name);
+	if(anim != animations.end()){
+		currentAnimation = anim->second;
 	}
 }
 
