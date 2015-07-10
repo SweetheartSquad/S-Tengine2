@@ -7,6 +7,8 @@
 #include "MatrixStack.h"
 #include "VoxRenderOptions.h"
 #include "Transform.h"
+#include <Log.h>
+
 #include <algorithm>
 
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode) :
@@ -26,15 +28,15 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode) :
 MeshInterface::~MeshInterface(){
 	checkForGlError(0,__FILE__,__LINE__);
 	if(glIsVertexArray(vaoId) != GL_TRUE){
-		std::cout << "vao bad" << std::endl << std::endl;
+		Log::warn("Mesh VAO is invalid");
 		return;
 	}
 	if(glIsBuffer(vboId) != GL_TRUE){
-		std::cout << "vbo bad" << std::endl << std::endl;
+		Log::warn("Mesh VBO is invalid");
 		return;
 	}
 	if(glIsBuffer(iboId) != GL_TRUE){
-		std::cout << "ibo bad" << std::endl << std::endl;
+		Log::warn("Mesh IBO is invalid");
 		return;
 	}
 	checkForGlError(0,__FILE__,__LINE__);
@@ -146,19 +148,19 @@ void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _ren
 	clean();
 	
 	if(glIsVertexArray(vaoId) != GL_TRUE){
-		std::cout << "vao bad" << std::endl << std::endl;
+		Log::warn("Mesh VAO is invalid");
 		return;
 	}
 	if(glIsBuffer(vboId) != GL_TRUE){
-		std::cout << "vbo bad" << std::endl << std::endl;
+		Log::warn("Mesh VBO is invalid");
 		return;
 	}
 	if(glIsBuffer(iboId) != GL_TRUE){
-		std::cout << "ibo bad" << std::endl << std::endl;
+		Log::warn("Mesh IBO is invalid");
 		return;
 	}
 	if(_renderOption->shader == nullptr){
-		std::cout << "no shader" << std::endl << std::endl;	
+		Log::warn("Mesh has no shader");
 		return;
 	}
 	//if(_renderOption->currentVao != vaoId){
