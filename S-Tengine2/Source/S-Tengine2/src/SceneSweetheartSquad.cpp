@@ -25,8 +25,6 @@
 #include <PointLight.h>
 #include <Texture.h>
 
-#include <Sound.h>
-
 #include <System.h>
 #include <Mouse.h>
 #include <Keyboard.h>
