@@ -30,8 +30,8 @@ public:
 	virtual float getCorrectedWidth();
 	virtual b2Fixture * createFixture(b2Filter _filter, b2Vec2 _offset = b2Vec2(0.0f, 0.0f), void * _userData = nullptr, bool _isSensor = false);
 
-	//Creates a rectangular shape that fits the sprite
-	b2PolygonShape getFixtureShape();
+	// Creates a rectangular shape that fits the sprite
+	b2PolygonShape createFixtureShape();
 
 	// We seem to need this fairly often
 	void setGroupIndex(int16 _groupIndex);

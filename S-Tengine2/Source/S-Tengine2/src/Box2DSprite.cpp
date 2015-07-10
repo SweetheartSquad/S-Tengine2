@@ -57,7 +57,7 @@ float Box2DSprite::getCorrectedWidth(){
 }
 
 b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * _userData, bool _isSensor){
-	b2PolygonShape tShape = getFixtureShape();
+	b2PolygonShape tShape = createFixtureShape();
 
 	b2FixtureDef fd;
 	fd.shape = &tShape;
@@ -109,9 +109,7 @@ void Box2DSprite::configureUVs(){
 	mesh->dirty = true;
 }
 
-
-// shouldn't this dereference the fixture and just return its shape?
-b2PolygonShape Box2DSprite::getFixtureShape(){
+b2PolygonShape Box2DSprite::createFixtureShape(){
 	b2PolygonShape tShape;
 	tShape.SetAsBox(getCorrectedWidth()*0.5f, getCorrectedHeight()*0.5f);
 	return tShape;
