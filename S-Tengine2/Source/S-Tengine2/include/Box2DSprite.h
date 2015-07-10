@@ -27,7 +27,6 @@ public:
 
 	virtual float getCorrectedHeight();
 	virtual float getCorrectedWidth();
-
 	virtual b2Fixture * createFixture(b2Filter _filter, b2Vec2 _offset = b2Vec2(0.0f, 0.0f), void * _userData = nullptr, bool _isSensor = false);
 
 	//Creates a rectangular shape that fits the sprite
@@ -37,4 +36,10 @@ public:
 	void setGroupIndex(int16 _groupIndex);
 
 	void setUserData(void * _data);
+
+	// configures the UVs of the sprite mesh such that
+	// they correspond to the u, v, width, and height
+	// member variables of this Box2DSprite
+	// (typically used in conjunction with texturesamplers)
+	void configureUVs();
 };
