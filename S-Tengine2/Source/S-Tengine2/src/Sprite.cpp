@@ -78,14 +78,14 @@ void Sprite::setUvs(float _topLeftU, float _topLeftV, float _topRightU, float _t
 }
 
 void Sprite::setUvs(vox::Rectangle _rect){
-	mesh->vertices.at(0).u  = _rect.getTopLeft().x;
-	mesh->vertices.at(0).v  = _rect.getTopLeft().y;
-	mesh->vertices.at(1).u  = _rect.getTopRight().x;
-	mesh->vertices.at(1).v  = _rect.getTopRight().y;
-	mesh->vertices.at(2).u  = _rect.getBottomRight().x;
-	mesh->vertices.at(2).v  = _rect.getBottomRight().y;
-	mesh->vertices.at(3).u  = _rect.getBottomLeft().x;
-	mesh->vertices.at(3).v  = _rect.getBottomLeft().y;
+	getTopLeft()->u  = _rect.getTopLeft().x;
+	getTopLeft()->v  = _rect.getTopLeft().y;
+	getTopRight()->u  = _rect.getTopRight().x;
+	getTopRight()->v  = _rect.getTopRight().y;
+	getBottomRight()->u  = _rect.getBottomRight().x;
+	getBottomRight()->v  = _rect.getBottomRight().y;
+	getBottomLeft()->u  = _rect.getBottomLeft().x;
+	getBottomLeft()->v  = _rect.getBottomLeft().y;
 }
 
 void Sprite::load(){
