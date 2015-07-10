@@ -11,8 +11,6 @@
 #include "Texture.h"
 #include <TextureSampler.h>
 
-int16 Box2DSuperSprite::gGroupIndex = 0;
-
 Box2DSuperSprite::Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :
 	world(_world),
 	componentScale(1.f),
@@ -69,6 +67,7 @@ void Box2DSuperSprite::setGroupIndex(int16 _groupIndex){
 	for(Box2DSprite ** c : components){
 		(*c)->setGroupIndex(_groupIndex);
 	}
+	groupIndex = _groupIndex;
 }
 
 void Box2DSuperSprite::addComponent(Box2DSprite ** _component){

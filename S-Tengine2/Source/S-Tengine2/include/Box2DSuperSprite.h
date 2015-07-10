@@ -17,8 +17,6 @@ class TextureSampler;
 
 class Box2DSuperSprite : public virtual Entity, public virtual NodeShadable{
 public:
-	
-	static int16 gGroupIndex;
 	int16 groupIndex;
 	int16 categoryBits; // Box2D entity category
 	int16 maskBits;		// Box2D collides only with
