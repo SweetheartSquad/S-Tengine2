@@ -1,12 +1,14 @@
 #pragma once
 
 #include <GL\glew.h>
+#include <Log.h>
+
+#include <string>
 #include <iostream>
+#include <sstream>
 #include <assert.h>
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
-
-#include <string>
 
 #ifdef _DEBUG
 #define checkForGlError(_printSuccess, _file, _line) do{\
@@ -23,8 +25,9 @@
 				case GL_INVALID_FRAMEBUFFER_OPERATION:  errString="INVALID_FRAMEBUFFER_OPERATION"; break;\
 				default: errString = "dunno, but something went wrong?";	break;\
 			}\
-			std::cout << "\tFile: " << (_file) <<", Line: "<< (_line) << ", Log: " << errString << std::endl;\
-			assert(false);\
+			std::stringstream ss;\
+			ss << "OpenGL Error:\tFile: " << (_file) <<", Line: "<< (_line) << ", Log: " << errString;\
+			Log::error(ss.str());\
 		}\
 	}while ((err = glGetError()) != GL_NO_ERROR);\
 }while(false)

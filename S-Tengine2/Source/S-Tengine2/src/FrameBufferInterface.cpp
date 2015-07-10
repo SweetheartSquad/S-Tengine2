@@ -5,6 +5,8 @@
 #include <iostream>
 #include <SOIL.h>
 
+#include <Log.h>
+
 FrameBufferInterface::FrameBufferInterface(std::vector<FrameBufferChannel> _frameBufferChannels, unsigned long int _width, unsigned long int _height, bool _autoRelease):
 	NodeResource(_autoRelease),
 	width(_width),
@@ -95,46 +97,46 @@ GLenum FrameBufferInterface::checkFrameBufferStatus(){
 	GLuint status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	switch(status) {
 	case GL_FRAMEBUFFER_COMPLETE:
-		std::cout << "Framebuffer Complete";
+		Log::info("Framebuffer Complete");
 		break;
 	case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-		std::cout << "An attachment could not be bound to frame buffer object!";
+		Log::warn("An attachment could not be bound to frame buffer object!");
 		break;
 
 	case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-		std::cout << "Attachments are missing! At least one image (texture) must be bound to the frame buffer object!";
+		Log::warn("Attachments are missing! At least one image (texture) must be bound to the frame buffer object!");
 		break;
 
 	case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
-		std::cout << "The dimensions of the buffers attached to the currently used frame buffer object do not match!";
+		Log::warn("The dimensions of the buffers attached to the currently used frame buffer object do not match!");
 		break;
 
 	case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT:
-		std::cout << "The formats of the currently used frame buffer object are not supported or do not fit together!";
+		Log::warn("The formats of the currently used frame buffer object are not supported or do not fit together!");
 		break;
 
 	case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
-		std::cout << "A Draw buffer is incomplete or undefinied. All draw buffers must specify attachment points that have images attached.";
+		Log::warn("A Draw buffer is incomplete or undefinied. All draw buffers must specify attachment points that have images attached.");
 		break;
 
 	case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
-		std::cout << "A Read buffer is incomplete or undefinied. All read buffers must specify attachment points that have images attached.";
+		Log::warn("A Read buffer is incomplete or undefinied. All read buffers must specify attachment points that have images attached.");
 		break;
 
 	case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
-		std::cout << "All images must have the same number of multisample samples.";
+		Log::warn("All images must have the same number of multisample samples.");
 		break;
 
 	case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS :
-		std::cout << "If a layered image is attached to one attachment, then all attachments must be layered attachments. The attached layers do not have to have the same number of layers, nor do the layers have to come from the same kind of texture.";
+		Log::warn("If a layered image is attached to one attachment, then all attachments must be layered attachments. The attached layers do not have to have the same number of layers, nor do the layers have to come from the same kind of texture.");
 		break;
 
 	case GL_FRAMEBUFFER_UNSUPPORTED:
-		std::cout << "Attempt to use an unsupported format combinaton!";
+		Log::warn("Attempt to use an unsupported format combinaton!");
 		break;
 
 	default:
-		std::cout << "Unknown error while attempting to create frame buffer object!";
+		Log::warn("Unknown error while attempting to create frame buffer object!");
 		break;
 	}
 	return status;

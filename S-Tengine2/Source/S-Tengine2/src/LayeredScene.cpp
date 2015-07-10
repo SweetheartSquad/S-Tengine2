@@ -72,6 +72,6 @@ void LayeredScene::addChild(NodeChild * _child, unsigned long int _layer, bool _
 	if(_layer < numLayers){
 		layers.at(_layer)->addChild(_child, _underNewTransform);
 	}else{
-		std::cout << "Scene does not have a layer " << _layer << std::endl;
+		Log::error("Attempted to add child to a layer that doesn't exist.");
 	}
 }

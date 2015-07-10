@@ -1,7 +1,9 @@
 #pragma once
 
 #include <DatabaseConnection.h>
+#include <Log.h>
 #include <iostream>
+#include <sstream>
 
 DatabaseConnection::DatabaseConnection(const char * _databaseFilename) :
 	db(nullptr)
@@ -14,7 +16,9 @@ DatabaseConnection::DatabaseConnection(const char * _databaseFilename) :
 	}*/
 	rc = sqlite3_open(_databaseFilename, &db);
 	if(rc != SQLITE_OK){
-		std::cout << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
+		std::stringstream ss;
+		ss << "Couldn't open database: " << _databaseFilename << "; Reason: " << sqlite3_errmsg(db);
+		Log::error(ss.str());
 		sqlite3_close(db);
 		db = nullptr;
 	}
@@ -32,7 +36,9 @@ void DatabaseConnection::queryDb(std::string _sql, int (*_callback)(void *, int,
 	char * zErrMsg = nullptr;
 	rc = sqlite3_exec(db, _sql.c_str(), _callback, 0, &zErrMsg);
 	if(rc != SQLITE_OK){
-		std::cout << "SQL error: " << zErrMsg << std::endl;
+		std::stringstream ss;
+		ss << "SQL error: " << zErrMsg;
+		Log::error(ss.str());
 		sqlite3_free(zErrMsg);
 		zErrMsg = nullptr;
 	}
