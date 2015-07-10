@@ -93,7 +93,6 @@
     <ClCompile Include="../src/shader/SharedComponentShaderMethods.cpp" />
     <ClCompile Include="../src/shader/ShaderComponentTexture.cpp" />
     <ClCompile Include="../src/shader/VoxelComponent.cpp" />
-    <ClCompile Include="../src/Sound.cpp" />
     <ClCompile Include="../src/SoundManager.cpp" />
     <ClCompile Include="../src/Sprite.cpp" />
     <ClCompile Include="../src/SpriteSheet.cpp" />
@@ -235,7 +234,6 @@
     <ClInclude Include="../include/shader/SharedComponentShaderMethods.h" />
     <ClInclude Include="../include/shader/ShaderComponentTexture.h" />
     <ClInclude Include="../include/shader/VoxelComponent.h" />
-    <ClInclude Include="../include/Sound.h" />
     <ClInclude Include="../include/SoundManager.h" />
     <ClInclude Include="../include/Sprite.h" />
     <ClInclude Include="../include/SpriteSheet.h" />

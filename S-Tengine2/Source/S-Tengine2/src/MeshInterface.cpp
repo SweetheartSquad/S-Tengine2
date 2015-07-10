@@ -24,8 +24,24 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode) :
 }
 
 MeshInterface::~MeshInterface(){
+	checkForGlError(0,__FILE__,__LINE__);
+	if(glIsVertexArray(vaoId) != GL_TRUE){
+		std::cout << "vao bad" << std::endl << std::endl;
+		return;
+	}
+	if(glIsBuffer(vboId) != GL_TRUE){
+		std::cout << "vbo bad" << std::endl << std::endl;
+		return;
+	}
+	if(glIsBuffer(iboId) != GL_TRUE){
+		std::cout << "ibo bad" << std::endl << std::endl;
+		return;
+	}
+	checkForGlError(0,__FILE__,__LINE__);
 	glDeleteVertexArrays(1, &vaoId);
+	checkForGlError(0,__FILE__,__LINE__);
 	glDeleteBuffers(1, &vboId);
+	checkForGlError(0,__FILE__,__LINE__);
 	glDeleteBuffers(1, &iboId);
 	checkForGlError(0,__FILE__,__LINE__);
 	for(Texture * t : textures){

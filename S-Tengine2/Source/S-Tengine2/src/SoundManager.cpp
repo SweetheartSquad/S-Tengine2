@@ -14,53 +14,36 @@ SoundManager::SoundManager(double _throttle):
 
 SoundManager::~SoundManager(){
 	for(auto sound : sounds){
-		sound.second.stop();
+		sound.second->stop();
+		delete sound.second;
 	}
 	sounds.clear();
 }
 
-void SoundManager::addNewSound(std::string _name){
-	sounds.insert(std::make_pair(_name, Sound()));
-}
-
 void SoundManager::addNewSound(std::string _name, std::string _fileName){
-	sounds.insert(std::make_pair(_name, Sound(_fileName)));
+	sounds.insert(std::make_pair(_name, new OpenAL_SoundSimple(_fileName.c_str(), false, false)));
 }
 
-void SoundManager::addSound(std::string _name, Sound _sound){
+void SoundManager::addSound(std::string _name, OpenAL_Sound * _sound){
 	sounds.insert(std::make_pair(_name, _sound));
-}
-
-void SoundManager::addFile(std::string _name, std::string _fileName){
-	sounds.at(_name).addFile(_fileName);
 }
 
 void SoundManager::play(std::string _name, bool _loop){
 	if(vox::step.time - lastTimeStamp > throttle){
-		sounds.at(_name).play(_loop);
+		sounds.at(_name)->play(_loop);
 		lastTimeStamp = vox::step.time;
 	}
 }
 
 void SoundManager::pause(std::string _name){
-	sounds.at(_name).pause();
+	sounds.at(_name)->pause();
 }
 
 void SoundManager::stop(std::string _name){
-	sounds.at(_name).stop();
+	sounds.at(_name)->stop();
 }
 
-void SoundManager::resume(std::string _name){
-	sounds.at(_name).resume();
-}
-
-void SoundManager::load(){
-}
-
-void SoundManager::unload(){
-}
-
-Sound * SoundManager::playRandomSound(){
+OpenAL_Sound * SoundManager::playRandomSound(){
 	if(sounds.size() > 1){
 		unsigned long int soundToPlay;
 		do{
@@ -71,10 +54,10 @@ Sound * SoundManager::playRandomSound(){
 		std::advance(it, soundToPlay);
 		auto s = it->first;
 		play(s);
-		return &it->second;
+		return it->second;
 	}else if(sounds.size() == 1){
 		play(sounds.begin()->first);
-		return &sounds.begin()->second;
+		return sounds.begin()->second;
 	}else{
 		return nullptr;
 	}
