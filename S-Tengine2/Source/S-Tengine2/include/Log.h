@@ -17,9 +17,12 @@ namespace Log {
 	/** Whether or not errors should be thrown */
 	extern bool THROW_ON_ERROR;
 	
-	extern int INFO_COLOUR;
-	extern int WARN_COLOUR;
-	extern int ERROR_COLOUR;
+	extern int INFO_COLOUR_FG;
+	extern int WARN_COLOUR_FG;
+	extern int ERROR_COLOUR_FG;
+	extern int INFO_COLOUR_BG;
+	extern int WARN_COLOUR_BG;
+	extern int ERROR_COLOUR_BG;
 
 	extern enum LogLevel{
 		kINFO,
