@@ -5,6 +5,7 @@
 #include <Box2DSprite.h>
 #include <Particle.h>
 #include <Box2DWorld.h>
+#include <TextureSampler.h>
 
 ParticleSystem::ParticleSystem(TextureSampler * _texture, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :
     Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex),
@@ -13,10 +14,11 @@ ParticleSystem::ParticleSystem(TextureSampler * _texture, Box2DWorld * _world, i
 	emissionTimer(0),
 	defaultTex(_texture)
 {
+	++defaultTex->referenceCount;
 }
 
 ParticleSystem::~ParticleSystem(){
-
+	defaultTex->decrementAndDelete();
 }
 
 void ParticleSystem::update(Step * _step){
@@ -53,8 +55,7 @@ Particle * ParticleSystem::addParticle(glm::vec3 _pos, TextureSampler * _texture
     test[0] = p;
 	p->setTranslationPhysical(_pos.x, _pos.y, _pos.z);
 	float mass = p->body->GetMass();
-	b2Vec2 pos = p->body->GetPosition();
-	p->applyLinearImpulse((std::rand() % 20 - 10)*mass, (std::rand() % 20 - 10)*mass, pos.x, pos.y);
+	p->applyLinearImpulseToCenter((std::rand() % 20 - 10)*mass, (std::rand() % 20 - 10)*mass);
 	p->applyAngularImpulse((std::rand() % 20 - 10)*mass);
     p->setShader(shader, true);
     components.push_back(test);
