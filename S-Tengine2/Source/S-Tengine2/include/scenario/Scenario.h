@@ -31,10 +31,12 @@ public:
 	std::map<std::string, Asset *> assets;
 	std::map<std::string, AssetTexture *> textures;
 	std::map<std::string, AssetAudio *> audio;
+	std::map<std::string, AssetFont *> fonts;
 
 	AssetTexture * defaultTexture;
 	AssetTextureSampler * defaultTextureSampler;
 	AssetAudio * defaultAudio;
+	AssetFont * defaultFont;
 
 
 	Conversation * currentConversation;
@@ -45,4 +47,5 @@ public:
 	AssetTexture * getTexture(std::string _id);
 	AssetTextureSampler * getTextureSampler(std::string _id);
 	AssetAudio * getAudio(std::string _id);
+	AssetFont * getFont(std::string _id);
 };

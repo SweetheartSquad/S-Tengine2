@@ -74,6 +74,23 @@ AssetAudio::~AssetAudio(){
 	delete sound;
 }
 
+AssetFont::AssetFont(Json::Value _json) :
+	Asset(_json)
+{
+	std::string src = _json.get("src", "NO_FONT").asString();
+	if(src == "NO_FONT"){
+		Log::warn("Loaded font without a src: Open Sans substitution in effect.");
+		src = "assets/engine basics/OpenSans-Regular.ttf";
+	}else{
+		src = "assets/fonts/" + src;
+	}
+	int size = _json.get("size", 24).asInt();
+	font = new Font(src, size, false);
+}
+AssetFont::~AssetFont(){
+	delete font;
+}
+
 Asset * Asset::getAsset(Json::Value _json){
 	Asset * res = nullptr;
 	std::string type = _json.get("type", "NO_TYPE").asString();
@@ -84,8 +101,10 @@ Asset * Asset::getAsset(Json::Value _json){
 		res = new AssetTextureSampler(_json);
 	}else if(type == "audio"){
 		res = new AssetAudio(_json);
+	}else if(type == "font"){
+		res = new AssetFont(_json);
 	}else{
-		throw "invalid trigger type";
+		throw "invalid asset type";
 	}
 	return res;
 }

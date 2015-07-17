@@ -40,13 +40,20 @@ Scenario::Scenario(std::string _jsonSrc) :
 			"\"type\": \"textureSampler\""
 		"}", defTexJson);
 	defaultTextureSampler = new AssetTextureSampler(defTexJson);
-
+	
 	parsingSuccessful = reader.parse(
 		"{"
 			"\"id\":\"DEFAULT\",\""
 			"\"type\": \"audio\""
 		"}", defTexJson);
 	defaultAudio = new AssetAudio(defTexJson);
+
+	parsingSuccessful = reader.parse(
+		"{"
+			"\"id\":\"DEFAULT\",\""
+			"\"type\": \"font\""
+		"}", defTexJson);
+	defaultFont = new AssetFont(defTexJson);
 
 
 	std::string jsonLoaded = FileUtils::voxReadFile(_jsonSrc);
@@ -80,6 +87,11 @@ Scenario::Scenario(std::string _jsonSrc) :
 				 audio[aa->id] = aa;
 				 continue;
 			 }
+			 AssetFont * af = dynamic_cast<AssetFont *>(a);
+			 if(af != nullptr){
+				 fonts[af->id] = af;
+				 continue;
+			 }
 
 			 assets[a->id] = a;
 		 }
@@ -99,6 +111,9 @@ Scenario::~Scenario(){
 	for(auto i : audio){
 		delete i.second;
 	}audio.clear();
+	for(auto i : fonts){
+		delete i.second;
+	}fonts.clear();
 }
 
 AssetTexture * Scenario::getTexture(std::string _id){
@@ -130,6 +145,17 @@ AssetAudio * Scenario::getAudio(std::string _id){
 		res = it->second;
 	}else{
 		res = defaultAudio;
+	}
+	return res;
+}
+
+AssetFont * Scenario::getFont(std::string _id){
+	AssetFont * res = nullptr;
+	auto it = fonts.find(_id);
+	if(it != fonts.end()){
+		res = it->second;
+	}else{
+		res = defaultFont;
 	}
 	return res;
 }
