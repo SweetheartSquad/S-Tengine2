@@ -2,18 +2,19 @@
 
 #include <DatabaseConnection.h>
 #include <Log.h>
+#include <FileUtils.h>
 #include <iostream>
 #include <sstream>
 
 DatabaseConnection::DatabaseConnection(const char * _databaseFilename) :
 	db(nullptr)
 {
+	if(!FileUtils::createFileIfNotExists(_databaseFilename)){
+		Log::error("Database file could not be created.");
+		return;
+	}
+
 	int rc;
-	
-	/*if( argc!=3 ){
-		fprintf(stderr, "Usage: %s DATABASE SQL-STATEMENT\n", _sql);
-		return(1);
-	}*/
 	rc = sqlite3_open(_databaseFilename, &db);
 	if(rc != SQLITE_OK){
 		std::stringstream ss;
@@ -37,7 +38,7 @@ void DatabaseConnection::queryDb(std::string _sql, int (*_callback)(void *, int,
 	rc = sqlite3_exec(db, _sql.c_str(), _callback, 0, &zErrMsg);
 	if(rc != SQLITE_OK){
 		std::stringstream ss;
-		ss << "SQL error: " << zErrMsg;
+		ss << "SQL error: " << zErrMsg << ", Query: " << _sql;
 		Log::error(ss.str());
 		sqlite3_free(zErrMsg);
 		zErrMsg = nullptr;
