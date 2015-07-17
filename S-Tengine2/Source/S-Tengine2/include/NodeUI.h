@@ -164,7 +164,14 @@ public:
 	// note that the way this works is that _uiElements first parent is removed from the child list,
 	// then _uiElement is removed from its first parent and the orphaned transform is deleted
 	virtual signed long int removeChild(NodeUI * _uiElement);
+	
 
+	
+	bool updateState;
+	// sets updateState to _newState
+	// typically _newState will be the result of a raycast which
+	// indicates whether the mouse is currently over this node
+	void setUpdateState(bool _newState);
 private:
 	virtual float getContentsWidth();
 	virtual float getContentsHeight();

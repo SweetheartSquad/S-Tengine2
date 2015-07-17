@@ -7,28 +7,38 @@
 #include <RenderOptions.h>
 #include <shader\ShaderComponentTexture.h>
 #include <System.h>
+#include <Mouse.h>
+#include <Scene.h>
+
+RayTestInfo::RayTestInfo() :
+	raycb(raystart, rayend)
+{
+}
 
 UILayer::UILayer(Scene * _scene, float _left, float _right, float _bottom, float _top) : 
 	NodeUI(world, _scene),
 	NodeBulletBody(new BulletWorld()),
 	cam(_left, _right, _bottom, _top, -1000.f, 1000.f),
-	shader(new ComponentShaderBase(true)),
-	bulletDebugDrawer(new BulletDebugDrawer(world->world))
+	bulletDebugDrawer(new BulletDebugDrawer(world->world)),
+	mouse(&Mouse::getInstance()),
+	shader(new ComponentShaderBase(false))
 {
-	Transform * t = new Transform();
-	t->addChild(&cam);
-
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->compileShader();
+
+	Transform * t = new Transform();
+	t->addChild(&cam);
 
 	bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
 	world->world->setDebugDrawer(bulletDebugDrawer);
 	childTransform->addChild(bulletDebugDrawer, false);
+
+	mouseEnabled = true;
 }
 
 UILayer::~UILayer(){
+	delete shader;
 }
-
 
 void UILayer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
@@ -40,8 +50,6 @@ void UILayer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 	Shader * prev = _renderOptions->overrideShader;
 	const glm::mat4 * p = _matrixStack->getProjectionMatrix();
 	const glm::mat4 * v = _matrixStack->getViewMatrix();
-
-	//_renderOptions->overrideShader = shader;
 
 	_matrixStack->pushMatrix();
 	_matrixStack->setProjectionMatrix(&cam.getProjectionMatrix());
@@ -77,15 +85,44 @@ void UILayer::update(Step * _step){
 	if(bulletDebugDrawer != childTransform->children.back()){
 		childTransform->addChild(bulletDebugDrawer, false);
 	}
+
+	if(mouseEnabled){
+		float raylength = 1000;
+
+		//Camera * cam = scene->activeCamera;
+		//glm::vec3 campos = cam->getWorldPos();
+		//glm::vec3 camdir = cam->forwardVectorRotated;
+		//btVector3 raystart(campos.x, campos.y, campos.z);
+		//btVector3 raydir(camdir.x, camdir.y, camdir.z);
+		//btVector3 rayend = raystart + raydir*raylength;
+	
+		rayInfo.raystart = btVector3(mouse->mouseX(), mouse->mouseY(), -raylength);
+		rayInfo.raydir = btVector3(0, 0, 1);
+		rayInfo.rayend = btVector3(mouse->mouseX(), mouse->mouseY(), raylength);
+	
+		rayInfo.rayfrom.setIdentity(); rayInfo.rayfrom.setOrigin(rayInfo.raystart);
+		rayInfo.rayto.setIdentity(); rayInfo.rayto.setOrigin(rayInfo.rayend);
+		rayInfo.raycb = btCollisionWorld::AllHitsRayResultCallback(rayInfo.raystart, rayInfo.rayend);
+		hitTest(this);
+	}
 }
 
-/*bool UILayer::addChild(NodeChild * _child){
-	bool success = NodeHierarchical::addChild(_child);
-	if(success){
-		MeshEntity * me = dynamic_cast<MeshEntity *>(_child);
-		if(me != nullptr){
-			me->setShader(shader, true);
-		}
+void UILayer::hitTest(NodeChild * _c){
+	NodeUI * ui = dynamic_cast<NodeUI *>(_c);
+	if(ui != nullptr && ui->mouseEnabled && ui->shape != nullptr){
+		world->world->rayTestSingle(rayInfo.rayfrom, rayInfo.rayto, ui->body, ui->shape, ui->body->getWorldTransform(), rayInfo.raycb);
+		ui->setUpdateState(rayInfo.raycb.hasHit());
 	}
-	return success;
-}*/
+	Entity * e = dynamic_cast<Entity *>(_c);
+	if(e != nullptr){
+		hitTest(e->childTransform);
+		return;
+	}
+	Transform * t = dynamic_cast<Transform *>(_c);
+	if(t != nullptr){
+		for(NodeChild * c : t->children){
+			hitTest(c);
+		}
+		return;
+	}
+}

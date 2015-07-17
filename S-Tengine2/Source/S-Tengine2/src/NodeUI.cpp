@@ -20,6 +20,7 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	NodeBulletBody(_world),
 	Entity(),
 	mouse(&Mouse::getInstance()),
+	updateState(false),
 	isHovered(false),
 	isDown(false),
 	isActive(false),
@@ -118,29 +119,8 @@ void NodeUI::update(Step * _step){
 	autoResize();
 	if(mouseEnabled){
 		updateCollider();
-		float raylength = 1000;
 
-		/*Camera * cam = scene->activeCamera;
-		
-		glm::vec3 campos = cam->getWorldPos();
-		glm::vec3 camdir = cam->forwardVectorRotated;
-		btVector3 raystart(campos.x, campos.y, campos.z);
-		btVector3 raydir(camdir.x, camdir.y, camdir.z);
-		btVector3 rayend = raystart + raydir*raylength;*/
-	
-		btVector3 raystart(mouse->mouseX(), mouse->mouseY(), -raylength);
-		btVector3 raydir(0, 0, 1);
-		btVector3 rayend(mouse->mouseX(), mouse->mouseY(), raylength);
-	
-		btTransform rayfrom;
-		rayfrom.setIdentity(); rayfrom.setOrigin(raystart);
-		btTransform rayto;
-		rayto.setIdentity(); rayto.setOrigin(rayend);
-		btCollisionWorld::AllHitsRayResultCallback raycb(raystart, rayend);
-		world->world->rayTestSingle(rayfrom, rayto, body, shape, body->getWorldTransform(), raycb);
-	
-	
-		if(raycb.hasHit()){
+		if(updateState){
 			if(!isHovered){
 				in();
 			}if(mouse->leftJustPressed()){
@@ -156,6 +136,9 @@ void NodeUI::update(Step * _step){
 				isDown = false;
 			}
 		}
+
+		updateState = false;
+		
 		NodeBulletBody::update(_step);
 	}
 	
@@ -529,4 +512,9 @@ void NodeUI::repositionChildren(){
 
 	background->parents.at(0)->translate(bpos, false);
 	contents->translate(cpos, false);
+}
+
+
+void NodeUI::setUpdateState(bool _newState){
+	updateState = _newState;
 }
