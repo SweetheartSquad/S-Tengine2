@@ -112,7 +112,6 @@
     <ClCompile Include="../src/shader/ShaderComponentTint.cpp" />
     <ClCompile Include="../src/TextureSampler.cpp" />
     <ClCompile Include="../src/Box.cpp" />
-    <ClCompile Include="../src/Text.cpp" />
     <ClCompile Include="../src/Joystick.cpp" />
     <ClCompile Include="../src/JoystickManager.cpp" />
     <ClCompile Include="../src/SceneSplash.cpp" />
@@ -266,7 +265,6 @@
     <ClInclude Include="../include/NodeUI.h" />
     <ClInclude Include="../include/OpenALSound.h" />
     <ClInclude Include="../include/shader/ShaderComponentText.h" />
-    <ClInclude Include="../include/Text.h" />
     <ClInclude Include="../include/Joystick.h" />
     <ClInclude Include="../include/JoystickManager.h" />
     <ClInclude Include="../include/SceneSplash.h" />
