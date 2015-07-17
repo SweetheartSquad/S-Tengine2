@@ -2,9 +2,10 @@
 
 #include <TextureSampler.h>
 #include <Texture.h>
+#include <FileUtils.h>
+#include <Log.h>
 
 #include <json\json.h>
-#include <FileUtils.h>
 
 TextureSampler::TextureSampler(Texture * _texture, float _width, float _height, float _u, float _v) :
 	NodeResource(true),
@@ -32,7 +33,7 @@ TextureSampler::TextureSampler(std::string _definitionDir, std::string _definiti
 		Json::Reader reader;
 		bool parsedSuccess = reader.parse(jsonString, root);
 		if(!parsedSuccess){
-			std::cout << "Unable to parse TextureSampler definition: " << _definitionDir << _definitionName;	
+			Log::error("Unable to parse TextureSampler definition: " + _definitionDir + _definitionName);	
 		}
 		
 		u = root.get("u", 0).asFloat();

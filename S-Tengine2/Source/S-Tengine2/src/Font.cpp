@@ -76,7 +76,7 @@ Font::Font(std::string _fontSrc, int _size, bool _autoRelease) :
 	face(nullptr)
 {
 	if(FT_New_Face(vox::freeTypeLibrary, _fontSrc.c_str(), 0, &face) != 0) {
-		std::cerr << "Couldn't load font: " << _fontSrc;
+		Log::error("Couldn't load font: " + _fontSrc);
 	}
 	size = _size;
 	lineGapRatio = 1.2f;

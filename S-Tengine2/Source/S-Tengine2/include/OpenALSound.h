@@ -3,6 +3,9 @@
 #include <node\NodeChild.h>
 #include <node\NodeUpdatable.h>
 #include <node\NodeResource.h>
+
+#include <Log.h>
+
 #include <AL\al.h>
 #include <AL\alc.h>
 #include <iostream>
@@ -25,7 +28,7 @@
 			case AL_OUT_OF_MEMORY:		errString = "AL_OUT_OF_MEMORY"; break;\
 			default: break;\
 		}\
-		std::cout << "OpenAL Error - " << err << ": " << errString << std::endl;\
+		Log::error("OpenAL Error - " + std::to_string(err) + ": " + errString);\
 		assert(false);\
 	}\
 }while(false)
