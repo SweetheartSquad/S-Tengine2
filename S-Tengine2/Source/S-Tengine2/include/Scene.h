@@ -121,4 +121,12 @@ public:
 	virtual void load() override;
 
 	virtual void unload() override;
+
+
+protected:
+	// sets activeCamera to the next camera in the camera stack
+	// if activeCamera is the last camera, sets it to the first camera
+	// returns the new activeCamera
+	// (this is intended for debugging purposes)
+	Camera * cycleCamera();
 };

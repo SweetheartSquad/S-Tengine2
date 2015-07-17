@@ -256,3 +256,18 @@ void Scene::clear(){
 	glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
+
+
+Camera * Scene::cycleCamera(){
+	if(activeCamera == cameras.back()){
+		activeCamera = cameras.at(0);
+	}else{
+		for(unsigned long int i = 0; i < cameras.size()-1; ++i){
+			if(activeCamera == cameras.at(i)){
+				activeCamera = cameras.at(i+1);
+				break;
+			}
+		}
+	}
+	return activeCamera;
+}
