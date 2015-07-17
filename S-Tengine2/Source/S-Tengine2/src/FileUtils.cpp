@@ -3,7 +3,7 @@
 #include <FileUtils.h>
 #include <Log.h>
 
-std::string FileUtils::voxReadFile(std::string _filename){
+std::string FileUtils::voxReadFile(const std::string & _filename){
 	std::ifstream file(_filename, std::ios::in);
 	std::stringstream contents;
 
@@ -17,4 +17,22 @@ std::string FileUtils::voxReadFile(std::string _filename){
 	}
 
 	return contents.str();
+}
+
+bool FileUtils::createDirectoryIfNotExists(const std::string & _src){
+	return CreateDirectoryA(_src.c_str(), NULL) != ERROR_PATH_NOT_FOUND;
+}
+
+bool FileUtils::createFileIfNotExists(const std::string & _src){
+	if (std::ifstream(_src)){
+		// File already exists
+		return true;
+	}
+	std::ofstream file(_src);
+	if (!file){
+		Log::error("File \"" + _src + "\" could not be created.");
+		return false;
+	}
+	// File was created
+	return true;
 }
