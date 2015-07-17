@@ -3,6 +3,7 @@
 #include <node/NodeContent.h>
 #include <Texture.h>
 #include <TextureSampler.h>
+#include <Font.h>
 #include <json\json.h>
 #include <OpenALSound.h>
 
@@ -39,4 +40,12 @@ public:
 
 	AssetAudio(Json::Value _json);
 	~AssetAudio();
+};
+
+class AssetFont : public Asset{
+public:
+	Font * font;
+
+	AssetFont(Json::Value _json);
+	~AssetFont();
 };
