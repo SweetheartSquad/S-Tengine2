@@ -13,6 +13,8 @@
 #include <OpenALSound.h>
 #include <System.h>
 
+#include <FileUtils.h>
+
 Step vox::step;
 std::string vox::title = "S-Tengine2";
 
@@ -107,6 +109,10 @@ void vox::initWindow(GLFWwindow * _w){
 }
 
 void vox::initialize(std::string _title){
+	// verify that the correct file structure is in place
+	FileUtils::createDirectoryIfNotExists("data");
+	FileUtils::createDirectoryIfNotExists("data/screenshots");
+
 	title = _title;
 	step.targetFrameDuration = 0.1667;
 

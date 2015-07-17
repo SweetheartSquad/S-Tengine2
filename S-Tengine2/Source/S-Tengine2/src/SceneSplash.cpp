@@ -40,7 +40,7 @@
 SceneSplash::SceneSplash(Game * _game) :
 	Scene(_game),
 	shader(new ComponentShaderBase(true)),
-	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
+	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
 	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
@@ -68,10 +68,10 @@ SceneSplash::SceneSplash(Game * _game) :
 	fc->parents.at(0)->setOrientation(fc->lastOrientation);
 	activeCamera = fc;
 
-	Texture * c = new Texture("../assets/engine basics/cursor.png", 32, 32, true, false);
+	Texture * c = new Texture("assets/engine basics/cursor.png", 32, 32, true, false);
 	c->load();
 	ResourceManager::resources.push_back(c);
-	Texture * logoTex = new Texture("../assets/engine basics/S-Tengine2_logo-tex.png", 1024, 1024, true, false);
+	Texture * logoTex = new Texture("assets/engine basics/S-Tengine2_logo-tex.png", 1024, 1024, true, false);
 	logoTex->load();
 	ResourceManager::resources.push_back(logoTex);
 	
@@ -87,7 +87,7 @@ SceneSplash::SceneSplash(Game * _game) :
 	}
 	mouseIndicator->mesh->dirty = true;
 	
-	logo = new MeshEntity(Resource::loadMeshFromObj("../assets/engine basics/S-Tengine2_logo.obj").at(0));
+	logo = new MeshEntity(Resource::loadMeshFromObj("assets/engine basics/S-Tengine2_logo.obj").at(0));
 	childTransform->addChild(logo)->scale(25);
 	logo->mesh->pushTexture2D(logoTex);
 	logo->setShader(shader, true);
@@ -98,7 +98,7 @@ SceneSplash::SceneSplash(Game * _game) :
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
 
-	/*Font * font = new Font("../assets/arial.ttf", 50, false);
+	/*Font * font = new Font("assets/arial.ttf", 50, false);
 	textThing = new Label(font, textShader, shader, WrapMode::WORD_WRAP, -1);
 	textThing->setText(L"some text");
 	uiLayer.childTransform->addChild(textThing);*/

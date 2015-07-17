@@ -329,7 +329,7 @@ void Game::takeScreenshot(){
 	struct tm now;
 	localtime_s(&now, &t);
 	filepath
-		<< "../screenshots/"
+		<< "data/screenshots/"
 		<< (now.tm_year + 1900)
 		<< '-'
 		<< (now.tm_mon + 1)

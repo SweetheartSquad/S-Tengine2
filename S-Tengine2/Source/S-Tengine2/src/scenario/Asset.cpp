@@ -16,10 +16,10 @@ AssetTexture::AssetTexture(Json::Value _json) :
 {
 	std::string src = _json.get("src", "NO_TEXTURE").asString();
 	if(src == "NO_TEXTURE"){
-		src = "../assets/engine basics/img_cheryl.jpg";
 		Log::warn("Loaded texture without a src: Cheryl substitution in effect.");
+		src = "assets/engine basics/img_cheryl.jpg";
 	}else{
-		src = "../assets/textures/" + src;
+		src = "assets/textures/" + src;
 	}
 	texture = new Texture(src, width, height, true, false);
 	texture->load();
@@ -34,10 +34,10 @@ AssetTextureSampler::AssetTextureSampler(Json::Value _json) :
 {
 	std::string src = _json.get("src", "NO_TEXTURE").asString();
 	if(src == "NO_TEXTURE"){
-		src = "../assets/engine basics/img_cheryl.jpg";
 		Log::warn("Loaded textureSampler without a src: Cheryl substitution in effect.");
+		src = "assets/engine basics/img_cheryl.jpg";
 	}else{
-		src = "../assets/textures/" + src;
+		src = "assets/textures/" + src;
 	}
 	int width = _json.get("width", 256).asInt();
 	int height = _json.get("height", 256).asInt();
@@ -58,10 +58,10 @@ AssetAudio::AssetAudio(Json::Value _json) :
 {
 	std::string src = _json.get("src", "NO_AUDIO").asString();
 	if(src == "NO_AUDIO"){
-		src = "../assets/engine basics/SCENE.ogg";
 		Log::warn("Loaded audio without a src: SCENE substitution in effect.");
+		src = "assets/engine basics/SCENE.ogg";
 	}else{
-		src = "../assets/audio/" + src;
+		src = "assets/audio/" + src;
 	}
 	bool stream = _json.get("stream", false).asBool();
 	if(stream){

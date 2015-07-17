@@ -45,7 +45,7 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	Scene(_game),
 	diffuseShader(new ComponentShaderBase(true)),
 	phongShader(new ComponentShaderBase(true)),
-	screenSurfaceShader(new Shader("../assets/RenderSurface", false, true)),
+	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, true)),
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
 	hsvComponent(new ShaderComponentHsv(diffuseShader, 0, 1, 1)),
@@ -77,10 +77,10 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	fc->parents.at(0)->setOrientation(fc->lastOrientation);
 	activeCamera = fc;
 
-	Texture * c = new Texture("../assets/engine basics/cursor.png", 32, 32, true, false);
+	Texture * c = new Texture("assets/engine basics/cursor.png", 32, 32, true, false);
 	c->load();
 	ResourceManager::resources.push_back(c);
-	Texture * logoTex = new Texture("../assets/engine basics/sweetheartsquad-logo-tex.png", 1024, 1024, true, false);
+	Texture * logoTex = new Texture("assets/engine basics/sweetheartsquad-logo-tex.png", 1024, 1024, true, false);
 	logoTex->load();
 	ResourceManager::resources.push_back(logoTex);
 	
@@ -100,11 +100,11 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	childTransform->addChild(logo)->scale(10);
 	logo->parents.at(0)->translate(0, 10, 0);
 
-	logo1 = new MeshEntity(Resource::loadMeshFromObj("../assets/engine basics/sweetheartsquad-logo-noheart.obj").at(0));
+	logo1 = new MeshEntity(Resource::loadMeshFromObj("assets/engine basics/sweetheartsquad-logo-noheart.obj").at(0));
 	logo1->mesh->pushTexture2D(logoTex);
 	logo1->setShader(diffuseShader, true);
 
-	logo2 = new MeshEntity(Resource::loadMeshFromObj("../assets/engine basics/sweetheartsquad-logo-heartonly.obj").at(0));
+	logo2 = new MeshEntity(Resource::loadMeshFromObj("assets/engine basics/sweetheartsquad-logo-heartonly.obj").at(0));
 	logo2->mesh->pushTexture2D(logoTex);
 	logo2->setShader(diffuseShader, true);
 	
@@ -118,7 +118,7 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
 
-	/*Font * font = new Font("../assets/arial.ttf", 50, false);
+	/*Font * font = new Font("assets/arial.ttf", 50, false);
 	textThing = new Label(font, textShader, shader, WrapMode::WORD_WRAP, -1);
 	textThing->setText(L"some text");
 	uiLayer.childTransform->addChild(textThing);*/
