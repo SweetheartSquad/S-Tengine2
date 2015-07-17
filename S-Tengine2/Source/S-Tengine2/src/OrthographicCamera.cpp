@@ -28,9 +28,9 @@ void OrthographicCamera::update(Step * _step){
 
 glm::mat4 OrthographicCamera::getViewMatrix(){
 	return glm::lookAt(
-		parents.at(0)->getTranslationVector(),							// Camera is here
-		parents.at(0)->getTranslationVector() + forwardVectorRotated,	// and looks here : at the same position, plus "direction"
-		upVectorRotated												// Head is up (set to 0,-1,0 to look upside-down)
+		getWorldPos(),							// Camera is here
+		getWorldPos() + forwardVectorRotated,	// and looks here : at the same position, plus "direction"
+		upVectorRotated							// Head is up (set to 0,-1,0 to look upside-down)
 	);
 }
 
