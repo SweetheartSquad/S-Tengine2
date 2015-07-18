@@ -41,8 +41,7 @@ Scene::Scene(Game * _game):
 	clearColor[3] = 1.0;
 
 	cameras.push_back(activeCamera);
-	Transform * ct = new Transform();
-	ct->addChild(activeCamera, false);
+	childTransform->addChild(activeCamera, false);
 
 	normalsShader->addComponent(new ShaderComponentNormals(normalsShader));
 	normalsShader->compileShader();
@@ -53,15 +52,15 @@ Scene::Scene(Game * _game):
 
 Scene::~Scene(void){
 	while(cameras.size() > 0){
-		delete cameras.back();
+		//delete cameras.back(); don't need to delete because they're children of the scene
 		cameras.pop_back();
 	}
 	activeCamera = nullptr;
 
-	/*while(lights.size() > 0){
-		delete lights.back();
+	while(lights.size() > 0){
+		//delete lights.back(); don't need to delete because they're children of the scene
 		lights.pop_back();
-	}*/
+	}
 	
 	depthBuffer->safeDelete();
 	shadowBuffer->safeDelete();
@@ -75,8 +74,6 @@ void Scene::update(Step * _step){
 	if(keyboard->keyJustDown(GLFW_KEY_F12)){
 		game->takeScreenshot();
 	}
-
-	activeCamera->update(_step);
 	Entity::update(_step);
 }
 

@@ -15,24 +15,24 @@ PerspectiveCamera::~PerspectiveCamera(){
 }
 
 void PerspectiveCamera::update(Step * _step){
-	lastOrientation = parents.at(0)->getOrientationQuat();
+	lastOrientation = childTransform->getOrientationQuat();
 
 	glm::quat newOrientation = calcOrientation();
 	newOrientation = glm::slerp(lastOrientation, newOrientation, interpolation * static_cast<float>(vox::deltaTimeCorrection));
 
-	parents.at(0)->setOrientation(newOrientation);
+	childTransform->setOrientation(newOrientation);
 
 	forwardVectorRotated   = newOrientation * forwardVectorLocal;
 	rightVectorRotated	   = newOrientation * rightVectorLocal;
 	upVectorRotated		   = newOrientation * upVectorLocal;
 
-	lookAtSpot = getWorldPos()+forwardVectorRotated;
+	lookAtSpot = childTransform->getWorldPos()+forwardVectorRotated;
 	Camera::update(_step);
 }
 
 glm::mat4 PerspectiveCamera::getViewMatrix(){
 	return glm::lookAt(
-		getWorldPos(),	// Camera is here
+		childTransform->getWorldPos(),	// Camera is here
 		lookAtSpot + lookAtOffset,			// and looks here : at the same position, plus "direction"
 		upVectorRotated						// Head is up (set to 0,-1,0 to look upside-down)
 	);

@@ -5,8 +5,7 @@
 
 /****************************
 *
-* A basic camera class. This camera is rotated via the mouse position 
-* The camera's rotation is restricted on the x axis so that It can not flip upside down
+* A basic camera class.
 *
 *****************************/
 class Camera abstract : public Entity {
