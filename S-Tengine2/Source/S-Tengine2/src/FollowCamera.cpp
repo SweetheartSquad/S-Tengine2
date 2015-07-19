@@ -24,13 +24,13 @@ FollowCamera::~FollowCamera(){
 
 void FollowCamera::update(Step * _step){
 	
-	lastOrientation = parents.at(0)->getOrientationQuat();
+	lastOrientation = childTransform->getOrientationQuat();
 	glm::quat newOrientation = glm::quat(1.f, 0.f, 0.f, 0.f);
 	newOrientation = glm::rotate(newOrientation, yaw, upVectorLocal);
 	newOrientation = glm::rotate(newOrientation, pitch, rightVectorLocal);
 
 	newOrientation = glm::slerp(lastOrientation, newOrientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
-	parents.at(0)->setOrientation(newOrientation);
+	childTransform->setOrientation(newOrientation);
 
 	forwardVectorRotated   = newOrientation * forwardVectorLocal;
 	rightVectorRotated	   = newOrientation * rightVectorLocal;
