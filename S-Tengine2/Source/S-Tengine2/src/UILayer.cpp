@@ -16,7 +16,7 @@ RayTestInfo::RayTestInfo() :
 }
 
 UILayer::UILayer(Scene * _scene, float _left, float _right, float _bottom, float _top) : 
-	NodeUI(world, _scene),
+	NodeUI(world, _scene, true),
 	NodeBulletBody(new BulletWorld()),
 	cam(_left, _right, _bottom, _top, -1000.f, 1000.f),
 	bulletDebugDrawer(new BulletDebugDrawer(world->world)),
@@ -33,8 +33,6 @@ UILayer::UILayer(Scene * _scene, float _left, float _right, float _bottom, float
 	bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
 	world->world->setDebugDrawer(bulletDebugDrawer);
 	childTransform->addChild(bulletDebugDrawer, false);
-
-	mouseEnabled = true;
 }
 
 UILayer::~UILayer(){
@@ -110,7 +108,7 @@ void UILayer::update(Step * _step){
 
 void UILayer::hitTest(NodeChild * _c){
 	NodeUI * ui = dynamic_cast<NodeUI *>(_c);
-	if(ui != nullptr && ui->mouseEnabled && ui->shape != nullptr){
+	if(ui != nullptr && ui->isMouseEnabled() && ui->shape != nullptr){
 		rayInfo.raycb = btCollisionWorld::AllHitsRayResultCallback(rayInfo.raystart, rayInfo.rayend);
 		world->world->rayTestSingle(rayInfo.rayfrom, rayInfo.rayto, ui->body, ui->shape, ui->body->getWorldTransform(), rayInfo.raycb);
 		ui->setUpdateState(rayInfo.raycb.hasHit());

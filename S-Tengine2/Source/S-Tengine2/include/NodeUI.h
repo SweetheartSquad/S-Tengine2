@@ -14,6 +14,7 @@ enum BoxSizing{
 
 class NodeUI : public virtual NodeBulletBody, public virtual Entity{
 protected:
+	bool mouseEnabled;
 	UIUnit marginLeft;
 	UIUnit marginRight;
 	UIUnit marginBottom;
@@ -62,7 +63,11 @@ protected:
 	glm::vec4 bgColour;
 
 public:
-	bool mouseEnabled;
+	// returns mouseEnabled
+	bool isMouseEnabled();
+	// sets mouseEnabled and creates/deletes the node's collider
+	void setMouseEnabled(bool _mouseEnabled);
+
 	Scene * scene;
 	MeshEntity * background;
 
@@ -72,7 +77,7 @@ public:
 	std::function<void(NodeUI * _this)> onClickFunction;
 	//void (*onUpFunction)();
 
-	NodeUI(BulletWorld * _world, Scene * _scene);
+	NodeUI(BulletWorld * _world, Scene * _scene, bool _mouseEnabled = false);
 	
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;

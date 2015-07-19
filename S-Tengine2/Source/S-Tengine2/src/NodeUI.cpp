@@ -16,7 +16,7 @@
 
 ComponentShaderBase * NodeUI::bgShader = nullptr;
 
-NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
+NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, bool _mouseEnabled) :
 	NodeBulletBody(_world),
 	Entity(),
 	mouse(&Mouse::getInstance()),
@@ -30,7 +30,7 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	contents(new Transform()),
 	boxSizing(kBORDER_BOX),
-	mouseEnabled(false),
+	mouseEnabled(!_mouseEnabled), // we initialize the variable to the opposite so that setMouseEnabled gets called properly at the end of the constructor
 	//bgColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), 1.f)
 	bgColour(0.f, 0.f, 0.f, 1.f)
 {
@@ -53,6 +53,8 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene) :
 	
 	setPadding(0);
 	setMargin(0);
+
+	setMouseEnabled(_mouseEnabled);
 }
 
 void NodeUI::load(){
@@ -122,6 +124,34 @@ signed long int NodeUI::removeChild(NodeUI* _uiElement){
 
 void NodeUI::setTranslationPhysical(float _x, float _y, float _z, bool _relative){
 	childTransform->translate(_x, _y, _z, _relative);
+}
+
+bool NodeUI::isMouseEnabled(){
+	return mouseEnabled;
+}
+
+void NodeUI::setMouseEnabled(bool _mouseEnabled){
+	// if nothing has changed, return early
+	if(_mouseEnabled == mouseEnabled){
+		return;
+	}
+
+	if(_mouseEnabled){
+		// create the NodeBulletBody collider stuff
+		autoResize();
+		updateCollider();
+	}else{
+		// delete the NodeBulletBody collider stuff
+		if(shape != nullptr){
+			delete shape;
+			shape = nullptr;
+		}if(body != nullptr){
+			world->world->removeRigidBody(body);
+			body = nullptr;
+		}
+	}
+
+	mouseEnabled = _mouseEnabled;
 }
 
 void NodeUI::update(Step * _step){
