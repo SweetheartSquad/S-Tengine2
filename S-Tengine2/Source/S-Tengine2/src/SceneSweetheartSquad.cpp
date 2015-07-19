@@ -60,21 +60,18 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	phongShader->addComponent(new ShaderComponentPhong(phongShader));
 	phongShader->compileShader();
 
-	Transform * t;
-
 	//Set up cameras
 	PerspectiveCamera * fc = new PerspectiveCamera();
-	t = new Transform();
-	t->addChild(fc);
+	childTransform->addChild(fc);
 	cameras.push_back(fc);
 	fc->farClip = 1000.f;
 	fc->nearClip = 0.001f;
-	fc->parents.at(0)->rotate(90, 0, 1, 0, kWORLD);
+	fc->childTransform->rotate(90, 0, 1, 0, kWORLD);
 	fc->parents.at(0)->translate(0.1f, -5.f, 18.f);
 	fc->yaw = 90.0f;
 	fc->pitch = 15.0f;
 	fc->lastOrientation = fc->calcOrientation();
-	fc->parents.at(0)->setOrientation(fc->lastOrientation);
+	fc->childTransform->setOrientation(fc->lastOrientation);
 	activeCamera = fc;
 
 	Texture * c = new Texture("assets/engine basics/cursor.png", 32, 32, true, false);
