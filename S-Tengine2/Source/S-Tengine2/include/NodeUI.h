@@ -32,10 +32,12 @@ protected:
 	// Whether the button is active (only affects RADIO and TOGGLE buttons)
 	bool isActive;
 	
-    // The function to be called when you are starting a click
+    // The function to be called when you press the button down
 	virtual void down();
-    // The function to be called when you complete a click
+    // The function to be called when you release the button
 	virtual void up();
+    // The function to be called when you release the button while still hovered over it
+	virtual void click();
     // The function to be called when you mouseover
 	virtual void in();
     // The function to be called when you mouseout

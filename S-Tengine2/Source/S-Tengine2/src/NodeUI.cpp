@@ -74,8 +74,8 @@ void NodeUI::down(){
 	}*/
 }
 void NodeUI::up(){
-	if(isHovered && onClickFunction != nullptr){
-		onClickFunction(this);
+	if(isHovered){
+		click();
 	}
 	isDown = false;
 	
@@ -83,6 +83,12 @@ void NodeUI::up(){
 	/*if(onUpFunction != nullptr){
 		onUpFunction(this);
 	}*/
+}
+void NodeUI::click(){
+	// do event stuff
+	if(onClickFunction != nullptr){
+		onClickFunction(this);
+	}
 }
 void NodeUI::in(){
 	isHovered = true;
