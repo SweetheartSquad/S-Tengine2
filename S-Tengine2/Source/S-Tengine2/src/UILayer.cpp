@@ -21,10 +21,11 @@ UILayer::UILayer(Scene * _scene, float _left, float _right, float _bottom, float
 	cam(_left, _right, _bottom, _top, -1000.f, 1000.f),
 	bulletDebugDrawer(new BulletDebugDrawer(world->world)),
 	mouse(&Mouse::getInstance()),
-	shader(new ComponentShaderBase(false))
+	shader(new ComponentShaderBase(true))
 {
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->compileShader();
+	++shader->referenceCount;
 
 	Transform * t = new Transform();
 	t->addChild(&cam);
@@ -37,7 +38,7 @@ UILayer::UILayer(Scene * _scene, float _left, float _right, float _bottom, float
 }
 
 UILayer::~UILayer(){
-	delete shader;
+	shader->decrementAndDelete();
 }
 
 void UILayer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
