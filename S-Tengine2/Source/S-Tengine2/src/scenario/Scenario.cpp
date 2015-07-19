@@ -18,7 +18,8 @@ Character::Character(Json::Value _json) :
 }
 
 Scenario::Scenario(std::string _jsonSrc) :
-	currentConversation(nullptr)
+	currentConversation(nullptr),
+	NodeResource(false)
 {
 	
 
@@ -77,6 +78,8 @@ Scenario::Scenario(std::string _jsonSrc) :
 		 Json::Value texturesJson = root["assets"];
 		 for(auto i = 0; i < texturesJson.size(); ++i) {
 			 Asset * a = Asset::getAsset(texturesJson[i]);
+			 assets[a->id] = a;
+
 			 AssetTexture * at = dynamic_cast<AssetTexture *>(a);
 			 if(at != nullptr){
 				textures[at->id] = at;
@@ -92,8 +95,6 @@ Scenario::Scenario(std::string _jsonSrc) :
 				 fonts[af->id] = af;
 				 continue;
 			 }
-
-			 assets[a->id] = a;
 		 }
 	}
 }
@@ -105,15 +106,9 @@ Scenario::~Scenario(){
 	for(auto i : characters){
 		delete i.second;
 	}characters.clear();
-	for(auto i : textures){
+	for(auto i : assets){
 		delete i.second;
-	}textures.clear();
-	for(auto i : audio){
-		delete i.second;
-	}audio.clear();
-	for(auto i : fonts){
-		delete i.second;
-	}fonts.clear();
+	}assets.clear();
 }
 
 AssetTexture * Scenario::getTexture(std::string _id){

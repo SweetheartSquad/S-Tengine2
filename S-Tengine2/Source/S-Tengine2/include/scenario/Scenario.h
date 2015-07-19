@@ -21,7 +21,7 @@ public:
 	std::map<std::string, std::string> variables;
 };
 
-class Scenario : public NodeContent{
+class Scenario : public virtual NodeContent, public virtual NodeResource{
 public:	
 
 	Json::Value root;
