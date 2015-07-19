@@ -110,6 +110,7 @@ void UILayer::update(Step * _step){
 void UILayer::hitTest(NodeChild * _c){
 	NodeUI * ui = dynamic_cast<NodeUI *>(_c);
 	if(ui != nullptr && ui->mouseEnabled && ui->shape != nullptr){
+		rayInfo.raycb = btCollisionWorld::AllHitsRayResultCallback(rayInfo.raystart, rayInfo.rayend);
 		world->world->rayTestSingle(rayInfo.rayfrom, rayInfo.rayto, ui->body, ui->shape, ui->body->getWorldTransform(), rayInfo.raycb);
 		ui->setUpdateState(rayInfo.raycb.hasHit());
 	}
