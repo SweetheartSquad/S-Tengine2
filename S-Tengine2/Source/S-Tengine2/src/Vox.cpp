@@ -168,7 +168,6 @@ void vox::initialize(std::string _title){
 }
 
 void vox::destruct(){
-	glfwDestroyWindow(vox::currentContext);
 	glfwTerminate();
 
 	FT_Done_FreeType(freeTypeLibrary);
