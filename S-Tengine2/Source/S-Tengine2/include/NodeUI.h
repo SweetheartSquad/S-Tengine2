@@ -164,6 +164,8 @@ public:
 	// note that the way this works is that _uiElements first parent is removed from the child list,
 	// then _uiElement is removed from its first parent and the orphaned transform is deleted
 	virtual signed long int removeChild(NodeUI * _uiElement);
+
+	virtual void setTranslationPhysical(float _x, float _y, float _z, bool _relative = false) override;
 	
 
 	
