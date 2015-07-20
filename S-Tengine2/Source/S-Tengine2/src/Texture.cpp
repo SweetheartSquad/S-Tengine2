@@ -21,7 +21,11 @@ Texture::Texture(std::string _src, unsigned long int _width, unsigned long int _
 
 Texture::Texture(bool _storeData, bool _autoRelease) :
 	NodeResource(_autoRelease),
-	storeData(_storeData)
+	storeData(_storeData),
+	data(nullptr),
+	channels(0),
+	width(0),
+	height(0)
 {	
 }
 
@@ -34,26 +38,12 @@ void Texture::load(){
 	if(!loaded){
 		glGenTextures(1, &textureId);
 		checkForGlError(0,__FILE__,__LINE__);
-		glBindTexture(GL_TEXTURE_2D, textureId);
-		checkForGlError(0,__FILE__,__LINE__);
 
-		//unsigned char * tempData = nullptr;
 		if(data == nullptr){
-			data = Resource::loadImage(src.c_str(), width, height, SOIL_LOAD_AUTO, &channels);
+			loadImageData();
 		}
 
-		if(channels == 2) {
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
-		}else if(channels == 3){
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		}else if(channels == 4){
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-		}else{
-			throw "Invalid number of image channels";
-		}
-		
-		glGenerateMipmap(GL_TEXTURE_2D);
+		bufferData();
 
 		if(!storeData){
 			delete data;
@@ -72,4 +62,28 @@ void Texture::unload(){
 		checkForGlError(0,__FILE__,__LINE__);
 	}
 	NodeLoadable::unload();
+}
+
+void Texture::loadImageData(){
+	data = Resource::loadImage(src.c_str(), width, height, SOIL_LOAD_AUTO, &channels);
+	numPixels = width * height;
+	numBytes = numPixels * channels;
+}
+
+void Texture::bufferData(){
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	checkForGlError(0,__FILE__,__LINE__);
+	if(channels == 2) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
+	}else if(channels == 3){
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+	}else if(channels == 4){
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	}else{
+		throw "Invalid number of image channels";
+	}
+	checkForGlError(0,__FILE__,__LINE__);
+		
+	glGenerateMipmap(GL_TEXTURE_2D);
+	checkForGlError(0,__FILE__,__LINE__);
 }

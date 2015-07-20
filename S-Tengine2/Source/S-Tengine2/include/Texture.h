@@ -26,6 +26,12 @@ public:
 	unsigned long int width;
 	/**Texture Height */
 	unsigned long int height;
+	/** Num channels (can't be unsigned long because of SOIL) */
+	int channels;
+	// Pixels in texture (width * height)
+	unsigned long int numPixels;
+	// Bytes in texture (numPixels * channels)
+	unsigned long int numBytes;
 	/**OpenGL Texture ID */
 	GLuint textureId;
 	/** Whether or not to store the image data in memory
@@ -33,13 +39,19 @@ public:
 	bool storeData;
 	/**The image data */
 	unsigned char * data;
-	/** Num channels (can't be unsigned long because of SOIL) */
-	int channels;
+
+
+	// sends the image data in the member pointer to OpenGL
+	// also generates a mipmap
+	void bufferData();
+
 	/**Initializes the texture. Can be called to recreate the texture
 	if the context is destroyed*/
 	virtual void load() override;
 	/**Destroy the texture objects relation to the opengl context */
 	virtual void unload() override;
+
+	virtual void loadImageData();
 
 	friend std::ostream& operator<<(std::ostream& os, const Texture& obj){
 		return os
