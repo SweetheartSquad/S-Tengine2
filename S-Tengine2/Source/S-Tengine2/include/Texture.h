@@ -40,10 +40,13 @@ public:
 	/**The image data */
 	unsigned char * data;
 
-
-	// sends the image data in the member pointer to OpenGL
-	// also generates a mipmap
+	
+	// updates the OpenGL texture with the image data (assumes texture exists already)
+	// also generates mipmaps
 	void bufferData();
+	// creates the OpenGL texture and buffers it with the image data
+	// also generates mipmaps
+	void bufferDataFirst();
 
 	/**Initializes the texture. Can be called to recreate the texture
 	if the context is destroyed*/

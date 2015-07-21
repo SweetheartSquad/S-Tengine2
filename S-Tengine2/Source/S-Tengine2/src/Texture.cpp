@@ -36,15 +36,17 @@ Texture::~Texture(){
 
 void Texture::load(){
 	if(!loaded){
-		glGenTextures(1, &textureId);
-		checkForGlError(0,__FILE__,__LINE__);
-
+		// load texture data if necessary
 		if(data == nullptr){
 			loadImageData();
 		}
 
-		bufferData();
+		// create and buffer OpenGL texture
+		glGenTextures(1, &textureId);
+		checkForGlError(0,__FILE__,__LINE__);
+		bufferDataFirst();
 
+		// delete texture data if necessary
 		if(!storeData){
 			delete data;
 			data = nullptr;
@@ -71,6 +73,24 @@ void Texture::loadImageData(){
 }
 
 void Texture::bufferData(){
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	checkForGlError(0,__FILE__,__LINE__);
+	if(channels == 2) {
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_R8, GL_UNSIGNED_BYTE, data);
+	}else if(channels == 3){
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
+	}else if(channels == 4){
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	}else{
+		throw "Invalid number of image channels";
+	}
+	checkForGlError(0,__FILE__,__LINE__);
+		
+	glGenerateMipmap(GL_TEXTURE_2D); // is this call necessary?
+	checkForGlError(0,__FILE__,__LINE__);
+}
+
+void Texture::bufferDataFirst(){
 	glBindTexture(GL_TEXTURE_2D, textureId);
 	checkForGlError(0,__FILE__,__LINE__);
 	if(channels == 2) {
