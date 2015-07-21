@@ -20,6 +20,7 @@ TextureColourTable::~TextureColourTable(){
 }
 
 void TextureColourTable::generateRandomTable(){
+	// set the first and last pixels to be transparent
 	data[0] = 0;
 	data[1] = 0;
 	data[2] = 0;
@@ -29,12 +30,13 @@ void TextureColourTable::generateRandomTable(){
 	data[numBytes-2] = 0;
 	data[numBytes-3] = 0;
 	data[numBytes-4] = 0;
-	for(unsigned long int i = 4; i < numBytes-4; ++i){
-		if(i % 4 == 3){
-			data[i] = 255;
-		}else{
-			data[i] = vox::NumberUtils::randomInt(0, 255);
-		}
+
+	// set the colour on all of the other pixels
+	for(unsigned long int i = 4; i < numBytes-4; i += 4){
+		data[i+0] = vox::NumberUtils::randomInt(0, 255);
+		data[i+1] = vox::NumberUtils::randomInt(0, 255);
+		data[i+2] = vox::NumberUtils::randomInt(0, 255);
+		data[i+3] = 255;
 	}
 }
 
