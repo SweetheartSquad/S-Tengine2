@@ -1,4 +1,4 @@
-#pragma 
+﻿#pragma 
 
 #include "shader/ShaderComponentIndexedTexture.h"
 #include "shader/ShaderVariables.h"
@@ -34,15 +34,14 @@ std::string ShaderComponentIndexedTexture::getVertexBodyString(){
 
 std::string ShaderComponentIndexedTexture::getFragmentBodyString(){
     std::stringstream res;
-    res << "if(" << GL_UNIFORM_ID_NUM_TEXTURES << " == 2){" << ENDL;
+    //res << "if(" << GL_UNIFORM_ID_NUM_TEXTURES << " == 2){" << ENDL;
 		// access the first texture to get the indexed colour
 		res << "vec4 myIndex = texture2D(" << GL_UNIFORM_ID_TEXTURE_SAMPLER +"[0], " << GL_IN_OUT_FRAG_UV << ");";
 		// access the second texture AT the colour index
-		res << "vec4 texel = texture2D(" << GL_UNIFORM_ID_TEXTURE_SAMPLER +"[1], myIndex.xy);";
+		res << "vec4 texel = texelFetch(" << GL_UNIFORM_ID_TEXTURE_SAMPLER +"[1], ivec2(myIndex.x*255, 0), 0);";
 		// output the texture
 		res << "modFrag = texel;";
-		//res << "modFrag = vec4(myIndex.xy,0,1);";
-    res << "}" << ENDL;
+    //res << "}" << ENDL;
     return res.str();
 }
 
