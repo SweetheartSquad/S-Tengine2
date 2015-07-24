@@ -114,6 +114,7 @@ const std::string SHADER_COMPONENT_NORMAL			  = "SHADER_COMPONENT_NORMAL";
 const std::string SHADER_COMPONENT_DEPTH			  = "SHADER_COMPONENT_DEPTH";
 const std::string SHADER_COMPONENT_SSAO			      = "SHADER_COMPONENT_SSAO";
 const std::string SHADER_COMPONENT_MASK			      = "SHADER_COMPONENT_MASK";
+const std::string SHADER_COMPONENT_MVP			      = "SHADER_COMPONENT_MVP";
 
 
 const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGHT + ENDL +

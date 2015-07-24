@@ -9,7 +9,6 @@ class GeometryComponent;
 
 class ComponentShaderBase : public Shader{
 public:	
-	GLint modelUniformLocation, viewUniformLocation, projectionUniformLocation, mvpUniformLocation;
 
 	ComponentShaderBase(bool _autoRelease);
 	explicit ComponentShaderBase(std::vector<ShaderComponent *> _components, bool _autoRelease);

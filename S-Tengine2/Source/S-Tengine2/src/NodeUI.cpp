@@ -11,6 +11,7 @@
 #include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentAlpha.h>
 #include <shader\ShaderComponentTint.h>
+#include <shader\ShaderComponentMVP.h>
 
 #include <NumberUtils.h>
 
@@ -36,6 +37,7 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, bool _mouseEnabled) :
 {
 	if(bgShader == nullptr){
 		bgShader = new ComponentShaderBase(true);
+		bgShader->addComponent(new ShaderComponentMVP(bgShader));
 		bgShader->addComponent(new ShaderComponentTexture(bgShader));
 		bgShader->addComponent(new ShaderComponentTint(bgShader));
 		bgShader->addComponent(new ShaderComponentAlpha(bgShader));
@@ -185,8 +187,8 @@ void NodeUI::update(Step * _step){
 }
 
 void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(1))->setRGB(bgColour.r, bgColour.g, bgColour.b);
-	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setAlpha(bgColour.a);
+	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(bgColour.r, bgColour.g, bgColour.b);
+	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(bgColour.a);
 	Entity::render(_matrixStack, _renderOptions);
 }
 

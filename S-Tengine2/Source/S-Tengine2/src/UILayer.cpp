@@ -6,6 +6,7 @@
 #include <MatrixStack.h>
 #include <RenderOptions.h>
 #include <shader\ShaderComponentTexture.h>
+#include <shader\ShaderComponentMVP.h>
 #include <System.h>
 #include <Mouse.h>
 #include <Scene.h>
@@ -24,6 +25,7 @@ UILayer::UILayer(Scene * _scene, float _left, float _right, float _bottom, float
 	shader(new ComponentShaderBase(true))
 {
 	shader->addComponent(new ShaderComponentTexture(shader));
+	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->compileShader();
 	++shader->referenceCount;
 
