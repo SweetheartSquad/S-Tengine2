@@ -52,6 +52,11 @@ public:
 	virtual void loadImageData();
 	virtual void unloadImageData();
 
+	// saves the texture data to _filename
+	// assumes TGA output regardless of _filename
+	// file path is relative to "data/images"
+	virtual void saveImageData(std::string _filename);
+
 	friend std::ostream& operator<<(std::ostream& os, const Texture& obj){
 		return os
 			<< static_cast<const NodeResource&>(obj)

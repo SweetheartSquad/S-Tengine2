@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stb/stb_image.h>
+#include <stb/stb_image_write.h>
 
 #include "Texture.h"
 #include <Resource.h>
@@ -72,6 +73,16 @@ void Texture::loadImageData(){
 void Texture::unloadImageData(){
 	free(data);
 	data = nullptr;
+}
+
+void Texture::saveImageData(std::string _filename){
+	std::stringstream ss;
+	ss << "data/images/" << _filename;
+	if(stbi_write_tga(ss.str().c_str(), width, height, channels, data)){
+		Log::info("Texture \"data/images/"+_filename+"\" saved");
+	}else{
+		Log::error("Texture \"data/images/"+_filename+"\" not saved");
+	}
 }
 
 void Texture::bufferData(){
