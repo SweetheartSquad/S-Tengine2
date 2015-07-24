@@ -8,6 +8,7 @@
 #include <RenderOptions.h>
 #include <shader\Shader.h>
 #include <shader\ComponentShaderBase.h>
+#include <shader\ShaderComponentMVP.h>
 #include <shader\ShaderComponentTexture.h>
 
 BulletDebugDrawer::BulletDebugDrawer(btCollisionWorld * _world) :
@@ -15,6 +16,7 @@ BulletDebugDrawer::BulletDebugDrawer(btCollisionWorld * _world) :
 	world(_world),
 	shader(new ComponentShaderBase(false))
 {
+	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->compileShader();
 	shader->load();

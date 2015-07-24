@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include <MeshInterface.h>
 #include "shader/ComponentShaderBase.h"
+#include "shader/ShaderComponentMVP.h"
 #include "shader/ShaderComponentTexture.h"
 
 #include "Box2DWorld.h"
@@ -24,6 +25,7 @@ Box2DDebugDrawer::Box2DDebugDrawer(Box2DWorld * _world) :
 	matrixStack(nullptr),
 	renderOptions(nullptr)
 {
+	dynamic_cast<ComponentShaderBase *>(shader)->addComponent(new ShaderComponentMVP(shader));
 	dynamic_cast<ComponentShaderBase *>(shader)->addComponent(new ShaderComponentTexture(shader));
 	dynamic_cast<ComponentShaderBase *>(shader)->compileShader();
 	
