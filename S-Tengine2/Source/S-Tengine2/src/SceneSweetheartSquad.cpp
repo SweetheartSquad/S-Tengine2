@@ -74,10 +74,10 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	fc->childTransform->setOrientation(fc->lastOrientation);
 	activeCamera = fc;
 
-	Texture * c = new Texture("assets/engine basics/cursor.png", 32, 32, true, false);
+	Texture * c = new Texture("assets/engine basics/cursor.png", true, false);
 	c->load();
 	ResourceManager::resources.push_back(c);
-	Texture * logoTex = new Texture("assets/engine basics/sweetheartsquad-logo-tex.png", 1024, 1024, true, false);
+	Texture * logoTex = new Texture("assets/engine basics/sweetheartsquad-logo-tex.png", true, false);
 	logoTex->load();
 	ResourceManager::resources.push_back(logoTex);
 	
