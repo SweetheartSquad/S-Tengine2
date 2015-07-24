@@ -86,7 +86,7 @@ extern "C" {
 
 extern int stbi_write_png(char const *filename, int w, int h, int comp, const void  *data, int stride_in_bytes);
 extern int stbi_write_bmp(char const *filename, int w, int h, int comp, const void  *data);
-extern int stbi_write_tga(char const *filename, int w, int h, int comp, const void  *data);
+extern int stbi_write_tga(char const *filename, int w, int h, int comp, const void  *data, int reverse = -1);
 extern int stbi_write_hdr(char const *filename, int w, int h, int comp, const float *data);
 
 #ifdef __cplusplus
@@ -228,12 +228,12 @@ int stbi_write_bmp(char const *filename, int x, int y, int comp, const void *dat
             40, x,y, 1,24, 0,0,0,0,0,0);             // bitmap header
 }
 
-int stbi_write_tga(char const *filename, int x, int y, int comp, const void *data)
+int stbi_write_tga(char const *filename, int x, int y, int comp, const void *data, int reverse)
 {
    int has_alpha = (comp == 2 || comp == 4);
    int colorbytes = has_alpha ? comp-1 : comp;
    int format = colorbytes < 2 ? 3 : 2; // 3 color channels (RGB/RGBA) = 2, 1 color channel (Y/YA) = 3
-   return outfile(filename, -1,-1, x, y, comp, 0, (void *) data, has_alpha, 0,
+   return outfile(filename, -1,reverse, x, y, comp, 0, (void *) data, has_alpha, 0,
                   "111 221 2222 11", 0,0,format, 0,0,0, 0,0,x,y, (colorbytes+has_alpha)*8, has_alpha*8);
 }
 
