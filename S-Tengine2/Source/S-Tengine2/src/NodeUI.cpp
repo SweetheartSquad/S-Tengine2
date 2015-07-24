@@ -466,23 +466,28 @@ bool NodeUI::isLayoutDirty(){
 
 TriMesh * NodeUI::colliderMesh = nullptr;
 void NodeUI::updateCollider(){
+	glm::mat4 mat = background->childTransform->getCumulativeModelMatrix();
+	
+	glm::vec4 verts[6] = {
+		mat * glm::vec4(0,						1,0,1),
+		mat * glm::vec4(1,	1,0,1),
+		mat * glm::vec4(1,	0,0,1),
+		mat * glm::vec4(1,	0,0,1),
+		mat * glm::vec4(0,						0,0,1),
+		mat * glm::vec4(0,						0,0,1)
+	};
 
-	glm::vec3 v = background->getWorldPos();
 	if(colliderMesh == nullptr){
 		colliderMesh = new TriMesh();
-		colliderMesh->pushVert(Vertex(v.x, v.y + getHeight(true, false), 0.f));
-		colliderMesh->pushVert(Vertex(v.x + getWidth(true, false), v.y + getHeight(true, false), 0.f));
-		colliderMesh->pushVert(Vertex(v.x + getWidth(true, false), v.y, 0.f));
-		colliderMesh->pushVert(Vertex(v.x + getWidth(true, false), v.y, 0.f));
-		colliderMesh->pushVert(Vertex(v.x, v.y, 0.f));
-		colliderMesh->pushVert(Vertex(v.x, v.y + getHeight(true, false), 0.f));
+		for(unsigned long int i = 0; i < 6; ++i){
+			colliderMesh->pushVert(Vertex(verts[i].x, verts[i].y, verts[i].z));
+		}
 	}else{
-		colliderMesh->vertices.at(0).x = v.x; colliderMesh->vertices.at(0).y = v.y + getHeight(true, false);
-		colliderMesh->vertices.at(1).x = v.x + getWidth(true, false); colliderMesh->vertices.at(1).y = v.y + getHeight(true, false);
-		colliderMesh->vertices.at(2).x = v.x + getWidth(true, false); colliderMesh->vertices.at(2).y = v.y;
-		colliderMesh->vertices.at(3).x = v.x + getWidth(true, false); colliderMesh->vertices.at(3).y = v.y;
-		colliderMesh->vertices.at(4).x = v.x; colliderMesh->vertices.at(4).y = v.y;
-		colliderMesh->vertices.at(5).x = v.x; colliderMesh->vertices.at(5).y = v.y + getHeight(true, false);
+		for(unsigned long int i = 0; i < 6; ++i){
+			colliderMesh->vertices.at(i).x = verts[i].x;
+			colliderMesh->vertices.at(i).y = verts[i].y;
+			colliderMesh->vertices.at(i).z = verts[i].z;
+		}
 	}
 
 	if(shape != nullptr){
