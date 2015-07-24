@@ -94,5 +94,8 @@ public:
 	*/
 	GLenum checkFrameBufferStatus();
 
+	// saves the contents of _fbochannel to _filename
+	// assumes TGA output regardless of _filename
+	// file path is relative to "data/images"
 	void saveToFile(const char * _filename, unsigned long int _fbochannel);
 };

@@ -1,10 +1,12 @@
 #pragma once
 
 #include <FrameBufferInterface.h>
+#include <Log.h>
 
 #include <iostream>
+#include <sstream>
 
-#include <Log.h>
+#include <stb/stb_image_write.h>
 
 FrameBufferInterface::FrameBufferInterface(std::vector<FrameBufferChannel> _frameBufferChannels, unsigned long int _width, unsigned long int _height, bool _autoRelease):
 	NodeResource(_autoRelease),
@@ -149,17 +151,22 @@ void FrameBufferInterface::saveToFile(const char * _filename, unsigned long int 
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &textureHeight);
 	bytes = textureWidth*textureHeight*4;
 	
-	GLfloat * pixels = (GLfloat *)malloc(bytes * sizeof(GLfloat));
+	GLubyte * pixels = (GLubyte *)malloc(bytes * sizeof(GLubyte));
 	unsigned char * pixelsSOIL = (unsigned char *)malloc(bytes * sizeof(unsigned char));
 
-	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_FLOAT, pixels);
+	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 	
 	for(unsigned long int i = 0; i < bytes; ++i){
 		pixelsSOIL[i] = pixels[i];
 	}
 	
-	//SOIL_save_image(_filename, SOIL_SAVE_TYPE_TGA, textureWidth, textureHeight, 4, pixelsSOIL);
-	Log::warn("file not saved; hasn't been re-implemented since SOIL was removed");
+	std::stringstream ss;
+	ss << "data/images/" << _filename;
+	if(stbi_write_tga(ss.str().c_str(), textureWidth, textureHeight, 4, pixelsSOIL, 1)){
+		Log::info("FBO \""+ss.str()+"\" saved");
+	}else{
+		Log::error("FBO \""+ss.str()+"\" not saved");
+	}
 	
 	free(pixels);
 }
