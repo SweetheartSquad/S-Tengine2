@@ -1,9 +1,6 @@
-// stb has its own guards, so do it before #pragma once
-// the define is needed in one cpp before the include
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
-
 #pragma once
+
+#include <stb/stb_image.h>
 
 #include "Texture.h"
 #include <Resource.h>

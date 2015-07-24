@@ -1,3 +1,10 @@
+// stb has its own guards, so do it before #pragma once
+// the define is needed in one cpp before the include
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb/stb_image_write.h>
+
 #pragma once
 
 #include "Vox.h"
@@ -112,6 +119,7 @@ void vox::initialize(std::string _title){
 	// verify that the correct file structure is in place
 	FileUtils::createDirectoryIfNotExists("data");
 	FileUtils::createDirectoryIfNotExists("data/screenshots");
+	FileUtils::createDirectoryIfNotExists("data/images");
 
 	title = _title;
 	step.targetFrameDuration = 0.1667;
