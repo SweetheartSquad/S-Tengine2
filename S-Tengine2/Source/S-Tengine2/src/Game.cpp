@@ -17,7 +17,6 @@
 #include <Log.h>
 
 // for screenshots
-#include <SOIL.h>
 #include <ctime>
 
 Game::Game(bool _isRunning, std::pair<std::string, Scene *> _firstScene, bool _splashScreen) :
@@ -338,8 +337,9 @@ void Game::takeScreenshot(){
 		<< '_'
 		<< t
 		<< ".tga";
-	SOIL_save_screenshot(filepath.str().c_str(), SOIL_SAVE_TYPE_TGA, 0, 0, viewPortWidth, viewPortHeight);
-	Log::info("Screenshot saved: " + filepath.str());
+	//SOIL_save_screenshot(filepath.str().c_str(), SOIL_SAVE_TYPE_TGA, 0, 0, viewPortWidth, viewPortHeight);
+	//Log::info("Screenshot saved: " + filepath.str());
+	Log::warn("screenshot not saved; hasn't been re-implemented since SOIL was removed");
 }
 
 void Game::exit(){

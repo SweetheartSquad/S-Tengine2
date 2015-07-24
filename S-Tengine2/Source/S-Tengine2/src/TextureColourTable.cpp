@@ -14,11 +14,6 @@ TextureColourTable::TextureColourTable(bool _autoRelease) :
 	numBytes = numPixels * channels;
 };
 
-TextureColourTable::~TextureColourTable(){
-	free(data);
-	data = nullptr;
-}
-
 void TextureColourTable::generateRandomTable(){
 	// set the first and last pixels to be transparent
 	data[0] = 0;

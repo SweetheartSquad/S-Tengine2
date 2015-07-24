@@ -40,10 +40,9 @@ TextureSampler::TextureSampler(std::string _definitionDir, std::string _definiti
 		v = root.get("v", 0).asFloat();
 		width = root.get("w", 0).asFloat();
 		height = root.get("h", 0).asFloat();
-		float s = root.get("s", 0).asFloat();
 		std::string tex = _definitionDir;
 		tex.append(root.get("t", "NO_TEXTURE").asString());
-		texture = new Texture(tex, s, s, true, _releaseTexture);
+		texture = new Texture(tex, true, _releaseTexture);
 		++texture->referenceCount;
 	}
 }

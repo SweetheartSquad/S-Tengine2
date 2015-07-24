@@ -1,31 +1,26 @@
 #pragma once
 
-#include <iostream>
-#include <GL/glew.h>
-#include <vector>
-#include "node/NodeResource.h"
-#include "node/NodeLoadable.h"
+#include <node/NodeResource.h>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-#include FT_GLYPH_H
+#include <GL/glew.h>
 
 #include <string>
 #include <ostream>
+#include <iostream>
 
 class Texture : public virtual NodeResource{
 public:
 	
-	Texture(std::string _src, unsigned long int _width, unsigned long int _height, bool _storeData, bool _autoRelease);
+	Texture(std::string _src, bool _storeData, bool _autoRelease);
 	Texture(bool _storeData, bool _autoRelease);
 	~Texture();
 
 	/**Source file location */
 	std::string src;
 	/**Texture Width */
-	unsigned long int width;
+	int width;
 	/**Texture Height */
-	unsigned long int height;
+	int height;
 	/** Num channels (can't be unsigned long because of SOIL) */
 	int channels;
 	// Pixels in texture (width * height)
@@ -53,8 +48,9 @@ public:
 	virtual void load() override;
 	/**Destroy the texture objects relation to the opengl context */
 	virtual void unload() override;
-
+	
 	virtual void loadImageData();
+	virtual void unloadImageData();
 
 	friend std::ostream& operator<<(std::ostream& os, const Texture& obj){
 		return os

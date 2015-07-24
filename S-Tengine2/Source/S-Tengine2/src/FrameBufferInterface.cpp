@@ -3,7 +3,6 @@
 #include <FrameBufferInterface.h>
 
 #include <iostream>
-#include <SOIL.h>
 
 #include <Log.h>
 
@@ -159,7 +158,8 @@ void FrameBufferInterface::saveToFile(const char * _filename, unsigned long int 
 		pixelsSOIL[i] = pixels[i];
 	}
 	
-	SOIL_save_image(_filename, SOIL_SAVE_TYPE_TGA, textureWidth, textureHeight, 4, pixelsSOIL);
+	//SOIL_save_image(_filename, SOIL_SAVE_TYPE_TGA, textureWidth, textureHeight, 4, pixelsSOIL);
+	Log::warn("file not saved; hasn't been re-implemented since SOIL was removed");
 	
 	free(pixels);
 }

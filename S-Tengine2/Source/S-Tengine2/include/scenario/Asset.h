@@ -18,8 +18,6 @@ public:
 
 class AssetTexture : public Asset{
 public:
-	float width;
-	float height;
 	Texture * texture;
 
 	AssetTexture(Json::Value _json);

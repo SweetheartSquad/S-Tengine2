@@ -10,8 +10,6 @@ Asset::Asset(Json::Value _json) :
 
 AssetTexture::AssetTexture(Json::Value _json) :
 	Asset(_json),
-	width(_json.get("width", 256).asInt()),
-	height(_json.get("height", 256).asInt()),
 	texture(nullptr)
 {
 	std::string src = _json.get("src", "NO_TEXTURE").asString();
@@ -21,7 +19,7 @@ AssetTexture::AssetTexture(Json::Value _json) :
 	}else{
 		src = "assets/textures/" + src;
 	}
-	texture = new Texture(src, width, height, true, false);
+	texture = new Texture(src, true, false);
 	texture->load();
 }
 AssetTexture::~AssetTexture(){
@@ -39,13 +37,11 @@ AssetTextureSampler::AssetTextureSampler(Json::Value _json) :
 	}else{
 		src = "assets/textures/" + src;
 	}
-	int width = _json.get("width", 256).asInt();
-	int height = _json.get("height", 256).asInt();
 	float u = _json.get("u", 0).asFloat();
 	float v = _json.get("v", 0).asFloat();
 	float w = _json.get("w", 256).asFloat();
 	float h = _json.get("h", 256).asFloat();
-	Texture * texture = new Texture(src, width, height, true, false);
+	Texture * texture = new Texture(src, true, false);
 	textureSampler = new TextureSampler(texture, w, h, u, v);
 	textureSampler->load();
 }

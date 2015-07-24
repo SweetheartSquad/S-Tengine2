@@ -1,18 +1,20 @@
+// stb has its own guards, so do it before #pragma once
+// the define is needed in one cpp before the include
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
+
 #pragma once
 
 #include "Texture.h"
 #include <Resource.h>
 #include <GLUtils.h>
-#include <SOIL.h>
 #include <Log.h>
 
-// maybe replace chars with strings
-
-Texture::Texture(std::string _src, unsigned long int _width, unsigned long int _height, bool _storeData, bool _autoRelease) :
+Texture::Texture(std::string _src, bool _storeData, bool _autoRelease) :
 	NodeResource(_autoRelease),
 	src(_src),
-	width(_width),
-	height(_height),
+	width(0),
+	height(0),
 	data(nullptr),
 	channels(0),
 	storeData(_storeData)
@@ -30,8 +32,7 @@ Texture::Texture(bool _storeData, bool _autoRelease) :
 }
 
 Texture::~Texture(){
-	delete data;
-	data = nullptr;
+	unloadImageData();
 }
 
 void Texture::load(){
@@ -48,8 +49,7 @@ void Texture::load(){
 
 		// delete texture data if necessary
 		if(!storeData){
-			delete data;
-			data = nullptr;
+			unloadImageData();
 		}
 	}
 	
@@ -67,9 +67,14 @@ void Texture::unload(){
 }
 
 void Texture::loadImageData(){
-	data = Resource::loadImage(src.c_str(), width, height, SOIL_LOAD_AUTO, &channels);
+	data = stbi_load(src.c_str(), &width, &height, &channels, 0);
 	numPixels = width * height;
 	numBytes = numPixels * channels;
+}
+
+void Texture::unloadImageData(){
+	free(data);
+	data = nullptr;
 }
 
 void Texture::bufferData(){

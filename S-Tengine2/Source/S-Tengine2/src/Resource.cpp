@@ -1,13 +1,10 @@
 #pragma once
 
-#include <SOIL.h>
 #include <regex>
 #include <sstream>
 #include <iostream>
 
 #include <glm/glm.hpp>
-
-#include <soil.h>
 
 #include <json/json.h>
 
@@ -22,22 +19,6 @@
 #include "Texture.h"
 
 #include <tiny_obj_loader.h>
-
-Resource::Resource(){}
-Resource::~Resource(){}
-
-unsigned char* Resource::loadImage(const char* _src, int _width, int _height, int _SOILLoadMode, int * _channels){
-	unsigned char* res = SOIL_load_image(_src, &_width, &_height, _channels, _SOILLoadMode);
-	if(res == 0){
-		std::cout << _src << std::endl;
-		throw;
-	}
-	return res;
-}
-
-void Resource::freeImageData(unsigned char* _image){
-	SOIL_free_image_data(_image);
-}
 
 std::vector<TriMesh *> Resource::loadMeshFromObj(std::string _objSrc){
 
