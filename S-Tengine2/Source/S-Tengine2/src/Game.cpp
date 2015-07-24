@@ -18,6 +18,7 @@
 
 // for screenshots
 #include <ctime>
+#include <stb/stb_image_write.h>
 
 Game::Game(bool _isRunning, std::pair<std::string, Scene *> _firstScene, bool _splashScreen) :
 	splashScreen(_splashScreen),
@@ -337,9 +338,16 @@ void Game::takeScreenshot(){
 		<< '_'
 		<< t
 		<< ".tga";
-	//SOIL_save_screenshot(filepath.str().c_str(), SOIL_SAVE_TYPE_TGA, 0, 0, viewPortWidth, viewPortHeight);
-	//Log::info("Screenshot saved: " + filepath.str());
-	Log::warn("screenshot not saved; hasn't been re-implemented since SOIL was removed");
+	GLubyte * data = (GLubyte *)malloc(sizeof(GLubyte) * viewPortWidth * viewPortHeight * 4);
+	glReadPixels(0, 0, viewPortWidth, viewPortHeight, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+	if(stbi_write_tga(filepath.str().c_str(), viewPortWidth, viewPortHeight, 4, data, 1)){
+		Log::info("Screenshot \""+filepath.str()+"\" saved");
+	}else{
+		Log::error("Screenshot \""+filepath.str()+"\" not saved");
+	}
+	
+	free(data);
 }
 
 void Game::exit(){
