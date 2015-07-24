@@ -283,6 +283,7 @@
     <ClInclude Include="include/shader/ShaderComponentSsao.h" />
     <ClInclude Include="include/Slider.h" />
     <ClInclude Include="include/stb/stb_image.h" />
+    <ClInclude Include="include/stb/stb_image_write.h" />
     <ClInclude Include="include/TextLabel.h" />
     <ClInclude Include="include/LinearLayout.h" />
     <ClInclude Include="include/shader/ComponentShaderText.h" />
