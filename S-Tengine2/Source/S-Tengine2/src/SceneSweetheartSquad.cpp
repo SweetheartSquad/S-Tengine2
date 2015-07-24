@@ -17,6 +17,7 @@
 #include <shader\ShaderComponentDiffuse.h>
 #include <shader\ShaderComponentPhong.h>
 #include <shader\ShaderComponentHsv.h>
+#include <shader\ShaderComponentMVP.h>
 
 #include <FollowCamera.h>
 #include <MousePerspectiveCamera.h>
@@ -52,6 +53,7 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	uiLayer(this, 0,0,0,0),
 	t(0.f)
 {
+	diffuseShader->addComponent(new ShaderComponentMVP(diffuseShader));
 	diffuseShader->addComponent(new ShaderComponentTexture(diffuseShader));
 	diffuseShader->addComponent(new ShaderComponentDiffuse(diffuseShader));
 	diffuseShader->addComponent(hsvComponent);

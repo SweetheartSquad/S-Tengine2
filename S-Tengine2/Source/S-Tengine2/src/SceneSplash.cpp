@@ -16,6 +16,7 @@
 #include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentDiffuse.h>
 #include <shader\ShaderComponentHsv.h>
+#include <shader\ShaderComponentMVP.h>
 
 #include <FollowCamera.h>
 #include <MousePerspectiveCamera.h>
@@ -47,6 +48,7 @@ SceneSplash::SceneSplash(Game * _game) :
 	uiLayer(this, 0,0,0,0),
 	t(0.f)
 {
+	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->addComponent(hsvComponent);
 	shader->compileShader();
