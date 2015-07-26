@@ -152,11 +152,11 @@ UIGlyph::UIGlyph(BulletWorld * _world, Scene * _scene, Glyph * _mesh, Shader * _
 
 void UIGlyph::setGlyphMesh(Glyph * _newGlyph){
 	if(glyph != nullptr){
-		contents->removeChild(glyph);
+		uiElements->removeChild(glyph);
 	}
 	glyph = _newGlyph;
 
-	contents->addChild(glyph, false);
+	uiElements->addChild(glyph, false);
 	setPixelWidth(glyph->advance.x/64);
 	setPixelHeight(glyph->advance.y/64);
 	

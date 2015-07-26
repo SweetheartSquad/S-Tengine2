@@ -28,7 +28,9 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, bool _mouseEnabled) :
 	scene(_scene),
 	onClickFunction(nullptr),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
-	contents(new Transform()),
+	margin(new Transform()),
+	padding(new Transform()),
+	uiElements(new Transform()),
 	boxSizing(kBORDER_BOX),
 	mouseEnabled(!_mouseEnabled), // we initialize the variable to the opposite so that setMouseEnabled gets called properly at the end of the constructor
 	//bgColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), 1.f)
@@ -48,9 +50,11 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, bool _mouseEnabled) :
 	}
 	background->mesh->dirty = true;
 	background->setShader(bgShader, true);
-
-	childTransform->addChild(background, true);
-	childTransform->addChild(contents, false);
+	
+	childTransform->addChild(margin, false);
+	margin->addChild(background, true);
+	margin->addChild(padding, false);
+	padding->addChild(uiElements, false);
 	
 	setPadding(0);
 	setMargin(0);
@@ -105,14 +109,14 @@ Transform * NodeUI::addChild(NodeUI* _uiElement){
 	layoutDirty = true;
 	_uiElement->setMeasuredWidths(this);
 	_uiElement->setMeasuredHeights(this);
-	return contents->addChild(_uiElement);
+	return uiElements->addChild(_uiElement);
 }
 
 signed long int NodeUI::removeChild(NodeUI* _uiElement){
 	signed long int res = -1;
 	if(_uiElement->parents.size() > 0){
 		Transform * t = _uiElement->parents.at(0);
-		res = contents->removeChild(t);
+		res = uiElements->removeChild(t);
 		t->removeChild(_uiElement);
 		delete t;
 	
@@ -317,8 +321,8 @@ void NodeUI::setPixelHeight(float _pixelHeight){
 }
 
 void NodeUI::resizeChildrenWidth(NodeUI * _root){
-	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
-		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
+	for(unsigned long int i = 0; i < uiElements->children.size(); ++i) {
+		Transform * trans = dynamic_cast<Transform *>(uiElements->children.at(i));
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
@@ -331,8 +335,8 @@ void NodeUI::resizeChildrenWidth(NodeUI * _root){
 }
 
 void NodeUI::resizeChildrenHeight(NodeUI * _root){
-	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
-		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
+	for(unsigned long int i = 0; i < uiElements->children.size(); ++i) {
+		Transform * trans = dynamic_cast<Transform *>(uiElements->children.at(i));
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
@@ -519,8 +523,8 @@ void NodeUI::autoResize(){
 float NodeUI::getContentsWidth(){
 	float w = 0.0f;
 	// take the maximum of the width of the contents
-	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
-		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
+	for(unsigned long int i = 0; i < uiElements->children.size(); ++i) {
+		Transform * trans = dynamic_cast<Transform *>(uiElements->children.at(i));
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
@@ -533,8 +537,8 @@ float NodeUI::getContentsWidth(){
 float NodeUI::getContentsHeight(){
 	float h = 0.0f;
 	// take the maximum of the height of the contents
-	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
-		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
+	for(unsigned long int i = 0; i < uiElements->children.size(); ++i) {
+		Transform * trans = dynamic_cast<Transform *>(uiElements->children.at(i));
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
@@ -546,17 +550,8 @@ float NodeUI::getContentsHeight(){
 }
 
 void NodeUI::repositionChildren(){
-	glm::vec3 bpos(0);
-	glm::vec3 cpos(0);
-
-	bpos.x = getMarginLeft();
-	cpos.x = getMarginLeft() + getPaddingLeft();
-
-	bpos.y = getMarginBottom();
-	cpos.y = getMarginBottom() + getPaddingBottom();
-
-	background->parents.at(0)->translate(bpos, false);
-	contents->translate(cpos, false);
+	margin->translate(getMarginLeft(), getMarginBottom(), 0, false);
+	padding->translate(getPaddingLeft(), getPaddingBottom(), 0, false);
 }
 
 

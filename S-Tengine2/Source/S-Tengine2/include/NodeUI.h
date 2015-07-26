@@ -54,7 +54,7 @@ protected:
 	// also adjusts the background and calls repositionChildren() to match size
 	void autoResize();
 
-	Transform * contents;
+	Transform * uiElements;
 	
 	UIUnit width;
 	UIUnit height;
@@ -182,6 +182,9 @@ public:
 	// indicates whether the mouse is currently over this node
 	void setUpdateState(bool _newState);
 private:
+	Transform * margin;
+	Transform * padding;
+
 	virtual float getContentsWidth();
 	virtual float getContentsHeight();
 	virtual void repositionChildren();
