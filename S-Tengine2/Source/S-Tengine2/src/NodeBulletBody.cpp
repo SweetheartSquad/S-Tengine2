@@ -26,11 +26,11 @@ void NodeBulletBody::update(Step * _step){
 	if(body != nullptr){
 		if(body->isActive() || needsToUpdate){
 			if(parents.size() > 0){
-				btTransform t = body->getWorldTransform();
+				const btTransform & t = body->getWorldTransform();
+				const btQuaternion & angle = t.getRotation();
 				internalPos = t.getOrigin();
-				btQuaternion angle = t.getRotation();
 				parents.at(0)->translate(internalPos.x(), internalPos.y(), internalPos.z(), false);
-			
+
 				/*b2Vec2 lv = body->GetLinearVelocity();
 				if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
 					lv.x = maxVelocity.x * (lv.x < 0 ? -1 : 1);
@@ -39,7 +39,7 @@ void NodeBulletBody::update(Step * _step){
 					lv.y = maxVelocity.y * (lv.y < 0 ? -1 : 1);
 				}
 				body->SetLinearVelocity(lv);*/
-			
+
 				parents.at(0)->setOrientation(glm::quat(angle.w(), angle.x(), angle.y(), angle.z()));
 				needsToUpdate = false;
 			}
@@ -97,15 +97,13 @@ void NodeBulletBody::setTranslationPhysical(glm::vec3 _position, bool _relative)
 	setTranslationPhysical(_position.x, _position.y, _position.z, _relative);
 }
 void NodeBulletBody::setTranslationPhysical(float _x, float _y, float _z, bool _relative){
-	btTransform t = body->getWorldTransform();
+	btVector3 & t = body->getWorldTransform().getOrigin();
 	if(_relative){
-		internalPos = t.getOrigin() + btVector3(_x, _y, _z);
+		t += btVector3(_x, _y, _z);
 	}else{
-		internalPos = btVector3(_x, _y, _z);
+		t = btVector3(_x, _y, _z);
 	}
-	t.setOrigin(internalPos);
-	body->setWorldTransform(t);
-	parents.at(0)->translate(internalPos.x(), internalPos.y(), internalPos.z(), false);
+	parents.at(0)->translate(t.x(), t.y(), t.z(), false);
 }
 
 void NodeBulletBody::createRigidBody(float _mass, unsigned short int _collisionGroup, unsigned short int _collisionMask){
