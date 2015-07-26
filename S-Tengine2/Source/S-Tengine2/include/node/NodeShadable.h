@@ -4,7 +4,7 @@
 
 class Shader;
 class RenderOptions;
-class NodeShadable abstract : public Node{
+class NodeShadable abstract : public virtual Node{
 public:
 	Shader * shader;
 

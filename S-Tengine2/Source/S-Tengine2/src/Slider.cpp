@@ -2,7 +2,6 @@
 
 Slider::Slider(BulletWorld* _world, Scene* _scene, float _width, float _height, float _size):
 	HorizontalLinearLayout(_world, _scene),
-	NodeBulletBody(_world),
 	fill(new NodeUI(_world, _scene)),
 	size(_size),
 	value(_size)

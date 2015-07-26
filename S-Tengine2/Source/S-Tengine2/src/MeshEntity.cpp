@@ -18,7 +18,7 @@ MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader) :
 	NodeShadable(_shader)
 {
 	++mesh->referenceCount;
-	childTransform->addChild(mesh, false);
+	meshTransform = childTransform->addChild(mesh);
 }
 
 MeshEntity::~MeshEntity(void){

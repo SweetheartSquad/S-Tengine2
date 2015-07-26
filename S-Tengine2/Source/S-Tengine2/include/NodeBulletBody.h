@@ -1,12 +1,11 @@
 #pragma once
 
-#include <node\NodeUpdatable.h>
-#include <node\NodeChild.h>
+#include <Entity.h>
 #include <BulletWorld.h>
 
 class TriMesh;
 
-class NodeBulletBody : public virtual NodeUpdatable, public virtual NodeChild{
+class NodeBulletBody : public virtual Entity{
 protected:
 	bool needsToUpdate;
 	btVector3 internalPos;
@@ -23,7 +22,7 @@ public:
 	void setColliderAsCapsule(float _radius = 0.5f, float _height = 0.5f);
 	void setColliderAsMesh(TriMesh * _colliderMesh, bool _convex);
 	// a mass of zero makes it static
-	void createRigidBody(float _mass, unsigned short int _collisionGroup = -1, unsigned short int _collisionMask = -1);
+	virtual void createRigidBody(float _mass, unsigned short int _collisionGroup = -1, unsigned short int _collisionMask = -1);
 	
 	// just calls the version with three floats instead of a vec3
 	void setTranslationPhysical(glm::vec3 _position, bool _relative = false);

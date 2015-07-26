@@ -3,8 +3,7 @@
 #include<VerticalLinearLayout.h>
 
 VerticalLinearLayout::VerticalLinearLayout(BulletWorld* _bulletWorld, Scene* _scene) :
-	LinearLayout(_bulletWorld, _scene),
-	NodeBulletBody(_bulletWorld)
+	LinearLayout(_bulletWorld, _scene)
 {
 }
 

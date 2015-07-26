@@ -19,7 +19,6 @@ ComponentShaderBase * NodeUI::bgShader = nullptr;
 
 NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, bool _mouseEnabled) :
 	NodeBulletBody(_world),
-	Entity(),
 	mouse(&Mouse::getInstance()),
 	updateState(false),
 	isHovered(false),
@@ -125,7 +124,7 @@ signed long int NodeUI::removeChild(NodeUI* _uiElement){
 }
 
 void NodeUI::setTranslationPhysical(float _x, float _y, float _z, bool _relative){
-	childTransform->translate(_x, _y, _z, _relative);
+	background->meshTransform->translate(_x, _y, _z, _relative);
 }
 
 bool NodeUI::isMouseEnabled(){
@@ -466,7 +465,7 @@ bool NodeUI::isLayoutDirty(){
 
 TriMesh * NodeUI::colliderMesh = nullptr;
 void NodeUI::updateCollider(){
-	glm::mat4 mat = background->childTransform->getCumulativeModelMatrix();
+	glm::mat4 mat = background->meshTransform->getCumulativeModelMatrix();
 	
 	glm::vec4 verts[6] = {
 		mat * glm::vec4(0,						1,0,1),

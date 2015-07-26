@@ -3,8 +3,7 @@
 #include <HorizontalLinearLayout.h>
 
 HorizontalLinearLayout::HorizontalLinearLayout(BulletWorld* _bulletWorld, Scene* _scene) :
-	LinearLayout(_bulletWorld, _scene),
-	NodeBulletBody(_bulletWorld)
+	LinearLayout(_bulletWorld, _scene)
 {
 }
 

@@ -6,8 +6,6 @@
 
 LinearLayout::LinearLayout(BulletWorld* _world, Scene* _scene):
 	Layout(_world, _scene),
-	Entity(),
-	NodeBulletBody(_world),
 	horizontalAlignment(kLEFT),
 	verticalAlignment(kBOTTOM)
 {

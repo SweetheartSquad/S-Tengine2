@@ -6,7 +6,6 @@
 
 FpsDisplay::FpsDisplay(BulletWorld* _world, Scene* _scene, Font * _font, Shader * _textShader) :
 	TextArea(_world, _scene, _font, _textShader, 300),
-	NodeBulletBody(_world),
 	numFrames(0),
 	avgFps(0.0f),
 	currentFps(0.0f),

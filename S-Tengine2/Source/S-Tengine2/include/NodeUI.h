@@ -12,7 +12,7 @@ enum BoxSizing{
 	kBORDER_BOX // padding and margin are interior to width and height
 };
 
-class NodeUI : public virtual NodeBulletBody, public virtual Entity{
+class NodeUI : public NodeBulletBody{
 protected:
 	bool mouseEnabled;
 	UIUnit marginLeft;
