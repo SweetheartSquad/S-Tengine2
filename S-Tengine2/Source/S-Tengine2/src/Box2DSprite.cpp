@@ -8,7 +8,6 @@
 
 Box2DSprite::Box2DSprite(Box2DWorld * _world, TextureSampler * _textureSampler, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, float _componentScale) :
 	Sprite(_shader),
-	NodeShadable(_shader),
 	NodeBox2DBody(_world, _bodyType, _defaultFixture),
 	width(_textureSampler->width),
 	height(_textureSampler->height),
@@ -25,7 +24,6 @@ Box2DSprite::Box2DSprite(Box2DWorld * _world, TextureSampler * _textureSampler, 
 }
 Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Texture * _texture, float _width, float _height, float _u, float _v, float _componentScale):
 	Sprite(_shader),
-	NodeShadable(_shader),
 	NodeBox2DBody(_world, _bodyType, _defaultFixture),
 	width(_width),
 	height(_height),
@@ -44,14 +42,14 @@ Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaul
 float Box2DSprite::getCorrectedHeight(){
 	glm::vec3 scaleVec(1);
 	if(parents.size() > 0){
-		scaleVec = parents.at(0)->getScaleVector();
+		scaleVec = childTransform->getScaleVector();
 	}
 	return height*std::abs(scaleVec.y)*scale;
 }
 float Box2DSprite::getCorrectedWidth(){
 	glm::vec3 scaleVec(1);
 	if(parents.size() > 0){
-		scaleVec = parents.at(0)->getScaleVector();
+		scaleVec = childTransform->getScaleVector();
 	}
 	return width*std::abs(scaleVec.x)*scale;
 }
