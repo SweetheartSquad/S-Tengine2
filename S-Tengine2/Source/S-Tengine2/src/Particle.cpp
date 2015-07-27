@@ -4,8 +4,8 @@
 #include <Box2DSuperSprite.h>
 #include <Easing.h>
 
-Particle::Particle(Box2DWorld * _world, TextureSampler * _texture) :
-	Box2DSprite(_world, _texture, b2_dynamicBody, false, nullptr),
+Particle::Particle(Box2DWorld * _world, Texture * _texture) :
+	Box2DSprite(_world, b2_dynamicBody, false, nullptr, _texture),
 	life(1),
 	age(0),
 	alive(true),
@@ -24,9 +24,9 @@ void Particle::update(Step * _step){
     if (age > life){
         alive = false;
 	}else{
-		glm::vec3 sv = parents.at(0)->getScaleVector();
+		glm::vec3 sv = childTransform->getScaleVector();
 		sv.x = Easing::none(age, startSize, deltaSize, life);//1.f - age / life;
 		sv.y = sv.x;
-		parents.at(0)->scale(sv, false);
+		childTransform->scale(sv, false);
 	}
 }

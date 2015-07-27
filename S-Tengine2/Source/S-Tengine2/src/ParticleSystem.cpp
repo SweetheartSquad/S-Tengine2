@@ -5,9 +5,9 @@
 #include <Box2DSprite.h>
 #include <Particle.h>
 #include <Box2DWorld.h>
-#include <TextureSampler.h>
+#include <Texture.h>
 
-ParticleSystem::ParticleSystem(TextureSampler * _texture, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :
+ParticleSystem::ParticleSystem(Texture * _texture, Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :
     Box2DSuperSprite(_world, _categoryBits, _maskBits, _groupIndex),
     emissionAmount(0),
     emissionRate(0),
@@ -43,7 +43,7 @@ void ParticleSystem::update(Step * _step){
 	}
 }
 
-Particle * ParticleSystem::addParticle(glm::vec3 _pos, TextureSampler * _texture){
+Particle * ParticleSystem::addParticle(glm::vec3 _pos, Texture * _texture){
 	if(_texture == nullptr){
 		_texture = defaultTex;
 	}
