@@ -9,22 +9,26 @@
 * TODO : Add file logging 
 *
 *********************************************************/
-namespace Log {
+class Log {
+public:
 
 	/** Whether or not warnings should be thrown */
-	extern bool THROW_ON_WARN;
+	static bool THROW_ON_WARN;
 	
 	/** Whether or not errors should be thrown */
-	extern bool THROW_ON_ERROR;
-	
-	extern int INFO_COLOUR_FG;
-	extern int WARN_COLOUR_FG;
-	extern int ERROR_COLOUR_FG;
-	extern int INFO_COLOUR_BG;
-	extern int WARN_COLOUR_BG;
-	extern int ERROR_COLOUR_BG;
+	static bool THROW_ON_ERROR;
 
-	extern enum LogLevel{
+	/** Wherer or not messages should be logged to a file*/
+	static bool WRITE_TO_FILE;
+	
+	static int INFO_COLOUR_FG;
+	static int WARN_COLOUR_FG;
+	static int ERROR_COLOUR_FG;
+	static int INFO_COLOUR_BG;
+	static int WARN_COLOUR_BG;
+	static int ERROR_COLOUR_BG;
+	
+	static enum LogLevel{
 		kINFO,
 		kWARN,
 		kERROR,
@@ -36,19 +40,23 @@ namespace Log {
 	*
 	* @param _message The message to display - Will be prepended with [WARN]
 	*/
-	void warn(std::string _message);
+	static void warn(std::string _message);
 	
 	/**
 	* Logs an error message - If THROW_ON_ERROR is true an exception will be thrown
 	*
 	* @param _message The message to display - Will be prepended with [ERROR]
 	*/
-	void error(std::string _message);
+	static void error(std::string _message);
 	
 	/**
 	* Logs an ingo message
 	*
 	* @param _message The message to display - Will be prepended with [INFO]
 	*/
-	void info(std::string _message);
+	static void info(std::string _message);
+
+private:
+	static void logToFile(std::string _message);
+	static std::string getDate();
 };
