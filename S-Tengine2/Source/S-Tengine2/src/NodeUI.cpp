@@ -128,7 +128,7 @@ signed long int NodeUI::removeChild(NodeUI* _uiElement){
 }
 
 void NodeUI::setTranslationPhysical(float _x, float _y, float _z, bool _relative){
-	background->meshTransform->translate(_x, _y, _z, _relative);
+	parents.at(0)->translate(_x, _y, _z, _relative);
 }
 
 bool NodeUI::isMouseEnabled(){
