@@ -9,7 +9,6 @@
 
 TextLabel::TextLabel(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textShader, float _width):
 	HorizontalLinearLayout(_world, _scene),
-	NodeBulletBody(_world),
 	font(_font),
 	textShader(_textShader),
 	updateRequired(false),
@@ -143,7 +142,6 @@ bool TextLabel::canFit(float _width){
 
 UIGlyph::UIGlyph(BulletWorld * _world, Scene * _scene, Glyph * _mesh, Shader * _shader, wchar_t _character) :
 	NodeUI(_world, _scene),
-	NodeBulletBody(_world),
 	NodeShadable(_shader),
 	character(_character),
 	glyph(nullptr)
@@ -154,11 +152,11 @@ UIGlyph::UIGlyph(BulletWorld * _world, Scene * _scene, Glyph * _mesh, Shader * _
 
 void UIGlyph::setGlyphMesh(Glyph * _newGlyph){
 	if(glyph != nullptr){
-		contents->removeChild(glyph);
+		uiElements->removeChild(glyph);
 	}
 	glyph = _newGlyph;
 
-	contents->addChild(glyph, false);
+	uiElements->addChild(glyph, false);
 	setPixelWidth(glyph->advance.x/64);
 	setPixelHeight(glyph->advance.y/64);
 	

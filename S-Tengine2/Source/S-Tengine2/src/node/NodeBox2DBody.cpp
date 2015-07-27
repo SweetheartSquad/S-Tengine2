@@ -27,7 +27,7 @@ void NodeBox2DBody::update(Step * _step){
 	if(body != nullptr){
 		if(body->IsAwake()){
 			const b2Vec2 pos = body->GetPosition();
-			parents.at(0)->translate(pos.x, pos.y, parents.at(0)->getTranslationVector().z, false);
+			childTransform->translate(pos.x, pos.y, childTransform->getTranslationVector().z, false);
 			
 			b2Vec2 lv = body->GetLinearVelocity();
 			if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
@@ -39,7 +39,7 @@ void NodeBox2DBody::update(Step * _step){
 			body->SetLinearVelocity(lv);
 			
 			if(abs(body->GetAngle() - prevAngle) > 0.00005f){
-				parents.at(0)->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
+				childTransform->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
 				prevAngle = body->GetAngle();
 			}
 		}
@@ -55,8 +55,8 @@ b2Fixture * NodeBox2DBody::getNewFixture(b2ChainShape _shape, float _density){
 }
 
 void NodeBox2DBody::setTranslationPhysical(glm::vec3 _translation, bool _relative){
-	parents.at(0)->translate(_translation, _relative);
-	glm::vec3 tv = parents.at(0)->getTranslationVector();
+	childTransform->translate(_translation, _relative);
+	glm::vec3 tv = childTransform->getTranslationVector();
 	if(body != nullptr){
 		body->SetTransform(b2Vec2(tv.x, tv.y), body->GetAngle());
 	}

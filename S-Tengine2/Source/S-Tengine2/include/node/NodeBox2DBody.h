@@ -1,6 +1,6 @@
 #pragma once
 
-#include <node/NodeUpdatable.h>
+#include <Entity.h>
 #include <Box2D/Box2D.h>
 #include <glm/glm.hpp>
 
@@ -10,7 +10,7 @@
 
 class Box2DWorld;
 
-class NodeBox2DBody : public virtual NodeUpdatable, public virtual NodeChild{
+class NodeBox2DBody : public virtual Entity{
 public:
 	Box2DWorld * world;
 

@@ -12,13 +12,11 @@
 #include <algorithm>
 
 MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader) :
-	Entity(),
-	NodeRenderable(),
+	NodeShadable(_shader),
 	mesh(_mesh),
-	NodeShadable(_shader)
+	meshTransform(childTransform->addChild(mesh))
 {
 	++mesh->referenceCount;
-	childTransform->addChild(mesh, false);
 }
 
 MeshEntity::~MeshEntity(void){

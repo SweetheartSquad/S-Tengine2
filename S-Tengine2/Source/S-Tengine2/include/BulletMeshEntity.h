@@ -5,10 +5,9 @@
 
 class BulletWorld;
 
-class BulletMeshEntity : public MeshEntity, public NodeBulletBody{
+class BulletMeshEntity : public NodeBulletBody, public MeshEntity{
 public:
 	BulletMeshEntity(BulletWorld * _world, MeshInterface * _mesh);
-	~BulletMeshEntity();
 
 	void update(Step* _step) override;
 

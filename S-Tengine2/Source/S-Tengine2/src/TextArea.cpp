@@ -5,7 +5,6 @@
 
 TextArea::TextArea(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Shader * _textShader, float _width, float _height) :
 	VerticalLinearLayout(_bulletWorld, _scene),
-	NodeBulletBody(_bulletWorld),
 	font(_font),
 	textShader(_textShader)
 {

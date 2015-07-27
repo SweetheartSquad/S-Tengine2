@@ -20,7 +20,7 @@ public:
 	RayTestInfo();
 };
 
-class UILayer : public virtual Entity, public virtual NodeUI{
+class UILayer : public NodeUI{
 private:
 	RayTestInfo rayInfo;
 public:
