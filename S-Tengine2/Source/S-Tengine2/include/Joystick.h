@@ -130,4 +130,6 @@ protected:
 	void initXbox();
 	// sets the button codes to correspond with playstation controller layout
 	void initPlaystation();
+	// sets the button codes to correspond with snes controller layout
+	void initSNES();
 };

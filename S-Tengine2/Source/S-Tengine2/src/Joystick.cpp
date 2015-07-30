@@ -15,7 +15,7 @@ Joystick::Joystick(int _id, float _deadZone) :
 	int present = glfwJoystickPresent(id);
 	if(present){
 		name = glfwGetJoystickName(id);
-
+		
 		// we'll need to test a bunch of different devices to bin these properly
 		// only the xbox one has actually been checked
 		if (name.compare("Wireless Controller") == 0){
@@ -202,6 +202,30 @@ void Joystick::initPlaystation(){
 
 	axisLeftX = -1;
 	axisLeftY = -1;
+	axisTriggers = -1;
+	axisRightY = -1;
+	axisRightX = -1;
+}
+
+void Joystick::initSNES(){
+	faceButtonDown = 2;
+	faceButtonRight = 1;
+	faceButtonLeft = 3;
+	faceButtonUp = 0;
+	bumperLeft = 4;
+	bumperRight = 5;
+	centerButtonLeft = 8;
+	centerButtonCenter = -1;
+	centerButtonRight = 9;
+	axisButtonLeft = -1; 
+	axisButtonRight = -1;
+	dpadUp = -1;
+	dpadDown = -1;
+	dpadLeft = -1;
+	dpadRight = -1;
+
+	axisLeftX = 0;
+	axisLeftY = 1;
 	axisTriggers = -1;
 	axisRightY = -1;
 	axisRightX = -1;
