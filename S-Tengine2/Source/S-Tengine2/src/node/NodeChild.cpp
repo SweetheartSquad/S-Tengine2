@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <node\NodeChild.h>
 #include <Transform.h>
@@ -97,15 +97,26 @@ void NodeChild::removeParent(Transform * _parent){
 	return glm::inverse(modelMatrix);
 }*/
 
-void NodeChild::printHierarchy(unsigned long int _startDepth){
+void NodeChild::printHierarchy(unsigned long int _startDepth, bool _last, std::vector<unsigned long int> & _p){
 	for(unsigned long int j = 1; j <= _startDepth; ++j){
 		if(j == _startDepth){
-			std::cout << char(192) << char(196);
+			std::cout << (_last ? char(0xC0) : char(0xC3)) << char(0xC4);
 		}else{
-			std::cout << "  ";
+			bool p = false;
+			for(unsigned long int i : _p){
+				if(j == i){
+					p = true;
+					break;
+				}
+			}
+			if(p){
+				std::cout << char(0xB3) << " ";
+			}else{
+				std::cout << "  ";
+			}
 		}
 	}
-	std::cout << this << std::endl;
+	std::cout << typeid(*this).name() << " " << this << std::endl;
 }
 
 unsigned long int NodeChild::calculateDepth(unsigned long int _parent){

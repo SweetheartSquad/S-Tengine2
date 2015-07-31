@@ -379,9 +379,15 @@ void Transform::deleteRecursively(Transform * _node){
 	_node = nullptr;
 }
 
-void Transform::printHierarchy(unsigned long int _startDepth){
-	NodeChild::printHierarchy(_startDepth);
+void Transform::printHierarchy(unsigned long int _startDepth, bool _last, std::vector<unsigned long int> & _p){
+	NodeChild::printHierarchy(_startDepth, _last, _p);
+	if(!_last){
+		_p.push_back(_startDepth);
+	}
 	for(NodeChild * c : children){
-		c->printHierarchy(_startDepth+1);
+		c->printHierarchy(_startDepth+1, c == children.back(), _p);
+	}
+	if(!_last){
+		_p.pop_back();
 	}
 }

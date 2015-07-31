@@ -63,7 +63,7 @@ void Entity::makeCumulativeModelMatrixDirty(){
 	childTransform->makeCumulativeModelMatrixDirty();
 }
 
-void Entity::printHierarchy(unsigned long int _startDepth){
-	NodeChild::printHierarchy(_startDepth);
-	childTransform->printHierarchy(_startDepth);
+void Entity::printHierarchy(unsigned long int _startDepth, bool _last, std::vector<unsigned long int> & _p){
+	NodeChild::printHierarchy(_startDepth, false, _p);
+	childTransform->printHierarchy(_startDepth, _last, _p);
 }
