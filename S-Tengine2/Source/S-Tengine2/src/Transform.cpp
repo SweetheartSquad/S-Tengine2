@@ -8,6 +8,7 @@
 #include <MeshInterface.h>
 #include <shader\ComponentShaderBase.h>
 #include <shader\ShaderComponentTexture.h>
+#include <shader\ShaderComponentMVP.h>
 
 MeshInterface * Transform::transformIndicator = nullptr;
 ComponentShaderBase * Transform::transformShader = nullptr;
@@ -29,6 +30,7 @@ Transform::Transform():
 	if(staticInit){
 		staticInit = false;
 		transformShader = new ComponentShaderBase(false);
+		transformShader->addComponent(new ShaderComponentMVP(transformShader));
 		transformShader->addComponent(new ShaderComponentTexture(transformShader));
 		transformShader->compileShader();
 		transformShader->load();
