@@ -86,6 +86,7 @@ static void attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _
 }
 
 static void windowFocusCallback(GLFWwindow * _window, int _focused){
+	std::cout << _window << " focused: " << _focused << std::endl;
 	if(_focused == GL_TRUE){
 		// gained focus
 		glfwSetMouseButtonCallback(_window, attemptToActuallyRegainFocus);

@@ -270,7 +270,12 @@ void Game::toggleFullScreen(){
 	}
 	Transform::transformIndicator->unload();
 	Transform::transformShader->unload();
-
+	
+	// destroy the current window
+	glfwSetKeyCallback(vox::currentContext, nullptr);
+	glfwSetMouseButtonCallback(vox::currentContext, nullptr);
+	glfwSetWindowFocusCallback(vox::currentContext, nullptr);
+	glfwDestroyWindow(vox::currentContext);
 
 	// Toggle fullscreen flag.
 	vox::fullscreen = !vox::fullscreen;
@@ -297,9 +302,8 @@ void Game::toggleFullScreen(){
 		glfwTerminate();
 		throw "some sort of window error?";
 	}
-
+	
 	vox::initWindow(window);
-	glfwDestroyWindow(vox::currentContext);
 	glfwMakeContextCurrent(window);
 	vox::currentContext = window;
 	
