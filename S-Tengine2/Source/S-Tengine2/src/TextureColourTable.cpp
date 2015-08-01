@@ -8,8 +8,8 @@ TextureColourTable::TextureColourTable(bool _autoRelease) :
 	NodeResource(_autoRelease)
 {
 	channels = 4;
-	width = 256;
-	height = 1;
+	width = 16;
+	height = 16;
 	numPixels = width * height;
 	numBytes = numPixels * channels;
 };
