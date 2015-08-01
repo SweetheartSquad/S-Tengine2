@@ -274,48 +274,26 @@ void Game::toggleFullScreen(){
 	// destroy the current window
 	glfwSetKeyCallback(vox::currentContext, nullptr);
 	glfwSetMouseButtonCallback(vox::currentContext, nullptr);
+	glfwSetCursorPosCallback(vox::currentContext, nullptr);
 	glfwSetWindowFocusCallback(vox::currentContext, nullptr);
 	glfwDestroyWindow(vox::currentContext);
 
 	// Toggle fullscreen flag.
 	vox::fullscreen = !vox::fullscreen;
-	//get size
-	int w, h;
-	//if(vox::fullscreen){
-	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-	w = mode->width;
-	h = mode->height;
-
-	if(!vox::fullscreen){
-		w /= 2;
-		h /= 2;
-	}
-	// Create the new window.
-	GLFWwindow * window;
-#ifdef _DEBUG
-	window = glfwCreateWindow(w, h, vox::title.c_str(),  nullptr, nullptr);
-#else
-	window = glfwCreateWindow(w, h, vox::title.c_str(),  vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
-#endif
-	if(!window){
-		glfwTerminate();
-		throw "some sort of window error?";
-	}
-	
-	vox::initWindow(window);
-	glfwMakeContextCurrent(window);
-	vox::currentContext = window;
+	// create new window and make assign it to the current context
+	vox::currentContext = vox::initWindow();
+	glfwMakeContextCurrent(vox::currentContext);
 	
 	if(autoResize){
 		resize();
 	}
 	
-	
+	// reload everything
 	Transform::transformShader->load();
 	Transform::transformIndicator->load();
 	Transform::transformIndicator->configureDefaultVertexAttributes(Transform::transformShader);
-	// reload everything
+	
 	for(std::pair<std::string, Scene *> s : scenes){
 		s.second->load();
 	}

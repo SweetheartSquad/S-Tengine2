@@ -104,19 +104,45 @@ static void error_callback(int _error, const char * _description){
 	fputs(_description, stderr);
 }
 
-void vox::initWindow(GLFWwindow * _w){
-	if(_w != nullptr){
-		//glfwMakeContextCurrent(currentContext);
-		glfwSetKeyCallback(_w, keyCallback);
-		glfwSetMouseButtonCallback(_w, mouseButtonCallback);
-		glfwSetCursorPosCallback(_w, mousePositionCallback);
-		glfwSetInputMode(_w, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+GLFWwindow * vox::initWindow(){
+	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 
-		glfwSetWindowFocusCallback(_w, windowFocusCallback);
+	int w = mode->width;
+	int	h = mode->height;
+	
+	if(!fullscreen){
+		w /= 2;
+		h /= 2;
 	}
+	// Create the new window
+	GLFWwindow * window;
+#ifdef _DEBUG
+	w -= 50;
+	h -= 100;
+	window = glfwCreateWindow(w, h, title.c_str(), nullptr, nullptr);
+#else
+	window = glfwCreateWindow(w, h, title.c_str(), vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+#endif
+	if (!window){
+		glfwTerminate();
+		throw "some sort of window error?";
+	}
+	glfwSetKeyCallback(window, keyCallback);
+	glfwSetMouseButtonCallback(window, mouseButtonCallback);
+	glfwSetCursorPosCallback(window, mousePositionCallback);
+	glfwSetWindowFocusCallback(window, windowFocusCallback);
+
+	glfwSetWindowPos(window, 10, 50);
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	return window;
 }
 
 void vox::initialize(std::string _title){
+	// you shouldn't be calling initialize if we've already got a window
+	assert(vox::currentContext == nullptr);
+
 	// verify that the correct file structure is in place
 	FileUtils::createDirectoryIfNotExists("data");
 	FileUtils::createDirectoryIfNotExists("data/screenshots");
@@ -127,33 +153,15 @@ void vox::initialize(std::string _title){
 
 	vox::setGlfwWindowHints();
 
-	GLFWwindow * window;
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit()){
 		exit(EXIT_FAILURE);
 	}
 
-	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-	int w = mode->width;
-	int	h = mode->height;
-
-#ifdef _DEBUG
-	w = mode->width/2;
-	h = mode->height/2;
-	window = glfwCreateWindow(w, h, title.c_str(), nullptr, nullptr);
-#else
-	window = glfwCreateWindow(w, h, title.c_str(), vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
-#endif
-
-	if (!window){
-		glfwTerminate();
-		exit(EXIT_FAILURE);
-	}
-
-	vox::initWindow(window);
-	glfwMakeContextCurrent(window);
-	vox::currentContext = window;
+	
+	
+	vox::currentContext = vox::initWindow();
+	glfwMakeContextCurrent(vox::currentContext);
 
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
@@ -163,11 +171,10 @@ void vox::initialize(std::string _title){
 		throw;
 	}
 
-	int screenHeight;
-	int screenWidth;
-
-	glfwGetWindowSize(window, &screenWidth, &screenHeight);
-	glfwSetCursorPos(window, screenWidth/2, screenHeight/2);
+	// move mouse to the middle of the window
+	int screenHeight, screenWidth;
+	glfwGetWindowSize(vox::currentContext, &screenWidth, &screenHeight);
+	glfwSetCursorPos(vox::currentContext, screenWidth/2, screenHeight/2);
 
 	// Initialize freetype
 	if(FT_Init_FreeType(&freeTypeLibrary) != 0) {

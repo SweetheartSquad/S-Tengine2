@@ -51,7 +51,7 @@ namespace vox{
 	/** 
 	* Sets the window properties that need to be initialized after window creation (uses currentContext if null) 
 	*/
-	void initWindow(GLFWwindow * _w = nullptr);
+	GLFWwindow * initWindow();
 	
 	/**
 	* Initializes everyting need to get the engine up and running
