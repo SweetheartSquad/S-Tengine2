@@ -67,4 +67,13 @@ namespace vox{
 	* Destroys the opengl context, shuts down GLFW and closes the application
 	*/
 	void destruct();
+
+
+	void setGlfwWindowHints();
+	void keyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods);
+	void mouseButtonCallback(GLFWwindow * _window, int _button, int _action, int _mods);
+	void mousePositionCallback(GLFWwindow *_window, double _x, double _y);
+	void attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _action, int _mods);
+	void windowFocusCallback(GLFWwindow * _window, int _focused);
+	void error_callback(int _error, const char * _description);
 }

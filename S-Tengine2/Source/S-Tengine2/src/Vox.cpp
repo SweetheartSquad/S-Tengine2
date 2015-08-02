@@ -40,7 +40,7 @@ void vox::setGlfwWindowHints(){
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
-static void keyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods){
+void vox::keyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods){
 	Keyboard * keyboard = &Keyboard::getInstance();
 	keyboard->alt = (_mods & GLFW_MOD_ALT) != 0;
 	keyboard->shift = (_mods & GLFW_MOD_SHIFT) != 0;
@@ -52,7 +52,7 @@ static void keyCallback(GLFWwindow * _window, int _key, int _scancode, int _acti
 		keyboard->keyUpListener(_key);
 	}
 }
-static void mouseButtonCallback(GLFWwindow * _window, int _button, int _action, int _mods){
+void vox::mouseButtonCallback(GLFWwindow * _window, int _button, int _action, int _mods){
 	Mouse * mouse = &Mouse::getInstance();
 	if(_action == GLFW_PRESS){
 		mouse->mouseDownListener(_button);
@@ -60,13 +60,13 @@ static void mouseButtonCallback(GLFWwindow * _window, int _button, int _action, 
 		mouse->mouseUpListener(_button);
 	}
 }
-static void mousePositionCallback(GLFWwindow *_window, double _x, double _y){
+void vox::mousePositionCallback(GLFWwindow *_window, double _x, double _y){
 	Mouse * mouse = &Mouse::getInstance();
-	glm::uvec2 sd = vox::getScreenDimensions();
+	glm::uvec2 sd = getScreenDimensions();
 	mouse->mousePositionListener(_x, sd.y - _y);
 }
 
-static void attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _action, int _mods){
+void vox::attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _action, int _mods){
 	// grab the mouse coordinates and the screen size
 	int w, h;
 	double x, y;
@@ -85,7 +85,7 @@ static void attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _
 	}
 }
 
-static void windowFocusCallback(GLFWwindow * _window, int _focused){
+void vox::windowFocusCallback(GLFWwindow * _window, int _focused){
 	std::cout << _window << " focused: " << _focused << std::endl;
 	if(_focused == GL_TRUE){
 		// gained focus
@@ -100,7 +100,7 @@ static void windowFocusCallback(GLFWwindow * _window, int _focused){
 	}
 }
 
-static void error_callback(int _error, const char * _description){
+void vox::error_callback(int _error, const char * _description){
 	fputs(_description, stderr);
 }
 
@@ -117,13 +117,13 @@ GLFWwindow * vox::initWindow(){
 	// Create the new window
 	GLFWwindow * window;
 #ifdef _DEBUG
-	if(vox::fullscreen){
+	if(fullscreen){
 		w -= 50;
 		h -= 100;
 	}
 	window = glfwCreateWindow(w, h, title.c_str(), nullptr, nullptr);
 #else
-	window = glfwCreateWindow(w, h, title.c_str(), vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	window = glfwCreateWindow(w, h, title.c_str(), fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 #endif
 	if (!window){
 		glfwTerminate();
