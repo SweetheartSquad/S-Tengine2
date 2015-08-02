@@ -117,8 +117,10 @@ GLFWwindow * vox::initWindow(){
 	// Create the new window
 	GLFWwindow * window;
 #ifdef _DEBUG
-	w -= 50;
-	h -= 100;
+	if(vox::fullscreen){
+		w -= 50;
+		h -= 100;
+	}
 	window = glfwCreateWindow(w, h, title.c_str(), nullptr, nullptr);
 #else
 	window = glfwCreateWindow(w, h, title.c_str(), vox::fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
