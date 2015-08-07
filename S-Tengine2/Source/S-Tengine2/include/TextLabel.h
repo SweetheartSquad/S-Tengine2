@@ -8,6 +8,7 @@ class TextLabel;
 class Font;
 class Glyph;
 
+// NOTE - UIGLyphs do not have mouse interaction enabled by default
 class UIGlyph : public virtual NodeUI, public virtual NodeShadable{
 public:
 	wchar_t character;
