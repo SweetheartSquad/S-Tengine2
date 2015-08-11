@@ -63,8 +63,10 @@
     <ClCompile Include="src/ResourceManager.cpp" />
     <ClCompile Include="src/Scene.cpp" />
     <ClCompile Include="src/Scene2D.cpp" />
+    <ClCompile Include="src/AnimationRig.cpp" />
     <ClCompile Include="src/FpsDisplay.cpp" />
     <ClCompile Include="src/HorizontalLinearLayout.cpp" />
+    <ClCompile Include="src/IkChain.cpp" />
     <ClCompile Include="src/JoystickVirtual.cpp" />
     <ClCompile Include="src/Layout.cpp" />
     <ClCompile Include="src/Log.cpp" />
@@ -206,8 +208,10 @@
     <ClInclude Include="include/ResourceManager.h" />
     <ClInclude Include="include/Scene.h" />
     <ClInclude Include="include/Scene2D.h" />
+    <ClInclude Include="include/AnimationRig.h" />
     <ClInclude Include="include/FpsDisplay.h" />
     <ClInclude Include="include/HorizontalLinearLayout.h" />
+    <ClInclude Include="include/IkChain.h" />
     <ClInclude Include="include/JoystickVirtual.h" />
     <ClInclude Include="include/Layout.h" />
     <ClInclude Include="include/Log.h" />
