@@ -24,4 +24,9 @@ public:
 	virtual void layoutChildren() = 0;
 
 	glm::vec3 getRootPos();
+
+	void invalidateLayout();
+
+private:
+	bool layoutValid;
 };

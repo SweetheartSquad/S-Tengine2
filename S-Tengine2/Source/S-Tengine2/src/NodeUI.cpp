@@ -160,7 +160,11 @@ void NodeUI::setMouseEnabled(bool _mouseEnabled){
 }
 
 void NodeUI::update(Step * _step){
-	autoResize();
+	
+	if(layoutDirty){
+		autoResize();
+	}
+
 	if(mouseEnabled){
 		updateCollider();
 

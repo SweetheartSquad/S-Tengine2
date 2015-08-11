@@ -42,6 +42,8 @@ void VerticalLinearLayout::layoutChildren(){
 		trans->translate(x, y, 0.f, false);
 		y += ui->getHeight(true, true);
 	}
+
+	layoutDirty = false;
 }
 
 float VerticalLinearLayout::getContentsHeight(){

@@ -286,6 +286,7 @@
     <ClInclude Include="include/shader/ShaderComponentNormals.h" />
     <ClInclude Include="include/shader/ShaderComponentSsao.h" />
     <ClInclude Include="include/Slider.h" />
+    <ClInclude Include="include/stb/stb_herringbone_wang_tile.h" />
     <ClInclude Include="include/stb/stb_image.h" />
     <ClInclude Include="include/stb/stb_image_write.h" />
     <ClInclude Include="include/TextLabel.h" />

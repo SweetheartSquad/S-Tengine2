@@ -59,6 +59,9 @@ void TextLabel::setText(std::wstring _text){
 	textAll = _text;
 
 	updateRequired = true;
+
+	layoutDirty = true;
+
 	updateText();
 }
 
@@ -148,6 +151,7 @@ UIGlyph::UIGlyph(BulletWorld * _world, Scene * _scene, Glyph * _mesh, Shader * _
 {
 	setGlyphMesh(_mesh);
 	boxSizing = kCONTENT_BOX;
+	mouseEnabled = false;
 }
 
 void UIGlyph::setGlyphMesh(Glyph * _newGlyph){
