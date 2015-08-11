@@ -9,10 +9,14 @@ class NodeBulletBody : public virtual Entity{
 protected:
 	bool needsToUpdate;
 	btVector3 internalPos;
+
 public:
 	BulletWorld * world;
 	btRigidBody * body;
 	btCollisionShape * shape;
+	//Max velocity. Should always be set as positive. -1 means no limit
+	btVector3 maxVelocity;
+
 	NodeBulletBody(BulletWorld * _world);
 	~NodeBulletBody();
 

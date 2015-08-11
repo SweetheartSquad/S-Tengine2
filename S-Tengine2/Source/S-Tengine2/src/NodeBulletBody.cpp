@@ -10,7 +10,8 @@ NodeBulletBody::NodeBulletBody(BulletWorld * _world) :
 	body(nullptr),
 	shape(nullptr),
 	needsToUpdate(true),
-	internalPos(0,0,0)
+	internalPos(0,0,0),
+	maxVelocity(-1,-1,-1)
 {
 }
 
@@ -30,14 +31,15 @@ void NodeBulletBody::update(Step * _step){
 			internalPos = t.getOrigin();
 			childTransform->translate(internalPos.x(), internalPos.y(), internalPos.z(), false);
 
-			/*b2Vec2 lv = body->GetLinearVelocity();
-			if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
-				lv.x = maxVelocity.x * (lv.x < 0 ? -1 : 1);
+			btVector3 lv = body->getLinearVelocity();
+			if(maxVelocity.x() != -1 && abs(lv.x()) > abs(maxVelocity.x())){
+				lv.setX(maxVelocity.x() * (lv.x() < 0 ? -1 : 1));
+			}if(maxVelocity.y() != -1 && abs(lv.y()) > maxVelocity.y()){
+				lv.setY(maxVelocity.y() * (lv.y() < 0 ? -1 : 1));
+			}if(maxVelocity.z() != -1 && abs(lv.z()) > maxVelocity.z()){
+				lv.setZ(maxVelocity.z() * (lv.z() < 0 ? -1 : 1));
 			}
-			if(maxVelocity.y != -1 && lv.y > maxVelocity.y){
-				lv.y = maxVelocity.y * (lv.y < 0 ? -1 : 1);
-			}
-			body->SetLinearVelocity(lv);*/
+			body->setLinearVelocity(lv);
 
 			childTransform->setOrientation(glm::quat(angle.w(), angle.x(), angle.y(), angle.z()));
 			needsToUpdate = false;
