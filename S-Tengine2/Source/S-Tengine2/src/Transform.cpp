@@ -237,9 +237,12 @@ void Transform::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderO
 	if(drawTransforms){
 		Shader * prev = _renderOptions->shader;
 		_renderOptions->shader = transformShader;
+
+		float prevLineWidth;
+		glGetFloatv(GL_LINE_WIDTH, &prevLineWidth);
 		glLineWidth(5);
 		transformIndicator->render(_matrixStack, _renderOptions);
-		glLineWidth(1);
+		glLineWidth(prevLineWidth);
 		_renderOptions->shader = prev;
 	}
 
