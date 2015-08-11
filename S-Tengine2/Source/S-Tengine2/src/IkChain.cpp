@@ -48,19 +48,23 @@ void IkChain_CCD::update(Step * _step){
 	// update target display
 	glm::vec4 v = glm::inverse(childTransform->getModelMatrix()) * glm::vec4(target.x, target.y, 0, 1);
 	
-	pointVis->mesh->vertices.back().x = v.x;
-	pointVis->mesh->vertices.back().y = v.y;
-	pointVis->mesh->vertices.back().green = 0;
-	pointVis->mesh->vertices.back().blue = 0;
-
-	lineVis->mesh->vertices.at(lineVis->mesh->vertices.size()-2).x = 0;
-	lineVis->mesh->vertices.at(lineVis->mesh->vertices.size()-2).y = 0;
-	lineVis->mesh->vertices.at(lineVis->mesh->vertices.size()-2).green = 0;
-	lineVis->mesh->vertices.at(lineVis->mesh->vertices.size()-2).blue = 0;
-	lineVis->mesh->vertices.back().x = v.x;
-	lineVis->mesh->vertices.back().y = v.y;
-	lineVis->mesh->vertices.back().green = 0;
-	lineVis->mesh->vertices.back().blue = 0;
+	if(pointVis->isVisible()){
+		pointVis->mesh->vertices.back().x = v.x;
+		pointVis->mesh->vertices.back().y = v.y;
+		pointVis->mesh->vertices.back().green = 0;
+		pointVis->mesh->vertices.back().blue = 0;
+	}
+	
+	if(lineVis->isVisible()){
+		lineVis->mesh->vertices.at(lineVis->mesh->vertices.size()-2).x = 0;
+		lineVis->mesh->vertices.at(lineVis->mesh->vertices.size()-2).y = 0;
+		lineVis->mesh->vertices.at(lineVis->mesh->vertices.size()-2).green = 0;
+		lineVis->mesh->vertices.at(lineVis->mesh->vertices.size()-2).blue = 0;
+		lineVis->mesh->vertices.back().x = v.x;
+		lineVis->mesh->vertices.back().y = v.y;
+		lineVis->mesh->vertices.back().green = 0;
+		lineVis->mesh->vertices.back().blue = 0;
+	}
 
 	// transformation data gets applied in individual joint updates as the step progresses through the hierarchy
 	AnimationJoint::update(_step);

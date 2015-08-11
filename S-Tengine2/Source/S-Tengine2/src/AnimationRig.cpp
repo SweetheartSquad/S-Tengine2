@@ -72,6 +72,9 @@ AnimationJoint::AnimationJoint(glm::vec2 _pos) :
 	childTransform->addChild(pointVis);
 
 	pointVis->mesh->pushVert(Vertex(0,0,0));
+	
+	pointVis->setVisible(false);
+	lineVis->setVisible(false);
 }
 
 void AnimationJoint::update(Step * _step){
@@ -80,14 +83,20 @@ void AnimationJoint::update(Step * _step){
 	childTransform->setOrientation(glm::quat(glm::vec3( 0, 0, getAngle() )));
 
 	// update bone/joint display
-	for(unsigned long int i = 0; i < outJoints.size(); ++i){
-		lineVis->mesh->vertices.at(i*2+1).x = outJoints.at(i)->pos.x;
-		lineVis->mesh->vertices.at(i*2+1).y = outJoints.at(i)->pos.y;
-		pointVis->mesh->vertices.at(i+1).x = outJoints.at(i)->pos.x;
-		pointVis->mesh->vertices.at(i+1).y = outJoints.at(i)->pos.y;
+	if(pointVis->isVisible()){
+		for(unsigned long int i = 0; i < outJoints.size(); ++i){
+			pointVis->mesh->vertices.at(i+1).x = outJoints.at(i)->pos.x;
+			pointVis->mesh->vertices.at(i+1).y = outJoints.at(i)->pos.y;
+		}
+		pointVis->mesh->dirty = true;
 	}
-	lineVis->mesh->dirty = true;
-	pointVis->mesh->dirty = true;
+	if(lineVis->isVisible()){
+		for(unsigned long int i = 0; i < outJoints.size(); ++i){
+			lineVis->mesh->vertices.at(i*2+1).x = outJoints.at(i)->pos.x;
+			lineVis->mesh->vertices.at(i*2+1).y = outJoints.at(i)->pos.y;
+		}
+		lineVis->mesh->dirty = true;
+	}
 
 	Entity::update(_step);
 }
