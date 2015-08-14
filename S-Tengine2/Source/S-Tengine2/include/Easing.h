@@ -9,7 +9,7 @@
 class Easing{
 public:
 	enum Type{
-		kNONE,
+		kLINEAR,
 		kEASE_IN_QUAD,
 		kEASE_OUT_QUAD,
 		kEASE_IN_OUT_QUAD,
@@ -50,7 +50,7 @@ public:
 	 */
 	static float call(Type type, float t, float b, float c, float d){
 		switch(type) {
-			case kNONE: return none(t,b,c,d);
+			case kLINEAR: return linear(t,b,c,d);
 			case kEASE_IN_QUAD:			return easeInQuad(t,b,c,d);
 			case kEASE_OUT_QUAD:		return easeOutQuad(t,b,c,d);
 			case kEASE_IN_OUT_QUAD:		return easeInOutQuad(t,b,c,d);
@@ -92,7 +92,7 @@ public:
 	 * @param	d	Duration
 	 * @return	Eased value
 	 */
-	static float none(float t, float b, float c, float d){
+	static float linear(float t, float b, float c, float d){
 		return c * t / d + b;
 	}
 	

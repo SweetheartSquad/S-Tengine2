@@ -35,7 +35,7 @@ void SpriteSheetAnimation::pushFrame(unsigned long int _column, unsigned long in
 	u = rW * _column;
 	v = rH * _row;
 	frames.push_back(vox::Rectangle(u, v, rW, rH));
-	frameIndices.tweens.push_back(new Tween<unsigned long int>(secondsPerFrame, 1, Easing::kNONE));
+	frameIndices.tweens.push_back(new Tween<unsigned long int>(secondsPerFrame, 1, Easing::kLINEAR));
 }
 
 void SpriteSheetAnimation::pushMultipleFrames(std::vector<unsigned long int> _frames, float _width, float _height){
