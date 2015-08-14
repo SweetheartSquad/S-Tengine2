@@ -68,6 +68,13 @@ std::vector<glm::vec2> vox::TextureUtils::getMarchingSquaresContour(Texture * _t
 				code += 8; // 1xxx
 			}
 
+			// handle ambiguous cases by checking average and flipping to the other if necessary
+			if(code == 0x5 && (p0 + p1 + p2 + p3) <= _threshold*4){
+				code = 0xA;
+			}else if(code == 0xA && (p0 + p1 + p2 + p3) <= _threshold*4){
+				code = 0x5;
+			}
+
 			// create the verts based on the code
 			// right now the interpolate function just cares about the position, but it can be modified to take the pixel values into account
 			for(unsigned long int edge : edgeTable[code]){
