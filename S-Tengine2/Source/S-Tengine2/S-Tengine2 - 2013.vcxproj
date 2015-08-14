@@ -146,6 +146,7 @@
     <ClCompile Include="src/sqlite/sqlite3.c" />
     <ClCompile Include="src/TextArea.cpp" />
     <ClCompile Include="src/TextureColourTable.cpp" />
+    <ClCompile Include="src/TextureUtils.cpp" />
     <ClCompile Include="src/Timeout.cpp" />
     <ClCompile Include="src/UIUnit.cpp" />
     <ClCompile Include="src/VerticalLinearLayout.cpp" />
@@ -296,6 +297,7 @@
     <ClInclude Include="include/sqlite/sqlite3ext.h" />
     <ClInclude Include="include/TextArea.h" />
     <ClInclude Include="include/TextureColourTable.h" />
+    <ClInclude Include="include/TextureUtils.h" />
     <ClInclude Include="include/Timeout.h" />
     <ClInclude Include="include/UIUnit.h" />
     <ClInclude Include="include/VerticalLinearLayout.h" />
