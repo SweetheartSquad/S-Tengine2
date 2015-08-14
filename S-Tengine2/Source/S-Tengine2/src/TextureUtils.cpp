@@ -1,17 +1,26 @@
 #pragma once
 
 #include <TextureUtils.h>
+#include <Easing.h>
 
 
-glm::vec2 interpolate(unsigned long int x1, unsigned long int y1, unsigned long int p1, unsigned long int x2, unsigned long int y2, unsigned long int p2){
+glm::vec2 vox::TextureUtils::interpolate(unsigned long int _x1, unsigned long int _y1, unsigned long int _x2, unsigned long int _y2){
 	return glm::vec2(
-		(x1+x2)/2.f,
-		(y1+y2)/2.f
+		(_x1+_x2)/2.f,
+		(_y1+_y2)/2.f
+	);
+}
+
+glm::vec2 vox::TextureUtils::interpolate(unsigned long int _threshold, float _x1, float _y1, float _p1, float _x2, float _y2, float _p2){
+	float t = (_threshold - _p1) / (_p2 - _p1);
+	return glm::vec2(
+		Easing::linear(t, _x1, _x2-_x1, 1),
+		Easing::linear(t, _y1, _y2-_y1, 1)
 	);
 }
 
 
-std::vector<glm::vec2> vox::TextureUtils::getMarchingSquaresContour(Texture * _texture, unsigned long int _threshold){
+std::vector<glm::vec2> vox::TextureUtils::getMarchingSquaresContour(Texture * _texture, unsigned long int _threshold, bool _smooth){
 	std::vector<glm::vec2> res;
 
 	// lookup table describing edges based on marching square code
@@ -63,19 +72,20 @@ std::vector<glm::vec2> vox::TextureUtils::getMarchingSquaresContour(Texture * _t
 			// right now the interpolate function just cares about the position, but it can be modified to take the pixel values into account
 			for(unsigned long int edge : edgeTable[code]){
 				glm::vec2 v;
-				switch(edge){
-				case 0:
-					v = interpolate(x, y, p0, x + size, y, p1);
-					break;
-				case 1:
-					v = interpolate(x + size, y, p1, x + size, y + size, p2);
-					break;
-				case 2:
-					v = interpolate(x + size, y + size, p2, x, y + size, p3);
-					break;
-				case 3:
-					v = interpolate(x, y, p0, x, y + size, p3);
-					break;
+				if(_smooth){
+					switch(edge){
+						case 0: v = interpolate(_threshold, x, y, p0, x + size, y, p1); break;
+						case 1: v = interpolate(_threshold, x + size, y, p1, x + size, y + size, p2); break;
+						case 2: v = interpolate(_threshold, x + size, y + size, p2, x, y + size, p3); break;
+						case 3: v = interpolate(_threshold, x, y, p0, x, y + size, p3); break;
+					}
+				}else{
+					switch(edge){
+						case 0: v = interpolate(x, y, x + size, y); break;
+						case 1: v = interpolate(x + size, y, x + size, y + size); break;
+						case 2: v = interpolate(x + size, y + size, x, y + size); break;
+						case 3: v = interpolate(x, y, x, y + size); break;
+					}
 				}
 
 				// result will be offset by half a pixel and flipped vertically; fix that here to line up with texture coords
