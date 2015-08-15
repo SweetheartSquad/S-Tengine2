@@ -20,11 +20,10 @@ glm::vec2 vox::TextureUtils::interpolate(unsigned long int _threshold, float _x1
 }
 
 
-std::vector<glm::vec2> vox::TextureUtils::getMarchingSquaresContour(Texture * _texture, unsigned long int _threshold, bool _smooth){
+std::vector<glm::vec2> vox::TextureUtils::getMarchingSquaresContour(Texture * _texture, unsigned long int _threshold, bool _smooth, bool _includeNormals){
 	std::vector<glm::vec2> res;
 
 	// lookup table describing edges based on marching square code
-	// codes are binary 0000 through 1111, where each bit represents an adjacent pixel value being above _threshold
 	std::vector<unsigned long int> edgeTable[16];
 	//edgeTable[0x0] is empty b/c it's completely outside
 	edgeTable[0x1].push_back(0); edgeTable[0x1].push_back(3);
@@ -43,9 +42,32 @@ std::vector<glm::vec2> vox::TextureUtils::getMarchingSquaresContour(Texture * _t
 	edgeTable[0xE].push_back(0); edgeTable[0xE].push_back(3);
 	//edgeTable[0xF] is empty b/c it's completely inside
 
+	bool reverse[16][2] = {
+		{0,	0},
+		{true,	0},
+		{false,	0},
+		{true,	0},
+		{false,	0},
+		{false,	false},
+		{false,	0},
+		{true,	0},
+		{false,	0},
+		{true,	0},
+		{false,	true},
+		{true,	0},
+		{false,	0},
+		{true,	0},
+		{false,	0},
+		{0,	0}
+	};
+	bool flipped = false;
+
 	// size of marching square
 	unsigned long int size = 1;
-	unsigned long int code, p0, p1, p2, p3;
+
+	// codes are binary 0000 through 1111, where each bit represents an adjacent pixel value being above _threshold
+	unsigned long int code,
+		p0, p1, p2, p3;
 
 	// iterate through texture
 	for(unsigned long int y = 0; y < _texture->height - size; y += size){
@@ -67,38 +89,63 @@ std::vector<glm::vec2> vox::TextureUtils::getMarchingSquaresContour(Texture * _t
 			}if(p3 > _threshold){
 				code += 8; // 1xxx
 			}
-
+			
+			flipped = false;
 			// handle ambiguous cases by checking average and flipping to the other if necessary
 			if(code == 0x5 && (p0 + p1 + p2 + p3) <= _threshold*4){
 				code = 0xA;
-			}else if(code == 0xA && (p0 + p1 + p2 + p3) <= _threshold*4){
+				flipped = true;
+			}
+
+			if(code == 0xA && (p0 + p1 + p2 + p3) <= _threshold*4){
 				code = 0x5;
+				//flipped = true;
 			}
 
 			// create the verts based on the code
 			// right now the interpolate function just cares about the position, but it can be modified to take the pixel values into account
-			for(unsigned long int edge : edgeTable[code]){
-				glm::vec2 v;
+			for(unsigned long int i = 0 ; i < edgeTable[code].size(); i += 2){
+				unsigned long int vertType1 = edgeTable[code].at(i);
+				unsigned long int vertType2 = edgeTable[code].at(i+1);
+				glm::vec2 v1, v2;
 				if(_smooth){
-					switch(edge){
-						case 0: v = interpolate(_threshold, x, y, p0, x + size, y, p1); break;
-						case 1: v = interpolate(_threshold, x + size, y, p1, x + size, y + size, p2); break;
-						case 2: v = interpolate(_threshold, x + size, y + size, p2, x, y + size, p3); break;
-						case 3: v = interpolate(_threshold, x, y, p0, x, y + size, p3); break;
+					switch(vertType1){
+						case 0: v1 = interpolate(_threshold, x, y, p0, x + size, y, p1); break;
+						case 1: v1 = interpolate(_threshold, x + size, y, p1, x + size, y + size, p2); break;
+						case 2: v1 = interpolate(_threshold, x + size, y + size, p2, x, y + size, p3); break;
+						case 3: v1 = interpolate(_threshold, x, y, p0, x, y + size, p3); break;
+					}
+					switch(vertType2){
+						case 0: v2 = interpolate(_threshold, x, y, p0, x + size, y, p1); break;
+						case 1: v2 = interpolate(_threshold, x + size, y, p1, x + size, y + size, p2); break;
+						case 2: v2 = interpolate(_threshold, x + size, y + size, p2, x, y + size, p3); break;
+						case 3: v2 = interpolate(_threshold, x, y, p0, x, y + size, p3); break;
 					}
 				}else{
-					switch(edge){
-						case 0: v = interpolate(x, y, x + size, y); break;
-						case 1: v = interpolate(x + size, y, x + size, y + size); break;
-						case 2: v = interpolate(x + size, y + size, x, y + size); break;
-						case 3: v = interpolate(x, y, x, y + size); break;
+					switch(vertType1){
+						case 0: v1 = interpolate(x, y, x + size, y); break;
+						case 1: v1 = interpolate(x + size, y, x + size, y + size); break;
+						case 2: v1 = interpolate(x + size, y + size, x, y + size); break;
+						case 3: v1 = interpolate(x, y, x, y + size); break;
+					}
+					switch(vertType2){
+						case 0: v2 = interpolate(x, y, x + size, y); break;
+						case 1: v2 = interpolate(x + size, y, x + size, y + size); break;
+						case 2: v2 = interpolate(x + size, y + size, x, y + size); break;
+						case 3: v2 = interpolate(x, y, x, y + size); break;
 					}
 				}
 
-				// result will be offset by half a pixel and flipped vertically; fix that here to line up with texture coords
-				v.x += 0.5;
-				v.y = _texture->height - v.y - 0.5f;
-				res.push_back(v);
+				// results will be offset by half a pixel and flipped vertically; fix that here to line up with texture coords
+				v1.x += 0.5;
+				v1.y = _texture->height - v1.y - 0.5f;
+				v2.x += 0.5;
+				v2.y = _texture->height - v2.y - 0.5f;
+				res.push_back(v1);
+				res.push_back(v2);
+				if(_includeNormals){
+					res.push_back((v2 - v1) * glm::vec2(-1,1) * (float)((flipped ? !reverse[code][i/2] : reverse[code][i/2]) * 2 - 1));
+				}
 			}
 		}
 	}
