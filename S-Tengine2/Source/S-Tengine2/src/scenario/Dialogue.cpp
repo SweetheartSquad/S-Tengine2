@@ -10,10 +10,9 @@
 
 Dialogue::Dialogue(Json::Value _json, Scenario * _scenario) :
 	currentText(-1),
-	scenario(_scenario)
+	scenario(_scenario),
+	speaker(_json.get("speaker", "NO_SPEAKER_DEFINED").asString())
 {
-	speaker = _json.get("speaker", "NO_SPEAKER_DEFINED").asString();
-	portrait = _json.get("portrait", "NO_PORTRAIT_DEFINED").asString();
 	const Json::Value textArray = _json["text"];
 	for(int i = 0; i < textArray.size(); ++i){
 		text.push_back(textArray[i].asString());
@@ -66,28 +65,36 @@ DialogueSay::DialogueSay(Json::Value _json, Scenario * _scenario) :
 {
 }
 
+
+DialogueOption::DialogueOption(Json::Value _json, Scenario * _scenario) :
+	text(_json["text"].asString())
+{
+	const Json::Value triggersArray = _json["triggers"];
+	for(int i = 0; i < triggersArray.size(); ++i){
+		triggers.push_back(Trigger::getTrigger(triggersArray[i], _scenario));
+	}
+}
+
+DialogueOption::~DialogueOption(){
+	while(triggers.size() > 0){
+		delete triggers.back();
+		triggers.pop_back();
+	}
+}
+
 DialogueAsk::DialogueAsk(Json::Value _json, Scenario * _scenario) :
 	Dialogue(_json, _scenario)
 {
 	const Json::Value optionsArray = _json["options"];
 	for(int i = 0; i < optionsArray.size(); ++i){
-		options.push_back(optionsArray[i]["text"].asString());
-		optionsResults.push_back(std::vector<Trigger *>());
-
-		const Json::Value triggersArray = optionsArray[i]["triggers"];
-		for(int j = 0; j < triggersArray.size(); ++j){
-			optionsResults.back().push_back(Trigger::getTrigger(triggersArray[j], _scenario));
-		}
+		options.push_back(new DialogueOption(optionsArray[i], _scenario));
 	}
 }
 
 DialogueAsk::~DialogueAsk(){
-	while(optionsResults.size() > 0){
-		while(optionsResults.back().size() > 0){
-			delete optionsResults.back().back();
-			optionsResults.back().pop_back();
-		}
-		optionsResults.pop_back();
+	while(options.size() > 0){
+		delete options.back();
+		options.pop_back();
 	}
 }
 

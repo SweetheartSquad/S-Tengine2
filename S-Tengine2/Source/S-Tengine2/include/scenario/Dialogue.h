@@ -12,14 +12,12 @@ class Condition;
 class Dialogue abstract : public NodeContent{
 public:
 	std::string speaker;
-	std::string portrait;
 	std::vector<std::string> text;
 	signed long int currentText;
 	std::vector<Trigger *> triggers;
 	std::vector<Condition *> conditions;
 	
-	Dialogue(Json::Value _json, Scenario * _scenario);
-	~Dialogue();
+	virtual ~Dialogue();
 	
 	std::string getCurrentText();
 	// increments currentText
@@ -38,6 +36,9 @@ public:
 protected:
 	// the scenario this content belongs to
 	Scenario * scenario;
+
+	// this constructor is for internal use only; call Dialogue::getDialogue to create a new instance
+	Dialogue(Json::Value _json, Scenario * _scenario);
 };
 
 class DialogueSay : public Dialogue{
@@ -46,12 +47,24 @@ public:
 };
 
 
+
+class DialogueOption : public NodeContent{
+public:
+	// text to display to use for this option
+	std::string text;
+	std::vector<Trigger *> triggers;
+
+	DialogueOption(Json::Value _json, Scenario * _scenario);
+	~DialogueOption();
+protected:
+	// the scenario this content belongs to
+	Scenario * scenario;
+};
 // a dialog object which prompts for user selection
 class DialogueAsk : public Dialogue{
 public:
-	std::vector<std::string> options;
-	std::vector<std::vector<Trigger *>> optionsResults;
-
+	std::vector<DialogueOption *> options;
+	
 	DialogueAsk(Json::Value _json, Scenario * _scenario);
 	~DialogueAsk();
 };
