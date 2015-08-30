@@ -7,6 +7,8 @@
 
 class Scene;
 class Mouse;
+class Texture;
+
 enum BoxSizing{
 	kCONTENT_BOX, // padding and margin are exterior to width and height
 	kBORDER_BOX // padding and margin are interior to width and height
@@ -150,6 +152,8 @@ public:
 	float getPaddingRight();
 	float getPaddingTop();
 	float getPaddingBottom();
+
+	Texture * renderToTexture(RenderOptions * _renderOptions, vox::MatrixStack * matrixStack, float x, float y);
 	
 	// If kPIXEL, returns the pixelWidth
 	// otherwise, returns measuredWidth

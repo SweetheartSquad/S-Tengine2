@@ -8,10 +8,13 @@
 #include <ostream>
 #include <iostream>
 
+class FrameBufferInterface;
+
 class Texture : public virtual NodeResource{
 public:
 	
 	Texture(std::string _src, bool _storeData, bool _autoRelease);
+	Texture(FrameBufferInterface * _frameBuffer, bool _storeData, int _frameBufferChannelIndex, int _channels, bool _autoRelease);
 	Texture(bool _storeData, bool _autoRelease);
 	~Texture();
 

@@ -6,6 +6,9 @@
 #include <Camera.h>
 #include <Mouse.h>
 #include <MeshInterface.h>
+#include <FrameBufferInterface.h>
+#include <StandardFrameBuffer.h>
+#include <Texture.h>
 
 #include <shader\ComponentShaderBase.h>
 #include <shader\ShaderComponentTexture.h>
@@ -14,6 +17,8 @@
 #include <shader\ShaderComponentMVP.h>
 
 #include <NumberUtils.h>
+#include <MatrixStack.h>
+#include <OrthographicCamera.h>
 
 ComponentShaderBase * NodeUI::bgShader = nullptr;
 
@@ -159,6 +164,7 @@ void NodeUI::setMouseEnabled(bool _mouseEnabled){
 	mouseEnabled = _mouseEnabled;
 }
 
+
 void NodeUI::update(Step * _step){
 	
 	if(layoutDirty){
@@ -191,6 +197,82 @@ void NodeUI::update(Step * _step){
 	}
 	
 	Entity::update(_step);
+}
+
+
+Texture * NodeUI::renderToTexture(RenderOptions * _renderOptions, vox::MatrixStack * matrixStack, float x, float y) {
+	
+	layoutDirty = true;
+	update(&vox::step);
+
+	StandardFrameBuffer * frameBuffer = new StandardFrameBuffer(true);
+	frameBuffer->referenceCount++;
+	frameBuffer->load();
+
+	vox::Box bgBox = background->calcOverallBoundingBox();
+
+	OrthographicCamera * cam = new OrthographicCamera(0, width.measuredSize, 0, height.measuredSize, -1000, 1000);
+
+	Transform * t = new Transform();
+	t->addChild(cam);
+
+	/*matrixStack->setViewMatrix(&glm::lookAt(	
+		//glm::vec3(bgBox.x + width.measuredSize * 0.5, bgBox.y + height.measuredSize * 0.5, 0.f),
+		glm::vec3(0, 0, 0.f),
+		glm::vec3(0.f, 0.f, 1.f),	
+		glm::vec3(0.f, 1.f, 0.f)							
+	));
+
+	matrixStack->setProjectionMatrix(&glm::ortho<float>(
+		-bgBox.x,
+		-(bgBox.x + width.measuredSize),
+		bgBox.y,
+		bgBox.y + height.measuredSize,
+		-1000, 
+		1000
+		));*/
+
+	//vox::MatrixStack * matrixStack = new vox::MatrixStack();
+
+	const glm::mat4 * p = matrixStack->getProjectionMatrix();
+	const glm::mat4 * v = matrixStack->getViewMatrix();
+
+	matrixStack->pushMatrix();	
+
+	matrixStack->setViewMatrix(&cam->getViewMatrix());
+	matrixStack->setProjectionMatrix(&cam->getProjectionMatrix());
+
+	frameBuffer->resize(width.measuredSize, height.measuredSize);	
+
+	frameBuffer->bindFrameBuffer();
+
+	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
+
+	if(depth == GL_TRUE){
+		glDisable(GL_DEPTH_TEST);
+	}
+
+	render(matrixStack, _renderOptions);
+
+	if(depth == GL_TRUE){
+		glEnable(GL_DEPTH_TEST);
+	}
+
+	frameBuffer->saveToFile("test2.tga", 0);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	matrixStack->setViewMatrix(v);
+	matrixStack->setProjectionMatrix(p);
+	matrixStack->popMatrix();
+
+	Texture * tex = new Texture(frameBuffer, true, 0, 4, true);
+
+	//delete matrixStack;
+	delete cam;
+	delete frameBuffer;
+
+	return tex;
 }
 
 void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
@@ -234,7 +316,7 @@ void NodeUI::setMargin(float _left, float _right, float _bottom, float _top){
 void NodeUI::setPaddingLeft(float _padding){
 	paddingLeft.setSize(_padding);
 }
-
+	 
 void NodeUI::setPaddingRight(float _padding){
 	paddingRight.setSize(_padding);
 }

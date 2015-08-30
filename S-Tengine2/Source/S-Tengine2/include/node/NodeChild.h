@@ -20,7 +20,10 @@ public:
 	virtual void addParent(Transform * _parent);
 	// Loops through the vector of parents and removes the first instance of _parent
 	virtual void removeParent(Transform * _parent);
-
+	
+	// Returns the first parent in the list of parents
+	// If there are no parents then returns nullptr
+	virtual Transform * firstParent();
 	
 	virtual void makeCumulativeModelMatrixDirty();
 	bool cumulativeModelMatrixDirty;
@@ -40,4 +43,6 @@ public:
 
 	// Returns the number of Nodes between this node and the top of its hierarchy, following the path through _parent
 	virtual unsigned long int calculateDepth(unsigned long int _parent = 0);
+
+
 };

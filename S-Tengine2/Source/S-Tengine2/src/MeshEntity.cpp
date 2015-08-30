@@ -11,11 +11,14 @@
 
 #include <algorithm>
 
-MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader) :
+MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader, bool _configureDefaultVertexAttributes) :
 	NodeShadable(_shader),
 	mesh(_mesh),
 	meshTransform(childTransform->addChild(mesh))
 {
+	if(shader != nullptr && _configureDefaultVertexAttributes) {
+		mesh->configureDefaultVertexAttributes(_shader);
+	}
 	++mesh->referenceCount;
 }
 

@@ -8,7 +8,11 @@
 bool Log::THROW_ON_WARN  = false;
 bool Log::THROW_ON_ERROR = false;
 
-bool Log::WRITE_TO_FILE  = true;
+bool Log::FORCE_VERBOSE = false;
+
+bool Log::WRITE_INFO_TO_FILE  = true;
+bool Log::WRITE_WARN_TO_FILE  = true;
+bool Log::WRITE_ERROR_TO_FILE = true;
 
 int Log::INFO_COLOUR_FG  = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
 int Log::WARN_COLOUR_FG  = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
@@ -28,7 +32,7 @@ void Log::warn(char * _file, int _line, std::string _message){
 	if(LOG_LEVEL <= kWARN){
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WARN_COLOUR_FG | WARN_COLOUR_BG);
 		std::cout << "[WARN] FILE:" << _file << " LINE:" << _line << " " << _message << std::endl;
-		if(WRITE_TO_FILE) {
+		if(WRITE_WARN_TO_FILE) {
 			logToFile(getDate() + "[WARN] FILE:" + _file + " LINE:" + std::to_string(_line) + _message + "\n");
 		}
 	}
@@ -41,7 +45,7 @@ void Log::warn(std::string _message){
 	if(LOG_LEVEL <= kWARN){
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WARN_COLOUR_FG | WARN_COLOUR_BG);
 		std::cout << "[WARN] "<< _message << std::endl;
-		if(WRITE_TO_FILE) {
+		if(WRITE_WARN_TO_FILE) {
 			logToFile(getDate() + "[WARN] " + _message + "\n");
 		}
 	}
@@ -54,7 +58,7 @@ void Log::error(char * _file, int _line, std::string _message){
 	if(LOG_LEVEL <= kERROR){
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), ERROR_COLOUR_FG | ERROR_COLOUR_BG);
 		std::cout << "[ERROR] FILE:" << _file << " LINE:" << _line << " "  << _message << std::endl;
-		if(WRITE_TO_FILE) {
+		if(WRITE_ERROR_TO_FILE) {
 			logToFile(getDate() + "[ERROR] FILE:" + _file + " LINE:" + std::to_string(_line) + _message + "\n");
 		}
 	}
@@ -67,7 +71,7 @@ void Log::error(std::string _message){
 	if(LOG_LEVEL <= kERROR){
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), ERROR_COLOUR_FG | ERROR_COLOUR_BG);
 		std::cout << "[ERROR]" << _message << std::endl;
-		if(WRITE_TO_FILE) {
+		if(WRITE_ERROR_TO_FILE) {
 			logToFile(getDate() + "[ERROR] " + _message + "\n");
 		}
 	}
@@ -80,7 +84,7 @@ void Log::info(char * _file, int _line, std::string _message){
 	if(LOG_LEVEL <= kINFO){
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), INFO_COLOUR_FG | INFO_COLOUR_BG);
 		std::cout << "[INFO] FILE:" << _file << " LINE:" << _line << " "  << _message << std::endl;
-		if(WRITE_TO_FILE) {
+		if(WRITE_INFO_TO_FILE) {
 			logToFile(getDate() + "[INFO] FILE:" + _file + " LINE:" + std::to_string(_line) + _message + "\n");
 		}
 	}
@@ -90,7 +94,7 @@ void Log::info(std::string _message){
 	if(LOG_LEVEL <= kINFO){
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), INFO_COLOUR_FG | INFO_COLOUR_BG);
 		std::cout << "[INFO] " << _message << std::endl;
-		if(WRITE_TO_FILE) {
+		if(WRITE_INFO_TO_FILE) {
 			logToFile(getDate() + "[INFO] " +  _message + "\n");
 		}
 	}

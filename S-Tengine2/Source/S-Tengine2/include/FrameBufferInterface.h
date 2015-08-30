@@ -98,4 +98,7 @@ public:
 	// assumes TGA output regardless of _filename
 	// file path is relative to "data/images"
 	void saveToFile(const char * _filename, unsigned long int _fbochannel);
+	
+	// Returns the pixel data for the framebuffer
+	GLubyte * getPixelData(unsigned long int _fbochannel);
 };
