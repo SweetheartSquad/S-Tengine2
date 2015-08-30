@@ -200,49 +200,29 @@ void NodeUI::update(Step * _step){
 }
 
 
-Texture * NodeUI::renderToTexture(RenderOptions * _renderOptions, vox::MatrixStack * matrixStack, float x, float y) {
+Texture * NodeUI::renderToTexture(RenderOptions * _renderOptions) {
 	
 	layoutDirty = true;
-	update(&vox::step);
+	autoResize();
 
 	StandardFrameBuffer * frameBuffer = new StandardFrameBuffer(true);
-	frameBuffer->referenceCount++;
 	frameBuffer->load();
 
-	vox::Box bgBox = background->calcOverallBoundingBox();
-
-	OrthographicCamera * cam = new OrthographicCamera(0, width.measuredSize, 0, height.measuredSize, -1000, 1000);
+	OrthographicCamera * cam = new OrthographicCamera(getWidth(true, true) * 4.0f, 0.f, getHeight(true, true), 0.f, -1000, 1000);
 
 	Transform * t = new Transform();
 	t->addChild(cam);
+		
+	cam->firstParent()->translate(-getWidth(true, true) * 3.0f, 0.f, 0.f);
 
-	/*matrixStack->setViewMatrix(&glm::lookAt(	
-		//glm::vec3(bgBox.x + width.measuredSize * 0.5, bgBox.y + height.measuredSize * 0.5, 0.f),
-		glm::vec3(0, 0, 0.f),
-		glm::vec3(0.f, 0.f, 1.f),	
-		glm::vec3(0.f, 1.f, 0.f)							
-	));
-
-	matrixStack->setProjectionMatrix(&glm::ortho<float>(
-		-bgBox.x,
-		-(bgBox.x + width.measuredSize),
-		bgBox.y,
-		bgBox.y + height.measuredSize,
-		-1000, 
-		1000
-		));*/
-
-	//vox::MatrixStack * matrixStack = new vox::MatrixStack();
-
-	const glm::mat4 * p = matrixStack->getProjectionMatrix();
-	const glm::mat4 * v = matrixStack->getViewMatrix();
+	vox::MatrixStack * matrixStack = new vox::MatrixStack();
 
 	matrixStack->pushMatrix();	
 
 	matrixStack->setViewMatrix(&cam->getViewMatrix());
 	matrixStack->setProjectionMatrix(&cam->getProjectionMatrix());
 
-	frameBuffer->resize(width.measuredSize, height.measuredSize);	
+    frameBuffer->resize(getWidth(true, true) * 2.75f, getHeight(true, true) * 3.f);	
 
 	frameBuffer->bindFrameBuffer();
 
@@ -262,13 +242,9 @@ Texture * NodeUI::renderToTexture(RenderOptions * _renderOptions, vox::MatrixSta
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	matrixStack->setViewMatrix(v);
-	matrixStack->setProjectionMatrix(p);
-	matrixStack->popMatrix();
-
 	Texture * tex = new Texture(frameBuffer, true, 0, 4, true);
 
-	//delete matrixStack;
+	delete matrixStack;
 	delete cam;
 	delete frameBuffer;
 

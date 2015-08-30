@@ -153,7 +153,7 @@ public:
 	float getPaddingTop();
 	float getPaddingBottom();
 
-	Texture * renderToTexture(RenderOptions * _renderOptions, vox::MatrixStack * matrixStack, float x, float y);
+	Texture * renderToTexture(RenderOptions * _renderOptions);
 	
 	// If kPIXEL, returns the pixelWidth
 	// otherwise, returns measuredWidth
