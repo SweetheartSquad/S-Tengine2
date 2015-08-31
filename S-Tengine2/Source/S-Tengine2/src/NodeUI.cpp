@@ -18,7 +18,10 @@
 
 #include <NumberUtils.h>
 #include <MatrixStack.h>
+#include <RenderOptions.h>
+#include <Texture.h>
 #include <OrthographicCamera.h>
+#include <StandardFrameBuffer.h>
 
 ComponentShaderBase * NodeUI::bgShader = nullptr;
 
@@ -30,6 +33,8 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, bool _mouseEnabled) :
 	isDown(false),
 	isActive(false),
 	layoutDirty(true),
+	frameBuffer(nullptr),
+	renderedTexture(nullptr),
 	scene(_scene),
 	onClickFunction(nullptr),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
@@ -136,6 +141,22 @@ void NodeUI::setTranslationPhysical(float _x, float _y, float _z, bool _relative
 	parents.at(0)->translate(_x, _y, _z, _relative);
 }
 
+void NodeUI::doRecursivleyOnUIChildren(std::function<void(NodeUI * _childOrThis)> _todo, bool _includeSelf) {
+	for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
+		NodeUI * nodeUI = dynamic_cast<NodeUI*>(childTransform->children.at(i));
+		if(nodeUI != nullptr) {
+			nodeUI->doRecursivleyOnUIChildren(_todo, true);
+		}
+	}
+	if(_includeSelf) {
+		_todo(this);
+	}
+}
+
+bool NodeUI::isFirstParentNodeUI() {
+	return firstParent() != nullptr && dynamic_cast<NodeUI *>(firstParent()) != nullptr;
+}
+
 bool NodeUI::isMouseEnabled(){
 	return mouseEnabled;
 }
@@ -200,54 +221,47 @@ void NodeUI::update(Step * _step){
 }
 
 
-Texture * NodeUI::renderToTexture(RenderOptions * _renderOptions) {
+Texture * NodeUI::renderToTexture() {
 	
-	layoutDirty = true;
-	autoResize();
+	// Make all children dirty
+	doRecursivleyOnUIChildren([](NodeUI * uiElem){
+		uiElem->makeLayoutDirty();
+	}, true);
 
-	StandardFrameBuffer * frameBuffer = new StandardFrameBuffer(true);	
-	frameBuffer->load();
-		
-	float mult = (std::max(getHeight(true, true), getWidth(true, true)) / std::min(getHeight(true, true), getWidth(true, true)));
-	//mult = getHeight(true, true) / getWidth(true, true);
+	// Then updat so things get laid out
+	update(&vox::step);
 
-	float widthMult  = getHeight(true, true) > getWidth(true, true) ? mult * 2.0f : 1.f;
-	float heightMult = getHeight(true, true) < getWidth(true, true) ? mult * 2.0f : 1.f;
-	
-	// Good
-	// OrthographicCamera * cam = new OrthographicCamera(getWidth(true, true) * widthMult, 0.f, getHeight(true, true) * heightMult, 0.f, -1000, 1000);
-	
-	OrthographicCamera * cam = new OrthographicCamera(getWidth(true, true) * 0.5f, -getWidth(true, true) * 0.5f, -getHeight(true, true) * 0.5, getHeight(true, true) * 0.5, -1000, 1000);
+	if(frameBuffer == nullptr){
+		frameBuffer = new StandardFrameBuffer(true);	
+		frameBuffer->load();
+	}else {
+		frameBuffer->reload();
+	}
+
+	RenderOptions * renderOptions = new RenderOptions(nullptr, nullptr);
+
+	OrthographicCamera * cam = new OrthographicCamera(
+		getWidth(true, true) * 0.5f, 
+		-getWidth(true, true) * 0.5f, 
+		getHeight(true, true) * 0.5, 
+		-getHeight(true, true) * 0.5, 
+		-1000, 
+		1000);
 	
 	Transform * t = new Transform();
 	t->addChild(cam);
-		
-	float transX = getHeight(true, true) > getWidth(true, true) ? -getWidth(true, true) * mult * 2.f : 0.f;
-	float transY = getHeight(true, true) < getWidth(true, true) ? -getHeight(true, true) * mult * 2.f : 0.f;
-
-	//good
-	//float transX = getHeight(true, true) > getWidth(true, true) ? -getWidth(true, true) * mult * 1.5f : 0.f;
-	//float transY = getHeight(true, true) < getWidth(true, true) ? -getHeight(true, true) * mult * 1.5f : 0.f;
-
-	// Good
-	// cam->firstParent()->translate(transX, transY, 0.f);
 	
 	cam->firstParent()->translate(getWidth(true, true) * 0.5f, getHeight(true, true) * 0.5f , 0.f);
 
 	vox::MatrixStack * matrixStack = new vox::MatrixStack();
 
-	matrixStack->pushMatrix();	
+	matrixStack->pushMatrix();		
 
 	matrixStack->setViewMatrix(&cam->getViewMatrix());
 	matrixStack->setProjectionMatrix(&cam->getProjectionMatrix());
-
-	//Good
-    //frameBuffer->resize(getWidth(true, true) * mult, getHeight(true, true));	
-    frameBuffer->resize(getWidth(true, true), getHeight(true, true));	
 	
-	// Horizontal
-	//frameBuffer->resize(getWidth(true, true) * mult * 1.5f, getHeight(true, true) * mult * 1.5f);	
-    //frameBuffer->resize(1920, 1080);	
+	// This should be based off of the width and height 
+    frameBuffer->resize(1920, 1080);
 
 	frameBuffer->bindFrameBuffer();
 
@@ -257,7 +271,7 @@ Texture * NodeUI::renderToTexture(RenderOptions * _renderOptions) {
 		glDisable(GL_DEPTH_TEST);
 	}
 
-	render(matrixStack, _renderOptions);
+	render(matrixStack, renderOptions);
 
 	if(depth == GL_TRUE){
 		glEnable(GL_DEPTH_TEST);
@@ -265,13 +279,20 @@ Texture * NodeUI::renderToTexture(RenderOptions * _renderOptions) {
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	Texture * tex = new Texture(frameBuffer, true, 0, 4, true);
+	if(renderedTexture == nullptr) {
+		renderedTexture = new Texture(frameBuffer, true, 0, 4, true);	
+	}else {
+		// Can OpenGL just update texture data instead of deleteing and recreating?
+		renderedTexture->unload();
+		renderedTexture->data = frameBuffer->getPixelData(0);
+		renderedTexture->load();
+	}
 
 	delete matrixStack;
 	delete cam;
-	delete frameBuffer;
+	delete renderOptions;
 
-	return tex;
+	return renderedTexture;
 }
 
 void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
@@ -550,6 +571,10 @@ float NodeUI::getHeight(bool _includePadding, bool _includeMargin){
 
 bool NodeUI::isLayoutDirty(){
 	return layoutDirty;
+}
+
+void NodeUI::makeLayoutDirty() {
+	layoutDirty = true;
 }
 
 TriMesh * NodeUI::colliderMesh = nullptr;

@@ -51,7 +51,6 @@ void Texture::load(){
 		if(data == nullptr){
 			loadImageData();
 		}
-
 		// create and buffer OpenGL texture
 		glGenTextures(1, &textureId);
 		checkForGlError(0,__FILE__,__LINE__);

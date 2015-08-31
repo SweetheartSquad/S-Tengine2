@@ -8,6 +8,7 @@
 class Scene;
 class Mouse;
 class Texture;
+class StandardFrameBuffer;
 
 enum BoxSizing{
 	kCONTENT_BOX, // padding and margin are exterior to width and height
@@ -72,6 +73,9 @@ public:
 
 	Scene * scene;
 	MeshEntity * background;
+
+	StandardFrameBuffer * frameBuffer;
+	Texture * renderedTexture;
 
 	// how padding and margin affect width and height
 	BoxSizing boxSizing;
@@ -153,7 +157,7 @@ public:
 	float getPaddingTop();
 	float getPaddingBottom();
 
-	Texture * renderToTexture(RenderOptions * _renderOptions);
+	Texture * renderToTexture();
 	
 	// If kPIXEL, returns the pixelWidth
 	// otherwise, returns measuredWidth
@@ -168,6 +172,7 @@ public:
 	virtual float getHeight(bool _includePadding, bool _includeMargin);
 
 	bool isLayoutDirty();
+	void makeLayoutDirty();
 	
 	virtual Transform * addChild(NodeUI * _uiElement);
 	// removes the element from the contents transform and returns the index it was found at
@@ -177,8 +182,10 @@ public:
 	virtual signed long int removeChild(NodeUI * _uiElement);
 
 	virtual void setTranslationPhysical(float _x, float _y, float _z, bool _relative = false) override;
-	
 
+	virtual void doRecursivleyOnUIChildren(std::function<void(NodeUI * _childOrThis)> _todo, bool _includeSelf = true);
+	
+	bool isFirstParentNodeUI();
 	
 	bool updateState;
 	// sets updateState to _newState

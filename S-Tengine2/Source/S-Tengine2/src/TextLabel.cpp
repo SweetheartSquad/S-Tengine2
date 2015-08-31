@@ -56,6 +56,9 @@ void TextLabel::setText(std::wstring _text){
 		return;
 	}*/
 	invalidate();
+	
+	invalidateLayout();
+
 	textAll = _text;
 
 	updateRequired = true;
