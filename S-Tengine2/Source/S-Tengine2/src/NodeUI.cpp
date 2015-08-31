@@ -205,15 +205,34 @@ Texture * NodeUI::renderToTexture(RenderOptions * _renderOptions) {
 	layoutDirty = true;
 	autoResize();
 
-	StandardFrameBuffer * frameBuffer = new StandardFrameBuffer(true);
+	StandardFrameBuffer * frameBuffer = new StandardFrameBuffer(true);	
 	frameBuffer->load();
+		
+	float mult = (std::max(getHeight(true, true), getWidth(true, true)) / std::min(getHeight(true, true), getWidth(true, true)));
+	//mult = getHeight(true, true) / getWidth(true, true);
 
-	OrthographicCamera * cam = new OrthographicCamera(getWidth(true, true) * 4.0f, 0.f, getHeight(true, true), 0.f, -1000, 1000);
-
+	float widthMult  = getHeight(true, true) > getWidth(true, true) ? mult * 2.0f : 1.f;
+	float heightMult = getHeight(true, true) < getWidth(true, true) ? mult * 2.0f : 1.f;
+	
+	// Good
+	// OrthographicCamera * cam = new OrthographicCamera(getWidth(true, true) * widthMult, 0.f, getHeight(true, true) * heightMult, 0.f, -1000, 1000);
+	
+	OrthographicCamera * cam = new OrthographicCamera(getWidth(true, true) * 0.5f, -getWidth(true, true) * 0.5f, -getHeight(true, true) * 0.5, getHeight(true, true) * 0.5, -1000, 1000);
+	
 	Transform * t = new Transform();
 	t->addChild(cam);
 		
-	cam->firstParent()->translate(-getWidth(true, true) * 3.0f, 0.f, 0.f);
+	float transX = getHeight(true, true) > getWidth(true, true) ? -getWidth(true, true) * mult * 2.f : 0.f;
+	float transY = getHeight(true, true) < getWidth(true, true) ? -getHeight(true, true) * mult * 2.f : 0.f;
+
+	//good
+	//float transX = getHeight(true, true) > getWidth(true, true) ? -getWidth(true, true) * mult * 1.5f : 0.f;
+	//float transY = getHeight(true, true) < getWidth(true, true) ? -getHeight(true, true) * mult * 1.5f : 0.f;
+
+	// Good
+	// cam->firstParent()->translate(transX, transY, 0.f);
+	
+	cam->firstParent()->translate(getWidth(true, true) * 0.5f, getHeight(true, true) * 0.5f , 0.f);
 
 	vox::MatrixStack * matrixStack = new vox::MatrixStack();
 
@@ -222,7 +241,13 @@ Texture * NodeUI::renderToTexture(RenderOptions * _renderOptions) {
 	matrixStack->setViewMatrix(&cam->getViewMatrix());
 	matrixStack->setProjectionMatrix(&cam->getProjectionMatrix());
 
-    frameBuffer->resize(getWidth(true, true) * 2.75f, getHeight(true, true) * 3.f);	
+	//Good
+    //frameBuffer->resize(getWidth(true, true) * mult, getHeight(true, true));	
+    frameBuffer->resize(getWidth(true, true), getHeight(true, true));	
+	
+	// Horizontal
+	//frameBuffer->resize(getWidth(true, true) * mult * 1.5f, getHeight(true, true) * mult * 1.5f);	
+    //frameBuffer->resize(1920, 1080);	
 
 	frameBuffer->bindFrameBuffer();
 
@@ -237,8 +262,6 @@ Texture * NodeUI::renderToTexture(RenderOptions * _renderOptions) {
 	if(depth == GL_TRUE){
 		glEnable(GL_DEPTH_TEST);
 	}
-
-	frameBuffer->saveToFile("test2.tga", 0);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
