@@ -15,6 +15,11 @@ enum BoxSizing{
 	kBORDER_BOX // padding and margin are interior to width and height
 };
 
+enum RenderMode {
+	kENTITIES,
+	kTEXTURE
+};
+
 class NodeUI : public NodeBulletBody{
 protected:
 	bool mouseEnabled;
@@ -76,6 +81,9 @@ public:
 
 	StandardFrameBuffer * frameBuffer;
 	Texture * renderedTexture;
+	MeshEntity * texturedPlane;
+
+	RenderMode renderMode;
 
 	// how padding and margin affect width and height
 	BoxSizing boxSizing;
@@ -83,7 +91,8 @@ public:
 	std::function<void(NodeUI * _this)> onClickFunction;
 	//void (*onUpFunction)();
 
-	NodeUI(BulletWorld * _world, Scene * _scene, bool _mouseEnabled = false);
+	NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode = kENTITIES, bool _mouseEnabled = false);
+	~NodeUI();
 	
 	virtual void update(Step * _step) override;
 	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
@@ -157,7 +166,8 @@ public:
 	float getPaddingTop();
 	float getPaddingBottom();
 
-	Texture * renderToTexture();
+	virtual Texture * renderToTexture();
+	virtual MeshEntity * getAsTexturedPlane();
 	
 	// If kPIXEL, returns the pixelWidth
 	// otherwise, returns measuredWidth
@@ -193,6 +203,10 @@ public:
 	// indicates whether the mouse is currently over this node
 	void setUpdateState(bool _newState);
 private:
+
+	// Used for renderMode = Texture to carry whether the layout is dirty between update and render
+	bool renderFrame;
+
 	Transform * margin;
 	Transform * padding;
 
@@ -204,4 +218,6 @@ private:
 	void resizeChildrenWidth(NodeUI * _root);
 	// check for rational-height children and resize them based on _root
 	void resizeChildrenHeight(NodeUI * _root);
+
+	bool hasRenderModeParent(RenderMode _renderMode);
 };

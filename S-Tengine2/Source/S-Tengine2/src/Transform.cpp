@@ -9,6 +9,7 @@
 #include <shader\ComponentShaderBase.h>
 #include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentMVP.h>
+#include <Log.h>
 
 MeshInterface * Transform::transformIndicator = nullptr;
 ComponentShaderBase * Transform::transformShader = nullptr;
@@ -80,7 +81,10 @@ glm::mat4 Transform::getCumulativeModelMatrix(){
 }
 
 void Transform::addParent(Transform * _parent){
-	assert(parents.size() == 0); // transforms should only ever have one parent you dumbo
+	if(parents.size() != 0){
+		ST_LOG_ERROR_V("Transform should never have more than one parent");
+		assert(false);
+	}
 	NodeChild::addParent(_parent);
 }
 
@@ -275,7 +279,10 @@ void Transform::load(){
 Transform * Transform::addChild(NodeChild * _child, bool _underNewTransform){
 	// Check to see if the child is one of the ancestors of this node
 	// (Cannot parent a node to one of its descendants)
-	assert(!hasAncestor(dynamic_cast<Transform *>(_child)));
+	if(hasAncestor(dynamic_cast<Transform *>(_child))) {
+		ST_LOG_ERROR_V("Cannot parent a node to one of it's ancestors");
+		assert(false);
+	}
 
 	Transform * t = nullptr;
 	if(_underNewTransform){
@@ -295,8 +302,11 @@ Transform * Transform::addChild(NodeChild * _child, bool _underNewTransform){
 Transform * Transform::addChildAtIndex(NodeChild * _child, int _index, bool _underNewTransform){
 	// Check to see if the child is one of the ancestors of this node
 	// (Cannot parent a node to one of its descendants)
-	assert(!hasAncestor(dynamic_cast<Transform *>(_child)));
-	
+	if(hasAncestor(dynamic_cast<Transform *>(_child))) {
+		ST_LOG_ERROR_V("Cannot parent a node to one of it's ancestors");
+		assert(false);
+	}
+
 	Transform * t = nullptr;
 	if(_underNewTransform){
 		Transform * t = new Transform();
