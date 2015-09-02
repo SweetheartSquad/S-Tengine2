@@ -42,6 +42,7 @@ public:
 	* 
 	* @param _textureId The openGL ID of the texture to render
 	* @param _renderTo The ID of the framebuffer to render to
+	* @param _disableBlending Whether or not to disable glBlend
 	*/
-	void render(GLuint _textureId, GLint _renderTo = 0);
+	void render(GLuint _textureId, GLint _renderTo = 0, bool _disableBlending = true);
 };

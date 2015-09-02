@@ -73,6 +73,7 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode, boo
 	setMargin(0);
 
 	setMouseEnabled(_mouseEnabled);
+
 }
 
 NodeUI::~NodeUI() {
@@ -151,8 +152,8 @@ void NodeUI::setTranslationPhysical(float _x, float _y, float _z, bool _relative
 }
 
 void NodeUI::doRecursivleyOnUIChildren(std::function<void(NodeUI * _childOrThis)> _todo, bool _includeSelf) {
-	for(unsigned long int i = 0; i < childTransform->children.size(); ++i) {
-		NodeUI * nodeUI = dynamic_cast<NodeUI*>(childTransform->children.at(i));
+	for(unsigned long int i = 0; i < uiElements->children.size(); ++i) {
+		NodeUI * nodeUI = dynamic_cast<NodeUI*>(uiElements->children.at(i));
 		if(nodeUI != nullptr) {
 			nodeUI->doRecursivleyOnUIChildren(_todo, true);
 		}
@@ -199,17 +200,7 @@ void NodeUI::update(Step * _step){
 
 	renderFrame = layoutDirty == true || renderFrame == true; 
 
-	if(renderMode == kTEXTURE && renderFrame) {
-		renderToTexture();
-		if(texturedPlane != nullptr){
-			texturedPlane->update(_step);
-			if(texturedPlane->firstParent() != nullptr){
-				texturedPlane->firstParent()->scale(getWidth(true, true), getHeight(true, true), 1.f, false);
-			}
-		}
-	}
-
-	if(renderMode == kENTITIES || layoutDirty || renderFrame){
+	//if(renderMode == kENTITIES || layoutDirty || renderFrame){
 		if(layoutDirty){
 			autoResize();
 		}
@@ -239,6 +230,16 @@ void NodeUI::update(Step * _step){
 		}
 	
 		Entity::update(_step);
+	//}
+
+	if(renderMode == kTEXTURE && renderFrame) {
+		renderToTexture();
+		if(texturedPlane != nullptr){
+			texturedPlane->update(_step);
+			if(texturedPlane->firstParent() != nullptr){
+				texturedPlane->firstParent()->scale(getWidth(true, true), getHeight(true, true), 1.f, false);
+			}
+		}
 	}
 }
 
@@ -253,31 +254,31 @@ Texture * NodeUI::renderToTexture() {
 	if(frameBuffer == nullptr){
 		frameBuffer = new StandardFrameBuffer(true);	
 		frameBuffer->load();
-	}else {
+	}else{
 		frameBuffer->reload();
 	}
 
-	RenderOptions * renderOptions = new RenderOptions(nullptr, nullptr);
+	RenderOptions renderOptions(nullptr, nullptr);
 
-	OrthographicCamera * cam = new OrthographicCamera(
-		-getWidth(true, true)  * 0.5f, 
+	OrthographicCamera * cam = new OrthographicCamera(0, getWidth(true, false), 0, getHeight(true, false), -1000, 1000);
+	/*	-getWidth(true, true)  * 0.5f, 
 		 getWidth(true, true)  * 0.5f, 
 		 getHeight(true, true) * 0.5f, 
 		-getHeight(true, true) * 0.5f, 
 		-1000, 
-		 1000);
+		 1000);*/
 	
 	Transform * t = new Transform();
 	t->addChild(cam);
 	
 	cam->firstParent()->translate(getWidth(true, true) * 0.5f, getHeight(true, true) * 0.5f , 0.f);
 
-	vox::MatrixStack * matrixStack = new vox::MatrixStack();
+	vox::MatrixStack matrixStack;
 
-	matrixStack->pushMatrix();		
+	matrixStack.pushMatrix();		
 
-	matrixStack->setViewMatrix(&cam->getViewMatrix());
-	matrixStack->setProjectionMatrix(&cam->getProjectionMatrix());
+	matrixStack.setViewMatrix(&cam->getViewMatrix());
+	matrixStack.setProjectionMatrix(&cam->getProjectionMatrix());
 	
 	// This should be based off of the width and height 
     frameBuffer->resize(1920, 1080);
@@ -290,7 +291,7 @@ Texture * NodeUI::renderToTexture() {
 		glDisable(GL_DEPTH_TEST);
 	}
 
-	render(matrixStack, renderOptions);
+	render(&matrixStack, &renderOptions);
 
 	if(depth == GL_TRUE){
 		glEnable(GL_DEPTH_TEST);
@@ -307,10 +308,7 @@ Texture * NodeUI::renderToTexture() {
 		renderedTexture->load();
 	}
 
-	delete matrixStack;
 	delete cam;
-	delete renderOptions;
-
 	return renderedTexture;
 }
 
@@ -325,15 +323,16 @@ MeshEntity * NodeUI::getAsTexturedPlane() {
 }
 
 void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	if(renderMode == kENTITIES || layoutDirty || renderFrame){
+	//if(renderMode == kENTITIES || layoutDirty || renderFrame){
 		dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(bgColour.r, bgColour.g, bgColour.b);
 		dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(bgColour.a);
 		if(renderMode == kTEXTURE && texturedPlane != nullptr) {
 			texturedPlane->render(_matrixStack, _renderOptions);
 		} 
+
 		Entity::render(_matrixStack, _renderOptions);
 		renderFrame = false;
-	}
+	//}
 }
 
 void NodeUI::setMarginLeft(float _margin){
@@ -562,9 +561,9 @@ void NodeUI::setMeasuredHeights(NodeUI * _root){
 
 
 void NodeUI::setBackgroundColour(float _r, float _g, float _b, float _a){
-	bgColour.r = _r;
-	bgColour.g = _g;
-	bgColour.b = _b;
+	bgColour.r = _r-1;
+	bgColour.g = _g-1;
+	bgColour.b = _b-1;
 	bgColour.a = _a;
 }
 
