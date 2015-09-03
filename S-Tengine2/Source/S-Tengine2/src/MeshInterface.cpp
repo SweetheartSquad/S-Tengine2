@@ -61,7 +61,6 @@ GLsizei MeshInterface::getStride(){
 	return sizeof(Vertex);
 }
 
-
 GLsizei MeshInterface::getVertCount(){
 	return vertices.size();
 }

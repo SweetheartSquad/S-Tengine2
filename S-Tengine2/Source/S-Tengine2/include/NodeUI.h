@@ -205,10 +205,10 @@ public:
 	// typically _newState will be the result of a raycast which
 	// indicates whether the mouse is currently over this node
 	void setUpdateState(bool _newState);
-private:
 
 	// Used for renderMode = Texture to carry whether the layout is dirty between update and render
 	bool renderFrame;
+private:
 
 	Transform * margin;
 	Transform * padding;

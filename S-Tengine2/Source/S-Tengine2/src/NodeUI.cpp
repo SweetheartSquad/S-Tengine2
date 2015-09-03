@@ -74,7 +74,6 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode, boo
 	setMargin(0);
 
 	setMouseEnabled(_mouseEnabled);
-
 }
 
 NodeUI::~NodeUI() {
@@ -201,7 +200,7 @@ void NodeUI::update(Step * _step){
 
 	renderFrame = layoutDirty == true || renderFrame == true; 
 
-	//if(renderMode == kENTITIES || layoutDirty || renderFrame){
+	if(renderMode == kENTITIES || layoutDirty || renderFrame){
 		if(layoutDirty){
 			autoResize();
 		}
@@ -231,16 +230,16 @@ void NodeUI::update(Step * _step){
 		}
 	
 		Entity::update(_step);
-	//}
+	}
 
+	if(texturedPlane != nullptr){
+		texturedPlane->update(_step);
+		if(texturedPlane->firstParent() != nullptr){
+			texturedPlane->firstParent()->scale(getWidth(true, true), getHeight(true, true), 1.f, false);
+		}
+	}
 	if(renderMode == kTEXTURE && renderFrame) {
 		renderToTexture();
-		if(texturedPlane != nullptr){
-			texturedPlane->update(_step);
-			if(texturedPlane->firstParent() != nullptr){
-				texturedPlane->firstParent()->scale(getWidth(true, true), getHeight(true, true), 1.f, false);
-			}
-		}
 	}
 }
 
@@ -261,8 +260,10 @@ Texture * NodeUI::renderToTexture() {
 
 	RenderOptions renderOptions(nullptr, nullptr);
 
-	OrthographicCamera * cam = new OrthographicCamera(0, getWidth(true, false), 0, getHeight(true, false), -1000, 1000);
-	/*	-getWidth(true, true)  * 0.5f, 
+
+	//
+	OrthographicCamera * cam = new OrthographicCamera(-1000, getWidth(true, false) , -1000, getHeight(true, false), -1000, 1000);
+		/*-getWidth(true, true)  * 0.5f, 
 		 getWidth(true, true)  * 0.5f, 
 		 getHeight(true, true) * 0.5f, 
 		-getHeight(true, true) * 0.5f, 
@@ -303,11 +304,17 @@ Texture * NodeUI::renderToTexture() {
 	if(renderedTexture == nullptr) {
 		renderedTexture = new Texture(frameBuffer, true, 0, 4, true);	
 	}else {
+
+		//glBindTexture(GL_TEXTURE_2D, renderedTexture->textureId);
+        //glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1920, 1080, GL_RGBA, GL_UNSIGNED_BYTE, static_cast<GLvoid*>(frameBuffer->getPixelData(0)));
+
 		// Can OpenGL just update texture data instead of deleteing and recreating?
 		renderedTexture->unload();
 		renderedTexture->data = frameBuffer->getPixelData(0);
 		renderedTexture->load();
 	}
+
+	renderedTexture->saveImageData("test.tga");
 
 	delete cam;
 	return renderedTexture;
@@ -319,21 +326,26 @@ MeshEntity * NodeUI::getAsTexturedPlane() {
 		texturedPlane->mesh->pushTexture2D(renderToTexture());
 		texturedPlane->mesh->scaleModeMag = GL_NEAREST;
 		texturedPlane->mesh->scaleModeMin = GL_NEAREST;
+		childTransform->addChild(texturedPlane);
 	}
 	return texturedPlane;
 }
 
 void NodeUI::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	//if(renderMode == kENTITIES || layoutDirty || renderFrame){
+	if(renderMode == kENTITIES || layoutDirty || renderFrame){
 		dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(bgColour.r, bgColour.g, bgColour.b);
 		dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(bgColour.a);
-		if(renderMode == kTEXTURE && texturedPlane != nullptr) {
-			texturedPlane->render(_matrixStack, _renderOptions);
-		} 
-
 		Entity::render(_matrixStack, _renderOptions);
-		renderFrame = false;
-	//}
+	}
+	if(renderMode == kTEXTURE) {
+		if(texturedPlane == nullptr){
+			getAsTexturedPlane();
+		}
+		if(texturedPlane->firstParent() != nullptr){
+			texturedPlane->firstParent()->render(_matrixStack, _renderOptions);
+			renderFrame = false;
+		}
+	} 
 }
 
 void NodeUI::setMarginLeft(float _margin){
