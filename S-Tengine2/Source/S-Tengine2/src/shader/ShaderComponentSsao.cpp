@@ -11,7 +11,7 @@ ShaderComponentSsao::ShaderComponentSsao(Shader * _shader) :
 {
 }
 
-void ShaderComponentSsao::configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
+void ShaderComponentSsao::configureUniforms(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
 	if( _renderOption->normalBufferId > 0 && _renderOption->depthBufferId > 0){
 		MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 		int numTextures = 0;
@@ -53,7 +53,7 @@ std::string ShaderComponentSsao::getOutColorMod(){
 		GL_OUT_OUT_COLOR  + "*=" + "vec4(zbuffer, zbuffer, zbuffer, 1.0)" + SEMI_ENDL; 
 }
 
-void ShaderComponentSsao::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentSsao::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	makeDirty();
 	ShaderComponent::clean(_matrixStack, _renderOption, _nodeRenderable);
 }

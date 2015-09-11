@@ -46,7 +46,7 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode, boo
 	boxSizing(kBORDER_BOX),
 	renderFrame(true),
 	mouseEnabled(!_mouseEnabled), // we initialize the variable to the opposite so that setMouseEnabled gets called properly at the end of the constructor
-	//bgColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), 1.f)
+	//bgColour(sweet::NumberUtils::randomFloat(-1, 0), sweet::NumberUtils::randomFloat(-1, 0), sweet::NumberUtils::randomFloat(-1, 0), 1.f)
 	bgColour(0.f, 0.f, 0.f, 1.f)
 {
 	if(bgShader == nullptr){
@@ -61,6 +61,7 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode, boo
 		background->mesh->vertices.at(i).x += 0.5f;
 		background->mesh->vertices.at(i).y += 0.5f;
 	}
+
 	background->mesh->dirty = true;
 	background->setShader(bgShader, true);
 	
@@ -273,7 +274,7 @@ Texture * NodeUI::renderToTexture() {
 	
 	cam->firstParent()->translate(getWidth(true, true) * 0.5f, getHeight(true, true) * 0.5f , 0.f);
 
-	vox::MatrixStack matrixStack;
+	sweet::MatrixStack matrixStack;
 
 	matrixStack.pushMatrix();		
 
@@ -322,7 +323,7 @@ MeshEntity * NodeUI::getAsTexturedPlane() {
 	return texturedPlane;
 }
 
-void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void NodeUI::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	//if(renderMode == kENTITIES || layoutDirty || renderFrame){
 		dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(bgColour.r, bgColour.g, bgColour.b);
 		dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(bgColour.a);

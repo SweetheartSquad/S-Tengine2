@@ -75,7 +75,7 @@ void ShaderComponentHsv::load(){
 	ShaderComponent::load();
 }
 
-void ShaderComponentHsv::configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
+void ShaderComponentHsv::configureUniforms(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
 	while(hue > 1.f){
 		hue -= 1.f;
 	}

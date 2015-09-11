@@ -2,7 +2,7 @@
 
 #include <Box.h>
 
-vox::Box::Box(float _x, float _y, float _z, float _width, float _height, float _depth) :
+sweet::Box::Box(float _x, float _y, float _z, float _width, float _height, float _depth) :
 	Rectangle(_x, _y, _width, _height)
 {
 	x		= _x;
@@ -14,20 +14,20 @@ vox::Box::Box(float _x, float _y, float _z, float _width, float _height, float _
 }
 
 
-float vox::Box::getSurfaceArea(){
+float sweet::Box::getSurfaceArea(){
 	return (width * height + width * depth + height * depth) * 2.f;
 }
 
-float vox::Box::getVolume(){
+float sweet::Box::getVolume(){
 	return width * height * depth;
 }
 
-bool vox::Box::intersects(vox::Box _rect){
+bool sweet::Box::intersects(sweet::Box _rect){
 	return false;
 }
 
-vox::Box vox::Box::bound(vox::Box & _a, vox::Box & _b){
-	vox::Box res(
+sweet::Box sweet::Box::bound(sweet::Box & _a, sweet::Box & _b){
+	sweet::Box res(
 		std::min(_a.x, _b.x),
 		std::min(_a.y, _b.y),
 		std::min(_a.z, _b.z),

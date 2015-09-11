@@ -143,7 +143,7 @@ void MeshInterface::clean(){
 	}
 }
 
-void MeshInterface::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption){
+void MeshInterface::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption){
 	load();
 	clean();
 	
@@ -278,7 +278,7 @@ void QuadMesh::pushQuad(GLuint _v0, GLuint _v1, GLuint _v2, GLuint _v3){
 	dirty = true;
 }
 
-vox::Box MeshInterface::calcBoundingBox(){
+sweet::Box MeshInterface::calcBoundingBox(){
 	float minX = 99999, minY= 99999, minZ = 99999,
 		maxX = -99999, maxY = -99999, maxZ = -99999;
 
@@ -292,7 +292,7 @@ vox::Box MeshInterface::calcBoundingBox(){
 		minZ = std::min(i.z, minZ);
 	}
 
-	return vox::Box(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ);
+	return sweet::Box(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ);
 }
 
 std::ostream& operator<<(std::ostream& os, const MeshInterface& obj){

@@ -51,7 +51,7 @@ std::string ShaderComponentIndexedTexture::getOutColorMod(){
 	return GL_OUT_OUT_COLOR + " *= modFrag" + SEMI_ENDL;
 }
 
-void ShaderComponentIndexedTexture::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentIndexedTexture::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	makeDirty();
 	ShaderComponent::clean(_matrixStack, _renderOption, _nodeRenderable);
 	//configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
@@ -67,7 +67,7 @@ void ShaderComponentIndexedTexture::load(){
 	ShaderComponent::load();
 }
 
-void ShaderComponentIndexedTexture::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentIndexedTexture::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 	int numTextures = 0;
 	if(mesh != nullptr){

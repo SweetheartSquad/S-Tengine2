@@ -24,7 +24,7 @@ BitmapFont::BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _c
 BitmapFont::~BitmapFont(){
 }
 
-void BitmapFont::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+void BitmapFont::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	MeshEntity::render(_matrixStack, _renderOptions);
 }
 
@@ -125,7 +125,7 @@ void BitmapFont::createQuads(){
 	int col = 0;
 	int row = 0;
 	int count = 0;
-	for(vox::Rectangle frame : frames){
+	for(sweet::Rectangle frame : frames){
 		if(chars.at(count) != '\n'){
 			mesh->pushVert(Vertex(((0 + col + kerning) * (modSize * kerning)), (1.f - row) * modSize, 0.f));
 			mesh->pushVert(Vertex(((1.f + col + kerning) * (modSize * kerning)), (1.f - row) * modSize, 0.f));
@@ -195,7 +195,7 @@ void BitmapFont::pushFrame(int _column, int _row, float _width, float _height){
 	rH = _height / mesh->getTexture(0)->height;
 	u = rW * _column;
 	v = rH * _row;
-	frames.push_back(vox::Rectangle(u, v, rW, rH));
+	frames.push_back(sweet::Rectangle(u, v, rW, rH));
 }
 
 float BitmapFont::getWidth(){

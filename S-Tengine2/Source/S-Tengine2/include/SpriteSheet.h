@@ -9,7 +9,7 @@ class Texture;
 class SpriteSheet{
 public:
 
-	std::vector<vox::Rectangle> frames;
+	std::vector<sweet::Rectangle> frames;
 	Texture * texture;
 
 	explicit SpriteSheet(Texture * _texture);

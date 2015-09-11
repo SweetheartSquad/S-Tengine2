@@ -15,7 +15,7 @@
 
 struct GLFWwindow;
 
-namespace vox{
+namespace sweet{
 	
 	extern Step step;
 	extern std::string title;

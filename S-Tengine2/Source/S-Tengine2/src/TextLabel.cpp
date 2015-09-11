@@ -18,7 +18,7 @@ TextLabel::TextLabel(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _t
 	setWidth(_width);
 }
 
-void TextLabel::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+void TextLabel::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
@@ -170,7 +170,7 @@ void UIGlyph::setGlyphMesh(Glyph * _newGlyph){
 	glyph->configureDefaultVertexAttributes(shader);
 }
 
-void UIGlyph::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void UIGlyph::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	Shader * prev = _renderOptions->shader;
 	NodeShadable::applyShader(_renderOptions);
 	NodeUI::render(_matrixStack, _renderOptions);

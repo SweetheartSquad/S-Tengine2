@@ -32,7 +32,7 @@ glm::vec3 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen){
 	glm::vec4 newPos(_coords, 1);
 	newPos = getProjectionMatrix() * getViewMatrix() * newPos;
 	
-	glm::uvec2 screenDimensions = vox::getScreenDimensions();
+	glm::uvec2 screenDimensions = sweet::getScreenDimensions();
 	return glm::vec3(
 		_screen.x * (newPos.x/newPos.w + 1)*0.5f,
 		_screen.y * (newPos.y/newPos.w + 1)*0.5f,

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace vox{
+namespace sweet{
 
 	class NumberUtils{
 	public:

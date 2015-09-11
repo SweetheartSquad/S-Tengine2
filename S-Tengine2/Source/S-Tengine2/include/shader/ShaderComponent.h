@@ -8,7 +8,7 @@
 
 class NodeRenderable;
 
-namespace vox{
+namespace sweet{
 	class MatrixStack;
 }
 
@@ -59,8 +59,8 @@ public:
 	*/
 	virtual std::string getOutColorMod() = 0;
 
-	virtual void configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable) = 0;
-	virtual void clean(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable);
+	virtual void configureUniforms(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable) = 0;
+	virtual void clean(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable);
 	void makeDirty();
 private:
 	bool dirty;

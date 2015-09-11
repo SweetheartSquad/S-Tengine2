@@ -4,14 +4,14 @@
 #include <Easing.h>
 
 
-glm::vec2 vox::TextureUtils::interpolate(unsigned long int _x1, unsigned long int _y1, unsigned long int _x2, unsigned long int _y2){
+glm::vec2 sweet::TextureUtils::interpolate(unsigned long int _x1, unsigned long int _y1, unsigned long int _x2, unsigned long int _y2){
 	return glm::vec2(
 		(_x1+_x2)/2.f,
 		(_y1+_y2)/2.f
 	);
 }
 
-glm::vec2 vox::TextureUtils::interpolate(unsigned long int _threshold, float _x1, float _y1, float _p1, float _x2, float _y2, float _p2){
+glm::vec2 sweet::TextureUtils::interpolate(unsigned long int _threshold, float _x1, float _y1, float _p1, float _x2, float _y2, float _p2){
 	float t = (_threshold - _p1) / (_p2 - _p1);
 	return glm::vec2(
 		Easing::linear(t, _x1, _x2-_x1, 1),
@@ -20,7 +20,7 @@ glm::vec2 vox::TextureUtils::interpolate(unsigned long int _threshold, float _x1
 }
 
 
-std::vector<glm::vec2> vox::TextureUtils::getMarchingSquaresContour(Texture * _texture, unsigned long int _threshold, bool _smooth, bool _includeNormals){
+std::vector<glm::vec2> sweet::TextureUtils::getMarchingSquaresContour(Texture * _texture, unsigned long int _threshold, bool _smooth, bool _includeNormals){
 	std::vector<glm::vec2> res;
 
 	// lookup table describing edges based on marching square code
@@ -73,10 +73,10 @@ std::vector<glm::vec2> vox::TextureUtils::getMarchingSquaresContour(Texture * _t
 	for(unsigned long int y = 0; y < _texture->height - size; y += size){
 		for(unsigned long int x = 0; x < _texture->width - size; x += size){
 			// get adjacent pixel values (just uses first channel)
-			p0 = vox::TextureUtils::getPixel(_texture, x, y);
-			p1 = x+size < _texture->width ? vox::TextureUtils::getPixel(_texture, x+size, y) : 0;
-			p2 = x+size < _texture->width && y+size < _texture->height ? vox::TextureUtils::getPixel(_texture, x+size, y+size) : 0;
-			p3 = y+size < _texture->height ? vox::TextureUtils::getPixel(_texture, x, y+size) : 0;
+			p0 = sweet::TextureUtils::getPixel(_texture, x, y);
+			p1 = x+size < _texture->width ? sweet::TextureUtils::getPixel(_texture, x+size, y) : 0;
+			p2 = x+size < _texture->width && y+size < _texture->height ? sweet::TextureUtils::getPixel(_texture, x+size, y+size) : 0;
+			p3 = y+size < _texture->height ? sweet::TextureUtils::getPixel(_texture, x, y+size) : 0;
 
 			// determine code for the current square location
 			code = 0;
@@ -153,10 +153,10 @@ std::vector<glm::vec2> vox::TextureUtils::getMarchingSquaresContour(Texture * _t
 }
 
 
-unsigned char & vox::TextureUtils::getPixel(Texture * _tex, unsigned long int _x, unsigned long int _y, unsigned long int _channel){
+unsigned char & sweet::TextureUtils::getPixel(Texture * _tex, unsigned long int _x, unsigned long int _y, unsigned long int _channel){
 	return _tex->data[ (_x + _y*_tex->width) * _tex->channels + _channel ];
 }
 	
-unsigned char * vox::TextureUtils::getPixelPointer(Texture * _tex, unsigned long int _x, unsigned long int _y, unsigned long int _channel){
+unsigned char * sweet::TextureUtils::getPixelPointer(Texture * _tex, unsigned long int _x, unsigned long int _y, unsigned long int _channel){
 	return &_tex->data[ (_x + _y*_tex->width) * _tex->channels + _channel ];
 }

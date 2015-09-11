@@ -29,7 +29,7 @@ MeshEntity::~MeshEntity(void){
 	}*/
 }
 
-void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void MeshEntity::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	// don't bother doing any work if we aren't rendering anyway
 	if(!visible){
 		return;
@@ -107,12 +107,12 @@ void MeshEntity::load(){
 	Entity::load();
 }
 
-vox::Box MeshEntity::calcOverallBoundingBox(){
-	vox::Box res = mesh->calcBoundingBox();
+sweet::Box MeshEntity::calcOverallBoundingBox(){
+	sweet::Box res = mesh->calcBoundingBox();
 	for(auto c : childTransform->children){
 		MeshEntity * me = dynamic_cast<MeshEntity *>(c);
 		if(me != nullptr){
-			res = vox::Box::bound(res, me->calcOverallBoundingBox());
+			res = sweet::Box::bound(res, me->calcOverallBoundingBox());
 		}
 	}
 	return res;

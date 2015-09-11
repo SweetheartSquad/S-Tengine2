@@ -13,8 +13,8 @@ public:
 	
 	/** Calls update on the attached camera */
 	virtual void update(Step * _step) override;
-	/** Tells the RenderSystem to render the attached children to the vox::currentContext using the camera's view-projection matrix */
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+	/** Tells the RenderSystem to render the attached children to the sweet::currentContext using the camera's view-projection matrix */
+	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	/** In addition to removing from child list, also searches each layer individually and removes as well */
 	void removeChild(NodeChild * _child);
 

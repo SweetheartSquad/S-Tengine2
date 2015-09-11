@@ -3,7 +3,7 @@
 #include <FileUtils.h>
 #include <Log.h>
 
-std::string FileUtils::voxReadFile(const std::string & _filename){
+std::string FileUtils::readFile(const std::string & _filename){
 	std::ifstream file(_filename, std::ios::in);
 	std::stringstream contents;
 

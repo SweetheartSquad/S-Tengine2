@@ -18,7 +18,7 @@ public:
 	Transform * meshTransform;
 
 	// returns a box which covers the verts of the mesh and all of its children
-	vox::Box calcOverallBoundingBox();
+	sweet::Box calcOverallBoundingBox();
 
 	explicit MeshEntity(MeshInterface * _mesh, Shader * _shader = nullptr, bool _configureDefaultVertexAttributes = true);
 	virtual ~MeshEntity(void);
@@ -31,7 +31,7 @@ public:
 	* Calls render on children (recursive),
 	* Pops model matrix stack
 	*/
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 
 	/**Sets shader to _shader*/
 	virtual void setShader(Shader* _shader, bool _configureDefaultAttributes = true);

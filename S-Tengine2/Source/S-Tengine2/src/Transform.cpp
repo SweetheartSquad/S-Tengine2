@@ -217,7 +217,7 @@ void Transform::update(Step * _step){
 }
 
 
-void Transform::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void Transform::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	// don't bother doing any work if we aren't rendering anyway
 	if(!visible){
 		return;

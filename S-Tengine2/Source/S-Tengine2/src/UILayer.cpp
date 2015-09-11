@@ -40,7 +40,7 @@ UILayer::~UILayer(){
 	shader->decrementAndDelete();
 }
 
-void UILayer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void UILayer::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
 	
 	if(depth == GL_TRUE){

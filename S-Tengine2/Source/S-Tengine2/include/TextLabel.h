@@ -17,7 +17,7 @@ public:
 	UIGlyph(BulletWorld * _world, Scene * _scene, Glyph * _mesh, Shader * _shader, wchar_t _character);
 	void setGlyphMesh(Glyph * _mesh);
 	
-	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
+	virtual void render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 };
 
 class TextLabel : public HorizontalLinearLayout{
@@ -31,7 +31,7 @@ public:
 
 	TextLabel(BulletWorld* _world, Scene* _scene, Font * _font, Shader * _textShader, float _width = -1);
 	
-	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
+	virtual void render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	virtual void update(Step * _step) override;
 	virtual void unload() override;
 	virtual void load() override;

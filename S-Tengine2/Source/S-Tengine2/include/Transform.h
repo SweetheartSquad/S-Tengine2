@@ -159,7 +159,7 @@ public:
 	* Renders children,
 	* Pops model matrix stack
 	*/
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	
 	/** Calls update on all children */
 	virtual void update(Step * _step) override;

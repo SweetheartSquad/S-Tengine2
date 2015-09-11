@@ -12,7 +12,7 @@ ShaderComponent::ShaderComponent(Shader * _shader) :
 ShaderComponent::~ShaderComponent(){
 }
 
-void ShaderComponent::clean(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable){
+void ShaderComponent::clean(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable){
 	if(dirty){
 		configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 		dirty = false;

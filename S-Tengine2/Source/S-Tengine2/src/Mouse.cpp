@@ -51,8 +51,8 @@ double Mouse::mouseY(bool _clamped){
 
 void Mouse::translate(glm::vec2 _v){
 	if(active){
-		glm::uvec2 sd = vox::getScreenDimensions();
-		glfwSetCursorPos(vox::currentContext, x+_v.x, sd.y - (y+_v.y));
+		glm::uvec2 sd = sweet::getScreenDimensions();
+		glfwSetCursorPos(sweet::currentContext, x+_v.x, sd.y - (y+_v.y));
 		mousePositionListener(x+_v.x, y+_v.y);
 	}
 }
@@ -81,7 +81,7 @@ void Mouse::mouseUpListener(int _glfwMouseCode){
 
 void Mouse::mousePositionListener(double _x, double _y){
 	if(active){
-		glm::uvec2 sd = vox::getScreenDimensions();
+		glm::uvec2 sd = sweet::getScreenDimensions();
 		clampedX = std::max(0., std::min(clampedX + _x - x, (double)sd.x));
 		clampedY = std::max(0., std::min(clampedY + _y - y, (double)sd.y));
 

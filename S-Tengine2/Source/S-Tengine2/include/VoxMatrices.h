@@ -4,7 +4,7 @@
 
 #include <glm\glm.hpp>
 
-namespace vox{
+namespace sweet{
 	/** Model matrix stack (replaces the OpenGL stack) */
 	extern std::vector<glm::mat4> matrixStack;
 	/** Current model matrix */

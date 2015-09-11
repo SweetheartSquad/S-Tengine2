@@ -3,7 +3,7 @@
 #include "Point.h"
 #include <node\Node.h>
 
-namespace vox {
+namespace sweet {
 	class Rectangle : public Node{
 	public:
 
