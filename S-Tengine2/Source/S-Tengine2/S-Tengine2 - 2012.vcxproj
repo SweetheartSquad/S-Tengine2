@@ -139,6 +139,7 @@
     <ClCompile Include="src\shader\ShaderComponentNormals.cpp" />
     <ClCompile Include="src\shader\ShaderComponentSsao.cpp" />
     <ClCompile Include="src\Slider.cpp" />
+    <ClCompile Include="src\SpotLight.cpp" />
     <ClCompile Include="src\TextLabel.cpp" />
     <ClCompile Include="src\LinearLayout.cpp" />
     <ClCompile Include="src\shader\ComponentShaderText.cpp" />
@@ -287,6 +288,7 @@
     <ClInclude Include="include\shader\ShaderComponentNormals.h" />
     <ClInclude Include="include\shader\ShaderComponentSsao.h" />
     <ClInclude Include="include\Slider.h" />
+    <ClInclude Include="include\SpotLight.h" />
     <ClInclude Include="include\stb\stb_herringbone_wang_tile.h" />
     <ClInclude Include="include\stb\stb_image.h" />
     <ClInclude Include="include\stb\stb_image_write.h" />
