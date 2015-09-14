@@ -191,14 +191,13 @@ void NodeUI::setMouseEnabled(bool _mouseEnabled){
 			body = nullptr;
 		}
 	}
-
 	mouseEnabled = _mouseEnabled;
 }
 
 
 void NodeUI::update(Step * _step){
 
-	renderFrame = layoutDirty == true || renderFrame == true; 
+	//renderFrame = layoutDirty == true;// || renderFrame == true; 
 
 	if(renderMode == kENTITIES || layoutDirty || renderFrame){
 		if(layoutDirty){
@@ -232,20 +231,18 @@ void NodeUI::update(Step * _step){
 		Entity::update(_step);
 	}
 
-	if(texturedPlane != nullptr){
-		texturedPlane->update(_step);
-		if(texturedPlane->firstParent() != nullptr){
-			texturedPlane->firstParent()->scale(getWidth(true, true), getHeight(true, true), 1.f, false);
+	if(renderMode == kTEXTURE) {
+		if(texturedPlane != nullptr){
+			texturedPlane->update(_step);
+			if(texturedPlane->firstParent() != nullptr){
+				texturedPlane->firstParent()->scale(getWidth(true, true), getHeight(true, true), 1.f, false);
+			}
 		}
-	}
-	if(renderMode == kTEXTURE && renderFrame) {
-		renderToTexture();
 	}
 }
 
 
 Texture * NodeUI::renderToTexture() {
-	
 	// Make all children and self dirty
 	doRecursivleyOnUIChildren([](NodeUI * uiElem){
 		uiElem->makeLayoutDirty();
@@ -257,18 +254,18 @@ Texture * NodeUI::renderToTexture() {
 	}else{
 		frameBuffer->reload();
 	}
+	//update(&sweet::step);
 
 	RenderOptions renderOptions(nullptr, nullptr);
 
-
 	//
-	OrthographicCamera * cam = new OrthographicCamera(-1000, getWidth(true, false) , -1000, getHeight(true, false), -1000, 1000);
-		/*-getWidth(true, true)  * 0.5f, 
+	OrthographicCamera * cam = new OrthographicCamera(//0, getWidth(true, false), 0, getHeight(true, false), -1000, 1000);
+		-getWidth(true, true)  * 0.5f, 
 		 getWidth(true, true)  * 0.5f, 
 		 getHeight(true, true) * 0.5f, 
 		-getHeight(true, true) * 0.5f, 
 		-1000, 
-		 1000);*/
+		 1000);
 	
 	Transform * t = new Transform();
 	t->addChild(cam);
@@ -283,6 +280,7 @@ Texture * NodeUI::renderToTexture() {
 	matrixStack.setProjectionMatrix(&cam->getProjectionMatrix());
 	
 	// This should be based off of the width and height 
+    //frameBuffer->resize(getWidth(true, false), getHeight(true, false));
     frameBuffer->resize(1920, 1080);
 
 	frameBuffer->bindFrameBuffer();
@@ -293,7 +291,9 @@ Texture * NodeUI::renderToTexture() {
 		glDisable(GL_DEPTH_TEST);
 	}
 
-	render(&matrixStack, &renderOptions);
+	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(bgColour.r, bgColour.g, bgColour.b);
+	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(bgColour.a);
+	Entity::render(&matrixStack, &renderOptions);
 
 	if(depth == GL_TRUE){
 		glEnable(GL_DEPTH_TEST);
@@ -315,6 +315,8 @@ Texture * NodeUI::renderToTexture() {
 	}
 
 	renderedTexture->saveImageData("test.tga");
+
+	renderFrame = false;
 
 	delete cam;
 	return renderedTexture;
@@ -340,10 +342,15 @@ void NodeUI::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOp
 	if(renderMode == kTEXTURE) {
 		if(texturedPlane == nullptr){
 			getAsTexturedPlane();
+		}else if(renderFrame) {
+			renderToTexture();
 		}
+		renderFrame = false;
 		if(texturedPlane->firstParent() != nullptr){
+			_matrixStack->pushMatrix();
+			_matrixStack->applyMatrix(childTransform->getModelMatrix());
 			texturedPlane->firstParent()->render(_matrixStack, _renderOptions);
-			renderFrame = false;
+			_matrixStack->popMatrix();
 		}
 	} 
 }
@@ -686,7 +693,7 @@ void NodeUI::autoResize(){
 		height.measuredSize = getContentsHeight();
 	}
 	// Adjust the size of the background
-	background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
+	//background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
 	repositionChildren();
 }
 float NodeUI::getContentsWidth(){
@@ -705,7 +712,7 @@ float NodeUI::getContentsWidth(){
 }
 float NodeUI::getContentsHeight(){
 	float h = 0.0f;
-	// take the maximum of the height of the contents
+	// take the maximum of the height of the contents66
 	for(unsigned long int i = 0; i < uiElements->children.size(); ++i) {
 		Transform * trans = dynamic_cast<Transform *>(uiElements->children.at(i));
 		if(trans != nullptr) {
