@@ -126,6 +126,8 @@ const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGH
 														"	float ambientCoefficient;\n"
 														"	float attenuation;\n"
 														"	float cutoff;\n"
+														"	float coneAngle;\n"
+														"	vec3  coneDirection;\n"
 														"};\n"
 														"uniform Light " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[" + std::to_string(MAX_LIGHTS) + "]" + SEMI_ENDL +
 														"uniform int " + GL_UNIFORM_ID_NUM_LIGHTS + SEMI_ENDL +
@@ -151,6 +153,13 @@ const std::string SHADER_LIGHT_DISTANCE_AND_ATTENUATION =
 				//TAB + TAB + "attenuation = (attenuation - lights[i].cutoff) / (1 - lights[i].cutoff)" + SEMI_ENDL +
 				//TAB + TAB + "attenuation = max(attenuation, 0)" + SEMI_ENDL +
 				TAB + "}" + ENDL +
+				// SpotLight
+				TAB + "if(lights[i].type == 2){" + ENDL + 
+				TAB + TAB + "float lightToSurfaceAngle = degrees(acos(dot(-surfaceToLight, normalize(lights[i].coneDirection))))" + SEMI_ENDL +
+				TAB + TAB + "if(lightToSurfaceAngle > lights[i].coneAngle){" + ENDL + 
+				TAB + TAB + TAB + "attenuation = 0.0;" + ENDL + 
+				TAB + TAB + "}" + ENDL + 
+				TAB + "}" + ENDL + 
 			"}";
 
 const std::string SHADER_INCLUDE_MATERIAL			  = "#ifndef " + SHADER_COMPONENT_MATERIAL + "\n"

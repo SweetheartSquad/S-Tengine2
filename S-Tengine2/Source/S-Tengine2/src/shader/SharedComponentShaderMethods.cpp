@@ -1,13 +1,14 @@
 #pragma once
 
-#include "shader/SharedComponentShaderMethods.h"
-#include "RenderOptions.h"
-#include "MatrixStack.h"
-#include "node/NodeRenderable.h"
-#include "GLUtils.h"
-#include "MeshInterface.h"
-#include "Material.h"
-#include "Transform.h"
+#include <shader/SharedComponentShaderMethods.h>
+#include <RenderOptions.h>
+#include <MatrixStack.h>
+#include <node/NodeRenderable.h>
+#include <GLUtils.h>
+#include <MeshInterface.h>
+#include <Material.h>
+#include <Transform.h>
+#include <SpotLight.h>
 
 void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStack, RenderOptions * _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
@@ -36,12 +37,28 @@ void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStac
 					GLuint attenuationUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), att.c_str());
 					GLuint cutoffUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), cut.c_str());
 
-					glUniform1i(typeUniformLocation, static_cast<int>(l->data.type));
+					glUniform1i(typeUniformLocation, static_cast<int>(l->getType()));
 					glUniform3f(positionUniformLocation, curPos.x, curPos.y, curPos.z);
-					glUniform3f(intensitiesUniformLocation, l->data.intensities.x, l->data.intensities.y, l->data.intensities.z);
-					glUniform1f(ambientUniformLocation, l->data.ambientCoefficient);
-					glUniform1f(attenuationUniformLocation, l->data.attenuation);
-					glUniform1f(cutoffUniformLocation, l->data.cutoff);
+					glUniform3f(intensitiesUniformLocation, l->getIntensities().x, l->getIntensities().y, l->getIntensities().z);
+					glUniform1f(ambientUniformLocation, l->getAmbientCoefficient());
+					glUniform1f(attenuationUniformLocation, l->getAttenuation());
+					glUniform1f(cutoffUniformLocation, l->getCutoff());
+
+					if(l->getType() == kSPOT_LIGHT) {
+
+						ST_LOG_INFO("here");
+
+						SpotLight * sl = dynamic_cast<SpotLight *>(l);
+
+						const std::string ang = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].coneAngle", i);
+						const std::string dir = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].coneDirection", i);
+
+						GLuint angleUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), ang.c_str());
+						GLuint coneDirectionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), dir.c_str());
+				
+						glUniform3f(coneDirectionUniformLocation, sl->getConeDirection().x, sl->getConeDirection().y, sl->getConeDirection().z);
+						glUniform1f(angleUniformLocation, sl->getConeAngle());
+					}
 					l->lightDirty = false;
 				}
 			}
