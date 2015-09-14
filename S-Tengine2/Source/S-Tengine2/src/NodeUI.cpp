@@ -27,27 +27,27 @@ ComponentShaderBase * NodeUI::bgShader = nullptr;
 
 NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode, bool _mouseEnabled) :
 	NodeBulletBody(_world),
+	mouseEnabled(!_mouseEnabled),
 	mouse(&Mouse::getInstance()),
-	updateState(false),
 	isHovered(false),
 	isDown(false),
 	isActive(false),
 	layoutDirty(true),
+	uiElements(new Transform()),
+	bgColour(0.f, 0.f, 0.f, 1.f),
+	scene(_scene),
+	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	frameBuffer(nullptr),
 	renderedTexture(nullptr),
 	texturedPlane(nullptr),
-	renderMode(_renderMode),
-	scene(_scene),
-	onClickFunction(nullptr),
-	background(new MeshEntity(MeshFactory::getPlaneMesh())),
-	margin(new Transform()),
-	padding(new Transform()),
-	uiElements(new Transform()),
+	renderMode(kTEXTURE),
 	boxSizing(kBORDER_BOX),
+	onClickFunction(nullptr),
+	updateState(false),
 	renderFrame(true),
-	mouseEnabled(!_mouseEnabled), // we initialize the variable to the opposite so that setMouseEnabled gets called properly at the end of the constructor
-	//bgColour(sweet::NumberUtils::randomFloat(-1, 0), sweet::NumberUtils::randomFloat(-1, 0), sweet::NumberUtils::randomFloat(-1, 0), 1.f)
-	bgColour(0.f, 0.f, 0.f, 1.f)
+	margin(new Transform()), // we initialize the variable to the opposite so that setMouseEnabled gets called properly at the end of the constructor
+	//bgColour(vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), vox::NumberUtils::randomFloat(-1, 0), 1.f)
+	padding(new Transform())
 {
 	if(bgShader == nullptr){
 		bgShader = new ComponentShaderBase(true);
@@ -61,7 +61,6 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode, boo
 		background->mesh->vertices.at(i).x += 0.5f;
 		background->mesh->vertices.at(i).y += 0.5f;
 	}
-
 	background->mesh->dirty = true;
 	background->setShader(bgShader, true);
 	
@@ -201,7 +200,7 @@ void NodeUI::update(Step * _step){
 
 	renderFrame = layoutDirty == true || renderFrame == true; 
 
-	//if(renderMode == kENTITIES || layoutDirty || renderFrame){
+	if(renderMode == kENTITIES || layoutDirty || renderFrame){
 		if(layoutDirty){
 			autoResize();
 		}
@@ -231,14 +230,12 @@ void NodeUI::update(Step * _step){
 		}
 	
 		Entity::update(_step);
-	//}
-
-	if(renderMode == kTEXTURE && renderFrame) {
-		renderToTexture();
-		if(texturedPlane != nullptr){
-			texturedPlane->update(_step);
-			if(texturedPlane->firstParent() != nullptr){
-				texturedPlane->firstParent()->scale(getWidth(true, true), getHeight(true, true), 1.f, false);
+		if(renderMode == kTEXTURE && renderFrame) {
+			if(texturedPlane != nullptr){
+				//renderToTexture();
+				if(texturedPlane->firstParent() != nullptr){
+					texturedPlane->firstParent()->scale(getWidth(true, true), getHeight(true, true), 1.f, false);
+				}
 			}
 		}
 	}
@@ -274,12 +271,14 @@ Texture * NodeUI::renderToTexture() {
 	
 	cam->firstParent()->translate(getWidth(true, true) * 0.5f, getHeight(true, true) * 0.5f , 0.f);
 
-	sweet::MatrixStack matrixStack;
+	vox::MatrixStack matrixStack;
 
 	matrixStack.pushMatrix();		
 
 	matrixStack.setViewMatrix(&cam->getViewMatrix());
 	matrixStack.setProjectionMatrix(&cam->getProjectionMatrix());
+
+	renderOptions.shader = bgShader;
 	
 	// This should be based off of the width and height 
     frameBuffer->resize(1920, 1080);
@@ -301,12 +300,14 @@ Texture * NodeUI::renderToTexture() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	if(renderedTexture == nullptr) {
-		renderedTexture = new Texture(frameBuffer, true, 0, 4, true);	
+		renderedTexture = new Texture(frameBuffer, true, 0, 4, true);
 	}else {
 		// Can OpenGL just update texture data instead of deleteing and recreating?
-		renderedTexture->unload();
-		renderedTexture->data = frameBuffer->getPixelData(0);
-		renderedTexture->load();
+		//renderedTexture->unload();
+		//renderedTexture->data = frameBuffer->getPixelData(0);
+		//renderedTexture->load();
+		glBindTexture(GL_TEXTURE_2D, renderedTexture->textureId);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1920, 1080, GL_RGBA, GL_UNSIGNED_BYTE, static_cast<GLvoid*>(frameBuffer->getPixelData(0)));
 	}
 
 	delete cam;
@@ -316,24 +317,33 @@ Texture * NodeUI::renderToTexture() {
 MeshEntity * NodeUI::getAsTexturedPlane() {
 	if(texturedPlane == nullptr) {
 		texturedPlane = new MeshEntity(MeshFactory::getPlaneMesh(0.5f), background->shader);
-		texturedPlane->mesh->pushTexture2D(renderToTexture());
+		//texturedPlane->mesh->pushTexture2D(renderToTexture());
 		texturedPlane->mesh->scaleModeMag = GL_NEAREST;
 		texturedPlane->mesh->scaleModeMin = GL_NEAREST;
 	}
 	return texturedPlane;
 }
 
-void NodeUI::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	//if(renderMode == kENTITIES || layoutDirty || renderFrame){
+void NodeUI::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+
+	if(renderMode == kENTITIES || layoutDirty || renderFrame){
 		dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(bgColour.r, bgColour.g, bgColour.b);
 		dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(bgColour.a);
-		if(renderMode == kTEXTURE && texturedPlane != nullptr) {
-			texturedPlane->render(_matrixStack, _renderOptions);
-		} 
-
-		Entity::render(_matrixStack, _renderOptions);
-		renderFrame = false;
-	//}
+		
+		if(renderMode == kTEXTURE) {
+			if(texturedPlane != nullptr){
+				//texturedPlane->render(_matrixStack, _renderOptions);
+				Entity::render(_matrixStack, _renderOptions);
+				renderFrame = false;
+			}else {
+				getAsTexturedPlane();
+				childTransform->addChild(texturedPlane);
+				margin->setVisible(false);
+			}
+		}else{ 
+			Entity::render(_matrixStack, _renderOptions);
+		}
+	}
 }
 
 void NodeUI::setMarginLeft(float _margin){
