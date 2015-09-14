@@ -14,6 +14,7 @@
 #include <shader\ShaderComponentMVP.h>
 
 #include <NumberUtils.h>
+#include <algorithm>
 
 ComponentShaderBase * NodeUI::bgShader = nullptr;
 

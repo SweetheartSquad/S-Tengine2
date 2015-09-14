@@ -1,6 +1,8 @@
 #pragma once
 
 #include <Box.h>
+#include <algorithm>
+
 
 vox::Box::Box(float _x, float _y, float _z, float _width, float _height, float _depth) :
 	Rectangle(_x, _y, _width, _height)
