@@ -78,7 +78,7 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode, boo
 NodeUI::~NodeUI() {
 	delete renderedTexture;
 	delete frameBuffer;
-	delete texturedPlane;
+	delete texturedPlane->firstParent();
 }
 
 void NodeUI::load(){
@@ -205,24 +205,19 @@ void NodeUI::update(Step * _step){
 
 
 Texture * NodeUI::renderToTexture() {
-	// Make all children and self dirty
-	doRecursivleyOnUIChildren([](NodeUI * uiElem){
-		//uiElem->makeLayoutDirty();
-	}, true);
-
 	if(frameBuffer == nullptr){
 		frameBuffer = new StandardFrameBuffer(true);	
 		frameBuffer->load();
-	}else{
-		frameBuffer->reload();
 	}
+
 	RenderOptions renderOptions(nullptr, nullptr);
+	sweet::MatrixStack matrixStack;
 
 	OrthographicCamera * cam = new OrthographicCamera(//0, getWidth(true, false), 0, getHeight(true, false), -1000, 1000);
 		-getWidth(true, true)  * 0.5f, 
 		 getWidth(true, true)  * 0.5f, 
-		 getHeight(true, true) * 0.5f, 
-		-getHeight(true, true) * 0.5f, 
+		 -getHeight(true, true) * 0.5f, 
+		getHeight(true, true) * 0.5f, 
 		-1000, 
 		 1000);
 	
@@ -231,7 +226,6 @@ Texture * NodeUI::renderToTexture() {
 	
 	cam->firstParent()->translate(getWidth(true, true) * 0.5f, getHeight(true, true) * 0.5f , 0.f);
 
-	sweet::MatrixStack matrixStack;
 
 	matrixStack.pushMatrix();		
 
@@ -249,6 +243,7 @@ Texture * NodeUI::renderToTexture() {
 	if(depth == GL_TRUE){
 		glDisable(GL_DEPTH_TEST);
 	}
+
 	__renderForEntities(&matrixStack, &renderOptions);
 
 	if(depth == GL_TRUE){
@@ -260,14 +255,10 @@ Texture * NodeUI::renderToTexture() {
 	if(renderedTexture == nullptr) {
 		renderedTexture = new Texture(frameBuffer, true, 0, 4, true);	
 	}else {
-		//glBindTexture(GL_TEXTURE_2D, renderedTexture->textureId);
-        //glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1920, 1080, GL_RGBA, GL_UNSIGNED_BYTE, static_cast<GLvoid*>(frameBuffer->getPixelData(0)));
-
-		// Can OpenGL just update texture data instead of deleteing and recreating?
-		renderedTexture->unload();
 		renderedTexture->data = frameBuffer->getPixelData(0);
-		renderedTexture->load();
+		renderedTexture->bufferData();
 	}
+
 	delete cam;
 	return renderedTexture;
 }
@@ -278,7 +269,9 @@ MeshEntity * NodeUI::getAsTexturedPlane() {
 		texturedPlane->mesh->pushTexture2D(renderToTexture());
 		texturedPlane->mesh->scaleModeMag = GL_NEAREST;
 		texturedPlane->mesh->scaleModeMin = GL_NEAREST;
-		childTransform->addChild(texturedPlane);
+
+		Transform * t = new Transform();
+		t->addChild(texturedPlane, false);
 	}
 	return texturedPlane;
 }
@@ -293,7 +286,6 @@ void NodeUI::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOp
 	} 
 }
 
-
 void NodeUI::__renderForEntities(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) {
 	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(bgColour.r, bgColour.g, bgColour.b);
 	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(bgColour.a);
@@ -307,10 +299,8 @@ void NodeUI::__renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions
 		renderToTexture();
 	}
 	if(texturedPlane->firstParent() != nullptr){
-		_matrixStack->pushMatrix();
-		_matrixStack->applyMatrix(childTransform->getModelMatrix());
+		texturedPlane->firstParent()->translate(getWidth(false, true) * 0.5f, getHeight(false, true) * 0.5f, 0.f, false);
 		texturedPlane->firstParent()->render(_matrixStack, _renderOptions);
-		_matrixStack->popMatrix();
 	}
 }
 
@@ -337,12 +327,9 @@ void NodeUI::__updateForEntities(Step * _step) {
 					isDown = false;
 				}
 			}
-
 			updateState = false;
-		
 			NodeBulletBody::update(_step);
 		}
-	
 		Entity::update(_step);
 }
 
