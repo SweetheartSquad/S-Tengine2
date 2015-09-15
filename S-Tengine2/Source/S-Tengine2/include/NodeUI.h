@@ -223,4 +223,9 @@ private:
 	void resizeChildrenHeight(NodeUI * _root);
 
 	bool hasRenderModeParent(RenderMode _renderMode);
+
+	void __renderForEntities(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
+	void __renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
+	void __updateForEntities(Step * _step);
+	void __updateForTexture(Step * _step);
 };

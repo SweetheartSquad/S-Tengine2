@@ -46,7 +46,6 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode, boo
 	boxSizing(kBORDER_BOX),
 	renderFrame(true),
 	mouseEnabled(!_mouseEnabled), // we initialize the variable to the opposite so that setMouseEnabled gets called properly at the end of the constructor
-	//bgColour(sweet::NumberUtils::randomFloat(-1, 0), sweet::NumberUtils::randomFloat(-1, 0), sweet::NumberUtils::randomFloat(-1, 0), 1.f)
 	bgColour(0.f, 0.f, 0.f, 1.f)
 {
 	if(bgShader == nullptr){
@@ -176,7 +175,6 @@ void NodeUI::setMouseEnabled(bool _mouseEnabled){
 	if(_mouseEnabled == mouseEnabled){
 		return;
 	}
-
 	if(_mouseEnabled){
 		// create the NodeBulletBody collider stuff
 		autoResize();
@@ -196,48 +194,12 @@ void NodeUI::setMouseEnabled(bool _mouseEnabled){
 
 
 void NodeUI::update(Step * _step){
-
-	//renderFrame = layoutDirty == true;// || renderFrame == true; 
-
 	if(renderMode == kENTITIES || layoutDirty || renderFrame){
-		if(layoutDirty){
-			autoResize();
-		}
-		if(mouseEnabled){
-			updateCollider();
-
-			if(updateState){
-				if(!isHovered){
-					in();
-				}if(mouse->leftJustPressed()){
-					down();
-				}else if(mouse->leftJustReleased()){
-					up();
-				}
-			}else{
-				if(isHovered){
-					out();
-				}
-				if(isDown && mouse->leftJustReleased()){
-					isDown = false;
-				}
-			}
-
-			updateState = false;
-		
-			NodeBulletBody::update(_step);
-		}
-	
-		Entity::update(_step);
+		__updateForEntities(_step);
 	}
 
 	if(renderMode == kTEXTURE) {
-		if(texturedPlane != nullptr){
-			texturedPlane->update(_step);
-			if(texturedPlane->firstParent() != nullptr){
-				texturedPlane->firstParent()->scale(getWidth(true, true), getHeight(true, true), 1.f, false);
-			}
-		}
+		__updateForTexture(_step);
 	}
 }
 
@@ -245,7 +207,7 @@ void NodeUI::update(Step * _step){
 Texture * NodeUI::renderToTexture() {
 	// Make all children and self dirty
 	doRecursivleyOnUIChildren([](NodeUI * uiElem){
-		uiElem->makeLayoutDirty();
+		//uiElem->makeLayoutDirty();
 	}, true);
 
 	if(frameBuffer == nullptr){
@@ -254,11 +216,8 @@ Texture * NodeUI::renderToTexture() {
 	}else{
 		frameBuffer->reload();
 	}
-	//update(&sweet::step);
-
 	RenderOptions renderOptions(nullptr, nullptr);
 
-	//
 	OrthographicCamera * cam = new OrthographicCamera(//0, getWidth(true, false), 0, getHeight(true, false), -1000, 1000);
 		-getWidth(true, true)  * 0.5f, 
 		 getWidth(true, true)  * 0.5f, 
@@ -290,10 +249,7 @@ Texture * NodeUI::renderToTexture() {
 	if(depth == GL_TRUE){
 		glDisable(GL_DEPTH_TEST);
 	}
-
-	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(bgColour.r, bgColour.g, bgColour.b);
-	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(bgColour.a);
-	Entity::render(&matrixStack, &renderOptions);
+	__renderForEntities(&matrixStack, &renderOptions);
 
 	if(depth == GL_TRUE){
 		glEnable(GL_DEPTH_TEST);
@@ -304,7 +260,6 @@ Texture * NodeUI::renderToTexture() {
 	if(renderedTexture == nullptr) {
 		renderedTexture = new Texture(frameBuffer, true, 0, 4, true);	
 	}else {
-
 		//glBindTexture(GL_TEXTURE_2D, renderedTexture->textureId);
         //glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 1920, 1080, GL_RGBA, GL_UNSIGNED_BYTE, static_cast<GLvoid*>(frameBuffer->getPixelData(0)));
 
@@ -313,11 +268,6 @@ Texture * NodeUI::renderToTexture() {
 		renderedTexture->data = frameBuffer->getPixelData(0);
 		renderedTexture->load();
 	}
-
-	renderedTexture->saveImageData("test.tga");
-
-	renderFrame = false;
-
 	delete cam;
 	return renderedTexture;
 }
@@ -335,24 +285,80 @@ MeshEntity * NodeUI::getAsTexturedPlane() {
 
 void NodeUI::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	if(renderMode == kENTITIES || layoutDirty || renderFrame){
-		dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(bgColour.r, bgColour.g, bgColour.b);
-		dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(bgColour.a);
-		Entity::render(_matrixStack, _renderOptions);
+		__renderForEntities(_matrixStack, _renderOptions);
 	}
 	if(renderMode == kTEXTURE) {
-		if(texturedPlane == nullptr){
-			getAsTexturedPlane();
-		}else if(renderFrame) {
-			renderToTexture();
-		}
+		__renderForTexture(_matrixStack, _renderOptions);
 		renderFrame = false;
-		if(texturedPlane->firstParent() != nullptr){
-			_matrixStack->pushMatrix();
-			_matrixStack->applyMatrix(childTransform->getModelMatrix());
-			texturedPlane->firstParent()->render(_matrixStack, _renderOptions);
-			_matrixStack->popMatrix();
-		}
 	} 
+}
+
+
+void NodeUI::__renderForEntities(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) {
+	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(bgColour.r, bgColour.g, bgColour.b);
+	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(bgColour.a);
+	Entity::render(_matrixStack, _renderOptions);
+}
+
+void NodeUI::__renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) {
+	if(texturedPlane == nullptr){
+		getAsTexturedPlane();
+	}else if(renderFrame) {
+		renderToTexture();
+	}
+	if(texturedPlane->firstParent() != nullptr){
+		_matrixStack->pushMatrix();
+		_matrixStack->applyMatrix(childTransform->getModelMatrix());
+		texturedPlane->firstParent()->render(_matrixStack, _renderOptions);
+		_matrixStack->popMatrix();
+	}
+}
+
+void NodeUI::__updateForEntities(Step * _step) {
+		if(layoutDirty){
+			autoResize();
+		}
+		if(mouseEnabled){
+			updateCollider();
+
+			if(updateState){
+				if(!isHovered){
+					in();
+				}if(mouse->leftJustPressed()){
+					down();
+				}else if(mouse->leftJustReleased()){
+					up();
+				}
+			}else{
+				if(isHovered){
+					out();
+				}
+				if(isDown && mouse->leftJustReleased()){
+					isDown = false;
+				}
+			}
+
+			updateState = false;
+		
+			NodeBulletBody::update(_step);
+		}
+	
+		Entity::update(_step);
+}
+
+void NodeUI::__updateForTexture(Step * _step) {
+	if(texturedPlane != nullptr){
+		texturedPlane->update(_step);
+		if(texturedPlane->firstParent() != nullptr){
+			texturedPlane->firstParent()->scale(getWidth(true, true), getHeight(true, true), 1.f, false);
+		}
+	}
+	renderFrame = false;
+	doRecursivleyOnUIChildren([this](NodeUI * _ui){
+		if(_ui->isLayoutDirty()){
+			this->renderFrame = true;
+		}
+	});
 }
 
 void NodeUI::setMarginLeft(float _margin){
@@ -693,7 +699,7 @@ void NodeUI::autoResize(){
 		height.measuredSize = getContentsHeight();
 	}
 	// Adjust the size of the background
-	//background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
+	background->parents.at(0)->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
 	repositionChildren();
 }
 float NodeUI::getContentsWidth(){
