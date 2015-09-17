@@ -76,9 +76,14 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode, boo
 }
 
 NodeUI::~NodeUI() {
-	delete renderedTexture;
 	delete frameBuffer;
-	delete texturedPlane->firstParent();
+	if(renderedTexture != nullptr){
+		// renderedTexture may or may not be managed by texturedPlane
+		renderedTexture->safeDelete();
+	}
+	if(texturedPlane != nullptr){
+		delete texturedPlane->firstParent();
+	}
 }
 
 void NodeUI::load(){
@@ -138,7 +143,6 @@ signed long int NodeUI::removeChild(NodeUI* _uiElement){
 		res = uiElements->removeChild(t);
 		t->removeChild(_uiElement);
 		delete t;
-	
 		if(res >= 0){
 			layoutDirty = true;
 		}
@@ -194,13 +198,8 @@ void NodeUI::setMouseEnabled(bool _mouseEnabled){
 
 
 void NodeUI::update(Step * _step){
-	if(renderMode == kENTITIES || layoutDirty || renderFrame){
-		__updateForEntities(_step);
-	}
-
-	if(renderMode == kTEXTURE) {
-		__updateForTexture(_step);
-	}
+	__updateForEntities(_step);
+	__updateForTexture(_step);
 }
 
 
@@ -213,31 +212,29 @@ Texture * NodeUI::renderToTexture() {
 	RenderOptions renderOptions(nullptr, nullptr);
 	sweet::MatrixStack matrixStack;
 
-	OrthographicCamera * cam = new OrthographicCamera(//0, getWidth(true, false), 0, getHeight(true, false), -1000, 1000);
-		-getWidth(true, true)  * 0.5f, 
+	OrthographicCamera * cam = new OrthographicCamera(0, getWidth(true, false), 0, getHeight(true, false), -1000, 1000);
+		/*-getWidth(true, true)  * 0.5f, 
 		 getWidth(true, true)  * 0.5f, 
-		 -getHeight(true, true) * 0.5f, 
-		getHeight(true, true) * 0.5f, 
+		-getHeight(true, true) * 0.5f, 
+		 getHeight(true, true) * 0.5f, 
 		-1000, 
-		 1000);
+		 1000);*/
 	
 	Transform * t = new Transform();
 	t->addChild(cam);
 	
-	cam->firstParent()->translate(getWidth(true, true) * 0.5f, getHeight(true, true) * 0.5f , 0.f);
-
-
-	matrixStack.pushMatrix();		
+	//cam->firstParent()->translate(getWidth(true, true) * 0.5f, getHeight(true, true) * 0.5f , 0.f);
 
 	matrixStack.setViewMatrix(&cam->getViewMatrix());
 	matrixStack.setProjectionMatrix(&cam->getProjectionMatrix());
-	
-	// This should be based off of the width and height 
-    //frameBuffer->resize(getWidth(true, false), getHeight(true, false));
-    frameBuffer->resize(1920, 1080);
+
+    frameBuffer->resize(getWidth(true, false), getHeight(true, false));
+
+	GLint currentFrameBuffer;
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFrameBuffer);
 
 	frameBuffer->bindFrameBuffer();
-
+	
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
 
 	if(depth == GL_TRUE){
@@ -250,26 +247,31 @@ Texture * NodeUI::renderToTexture() {
 		glEnable(GL_DEPTH_TEST);
 	}
 
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, currentFrameBuffer);
 
 	if(renderedTexture == nullptr) {
 		renderedTexture = new Texture(frameBuffer, true, 0, 4, true);	
 	}else {
+		renderedTexture->width = getWidth(true, false);
+		renderedTexture->height = getHeight(true, false);
 		renderedTexture->data = frameBuffer->getPixelData(0);
-		renderedTexture->bufferData();
+		renderedTexture->unload();
+		renderedTexture->load();
+
+		// Can we just use this?
+		// renderedTexture->bufferData();
 	}
 
 	delete cam;
 	return renderedTexture;
 }
 
-MeshEntity * NodeUI::getAsTexturedPlane() {
+MeshEntity * NodeUI::getTexturedPlane() {
 	if(texturedPlane == nullptr) {
 		texturedPlane = new MeshEntity(MeshFactory::getPlaneMesh(0.5f), background->shader);
-		texturedPlane->mesh->pushTexture2D(renderToTexture());
+		texturedPlane->mesh->pushTexture2D(renderedTexture == nullptr ? renderToTexture() : renderedTexture);
 		texturedPlane->mesh->scaleModeMag = GL_NEAREST;
 		texturedPlane->mesh->scaleModeMin = GL_NEAREST;
-
 		Transform * t = new Transform();
 		t->addChild(texturedPlane, false);
 	}
@@ -277,12 +279,11 @@ MeshEntity * NodeUI::getAsTexturedPlane() {
 }
 
 void NodeUI::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	if(renderMode == kENTITIES || layoutDirty || renderFrame){
+	if(renderMode == kENTITIES){
 		__renderForEntities(_matrixStack, _renderOptions);
 	}
 	if(renderMode == kTEXTURE) {
 		__renderForTexture(_matrixStack, _renderOptions);
-		renderFrame = false;
 	} 
 }
 
@@ -293,70 +294,75 @@ void NodeUI::__renderForEntities(sweet::MatrixStack * _matrixStack, RenderOption
 }
 
 void NodeUI::__renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) {
-	if(texturedPlane == nullptr){
-		getAsTexturedPlane();
-	}else if(renderFrame) {
+	getTexturedPlane();
+	if(renderFrame) {
 		renderToTexture();
+		renderFrame = false;
 	}
-	if(texturedPlane->firstParent() != nullptr){
-		texturedPlane->firstParent()->translate(getWidth(false, true) * 0.5f, getHeight(false, true) * 0.5f, 0.f, false);
-		texturedPlane->firstParent()->render(_matrixStack, _renderOptions);
-	}
+	texturedPlane->firstParent()->translate(getWidth(false, true) * 0.5f, getHeight(false, true) * 0.5f, 0.f, false);
+	texturedPlane->firstParent()->render(_matrixStack, _renderOptions);
 }
 
 void NodeUI::__updateForEntities(Step * _step) {
-		if(layoutDirty){
-			autoResize();
-		}
-		if(mouseEnabled){
-			updateCollider();
-
-			if(updateState){
-				if(!isHovered){
-					in();
-				}if(mouse->leftJustPressed()){
-					down();
-				}else if(mouse->leftJustReleased()){
-					up();
-				}
-			}else{
-				if(isHovered){
-					out();
-				}
-				if(isDown && mouse->leftJustReleased()){
-					isDown = false;
-				}
+	if(layoutDirty){
+		autoResize();
+	}
+	if(mouseEnabled){
+		updateCollider();
+		if(updateState){
+			if(!isHovered){
+				in();
+			}if(mouse->leftJustPressed()){
+				down();
+			}else if(mouse->leftJustReleased()){
+				up();
 			}
-			updateState = false;
-			NodeBulletBody::update(_step);
+		}else{
+			if(isHovered){
+				out();
+			}
+			if(isDown && mouse->leftJustReleased()){
+				isDown = false;
+			}
 		}
-		Entity::update(_step);
+		updateState = false;
+		NodeBulletBody::update(_step);
+	}
+	Entity::update(_step);
 }
 
 void NodeUI::__updateForTexture(Step * _step) {
-	if(texturedPlane != nullptr){
-		texturedPlane->update(_step);
-		if(texturedPlane->firstParent() != nullptr){
-			texturedPlane->firstParent()->scale(getWidth(true, true), getHeight(true, true), 1.f, false);
+	if(renderMode == kTEXTURE){
+		if(texturedPlane != nullptr){
+			texturedPlane->update(_step);
+			if(texturedPlane->firstParent() != nullptr){
+				texturedPlane->firstParent()->scale(getWidth(true, true), getHeight(true, true), 1.f, false);
+			}
+		}
+		doRecursivleyOnUIChildren([this](NodeUI * _ui){
+			if(_ui->isLayoutDirty()){
+				this->renderFrame = true;
+				return;
+			}
+		});
+		if(renderFrame) {
+			autoResize();
 		}
 	}
-	renderFrame = false;
-	doRecursivleyOnUIChildren([this](NodeUI * _ui){
-		if(_ui->isLayoutDirty()){
-			this->renderFrame = true;
-		}
-	});
 }
 
 void NodeUI::setMarginLeft(float _margin){
 	marginLeft.setSize(_margin);
 }
+
 void NodeUI::setMarginRight(float _margin){
 	marginRight.setSize(_margin);
 }
+
 void NodeUI::setMarginTop(float _margin){
 	marginTop.setSize(_margin);
 }
+
 void NodeUI::setMarginBottom(float _margin){
 	marginBottom.setSize(_margin);
 }
@@ -367,6 +373,7 @@ void NodeUI::setMargin(float _all){
 	setMarginBottom(_all);
 	setMarginTop(_all);
 }
+
 void NodeUI::setMargin(float _leftAndRight, float _bottomAndTop){
 	setMarginLeft(_leftAndRight);
 	setMarginRight(_leftAndRight);
@@ -402,12 +409,14 @@ void NodeUI::setPadding(float _all){
 	setPaddingBottom(_all);
 	setPaddingTop(_all);
 }
+
 void NodeUI::setPadding(float _leftAndRight, float _bottomAndTop){
 	setPaddingLeft(_leftAndRight);
 	setPaddingRight(_leftAndRight);
 	setPaddingBottom(_bottomAndTop);
 	setPaddingTop(_bottomAndTop);
 }
+
 void NodeUI::setPadding(float _left, float _right, float _bottom, float _top){
 	setPaddingLeft(_left);
 	setPaddingRight(_right);
@@ -465,6 +474,7 @@ void NodeUI::setPixelWidth(float _pixelWidth){
 	width.setPixelSize(_pixelWidth);
 	resizeChildrenWidth(this);
 }
+
 void NodeUI::setPixelHeight(float _pixelHeight){
 	if(boxSizing == kBORDER_BOX){
 		_pixelHeight -= getMarginBottom() + getPaddingBottom() + getPaddingTop() + getMarginTop();
@@ -543,6 +553,7 @@ void NodeUI::setMeasuredWidths(NodeUI * _root){
 		resizeChildrenWidth(this);
 	}
 }
+
 void NodeUI::setMeasuredHeights(NodeUI * _root){
 	float rootHeight = 0.f;
 	if(_root != nullptr){
@@ -562,7 +573,6 @@ void NodeUI::setMeasuredHeights(NodeUI * _root){
 			height.measuredSize -= marginBottom.getSize() + paddingBottom.getSize() + paddingTop.getSize() + marginTop.getSize();
 		}
 	}
-
 	if(height.sizeMode == kAUTO){
 		// if the height of this node is auto-sized, the children's height has to be based on the element one level above this one
 		// to avoid the conflict between an auto-sized container and a rational-sized child
@@ -571,7 +581,6 @@ void NodeUI::setMeasuredHeights(NodeUI * _root){
 		resizeChildrenHeight(this);
 	}
 }
-
 
 void NodeUI::setBackgroundColour(float _r, float _g, float _b, float _a){
 	bgColour.r = _r-1;
@@ -723,7 +732,6 @@ void NodeUI::repositionChildren(){
 	padding->translate(getPaddingLeft(), getPaddingBottom(), 0, false);
 }
 
-
 void NodeUI::setUpdateState(bool _newState){
 	updateState = _newState;
-}
+} 

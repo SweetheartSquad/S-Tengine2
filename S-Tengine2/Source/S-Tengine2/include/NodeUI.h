@@ -170,7 +170,7 @@ public:
 	float getPaddingBottom();
 
 	virtual Texture * renderToTexture();
-	virtual MeshEntity * getAsTexturedPlane();
+	virtual MeshEntity * getTexturedPlane();
 	
 	// If kPIXEL, returns the pixelWidth
 	// otherwise, returns measuredWidth
