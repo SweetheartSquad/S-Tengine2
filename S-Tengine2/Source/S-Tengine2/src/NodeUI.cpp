@@ -213,22 +213,15 @@ Texture * NodeUI::renderToTexture() {
 	sweet::MatrixStack matrixStack;
 
 	OrthographicCamera * cam = new OrthographicCamera(0, getWidth(true, false), 0, getHeight(true, false), -1000, 1000);
-		/*-getWidth(true, true)  * 0.5f, 
-		 getWidth(true, true)  * 0.5f, 
-		-getHeight(true, true) * 0.5f, 
-		 getHeight(true, true) * 0.5f, 
-		-1000, 
-		 1000);*/
-	
 	Transform * t = new Transform();
 	t->addChild(cam);
-	
-	//cam->firstParent()->translate(getWidth(true, true) * 0.5f, getHeight(true, true) * 0.5f , 0.f);
 
 	matrixStack.setViewMatrix(&cam->getViewMatrix());
 	matrixStack.setProjectionMatrix(&cam->getProjectionMatrix());
 
-    frameBuffer->resize(getWidth(true, false), getHeight(true, false));
+	float size = std::max(getWidth(true, false), getHeight(true, false));
+
+    frameBuffer->resize(size, size);
 
 	GLint currentFrameBuffer;
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFrameBuffer);
@@ -252,15 +245,17 @@ Texture * NodeUI::renderToTexture() {
 	if(renderedTexture == nullptr) {
 		renderedTexture = new Texture(frameBuffer, true, 0, 4, true);	
 	}else {
-		renderedTexture->width = getWidth(true, false);
-		renderedTexture->height = getHeight(true, false);
-		renderedTexture->data = frameBuffer->getPixelData(0);
+		renderedTexture->width  = size;
+		renderedTexture->height = size;
+		renderedTexture->data   = frameBuffer->getPixelData(0);
 		renderedTexture->unload();
 		renderedTexture->load();
 
 		// Can we just use this?
 		// renderedTexture->bufferData();
 	}
+
+	renderedTexture->saveImageData("test.tga");
 
 	delete cam;
 	return renderedTexture;
@@ -336,7 +331,7 @@ void NodeUI::__updateForTexture(Step * _step) {
 		if(texturedPlane != nullptr){
 			texturedPlane->update(_step);
 			if(texturedPlane->firstParent() != nullptr){
-				texturedPlane->firstParent()->scale(getWidth(true, true), getHeight(true, true), 1.f, false);
+				texturedPlane->firstParent()->scale(getWidth(true, true), -getHeight(true, true), 1.f, false);
 			}
 		}
 		doRecursivleyOnUIChildren([this](NodeUI * _ui){
