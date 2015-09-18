@@ -4,7 +4,7 @@
 #include <glm\glm.hpp>
 
 
-namespace vox{
+namespace sweet{
 /***********************************************
 *
 * A matrix stack used for matrix operations such

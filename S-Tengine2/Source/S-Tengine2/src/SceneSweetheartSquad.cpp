@@ -181,7 +181,7 @@ void SceneSweetheartSquad::update(Step * _step){
 
 	Scene::update(_step);
 
-	glm::uvec2 sd = vox::getScreenDimensions();
+	glm::uvec2 sd = sweet::getScreenDimensions();
 	uiLayer.resize(0.f, sd.x, 0.f, sd.y);
 	uiLayer.update(_step);
 	
@@ -189,7 +189,7 @@ void SceneSweetheartSquad::update(Step * _step){
 	//textThing->parents.at(0)->translate(game->viewPortWidth*0.5f, game->viewPortHeight*0.8f, 0, false);
 }
 
-void SceneSweetheartSquad::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void SceneSweetheartSquad::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	clear();
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer

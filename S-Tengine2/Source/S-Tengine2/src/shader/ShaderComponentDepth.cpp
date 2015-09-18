@@ -8,7 +8,7 @@ ShaderComponentDepth::ShaderComponentDepth(Shader * _shader) :
 {
 }
 
-void ShaderComponentDepth::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentDepth::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	// Do nothing
 }
 
@@ -35,7 +35,7 @@ std::string ShaderComponentDepth::getOutColorMod(){
 		GL_OUT_OUT_COLOR  + "*=" + "vec4(zbuffer, zbuffer, zbuffer, 1.0)" + SEMI_ENDL; 
 }
 
-void ShaderComponentDepth::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentDepth::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	makeDirty();
 	ShaderComponent::clean(_matrixStack, _renderOption, _nodeRenderable);
 }

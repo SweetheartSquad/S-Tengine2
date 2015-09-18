@@ -3,10 +3,11 @@
 #include <stb/stb_image.h>
 #include <stb/stb_image_write.h>
 
-#include "Texture.h"
+#include <Texture.h>
 #include <Resource.h>
 #include <GLUtils.h>
 #include <Log.h>
+#include <FrameBufferInterface.h>
 
 Texture::Texture(std::string _src, bool _storeData, bool _autoRelease) :
 	NodeResource(_autoRelease),
@@ -17,6 +18,17 @@ Texture::Texture(std::string _src, bool _storeData, bool _autoRelease) :
 	channels(0),
 	storeData(_storeData)
 {
+}
+
+Texture::Texture(FrameBufferInterface * _frameBuffer, bool _storeData, int _frameBufferChannelIndex, int _channels, bool _autoRelease) :
+	NodeResource(_autoRelease),
+	width(_frameBuffer->width),
+	height(_frameBuffer->height),
+	data(_frameBuffer->getPixelData(_frameBufferChannelIndex)),
+	channels(_channels),
+	storeData(_storeData)
+{
+	load();
 }
 
 Texture::Texture(bool _storeData, bool _autoRelease) :
@@ -39,7 +51,6 @@ void Texture::load(){
 		if(data == nullptr){
 			loadImageData();
 		}
-
 		// create and buffer OpenGL texture
 		glGenTextures(1, &textureId);
 		checkForGlError(0,__FILE__,__LINE__);
@@ -56,7 +67,7 @@ void Texture::load(){
 
 void Texture::unload(){
 	if(loaded){
-		Log::info("Unloading texture: " + this->src);
+		ST_LOG_INFO("Unloading texture: " + this->src);
 		glDeleteTextures(1, &textureId);
 		textureId = 0;
 		checkForGlError(0,__FILE__,__LINE__);
@@ -78,7 +89,7 @@ void Texture::unloadImageData(){
 void Texture::saveImageData(std::string _filename){
 	std::stringstream ss;
 	ss << "data/images/" << _filename;
-	if(stbi_write_tga(ss.str().c_str(), width, height, channels, data)){
+	if(stbi_write_tga(ss.str().c_str(), width, height, channels, data, 1)){
 		Log::info("Texture \"data/images/"+_filename+"\" saved");
 	}else{
 		Log::error("Texture \"data/images/"+_filename+"\" not saved");

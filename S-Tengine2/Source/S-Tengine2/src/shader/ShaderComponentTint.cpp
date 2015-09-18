@@ -57,7 +57,7 @@ void ShaderComponentTint::load(){
 	ShaderComponent::load();
 }
 
-void ShaderComponentTint::configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
+void ShaderComponentTint::configureUniforms(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
 	glUniform1f(redLoc, red);
 	glUniform1f(greenLoc, green);
 	glUniform1f(blueLoc, blue);

@@ -7,7 +7,7 @@
 
 #include <vector>
 
-#include "Vox.h"
+#include "Sweet.h"
 #include "shader/Shader.h"
 #include "Vertex.h"
 #include "Light.h"
@@ -111,7 +111,7 @@ public:
 	/** If dirty, copies data from vertices and indices to VBO and IBO and flags as clean */
 	virtual void clean();
 	/** Renders the vao using the given shader, model-view-projection and lights */
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
+	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
 	/** A helper method to configure all the starndard vertex attributes - Position, Colours, Normals */
 	void configureDefaultVertexAttributes(Shader *_shader);
 	/** Sets the normal of the given vert to _x, _y, _z */
@@ -133,7 +133,7 @@ public:
 	Texture * getTexture(int _idx);
 
 	// returns a box which covers the verts of the mesh
-	vox::Box calcBoundingBox();
+	sweet::Box calcBoundingBox();
 
 	friend std::ostream& operator<<(std::ostream& os, const MeshInterface& obj);
 };

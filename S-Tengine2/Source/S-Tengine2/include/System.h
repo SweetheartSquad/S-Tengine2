@@ -2,14 +2,14 @@
 
 #include <GLFW/glfw3.h>
 
-#include "Vox.h"
+#include "Sweet.h"
 
 /**********************************************
 *
 * A collection of system utility functions
 *
 ***********************************************/
-namespace vox{
+namespace sweet{
 	/**
 	* @returns the width of the current context in pixels 
 	*/

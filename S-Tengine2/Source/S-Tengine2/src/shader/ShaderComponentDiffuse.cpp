@@ -78,10 +78,10 @@ std::string ShaderComponentDiffuse::getOutColorMod(){
 		END_IF + ENDL;
 }
 
-void ShaderComponentDiffuse::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentDiffuse::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 }
 
-void ShaderComponentDiffuse::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentDiffuse::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	SharedComponentShaderMethods::configureLights(_matrixStack, _renderOption, _nodeRenderable);
 }

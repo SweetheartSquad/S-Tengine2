@@ -5,14 +5,14 @@
 #include <Game.h>
 #include <Keyboard.h>
 #include <Mouse.h>
-#include <Vox.h>
+#include <sweet.h>
 #include <MatrixStack.h>
 #include <VoxRenderOptions.h>
 #include <GLUtils.h>
 #include <System.h>
 
 #include <SceneSplash.h>
-#include <SceneSweetheartSquad.h>
+#include <ScenesweetheartSquad.h>
 #include <MeshInterface.h>
 #include <Log.h>
 
@@ -77,17 +77,17 @@ void Game::performGameLoop(){
 	accumulator += time - lastTimestep;
 	lastTimestep = time;
 	//std::cout << accumulator << std::endl;
-	if(accumulator >= vox::step.targetFrameDuration){
-		accumulator -= vox::step.targetFrameDuration;
+	if(accumulator >= sweet::step.targetFrameDuration){
+		accumulator -= sweet::step.targetFrameDuration;
 #endif
-		vox::calculateDeltaTimeCorrection();
+		sweet::calculateDeltaTimeCorrection();
 		glfwPollEvents();
-		update(&vox::step);
+		update(&sweet::step);
 		draw();
 
-		glfwSwapBuffers(vox::currentContext);
+		glfwSwapBuffers(sweet::currentContext);
 		manageInput();
-		isRunning = !glfwWindowShouldClose(vox::currentContext);
+		isRunning = !glfwWindowShouldClose(sweet::currentContext);
 
 		if(switchingScene){
 			if(deleteOldScene){
@@ -210,7 +210,7 @@ void Game::update(Step * _step){
 		break;
 	}
 	
-	if(currentScene != nullptr/* && vox::step.deltaTimeCorrection < 5*/){
+	if(currentScene != nullptr/* && sweet::step.deltaTimeCorrection < 5*/){
 		currentScene->update(_step);
 	}
 }
@@ -219,7 +219,7 @@ void Game::draw(void){
 	if(autoResize){
 		resize();
 	}
-	vox::MatrixStack ms;
+	sweet::MatrixStack ms;
 	VoxRenderOptions ro(nullptr, nullptr, nullptr);
 	ro.kc_active = kc_active;
 	if(currentScene != nullptr){
@@ -272,18 +272,18 @@ void Game::toggleFullScreen(){
 	Transform::transformShader->unload();
 	
 	// destroy the current window
-	glfwSetKeyCallback(vox::currentContext, nullptr);
-	glfwSetMouseButtonCallback(vox::currentContext, nullptr);
-	glfwSetCursorPosCallback(vox::currentContext, nullptr);
-	glfwSetWindowFocusCallback(vox::currentContext, nullptr);
-	glfwDestroyWindow(vox::currentContext);
+	glfwSetKeyCallback(sweet::currentContext, nullptr);
+	glfwSetMouseButtonCallback(sweet::currentContext, nullptr);
+	glfwSetCursorPosCallback(sweet::currentContext, nullptr);
+	glfwSetWindowFocusCallback(sweet::currentContext, nullptr);
+	glfwDestroyWindow(sweet::currentContext);
 
 	// Toggle fullscreen flag.
-	vox::fullscreen = !vox::fullscreen;
+	sweet::fullscreen = !sweet::fullscreen;
 
 	// create new window and make assign it to the current context
-	vox::currentContext = vox::initWindow();
-	glfwMakeContextCurrent(vox::currentContext);
+	sweet::currentContext = sweet::initWindow();
+	glfwMakeContextCurrent(sweet::currentContext);
 	
 	if(autoResize){
 		resize();
@@ -333,11 +333,11 @@ void Game::takeScreenshot(){
 }
 
 void Game::exit(){
-	glfwSetWindowShouldClose(vox::currentContext, true);
+	glfwSetWindowShouldClose(sweet::currentContext, true);
 }
 
 void Game::resize(){
-	glm::vec2 screenDimensions = vox::getScreenDimensions();
+	glm::vec2 screenDimensions = sweet::getScreenDimensions();
 	setViewport(0, 0, screenDimensions.x, screenDimensions.y);
 }
 

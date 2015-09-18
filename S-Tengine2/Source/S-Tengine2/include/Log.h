@@ -9,9 +9,9 @@
 #define ST_LOG_INFO_V(message)  Log::info(__FILE__, __LINE__, message);
 
 // Just the message
-#define ST_LOG_ERROR(message) Log::error(message);
-#define ST_LOG_WARN(message)  Log::warn(message);
-#define ST_LOG_INFO(message)  Log::info(message);
+#define ST_LOG_ERROR(message) if(Log::FORCE_VERBOSE){ST_LOG_ERROR_V(message);}else{Log::error(message);}
+#define ST_LOG_WARN(message)  if(Log::FORCE_VERBOSE){ST_LOG_WARN_V(message);}else{Log::warn(message);}
+#define ST_LOG_INFO(message)  if(Log::FORCE_VERBOSE){ST_LOG_INFO_V(message);}else{Log::info(message);}
 
 /********************************************************
 *
@@ -28,7 +28,12 @@ public:
 	static bool THROW_ON_ERROR;
 
 	/** Wherer or not messages should be logged to a file*/
-	static bool WRITE_TO_FILE;
+	static bool WRITE_INFO_TO_FILE;
+	static bool WRITE_WARN_TO_FILE;
+	static bool WRITE_ERROR_TO_FILE;
+
+	/** Wherer or not to force verbose logging*/
+	static bool FORCE_VERBOSE;
 	
 	static int INFO_COLOUR_FG;
 	static int WARN_COLOUR_FG;

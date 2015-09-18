@@ -57,7 +57,7 @@ Scenario::Scenario(std::string _jsonSrc) :
 	defaultFont = new AssetFont(defTexJson);
 
 
-	std::string jsonLoaded = FileUtils::voxReadFile(_jsonSrc);
+	std::string jsonLoaded = FileUtils::readFile(_jsonSrc);
 	parsingSuccessful = reader.parse( jsonLoaded, root );
 	if(!parsingSuccessful){
 		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);

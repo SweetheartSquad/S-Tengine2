@@ -10,7 +10,7 @@
 #include <Transform.h>
 #include <SpotLight.h>
 
-void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStack, RenderOptions * _renderOption, NodeRenderable* _nodeRenderable){
+void SharedComponentShaderMethods::configureLights(sweet::MatrixStack* _matrixStack, RenderOptions * _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 	if(mesh != nullptr){
 		// Pass the _shader the number of lights
@@ -66,7 +66,7 @@ void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStac
 	}
 }
 
-void SharedComponentShaderMethods::configureMaterials(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void SharedComponentShaderMethods::configureMaterials(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 	if(mesh != nullptr){
 		// Pass the _shader the number of materials

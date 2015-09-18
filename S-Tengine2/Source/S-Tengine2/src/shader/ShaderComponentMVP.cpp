@@ -55,7 +55,7 @@ void ShaderComponentMVP::load() {
 	mvpUniformLocation		  = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_MODEL_VIEW_PROJECTION.c_str());
 }
 
-void ShaderComponentMVP::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) {
+void ShaderComponentMVP::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) {
 	
 	const glm::mat4 * m = _matrixStack->getModelMatrix();
 	glUniformMatrix4fv(modelUniformLocation, 1, GL_FALSE, &(*m)[0][0]);

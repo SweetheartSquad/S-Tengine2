@@ -98,7 +98,7 @@ std::string ShaderComponentShadow::getOutColorMod(){
 		"}" + ENDL;
 }
 
-void ShaderComponentShadow::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentShadow::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 

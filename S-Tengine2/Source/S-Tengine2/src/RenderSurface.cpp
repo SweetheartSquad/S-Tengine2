@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "RenderSurface.h"
@@ -80,7 +81,7 @@ void RenderSurface::unload(){
 	NodeLoadable::unload();
 }
 
-void RenderSurface::render(GLuint _textureId, GLint _renderTo){
+void RenderSurface::render(GLuint _textureId, GLint _renderTo, bool _disableBlending){
 	load();
 	clean();
 
@@ -91,6 +92,10 @@ void RenderSurface::render(GLuint _textureId, GLint _renderTo){
 				glBindFramebuffer(GL_FRAMEBUFFER, _renderTo);
 				glBindVertexArray(vaoId);
 				checkForGlError(0,__FILE__,__LINE__);
+
+				if(_disableBlending){
+					glDisable(GL_BLEND);
+				}
 
 				GLboolean dt = glIsEnabled(GL_DEPTH_TEST);
 				if (dt == GL_TRUE){
@@ -124,7 +129,13 @@ void RenderSurface::render(GLuint _textureId, GLint _renderTo){
 				if (dt == GL_TRUE){
 					glEnable(GL_DEPTH_TEST);
 				}
+
+				if(_disableBlending){
+					glEnable(GL_BLEND);
+				}
+
 				glBindVertexArray(0);
+
 
 				checkForGlError(0, __FILE__, __LINE__);
 			}else{

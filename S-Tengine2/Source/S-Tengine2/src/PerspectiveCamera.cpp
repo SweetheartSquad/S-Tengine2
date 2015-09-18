@@ -18,7 +18,7 @@ void PerspectiveCamera::update(Step * _step){
 	lastOrientation = childTransform->getOrientationQuat();
 
 	glm::quat newOrientation = calcOrientation();
-	newOrientation = glm::slerp(lastOrientation, newOrientation, interpolation * static_cast<float>(vox::deltaTimeCorrection));
+	newOrientation = glm::slerp(lastOrientation, newOrientation, interpolation * static_cast<float>(sweet::deltaTimeCorrection));
 
 	childTransform->setOrientation(newOrientation);
 
@@ -39,7 +39,7 @@ glm::mat4 PerspectiveCamera::getViewMatrix(){
 }
 
 glm::mat4 PerspectiveCamera::getProjectionMatrix(){
-	glm::vec2 screenDimensions = vox::getScreenDimensions();
+	glm::vec2 screenDimensions = sweet::getScreenDimensions();
 	// Projection matrix : 45° Field of View, ratio, near-far clip : 0.1 unit <-> 100 units
 	return glm::perspective(fieldOfView, static_cast<float>(screenDimensions.x)/static_cast<float>(screenDimensions.y), nearClip, farClip);
 }

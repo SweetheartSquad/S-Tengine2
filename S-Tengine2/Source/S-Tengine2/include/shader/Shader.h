@@ -8,7 +8,7 @@
 
 class NodeRenderable;
 
-namespace vox{
+namespace sweet{
 	class MatrixStack;
 }
 
@@ -74,8 +74,8 @@ public:
 	/** Prints the shader to the console */
 	void printShader();
 
-	virtual void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
-	virtual void clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
+	virtual void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
+	virtual void clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
 	virtual void makeDirty();
 
 	void load() override;

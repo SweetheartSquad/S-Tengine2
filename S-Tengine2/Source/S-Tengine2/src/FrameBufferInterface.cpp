@@ -152,6 +152,7 @@ void FrameBufferInterface::saveToFile(const char * _filename, unsigned long int 
 	bytes = textureWidth*textureHeight*4;
 	
 	GLubyte * pixels = (GLubyte *)malloc(bytes * sizeof(GLubyte));
+
 	unsigned char * pixelsSOIL = (unsigned char *)malloc(bytes * sizeof(unsigned char));
 
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
@@ -169,4 +170,20 @@ void FrameBufferInterface::saveToFile(const char * _filename, unsigned long int 
 	}
 	
 	free(pixels);
+}
+
+GLubyte * FrameBufferInterface::getPixelData(unsigned long int _fbochannel) {
+	glBindTexture(GL_TEXTURE_2D, frameBufferChannels.at(_fbochannel).id);
+	GLint textureWidth, textureHeight;
+	unsigned long int bytes;
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &textureWidth);
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &textureHeight);
+	bytes = textureWidth*textureHeight*4;
+	
+	GLubyte * pixels = (GLubyte *)malloc(bytes * sizeof(GLubyte));
+	unsigned char * pixelsSOIL = (unsigned char *)malloc(bytes * sizeof(unsigned char));
+
+	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+	return pixels;
 }

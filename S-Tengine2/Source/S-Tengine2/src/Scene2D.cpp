@@ -17,6 +17,6 @@ void Scene2D::update(Step * _step){
 	Scene::update(_step);
 }
 
-void Scene2D::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
+void Scene2D::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	Scene::render(_matrixStack, _renderOptions);
 }

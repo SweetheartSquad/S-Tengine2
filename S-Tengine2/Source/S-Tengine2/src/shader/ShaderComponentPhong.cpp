@@ -83,11 +83,11 @@ std::string ShaderComponentPhong::getOutColorMod(){
 		END_IF + ENDL;	
 }
 
-void ShaderComponentPhong::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentPhong::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 }
 
-void ShaderComponentPhong::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentPhong::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	SharedComponentShaderMethods::configureLights(_matrixStack, _renderOption, _nodeRenderable);
 	SharedComponentShaderMethods::configureMaterials(_matrixStack, _renderOption, _nodeRenderable);
 }

@@ -62,7 +62,7 @@ void ShaderComponentText::setColor(glm::vec3 _color){
 	makeDirty();
 }
 
-void ShaderComponentText::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentText::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	//ShaderComponent::clean(_matrixStack, _renderOption, _nodeRenderable);
 	configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 	shader->configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
@@ -77,7 +77,7 @@ void ShaderComponentText::load(){
 	ShaderComponent::load();
 }
 
-void ShaderComponentText::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentText::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 	int numTextures = 0;
 	if(mesh != nullptr){

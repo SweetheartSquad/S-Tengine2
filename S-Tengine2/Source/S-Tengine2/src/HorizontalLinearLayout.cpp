@@ -42,8 +42,6 @@ void HorizontalLinearLayout::layoutChildren(){
 		trans->translate(x, y, 0.f, false);
 		x += ui->getWidth(true, true);
 	}
-
-	layoutDirty = false;
 }
 
 float HorizontalLinearLayout::getContentsWidth(){

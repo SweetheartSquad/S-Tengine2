@@ -10,7 +10,7 @@ ShaderComponentMask::ShaderComponentMask(Shader * _shader) :
 {
 }
 
-void ShaderComponentMask::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentMask::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	// Do nothing
 }
 
@@ -42,7 +42,7 @@ void ShaderComponentMask::setMaskTextureId(GLuint _id){
 	makeDirty();
 }
 
-void ShaderComponentMask::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentMask::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	makeDirty();
 	ShaderComponent::clean(_matrixStack, _renderOption, _nodeRenderable);
 }

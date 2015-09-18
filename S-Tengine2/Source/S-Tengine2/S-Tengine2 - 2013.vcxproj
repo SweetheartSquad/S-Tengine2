@@ -105,7 +105,7 @@
     <ClCompile Include="src/System.cpp" />
     <ClCompile Include="src/Texture.cpp" />
     <ClCompile Include="src/Transform.cpp" />
-    <ClCompile Include="src/Vox.cpp" />
+    <ClCompile Include="src/Sweet.cpp" />
     <ClCompile Include="src/VoxelMesh.cpp" />
     <ClCompile Include="src/VoxMatrices.cpp" />
     <ClCompile Include="src/VoxRenderOptions.cpp" />
@@ -254,7 +254,7 @@
     <ClInclude Include="include/Transform.h" />
     <ClInclude Include="include/Tween.h" />
     <ClInclude Include="include/Vertex.h" />
-    <ClInclude Include="include/Vox.h" />
+    <ClInclude Include="include/Sweet.h" />
     <ClInclude Include="include/VoxelMesh.h" />
     <ClInclude Include="include/VoxMatrices.h" />
     <ClInclude Include="include/VoxRenderOptions.h" />

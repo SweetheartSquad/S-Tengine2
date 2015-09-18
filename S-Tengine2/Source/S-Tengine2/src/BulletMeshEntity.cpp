@@ -15,7 +15,7 @@ void BulletMeshEntity::update(Step* _step){
 }
 
 void BulletMeshEntity::setColliderAsBoundingBox(){
-	vox::Box bb = calcOverallBoundingBox();
+	sweet::Box bb = calcOverallBoundingBox();
 	setColliderAsBox(bb.width*0.5f, bb.height*0.5f, bb.depth*0.5f);
 	
 	// this moves the mesh so that it is on top of the collider, and then sets the collider position to be where the mesh was
@@ -24,7 +24,7 @@ void BulletMeshEntity::setColliderAsBoundingBox(){
 }
 
 void BulletMeshEntity::setColliderAsBoundingSphere(bool _encompassBox){
-	vox::Box bb = calcOverallBoundingBox();
+	sweet::Box bb = calcOverallBoundingBox();
 	float diameter = _encompassBox ? glm::length(glm::vec3(bb.width, bb.height, bb.depth)) : std::max(bb.width, std::max(bb.height, bb.depth));
 	setColliderAsSphere(diameter*0.5f);
 	
