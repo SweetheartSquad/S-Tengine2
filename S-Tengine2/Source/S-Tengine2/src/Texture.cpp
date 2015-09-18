@@ -89,7 +89,7 @@ void Texture::unloadImageData(){
 void Texture::saveImageData(std::string _filename){
 	std::stringstream ss;
 	ss << "data/images/" << _filename;
-	if(stbi_write_tga(ss.str().c_str(), width, height, channels, data)){
+	if(stbi_write_tga(ss.str().c_str(), width, height, channels, data, 1)){
 		Log::info("Texture \"data/images/"+_filename+"\" saved");
 	}else{
 		Log::error("Texture \"data/images/"+_filename+"\" not saved");

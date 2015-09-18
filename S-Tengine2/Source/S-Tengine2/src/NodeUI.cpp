@@ -196,12 +196,10 @@ void NodeUI::setMouseEnabled(bool _mouseEnabled){
 	mouseEnabled = _mouseEnabled;
 }
 
-
 void NodeUI::update(Step * _step){
 	__updateForEntities(_step);
 	__updateForTexture(_step);
 }
-
 
 Texture * NodeUI::renderToTexture() {
 	if(frameBuffer == nullptr){
@@ -212,22 +210,30 @@ Texture * NodeUI::renderToTexture() {
 	RenderOptions renderOptions(nullptr, nullptr);
 	sweet::MatrixStack matrixStack;
 
-	OrthographicCamera * cam = new OrthographicCamera(0, getWidth(true, false), 0, getHeight(true, false), -1000, 1000);
+	OrthographicCamera * cam = new OrthographicCamera(//0, getWidth(true, false) * 2.0f, 0, getHeight(true, false) * 2.0f, -1000, 1000);
+		-getWidth(true, false) * 1.75f, 
+		 getWidth(true, false) * 1.75f, 
+		-getHeight(true, false) * 1.75f, 
+		 getHeight(true, false) * 1.75f, 
+		-1000, 
+		 1000);
+
+
 	Transform * t = new Transform();
 	t->addChild(cam);
+		
+	cam->firstParent()->translate(getWidth(true, false) * 1.75f, getHeight(true, false) * 1.75f, 0.f);
 
 	matrixStack.setViewMatrix(&cam->getViewMatrix());
 	matrixStack.setProjectionMatrix(&cam->getProjectionMatrix());
 
-	float size = std::max(getWidth(true, false), getHeight(true, false));
-
-    frameBuffer->resize(size, size);
+	frameBuffer->resize(getWidth(true, false), getHeight(true, false));
 
 	GLint currentFrameBuffer;
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFrameBuffer);
 
 	frameBuffer->bindFrameBuffer();
-	
+
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
 
 	if(depth == GL_TRUE){
@@ -244,15 +250,19 @@ Texture * NodeUI::renderToTexture() {
 
 	if(renderedTexture == nullptr) {
 		renderedTexture = new Texture(frameBuffer, true, 0, 4, true);	
-	}else {
-		renderedTexture->width  = size;
-		renderedTexture->height = size;
+		renderedTexture->width  = getWidth(true, false);//size;
+		renderedTexture->height = getHeight(true, false);//((float)size/1.5f);
 		renderedTexture->data   = frameBuffer->getPixelData(0);
+		//renderedTexture->bufferData();
 		renderedTexture->unload();
 		renderedTexture->load();
-
-		// Can we just use this?
-		// renderedTexture->bufferData();
+	}else {
+		renderedTexture->width  = getWidth(true, false);//size;
+		renderedTexture->height = getHeight(true, false);//((float)size/1.5f);
+		renderedTexture->data   = frameBuffer->getPixelData(0);
+		//renderedTexture->bufferData();
+		renderedTexture->unload();
+		renderedTexture->load();
 	}
 
 	renderedTexture->saveImageData("test.tga");
@@ -263,6 +273,7 @@ Texture * NodeUI::renderToTexture() {
 
 MeshEntity * NodeUI::getTexturedPlane() {
 	if(texturedPlane == nullptr) {
+
 		texturedPlane = new MeshEntity(MeshFactory::getPlaneMesh(0.5f), background->shader);
 		texturedPlane->mesh->pushTexture2D(renderedTexture == nullptr ? renderToTexture() : renderedTexture);
 		texturedPlane->mesh->scaleModeMag = GL_NEAREST;
