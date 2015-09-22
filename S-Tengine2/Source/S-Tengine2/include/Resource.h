@@ -2,6 +2,7 @@
 
 #include <node\Node.h>
 #include <string>
+#include <MeshInterface.h>
 
 class VoxelJoint;
 class VoxelMesh;
