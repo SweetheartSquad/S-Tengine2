@@ -17,7 +17,15 @@ MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader, bool _configureD
 	meshTransform(childTransform->addChild(mesh))
 {
 	if(shader != nullptr && _configureDefaultVertexAttributes) {
+		if(!mesh->loaded || mesh->dirty) {
+			mesh->load();
+		}
+		if(!shader->loaded || shader->isDirty()) {
+			shader->load();
+		}
 		mesh->configureDefaultVertexAttributes(_shader);
+	}else {
+		ST_LOG_WARN_V("Shader was nullptr - Vertex attributes not configured")
 	}
 	++mesh->referenceCount;
 }

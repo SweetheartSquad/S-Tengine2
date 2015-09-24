@@ -238,6 +238,10 @@ void Shader::printShader(){
 
 }
 
+bool Shader::isDirty() {
+	return dirty;
+}
+
 void Shader::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	//leave unimplemented
 }
