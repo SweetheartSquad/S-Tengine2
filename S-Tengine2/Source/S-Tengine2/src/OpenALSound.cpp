@@ -5,6 +5,8 @@
 
 #include <sndfile.hh>
 
+#include <algorithm>
+
 ALCcontext * NodeOpenAL::context = nullptr; 
 ALCdevice * NodeOpenAL::device = nullptr;
 
