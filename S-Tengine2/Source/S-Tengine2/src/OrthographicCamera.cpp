@@ -13,7 +13,7 @@ OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom,
 	right(_right)
 {
 	forwardVectorRotated = glm::vec3(0.f, 0.f, 1.f);
-	rightVectorRotated = glm::vec3(-1.f, 0.f, 0.f);
+	rightVectorRotated = glm::vec3(1.f, 0.f, 0.f);
 
 	nearClip = _near;
 	farClip = _far;
