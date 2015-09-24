@@ -23,6 +23,8 @@
 #include <OrthographicCamera.h>
 #include <StandardFrameBuffer.h>
 
+#include <algorithm>
+
 ComponentShaderBase * NodeUI::bgShader = nullptr;
 
 NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode, bool _mouseEnabled) :

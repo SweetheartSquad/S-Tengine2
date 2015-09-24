@@ -3,6 +3,8 @@
 #include <BulletMeshEntity.h>
 #include <MeshInterface.h>
 
+#include <algorithm>
+
 BulletMeshEntity::BulletMeshEntity(BulletWorld * _world, MeshInterface * _mesh) :
 	MeshEntity(_mesh),
 	NodeBulletBody(_world)
