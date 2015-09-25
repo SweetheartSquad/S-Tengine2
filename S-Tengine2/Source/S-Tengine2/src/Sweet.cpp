@@ -1,4 +1,4 @@
-// stb has its own guards, so do it before #pragma once
+﻿// stb has its own guards, so do it before #pragma once
 // the define is needed in one cpp before the include
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -125,6 +125,7 @@ GLFWwindow * sweet::initWindow(){
 }
 
 void sweet::initialize(std::string _title){
+	Log::info("*** Sweet Initialization ***");
 	// you shouldn't be calling initialize if we've already got a window
 	assert(sweet::currentContext == nullptr);
 
@@ -172,6 +173,7 @@ void sweet::initialize(std::string _title){
 }
 
 void sweet::destruct(){
+	Log::info("*** Sweet Destruction ***");
 	glfwTerminate();
 
 	FT_Done_FreeType(freeTypeLibrary);
