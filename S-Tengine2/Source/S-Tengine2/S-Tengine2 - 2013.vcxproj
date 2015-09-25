@@ -151,6 +151,7 @@
     <ClCompile Include="src/Timeout.cpp" />
     <ClCompile Include="src/UIUnit.cpp" />
     <ClCompile Include="src/VerticalLinearLayout.cpp" />
+    <ClCompile Include="src/Configuration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include/Accelerometer.h" />
@@ -303,6 +304,7 @@
     <ClInclude Include="include/Timeout.h" />
     <ClInclude Include="include/UIUnit.h" />
     <ClInclude Include="include/VerticalLinearLayout.h" />
+    <ClInclude Include="include/Configuration.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E178CAF8-5E96-478C-812C-DCBA942FC878}</ProjectGuid>
