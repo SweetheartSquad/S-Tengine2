@@ -15,7 +15,6 @@ class Sprite : public MeshEntity{
 public:
 	std::map<std::string, SpriteSheetAnimation *> animations;
 	SpriteSheetAnimation * currentAnimation;
-	Texture * animatedTexture;
 	bool playAnimation;
 
 	explicit Sprite(Shader * _shader = nullptr);
