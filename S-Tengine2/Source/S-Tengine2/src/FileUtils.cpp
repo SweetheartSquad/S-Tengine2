@@ -24,7 +24,7 @@ bool FileUtils::createDirectoryIfNotExists(const std::string & _src){
 }
 
 bool FileUtils::createFileIfNotExists(const std::string & _src){
-	if (std::ifstream(_src)){
+	if (fileExists(_src)){
 		// File already exists
 		return true;
 	}
@@ -35,4 +35,12 @@ bool FileUtils::createFileIfNotExists(const std::string & _src){
 	}
 	// File was created
 	return true;
+}
+
+bool FileUtils::fileExists(const std::string & _src){
+	if (std::ifstream(_src)){
+		return true;
+	}else{
+		return false;
+	}
 }

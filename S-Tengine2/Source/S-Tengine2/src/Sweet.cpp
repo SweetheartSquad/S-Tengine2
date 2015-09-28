@@ -1,4 +1,4 @@
-// stb has its own guards, so do it before #pragma once
+﻿// stb has its own guards, so do it before #pragma once
 // the define is needed in one cpp before the include
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -24,6 +24,7 @@
 
 Step sweet::step;
 std::string sweet::title = "S-Tengine2";
+Configuration sweet::config;
 
 double sweet::lastTimestamp = 0;
 double sweet::deltaTimeCorrection = 1;
@@ -31,7 +32,6 @@ double sweet::deltaTimeCorrection = 1;
 bool sweet::fullscreen = false;
 
 FT_Library sweet::freeTypeLibrary = nullptr;
-
 GLFWwindow * sweet::currentContext = nullptr;
 
 void sweet::setGlfwWindowHints(){
@@ -105,26 +105,9 @@ void sweet::error_callback(int _error, const char * _description){
 }
 
 GLFWwindow * sweet::initWindow(){
-	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-	int w = mode->width;
-	int	h = mode->height;
-	
-	if(!fullscreen){
-		w /= 2;
-		h /= 2;
-	}
-	// Create the new window
 	GLFWwindow * window;
-#ifdef _DEBUG
-	if(fullscreen){
-		w -= 50;
-		h -= 100;
-	}
-	window = glfwCreateWindow(w, h, title.c_str(), nullptr, nullptr);
-#else
-	window = glfwCreateWindow(w, h, title.c_str(), fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
-#endif
+	window = glfwCreateWindow(config.resolution.x, config.resolution.y, title.c_str(), config.fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+
 	if (!window){
 		glfwTerminate();
 		throw "some sort of window error?";
@@ -142,6 +125,7 @@ GLFWwindow * sweet::initWindow(){
 }
 
 void sweet::initialize(std::string _title){
+	Log::info("*** Sweet Initialization ***");
 	// you shouldn't be calling initialize if we've already got a window
 	assert(sweet::currentContext == nullptr);
 
@@ -155,11 +139,14 @@ void sweet::initialize(std::string _title){
 
 	sweet::setGlfwWindowHints();
 
+	// initialize glfw
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit()){
 		exit(EXIT_FAILURE);
 	}
-
+	
+	// load configuration file
+	config.load("data/config.json");
 	
 	
 	sweet::currentContext = sweet::initWindow();
@@ -186,6 +173,7 @@ void sweet::initialize(std::string _title){
 }
 
 void sweet::destruct(){
+	Log::info("*** Sweet Destruction ***");
 	glfwTerminate();
 
 	FT_Done_FreeType(freeTypeLibrary);

@@ -151,6 +151,7 @@
     <ClCompile Include="src/Timeout.cpp" />
     <ClCompile Include="src/UIUnit.cpp" />
     <ClCompile Include="src/VerticalLinearLayout.cpp" />
+    <ClCompile Include="src/Configuration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include/Accelerometer.h" />
@@ -303,6 +304,7 @@
     <ClInclude Include="include/Timeout.h" />
     <ClInclude Include="include/UIUnit.h" />
     <ClInclude Include="include/VerticalLinearLayout.h" />
+    <ClInclude Include="include/Configuration.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E178CAF8-5E96-478C-812C-DCBA942FC878}</ProjectGuid>
@@ -340,8 +342,8 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(FREETYPE_DIR)\include;$(IncludePath)</IncludePath>
     <SourcePath>src;$(SourcePath)</SourcePath>
-    <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
-    <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
+    <OutDir>..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
+    <IntDir>..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <TargetName>$(ProjectName)d</TargetName>
@@ -350,8 +352,8 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
     <SourcePath>src;$(SourcePath)</SourcePath>
-    <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
-    <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
+    <OutDir>..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
+    <IntDir>..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'">
     <ClCompile>
