@@ -125,7 +125,6 @@ GLFWwindow * sweet::initWindow(){
 }
 
 void sweet::initialize(std::string _title){
-	Log::info("*** Sweet Initialization ***");
 	// you shouldn't be calling initialize if we've already got a window
 	assert(sweet::currentContext == nullptr);
 
@@ -170,15 +169,16 @@ void sweet::initialize(std::string _title){
 		std::cerr << "Couldn't initialize FreeType library\n";
 		throw;
 	}
+	Log::info("*** Sweet Initialization ***");
 }
 
 void sweet::destruct(){
-	Log::info("*** Sweet Destruction ***");
 	glfwTerminate();
 
 	FT_Done_FreeType(freeTypeLibrary);
 	
 	NodeOpenAL::destruct();
+	Log::info("*** Sweet Destruction ***");
 }
 
 /////////// Delta Time Begin //////////////
