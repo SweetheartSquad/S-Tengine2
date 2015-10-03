@@ -43,7 +43,7 @@ void Keyboard::update(){
 	justReleasedKeys.clear();
 }
 
-Keyboard& Keyboard::getInstance(){
+Keyboard & Keyboard::getInstance(){
 	static Keyboard *keyboard;
 	if(keyboard == 0){
 		keyboard= new Keyboard();

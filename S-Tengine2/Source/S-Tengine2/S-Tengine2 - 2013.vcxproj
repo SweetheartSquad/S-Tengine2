@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cpp/MouseCameraController.cpp" />
     <ClCompile Include="src/Accelerometer.cpp" />
     <ClCompile Include="src/AccelerometerParser.cpp" />
     <ClCompile Include="src/Arduino.cpp" />
@@ -305,6 +306,7 @@
     <ClInclude Include="include/UIUnit.h" />
     <ClInclude Include="include/VerticalLinearLayout.h" />
     <ClInclude Include="include/Configuration.h" />
+    <ClInclude Include="include/MouseCameraController.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E178CAF8-5E96-478C-812C-DCBA942FC878}</ProjectGuid>
