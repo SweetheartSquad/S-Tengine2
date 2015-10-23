@@ -38,10 +38,6 @@ public:
 	// saves the shader on this supersprite and sets it on all its components
 	virtual void setShader(Shader * _shader, bool _configureDefaultVertexAttributes);
 	
-	virtual void addToScene(Scene * _scene);
-
-	virtual void addToLayeredScene(LayeredScene * _scene, unsigned long int _layer);
-	
 	virtual void translateComponents(glm::vec3 _translateVector);
 	virtual void translateComponents(float _x, float _y, float _z);
 	void setUserData(void * _data);
@@ -49,8 +45,11 @@ public:
 	// Sets the group index on all components
 	void setGroupIndex(int16 _groupIndex);
 
+	/**
+	* Adds a component to the components list. If the shader of this is not null and the shader
+	* of the component is null then the shader of this will be applied to the component
+	*/
 	virtual void addComponent(Box2DSprite ** _component);
 
-	// Can't use this with the way we have things set up, things like the catapult arm and puppet hand don't store their actual world position since they're positioned with joints
 	void snapComponents(Box2DSprite * _sprite);
 };
