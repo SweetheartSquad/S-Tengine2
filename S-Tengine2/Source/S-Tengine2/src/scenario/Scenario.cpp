@@ -85,6 +85,11 @@ Scenario::Scenario(std::string _jsonSrc) :
 				textures[at->id] = at;
 				continue;
 			 }
+			 AssetTextureSampler * ats = dynamic_cast<AssetTextureSampler *>(a);
+			 if(ats != nullptr){
+				textureSamplers[ats->id] = ats;
+				continue;
+			 }
 			 AssetAudio * aa = dynamic_cast<AssetAudio *>(a);
 			 if(aa != nullptr){
 				 audio[aa->id] = aa;
@@ -124,8 +129,8 @@ AssetTexture * Scenario::getTexture(std::string _id){
 
 AssetTextureSampler * Scenario::getTextureSampler(std::string _id){
 	AssetTextureSampler * res = nullptr;
-	auto it = audio.find(_id);
-	if(it != audio.end()){
+	auto it = textureSamplers.find(_id);
+	if(it != textureSamplers.end()){
 		res = dynamic_cast<AssetTextureSampler *>(it->second);
 	}else{
 		res = defaultTextureSampler;

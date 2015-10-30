@@ -46,8 +46,6 @@ void SharedComponentShaderMethods::configureLights(sweet::MatrixStack* _matrixSt
 
 					if(l->getType() == kSPOT_LIGHT) {
 
-						ST_LOG_INFO("here");
-
 						SpotLight * sl = dynamic_cast<SpotLight *>(l);
 
 						const std::string ang = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].coneAngle", i);

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <scenario/Asset.h>
+#include <FileUtils.h>
+#include <json/json.h>
 
 Asset::Asset(Json::Value _json) :
 	id(_json.get("id", "NO_ID").asString())
@@ -30,20 +32,32 @@ AssetTextureSampler::AssetTextureSampler(Json::Value _json) :
 	Asset(_json),
 	textureSampler(nullptr)
 {
-	std::string src = _json.get("src", "NO_TEXTURE").asString();
-	if(src == "NO_TEXTURE"){
-		Log::warn("Loaded textureSampler without a src: Cheryl substitution in effect.");
-		src = "assets/engine basics/img_cheryl.jpg";
-	}else{
-		src = "assets/textures/" + src;
+	std::string defTex = "assets/engine basics/img_cheryl.jpg";
+	std::string src = "assets/textures/" + _json.get("src", "NO_TEXTURE").asString();
+
+	const std::string defJsonRaw = FileUtils::readFile(src);
+
+	Json::Reader reader;
+	Json::Value defJson;
+	bool parsingSuccessful;
+	
+	parsingSuccessful = reader.parse(defJsonRaw, defJson);
+
+	if(parsingSuccessful){
+		float u		  = defJson.get("u", 0).asFloat();
+		float v		  = defJson.get("v", 0).asFloat();
+		float w		  = defJson.get("w", 256).asFloat();
+		float h		  = defJson.get("h", 256).asFloat();
+		std::string t = defJson.get("t", defTex).asString();
+		std::string defPath = src.substr(0, src.find_last_of("\\/"));
+		Texture * texture = new Texture(defPath + "/" + t, true, false);
+		textureSampler = new TextureSampler(texture, w, h, u, v);
+		textureSampler->load();
+	}else {
+		Log::warn("Could not parse texture sampler definition, using cheryl default");	
+		textureSampler = new TextureSampler(new Texture(defTex, true, false), 256, 256, 0, 0);
+		textureSampler->load();
 	}
-	float u = _json.get("u", 0).asFloat();
-	float v = _json.get("v", 0).asFloat();
-	float w = _json.get("w", 256).asFloat();
-	float h = _json.get("h", 256).asFloat();
-	Texture * texture = new Texture(src, true, false);
-	textureSampler = new TextureSampler(texture, w, h, u, v);
-	textureSampler->load();
 }
 AssetTextureSampler::~AssetTextureSampler(){
 	delete textureSampler;
