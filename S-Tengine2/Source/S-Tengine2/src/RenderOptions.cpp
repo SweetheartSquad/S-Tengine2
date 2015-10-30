@@ -10,7 +10,9 @@ RenderOptions::RenderOptions(Shader* _shader, std::vector<Light *> *_lights, Sha
 	currentVao(0),
 	currentlyBoundShaderId(0),
 	depthBufferId(0),
-	normalBufferId(0)
+	normalBufferId(0),
+	alphaEnabled(true),
+	depthEnabled(true)
 {
 }
 

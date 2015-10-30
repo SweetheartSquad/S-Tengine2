@@ -100,19 +100,27 @@ void Scene::unload(){
 
 void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	glEnable(GL_SCISSOR_TEST);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_ALPHA_TEST);
-	//glAlphaFunc ( GL_GREATER, 0.1 ) ;
-	glEnable(GL_BLEND);
-	//glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBlendEquation(GL_FUNC_ADD);
 
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	if(_renderOptions->depthEnabled){
+		glEnable(GL_DEPTH_TEST);
+	}else{
+		glDisable(GL_DEPTH_TEST);
+	}if(_renderOptions->alphaEnabled){
+		glEnable(GL_ALPHA_TEST);
+		//glAlphaFunc ( GL_GREATER, 0.1 ) ;
+		//glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glEnable(GL_BLEND);
+		glBlendEquation(GL_FUNC_ADD);
+	}else{
+		glDisable(GL_ALPHA_TEST);
+	}
+
 
 	//Back-face culling
 	//glEnable (GL_CULL_FACE); // cull face
 	//glCullFace (GL_BACK); // cull back face
-
 	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
 	const glm::mat4 * p = &activeCamera->getProjectionMatrix();

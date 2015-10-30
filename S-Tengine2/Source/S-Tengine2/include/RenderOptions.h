@@ -27,4 +27,6 @@ public:
 	GLuint  normalBufferId;  
 
 	bool alphaSorting;
+	bool alphaEnabled;
+	bool depthEnabled;
 };
