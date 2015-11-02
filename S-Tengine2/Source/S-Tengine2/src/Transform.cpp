@@ -189,6 +189,18 @@ const glm::mat4 & Transform::getModelMatrix(){
 	return mMatrix;
 }
 
+void Transform::resetTranslation() {
+	translationVector = glm::vec3(0.f, 0.f, 0.f);
+}
+
+void Transform::resetOrientation() {
+	orientation = glm::quat(1.f, 0.f, 0.f, 0.f);
+}
+
+void Transform::resetScale() {
+	scaleVector = glm::vec3(1.f, 1.f, 1.f);
+}
+
 void Transform::reset(){
 	translate(glm::vec3(0.f, 0.f, 0.f), false);
 	scale(glm::vec3(1.f, 1.f, 1.f), false);

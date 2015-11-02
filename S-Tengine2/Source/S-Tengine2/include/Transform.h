@@ -127,6 +127,10 @@ public:
 	*/
 	void reset();
 
+	void resetTranslation();
+	void resetOrientation();
+	void resetScale();
+
 	/** 
 	* Converts the translation vector to a 4x4 matrix and returns the result 
 	*/

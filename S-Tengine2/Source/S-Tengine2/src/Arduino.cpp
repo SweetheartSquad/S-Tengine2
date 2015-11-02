@@ -34,9 +34,9 @@ Arduino::Arduino(std::string _portName){
         //If not success full display an Error
         if(GetLastError()==ERROR_FILE_NOT_FOUND){
             //Print Error if neccessary
-			Log::error("Handle was not attached. Reason: "+_portName+" not available");
+			ST_LOG_WARN("Handle was not attached. Reason: "+_portName+" not available");
         }else{
-			Log::error("Handle was not attached. Reason: unknown");
+			ST_LOG_WARN("Handle was not attached. Reason: unknown");
         }
     }else{
         //If connected we try to set the comm parameters
@@ -45,7 +45,7 @@ Arduino::Arduino(std::string _portName){
         //Try to get the current
         if (!GetCommState(this->hSerial, &dcbSerialParams)){
             //If impossible, show an error
-			Log::error("Failed to get current serial parameters");
+			ST_LOG_WARN("Failed to get current serial parameters");
         }else{
             //Define serial connection parameters for the arduino board
             dcbSerialParams.BaudRate=CBR_115200;

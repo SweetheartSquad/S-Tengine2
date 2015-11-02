@@ -109,9 +109,8 @@ void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 		glEnable(GL_ALPHA_TEST);
 		//glAlphaFunc ( GL_GREATER, 0.1 ) ;
 		//glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glBlendEquation(GL_FUNC_ADD);
 	}else{
 		glDisable(GL_ALPHA_TEST);

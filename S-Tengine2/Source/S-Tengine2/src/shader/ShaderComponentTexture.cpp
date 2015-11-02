@@ -11,7 +11,9 @@
 #include "SpriteSheetAnimation.h"
 
 ShaderComponentTexture::ShaderComponentTexture(Shader * _shader) :
-	ShaderComponent(_shader){
+	ShaderComponent(_shader),
+	discardTransperantPixels(true)
+{
 }
 
 ShaderComponentTexture::~ShaderComponentTexture(){
@@ -46,6 +48,9 @@ std::string ShaderComponentTexture::getFragmentBodyString(){
             res << "\t}" << ENDL;
         }
     res << "}" << ENDL;
+	if(discardTransperantPixels){
+		res << "if(modFrag.a <= 0.05){discard;}" << ENDL;
+	}
     return res.str();
 }
 

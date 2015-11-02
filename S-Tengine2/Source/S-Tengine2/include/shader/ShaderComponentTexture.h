@@ -15,6 +15,8 @@ class ShaderComponentTexture : public ShaderComponent{
 private:
 	GLint texNumLoc, texColLoc, texSamLoc;
 public:
+	bool discardTransperantPixels;
+
 	ShaderComponentTexture(Shader * _shader);
 	~ShaderComponentTexture() override;
 	std::string getVertexVariablesString() override;
