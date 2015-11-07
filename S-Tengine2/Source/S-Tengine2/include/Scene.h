@@ -49,9 +49,6 @@ public:
 	
 	// List of cameras for the scene
 	std::vector<Camera *> cameras;
-	
-	// OpenGL color - Defaults to black
-	float clearColor[4];
 
 	/** The lights for this scene **/
 	std::vector<Light *> lights;
@@ -111,12 +108,6 @@ public:
 	*/
 	void renderNormalBufferToSurface(RenderSurface * _renderSurface);
 
-	/**
-	* Clears the currently bound buffer using the valuses of @see clearColor
-	*
-	* Clears the following bits GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT
-	*/
-	void clear();
 
 	virtual void load() override;
 

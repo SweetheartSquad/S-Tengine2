@@ -1,11 +1,12 @@
 #pragma once
 
-#include "LayeredScene.h"
+#include <LayeredScene.h>
 
-#include "Game.h"
-#include "MatrixStack.h"
-#include "Entity.h"
-#include "Camera.h"
+#include <Game.h>
+#include <MatrixStack.h>
+#include <RenderOptions.h>
+#include <Entity.h>
+#include <Camera.h>
 #include <OrthographicCamera.h>
 
 LayeredScene::LayeredScene(Game * _game, unsigned long int _numLayers) :
@@ -37,7 +38,7 @@ void LayeredScene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _re
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBlendEquation(GL_FUNC_ADD);
 
-	glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
+	_renderOptions->clear();
 
 	glViewport(game->viewPortX, game->viewPortY, game->viewPortWidth, game->viewPortHeight);
 	glScissor(game->viewPortX, game->viewPortY, game->viewPortWidth, game->viewPortHeight);

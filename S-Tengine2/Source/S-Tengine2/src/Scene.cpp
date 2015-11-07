@@ -35,10 +35,6 @@ Scene::Scene(Game * _game):
 	keyboard(&Keyboard::getInstance()),
 	activeCamera(new PerspectiveCamera())
 {
-	clearColor[0] = 0.0;
-	clearColor[1] = 0.0;
-	clearColor[2] = 0.0;
-	clearColor[3] = 1.0;
 
 	cameras.push_back(activeCamera);
 	childTransform->addChild(activeCamera);
@@ -132,7 +128,6 @@ void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 
 	_renderOptions->lights = &lights;
 	
-	clear();
 	Entity::render(_matrixStack, _renderOptions);
 
 	_matrixStack->popMatrix();
@@ -257,12 +252,6 @@ void Scene::renderShadows(sweet::MatrixStack * _matrixStack, RenderOptions * _re
 	_renderOptions->overrideShader = backupOverride;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
-
-void Scene::clear(){
-	glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-}
-
 
 Camera * Scene::cycleCamera(){
 	if(activeCamera == cameras.back()){
