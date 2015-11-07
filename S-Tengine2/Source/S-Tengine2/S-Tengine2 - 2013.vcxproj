@@ -153,6 +153,8 @@
     <ClCompile Include="src/UIUnit.cpp" />
     <ClCompile Include="src/VerticalLinearLayout.cpp" />
     <ClCompile Include="src/Configuration.cpp" />
+    <ClCompile Include="src/scenario/ConversationIterator.cpp" />
+    <ClCompile Include="src/scenario/Option.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include/Accelerometer.h" />
@@ -307,6 +309,9 @@
     <ClInclude Include="include/VerticalLinearLayout.h" />
     <ClInclude Include="include/Configuration.h" />
     <ClInclude Include="include/MouseCameraController.h" />
+    <ClInclude Include="include/scenario/ConversationIterator.h" />
+    <ClInclude Include="include/scenario/Option.h" />
+    <ClInclude Include="include/sweet/UI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E178CAF8-5E96-478C-812C-DCBA942FC878}</ProjectGuid>

@@ -12,10 +12,11 @@ class Condition;
 class Dialogue abstract : public NodeContent{
 public:
 	std::string speaker;
-	std::vector<std::string> text;
+	std::vector<std::string> lines;
+	std::vector<Trigger *> triggerCalls;
+	std::vector<Condition *> conditionChecks;
+	
 	signed long int currentText;
-	std::vector<Trigger *> triggers;
-	std::vector<Condition *> conditions;
 	
 	virtual ~Dialogue();
 	

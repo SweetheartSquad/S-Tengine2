@@ -15,40 +15,40 @@ Dialogue::Dialogue(Json::Value _json, Scenario * _scenario) :
 {
 	const Json::Value textArray = _json["text"];
 	for(int i = 0; i < textArray.size(); ++i){
-		text.push_back(textArray[i].asString());
+		lines.push_back(textArray[i].asString());
 	}
 	const Json::Value triggersArray = _json["triggers"];
 	for(int j = 0; j < triggersArray.size(); ++j){
-		triggers.push_back(Trigger::getTrigger(triggersArray[j], scenario));
+		triggerCalls.push_back(Trigger::getTrigger(triggersArray[j], scenario));
 	}
 	const Json::Value conditionsArray = _json["conditions"];
 	for(int i = 0; i < conditionsArray.size(); ++i){
-		conditions.push_back(Condition::getCondition(conditionsArray[i], scenario));
+		conditionChecks.push_back(Condition::getCondition(conditionsArray[i], scenario));
 	}
 }
 
 Dialogue::~Dialogue(){
-	while(triggers.size() > 0){
-		delete triggers.back();
-		triggers.pop_back();
+	while(triggerCalls.size() > 0){
+		delete triggerCalls.back();
+		triggerCalls.pop_back();
 	}
-	while(conditions.size() > 0){
-		delete conditions.back();
-		conditions.pop_back();
+	while(conditionChecks.size() > 0){
+		delete conditionChecks.back();
+		conditionChecks.pop_back();
 	}
 }
 
 std::string Dialogue::getCurrentText(){
-	return text.at(currentText);
+	return lines.at(currentText);
 }
 
 bool Dialogue::sayNextText(){
 	++currentText;
-	return currentText < text.size();
+	return currentText < lines.size();
 }
 
 bool Dialogue::evaluateConditions(){
-	for(Condition * c : conditions){
+	for(Condition * c : conditionChecks){
 		if(!c->evaluate()){
 			return false;
 		}
