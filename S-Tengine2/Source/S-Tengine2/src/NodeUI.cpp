@@ -119,7 +119,7 @@ void NodeUI::up(){
 void NodeUI::click(){
 	// do event stuff
 	if(onClickFunction != nullptr){
-		onClickFunction(this);
+		onClickFunction();
 	}
 }
 void NodeUI::in(){

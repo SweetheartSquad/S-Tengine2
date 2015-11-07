@@ -21,7 +21,7 @@ enum RenderMode {
 };
 
 class NodeUI : public NodeBulletBody{
-protected:
+public:
 	bool mouseEnabled;
 	UIUnit marginLeft;
 	UIUnit marginRight;
@@ -88,7 +88,7 @@ public:
 	// how padding and margin affect width and height
 	BoxSizing boxSizing;
 
-	std::function<void(NodeUI * _this)> onClickFunction;
+	std::function<void()> onClickFunction;
 	//void (*onUpFunction)();
 
 	NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode = kENTITIES, bool _mouseEnabled = false);
