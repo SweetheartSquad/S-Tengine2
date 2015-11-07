@@ -34,6 +34,7 @@ void TextArea::invalidateAllLines(){
 void TextArea::setText(std::wstring _text){
 	text = _text;
 	updateRequired = true;
+	invalidateLayout();
 	updateText();
 }
 

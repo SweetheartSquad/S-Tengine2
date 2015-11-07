@@ -2,6 +2,7 @@
 
 #include <node\NodeChild.h>
 #include <Transform.h>
+#include <Log.h>
 
 NodeChild::NodeChild() :
 	worldPos(0),
@@ -71,6 +72,15 @@ void NodeChild::removeParent(Transform * _parent){
 			parents.erase(parents.begin() + i);
 			return;
 		}
+	}
+}
+
+Transform* NodeChild::firstParent() {
+	if(parents.size() > 0) {
+		return(parents.at(0));
+	}else {
+		ST_LOG_WARN("The list of parents was empty - Return nullptr");
+		return nullptr;
 	}
 }
 

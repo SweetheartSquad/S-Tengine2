@@ -4,7 +4,7 @@
 #include <GL/glew.h>
 #include <vector>
 #include "node/NodeResource.h"
-#include "Vox.h"
+#include "Sweet.h"
 
 struct MaterialData {
 	float shininess;

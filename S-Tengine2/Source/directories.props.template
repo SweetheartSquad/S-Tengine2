@@ -3,7 +3,7 @@
 	<ImportGroup Label="PropertySheets" />
 	<PropertyGroup Label="UserMacros">
 		<GLEW_DIR>C:\dev\glew-1.11.0</GLEW_DIR>
-		<GLFW_DIR>C:\dev\glfw-3.0.4.bin.WIN32</GLFW_DIR>
+		<GLFW_DIR>C:\dev\glfw-3.1.1</GLFW_DIR>
 		<GLM_DIR>C:\dev\glm</GLM_DIR>
 		<OPENAL_DIR>C:\dev\OpenAL-Pack</OPENAL_DIR>
 		<BOX2D_DIR>C:\dev\Box2D-2.3.1\Box2D</BOX2D_DIR>

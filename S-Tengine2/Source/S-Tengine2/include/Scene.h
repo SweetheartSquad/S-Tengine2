@@ -6,7 +6,7 @@
 
 class Camera;
 
-namespace vox{
+namespace sweet{
 	class MatrixStack;
 }
 
@@ -67,11 +67,11 @@ public:
 	
 	/** 
 	* Tells the RenderSystem to render the attached children to 
-	* the vox::currentContext using the camera's view-projection matrix 
+	* the sweet::currentContext using the camera's view-projection matrix 
 	*/
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	
-	virtual void renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
+	virtual void renderShadows(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 
 	/**
 	* Renders the children of the scene to its depth buffer
@@ -80,7 +80,7 @@ public:
 	*
 	* The currently bound frame buffer will be set back to 0 at the end of this function
 	*/
-	virtual void renderDepth(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
+	virtual void renderDepth(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 
 	/**
 	* Convenience fuction for rendering the current depth buffer to the provided surface
@@ -99,7 +99,7 @@ public:
 	*
 	* The currently bound frame buffer will be set back to 0 at the end of this function
 	*/
-	virtual void renderNormals(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
+	virtual void renderNormals(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 
 	/**
 	* Convenience fuction for rendering the current normals buffer to the provided surface

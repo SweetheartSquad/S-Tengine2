@@ -101,7 +101,7 @@ void AnimationJoint::update(Step * _step){
 	Entity::update(_step);
 }
 
-void AnimationJoint::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void AnimationJoint::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	float prevLineWidth, prevPointSize;
 	glGetFloatv(GL_LINE_WIDTH, &prevLineWidth);
 	glGetFloatv(GL_POINT_SIZE, &prevPointSize);

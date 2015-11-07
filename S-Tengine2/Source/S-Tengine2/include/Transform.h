@@ -127,6 +127,10 @@ public:
 	*/
 	void reset();
 
+	void resetTranslation();
+	void resetOrientation();
+	void resetScale();
+
 	/** 
 	* Converts the translation vector to a 4x4 matrix and returns the result 
 	*/
@@ -159,7 +163,7 @@ public:
 	* Renders children,
 	* Pops model matrix stack
 	*/
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	
 	/** Calls update on all children */
 	virtual void update(Step * _step) override;

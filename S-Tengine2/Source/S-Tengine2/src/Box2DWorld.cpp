@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Box2DWorld.h"
-#include "node/NodeBox2DBody.h"
-#include "Step.h"
+#include <Box2DWorld.h>
+#include <node/NodeBox2DBody.h>
+#include <Step.h>
+#include <Box2DDebugDrawer.h>
 
 Box2DWorld::Box2DWorld(b2Vec2 _gravityVector):
 	NodeUpdatable(),
@@ -41,4 +42,15 @@ void Box2DWorld::addToWorld(NodeBox2DBody * _nodeBox2D, int _userDataGroup){
 		}
 		_nodeBox2D->body->CreateFixture(&fixtureDef);
 	}
+}
+
+Box2DDebugDrawer* Box2DWorld::createDebugDrawer() {
+	Box2DDebugDrawer * box2dDebug = new Box2DDebugDrawer(this);
+	box2dDebug->drawing = true;
+	b2world->SetDebugDraw(box2dDebug);
+	box2dDebug->AppendFlags(b2Draw::e_shapeBit);
+	box2dDebug->AppendFlags(b2Draw::e_centerOfMassBit);
+	box2dDebug->AppendFlags(b2Draw::e_jointBit);
+	return box2dDebug;
+
 }

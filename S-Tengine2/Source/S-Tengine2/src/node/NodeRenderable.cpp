@@ -14,6 +14,6 @@ bool NodeRenderable::isVisible(){
 	return visible;
 }
 
-/*void NodeRenderable::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+/*void NodeRenderable::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 }
 */

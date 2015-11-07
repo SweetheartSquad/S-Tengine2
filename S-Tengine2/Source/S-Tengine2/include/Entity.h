@@ -3,7 +3,7 @@
 #include "Transform.h"
 #include "Vertex.h"
 #include "node/Node.h"
-#include "Vox.h"
+#include "Sweet.h"
 #include "node/NodeUpdatable.h"
 #include "node/NodeRenderable.h"
 #include "node/NodeLoadable.h"
@@ -23,7 +23,7 @@ public:
 	* Calls render on children (recursive),
 	* Pops model matrix stack
 	*/
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	/** Doesn't do anything by default */
 	virtual void update(Step * _step) override;
 

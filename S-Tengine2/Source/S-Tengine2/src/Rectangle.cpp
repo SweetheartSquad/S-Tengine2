@@ -3,41 +3,41 @@
 #include "Rectangle.h"
 #include "Point.h"
 
-vox::Rectangle::Rectangle(float _x, float _y, float _width, float _height){
+sweet::Rectangle::Rectangle(float _x, float _y, float _width, float _height){
 	x      = _x;
 	y      = _y;
 	width  = _width;
 	height = _height;
 }
 
-vox::Rectangle::~Rectangle(){
+sweet::Rectangle::~Rectangle(){
 }
 
-vox::Point vox::Rectangle::getTopLeft(){
+sweet::Point sweet::Rectangle::getTopLeft(){
 	return Point(x, y+height);
 }
 
-vox::Point vox::Rectangle::getTopRight(){
-	return vox::Point(x + width, y+height);
+sweet::Point sweet::Rectangle::getTopRight(){
+	return sweet::Point(x + width, y+height);
 }
 
-vox::Point vox::Rectangle::getBottomLeft(){
-	return vox::Point(x, y);
+sweet::Point sweet::Rectangle::getBottomLeft(){
+	return sweet::Point(x, y);
 }
 
-vox::Point vox::Rectangle::getBottomRight(){
-	return vox::Point(x + width, y);
+sweet::Point sweet::Rectangle::getBottomRight(){
+	return sweet::Point(x + width, y);
 }
 
-float vox::Rectangle::getArea(){
+float sweet::Rectangle::getArea(){
 	return width * height;
 }
 
-float vox::Rectangle::getPerimeter(){
+float sweet::Rectangle::getPerimeter(){
 	return 2 * (width + height);
 }
 
-bool vox::Rectangle::intersects(vox::Rectangle _rect){
+bool sweet::Rectangle::intersects(sweet::Rectangle _rect){
 	return (getTopLeft().x > _rect.getTopRight().x && 
 		    getTopRight().x < _rect.getTopLeft().x &&
 			getTopLeft().y >_rect.getBottomRight().y && 

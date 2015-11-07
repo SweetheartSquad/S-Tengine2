@@ -44,14 +44,15 @@ float Box2DSprite::getCorrectedHeight(){
 	if(parents.size() > 0){
 		scaleVec = childTransform->getScaleVector();
 	}
-	return height*std::abs(scaleVec.y)*scale;
+	return height * std::abs(scaleVec.y)*scale;
 }
+
 float Box2DSprite::getCorrectedWidth(){
 	glm::vec3 scaleVec(1);
 	if(parents.size() > 0){
 		scaleVec = childTransform->getScaleVector();
 	}
-	return width*std::abs(scaleVec.x)*scale;
+	return width * std::abs(scaleVec.x)*scale;
 }
 
 b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * _userData, bool _isSensor){

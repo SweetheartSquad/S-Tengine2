@@ -17,7 +17,7 @@ RayTestInfo::RayTestInfo() :
 }
 
 UILayer::UILayer(Scene * _scene, float _left, float _right, float _bottom, float _top) : 
-	NodeUI(new BulletWorld(), _scene, true),
+	NodeUI(new BulletWorld(), _scene, kENTITIES, true),
 	mouse(&Mouse::getInstance()),
 	cam(_left, _right, _bottom, _top, -1000.f, 1000.f),
 	bulletDebugDrawer(new BulletDebugDrawer(world->world)),
@@ -40,7 +40,7 @@ UILayer::~UILayer(){
 	shader->decrementAndDelete();
 }
 
-void UILayer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void UILayer::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
 	
 	if(depth == GL_TRUE){

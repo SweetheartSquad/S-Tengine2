@@ -133,7 +133,7 @@ void Box2DDebugDrawer::DrawTransform(const b2Transform& xf){
 	spriteTransform->parents.at(0)->render(matrixStack, renderOptions);
 }
 
-void Box2DDebugDrawer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void Box2DDebugDrawer::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	// save previous line width state and change
 	GLfloat oldWidth;
 	glGetFloatv(GL_LINE_WIDTH, &oldWidth);

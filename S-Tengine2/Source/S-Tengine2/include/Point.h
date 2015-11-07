@@ -2,7 +2,7 @@
 
 #include <node\Node.h>
 
-namespace vox {
+namespace sweet {
 	class Point : public Node{
 	public:	
 		float x, y;

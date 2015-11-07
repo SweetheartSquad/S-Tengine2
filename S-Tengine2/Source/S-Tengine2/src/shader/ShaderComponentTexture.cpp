@@ -11,7 +11,9 @@
 #include "SpriteSheetAnimation.h"
 
 ShaderComponentTexture::ShaderComponentTexture(Shader * _shader) :
-	ShaderComponent(_shader){
+	ShaderComponent(_shader),
+	discardTransperantPixels(true)
+{
 }
 
 ShaderComponentTexture::~ShaderComponentTexture(){
@@ -46,6 +48,9 @@ std::string ShaderComponentTexture::getFragmentBodyString(){
             res << "\t}" << ENDL;
         }
     res << "}" << ENDL;
+	if(discardTransperantPixels){
+		res << "if(modFrag.a <= 0.05){discard;}" << ENDL;
+	}
     return res.str();
 }
 
@@ -53,7 +58,7 @@ std::string ShaderComponentTexture::getOutColorMod(){
 	return GL_OUT_OUT_COLOR + " *= modFrag" + SEMI_ENDL;
 }
 
-void ShaderComponentTexture::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentTexture::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	makeDirty();
 	ShaderComponent::clean(_matrixStack, _renderOption, _nodeRenderable);
 	//configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
@@ -69,7 +74,7 @@ void ShaderComponentTexture::load(){
 	ShaderComponent::load();
 }
 
-void ShaderComponentTexture::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentTexture::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 	int numTextures = 0;
 	if(mesh != nullptr){

@@ -10,13 +10,13 @@
 #include <string>
 
 #include "VoxMatrices.h"
-
+#include <Configuration.h>
 #include "Step.h"
 
 struct GLFWwindow;
 
-namespace vox{
-	
+namespace sweet{
+	extern Configuration config;
 	extern Step step;
 	extern std::string title;
 

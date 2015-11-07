@@ -34,11 +34,11 @@ Shader::Shader(std::string _shaderSource, bool _hasGeometryShader, bool _autoRel
 	hasGeometryShader(_hasGeometryShader),
 	numLightsUniformLocation(-1)
 {
-	std::string _vertexShaderSource = FileUtils::voxReadFile(_shaderSource + ".vert");
-	std::string _fragmentShaderSource = FileUtils::voxReadFile(_shaderSource + ".frag");
+	std::string _vertexShaderSource = FileUtils::readFile(_shaderSource + ".vert");
+	std::string _fragmentShaderSource = FileUtils::readFile(_shaderSource + ".frag");
 	
 	if (hasGeometryShader){
-		std::string _geometryShaderSource = FileUtils::voxReadFile(_shaderSource + ".geom");
+		std::string _geometryShaderSource = FileUtils::readFile(_shaderSource + ".geom");
 		init(_vertexShaderSource, _fragmentShaderSource, _geometryShaderSource);
 	}else{
 		init(_vertexShaderSource, _fragmentShaderSource);
@@ -238,11 +238,15 @@ void Shader::printShader(){
 
 }
 
-void Shader::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+bool Shader::isDirty() {
+	return dirty;
+}
+
+void Shader::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	//leave unimplemented
 }
 
-void Shader::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void Shader::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	if(dirty){
 		configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 		dirty = false;

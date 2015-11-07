@@ -1,4 +1,4 @@
-// stb has its own guards, so do it before #pragma once
+﻿// stb has its own guards, so do it before #pragma once
 // the define is needed in one cpp before the include
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Vox.h"
+#include "Sweet.h"
 
 #include <string>
 
@@ -22,25 +22,25 @@
 
 #include <FileUtils.h>
 
-Step vox::step;
-std::string vox::title = "S-Tengine2";
+Step sweet::step;
+std::string sweet::title = "S-Tengine2";
+Configuration sweet::config;
 
-double vox::lastTimestamp = 0;
-double vox::deltaTimeCorrection = 1;
+double sweet::lastTimestamp = 0;
+double sweet::deltaTimeCorrection = 1;
 
-bool vox::fullscreen = false;
+bool sweet::fullscreen = false;
 
-FT_Library vox::freeTypeLibrary = nullptr;
+FT_Library sweet::freeTypeLibrary = nullptr;
+GLFWwindow * sweet::currentContext = nullptr;
 
-GLFWwindow * vox::currentContext = nullptr;
-
-void vox::setGlfwWindowHints(){
+void sweet::setGlfwWindowHints(){
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
-void vox::keyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods){
+void sweet::keyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods){
 	Keyboard * keyboard = &Keyboard::getInstance();
 	keyboard->alt = (_mods & GLFW_MOD_ALT) != 0;
 	keyboard->shift = (_mods & GLFW_MOD_SHIFT) != 0;
@@ -52,7 +52,7 @@ void vox::keyCallback(GLFWwindow * _window, int _key, int _scancode, int _action
 		keyboard->keyUpListener(_key);
 	}
 }
-void vox::mouseButtonCallback(GLFWwindow * _window, int _button, int _action, int _mods){
+void sweet::mouseButtonCallback(GLFWwindow * _window, int _button, int _action, int _mods){
 	Mouse * mouse = &Mouse::getInstance();
 	if(_action == GLFW_PRESS){
 		mouse->mouseDownListener(_button);
@@ -60,13 +60,13 @@ void vox::mouseButtonCallback(GLFWwindow * _window, int _button, int _action, in
 		mouse->mouseUpListener(_button);
 	}
 }
-void vox::mousePositionCallback(GLFWwindow *_window, double _x, double _y){
+void sweet::mousePositionCallback(GLFWwindow *_window, double _x, double _y){
 	Mouse * mouse = &Mouse::getInstance();
 	glm::uvec2 sd = getScreenDimensions();
 	mouse->mousePositionListener(_x, sd.y - _y);
 }
 
-void vox::attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _action, int _mods){
+void sweet::attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _action, int _mods){
 	// grab the mouse coordinates and the screen size
 	int w, h;
 	double x, y;
@@ -85,7 +85,7 @@ void vox::attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _ac
 	}
 }
 
-void vox::windowFocusCallback(GLFWwindow * _window, int _focused){
+void sweet::windowFocusCallback(GLFWwindow * _window, int _focused){
 	std::cout << _window << " focused: " << _focused << std::endl;
 	if(_focused == GL_TRUE){
 		// gained focus
@@ -100,31 +100,14 @@ void vox::windowFocusCallback(GLFWwindow * _window, int _focused){
 	}
 }
 
-void vox::error_callback(int _error, const char * _description){
+void sweet::error_callback(int _error, const char * _description){
 	fputs(_description, stderr);
 }
 
-GLFWwindow * vox::initWindow(){
-	const GLFWvidmode * mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-
-	int w = mode->width;
-	int	h = mode->height;
-	
-	if(!fullscreen){
-		w /= 2;
-		h /= 2;
-	}
-	// Create the new window
+GLFWwindow * sweet::initWindow(){
 	GLFWwindow * window;
-#ifdef _DEBUG
-	if(fullscreen){
-		w -= 50;
-		h -= 100;
-	}
-	window = glfwCreateWindow(w, h, title.c_str(), nullptr, nullptr);
-#else
-	window = glfwCreateWindow(w, h, title.c_str(), fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
-#endif
+	window = glfwCreateWindow(config.resolution.x, config.resolution.y, title.c_str(), config.fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+
 	if (!window){
 		glfwTerminate();
 		throw "some sort of window error?";
@@ -141,9 +124,9 @@ GLFWwindow * vox::initWindow(){
 	return window;
 }
 
-void vox::initialize(std::string _title){
+void sweet::initialize(std::string _title){
 	// you shouldn't be calling initialize if we've already got a window
-	assert(vox::currentContext == nullptr);
+	assert(sweet::currentContext == nullptr);
 
 	// verify that the correct file structure is in place
 	FileUtils::createDirectoryIfNotExists("data");
@@ -153,17 +136,20 @@ void vox::initialize(std::string _title){
 	title = _title;
 	step.targetFrameDuration = 0.1667;
 
-	vox::setGlfwWindowHints();
+	sweet::setGlfwWindowHints();
 
+	// initialize glfw
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit()){
 		exit(EXIT_FAILURE);
 	}
-
+	
+	// load configuration file
+	config.load("data/config.json");
 	
 	
-	vox::currentContext = vox::initWindow();
-	glfwMakeContextCurrent(vox::currentContext);
+	sweet::currentContext = sweet::initWindow();
+	glfwMakeContextCurrent(sweet::currentContext);
 
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
@@ -175,26 +161,28 @@ void vox::initialize(std::string _title){
 
 	// move mouse to the middle of the window
 	int screenHeight, screenWidth;
-	glfwGetWindowSize(vox::currentContext, &screenWidth, &screenHeight);
-	glfwSetCursorPos(vox::currentContext, screenWidth/2, screenHeight/2);
+	glfwGetWindowSize(sweet::currentContext, &screenWidth, &screenHeight);
+	glfwSetCursorPos(sweet::currentContext, screenWidth/2, screenHeight/2);
 
 	// Initialize freetype
 	if(FT_Init_FreeType(&freeTypeLibrary) != 0) {
 		std::cerr << "Couldn't initialize FreeType library\n";
 		throw;
 	}
+	Log::info("*** Sweet Initialization ***");
 }
 
-void vox::destruct(){
+void sweet::destruct(){
 	glfwTerminate();
 
 	FT_Done_FreeType(freeTypeLibrary);
 	
 	NodeOpenAL::destruct();
+	Log::info("*** Sweet Destruction ***");
 }
 
 /////////// Delta Time Begin //////////////
-void vox::calculateDeltaTimeCorrection(){
+void sweet::calculateDeltaTimeCorrection(){
 	double targetFrameDuration = static_cast<double>(1) / FPS;
 	double time = glfwGetTime();
 	double deltaTime = time - lastTimestamp;
@@ -205,9 +193,9 @@ void vox::calculateDeltaTimeCorrection(){
 	}
 	lastTimestamp = time;
 
-	vox::step.targetFrameDuration = targetFrameDuration;
-	vox::step.time = time;
-	vox::step.setDeltaTime(deltaTime);
-	vox::step.deltaTimeCorrection = deltaTimeCorrection;
-	vox::step.lastTimestamp = lastTimestamp;
+	sweet::step.targetFrameDuration = targetFrameDuration;
+	sweet::step.time = time;
+	sweet::step.setDeltaTime(deltaTime);
+	sweet::step.deltaTimeCorrection = deltaTimeCorrection;
+	sweet::step.lastTimestamp = lastTimestamp;
 }

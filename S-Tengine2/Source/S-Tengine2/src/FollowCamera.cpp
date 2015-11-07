@@ -29,7 +29,7 @@ void FollowCamera::update(Step * _step){
 	newOrientation = glm::rotate(newOrientation, yaw, upVectorLocal);
 	newOrientation = glm::rotate(newOrientation, pitch, rightVectorLocal);
 
-	newOrientation = glm::slerp(lastOrientation, newOrientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
+	newOrientation = glm::slerp(lastOrientation, newOrientation, 0.15f * static_cast<float>(sweet::deltaTimeCorrection));
 	childTransform->setOrientation(newOrientation);
 
 	forwardVectorRotated   = newOrientation * forwardVectorLocal;
@@ -104,7 +104,7 @@ void FollowCamera::update(Step * _step){
 
 	// calculate zoom and account for FoV (the camera FoV seems to be vertical, so if the screen w > screen h, we need to take the h / the intended aspect ratio)
 	float ar1 = screenWidth/screenHeight;
-	glm::vec2 screenDimensions = vox::getScreenDimensions();
+	glm::vec2 screenDimensions = sweet::getScreenDimensions();
 	float ar2 = static_cast<float>(screenDimensions.x)/static_cast<float>(screenDimensions.y);
 	float zoom;
 	if(ar1 > ar2){

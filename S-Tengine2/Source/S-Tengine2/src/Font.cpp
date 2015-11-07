@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Font.h>
-#include <Vox.h>
+#include <Sweet.h>
 #include <MeshFactory.h>
 
 Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _char) :
@@ -75,7 +75,7 @@ Font::Font(std::string _fontSrc, int _size, bool _autoRelease) :
 	NodeResource(_autoRelease),
 	face(nullptr)
 {
-	if(FT_New_Face(vox::freeTypeLibrary, _fontSrc.c_str(), 0, &face) != 0) {
+	if(FT_New_Face(sweet::freeTypeLibrary, _fontSrc.c_str(), 0, &face) != 0) {
 		Log::error("Couldn't load font: " + _fontSrc);
 	}
 	size = _size;

@@ -113,7 +113,7 @@ void ComponentShaderBase::compileShader(){
 	isCompiled = true;
 }
 
-void ComponentShaderBase::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ComponentShaderBase::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	for(unsigned long int i = 0; i < components.size(); ++i) {
 		components.at(i)->configureUniforms(_matrixStack,_renderOption, _nodeRenderable);
 	}
@@ -134,7 +134,7 @@ ShaderComponent* ComponentShaderBase::getComponentAt(int idx){
 	return components.at(idx);
 }
 
-void ComponentShaderBase::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ComponentShaderBase::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	Shader::clean(_matrixStack, _renderOption, _nodeRenderable);
 	for(unsigned long int i = 0; i < components.size(); i++){
 		components.at(i)->clean(_matrixStack, _renderOption, _nodeRenderable);

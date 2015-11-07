@@ -14,7 +14,7 @@ ShaderComponentNormals::ShaderComponentNormals(Shader * _shader) :
 {
 }
 
-void ShaderComponentNormals::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentNormals::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	// Do nothing
 }
 
@@ -41,7 +41,7 @@ std::string ShaderComponentNormals::getOutColorMod(){
 		GL_OUT_OUT_COLOR  + "*=" + "vec4(outNormal, 1.0)" + SEMI_ENDL; 
 }
 
-void ShaderComponentNormals::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentNormals::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	makeDirty();
 	ShaderComponent::clean(_matrixStack, _renderOption, _nodeRenderable);
 }

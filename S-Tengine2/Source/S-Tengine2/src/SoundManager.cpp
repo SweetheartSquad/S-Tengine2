@@ -2,7 +2,7 @@
 
 #include "SoundManager.h"
 #include <NumberUtils.h>
-#include <Vox.h>
+#include <Sweet.h>
 
 SoundManager::SoundManager(double _throttle):
 	NodeResource(true),
@@ -29,9 +29,9 @@ void SoundManager::addSound(std::string _name, OpenAL_Sound * _sound){
 }
 
 void SoundManager::play(std::string _name, bool _loop){
-	if(vox::step.time - lastTimeStamp > throttle){
+	if(sweet::step.time - lastTimeStamp > throttle){
 		sounds.at(_name)->play(_loop);
-		lastTimeStamp = vox::step.time;
+		lastTimeStamp = sweet::step.time;
 	}
 }
 
@@ -47,7 +47,7 @@ OpenAL_Sound * SoundManager::playRandomSound(){
 	if(sounds.size() > 1){
 		unsigned long int soundToPlay;
 		do{
-			soundToPlay = vox::NumberUtils::randomInt(0, sounds.size() - 1);
+			soundToPlay = sweet::NumberUtils::randomInt(0, sounds.size() - 1);
 		}while(soundToPlay == lastPlayed);
 		lastPlayed = soundToPlay;
 		auto it = sounds.begin();

@@ -8,7 +8,7 @@
 
 class NodeRenderable;
 
-namespace vox{
+namespace sweet{
 	class MatrixStack;
 }
 
@@ -73,9 +73,11 @@ public:
 	GLint get_aVertexUVs();
 	/** Prints the shader to the console */
 	void printShader();
+	/** Returns whether the shader is dirty or not */
+	bool isDirty();
 
-	virtual void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
-	virtual void clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
+	virtual void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
+	virtual void clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
 	virtual void makeDirty();
 
 	void load() override;

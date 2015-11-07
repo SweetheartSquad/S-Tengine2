@@ -12,7 +12,7 @@ class SpriteSheetAnimation : NodeUpdatable, NodeLoadable
 {
 public:
 	Animation<unsigned long int> frameIndices;
-	std::vector<vox::Rectangle> frames;
+	std::vector<sweet::Rectangle> frames;
 	Texture * texture;
 	unsigned long int currentFrame;
 	float secondsPerFrame;

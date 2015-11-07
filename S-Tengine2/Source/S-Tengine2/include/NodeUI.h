@@ -7,9 +7,17 @@
 
 class Scene;
 class Mouse;
+class Texture;
+class StandardFrameBuffer;
+
 enum BoxSizing{
 	kCONTENT_BOX, // padding and margin are exterior to width and height
 	kBORDER_BOX // padding and margin are interior to width and height
+};
+
+enum RenderMode {
+	kENTITIES,
+	kTEXTURE
 };
 
 class NodeUI : public NodeBulletBody{
@@ -71,16 +79,23 @@ public:
 	Scene * scene;
 	MeshEntity * background;
 
+	StandardFrameBuffer * frameBuffer;
+	Texture * renderedTexture;
+	MeshEntity * texturedPlane;
+
+	RenderMode renderMode;
+
 	// how padding and margin affect width and height
 	BoxSizing boxSizing;
 
 	std::function<void(NodeUI * _this)> onClickFunction;
 	//void (*onUpFunction)();
 
-	NodeUI(BulletWorld * _world, Scene * _scene, bool _mouseEnabled = false);
+	NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode = kENTITIES, bool _mouseEnabled = false);
+	~NodeUI();
 	
 	virtual void update(Step * _step) override;
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
+	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
 	virtual void load() override;
 	virtual void unload() override;
 
@@ -139,6 +154,9 @@ public:
 	// recalculates measuredHeight using _root as the basis for rational sizes
 	void setMeasuredHeights(NodeUI * _root);
 
+	// saves the arguments into a member variable
+	// these arguments are in the range 0-1, where 1,1,1,1 is fully opaque and white
+	// but the stored colour is converted into the correct format for the tint shader
 	void setBackgroundColour(float _r, float _g, float _b, float _a = 1.f);
 
 	float getMarginLeft();
@@ -150,6 +168,9 @@ public:
 	float getPaddingRight();
 	float getPaddingTop();
 	float getPaddingBottom();
+
+	virtual Texture * renderToTexture();
+	virtual MeshEntity * getTexturedPlane();
 	
 	// If kPIXEL, returns the pixelWidth
 	// otherwise, returns measuredWidth
@@ -164,6 +185,7 @@ public:
 	virtual float getHeight(bool _includePadding, bool _includeMargin);
 
 	bool isLayoutDirty();
+	void makeLayoutDirty();
 	
 	virtual Transform * addChild(NodeUI * _uiElement);
 	// removes the element from the contents transform and returns the index it was found at
@@ -173,15 +195,21 @@ public:
 	virtual signed long int removeChild(NodeUI * _uiElement);
 
 	virtual void setTranslationPhysical(float _x, float _y, float _z, bool _relative = false) override;
-	
 
+	virtual void doRecursivleyOnUIChildren(std::function<void(NodeUI * _childOrThis)> _todo, bool _includeSelf = true);
+	
+	bool isFirstParentNodeUI();
 	
 	bool updateState;
 	// sets updateState to _newState
 	// typically _newState will be the result of a raycast which
 	// indicates whether the mouse is currently over this node
 	void setUpdateState(bool _newState);
+
+	// Used for renderMode = Texture to carry whether the layout is dirty between update and render
+	bool renderFrame;
 private:
+
 	Transform * margin;
 	Transform * padding;
 
@@ -193,4 +221,11 @@ private:
 	void resizeChildrenWidth(NodeUI * _root);
 	// check for rational-height children and resize them based on _root
 	void resizeChildrenHeight(NodeUI * _root);
+
+	bool hasRenderModeParent(RenderMode _renderMode);
+
+	void __renderForEntities(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
+	void __renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
+	void __updateForEntities(Step * _step);
+	void __updateForTexture(Step * _step);
 };

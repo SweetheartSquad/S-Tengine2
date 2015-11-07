@@ -30,6 +30,7 @@ public:
 
 	std::map<std::string, Asset *> assets;
 	std::map<std::string, AssetTexture *> textures;
+	std::map<std::string, AssetTextureSampler *> textureSamplers;
 	std::map<std::string, AssetAudio *> audio;
 	std::map<std::string, AssetFont *> fonts;
 

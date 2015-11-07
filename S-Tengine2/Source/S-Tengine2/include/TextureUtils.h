@@ -3,7 +3,7 @@
 #include <Texture.h>
 #include <glm\glm.hpp>
 
-namespace vox{
+namespace sweet{
 
 class TextureUtils abstract{
 public:

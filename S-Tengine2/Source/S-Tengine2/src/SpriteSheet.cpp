@@ -19,5 +19,5 @@ void SpriteSheet::pushFrame(int _column, int _row, float _width, float _height){
 	v = rH;
 	u *= _column;
 	v *= _row;
-	frames.push_back(vox::Rectangle(u, v, rW, rH));
+	frames.push_back(sweet::Rectangle(u, v, rW, rH));
 }

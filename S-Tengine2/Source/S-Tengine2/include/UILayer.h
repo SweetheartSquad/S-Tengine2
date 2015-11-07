@@ -32,7 +32,7 @@ public:
 
 	UILayer(Scene * _scene, float _left, float _right, float _bottom, float _top);
 	~UILayer();
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	void resize(float _left, float _right, float _bottom, float _top);
 	virtual void update(Step * _step) override;
 

@@ -49,7 +49,7 @@ void ShaderComponentAlpha::load(){
 	ShaderComponent::load();
 }
 
-void ShaderComponentAlpha::configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
+void ShaderComponentAlpha::configureUniforms(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
 	glUniform1f(alphaLoc, alpha);
 }
 

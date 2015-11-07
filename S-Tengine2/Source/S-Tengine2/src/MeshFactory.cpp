@@ -92,6 +92,23 @@ MeshInterface* MeshFactory::getCubeMesh(float _halfSize, GLenum _polygonalDrawMo
 	return m;
 }
 
+MeshInterface* MeshFactory::getPlaneMesh(float _halfWidth, float _halfHeight, GLenum _polygonalDrawMode, GLenum _drawMode) {
+	QuadMesh * m = new QuadMesh(_polygonalDrawMode, _drawMode);
+	m->pushVert(Vertex(-_halfWidth, _halfHeight, 0.f));
+	m->pushVert(Vertex(_halfWidth, _halfHeight, 0.f));
+	m->pushVert(Vertex(_halfWidth, -_halfHeight, 0.f));
+	m->pushVert(Vertex(-_halfWidth, -_halfHeight, 0.f));
+	m->setNormal(0, 0.0, 0.0, 1.0);
+	m->setNormal(1, 0.0, 0.0, 1.0);
+	m->setNormal(2, 0.0, 0.0, 1.0);
+	m->setNormal(3, 0.0, 0.0, 1.0);
+	m->setUV(0, 0.0, 0.0);
+	m->setUV(1, 1.0, 0.0);
+	m->setUV(2, 1.0, 1.0);
+	m->setUV(3, 0.0, 1.0);
+	return m;
+}
+
 MeshInterface* MeshFactory::getPlaneMesh(float _halfSize, GLenum _polygonalDrawMode, GLenum _drawMode){
 	QuadMesh * m = new QuadMesh(_polygonalDrawMode, _drawMode);
 	m->pushVert(Vertex(-_halfSize, _halfSize, 0.f));

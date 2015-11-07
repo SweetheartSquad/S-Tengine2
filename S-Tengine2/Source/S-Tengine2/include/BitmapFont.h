@@ -21,12 +21,12 @@ public:
 	bool padFront;
 	WrapMode wrapMode;
 
-	std::vector<vox::Rectangle> frames;
+	std::vector<sweet::Rectangle> frames;
 
 	BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _columns, bool padFront = true, WrapMode _wrapMode = WORD_WRAP);
 	~BitmapFont();
 
-	void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
+	void render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	void setText(std::string _text);
 	void pushMultipleFrames(std::vector<int> _frames, float _width, float _height, float _textureWidth);
 	void pushFrame(int _column, int _row, float _width, float _height);

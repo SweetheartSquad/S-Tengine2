@@ -98,19 +98,28 @@ void Scene::unload(){
 }
 
 
-void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	glEnable(GL_SCISSOR_TEST);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_ALPHA_TEST);
-	//glAlphaFunc ( GL_GREATER, 0.1 ) ;
-	glEnable(GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBlendEquation(GL_FUNC_ADD);
+
+	if(_renderOptions->depthEnabled){
+		glEnable(GL_DEPTH_TEST);
+	}else{
+		glDisable(GL_DEPTH_TEST);
+	}if(_renderOptions->alphaEnabled){
+		glEnable(GL_ALPHA_TEST);
+		//glAlphaFunc ( GL_GREATER, 0.1 ) ;
+		//glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBlendEquation(GL_FUNC_ADD);
+	}else{
+		glDisable(GL_ALPHA_TEST);
+	}
+
 
 	//Back-face culling
 	//glEnable (GL_CULL_FACE); // cull face
 	//glCullFace (GL_BACK); // cull back face
-
 	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
 	const glm::mat4 * p = &activeCamera->getProjectionMatrix();
@@ -131,7 +140,7 @@ void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptio
 	checkForGlError(0,__FILE__,__LINE__);
 }
 
-void Scene::renderDepth(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
+void Scene::renderDepth(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
 	// Store a reference to the current override shader so we can restore it 
 	Shader * backupOverride = _renderOptions->overrideShader;
 	
@@ -182,7 +191,7 @@ void Scene::renderDepthBufferToSurface(RenderSurface* _renderSurface) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Scene::renderNormals(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
+void Scene::renderNormals(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
 	// Store a reference to the current override shader so we can restore it 
 	Shader * backupOverride = _renderOptions->overrideShader;
 	
@@ -234,7 +243,7 @@ void Scene::renderNormalBufferToSurface(RenderSurface* _renderSurface) {
 }
 
 
-void Scene::renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void Scene::renderShadows(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	Shader * backupOverride = _renderOptions->overrideShader;
 	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	depthBuffer->bindFrameBuffer();

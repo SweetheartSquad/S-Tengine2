@@ -94,7 +94,7 @@ std::string VoxelComponent::getGeometryShader(){
 }
 
 //TOOD make resolution configurable
-void VoxelComponent::configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable){
+void VoxelComponent::configureUniforms(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable){
 	const glm::mat4 * vp = _matrixStack->getVP();
 	GLuint vpUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), "VP");
 	GLuint resolutionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), "resolution");

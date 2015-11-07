@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cpp/MouseCameraController.cpp" />
     <ClCompile Include="src/Accelerometer.cpp" />
     <ClCompile Include="src/AccelerometerParser.cpp" />
     <ClCompile Include="src/Arduino.cpp" />
@@ -105,7 +106,7 @@
     <ClCompile Include="src/System.cpp" />
     <ClCompile Include="src/Texture.cpp" />
     <ClCompile Include="src/Transform.cpp" />
-    <ClCompile Include="src/Vox.cpp" />
+    <ClCompile Include="src/Sweet.cpp" />
     <ClCompile Include="src/VoxelMesh.cpp" />
     <ClCompile Include="src/VoxMatrices.cpp" />
     <ClCompile Include="src/VoxRenderOptions.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="src/Timeout.cpp" />
     <ClCompile Include="src/UIUnit.cpp" />
     <ClCompile Include="src/VerticalLinearLayout.cpp" />
+    <ClCompile Include="src/Configuration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include/Accelerometer.h" />
@@ -254,7 +256,7 @@
     <ClInclude Include="include/Transform.h" />
     <ClInclude Include="include/Tween.h" />
     <ClInclude Include="include/Vertex.h" />
-    <ClInclude Include="include/Vox.h" />
+    <ClInclude Include="include/Sweet.h" />
     <ClInclude Include="include/VoxelMesh.h" />
     <ClInclude Include="include/VoxMatrices.h" />
     <ClInclude Include="include/VoxRenderOptions.h" />
@@ -303,6 +305,8 @@
     <ClInclude Include="include/Timeout.h" />
     <ClInclude Include="include/UIUnit.h" />
     <ClInclude Include="include/VerticalLinearLayout.h" />
+    <ClInclude Include="include/Configuration.h" />
+    <ClInclude Include="include/MouseCameraController.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E178CAF8-5E96-478C-812C-DCBA942FC878}</ProjectGuid>
@@ -320,7 +324,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -348,10 +352,10 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>..\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
-    <SourcePath>..\src;$(SourcePath)</SourcePath>
-    <OutDir>..\..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
-    <IntDir>..\..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
+    <IncludePath>include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
+    <SourcePath>src;$(SourcePath)</SourcePath>
+    <OutDir>..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
+    <IntDir>..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'">
     <ClCompile>
@@ -403,7 +407,7 @@
       <AdditionalDependencies>glfw3.lib;opengl32.lib;SOIL.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>..\..\..\..\VCProjer\dist\VCProjer.exe "S-Tengine2 - 2013.vcxproj" "S-Tengine2 - 2012.vcxproj"</Command>
+      <Command>..\..\..\VCProjer\dist\VCProjer.exe "S-Tengine2 - 2013.vcxproj" "S-Tengine2 - 2012.vcxproj"</Command>
     </PreBuildEvent>
     <PostBuildEvent>
       <Command>

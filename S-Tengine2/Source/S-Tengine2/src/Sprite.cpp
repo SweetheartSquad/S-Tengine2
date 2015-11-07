@@ -17,7 +17,6 @@ struct b2Vec2;
 Sprite::Sprite(Shader * _shader) :
 	MeshEntity(MeshFactory::getPlaneMesh(), _shader),
 	currentAnimation(nullptr),
-	animatedTexture(nullptr),
 	playAnimation(true)
 {
 }
@@ -27,18 +26,19 @@ Sprite::~Sprite(){
 		delete i.second;
 	}
 	animations.clear();
-	if(animatedTexture != nullptr){
-		animatedTexture->decrementAndDelete();
-	}
 }
 
 void Sprite::update(Step* _step){
 	MeshEntity::update(_step);
 	if(currentAnimation != nullptr && playAnimation){
-		currentAnimation->update(_step);
 		mesh->dirty = true;
+		currentAnimation->update(_step);
 		setUvs(currentAnimation->frames.at(currentAnimation->currentFrame));
-		animatedTexture = currentAnimation->texture;
+		if(mesh->textures.size() > 0){
+			mesh->textures.at(0) = currentAnimation->texture;
+		}else {
+			mesh->pushTexture2D(currentAnimation->texture);
+		}
 	}
 }
 
@@ -87,7 +87,7 @@ void Sprite::setUvs(float _topLeftU, float _topLeftV, float _topRightU, float _t
 	getBottomRight()->v   = _bottomRightV;
 }
 
-void Sprite::setUvs(vox::Rectangle _rect){
+void Sprite::setUvs(sweet::Rectangle _rect){
 	getTopLeft()->u  = _rect.getTopLeft().x;
 	getTopLeft()->v  = _rect.getTopLeft().y;
 	getTopRight()->u  = _rect.getTopRight().x;

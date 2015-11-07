@@ -115,7 +115,7 @@ void BulletDebugDrawer::drawContactPoint(const btVector3& pointOnB, const btVect
 }
 
 
-void BulletDebugDrawer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void BulletDebugDrawer::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	// save previous line width state and change
 	GLfloat oldWidth;
 	glGetFloatv(GL_LINE_WIDTH, &oldWidth);

@@ -28,9 +28,9 @@ void TextureColourTable::generateRandomTable(){
 
 	// set the colour on all of the other pixels
 	for(unsigned long int i = 4; i < numBytes-4; i += 4){
-		data[i+0] = vox::NumberUtils::randomInt(0, 255);
-		data[i+1] = vox::NumberUtils::randomInt(0, 255);
-		data[i+2] = vox::NumberUtils::randomInt(0, 255);
+		data[i+0] = sweet::NumberUtils::randomInt(0, 255);
+		data[i+1] = sweet::NumberUtils::randomInt(0, 255);
+		data[i+2] = sweet::NumberUtils::randomInt(0, 255);
 		data[i+3] = 255;
 	}
 }

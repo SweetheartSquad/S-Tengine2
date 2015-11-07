@@ -24,7 +24,7 @@ void LayeredScene::update(Step * _step){
 	Scene::update(_step);
 }
 
-void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void LayeredScene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	//glfwGetFramebufferSize(glfwGetCurrentContext(), &w, &h);
 	glfwMakeContextCurrent(glfwGetCurrentContext());
 	float ratio;
@@ -59,7 +59,7 @@ void LayeredScene::render(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	}
 
 	int sceneWidth, sceneHeight;
-	glfwGetWindowSize(vox::currentContext, &sceneWidth, &sceneHeight);
+	glfwGetWindowSize(sweet::currentContext, &sceneWidth, &sceneHeight);
 }
 
 void LayeredScene::removeChild(NodeChild * _child){

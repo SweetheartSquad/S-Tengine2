@@ -13,13 +13,15 @@
 class FileUtils{
 public:
 	// reads the contents of a file located at _filename and returns them as a string
-	static std::string voxReadFile(const std::string & _filename);
+	static std::string readFile(const std::string & _filename);
 
 	// if the directory at _src does not exist, attempts to create it
 	// returns whether or not the directory exists at the end of the operation
 	// Note: this is Windows-specific
 	static bool createDirectoryIfNotExists(const std::string & _src);
 
+	// returns true if the file at _src exists; returns false otherwise
+	static bool fileExists(const std::string & _src);
 	// if the file at _src does not exist, attempts to create a blank file in its place
 	// returns whether or not the file exists at the end of the operation
 	// Note: this is a lazy, thread-unsafe check

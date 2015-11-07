@@ -84,11 +84,11 @@ std::string ShaderComponentBlinn::getOutColorMod(){
 		END_IF + ENDL;
 }
 
-void ShaderComponentBlinn::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentBlinn::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 }
 
-void ShaderComponentBlinn::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentBlinn::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	SharedComponentShaderMethods::configureLights(_matrixStack, _renderOption, _nodeRenderable);
 	SharedComponentShaderMethods::configureMaterials(_matrixStack, _renderOption, _nodeRenderable);
 }

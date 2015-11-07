@@ -2,6 +2,7 @@
 
 #include <node\Node.h>
 #include <string>
+#include <MeshInterface.h>
 
 class VoxelJoint;
 class VoxelMesh;
@@ -22,7 +23,7 @@ public:
 	static std::vector<TriMesh *> loadMeshFromObj(std::string _objSrc);
 
 	/**
-	* Used to load a VoxelJoint from a vox model JSON file
+	* Used to load a VoxelJoint from a sweet model JSON file
 	* This will load all voxel points and animations 
 	* withthe proper hirearchy
 	* 

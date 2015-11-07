@@ -5,12 +5,12 @@
 class NodeRenderable;
 class RenderOptions;
 
-namespace vox{
+namespace sweet{
 	class MatrixStack;
 }
 
 class SharedComponentShaderMethods {
 public:
-	static void configureLights(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
-	static void configureMaterials(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
+	static void configureLights(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
+	static void configureMaterials(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
 };

@@ -51,5 +51,7 @@ void LinearLayout::update(Step * _step){
 	Layout::update(_step);
 	if(layoutDirty){
 		layoutChildren();
+		autoResize();
+		layoutDirty = false;
 	}
 }
