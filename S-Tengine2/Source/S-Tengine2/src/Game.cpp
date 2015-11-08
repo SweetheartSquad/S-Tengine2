@@ -249,14 +249,18 @@ void Game::printFps(){
 
 void Game::switchScene(std::string _newSceneKey, bool _deleteOldScene){
 	deleteOldScene = _deleteOldScene;
+	std::stringstream ss;
 	if(scenes.count(_newSceneKey) > 0){
 		switchingScene = true;
 		newSceneKey = _newSceneKey;
+		ss << "newSceneKey: " << newSceneKey;
+		Log::info(ss.str());
 	}else{
+		ss << "Scene \"" << _newSceneKey << "\" does not exist, newSceneKey is now null";
 		switchingScene = false;
 		newSceneKey = "";
+		Log::warn(ss.str());
 	}
-	Log::info("newSceneKey: " + newSceneKey);
 }
 
 
