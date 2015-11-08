@@ -152,6 +152,42 @@ std::vector<glm::vec2> sweet::TextureUtils::getMarchingSquaresContour(Texture * 
 	return res;
 }
 
+std::vector<glm::vec2> sweet::TextureUtils::getCurves(Texture * _texture, unsigned long int _threshold, unsigned long int _smooth){
+	std::vector<glm::vec2> verts;
+	for (unsigned long x = 0; x < _texture->width; ++x){
+		for (unsigned long y = 0; y < _texture->height; ++y){
+			//if (isEdge)
+		}
+	}
+	return verts;
+}
+
+bool sweet::TextureUtils::isEdge(Texture * _texture, unsigned long int _x, unsigned long int _y, unsigned long int _threshold){
+	float dx = 1.f / _texture->width;
+	float dy = 1.f / _texture->height;
+
+	int k = -1;
+	float delta;
+	long pixels[9]; // one channel 
+
+	for (int x = -1; x < 2; ++x){
+		for (int y = -1; y < 2; ++y){
+			++k;
+			// get average intensity
+			pixels[k] = TextureUtils::getPixel(_texture, x, y);
+		}
+	}
+
+	// average blah
+	delta = (abs(pixels[1] - pixels[7]) +
+		abs(pixels[5] - pixels[3]) +
+		abs(pixels[0] - pixels[8]) +
+		abs(pixels[2] - pixels[6])
+		) / 4.;
+
+	return delta <= _threshold;
+}
+
 
 unsigned char & sweet::TextureUtils::getPixel(Texture * _tex, unsigned long int _x, unsigned long int _y, unsigned long int _channel){
 	return _tex->data[ (_x + _y*_tex->width) * _tex->channels + _channel ];
