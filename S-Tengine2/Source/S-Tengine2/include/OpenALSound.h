@@ -40,6 +40,8 @@
 class NodeOpenAL abstract : public Node{
 private:
 	static bool inited;
+
+	static float listenerGain;
 protected:
     static ALCcontext * context;
     static ALCdevice * device;
@@ -50,10 +52,13 @@ public:
 
 	// sets the global OpenAL listener position
 	static void setListenerPosition(glm::vec3 _position);
-	// sets the global OpenAL listener position
+	// sets the global OpenAL listener velocity
 	static void setListenerVelocity(glm::vec3 _velocity);
 	// sets the global OpenAL listener orientation
 	static void setListenerOrientation(glm::vec3 _forward, glm::vec3 _up);
+	// sets the global OpenAL listener gain
+	static void setListenerGain(float _gain);
+	static float getListenerGain();
 };
 
 class OpenAL_Buffer : public virtual NodeOpenAL, public virtual NodeResource{
