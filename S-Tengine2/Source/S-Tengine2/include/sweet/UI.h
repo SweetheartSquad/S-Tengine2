@@ -14,3 +14,6 @@ This file just includes various others in order to make including different "pac
 #include <VerticalLinearLayout.h>
 #include <TextLabel.h>
 #include <TextArea.h>
+#include <UILayer.h>
+#include <UIUnit.h>
+#include <Slider.h>
