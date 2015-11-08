@@ -30,7 +30,7 @@ void PerspectiveCamera::update(Step * _step){
 	Camera::update(_step);
 }
 
-glm::mat4 PerspectiveCamera::getViewMatrix(){
+glm::mat4 PerspectiveCamera::getViewMatrix() const{
 	return glm::lookAt(
 		childTransform->getWorldPos(),	// Camera is here
 		lookAtSpot + lookAtOffset,			// and looks here : at the same position, plus "direction"
@@ -38,7 +38,7 @@ glm::mat4 PerspectiveCamera::getViewMatrix(){
 	);
 }
 
-glm::mat4 PerspectiveCamera::getProjectionMatrix(){
+glm::mat4 PerspectiveCamera::getProjectionMatrix() const{
 	glm::vec2 screenDimensions = sweet::getScreenDimensions();
 	// Projection matrix : 45° Field of View, ratio, near-far clip : 0.1 unit <-> 100 units
 	return glm::perspective(fieldOfView, static_cast<float>(screenDimensions.x)/static_cast<float>(screenDimensions.y), nearClip, farClip);

@@ -95,8 +95,8 @@ void Scene::unload(){
 
 
 void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// render options
 	glEnable(GL_SCISSOR_TEST);
-
 	if(_renderOptions->depthEnabled){
 		glEnable(GL_DEPTH_TEST);
 	}else{
@@ -111,23 +111,19 @@ void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 	}else{
 		glDisable(GL_ALPHA_TEST);
 	}
-
-
+	_renderOptions->lights = &lights;
 	//Back-face culling
 	//glEnable (GL_CULL_FACE); // cull face
 	//glCullFace (GL_BACK); // cull back face
 	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
-	const glm::mat4 * p = &activeCamera->getProjectionMatrix();
-	const glm::mat4 * v = &activeCamera->getViewMatrix();
 
+	// matrix stack
 	_matrixStack->pushMatrix();
 	_matrixStack->resetCurrentMatrix();
-	_matrixStack->setProjectionMatrix(p);
-	_matrixStack->setViewMatrix(v);
+	_matrixStack->setCamera(activeCamera);
 
-	_renderOptions->lights = &lights;
-	
+	// render
 	Entity::render(_matrixStack, _renderOptions);
 
 	_matrixStack->popMatrix();
