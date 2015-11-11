@@ -153,6 +153,7 @@
     <ClCompile Include="src/UIUnit.cpp" />
     <ClCompile Include="src/VerticalLinearLayout.cpp" />
     <ClCompile Include="src/Configuration.cpp" />
+    <ClCompile Include="src\AutoRiff.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include/Accelerometer.h" />
@@ -307,6 +308,7 @@
     <ClInclude Include="include/VerticalLinearLayout.h" />
     <ClInclude Include="include/Configuration.h" />
     <ClInclude Include="include/MouseCameraController.h" />
+    <ClInclude Include="include\AutoRiff.h" />
     <ClInclude Include="include\sweet\UI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
