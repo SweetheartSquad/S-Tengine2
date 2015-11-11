@@ -88,6 +88,10 @@ public:
 	BoxSizing boxSizing;
 
 	std::function<void()> onClickFunction;
+	std::function<void()> onMouseInFunction;
+	std::function<void()> onMouseOutFunction;
+	std::function<void()> onMouseUpFunction;
+	std::function<void()> onMouseDownFunction;
 	//void (*onUpFunction)();
 
 	NodeUI(BulletWorld * _world, RenderMode _renderMode = kENTITIES, bool _mouseEnabled = false);

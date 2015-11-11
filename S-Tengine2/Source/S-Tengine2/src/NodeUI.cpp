@@ -39,6 +39,10 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	texturedPlane(nullptr),
 	renderMode(_renderMode),
 	onClickFunction(nullptr),
+	onMouseDownFunction(nullptr),
+	onMouseInFunction(nullptr),
+	onMouseOutFunction(nullptr),
+	onMouseUpFunction(nullptr),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	margin(new Transform()),
 	padding(new Transform()),
@@ -100,9 +104,9 @@ void NodeUI::down(){
 	isDown = true;
 	
     // do event stuff
-	/*if(onDownFunction != nullptr){
-		onDownFunction(this);
-	}*/
+	if(onMouseDownFunction != nullptr){
+		onMouseDownFunction();
+	}
 }
 void NodeUI::up(){
 	if(isHovered){
@@ -111,9 +115,9 @@ void NodeUI::up(){
 	isDown = false;
 	
 	// do event stuff
-	/*if(onUpFunction != nullptr){
-		onUpFunction(this);
-	}*/
+	if(onMouseUpFunction != nullptr){
+		onMouseUpFunction();
+	}
 }
 void NodeUI::click(){
 	// do event stuff
@@ -123,9 +127,17 @@ void NodeUI::click(){
 }
 void NodeUI::in(){
 	isHovered = true;
+
+	if(onMouseInFunction != nullptr) {
+		onMouseInFunction();
+	}
 }
 void NodeUI::out(){
 	isHovered = false;
+
+	if(onMouseOutFunction != nullptr) {
+		onMouseOutFunction();
+	}
 }
 
 
