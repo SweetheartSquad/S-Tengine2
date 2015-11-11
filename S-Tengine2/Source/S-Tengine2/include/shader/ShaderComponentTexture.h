@@ -15,7 +15,7 @@ class ShaderComponentTexture : public ShaderComponent{
 private:
 	GLint texNumLoc, texColLoc, texSamLoc;
 public:
-	bool discardTransperantPixels;
+	float  alphaDiscardThreshold;
 
 	ShaderComponentTexture(Shader * _shader);
 	~ShaderComponentTexture() override;

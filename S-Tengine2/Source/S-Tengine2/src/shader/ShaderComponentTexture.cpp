@@ -12,7 +12,7 @@
 
 ShaderComponentTexture::ShaderComponentTexture(Shader * _shader) :
 	ShaderComponent(_shader),
-	discardTransperantPixels(true)
+	alphaDiscardThreshold(-1)
 {
 }
 
@@ -48,8 +48,8 @@ std::string ShaderComponentTexture::getFragmentBodyString(){
             res << "\t}" << ENDL;
         }
     res << "}" << ENDL;
-	if(discardTransperantPixels){
-		res << "if(modFrag.a <= 0.05){discard;}" << ENDL;
+	if(alphaDiscardThreshold >= 0){
+		res << "if(modFrag.a <= " << alphaDiscardThreshold << "){discard;}" << ENDL;
 	}
     return res.str();
 }
