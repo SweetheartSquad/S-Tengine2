@@ -30,7 +30,7 @@ public:
 	BulletDebugDrawer * bulletDebugDrawer;
 	ComponentShaderBase * shader;
 
-	UILayer(Scene * _scene, float _left, float _right, float _bottom, float _top);
+	UILayer(float _left, float _right, float _bottom, float _top);
 	~UILayer();
 	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	void resize(float _left, float _right, float _bottom, float _top);

@@ -5,5 +5,5 @@
 class Layout abstract : public NodeUI {
 public:
 
-	Layout(BulletWorld * _world, Scene * _scene);
+	Layout(BulletWorld * _world);
 };

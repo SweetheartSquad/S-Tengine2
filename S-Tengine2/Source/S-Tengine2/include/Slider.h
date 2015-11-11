@@ -22,7 +22,7 @@ public:
 	// the "handle"
 	NodeUI * thumb;
 
-	Slider(BulletWorld* _world, Scene* _scene, float _defaultValue, float _valueMax, float _valueMin);
+	Slider(BulletWorld* _world,  float _defaultValue, float _valueMax, float _valueMin);
 	~Slider(void);
 
 	void update(Step * _step) override;

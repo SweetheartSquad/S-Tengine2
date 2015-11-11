@@ -76,7 +76,6 @@ public:
 	// sets mouseEnabled and creates/deletes the node's collider
 	void setMouseEnabled(bool _mouseEnabled);
 
-	Scene * scene;
 	MeshEntity * background;
 
 	StandardFrameBuffer * frameBuffer;
@@ -91,7 +90,7 @@ public:
 	std::function<void()> onClickFunction;
 	//void (*onUpFunction)();
 
-	NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode = kENTITIES, bool _mouseEnabled = false);
+	NodeUI(BulletWorld * _world, RenderMode _renderMode = kENTITIES, bool _mouseEnabled = false);
 	~NodeUI();
 	
 	virtual void update(Step * _step) override;

@@ -46,7 +46,7 @@ SceneSplash::SceneSplash(Game * _game) :
 	screenSurface(new RenderSurface(screenSurfaceShader)),
 	screenFBO(new StandardFrameBuffer(true)),
 	hsvComponent(new ShaderComponentHsv(shader, 0, 1, 1)),
-	uiLayer(this, 0,0,0,0),
+	uiLayer(0,0,0,0),
 	t(0.f)
 {
 	shader->addComponent(new ShaderComponentMVP(shader));

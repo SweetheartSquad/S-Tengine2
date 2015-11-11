@@ -3,8 +3,8 @@
 #include <TextArea.h>
 #include <Font.h>
 
-TextArea::TextArea(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Shader * _textShader, float _width, float _height) :
-	VerticalLinearLayout(_bulletWorld, _scene),
+TextArea::TextArea(BulletWorld * _bulletWorld, Font * _font, Shader * _textShader, float _width, float _height) :
+	VerticalLinearLayout(_bulletWorld),
 	font(_font),
 	textShader(_textShader)
 {
@@ -65,7 +65,7 @@ TextLabel * TextArea::getNewLine() {
 		line = unusedLines.back();
 		unusedLines.pop_back();
 	}else{
-		line = new TextLabel(world, scene, font, textShader, 1.f);
+		line = new TextLabel(world, font, textShader, 1.f);
 		line->setRationalWidth(1.f, this);
 		line->horizontalAlignment = horizontalAlignment;
 	}

@@ -4,8 +4,8 @@
 #include <MeshInterface.h>
 #include <shader/Shader.h>
 
-FpsDisplay::FpsDisplay(BulletWorld* _world, Scene* _scene, Font * _font, Shader * _textShader) :
-	TextArea(_world, _scene, _font, _textShader, 300),
+FpsDisplay::FpsDisplay(BulletWorld* _world, Font * _font, Shader * _textShader) :
+	TextArea(_world, _font, _textShader, 300),
 	numFrames(0),
 	avgFps(0.0f),
 	currentFps(0.0f),

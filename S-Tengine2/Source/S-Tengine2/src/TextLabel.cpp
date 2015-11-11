@@ -7,8 +7,8 @@
 #include <Font.h>
 #include <RenderOptions.h>
 
-TextLabel::TextLabel(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textShader, float _width):
-	HorizontalLinearLayout(_world, _scene),
+TextLabel::TextLabel(BulletWorld* _world, Font* _font, Shader* _textShader, float _width):
+	HorizontalLinearLayout(_world),
 	font(_font),
 	textShader(_textShader),
 	updateRequired(false),
@@ -130,7 +130,7 @@ UIGlyph * TextLabel::getGlyph(wchar_t _char, Glyph * _glyphMesh){
 		res->setGlyphMesh(_glyphMesh);
 		unusedGlyphs.pop_back();
 	}else{
-		res = new UIGlyph(world, scene, _glyphMesh, textShader, _char);
+		res = new UIGlyph(world, _glyphMesh, textShader, _char);
 	}
 	return res;
 }
@@ -146,8 +146,8 @@ bool TextLabel::canFit(float _width){
 
 // GlyphMeshEntity definitions //
 
-UIGlyph::UIGlyph(BulletWorld * _world, Scene * _scene, Glyph * _mesh, Shader * _shader, wchar_t _character) :
-	NodeUI(_world, _scene),
+UIGlyph::UIGlyph(BulletWorld * _world, Glyph * _mesh, Shader * _shader, wchar_t _character) :
+	NodeUI(_world),
 	NodeShadable(_shader),
 	character(_character),
 	glyph(nullptr)

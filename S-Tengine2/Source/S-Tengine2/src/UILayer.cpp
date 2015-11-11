@@ -16,8 +16,8 @@ RayTestInfo::RayTestInfo() :
 {
 }
 
-UILayer::UILayer(Scene * _scene, float _left, float _right, float _bottom, float _top) : 
-	NodeUI(new BulletWorld(), _scene, kENTITIES, true),
+UILayer::UILayer(float _left, float _right, float _bottom, float _top) : 
+	NodeUI(new BulletWorld(), kENTITIES, true),
 	mouse(&Mouse::getInstance()),
 	cam(_left, _right, _bottom, _top, -1000.f, 1000.f),
 	bulletDebugDrawer(new BulletDebugDrawer(world->world)),

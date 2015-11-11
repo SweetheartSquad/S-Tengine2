@@ -2,6 +2,6 @@
 
 #include <Layout.h>
 
-Layout::Layout(BulletWorld* _world, Scene* _scene) :
-	NodeUI(_world, _scene)
+Layout::Layout(BulletWorld* _world) :
+	NodeUI(_world)
 {}

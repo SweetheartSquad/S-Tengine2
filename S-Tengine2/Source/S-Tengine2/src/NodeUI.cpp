@@ -26,7 +26,7 @@
 
 ComponentShaderBase * NodeUI::bgShader = nullptr;
 
-NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode, bool _mouseEnabled) :
+NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled) :
 	NodeBulletBody(_world),
 	mouse(&Mouse::getInstance()),
 	updateState(false),
@@ -38,7 +38,6 @@ NodeUI::NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode, boo
 	renderedTexture(nullptr),
 	texturedPlane(nullptr),
 	renderMode(_renderMode),
-	scene(_scene),
 	onClickFunction(nullptr),
 	background(new MeshEntity(MeshFactory::getPlaneMesh())),
 	margin(new Transform()),

@@ -2,8 +2,8 @@
 
 #include <HorizontalLinearLayout.h>
 
-HorizontalLinearLayout::HorizontalLinearLayout(BulletWorld* _bulletWorld, Scene* _scene) :
-	LinearLayout(_bulletWorld, _scene)
+HorizontalLinearLayout::HorizontalLinearLayout(BulletWorld* _bulletWorld) :
+	LinearLayout(_bulletWorld)
 {
 }
 

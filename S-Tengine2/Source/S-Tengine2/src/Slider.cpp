@@ -3,10 +3,10 @@
 #include <Slider.h>
 #include <Mouse.h>
 
-Slider::Slider(BulletWorld* _world, Scene* _scene, float _defaultValue, float _valueMin, float _valueMax) :
-	HorizontalLinearLayout(_world, _scene),
-	fill(new NodeUI(_world, _scene)),
-	thumb(new NodeUI(_world, _scene)),
+Slider::Slider(BulletWorld * _world, float _defaultValue, float _valueMin, float _valueMax) :
+	HorizontalLinearLayout(_world),
+	fill(new NodeUI(_world)),
+	thumb(new NodeUI(_world)),
 	valueMin(_valueMin),
 	valueMax(_valueMax),
 	value(0),
