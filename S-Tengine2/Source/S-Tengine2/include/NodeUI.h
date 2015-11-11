@@ -15,13 +15,13 @@ enum BoxSizing{
 	kBORDER_BOX // padding and margin are interior to width and height
 };
 
-enum RenderMode {
+enum RenderMode{
 	kENTITIES,
 	kTEXTURE
 };
 
 class NodeUI : public NodeBulletBody{
-protected:
+public:
 	bool mouseEnabled;
 	UIUnit marginLeft;
 	UIUnit marginRight;
@@ -60,7 +60,7 @@ protected:
 
 	// if the width or height are kAUTO, sets the measured size to the measurement of the children
 	// also adjusts the background and calls repositionChildren() to match size
-	void autoResize();
+	virtual void autoResize();
 
 	Transform * uiElements;
 	
@@ -88,7 +88,7 @@ public:
 	// how padding and margin affect width and height
 	BoxSizing boxSizing;
 
-	std::function<void(NodeUI * _this)> onClickFunction;
+	std::function<void()> onClickFunction;
 	//void (*onUpFunction)();
 
 	NodeUI(BulletWorld * _world, Scene * _scene, RenderMode _renderMode = kENTITIES, bool _mouseEnabled = false);

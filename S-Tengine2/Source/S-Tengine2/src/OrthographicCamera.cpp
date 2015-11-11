@@ -27,7 +27,7 @@ void OrthographicCamera::update(Step * _step){
 	Camera::update(_step);
 }
 
-glm::mat4 OrthographicCamera::getViewMatrix(){
+glm::mat4 OrthographicCamera::getViewMatrix() const{
 	return glm::lookAt(
 		childTransform->getWorldPos(),							// Camera is here
 		childTransform->getWorldPos() + forwardVectorRotated,	// and looks here : at the same position, plus "direction"
@@ -35,6 +35,6 @@ glm::mat4 OrthographicCamera::getViewMatrix(){
 	);
 }
 
-glm::mat4 OrthographicCamera::getProjectionMatrix(){
+glm::mat4 OrthographicCamera::getProjectionMatrix() const{
 	return glm::ortho<float>(-left, -right, bottom, top, nearClip, farClip);
 }

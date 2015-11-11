@@ -24,12 +24,12 @@ public:
 	/**
 	* @return The view matrix of the camera
 	*/
-	glm::mat4 getViewMatrix() override;
+	glm::mat4 getViewMatrix() const override;
 
 	/**
 	* @return The projection matrix of the camera 
 	*/
-	glm::mat4 getProjectionMatrix() override;
+	glm::mat4 getProjectionMatrix() const override;
 	
 	float left;
 	float top;

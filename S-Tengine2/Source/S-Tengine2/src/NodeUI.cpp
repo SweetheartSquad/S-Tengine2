@@ -119,7 +119,7 @@ void NodeUI::up(){
 void NodeUI::click(){
 	// do event stuff
 	if(onClickFunction != nullptr){
-		onClickFunction(this);
+		onClickFunction();
 	}
 }
 void NodeUI::in(){
@@ -324,6 +324,7 @@ void NodeUI::__updateForEntities(Step * _step) {
 			}else if(mouse->leftJustReleased()){
 				up();
 			}
+			updateState = false;
 		}else{
 			if(isHovered){
 				out();
@@ -332,7 +333,6 @@ void NodeUI::__updateForEntities(Step * _step) {
 				isDown = false;
 			}
 		}
-		updateState = false;
 		NodeBulletBody::update(_step);
 	}
 	Entity::update(_step);

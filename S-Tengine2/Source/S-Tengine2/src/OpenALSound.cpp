@@ -12,6 +12,7 @@ ALCcontext * NodeOpenAL::context = nullptr;
 ALCdevice * NodeOpenAL::device = nullptr;
 
 bool NodeOpenAL::inited = false;
+float NodeOpenAL::listenerGain = 1.f;
 
 NodeOpenAL::NodeOpenAL(){
 	initOpenAL();
@@ -52,6 +53,13 @@ void NodeOpenAL::setListenerVelocity(glm::vec3 _velocity){
 void NodeOpenAL::setListenerOrientation(glm::vec3 _forward, glm::vec3 _up){
 	float orientation[6] = {_forward.x, _forward.y, _forward.z, _up.x, _up.y, _up.z};
 	checkForAlError(alListenerfv(AL_ORIENTATION, orientation));
+}
+void NodeOpenAL::setListenerGain(float _gain){
+	listenerGain = _gain;
+	checkForAlError(alListenerf(AL_GAIN, listenerGain));
+}
+float NodeOpenAL::getListenerGain(){
+	return listenerGain;
 }
 
 OpenAL_Buffer::OpenAL_Buffer(const char * _filename, bool _autoRelease) :

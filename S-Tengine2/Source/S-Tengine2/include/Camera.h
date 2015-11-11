@@ -42,16 +42,16 @@ public:
 	/**
 	* @return The view matrix of the camera. Pure virtual; to be implemented only in derived classes
 	*/
-	virtual glm::mat4 getViewMatrix() = 0;
+	virtual glm::mat4 getViewMatrix() const = 0;
 
 	/**
 	* @return The projection matrix of the camera. Pure virtual; to be implemented only in derived classes
 	*/
-	virtual glm::mat4 getProjectionMatrix() = 0;
+	virtual glm::mat4 getProjectionMatrix() const = 0;
 
 	// projects the world-space _coords into _screen space (x and y are the pixel coordinates, sign of z indicates whether the camera is facing towards or away from _coords)
-	virtual glm::vec3 worldToScreen(glm::vec3 _coords, glm::uvec2 _screen);
+	virtual glm::vec3 worldToScreen(glm::vec3 _coords, glm::uvec2 _screen) const;
 
 	// returns an orientation quaternion based on pitch, yaw and roll
-	glm::quat calcOrientation();
+	glm::quat calcOrientation() const;
 };

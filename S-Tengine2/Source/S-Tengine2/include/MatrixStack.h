@@ -3,6 +3,7 @@
 #include <vector>
 #include <glm\glm.hpp>
 
+class Camera;
 
 namespace sweet{
 /***********************************************
@@ -36,11 +37,18 @@ public:
 	/** Model matrix stack (replaces the OpenGL stack) */
 	std::vector<glm::mat4> matrixStack;
 	
+	// if the model-view-projection matrix is dirty, pre-multiplies it
+	// returns the value of the model-view-projection matrix
 	const glm::mat4 * getMVP();
+	// if the view-projection matrix is dirty, pre-multiplies it
+	// returns the value of the view-projection matrix
 	const glm::mat4 * getVP();
 	
 	void setViewMatrix(const glm::mat4 * _viewMatrix);
 	void setProjectionMatrix(const glm::mat4 * _projectionMatrix);
+
+	// sets the view and projection matrix from _camera
+	void setCamera(const Camera * _camera);
 
 	/** Pushes the current model matrix onto the stack */
 	void pushMatrix();

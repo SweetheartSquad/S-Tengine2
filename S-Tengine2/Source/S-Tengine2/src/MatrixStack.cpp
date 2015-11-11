@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MatrixStack.h"
+#include <Camera.h>
 
 sweet::MatrixStack::MatrixStack() :
 	currentModelMatrix(glm::mat4(1)),
@@ -94,4 +95,11 @@ const glm::mat4 * sweet::MatrixStack::getMVP(){
 		mvpDirty = false;
 	}
 	return &mvp;
+}
+
+void sweet::MatrixStack::setCamera(const Camera * _camera){
+	const glm::mat4 * p = &_camera->getProjectionMatrix();
+	const glm::mat4 * v = &_camera->getViewMatrix();
+	setProjectionMatrix(p);
+	setViewMatrix(v);
 }

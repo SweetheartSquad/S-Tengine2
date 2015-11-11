@@ -35,10 +35,6 @@ Scene::Scene(Game * _game):
 	keyboard(&Keyboard::getInstance()),
 	activeCamera(new PerspectiveCamera())
 {
-	clearColor[0] = 0.0;
-	clearColor[1] = 0.0;
-	clearColor[2] = 0.0;
-	clearColor[3] = 1.0;
 
 	cameras.push_back(activeCamera);
 	childTransform->addChild(activeCamera);
@@ -99,8 +95,8 @@ void Scene::unload(){
 
 
 void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// render options
 	glEnable(GL_SCISSOR_TEST);
-
 	if(_renderOptions->depthEnabled){
 		glEnable(GL_DEPTH_TEST);
 	}else{
@@ -115,24 +111,19 @@ void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 	}else{
 		glDisable(GL_ALPHA_TEST);
 	}
-
-
+	_renderOptions->lights = &lights;
 	//Back-face culling
 	//glEnable (GL_CULL_FACE); // cull face
 	//glCullFace (GL_BACK); // cull back face
 	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
-	const glm::mat4 * p = &activeCamera->getProjectionMatrix();
-	const glm::mat4 * v = &activeCamera->getViewMatrix();
 
+	// matrix stack
 	_matrixStack->pushMatrix();
 	_matrixStack->resetCurrentMatrix();
-	_matrixStack->setProjectionMatrix(p);
-	_matrixStack->setViewMatrix(v);
+	_matrixStack->setCamera(activeCamera);
 
-	_renderOptions->lights = &lights;
-	
-	clear();
+	// render
 	Entity::render(_matrixStack, _renderOptions);
 
 	_matrixStack->popMatrix();
@@ -257,12 +248,6 @@ void Scene::renderShadows(sweet::MatrixStack * _matrixStack, RenderOptions * _re
 	_renderOptions->overrideShader = backupOverride;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
-
-void Scene::clear(){
-	glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-}
-
 
 Camera * Scene::cycleCamera(){
 	if(activeCamera == cameras.back()){

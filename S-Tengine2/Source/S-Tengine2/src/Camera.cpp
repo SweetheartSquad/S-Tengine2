@@ -28,7 +28,7 @@ void Camera::update(Step * _step){
 	Entity::update(_step);
 }
 
-glm::vec3 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen){
+glm::vec3 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen) const{
 	glm::vec4 newPos(_coords, 1);
 	newPos = getProjectionMatrix() * getViewMatrix() * newPos;
 	
@@ -40,7 +40,7 @@ glm::vec3 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen){
 	);
 }
 
-glm::quat Camera::calcOrientation(){
+glm::quat Camera::calcOrientation() const{
 	glm::quat res(1.f, 0.f, 0.f, 0.f);
 	res = glm::rotate(res, yaw, upVectorLocal);
 	res = glm::rotate(res, pitch, rightVectorLocal);
