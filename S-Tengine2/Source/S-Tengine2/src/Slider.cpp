@@ -10,10 +10,8 @@ Slider::Slider(BulletWorld * _world, float _defaultValue, float _valueMin, float
 	valueMin(_valueMin),
 	valueMax(_valueMax),
 	value(0),
-	controlledByMouse(false),
 	stepped(false),
-	valueStep(0),
-	target(nullptr)
+	valueStep(0)
 {
 	setBackgroundColour(0.f, 0.f, 0.f);
 
@@ -70,10 +68,6 @@ float Slider::getValue(){
 void Slider::updateValue(){
 	float rW = (value - valueMin) / (valueMax - valueMin);
 
-	if(target != nullptr){
-		*target = rW;
-	}
-
 	fill->setRationalWidth(rW, this);
 	invalidateLayout();
 }
@@ -89,4 +83,36 @@ void Slider::autoResize(){
 }
 
 Slider::~Slider(void){
+}
+
+
+
+
+SliderController::SliderController(BulletWorld * _world, float * _target, float _defaultValue, float _valueMin, float _valueMax) :
+	Slider(_world, _defaultValue, _valueMin, _valueMax),
+	target(_target)
+{
+}
+
+void SliderController::update(Step * _step){
+	Slider::update(_step);
+	*target = value;
+}
+
+
+
+
+
+
+
+
+SliderControlled::SliderControlled(BulletWorld * _world, float * _target, float _valueMin, float _valueMax) :
+	Slider(_world, *_target, _valueMin, _valueMax),
+	target(_target)
+{
+}
+
+void SliderControlled::update(Step * _step){
+	Slider::update(_step);
+	setValue(*target);
 }
