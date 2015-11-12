@@ -308,6 +308,7 @@
     <ClInclude Include="include/Configuration.h" />
     <ClInclude Include="include/MouseCameraController.h" />
     <ClInclude Include="include/sweet/UI.h" />
+    <ClInclude Include="include/WrapMode.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E178CAF8-5E96-478C-812C-DCBA942FC878}</ProjectGuid>

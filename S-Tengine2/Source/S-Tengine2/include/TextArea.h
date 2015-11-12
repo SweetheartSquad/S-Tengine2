@@ -2,6 +2,7 @@
 
 #include <VerticalLinearLayout.h>
 #include <TextLabel.h>
+#include <WrapMode.h>
 
 class TextArea : public VerticalLinearLayout{
 public:
@@ -10,8 +11,6 @@ public:
 	
 	std::vector<TextLabel *> usedLines;
 	std::vector<TextLabel *> unusedLines;
-//	WrapMode wrapMode;
-
 
 	TextArea(BulletWorld * _bulletWorld, Font * _font, Shader * _textShader, float width, float height = -1);
 	virtual void update(Step * _step) override;
@@ -20,6 +19,7 @@ public:
 	void setText(std::wstring _text);
 	std::wstring getText();
 	void updateText();
+	void setWrapMode(WrapMode _wrapMode);
 
 	// returns the last TextLabel inserted into unusedLines
 	// if unusedLines is empty, creates a new TextLabel and returns that instead
@@ -29,6 +29,7 @@ private:
 	std::wstring text;
 	std::wstring textDisplayed;
 	bool updateRequired;
+	WrapMode wrapMode;
 
 	// returns the last line in usedLines
 	// if usedLines is empty, calls getNewLine and returns the result

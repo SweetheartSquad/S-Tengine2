@@ -2,6 +2,7 @@
 
 #include <HorizontalLinearLayout.h>
 #include <MeshEntity.h>
+#include <WrapMode.h>
 
 class TextArea;
 class TextLabel;
@@ -48,6 +49,9 @@ public:
 	
 	std::wstring textDisplayed;
 	std::wstring textOverflow;
+	
+	WrapMode wrapMode;
+
 private:
 	std::wstring textAll;
 	bool updateRequired;

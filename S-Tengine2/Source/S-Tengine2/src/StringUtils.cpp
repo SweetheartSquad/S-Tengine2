@@ -3,8 +3,8 @@
 #include "StringUtils.h"
 #include <CharacterUtils.h>
 
-std::string StringUtils::trim(std::string _toTrim){
-	std::string retString = "";
+std::wstring StringUtils::trim(std::wstring _toTrim){
+	std::wstring retString = L"";
 	bool started = false;
 	unsigned long int sinceChar = 0;
 	for(auto c : _toTrim) {
@@ -32,8 +32,8 @@ std::string StringUtils::trim(std::string _toTrim){
 	return retString;
 }
 
-std::string StringUtils::removeDigits(std::string _string){
-	std::string retString;
+std::wstring StringUtils::removeDigits(std::wstring _string){
+	std::wstring retString;
 	for(auto c : _string) {
 		if(!CharacterUtils::isDigit(c)) {
 			retString += c;
@@ -42,8 +42,8 @@ std::string StringUtils::removeDigits(std::string _string){
 	return retString;
 }
 
-std::string StringUtils::removeSymbols(std::string _string, bool _keepSpaces){
-	std::string retString;
+std::wstring StringUtils::removeSymbols(std::wstring _string, bool _keepSpaces){
+	std::wstring retString;
 	for(auto c : _string) {
 		if(!CharacterUtils::isSymbol(c)) {
 			retString += c;
@@ -52,8 +52,8 @@ std::string StringUtils::removeSymbols(std::string _string, bool _keepSpaces){
 	return retString;
 }
 
-std::string StringUtils::removeLetters(std::string _string){
-	std::string retString;
+std::wstring StringUtils::removeLetters(std::wstring _string){
+	std::wstring retString;
 	for(auto c : _string) {
 		if(!CharacterUtils::isLetter(c)) {
 			retString += c;
@@ -62,19 +62,20 @@ std::string StringUtils::removeLetters(std::string _string){
 	return retString;
 }
 
-std::vector<std::string> StringUtils::split(std::string _string, char _splitOn){
-	std::vector<std::string> retVec;
-	std::string accumulator("");
+std::vector<std::wstring> StringUtils::split(std::wstring _string, char _splitOn){
+	std::vector<std::wstring> retVec;
+	std::wstring accumulator(L"");
 	for(auto c : _string) {
 		if(c == _splitOn) {
 			retVec.push_back(accumulator);
-			accumulator = "";
+			accumulator = L"";
 		}else {
 			accumulator += c;
 		}
 	}
-	if(accumulator.compare("") != 0) {
+	if(accumulator.compare(L"") != 0) {
 		retVec.push_back(accumulator);
 	}
 	return retVec;
 }
+

@@ -29,6 +29,19 @@ void TextArea::invalidateAllLines(){
 		usedLines.pop_back();
 	}
 	textDisplayed = L"";
+	// Do this to make sure all labels have the right wrap mode
+	setWrapMode(wrapMode);
+}
+
+
+void TextArea::setWrapMode(WrapMode _wrapMode){
+	for(auto label : usedLines) {
+		label->wrapMode = _wrapMode;
+	}
+	for(auto label : unusedLines) {
+		label->wrapMode = _wrapMode;
+	}
+	wrapMode = _wrapMode;
 }
 
 void TextArea::setText(std::wstring _text){
