@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cpp\MouseCameraController.cpp" />
+    <ClCompile Include="cpp/MouseCameraController.cpp" />
     <ClCompile Include="src/Accelerometer.cpp" />
     <ClCompile Include="src/AccelerometerParser.cpp" />
     <ClCompile Include="src/Arduino.cpp" />
@@ -153,7 +153,7 @@
     <ClCompile Include="src/UIUnit.cpp" />
     <ClCompile Include="src/VerticalLinearLayout.cpp" />
     <ClCompile Include="src/Configuration.cpp" />
-    <ClCompile Include="src\AutoRiff.cpp" />
+    <ClCompile Include="src/AutoRiff.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include/Accelerometer.h" />
@@ -308,8 +308,8 @@
     <ClInclude Include="include/VerticalLinearLayout.h" />
     <ClInclude Include="include/Configuration.h" />
     <ClInclude Include="include/MouseCameraController.h" />
-    <ClInclude Include="include\AutoRiff.h" />
-    <ClInclude Include="include\sweet\UI.h" />
+    <ClInclude Include="include/AutoRiff.h" />
+    <ClInclude Include="include/sweet/UI.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>

@@ -3,7 +3,6 @@
 #include <TextureUtils.h>
 #include <Easing.h>
 
-
 glm::vec2 sweet::TextureUtils::interpolate(unsigned long int _x1, unsigned long int _y1, unsigned long int _x2, unsigned long int _y2){
 	return glm::vec2(
 		(_x1+_x2)/2.f,
@@ -150,6 +149,86 @@ std::vector<glm::vec2> sweet::TextureUtils::getMarchingSquaresContour(Texture * 
 		}
 	}
 	return res;
+}
+
+// TODO: define start scanning direction
+static std::vector<glm::vec2> getTracedContour(Texture * _tex, long int _threshold){
+	std::vector<glm::vec2> contour;
+
+	// [direction][p1, p2, p3][x, y]
+	const char moves[4][3][3] = {
+		{ {-1, -1}, {0, -1}, {1, -1} }, // TOP
+		{ {1, -1}, {1, 0}, {1, 1} }, // RIGHT
+		{ {1, 1}, {0, 1}, {-1, 1} }, // BOTTOM
+		{ {-1, 1}, {-1, 0}, {-1, -1} } // LEFT
+	};
+
+	glm::vec2 s;
+	for (int x = 0; x < _tex->width; ++x){
+		for (int y = 0; y < _tex->height; ++y){
+			if (sweet::TextureUtils::getPixel(_tex, x, y) <= _threshold){
+				s = glm::vec2(x,y);
+				contour.push_back(s);
+				break;
+			}
+		}
+		if (contour.size() > 0){
+			break;
+		}
+	}
+
+	if (contour.size() > 0){
+		// stuff
+		glm::vec2 p;
+		glm::vec2 p1;
+		glm::vec2 p2;
+		glm::vec2 p3;
+		int direction = 0;
+
+		do {
+			// max 3 tries allowed in search
+			bool found = false;
+			for (unsigned int numRotates = 0; numRotates < 3; numRotates++){
+				// Find p1, p2, and p3
+				p1 = glm::vec2(p.x + moves[direction][0][0], p.y + p.x + moves[direction][0][1]);
+				p2 = glm::vec2(p.x + moves[direction][1][0], p.y + p.x + moves[direction][1][1]);
+				p3 = glm::vec2(p.x + moves[direction][2][0], p.y + p.x + moves[direction][2][1]);
+
+				if (sweet::TextureUtils::getPixel(_tex, p1.x, p1.y) <= _threshold){
+					contour.push_back(p1);
+					// move up and left
+					p = p1;
+					direction = ((direction - 1) % 4 + 4) % 4;
+					found = true;
+				}
+				else if (sweet::TextureUtils::getPixel(_tex, p2.x, p2.y) <= _threshold){
+					contour.push_back(p2);
+					// move up
+					p = p2;
+					found = true;
+				}
+				else if (sweet::TextureUtils::getPixel(_tex, p3.x, p3.y) <= _threshold){
+					contour.push_back(p3);
+					// move right and left
+					p = p3;
+					found = true;
+				}
+				if (found){
+					break;
+				}else{
+					direction = (direction + 1) % 4;
+				}
+				
+			}
+
+			if (!found){
+				// Pixel is isolated, and probably the starting pixel
+				break;
+			}
+		} while (!(p.x == s.x && p.y == s.y));
+	}
+
+	return contour;
 }
 
 
