@@ -2,6 +2,7 @@
 
 #include <Texture.h>
 #include <glm\glm.hpp>
+#include <vector>
 
 namespace sweet{
 
@@ -14,7 +15,7 @@ public:
 	
 	// returns an ordered sequence of vertices describing the contour in the image
 	// follows Theo Pavlidis' Algorithm
-	static std::vector<glm::vec2> getTracedContour(Texture * _tex, long int _threshold = 128);
+	static std::vector<glm::vec2> getTracedContour(Texture * _tex, unsigned long int _threshold = 128);
 
 	// returns the pixel value at the given coordinates (passed by reference)
 	// returned value is *_tex->data[ (_x + _y*_tex->width) * _tex->channels) + _channel]

@@ -152,9 +152,9 @@ std::vector<glm::vec2> sweet::TextureUtils::getMarchingSquaresContour(Texture * 
 }
 
 // TODO: define start scanning direction
-static std::vector<glm::vec2> getTracedContour(Texture * _tex, long int _threshold){
+std::vector<glm::vec2> sweet::TextureUtils::getTracedContour(Texture * _tex, unsigned long int _threshold){
 	std::vector<glm::vec2> contour;
-
+	
 	// [direction][p1, p2, p3][x, y]
 	const char moves[4][3][3] = {
 		{ {-1, -1}, {0, -1}, {1, -1} }, // TOP
@@ -179,7 +179,7 @@ static std::vector<glm::vec2> getTracedContour(Texture * _tex, long int _thresho
 
 	if (contour.size() > 0){
 		// stuff
-		glm::vec2 p;
+		glm::vec2 p = s;
 		glm::vec2 p1;
 		glm::vec2 p2;
 		glm::vec2 p3;
@@ -190,24 +190,30 @@ static std::vector<glm::vec2> getTracedContour(Texture * _tex, long int _thresho
 			bool found = false;
 			for (unsigned int numRotates = 0; numRotates < 3; numRotates++){
 				// Find p1, p2, and p3
-				p1 = glm::vec2(p.x + moves[direction][0][0], p.y + p.x + moves[direction][0][1]);
-				p2 = glm::vec2(p.x + moves[direction][1][0], p.y + p.x + moves[direction][1][1]);
-				p3 = glm::vec2(p.x + moves[direction][2][0], p.y + p.x + moves[direction][2][1]);
+				p1 = glm::vec2(p.x + moves[direction][0][0], p.y + moves[direction][0][1]);
+				p2 = glm::vec2(p.x + moves[direction][1][0], p.y + moves[direction][1][1]);
+				p3 = glm::vec2(p.x + moves[direction][2][0], p.y + moves[direction][2][1]);
 
-				if (sweet::TextureUtils::getPixel(_tex, p1.x, p1.y) <= _threshold){
+				bool p1V = p1.x >= 0 && p1.x < _tex->width && p1.y >= 0 && p1.y < _tex->width;
+				bool p2V = p2.x >= 0 && p2.x < _tex->width && p2.y >= 0 && p2.y < _tex->width;
+				bool p3V = p3.x >= 0 && p3.x < _tex->width && p3.y >= 0 && p3.y < _tex->width;
+				
+				int whee = getPixel(_tex, p.x, p.y);
+				
+				if (p1V && sweet::TextureUtils::getPixel(_tex, p1.x, p1.y) <= _threshold){
 					contour.push_back(p1);
 					// move up and left
 					p = p1;
 					direction = ((direction - 1) % 4 + 4) % 4;
 					found = true;
 				}
-				else if (sweet::TextureUtils::getPixel(_tex, p2.x, p2.y) <= _threshold){
+				else if (p2V && sweet::TextureUtils::getPixel(_tex, p2.x, p2.y) <= _threshold){
 					contour.push_back(p2);
 					// move up
 					p = p2;
 					found = true;
 				}
-				else if (sweet::TextureUtils::getPixel(_tex, p3.x, p3.y) <= _threshold){
+				else if (p3V && sweet::TextureUtils::getPixel(_tex, p3.x, p3.y) <= _threshold){
 					contour.push_back(p3);
 					// move right and left
 					p = p3;
@@ -227,7 +233,6 @@ static std::vector<glm::vec2> getTracedContour(Texture * _tex, long int _thresho
 			}
 		} while (!(p.x == s.x && p.y == s.y));
 	}
-
 	return contour;
 }
 
