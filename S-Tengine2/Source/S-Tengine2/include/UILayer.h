@@ -7,6 +7,7 @@
 #include <BulletDebugDrawer.h>
 #include <NodeUI.h>
 
+class Sprite;
 class Mouse;
 
 class RayTestInfo{
@@ -25,6 +26,7 @@ private:
 	RayTestInfo rayInfo;
 public:
 	Mouse * mouse;
+	Sprite * mouseIndicator;
 	OrthographicCamera cam;
 
 	BulletDebugDrawer * bulletDebugDrawer;
@@ -37,4 +39,6 @@ public:
 	virtual void update(Step * _step) override;
 
 	void hitTest(NodeChild * _c);
+
+	Sprite * addMouseIndicator();
 };

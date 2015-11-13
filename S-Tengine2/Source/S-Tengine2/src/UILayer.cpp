@@ -10,6 +10,9 @@
 #include <System.h>
 #include <Mouse.h>
 #include <Scene.h>
+#include <Sprite.h>
+#include <Texture.h>
+#include <MeshInterface.h>
 
 RayTestInfo::RayTestInfo() :
 	raycb(raystart, rayend)
@@ -19,6 +22,7 @@ RayTestInfo::RayTestInfo() :
 UILayer::UILayer(float _left, float _right, float _bottom, float _top) : 
 	NodeUI(new BulletWorld(), kENTITIES, true),
 	mouse(&Mouse::getInstance()),
+	mouseIndicator(nullptr),
 	cam(_left, _right, _bottom, _top, -1000.f, 1000.f),
 	bulletDebugDrawer(new BulletDebugDrawer(world->world)),
 	shader(new ComponentShaderBase(true))
@@ -103,6 +107,10 @@ void UILayer::update(Step * _step){
 		rayInfo.raycb = btCollisionWorld::AllHitsRayResultCallback(rayInfo.raystart, rayInfo.rayend);
 		hitTest(this);
 	}
+
+	if(mouseIndicator != nullptr){
+		mouseIndicator->firstParent()->translate(mouse->mouseX(), mouse->mouseY(), 0, false);
+	}
 }
 
 void UILayer::hitTest(NodeChild * _c){
@@ -124,4 +132,25 @@ void UILayer::hitTest(NodeChild * _c){
 		}
 		return;
 	}
+}
+
+Sprite * UILayer::addMouseIndicator(){
+	if(mouseIndicator != nullptr){
+		throw "mouse already exists";
+	}
+	mouseIndicator = new Sprite(shader);
+
+	childTransform->addChild(mouseIndicator);
+	Texture * tex = new Texture("assets/engine basics/cursor.png", true, true);
+	tex->load();
+	mouseIndicator->mesh->pushTexture2D(tex);
+	mouseIndicator->parents.at(0)->scale(32,32,1);
+	mouseIndicator->mesh->scaleModeMag = GL_NEAREST;
+	mouseIndicator->mesh->scaleModeMin = GL_NEAREST;
+
+	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
+		mouseIndicator->mesh->vertices[i].x += 0.5f;
+		mouseIndicator->mesh->vertices[i].y -= 0.5f;
+	}
+	mouseIndicator->mesh->dirty = true;
 }
