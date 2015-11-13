@@ -5,7 +5,7 @@
 #include <NumberUtils.h>
 #include <sstream>
 
-int AutoRiff::scales[] = {
+int AutoMusic::scales[] = {
 	0,	2,	4,	5,	7,	9,	11,	12,	13,	//kIONIAN
 	0,	2,	3,	5,	7,	9,	10,	2,	13,	//kDORIAN
 	0,	1,	3,	5,	7,	8,	10,	12,	13,	//kPHRYGIAN
@@ -15,31 +15,95 @@ int AutoRiff::scales[] = {
 	0,	1,	3,	5,	6,	8,	10,	12,	13	//kLOCRIAN
 };
 
-
-
-Note::Note(int _generationMin, int _generationMax){
-	// generate either a whole note, a half note, a quarter note, or an eigth note
-	switch(sweet::NumberUtils::randomInt(0, 3)){
-		case 0: length = 1; break;
-		case 1: length = 0.5; break;
-		case 2: length = 0.25; break;
-		case 3: length = 0.125; break;
-	}
-	// generate a random number on the scale (will be used as an array accessor for AutoRiff::scales
-	pitch = sweet::NumberUtils::randomInt(_generationMin, _generationMax);
-	// make some notes rests instead of actual notes
-	volume = sweet::NumberUtils::randomInt(0, 1);
-
-	//length = 0.25;
-	//volume = 1;
-}
-
-Note::Note(float _length, int _pitch, float _volume) :
-	length(_length),
+AutoMusic::AutoMusic(float _lengthInBeats, int _pitch, float _volume) :
+	lengthInBeats(_lengthInBeats),
 	pitch(_pitch),
 	volume(_volume)
 {
-	if(length <= 0.001){
+}
+
+void AutoMusic::update(Step * _step){
+
+}
+
+std::string AutoMusic::toString(){
+	return "?";
+}
+
+AutoTrack::AutoTrack(float _bpm, unsigned long int _timeSignatureTop, unsigned long int _timeSignatureBottom, int _pitch, float _volume) :
+	AutoMusic((float)_timeSignatureTop/_timeSignatureBottom, _pitch, _volume),
+	timeSignatureTop(_timeSignatureTop),
+	timeSignatureBottom(_timeSignatureBottom),
+	bpm(_bpm)
+{
+}
+
+AutoTrack::~AutoTrack(){
+	clearComponents();
+}
+
+float AutoTrack::getSecondsPerBeat() const{
+	// beats per minute == beats per second / 60
+	// beats per second == 1 / seconds per beat
+	// seconds per beat == 1 / (beats per minute / 60)
+	return 1.f / (bpm / 60.f) * timeSignatureBottom;
+}
+
+void AutoTrack::clearComponents(){
+	while(components.size() > 0){
+		delete components.back();
+		components.pop_back();
+	}
+}
+
+void AutoTrack::generate(){
+	lengthInSeconds = lengthInBeats * getSecondsPerBeat();
+
+	curComponent = 0;
+	curTime = 0;
+	nextComponent = 0;//(components.size() > 0) ? components.front()->lengthInBeats * getSecondsPerBeat() : 0;
+}
+
+
+void AutoTrack::update(Step * _step){
+	if(components.size() > 0){
+		curTime += _step->deltaTime;
+
+		if(curTime > nextComponent){
+			curComponent += 1;
+			// looping
+			while(curComponent >= components.size()){
+				curComponent -= components.size();
+				curTime -= lengthInSeconds;
+				nextComponent -= lengthInSeconds;
+			}
+			nextComponent += components.at(curComponent)->lengthInBeats * getSecondsPerBeat();
+
+			// play the active component
+			playComponent(components.at(curComponent));
+		}
+		// update the active component
+		components.at(curComponent)->update(_step);
+	}
+}
+
+void AutoTrack::playComponent(AutoMusic * _component){
+
+}
+
+std::string AutoTrack::toString(){
+	std::stringstream ss;
+	for(AutoMusic * c : components){
+		ss << c->toString();
+	}
+	return ss.str();
+}
+
+
+Note::Note(float _lengthInBeats, int _pitch, float _volume) :
+	AutoMusic(_lengthInBeats, _pitch, _volume)
+{
+	if(lengthInBeats <= 0.001){
 		throw;
 	}
 }
@@ -47,23 +111,16 @@ Note::Note(float _length, int _pitch, float _volume) :
 std::string Note::toString(){
 	std::stringstream ss;
 	ss << (volume == 1 ? "X" : (volume == 0.5 ? "x" : (volume == 0.25 ? "*" : "0")));
-	for(unsigned long int i = 1; i < length*128; ++i){
+	for(unsigned long int i = 1; i < lengthInBeats*128; ++i){
 		ss << "-";
 	}
 	return ss.str();
 }
 
 AutoRiff::AutoRiff(OpenAL_Sound * _instrument, Mode _mode) :
+	AutoTrack(120, 4, 4, 0, 1),
 	instrument(_instrument),
-	pitch(0),
-	nextNote(0),
 	mode(_mode),
-	bpm(120),
-	timeSignatureBottom(4),
-	timeSignatureTop(4),
-	bars(4),
-	curTime(0),
-	curNote(0),
 	generationMax(8),
 	generationMin(-8)
 {
@@ -76,64 +133,42 @@ AutoRiff::~AutoRiff(){
 	instrument->decrementAndDelete();
 }
 
-
-void AutoRiff::update(Step * _step){
-	if(notes.size() > 0){
-		instrument->update(_step);
-
-		curTime += _step->deltaTime;
-
-		if(curTime > nextNote){
-			curNote += 1;
-			// looping
-			while(curNote >= notes.size()){
-				curNote -= notes.size();
-				curTime -= getLengthInSeconds();
-				nextNote -= getLengthInSeconds();
-			}
-			nextNote += notes.at(curNote).length * getSecondsPerBeat();
-
-			// play the note
-			int notePitch = scales[mode*8 + notes.at(curNote).pitch];
-			instrument->setPitch(pow(2, (pitch+notePitch)/13));
-			instrument->setGain(notes.at(curNote).volume);
-			instrument->play();
-		}
-	}
+void AutoRiff::playComponent(AutoMusic * _component){
+	int notePitch = scales[mode*8 + _component->pitch];
+	instrument->setPitch(pow(2, (pitch+notePitch)/13));
+	instrument->setGain(_component->volume);
+	instrument->play();
 }
+
+
 
 void AutoRiff::generate(){
-	notes.clear();
+	clearComponents();
 
 	// fill the length of the riff
-	float curLength = 0;
-	float totalLength = getLengthInBeats();
-	while(curLength < totalLength){
-		notes.push_back(Note(generationMin, generationMax));
-		curLength += notes.back().length;
+	float curLengthInBeats = 0;
+	while(curLengthInBeats < lengthInBeats){
+
+		float genLengthInBeats = 0;
+		switch(sweet::NumberUtils::randomInt(0, 3)){
+			case 0: genLengthInBeats = 1; break;
+			case 1: genLengthInBeats = 0.5; break;
+			case 2: genLengthInBeats = 0.25; break;
+			case 3: genLengthInBeats = 0.125; break;
+		}
+		// generate a random number on the scale (will be used as an array accessor for AutoRiff::scales
+		float genPitch = sweet::NumberUtils::randomInt(generationMin, generationMax);
+		// make some notes rests instead of actual notes
+		float genVolume = sweet::NumberUtils::randomInt(0, 1);
+
+		components.push_back(new Note(genLengthInBeats, genPitch, genVolume));
+		curLengthInBeats += components.back()->lengthInBeats;
 	}
-	if(curLength > totalLength){
-		notes.back().length = curLength - totalLength;
+	if(curLengthInBeats > lengthInBeats){
+		components.back()->lengthInBeats -= curLengthInBeats - lengthInBeats;
 	}
 
-	curNote = 0;
-	curTime = 0;
-	nextNote = notes.front().length * getSecondsPerBeat();
-}
-
-float AutoRiff::getLengthInBeats() const{
-	return bars * (float)timeSignatureTop / timeSignatureBottom;
-}
-
-float AutoRiff::getLengthInSeconds() const{
-	return getLengthInBeats() * getSecondsPerBeat();
-}
-
-float AutoRiff::getSecondsPerBeat() const{
-	// beats per minute == beats per second / 60
-	// beats per second == 1 / seconds per beat
-	// seconds per beat == 1 / (beats per minute / 60)
-	return 1 / (bpm / 60) * timeSignatureBottom;
+	AutoTrack::generate();
 }
 
 AutoSnare::AutoSnare(OpenAL_Sound * _instrument) :
@@ -152,6 +187,8 @@ AutoRide::AutoRide(OpenAL_Sound * _instrument) :
 }
 
 void AutoSnare::generate(){
+	clearComponents();
+
 	// generate snare hits
 	float beatUnit = 1.f/timeSignatureBottom;
 	for(unsigned long int i = 0; i < timeSignatureTop; ++i){
@@ -172,28 +209,32 @@ void AutoSnare::generate(){
 
 		if(i % 2 == 1){
 			if(addSecondary){
-				notes.push_back(Note(l, 0, 1)); // primary hit
+				components.push_back(new Note(l, 0, 1)); // primary hit
 				if(l < beatUnit){
-					notes.push_back(Note(beatUnit-l, 0, 0.5)); // secondary hit
+					components.push_back(new Note(beatUnit-l, 0, 0.5)); // secondary hit
 				}
 			}else{
-				notes.push_back(Note(beatUnit, 0, 1)); // primary hit for full beat
+				components.push_back(new Note(beatUnit, 0, 1)); // primary hit for full beat
 			}
 		}else{
 			if(addSecondary){
-				notes.push_back(Note(beatUnit, 0, 0.5)); // secondary hit for full beat
+				components.push_back(new Note(beatUnit, 0, 0.5)); // secondary hit for full beat
 			}else{
 				 // full rest
-				if(notes.size() > 0){
-					notes.back().length += beatUnit;
+				if(components.size() > 0){
+					components.back()->lengthInBeats += beatUnit;
 				}else{
-					notes.push_back(Note(beatUnit, 0, 0));
+					components.push_back(new Note(beatUnit, 0, 0));
 				}
 			}
 		}
 	}
+
+	AutoTrack::generate();
 }
 void AutoKick::generate(){
+	clearComponents();
+
 	// generate kick hits
 	float beatUnit = 1.f/timeSignatureBottom;
 	//kick->notes.push_back(Note(0.25, 0, 1)); // first primary hit always on 1
@@ -205,13 +246,17 @@ void AutoKick::generate(){
 			case 2:	numKick = 4; break;
 		}
 		float l = beatUnit/numKick;
-		notes.push_back(Note(l, 0, 0.5));
+		components.push_back(new Note(l, 0, 0.5));
 		if(l < beatUnit){
-			notes.push_back(Note(beatUnit-l, 0, 1));
+			components.push_back(new Note(beatUnit-l, 0, 1));
 		}
 	}
+
+	AutoTrack::generate();
 }
 void AutoRide::generate(){
+	clearComponents();
+
 	// generate ride hits
 	float beatUnit = 1.f/timeSignatureBottom;
 	int numRide = 0;
@@ -224,16 +269,19 @@ void AutoRide::generate(){
 		for(unsigned long int j = 0; j < numRide; ++j){
 			bool addSecondary = !sweet::NumberUtils::randomInt(0, 2);
 			if(addSecondary){
-				notes.push_back(Note(beatUnit/numRide*0.5f, 0, 0.5)); // primary hit
-				notes.push_back(Note(beatUnit/numRide*0.5f, 0, 0.25)); // secondary hit
+				components.push_back(new Note(beatUnit/numRide*0.5f, 0, 0.5)); // primary hit
+				components.push_back(new Note(beatUnit/numRide*0.5f, 0, 0.25)); // secondary hit
 			}else{
-				notes.push_back(Note(beatUnit/numRide, 0, 0.5)); // primary hit
+				components.push_back(new Note(beatUnit/numRide, 0, 0.5)); // primary hit
 			}
 		}
 	}
+
+	AutoTrack::generate();
 }
 
 AutoBeat::AutoBeat(OpenAL_Sound * _snare, OpenAL_Sound * _kick, OpenAL_Sound * _ride) :
+	AutoTrack(120, 4, 4, 0, 1),
 	snare(new AutoSnare(_snare)),
 	kick(new AutoKick(_kick)),
 	ride(new AutoRide(_ride))
@@ -255,9 +303,9 @@ AutoBeat::~AutoBeat(){
 }
 
 void AutoBeat::generate(){
-	snare->notes.clear();
-	kick->notes.clear();
-	ride->notes.clear();
+	snare->clearComponents();
+	kick->clearComponents();
+	ride->clearComponents();
 	
 	//alSource3f(snare->instrument->source->sourceId, AL_POSITION, sweet::NumberUtils::randomFloat(-1, 1), 0, 0);
 	//alSource3f(kick->instrument->source->sourceId, AL_POSITION, sweet::NumberUtils::randomFloat(-1, 1), 0, 0);
@@ -266,50 +314,30 @@ void AutoBeat::generate(){
 	snare->bpm = kick->bpm = ride->bpm = bpm;
 	snare->timeSignatureTop = kick->timeSignatureTop = ride->timeSignatureTop = timeSignatureTop;
 	snare->timeSignatureBottom = kick->timeSignatureBottom = ride->timeSignatureBottom = timeSignatureBottom;
-	snare->bars = kick->bars = ride->bars = 1;
+	//snare->bars = kick->bars = ride->bars = 1;
 	
 	snare->generate();
 	kick->generate();
 	ride->generate();
-
+	
+	AutoTrack::generate();
 
 	// even-out lengths
-	length = (float)timeSignatureTop/timeSignatureBottom;
-	float sl = snare->getLengthInBeats();
-	float kl = kick->getLengthInBeats();
-	float rl = ride->getLengthInBeats();
+	/*float sl = snare->lengthInBeats;
+	float kl = kick->lengthInBeats;
+	float rl = ride->lengthInBeats;
 
-	if(abs(sl - length) > FLT_EPSILON){
-		snare->notes.back().length += length-sl;
-	}if(abs(kl - length) > FLT_EPSILON){
-		kick->notes.back().length += length-sl;
-	}if(abs(rl - length) > FLT_EPSILON){
-		ride->notes.back().length += length-sl;
-	}
+	if(abs(sl - lengthInBeats) > FLT_EPSILON){
+		snare->components.back()->lengthInBeats += lengthInBeats-sl;
+	}if(abs(kl - lengthInBeats) > FLT_EPSILON){
+		kick->components.back()->lengthInBeats += lengthInBeats-kl;
+	}if(abs(rl - lengthInBeats) > FLT_EPSILON){
+		ride->components.back()->lengthInBeats += lengthInBeats-rl;
+	}*/
 
-	std::cout << "Snare:\t";
-	float c = 0;
-	for(Note n : snare->notes){
-		std::cout << n.toString();
-		c += n.length;
-	}
-	std::cout << " " << c << std::endl;
-
-	std::cout << "Kick:\t";
-	c = 0;
-	for(Note n : kick->notes){
-		std::cout << n.toString();
-		c += n.length;
-	}
-	std::cout << " " << c << std::endl;
-
-	std::cout << "Ride:\t";
-	c = 0;
-	for(Note n : ride->notes){
-		std::cout << n.toString();
-		c += n.length;
-	}
-	std::cout << " " << c << std::endl;
+	std::cout << "Snare:\t" << snare->toString() << std::endl;
+	std::cout << "Kick:\t" << kick->toString() << std::endl;
+	std::cout << "Ride:\t" << ride->toString() << std::endl;
 }
 
 void AutoBeat::update(Step * _step){
@@ -319,42 +347,64 @@ void AutoBeat::update(Step * _step){
 }
 
 AutoDrums::AutoDrums(OpenAL_Sound * _snare, OpenAL_Sound * _kick, OpenAL_Sound * _ride) :
+	AutoTrack(120, 4, 4, 0, 1),
 	snare(_snare),
 	kick(_kick),
-	ride(_ride),
-	activeBeat(0)
+	ride(_ride)
 {
-};
-
-AutoDrums::~AutoDrums(){
-	while(beats.size() > 0){
-		delete beats.back();
-		beats.pop_back();
-	}
 }
 
 void AutoDrums::generate(){
-	while(beats.size() > 0){
-		delete beats.back();
-		beats.pop_back();
-	}
-	float bpm = sweet::NumberUtils::randomInt(60, 240);
-	int timeSignatureBottom = sweet::NumberUtils::randomInt(2,8);
-	int timeSignatureTop = sweet::NumberUtils::randomInt(1,timeSignatureBottom+1);
-	for(unsigned long int i = 0; i < 1; ++i){
-		beats.push_back(new AutoBeat(snare, kick, ride));
-		beats.back()->bpm = bpm;
-		beats.back()->timeSignatureTop = timeSignatureTop;
-		beats.back()->timeSignatureBottom = timeSignatureBottom;
+	clearComponents();
+
+	int numBeats = 1;
+
+	bpm = sweet::NumberUtils::randomInt(60, 240);
+	timeSignatureBottom = sweet::NumberUtils::randomInt(2,8);
+	timeSignatureTop = sweet::NumberUtils::randomInt(1,timeSignatureBottom+1);
+	for(unsigned long int i = 0; i < numBeats; ++i){
+		AutoBeat * b = new AutoBeat(snare, kick, ride);
+		b->bpm = bpm;
+		b->timeSignatureTop = timeSignatureTop;
+		b->timeSignatureBottom = timeSignatureBottom;
 
 		std::cout << "Beat: " << bpm << "bpm, " << timeSignatureTop << "/" << timeSignatureBottom << std::endl;
 
-		beats.back()->generate();
+		b->generate();
+		components.push_back(b);
 	}
 
-	activeBeat = 0;
+	AutoTrack::generate();
+
+	lengthInBeats *= numBeats;
+	lengthInSeconds *= numBeats;
 }
 
-void AutoDrums::update(Step * _step){
-	beats.at(activeBeat)->update(_step);
-}
+//void AutoDrums::update(Step * _step){
+//	components.at(0)->update(_step);
+	//if(components.size() > 0){
+	//	components.at(curComponent)->update(_step);
+	//
+	//	curTime += _step->deltaTime;
+	//
+	//	if(curTime > nextComponent){
+	//		curComponent += 1;
+	//		// looping
+	//		while(activeBeat >= beats.size()){
+	//			activeBeat -= beats.size();
+	//			curTime -= getLengthInSeconds();
+	//			nextBeat -= getLengthInSeconds();
+	//		}
+	//		nextBeat += beats.at(activeBeat)->length * getSecondsPerBeat();
+	//
+	//		// play the note
+	//		/*int notePitch = scales[mode*8 + notes.at(curNote).pitch];
+	//		instrument->setPitch(pow(2, (pitch+notePitch)/13));
+	//		instrument->setGain(notes.at(curNote).volume);
+	//		instrument->play();*/
+	//	}
+	//}
+	//
+	//
+	//beats.at(activeBeat)->update(_step);
+//}

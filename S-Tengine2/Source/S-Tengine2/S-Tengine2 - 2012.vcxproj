@@ -153,7 +153,7 @@
     <ClCompile Include="src/UIUnit.cpp" />
     <ClCompile Include="src/VerticalLinearLayout.cpp" />
     <ClCompile Include="src/Configuration.cpp" />
-    <ClInclude Include="src\AutoRiff.cpp" />
+    <ClCompile Include="src\AutoRiff.cpp" />
     <ClInclude Include="src\sweet\UI.cpp" />
     <ClInclude Include="src\WrapMode.cppcpp" />
   </ItemGroup>

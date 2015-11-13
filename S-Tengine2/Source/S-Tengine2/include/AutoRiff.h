@@ -12,26 +12,67 @@ enum Mode{
 	kLOCRIAN
 };
 
-struct Note{
-	float length;
+
+class AutoMusic : public virtual NodeUpdatable, public virtual NodeChild{
+public:
+	static int scales[];
+
+	float lengthInBeats;
+	//float lengthInSeconds;
+	// semi-tones above or below the original sound
 	int pitch;
 	float volume;
-	
-	Note(int _generationMin, int _generationMax);
-	Note(float _length, int _pitch, float _volume);
 
-	std::string toString();
+	AutoMusic(float _lengthInBeats, int _pitch, float _volume);
+
+	virtual void update(Step * _step);
+
+	virtual std::string toString();
 };
 
-class AutoRiff : public virtual NodeUpdatable, public virtual NodeChild{
+class AutoTrack : public AutoMusic{
+public:
+	// beats per minute
+	float bpm;
+	float lengthInSeconds;
+	
+	// beats per bar
+	unsigned long int timeSignatureTop;
+	// beat unit (note value which represents one beat)
+	unsigned long int timeSignatureBottom;
+
+
+
+	float curTime;
+	std::vector<AutoMusic *> components;
+	int curComponent;
+	float nextComponent;
+	
+	AutoTrack(float _bpm, unsigned long int _timeSignatureTop, unsigned long int _timeSignatureBottom, int _pitch, float _volume);
+	~AutoTrack();
+
+	virtual void update(Step * _step);
+
+	// deletes all components and removes them from the component list
+	void clearComponents();
+	virtual void generate();
+	virtual void playComponent(AutoMusic * _component);
+	float getSecondsPerBeat() const;
+
+	virtual std::string toString() override;
+};
+
+class Note : public AutoMusic{
+public:
+	Note(float _lengthInBeats, int _pitch, float _volume);
+
+	virtual std::string toString() override;
+};
+
+class AutoRiff : public AutoTrack{
 public:
 	Mode mode;
 	OpenAL_Sound * instrument;
-
-	static int scales[];
-
-	// semi-tones above or below the original sound
-	float pitch;
 
 	// number of notes above the original sample the riff is allowed to pitch shift to
 	// e.g. a generationMax of 8 means that it can pitch up to one octave up
@@ -40,36 +81,14 @@ public:
 	// e.g. a generationMin of 8 means that it can pitch up to one octave down
 	int generationMin;
 
-
-	float nextNote;
-
-	float curTime;
-	int curNote;
-
-
-	// beats per minute
-	float bpm;
-
 	// number of bars in the riff
-	int bars;
-	
-	// beats per bar
-	int timeSignatureTop;
-	// beat unit (note value which represents one beat)
-	int timeSignatureBottom;
-
-
-	std::vector<Note> notes;
+	//int bars;
 	
 	AutoRiff(OpenAL_Sound * _instrument, Mode _mode = kIONIAN);
 	~AutoRiff();
 
-	void update(Step * _step);
-
-	virtual void generate();
-	float getLengthInSeconds() const;
-	float getLengthInBeats() const;
-	float getSecondsPerBeat() const;
+	virtual void playComponent(AutoMusic * _component) override;
+	virtual void generate() override;
 };
 
 
@@ -91,32 +110,24 @@ public:
 	virtual void generate() override;
 };
 
-class AutoBeat : public virtual NodeUpdatable, public virtual NodeChild{
+class AutoBeat : public AutoTrack{
 public:
 	// plays the backbeat
-	AutoRiff * snare;
+	AutoSnare * snare;
 	// plays the downbeats
-	AutoRiff * kick;
+	AutoKick * kick;
 	// plays at a constant interval
-	AutoRiff * ride;
+	AutoRide * ride;
 
 	AutoBeat(OpenAL_Sound * _snare, OpenAL_Sound * _kick, OpenAL_Sound * _ride);
 	~AutoBeat();
 
 	virtual void update(Step * _step) override;
 
-	void generate();
-	
-	// note: changes only affects generation
-	float bpm;
-	// beats per bar
-	int timeSignatureTop;
-	// beat unit (note value which represents one beat)
-	int timeSignatureBottom;
-	float length;
+	virtual void generate() override;
 };
 
-class AutoDrums : public virtual NodeUpdatable, public virtual NodeChild{
+class AutoDrums : public AutoTrack{
 public:
 	// plays the backbeat
 	OpenAL_Sound * snare;
@@ -124,18 +135,14 @@ public:
 	OpenAL_Sound * kick;
 	// plays at a constant interval
 	OpenAL_Sound * ride;
-
-	std::vector<AutoBeat *> beats;
-	int activeBeat;
 	
 	AutoDrums(OpenAL_Sound * _snare, OpenAL_Sound * _kick, OpenAL_Sound * _ride);
-	~AutoDrums();
 
-	virtual void update(Step * _step) override;
+	//virtual void update(Step * _step) override;
 
-	void generate();
+	virtual void generate() override;
 };
 
-class AutoSong : public virtual NodeUpdatable, public virtual NodeChild{
+/*class AutoSong : public virtual NodeUpdatable, public virtual NodeChild{
 	
-};
+};*/
