@@ -6,13 +6,15 @@
 #include <MeshFactory.h>
 #include <Font.h>
 #include <RenderOptions.h>
+#include <StringUtils.h>
 
 TextLabel::TextLabel(BulletWorld* _world, Font* _font, Shader* _textShader, float _width):
 	HorizontalLinearLayout(_world),
 	font(_font),
 	textShader(_textShader),
 	updateRequired(false),
-	lineWidth(0.f)
+	lineWidth(0.f),
+	wrapMode(kCHARACTER)
 {
 	setHeight(font->getLineHeight());
 	setWidth(_width);
@@ -70,28 +72,49 @@ void TextLabel::setText(std::wstring _text){
 
 void TextLabel::updateText(){
 	// find out where the first overflow in the text would occur
-	unsigned long int i;
-	for(i = 0; i < textAll.size(); ++i){
-		if(textAll.at(i) == '\n'){
-			++i;
-			textDisplayed += '\n';
-			// newline character
-			break;
-		}else if(!canFit(font->getGlyphWidthHeight(textAll.at(i)).x)){
-			// width overflow
-			break;
-		}else{
-			insertChar(textAll.at(i));
+	unsigned long int idx = 0;
+	if(wrapMode == kWORD) {
+		std::vector<std::wstring> words = StringUtils::split(textAll, ' ');
+		for(auto word : words) {
+			float width = 0.f;
+			for(auto c : word) {
+				width += font->getGlyphWidthHeight(c).x;
+			}
+			if(canFit(width) + font->getGlyphWidthHeight(' ').x) {
+				for(auto c : word) {
+					insertChar(c);
+					idx++;
+				}
+				insertChar(' ');
+				idx++;
+			}else {
+				textDisplayed += '\n';
+				break;
+			}
+		}
+	}else if(wrapMode == kCHARACTER) {
+		for(idx = 0; idx < textAll.size(); ++idx){
+			if(textAll.at(idx) == '\n'){
+				++idx;
+				textDisplayed += '\n';
+				// newline character
+				break;
+			}else if(!canFit(font->getGlyphWidthHeight(textAll.at(idx)).x)){
+				// width overflow
+				break;
+			}else{
+				insertChar(textAll.at(idx));
+			}
 		}
 	}
-	
-	// i to the end of the text did not fit
-	if(i < textAll.size()){
-		textOverflow = textAll.substr(i);
+
+	// idx to the end of the text did not fit
+	if(idx < textAll.size()){
+		textOverflow = textAll.substr(idx);
 	}else{
 		textOverflow = L"";
 	}
-
+	
 	updateRequired = false;
 }
 
