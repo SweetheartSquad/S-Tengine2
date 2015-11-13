@@ -168,7 +168,7 @@ std::vector<glm::vec2> sweet::TextureUtils::getTracedContour(Texture * _tex, uns
 		for (int y = 0; y < _tex->height; ++y){
 			if (sweet::TextureUtils::getPixel(_tex, x, y) <= _threshold){
 				s = glm::vec2(x,y);
-				contour.push_back(s);
+				contour.push_back(glm::vec2(s.x, _tex->height - s.y));
 				break;
 			}
 		}
@@ -184,10 +184,10 @@ std::vector<glm::vec2> sweet::TextureUtils::getTracedContour(Texture * _tex, uns
 		glm::vec2 p2;
 		glm::vec2 p3;
 		int direction = 0;
-
+		bool found;
 		do {
 			// max 3 tries allowed in search
-			bool found = false;
+			found = false;
 			for (unsigned int numRotates = 0; numRotates < 3; numRotates++){
 				// Find p1, p2, and p3
 				p1 = glm::vec2(p.x + moves[direction][0][0], p.y + moves[direction][0][1]);
@@ -198,23 +198,21 @@ std::vector<glm::vec2> sweet::TextureUtils::getTracedContour(Texture * _tex, uns
 				bool p2V = p2.x >= 0 && p2.x < _tex->width && p2.y >= 0 && p2.y < _tex->width;
 				bool p3V = p3.x >= 0 && p3.x < _tex->width && p3.y >= 0 && p3.y < _tex->width;
 				
-				int whee = getPixel(_tex, p.x, p.y);
-				
 				if (p1V && sweet::TextureUtils::getPixel(_tex, p1.x, p1.y) <= _threshold){
-					contour.push_back(p1);
+					contour.push_back(glm::vec2(p1.x, _tex->height - p1.y));
 					// move up and left
 					p = p1;
 					direction = ((direction - 1) % 4 + 4) % 4;
 					found = true;
 				}
 				else if (p2V && sweet::TextureUtils::getPixel(_tex, p2.x, p2.y) <= _threshold){
-					contour.push_back(p2);
+					contour.push_back(glm::vec2(p2.x, _tex->height - p2.y));
 					// move up
 					p = p2;
 					found = true;
 				}
 				else if (p3V && sweet::TextureUtils::getPixel(_tex, p3.x, p3.y) <= _threshold){
-					contour.push_back(p3);
+					contour.push_back(glm::vec2(p3.x, _tex->height - p3.y));
 					// move right and left
 					p = p3;
 					found = true;
@@ -232,6 +230,11 @@ std::vector<glm::vec2> sweet::TextureUtils::getTracedContour(Texture * _tex, uns
 				break;
 			}
 		} while (!(p.x == s.x && p.y == s.y));
+
+		// If the function actually found a contour, remove the last point? (which is s again)
+		if (found){
+			contour.pop_back();
+		}
 	}
 	return contour;
 }
