@@ -194,10 +194,10 @@ std::vector<glm::vec2> sweet::TextureUtils::getTracedContour(Texture * _tex, uns
 				p2 = glm::vec2(p.x + moves[direction][1][0], p.y + moves[direction][1][1]);
 				p3 = glm::vec2(p.x + moves[direction][2][0], p.y + moves[direction][2][1]);
 
-				bool p1V = p1.x >= 0 && p1.x < _tex->width && p1.y >= 0 && p1.y < _tex->width;
-				bool p2V = p2.x >= 0 && p2.x < _tex->width && p2.y >= 0 && p2.y < _tex->width;
-				bool p3V = p3.x >= 0 && p3.x < _tex->width && p3.y >= 0 && p3.y < _tex->width;
-				
+				bool p1V = p1.x >= 0 && p1.x < _tex->width && p1.y >= 0 && p1.y < _tex->height;
+				bool p2V = p2.x >= 0 && p2.x < _tex->width && p2.y >= 0 && p2.y < _tex->height;
+				bool p3V = p3.x >= 0 && p3.x < _tex->width && p3.y >= 0 && p3.y < _tex->height;
+
 				if (p1V && sweet::TextureUtils::getPixel(_tex, p1.x, p1.y) <= _threshold){
 					contour.push_back(glm::vec2(p1.x, _tex->height - p1.y));
 					// move up and left
