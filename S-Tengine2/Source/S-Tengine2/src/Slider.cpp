@@ -47,8 +47,7 @@ Slider::Slider(BulletWorld * _world, float _defaultValue, float _valueMin, float
 	layout->setRationalHeight(1.f);
 	addChild(layout);
 
-	this->setMouseEnabled(true);
-	//layout->setMouseEnabled(true);
+	setMouseEnabled(true);
 	setValue(_defaultValue);
 }
 
@@ -93,7 +92,6 @@ float Slider::getValue(){
 
 void Slider::updateValue(){
 	float v = (value - valueMin) / (valueMax - valueMin);
-	std::cout << v << std::endl;
 	if(horizontal){
 		fill->setRationalWidth(v, this);
 		fill->background->mesh->setUV(0, 1-v, 0.0);
@@ -149,6 +147,7 @@ SliderControlled::SliderControlled(BulletWorld * _world, float * _target, float 
 	Slider(_world, *_target, _valueMin, _valueMax, _horizontal),
 	target(_target)
 {
+	setMouseEnabled(false);
 }
 
 void SliderControlled::update(Step * _step){
