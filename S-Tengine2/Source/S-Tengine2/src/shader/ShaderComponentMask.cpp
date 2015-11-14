@@ -1,48 +1,66 @@
 #pragma once
 
-#include <shader/ShaderComponentMask.h>
-#include <shader/ShaderVariables.h>
-#include <shader/ShaderComponentDepth.h>
+#include <shader\ShaderComponentMask.h>
+#include <shader\ShaderVariables.h>
+#include <GLUtils.h>
+#include <RenderOptions.h>
+#include <shader\Shader.h>
+#include <Texture.h>
 
-ShaderComponentMask::ShaderComponentMask(Shader * _shader) :
+ShaderComponentMask::ShaderComponentMask(Shader * _shader, Texture * _maskTex) :
 	ShaderComponent(_shader),
-	maskTextureId(0)
+	maskTex(_maskTex),
+	maskTexLoc(-1)
 {
 }
 
-void ShaderComponentMask::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
-	// Do nothing
+ShaderComponentMask::~ShaderComponentMask(){
 }
-
+	
 std::string ShaderComponentMask::getVertexVariablesString(){
 	return DEFINE + SHADER_COMPONENT_MASK + ENDL;
 }
 
 std::string ShaderComponentMask::getFragmentVariablesString(){
-	return DEFINE + SHADER_COMPONENT_MASK + ENDL;
+	return 
+		DEFINE + SHADER_COMPONENT_MASK + ENDL +
+		"uniform sampler2D " + GL_UNIFORM_ID_MASK_TEX + SEMI_ENDL;
 }
 
 std::string ShaderComponentMask::getVertexBodyString(){
 	return "";
 }
 
-
 std::string ShaderComponentMask::getFragmentBodyString(){
-	return "uniform sampler2D maskTextureSampler" + SEMI_ENDL;
+	return "";
 }
 
 std::string ShaderComponentMask::getOutColorMod(){
-	return 
-		"vec 4 maskTexColor = texture(maskTextureSampler, " + GL_IN_OUT_FRAG_UV + ")" + SEMI_ENDL + 
-		GL_OUT_OUT_COLOR  + ".a *= maskTexColor.r";
+	return
+		"// discard transparent pixels in the mask" + ENDL +
+		//"if("+ GL_UNIFORM_ID_MASK_TEX + " != 0){" + ENDL +
+		GL_OUT_OUT_COLOR + ".a *= texture("+ GL_UNIFORM_ID_MASK_TEX + ", " + GL_IN_OUT_FRAG_UV + ").a" + SEMI_ENDL +
+		/*"}" + */ENDL;
 }
 
-void ShaderComponentMask::setMaskTextureId(GLuint _id){
-	maskTextureId = _id;
-	makeDirty();
+void ShaderComponentMask::load(){
+	if(!loaded){
+		maskTexLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_MASK_TEX.c_str());
+	}
+
+	ShaderComponent::load();
 }
 
-void ShaderComponentMask::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentMask::configureUniforms(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
+	glActiveTexture(GL_TEXTURE0 + maskTex->textureId);
+	glBindTexture(GL_TEXTURE_2D, maskTex->textureId);
+	glUniform1i(maskTexLoc, maskTex != nullptr ? maskTex->textureId : 0);
+}
+
+void ShaderComponentMask::setMaskTex(Texture * _maskTex){
+	maskTex = _maskTex;
 	makeDirty();
-	ShaderComponent::clean(_matrixStack, _renderOption, _nodeRenderable);
+}
+Texture * ShaderComponentMask::getMaskTex(){
+	return maskTex;
 }

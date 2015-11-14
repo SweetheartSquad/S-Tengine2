@@ -79,6 +79,7 @@ const std::string GL_UNIFORM_ID_SATURATION			  = "saturation";
 const std::string GL_UNIFORM_ID_VALUE				  = "value";
 
 const std::string GL_UNIFORM_ID_ALPHA				  = "alpha";
+const std::string GL_UNIFORM_ID_MASK_TEX			  = "maskTex";
 
 const std::string GL_UNIFORM_ID_TEXT_COLOR			  = "textColor";
 

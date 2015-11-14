@@ -134,8 +134,6 @@
     <ClCompile Include="src/DatabaseConnection.cpp" />
     <ClCompile Include="src/shader/ShaderComponentDepth.cpp" />
     <ClCompile Include="src/shader/ShaderComponentIndexedTexture.cpp" />
-    <ClCompile Include="src/shader/ShaderComponentMask.cpp" />
-    <ClCompile Include="src/shader/ShaderComponentMaskRender.cpp" />
     <ClCompile Include="src/shader/ShaderComponentMVP.cpp" />
     <ClCompile Include="src/shader/ShaderComponentNormals.cpp" />
     <ClCompile Include="src/shader/ShaderComponentSsao.cpp" />
@@ -154,13 +152,16 @@
     <ClCompile Include="src/VerticalLinearLayout.cpp" />
     <ClCompile Include="src/Configuration.cpp" />
     <ClCompile Include="src/Plane.cpp" />
+    <ClCompile Include="src/shader/ShaderComponentMask.cpp" />
     <ClInclude Include="include/Plane.h" />
+    <ClInclude Include="include/shader/ShaderComponentMask.h" />
     <ClInclude Include="src/sweet/UI.cpp" />
     <ClInclude Include="src/WrapMode.cppcpp" />
     <ClCompile Include="src/AutoRiff.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include/Plane.h" />
+    <ClInclude Include="include/shader/ShaderComponentMask.h" />
     <ClInclude Include="src/sweet/UI.cpp" />
     <ClInclude Include="src/WrapMode.cppcpp" />
     <ClCompile Include="cpp/MouseCameraController.cpp" />
@@ -286,8 +287,6 @@
     <ClCompile Include="src/DatabaseConnection.cpp" />
     <ClCompile Include="src/shader/ShaderComponentDepth.cpp" />
     <ClCompile Include="src/shader/ShaderComponentIndexedTexture.cpp" />
-    <ClCompile Include="src/shader/ShaderComponentMask.cpp" />
-    <ClCompile Include="src/shader/ShaderComponentMaskRender.cpp" />
     <ClCompile Include="src/shader/ShaderComponentMVP.cpp" />
     <ClCompile Include="src/shader/ShaderComponentNormals.cpp" />
     <ClCompile Include="src/shader/ShaderComponentSsao.cpp" />
@@ -306,7 +305,9 @@
     <ClCompile Include="src/VerticalLinearLayout.cpp" />
     <ClCompile Include="src/Configuration.cpp" />
     <ClCompile Include="src/Plane.cpp" />
+    <ClCompile Include="src/shader/ShaderComponentMask.cpp" />
     <ClInclude Include="include/Plane.h" />
+    <ClInclude Include="include/shader/ShaderComponentMask.h" />
     <ClInclude Include="src/sweet/UI.cpp" />
     <ClInclude Include="src/WrapMode.cppcpp" />
     <ClCompile Include="src/AutoRiff.cpp" />
