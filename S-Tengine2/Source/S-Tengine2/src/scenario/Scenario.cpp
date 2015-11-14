@@ -18,6 +18,7 @@ Character::Character(Json::Value _json) :
 }
 
 Scenario::Scenario(std::string _jsonSrc) :
+	id(_jsonSrc),
 	currentConversation(nullptr),
 	NodeResource(false)
 {

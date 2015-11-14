@@ -22,7 +22,9 @@ public:
 };
 
 class Scenario : public virtual NodeContent, public virtual NodeResource{
-public:	
+public:
+	// the scenario filename
+	std::string id;
 
 	Json::Value root;
 	std::map<std::string, Conversation *> conversations;
