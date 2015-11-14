@@ -1,11 +1,15 @@
 #pragma once
+
+#include <MeshInterface.h>
 #include <HorizontalLinearLayout.h>
+#include <VerticalLinearLayout.h>
 
 class BulletWorld;
 class Scene;
 
-class Slider : public HorizontalLinearLayout{
+class Slider : public NodeUI{
 public:
+	bool horizontal;
 	bool stepped;
 	float valueStep;
 
@@ -14,12 +18,13 @@ public:
 	// the maximum value of the slider
 	float valueMax;
 
+	LinearLayout * layout;
 	NodeUI * fill;
 
 	// the "handle"
 	NodeUI * thumb;
 
-	Slider(BulletWorld* _world, float _defaultValue, float _valueMin, float _valueMax);
+	Slider(BulletWorld* _world, float _defaultValue, float _valueMin, float _valueMax, bool _horizontal = true);
 	~Slider();
 
 	virtual void update(Step * _step) override;
@@ -43,7 +48,7 @@ public:
 	float * target;
 	virtual void update(Step * _step) override;
 
-	SliderController(BulletWorld* _world, float * _target, float _defaultValue, float _valueMin, float _valueMax);
+	SliderController(BulletWorld* _world, float * _target, float _defaultValue, float _valueMin, float _valueMax, bool _horizontal = true);
 };
 
 // A slider which is modified by the value of a target float
@@ -53,5 +58,5 @@ public:
 	float * target;
 	virtual void update(Step * _step) override;
 
-	SliderControlled(BulletWorld* _world, float * _target, float _valueMin, float _valueMax);
+	SliderControlled(BulletWorld* _world, float * _target, float _valueMin, float _valueMax, bool _horizontal = true);
 };
