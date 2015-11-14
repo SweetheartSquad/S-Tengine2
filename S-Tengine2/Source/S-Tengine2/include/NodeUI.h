@@ -4,6 +4,7 @@
 #include <NodeBulletBody.h>
 #include <MeshEntity.h>
 #include <UIUnit.h>
+#include <Plane.h>
 
 class Scene;
 class Mouse;
@@ -76,7 +77,7 @@ public:
 	// sets mouseEnabled and creates/deletes the node's collider
 	void setMouseEnabled(bool _mouseEnabled);
 
-	MeshEntity * background;
+	Plane * background;
 
 	StandardFrameBuffer * frameBuffer;
 	Texture * renderedTexture;

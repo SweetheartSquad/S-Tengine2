@@ -153,6 +153,8 @@
     <ClCompile Include="src/UIUnit.cpp" />
     <ClCompile Include="src/VerticalLinearLayout.cpp" />
     <ClCompile Include="src/Configuration.cpp" />
+    <ClCompile Include="src\Plane.cpp" />
+    <ClInclude Include="include\Plane.h" />
     <ClInclude Include="src/sweet\UI.cpp" />
     <ClInclude Include="src/WrapMode.cppcpp" />
     <ClCompile Include="src/AutoRiff.cpp" />

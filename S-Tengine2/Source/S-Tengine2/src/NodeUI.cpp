@@ -43,7 +43,7 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	onMouseInFunction(nullptr),
 	onMouseOutFunction(nullptr),
 	onMouseUpFunction(nullptr),
-	background(new MeshEntity(MeshFactory::getPlaneMesh())),
+	background(new Plane(glm::vec3(-0.5f, -0.5f, 0.f))),
 	margin(new Transform()),
 	padding(new Transform()),
 	uiElements(new Transform()),
@@ -60,12 +60,6 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 		bgShader->addComponent(new ShaderComponentAlpha(bgShader));
 		bgShader->compileShader();
 	}
-	for(unsigned long int i = 0; i < background->mesh->vertices.size(); ++i){
-		background->mesh->vertices.at(i).x += 0.5f;
-		background->mesh->vertices.at(i).y += 0.5f;
-	}
-
-	background->mesh->dirty = true;
 	background->setShader(bgShader, true);
 	
 	childTransform->addChild(margin, false);
