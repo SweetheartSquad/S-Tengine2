@@ -61,7 +61,7 @@ void AutoTrack::generate(){
 
 	curComponent = 0;
 	curTime = 0;
-	nextComponent = 0;//(components.size() > 0) ? components.front()->lengthInBeats * getSecondsPerBeat() : 0;
+	nextComponent = (components.size() > 0) ? components.front()->lengthInBeats * getSecondsPerBeat() : 0;
 }
 
 
