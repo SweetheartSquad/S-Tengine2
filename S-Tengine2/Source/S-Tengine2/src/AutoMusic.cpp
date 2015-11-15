@@ -99,6 +99,11 @@ std::string AutoTrack::toString(){
 	return ss.str();
 }
 
+void AutoTrack::randomProperties(){
+	bpm = sweet::NumberUtils::randomInt(60, 240);
+	timeSignatureBottom = sweet::NumberUtils::randomInt(2,8);
+	timeSignatureTop = sweet::NumberUtils::randomInt(1,timeSignatureBottom+1);	
+}
 
 Note::Note(float _lengthInBeats, int _pitch, float _volume) :
 	AutoMusic(_lengthInBeats, _pitch, _volume)
@@ -359,9 +364,6 @@ void AutoDrums::generate(){
 
 	int numBeats = 1;
 
-	bpm = sweet::NumberUtils::randomInt(60, 240);
-	timeSignatureBottom = sweet::NumberUtils::randomInt(2,8);
-	timeSignatureTop = sweet::NumberUtils::randomInt(1,timeSignatureBottom+1);
 	for(unsigned long int i = 0; i < numBeats; ++i){
 		AutoBeat * b = new AutoBeat(snare, kick, ride);
 		b->bpm = bpm;

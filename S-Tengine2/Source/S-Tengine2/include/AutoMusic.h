@@ -32,6 +32,9 @@ public:
 
 class AutoTrack : public AutoMusic{
 public:
+	// randomizes the bpm and time signature
+	void randomProperties();
+
 	// beats per minute
 	float bpm;
 	float lengthInSeconds;
