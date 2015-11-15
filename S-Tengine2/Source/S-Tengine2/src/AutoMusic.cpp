@@ -1,6 +1,6 @@
 #pragma once
 
-#include <AutoRiff.h>
+#include <AutoMusic.h>
 #include <Step.h>
 #include <NumberUtils.h>
 #include <sstream>

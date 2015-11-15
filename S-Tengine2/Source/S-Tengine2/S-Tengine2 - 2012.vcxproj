@@ -157,7 +157,7 @@
     <ClInclude Include="include\shader\ShaderComponentMask.h" />
     <ClInclude Include="src/sweet\UI.cpp" />
     <ClInclude Include="src/WrapMode.cppcpp" />
-    <ClCompile Include="src/AutoRiff.cpp" />
+    <ClCompile Include="src\AutoMusic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include/Accelerometer.h" />
@@ -310,7 +310,7 @@
     <ClInclude Include="include/VerticalLinearLayout.h" />
     <ClInclude Include="include/Configuration.h" />
     <ClInclude Include="include/MouseCameraController.h" />
-    <ClInclude Include="include/AutoRiff.h" />
+    <ClInclude Include="include\AutoMusic.h" />
     <ClInclude Include="include/sweet/UI.h" />
     <ClInclude Include="include/WrapMode.h" />
   </ItemGroup>
