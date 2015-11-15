@@ -155,15 +155,11 @@
     <ClCompile Include="src/shader/ShaderComponentMask.cpp" />
     <ClInclude Include="include/Plane.h" />
     <ClInclude Include="include/shader/ShaderComponentMask.h" />
-    <ClInclude Include="src/sweet/UI.cpp" />
-    <ClInclude Include="src/WrapMode.cppcpp" />
     <ClCompile Include="src/AutoMusic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include/Plane.h" />
     <ClInclude Include="include/shader/ShaderComponentMask.h" />
-    <ClInclude Include="src/sweet/UI.cpp" />
-    <ClInclude Include="src/WrapMode.cppcpp" />
     <ClCompile Include="cpp/MouseCameraController.cpp" />
     <ClCompile Include="src/Accelerometer.cpp" />
     <ClCompile Include="src/AccelerometerParser.cpp" />
@@ -308,8 +304,6 @@
     <ClCompile Include="src/shader/ShaderComponentMask.cpp" />
     <ClInclude Include="include/Plane.h" />
     <ClInclude Include="include/shader/ShaderComponentMask.h" />
-    <ClInclude Include="src/sweet/UI.cpp" />
-    <ClInclude Include="src/WrapMode.cppcpp" />
     <ClCompile Include="src/AutoMusic.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

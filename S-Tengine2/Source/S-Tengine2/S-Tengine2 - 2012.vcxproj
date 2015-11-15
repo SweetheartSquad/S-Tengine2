@@ -155,8 +155,6 @@
     <ClCompile Include="src\shader\ShaderComponentMask.cpp" />
     <ClInclude Include="include\Plane.h" />
     <ClInclude Include="include\shader\ShaderComponentMask.h" />
-    <ClInclude Include="src/sweet\UI.cpp" />
-    <ClInclude Include="src/WrapMode.cppcpp" />
     <ClCompile Include="src\AutoMusic.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -209,7 +207,6 @@
     <ClInclude Include="include/PerspectiveCamera.h" />
     <ClInclude Include="include/Point.h" />
     <ClInclude Include="include/PointLight.h" />
-    <ClInclude Include="include/poly2Tri/common/utils.h" />
     <ClInclude Include="include/Rectangle.h" />
     <ClInclude Include="include/RenderOptions.h" />
     <ClInclude Include="include/RenderSurface.h" />
