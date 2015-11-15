@@ -36,7 +36,7 @@ Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _char) :
 
 
 GlyphTexture::GlyphTexture(FT_Bitmap _glyph, bool _autoRelease) :
-	Texture(true, _autoRelease),
+	Texture("", true, _autoRelease),
 	NodeResource(_autoRelease)
 {
 	width = _glyph.width;

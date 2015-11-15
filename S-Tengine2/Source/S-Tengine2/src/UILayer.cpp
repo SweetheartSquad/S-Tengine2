@@ -145,8 +145,7 @@ Sprite * UILayer::addMouseIndicator(){
 	tex->load();
 	mouseIndicator->mesh->pushTexture2D(tex);
 	mouseIndicator->parents.at(0)->scale(32,32,1);
-	mouseIndicator->mesh->scaleModeMag = GL_NEAREST;
-	mouseIndicator->mesh->scaleModeMin = GL_NEAREST;
+	mouseIndicator->mesh->scaleModeMag = mouseIndicator->mesh->scaleModeMin = GL_NEAREST;
 
 	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
 		mouseIndicator->mesh->vertices[i].x += 0.5f;

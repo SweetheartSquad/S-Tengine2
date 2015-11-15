@@ -4,7 +4,7 @@
 #include <NumberUtils.h>
 
 TextureColourTable::TextureColourTable(bool _autoRelease) :
-	Texture(true, _autoRelease),
+	Texture("", true, _autoRelease),
 	NodeResource(_autoRelease)
 {
 	channels = 4;

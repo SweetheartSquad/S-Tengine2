@@ -13,9 +13,8 @@ class FrameBufferInterface;
 class Texture : public virtual NodeResource{
 public:
 	
-	Texture(std::string _src, bool _storeData, bool _autoRelease);
-	Texture(FrameBufferInterface * _frameBuffer, bool _storeData, int _frameBufferChannelIndex, int _channels, bool _autoRelease);
-	Texture(bool _storeData, bool _autoRelease);
+	explicit Texture(std::string _src, bool _storeData, bool _autoRelease, bool _useMipmaps = true);
+	explicit Texture(FrameBufferInterface * _frameBuffer, bool _storeData, int _frameBufferChannelIndex, int _channels, bool _autoRelease, bool _useMipmaps = true);
 	~Texture();
 
 	/**Source file location */
@@ -37,13 +36,15 @@ public:
 	bool storeData;
 	/**The image data */
 	unsigned char * data;
+	// whether or not mipmaps will be generated after buffering data
+	bool useMipmaps;
 
 	
 	// updates the OpenGL texture with the image data (assumes texture exists already)
-	// also generates mipmaps
+	// also generates mipmaps if needed
 	void bufferData();
 	// creates the OpenGL texture and buffers it with the image data
-	// also generates mipmaps
+	// also generates mipmaps if needed
 	void bufferDataFirst();
 
 	/**Initializes the texture. Can be called to recreate the texture
@@ -70,5 +71,5 @@ public:
 			<< " storeData: " << obj.storeData
 			<< " data: " << obj.data
 			<< " channels: " << obj.channels;
-	}
+	};
 };
