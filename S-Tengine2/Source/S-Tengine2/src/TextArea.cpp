@@ -10,6 +10,7 @@ TextArea::TextArea(BulletWorld * _bulletWorld, Font * _font, Shader * _textShade
 {
 	setHeight(_height);
 	setWidth(_width);
+	setWrapMode(kCHARACTER);
 }
 void TextArea::update(Step * _step){
 	if(text != textDisplayed){
