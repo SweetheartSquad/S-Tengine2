@@ -7,6 +7,7 @@ class Configuration{
 public:
 	bool fullscreen;
 	glm::uvec2 resolution;
+	double fps;
 
 
 	Configuration();

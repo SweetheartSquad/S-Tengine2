@@ -134,7 +134,6 @@ void sweet::initialize(std::string _title){
 	FileUtils::createDirectoryIfNotExists("data/images");
 
 	title = _title;
-	step.targetFrameDuration = 0.1667;
 
 	sweet::setGlfwWindowHints();
 
@@ -183,7 +182,7 @@ void sweet::destruct(){
 
 /////////// Delta Time Begin //////////////
 void sweet::calculateDeltaTimeCorrection(){
-	double targetFrameDuration = static_cast<double>(1) / FPS;
+	double targetFrameDuration = 1.0 / config.fps;
 	double time = glfwGetTime();
 	double deltaTime = time - lastTimestamp;
 	deltaTimeCorrection = deltaTime/targetFrameDuration;
@@ -193,9 +192,9 @@ void sweet::calculateDeltaTimeCorrection(){
 	}
 	lastTimestamp = time;
 
-	sweet::step.targetFrameDuration = targetFrameDuration;
-	sweet::step.time = time;
-	sweet::step.setDeltaTime(deltaTime);
-	sweet::step.deltaTimeCorrection = deltaTimeCorrection;
-	sweet::step.lastTimestamp = lastTimestamp;
+	step.targetFrameDuration = targetFrameDuration;
+	step.time = time;
+	step.setDeltaTime(deltaTime);
+	step.deltaTimeCorrection = deltaTimeCorrection;
+	step.lastTimestamp = lastTimestamp;
 }

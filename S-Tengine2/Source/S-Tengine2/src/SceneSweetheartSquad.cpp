@@ -110,7 +110,7 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	
 	logo->childTransform->addChild(logo1, false);
 	logo->childTransform->addChild(logo2, false);
-	logo->childTransform->translate(0, -0.9, 0);
+	logo->childTransform->translate(0, -0.9f, 0);
 
 
 

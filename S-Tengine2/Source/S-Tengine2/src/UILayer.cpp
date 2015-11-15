@@ -152,4 +152,6 @@ Sprite * UILayer::addMouseIndicator(){
 		mouseIndicator->mesh->vertices[i].y -= 0.5f;
 	}
 	mouseIndicator->mesh->dirty = true;
+
+	return mouseIndicator;
 }

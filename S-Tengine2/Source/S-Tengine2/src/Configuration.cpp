@@ -6,7 +6,8 @@
 #include <GLFW\glfw3.h>
 Configuration::Configuration() :
 	fullscreen(false),
-	resolution(0)
+	resolution(0),
+	fps(0)
 {
 }
 
@@ -15,6 +16,7 @@ void Configuration::load(const std::string & _filename){
 	const GLFWvidmode * vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	bool fullscreenDefault = false;
 	glm::uvec2 resolutionDefault = glm::uvec2(vidmode->width*0.9, vidmode->height*0.9);
+	double fpsDefault = 60.0;
 
 
 	Json::Reader reader;
@@ -39,6 +41,7 @@ void Configuration::load(const std::string & _filename){
 	}else{
 		fullscreen = json.get("fullscreen", fullscreenDefault).asBool();
 		resolution = glm::uvec2(json["resolution"].get("x", resolutionDefault.x).asInt(), json["resolution"].get("y", resolutionDefault.y).asInt());
+		fps = json.get("fps", fpsDefault).asDouble();
 	}
 }
 
@@ -47,6 +50,7 @@ void Configuration::save(const std::string & _filename){
 	json["fullscreen"] = fullscreen;
 	json["resolution"]["x"] = resolution.x;
 	json["resolution"]["y"] = resolution.y;
+	json["fps"] = fps;
 		
 	std::ofstream log(_filename, std::ios_base::out);
 	log << json;

@@ -116,7 +116,7 @@ Note::Note(float _lengthInBeats, int _pitch, float _volume) :
 std::string Note::toString(){
 	std::stringstream ss;
 	ss << (volume == 1 ? "X" : (volume == 0.5 ? "x" : (volume == 0.25 ? "*" : "0")));
-	for(unsigned long int i = 1; i < lengthInBeats*128; ++i){
+	for(unsigned long int i = 1; i < lengthInBeats*64; ++i){
 		ss << "-";
 	}
 	return ss.str();
