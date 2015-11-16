@@ -151,8 +151,10 @@
     <ClCompile Include="src/UIUnit.cpp" />
     <ClCompile Include="src/VerticalLinearLayout.cpp" />
     <ClCompile Include="src/Configuration.cpp" />
+    <ClCompile Include="src\EventManager.cpp" />
     <ClCompile Include="src\Plane.cpp" />
     <ClCompile Include="src\shader\ShaderComponentMask.cpp" />
+    <ClInclude Include="include\EventManager.h" />
     <ClInclude Include="include\Plane.h" />
     <ClInclude Include="include\rng.h" />
     <ClInclude Include="include\shader\ShaderComponentMask.h" />
