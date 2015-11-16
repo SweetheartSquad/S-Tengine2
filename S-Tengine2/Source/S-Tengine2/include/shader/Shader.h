@@ -40,13 +40,20 @@ private:
 	bool dirty;
 
 public:
-
+	
 	/** Filename of vertex shader */
 	std::string vertSource;
 	/** Filename of fragment shader */
 	std::string fragSource;
 	/** Filename of geometry shader */
 	std::string geomSource;
+	
+	/** contents of vertex shader */
+	std::string vert;
+	/** contents of fragment shader */
+	std::string frag;
+	/** contents of geometry shader */
+	std::string geom;
 
 	// Whether the shader has been compiled
 	bool isCompiled;
@@ -60,6 +67,10 @@ public:
 	Shader(std::string _vertexShaderFile, std::string _fragmentShaderFile, std::string _geometryShaderFile, bool _autoRelease);
 	virtual ~Shader(void);
 	GLuint compileShader(GLenum _shaderType, const char* _source, int _length);
+	
+	void loadFromFile(std::string _vertexShaderFile, std::string _fragmentShaderFile);
+	void loadFromFile(std::string _vertexShaderFile, std::string _fragmentShaderFile, std::string _geometryShaderFile);
+
 
 	/** Returns the shader's program ID */
 	GLuint getProgramId();
