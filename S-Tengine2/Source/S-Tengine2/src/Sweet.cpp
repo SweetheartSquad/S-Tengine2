@@ -34,6 +34,12 @@ bool sweet::fullscreen = false;
 FT_Library sweet::freeTypeLibrary = nullptr;
 GLFWwindow * sweet::currentContext = nullptr;
 
+
+// Nvidia optiums fix to force discrete graphics
+ extern "C" {  
+      _declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;  
+ }  
+
 void sweet::setGlfwWindowHints(){
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);

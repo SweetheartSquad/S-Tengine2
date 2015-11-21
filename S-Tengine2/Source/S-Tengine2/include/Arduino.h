@@ -44,6 +44,9 @@ class Arduino : public NodeUpdatable
         //Check if we are actually connected
         bool IsConnected();
 
+		void connect(std::string _portName);
+
 		virtual void update(Step * _step) override;
+		
 };
 
