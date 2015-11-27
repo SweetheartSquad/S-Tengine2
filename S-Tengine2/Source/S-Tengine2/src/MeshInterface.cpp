@@ -179,7 +179,7 @@ void MeshInterface::render(sweet::MatrixStack * _matrixStack, RenderOptions * _r
 		glUseProgram(_renderOption->shader->getProgramId());
 	//}
 	_renderOption->shader->clean(_matrixStack, _renderOption, this);	
-
+	checkForGlError(0,__FILE__,__LINE__);
 	// Texture repeat
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, uvEdgeMode);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, uvEdgeMode);

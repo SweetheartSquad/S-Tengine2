@@ -55,6 +55,8 @@ const std::string GL_UNIFORM_ID_PROJECTION_MATRIX     =	"projectionMat";
 const std::string GL_UNIFORM_ID_MODEL_VIEW_PROJECTION = "MVP";
 const std::string GL_UNIFORM_ID_VIEW_PROJECTION		  = "VP";
 
+const std::string GL_UNIFORM_ID_DEPTH_OFFSET			  = "depthOffset";
+
 const std::string GL_UNIFORM_ID_TEXTURE_SAMPLER       = "textureSampler";
 const std::string GL_UNIFORM_ID_NUM_TEXTURES 		  = "numTextures";
 
@@ -116,6 +118,7 @@ const std::string SHADER_COMPONENT_DEPTH			  = "SHADER_COMPONENT_DEPTH";
 const std::string SHADER_COMPONENT_SSAO			      = "SHADER_COMPONENT_SSAO";
 const std::string SHADER_COMPONENT_MASK			      = "SHADER_COMPONENT_MASK";
 const std::string SHADER_COMPONENT_MVP			      = "SHADER_COMPONENT_MVP";
+const std::string SHADER_COMPONENT_DEPTH_OFFSET		  = "SHADER_COMPONENT_DEPTH_OFFSET";
 
 
 const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGHT + ENDL +

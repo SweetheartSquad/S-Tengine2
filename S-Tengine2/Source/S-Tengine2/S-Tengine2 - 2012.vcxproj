@@ -153,10 +153,12 @@
     <ClCompile Include="src/Configuration.cpp" />
     <ClCompile Include="src\EventManager.cpp" />
     <ClCompile Include="src\Plane.cpp" />
+    <ClCompile Include="src\shader\ShaderComponentDepthOffset.cpp" />
     <ClCompile Include="src\shader\ShaderComponentMask.cpp" />
     <ClInclude Include="include\EventManager.h" />
     <ClInclude Include="include\Plane.h" />
     <ClInclude Include="include\rng.h" />
+    <ClInclude Include="include\shader\ShaderComponentDepthOffset.h" />
     <ClInclude Include="include\shader\ShaderComponentMask.h" />
     <ClCompile Include="src\AutoMusic.cpp" />
   </ItemGroup>

@@ -12,6 +12,7 @@ public:
 	double deltaTimeCorrection;
 	double lastTimestamp;
 	double deltaTime;
+	unsigned long long cycles;
 
 	void setDeltaTime(double _deltaTime);
 	double getDeltaTime();
