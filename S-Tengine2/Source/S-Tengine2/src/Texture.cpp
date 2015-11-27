@@ -34,10 +34,10 @@ Texture::Texture(FrameBufferInterface * _frameBuffer, bool _storeData, int _fram
 	storeData(_storeData),
 	useMipmaps(_useMipmaps)
 {
-	load();
 }
 
 Texture::~Texture(){
+	unload();
 	unloadImageData();
 }
 
@@ -110,7 +110,7 @@ void Texture::bufferData(){
 	checkForGlError(0,__FILE__,__LINE__);
 	
 	if(useMipmaps){
-		glGenerateMipmap(GL_TEXTURE_2D);
+		glGenerateTextureMipmap(textureId);
 		checkForGlError(0,__FILE__,__LINE__);
 	}
 }
@@ -132,7 +132,7 @@ void Texture::bufferDataFirst(){
 	checkForGlError(0,__FILE__,__LINE__);
 	
 	if(useMipmaps){
-		glGenerateMipmap(GL_TEXTURE_2D);
+		glGenerateTextureMipmap(textureId);
 		checkForGlError(0,__FILE__,__LINE__);
 	}
 }
