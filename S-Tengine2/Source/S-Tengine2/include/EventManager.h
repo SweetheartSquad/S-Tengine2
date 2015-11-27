@@ -31,19 +31,21 @@ public:
 class EventManager : public NodeUpdatable{
 private:
 	// when an event is triggered, it will be placed into the event queue
-	std::queue<Event *> events;
+	std::queue<sweet::Event *> events;
 public:
 	
 	// when an event is consumed, it will access listeners[event->key]
 	// and will call each function in the result, passing itself in as an argument
 	// listeners are handled in order from first added to last added
-	std::map<std::string, std::vector<std::function<void(Event *)>>> listeners;
+	std::map<std::string, std::vector<std::function<void(sweet::Event *)>>> listeners;
 
 	// triggers an event using the given object
-	void triggerEvent(Event * _event);
+	void triggerEvent(sweet::Event * _event);
 
 	// triggers an empty event object with the provided tag
 	void triggerEvent(std::string _tag);
+
+	void addEventListener(std::string _tag, std::function<void (sweet::Event *)> _listener );
 
 	EventManager();
 	~EventManager();

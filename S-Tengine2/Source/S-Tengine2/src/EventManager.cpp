@@ -37,22 +37,26 @@ sweet::EventManager::EventManager(){
 
 sweet::EventManager::~EventManager(){
 	while(events.size() > 0){
-		delete events.back();
+		delete events.front();
 		events.pop();
 	}
 }
 
 void sweet::EventManager::triggerEvent(std::string _tag){
-	events.push(new Event(_tag));
+	events.push(new sweet::Event(_tag));
 }
 
-void sweet::EventManager::triggerEvent(Event * _event){
+void sweet::EventManager::triggerEvent(sweet::Event * _event){
 	events.push(_event);
+}
+
+void sweet::EventManager::addEventListener(std::string _tag, std::function<void (Event *)> _listener ){
+	listeners[_tag].push_back(_listener);
 }
 
 void sweet::EventManager::update(Step * _step){
 	while(events.size() > 0){
-		sweet::Event * e = events.back();
+		sweet::Event * e = events.front();
 		for(std::function<void(sweet::Event *)> f : listeners[e->tag]){
 			f(e);
 		}
