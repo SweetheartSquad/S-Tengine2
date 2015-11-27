@@ -142,11 +142,11 @@ void NodeUI::setTranslationPhysical(float _x, float _y, float _z, bool _relative
 	parents.at(0)->translate(_x, _y, _z, _relative);
 }
 
-void NodeUI::doRecursivleyOnUIChildren(std::function<void(NodeUI * _childOrThis)> _todo, bool _includeSelf) {
+void NodeUI::doRecursivelyOnUIChildren(std::function<void(NodeUI * _childOrThis)> _todo, bool _includeSelf) {
 	for(unsigned long int i = 0; i < uiElements->children.size(); ++i) {
 		NodeUI * nodeUI = dynamic_cast<NodeUI*>(uiElements->children.at(i));
 		if(nodeUI != nullptr) {
-			nodeUI->doRecursivleyOnUIChildren(_todo, true);
+			nodeUI->doRecursivelyOnUIChildren(_todo, true);
 		}
 	}
 	if(_includeSelf) {
@@ -334,8 +334,8 @@ void NodeUI::__updateForTexture(Step * _step) {
 				texturedPlane->firstParent()->scale(getWidth(true, true), -getHeight(true, true), 1.f, false);
 			}
 		}
-		doRecursivleyOnUIChildren([this](NodeUI * _ui){
-			if(_ui->isLayoutDirty()){
+		doRecursivelyOnUIChildren([this](NodeUI * _ui){
+			if(_ui->isLayoutDirty() || _ui->renderFrame){
 				this->renderFrame = true;
 				return;
 			}
@@ -504,18 +504,6 @@ void NodeUI::resizeChildrenHeight(NodeUI * _root){
 			}
 		}
 	}
-}
-
-bool NodeUI::hasRenderModeParent(RenderMode _renderMode) {
-	for(unsigned long int i = 0; i < parents.size(); ++i) {
-		NodeUI * nodeUI = dynamic_cast<NodeUI *>(parents.at(i));
-		if(nodeUI != nullptr) {
-			if(nodeUI->renderMode == _renderMode || nodeUI->hasRenderModeParent(_renderMode)) {
-				return true;
-			}
-		}
-	}
-	return false;
 }
 
 void NodeUI::setMeasuredWidths(NodeUI * _root){

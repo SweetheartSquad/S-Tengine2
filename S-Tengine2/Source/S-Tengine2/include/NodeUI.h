@@ -196,7 +196,7 @@ public:
 
 	virtual void setTranslationPhysical(float _x, float _y, float _z, bool _relative = false) override;
 
-	virtual void doRecursivleyOnUIChildren(std::function<void(NodeUI * _childOrThis)> _todo, bool _includeSelf = true);
+	virtual void doRecursivelyOnUIChildren(std::function<void(NodeUI * _childOrThis)> _todo, bool _includeSelf = true);
 	
 	bool isFirstParentNodeUI();
 	
@@ -221,8 +221,6 @@ private:
 	void resizeChildrenWidth(NodeUI * _root);
 	// check for rational-height children and resize them based on _root
 	void resizeChildrenHeight(NodeUI * _root);
-
-	bool hasRenderModeParent(RenderMode _renderMode);
 
 	void __renderForEntities(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 	void __renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
