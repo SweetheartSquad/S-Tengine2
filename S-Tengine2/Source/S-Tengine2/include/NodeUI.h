@@ -5,6 +5,7 @@
 #include <MeshEntity.h>
 #include <UIUnit.h>
 #include <Plane.h>
+#include <EventManager.h>
 
 class Scene;
 class Mouse;
@@ -23,6 +24,8 @@ enum RenderMode{
 
 class NodeUI : public NodeBulletBody{
 public:
+	// manages mouse events (click, mouseout, mousein, mousedown, mouseup)
+	sweet::EventManager eventManager;
 	bool mouseEnabled;
 	UIUnit marginLeft;
 	UIUnit marginRight;
@@ -87,13 +90,6 @@ public:
 
 	// how padding and margin affect width and height
 	BoxSizing boxSizing;
-
-	std::function<void()> onClickFunction;
-	std::function<void()> onMouseInFunction;
-	std::function<void()> onMouseOutFunction;
-	std::function<void()> onMouseUpFunction;
-	std::function<void()> onMouseDownFunction;
-	//void (*onUpFunction)();
 
 	NodeUI(BulletWorld * _world, RenderMode _renderMode = kENTITIES, bool _mouseEnabled = false);
 	~NodeUI();

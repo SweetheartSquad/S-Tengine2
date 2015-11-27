@@ -38,11 +38,6 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	renderedTexture(nullptr),
 	texturedPlane(nullptr),
 	renderMode(_renderMode),
-	onClickFunction(nullptr),
-	onMouseDownFunction(nullptr),
-	onMouseInFunction(nullptr),
-	onMouseOutFunction(nullptr),
-	onMouseUpFunction(nullptr),
 	background(new Plane(glm::vec3(-0.5f, -0.5f, 0.f))),
 	margin(new Transform()),
 	padding(new Transform()),
@@ -97,10 +92,7 @@ void NodeUI::down(){
 	isHovered = true;
 	isDown = true;
 	
-    // do event stuff
-	if(onMouseDownFunction != nullptr){
-		onMouseDownFunction();
-	}
+	eventManager.triggerEvent("mousedown");
 }
 void NodeUI::up(){
 	if(isHovered){
@@ -108,30 +100,20 @@ void NodeUI::up(){
 	}
 	isDown = false;
 	
-	// do event stuff
-	if(onMouseUpFunction != nullptr){
-		onMouseUpFunction();
-	}
+	eventManager.triggerEvent("mouseup");
 }
 void NodeUI::click(){
-	// do event stuff
-	if(onClickFunction != nullptr){
-		onClickFunction();
-	}
+	eventManager.triggerEvent("click");
 }
 void NodeUI::in(){
 	isHovered = true;
-
-	if(onMouseInFunction != nullptr) {
-		onMouseInFunction();
-	}
+	
+	eventManager.triggerEvent("mousein");
 }
 void NodeUI::out(){
 	isHovered = false;
-
-	if(onMouseOutFunction != nullptr) {
-		onMouseOutFunction();
-	}
+	
+	eventManager.triggerEvent("mouseout");
 }
 
 
@@ -338,6 +320,7 @@ void NodeUI::__updateForEntities(Step * _step) {
 				isDown = false;
 			}
 		}
+		eventManager.update(_step);
 		NodeBulletBody::update(_step);
 	}
 	Entity::update(_step);
