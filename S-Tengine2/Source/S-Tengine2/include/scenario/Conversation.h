@@ -4,16 +4,31 @@
 #include <scenario/Dialogue.h>
 #include <scenario/Triggers.h>
 
+class Option : public NodeContent{
+public:
+	std::string text;
+	std::string link;
+
+	Option(Json::Value _json, Scenario * _scenario);
+	~Option();
+};
+
+
+
+
 class Scenario;
 
 class Conversation : public NodeContent{
 private:
 	// keeps track of the progress within this conversation
 	unsigned long int currentDialogue;
+
+	bool advance();
+public:
 	// the scenario this content belongs to
 	Scenario * scenario;
 
-public:
+	std::vector<Option *> options;
 	std::string id;
 	std::vector<Dialogue *> dialogueObjects;
 	Conversation(Json::Value _json, Scenario * _scenario);
@@ -40,12 +55,8 @@ public:
 
 	bool shouldSayNext;
 	
-
 	// whether the conversation is waiting on user input (i.e. the user needs to pick an option from an Ask object)
 	bool waitingForInput;
-	// if the current conversation is waiting on user input because of an Ask, this contains the options
-	std::vector<void * > options;
-
 
 	Timeout * autoProgressTimer;
 	bool autoProgress;
@@ -59,4 +70,8 @@ public:
 	// moves the conversation forward by one step
 	// if there is nothing left to say, returns false. Returns true otherwise
 	virtual bool sayNext();
+
+	// selects _option from the currentConversation's list of options
+	// throws an exception if not waiting for input
+	void select(unsigned long int _option);
 };

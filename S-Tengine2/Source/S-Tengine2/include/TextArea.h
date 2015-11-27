@@ -18,6 +18,8 @@ public:
 	void invalidateAllLines();
 	void setText(std::wstring _text);
 	std::wstring getText();
+	// converts _text to an std::wstring and calls setText(std::wstring)
+	void setText(std::string _text);
 	void updateText();
 	void setWrapMode(WrapMode _wrapMode);
 
