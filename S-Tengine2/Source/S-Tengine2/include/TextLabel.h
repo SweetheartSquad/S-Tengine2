@@ -36,8 +36,10 @@ public:
 	virtual void update(Step * _step) override;
 	virtual void unload() override;
 	virtual void load() override;
-
+	
 	void setText(std::wstring _text);
+	// converts _text to an std::wstring and calls setText(std::wstring)
+	void setText(std::string _text);
 	void updateText();
 	
 	virtual float getContentsHeight() override;

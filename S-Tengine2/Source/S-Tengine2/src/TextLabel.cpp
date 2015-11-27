@@ -70,6 +70,10 @@ void TextLabel::setText(std::wstring _text){
 	updateText();
 }
 
+void TextLabel::setText(std::string _text){
+	setText(std::wstring(_text.begin(), _text.end()));
+}
+
 void TextLabel::updateText(){
 	// find out where the first overflow in the text would occur
 	unsigned long int idx = 0;

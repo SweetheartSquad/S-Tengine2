@@ -52,6 +52,10 @@ void TextArea::setText(std::wstring _text){
 	updateText();
 }
 
+void TextArea::setText(std::string _text){
+	setText(std::wstring(_text.begin(), _text.end()));
+}
+
 std::wstring TextArea::getText(){
 	return text;
 }
