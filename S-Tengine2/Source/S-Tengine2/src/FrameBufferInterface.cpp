@@ -81,13 +81,15 @@ void FrameBufferInterface::reload(){
 	load();
 }
 
-void FrameBufferInterface::resize(unsigned long _width, unsigned long _height){
+bool FrameBufferInterface::resize(unsigned long _width, unsigned long _height){
 	if(width != _width || height != _height){
 		width  = _width;
 		height = _height;
 		unload();
 		load();
+		return true;
 	}
+	return false;
 }
 
 void FrameBufferInterface::bindFrameBuffer(){
@@ -170,6 +172,7 @@ void FrameBufferInterface::saveToFile(const char * _filename, unsigned long int 
 	}
 	
 	free(pixels);
+	free(pixelsSOIL);
 }
 
 GLubyte * FrameBufferInterface::getPixelData(unsigned long int _fbochannel) {
@@ -181,7 +184,6 @@ GLubyte * FrameBufferInterface::getPixelData(unsigned long int _fbochannel) {
 	bytes = textureWidth*textureHeight*4;
 	
 	GLubyte * pixels = (GLubyte *)malloc(bytes * sizeof(GLubyte));
-	unsigned char * pixelsSOIL = (unsigned char *)malloc(bytes * sizeof(unsigned char));
 
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 

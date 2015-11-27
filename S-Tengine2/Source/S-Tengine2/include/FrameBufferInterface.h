@@ -78,11 +78,12 @@ public:
 	
 	/**
 	* Alters the buffers width and heights calling reload if they've changed
+	* Returns true if a resize actually occurs, false otherwise
 	*
 	* @param _width The width to resize the framebuffer to
 	* @param _height The height to resize the framebuffer to
  	*/
-	void resize(unsigned long int _width, unsigned long int _height);
+	bool resize(unsigned long int _width, unsigned long int _height);
 	
 	/**
 	* Binds this frame buffer as the current in opengl
@@ -100,5 +101,6 @@ public:
 	void saveToFile(const char * _filename, unsigned long int _fbochannel);
 	
 	// Returns the pixel data for the framebuffer
+	// !!! NOTE: you have to free the returned array yourself; it's malloced inside the function
 	GLubyte * getPixelData(unsigned long int _fbochannel);
 };
