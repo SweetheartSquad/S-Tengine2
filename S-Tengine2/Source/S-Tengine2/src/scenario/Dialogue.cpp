@@ -43,8 +43,12 @@ std::string Dialogue::getCurrentText(){
 }
 
 bool Dialogue::sayNextText(){
-	++currentText;
-	return currentText < text.size();
+	if(currentText == (unsigned long int)-1 || currentText < text.size() - 1){
+		++currentText;
+		return true;
+	}else{
+		return false;
+	}
 }
 
 bool Dialogue::evaluateConditions(){
@@ -58,55 +62,4 @@ bool Dialogue::evaluateConditions(){
 
 void Dialogue::reset(){
 	currentText = -1;
-}
-
-DialogueSay::DialogueSay(Json::Value _json, Scenario * _scenario) :
-	Dialogue(_json, _scenario)
-{
-}
-
-
-DialogueOption::DialogueOption(Json::Value _json, Scenario * _scenario) :
-	text(_json["text"].asString())
-{
-	const Json::Value triggersArray = _json["triggers"];
-	for(int i = 0; i < triggersArray.size(); ++i){
-		triggers.push_back(Trigger::getTrigger(triggersArray[i], _scenario));
-	}
-}
-
-DialogueOption::~DialogueOption(){
-	while(triggers.size() > 0){
-		delete triggers.back();
-		triggers.pop_back();
-	}
-}
-
-DialogueAsk::DialogueAsk(Json::Value _json, Scenario * _scenario) :
-	Dialogue(_json, _scenario)
-{
-	const Json::Value optionsArray = _json["options"];
-	for(int i = 0; i < optionsArray.size(); ++i){
-		options.push_back(new DialogueOption(optionsArray[i], _scenario));
-	}
-}
-
-DialogueAsk::~DialogueAsk(){
-	while(options.size() > 0){
-		delete options.back();
-		options.pop_back();
-	}
-}
-
-
-Dialogue * Dialogue::getDialogue(Json::Value _json, Scenario * _scenario){
-	Dialogue * res = nullptr;
-	
-	if(_json.isMember("options")) {
-		res = new DialogueAsk(_json, _scenario);
-	}else {
-		res = new DialogueSay(_json, _scenario);
-	}
-
-	return res;
 }

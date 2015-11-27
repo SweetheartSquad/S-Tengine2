@@ -1,18 +1,40 @@
 #pragma once
 
+#include <scenario/Scenario.h>
 #include <scenario/Conversation.h>
 #include <Log.h>
 #include <assert.h>
 
+
+
+
+Option::Option(Json::Value _json, Scenario * _scenario) :
+	text(_json.get("text", "").asString()),
+	link(_json.get("link", "END").asString())
+{
+}
+
+Option::~Option(){
+
+} 
+
+
+
 Conversation::Conversation(Json::Value _json, Scenario * _scenario) :
 	id(_json.get("id", "NO_ID").asString()),
-	currentDialogue(0),
+	currentDialogue(-1),
 	scenario(_scenario)
 {
 	Json::Value convoDialogueJson = _json["dialogue"];
 
 	for(auto j = 0; j < convoDialogueJson.size(); ++j){
-		dialogueObjects.push_back(Dialogue::getDialogue(convoDialogueJson[j], scenario));
+		dialogueObjects.push_back(new Dialogue(convoDialogueJson[j], scenario));
+	}
+
+	Json::Value convoOptionsJson = _json["options"];
+
+	for(auto j = 0; j < convoOptionsJson.size(); ++j){
+		options.push_back(new Option(convoOptionsJson[j], scenario));
 	}
 }
 
@@ -28,9 +50,10 @@ Dialogue * Conversation::getCurrentDialogue(){
 }
 
 bool Conversation::sayNextDialogue(){
-	// if there aren't any dialogue objects left, the conversation is over so return false
-	if(currentDialogue >= dialogueObjects.size()){
-		return false;
+
+	// if we're at the start, move to the first valid dialogue
+	if(currentDialogue == (unsigned long int) -1){
+		return advance();
 	}
 
 	// if there's still text in the current dialogue object,
@@ -39,24 +62,44 @@ bool Conversation::sayNextDialogue(){
 	if(dialogueObjects.at(currentDialogue)->sayNextText()){
 		return true;
 	}
+	
+	// trigger anything left on the current dialogue object before moving on
+	// (note that if there are multiple lines of text for the object, the triggers will be called multiple times)
+	if(getCurrentDialogue()->currentText == getCurrentDialogue()->text.size()-1){
+		for(Trigger * t : getCurrentDialogue()->triggers){
+			t->trigger();
+		}
+	}
 
-
+	// if there aren't any dialogue objects left, the conversation is over so return false
+	if(currentDialogue+2 >= dialogueObjects.size()){
+		return false;
+	}
+	
 	// go to next dialogue
+	return advance();
+}
+
+
+bool Conversation::advance(){
 	// check that we still have something to say
 	// check if we are allowed to say the current selection
 	bool valid = false;
-	while(currentDialogue < dialogueObjects.size()-1 && !valid){
+	do{
+		++currentDialogue;
 		// if any conditions are untrue for a given dialogue object, skip over it
-		valid = dialogueObjects.at(++currentDialogue)->evaluateConditions();
-	}
+		valid = dialogueObjects.at(currentDialogue)->evaluateConditions();
+	}while(currentDialogue+2 < dialogueObjects.size() && !valid);
+	
 	if(valid){
-		// get the first text in the new dialogue object
+		// advance to the first text in the new dialogue object
 		return dialogueObjects.at(currentDialogue)->sayNextText();
 	}else{
-		// no valid dialogue objects were found past this one
+		// no valid dialogue objects were found past this point
 		return false;
 	}
 }
+
 
 void Conversation::reset(){
 	Log::info("Reset conversation: " + id);
@@ -64,11 +107,7 @@ void Conversation::reset(){
 		d->reset();
 	}
 
-	currentDialogue = 0;
-	while(!dialogueObjects.at(currentDialogue)->evaluateConditions()){
-		++currentDialogue;
-		assert(currentDialogue < dialogueObjects.size());
-	}
+	currentDialogue = -1;
 }
 
 
@@ -95,84 +134,50 @@ ConversationIterator::~ConversationIterator(){
 	delete autoProgressTimer;
 }
 
+void ConversationIterator::select(unsigned long int _option){
+	if(!waitingForInput){
+		throw "you can't do that";
+	}
+	currentConversation = currentConversation->scenario->conversations[currentConversation->options.at(_option)->link];
+	currentConversation->reset();
+	waitingForInput = false;
+	sayNext();
+}
+
 bool ConversationIterator::sayNext(){
+
+	
+	if(waitingForInput){
+		throw "you can't do that";
+	}
 	if(currentConversation == nullptr){
 		return false;
 	}
-	// trigger anything left on the current dialogue object
-	// (note that if there are multiple lines of text for the object, the triggers will be called multiple times)
-	if(currentConversation->getCurrentDialogue()->currentText == currentConversation->getCurrentDialogue()->text.size()-1){
-		for(Trigger * t : currentConversation->getCurrentDialogue()->triggers){
-			t->trigger();
-		}
-	}
+
 
 	// move conversation forward
 	if(!currentConversation->sayNextDialogue()){
-		// if there's nothing left to say, return false
-		return false;
-	}
-
-	// set the speaker
-	//std::string sp = currentConversation->getCurrentDialogue()->speaker;
-	//speaker->setText(std::wstring(sp.begin(), sp.end()));
-	//WAG_ResourceManager::speaker = sp;
-
-
-	// set the images
-	//loadFrame(currentConversation->getCurrentDialogue()->portrait);
-	//loadPortrait(currentConversation->getCurrentDialogue()->speaker);
-	
-	// set the text
-	//std::string thingToSay = currentConversation->getCurrentDialogue()->getCurrentText();
-	//dialogue->setText(std::wstring(thingToSay.begin(), thingToSay.end()));
-	//dialogue->tickerIn(0.05f);
-
-	// check for dialogue options
-	DialogueAsk * ask = dynamic_cast<DialogueAsk *>(currentConversation->getCurrentDialogue());
-	if(ask != nullptr){
-		if(ask->currentText == ask->text.size()-1){
+		// if there's nothing left to say, check for options
+		if(currentConversation->options.size() > 1){
+			// multiple options means wait for user input
 			waitingForInput = true;
-			//removeChild(progressButton);
-			for(unsigned long int i = 0; i < ask->options.size(); ++i){
-				//dialogue->appendText(std::wstring(s.begin(), s.end()));
-				//TextArea * o = new TextArea(world, scene, font, textShader, 0.3f);
-				//if(i != 0){
-				//	o->setMarginLeft(10);
-				//}
-				//std::wstringstream ss;
-				//ss << (i+1) << L". " << std::wstring(ask->options.at(i).begin(), ask->options.at(i).end());
-				//o->setText(ss.str());
-				//options.push_back(o);
-				//optionslayout->addChild(o);
-				//o->parents.at(0)->scale(50,50,1);
-				
-				/*std::vector<Trigger *> optionResult = ask->optionsResults.at(i);
-				o->onClickFunction = [this, optionResult](NodeUI * _this) {
-					// remove the function pointers on all the other buttons to avoid multiple buttons getting triggered at the same time
-					for(auto o : options){
-						if(o != _this){
-							o->onClickFunction = nullptr;
-						}
-					}
-
-					for(auto t : optionResult){
-						t->trigger();
-					}
-					this->waitingForInput = false;
-					this->shouldSayNext = true;
-					this->addChild(progressButton);
-				};*/
-			}
+		}else if(currentConversation->options.size() == 1){
+			// single option means go to the link
+			currentConversation = currentConversation->scenario->conversations.at(currentConversation->options.front()->link);
+			currentConversation->reset();
+		}else{
+			// no options means conversation over, return false
+			return false;
 		}
 	}
+
 
 	// if auto-progression is enabled, restart the timer (should also set the duration here based on length of content)
 	if(!waitingForInput){
  		autoProgressTimer->restart();
 	}
 
-	std::cout << currentConversation->getCurrentDialogue()->getCurrentText() << std::endl;
+	//std::cout << currentConversation->getCurrentDialogue()->getCurrentText() << std::endl;
 
 	return true;
 }
