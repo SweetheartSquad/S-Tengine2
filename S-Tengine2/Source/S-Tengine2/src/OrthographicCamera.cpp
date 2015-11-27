@@ -38,3 +38,11 @@ glm::mat4 OrthographicCamera::getViewMatrix() const{
 glm::mat4 OrthographicCamera::getProjectionMatrix() const{
 	return glm::ortho<float>(-left, -right, bottom, top, nearClip, farClip);
 }
+
+
+void OrthographicCamera::resize(float _left, float _right, float _bottom, float _top){
+	left = _left;
+	right = _right;
+	bottom = _bottom;
+	top = _top;
+}
