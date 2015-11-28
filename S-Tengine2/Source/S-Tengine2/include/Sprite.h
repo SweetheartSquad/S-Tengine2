@@ -32,6 +32,9 @@ public:
 	void addAnimation(std::string _name, SpriteSheetAnimation * _animation, bool _makeCurrent);
 	void setCurrentAnimation(std::string _name);
 	
+	void setPrimaryTexture(Texture * _texture);
+	void setPrimaryTexture(TextureSampler * _textureSampler);
+	
 	virtual void load() override;
 	virtual void unload() override;
 };

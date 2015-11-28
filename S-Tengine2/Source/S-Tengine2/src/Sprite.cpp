@@ -52,6 +52,32 @@ void Sprite::addAnimation(std::string _name, SpriteSheetAnimation* _animation, b
 	}
 }
 
+void Sprite::setPrimaryTexture(Texture * _texture) {
+	if(mesh->textures.size() == 0) {
+		mesh->pushTexture2D(_texture);
+	}else {
+		mesh->textures[0] = _texture;
+	}
+}
+
+void Sprite::setPrimaryTexture(TextureSampler * _textureSampler) {
+	if(mesh->textures.size() == 0) {
+		mesh->pushTexture2D(_textureSampler->texture);
+	}else {
+		mesh->textures[0] = _textureSampler->texture;
+	}
+	float mag = std::max(mesh->getTexture(0)->width, mesh->getTexture(0)->height);
+	mesh->vertices.at(0).u = _textureSampler->u/mag;
+	mesh->vertices.at(0).v = (_textureSampler->v + _textureSampler->height)/mag;
+	mesh->vertices.at(1).u = (_textureSampler->u + _textureSampler->width)/mag;
+	mesh->vertices.at(1).v = (_textureSampler->v + _textureSampler->height)/mag;
+	mesh->vertices.at(2).u = (_textureSampler->u + _textureSampler->width)/mag;
+	mesh->vertices.at(2).v = _textureSampler->v/mag;
+	mesh->vertices.at(3).u = _textureSampler->u/mag;
+	mesh->vertices.at(3).v = _textureSampler->v/mag;
+	mesh->dirty = true;
+}
+
 void Sprite::setCurrentAnimation(std::string _name){
 	auto anim = animations.find(_name);
 	if(anim != animations.end()){
