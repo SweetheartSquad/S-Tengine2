@@ -95,7 +95,7 @@ void NodeUI::down(){
 	eventManager.triggerEvent("mousedown");
 }
 void NodeUI::up(){
-	if(isHovered){
+	if(isHovered && isDown){
 		click();
 	}
 	isDown = false;
