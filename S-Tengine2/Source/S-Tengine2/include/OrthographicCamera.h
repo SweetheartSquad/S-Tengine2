@@ -36,4 +36,6 @@ public:
 	float bottom;
 	float right;
 
+	void resize(float _left, float _right, float _bottom, float _top);
+
 };
