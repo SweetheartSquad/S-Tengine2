@@ -57,7 +57,6 @@ public:
     // The function to be called when you mouseout
 	virtual void out();
 
-	bool layoutDirty;
 	
 	static TriMesh * colliderMesh;
 	// destroys the current rigid body and creates a new one which is sized to match the bounding box of the element
@@ -91,7 +90,6 @@ public:
 	Texture * renderedTexture;
 	MeshEntity * texturedPlane;
 
-	RenderMode renderMode;
 
 	// how padding and margin affect width and height
 	BoxSizing boxSizing;
@@ -189,8 +187,11 @@ public:
 	// returns the height of the UI element, optionally including the padding and margin
 	virtual float getHeight(bool _includePadding, bool _includeMargin);
 
+	// returns whether the node needs to resize itself or layout its children
 	bool isLayoutDirty();
-	void makeLayoutDirty();
+	// indicates to the node that it needs to resize or layout its children because of changes
+	// also calls invalidateRenderFrame()
+	void invalidateLayout();
 	
 	virtual Transform * addChild(NodeUI * _uiElement);
 	// removes the element from the contents transform and returns the index it was found at
@@ -211,8 +212,8 @@ public:
 	// indicates whether the mouse is currently over this node
 	void setUpdateState(bool _newState);
 
-	// Used for renderMode = Texture to carry whether the layout is dirty between update and render
-	bool renderFrame;
+
+	void setRenderMode(RenderMode _newRenderMode);
 private:
 
 	Transform * margin;
@@ -231,4 +232,21 @@ private:
 	void __renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 	void __updateForEntities(Step * _step);
 	void __updateForTexture(Step * _step);
+	
+
+	// Used for renderMode = kTEXTURE
+	// indicates whether the texture representation needs to be updated
+	// NOTE: do not change or query directly, use invalidateRenderFrame() or isRenderFrameDirty() instead
+	bool __renderFrameDirty;
+	// indicates whether the node needs to resize itself or layout its children
+	// NOTE: do not change or query directly, use invalidateLayout() or isLayoutDirty() instead
+	bool __layoutDirty;
+
+protected:
+	RenderMode renderMode;
+	// returns whether the texture representation needs to be updated
+	// if the renderMode is not kTEXTURE, this is always false
+	bool isRenderFrameDirty();
+	// indicates to the node that it needs to update the texture representation because of changes
+	void invalidateRenderFrame();
 };

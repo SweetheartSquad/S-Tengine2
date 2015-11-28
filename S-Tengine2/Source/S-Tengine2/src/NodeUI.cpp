@@ -34,7 +34,6 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	isHovered(false),
 	isDown(false),
 	isActive(false),
-	layoutDirty(true),
 	frameBuffer(nullptr),
 	renderedTexture(nullptr),
 	texturedPlane(nullptr),
@@ -44,10 +43,11 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	padding(new Transform()),
 	uiElements(new Transform()),
 	boxSizing(kBORDER_BOX),
-	renderFrame(true),
 	mouseEnabled(!_mouseEnabled), // we initialize the variable to the opposite so that setMouseEnabled gets called properly at the end of the constructor
 	bgColour(0.f, 0.f, 0.f, 1.f),
-	textureCam(nullptr)
+	textureCam(nullptr),
+	__layoutDirty(true),
+	__renderFrameDirty(_renderMode == kTEXTURE)
 {
 	if(bgShader == nullptr){
 		bgShader = new ComponentShaderBase(true);
@@ -78,7 +78,7 @@ NodeUI::~NodeUI() {
 
 void NodeUI::setVisible(bool _visible){
 	NodeBulletBody::setVisible(_visible);
-	renderFrame = true;
+	invalidateRenderFrame();
 }
 
 void NodeUI::load(){
@@ -120,7 +120,7 @@ void NodeUI::out(){
 
 
 Transform * NodeUI::addChild(NodeUI* _uiElement){
-	makeLayoutDirty();
+	invalidateLayout();
 	_uiElement->setMeasuredWidths(this);
 	_uiElement->setMeasuredHeights(this);
 	return uiElements->addChild(_uiElement);
@@ -136,7 +136,7 @@ signed long int NodeUI::removeChild(NodeUI* _uiElement){
 		if(res != (unsigned long int)-1){
 			t->removeChild(_uiElement);
 			delete t;
-			makeLayoutDirty();
+			invalidateLayout();
 		}
 	}
 	return res;
@@ -147,10 +147,13 @@ void NodeUI::setTranslationPhysical(float _x, float _y, float _z, bool _relative
 }
 
 void NodeUI::doRecursivelyOnUIChildren(std::function<void(NodeUI * _childOrThis)> _todo, bool _includeSelf) {
-	for(unsigned long int i = 0; i < uiElements->children.size(); ++i) {
-		NodeUI * nodeUI = dynamic_cast<NodeUI*>(uiElements->children.at(i));
-		if(nodeUI != nullptr) {
-			nodeUI->doRecursivelyOnUIChildren(_todo, true);
+	for(NodeChild * c : uiElements->children) {
+		Transform * t = dynamic_cast<Transform*>(c);
+		if(t != nullptr){
+			NodeUI * nodeUI = dynamic_cast<NodeUI*>(t->children.at(0));
+			if(nodeUI != nullptr) {
+				nodeUI->doRecursivelyOnUIChildren(_todo, true);
+			}
 		}
 	}
 	if(_includeSelf) {
@@ -279,26 +282,27 @@ void NodeUI::__renderForEntities(sweet::MatrixStack * _matrixStack, RenderOption
 	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(bgColour.r, bgColour.g, bgColour.b);
 	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(bgColour.a);
 	Entity::render(_matrixStack, _renderOptions);
+	__renderFrameDirty = false;
 }
 
 void NodeUI::__renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) {
 	getTexturedPlane();
-	if(renderFrame) {
+	if(isRenderFrameDirty()) {
 		renderToTexture();
-		renderFrame = false;
 	}
 	
 	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(0, 0, 0);
 	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(1);
 
 	texturedPlane->render(_matrixStack, _renderOptions);
+	__renderFrameDirty = false;
 }
 
 void NodeUI::__updateForEntities(Step * _step) {
 	eventManager.update(_step);
 	if(isLayoutDirty()){
 		autoResize();
-		layoutDirty = false;
+		__layoutDirty = false;
 	}
 	if(mouseEnabled){
 		updateCollider();
@@ -332,12 +336,12 @@ void NodeUI::__updateForTexture(Step * _step) {
 			
 		}
 		doRecursivelyOnUIChildren([this](NodeUI * _ui){
-			if(_ui->isLayoutDirty() || _ui->renderFrame){
-				this->renderFrame = true;
+			if(_ui->isLayoutDirty() || _ui->__renderFrameDirty){ // we need to access __renderFrameDirty directly because changes to non-kTEXTURE children affect kTEXTURE parents
+				this->invalidateRenderFrame();
 				return;
 			}
 		});
-		if(renderFrame) {
+		if(isRenderFrameDirty()) {
 			autoResize();
 		}
 	}
@@ -567,7 +571,7 @@ void NodeUI::setBackgroundColour(float _r, float _g, float _b, float _a){
 	bgColour.g = _g - 1.f;
 	bgColour.b = _b - 1.f;
 	bgColour.a = _a;
-	renderFrame = true;
+	invalidateRenderFrame();
 }
 
 float NodeUI::getMarginLeft(){
@@ -616,15 +620,6 @@ float NodeUI::getHeight(bool _includePadding, bool _includeMargin){
 		res += getMarginBottom() + getMarginTop();
 	}
 	return res;
-}
-
-bool NodeUI::isLayoutDirty(){
-	return layoutDirty;
-}
-
-void NodeUI::makeLayoutDirty() {
-	layoutDirty = true;
-	renderFrame = true;
 }
 
 TriMesh * NodeUI::colliderMesh = nullptr;
@@ -716,4 +711,28 @@ void NodeUI::repositionChildren(){
 
 void NodeUI::setUpdateState(bool _newState){
 	updateState = _newState;
+}
+
+void NodeUI::setRenderMode(RenderMode _newRenderMode){
+	renderMode = _newRenderMode;
+	invalidateRenderFrame();
+}
+
+
+
+bool NodeUI::isRenderFrameDirty(){
+	return renderMode == kTEXTURE && __renderFrameDirty;
+}
+
+void NodeUI::invalidateRenderFrame(){
+	__renderFrameDirty = true;
+}
+
+bool NodeUI::isLayoutDirty(){
+	return __layoutDirty;
+}
+
+void NodeUI::invalidateLayout() {
+	__layoutDirty = true;
+	invalidateRenderFrame();
 }
