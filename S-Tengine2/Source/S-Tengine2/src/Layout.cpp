@@ -11,9 +11,8 @@ void Layout::invalidateLayout(){
 }
 
 void Layout::update(Step * _step){
-	if(layoutDirty){
+	if(isLayoutDirty()){
 		layoutChildren();
-		//layoutDirty = false;
 	}
 	NodeUI::update(_step);
 }

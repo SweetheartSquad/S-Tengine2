@@ -23,6 +23,7 @@
 #include <OrthographicCamera.h>
 #include <StandardFrameBuffer.h>
 #include <algorithm>
+#include <Layout.h>
 
 ComponentShaderBase * NodeUI::bgShader = nullptr;
 
@@ -45,7 +46,8 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	boxSizing(kBORDER_BOX),
 	renderFrame(true),
 	mouseEnabled(!_mouseEnabled), // we initialize the variable to the opposite so that setMouseEnabled gets called properly at the end of the constructor
-	bgColour(0.f, 0.f, 0.f, 1.f)
+	bgColour(0.f, 0.f, 0.f, 1.f),
+	textureCam(nullptr)
 {
 	if(bgShader == nullptr){
 		bgShader = new ComponentShaderBase(true);
@@ -69,14 +71,14 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 }
 
 NodeUI::~NodeUI() {
+	delete textureCam;
 	delete frameBuffer;
-	if(renderedTexture != nullptr){
-		// renderedTexture may or may not be managed by texturedPlane
-		renderedTexture->safeDelete();
-	}
-	if(texturedPlane != nullptr){
-		delete texturedPlane->firstParent();
-	}
+	delete texturedPlane;
+}
+
+void NodeUI::setVisible(bool _visible){
+	NodeBulletBody::setVisible(_visible);
+	renderFrame = true;
 }
 
 void NodeUI::load(){
@@ -118,21 +120,23 @@ void NodeUI::out(){
 
 
 Transform * NodeUI::addChild(NodeUI* _uiElement){
-	layoutDirty = true;
+	makeLayoutDirty();
 	_uiElement->setMeasuredWidths(this);
 	_uiElement->setMeasuredHeights(this);
 	return uiElements->addChild(_uiElement);
 }
 
 signed long int NodeUI::removeChild(NodeUI* _uiElement){
-	signed long int res = -1;
+	unsigned long int res = -1;
 	if(_uiElement->parents.size() > 0){
 		Transform * t = _uiElement->parents.at(0);
 		res = uiElements->removeChild(t);
-		t->removeChild(_uiElement);
-		delete t;
-		if(res >= 0){
-			layoutDirty = true;
+
+		// if the element is a child, remove it
+		if(res != (unsigned long int)-1){
+			t->removeChild(_uiElement);
+			delete t;
+			makeLayoutDirty();
 		}
 	}
 	return res;
@@ -189,33 +193,25 @@ void NodeUI::update(Step * _step){
 	__updateForTexture(_step);
 }
 
-Texture * NodeUI::renderToTexture() {
+Texture * NodeUI::renderToTexture(){
+	float h = getHeight(true, true);
+	float w = getWidth(true, true);
+	if(textureCam == nullptr){
+		textureCam = new OrthographicCamera(0, w, 0, h, -1000,1000);
+	}
 	if(frameBuffer == nullptr){
-		frameBuffer = new StandardFrameBuffer(true);	
+		frameBuffer = new StandardFrameBuffer(false);	
 		frameBuffer->load();
 	}
+	
+	texturedPlane->childTransform->translate(w * 0.5f, h * 0.5f, 0.f, false);
+	texturedPlane->childTransform->scale(w, -h, 1.f, false);
 
-	RenderOptions renderOptions(nullptr, nullptr);
-	sweet::MatrixStack matrixStack;
-
-	OrthographicCamera * cam = new OrthographicCamera(//0, getWidth(true, false) * 2.0f, 0, getHeight(true, false) * 2.0f, -1000, 1000);
-		-getWidth(true, false) * 1.75f, 
-		 getWidth(true, false) * 1.75f, 
-		-getHeight(true, false) * 1.75f, 
-		 getHeight(true, false) * 1.75f, 
-		-1000, 
-		 1000);
-
-
-	Transform * t = new Transform();
-	t->addChild(cam);
-		
-	cam->firstParent()->translate(getWidth(true, false) * 1.75f, getHeight(true, false) * 1.75f, 0.f);
-
-	matrixStack.setViewMatrix(&cam->getViewMatrix());
-	matrixStack.setProjectionMatrix(&cam->getProjectionMatrix());
-
-	frameBuffer->resize(getWidth(true, false), getHeight(true, false));
+	if(frameBuffer->resize(w, h) && renderedTexture != nullptr){
+		textureCam->resize(0, w, 0, h);
+		texturedPlane->mesh->removeTextureAt(0);
+		renderedTexture = nullptr;
+	}
 
 	GLint currentFrameBuffer;
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFrameBuffer);
@@ -228,46 +224,44 @@ Texture * NodeUI::renderToTexture() {
 		glDisable(GL_DEPTH_TEST);
 	}
 
+	
+	RenderOptions renderOptions(nullptr, nullptr);
+	sweet::MatrixStack matrixStack;
+	matrixStack.setCamera(textureCam);
+
+	renderOptions.clearColour[3] = 0; // clear to alpha, not black
+	renderOptions.clear();
+
 	__renderForEntities(&matrixStack, &renderOptions);
 
 	if(depth == GL_TRUE){
 		glEnable(GL_DEPTH_TEST);
 	}
-
+	
 	glBindFramebuffer(GL_FRAMEBUFFER, currentFrameBuffer);
-
+	
 	if(renderedTexture == nullptr) {
-		renderedTexture = new Texture(frameBuffer, true, 0, 4, true);	
-		renderedTexture->width  = getWidth(true, false);//size;
-		renderedTexture->height = getHeight(true, false);//((float)size/1.5f);
-		renderedTexture->data   = frameBuffer->getPixelData(0);
-		//renderedTexture->bufferData();
-		renderedTexture->unload();
+		renderedTexture = new Texture(frameBuffer, true, 0, 4, true, false);	
 		renderedTexture->load();
-	}else {
-		renderedTexture->width  = getWidth(true, false);//size;
-		renderedTexture->height = getHeight(true, false);//((float)size/1.5f);
-		renderedTexture->data   = frameBuffer->getPixelData(0);
-		//renderedTexture->bufferData();
-		renderedTexture->unload();
-		renderedTexture->load();
+		texturedPlane->mesh->pushTexture2D(renderedTexture);
+	}else{
+		renderedTexture->width  = w;
+		renderedTexture->height = h;
+		renderedTexture->numPixels = renderedTexture->width * renderedTexture->height;
+		renderedTexture->numBytes = renderedTexture->numPixels * renderedTexture->channels;
+		free(renderedTexture->data);
+		renderedTexture->data = frameBuffer->getPixelData(0);
+		renderedTexture->bufferData();
 	}
 
-	renderedTexture->saveImageData("test.tga");
-
-	delete cam;
+	//renderedTexture->saveImageData("test.tga");
 	return renderedTexture;
 }
 
 MeshEntity * NodeUI::getTexturedPlane() {
 	if(texturedPlane == nullptr) {
-
 		texturedPlane = new MeshEntity(MeshFactory::getPlaneMesh(0.5f), background->shader);
-		texturedPlane->mesh->pushTexture2D(renderedTexture == nullptr ? renderToTexture() : renderedTexture);
-		texturedPlane->mesh->scaleModeMag = GL_NEAREST;
-		texturedPlane->mesh->scaleModeMin = GL_NEAREST;
-		Transform * t = new Transform();
-		t->addChild(texturedPlane, false);
+		texturedPlane->mesh->scaleModeMag = texturedPlane->mesh->scaleModeMin = GL_NEAREST;
 	}
 	return texturedPlane;
 }
@@ -276,9 +270,9 @@ void NodeUI::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOp
 	if(renderMode == kENTITIES){
 		__renderForEntities(_matrixStack, _renderOptions);
 	}
-	if(renderMode == kTEXTURE) {
+	if(renderMode == kTEXTURE){
 		__renderForTexture(_matrixStack, _renderOptions);
-	} 
+	}
 }
 
 void NodeUI::__renderForEntities(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) {
@@ -293,16 +287,22 @@ void NodeUI::__renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions
 		renderToTexture();
 		renderFrame = false;
 	}
-	texturedPlane->firstParent()->translate(getWidth(false, true) * 0.5f, getHeight(false, true) * 0.5f, 0.f, false);
-	texturedPlane->firstParent()->render(_matrixStack, _renderOptions);
+	
+	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(0, 0, 0);
+	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(1);
+
+	texturedPlane->render(_matrixStack, _renderOptions);
 }
 
 void NodeUI::__updateForEntities(Step * _step) {
-	if(layoutDirty){
+	eventManager.update(_step);
+	if(isLayoutDirty()){
 		autoResize();
+		layoutDirty = false;
 	}
 	if(mouseEnabled){
 		updateCollider();
+		
 		if(updateState){
 			if(!isHovered){
 				in();
@@ -320,7 +320,6 @@ void NodeUI::__updateForEntities(Step * _step) {
 				isDown = false;
 			}
 		}
-		eventManager.update(_step);
 		NodeBulletBody::update(_step);
 	}
 	Entity::update(_step);
@@ -330,9 +329,7 @@ void NodeUI::__updateForTexture(Step * _step) {
 	if(renderMode == kTEXTURE){
 		if(texturedPlane != nullptr){
 			texturedPlane->update(_step);
-			if(texturedPlane->firstParent() != nullptr){
-				texturedPlane->firstParent()->scale(getWidth(true, true), -getHeight(true, true), 1.f, false);
-			}
+			
 		}
 		doRecursivelyOnUIChildren([this](NodeUI * _ui){
 			if(_ui->isLayoutDirty() || _ui->renderFrame){
@@ -566,10 +563,11 @@ void NodeUI::setMeasuredHeights(NodeUI * _root){
 }
 
 void NodeUI::setBackgroundColour(float _r, float _g, float _b, float _a){
-	bgColour.r = _r-1;
-	bgColour.g = _g-1;
-	bgColour.b = _b-1;
+	bgColour.r = _r - 1.f;
+	bgColour.g = _g - 1.f;
+	bgColour.b = _b - 1.f;
 	bgColour.a = _a;
+	renderFrame = true;
 }
 
 float NodeUI::getMarginLeft(){
@@ -626,6 +624,7 @@ bool NodeUI::isLayoutDirty(){
 
 void NodeUI::makeLayoutDirty() {
 	layoutDirty = true;
+	renderFrame = true;
 }
 
 TriMesh * NodeUI::colliderMesh = nullptr;
@@ -633,12 +632,12 @@ void NodeUI::updateCollider(){
 	glm::mat4 mat = background->meshTransform->getCumulativeModelMatrix();
 	
 	glm::vec4 verts[6] = {
-		mat * glm::vec4(0,						1,0,1),
+		mat * glm::vec4(0,	1,0,1),
 		mat * glm::vec4(1,	1,0,1),
 		mat * glm::vec4(1,	0,0,1),
 		mat * glm::vec4(1,	0,0,1),
-		mat * glm::vec4(0,						0,0,1),
-		mat * glm::vec4(0,						0,0,1)
+		mat * glm::vec4(0,	0,0,1),
+		mat * glm::vec4(0,	0,0,1)
 	};
 
 	if(colliderMesh == nullptr){
@@ -717,4 +716,4 @@ void NodeUI::repositionChildren(){
 
 void NodeUI::setUpdateState(bool _newState){
 	updateState = _newState;
-} 
+}

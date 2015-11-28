@@ -11,6 +11,7 @@ class Scene;
 class Mouse;
 class Texture;
 class StandardFrameBuffer;
+class OrthographicCamera;
 
 enum BoxSizing{
 	kCONTENT_BOX, // padding and margin are exterior to width and height
@@ -74,6 +75,9 @@ public:
 	static ComponentShaderBase * bgShader;
 	glm::vec4 bgColour;
 
+	// changes the visiblity and also sets renderFrame to true
+	virtual void setVisible(bool _visible) override;
+
 public:
 	// returns mouseEnabled
 	bool isMouseEnabled();
@@ -82,6 +86,7 @@ public:
 
 	Plane * background;
 
+	OrthographicCamera * textureCam;
 	StandardFrameBuffer * frameBuffer;
 	Texture * renderedTexture;
 	MeshEntity * texturedPlane;
