@@ -11,6 +11,7 @@ Slider::Slider(BulletWorld * _world, float _defaultValue, float _valueMin, float
 	valueMin(_valueMin),
 	valueMax(_valueMax),
 	value(0),
+	prevValue(0),
 	horizontal(_horizontal),
 	stepped(false),
 	valueStep(0)
@@ -91,6 +92,13 @@ float Slider::getValue(){
 }
 
 void Slider::updateValue(){
+	float delta = value - prevValue;
+
+	// if the value hasn't changed, return early
+	if(abs(delta) < FLT_EPSILON){
+		return;
+	}
+
 	float v = (value - valueMin) / (valueMax - valueMin);
 	if(horizontal){
 		fill->setRationalWidth(v, this);
@@ -103,6 +111,10 @@ void Slider::updateValue(){
 	}
 	fill->background->mesh->dirty = true;
 	layout->invalidateLayout();
+
+	sweet::Event * e = new sweet::Event(std::string("change"));
+	e->setFloatData("delta", delta);
+	eventManager.triggerEvent(e);
 }
 
 void Slider::setStepped(float _valueStep){
