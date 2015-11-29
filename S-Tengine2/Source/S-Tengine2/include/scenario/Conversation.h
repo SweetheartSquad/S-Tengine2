@@ -2,7 +2,6 @@
 
 #include <node/NodeContent.h>
 #include <scenario/Dialogue.h>
-#include <scenario/Triggers.h>
 
 class Option : public NodeContent{
 public:

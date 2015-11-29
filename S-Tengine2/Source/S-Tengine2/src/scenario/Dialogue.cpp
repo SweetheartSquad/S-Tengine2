@@ -1,7 +1,6 @@
 #pragma once
 
 #include <scenario/Dialogue.h>
-#include <scenario/Triggers.h>
 #include <scenario/Conditions.h>
 #include <scenario/Scenario.h>
 
@@ -19,7 +18,7 @@ Dialogue::Dialogue(Json::Value _json, Scenario * _scenario) :
 	}
 	const Json::Value triggersArray = _json["triggers"];
 	for(int j = 0; j < triggersArray.size(); ++j){
-		triggers.push_back(Trigger::getTrigger(triggersArray[j], scenario));
+		triggers.push_back(new sweet::Event(triggersArray[j]));
 	}
 	const Json::Value conditionsArray = _json["conditions"];
 	for(int i = 0; i < conditionsArray.size(); ++i){
@@ -58,6 +57,12 @@ bool Dialogue::evaluateConditions(){
 		}
 	}
 	return true;
+}
+
+void Dialogue::trigger(){
+	for(sweet::Event * e : triggers){
+		scenario->eventManager.triggerEvent(new sweet::Event(*e));
+	}
 }
 
 void Dialogue::reset(){

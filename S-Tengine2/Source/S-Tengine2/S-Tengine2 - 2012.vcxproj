@@ -79,7 +79,6 @@
     <ClCompile Include="src/scenario/Conversation.cpp" />
     <ClCompile Include="src/scenario/Dialogue.cpp" />
     <ClCompile Include="src/scenario/Scenario.cpp" />
-    <ClCompile Include="src/scenario/Triggers.cpp" />
     <ClCompile Include="src/SceneSweetheartSquad.cpp" />
     <ClCompile Include="src/shader/ComponentShaderBase.cpp" />
     <ClCompile Include="src/shader/ShaderComponentBlinn.cpp" />
@@ -233,7 +232,6 @@
     <ClInclude Include="include/scenario/Conversation.h" />
     <ClInclude Include="include/scenario/Dialogue.h" />
     <ClInclude Include="include/scenario/Scenario.h" />
-    <ClInclude Include="include/scenario/Triggers.h" />
     <ClInclude Include="include/SceneSweetheartSquad.h" />
     <ClInclude Include="include/shader/ComponentShaderBase.h" />
     <ClInclude Include="include/shader/ShaderComponentBlinn.h" />

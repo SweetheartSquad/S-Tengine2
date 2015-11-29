@@ -66,9 +66,7 @@ bool Conversation::sayNextDialogue(){
 	// trigger anything left on the current dialogue object before moving on
 	// (note that if there are multiple lines of text for the object, the triggers will be called multiple times)
 	if(getCurrentDialogue()->currentText == getCurrentDialogue()->text.size()-1){
-		for(Trigger * t : getCurrentDialogue()->triggers){
-			t->trigger();
-		}
+		getCurrentDialogue()->trigger();
 	}
 
 	// if there aren't any dialogue objects left, the conversation is over so return false
@@ -155,8 +153,13 @@ bool ConversationIterator::sayNext(){
 	}
 
 
+	
 	// move conversation forward
-	if(!currentConversation->sayNextDialogue()){
+	bool stuffLeftToSay = currentConversation->sayNextDialogue();
+	// allow any events triggered during conversation to be handled
+	currentConversation->scenario->eventManager.update(nullptr);
+	
+	if(!stuffLeftToSay){
 		// if there's nothing left to say, check for options
 		if(currentConversation->options.size() > 1){
 			// multiple options means wait for user input
