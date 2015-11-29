@@ -63,7 +63,6 @@
     <ClCompile Include="src/Resource.cpp" />
     <ClCompile Include="src/ResourceManager.cpp" />
     <ClCompile Include="src/Scene.cpp" />
-    <ClCompile Include="src/Scene2D.cpp" />
     <ClCompile Include="src/AnimationRig.cpp" />
     <ClCompile Include="src/FpsDisplay.cpp" />
     <ClCompile Include="src/HorizontalLinearLayout.cpp" />
@@ -217,7 +216,6 @@
     <ClInclude Include="include/Resource.h" />
     <ClInclude Include="include/ResourceManager.h" />
     <ClInclude Include="include/Scene.h" />
-    <ClInclude Include="include/Scene2D.h" />
     <ClInclude Include="include/AnimationRig.h" />
     <ClInclude Include="include/FpsDisplay.h" />
     <ClInclude Include="include/HorizontalLinearLayout.h" />

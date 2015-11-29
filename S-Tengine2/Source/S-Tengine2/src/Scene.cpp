@@ -95,6 +95,11 @@ void Scene::unload(){
 
 
 void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// don't bother doing any work if we aren't rendering anyway
+	if(!isVisible()){
+		return;
+	}
+
 	// render options
 	glEnable(GL_SCISSOR_TEST);
 	if(_renderOptions->depthEnabled){

@@ -45,6 +45,11 @@ UILayer::~UILayer(){
 }
 
 void UILayer::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// don't bother doing any work if we aren't rendering anyway
+	if(!isVisible()){
+		return;
+	}
+
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
 	
 	if(depth == GL_TRUE){

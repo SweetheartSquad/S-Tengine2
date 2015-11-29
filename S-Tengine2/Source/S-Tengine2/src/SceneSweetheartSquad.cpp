@@ -191,6 +191,11 @@ void SceneSweetheartSquad::update(Step * _step){
 }
 
 void SceneSweetheartSquad::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// don't bother doing any work if we aren't rendering anyway
+	if(!isVisible()){
+		return;
+	}
+
 	_renderOptions->clear();
 	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
 	//Bind frameBuffer

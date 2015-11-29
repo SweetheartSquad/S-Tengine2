@@ -102,6 +102,11 @@ void AnimationJoint::update(Step * _step){
 }
 
 void AnimationJoint::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// don't bother doing any work if we aren't rendering anyway
+	if(!isVisible()){
+		return;
+	}
+
 	float prevLineWidth, prevPointSize;
 	glGetFloatv(GL_LINE_WIDTH, &prevLineWidth);
 	glGetFloatv(GL_POINT_SIZE, &prevPointSize);

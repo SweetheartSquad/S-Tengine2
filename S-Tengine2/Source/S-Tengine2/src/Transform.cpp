@@ -231,7 +231,7 @@ void Transform::update(Step * _step){
 
 void Transform::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	// don't bother doing any work if we aren't rendering anyway
-	if(!visible){
+	if(!isVisible()){
 		return;
 	}
 
@@ -246,8 +246,8 @@ void Transform::render(sweet::MatrixStack * _matrixStack, RenderOptions * _rende
 	// render all of the transform's children
 	for(unsigned long int i = 0; i < children.size(); i++){
 		NodeRenderable * nr = dynamic_cast<NodeRenderable *>(children.at(i));
-		if(nr != nullptr && nr->isVisible()){
-			nr->render(_matrixStack, _renderOptions);	
+		if(nr != nullptr /*&& nr->isVisible()*/){
+			nr->render(_matrixStack, _renderOptions);
 		}
 	}
 	if(drawTransforms){

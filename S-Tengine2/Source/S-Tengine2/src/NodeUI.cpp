@@ -77,8 +77,10 @@ NodeUI::~NodeUI() {
 }
 
 void NodeUI::setVisible(bool _visible){
-	NodeBulletBody::setVisible(_visible);
-	invalidateRenderFrame();
+	if(_visible != isVisible()){
+		invalidateRenderFrame();
+		NodeBulletBody::setVisible(_visible);
+	}
 }
 
 void NodeUI::load(){
@@ -270,6 +272,12 @@ MeshEntity * NodeUI::getTexturedPlane() {
 }
 
 void NodeUI::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// don't bother doing any work if we aren't rendering anyway
+	if(!isVisible()){
+		__renderFrameDirty = false;
+		return;
+	}
+
 	if(renderMode == kENTITIES){
 		__renderForEntities(_matrixStack, _renderOptions);
 	}
