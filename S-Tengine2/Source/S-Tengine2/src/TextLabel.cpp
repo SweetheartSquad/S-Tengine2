@@ -21,8 +21,6 @@ TextLabel::TextLabel(BulletWorld* _world, Font* _font, Shader* _textShader, floa
 }
 
 void TextLabel::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
 	if(depth == GL_TRUE){
 		glDisable(GL_DEPTH_TEST);
