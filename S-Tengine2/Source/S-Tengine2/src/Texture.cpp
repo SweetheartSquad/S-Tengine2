@@ -109,8 +109,8 @@ void Texture::bufferData(){
 	}
 	checkForGlError(0,__FILE__,__LINE__);
 	
-	if(useMipmaps){
-		glGenerateTextureMipmap(textureId);
+	if (useMipmaps){
+		glGenerateMipmap(GL_TEXTURE_2D);
 		checkForGlError(0,__FILE__,__LINE__);
 	}
 }
@@ -132,7 +132,7 @@ void Texture::bufferDataFirst(){
 	checkForGlError(0,__FILE__,__LINE__);
 	
 	if(useMipmaps){
-		glGenerateTextureMipmap(textureId);
+		glGenerateMipmap(GL_TEXTURE_2D);
 		checkForGlError(0,__FILE__,__LINE__);
 	}
 }
