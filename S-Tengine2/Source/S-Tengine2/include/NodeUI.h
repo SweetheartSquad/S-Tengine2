@@ -242,6 +242,8 @@ private:
 	// NOTE: do not change or query directly, use invalidateLayout() or isLayoutDirty() instead
 	bool __layoutDirty;
 
+	// invalidates the render frame if any NodeUI children in the hierarchy are invalid
+	bool __evaluateChildRenderFrames();
 protected:
 	RenderMode renderMode;
 	// returns whether the texture representation needs to be updated

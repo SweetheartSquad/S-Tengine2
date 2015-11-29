@@ -195,7 +195,9 @@ void NodeUI::setMouseEnabled(bool _mouseEnabled){
 
 void NodeUI::update(Step * _step){
 	__updateForEntities(_step);
-	__updateForTexture(_step);
+	if(renderMode == kTEXTURE){
+		__updateForTexture(_step);
+	}
 }
 
 Texture * NodeUI::renderToTexture(){
@@ -337,21 +339,37 @@ void NodeUI::__updateForEntities(Step * _step) {
 	Entity::update(_step);
 }
 
-void NodeUI::__updateForTexture(Step * _step) {
-	if(renderMode == kTEXTURE){
-		if(texturedPlane != nullptr){
-			texturedPlane->update(_step);
-			
-		}
-		doRecursivelyOnUIChildren([this](NodeUI * _ui){
-			if(_ui->isLayoutDirty() || _ui->__renderFrameDirty){ // we need to access __renderFrameDirty directly because changes to non-kTEXTURE children affect kTEXTURE parents
-				this->invalidateRenderFrame();
-				return;
+bool NodeUI::__evaluateChildRenderFrames(){
+	if(isLayoutDirty() || __renderFrameDirty){
+		return true;
+	}
+	if(isVisible()){
+		for(NodeChild * c : uiElements->children) {
+			Transform * t = dynamic_cast<Transform*>(c);
+			if(t != nullptr){
+				NodeUI * nodeUI = dynamic_cast<NodeUI*>(t->children.at(0));
+				if(nodeUI != nullptr) {
+					if(nodeUI->__evaluateChildRenderFrames()){
+						invalidateRenderFrame();
+						return true;
+					}
+				}
 			}
-		});
-		if(isRenderFrameDirty()) {
-			autoResize();
 		}
+	}
+	return false;
+}
+
+void NodeUI::__updateForTexture(Step * _step) {
+	if(texturedPlane != nullptr){
+		texturedPlane->update(_step);
+			
+	}
+
+	__evaluateChildRenderFrames();
+
+	if(isRenderFrameDirty()) {
+		autoResize();
 	}
 }
 

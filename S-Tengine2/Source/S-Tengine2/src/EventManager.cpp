@@ -11,6 +11,9 @@ sweet::Event::Event(Json::Value _json) :
 {
 	Json::Value argsJson = _json["args"];
 	Json::Value::Members argsJsonMembers = argsJson.getMemberNames();
+
+	// TODO: figure out if there's a way to distinguish between int and double in the json
+
 	for(auto j : argsJsonMembers){
 		Json::Value v = argsJson[j];
 		if(v.isDouble()){
