@@ -74,7 +74,8 @@ void TextLabel::updateText(){
 	unsigned long int idx = 0;
 	if(wrapMode == kWORD) {
 		std::vector<std::wstring> words = StringUtils::split(textAll, ' ');
-		for(auto word : words) {
+		for(unsigned long int i = 0; i < words.size(); ++i) {
+			std::wstring & word = words.at(i);
 			float width = 0.f;
 			for(auto c : word) {
 				width += font->getGlyphWidthHeight(c).x;
@@ -84,7 +85,9 @@ void TextLabel::updateText(){
 					insertChar(c);
 					idx++;
 				}
-				insertChar(' ');
+				if(i != words.size()-1){
+					insertChar(' ');
+				}
 				idx++;
 			}else {
 				textDisplayed += '\n';
