@@ -98,6 +98,7 @@ void Slider::updateValue(){
 	if(abs(delta) < FLT_EPSILON){
 		return;
 	}
+	prevValue = value;
 
 	float v = (value - valueMin) / (valueMax - valueMin);
 	if(horizontal){
