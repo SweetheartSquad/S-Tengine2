@@ -63,7 +63,7 @@ public:
 	ConversationIterator();
 	virtual ~ConversationIterator();
 
-	// resets the current conversation, then sets it to nullptr
+	// sets the current conversation to nullptr
 	void end();
 
 	// moves the conversation forward by one step

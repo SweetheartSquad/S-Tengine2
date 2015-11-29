@@ -27,13 +27,13 @@ Conversation::Conversation(Json::Value _json, Scenario * _scenario) :
 {
 	Json::Value convoDialogueJson = _json["dialogue"];
 
-	for(auto j = 0; j < convoDialogueJson.size(); ++j){
+	for(Json::Value::ArrayIndex j = 0; j < convoDialogueJson.size(); ++j){
 		dialogueObjects.push_back(new Dialogue(convoDialogueJson[j], scenario));
 	}
 
 	Json::Value convoOptionsJson = _json["options"];
 
-	for(auto j = 0; j < convoOptionsJson.size(); ++j){
+	for(Json::Value::ArrayIndex j = 0; j < convoOptionsJson.size(); ++j){
 		options.push_back(new Option(convoOptionsJson[j], scenario));
 	}
 }
@@ -170,6 +170,7 @@ bool ConversationIterator::sayNext(){
 			currentConversation->reset();
 		}else{
 			// no options means conversation over, return false
+			end();
 			return false;
 		}
 	}
@@ -183,4 +184,8 @@ bool ConversationIterator::sayNext(){
 	//std::cout << currentConversation->getCurrentDialogue()->getCurrentText() << std::endl;
 
 	return true;
+}
+
+void ConversationIterator::end(){
+	currentConversation = nullptr;
 }
