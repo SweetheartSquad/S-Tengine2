@@ -112,6 +112,7 @@ void Slider::updateValue(){
 	}
 	fill->background->mesh->dirty = true;
 	layout->invalidateLayout();
+	fill->invalidateLayout();
 
 	sweet::Event * e = new sweet::Event(std::string("change"));
 	e->setFloatData("delta", delta);
