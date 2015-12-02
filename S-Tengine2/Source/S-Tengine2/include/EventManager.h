@@ -27,6 +27,8 @@ public:
 	void setStringData(std::string _key, std::string _val);
 	
 	// empty event with the given tag
+	explicit Event(const char * _tag);
+	// empty event with the given tag
 	explicit Event(std::string _tag);
 	// event filled from a json value
 	// the tag is the "type" attribute

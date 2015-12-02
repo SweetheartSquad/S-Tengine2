@@ -114,18 +114,17 @@ void Conversation::reset(){
 ConversationIterator::ConversationIterator() :
 	currentConversation(nullptr),
 	autoProgress(false),
-	autoProgressTimer(new Timeout(2.f)),
-	waitingForInput(false),
-	shouldSayNext(false)
-{
-	autoProgressTimer->onCompleteFunction = [this](Timeout * _this){
+	autoProgressTimer(new Timeout(2.f, [this](sweet::Event * _event){
 		/*if(dialogue->ticking){
 			dialogue->finishTicking();
 			autoProgressTimer->restart();
 		}else{*/
 			this->shouldSayNext = true;
 		//}
-	};
+	})),
+	waitingForInput(false),
+	shouldSayNext(false)
+{;
 }
 
 ConversationIterator::~ConversationIterator(){

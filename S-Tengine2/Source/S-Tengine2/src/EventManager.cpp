@@ -2,6 +2,10 @@
 
 #include <EventManager.h>
 
+sweet::Event::Event(const char * _tag) :
+	tag(std::string(_tag))
+{
+}
 sweet::Event::Event(std::string _tag) :
 	tag(_tag)
 {
@@ -59,6 +63,14 @@ sweet::EventManager::~EventManager(){
 		delete events.front();
 		events.pop();
 	}
+
+	while(childManagers.size() > 0){
+		removeChildManager(childManagers.back());
+	}
+
+	while(parentManagers.size() > 0){
+		removeParentManager(parentManagers.back());
+	}
 }
 
 void sweet::EventManager::triggerEvent(std::string _tag){
@@ -74,7 +86,8 @@ void sweet::EventManager::addEventListener(std::string _tag, std::function<void 
 }
 
 void sweet::EventManager::handle(sweet::Event * _event){
-	for(std::function<void(sweet::Event *)> f : listeners[_event->tag]){
+	std::vector<std::function<void(sweet::Event *)>> l = listeners[_event->tag];
+	for(std::function<void(sweet::Event *)> f : l){
 		f(_event);
 	}
 	for(sweet::EventManager * m : parentManagers){

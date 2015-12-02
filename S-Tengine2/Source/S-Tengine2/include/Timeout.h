@@ -4,6 +4,7 @@
 #include <node\NodeChild.h>
 
 #include <functional>
+#include <EventManager.h>
 
 class Timeout : public virtual NodeChild, public virtual NodeUpdatable{
 public:
@@ -11,9 +12,10 @@ public:
 	bool active;
 	float elapsedSeconds;
 	float targetSeconds;
-	std::function<void(Timeout *)> onCompleteFunction;
+	// events for the timeout object: complete, progress
+	sweet::EventManager * eventManager;
 
-	Timeout(float _targetSeconds);
+	Timeout(float _targetSeconds, std::function<void (sweet::Event * )> _onComplete);
 
 	// calls stop and then calls start
 	void restart();
