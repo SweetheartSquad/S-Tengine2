@@ -42,7 +42,7 @@ std::string Dialogue::getCurrentText(){
 }
 
 bool Dialogue::sayNextText(){
-	if(currentText == (unsigned long int)-1 || currentText < text.size() - 1){
+	if(currentText == (unsigned long int)-1 || currentText+1 < text.size()){
 		++currentText;
 		return true;
 	}else{

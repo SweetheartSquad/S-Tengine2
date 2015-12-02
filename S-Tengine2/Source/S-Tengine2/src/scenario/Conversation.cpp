@@ -65,7 +65,7 @@ bool Conversation::sayNextDialogue(){
 	
 	// trigger anything left on the current dialogue object before moving on
 	// (note that if there are multiple lines of text for the object, the triggers will be called multiple times)
-	if(getCurrentDialogue()->currentText == getCurrentDialogue()->text.size()-1){
+	if(getCurrentDialogue()->currentText+1 == getCurrentDialogue()->text.size()){
 		getCurrentDialogue()->trigger();
 	}
 
@@ -167,6 +167,7 @@ bool ConversationIterator::sayNext(){
 			// single option means go to the link
 			currentConversation = currentConversation->scenario->conversations.at(currentConversation->options.front()->link);
 			currentConversation->reset();
+			sayNext();
 		}else{
 			// no options means conversation over, return false
 			end();
