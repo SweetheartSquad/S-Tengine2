@@ -34,7 +34,6 @@ public:
 	virtual void unload() override;
 
 	UILayer uiLayer;
-	Sprite * mouseIndicator;
 	Entity * logo;
 	MeshEntity * logo1;
 	MeshEntity * logo2;

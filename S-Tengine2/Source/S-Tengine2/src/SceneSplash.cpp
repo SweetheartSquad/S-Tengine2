@@ -75,22 +75,11 @@ SceneSplash::SceneSplash(Game * _game) :
 	logoTex->load();
 	ResourceManager::resources.push_back(logoTex);
 	
-	mouseIndicator = new Sprite();
-	uiLayer.childTransform->addChild(mouseIndicator);
-	mouseIndicator->mesh->pushTexture2D(c);
-	mouseIndicator->parents.at(0)->scale(32,32,1);
-	mouseIndicator->setShader(uiLayer.shader, true);
-
-	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
-		mouseIndicator->mesh->vertices[i].x += 0.5f;
-		mouseIndicator->mesh->vertices[i].y -= 0.5f;
-	}
-	mouseIndicator->mesh->dirty = true;
+	uiLayer.addMouseIndicator();
 	
-	logo = new MeshEntity(Resource::loadMeshFromObj("assets/engine basics/S-Tengine2_logo.obj").at(0));
+	logo = new MeshEntity(Resource::loadMeshFromObj("assets/engine basics/S-Tengine2_logo.obj").at(0), shader);
 	childTransform->addChild(logo)->scale(25);
 	logo->mesh->pushTexture2D(logoTex);
-	logo->setShader(shader, true);
 
 
 
@@ -173,7 +162,6 @@ void SceneSplash::update(Step * _step){
 	uiLayer.resize(0.f, sd.x, 0.f, sd.y);
 	uiLayer.update(_step);
 	
-	mouseIndicator->parents.at(0)->translate(mouse->mouseX(), mouse->mouseY(), 0.f, false);
 	//textThing->parents.at(0)->translate(game->viewPortWidth*0.5f, game->viewPortHeight*0.8f, 0, false);
 }
 

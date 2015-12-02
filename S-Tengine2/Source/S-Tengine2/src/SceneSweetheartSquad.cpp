@@ -84,29 +84,17 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	logoTex->load();
 	ResourceManager::resources.push_back(logoTex);
 	
-	mouseIndicator = new Sprite();
-	uiLayer.childTransform->addChild(mouseIndicator);
-	mouseIndicator->mesh->pushTexture2D(c);
-	mouseIndicator->parents.at(0)->scale(32,32,1);
-	mouseIndicator->setShader(uiLayer.shader, true);
-
-	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
-		mouseIndicator->mesh->vertices[i].x += 0.5f;
-		mouseIndicator->mesh->vertices[i].y -= 0.5f;
-	}
-	mouseIndicator->mesh->dirty = true;
+	uiLayer.addMouseIndicator();
 	
 	logo = new Entity();
 	childTransform->addChild(logo)->scale(10);
 	logo->parents.at(0)->translate(0, 10, 0);
 
-	logo1 = new MeshEntity(Resource::loadMeshFromObj("assets/engine basics/sweetheartsquad-logo-noheart.obj").at(0));
+	logo1 = new MeshEntity(Resource::loadMeshFromObj("assets/engine basics/sweetheartsquad-logo-noheart.obj").at(0), diffuseShader);
 	logo1->mesh->pushTexture2D(logoTex);
-	logo1->setShader(diffuseShader, true);
 
-	logo2 = new MeshEntity(Resource::loadMeshFromObj("assets/engine basics/sweetheartsquad-logo-heartonly.obj").at(0));
+	logo2 = new MeshEntity(Resource::loadMeshFromObj("assets/engine basics/sweetheartsquad-logo-heartonly.obj").at(0), diffuseShader);
 	logo2->mesh->pushTexture2D(logoTex);
-	logo2->setShader(diffuseShader, true);
 	
 	logo->childTransform->addChild(logo1, false);
 	logo->childTransform->addChild(logo2, false);
@@ -186,7 +174,6 @@ void SceneSweetheartSquad::update(Step * _step){
 	uiLayer.resize(0.f, sd.x, 0.f, sd.y);
 	uiLayer.update(_step);
 	
-	mouseIndicator->parents.at(0)->translate(mouse->mouseX(), mouse->mouseY(), 0.f, false);
 	//textThing->parents.at(0)->translate(game->viewPortWidth*0.5f, game->viewPortHeight*0.8f, 0, false);
 }
 
