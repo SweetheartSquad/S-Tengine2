@@ -56,9 +56,9 @@ void Slider::update(Step * _step){
 	// update the slider's value based on the mouse's position when it is being pressed
 	if(isDown){
 		if(horizontal){
-			setValue((mouse->mouseX() - getWorldPos().x)/getWidth(true, true) * (valueMax - valueMin) + valueMin + valueStep*0.5f);
+			setValue((mouse->mouseX() - getWorldPos().x)/getWidth(true, false) * (valueMax - valueMin) + valueMin + valueStep*0.5f);
 		}else{
-			setValue((mouse->mouseY() - getWorldPos().y)/getHeight(true, true) * (valueMax - valueMin) + valueMin + valueStep*0.5f);
+			setValue((mouse->mouseY() - getWorldPos().y)/getHeight(true, false) * (valueMax - valueMin) + valueMin + valueStep*0.5f);
 		}
 	}
 	NodeUI::update(_step);
