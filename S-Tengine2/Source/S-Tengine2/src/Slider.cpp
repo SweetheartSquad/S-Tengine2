@@ -103,8 +103,8 @@ void Slider::updateValue(){
 	float v = (value - valueMin) / (valueMax - valueMin);
 	if(horizontal){
 		fill->setRationalWidth(v, this);
-		fill->background->mesh->setUV(0, 1-v, 0.0);
-		fill->background->mesh->setUV(3, 1-v, 1.0);
+		fill->background->mesh->setUV(2, v, 1.0);
+		fill->background->mesh->setUV(1, v, 0.0);
 	}else{
 		fill->setRationalHeight(v, this);
 		fill->background->mesh->setUV(0, 0.0, 1-v);
