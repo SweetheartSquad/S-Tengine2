@@ -27,6 +27,7 @@ void Configuration::load(const std::string & _filename){
 		// set defaults
 		fullscreen = fullscreenDefault;
 		resolution = resolutionDefault;
+		fps = fpsDefault;
 
 		// save defaults to file
 		save(_filename);
