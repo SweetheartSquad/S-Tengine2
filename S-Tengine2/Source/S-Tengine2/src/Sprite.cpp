@@ -72,13 +72,13 @@ void Sprite::setPrimaryTexture(TextureSampler * _textureSampler) {
 	}
 	float mag = std::max(mesh->getTexture(0)->width, mesh->getTexture(0)->height);
 	mesh->vertices.at(0).u = _textureSampler->u/mag;
-	mesh->vertices.at(0).v = (_textureSampler->v + _textureSampler->height)/mag;
+	mesh->vertices.at(0).v = _textureSampler->v/mag;
 	mesh->vertices.at(1).u = (_textureSampler->u + _textureSampler->width)/mag;
-	mesh->vertices.at(1).v = (_textureSampler->v + _textureSampler->height)/mag;
+	mesh->vertices.at(1).v = _textureSampler->v/mag;
 	mesh->vertices.at(2).u = (_textureSampler->u + _textureSampler->width)/mag;
-	mesh->vertices.at(2).v = _textureSampler->v/mag;
+	mesh->vertices.at(2).v = (_textureSampler->v + _textureSampler->height)/mag;
 	mesh->vertices.at(3).u = _textureSampler->u/mag;
-	mesh->vertices.at(3).v = _textureSampler->v/mag;
+	mesh->vertices.at(3).v = (_textureSampler->v + _textureSampler->height)/mag;
 	mesh->dirty = true;
 }
 
