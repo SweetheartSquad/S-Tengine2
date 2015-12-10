@@ -63,6 +63,7 @@ void Sprite::setPrimaryTexture(Texture * _texture) {
 }
 
 void Sprite::setPrimaryTexture(TextureSampler * _textureSampler) {
+
 	if(mesh->textures.size() == 0) {
 		mesh->pushTexture2D(_textureSampler->texture);
 	}else {
@@ -70,15 +71,37 @@ void Sprite::setPrimaryTexture(TextureSampler * _textureSampler) {
 		mesh->texturesDirty = true;
 		++_textureSampler->texture->referenceCount;
 	}
+
 	float mag = std::max(mesh->getTexture(0)->width, mesh->getTexture(0)->height);
-	mesh->vertices.at(0).u = _textureSampler->u/mag;
-	mesh->vertices.at(0).v = _textureSampler->v/mag;
-	mesh->vertices.at(1).u = (_textureSampler->u + _textureSampler->width)/mag;
-	mesh->vertices.at(1).v = _textureSampler->v/mag;
-	mesh->vertices.at(2).u = (_textureSampler->u + _textureSampler->width)/mag;
-	mesh->vertices.at(2).v = (_textureSampler->v + _textureSampler->height)/mag;
-	mesh->vertices.at(3).u = _textureSampler->u/mag;
-	mesh->vertices.at(3).v = (_textureSampler->v + _textureSampler->height)/mag;
+
+	float u = _textureSampler->u;
+	float v = _textureSampler->v;
+	float width = _textureSampler->width;
+	float height = _textureSampler->height;
+
+	mesh->vertices.at(0).u = u/mag;
+	mesh->vertices.at(0).v = v/mag;
+	mesh->vertices.at(1).u = (u + width)/mag;
+	mesh->vertices.at(1).v = v/mag;
+	mesh->vertices.at(2).v = (v + height)/mag;
+	mesh->vertices.at(2).u = (u + width)/mag;
+	mesh->vertices.at(3).u = u/mag;
+	mesh->vertices.at(3).v = (v + height)/mag;
+	
+	float negHeight = -height/mag/2;
+	float negWidth  = -width/mag/2;
+	float posHeight =  height/mag/2;;
+	float posWidth  =  width/mag/2;;
+
+	mesh->vertices.at(0).x = negWidth;
+	mesh->vertices.at(0).y = posHeight;
+	mesh->vertices.at(1).x = posWidth;
+	mesh->vertices.at(1).y = posHeight;
+	mesh->vertices.at(2).x = posWidth;
+	mesh->vertices.at(2).y = negHeight;
+	mesh->vertices.at(3).x = negWidth;
+	mesh->vertices.at(3).y = negHeight;
+
 	mesh->dirty = true;
 }
 

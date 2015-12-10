@@ -16,7 +16,6 @@ public:
 	std::map<std::string, SpriteSheetAnimation *> animations;
 	SpriteSheetAnimation * currentAnimation;
 	bool playAnimation;
-
 	explicit Sprite(Shader * _shader = nullptr);
 	virtual ~Sprite();
 
