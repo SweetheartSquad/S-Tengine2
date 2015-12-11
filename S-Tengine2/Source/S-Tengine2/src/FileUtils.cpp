@@ -13,7 +13,7 @@ std::string FileUtils::readFile(const std::string & _filename){
 		file.close();
 		Log::info("File \"" + _filename + "\" read.");
 	}else{
-		contents << "\tERROR: file \"" << _filename << "\" could not be opened for reading." << std::endl;
+		Log::error("File \"" + _filename + "\" could not be opened for reading.");
 	}
 
 	return contents.str();

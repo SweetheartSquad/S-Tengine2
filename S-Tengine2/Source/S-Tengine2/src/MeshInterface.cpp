@@ -143,6 +143,11 @@ void MeshInterface::clean(){
 }
 
 void MeshInterface::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption){
+	// don't bother doing any work if we aren't rendering anyway
+	if(!isVisible()){
+		return;
+	}
+
 	load();
 	clean();
 	

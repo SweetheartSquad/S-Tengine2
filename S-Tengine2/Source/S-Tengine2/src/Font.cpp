@@ -29,8 +29,8 @@ Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _char) :
 	setUV(2, 1.0, 1.0);
 	setUV(3, 0.0, 1.0);
 
-	scaleModeMag = GL_NEAREST;
-	scaleModeMin = GL_NEAREST;
+	scaleModeMag = scaleModeMin = GL_NEAREST;
+	uvEdgeMode = GL_CLAMP;
 }
 
 

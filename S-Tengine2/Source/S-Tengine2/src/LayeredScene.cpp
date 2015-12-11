@@ -26,6 +26,11 @@ void LayeredScene::update(Step * _step){
 }
 
 void LayeredScene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// don't bother doing any work if we aren't rendering anyway
+	if(!isVisible()){
+		return;
+	}
+
 	//glfwGetFramebufferSize(glfwGetCurrentContext(), &w, &h);
 	glfwMakeContextCurrent(glfwGetCurrentContext());
 	float ratio;

@@ -13,9 +13,6 @@ TextArea::TextArea(BulletWorld * _bulletWorld, Font * _font, Shader * _textShade
 	setWrapMode(kCHARACTER);
 }
 void TextArea::update(Step * _step){
-	if(text != textDisplayed){
-		updateRequired = true;
-	}
 	if(updateRequired){
 		updateText();
 	}

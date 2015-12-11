@@ -31,7 +31,6 @@ public:
 	virtual void unload() override;
 
 	UILayer uiLayer;
-	Sprite * mouseIndicator;
 	MeshEntity * logo;
 	Label * textThing;
 	float t;

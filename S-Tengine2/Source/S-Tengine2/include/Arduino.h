@@ -40,7 +40,7 @@ class Arduino : public NodeUpdatable
 		std::string ReadDataUntil(char _until, bool * _forced);
         //Writes data from a buffer through the Serial connection
         //return true on success.
-        bool WriteData(char *buffer, unsigned int nbChar);
+        bool WriteData(const char * buffer, unsigned int nbChar);
         //Check if we are actually connected
         bool IsConnected();
 

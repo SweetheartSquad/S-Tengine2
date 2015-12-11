@@ -2,7 +2,6 @@
 
 #include <node/NodeContent.h>
 #include <scenario/Dialogue.h>
-#include <scenario/Triggers.h>
 
 class Option : public NodeContent{
 public:
@@ -64,7 +63,7 @@ public:
 	ConversationIterator();
 	virtual ~ConversationIterator();
 
-	// resets the current conversation, then sets it to nullptr
+	// sets the current conversation to nullptr
 	void end();
 
 	// moves the conversation forward by one step

@@ -4,6 +4,7 @@
 #include <json\json.h>
 
 #include <node/NodeContent.h>
+#include <EventManager.h>
 
 class Scenario;
 class Trigger;
@@ -14,7 +15,9 @@ public:
 	std::string speaker;
 	std::vector<std::string> text;
 	unsigned long int currentText;
-	std::vector<Trigger *> triggers;
+
+	// events which will be triggered on this node's scenario when the dialogue is finished
+	std::vector<sweet::Event *> triggers;
 	std::vector<Condition *> conditions;
 	
 	virtual ~Dialogue();
@@ -29,6 +32,10 @@ public:
 	// if any evaluate to false, returns false immediately
 	// otherwise, returns true
 	bool evaluateConditions();
+
+	// loops through the dialogue's triggers
+	// and forwards them to its scenario's EventManager
+	void trigger();
 
 	void reset();
 

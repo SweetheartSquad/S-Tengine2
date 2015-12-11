@@ -39,6 +39,7 @@ public:
 
 protected:
 	float value;
+	float prevValue;
 };
 
 // A slider which modifes the value of a target float

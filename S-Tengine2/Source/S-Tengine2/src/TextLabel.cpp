@@ -21,8 +21,6 @@ TextLabel::TextLabel(BulletWorld* _world, Font* _font, Shader* _textShader, floa
 }
 
 void TextLabel::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
 	if(depth == GL_TRUE){
 		glDisable(GL_DEPTH_TEST);
@@ -58,14 +56,11 @@ void TextLabel::setText(std::wstring _text){
 		return;
 	}*/
 	invalidate();
-	
 	invalidateLayout();
 
 	textAll = _text;
 
 	updateRequired = true;
-
-	layoutDirty = true;
 
 	updateText();
 }
@@ -79,7 +74,8 @@ void TextLabel::updateText(){
 	unsigned long int idx = 0;
 	if(wrapMode == kWORD) {
 		std::vector<std::wstring> words = StringUtils::split(textAll, ' ');
-		for(auto word : words) {
+		for(unsigned long int i = 0; i < words.size(); ++i) {
+			std::wstring & word = words.at(i);
 			float width = 0.f;
 			for(auto c : word) {
 				width += font->getGlyphWidthHeight(c).x;
@@ -89,7 +85,9 @@ void TextLabel::updateText(){
 					insertChar(c);
 					idx++;
 				}
-				insertChar(' ');
+				if(i != words.size()-1){
+					insertChar(' ');
+				}
 				idx++;
 			}else {
 				textDisplayed += '\n';

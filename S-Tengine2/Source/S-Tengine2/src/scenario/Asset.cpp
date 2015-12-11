@@ -33,7 +33,13 @@ AssetTextureSampler::AssetTextureSampler(Json::Value _json) :
 	textureSampler(nullptr)
 {
 	std::string defTex = "assets/engine basics/img_cheryl.jpg";
-	std::string src = "assets/textures/" + _json.get("src", "NO_TEXTURE").asString();
+	std::string src =  _json.get("src", "NO_TEXTURE").asString();
+	if(src == "NO_TEXTURE"){
+		Log::warn("Could not parse texture sampler definition, using cheryl default");	
+		src = "assets/engine basics/img_cheryl.jpg.def";
+	}else{
+		src = "assets/textures/" + src;
+	}
 
 	const std::string defJsonRaw = FileUtils::readFile(src);
 
@@ -52,10 +58,6 @@ AssetTextureSampler::AssetTextureSampler(Json::Value _json) :
 		std::string defPath = src.substr(0, src.find_last_of("\\/"));
 		Texture * texture = new Texture(defPath + "/" + t, true, false);
 		textureSampler = new TextureSampler(texture, w, h, u, v);
-		textureSampler->load();
-	}else {
-		Log::warn("Could not parse texture sampler definition, using cheryl default");	
-		textureSampler = new TextureSampler(new Texture(defTex, true, false), 256, 256, 0, 0);
 		textureSampler->load();
 	}
 }

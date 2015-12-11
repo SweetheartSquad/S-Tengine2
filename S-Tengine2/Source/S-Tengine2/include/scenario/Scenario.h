@@ -7,12 +7,12 @@
 #include <scenario/Conditions.h>
 #include <scenario/Conversation.h>
 #include <scenario/Dialogue.h>
-#include <scenario/Triggers.h>
 
 #include <vector>
 #include <map>
 
 #include <json/json.h>
+#include <EventManager.h>
 
 class Character : public NodeContent{
 public:
@@ -23,6 +23,9 @@ public:
 
 class Scenario : public virtual NodeContent, public virtual NodeResource{
 public:
+	// events triggered by this scenario's dialogue will be handled by this manager
+	sweet::EventManager eventManager;
+
 	// the scenario filename
 	std::string id;
 

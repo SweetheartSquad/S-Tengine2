@@ -27,13 +27,13 @@ Conversation::Conversation(Json::Value _json, Scenario * _scenario) :
 {
 	Json::Value convoDialogueJson = _json["dialogue"];
 
-	for(auto j = 0; j < convoDialogueJson.size(); ++j){
+	for(Json::Value::ArrayIndex j = 0; j < convoDialogueJson.size(); ++j){
 		dialogueObjects.push_back(new Dialogue(convoDialogueJson[j], scenario));
 	}
 
 	Json::Value convoOptionsJson = _json["options"];
 
-	for(auto j = 0; j < convoOptionsJson.size(); ++j){
+	for(Json::Value::ArrayIndex j = 0; j < convoOptionsJson.size(); ++j){
 		options.push_back(new Option(convoOptionsJson[j], scenario));
 	}
 }
@@ -65,10 +65,8 @@ bool Conversation::sayNextDialogue(){
 	
 	// trigger anything left on the current dialogue object before moving on
 	// (note that if there are multiple lines of text for the object, the triggers will be called multiple times)
-	if(getCurrentDialogue()->currentText == getCurrentDialogue()->text.size()-1){
-		for(Trigger * t : getCurrentDialogue()->triggers){
-			t->trigger();
-		}
+	if(getCurrentDialogue()->currentText+1 == getCurrentDialogue()->text.size()){
+		getCurrentDialogue()->trigger();
 	}
 
 	// if there aren't any dialogue objects left, the conversation is over so return false
@@ -116,18 +114,17 @@ void Conversation::reset(){
 ConversationIterator::ConversationIterator() :
 	currentConversation(nullptr),
 	autoProgress(false),
-	autoProgressTimer(new Timeout(2.f)),
-	waitingForInput(false),
-	shouldSayNext(false)
-{
-	autoProgressTimer->onCompleteFunction = [this](Timeout * _this){
+	autoProgressTimer(new Timeout(2.f, [this](sweet::Event * _event){
 		/*if(dialogue->ticking){
 			dialogue->finishTicking();
 			autoProgressTimer->restart();
 		}else{*/
 			this->shouldSayNext = true;
 		//}
-	};
+	})),
+	waitingForInput(false),
+	shouldSayNext(false)
+{;
 }
 
 ConversationIterator::~ConversationIterator(){
@@ -155,8 +152,13 @@ bool ConversationIterator::sayNext(){
 	}
 
 
+	
 	// move conversation forward
-	if(!currentConversation->sayNextDialogue()){
+	bool stuffLeftToSay = currentConversation->sayNextDialogue();
+	// allow any events triggered during conversation to be handled
+	currentConversation->scenario->eventManager.update(nullptr);
+	
+	if(!stuffLeftToSay){
 		// if there's nothing left to say, check for options
 		if(currentConversation->options.size() > 1){
 			// multiple options means wait for user input
@@ -165,8 +167,10 @@ bool ConversationIterator::sayNext(){
 			// single option means go to the link
 			currentConversation = currentConversation->scenario->conversations.at(currentConversation->options.front()->link);
 			currentConversation->reset();
+			sayNext();
 		}else{
 			// no options means conversation over, return false
+			end();
 			return false;
 		}
 	}
@@ -180,4 +184,8 @@ bool ConversationIterator::sayNext(){
 	//std::cout << currentConversation->getCurrentDialogue()->getCurrentText() << std::endl;
 
 	return true;
+}
+
+void ConversationIterator::end(){
+	currentConversation = nullptr;
 }

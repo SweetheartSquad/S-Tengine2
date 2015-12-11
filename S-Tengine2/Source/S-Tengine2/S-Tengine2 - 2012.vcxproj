@@ -63,7 +63,6 @@
     <ClCompile Include="src/Resource.cpp" />
     <ClCompile Include="src/ResourceManager.cpp" />
     <ClCompile Include="src/Scene.cpp" />
-    <ClCompile Include="src/Scene2D.cpp" />
     <ClCompile Include="src/AnimationRig.cpp" />
     <ClCompile Include="src/FpsDisplay.cpp" />
     <ClCompile Include="src/HorizontalLinearLayout.cpp" />
@@ -79,7 +78,6 @@
     <ClCompile Include="src/scenario/Conversation.cpp" />
     <ClCompile Include="src/scenario/Dialogue.cpp" />
     <ClCompile Include="src/scenario/Scenario.cpp" />
-    <ClCompile Include="src/scenario/Triggers.cpp" />
     <ClCompile Include="src/SceneSweetheartSquad.cpp" />
     <ClCompile Include="src/shader/ComponentShaderBase.cpp" />
     <ClCompile Include="src/shader/ShaderComponentBlinn.cpp" />
@@ -218,7 +216,6 @@
     <ClInclude Include="include/Resource.h" />
     <ClInclude Include="include/ResourceManager.h" />
     <ClInclude Include="include/Scene.h" />
-    <ClInclude Include="include/Scene2D.h" />
     <ClInclude Include="include/AnimationRig.h" />
     <ClInclude Include="include/FpsDisplay.h" />
     <ClInclude Include="include/HorizontalLinearLayout.h" />
@@ -233,7 +230,6 @@
     <ClInclude Include="include/scenario/Conversation.h" />
     <ClInclude Include="include/scenario/Dialogue.h" />
     <ClInclude Include="include/scenario/Scenario.h" />
-    <ClInclude Include="include/scenario/Triggers.h" />
     <ClInclude Include="include/SceneSweetheartSquad.h" />
     <ClInclude Include="include/shader/ComponentShaderBase.h" />
     <ClInclude Include="include/shader/ShaderComponentBlinn.h" />

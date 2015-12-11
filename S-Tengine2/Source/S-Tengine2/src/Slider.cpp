@@ -11,6 +11,7 @@ Slider::Slider(BulletWorld * _world, float _defaultValue, float _valueMin, float
 	valueMin(_valueMin),
 	valueMax(_valueMax),
 	value(0),
+	prevValue(0),
 	horizontal(_horizontal),
 	stepped(false),
 	valueStep(0)
@@ -55,9 +56,9 @@ void Slider::update(Step * _step){
 	// update the slider's value based on the mouse's position when it is being pressed
 	if(isDown){
 		if(horizontal){
-			setValue((mouse->mouseX() - getWorldPos().x)/getWidth(true, true) * (valueMax - valueMin) + valueMin + valueStep*0.5f);
+			setValue((mouse->mouseX() - getWorldPos().x)/getWidth(true, false) * (valueMax - valueMin) + valueMin + valueStep*0.5f);
 		}else{
-			setValue((mouse->mouseY() - getWorldPos().y)/getHeight(true, true) * (valueMax - valueMin) + valueMin + valueStep*0.5f);
+			setValue((mouse->mouseY() - getWorldPos().y)/getHeight(true, false) * (valueMax - valueMin) + valueMin + valueStep*0.5f);
 		}
 	}
 	NodeUI::update(_step);
@@ -91,11 +92,19 @@ float Slider::getValue(){
 }
 
 void Slider::updateValue(){
+	float delta = value - prevValue;
+
+	// if the value hasn't changed, return early
+	if(abs(delta) < FLT_EPSILON){
+		return;
+	}
+	prevValue = value;
+
 	float v = (value - valueMin) / (valueMax - valueMin);
 	if(horizontal){
 		fill->setRationalWidth(v, this);
-		fill->background->mesh->setUV(0, 1-v, 0.0);
-		fill->background->mesh->setUV(3, 1-v, 1.0);
+		fill->background->mesh->setUV(2, v, 1.0);
+		fill->background->mesh->setUV(1, v, 0.0);
 	}else{
 		fill->setRationalHeight(v, this);
 		fill->background->mesh->setUV(0, 0.0, 1-v);
@@ -103,6 +112,11 @@ void Slider::updateValue(){
 	}
 	fill->background->mesh->dirty = true;
 	layout->invalidateLayout();
+	fill->invalidateLayout();
+
+	sweet::Event * e = new sweet::Event(std::string("change"));
+	e->setFloatData("delta", delta);
+	eventManager.triggerEvent(e);
 }
 
 void Slider::setStepped(float _valueStep){

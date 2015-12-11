@@ -102,6 +102,8 @@ void Shader::load(){
 		GLint isLinked = 0;
 		glGetProgramiv(programId, GL_LINK_STATUS, &isLinked);
 		if(isLinked == GL_FALSE){
+			std::stringstream ss;
+			ss << "Shader could not be loaded";
 			GLint maxLength = 0;
 			glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &maxLength);
 
@@ -114,8 +116,9 @@ void Shader::load(){
 
 			// Provide the infolog in whatever manner you deem best.
 			for(unsigned long int i = 0; i < infoLog.size(); ++i){
-				std::cout << infoLog.at(i);
+				ss << infoLog.at(i);
 			}
+			Log::error(ss.str());
 			// Exit with failure.
 		}
 		checkForGlError(0,__FILE__,__LINE__);
@@ -155,7 +158,7 @@ void Shader::unload(){
 			dirty = true;
 			isCompiled = false;
 		}else{
-			std::cout << "not actually a shader?" << std::endl << std::endl;
+			Log::error("not actually a shader?");
 		}
 	}
 	
@@ -174,7 +177,8 @@ GLuint Shader::compileShader(GLenum _shaderType, char const* _source, int _lengt
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &status);
 	checkForGlError(0,__FILE__,__LINE__);
 	if(status == GL_FALSE){
-		std::cout << "\tERROR: Shader could not be compiled." << std::endl << std::endl << _source << std::endl << std::endl;
+		std::stringstream ss;
+		ss << "Shader could not be compiled." << std::endl << std::endl << _source << std::endl << std::endl;
 		GLint maxLength = 0;
 		glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &maxLength);
 
@@ -183,11 +187,11 @@ GLuint Shader::compileShader(GLenum _shaderType, char const* _source, int _lengt
 		glGetShaderInfoLog(shaderId, maxLength, &maxLength, &errorLog[0]);
 
 		//Provide the infolog in whatever manner you deem best.
-		std::cout << "\t";
+		ss << "\t";
 		for(unsigned long int i = 0; i < errorLog.size(); ++i){
-			std::cout << errorLog.at(i);
+			ss << errorLog.at(i);
 		}
-		std::cout << std::endl;
+		Log::error(ss.str());
 		//Exit with failure.
 		glDeleteShader(shaderId); //Don't leak the shader.
 		return -1;

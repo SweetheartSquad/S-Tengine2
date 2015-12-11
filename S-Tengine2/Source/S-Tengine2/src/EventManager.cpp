@@ -2,9 +2,32 @@
 
 #include <EventManager.h>
 
+sweet::Event::Event(const char * _tag) :
+	tag(std::string(_tag))
+{
+}
 sweet::Event::Event(std::string _tag) :
 	tag(_tag)
 {
+}
+sweet::Event::Event(Json::Value _json) :
+	tag(_json["type"].asString())
+{
+	Json::Value argsJson = _json["args"];
+	Json::Value::Members argsJsonMembers = argsJson.getMemberNames();
+
+	// TODO: figure out if there's a way to distinguish between int and double in the json
+
+	for(auto j : argsJsonMembers){
+		Json::Value v = argsJson[j];
+		if(v.isDouble()){
+			setFloatData(j, v.asDouble());
+		}else if(v.isInt()){
+			setIntData(j, v.asInt());
+		}else if(v.isString()){
+			setStringData(j, v.asString());
+		}
+	}
 }
 
 int sweet::Event::getIntData(std::string _key, int _default) const{
@@ -40,6 +63,14 @@ sweet::EventManager::~EventManager(){
 		delete events.front();
 		events.pop();
 	}
+
+	while(childManagers.size() > 0){
+		removeChildManager(childManagers.back());
+	}
+
+	while(parentManagers.size() > 0){
+		removeParentManager(parentManagers.back());
+	}
 }
 
 void sweet::EventManager::triggerEvent(std::string _tag){
@@ -54,13 +85,54 @@ void sweet::EventManager::addEventListener(std::string _tag, std::function<void 
 	listeners[_tag].push_back(_listener);
 }
 
+void sweet::EventManager::handle(sweet::Event * _event){
+	std::vector<std::function<void(sweet::Event *)>> l = listeners[_event->tag];
+	for(std::function<void(sweet::Event *)> f : l){
+		f(_event);
+	}
+	for(sweet::EventManager * m : parentManagers){
+		m->handle(_event);
+	}
+}
+
 void sweet::EventManager::update(Step * _step){
 	while(events.size() > 0){
 		sweet::Event * e = events.front();
-		for(std::function<void(sweet::Event *)> f : listeners[e->tag]){
-			f(e);
-		}
+		handle(e);
+
 		delete e;
 		events.pop();
 	}
+}
+
+
+
+void sweet::EventManager::addChildManager(sweet::EventManager * _childManager){
+	// Add the child to the list of children and set it's parent to this
+	childManagers.push_back(_childManager);
+	_childManager->addParentManager(this);
+}
+
+signed long int sweet::EventManager::removeChildManager(sweet::EventManager * _childManager){
+	for(signed long int i = childManagers.size()-1; i >= 0; --i){
+		if(_childManager == childManagers.at(i)){
+			childManagers.erase(childManagers.begin() + i);
+			_childManager->removeParentManager(this);
+			return i;
+		}
+	}
+	return -1;
+}
+
+void sweet::EventManager::removeParentManager(sweet::EventManager * _parentManager){
+	for(signed long int i = parentManagers.size()-1; i >= 0; --i){
+		if(parentManagers.at(i) == _parentManager){
+			parentManagers.erase(parentManagers.begin() + i);
+			return;
+		}
+	}
+}
+
+void sweet::EventManager::addParentManager(sweet::EventManager * _parentManager){
+	parentManagers.push_back(_parentManager);
 }
