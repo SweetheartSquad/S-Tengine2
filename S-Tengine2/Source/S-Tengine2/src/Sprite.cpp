@@ -21,6 +21,23 @@ Sprite::Sprite(Shader * _shader) :
 {
 }
 
+Sprite::Sprite(Texture * _texture, Shader * _shader) :
+	MeshEntity(MeshFactory::getPlaneMesh(), _shader),
+	currentAnimation(nullptr),
+	playAnimation(true)
+{
+	setPrimaryTexture(_texture);
+}
+
+Sprite::Sprite(TextureSampler * _textureSampler, Shader * _shader) :
+	MeshEntity(MeshFactory::getPlaneMesh(), _shader),
+	currentAnimation(nullptr),
+	playAnimation(true)
+{
+	setPrimaryTexture(_textureSampler);
+}
+
+
 Sprite::~Sprite(){
 	for(auto i : animations){
 		delete i.second;
@@ -60,6 +77,27 @@ void Sprite::setPrimaryTexture(Texture * _texture) {
 		mesh->texturesDirty = true;
 		++_texture->referenceCount;
 	}
+	
+	float mag = std::max(mesh->getTexture(0)->width, mesh->getTexture(0)->height);
+
+	float width = _texture->width;
+	float height = _texture->height;
+	
+	float negHeight = -height/mag/2;
+	float negWidth  = -width/mag/2;
+	float posHeight =  height/mag/2;;
+	float posWidth  =  width/mag/2;;
+
+	mesh->vertices.at(0).x = negWidth;
+	mesh->vertices.at(0).y = posHeight;
+	mesh->vertices.at(1).x = posWidth;
+	mesh->vertices.at(1).y = posHeight;
+	mesh->vertices.at(2).x = posWidth;
+	mesh->vertices.at(2).y = negHeight;
+	mesh->vertices.at(3).x = negWidth;
+	mesh->vertices.at(3).y = negHeight;
+
+	mesh->dirty = true;
 }
 
 void Sprite::setPrimaryTexture(TextureSampler * _textureSampler) {

@@ -16,7 +16,10 @@ public:
 	std::map<std::string, SpriteSheetAnimation *> animations;
 	SpriteSheetAnimation * currentAnimation;
 	bool playAnimation;
+
 	explicit Sprite(Shader * _shader = nullptr);
+	explicit Sprite(Texture * _texture, Shader * _shader = nullptr);
+	explicit Sprite(TextureSampler *_textureSampler, Shader * _shader = nullptr);
 	virtual ~Sprite();
 
 	Vertex * getTopLeft();
