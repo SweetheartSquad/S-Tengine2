@@ -16,7 +16,6 @@ public:
 	std::map<std::string, SpriteSheetAnimation *> animations;
 	SpriteSheetAnimation * currentAnimation;
 	bool playAnimation;
-
 	explicit Sprite(Shader * _shader = nullptr);
 	virtual ~Sprite();
 
@@ -31,6 +30,9 @@ public:
 	virtual void update(Step* _step) override;
 	void addAnimation(std::string _name, SpriteSheetAnimation * _animation, bool _makeCurrent);
 	void setCurrentAnimation(std::string _name);
+	
+	void setPrimaryTexture(Texture * _texture);
+	void setPrimaryTexture(TextureSampler * _textureSampler);
 	
 	virtual void load() override;
 	virtual void unload() override;

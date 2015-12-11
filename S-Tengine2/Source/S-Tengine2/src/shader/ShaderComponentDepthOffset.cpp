@@ -41,7 +41,7 @@ void ShaderComponentDepthOffset::configureUniforms(sweet::MatrixStack* _matrixSt
 		currentCycle = sweet::step.cycles;
 		depthOffset = 0.000000000f;
 	}else {
-		depthOffset -= 0.001f;
+		depthOffset -= 0.00001f;
 	}
 	glUniform1f(glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_DEPTH_OFFSET.c_str()), depthOffset);
 }
