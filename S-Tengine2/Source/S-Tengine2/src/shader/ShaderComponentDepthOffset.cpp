@@ -5,9 +5,11 @@
 #include <shader/Shader.h>
 #include <Sweet.h>
 
+float sweet::depthOffset = 0.0000000;
+unsigned long long sweet::currentCycle = 0;
+
 ShaderComponentDepthOffset::ShaderComponentDepthOffset(Shader * _shader) :
-	ShaderComponent(_shader),
-	depthOffset(0.0000000)
+	ShaderComponent(_shader)
 {
 }
 
@@ -37,11 +39,11 @@ std::string ShaderComponentDepthOffset::getOutColorMod() {
 }
 
 void ShaderComponentDepthOffset::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) {
-	if(currentCycle != sweet::step.cycles) {
-		currentCycle = sweet::step.cycles;
-		depthOffset = 0.000000000f;
+	if(sweet::currentCycle != sweet::step.cycles) {
+		sweet::currentCycle = sweet::step.cycles;
+		sweet::depthOffset = 0.000000000f;
 	}else {
-		depthOffset -= 0.00001f;
+		sweet::depthOffset -= 0.00001f;
 	}
-	glUniform1f(glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_DEPTH_OFFSET.c_str()), depthOffset);
+	glUniform1f(glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_DEPTH_OFFSET.c_str()), sweet::depthOffset);
 }

@@ -21,14 +21,7 @@ TextLabel::TextLabel(BulletWorld* _world, Font* _font, Shader* _textShader, floa
 }
 
 void TextLabel::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
-	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
-	if(depth == GL_TRUE){
-		glDisable(GL_DEPTH_TEST);
-	}
 	HorizontalLinearLayout::render(_matrixStack, _renderOptions);
-	if(depth == GL_TRUE){
-		glEnable(GL_DEPTH_TEST);
-	}
 }
 
 void TextLabel::update(Step * _step){

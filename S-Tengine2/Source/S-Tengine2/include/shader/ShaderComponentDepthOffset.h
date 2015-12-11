@@ -2,8 +2,14 @@
 
 #include <shader/ShaderComponent.h>
 
+namespace sweet{
+	extern float depthOffset;
+	extern unsigned long long currentCycle;
+}
+
 class ShaderComponentDepthOffset : public ShaderComponent{
 public:
+
 	ShaderComponentDepthOffset(Shader * _shader);
 	~ShaderComponentDepthOffset();
 	
@@ -13,8 +19,4 @@ public:
 	std::string getFragmentBodyString() override;
 	std::string getOutColorMod() override;
 	void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
-
-private:
-	float depthOffset;
-	unsigned long long currentCycle;
 };

@@ -24,6 +24,7 @@
 #include <StandardFrameBuffer.h>
 #include <algorithm>
 #include <Layout.h>
+#include <shader/ShaderComponentDepthOffset.h>
 
 ComponentShaderBase * NodeUI::bgShader = nullptr;
 
@@ -55,6 +56,7 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 		bgShader->addComponent(new ShaderComponentTexture(bgShader));
 		bgShader->addComponent(new ShaderComponentTint(bgShader));
 		bgShader->addComponent(new ShaderComponentAlpha(bgShader));
+		bgShader->addComponent(new ShaderComponentDepthOffset(bgShader));
 		bgShader->compileShader();
 	}
 	background->setShader(bgShader, true);

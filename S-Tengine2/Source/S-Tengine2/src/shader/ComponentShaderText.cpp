@@ -2,6 +2,7 @@
 
 #include <shader\ComponentShaderText.h>
 #include <shader\ShaderComponentMVP.h>
+#include <shader/ShaderComponentDepthOffset.h>
 
 ComponentShaderText::ComponentShaderText(bool _autoRelease) :
 	ComponentShaderBase(_autoRelease),
@@ -9,6 +10,7 @@ ComponentShaderText::ComponentShaderText(bool _autoRelease) :
 {
 	addComponent(textComponent);
 	addComponent(new ShaderComponentMVP(this));
+	addComponent(new ShaderComponentDepthOffset(this));
 	compileShader();
 	load();
 }
