@@ -10,6 +10,7 @@
 #include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentMVP.h>
 #include <Log.h>
+#include <AntTweakBar.h>
 
 MeshInterface * Transform::transformIndicator = nullptr;
 ComponentShaderBase * Transform::transformShader = nullptr;
@@ -415,4 +416,61 @@ void Transform::printHierarchy(unsigned long int _startDepth, bool _last, std::v
 	if(!_last){
 		_p.pop_back();
 	}
+}
+
+void Transform::createAntTweakBarWindow(std::string _name) {
+	if(sweet::antTweakBarInititialized){
+		TwBar * bar = TwNewBar(_name.c_str());
+		TwAddVarCB(bar, "trans", TW_TYPE_DIR3F, twSetTranslation, twGetTranslation, this, "label=Translation");
+		TwAddVarCB(bar, "scale", TW_TYPE_DIR3F, twSetScale, twGetScale, this, "label=Scale");
+		TwAddVarCB(bar, "rotate", TW_TYPE_QUAT4F, twSetRotation, twGetRotation, this, "label=Rotation");
+	}
+}
+
+void Transform::addToAntTweakBar(TwBar* _bar, std::string _name) {
+	if(sweet::antTweakBarInititialized){
+		TwAddSeparator(_bar, _name.c_str(), "");
+		TwAddVarCB(_bar, "trans", TW_TYPE_DIR3F, twSetTranslation, twGetTranslation, this, "label=Translation");
+		TwAddVarCB(_bar, "scale", TW_TYPE_DIR3F, twSetScale, twGetScale, this, "label=Scale");
+		TwAddVarCB(_bar, "rotate", TW_TYPE_QUAT4F, twSetRotation, twGetRotation, this, "label=Rotation");
+	}
+}
+
+void TW_CALL Transform::twSetTranslation(const void * value, void * clientData) {
+	((Transform *)clientData)->translate(((float*)value)[0], ((float*)value)[1], ((float*)value)[2], false);
+}
+
+void TW_CALL Transform::twGetTranslation(void * value, void * clientData) {
+	glm::vec3 trans = ((Transform *)clientData)->getTranslationVector();
+	((float *)value)[0] = trans.x;
+	((float *)value)[1] = trans.y;
+	((float *)value)[2] = trans.z;
+}
+
+void TW_CALL Transform::twSetScale(const void * value, void * clientData) {
+	((Transform *)clientData)->scale(((float*)value)[0], ((float*)value)[1], ((float*)value)[2], false);
+}
+
+void TW_CALL Transform::twGetScale(void * value, void * clientData) {
+	glm::vec3 scale = ((Transform *)clientData)->getScaleVector();
+	((float *)value)[0] = scale.x;
+	((float *)value)[1] = scale.y;
+	((float *)value)[2] = scale.z;
+}
+
+void TW_CALL Transform::twSetRotation(const void * value, void * clientData) {
+	glm::quat rot = ((Transform *)clientData)->getOrientationQuat();
+	rot.x = ((float*)value)[0];
+	rot.y = ((float*)value)[1];
+	rot.z = ((float*)value)[2];
+	rot.w = ((float*)value)[3];
+	((Transform *)clientData)->setOrientation(rot);
+}
+
+void TW_CALL Transform::twGetRotation(void * value, void * clientData) {
+	glm::quat rot = ((Transform *)clientData)->getOrientationQuat();
+	((float *)value)[0] = rot.x;
+	((float *)value)[1] = rot.y;
+	((float *)value)[2] = rot.z;
+	((float *)value)[3] = rot.w;
 }

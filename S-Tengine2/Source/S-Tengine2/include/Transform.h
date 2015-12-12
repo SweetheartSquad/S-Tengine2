@@ -15,6 +15,8 @@
 #include <node/NodeRenderable.h>
 #include <node/NodeUpdatable.h>
 
+#include <AntTweakBar.h>
+
 class MeshInterface;
 class ComponentShaderBase;
 
@@ -57,6 +59,14 @@ private:
 	
 	// whether the transform indicator/shader have been initialized
 	static bool staticInit;
+
+	static void TW_CALL twSetTranslation(const void *value, void *clientData);
+	static void TW_CALL twGetTranslation(void *value, void *clientData);
+	static void TW_CALL twSetScale(const void *value, void *clientData);
+	static void TW_CALL twGetScale(void *value, void *clientData);
+	static void TW_CALL twSetRotation(const void *value, void *clientData);
+	static void TW_CALL twGetRotation(void *value, void *clientData);
+
 public:
 	// whether to draw the transform indicator on render
 	static bool drawTransforms;
@@ -218,4 +228,7 @@ public:
 
 	// prints the hierarchy to the console in ASCII
 	virtual void printHierarchy(unsigned long int _startDepth = 0, bool _last = true, std::vector<unsigned long int> & _p = std::vector<unsigned long int>(0));
+
+	virtual void createAntTweakBarWindow(std::string _name);
+	virtual void addToAntTweakBar(TwBar * _bar, std::string _name);
 };

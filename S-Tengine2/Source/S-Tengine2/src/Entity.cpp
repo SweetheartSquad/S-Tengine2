@@ -5,6 +5,7 @@
 #include <MatrixStack.h>
 #include <node/NodeResource.h>
 #include <Sprite.h>
+#include <AntTweakBar.h>
 
 #include <GL\glew.h>
 

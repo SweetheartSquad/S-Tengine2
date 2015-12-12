@@ -37,7 +37,6 @@ public:
 	virtual void addParent(Transform * _parent) override;
 	virtual void removeParent(Transform * _parent) override;
 
-
 	// prints the hierarchy to the console in ASCII
 	virtual void printHierarchy(unsigned long int _startDepth = 0, bool _last = true, std::vector<unsigned long int> & _p = std::vector<unsigned long int>(0)) override;
 

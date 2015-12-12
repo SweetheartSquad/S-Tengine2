@@ -63,6 +63,13 @@ void sweet::keyCallback(GLFWwindow * _window, int _key, int _scancode, int _acti
 		}
 	}
 }
+
+void sweet::charCallback(GLFWwindow* _window, unsigned int _key) {
+	if(sweet::antTweakBarInititialized) {
+		TwEventCharGLFW(_key, GLFW_PRESS);
+	}
+}
+
 void sweet::mouseButtonCallback(GLFWwindow * _window, int _button, int _action, int _mods){
 	if(!sweet::antTweakBarInititialized || !TwEventMouseButtonGLFW(_button, _action) ) {
 		Mouse * mouse = &Mouse::getInstance();
@@ -92,7 +99,16 @@ void sweet::attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _
 	// this prevents mouse events which took place on the window border from re-capturing the mouse
 	if(x >= 0 && x <= w
 		&& y >= 0 && y <= h){
-		glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		if(antTweakBarInititialized) {
+			if(drawAntTweakBar) {
+				glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			}else{
+				glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			}
+		}else {
+			glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+
 		glfwSetKeyCallback(_window, keyCallback);
 		glfwSetMouseButtonCallback(_window, mouseButtonCallback);
 		glfwSetCursorPosCallback(_window, mousePositionCallback);
@@ -206,6 +222,8 @@ void sweet::initAntTweakBar() {
 
 	TwInit(TW_OPENGL, NULL);
 	TwWindowSize(dimens.x, dimens.y);
+
+	glfwSetCharCallback(glfwGetCurrentContext(), charCallback);
 
 	sweet::antTweakBarInititialized = true;
 }
