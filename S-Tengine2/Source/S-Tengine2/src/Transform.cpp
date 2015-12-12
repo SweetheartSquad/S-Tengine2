@@ -11,6 +11,8 @@
 #include <shader\ShaderComponentMVP.h>
 #include <Log.h>
 #include <AntTweakBar.h>
+#include <ctime>
+#include <NumberUtils.h>
 
 MeshInterface * Transform::transformIndicator = nullptr;
 ComponentShaderBase * Transform::transformShader = nullptr;
@@ -418,21 +420,27 @@ void Transform::printHierarchy(unsigned long int _startDepth, bool _last, std::v
 	}
 }
 
-void Transform::createAntTweakBarWindow(std::string _name) {
+TwBar * Transform::createAntTweakBarWindow(std::string _name) {
 	if(sweet::antTweakBarInititialized){
+		// Names must be unique
+		double t = sweet::step.time + sweet::NumberUtils::randomFloat(1, 1000);
 		TwBar * bar = TwNewBar(_name.c_str());
-		TwAddVarCB(bar, "trans", TW_TYPE_DIR3F, twSetTranslation, twGetTranslation, this, "label=Translation");
-		TwAddVarCB(bar, "scale", TW_TYPE_DIR3F, twSetScale, twGetScale, this, "label=Scale");
-		TwAddVarCB(bar, "rotate", TW_TYPE_QUAT4F, twSetRotation, twGetRotation, this, "label=Rotation");
+		TwAddVarCB(bar, std::string(std::to_string(t) + "trans").c_str(),  TW_TYPE_DIR3F, twSetTranslation, twGetTranslation, this, "label=Translation");
+		TwAddVarCB(bar, std::string(std::to_string(t) + "scale").c_str(),  TW_TYPE_DIR3F, twSetScale, twGetScale, this, "label=Scale");
+		TwAddVarCB(bar, std::string(std::to_string(t) + "rotate").c_str(), TW_TYPE_QUAT4F, twSetRotation, twGetRotation, this, "label=Rotation");
+		return bar;
 	}
+	return nullptr;
 }
 
 void Transform::addToAntTweakBar(TwBar* _bar, std::string _name) {
 	if(sweet::antTweakBarInititialized){
-		TwAddSeparator(_bar, _name.c_str(), "");
-		TwAddVarCB(_bar, "trans", TW_TYPE_DIR3F, twSetTranslation, twGetTranslation, this, "label=Translation");
-		TwAddVarCB(_bar, "scale", TW_TYPE_DIR3F, twSetScale, twGetScale, this, "label=Scale");
-		TwAddVarCB(_bar, "rotate", TW_TYPE_QUAT4F, twSetRotation, twGetRotation, this, "label=Rotation");
+		// Names must be unique
+		TwAddSeparator(_bar, _name.c_str(), std::string("label="+_name).c_str());
+		double t = sweet::step.time + sweet::NumberUtils::randomFloat(1, 1000);
+		TwAddVarCB(_bar, std::string(std::to_string(t) + "trans").c_str(),  TW_TYPE_DIR3F, twSetTranslation, twGetTranslation, this, "label=Translation");
+		TwAddVarCB(_bar, std::string(std::to_string(t) + "scale").c_str(),  TW_TYPE_DIR3F, twSetScale, twGetScale, this, "label=Scale");
+		TwAddVarCB(_bar, std::string(std::to_string(t) + "rotate").c_str(), TW_TYPE_QUAT4F, twSetRotation, twGetRotation, this, "label=Rotation");
 	}
 }
 

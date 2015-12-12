@@ -229,6 +229,6 @@ public:
 	// prints the hierarchy to the console in ASCII
 	virtual void printHierarchy(unsigned long int _startDepth = 0, bool _last = true, std::vector<unsigned long int> & _p = std::vector<unsigned long int>(0));
 
-	virtual void createAntTweakBarWindow(std::string _name);
+	virtual TwBar * createAntTweakBarWindow(std::string _name);
 	virtual void addToAntTweakBar(TwBar * _bar, std::string _name);
 };
