@@ -21,6 +21,7 @@
 #include <System.h>
 
 #include <FileUtils.h>
+#include <AntTweakBar.h>
 
 Step sweet::step;
 std::string sweet::title = "S-Tengine2";
@@ -30,9 +31,12 @@ double sweet::lastTimestamp = 0;
 double sweet::deltaTimeCorrection = 1;
 
 bool sweet::fullscreen = false;
+bool sweet::antTweakBarInititialized = false;
+bool sweet::drawAntTweakBar = false;
 
 FT_Library sweet::freeTypeLibrary = nullptr;
 GLFWwindow * sweet::currentContext = nullptr;
+
 
 // Nvidia optiums fix to force discrete graphics
  extern "C" {  
@@ -46,29 +50,35 @@ void sweet::setGlfwWindowHints(){
 }
 
 void sweet::keyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods){
-	Keyboard * keyboard = &Keyboard::getInstance();
-	keyboard->alt = (_mods & GLFW_MOD_ALT) != 0;
-	keyboard->shift = (_mods & GLFW_MOD_SHIFT) != 0;
-	keyboard->control = (_mods & GLFW_MOD_CONTROL) != 0;
-	keyboard->super = (_mods & GLFW_MOD_SUPER) != 0;
-	if(_action == GLFW_PRESS){
-		keyboard->keyDownListener(_key);
-	}else if(_action == GLFW_RELEASE){
-		keyboard->keyUpListener(_key);
+	if(!sweet::antTweakBarInititialized || !TwEventKeyGLFW(_key, _action) ) {
+		Keyboard * keyboard = &Keyboard::getInstance();
+		keyboard->alt = (_mods & GLFW_MOD_ALT) != 0;
+		keyboard->shift = (_mods & GLFW_MOD_SHIFT) != 0;
+		keyboard->control = (_mods & GLFW_MOD_CONTROL) != 0;
+		keyboard->super = (_mods & GLFW_MOD_SUPER) != 0;
+		if(_action == GLFW_PRESS){
+			keyboard->keyDownListener(_key);
+		}else if(_action == GLFW_RELEASE){
+			keyboard->keyUpListener(_key);
+		}
 	}
 }
 void sweet::mouseButtonCallback(GLFWwindow * _window, int _button, int _action, int _mods){
-	Mouse * mouse = &Mouse::getInstance();
-	if(_action == GLFW_PRESS){
-		mouse->mouseDownListener(_button);
-	}else if(_action == GLFW_RELEASE){
-		mouse->mouseUpListener(_button);
+	if(!sweet::antTweakBarInititialized || !TwEventMouseButtonGLFW(_button, _action) ) {
+		Mouse * mouse = &Mouse::getInstance();
+		if(_action == GLFW_PRESS){
+			mouse->mouseDownListener(_button);
+		}else if(_action == GLFW_RELEASE){
+			mouse->mouseUpListener(_button);
+		}
 	}
 }
 void sweet::mousePositionCallback(GLFWwindow *_window, double _x, double _y){
-	Mouse * mouse = &Mouse::getInstance();
-	glm::uvec2 sd = getScreenDimensions();
-	mouse->mousePositionListener(_x, sd.y - _y);
+	if(!sweet::antTweakBarInititialized || !TwEventMousePosGLFW(_x, _y) ) {
+      	Mouse * mouse = &Mouse::getInstance();
+		glm::uvec2 sd = getScreenDimensions();
+		mouse->mousePositionListener(_x, sd.y - _y);
+    }
 }
 
 void sweet::attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _action, int _mods){
@@ -117,11 +127,7 @@ GLFWwindow * sweet::initWindow(){
 		glfwTerminate();
 		throw "some sort of window error?";
 	}
-	glfwSetKeyCallback(window, keyCallback);
-	glfwSetMouseButtonCallback(window, mouseButtonCallback);
-	glfwSetCursorPosCallback(window, mousePositionCallback);
-	glfwSetWindowFocusCallback(window, windowFocusCallback);
-
+	
 	glfwSetWindowPos(window, 10, 50);
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -151,7 +157,6 @@ void sweet::initialize(std::string _title){
 	// load configuration file
 	config.load("data/config.json");
 	
-	
 	sweet::currentContext = sweet::initWindow();
 	glfwMakeContextCurrent(sweet::currentContext);
 
@@ -163,26 +168,65 @@ void sweet::initialize(std::string _title){
 		throw;
 	}
 
-	// move mouse to the middle of the window
-	int screenHeight, screenWidth;
-	glfwGetWindowSize(sweet::currentContext, &screenWidth, &screenHeight);
-	glfwSetCursorPos(sweet::currentContext, screenWidth/2, screenHeight/2);
-
 	// Initialize freetype
 	if(FT_Init_FreeType(&freeTypeLibrary) != 0) {
 		std::cerr << "Couldn't initialize FreeType library\n";
 		throw;
 	}
+
+#ifdef _DEBUG
+	ST_LOG_INFO("Initializing AntTweakBar");
+	sweet::initAntTweakBar();
+#endif
+
+	initializeInputCallbacks();
+
+	// move mouse to the middle of the window
+	int screenHeight, screenWidth;
+	glfwGetWindowSize(sweet::currentContext, &screenWidth, &screenHeight);
+	glfwSetCursorPos(sweet::currentContext, screenWidth/2, screenHeight/2);
+
 	Log::info("*** Sweet Initialization ***");
 }
 
 void sweet::destruct(){
+	if(antTweakBarInititialized) {
+		TwTerminate();
+	}
 	glfwTerminate();
 
 	FT_Done_FreeType(freeTypeLibrary);
-	
+
 	NodeOpenAL::destruct();
 	Log::info("*** Sweet Destruction ***");
+}
+
+void sweet::initAntTweakBar() {
+	glm::uvec2 dimens = sweet::getScreenDimensions();
+
+	TwInit(TW_OPENGL, NULL);
+	TwWindowSize(dimens.x, dimens.y);
+
+	sweet::antTweakBarInititialized = true;
+}
+
+void sweet::toggleAntTweakBar() {
+	if(sweet::antTweakBarInititialized){
+		sweet::drawAntTweakBar = !sweet::drawAntTweakBar;
+		if(drawAntTweakBar) {
+			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}else {
+			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+	}
+}
+
+void sweet::initializeInputCallbacks() {
+	GLFWwindow * window = glfwGetCurrentContext();
+	glfwSetKeyCallback(window, keyCallback);
+	glfwSetMouseButtonCallback(window, mouseButtonCallback);
+	glfwSetCursorPosCallback(window, mousePositionCallback);
+	glfwSetWindowFocusCallback(window, windowFocusCallback);
 }
 
 /////////// Delta Time Begin //////////////

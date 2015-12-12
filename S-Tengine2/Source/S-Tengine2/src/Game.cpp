@@ -19,6 +19,7 @@
 // for screenshots
 #include <ctime>
 #include <stb/stb_image_write.h>
+#include <AntTweakBar.h>
 
 Game::Game(bool _isRunning, std::pair<std::string, Scene *> _firstScene, bool _splashScreen) :
 	splashScreen(_splashScreen),
@@ -224,6 +225,9 @@ void Game::draw(void){
 	ro.kc_active = kc_active;
 	if(currentScene != nullptr){
 		currentScene->render(&ms, &ro);
+	}
+	if(sweet::drawAntTweakBar && sweet::antTweakBarInititialized) {
+		TwDraw(); 
 	}
 }
 

@@ -42,6 +42,16 @@ namespace sweet{
 	* Whether the main window is fullscreen or not 
 	*/
 	extern bool fullscreen;
+
+	/**
+	* Whether AntTweakBar has been initialized or not
+	*/
+	extern bool antTweakBarInititialized;
+
+	/**
+	* Whether AntTweakBar should be drawn by game or not
+	*/
+	extern bool drawAntTweakBar;
 	
 	/** 
 	* Sets the window properties that need to be initialized before window creation
@@ -68,7 +78,18 @@ namespace sweet{
 	*/
 	void destruct();
 
+	/**
+	* Intitializes ant tweak bar
+	*/
+	void initAntTweakBar();
 
+	/**
+	* Flips drawAntTweakBar 
+	* Sets the cursor mode so that ant tweak bar works properly
+	*/
+	void toggleAntTweakBar();
+
+	void initializeInputCallbacks();
 	void setGlfwWindowHints();
 	void keyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods);
 	void mouseButtonCallback(GLFWwindow * _window, int _button, int _action, int _mods);
