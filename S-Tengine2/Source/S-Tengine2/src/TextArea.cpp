@@ -43,6 +43,7 @@ void TextArea::setWrapMode(WrapMode _wrapMode){
 }
 
 void TextArea::setText(std::wstring _text){
+	
 	text = _text;
 	updateRequired = true;
 	invalidateLayout();
@@ -86,6 +87,7 @@ TextLabel * TextArea::getNewLine() {
 	}
 	usedLines.push_back(line);
 	addChild(line);
+	line->wrapMode = wrapMode;
 	return line;
 }
 

@@ -68,7 +68,7 @@ void TextLabel::updateText(){
 	if(wrapMode == kWORD) {
 		std::vector<std::wstring> words = StringUtils::split(textAll, ' ');
 		for(unsigned long int i = 0; i < words.size(); ++i) {
-			std::wstring & word = words.at(i);
+			std::wstring word = words.at(i);
 			float width = 0.f;
 			for(auto c : word) {
 				width += font->getGlyphWidthHeight(c).x;
