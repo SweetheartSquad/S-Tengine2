@@ -2,22 +2,41 @@
 
 #include "SpriteSheet.h"
 #include "Texture.h"
-#include "Rectangle.h"
+#include <SpriteSheetAnimation.h>
+#include <Log.h>
 
 SpriteSheet::SpriteSheet(Texture* _texture){
 	texture = _texture;
+	++texture->referenceCount;
 }
 
 SpriteSheet::~SpriteSheet(){
+	for(auto i : animations){
+		delete i.second;
+	}
+	animations.clear();
+	texture->decrementAndDelete();
 }
 
-void SpriteSheet::pushFrame(int _column, int _row, float _width, float _height){
-	float u, v, rW, rH;
-	rW = _width / texture->width;
-	rH = _height / texture->height;
-	u = rW;
-	v = rH;
-	u *= _column;
-	v *= _row;
-	frames.push_back(sweet::Rectangle(u, v, rW, rH));
+void SpriteSheet::load(){
+	texture->load();
+	NodeLoadable::load();
+}
+
+void SpriteSheet::unload(){
+	texture->unload();
+	NodeLoadable::unload();
+}
+
+void SpriteSheet::addAnimation(std::string _name, SpriteSheetAnimation* _animation){
+	auto res = animations.insert(std::pair<std::string, SpriteSheetAnimation * >(_name, _animation));
+	if(!res.second){
+		Log::error("Animation with name \""+_name+"\" already exists; not added.");
+	}
+}
+
+void SpriteSheet::addAnimation(std::string _name, unsigned long int _start, unsigned long int _end, float _width, float _height, float _secondsPerFrame){
+	SpriteSheetAnimation * ssa = new SpriteSheetAnimation(_secondsPerFrame);
+	ssa->pushFramesInRange(_start, _end, _width, _height, texture->width, texture->height);
+	addAnimation(_name, ssa);
 }

@@ -7,11 +7,8 @@
 #include "Rectangle.h"
 #include "Texture.h"
 
-SpriteSheetAnimation::SpriteSheetAnimation(Texture * _texture, float _secondsPerFrame):
-	NodeUpdatable(),
-	NodeLoadable(),
+SpriteSheetAnimation::SpriteSheetAnimation(float _secondsPerFrame) :
 	frameIndices(Animation<unsigned long int>(&currentFrame)),
-	texture(_texture),
 	currentFrame(0),
 	secondsPerFrame(_secondsPerFrame)
 {
@@ -28,21 +25,17 @@ void SpriteSheetAnimation::update(Step* _step){
 	}
 }
 
-void SpriteSheetAnimation::pushFrame(unsigned long int _column, unsigned long int _row, float _width, float _height){
+void SpriteSheetAnimation::pushFrame(unsigned long int _column, unsigned long int _row, float _width, float _height, float _textureWidth, float _textureHeight){
 	float u, v, rW, rH;
-	rW = _width / texture->width;
-	rH = _height / texture->height;
+	rW = _width / _textureWidth;
+	rH = _height / _textureHeight;
 	u = rW * _column;
 	v = rH * _row;
 	frames.push_back(sweet::Rectangle(u, v, rW, rH));
 	frameIndices.tweens.push_back(new Tween<unsigned long int>(secondsPerFrame, 1, Easing::kLINEAR));
 }
 
-void SpriteSheetAnimation::pushMultipleFrames(std::vector<unsigned long int> _frames, float _width, float _height){
-	pushMultipleFrames(_frames, _width, _height, texture->width);
-}
-
-void SpriteSheetAnimation::pushMultipleFrames(std::vector<unsigned long int> _frames, float _width, float _height, float _textureWidth){
+void SpriteSheetAnimation::pushMultipleFrames(std::vector<unsigned long int> _frames, float _width, float _height, float _textureWidth, float _textureHeight){
 	int curCol = 0;
 	int curRow = 0;
 	int colOffset = 0;
@@ -56,21 +49,11 @@ void SpriteSheetAnimation::pushMultipleFrames(std::vector<unsigned long int> _fr
 			}
 			colOffset += colInRow;
 		}
-		pushFrame(curCol - colOffset, curRow, _width, _height);
+		pushFrame(curCol - colOffset, curRow, _width, _height, _textureWidth, _textureHeight);
 	}
 }
 
-void SpriteSheetAnimation::load(){
-	NodeLoadable::load();
-	texture->load();
-}
-
-void SpriteSheetAnimation::unload(){
-	NodeLoadable::unload();
-	texture->unload();
-}
-
-void SpriteSheetAnimation::pushFramesInRange(unsigned long int _min, unsigned long int _max, float _width, float _height, float _textureWidth){
+void SpriteSheetAnimation::pushFramesInRange(unsigned long int _min, unsigned long int _max, float _width, float _height, float _textureWidth, float _textureHeight){
 	int curCol = _min - 1;
 	int curRow = 0;
 	int colOffset = 0;
@@ -84,10 +67,6 @@ void SpriteSheetAnimation::pushFramesInRange(unsigned long int _min, unsigned lo
 			}
 			colOffset += colInRow;
 		}
-		pushFrame(curCol - colOffset, curRow, _width, _height);
+		pushFrame(curCol - colOffset, curRow, _width, _height, _textureWidth, _textureHeight);
 	}
-}
-
-void SpriteSheetAnimation::pushFramesInRange(unsigned long int _min, unsigned long int _max, float _width, float _height){
-	pushFramesInRange(_min, _max, _width, _height, texture->width);
 }

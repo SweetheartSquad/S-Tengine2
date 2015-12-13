@@ -3,6 +3,7 @@
 #include "Sprite.h"
 #include "Rectangle.h"
 #include "Point.h"
+#include "SpriteSheet.h"
 #include "SpriteSheetAnimation.h"
 #include "Rectangle.h"
 #include "Box2DSuperSprite.h"
@@ -39,10 +40,7 @@ Sprite::Sprite(TextureSampler * _textureSampler, Shader * _shader) :
 
 
 Sprite::~Sprite(){
-	for(auto i : animations){
-		delete i.second;
-	}
-	animations.clear();
+	// TODO: memory management of spritesheet?
 }
 
 void Sprite::update(Step* _step){
@@ -51,21 +49,11 @@ void Sprite::update(Step* _step){
 		mesh->dirty = true;
 		currentAnimation->update(_step);
 		setUvs(currentAnimation->frames.at(currentAnimation->currentFrame));
-		if(mesh->textures.size() > 0){
-			mesh->textures.at(0) = currentAnimation->texture;
-		}else {
-			mesh->pushTexture2D(currentAnimation->texture);
+		while(mesh->textures.size() > 0){
+			mesh->textures.back()->decrementAndDelete();
+			mesh->textures.pop_back();
 		}
-	}
-}
-
-void Sprite::addAnimation(std::string _name, SpriteSheetAnimation* _animation, bool _makeCurrent){
-	auto res = animations.insert(std::pair<std::string, SpriteSheetAnimation * >(_name, _animation));
-	if(!res.second){
-		Log::error("Animation with name "+_name+" already exists; not added.");
-	}
-	if(_makeCurrent){
-		currentAnimation = _animation;
+		mesh->pushTexture2D(spriteSheet->texture);
 	}
 }
 
@@ -143,10 +131,18 @@ void Sprite::setPrimaryTexture(TextureSampler * _textureSampler) {
 	mesh->dirty = true;
 }
 
+void Sprite::setSpriteSheet(SpriteSheet * _spriteSheet, std::string _currentAnimation){
+	spriteSheet = _spriteSheet;
+	setCurrentAnimation(_currentAnimation);
+}
+
+
 void Sprite::setCurrentAnimation(std::string _name){
-	auto anim = animations.find(_name);
-	if(anim != animations.end()){
+	auto anim = spriteSheet->animations.find(_name);
+	if(anim != spriteSheet->animations.end()){
 		currentAnimation = anim->second;
+	}else{
+		Log::error("Animation with name \""+_name+"\" does not exist.");
 	}
 }
 
@@ -187,23 +183,4 @@ void Sprite::setUvs(sweet::Rectangle _rect){
 	getBottomRight()->v  = _rect.getBottomRight().y;
 	getBottomLeft()->u  = _rect.getBottomLeft().x;
 	getBottomLeft()->v  = _rect.getBottomLeft().y;
-}
-
-void Sprite::load(){
-	if(!loaded){
-		for(auto s : animations) {
-			s.second->load();
-		}
-		
-	}
-	MeshEntity::load();
-}
-
-void Sprite::unload(){
-	if(loaded){
-		for(auto s : animations) {
-			s.second->unload();
-		}	
-	}
-	MeshEntity::unload();
 }

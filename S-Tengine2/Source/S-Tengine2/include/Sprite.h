@@ -10,10 +10,11 @@ class TextureSampler;
 class SpriteSheetAnimation;
 class Rectangle;
 class SpriteMesh;
+class SpriteSheet;
 
 class Sprite : public MeshEntity{
 public:
-	std::map<std::string, SpriteSheetAnimation *> animations;
+	SpriteSheet * spriteSheet;
 	SpriteSheetAnimation * currentAnimation;
 	bool playAnimation;
 
@@ -31,12 +32,10 @@ public:
 	float _bottomLeftU, float _bottomLeftV, float _bottomRightU, float _bottomRightV);
 	void setUvs(sweet::Rectangle _rect);
 	virtual void update(Step* _step) override;
-	void addAnimation(std::string _name, SpriteSheetAnimation * _animation, bool _makeCurrent);
 	void setCurrentAnimation(std::string _name);
 	
 	void setPrimaryTexture(Texture * _texture);
 	void setPrimaryTexture(TextureSampler * _textureSampler);
-	
-	virtual void load() override;
-	virtual void unload() override;
+
+	void setSpriteSheet(SpriteSheet * _spriteSheet, std::string _currentAnimation);
 };
