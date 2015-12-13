@@ -28,22 +28,6 @@ void Box2DWorld::update(Step* _step){
 	timeStepAccumulator = 0;
 }
 
-void Box2DWorld::addToWorld(NodeBox2DBody * _nodeBox2D, int _userDataGroup){
-	if(_nodeBox2D->defaultFixture){
-		b2PolygonShape dynamicBox;
-		glm::vec3 sv = _nodeBox2D->parents.at(0)->getScaleVector();
-		dynamicBox.SetAsBox(1.0f * std::abs(sv.x), 1.0f * std::abs(sv.y));	
-		b2FixtureDef fixtureDef;
-		fixtureDef.shape = &dynamicBox;
-		fixtureDef.userData = reinterpret_cast<void *>(_userDataGroup);
-		if(_nodeBox2D->bodyDef.type != b2_staticBody){
-			  fixtureDef.density = 1.0f;
-			  fixtureDef.friction = 0.8f;
-		}
-		_nodeBox2D->body->CreateFixture(&fixtureDef);
-	}
-}
-
 Box2DDebugDrawer* Box2DWorld::createDebugDrawer() {
 	Box2DDebugDrawer * box2dDebug = new Box2DDebugDrawer(this);
 	box2dDebug->drawing = true;

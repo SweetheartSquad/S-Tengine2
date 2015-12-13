@@ -21,11 +21,9 @@ public:
 	~Box2DWorld();
 
 	void update(Step* _step) override;
-
-	void addToWorld(NodeBox2DBody * _nodeBox2D, int _userDataGroup = 1);
 	
 	/**
-	* @breif Creates a new Box2DDebugDrawer and attaches it to this Box2DWorld
+	* @brief Creates a new Box2DDebugDrawer and attaches it to this Box2DWorld
 	* @description Does NOT manage memory for the Box2DDebugDrawer created
 	*
 	* @return A referece to the Box2DDebugDrawer instance 

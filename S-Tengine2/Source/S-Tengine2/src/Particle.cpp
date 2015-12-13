@@ -5,7 +5,7 @@
 #include <Easing.h>
 
 Particle::Particle(Box2DWorld * _world, Texture * _texture) :
-	Box2DSprite(_world, b2_dynamicBody, false, nullptr, _texture),
+	Box2DSprite(_world, b2_dynamicBody, nullptr, _texture),
 	life(1),
 	age(0),
 	alive(true),

@@ -20,9 +20,9 @@ public:
 	//Max velocity. Should always be set as positive. -1 means no limit
 	b2Vec2 maxVelocity;
 
-	bool defaultFixture;
+	//bool defaultFixture;
 
-	explicit NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType = b2_dynamicBody, bool _defaultFixture = true);
+	explicit NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType = b2_dynamicBody);
 	virtual ~NodeBox2DBody();	
 
 	void update(Step* _step) override;

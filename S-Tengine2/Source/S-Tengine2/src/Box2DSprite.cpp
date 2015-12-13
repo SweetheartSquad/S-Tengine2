@@ -6,9 +6,9 @@
 #include <TextureSampler.h>
 #include <MeshInterface.h>
 
-Box2DSprite::Box2DSprite(Box2DWorld * _world, TextureSampler * _textureSampler, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, float _componentScale) :
+Box2DSprite::Box2DSprite(Box2DWorld * _world, TextureSampler * _textureSampler, b2BodyType _bodyType, Shader* _shader, float _componentScale) :
 	Sprite(_shader),
-	NodeBox2DBody(_world, _bodyType, _defaultFixture),
+	NodeBox2DBody(_world, _bodyType),
 	width(_textureSampler->width),
 	height(_textureSampler->height),
 	scale(_componentScale),
@@ -22,9 +22,9 @@ Box2DSprite::Box2DSprite(Box2DWorld * _world, TextureSampler * _textureSampler, 
 
 	setUserData(this);
 }
-Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Texture * _texture, float _width, float _height, float _u, float _v, float _componentScale):
+Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, Shader* _shader, Texture * _texture, float _width, float _height, float _u, float _v, float _componentScale):
 	Sprite(_shader),
-	NodeBox2DBody(_world, _bodyType, _defaultFixture),
+	NodeBox2DBody(_world, _bodyType),
 	width(_width),
 	height(_height),
 	scale(_componentScale),

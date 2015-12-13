@@ -3,9 +3,8 @@
 #include <node/NodeBox2DBody.h>
 #include <Box2DWorld.h>
 
-NodeBox2DBody::NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture) :
+NodeBox2DBody::NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType) :
 	body(nullptr),
-	defaultFixture(_defaultFixture),
 	maxVelocity(b2Vec2(-1, -1)),
 	prevAngle(0),
 	world(_world)
