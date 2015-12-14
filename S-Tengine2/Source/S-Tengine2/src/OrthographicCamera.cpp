@@ -46,3 +46,11 @@ void OrthographicCamera::resize(float _left, float _right, float _bottom, float 
 	bottom = _bottom;
 	top = _top;
 }
+
+float OrthographicCamera::getWidth() const{
+	return right - left;
+}
+
+float OrthographicCamera::getHeight() const{
+	return top - bottom;
+}

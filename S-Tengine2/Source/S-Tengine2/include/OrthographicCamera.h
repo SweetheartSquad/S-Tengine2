@@ -37,5 +37,9 @@ public:
 	float right;
 
 	void resize(float _left, float _right, float _bottom, float _top);
-
+	
+	// returns right - left
+	float getWidth() const;
+	// returns top - bottom
+	float getHeight() const;
 };
