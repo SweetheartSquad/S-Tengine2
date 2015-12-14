@@ -121,6 +121,10 @@ public:
 	/** Adds _vertex to the list of vertices*/
 	void pushVert(Vertex _vertex);
 	void pushTexture2D(Texture * _texture);
+
+	// sets both scaleModeMin and scaleModeMag to _both
+	// Note that only GL_NEAREST and GL_LINEAR are valid options
+	void setScaleMode(GLenum _both);
 	
 	// removes the last texture pushed onto the mesh
 	// decrements and attempts to delete the texture
@@ -129,11 +133,11 @@ public:
 	Texture * popTexture2D();
 	void removeTextureAt(int _idx);
 	void pushMaterial(Material * _material);
-	unsigned long int textureCount();
-	Texture * getTexture(int _idx);
-
+	unsigned long int textureCount() const;
+	Texture * getTexture(int _idx) const;
+	
 	// returns a box which covers the verts of the mesh
-	sweet::Box calcBoundingBox();
+	sweet::Box calcBoundingBox() const;
 
 	friend std::ostream& operator<<(std::ostream& os, const MeshInterface& obj);
 };

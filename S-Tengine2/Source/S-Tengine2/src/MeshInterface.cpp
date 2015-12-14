@@ -239,17 +239,21 @@ void MeshInterface::pushTexture2D(Texture* _texture){
 	texturesDirty = true;
 }
 
-unsigned long int MeshInterface::textureCount(){
+unsigned long int MeshInterface::textureCount() const{
 	return textures.size();
 }
  
-Texture * MeshInterface::getTexture(int _idx){
+Texture * MeshInterface::getTexture(int _idx) const{
 	return textures.at(_idx);
 }
 
 void MeshInterface::pushMaterial(Material * _material){
 	++_material->referenceCount;
 	materials.push_back(_material);
+}
+
+void MeshInterface::setScaleMode(GLenum _both){
+	scaleModeMag = scaleModeMin = _both;
 }
 
 void MeshInterface::setNormal(unsigned long int _vertId, float _x, float _y, float _z){
@@ -282,7 +286,7 @@ void QuadMesh::pushQuad(GLuint _v0, GLuint _v1, GLuint _v2, GLuint _v3){
 	dirty = true;
 }
 
-sweet::Box MeshInterface::calcBoundingBox(){
+sweet::Box MeshInterface::calcBoundingBox() const{
 	float minX = 99999, minY= 99999, minZ = 99999,
 		maxX = -99999, maxY = -99999, maxZ = -99999;
 
