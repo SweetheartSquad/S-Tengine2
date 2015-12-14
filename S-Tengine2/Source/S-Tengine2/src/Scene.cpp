@@ -134,6 +134,11 @@ void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 	_matrixStack->popMatrix();
 
 	checkForGlError(0,__FILE__,__LINE__);
+
+	// clean the lights
+	for(Light * l : lights){
+		l->lightDirty = false;
+	}
 }
 
 void Scene::renderDepth(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {

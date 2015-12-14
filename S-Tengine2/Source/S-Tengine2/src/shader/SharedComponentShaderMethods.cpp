@@ -50,7 +50,6 @@ void SharedComponentShaderMethods::configureLights(sweet::MatrixStack* _matrixSt
 					glUniform1f(cutoffUniformLocation, l->getCutoff());
 					glUniform3f(coneDirectionUniformLocation, l->getConeDirection().x, l->getConeDirection().y, l->getConeDirection().z);
 					glUniform1f(angleUniformLocation, l->getConeAngle());
-					l->lightDirty = false;
 				}
 			}
 		}
