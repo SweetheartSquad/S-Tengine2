@@ -153,12 +153,14 @@
     <ClCompile Include="src/Plane.cpp" />
     <ClCompile Include="src/shader/ShaderComponentDepthOffset.cpp" />
     <ClCompile Include="src/shader/ShaderComponentMask.cpp" />
+    <ClCompile Include="src/shader/ShaderComponentWorldSpaceUVs.cpp" />
     <ClInclude Include="include/EventManager.h" />
     <ClInclude Include="include/Plane.h" />
     <ClInclude Include="include/rng.h" />
     <ClInclude Include="include/shader/ShaderComponentDepthOffset.h" />
     <ClInclude Include="include/shader/ShaderComponentMask.h" />
     <ClCompile Include="src/AutoMusic.cpp" />
+    <ClInclude Include="include/shader/ShaderComponentWorldSpaceUVs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include/EventManager.h" />
@@ -308,12 +310,14 @@
     <ClCompile Include="src/Plane.cpp" />
     <ClCompile Include="src/shader/ShaderComponentDepthOffset.cpp" />
     <ClCompile Include="src/shader/ShaderComponentMask.cpp" />
+    <ClCompile Include="src/shader/ShaderComponentWorldSpaceUVs.cpp" />
     <ClInclude Include="include/EventManager.h" />
     <ClInclude Include="include/Plane.h" />
     <ClInclude Include="include/rng.h" />
     <ClInclude Include="include/shader/ShaderComponentDepthOffset.h" />
     <ClInclude Include="include/shader/ShaderComponentMask.h" />
     <ClCompile Include="src/AutoMusic.cpp" />
+    <ClInclude Include="include/shader/ShaderComponentWorldSpaceUVs.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E178CAF8-5E96-478C-812C-DCBA942FC878}</ProjectGuid>

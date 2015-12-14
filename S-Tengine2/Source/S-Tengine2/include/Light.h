@@ -45,16 +45,19 @@ public:
 
 	bool lightDirty;
 
-    glm::vec3 getIntensities();
+    glm::vec3 getIntensities() const;
 	
 	void  setIntensities(const glm::vec3 _intensities);
-	float getAmbientCoefficient();
+	float getAmbientCoefficient() const;
 	void  setAmbientCoefficient(float _ambientCoefficient);
-	float getAttenuation();
+	float getAttenuation() const;
 	void  setAttenuation(float _attenuation);
-	float getCutoff();
+	float getCutoff() const;
 	void  setCutoff(float _cutoff);
-	LightType getType();
+	LightType getType() const;
+
+	float getConeAngle() const;
+	glm::vec3 getConeDirection() const;
 
 protected:
 	/**

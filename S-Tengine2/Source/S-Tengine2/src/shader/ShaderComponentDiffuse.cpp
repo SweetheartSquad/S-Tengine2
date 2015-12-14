@@ -40,11 +40,11 @@ std::string ShaderComponentDiffuse::getFragmentBodyString(){
 		"float attenuation = 1.0" + SEMI_ENDL +
 		"vec3 surfaceToLight = vec3(0)" + SEMI_ENDL +
 
-		"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_LIGHTS + "; i++){" + ENDL +
+		"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_LIGHTS + "; ++i){" + ENDL +
 			
 			SHADER_LIGHT_DISTANCE_AND_ATTENUATION +
 
-			"vec3 ambient = vec3(" + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].ambientCoefficient) * modFrag.rgb" + SEMI_ENDL + //"* " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
+			"vec3 ambient = vec3(" + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].ambientCoefficient) * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 			"//diffuse" + ENDL +
 			"float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))" + SEMI_ENDL +
 			"vec3 diffuse = diffuseCoefficient * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
@@ -54,7 +54,7 @@ std::string ShaderComponentDiffuse::getFragmentBodyString(){
 			"vec3 linearColor = ambient + (attenuation * (diffuse))" + SEMI_ENDL +
     
 			"//final color (after gamma correction)" + ENDL +
-			"vec3 gamma = vec3(1.0/2.2, 1.0/2.2, 1.0/2.2)" + SEMI_ENDL +
+			"vec3 gamma = vec3(0.4545454)" + SEMI_ENDL + // 1.0/2.2 = 0.45454545454545454545454545454545
 			"vec3 gammaColor = pow(linearColor, gamma)" + SEMI_ENDL +
 			"outDiffuse += gammaColor" + SEMI_ENDL +
 

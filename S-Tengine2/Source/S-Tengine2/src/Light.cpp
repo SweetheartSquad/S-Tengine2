@@ -19,7 +19,9 @@ bool LightData::operator==(const LightData &other) const{
 		intensities == other.intensities &&
 		ambientCoefficient == other.ambientCoefficient &&
 		attenuation == other.attenuation &&
-		cutoff == other.cutoff);
+		cutoff == other.cutoff &&
+		coneAngle == other.coneAngle &&
+		coneDirection == other.coneDirection);
 }
 bool LightData::operator!=(const LightData &other) const{
 	return !(*this == other);
@@ -48,7 +50,7 @@ void Light::unload(){
 	lightDirty = true;
 }
 
-glm::vec3 Light::getIntensities() {
+glm::vec3 Light::getIntensities() const{
 	return data.intensities;
 }
 
@@ -57,7 +59,7 @@ void Light::setIntensities(const glm::vec3 _intensities) {
 	lightDirty = true;
 }
 
-float Light::getAmbientCoefficient() {
+float Light::getAmbientCoefficient() const{
 	return data.ambientCoefficient;
 }
 
@@ -66,7 +68,7 @@ void Light::setAmbientCoefficient(float _ambientCoefficient) {
 	lightDirty = true;
 }
 
-float Light::getAttenuation() {
+float Light::getAttenuation() const{
 	return data.attenuation;
 }
 
@@ -75,7 +77,7 @@ void Light::setAttenuation(float _attenuation) {
 	lightDirty = true;
 }
 
-float Light::getCutoff(){
+float Light::getCutoff() const{
 	return data.cutoff;
 }
 
@@ -84,6 +86,14 @@ void Light::setCutoff(float _cutoff) {
 	lightDirty = true;
 }
 
-LightType Light::getType() {
+LightType Light::getType() const{
 	return data.type;
+}
+
+float Light::getConeAngle() const{
+	return data.coneAngle;
+}
+
+glm::vec3 Light::getConeDirection() const{
+	return data.coneDirection;
 }

@@ -15,12 +15,3 @@ void SpotLight::setConeDirection(glm::vec3 _direction) {
 	data.coneDirection = _direction;
 	lightDirty = true;
 }
-
-float SpotLight::getConeAngle() {
-	return data.coneAngle;
-}
-
-glm::vec3 SpotLight::getConeDirection() {
-	return data.coneDirection;
-
-}

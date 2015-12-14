@@ -99,10 +99,11 @@ const std::string GL_IN_OUT_FRAG_UV				      =	"fragUV";
 const std::string GL_IN_OUT_SHADOW_COORD			  =	"shadowCoord";
 
 //Component names
-const std::string SHADER_COMPONENT_TEXTURE	          =	"TEXTURE_COMPONENT";
-const std::string SHADER_COMPONENT_MASK_RENDER	      =	"MASK_RENDER";
-const std::string SHADER_COMPONENT_SHADOW	          =	"SHADOW_COMPONENT";
-const std::string SHADER_COMPONENT_LIGHT	          =	"LIGHT_COMPONENT";
+const std::string SHADER_COMPONENT_TEXTURE	          =	"SHADER_COMPONENT_TEXTURE";
+const std::string SHADER_COMPONENT_WORLDSPACEUVS	  =	"SHADER_COMPONENT_WORLDSPACEUVS";
+const std::string SHADER_COMPONENT_MASK_RENDER	      =	"SHADER_COMPONENT_MASK_RENDER";
+const std::string SHADER_COMPONENT_SHADOW	          =	"SHADER_COMPONENT_SHADOW";
+const std::string SHADER_COMPONENT_LIGHT	          =	"SHADER_COMPONENT_LIGHT";
 const std::string SHADER_COMPONENT_PHONG			  = "SHADER_COMPONENT_PHONG";
 const std::string SHADER_COMPONENT_MATERIAL			  = "SHADER_COMPONENT_MATERIAL";
 const std::string SHADER_COMPONENT_AMBIENT			  = "SHADER_COMPONENT_AMBIENT";
@@ -158,12 +159,13 @@ const std::string SHADER_LIGHT_DISTANCE_AND_ATTENUATION =
 				//TAB + TAB + "attenuation = max(attenuation, 0)" + SEMI_ENDL +
 				TAB + "}" + ENDL +
 				// SpotLight
-				TAB + "if(lights[i].type == 2){" + ENDL + 
+				//TAB + "if(lights[i].type == 2){" + ENDL + 
+				TAB + TAB + "//SPOTLIGHT" + ENDL +
 				TAB + TAB + "float lightToSurfaceAngle = degrees(acos(dot(-surfaceToLight, normalize(lights[i].coneDirection))))" + SEMI_ENDL +
 				TAB + TAB + "if(lightToSurfaceAngle > lights[i].coneAngle){" + ENDL + 
 				TAB + TAB + TAB + "attenuation = 0.0;" + ENDL + 
 				TAB + TAB + "}" + ENDL + 
-				TAB + "}" + ENDL + 
+				//TAB + "}" + ENDL + 
 			"}";
 
 const std::string SHADER_INCLUDE_MATERIAL			  = "#ifndef " + SHADER_COMPONENT_MATERIAL + "\n"

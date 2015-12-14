@@ -1,6 +1,6 @@
 #pragma once
 
-#include<Light.h>
+#include <Light.h>
 
 class SpotLight : public Light {
 public:
@@ -8,7 +8,4 @@ public:
 
 	void setConeAngle(float _angle);
 	void setConeDirection(glm::vec3 _direction);
-
-	float getConeAngle();
-	glm::vec3 getConeDirection();
 };
