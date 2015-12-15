@@ -27,15 +27,15 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode) :
 
 MeshInterface::~MeshInterface(){
 	checkForGlError(0,__FILE__,__LINE__);
-	if(glIsVertexArray(vaoId) != GL_TRUE){
+	if(vaoId != 0 && glIsVertexArray(vaoId) != GL_TRUE){
 		Log::warn("Mesh VAO is invalid");
 		return;
 	}
-	if(glIsBuffer(vboId) != GL_TRUE){
+	if(vboId != 0 && glIsBuffer(vboId) != GL_TRUE){
 		Log::warn("Mesh VBO is invalid");
 		return;
 	}
-	if(glIsBuffer(iboId) != GL_TRUE){
+	if(iboId != 0 && glIsBuffer(iboId) != GL_TRUE){
 		Log::warn("Mesh IBO is invalid");
 		return;
 	}
