@@ -1,8 +1,6 @@
 #pragma once
 
 namespace sweet{
-
-namespace sweet{
 	class NumberUtils{
 	public:
 		static float pingPong(float _val, float _min, float _max);
