@@ -2,8 +2,11 @@
 
 namespace sweet{
 
+namespace sweet{
 	class NumberUtils{
 	public:
+		static float pingPong(float _val, float _min, float _max);
+
 		// returns a random number in the range _min <= res < _max
 		static float randomFloat(float _min, float _max);
 		// returns a random number in the range 0 to 1

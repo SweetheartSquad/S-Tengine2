@@ -4,6 +4,18 @@
 #include <NumberUtils.h>
 #include <algorithm>
 
+float sweet::NumberUtils::pingPong(float _val, float _min, float _max){
+	float l = _max - _min; 
+	float L = 2 * l;
+	float T = fmod(_val, L);
+ 
+	if(0 <= T && T < l){
+		return T + _min;
+	}else{
+		return L - T + _min;
+	}
+}
+
 float sweet::NumberUtils::randomFloat(float _min, float _max){
 	return _min + randomFloat() * (_max - _min +1);
 	return 0;
