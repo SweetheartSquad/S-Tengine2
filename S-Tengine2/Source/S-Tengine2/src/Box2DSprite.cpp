@@ -70,7 +70,8 @@ b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * 
 	b2Fixture * f = body->CreateFixture(&fd);
 
 	// reposition mesh vertices to match collider vertices
-	for(unsigned long int i = 0; i < tShape.GetVertexCount(); ++i){
+	const unsigned long int numVerts = tShape.GetVertexCount();
+	for(unsigned long int i = 0; i < numVerts; ++i){
 		mesh->vertices.at(i).x = tShape.GetVertex(i).x;
 		mesh->vertices.at(i).y = tShape.GetVertex(i).y;
 	}

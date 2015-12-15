@@ -73,8 +73,8 @@ void Sprite::setPrimaryTexture(Texture * _texture) {
 	
 	float negHeight = -height/mag/2;
 	float negWidth  = -width/mag/2;
-	float posHeight =  height/mag/2;;
-	float posWidth  =  width/mag/2;;
+	float posHeight =  height/mag/2;
+	float posWidth  =  width/mag/2;
 
 	mesh->vertices.at(0).x = negWidth;
 	mesh->vertices.at(0).y = posHeight;
