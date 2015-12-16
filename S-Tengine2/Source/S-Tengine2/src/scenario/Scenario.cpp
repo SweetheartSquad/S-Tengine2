@@ -17,6 +17,19 @@ Character::Character(Json::Value _json) :
 	}
 }
 
+AssetTexture * Scenario::defaultTexture = nullptr;
+AssetTextureSampler * Scenario::defaultTextureSampler = nullptr;
+AssetAudio * Scenario::defaultAudio = nullptr;
+AssetFont * Scenario::defaultFont = nullptr;
+std::vector<Asset *> Scenario::defaultAssets;
+
+void Scenario::destruct(){
+	while(defaultAssets.size() > 0){
+		delete defaultAssets.back();
+		defaultAssets.pop_back();
+	}
+}
+
 Scenario::Scenario(std::string _jsonSrc) :
 	id(_jsonSrc),
 	currentConversation(nullptr),
@@ -28,35 +41,45 @@ Scenario::Scenario(std::string _jsonSrc) :
 	Json::Value defTexJson;
 	bool parsingSuccessful;
 	
+	if(defaultTexture == nullptr){
+		parsingSuccessful = reader.parse(
+			"{"
+				"\"id\":\"DEFAULT\",\""
+				"\"type\": \"texture\""
+			"}", defTexJson);
+		defaultTexture = new AssetTexture(defTexJson);
+		defaultAssets.push_back(defaultTexture);
+	}
 	
-	parsingSuccessful = reader.parse(
-		"{"
-			"\"id\":\"DEFAULT\",\""
-			"\"type\": \"texture\""
-		"}", defTexJson);
-	defaultTexture = new AssetTexture(defTexJson);
-
-	parsingSuccessful = reader.parse(
-		"{"
-			"\"id\":\"DEFAULT\",\""
-			"\"type\": \"textureSampler\""
-		"}", defTexJson);
-	defaultTextureSampler = new AssetTextureSampler(defTexJson);
+	if(defaultTextureSampler == nullptr){
+		parsingSuccessful = reader.parse(
+			"{"
+				"\"id\":\"DEFAULT\",\""
+				"\"type\": \"textureSampler\""
+			"}", defTexJson);
+		defaultTextureSampler = new AssetTextureSampler(defTexJson);
+		defaultAssets.push_back(defaultTextureSampler);
+	}
 	
-	parsingSuccessful = reader.parse(
-		"{"
-			"\"id\":\"DEFAULT\",\""
-			"\"type\": \"audio\""
-		"}", defTexJson);
-	defaultAudio = new AssetAudio(defTexJson);
+	if(defaultAudio == nullptr){
+		parsingSuccessful = reader.parse(
+			"{"
+				"\"id\":\"DEFAULT\",\""
+				"\"type\": \"audio\""
+			"}", defTexJson);
+		defaultAudio = new AssetAudio(defTexJson);
+		defaultAssets.push_back(defaultAudio);
+	}
 
-	parsingSuccessful = reader.parse(
-		"{"
-			"\"id\":\"DEFAULT\",\""
-			"\"type\": \"font\""
-		"}", defTexJson);
-	defaultFont = new AssetFont(defTexJson);
-
+	if(defaultFont == nullptr){
+		parsingSuccessful = reader.parse(
+			"{"
+				"\"id\":\"DEFAULT\",\""
+				"\"type\": \"font\""
+			"}", defTexJson);
+		defaultFont = new AssetFont(defTexJson);
+		defaultAssets.push_back(defaultFont);
+	}
 
 	std::string jsonLoaded = FileUtils::readFile(_jsonSrc);
 	parsingSuccessful = reader.parse( jsonLoaded, root );
@@ -65,19 +88,19 @@ Scenario::Scenario(std::string _jsonSrc) :
 	}else{
 		
 		 Json::Value charactersJson = root["characters"];
-		 for(auto i = 0; i < charactersJson.size(); ++i) {
+		 for(Json::Value::ArrayIndex i = 0; i < charactersJson.size(); ++i) {
 			Character * c = new Character(charactersJson[i]);
 			characters[c->id] = c;
 		 }
 
 		 Json::Value conversationsJson = root["conversations"];
-		 for(auto i = 0; i < conversationsJson.size(); ++i) {
+		 for(Json::Value::ArrayIndex i = 0; i < conversationsJson.size(); ++i) {
 			 Conversation * c = new Conversation(conversationsJson[i], this);
 			 conversations[c->id] = c;
 		 }
 
 		 Json::Value texturesJson = root["assets"];
-		 for(auto i = 0; i < texturesJson.size(); ++i) {
+		 for(Json::Value::ArrayIndex i = 0; i < texturesJson.size(); ++i) {
 			 Asset * a = Asset::getAsset(texturesJson[i]);
 			 assets[a->id] = a;
 

@@ -22,6 +22,8 @@ public:
 };
 
 class Scenario : public virtual NodeContent, public virtual NodeResource{
+private:
+	static std::vector<Asset *> defaultAssets;
 public:
 	// events triggered by this scenario's dialogue will be handled by this manager
 	sweet::EventManager eventManager;
@@ -39,11 +41,12 @@ public:
 	std::map<std::string, AssetAudio *> audio;
 	std::map<std::string, AssetFont *> fonts;
 
-	AssetTexture * defaultTexture;
-	AssetTextureSampler * defaultTextureSampler;
-	AssetAudio * defaultAudio;
-	AssetFont * defaultFont;
-
+	static AssetTexture * defaultTexture;
+	static AssetTextureSampler * defaultTextureSampler;
+	static AssetAudio * defaultAudio;
+	static AssetFont * defaultFont;
+	// delete static variables used for default assets
+	static void destruct();
 
 	Conversation * currentConversation;
 	
