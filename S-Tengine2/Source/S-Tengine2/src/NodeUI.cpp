@@ -73,9 +73,11 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 }
 
 NodeUI::~NodeUI() {
-	delete textureCam;
-	delete frameBuffer;
-	delete texturedPlane;
+	if(textureCam != nullptr){
+		delete textureCam;
+		delete frameBuffer;
+		delete texturedPlane;
+	}
 }
 
 void NodeUI::setVisible(bool _visible){
@@ -86,12 +88,24 @@ void NodeUI::setVisible(bool _visible){
 }
 
 void NodeUI::load(){
+	if(!loaded){
+		bgShader->load();
+	}
 	Entity::load();
-	bgShader->load();
 }
 void NodeUI::unload(){
+	if(loaded){
+		bgShader->unload();
+		
+		if(textureCam != nullptr){
+			delete textureCam;
+			delete frameBuffer;
+			delete texturedPlane;
+		}
+
+		invalidateRenderFrame();
+	}
 	Entity::unload();
-	bgShader->unload();
 }
 
 void NodeUI::down(){
@@ -209,7 +223,7 @@ Texture * NodeUI::renderToTexture(){
 		textureCam = new OrthographicCamera(0, w, 0, h, -1000,1000);
 	}
 	if(frameBuffer == nullptr){
-		frameBuffer = new StandardFrameBuffer(false);	
+		frameBuffer = new StandardFrameBuffer(false);
 		frameBuffer->load();
 	}
 	
@@ -262,7 +276,6 @@ Texture * NodeUI::renderToTexture(){
 		renderedTexture->data = frameBuffer->getPixelData(0);
 		renderedTexture->bufferData();
 	}
-
 	//renderedTexture->saveImageData("test.tga");
 	return renderedTexture;
 }
@@ -270,7 +283,7 @@ Texture * NodeUI::renderToTexture(){
 MeshEntity * NodeUI::getTexturedPlane() {
 	if(texturedPlane == nullptr) {
 		texturedPlane = new MeshEntity(MeshFactory::getPlaneMesh(0.5f), background->shader);
-		texturedPlane->mesh->scaleModeMag = texturedPlane->mesh->scaleModeMin = GL_NEAREST;
+		texturedPlane->mesh->setScaleMode(GL_NEAREST);
 	}
 	return texturedPlane;
 }

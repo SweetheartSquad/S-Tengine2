@@ -159,3 +159,17 @@ Sprite * UILayer::addMouseIndicator(){
 
 	return mouseIndicator;
 }
+
+void UILayer::load(){
+	if(!loaded){
+		shader->load();
+	}
+	NodeUI::load();
+}
+
+void UILayer::unload(){
+	if(loaded){
+		shader->unload();
+	}
+	NodeUI::unload();
+}

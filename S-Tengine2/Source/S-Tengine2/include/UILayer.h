@@ -24,8 +24,8 @@ public:
 class UILayer : public NodeUI{
 private:
 	RayTestInfo rayInfo;
-public:
 	Mouse * mouse;
+public:
 	Sprite * mouseIndicator;
 	OrthographicCamera cam;
 
@@ -41,4 +41,7 @@ public:
 	void hitTest(NodeChild * _c);
 
 	Sprite * addMouseIndicator();
+
+	void load() override;
+	void unload() override;
 };
