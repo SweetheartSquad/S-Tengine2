@@ -12,7 +12,10 @@
 
 ShaderComponentTexture::ShaderComponentTexture(Shader * _shader) :
 	ShaderComponent(_shader),
-	alphaDiscardThreshold(-1)
+	alphaDiscardThreshold(-1),
+	texNumLoc(-1),
+	texSamLoc(-1),
+	numTextures(0)
 {
 }
 
@@ -68,20 +71,31 @@ void ShaderComponentTexture::clean(sweet::MatrixStack* _matrixStack, RenderOptio
 void ShaderComponentTexture::load(){
 	if(!loaded){
 		texNumLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str());
-		texColLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TEXT_COLOR.c_str());
 		texSamLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str());
 	}
 	ShaderComponent::load();
 }
 
+void ShaderComponentTexture::unload(){
+	if(loaded){
+		texNumLoc = -1;
+		texSamLoc = -1;
+		numTextures = 0;
+	}
+	ShaderComponent::unload();
+}
+
 void ShaderComponentTexture::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
-	int numTextures = 0;
 	if(mesh != nullptr){
-		numTextures = mesh->textureCount();
-		glUniform1i(texNumLoc, numTextures);
+		// check if the number of textures has changes and send new value to OpenGL
+		unsigned long int newNumTextures = mesh->textureCount();
+		if(newNumTextures != numTextures){
+			glUniform1i(texNumLoc, newNumTextures);
+			numTextures = newNumTextures;
+		}
 		// Bind each texture to the texture sampler array in the frag _shader
-		for(unsigned long int i = 0; i < mesh->textureCount(); i++){
+		for(unsigned long int i = 0; i < mesh->textureCount(); ++i){
 			glActiveTexture(GL_TEXTURE0 + i);
 			glBindTexture(GL_TEXTURE_2D, mesh->getTexture(i)->textureId);
 			glUniform1i(texSamLoc, i);

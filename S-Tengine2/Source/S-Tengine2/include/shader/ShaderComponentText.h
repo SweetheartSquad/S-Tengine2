@@ -6,6 +6,7 @@
 class ShaderComponentText : public ShaderComponent{
 private:
 	GLint texNumLoc, texColLoc, texSamLoc;
+	unsigned long int numTextures;
 
 public:
 
@@ -18,7 +19,8 @@ public:
 	std::string getVertexBodyString() override;
 	std::string getFragmentBodyString() override;
 	std::string getOutColorMod() override;
-	void load() override;
+	virtual void load() override;
+	virtual void unload() override;
 	void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 	virtual void clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 	

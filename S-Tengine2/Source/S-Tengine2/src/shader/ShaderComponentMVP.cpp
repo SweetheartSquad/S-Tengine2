@@ -49,10 +49,23 @@ std::string ShaderComponentMVP::getOutColorMod() {
 }
 
 void ShaderComponentMVP::load() {
-	modelUniformLocation	  = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX.c_str());
-	viewUniformLocation		  = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_VIEW_MATRIX.c_str());
-	projectionUniformLocation = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_PROJECTION_MATRIX.c_str());
-	mvpUniformLocation		  = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_MODEL_VIEW_PROJECTION.c_str());
+	if(!loaded){
+		modelUniformLocation	  = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_MODEL_MATRIX.c_str());
+		viewUniformLocation		  = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_VIEW_MATRIX.c_str());
+		projectionUniformLocation = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_PROJECTION_MATRIX.c_str());
+		mvpUniformLocation		  = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_MODEL_VIEW_PROJECTION.c_str());
+	}
+	ShaderComponent::load();
+}
+
+void ShaderComponentMVP::unload() {
+	if(loaded){
+		modelUniformLocation	  = -1;
+		viewUniformLocation		  = -1;
+		projectionUniformLocation = -1;
+		mvpUniformLocation		  = -1;
+	}
+	ShaderComponent::unload();
 }
 
 void ShaderComponentMVP::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) {

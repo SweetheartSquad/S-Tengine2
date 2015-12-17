@@ -16,5 +16,6 @@ public:
 	std::string getFragmentBodyString() override;
 	std::string getOutColorMod() override;
 	void load() override;
+	void unload() override;
 	void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 };
