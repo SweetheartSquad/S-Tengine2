@@ -37,11 +37,6 @@ namespace sweet{
 	* Stores a reference to the global freetype instance
 	*/
 	extern FT_Library freeTypeLibrary;
-	
-	/** 
-	* Whether the main window is fullscreen or not 
-	*/
-	extern bool fullscreen;
 
 	/**
 	* Whether AntTweakBar has been initialized or not
@@ -59,9 +54,13 @@ namespace sweet{
 	void setGlfwWindowHints();
 	
 	/** 
-	* Sets the window properties that need to be initialized after window creation (uses currentContext if null) 
+	* 
 	*/
 	GLFWwindow * initWindow();
+	/** 
+	* 
+	*/
+	void destructWindow(GLFWwindow * _window);
 	
 	/**
 	* Initializes everyting need to get the engine up and running
@@ -81,7 +80,7 @@ namespace sweet{
 	/**
 	* Intitializes ant tweak bar
 	*/
-	void initAntTweakBar();
+	void initAntTweakBar(GLFWwindow * _context);
 
 	/**
 	* Flips drawAntTweakBar 
@@ -89,7 +88,7 @@ namespace sweet{
 	*/
 	void toggleAntTweakBar();
 
-	void initializeInputCallbacks();
+	void initializeInputCallbacks(GLFWwindow * _context);
 	void setGlfwWindowHints();
 	void keyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods);
 	void charCallback(GLFWwindow * _window, unsigned int _key);

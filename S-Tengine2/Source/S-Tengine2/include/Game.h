@@ -21,7 +21,7 @@
 *
 **************************************************************************/
 class Step;
-class Game : public NodeUpdatable{
+class Game : public virtual NodeUpdatable, public virtual NodeLoadable{
 private:
 	/**
 	* Prints the frames per second which this game class
@@ -84,9 +84,13 @@ public:
 	void manageInput(void);
 
 	/**
-	* Toggles the fullscreen mode. Destroys the current glfwContext and makes a new one; sets all scenes to dirty
+	* Toggles the fullscreen mode. Unloads, destroys the current glfwContext, makes a new glfwContext, and reloads
+	* sets all scenes to dirty
 	*/
 	void toggleFullScreen();
+
+	virtual void load() override;
+	virtual void unload() override;
 
 
 	// saves the current viewport with the format "../screenshots/YYYY-MM-DD_TTTTTTTTTT.tga"

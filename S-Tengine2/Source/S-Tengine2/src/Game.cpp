@@ -267,26 +267,38 @@ void Game::switchScene(std::string _newSceneKey, bool _deleteOldScene){
 }
 
 
+void Game::load(){
+	Transform::transformShader->load();
+	Transform::transformIndicator->load();
+	Transform::transformIndicator->configureDefaultVertexAttributes(Transform::transformShader);
+	
+	for(std::pair<std::string, Scene *> s : scenes){
+		s.second->load();
+	}
+	ResourceManager::load();
+}
 
-
-void Game::toggleFullScreen(){
-	// unload everything
+void Game::unload(){
 	ResourceManager::unload();
 	for(std::pair<std::string, Scene *> s : scenes){
 		s.second->unload();
 	}
 	Transform::transformIndicator->unload();
 	Transform::transformShader->unload();
-	
+}
+
+void Game::toggleFullScreen(){
+	// unload everything
+	unload();
+
 	// destroy the current window
-	glfwSetKeyCallback(sweet::currentContext, nullptr);
-	glfwSetMouseButtonCallback(sweet::currentContext, nullptr);
-	glfwSetCursorPosCallback(sweet::currentContext, nullptr);
-	glfwSetWindowFocusCallback(sweet::currentContext, nullptr);
-	glfwDestroyWindow(sweet::currentContext);
+	sweet::destructWindow(sweet::currentContext);
 
 	// Toggle fullscreen flag.
-	sweet::fullscreen = !sweet::fullscreen;
+	sweet::config.fullscreen = !sweet::config.fullscreen;
+#ifdef _DEBUG
+	sweet::config.fullscreen = false;
+#endif
 
 	// create new window and make assign it to the current context
 	sweet::currentContext = sweet::initWindow();
@@ -297,15 +309,7 @@ void Game::toggleFullScreen(){
 	}
 	
 	// reload everything
-	Transform::transformShader->load();
-	Transform::transformIndicator->load();
-	Transform::transformIndicator->configureDefaultVertexAttributes(Transform::transformShader);
-	
-	for(std::pair<std::string, Scene *> s : scenes){
-		s.second->load();
-	}
-	ResourceManager::load();
-
+	load();
 	checkForGlError(0,__FILE__,__LINE__);
 }
 

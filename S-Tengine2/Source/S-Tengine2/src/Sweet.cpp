@@ -29,7 +29,6 @@ Configuration sweet::config;
 double sweet::lastTimestamp = 0;
 double sweet::deltaTimeCorrection = 1;
 
-bool sweet::fullscreen = false;
 bool sweet::antTweakBarInititialized = false;
 bool sweet::drawAntTweakBar = false;
 
@@ -145,11 +144,33 @@ GLFWwindow * sweet::initWindow(){
 		throw "some sort of window error?";
 	}
 	
-	glfwSetWindowPos(window, 10, 50);
+	if(!config.fullscreen){
+		glfwSetWindowPos(window, 10, 50);
+	}
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+#ifdef _DEBUG
+	ST_LOG_INFO("Initializing AntTweakBar");
+	sweet::initAntTweakBar(window);
+#endif
+
+	initializeInputCallbacks(window);
+
 	return window;
+}
+
+void sweet::destructWindow(GLFWwindow * _window){
+	glfwSetKeyCallback(_window, nullptr);
+	glfwSetMouseButtonCallback(_window, nullptr);
+	glfwSetCursorPosCallback(_window, nullptr);
+	glfwSetWindowFocusCallback(_window, nullptr);
+	glfwDestroyWindow(_window);
+
+	if(antTweakBarInititialized) {
+		TwTerminate();
+		antTweakBarInititialized = false;
+	}
 }
 
 void sweet::initialize(std::string _title){
@@ -191,12 +212,6 @@ void sweet::initialize(std::string _title){
 		throw;
 	}
 
-#ifdef _DEBUG
-	ST_LOG_INFO("Initializing AntTweakBar");
-	sweet::initAntTweakBar();
-#endif
-
-	initializeInputCallbacks();
 
 	// move mouse to the middle of the window
 	int screenHeight, screenWidth;
@@ -207,9 +222,8 @@ void sweet::initialize(std::string _title){
 }
 
 void sweet::destruct(){
-	if(antTweakBarInititialized) {
-		TwTerminate();
-	}
+
+	destructWindow(currentContext);
 	glfwTerminate();
 
 	FT_Done_FreeType(freeTypeLibrary);
@@ -218,13 +232,13 @@ void sweet::destruct(){
 	Log::info("*** Sweet Destruction ***");
 }
 
-void sweet::initAntTweakBar() {
-	glm::uvec2 dimens = sweet::getScreenDimensions();
+void sweet::initAntTweakBar(GLFWwindow * _context) {
+	glm::uvec2 dimens = sweet::getWindowDimensions(_context);
 
 	TwInit(TW_OPENGL, NULL);
 	TwWindowSize(dimens.x, dimens.y);
 
-	glfwSetCharCallback(glfwGetCurrentContext(), charCallback);
+	glfwSetCharCallback(_context, charCallback);
 
 	sweet::antTweakBarInititialized = true;
 }
@@ -240,12 +254,11 @@ void sweet::toggleAntTweakBar() {
 	}
 }
 
-void sweet::initializeInputCallbacks() {
-	GLFWwindow * window = glfwGetCurrentContext();
-	glfwSetKeyCallback(window, keyCallback);
-	glfwSetMouseButtonCallback(window, mouseButtonCallback);
-	glfwSetCursorPosCallback(window, mousePositionCallback);
-	glfwSetWindowFocusCallback(window, windowFocusCallback);
+void sweet::initializeInputCallbacks(GLFWwindow * _context) {
+	glfwSetKeyCallback(_context, keyCallback);
+	glfwSetMouseButtonCallback(_context, mouseButtonCallback);
+	glfwSetCursorPosCallback(_context, mousePositionCallback);
+	glfwSetWindowFocusCallback(_context, windowFocusCallback);
 }
 
 /////////// Delta Time Begin //////////////
