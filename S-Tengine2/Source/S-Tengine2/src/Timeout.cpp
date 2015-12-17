@@ -15,7 +15,10 @@ Timeout::Timeout(float _targetSeconds, std::function<void (sweet::Event * )> _on
 }
 
 void Timeout::start(){
-	active = true;
+	if(!active){
+		eventManager->triggerEvent("start");
+		active = true;
+	}
 }
 
 void Timeout::stop(){

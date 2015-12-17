@@ -12,7 +12,7 @@ public:
 	bool active;
 	float elapsedSeconds;
 	float targetSeconds;
-	// events for the timeout object: complete, progress
+	// events for the timeout object: complete, progress, start
 	sweet::EventManager * eventManager;
 
 	Timeout(float _targetSeconds, std::function<void (sweet::Event * )> _onComplete);
@@ -20,7 +20,7 @@ public:
 	// calls stop and then calls start
 	void restart();
 	
-	// sets active to true
+	// sets active to true (triggers "start" event)
 	virtual void start();
 
 	// sets active to false
@@ -30,6 +30,7 @@ public:
 	void stop();
 
 	// calls the onCompleteFunction, sets elapsedSeconds to targetSeconds, and complete to true
+	// triggers "complete" event
 	virtual void trigger();
 
 	virtual void update(Step * _step) override;
