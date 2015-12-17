@@ -32,14 +32,24 @@ void TextLabel::update(Step * _step){
 }
 
 void TextLabel::unload(){
+	if(loaded){
+		textShader->unload();
+		font->unload();
+		for(unsigned long int i = 0; i < unusedGlyphs.size(); ++i){
+			unusedGlyphs.at(i)->unload();
+		}
+	}
 	HorizontalLinearLayout::unload();
-	textShader->unload();
-	font->unload();
 }
 
 void TextLabel::load(){
-	font->load();
-	textShader->load();
+	if(!loaded){
+		font->load();
+		textShader->load();
+		for(unsigned long int i = 0; i < unusedGlyphs.size(); ++i){
+			unusedGlyphs.at(i)->load();
+		}
+	}
 	HorizontalLinearLayout::load();
 }
 

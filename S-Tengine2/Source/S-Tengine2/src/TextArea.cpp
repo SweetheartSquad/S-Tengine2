@@ -98,3 +98,21 @@ TextLabel * TextArea::getCurrentLine(){
 		return getNewLine();
 	}
 }
+
+void TextArea::load(){
+	if(!loaded){
+		for(unsigned long int i = 0; i < unusedLines.size(); ++i){
+			unusedLines.at(i)->load();
+		}
+	}
+	VerticalLinearLayout::load();
+}
+
+void TextArea::unload(){
+	if(loaded){
+		for(unsigned long int i = 0; i < unusedLines.size(); ++i){
+			unusedLines.at(i)->unload();
+		}
+	}
+	VerticalLinearLayout::unload();
+}

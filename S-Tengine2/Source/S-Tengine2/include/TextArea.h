@@ -27,6 +27,9 @@ public:
 	// if unusedLines is empty, creates a new TextLabel and returns that instead
 	// the returned line will be added to the contents list automatically
 	virtual TextLabel * getNewLine();
+	
+	virtual void load() override;
+	virtual void unload() override;
 private:
 	std::wstring text;
 	std::wstring textDisplayed;
