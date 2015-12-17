@@ -270,3 +270,7 @@ void Shader::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptio
 void Shader::makeDirty(){
 	dirty = true;
 }
+
+void Shader::bindShader(){
+	glUseProgram(getProgramId());
+}

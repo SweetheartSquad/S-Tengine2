@@ -93,4 +93,7 @@ public:
 
 	void load() override;
 	void unload() override;
+
+	// calls glUseProgram(this->programId)
+	void bindShader();
 };
