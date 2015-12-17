@@ -2,7 +2,6 @@
 
 #include "Entity.h"
 #include "PerspectiveCamera.h"
-#include "System.h"
 #include "Transform.h"
 
 PerspectiveCamera::PerspectiveCamera() :
@@ -39,7 +38,7 @@ glm::mat4 PerspectiveCamera::getViewMatrix() const{
 }
 
 glm::mat4 PerspectiveCamera::getProjectionMatrix() const{
-	glm::vec2 screenDimensions = sweet::getScreenDimensions();
+	glm::vec2 screenDimensions = sweet::getWindowDimensions();
 	// Projection matrix : 45° Field of View, ratio, near-far clip : 0.1 unit <-> 100 units
 	return glm::perspective(fieldOfView, static_cast<float>(screenDimensions.x)/static_cast<float>(screenDimensions.y), nearClip, farClip);
 }

@@ -9,7 +9,6 @@
 #include <MatrixStack.h>
 #include <VoxRenderOptions.h>
 #include <GLUtils.h>
-#include <System.h>
 
 #include <SceneSplash.h>
 #include <ScenesweetheartSquad.h>
@@ -345,7 +344,7 @@ void Game::exit(){
 }
 
 void Game::resize(){
-	glm::vec2 screenDimensions = sweet::getScreenDimensions();
+	glm::vec2 screenDimensions = sweet::getWindowDimensions();
 	setViewport(0, 0, screenDimensions.x, screenDimensions.y);
 }
 

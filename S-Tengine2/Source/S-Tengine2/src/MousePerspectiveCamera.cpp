@@ -1,7 +1,6 @@
 #include "MousePerspectiveCamera.h"
 #include "Mouse.h"
 #include "Transform.h"
-#include "System.h"
 
 MousePerspectiveCamera::MousePerspectiveCamera() :
 	mouse(&Mouse::getInstance()),

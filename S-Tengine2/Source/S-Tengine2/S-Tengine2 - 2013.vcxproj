@@ -101,7 +101,6 @@
     <ClCompile Include="src/StandardFrameBuffer.cpp" />
     <ClCompile Include="src/Step.cpp" />
     <ClCompile Include="src/StringUtils.cpp" />
-    <ClCompile Include="src/System.cpp" />
     <ClCompile Include="src/Texture.cpp" />
     <ClCompile Include="src/Transform.cpp" />
     <ClCompile Include="src/Sweet.cpp" />
@@ -259,7 +258,6 @@
     <ClCompile Include="src/StandardFrameBuffer.cpp" />
     <ClCompile Include="src/Step.cpp" />
     <ClCompile Include="src/StringUtils.cpp" />
-    <ClCompile Include="src/System.cpp" />
     <ClCompile Include="src/Texture.cpp" />
     <ClCompile Include="src/Transform.cpp" />
     <ClCompile Include="src/Sweet.cpp" />

@@ -18,7 +18,6 @@
 #include "Mouse.h"
 
 #include <OpenALSound.h>
-#include <System.h>
 
 #include <FileUtils.h>
 #include <AntTweakBar.h>
@@ -83,7 +82,7 @@ void sweet::mouseButtonCallback(GLFWwindow * _window, int _button, int _action, 
 void sweet::mousePositionCallback(GLFWwindow *_window, double _x, double _y){
 	if(!sweet::antTweakBarInititialized || !TwEventMousePosGLFW(_x, _y) ) {
       	Mouse * mouse = &Mouse::getInstance();
-		glm::uvec2 sd = getScreenDimensions();
+		glm::uvec2 sd = getWindowDimensions();
 		mouse->mousePositionListener(_x, sd.y - _y);
     }
 }
@@ -117,7 +116,9 @@ void sweet::attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _
 }
 
 void sweet::windowFocusCallback(GLFWwindow * _window, int _focused){
-	std::cout << _window << " focused: " << _focused << std::endl;
+	std::stringstream ss;
+	ss << _window << " focused: " << _focused;
+	Log::info(ss.str());
 	if(_focused == GL_TRUE){
 		// gained focus
 		glfwSetMouseButtonCallback(_window, attemptToActuallyRegainFocus);
@@ -265,4 +266,28 @@ void sweet::calculateDeltaTimeCorrection(){
 	step.deltaTimeCorrection = deltaTimeCorrection;
 	step.lastTimestamp = lastTimestamp;
 	step.cycles++;
+}
+
+unsigned long int sweet::getWindowWidth(){
+	return getWindowWidth(currentContext);
+}unsigned long int sweet::getWindowWidth(GLFWwindow * _window){
+	return getWindowDimensions().y;
+}
+
+unsigned long int sweet::getWindowHeight(){
+	return getWindowHeight(currentContext);
+}
+unsigned long int sweet::getWindowHeight(GLFWwindow * _window){
+	return getWindowDimensions().x;
+}
+
+glm::uvec2 sweet::getWindowDimensions(){
+	return getWindowDimensions(currentContext);
+}glm::uvec2 sweet::getWindowDimensions(GLFWwindow * _window){
+	int windowHeight;
+	int windowWidth;
+
+	glfwGetWindowSize(_window, &windowWidth, &windowHeight);
+
+	return glm::uvec2(windowWidth, windowHeight);
 }

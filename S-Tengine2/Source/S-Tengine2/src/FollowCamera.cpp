@@ -2,7 +2,6 @@
 
 #include "Entity.h"
 #include "FollowCamera.h"
-#include "System.h"
 #include "Transform.h"
 #include <algorithm>
 
@@ -104,7 +103,7 @@ void FollowCamera::update(Step * _step){
 
 	// calculate zoom and account for FoV (the camera FoV seems to be vertical, so if the screen w > screen h, we need to take the h / the intended aspect ratio)
 	float ar1 = screenWidth/screenHeight;
-	glm::vec2 screenDimensions = sweet::getScreenDimensions();
+	glm::vec2 screenDimensions = sweet::getWindowDimensions();
 	float ar2 = static_cast<float>(screenDimensions.x)/static_cast<float>(screenDimensions.y);
 	float zoom;
 	if(ar1 > ar2){

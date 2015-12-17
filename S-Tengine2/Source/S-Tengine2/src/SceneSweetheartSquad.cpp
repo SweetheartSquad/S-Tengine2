@@ -26,7 +26,6 @@
 #include <PointLight.h>
 #include <Texture.h>
 
-#include <System.h>
 #include <Mouse.h>
 #include <Keyboard.h>
 #include <GLFW\glfw3.h>
@@ -170,7 +169,7 @@ void SceneSweetheartSquad::update(Step * _step){
 
 	Scene::update(_step);
 
-	glm::uvec2 sd = sweet::getScreenDimensions();
+	glm::uvec2 sd = sweet::getWindowDimensions();
 	uiLayer.resize(0.f, sd.x, 0.f, sd.y);
 	uiLayer.update(_step);
 	

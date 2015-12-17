@@ -3,7 +3,6 @@
 #include "OrthographicCamera.h"
 #include "Mouse.h"
 #include "Keyboard.h"
-#include "System.h"
 #include "Transform.h"
 
 OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom, float _top, float _near, float _far) :

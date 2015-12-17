@@ -7,7 +7,6 @@
 #include <RenderOptions.h>
 #include <shader\ShaderComponentTexture.h>
 #include <shader\ShaderComponentMVP.h>
-#include <System.h>
 #include <Mouse.h>
 #include <Scene.h>
 #include <Sprite.h>

@@ -98,4 +98,32 @@ namespace sweet{
 	void attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _action, int _mods);
 	void windowFocusCallback(GLFWwindow * _window, int _focused);
 	void error_callback(int _error, const char * _description);
+
+
+	/**
+	* @returns the width of the current context in pixels 
+	*/
+	unsigned long int getWindowWidth();
+	/**
+	* @returns the width of _window in pixels
+	*/
+	unsigned long int getWindowWidth(GLFWwindow * _window);
+	
+	/**
+	* @returns the height of the current context in pixels 
+	*/
+	unsigned long int getWindowHeight();
+	/**
+	* @returns the height of _window in pixels
+	*/
+	unsigned long int getWindowHeight(GLFWwindow * _window);
+	
+	/**
+	* @returns the width and height of the current context in pixels as a Dimension object 
+	*/
+	glm::uvec2 getWindowDimensions();
+	/**
+	* @returns the width and height of _window in pixels as a Dimension object 
+	*/
+	glm::uvec2 getWindowDimensions(GLFWwindow * _window);
 }
