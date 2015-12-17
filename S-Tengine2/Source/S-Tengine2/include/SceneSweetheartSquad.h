@@ -22,9 +22,6 @@ public:
 	ComponentShaderBase * phongShader;
 	ShaderComponentHsv * hsvComponent;
 	
-	Shader * screenSurfaceShader;
-	RenderSurface * screenSurface;
-	StandardFrameBuffer * screenFBO;
 	std::string nextScene;
 
 	virtual void update(Step * _step) override;
@@ -33,7 +30,7 @@ public:
 	virtual void load() override;
 	virtual void unload() override;
 
-	UILayer uiLayer;
+	UILayer * uiLayer;
 	Entity * logo;
 	MeshEntity * logo1;
 	MeshEntity * logo2;

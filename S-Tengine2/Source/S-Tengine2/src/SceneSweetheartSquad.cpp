@@ -18,8 +18,8 @@
 #include <shader\ShaderComponentPhong.h>
 #include <shader\ShaderComponentHsv.h>
 #include <shader\ShaderComponentMVP.h>
+#include <Material.h>
 
-#include <FollowCamera.h>
 #include <MousePerspectiveCamera.h>
 
 #include <Sprite.h>
@@ -32,25 +32,17 @@
 #include <MatrixStack.h>
 #include <RenderOptions.h>
 
-#include <RenderSurface.h>
-#include <StandardFrameBuffer.h>
 #include <NumberUtils.h>
 
 #include <Font.h>
 #include <shader\ShaderComponentText.h>
 
-#include <BulletWorld.h>
-#include <BulletMeshEntity.h>
-
 SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	Scene(_game),
 	diffuseShader(new ComponentShaderBase(true)),
 	phongShader(new ComponentShaderBase(true)),
-	screenSurfaceShader(new Shader("assets/engine basics/DefaultRenderSurface", false, true)),
-	screenSurface(new RenderSurface(screenSurfaceShader)),
-	screenFBO(new StandardFrameBuffer(true)),
 	hsvComponent(new ShaderComponentHsv(diffuseShader, 0, 1, 1)),
-	uiLayer(0,0,0,0),
+	uiLayer(new UILayer(0,0,0,0)),
 	t(0.f)
 {
 	diffuseShader->addComponent(new ShaderComponentMVP(diffuseShader));
@@ -58,6 +50,8 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	diffuseShader->addComponent(new ShaderComponentDiffuse(diffuseShader));
 	diffuseShader->addComponent(hsvComponent);
 	diffuseShader->compileShader();
+
+	phongShader->addComponent(new ShaderComponentMVP(phongShader));
 	phongShader->addComponent(new ShaderComponentTexture(phongShader));
 	phongShader->addComponent(new ShaderComponentPhong(phongShader));
 	phongShader->compileShader();
@@ -76,14 +70,10 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	fc->childTransform->setOrientation(fc->lastOrientation);
 	activeCamera = fc;
 
-	Texture * c = new Texture("assets/engine basics/cursor.png", true, false);
-	c->load();
-	ResourceManager::resources.push_back(c);
 	Texture * logoTex = new Texture("assets/engine basics/sweetheartsquad-logo-tex.png", true, false);
 	logoTex->load();
-	ResourceManager::resources.push_back(logoTex);
 	
-	uiLayer.addMouseIndicator();
+	uiLayer->addMouseIndicator();
 	
 	logo = new Entity();
 	childTransform->addChild(logo)->scale(10);
@@ -92,8 +82,9 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	logo1 = new MeshEntity(Resource::loadMeshFromObj("assets/engine basics/sweetheartsquad-logo-noheart.obj").at(0), diffuseShader);
 	logo1->mesh->pushTexture2D(logoTex);
 
-	logo2 = new MeshEntity(Resource::loadMeshFromObj("assets/engine basics/sweetheartsquad-logo-heartonly.obj").at(0), diffuseShader);
+	logo2 = new MeshEntity(Resource::loadMeshFromObj("assets/engine basics/sweetheartsquad-logo-heartonly.obj").at(0), phongShader);
 	logo2->mesh->pushTexture2D(logoTex);
+	logo2->mesh->pushMaterial(new Material(80, glm::vec3(1.f), true));
 	
 	logo->childTransform->addChild(logo1, false);
 	logo->childTransform->addChild(logo2, false);
@@ -101,11 +92,11 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 
 
 
-	ComponentShaderBase * textShader = new ComponentShaderBase(true);
+	/*ComponentShaderBase * textShader = new ComponentShaderBase(true);
 	textShader->addComponent(new ShaderComponentText(textShader));
 	textShader->compileShader();
 
-	/*Font * font = new Font("assets/arial.ttf", 50, false);
+	Font * font = new Font("assets/arial.ttf", 50, false);
 	textThing = new Label(font, textShader, shader, WrapMode::WORD_WRAP, -1);
 	textThing->setText(L"some text");
 	uiLayer.childTransform->addChild(textThing);*/
@@ -113,14 +104,17 @@ SceneSweetheartSquad::SceneSweetheartSquad(Game * _game) :
 	PointLight * light = new PointLight(glm::vec3(1,1,1), 0.5f, 0.001f, -1);
 	lights.push_back(light);
 	childTransform->addChild(light)->translate(0, 10, 0);
+
+	
+	++diffuseShader->referenceCount;
+	++phongShader->referenceCount;
 }
 
 SceneSweetheartSquad::~SceneSweetheartSquad(){
-	diffuseShader->safeDelete();
-	phongShader->safeDelete();
-	screenSurface->safeDelete();
-	//screenSurfaceShader->safeDelete();
-	screenFBO->safeDelete();
+	diffuseShader->decrementAndDelete();
+	phongShader->decrementAndDelete();
+
+	delete uiLayer;
 }
 
 void SceneSweetheartSquad::update(Step * _step){
@@ -170,8 +164,8 @@ void SceneSweetheartSquad::update(Step * _step){
 	Scene::update(_step);
 
 	glm::uvec2 sd = sweet::getWindowDimensions();
-	uiLayer.resize(0.f, sd.x, 0.f, sd.y);
-	uiLayer.update(_step);
+	uiLayer->resize(0.f, sd.x, 0.f, sd.y);
+	uiLayer->update(_step);
 	
 	//textThing->parents.at(0)->translate(game->viewPortWidth*0.5f, game->viewPortHeight*0.8f, 0, false);
 }
@@ -183,30 +177,18 @@ void SceneSweetheartSquad::render(sweet::MatrixStack * _matrixStack, RenderOptio
 	}
 
 	_renderOptions->clear();
-	screenFBO->resize(game->viewPortWidth, game->viewPortHeight);
-	//Bind frameBuffer
-	screenFBO->bindFrameBuffer();
-	//render the scene to the buffer
 	Scene::render(_matrixStack, _renderOptions);
-	//Render the buffer to the render surface
-	screenSurface->render(screenFBO->getTextureId());
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	uiLayer.render(_matrixStack, _renderOptions);
+	uiLayer->render(_matrixStack, _renderOptions);
 }
 
 void SceneSweetheartSquad::load(){
 	Scene::load();	
 
-	screenSurface->load();
-	screenFBO->load();
-	uiLayer.load();
+	uiLayer->load();
 }
 
 void SceneSweetheartSquad::unload(){
-	uiLayer.unload();
-	screenFBO->unload();
-	screenSurface->unload();
+	uiLayer->unload();
 
 	Scene::unload();	
 }
