@@ -96,17 +96,15 @@ void Texture::saveImageData(std::string _filename){
 void Texture::bufferData(){
 	glBindTexture(GL_TEXTURE_2D, textureId);
 	checkForGlError(0,__FILE__,__LINE__);
-	if(channels == 1) {
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RED, GL_UNSIGNED_BYTE, data);
-	}else if(channels == 2) {
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RG, GL_UNSIGNED_BYTE, data);
-	}else if(channels == 3){
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data);
-	}else if(channels == 4){
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	}else{
-		throw "Invalid number of image channels";
+	GLenum format;
+	switch(channels){
+		case 1: format = GL_RED; break;
+		case 2: format = GL_RG; break;
+		case 3: format = GL_RGB; break;
+		case 4: format = GL_RGBA; break;
+		default: throw "Invalid number of image channels";
 	}
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
 	checkForGlError(0,__FILE__,__LINE__);
 	
 	if (useMipmaps){
@@ -118,17 +116,15 @@ void Texture::bufferData(){
 void Texture::bufferDataFirst(){
 	glBindTexture(GL_TEXTURE_2D, textureId);
 	checkForGlError(0,__FILE__,__LINE__);
-	if(channels == 1){
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
-	}else if(channels == 2) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RG, width, height, 0, GL_RG, GL_UNSIGNED_BYTE, data);
-	}else if(channels == 3){
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-	}else if(channels == 4){
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-	}else{
-		throw "Invalid number of image channels";
+	GLenum format;
+	switch(channels){
+		case 1: format = GL_RED; break;
+		case 2: format = GL_RG; break;
+		case 3: format = GL_RGB; break;
+		case 4: format = GL_RGBA; break;
+		default: throw "Invalid number of image channels";
 	}
+	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 	checkForGlError(0,__FILE__,__LINE__);
 	
 	if(useMipmaps){
