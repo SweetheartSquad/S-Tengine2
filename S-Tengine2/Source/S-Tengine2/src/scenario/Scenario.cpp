@@ -44,8 +44,9 @@ Scenario::Scenario(std::string _jsonSrc) :
 	if(defaultTexture == nullptr){
 		parsingSuccessful = reader.parse(
 			"{"
-				"\"id\":\"DEFAULT\",\""
-				"\"type\": \"texture\""
+				"\"id\":\"DEFAULT\","
+				"\"type\": \"texture\","
+				"\"src\": \"../engine basics/img_cheryl.jpg\""
 			"}", defTexJson);
 		defaultTexture = new AssetTexture(defTexJson);
 		defaultAssets.push_back(defaultTexture);
@@ -54,8 +55,9 @@ Scenario::Scenario(std::string _jsonSrc) :
 	if(defaultTextureSampler == nullptr){
 		parsingSuccessful = reader.parse(
 			"{"
-				"\"id\":\"DEFAULT\",\""
-				"\"type\": \"textureSampler\""
+				"\"id\":\"DEFAULT\","
+				"\"type\": \"textureSampler\","
+				"\"src\": \"../engine basics/img_cheryl.jpg.def\""
 			"}", defTexJson);
 		defaultTextureSampler = new AssetTextureSampler(defTexJson);
 		defaultAssets.push_back(defaultTextureSampler);
@@ -64,8 +66,9 @@ Scenario::Scenario(std::string _jsonSrc) :
 	if(defaultAudio == nullptr){
 		parsingSuccessful = reader.parse(
 			"{"
-				"\"id\":\"DEFAULT\",\""
-				"\"type\": \"audio\""
+				"\"id\":\"DEFAULT\","
+				"\"type\": \"audio\","
+				"\"src\": \"../engine basics/SCENE.ogg\""
 			"}", defTexJson);
 		defaultAudio = new AssetAudio(defTexJson);
 		defaultAssets.push_back(defaultAudio);
@@ -74,8 +77,9 @@ Scenario::Scenario(std::string _jsonSrc) :
 	if(defaultFont == nullptr){
 		parsingSuccessful = reader.parse(
 			"{"
-				"\"id\":\"DEFAULT\",\""
-				"\"type\": \"font\""
+				"\"id\":\"DEFAULT\","
+				"\"type\": \"font\","
+				"\"src\": \"../engine basics/OpenSans-Regular.ttf\""
 			"}", defTexJson);
 		defaultFont = new AssetFont(defTexJson);
 		defaultAssets.push_back(defaultFont);
