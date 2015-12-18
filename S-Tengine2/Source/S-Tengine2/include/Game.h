@@ -27,6 +27,11 @@ protected:
 	// adds the given scene to the splash scene queue
 	// and points the previous splash scene to it
 	void addSplash(Scene_Splash * _splashScene);
+	// called in Game's constructor
+	// should be overridden to contain calls to addSplash
+	// in order to add splash scenes to a game before the
+	// initial scene is loaded
+	virtual void addSplashes();
 private:
 	/**
 	* Prints the frames per second which this game class
@@ -43,11 +48,6 @@ private:
 	unsigned long int numSplashScenes;
 	
 	
-	// called in Game's constructor
-	// should be overridden to contain calls to addSplash
-	// in order to add splash scenes to a game before the
-	// initial scene is loaded
-	virtual void addSplashes();
 public:
 	// must be called in the main before the game loop is started
 	void init();
