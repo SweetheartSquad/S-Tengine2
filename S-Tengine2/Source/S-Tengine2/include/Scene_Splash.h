@@ -11,7 +11,7 @@
 #include <Timeout.h>
 
 class Scene_Splash : public Scene{
-private:
+protected:
 	glm::vec3 clearColour;
 	MeshEntity * splash;
 	ComponentShaderBase * shader;

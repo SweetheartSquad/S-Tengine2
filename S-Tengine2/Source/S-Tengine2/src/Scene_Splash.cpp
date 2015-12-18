@@ -10,6 +10,7 @@
 #include <Keyboard.h>
 #include <Game.h>
 #include <RenderOptions.h>
+#include <scenario/Asset.h>
 
 Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * _splashSound, float _length, glm::vec3 _clearColour) :
 	Scene(_game),
@@ -18,44 +19,35 @@ Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * 
 	shader(new ComponentShaderBase(true)),
 	alphaComponent(new ShaderComponentAlpha(shader, 0)),
 	nextScene(""),
-	aspectRatio((float)_splashImage->width/_splashImage->height)
+	aspectRatio(/*(float)_splashImage->width/_splashImage->height*/1.f)
 {
 	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->addComponent(alphaComponent);
 	shader->compileShader();
+	++shader->referenceCount;
 
+	// remove initial camera
+	childTransform->removeChild(cameras.at(0)->parents.at(0));
+	delete cameras.at(0)->parents.at(0);
+	cameras.pop_back();
+
+	// add orthographic camera
 	orthoCam = new OrthographicCamera(0, 0, 0, 0, -1000, 1000);
 	cameras.push_back(orthoCam);
 	activeCamera = orthoCam;
-
-	//Set up cameras
-	/*PerspectiveCamera * fc = new PerspectiveCamera();
-	childTransform->addChild(fc);
-	cameras.push_back(fc);
-	fc->farClip = 1000.f;
-	fc->nearClip = 0.001f;
-	fc->childTransform->rotate(90, 0, 1, 0, kWORLD);
-	fc->parents.at(0)->translate(-18.5f, -2.0f, 17.36f);
-	fc->yaw = 60.0f;
-	fc->pitch = -4.0f;
-	fc->lastOrientation = fc->calcOrientation();
-	fc->childTransform->setOrientation(fc->lastOrientation);
-	activeCamera = fc;*/
 	
+	// add splash image MeshEntity
 	splash = new MeshEntity(MeshFactory::getPlaneMesh(), shader);
-	splash->mesh->pushTexture2D(_splashImage);
 	childTransform->addChild(splash);
-	for(unsigned long int i = 0; i < splash->mesh->vertices.size(); ++i){
-		splash->mesh->vertices.at(i).y += 0.5f;
-	}
-	splash->mesh->dirty = true;
+	splash->mesh->pushTexture2D(_splashImage);
 
-
-	
+	// initialize timer
 	timer = new Timeout(_length, [this](sweet::Event * _event){
 		game->switchScene(nextScene, true);
 	});
+
+	// add a default fade-in/out transition
 	timer->eventManager->addEventListener("progress", [this](sweet::Event * _event){
 		float p = _event->getFloatData("progress");
 		if(p <= 0.1f){
@@ -66,13 +58,15 @@ Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * 
 			alphaComponent->setAlpha(1.f);
 		}
 	});
-	if(_splashSound != nullptr){
-		timer->eventManager->addEventListener("start", [_splashSound](sweet::Event * _event){
-			_splashSound->play();
-		});
-	}
 
-	++shader->referenceCount;
+	// when the timer starts, load the image and play the sound (if provided)
+	timer->eventManager->addEventListener("start", [this, _splashImage, _splashSound](sweet::Event * _event){
+		_splashImage->load();
+		aspectRatio = (float)_splashImage->width/_splashImage->height;
+		if(_splashSound != nullptr){
+			_splashSound->play();
+		}
+	});
 }
 
 Scene_Splash::~Scene_Splash(){
@@ -87,10 +81,31 @@ void Scene_Splash::update(Step * _step){
 
 	orthoCam->resize(0, sd.x, 0, sd.y);
 
+	// center and resize the splash image
 	if(splash != nullptr){
-		float s = std::min(sd.x, (sd.y));
-		splash->childTransform->scale(s*aspectRatio, s, 1, false);
-		splash->childTransform->translate(sd.x/2.f,0,0,false);
+		float sx;
+		float sy;
+		// screen aspect ratio
+		float sar = (float)(sd.x/sd.y);
+		if(sd.x > sd.y){
+			if(aspectRatio > sar){
+				sx = sd.x;
+				sy = sd.x/aspectRatio;
+			}else{
+				sx = sd.y*aspectRatio;
+				sy = sd.y;
+			}
+		}else{
+			if(aspectRatio > sar){
+				sx = sd.x;
+				sy = sd.x/aspectRatio;
+			}else{
+				sx = sd.y*aspectRatio;
+				sy = sd.y;
+			}
+		}
+		splash->childTransform->scale(sx, sy, 1, false);
+		splash->childTransform->translate(sd.x/2.f,sd.y/2.f,0,false);
 	}
 
 	if(Keyboard::getInstance().keyJustUp(GLFW_KEY_ENTER)){
