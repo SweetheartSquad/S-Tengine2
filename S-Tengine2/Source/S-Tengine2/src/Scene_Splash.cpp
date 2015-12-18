@@ -19,7 +19,7 @@ Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * 
 	shader(new ComponentShaderBase(true)),
 	alphaComponent(new ShaderComponentAlpha(shader, 0)),
 	nextScene(""),
-	aspectRatio(/*(float)_splashImage->width/_splashImage->height*/1.f)
+	aspectRatio(1.f)
 {
 	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->addComponent(new ShaderComponentTexture(shader));
@@ -86,8 +86,8 @@ void Scene_Splash::update(Step * _step){
 		float sx;
 		float sy;
 		// screen aspect ratio
-		float sar = (float)(sd.x/sd.y);
-		if(sd.x > sd.y){
+		float sar = (float)sd.x/sd.y;
+		if(sar > 1){
 			if(aspectRatio > sar){
 				sx = sd.x;
 				sy = sd.x/aspectRatio;
