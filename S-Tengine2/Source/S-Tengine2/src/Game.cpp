@@ -11,8 +11,8 @@
 #include <GLUtils.h>
 
 #include <Scene_Splash.h>
-#include <SceneSplash.h>
-#include <ScenesweetheartSquad.h>
+#include <Scene_Splash_Engine.h>
+#include <Scene_Splash_SweetHeartSquad.h>
 #include <MeshInterface.h>
 #include <Log.h>
 #include <scenario/Scenario.h>
@@ -56,7 +56,8 @@ Game::Game(std::pair<std::string, Scene *> _firstScene, bool _isRunning) :
 }
 
 void Game::addSplashes(){
-	// by default, there are no splash screens
+	addSplash(new Scene_Splash_Engine(this));
+	addSplash(new Scene_Splash_SweetHeartSquad(this));
 }
 
 void Game::init(){

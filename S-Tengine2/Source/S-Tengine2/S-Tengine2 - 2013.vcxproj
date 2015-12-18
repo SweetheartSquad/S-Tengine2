@@ -78,7 +78,7 @@
     <ClCompile Include="src/scenario/Conversation.cpp" />
     <ClCompile Include="src/scenario/Dialogue.cpp" />
     <ClCompile Include="src/scenario/Scenario.cpp" />
-    <ClCompile Include="src/SceneSweetheartSquad.cpp" />
+    <ClCompile Include="src/Scene_Splash_SweetHeartSquad.cpp" />
     <ClCompile Include="src/shader/ComponentShaderBase.cpp" />
     <ClCompile Include="src/shader/ShaderComponentBlinn.cpp" />
     <ClCompile Include="src/shader/BlurShader.cpp" />
@@ -114,7 +114,7 @@
     <ClCompile Include="src/Box.cpp" />
     <ClCompile Include="src/Joystick.cpp" />
     <ClCompile Include="src/JoystickManager.cpp" />
-    <ClCompile Include="src/SceneSplash.cpp" />
+    <ClCompile Include="src/Scene_Splash_Engine.cpp" />
     <ClCompile Include="src/tiny_obj_loader.cc" />
     <ClCompile Include="src/UILayer.cpp" />
     <ClCompile Include="src/BulletDebugDrawer.cpp" />
@@ -238,7 +238,7 @@
     <ClCompile Include="src/scenario/Conversation.cpp" />
     <ClCompile Include="src/scenario/Dialogue.cpp" />
     <ClCompile Include="src/scenario/Scenario.cpp" />
-    <ClCompile Include="src/SceneSweetheartSquad.cpp" />
+    <ClCompile Include="src/Scene_Splash_SweetHeartSquad.cpp" />
     <ClCompile Include="src/shader/ComponentShaderBase.cpp" />
     <ClCompile Include="src/shader/ShaderComponentBlinn.cpp" />
     <ClCompile Include="src/shader/BlurShader.cpp" />
@@ -274,7 +274,7 @@
     <ClCompile Include="src/Box.cpp" />
     <ClCompile Include="src/Joystick.cpp" />
     <ClCompile Include="src/JoystickManager.cpp" />
-    <ClCompile Include="src/SceneSplash.cpp" />
+    <ClCompile Include="src/Scene_Splash_Engine.cpp" />
     <ClCompile Include="src/tiny_obj_loader.cc" />
     <ClCompile Include="src/UILayer.cpp" />
     <ClCompile Include="src/BulletDebugDrawer.cpp" />
