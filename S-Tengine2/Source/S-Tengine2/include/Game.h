@@ -21,7 +21,12 @@
 *
 **************************************************************************/
 class Step;
+class Scene_Splash;
 class Game : public virtual NodeUpdatable, public virtual NodeLoadable{
+protected:
+	// adds the given scene to the splash scene queue
+	// and points the previous splash scene to it
+	void addSplash(Scene_Splash * _splashScene);
 private:
 	/**
 	* Prints the frames per second which this game class
@@ -34,10 +39,22 @@ private:
 
 	double lastTime;
 	int nbFrames;
+
+	unsigned long int numSplashScenes;
+	
+	
+	// called in Game's constructor
+	// should be overridden to contain calls to addSplash
+	// in order to add splash scenes to a game before the
+	// initial scene is loaded
+	virtual void addSplashes();
 public:
+	// must be called in the main before the game loop is started
+	void init();
+
 	bool splashScreen;
 
-	explicit Game(bool _running, std::pair<std::string, Scene *> _firstScene, bool _splashScreen = true);
+	explicit Game(std::pair<std::string, Scene *> _firstScene, bool _running = true);
 	virtual ~Game(void);
 
 	/** Reference to mouse singleton */
@@ -77,7 +94,8 @@ public:
 	std::string newSceneKey;
 	bool deleteOldScene;
 	void switchScene(std::string _newSceneKey, bool _deleteOldScene);
-	
+
+
 	/** 
 	* Calls update on the mouse and keyboard 
 	*/

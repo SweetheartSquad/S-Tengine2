@@ -10,18 +10,19 @@
 #include <VoxRenderOptions.h>
 #include <GLUtils.h>
 
+#include <Scene_Splash.h>
 #include <SceneSplash.h>
 #include <ScenesweetheartSquad.h>
 #include <MeshInterface.h>
 #include <Log.h>
+#include <scenario/Scenario.h>
 
 // for screenshots
 #include <ctime>
 #include <stb/stb_image_write.h>
 #include <AntTweakBar.h>
 
-Game::Game(bool _isRunning, std::pair<std::string, Scene *> _firstScene, bool _splashScreen) :
-	splashScreen(_splashScreen),
+Game::Game(std::pair<std::string, Scene *> _firstScene, bool _isRunning) :
 	accumulator(0.0),
 	lastTimestep(0.0),
 	mouse(&Mouse::getInstance()),
@@ -37,7 +38,8 @@ Game::Game(bool _isRunning, std::pair<std::string, Scene *> _firstScene, bool _s
 	kc_code(0),
 	kc_active(false),
 	kc_just_active(false),
-	autoResize(true)
+	autoResize(true),
+	numSplashScenes(0)
 {
 	int width, height;
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
@@ -49,19 +51,26 @@ Game::Game(bool _isRunning, std::pair<std::string, Scene *> _firstScene, bool _s
 	nbFrames = 0;
 	
 	scenes.insert(_firstScene);
-	if(splashScreen){
-		currentSceneKey = "S-TENGINE2_SPLASH";
-		SceneSplash * ss = new SceneSplash(this);
-		SceneSweetheartSquad * sss = new SceneSweetheartSquad(this);
-		ss->nextScene = "SWEETHEARTSQUAD_SPLASH";
-		sss->nextScene = _firstScene.first;
-		currentScene = ss;
-		scenes.insert(std::pair<std::string, Scene * >(currentSceneKey, ss));
-		scenes.insert(std::pair<std::string, Scene * >("SWEETHEARTSQUAD_SPLASH", sss));
+	currentScene = _firstScene.second;
+	currentSceneKey = _firstScene.first;
+}
+
+void Game::addSplashes(){
+	// by default, there are no splash screens
+}
+
+void Game::init(){
+	addSplashes();
+	if(numSplashScenes > 0){
+		std::stringstream ss;
+		ss << "SCENE_SPLASH" << numSplashScenes;
+		Scene_Splash * lastSplash = dynamic_cast<Scene_Splash *>(scenes[ss.str()]);
+		lastSplash->nextScene = currentSceneKey;
+		currentSceneKey = "SCENE_SPLASH1";
 	}else{
-		currentSceneKey = _firstScene.first;
-		currentScene = _firstScene.second;
+		currentSceneKey = currentSceneKey;
 	}
+	currentScene = scenes[currentSceneKey];
 }
 
 Game::~Game(void){
@@ -263,6 +272,22 @@ void Game::switchScene(std::string _newSceneKey, bool _deleteOldScene){
 		switchingScene = false;
 		newSceneKey = "";
 		Log::warn(ss.str());
+	}
+}
+
+void Game::addSplash(Scene_Splash * _splashScene){
+	std::stringstream ss1;
+	ss1 << "SCENE_SPLASH" << numSplashScenes;
+	++numSplashScenes;
+	std::stringstream ss2;
+	ss2 << "SCENE_SPLASH" << numSplashScenes;
+	if(numSplashScenes > 1){
+		dynamic_cast<Scene_Splash *>(scenes[ss1.str()])->nextScene = ss2.str();
+	}
+	
+	auto res = scenes.insert(std::pair<std::string, Scene * >(ss2.str(), _splashScene));
+	if(!res.second){
+		Log::error("Scene with name\"" + ss2.str() + "\" already exists, splash scene could not be inserted.");
 	}
 }
 

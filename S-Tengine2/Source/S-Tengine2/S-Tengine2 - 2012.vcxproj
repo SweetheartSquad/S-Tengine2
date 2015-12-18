@@ -151,12 +151,14 @@
     <ClCompile Include="src\AntTweakBar.cpp" />
     <ClCompile Include="src\EventManager.cpp" />
     <ClCompile Include="src\Plane.cpp" />
+    <ClCompile Include="src\Scene_Splash.cpp" />
     <ClCompile Include="src\shader\ShaderComponentDepthOffset.cpp" />
     <ClCompile Include="src\shader\ShaderComponentMask.cpp" />
     <ClCompile Include="src\shader\ShaderComponentWorldSpaceUVs.cpp" />
     <ClInclude Include="include\EventManager.h" />
     <ClInclude Include="include\Plane.h" />
     <ClInclude Include="include\rng.h" />
+    <ClInclude Include="include\Scene_Splash.h" />
     <ClInclude Include="include\shader\ShaderComponentDepthOffset.h" />
     <ClInclude Include="include\shader\ShaderComponentMask.h" />
     <ClCompile Include="src\AutoMusic.cpp" />
