@@ -7,7 +7,7 @@
 #include <json\json.h>
 #include <OpenALSound.h>
 
-class Asset abstract : public NodeContent{
+class Asset abstract : public virtual NodeContent, public virtual NodeLoadable{
 public:
 	std::string id;
 
@@ -22,6 +22,9 @@ public:
 
 	AssetTexture(Json::Value _json);
 	~AssetTexture();
+	
+	virtual void load() override;
+	virtual void unload() override;
 };
 
 class AssetTextureSampler : public Asset{
@@ -30,6 +33,9 @@ public:
 
 	AssetTextureSampler(Json::Value _json);
 	~AssetTextureSampler();
+	
+	virtual void load() override;
+	virtual void unload() override;
 };
 
 class AssetAudio : public Asset{
@@ -38,6 +44,9 @@ public:
 
 	AssetAudio(Json::Value _json);
 	~AssetAudio();
+	
+	virtual void load() override;
+	virtual void unload() override;
 };
 
 class AssetFont : public Asset{
@@ -46,4 +55,7 @@ public:
 
 	AssetFont(Json::Value _json);
 	~AssetFont();
+	
+	virtual void load() override;
+	virtual void unload() override;
 };

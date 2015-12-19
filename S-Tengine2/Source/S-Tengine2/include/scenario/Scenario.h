@@ -57,4 +57,7 @@ public:
 	AssetTextureSampler * getTextureSampler(std::string _id);
 	AssetAudio * getAudio(std::string _id);
 	AssetFont * getFont(std::string _id);
+
+	virtual void load() override;
+	virtual void unload() override;
 };

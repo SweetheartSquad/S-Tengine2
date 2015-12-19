@@ -191,3 +191,21 @@ AssetFont * Scenario::getFont(std::string _id){
 	}
 	return res;
 }
+
+void Scenario::load(){
+	if(!loaded){
+		for(auto a : assets){
+			a.second->load();
+		}
+	}
+	NodeResource::load();
+}
+
+void Scenario::unload(){
+	if(loaded){
+		for(auto a : assets){
+			a.second->unload();
+		}
+	}
+	NodeResource::unload();
+}

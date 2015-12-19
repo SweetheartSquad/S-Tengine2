@@ -21,11 +21,25 @@ AssetTexture::AssetTexture(Json::Value _json) :
 	}else{
 		src = "assets/textures/" + src;
 	}
-	texture = new Texture(src, true, false);
-	texture->load();
+	texture = new Texture(src, true, false, _json.get("generateMipmaps", true).asBool());
+	//texture->load();
 }
 AssetTexture::~AssetTexture(){
 	delete texture;
+}
+
+void AssetTexture::load(){
+	if(!loaded){
+		texture->load();
+	}
+	Asset::load();
+}
+
+void AssetTexture::unload(){
+	if(loaded){
+		texture->unload();
+	}
+	Asset::unload();
 }
 
 AssetTextureSampler::AssetTextureSampler(Json::Value _json) :
@@ -65,6 +79,20 @@ AssetTextureSampler::~AssetTextureSampler(){
 	delete textureSampler;
 }
 
+void AssetTextureSampler::load(){
+	if(!loaded){
+		textureSampler->load();
+	}
+	Asset::load();
+}
+
+void AssetTextureSampler::unload(){
+	if(loaded){
+		textureSampler->unload();
+	}
+	Asset::unload();
+}
+
 AssetAudio::AssetAudio(Json::Value _json) :
 	Asset(_json)
 {
@@ -86,6 +114,20 @@ AssetAudio::~AssetAudio(){
 	delete sound;
 }
 
+void AssetAudio::load(){
+	if(!loaded){
+		sound->load();
+	}
+	Asset::load();
+}
+
+void AssetAudio::unload(){
+	if(loaded){
+		sound->unload();
+	}
+	Asset::unload();
+}
+
 AssetFont::AssetFont(Json::Value _json) :
 	Asset(_json)
 {
@@ -101,6 +143,20 @@ AssetFont::AssetFont(Json::Value _json) :
 }
 AssetFont::~AssetFont(){
 	delete font;
+}
+
+void AssetFont::load(){
+	if(!loaded){
+		font->load();
+	}
+	Asset::load();
+}
+
+void AssetFont::unload(){
+	if(loaded){
+		font->unload();
+	}
+	Asset::unload();
 }
 
 Asset * Asset::getAsset(Json::Value _json){
