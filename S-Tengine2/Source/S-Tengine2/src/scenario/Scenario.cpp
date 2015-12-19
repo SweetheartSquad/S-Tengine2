@@ -150,6 +150,7 @@ AssetTexture * Scenario::getTexture(std::string _id){
 	if(it != textures.end()){
 		res = it->second;
 	}else{
+		Log::warn("Texture \"" + _id + "\" not found.");
 		res = defaultTexture;
 	}
 	return res;
@@ -161,6 +162,7 @@ AssetTextureSampler * Scenario::getTextureSampler(std::string _id){
 	if(it != textureSamplers.end()){
 		res = dynamic_cast<AssetTextureSampler *>(it->second);
 	}else{
+		Log::warn("TextureSampler \"" + _id + "\" not found.");
 		res = defaultTextureSampler;
 	}
 	return res;
@@ -172,6 +174,7 @@ AssetAudio * Scenario::getAudio(std::string _id){
 	if(it != audio.end()){
 		res = it->second;
 	}else{
+		Log::warn("Audio \"" + _id + "\" not found.");
 		res = defaultAudio;
 	}
 	return res;
@@ -183,6 +186,7 @@ AssetFont * Scenario::getFont(std::string _id){
 	if(it != fonts.end()){
 		res = it->second;
 	}else{
+		Log::warn("Font \"" + _id + "\" not found.");
 		res = defaultFont;
 	}
 	return res;
