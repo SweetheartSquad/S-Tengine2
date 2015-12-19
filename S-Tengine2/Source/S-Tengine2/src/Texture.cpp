@@ -49,7 +49,7 @@ void Texture::load(){
 		}
 		// create and buffer OpenGL texture
 		glGenTextures(1, &textureId);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		bufferDataFirst();
 
 		// delete texture data if necessary
@@ -66,7 +66,7 @@ void Texture::unload(){
 		ST_LOG_INFO("Unloading texture: " + this->src);
 		glDeleteTextures(1, &textureId);
 		textureId = 0;
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}
 	NodeLoadable::unload();
 }
@@ -95,7 +95,7 @@ void Texture::saveImageData(std::string _filename){
 
 void Texture::bufferData(){
 	glBindTexture(GL_TEXTURE_2D, textureId);
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	GLenum format;
 	switch(channels){
 		case 1: format = GL_RED; break;
@@ -105,17 +105,17 @@ void Texture::bufferData(){
 		default: throw "Invalid number of image channels";
 	}
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, format, GL_UNSIGNED_BYTE, data);
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	
 	if (useMipmaps){
 		glGenerateMipmap(GL_TEXTURE_2D);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}
 }
 
 void Texture::bufferDataFirst(){
 	glBindTexture(GL_TEXTURE_2D, textureId);
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	GLenum format;
 	switch(channels){
 		case 1: format = GL_RED; break;
@@ -125,10 +125,10 @@ void Texture::bufferDataFirst(){
 		default: throw "Invalid number of image channels";
 	}
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	
 	if(useMipmaps){
 		glGenerateMipmap(GL_TEXTURE_2D);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}
 }

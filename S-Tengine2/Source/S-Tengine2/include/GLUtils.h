@@ -11,7 +11,10 @@
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 #ifdef _DEBUG
-#define checkForGlError(_printSuccess, _file, _line) do{\
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
+
+#define checkForGlError(_printSuccess) do{\
 	GLenum err = glGetError();\
 	std::string errString;\
 	do {\
@@ -26,13 +29,13 @@
 				default: errString = "dunno, but something went wrong?";	break;\
 			}\
 			std::stringstream ss;\
-			ss << "OpenGL Error:\tFile: " << (_file) <<", Line: "<< (_line) << ", Log: " << errString;\
+			ss << "OpenGL Error:\tFile: " << TOSTRING(__FILE__) <<", Line: "<< TOSTRING(__LINE__) << ", Log: " << errString;\
 			Log::error(ss.str());\
 		}\
 	}while ((err = glGetError()) != GL_NO_ERROR);\
 }while(false)
 #else
-#define checkForGlError(ps, f, l)
+#define checkForGlError(ps)
 #endif
 
 class GLUtils{

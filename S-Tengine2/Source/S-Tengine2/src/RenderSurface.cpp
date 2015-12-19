@@ -102,7 +102,7 @@ void RenderSurface::render(GLuint _textureId, GLint _renderTo, bool _disableBlen
 	glUseProgram(shader->getProgramId());
 	glBindFramebuffer(GL_FRAMEBUFFER, _renderTo);
 	glBindVertexArray(vaoId);
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 
 	if(_disableBlending){
 		glDisable(GL_BLEND);

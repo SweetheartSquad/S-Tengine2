@@ -39,13 +39,13 @@ MeshInterface::~MeshInterface(){
 		Log::warn("Mesh IBO is invalid");
 		return;
 	}
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	glDeleteVertexArrays(1, &vaoId);
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	glDeleteBuffers(1, &vboId);
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	glDeleteBuffers(1, &iboId);
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	for(Texture * t : textures){
 		t->decrementAndDelete();
 	}
@@ -67,7 +67,7 @@ GLsizei MeshInterface::getVertCount(){
 
 void MeshInterface::load(){
 	if(!loaded){
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		
 		GLint prev;
 		glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &prev);
@@ -85,7 +85,7 @@ void MeshInterface::load(){
 		// Index Buffer Object (IBO)
 		glGenBuffers(1, &iboId);
 
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 
 		// Initialize textures
 		for (Texture * texture : textures){
@@ -98,7 +98,7 @@ void MeshInterface::load(){
 		glBindVertexArray(prev);
 		glBindBuffer(GL_ARRAY_BUFFER, prev2);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, prev3);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 
 		clean();
 	}
@@ -119,7 +119,7 @@ void MeshInterface::unload(){
 		vaoId = 0;
 
 		dirty = true;
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}
 	NodeLoadable::unload();
 }
@@ -138,7 +138,7 @@ void MeshInterface::clean(){
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * (indices.size()), indices.data(), drawMode);
 		dirty = false;
 		glBindVertexArray(prev);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}
 }
 
@@ -173,7 +173,7 @@ void MeshInterface::render(sweet::MatrixStack * _matrixStack, RenderOptions * _r
 		// Bind VAO
 		glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &prev);
 		glBindVertexArray(vaoId);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		//glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 
@@ -184,7 +184,7 @@ void MeshInterface::render(sweet::MatrixStack * _matrixStack, RenderOptions * _r
 		glUseProgram(_renderOption->shader->getProgramId());
 	//}
 	_renderOption->shader->clean(_matrixStack, _renderOption, this);	
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	// Texture repeat
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, uvEdgeMode);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, uvEdgeMode);
@@ -197,7 +197,7 @@ void MeshInterface::render(sweet::MatrixStack * _matrixStack, RenderOptions * _r
 
 	// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
 	glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 
 	//if(prev != -1){
 		// Disable VAO

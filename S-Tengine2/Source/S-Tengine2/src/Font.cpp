@@ -54,9 +54,9 @@ void GlyphTexture::load(){
 	if(!loaded){
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glGenTextures(1, &textureId);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 		glBindTexture(GL_TEXTURE_2D, textureId);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
 		

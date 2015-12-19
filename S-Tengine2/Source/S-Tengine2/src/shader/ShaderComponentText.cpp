@@ -98,7 +98,7 @@ void ShaderComponentText::configureUniforms(sweet::MatrixStack* _matrixStack, Re
 		unsigned long int newNumTextures = mesh->textureCount();
 		if(newNumTextures != numTextures){
 			glUniform1i(texNumLoc, newNumTextures);
-			checkForGlError(0,__FILE__,__LINE__);
+			checkForGlError(false);
 			numTextures = newNumTextures;
 		}
 		// Bind each texture to the texture sampler array in the frag _shader

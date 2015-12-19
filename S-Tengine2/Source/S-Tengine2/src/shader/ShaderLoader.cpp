@@ -13,19 +13,19 @@ ShaderLoader::ShaderLoader(std::string _vertexShaderSource, std::string _fragmen
 	char * f = new char[_fragmentShaderSource.size() + 1];
 	int fl = _fragmentShaderSource.length();
 	memcpy(f, _fragmentShaderSource.c_str(), _fragmentShaderSource.size() + 1);
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(true);
 	GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, f, fl);
 	delete f;
 
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(true);
 
 	programId = glCreateProgram();
 	glAttachShader(programId, vertexShader);
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(true);
 	glAttachShader(programId, fragmentShader);
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(true);
 	glLinkProgram(programId);
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(true);
 
 	//check for error with glLinkProgram
 	GLint isLinked = 0;
@@ -47,11 +47,11 @@ ShaderLoader::ShaderLoader(std::string _vertexShaderSource, std::string _fragmen
 		}
 		//Exit with failure.
 	}
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(true);
 
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(true);
 }
 
 ShaderLoader::~ShaderLoader(void){}
@@ -61,17 +61,17 @@ GLuint ShaderLoader::getProgramId(){
 }
 
 GLuint ShaderLoader::compileShader(GLenum _shaderType, const char* _source, int _length){
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(true);
 	GLuint shaderId = glCreateShader(_shaderType);
 	glShaderSource(shaderId, 1, &_source, &_length);
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(true);
 	glCompileShader(shaderId);
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(true);
 
 	GLint status = 0;
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(true);
 	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &status);
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(true);
 	if(status == GL_FALSE){
 		std::cout << "\tERROR: Shader could not be compiled." << std::endl << std::endl << _source << std::endl << std::endl;
 		GLint maxLength = 0;
@@ -93,7 +93,7 @@ GLuint ShaderLoader::compileShader(GLenum _shaderType, const char* _source, int 
 	}else{
 		std::cout << "Shader compiled succesfully." << std::endl << std::endl << _source << std::endl << std::endl;
 	}
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(true);
 
 	return shaderId;
 }

@@ -133,7 +133,7 @@ void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 
 	_matrixStack->popMatrix();
 
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 
 	// clean the lights
 	for(Light * l : lights){

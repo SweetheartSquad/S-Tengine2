@@ -336,7 +336,7 @@ void Game::toggleFullScreen(){
 	
 	// reload everything
 	load();
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 }
 
 

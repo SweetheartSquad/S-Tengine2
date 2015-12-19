@@ -31,6 +31,6 @@ void GLUtils::configureVertexAttributes(GLint _vertexHandle, unsigned long _arit
 		glVertexAttribPointer(_vertexHandle, _arity, GL_FLOAT, GL_FALSE, _stride, BUFFER_OFFSET(_bufferOffset));
 		
 		glBindVertexArray(prev);
-		checkForGlError(0,__FILE__,__LINE__);
+		checkForGlError(false);
 	}
 }
