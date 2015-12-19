@@ -14,7 +14,6 @@
 MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode) :
 	NodeResource(true),
 	dirty(true),
-	texturesDirty(true),
 	drawMode(drawMode),
 	polygonalDrawMode(polygonalDrawMode),
 	uvEdgeMode(GL_REPEAT),
@@ -236,7 +235,6 @@ void MeshInterface::removeTextureAt(int _idx){
 void MeshInterface::pushTexture2D(Texture* _texture){
 	++_texture->referenceCount;
 	textures.push_back(_texture);
-	texturesDirty = true;
 }
 
 unsigned long int MeshInterface::textureCount() const{
@@ -309,7 +307,6 @@ std::ostream& operator<<(std::ostream& os, const MeshInterface& obj){
 			<< ' ' << static_cast<const NodeLoadable&>(obj)<< std::endl
 			<< ' ' << static_cast<const NodeResource&>(obj)<< std::endl
 			<< " dirty: " << obj.dirty<< std::endl
-			<< " texturesDirty: " << obj.texturesDirty<< std::endl
 			<< " uvEdgeMode: " << obj.uvEdgeMode<< std::endl
 			<< " scaleModeMag: " << obj.scaleModeMag<< std::endl
 			<< " scaleModeMin: " << obj.scaleModeMin<< std::endl

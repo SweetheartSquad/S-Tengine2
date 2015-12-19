@@ -27,7 +27,6 @@ class MeshInterface : public virtual NodeRenderable, public virtual NodeLoadable
 public:
 	/** Whether the vbo and ibo contain up-to-date vertex and index data */
 	bool dirty;
-	bool texturesDirty;
 	/** Textures */
 	std::vector<Texture *> textures;
 	/** Vertex data for the vbo */

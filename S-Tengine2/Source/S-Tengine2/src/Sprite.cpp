@@ -62,7 +62,6 @@ void Sprite::setPrimaryTexture(Texture * _texture) {
 		mesh->pushTexture2D(_texture);
 	}else {
 		mesh->textures[0] = _texture;
-		mesh->texturesDirty = true;
 		++_texture->referenceCount;
 	}
 	
@@ -94,7 +93,6 @@ void Sprite::setPrimaryTexture(TextureSampler * _textureSampler) {
 		mesh->pushTexture2D(_textureSampler->texture);
 	}else {
 		mesh->textures[0] = _textureSampler->texture;
-		mesh->texturesDirty = true;
 		++_textureSampler->texture->referenceCount;
 	}
 
