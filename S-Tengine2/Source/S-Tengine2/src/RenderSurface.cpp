@@ -62,7 +62,7 @@ void RenderSurface::load(){
 
 		configureDefaultVertexAttributes(shader);
 		glBindVertexArray(0);
-		checkForGlError(0, __FILE__, __LINE__);
+		checkForGlError(false);
 	}
 	
 	NodeLoadable::load();
@@ -77,7 +77,7 @@ void RenderSurface::unload(){
 		vaoId = 0;
 		iboId = 0;
 		shader->unload();
-		checkForGlError(0, __FILE__, __LINE__);
+		checkForGlError(false);
 	}
 	NodeLoadable::unload();
 }
@@ -148,6 +148,5 @@ void RenderSurface::render(GLuint _textureId, GLint _renderTo, bool _disableBlen
 	glBindVertexArray(0);
 
 
-	checkForGlError(0, __FILE__, __LINE__);
-			
+	checkForGlError(false);
 }

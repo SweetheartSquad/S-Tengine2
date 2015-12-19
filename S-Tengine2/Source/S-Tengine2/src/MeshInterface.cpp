@@ -26,7 +26,7 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode) :
 }
 
 MeshInterface::~MeshInterface(){
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
 	if(vaoId != 0 && glIsVertexArray(vaoId) != GL_TRUE){
 		Log::warn("Mesh VAO is invalid");
 		return;

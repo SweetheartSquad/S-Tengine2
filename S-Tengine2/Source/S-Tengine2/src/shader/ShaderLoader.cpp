@@ -5,7 +5,7 @@ ShaderLoader::ShaderLoader(std::string _vertexShaderSource, std::string _fragmen
 	char * v = new char[_vertexShaderSource.size() + 1];
 	int vl = _vertexShaderSource.length();
 	memcpy(v, _vertexShaderSource.c_str(), _vertexShaderSource.size() + 1);
-	checkForGlError(true,__FILE__,__LINE__);
+	checkForGlError(true);
 	GLuint vertexShader = compileShader(GL_VERTEX_SHADER, v, vl);
 	delete v;
 
