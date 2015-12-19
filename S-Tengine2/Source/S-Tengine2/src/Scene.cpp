@@ -44,6 +44,14 @@ Scene::Scene(Game * _game):
 
 	depthShader->addComponent(new ShaderComponentDepth(depthShader));
 	depthShader->compileShader();
+
+	++depthBuffer->referenceCount;
+	++normalBuffer->referenceCount;
+	++shadowBuffer->referenceCount;
+	++depthShader->referenceCount;
+	++shadowShader->referenceCount;
+	++normalsShader->referenceCount;
+	++shadowSurface->referenceCount;
 }
 
 Scene::~Scene(void){
@@ -58,12 +66,14 @@ Scene::~Scene(void){
 		lights.pop_back();
 	}
 	
-	depthBuffer->safeDelete();
-	shadowBuffer->safeDelete();
-	depthShader->safeDelete();
-	normalsShader->safeDelete();
-	normalBuffer->safeDelete();
-	delete shadowSurface;
+
+	depthBuffer->decrementAndDelete();
+	normalBuffer->decrementAndDelete();
+	shadowBuffer->decrementAndDelete();
+	depthShader->decrementAndDelete();
+	shadowShader->decrementAndDelete();
+	normalsShader->decrementAndDelete();
+	shadowSurface->decrementAndDelete();
 }
 
 void Scene::update(Step * _step){
@@ -74,22 +84,26 @@ void Scene::update(Step * _step){
 }
 
 void Scene::load(){
-	shadowSurface->load();
-	depthShader->load();
-	shadowBuffer->load();
-	depthBuffer->load();
-	normalsShader->load();
-	normalBuffer->load();
+	if(!loaded){
+		shadowSurface->load();
+		depthShader->load();
+		shadowBuffer->load();
+		depthBuffer->load();
+		normalsShader->load();
+		normalBuffer->load();
+	}
 	Entity::load();
 }
 
 void Scene::unload(){
-	depthBuffer->unload();
-	shadowBuffer->unload();
-	depthShader->unload();
-	shadowSurface->unload();
-	normalsShader->unload();
-	normalBuffer->unload();
+	if(loaded){
+		depthBuffer->unload();
+		shadowBuffer->unload();
+		depthShader->unload();
+		shadowSurface->unload();
+		normalsShader->unload();
+		normalBuffer->unload();
+	}
 	Entity::unload();
 }
 
