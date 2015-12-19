@@ -75,6 +75,10 @@ void UILayer::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderO
 }
 
 void UILayer::resize(float _left, float _right, float _bottom, float _top){
+	// if the size hasn't changed, return early
+	if(_left == cam.left && _right == cam.right && _bottom == cam.bottom && _top == cam.top){
+		return;
+	}
 	cam.left = _left;
 	cam.right = _right;
 	cam.bottom = _bottom;
