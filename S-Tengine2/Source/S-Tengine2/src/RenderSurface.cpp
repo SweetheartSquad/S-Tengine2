@@ -5,7 +5,7 @@
 
 #include "shader/Shader.h"
 
-RenderSurface::RenderSurface(Shader * _shader) :
+RenderSurface::RenderSurface(Shader * _shader, bool _configureDefaultVertexAttributes) :
 	MeshInterface(GL_QUADS, GL_STATIC_DRAW),
 	NodeResource(true),
 	NodeShadable(_shader)
@@ -35,7 +35,13 @@ RenderSurface::RenderSurface(Shader * _shader) :
 		0, 0
 	));
 
-	loaded = false;
+	if(shader != nullptr && _configureDefaultVertexAttributes) {
+		load();
+		if(!shader->loaded || shader->isDirty()) {
+			shader->load();
+		}
+		configureDefaultVertexAttributes(_shader);
+	}
 }
 
 RenderSurface::~RenderSurface(){
