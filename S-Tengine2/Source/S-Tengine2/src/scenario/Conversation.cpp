@@ -70,7 +70,7 @@ bool Conversation::sayNextDialogue(){
 	}
 
 	// if there aren't any dialogue objects left, the conversation is over so return false
-	if(currentDialogue+2 >= dialogueObjects.size()){
+	if(currentDialogue+1 >= dialogueObjects.size()){
 		return false;
 	}
 	
