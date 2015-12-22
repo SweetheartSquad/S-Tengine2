@@ -54,7 +54,7 @@ public:
 
 	bool splashScreen;
 
-	explicit Game(std::pair<std::string, Scene *> _firstScene, bool _running = true);
+	explicit Game(std::string _firstSceneKey, Scene * _firstScene, bool _running = true);
 	virtual ~Game(void);
 
 	/** Reference to mouse singleton */

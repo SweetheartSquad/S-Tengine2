@@ -22,7 +22,7 @@
 #include <stb/stb_image_write.h>
 #include <AntTweakBar.h>
 
-Game::Game(std::pair<std::string, Scene *> _firstScene, bool _isRunning) :
+Game::Game(std::string _firstSceneKey, Scene * _firstScene, bool _isRunning) :
 	accumulator(0.0),
 	lastTimestep(0.0),
 	mouse(&Mouse::getInstance()),
@@ -50,9 +50,9 @@ Game::Game(std::pair<std::string, Scene *> _firstScene, bool _isRunning) :
 	lastTime = glfwGetTime();
 	nbFrames = 0;
 	
-	scenes.insert(_firstScene);
-	currentScene = _firstScene.second;
-	currentSceneKey = _firstScene.first;
+	scenes.insert(std::pair<std::string, Scene *>(_firstSceneKey, _firstScene));
+	currentScene = _firstScene;
+	currentSceneKey = _firstSceneKey;
 }
 
 void Game::addSplashes(){
