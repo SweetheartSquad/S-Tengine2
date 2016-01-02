@@ -17,7 +17,7 @@ float sweet::NumberUtils::pingPong(float _val, float _min, float _max){
 }
 
 float sweet::NumberUtils::randomFloat(float _min, float _max){
-	return _min + randomFloat() * (_max - _min +1);
+	return _min + randomFloat() * (_max - _min);
 	return 0;
 }
 float sweet::NumberUtils::randomFloat(){

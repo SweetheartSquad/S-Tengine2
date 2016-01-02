@@ -5,13 +5,14 @@ namespace sweet{
 	public:
 		static float pingPong(float _val, float _min, float _max);
 
-		// returns a random number in the range _min <= res < _max
+		// returns a random number in the range _min < res < _max
 		static float randomFloat(float _min, float _max);
-		// returns a random number in the range 0 to 1
+		// returns a random number in the range 0 < res < 1
 		static float randomFloat();
+
 		// returns a random number in the range _min <= res <= _max
 		static int randomInt(int _min, int _max);
-		// returns a random number in the range 0 to something really really high
+		// returns a random number in the range 0 <= res <= INT_MAX/2
 		static int randomInt();
 
 
