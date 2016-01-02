@@ -18,7 +18,7 @@ public:
 	Transform * meshTransform;
 
 	// returns a box which covers the verts of the mesh and all of its children
-	sweet::Box calcOverallBoundingBox();
+	//sweet::Box calcOverallBoundingBox();
 
 	explicit MeshEntity(MeshInterface * _mesh, Shader * _shader = nullptr, bool _configureDefaultVertexAttributes = true);
 	virtual ~MeshEntity(void);
@@ -44,8 +44,11 @@ public:
 	/** Loads and cleans mesh, configures default vertex attributes, deletes and reloads shader, and calls unload on all children (recursive) */
 	virtual void load() override;
 
-	// bakes the transformation matrices into the mesh's verts and resets the transform
-	//void freezeTransformation();
+	// bakes the childTransform and meshTransform into the mesh's verts and resets them both to identity matrices
+	// this is useful for static entities, as it simplifies model-matrix calculations
+	// this is also useful for configuring physics entities which use the mesh as the source for the collider
+	// be careful about using this with non-static entities
+	void freezeTransformation();
 private:
 	
 };

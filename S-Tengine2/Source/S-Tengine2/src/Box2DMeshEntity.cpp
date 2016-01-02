@@ -16,7 +16,7 @@ void Box2DMeshEntity::update(Step* _step){
 }
 
 b2Fixture * Box2DMeshEntity::createFixture(bool _circle){
-	sweet::Box bb = calcOverallBoundingBox();
+	sweet::Box bb = mesh->calcBoundingBox();
 	
 	float scaleX = 1, scaleY = 1;
 	if(parents.size() > 0){

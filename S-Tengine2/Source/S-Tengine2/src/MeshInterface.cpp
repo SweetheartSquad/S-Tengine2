@@ -301,6 +301,18 @@ sweet::Box MeshInterface::calcBoundingBox() const{
 	return sweet::Box(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ);
 }
 
+void MeshInterface::applyTransformation(Transform * _transform){
+	const glm::mat4x4 m = _transform->getModelMatrix();
+	for(Vertex & i : vertices){
+		glm::vec4 v(i.x, i.y, i.z, 1);
+		v = m * v;
+		i.x = v.x;
+		i.y = v.y;
+		i.z = v.z;
+	}
+	dirty = true;
+}
+
 std::ostream& operator<<(std::ostream& os, const MeshInterface& obj){
 		os
 			<< static_cast<const NodeRenderable&>(obj)<< std::endl

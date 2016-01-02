@@ -138,6 +138,9 @@ public:
 	// returns a box which covers the verts of the mesh
 	sweet::Box calcBoundingBox() const;
 
+	// multiplies the mesh's vertices by the transformation matrix of the provided _transform
+	void applyTransformation(Transform * _transform);
+
 	friend std::ostream& operator<<(std::ostream& os, const MeshInterface& obj);
 };
 

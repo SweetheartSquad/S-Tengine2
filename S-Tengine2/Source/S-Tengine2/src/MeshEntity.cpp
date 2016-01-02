@@ -113,7 +113,7 @@ void MeshEntity::load(){
 	Entity::load();
 }
 
-sweet::Box MeshEntity::calcOverallBoundingBox(){
+/*sweet::Box MeshEntity::calcOverallBoundingBox(){
 	sweet::Box res = mesh->calcBoundingBox();
 	for(auto c : childTransform->children){
 		MeshEntity * me = dynamic_cast<MeshEntity *>(c);
@@ -122,18 +122,11 @@ sweet::Box MeshEntity::calcOverallBoundingBox(){
 		}
 	}
 	return res;
-}
-
-/*void MeshEntity::freezeTransformation(){
-	glm::mat4 m = parent->getModelMatrix();
-
-	for(auto & v : mesh->vertices){
-		glm::vec4 newV(v.x, v.y, v.z, 0);
-		newV = m * newV;
-		v.x = newV.x;
-		v.y = newV.y;
-		v.z = newV.z;
-	}
-	mesh->dirty = true;
-	parent->reset();
 }*/
+
+void MeshEntity::freezeTransformation(){
+	mesh->applyTransformation(meshTransform);
+	meshTransform->reset();
+	mesh->applyTransformation(childTransform);
+	childTransform->reset();
+}
