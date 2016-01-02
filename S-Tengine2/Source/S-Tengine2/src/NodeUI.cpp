@@ -333,6 +333,13 @@ void NodeUI::__updateForEntities(Step * _step) {
 		updateCollider();
 		
 		if(updateState){
+			float d = mouse->getMouseWheelDelta();
+			if(abs(d) > FLT_EPSILON){
+				sweet::Event * e = new sweet::Event("mousewheel");
+				e->setFloatData("delta", d);
+				eventManager.triggerEvent(e);
+			}
+
 			if(!isHovered){
 				in();
 			}if(mouse->leftJustPressed()){

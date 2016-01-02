@@ -9,7 +9,8 @@ Mouse::Mouse():
 	y(NULL),
 	clampedX(NULL),
 	clampedY(NULL),
-	active(true)
+	active(true),
+	mouseWheelDelta(0)
 {
 }
 
@@ -48,6 +49,10 @@ double Mouse::mouseY(bool _clamped){
 	return _clamped ? clampedY : y;
 }
 
+double Mouse::getMouseWheelDelta(){
+	return mouseWheelDelta;
+}
+
 void Mouse::translate(glm::vec2 _v){
 	if(active){
 		glm::uvec2 sd = sweet::getWindowDimensions();
@@ -59,6 +64,7 @@ void Mouse::translate(glm::vec2 _v){
 void Mouse::update(){
 	justPressedButtons.clear();
 	justReleasedButtons.clear();
+	mouseWheelDelta = 0;
 }
 
 void Mouse::mouseDownListener(int _glfwMouseCode){
@@ -87,6 +93,10 @@ void Mouse::mousePositionListener(double _x, double _y){
 		x = _x;
 		y = _y;
 	}
+}
+
+void Mouse::mouseWheelListener(double _delta){
+	mouseWheelDelta = _delta;
 }
 
 Mouse& Mouse::getInstance(){

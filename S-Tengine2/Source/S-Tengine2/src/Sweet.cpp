@@ -85,6 +85,13 @@ void sweet::mousePositionCallback(GLFWwindow *_window, double _x, double _y){
 		mouse->mousePositionListener(_x, sd.y - _y);
     }
 }
+void sweet::mouseScrollCallback(GLFWwindow *_window, double _x, double _y){
+	if(!sweet::antTweakBarInititialized || !TwEventMouseWheelGLFW(_y) ) {
+      	Mouse * mouse = &Mouse::getInstance();
+		mouse->mouseWheelListener(_y);
+    }
+}
+
 
 void sweet::attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _action, int _mods){
 	// grab the mouse coordinates and the screen size
@@ -110,6 +117,7 @@ void sweet::attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _
 		glfwSetKeyCallback(_window, keyCallback);
 		glfwSetMouseButtonCallback(_window, mouseButtonCallback);
 		glfwSetCursorPosCallback(_window, mousePositionCallback);
+		glfwSetScrollCallback(_window, mouseScrollCallback);
 		Mouse::getInstance().active = true;
 	}
 }
@@ -127,6 +135,7 @@ void sweet::windowFocusCallback(GLFWwindow * _window, int _focused){
 		glfwSetKeyCallback(_window, nullptr);
 		glfwSetMouseButtonCallback(_window, nullptr);
 		glfwSetCursorPosCallback(_window, nullptr);
+		glfwSetScrollCallback(_window, nullptr);
 		Mouse::getInstance().active = false;
 	}
 }
@@ -164,6 +173,7 @@ void sweet::destructWindow(GLFWwindow * _window){
 	glfwSetKeyCallback(_window, nullptr);
 	glfwSetMouseButtonCallback(_window, nullptr);
 	glfwSetCursorPosCallback(_window, nullptr);
+	glfwSetScrollCallback(_window, nullptr);
 	glfwSetWindowFocusCallback(_window, nullptr);
 	glfwDestroyWindow(_window);
 
@@ -258,6 +268,7 @@ void sweet::initializeInputCallbacks(GLFWwindow * _context) {
 	glfwSetKeyCallback(_context, keyCallback);
 	glfwSetMouseButtonCallback(_context, mouseButtonCallback);
 	glfwSetCursorPosCallback(_context, mousePositionCallback);
+	glfwSetScrollCallback(_context, mouseScrollCallback);
 	glfwSetWindowFocusCallback(_context, windowFocusCallback);
 }
 

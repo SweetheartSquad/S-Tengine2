@@ -94,6 +94,7 @@ namespace sweet{
 	void charCallback(GLFWwindow * _window, unsigned int _key);
 	void mouseButtonCallback(GLFWwindow * _window, int _button, int _action, int _mods);
 	void mousePositionCallback(GLFWwindow *_window, double _x, double _y);
+	void mouseScrollCallback(GLFWwindow *_window, double _x, double _y);
 	void attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _action, int _mods);
 	void windowFocusCallback(GLFWwindow * _window, int _focused);
 	void error_callback(int _error, const char * _description);
