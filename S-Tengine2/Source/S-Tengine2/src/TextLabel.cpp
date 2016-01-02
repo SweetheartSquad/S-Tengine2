@@ -76,7 +76,7 @@ void TextLabel::updateText(){
 	// find out where the first overflow in the text would occur
 	unsigned long int idx = 0;
 	if(wrapMode == kWORD) {
-		std::vector<std::wstring> words = StringUtils::split(textAll, ' ');
+		std::vector<std::wstring> words = sweet::StringUtils::split(textAll, ' ');
 		for(unsigned long int i = 0; i < words.size(); ++i) {
 			std::wstring word = words.at(i);
 			float width = 0.f;
