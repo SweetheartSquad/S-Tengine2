@@ -7,7 +7,7 @@ class BulletWorld;
 
 class BulletMeshEntity : public NodeBulletBody, public MeshEntity{
 public:
-	BulletMeshEntity(BulletWorld * _world, MeshInterface * _mesh);
+	BulletMeshEntity(BulletWorld * _world, MeshInterface * _mesh, Shader * _shader = nullptr);
 
 	void update(Step* _step) override;
 

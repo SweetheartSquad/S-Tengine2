@@ -6,8 +6,8 @@
 
 #include <algorithm>
 
-BulletMeshEntity::BulletMeshEntity(BulletWorld * _world, MeshInterface * _mesh) :
-	MeshEntity(_mesh),
+BulletMeshEntity::BulletMeshEntity(BulletWorld * _world, MeshInterface * _mesh, Shader * _shader) :
+	MeshEntity(_mesh, _shader),
 	NodeBulletBody(_world)
 {
 }
