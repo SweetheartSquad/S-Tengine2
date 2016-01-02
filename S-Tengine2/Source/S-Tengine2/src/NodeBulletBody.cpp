@@ -103,7 +103,23 @@ void NodeBulletBody::setTranslationPhysical(float _x, float _y, float _z, bool _
 	}else{
 		t = btVector3(_x, _y, _z);
 	}
-	childTransform->translate(t.x(), t.y(), t.z(), false);
+	// getOrigin returned a reference to the translation vector, so we only had to modify it
+	needsToUpdate = true;
+}
+
+void NodeBulletBody::rotatePhysical(float _angle, float _x, float _y, float _z, bool _relative){
+	btQuaternion q = body->getWorldTransform().getRotation();
+	btVector3 axis(_x, _y, _z);
+	btScalar angle(glm::radians(_angle));
+	if(_relative){
+		btQuaternion q2(axis, angle);
+		q = q2 * q;
+	}else{
+		q.setRotation(axis, angle);
+	}
+	// getRotation didn't return a reference to the quaternion, so we have to set rotation explicitly after modifying it
+	body->getWorldTransform().setRotation(q);
+	needsToUpdate = true;
 }
 
 void NodeBulletBody::createRigidBody(float _mass, unsigned short int _collisionGroup, unsigned short int _collisionMask){

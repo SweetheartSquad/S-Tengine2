@@ -7,6 +7,7 @@ class TriMesh;
 
 class NodeBulletBody : public virtual Entity{
 protected:
+	// whether the Bullet physics body has changed in some way and the childTransform needs to update to match
 	bool needsToUpdate;
 	btVector3 internalPos;
 
@@ -30,7 +31,14 @@ public:
 	
 	// just calls the version with three floats instead of a vec3
 	void setTranslationPhysical(glm::vec3 _position, bool _relative = false);
+	// directly adjusts the rigid body's transform
+	// a flag is set for the childTransform to be updated later
 	virtual void setTranslationPhysical(float _x, float _y, float _z, bool _relative = false);
+
+	// directly adjusts the rigid body's transform and then updates the childTransform to match
+	// a flag is set for the childTransform to be updated later
+	// note: rotates _angle degrees around the axis (_x, _y, _z)
+	virtual void rotatePhysical(float _angle, float _x, float _y, float _z, bool _relative = true);
 
 	virtual void update(Step * _step) override;
 };
