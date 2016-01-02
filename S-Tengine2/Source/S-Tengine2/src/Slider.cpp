@@ -3,7 +3,7 @@
 #include <Slider.h>
 #include <Mouse.h>
 
-Slider::Slider(BulletWorld * _world, float _defaultValue, float _valueMin, float _valueMax, bool _horizontal) :
+Slider::Slider(BulletWorld * _world, float _defaultValue, float _valueMin, float _valueMax, bool _horizontal, bool _flipped) :
 	NodeUI(_world),
 	layout(_horizontal ? (LinearLayout *)new HorizontalLinearLayout(_world) : (LinearLayout *)new VerticalLinearLayout(_world)),
 	fill(new NodeUI(_world)),
@@ -14,7 +14,8 @@ Slider::Slider(BulletWorld * _world, float _defaultValue, float _valueMin, float
 	prevValue(0),
 	horizontal(_horizontal),
 	stepped(false),
-	valueStep(0)
+	valueStep(0),
+	flipped(_flipped)
 {
 	setBackgroundColour(0.f, 0.f, 0.f);
 
@@ -35,7 +36,7 @@ Slider::Slider(BulletWorld * _world, float _defaultValue, float _valueMin, float
 		setWidth(10);
 		fill->setRationalWidth(1.f, this);
 		thumb->setRationalWidth(1.f, this);
-		thumb->setWidth(thumb->getWidth(true, false));
+		thumb->setHeight(thumb->getWidth(true, false));
 		thumb->background->meshTransform->translate(0, -0.5f, 0);
 		layout->addChild(thumb);
 		layout->addChild(fill);
@@ -55,11 +56,17 @@ Slider::Slider(BulletWorld * _world, float _defaultValue, float _valueMin, float
 void Slider::update(Step * _step){
 	// update the slider's value based on the mouse's position when it is being pressed
 	if(isDown){
+		float v;
 		if(horizontal){
-			setValue((mouse->mouseX() - getWorldPos().x)/getWidth(true, false) * (valueMax - valueMin) + valueMin + valueStep*0.5f);
+			v = (mouse->mouseX() - getWorldPos().x)/getWidth(true, false);
 		}else{
-			setValue((mouse->mouseY() - getWorldPos().y)/getHeight(true, false) * (valueMax - valueMin) + valueMin + valueStep*0.5f);
+			v = (mouse->mouseY() - getWorldPos().y)/getHeight(true, false);
 		}
+		if(flipped){
+			v = 1.f - v;
+		}
+		v *= (valueMax - valueMin) + valueMin + valueStep*0.5f;
+		setValue(v);
 	}
 	NodeUI::update(_step);
 }
@@ -101,6 +108,9 @@ void Slider::updateValue(){
 	prevValue = value;
 
 	float v = (value - valueMin) / (valueMax - valueMin);
+	if(flipped){
+		v = 1.f - v;
+	}
 	if(horizontal){
 		fill->setRationalWidth(v, this);
 		fill->background->mesh->setUV(2, v, 1.0);
@@ -139,8 +149,8 @@ Slider::~Slider(void){
 
 
 
-SliderController::SliderController(BulletWorld * _world, float * _target, float _defaultValue, float _valueMin, float _valueMax, bool _horizontal) :
-	Slider(_world, _defaultValue, _valueMin, _valueMax, _horizontal),
+SliderController::SliderController(BulletWorld * _world, float * _target, float _defaultValue, float _valueMin, float _valueMax, bool _horizontal, bool _flipped) :
+	Slider(_world, _defaultValue, _valueMin, _valueMax, _horizontal, _flipped),
 	target(_target)
 {
 }
@@ -157,8 +167,8 @@ void SliderController::update(Step * _step){
 
 
 
-SliderControlled::SliderControlled(BulletWorld * _world, float * _target, float _valueMin, float _valueMax, bool _horizontal) :
-	Slider(_world, *_target, _valueMin, _valueMax, _horizontal),
+SliderControlled::SliderControlled(BulletWorld * _world, float * _target, float _valueMin, float _valueMax, bool _horizontal, bool _flipped) :
+	Slider(_world, *_target, _valueMin, _valueMax, _horizontal, _flipped),
 	target(_target)
 {
 	setMouseEnabled(false);
