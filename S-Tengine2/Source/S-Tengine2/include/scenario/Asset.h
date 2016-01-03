@@ -8,19 +8,66 @@
 #include <OpenALSound.h>
 
 class Asset abstract : public virtual NodeContent, public virtual NodeLoadable{
+private:
+	// a map which associates the functions for creating different asset types with their type name
+	// used in order to dynamically instantiate different types of assets based on a string specifying the type
+	static std::map<std::string, std::function<Asset * (Json::Value)>> creationRegistry;
+	
+	// pretty much just here so that the asset types can be registered during static initialization
+	// true when types have been registered successfully, false otherwise
+	static const bool typesRegistered;
+	// called during the static initialization of the "typesRegistered" member
+	// this is used to register all of the default engine asset types
+	static bool registerTypes();
+protected:
 public:
 	std::string id;
 
 	Asset(Json::Value _json);
 
+	// checks _json for a type member
+	// type is used to query the creationRegistry in order to dynamically instantiate an asset
+	// if the type is unregistered, returns nullptr
 	static Asset * getAsset(Json::Value _json);
+
+	// registers a function for creating a specific asset type under the specified _typeName
+	// if the type has already been registered, logs an error and returns false
+	// returns true otherwise
+	static bool registerType(std::string _typeName, std::function<Asset * (Json::Value)> _typeCreator);
 };
 
+
+
+
+/*
+// Template for new asset type:
+class AssetTYPE : public Asset{
+private:
+	// constructor is private; use create instead if you need to instantiate directly
+	AssetTYPE(Json::Value _json);
+public:
+
+	// substitute for public constructor (we can't take the address of the constructor,
+	// so we have a static function which simply returns a new instance of the class instead)
+	static AssetTYPE * create(Json::Value _json);
+	~AssetTYPE();
+	
+	virtual void load() override;
+	virtual void unload() override;
+};
+*/
+
+
 class AssetTexture : public Asset{
+private:
+	// constructor is private; use create instead if you need to instantiate directly
+	AssetTexture(Json::Value _json);
 public:
 	Texture * texture;
 
-	AssetTexture(Json::Value _json);
+	// substitute for public constructor (we can't take the address of the constructor,
+	// so we have a static function which simply returns a new instance of the class instead)
+	static AssetTexture * create(Json::Value _json);
 	~AssetTexture();
 	
 	virtual void load() override;
@@ -28,10 +75,15 @@ public:
 };
 
 class AssetTextureSampler : public Asset{
+private:
+	// constructor is private; use create instead if you need to instantiate directly
+	AssetTextureSampler(Json::Value _json);
 public:
 	TextureSampler * textureSampler;
-
-	AssetTextureSampler(Json::Value _json);
+	
+	// substitute for public constructor (we can't take the address of the constructor,
+	// so we have a static function which simply returns a new instance of the class instead)
+	static AssetTextureSampler * create(Json::Value _json);
 	~AssetTextureSampler();
 	
 	virtual void load() override;
@@ -39,10 +91,15 @@ public:
 };
 
 class AssetAudio : public Asset{
+private:
+	// constructor is private; use create instead if you need to instantiate directly
+	AssetAudio(Json::Value _json);
 public:
 	OpenAL_Sound * sound;
 
-	AssetAudio(Json::Value _json);
+	// substitute for public constructor (we can't take the address of the constructor,
+	// so we have a static function which simply returns a new instance of the class instead)
+	static AssetAudio * create(Json::Value _json);
 	~AssetAudio();
 	
 	virtual void load() override;
@@ -50,10 +107,15 @@ public:
 };
 
 class AssetFont : public Asset{
+private:
+	// constructor is private; use create instead if you need to instantiate directly
+	AssetFont(Json::Value _json);
 public:
 	Font * font;
 
-	AssetFont(Json::Value _json);
+	// substitute for public constructor (we can't take the address of the constructor,
+	// so we have a static function which simply returns a new instance of the class instead)
+	static AssetFont * create(Json::Value _json);
 	~AssetFont();
 	
 	virtual void load() override;

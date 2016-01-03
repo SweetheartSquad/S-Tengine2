@@ -24,6 +24,9 @@ AssetTexture::AssetTexture(Json::Value _json) :
 	texture = new Texture(src, true, false, _json.get("generateMipmaps", true).asBool());
 	//texture->load();
 }
+AssetTexture * AssetTexture::create(Json::Value _json){
+	return new AssetTexture(_json);
+}
 AssetTexture::~AssetTexture(){
 	delete texture;
 }
@@ -75,6 +78,9 @@ AssetTextureSampler::AssetTextureSampler(Json::Value _json) :
 		textureSampler->load();
 	}
 }
+AssetTextureSampler * AssetTextureSampler::create(Json::Value _json){
+	return new AssetTextureSampler(_json);
+}
 AssetTextureSampler::~AssetTextureSampler(){
 	delete textureSampler;
 }
@@ -110,6 +116,9 @@ AssetAudio::AssetAudio(Json::Value _json) :
 		sound = new OpenAL_SoundSimple(src.c_str(), false, false);
 	}
 }
+AssetAudio * AssetAudio::create(Json::Value _json){
+	return new AssetAudio(_json);
+}
 AssetAudio::~AssetAudio(){
 	delete sound;
 }
@@ -141,6 +150,9 @@ AssetFont::AssetFont(Json::Value _json) :
 	int size = _json.get("size", 24).asInt();
 	font = new Font(src, size, false);
 }
+AssetFont * AssetFont::create(Json::Value _json){
+	return new AssetFont(_json);
+}
 AssetFont::~AssetFont(){
 	delete font;
 }
@@ -159,20 +171,37 @@ void AssetFont::unload(){
 	Asset::unload();
 }
 
-Asset * Asset::getAsset(Json::Value _json){
-	Asset * res = nullptr;
-	std::string type = _json.get("type", "NO_TYPE").asString();
-	// create a different type of Trigger depending on the value of type
-	if(type == "texture"){
-		res = new AssetTexture(_json);
-	}else if(type == "textureSampler"){
-		res = new AssetTextureSampler(_json);
-	}else if(type == "audio"){
-		res = new AssetAudio(_json);
-	}else if(type == "font"){
-		res = new AssetFont(_json);
-	}else{
-		throw "invalid asset type";
+std::map<std::string, std::function<Asset * (Json::Value)>> Asset::creationRegistry;
+bool Asset::registerType(std::string _typeName, std::function<Asset * (Json::Value)> _typeCreator){
+	if(!creationRegistry.insert(std::make_pair(_typeName, _typeCreator)).second){
+		Log::error("Asset type registration failed; type \"" + _typeName + "\" already registered.");
+		return false;
 	}
-	return res;
+	return true;
 }
+
+
+Asset * Asset::getAsset(Json::Value _json){
+	// retrieve the type string and use it to find the create function
+	std::string type = _json.get("type", "NO_TYPE").asString();
+	auto s = creationRegistry.find(type);
+	
+	// if the type is unregistered, log an error and return nullptr
+	if(s == creationRegistry.end()){
+		Log::error("Asset type \"" + type + "\" is unregistered; asset not allocated.");
+		return nullptr;
+	}
+
+	// return the result of calling the create function with the provided json
+	return s->second(_json);
+}
+
+// register asset types
+bool Asset::registerTypes(){
+	return 
+		Asset::registerType("texture", &AssetTexture::create) &&
+		Asset::registerType("textureSampler", &AssetTextureSampler::create) &&
+		Asset::registerType("audio", &AssetAudio::create) &&
+		Asset::registerType("font", &AssetFont::create);
+}
+const bool Asset::typesRegistered = Asset::registerTypes();
