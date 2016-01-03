@@ -25,7 +25,7 @@ enum RenderMode{
 
 class NodeUI : public NodeBulletBody{
 public:
-	// manages mouse events (click, mouseout, mousein, mousedown, mouseup)
+	// manages mouse events (click, mouseout, mousein, mousedown, mouseup, mousewheel)
 	sweet::EventManager eventManager;
 	bool mouseEnabled;
 	UIUnit marginLeft;

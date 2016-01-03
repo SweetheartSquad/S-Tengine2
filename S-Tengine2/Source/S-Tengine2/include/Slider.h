@@ -19,11 +19,6 @@ public:
 	bool stepped;
 	float valueStep;
 
-	// the minimum value of the slider
-	float valueMin;
-	// the maximum value of the slider
-	float valueMax;
-
 	LinearLayout * layout;
 	NodeUI * fill;
 
@@ -42,9 +37,20 @@ public:
 	void setStepped(float _valueStep);
 
 	virtual void autoResize() override;
+	
+	// sets the maximum value and calls setValue(getValue()) to handle clamping and visual updates
+	void setValueMax(float _maxValue);
+	// sets the minimum value and calls setValue(getValue()) to handle clamping and visual updates
+	void setValueMin(float _minValue);
 
 protected:
+	// the minimum value of the slider
+	float valueMin;
+	// the maximum value of the slider
+	float valueMax;
+	// the value of the slider
 	float value;
+	// the previous value (normalized) of the slider
 	float prevValue;
 };
 

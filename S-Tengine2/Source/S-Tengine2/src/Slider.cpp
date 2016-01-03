@@ -94,20 +94,38 @@ void Slider::setValue(float _value){
 	updateValue();
 }
 
+void Slider::setValueMax(float _valueMax){
+	if(abs(valueMax - _valueMax) < FLT_EPSILON){
+		return;
+	}
+
+	valueMax = _valueMax;
+	setValue(getValue());
+}
+
+void Slider::setValueMin(float _valueMin){
+	if(abs(valueMin - _valueMin) < FLT_EPSILON){
+		return;
+	}
+
+	valueMin = _valueMin;
+	setValue(getValue());
+}
+
 float Slider::getValue(){
 	return value;
 }
 
 void Slider::updateValue(){
-	float delta = value - prevValue;
+	float v = (value - valueMin) / (valueMax - valueMin);
 
 	// if the value hasn't changed, return early
+	float delta = v - prevValue;
 	if(abs(delta) < FLT_EPSILON){
 		return;
 	}
-	prevValue = value;
+	prevValue = v;
 
-	float v = (value - valueMin) / (valueMax - valueMin);
 	if(flipped){
 		v = 1.f - v;
 	}
