@@ -23,8 +23,8 @@ public:
 
 class Scenario : public virtual NodeContent, public virtual NodeResource{
 private:
-	static std::vector<Asset *> defaultAssets;
 public:
+	static std::vector<Asset *> defaultAssets;
 	// events triggered by this scenario's dialogue will be handled by this manager
 	sweet::EventManager eventManager;
 
@@ -34,12 +34,9 @@ public:
 	Json::Value root;
 	std::map<std::string, Conversation *> conversations;
 	std::map<std::string, Character *> characters;
-
-	std::map<std::string, Asset *> assets;
-	std::map<std::string, AssetTexture *> textures;
-	std::map<std::string, AssetTextureSampler *> textureSamplers;
-	std::map<std::string, AssetAudio *> audio;
-	std::map<std::string, AssetFont *> fonts;
+	
+	// accessed using "assets[type][id]"
+	std::map<std::string, std::map<std::string, Asset *>> assets;
 
 	static AssetTexture * defaultTexture;
 	static AssetTextureSampler * defaultTextureSampler;
@@ -53,9 +50,17 @@ public:
 	Scenario(std::string _jsonSrc);
 	~Scenario();
 	
+	// returns the asset of the specified type with the specified id
+	// returns nullptr if not found (note that no default substitution is used when calling this function directly)
+	Asset * getAsset(std::string _type, std::string _id);
+
+	// convenience function: just calls getAsset with a specific type and casts the result; if not found uses the default asset for that type
 	AssetTexture * getTexture(std::string _id);
+	// convenience function: just calls getAsset with a specific type and casts the result; if not found uses the default asset for that type
 	AssetTextureSampler * getTextureSampler(std::string _id);
+	// convenience function: just calls getAsset with a specific type and casts the result; if not found uses the default asset for that type
 	AssetAudio * getAudio(std::string _id);
+	// convenience function: just calls getAsset with a specific type and casts the result; if not found uses the default asset for that type
 	AssetFont * getFont(std::string _id);
 
 	virtual void load() override;

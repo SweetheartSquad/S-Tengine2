@@ -5,7 +5,8 @@
 #include <json/json.h>
 
 Asset::Asset(Json::Value _json) :
-	id(_json.get("id", "NO_ID").asString())
+	id(_json.get("id", "NO_ID").asString()),
+	type(_json.get("type", "NO_TYPE").asString())
 {
 
 }

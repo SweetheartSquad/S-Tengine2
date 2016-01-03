@@ -35,8 +35,6 @@ Scenario::Scenario(std::string _jsonSrc) :
 	currentConversation(nullptr),
 	NodeResource(false)
 {
-	
-
 	Json::Reader reader;
 	Json::Value defJson;
 	bool parsingSuccessful;
@@ -106,28 +104,7 @@ Scenario::Scenario(std::string _jsonSrc) :
 		 Json::Value texturesJson = root["assets"];
 		 for(Json::Value::ArrayIndex i = 0; i < texturesJson.size(); ++i) {
 			 Asset * a = Asset::getAsset(texturesJson[i]);
-			 assets[a->id] = a;
-
-			 AssetTexture * at = dynamic_cast<AssetTexture *>(a);
-			 if(at != nullptr){
-				textures[at->id] = at;
-				continue;
-			 }
-			 AssetTextureSampler * ats = dynamic_cast<AssetTextureSampler *>(a);
-			 if(ats != nullptr){
-				textureSamplers[ats->id] = ats;
-				continue;
-			 }
-			 AssetAudio * aa = dynamic_cast<AssetAudio *>(a);
-			 if(aa != nullptr){
-				 audio[aa->id] = aa;
-				 continue;
-			 }
-			 AssetFont * af = dynamic_cast<AssetFont *>(a);
-			 if(af != nullptr){
-				 fonts[af->id] = af;
-				 continue;
-			 }
+			 assets[a->type][a->id] = a;
 		 }
 	}
 }
@@ -139,17 +116,31 @@ Scenario::~Scenario(){
 	for(auto i : characters){
 		delete i.second;
 	}characters.clear();
-	for(auto i : assets){
-		delete i.second;
+	for(auto a : assets){
+		for(auto b : a.second){
+			delete b.second;
+		}
+		a.second.clear();
 	}assets.clear();
 }
 
+Asset * Scenario::getAsset(std::string _type, std::string _id){
+	auto typeList = assets.find(_type);
+	if(typeList == assets.end()){
+		Log::warn("No asset of type \"" + _type + "\" found.");
+		return nullptr;
+	}
+	auto a = typeList->second.find(_id);
+	if(a == typeList->second.end()){
+		Log::warn("No asset with the id \"" + _id + "\" found for type \"" + _type + "\".");
+		return nullptr;
+	}
+	return a->second;
+}
+
 AssetTexture * Scenario::getTexture(std::string _id){
-	AssetTexture * res = nullptr;
-	auto it = textures.find(_id);
-	if(it != textures.end()){
-		res = it->second;
-	}else{
+	AssetTexture * res = dynamic_cast<AssetTexture *>(getAsset("texture", _id));
+	if(res == nullptr){
 		Log::warn("Texture \"" + _id + "\" not found.");
 		res = defaultTexture;
 	}
@@ -157,11 +148,8 @@ AssetTexture * Scenario::getTexture(std::string _id){
 }
 
 AssetTextureSampler * Scenario::getTextureSampler(std::string _id){
-	AssetTextureSampler * res = nullptr;
-	auto it = textureSamplers.find(_id);
-	if(it != textureSamplers.end()){
-		res = dynamic_cast<AssetTextureSampler *>(it->second);
-	}else{
+	AssetTextureSampler * res = dynamic_cast<AssetTextureSampler *>(getAsset("textureSampler", _id));
+	if(res == nullptr){
 		Log::warn("TextureSampler \"" + _id + "\" not found.");
 		res = defaultTextureSampler;
 	}
@@ -169,11 +157,8 @@ AssetTextureSampler * Scenario::getTextureSampler(std::string _id){
 }
 
 AssetAudio * Scenario::getAudio(std::string _id){
-	AssetAudio * res = nullptr;
-	auto it = audio.find(_id);
-	if(it != audio.end()){
-		res = it->second;
-	}else{
+	AssetAudio * res = dynamic_cast<AssetAudio *>(getAsset("audio", _id));
+	if(res == nullptr){
 		Log::warn("Audio \"" + _id + "\" not found.");
 		res = defaultAudio;
 	}
@@ -181,11 +166,8 @@ AssetAudio * Scenario::getAudio(std::string _id){
 }
 
 AssetFont * Scenario::getFont(std::string _id){
-	AssetFont * res = nullptr;
-	auto it = fonts.find(_id);
-	if(it != fonts.end()){
-		res = it->second;
-	}else{
+	AssetFont * res = dynamic_cast<AssetFont *>(getAsset("font", _id));
+	if(res == nullptr){
 		Log::warn("Font \"" + _id + "\" not found.");
 		res = defaultFont;
 	}
@@ -195,7 +177,9 @@ AssetFont * Scenario::getFont(std::string _id){
 void Scenario::load(){
 	if(!loaded){
 		for(auto a : assets){
-			a.second->load();
+			for(auto b : a.second){
+				b.second->load();
+			}
 		}
 	}
 	NodeResource::load();
@@ -204,7 +188,9 @@ void Scenario::load(){
 void Scenario::unload(){
 	if(loaded){
 		for(auto a : assets){
-			a.second->unload();
+			for(auto b : a.second){
+				b.second->unload();
+			}
 		}
 	}
 	NodeResource::unload();

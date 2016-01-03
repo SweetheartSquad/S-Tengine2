@@ -22,6 +22,7 @@ private:
 protected:
 public:
 	std::string id;
+	std::string type;
 
 	Asset(Json::Value _json);
 
