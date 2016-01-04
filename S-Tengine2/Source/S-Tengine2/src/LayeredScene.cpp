@@ -2,12 +2,11 @@
 
 #include <LayeredScene.h>
 
-#include <Game.h>
 #include <MatrixStack.h>
 #include <RenderOptions.h>
 #include <Entity.h>
 #include <Camera.h>
-#include <OrthographicCamera.h>
+#include <Light.h>
 
 LayeredScene::LayeredScene(Game * _game, unsigned long int _numLayers) :
 	Scene(_game),
@@ -31,30 +30,35 @@ void LayeredScene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _re
 		return;
 	}
 
-	//glfwGetFramebufferSize(glfwGetCurrentContext(), &w, &h);
-	glfwMakeContextCurrent(glfwGetCurrentContext());
-	float ratio;
-	ratio = game->viewPortWidth / static_cast<float>(game->viewPortHeight);
-
+	// render options
 	glEnable(GL_SCISSOR_TEST);
+	if(_renderOptions->depthEnabled){
+		glEnable(GL_DEPTH_TEST);
+	}else{
+		glDisable(GL_DEPTH_TEST);
+	}if(_renderOptions->alphaEnabled){
+		glEnable(GL_ALPHA_TEST);
+		//glAlphaFunc ( GL_GREATER, 0.1 ) ;
+		//glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBlendEquation(GL_FUNC_ADD);
+	}else{
+		glDisable(GL_ALPHA_TEST);
+	}
+	_renderOptions->lights = &lights;
+	//Back-face culling
+	//glEnable (GL_CULL_FACE); // cull face
+	//glCullFace (GL_BACK); // cull back face
+	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
-	//glEnable(GL_ALPHA_TEST);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBlendEquation(GL_FUNC_ADD);
 
-	_renderOptions->clear();
-
-	glViewport(game->viewPortX, game->viewPortY, game->viewPortWidth, game->viewPortHeight);
-	glScissor(game->viewPortX, game->viewPortY, game->viewPortWidth, game->viewPortHeight);
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
+	// matrix stack
 	_matrixStack->pushMatrix();
 	_matrixStack->resetCurrentMatrix();
-	_matrixStack->setProjectionMatrix(&activeCamera->getProjectionMatrix());
-	_matrixStack->setViewMatrix(&activeCamera->getViewMatrix());
+	_matrixStack->setCamera(activeCamera);
 
+	// render
 	for(unsigned long int i = 0; i < layers.size(); ++i){
 		if(depthEnabled.at(i)){
 			glEnable(GL_DEPTH_TEST);
@@ -64,8 +68,14 @@ void LayeredScene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _re
 		layers.at(i)->render(_matrixStack, _renderOptions);
 	}
 
-	int sceneWidth, sceneHeight;
-	glfwGetWindowSize(sweet::currentContext, &sceneWidth, &sceneHeight);
+	_matrixStack->popMatrix();
+
+	checkForGlError(false);
+
+	// clean the lights
+	for(Light * l : lights){
+		l->lightDirty = false;
+	}
 }
 
 void LayeredScene::removeChild(NodeChild * _child){
