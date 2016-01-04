@@ -66,7 +66,7 @@ void Shader::load(){
 		memcpy(v, vert.c_str(), vl + 1);
 		GLuint vertexShader = compileShader(GL_VERTEX_SHADER, v, vl);
 		checkForGlError(false);
-		delete v;
+		delete[] v;
 
 		//frag
 		char * f = new char[frag.size() + 1];
@@ -74,7 +74,7 @@ void Shader::load(){
 		memcpy(f, frag.c_str(), fl + 1);
 		GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, f, fl);
 		checkForGlError(false);
-		delete f;
+		delete[] f;
 
 		GLuint geometryShader = 0;
 		if (hasGeometryShader){
@@ -83,7 +83,7 @@ void Shader::load(){
 			memcpy(g, geom.c_str(), gl + 1);
 			geometryShader = compileShader(GL_GEOMETRY_SHADER, g, gl);
 			checkForGlError(false);
-			delete g;
+			delete[] g;
 		}
 
 		checkForGlError(false);

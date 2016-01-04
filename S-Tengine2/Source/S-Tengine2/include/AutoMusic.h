@@ -17,7 +17,7 @@ class AutoMusic : public virtual NodeUpdatable, public virtual NodeChild{
 public:
 	static int scales[];
 
-	float lengthInBeats;
+	double lengthInBeats;
 	//float lengthInSeconds;
 	// semi-tones above or below the original sound
 	int pitch;
@@ -37,7 +37,7 @@ public:
 
 	// beats per minute
 	float bpm;
-	float lengthInSeconds;
+	double lengthInSeconds;
 	
 	// beats per bar
 	unsigned long int timeSignatureTop;
@@ -46,10 +46,10 @@ public:
 
 
 
-	float curTime;
+	double curTime;
 	std::vector<AutoMusic *> components;
-	int curComponent;
-	float nextComponent;
+	unsigned long int curComponent;
+	double nextComponent;
 	
 	AutoTrack(float _bpm, unsigned long int _timeSignatureTop, unsigned long int _timeSignatureBottom, int _pitch, float _volume);
 	~AutoTrack();
@@ -79,10 +79,10 @@ public:
 
 	// number of notes above the original sample the riff is allowed to pitch shift to
 	// e.g. a generationMax of 8 means that it can pitch up to one octave up
-	int generationMax;
+	signed long int generationMax;
 	// number of notes below the original sample the riff is allowed to pitch shift to
 	// e.g. a generationMin of 8 means that it can pitch up to one octave down
-	int generationMin;
+	signed long int generationMin;
 
 	// number of bars in the riff
 	//int bars;

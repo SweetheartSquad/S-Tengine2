@@ -14,6 +14,7 @@ SoundManager::SoundManager(double _throttle):
 
 SoundManager::~SoundManager(){
 	for(auto sound : sounds){
+#pragma warning(suppress: 28182) // the sound map should never have a reference to a nullptr
 		sound.second->stop();
 		delete sound.second;
 	}

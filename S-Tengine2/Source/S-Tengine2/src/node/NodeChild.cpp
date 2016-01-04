@@ -24,6 +24,7 @@ bool NodeChild::hasAncestor(Transform * _parent){
 		if(p == _parent) {
 			return true;
 		}
+#pragma warning(suppress: 6011) // children should never have nullptr in their parent list
 		if(p->hasAncestor(_parent)){
 			return true;
 		}

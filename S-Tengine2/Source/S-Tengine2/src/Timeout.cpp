@@ -4,7 +4,7 @@
 
 #include <Step.h>
 
-Timeout::Timeout(float _targetSeconds, std::function<void (sweet::Event * )> _onComplete) :
+Timeout::Timeout(double _targetSeconds, std::function<void (sweet::Event * )> _onComplete) :
 	eventManager(new sweet::EventManager()),
 	targetSeconds(_targetSeconds),
 	elapsedSeconds(0),
@@ -43,7 +43,7 @@ void Timeout::update(Step * _step){
 
 		// trigger a progress event
 		sweet::Event * progressEvent = new sweet::Event("progress");
-		progressEvent->setFloatData("progress", std::min(1.f, elapsedSeconds/targetSeconds));
+		progressEvent->setFloatData("progress", std::min(1.f, (float)(elapsedSeconds/targetSeconds)));
 		eventManager->triggerEvent(progressEvent);
 
 		// trigger a complete event

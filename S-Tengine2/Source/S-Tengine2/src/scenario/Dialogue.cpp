@@ -13,16 +13,16 @@ Dialogue::Dialogue(Json::Value _json, Scenario * _scenario) :
 	speaker(_json.get("speaker", "NO_SPEAKER_DEFINED").asString())
 {
 	const Json::Value textArray = _json["text"];
-	for(int i = 0; i < textArray.size(); ++i){
-		text.push_back(textArray[i].asString());
+	for(Json::Value i : textArray){
+		text.push_back(i.asString());
 	}
 	const Json::Value triggersArray = _json["triggers"];
-	for(int j = 0; j < triggersArray.size(); ++j){
-		triggers.push_back(new sweet::Event(triggersArray[j]));
+	for(Json::Value i : triggersArray){
+		triggers.push_back(new sweet::Event(i));
 	}
 	const Json::Value conditionsArray = _json["conditions"];
-	for(int i = 0; i < conditionsArray.size(); ++i){
-		conditions.push_back(Condition::getCondition(conditionsArray[i], scenario));
+	for(Json::Value i : conditionsArray){
+		conditions.push_back(Condition::getCondition(i, scenario));
 	}
 }
 

@@ -50,8 +50,10 @@ RenderSurface::~RenderSurface(){
 
 void RenderSurface::load(){
 	if(!loaded){
-		shader->load();
-		glUseProgram(shader->getProgramId());
+		if(shader != nullptr){
+			shader->load();
+			glUseProgram(shader->getProgramId());
+		}
 		// Vertex Array Object (VAO)
 		glGenVertexArrays(1, &vaoId);
 		glBindVertexArray(vaoId);
@@ -65,8 +67,10 @@ void RenderSurface::load(){
 		glGenBuffers(1, &iboId);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iboId);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * indices.size(), indices.data(), drawMode);
-
-		configureDefaultVertexAttributes(shader);
+		
+		if(shader != nullptr){
+			configureDefaultVertexAttributes(shader);
+		}
 		glBindVertexArray(0);
 		checkForGlError(false);
 	}
@@ -89,6 +93,7 @@ void RenderSurface::unload(){
 }
 
 void RenderSurface::render(GLuint _textureId, GLint _renderTo, bool _disableBlending){
+	checkForGlError(false);
 	load();
 	clean();
 	
@@ -130,6 +135,7 @@ void RenderSurface::render(GLuint _textureId, GLint _renderTo, bool _disableBlen
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, scaleModeMin);
 
 	clean();
+	checkForGlError(false);
 
 	// we might need to try and optimize this bit
 	if(scaleModeMin == GL_NEAREST_MIPMAP_NEAREST
@@ -142,6 +148,7 @@ void RenderSurface::render(GLuint _textureId, GLint _renderTo, bool _disableBlen
 
 	// Draw (note that the last argument is expecting a pointer to the indices, but since we have an ibo, it's actually interpreted as an offset)
 	glDrawRangeElements(polygonalDrawMode, 0, indices.size(), indices.size(), GL_UNSIGNED_INT, 0);
+	checkForGlError(false);
 
 	if (dt == GL_TRUE){
 		glEnable(GL_DEPTH_TEST);

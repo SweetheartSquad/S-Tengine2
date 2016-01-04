@@ -205,11 +205,11 @@ void AutoSnare::generate(){
 			case 2:	numSnare = 4; break;
 		}
 		float l = beatUnit/numSnare;
-		if(l < beatUnit && sweet::NumberUtils::randomInt(0,1)){
+		if(l < beatUnit && sweet::NumberUtils::randomBool()){
 			l = beatUnit-l;
 		}
 
-		bool addSecondary = sweet::NumberUtils::randomInt(0, 1);
+		bool addSecondary = sweet::NumberUtils::randomBool();
 		
 
 		if(i % 2 == 1){

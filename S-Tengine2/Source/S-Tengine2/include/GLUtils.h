@@ -15,24 +15,24 @@
 #define TOSTRING(x) STRINGIFY(x)
 
 #define checkForGlError(_printSuccess) do{\
-	GLenum err = glGetError();\
-	std::string errString;\
+	GLenum opengl_error_code = glGetError();\
+	std::string opengl_error_string;\
 	do {\
-		if((_printSuccess) || err != GL_NO_ERROR){\
-			switch(err) {\
-				case GL_NO_ERROR:						errString="NO_ERROR"; break;\
-				case GL_INVALID_OPERATION:				errString="INVALID_OPERATION"; break;\
-				case GL_INVALID_ENUM:					errString="INVALID_ENUM"; break;\
-				case GL_INVALID_VALUE:					errString="INVALID_VALUE"; break;\
-				case GL_OUT_OF_MEMORY:					errString="OUT_OF_MEMORY"; break;\
-				case GL_INVALID_FRAMEBUFFER_OPERATION:  errString="INVALID_FRAMEBUFFER_OPERATION"; break;\
-				default: errString = "dunno, but something went wrong?";	break;\
+		if((_printSuccess) || opengl_error_code != GL_NO_ERROR){\
+			switch(opengl_error_code) {\
+				case GL_NO_ERROR:						opengl_error_string = "NO_ERROR"; break;\
+				case GL_INVALID_OPERATION:				opengl_error_string = "INVALID_OPERATION"; break;\
+				case GL_INVALID_ENUM:					opengl_error_string = "INVALID_ENUM"; break;\
+				case GL_INVALID_VALUE:					opengl_error_string = "INVALID_VALUE"; break;\
+				case GL_OUT_OF_MEMORY:					opengl_error_string = "OUT_OF_MEMORY"; break;\
+				case GL_INVALID_FRAMEBUFFER_OPERATION:  opengl_error_string = "INVALID_FRAMEBUFFER_OPERATION"; break;\
+				default: opengl_error_string = "dunno, but something went wro ng?";	break;\
 			}\
-			std::stringstream ss;\
-			ss << "OpenGL Error:\tFile: " << TOSTRING(__FILE__) <<", Line: "<< TOSTRING(__LINE__) << ", Log: " << errString;\
-			Log::error(ss.str());\
+			std::stringstream opengl_error_stream;\
+			opengl_error_stream << "OpenGL Error:\tFile: " << TOSTRING(__FILE__) <<", Line: "<< TOSTRING(__LINE__) << ", Log: " << opengl_error_string;\
+			Log::error(opengl_error_stream.str());\
 		}\
-	}while ((err = glGetError()) != GL_NO_ERROR);\
+	}while ((opengl_error_code = glGetError()) != GL_NO_ERROR);\
 }while(false)
 #else
 #define checkForGlError(ps)

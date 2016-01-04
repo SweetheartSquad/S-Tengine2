@@ -10,12 +10,12 @@ class Timeout : public virtual NodeChild, public virtual NodeUpdatable{
 public:
 	bool complete;
 	bool active;
-	float elapsedSeconds;
-	float targetSeconds;
+	double elapsedSeconds;
+	double targetSeconds;
 	// events for the timeout object: complete, progress, start
 	sweet::EventManager * eventManager;
 
-	Timeout(float _targetSeconds, std::function<void (sweet::Event * )> _onComplete);
+	Timeout(double _targetSeconds, std::function<void (sweet::Event * )> _onComplete);
 
 	// calls stop and then calls start
 	void restart();

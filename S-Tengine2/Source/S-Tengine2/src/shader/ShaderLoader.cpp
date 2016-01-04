@@ -7,7 +7,7 @@ ShaderLoader::ShaderLoader(std::string _vertexShaderSource, std::string _fragmen
 	memcpy(v, _vertexShaderSource.c_str(), _vertexShaderSource.size() + 1);
 	checkForGlError(true);
 	GLuint vertexShader = compileShader(GL_VERTEX_SHADER, v, vl);
-	delete v;
+	delete[] v;
 
 	//fragment shader
 	char * f = new char[_fragmentShaderSource.size() + 1];
@@ -15,7 +15,7 @@ ShaderLoader::ShaderLoader(std::string _vertexShaderSource, std::string _fragmen
 	memcpy(f, _fragmentShaderSource.c_str(), _fragmentShaderSource.size() + 1);
 	checkForGlError(true);
 	GLuint fragmentShader = compileShader(GL_FRAGMENT_SHADER, f, fl);
-	delete f;
+	delete[] f;
 
 	checkForGlError(true);
 

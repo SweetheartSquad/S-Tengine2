@@ -14,6 +14,8 @@ namespace sweet{
 		static int randomInt(int _min, int _max);
 		// returns a random number in the range 0 <= res <= INT_MAX/2
 		static int randomInt();
+		// returns true or false, based on a randomly generated int
+		static bool randomBool();
 
 
 		// seeds the random number generator

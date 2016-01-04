@@ -30,6 +30,9 @@ int sweet::NumberUtils::randomInt(int _min, int _max){
 int sweet::NumberUtils::randomInt(){
 	return ran_arr_cycle();
 }
+bool sweet::NumberUtils::randomBool(){
+	return randomInt(0, 1) == 1;
+}
 
 
 
