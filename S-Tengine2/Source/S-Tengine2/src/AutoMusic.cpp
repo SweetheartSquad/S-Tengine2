@@ -151,7 +151,7 @@ void AutoRiff::generate(){
 	clearComponents();
 
 	// fill the length of the riff
-	float curLengthInBeats = 0;
+	double curLengthInBeats = 0;
 	while(curLengthInBeats < lengthInBeats){
 
 		float genLengthInBeats = 0;
@@ -162,9 +162,9 @@ void AutoRiff::generate(){
 			case 3: genLengthInBeats = 0.125; break;
 		}
 		// generate a random number on the scale (will be used as an array accessor for AutoRiff::scales
-		float genPitch = sweet::NumberUtils::randomInt(generationMin, generationMax);
+		int genPitch = sweet::NumberUtils::randomInt(generationMin, generationMax);
 		// make some notes rests instead of actual notes
-		float genVolume = sweet::NumberUtils::randomInt(0, 1);
+		float genVolume = (float)sweet::NumberUtils::randomInt(0, 1);
 
 		components.push_back(new Note(genLengthInBeats, genPitch, genVolume));
 		curLengthInBeats += components.back()->lengthInBeats;
@@ -264,7 +264,7 @@ void AutoRide::generate(){
 
 	// generate ride hits
 	float beatUnit = 1.f/timeSignatureBottom;
-	int numRide = 0;
+	unsigned long int numRide = 0;
 	switch(sweet::NumberUtils::randomInt(0,2)){
 		case 0:	numRide = 1; break; // one primary per beat
 		case 1:	numRide = 2; break; // two primary per beat
@@ -362,7 +362,7 @@ AutoDrums::AutoDrums(OpenAL_Sound * _snare, OpenAL_Sound * _kick, OpenAL_Sound *
 void AutoDrums::generate(){
 	clearComponents();
 
-	int numBeats = 1;
+	unsigned long int numBeats = 1;
 
 	for(unsigned long int i = 0; i < numBeats; ++i){
 		AutoBeat * b = new AutoBeat(snare, kick, ride);

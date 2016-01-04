@@ -163,6 +163,7 @@
     <ClInclude Include="include\shader\ShaderComponentMask.h" />
     <ClCompile Include="src\AutoMusic.cpp" />
     <ClInclude Include="include\shader\ShaderComponentWorldSpaceUVs.h" />
+    <ClInclude Include="include\sweet\Input.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include/Accelerometer.h" />

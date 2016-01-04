@@ -8,7 +8,6 @@
 #include <sweet.h>
 #include <MatrixStack.h>
 #include <VoxRenderOptions.h>
-#include <GLUtils.h>
 
 #include <Scene_Splash.h>
 #include <Scene_Splash_Engine.h>
@@ -20,7 +19,10 @@
 // for screenshots
 #include <ctime>
 #include <stb/stb_image_write.h>
+
 #include <AntTweakBar.h>
+
+#include <GLFW/glfw3.h>
 
 Game::Game(std::string _firstSceneKey, Scene * _firstScene, bool _isRunning) :
 	accumulator(0.0),
@@ -374,11 +376,11 @@ void Game::exit(){
 }
 
 void Game::resize(){
-	glm::vec2 screenDimensions = sweet::getWindowDimensions();
+	glm::uvec2 screenDimensions = sweet::getWindowDimensions();
 	setViewport(0, 0, screenDimensions.x, screenDimensions.y);
 }
 
-void Game::setViewport(float _x, float _y, float _w, float _h){
+void Game::setViewport(int _x, int _y, int _w, int _h){
 	viewPortX = _x;
 	viewPortY = _y;
 	viewPortWidth = _w;

@@ -7,20 +7,20 @@
 
 #pragma once
 
-#include "Sweet.h"
+#include <Sweet.h>
 
 #include <string>
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
-#include "Keyboard.h"
-#include "Mouse.h"
+#include <Keyboard.h>
+#include <Mouse.h>
 
 #include <OpenALSound.h>
 
 #include <FileUtils.h>
 #include <AntTweakBar.h>
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 Step sweet::step;
 std::string sweet::title = "S-Tengine2";

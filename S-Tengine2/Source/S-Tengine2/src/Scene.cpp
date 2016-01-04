@@ -7,8 +7,6 @@
 #include "OrthographicCamera.h"
 #include "VoxRenderOptions.h"
 #include "RenderSurface.h"
-#include "Keyboard.h"
-#include "Mouse.h"
 #include "MatrixStack.h"
 #include "shader/DepthMapShader.h"
 #include "shader/BlurShader.h"
@@ -20,6 +18,8 @@
 #include <shader/ShaderComponentNormals.h>
 #include <shader/ComponentShaderBase.h>
 #include <shader/ShaderComponentDepth.h>
+
+#include <sweet/Input.h>
 
 Scene::Scene(Game * _game):
 	depthBuffer(new StandardFrameBuffer(true)),

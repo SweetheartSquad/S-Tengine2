@@ -1,11 +1,9 @@
 #pragma once
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #include <glm\glm.hpp>
 
 #include <vector>
+#include <ostream>
 
 #include "Sweet.h"
 #include "shader/Shader.h"
@@ -17,7 +15,9 @@
 #include <node\NodeResource.h>
 #include "shader/ShaderVariables.h"
 #include <Box.h>
-#include <ostream>
+
+#include <GL/glew.h>
+//#include <GLFW/glfw3.h>
 
 class Texture;
 class Material;

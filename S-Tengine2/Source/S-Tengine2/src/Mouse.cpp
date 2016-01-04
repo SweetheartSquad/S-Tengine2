@@ -4,6 +4,8 @@
 #include <Sweet.h>
 #include <algorithm>
 
+#include <GLFW/glfw3.h>
+
 Mouse::Mouse():
 	x(NULL),
 	y(NULL),

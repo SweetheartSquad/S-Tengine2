@@ -5,9 +5,6 @@
 #include <iostream>
 #include <map>
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #include "Scene.h"
 #include "ResourceManager.h"
 
@@ -22,6 +19,7 @@
 **************************************************************************/
 class Step;
 class Scene_Splash;
+struct GLFWwindow;
 class Game : public virtual NodeUpdatable, public virtual NodeLoadable{
 protected:
 	// adds the given scene to the splash scene queue
@@ -68,7 +66,7 @@ public:
 	bool printFPS;
 
 	/** Reference to the game's window */
-	GLFWwindow *glfwWindow;
+	GLFWwindow * glfwWindow;
 
 	/** Reference to the game's current scene */
 	Scene * currentScene;
@@ -122,7 +120,7 @@ public:
 	// sets the viewport to match the current window size
 	void resize();
 
-	virtual void setViewport(float _x, float _y, float _width, float _height);
+	virtual void setViewport(int _x, int _y, int _width, int _height);
 	int viewPortX, viewPortY, viewPortWidth, viewPortHeight;
 	
 	unsigned long int kc_lastKey;

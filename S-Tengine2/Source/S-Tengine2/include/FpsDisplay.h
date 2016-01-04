@@ -4,8 +4,6 @@
 
 class FpsDisplay : public TextArea {
 public:
-
-	float currentFps;
 	float avgFps;
 
 	FpsDisplay(BulletWorld * _world, Font * font, Shader * _textShaders);
@@ -14,8 +12,8 @@ public:
 
 private:
 
-	int numFrames;
+	unsigned long int numFrames;
 	double lastTime;
-	int numCycles;
-	int totalFrames; 
+	unsigned long int numCycles;
+	unsigned long int totalFrames; 
 };

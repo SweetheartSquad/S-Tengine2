@@ -7,10 +7,11 @@
 
 #include <MeshInterface.h>
 #include <MeshFactory.h>
-#include <Keyboard.h>
 #include <Game.h>
 #include <RenderOptions.h>
 #include <scenario/Asset.h>
+
+#include <sweet/Input.h>
 
 Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * _splashSound, float _length, glm::vec3 _clearColour) :
 	Scene(_game),

@@ -1,9 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include <glm\glm.hpp>
-#include <GLFW/glfw3.h>
 #include <map>
+
+#include <glm/glm.hpp>
 
 /*******************************************************
 *
