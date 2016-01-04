@@ -324,7 +324,7 @@ Transform * Transform::addChildAtIndex(NodeChild * _child, int _index, bool _und
 
 	Transform * t = nullptr;
 	if(_underNewTransform){
-		Transform * t = new Transform();
+		t = new Transform();
 		t->addChild(_child, false);
 		_child = t;
 	}else{
