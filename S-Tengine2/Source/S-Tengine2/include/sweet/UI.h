@@ -17,3 +17,4 @@ This file just includes various others in order to make including different "pac
 #include <UILayer.h>
 #include <UIUnit.h>
 #include <Slider.h>
+#include <NineSlicing.h>
