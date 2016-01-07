@@ -78,6 +78,7 @@
     <ClCompile Include="src/scenario/Conversation.cpp" />
     <ClCompile Include="src/scenario/Dialogue.cpp" />
     <ClCompile Include="src/scenario/Scenario.cpp" />
+    <ClCompile Include="src\NineSlicing.cpp" />
     <ClCompile Include="src\Scene_Splash_SweetHeartSquad.cpp" />
     <ClCompile Include="src/shader/ComponentShaderBase.cpp" />
     <ClCompile Include="src/shader/ShaderComponentBlinn.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="src\shader\ShaderComponentMask.cpp" />
     <ClCompile Include="src\shader\ShaderComponentWorldSpaceUVs.cpp" />
     <ClInclude Include="include\EventManager.h" />
+    <ClInclude Include="include\NineSlicing.h" />
     <ClInclude Include="include\Plane.h" />
     <ClInclude Include="include\rng.h" />
     <ClInclude Include="include\Scene_Splash.h" />
