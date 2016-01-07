@@ -40,7 +40,10 @@ UILayer::UILayer(float _left, float _right, float _bottom, float _top) :
 }
 
 UILayer::~UILayer(){
+	deleteChildTransform();
 	shader->decrementAndDelete();
+	delete world;
+	world = nullptr;
 }
 
 void UILayer::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
