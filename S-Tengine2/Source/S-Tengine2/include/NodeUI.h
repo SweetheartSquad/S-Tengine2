@@ -160,7 +160,7 @@ public:
 	// saves the arguments into a member variable
 	// these arguments are in the range 0-1, where 1,1,1,1 is fully opaque and white
 	// but the stored colour is converted into the correct format for the tint shader
-	void setBackgroundColour(float _r, float _g, float _b, float _a = 1.f);
+	virtual void setBackgroundColour(float _r, float _g, float _b, float _a = 1.f);
 
 	float getMarginLeft();
 	float getMarginRight();

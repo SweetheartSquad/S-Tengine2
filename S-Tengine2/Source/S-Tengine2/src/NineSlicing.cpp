@@ -233,4 +233,16 @@ void NodeUI_NineSliced::setBorder(float _left, float _right, float _bottom, floa
 	r->setPaddingTop(_top+_bottom);
 	r->paddingTop.pixelSize *= -1;
 	r->paddingTop.rationalSize *= -1;
+
+void NodeUI_NineSliced::setBackgroundColour(float _r, float _g, float _b, float _a){
+	tl->setBackgroundColour(_r, _g, _b, _a);
+	t->setBackgroundColour(_r, _g, _b, _a);
+	tr->setBackgroundColour(_r, _g, _b, _a);
+	l->setBackgroundColour(_r, _g, _b, _a);
+	c->setBackgroundColour(_r, _g, _b, _a);
+	r->setBackgroundColour(_r, _g, _b, _a);
+	bl->setBackgroundColour(_r, _g, _b, _a);
+	b->setBackgroundColour(_r, _g, _b, _a);
+	br->setBackgroundColour(_r, _g, _b, _a);
+}
 }

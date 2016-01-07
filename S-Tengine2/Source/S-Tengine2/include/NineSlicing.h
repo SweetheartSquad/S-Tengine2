@@ -57,4 +57,9 @@ public:
 	void setBorder(float _leftAndRight, float _bottomAndTop);
 	// set the size of the 8 border patches
 	void setBorder(float _left, float _right, float _bottom, float _top);
+
+
+	// since the background of a NineSliced node is hidden and replaced by the 
+	// patches, this changes the patches' background colours instead
+	virtual void setBackgroundColour(float _r, float _g, float _b, float _a = 1.f) override;
 };
