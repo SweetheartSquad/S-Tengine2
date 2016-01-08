@@ -781,6 +781,8 @@ bool NodeUI::isLayoutDirty(){
 }
 
 void NodeUI::invalidateLayout() {
-	__layoutDirty = true;
-	invalidateRenderFrame();
+	doRecursivelyOnUIChildren([](NodeUI * _this){
+		_this->__layoutDirty = true;
+		_this->invalidateRenderFrame();
+	}, true);
 }
