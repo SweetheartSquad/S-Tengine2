@@ -21,8 +21,8 @@ SoundManager::~SoundManager(){
 	sounds.clear();
 }
 
-void SoundManager::addNewSound(std::string _name, std::string _fileName){
-	sounds.insert(std::make_pair(_name, new OpenAL_SoundSimple(_fileName.c_str(), false, false)));
+void SoundManager::addNewSound(std::string _name, std::string _fileName, std::string _category){
+	sounds.insert(std::make_pair(_name, new OpenAL_SoundSimple(_fileName.c_str(), false, false, _category)));
 }
 
 void SoundManager::addSound(std::string _name, OpenAL_Sound * _sound){

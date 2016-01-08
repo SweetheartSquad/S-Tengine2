@@ -18,7 +18,7 @@ public:
 
 	// creates a new simple sound using an audio file located at _fileName
 	// sound is non-positional by default
-	void addNewSound(std::string _name, std::string _fileName);
+	void addNewSound(std::string _name, std::string _fileName, std::string _category);
 
 	// adds _sound to this sound manager
 	// note that the manager deletes sounds when it is deleted

@@ -10,6 +10,7 @@
 #include <AL\alc.h>
 #include <iostream>
 #include <string>
+#include <map>
 
 #ifdef _DEBUG
 // OpenAL error-checking macro (enabled because _DEBUG is defined)
@@ -98,10 +99,25 @@ public:
 };
 
 class OpenAL_Sound abstract : public virtual NodeOpenAL, public virtual NodeResource, public virtual NodeUpdatable, public virtual NodeChild{
+private:
+	// used to initialize the default volume categories
+	static std::map<std::string, float> initializeCategoricalGain();
+	// volume for the current sound effect
+	float gain;
 protected:
 	ALint samplesPlayed;
 public:
-	OpenAL_Sound(OpenAL_Source * _source, bool _autoRelease);
+	// by default, all calls to setGain are pre-multiplied by the master volume
+	static float masterGain;
+	// by default, all calls to setGain are pre-multiplied by the sound category's volume
+	// the categories "voice", "sfx", "music", and "other" are initialized with a volume of 1.f ("other" is for sounds which have no specified category)
+	// other categories are undefined by default
+	static std::map<std::string, float> categoricalGain;
+
+	// sound category is used to determine volume
+	std::string category;
+
+	OpenAL_Sound(OpenAL_Source * _source, bool _autoRelease, std::string _category);
 	~OpenAL_Sound();
 	OpenAL_Source * source;
 	
@@ -113,6 +129,7 @@ public:
 	float getAmplitude();
 	
 	// Starts the audio source if stopped, resumes if paused, restarts if playing.
+	// also calls setGain with the sound's current gain
 	virtual void play(bool _loop = false);
 	// Pauses the audio source
 	virtual void pause();
@@ -143,13 +160,15 @@ public:
 	 * silent.
 	 *
 	 * Note that this alters the source, so if the source is used by multiple sound objects, they will all be modified
+	 * 
+	 * The provided _gain is pre-multiplied by the master volume and the categorical volume
 	 */
 	void setGain(float _gain);
 };
 
 class OpenAL_SoundSimple : public OpenAL_Sound{
 public:
-	OpenAL_SoundSimple(const char * _filename, bool _positional, bool _autoRelease);
+	OpenAL_SoundSimple(const char * _filename, bool _positional, bool _autoRelease, std::string _category);
 
 	virtual void update(Step * _step) override;
 };
@@ -171,7 +190,7 @@ public:
 	// whether the stream should continue buffering
 	bool isStreaming;
 
-	OpenAL_SoundStream(const char * _filename, bool _positional, bool _autoRelease, unsigned long int _bufferLength = 4410, unsigned long int _numBufs = 4);
+	OpenAL_SoundStream(const char * _filename, bool _positional, bool _autoRelease, std::string _category, unsigned long int _bufferLength = 4410, unsigned long int _numBufs = 4);
 	~OpenAL_SoundStream();
 
 	virtual void update(Step * _step) override;
@@ -206,7 +225,7 @@ public:
 
 	std::function<ALshort(unsigned long int _time)> generativeFunction;
 	
-	OpenAL_SoundStreamGenerative(bool _positional, bool _autoRelease, unsigned long int _bufferLength = 4410, unsigned long int _numBufs = 4);
+	OpenAL_SoundStreamGenerative(bool _positional, bool _autoRelease, std::string _category, unsigned long int _bufferLength = 4410, unsigned long int _numBufs = 4);
 
 	// attempt to fill the _bufferId with new data from the function
 	// (uses bufferOffset to determine where to start from)

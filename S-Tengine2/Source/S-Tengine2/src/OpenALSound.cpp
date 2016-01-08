@@ -209,11 +209,20 @@ void OpenAL_Source::pause(){
 
 
 
+float OpenAL_Sound::masterGain = 1.f;
+std::map<std::string, float> OpenAL_Sound::categoricalGain = initializeCategoricalGain();
+std::map<std::string, float> OpenAL_Sound::initializeCategoricalGain(){
+	std::map<std::string, float> res;
+	res["voice"] = res["sfx"] = res["music"] = res["other"] = 1.f;
+	return res;
+}
 
-OpenAL_Sound::OpenAL_Sound(OpenAL_Source * _source, bool _autoRelease) :
+OpenAL_Sound::OpenAL_Sound(OpenAL_Source * _source, bool _autoRelease, std::string _category) :
 	NodeResource(_autoRelease),
 	source(_source),
-	samplesPlayed(0)
+	samplesPlayed(0),
+	category(_category),
+	gain(1.f)
 {
 }
 
@@ -229,6 +238,7 @@ void OpenAL_Sound::update(Step * _step){
 }
 
 void OpenAL_Sound::play(bool _loop){
+	setGain(gain);
 	source->play(_loop);
 }void OpenAL_Sound::pause(){
 	source->pause();
@@ -240,7 +250,8 @@ void OpenAL_Sound::setPitch(float _pitch){
 	checkForAlError(alSourcef(source->sourceId, AL_PITCH, _pitch));
 }
 void OpenAL_Sound::setGain(float _gain){
-	checkForAlError(alSourcef(source->sourceId, AL_GAIN, _gain));
+	gain = _gain;
+	checkForAlError(alSourcef(source->sourceId, AL_GAIN, gain * masterGain * categoricalGain[category]));
 }
 
 ALint OpenAL_Sound::getCurrentSample(){
@@ -258,8 +269,8 @@ float OpenAL_Sound::getAmplitude(){
 
 
 
-OpenAL_SoundSimple::OpenAL_SoundSimple(const char * _filename, bool _positional, bool _autoRelease) :
-	OpenAL_Sound(new OpenAL_Source(new OpenAL_Buffer(_filename, _autoRelease), _positional, _autoRelease), _autoRelease),
+OpenAL_SoundSimple::OpenAL_SoundSimple(const char * _filename, bool _positional, bool _autoRelease, std::string _category) :
+	OpenAL_Sound(new OpenAL_Source(new OpenAL_Buffer(_filename, _autoRelease), _positional, _autoRelease), _autoRelease, _category),
 	NodeResource(_autoRelease)
 {
 }
@@ -270,10 +281,10 @@ void OpenAL_SoundSimple::update(Step * _step){
 }
 
 
-OpenAL_SoundStream::OpenAL_SoundStream(const char * _filename, bool _positional, bool _autoRelease, unsigned long int _bufferLength, unsigned long int _numBufs) :
+OpenAL_SoundStream::OpenAL_SoundStream(const char * _filename, bool _positional, bool _autoRelease, std::string _category, unsigned long int _bufferLength, unsigned long int _numBufs) :
 	NodeResource(_autoRelease),
 	isStreaming(false),
-	OpenAL_Sound(new OpenAL_Source(nullptr, _positional, _autoRelease), _autoRelease),
+	OpenAL_Sound(new OpenAL_Source(nullptr, _positional, _autoRelease), _autoRelease, _category),
 	bufferOffset(0),
 	maxBufferOffset(0),
 	numBuffers(_numBufs),
@@ -428,8 +439,8 @@ unsigned long int OpenAL_SoundStream::fillBuffers(){
 
 
 
-OpenAL_SoundStreamGenerative::OpenAL_SoundStreamGenerative(bool _positional, bool _autoRelease, unsigned long int _bufferLength, unsigned long int _numBufs) :
-	OpenAL_SoundStream(nullptr, _positional, _autoRelease, _bufferLength, _numBufs),
+OpenAL_SoundStreamGenerative::OpenAL_SoundStreamGenerative(bool _positional, bool _autoRelease, std::string _category, unsigned long int _bufferLength, unsigned long int _numBufs) :
+	OpenAL_SoundStream(nullptr, _positional, _autoRelease, _category, _bufferLength, _numBufs),
 	NodeResource(_autoRelease),
 	generativeFunction(nullptr)
 {
