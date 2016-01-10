@@ -17,8 +17,9 @@ private:
 	unsigned long int numTextures;
 public:
 	float  alphaDiscardThreshold;
-
-	ShaderComponentTexture(Shader * _shader);
+	
+	// if _alphaDiscardThreshold is > 0, pixels which have an alpha of less than _alphaDiscardThreshold will be discarded in the fragment shader
+	ShaderComponentTexture(Shader * _shader, float _alphaDiscardThreshold = -1);
 	~ShaderComponentTexture() override;
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;

@@ -10,9 +10,9 @@
 #include "Sprite.h"
 #include "SpriteSheetAnimation.h"
 
-ShaderComponentTexture::ShaderComponentTexture(Shader * _shader) :
+ShaderComponentTexture::ShaderComponentTexture(Shader * _shader, float _alphaDiscardThreshold) :
 	ShaderComponent(_shader),
-	alphaDiscardThreshold(-1),
+	alphaDiscardThreshold(_alphaDiscardThreshold),
 	texNumLoc(-1),
 	texSamLoc(-1),
 	numTextures(0)
