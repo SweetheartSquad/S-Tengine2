@@ -48,7 +48,8 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	bgColour(0.f, 0.f, 0.f, 1.f),
 	textureCam(nullptr),
 	__layoutDirty(true),
-	__renderFrameDirty(_renderMode == kTEXTURE)
+	__renderFrameDirty(_renderMode == kTEXTURE),
+	nodeUIParent(nullptr)
 {
 	if(bgShader == nullptr){
 		bgShader = new ComponentShaderBase(true);
@@ -138,6 +139,7 @@ void NodeUI::out(){
 
 
 Transform * NodeUI::addChild(NodeUI* _uiElement){
+	_uiElement->nodeUIParent = this;
 	invalidateLayout();
 	_uiElement->setMeasuredWidths(this);
 	_uiElement->setMeasuredHeights(this);
@@ -155,6 +157,7 @@ signed long int NodeUI::removeChild(NodeUI* _uiElement){
 			t->removeChild(_uiElement);
 			delete t;
 			invalidateLayout();
+			_uiElement->nodeUIParent = nullptr;
 		}
 	}
 	return res;

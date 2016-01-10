@@ -78,6 +78,11 @@ public:
 	virtual void setVisible(bool _visible) override;
 
 public:
+	// if this NodeUI is contained within the standard layout system (i.e. it was added to the hierarchy using NodeUI::addChild)
+	// this is a reference to the NodeUI which contains it
+	// this is useful because there are multiple transform nodes inbetween children and parents in the NodeUI system
+	NodeUI * nodeUIParent;
+
 	// returns mouseEnabled
 	bool isMouseEnabled();
 	// sets mouseEnabled and creates/deletes the node's collider
