@@ -70,11 +70,11 @@ void TextArea::updateText(){
 			textToAdd = curLine->textOverflow;
 			textDisplayed += curLine->textDisplayed;
 		}while(textToAdd.size() > 0 && !curLine->textDisplayed.empty());
-	}
-	// if all the text is added, then the loop is successfull
-	// if no text was actually added to a line, stop to avoid infinite loop (probably a zero-width text-area)
+		// if all the text is added, then the loop is successfull
+		// if no text was actually added to a line, stop to avoid infinite loop (probably a zero-width text-area)
 
-	updateRequired = false;
+		updateRequired = false;
+	}
 }
 
 TextLabel * TextArea::getNewLine() {
