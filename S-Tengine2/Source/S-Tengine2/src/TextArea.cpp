@@ -63,12 +63,14 @@ void TextArea::updateText(){
 	std::wstring textToAdd = text;
 
 	TextLabel * curLine;
-	do{
-		curLine = getNewLine();
-		curLine->setText(textToAdd);
-		textToAdd = curLine->textOverflow;
-		textDisplayed += curLine->textDisplayed;
-	}while(textToAdd.size() > 0 && !curLine->textDisplayed.empty());
+	if(getWidth(false, false) > FLT_EPSILON){
+		do{
+			curLine = getNewLine();
+			curLine->setText(textToAdd);
+			textToAdd = curLine->textOverflow;
+			textDisplayed += curLine->textDisplayed;
+		}while(textToAdd.size() > 0 && !curLine->textDisplayed.empty());
+	}
 	// if all the text is added, then the loop is successfull
 	// if no text was actually added to a line, stop to avoid infinite loop (probably a zero-width text-area)
 
