@@ -150,9 +150,13 @@ public:
 	friend std::ostream& operator<<(std::ostream& os, const MeshInterface& obj);
 };
 
+class QuadMesh;
+
 /** MeshInterface preset for triangle meshes */
 class TriMesh : public MeshInterface{
 public:
+	// creates a triangulated version of _mesh
+	TriMesh(const QuadMesh * const _mesh, bool _autoRelease);
 	void pushTri(GLuint _v0, GLuint _v1, GLuint _v2);
 	explicit TriMesh(GLenum _polygonalDrawMode = GL_TRIANGLES, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode), NodeResource(true){};
 };

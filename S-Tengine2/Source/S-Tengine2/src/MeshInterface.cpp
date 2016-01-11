@@ -279,6 +279,22 @@ void MeshInterface::setUV(unsigned long _vertId, float _u, float _v){
 
 	dirty = true;
 }
+
+TriMesh::TriMesh(const QuadMesh * const _mesh, bool _autoRelease) :
+	NodeResource(_autoRelease),
+	MeshInterface(GL_TRIANGLES, GL_STATIC_DRAW)
+{
+	for(unsigned long int i = 0; i < _mesh->vertices.size(); i += 4){
+		pushVert(_mesh->vertices.at(i));
+		pushVert(_mesh->vertices.at(i+1));
+		pushVert(_mesh->vertices.at(i+2));
+
+		pushVert(_mesh->vertices.at(i+2));
+		pushVert(_mesh->vertices.at(i+3));
+		pushVert(_mesh->vertices.at(i+1));
+	}
+}
+
 void TriMesh::pushTri(GLuint _v0, GLuint _v1, GLuint _v2){
 	indices.push_back(_v0);
 	indices.push_back(_v1);
