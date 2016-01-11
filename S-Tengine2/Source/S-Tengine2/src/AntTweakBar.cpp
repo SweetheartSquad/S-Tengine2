@@ -11,6 +11,7 @@ int TwWindowSize(int width, int height){return 0;}
 int TwTerminate(){return 0;}
 int TwMouseMotion(int mouseX, int mouseY){return 0;}
 int TwInit(TwGraphAPI, void*){return 0;}
+int TwMouseWheel(int){return 0;}
 int TwEventMouseButtonGLFW(int, int){return 0;}
 int TwEventKeyGLFW(int, int){return 0;}
 int TwEventCharGLFW(int, int){return 0;}
