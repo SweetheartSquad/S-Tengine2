@@ -291,7 +291,7 @@ TriMesh::TriMesh(const QuadMesh * const _mesh, bool _autoRelease) :
 
 		pushVert(_mesh->vertices.at(i+2));
 		pushVert(_mesh->vertices.at(i+3));
-		pushVert(_mesh->vertices.at(i+1));
+		pushVert(_mesh->vertices.at(i));
 	}
 }
 
