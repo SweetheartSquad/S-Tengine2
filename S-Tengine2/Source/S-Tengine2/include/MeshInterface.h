@@ -130,6 +130,12 @@ public:
 	// if the texture is deleted, returns nullptr
 	// otherwise, returns the popped texture
 	Texture * popTexture2D();
+
+	// calls popTexture2D until there aren't any textures left
+	void clearTextures();
+	// calls clearTextures() and then pushTexture2D(_newTexture)
+	void replaceTextures(Texture * _newTexture);
+
 	void removeTextureAt(int _idx);
 	void pushMaterial(Material * _material);
 	unsigned long int textureCount() const;

@@ -227,6 +227,17 @@ Texture * MeshInterface::popTexture2D(){
 	return t;
 }
 
+void MeshInterface::clearTextures(){
+	while(textures.size() > 0){
+		popTexture2D();
+	}
+}
+
+void MeshInterface::replaceTextures(Texture * _newTexture){
+	clearTextures();
+	pushTexture2D(_newTexture);
+}
+
 void MeshInterface::removeTextureAt(int _idx){
 	textures.at(_idx)->decrementAndDelete();
 	textures.erase(textures.begin() + _idx);
