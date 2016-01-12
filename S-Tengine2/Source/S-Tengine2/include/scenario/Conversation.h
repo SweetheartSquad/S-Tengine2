@@ -63,8 +63,9 @@ public:
 	ConversationIterator();
 	virtual ~ConversationIterator();
 
+	// called when the conversation ends
 	// sets the current conversation to nullptr
-	void end();
+	virtual void end();
 
 	// moves the conversation forward by one step
 	// if there is nothing left to say, returns false. Returns true otherwise
