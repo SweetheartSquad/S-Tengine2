@@ -156,6 +156,7 @@ UIGlyph * TextLabel::getGlyph(wchar_t _char, Glyph * _glyphMesh){
 	if(unusedGlyphs.size() > 0){
 		res = unusedGlyphs.back();
 		res->setGlyphMesh(_glyphMesh);
+		res->character = _char;
 		unusedGlyphs.pop_back();
 	}else{
 		res = new UIGlyph(world, _glyphMesh, textShader, _char);
