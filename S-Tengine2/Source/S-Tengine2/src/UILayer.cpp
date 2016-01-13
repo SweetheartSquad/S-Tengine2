@@ -155,7 +155,7 @@ Sprite * UILayer::addMouseIndicator(){
 	Texture * tex = new Texture("assets/engine basics/cursor.png", true, true);
 	tex->load();
 	mouseIndicator->mesh->pushTexture2D(tex);
-	mouseIndicator->parents.at(0)->scale(32,32,1);
+	mouseIndicator->firstParent()->scale(32,32,1);
 	mouseIndicator->mesh->scaleModeMag = mouseIndicator->mesh->scaleModeMin = GL_NEAREST;
 
 	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
@@ -165,6 +165,11 @@ Sprite * UILayer::addMouseIndicator(){
 	mouseIndicator->mesh->dirty = true;
 
 	return mouseIndicator;
+}
+void UILayer::removeMouseIndicator(){
+	childTransform->removeChild(mouseIndicator->firstParent());
+	delete mouseIndicator->firstParent();
+	mouseIndicator = nullptr;
 }
 
 void UILayer::load(){

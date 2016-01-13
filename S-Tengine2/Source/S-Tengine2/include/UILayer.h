@@ -40,7 +40,9 @@ public:
 
 	void hitTest(NodeChild * _c);
 
+	// adds a sprite with the default cursor texture to the ui layer which is updated each frame to match the mouse position
 	Sprite * addMouseIndicator();
+	void removeMouseIndicator();
 
 	void load() override;
 	void unload() override;
