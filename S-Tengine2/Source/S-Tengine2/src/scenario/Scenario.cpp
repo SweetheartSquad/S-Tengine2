@@ -46,7 +46,7 @@ Scenario::Scenario(std::string _jsonSrc) :
 				"\"type\": \"texture\","
 				"\"src\": \"../engine basics/img_cheryl.jpg\""
 			"}", defJson);
-		defaultTexture = AssetTexture::create(defJson);
+		defaultTexture = AssetTexture::create(defJson, this);
 		defaultAssets.push_back(defaultTexture);
 	}
 	
@@ -57,7 +57,7 @@ Scenario::Scenario(std::string _jsonSrc) :
 				"\"type\": \"textureSampler\","
 				"\"src\": \"../engine basics/img_cheryl.jpg.def\""
 			"}", defJson);
-		defaultTextureSampler = AssetTextureSampler::create(defJson);
+		defaultTextureSampler = AssetTextureSampler::create(defJson, this);
 		defaultAssets.push_back(defaultTextureSampler);
 	}
 	
@@ -68,7 +68,7 @@ Scenario::Scenario(std::string _jsonSrc) :
 				"\"type\": \"audio\","
 				"\"src\": \"../engine basics/SCENE.ogg\""
 			"}", defJson);
-		defaultAudio = AssetAudio::create(defJson);
+		defaultAudio = AssetAudio::create(defJson, this);
 		defaultAssets.push_back(defaultAudio);
 	}
 
@@ -79,7 +79,7 @@ Scenario::Scenario(std::string _jsonSrc) :
 				"\"type\": \"font\","
 				"\"src\": \"../engine basics/OpenSans-Regular.ttf\""
 			"}", defJson);
-		defaultFont = AssetFont::create(defJson);
+		defaultFont = AssetFont::create(defJson, this);
 		defaultAssets.push_back(defaultFont);
 	}
 
@@ -89,7 +89,7 @@ Scenario::Scenario(std::string _jsonSrc) :
 		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
 	}else{
 		
-		 Json::Value charactersJson = root["characters"];
+		 /*Json::Value charactersJson = root["characters"];
 		 for(Json::Value::ArrayIndex i = 0; i < charactersJson.size(); ++i) {
 			Character * c = new Character(charactersJson[i]);
 			characters[c->id] = c;
@@ -99,23 +99,23 @@ Scenario::Scenario(std::string _jsonSrc) :
 		 for(Json::Value::ArrayIndex i = 0; i < conversationsJson.size(); ++i) {
 			 Conversation * c = new Conversation(conversationsJson[i], this);
 			 conversations[c->id] = c;
-		 }
+		 }*/
 
 		 Json::Value texturesJson = root["assets"];
 		 for(Json::Value::ArrayIndex i = 0; i < texturesJson.size(); ++i) {
-			 Asset * a = Asset::getAsset(texturesJson[i]);
+			 Asset * a = Asset::getAsset(texturesJson[i], this);
 			 assets[a->type][a->id] = a;
 		 }
 	}
 }
 
 Scenario::~Scenario(){
-	for(auto i : conversations){
+	/*for(auto i : conversations){
 		delete i.second;
 	}conversations.clear();
 	for(auto i : characters){
 		delete i.second;
-	}characters.clear();
+	}characters.clear();*/
 	for(auto a : assets){
 		for(auto b : a.second){
 			delete b.second;
@@ -170,6 +170,14 @@ AssetFont * Scenario::getFont(std::string _id){
 	if(res == nullptr){
 		Log::warn("Font \"" + _id + "\" not found.");
 		res = defaultFont;
+	}
+	return res;
+}
+
+AssetConversation * Scenario::getConversation(std::string _id){
+	AssetConversation * res = dynamic_cast<AssetConversation *>(getAsset("conversation", _id));
+	if(res == nullptr){
+		Log::error("Conversation \"" + _id + "\" not found.");
 	}
 	return res;
 }

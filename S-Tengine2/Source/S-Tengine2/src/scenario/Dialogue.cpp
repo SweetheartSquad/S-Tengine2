@@ -7,7 +7,7 @@
 #include <iostream>
 #include <Log.h>
 
-Dialogue::Dialogue(Json::Value _json, Scenario * _scenario) :
+Dialogue::Dialogue(Json::Value _json, Scenario * const _scenario) :
 	currentText(-1),
 	scenario(_scenario),
 	speaker(_json.get("speaker", "NO_SPEAKER_DEFINED").asString())

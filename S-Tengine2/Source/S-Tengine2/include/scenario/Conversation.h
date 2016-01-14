@@ -8,7 +8,7 @@ public:
 	std::string text;
 	std::string link;
 
-	Option(Json::Value _json, Scenario * _scenario);
+	Option(Json::Value _json, Scenario * const _scenario);
 	~Option();
 };
 
@@ -25,12 +25,12 @@ private:
 	bool advance();
 public:
 	// the scenario this content belongs to
-	Scenario * scenario;
+	Scenario * const scenario;
 
 	std::vector<Option *> options;
 	std::string id;
 	std::vector<Dialogue *> dialogueObjects;
-	Conversation(Json::Value _json, Scenario * _scenario);
+	Conversation(Json::Value _json, Scenario * const _scenario);
 	~Conversation();
 
 	// returns dialogueObjects.at(currentDialogue)

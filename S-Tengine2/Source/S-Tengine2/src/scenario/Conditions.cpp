@@ -5,7 +5,7 @@
 
 #include <Log.h>
 
-Condition * Condition::getCondition(Json::Value _json, Scenario * _scenario){
+Condition * Condition::getCondition(Json::Value _json, Scenario * const _scenario){
 	Condition * res = nullptr;
 	std::string type = _json.get("type", "NO_TYPE").asString();
 	// create a different type of Trigger depending on the value of type
@@ -31,7 +31,9 @@ ConditionEquality::ConditionEquality(Json::Value _json) :
 }
 
 bool ConditionEquality::evaluate(){
-	bool res = scenario->characters.at(target)->variables.at(variable) == requiredValue;
+	// TODO: replace this with the new system
+	/*bool res = scenario->characters.at(target)->variables.at(variable) == requiredValue;
 	Log::info((res ? "Condition passed: " : "Condition failed: ") + target + "->" + variable + "("+scenario->characters.at(target)->variables.at(variable)+") == " + requiredValue);
-	return res;
+	return res;*/
+	return true;
 }

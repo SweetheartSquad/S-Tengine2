@@ -9,7 +9,7 @@ class Scenario;
 
 class Condition abstract: public NodeContent{
 public:
-	static Condition * getCondition(Json::Value _json, Scenario * _scenario);
+	static Condition * getCondition(Json::Value _json, Scenario * const _scenario);
 	
 	std::string target;
 	std::string variable;

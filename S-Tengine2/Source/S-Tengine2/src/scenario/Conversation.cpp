@@ -8,7 +8,7 @@
 
 
 
-Option::Option(Json::Value _json, Scenario * _scenario) :
+Option::Option(Json::Value _json, Scenario * const _scenario) :
 	text(_json.get("text", "").asString()),
 	link(_json.get("link", "END").asString())
 {
@@ -20,7 +20,7 @@ Option::~Option(){
 
 
 
-Conversation::Conversation(Json::Value _json, Scenario * _scenario) :
+Conversation::Conversation(Json::Value _json, Scenario * const _scenario) :
 	id(_json.get("id", "NO_ID").asString()),
 	currentDialogue(-1),
 	scenario(_scenario)
@@ -135,7 +135,7 @@ void ConversationIterator::select(unsigned long int _option){
 	if(!waitingForInput){
 		throw "you can't do that";
 	}
-	currentConversation = currentConversation->scenario->conversations[currentConversation->options.at(_option)->link];
+	currentConversation = currentConversation->scenario->getConversation(currentConversation->options.at(_option)->link)->conversation;
 	currentConversation->reset();
 	waitingForInput = false;
 	sayNext();
@@ -165,7 +165,7 @@ bool ConversationIterator::sayNext(){
 			waitingForInput = true;
 		}else if(currentConversation->options.size() == 1){
 			// single option means go to the link
-			currentConversation = currentConversation->scenario->conversations.at(currentConversation->options.front()->link);
+			currentConversation = currentConversation->scenario->getConversation(currentConversation->options.front()->link)->conversation;
 			currentConversation->reset();
 			sayNext();
 		}else{

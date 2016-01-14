@@ -32,8 +32,6 @@ public:
 	std::string id;
 
 	Json::Value root;
-	std::map<std::string, Conversation *> conversations;
-	std::map<std::string, Character *> characters;
 	
 	// accessed using "assets[type][id]"
 	std::map<std::string, std::map<std::string, Asset *>> assets;
@@ -62,6 +60,8 @@ public:
 	AssetAudio * getAudio(std::string _id);
 	// convenience function: just calls getAsset with a specific type and casts the result; if not found uses the default asset for that type
 	AssetFont * getFont(std::string _id);
+	// convenience function: just calls getAsset with a specific type and casts the result; if not found uses the default asset for that type
+	AssetConversation * getConversation(std::string _id);
 
 	virtual void load() override;
 	virtual void unload() override;

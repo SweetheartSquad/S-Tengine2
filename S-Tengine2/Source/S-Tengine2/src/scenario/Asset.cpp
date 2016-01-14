@@ -4,15 +4,16 @@
 #include <FileUtils.h>
 #include <json/json.h>
 
-Asset::Asset(Json::Value _json) :
+Asset::Asset(Json::Value _json, Scenario * const _scenario) :
 	id(_json.get("id", "NO_ID").asString()),
-	type(_json.get("type", "NO_TYPE").asString())
+	type(_json.get("type", "NO_TYPE").asString()),
+	scenario(_scenario)
 {
 
 }
 
-AssetTexture::AssetTexture(Json::Value _json) :
-	Asset(_json),
+AssetTexture::AssetTexture(Json::Value _json, Scenario * const _scenario) :
+	Asset(_json, _scenario),
 	texture(nullptr)
 {
 	std::string src = _json.get("src", "NO_TEXTURE").asString();
@@ -25,8 +26,8 @@ AssetTexture::AssetTexture(Json::Value _json) :
 	texture = new Texture(src, true, false, _json.get("generateMipmaps", true).asBool());
 	//texture->load();
 }
-AssetTexture * AssetTexture::create(Json::Value _json){
-	return new AssetTexture(_json);
+AssetTexture * AssetTexture::create(Json::Value _json, Scenario * const _scenario){
+	return new AssetTexture(_json, _scenario);
 }
 AssetTexture::~AssetTexture(){
 	delete texture;
@@ -46,8 +47,8 @@ void AssetTexture::unload(){
 	Asset::unload();
 }
 
-AssetTextureSampler::AssetTextureSampler(Json::Value _json) :
-	Asset(_json),
+AssetTextureSampler::AssetTextureSampler(Json::Value _json, Scenario * const _scenario) :
+	Asset(_json, _scenario),
 	textureSampler(nullptr)
 {
 	std::string defTex = "assets/engine basics/img_cheryl.jpg";
@@ -79,8 +80,8 @@ AssetTextureSampler::AssetTextureSampler(Json::Value _json) :
 		textureSampler->load();
 	}
 }
-AssetTextureSampler * AssetTextureSampler::create(Json::Value _json){
-	return new AssetTextureSampler(_json);
+AssetTextureSampler * AssetTextureSampler::create(Json::Value _json, Scenario * const _scenario){
+	return new AssetTextureSampler(_json, _scenario);
 }
 AssetTextureSampler::~AssetTextureSampler(){
 	delete textureSampler;
@@ -100,8 +101,8 @@ void AssetTextureSampler::unload(){
 	Asset::unload();
 }
 
-AssetAudio::AssetAudio(Json::Value _json) :
-	Asset(_json)
+AssetAudio::AssetAudio(Json::Value _json, Scenario * const _scenario) :
+	Asset(_json, _scenario)
 {
 	std::string src = _json.get("src", "NO_AUDIO").asString();
 	if(src == "NO_AUDIO"){
@@ -118,8 +119,8 @@ AssetAudio::AssetAudio(Json::Value _json) :
 		sound = new OpenAL_SoundSimple(src.c_str(), false, false, category);
 	}
 }
-AssetAudio * AssetAudio::create(Json::Value _json){
-	return new AssetAudio(_json);
+AssetAudio * AssetAudio::create(Json::Value _json, Scenario * const _scenario){
+	return new AssetAudio(_json, _scenario);
 }
 AssetAudio::~AssetAudio(){
 	delete sound;
@@ -139,8 +140,8 @@ void AssetAudio::unload(){
 	Asset::unload();
 }
 
-AssetFont::AssetFont(Json::Value _json) :
-	Asset(_json)
+AssetFont::AssetFont(Json::Value _json, Scenario * const _scenario) :
+	Asset(_json, _scenario)
 {
 	std::string src = _json.get("src", "NO_FONT").asString();
 	if(src == "NO_FONT"){
@@ -152,8 +153,8 @@ AssetFont::AssetFont(Json::Value _json) :
 	int size = _json.get("size", 24).asInt();
 	font = new Font(src, size, false);
 }
-AssetFont * AssetFont::create(Json::Value _json){
-	return new AssetFont(_json);
+AssetFont * AssetFont::create(Json::Value _json, Scenario * const _scenario){
+	return new AssetFont(_json, _scenario);
 }
 AssetFont::~AssetFont(){
 	delete font;
@@ -173,8 +174,38 @@ void AssetFont::unload(){
 	Asset::unload();
 }
 
-std::map<std::string, std::function<Asset * (Json::Value)>> Asset::creationRegistry;
-bool Asset::registerType(std::string _typeName, std::function<Asset * (Json::Value)> _typeCreator){
+
+
+
+AssetConversation::AssetConversation(Json::Value _json, Scenario * const _scenario) :
+	Asset(_json, _scenario),
+	conversation(new Conversation(_json, _scenario))
+{
+}
+AssetConversation * AssetConversation::create(Json::Value _json, Scenario * const _scenario){
+	return new AssetConversation(_json, _scenario);
+}
+AssetConversation::~AssetConversation(){
+	delete conversation;
+}
+
+void AssetConversation::load(){
+	if(!loaded){
+	}
+	Asset::load();
+}
+
+void AssetConversation::unload(){
+	if(loaded){
+	}
+	Asset::unload();
+}
+
+
+
+
+std::map<std::string, std::function<Asset * (Json::Value, Scenario * const)>> Asset::creationRegistry;
+bool Asset::registerType(std::string _typeName, std::function<Asset * (Json::Value, Scenario * const _scenario)> _typeCreator){
 	if(!creationRegistry.insert(std::make_pair(_typeName, _typeCreator)).second){
 		Log::error("Asset type registration failed; type \"" + _typeName + "\" already registered.");
 		return false;
@@ -183,7 +214,7 @@ bool Asset::registerType(std::string _typeName, std::function<Asset * (Json::Val
 }
 
 
-Asset * Asset::getAsset(Json::Value _json){
+Asset * Asset::getAsset(Json::Value _json, Scenario * const _scenario){
 	// retrieve the type string and use it to find the create function
 	std::string type = _json.get("type", "NO_TYPE").asString();
 	auto s = creationRegistry.find(type);
@@ -195,15 +226,16 @@ Asset * Asset::getAsset(Json::Value _json){
 	}
 
 	// return the result of calling the create function with the provided json
-	return s->second(_json);
+	return s->second(_json, _scenario);
 }
 
-// register asset types
-bool Asset::registerTypes(){
+// register asset types during static initialization
+static bool registerTypes(){
 	return 
 		Asset::registerType("texture", &AssetTexture::create) &&
 		Asset::registerType("textureSampler", &AssetTextureSampler::create) &&
 		Asset::registerType("audio", &AssetAudio::create) &&
-		Asset::registerType("font", &AssetFont::create);
+		Asset::registerType("font", &AssetFont::create) &&
+		Asset::registerType("conversation", &AssetConversation::create);
 }
-const bool Asset::typesRegistered = Asset::registerTypes();
+static bool typesRegistered = registerTypes();

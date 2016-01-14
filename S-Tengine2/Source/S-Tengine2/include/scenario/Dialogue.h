@@ -39,8 +39,8 @@ public:
 
 	void reset();
 
-	Dialogue(Json::Value _json, Scenario * _scenario);
+	Dialogue(Json::Value _json, Scenario * const _scenario);
 protected:
 	// the scenario this content belongs to
-	Scenario * scenario;
+	Scenario * const scenario;
 };
