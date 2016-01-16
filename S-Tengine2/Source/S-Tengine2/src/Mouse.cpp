@@ -89,8 +89,8 @@ void Mouse::mouseUpListener(int _glfwMouseCode){
 void Mouse::mousePositionListener(double _x, double _y){
 	if(active){
 		glm::uvec2 sd = sweet::getWindowDimensions();
-		clampedX = std::max(0., std::min(clampedX + _x - x, (double)sd.x));
-		clampedY = std::max(0., std::min(clampedY + _y - y, (double)sd.y));
+		clampedX = max(0., min(clampedX + _x - x, (double)sd.x));
+		clampedY = max(0., min(clampedY + _y - y, (double)sd.y));
 
 		x = _x;
 		y = _y;
