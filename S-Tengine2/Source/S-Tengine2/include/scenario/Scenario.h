@@ -40,6 +40,7 @@ public:
 	static AssetTextureSampler * defaultTextureSampler;
 	static AssetAudio * defaultAudio;
 	static AssetFont * defaultFont;
+	static AssetMesh * defaultMesh;
 	// delete static variables used for default assets
 	static void destruct();
 
@@ -62,6 +63,8 @@ public:
 	AssetFont * getFont(std::string _id);
 	// convenience function: just calls getAsset with a specific type and casts the result; if not found uses the default asset for that type
 	AssetConversation * getConversation(std::string _id);
+	// convenience function: just calls getAsset with a specific type and casts the result; if not found uses the default asset for that type
+	AssetMesh * getMesh(std::string _id);
 
 	virtual void load() override;
 	virtual void unload() override;

@@ -133,3 +133,16 @@ public:
 	virtual void load() override;
 	virtual void unload() override;
 };
+
+class AssetMesh : public Asset {
+private:
+	AssetMesh(Json::Value _json, Scenario * const _scenario);
+public:
+	std::vector<MeshInterface *> * meshes;
+	
+	static AssetMesh * create(Json::Value _json, Scenario * const _scenario);
+	~AssetMesh();
+
+	virtual void load() override;
+	virtual void unload() override;
+};

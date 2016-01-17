@@ -3,6 +3,8 @@
 #include <scenario/Asset.h>
 #include <FileUtils.h>
 #include <json/json.h>
+#include <Resource.h>
+#include <MeshFactory.h>
 
 Asset::Asset(Json::Value _json, Scenario * const _scenario) :
 	id(_json.get("id", "NO_ID").asString()),
@@ -195,6 +197,50 @@ void AssetConversation::load(){
 	Asset::load();
 }
 
+AssetMesh::AssetMesh(Json::Value _json, Scenario* const _scenario) :
+	Asset(_json, _scenario)
+{
+	meshes = new std::vector<MeshInterface *>();
+	std::string src = _json.get("src", "NO_MESH").asString();
+	if(src == "NO_MESH"){
+		Log::warn("Loaded mesh without a src: Cube substitution in effect.");
+		meshes->push_back(MeshFactory::getCubeMesh());
+	}else{
+		src = "assets/meshes/" + src;
+		auto loadedMeshes = Resource::loadMeshFromObj(src);
+		meshes->insert(meshes->end(), loadedMeshes.begin(), loadedMeshes.end());
+	}
+}
+
+AssetMesh* AssetMesh::create(Json::Value _json, Scenario* const _scenario) {
+	return new AssetMesh(_json, _scenario);
+}
+
+AssetMesh::~AssetMesh() {
+	for(auto mesh : *meshes) {
+		delete mesh;
+	}
+	delete meshes;
+}
+
+void AssetMesh::load() {
+	if(!loaded) {
+		for(auto mesh : *meshes) {
+			mesh->load();
+		}
+	}
+	Asset::load();
+}
+
+void AssetMesh::unload() {
+	if(loaded) {
+		for(auto mesh : *meshes) {
+			mesh->unload();
+		}
+	}
+	Asset::unload();
+}
+
 void AssetConversation::unload(){
 	if(loaded){
 	}
@@ -236,6 +282,7 @@ static bool registerTypes(){
 		Asset::registerType("textureSampler", &AssetTextureSampler::create) &&
 		Asset::registerType("audio", &AssetAudio::create) &&
 		Asset::registerType("font", &AssetFont::create) &&
-		Asset::registerType("conversation", &AssetConversation::create);
+		Asset::registerType("conversation", &AssetConversation::create) &&
+		Asset::registerType("mesh", &AssetMesh::create);
 }
 static bool typesRegistered = registerTypes();
