@@ -5,6 +5,7 @@
 #include <json/json.h>
 #include <Resource.h>
 #include <MeshFactory.h>
+#include <NineSlicing.h>
 
 Asset::Asset(Json::Value _json, Scenario * const _scenario) :
 	id(_json.get("id", "NO_ID").asString()),
@@ -25,7 +26,11 @@ AssetTexture::AssetTexture(Json::Value _json, Scenario * const _scenario) :
 	}else{
 		src = "assets/textures/" + src;
 	}
-	texture = new Texture(src, true, false, _json.get("generateMipmaps", true).asBool());
+	if(!_json.get("nineSliced", false).asBool()){
+		texture = new Texture(src, true, false, _json.get("generateMipmaps", true).asBool());
+	}else{
+		texture = new Texture_NineSliced(src, false, _json.get("generateMipmaps", true).asBool());
+	}
 	//texture->load();
 }
 AssetTexture * AssetTexture::create(Json::Value _json, Scenario * const _scenario){
