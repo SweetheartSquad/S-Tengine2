@@ -85,6 +85,8 @@ const std::string GL_UNIFORM_ID_MASK_TEX			  = "maskTex";
 
 const std::string GL_UNIFORM_ID_TEXT_COLOR			  = "textColor";
 
+const std::string GL_UNIFORM_ID_TOON_LEVELS			  = "toonLevels";
+
 
 //Attribute variable names
 const std::string GL_ATTRIBUTE_ID_VERTEX_POSITION	  = "aVertexPosition";
@@ -120,6 +122,7 @@ const std::string SHADER_COMPONENT_SSAO			      = "SHADER_COMPONENT_SSAO";
 const std::string SHADER_COMPONENT_MASK			      = "SHADER_COMPONENT_MASK";
 const std::string SHADER_COMPONENT_MVP			      = "SHADER_COMPONENT_MVP";
 const std::string SHADER_COMPONENT_DEPTH_OFFSET		  = "SHADER_COMPONENT_DEPTH_OFFSET";
+const std::string SHADER_COMPONENT_TOON				  = "SHADER_COMPONENT_TOON";
 
 
 const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGHT + ENDL +
