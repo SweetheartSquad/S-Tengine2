@@ -14,11 +14,11 @@ Texture::Texture(std::string _src, bool _storeData, bool _autoRelease, bool _use
 	src(_src),
 	width(0),
 	height(0),
+	channels(0),
 	numPixels(0),
 	numBytes(0),
-	data(nullptr),
-	channels(0),
 	storeData(_storeData),
+	data(nullptr),
 	useMipmaps(_useMipmaps)
 {
 }
@@ -27,11 +27,11 @@ Texture::Texture(FrameBufferInterface * _frameBuffer, bool _storeData, int _fram
 	NodeResource(_autoRelease),
 	width(_frameBuffer->width),
 	height(_frameBuffer->height),
+	channels(_channels),
 	numPixels(width * height),
 	numBytes(numPixels * channels),
-	data(_frameBuffer->getPixelData(_frameBufferChannelIndex)),
-	channels(_channels),
 	storeData(_storeData),
+	data(_frameBuffer->getPixelData(_frameBufferChannelIndex)),
 	useMipmaps(_useMipmaps)
 {
 }
@@ -47,10 +47,8 @@ void Texture::load(){
 		if(data == nullptr){
 			loadImageData();
 		}
-		// create and buffer OpenGL texture
-		glGenTextures(1, &textureId);
-		checkForGlError(false);
-		bufferDataFirst();
+		
+		genTextures();
 
 		// delete texture data if necessary
 		if(!storeData){
@@ -93,7 +91,7 @@ void Texture::saveImageData(std::string _filename){
 	}
 }
 
-void Texture::bufferData(){
+void Texture::bufferData() const {
 	glBindTexture(GL_TEXTURE_2D, textureId);
 	checkForGlError(false);
 	GLenum format;
@@ -113,7 +111,7 @@ void Texture::bufferData(){
 	}
 }
 
-void Texture::bufferDataFirst(){
+void Texture::bufferDataFirst() const {
 	glBindTexture(GL_TEXTURE_2D, textureId);
 	checkForGlError(false);
 	GLenum format;
@@ -131,4 +129,12 @@ void Texture::bufferDataFirst(){
 		glGenerateMipmap(GL_TEXTURE_2D);
 		checkForGlError(false);
 	}
+}
+
+
+void Texture::genTextures() {
+	// create and buffer OpenGL texture
+	glGenTextures(1, &textureId);
+	checkForGlError(false);
+	bufferDataFirst();
 }

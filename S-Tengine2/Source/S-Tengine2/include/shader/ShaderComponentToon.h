@@ -1,24 +1,29 @@
 #pragma once
 
 #include <shader\ShaderComponent.h>
+#include <Texture.h>
+#include "ShaderComponentDiffuse.h"
 
-class ShaderComponentToon : public ShaderComponent {
+class ShaderComponentToon : public ShaderComponentDiffuse {
 public:	
-	ShaderComponentToon(Shader * _shader, int _levels);
+	ShaderComponentToon(Shader * _shader, Texture * _texture, int _levels);
 	~ShaderComponentToon();
 	
-	std::string getVertexVariablesString() override;
-	std::string getFragmentVariablesString() override;
-	std::string getVertexBodyString() override;
-	std::string getFragmentBodyString() override;
-	std::string getOutColorMod() override;
-	void load() override;
-	void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
+	virtual std::string getVertexVariablesString() override;
+	virtual std::string getFragmentVariablesString() override;
+	virtual std::string getVertexBodyString() override;
+	virtual std::string getFragmentBodyString() override;
+	virtual std::string getOutColorMod() override;
+	virtual void load() override;
+	virtual virtual void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 
-	void setLevels(int _levels);
-	int getLevels() const;
+	virtual void setTexture(Texture * _texture);
+	virtual Texture * getTexture();
 
 private:
 	int levels;
+	Texture * texture;
 	GLint levelsLoc;
+	GLint numTexturesLoc;
+	GLint textureLoc;
 };

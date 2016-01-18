@@ -4,10 +4,16 @@
 #include <sstream>
 #include <shader/ShaderVariables.h>
 #include <shader/Shader.h>
+#include <MeshInterface.h>
+#include <shader/SharedComponentShaderMethods.h>
 
-ShaderComponentToon::ShaderComponentToon(Shader* _shader, int _levels) :
-	ShaderComponent(_shader),
-	levels(_levels)
+ShaderComponentToon::ShaderComponentToon(Shader* _shader, Texture * _texture, int _levels) :
+	ShaderComponentDiffuse(_shader),
+	levels(_levels), 
+	texture(_texture), 
+	levelsLoc(0), 
+	numTexturesLoc(0), 
+	textureLoc(0) 
 {
 }
 
@@ -21,7 +27,9 @@ std::string ShaderComponentToon::getVertexVariablesString() {
 std::string ShaderComponentToon::getFragmentVariablesString() {
 	std::stringstream res;
 	res << DEFINE << SHADER_COMPONENT_TOON << ENDL
-	<< "uniform float " << GL_UNIFORM_ID_TOON_LEVELS << SEMI_ENDL;
+	<< "uniform float " << GL_UNIFORM_ID_TOON_LEVELS << SEMI_ENDL
+	<< "uniform sampler2D toonTexture" << SEMI_ENDL 
+	<< ShaderComponentDiffuse::getFragmentVariablesString();
 	return res.str();
 }
 
@@ -30,36 +38,49 @@ std::string ShaderComponentToon::getVertexBodyString() {
 }
 
 std::string ShaderComponentToon::getFragmentBodyString() {
-	return "";
+	std::stringstream res;
+	res << ShaderComponentDiffuse::getFragmentBodyString() << ENDL << 
+	"vec3 curCol = modFrag.rgb * outDiffuse" << SEMI_ENDL <<
+	"const vec3 _lum = vec3(0.2125, 0.7154, 0.0721)" << SEMI_ENDL <<
+	"float luminance = dot(curCol, _lum)" << SEMI_ENDL <<
+	"float level = round(luminance * 3 - 1)" << SEMI_ENDL <<
+	"level -= 1;"
+	"if(level > " << GL_UNIFORM_ID_TOON_LEVELS << " - 1){level = " << GL_UNIFORM_ID_TOON_LEVELS << " - 1;}" << ENDL << 
+	"if(level < 0){level = 0;}" << ENDL << 
+	"vec3 toonMod = vec3(texelFetch(toonTexture, ivec2(level, 0), 0).rgb)"<< SEMI_ENDL;
+	return res.str();
 }
 
 std::string ShaderComponentToon::getOutColorMod() {
 	std::stringstream res;
-	res << "vec3 _lum = vec3(0.2125, 0.7154, 0.0721)" << SEMI_ENDL <<
-	"float luminance = dot(" << GL_OUT_OUT_COLOR << ".rgb, _lum)" << SEMI_ENDL <<
-	"float level = floor(luminance * " << GL_UNIFORM_ID_TOON_LEVELS << ")" << SEMI_ENDL <<
-	"float toon = level / " << GL_UNIFORM_ID_TOON_LEVELS << SEMI_ENDL;
-	res << GL_OUT_OUT_COLOR << ".rgb *= toon" << SEMI_ENDL;
+	res << GL_OUT_OUT_COLOR << " *= " << "vec4(toonMod, 1)"<< SEMI_ENDL;
 	return res.str();
 }
 
 void ShaderComponentToon::load() {
 	if(!loaded){
 		levelsLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TOON_LEVELS.c_str());
+		textureLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TOON_TEXTURE.c_str());
 	}
 	ShaderComponent::load();
 }
 
-void ShaderComponentToon::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) {
-	glUniform1f(levelsLoc, (float)levels);
-}
-
-
-void ShaderComponentToon::setLevels(int _levels) {
-	levels = _levels;
+void ShaderComponentToon::setTexture(Texture * _texture) {
+	texture = _texture;
+	levels  = _texture->width;
 	makeDirty();
 }
 
-int ShaderComponentToon::getLevels() const {
-	return levels;
+Texture * ShaderComponentToon::getTexture() {
+	return texture;
+}
+
+void ShaderComponentToon::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) {
+	GLint curTex;
+	glGetIntegerv(GL_TEXTURE_BINDING_2D, &curTex);
+	glActiveTexture(GL_TEXTURE0 + curTex + 1);
+	glBindTexture(GL_TEXTURE_2D, texture->textureId);
+	glUniform1i(textureLoc,  curTex + 1);
+	glUniform1f(levelsLoc, static_cast<float>(levels));
+	ShaderComponentDiffuse::configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 }

@@ -6,11 +6,11 @@ class ShaderComponentDiffuse : public ShaderComponent{
 public:
 	ShaderComponentDiffuse(Shader * _shader);
 	~ShaderComponentDiffuse() override;
-	std::string getVertexVariablesString() override;
-	std::string getFragmentVariablesString() override;
-	std::string getVertexBodyString() override;
-	std::string getFragmentBodyString() override;
-	std::string getOutColorMod() override;
-	void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
-	void clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
+	virtual std::string getVertexVariablesString() override;
+	virtual std::string getFragmentVariablesString() override;
+	virtual std::string getVertexBodyString() override;
+	virtual std::string getFragmentBodyString() override;
+	virtual std::string getOutColorMod() override;
+	virtual void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
+	virtual void clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 };

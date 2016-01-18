@@ -86,6 +86,7 @@ const std::string GL_UNIFORM_ID_MASK_TEX			  = "maskTex";
 const std::string GL_UNIFORM_ID_TEXT_COLOR			  = "textColor";
 
 const std::string GL_UNIFORM_ID_TOON_LEVELS			  = "toonLevels";
+const std::string GL_UNIFORM_ID_TOON_TEXTURE		  = "toonTexture";
 
 
 //Attribute variable names
