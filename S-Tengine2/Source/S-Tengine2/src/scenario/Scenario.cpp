@@ -3,6 +3,7 @@
 #include <scenario/Scenario.h>
 #include <scenario/Conversation.h>
 #include <scenario/Dialogue.h>
+#include <NineSlicing.h>
 
 #include <Log.h>
 #include <FileUtils.h>
@@ -158,6 +159,15 @@ AssetTexture * Scenario::getTexture(std::string _id){
 		res = defaultTexture;
 	}
 	return res;
+}
+
+Texture_NineSliced * Scenario::getNineSlicedTexture(std::string _id){
+	AssetTexture * res = dynamic_cast<AssetTexture *>(getAsset("texture", _id));
+	if(res == nullptr){
+		Log::warn("Texture \"" + _id + "\" not found.");
+		res = defaultTexture;
+	}
+	return dynamic_cast<Texture_NineSliced *>(res->texture);
 }
 
 AssetTextureSampler * Scenario::getTextureSampler(std::string _id){

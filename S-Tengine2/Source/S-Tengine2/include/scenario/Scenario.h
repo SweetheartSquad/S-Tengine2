@@ -21,6 +21,8 @@ public:
 	std::map<std::string, std::string> variables;
 };
 
+class Texture_NineSliced;
+
 class Scenario : public virtual NodeContent, public virtual NodeResource{
 private:
 public:
@@ -52,9 +54,11 @@ public:
 	// returns the asset of the specified type with the specified id
 	// returns nullptr if not found (note that no default substitution is used when calling this function directly)
 	Asset * getAsset(std::string _type, std::string _id);
-
+	
 	// convenience function: just calls getAsset with a specific type and casts the result; if not found uses the default asset for that type
 	AssetTexture * getTexture(std::string _id);
+	// convenience function: just calls getAsset with a specific type and casts the result; if not found uses the default asset for that type
+	Texture_NineSliced * getNineSlicedTexture(std::string _id);
 	// convenience function: just calls getAsset with a specific type and casts the result; if not found uses the default asset for that type
 	AssetTextureSampler * getTextureSampler(std::string _id);
 	// convenience function: just calls getAsset with a specific type and casts the result; if not found uses the default asset for that type
