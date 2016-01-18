@@ -79,6 +79,8 @@
     <ClCompile Include="src/scenario/Scenario.cpp" />
     <ClCompile Include="src/MouseCameraController.cpp" />
     <ClCompile Include="src/NineSlicing.cpp" />
+    <ClCompile Include="src/ProgrammaticTexture.cpp" />
+    <ClCompile Include="src/RampTexture.cpp" />
     <ClCompile Include="src/Scene_Splash_SweetHeartSquad.cpp" />
     <ClCompile Include="src/shader/ComponentShaderBase.cpp" />
     <ClCompile Include="src/shader/ShaderComponentBlinn.cpp" />
@@ -160,6 +162,8 @@
     <ClInclude Include="include/EventManager.h" />
     <ClInclude Include="include/NineSlicing.h" />
     <ClInclude Include="include/Plane.h" />
+    <ClInclude Include="include/ProgrammaticTexture.h" />
+    <ClInclude Include="include/RampTexture.h" />
     <ClInclude Include="include/rng.h" />
     <ClInclude Include="include/Scene_Splash.h" />
     <ClInclude Include="include/shader/ShaderComponentDepthOffset.h" />
@@ -173,6 +177,8 @@
     <ClInclude Include="include/EventManager.h" />
     <ClInclude Include="include/NineSlicing.h" />
     <ClInclude Include="include/Plane.h" />
+    <ClInclude Include="include/ProgrammaticTexture.h" />
+    <ClInclude Include="include/RampTexture.h" />
     <ClInclude Include="include/rng.h" />
     <ClInclude Include="include/Scene_Splash.h" />
     <ClInclude Include="include/shader/ShaderComponentDepthOffset.h" />
@@ -245,6 +251,8 @@
     <ClCompile Include="src/scenario/Scenario.cpp" />
     <ClCompile Include="src/MouseCameraController.cpp" />
     <ClCompile Include="src/NineSlicing.cpp" />
+    <ClCompile Include="src/ProgrammaticTexture.cpp" />
+    <ClCompile Include="src/RampTexture.cpp" />
     <ClCompile Include="src/Scene_Splash_SweetHeartSquad.cpp" />
     <ClCompile Include="src/shader/ComponentShaderBase.cpp" />
     <ClCompile Include="src/shader/ShaderComponentBlinn.cpp" />
@@ -326,6 +334,8 @@
     <ClInclude Include="include/EventManager.h" />
     <ClInclude Include="include/NineSlicing.h" />
     <ClInclude Include="include/Plane.h" />
+    <ClInclude Include="include/ProgrammaticTexture.h" />
+    <ClInclude Include="include/RampTexture.h" />
     <ClInclude Include="include/rng.h" />
     <ClInclude Include="include/Scene_Splash.h" />
     <ClInclude Include="include/shader/ShaderComponentDepthOffset.h" />

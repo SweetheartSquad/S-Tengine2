@@ -6,7 +6,7 @@
 
 class ShaderComponentToon : public ShaderComponentDiffuse {
 public:	
-	ShaderComponentToon(Shader * _shader, Texture * _texture, int _levels);
+	ShaderComponentToon(Shader * _shader, Texture * _texture);
 	~ShaderComponentToon();
 	
 	virtual std::string getVertexVariablesString() override;
@@ -15,6 +15,7 @@ public:
 	virtual std::string getFragmentBodyString() override;
 	virtual std::string getOutColorMod() override;
 	virtual void load() override;
+	virtual void unload() override;
 	virtual virtual void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 
 	virtual void setTexture(Texture * _texture);

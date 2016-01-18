@@ -7,9 +7,9 @@
 #include <MeshInterface.h>
 #include <shader/SharedComponentShaderMethods.h>
 
-ShaderComponentToon::ShaderComponentToon(Shader* _shader, Texture * _texture, int _levels) :
+ShaderComponentToon::ShaderComponentToon(Shader* _shader, Texture * _texture) :
 	ShaderComponentDiffuse(_shader),
-	levels(_levels), 
+	levels(_texture->width), 
 	texture(_texture), 
 	levelsLoc(0), 
 	numTexturesLoc(0), 
@@ -43,7 +43,7 @@ std::string ShaderComponentToon::getFragmentBodyString() {
 	"vec3 curCol = modFrag.rgb * outDiffuse" << SEMI_ENDL <<
 	"const vec3 _lum = vec3(0.2125, 0.7154, 0.0721)" << SEMI_ENDL <<
 	"float luminance = dot(curCol, _lum)" << SEMI_ENDL <<
-	"float level = round(luminance * 3 - 1)" << SEMI_ENDL <<
+	"float level = round(luminance * " << GL_UNIFORM_ID_TOON_LEVELS << " - 1)" << SEMI_ENDL <<
 	"level -= 1;"
 	"if(level > " << GL_UNIFORM_ID_TOON_LEVELS << " - 1){level = " << GL_UNIFORM_ID_TOON_LEVELS << " - 1;}" << ENDL << 
 	"if(level < 0){level = 0;}" << ENDL << 
@@ -61,8 +61,15 @@ void ShaderComponentToon::load() {
 	if(!loaded){
 		levelsLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TOON_LEVELS.c_str());
 		textureLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TOON_TEXTURE.c_str());
+		texture->load();
 	}
-	ShaderComponent::load();
+	ShaderComponentDiffuse::load();
+	texture->saveImageData("test.tga");
+}
+
+void ShaderComponentToon::unload() {
+	texture->unload();
+	ShaderComponentDiffuse::unload();
 }
 
 void ShaderComponentToon::setTexture(Texture * _texture) {

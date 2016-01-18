@@ -42,10 +42,10 @@ public:
 	
 	// updates the OpenGL texture with the image data (assumes texture exists already)
 	// also generates mipmaps if needed
-	void bufferData();
+	void bufferData() const;
 	// creates the OpenGL texture and buffers it with the image data
 	// also generates mipmaps if needed
-	void bufferDataFirst();
+	void bufferDataFirst() const;
 
 	/**Initializes the texture. Can be called to recreate the texture
 	if the context is destroyed*/
@@ -72,4 +72,7 @@ public:
 			<< " data: " << obj.data
 			<< " channels: " << obj.channels;
 	};
+
+protected:
+	virtual void genTextures();
 };
