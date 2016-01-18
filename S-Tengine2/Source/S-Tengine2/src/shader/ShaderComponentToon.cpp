@@ -40,9 +40,8 @@ std::string ShaderComponentToon::getVertexBodyString() {
 std::string ShaderComponentToon::getFragmentBodyString() {
 	std::stringstream res;
 	res << ShaderComponentDiffuse::getFragmentBodyString() << ENDL << 
-	"vec3 curCol = modFrag.rgb * outDiffuse" << SEMI_ENDL <<
 	"const vec3 _lum = vec3(0.2125, 0.7154, 0.0721)" << SEMI_ENDL <<
-	"float luminance = dot(curCol, _lum)" << SEMI_ENDL <<
+	"float luminance = dot(outDiffuse, _lum)" << SEMI_ENDL <<
 	"float level = round(luminance * " << GL_UNIFORM_ID_TOON_LEVELS << " - 1)" << SEMI_ENDL <<
 	"level -= 1;"
 	"if(level > " << GL_UNIFORM_ID_TOON_LEVELS << " - 1){level = " << GL_UNIFORM_ID_TOON_LEVELS << " - 1;}" << ENDL << 
