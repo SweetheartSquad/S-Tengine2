@@ -63,7 +63,6 @@ void ShaderComponentToon::load() {
 		texture->load();
 	}
 	ShaderComponentDiffuse::load();
-	texture->saveImageData("test.tga");
 }
 
 void ShaderComponentToon::unload() {
