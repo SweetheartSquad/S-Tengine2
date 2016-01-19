@@ -17,7 +17,7 @@
 #include <scenario/Scenario.h>
 
 // for screenshots
-#include <ctime>
+#include <DateUtils.h>
 #include <stb/stb_image_write.h>
 
 #include <AntTweakBar.h>
@@ -345,20 +345,7 @@ void Game::toggleFullScreen(){
 void Game::takeScreenshot(){
 	std::stringstream filepath;
 		
-	// create a string with the format "../screenshots/YYYY-MM-DD_TTTTTTTTTT.tga"
-	time_t t = time(0);
-	struct tm now;
-	localtime_s(&now, &t);
-	filepath
-		<< "data/screenshots/"
-		<< (now.tm_year + 1900)
-		<< '-'
-		<< (now.tm_mon + 1)
-		<< '-'
-		<< now.tm_mday
-		<< '_'
-		<< t
-		<< ".tga";
+	filepath << "data/screenshots/" << sweet::DateUtils::getDatetime() << ".tga";
 	GLubyte * data = (GLubyte *)malloc(sizeof(GLubyte) * viewPortWidth * viewPortHeight * 4);
 	glReadPixels(0, 0, viewPortWidth, viewPortHeight, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
