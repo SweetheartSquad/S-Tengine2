@@ -67,7 +67,7 @@ AssetTextureSampler::AssetTextureSampler(Json::Value _json, Scenario * const _sc
 		src = "assets/textures/" + src;
 	}
 
-	const std::string defJsonRaw = FileUtils::readFile(src);
+	const std::string defJsonRaw = sweet::FileUtils::readFile(src);
 
 	Json::Reader reader;
 	Json::Value defJson;

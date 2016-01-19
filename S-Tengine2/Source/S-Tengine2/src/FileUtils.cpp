@@ -3,7 +3,7 @@
 #include <FileUtils.h>
 #include <Log.h>
 
-std::string FileUtils::readFile(const std::string & _filename){
+std::string sweet::FileUtils::readFile(const std::string & _filename){
 	std::ifstream file(_filename, std::ios::in);
 	std::stringstream contents;
 
@@ -19,11 +19,11 @@ std::string FileUtils::readFile(const std::string & _filename){
 	return contents.str();
 }
 
-bool FileUtils::createDirectoryIfNotExists(const std::string & _src){
+bool sweet::FileUtils::createDirectoryIfNotExists(const std::string & _src){
 	return CreateDirectoryA(_src.c_str(), NULL) != ERROR_PATH_NOT_FOUND;
 }
 
-bool FileUtils::createFileIfNotExists(const std::string & _src){
+bool sweet::FileUtils::createFileIfNotExists(const std::string & _src){
 	if (fileExists(_src)){
 		// File already exists
 		return true;
@@ -37,7 +37,7 @@ bool FileUtils::createFileIfNotExists(const std::string & _src){
 	return true;
 }
 
-bool FileUtils::fileExists(const std::string & _src){
+bool sweet::FileUtils::fileExists(const std::string & _src){
 	if (std::ifstream(_src)){
 		return true;
 	}else{

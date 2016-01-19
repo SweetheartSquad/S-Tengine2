@@ -22,7 +22,7 @@
 
 std::vector<TriMesh *> Resource::loadMeshFromObj(std::string _objSrc){
 
-	std::string inputfile = FileUtils::readFile(_objSrc);
+	std::string inputfile = sweet::FileUtils::readFile(_objSrc);
 	
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;

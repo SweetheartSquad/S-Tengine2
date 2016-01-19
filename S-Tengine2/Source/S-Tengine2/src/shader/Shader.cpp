@@ -207,14 +207,14 @@ GLuint Shader::compileShader(GLenum _shaderType, char const* _source, int _lengt
 void Shader::loadFromFile(std::string _vertexShaderFile, std::string _fragmentShaderFile){
 	vertSource = _vertexShaderFile;
 	fragSource = _fragmentShaderFile;
-	init(FileUtils::readFile(_vertexShaderFile), FileUtils::readFile(_fragmentShaderFile));
+	init(sweet::FileUtils::readFile(_vertexShaderFile), sweet::FileUtils::readFile(_fragmentShaderFile));
 }
 
 void Shader::loadFromFile(std::string _vertexShaderFile, std::string _fragmentShaderFile, std::string _geometryShaderFile){
 	vertSource = _vertexShaderFile;
 	fragSource = _fragmentShaderFile;
 	geomSource = _geometryShaderFile;
-	init(FileUtils::readFile(_vertexShaderFile), FileUtils::readFile(_fragmentShaderFile), FileUtils::readFile(_geometryShaderFile));
+	init(sweet::FileUtils::readFile(_vertexShaderFile), sweet::FileUtils::readFile(_fragmentShaderFile), sweet::FileUtils::readFile(_geometryShaderFile));
 }
 
 

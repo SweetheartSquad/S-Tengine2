@@ -97,7 +97,7 @@ Scenario::Scenario(std::string _jsonSrc) :
 		defaultAssets.push_back(defaultMesh);
 	}
 
-	std::string jsonLoaded = FileUtils::readFile(_jsonSrc);
+	std::string jsonLoaded = sweet::FileUtils::readFile(_jsonSrc);
 	parsingSuccessful = reader.parse( jsonLoaded, root );
 	if(!parsingSuccessful){
 		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
