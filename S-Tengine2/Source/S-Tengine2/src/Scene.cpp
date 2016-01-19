@@ -20,6 +20,7 @@
 #include <shader/ShaderComponentDepth.h>
 
 #include <sweet/Input.h>
+#include <MousePerspectiveCamera.h>
 
 Scene::Scene(Game * _game):
 	depthBuffer(new StandardFrameBuffer(true)),
@@ -33,7 +34,7 @@ Scene::Scene(Game * _game):
 	mouse(&Mouse::getInstance()),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
-	activeCamera(new PerspectiveCamera())
+	activeCamera(new MousePerspectiveCamera())
 {
 
 	cameras.push_back(activeCamera);
