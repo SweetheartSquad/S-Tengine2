@@ -62,4 +62,8 @@ public:
 	// since the background of a NineSliced node is hidden and replaced by the 
 	// patches, this changes the patches' background colours instead
 	virtual void setBackgroundColour(float _r, float _g, float _b, float _a = 1.f) override;
+
+	// sets the scale mode on this node, along with all of the patches
+	// only valid args are GL_NEAREST and GL_LINEAR
+	void setScaleMode(GLenum _scalemode);
 };
