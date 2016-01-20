@@ -5,7 +5,7 @@
 
 RampTexture::RampTexture(glm::vec3 _start, glm::vec3 _end, unsigned long _levels, bool _autoRelease):
 	NodeResource(_autoRelease),
-	ProgrammaticTexture(nullptr, _autoRelease, false)
+	ProgrammaticTexture(nullptr, _autoRelease, true)
 {
 	channels = 4;
 	width    = _levels;

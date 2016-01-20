@@ -14,6 +14,7 @@ ProgrammaticTexture::~ProgrammaticTexture() {
 
 void ProgrammaticTexture::load() {
 	genTextures();
+	NodeLoadable::load();
 }
 
 void ProgrammaticTexture::setTextureData(unsigned char* _data) {

@@ -60,8 +60,8 @@ void ShaderComponentToon::load() {
 	if(!loaded){
 		levelsLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TOON_LEVELS.c_str());
 		textureLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TOON_TEXTURE.c_str());
-		texture->load();
 	}
+	texture->load();
 	ShaderComponentDiffuse::load();
 }
 
@@ -82,10 +82,10 @@ Texture * ShaderComponentToon::getTexture() {
 
 void ShaderComponentToon::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) {
 	GLint curTex;
-	glGetIntegerv(GL_TEXTURE_BINDING_2D, &curTex);
-	glActiveTexture(GL_TEXTURE0 + curTex + 1);
+	glGetIntegerv(GL_ACTIVE_TEXTURE, &curTex);
+	glActiveTexture(curTex + 1);
 	glBindTexture(GL_TEXTURE_2D, texture->textureId);
-	glUniform1i(textureLoc,  curTex + 1);
+	glUniform1i(textureLoc,  curTex - GL_TEXTURE0 + 1);
 	glUniform1f(levelsLoc, static_cast<float>(levels));
 	ShaderComponentDiffuse::configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 }

@@ -24,6 +24,7 @@ MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader, bool _configureD
 			shader->load();
 		}
 		mesh->configureDefaultVertexAttributes(_shader);
+		++shader->referenceCount;
 	}
 	++mesh->referenceCount;
 }
@@ -48,6 +49,9 @@ void MeshEntity::render(sweet::MatrixStack * _matrixStack, RenderOptions * _rend
 }
 
 void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
+	if(shader != nullptr) {
+		--shader->referenceCount;
+	}
 	if(_shader != nullptr){
 		if(_shader->isCompiled){
 			if(shader != _shader){
@@ -70,7 +74,7 @@ void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
 	}
 }
 
-Shader * MeshEntity::getShader(){
+Shader * MeshEntity::getShader() const{
 	return shader;
 }
 

@@ -36,7 +36,7 @@ public:
 	/**Sets shader to _shader*/
 	virtual void setShader(Shader* _shader, bool _configureDefaultAttributes = true);
 	/**Get shader*/
-	Shader* getShader();
+	Shader* getShader() const;
 	/** Recursivley sets the shader to _shader for _entity's children recursivley*/
 	void setShaderOnChildren(Shader * _shader);
 	/** Calls unload on all children and on mesh */
