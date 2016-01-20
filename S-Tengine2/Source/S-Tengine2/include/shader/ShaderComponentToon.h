@@ -16,7 +16,7 @@ public:
 	virtual std::string getOutColorMod() override;
 	virtual void load() override;
 	virtual void unload() override;
-	virtual virtual void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
+	virtual void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 
 	virtual void setTexture(Texture * _texture);
 	virtual Texture * getTexture();
