@@ -353,6 +353,8 @@ void MeshInterface::insertVertices(const MeshInterface * const _mesh){
 	for(unsigned long int i = indOffet; i < indices.size(); ++i) {
 		indices.at(i) += vertOffset;
 	}
+
+	dirty = true;
 }
 
 std::ostream& operator<<(std::ostream& os, const MeshInterface& obj){
