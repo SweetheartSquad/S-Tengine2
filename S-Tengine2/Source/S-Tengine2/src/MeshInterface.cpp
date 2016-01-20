@@ -340,6 +340,21 @@ void MeshInterface::applyTransformation(Transform * _transform){
 	dirty = true;
 }
 
+void MeshInterface::insertVertices(const MeshInterface * const _mesh){
+	// save the number of vertices and indices so we can offset them later
+	unsigned long int vertOffset = vertices.size();
+	unsigned long int indOffet = indices.size();
+
+	// copy the verts from the temporary mesh into this one
+	vertices.insert(vertices.end(), _mesh->vertices.begin(), _mesh->vertices.end());
+	indices.insert(indices.end(), _mesh->indices.begin(), _mesh->indices.end());
+				
+	// offset the inserted indices
+	for(unsigned long int i = indOffet; i < indices.size(); ++i) {
+		indices.at(i) += vertOffset;
+	}
+}
+
 std::ostream& operator<<(std::ostream& os, const MeshInterface& obj){
 		os
 			<< static_cast<const NodeRenderable&>(obj)<< std::endl
