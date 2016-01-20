@@ -56,6 +56,10 @@ namespace sweet{
 			++shuffles;
 		};
 
+		unsigned long int shuffleCount(){
+			return shuffles;
+		}
+
 		ShuffleVector<T>() :
 			shuffles(0)
 		{};
