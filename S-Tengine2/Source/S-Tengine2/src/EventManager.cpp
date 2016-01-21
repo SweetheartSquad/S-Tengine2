@@ -19,7 +19,7 @@ sweet::Event::Event(Json::Value _json) :
 	// TODO: figure out if there's a way to distinguish between int and double in the json
 
 	for(auto j : argsJsonMembers){
-		Json::Value v = argsJson[j];
+		Json::Value v = argsJson[j]["value"];
 		if(v.isDouble()){
 			setFloatData(j, v.asDouble());
 		}else if(v.isInt()){
