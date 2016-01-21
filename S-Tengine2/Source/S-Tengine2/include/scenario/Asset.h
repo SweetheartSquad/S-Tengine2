@@ -14,8 +14,8 @@ private:
 	// used in order to dynamically instantiate different types of assets based on a string specifying the type
 	static std::map<std::string, std::function<Asset * (Json::Value, Scenario * const)>> creationRegistry;
 protected:
-	Scenario * scenario;
 public:
+	Scenario * scenario;
 	std::string id;
 	std::string type;
 
