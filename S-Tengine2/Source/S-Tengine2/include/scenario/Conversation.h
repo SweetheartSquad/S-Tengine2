@@ -33,7 +33,7 @@ public:
 	Conversation(Json::Value _json, Scenario * const _scenario);
 	~Conversation();
 
-	// returns dialogueObjects.at(currentDialogue)
+	// returns dialogueObjects.at(currentDialogue) or nullptr if currentDialogue >= dialogueObjects.size()
 	Dialogue * getCurrentDialogue();
 	// increments currentDialogue
 	// returns true if there is a corresponding dialogue object
