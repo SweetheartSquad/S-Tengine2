@@ -28,7 +28,7 @@ public:
 	// adds _j as a child of this joint
 	// adds _j to the out-list of this joint
 	// (this will create a new bone which branches off of this joint)
-	void addJoint(AnimationJoint * _j);
+	void addJoint(AnimationJoint * _j, bool _behind = false);
 
 	
 	virtual void update(Step * _step) override;
