@@ -31,19 +31,20 @@ Colour Colour::hsvMod(glm::uvec3 _hsvDelta){
 	
 glm::uvec3 Colour::rgbToHsv(glm::uvec3 _rgb){
 	glm::vec3 n = glm::vec3(_rgb) / 255.f;
-	float cMax = std::max(n.r, std::max(n.g, n.b));
-	float cMin = std::min(n.r, std::min(n.g, n.b));
+	float cMax = glm::max(n.r, glm::max(n.g, n.b));
+	float cMin = glm::min(n.r, glm::min(n.g, n.b));
 	float delta = cMax - cMin;
 	glm::uvec3 hsv;
 
 	// hue calculation
 	if(delta < FLT_EPSILON){
 		hsv.x = 0;
-	}else if(std::abs(cMax - n.r) < FLT_EPSILON){
+	}
+	else if (glm::abs(cMax - n.r) < FLT_EPSILON){
 		hsv.x = 60 * fmod((n.g - n.b) / delta, 6);
-	}else if(std::abs(cMax - n.g) < FLT_EPSILON){
+	}else if(glm::abs(cMax - n.g) < FLT_EPSILON){
 		hsv.x = 60 * ((n.b - n.r) / delta + 2);
-	}else if(std::abs(cMax - n.b) < FLT_EPSILON){
+	}else if(glm::abs(cMax - n.b) < FLT_EPSILON){
 		hsv.x = 60 * ((n.r - n.g) / delta + 4);
 	}
 
@@ -57,7 +58,7 @@ glm::uvec3 Colour::rgbToHsv(glm::uvec3 _rgb){
 }
 glm::uvec3 Colour::hsvToRgb(glm::uvec3 _hsv){
 	float c = (_hsv.z * _hsv.y)/10000.f;
-	float x = c * (1 - std::abs(fmod(_hsv.x / 60.f, 2) - 1));
+	float x = c * (1 - glm::abs(fmod(_hsv.x / 60.f, 2) - 1));
 	float m = _hsv.z/100.f - c;
 
 	
