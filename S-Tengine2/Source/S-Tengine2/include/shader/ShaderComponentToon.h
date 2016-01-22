@@ -19,7 +19,7 @@ public:
 	virtual void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 
 	virtual void setTexture(Texture * _texture);
-	virtual Texture * getTexture();
+	virtual Texture * const getTexture() const;
 
 private:
 	int levels;

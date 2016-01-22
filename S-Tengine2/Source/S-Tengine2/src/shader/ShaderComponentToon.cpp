@@ -66,6 +66,9 @@ void ShaderComponentToon::load() {
 }
 
 void ShaderComponentToon::unload() {
+	if(loaded){
+		levelsLoc = textureLoc = -1;
+	}
 	texture->unload();
 	ShaderComponentDiffuse::unload();
 }
@@ -76,7 +79,7 @@ void ShaderComponentToon::setTexture(Texture * _texture) {
 	makeDirty();
 }
 
-Texture * ShaderComponentToon::getTexture() {
+Texture * const ShaderComponentToon::getTexture() const {
 	return texture;
 }
 
