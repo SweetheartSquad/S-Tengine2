@@ -7,12 +7,7 @@ RampTexture::RampTexture(glm::vec3 _start, glm::vec3 _end, unsigned long _levels
 	NodeResource(_autoRelease),
 	ProgrammaticTexture(nullptr, _autoRelease, true)
 {
-	channels = 4;
-	width    = _levels;
-	height   = 1;
-	numPixels = width * height;
-	numBytes = numPixels * channels;
-	data = static_cast<unsigned char *>(malloc(sizeof(unsigned char) * numBytes));
+	allocate(_levels, 1, 4);
 
 	for(unsigned long int i = 0; i < width; ++i){
 		

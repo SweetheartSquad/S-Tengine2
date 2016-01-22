@@ -9,4 +9,7 @@ public:
 
 	virtual void load() override;
 	virtual void setTextureData(unsigned char * _data);
+
+
+	void allocate(unsigned long int _width, unsigned long int _height, unsigned long int _channels = 4);
 };

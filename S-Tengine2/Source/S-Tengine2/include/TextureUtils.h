@@ -26,6 +26,11 @@ public:
 	// returned pointer is _tex->data[ (_x + _y*_tex->width) * _tex->channels) + _channel]
 	// note: no validation on image bounds or pixel depth
 	static unsigned char * getPixelPointer(Texture * _tex, unsigned long int _x, unsigned long int _y, unsigned long int _channel = 0);
+	
+	static void setPixel(Texture * _tex, unsigned long int _x, unsigned long int _y, glm::uvec4 _colour);
+	static void setPixel(Texture * _tex, unsigned long int _x, unsigned long int _y, glm::uvec3 _colour);
+	static void setPixel(Texture * _tex, unsigned long int _x, unsigned long int _y, glm::uvec2 _colour);
+	static void setPixel(Texture * _tex, unsigned long int _x, unsigned long int _y, unsigned char _colour);
 
 private:
 	static glm::vec2 interpolate(unsigned long int _x1, unsigned long int _y1, unsigned long int _x2, unsigned long int _y2);

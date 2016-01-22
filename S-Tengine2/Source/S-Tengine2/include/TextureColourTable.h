@@ -1,12 +1,12 @@
 #pragma once
 
-#include <Texture.h>
+#include <ProgrammaticTexture.h>
 
-class TextureColourTable : public Texture{
+class TextureColourTable : public ProgrammaticTexture{
 public:
 	TextureColourTable(bool _autoRelease);
 
-	void generateRandomTable();
+	virtual void generateRandomTable();
 	
 	virtual void loadImageData() override;
 };
