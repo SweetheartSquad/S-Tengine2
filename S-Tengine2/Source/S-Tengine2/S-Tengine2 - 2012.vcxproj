@@ -77,6 +77,7 @@
     <ClCompile Include="src/scenario/Conversation.cpp" />
     <ClCompile Include="src/scenario/Dialogue.cpp" />
     <ClCompile Include="src/scenario/Scenario.cpp" />
+    <ClCompile Include="src\Colour.cpp" />
     <ClCompile Include="src\DateUtils.cpp" />
     <ClCompile Include="src\MouseCameraController.cpp" />
     <ClCompile Include="src\NineSlicing.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="src\shader\ShaderComponentMask.cpp" />
     <ClCompile Include="src\shader\ShaderComponentToon.cpp" />
     <ClCompile Include="src\shader\ShaderComponentWorldSpaceUVs.cpp" />
+    <ClInclude Include="include\Colour.h" />
     <ClInclude Include="include\DateUtils.h" />
     <ClInclude Include="include\EventManager.h" />
     <ClInclude Include="include\NineSlicing.h" />
