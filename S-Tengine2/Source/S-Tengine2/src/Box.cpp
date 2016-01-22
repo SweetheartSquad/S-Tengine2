@@ -27,7 +27,18 @@ float sweet::Box::getVolume(){
 }
 
 bool sweet::Box::intersects(sweet::Box _rect){
-	return false;
+	if (_rect.x + _rect.width < x) return false; // rect is left
+    if (_rect.x > x + width) return false; // rect is right
+    if (_rect.y + _rect.height < y) return false; // rect is above
+    if (_rect.y > y + height) return false; // rect is below
+	if (_rect.z + _rect.depth < z) return false; // rect is in front
+    if (_rect.z > z + depth) return false; // rect is behind
+
+    return true; // boxes overlap
+}
+
+bool sweet::Box::intersects(std::vector<glm::vec3> _verts){
+	return intersects(sweet::Box::bound(_verts));
 }
 
 sweet::Box sweet::Box::bound(sweet::Box & _a, sweet::Box & _b){
@@ -43,4 +54,29 @@ sweet::Box sweet::Box::bound(sweet::Box & _a, sweet::Box & _b){
 	res.height -= res.y;
 	res.depth -= res.z;
 	return res;
+}
+
+sweet::Box sweet::Box::bound(std::vector<glm::vec3> _verts){
+	float minX = 99999, minY= 99999, minZ = 99999,
+		maxX = -99999, maxY = -99999, maxZ = -99999;
+
+	for(auto i : _verts){
+		maxX = std::max(i.x, maxX);
+		maxY = std::max(i.y, maxY);
+		maxZ = std::max(i.z, maxZ);
+
+		minX = std::min(i.x, minX);
+		minY = std::min(i.y, minY);
+		minZ = std::min(i.z, minZ);
+	}
+
+	return sweet::Box(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ);
+}
+
+glm::vec3 sweet::Box::getMinCoordinate(){
+	return glm::vec3(x, y, z);
+}
+
+glm::vec3 sweet::Box::getMaxCoordinate(){
+	return glm::vec3(x + width, y + height, z + depth);
 }
