@@ -6,7 +6,7 @@
 
 class ShaderComponentToon : public ShaderComponentDiffuse {
 public:	
-	ShaderComponentToon(Shader * _shader, Texture * _texture);
+	ShaderComponentToon(ComponentShaderBase * _shader, Texture * _texture, bool _doubleSided);
 	~ShaderComponentToon();
 	
 	virtual std::string getVertexVariablesString() override;

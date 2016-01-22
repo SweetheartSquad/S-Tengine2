@@ -9,7 +9,7 @@
 #include <glm/mat4x2.hpp>
 #include <glm/gtc/matrix_transform.inl>
 
-ShaderComponentNormals::ShaderComponentNormals(Shader * _shader) :
+ShaderComponentNormals::ShaderComponentNormals(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader)
 {
 }

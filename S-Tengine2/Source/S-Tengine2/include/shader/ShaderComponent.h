@@ -14,6 +14,7 @@ namespace sweet{
 
 class RenderOptions;
 class Shader;
+class ComponentShaderBase;
 
 /********************************************************
 *
@@ -27,10 +28,9 @@ class Shader;
 *********************************************************/
 class ShaderComponent abstract : public NodeLoadable{
 public:
+	ComponentShaderBase * shader;
 
-	Shader * shader;
-
-	ShaderComponent(Shader * _shader);
+	ShaderComponent(ComponentShaderBase * _shader);
 	virtual ~ShaderComponent();
 
 	/**

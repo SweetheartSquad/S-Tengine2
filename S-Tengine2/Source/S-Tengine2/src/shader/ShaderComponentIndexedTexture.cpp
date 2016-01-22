@@ -2,6 +2,7 @@
 
 #include "shader/ShaderComponentIndexedTexture.h"
 #include "shader/ShaderVariables.h"
+#include <shader/ComponentShaderBase.h>
 #include "MatrixStack.h"
 #include "RenderOptions.h"
 #include "Texture.h"
@@ -10,7 +11,7 @@
 #include "Sprite.h"
 #include "SpriteSheetAnimation.h"
 
-ShaderComponentIndexedTexture::ShaderComponentIndexedTexture(Shader * _shader) :
+ShaderComponentIndexedTexture::ShaderComponentIndexedTexture(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader){
 }
 

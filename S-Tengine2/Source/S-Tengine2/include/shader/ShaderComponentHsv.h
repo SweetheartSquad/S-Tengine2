@@ -15,7 +15,7 @@ public:
 	void setValue(float _val);
 
 	// all values are given as 0 - 1, h += hue, s *= sat, v *= val
-	ShaderComponentHsv(Shader * _shader, float _hue, float _saturation, float _value);
+	ShaderComponentHsv(ComponentShaderBase * _shader, float _hue, float _saturation, float _value);
 	~ShaderComponentHsv();
 	
 	std::string getVertexVariablesString() override;

@@ -235,6 +235,19 @@ void Game::draw(void){
 	VoxRenderOptions ro(nullptr, nullptr, nullptr);
 	ro.kc_active = kc_active;
 	if(currentScene != nullptr){
+		ro.lights = &currentScene->lights;
+		for(auto s : Shader::allShaders){
+			ComponentShaderBase * sb = dynamic_cast<ComponentShaderBase *>(s);
+			if(sb != nullptr){
+				sb->lightingDirty = true;
+			}
+			if(s->bindShader()){
+				ro.shader = s;
+				s->clean(&ms, &ro, nullptr);
+				checkForGlError(false);
+			}
+		}
+		ro.shader = nullptr;
 		currentScene->render(&ms, &ro);
 	}
 	if(sweet::drawAntTweakBar && sweet::antTweakBarInititialized) {

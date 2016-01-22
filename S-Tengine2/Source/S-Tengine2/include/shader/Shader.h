@@ -40,6 +40,7 @@ private:
 	bool dirty;
 
 public:
+	static std::vector<Shader *> allShaders;
 	
 	/** Filename of vertex shader */
 	std::string vertSource;
@@ -95,5 +96,6 @@ public:
 	void unload() override;
 
 	// calls glUseProgram(this->programId)
-	void bindShader();
+	// returns true if the shader is actually bound, false otherwise
+	bool bindShader();
 };

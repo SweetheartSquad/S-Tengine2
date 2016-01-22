@@ -6,7 +6,7 @@
 #include <RenderOptions.h>
 #include <Log.h>
 
-ShaderComponentSsao::ShaderComponentSsao(Shader * _shader) :
+ShaderComponentSsao::ShaderComponentSsao(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader)
 {
 }

@@ -3,12 +3,12 @@
 #include <shader/ShaderComponentToon.h>
 #include <sstream>
 #include <shader/ShaderVariables.h>
-#include <shader/Shader.h>
+#include <shader/ComponentShaderBase.h>
 #include <MeshInterface.h>
 #include <shader/SharedComponentShaderMethods.h>
 
-ShaderComponentToon::ShaderComponentToon(Shader* _shader, Texture * _texture) :
-	ShaderComponentDiffuse(_shader),
+ShaderComponentToon::ShaderComponentToon(ComponentShaderBase * _shader, Texture * _texture, bool _doubleSided) :
+	ShaderComponentDiffuse(_shader, _doubleSided),
 	levels(_texture->width), 
 	texture(_texture), 
 	levelsLoc(0), 

@@ -2,10 +2,10 @@
 
 #include <shader/ShaderComponentMVP.h>
 #include <shader/ShaderVariables.h>
+#include <shader/ComponentShaderBase.h>
 #include <MatrixStack.h>
-#include <shader/Shader.h>
 
-ShaderComponentMVP::ShaderComponentMVP(Shader* _shader) :
+ShaderComponentMVP::ShaderComponentMVP(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader),
 	modelUniformLocation(-1),
 	viewUniformLocation(-1),

@@ -19,7 +19,7 @@ public:
 	void setRGB(float _r, float _g, float _b);
 
 	// all values are added to the rgb of the fragColor (therefore, changing the colour of a standard white vertex requires these arguments to be negative)
-	ShaderComponentTint(Shader * _shader, float _r = 0.f, float _g = 0.f, float _b = 0.f);
+	ShaderComponentTint(ComponentShaderBase * _shader, float _r = 0.f, float _g = 0.f, float _b = 0.f);
 	~ShaderComponentTint();
 	
 	std::string getVertexVariablesString() override;

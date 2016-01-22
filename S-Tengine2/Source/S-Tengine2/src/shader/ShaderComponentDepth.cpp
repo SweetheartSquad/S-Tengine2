@@ -3,7 +3,7 @@
 #include <shader/ShaderComponentDepth.h>
 #include <shader/ShaderVariables.h>
 
-ShaderComponentDepth::ShaderComponentDepth(Shader * _shader) :
+ShaderComponentDepth::ShaderComponentDepth(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader)
 {
 }

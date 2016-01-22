@@ -10,7 +10,7 @@ public:
 	Texture * getMaskTex();
 	void setMaskTex(Texture * _maskTex);
 
-	ShaderComponentMask(Shader * _shader, Texture * _maskTex = nullptr);
+	ShaderComponentMask(ComponentShaderBase * _shader, Texture * _maskTex = nullptr);
 	~ShaderComponentMask();
 	
 	std::string getVertexVariablesString() override;

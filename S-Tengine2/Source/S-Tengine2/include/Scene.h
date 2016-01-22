@@ -27,13 +27,13 @@ class NormalsShaderComponent;
 class Scene : public Entity{
 public:
 
-	StandardFrameBuffer	* depthBuffer;
-	StandardFrameBuffer	* normalBuffer;
-	StandardFrameBuffer * shadowBuffer;
-	ComponentShaderBase	* depthShader;
-	BlurShader			* shadowShader;
-	ComponentShaderBase * normalsShader;
-	RenderSurface       * shadowSurface;
+	//StandardFrameBuffer	* depthBuffer;
+	//StandardFrameBuffer	* normalBuffer;
+	//StandardFrameBuffer * shadowBuffer;
+	//ComponentShaderBase	* depthShader;
+	//BlurShader			* shadowShader;
+	//ComponentShaderBase * normalsShader;
+	//RenderSurface       * shadowSurface;
 	
 	// Reference to the game instance 
 	Game * game;
@@ -68,7 +68,7 @@ public:
 	*/
 	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	
-	virtual void renderShadows(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
+	//virtual void renderShadows(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 
 	/**
 	* Renders the children of the scene to its depth buffer
@@ -77,7 +77,7 @@ public:
 	*
 	* The currently bound frame buffer will be set back to 0 at the end of this function
 	*/
-	virtual void renderDepth(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
+	//virtual void renderDepth(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 
 	/**
 	* Convenience fuction for rendering the current depth buffer to the provided surface
@@ -87,7 +87,7 @@ public:
 	*
 	* @param _renderSurface  The surface that the depth buffer will be rendered to
 	*/
-	void renderDepthBufferToSurface(RenderSurface * _renderSurface);
+	//void renderDepthBufferToSurface(RenderSurface * _renderSurface);
 	
 	/**
 	* Renders the children of the scene to its normals buffer
@@ -96,7 +96,7 @@ public:
 	*
 	* The currently bound frame buffer will be set back to 0 at the end of this function
 	*/
-	virtual void renderNormals(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
+	//virtual void renderNormals(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 
 	/**
 	* Convenience fuction for rendering the current normals buffer to the provided surface
@@ -106,7 +106,7 @@ public:
 	*
 	* @param _renderSurface  The surface that the normal buffer will be rendered to
 	*/
-	void renderNormalBufferToSurface(RenderSurface * _renderSurface);
+	//void renderNormalBufferToSurface(RenderSurface * _renderSurface);
 
 
 	virtual void load() override;

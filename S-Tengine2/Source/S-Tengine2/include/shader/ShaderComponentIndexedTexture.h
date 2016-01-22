@@ -15,7 +15,7 @@ class ShaderComponentIndexedTexture : public ShaderComponent{
 private:
 	GLint texNumLoc, texColLoc, texSamLoc;
 public:
-	ShaderComponentIndexedTexture(Shader * _shader);
+	ShaderComponentIndexedTexture(ComponentShaderBase * _shader);
 	~ShaderComponentIndexedTexture() override;
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;

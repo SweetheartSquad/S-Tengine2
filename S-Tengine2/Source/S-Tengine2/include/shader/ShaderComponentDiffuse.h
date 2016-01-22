@@ -3,8 +3,11 @@
 #include "ShaderComponent.h"
 
 class ShaderComponentDiffuse : public ShaderComponent{
+private:
+	const bool doubleSided;
 public:
-	ShaderComponentDiffuse(Shader * _shader);
+	// if _doubleSided is true, the polygons can be lit from either side instead of just the front-face
+	ShaderComponentDiffuse(ComponentShaderBase * _shader, bool _doubleSided = false);
 	~ShaderComponentDiffuse() override;
 	virtual std::string getVertexVariablesString() override;
 	virtual std::string getFragmentVariablesString() override;

@@ -9,14 +9,17 @@
 #include <Material.h>
 #include <Transform.h>
 #include <SpotLight.h>
+#include <shader/ComponentShaderBase.h>
 
 void SharedComponentShaderMethods::configureLights(sweet::MatrixStack* _matrixStack, RenderOptions * _renderOption, NodeRenderable* _nodeRenderable){
-	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
-	if(mesh != nullptr){
+	checkForGlError(false);
+	ComponentShaderBase * shaderBase = dynamic_cast<ComponentShaderBase *>(_renderOption->shader);
+	if(shaderBase->lightingDirty){
 		// Pass the _shader the number of lights
 		if(_renderOption->lights != nullptr){
 			unsigned long int numLights = _renderOption->lights->size();
 			glUniform1i(_renderOption->shader->numLightsUniformLocation, numLights);
+			checkForGlError(false);
 			// Pass the paramaters for each light to the _shader
 			for(unsigned long int i = 0; i < numLights; ++i){
 				Light * l = _renderOption->lights->at(i);
@@ -50,10 +53,13 @@ void SharedComponentShaderMethods::configureLights(sweet::MatrixStack* _matrixSt
 					glUniform1f(cutoffUniformLocation, l->getCutoff());
 					glUniform3f(coneDirectionUniformLocation, l->getConeDirection().x, l->getConeDirection().y, l->getConeDirection().z);
 					glUniform1f(angleUniformLocation, l->getConeAngle());
+					checkForGlError(false);
 				}
 			}
 		}
 	}
+	shaderBase->lightingDirty = false;
+	checkForGlError(false);
 }
 
 void SharedComponentShaderMethods::configureMaterials(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){

@@ -1,12 +1,12 @@
 #pragma once
 
-#include <shader\ShaderComponentHsv.h>
-#include <shader\ShaderVariables.h>
+#include <shader/ShaderComponentHsv.h>
+#include <shader/ShaderVariables.h>
+#include <shader/ComponentShaderBase.h>
 #include <GLUtils.h>
 #include <RenderOptions.h>
-#include <shader\Shader.h>
 
-ShaderComponentHsv::ShaderComponentHsv(Shader * _shader, float _hue, float _saturation, float _value):
+ShaderComponentHsv::ShaderComponentHsv(ComponentShaderBase * _shader, float _hue, float _saturation, float _value):
 	ShaderComponent(_shader),
 	hue(_hue),
 	saturation(_saturation),

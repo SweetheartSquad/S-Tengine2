@@ -1,9 +1,9 @@
 #pragma once
 
 #include <shader/ShaderComponent.h>
-#include <shader/Shader.h>
+#include <shader/ComponentShaderBase.h>
 
-ShaderComponent::ShaderComponent(Shader * _shader) :
+ShaderComponent::ShaderComponent(ComponentShaderBase * _shader) :
 	shader(_shader),
 	dirty(true)
 {
