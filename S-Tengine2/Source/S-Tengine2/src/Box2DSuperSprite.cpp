@@ -42,7 +42,7 @@ void Box2DSuperSprite::translateComponents(float _x, float _y, float _z){
 void Box2DSuperSprite::translateComponents(glm::vec3 _translateVector){
 	for(Box2DSprite ** c : components){
 		if(*c != nullptr){
-			(*c)->setTranslationPhysical(_translateVector, true);
+			(*c)->translatePhysical(_translateVector, true);
 		}
 	}
 }

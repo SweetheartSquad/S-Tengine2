@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Entity.h>
+#include <NodePhysicsBody.h>
 #include <Box2D/Box2D.h>
 #include <glm/glm.hpp>
 
@@ -10,7 +10,12 @@
 
 class Box2DWorld;
 
-class NodeBox2DBody : public virtual Entity{
+// NOTE: physics bodies override Entity's update and don't call it
+// This is because the MeshEntity varieties will also call it,
+// causing problems in the most common use case. If you want the
+// physics body to update its children, you have to extend this class
+// and call it yourself in an overriden update call
+class NodeBox2DBody : public virtual NodePhysicsBody{
 public:
 	Box2DWorld * world;
 
@@ -30,9 +35,6 @@ public:
 	//Creates a new fixture for the body and returns a reference to it
 	b2Fixture * getNewFixture(b2PolygonShape _shape, float _density);
 	b2Fixture * getNewFixture(b2ChainShape _shape, float _density);
-
-	void setTranslationPhysical(glm::vec3 _translation, bool _relative = false);
-	void setTranslationPhysical(float _x, float _y, float _z, bool _relative = false);
 
 	void applyForce(float _forceX, float _forceY, float _pointX, float _pointY);
 	void applyForceLeft(float _force);
@@ -55,7 +57,10 @@ public:
 	bool movingLeft(float _threshold = 0);
 	bool movingUp(float _threshold = 0);
 	bool movingDown(float _threshold = 0);
-
+	
+	// NOTE: z is ignored completely; translate the childTransform directly to affect the z translation
+	virtual void translatePhysical(glm::vec3 _translation, bool _relative = true) override;
+	virtual void realign() override;
 private:
 	float prevAngle;
 };

@@ -163,8 +163,8 @@ signed long int NodeUI::removeChild(NodeUI* _uiElement){
 	return res;
 }
 
-void NodeUI::setTranslationPhysical(float _x, float _y, float _z, bool _relative){
-	parents.at(0)->translate(_x, _y, _z, _relative);
+void NodeUI::translatePhysical(glm::vec3 _translation, bool _relative){
+	firstParent()->translate(_translation, _relative);
 }
 
 void NodeUI::doRecursivelyOnUIChildren(std::function<void(NodeUI * _childOrThis)> _todo, bool _includeSelf) {

@@ -23,26 +23,30 @@ NodeBox2DBody::~NodeBox2DBody(){
 }
 
 void NodeBox2DBody::update(Step * _step){
-	if(body != nullptr){
-		if(body->IsAwake()){
-			const b2Vec2 pos = body->GetPosition();
-			childTransform->translate(pos.x, pos.y, childTransform->getTranslationVector().z, false);
-			
-			b2Vec2 lv = body->GetLinearVelocity();
-			if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
-				lv.x = maxVelocity.x * (lv.x < 0 ? -1 : 1);
-			}
-			if(maxVelocity.y != -1 && abs(lv.y) > maxVelocity.y){
-				lv.y = maxVelocity.y * (lv.y < 0 ? -1 : 1);
-			}
-			body->SetLinearVelocity(lv);
-			
-			if(abs(body->GetAngle() - prevAngle) > 0.00005f){
-				childTransform->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
-				prevAngle = body->GetAngle();
-			}
-		}
+	if(body != nullptr && (body->IsAwake() || directAdjustment)){
+		realign();
 	}
+	NodePhysicsBody::update(_step);
+}
+
+void NodeBox2DBody::realign(){
+	const b2Vec2 pos = body->GetPosition();
+	childTransform->translate(pos.x, pos.y, childTransform->getTranslationVector().z, false);
+			
+	b2Vec2 lv = body->GetLinearVelocity();
+	if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
+		lv.x = maxVelocity.x * (lv.x < 0 ? -1 : 1);
+	}
+	if(maxVelocity.y != -1 && abs(lv.y) > maxVelocity.y){
+		lv.y = maxVelocity.y * (lv.y < 0 ? -1 : 1);
+	}
+	body->SetLinearVelocity(lv);
+			
+	if(abs(body->GetAngle() - prevAngle) > 0.00005f){
+		childTransform->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
+		prevAngle = body->GetAngle();
+	}
+	NodePhysicsBody::realign();
 }
 
 b2Fixture * NodeBox2DBody::getNewFixture(b2PolygonShape _shape, float _density){
@@ -53,16 +57,12 @@ b2Fixture * NodeBox2DBody::getNewFixture(b2ChainShape _shape, float _density){
 	return body->CreateFixture(&_shape, _density);
 }
 
-void NodeBox2DBody::setTranslationPhysical(glm::vec3 _translation, bool _relative){
-	childTransform->translate(_translation, _relative);
+void NodeBox2DBody::translatePhysical(glm::vec3 _translation, bool _relative){
 	glm::vec3 tv = childTransform->getTranslationVector();
 	if(body != nullptr){
 		body->SetTransform(b2Vec2(tv.x, tv.y), body->GetAngle());
 	}
-}
-
-void NodeBox2DBody::setTranslationPhysical(float _x, float _y, float _z, bool _relative){
-	setTranslationPhysical(glm::vec3(_x, _y, _z), _relative);
+	NodePhysicsBody::translatePhysical(_translation, _relative);
 }
 
 void NodeBox2DBody::applyForce(float _forceX, float _forceY, float _pointX, float _pointY){

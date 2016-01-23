@@ -53,7 +53,7 @@ Particle * ParticleSystem::addParticle(glm::vec3 _pos, Texture * _texture){
 	p->deltaSize = -componentScale;
 	childTransform->addChild(p)->scale(p->startSize, false);
     test[0] = p;
-	p->setTranslationPhysical(_pos.x, _pos.y, _pos.z);
+	p->translatePhysical(glm::vec3(_pos.x, _pos.y, _pos.z), false);
 	float mass = p->body->GetMass();
 	p->applyLinearImpulseToCenter((std::rand() % 20 - 10)*mass, (std::rand() % 20 - 10)*mass);
 	p->applyAngularImpulse((std::rand() % 20 - 10)*mass);
