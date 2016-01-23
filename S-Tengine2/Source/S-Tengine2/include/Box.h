@@ -24,5 +24,6 @@ namespace sweet {
 
 		glm::vec3 getMinCoordinate();
 		glm::vec3 getMaxCoordinate();
+		std::vector<glm::vec3> getVertices();
 	};
 };

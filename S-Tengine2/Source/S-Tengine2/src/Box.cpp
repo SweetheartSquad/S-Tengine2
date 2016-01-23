@@ -80,3 +80,20 @@ glm::vec3 sweet::Box::getMinCoordinate(){
 glm::vec3 sweet::Box::getMaxCoordinate(){
 	return glm::vec3(x + width, y + height, z + depth);
 }
+
+std::vector<glm::vec3> sweet::Box::getVertices(){
+	glm::vec3 min = getMinCoordinate();
+	glm::vec3 max = getMaxCoordinate();
+
+	std::vector<glm::vec3> vertices;
+	vertices.push_back(min);							// left bottom back
+	vertices.push_back(glm::vec3(max.x, min.y, min.z));	// right bottom back
+	vertices.push_back(glm::vec3(min.x, max.y, min.z));	// left top back
+	vertices.push_back(glm::vec3(max.x, max.y, min.z));	// right top back
+	vertices.push_back(glm::vec3(min.x, min.y, max.z));	// left bottom front
+	vertices.push_back(glm::vec3(max.x, min.y, max.z));	// right bottom front
+	vertices.push_back(glm::vec3(min.x, max.y, max.z));	// left top front
+	vertices.push_back(max);							// right top front
+
+	return vertices;
+}
