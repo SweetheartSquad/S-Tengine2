@@ -20,7 +20,7 @@ Scene_Splash_Engine::Scene_Splash_Engine(Game * _game) :
 		if(t < 0.4f){
 			b = Easing::easeInQuint(std::max(0.f, t), 0, 1, 0.4f) - std::rand() % 100 / 1000.f;
 		}else{
-			b = Easing::easeOutQuad(std::max(0.f, t - 0.95f), 1, -1, 0.1f) - std::rand() % 100 / 1000.f;
+			b = Easing::easeOutQuad(std::max(0.f, t - 0.925f), 1, -1, 0.1f) - std::rand() % 100 / 1000.f;
 		}
 
 		float thing = std::rand() % 50 / 10000.f;
