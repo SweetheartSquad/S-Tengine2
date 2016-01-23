@@ -9,7 +9,7 @@
 #include <scenario/Scenario.h>
 
 Scene_Splash_Engine::Scene_Splash_Engine(Game * _game) :
-	Scene_Splash(_game, new Texture("assets/engine basics/splash-engine.png", false, true), Scenario::defaultAudio->sound, 10.f)
+	Scene_Splash(_game, new Texture("assets/engine basics/splash-engine.png", false, true), new OpenAL_SoundSimple("assets/engine basics/S-Tengine 2.ogg", false, true, "sfx"), 10.f)
 {
 	
 	timer->eventManager->listeners["progress"].pop_back(); // remove the default transition effect

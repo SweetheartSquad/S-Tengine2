@@ -9,7 +9,7 @@
 #include <scenario/Scenario.h>
 
 Scene_Splash_SweetHeartSquad::Scene_Splash_SweetHeartSquad(Game * _game) :
-	Scene_Splash(_game, new Texture("assets/engine basics/splash-sweetheartsquad.png", false, true), Scenario::defaultAudio->sound, 4.f)
+	Scene_Splash(_game, new Texture("assets/engine basics/splash-sweetheartsquad.png", false, true), new OpenAL_SoundSimple("assets/engine basics/SweetHeart Squad.ogg", false, true, "sfx"), 4.f)
 {
 	splash->mesh->uvEdgeMode = GL_CLAMP;
 
