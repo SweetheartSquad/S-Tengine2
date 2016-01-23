@@ -20,7 +20,12 @@ public:
 	
 	virtual void update(Step * _step) override;
 
+	void enable();
+	void disable();
+
+	void alignMouse();
 private :
+	bool enabled;
 	/** The X position of the mouse from the last update loop*/
 	double lastMouseX;
 	/** The Y position of the mouse from the last update loop*/

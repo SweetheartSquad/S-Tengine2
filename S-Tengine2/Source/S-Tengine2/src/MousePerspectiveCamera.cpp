@@ -25,14 +25,27 @@ void MousePerspectiveCamera::update(Step* _step){
 		deltaY = -(mouse->mouseY(false) - lastMouseY);
 	}
 
-	if(deltaY != 0){
-		pitch -= (mouseSpeed * static_cast<float>(deltaY));
-	}if(deltaX != 0){
-		yaw += (mouseSpeed * static_cast<float>(deltaX));
+	if(enabled){
+		if(deltaY != 0){
+			pitch -= (mouseSpeed * static_cast<float>(deltaY));
+		}if(deltaX != 0){
+			yaw += (mouseSpeed * static_cast<float>(deltaX));
+		}
 	}
-	
-	lastMouseX = mouse->mouseX(false);
-	lastMouseY = mouse->mouseY(false);
+
+	alignMouse();
 
 	PerspectiveCamera::update(_step);
+}
+
+void MousePerspectiveCamera::enable(){
+	enabled = true;
+}
+void MousePerspectiveCamera::disable(){
+	enabled = false;
+}
+
+void MousePerspectiveCamera::alignMouse(){	
+	lastMouseX = mouse->mouseX(false);
+	lastMouseY = mouse->mouseY(false);
 }
