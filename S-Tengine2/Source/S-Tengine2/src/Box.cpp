@@ -27,12 +27,12 @@ float sweet::Box::getVolume(){
 }
 
 bool sweet::Box::intersects(sweet::Box _rect){
-	if (_rect.x + _rect.width < x) return false; // rect is left
-    if (_rect.x > x + width) return false; // rect is right
-    if (_rect.y + _rect.height < y) return false; // rect is above
-    if (_rect.y > y + height) return false; // rect is below
-	if (_rect.z + _rect.depth < z) return false; // rect is in front
-    if (_rect.z > z + depth) return false; // rect is behind
+	if (_rect.x + _rect.width <= x) return false; // rect is left
+    if (_rect.x >= x + width) return false; // rect is right
+    if (_rect.y + _rect.height <= y) return false; // rect is below
+    if (_rect.y >= y + height) return false; // rect is above
+	if (_rect.z + _rect.depth <= z) return false; // rect is in behind
+    if (_rect.z >= z + depth) return false; // rect is front
 
     return true; // boxes overlap
 }
