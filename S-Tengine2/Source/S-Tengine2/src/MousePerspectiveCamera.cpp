@@ -5,7 +5,8 @@
 MousePerspectiveCamera::MousePerspectiveCamera() :
 	mouse(&Mouse::getInstance()),
 	speed(0.1f),
-	mouseSpeed(0.05f)
+	mouseSpeed(0.05f),
+	enabled(true)
 {
 	lastMouseY = mouse->mouseX();
 	lastMouseX = mouse->mouseY();
