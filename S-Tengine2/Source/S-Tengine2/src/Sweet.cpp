@@ -145,8 +145,20 @@ void sweet::error_callback(int _error, const char * _description){
 }
 
 GLFWwindow * sweet::initWindow(){
-	GLFWwindow * window;
-	window = glfwCreateWindow(config.resolution.x, config.resolution.y, title.c_str(), config.fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	int count = 0;
+	const GLFWvidmode * videoModes = glfwGetVideoModes(glfwGetPrimaryMonitor(), &count);
+	
+	int diff = INT_MAX;
+	int bestMatch = 0;
+	for(unsigned long int i = 0; i < count; ++i){
+		int d = (config.resolution.x - videoModes[i].width) + (config.resolution.y - videoModes[i].height);
+		if(d < diff){
+			bestMatch = i;
+			diff = d;
+		}
+	}
+
+	GLFWwindow * window = glfwCreateWindow(config.fullscreen ? videoModes[bestMatch].width : config.resolution.x, config.fullscreen ? videoModes[bestMatch].height : config.resolution.y, title.c_str(), config.fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 
 	if (!window){
 		glfwTerminate();
