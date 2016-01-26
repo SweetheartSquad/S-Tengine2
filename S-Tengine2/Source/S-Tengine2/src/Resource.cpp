@@ -20,7 +20,7 @@
 
 #include <tiny_obj_loader.h>
 
-std::vector<TriMesh *> Resource::loadMeshFromObj(std::string _objSrc){
+std::vector<TriMesh *> Resource::loadMeshFromObj(std::string _objSrc, bool _autorelease){
 
 	std::string inputfile = sweet::FileUtils::readFile(_objSrc);
 	
@@ -38,7 +38,7 @@ std::vector<TriMesh *> Resource::loadMeshFromObj(std::string _objSrc){
 	
 	std::vector<TriMesh *> res;
 	for (tinyobj::shape_t s : shapes) {
-		TriMesh* mesh = new TriMesh(GL_TRIANGLES, GL_STATIC_DRAW);
+		TriMesh* mesh = new TriMesh(_autorelease);
 		
 		for(unsigned long int v = 0; v < s.mesh.positions.size(); v += 3){
 			mesh->vertices.push_back(Vertex(

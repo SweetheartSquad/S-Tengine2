@@ -205,15 +205,16 @@ void AssetConversation::load(){
 AssetMesh::AssetMesh(Json::Value _json, Scenario* const _scenario) :
 	Asset(_json, _scenario)
 {
-	meshes = new std::vector<MeshInterface *>();
 	std::string src = _json.get("src", "NO_MESH").asString();
 	if(src == "NO_MESH"){
 		Log::warn("Loaded mesh without a src: Cube substitution in effect.");
-		meshes->push_back(MeshFactory::getCubeMesh());
+		QuadMesh * m = MeshFactory::getCubeMesh();
+		meshes.push_back(new TriMesh(m, false));
+		delete m;
 	}else{
 		src = "assets/meshes/" + src;
-		auto loadedMeshes = Resource::loadMeshFromObj(src);
-		meshes->insert(meshes->end(), loadedMeshes.begin(), loadedMeshes.end());
+		auto loadedMeshes = Resource::loadMeshFromObj(src, false);
+		meshes.insert(meshes.end(), loadedMeshes.begin(), loadedMeshes.end());
 	}
 }
 
@@ -222,15 +223,15 @@ AssetMesh* AssetMesh::create(Json::Value _json, Scenario* const _scenario) {
 }
 
 AssetMesh::~AssetMesh() {
-	for(auto mesh : *meshes) {
-		delete mesh;
+	while(meshes.size() > 0){
+		delete meshes.back();
+		meshes.pop_back();
 	}
-	delete meshes;
 }
 
 void AssetMesh::load() {
 	if(!loaded) {
-		for(auto mesh : *meshes) {
+		for(auto mesh : meshes) {
 			mesh->load();
 		}
 	}
@@ -239,7 +240,7 @@ void AssetMesh::load() {
 
 void AssetMesh::unload() {
 	if(loaded) {
-		for(auto mesh : *meshes) {
+		for(auto mesh : meshes) {
 			mesh->unload();
 		}
 	}

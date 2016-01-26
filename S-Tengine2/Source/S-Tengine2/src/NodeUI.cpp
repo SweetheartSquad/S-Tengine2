@@ -687,7 +687,7 @@ void NodeUI::updateCollider(){
 	};
 
 	if(colliderMesh == nullptr){
-		colliderMesh = new TriMesh();
+		colliderMesh = new TriMesh(false);
 		for(unsigned long int i = 0; i < 6; ++i){
 			colliderMesh->pushVert(Vertex(verts[i].x, verts[i].y, verts[i].z));
 		}
