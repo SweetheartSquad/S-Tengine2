@@ -160,9 +160,6 @@ void StereoCamera::update(Step * _step){
 		ovrTrackingState hmdState = ovr_GetTrackingState(*sweet::hmd, ftiming, ovrTrue);
 		ovr_CalcEyePoses(hmdState.HeadPose.ThePose, ViewOffset, EyeRenderPose);
 		sensorSampleTime = ovr_GetTimeInSeconds();
-
-		//player->playerCamera->firstParent()->translate(EyeRenderPose[0].Position.x, EyeRenderPose[0].Position.y, EyeRenderPose[0].Position.z);
-		//player->playerCamera->childTransform->setOrientation(glm::quat(EyeRenderPose[0].Orientation.w, EyeRenderPose[0].Orientation.z, EyeRenderPose[0].Orientation.y, EyeRenderPose[0].Orientation.x));
 	
 		if(keyboard->keyJustDown(GLFW_KEY_R)){
 			ovr_RecenterPose(*sweet::hmd);
@@ -180,6 +177,7 @@ void StereoCamera::update(Step * _step){
 	
 	for(unsigned long int eye = 0; eye < 2; ++eye){
 		PerspectiveCamera * cam = eyes[eye].camera;
+		// copy all properties of the central camera to the eye camera
 		cam->yaw = yaw;
 		cam->pitch = pitch;
 		cam->fieldOfView = fieldOfView;
@@ -191,9 +189,19 @@ void StereoCamera::update(Step * _step){
 		cam->farClip = farClip;
 		cam->interpolation = interpolation;
 		cam->lookAtOffset = lookAtOffset;
-
 		cam->childTransform->setOrientation(childTransform->getOrientationQuat());
+		
+		// account for eye position relative to central camera
 		cam->firstParent()->translate(glm::vec3(EyeRenderDesc[eye].HmdToEyeViewOffset.x, EyeRenderDesc[eye].HmdToEyeViewOffset.y, EyeRenderDesc[eye].HmdToEyeViewOffset.z) * -ipdScale, false);
+		cam->firstParent()->translate(glm::vec3(EyeRenderPose[eye].Position.x, EyeRenderPose[eye].Position.y, EyeRenderPose[eye].Position.z));
+		
+
+		// account for head orientation
+		glm::quat o = glm::quat(EyeRenderPose[eye].Orientation.w, EyeRenderPose[eye].Orientation.z, EyeRenderPose[eye].Orientation.y, EyeRenderPose[eye].Orientation.x);
+		// negate the x component in order to correct for roll
+		o.x = -o.x;
+		cam->childTransform->rotate(o, kOBJECT);
+		
 		cam->update(_step);
 	}
 }
@@ -214,7 +222,6 @@ void StereoCamera::render(std::function<void()> _renderFunction){
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, eyes[eye].dbuffer.texId, 0);
 	
 			glViewport(0, 0, eyes[eye].size.w, eyes[eye].size.h);
-       // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glEnable(GL_FRAMEBUFFER_SRGB);
 	
 			// render scene
@@ -224,26 +231,11 @@ void StereoCamera::render(std::function<void()> _renderFunction){
 			activeCam = this;
 
 			glDisable(GL_FRAMEBUFFER_SRGB);
-			/*
-			_matrixStack->pushMatrix();
-		
-			activeCamera->firstParent()->translate(glm::vec3(sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.x, sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.y, sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.z) * -ipdScale);
-			uiLayer.childTransform->translate(glm::vec3(sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.x*sweet::getWindowWidth(), sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.y*sweet::getWindowHeight(), sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.z) * -ipdScale_ui);
-			
-			_renderOptions->clear();
-			Scene::render(_matrixStack, _renderOptions);
-			uiLayer.render(_matrixStack, _renderOptions);
-			_matrixStack->popMatrix();
-		
-			uiLayer.childTransform->translate(glm::vec3(sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.x*sweet::getWindowWidth(), sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.y*sweet::getWindowHeight(), sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.z) * ipdScale_ui);
-			activeCamera->firstParent()->translate(glm::vec3(sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.x, sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.y, sweet::EyeRenderDesc[eye].HmdToEyeViewOffset.z) * ipdScale);
-			*/
 
 			// unset render surface
 			glBindFramebuffer(GL_FRAMEBUFFER, eyes[eye].fboId);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
-			//glDisable(GL_FRAMEBUFFER_SRGB);
 		}
 
 
