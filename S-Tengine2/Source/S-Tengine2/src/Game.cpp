@@ -253,6 +253,7 @@ void Game::draw(void){
 	if(sweet::drawAntTweakBar && sweet::antTweakBarInititialized) {
 		TwDraw(); 
 	}
+	glfwSwapBuffers(sweet::currentContext);
 }
 
 void Game::manageInput(){

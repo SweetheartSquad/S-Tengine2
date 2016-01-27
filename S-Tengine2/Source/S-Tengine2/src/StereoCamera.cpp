@@ -202,19 +202,21 @@ void StereoCamera::update(Step * _step){
 		cam->lookAtOffset = lookAtOffset;
 		cam->childTransform->setOrientation(childTransform->getOrientationQuat());
 		
-		// account for eye position relative to central camera
-		cam->firstParent()->translate(glm::vec3(EyeRenderDesc[eye].HmdToEyeViewOffset.x, EyeRenderDesc[eye].HmdToEyeViewOffset.y, EyeRenderDesc[eye].HmdToEyeViewOffset.z) * -ipdScale, false);
-		cam->firstParent()->translate(glm::vec3(EyeRenderPose[eye].Position.x, EyeRenderPose[eye].Position.y, EyeRenderPose[eye].Position.z));
+		if(sweet::ovrInitialized){
+			// account for eye position relative to central camera
+			cam->firstParent()->translate(glm::vec3(EyeRenderDesc[eye].HmdToEyeViewOffset.x, EyeRenderDesc[eye].HmdToEyeViewOffset.y, EyeRenderDesc[eye].HmdToEyeViewOffset.z) * -ipdScale, false);
+			cam->firstParent()->translate(glm::vec3(EyeRenderPose[eye].Position.x, EyeRenderPose[eye].Position.y, EyeRenderPose[eye].Position.z));
 		
-		// account for head orientation
-		OVR::Quatf o = EyeRenderPose[eye].Orientation;
-		OVR::Vector3f axis;
-		float y, p, r;
-		o.GetYawPitchRoll(&y, &p, &r);
-		cam->childTransform->rotate(glm::degrees(r), 0, 0, 1, kWORLD);
-		cam->childTransform->rotate(glm::degrees(p), 1, 0, 0, kWORLD);
-		cam->childTransform->rotate(glm::degrees(y), 0, 1, 0, kWORLD);
-		
+			// account for head orientation
+			OVR::Quatf o = EyeRenderPose[eye].Orientation;
+			OVR::Vector3f axis;
+			float y, p, r;
+			o.GetYawPitchRoll(&y, &p, &r);
+			cam->childTransform->rotate(glm::degrees(r), 0, 0, 1, kWORLD);
+			cam->childTransform->rotate(glm::degrees(p), 1, 0, 0, kWORLD);
+			cam->childTransform->rotate(glm::degrees(y), 0, 1, 0, kWORLD);
+		}
+
 		cam->update(_step);
 	}
 }
@@ -231,7 +233,8 @@ void StereoCamera::render(std::function<void()> _renderFunction){
 		renderFrame();
 	}else{
 		// standard scene rendering
-		_renderFunction();
+		activeCam = OVR::StereoEye_Center;
+		renderActiveCamera(_renderFunction);
 	}
 }
 
@@ -295,8 +298,6 @@ void StereoCamera::renderFrame(){
 
 	ovrLayerHeader* layers = &ld.Header;
 	checkForOvrError(ovr_SubmitFrame(*sweet::hmd, 0, &viewScaleDesc, &layers, 1));
-
-	glfwSwapBuffers(sweet::currentContext);
 }
 
 void StereoCamera::blitBack(GLint _targetFbo){
