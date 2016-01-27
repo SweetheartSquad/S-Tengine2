@@ -14,7 +14,6 @@
 class PerspectiveCamera : public Camera {
 public:
 	explicit PerspectiveCamera();
-	~PerspectiveCamera();
 
 	// how much the camera slerps from its last orientation to the intended current orientation
 	float interpolation;
@@ -26,17 +25,7 @@ public:
 	glm::quat lastOrientation;
 
 	/**
-	* @return The view matrix of the camera
-	*/
-	virtual glm::mat4 getViewMatrix() const override;
-
-	/**
 	* @return The projection matrix of the camera 
 	*/
 	virtual glm::mat4 getProjectionMatrix() const override;
-
-	// I think this is typically called the center of interest?
-	glm::vec3 lookAtSpot;
-
-	glm::vec3 lookAtOffset;
 };

@@ -18,22 +18,6 @@ OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom,
 	farClip = _far;
 }
 
-OrthographicCamera::~OrthographicCamera(){
-}
-
-
-void OrthographicCamera::update(Step * _step){
-	Camera::update(_step);
-}
-
-glm::mat4 OrthographicCamera::getViewMatrix() const{
-	return glm::lookAt(
-		childTransform->getWorldPos(),							// Camera is here
-		childTransform->getWorldPos() + forwardVectorRotated,	// and looks here : at the same position, plus "direction"
-		upVectorRotated							// Head is up (set to 0,-1,0 to look upside-down)
-	);
-}
-
 glm::mat4 OrthographicCamera::getProjectionMatrix() const{
 	return glm::ortho<float>(-left, -right, bottom, top, nearClip, farClip);
 }

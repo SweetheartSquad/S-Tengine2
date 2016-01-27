@@ -10,9 +10,6 @@ PerspectiveCamera::PerspectiveCamera() :
 {
 }
 
-PerspectiveCamera::~PerspectiveCamera(){
-}
-
 void PerspectiveCamera::update(Step * _step){
 	lastOrientation = childTransform->getOrientationQuat();
 
@@ -20,21 +17,8 @@ void PerspectiveCamera::update(Step * _step){
 	newOrientation = glm::slerp(lastOrientation, newOrientation, interpolation * static_cast<float>(sweet::deltaTimeCorrection));
 
 	childTransform->setOrientation(newOrientation);
-
-	forwardVectorRotated   = newOrientation * forwardVectorLocal;
-	rightVectorRotated	   = newOrientation * rightVectorLocal;
-	upVectorRotated		   = newOrientation * upVectorLocal;
-
-	lookAtSpot = childTransform->getWorldPos()+forwardVectorRotated;
+	
 	Camera::update(_step);
-}
-
-glm::mat4 PerspectiveCamera::getViewMatrix() const{
-	return glm::lookAt(
-		childTransform->getWorldPos(),	// Camera is here
-		lookAtSpot + lookAtOffset,			// and looks here : at the same position, plus "direction"
-		upVectorRotated						// Head is up (set to 0,-1,0 to look upside-down)
-	);
 }
 
 glm::mat4 PerspectiveCamera::getProjectionMatrix() const{

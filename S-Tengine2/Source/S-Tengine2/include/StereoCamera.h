@@ -8,6 +8,8 @@
 
 class Scene;
 
+// A stereo-camera setup designed for use with an Oculus Rift (tested on DK2 hardware with SDK v0.8)
+// TODO: implement eye buffers as extensions of our FBO class
 class StereoCamera : public PerspectiveCamera {
 private:
 	// inter-pupillary distance, i.e. the distance between the two cameras
@@ -46,6 +48,8 @@ private:
 	// the activeCam points to either this camera, this camera's leftEye, or this camera's rightEye
 	// when rendering, the view matrix is calculated based on the activeCam
 	OVR::StereoEye activeCam;
+
+	OVR::Quatf hmdOrientation;
 public:
 	StereoCamera();
 	~StereoCamera();
@@ -63,7 +67,11 @@ public:
 	/** Updates the left and right eye to match the main camera */
 	virtual void update(Step * _step) override;
 
-
+	// if an hmd is not connected, runs the _renderFunction without any chanes
+	// if an hmd is connected, renders to the hmd
+	//
+	// To render to an Oculus, the _renderFunction is called twice (once for each eye camera)
+	// and then the buffers are submitted to the mirrorTexture as a single frame
 	void render(std::function<void()> _renderFunction);
 	// renders the active camera by calling _renderFunction
 	// if the active camera is one of the eye cams, it renders to the eye framebuffer
@@ -73,6 +81,6 @@ public:
 	// also calls glfwSwapBuffers on the current context
 	void renderFrame();
 
-		// Render what the oculus sees to the provided fbo 
-	void blitBack(GLint _targetFbo = 0);
+	// Copies the mirror texture to the provided fbo 
+	void blitTo(GLint _targetFbo = 0);
 };
