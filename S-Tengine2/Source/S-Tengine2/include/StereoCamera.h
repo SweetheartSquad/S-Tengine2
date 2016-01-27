@@ -3,6 +3,7 @@
 #include <PerspectiveCamera.h>
 #include <Sweet.h>
 #include <functional>
+#include <Extras/OVR_StereoProjection.h>
 
 
 class Scene;
@@ -44,7 +45,7 @@ private:
 
 	// the activeCam points to either this camera, this camera's leftEye, or this camera's rightEye
 	// when rendering, the view matrix is calculated based on the activeCam
-	Camera * activeCam;
+	OVR::StereoEye activeCam;
 public:
 	StereoCamera();
 	~StereoCamera();
@@ -64,6 +65,13 @@ public:
 
 
 	void render(std::function<void()> _renderFunction);
+	// renders the active camera by calling _renderFunction
+	// if the active camera is one of the eye cams, it renders to the eye framebuffer
+	// if the active camera is the center camera, nothing special happens
+	void renderActiveCamera(std::function<void()> _renderFunction);
+	// uses positional data and eye buffers to submit a frame to the oculus
+	// also calls glfwSwapBuffers on the current context
+	void renderFrame();
 
 		// Render what the oculus sees to the provided fbo 
 	void blitBack(GLint _targetFbo = 0);
