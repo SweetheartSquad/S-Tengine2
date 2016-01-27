@@ -34,6 +34,8 @@
 #include <GLFW/glfw3native.h>
 #include <OVR_CAPI_GL.h>
 
+#include <Log.h>
+
 #ifdef _DEBUG
 // OVR error-checking macro (enabled because _DEBUG is defined)
 // If an error is found, it is printed to the console and the application will fail an assertion
@@ -125,16 +127,11 @@ namespace sweet{
 	
 	// OVR head-mounted display
 	extern ovrHmd * hmd;
-	extern bool ovrInitialized;
-	extern ovrGLTexture * mirrorTexture;
-	extern GLuint mirrorFBO;
-	extern ovrSwapTextureSet * swapTextureSet;
-	extern ovrEyeRenderDesc EyeRenderDesc[2];
-	extern ovrGraphicsLuid luid;
 	extern ovrHmdDesc hmdDesc;
+	extern ovrGraphicsLuid luid;
+	extern bool ovrInitialized;
 	// Initializes OVR for oculus support
 	void initOVR();
-	void initOVR2();
 	// De-initializes OVR
 	void destructOVR();
 

@@ -5,10 +5,6 @@
 
 ovrHmd * sweet::hmd = nullptr;
 bool sweet::ovrInitialized = false;
-ovrGLTexture * sweet::mirrorTexture = nullptr;
-GLuint sweet::mirrorFBO = 0;
-ovrSwapTextureSet * sweet::swapTextureSet = nullptr;
-ovrEyeRenderDesc sweet::EyeRenderDesc[2];
 ovrGraphicsLuid sweet::luid;
 ovrHmdDesc sweet::hmdDesc;
 
@@ -43,59 +39,8 @@ void sweet::initOVR(){
 	ovrInitialized = hmdDesc.Type != 0;
 }
 
-void sweet::initOVR2(){
-	if(ovrInitialized){
-		// Setup Window and Graphics
-		// Note: the mirror window can be any size, for this sample we use 1/2 the HMD resolution
-		ovrSizei windowSize = { hmdDesc.Resolution.w / 2, hmdDesc.Resolution.h / 2 };
-		std::cout << windowSize.w << " x " << windowSize.h << std::endl;
-
-		 /*checkForOvrError(ovr_CreateSwapTextureSetGL(*hmd, GL_RGBA, windowSize.w, windowSize.h, &swapTextureSet));
-		Platform.InitDevice(windowSize.w, windowSize.h, reinterpret_cast<LUID*>(&luid));*/
-
-		// Make eye render buffers
-		/*for (int eye = 0; eye < 2; ++eye)
-		{
-			ovrSizei idealTextureSize = ovr_GetFovTextureSize(*hmd, ovrEyeType(eye), hmdDesc.DefaultEyeFov[eye], 1);
-			//eyeRenderTexture[eye] = new TextureBuffer(*hmd, true, true, idealTextureSize, 1, NULL, 1);
-			//eyeDepthBuffer[eye]   = new DepthBuffer(eyeRenderTexture[eye]->GetSize(), 0);
-		}*/
-
-		// Create mirror texture and an FBO used to copy mirror texture to back buffer
-		checkForOvrError(ovr_CreateMirrorTextureGL(*hmd, GL_SRGB8_ALPHA8, windowSize.w, windowSize.h, reinterpret_cast<ovrTexture**>(&mirrorTexture)));
-
-		// Configure the mirror read buffer
-		glGenFramebuffers(1, &mirrorFBO);
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, mirrorFBO);
-		glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mirrorTexture->OGL.TexId, 0);
-		glFramebufferRenderbuffer(GL_READ_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
- 
-		EyeRenderDesc[0] = ovr_GetRenderDesc(*hmd, ovrEye_Left, hmdDesc.DefaultEyeFov[0]);
-		EyeRenderDesc[1] = ovr_GetRenderDesc(*hmd, ovrEye_Right, hmdDesc.DefaultEyeFov[1]);
-
-		// Turn off vsync to let the compositor do its magic
-		//glSwapIntervalEXT(0);
-		glfwSwapInterval(0);
-	}
-}
-
 void sweet::destructOVR(){
 	if(ovrInitialized){
-		if (mirrorFBO){
-			glDeleteFramebuffers(1, &mirrorFBO);
-		}
-		if (mirrorTexture){
-			ovr_DestroyMirrorTexture(*hmd, reinterpret_cast<ovrTexture*>(mirrorTexture));
-		}
-		for (int eye = 0; eye < 2; ++eye)
-		{
-			//delete eyeRenderTexture[eye];
-			//delete eyeDepthBuffer[eye];
-		}
-		//Platform.ReleaseDevice();
-
-
 		ovr_Destroy(*hmd);
 		ovr_Shutdown();
 		hmd = nullptr;

@@ -28,12 +28,12 @@ public:
 	/**
 	* @return The view matrix of the camera
 	*/
-	glm::mat4 getViewMatrix() const override;
+	virtual glm::mat4 getViewMatrix() const override;
 
 	/**
 	* @return The projection matrix of the camera 
 	*/
-	glm::mat4 getProjectionMatrix() const override;
+	virtual glm::mat4 getProjectionMatrix() const override;
 
 	// I think this is typically called the center of interest?
 	glm::vec3 lookAtSpot;

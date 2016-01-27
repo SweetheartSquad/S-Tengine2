@@ -232,9 +232,6 @@ void sweet::initialize(std::string _title){
 	int screenHeight, screenWidth;
 	glfwGetWindowSize(sweet::currentContext, &screenWidth, &screenHeight);
 	glfwSetCursorPos(sweet::currentContext, screenWidth/2, screenHeight/2);
-	
-
-	initOVR2();
 
 	Log::info("*** Sweet Initialization ***");
 }

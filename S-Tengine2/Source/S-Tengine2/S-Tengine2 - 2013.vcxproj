@@ -156,6 +156,8 @@
     <ClCompile Include="src/shader/ShaderComponentDepthOffset.cpp" />
     <ClCompile Include="src/shader/ShaderComponentMask.cpp" />
     <ClCompile Include="src/shader/ShaderComponentWorldSpaceUVs.cpp" />
+    <ClCompile Include="src/StereoCamera.cpp" />
+    <ClCompile Include="src/Sweet_OVR.cpp" />
     <ClInclude Include="include/EventManager.h" />
     <ClInclude Include="include/NineSlicing.h" />
     <ClInclude Include="include/Plane.h" />
@@ -165,6 +167,7 @@
     <ClInclude Include="include/shader/ShaderComponentMask.h" />
     <ClCompile Include="src/AutoMusic.cpp" />
     <ClInclude Include="include/shader/ShaderComponentWorldSpaceUVs.h" />
+    <ClInclude Include="include/StereoCamera.h" />
     <ClInclude Include="include/sweet/Input.h" />
   </ItemGroup>
   <ItemGroup>
@@ -320,6 +323,8 @@
     <ClCompile Include="src/shader/ShaderComponentDepthOffset.cpp" />
     <ClCompile Include="src/shader/ShaderComponentMask.cpp" />
     <ClCompile Include="src/shader/ShaderComponentWorldSpaceUVs.cpp" />
+    <ClCompile Include="src/StereoCamera.cpp" />
+    <ClCompile Include="src/Sweet_OVR.cpp" />
     <ClInclude Include="include/EventManager.h" />
     <ClInclude Include="include/NineSlicing.h" />
     <ClInclude Include="include/Plane.h" />
@@ -329,6 +334,7 @@
     <ClInclude Include="include/shader/ShaderComponentMask.h" />
     <ClCompile Include="src/AutoMusic.cpp" />
     <ClInclude Include="include/shader/ShaderComponentWorldSpaceUVs.h" />
+    <ClInclude Include="include/StereoCamera.h" />
     <ClInclude Include="include/sweet/Input.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
