@@ -23,7 +23,7 @@ void Configuration::load(const std::string & _filename){
 	Json::Value json;
 	bool parsingSuccessful;
 	
-	if(!FileUtils::fileExists(_filename)){
+	if(!sweet::FileUtils::fileExists(_filename)){
 		// set defaults
 		fullscreen = fullscreenDefault;
 		resolution = resolutionDefault;
@@ -32,9 +32,9 @@ void Configuration::load(const std::string & _filename){
 		// save defaults to file
 		save(_filename);
 	}
-	FileUtils::createFileIfNotExists(_filename);
+	sweet::FileUtils::createFileIfNotExists(_filename);
 	
-	std::string jsonLoaded = FileUtils::readFile(_filename);
+	std::string jsonLoaded = sweet::FileUtils::readFile(_filename);
 	parsingSuccessful = reader.parse(jsonLoaded, json);
 
 	if(!parsingSuccessful){

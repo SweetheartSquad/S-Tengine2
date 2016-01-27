@@ -4,8 +4,6 @@
 #include <Keyboard.h>
 
 StereoCamera::StereoCamera() :
-	leftEye(new PerspectiveCamera()),
-	rightEye(new PerspectiveCamera()),
 	ipd(0),
 	ipdScale(1),
 	ipdScale_ui(1.8),
@@ -16,18 +14,21 @@ StereoCamera::StereoCamera() :
 	mirrorFBO(0),
 	swapTextureSet(nullptr)
 {
-	leftEye->interpolation = 0;
-	rightEye->interpolation = 0;
-	
-	childTransform->addChild(leftEye);
-	childTransform->addChild(rightEye);
+	for(unsigned long int eye = 0; eye < 2; ++eye){
+		PerspectiveCamera * cam = new PerspectiveCamera();
+		childTransform->addChild(cam);
+		eyes[eye].camera = cam;
+	}
 
 
 	if(sweet::ovrInitialized){
 		// Setup Window and Graphics
 		// Note: the mirror window can be any size, for this sample we use 1/2 the HMD resolution
-		ovrSizei windowSize = { sweet::hmdDesc.Resolution.w / 2, sweet::hmdDesc.Resolution.h / 2 };
+		ovrSizei windowSize = { sweet::hmdDesc.Resolution.w, sweet::hmdDesc.Resolution.h};
 		std::cout << windowSize.w << " x " << windowSize.h << std::endl;
+
+		//fieldOfView = glm::degrees(sweet::hmdDesc.CameraFrustumVFovInRadians);
+		//std::cout << "TEST: " << fieldOfView << std::endl;
 
 			/*checkForOvrError(ovr_CreateSwapTextureSetGL(*hmd, GL_RGBA, windowSize.w, windowSize.h, &swapTextureSet));
 		Platform.InitDevice(windowSize.w, windowSize.h, reinterpret_cast<LUID*>(&luid));*/
@@ -49,9 +50,10 @@ StereoCamera::StereoCamera() :
 		glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mirrorTexture->OGL.TexId, 0);
 		glFramebufferRenderbuffer(GL_READ_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
- 
-		EyeRenderDesc[0] = ovr_GetRenderDesc(*sweet::hmd, ovrEye_Left, sweet::hmdDesc.DefaultEyeFov[0]);
-		EyeRenderDesc[1] = ovr_GetRenderDesc(*sweet::hmd, ovrEye_Right, sweet::hmdDesc.DefaultEyeFov[1]);
+	
+		for(unsigned long int eye = 0; eye < 2; ++eye){
+			EyeRenderDesc[eye] = ovr_GetRenderDesc(*sweet::hmd, (ovrEyeType)eye, sweet::hmdDesc.MaxEyeFov[eye]);
+		}
 
 		// Turn off vsync to let the compositor do its magic
 		//glSwapIntervalEXT(0);
@@ -64,9 +66,9 @@ StereoCamera::StereoCamera() :
 	if(sweet::ovrInitialized){
 		// setup for oculus rendering
 		for(unsigned long int eye = 0; eye < 2; ++eye){
-			//eyes[eye].size.w = sweet::hmdDesc.Resolution.w/2;
-			//eyes[eye].size.h = sweet::hmdDesc.Resolution.h/2;
-			eyes[eye].size = ovr_GetFovTextureSize(*sweet::hmd, ovrEyeType(eye), sweet::hmdDesc.DefaultEyeFov[eye], 1);
+			eyes[eye].size.w = sweet::hmdDesc.Resolution.w/2;
+			eyes[eye].size.h = sweet::hmdDesc.Resolution.h/2;
+			//eyes[eye].size = ovr_GetFovTextureSize(*sweet::hmd, ovrEyeType(eye), sweet::hmdDesc.MaxEyeFov[eye], 1);
 			checkForOvrError(ovr_CreateSwapTextureSetGL(*sweet::hmd, GL_SRGB8_ALPHA8, eyes[eye].size.w, eyes[eye].size.h, &eyes[eye].tbuffer.TextureSet));
 
 			for (int i = 0; i < eyes[eye].tbuffer.TextureSet->TextureCount; ++i){
@@ -98,23 +100,6 @@ StereoCamera::StereoCamera() :
 			}*/
 
 			glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, eyes[eye].size.w, eyes[eye].size.h, 0, GL_DEPTH_COMPONENT, type, NULL);
-		}
-	}else{
-		// setup for non-oculus stereo rendering
-		for(unsigned long int eye = 0; eye < 2; ++eye){
-			eyes[eye].size = ovr_GetFovTextureSize(*sweet::hmd, ovrEyeType(eye), sweet::hmdDesc.DefaultEyeFov[eye], 1);
-
-			glGenTextures(1, &eyes[eye].tbuffer.texId);
-			glBindTexture(GL_TEXTURE_2D, eyes[eye].tbuffer.texId);
-
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, eyes[eye].size.w, eyes[eye].size.h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-
-			glGenFramebuffers(1, &eyes[eye].fboId);
 		}
 	}
 }
@@ -158,7 +143,10 @@ glm::mat4 StereoCamera::getViewMatrix() const{
 }
 
 glm::mat4 StereoCamera::getProjectionMatrix() const{
-	return activeCam->getViewMatrix();
+	if(activeCam == this){
+		return PerspectiveCamera::getProjectionMatrix();
+	}
+	return activeCam->getProjectionMatrix();
 }
 
 void StereoCamera::update(Step * _step){
@@ -190,11 +178,24 @@ void StereoCamera::update(Step * _step){
 
 	PerspectiveCamera::update(_step);
 	
-	leftEye->firstParent()->translate(glm::vec3(EyeRenderDesc[0].HmdToEyeViewOffset.x, EyeRenderDesc[0].HmdToEyeViewOffset.y, EyeRenderDesc[0].HmdToEyeViewOffset.z) * -ipdScale, false);
-	rightEye->firstParent()->translate(glm::vec3(EyeRenderDesc[1].HmdToEyeViewOffset.x, EyeRenderDesc[1].HmdToEyeViewOffset.y, EyeRenderDesc[1].HmdToEyeViewOffset.z) * -ipdScale, false);
+	for(unsigned long int eye = 0; eye < 2; ++eye){
+		PerspectiveCamera * cam = eyes[eye].camera;
+		cam->yaw = yaw;
+		cam->pitch = pitch;
+		cam->fieldOfView = fieldOfView;
+		cam->lastOrientation = lastOrientation;
+		cam->forwardVectorLocal = forwardVectorLocal;
+		cam->rightVectorLocal = rightVectorLocal;
+		cam->upVectorLocal = upVectorLocal;
+		cam->nearClip = nearClip;
+		cam->farClip = farClip;
+		cam->interpolation = interpolation;
+		cam->lookAtOffset = lookAtOffset;
 
-	leftEye->update(_step);
-	rightEye->update(_step);
+		cam->childTransform->setOrientation(childTransform->getOrientationQuat());
+		cam->firstParent()->translate(glm::vec3(EyeRenderDesc[eye].HmdToEyeViewOffset.x, EyeRenderDesc[eye].HmdToEyeViewOffset.y, EyeRenderDesc[eye].HmdToEyeViewOffset.z) * -ipdScale, false);
+		cam->update(_step);
+	}
 }
 
 void StereoCamera::render(std::function<void()> _renderFunction){
@@ -203,7 +204,7 @@ void StereoCamera::render(std::function<void()> _renderFunction){
 		for(unsigned long int eye = 0; eye < 2; ++eye){
 			// Increment to use next texture, just before writing
 			eyes[eye].tbuffer.TextureSet->CurrentIndex = (eyes[eye].tbuffer.TextureSet->CurrentIndex + 1) % eyes[eye].tbuffer.TextureSet->TextureCount;
-
+			
 			// Switch to eye render target
 			// set render surface
 			auto tex = reinterpret_cast<ovrGLTexture*>(&eyes[eye].tbuffer.TextureSet->Textures[eyes[eye].tbuffer.TextureSet->CurrentIndex]);
@@ -213,19 +214,16 @@ void StereoCamera::render(std::function<void()> _renderFunction){
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, eyes[eye].dbuffer.texId, 0);
 	
 			glViewport(0, 0, eyes[eye].size.w, eyes[eye].size.h);
+       // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glEnable(GL_FRAMEBUFFER_SRGB);
 	
 			// render scene
 			
-			if(eye == 0){
-				activeCam = leftEye;
-			}else{
-				activeCam = rightEye;
-			}
-
+			activeCam = eyes[eye].camera;
 			_renderFunction();
+			activeCam = this;
 
-
+			glDisable(GL_FRAMEBUFFER_SRGB);
 			/*
 			_matrixStack->pushMatrix();
 		
@@ -258,7 +256,7 @@ void StereoCamera::render(std::function<void()> _renderFunction){
 
 		ovrLayerEyeFov ld;
 		ld.Header.Type  = ovrLayerType_EyeFov;
-		ld.Header.Flags = ovrLayerFlag_TextureOriginAtBottomLeft;   // Because OpenGL.
+		ld.Header.Flags = ovrLayerFlag_TextureOriginAtBottomLeft | ovrLayerFlag_HighQuality;   // Because OpenGL.
 	
 		ovrRecti recti;
 		for (int eye = 0; eye < 2; ++eye)
@@ -268,20 +266,14 @@ void StereoCamera::render(std::function<void()> _renderFunction){
 			recti.Pos.y = 0;
 			ld.ColorTexture[eye] = eyes[eye].tbuffer.TextureSet;
 			ld.Viewport[eye]     = recti;
-			ld.Fov[eye]          = sweet::hmdDesc.DefaultEyeFov[eye];
+			ld.Fov[eye]          = sweet::hmdDesc.MaxEyeFov[eye];
 			ld.RenderPose[eye]   = EyeRenderPose[eye];
 			ld.SensorSampleTime  = sensorSampleTime;
 		}
-		//ld.Viewport[1].Pos.x = windowSize.w;
-		//ld.Viewport[1].Pos.y = windowSize.h;
 
 		ovrLayerHeader* layers = &ld.Header;
 		checkForOvrError(ovr_SubmitFrame(*sweet::hmd, 0, &viewScaleDesc, &layers, 1));
-		//glfwSwapBuffers(sweet::currentContext);
 
-
-
-		
 		glfwSwapBuffers(sweet::currentContext);
 	}else{
 		// standard scene rendering

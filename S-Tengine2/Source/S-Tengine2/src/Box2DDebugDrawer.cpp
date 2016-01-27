@@ -25,9 +25,10 @@ Box2DDebugDrawer::Box2DDebugDrawer(Box2DWorld * _world) :
 	matrixStack(nullptr),
 	renderOptions(nullptr)
 {
-	dynamic_cast<ComponentShaderBase *>(shader)->addComponent(new ShaderComponentMVP(shader));
-	dynamic_cast<ComponentShaderBase *>(shader)->addComponent(new ShaderComponentTexture(shader));
-	dynamic_cast<ComponentShaderBase *>(shader)->compileShader();
+	ComponentShaderBase * sb = dynamic_cast<ComponentShaderBase *>(shader);
+	sb->addComponent(new ShaderComponentMVP(sb));
+	sb->addComponent(new ShaderComponentTexture(sb));
+	sb->compileShader();
 	
 	spriteSegment->mesh->vertices.clear();
 	spriteSegment->mesh->indices.clear();

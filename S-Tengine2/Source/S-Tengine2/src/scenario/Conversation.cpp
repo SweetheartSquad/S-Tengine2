@@ -9,8 +9,8 @@
 
 
 Option::Option(Json::Value _json, Scenario * const _scenario) :
-	text(_json.get("text", "").asString()),
-	link(_json.get("link", "END").asString())
+	text(_json.get("label", "").asString()),
+	link(_json.get("convoId", "END").asString())
 {
 }
 
@@ -46,7 +46,7 @@ Conversation::~Conversation(){
 }
 
 Dialogue * Conversation::getCurrentDialogue(){
-	return dialogueObjects.at(currentDialogue);
+	return currentDialogue < dialogueObjects.size() ? dialogueObjects.at(currentDialogue) : nullptr;
 }
 
 bool Conversation::sayNextDialogue(){
@@ -86,7 +86,7 @@ bool Conversation::advance(){
 	do{
 		++currentDialogue;
 		// if any conditions are untrue for a given dialogue object, skip over it
-		valid = dialogueObjects.at(currentDialogue)->evaluateConditions();
+		valid = currentDialogue < dialogueObjects.size() ? dialogueObjects.at(currentDialogue)->evaluateConditions() : false;
 	}while(currentDialogue+2 < dialogueObjects.size() && !valid);
 	
 	if(valid){

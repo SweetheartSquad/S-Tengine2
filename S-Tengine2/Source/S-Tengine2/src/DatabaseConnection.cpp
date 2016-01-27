@@ -9,7 +9,7 @@
 DatabaseConnection::DatabaseConnection(const char * _databaseFilename) :
 	db(nullptr)
 {
-	if(!FileUtils::createFileIfNotExists(_databaseFilename)){
+	if(!sweet::FileUtils::createFileIfNotExists(_databaseFilename)){
 		Log::error("Database file could not be created.");
 		return;
 	}

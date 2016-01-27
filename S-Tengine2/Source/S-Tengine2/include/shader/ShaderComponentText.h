@@ -12,7 +12,7 @@ public:
 
 	glm::vec3 color;
 	
-	ShaderComponentText(Shader * _shader);
+	ShaderComponentText(ComponentShaderBase * _shader);
 	~ShaderComponentText() override;
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;

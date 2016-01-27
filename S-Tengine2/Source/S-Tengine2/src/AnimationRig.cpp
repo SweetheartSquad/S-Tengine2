@@ -40,9 +40,12 @@ void AnimationJoint::setAngleLimits(float _lower, float _upper){
 	angleLimitUpper = _upper;
 }
 
-void AnimationJoint::addJoint(AnimationJoint * _j){
-	childTransform->addChild(_j);
-	outJoints.push_back(_j);
+void AnimationJoint::addJoint(AnimationJoint * _j, bool _behind){
+	if(_behind){
+		childTransform->addChildAtIndex(_j, 0);
+	}else{
+		childTransform->addChild(_j);
+	}outJoints.push_back(_j);
 	
 	lineVis->mesh->pushVert(Vertex(0,0,0));
 	lineVis->mesh->pushVert(Vertex(_j->pos.x,_j->pos.y,0));

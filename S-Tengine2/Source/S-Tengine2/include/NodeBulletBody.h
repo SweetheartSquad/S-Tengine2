@@ -1,14 +1,17 @@
 #pragma once
 
-#include <Entity.h>
+#include <NodePhysicsBody.h>
 #include <BulletWorld.h>
 
 class TriMesh;
 
-class NodeBulletBody : public virtual Entity{
+// NOTE: physics bodies override Entity's update and don't call it
+// This is because the MeshEntity varieties will also call it,
+// causing problems in the most common use case. If you want the
+// physics body to update its children, you have to extend this class
+// and call it yourself in an overriden update call
+class NodeBulletBody : public virtual NodePhysicsBody{
 protected:
-	// whether the Bullet physics body has changed in some way and the childTransform needs to update to match
-	bool needsToUpdate;
 	btVector3 internalPos;
 
 public:
@@ -28,12 +31,6 @@ public:
 	void setColliderAsMesh(TriMesh * _colliderMesh, bool _convex);
 	// a mass of zero makes it static
 	virtual void createRigidBody(float _mass, unsigned short int _collisionGroup = -1, unsigned short int _collisionMask = -1);
-	
-	// just calls the version with three floats instead of a vec3
-	void setTranslationPhysical(glm::vec3 _position, bool _relative = false);
-	// directly adjusts the rigid body's transform
-	// a flag is set for the childTransform to be updated later
-	virtual void setTranslationPhysical(float _x, float _y, float _z, bool _relative = false);
 
 	// directly adjusts the rigid body's transform and then updates the childTransform to match
 	// a flag is set for the childTransform to be updated later
@@ -41,4 +38,8 @@ public:
 	virtual void rotatePhysical(float _angle, float _x, float _y, float _z, bool _relative = true);
 
 	virtual void update(Step * _step) override;
+	
+	
+	virtual void translatePhysical(glm::vec3 _translation, bool _relative = true) override;
+	virtual void realign() override;
 };

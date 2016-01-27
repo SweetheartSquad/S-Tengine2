@@ -2,13 +2,13 @@
 
 #include <shader/ShaderComponentDepthOffset.h>
 #include <shader/ShaderVariables.h>
-#include <shader/Shader.h>
+#include <shader\ComponentShaderBase.h>
 #include <Sweet.h>
 
 float sweet::depthOffset = 0.0000000;
 unsigned long long sweet::currentCycle = 0;
 
-ShaderComponentDepthOffset::ShaderComponentDepthOffset(Shader * _shader) :
+ShaderComponentDepthOffset::ShaderComponentDepthOffset(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader)
 {
 }

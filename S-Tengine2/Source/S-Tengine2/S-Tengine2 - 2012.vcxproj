@@ -11,7 +11,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cpp/MouseCameraController.cpp" />
     <ClCompile Include="src/Accelerometer.cpp" />
     <ClCompile Include="src/AccelerometerParser.cpp" />
     <ClCompile Include="src/Arduino.cpp" />
@@ -78,7 +77,13 @@
     <ClCompile Include="src/scenario/Conversation.cpp" />
     <ClCompile Include="src/scenario/Dialogue.cpp" />
     <ClCompile Include="src/scenario/Scenario.cpp" />
+    <ClCompile Include="src\Colour.cpp" />
+    <ClCompile Include="src\DateUtils.cpp" />
+    <ClCompile Include="src\MouseCameraController.cpp" />
     <ClCompile Include="src\NineSlicing.cpp" />
+    <ClCompile Include="src\NodePhysicsBody.cpp" />
+    <ClCompile Include="src\ProgrammaticTexture.cpp" />
+    <ClCompile Include="src\RampTexture.cpp" />
     <ClCompile Include="src\Scene_Splash_SweetHeartSquad.cpp" />
     <ClCompile Include="src/shader/ComponentShaderBase.cpp" />
     <ClCompile Include="src/shader/ShaderComponentBlinn.cpp" />
@@ -155,17 +160,24 @@
     <ClCompile Include="src\Scene_Splash.cpp" />
     <ClCompile Include="src\shader\ShaderComponentDepthOffset.cpp" />
     <ClCompile Include="src\shader\ShaderComponentMask.cpp" />
+    <ClCompile Include="src\shader\ShaderComponentToon.cpp" />
     <ClCompile Include="src\shader\ShaderComponentWorldSpaceUVs.cpp" />
     <ClCompile Include="src\StereoCamera.cpp" />
     <ClCompile Include="src\Sweet_OVR.cpp" />
+    <ClInclude Include="include\Colour.h" />
+    <ClInclude Include="include\DateUtils.h" />
     <ClInclude Include="include\EventManager.h" />
     <ClInclude Include="include\NineSlicing.h" />
+    <ClInclude Include="include\NodePhysicsBody.h" />
     <ClInclude Include="include\Plane.h" />
+    <ClInclude Include="include\ProgrammaticTexture.h" />
+    <ClInclude Include="include\RampTexture.h" />
     <ClInclude Include="include\rng.h" />
     <ClInclude Include="include\Scene_Splash.h" />
     <ClInclude Include="include\shader\ShaderComponentDepthOffset.h" />
     <ClInclude Include="include\shader\ShaderComponentMask.h" />
     <ClCompile Include="src\AutoMusic.cpp" />
+    <ClInclude Include="include\shader\ShaderComponentToon.h" />
     <ClInclude Include="include\shader\ShaderComponentWorldSpaceUVs.h" />
     <ClInclude Include="include\StereoCamera.h" />
     <ClInclude Include="include\sweet\Input.h" />

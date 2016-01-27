@@ -9,7 +9,8 @@
 
 ComponentShaderBase::ComponentShaderBase(bool _autoRelease) :
 	Shader(_autoRelease),
-	geometryComponent(nullptr)
+	geometryComponent(nullptr),
+	lightingDirty(true)
 {
 }
 

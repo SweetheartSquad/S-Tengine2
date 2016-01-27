@@ -7,7 +7,7 @@
 #include <Texture.h>
 
 BitmapFont::BitmapFont(Texture * _fontTextue, int _asciiStart, int _rows, int _columns, bool _padFront, WrapMode _wrapMode) :
-	MeshEntity(new QuadMesh(GL_QUADS, GL_STATIC_DRAW)),
+	MeshEntity(new QuadMesh(true)),
 	asciiStart(_asciiStart),
 	rows(_rows),
 	kerning(0.f),

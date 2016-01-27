@@ -4,6 +4,13 @@
 #include <NumberUtils.h>
 #include <algorithm>
 
+
+
+
+
+
+
+
 float sweet::NumberUtils::pingPong(float _val, float _min, float _max){
 	float l = _max - _min; 
 	float L = 2 * l;

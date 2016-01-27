@@ -2,6 +2,7 @@
 
 #include "shader/ShaderComponentTexture.h"
 #include "shader/ShaderVariables.h"
+#include <shader\ComponentShaderBase.h>
 #include "MatrixStack.h"
 #include "RenderOptions.h"
 #include "Texture.h"
@@ -10,7 +11,7 @@
 #include "Sprite.h"
 #include "SpriteSheetAnimation.h"
 
-ShaderComponentTexture::ShaderComponentTexture(Shader * _shader, float _alphaDiscardThreshold) :
+ShaderComponentTexture::ShaderComponentTexture(ComponentShaderBase * _shader, float _alphaDiscardThreshold) :
 	ShaderComponent(_shader),
 	alphaDiscardThreshold(_alphaDiscardThreshold),
 	texNumLoc(-1),

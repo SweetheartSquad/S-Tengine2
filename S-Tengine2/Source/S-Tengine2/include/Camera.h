@@ -29,7 +29,7 @@ public:
 	/** Direction the camera's right side is pointing at (local * orientation) */
 	glm::vec3 rightVectorRotated;
 
-	/** The camera's field of view */
+	/** The camera's vertical field of view */
 	float fieldOfView;
 	/** The camera's pitch */
 	float pitch;

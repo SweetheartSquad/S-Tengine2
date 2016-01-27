@@ -12,7 +12,7 @@
 
 class VoxRenderOptions;
 
-ShaderComponentShadow::ShaderComponentShadow(Shader * _shader) :
+ShaderComponentShadow::ShaderComponentShadow(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader)
 {
 }

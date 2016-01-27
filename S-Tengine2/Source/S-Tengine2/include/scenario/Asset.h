@@ -14,8 +14,8 @@ private:
 	// used in order to dynamically instantiate different types of assets based on a string specifying the type
 	static std::map<std::string, std::function<Asset * (Json::Value, Scenario * const)>> creationRegistry;
 protected:
-	Scenario * scenario;
 public:
+	Scenario * scenario;
 	std::string id;
 	std::string type;
 
@@ -130,6 +130,19 @@ public:
 	static AssetConversation * create(Json::Value _json, Scenario * const _scenario);
 	~AssetConversation();
 	
+	virtual void load() override;
+	virtual void unload() override;
+};
+
+class AssetMesh : public Asset {
+private:
+	AssetMesh(Json::Value _json, Scenario * const _scenario);
+public:
+	std::vector<TriMesh *> meshes;
+	
+	static AssetMesh * create(Json::Value _json, Scenario * const _scenario);
+	~AssetMesh();
+
 	virtual void load() override;
 	virtual void unload() override;
 };

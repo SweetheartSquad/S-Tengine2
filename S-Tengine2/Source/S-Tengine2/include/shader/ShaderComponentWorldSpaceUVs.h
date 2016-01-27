@@ -14,7 +14,7 @@ public:
 	float xMultiplier;
 	float yMultiplier;
 
-	ShaderComponentWorldSpaceUVs(Shader * _shader);
+	ShaderComponentWorldSpaceUVs(ComponentShaderBase * _shader);
 	~ShaderComponentWorldSpaceUVs() override;
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;

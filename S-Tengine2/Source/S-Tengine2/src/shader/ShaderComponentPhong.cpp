@@ -6,7 +6,7 @@
 #include "RenderOptions.h"
 #include "shader/SharedComponentShaderMethods.h"
 
-ShaderComponentPhong::ShaderComponentPhong(Shader * _shader) :
+ShaderComponentPhong::ShaderComponentPhong(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader)
 {
 }

@@ -1,5 +1,6 @@
-#include <shader/ShaderComponentText.h>
+#pragma once
 
+#include <shader/ComponentShaderBase.h>
 #include "shader/ShaderComponentText.h"
 #include "shader/ShaderVariables.h"
 #include "MatrixStack.h"
@@ -10,7 +11,7 @@
 #include "Sprite.h"
 #include "SpriteSheetAnimation.h"
 
-ShaderComponentText::ShaderComponentText(Shader * _shader) :
+ShaderComponentText::ShaderComponentText(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader),
 	color(0, 0, 0),
 	texNumLoc(-1),

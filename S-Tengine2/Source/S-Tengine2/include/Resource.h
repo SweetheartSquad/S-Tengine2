@@ -20,7 +20,7 @@ public:
 	* @param _objSrc The path to the obj file
 	* @returns The loaded TriMesh
 	*/
-	static std::vector<TriMesh *> loadMeshFromObj(std::string _objSrc);
+	static std::vector<TriMesh *> loadMeshFromObj(std::string _objSrc, bool _autorelease);
 
 	/**
 	* Used to load a VoxelJoint from a sweet model JSON file

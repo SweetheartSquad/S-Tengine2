@@ -3,6 +3,9 @@
 #include <scenario/Asset.h>
 #include <FileUtils.h>
 #include <json/json.h>
+#include <Resource.h>
+#include <MeshFactory.h>
+#include <NineSlicing.h>
 
 Asset::Asset(Json::Value _json, Scenario * const _scenario) :
 	id(_json.get("id", "NO_ID").asString()),
@@ -23,7 +26,11 @@ AssetTexture::AssetTexture(Json::Value _json, Scenario * const _scenario) :
 	}else{
 		src = "assets/textures/" + src;
 	}
-	texture = new Texture(src, true, false, _json.get("generateMipmaps", true).asBool());
+	if(!_json.get("nineSliced", false).asBool()){
+		texture = new Texture(src, true, false, _json.get("generateMipmaps", true).asBool());
+	}else{
+		texture = new Texture_NineSliced(src, false, _json.get("generateMipmaps", true).asBool());
+	}
 	//texture->load();
 }
 AssetTexture * AssetTexture::create(Json::Value _json, Scenario * const _scenario){
@@ -60,7 +67,7 @@ AssetTextureSampler::AssetTextureSampler(Json::Value _json, Scenario * const _sc
 		src = "assets/textures/" + src;
 	}
 
-	const std::string defJsonRaw = FileUtils::readFile(src);
+	const std::string defJsonRaw = sweet::FileUtils::readFile(src);
 
 	Json::Reader reader;
 	Json::Value defJson;
@@ -195,6 +202,51 @@ void AssetConversation::load(){
 	Asset::load();
 }
 
+AssetMesh::AssetMesh(Json::Value _json, Scenario* const _scenario) :
+	Asset(_json, _scenario)
+{
+	std::string src = _json.get("src", "NO_MESH").asString();
+	if(src == "NO_MESH"){
+		Log::warn("Loaded mesh without a src: Cube substitution in effect.");
+		QuadMesh * m = MeshFactory::getCubeMesh();
+		meshes.push_back(new TriMesh(m, false));
+		delete m;
+	}else{
+		src = "assets/meshes/" + src;
+		auto loadedMeshes = Resource::loadMeshFromObj(src, false);
+		meshes.insert(meshes.end(), loadedMeshes.begin(), loadedMeshes.end());
+	}
+}
+
+AssetMesh* AssetMesh::create(Json::Value _json, Scenario* const _scenario) {
+	return new AssetMesh(_json, _scenario);
+}
+
+AssetMesh::~AssetMesh() {
+	while(meshes.size() > 0){
+		delete meshes.back();
+		meshes.pop_back();
+	}
+}
+
+void AssetMesh::load() {
+	if(!loaded) {
+		for(auto mesh : meshes) {
+			mesh->load();
+		}
+	}
+	Asset::load();
+}
+
+void AssetMesh::unload() {
+	if(loaded) {
+		for(auto mesh : meshes) {
+			mesh->unload();
+		}
+	}
+	Asset::unload();
+}
+
 void AssetConversation::unload(){
 	if(loaded){
 	}
@@ -236,6 +288,7 @@ static bool registerTypes(){
 		Asset::registerType("textureSampler", &AssetTextureSampler::create) &&
 		Asset::registerType("audio", &AssetAudio::create) &&
 		Asset::registerType("font", &AssetFont::create) &&
-		Asset::registerType("conversation", &AssetConversation::create);
+		Asset::registerType("conversation", &AssetConversation::create) &&
+		Asset::registerType("mesh", &AssetMesh::create);
 }
 static bool typesRegistered = registerTypes();

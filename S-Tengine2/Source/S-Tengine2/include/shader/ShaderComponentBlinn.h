@@ -4,7 +4,7 @@
 
 class ShaderComponentBlinn : public ShaderComponent{	
 public:
-	ShaderComponentBlinn(Shader * _shader);
+	ShaderComponentBlinn(ComponentShaderBase * _shader);
 	~ShaderComponentBlinn() override;
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;

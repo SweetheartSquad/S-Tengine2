@@ -10,7 +10,7 @@ namespace sweet{
 class ShaderComponentDepthOffset : public ShaderComponent{
 public:
 
-	ShaderComponentDepthOffset(Shader * _shader);
+	ShaderComponentDepthOffset(ComponentShaderBase * _shader);
 	~ShaderComponentDepthOffset();
 	
 	std::string getVertexVariablesString() override;

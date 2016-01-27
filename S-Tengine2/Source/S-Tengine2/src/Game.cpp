@@ -17,7 +17,7 @@
 #include <scenario/Scenario.h>
 
 // for screenshots
-#include <ctime>
+#include <DateUtils.h>
 #include <stb/stb_image_write.h>
 
 #include <AntTweakBar.h>
@@ -97,7 +97,7 @@ void Game::performGameLoop(){
 		update(&sweet::step);
 		draw();
 
-		glfwSwapBuffers(sweet::currentContext);
+		//glfwSwapBuffers(sweet::currentContext);
 		manageInput();
 		isRunning = !glfwWindowShouldClose(sweet::currentContext);
 
@@ -235,6 +235,19 @@ void Game::draw(void){
 	VoxRenderOptions ro(nullptr, nullptr, nullptr);
 	ro.kc_active = kc_active;
 	if(currentScene != nullptr){
+		ro.lights = &currentScene->lights;
+		for(auto s : Shader::allShaders){
+			ComponentShaderBase * sb = dynamic_cast<ComponentShaderBase *>(s);
+			if(sb != nullptr){
+				sb->lightingDirty = true;
+			}
+			if(s->bindShader()){
+				ro.shader = s;
+				s->clean(&ms, &ro, nullptr);
+				checkForGlError(false);
+			}
+		}
+		ro.shader = nullptr;
 		currentScene->render(&ms, &ro);
 	}
 	if(sweet::drawAntTweakBar && sweet::antTweakBarInititialized) {
@@ -345,20 +358,7 @@ void Game::toggleFullScreen(){
 void Game::takeScreenshot(){
 	std::stringstream filepath;
 		
-	// create a string with the format "../screenshots/YYYY-MM-DD_TTTTTTTTTT.tga"
-	time_t t = time(0);
-	struct tm now;
-	localtime_s(&now, &t);
-	filepath
-		<< "data/screenshots/"
-		<< (now.tm_year + 1900)
-		<< '-'
-		<< (now.tm_mon + 1)
-		<< '-'
-		<< now.tm_mday
-		<< '_'
-		<< t
-		<< ".tga";
+	filepath << "data/screenshots/" << sweet::DateUtils::getDatetime() << ".tga";
 	GLubyte * data = (GLubyte *)malloc(sizeof(GLubyte) * viewPortWidth * viewPortHeight * 4);
 	glReadPixels(0, 0, viewPortWidth, viewPortHeight, GL_RGBA, GL_UNSIGNED_BYTE, data);
 

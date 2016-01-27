@@ -5,7 +5,7 @@
 class ShaderComponentSsao : public ShaderComponent {
 public:
 
-	explicit ShaderComponentSsao(Shader * _shader);
+	explicit ShaderComponentSsao(ComponentShaderBase * _shader);
 
 	void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 

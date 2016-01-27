@@ -8,7 +8,7 @@
 */
 class ShaderComponentNormals : public ShaderComponent {
 public:	
-	explicit ShaderComponentNormals(Shader * _shader);
+	explicit ShaderComponentNormals(ComponentShaderBase * _shader);
 
 	void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 

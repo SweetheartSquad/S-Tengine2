@@ -2,12 +2,14 @@
 
 #include "shader/ShaderComponentDiffuse.h"
 #include "shader/ShaderVariables.h"
+#include "shader/SharedComponentShaderMethods.h"
+#include <shader/ComponentShaderBase.h>
 #include "MatrixStack.h"
 #include "RenderOptions.h"
-#include "shader/SharedComponentShaderMethods.h"
 
-ShaderComponentDiffuse::ShaderComponentDiffuse(Shader * _shader) :
-	ShaderComponent(_shader)
+ShaderComponentDiffuse::ShaderComponentDiffuse(ComponentShaderBase * _shader, bool _doubleSided) :
+	ShaderComponent(_shader),
+	doubleSided(_doubleSided)
 {
 }
 
@@ -46,7 +48,7 @@ std::string ShaderComponentDiffuse::getFragmentBodyString(){
 
 			"vec3 ambient = vec3(" + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].ambientCoefficient) * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 			"//diffuse" + ENDL +
-			"float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))" + SEMI_ENDL +
+			(doubleSided ? "float diffuseCoefficient = abs(dot(normal, surfaceToLight))" : "float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))") + SEMI_ENDL +
 			"vec3 diffuse = diffuseCoefficient * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 
 			

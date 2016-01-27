@@ -205,7 +205,7 @@ public:
 	// then _uiElement is removed from its first parent and the orphaned transform is deleted
 	virtual signed long int removeChild(NodeUI * _uiElement);
 
-	virtual void setTranslationPhysical(float _x, float _y, float _z, bool _relative = false) override;
+	virtual void translatePhysical(glm::vec3 _translation, bool _relative = true) override;
 
 	virtual void doRecursivelyOnUIChildren(std::function<void(NodeUI * _childOrThis)> _todo, bool _includeSelf = true);
 	

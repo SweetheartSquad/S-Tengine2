@@ -2,12 +2,12 @@
 
 #include <shader\ShaderComponentMask.h>
 #include <shader\ShaderVariables.h>
+#include <shader\ComponentShaderBase.h>
 #include <GLUtils.h>
 #include <RenderOptions.h>
-#include <shader\Shader.h>
 #include <Texture.h>
 
-ShaderComponentMask::ShaderComponentMask(Shader * _shader, Texture * _maskTex) :
+ShaderComponentMask::ShaderComponentMask(ComponentShaderBase * _shader, Texture * _maskTex) :
 	ShaderComponent(_shader),
 	maskTex(_maskTex),
 	maskTexLoc(-1)

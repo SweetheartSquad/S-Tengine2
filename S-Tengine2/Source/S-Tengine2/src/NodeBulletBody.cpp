@@ -9,7 +9,6 @@ NodeBulletBody::NodeBulletBody(BulletWorld * _world) :
 	world(_world),
 	body(nullptr),
 	shape(nullptr),
-	needsToUpdate(true),
 	internalPos(0,0,0),
 	maxVelocity(-1,-1,-1)
 {
@@ -24,27 +23,30 @@ NodeBulletBody::~NodeBulletBody(){
 }
 
 void NodeBulletBody::update(Step * _step){
-	if(body != nullptr){
-		if(body->isActive() || needsToUpdate){
-			const btTransform & t = body->getWorldTransform();
-			const btQuaternion & angle = t.getRotation();
-			internalPos = t.getOrigin();
-			childTransform->translate(internalPos.x(), internalPos.y(), internalPos.z(), false);
-
-			btVector3 lv = body->getLinearVelocity();
-			if(maxVelocity.x() != -1 && abs(lv.x()) > abs(maxVelocity.x())){
-				lv.setX(maxVelocity.x() * (lv.x() < 0 ? -1 : 1));
-			}if(maxVelocity.y() != -1 && abs(lv.y()) > maxVelocity.y()){
-				lv.setY(maxVelocity.y() * (lv.y() < 0 ? -1 : 1));
-			}if(maxVelocity.z() != -1 && abs(lv.z()) > maxVelocity.z()){
-				lv.setZ(maxVelocity.z() * (lv.z() < 0 ? -1 : 1));
-			}
-			body->setLinearVelocity(lv);
-
-			childTransform->setOrientation(glm::quat(angle.w(), angle.x(), angle.y(), angle.z()));
-			needsToUpdate = false;
-		}
+	if(body != nullptr && (body->isActive() || directAdjustment)){
+		realign();
 	}
+	NodePhysicsBody::update(_step);
+}
+
+void NodeBulletBody::realign(){
+	const btTransform & t = body->getWorldTransform();
+	const btQuaternion & angle = t.getRotation();
+	internalPos = t.getOrigin();
+	childTransform->translate(internalPos.x(), internalPos.y(), internalPos.z(), false);
+
+	btVector3 lv = body->getLinearVelocity();
+	if(maxVelocity.x() != -1 && abs(lv.x()) > abs(maxVelocity.x())){
+		lv.setX(maxVelocity.x() * (lv.x() < 0 ? -1 : 1));
+	}if(maxVelocity.y() != -1 && abs(lv.y()) > maxVelocity.y()){
+		lv.setY(maxVelocity.y() * (lv.y() < 0 ? -1 : 1));
+	}if(maxVelocity.z() != -1 && abs(lv.z()) > maxVelocity.z()){
+		lv.setZ(maxVelocity.z() * (lv.z() < 0 ? -1 : 1));
+	}
+	body->setLinearVelocity(lv);
+
+	childTransform->setOrientation(glm::quat(angle.w(), angle.x(), angle.y(), angle.z()));
+	NodePhysicsBody::realign();
 }
 
 void NodeBulletBody::setColliderAsStaticPlane(float _normalX, float _normalY, float _normalZ, float _distanceFromOrigin){
@@ -93,18 +95,15 @@ void NodeBulletBody::setColliderAsMesh(TriMesh * _colliderMesh, bool _convex){
 	}
 }
 
-void NodeBulletBody::setTranslationPhysical(glm::vec3 _position, bool _relative){
-	setTranslationPhysical(_position.x, _position.y, _position.z, _relative);
-}
-void NodeBulletBody::setTranslationPhysical(float _x, float _y, float _z, bool _relative){
+void NodeBulletBody::translatePhysical(glm::vec3 _translation, bool _relative){
 	btVector3 & t = body->getWorldTransform().getOrigin();
 	if(_relative){
-		t += btVector3(_x, _y, _z);
+		t += btVector3(_translation.x, _translation.y, _translation.z);
 	}else{
-		t = btVector3(_x, _y, _z);
+		t = btVector3(_translation.x, _translation.y, _translation.z);
 	}
 	// getOrigin returned a reference to the translation vector, so we only had to modify it
-	needsToUpdate = true;
+	NodePhysicsBody::translatePhysical(_translation, _relative);
 }
 
 void NodeBulletBody::rotatePhysical(float _angle, float _x, float _y, float _z, bool _relative){
@@ -119,7 +118,7 @@ void NodeBulletBody::rotatePhysical(float _angle, float _x, float _y, float _z, 
 	}
 	// getRotation didn't return a reference to the quaternion, so we have to set rotation explicitly after modifying it
 	body->getWorldTransform().setRotation(q);
-	needsToUpdate = true;
+	directAdjustment = true;
 }
 
 void NodeBulletBody::createRigidBody(float _mass, unsigned short int _collisionGroup, unsigned short int _collisionMask){

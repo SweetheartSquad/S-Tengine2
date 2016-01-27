@@ -103,7 +103,7 @@ void Log::info(std::string _message){
 
 void Log::logToFile(std::string _message) {
 	std::string logFileName = "data/log.txt";
-	FileUtils::createFileIfNotExists(logFileName);
+	sweet::FileUtils::createFileIfNotExists(logFileName);
 	std::ofstream log(logFileName, std::ios_base::app);
 	log << _message;
 	log.close();

@@ -10,6 +10,7 @@
 #include <sstream>
 #include <string>
 
+namespace sweet{
 class FileUtils{
 public:
 	// reads the contents of a file located at _filename and returns them as a string
@@ -26,4 +27,5 @@ public:
 	// returns whether or not the file exists at the end of the operation
 	// Note: this is a lazy, thread-unsafe check
 	static bool createFileIfNotExists(const std::string & _src);
+};
 };

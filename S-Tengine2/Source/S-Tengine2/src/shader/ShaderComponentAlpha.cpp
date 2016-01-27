@@ -1,12 +1,12 @@
 #pragma once
 
-#include <shader\ShaderComponentAlpha.h>
-#include <shader\ShaderVariables.h>
+#include <shader/ShaderComponentAlpha.h>
+#include <shader/ShaderVariables.h>
+#include <shader/ComponentShaderBase.h>
 #include <GLUtils.h>
 #include <RenderOptions.h>
-#include <shader\Shader.h>
 
-ShaderComponentAlpha::ShaderComponentAlpha(Shader * _shader, float _alpha):
+ShaderComponentAlpha::ShaderComponentAlpha(ComponentShaderBase * _shader, float _alpha):
 	ShaderComponent(_shader),
 	alpha(_alpha),
 	alphaLoc(-1)

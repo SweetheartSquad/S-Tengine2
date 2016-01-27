@@ -2,6 +2,7 @@
 
 #include "shader/ShaderComponentWorldSpaceUVs.h"
 #include "shader/ShaderVariables.h"
+#include "shader/ComponentShaderBase.h"
 #include "MatrixStack.h"
 #include "RenderOptions.h"
 #include "Texture.h"
@@ -10,7 +11,7 @@
 #include "Sprite.h"
 #include "SpriteSheetAnimation.h"
 
-ShaderComponentWorldSpaceUVs::ShaderComponentWorldSpaceUVs(Shader * _shader) :
+ShaderComponentWorldSpaceUVs::ShaderComponentWorldSpaceUVs(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader),
 	xMultiplier(1),
 	yMultiplier(1),

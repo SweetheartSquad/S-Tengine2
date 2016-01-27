@@ -3,6 +3,7 @@
 #include <scenario/Scenario.h>
 #include <scenario/Conversation.h>
 #include <scenario/Dialogue.h>
+#include <NineSlicing.h>
 
 #include <Log.h>
 #include <FileUtils.h>
@@ -21,6 +22,8 @@ AssetTexture * Scenario::defaultTexture = nullptr;
 AssetTextureSampler * Scenario::defaultTextureSampler = nullptr;
 AssetAudio * Scenario::defaultAudio = nullptr;
 AssetFont * Scenario::defaultFont = nullptr;
+AssetMesh * Scenario::defaultMesh = nullptr;
+
 std::vector<Asset *> Scenario::defaultAssets;
 
 void Scenario::destruct(){
@@ -83,7 +86,18 @@ Scenario::Scenario(std::string _jsonSrc) :
 		defaultAssets.push_back(defaultFont);
 	}
 
-	std::string jsonLoaded = FileUtils::readFile(_jsonSrc);
+	if(defaultMesh == nullptr) {
+		parsingSuccessful = reader.parse(
+			"{"
+				"\"id\":\"DEFAULT\","
+				"\"type\": \"mesh\","
+				"\"src\": \"../engine basics/S-Tengine2_logo.obj\""
+			"}", defJson);
+		defaultMesh = AssetMesh::create(defJson, this);
+		defaultAssets.push_back(defaultMesh);
+	}
+
+	std::string jsonLoaded = sweet::FileUtils::readFile(_jsonSrc);
 	parsingSuccessful = reader.parse( jsonLoaded, root );
 	if(!parsingSuccessful){
 		Log::error("JSON parse failed: " + reader.getFormattedErrorMessages()/* + "\n" + jsonLoaded*/);
@@ -147,6 +161,15 @@ AssetTexture * Scenario::getTexture(std::string _id){
 	return res;
 }
 
+Texture_NineSliced * Scenario::getNineSlicedTexture(std::string _id){
+	AssetTexture * res = dynamic_cast<AssetTexture *>(getAsset("texture", _id));
+	if(res == nullptr){
+		Log::warn("Texture \"" + _id + "\" not found.");
+		res = defaultTexture;
+	}
+	return dynamic_cast<Texture_NineSliced *>(res->texture);
+}
+
 AssetTextureSampler * Scenario::getTextureSampler(std::string _id){
 	AssetTextureSampler * res = dynamic_cast<AssetTextureSampler *>(getAsset("textureSampler", _id));
 	if(res == nullptr){
@@ -178,6 +201,15 @@ AssetConversation * Scenario::getConversation(std::string _id){
 	AssetConversation * res = dynamic_cast<AssetConversation *>(getAsset("conversation", _id));
 	if(res == nullptr){
 		Log::error("Conversation \"" + _id + "\" not found.");
+	}
+	return res;
+}
+
+AssetMesh* Scenario::getMesh(std::string _id) {
+	AssetMesh * res = dynamic_cast<AssetMesh *>(getAsset("mesh", _id));
+	if(res == nullptr){
+		Log::error("Mesh \"" + _id + "\" not found.");
+		res = defaultMesh;
 	}
 	return res;
 }

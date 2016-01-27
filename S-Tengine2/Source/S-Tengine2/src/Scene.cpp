@@ -20,26 +20,27 @@
 #include <shader/ShaderComponentDepth.h>
 
 #include <sweet/Input.h>
+#include <MousePerspectiveCamera.h>
 
 Scene::Scene(Game * _game):
-	depthBuffer(new StandardFrameBuffer(true)),
+	/*depthBuffer(new StandardFrameBuffer(true)),
 	normalBuffer(new StandardFrameBuffer(true)),
 	shadowBuffer(new StandardFrameBuffer(true)),
 	depthShader(new ComponentShaderBase(true)),
 	shadowShader(new BlurShader(true)),
 	normalsShader(new ComponentShaderBase(true)),
-	shadowSurface(new RenderSurface(shadowShader)),
+	shadowSurface(new RenderSurface(shadowShader)),*/
 	game(_game),
 	mouse(&Mouse::getInstance()),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
-	activeCamera(new PerspectiveCamera())
+	activeCamera(new MousePerspectiveCamera())
 {
 
 	cameras.push_back(activeCamera);
 	childTransform->addChild(activeCamera);
 
-	normalsShader->addComponent(new ShaderComponentNormals(normalsShader));
+	/*normalsShader->addComponent(new ShaderComponentNormals(normalsShader));
 	normalsShader->compileShader();
 
 	depthShader->addComponent(new ShaderComponentDepth(depthShader));
@@ -51,7 +52,7 @@ Scene::Scene(Game * _game):
 	++depthShader->referenceCount;
 	++shadowShader->referenceCount;
 	++normalsShader->referenceCount;
-	++shadowSurface->referenceCount;
+	++shadowSurface->referenceCount;*/
 }
 
 Scene::~Scene(void){
@@ -67,13 +68,13 @@ Scene::~Scene(void){
 	}
 	
 
-	depthBuffer->decrementAndDelete();
+	/*depthBuffer->decrementAndDelete();
 	normalBuffer->decrementAndDelete();
 	shadowBuffer->decrementAndDelete();
 	depthShader->decrementAndDelete();
 	shadowShader->decrementAndDelete();
 	normalsShader->decrementAndDelete();
-	shadowSurface->decrementAndDelete();
+	shadowSurface->decrementAndDelete();*/
 }
 
 void Scene::update(Step * _step){
@@ -85,24 +86,24 @@ void Scene::update(Step * _step){
 
 void Scene::load(){
 	if(!loaded){
-		shadowSurface->load();
+		/*shadowSurface->load();
 		depthShader->load();
 		shadowBuffer->load();
 		depthBuffer->load();
 		normalsShader->load();
-		normalBuffer->load();
+		normalBuffer->load();*/
 	}
 	Entity::load();
 }
 
 void Scene::unload(){
 	if(loaded){
-		depthBuffer->unload();
+		/*depthBuffer->unload();
 		shadowBuffer->unload();
 		depthShader->unload();
 		shadowSurface->unload();
 		normalsShader->unload();
-		normalBuffer->unload();
+		normalBuffer->unload();*/
 	}
 	Entity::unload();
 }
@@ -155,7 +156,7 @@ void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 	}
 }
 
-void Scene::renderDepth(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
+/*void Scene::renderDepth(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
 	// Store a reference to the current override shader so we can restore it 
 	Shader * backupOverride = _renderOptions->overrideShader;
 	
@@ -187,9 +188,9 @@ void Scene::renderDepth(sweet::MatrixStack* _matrixStack, RenderOptions* _render
 
 	// Binf the main OpenGL buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+}*/
 
-void Scene::renderDepthBufferToSurface(RenderSurface* _renderSurface) {
+/*void Scene::renderDepthBufferToSurface(RenderSurface* _renderSurface) {
 	// resize and bind the depth buffer
 	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	depthBuffer->bindFrameBuffer();
@@ -204,9 +205,9 @@ void Scene::renderDepthBufferToSurface(RenderSurface* _renderSurface) {
 
 	// Re-bind the main OpenGL buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+}*/
 
-void Scene::renderNormals(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
+/*void Scene::renderNormals(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
 	// Store a reference to the current override shader so we can restore it 
 	Shader * backupOverride = _renderOptions->overrideShader;
 	
@@ -238,9 +239,9 @@ void Scene::renderNormals(sweet::MatrixStack* _matrixStack, RenderOptions* _rend
 
 	// Binf the main OpenGL buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+}*/
 
-void Scene::renderNormalBufferToSurface(RenderSurface* _renderSurface) {
+/*void Scene::renderNormalBufferToSurface(RenderSurface* _renderSurface) {
 	// resize and bind the normal buffer
 	normalBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	normalBuffer->bindFrameBuffer();
@@ -255,10 +256,10 @@ void Scene::renderNormalBufferToSurface(RenderSurface* _renderSurface) {
 
 	// Re-bind the main OpenGL buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+}*/
 
 
-void Scene::renderShadows(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+/*void Scene::renderShadows(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	Shader * backupOverride = _renderOptions->overrideShader;
 	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	depthBuffer->bindFrameBuffer();
@@ -271,7 +272,7 @@ void Scene::renderShadows(sweet::MatrixStack * _matrixStack, RenderOptions * _re
 	static_cast<VoxRenderOptions *>(_renderOptions)->shadowMapTextureId = shadowBuffer->getTextureId();
 	_renderOptions->overrideShader = backupOverride;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+}*/
 
 Camera * Scene::cycleCamera(){
 	if(activeCamera == cameras.back()){

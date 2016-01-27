@@ -246,3 +246,16 @@ void NodeUI_NineSliced::setBackgroundColour(float _r, float _g, float _b, float 
 	b->setBackgroundColour(_r, _g, _b, _a);
 	br->setBackgroundColour(_r, _g, _b, _a);
 }
+
+void NodeUI_NineSliced::setScaleMode(GLenum _scalemode){
+	background->mesh->setScaleMode(_scalemode);
+	tl->background->mesh->setScaleMode(_scalemode);
+	t->background->mesh->setScaleMode(_scalemode);
+	tr->background->mesh->setScaleMode(_scalemode);
+	l->background->mesh->setScaleMode(_scalemode);
+	c->background->mesh->setScaleMode(_scalemode);
+	r->background->mesh->setScaleMode(_scalemode);
+	bl->background->mesh->setScaleMode(_scalemode);
+	b->background->mesh->setScaleMode(_scalemode);
+	br->background->mesh->setScaleMode(_scalemode);
+}

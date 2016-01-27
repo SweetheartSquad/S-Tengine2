@@ -6,7 +6,7 @@
 #include "RenderOptions.h"
 #include "shader/SharedComponentShaderMethods.h"
 
-ShaderComponentBlinn::ShaderComponentBlinn(Shader * _shader) :
+ShaderComponentBlinn::ShaderComponentBlinn(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader)
 {
 }

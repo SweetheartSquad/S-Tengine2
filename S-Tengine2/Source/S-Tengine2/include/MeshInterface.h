@@ -147,6 +147,11 @@ public:
 	// multiplies the mesh's vertices by the transformation matrix of the provided _transform
 	void applyTransformation(Transform * _transform);
 
+	// appends all of _mesh's vertices and indices (indices are offset by current vertex count) to this mesh
+	// NOTE: does not delete _mesh
+	// ALSO NOTE: transferring verts from a TriMesh to a QuadMesh or vice versa probably won't do what you want
+	void insertVertices(const MeshInterface * const _mesh);
+
 	friend std::ostream& operator<<(std::ostream& os, const MeshInterface& obj);
 };
 
@@ -156,14 +161,14 @@ class QuadMesh;
 class TriMesh : public MeshInterface{
 public:
 	// creates a triangulated version of _mesh
-	TriMesh(const QuadMesh * const _mesh, bool _autoRelease);
+	explicit TriMesh(const QuadMesh * const _mesh, bool _autoRelease);
 	void pushTri(GLuint _v0, GLuint _v1, GLuint _v2);
-	explicit TriMesh(GLenum _polygonalDrawMode = GL_TRIANGLES, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode), NodeResource(true){};
+	explicit TriMesh(bool _autorelease, GLenum _polygonalDrawMode = GL_TRIANGLES, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode), NodeResource(_autorelease){};
 };
 
 /** MeshInterface preset for quad meshes */
 class QuadMesh : public MeshInterface{
 public:
 	void pushQuad(GLuint _v0, GLuint _v1, GLuint _v2, GLuint _v3);
-	explicit QuadMesh(GLenum _polygonalDrawMode = GL_QUADS, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode), NodeResource(true){};
+	explicit QuadMesh(bool _autorelease, GLenum _polygonalDrawMode = GL_QUADS, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode), NodeResource(_autorelease){};
 };

@@ -9,6 +9,7 @@ class GeometryComponent;
 
 class ComponentShaderBase : public Shader{
 public:	
+	bool lightingDirty;
 
 	ComponentShaderBase(bool _autoRelease);
 	explicit ComponentShaderBase(std::vector<ShaderComponent *> _components, bool _autoRelease);

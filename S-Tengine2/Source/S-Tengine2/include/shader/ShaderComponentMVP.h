@@ -7,7 +7,7 @@ public:
 
 	GLint modelUniformLocation, viewUniformLocation, projectionUniformLocation, mvpUniformLocation;
 
-	ShaderComponentMVP(Shader * _shader);
+	ShaderComponentMVP(ComponentShaderBase * _shader);
 	~ShaderComponentMVP();
 	
 	std::string getVertexVariablesString() override;

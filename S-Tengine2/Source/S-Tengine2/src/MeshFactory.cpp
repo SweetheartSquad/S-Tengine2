@@ -4,8 +4,8 @@
 #include "Vertex.h"
 #include "MeshInterface.h"
 
-MeshInterface* MeshFactory::getCubeMesh(float _halfSize, GLenum _polygonalDrawMode, GLenum _drawMode){	
-	QuadMesh * m = new QuadMesh(_polygonalDrawMode, _drawMode);
+QuadMesh* MeshFactory::getCubeMesh(float _halfSize, bool _autorelease){	
+	QuadMesh * m = new QuadMesh(_autorelease);
 	//Top
 	m->pushVert(Vertex(-_halfSize, _halfSize, _halfSize));
 	m->pushVert(Vertex(-_halfSize, _halfSize, -_halfSize));
@@ -92,8 +92,8 @@ MeshInterface* MeshFactory::getCubeMesh(float _halfSize, GLenum _polygonalDrawMo
 	return m;
 }
 
-MeshInterface* MeshFactory::getPlaneMesh(float _halfWidth, float _halfHeight, GLenum _polygonalDrawMode, GLenum _drawMode) {
-	QuadMesh * m = new QuadMesh(_polygonalDrawMode, _drawMode);
+QuadMesh* MeshFactory::getPlaneMesh(float _halfWidth, float _halfHeight, bool _autorelease) {
+	QuadMesh * m = new QuadMesh(_autorelease);
 	m->pushVert(Vertex(-_halfWidth, _halfHeight, 0.f));
 	m->pushVert(Vertex(_halfWidth, _halfHeight, 0.f));
 	m->pushVert(Vertex(_halfWidth, -_halfHeight, 0.f));
@@ -109,8 +109,8 @@ MeshInterface* MeshFactory::getPlaneMesh(float _halfWidth, float _halfHeight, GL
 	return m;
 }
 
-MeshInterface* MeshFactory::getPlaneMesh(float _halfSize, GLenum _polygonalDrawMode, GLenum _drawMode){
-	QuadMesh * m = new QuadMesh(_polygonalDrawMode, _drawMode);
+QuadMesh* MeshFactory::getPlaneMesh(float _halfSize, bool _autorelease){
+	QuadMesh * m = new QuadMesh(_autorelease);
 	m->pushVert(Vertex(-_halfSize, _halfSize, 0.f));
 	m->pushVert(Vertex(_halfSize, _halfSize, 0.f));
 	m->pushVert(Vertex(_halfSize, -_halfSize, 0.f));

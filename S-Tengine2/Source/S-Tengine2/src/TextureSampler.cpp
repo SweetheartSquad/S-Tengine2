@@ -28,7 +28,7 @@ TextureSampler::TextureSampler(std::string _definitionDir, std::string _definiti
 	releaseTexture(_releaseTexture)
 {
 	if(!_definitionName.empty()){
-		std::string jsonString = FileUtils::readFile(_definitionDir + _definitionName);
+		std::string jsonString = sweet::FileUtils::readFile(_definitionDir + _definitionName);
 		Json::Value root;
 		Json::Reader reader;
 		bool parsedSuccess = reader.parse(jsonString, root);

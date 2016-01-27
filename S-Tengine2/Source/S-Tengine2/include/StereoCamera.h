@@ -9,14 +9,12 @@ class Scene;
 
 class StereoCamera : public PerspectiveCamera {
 private:
-	PerspectiveCamera * leftEye;
-	PerspectiveCamera * rightEye;
-
 	// inter-pupillary distance, i.e. the distance between the two cameras
 	float ipd;
 
 	
 	struct OculusEye{
+		PerspectiveCamera * camera;
 		// width and height of the texture and depth buffers
 		ovrSizei			size;
 		GLuint              fboId;

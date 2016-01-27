@@ -3,6 +3,8 @@
 #include "shader/Shader.h"
 #include "shader/ShaderVariables.h"
 
+std::vector<Shader *> Shader::allShaders;
+
 void Shader::init(std::string _vertexShader, std::string _fragmentShader){
 	vert = _vertexShader;
 	frag = _fragmentShader;
@@ -25,37 +27,52 @@ void Shader::init(std::string _vertexShader, std::string _fragmentShader, std::s
 Shader::Shader(bool _autoRelease) :
 	NodeResource(_autoRelease),
 	hasGeometryShader(false),
-	numLightsUniformLocation(-1)
+	numLightsUniformLocation(-1),
+	programId(-1)
 {
+	allShaders.push_back(this);
 }
 
 Shader::Shader(std::string _shaderSource, bool _hasGeometryShader, bool _autoRelease) :
 	NodeResource(_autoRelease),
 	hasGeometryShader(_hasGeometryShader),
-	numLightsUniformLocation(-1)
+	numLightsUniformLocation(-1),
+	programId(-1)
 {
 	if (!hasGeometryShader){
 		loadFromFile(_shaderSource + ".vert", _shaderSource + ".frag");
 	}else{
 		loadFromFile(_shaderSource + ".vert", _shaderSource + ".frag", _shaderSource + ".geom");
 	}
+	allShaders.push_back(this);
 }
 
 Shader::Shader(std::string _vertexShaderSource, std::string _fragmentShaderSource, bool _autoRelease) :
 	NodeResource(_autoRelease),
-	hasGeometryShader(false)
+	hasGeometryShader(false),
+	programId(-1)
 {
 	loadFromFile(_vertexShaderSource, _fragmentShaderSource);
+	allShaders.push_back(this);
 }
 
 Shader::Shader(std::string _vertexShaderSource, std::string _fragmentShaderSource, std::string _geometryShaderSource, bool _autoRelease) :
 	NodeResource(_autoRelease),
-	hasGeometryShader(true)
+	hasGeometryShader(true),
+	programId(-1)
 {
 	loadFromFile(_vertexShaderSource, _fragmentShaderSource, _geometryShaderSource);
+	allShaders.push_back(this);
 }
 
 Shader::~Shader(void){
+	// TODO: try to optimize this so that it doesn't require a large search
+	for(unsigned long int i = 0; i < allShaders.size(); ++i){
+		if(this == allShaders.at(i)){
+			allShaders.erase(allShaders.begin() + i);
+			break;
+		}
+	}
 }
 
 void Shader::load(){
@@ -207,14 +224,14 @@ GLuint Shader::compileShader(GLenum _shaderType, char const* _source, int _lengt
 void Shader::loadFromFile(std::string _vertexShaderFile, std::string _fragmentShaderFile){
 	vertSource = _vertexShaderFile;
 	fragSource = _fragmentShaderFile;
-	init(FileUtils::readFile(_vertexShaderFile), FileUtils::readFile(_fragmentShaderFile));
+	init(sweet::FileUtils::readFile(_vertexShaderFile), sweet::FileUtils::readFile(_fragmentShaderFile));
 }
 
 void Shader::loadFromFile(std::string _vertexShaderFile, std::string _fragmentShaderFile, std::string _geometryShaderFile){
 	vertSource = _vertexShaderFile;
 	fragSource = _fragmentShaderFile;
 	geomSource = _geometryShaderFile;
-	init(FileUtils::readFile(_vertexShaderFile), FileUtils::readFile(_fragmentShaderFile), FileUtils::readFile(_geometryShaderFile));
+	init(sweet::FileUtils::readFile(_vertexShaderFile), sweet::FileUtils::readFile(_fragmentShaderFile), sweet::FileUtils::readFile(_geometryShaderFile));
 }
 
 
@@ -271,6 +288,12 @@ void Shader::makeDirty(){
 	dirty = true;
 }
 
-void Shader::bindShader(){
-	glUseProgram(getProgramId());
+bool Shader::bindShader(){
+	GLuint id = getProgramId();
+	if(id != -1){
+		glUseProgram(getProgramId());
+		checkForGlError(false);
+		return true;
+	}
+	return false;
 }
