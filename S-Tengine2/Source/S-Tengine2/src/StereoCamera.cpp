@@ -26,6 +26,11 @@ StereoCamera::StereoCamera() :
 
 
 	if(sweet::ovrInitialized){
+		// get the current fbo bindings
+		GLint readFboId = 0, drawFboId = 0;
+		glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &readFboId);
+		glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &drawFboId);
+
 		// Setup Window and Graphics
 		// Note: the mirror window can be any size, for this sample we use 1/2 the HMD resolution
 		ovrSizei windowSize = { sweet::hmdDesc.Resolution.w/2, sweet::hmdDesc.Resolution.h/2};
@@ -39,7 +44,10 @@ StereoCamera::StereoCamera() :
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, mirrorFBO);
 		glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mirrorTexture->OGL.TexId, 0);
 		glFramebufferRenderbuffer(GL_READ_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+		
+		// reassign the fbo bindings to what they were
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, readFboId);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFboId);
 	
 		for(unsigned long int eye = 0; eye < 2; ++eye){
 			EyeRenderDesc[eye] = ovr_GetRenderDesc(*sweet::hmd, (ovrEyeType)eye, sweet::hmdDesc.MaxEyeFov[eye]);
