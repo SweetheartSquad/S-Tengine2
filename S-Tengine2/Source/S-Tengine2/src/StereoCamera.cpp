@@ -261,12 +261,12 @@ void StereoCamera::renderActiveCamera(std::function<void()> _renderFunction){
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, eye.dbuffer.texId, 0);
 	
 	glViewport(0, 0, eye.size.w, eye.size.h);
-	glEnable(GL_FRAMEBUFFER_SRGB);
+	//glEnable(GL_FRAMEBUFFER_SRGB);
 	
 	// render scene
 	_renderFunction();
 
-	glDisable(GL_FRAMEBUFFER_SRGB);
+	//glDisable(GL_FRAMEBUFFER_SRGB);
 
 	// unset render surface
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
