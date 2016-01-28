@@ -9,7 +9,8 @@
 		<BOX2D_DIR>C:\dev\Box2D-2.3.1\Box2D</BOX2D_DIR>
 		<BULLET_DIR>C:\dev\Bullet-2.83-alpha</BULLET_DIR>
 		<FREETYPE_DIR>C:\dev\freetype-2.5.5</FREETYPE_DIR>
-	    <ANT_DIR>C:\dev\AntTweakBar</ANT_DIR>
+	  <ANT_DIR>C:\dev\AntTweakBar</ANT_DIR>
+    <OVR_DIR>C:\dev\LibOVR</OVR_DIR>
 	</PropertyGroup>
 	<ItemDefinitionGroup />
 	<ItemGroup />
