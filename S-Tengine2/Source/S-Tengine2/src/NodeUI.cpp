@@ -239,10 +239,7 @@ Texture * NodeUI::renderToTexture(){
 		renderedTexture = nullptr;
 	}
 
-	GLint currentFrameBuffer;
-	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &currentFrameBuffer);
-
-	frameBuffer->bindFrameBuffer();
+	FrameBufferInterface::pushFbo(frameBuffer);
 
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
 
@@ -264,7 +261,7 @@ Texture * NodeUI::renderToTexture(){
 		glEnable(GL_DEPTH_TEST);
 	}
 	
-	glBindFramebuffer(GL_FRAMEBUFFER, currentFrameBuffer);
+	FrameBufferInterface::popFbo();
 	
 	if(renderedTexture == nullptr) {
 		renderedTexture = new Texture(frameBuffer, true, 0, 4, true, false);	

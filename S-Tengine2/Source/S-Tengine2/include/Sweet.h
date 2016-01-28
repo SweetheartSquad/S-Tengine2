@@ -13,7 +13,44 @@
 #include <Configuration.h>
 #include "Step.h"
 
-struct GLFWwindow;
+
+// oculus support
+#if defined(_WIN32)
+ #define GLFW_EXPOSE_NATIVE_WIN32
+ #define GLFW_EXPOSE_NATIVE_WGL
+ #define OVR_OS_WIN32
+#elif defined(__APPLE__)
+ #define GLFW_EXPOSE_NATIVE_COCOA
+ #define GLFW_EXPOSE_NATIVE_NSGL
+ #define OVR_OS_MAC
+#elif defined(__linux__)
+ #define GLFW_EXPOSE_NATIVE_X11
+ #define GLFW_EXPOSE_NATIVE_GLX
+ #define OVR_OS_LINUX
+#endif
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <GLFW/glfw3native.h>
+#include <OVR_CAPI_GL.h>
+
+#include <Log.h>
+
+#ifdef _DEBUG
+// OVR error-checking macro (enabled because _DEBUG is defined)
+// If an error is found, it is printed to the console and the application will fail an assertion
+#define checkForOvrError(_ovrFunc) do{\
+	ovrResult result = (_ovrFunc);\
+	if(OVR_FAILURE(result)) {\
+		ovrErrorInfo errorInfo;\
+		ovr_GetLastErrorInfo(&errorInfo);\
+		Log::warn("OVR failed: " + std::string(errorInfo.ErrorString));\
+	}\
+}while(false);
+#else
+// OVR error-checking macro (disabled because _DEBUG is not defined)
+#define checkForOvrError(_ovrFunc) (_ovrFunc)
+#endif
 
 namespace sweet{
 	extern Configuration config;
@@ -87,6 +124,16 @@ namespace sweet{
 	* Sets the cursor mode so that ant tweak bar works properly
 	*/
 	void toggleAntTweakBar();
+	
+	// OVR head-mounted display
+	extern ovrHmd * hmd;
+	extern ovrHmdDesc hmdDesc;
+	extern ovrGraphicsLuid luid;
+	extern bool ovrInitialized;
+	// Initializes OVR for oculus support
+	void initOVR();
+	// De-initializes OVR
+	void destructOVR();
 
 	void initializeInputCallbacks(GLFWwindow * _context);
 	void setGlfwWindowHints();

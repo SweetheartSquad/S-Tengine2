@@ -145,30 +145,50 @@ void sweet::error_callback(int _error, const char * _description){
 }
 
 GLFWwindow * sweet::initWindow(){
-	// find the best match between the specified resolution and the monitor's available video modes
-	int numVideoModes = 0;
-	const GLFWvidmode * videoModes = glfwGetVideoModes(glfwGetPrimaryMonitor(), &numVideoModes);
-	int diff = INT_MAX;
-	int bestMatch = 0;
-	for(unsigned long int i = 0; i < numVideoModes; ++i){
-		int d = (config.resolution.x - videoModes[i].width) + (config.resolution.y - videoModes[i].height);
-		if(d < diff){
-			bestMatch = i;
-			diff = d;
-		}
+	glm::uvec2 target(config.resolution.x, config.resolution.y);
+	bool fullscreen = config.fullscreen;
+	GLFWmonitor * monitor = glfwGetPrimaryMonitor();
+	
+	// if we're rendering to an oculus, match the resolution target to the HMD output size
+	// also prevent fullscreen windows
+	if(sweet::ovrInitialized){
+		target.x = sweet::hmdDesc.Resolution.w/2;
+		target.y = sweet::hmdDesc.Resolution.h/2;
+		fullscreen = false;
 	}
 
-	GLFWwindow * window = glfwCreateWindow(config.fullscreen ? videoModes[bestMatch].width : config.resolution.x, config.fullscreen ? videoModes[bestMatch].height : config.resolution.y, title.c_str(), config.fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	// if it's a fullscreen window, we need to use one of the monitor's available video modes
+	// find the best match between the target resolution and the available video modes
+	if(fullscreen){
+		int numVideoModes = 0;
+		const GLFWvidmode * videoModes = glfwGetVideoModes(monitor, &numVideoModes);
+		int diff = INT_MAX;
+		int bestMatch = 0;
+		for(unsigned long int i = 0; i < numVideoModes; ++i){
+			int d = (target.x - videoModes[i].width) + (target.y - videoModes[i].height);
+			if(d < diff){
+				bestMatch = i;
+				diff = d;
+			}
+		}
+		target.x = videoModes[bestMatch].width;
+		target.y = videoModes[bestMatch].height;
+	}
+
+	GLFWwindow * window = glfwCreateWindow(target.x, target.y, title.c_str(), fullscreen ? monitor : nullptr, nullptr);
 
 	if (!window){
 		glfwTerminate();
 		throw "some sort of window error?";
 	}
 	
-	if(!config.fullscreen){
-		glfwSetWindowPos(window, 10, 50);
+	// if we're running in windowed mode, center the window in the current monitor
+	if(!fullscreen){
+		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+		glfwSetWindowPos(window, (mode->width - target.x)/2, (mode->height - target.y)/2);
 	}
 
+	// TODO: make this based on config too
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 #ifdef _DEBUG
@@ -207,6 +227,11 @@ void sweet::initialize(std::string _title){
 	title = _title;
 
 	sweet::setGlfwWindowHints();
+
+
+	initOVR();
+
+
 
 	// initialize glfw
 	glfwSetErrorCallback(error_callback);
@@ -247,6 +272,7 @@ void sweet::destruct(){
 
 	destructWindow(currentContext);
 	glfwTerminate();
+	destructOVR();
 
 	FT_Done_FreeType(freeTypeLibrary);
 

@@ -37,12 +37,10 @@ public:
 	void unload() override;
 
 	/**
-	* Renders a frame buffers texture buffer to this surface using the
-	* specified frame buffer ID. The default is 0 which is the main openGL frame buffer
+	* Renders a texture buffer to this surface (typically the texture will be an FBO)
 	* 
-	* @param _textureId The openGL ID of the texture to render
-	* @param _renderTo The ID of the framebuffer to render to
+	* @param _textureId The OpenGL ID of the texture to render
 	* @param _disableBlending Whether or not to disable glBlend
 	*/
-	void render(GLuint _textureId, GLint _renderTo = 0, bool _disableBlending = true);
+	void render(GLuint _textureId, bool _disableBlending = true);
 };

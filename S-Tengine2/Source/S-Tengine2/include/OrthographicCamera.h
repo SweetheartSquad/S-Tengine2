@@ -17,14 +17,6 @@ class OrthographicCamera : public Camera {
 public:
 
 	OrthographicCamera(float _left, float _right, float _bottom, float _top, float _nearClip, float _farClip);
-	~OrthographicCamera();
-
-	virtual void update(Step * _step) override;
-
-	/**
-	* @return The view matrix of the camera
-	*/
-	glm::mat4 getViewMatrix() const override;
 
 	/**
 	* @return The projection matrix of the camera 

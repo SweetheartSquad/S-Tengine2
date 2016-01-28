@@ -92,7 +92,8 @@ void RenderSurface::unload(){
 	NodeLoadable::unload();
 }
 
-void RenderSurface::render(GLuint _textureId, GLint _renderTo, bool _disableBlending){
+void RenderSurface::render(GLuint _textureId, bool _disableBlending){
+
 	checkForGlError(false);
 	load();
 	clean();
@@ -111,7 +112,6 @@ void RenderSurface::render(GLuint _textureId, GLint _renderTo, bool _disableBlen
 	}
 
 	glUseProgram(shader->getProgramId());
-	glBindFramebuffer(GL_FRAMEBUFFER, _renderTo);
 	glBindVertexArray(vaoId);
 	checkForGlError(false);
 

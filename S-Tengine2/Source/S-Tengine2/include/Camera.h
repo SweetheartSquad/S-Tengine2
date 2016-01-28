@@ -29,12 +29,14 @@ public:
 	/** Direction the camera's right side is pointing at (local * orientation) */
 	glm::vec3 rightVectorRotated;
 
-	/** The camera's field of view */
+	/** The camera's vertical field of view */
 	float fieldOfView;
 	/** The camera's pitch */
 	float pitch;
 	/** The camera's yaw */
 	float yaw;
+	// The camera's roll
+	float roll;
 
 	float nearClip;
 	float farClip;
@@ -42,7 +44,7 @@ public:
 	/**
 	* @return The view matrix of the camera. Pure virtual; to be implemented only in derived classes
 	*/
-	virtual glm::mat4 getViewMatrix() const = 0;
+	virtual glm::mat4 getViewMatrix() const;
 
 	/**
 	* @return The projection matrix of the camera. Pure virtual; to be implemented only in derived classes
@@ -54,4 +56,16 @@ public:
 
 	// returns an orientation quaternion based on pitch, yaw and roll
 	glm::quat calcOrientation() const;
+
+	// sets the childTransform's orientation to the given quaternion
+	virtual void setOrientation(glm::quat _orientation);
+
+	// I think this is typically called the center of interest?
+	glm::vec3 lookAtSpot;
+	glm::vec3 lookFromSpot;
+	glm::vec3 lookAtOffset;
+
+
+	// rotates the local forward, right, and up vectors by _orientation, storing the results in the rotated vectors
+	virtual void rotateVectors(glm::quat _orientation);
 };

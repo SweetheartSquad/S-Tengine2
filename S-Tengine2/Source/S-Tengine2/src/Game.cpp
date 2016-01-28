@@ -97,7 +97,7 @@ void Game::performGameLoop(){
 		update(&sweet::step);
 		draw();
 
-		glfwSwapBuffers(sweet::currentContext);
+		//glfwSwapBuffers(sweet::currentContext);
 		manageInput();
 		isRunning = !glfwWindowShouldClose(sweet::currentContext);
 
@@ -253,6 +253,7 @@ void Game::draw(void){
 	if(sweet::drawAntTweakBar && sweet::antTweakBarInititialized) {
 		TwDraw(); 
 	}
+	glfwSwapBuffers(sweet::currentContext);
 }
 
 void Game::manageInput(){

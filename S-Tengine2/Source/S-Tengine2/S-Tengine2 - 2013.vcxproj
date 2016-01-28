@@ -162,6 +162,8 @@
     <ClCompile Include="src/shader/ShaderComponentMask.cpp" />
     <ClCompile Include="src/shader/ShaderComponentToon.cpp" />
     <ClCompile Include="src/shader/ShaderComponentWorldSpaceUVs.cpp" />
+    <ClCompile Include="src/StereoCamera.cpp" />
+    <ClCompile Include="src/Sweet_OVR.cpp" />
     <ClInclude Include="include/Colour.h" />
     <ClInclude Include="include/DateUtils.h" />
     <ClInclude Include="include/EventManager.h" />
@@ -177,6 +179,7 @@
     <ClCompile Include="src/AutoMusic.cpp" />
     <ClInclude Include="include/shader/ShaderComponentToon.h" />
     <ClInclude Include="include/shader/ShaderComponentWorldSpaceUVs.h" />
+    <ClInclude Include="include/StereoCamera.h" />
     <ClInclude Include="include/sweet/Input.h" />
   </ItemGroup>
   <ItemGroup>
@@ -343,6 +346,8 @@
     <ClCompile Include="src/shader/ShaderComponentMask.cpp" />
     <ClCompile Include="src/shader/ShaderComponentToon.cpp" />
     <ClCompile Include="src/shader/ShaderComponentWorldSpaceUVs.cpp" />
+    <ClCompile Include="src/StereoCamera.cpp" />
+    <ClCompile Include="src/Sweet_OVR.cpp" />
     <ClInclude Include="include/Colour.h" />
     <ClInclude Include="include/DateUtils.h" />
     <ClInclude Include="include/EventManager.h" />
@@ -358,6 +363,7 @@
     <ClCompile Include="src/AutoMusic.cpp" />
     <ClInclude Include="include/shader/ShaderComponentToon.h" />
     <ClInclude Include="include/shader/ShaderComponentWorldSpaceUVs.h" />
+    <ClInclude Include="include/StereoCamera.h" />
     <ClInclude Include="include/sweet/Input.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

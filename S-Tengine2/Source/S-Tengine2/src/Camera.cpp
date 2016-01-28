@@ -15,8 +15,12 @@ Camera::Camera() :
 	fieldOfView(60.0f),
 	pitch(0.0f),
 	yaw(0.f),
+	roll(0.f),
 	nearClip(1.f),
-	farClip(100.f)
+	farClip(100.f),
+	lookFromSpot(0),
+	lookAtSpot(0),
+	lookAtOffset(0)
 {
 }
 
@@ -24,7 +28,18 @@ Camera::~Camera(){
 }
 
 void Camera::update(Step * _step){
+	// update the childTransform based on the pitch, roll, and yaw
+	setOrientation(calcOrientation());
+	// update the rotation and position vectors based on the childTransform
+	rotateVectors(childTransform->getOrientationQuat());
+	lookFromSpot = childTransform->getWorldPos();
+	lookAtSpot = lookFromSpot+forwardVectorRotated;
+
 	Entity::update(_step);
+}
+
+void Camera::setOrientation(glm::quat _orientation){
+	childTransform->setOrientation(_orientation);
 }
 
 glm::vec3 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen) const{
@@ -42,5 +57,20 @@ glm::quat Camera::calcOrientation() const{
 	glm::quat res(1.f, 0.f, 0.f, 0.f);
 	res = glm::rotate(res, yaw, upVectorLocal);
 	res = glm::rotate(res, pitch, rightVectorLocal);
+	res = glm::rotate(res, roll, forwardVectorLocal);
 	return res;
+}
+
+void Camera::rotateVectors(glm::quat _orientation){
+	forwardVectorRotated   = _orientation * forwardVectorLocal;
+	rightVectorRotated	   = _orientation * rightVectorLocal;
+	upVectorRotated		   = _orientation * upVectorLocal;
+}
+
+glm::mat4 Camera::getViewMatrix() const{
+	return glm::lookAt(
+		lookFromSpot,	// Camera is here
+		lookAtSpot + lookAtOffset,			// and looks here : at the same position, plus "direction"
+		upVectorRotated						// Head is up (set to 0,-1,0 to look upside-down)
+	);
 }
