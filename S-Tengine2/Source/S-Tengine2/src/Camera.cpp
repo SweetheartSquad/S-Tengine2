@@ -28,10 +28,18 @@ Camera::~Camera(){
 }
 
 void Camera::update(Step * _step){
-	Entity::update(_step);
+	// update the childTransform based on the pitch, roll, and yaw
+	setOrientation(calcOrientation());
+	// update the rotation and position vectors based on the childTransform
 	rotateVectors(childTransform->getOrientationQuat());
 	lookFromSpot = childTransform->getWorldPos();
 	lookAtSpot = lookFromSpot+forwardVectorRotated;
+
+	Entity::update(_step);
+}
+
+void Camera::setOrientation(glm::quat _orientation){
+	childTransform->setOrientation(_orientation);
 }
 
 glm::vec3 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen) const{

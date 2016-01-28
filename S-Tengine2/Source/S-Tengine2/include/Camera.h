@@ -56,6 +56,10 @@ public:
 
 	// returns an orientation quaternion based on pitch, yaw and roll
 	glm::quat calcOrientation() const;
+
+	// sets the childTransform's orientation to the given quaternion
+	virtual void setOrientation(glm::quat _orientation);
+
 	// I think this is typically called the center of interest?
 	glm::vec3 lookAtSpot;
 	glm::vec3 lookFromSpot;

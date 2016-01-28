@@ -12,13 +12,12 @@ PerspectiveCamera::PerspectiveCamera() :
 
 void PerspectiveCamera::update(Step * _step){
 	lastOrientation = childTransform->getOrientationQuat();
-
-	glm::quat newOrientation = calcOrientation();
-	newOrientation = glm::slerp(lastOrientation, newOrientation, interpolation * static_cast<float>(sweet::deltaTimeCorrection));
-
-	childTransform->setOrientation(newOrientation);
-	
 	Camera::update(_step);
+}
+
+void PerspectiveCamera::setOrientation(glm::quat _orientation){
+	_orientation = glm::slerp(lastOrientation, _orientation, interpolation * static_cast<float>(sweet::deltaTimeCorrection));
+	Camera::setOrientation(_orientation);
 }
 
 glm::mat4 PerspectiveCamera::getProjectionMatrix() const{

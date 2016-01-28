@@ -21,6 +21,8 @@ public:
 	/**Tracks the changes in mouse position and uses them to rotate the camera */
 	virtual void update(Step * _step) override;
 	
+	virtual void setOrientation(glm::quat _orientation) override;
+
 	/** The orientation quaternian from the last update loop*/
 	glm::quat lastOrientation;
 
