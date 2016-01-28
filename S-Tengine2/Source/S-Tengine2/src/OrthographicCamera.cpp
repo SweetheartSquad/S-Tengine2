@@ -15,6 +15,9 @@ OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom,
 
 	nearClip = _near;
 	farClip = _far;
+
+	// update immediately in order to set the orientations and stuff
+	update(nullptr);
 }
 
 glm::mat4 OrthographicCamera::getProjectionMatrix() const{
