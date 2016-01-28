@@ -41,6 +41,10 @@ bool sweet::NumberUtils::randomBool(){
 	return randomInt(0, 1) == 1;
 }
 
+glm::vec3 sweet::NumberUtils::randomVec3(glm::vec3 _min, glm::vec3 _max){
+	return glm::vec3(randomFloat(_min.x, _max.x), randomFloat(_min.y, _max.y), randomFloat(_min.z, _max.z));
+}
+
 
 
 long int sweet::NumberUtils::p[512];

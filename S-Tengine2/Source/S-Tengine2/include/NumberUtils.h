@@ -3,6 +3,8 @@
 #include <vector>
 #include <stack>
 
+#include <glm\glm.hpp>
+
 namespace sweet{
 
 	// Can be used to randomly retrieve items from a list, never retrieving the same one twice until the whole list has been used
@@ -80,6 +82,9 @@ namespace sweet{
 		static int randomInt();
 		// returns true or false, based on a randomly generated int
 		static bool randomBool();
+
+		// returns a random vec3 where each dimension is in the range _min <= _max
+		static glm::vec3 randomVec3(glm::vec3 _min, glm::vec3 _max);
 
 
 		// seeds the random number generator
