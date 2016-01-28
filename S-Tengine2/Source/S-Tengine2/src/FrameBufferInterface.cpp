@@ -20,6 +20,7 @@ FrameBufferInterface::FrameBufferInterface(std::vector<FrameBufferChannel> _fram
 }
 
 FrameBufferInterface::~FrameBufferInterface(){
+	unload();
 }
 
 void FrameBufferInterface::load(){
@@ -93,7 +94,10 @@ bool FrameBufferInterface::resize(unsigned long _width, unsigned long _height){
 }
 
 void FrameBufferInterface::bindFrameBuffer(){
-	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+			// reassign the fbo bindings to what they were
+			glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBufferId);
+			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBufferId);
+	//glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 }
 
 GLenum FrameBufferInterface::checkFrameBufferStatus(){
