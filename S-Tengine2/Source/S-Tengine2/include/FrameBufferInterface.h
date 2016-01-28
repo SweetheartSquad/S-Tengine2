@@ -2,6 +2,7 @@
 
 #include <gl/glew.h>
 #include <vector>
+#include <stack>
 
 #include "FrameBufferChannel.h"
 #include "node/NodeResource.h"
@@ -16,6 +17,23 @@
 ********************************************************/
 class FrameBufferInterface : public NodeResource{
 public:
+	// a stack containing the IDs of bound FBOs in the order in which they were bound
+	// calls to pushFbo will push to this stack, calls to popFbo will pop the stack and bind the previous FBO
+	static std::stack<GLuint> fboStack;
+	// binds _fboToBind and pushes it onto the FBO stack
+	// NOTE: Remember to keep calls to pushFbo symettric with popFbo
+	static void pushFbo(FrameBufferInterface * const _fboToBind);
+	// binds _fboIdToBind and pushes it onto the FBO stack
+	// NOTE: Remember to keep calls to pushFbo symettric with popFbo
+	static void pushFbo(GLuint _fboIdToBind);
+	// binds this FBO and pushes it onto the FBO stack
+	// NOTE: Remember to keep calls to pushFbo symettric with popFbo
+	void pushFbo();
+	// pops the FBO stack and binds the previously bound FBO
+	// if the stack is empty, binds the default FBO (0) instead
+	// NOTE: Remember to keep calls to pushFbo symettric with popFbo
+	static void popFbo();
+
 
 	//The openGL ID for the Frame Buffer
 	GLuint frameBufferId;
@@ -84,11 +102,6 @@ public:
 	* @param _height The height to resize the framebuffer to
  	*/
 	bool resize(unsigned long int _width, unsigned long int _height);
-	
-	/**
-	* Binds this frame buffer as the current in opengl
-	*/
-	void bindFrameBuffer();
 	
 	/**
 	* Prints a string representing the status of the framebuffer

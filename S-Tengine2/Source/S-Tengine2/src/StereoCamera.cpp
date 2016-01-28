@@ -3,6 +3,7 @@
 #include <StereoCamera.h>
 #include <Keyboard.h>
 #include <Extras/OVR_Math.h>
+#include <FrameBufferInterface.h>
 
 StereoCamera::StereoCamera() :
 	ipd(0),
@@ -26,11 +27,6 @@ StereoCamera::StereoCamera() :
 
 
 	if(sweet::ovrInitialized){
-		// get the current fbo bindings
-		GLint readFboId = 0, drawFboId = 0;
-		glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &readFboId);
-		glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &drawFboId);
-
 		// Setup Window and Graphics
 		// Note: the mirror window can be any size, for this sample we use 1/2 the HMD resolution
 		ovrSizei windowSize = { sweet::hmdDesc.Resolution.w/2, sweet::hmdDesc.Resolution.h/2};
@@ -39,15 +35,13 @@ StereoCamera::StereoCamera() :
 		// Create mirror texture and an FBO used to copy mirror texture to back buffer
 		checkForOvrError(ovr_CreateMirrorTextureGL(*sweet::hmd, GL_SRGB8_ALPHA8, windowSize.w, windowSize.h, reinterpret_cast<ovrTexture**>(&mirrorTexture)));
 
-		// Configure the mirror read buffer
+		// create the mirror FBO
 		glGenFramebuffers(1, &mirrorFBO);
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, mirrorFBO);
+		// Configure the mirror FBO
+		FrameBufferInterface::pushFbo(mirrorFBO);
 		glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mirrorTexture->OGL.TexId, 0);
 		glFramebufferRenderbuffer(GL_READ_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
-		
-		// reassign the fbo bindings to what they were
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, readFboId);
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFboId);
+		FrameBufferInterface::popFbo();
 	
 		for(unsigned long int eye = 0; eye < 2; ++eye){
 			EyeRenderDesc[eye] = ovr_GetRenderDesc(*sweet::hmd, (ovrEyeType)eye, sweet::hmdDesc.MaxEyeFov[eye]);
@@ -262,7 +256,7 @@ void StereoCamera::renderActiveCamera(std::function<void()> _renderFunction){
 	// set render surface
 	auto tex = reinterpret_cast<ovrGLTexture*>(&eye.tbuffer.TextureSet->Textures[eye.tbuffer.TextureSet->CurrentIndex]);
 
-	glBindFramebuffer(GL_FRAMEBUFFER, eye.fboId);
+	FrameBufferInterface::pushFbo(eye.fboId);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex->OGL.TexId, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, eye.dbuffer.texId, 0);
 	
@@ -275,9 +269,9 @@ void StereoCamera::renderActiveCamera(std::function<void()> _renderFunction){
 	glDisable(GL_FRAMEBUFFER_SRGB);
 
 	// unset render surface
-	glBindFramebuffer(GL_FRAMEBUFFER, eye.fboId);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, 0, 0);
+	FrameBufferInterface::popFbo();
 }
 
 void StereoCamera::renderFrame(){
@@ -310,22 +304,15 @@ void StereoCamera::renderFrame(){
 
 void StereoCamera::blitTo(GLint _targetFbo){
 	if(sweet::ovrInitialized){
-		// get the current fbo bindings
-		GLint readFboId = 0, drawFboId = 0;
-		glGetIntegerv(GL_READ_FRAMEBUFFER_BINDING, &readFboId);
-		glGetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING, &drawFboId);
-		
+		FrameBufferInterface::pushFbo(mirrorFBO);
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _targetFbo); // bind _targetFbo to the draw buffer to blit across FBOs
 		// Blit mirror texture to back buffer
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, mirrorFBO);
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _targetFbo);
 		GLint w = mirrorTexture->OGL.Header.TextureSize.w;
 		GLint h = mirrorTexture->OGL.Header.TextureSize.h;
 		glBlitFramebuffer(0, h, w, 0,
 							0, 0, w, h,
 							GL_COLOR_BUFFER_BIT, GL_NEAREST);
 		
-		// reassign the fbo bindings to what they were
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, readFboId);
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, drawFboId);
+		FrameBufferInterface::popFbo();
 	}
 }

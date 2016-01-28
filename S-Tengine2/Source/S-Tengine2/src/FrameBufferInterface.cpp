@@ -8,6 +8,34 @@
 
 #include <stb/stb_image_write.h>
 
+std::stack<GLuint> FrameBufferInterface::fboStack;
+
+void FrameBufferInterface::pushFbo(){
+	pushFbo(this);
+}
+
+void FrameBufferInterface::pushFbo(GLuint _fboIdToBind){
+	fboStack.push(_fboIdToBind);
+	
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, _fboIdToBind);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _fboIdToBind);
+}
+
+void FrameBufferInterface::pushFbo(FrameBufferInterface * const _fboToBind){
+	pushFbo(_fboToBind->frameBufferId);
+}
+
+void FrameBufferInterface::popFbo(){
+	// the top of the stack is the currently bound FBO, so pop it immediately
+	fboStack.pop();
+	// the new top is the previously bound FBO, so we need to rebind it
+	// if there is no top, we need to bind the default FBO instead
+	GLuint fboToBind = (fboStack.size() > 0) ? fboStack.top() : 0;
+	
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, fboToBind);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fboToBind);
+}
+
 FrameBufferInterface::FrameBufferInterface(std::vector<FrameBufferChannel> _frameBufferChannels, unsigned long int _width, unsigned long int _height, bool _autoRelease):
 	NodeResource(_autoRelease),
 	width(_width),
@@ -27,7 +55,8 @@ void FrameBufferInterface::load(){
 	unsigned long int colorAttachmentCount = 0;
 
 	glGenFramebuffers(1, &frameBufferId);
-	bindFrameBuffer();
+	// we need to bind the framebuffer in order to configure it
+	pushFbo();
 	for(unsigned long int i = 0; i < frameBufferChannels.size(); i++){
 		switch (frameBufferChannels.at(i).channelType){
 		case FrameBufferChannel::TEXTURE :
@@ -53,7 +82,8 @@ void FrameBufferInterface::load(){
 			break;
 		}
 	}
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	// rebind previous fbo
+	popFbo();
 	
 	NodeLoadable::load();
 }
@@ -91,13 +121,6 @@ bool FrameBufferInterface::resize(unsigned long _width, unsigned long _height){
 		return true;
 	}
 	return false;
-}
-
-void FrameBufferInterface::bindFrameBuffer(){
-			// reassign the fbo bindings to what they were
-			glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBufferId);
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBufferId);
-	//glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 }
 
 GLenum FrameBufferInterface::checkFrameBufferStatus(){
