@@ -22,7 +22,7 @@ UILayer::UILayer(float _left, float _right, float _bottom, float _top) :
 	NodeUI(new BulletWorld(), kENTITIES, true),
 	mouse(&Mouse::getInstance()),
 	mouseIndicator(nullptr),
-	cam(_left, _right, _bottom, _top, -1000.f, 1000.f),
+	cam(new OrthographicCamera(_left, _right, _bottom, _top, -1000.f, 1000.f)),
 	bulletDebugDrawer(new BulletDebugDrawer(world->world)),
 	shader(new ComponentShaderBase(true))
 {
@@ -32,7 +32,7 @@ UILayer::UILayer(float _left, float _right, float _bottom, float _top) :
 	++shader->referenceCount;
 
 	Transform * t = new Transform();
-	t->addChild(&cam);
+	t->addChild(cam, false);
 
 	bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
 	world->world->setDebugDrawer(bulletDebugDrawer);
@@ -40,6 +40,7 @@ UILayer::UILayer(float _left, float _right, float _bottom, float _top) :
 }
 
 UILayer::~UILayer(){
+	delete cam->firstParent();
 	deleteChildTransform();
 	shader->decrementAndDelete();
 	delete world;
@@ -63,8 +64,7 @@ void UILayer::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderO
 	const glm::mat4 * v = _matrixStack->getViewMatrix();
 
 	_matrixStack->pushMatrix();
-	_matrixStack->setProjectionMatrix(&cam.getProjectionMatrix());
-	_matrixStack->setViewMatrix(&cam.getViewMatrix());
+	_matrixStack->setCamera(cam);
 	Entity::render(_matrixStack, _renderOptions);
 	_matrixStack->setViewMatrix(v);
 	_matrixStack->setProjectionMatrix(p);
@@ -79,13 +79,13 @@ void UILayer::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderO
 
 void UILayer::resize(float _left, float _right, float _bottom, float _top){
 	// if the size hasn't changed, return early
-	if(_left == cam.left && _right == cam.right && _bottom == cam.bottom && _top == cam.top){
+	if(_left == cam->left && _right == cam->right && _bottom == cam->bottom && _top == cam->top){
 		return;
 	}
-	cam.left = _left;
-	cam.right = _right;
-	cam.bottom = _bottom;
-	cam.top = _top;
+	cam->left = _left;
+	cam->right = _right;
+	cam->bottom = _bottom;
+	cam->top = _top;
 	
 	setWidth(_right - _left);
 	setHeight(_top - _bottom);
@@ -93,6 +93,7 @@ void UILayer::resize(float _left, float _right, float _bottom, float _top){
 
 void UILayer::update(Step * _step){
 	Entity::update(_step);
+	cam->update(_step);
 
 	// make sure the debug drawer is always the last thing so it will render on top
 	if(bulletDebugDrawer != childTransform->children.back()){

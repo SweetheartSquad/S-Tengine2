@@ -27,7 +27,7 @@ private:
 	Mouse * mouse;
 public:
 	Sprite * mouseIndicator;
-	OrthographicCamera cam;
+	OrthographicCamera * const cam;
 
 	BulletDebugDrawer * bulletDebugDrawer;
 	ComponentShaderBase * shader;
