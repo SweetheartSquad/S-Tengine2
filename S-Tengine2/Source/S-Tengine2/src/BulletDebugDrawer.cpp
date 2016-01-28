@@ -2,7 +2,7 @@
 
 #include <BulletDebugDrawer.h>
 
-#include <glew\glew.h>
+#include <GL\glew.h>
 
 #include <MatrixStack.h>
 #include <RenderOptions.h>
