@@ -224,7 +224,7 @@ void StereoCamera::update(Step * _step){
 	roll  += glm::degrees(headAngles.z); // the roll value from the oculus SDK is opposite what we need
 }
 
-void StereoCamera::render(std::function<void()> _renderFunction){
+void StereoCamera::renderStereo(std::function<void()> _renderFunction){
 	if(sweet::ovrInitialized){
 		// render oculus eyes
 		activeCam = OVR::StereoEye_Left;
@@ -235,11 +235,16 @@ void StereoCamera::render(std::function<void()> _renderFunction){
 
 		renderFrame();
 	}else{
-		// standard scene rendering
-		activeCam = OVR::StereoEye_Center;
-		renderActiveCamera(_renderFunction);
+		renderStandard(_renderFunction);
 	}
 }
+
+void StereoCamera::renderStandard(std::function<void()> _renderFunction){
+	// standard scene rendering
+	activeCam = OVR::StereoEye_Center;
+	renderActiveCamera(_renderFunction);
+}
+
 
 void StereoCamera::renderActiveCamera(std::function<void()> _renderFunction){
 	// if we're rendering the center cam, just run the render code and return early

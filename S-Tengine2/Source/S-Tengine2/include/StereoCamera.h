@@ -67,12 +67,12 @@ public:
 	/** Updates the left and right eye to match the main camera */
 	virtual void update(Step * _step) override;
 
-	// if an hmd is not connected, runs the _renderFunction without any chanes
-	// if an hmd is connected, renders to the hmd
-	//
 	// To render to an Oculus, the _renderFunction is called twice (once for each eye camera)
 	// and then the buffers are submitted to the mirrorTexture as a single frame
-	void render(std::function<void()> _renderFunction);
+	// If an hmd is not connected, calls renderStandard
+	void renderStereo(std::function<void()> _renderFunction);
+	// calls _renderFunction from the central camera's point of view without any additional changes
+	void renderStandard(std::function<void()> _renderFunction);
 	// renders the active camera by calling _renderFunction
 	// if the active camera is one of the eye cams, it renders to the eye framebuffer
 	// if the active camera is the center camera, nothing special happens
