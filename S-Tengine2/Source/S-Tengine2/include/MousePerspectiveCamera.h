@@ -1,34 +1,12 @@
 #pragma once
 
 #include "PerspectiveCamera.h"
+#include <CameraController.h>
 
-class Mouse;
-
+// Just a standard perspective camera which is constructed with a CameraController as a child node
 class MousePerspectiveCamera : public PerspectiveCamera {
 public:
-
-	/** Reference to the mouse singleton */
-	Mouse * mouse;
-
-	/** Movement speed multiplier */
-	float speed;
-	/** Mouse speed multiplier */
-	float mouseSpeed;
+	CameraController * const controller;
 
 	MousePerspectiveCamera();
-	~MousePerspectiveCamera();
-	
-	virtual void update(Step * _step) override;
-
-	void enable();
-	void disable();
-
-	void alignMouse();
-private :
-	bool enabled;
-	/** The X position of the mouse from the last update loop*/
-	double lastMouseX;
-	/** The Y position of the mouse from the last update loop*/
-	double lastMouseY;
-
 };
