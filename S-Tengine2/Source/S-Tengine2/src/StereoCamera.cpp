@@ -28,7 +28,7 @@ StereoCamera::StereoCamera() :
 	if(sweet::ovrInitialized){
 		// Setup Window and Graphics
 		// Note: the mirror window can be any size, for this sample we use 1/2 the HMD resolution
-		ovrSizei windowSize = { sweet::hmdDesc.Resolution.w, sweet::hmdDesc.Resolution.h};
+		ovrSizei windowSize = { sweet::hmdDesc.Resolution.w/2, sweet::hmdDesc.Resolution.h/2};
 		std::cout << windowSize.w << " x " << windowSize.h << std::endl;
 
 		//fieldOfView = glm::degrees(sweet::hmdDesc.CameraFrustumVFovInRadians);

@@ -152,8 +152,8 @@ GLFWwindow * sweet::initWindow(){
 	// if we're rendering to an oculus, match the resolution target to the HMD output size
 	// also prevent fullscreen windows
 	if(sweet::ovrInitialized){
-		target.x = sweet::hmdDesc.Resolution.w;
-		target.y = sweet::hmdDesc.Resolution.h;
+		target.x = sweet::hmdDesc.Resolution.w/2;
+		target.y = sweet::hmdDesc.Resolution.h/2;
 		fullscreen = false;
 	}
 
