@@ -79,7 +79,7 @@
     <ClCompile Include="src/scenario/Scenario.cpp" />
     <ClCompile Include="src\Colour.cpp" />
     <ClCompile Include="src\DateUtils.cpp" />
-    <ClCompile Include="src\MouseCameraController.cpp" />
+    <ClCompile Include="src\CameraController.cpp" />
     <ClCompile Include="src\NineSlicing.cpp" />
     <ClCompile Include="src\NodePhysicsBody.cpp" />
     <ClCompile Include="src\ProgrammaticTexture.cpp" />
@@ -328,7 +328,7 @@
     <ClInclude Include="include/UIUnit.h" />
     <ClInclude Include="include/VerticalLinearLayout.h" />
     <ClInclude Include="include/Configuration.h" />
-    <ClInclude Include="include/MouseCameraController.h" />
+    <ClInclude Include="include\CameraController.h" />
     <ClInclude Include="include\AutoMusic.h" />
     <ClInclude Include="include/sweet/UI.h" />
     <ClInclude Include="include/WrapMode.h" />
