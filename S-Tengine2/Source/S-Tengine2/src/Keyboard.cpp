@@ -13,12 +13,16 @@ Keyboard::Keyboard() :
 Keyboard::~Keyboard(){
 }
 
-bool Keyboard::keyJustUp(int _glfwKeyCode){
+bool Keyboard::keyJustUp(int _glfwKeyCode) const{
 	return justReleasedKeys.find(_glfwKeyCode) != justReleasedKeys.end();
 }
 
-bool Keyboard::keyJustDown(int _glfwKeyCode){
+bool Keyboard::keyJustDown(int _glfwKeyCode) const{
 	return justPressedKeys.find(_glfwKeyCode) != justPressedKeys.end();
+}
+
+bool Keyboard::keyDown(int _glfwKeyCode) const{
+	return justPressedKeys.find(_glfwKeyCode) != justPressedKeys.end() || pressedKeys.find(_glfwKeyCode) != pressedKeys.end();
 }
 
 void Keyboard::keyDownListener(int _glfwKeyCode){
@@ -49,8 +53,4 @@ Keyboard & Keyboard::getInstance(){
 		keyboard= new Keyboard();
 	}
 	return *keyboard;
-}
-
-bool Keyboard::keyDown(int _glfwKeyCode){
-	return justPressedKeys.find(_glfwKeyCode) != justPressedKeys.end() || pressedKeys.find(_glfwKeyCode) != pressedKeys.end();
 }

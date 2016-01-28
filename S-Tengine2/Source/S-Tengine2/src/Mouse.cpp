@@ -19,39 +19,39 @@ Mouse::Mouse():
 Mouse::~Mouse(){
 }
 
-bool Mouse::leftJustPressed(){
+bool Mouse::leftJustPressed() const{
 	return justPressedButtons.find(GLFW_MOUSE_BUTTON_LEFT) != justPressedButtons.end();
 }
 
-bool Mouse::leftJustReleased(){
+bool Mouse::leftJustReleased() const{
 	return justReleasedButtons.find(GLFW_MOUSE_BUTTON_LEFT) != justReleasedButtons.end();
 }
 
-bool Mouse::leftDown(){
+bool Mouse::leftDown() const{
 	return pressedButtons.find(GLFW_MOUSE_BUTTON_LEFT) != pressedButtons.end();
 }
 
-bool Mouse::rightJustPressed(){
+bool Mouse::rightJustPressed() const{
 	return justPressedButtons.find(GLFW_MOUSE_BUTTON_RIGHT) != justPressedButtons.end();
 }
 
-bool Mouse::rightJustReleased(){
+bool Mouse::rightJustReleased() const{
 	return justReleasedButtons.find(GLFW_MOUSE_BUTTON_RIGHT) != justReleasedButtons.end();
 }
 
-bool Mouse::rightDown(){
+bool Mouse::rightDown() const{
 	return pressedButtons.find(GLFW_MOUSE_BUTTON_RIGHT) != pressedButtons.end();
 }
 
-double Mouse::mouseX(bool _clamped){
+double Mouse::mouseX(bool _clamped) const{
 	return _clamped ? clampedX : x;
 }
 
-double Mouse::mouseY(bool _clamped){
+double Mouse::mouseY(bool _clamped) const{
 	return _clamped ? clampedY : y;
 }
 
-double Mouse::getMouseWheelDelta(){
+double Mouse::getMouseWheelDelta() const{
 	return mouseWheelDelta;
 }
 

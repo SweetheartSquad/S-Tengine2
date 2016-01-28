@@ -24,42 +24,42 @@ public:
 	*
 	* @return Whether the left mouse button was pressed since the last mouse update
 	*/
-	bool leftJustPressed();
+	bool leftJustPressed() const;
 
 	/**
 	* Returns true if the left mouse button was released since the mouse's last call to update
 	*
 	* @return Whether the left mouse button was released since the last mouse update
 	*/
-	bool leftJustReleased();
+	bool leftJustReleased() const;
 
 	/**
 	* Returns true if the left mouse button is currently pressed down
 	*
 	* @return Whether the left mouse button is currently pressed down or not
 	*/
-	bool leftDown();
+	bool leftDown() const;
 
 	/**
 	* Returns true if the right mouse button was pressed down since the mouse's last call to update
 	*
 	* @return Whether the right mouse button was pressed since the last mouse update
 	*/
-	bool rightJustPressed();
+	bool rightJustPressed() const;
 
 	/**
 	* Returns true if the right mouse button was released since the mouse's last call to update
 	*
 	* @return Whether the right mouse button was released since the last mouse update
 	*/
-	bool rightJustReleased();
+	bool rightJustReleased() const;
 
 	/**
 	* Returns true if the right mouse button is currently pressed down
 	*
 	* @return Whether the right mouse button is currently pressed or not
 	*/
-	bool rightDown();
+	bool rightDown() const;
 
 	/**
 	* Returns the mouse's current X coordinate. If _clamped, the value will always be within the screen coordinates
@@ -67,7 +67,7 @@ public:
 	*
 	* @return The mouse's X coordinate
 	*/
-	double mouseX(bool _clamped = true);
+	double mouseX(bool _clamped = true) const;
 
 	/**
 	* Returns the mouse's current Y coordinate. If _clamped, the value will always be within the screen coordinates
@@ -75,12 +75,12 @@ public:
 	*
 	* @return The mouse's Y coordinate
 	*/
-	double mouseY(bool _clamped = true);
+	double mouseY(bool _clamped = true) const;
 	
 	/*
 	* @return The change in mousewheel since the last update
 	*/
-	double getMouseWheelDelta();
+	double getMouseWheelDelta() const;
 	
 	/**
 	* Moves the mouse by _v
