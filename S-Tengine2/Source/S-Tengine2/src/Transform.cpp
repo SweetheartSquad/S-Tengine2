@@ -92,15 +92,17 @@ void Transform::addParent(Transform * _parent){
 }
 
 
-void Transform::scale(float _scaleX, float _scaleY, float _scaleZ, bool _relative){
+Transform * Transform::scale(float _scaleX, float _scaleY, float _scaleZ, bool _relative){
 	scale(glm::vec3(_scaleX, _scaleY, _scaleZ), _relative);
+	return this;
 }
 
-void Transform::scale(float _scale, bool _relative){
+Transform * Transform::scale(float _scale, bool _relative){
 	scale(glm::vec3(_scale, _scale, _scale), _relative);
+	return this;
 }
 
-void Transform::scale(glm::vec3 _scale, bool relative){
+Transform * Transform::scale(glm::vec3 _scale, bool relative){
 	if(relative){
 		scaleVector *= _scale;
 	}else{
@@ -111,13 +113,15 @@ void Transform::scale(glm::vec3 _scale, bool relative){
 	mDirty = true;
 	isIdentity = false;
 	makeCumulativeModelMatrixDirty();
+	return this;
 }
 
-void Transform::translate(float _translateX, float _translateY, float _translateZ, bool _relative){
+Transform * Transform::translate(float _translateX, float _translateY, float _translateZ, bool _relative){
 	translate(glm::vec3(_translateX, _translateY, _translateZ), _relative);
+	return this;
 }
 
-void Transform::translate(glm::vec3 _translate, bool _relative){
+Transform * Transform::translate(glm::vec3 _translate, bool _relative){
 	if(_relative){
 		translationVector += _translate;
 	}else{
@@ -127,9 +131,10 @@ void Transform::translate(glm::vec3 _translate, bool _relative){
 	mDirty = true;
 	isIdentity = false;
 	makeCumulativeModelMatrixDirty();
+	return this;
 }
 
-void Transform::rotate(glm::quat _rotation, CoordinateSpace _space){
+Transform * Transform::rotate(glm::quat _rotation, CoordinateSpace _space){
 	switch(_space){
 	case kWORLD:
 		setOrientation(_rotation * orientation);
@@ -138,18 +143,21 @@ void Transform::rotate(glm::quat _rotation, CoordinateSpace _space){
 		setOrientation(orientation * _rotation);
 		break;
 	}
+	return this;
 }
 
-void Transform::rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space){
+Transform * Transform::rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space){
 	rotate(glm::quat(glm::angleAxis(_angle, glm::vec3(_x, _y, _z))), _space);
+	return this;
 }
-void Transform::setOrientation(glm::quat _orientation){
+Transform * Transform::setOrientation(glm::quat _orientation){
 	orientation = _orientation;
 	oDirty = true;
 	osDirty = true;
 	mDirty = true;
 	isIdentity = false;
 	makeCumulativeModelMatrixDirty();
+	return this;
 }
 
 const glm::mat4 & Transform::getTranslationMatrix(){
@@ -212,13 +220,13 @@ void Transform::reset(){
 	makeCumulativeModelMatrixDirty();
 }
 
-glm::vec3 Transform::getTranslationVector(){
+glm::vec3 Transform::getTranslationVector() const {
 	return translationVector;
 }
-glm::vec3 Transform::getScaleVector(){
+glm::vec3 Transform::getScaleVector() const {
 	return scaleVector;
 }
-glm::quat Transform::getOrientationQuat(){
+glm::quat Transform::getOrientationQuat() const {
 	return orientation;
 }
 

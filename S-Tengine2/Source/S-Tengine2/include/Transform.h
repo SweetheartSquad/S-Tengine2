@@ -90,37 +90,37 @@ public:
 	* Multiplies the x, y, and z component of the scale vector by _scaleX, _scaleY, and _scaleZ, respectively 
 	  If relative = false, sets the scale to the provided values
 	*/
-	void scale(float _scaleX, float _scaleY, float _scaleZ, bool relative = true);
+	Transform * scale(float _scaleX, float _scaleY, float _scaleZ, bool relative = true);
 	
 	/** 
 	* Multiplies each dimension of the scale vector by _scale 
 	  If relative = false, sets the scale to the provided value
 	*/
-	void scale(float _scale, bool relative = true);
+	Transform * scale(float _scale, bool relative = true);
 
 	/** 
 	* Multiplies the scale vector by _scale 
 	  If relative = false, sets the scale to the provided values
 	*/
-	void scale(glm::vec3 _scale, bool relative = true);
+	Transform * scale(glm::vec3 _scale, bool relative = true);
 
 	/**
 	* Adds _translateX, _translateY, and _translateZ to the x, y, and z component of the translation vector, respectively 
 	  If relative = false, sets the translation to the provided values
 	*/
-	void translate(float _translateX, float _translateY, float _translateZ, bool relative = true);
+	Transform * translate(float _translateX, float _translateY, float _translateZ, bool relative = true);
 	
 	/** 
 	* Adds _translate to the translation vector 
 	  If relative = false, sets the translation to the provided values
 	*/
-	void translate(glm::vec3 _translate, bool relative = true);
+	Transform * translate(glm::vec3 _translate, bool relative = true);
 
 	/** 
 	OBJECT:	Rotates the orientation quaternion by _rotation in object-space (i.e. orientation = _rotation * orientation) 
 	WORLD:	Rotates the orientation quaternion by _rotation in world-space (i.e. orientation = orientation * _rotation) 
 	*/
-	void rotate(glm::quat _rotation, CoordinateSpace _space);
+	Transform * rotate(glm::quat _rotation, CoordinateSpace _space);
 	
 	/**
 	Rotates the orientation quaternion by the quaternion defined by _angle, _x, _y, and _z (i.e. orientation = quat(axisAngle(_angle, vec3(_x, _y, _z))) * orientation)
@@ -128,9 +128,9 @@ public:
 	OBJECT:	Rotates the orientation quaternion by _rotation in object-space (i.e. orientation = _rotation * orientation) 
 	WORLD:	Rotates the orientation quaternion by _rotation in world-space (i.e. orientation = orientation * _rotation)
 	*/
-	void rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space);
+	Transform * rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space);
 	
-	void setOrientation(glm::quat _orientation);
+	Transform * setOrientation(glm::quat _orientation);
 	
 	/**
 	* Resets the translation, orientation, and scale to their defaults
@@ -146,9 +146,9 @@ public:
 	*/
 	const glm::mat4 & getTranslationMatrix();
 
-	glm::vec3 getTranslationVector();
-	glm::vec3 getScaleVector();
-	glm::quat getOrientationQuat();
+	glm::vec3 getTranslationVector() const;
+	glm::vec3 getScaleVector() const;
+	glm::quat getOrientationQuat() const;
 	
 	/** 
 	* Converts the scale vector to a 4x4 matrix and returns the result 
