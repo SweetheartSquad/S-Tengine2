@@ -79,7 +79,7 @@
     <ClCompile Include="src/scenario/Scenario.cpp" />
     <ClCompile Include="src/Colour.cpp" />
     <ClCompile Include="src/DateUtils.cpp" />
-    <ClCompile Include="src/MouseCameraController.cpp" />
+    <ClCompile Include="src/CameraController.cpp" />
     <ClCompile Include="src/NineSlicing.cpp" />
     <ClCompile Include="src/NodePhysicsBody.cpp" />
     <ClCompile Include="src/ProgrammaticTexture.cpp" />
@@ -263,7 +263,7 @@
     <ClCompile Include="src/scenario/Scenario.cpp" />
     <ClCompile Include="src/Colour.cpp" />
     <ClCompile Include="src/DateUtils.cpp" />
-    <ClCompile Include="src/MouseCameraController.cpp" />
+    <ClCompile Include="src/CameraController.cpp" />
     <ClCompile Include="src/NineSlicing.cpp" />
     <ClCompile Include="src/NodePhysicsBody.cpp" />
     <ClCompile Include="src/ProgrammaticTexture.cpp" />
@@ -400,7 +400,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibDebug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>include;$(ANT_DIR)\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(FREETYPE_DIR)\include;$(IncludePath)</IncludePath>
+    <IncludePath>include;$(ANT_DIR)\include;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(FREETYPE_DIR)\include;$(OVR_DIR)\Include;$(IncludePath)</IncludePath>
     <SourcePath>src;$(SourcePath)</SourcePath>
     <OutDir>..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
@@ -410,7 +410,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LibRelease|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>include;$(ANT_DIR)\include;$(SOIL_DIR)\src;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(IncludePath)</IncludePath>
+    <IncludePath>include;$(ANT_DIR)\include;$(GLEW_DIR)\include;$(GLFW_DIR)\include;$(GLM_DIR);$(OPENAL_DIR)\include;$(BOX2D_DIR);$(BULLET_DIR)\src;$(FREETYPE_DIR)\include;$(OVR_DIR)\Include;$(IncludePath)</IncludePath>
     <SourcePath>src;$(SourcePath)</SourcePath>
     <OutDir>..\..\Output\$(ProjectName)-$(Configuration)\</OutDir>
     <IntDir>..\..\Output\junk\$(ProjectName)-$(Configuration)\</IntDir>
@@ -421,7 +421,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;TW_NO_LIB_PRAGMA;TW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_LIB;_DEBUG;TW_NO_LIB_PRAGMA;TW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
       <EnablePREfast>false</EnablePREfast>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -454,7 +454,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;TW_NO_LIB_PRAGMA;TW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_LIB;NDEBUG;TW_NO_LIB_PRAGMA;TW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
