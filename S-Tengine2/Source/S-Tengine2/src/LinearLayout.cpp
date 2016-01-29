@@ -11,7 +11,6 @@ LinearLayout::LinearLayout(BulletWorld* _world):
 {
 	setAutoresizeWidth();
 	setAutoresizeHeight();
-	setBackgroundColour(0.f, 0.f, 0.f, 0.f);
 }
 
 glm::vec3 LinearLayout::getRootPos(){
