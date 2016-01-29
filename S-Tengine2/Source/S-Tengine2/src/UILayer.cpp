@@ -37,6 +37,8 @@ UILayer::UILayer(float _left, float _right, float _bottom, float _top) :
 	bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
 	world->world->setDebugDrawer(bulletDebugDrawer);
 	childTransform->addChild(bulletDebugDrawer, false);
+	
+	setBackgroundColour(0.f, 0.f, 0.f, 0.f);
 }
 
 UILayer::~UILayer(){
@@ -65,7 +67,7 @@ void UILayer::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderO
 
 	_matrixStack->pushMatrix();
 	_matrixStack->setCamera(cam);
-	Entity::render(_matrixStack, _renderOptions);
+	NodeUI::render(_matrixStack, _renderOptions);
 	_matrixStack->setViewMatrix(v);
 	_matrixStack->setProjectionMatrix(p);
 	_matrixStack->popMatrix();
@@ -92,7 +94,7 @@ void UILayer::resize(float _left, float _right, float _bottom, float _top){
 }
 
 void UILayer::update(Step * _step){
-	Entity::update(_step);
+	NodeUI::update(_step);
 	cam->update(_step);
 
 	// make sure the debug drawer is always the last thing so it will render on top
