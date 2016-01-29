@@ -196,6 +196,7 @@ public:
 	// Removes the first instance of _child if it is already in the child list
 	// Inserts _child into this node's list of children at _index
 	// adds this node as a parent of _child
+	// Note: if _index is negative, adds child at children.size() + _index; e.g. addChildAtIndex(-1) would put it at the end of the list
 	// Note: asserts that this node is not a descendant of _child
 	// Returns the transform node if created, nullptr otherwise
 	virtual Transform * addChildAtIndex(NodeChild * _child, int _index, bool _underNewTransform = true);

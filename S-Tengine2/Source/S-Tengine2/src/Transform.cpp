@@ -339,6 +339,11 @@ Transform * Transform::addChildAtIndex(NodeChild * _child, int _index, bool _und
 		removeChild(_child);
 	}
 
+	// if negative, count from the end
+	if(_index < 0){
+		_index = children.size() + _index;
+	}
+
 	children.insert(children.begin() + _index, _child);
 	_child->addParent(this);
 	return t;
