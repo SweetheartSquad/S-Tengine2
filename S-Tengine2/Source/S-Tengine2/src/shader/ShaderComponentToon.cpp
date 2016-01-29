@@ -86,9 +86,13 @@ Texture * const ShaderComponentToon::getTexture() const {
 void ShaderComponentToon::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) {
 	GLint curTex;
 	glGetIntegerv(GL_ACTIVE_TEXTURE, &curTex);
+	if(curTex > GL_TEXTURE31 || curTex < GL_TEXTURE0){
+		curTex = GL_TEXTURE0;
+	}
 	glActiveTexture(curTex + 1);
 	glBindTexture(GL_TEXTURE_2D, texture->textureId);
 	glUniform1i(textureLoc,  curTex - GL_TEXTURE0 + 1);
 	glUniform1f(levelsLoc, static_cast<float>(levels));
 	ShaderComponentDiffuse::configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
+	checkForGlError(false);
 }
