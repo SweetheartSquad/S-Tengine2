@@ -20,7 +20,8 @@ Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * 
 	shader(new ComponentShaderBase(true)),
 	alphaComponent(new ShaderComponentAlpha(shader, 0)),
 	nextScene(""),
-	aspectRatio(1.f)
+	aspectRatio(1.f),
+	splashSound(_splashSound)
 {
 	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->addComponent(new ShaderComponentTexture(shader));
@@ -61,11 +62,11 @@ Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * 
 	});
 
 	// when the timer starts, load the image and play the sound (if provided)
-	timer->eventManager->addEventListener("start", [this, _splashImage, _splashSound](sweet::Event * _event){
+	timer->eventManager->addEventListener("start", [this, _splashImage](sweet::Event * _event){
 		_splashImage->load();
 		aspectRatio = (float)_splashImage->width/_splashImage->height;
-		if(_splashSound != nullptr){
-			_splashSound->play();
+		if(splashSound != nullptr){
+			splashSound->play();
 		}
 	});
 }
@@ -110,6 +111,7 @@ void Scene_Splash::update(Step * _step){
 	}
 
 	if(Keyboard::getInstance().keyJustUp(GLFW_KEY_ENTER)){
+		splashSound->stop();
 		timer->eventManager->triggerEvent("complete");
 	}
 	

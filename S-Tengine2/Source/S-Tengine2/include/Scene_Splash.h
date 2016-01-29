@@ -14,6 +14,7 @@ class Scene_Splash : public Scene{
 protected:
 	glm::vec3 clearColour;
 	MeshEntity * splash;
+	OpenAL_Sound * splashSound;
 	ComponentShaderBase * shader;
 	ShaderComponentAlpha * alphaComponent;
 	OrthographicCamera * orthoCam;
