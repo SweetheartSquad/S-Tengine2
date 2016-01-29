@@ -152,12 +152,12 @@ Vertex * Sprite::getTopRight(){
 	return &mesh->vertices.at(1);
 }
 
-Vertex * Sprite::getBottomLeft(){
-	return &mesh->vertices.at(3);
-}
-
 Vertex * Sprite::getBottomRight(){
 	return &mesh->vertices.at(2);
+}
+
+Vertex * Sprite::getBottomLeft(){
+	return &mesh->vertices.at(3);
 }
 
 void Sprite::setUvs(float _topLeftU, float _topLeftV, float _topRightU, float _topRightV,
@@ -170,15 +170,14 @@ void Sprite::setUvs(float _topLeftU, float _topLeftV, float _topRightU, float _t
 	getTopRight()->v      = _topRightV;
 	getBottomRight()->u   = _bottomRightU;
 	getBottomRight()->v   = _bottomRightV;
+	mesh->dirty = true;
 }
 
 void Sprite::setUvs(sweet::Rectangle _rect){
-	getTopLeft()->u  = _rect.getTopLeft().x;
-	getTopLeft()->v  = _rect.getTopLeft().y;
-	getTopRight()->u  = _rect.getTopRight().x;
-	getTopRight()->v  = _rect.getTopRight().y;
-	getBottomRight()->u  = _rect.getBottomRight().x;
-	getBottomRight()->v  = _rect.getBottomRight().y;
-	getBottomLeft()->u  = _rect.getBottomLeft().x;
-	getBottomLeft()->v  = _rect.getBottomLeft().y;
+	setUvs(
+		_rect.getTopLeft().x, _rect.getTopLeft().y,
+		_rect.getTopRight().x, _rect.getTopRight().y,
+		_rect.getBottomLeft().x, _rect.getBottomLeft().y,
+		_rect.getBottomRight().x, _rect.getBottomRight().y
+	);
 }
