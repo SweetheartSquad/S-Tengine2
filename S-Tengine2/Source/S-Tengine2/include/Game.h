@@ -7,18 +7,18 @@
 
 #include "Scene.h"
 #include "ResourceManager.h"
+#include <Scene_Splash.h>
 
 #define VOX_LIMIT_FRAMERATE 1
 
 /*************************************************************************
 *
-* The Game class for VOX. There should only ever be one instance of Game.
+* The Game class for S-Tengine2. There should only ever be one instance of Game.
 * This game will hold and update scenes. This Game should be updated
 * in the main render loop in the Main class
 *
 **************************************************************************/
 class Step;
-class Scene_Splash;
 struct GLFWwindow;
 class Game : public virtual NodeUpdatable, public virtual NodeLoadable{
 protected:
@@ -75,7 +75,7 @@ public:
 	/** List of references to scenes in the game */
 	std::map<std::string, Scene*> scenes;
 
-	/**Perorms a full game loop*/
+	/**Performs a full game loop, i.e. calculate delta time stuff, poll input events, update, draw*/
 	void performGameLoop();
 
 	/** 

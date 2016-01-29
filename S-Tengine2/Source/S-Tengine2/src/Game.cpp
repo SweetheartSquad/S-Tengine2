@@ -9,7 +9,6 @@
 #include <MatrixStack.h>
 #include <VoxRenderOptions.h>
 
-#include <Scene_Splash.h>
 #include <Scene_Splash_Engine.h>
 #include <Scene_Splash_SweetHeartSquad.h>
 #include <MeshInterface.h>
