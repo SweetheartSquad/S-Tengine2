@@ -85,15 +85,7 @@ b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * 
 
 void Box2DSprite::configureUVs(){
 	float mag = std::max(mesh->getTexture(0)->width, mesh->getTexture(0)->height);
-	mesh->vertices.at(0).u = u/mag;
-	mesh->vertices.at(0).v = (v + height)/mag;
-	mesh->vertices.at(1).u = (u + width)/mag;
-	mesh->vertices.at(1).v = (v + height)/mag;
-	mesh->vertices.at(2).u = (u + width)/mag;
-	mesh->vertices.at(2).v = v/mag;
-	mesh->vertices.at(3).u = u/mag;
-	mesh->vertices.at(3).v = v/mag;
-	mesh->dirty = true;
+	setUvs(sweet::Rectangle(u/mag, v/mag, width/mag, height/mag));
 }
 
 b2PolygonShape Box2DSprite::createFixtureShape(){
