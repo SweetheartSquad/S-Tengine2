@@ -30,7 +30,8 @@ public:
 	// (this will create a new bone which branches off of this joint)
 	void addJoint(AnimationJoint * _j, bool _behind = false);
 
-	
+	void setJointsVisible(bool _visible);
+
 	virtual void update(Step * _step) override;
 	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 protected:

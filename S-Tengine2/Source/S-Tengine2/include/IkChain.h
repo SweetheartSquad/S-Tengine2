@@ -46,6 +46,7 @@ public:
 	float getChainLength();
 	
 	virtual void update(Step * _step) override;
+
 private:
 	// list of world-space joints corresponding to the joints in this IK chain
 	std::vector<IkJoint_CCD_World *> jointsWorld;

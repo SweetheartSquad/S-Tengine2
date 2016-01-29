@@ -53,6 +53,11 @@ void AnimationJoint::addJoint(AnimationJoint * _j, bool _behind){
 	pointVis->mesh->pushVert(Vertex(_j->pos.x,_j->pos.y,0));
 }
 
+void AnimationJoint::setJointsVisible(bool _visible) {
+	lineVis->setVisible(_visible);
+	pointVis->setVisible(_visible);
+}
+
 AnimationJoint::AnimationJoint(glm::vec2 _pos) :
 	pos(_pos),
 	angle(0),
