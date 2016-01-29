@@ -39,10 +39,10 @@ public:
 	Game * game;
 	
 	/** Reference to mouse singleton */
-	Mouse * mouse;
+	Mouse * const mouse;
 	
 	/** Reference to keyboard singleton */
-	Keyboard * keyboard;
+	Keyboard * const keyboard;
 	
 	/** Reference to this scene's active camera */
 	Camera * activeCamera;
