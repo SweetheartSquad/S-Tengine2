@@ -65,69 +65,22 @@ void NodeBox2DBody::translatePhysical(glm::vec3 _translation, bool _relative){
 	NodePhysicsBody::translatePhysical(_translation, _relative);
 }
 
-void NodeBox2DBody::applyForce(float _forceX, float _forceY, float _pointX, float _pointY){
+void NodeBox2DBody::applyLinearImpulse(glm::vec3 _impulse, glm::vec3 _point){
 	if(body != nullptr){
-		body->ApplyForce(b2Vec2(_forceX, _forceY), b2Vec2(_pointX, _pointY), true);
+		body->ApplyLinearImpulse(b2Vec2(_impulse.x, _impulse.y), b2Vec2(_point.x, _point.y), true);
 	}
 }
 
-void NodeBox2DBody::applyForceLeft(float _force){
+void NodeBox2DBody::applyForce(glm::vec3 _force, glm::vec3 _point){
 	if(body != nullptr){
-		body->ApplyForce(b2Vec2(-_force, 0), body->GetWorldCenter(), true);
+		body->ApplyForce(b2Vec2(_force.x, _force.y), b2Vec2(_point.x, _point.y), true);
 	}
 }
 
-void NodeBox2DBody::applyForceRight(float _force){
+glm::vec3 NodeBox2DBody::getPhysicsBodyCenter(){
 	if(body != nullptr){
-		body->ApplyForce(b2Vec2(_force, 0), body->GetWorldCenter(), true);
-	}
-}
-
-void NodeBox2DBody::applyForceUp(float _force){
-	if(body != nullptr){
-		body->ApplyForce(b2Vec2(0, _force), body->GetWorldCenter(), true);
-	}
-}
-
-void NodeBox2DBody::applyForceDown(float _force){
-	if(body != nullptr){
-		body->ApplyForce(b2Vec2(0, -_force), body->GetWorldCenter(), true);
-	}
-}
-
-void NodeBox2DBody::applyLinearImpulse(float _forceX, float _forceY, float _pointX, float _pointY){
-	if(body != nullptr){
-		body->ApplyLinearImpulse(b2Vec2(_forceX, _forceY), b2Vec2(_pointX, _pointY), true);
-	}
-}
-
-void NodeBox2DBody::applyLinearImpulseToCenter(float _forceX, float _forceY){
-	if(body != nullptr){
-		body->ApplyLinearImpulse(b2Vec2(_forceX, _forceY), body->GetWorldCenter(), true);
-	}
-}
-
-void NodeBox2DBody::applyLinearImpulseLeft(float _force){
-	if(body != nullptr){
-		body->ApplyLinearImpulse(b2Vec2(-_force, 0), body->GetWorldCenter(), true);
-	}
-}
-
-void NodeBox2DBody::applyLinearImpulseRight(float _force){
-	if(body != nullptr){
-		body->ApplyLinearImpulse(b2Vec2(_force, 0), body->GetWorldCenter(), true);
-	}
-}
-
-void NodeBox2DBody::applyLinearImpulseUp(float _force){
-	if(body != nullptr){
-		body->ApplyLinearImpulse(b2Vec2(0, _force), body->GetWorldCenter(), true);
-	}
-}
-
-void NodeBox2DBody::applyLinearImpulseDown(float _force){
-	if(body != nullptr){
-		body->ApplyLinearImpulse(b2Vec2(0, -_force), body->GetWorldCenter(), true);
+		b2Vec2 v = body->GetWorldCenter();
+		return glm::vec3(v.x, v.y, 0);
 	}
 }
 

@@ -39,6 +39,13 @@ public:
 
 	virtual void update(Step * _step) override;
 	
+	virtual void applyForce(glm::vec3 _force, glm::vec3 _point) override;
+	virtual void applyLinearImpulse(glm::vec3 _impulse, glm::vec3 _point) override;
+	
+	virtual void applyForceToCenter(glm::vec3 _force) override;
+	virtual void applyLinearImpulseToCenter(glm::vec3 _impulse) override;
+
+	virtual glm::vec3 getPhysicsBodyCenter() override;
 	
 	virtual void translatePhysical(glm::vec3 _translation, bool _relative = true) override;
 	virtual void realign() override;

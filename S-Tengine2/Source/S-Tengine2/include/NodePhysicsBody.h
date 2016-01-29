@@ -29,4 +29,23 @@ public:
 	// this should be called when the body is active or there has been a direct adjustment
 	// Clears the directAdjustment flag
 	virtual void realign();
+
+	// apply _force to _point
+	virtual void applyForce(glm::vec3 _force, glm::vec3 _point) = 0;
+	virtual void applyForceToCenter(glm::vec3 _force);
+	void applyForceLeft(float _force);
+	void applyForceRight(float _force);
+	void applyForceUp(float _force);
+	void applyForceDown(float _force);
+	
+	// apply _impulse to _point
+	virtual void applyLinearImpulse(glm::vec3 _impulse, glm::vec3 _point) = 0;
+	virtual void applyLinearImpulseToCenter(glm::vec3 _impulse);
+	void applyLinearImpulseLeft(float _force);
+	void applyLinearImpulseRight(float _force);
+	void applyLinearImpulseUp(float _force);
+	void applyLinearImpulseDown(float _force);
+
+	// returns the position of the physics body within the physics world
+	virtual glm::vec3 getPhysicsBodyCenter() = 0;
 };

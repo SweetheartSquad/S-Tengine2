@@ -106,6 +106,41 @@ void NodeBulletBody::translatePhysical(glm::vec3 _translation, bool _relative){
 	NodePhysicsBody::translatePhysical(_translation, _relative);
 }
 
+void NodeBulletBody::applyLinearImpulse(glm::vec3 _impulse, glm::vec3 _point){
+	if(body != nullptr){
+		body->activate();
+		body->applyImpulse(btVector3(_impulse.x, _impulse.y, _impulse.z), btVector3(_point.x, _point.y, _point.z));
+	}
+}
+
+void NodeBulletBody::applyForce(glm::vec3 _force, glm::vec3 _point){
+	if(body != nullptr){
+		body->activate();
+		body->applyForce(btVector3(_force.x, _force.y, _force.z), btVector3(_point.x, _point.y, _point.z));
+	}
+}
+
+void NodeBulletBody::applyLinearImpulseToCenter(glm::vec3 _impulse){
+	if(body != nullptr){
+		body->activate();
+		body->applyCentralImpulse(btVector3(_impulse.x, _impulse.y, _impulse.z));
+	}
+}
+
+void NodeBulletBody::applyForceToCenter(glm::vec3 _force){
+	if(body != nullptr){
+		body->activate();
+		body->applyCentralForce(btVector3(_force.x, _force.y, _force.z));
+	}
+}
+
+glm::vec3 NodeBulletBody::getPhysicsBodyCenter(){
+	if(body != nullptr){
+		btVector3 v = body->getWorldTransform().getOrigin();
+		return glm::vec3(v.x(), v.y(), v.z());
+	}
+}
+
 void NodeBulletBody::rotatePhysical(float _angle, float _x, float _y, float _z, bool _relative){
 	btQuaternion q = body->getWorldTransform().getRotation();
 	btVector3 axis(_x, _y, _z);

@@ -35,19 +35,10 @@ public:
 	//Creates a new fixture for the body and returns a reference to it
 	b2Fixture * getNewFixture(b2PolygonShape _shape, float _density);
 	b2Fixture * getNewFixture(b2ChainShape _shape, float _density);
-
-	void applyForce(float _forceX, float _forceY, float _pointX, float _pointY);
-	void applyForceLeft(float _force);
-	void applyForceRight(float _force);
-	void applyForceUp(float _force);
-	void applyForceDown(float _force);
-
-	void applyLinearImpulse(float _forceX, float _forceY, float _pointX, float _pointY);
-	void applyLinearImpulseToCenter(float _forceX, float _forceY);
-	void applyLinearImpulseLeft(float _force);
-	void applyLinearImpulseRight(float _force);
-	void applyLinearImpulseUp(float _force);
-	void applyLinearImpulseDown(float _force);
+	
+	virtual void applyForce(glm::vec3 _force, glm::vec3 _point) override;
+	virtual void applyLinearImpulse(glm::vec3 _impulse, glm::vec3 _point) override;
+	virtual glm::vec3 getPhysicsBodyCenter() override;
 
 	void applyAngularImpulse(float _angle);
 

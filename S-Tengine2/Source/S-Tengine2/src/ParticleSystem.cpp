@@ -55,7 +55,7 @@ Particle * ParticleSystem::addParticle(glm::vec3 _pos, Texture * _texture){
     test[0] = p;
 	p->translatePhysical(glm::vec3(_pos.x, _pos.y, _pos.z), false);
 	float mass = p->body->GetMass();
-	p->applyLinearImpulseToCenter((std::rand() % 20 - 10)*mass, (std::rand() % 20 - 10)*mass);
+	p->applyLinearImpulseToCenter(glm::vec3((std::rand() % 20 - 10)*mass, (std::rand() % 20 - 10)*mass, 0));
 	p->applyAngularImpulse((std::rand() % 20 - 10)*mass);
     p->setShader(shader, true);
     components.push_back(test);
