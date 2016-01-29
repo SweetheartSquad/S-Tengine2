@@ -51,7 +51,7 @@ Scene::Scene(Game * _game):
 	++shadowSurface->referenceCount;*/
 }
 
-Scene::~Scene(void){
+Scene::~Scene(){
 	while(cameras.size() > 0){
 		//delete cameras.back(); don't need to delete because they're children of the scene
 		cameras.pop_back();

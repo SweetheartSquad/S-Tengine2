@@ -55,7 +55,7 @@ public:
 
 	explicit Scene(Game * _game);
 	
-	virtual ~Scene(void);
+	virtual ~Scene();
 	
 	/** 
 	* Calls update on the attached camera
