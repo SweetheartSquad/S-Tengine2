@@ -34,12 +34,8 @@ Scene::Scene(Game * _game):
 	mouse(&Mouse::getInstance()),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
-	activeCamera(new MousePerspectiveCamera())
+	activeCamera(nullptr)
 {
-
-	cameras.push_back(activeCamera);
-	childTransform->addChild(activeCamera);
-
 	/*normalsShader->addComponent(new ShaderComponentNormals(normalsShader));
 	normalsShader->compileShader();
 
@@ -141,8 +137,11 @@ void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 	// matrix stack
 	_matrixStack->pushMatrix();
 	_matrixStack->resetCurrentMatrix();
-	_matrixStack->setCamera(activeCamera);
-
+	if(activeCamera == nullptr){
+		Log::warn("No active camera; scene cannot be rendered.");
+	}else{
+		_matrixStack->setCamera(activeCamera);
+	}
 	// render
 	Entity::render(_matrixStack, _renderOptions);
 
