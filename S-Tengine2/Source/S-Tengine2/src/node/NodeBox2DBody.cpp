@@ -42,7 +42,7 @@ void NodeBox2DBody::realign(){
 	}
 	body->SetLinearVelocity(lv);
 			
-	if(abs(body->GetAngle() - prevAngle) > 0.00005f){
+	if(abs(body->GetAngle() - prevAngle) > FLT_EPSILON){
 		childTransform->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
 		prevAngle = body->GetAngle();
 	}

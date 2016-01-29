@@ -103,14 +103,8 @@ void Sprite::setPrimaryTexture(TextureSampler * _textureSampler) {
 	float width = _textureSampler->width;
 	float height = _textureSampler->height;
 
-	mesh->vertices.at(0).u = u/mag;
-	mesh->vertices.at(0).v = v/mag;
-	mesh->vertices.at(1).u = (u + width)/mag;
-	mesh->vertices.at(1).v = v/mag;
-	mesh->vertices.at(2).v = (v + height)/mag;
-	mesh->vertices.at(2).u = (u + width)/mag;
-	mesh->vertices.at(3).u = u/mag;
-	mesh->vertices.at(3).v = (v + height)/mag;
+
+	setUvs(sweet::Rectangle(u/mag, v/mag, width/mag, height/mag));
 	
 	float negHeight = -height/mag/2;
 	float negWidth  = -width/mag/2;
