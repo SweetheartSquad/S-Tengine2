@@ -58,7 +58,7 @@ b2Fixture * NodeBox2DBody::getNewFixture(b2ChainShape _shape, float _density){
 }
 
 void NodeBox2DBody::translatePhysical(glm::vec3 _translation, bool _relative){
-	glm::vec3 tv = childTransform->getTranslationVector();
+	glm::vec3 tv = _relative ? childTransform->getTranslationVector() + _translation : _translation;
 	if(body != nullptr){
 		body->SetTransform(b2Vec2(tv.x, tv.y), body->GetAngle());
 	}
