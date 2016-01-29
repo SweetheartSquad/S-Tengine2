@@ -62,8 +62,6 @@ const std::string GL_UNIFORM_ID_NUM_TEXTURES 		  = "numTextures";
 
 const std::string GL_UNIFORM_ID_NUM_LIGHTS			  = "numLights";
 const std::string GL_UNIFORM_ID_LIGHTS_NO_ARRAY       = "lights";
-const std::string GL_UNIFORM_ID_LIGHTS_POSITION		  = GL_UNIFORM_ID_LIGHTS_NO_ARRAY+"[].position";
-const std::string GL_UNIFORM_ID_LIGHTS_INTENSITIES    =	GL_UNIFORM_ID_LIGHTS_NO_ARRAY+"[].intensities";
 
 const std::string GL_UNIFORM_ID_DEPTH_MVP	          =	"depthMVP";
 const std::string GL_UNIFORM_ID_SHADOW_MAP_SAMPLER    = "shadowMapSampler";
