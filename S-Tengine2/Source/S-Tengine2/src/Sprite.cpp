@@ -70,10 +70,10 @@ void Sprite::setPrimaryTexture(Texture * _texture) {
 	float width = _texture->width;
 	float height = _texture->height;
 	
-	float negHeight = -height/mag/2;
-	float negWidth  = -width/mag/2;
 	float posHeight =  height/mag/2;
 	float posWidth  =  width/mag/2;
+	float negHeight = -posHeight;
+	float negWidth  = -posWidth;
 
 	mesh->vertices.at(0).x = negWidth;
 	mesh->vertices.at(0).y = posHeight;
@@ -106,10 +106,10 @@ void Sprite::setPrimaryTexture(TextureSampler * _textureSampler) {
 
 	setUvs(sweet::Rectangle(u/mag, v/mag, width/mag, height/mag));
 	
-	float negHeight = -height/mag/2;
-	float negWidth  = -width/mag/2;
 	float posHeight =  height/mag/2;
 	float posWidth  =  width/mag/2;
+	float negHeight = -posHeight;
+	float negWidth  = -posWidth;
 
 	mesh->vertices.at(0).x = negWidth;
 	mesh->vertices.at(0).y = posHeight;
