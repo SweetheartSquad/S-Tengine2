@@ -273,6 +273,24 @@ void MeshInterface::setNormal(unsigned long int _vertId, float _x, float _y, flo
 	dirty = true;
 }
 
+glm::vec3 MeshInterface::calcNormal(unsigned long int _v1, unsigned long int _v2, unsigned long int _v3) const{
+	const Vertex & v1 = vertices.at(_v1);
+	const Vertex & v2 = vertices.at(_v2);
+	const Vertex & v3 = vertices.at(_v3);
+	glm::vec3 a(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
+	glm::vec3 b(v3.x - v1.x, v3.y - v1.y, v3.z - v1.z);
+
+	return glm::normalize(glm::cross(b, a));
+}
+
+glm::vec3 MeshInterface::setAutoNormal(unsigned long int _v1, unsigned long int _v2, unsigned long int _v3){
+	glm::vec3 n(calcNormal(_v1, _v2, _v3));
+	setNormal(_v1, n.x, n.y, n.z);
+	setNormal(_v2, n.x, n.y, n.z);
+	setNormal(_v3, n.x, n.y, n.z);
+	return n;
+}
+
 void MeshInterface::setUV(unsigned long _vertId, float _u, float _v){
 	vertices.at(_vertId).u = _u;
 	vertices.at(_vertId).v = _v;

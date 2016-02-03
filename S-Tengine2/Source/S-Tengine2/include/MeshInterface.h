@@ -115,6 +115,13 @@ public:
 	void configureDefaultVertexAttributes(Shader *_shader);
 	/** Sets the normal of the given vert to _x, _y, _z */
 	void setNormal(unsigned long int _vertId, float _x, float _y, float _z);
+
+	// returns the normal vector to the plane formed by _v1, _v2, and _v3
+	glm::vec3 calcNormal(unsigned long int _v1, unsigned long int _v2, unsigned long int _v3) const;
+	// calculates the normal vector to the plane formed by _v1, _v2, and _v3, and sets each vertex to use it as their normal
+	// also returns the normal vector
+	glm::vec3 setAutoNormal(unsigned long int _v1, unsigned long int _v2, unsigned long int _v3);
+
 	/** Sets the UV of the given vert to _x, _y */
 	void setUV(unsigned long int _vertId, float _x, float _y);
 	/** Adds _vertex to the list of vertices*/
