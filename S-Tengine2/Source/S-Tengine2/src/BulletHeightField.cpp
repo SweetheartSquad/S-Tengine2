@@ -17,36 +17,45 @@ BulletHeightFieldShape::~BulletHeightFieldShape(){
 	heightMap->decrementAndDelete();
 }
 
-TriMesh * BulletHeightFieldShape::getMesh(){
+TriMesh * BulletHeightFieldShape::getMesh(bool _tileUvs){
 	TriMesh * res = new TriMesh(true);
-	for(unsigned long int x = 1; x < heightMap->width; ++x){
-		for(unsigned long int y = 1; y < heightMap->height; ++y){
+	for(unsigned long int y = 0; y < heightMap->height; ++y){
+		for(unsigned long int x = 0; x < heightMap->width; ++x){
 			// copy verts
-			btVector3 v;
-			getVertex(x, y, v);
-			res->vertices.push_back(Vertex(v.x(), v.y(), v.z()));
-			getVertex(x-1, y, v);
-			res->vertices.push_back(Vertex(v.x(), v.y(), v.z()));
-			getVertex(x-1, y-1, v);
-			res->vertices.push_back(Vertex(v.x(), v.y(), v.z()));
-			getVertex(x, y-1, v);
-			res->vertices.push_back(Vertex(v.x(), v.y(), v.z()));
-			
-			// set uvs
-			res->setUV(res->vertices.size() - 1, (float)x/heightMap->width, (float)(y-1)/heightMap->height);
-			res->setUV(res->vertices.size() - 2, (float)(x-1)/heightMap->width, (float)(y-1)/heightMap->height);
-			res->setUV(res->vertices.size() - 3, (float)(x-1)/heightMap->width, (float)y/heightMap->height);
-			res->setUV(res->vertices.size() - 4, (float)x/heightMap->width, (float)y/heightMap->height);
-			
-			// connect verts
-			res->pushTri(res->vertices.size() - 4, res->vertices.size() - 3, res->vertices.size() - 2);
-			res->pushTri(res->vertices.size() - 4, res->vertices.size() - 2, res->vertices.size() - 1);
+			btVector3 v1;
+			getVertex(x, y, v1);
+			Vertex v2(v1.x(), v1.y(), v1.z());
+			v2.u = x;
+			v2.v = y;
+			if(!_tileUvs){
+				v2.u /= heightMap->width;
+				v2.v /= heightMap->height;
+			}
+			res->vertices.push_back(v2);
 		}
 	}
+	
+	for(unsigned long int i = 0; i < res->vertices.size() - heightMap->width - 1; ++i){
+		if((i+1) % heightMap->width == 0){
+			continue;
+		}
+		res->pushTri(i, i+1, i+heightMap->width);
+		res->pushTri(i+1, i+heightMap->width, i+heightMap->width+1);
+		
+		glm::vec3 n = res->calcNormal(i, i+1, i+heightMap->width);
+		n += res->calcNormal(i, i+1, i+heightMap->width);
+		n *= 2;
+		
+		res->setNormal(i, n.x, n.y, n.z);
+		res->setNormal(i+1, n.x, n.y, n.z);
+		res->setNormal(i+heightMap->width, n.x, n.y, n.z);
+		res->setNormal(i+heightMap->width+1, n.x, n.y, n.z);
+	}
+
 	return res;
 }
 
-BulletHeightField::BulletHeightField(BulletWorld * _world, Texture * _heightMap, Shader * _shader, glm::vec3 _scale, unsigned long int _upAxis) :
+BulletHeightField::BulletHeightField(BulletWorld * _world, Texture * _heightMap, Shader * _shader, bool _tileUvs, glm::vec3 _scale, unsigned long int _upAxis) :
 	BulletMeshEntity(_world, new TriMesh(true), _shader),
 	heightMap(_heightMap)
 {
@@ -55,7 +64,7 @@ BulletHeightField::BulletHeightField(BulletWorld * _world, Texture * _heightMap,
 	setColliderAsHeightMap(_heightMap, _scale, _upAxis);
 
 	BulletHeightFieldShape * s = dynamic_cast<BulletHeightFieldShape *>(shape);
-	TriMesh * temp = s->getMesh();
+	TriMesh * temp = s->getMesh(_tileUvs);
 	mesh->insertVertices(temp);
 	delete temp;
 }

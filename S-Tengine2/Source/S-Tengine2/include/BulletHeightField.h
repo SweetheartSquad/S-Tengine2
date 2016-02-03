@@ -18,10 +18,9 @@ public:
 	// _upAxis = 0, 1, or 2, indicating x, y, and z axis respectively
 	BulletHeightFieldShape(Texture * _heightMap, glm::vec3 _scale = glm::vec3(1.f), unsigned long int _upAxis = 1);
 	~BulletHeightFieldShape();
-
-	// copies the bullet collider vertices into a new mesh
-	// NOTE: you have to manage the memory for this mesh on your own
-	TriMesh * getMesh();
+	
+	// _tileUvs = if true, sets UVs such that each square on the height map is 0-1; if false sets UVs such that the entire height map is 0-1
+	TriMesh * getMesh(bool _tileUvs);
 };
 
 class BulletHeightField : public BulletMeshEntity{
@@ -29,6 +28,8 @@ private:
 	Texture * heightMap;
 public:
 	// NOTE: a BulletHeightField calls setColliderAsHeightMap in its constructor, so you don't need to construct the shape yourself
-	BulletHeightField(BulletWorld * _world, Texture * _heightMap, Shader * _shader, glm::vec3 _scale = glm::vec3(1.f), unsigned long int _upAxis = 1);
+	// _tileUvs = if true, sets UVs such that each square on the height map is 0-1; if false sets UVs such that the entire height map is 0-1
+	// _upAxis = 0, 1, or 2, indicating x, y, and z axis respectively
+	BulletHeightField(BulletWorld * _world, Texture * _heightMap, Shader * _shader, bool _tileUvs = false, glm::vec3 _scale = glm::vec3(1.f), unsigned long int _upAxis = 1);
 	~BulletHeightField();
 };
