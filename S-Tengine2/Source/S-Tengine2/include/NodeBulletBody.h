@@ -4,6 +4,7 @@
 #include <BulletWorld.h>
 
 class TriMesh;
+class Texture;
 
 // NOTE: physics bodies override Entity's update and don't call it
 // This is because the MeshEntity varieties will also call it,
@@ -29,6 +30,8 @@ public:
 	void setColliderAsSphere(float _radius = 0.5f);
 	void setColliderAsCapsule(float _radius = 0.5f, float _height = 0.5f);
 	void setColliderAsMesh(TriMesh * _colliderMesh, bool _convex);
+	// upAxis = 0, 1, or 2 = x, y, or z axis
+	void setColliderAsHeightMap(Texture * _heightMap, glm::vec3 _scale, unsigned long int _upAxis = 1);
 	// a mass of zero makes it static
 	virtual void createRigidBody(float _mass, unsigned short int _collisionGroup = -1, unsigned short int _collisionMask = -1);
 

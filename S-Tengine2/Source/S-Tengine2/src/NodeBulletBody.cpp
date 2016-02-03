@@ -2,8 +2,10 @@
 
 #include <NodeBulletBody.h>
 #include <btBulletDynamicsCommon.h>
+#include <BulletHeightField.h>
 #include <Transform.h>
 #include <MeshInterface.h>
+#include <Texture.h>
 
 NodeBulletBody::NodeBulletBody(BulletWorld * _world) :
 	world(_world),
@@ -93,6 +95,14 @@ void NodeBulletBody::setColliderAsMesh(TriMesh * _colliderMesh, bool _convex){
 		}
 		shape = new btBvhTriangleMeshShape(mesh, true);
 	}
+}
+
+void NodeBulletBody::setColliderAsHeightMap(Texture * _heightMap, glm::vec3 _scale, unsigned long int _upAxis){
+	assert(shape == nullptr);
+	assert(_heightMap->storeData);
+	assert(_heightMap->channels == 1);
+
+	shape = new BulletHeightFieldShape(_heightMap, _scale, _upAxis);
 }
 
 void NodeBulletBody::translatePhysical(glm::vec3 _translation, bool _relative){

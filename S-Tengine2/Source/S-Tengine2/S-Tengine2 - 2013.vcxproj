@@ -77,6 +77,7 @@
     <ClCompile Include="src/scenario/Conversation.cpp" />
     <ClCompile Include="src/scenario/Dialogue.cpp" />
     <ClCompile Include="src/scenario/Scenario.cpp" />
+    <ClCompile Include="src/BulletHeightField.cpp" />
     <ClCompile Include="src/Colour.cpp" />
     <ClCompile Include="src/DateUtils.cpp" />
     <ClCompile Include="src/CameraController.cpp" />
@@ -164,6 +165,7 @@
     <ClCompile Include="src/shader/ShaderComponentWorldSpaceUVs.cpp" />
     <ClCompile Include="src/StereoCamera.cpp" />
     <ClCompile Include="src/Sweet_OVR.cpp" />
+    <ClInclude Include="include/BulletHeightField.h" />
     <ClInclude Include="include/Colour.h" />
     <ClInclude Include="include/DateUtils.h" />
     <ClInclude Include="include/EventManager.h" />
@@ -183,6 +185,7 @@
     <ClInclude Include="include/sweet/Input.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include/BulletHeightField.h" />
     <ClInclude Include="include/Colour.h" />
     <ClInclude Include="include/DateUtils.h" />
     <ClInclude Include="include/EventManager.h" />
@@ -261,6 +264,7 @@
     <ClCompile Include="src/scenario/Conversation.cpp" />
     <ClCompile Include="src/scenario/Dialogue.cpp" />
     <ClCompile Include="src/scenario/Scenario.cpp" />
+    <ClCompile Include="src/BulletHeightField.cpp" />
     <ClCompile Include="src/Colour.cpp" />
     <ClCompile Include="src/DateUtils.cpp" />
     <ClCompile Include="src/CameraController.cpp" />
@@ -348,6 +352,7 @@
     <ClCompile Include="src/shader/ShaderComponentWorldSpaceUVs.cpp" />
     <ClCompile Include="src/StereoCamera.cpp" />
     <ClCompile Include="src/Sweet_OVR.cpp" />
+    <ClInclude Include="include/BulletHeightField.h" />
     <ClInclude Include="include/Colour.h" />
     <ClInclude Include="include/DateUtils.h" />
     <ClInclude Include="include/EventManager.h" />
