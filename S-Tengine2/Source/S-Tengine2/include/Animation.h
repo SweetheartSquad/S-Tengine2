@@ -34,6 +34,7 @@ public:
 	std::vector<Tween<T> *> tweens;
 
 	inline virtual void update(Step * _step) override;
+	inline virtual T ease(Easing::Type _interpolation, float _curTweenTime, T _refValue, T _deltaValue, float _deltaTime);
 
 	enum LoopType{
 		kLOOP,
@@ -150,7 +151,7 @@ void Animation<T>::update(Step * _step){
 			}
 		}
 		
-		*prop = (T)Easing::call(tweens.at(currentTween)->interpolation, currentTweenTime, (float)referenceValue, (float)tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
+		*prop = ease(tweens.at(currentTween)->interpolation, currentTweenTime, referenceValue, tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
 		
 		// The time > sum-delta-time bit is inefficient since we don't keep a record of the total animation length (which we should), but it works
 		if(loopType == kCONSTANT){
@@ -230,10 +231,7 @@ void Animation<glm::quat>::update(Step * _step){
 			}
 		}
 		
-		float slerpInterpolation = Easing::call(tweens.at(currentTween)->interpolation, currentTweenTime, 0, 1, tweens.at(currentTween)->deltaTime);
-
-		*prop = glm::slerp(referenceValue, tweens.at(currentTween)->deltaValue * referenceValue, slerpInterpolation);
-		
+		*prop = ease(tweens.at(currentTween)->interpolation, currentTweenTime, referenceValue,  tweens.at(currentTween)->deltaValue, tweens.at(currentTween)->deltaTime);
 		// The time > sum-delta-time bit is inefficient since we don't keep a record of the total animation length (which we should), but it works
 		if(loopType == kCONSTANT){
 			if(currentAnimationTime < 0){
@@ -258,6 +256,38 @@ void Animation<glm::quat>::update(Step * _step){
 		}
 	}
 };
+
+template <>
+glm::quat Animation<glm::quat>::ease(Easing::Type _interpolation, float _curTweenTime, glm::quat _refValue, glm::quat _deltaValue, float _deltaTime) {
+	float slerpInterpolation = Easing::call(_interpolation, _curTweenTime, 0, 1, _deltaTime);
+	return glm::slerp(_refValue, _deltaValue * _refValue, slerpInterpolation);
+}
+
+template <>
+glm::vec2 Animation<glm::vec2>::ease(Easing::Type _interpolation, float _curTweenTime, glm::vec2 _refValue, glm::vec2 _deltaValue, float _deltaTime) {
+	return glm::vec2(Easing::call(_interpolation, _curTweenTime, _refValue.x, _deltaValue.x, _deltaTime),
+		Easing::call(_interpolation, _curTweenTime, _refValue.y, _deltaValue.y, _deltaTime));
+}
+
+template <>
+glm::vec3 Animation<glm::vec3>::ease(Easing::Type _interpolation, float _curTweenTime, glm::vec3 _refValue, glm::vec3 _deltaValue, float _deltaTime) {
+	return glm::vec3(Easing::call(_interpolation, _curTweenTime, _refValue.x, _deltaValue.x, _deltaTime),
+		Easing::call(_interpolation, _curTweenTime, _refValue.y, _deltaValue.y, _deltaTime),
+		Easing::call(_interpolation, _curTweenTime, _refValue.z, _deltaValue.z, _deltaTime));
+}
+
+template <>
+glm::vec4 Animation<glm::vec4>::ease(Easing::Type _interpolation, float _curTweenTime, glm::vec4 _refValue, glm::vec4 _deltaValue, float _deltaTime) {
+	return glm::vec4(Easing::call(_interpolation, _curTweenTime, _refValue.x, _deltaValue.x, _deltaTime),
+		Easing::call(_interpolation, _curTweenTime, _refValue.y, _deltaValue.y, _deltaTime),
+		Easing::call(_interpolation, _curTweenTime, _refValue.z, _deltaValue.z, _deltaTime),
+		Easing::call(_interpolation, _curTweenTime, _refValue.w, _deltaValue.w, _deltaTime));
+}
+
+template <typename T>
+T Animation<T>::ease(Easing::Type _interpolation, float _curTweenTime, T _refValue, T _deltaValue, float _deltaTime) {
+	return static_cast<T>(Easing::call(_interpolation, _curTweenTime, (float)(_refValue), (float)(_deltaValue), _deltaTime));
+}
 
 template <typename T>
 Animation<T>::~Animation(){
