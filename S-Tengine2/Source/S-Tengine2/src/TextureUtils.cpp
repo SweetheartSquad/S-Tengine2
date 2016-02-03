@@ -272,3 +272,23 @@ void sweet::TextureUtils::setPixel(Texture * _tex, unsigned long int _x, unsigne
 	unsigned char * p = getPixelPointer(_tex, _x, _y, 0);
 	*(p + 0) = _colour;
 }
+
+unsigned char sweet::TextureUtils::getMax(Texture * _tex, unsigned long int _channel){
+	unsigned char res = 0;
+	for(unsigned long int x = 0; x < _tex->width; ++x){
+	for(unsigned long int y = 0; y < _tex->height; ++y){
+		res = glm::max(res, getPixel(_tex, x, y, _channel));
+	}
+	}
+	return res;
+}
+
+unsigned char sweet::TextureUtils::getMin(Texture * _tex, unsigned long int _channel){
+	unsigned char res = 255;
+	for(unsigned long int x = 0; x < _tex->width; ++x){
+	for(unsigned long int y = 0; y < _tex->height; ++y){
+		res = glm::min(res, getPixel(_tex, x, y, _channel));
+	}
+	}
+	return res;
+}

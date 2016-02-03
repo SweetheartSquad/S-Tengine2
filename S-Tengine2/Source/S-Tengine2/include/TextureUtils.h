@@ -32,6 +32,11 @@ public:
 	static void setPixel(Texture * _tex, unsigned long int _x, unsigned long int _y, glm::uvec2 _colour);
 	static void setPixel(Texture * _tex, unsigned long int _x, unsigned long int _y, unsigned char _colour);
 
+	// returns the maximum value stored in the given channel
+	static unsigned char getMax(Texture * _tex, unsigned long int _channel = 0);
+	// returns the minimum value stored in the given channel
+	static unsigned char getMin(Texture * _tex, unsigned long int _channel = 0);
+
 private:
 	static glm::vec2 interpolate(unsigned long int _x1, unsigned long int _y1, unsigned long int _x2, unsigned long int _y2);
 	static glm::vec2 interpolate(unsigned long int _threshold, float _x1, float _y1, float _p1, float _x2, float _y2, float _p2);
