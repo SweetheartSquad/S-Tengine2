@@ -17,6 +17,8 @@
 #include <OpenALSound.h>
 
 #include <FileUtils.h>
+#include <NumberUtils.h>
+
 #include <AntTweakBar.h>
 
 #include <GL/glew.h>
@@ -241,6 +243,9 @@ void sweet::initialize(std::string _title){
 	
 	// load configuration file
 	config.load("data/config.json");
+
+	// seed RNG
+	sweet::NumberUtils::seed(0);
 	
 	sweet::currentContext = sweet::initWindow();
 	glfwMakeContextCurrent(sweet::currentContext);
@@ -264,6 +269,7 @@ void sweet::initialize(std::string _title){
 	int screenHeight, screenWidth;
 	glfwGetWindowSize(sweet::currentContext, &screenWidth, &screenHeight);
 	glfwSetCursorPos(sweet::currentContext, screenWidth/2, screenHeight/2);
+
 
 	Log::info("*** Sweet Initialization ***");
 }
