@@ -95,73 +95,42 @@ public:
 	 * @return	Eased value
 	 */
 	static float call(std::string type, float t, float b, float c, float d){
-			if(type == "LINEAR") return linear(t,b,c,d);
-			if(type == "EASE_IN_QUAD")			return easeInQuad(t,b,c,d);
-			if(type == "EASE_OUT_QUAD")			return easeOutQuad(t,b,c,d);
-			if(type == "EASE_IN_OUT_QUAD")		return easeInOutQuad(t,b,c,d);
-			if(type == "EASE_IN_CUBIC")			return easeInCubic(t,b,c,d);
-			if(type == "EASE_OUT_CUBIC")		return easeOutCubic(t,b,c,d);
-			if(type == "EASE_IN_OUT_CUBIC")		return easeInOutCubic(t,b,c,d);
-			if(type == "EASE_IN_QUART")			return easeInQuart(t,b,c,d);
-			if(type == "EASE_OUT_QUART")		return easeOutQuart(t,b,c,d);
-			if(type == "EASE_IN_OUT_QUART")		return easeInOutQuart(t,b,c,d);
-			if(type == "EASE_IN_QUINT")			return easeInQuint(t,b,c,d);
-			if(type == "EASE_OUT_QUINT")		return easeOutQuint(t,b,c,d);
-			if(type == "EASE_IN_OUT_QUINT")		return easeInOutQuint(t,b,c,d);
-			if(type == "EASE_IN_SINE")			return easeInSine(t,b,c,d);
-			if(type == "EASE_OUT_SINE")			return easeOutSine(t,b,c,d);
-			if(type == "EASE_IN_OUT_SINE")		return easeInOutSine(t,b,c,d);
-			if(type == "EASE_IN_EXPO")			return easeInExpo(t,b,c,d);
-			if(type == "EASE_OUT_EXPO")			return easeOutExpo(t,b,c,d);
-			if(type == "EASE_IN_OUT_EXPO")		return easeInOutExpo(t,b,c,d);
-			if(type == "EASE_IN_CIRC")			return easeInCirc(t,b,c,d);
-			if(type == "EASE_OUT_CIRC")			return easeOutCirc(t,b,c,d);
-			if(type == "EASE_IN_OUT_CIRC")		return easeInOutCirc(t,b,c,d);
-			if(type == "EASE_IN_ELASTIC")		return easeInElastic(t,b,c,d);
-			if(type == "EASE_OUT_ELASTIC")		return easeOutElastic(t,b,c,d);
-			if(type == "EASE_IN_OUT_ELASTIC")	return easeInOutElastic(t,b,c,d);
-			if(type == "EASE_IN_BOUNCE")		return easeInBounce(t,b,c,d);
-			if(type == "EASE_OUT_BOUNCE")		return easeOutBounce(t,b,c,d);
-			if(type == "EASE_IN_OUT_BOUNCE")	return easeInOutBounce(t,b,c,d);
-			if(type == "EASE_IN_BACK")			return easeInBack(t,b,c,d);
-			if(type == "EASE_OUT_BACK")			return easeOutBack(t,b,c,d);
-			if(type == "EASE_IN_OUT_BACK")		return easeInOutBack(t,b,c,d);
-		return 0;
+		return call(getTypeByName(type), t, b, c, d);
 	}
 
 	static Easing::Type getTypeByName(std::string name){
-			if(name == "LINEAR") return kLINEAR;
-			if(name == "EASE_IN_QUAD")			return kEASE_IN_QUAD;
-			if(name == "EASE_OUT_QUAD")			return kEASE_OUT_QUAD;
-			if(name == "EASE_IN_OUT_QUAD")		return kEASE_IN_OUT_QUAD;
-			if(name == "EASE_IN_CUBIC")			return kEASE_IN_CUBIC;
-			if(name == "EASE_OUT_CUBIC")		return kEASE_OUT_CUBIC;
-			if(name == "EASE_IN_OUT_CUBIC")		return kEASE_IN_OUT_CUBIC;
-			if(name == "EASE_IN_QUART")			return kEASE_IN_QUART;
-			if(name == "EASE_OUT_QUART")		return kEASE_OUT_QUART;
-			if(name == "EASE_IN_OUT_QUART")		return kEASE_IN_OUT_QUART;
-			if(name == "EASE_IN_QUINT")			return kEASE_IN_QUINT;
-			if(name == "EASE_OUT_QUINT")		return kEASE_OUT_QUINT;
-			if(name == "EASE_IN_OUT_QUINT")		return kEASE_IN_OUT_QUINT;
-			if(name == "EASE_IN_SINE")			return kEASE_IN_SINE;
-			if(name == "EASE_OUT_SINE")			return kEASE_OUT_SINE;
-			if(name == "EASE_IN_OUT_SINE")		return kEASE_IN_OUT_SINE;
-			if(name == "EASE_IN_EXPO")			return kEASE_IN_EXPO;
-			if(name == "EASE_OUT_EXPO")			return kEASE_OUT_EXPO;
-			if(name == "EASE_IN_OUT_EXPO")		return kEASE_IN_OUT_EXPO;
-			if(name == "EASE_IN_CIRC")			return kEASE_IN_CIRC;
-			if(name == "EASE_OUT_CIRC")			return kEASE_OUT_CIRC;
-			if(name == "EASE_IN_OUT_CIRC")		return kEASE_IN_OUT_CIRC;
-			if(name == "EASE_IN_ELASTIC")		return kEASE_IN_ELASTIC;
-			if(name == "EASE_OUT_ELASTIC")		return kEASE_OUT_ELASTIC;
-			if(name == "EASE_IN_OUT_ELASTIC")	return kEASE_IN_OUT_ELASTIC;
-			if(name == "EASE_IN_BOUNCE")		return kEASE_IN_BOUNCE;
-			if(name == "EASE_OUT_BOUNCE")		return kEASE_OUT_BOUNCE;
-			if(name == "EASE_IN_OUT_BOUNCE")	return kEASE_IN_OUT_BOUNCE;
-			if(name == "EASE_IN_BACK")			return kEASE_IN_BACK;
-			if(name == "EASE_OUT_BACK")			return kEASE_OUT_BACK;
-			if(name == "EASE_IN_OUT_BACK")		return kEASE_IN_OUT_BACK;
-			return kLINEAR;
+		if(name == "LINEAR") return kLINEAR;
+		if(name == "EASE_IN_QUAD")			return kEASE_IN_QUAD;
+		if(name == "EASE_OUT_QUAD")			return kEASE_OUT_QUAD;
+		if(name == "EASE_IN_OUT_QUAD")		return kEASE_IN_OUT_QUAD;
+		if(name == "EASE_IN_CUBIC")			return kEASE_IN_CUBIC;
+		if(name == "EASE_OUT_CUBIC")		return kEASE_OUT_CUBIC;
+		if(name == "EASE_IN_OUT_CUBIC")		return kEASE_IN_OUT_CUBIC;
+		if(name == "EASE_IN_QUART")			return kEASE_IN_QUART;
+		if(name == "EASE_OUT_QUART")		return kEASE_OUT_QUART;
+		if(name == "EASE_IN_OUT_QUART")		return kEASE_IN_OUT_QUART;
+		if(name == "EASE_IN_QUINT")			return kEASE_IN_QUINT;
+		if(name == "EASE_OUT_QUINT")		return kEASE_OUT_QUINT;
+		if(name == "EASE_IN_OUT_QUINT")		return kEASE_IN_OUT_QUINT;
+		if(name == "EASE_IN_SINE")			return kEASE_IN_SINE;
+		if(name == "EASE_OUT_SINE")			return kEASE_OUT_SINE;
+		if(name == "EASE_IN_OUT_SINE")		return kEASE_IN_OUT_SINE;
+		if(name == "EASE_IN_EXPO")			return kEASE_IN_EXPO;
+		if(name == "EASE_OUT_EXPO")			return kEASE_OUT_EXPO;
+		if(name == "EASE_IN_OUT_EXPO")		return kEASE_IN_OUT_EXPO;
+		if(name == "EASE_IN_CIRC")			return kEASE_IN_CIRC;
+		if(name == "EASE_OUT_CIRC")			return kEASE_OUT_CIRC;
+		if(name == "EASE_IN_OUT_CIRC")		return kEASE_IN_OUT_CIRC;
+		if(name == "EASE_IN_ELASTIC")		return kEASE_IN_ELASTIC;
+		if(name == "EASE_OUT_ELASTIC")		return kEASE_OUT_ELASTIC;
+		if(name == "EASE_IN_OUT_ELASTIC")	return kEASE_IN_OUT_ELASTIC;
+		if(name == "EASE_IN_BOUNCE")		return kEASE_IN_BOUNCE;
+		if(name == "EASE_OUT_BOUNCE")		return kEASE_OUT_BOUNCE;
+		if(name == "EASE_IN_OUT_BOUNCE")	return kEASE_IN_OUT_BOUNCE;
+		if(name == "EASE_IN_BACK")			return kEASE_IN_BACK;
+		if(name == "EASE_OUT_BACK")			return kEASE_OUT_BACK;
+		if(name == "EASE_IN_OUT_BACK")		return kEASE_IN_OUT_BACK;
+		return kLINEAR;
 	}
 	
 	/**
