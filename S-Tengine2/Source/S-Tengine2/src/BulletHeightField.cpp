@@ -19,6 +19,8 @@ BulletHeightFieldShape::~BulletHeightFieldShape(){
 
 TriMesh * BulletHeightFieldShape::getMesh(bool _tileUvs){
 	TriMesh * res = new TriMesh(true);
+
+	// copy the vertices into the mesh while also setting up the UVs
 	for(unsigned long int y = 0; y < heightMap->height; ++y){
 		for(unsigned long int x = 0; x < heightMap->width; ++x){
 			// copy verts
@@ -35,16 +37,23 @@ TriMesh * BulletHeightFieldShape::getMesh(bool _tileUvs){
 		}
 	}
 	
+	// connect the verts to make triangles and set the normals on each set of 4 as the average of both triangle face normals
 	for(unsigned long int i = 0; i < res->vertices.size() - heightMap->width - 1; ++i){
 		if((i+1) % heightMap->width == 0){
 			continue;
 		}
-		res->pushTri(i, i+1, i+heightMap->width);
-		res->pushTri(i+1, i+heightMap->width, i+heightMap->width+1);
 		
-		glm::vec3 n = res->calcNormal(i, i+1, i+heightMap->width);
-		n += res->calcNormal(i, i+1, i+heightMap->width);
-		n /= 2;
+		unsigned long int
+			v1 = i,
+			v2 = i+1,
+			v3 = i+heightMap->width,
+			v4 = v3+1;
+			
+		res->pushTri(v1, v2, v3);
+		res->pushTri(v3, v2, v4);
+		
+		// calculate the normal as an average of both face normals
+		glm::vec3 n = ( res->calcNormal(v1, v2, v3) + res->calcNormal(v3, v2, v4) ) * 0.5f;
 		
 		res->setNormal(i, n.x, n.y, n.z);
 		res->setNormal(i+1, n.x, n.y, n.z);
