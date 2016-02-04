@@ -115,6 +115,7 @@ void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 	glEnable(GL_SCISSOR_TEST);
 	if(_renderOptions->depthEnabled){
 		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
 	}else{
 		glDisable(GL_DEPTH_TEST);
 	}if(_renderOptions->alphaEnabled){
