@@ -36,8 +36,8 @@ std::string ComponentShaderBase::buildVertexShader(){
 								"layout(location = 4) in vec2 aVertexUVs" + SEMI_ENDL +*/
 
                                 "in vec3 " + GL_ATTRIBUTE_ID_VERTEX_POSITION + SEMI_ENDL +
-                                "in vec4 " + GL_ATTRIBUTE_ID_VERTEX_COLOR + SEMI_ENDL +
                                 "in vec3 " + GL_ATTRIBUTE_ID_VERTEX_NORMALS + SEMI_ENDL +
+                                "in vec4 " + GL_ATTRIBUTE_ID_VERTEX_COLOR + SEMI_ENDL +
                                 "in vec2 " + GL_ATTRIBUTE_ID_VERTEX_UVS + SEMI_ENDL +
 								
 								"out vec3 fragVert" + modGeo + SEMI_ENDL +
