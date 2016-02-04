@@ -83,6 +83,7 @@
     <ClCompile Include="src\CubeMapTexture.cpp" />
     <ClCompile Include="src\DateUtils.cpp" />
     <ClCompile Include="src\CameraController.cpp" />
+    <ClCompile Include="src\FirstPersonController.cpp" />
     <ClCompile Include="src\NineSlicing.cpp" />
     <ClCompile Include="src\NodePhysicsBody.cpp" />
     <ClCompile Include="src\ProgrammaticTexture.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="include\CubeMapTexture.h" />
     <ClInclude Include="include\DateUtils.h" />
     <ClInclude Include="include\EventManager.h" />
+    <ClInclude Include="include\FirstPersonController.h" />
     <ClInclude Include="include\NineSlicing.h" />
     <ClInclude Include="include\NodePhysicsBody.h" />
     <ClInclude Include="include\Plane.h" />
