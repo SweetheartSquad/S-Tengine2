@@ -78,6 +78,7 @@
     <ClCompile Include="src/scenario/Dialogue.cpp" />
     <ClCompile Include="src/scenario/Scenario.cpp" />
     <ClCompile Include="src/BulletHeightField.cpp" />
+    <ClCompile Include="src/BulletVehicle.cpp" />
     <ClCompile Include="src/Colour.cpp" />
     <ClCompile Include="src/CubeMap.cpp" />
     <ClCompile Include="src/CubeMapTexture.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="src/StereoCamera.cpp" />
     <ClCompile Include="src/Sweet_OVR.cpp" />
     <ClInclude Include="include/BulletHeightField.h" />
+    <ClInclude Include="include/BulletVehicle.h" />
     <ClInclude Include="include/Colour.h" />
     <ClInclude Include="include/CubeMap.h" />
     <ClInclude Include="include/CubeMapTexture.h" />
@@ -194,6 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include/BulletHeightField.h" />
+    <ClInclude Include="include/BulletVehicle.h" />
     <ClInclude Include="include/Colour.h" />
     <ClInclude Include="include/CubeMap.h" />
     <ClInclude Include="include/CubeMapTexture.h" />
@@ -277,6 +280,7 @@
     <ClCompile Include="src/scenario/Dialogue.cpp" />
     <ClCompile Include="src/scenario/Scenario.cpp" />
     <ClCompile Include="src/BulletHeightField.cpp" />
+    <ClCompile Include="src/BulletVehicle.cpp" />
     <ClCompile Include="src/Colour.cpp" />
     <ClCompile Include="src/CubeMap.cpp" />
     <ClCompile Include="src/CubeMapTexture.cpp" />
@@ -369,6 +373,7 @@
     <ClCompile Include="src/StereoCamera.cpp" />
     <ClCompile Include="src/Sweet_OVR.cpp" />
     <ClInclude Include="include/BulletHeightField.h" />
+    <ClInclude Include="include/BulletVehicle.h" />
     <ClInclude Include="include/Colour.h" />
     <ClInclude Include="include/CubeMap.h" />
     <ClInclude Include="include/CubeMapTexture.h" />
