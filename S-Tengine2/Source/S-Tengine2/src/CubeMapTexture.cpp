@@ -6,16 +6,16 @@
 #include <stb/stb_image.h>
 #include <stb/stb_image_write.h>
 
-CubeMapTexture::CubeMapTexture(std::string _src, bool _storeData, bool _autoRelease, bool _useMipmaps) :
-	Texture(_src, _storeData, _autoRelease, _useMipmaps),
+CubeMapTexture::CubeMapTexture(std::string _srcPrefix, std::string _srcSuffix, bool _storeData, bool _autoRelease, bool _useMipmaps) :
+	Texture(_srcPrefix + _srcSuffix, _storeData, _autoRelease, _useMipmaps),
 	NodeResource(_autoRelease)
 {
-	faceSrc[0] = _src + "/posx.jpg";
-	faceSrc[1] = _src + "/negx.jpg";
-	faceSrc[2] = _src + "/posy.jpg";
-	faceSrc[3] = _src + "/negy.jpg";
-	faceSrc[4] = _src + "/posz.jpg";
-	faceSrc[5] = _src + "/negz.jpg";
+	faceSrc[0] = _srcPrefix + "/posx." + _srcSuffix;
+	faceSrc[1] = _srcPrefix + "/negx." + _srcSuffix;
+	faceSrc[2] = _srcPrefix + "/posy." + _srcSuffix;
+	faceSrc[3] = _srcPrefix + "/negy." + _srcSuffix;
+	faceSrc[4] = _srcPrefix + "/posz." + _srcSuffix;
+	faceSrc[5] = _srcPrefix + "/negz." + _srcSuffix;
 }
 
 void CubeMapTexture::bufferData() const{

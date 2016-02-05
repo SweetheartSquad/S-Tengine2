@@ -5,8 +5,8 @@
 #include <MeshInterface.h>
 #include <MeshFactory.h>
 
-CubeMap::CubeMap(std::string _src) :
-	cubemapTexture(new CubeMapTexture(_src, true, true, false)),
+CubeMap::CubeMap(std::string _srcPrefix, std::string _srcSuffix) :
+	cubemapTexture(new CubeMapTexture(_srcPrefix, _srcSuffix, true, true, false)),
 	cubemapShader(new ComponentShaderBase(true)),
 	MeshEntity(MeshFactory::getCubeMesh(1.f), nullptr)
 {
