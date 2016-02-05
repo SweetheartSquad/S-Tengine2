@@ -174,7 +174,7 @@ void FirstPersonController::update(Step * _step){
 		if(isGrounded){
 			// jump controls
 			if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
-				applyLinearImpulseToCenter(glm::vec3(0.f, jumpSpeed, 0.f));
+				applyLinearImpulseToCenter(glm::vec3(0.f, jumpSpeed * mass, 0.f));
 				if(jumpSound != nullptr){
 					jumpSound->play();
 				}
