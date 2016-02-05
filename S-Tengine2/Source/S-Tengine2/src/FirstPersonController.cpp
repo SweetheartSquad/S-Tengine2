@@ -133,7 +133,9 @@ void FirstPersonController::update(Step * _step){
 
 	currentYVel = curVelocity.y;
 	if (currentYVel > 0.f && lastYVel < 0.f && isGrounded && jumpTime > 0.025f){
-		landSound->play();
+		if(landSound != nullptr){
+			landSound->play();
+		}
 		jumpTime = 0.0;
 	}
 
@@ -173,7 +175,9 @@ void FirstPersonController::update(Step * _step){
 			// jump controls
 			if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
 				applyLinearImpulseToCenter(glm::vec3(0.f, jumpSpeed, 0.f));
-				jumpSound->play();
+				if(jumpSound != nullptr){
+					jumpSound->play();
+				}
 				jumpTime = _step->time;
 			}
 		}else{
@@ -207,9 +211,11 @@ void FirstPersonController::update(Step * _step){
 
 		// randomize pitch of footsteps and play sound when the animation loops over
 		if(tweenBobbleChange && glmCurVelocityMagXZ >= 1.0f){
-			float pitchRand = sweet::NumberUtils::randomFloat(0.75f, 1.75f);
-			footSteps->setPitch(pitchRand);
-			footSteps->play();
+			if(footSteps != nullptr){
+				float pitchRand = sweet::NumberUtils::randomFloat(0.75f, 1.75f);
+				footSteps->setPitch(pitchRand);
+				footSteps->play();
+			}
 		}
 		
 		// recalculate movement speed based on intended playerSpeed and mass
