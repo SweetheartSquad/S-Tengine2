@@ -11,7 +11,6 @@
 #include <sweet/Input.h>
 #include <MousePerspectiveCamera.h>
 
-
 BulletVehicle::BulletVehicle() :
 	currentSteeringAngle(0.0f),
 	keyboard(&Keyboard::getInstance()),
@@ -20,24 +19,19 @@ BulletVehicle::BulletVehicle() :
 	steeringMode(kTWO_WHEEL)
 {
 
-    m_fEngineForce = 0.0f;                                                 
-    m_fBreakingForce = 0.0f;                                               
-                                                                        
-    m_fmaxEngineForce = 2500.f;//this should be engine/velocity dependent  
-    m_fmaxBreakingForce = 100.f;                                           
-                                                                        
-    m_fVehicleSteering = 0.0f;                                             
-    m_fsteeringIncrement = 0.04f;                                          
-    m_fsteeringClamp = 0.3f;                                               
-    m_fwheelRadius = 0.5f;                                                 
-    m_fwheelWidth = 0.4f;                         
-	m_frollInfluence = 0.01f;//1.0f;         
-	m_fsuspensionRestLength = 0.6f;//0.6         
+    m_fEngineForce = 0.0f;
+	m_fBrakingForce = 0.0f;
 
-	m_tuning.m_suspensionStiffness = 14.f;//20.f;                                 
-    m_tuning.m_suspensionDamping = 2.0f;//2.3f;                                    
-    m_tuning.m_suspensionCompression = 4.0f;//4.4f;       
-	m_tuning.m_frictionSlip = 1000;// (wheel friction) BT_LARGE_FLOAT;    ;
+    m_fmaxEngineForce = 2500.f;//this should be engine/velocity dependent
+    m_fmaxBrakingForce = 100.f;
+
+    m_fVehicleSteering = 0.0f;
+	m_frollInfluence = 0.01f;//1.0f;
+
+	m_tuning.m_suspensionStiffness = 14.f;//20.f;
+    m_tuning.m_suspensionDamping = 2.0f;//2.3f;
+    m_tuning.m_suspensionCompression = 4.0f;//4.4f;
+	m_tuning.m_frictionSlip = 1000;// (wheel friction) BT_LARGE_FLOAT;
 	m_tuning.m_maxSuspensionForce;
 	m_tuning.m_maxSuspensionTravelCm;
 
@@ -54,20 +48,29 @@ BulletVehicle::~BulletVehicle(){
     
     wheels.clear();
 }
-void BulletVehicle::Init(BulletWorld * _world, MeshInterface * _chassisMesh, MeshInterface * _wheelMesh, Shader * _chassisShader, Shader * _wheelShader){
+
+void BulletVehicle::addWheelDefinition(glm::vec3 _pos, MeshInterface * _mesh, bool _front){
+	BulletVehicleWheelDefinition def;
+	def.pos = _pos;
+	def.mesh = _mesh;
+	def.isFrontWheel = _front;
+
+	sweet::Box bbox = _mesh->calcBoundingBox();
+	def.radius = bbox.height * 0.5f;
+	wheelDefinitions.push_back(def);
+}
+
+void BulletVehicle::init(BulletWorld * _world, MeshInterface * _chassisMesh, Shader * _shader){
 	float mass = 500;
-	m_tuning.m_suspensionStiffness = mass*0.01f;//20.f;  
+	m_tuning.m_suspensionStiffness = mass*0.1f;//20.f;  
 	float linearDamping = 0.2f;
 	float angularDamping = 0.5f;
 
-	chassis = new BulletMeshEntity(_world, _chassisMesh, _chassisShader); // TODO: chassis mesh, shader
+	chassis = new BulletMeshEntity(_world, _chassisMesh, _shader); // TODO: chassis mesh, shader
 	childTransform->addChild(chassis);
 	
 	sweet::Box chassisBbox = _chassisMesh->calcBoundingBox();
-	sweet::Box wheelBbox = _wheelMesh->calcBoundingBox();
-	m_fwheelRadius = wheelBbox.height * 0.5f;
-	m_fsuspensionRestLength = chassisBbox.height*0.25f;
-	m_tuning.m_suspensionCompression = wheelBbox.height;
+	m_tuning.m_suspensionCompression = chassisBbox.height*0.25f;
 
 	chassis->setColliderAsBoundingBox();
 
@@ -90,36 +93,22 @@ void BulletVehicle::Init(BulletWorld * _world, MeshInterface * _chassisMesh, Mes
     btVector3 wheelDirectionCS0(0,-1,0);
     btVector3 wheelAxleCS(-1,0,0);
 
-	btVector3 connectionPointCS0(chassisBbox.width*0.4f, -chassisBbox.height*0.25f, chassisBbox.depth*0.3f);
-    m_vehicle->addWheel(connectionPointCS0, wheelDirectionCS0, wheelAxleCS, m_fsuspensionRestLength, m_fwheelRadius, m_tuning, isFrontWheel);
+	for(auto d : wheelDefinitions){
+		// add wheels to bullet vehicle
+		btVector3 connectionPointCS0(chassisBbox.width*d.pos.x, 0, chassisBbox.depth*d.pos.z);
+		btWheelInfo & wheel = m_vehicle->addWheel(connectionPointCS0, wheelDirectionCS0, wheelAxleCS, chassisBbox.height*d.pos.y, d.radius, m_tuning, d.isFrontWheel);
+        wheel.m_rollInfluence = m_frollInfluence;
 
-    connectionPointCS0 = btVector3(-chassisBbox.width*0.4f, -chassisBbox.height*0.25f, chassisBbox.depth*0.3f);
-    m_vehicle->addWheel(connectionPointCS0, wheelDirectionCS0, wheelAxleCS, m_fsuspensionRestLength, m_fwheelRadius, m_tuning, isFrontWheel);
-
-    isFrontWheel = false;
-    connectionPointCS0 = btVector3(-chassisBbox.width*0.4f, -chassisBbox.height*0.25f, -chassisBbox.depth*0.3f);
-    m_vehicle->addWheel(connectionPointCS0, wheelDirectionCS0, wheelAxleCS, m_fsuspensionRestLength, m_fwheelRadius, m_tuning, isFrontWheel);
-
-    connectionPointCS0 = btVector3(chassisBbox.width*0.4f, -chassisBbox.height*0.25f, -chassisBbox.depth*0.3f);
-    m_vehicle->addWheel(connectionPointCS0, wheelDirectionCS0, wheelAxleCS, m_fsuspensionRestLength, m_fwheelRadius, m_tuning, isFrontWheel);
-	unsigned long int numWheels = m_vehicle->getNumWheels();
-    for (unsigned long int i = 0; i < numWheels; ++i){
-        btWheelInfo & wheel = m_vehicle->getWheelInfo(i);
-        wheel.m_rollInfluence = m_frollInfluence;	
-	}
-
-    m_vehicle->resetSuspension();
-
-    for (unsigned long int i = 0; i < numWheels; ++i){
-        // create wheels
-		MeshEntity * wheelNode = new MeshEntity(_wheelMesh, _wheelShader); // TODO: Wheel mesh, shader
+		MeshEntity * wheelNode = new MeshEntity(d.mesh, _shader); // TODO: Wheel mesh, shader
 		childTransform->addChild(wheelNode);
 		wheels.push_back(wheelNode);
 
 		// flip the left wheels
-		wheelNode->meshTransform->scale((m_vehicle->getWheelInfo(i).m_chassisConnectionPointCS.x() >= 0.0 ? -1 : 1), 1, 1);
-    }
+		wheelNode->meshTransform->scale((chassisBbox.width*d.pos.x >= 0.0 ? -1 : 1), 1, 1);
+	}
+
 	// realign the wheels after creation
+    m_vehicle->resetSuspension();
 	realignWheels();
 
    
@@ -150,6 +139,7 @@ void BulletVehicle::update(Step * _step){
 void BulletVehicle::handleInput(){
 	float newSteering = 0.0f;
     float accelerator = 0.0f;
+    float brake = 0.0f;
 
     // Read controls
 	if (keyboard->keyDown(GLFW_KEY_A)){
@@ -175,10 +165,10 @@ void BulletVehicle::handleInput(){
         accelerator = -0.5f;
 	}
 	m_fEngineForce = m_fmaxEngineForce * accelerator;
-    m_fBreakingForce = 0.f;
+	m_fBrakingForce = m_fmaxBrakingForce * brake;
 	
 	// wake up the rigid body if needed
-    if( glm::abs(newSteering) >= FLT_EPSILON || glm::abs(accelerator) != FLT_EPSILON ){
+    if( glm::abs(newSteering) >= FLT_EPSILON || glm::abs(accelerator) >= FLT_EPSILON ){
 		chassis->body->activate();
     }
 }
@@ -204,7 +194,7 @@ void BulletVehicle::updateWheel(unsigned long int _index, bool _reverse){
 	m_vehicle->setSteeringValue(_reverse ? -m_fVehicleSteering : m_fVehicleSteering, _index);
     m_vehicle->applyEngineForce(m_fEngineForce, _index);
 	if(m_fEngineForce < 0){
-		m_vehicle->setBrake(m_fBreakingForce, _index);
+		m_vehicle->setBrake(m_fBrakingForce, _index);
 	}
 }
 
@@ -212,7 +202,7 @@ void BulletVehicle::realignWheels(){
 	unsigned long int numWheels = m_vehicle->getNumWheels();
     for (unsigned long int i = 0; i < m_vehicle->getNumWheels(); ++i){
 		// get wheel properties
-		m_vehicle->updateWheelTransform( i, false );
+		m_vehicle->updateWheelTransform(i, false);
 		btTransform transform = m_vehicle->getWheelTransformWS(i);
 		btVector3 origin = transform.getOrigin();
 		btQuaternion rotation = transform.getRotation();
