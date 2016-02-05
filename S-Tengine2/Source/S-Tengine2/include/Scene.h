@@ -49,9 +49,13 @@ public:
 	
 	// List of cameras for the scene
 	std::vector<Camera *> cameras;
+	// removes _camera from the list of cameras
+	void removeCamera(Camera * _camera);
 
 	/** The lights for this scene **/
 	std::vector<Light *> lights;
+	// removes _light from the list of lights
+	void removeLight(Light * _light);
 
 	explicit Scene(Game * _game);
 	

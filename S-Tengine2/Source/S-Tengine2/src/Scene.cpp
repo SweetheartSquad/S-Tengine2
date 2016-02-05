@@ -156,6 +156,24 @@ void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 	}
 }
 
+void Scene::removeLight(Light * _light){
+	for(signed long int i = lights.size()-1; i > 0; --i){
+		if(lights.at(i) == _light){
+			lights.erase(lights.begin() + i);
+			break;
+		}
+	}
+}
+
+void Scene::removeCamera(Camera * _camera){
+	for(signed long int i = cameras.size()-1; i > 0; --i){
+		if(cameras.at(i) == _camera){
+			cameras.erase(cameras.begin() + i);
+			break;
+		}
+	}
+}
+
 /*void Scene::renderDepth(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
 	// Store a reference to the current override shader so we can restore it 
 	Shader * backupOverride = _renderOptions->overrideShader;
