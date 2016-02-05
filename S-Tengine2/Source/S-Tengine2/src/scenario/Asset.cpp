@@ -119,11 +119,12 @@ AssetAudio::AssetAudio(Json::Value _json, Scenario * const _scenario) :
 		src = "assets/audio/" + src;
 	}
 	bool stream = _json.get("stream", false).asBool();
+	bool positional = _json.get("positional", false).asBool();
 	std::string category = _json.get("category", "other").asString();
 	if(stream){
-		sound = new OpenAL_SoundStream(src.c_str(), false, false, category);
+		sound = new OpenAL_SoundStream(src.c_str(), positional, false, category);
 	}else{
-		sound = new OpenAL_SoundSimple(src.c_str(), false, false, category);
+		sound = new OpenAL_SoundSimple(src.c_str(), positional, false, category);
 	}
 }
 AssetAudio * AssetAudio::create(Json::Value _json, Scenario * const _scenario){
