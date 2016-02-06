@@ -148,29 +148,20 @@ namespace sweet{
 
 
 	/**
-	* @returns the width of the current context in pixels 
-	*/
-	unsigned long int getWindowWidth();
-	/**
 	* @returns the width of _window in pixels
+	* if _window is nullptr, uses the sweet::currentContext as the window
 	*/
-	unsigned long int getWindowWidth(GLFWwindow * _window);
+	unsigned long int getWindowWidth(GLFWwindow * _window = nullptr);
 	
-	/**
-	* @returns the height of the current context in pixels 
-	*/
-	unsigned long int getWindowHeight();
 	/**
 	* @returns the height of _window in pixels
+	* if _window is nullptr, uses the sweet::currentContext as the window
 	*/
-	unsigned long int getWindowHeight(GLFWwindow * _window);
+	unsigned long int getWindowHeight(GLFWwindow * _window = nullptr);
 	
 	/**
-	* @returns the width and height of the current context in pixels as a Dimension object 
+	* @returns the width and height of _window in pixels as a Dimension object
+	* if _window is nullptr, uses the sweet::currentContext as the window
 	*/
-	glm::uvec2 getWindowDimensions();
-	/**
-	* @returns the width and height of _window in pixels as a Dimension object 
 	*/
-	glm::uvec2 getWindowDimensions(GLFWwindow * _window);
 }

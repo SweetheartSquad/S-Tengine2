@@ -336,22 +336,25 @@ void sweet::calculateDeltaTimeCorrection(){
 	step.cycles++;
 }
 
-unsigned long int sweet::getWindowWidth(){
-	return getWindowWidth(currentContext);
-}unsigned long int sweet::getWindowWidth(GLFWwindow * _window){
+unsigned long int sweet::getWindowWidth(GLFWwindow * _window){
+	if(_window == nullptr){
+		_window = currentContext;
+	}
 	return getWindowDimensions().x;
 }
 
-unsigned long int sweet::getWindowHeight(){
-	return getWindowHeight(currentContext);
-}
+
 unsigned long int sweet::getWindowHeight(GLFWwindow * _window){
+	if(_window == nullptr){
+		_window = currentContext;
+	}
 	return getWindowDimensions().y;
 }
 
-glm::uvec2 sweet::getWindowDimensions(){
-	return getWindowDimensions(currentContext);
-}glm::uvec2 sweet::getWindowDimensions(GLFWwindow * _window){
+glm::uvec2 sweet::getWindowDimensions(GLFWwindow * _window){
+	if(_window == nullptr){
+		_window = currentContext;
+	}
 	int windowHeight;
 	int windowWidth;
 
