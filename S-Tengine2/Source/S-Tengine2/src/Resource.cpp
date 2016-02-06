@@ -11,8 +11,6 @@
 #include "MeshInterface.h"
 #include "Resource.h"
 #include "FileUtils.h"
-#include "VoxelJoint.h"
-#include "VoxelMesh.h"
 #include "Animation.h"
 #include "Box2DSprite.h"
 #include "Box2DWorld.h"

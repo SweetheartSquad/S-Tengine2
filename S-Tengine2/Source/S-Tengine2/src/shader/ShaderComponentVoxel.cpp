@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shader/VoxelComponent.h"
+#include "shader/ShaderComponentVoxel.h"
 #include "MatrixStack.h"
 #include "MeshInterface.h"
 #include "RenderOptions.h"
@@ -10,20 +10,20 @@
 
 #include <glm/glm.hpp>
 
-VoxelComponent::VoxelComponent(Shader * _shader) :
+ShaderComponentVoxel::ShaderComponentVoxel(Shader * _shader) :
 	GeometryComponent(_shader)
 {
 }
 
-std::string VoxelComponent::getVertexVariablesString(){
+std::string ShaderComponentVoxel::getVertexVariablesString(){
 	return DEFINE + SHADER_COMPONENT_VOXEL + ENDL;
 }
 
-std::string VoxelComponent::getVertexBodyString(){
+std::string ShaderComponentVoxel::getVertexBodyString(){
 	return "gl_Position = vec4(aVertexPosition, 1.0);\n";
 }
 
-std::string VoxelComponent::getGeometryShader(){
+std::string ShaderComponentVoxel::getGeometryShader(){
 	return 
 		"#version 150\n"
 
@@ -94,7 +94,7 @@ std::string VoxelComponent::getGeometryShader(){
 }
 
 //TOOD make resolution configurable
-void VoxelComponent::configureUniforms(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable){
+void ShaderComponentVoxel::configureUniforms(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable){
 	const glm::mat4 * vp = _matrixStack->getVP();
 	GLuint vpUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), "VP");
 	GLuint resolutionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), "resolution");

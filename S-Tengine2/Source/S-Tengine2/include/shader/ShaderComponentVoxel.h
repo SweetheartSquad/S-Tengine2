@@ -2,10 +2,9 @@
 
 #include "GeometryComponent.h"
 
-class VoxelComponent : public GeometryComponent
-{
+class ShaderComponentVoxel : public GeometryComponent{
 public:
-	VoxelComponent(Shader * _shader);
+	ShaderComponentVoxel(Shader * _shader);
 	std::string getGeometryShader() override;
 	std::string getVertexVariablesString() override;
 	std::string getVertexBodyString() override;

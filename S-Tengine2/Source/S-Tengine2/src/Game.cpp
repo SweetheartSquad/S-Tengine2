@@ -7,7 +7,7 @@
 #include <Mouse.h>
 #include <sweet.h>
 #include <MatrixStack.h>
-#include <VoxRenderOptions.h>
+#include <RenderOptions.h>
 
 #include <Scene_Splash_Engine.h>
 #include <Scene_Splash_SweetHeartSquad.h>
@@ -35,10 +35,6 @@ Game::Game(std::string _firstSceneKey, Scene * _firstScene, bool _isRunning) :
 	switchingScene(false),
 	newSceneKey(""),
 	deleteOldScene(false),
-	kc_lastKey(0),
-	kc_code(0),
-	kc_active(false),
-	kc_just_active(false),
 	autoResize(true),
 	numSplashScenes(0)
 {
@@ -120,106 +116,6 @@ void Game::update(Step * _step){
 	if(printFPS){
 		printFps();
 	}
-	if(kc_just_active){
-		kc_just_active = false;
-	}
-	switch(kc_code){
-	case 0:
-		if(keyboard->keyJustUp(GLFW_KEY_UP)){
-			kc_lastKey = GLFW_KEY_UP;
-			kc_code += 1;
-		}
-		break;
-	case 1:
-		if(keyboard->keyJustUp(GLFW_KEY_UP)){
-			if(kc_lastKey == GLFW_KEY_UP){
-				kc_lastKey = GLFW_KEY_UP;
-				kc_code += 1;
-			}else{
-				kc_code = 0;
-			}
-		}
-		break;
-	case 2:
-		if(keyboard->keyJustUp(GLFW_KEY_DOWN)){
-			if(kc_lastKey == GLFW_KEY_UP){
-				kc_lastKey = GLFW_KEY_DOWN;
-				kc_code += 1;
-			}else{
-				kc_code = 0;
-			}
-		}
-		break;
-	case 3:
-		if(keyboard->keyJustUp(GLFW_KEY_DOWN)){
-			if(kc_lastKey == GLFW_KEY_DOWN){
-				kc_lastKey = GLFW_KEY_DOWN;
-				kc_code += 1;
-			}else{
-				kc_code = 0;
-			}
-		}
-		break;
-	case 4:
-		if(keyboard->keyJustUp(GLFW_KEY_LEFT)){
-			if(kc_lastKey == GLFW_KEY_DOWN){
-				kc_lastKey = GLFW_KEY_LEFT;
-				kc_code += 1;
-			}else{
-				kc_code = 0;
-			}
-		}
-		break;
-	case 5:
-		if(keyboard->keyJustUp(GLFW_KEY_RIGHT)){
-			if(kc_lastKey == GLFW_KEY_LEFT){
-				kc_lastKey = GLFW_KEY_RIGHT;
-				kc_code += 1;
-			}else{
-				kc_code = 0;
-			}
-		}
-		break;
-	case 6:
-		if(keyboard->keyJustUp(GLFW_KEY_LEFT)){
-			if(kc_lastKey == GLFW_KEY_RIGHT){
-				kc_lastKey = GLFW_KEY_LEFT;
-				kc_code += 1;
-			}else{
-				kc_code = 0;
-			}
-		}
-		break;
-	case 7:
-		if(keyboard->keyJustUp(GLFW_KEY_RIGHT)){
-			if(kc_lastKey == GLFW_KEY_LEFT){
-				kc_lastKey = GLFW_KEY_RIGHT;
-				kc_code += 1;
-			}else{
-				kc_code = 0;
-			}
-		}
-		break;
-	case 8:
-		if(keyboard->keyJustUp(GLFW_KEY_B)){
-			if(kc_lastKey == GLFW_KEY_RIGHT){
-				kc_lastKey = GLFW_KEY_B;
-				kc_code += 1;
-			}else{
-				kc_code = 0;
-			}
-		}
-		break;
-	case 9:
-		if(keyboard->keyJustUp(GLFW_KEY_A)){
-			if(kc_lastKey == GLFW_KEY_B){
-				kc_active = !kc_active;
-				kc_just_active = true;
-			}
-			kc_code = 0;
-		}
-		break;
-	}
 	
 	if(currentScene != nullptr/* && sweet::step.deltaTimeCorrection < 5*/){
 		currentScene->update(_step);
@@ -231,8 +127,7 @@ void Game::draw(void){
 		resize();
 	}
 	sweet::MatrixStack ms;
-	VoxRenderOptions ro(nullptr, nullptr, nullptr);
-	ro.kc_active = kc_active;
+	RenderOptions ro(nullptr, nullptr, nullptr);
 	if(currentScene != nullptr){
 		ro.lights = &currentScene->lights;
 		for(auto s : Shader::allShaders){

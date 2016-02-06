@@ -9,7 +9,7 @@
 
 #include <string>
 
-#include "VoxMatrices.h"
+#include "MatrixStack.h"
 #include <Configuration.h>
 #include "Step.h"
 

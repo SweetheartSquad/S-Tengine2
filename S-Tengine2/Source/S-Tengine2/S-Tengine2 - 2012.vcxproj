@@ -79,6 +79,9 @@
     <ClCompile Include="src\BulletHeightField.cpp" />
     <ClCompile Include="src\BulletVehicle.cpp" />
     <ClCompile Include="src\Colour.cpp" />
+    <ClCompile Include="src\Command.cpp" />
+    <ClCompile Include="src\CommandProcessor.cpp" />
+    <ClCompile Include="src\CompressedCommand.cpp" />
     <ClCompile Include="src\CubeMap.cpp" />
     <ClCompile Include="src\CubeMapTexture.cpp" />
     <ClCompile Include="src\DateUtils.cpp" />
@@ -103,7 +106,7 @@
     <ClCompile Include="src/shader/ShaderComponentShadow.cpp" />
     <ClCompile Include="src/shader/SharedComponentShaderMethods.cpp" />
     <ClCompile Include="src/shader/ShaderComponentTexture.cpp" />
-    <ClCompile Include="src/shader/VoxelComponent.cpp" />
+    <ClCompile Include="src\shader\ShaderComponentVoxel.cpp" />
     <ClCompile Include="src/SoundManager.cpp" />
     <ClCompile Include="src/Sprite.cpp" />
     <ClCompile Include="src/SpriteSheet.cpp" />
@@ -114,9 +117,6 @@
     <ClCompile Include="src/Texture.cpp" />
     <ClCompile Include="src/Transform.cpp" />
     <ClCompile Include="src/Sweet.cpp" />
-    <ClCompile Include="src/VoxelMesh.cpp" />
-    <ClCompile Include="src/VoxMatrices.cpp" />
-    <ClCompile Include="src/VoxRenderOptions.cpp" />
     <ClCompile Include="src/Particle.cpp" />
     <ClCompile Include="src/shader/ShaderComponentAlpha.cpp" />
     <ClCompile Include="src/shader/ShaderComponentTint.cpp" />
@@ -169,9 +169,13 @@
     <ClCompile Include="src\shader\ShaderComponentWorldSpaceUVs.cpp" />
     <ClCompile Include="src\StereoCamera.cpp" />
     <ClCompile Include="src\Sweet_OVR.cpp" />
+    <ClCompile Include="src\VoxRenderOptions.cpp" />
     <ClInclude Include="include\BulletHeightField.h" />
     <ClInclude Include="include\BulletVehicle.h" />
     <ClInclude Include="include\Colour.h" />
+    <ClInclude Include="include\Command.h" />
+    <ClInclude Include="include\CommandProcessor.h" />
+    <ClInclude Include="include\CompressedCommand.h" />
     <ClInclude Include="include\CubeMap.h" />
     <ClInclude Include="include\CubeMapTexture.h" />
     <ClInclude Include="include\DateUtils.h" />
@@ -192,6 +196,7 @@
     <ClInclude Include="include\shader\ShaderComponentWorldSpaceUVs.h" />
     <ClInclude Include="include\StereoCamera.h" />
     <ClInclude Include="include\sweet\Input.h" />
+    <ClInclude Include="include\VoxRenderOptions.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include/Accelerometer.h" />
@@ -278,7 +283,7 @@
     <ClInclude Include="include/shader/ShaderComponentShadow.h" />
     <ClInclude Include="include/shader/SharedComponentShaderMethods.h" />
     <ClInclude Include="include/shader/ShaderComponentTexture.h" />
-    <ClInclude Include="include/shader/VoxelComponent.h" />
+    <ClInclude Include="include\shader\ShaderComponentVoxel.h" />
     <ClInclude Include="include/SoundManager.h" />
     <ClInclude Include="include/Sprite.h" />
     <ClInclude Include="include/SpriteSheet.h" />
@@ -291,9 +296,6 @@
     <ClInclude Include="include/Tween.h" />
     <ClInclude Include="include/Vertex.h" />
     <ClInclude Include="include/Sweet.h" />
-    <ClInclude Include="include/VoxelMesh.h" />
-    <ClInclude Include="include/VoxMatrices.h" />
-    <ClInclude Include="include/VoxRenderOptions.h" />
     <ClInclude Include="include/Particle.h" />
     <ClInclude Include="include/shader/ShaderComponentAlpha.h" />
     <ClInclude Include="include/shader/ShaderComponentTint.h" />

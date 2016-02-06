@@ -122,9 +122,4 @@ public:
 
 	virtual void setViewport(int _x, int _y, int _width, int _height);
 	int viewPortX, viewPortY, viewPortWidth, viewPortHeight;
-	
-	unsigned long int kc_lastKey;
-	unsigned long int kc_code;
-	bool kc_active;
-	bool kc_just_active;
 };

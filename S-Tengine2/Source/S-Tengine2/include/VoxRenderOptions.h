@@ -7,15 +7,11 @@
 class Shader;
 class Light;
 
+// necessary for the old shadow shader component
 class VoxRenderOptions : public RenderOptions{
-	
 public:
-
 	VoxRenderOptions(Shader * _shader, std::vector<Light *> * _lights, Shader * _overrideShader = nullptr);
-
 	~VoxRenderOptions();
 
 	GLuint shadowMapTextureId;
-
-	bool kc_active;
 };

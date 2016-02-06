@@ -2,12 +2,10 @@
 
 #include <typeinfo>
 
-#include <cinder/app/AppBasic.h>
-
 #include "CommandProcessor.h"
 #include "Command.h"
-#include "Commands/CompressedCommand.h"
-#include "ConsoleGUI.h"
+#include "CompressedCommand.h"
+#include "Log.h"
 
 CommandProcessor::CommandProcessor(void) :
 	currentCompressedCommand(nullptr)
@@ -17,7 +15,7 @@ CommandProcessor::CommandProcessor(void) :
 bool CommandProcessor::executeCommand(Command * c){
 	if(currentCompressedCommand != nullptr){
 		if(!currentCompressedCommand->subCmdProc.executeCommand(c)){
-			error("Compression command failed: sub-command error bubbled up");
+			Log::error("Compression command failed: sub-command error bubbled up");
 			currentCompressedCommand->subCmdProc.undoAll();
 			currentCompressedCommand->firstRun = false;
 			endCompressing();
@@ -138,28 +136,4 @@ CommandProcessor::~CommandProcessor(void){
 		delete consoleEntries.back();
 		consoleEntries.pop_back();
 	}
-}
-
-void CommandProcessor::log(std::string _message){
-	std::stringstream t;
-	t << "Log: ";
-	t << _message;
-	consoleEntries.push_back(new ConsoleEntry(t.str(), ConsoleEntry::Type::kLOG));
-	t.flush();
-}
-
-void CommandProcessor::warn(std::string _message){
-	std::stringstream t;
-	t << "Warning: ";
-	t << _message;
-	consoleEntries.push_back(new ConsoleEntry(t.str(), ConsoleEntry::Type::kWARNING));
-	t.flush();
-}
-
-void CommandProcessor::error(std::string _message){
-	std::stringstream t;
-	t << "Error: ";
-	t << _message;
-	consoleEntries.push_back(new ConsoleEntry(t.str(), ConsoleEntry::Type::kERROR));
-	t.flush();
 }
