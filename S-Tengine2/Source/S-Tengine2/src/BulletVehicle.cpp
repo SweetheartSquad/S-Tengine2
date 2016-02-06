@@ -144,20 +144,17 @@ void BulletVehicle::update(Step * _step){
 }
 
 void BulletVehicle::handleInput(){
-	// if the vehicle is disabled, return early
-	if(!enabled){
-		return;
-	}
-
 	float newSteering = 0.0f;
     float accelerator = 0.0f;
     float brake = 0.0f;
 
     // Read controls
-	if (keyboard->keyDown(GLFW_KEY_A)){
-        newSteering = 1.0f;
-	}if (keyboard->keyDown(GLFW_KEY_D)){
-        newSteering = -1.0f;
+	if(enabled){
+		if (keyboard->keyDown(GLFW_KEY_A)){
+			newSteering = 1.0f;
+		}if (keyboard->keyDown(GLFW_KEY_D)){
+			newSteering = -1.0f;
+		}
 	}
 
     // calculate steering angle
@@ -171,10 +168,12 @@ void BulletVehicle::handleInput(){
 	m_fVehicleSteering = currentSteeringAngle;
 
     // calculate forces
-    if (keyboard->keyDown(GLFW_KEY_W)){
-        accelerator = 1.0f;
-	}if (keyboard->keyDown(GLFW_KEY_S)){
-        accelerator = -0.5f;
+	if(enabled){
+		if (keyboard->keyDown(GLFW_KEY_W)){
+			accelerator = 1.0f;
+		}if (keyboard->keyDown(GLFW_KEY_S)){
+			accelerator = -0.5f;
+		}
 	}
 	m_fEngineForce = m_fmaxEngineForce * accelerator;
 	m_fBrakingForce = m_fmaxBrakingForce * brake;
