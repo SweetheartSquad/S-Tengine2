@@ -9,27 +9,34 @@ Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _char) :
 	NodeResource(false),
 	character(_char)
 {
+	// get a standard plane mesh and insert the verts into the glyph
+	MeshInterface * m = MeshFactory::getPlaneMesh(0.5f, false);
+	insertVertices(m);
+	delete m;
+
+	// get the glyph dimensions
 	float vx = _glyph->bitmap_left;
 	float vy = _glyph->bitmap_top;
 	float w = _glyph->bitmap.width;
 	float h = _glyph->bitmap.rows;
 	advance = _glyph->advance;
 	metrics = _glyph->metrics;
+	
+	// modify the mesh verts to match the glyph dimensions
+	vertices.at(0).x = vx;
+	vertices.at(0).y = vy;
+	
+	vertices.at(1).x = vx + w;
+	vertices.at(1).y = vy;
+	
+	vertices.at(2).x = vx + w;
+	vertices.at(2).y = vy - h;
+	
+	vertices.at(3).x = vx;
+	vertices.at(3).y = vy - h;
 
-	pushVert(Vertex(vx, vy, 0));
-	pushVert(Vertex(vx + w, vy, 0));
-	pushVert(Vertex(vx + w, vy - h, 0));
-	pushVert(Vertex(vx, vy - h, 0));
-	setNormal(0, 0.0, 0.0, 1.0);
-	setNormal(1, 0.0, 0.0, 1.0);
-	setNormal(2, 0.0, 0.0, 1.0);
-	setNormal(3, 0.0, 0.0, 1.0);
-	setUV(0, 0.0, 0.0);
-	setUV(1, 1.0, 0.0);
-	setUV(2, 1.0, 1.0);
-	setUV(3, 0.0, 1.0);
-
-	scaleModeMag = scaleModeMin = GL_NEAREST;
+	// set the scale mode
+	setScaleMode(GL_NEAREST);
 	uvEdgeMode = GL_CLAMP;
 }
 
