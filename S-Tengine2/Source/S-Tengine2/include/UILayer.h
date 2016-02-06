@@ -38,6 +38,9 @@ public:
 	void resize(float _left, float _right, float _bottom, float _top);
 	virtual void update(Step * _step) override;
 
+	// if true, traverses the hierarchy including entities and transforms
+	// if false, only traverses the standard UI layout system
+	bool complexHitTest;
 	void hitTest(NodeChild * _c);
 
 	// adds a sprite with the default cursor texture to the ui layer which is updated each frame to match the mouse position

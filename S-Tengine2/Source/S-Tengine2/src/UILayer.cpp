@@ -24,7 +24,8 @@ UILayer::UILayer(float _left, float _right, float _bottom, float _top) :
 	mouseIndicator(nullptr),
 	cam(new OrthographicCamera(_left, _right, _bottom, _top, -1000.f, 1000.f)),
 	bulletDebugDrawer(new BulletDebugDrawer(world->world)),
-	shader(new ComponentShaderBase(true))
+	shader(new ComponentShaderBase(true)),
+	complexHitTest(false)
 {
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->addComponent(new ShaderComponentMVP(shader));
@@ -137,14 +138,18 @@ void UILayer::hitTest(NodeChild * _c){
 			ui->setUpdateState(rayInfo.raycb.hasHit());
 		}
 
-		// run hittest on this child NodeUI's children
-		for(NodeChild * c : ui->uiElements->children){
-			Transform * t = dynamic_cast<Transform *>(c);
-			if(t != nullptr){
-				hitTest(t->children.at(0));
+		if(!complexHitTest){
+			// run hittest on this child NodeUI's children
+			for(NodeChild * c : ui->uiElements->children){
+				Transform * t = dynamic_cast<Transform *>(c);
+				if(t != nullptr){
+					hitTest(t->children.at(0));
+				}
 			}
 		}
-	}/*else{
+	}
+
+	if(complexHitTest){
 		Entity * e = dynamic_cast<Entity *>(_c);
 		if(e != nullptr){
 			hitTest(e->childTransform);
@@ -157,7 +162,7 @@ void UILayer::hitTest(NodeChild * _c){
 			}
 			return;
 		}
-	}*/
+	}
 }
 
 Sprite * UILayer::addMouseIndicator(){
