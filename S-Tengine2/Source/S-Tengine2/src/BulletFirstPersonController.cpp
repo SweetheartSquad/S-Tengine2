@@ -110,9 +110,15 @@ BulletFirstPersonController::BulletFirstPersonController(BulletWorld * _bulletWo
 };
 
 BulletFirstPersonController::~BulletFirstPersonController(){
-	delete footSteps;
-	delete jumpSound;
-	delete landSound;
+	if(footSteps != nullptr){
+		footSteps->decrementAndDelete();
+	}
+	if(jumpSound != nullptr){
+		jumpSound->decrementAndDelete();
+	}
+	if(landSound != nullptr){
+		landSound->decrementAndDelete();
+	}
 }
 
 void BulletFirstPersonController::update(Step * _step){
