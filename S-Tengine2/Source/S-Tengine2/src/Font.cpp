@@ -4,7 +4,7 @@
 #include <Sweet.h>
 #include <MeshFactory.h>
 
-Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _char) :
+Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _char, bool _antiAliased) :
 	MeshInterface(GL_QUADS, GL_STATIC_DRAW),
 	NodeResource(false),
 	character(_char)
@@ -36,7 +36,11 @@ Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _char) :
 	vertices.at(3).y = vy - h;
 
 	// set the scale mode
-	setScaleMode(GL_NEAREST);
+	if(!_antiAliased){
+		setScaleMode(GL_NEAREST);
+	}else{
+		setScaleMode(GL_LINEAR);
+	}
 	uvEdgeMode = GL_CLAMP;
 }
 
@@ -80,7 +84,8 @@ void GlyphTexture::load(){
 
 Font::Font(std::string _fontSrc, int _size, bool _autoRelease) :
 	NodeResource(_autoRelease),
-	face(nullptr)
+	face(nullptr),
+	antiAliased(false)
 {
 	if(FT_New_Face(sweet::freeTypeLibrary, _fontSrc.c_str(), 0, &face) != 0) {
 		Log::error("Couldn't load font: " + _fontSrc);
@@ -140,7 +145,7 @@ Glyph* Font::getMeshInterfaceForChar(wchar_t _char){
 	auto t = meshes.find(_char);
 	if(t == meshes.end()){
 		loadGlyph(_char);
-		Glyph * mesh = new Glyph(face->glyph, _char);
+		Glyph * mesh = new Glyph(face->glyph, _char, antiAliased);
 		mesh->autoRelease = false;
 		mesh->pushTexture2D(getTextureForChar(_char));
 		meshes.insert(std::pair<char, Glyph *>(_char, mesh));
