@@ -163,5 +163,11 @@ namespace sweet{
 	* @returns the width and height of _window in pixels as a Dimension object
 	* if _window is nullptr, uses the sweet::currentContext as the window
 	*/
+	glm::uvec2 getWindowDimensions(GLFWwindow * _window = nullptr);
+
+	/*
+	* @returns the DPI of the monitor
+	* if _monitor is nullptr, uses the primary monitor
 	*/
+	float getDpi(GLFWmonitor * _monitor = nullptr);
 }

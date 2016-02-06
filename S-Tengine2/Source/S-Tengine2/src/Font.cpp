@@ -90,7 +90,8 @@ Font::Font(std::string _fontSrc, int _size, bool _autoRelease) :
 	if(FT_New_Face(sweet::freeTypeLibrary, _fontSrc.c_str(), 0, &face) != 0) {
 		Log::error("Couldn't load font: " + _fontSrc);
 	}
-	size = _size;
+	size = _size * (sweet::getDpi() / 75.f);
+	std::cout << _size << ", " << sweet::getDpi() << " = " << size << std::endl;
 	lineGapRatio = 1.2f;
 }
 
