@@ -129,23 +129,35 @@ void UILayer::update(Step * _step){
 
 void UILayer::hitTest(NodeChild * _c){
 	NodeUI * ui = dynamic_cast<NodeUI *>(_c);
-	if(ui != nullptr && ui->isMouseEnabled() && ui->shape != nullptr){
-		rayInfo.raycb = btCollisionWorld::AllHitsRayResultCallback(rayInfo.raystart, rayInfo.rayend);
-		world->world->rayTestSingle(rayInfo.rayfrom, rayInfo.rayto, ui->body, ui->shape, ui->body->getWorldTransform(), rayInfo.raycb);
-		ui->setUpdateState(rayInfo.raycb.hasHit());
-	}
-	Entity * e = dynamic_cast<Entity *>(_c);
-	if(e != nullptr){
-		hitTest(e->childTransform);
-		return;
-	}
-	Transform * t = dynamic_cast<Transform *>(_c);
-	if(t != nullptr){
-		for(NodeChild * c : t->children){
-			hitTest(c);
+	if(ui != nullptr){
+		// run hittest on the child NodeUI
+		if(ui->isMouseEnabled() && ui->shape != nullptr){
+			rayInfo.raycb = btCollisionWorld::AllHitsRayResultCallback(rayInfo.raystart, rayInfo.rayend);
+			world->world->rayTestSingle(rayInfo.rayfrom, rayInfo.rayto, ui->body, ui->shape, ui->body->getWorldTransform(), rayInfo.raycb);
+			ui->setUpdateState(rayInfo.raycb.hasHit());
 		}
-		return;
-	}
+
+		// run hittest on this child NodeUI's children
+		for(NodeChild * c : ui->uiElements->children){
+			Transform * t = dynamic_cast<Transform *>(c);
+			if(t != nullptr){
+				hitTest(t->children.at(0));
+			}
+		}
+	}/*else{
+		Entity * e = dynamic_cast<Entity *>(_c);
+		if(e != nullptr){
+			hitTest(e->childTransform);
+			return;
+		}
+		Transform * t = dynamic_cast<Transform *>(_c);
+		if(t != nullptr){
+			for(NodeChild * c : t->children){
+				hitTest(c);
+			}
+			return;
+		}
+	}*/
 }
 
 Sprite * UILayer::addMouseIndicator(){
