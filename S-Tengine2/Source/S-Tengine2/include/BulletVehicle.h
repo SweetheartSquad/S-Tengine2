@@ -19,6 +19,11 @@ struct BulletVehicleWheelDefinition{
 	bool isFrontWheel;
 	// wheel radius
 	float radius;
+
+
+	float steeringMultiplier;
+	float engineMultiplier;
+	float brakingMultiplier;
 };
 
 // Partially based on the forklift demo and on the one found here: http://urho3d.prophpbb.com/topic1354.html
@@ -59,7 +64,15 @@ public:
 	void realignWheels();
     
 	BulletMeshEntity * chassis;
+
+	void enable();
+	void disable();
+	bool isEnabled();
+
+	std::vector<MeshEntity * > wheels;
+	std::vector<BulletVehicleWheelDefinition> wheelDefinitions;
 protected:
+	bool enabled;
 	Mouse * mouse;
 	Keyboard * keyboard;
     
@@ -71,8 +84,6 @@ protected:
     btVehicleRaycaster * m_vehicleRayCaster;
     btRaycastVehicle * m_vehicle;
 	
-	std::vector<MeshEntity * > wheels;
-	std::vector<BulletVehicleWheelDefinition> wheelDefinitions;
 
     float m_fEngineForce;
     float m_fBrakingForce;

@@ -16,7 +16,8 @@ BulletVehicle::BulletVehicle() :
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance()),
 	orbitalCameraRadius(3.f),
-	steeringMode(kTWO_WHEEL)
+	steeringMode(kTWO_WHEEL),
+	enabled(true)
 {
 
     m_fEngineForce = 0.0f;
@@ -57,6 +58,12 @@ void BulletVehicle::addWheelDefinition(glm::vec3 _pos, MeshInterface * _mesh, bo
 
 	sweet::Box bbox = _mesh->calcBoundingBox();
 	def.radius = bbox.height * 0.5f;
+
+	
+	def.steeringMultiplier = 1.f;
+	def.engineMultiplier = 1.f;
+	def.brakingMultiplier= 1.f;
+
 	wheelDefinitions.push_back(def);
 }
 
@@ -137,6 +144,11 @@ void BulletVehicle::update(Step * _step){
 }
 
 void BulletVehicle::handleInput(){
+	// if the vehicle is disabled, return early
+	if(!enabled){
+		return;
+	}
+
 	float newSteering = 0.0f;
     float accelerator = 0.0f;
     float brake = 0.0f;
@@ -191,10 +203,11 @@ void BulletVehicle::updateWheels(){
 }
 
 void BulletVehicle::updateWheel(unsigned long int _index, bool _reverse){
-	m_vehicle->setSteeringValue(_reverse ? -m_fVehicleSteering : m_fVehicleSteering, _index);
-    m_vehicle->applyEngineForce(m_fEngineForce, _index);
+	const BulletVehicleWheelDefinition & w = wheelDefinitions.at(_index);
+	m_vehicle->setSteeringValue((_reverse ? -m_fVehicleSteering : m_fVehicleSteering) * w.steeringMultiplier, _index);
+	m_vehicle->applyEngineForce(m_fEngineForce * w.engineMultiplier, _index);
 	if(m_fEngineForce < 0){
-		m_vehicle->setBrake(m_fBrakingForce, _index);
+		m_vehicle->setBrake(m_fBrakingForce * w.brakingMultiplier, _index);
 	}
 }
 
@@ -212,4 +225,14 @@ void BulletVehicle::realignWheels(){
 		pWheel->firstParent()->translate( glm::vec3(origin.x(), origin.y(), origin.z()), false );
 		pWheel->firstParent()->setOrientation(glm::quat(rotation.w(), rotation.x(), rotation.y(), rotation.z()));
     }
+}
+
+void BulletVehicle::enable(){
+	enabled = true;
+}
+void BulletVehicle::disable(){
+	enabled = false;
+}
+bool BulletVehicle::isEnabled(){
+	return enabled;
 }
