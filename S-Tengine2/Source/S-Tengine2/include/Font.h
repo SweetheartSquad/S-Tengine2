@@ -9,7 +9,7 @@
 
 class Glyph : public MeshInterface{
 public:
-	Glyph(FT_GlyphSlot _glyph, wchar_t _character);
+	Glyph(FT_GlyphSlot _glyph, wchar_t _character, bool _antiAliased);
 	FT_Vector advance;
 	FT_Glyph_Metrics metrics;
 	wchar_t character;
@@ -29,6 +29,10 @@ public:
 	float lineGapRatio;
 	std::map<wchar_t, GlyphTexture *> textures;
 	std::map<wchar_t, Glyph *> meshes;
+
+	// if true, font meshes use the standard scale mode
+	// if false, font meshes use GL_NEAREST
+	bool antiAliased;
 
 	explicit Font(std::string _fontSrc, int size, bool _autoRelease);
 	~Font();

@@ -5,8 +5,6 @@
 #include "Box2DWorld.h"
 #include "shader/Shader.h"
 #include "Scene.h"
-#include "LayeredScene.h"
-#include "BitmapFont.h"
 #include <node/NodeResource.h>
 #include "Texture.h"
 #include <TextureSampler.h>

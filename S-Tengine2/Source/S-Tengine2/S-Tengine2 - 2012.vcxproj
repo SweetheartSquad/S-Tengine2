@@ -14,7 +14,6 @@
     <ClCompile Include="src/Accelerometer.cpp" />
     <ClCompile Include="src/AccelerometerParser.cpp" />
     <ClCompile Include="src/Arduino.cpp" />
-    <ClCompile Include="src/BitmapFont.cpp" />
     <ClCompile Include="src/Billboard.cpp" />
     <ClCompile Include="src/Box2DDebugDrawer.cpp" />
     <ClCompile Include="src/Box2DMeshEntity.cpp" />
@@ -199,7 +198,6 @@
     <ClInclude Include="include/AccelerometerParser.h" />
     <ClInclude Include="include/Animation.h" />
     <ClInclude Include="include/Arduino.h" />
-    <ClInclude Include="include/BitmapFont.h" />
     <ClInclude Include="include/Billboard.h" />
     <ClInclude Include="include/Box2DDebugDrawer.h" />
     <ClInclude Include="include/Box2DMeshEntity.h" />

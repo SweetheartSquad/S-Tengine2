@@ -160,6 +160,7 @@ AssetFont::AssetFont(Json::Value _json, Scenario * const _scenario) :
 	}
 	int size = _json.get("size", 24).asInt();
 	font = new Font(src, size, false);
+	font->antiAliased = _json.get("antiAliased", false).asBool();
 }
 AssetFont * AssetFont::create(Json::Value _json, Scenario * const _scenario){
 	return new AssetFont(_json, _scenario);

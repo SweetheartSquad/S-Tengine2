@@ -4,32 +4,43 @@
 #include <Sweet.h>
 #include <MeshFactory.h>
 
-Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _char) :
+Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _char, bool _antiAliased) :
 	MeshInterface(GL_QUADS, GL_STATIC_DRAW),
 	NodeResource(false),
 	character(_char)
 {
+	// get a standard plane mesh and insert the verts into the glyph
+	MeshInterface * m = MeshFactory::getPlaneMesh(0.5f, false);
+	insertVertices(m);
+	delete m;
+
+	// get the glyph dimensions
 	float vx = _glyph->bitmap_left;
 	float vy = _glyph->bitmap_top;
 	float w = _glyph->bitmap.width;
 	float h = _glyph->bitmap.rows;
 	advance = _glyph->advance;
 	metrics = _glyph->metrics;
+	
+	// modify the mesh verts to match the glyph dimensions
+	vertices.at(0).x = vx;
+	vertices.at(0).y = vy;
+	
+	vertices.at(1).x = vx + w;
+	vertices.at(1).y = vy;
+	
+	vertices.at(2).x = vx + w;
+	vertices.at(2).y = vy - h;
+	
+	vertices.at(3).x = vx;
+	vertices.at(3).y = vy - h;
 
-	pushVert(Vertex(vx, vy, 0));
-	pushVert(Vertex(vx + w, vy, 0));
-	pushVert(Vertex(vx + w, vy - h, 0));
-	pushVert(Vertex(vx, vy - h, 0));
-	setNormal(0, 0.0, 0.0, 1.0);
-	setNormal(1, 0.0, 0.0, 1.0);
-	setNormal(2, 0.0, 0.0, 1.0);
-	setNormal(3, 0.0, 0.0, 1.0);
-	setUV(0, 0.0, 0.0);
-	setUV(1, 1.0, 0.0);
-	setUV(2, 1.0, 1.0);
-	setUV(3, 0.0, 1.0);
-
-	scaleModeMag = scaleModeMin = GL_NEAREST;
+	// set the scale mode
+	if(!_antiAliased){
+		setScaleMode(GL_NEAREST);
+	}else{
+		setScaleMode(GL_LINEAR);
+	}
 	uvEdgeMode = GL_CLAMP;
 }
 
@@ -73,7 +84,8 @@ void GlyphTexture::load(){
 
 Font::Font(std::string _fontSrc, int _size, bool _autoRelease) :
 	NodeResource(_autoRelease),
-	face(nullptr)
+	face(nullptr),
+	antiAliased(false)
 {
 	if(FT_New_Face(sweet::freeTypeLibrary, _fontSrc.c_str(), 0, &face) != 0) {
 		Log::error("Couldn't load font: " + _fontSrc);
@@ -133,7 +145,7 @@ Glyph* Font::getMeshInterfaceForChar(wchar_t _char){
 	auto t = meshes.find(_char);
 	if(t == meshes.end()){
 		loadGlyph(_char);
-		Glyph * mesh = new Glyph(face->glyph, _char);
+		Glyph * mesh = new Glyph(face->glyph, _char, antiAliased);
 		mesh->autoRelease = false;
 		mesh->pushTexture2D(getTextureForChar(_char));
 		meshes.insert(std::pair<char, Glyph *>(_char, mesh));
