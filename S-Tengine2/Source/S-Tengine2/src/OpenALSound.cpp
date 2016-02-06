@@ -126,12 +126,13 @@ OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional, bool _au
 	checkForAlError(alSourcei(sourceId, AL_LOOPING, AL_FALSE));
 	checkForAlError(alSourcef(sourceId, AL_PITCH, 1.f));
 	checkForAlError(alSourcef(sourceId, AL_GAIN, 1.f));
-	checkForAlError(alSourcef(sourceId, AL_ROLLOFF_FACTOR, 0.05f));
 	checkForAlError(alDopplerFactor(1.f));
 	checkForAlError(alDopplerVelocity(1.f));
 	checkForAlError(alSource3f(sourceId, AL_POSITION, 0, 0, 0));
 	checkForAlError(alSource3f(sourceId, AL_VELOCITY, 0, 0, 0));
     checkForAlError(alSourcef(sourceId, AL_ROLLOFF_FACTOR, 1.0f));
+	checkForAlError(alSourcef(sourceId, AL_REFERENCE_DISTANCE, 1)); // 1.0f
+	checkForAlError(alSourcef(sourceId, AL_MAX_DISTANCE, std::numeric_limits<float>::infinity()));  // 1000.0f
 
 	float orientation[6] = {
 		/*forward vector*/
@@ -252,6 +253,12 @@ void OpenAL_Sound::setPitch(float _pitch){
 void OpenAL_Sound::setGain(float _gain){
 	gain = _gain;
 	checkForAlError(alSourcef(source->sourceId, AL_GAIN, gain * masterGain * categoricalGain[category]));
+}
+
+void OpenAL_Sound::setPositionalAttributes(float _referenceDistance, float _rolloff, float _maxDistance){
+	checkForAlError(alSourcef(source->sourceId, AL_REFERENCE_DISTANCE, _referenceDistance));
+	checkForAlError(alSourcef(source->sourceId, AL_MAX_DISTANCE, _maxDistance));
+	checkForAlError(alSourcef(source->sourceId, AL_ROLLOFF_FACTOR, _rolloff));
 }
 
 ALint OpenAL_Sound::getCurrentSample(){

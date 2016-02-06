@@ -164,6 +164,14 @@ public:
 	 * The provided _gain is pre-multiplied by the master volume and the categorical volume
 	 */
 	void setGain(float _gain);
+
+	// Sets the properties which determine how sound is attenuated over distance
+	// _referenceDistance is the distance at which the sound is at full volume
+	// _maxDistance is the distance at which the sound can't be heard anymore
+	// _rolloff is a multiplier
+	//
+	// From online forums: attenuation = _referenceDistance / (_referenceDistance + (_rolloff * (distance - _referenceDistance)));
+	void setPositionalAttributes(float _referenceDistance, float _rolloff = 1.f, float _maxDistance = std::numeric_limits<float>::infinity());
 };
 
 class OpenAL_SoundSimple : public OpenAL_Sound{
