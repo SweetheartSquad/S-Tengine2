@@ -13,6 +13,7 @@
 
 #include <json/json.h>
 #include <EventManager.h>
+#include <Functional>
 
 class Character : public NodeContent{
 public:
@@ -23,9 +24,14 @@ public:
 
 class Texture_NineSliced;
 
+typedef std::map<std::string, std::function<bool(sweet::Event *)>> ConditionImplementations;
+
 class Scenario : public virtual NodeContent, public virtual NodeResource{
 private:
 public:
+
+	ConditionImplementations * conditionImplementations;
+
 	static std::vector<Asset *> defaultAssets;
 	// events triggered by this scenario's dialogue will be handled by this manager
 	sweet::EventManager eventManager;

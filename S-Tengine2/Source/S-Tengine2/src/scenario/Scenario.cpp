@@ -34,9 +34,10 @@ void Scenario::destruct(){
 }
 
 Scenario::Scenario(std::string _jsonSrc) :
+	NodeResource(false),
+	conditionImplementations(nullptr),
 	id(_jsonSrc),
-	currentConversation(nullptr),
-	NodeResource(false)
+	currentConversation(nullptr)
 {
 	Json::Reader reader;
 	Json::Value defJson;

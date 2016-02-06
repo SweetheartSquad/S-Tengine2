@@ -4,29 +4,22 @@
 #include <json\json.h>
 
 #include <node/NodeContent.h>
+#include <EventManager.h>
 
 class Scenario;
 
-class Condition abstract: public NodeContent{
+class Condition: public NodeContent{
 public:
+
 	static Condition * getCondition(Json::Value _json, Scenario * const _scenario);
 	
-	std::string target;
-	std::string variable;
+	sweet::Event * event; 
 
-	Condition(Json::Value _json);
+	explicit Condition(Json::Value _json, Scenario * _scenario);
 
 	// returns true if the condition's criteria are met
-	virtual bool evaluate() = 0;
+	virtual bool evaluate();
 protected:
 	// the scenario this content belongs to
 	Scenario * scenario;
-};
-
-class ConditionEquality : public Condition{
-public:
-	std::string requiredValue;
-
-	ConditionEquality(Json::Value _json);
-	virtual bool evaluate() override;
 };
