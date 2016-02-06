@@ -339,14 +339,14 @@ void sweet::calculateDeltaTimeCorrection(){
 unsigned long int sweet::getWindowWidth(){
 	return getWindowWidth(currentContext);
 }unsigned long int sweet::getWindowWidth(GLFWwindow * _window){
-	return getWindowDimensions().y;
+	return getWindowDimensions().x;
 }
 
 unsigned long int sweet::getWindowHeight(){
 	return getWindowHeight(currentContext);
 }
 unsigned long int sweet::getWindowHeight(GLFWwindow * _window){
-	return getWindowDimensions().x;
+	return getWindowDimensions().y;
 }
 
 glm::uvec2 sweet::getWindowDimensions(){
