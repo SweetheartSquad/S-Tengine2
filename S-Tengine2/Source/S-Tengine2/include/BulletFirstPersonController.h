@@ -60,6 +60,8 @@ protected:
 	glm::vec3 lastPos;
 
 	glm::vec3 startPos;
+
+	float maxSpeedCurrent;
 public:
 	MousePerspectiveCamera * playerCamera;
 	glm::vec3 camOffset;
@@ -71,7 +73,8 @@ public:
 	// impulse applied upwards when jumping
 	float jumpSpeed;
 	float mass;
-	float maxSpeed;
+	float maxSpeedWalking;
+	float maxSpeedSprinting;
 
 	BulletFirstPersonController(BulletWorld * bulletWorld, float _radius, float _height, float _mass);
 	~BulletFirstPersonController();

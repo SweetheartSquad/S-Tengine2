@@ -69,7 +69,9 @@ BulletFirstPersonController::BulletFirstPersonController(BulletWorld * _bulletWo
 	body->setAngularFactor(btVector3(0,0,0));
 	body->setLinearFactor(btVector3(1,0.9,1));
 	maxVelocity = btVector3(20,20,20);
-	maxSpeed = 12.0f;
+	maxSpeedWalking = 12.0f;
+	maxSpeedSprinting = 15.0f;
+	maxSpeedCurrent = maxSpeedWalking;
 
 	//Head Bobble Animation
 	headBobble = new Animation<float>(&bobbleVal);
@@ -223,14 +225,14 @@ void BulletFirstPersonController::update(Step * _step){
 		// if the player is running, multiply speed by a constant
 		if(keyboard->keyDown(GLFW_KEY_LEFT_SHIFT)&&isGrounded){
 			movement *= sprintSpeed;
-			maxSpeed = 15.0f;
+			maxSpeedCurrent = maxSpeedSprinting;
 		}else{
-			maxSpeed = 12.0f;
+			maxSpeedCurrent = maxSpeedWalking;
 		}
 
 		body->activate(true);
 
-		if(glmCurVelocityMagXZ < maxSpeed){
+		if(glmCurVelocityMagXZ < maxSpeedCurrent){
 			if(bobbleInterpolation < 2.0f && glmCurVelocityMagXZ >= 1.0f){
 				bobbleInterpolation += 0.1f;
 			}else if(glmCurVelocityMagXZ < 1.0f){
