@@ -1,5 +1,5 @@
 #pragma once
-#include <FirstPersonController.h>
+#include <BulletFirstPersonController.h>
 
 #include <node/NodeChild.h>
 #include <node/NodeUpdatable.h>
@@ -42,7 +42,7 @@
 #include <NumberUtils.h>
 #include <Timeout.h>
 
-FirstPersonController::FirstPersonController(BulletWorld * _bulletWorld, float _radius, float _height, float _mass) : 
+BulletFirstPersonController::BulletFirstPersonController(BulletWorld * _bulletWorld, float _radius, float _height, float _mass) : 
 	NodeBulletBody(_bulletWorld),
 	keyboard(&Keyboard::getInstance()),
 	mouse(&Mouse::getInstance()),
@@ -107,13 +107,13 @@ FirstPersonController::FirstPersonController(BulletWorld * _bulletWorld, float _
 	playerCamera->pitch = 0.0f;
 };
 
-FirstPersonController::~FirstPersonController(){
+BulletFirstPersonController::~BulletFirstPersonController(){
 	delete footSteps;
 	delete jumpSound;
 	delete landSound;
 }
 
-void FirstPersonController::update(Step * _step){
+void BulletFirstPersonController::update(Step * _step){
 	
 	// get player velocity
 	glm::vec3 curVelocity = getLinearVelocity();
@@ -297,27 +297,27 @@ void FirstPersonController::update(Step * _step){
 }
 
 
-glm::vec3 FirstPersonController::getPosition() const{
+glm::vec3 BulletFirstPersonController::getPosition() const{
 	btVector3 playerPos = body->getWorldTransform().getOrigin();
 	return glm::vec3(playerPos.x(), playerPos.y(), playerPos.z());
 }
-glm::vec3 FirstPersonController::getLinearVelocity() const{
+glm::vec3 BulletFirstPersonController::getLinearVelocity() const{
 	btVector3 playerVel = body->getLinearVelocity(); 
 	return glm::vec3(playerVel.x(), playerVel.y(), playerVel.z());
 }
 
-void FirstPersonController::enable(){
+void BulletFirstPersonController::enable(){
 	enabled = true;
 	playerCamera->controller->movementEnabled = true;
 	playerCamera->controller->rotationEnabled = true;
 }
 
-void FirstPersonController::disable(){
+void BulletFirstPersonController::disable(){
 	enabled = false;
 	playerCamera->controller->movementEnabled = false;
 	playerCamera->controller->rotationEnabled = false;
 }
 
-bool FirstPersonController::isEnabled(){
+bool BulletFirstPersonController::isEnabled(){
 	return enabled;
 }

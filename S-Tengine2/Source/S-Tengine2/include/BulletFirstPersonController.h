@@ -18,7 +18,7 @@ class Keyboard;
 class Mouse;
 class Joystick;
 
-class FirstPersonController : public virtual NodeBulletBody{
+class BulletFirstPersonController : public virtual NodeBulletBody{
 protected:
 	bool enabled;
 
@@ -73,8 +73,8 @@ public:
 	float mass;
 	float maxSpeed;
 
-	FirstPersonController(BulletWorld * bulletWorld, float _radius, float _height, float _mass);
-	~FirstPersonController();
+	BulletFirstPersonController(BulletWorld * bulletWorld, float _radius, float _height, float _mass);
+	~BulletFirstPersonController();
 
 	glm::vec3 getLinearVelocity() const;
 	glm::vec3 getPosition() const;
