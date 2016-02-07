@@ -91,7 +91,6 @@ Font::Font(std::string _fontSrc, int _size, bool _autoRelease) :
 		Log::error("Couldn't load font: " + _fontSrc);
 	}
 	size = _size * (sweet::getDpi() / 75.f);
-	std::cout << _size << ", " << sweet::getDpi() << " = " << size << std::endl;
 	lineGapRatio = 1.2f;
 }
 
