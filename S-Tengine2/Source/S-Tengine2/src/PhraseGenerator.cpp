@@ -31,12 +31,11 @@ void PhraseGenerator::makeDatabases(std::string _databaseSrc) {
 				escapeChar = root[memberName].asString();
 			}else{
 				// parse the terms list
-				std::vector<std::string> termList;
+				sweet::ShuffleVector<std::string> & termList = terms[memberName];
 				for (Json::Value::ArrayIndex i = 0; i < root[memberName].size(); ++i) {
 					std::string p = root[memberName][i].asString();
-					termList.push_back(p);
+					termList.push(p);
 				}
-				terms[memberName] = termList;
 			}
 		}
 	}
@@ -52,15 +51,13 @@ std::string PhraseGenerator::replaceWords(std::string phrase) {
 		std::string word;
 		std::string replacer;
 		std::string replacee;
-		int choice;
 
 		if (std::regex_search(constPhrase, match, r)){
 			word = match[1];
 		}
 
-		choice = sweet::NumberUtils::randomInt(0, terms[word].size() - 1);
 		replacee = "\\" + escapeChar + word + "\\" + escapeChar;
-		replacer = terms[word][choice];
+		replacer = terms[word].pop();
 		std::regex rg(replacee);
 
 		phrase = std::regex_replace(constPhrase, rg, replacer);

@@ -1,8 +1,9 @@
 #pragma once
 
 #include <node/Node.h>
+#include <NumberUtils.h>
+
 #include <string>
-#include <vector>
 #include <map>
 
 // A generic phrase generator which uses regex to replace pre-defined
@@ -34,7 +35,7 @@ public:
 	PhraseGenerator();
 protected:
 	// individual terms are stored in vectors which can be accessed by their name
-	std::map<std::string, std::vector<std::string>> terms;
+	std::map<std::string, sweet::ShuffleVector<std::string>> terms;
 
 	// character used to indicate which terms need to be replaced
 	// e.g. if the escapeChar is "*", a phrase might be stored as
