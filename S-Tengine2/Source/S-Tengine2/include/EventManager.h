@@ -12,6 +12,8 @@
 
 namespace sweet{
 
+class EventManager;
+
 class Event : public Node{
 private:
 	std::map<std::string, std::string> dataString;
@@ -20,6 +22,11 @@ private:
 public:
 	std::string tag;
 	
+	// the event manager which originally triggered the event
+	EventManager * originalManager;
+	// the event manager which is currently handling the event
+	EventManager * currentManager;
+
 	int getIntData(std::string _key, int _default = 0) const;
 	float getFloatData(std::string _key, float _default = 0) const;
 	std::string getStringData(std::string _key, std::string _default = "") const;
@@ -36,6 +43,7 @@ public:
 	// the tag is the "type" attribute
 	// and the data is filled from the "args" attribute
 	explicit Event(Json::Value _json);
+	
 };
 
 class EventManager : public NodeUpdatable{

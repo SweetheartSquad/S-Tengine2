@@ -3,15 +3,21 @@
 #include <EventManager.h>
 
 sweet::Event::Event(const char * _tag) :
-	tag(std::string(_tag))
+	tag(std::string(_tag)),
+	currentManager(nullptr),
+	originalManager(nullptr)
 {
 }
 sweet::Event::Event(std::string _tag) :
-	tag(_tag)
+	tag(_tag),
+	currentManager(nullptr),
+	originalManager(nullptr)
 {
 }
 sweet::Event::Event(Json::Value _json) :
-	tag(_json["type"].asString())
+	tag(_json["type"].asString()),
+	currentManager(nullptr),
+	originalManager(nullptr)
 {
 	Json::Value argsJson = _json["args"];
 	Json::Value::Members argsJsonMembers = argsJson.getMemberNames();
@@ -74,10 +80,13 @@ sweet::EventManager::~EventManager(){
 }
 
 void sweet::EventManager::triggerEvent(std::string _tag){
-	events.push(new sweet::Event(_tag));
+	Event * e = new sweet::Event(_tag);
+	e->originalManager = this;
+	events.push(e);
 }
 
 void sweet::EventManager::triggerEvent(sweet::Event * _event){
+	_event->originalManager = this;
 	events.push(_event);
 }
 
@@ -88,6 +97,7 @@ void sweet::EventManager::addEventListener(std::string _tag, std::function<void 
 void sweet::EventManager::handle(sweet::Event * _event){
 	std::vector<std::function<void(sweet::Event *)>> l = listeners[_event->tag];
 	for(std::function<void(sweet::Event *)> f : l){
+		_event->currentManager = this;
 		f(_event);
 	}
 	for(sweet::EventManager * m : parentManagers){

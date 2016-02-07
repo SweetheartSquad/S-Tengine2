@@ -18,7 +18,9 @@ Dialogue::Dialogue(Json::Value _json, Scenario * const _scenario) :
 	}
 	const Json::Value triggersArray = _json["triggers"];
 	for(Json::Value i : triggersArray){
-		triggers.push_back(new sweet::Event(i));
+		sweet::Event * e = new sweet::Event(i);
+		e->setStringData("scenario", scenario->id);
+		triggers.push_back(e);
 	}
 	const Json::Value conditionsArray = _json["conditions"];
 	for(Json::Value i : conditionsArray){
