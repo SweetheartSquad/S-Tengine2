@@ -23,6 +23,9 @@ public:
 	btConstraintSolver * solver;
 	btDynamicsWorld * world;
 	
+	unsigned long int maxSubSteps;
+	float fixedTimeStep;
+
 	BulletWorld(glm::vec3 _gravity = glm::vec3(0, -9.8, 0));
 	~BulletWorld();
 

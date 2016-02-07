@@ -8,7 +8,9 @@ BulletWorld::BulletWorld(glm::vec3 _gravity) :
 	dispatcher(new btCollisionDispatcher(collisionConfig)),
 	broadphase(new btDbvtBroadphase()),
 	solver(new btSequentialImpulseConstraintSolver()),
-	world(new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig))
+	world(new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfig)),
+	maxSubSteps(1),
+	fixedTimeStep(1.f/60.f)
 {
 	world->setGravity(btVector3(_gravity.x, _gravity.y, _gravity.z));
 }
@@ -40,5 +42,5 @@ BulletWorld::~BulletWorld(){
 }
 
 void BulletWorld::update(Step * _step){
-	world->stepSimulation(_step->deltaTime);
+	world->stepSimulation(_step->deltaTime, maxSubSteps, fixedTimeStep);
 }
