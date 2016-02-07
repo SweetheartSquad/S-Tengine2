@@ -89,6 +89,7 @@
     <ClCompile Include="src\BulletFirstPersonController.cpp" />
     <ClCompile Include="src\NineSlicing.cpp" />
     <ClCompile Include="src\NodePhysicsBody.cpp" />
+    <ClCompile Include="src\PhraseGenerator.cpp" />
     <ClCompile Include="src\ProgrammaticTexture.cpp" />
     <ClCompile Include="src\RampTexture.cpp" />
     <ClCompile Include="src\Scene_Splash_SweetHeartSquad.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="include\BulletFirstPersonController.h" />
     <ClInclude Include="include\NineSlicing.h" />
     <ClInclude Include="include\NodePhysicsBody.h" />
+    <ClInclude Include="include\PhraseGenerator.h" />
     <ClInclude Include="include\Plane.h" />
     <ClInclude Include="include\ProgrammaticTexture.h" />
     <ClInclude Include="include\RampTexture.h" />
