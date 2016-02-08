@@ -19,8 +19,8 @@ namespace sweet {
 		float getSurfaceArea();
 
 		// sort of implemented
-		bool intersects(Box _box);
-		bool intersects(std::vector<glm::vec3> _verts);
+		bool intersects(Box _box, float _margin = FLT_EPSILON);
+		bool intersects(std::vector<glm::vec3> _verts,  float _margin = FLT_EPSILON);
 
 		glm::vec3 getMinCoordinate();
 		glm::vec3 getMaxCoordinate();

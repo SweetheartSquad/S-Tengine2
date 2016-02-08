@@ -26,19 +26,19 @@ float sweet::Box::getVolume(){
 	return width * height * depth;
 }
 
-bool sweet::Box::intersects(sweet::Box _rect){
-	if (_rect.x + _rect.width <= x) return false; // rect is left
-    if (_rect.x >= x + width) return false; // rect is right
-    if (_rect.y + _rect.height <= y) return false; // rect is below
-    if (_rect.y >= y + height) return false; // rect is above
-	if (_rect.z + _rect.depth <= z) return false; // rect is in behind
-    if (_rect.z >= z + depth) return false; // rect is front
+bool sweet::Box::intersects(sweet::Box _rect, float _margin){
+	if (_rect.x + _rect.width <= x + _margin) return false; // rect is left
+    if (_rect.x >= x + width - _margin) return false; // rect is right
+    if (_rect.y + _rect.height <= y + _margin) return false; // rect is below
+    if (_rect.y >= y + height - _margin) return false; // rect is above
+	if (_rect.z + _rect.depth <= z + _margin) return false; // rect is in behind
+    if (_rect.z >= z + depth - _margin) return false; // rect is front
 
     return true; // boxes overlap
 }
 
-bool sweet::Box::intersects(std::vector<glm::vec3> _verts){
-	return intersects(sweet::Box::bound(_verts));
+bool sweet::Box::intersects(std::vector<glm::vec3> _verts,  float _margin){
+	return intersects(sweet::Box::bound(_verts), _margin);
 }
 
 sweet::Box sweet::Box::bound(sweet::Box & _a, sweet::Box & _b){
