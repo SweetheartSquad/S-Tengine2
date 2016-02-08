@@ -28,7 +28,7 @@ void SpriteSheet::unload(){
 	NodeLoadable::unload();
 }
 
-void SpriteSheet::addAnimation(std::string _name, SpriteSheetAnimation* _animation){
+void SpriteSheet::addAnimation(std::string _name, SpriteSheetAnimation * _animation){
 	auto res = animations.insert(std::pair<std::string, SpriteSheetAnimation * >(_name, _animation));
 	if(!res.second){
 		Log::error("Animation with name \""+_name+"\" already exists; not added.");

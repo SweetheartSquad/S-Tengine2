@@ -87,7 +87,7 @@ bool Conversation::advance(){
 		++currentDialogue;
 		// if any conditions are untrue for a given dialogue object, skip over it
 		valid = currentDialogue < dialogueObjects.size() ? dialogueObjects.at(currentDialogue)->evaluateConditions() : false;
-	}while(currentDialogue+2 < dialogueObjects.size() && !valid);
+	}while(currentDialogue+1 < dialogueObjects.size() && !valid);
 	
 	if(valid){
 		// advance to the first text in the new dialogue object

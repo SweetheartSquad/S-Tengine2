@@ -18,6 +18,8 @@ public:
 	explicit SpriteSheetAnimation(float _secondsPerFrame);
 	~SpriteSheetAnimation();
 
+	SpriteSheetAnimation * copy();
+
 	void update(Step* _step) override;
 	void pushFrame(unsigned long int _column, unsigned long int _row, float _width, float _height, float _textureWidth, float _textureHeight);
 	

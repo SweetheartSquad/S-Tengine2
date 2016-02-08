@@ -18,6 +18,13 @@ SpriteSheetAnimation::SpriteSheetAnimation(float _secondsPerFrame) :
 SpriteSheetAnimation::~SpriteSheetAnimation(){
 }
 
+SpriteSheetAnimation * SpriteSheetAnimation::copy() {
+	SpriteSheetAnimation * newAnim = new SpriteSheetAnimation(secondsPerFrame);
+	newAnim->frameIndices.tweens = frameIndices.tweens;
+	newAnim->frames = frames;
+	return newAnim;
+}
+
 void SpriteSheetAnimation::update(Step* _step){
 	if(secondsPerFrame != 0){
 		frameIndices.update(_step);

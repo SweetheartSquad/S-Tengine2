@@ -130,9 +130,10 @@ void Sprite::setSpriteSheet(SpriteSheet * _spriteSheet, std::string _currentAnim
 
 
 void Sprite::setCurrentAnimation(std::string _name){
+	delete currentAnimation;
 	auto anim = spriteSheet->animations.find(_name);
 	if(anim != spriteSheet->animations.end()){
-		currentAnimation = anim->second;
+		currentAnimation = anim->second->copy();
 	}else{
 		Log::error("Animation with name \""+_name+"\" does not exist.");
 	}

@@ -4,6 +4,7 @@
 #include "Rectangle.h"
 
 #include <map>
+#include "SpriteSheetAnimation.h"
 
 class Texture;
 class TextureSampler;
