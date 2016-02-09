@@ -16,11 +16,20 @@ void PerspectiveCamera::update(Step * _step){
 }
 
 void PerspectiveCamera::setOrientation(glm::quat _orientation){
-	_orientation = glm::slerp(lastOrientation, _orientation, interpolation * static_cast<float>(sweet::deltaTimeCorrection));
+	if(interpolation == 0){
+		_orientation = lastOrientation;
+	}else if (interpolation == 1.f){
+		_orientation = _orientation;
+	}else{
+		_orientation = glm::slerp(lastOrientation, _orientation, interpolation * static_cast<float>(sweet::deltaTimeCorrection));
+	}
 	Camera::setOrientation(_orientation);
 }
 
 glm::mat4 PerspectiveCamera::getProjectionMatrix() const{
 	glm::vec2 screenDimensions = sweet::getWindowDimensions();
+	if(sweet::ovrInitialized){
+		screenDimensions.x /= 2;
+	}
 	return glm::perspective(fieldOfView, static_cast<float>(screenDimensions.x)/static_cast<float>(screenDimensions.y), nearClip, farClip);
 }

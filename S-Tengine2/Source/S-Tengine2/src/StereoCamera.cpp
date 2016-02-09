@@ -23,13 +23,14 @@ StereoCamera::StereoCamera() :
 		PerspectiveCamera * cam = new PerspectiveCamera();
 		childTransform->addChild(cam);
 		eyes[eye].camera = cam;
+		cam->fieldOfView = 90;
 	}
 
 
 	if(sweet::ovrInitialized){
 		// Setup Window and Graphics
 		// Note: the mirror window can be any size, for this sample we use 1/2 the HMD resolution
-		ovrSizei windowSize = { sweet::hmdDesc.Resolution.w/2, sweet::hmdDesc.Resolution.h/2};
+		ovrSizei windowSize = { sweet::hmdDesc.Resolution.w, sweet::hmdDesc.Resolution.h};
 		std::cout << windowSize.w << " x " << windowSize.h << std::endl;
 
 		// Create mirror texture and an FBO used to copy mirror texture to back buffer
@@ -160,8 +161,6 @@ void StereoCamera::update(Step * _step){
 			ovrPoseStatef pose = hmdState.HeadPose;
 			ovr_CalcEyePoses(pose.ThePose, ViewOffset, EyeRenderPose);
 			hmdOrientation = pose.ThePose.Orientation;
-
-
 			hmdOrientation.GetYawPitchRoll(&headAngles.y, &headAngles.x, &headAngles.z);
 		}
 		sensorSampleTime = ovr_GetTimeInSeconds();
@@ -181,16 +180,16 @@ void StereoCamera::update(Step * _step){
 	// modify the camera angles by the HMD angles
 	yaw   += glm::degrees(headAngles.y);
 	pitch += glm::degrees(headAngles.x);
-	roll  -= glm::degrees(headAngles.z); // the roll value from the oculus SDK is opposite what we need
+	roll  += glm::degrees(headAngles.z); // the roll value from the oculus SDK is opposite what we need
 
 	PerspectiveCamera::update(_step);
 	
 	for(unsigned long int eye = 0; eye < 2; ++eye){
-		PerspectiveCamera * cam = eyes[eye].camera;
+		PerspectiveCamera * const cam = eyes[eye].camera;
 		// copy all properties of the central camera to the eye camera
 		cam->yaw = yaw;
 		cam->pitch = pitch;
-		cam->roll = roll;
+		cam->roll = -roll;
 		cam->fieldOfView = fieldOfView;
 		cam->lastOrientation = lastOrientation;
 		cam->forwardVectorLocal = forwardVectorLocal;
@@ -215,7 +214,7 @@ void StereoCamera::update(Step * _step){
 	// if we don't the camera will just spin forever
 	yaw   -= glm::degrees(headAngles.y);
 	pitch -= glm::degrees(headAngles.x);
-	roll  += glm::degrees(headAngles.z); // the roll value from the oculus SDK is opposite what we need
+	roll  -= glm::degrees(headAngles.z); // the roll value from the oculus SDK is opposite what we need
 }
 
 void StereoCamera::renderStereo(std::function<void()> _renderFunction){
@@ -254,7 +253,7 @@ void StereoCamera::renderActiveCamera(std::function<void()> _renderFunction){
 			
 	// Switch to eye render target
 	// set render surface
-	auto tex = reinterpret_cast<ovrGLTexture*>(&eye.tbuffer.TextureSet->Textures[eye.tbuffer.TextureSet->CurrentIndex]);
+	auto tex = reinterpret_cast<ovrGLTexture *>(&eye.tbuffer.TextureSet->Textures[eye.tbuffer.TextureSet->CurrentIndex]);
 
 	FrameBufferInterface::pushFbo(eye.fboId);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex->OGL.TexId, 0);
@@ -286,8 +285,7 @@ void StereoCamera::renderFrame(){
 	ld.Header.Flags = ovrLayerFlag_TextureOriginAtBottomLeft | ovrLayerFlag_HighQuality;   // Because OpenGL.
 	
 	ovrRecti recti;
-	for (int eye = 0; eye < 2; ++eye)
-	{
+	for (unsigned long int eye = 0; eye < 2; ++eye){
 		recti.Size = eyes[eye].size;
 		recti.Pos.x = 0;
 		recti.Pos.y = 0;
@@ -298,7 +296,7 @@ void StereoCamera::renderFrame(){
 		ld.SensorSampleTime  = sensorSampleTime;
 	}
 
-	ovrLayerHeader* layers = &ld.Header;
+	ovrLayerHeader * layers = &ld.Header;
 	checkForOvrError(ovr_SubmitFrame(*sweet::hmd, 0, &viewScaleDesc, &layers, 1));
 }
 
