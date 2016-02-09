@@ -122,14 +122,17 @@ void Game::update(Step * _step){
 	}
 }
 
-void Game::draw(void){
+void Game::draw(Scene * _scene){
+	if(_scene == nullptr){
+		_scene = currentScene;
+	}
 	if(autoResize){
 		resize();
 	}
 	sweet::MatrixStack ms;
 	RenderOptions ro(nullptr, nullptr, nullptr);
-	if(currentScene != nullptr){
-		ro.lights = &currentScene->lights;
+	if(_scene != nullptr){
+		ro.lights = &_scene->lights;
 		for(auto s : Shader::allShaders){
 			ComponentShaderBase * sb = dynamic_cast<ComponentShaderBase *>(s);
 			if(sb != nullptr){
@@ -142,7 +145,7 @@ void Game::draw(void){
 			}
 		}
 		ro.shader = nullptr;
-		currentScene->render(&ms, &ro);
+		_scene->render(&ms, &ro);
 	}
 	if(sweet::drawAntTweakBar && sweet::antTweakBarInititialized) {
 		TwDraw(); 

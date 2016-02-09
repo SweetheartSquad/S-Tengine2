@@ -84,9 +84,10 @@ public:
 	virtual void update(Step * _step) override;
 	
 	/** 
-	* Draws the current scene 
+	* Draws _scene
+	* If _scene is nullptr, draws current scene 
 	*/
-	virtual void draw(void);
+	virtual void draw(Scene * _scene = nullptr);
 
 	bool switchingScene;
 	std::string newSceneKey;
