@@ -136,12 +136,10 @@ public:
 
 	// enables rational width
 	// the dimension will be sized as a ratio of its parent's size
-	// if _parent is nullptr, only sets the member variable and doesn't change the current size
-	void setRationalWidth(float _rationalWidth, NodeUI * _parent = nullptr);
+	void setRationalWidth(float _rationalWidth, NodeUI * _parent);
 	// enables rational height
 	// the dimension will be sized as a ratio of its parent's size
-	// if _parent is nullptr, only sets the member variable and doesn't change the current size
-	void setRationalHeight(float _rationalHeight, NodeUI * _parent = nullptr);
+	void setRationalHeight(float _rationalHeight, NodeUI * _parent);
 	
 	// enables pixel width
 	// the dimension will be sized in pixels
@@ -156,11 +154,18 @@ public:
 	// enables autoresizing height
 	// the dimension will be sized as a ratio of its parent's size
 	void setAutoresizeHeight();
+	
+	// the dimension will be sized as a ratio of its opposing unit
+	// if _parent is nullptr, only sets the member variable and doesn't change the current size
+	void setSquareWidth(float _rationalWidth, NodeUI * _parent);
+	// the dimension will be sized as a ratio of its opposing unit
+	// if _parent is nullptr, only sets the member variable and doesn't change the current size
+	void setSquareHeight(float _rationalHeight, NodeUI * _parent);
 
-	// recalculates measuredWidth using _root as the basis for rational sizes
-	void setMeasuredWidths(NodeUI * _root);
-	// recalculates measuredHeight using _root as the basis for rational sizes
-	void setMeasuredHeights(NodeUI * _root);
+	// recalculates measuredWidth
+	virtual void setMeasuredWidths();
+	// recalculates measuredHeight
+	virtual void setMeasuredHeights();
 
 	// saves the arguments into a member variable
 	// these arguments are in the range 0-1, where 1,1,1,1 is fully opaque and white
@@ -228,10 +233,8 @@ private:
 	virtual float getContentsHeight();
 	virtual void repositionChildren();
 
-	// check for rational-width children and resize them based on _root
-	void resizeChildrenWidth(NodeUI * _root);
-	// check for rational-height children and resize them based on _root
-	void resizeChildrenHeight(NodeUI * _root);
+	void resizeChildrenWidth();
+	void resizeChildrenHeight();
 
 	void __renderForEntities(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 	void __renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);

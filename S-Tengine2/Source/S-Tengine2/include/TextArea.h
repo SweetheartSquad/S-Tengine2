@@ -39,4 +39,6 @@ private:
 	// returns the last line in usedLines
 	// if usedLines is empty, calls getNewLine and returns the result
 	TextLabel * getCurrentLine();
+
+	virtual void setMeasuredWidths() override;
 };

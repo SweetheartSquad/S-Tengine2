@@ -24,8 +24,8 @@ void HorizontalLinearLayout::layoutChildren(){
 		break;
 	}
 
-	for(unsigned long int i = 0; i < uiElements->children.size(); ++i){
-		Transform * trans = dynamic_cast<Transform *>(uiElements->children.at(i));
+	for(auto c : uiElements->children){
+		Transform * trans = dynamic_cast<Transform *>(c);
 		NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
 		switch (verticalAlignment){
 			default:
@@ -46,8 +46,8 @@ void HorizontalLinearLayout::layoutChildren(){
 
 float HorizontalLinearLayout::getContentsWidth(){
 	float w = 0.0f;
-	for(unsigned long int i = 0; i < uiElements->children.size(); ++i) {
-		Transform * trans = dynamic_cast<Transform *>(uiElements->children.at(i));
+	for(auto c : uiElements->children) {
+		Transform * trans = dynamic_cast<Transform *>(c);
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));

@@ -21,7 +21,7 @@ Slider::Slider(BulletWorld * _world, float _defaultValue, float _valueMin, float
 
 	if(horizontal){
 		layout->horizontalAlignment = kLEFT;
-		setRationalWidth(1.f);
+		//setRationalWidth(1.f);
 		setHeight(10);
 
 		fill->setRationalHeight(1.f, this);
@@ -32,7 +32,7 @@ Slider::Slider(BulletWorld * _world, float _defaultValue, float _valueMin, float
 		layout->addChild(thumb);
 	}else{
 		layout->verticalAlignment = kBOTTOM;
-		setRationalHeight(1.f);
+		//setRationalHeight(1.f);
 		setWidth(10);
 		fill->setRationalWidth(1.f, this);
 		thumb->setRationalWidth(1.f, this);
@@ -45,8 +45,8 @@ Slider::Slider(BulletWorld * _world, float _defaultValue, float _valueMin, float
 	fill->setBackgroundColour(1.f, 1.f, 1.f);
 	thumb->setBackgroundColour(0.5f, 1.f, 1.f, 0.5f);
 
-	layout->setRationalWidth(1.f);
-	layout->setRationalHeight(1.f);
+	layout->setRationalWidth(1.f, this);
+	layout->setRationalHeight(1.f, this);
 	addChild(layout);
 
 	setMouseEnabled(true);

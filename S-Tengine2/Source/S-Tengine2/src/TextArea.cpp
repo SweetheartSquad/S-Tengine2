@@ -20,6 +20,14 @@ void TextArea::update(Step * _step){
 	VerticalLinearLayout::update(_step);
 }
 
+void TextArea::setMeasuredWidths(){
+	float w = width.getSize();
+	VerticalLinearLayout::setMeasuredWidths();
+	if(glm::abs(w - width.getSize()) > FLT_EPSILON){
+		updateRequired = true;
+	}
+}
+
 void TextArea::invalidateAllLines(){
 	while(usedLines.size() > 0){
 		usedLines.back()->invalidate();

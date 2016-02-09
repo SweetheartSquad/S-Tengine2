@@ -67,8 +67,14 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	margin->addChild(padding, false);
 	padding->addChild(uiElements, false);
 	
-	setPadding(0);
-	setMargin(0);
+	paddingLeft.setPixelSize(0);
+	paddingRight.setPixelSize(0);
+	paddingTop.setPixelSize(0);
+	paddingBottom.setPixelSize(0);
+	marginLeft.setPixelSize(0);
+	marginRight.setPixelSize(0);
+	marginBottom.setPixelSize(0);
+	marginTop.setPixelSize(0);
 
 	setMouseEnabled(_mouseEnabled);
 }
@@ -141,8 +147,8 @@ void NodeUI::out(){
 Transform * NodeUI::addChild(NodeUI* _uiElement){
 	_uiElement->nodeUIParent = this;
 	invalidateLayout();
-	_uiElement->setMeasuredWidths(this);
-	_uiElement->setMeasuredHeights(this);
+	_uiElement->setMeasuredWidths();
+	_uiElement->setMeasuredHeights();
 	return uiElements->addChild(_uiElement);
 }
 
@@ -396,19 +402,35 @@ void NodeUI::__updateForTexture(Step * _step) {
 }
 
 void NodeUI::setMarginLeft(float _margin){
-	marginLeft.setSize(_margin);
+	NodeUI * root = nodeUIParent;
+	while(root->width.sizeMode == kAUTO && root->nodeUIParent != nullptr){
+		root = root->nodeUIParent;
+	}
+	marginLeft.setSize(_margin, &root->width);
 }
 
 void NodeUI::setMarginRight(float _margin){
-	marginRight.setSize(_margin);
+	NodeUI * root = nodeUIParent;
+	while(root->width.sizeMode == kAUTO && root->nodeUIParent != nullptr){
+		root = root->nodeUIParent;
+	}
+	marginRight.setSize(_margin, &root->width);
 }
 
 void NodeUI::setMarginTop(float _margin){
-	marginTop.setSize(_margin);
+	NodeUI * root = nodeUIParent;
+	while(root->width.sizeMode == kAUTO && root->nodeUIParent != nullptr){
+		root = root->nodeUIParent;
+	}
+	marginTop.setSize(_margin, &root->height);
 }
 
 void NodeUI::setMarginBottom(float _margin){
-	marginBottom.setSize(_margin);
+	NodeUI * root = nodeUIParent;
+	while(root->width.sizeMode == kAUTO && root->nodeUIParent != nullptr){
+		root = root->nodeUIParent;
+	}
+	marginBottom.setSize(_margin, &root->height);
 }
 
 void NodeUI::setMargin(float _all){
@@ -432,33 +454,43 @@ void NodeUI::setMargin(float _left, float _right, float _bottom, float _top){
 }
 
 void NodeUI::setPaddingLeft(float _padding){
-	paddingLeft.setSize(_padding);
+	NodeUI * root = nodeUIParent;
+	while(root->width.sizeMode == kAUTO && root->nodeUIParent != nullptr){
+		root = root->nodeUIParent;
+	}
+	paddingLeft.setSize(_padding, &root->width);
 }
 	 
 void NodeUI::setPaddingRight(float _padding){
-	paddingRight.setSize(_padding);
+	NodeUI * root = nodeUIParent;
+	while(root->width.sizeMode == kAUTO && root->nodeUIParent != nullptr){
+		root = root->nodeUIParent;
+	}
+	paddingRight.setSize(_padding, &root->width);
 }
 
 void NodeUI::setPaddingTop(float _padding){
-	paddingTop.setSize(_padding);
+	NodeUI * root = nodeUIParent;
+	while(root->width.sizeMode == kAUTO && root->nodeUIParent != nullptr){
+		root = root->nodeUIParent;
+	}
+	paddingTop.setSize(_padding, &root->height);
 }
 
 void NodeUI::setPaddingBottom(float _padding){
-	paddingBottom.setSize(_padding);
+	NodeUI * root = nodeUIParent;
+	while(root->width.sizeMode == kAUTO && root->nodeUIParent != nullptr){
+		root = root->nodeUIParent;
+	}
+	paddingBottom.setSize(_padding, &root->height);
 }
 
 void NodeUI::setPadding(float _all){
-	setPaddingLeft(_all);
-	setPaddingRight(_all);
-	setPaddingBottom(_all);
-	setPaddingTop(_all);
+	setPadding(_all, _all, _all, _all);
 }
 
 void NodeUI::setPadding(float _leftAndRight, float _bottomAndTop){
-	setPaddingLeft(_leftAndRight);
-	setPaddingRight(_leftAndRight);
-	setPaddingBottom(_bottomAndTop);
-	setPaddingTop(_bottomAndTop);
+	setPadding(_leftAndRight, _leftAndRight, _bottomAndTop, _bottomAndTop);
 }
 
 void NodeUI::setPadding(float _left, float _right, float _bottom, float _top){
@@ -472,7 +504,8 @@ void NodeUI::setWidth(float _width){
 	if(_width < 0){
 		setAutoresizeWidth();
 	}else if(_width <= 1.00001f){
-		setRationalWidth(_width);
+		assert(nodeUIParent != nullptr);
+		setRationalWidth(_width, nodeUIParent);
 	}else{
 		setPixelWidth(_width);
 	}
@@ -482,7 +515,8 @@ void NodeUI::setHeight(float _height){
 	if(_height < 0){
 		setAutoresizeHeight();
 	}else if(_height <= 1.00001f){
-		setRationalHeight(_height);
+		assert(nodeUIParent != nullptr);
+		setRationalHeight(_height, nodeUIParent);
 	}else{
 		setPixelHeight(_height);
 	}
@@ -491,24 +525,22 @@ void NodeUI::setHeight(float _height){
 void NodeUI::setAutoresizeWidth(){
 	width.setAutoSize();
 	width.measuredSize = getContentsWidth();
-	resizeChildrenWidth(this);
+	resizeChildrenWidth();
 }
 void NodeUI::setAutoresizeHeight(){
 	height.setAutoSize();
 	height.measuredSize = getContentsHeight();
-	resizeChildrenHeight(this);
+	resizeChildrenHeight();
 }
 
 void NodeUI::setRationalWidth(float _rationalWidth, NodeUI * _root){
-	width.setRationalSize(_rationalWidth);
-	setMeasuredWidths(_root);
-	resizeChildrenWidth(this);
+	width.setRationalSize(_rationalWidth, &_root->width);
+	setMeasuredWidths();
 }
 
 void NodeUI::setRationalHeight(float _rationalHeight, NodeUI * _root){
-	height.setRationalSize(_rationalHeight);
-	setMeasuredHeights(_root);
-	resizeChildrenHeight(this);
+	height.setRationalSize(_rationalHeight, &_root->height);
+	setMeasuredHeights();
 }
 
 void NodeUI::setPixelWidth(float _pixelWidth){
@@ -516,7 +548,7 @@ void NodeUI::setPixelWidth(float _pixelWidth){
 		_pixelWidth -= getMarginLeft() + getPaddingLeft() + getPaddingRight() + getMarginRight();
 	}
 	width.setPixelSize(_pixelWidth);
-	resizeChildrenWidth(this);
+	resizeChildrenWidth();
 }
 
 void NodeUI::setPixelHeight(float _pixelHeight){
@@ -524,94 +556,91 @@ void NodeUI::setPixelHeight(float _pixelHeight){
 		_pixelHeight -= getMarginBottom() + getPaddingBottom() + getPaddingTop() + getMarginTop();
 	}
 	height.setPixelSize(_pixelHeight);
-	resizeChildrenHeight(this);
+	resizeChildrenHeight();
 }
 
-void NodeUI::resizeChildrenWidth(NodeUI * _root){
-	for(unsigned long int i = 0; i < uiElements->children.size(); ++i) {
-		Transform * trans = dynamic_cast<Transform *>(uiElements->children.at(i));
+void NodeUI::setSquareWidth(float _rationalWidth, NodeUI * _root){
+	width.setRationalSize(_rationalWidth, &height);
+	setMeasuredWidths();
+}
+
+void NodeUI::setSquareHeight(float _rationalHeight, NodeUI * _root){
+	height.setRationalSize(_rationalHeight, &width);
+	setMeasuredHeights();
+}
+
+void NodeUI::resizeChildrenWidth(){
+	for(auto c : uiElements->children) {
+		Transform * trans = dynamic_cast<Transform *>(c);
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
 				if(nui != nullptr){
-					nui->setMeasuredWidths(_root);
+					nui->setMeasuredWidths();
 				}
 			}
 		}
 	}
 }
 
-void NodeUI::resizeChildrenHeight(NodeUI * _root){
-	for(unsigned long int i = 0; i < uiElements->children.size(); ++i) {
-		Transform * trans = dynamic_cast<Transform *>(uiElements->children.at(i));
+void NodeUI::resizeChildrenHeight(){
+	for(auto c : uiElements->children) {
+		Transform * trans = dynamic_cast<Transform *>(c);
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
 				if(nui != nullptr){
-					nui->setMeasuredHeights(_root);
+					nui->setMeasuredHeights();
 				}
 			}
 		}
 	}
 }
 
-void NodeUI::setMeasuredWidths(NodeUI * _root){
-	
-	float rootWidth = 0.f;
-	if(_root != nullptr){
-		rootWidth = _root->getWidth();
-	}
-
+void NodeUI::setMeasuredWidths(){
 	if(marginLeft.sizeMode == kRATIO){
-		marginLeft.measuredSize = rootWidth * marginLeft.rationalSize;
+		marginLeft.measuredSize = marginLeft.rationalTarget->getSize() * marginLeft.rationalSize;
 	}if(paddingLeft.sizeMode == kRATIO){
-		paddingLeft.measuredSize = rootWidth * paddingLeft.rationalSize;
+		paddingLeft.measuredSize = paddingLeft.rationalTarget->getSize() * paddingLeft.rationalSize;
 	}if(paddingRight.sizeMode == kRATIO){
-		paddingRight.measuredSize = rootWidth * paddingRight.rationalSize;
+		paddingRight.measuredSize = paddingRight.rationalTarget->getSize() * paddingRight.rationalSize;
 	}if(marginRight.sizeMode == kRATIO){
-		marginRight.measuredSize = rootWidth * marginRight.rationalSize;
-	}if(width.sizeMode == kRATIO){
-		width.measuredSize = rootWidth * width.rationalSize;
+		marginRight.measuredSize = marginRight.rationalTarget->getSize() * marginRight.rationalSize;
+	}
+	
+	if(width.sizeMode == kRATIO){
+		width.measuredSize = width.rationalTarget->getSize() * width.rationalSize;
 		if(boxSizing == kBORDER_BOX){
 			width.measuredSize -= marginLeft.getSize() + paddingLeft.getSize() + paddingRight.getSize() + marginRight.getSize();
 		}
+	}else if(width.sizeMode == kAUTO){
+		width.measuredSize = getContentsWidth();
 	}
 
-	if(width.sizeMode == kAUTO){
-		// if the width of this node is auto-sized, the children's width has to be based on the element one level above this one
-		// to avoid the conflict between an auto-sized container and a rational-sized child
-		resizeChildrenWidth(_root);
-	}else{
-		resizeChildrenWidth(this);
-	}
+	resizeChildrenWidth();
 }
 
-void NodeUI::setMeasuredHeights(NodeUI * _root){
-	float rootHeight = 0.f;
-	if(_root != nullptr){
-		rootHeight = _root->getHeight();
-	}
+void NodeUI::setMeasuredHeights(){
 	if(marginBottom.sizeMode == kRATIO){
-		marginBottom.measuredSize = rootHeight * marginBottom.rationalSize;
+		marginBottom.measuredSize = marginBottom.rationalTarget->getSize() * marginBottom.rationalSize;
 	}if(paddingBottom.sizeMode == kRATIO){
-		paddingBottom.measuredSize = rootHeight * paddingBottom.rationalSize;
+		paddingBottom.measuredSize = paddingBottom.rationalTarget->getSize() * paddingBottom.rationalSize;
 	}if(paddingTop.sizeMode == kRATIO){
-		paddingTop.measuredSize = rootHeight * paddingTop.rationalSize;
+		paddingTop.measuredSize = paddingTop.rationalTarget->getSize() * paddingTop.rationalSize;
 	}if(marginTop.sizeMode == kRATIO){
-		marginTop.measuredSize = rootHeight * marginTop.rationalSize;
-	}if(height.sizeMode == kRATIO){
-		height.measuredSize = rootHeight * height.rationalSize;
+		marginTop.measuredSize = marginTop.rationalTarget->getSize() * marginTop.rationalSize;
+	}
+	
+	if(height.sizeMode == kRATIO){
+		height.measuredSize = height.rationalTarget->getSize() * height.rationalSize;
 		if(boxSizing == kBORDER_BOX){
 			height.measuredSize -= marginBottom.getSize() + paddingBottom.getSize() + paddingTop.getSize() + marginTop.getSize();
 		}
+	}else if(height.sizeMode == kAUTO){
+		height.measuredSize = getContentsHeight();
 	}
-	if(height.sizeMode == kAUTO){
-		// if the height of this node is auto-sized, the children's height has to be based on the element one level above this one
-		// to avoid the conflict between an auto-sized container and a rational-sized child
-		resizeChildrenHeight(_root);
-	}else{
-		resizeChildrenHeight(this);
-	}
+
+	resizeChildrenHeight();
 }
 
 void NodeUI::setBackgroundColour(float _r, float _g, float _b, float _a){
@@ -713,12 +742,15 @@ void NodeUI::updateCollider(){
 }
 
 void NodeUI::autoResize(){
-	if(width.sizeMode == kAUTO){
+	/*if(width.sizeMode == kAUTO){
 		width.measuredSize = getContentsWidth();
 	}
 	if(height.sizeMode == kAUTO){
 		height.measuredSize = getContentsHeight();
-	}
+	}*/
+	setMeasuredWidths();
+	setMeasuredHeights();
+
 	// Adjust the size of the background
 	background->firstParent()->scale(getWidth(true, false), getHeight(true, false), 1.0f, false);
 	repositionChildren();
