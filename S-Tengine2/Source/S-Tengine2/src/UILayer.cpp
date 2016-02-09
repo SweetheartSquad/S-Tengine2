@@ -92,6 +92,8 @@ void UILayer::resize(float _left, float _right, float _bottom, float _top){
 	
 	setWidth(_right - _left);
 	setHeight(_top - _bottom);
+
+	invalidateLayout();
 }
 
 void UILayer::update(Step * _step){
