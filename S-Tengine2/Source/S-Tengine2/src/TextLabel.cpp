@@ -8,7 +8,7 @@
 #include <RenderOptions.h>
 #include <StringUtils.h>
 
-TextLabel::TextLabel(BulletWorld* _world, Font* _font, Shader* _textShader, float _width):
+TextLabel::TextLabel(BulletWorld* _world, Font* _font, Shader* _textShader):
 	HorizontalLinearLayout(_world),
 	font(_font),
 	textShader(_textShader),
@@ -16,8 +16,9 @@ TextLabel::TextLabel(BulletWorld* _world, Font* _font, Shader* _textShader, floa
 	lineWidth(0.f),
 	wrapMode(kCHARACTER)
 {
-	setHeight(font->getLineHeight());
-	setWidth(_width);
+	// set the default width and height to be auto and the font's height, respectively
+	setPixelHeight(font->getLineHeight());
+	setAutoresizeWidth();
 }
 
 void TextLabel::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions){

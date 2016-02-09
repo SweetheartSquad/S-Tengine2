@@ -30,7 +30,7 @@ public:
 	std::vector<UIGlyph *> usedGlyphs;
 	std::vector<UIGlyph *> unusedGlyphs;
 
-	TextLabel(BulletWorld* _world, Font * _font, Shader * _textShader, float _width = -1);
+	TextLabel(BulletWorld* _world, Font * _font, Shader * _textShader);
 	
 	virtual void render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	virtual void update(Step * _step) override;

@@ -5,7 +5,7 @@
 #include <shader/Shader.h>
 
 FpsDisplay::FpsDisplay(BulletWorld* _world, Font * _font, Shader * _textShader) :
-	TextArea(_world, _font, _textShader, 300),
+	TextArea(_world, _font, _textShader),
 	numFrames(0),
 	avgFps(0.0f),
 	numCycles(0),

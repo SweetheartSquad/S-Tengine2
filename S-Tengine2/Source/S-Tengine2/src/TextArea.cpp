@@ -3,13 +3,14 @@
 #include <TextArea.h>
 #include <Font.h>
 
-TextArea::TextArea(BulletWorld * _bulletWorld, Font * _font, Shader * _textShader, float _width, float _height) :
+TextArea::TextArea(BulletWorld * _bulletWorld, Font * _font, Shader * _textShader) :
 	VerticalLinearLayout(_bulletWorld),
 	font(_font),
 	textShader(_textShader)
 {
-	setHeight(_height);
-	setWidth(_width);
+	// set the default width and height to be auto and the three times font's height, respectively
+	setPixelHeight(_font->getLineHeight()*3);
+	setAutoresizeWidth();
 	setWrapMode(kCHARACTER);
 }
 void TextArea::update(Step * _step){
@@ -83,7 +84,7 @@ TextLabel * TextArea::getNewLine() {
 		line = unusedLines.back();
 		unusedLines.pop_back();
 	}else{
-		line = new TextLabel(world, font, textShader, 1.f);
+		line = new TextLabel(world, font, textShader);
 		line->setRationalWidth(1.f, this);
 		line->horizontalAlignment = horizontalAlignment;
 	}
