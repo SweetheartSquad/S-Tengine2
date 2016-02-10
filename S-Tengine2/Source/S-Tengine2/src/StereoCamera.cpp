@@ -59,8 +59,8 @@ StereoCamera::StereoCamera() :
 	if(sweet::ovrInitialized){
 		// setup for oculus rendering
 		for(unsigned long int eye = 0; eye < 2; ++eye){
-			eyes[eye].size.w = sweet::hmdDesc.Resolution.w/2;
-			eyes[eye].size.h = sweet::hmdDesc.Resolution.h/2;
+			eyes[eye].size.w = sweet::hmdDesc.Resolution.w;
+			eyes[eye].size.h = sweet::hmdDesc.Resolution.h;
 			//eyes[eye].size = ovr_GetFovTextureSize(*sweet::hmd, ovrEyeType(eye), sweet::hmdDesc.MaxEyeFov[eye], 1);
 			checkForOvrError(ovr_CreateSwapTextureSetGL(*sweet::hmd, GL_SRGB8_ALPHA8, eyes[eye].size.w, eyes[eye].size.h, &eyes[eye].tbuffer.TextureSet));
 
@@ -260,12 +260,12 @@ void StereoCamera::renderActiveCamera(std::function<void()> _renderFunction){
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, eye.dbuffer.texId, 0);
 	
 	glViewport(0, 0, eye.size.w, eye.size.h);
-	//glEnable(GL_FRAMEBUFFER_SRGB);
+	glEnable(GL_FRAMEBUFFER_SRGB);
 	
 	// render scene
 	_renderFunction();
 
-	//glDisable(GL_FRAMEBUFFER_SRGB);
+	glDisable(GL_FRAMEBUFFER_SRGB);
 
 	// unset render surface
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, 0, 0);
