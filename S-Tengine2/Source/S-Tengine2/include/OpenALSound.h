@@ -12,6 +12,8 @@
 #include <string>
 #include <map>
 
+class Camera;
+
 #ifdef _DEBUG
 // OpenAL error-checking macro (enabled because _DEBUG is defined)
 // If an error is found, it is printed to the console and the application will fail an assertion
@@ -43,6 +45,8 @@ private:
 	static bool inited;
 
 	static float listenerGain;
+	// internally tracks the listener position in order to automatically calculate velocity when desired
+	static glm::vec3 listenerPosition;
 protected:
     static ALCcontext * context;
     static ALCdevice * device;
@@ -52,11 +56,15 @@ public:
 	static void initOpenAL();
 
 	// sets the global OpenAL listener position
-	static void setListenerPosition(glm::vec3 _position);
+	// if _autoVelocity is true, also uses the last known position to set the velocity
+	static void setListenerPosition(glm::vec3 _position, bool _autoVelocity = false);
 	// sets the global OpenAL listener velocity
 	static void setListenerVelocity(glm::vec3 _velocity);
 	// sets the global OpenAL listener orientation
 	static void setListenerOrientation(glm::vec3 _forward, glm::vec3 _up);
+	// sets the global OpenAL listener position and orientation based on _camera's worldPos and childTransform's orientation, respectively
+	// if _autoVelocity is true, also uses the last known position to set the velocity
+	static void setListener(Camera * _camera, bool _autoVelocity = false);
 	// sets the global OpenAL listener gain
 	static void setListenerGain(float _gain);
 	static float getListenerGain();

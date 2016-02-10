@@ -2,17 +2,19 @@
 
 #include <OpenALSound.h>
 #include <Transform.h>
+#include <Camera.h>
 
 #include <sndfile.hh>
-#include <algorithm>
 
 #include <algorithm>
+
 
 ALCcontext * NodeOpenAL::context = nullptr; 
 ALCdevice * NodeOpenAL::device = nullptr;
 
 bool NodeOpenAL::inited = false;
 float NodeOpenAL::listenerGain = 1.f;
+glm::vec3 NodeOpenAL::listenerPosition(0);
 
 NodeOpenAL::NodeOpenAL(){
 	initOpenAL();
@@ -44,8 +46,12 @@ void NodeOpenAL::destruct(){
 	}
 }
 
-void NodeOpenAL::setListenerPosition(glm::vec3 _position){
+void NodeOpenAL::setListenerPosition(glm::vec3 _position, bool _autoVelocity){
 	checkForAlError(alListener3f(AL_POSITION, _position.x, _position.y, _position.z));
+	if(_autoVelocity){
+		setListenerVelocity(_position - listenerPosition);
+	}
+	listenerPosition = _position;
 }
 void NodeOpenAL::setListenerVelocity(glm::vec3 _velocity){
 	checkForAlError(alListener3f(AL_VELOCITY, _velocity.x, _velocity.y, _velocity.z));
@@ -54,6 +60,12 @@ void NodeOpenAL::setListenerOrientation(glm::vec3 _forward, glm::vec3 _up){
 	float orientation[6] = {_forward.x, _forward.y, _forward.z, _up.x, _up.y, _up.z};
 	checkForAlError(alListenerfv(AL_ORIENTATION, orientation));
 }
+
+void NodeOpenAL::setListener(Camera * _camera, bool _autoVelocity){
+	setListenerPosition(_camera->getWorldPos(), _autoVelocity);
+	setListenerOrientation(_camera->forwardVectorRotated, _camera->upVectorRotated);
+}
+
 void NodeOpenAL::setListenerGain(float _gain){
 	listenerGain = _gain;
 	checkForAlError(alListenerf(AL_GAIN, listenerGain));
