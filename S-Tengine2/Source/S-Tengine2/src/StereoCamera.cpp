@@ -18,12 +18,12 @@ StereoCamera::StereoCamera() :
 	hmdOrientation(0,0,0,1)
 {
 	interpolation = 1; // better to avoid interpolation
+	fieldOfView = 100; // default is the same as the DK2's FoV
 
 	for(unsigned long int eye = 0; eye < 2; ++eye){
 		PerspectiveCamera * cam = new PerspectiveCamera();
 		childTransform->addChild(cam);
 		eyes[eye].camera = cam;
-		cam->fieldOfView = 90;
 	}
 
 
@@ -204,7 +204,7 @@ void StereoCamera::update(Step * _step){
 		if(sweet::ovrInitialized){
 			// account for eye position relative to central camera
 			cam->firstParent()->translate(glm::vec3(EyeRenderDesc[eye].HmdToEyeViewOffset.x, EyeRenderDesc[eye].HmdToEyeViewOffset.y, EyeRenderDesc[eye].HmdToEyeViewOffset.z) * -ipdScale, false);
-			cam->firstParent()->translate(glm::vec3(EyeRenderPose[eye].Position.x, EyeRenderPose[eye].Position.y, EyeRenderPose[eye].Position.z));
+			cam->firstParent()->translate(glm::vec3(-EyeRenderPose[eye].Position.x, EyeRenderPose[eye].Position.y, -EyeRenderPose[eye].Position.z) * ipdScale);
 		}
 
 		cam->update(_step);
