@@ -4,6 +4,9 @@
 #include <btBulletDynamicsCommon.h>
 #include <glm\glm.hpp>
 
+class NodeBulletBody;
+class Camera;
+
 class BulletWorld : public NodeUpdatable{
 public:
 	// where accurate collision detection code runs
@@ -30,4 +33,10 @@ public:
 	~BulletWorld();
 
 	virtual void update(Step * _step) override;
+
+	// runs a raycast from _camera along its forward vector
+	// returns the first intersection found within _range
+	// returns nullptr if none found
+	// if _rayCallback is not nullptr, the callback from the raycast is copied there
+	NodeBulletBody * raycast(Camera * _camera, float _range, btCollisionWorld::ClosestRayResultCallback * _rayCallback = nullptr);
 };

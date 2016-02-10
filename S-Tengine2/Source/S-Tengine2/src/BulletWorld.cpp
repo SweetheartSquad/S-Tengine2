@@ -2,6 +2,7 @@
 
 #include <BulletWorld.h>
 #include <Step.h>
+#include <Camera.h>
 
 BulletWorld::BulletWorld(glm::vec3 _gravity) :
 	collisionConfig(new btDefaultCollisionConfiguration()),
@@ -43,4 +44,25 @@ BulletWorld::~BulletWorld(){
 
 void BulletWorld::update(Step * _step){
 	world->stepSimulation(_step->deltaTime, maxSubSteps, fixedTimeStep);
+}
+
+NodeBulletBody * BulletWorld::raycast(Camera * _camera, float _range, btCollisionWorld::ClosestRayResultCallback * _rayCallback){
+	glm::vec3 pos = _camera->childTransform->getWorldPos();
+	btVector3 start(pos.x, pos.y, pos.z);
+	btVector3 dir(_camera->forwardVectorRotated.x, _camera->forwardVectorRotated.y, _camera->forwardVectorRotated.z);
+	btVector3 end = start + dir*_range;
+	btCollisionWorld::ClosestRayResultCallback rayCallback(start, end);
+	world->rayTest(start, end, rayCallback);
+	
+	// store the result in the user's ray callback pointer
+	if(_rayCallback != nullptr){
+		*_rayCallback = rayCallback;
+	}
+
+	// if we're not looking at anything, cancel the current hover target
+	if(rayCallback.hasHit()){
+		return static_cast<NodeBulletBody *>(rayCallback.m_collisionObject->getUserPointer());
+	}else{
+		return nullptr;
+	}
 }
