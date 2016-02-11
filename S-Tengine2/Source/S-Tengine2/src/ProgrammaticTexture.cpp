@@ -31,11 +31,7 @@ void ProgrammaticTexture::allocate(unsigned long int _width, unsigned long int _
 	// make sure that we aren't allocating on top of an existing texture, which would cause a memory leak
 	assert(data == nullptr);
 
-	width = _width;
-	height = _height;
-	channels = _channels;
-	numPixels = width * height;
-	numBytes = numPixels * channels;
+	resize(_width, _height, _channels);
 
 	data = static_cast<unsigned char *>(malloc(sizeof(unsigned char) * numBytes));
 }

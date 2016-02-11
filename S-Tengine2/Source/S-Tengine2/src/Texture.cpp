@@ -41,6 +41,14 @@ Texture::~Texture(){
 	unloadImageData();
 }
 
+void Texture::resize(int _width, int _height, int _channels){
+	width = _width;
+	height = _height;
+	channels = _channels;
+	numPixels = width * height;
+	numBytes = numPixels * channels;
+}
+
 void Texture::load(){
 	if(!loaded){
 		// load texture data if necessary
@@ -70,10 +78,10 @@ void Texture::unload(){
 }
 
 void Texture::loadImageData(){
-	data = stbi_load(src.c_str(), &width, &height, &channels, 0);
+	int w, h, c;
+	data = stbi_load(src.c_str(), &w, &h, &c, 0);
 	assert(data != nullptr);
-	numPixels = width * height;
-	numBytes = numPixels * channels;
+	resize(w,h,c);
 }
 
 void Texture::unloadImageData(){

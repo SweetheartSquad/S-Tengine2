@@ -29,6 +29,10 @@ public:
 	unsigned long int numPixels;
 	// Bytes in texture (numPixels * channels)
 	unsigned long int numBytes;
+
+	// sets the width, height, channels, and calculates the numPixels and numBytes
+	void resize(int _width, int _height, int _channels);
+
 	/**OpenGL Texture ID */
 	GLuint textureId;
 	/** Whether or not to store the image data in memory
