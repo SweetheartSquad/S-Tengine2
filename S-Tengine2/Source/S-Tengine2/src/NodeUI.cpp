@@ -9,6 +9,7 @@
 #include <FrameBufferInterface.h>
 #include <StandardFrameBuffer.h>
 #include <Texture.h>
+#include <FBOTexture.h>
 
 #include <shader\ComponentShaderBase.h>
 #include <shader\ShaderComponentTexture.h>
@@ -270,7 +271,7 @@ Texture * NodeUI::renderToTexture(){
 	FrameBufferInterface::popFbo();
 	
 	if(renderedTexture == nullptr) {
-		renderedTexture = new Texture(frameBuffer, true, 0, 4, true, false);	
+		renderedTexture = new FBOTexture(frameBuffer, true, 0, true, false);	
 		renderedTexture->load();
 		texturedPlane->mesh->pushTexture2D(renderedTexture);
 	}else{

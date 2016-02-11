@@ -87,6 +87,7 @@
     <ClCompile Include="src\DateUtils.cpp" />
     <ClCompile Include="src\CameraController.cpp" />
     <ClCompile Include="src\BulletFirstPersonController.cpp" />
+    <ClCompile Include="src\FBOTexture.cpp" />
     <ClCompile Include="src\NineSlicing.cpp" />
     <ClCompile Include="src\NodePhysicsBody.cpp" />
     <ClCompile Include="src\PhraseGenerator.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="include\DateUtils.h" />
     <ClInclude Include="include\EventManager.h" />
     <ClInclude Include="include\BulletFirstPersonController.h" />
+    <ClInclude Include="include\FBOTexture.h" />
     <ClInclude Include="include\NineSlicing.h" />
     <ClInclude Include="include\NodePhysicsBody.h" />
     <ClInclude Include="include\PhraseGenerator.h" />

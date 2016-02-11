@@ -8,13 +8,10 @@
 #include <ostream>
 #include <iostream>
 
-class FrameBufferInterface;
-
 class Texture : public virtual NodeResource{
 public:
 	
 	explicit Texture(std::string _src, bool _storeData, bool _autoRelease, bool _useMipmaps = true);
-	explicit Texture(FrameBufferInterface * _frameBuffer, bool _storeData, int _frameBufferChannelIndex, int _channels, bool _autoRelease, bool _useMipmaps = true);
 	~Texture();
 
 	/**Source file location */

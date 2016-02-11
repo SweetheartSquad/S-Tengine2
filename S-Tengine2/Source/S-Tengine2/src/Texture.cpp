@@ -7,7 +7,6 @@
 #include <Resource.h>
 #include <GLUtils.h>
 #include <Log.h>
-#include <FrameBufferInterface.h>
 
 Texture::Texture(std::string _src, bool _storeData, bool _autoRelease, bool _useMipmaps) :
 	NodeResource(_autoRelease),
@@ -19,19 +18,6 @@ Texture::Texture(std::string _src, bool _storeData, bool _autoRelease, bool _use
 	numBytes(0),
 	storeData(_storeData),
 	data(nullptr),
-	useMipmaps(_useMipmaps)
-{
-}
-
-Texture::Texture(FrameBufferInterface * _frameBuffer, bool _storeData, int _frameBufferChannelIndex, int _channels, bool _autoRelease, bool _useMipmaps) :
-	NodeResource(_autoRelease),
-	width(_frameBuffer->width),
-	height(_frameBuffer->height),
-	channels(_channels),
-	numPixels(width * height),
-	numBytes(numPixels * channels),
-	storeData(_storeData),
-	data(_frameBuffer->getPixelData(_frameBufferChannelIndex)),
 	useMipmaps(_useMipmaps)
 {
 }

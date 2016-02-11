@@ -173,17 +173,16 @@ GLenum FrameBufferInterface::checkFrameBufferStatus(){
 }
 
 void FrameBufferInterface::saveToFile(const char * _filename, unsigned long int _fbochannel){
-	glBindTexture(GL_TEXTURE_2D, frameBufferChannels.at(_fbochannel).id);
-	GLint textureWidth, textureHeight;
-	unsigned long int bytes;
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &textureWidth);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &textureHeight);
-	bytes = textureWidth*textureHeight*4;
+	// get the channel we're asking for
+	const FrameBufferChannel & channel = frameBufferChannels.at(_fbochannel);
 	
-	GLubyte * pixels = (GLubyte *)malloc(bytes * sizeof(GLubyte));
+	unsigned long int bytes = width*height*channel.numChannels;
+	
+	GLubyte * pixels = getPixelData(_fbochannel);
 
 	unsigned char * pixelsSOIL = (unsigned char *)malloc(bytes * sizeof(unsigned char));
-
+	
+	glBindTexture(GL_TEXTURE_2D, frameBufferChannels.at(_fbochannel).id);
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 	
 	for(unsigned long int i = 0; i < bytes; ++i){
@@ -192,7 +191,7 @@ void FrameBufferInterface::saveToFile(const char * _filename, unsigned long int 
 	
 	std::stringstream ss;
 	ss << "data/images/" << _filename;
-	if(stbi_write_tga(ss.str().c_str(), textureWidth, textureHeight, 4, pixelsSOIL, 1)){
+	if(stbi_write_tga(ss.str().c_str(), width, height, channel.numChannels, pixelsSOIL, 1)){
 		Log::info("FBO \""+ss.str()+"\" saved");
 	}else{
 		Log::error("FBO \""+ss.str()+"\" not saved");
@@ -203,16 +202,16 @@ void FrameBufferInterface::saveToFile(const char * _filename, unsigned long int 
 }
 
 GLubyte * FrameBufferInterface::getPixelData(unsigned long int _fbochannel) {
-	glBindTexture(GL_TEXTURE_2D, frameBufferChannels.at(_fbochannel).id);
-	GLint textureWidth, textureHeight;
-	unsigned long int bytes;
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &textureWidth);
-	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &textureHeight);
-	bytes = textureWidth*textureHeight*4;
-	
-	GLubyte * pixels = (GLubyte *)malloc(bytes * sizeof(GLubyte));
+	// get the channel we're asking for
+	const FrameBufferChannel & channel = frameBufferChannels.at(_fbochannel);
 
-	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+	// allocated a new array with space for all of the pixels in the FBO
+	GLubyte * pixels = (GLubyte *)malloc(width*height*channel.numChannels * sizeof(GLubyte));
+	
+	
+	// bind the texture and copy the data into the new pixels array
+	glBindTexture(GL_TEXTURE_2D, channel.id);
+	glGetTexImage(GL_TEXTURE_2D, 0, channel.internalFormat, GL_UNSIGNED_BYTE, pixels);
 
 	return pixels;
 }

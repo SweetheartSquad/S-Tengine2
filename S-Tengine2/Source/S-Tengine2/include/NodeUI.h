@@ -10,6 +10,7 @@
 class Scene;
 class Mouse;
 class Texture;
+class FBOTexture;
 class StandardFrameBuffer;
 class OrthographicCamera;
 
@@ -92,7 +93,7 @@ public:
 
 	OrthographicCamera * textureCam;
 	StandardFrameBuffer * frameBuffer;
-	Texture * renderedTexture;
+	FBOTexture * renderedTexture;
 	MeshEntity * texturedPlane;
 
 
