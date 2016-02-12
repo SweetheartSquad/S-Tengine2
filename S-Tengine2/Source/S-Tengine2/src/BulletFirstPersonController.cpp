@@ -59,7 +59,8 @@ BulletFirstPersonController::BulletFirstPersonController(BulletWorld * _bulletWo
 	mass(_mass),
 	footSteps(nullptr),
 	jumpSound(nullptr),
-	landSound(nullptr)
+	landSound(nullptr),
+	enabled(true)
 {
 
 	// player set-up
