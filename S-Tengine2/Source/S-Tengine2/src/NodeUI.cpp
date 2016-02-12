@@ -560,12 +560,12 @@ void NodeUI::setPixelHeight(float _pixelHeight){
 	resizeChildrenHeight();
 }
 
-void NodeUI::setSquareWidth(float _rationalWidth, NodeUI * _root){
+void NodeUI::setSquareWidth(float _rationalWidth){
 	width.setRationalSize(_rationalWidth, &height);
 	setMeasuredWidths();
 }
 
-void NodeUI::setSquareHeight(float _rationalHeight, NodeUI * _root){
+void NodeUI::setSquareHeight(float _rationalHeight){
 	height.setRationalSize(_rationalHeight, &width);
 	setMeasuredHeights();
 }

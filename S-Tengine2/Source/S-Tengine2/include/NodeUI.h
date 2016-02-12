@@ -158,10 +158,10 @@ public:
 	
 	// the dimension will be sized as a ratio of its opposing unit
 	// if _parent is nullptr, only sets the member variable and doesn't change the current size
-	void setSquareWidth(float _rationalWidth, NodeUI * _parent);
+	void setSquareWidth(float _rationalWidth);
 	// the dimension will be sized as a ratio of its opposing unit
 	// if _parent is nullptr, only sets the member variable and doesn't change the current size
-	void setSquareHeight(float _rationalHeight, NodeUI * _parent);
+	void setSquareHeight(float _rationalHeight);
 
 	// recalculates measuredWidth
 	virtual void setMeasuredWidths();
