@@ -35,7 +35,7 @@ namespace sweet{
 		};
 
 		// returns the total number of items in the shuffle vector
-		unsigned long int size(){
+		unsigned long int size() const{
 			return unused.size() + used.size();
 		}
 
