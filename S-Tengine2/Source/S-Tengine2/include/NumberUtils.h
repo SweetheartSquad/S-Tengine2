@@ -34,16 +34,24 @@ namespace sweet{
 			}
 		};
 
+		// returns the total number of items in the shuffle vector
+		unsigned long int size(){
+			return unused.size() + used.size();
+		}
+
 		// returns the next available item
 		// calls shuffle when there aren't any available items
-		T pop(){
+		// if _remove is true, the item is not inserted into the used list (i.e. it is removed from the shuffle vector)
+		T pop(bool _remove = false){
 			// if there aren't any available items, shuffle
 			if(unused.size() <= 0){
 				shuffle();
 			}
 			T res = unused.top();
 			unused.pop();
-			used.push_back(res);
+			if(!_remove){
+				used.push_back(res);
+			}
 			return res;
 		};
 
