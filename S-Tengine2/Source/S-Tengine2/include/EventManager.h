@@ -10,7 +10,14 @@
 
 // 
 
+
 namespace sweet{
+
+enum EventArgumentType{
+	FLOAT,
+	STRING,
+	INT
+};
 
 class EventManager;
 
@@ -19,6 +26,8 @@ private:
 	std::map<std::string, std::string> dataString;
 	std::map<std::string, float> dataFloat;
 	std::map<std::string, int> dataInt;
+	
+	static std::map<std::string, EventArgumentType> registeredTypeMap;
 public:
 	std::string tag;
 	
@@ -43,7 +52,8 @@ public:
 	// the tag is the "type" attribute
 	// and the data is filled from the "args" attribute
 	explicit Event(Json::Value _json);
-	
+
+	static void registerArgumentType(std::string _type, EventArgumentType _mapToType);
 };
 
 class EventManager : public NodeUpdatable{

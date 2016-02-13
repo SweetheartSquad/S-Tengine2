@@ -1,39 +1,73 @@
 #pragma once
 
 #include <EventManager.h>
+#include <Log.h>
+
+std::map<std::string, sweet::EventArgumentType> sweet::Event::registeredTypeMap;
 
 sweet::Event::Event(const char * _tag) :
 	tag(std::string(_tag)),
-	currentManager(nullptr),
-	originalManager(nullptr)
+	originalManager(nullptr),
+	currentManager(nullptr)
 {
 }
 sweet::Event::Event(std::string _tag) :
 	tag(_tag),
-	currentManager(nullptr),
-	originalManager(nullptr)
+	originalManager(nullptr),
+	currentManager(nullptr)
 {
 }
 sweet::Event::Event(Json::Value _json) :
 	tag(_json["type"].asString()),
-	currentManager(nullptr),
-	originalManager(nullptr)
+	originalManager(nullptr),
+	currentManager(nullptr)
 {
 	Json::Value argsJson = _json["args"];
 	Json::Value::Members argsJsonMembers = argsJson.getMemberNames();
 
-	// TODO: figure out if there's a way to distinguish between int and double in the json
 
+	// TODO: figure out if there's a way to distinguish between int and double in the json
 	for(auto j : argsJsonMembers){
 		Json::Value v = argsJson[j]["value"];
-		if(v.isDouble()){
+		std::string t = argsJson[j].get("type", "NO_TYPE").asString();
+		std::transform(t.begin(), t.end(), t.begin(), ::toupper);
+
+		if(t == "FLOAT" || t == "DOUBLE") {
 			setFloatData(j, v.asDouble());
-		}else if(v.isInt()){
-			setIntData(j, v.asInt());
-		}else if(v.isString()){
-			setStringData(j, v.asString());
+		}else if(t == "INT") {
+			setIntData(j, v.asInt());	
+		}else if(t == "STRING") {
+			setStringData(j, v.asString());	
+		}else if(t == "NO_TYPE"){
+			if(v.isDouble()){
+				setFloatData(j, v.asDouble());
+			}else if(v.isInt()){
+				setIntData(j, v.asInt());
+			}else if(v.isString()){
+				setStringData(j, v.asString());
+			}
+		}else {
+			if(registeredTypeMap.find(t) != registeredTypeMap.end()) {
+				switch(registeredTypeMap[t]) {
+					case FLOAT: 
+						setFloatData(j, v.asDouble());
+						break;
+					case STRING: 
+						setStringData(j, v.asString());
+						break;
+					case INT: 
+						setIntData(j, v.asInt());
+						break;
+				}
+			}else {
+				ST_LOG_ERROR("Invalid argument type");
+			}
 		}
 	}
+}
+
+void sweet::Event::registerArgumentType(std::string _type, EventArgumentType _mapToType) {
+	registeredTypeMap[_type] = _mapToType;
 }
 
 int sweet::Event::getIntData(std::string _key, int _default) const{

@@ -14,6 +14,7 @@ Condition * Condition::getCondition(Json::Value _json, Scenario * const _scenari
 Condition::Condition(Json::Value _json, Scenario * _scenario) :
 	event(new sweet::Event(_json)), 
 	scenario(_scenario) {
+	event->setStringData("scenario", _scenario->id);
 }
 
 bool Condition::evaluate() {
