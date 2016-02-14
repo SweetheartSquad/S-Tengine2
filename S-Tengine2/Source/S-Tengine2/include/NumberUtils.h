@@ -66,6 +66,14 @@ namespace sweet{
 			++shuffles;
 		};
 
+		// pops items until every currently available item is used
+		// useful for when you want to "reset" the vector, letting it pick randomly from the entire list again
+		void clearAvailable(){
+			while(unused.size() > 0){
+				pop();
+			}
+		}
+
 		unsigned long int shuffleCount(){
 			return shuffles;
 		}
