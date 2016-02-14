@@ -86,6 +86,11 @@ void TextLabel::updateText(){
 			}
 			if(canFit(width) + font->getGlyphWidthHeight(' ').x) {
 				for(auto c : word) {
+					if(c == '\n') {
+						++idx;
+						textDisplayed += '\n';
+						goto _WordWrapComplete;
+					}
 					insertChar(c);
 					idx++;
 				}
@@ -114,13 +119,14 @@ void TextLabel::updateText(){
 		}
 	}
 
+_WordWrapComplete:
 	// idx to the end of the text did not fit
 	if(idx < textAll.size()){
 		textOverflow = textAll.substr(idx);
 	}else{
 		textOverflow = L"";
 	}
-	
+
 	updateRequired = false;
 }
 
