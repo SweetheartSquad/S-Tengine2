@@ -53,6 +53,11 @@ glm::vec3 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen) const{
 	);
 }
 
+glm::vec3 Camera::screenToWorld(glm::vec3 _screenCoords) const{
+	glm::vec4 t = glm::inverse(getProjectionMatrix() * getViewMatrix()) * glm::vec4((_screenCoords - glm::vec3(0.5f))*2.f, 1);
+    return glm::vec3(t)/t.w;
+}
+
 glm::quat Camera::calcOrientation() const{
 	glm::quat res(1.f, 0.f, 0.f, 0.f);
 	res = glm::rotate(res, yaw, upVectorLocal);
