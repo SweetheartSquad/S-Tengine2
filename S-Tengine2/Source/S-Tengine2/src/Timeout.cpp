@@ -42,9 +42,12 @@ void Timeout::update(Step * _step){
 		elapsedSeconds += _step->deltaTime;
 
 		// trigger a progress event
-		sweet::Event * progressEvent = new sweet::Event("progress");
-		progressEvent->setFloatData("progress", std::min(1.f, (float)(elapsedSeconds/targetSeconds)));
-		eventManager->triggerEvent(progressEvent);
+		// if there are no listeners/parents, skip over this
+		if(eventManager->listeners["progress"].size() > 0 || eventManager->hasParentManagers()){
+			sweet::Event * progressEvent = new sweet::Event("progress");
+			progressEvent->setFloatData("progress", std::min(1.f, (float)(elapsedSeconds/targetSeconds)));
+			eventManager->triggerEvent(progressEvent);
+		}
 
 		// trigger a complete event
 		if(elapsedSeconds >= targetSeconds){

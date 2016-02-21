@@ -180,3 +180,7 @@ void sweet::EventManager::removeParentManager(sweet::EventManager * _parentManag
 void sweet::EventManager::addParentManager(sweet::EventManager * _parentManager){
 	parentManagers.push_back(_parentManager);
 }
+
+bool sweet::EventManager::hasParentManagers(){
+	return parentManagers.size() > 0;
+}

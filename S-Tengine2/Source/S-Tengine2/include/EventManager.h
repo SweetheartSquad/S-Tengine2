@@ -88,7 +88,7 @@ public:
 	void triggerEvent(std::string _tag);
 
 	// listeners are usually in the format [captures](sweet::Event * _event){ code; }
-	void addEventListener(std::string _tag, Listener _listener );
+	void addEventListener(std::string _tag, Listener _listener);
 
 	EventManager();
 	~EventManager();
@@ -102,6 +102,8 @@ public:
 	// removes a child manager from this manager
 	// returns the index of the child in the children list, or -1 if it wasn't a child
 	signed long int removeChildManager(EventManager * _childManager);
+
+	bool hasParentManagers();
 };
 
 }; // end namespace sweet
