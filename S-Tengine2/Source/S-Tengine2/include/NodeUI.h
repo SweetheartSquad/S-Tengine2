@@ -204,12 +204,21 @@ public:
 	// also calls invalidateRenderFrame()
 	void invalidateLayout();
 	
-	virtual Transform * addChild(NodeUI * _uiElement);
+	// Adds _uiElement in the UI hierarchy for this element
+	// i.e. it is placed under a new transform, and then the new transform is placed under this->uiElements, and the new transform is returned
+	//
+	// if _invalidateLayout is true, the layout is invalidated immediately after the child is added
+	// if it is false, you must call invalidateLayout manually in order for the new child to be integrated properly
+	virtual Transform * addChild(NodeUI * _uiElement, bool _invalidateLayout = true);
+
 	// removes the element from the contents transform and returns the index it was found at
 	// if it wasn't found, returns -1
 	// note that the way this works is that _uiElements first parent is removed from the child list,
 	// then _uiElement is removed from its first parent and the orphaned transform is deleted
-	virtual signed long int removeChild(NodeUI * _uiElement);
+	//
+	// if _invalidateLayout is true, the layout is invalidated immediately after the child is added
+	// if it is false, you must call invalidateLayout manually in order for the new child to be integrated properly
+	virtual signed long int removeChild(NodeUI * _uiElement, bool _invalidateLayout = true);
 
 	virtual void translatePhysical(glm::vec3 _translation, bool _relative = true) override;
 

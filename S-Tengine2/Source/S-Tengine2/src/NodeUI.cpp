@@ -145,15 +145,15 @@ void NodeUI::out(){
 }
 
 
-Transform * NodeUI::addChild(NodeUI* _uiElement){
+Transform * NodeUI::addChild(NodeUI* _uiElement, bool _invalidateLayout){
 	_uiElement->nodeUIParent = this;
-	invalidateLayout();
-	_uiElement->setMeasuredWidths();
-	_uiElement->setMeasuredHeights();
+	if(_invalidateLayout){
+		invalidateLayout();
+	}
 	return uiElements->addChild(_uiElement);
 }
 
-signed long int NodeUI::removeChild(NodeUI* _uiElement){
+signed long int NodeUI::removeChild(NodeUI* _uiElement, bool _invalidateLayout){
 	unsigned long int res = -1;
 	if(_uiElement->parents.size() > 0){
 		Transform * t = _uiElement->parents.at(0);
@@ -163,7 +163,9 @@ signed long int NodeUI::removeChild(NodeUI* _uiElement){
 		if(res != (unsigned long int)-1){
 			t->removeChild(_uiElement);
 			delete t;
-			invalidateLayout();
+			if(_invalidateLayout){
+				invalidateLayout();
+			}
 			_uiElement->nodeUIParent = nullptr;
 		}
 	}
