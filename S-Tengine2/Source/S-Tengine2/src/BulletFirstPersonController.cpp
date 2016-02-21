@@ -60,7 +60,8 @@ BulletFirstPersonController::BulletFirstPersonController(BulletWorld * _bulletWo
 	footSteps(nullptr),
 	jumpSound(nullptr),
 	landSound(nullptr),
-	enabled(true)
+	enabled(true),
+	isSprinting(false)
 {
 
 	// player set-up
@@ -166,44 +167,24 @@ void BulletFirstPersonController::update(Step * _step){
 	forward = glm::normalize(forward);
 	right = glm::normalize(right);
 
-	// Create movement vector
-	glm::vec3 movement(0);
 	// Movement speed multiplier while in the air
 	float airControl = 0.1f;
-	if(enabled){
-		if (keyboard->keyDown(GLFW_KEY_W)){
-			movement += forward;
-		}if (keyboard->keyDown(GLFW_KEY_S)){
-			movement -= forward;
-		}if (keyboard->keyDown(GLFW_KEY_A)){
-			movement -= right;
-		}if (keyboard->keyDown(GLFW_KEY_D)){
-			movement += right;
-		}
-		if(isGrounded){
-			// jump controls
-			if (keyboard->keyJustDown(GLFW_KEY_SPACE)){
-				applyLinearImpulseToCenter(glm::vec3(0.f, jumpSpeed * mass, 0.f));
-				if(jumpSound != nullptr){
-					jumpSound->play();
-				}
-				jumpTime = _step->time;
+
+	// Create movement vector
+	glm::vec3 movement = enabled ? calculateInputs(_step) : glm::vec3(0);
+
+	if(!isGrounded){
+		movement *= airControl;
+	}else{
+		// jumping
+		if(movement.y > FLT_EPSILON){
+			applyLinearImpulseToCenter(glm::vec3(0.f, jumpSpeed * mass, 0.f));
+			if(jumpSound != nullptr){
+				jumpSound->play();
 			}
-		}else{
-			// player has less control over movement while in the air
-			movement *= airControl;
+			jumpTime = _step->time;
 		}
 	}
-
-	/*if(joystick != nullptr){
-		movement += forward * -joystick->getAxis(joystick->axisLeftY);
-		movement += right * joystick->getAxis(joystick->axisLeftX);
-			
-		// move camera by directly moving mouse
-		float x2 = joystick->getAxis(joystick->axisRightX)*100;
-		float y2 = -joystick->getAxis(joystick->axisRightY)*100;
-		mouse->translate(glm::vec2(x2, y2));
-	}*/
 	
 	
 	glm::vec2 glmCurVelocityXZ = glm::vec2(curVelocity.x, curVelocity.z);
@@ -230,7 +211,7 @@ void BulletFirstPersonController::update(Step * _step){
 		// recalculate movement speed based on intended playerSpeed and mass
 		movement *= playerSpeed * mass;
 		// if the player is running, multiply speed by a constant
-		if(keyboard->keyDown(GLFW_KEY_LEFT_SHIFT)&&isGrounded){
+		if(isSprinting && isGrounded){
 			movement *= sprintSpeed;
 			maxSpeedCurrent = maxSpeedSprinting;
 		}else{
