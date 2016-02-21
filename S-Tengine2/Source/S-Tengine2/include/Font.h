@@ -7,9 +7,9 @@
 #include <node/NodeResource.h>
 #include <MeshInterface.h>
 
-class Glyph : public MeshInterface{
+class GlyphMesh : public QuadMesh{
 public:
-	Glyph(FT_GlyphSlot _glyph, wchar_t _character, bool _antiAliased);
+	GlyphMesh(FT_GlyphSlot _glyph, wchar_t _character, bool _antiAliased);
 	FT_Vector advance;
 	FT_Glyph_Metrics metrics;
 	wchar_t character;
@@ -28,7 +28,7 @@ public:
 	FT_Face face;
 	float lineGapRatio;
 	std::map<wchar_t, GlyphTexture *> textures;
-	std::map<wchar_t, Glyph *> meshes;
+	std::map<wchar_t, GlyphMesh *> meshes;
 
 	// if true, font meshes use the standard scale mode
 	// if false, font meshes use GL_NEAREST
@@ -41,7 +41,7 @@ public:
 	void unload() override;
 
 	GlyphTexture * getTextureForChar(wchar_t _char);
-	Glyph * getMeshInterfaceForChar(wchar_t _char);
+	GlyphMesh * getMeshInterfaceForChar(wchar_t _char);
 	glm::vec2 getGlyphWidthHeight(wchar_t _char);
 	glm::vec2 getGlyphXY(wchar_t _char);
 	void loadGlyph(wchar_t _char);

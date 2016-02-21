@@ -4,8 +4,8 @@
 #include <Sweet.h>
 #include <MeshFactory.h>
 
-Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _char, bool _antiAliased) :
-	MeshInterface(GL_QUADS, GL_STATIC_DRAW),
+GlyphMesh::GlyphMesh(FT_GlyphSlot _glyph, wchar_t _char, bool _antiAliased) :
+	QuadMesh(false),
 	NodeResource(false),
 	character(_char)
 {
@@ -140,15 +140,15 @@ GlyphTexture * Font::getTextureForChar(wchar_t _char){
 	return res;
 }
 
-Glyph* Font::getMeshInterfaceForChar(wchar_t _char){
-	Glyph * res;
+GlyphMesh * Font::getMeshInterfaceForChar(wchar_t _char){
+	GlyphMesh * res;
 	auto t = meshes.find(_char);
 	if(t == meshes.end()){
 		loadGlyph(_char);
-		Glyph * mesh = new Glyph(face->glyph, _char, antiAliased);
+		GlyphMesh * mesh = new GlyphMesh(face->glyph, _char, antiAliased);
 		mesh->autoRelease = false;
 		mesh->pushTexture2D(getTextureForChar(_char));
-		meshes.insert(std::pair<char, Glyph *>(_char, mesh));
+		meshes.insert(std::pair<char, GlyphMesh *>(_char, mesh));
 		res = mesh;
 		res->load();
 	}else{

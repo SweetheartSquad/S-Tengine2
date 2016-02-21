@@ -7,16 +7,16 @@
 class TextArea;
 class TextLabel;
 class Font;
-class Glyph;
+class GlyphMesh;
 
 // NOTE - UIGLyphs do not have mouse interaction enabled by default
 class UIGlyph : public virtual NodeUI, public virtual NodeShadable{
 public:
 	wchar_t character;
-	Glyph * glyph;
+	GlyphMesh * glyph;
 
-	UIGlyph(BulletWorld * _world, Glyph * _mesh, Shader * _shader, wchar_t _character);
-	void setGlyphMesh(Glyph * _mesh);
+	UIGlyph(BulletWorld * _world, GlyphMesh * _mesh, Shader * _shader, wchar_t _character);
+	void setGlyphMesh(GlyphMesh * _mesh);
 	
 	virtual void render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 };
@@ -58,5 +58,5 @@ private:
 	std::wstring textAll;
 	bool updateRequired;
 
-	UIGlyph * getGlyph(wchar_t _char, Glyph * _glyphMesh);
+	UIGlyph * getGlyph(wchar_t _char, GlyphMesh * _glyphMesh);
 };

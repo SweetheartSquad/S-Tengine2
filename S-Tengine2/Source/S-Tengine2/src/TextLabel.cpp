@@ -150,7 +150,7 @@ void TextLabel::invalidate(){
 }
 
 void TextLabel::insertChar(wchar_t _char){
-	Glyph * glyphMesh = font->getMeshInterfaceForChar(_char);
+	GlyphMesh * glyphMesh = font->getMeshInterfaceForChar(_char);
 	UIGlyph * glyph = getGlyph(_char, glyphMesh);
 	usedGlyphs.push_back(glyph);
 	addChild(glyph);
@@ -158,7 +158,7 @@ void TextLabel::insertChar(wchar_t _char){
 	textDisplayed += _char;
 }
 
-UIGlyph * TextLabel::getGlyph(wchar_t _char, Glyph * _glyphMesh){
+UIGlyph * TextLabel::getGlyph(wchar_t _char, GlyphMesh * _glyphMesh){
 	UIGlyph * res;
 	if(unusedGlyphs.size() > 0){
 		res = unusedGlyphs.back();
@@ -182,7 +182,7 @@ bool TextLabel::canFit(float _width){
 
 // GlyphMeshEntity definitions //
 
-UIGlyph::UIGlyph(BulletWorld * _world, Glyph * _mesh, Shader * _shader, wchar_t _character) :
+UIGlyph::UIGlyph(BulletWorld * _world, GlyphMesh * _mesh, Shader * _shader, wchar_t _character) :
 	NodeUI(_world),
 	NodeShadable(_shader),
 	character(_character),
@@ -193,7 +193,7 @@ UIGlyph::UIGlyph(BulletWorld * _world, Glyph * _mesh, Shader * _shader, wchar_t 
 	mouseEnabled = false;
 }
 
-void UIGlyph::setGlyphMesh(Glyph * _newGlyph){
+void UIGlyph::setGlyphMesh(GlyphMesh * _newGlyph){
 	if(glyph != nullptr){
 		uiElements->removeChild(glyph);
 	}
