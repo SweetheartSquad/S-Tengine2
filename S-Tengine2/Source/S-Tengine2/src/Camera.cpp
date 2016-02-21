@@ -54,6 +54,8 @@ glm::vec3 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen) const{
 }
 
 glm::vec3 Camera::screenToWorld(glm::vec3 _screenCoords) const{
+	_screenCoords = glm::min(glm::vec3(1), _screenCoords);
+	_screenCoords = glm::max(glm::vec3(0), _screenCoords);
 	glm::vec4 t = glm::inverse(getProjectionMatrix() * getViewMatrix()) * glm::vec4((_screenCoords - glm::vec3(0.5f))*2.f, 1);
     return glm::vec3(t)/t.w;
 }

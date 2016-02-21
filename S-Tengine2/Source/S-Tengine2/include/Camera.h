@@ -57,6 +57,7 @@ public:
 	// coordinates are 0-1
 	// x,y: bottom-left to top-right
 	// z: near-clip to far-clip
+	// if coordinates are below zero or above 1, they will be clamped
 	virtual glm::vec3 screenToWorld(glm::vec3 _screenCoords) const;
 
 	// returns an orientation quaternion based on pitch, yaw and roll
