@@ -79,7 +79,9 @@ Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _character, bool _antialiased) :
 	texture(new GlyphTexture(_glyph->bitmap)),
 	mesh(new GlyphMesh(_glyph, _antialiased)),
 	advance(_glyph->advance),
-	metrics(_glyph->metrics)
+	metrics(_glyph->metrics),
+	bitmap_left(_glyph->bitmap_left),
+	bitmap_top(_glyph->bitmap_top)
 {
 	mesh->pushTexture2D(texture);
 }
@@ -118,31 +120,28 @@ Font::Font(std::string _fontSrc, int _size, bool _autoRelease) :
 }
 
 Font::~Font(){
-	for(auto c : meshes){
-		delete c.second;
-	}
-	for(auto c : textures){
-		delete c.second;
+	for(auto g : glyphs){
+		delete g.second;
 	}
 	FT_Done_Face(face);
 }
 
 void Font::load(){
-	for(auto c : meshes){
-		c.second->load();
+	if(!loaded){
+		for(auto g : glyphs){
+			g.second->load();
+		}
 	}
-	for(auto c : textures){
-		c.second->load();
-	}
+	NodeResource::load();
 }
 
 void Font::unload(){
-	for(auto c : textures){
-		c.second->unload();
+	if(loaded){
+		for(auto g : glyphs){
+			g.second->unload();
+		}
 	}
-	for(auto c : meshes){
-		c.second->unload();
-	}
+	NodeResource::unload();
 }
 
 Glyph * Font::getGlyphForChar(wchar_t _char){
@@ -153,6 +152,7 @@ Glyph * Font::getGlyphForChar(wchar_t _char){
 	}else{
 		loadGlyph(_char);
 		res = new Glyph(face->glyph, _char, antiAliased);
+		glyphs[_char] = res;
 	}
 	
 	res->load();
@@ -168,13 +168,13 @@ GlyphMesh * Font::getMeshInterfaceForChar(wchar_t _char){
 }
 
 glm::vec2 Font::getGlyphWidthHeight(wchar_t _char){
-	loadGlyph(_char);
-	return glm::vec2(face->glyph->bitmap.width, face->glyph->bitmap.rows);
+	GlyphTexture * t = getGlyphForChar(_char)->texture;
+	return glm::vec2(t->width, t->height);
 }
 
 glm::vec2 Font::getGlyphXY(wchar_t _char){
-	loadGlyph(_char);
-	return glm::vec2(face->glyph->bitmap_left, face->glyph->bitmap_top);
+	Glyph * g = getGlyphForChar(_char);
+	return glm::vec2(g->bitmap_left, g->bitmap_top);
 }
 
 void Font::loadGlyph(wchar_t _char){

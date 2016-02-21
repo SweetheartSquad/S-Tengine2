@@ -23,6 +23,7 @@ public:
 	GlyphMesh * mesh;
 	GlyphTexture * texture;
 	
+	FT_Int bitmap_top, bitmap_left;
 	FT_Vector advance;
 	FT_Glyph_Metrics metrics;
 	wchar_t character;
@@ -36,13 +37,10 @@ public:
 
 class Font : public NodeResource{
 public:	
-	
 	FT_Face face;
 	float lineGapRatio;
 
 	std::map<wchar_t, Glyph *> glyphs;
-	std::map<wchar_t, GlyphTexture *> textures;
-	std::map<wchar_t, GlyphMesh *> meshes;
 
 	// if true, font meshes use the standard scale mode
 	// if false, font meshes use GL_NEAREST
