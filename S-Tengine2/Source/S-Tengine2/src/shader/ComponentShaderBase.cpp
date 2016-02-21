@@ -147,20 +147,24 @@ void ComponentShaderBase::clean(sweet::MatrixStack* _matrixStack, RenderOptions*
 }
 
 void ComponentShaderBase::unload(){
-	for(ShaderComponent * sc : components){
-		sc->unload();
-	}
-	Shader::unload();
-	makeDirty();
-	for(unsigned long int i = 0; i < components.size(); i++){
-		components.at(i)->makeDirty();
+	if(loaded){
+		for(ShaderComponent * sc : components){
+			sc->unload();
+		}
+		Shader::unload();
+		makeDirty();
+		for(unsigned long int i = 0; i < components.size(); i++){
+			components.at(i)->makeDirty();
+		}
 	}
 }
 
 void ComponentShaderBase::load(){
-	Shader::load();
-	for(ShaderComponent * sc : components){
-		sc->load();
+	if(!loaded){
+		Shader::load();
+		for(ShaderComponent * sc : components){
+			sc->load();
+		}
+		compileShader();
 	}
-	compileShader();
 }
