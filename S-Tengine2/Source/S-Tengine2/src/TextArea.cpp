@@ -31,7 +31,7 @@ void TextArea::setMeasuredWidths(){
 void TextArea::invalidateAllLines(){
 	while(usedLines.size() > 0){
 		usedLines.back()->invalidate();
-		removeChild(usedLines.back());
+		removeChild(usedLines.back(), false);
 		unusedLines.push_back(usedLines.back());
 		usedLines.pop_back();
 	}
@@ -52,10 +52,8 @@ void TextArea::setWrapMode(WrapMode _wrapMode){
 }
 
 void TextArea::setText(std::wstring _text){
-	
 	text = _text;
 	updateRequired = true;
-	invalidateLayout();
 	updateText();
 }
 
@@ -84,6 +82,7 @@ void TextArea::updateText(){
 
 		updateRequired = false;
 	}
+	invalidateLayout();
 }
 
 TextLabel * TextArea::getNewLine() {
@@ -97,7 +96,7 @@ TextLabel * TextArea::getNewLine() {
 		line->horizontalAlignment = horizontalAlignment;
 	}
 	usedLines.push_back(line);
-	addChild(line);
+	addChild(line, false);
 	line->wrapMode = wrapMode;
 	return line;
 }

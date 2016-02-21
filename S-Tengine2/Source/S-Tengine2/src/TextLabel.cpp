@@ -60,7 +60,6 @@ void TextLabel::setText(std::wstring _text){
 		return;
 	}*/
 	invalidate();
-	invalidateLayout();
 
 	textAll = _text;
 
@@ -127,6 +126,7 @@ _WordWrapComplete:
 		textOverflow = L"";
 	}
 
+	invalidateLayout();
 	updateRequired = false;
 }
 
@@ -140,7 +140,7 @@ float TextLabel::getContentsWidth(){
 
 void TextLabel::invalidate(){
 	while(usedGlyphs.size() > 0){
-		removeChild(usedGlyphs.back());
+		removeChild(usedGlyphs.back(), false);
 		unusedGlyphs.push_back(usedGlyphs.back());
 		usedGlyphs.pop_back();
 	}
@@ -153,7 +153,7 @@ void TextLabel::insertChar(wchar_t _char){
 	Glyph * glyph = font->getGlyphForChar(_char);
 	UIGlyph * uiGlyph = getGlyph(_char, glyph);
 	usedGlyphs.push_back(uiGlyph);
-	addChild(uiGlyph);
+	addChild(uiGlyph, false);
 	lineWidth += glyph->advance.x/64.f;
 	textDisplayed += _char;
 }
