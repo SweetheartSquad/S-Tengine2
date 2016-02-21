@@ -76,6 +76,7 @@
     <ClCompile Include="src/scenario/Conversation.cpp" />
     <ClCompile Include="src/scenario/Dialogue.cpp" />
     <ClCompile Include="src/scenario/Scenario.cpp" />
+    <ClCompile Include="src\BulletController.cpp" />
     <ClCompile Include="src\BulletHeightField.cpp" />
     <ClCompile Include="src\BulletVehicle.cpp" />
     <ClCompile Include="src\Colour.cpp" />
@@ -173,6 +174,7 @@
     <ClCompile Include="src\StereoCamera.cpp" />
     <ClCompile Include="src\Sweet_OVR.cpp" />
     <ClCompile Include="src\VoxRenderOptions.cpp" />
+    <ClInclude Include="include\BulletController.h" />
     <ClInclude Include="include\BulletHeightField.h" />
     <ClInclude Include="include\BulletVehicle.h" />
     <ClInclude Include="include\Colour.h" />

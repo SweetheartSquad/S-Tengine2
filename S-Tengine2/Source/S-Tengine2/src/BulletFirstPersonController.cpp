@@ -44,9 +44,6 @@
 
 BulletFirstPersonController::BulletFirstPersonController(BulletWorld * _bulletWorld, float _radius, float _height, float _mass) : 
 	NodeBulletBody(_bulletWorld),
-	keyboard(&Keyboard::getInstance()),
-	mouse(&Mouse::getInstance()),
-	joystick(nullptr),
 	jumpTime(0.0),
 	camOffset(0),
 	// speed
@@ -60,7 +57,6 @@ BulletFirstPersonController::BulletFirstPersonController(BulletWorld * _bulletWo
 	footSteps(nullptr),
 	jumpSound(nullptr),
 	landSound(nullptr),
-	enabled(true),
 	isSprinting(false)
 {
 
@@ -124,7 +120,17 @@ BulletFirstPersonController::~BulletFirstPersonController(){
 }
 
 void BulletFirstPersonController::update(Step * _step){
-	
+	BulletController::update(_step);
+	NodeBulletBody::update(_step);
+}
+
+void BulletFirstPersonController::handleInputs(Step * _step, glm::vec3 _inputs){
+	// parse inputs
+	bool attemptJump = _inputs.y > FLT_EPSILON;
+	glm::vec2 movement(_inputs.x, _inputs.z);
+
+
+
 	// get player velocity
 	glm::vec3 curVelocity = getLinearVelocity();
 	
@@ -151,33 +157,14 @@ void BulletFirstPersonController::update(Step * _step){
 
 	lastYVel = currentYVel;
 
-	
-	//mouseCam->parents.at(0)->translate(player->getWorldPos() + glm::vec3(0, 0, player->parents.at(0)->getScaleVector().z*1.25f), false);
-	//mouseCam->lookAtOffset = glm::vec3(0, 0, -player->parents.at(0)->getScaleVector().z*0.25f);
-	
-	// get direction vectors
-	glm::vec3 forward = playerCamera->forwardVectorRotated;
-	glm::vec3 right = playerCamera->rightVectorRotated;
-	
-	// remove y portion of direction vectors to avoid flying
-	forward.y = 0;
-	right.y = 0;
-
-	// normalize direction vectors for consistent motion regardless of viewing angle
-	forward = glm::normalize(forward);
-	right = glm::normalize(right);
-
 	// Movement speed multiplier while in the air
 	float airControl = 0.1f;
-
-	// Create movement vector
-	glm::vec3 movement = enabled ? calculateInputs(_step) : glm::vec3(0);
 
 	if(!isGrounded){
 		movement *= airControl;
 	}else{
 		// jumping
-		if(movement.y > FLT_EPSILON){
+		if(attemptJump){
 			applyLinearImpulseToCenter(glm::vec3(0.f, jumpSpeed * mass, 0.f));
 			if(jumpSound != nullptr){
 				jumpSound->play();
@@ -189,7 +176,7 @@ void BulletFirstPersonController::update(Step * _step){
 	
 	glm::vec2 glmCurVelocityXZ = glm::vec2(curVelocity.x, curVelocity.z);
 	glm::vec2 normCurvelocityXZ(glm::normalize(glmCurVelocityXZ));
-	glm::vec2 normMovementXZ(glm::normalize(glm::vec2(movement.x, movement.z)));
+	glm::vec2 normMovementXZ(glm::normalize(movement));
 
 	float movementMag = glm::length(movement);
 	float glmCurVelocityMagXZ = glm::length(glmCurVelocityXZ);
@@ -226,7 +213,7 @@ void BulletFirstPersonController::update(Step * _step){
 			}else if(glmCurVelocityMagXZ < 1.0f){
 				bobbleInterpolation = 0.f;
 			}
-			applyLinearImpulseToCenter(glm::vec3(movement.x, 0, movement.z));
+			applyLinearImpulseToCenter(glm::vec3(movement.x, 0, movement.y));
 		}
 		
 
@@ -279,11 +266,6 @@ void BulletFirstPersonController::update(Step * _step){
 		jumpTime += _step->time - jumpTime;
 	}
 	playerCamera->firstParent()->translate(glm::vec3(b.x(), playerHeight*0.75f+bobbleVal*bobbleInterpolation+b.y(), b.z()) + camOffset, false);
-
-	//std::cout << isGrounded << std::endl;
-
-	NodeBulletBody::update(_step);
-	Entity::update(_step);
 }
 
 
@@ -297,17 +279,13 @@ glm::vec3 BulletFirstPersonController::getLinearVelocity() const{
 }
 
 void BulletFirstPersonController::enable(){
-	enabled = true;
 	playerCamera->controller->movementEnabled = true;
 	playerCamera->controller->rotationEnabled = true;
+	BulletController::enable();
 }
 
 void BulletFirstPersonController::disable(){
-	enabled = false;
 	playerCamera->controller->movementEnabled = false;
 	playerCamera->controller->rotationEnabled = false;
-}
-
-bool BulletFirstPersonController::isEnabled(){
-	return enabled;
+	BulletController::disable();
 }

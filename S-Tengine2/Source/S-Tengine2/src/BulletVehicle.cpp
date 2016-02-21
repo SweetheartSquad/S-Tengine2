@@ -13,11 +13,9 @@
 
 BulletVehicle::BulletVehicle() :
 	currentSteeringAngle(0.0f),
-	keyboard(&Keyboard::getInstance()),
-	mouse(&Mouse::getInstance()),
 	orbitalCameraRadius(3.f),
 	steeringMode(kTWO_WHEEL),
-	enabled(true)
+	chassisMesh(nullptr)
 {
 
     m_fEngineForce = 0.0f;
@@ -67,16 +65,21 @@ void BulletVehicle::addWheelDefinition(glm::vec3 _pos, MeshInterface * _mesh, bo
 	wheelDefinitions.push_back(def);
 }
 
-void BulletVehicle::init(BulletWorld * _world, MeshInterface * _chassisMesh, Shader * _shader){
+void BulletVehicle::addChassisDefinition(MeshInterface * _chassisMesh){
+	assert(chassisMesh == nullptr);
+	chassisMesh = _chassisMesh;
+}
+
+void BulletVehicle::init(BulletWorld * _world, Shader * _shader){
 	float mass = 500;
 	m_tuning.m_suspensionStiffness = mass*0.1f;//20.f;  
 	float linearDamping = 0.2f;
 	float angularDamping = 0.5f;
 
-	chassis = new BulletMeshEntity(_world, _chassisMesh, _shader); // TODO: chassis mesh, shader
+	chassis = new BulletMeshEntity(_world, chassisMesh, _shader);
 	childTransform->addChild(chassis);
 	
-	sweet::Box chassisBbox = _chassisMesh->calcBoundingBox();
+	sweet::Box chassisBbox = chassisMesh->calcBoundingBox();
 	m_tuning.m_suspensionCompression = chassisBbox.height*0.25f;
 
 	chassis->setColliderAsBoundingBox();
@@ -128,10 +131,7 @@ void BulletVehicle::init(BulletWorld * _world, MeshInterface * _chassisMesh, Sha
 
 
 void BulletVehicle::update(Step * _step){
-    handleInput();
-    updateWheels();
-	realignWheels();
-	
+	BulletController::update(_step);
 	Entity::update(_step);
 
 	// update orbital camera
@@ -143,45 +143,32 @@ void BulletVehicle::update(Step * _step){
 	orbitalCamera->firstParent()->translate(chassis->meshTransform->getWorldPos() - orbitalCamera->forwardVectorRotated * orbitalCameraRadius, false);
 }
 
-void BulletVehicle::handleInput(){
-	float newSteering = 0.0f;
-    float accelerator = 0.0f;
-    float brake = 0.0f;
+void BulletVehicle::handleInputs(Step * _step, glm::vec3 _inputs){
+	// parse inputs
+	float steering = _inputs.x, accelerator = _inputs.z, brake = 0.f;
 
-    // Read controls
-	if(enabled){
-		if (keyboard->keyDown(GLFW_KEY_A)){
-			newSteering = 1.0f;
-		}if (keyboard->keyDown(GLFW_KEY_D)){
-			newSteering = -1.0f;
-		}
-	}
 
     // calculate steering angle
-	if (glm::abs(newSteering) > FLT_EPSILON){
+	if (glm::abs(steering) > FLT_EPSILON){
 		// pull towards target steering angle
-		currentSteeringAngle = currentSteeringAngle * 0.95f + newSteering * 0.05f;
+		currentSteeringAngle = currentSteeringAngle * 0.95f + steering * 0.05f;
     }else{
 		// if we're not steering, pull the wheels back to zero
         currentSteeringAngle *= 0.8f;
     }
 	m_fVehicleSteering = currentSteeringAngle;
-
-    // calculate forces
-	if(enabled){
-		if (keyboard->keyDown(GLFW_KEY_W)){
-			accelerator = 1.0f;
-		}if (keyboard->keyDown(GLFW_KEY_S)){
-			accelerator = -0.5f;
-		}
-	}
+	
 	m_fEngineForce = m_fmaxEngineForce * accelerator;
 	m_fBrakingForce = m_fmaxBrakingForce * brake;
 	
-	// wake up the rigid body if needed
-    if( glm::abs(newSteering) >= FLT_EPSILON || glm::abs(accelerator) >= FLT_EPSILON ){
+	// if we're turning or accelerating, wake up the rigid body
+    if( glm::abs(steering) + glm::abs(accelerator) >= FLT_EPSILON){
 		chassis->body->activate();
     }
+
+	// deal with wheels
+    updateWheels();
+	realignWheels();
 }
 
 void BulletVehicle::updateWheels(){
@@ -227,11 +214,8 @@ void BulletVehicle::realignWheels(){
 }
 
 void BulletVehicle::enable(){
-	enabled = true;
+	BulletController::enable();
 }
 void BulletVehicle::disable(){
-	enabled = false;
-}
-bool BulletVehicle::isEnabled(){
-	return enabled;
+	BulletController::disable();
 }

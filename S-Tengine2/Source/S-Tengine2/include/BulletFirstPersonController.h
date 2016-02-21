@@ -1,31 +1,15 @@
 #pragma once
 
-#include <node/NodeChild.h>
-#include <node/NodeUpdatable.h>
-
-#include <Scene.h>
-#include <BulletDebugDrawer.h>
-#include <BulletWorld.h>
 #include <NodeBulletBody.h>
-#include <MousePerspectiveCamera.h>
+#include <BulletController.h>
 
+#include <MousePerspectiveCamera.h>
 #include <Animation.h>
 #include <Tween.h>
-
 #include <OpenALSound.h>
 
-class Keyboard;
-class Mouse;
-class Joystick;
-
-class BulletFirstPersonController : public virtual NodeBulletBody{
+class BulletFirstPersonController : public virtual BulletController, public virtual NodeBulletBody{
 protected:
-	bool enabled;
-
-	Keyboard * keyboard;
-	Mouse * mouse;
-	Joystick * joystick;
-
 	float camYpos;
 
 	Animation<float> * headBobble;
@@ -85,15 +69,8 @@ public:
 
 	virtual void update(Step * _step) override;
 
-	void enable();
-	void disable();
-	bool isEnabled();
+	virtual void enable() override;
+	virtual void disable() override;
 
-	// this must be overriden by the derived class
-	// the return result corresponds to the 
-	// x and z are values between -1 and 1 which represent the movement along the ground plane (i.e. walking, running, etc.)
-	// y is the "jump" value; if it is above 0, a jump will occur. The value is a multiplier for jump height, i.e. a y-value of 1 means a normal jump
-	// NOTE: You should also handle sprinting here
-	// NOTE: This is only called if the controller is enabled
-	virtual glm::vec3 calculateInputs(Step * _step) = 0;
+	virtual void handleInputs(Step * _step, glm::vec3 _inputs) override;
 };
