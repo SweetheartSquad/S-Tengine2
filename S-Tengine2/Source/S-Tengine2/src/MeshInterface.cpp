@@ -349,8 +349,7 @@ sweet::Box MeshInterface::calcBoundingBox() const{
 void MeshInterface::applyTransformation(Transform * _transform){
 	const glm::mat4x4 m = _transform->getModelMatrix();
 	for(Vertex & i : vertices){
-		glm::vec4 v(i.x, i.y, i.z, 1);
-		v = m * v;
+		glm::vec3 v(m * glm::vec4(i.x, i.y, i.z, 1));
 		i.x = v.x;
 		i.y = v.y;
 		i.z = v.z;
@@ -358,17 +357,19 @@ void MeshInterface::applyTransformation(Transform * _transform){
 	dirty = true;
 }
 
-void MeshInterface::insertVertices(const MeshInterface * const _mesh){
+void MeshInterface::insertVertices(const MeshInterface & _mesh){
 	// save the number of vertices and indices so we can offset them later
-	unsigned long int vertOffset = vertices.size();
-	unsigned long int indOffet = indices.size();
+	unsigned long int
+		vertOffset = vertices.size(),
+		indOffset = indices.size(),
+		indNumTotal = indOffset + _mesh.indices.size();
 
 	// copy the verts from the temporary mesh into this one
-	vertices.insert(vertices.end(), _mesh->vertices.begin(), _mesh->vertices.end());
-	indices.insert(indices.end(), _mesh->indices.begin(), _mesh->indices.end());
+	vertices.insert(vertices.end(), _mesh.vertices.begin(), _mesh.vertices.end());
+	indices.insert(indices.end(), _mesh.indices.begin(), _mesh.indices.end());
 				
 	// offset the inserted indices
-	for(unsigned long int i = indOffet; i < indices.size(); ++i) {
+	for(unsigned long int i = indOffset; i < indNumTotal; ++i) {
 		indices.at(i) += vertOffset;
 	}
 

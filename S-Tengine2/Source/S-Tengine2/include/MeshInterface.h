@@ -157,7 +157,7 @@ public:
 	// appends all of _mesh's vertices and indices (indices are offset by current vertex count) to this mesh
 	// NOTE: does not delete _mesh
 	// ALSO NOTE: transferring verts from a TriMesh to a QuadMesh or vice versa probably won't do what you want
-	void insertVertices(const MeshInterface * const _mesh);
+	void insertVertices(const MeshInterface & _mesh);
 
 	friend std::ostream& operator<<(std::ostream& os, const MeshInterface& obj);
 };

@@ -11,7 +11,7 @@ Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _char, bool _antiAliased) :
 {
 	// get a standard plane mesh and insert the verts into the glyph
 	MeshInterface * m = MeshFactory::getPlaneMesh(0.5f, false);
-	insertVertices(m);
+	insertVertices(*m);
 	delete m;
 
 	// get the glyph dimensions

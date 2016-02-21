@@ -26,7 +26,7 @@ float sweet::Box::getVolume(){
 	return width * height * depth;
 }
 
-bool sweet::Box::intersects(sweet::Box _rect, float _margin){
+bool sweet::Box::intersects(const sweet::Box & _rect, const float _margin) const{
 	if (_rect.x + _rect.width <= x + _margin) return false; // rect is left
     if (_rect.x >= x + width - _margin) return false; // rect is right
     if (_rect.y + _rect.height <= y + _margin) return false; // rect is below
@@ -37,7 +37,7 @@ bool sweet::Box::intersects(sweet::Box _rect, float _margin){
     return true; // boxes overlap
 }
 
-bool sweet::Box::intersects(std::vector<glm::vec3> _verts,  float _margin){
+bool sweet::Box::intersects(const std::vector<glm::vec3> & _verts, const float _margin) const{
 	return intersects(sweet::Box::bound(_verts), _margin);
 }
 

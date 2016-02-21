@@ -88,6 +88,6 @@ void BulletHeightField::updateMesh(){
 	// copy in the new verts
 	BulletHeightFieldShape * s = dynamic_cast<BulletHeightFieldShape *>(shape);
 	TriMesh * temp = s->getMesh(tileUvs);
-	mesh->insertVertices(temp);
+	mesh->insertVertices(*temp);
 	delete temp;
 }
