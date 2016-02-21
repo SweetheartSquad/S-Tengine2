@@ -60,4 +60,6 @@ private:
 	bool updateRequired;
 
 	UIGlyph * getGlyph(wchar_t _char, Glyph * _glyph);
+
+	unsigned long int wordWrap();
 };

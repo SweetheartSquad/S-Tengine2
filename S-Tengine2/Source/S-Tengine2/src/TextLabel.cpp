@@ -74,6 +74,20 @@ void TextLabel::setText(std::string _text){
 
 void TextLabel::updateText(){
 	// find out where the first overflow in the text would occur
+	unsigned long int idx = wordWrap();
+
+	// idx to the end of the text did not fit
+	if(idx < textAll.size()){
+		textOverflow = textAll.substr(idx);
+	}else{
+		textOverflow = L"";
+	}
+
+	invalidateLayout();
+	updateRequired = false;
+}
+
+unsigned long int TextLabel::wordWrap(){
 	unsigned long int idx = 0;
 	if(wrapMode == kWORD) {
 		std::vector<std::wstring> words = sweet::StringUtils::split(textAll, ' ');
@@ -88,7 +102,7 @@ void TextLabel::updateText(){
 					if(c == '\n') {
 						++idx;
 						textDisplayed += '\n';
-						goto _WordWrapComplete;
+						return idx; // return early
 					}
 					insertChar(c);
 					idx++;
@@ -117,17 +131,7 @@ void TextLabel::updateText(){
 			}
 		}
 	}
-
-_WordWrapComplete:
-	// idx to the end of the text did not fit
-	if(idx < textAll.size()){
-		textOverflow = textAll.substr(idx);
-	}else{
-		textOverflow = L"";
-	}
-
-	invalidateLayout();
-	updateRequired = false;
+	return idx;
 }
 
 float TextLabel::getContentsHeight(){
