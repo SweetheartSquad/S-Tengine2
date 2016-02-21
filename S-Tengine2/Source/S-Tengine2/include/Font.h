@@ -9,17 +9,29 @@
 
 class GlyphMesh : public QuadMesh{
 public:
-	GlyphMesh(FT_GlyphSlot _glyph, wchar_t _character, bool _antiAliased);
-	FT_Vector advance;
-	FT_Glyph_Metrics metrics;
-	wchar_t character;
+	GlyphMesh(FT_GlyphSlot _glyph, bool _antiAliased);
 };
 
 class GlyphTexture : public Texture{
 public:
-	GlyphTexture(FT_Bitmap _glyph, bool _autoRelease);
-	~GlyphTexture();
+	GlyphTexture(FT_Bitmap _glyph);
 	virtual void load() override;
+};
+
+class Glyph : public NodeResource{
+public:
+	GlyphMesh * mesh;
+	GlyphTexture * texture;
+	
+	FT_Vector advance;
+	FT_Glyph_Metrics metrics;
+	wchar_t character;
+
+	Glyph(FT_GlyphSlot _glyph, wchar_t _character, bool _antiAliased);
+	~Glyph();
+	
+	virtual void load() override;
+	virtual void unload() override;
 };
 
 class Font : public NodeResource{
@@ -27,6 +39,8 @@ public:
 	
 	FT_Face face;
 	float lineGapRatio;
+
+	std::map<wchar_t, Glyph *> glyphs;
 	std::map<wchar_t, GlyphTexture *> textures;
 	std::map<wchar_t, GlyphMesh *> meshes;
 
@@ -40,11 +54,12 @@ public:
 	void load() override;
 	void unload() override;
 
-	GlyphTexture * getTextureForChar(wchar_t _char);
-	GlyphMesh * getMeshInterfaceForChar(wchar_t _char);
-	glm::vec2 getGlyphWidthHeight(wchar_t _char);
-	glm::vec2 getGlyphXY(wchar_t _char);
-	void loadGlyph(wchar_t _char);
+	Glyph * getGlyphForChar(wchar_t _character);
+	GlyphTexture * getTextureForChar(wchar_t _character);
+	GlyphMesh * getMeshInterfaceForChar(wchar_t _character);
+	glm::vec2 getGlyphWidthHeight(wchar_t _character);
+	glm::vec2 getGlyphXY(wchar_t _character);
+	void loadGlyph(wchar_t _character);
 	float getLineHeight();
 
 private:

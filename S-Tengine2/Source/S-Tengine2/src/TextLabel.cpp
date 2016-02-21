@@ -150,23 +150,23 @@ void TextLabel::invalidate(){
 }
 
 void TextLabel::insertChar(wchar_t _char){
-	GlyphMesh * glyphMesh = font->getMeshInterfaceForChar(_char);
-	UIGlyph * glyph = getGlyph(_char, glyphMesh);
-	usedGlyphs.push_back(glyph);
-	addChild(glyph);
-	lineWidth += glyphMesh->advance.x/64.f;
+	Glyph * glyph = font->getGlyphForChar(_char);
+	UIGlyph * uiGlyph = getGlyph(_char, glyph);
+	usedGlyphs.push_back(uiGlyph);
+	addChild(uiGlyph);
+	lineWidth += glyph->advance.x/64.f;
 	textDisplayed += _char;
 }
 
-UIGlyph * TextLabel::getGlyph(wchar_t _char, GlyphMesh * _glyphMesh){
+UIGlyph * TextLabel::getGlyph(wchar_t _char, Glyph * _glyph){
 	UIGlyph * res;
 	if(unusedGlyphs.size() > 0){
 		res = unusedGlyphs.back();
-		res->setGlyphMesh(_glyphMesh);
+		res->setGlyph(_glyph);
 		res->character = _char;
 		unusedGlyphs.pop_back();
 	}else{
-		res = new UIGlyph(world, _glyphMesh, textShader, _char);
+		res = new UIGlyph(world, _glyph, textShader, _char);
 	}
 	return res;
 }
@@ -182,28 +182,28 @@ bool TextLabel::canFit(float _width){
 
 // GlyphMeshEntity definitions //
 
-UIGlyph::UIGlyph(BulletWorld * _world, GlyphMesh * _mesh, Shader * _shader, wchar_t _character) :
+UIGlyph::UIGlyph(BulletWorld * _world, Glyph * _mesh, Shader * _shader, wchar_t _character) :
 	NodeUI(_world),
 	NodeShadable(_shader),
 	character(_character),
-	glyph(nullptr)
+	glyphMesh(nullptr)
 {
-	setGlyphMesh(_mesh);
+	setGlyph(_mesh);
 	boxSizing = kCONTENT_BOX;
 	mouseEnabled = false;
 }
 
-void UIGlyph::setGlyphMesh(GlyphMesh * _newGlyph){
-	if(glyph != nullptr){
-		uiElements->removeChild(glyph);
+void UIGlyph::setGlyph(Glyph * _newGlyph){
+	if(glyphMesh != nullptr){
+		uiElements->removeChild(glyphMesh);
 	}
-	glyph = _newGlyph;
+	glyphMesh = _newGlyph->mesh;
 
-	uiElements->addChild(glyph, false);
-	setPixelWidth(glyph->advance.x/64);
-	setPixelHeight(glyph->advance.y/64);
+	uiElements->addChild(glyphMesh, false);
+	setPixelWidth(_newGlyph->advance.x/64);
+	setPixelHeight(_newGlyph->advance.y/64);
 	
-	glyph->configureDefaultVertexAttributes(shader);
+	glyphMesh->configureDefaultVertexAttributes(shader);
 }
 
 void UIGlyph::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
