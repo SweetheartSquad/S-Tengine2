@@ -87,8 +87,8 @@ Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _character, bool _antialiased) :
 }
 
 Glyph::~Glyph(){
-	delete texture;
 	delete mesh;
+	delete texture;
 }
 
 void Glyph::load(){
