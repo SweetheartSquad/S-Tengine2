@@ -15,7 +15,9 @@ StereoCamera::StereoCamera() :
 	mirrorFBO(0),
 	swapTextureSet(nullptr),
 	activeCam(OVR::StereoEye_Center),
-	hmdOrientation(0,0,0,1)
+	hmdOrientation(0,0,0,1),
+	useHeadTrackingOrientation(true),
+	useHeadTrackingPosition(false)
 {
 	interpolation = 1; // better to avoid interpolation
 	fieldOfView = 100; // default is the same as the DK2's FoV
@@ -177,10 +179,12 @@ void StereoCamera::update(Step * _step){
 		*/
 	}
 	
-	// modify the camera angles by the HMD angles
-	yaw   += glm::degrees(headAngles.y);
-	pitch += glm::degrees(headAngles.x);
-	roll  += glm::degrees(headAngles.z); // the roll value from the oculus SDK is opposite what we need
+	if(useHeadTrackingOrientation){
+		// modify the camera angles by the HMD angles
+		yaw   += glm::degrees(headAngles.y);
+		pitch += glm::degrees(headAngles.x);
+		roll  += glm::degrees(headAngles.z); // the roll value from the oculus SDK is opposite what we need
+	}
 
 	PerspectiveCamera::update(_step);
 	
@@ -202,19 +206,27 @@ void StereoCamera::update(Step * _step){
 		cam->childTransform->setOrientation(childTransform->getOrientationQuat());
 		
 		if(sweet::ovrInitialized){
-			// account for eye position relative to central camera
-			cam->firstParent()->translate(glm::vec3(EyeRenderDesc[eye].HmdToEyeViewOffset.x, EyeRenderDesc[eye].HmdToEyeViewOffset.y, EyeRenderDesc[eye].HmdToEyeViewOffset.z) * -ipdScale, false);
-			cam->firstParent()->translate(glm::vec3(-EyeRenderPose[eye].Position.x, EyeRenderPose[eye].Position.y, -EyeRenderPose[eye].Position.z) * ipdScale);
+			if(useHeadTrackingPosition){
+				// account for eye position relative to central camera
+				glm::vec3 eyePos = -glm::vec3(EyeRenderDesc[eye].HmdToEyeViewOffset.x, EyeRenderDesc[eye].HmdToEyeViewOffset.y, EyeRenderDesc[eye].HmdToEyeViewOffset.z);
+				eyePos += glm::vec3(-EyeRenderPose[eye].Position.x, EyeRenderPose[eye].Position.y, -EyeRenderPose[eye].Position.z);
+				eyePos *= ipdScale;
+				cam->firstParent()->translate(forwardVectorRotated * -eyePos.x, false);
+				cam->firstParent()->translate(rightVectorRotated * -eyePos.z);
+				cam->firstParent()->translate(upVectorRotated * eyePos.y);
+			}
 		}
 
 		cam->update(_step);
 	}
 
-	// set the angles back to what they were
-	// if we don't the camera will just spin forever
-	yaw   -= glm::degrees(headAngles.y);
-	pitch -= glm::degrees(headAngles.x);
-	roll  -= glm::degrees(headAngles.z); // the roll value from the oculus SDK is opposite what we need
+	if(useHeadTrackingOrientation){
+		// set the angles back to what they were
+		// if we don't the camera will just spin forever
+		yaw   -= glm::degrees(headAngles.y);
+		pitch -= glm::degrees(headAngles.x);
+		roll  -= glm::degrees(headAngles.z); // the roll value from the oculus SDK is opposite what we need
+	}
 }
 
 void StereoCamera::renderStereo(std::function<void()> _renderFunction){

@@ -51,6 +51,8 @@ private:
 
 	OVR::Quatf hmdOrientation;
 public:
+	bool useHeadTrackingPosition;
+	bool useHeadTrackingOrientation;
 	StereoCamera();
 	~StereoCamera();
 
