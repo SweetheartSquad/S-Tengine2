@@ -145,6 +145,13 @@ glm::mat4 StereoCamera::getProjectionMatrix(glm::vec2 _screenSize) const{
 void StereoCamera::update(Step * _step){
 	Keyboard * keyboard = &Keyboard::getInstance();
 	
+	// save the rotated vectors without the HMD's contribution
+	setOrientation(calcOrientation());
+	rotateVectors(childTransform->getOrientationQuat());
+	forwardVectorRotatedWithoutHMD = forwardVectorRotated;
+	rightVectorRotatedWithoutHMD = rightVectorRotated;
+	upVectorRotatedWithoutHMD = upVectorRotated;
+
 	// initialize yaw, pitch, and roll angles to zero in case the HMD isn't tracking
 	// x = pitch
 	// y = yaw
@@ -179,11 +186,6 @@ void StereoCamera::update(Step * _step){
 		*/
 	}
 	
-	setOrientation(calcOrientation());
-	rotateVectors(childTransform->getOrientationQuat());
-	forwardVectorRotatedWithoutHMD = forwardVectorRotated;
-	rightVectorRotatedWithoutHMD = rightVectorRotated;
-	upVectorRotatedWithoutHMD = upVectorRotated;
 
 	if(useHeadTrackingOrientation){
 		// modify the camera angles by the HMD angles
