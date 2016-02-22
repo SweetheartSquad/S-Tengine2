@@ -99,12 +99,14 @@ BulletFirstPersonController::BulletFirstPersonController(BulletWorld * _bulletWo
 
 	lastYVel = 0;
 	
-	playerCamera = new MousePerspectiveCamera();
-	playerCamera->interpolation = 0.8f;
-	playerCamera->farClip = 1000.f;
-	playerCamera->nearClip = 0.1f;
-	playerCamera->yaw = 90.0f;
-	playerCamera->pitch = 0.0f;
+	MousePerspectiveCamera * c = new MousePerspectiveCamera();
+	c->interpolation = 0.8f;
+	c->farClip = 1000.f;
+	c->nearClip = 0.1f;
+	c->yaw = 90.0f;
+	c->pitch = 0.0f;
+	playerCamera = c;
+	playerCameraController = c->controller;
 };
 
 BulletFirstPersonController::~BulletFirstPersonController(){
@@ -279,13 +281,13 @@ glm::vec3 BulletFirstPersonController::getLinearVelocity() const{
 }
 
 void BulletFirstPersonController::enable(){
-	playerCamera->controller->movementEnabled = true;
-	playerCamera->controller->rotationEnabled = true;
+	playerCameraController->movementEnabled = true;
+	playerCameraController->rotationEnabled = true;
 	BulletController::enable();
 }
 
 void BulletFirstPersonController::disable(){
-	playerCamera->controller->movementEnabled = false;
-	playerCamera->controller->rotationEnabled = false;
+	playerCameraController->movementEnabled = false;
+	playerCameraController->rotationEnabled = false;
 	BulletController::disable();
 }

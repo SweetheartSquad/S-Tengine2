@@ -48,7 +48,8 @@ protected:
 
 	float maxSpeedCurrent;
 public:
-	MousePerspectiveCamera * playerCamera;
+	Camera * playerCamera;
+	CameraController * playerCameraController;
 	glm::vec3 camOffset;
 
 	// base player speed
