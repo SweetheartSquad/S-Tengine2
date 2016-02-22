@@ -87,4 +87,11 @@ public:
 
 	// Copies the mirror texture to the provided fbo 
 	void blitTo(GLint _targetFbo = 0);
+	
+	// stores the forward vector rotated by the camera's orientation without the head tracking orientation
+	glm::vec3 forwardVectorRotatedWithoutHMD;
+	// stores the forward vector rotated by the camera's orientation without the head tracking orientation
+	glm::vec3 rightVectorRotatedWithoutHMD;
+	// stores the forward vector rotated by the camera's orientation without the head tracking orientation
+	glm::vec3 upVectorRotatedWithoutHMD;
 };

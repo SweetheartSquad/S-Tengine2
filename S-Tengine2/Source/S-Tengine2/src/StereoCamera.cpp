@@ -179,6 +179,12 @@ void StereoCamera::update(Step * _step){
 		*/
 	}
 	
+	setOrientation(calcOrientation());
+	rotateVectors(childTransform->getOrientationQuat());
+	forwardVectorRotatedWithoutHMD = forwardVectorRotated;
+	rightVectorRotatedWithoutHMD = rightVectorRotated;
+	upVectorRotatedWithoutHMD = upVectorRotated;
+
 	if(useHeadTrackingOrientation){
 		// modify the camera angles by the HMD angles
 		yaw   += glm::degrees(headAngles.y);
