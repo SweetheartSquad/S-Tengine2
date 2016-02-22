@@ -16,21 +16,7 @@ private:
 	float ipd;
 
 	
-	struct OculusEye{
-		PerspectiveCamera * camera;
-		// width and height of the texture and depth buffers
-		ovrSizei			size;
-		GLuint              fboId;
-		struct TextureBuffer{
-			// oculus target
-			ovrSwapTextureSet*  TextureSet;
-			// non-oculus target
-			GLuint              texId;
-		} tbuffer;
-		struct DepthBuffer{
-			GLuint        texId;
-		} dbuffer;
-	} eyes[2];
+	
 	ovrVector3f ViewOffset[2];
 	ovrPosef    EyeRenderPose[2];
 	double ftiming;
@@ -51,6 +37,22 @@ private:
 
 	OVR::Quatf hmdOrientation;
 public:
+	struct OculusEye{
+		PerspectiveCamera * camera;
+		// width and height of the texture and depth buffers
+		ovrSizei			size;
+		GLuint              fboId;
+		struct TextureBuffer{
+			// oculus target
+			ovrSwapTextureSet*  TextureSet;
+			// non-oculus target
+			GLuint              texId;
+		} tbuffer;
+		struct DepthBuffer{
+			GLuint        texId;
+		} dbuffer;
+	} eyes[2];
+
 	bool useHeadTrackingPosition;
 	bool useHeadTrackingOrientation;
 	StereoCamera();
