@@ -27,7 +27,7 @@ public:
 	glm::quat lastOrientation;
 
 	/**
-	* @return The projection matrix of the camera 
+	* @return The projection matrix of the camera for a screen of size _screenSize
 	*/
-	virtual glm::mat4 getProjectionMatrix() const override;
+	virtual glm::mat4 getProjectionMatrix(glm::vec2 _screenSize) const override;
 };

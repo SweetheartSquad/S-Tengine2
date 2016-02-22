@@ -66,7 +66,7 @@ public:
 	/**
 	* @return The projection matrix of the active camera 
 	*/
-	virtual glm::mat4 getProjectionMatrix() const override;
+	virtual glm::mat4 getProjectionMatrix(glm::vec2 _screenSize) const override;
 
 	/** Updates the left and right eye to match the main camera */
 	virtual void update(Step * _step) override;

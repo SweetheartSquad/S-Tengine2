@@ -98,7 +98,7 @@ const glm::mat4 * sweet::MatrixStack::getMVP(){
 }
 
 void sweet::MatrixStack::setCamera(const Camera * _camera){
-	const glm::mat4 * p = &_camera->getProjectionMatrix();
+	const glm::mat4 * p = &_camera->getProjectionMatrix(sweet::getWindowDimensions());
 	const glm::mat4 * v = &_camera->getViewMatrix();
 	setProjectionMatrix(p);
 	setViewMatrix(v);

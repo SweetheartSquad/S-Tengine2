@@ -134,11 +134,11 @@ glm::mat4 StereoCamera::getViewMatrix() const{
 	}
 }
 
-glm::mat4 StereoCamera::getProjectionMatrix() const{
+glm::mat4 StereoCamera::getProjectionMatrix(glm::vec2 _screenSize) const{
 	if(activeCam == OVR::StereoEye_Center){
-		return PerspectiveCamera::getProjectionMatrix();
+		return PerspectiveCamera::getProjectionMatrix(_screenSize);
 	}else{
-		return eyes[activeCam].camera->getProjectionMatrix();
+		return eyes[activeCam].camera->getProjectionMatrix(_screenSize * glm::vec2(0.5,1)); // each eye only uses half the screen width
 	}
 }
 

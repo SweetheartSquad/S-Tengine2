@@ -26,10 +26,6 @@ void PerspectiveCamera::setOrientation(glm::quat _orientation){
 	Camera::setOrientation(_orientation);
 }
 
-glm::mat4 PerspectiveCamera::getProjectionMatrix() const{
-	glm::vec2 screenDimensions = sweet::getWindowDimensions();
-	if(sweet::ovrInitialized){
-		screenDimensions.x /= 2;
-	}
-	return glm::perspective(fieldOfView, static_cast<float>(screenDimensions.x)/static_cast<float>(screenDimensions.y), nearClip, farClip);
+glm::mat4 PerspectiveCamera::getProjectionMatrix(glm::vec2 _screenSize) const{
+	return glm::perspective(fieldOfView, _screenSize.x/_screenSize.y, nearClip, farClip);
 }

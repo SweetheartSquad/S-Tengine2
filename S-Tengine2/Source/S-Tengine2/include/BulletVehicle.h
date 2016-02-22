@@ -5,7 +5,8 @@
 #include <BulletController.h>
 #include <BulletMeshEntity.h>
 
-class MousePerspectiveCamera;
+class Camera;
+class CameraController;
 
 struct BulletVehicleWheelDefinition{
 	// position of the wheel expressed as a percentage of the chassis
@@ -26,7 +27,8 @@ struct BulletVehicleWheelDefinition{
 // Partially based on the forklift demo and on the one found here: http://urho3d.prophpbb.com/topic1354.html
 class BulletVehicle : public virtual BulletController, public virtual Entity{
 public:
-	MousePerspectiveCamera * orbitalCamera;
+	Camera * orbitalCamera;
+	CameraController * orbitalCameraController;
 	float orbitalCameraRadius;
 
 	enum SteeringMode{
@@ -46,7 +48,7 @@ public:
 	void addChassisDefinition(MeshInterface * _chassisMesh);
 
     // actually create the vehicle
-    void init(BulletWorld * _world, Shader * _shader);
+    virtual void init(BulletWorld * _world, Shader * _shader);
 
     virtual void update(Step * _step) override;
 	

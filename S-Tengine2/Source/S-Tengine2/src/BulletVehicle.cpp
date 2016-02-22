@@ -123,9 +123,11 @@ void BulletVehicle::init(BulletWorld * _world, Shader * _shader){
 
    
 	// setup orbital camera
-	orbitalCamera = new MousePerspectiveCamera();
-	orbitalCamera->nearClip = 0.001f;
-	orbitalCamera->farClip = 1000;
+	MousePerspectiveCamera * c = new MousePerspectiveCamera();
+	c->nearClip = 0.001f;
+	c->farClip = 1000;
+	orbitalCameraController = c->controller;
+	orbitalCamera = c;
 	childTransform->addChild(orbitalCamera);
 }
 

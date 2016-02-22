@@ -21,7 +21,7 @@ public:
 	/**
 	* @return The projection matrix of the camera 
 	*/
-	glm::mat4 getProjectionMatrix() const override;
+	glm::mat4 getProjectionMatrix(glm::vec2 _screenSize) const override;
 	
 	float left;
 	float top;

@@ -44,7 +44,7 @@ void Camera::setOrientation(glm::quat _orientation){
 
 glm::vec3 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen) const{
 	glm::vec4 newPos(_coords, 1);
-	newPos = getProjectionMatrix() * getViewMatrix() * newPos;
+	newPos = getProjectionMatrix(_screen) * getViewMatrix() * newPos;
 	
 	return glm::vec3(
 		_screen.x * (newPos.x/newPos.w + 1)*0.5f,
@@ -53,10 +53,10 @@ glm::vec3 Camera::worldToScreen(glm::vec3 _coords, glm::uvec2 _screen) const{
 	);
 }
 
-glm::vec3 Camera::screenToWorld(glm::vec3 _screenCoords) const{
+glm::vec3 Camera::screenToWorld(glm::vec3 _screenCoords, glm::vec2 _screenSize) const{
 	_screenCoords = glm::min(glm::vec3(1), _screenCoords);
 	_screenCoords = glm::max(glm::vec3(0), _screenCoords);
-	glm::vec4 t = glm::inverse(getProjectionMatrix() * getViewMatrix()) * glm::vec4((_screenCoords - glm::vec3(0.5f))*2.f, 1);
+	glm::vec4 t = glm::inverse(getProjectionMatrix(_screenSize) * getViewMatrix()) * glm::vec4((_screenCoords - glm::vec3(0.5f))*2.f, 1);
     return glm::vec3(t)/t.w;
 }
 

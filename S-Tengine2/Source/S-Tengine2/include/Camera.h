@@ -49,7 +49,7 @@ public:
 	/**
 	* @return The projection matrix of the camera. Pure virtual; to be implemented only in derived classes
 	*/
-	virtual glm::mat4 getProjectionMatrix() const = 0;
+	virtual glm::mat4 getProjectionMatrix(glm::vec2 _screenSize) const = 0;
 
 	// projects the world-space _coords into _screen space (x and y are the pixel coordinates, sign of z indicates whether the camera is facing towards or away from _coords)
 	virtual glm::vec3 worldToScreen(glm::vec3 _coords, glm::uvec2 _screen) const;
@@ -58,7 +58,7 @@ public:
 	// x,y: bottom-left to top-right
 	// z: near-clip to far-clip
 	// if coordinates are below zero or above 1, they will be clamped
-	virtual glm::vec3 screenToWorld(glm::vec3 _screenCoords) const;
+	virtual glm::vec3 screenToWorld(glm::vec3 _screenCoords, glm::vec2 _screenSize) const;
 
 	// returns an orientation quaternion based on pitch, yaw and roll
 	glm::quat calcOrientation() const;

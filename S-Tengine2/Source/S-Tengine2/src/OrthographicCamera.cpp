@@ -20,7 +20,7 @@ OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom,
 	update(nullptr);
 }
 
-glm::mat4 OrthographicCamera::getProjectionMatrix() const{
+glm::mat4 OrthographicCamera::getProjectionMatrix(glm::vec2 _screenSize) const{
 	return glm::ortho<float>(-left, -right, bottom, top, nearClip, farClip);
 }
 
