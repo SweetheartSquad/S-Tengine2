@@ -22,6 +22,8 @@ protected:
 	bool tweenBobbleChange;
 	double jumpTime;
 
+	float maxPitch, minPitch;
+
 	bool isGrounded;
 	bool isSprinting;
 

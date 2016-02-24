@@ -57,7 +57,9 @@ BulletFirstPersonController::BulletFirstPersonController(BulletWorld * _bulletWo
 	footSteps(nullptr),
 	jumpSound(nullptr),
 	landSound(nullptr),
-	isSprinting(false)
+	isSprinting(false),
+	maxPitch(80),
+	minPitch(-80)
 {
 
 	// player set-up
@@ -143,10 +145,10 @@ void BulletFirstPersonController::handleInputs(Step * _step, glm::vec3 _inputs){
 	tweenBobbleChange = (currentBobbleTween != lastBobbleTween && currentBobbleTween == 1);
 
 	//restrict how player can rotate head upward and downward around x-axis
-	if(playerCamera->pitch > 80){
-		playerCamera->pitch = 80;
-	}else if(playerCamera->pitch < -80){
-		playerCamera->pitch = -80;
+	if(playerCamera->pitch > maxPitch){
+		playerCamera->pitch = maxPitch;
+	}else if(playerCamera->pitch < minPitch){
+		playerCamera->pitch = minPitch;
 	}
 
 	currentYVel = curVelocity.y;
