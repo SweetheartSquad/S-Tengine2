@@ -19,7 +19,7 @@ Camera::Camera() :
 	nearClip(1.f),
 	farClip(100.f),
 	lookFromSpot(0),
-	lookAtSpot(0),
+	lookAtSpot(0,0,1),
 	lookAtOffset(0)
 {
 }
