@@ -334,3 +334,20 @@ void StereoCamera::blitTo(GLint _targetFbo){
 		FrameBufferInterface::popFbo();
 	}
 }
+
+
+
+glm::vec3 StereoCamera::screenToWorldWithoutHMD(glm::vec3 _screenCoords, glm::vec2 _screenSize) const{
+	_screenCoords = glm::min(glm::vec3(1), _screenCoords);
+	_screenCoords = glm::max(glm::vec3(0), _screenCoords);
+	glm::vec4 t = glm::inverse(getProjectionMatrix(_screenSize) * getViewMatrixWithoutHMD()) * glm::vec4((_screenCoords - glm::vec3(0.5f))*2.f, 1);
+    return glm::vec3(t)/t.w;
+}
+
+glm::mat4 StereoCamera::getViewMatrixWithoutHMD() const{
+	return glm::lookAt(
+		lookFromSpot,	// Camera is here
+		lookFromSpot + forwardVectorRotatedWithoutHMD + lookAtOffset,			// and looks here : at the same position, plus "direction"
+		upVectorRotatedWithoutHMD						// Head is up (set to 0,-1,0 to look upside-down)
+	);
+}

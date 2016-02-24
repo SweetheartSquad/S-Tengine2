@@ -94,4 +94,16 @@ public:
 	glm::vec3 rightVectorRotatedWithoutHMD;
 	// stores the forward vector rotated by the camera's orientation without the head tracking orientation
 	glm::vec3 upVectorRotatedWithoutHMD;
+
+	
+
+	// coordinates are 0-1
+	// x,y: bottom-left to top-right
+	// z: near-clip to far-clip
+	// if coordinates are below zero or above 1, they will be clamped
+	virtual glm::vec3 screenToWorldWithoutHMD(glm::vec3 _screenCoords, glm::vec2 _screenSize) const;
+	/**
+	* @return The view matrix of the camera. Pure virtual; to be implemented only in derived classes
+	*/
+	virtual glm::mat4 getViewMatrixWithoutHMD() const;
 };
