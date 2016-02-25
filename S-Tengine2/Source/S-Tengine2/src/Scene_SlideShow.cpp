@@ -44,8 +44,8 @@ Scene_SlideShow::Scene_SlideShow(Game * _game, Easing::Type _easeType) :
 	slideNew->setRationalWidth(1.f, uiLayer);
 	slideNew->setRationalHeight(1.f, uiLayer);
 
-	uiLayer->addChild(slideOld);
-	uiLayer->addChild(slideNew);
+	uiLayer->addChild(slideOld, false);
+	uiLayer->addChild(slideNew, false);
 	
 	uiLayer->addMouseIndicator();
 
@@ -81,6 +81,13 @@ Scene_SlideShow::Scene_SlideShow(Game * _game, Easing::Type _easeType) :
 
 Scene_SlideShow::~Scene_SlideShow(){
 	delete uiLayer;
+	while(forwards.size() > 0){
+		delete forwards.back();
+		forwards.pop_back();
+	}while(backwards.size() > 0){
+		delete backwards.back();
+		backwards.pop_back();
+	}
 }
 
 void Scene_SlideShow::update(Step * _step){
