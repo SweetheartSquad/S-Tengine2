@@ -41,17 +41,21 @@ std::string ShaderComponentTexture::getVertexBodyString(){
 std::string ShaderComponentTexture::getFragmentBodyString(){
     std::stringstream res;
     res << "if(" << GL_UNIFORM_ID_NUM_TEXTURES << " > 0){" << ENDL;
-        for (unsigned long int i = 0; i < MAX_TEXTURES; ++i){
-            res << "\tif (" + GL_UNIFORM_ID_NUM_TEXTURES + " > " << i << "){" << ENDL;
-                if(i == 0){
-                    res << "\t\tmodFrag = vec4(texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << ").rgba)" << SEMI_ENDL;
-                }
-                else{
-                    res << "\t\tmodFrag = mix(modFrag, texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << ").rgba, 0.5)" << SEMI_ENDL;
-                }
-            res << "\t}" << ENDL;
-        }
-    res << "}" << ENDL;
+		
+	res << "vec4 textureRes;" << ENDL;
+	for (unsigned long int i = 0; i < MAX_TEXTURES; ++i){
+        res << "\tif (" + GL_UNIFORM_ID_NUM_TEXTURES + " > " << i << "){" << ENDL;
+            if(i == 0){
+                res << "\t\ttextureRes = vec4(texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << ").rgba)" << SEMI_ENDL;
+            }
+            else{
+                res << "\t\ttextureRes = mix(textureRes, texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << i << "], " << GL_IN_OUT_FRAG_UV << ").rgba, 0)" << SEMI_ENDL;
+            }
+        res << "\t}" << ENDL;
+    }
+
+	res << "modFrag *= textureRes" << SEMI_ENDL;
+	res << "}" << ENDL;
 	if(alphaDiscardThreshold >= 0){
 		res << "if(modFrag.a <= " << alphaDiscardThreshold << "){discard;}" << ENDL;
 	}
@@ -102,7 +106,7 @@ void ShaderComponentTexture::configureUniforms(sweet::MatrixStack* _matrixStack,
 			glUniform1i(texSamLoc, i);
 		}
 	}else{
-		glUniform1i(texNumLoc, numTextures);
+		glUniform1i(texNumLoc, numTextures); // should this be zero?
 	}
 
 	/*SpriteMesh * spriteMesh = dynamic_cast<SpriteMesh *>(_nodeRenderable);
