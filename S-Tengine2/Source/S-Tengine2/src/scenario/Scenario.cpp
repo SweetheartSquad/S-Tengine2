@@ -36,6 +36,7 @@ void Scenario::destruct(){
 Scenario::Scenario(std::string _jsonSrc) :
 	NodeResource(false),
 	conditionImplementations(nullptr),
+	variables(new sweet::Event("__VARIABLES__")),
 	id(_jsonSrc),
 	currentConversation(nullptr)
 {
@@ -137,6 +138,7 @@ Scenario::~Scenario(){
 		}
 		a.second.clear();
 	}assets.clear();
+	delete variables;
 }
 
 Asset * Scenario::getAsset(std::string _type, std::string _id){

@@ -32,6 +32,8 @@ public:
 
 	ConditionImplementations * conditionImplementations;
 
+	sweet::Event * variables; 
+
 	static std::vector<Asset *> defaultAssets;
 	// events triggered by this scenario's dialogue will be handled by this manager
 	sweet::EventManager eventManager;
