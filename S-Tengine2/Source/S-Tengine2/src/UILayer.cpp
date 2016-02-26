@@ -90,9 +90,10 @@ void UILayer::resize(float _left, float _right, float _bottom, float _top){
 	cam->bottom = _bottom;
 	cam->top = _top;
 	
-	setWidth(_right - _left);
-	setHeight(_top - _bottom);
-
+	float w = _right - _left;
+	float h = _top - _bottom;
+	setPixelWidth(w);
+	setPixelHeight(h);
 	invalidateLayout();
 }
 
