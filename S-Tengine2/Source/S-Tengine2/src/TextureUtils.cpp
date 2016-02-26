@@ -241,16 +241,33 @@ std::vector<glm::vec2> sweet::TextureUtils::getTracedContour(Texture * _tex, uns
 
 
 unsigned char & sweet::TextureUtils::getPixel(Texture * _tex, unsigned long int _x, unsigned long int _y, unsigned long int _channel){
-	return _tex->data[ (_x + _y*_tex->width) * _tex->channels + _channel ];
+	if(!_tex->storeData){
+		_tex->loadImageData();
+	}
+	unsigned char & res = _tex->data[ (_x + _y*_tex->width) * _tex->channels + _channel ];
+	if(!_tex->storeData){
+		_tex->unloadImageData();
+	}
+
+	return res;
 }
 	
 unsigned char * sweet::TextureUtils::getPixelPointer(Texture * _tex, unsigned long int _x, unsigned long int _y, unsigned long int _channel){
-	return &_tex->data[ (_x + _y*_tex->width) * _tex->channels + _channel ];
+	if(!_tex->storeData){
+		_tex->loadImageData();
+	}
+	unsigned char & res = _tex->data[ (_x + _y*_tex->width) * _tex->channels + _channel ];
+	if(!_tex->storeData){
+		_tex->unloadImageData();
+	}
+
+	return &res;
 }
 
 
 
 void sweet::TextureUtils::setPixel(Texture * _tex, unsigned long int _x, unsigned long int _y, glm::uvec4 _colour){
+	assert(_tex->data != nullptr);
 	unsigned char * p = getPixelPointer(_tex, _x, _y, 0);
 	*(p + 0) = _colour.r;
 	*(p + 1) = _colour.g;
@@ -258,17 +275,20 @@ void sweet::TextureUtils::setPixel(Texture * _tex, unsigned long int _x, unsigne
 	*(p + 3) = _colour.a;
 }
 void sweet::TextureUtils::setPixel(Texture * _tex, unsigned long int _x, unsigned long int _y, glm::uvec3 _colour){
+	assert(_tex->data != nullptr);
 	unsigned char * p = getPixelPointer(_tex, _x, _y, 0);
 	*(p + 0) = _colour.r;
 	*(p + 1) = _colour.g;
 	*(p + 2) = _colour.b;
 }
 void sweet::TextureUtils::setPixel(Texture * _tex, unsigned long int _x, unsigned long int _y, glm::uvec2 _colour){
+	assert(_tex->data != nullptr);
 	unsigned char * p = getPixelPointer(_tex, _x, _y, 0);
 	*(p + 0) = _colour.r;
 	*(p + 1) = _colour.g;
 }
 void sweet::TextureUtils::setPixel(Texture * _tex, unsigned long int _x, unsigned long int _y, unsigned char _colour){
+	assert(_tex->data != nullptr);
 	unsigned char * p = getPixelPointer(_tex, _x, _y, 0);
 	*(p + 0) = _colour;
 }
