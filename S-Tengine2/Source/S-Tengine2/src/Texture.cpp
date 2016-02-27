@@ -75,7 +75,7 @@ void Texture::unloadImageData(){
 	data = nullptr;
 }
 
-void Texture::saveImageData(std::string _filename){
+void Texture::saveImageData(const std::string & _filename){
 	std::stringstream ss;
 	ss << "data/images/" << _filename;
 	if(stbi_write_tga(ss.str().c_str(), width, height, channels, data, 1)){
