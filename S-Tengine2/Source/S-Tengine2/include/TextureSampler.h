@@ -15,7 +15,7 @@ public:
 	
 	bool releaseTexture;
 	
-	TextureSampler(Texture * _texture, float _width, float _height, float _u = 0.f, float _v = 0.f, bool _releaseTexture = true);
+	TextureSampler(Texture * _texture, float _width, float _height, float _u = 0.f, float _v = 0.f);
 	TextureSampler(std::string _definitionDir, std::string _definitionName, bool _releaseTexture = true);
 
 	~TextureSampler();

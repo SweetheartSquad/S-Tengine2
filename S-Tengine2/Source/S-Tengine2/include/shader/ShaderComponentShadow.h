@@ -15,12 +15,12 @@
 *******************************************************************************/
 class ShaderComponentShadow : public ShaderComponent{
 public:
-	ShaderComponentShadow(Shader * _shader);
+	ShaderComponentShadow(ComponentShaderBase * _shader);
 	~ShaderComponentShadow() override;
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;
 	std::string getVertexBodyString() override;
 	std::string getFragmentBodyString() override;
 	std::string getOutColorMod() override;
-	void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
+	void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 };

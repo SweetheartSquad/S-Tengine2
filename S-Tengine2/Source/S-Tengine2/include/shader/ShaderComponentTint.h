@@ -18,8 +18,8 @@ public:
 	void setBlue(float _b);
 	void setRGB(float _r, float _g, float _b);
 
-	// all values are added to the rgb of the fragColor (negative can be used too)
-	ShaderComponentTint(Shader * _shader, float _r = 0.f, float _g = 0.f, float _b = 0.f);
+	// all values are added to the rgb of the fragColor (therefore, changing the colour of a standard white vertex requires these arguments to be negative)
+	ShaderComponentTint(ComponentShaderBase * _shader, float _r = 0.f, float _g = 0.f, float _b = 0.f);
 	~ShaderComponentTint();
 	
 	std::string getVertexVariablesString() override;
@@ -28,5 +28,5 @@ public:
 	std::string getFragmentBodyString() override;
 	std::string getOutColorMod() override;
 	void load() override;
-	void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
+	void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 };

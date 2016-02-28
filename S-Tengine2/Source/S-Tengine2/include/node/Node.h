@@ -7,6 +7,7 @@
 class Node abstract{
 public:
 #ifdef _DEBUG
+	static bool nodeCounting;
 	static std::vector<Node *> nodes;
 #endif
 

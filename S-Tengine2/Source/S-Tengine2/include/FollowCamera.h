@@ -57,5 +57,5 @@ public:
 	float targetZoom;
 
 	bool useBounds;
-	vox::Rectangle minBounds;
+	sweet::Rectangle minBounds;
 };

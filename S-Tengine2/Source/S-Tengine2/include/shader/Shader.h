@@ -8,7 +8,7 @@
 
 class NodeRenderable;
 
-namespace vox{
+namespace sweet{
 	class MatrixStack;
 }
 
@@ -18,9 +18,9 @@ class Shader : public NodeResource{
 	friend class SharedComponentShaderMethods;
 
 protected:
-	/** Reads the files at the given location/name and compiles them as a vertex shader and a fragment shader */
+	/** Compiles the given strings as source code for a shader (note that the actual shader code should be used, not a filename) */
 	void init(std::string _vertexSource, std::string _fragmentSource);
-	/** Reads the files at the given location/name and compiles them as a vertex shader and a fragment shader */
+	/** Compiles the given strings as source code for a shader (note that the actual shader code should be used, not a filename) */
 	void init(std::string _vertexShaderSource, std::string _fragmentShaderSource, std::string _geometryShaderSource);
 	
 	GLint numLightsUniformLocation;
@@ -40,13 +40,21 @@ private:
 	bool dirty;
 
 public:
-
+	static std::vector<Shader *> allShaders;
+	
 	/** Filename of vertex shader */
 	std::string vertSource;
 	/** Filename of fragment shader */
 	std::string fragSource;
 	/** Filename of geometry shader */
 	std::string geomSource;
+	
+	/** contents of vertex shader */
+	std::string vert;
+	/** contents of fragment shader */
+	std::string frag;
+	/** contents of geometry shader */
+	std::string geom;
 
 	// Whether the shader has been compiled
 	bool isCompiled;
@@ -60,6 +68,10 @@ public:
 	Shader(std::string _vertexShaderFile, std::string _fragmentShaderFile, std::string _geometryShaderFile, bool _autoRelease);
 	virtual ~Shader(void);
 	GLuint compileShader(GLenum _shaderType, const char* _source, int _length);
+	
+	void loadFromFile(std::string _vertexShaderFile, std::string _fragmentShaderFile);
+	void loadFromFile(std::string _vertexShaderFile, std::string _fragmentShaderFile, std::string _geometryShaderFile);
+
 
 	/** Returns the shader's program ID */
 	GLuint getProgramId();
@@ -73,11 +85,17 @@ public:
 	GLint get_aVertexUVs();
 	/** Prints the shader to the console */
 	void printShader();
+	/** Returns whether the shader is dirty or not */
+	bool isDirty();
 
-	virtual void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
-	virtual void clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
+	virtual void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
+	virtual void clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable);
 	virtual void makeDirty();
 
 	void load() override;
 	void unload() override;
+
+	// calls glUseProgram(this->programId)
+	// returns true if the shader is actually bound, false otherwise
+	bool bindShader();
 };

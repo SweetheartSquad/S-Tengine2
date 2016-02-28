@@ -1,21 +1,16 @@
 #pragma once
 
-#include <SOIL.h>
 #include <regex>
 #include <sstream>
 #include <iostream>
 
 #include <glm/glm.hpp>
 
-#include <soil.h>
-
 #include <json/json.h>
 
 #include "MeshInterface.h"
 #include "Resource.h"
 #include "FileUtils.h"
-#include "VoxelJoint.h"
-#include "VoxelMesh.h"
 #include "Animation.h"
 #include "Box2DSprite.h"
 #include "Box2DWorld.h"
@@ -23,25 +18,9 @@
 
 #include <tiny_obj_loader.h>
 
-Resource::Resource(){}
-Resource::~Resource(){}
+std::vector<TriMesh *> Resource::loadMeshFromObj(std::string _objSrc, bool _autorelease){
 
-unsigned char* Resource::loadImage(const char* _src, int _width, int _height, int _SOILLoadMode, int * _channels){
-	unsigned char* res = SOIL_load_image(_src, &_width, &_height, _channels, _SOILLoadMode);
-	if(res == 0){
-		std::cout << _src << std::endl;
-		throw;
-	}
-	return res;
-}
-
-void Resource::freeImageData(unsigned char* _image){
-	SOIL_free_image_data(_image);
-}
-
-std::vector<TriMesh *> Resource::loadMeshFromObj(std::string _objSrc){
-
-	std::string inputfile = FileUtils::voxReadFile(_objSrc);
+	std::string inputfile = sweet::FileUtils::readFile(_objSrc);
 	
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
@@ -57,7 +36,7 @@ std::vector<TriMesh *> Resource::loadMeshFromObj(std::string _objSrc){
 	
 	std::vector<TriMesh *> res;
 	for (tinyobj::shape_t s : shapes) {
-		TriMesh* mesh = new TriMesh(GL_TRIANGLES, GL_STATIC_DRAW);
+		TriMesh* mesh = new TriMesh(_autorelease);
 		
 		for(unsigned long int v = 0; v < s.mesh.positions.size(); v += 3){
 			mesh->vertices.push_back(Vertex(

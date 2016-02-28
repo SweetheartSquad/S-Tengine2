@@ -4,19 +4,24 @@
 
 #ifdef _DEBUG
 std::vector<Node *>Node::nodes;
+bool Node::nodeCounting = false;
 #endif
 
 Node::~Node(){
 #ifdef _DEBUG
-	for(signed long int j = nodes.size()-1; j >= 0; --j){
-		if(nodes.at(j) == this){
-			nodes.erase(nodes.begin() + j);
+	if(nodeCounting){
+		for(signed long int j = nodes.size()-1; j >= 0; --j){
+			if(nodes.at(j) == this){
+				nodes.erase(nodes.begin() + j);
+			}
 		}
 	}
 #endif
 }
 Node::Node(){
 #ifdef _DEBUG
-	nodes.push_back(this);
+	if(nodeCounting){
+		nodes.push_back(this);
+	}
 #endif
 }

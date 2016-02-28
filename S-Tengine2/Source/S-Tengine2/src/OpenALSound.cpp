@@ -2,13 +2,19 @@
 
 #include <OpenALSound.h>
 #include <Transform.h>
+#include <Camera.h>
 
 #include <sndfile.hh>
+
+#include <algorithm>
+
 
 ALCcontext * NodeOpenAL::context = nullptr; 
 ALCdevice * NodeOpenAL::device = nullptr;
 
 bool NodeOpenAL::inited = false;
+float NodeOpenAL::listenerGain = 1.f;
+glm::vec3 NodeOpenAL::listenerPosition(0);
 
 NodeOpenAL::NodeOpenAL(){
 	initOpenAL();
@@ -40,8 +46,12 @@ void NodeOpenAL::destruct(){
 	}
 }
 
-void NodeOpenAL::setListenerPosition(glm::vec3 _position){
+void NodeOpenAL::setListenerPosition(glm::vec3 _position, bool _autoVelocity){
 	checkForAlError(alListener3f(AL_POSITION, _position.x, _position.y, _position.z));
+	if(_autoVelocity){
+		setListenerVelocity(_position - listenerPosition);
+	}
+	listenerPosition = _position;
 }
 void NodeOpenAL::setListenerVelocity(glm::vec3 _velocity){
 	checkForAlError(alListener3f(AL_VELOCITY, _velocity.x, _velocity.y, _velocity.z));
@@ -49,6 +59,19 @@ void NodeOpenAL::setListenerVelocity(glm::vec3 _velocity){
 void NodeOpenAL::setListenerOrientation(glm::vec3 _forward, glm::vec3 _up){
 	float orientation[6] = {_forward.x, _forward.y, _forward.z, _up.x, _up.y, _up.z};
 	checkForAlError(alListenerfv(AL_ORIENTATION, orientation));
+}
+
+void NodeOpenAL::setListener(Camera * _camera, bool _autoVelocity){
+	setListenerPosition(_camera->getWorldPos(), _autoVelocity);
+	setListenerOrientation(_camera->forwardVectorRotated, _camera->upVectorRotated);
+}
+
+void NodeOpenAL::setListenerGain(float _gain){
+	listenerGain = _gain;
+	checkForAlError(alListenerf(AL_GAIN, listenerGain));
+}
+float NodeOpenAL::getListenerGain(){
+	return listenerGain;
 }
 
 OpenAL_Buffer::OpenAL_Buffer(const char * _filename, bool _autoRelease) :
@@ -70,10 +93,11 @@ OpenAL_Buffer::OpenAL_Buffer(const char * _filename, bool _autoRelease) :
 		sampleRate = static_cast<ALsizei>(fileInfo.samplerate);
 
 		// read the audio data (as a 16 bit signed integer)
-		samples.resize(numSamples);
+		samples = (ALshort *)calloc(numSamples, sizeof(ALshort));
 		// sf_read_short returns the number of samples read
-		// if we read zero samples, there must be an error
-		assert(!sf_read_short(file, &samples[0], numSamples) < numSamples); 
+		sf_count_t samplesRead = sf_read_short(file, samples, numSamples);
+		// if we read less samples than requested, there must be an error
+		assert(samplesRead == numSamples); 
 
 		// close the file
 		sf_close(file);
@@ -93,6 +117,7 @@ OpenAL_Buffer::OpenAL_Buffer(const char * _filename, bool _autoRelease) :
 
 OpenAL_Buffer::~OpenAL_Buffer(){	
 	checkForAlError(alDeleteBuffers(1, &bufferId));
+	free(samples);
 }
 
 
@@ -112,13 +137,14 @@ OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional, bool _au
 	// turn off looping by default
 	checkForAlError(alSourcei(sourceId, AL_LOOPING, AL_FALSE));
 	checkForAlError(alSourcef(sourceId, AL_PITCH, 1.f));
-	checkForAlError(alSourcef(sourceId, AL_GAIN, 0.1f));
-	checkForAlError(alSourcef(sourceId, AL_ROLLOFF_FACTOR, 0.05f));
+	checkForAlError(alSourcef(sourceId, AL_GAIN, 1.f));
 	checkForAlError(alDopplerFactor(1.f));
 	checkForAlError(alDopplerVelocity(1.f));
 	checkForAlError(alSource3f(sourceId, AL_POSITION, 0, 0, 0));
 	checkForAlError(alSource3f(sourceId, AL_VELOCITY, 0, 0, 0));
     checkForAlError(alSourcef(sourceId, AL_ROLLOFF_FACTOR, 1.0f));
+	checkForAlError(alSourcef(sourceId, AL_REFERENCE_DISTANCE, 1)); // 1.0f
+	checkForAlError(alSourcef(sourceId, AL_MAX_DISTANCE, std::numeric_limits<float>::infinity()));  // 1000.0f
 
 	float orientation[6] = {
 		/*forward vector*/
@@ -196,11 +222,20 @@ void OpenAL_Source::pause(){
 
 
 
+float OpenAL_Sound::masterGain = 1.f;
+std::map<std::string, float> OpenAL_Sound::categoricalGain = initializeCategoricalGain();
+std::map<std::string, float> OpenAL_Sound::initializeCategoricalGain(){
+	std::map<std::string, float> res;
+	res["voice"] = res["sfx"] = res["music"] = res["other"] = 1.f;
+	return res;
+}
 
-OpenAL_Sound::OpenAL_Sound(OpenAL_Source * _source, bool _autoRelease) :
+OpenAL_Sound::OpenAL_Sound(OpenAL_Source * _source, bool _autoRelease, std::string _category) :
 	NodeResource(_autoRelease),
 	source(_source),
-	samplesPlayed(0)
+	samplesPlayed(0),
+	category(_category),
+	gain(1.f)
 {
 }
 
@@ -216,11 +251,26 @@ void OpenAL_Sound::update(Step * _step){
 }
 
 void OpenAL_Sound::play(bool _loop){
+	setGain(gain);
 	source->play(_loop);
 }void OpenAL_Sound::pause(){
 	source->pause();
 }void OpenAL_Sound::stop(){
 	source->stop();
+}
+
+void OpenAL_Sound::setPitch(float _pitch){
+	checkForAlError(alSourcef(source->sourceId, AL_PITCH, _pitch));
+}
+void OpenAL_Sound::setGain(float _gain){
+	gain = _gain;
+	checkForAlError(alSourcef(source->sourceId, AL_GAIN, gain * masterGain * categoricalGain[category]));
+}
+
+void OpenAL_Sound::setPositionalAttributes(float _referenceDistance, float _rolloff, float _maxDistance){
+	checkForAlError(alSourcef(source->sourceId, AL_REFERENCE_DISTANCE, _referenceDistance));
+	checkForAlError(alSourcef(source->sourceId, AL_MAX_DISTANCE, _maxDistance));
+	checkForAlError(alSourcef(source->sourceId, AL_ROLLOFF_FACTOR, _rolloff));
 }
 
 ALint OpenAL_Sound::getCurrentSample(){
@@ -232,14 +282,14 @@ float OpenAL_Sound::getAmplitude(){
 	if(t < 0){
 		return 0;
 	}
-	return (float)source->buffer->samples.at(t)/INT16_MAX;
+	return (float)source->buffer->samples[t]/INT16_MAX;
 }
 
 
 
 
-OpenAL_SoundSimple::OpenAL_SoundSimple(const char * _filename, bool _positional, bool _autoRelease) :
-	OpenAL_Sound(new OpenAL_Source(new OpenAL_Buffer(_filename, _autoRelease), _positional, _autoRelease), _autoRelease),
+OpenAL_SoundSimple::OpenAL_SoundSimple(const char * _filename, bool _positional, bool _autoRelease, std::string _category) :
+	OpenAL_Sound(new OpenAL_Source(new OpenAL_Buffer(_filename, _autoRelease), _positional, _autoRelease), _autoRelease, _category),
 	NodeResource(_autoRelease)
 {
 }
@@ -250,24 +300,28 @@ void OpenAL_SoundSimple::update(Step * _step){
 }
 
 
-OpenAL_SoundStream::OpenAL_SoundStream(const char * _filename, bool _positional, bool _autoRelease) :
+OpenAL_SoundStream::OpenAL_SoundStream(const char * _filename, bool _positional, bool _autoRelease, std::string _category, unsigned long int _bufferLength, unsigned long int _numBufs) :
 	NodeResource(_autoRelease),
 	isStreaming(false),
-	OpenAL_Sound(new OpenAL_Source(nullptr, _positional, _autoRelease), _autoRelease),
+	OpenAL_Sound(new OpenAL_Source(nullptr, _positional, _autoRelease), _autoRelease, _category),
 	bufferOffset(0),
-	maxBufferOffset(0)
+	maxBufferOffset(0),
+	numBuffers(_numBufs),
+	bufferLength(_bufferLength)
 {
-	alGenBuffers(NUM_BUFS, buffers);
+	buffers = (ALuint *)calloc(numBuffers, sizeof(ALuint));
+	alGenBuffers(numBuffers, buffers);
 	source->buffer = new OpenAL_Buffer(_filename, _autoRelease);
 	++source->buffer->referenceCount;
 
-	maxBufferOffset = source->buffer->numSamples / BUFFER_LEN;
+	maxBufferOffset = source->buffer->numSamples / bufferLength;
 }
 
 
 OpenAL_SoundStream::~OpenAL_SoundStream(){
 	stop();
-	checkForAlError(alDeleteBuffers(NUM_BUFS, buffers));
+	checkForAlError(alDeleteBuffers(numBuffers, buffers));
+	free(buffers);
 }
 
 void OpenAL_SoundStream::update(Step * _step){
@@ -279,7 +333,7 @@ void OpenAL_SoundStream::update(Step * _step){
 	checkForAlError(alGetSourcei(source->sourceId, AL_BUFFERS_PROCESSED, &numBufs));
 	
 	while(numBufs--){
-		samplesPlayed += BUFFER_LEN;
+		samplesPlayed += bufferLength;
 		ALuint tempBuf;
 		// unqueue the processed buffer
 		checkForAlError(alSourceUnqueueBuffers(source->sourceId, 1, &tempBuf));
@@ -360,9 +414,10 @@ void OpenAL_SoundStream::rewind(){
 	// move to the beginning
 	ALint numQueuedBuffers = 0;
 	checkForAlError(alGetSourcei(source->sourceId, AL_BUFFERS_QUEUED, &numQueuedBuffers));
-	ALuint tempBuf[NUM_BUFS];
+	ALuint * tempBuf = (ALuint *)calloc(numBuffers, sizeof(ALuint));
 	checkForAlError(alSourceUnqueueBuffers(source->sourceId, numQueuedBuffers, tempBuf));
 	bufferOffset = 0;
+	free(tempBuf);
 }
 
 
@@ -379,13 +434,13 @@ ALint OpenAL_SoundStream::getCurrentSample(){
 unsigned long int OpenAL_SoundStream::fillBuffer(ALuint _bufferId){
 	unsigned long int numSamplesToBuffer;
 	if(bufferOffset < maxBufferOffset){
-		numSamplesToBuffer = BUFFER_LEN;
+		numSamplesToBuffer = bufferLength;
 	}else if(bufferOffset == maxBufferOffset){
-		numSamplesToBuffer = source->buffer->numSamples - bufferOffset*BUFFER_LEN;
+		numSamplesToBuffer = source->buffer->numSamples - bufferOffset*bufferLength;
 	}else{
 		return 0;
 	}
-	checkForAlError(alBufferData(_bufferId, source->buffer->format, &source->buffer->samples[bufferOffset*BUFFER_LEN], numSamplesToBuffer * sizeof(ALushort), source->buffer->sampleRate));
+	checkForAlError(alBufferData(_bufferId, source->buffer->format, &source->buffer->samples[bufferOffset*bufferLength], numSamplesToBuffer * sizeof(ALushort), source->buffer->sampleRate));
 	++bufferOffset;
 	return 1;
 }
@@ -403,13 +458,13 @@ unsigned long int OpenAL_SoundStream::fillBuffers(){
 
 
 
-OpenAL_SoundStreamGenerative::OpenAL_SoundStreamGenerative(bool _positional, bool _autoRelease) :
-	OpenAL_SoundStream(nullptr, _positional, _autoRelease),
+OpenAL_SoundStreamGenerative::OpenAL_SoundStreamGenerative(bool _positional, bool _autoRelease, std::string _category, unsigned long int _bufferLength, unsigned long int _numBufs) :
+	OpenAL_SoundStream(nullptr, _positional, _autoRelease, _category, _bufferLength, _numBufs),
 	NodeResource(_autoRelease),
 	generativeFunction(nullptr)
 {
 	maxBufferOffset = -1;
-	source->buffer->samples.resize(BUFFER_LEN);
+	source->buffer->samples = (ALshort *)calloc(bufferLength, sizeof(ALshort));
 	source->buffer->sampleRate = 44100;
 	source->buffer->format = AL_FORMAT_MONO16;
 
@@ -423,12 +478,12 @@ ALshort OpenAL_SoundStreamGenerative::compressFloat(float _v, float _volume){
 }
 
 unsigned long int OpenAL_SoundStreamGenerative::fillBuffer(ALuint _bufferId){
-	for(unsigned long int i = 0; i < source->buffer->samples.size(); ++i){
+	for(unsigned long int i = 0; i < source->buffer->numSamples; ++i){
 		unsigned long int t = i + samplesPlayed;
-		source->buffer->samples.at(i) = generativeFunction(t);
+		source->buffer->samples[i] = generativeFunction(t);
 	}
 
-	checkForAlError(alBufferData(_bufferId, source->buffer->format, &source->buffer->samples[0], BUFFER_LEN * sizeof(ALushort), source->buffer->sampleRate));
+	checkForAlError(alBufferData(_bufferId, source->buffer->format, &source->buffer->samples[0], bufferLength * sizeof(ALushort), source->buffer->sampleRate));
 	++bufferOffset;
 	return 1;
 }

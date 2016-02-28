@@ -4,21 +4,24 @@
 #include "Rectangle.h"
 
 #include <map>
+#include "SpriteSheetAnimation.h"
 
 class Texture;
 class TextureSampler;
 class SpriteSheetAnimation;
 class Rectangle;
 class SpriteMesh;
+class SpriteSheet;
 
 class Sprite : public MeshEntity{
 public:
-	std::map<std::string, SpriteSheetAnimation *> animations;
+	SpriteSheet * spriteSheet;
 	SpriteSheetAnimation * currentAnimation;
-	Texture * animatedTexture;
 	bool playAnimation;
 
 	explicit Sprite(Shader * _shader = nullptr);
+	explicit Sprite(Texture * _texture, Shader * _shader = nullptr);
+	explicit Sprite(TextureSampler *_textureSampler, Shader * _shader = nullptr);
 	virtual ~Sprite();
 
 	Vertex * getTopLeft();
@@ -28,15 +31,12 @@ public:
 
 	void setUvs(float _topLeftU, float _topLeftV, float _topRightU, float _topRightV, 
 	float _bottomLeftU, float _bottomLeftV, float _bottomRightU, float _bottomRightV);
-	void setUvs(vox::Rectangle _rect);
+	void setUvs(sweet::Rectangle _rect);
 	virtual void update(Step* _step) override;
-	void addAnimation(std::string _name, SpriteSheetAnimation * _animation, bool _makeCurrent);
 	void setCurrentAnimation(std::string _name);
-	void pushTextureSampler(TextureSampler * _sampler);
 	
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+	void setPrimaryTexture(Texture * _texture);
+	void setPrimaryTexture(TextureSampler * _textureSampler);
 
-	virtual void load() override;
-	virtual void unload() override;
-
+	void setSpriteSheet(SpriteSheet * _spriteSheet, std::string _currentAnimation);
 };

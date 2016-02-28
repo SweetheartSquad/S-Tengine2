@@ -2,7 +2,6 @@
 
 #include <vector>
 #include "CommandProcessor.h"
-#include "ConsoleEntry.h"
 #include "node/Node.h"
 
 class Command : public Node{
@@ -19,8 +18,4 @@ public:
 	bool executed;
 	// True from creation up until the end of the first call to execute, false otherwise
 	bool firstRun;
-
-	void log(std::string _message);
-	void warn(std::string _message);
-	void error(std::string _message);
 };

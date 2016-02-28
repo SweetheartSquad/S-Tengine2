@@ -1,66 +1,102 @@
 #pragma once
 
-#include "shader/SharedComponentShaderMethods.h"
-#include "RenderOptions.h"
-#include "MatrixStack.h"
-#include "node/NodeRenderable.h"
-#include "GLUtils.h"
-#include "MeshInterface.h"
-#include "Material.h"
-#include "Transform.h"
+#include <shader/SharedComponentShaderMethods.h>
+#include <RenderOptions.h>
+#include <MatrixStack.h>
+#include <node/NodeRenderable.h>
+#include <GLUtils.h>
+#include <MeshInterface.h>
+#include <Material.h>
+#include <Transform.h>
+#include <SpotLight.h>
+#include <shader/ComponentShaderBase.h>
+#include <shader/ShaderVariables.h>
 
-void SharedComponentShaderMethods::configureLights(vox::MatrixStack* _matrixStack, RenderOptions * _renderOption, NodeRenderable* _nodeRenderable){
-	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
-	if(mesh != nullptr){
+std::string SharedComponentShaderMethods::lightArrayAccessors[MAX_LIGHTS][8];
+std::string SharedComponentShaderMethods::materialArrayAccessors[MAX_MATERIALS][2];
+bool SharedComponentShaderMethods::staticInitialized = staticInit();
+
+bool SharedComponentShaderMethods::staticInit(){
+	for(unsigned long int i = 0; i < MAX_LIGHTS; ++i){
+		std::stringstream ss;
+		ss << GL_UNIFORM_ID_LIGHTS_NO_ARRAY << "[" << i << "]";
+		std::string s = ss.str();
+		lightArrayAccessors[i][0] = s + ".type";
+		lightArrayAccessors[i][1] = s + ".position";
+		lightArrayAccessors[i][2] = s + ".intensities";
+		lightArrayAccessors[i][3] = s + ".ambientCoefficient";
+		lightArrayAccessors[i][4] = s + ".attenuation";
+		lightArrayAccessors[i][5] = s + ".cutoff";
+		lightArrayAccessors[i][6] = s + ".coneAngle";
+		lightArrayAccessors[i][7] = s + ".coneDirection";
+	}
+	for(unsigned long int i = 0; i < MAX_MATERIALS; ++i){
+		std::stringstream ss;
+		ss << GL_UNIFORM_ID_MATERIALS_NO_ARRAY << "[" << i << "]";
+		std::string s = ss.str();
+		materialArrayAccessors[i][0] = s + ".shininess";
+		materialArrayAccessors[i][1] = s + ".specularColor";
+	}
+	return true;
+}
+
+void SharedComponentShaderMethods::configureLights(sweet::MatrixStack* _matrixStack, RenderOptions * _renderOption, NodeRenderable* _nodeRenderable){
+	checkForGlError(false);
+	ComponentShaderBase * shaderBase = dynamic_cast<ComponentShaderBase *>(_renderOption->shader);
+	if(shaderBase->lightingDirty){
 		// Pass the _shader the number of lights
 		if(_renderOption->lights != nullptr){
-			glUniform1i(_renderOption->shader->numLightsUniformLocation, _renderOption->lights->size());
+			unsigned long int numLights = _renderOption->lights->size();
+			glUniform1i(_renderOption->shader->numLightsUniformLocation, numLights);
+			checkForGlError(false);
 			// Pass the paramaters for each light to the _shader
-			for(unsigned long int i = 0; i < _renderOption->lights->size(); i++){
+			for(unsigned long int i = 0; i < numLights; ++i){
 				Light * l = _renderOption->lights->at(i);
 
 				if(l->lightDirty){
 					glm::vec3 curPos = l->lastPos;
-					//std::cout << "update light " << i << ": " << curPos.x << "," << curPos.y << "," << curPos.z << std::endl;
-					const std::string typ = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].type", i);
-					const std::string pos = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_POSITION, i);
-					const std::string ins = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_INTENSITIES, i);
-					const std::string amb = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].ambientCoefficient", i);
-					const std::string att = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].attenuation", i);
-					const std::string cut = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[].cutoff", i);
+					std::string * const root = lightArrayAccessors[i];
 
-					GLuint typeUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), typ.c_str());
-					GLuint positionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), pos.c_str());
-					GLuint intensitiesUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), ins.c_str());
-					GLuint ambientUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), amb.c_str());
-					GLuint attenuationUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), att.c_str());
-					GLuint cutoffUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), cut.c_str());
+					GLuint typeUniformLocation =          glGetUniformLocation(_renderOption->shader->getProgramId(), root[0].c_str());
+					GLuint positionUniformLocation =      glGetUniformLocation(_renderOption->shader->getProgramId(), root[1].c_str());
+					GLuint intensitiesUniformLocation =   glGetUniformLocation(_renderOption->shader->getProgramId(), root[2].c_str());
+					GLuint ambientUniformLocation =       glGetUniformLocation(_renderOption->shader->getProgramId(), root[3].c_str());
+					GLuint attenuationUniformLocation =   glGetUniformLocation(_renderOption->shader->getProgramId(), root[4].c_str());
+					GLuint cutoffUniformLocation =        glGetUniformLocation(_renderOption->shader->getProgramId(), root[5].c_str());
+					GLuint angleUniformLocation =         glGetUniformLocation(_renderOption->shader->getProgramId(), root[6].c_str());
+					GLuint coneDirectionUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), root[7].c_str());
 
-					glUniform1i(typeUniformLocation, static_cast<int>(l->data.type));
+					glUniform1i(typeUniformLocation, static_cast<int>(l->getType()));
 					glUniform3f(positionUniformLocation, curPos.x, curPos.y, curPos.z);
-					glUniform3f(intensitiesUniformLocation, l->data.intensities.x, l->data.intensities.y, l->data.intensities.z);
-					glUniform1f(ambientUniformLocation, l->data.ambientCoefficient);
-					glUniform1f(attenuationUniformLocation, l->data.attenuation);
-					glUniform1f(cutoffUniformLocation, l->data.cutoff);
-					l->lightDirty = false;
+					glm::vec3 intensities = l->getIntensities();
+					glUniform3f(intensitiesUniformLocation, intensities.x, intensities.y, intensities.z);
+					glUniform1f(ambientUniformLocation, l->getAmbientCoefficient());
+					glUniform1f(attenuationUniformLocation, l->getAttenuation());
+					glUniform1f(cutoffUniformLocation, l->getCutoff());
+					glm::vec3 coneDirection = l->getConeDirection();
+					glUniform3f(coneDirectionUniformLocation, coneDirection.x, coneDirection.y, coneDirection.z);
+					glUniform1f(angleUniformLocation, l->getConeAngle());
+					checkForGlError(false);
 				}
 			}
 		}
 	}
+	shaderBase->lightingDirty = false;
+	checkForGlError(false);
 }
 
-void SharedComponentShaderMethods::configureMaterials(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void SharedComponentShaderMethods::configureMaterials(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 	if(mesh != nullptr){
+		unsigned long int numMaterials = mesh->materials.size();
 		// Pass the _shader the number of materials
-		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_MATERIALS.c_str()), mesh->materials.size());
+		glUniform1i(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_NUM_MATERIALS.c_str()), numMaterials);
 
 		// Pass each material to the _shader
-		for(unsigned long int i = 0; i < mesh->materials.size(); i++){
-			std::string shin = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_MATERIALS_NO_ARRAY+"[].shininess", i);
-			std::string spec = GLUtils::buildGLArrayReferenceString(GL_UNIFORM_ID_MATERIALS_NO_ARRAY+"[].specularColor", i);
-			GLuint shinyUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), shin.c_str());
-			GLuint specColorUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), spec.c_str());
+		for(unsigned long int i = 0; i < numMaterials; ++i){
+			std::string * const root = materialArrayAccessors[i];
+			GLuint shinyUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), root[0].c_str());
+			GLuint specColorUniformLocation = glGetUniformLocation(_renderOption->shader->getProgramId(), root[1].c_str());
 			glUniform1f(shinyUniformLocation, mesh->materials.at(i)->data.shininess);
 			glUniform3f(specColorUniformLocation, mesh->materials.at(i)->data.specularColor.x, mesh->materials.at(i)->data.specularColor.y, mesh->materials.at(i)->data.specularColor.z);
 		}

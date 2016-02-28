@@ -5,10 +5,14 @@
 #include "MeshFactory.h"
 
 Plane::Plane(glm::vec3 _center, float _size) :
-	MeshEntity(MeshFactory::getPlaneMesh())
+	MeshEntity(MeshFactory::getPlaneMesh(_size*0.5f, _size*0.5f))
 {
-	parents.at(0)->scale(_size, _size, _size);
-	parents.at(0)->translate(_center);
+	for(unsigned long int i = 0; i < mesh->vertices.size(); ++i){
+		mesh->vertices.at(i).x -= _center.x;
+		mesh->vertices.at(i).y -= _center.y;
+		mesh->vertices.at(i).z -= _center.z;
+	}
+	mesh->dirty = true;
 }
 
 Plane::~Plane(){

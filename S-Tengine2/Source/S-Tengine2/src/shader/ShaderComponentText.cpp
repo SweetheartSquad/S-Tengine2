@@ -1,5 +1,6 @@
-#include <shader/ShaderComponentText.h>
+#pragma once
 
+#include <shader/ComponentShaderBase.h>
 #include "shader/ShaderComponentText.h"
 #include "shader/ShaderVariables.h"
 #include "MatrixStack.h"
@@ -10,12 +11,13 @@
 #include "Sprite.h"
 #include "SpriteSheetAnimation.h"
 
-ShaderComponentText::ShaderComponentText(Shader * _shader) :
+ShaderComponentText::ShaderComponentText(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader),
 	color(0, 0, 0),
 	texNumLoc(-1),
 	texColLoc(-1),
-	texSamLoc(-1)
+	texSamLoc(-1),
+	numTextures(0)
 {
 }
 
@@ -62,7 +64,7 @@ void ShaderComponentText::setColor(glm::vec3 _color){
 	makeDirty();
 }
 
-void ShaderComponentText::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentText::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	//ShaderComponent::clean(_matrixStack, _renderOption, _nodeRenderable);
 	configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 	shader->configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
@@ -77,12 +79,29 @@ void ShaderComponentText::load(){
 	ShaderComponent::load();
 }
 
-void ShaderComponentText::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentText::unload(){
+	if(loaded){
+		texNumLoc = -1;
+		texColLoc = -1;
+		texSamLoc = -1;
+		numTextures = 0;
+	}
+	ShaderComponent::unload();
+}
+
+void ShaderComponentText::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+		texNumLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_NUM_TEXTURES.c_str());
+		texColLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TEXT_COLOR.c_str());
+		texSamLoc = glGetUniformLocation(shader->getProgramId(), GL_UNIFORM_ID_TEXTURE_SAMPLER.c_str());
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
-	int numTextures = 0;
 	if(mesh != nullptr){
-		numTextures = mesh->textureCount();
-		glUniform1i(texNumLoc, numTextures);
+		// check if the number of textures has changes and send new value to OpenGL
+		unsigned long int newNumTextures = mesh->textureCount();
+		if(newNumTextures != numTextures){
+			glUniform1i(texNumLoc, newNumTextures);
+			checkForGlError(false);
+			numTextures = newNumTextures;
+		}
 		// Bind each texture to the texture sampler array in the frag _shader
 		for(unsigned long int i = 0; i < mesh->textureCount(); i++){
 			glActiveTexture(GL_TEXTURE0 + i);

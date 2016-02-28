@@ -2,7 +2,7 @@
 
 #include "node/Node.h"
 
-namespace vox{
+namespace sweet{
 	class MatrixStack;
 };
 class RenderOptions;
@@ -13,7 +13,7 @@ protected:
 	bool visible;
 public:
 	NodeRenderable();
-	void setVisible(bool _visible);
+	virtual void setVisible(bool _visible);
 	bool isVisible();
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) = 0;
+	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) = 0;
 };

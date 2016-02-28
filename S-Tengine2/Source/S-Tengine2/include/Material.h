@@ -4,9 +4,10 @@
 #include <GL/glew.h>
 #include <vector>
 #include "node/NodeResource.h"
-#include "Vox.h"
+#include "Sweet.h"
 
 struct MaterialData {
+	// shininess is an exponent for a number between 0 and 1
 	float shininess;
 	glm::vec3 specularColor;
 

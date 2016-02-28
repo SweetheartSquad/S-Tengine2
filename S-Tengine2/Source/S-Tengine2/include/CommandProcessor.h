@@ -26,10 +26,6 @@ public:
 	void startCompressing();
 	void endCompressing();
 	
-	void log(std::string _message);
-	void warn(std::string _message);
-	void error(std::string _message);
-	
 	std::vector<ConsoleEntry *> consoleEntries;
 private:
 	std::vector<Command *> undoStack;

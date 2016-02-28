@@ -20,7 +20,7 @@ public:
 	* @param The GLFW key code - eg. GLFW_KEY_A
 	* @return Whether the key is currently down or not
 	*/
-	bool keyDown(int _glfwKeyCode);
+	bool keyDown(int _glfwKeyCode) const;
 
 	/**
 	* Returns true if the given key was released since the keyboard's last call to update
@@ -28,7 +28,7 @@ public:
 	* @param The GLFW key code - eg. GLFW_KEY_A
 	* @return Whether the key was released since the last keyboard update
 	*/
-	bool keyJustUp(int _glfwKeyCode);
+	bool keyJustUp(int _glfwKeyCode) const;
 
 	/**
 	* Returns true if the given key was pressed down since the keyboard's last call to update
@@ -36,7 +36,7 @@ public:
 	* @param The GLFW key code - eg. GLFW_KEY_A
 	* @return Whether the key was pressed down since the last keyboard update
 	*/
-	bool keyJustDown(int _glfwKeyCode);
+	bool keyJustDown(int _glfwKeyCode) const;
 
 	/**
 	* Clears the maps of justPressed and justReleased keys

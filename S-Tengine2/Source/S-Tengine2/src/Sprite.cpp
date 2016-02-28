@@ -3,6 +3,7 @@
 #include "Sprite.h"
 #include "Rectangle.h"
 #include "Point.h"
+#include "SpriteSheet.h"
 #include "SpriteSheetAnimation.h"
 #include "Rectangle.h"
 #include "Box2DSuperSprite.h"
@@ -10,76 +11,132 @@
 #include <TextureSampler.h>
 #include <MeshFactory.h>
 #include <MeshInterface.h>
+#include <Log.h>
 
 struct b2Vec2;
 
 Sprite::Sprite(Shader * _shader) :
-	MeshEntity(MeshFactory::getPlaneMesh()),
+	MeshEntity(MeshFactory::getPlaneMesh(), _shader),
 	currentAnimation(nullptr),
-	animatedTexture(nullptr),
 	playAnimation(true)
 {
 }
 
+Sprite::Sprite(Texture * _texture, Shader * _shader) :
+	MeshEntity(MeshFactory::getPlaneMesh(), _shader),
+	currentAnimation(nullptr),
+	playAnimation(true)
+{
+	setPrimaryTexture(_texture);
+}
+
+Sprite::Sprite(TextureSampler * _textureSampler, Shader * _shader) :
+	MeshEntity(MeshFactory::getPlaneMesh(), _shader),
+	currentAnimation(nullptr),
+	playAnimation(true)
+{
+	setPrimaryTexture(_textureSampler);
+}
+
+
 Sprite::~Sprite(){
+	// TODO: memory management of spritesheet?
 }
 
 void Sprite::update(Step* _step){
 	MeshEntity::update(_step);
 	if(currentAnimation != nullptr && playAnimation){
-		currentAnimation->update(_step);
 		mesh->dirty = true;
+		currentAnimation->update(_step);
 		setUvs(currentAnimation->frames.at(currentAnimation->currentFrame));
-		animatedTexture = currentAnimation->texture;
+		while(mesh->textures.size() > 0){
+			mesh->textures.back()->decrementAndDelete();
+			mesh->textures.pop_back();
+		}
+		mesh->pushTexture2D(spriteSheet->texture);
 	}
 }
 
-void Sprite::addAnimation(std::string _name, SpriteSheetAnimation* _animation, bool _makeCurrent){
-	animations.insert(std::make_pair(_name, _animation));
-	if(_makeCurrent){
-		currentAnimation = _animation;
+void Sprite::setPrimaryTexture(Texture * _texture) {
+	if(mesh->textures.size() == 0) {
+		mesh->pushTexture2D(_texture);
+	}else {
+		mesh->textures[0] = _texture;
+		++_texture->referenceCount;
 	}
-}
-
-void Sprite::setCurrentAnimation(std::string _name){
-	SpriteSheetAnimation * anim = animations.at(_name);
-	if(anim != nullptr){
-		currentAnimation = anim;
-	}
-}
-
-void Sprite::pushTextureSampler(TextureSampler* _sampler){
-	glm::vec3 sv = parents.at(0)->getScaleVector();
-	vox::Rectangle rect(0, 0, _sampler->width * std::abs(sv.x) * 0.025f, 
-		_sampler->height * std::abs(sv.y) * 0.025f);
 	
-	mesh->pushTexture2D(_sampler->texture);
+	float mag = std::max(mesh->getTexture(0)->width, mesh->getTexture(0)->height);
 
-	vox::Point v1 = rect.getBottomLeft();
-	vox::Point v2 = rect.getBottomRight();
-	vox::Point v3 = rect.getTopRight();
-	vox::Point v4 = rect.getTopLeft();
-
-	mesh->vertices.at(0).x = v1.x;
-	mesh->vertices.at(0).y = v1.y;
-	mesh->vertices.at(1).x = v2.x;
-	mesh->vertices.at(1).y = v2.y;
-	mesh->vertices.at(2).x = v3.x;
-	mesh->vertices.at(2).y = v3.y;
-	mesh->vertices.at(3).x = v4.x;
-	mesh->vertices.at(3).y = v4.y;
+	float width = _texture->width;
+	float height = _texture->height;
 	
-	float mag = std::max(mesh->getTexture(mesh->textureCount() - 1)->width, mesh->getTexture(mesh->textureCount() - 1)->height);
-	mesh->vertices.at(3).u = 0;
-	mesh->vertices.at(3).v = 0;
-	mesh->vertices.at(2).u = _sampler->width/mag;
-	mesh->vertices.at(2).v = 0;
-	mesh->vertices.at(1).u = _sampler->width/mag;
-	mesh->vertices.at(1).v = _sampler->height/mag;
-	mesh->vertices.at(0).u = 0;
-	mesh->vertices.at(0).v = _sampler->height/mag;
+	float posHeight =  height/mag/2;
+	float posWidth  =  width/mag/2;
+	float negHeight = -posHeight;
+	float negWidth  = -posWidth;
+
+	mesh->vertices.at(0).x = negWidth;
+	mesh->vertices.at(0).y = posHeight;
+	mesh->vertices.at(1).x = posWidth;
+	mesh->vertices.at(1).y = posHeight;
+	mesh->vertices.at(2).x = posWidth;
+	mesh->vertices.at(2).y = negHeight;
+	mesh->vertices.at(3).x = negWidth;
+	mesh->vertices.at(3).y = negHeight;
 
 	mesh->dirty = true;
+}
+
+void Sprite::setPrimaryTexture(TextureSampler * _textureSampler) {
+
+	if(mesh->textures.size() == 0) {
+		mesh->pushTexture2D(_textureSampler->texture);
+	}else {
+		mesh->textures[0] = _textureSampler->texture;
+		++_textureSampler->texture->referenceCount;
+	}
+
+	float mag = std::max(mesh->getTexture(0)->width, mesh->getTexture(0)->height);
+
+	float u = _textureSampler->u;
+	float v = _textureSampler->v;
+	float width = _textureSampler->width;
+	float height = _textureSampler->height;
+
+
+	setUvs(sweet::Rectangle(u/mag, v/mag, width/mag, height/mag));
+	
+	float posHeight =  height/mag/2;
+	float posWidth  =  width/mag/2;
+	float negHeight = -posHeight;
+	float negWidth  = -posWidth;
+
+	mesh->vertices.at(0).x = negWidth;
+	mesh->vertices.at(0).y = posHeight;
+	mesh->vertices.at(1).x = posWidth;
+	mesh->vertices.at(1).y = posHeight;
+	mesh->vertices.at(2).x = posWidth;
+	mesh->vertices.at(2).y = negHeight;
+	mesh->vertices.at(3).x = negWidth;
+	mesh->vertices.at(3).y = negHeight;
+
+	mesh->dirty = true;
+}
+
+void Sprite::setSpriteSheet(SpriteSheet * _spriteSheet, std::string _currentAnimation){
+	spriteSheet = _spriteSheet;
+	setCurrentAnimation(_currentAnimation);
+}
+
+
+void Sprite::setCurrentAnimation(std::string _name){
+	delete currentAnimation;
+	auto anim = spriteSheet->animations.find(_name);
+	if(anim != spriteSheet->animations.end()){
+		currentAnimation = anim->second->copy();
+	}else{
+		Log::error("Animation with name \""+_name+"\" does not exist.");
+	}
 }
 
 Vertex * Sprite::getTopLeft(){
@@ -90,12 +147,12 @@ Vertex * Sprite::getTopRight(){
 	return &mesh->vertices.at(1);
 }
 
-Vertex * Sprite::getBottomLeft(){
-	return &mesh->vertices.at(3);
-}
-
 Vertex * Sprite::getBottomRight(){
 	return &mesh->vertices.at(2);
+}
+
+Vertex * Sprite::getBottomLeft(){
+	return &mesh->vertices.at(3);
 }
 
 void Sprite::setUvs(float _topLeftU, float _topLeftV, float _topRightU, float _topRightV,
@@ -108,38 +165,14 @@ void Sprite::setUvs(float _topLeftU, float _topLeftV, float _topRightU, float _t
 	getTopRight()->v      = _topRightV;
 	getBottomRight()->u   = _bottomRightU;
 	getBottomRight()->v   = _bottomRightV;
+	mesh->dirty = true;
 }
 
-void Sprite::setUvs(vox::Rectangle _rect){
-	mesh->vertices.at(0).u  = _rect.getTopLeft().x;
-	mesh->vertices.at(0).v  = _rect.getTopLeft().y;
-	mesh->vertices.at(1).u  = _rect.getTopRight().x;
-	mesh->vertices.at(1).v  = _rect.getTopRight().y;
-	mesh->vertices.at(2).u  = _rect.getBottomRight().x;
-	mesh->vertices.at(2).v  = _rect.getBottomRight().y;
-	mesh->vertices.at(3).u  = _rect.getBottomLeft().x;
-	mesh->vertices.at(3).v  = _rect.getBottomLeft().y;
-}
-
-void Sprite::load(){
-	if(!loaded){
-		for(auto s : animations) {
-			s.second->load();
-		}
-		
-	}
-	MeshEntity::load();
-}
-
-void Sprite::unload(){
-	if(loaded){
-		for(auto s : animations) {
-			s.second->unload();
-		}	
-	}
-	MeshEntity::unload();
-}
-
-void Sprite::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-   MeshEntity::render(_matrixStack, _renderOptions);
+void Sprite::setUvs(sweet::Rectangle _rect){
+	setUvs(
+		_rect.getTopLeft().x, _rect.getTopLeft().y,
+		_rect.getTopRight().x, _rect.getTopRight().y,
+		_rect.getBottomLeft().x, _rect.getBottomLeft().y,
+		_rect.getBottomRight().x, _rect.getBottomRight().y
+	);
 }

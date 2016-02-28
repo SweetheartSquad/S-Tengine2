@@ -7,18 +7,46 @@
 #include <BulletDebugDrawer.h>
 #include <NodeUI.h>
 
-class UILayer : public virtual Entity, public virtual NodeUI{
+class Sprite;
+class Mouse;
+
+class RayTestInfo{
 public:
-	OrthographicCamera cam;
-	ComponentShaderBase * shader;
+	btVector3 raystart;
+	btVector3 raydir;
+	btVector3 rayend;
+	btTransform rayfrom;
+	btTransform rayto;
+	btCollisionWorld::AllHitsRayResultCallback raycb;
+	RayTestInfo();
+};
+
+class UILayer : public NodeUI{
+private:
+	RayTestInfo rayInfo;
+	Mouse * mouse;
+public:
+	Sprite * mouseIndicator;
+	OrthographicCamera * const cam;
 
 	BulletDebugDrawer * bulletDebugDrawer;
+	ComponentShaderBase * shader;
 
-	UILayer(Scene * _scene, float _left, float _right, float _bottom, float _top);
+	UILayer(float _left, float _right, float _bottom, float _top);
 	~UILayer();
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
+	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 	void resize(float _left, float _right, float _bottom, float _top);
 	virtual void update(Step * _step) override;
-	
-	//bool addChild(NodeChild * _child) override;
+
+	// if true, traverses the hierarchy including entities and transforms
+	// if false, only traverses the standard UI layout system
+	bool complexHitTest;
+	void hitTest(NodeChild * _c);
+
+	// adds a sprite with the default cursor texture to the ui layer which is updated each frame to match the mouse position
+	Sprite * addMouseIndicator();
+	void removeMouseIndicator();
+
+	void load() override;
+	void unload() override;
 };

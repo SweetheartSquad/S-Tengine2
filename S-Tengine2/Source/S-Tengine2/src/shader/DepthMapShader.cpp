@@ -16,7 +16,7 @@ DepthMapShader::DepthMapShader(bool _autoRelease) :
 {
 }
 
-void DepthMapShader::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void DepthMapShader::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	const glm::mat4 * depthMVP = _matrixStack->getVP();
 	glUniformMatrix4fv(glGetUniformLocation(_renderOption->shader->getProgramId(), GL_UNIFORM_ID_DEPTH_MVP.c_str()), 1, GL_FALSE, &(*depthMVP)[0][0]);
 }

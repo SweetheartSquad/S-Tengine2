@@ -17,8 +17,10 @@ public:
 		RENDER_BUFFER
 	} channelType;
 
-	/**The iternal format of the buffer channel*/
+	/**The internal format of the buffer channel*/
 	GLint  internalFormat;
+	// the number of pixel channels in this FBO channel (e.g. GL_RGBA has 4 channels)
+	unsigned long int numChannels;
 	/**The attachement type of the buffer channel*/
 	GLenum attachmentType;
 	/**The size of te data type. eg GL_UNSIGNED_INT*/

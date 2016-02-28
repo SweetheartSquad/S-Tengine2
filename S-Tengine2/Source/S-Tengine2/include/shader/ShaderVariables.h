@@ -55,13 +55,13 @@ const std::string GL_UNIFORM_ID_PROJECTION_MATRIX     =	"projectionMat";
 const std::string GL_UNIFORM_ID_MODEL_VIEW_PROJECTION = "MVP";
 const std::string GL_UNIFORM_ID_VIEW_PROJECTION		  = "VP";
 
+const std::string GL_UNIFORM_ID_DEPTH_OFFSET			  = "depthOffset";
+
 const std::string GL_UNIFORM_ID_TEXTURE_SAMPLER       = "textureSampler";
 const std::string GL_UNIFORM_ID_NUM_TEXTURES 		  = "numTextures";
 
 const std::string GL_UNIFORM_ID_NUM_LIGHTS			  = "numLights";
 const std::string GL_UNIFORM_ID_LIGHTS_NO_ARRAY       = "lights";
-const std::string GL_UNIFORM_ID_LIGHTS_POSITION		  = GL_UNIFORM_ID_LIGHTS_NO_ARRAY+"[].position";
-const std::string GL_UNIFORM_ID_LIGHTS_INTENSITIES    =	GL_UNIFORM_ID_LIGHTS_NO_ARRAY+"[].intensities";
 
 const std::string GL_UNIFORM_ID_DEPTH_MVP	          =	"depthMVP";
 const std::string GL_UNIFORM_ID_SHADOW_MAP_SAMPLER    = "shadowMapSampler";
@@ -79,8 +79,12 @@ const std::string GL_UNIFORM_ID_SATURATION			  = "saturation";
 const std::string GL_UNIFORM_ID_VALUE				  = "value";
 
 const std::string GL_UNIFORM_ID_ALPHA				  = "alpha";
+const std::string GL_UNIFORM_ID_MASK_TEX			  = "maskTex";
 
 const std::string GL_UNIFORM_ID_TEXT_COLOR			  = "textColor";
+
+const std::string GL_UNIFORM_ID_TOON_LEVELS			  = "toonLevels";
+const std::string GL_UNIFORM_ID_TOON_TEXTURE		  = "toonTexture";
 
 
 //Attribute variable names
@@ -96,9 +100,11 @@ const std::string GL_IN_OUT_FRAG_UV				      =	"fragUV";
 const std::string GL_IN_OUT_SHADOW_COORD			  =	"shadowCoord";
 
 //Component names
-const std::string SHADER_COMPONENT_TEXTURE	          =	"TEXTURE_COMPONENT";
-const std::string SHADER_COMPONENT_SHADOW	          =	"SHADOW_COMPONENT";
-const std::string SHADER_COMPONENT_LIGHT	          =	"LIGHT_COMPONENT";
+const std::string SHADER_COMPONENT_TEXTURE	          =	"SHADER_COMPONENT_TEXTURE";
+const std::string SHADER_COMPONENT_WORLDSPACEUVS	  =	"SHADER_COMPONENT_WORLDSPACEUVS";
+const std::string SHADER_COMPONENT_MASK_RENDER	      =	"SHADER_COMPONENT_MASK_RENDER";
+const std::string SHADER_COMPONENT_SHADOW	          =	"SHADER_COMPONENT_SHADOW";
+const std::string SHADER_COMPONENT_LIGHT	          =	"SHADER_COMPONENT_LIGHT";
 const std::string SHADER_COMPONENT_PHONG			  = "SHADER_COMPONENT_PHONG";
 const std::string SHADER_COMPONENT_MATERIAL			  = "SHADER_COMPONENT_MATERIAL";
 const std::string SHADER_COMPONENT_AMBIENT			  = "SHADER_COMPONENT_AMBIENT";
@@ -112,6 +118,10 @@ const std::string SHADER_COMPONENT_TEXT				  = "SHADER_COMPONENT_TEXT";
 const std::string SHADER_COMPONENT_NORMAL			  = "SHADER_COMPONENT_NORMAL";
 const std::string SHADER_COMPONENT_DEPTH			  = "SHADER_COMPONENT_DEPTH";
 const std::string SHADER_COMPONENT_SSAO			      = "SHADER_COMPONENT_SSAO";
+const std::string SHADER_COMPONENT_MASK			      = "SHADER_COMPONENT_MASK";
+const std::string SHADER_COMPONENT_MVP			      = "SHADER_COMPONENT_MVP";
+const std::string SHADER_COMPONENT_DEPTH_OFFSET		  = "SHADER_COMPONENT_DEPTH_OFFSET";
+const std::string SHADER_COMPONENT_TOON				  = "SHADER_COMPONENT_TOON";
 
 
 const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGHT + ENDL +
@@ -123,6 +133,8 @@ const std::string SHADER_INCLUDE_LIGHT				  = "#ifndef " + SHADER_COMPONENT_LIGH
 														"	float ambientCoefficient;\n"
 														"	float attenuation;\n"
 														"	float cutoff;\n"
+														"	float coneAngle;\n"
+														"	vec3  coneDirection;\n"
 														"};\n"
 														"uniform Light " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[" + std::to_string(MAX_LIGHTS) + "]" + SEMI_ENDL +
 														"uniform int " + GL_UNIFORM_ID_NUM_LIGHTS + SEMI_ENDL +
@@ -148,6 +160,14 @@ const std::string SHADER_LIGHT_DISTANCE_AND_ATTENUATION =
 				//TAB + TAB + "attenuation = (attenuation - lights[i].cutoff) / (1 - lights[i].cutoff)" + SEMI_ENDL +
 				//TAB + TAB + "attenuation = max(attenuation, 0)" + SEMI_ENDL +
 				TAB + "}" + ENDL +
+				// SpotLight
+				//TAB + "if(lights[i].type == 2){" + ENDL + 
+				TAB + TAB + "//SPOTLIGHT" + ENDL +
+				TAB + TAB + "float lightToSurfaceAngle = degrees(acos(dot(-surfaceToLight, normalize(lights[i].coneDirection))))" + SEMI_ENDL +
+				TAB + TAB + "if(lightToSurfaceAngle > lights[i].coneAngle){" + ENDL + 
+				TAB + TAB + TAB + "attenuation = 0.0;" + ENDL + 
+				TAB + TAB + "}" + ENDL + 
+				//TAB + "}" + ENDL + 
 			"}";
 
 const std::string SHADER_INCLUDE_MATERIAL			  = "#ifndef " + SHADER_COMPONENT_MATERIAL + "\n"

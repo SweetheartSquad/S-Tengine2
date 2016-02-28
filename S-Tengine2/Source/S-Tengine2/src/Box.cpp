@@ -1,8 +1,12 @@
 #pragma once
 
 #include <Box.h>
+#include <algorithm>
 
-vox::Box::Box(float _x, float _y, float _z, float _width, float _height, float _depth) :
+
+#include <algorithm>
+
+sweet::Box::Box(float _x, float _y, float _z, float _width, float _height, float _depth) :
 	Rectangle(_x, _y, _width, _height)
 {
 	x		= _x;
@@ -14,20 +18,31 @@ vox::Box::Box(float _x, float _y, float _z, float _width, float _height, float _
 }
 
 
-float vox::Box::getSurfaceArea(){
+float sweet::Box::getSurfaceArea(){
 	return (width * height + width * depth + height * depth) * 2.f;
 }
 
-float vox::Box::getVolume(){
+float sweet::Box::getVolume(){
 	return width * height * depth;
 }
 
-bool vox::Box::intersects(vox::Box _rect){
-	return false;
+bool sweet::Box::intersects(const sweet::Box & _rect, const float _margin) const{
+	if (_rect.x + _rect.width <= x + _margin) return false; // rect is left
+    if (_rect.x >= x + width - _margin) return false; // rect is right
+    if (_rect.y + _rect.height <= y + _margin) return false; // rect is below
+    if (_rect.y >= y + height - _margin) return false; // rect is above
+	if (_rect.z + _rect.depth <= z + _margin) return false; // rect is in behind
+    if (_rect.z >= z + depth - _margin) return false; // rect is front
+
+    return true; // boxes overlap
 }
 
-vox::Box vox::Box::bound(vox::Box & _a, vox::Box & _b){
-	vox::Box res(
+bool sweet::Box::intersects(const std::vector<glm::vec3> & _verts, const float _margin) const{
+	return intersects(sweet::Box::bound(_verts), _margin);
+}
+
+sweet::Box sweet::Box::bound(sweet::Box & _a, sweet::Box & _b){
+	sweet::Box res(
 		std::min(_a.x, _b.x),
 		std::min(_a.y, _b.y),
 		std::min(_a.z, _b.z),
@@ -39,4 +54,46 @@ vox::Box vox::Box::bound(vox::Box & _a, vox::Box & _b){
 	res.height -= res.y;
 	res.depth -= res.z;
 	return res;
+}
+
+sweet::Box sweet::Box::bound(std::vector<glm::vec3> _verts){
+	float minX = 99999, minY= 99999, minZ = 99999,
+		maxX = -99999, maxY = -99999, maxZ = -99999;
+
+	for(auto i : _verts){
+		maxX = std::max(i.x, maxX);
+		maxY = std::max(i.y, maxY);
+		maxZ = std::max(i.z, maxZ);
+
+		minX = std::min(i.x, minX);
+		minY = std::min(i.y, minY);
+		minZ = std::min(i.z, minZ);
+	}
+
+	return sweet::Box(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ);
+}
+
+glm::vec3 sweet::Box::getMinCoordinate(){
+	return glm::vec3(x, y, z);
+}
+
+glm::vec3 sweet::Box::getMaxCoordinate(){
+	return glm::vec3(x + width, y + height, z + depth);
+}
+
+std::vector<glm::vec3> sweet::Box::getVertices(){
+	glm::vec3 min = getMinCoordinate();
+	glm::vec3 max = getMaxCoordinate();
+
+	std::vector<glm::vec3> vertices;
+	vertices.push_back(min);							// left bottom back
+	vertices.push_back(glm::vec3(max.x, min.y, min.z));	// right bottom back
+	vertices.push_back(glm::vec3(min.x, max.y, min.z));	// left top back
+	vertices.push_back(glm::vec3(max.x, max.y, min.z));	// right top back
+	vertices.push_back(glm::vec3(min.x, min.y, max.z));	// left bottom front
+	vertices.push_back(glm::vec3(max.x, min.y, max.z));	// right bottom front
+	vertices.push_back(glm::vec3(min.x, max.y, max.z));	// left top front
+	vertices.push_back(max);							// right top front
+
+	return vertices;
 }

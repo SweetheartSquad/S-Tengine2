@@ -2,7 +2,6 @@
 
 #include "Entity.h"
 #include "FollowCamera.h"
-#include "System.h"
 #include "Transform.h"
 #include <algorithm>
 
@@ -24,13 +23,13 @@ FollowCamera::~FollowCamera(){
 
 void FollowCamera::update(Step * _step){
 	
-	lastOrientation = parents.at(0)->getOrientationQuat();
+	lastOrientation = childTransform->getOrientationQuat();
 	glm::quat newOrientation = glm::quat(1.f, 0.f, 0.f, 0.f);
 	newOrientation = glm::rotate(newOrientation, yaw, upVectorLocal);
 	newOrientation = glm::rotate(newOrientation, pitch, rightVectorLocal);
 
-	newOrientation = glm::slerp(lastOrientation, newOrientation, 0.15f * static_cast<float>(vox::deltaTimeCorrection));
-	parents.at(0)->setOrientation(newOrientation);
+	newOrientation = glm::slerp(lastOrientation, newOrientation, 0.15f * static_cast<float>(sweet::deltaTimeCorrection));
+	childTransform->setOrientation(newOrientation);
 
 	forwardVectorRotated   = newOrientation * forwardVectorLocal;
 	rightVectorRotated	   = newOrientation * rightVectorLocal;
@@ -104,7 +103,7 @@ void FollowCamera::update(Step * _step){
 
 	// calculate zoom and account for FoV (the camera FoV seems to be vertical, so if the screen w > screen h, we need to take the h / the intended aspect ratio)
 	float ar1 = screenWidth/screenHeight;
-	glm::vec2 screenDimensions = vox::getScreenDimensions();
+	glm::vec2 screenDimensions = sweet::getWindowDimensions();
 	float ar2 = static_cast<float>(screenDimensions.x)/static_cast<float>(screenDimensions.y);
 	float zoom;
 	if(ar1 > ar2){
@@ -127,6 +126,7 @@ void FollowCamera::update(Step * _step){
 }
 
 void FollowCamera::addTarget(NodeChild * _target, float _weight){
+	assert(_target != nullptr);
 	Target t;
 	t.target = _target;
 	t.weight = _weight;

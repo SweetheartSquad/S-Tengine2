@@ -3,9 +3,8 @@
 #include <node/NodeBox2DBody.h>
 #include <Box2DWorld.h>
 
-NodeBox2DBody::NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture) :
+NodeBox2DBody::NodeBox2DBody(Box2DWorld * _world, b2BodyType _bodyType) :
 	body(nullptr),
-	defaultFixture(_defaultFixture),
 	maxVelocity(b2Vec2(-1, -1)),
 	prevAngle(0),
 	world(_world)
@@ -24,25 +23,30 @@ NodeBox2DBody::~NodeBox2DBody(){
 }
 
 void NodeBox2DBody::update(Step * _step){
-	if(body != nullptr){
-		if(body->IsAwake()){
-			parents.at(0)->translate(body->GetPosition().x, body->GetPosition().y, parents.at(0)->getTranslationVector().z, false);
-			
-			b2Vec2 lv = body->GetLinearVelocity();
-			if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
-				lv.x = maxVelocity.x * (lv.x < 0 ? -1 : 1);
-			}
-			if(maxVelocity.y != -1 && lv.y > maxVelocity.y){
-				lv.y = maxVelocity.y * (lv.y < 0 ? -1 : 1);
-			}
-			body->SetLinearVelocity(lv);
-			
-			if(abs(body->GetAngle() - prevAngle) > 0.00005f){
-				parents.at(0)->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
-				prevAngle = body->GetAngle();
-			}
-		}
+	if(body != nullptr && (body->IsAwake() || directAdjustment)){
+		realign();
 	}
+	NodePhysicsBody::update(_step);
+}
+
+void NodeBox2DBody::realign(){
+	const b2Vec2 pos = body->GetPosition();
+	childTransform->translate(pos.x, pos.y, childTransform->getTranslationVector().z, false);
+			
+	b2Vec2 lv = body->GetLinearVelocity();
+	if(maxVelocity.x != -1 && abs(lv.x) > abs(maxVelocity.x)){
+		lv.x = maxVelocity.x * (lv.x < 0 ? -1 : 1);
+	}
+	if(maxVelocity.y != -1 && abs(lv.y) > maxVelocity.y){
+		lv.y = maxVelocity.y * (lv.y < 0 ? -1 : 1);
+	}
+	body->SetLinearVelocity(lv);
+			
+	if(abs(body->GetAngle() - prevAngle) > FLT_EPSILON){
+		childTransform->rotate(glm::degrees(body->GetAngle() - prevAngle), 0, 0, 1, kOBJECT);
+		prevAngle = body->GetAngle();
+	}
+	NodePhysicsBody::realign();
 }
 
 b2Fixture * NodeBox2DBody::getNewFixture(b2PolygonShape _shape, float _density){
@@ -53,75 +57,30 @@ b2Fixture * NodeBox2DBody::getNewFixture(b2ChainShape _shape, float _density){
 	return body->CreateFixture(&_shape, _density);
 }
 
-void NodeBox2DBody::setTranslationPhysical(glm::vec3 _translation, bool _relative){
-	parents.at(0)->translate(_translation, _relative);
-	glm::vec3 tv = parents.at(0)->getTranslationVector();
+void NodeBox2DBody::translatePhysical(glm::vec3 _translation, bool _relative){
+	glm::vec3 tv = _relative ? childTransform->getTranslationVector() + _translation : _translation;
 	if(body != nullptr){
 		body->SetTransform(b2Vec2(tv.x, tv.y), body->GetAngle());
 	}
+	NodePhysicsBody::translatePhysical(_translation, _relative);
 }
 
-void NodeBox2DBody::setTranslationPhysical(float _x, float _y, float _z, bool _relative){
-	setTranslationPhysical(glm::vec3(_x, _y, _z), _relative);
-}
-
-void NodeBox2DBody::applyForce(float _forceX, float _forceY, float _pointX, float _pointY){
+void NodeBox2DBody::applyLinearImpulse(glm::vec3 _impulse, glm::vec3 _point){
 	if(body != nullptr){
-		body->ApplyForce(b2Vec2(_forceX, _forceY), b2Vec2(_pointX, _pointY), true);
+		body->ApplyLinearImpulse(b2Vec2(_impulse.x, _impulse.y), b2Vec2(_point.x, _point.y), true);
 	}
 }
 
-void NodeBox2DBody::applyForceLeft(float _force){
+void NodeBox2DBody::applyForce(glm::vec3 _force, glm::vec3 _point){
 	if(body != nullptr){
-		body->ApplyForce(b2Vec2(-_force, 0), body->GetWorldCenter(), true);
+		body->ApplyForce(b2Vec2(_force.x, _force.y), b2Vec2(_point.x, _point.y), true);
 	}
 }
 
-void NodeBox2DBody::applyForceRight(float _force){
+glm::vec3 NodeBox2DBody::getPhysicsBodyCenter(){
 	if(body != nullptr){
-		body->ApplyForce(b2Vec2(_force, 0), body->GetWorldCenter(), true);
-	}
-}
-
-void NodeBox2DBody::applyForceUp(float _force){
-	if(body != nullptr){
-		body->ApplyForce(b2Vec2(0, _force), body->GetWorldCenter(), true);
-	}
-}
-
-void NodeBox2DBody::applyForceDown(float _force){
-	if(body != nullptr){
-		body->ApplyForce(b2Vec2(0, -_force), body->GetWorldCenter(), true);
-	}
-}
-
-void NodeBox2DBody::applyLinearImpulse(float _forceX, float _forceY, float _pointX, float _pointY){
-	if(body != nullptr){
-		body->ApplyLinearImpulse(b2Vec2(_forceX, _forceY), b2Vec2(_pointX, _pointY), true);
-	}
-}
-
-void NodeBox2DBody::applyLinearImpulseLeft(float _force){
-	if(body != nullptr){
-		body->ApplyLinearImpulse(b2Vec2(-_force, 0), body->GetWorldCenter(), true);
-	}
-}
-
-void NodeBox2DBody::applyLinearImpulseRight(float _force){
-	if(body != nullptr){
-		body->ApplyLinearImpulse(b2Vec2(_force, 0), body->GetWorldCenter(), true);
-	}
-}
-
-void NodeBox2DBody::applyLinearImpulseUp(float _force){
-	if(body != nullptr){
-		body->ApplyLinearImpulse(b2Vec2(0, _force), body->GetWorldCenter(), true);
-	}
-}
-
-void NodeBox2DBody::applyLinearImpulseDown(float _force){
-	if(body != nullptr){
-		body->ApplyLinearImpulse(b2Vec2(0, -_force), body->GetWorldCenter(), true);
+		b2Vec2 v = body->GetWorldCenter();
+		return glm::vec3(v.x, v.y, 0);
 	}
 }
 

@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include <MeshInterface.h>
 #include "shader/ComponentShaderBase.h"
+#include "shader/ShaderComponentMVP.h"
 #include "shader/ShaderComponentTexture.h"
 
 #include "Box2DWorld.h"
@@ -14,7 +15,7 @@
 #include <GL/glew.h>
 
 Box2DDebugDrawer::Box2DDebugDrawer(Box2DWorld * _world) :
-	shader(new ComponentShaderBase(false)),
+	NodeShadable(new ComponentShaderBase(false)),
 	world(_world),
 	spriteSegment(new Sprite()),
 	spriteTransform(new Sprite()),
@@ -24,8 +25,10 @@ Box2DDebugDrawer::Box2DDebugDrawer(Box2DWorld * _world) :
 	matrixStack(nullptr),
 	renderOptions(nullptr)
 {
-	shader->addComponent(new ShaderComponentTexture(shader));
-	shader->compileShader();
+	ComponentShaderBase * sb = dynamic_cast<ComponentShaderBase *>(shader);
+	sb->addComponent(new ShaderComponentMVP(sb));
+	sb->addComponent(new ShaderComponentTexture(sb));
+	sb->compileShader();
 	
 	spriteSegment->mesh->vertices.clear();
 	spriteSegment->mesh->indices.clear();
@@ -75,7 +78,6 @@ Box2DDebugDrawer::Box2DDebugDrawer(Box2DWorld * _world) :
 }
 
 Box2DDebugDrawer::~Box2DDebugDrawer(){
-	shader->decrementAndDelete();
 }
 
 void Box2DDebugDrawer::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color){
@@ -132,7 +134,13 @@ void Box2DDebugDrawer::DrawTransform(const b2Transform& xf){
 	spriteTransform->parents.at(0)->render(matrixStack, renderOptions);
 }
 
-void Box2DDebugDrawer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void Box2DDebugDrawer::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	
+	// don't bother doing any work if we aren't rendering anyway
+	if(!isVisible()){
+		return;
+	}
+
 	// save previous line width state and change
 	GLfloat oldWidth;
 	glGetFloatv(GL_LINE_WIDTH, &oldWidth);

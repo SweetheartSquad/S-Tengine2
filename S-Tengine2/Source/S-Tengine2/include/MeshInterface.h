@@ -1,13 +1,11 @@
 #pragma once
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
 #include <glm\glm.hpp>
 
 #include <vector>
+#include <ostream>
 
-#include "Vox.h"
+#include "Sweet.h"
 #include "shader/Shader.h"
 #include "Vertex.h"
 #include "Light.h"
@@ -17,7 +15,9 @@
 #include <node\NodeResource.h>
 #include "shader/ShaderVariables.h"
 #include <Box.h>
-#include <ostream>
+
+#include <GL/glew.h>
+//#include <GLFW/glfw3.h>
 
 class Texture;
 class Material;
@@ -27,7 +27,6 @@ class MeshInterface : public virtual NodeRenderable, public virtual NodeLoadable
 public:
 	/** Whether the vbo and ibo contain up-to-date vertex and index data */
 	bool dirty;
-	bool texturesDirty;
 	/** Textures */
 	std::vector<Texture *> textures;
 	/** Vertex data for the vbo */
@@ -111,38 +110,72 @@ public:
 	/** If dirty, copies data from vertices and indices to VBO and IBO and flags as clean */
 	virtual void clean();
 	/** Renders the vao using the given shader, model-view-projection and lights */
-	virtual void render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
+	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
 	/** A helper method to configure all the starndard vertex attributes - Position, Colours, Normals */
 	void configureDefaultVertexAttributes(Shader *_shader);
 	/** Sets the normal of the given vert to _x, _y, _z */
 	void setNormal(unsigned long int _vertId, float _x, float _y, float _z);
+
+	// returns the normal vector to the plane formed by _v1, _v2, and _v3
+	glm::vec3 calcNormal(unsigned long int _v1, unsigned long int _v2, unsigned long int _v3) const;
+	// calculates the normal vector to the plane formed by _v1, _v2, and _v3, and sets each vertex to use it as their normal
+	// also returns the normal vector
+	glm::vec3 setAutoNormal(unsigned long int _v1, unsigned long int _v2, unsigned long int _v3);
+
 	/** Sets the UV of the given vert to _x, _y */
 	void setUV(unsigned long int _vertId, float _x, float _y);
 	/** Adds _vertex to the list of vertices*/
 	void pushVert(Vertex _vertex);
 	void pushTexture2D(Texture * _texture);
-	void popTexture2D();
+
+	// sets both scaleModeMin and scaleModeMag to _both
+	// Note that only GL_NEAREST and GL_LINEAR are valid options
+	void setScaleMode(GLenum _both);
+	
+	// removes the last texture pushed onto the mesh
+	// decrements and attempts to delete the texture
+	// if the texture is deleted, returns nullptr
+	// otherwise, returns the popped texture
+	Texture * popTexture2D();
+
+	// calls popTexture2D until there aren't any textures left
+	void clearTextures();
+	// calls clearTextures() and then pushTexture2D(_newTexture)
+	void replaceTextures(Texture * _newTexture);
+
 	void removeTextureAt(int _idx);
 	void pushMaterial(Material * _material);
-	unsigned long int textureCount();
-	Texture * getTexture(int _idx);
-
+	unsigned long int textureCount() const;
+	Texture * getTexture(int _idx) const;
+	
 	// returns a box which covers the verts of the mesh
-	vox::Box calcBoundingBox();
+	sweet::Box calcBoundingBox() const;
+
+	// multiplies the mesh's vertices by the transformation matrix of the provided _transform
+	void applyTransformation(Transform * _transform);
+
+	// appends all of _mesh's vertices and indices (indices are offset by current vertex count) to this mesh
+	// NOTE: does not delete _mesh
+	// ALSO NOTE: transferring verts from a TriMesh to a QuadMesh or vice versa probably won't do what you want
+	void insertVertices(const MeshInterface & _mesh);
 
 	friend std::ostream& operator<<(std::ostream& os, const MeshInterface& obj);
 };
 
+class QuadMesh;
+
 /** MeshInterface preset for triangle meshes */
 class TriMesh : public MeshInterface{
 public:
+	// creates a triangulated version of _mesh
+	explicit TriMesh(const QuadMesh * const _mesh, bool _autoRelease);
 	void pushTri(GLuint _v0, GLuint _v1, GLuint _v2);
-	explicit TriMesh(GLenum _polygonalDrawMode = GL_TRIANGLES, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode), NodeResource(true){};
+	explicit TriMesh(bool _autorelease, GLenum _polygonalDrawMode = GL_TRIANGLES, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode), NodeResource(_autorelease){};
 };
 
 /** MeshInterface preset for quad meshes */
 class QuadMesh : public MeshInterface{
 public:
 	void pushQuad(GLuint _v0, GLuint _v1, GLuint _v2, GLuint _v3);
-	explicit QuadMesh(GLenum _polygonalDrawMode = GL_QUADS, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode), NodeResource(true){};
+	explicit QuadMesh(bool _autorelease, GLenum _polygonalDrawMode = GL_QUADS, GLenum _drawMode = GL_STATIC_DRAW) : MeshInterface(_polygonalDrawMode, _drawMode), NodeResource(_autorelease){};
 };

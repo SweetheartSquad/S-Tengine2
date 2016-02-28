@@ -1,12 +1,12 @@
 #pragma once
 
-#include <shader\ShaderComponentTint.h>
-#include <shader\ShaderVariables.h>
+#include <shader/ShaderComponentTint.h>
+#include <shader/ShaderVariables.h>
+#include <shader/ComponentShaderBase.h>
 #include <GLUtils.h>
 #include <RenderOptions.h>
-#include <shader\Shader.h>
 
-ShaderComponentTint::ShaderComponentTint(Shader * _shader, float _r, float _g, float _b):
+ShaderComponentTint::ShaderComponentTint(ComponentShaderBase * _shader, float _r, float _g, float _b):
 	ShaderComponent(_shader),
 	red(_r),
 	green(_g),
@@ -57,7 +57,7 @@ void ShaderComponentTint::load(){
 	ShaderComponent::load();
 }
 
-void ShaderComponentTint::configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
+void ShaderComponentTint::configureUniforms(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
 	glUniform1f(redLoc, red);
 	glUniform1f(greenLoc, green);
 	glUniform1f(blueLoc, blue);

@@ -6,29 +6,31 @@
 #include <TextureSampler.h>
 #include <MeshInterface.h>
 
-Box2DSprite::Box2DSprite(Box2DWorld * _world, TextureSampler * _textureSampler, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, float _componentScale) :
+Box2DSprite::Box2DSprite(Box2DWorld * _world, TextureSampler * _textureSampler, b2BodyType _bodyType, Shader* _shader, float _componentScale) :
 	Sprite(_shader),
-	NodeBox2DBody(_world, _bodyType, _defaultFixture),
+	NodeBox2DBody(_world, _bodyType),
 	width(_textureSampler->width),
 	height(_textureSampler->height),
 	scale(_componentScale),
 	u(_textureSampler->u),
-	v(_textureSampler->v)
+	v(_textureSampler->v),
+	useTextureSamplerUVs(true)
 {
-	if(_textureSampler->texture != nullptr){
+	if(_textureSampler != nullptr){
 		mesh->pushTexture2D(_textureSampler->texture);
 	}
 
 	setUserData(this);
 }
-Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaultFixture, Shader* _shader, Texture * _texture, float _width, float _height, float _u, float _v, float _componentScale):
+Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, Shader* _shader, Texture * _texture, float _width, float _height, float _u, float _v, float _componentScale):
 	Sprite(_shader),
-	NodeBox2DBody(_world, _bodyType, _defaultFixture),
+	NodeBox2DBody(_world, _bodyType),
 	width(_width),
 	height(_height),
 	scale(_componentScale),
 	u(_u),
-	v(_v)
+	v(_v),
+	useTextureSamplerUVs(false)
 {
 	if(_texture != nullptr){
 		mesh->pushTexture2D(_texture);
@@ -40,25 +42,21 @@ Box2DSprite::Box2DSprite(Box2DWorld * _world, b2BodyType _bodyType, bool _defaul
 float Box2DSprite::getCorrectedHeight(){
 	glm::vec3 scaleVec(1);
 	if(parents.size() > 0){
-		scaleVec = parents.at(0)->getScaleVector();
+		scaleVec = childTransform->getScaleVector();
 	}
-	return height*std::abs(scaleVec.y)*scale;
+	return height * std::abs(scaleVec.y)*scale;
 }
+
 float Box2DSprite::getCorrectedWidth(){
 	glm::vec3 scaleVec(1);
 	if(parents.size() > 0){
-		scaleVec = parents.at(0)->getScaleVector();
+		scaleVec = childTransform->getScaleVector();
 	}
-	return width*std::abs(scaleVec.x)*scale;
+	return width * std::abs(scaleVec.x)*scale;
 }
 
 b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * _userData, bool _isSensor){
-	b2PolygonShape tShape;
-	glm::vec3 scaleVec(1);
-	if(parents.size() > 0){
-		scaleVec = parents.at(0)->getScaleVector();
-	}
-	tShape.SetAsBox(width*std::abs(scaleVec.x)*scale, height*std::abs(scaleVec.y)*scale, _offset, 0.0f);
+	b2PolygonShape tShape = createFixtureShape();
 
 	b2FixtureDef fd;
 	fd.shape = &tShape;
@@ -71,44 +69,29 @@ b2Fixture * Box2DSprite::createFixture(b2Filter _filter, b2Vec2 _offset, void * 
 
 	b2Fixture * f = body->CreateFixture(&fd);
 
-	// physical fixture
-	//b2Fixture * f = body->CreateFixture(&tShape, 1); // physical fixture
-	//..f->SetFilterData(_filter);
-	//f->SetUserData(_userData);
-
-	b2Vec2 v1 = tShape.GetVertex(0);
-	b2Vec2 v2 = tShape.GetVertex(1);
-	b2Vec2 v3 = tShape.GetVertex(2);
-	b2Vec2 v4 = tShape.GetVertex(3);
-
-	mesh->vertices.at(0).x = v1.x;
-	mesh->vertices.at(0).y = v1.y;
-	mesh->vertices.at(1).x = v2.x;
-	mesh->vertices.at(1).y = v2.y;
-	mesh->vertices.at(2).x = v3.x;
-	mesh->vertices.at(2).y = v3.y;
-	mesh->vertices.at(3).x = v4.x;
-	mesh->vertices.at(3).y = v4.y;
+	// reposition mesh vertices to match collider vertices
+	// NOTE: the vertex order is reversed between our mesh and Box2D's shapes
+	const unsigned long int numVerts = tShape.GetVertexCount();
+	for(unsigned long int i = 0; i < numVerts; ++i){
+		mesh->vertices.at(i).x = tShape.GetVertex(numVerts-(i+1)).x;
+		mesh->vertices.at(i).y = tShape.GetVertex(numVerts-(i+1)).y;
+	}
 	
-	float mag = std::max(mesh->getTexture(0)->width, mesh->getTexture(0)->height);
-	mesh->vertices.at(0).u = u/mag;
-	mesh->vertices.at(0).v = (v + height)/mag;
-	mesh->vertices.at(1).u = (u + width)/mag;
-	mesh->vertices.at(1).v = (v + height)/mag;
-	mesh->vertices.at(2).u = (u + width)/mag;
-	mesh->vertices.at(2).v = v/mag;
-	mesh->vertices.at(3).u = u/mag;
-	mesh->vertices.at(3).v = v/mag;
+	if(useTextureSamplerUVs){
+		configureUVs();
+	}
 
 	return f;
 }
 
+void Box2DSprite::configureUVs(){
+	float mag = std::max(mesh->getTexture(0)->width, mesh->getTexture(0)->height);
+	setUvs(sweet::Rectangle(u/mag, v/mag, width/mag, height/mag));
+}
 
-// shouldn't this dereference the fixture and just return its shape?
-b2PolygonShape Box2DSprite::getFixtureShape(){
+b2PolygonShape Box2DSprite::createFixtureShape(){
 	b2PolygonShape tShape;
-	glm::vec3 scaleVec = parents.at(0)->getScaleVector();
-	tShape.SetAsBox(width*std::abs(scaleVec.x)*scale*2.f, height*std::abs(scaleVec.y)*scale*2.f);
+	tShape.SetAsBox(getCorrectedWidth()*0.5f, getCorrectedHeight()*0.5f);
 	return tShape;
 }
 

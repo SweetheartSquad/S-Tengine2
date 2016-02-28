@@ -12,7 +12,7 @@ GeometryComponent::GeometryComponent(Shader * _shader) :
 GeometryComponent::~GeometryComponent(){
 }
 
-void GeometryComponent::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void GeometryComponent::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	if(dirty){
 		configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 		dirty = false;

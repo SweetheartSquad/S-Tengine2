@@ -4,13 +4,10 @@
 #include "Box2DWorld.h"
 #include <MeshInterface.h>
 
-Box2DMeshEntity::Box2DMeshEntity(Box2DWorld * _world, MeshInterface * _mesh, b2BodyType _bodyType, bool _defaultFixture, Shader * _shader):
-	NodeBox2DBody(_world, _bodyType, _defaultFixture),
+Box2DMeshEntity::Box2DMeshEntity(Box2DWorld * _world, MeshInterface * _mesh, b2BodyType _bodyType, Shader * _shader):
+	NodeBox2DBody(_world, _bodyType),
 	MeshEntity(_mesh, _shader)
 {
-}
-
-Box2DMeshEntity::~Box2DMeshEntity(){
 }
 
 void Box2DMeshEntity::update(Step* _step){
@@ -19,7 +16,7 @@ void Box2DMeshEntity::update(Step* _step){
 }
 
 b2Fixture * Box2DMeshEntity::createFixture(bool _circle){
-	vox::Box bb = calcOverallBoundingBox();
+	sweet::Box bb = mesh->calcBoundingBox();
 	
 	float scaleX = 1, scaleY = 1;
 	if(parents.size() > 0){

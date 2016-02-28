@@ -2,23 +2,24 @@
 
 #include <HorizontalLinearLayout.h>
 #include <MeshEntity.h>
+#include <WrapMode.h>
 
 class TextArea;
 class TextLabel;
 class Font;
 class Glyph;
+class GlyphMesh;
 
-class UIGlyph : public virtual NodeUI, public virtual MeshEntity {
+// NOTE - UIGLyphs do not have mouse interaction enabled by default
+class UIGlyph : public virtual NodeUI, public virtual NodeShadable{
 public:
 	wchar_t character;
-	Glyph * glyph;
+	GlyphMesh * glyphMesh;
 
-	UIGlyph(BulletWorld * _world, Scene * _scene, Glyph * _mesh, Shader * _shader, wchar_t _character);
-	void setGlyphMesh(Glyph * _mesh);
+	UIGlyph(BulletWorld * _world, Glyph * _mesh, Shader * _shader, wchar_t _character);
+	void setGlyph(Glyph * _mesh);
 	
-	virtual void load() override;
-	virtual void unload() override;
-	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
+	virtual void render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 };
 
 class TextLabel : public HorizontalLinearLayout{
@@ -28,15 +29,18 @@ public:
 
 	float lineWidth;
 	std::vector<UIGlyph *> usedGlyphs;
+	std::vector<UIGlyph *> unusedGlyphs;
 
-	TextLabel(BulletWorld* _world, Scene* _scene, Font * _font, Shader * _textShader, float _width = -1);
+	TextLabel(BulletWorld* _world, Font * _font, Shader * _textShader);
 	
-	virtual void render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
+	virtual void render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	virtual void update(Step * _step) override;
 	virtual void unload() override;
 	virtual void load() override;
-
+	
 	void setText(std::wstring _text);
+	// converts _text to an std::wstring and calls setText(std::wstring)
+	void setText(std::string _text);
 	void updateText();
 	
 	virtual float getContentsHeight() override;
@@ -48,7 +52,14 @@ public:
 	
 	std::wstring textDisplayed;
 	std::wstring textOverflow;
+	
+	WrapMode wrapMode;
+
 private:
 	std::wstring textAll;
 	bool updateRequired;
+
+	UIGlyph * getGlyph(wchar_t _char, Glyph * _glyph);
+
+	unsigned long int wordWrap();
 };

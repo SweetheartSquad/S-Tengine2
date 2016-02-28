@@ -11,7 +11,7 @@ public:
 	void setAlpha(float _alpha);
 
 	// all values are given as 0 - 1, a *= alpha
-	ShaderComponentAlpha(Shader * _shader, float _alpha = 1.f);
+	ShaderComponentAlpha(ComponentShaderBase * _shader, float _alpha = 1.f);
 	~ShaderComponentAlpha();
 	
 	std::string getVertexVariablesString() override;
@@ -20,5 +20,5 @@ public:
 	std::string getFragmentBodyString() override;
 	std::string getOutColorMod() override;
 	void load() override;
-	void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
+	void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 };

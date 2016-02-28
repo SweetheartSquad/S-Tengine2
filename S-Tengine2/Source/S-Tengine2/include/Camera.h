@@ -5,8 +5,7 @@
 
 /****************************
 *
-* A basic camera class. This camera is rotated via the mouse position 
-* The camera's rotation is restricted on the x axis so that It can not flip upside down
+* A basic camera class.
 *
 *****************************/
 class Camera abstract : public Entity {
@@ -30,12 +29,14 @@ public:
 	/** Direction the camera's right side is pointing at (local * orientation) */
 	glm::vec3 rightVectorRotated;
 
-	/** The camera's field of view */
+	/** The camera's vertical field of view */
 	float fieldOfView;
 	/** The camera's pitch */
 	float pitch;
 	/** The camera's yaw */
 	float yaw;
+	// The camera's roll
+	float roll;
 
 	float nearClip;
 	float farClip;
@@ -43,16 +44,34 @@ public:
 	/**
 	* @return The view matrix of the camera. Pure virtual; to be implemented only in derived classes
 	*/
-	virtual glm::mat4 getViewMatrix() = 0;
+	virtual glm::mat4 getViewMatrix() const;
 
 	/**
 	* @return The projection matrix of the camera. Pure virtual; to be implemented only in derived classes
 	*/
-	virtual glm::mat4 getProjectionMatrix() = 0;
+	virtual glm::mat4 getProjectionMatrix(glm::vec2 _screenSize) const = 0;
 
 	// projects the world-space _coords into _screen space (x and y are the pixel coordinates, sign of z indicates whether the camera is facing towards or away from _coords)
-	virtual glm::vec3 worldToScreen(glm::vec3 _coords, glm::uvec2 _screen);
+	virtual glm::vec3 worldToScreen(glm::vec3 _coords, glm::uvec2 _screen) const;
+
+	// coordinates are 0-1
+	// x,y: bottom-left to top-right
+	// z: near-clip to far-clip
+	// if coordinates are below zero or above 1, they will be clamped
+	virtual glm::vec3 screenToWorld(glm::vec3 _screenCoords, glm::vec2 _screenSize) const;
 
 	// returns an orientation quaternion based on pitch, yaw and roll
-	glm::quat calcOrientation();
+	glm::quat calcOrientation() const;
+
+	// sets the childTransform's orientation to the given quaternion
+	virtual void setOrientation(glm::quat _orientation);
+
+	// I think this is typically called the center of interest?
+	glm::vec3 lookAtSpot;
+	glm::vec3 lookFromSpot;
+	glm::vec3 lookAtOffset;
+
+
+	// rotates the local forward, right, and up vectors by _orientation, storing the results in the rotated vectors
+	virtual void rotateVectors(glm::quat _orientation);
 };

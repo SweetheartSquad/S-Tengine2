@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ResourceManager.h"
+#include "scenario/Scenario.h"
 
 std::vector<NodeResource *> ResourceManager::resources;
 std::vector<ResourceManager *> ResourceManager::subManagers;
@@ -13,9 +14,16 @@ void ResourceManager::load(){
 	for(auto sub : subManagers){
 		sub->load();
 	}
+
+	for(auto a : Scenario::defaultAssets){
+		a->load();
+	}
 }
 
 void ResourceManager::unload(){
+	for(auto a : Scenario::defaultAssets){
+		a->load();
+	}
 	//NodeLoadable::unload();
 	for(auto res : resources){
 		res->unload();

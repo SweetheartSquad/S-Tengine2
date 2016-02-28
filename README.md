@@ -7,15 +7,23 @@
 
 
 # Set-up Instructions #
-1. Download the necessary libraries (links provided below)
-2. Open solution file
-3. Rename voxSettings.props.template to voxSettings.props
-4. Change the various directory items in voxSettings.props to point to your local installation of each library
+1. Dependencies:
+ 1. Download the [dev folder](https://drive.google.com/file/d/0B2VyAXziLJJtNXJ2Y0REU3RrSm8/view?usp=sharing) with all the necessary libraries
+ 2. Open dev/Box2D-2.3.1/Box2D/Build/vs2013/Box2D.sln and build
+ 3. Open dev/Bullet-2.83-alpha/build3/vs2010/0_Bullet3Solution.sln and build
+2. Engine:
+ 1. Download or clone [S-Tengine2](https://github.com/SweetheartSquad/S-Tengine2)
+ 2. Rename S-Tengine2/Source/directories.props.template to directories.props
+ 3. Open S-Tengine2/Source/S-Tengine2.sln
+ 4. Edit the directories.props file so that each entry points to your installation location for the [dev folder](https://drive.google.com/file/d/0B2VyAXziLJJtNXJ2Y0REU3RrSm8/view?usp=sharing)
+ 5. Build
+3. Template Project:
+ 1. Download or clone the [template project](https://github.com/SweetheartSquad/TemplateProject)
+ 2. Rename Game/Source/gameSettings.props.template to gameSettings.props
+ 3. Open Game/Source/Game.sln
+ 4. Edit the gameSettings.props file so that each entry points to your installation location for the [dev folder](https://drive.google.com/file/d/0B2VyAXziLJJtNXJ2Y0REU3RrSm8/view?usp=sharing), and the engine directory points to your installation location for S-Tengine2
 
 
-## Library Pack (Express Installation)  
-
-https://drive.google.com/file/d/0B2VyAXziLJJtNXJ2Y0REU3RrSm8/view?usp=sharing
 
 ## Individual Libraries (Manual Installation) ##
 
@@ -39,25 +47,10 @@ https://drive.google.com/file/d/0B2VyAXziLJJtNXJ2Y0REU3RrSm8/view?usp=sharing
 
 * Unzip the folder and place it in an accessible location. Set the GLM_DIR property to this location
 * e.g. <GLM_DIR>C:\Dev\glm</GLM_DIR>
- 
-### SOIL ###
-Download SOIL
-http://www.lonesock.net/files/soil.zip
-
-* Unzip the folder and place it in an accessible location. Set the SOIL_DIR property to this location
-* e.g. <SOIL_DIR> C:\Dev\Simple OpenGL Image Library</SOIL_DIR>
-
-* Open the projects folder under in the library’s root, then open the VC9 folder.
-
-* Open the SOIL.sln file in Visual Studio. You will have to upgrade the project.
-
-* Once it is open, click Build to build the lib file.
 
 ### Some more that we haven't added yet ###
-Box2D
-
-**The project should now build**
-
-
-### Useful Resources ###
-http://www.slideshare.net/Mark_Kilgard/using-vertex-bufferobjectswell
+- Box2D
+- Bullet
+- Freetype
+- OpenAL Soft + libsndfile
+- RestCpp

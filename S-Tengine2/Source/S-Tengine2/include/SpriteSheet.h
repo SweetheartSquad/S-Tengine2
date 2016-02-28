@@ -1,20 +1,22 @@
 #pragma once
 
-#include <vector>
-
-#include "Rectangle.h"
+#include <map>
+#include <node/NodeLoadable.h>
 
 class Texture;
+class SpriteSheetAnimation;
 
-class SpriteSheet{
+class SpriteSheet : public NodeLoadable{
 public:
-
-	std::vector<vox::Rectangle> frames;
+	std::map<std::string, SpriteSheetAnimation *> animations;
 	Texture * texture;
 
 	explicit SpriteSheet(Texture * _texture);
 	~SpriteSheet();
-
-	void pushFrame(int _column, int _row, float _width, float _height);
-
+	
+	void addAnimation(std::string _name, SpriteSheetAnimation * _animation);
+	void addAnimation(std::string _name, unsigned long int _start, unsigned long int _end, float _width, float _height, float _secondsPerFrame);
+	
+	virtual void load() override;
+	virtual void unload() override;
 };

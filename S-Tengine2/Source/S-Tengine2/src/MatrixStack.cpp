@@ -1,8 +1,9 @@
 #pragma once
 
 #include "MatrixStack.h"
+#include <Camera.h>
 
-vox::MatrixStack::MatrixStack() :
+sweet::MatrixStack::MatrixStack() :
 	currentModelMatrix(glm::mat4(1)),
 	projectionMatrix(glm::mat4(1)),
 	viewMatrix(glm::mat4(1)),
@@ -13,10 +14,10 @@ vox::MatrixStack::MatrixStack() :
 {
 }
 
-vox::MatrixStack::~MatrixStack(){
+sweet::MatrixStack::~MatrixStack(){
 }
 
-void vox::MatrixStack::popMatrix(){
+void sweet::MatrixStack::popMatrix(){
 	if(matrixStack.size() > 0){
 		currentModelMatrix = matrixStack.at(matrixStack.size() - 1);
 		matrixStack.pop_back();
@@ -27,60 +28,60 @@ void vox::MatrixStack::popMatrix(){
 	mvpDirty = true;
 }
 
-void vox::MatrixStack::pushMatrix(){
+void sweet::MatrixStack::pushMatrix(){
 	matrixStack.push_back(currentModelMatrix);
 }
 
-const glm::mat4 * vox::MatrixStack::getModelMatrix(){
+const glm::mat4 * sweet::MatrixStack::getModelMatrix(){
 	return &currentModelMatrix;
 }
-const glm::mat4 * vox::MatrixStack::getViewMatrix(){
+const glm::mat4 * sweet::MatrixStack::getViewMatrix(){
 	return &viewMatrix;
 }
-const glm::mat4 * vox::MatrixStack::getProjectionMatrix(){
+const glm::mat4 * sweet::MatrixStack::getProjectionMatrix(){
 	return &projectionMatrix;
 }
 
-void vox::MatrixStack::setProjectionMatrix(const glm::mat4 * _projectionMatrix){
+void sweet::MatrixStack::setProjectionMatrix(const glm::mat4 * _projectionMatrix){
 	projectionMatrix = *_projectionMatrix;
 	vpDirty = true;
 	mvpDirty = true;
 }
-void vox::MatrixStack::setViewMatrix(const glm::mat4 * _viewMatrix){
+void sweet::MatrixStack::setViewMatrix(const glm::mat4 * _viewMatrix){
 	viewMatrix = *_viewMatrix;
 	vpDirty = true;
 	mvpDirty = true;
 }
 
-void vox::MatrixStack::scale(glm::mat4 _scaleMatrix){
+void sweet::MatrixStack::scale(glm::mat4 _scaleMatrix){
 	currentModelMatrix = currentModelMatrix * _scaleMatrix;
 	mvpDirty = true;
 }
 
-void vox::MatrixStack::rotate(glm::mat4 _rotationMatrix){
+void sweet::MatrixStack::rotate(glm::mat4 _rotationMatrix){
 	currentModelMatrix = currentModelMatrix * _rotationMatrix;
 	mvpDirty = true;
 }
 
-void vox::MatrixStack::translate(glm::mat4 _translationMatrix){
+void sweet::MatrixStack::translate(glm::mat4 _translationMatrix){
 	currentModelMatrix = currentModelMatrix * _translationMatrix;
 	mvpDirty = true;
 }
 
-void vox::MatrixStack::applyMatrix(glm::mat4 _modelMatrix){
+void sweet::MatrixStack::applyMatrix(glm::mat4 _modelMatrix){
 	currentModelMatrix = currentModelMatrix * _modelMatrix;
 	mvpDirty = true;
 }
 
-void vox::MatrixStack::resetCurrentMatrix(){
+void sweet::MatrixStack::resetCurrentMatrix(){
 	currentModelMatrix = glm::mat4(1);
 	mvpDirty = true;
 }
-void vox::MatrixStack::clearMatrixStack(){
+void sweet::MatrixStack::clearMatrixStack(){
 	matrixStack.clear();
 }
 
-const glm::mat4 * vox::MatrixStack::getVP(){
+const glm::mat4 * sweet::MatrixStack::getVP(){
 	if(vpDirty){
 		vp = projectionMatrix * viewMatrix;
 		vpDirty = false;
@@ -88,10 +89,17 @@ const glm::mat4 * vox::MatrixStack::getVP(){
 	return &vp;
 }
 
-const glm::mat4 * vox::MatrixStack::getMVP(){
+const glm::mat4 * sweet::MatrixStack::getMVP(){
 	if(mvpDirty){
 		mvp = *getVP() * currentModelMatrix;
 		mvpDirty = false;
 	}
 	return &mvp;
+}
+
+void sweet::MatrixStack::setCamera(const Camera * _camera){
+	const glm::mat4 * p = &_camera->getProjectionMatrix(sweet::getWindowDimensions());
+	const glm::mat4 * v = &_camera->getViewMatrix();
+	setProjectionMatrix(p);
+	setViewMatrix(v);
 }

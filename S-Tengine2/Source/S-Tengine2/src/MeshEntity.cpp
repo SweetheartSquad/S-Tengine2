@@ -11,17 +11,22 @@
 
 #include <algorithm>
 
-MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader) :
-	Entity(),
-	NodeRenderable(),
+MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader, bool _configureDefaultVertexAttributes) :
+	NodeShadable(_shader),
 	mesh(_mesh),
-	shader(_shader)
+	meshTransform(childTransform->addChild(mesh))
 {
-	++mesh->referenceCount;
-	childTransform->addChild(mesh, false);
-	if(shader != nullptr){
+	if(shader != nullptr && _configureDefaultVertexAttributes) {
+		if(!mesh->loaded || mesh->dirty) {
+			mesh->load();
+		}
+		if(!shader->loaded || shader->isDirty()) {
+			shader->load();
+		}
+		mesh->configureDefaultVertexAttributes(_shader);
 		++shader->referenceCount;
 	}
+	++mesh->referenceCount;
 }
 
 MeshEntity::~MeshEntity(void){
@@ -29,22 +34,24 @@ MeshEntity::~MeshEntity(void){
 		mesh->decrementAndDelete();
 		mesh = nullptr;
 	}*/
-	if(shader != nullptr){
-		shader->decrementAndDelete();		
-		shader = nullptr;
-	}
 }
 
-void MeshEntity::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	if(_renderOptions->overrideShader == nullptr){
-		_renderOptions->shader = shader;
-	}else{
-		_renderOptions->shader = _renderOptions->overrideShader;
+void MeshEntity::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// don't bother doing any work if we aren't rendering anyway
+	if(!isVisible()){
+		return;
 	}
+
+	Shader * prev = _renderOptions->shader;
+	NodeShadable::applyShader(_renderOptions);
 	Entity::render(_matrixStack, _renderOptions);
+	_renderOptions->shader = prev;
 }
 
 void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
+	if(shader != nullptr) {
+		--shader->referenceCount;
+	}
 	if(_shader != nullptr){
 		if(_shader->isCompiled){
 			if(shader != _shader){
@@ -67,7 +74,7 @@ void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
 	}
 }
 
-Shader * MeshEntity::getShader(){
+Shader * MeshEntity::getShader() const{
 	return shader;
 }
 
@@ -110,27 +117,20 @@ void MeshEntity::load(){
 	Entity::load();
 }
 
-vox::Box MeshEntity::calcOverallBoundingBox(){
-	vox::Box res = mesh->calcBoundingBox();
+/*sweet::Box MeshEntity::calcOverallBoundingBox(){
+	sweet::Box res = mesh->calcBoundingBox();
 	for(auto c : childTransform->children){
 		MeshEntity * me = dynamic_cast<MeshEntity *>(c);
 		if(me != nullptr){
-			res = vox::Box::bound(res, me->calcOverallBoundingBox());
+			res = sweet::Box::bound(res, me->calcOverallBoundingBox());
 		}
 	}
 	return res;
-}
-
-/*void MeshEntity::freezeTransformation(){
-	glm::mat4 m = parent->getModelMatrix();
-
-	for(auto & v : mesh->vertices){
-		glm::vec4 newV(v.x, v.y, v.z, 0);
-		newV = m * newV;
-		v.x = newV.x;
-		v.y = newV.y;
-		v.z = newV.z;
-	}
-	mesh->dirty = true;
-	parent->reset();
 }*/
+
+void MeshEntity::freezeTransformation(){
+	mesh->applyTransformation(meshTransform);
+	meshTransform->reset();
+	mesh->applyTransformation(childTransform);
+	childTransform->reset();
+}

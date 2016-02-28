@@ -7,8 +7,6 @@
 #include "OrthographicCamera.h"
 #include "VoxRenderOptions.h"
 #include "RenderSurface.h"
-#include "Keyboard.h"
-#include "Mouse.h"
 #include "MatrixStack.h"
 #include "shader/DepthMapShader.h"
 #include "shader/BlurShader.h"
@@ -21,145 +19,162 @@
 #include <shader/ComponentShaderBase.h>
 #include <shader/ShaderComponentDepth.h>
 
-// for screenshots
-#include <SOIL.h>
-#include <ctime>
-
-
+#include <sweet/Input.h>
+#include <MousePerspectiveCamera.h>
 
 Scene::Scene(Game * _game):
-	depthBuffer(new StandardFrameBuffer(true)),
+	/*depthBuffer(new StandardFrameBuffer(true)),
 	normalBuffer(new StandardFrameBuffer(true)),
 	shadowBuffer(new StandardFrameBuffer(true)),
 	depthShader(new ComponentShaderBase(true)),
 	shadowShader(new BlurShader(true)),
 	normalsShader(new ComponentShaderBase(true)),
-	shadowSurface(new RenderSurface(shadowShader)),
+	shadowSurface(new RenderSurface(shadowShader)),*/
 	game(_game),
 	mouse(&Mouse::getInstance()),
 	//Singletons
 	keyboard(&Keyboard::getInstance()),
-	activeCamera(new PerspectiveCamera())
+	activeCamera(nullptr)
 {
-	clearColor[0] = 0.0;
-	clearColor[1] = 0.0;
-	clearColor[2] = 0.0;
-	clearColor[3] = 1.0;
-
-	cameras.push_back(activeCamera);
-
-	normalsShader->addComponent(new ShaderComponentNormals(normalsShader));
+	/*normalsShader->addComponent(new ShaderComponentNormals(normalsShader));
 	normalsShader->compileShader();
 
 	depthShader->addComponent(new ShaderComponentDepth(depthShader));
 	depthShader->compileShader();
+
+	++depthBuffer->referenceCount;
+	++normalBuffer->referenceCount;
+	++shadowBuffer->referenceCount;
+	++depthShader->referenceCount;
+	++shadowShader->referenceCount;
+	++normalsShader->referenceCount;
+	++shadowSurface->referenceCount;*/
 }
 
-Scene::~Scene(void){
+Scene::~Scene(){
 	while(cameras.size() > 0){
-		delete cameras.back();
+		//delete cameras.back(); don't need to delete because they're children of the scene
 		cameras.pop_back();
 	}
 	activeCamera = nullptr;
 
-	/*while(lights.size() > 0){
-		delete lights.back();
+	while(lights.size() > 0){
+		//delete lights.back(); don't need to delete because they're children of the scene
 		lights.pop_back();
-	}*/
+	}
 	
-	depthBuffer->safeDelete();
-	shadowBuffer->safeDelete();
-	depthShader->safeDelete();
-	normalsShader->safeDelete();
-	normalBuffer->safeDelete();
-	delete shadowSurface;
+
+	/*depthBuffer->decrementAndDelete();
+	normalBuffer->decrementAndDelete();
+	shadowBuffer->decrementAndDelete();
+	depthShader->decrementAndDelete();
+	shadowShader->decrementAndDelete();
+	normalsShader->decrementAndDelete();
+	shadowSurface->decrementAndDelete();*/
 }
 
 void Scene::update(Step * _step){
-	
-	if(keyboard->keyJustUp(GLFW_KEY_F11)){
-		game->toggleFullScreen();
-	}
-
 	if(keyboard->keyJustDown(GLFW_KEY_F12)){
-		std::stringstream filepath;
-		
-		// create a string with the format "../screenshots/YYYY-MM-DD_TTTTTTTTTT.tga"
-		time_t t = time(0);
-		struct tm now;
-		localtime_s(&now, &t);
-		filepath
-			<< "../screenshots/"
-			<< (now.tm_year + 1900)
-			<< '-'
-			<< (now.tm_mon + 1)
-			<< '-'
-			<< now.tm_mday
-			<< '_'
-			<< t
-			<< ".tga";
-		SOIL_save_screenshot(filepath.str().c_str(), SOIL_SAVE_TYPE_TGA, 0, 0, game->viewPortWidth, game->viewPortHeight);
+		game->takeScreenshot();
 	}
-
-	activeCamera->update(_step);
 	Entity::update(_step);
 }
 
 void Scene::load(){
-	shadowSurface->load();
-	depthShader->load();
-	shadowBuffer->load();
-	depthBuffer->load();
-	normalsShader->load();
-	normalBuffer->load();
+	if(!loaded){
+		/*shadowSurface->load();
+		depthShader->load();
+		shadowBuffer->load();
+		depthBuffer->load();
+		normalsShader->load();
+		normalBuffer->load();*/
+	}
 	Entity::load();
 }
 
 void Scene::unload(){
-	depthBuffer->unload();
-	shadowBuffer->unload();
-	depthShader->unload();
-	shadowSurface->unload();
-	normalsShader->unload();
-	normalBuffer->unload();
+	if(loaded){
+		/*depthBuffer->unload();
+		shadowBuffer->unload();
+		depthShader->unload();
+		shadowSurface->unload();
+		normalsShader->unload();
+		normalBuffer->unload();*/
+	}
 	Entity::unload();
 }
 
 
-void Scene::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	glEnable(GL_SCISSOR_TEST);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_ALPHA_TEST);
-	//glAlphaFunc ( GL_GREATER, 0.1 ) ;
-	glEnable(GL_BLEND);
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBlendEquation(GL_FUNC_ADD);
+void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// don't bother doing any work if we aren't rendering anyway
+	if(!isVisible()){
+		return;
+	}
 
+	// render options
+	glEnable(GL_SCISSOR_TEST);
+	if(_renderOptions->depthEnabled){
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
+	}else{
+		glDisable(GL_DEPTH_TEST);
+	}if(_renderOptions->alphaEnabled){
+		glEnable(GL_ALPHA_TEST);
+		//glAlphaFunc ( GL_GREATER, 0.1 ) ;
+		//glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glBlendEquation(GL_FUNC_ADD);
+	}else{
+		glDisable(GL_ALPHA_TEST);
+	}
+	_renderOptions->lights = &lights;
 	//Back-face culling
 	//glEnable (GL_CULL_FACE); // cull face
 	//glCullFace (GL_BACK); // cull back face
-
 	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
 
-	const glm::mat4 * p = &activeCamera->getProjectionMatrix();
-	const glm::mat4 * v = &activeCamera->getViewMatrix();
 
+	// matrix stack
 	_matrixStack->pushMatrix();
 	_matrixStack->resetCurrentMatrix();
-	_matrixStack->setProjectionMatrix(p);
-	_matrixStack->setViewMatrix(v);
-
-	_renderOptions->lights = &lights;
-	
-	clear();
+	if(activeCamera == nullptr){
+		Log::warn("No active camera; scene cannot be rendered.");
+	}else{
+		_matrixStack->setCamera(activeCamera);
+	}
+	// render
 	Entity::render(_matrixStack, _renderOptions);
 
 	_matrixStack->popMatrix();
 
-	checkForGlError(0,__FILE__,__LINE__);
+	checkForGlError(false);
+
+	// clean the lights
+	for(Light * l : lights){
+		l->lightDirty = false;
+	}
 }
 
-void Scene::renderDepth(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
+void Scene::removeLight(Light * _light){
+	for(signed long int i = lights.size()-1; i > 0; --i){
+		if(lights.at(i) == _light){
+			lights.erase(lights.begin() + i);
+			break;
+		}
+	}
+}
+
+void Scene::removeCamera(Camera * _camera){
+	for(signed long int i = cameras.size()-1; i > 0; --i){
+		if(cameras.at(i) == _camera){
+			cameras.erase(cameras.begin() + i);
+			break;
+		}
+	}
+}
+
+/*void Scene::renderDepth(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
 	// Store a reference to the current override shader so we can restore it 
 	Shader * backupOverride = _renderOptions->overrideShader;
 	
@@ -191,9 +206,9 @@ void Scene::renderDepth(vox::MatrixStack* _matrixStack, RenderOptions* _renderOp
 
 	// Binf the main OpenGL buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+}*/
 
-void Scene::renderDepthBufferToSurface(RenderSurface* _renderSurface) {
+/*void Scene::renderDepthBufferToSurface(RenderSurface* _renderSurface) {
 	// resize and bind the depth buffer
 	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	depthBuffer->bindFrameBuffer();
@@ -208,9 +223,9 @@ void Scene::renderDepthBufferToSurface(RenderSurface* _renderSurface) {
 
 	// Re-bind the main OpenGL buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+}*/
 
-void Scene::renderNormals(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
+/*void Scene::renderNormals(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
 	// Store a reference to the current override shader so we can restore it 
 	Shader * backupOverride = _renderOptions->overrideShader;
 	
@@ -242,9 +257,9 @@ void Scene::renderNormals(vox::MatrixStack* _matrixStack, RenderOptions* _render
 
 	// Binf the main OpenGL buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+}*/
 
-void Scene::renderNormalBufferToSurface(RenderSurface* _renderSurface) {
+/*void Scene::renderNormalBufferToSurface(RenderSurface* _renderSurface) {
 	// resize and bind the normal buffer
 	normalBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	normalBuffer->bindFrameBuffer();
@@ -259,10 +274,10 @@ void Scene::renderNormalBufferToSurface(RenderSurface* _renderSurface) {
 
 	// Re-bind the main OpenGL buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+}*/
 
 
-void Scene::renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+/*void Scene::renderShadows(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	Shader * backupOverride = _renderOptions->overrideShader;
 	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
 	depthBuffer->bindFrameBuffer();
@@ -275,9 +290,18 @@ void Scene::renderShadows(vox::MatrixStack * _matrixStack, RenderOptions * _rend
 	static_cast<VoxRenderOptions *>(_renderOptions)->shadowMapTextureId = shadowBuffer->getTextureId();
 	_renderOptions->overrideShader = backupOverride;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
+}*/
 
-void Scene::clear(){
-	glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+Camera * Scene::cycleCamera(){
+	if(activeCamera == cameras.back()){
+		activeCamera = cameras.at(0);
+	}else{
+		for(unsigned long int i = 0; i < cameras.size()-1; ++i){
+			if(activeCamera == cameras.at(i)){
+				activeCamera = cameras.at(i+1);
+				break;
+			}
+		}
+	}
+	return activeCamera;
 }

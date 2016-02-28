@@ -8,7 +8,8 @@ Step::Step() :
 	deltaTime(0),
 	deltaTimeCorrection(0),
 	lastTimestamp(0),
-	reverse(false)
+	reverse(false),
+	cycles(0)
 {
 }
 

@@ -8,9 +8,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		directories.props = directories.props
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "S-Tengine2 - 2012", "S-Tengine2\VC Project\S-Tengine2 - 2012.vcxproj", "{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "S-Tengine2 - 2012", "S-Tengine2\S-Tengine2 - 2012.vcxproj", "{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "S-Tengine2 - 2013", "S-Tengine2\VC Project\S-Tengine2 - 2013.vcxproj", "{E178CAF8-5E96-478C-812C-DCBA942FC878}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "S-Tengine2 - 2013", "S-Tengine2\S-Tengine2 - 2013.vcxproj", "{E178CAF8-5E96-478C-812C-DCBA942FC878}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

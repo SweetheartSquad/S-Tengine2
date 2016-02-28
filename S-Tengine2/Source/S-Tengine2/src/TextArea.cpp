@@ -3,33 +3,52 @@
 #include <TextArea.h>
 #include <Font.h>
 
-TextArea::TextArea(BulletWorld * _bulletWorld, Scene * _scene, Font * _font, Shader * _textShader, float _width, float _height) :
-	VerticalLinearLayout(_bulletWorld, _scene),
-	NodeBulletBody(_bulletWorld),
+TextArea::TextArea(BulletWorld * _bulletWorld, Font * _font, Shader * _textShader) :
+	VerticalLinearLayout(_bulletWorld),
 	font(_font),
 	textShader(_textShader)
 {
-	setHeight(_height);
-	setWidth(_width);
+	// set the default width and height to be auto and the three times font's height, respectively
+	setPixelHeight(_font->getLineHeight()*3);
+	setAutoresizeWidth();
+	setWrapMode(kCHARACTER);
 }
 void TextArea::update(Step * _step){
-	if(text != textDisplayed){
-		updateRequired = true;
-	}
 	if(updateRequired){
 		updateText();
 	}
 	VerticalLinearLayout::update(_step);
 }
 
+void TextArea::setMeasuredWidths(){
+	float w = width.getSize();
+	VerticalLinearLayout::setMeasuredWidths();
+	if(glm::abs(w - width.getSize()) > FLT_EPSILON){
+		updateRequired = true;
+	}
+}
+
 void TextArea::invalidateAllLines(){
 	while(usedLines.size() > 0){
 		usedLines.back()->invalidate();
-		removeChild(usedLines.back());
+		removeChild(usedLines.back(), false);
 		unusedLines.push_back(usedLines.back());
 		usedLines.pop_back();
 	}
 	textDisplayed = L"";
+	// Do this to make sure all labels have the right wrap mode
+	setWrapMode(wrapMode);
+}
+
+
+void TextArea::setWrapMode(WrapMode _wrapMode){
+	for(auto label : usedLines) {
+		label->wrapMode = _wrapMode;
+	}
+	for(auto label : unusedLines) {
+		label->wrapMode = _wrapMode;
+	}
+	wrapMode = _wrapMode;
 }
 
 void TextArea::setText(std::wstring _text){
@@ -38,21 +57,32 @@ void TextArea::setText(std::wstring _text){
 	updateText();
 }
 
+void TextArea::setText(std::string _text){
+	setText(std::wstring(_text.begin(), _text.end()));
+}
+
+std::wstring TextArea::getText(){
+	return text;
+}
+
 void TextArea::updateText(){
 	invalidateAllLines();
 	std::wstring textToAdd = text;
 
 	TextLabel * curLine;
-	do{
-		curLine = getNewLine();
-		curLine->setText(textToAdd);
-		textToAdd = curLine->textOverflow;
-		textDisplayed += curLine->textDisplayed;
-	}while(textToAdd.size() > 0 && !curLine->textDisplayed.empty());
-	// if all the text is added, then the loop is successfull
-	// if no text was actually added to a line, stop to avoid infinite loop (probably a zero-width text-area)
+	if(getWidth(false, false) > FLT_EPSILON){
+		do{
+			curLine = getNewLine();
+			curLine->setText(textToAdd);
+			textToAdd = curLine->textOverflow;
+			textDisplayed += curLine->textDisplayed;
+		}while(textToAdd.size() > 0 && !curLine->textDisplayed.empty());
+		// if all the text is added, then the loop is successfull
+		// if no text was actually added to a line, stop to avoid infinite loop (probably a zero-width text-area)
 
-	updateRequired = false;
+		updateRequired = false;
+	}
+	invalidateLayout();
 }
 
 TextLabel * TextArea::getNewLine() {
@@ -61,13 +91,13 @@ TextLabel * TextArea::getNewLine() {
 		line = unusedLines.back();
 		unusedLines.pop_back();
 	}else{
-		line = new TextLabel(world, scene, font, textShader, 1.f);
+		line = new TextLabel(world, font, textShader);
 		line->setRationalWidth(1.f, this);
 		line->horizontalAlignment = horizontalAlignment;
-		line->verticalAlignment = verticalAlignment;
 	}
 	usedLines.push_back(line);
-	addChild(line);
+	addChild(line, false);
+	line->wrapMode = wrapMode;
 	return line;
 }
 
@@ -77,4 +107,22 @@ TextLabel * TextArea::getCurrentLine(){
 	}else{
 		return getNewLine();
 	}
+}
+
+void TextArea::load(){
+	if(!loaded){
+		for(unsigned long int i = 0; i < unusedLines.size(); ++i){
+			unusedLines.at(i)->load();
+		}
+	}
+	VerticalLinearLayout::load();
+}
+
+void TextArea::unload(){
+	if(loaded){
+		for(unsigned long int i = 0; i < unusedLines.size(); ++i){
+			unusedLines.at(i)->unload();
+		}
+	}
+	VerticalLinearLayout::unload();
 }

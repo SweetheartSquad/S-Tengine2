@@ -2,13 +2,12 @@
 
 #include <HorizontalLinearLayout.h>
 
-HorizontalLinearLayout::HorizontalLinearLayout(BulletWorld* _bulletWorld, Scene* _scene) :
-	LinearLayout(_bulletWorld, _scene),
-	NodeBulletBody(_bulletWorld)
+HorizontalLinearLayout::HorizontalLinearLayout(BulletWorld* _bulletWorld) :
+	LinearLayout(_bulletWorld)
 {
 }
 
-void HorizontalLinearLayout::update(Step* _step){
+void HorizontalLinearLayout::layoutChildren(){
 	glm::vec3 rootPos = getRootPos();
 	float x = rootPos.x;
 	float y = rootPos.y;
@@ -25,8 +24,8 @@ void HorizontalLinearLayout::update(Step* _step){
 		break;
 	}
 
-	for(unsigned long int i = 0; i < contents->children.size(); ++i){
-		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
+	for(auto c : uiElements->children){
+		Transform * trans = dynamic_cast<Transform *>(c);
 		NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
 		switch (verticalAlignment){
 			default:
@@ -39,16 +38,16 @@ void HorizontalLinearLayout::update(Step* _step){
 				y = rootPos.y - ui->getHeight(true, true);
 				break;
 		}
+
 		trans->translate(x, y, 0.f, false);
 		x += ui->getWidth(true, true);
 	}
-	LinearLayout::update(_step);
 }
 
 float HorizontalLinearLayout::getContentsWidth(){
 	float w = 0.0f;
-	for(unsigned long int i = 0; i < contents->children.size(); ++i) {
-		Transform * trans = dynamic_cast<Transform *>(contents->children.at(i));
+	for(auto c : uiElements->children) {
+		Transform * trans = dynamic_cast<Transform *>(c);
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));

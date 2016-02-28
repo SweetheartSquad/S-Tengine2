@@ -3,16 +3,16 @@
 #include "shader/ShaderComponentShadow.h"
 #include "shader/ShaderVariables.h"
 #include "MatrixStack.h"
-#include "RenderOptions.h"
-#include "MeshInterface.h"
 #include "VoxRenderOptions.h"
+#include "MeshInterface.h"
+#include "RenderOptions.h"
 #include "Light.h"
 #include "DirectionalLight.h"
 #include "Transform.h"
 
 class VoxRenderOptions;
 
-ShaderComponentShadow::ShaderComponentShadow(Shader * _shader) :
+ShaderComponentShadow::ShaderComponentShadow(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader)
 {
 }
@@ -98,14 +98,14 @@ std::string ShaderComponentShadow::getOutColorMod(){
 		"}" + ENDL;
 }
 
-void ShaderComponentShadow::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentShadow::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	
 	MeshInterface * mesh = dynamic_cast<MeshInterface *>(_nodeRenderable);
 
 	DirectionalLight * keyLight = nullptr;
 
 	for(unsigned long int i = 0; i < _renderOption->lights->size(); ++i){
-		if(_renderOption->lights->at(i)->data.type == LightType::kDIRECTIONAL_LIGHT){
+		if(_renderOption->lights->at(i)->getType() == LightType::kDIRECTIONAL_LIGHT){
 			keyLight = dynamic_cast<DirectionalLight *>(_renderOption->lights->at(i));
 			break;
 		}

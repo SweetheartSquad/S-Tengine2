@@ -13,9 +13,13 @@
 ******************************************************************************/
 class ShaderComponentTexture : public ShaderComponent{
 private:
-	GLint texNumLoc, texColLoc, texSamLoc;
+	GLint texNumLoc, texSamLoc;
+	unsigned long int numTextures;
 public:
-	ShaderComponentTexture(Shader * _shader);
+	float  alphaDiscardThreshold;
+	
+	// if _alphaDiscardThreshold is > 0, pixels which have an alpha of less than _alphaDiscardThreshold will be discarded in the fragment shader
+	ShaderComponentTexture(ComponentShaderBase * _shader, float _alphaDiscardThreshold = -1);
 	~ShaderComponentTexture() override;
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;
@@ -23,6 +27,7 @@ public:
 	std::string getFragmentBodyString() override;
 	std::string getOutColorMod() override;
 	void load() override;
-	void configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
-	virtual void clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
+	void unload() override;
+	void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
+	virtual void clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 };

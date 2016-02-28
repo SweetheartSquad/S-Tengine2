@@ -7,64 +7,68 @@
 
 /************************************************************
 *
-* encapsulating joystick events and properties
-*
-* TODO - Add modifier keys to the value section of the maps
+* wrapper for joystick events and properties
 *
 *************************************************************/
 
 class Joystick : public NodeUpdatable{
 public:
-	static enum xbox_buttons{
-		kA,
-		kB,
-		kX,
-		kY,
-		kL1,
-		kR1,
-		kBACK,
-		kSTART,
-		kL3,
-		kR3,
-		kDPAD_UP,
-		kDPAD_DOWN,
-		kDPAD_LEFT,
-		kDPAD_RIGHT
-	};
-	static enum xbox_axes{
-		kLX,
-		kLY,
-		kBUMPERS,
-		kRY,
-		kRX
-	};
+	int faceButtonDown,  // A on xbox, X on playstation
+		faceButtonUp,    // Y on xbox, triangle on playstation
+		faceButtonLeft,  // X on xbox, square on playstation
+		faceButtonRight, // B on xbox, circle on playstation
+		
+		axisButtonLeft,  // pressing the left analog stick
+		axisButtonRight, // pressing the right analog stick
 
+		bumperLeft,
+		bumperRight,
+
+		centerButtonLeft,   // back on xbox, select on playstation
+		centerButtonCenter, // XBOX button, PS button (not reliable)
+		centerButtonRight,  // start
+		
+		dpadDown,
+		dpadUp,
+		dpadLeft,
+		dpadRight,
+		
+		axisLeftX, // left-right on the left analog stick
+		axisLeftY, // up-down on the left analog stick
+		axisTriggers, // corresponds to L2 and R2 (note that until GLFW updates the joystick input, we can only use the triggers separately)
+		axisRightY, // up-down on the right analog stick
+		axisRightX; // left-right on the right analog stick
+
+	// when getAxis is called, any value less than deadZone will instead return zero
 	float deadZone;
 
+	// GLFW joystick id
 	int id;
+
+	// human-readable string intended to identify the make/model of a joystick
 	std::string name;
 
 	/**
-	* Returns true if the given key is currently pressed down
+	* Returns true if the given button is currently pressed down
 	*
-	* @param The button code - eg. button_mapping::xbox::kA
-	* @return Whether the key is currently down or not
+	* @param The joystick's button code
+	* @return Whether the button is currently down or not
 	*/
 	bool buttonDown(int _code);
 
 	/**
-	* Returns true if the given key was released since the keyboard's last call to update
+	* Returns true if the given button was released since the last call to update
 	*
-	* @param The button code - eg. button_mapping::xbox::kA
-	* @return Whether the key was released since the last keyboard update
+	* @param The joystick's button code
+	* @return Whether the button was released since the last update
 	*/
 	bool buttonJustUp(int _code);
 
 	/**
-	* Returns true if the given button was pressed down since the keyboard's last call to update
+	* Returns true if the given button was pressed down since the last call to update
 	*
-	* @param The button code - eg. button_mapping::xbox::kA
-	* @return Whether the key was pressed down since the last keyboard update
+	* @param The joystick's button code
+	* @return Whether the button was pressed down since the last update
 	*/
 	bool buttonJustDown(int _code);
 
@@ -72,6 +76,16 @@ public:
 	// If the absolute value is less than the deadZone, returns 0
 	// If the axis doesn't exist, returns 0
 	float getAxis(int _code);
+
+	// If _axis was above _value last update
+	// and is below _value now, returns true
+	// otherwise, returns false
+	bool axisJustBelow(int _axis, float _value);
+
+	// If _axis was below _value last update
+	// and is above _value now, returns true
+	// otherwise, returns false
+	bool axisJustAbove(int _axis, float _value);
 
 	/**
 	* Handles input from glfw
@@ -81,21 +95,23 @@ public:
 	/**
 	* Inserts _code into the maps of justPressed and pressed buttons
 	*
-	* @param The button code - eg. button_mapping::xbox::kA
+	* @param The button code
 	*/
 	void buttonDownListener(int _code);
 
 	/**
 	* Inserts _code into the map of justPressed buttons and removes it from the maps of justPressed and pressed buttons
 	*
-	* @param The button code - eg. button_mapping::xbox::kA
+	* @param The button code
 	*/
 	void buttonUpListener(int _code);
+
+	void buttonNullListener(int _code);
 
 	/* _id is GLFW_JOYSTICK_1 through GLFW_JOYSTICK_LAST */
 	Joystick(int _id, float _deadZone = 0.25f);
 	~Joystick();
-private:
+protected:
 
 	/** Map of buttons which are currently pressed down */
 	std::map<int, int> pressedButtons;
@@ -103,7 +119,17 @@ private:
 	std::map<int, int> justPressedButtons;
 	/** Map of buttons which were released since the joystick's last call to update */
 	std::map<int, int> justReleasedButtons;
-
+	
 	/** Map of axes values since the joystick's last call to update */
 	std::map<int, float> axesValues;
+	/** Map of axes values previous to the joystick's last call to update */
+	std::map<int, float> axesValuesPrev;
+
+
+	// sets the button codes to correspond with xbox controller layout
+	void initXbox();
+	// sets the button codes to correspond with playstation controller layout
+	void initPlaystation();
+	// sets the button codes to correspond with snes controller layout
+	void initSNES();
 };

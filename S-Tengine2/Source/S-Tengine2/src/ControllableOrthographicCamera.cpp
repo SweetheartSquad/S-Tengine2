@@ -4,8 +4,8 @@
 #include "node/NodeUpdatable.h"
 #include "Transform.h"
 
-ControllableOrthographicCamera::ControllableOrthographicCamera(float left, float right, float bottom, float top, float near, float far):
-	OrthographicCamera(left, right, bottom, top, near, far),
+ControllableOrthographicCamera::ControllableOrthographicCamera(float _left, float _right, float _bottom, float _top, float _near, float _far):
+	OrthographicCamera(_left, _right, _bottom, _top, _near, _far),
 	target(nullptr),
 	deadZone(2)
 {

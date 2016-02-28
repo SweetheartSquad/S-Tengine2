@@ -3,13 +3,14 @@
 	<ImportGroup Label="PropertySheets" />
 	<PropertyGroup Label="UserMacros">
 		<GLEW_DIR>C:\dev\glew-1.11.0</GLEW_DIR>
-		<GLFW_DIR>C:\dev\glfw-3.0.4.bin.WIN32</GLFW_DIR>
+		<GLFW_DIR>C:\dev\glfw-3.1.1</GLFW_DIR>
 		<GLM_DIR>C:\dev\glm</GLM_DIR>
-		<SOIL_DIR>C:\dev\Simple OpenGL Image Library</SOIL_DIR>
 		<OPENAL_DIR>C:\dev\OpenAL-Pack</OPENAL_DIR>
 		<BOX2D_DIR>C:\dev\Box2D-2.3.1\Box2D</BOX2D_DIR>
 		<BULLET_DIR>C:\dev\Bullet-2.83-alpha</BULLET_DIR>
 		<FREETYPE_DIR>C:\dev\freetype-2.5.5</FREETYPE_DIR>
+	  <ANT_DIR>C:\dev\AntTweakBar</ANT_DIR>
+    <OVR_DIR>C:\dev\LibOVR</OVR_DIR>
 	</PropertyGroup>
 	<ItemDefinitionGroup />
 	<ItemGroup />

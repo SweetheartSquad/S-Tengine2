@@ -14,8 +14,6 @@ public:
 	float startSize;
 	float deltaSize;
 
-    explicit Particle(Box2DWorld * _world, TextureSampler * _texture = nullptr);
-    ~Particle();
-
+    explicit Particle(Box2DWorld * _world, Texture * _texture = nullptr);
     virtual void update(Step * _step) override;
 };

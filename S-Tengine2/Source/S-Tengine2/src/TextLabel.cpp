@@ -5,30 +5,24 @@
 #include <GL/glew.h>
 #include <MeshFactory.h>
 #include <Font.h>
+#include <RenderOptions.h>
+#include <StringUtils.h>
 
-TextLabel::TextLabel(BulletWorld* _world, Scene* _scene, Font* _font, Shader* _textShader, float _width):
-	HorizontalLinearLayout(_world, _scene),
-	NodeBulletBody(_world),
+TextLabel::TextLabel(BulletWorld* _world, Font* _font, Shader* _textShader):
+	HorizontalLinearLayout(_world),
 	font(_font),
 	textShader(_textShader),
 	updateRequired(false),
-	lineWidth(0.f)
+	lineWidth(0.f),
+	wrapMode(kCHARACTER)
 {
-	setHeight(font->getLineHeight());
-	setWidth(_width);
+	// set the default width and height to be auto and the font's height, respectively
+	setPixelHeight(font->getLineHeight());
+	setAutoresizeWidth();
 }
 
-void TextLabel::render(vox::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
-	if(depth == GL_TRUE){
-		glDisable(GL_DEPTH_TEST);
-	}
+void TextLabel::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	HorizontalLinearLayout::render(_matrixStack, _renderOptions);
-	if(depth == GL_TRUE){
-		glEnable(GL_DEPTH_TEST);
-	}
 }
 
 void TextLabel::update(Step * _step){
@@ -39,15 +33,25 @@ void TextLabel::update(Step * _step){
 }
 
 void TextLabel::unload(){
+	if(loaded){
+		textShader->unload();
+		font->unload();
+		for(unsigned long int i = 0; i < unusedGlyphs.size(); ++i){
+			unusedGlyphs.at(i)->unload();
+		}
+	}
 	HorizontalLinearLayout::unload();
-	textShader->unload();
-	font->unload();
 }
 
 void TextLabel::load(){
+	if(!loaded){
+		font->load();
+		textShader->load();
+		for(unsigned long int i = 0; i < unusedGlyphs.size(); ++i){
+			unusedGlyphs.at(i)->load();
+		}
+	}
 	HorizontalLinearLayout::load();
-	textShader->load();
-	font->load();
 }
 
 void TextLabel::setText(std::wstring _text){
@@ -56,37 +60,78 @@ void TextLabel::setText(std::wstring _text){
 		return;
 	}*/
 	invalidate();
+
 	textAll = _text;
 
 	updateRequired = true;
+
 	updateText();
+}
+
+void TextLabel::setText(std::string _text){
+	setText(std::wstring(_text.begin(), _text.end()));
 }
 
 void TextLabel::updateText(){
 	// find out where the first overflow in the text would occur
-	unsigned long int i;
-	for(i = 0; i < textAll.size(); ++i){
-		if(textAll.at(i) == '\n'){
-			++i;
-			textDisplayed += '\n';
-			// newline character
-			break;
-		}else if(!canFit(font->getGlyphWidthHeight(textAll.at(i)).x)){
-			// width overflow
-			break;
-		}else{
-			insertChar(textAll.at(i));
-		}
-	}
-	
-	// i to the end of the text did not fit
-	if(i < textAll.size()){
-		textOverflow = textAll.substr(i);
+	unsigned long int idx = wordWrap();
+
+	// idx to the end of the text did not fit
+	if(idx < textAll.size()){
+		textOverflow = textAll.substr(idx);
 	}else{
 		textOverflow = L"";
 	}
 
+	invalidateLayout();
 	updateRequired = false;
+}
+
+unsigned long int TextLabel::wordWrap(){
+	unsigned long int idx = 0;
+	if(wrapMode == kWORD) {
+		std::vector<std::wstring> words = sweet::StringUtils::split(textAll, ' ');
+		for(unsigned long int i = 0; i < words.size(); ++i) {
+			std::wstring word = words.at(i);
+			float width = 0.f;
+			for(auto c : word) {
+				width += font->getGlyphWidthHeight(c).x;
+			}
+			if(canFit(width) + font->getGlyphWidthHeight(' ').x) {
+				for(auto c : word) {
+					if(c == '\n') {
+						++idx;
+						textDisplayed += '\n';
+						return idx; // return early
+					}
+					insertChar(c);
+					idx++;
+				}
+				if(i != words.size()-1){
+					insertChar(' ');
+				}
+				idx++;
+			}else {
+				textDisplayed += '\n';
+				break;
+			}
+		}
+	}else if(wrapMode == kCHARACTER) {
+		for(idx = 0; idx < textAll.size(); ++idx){
+			if(textAll.at(idx) == '\n'){
+				++idx;
+				textDisplayed += '\n';
+				// newline character
+				break;
+			}else if(!canFit(font->getGlyphWidthHeight(textAll.at(idx)).x)){
+				// width overflow
+				break;
+			}else{
+				insertChar(textAll.at(idx));
+			}
+		}
+	}
+	return idx;
 }
 
 float TextLabel::getContentsHeight(){
@@ -99,8 +144,8 @@ float TextLabel::getContentsWidth(){
 
 void TextLabel::invalidate(){
 	while(usedGlyphs.size() > 0){
-		removeChild(usedGlyphs.back());
-		delete usedGlyphs.back();
+		removeChild(usedGlyphs.back(), false);
+		unusedGlyphs.push_back(usedGlyphs.back());
 		usedGlyphs.pop_back();
 	}
 
@@ -109,12 +154,25 @@ void TextLabel::invalidate(){
 }
 
 void TextLabel::insertChar(wchar_t _char){
-	Glyph * glyphMesh = font->getMeshInterfaceForChar(_char);
-	UIGlyph * glyph = new UIGlyph(world, scene, glyphMesh, textShader, _char);
-	usedGlyphs.push_back(glyph);
-	addChild(glyph);
-	lineWidth += glyphMesh->advance.x/64.f;
+	Glyph * glyph = font->getGlyphForChar(_char);
+	UIGlyph * uiGlyph = getGlyph(_char, glyph);
+	usedGlyphs.push_back(uiGlyph);
+	addChild(uiGlyph, false);
+	lineWidth += glyph->advance.x/64.f;
 	textDisplayed += _char;
+}
+
+UIGlyph * TextLabel::getGlyph(wchar_t _char, Glyph * _glyph){
+	UIGlyph * res;
+	if(unusedGlyphs.size() > 0){
+		res = unusedGlyphs.back();
+		res->setGlyph(_glyph);
+		res->character = _char;
+		unusedGlyphs.pop_back();
+	}else{
+		res = new UIGlyph(world, _glyph, textShader, _char);
+	}
+	return res;
 }
 
 bool TextLabel::canFit(float _width){
@@ -128,34 +186,33 @@ bool TextLabel::canFit(float _width){
 
 // GlyphMeshEntity definitions //
 
-UIGlyph::UIGlyph(BulletWorld * _world, Scene * _scene, Glyph * _mesh, Shader * _shader, wchar_t _character) :
-	NodeUI(_world, _scene),
-	NodeBulletBody(_world),
-	MeshEntity(_mesh, _shader),
+UIGlyph::UIGlyph(BulletWorld * _world, Glyph * _mesh, Shader * _shader, wchar_t _character) :
+	NodeUI(_world),
+	NodeShadable(_shader),
 	character(_character),
-	glyph(nullptr)
+	glyphMesh(nullptr)
 {
-	setGlyphMesh(_mesh);
+	setGlyph(_mesh);
 	boxSizing = kCONTENT_BOX;
+	mouseEnabled = false;
 }
 
-void UIGlyph::setGlyphMesh(Glyph * _newGlyph){
-	if(glyph != nullptr){
-		contents->removeChild(glyph);
+void UIGlyph::setGlyph(Glyph * _newGlyph){
+	if(glyphMesh != nullptr){
+		uiElements->removeChild(glyphMesh);
 	}
-	mesh = glyph = _newGlyph;
-	contents->addChild(_newGlyph, false);
-	setPixelWidth(glyph->advance.x/64);
-	setPixelHeight(glyph->advance.y/64);
-	setShader(shader, true);
+	glyphMesh = _newGlyph->mesh;
+
+	uiElements->addChild(glyphMesh, false);
+	setPixelWidth(_newGlyph->advance.x/64);
+	setPixelHeight(_newGlyph->advance.y/64);
+	
+	glyphMesh->configureDefaultVertexAttributes(shader);
 }
 
-void UIGlyph::load(){
-	MeshEntity::load();
-}
-void UIGlyph::unload(){
-	MeshEntity::unload();
-}
-void UIGlyph::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	MeshEntity::render(_matrixStack, _renderOptions);
+void UIGlyph::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	Shader * prev = _renderOptions->shader;
+	NodeShadable::applyShader(_renderOptions);
+	NodeUI::render(_matrixStack, _renderOptions);
+	_renderOptions->shader = prev;
 }

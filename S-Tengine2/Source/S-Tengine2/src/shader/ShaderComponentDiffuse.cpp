@@ -2,12 +2,14 @@
 
 #include "shader/ShaderComponentDiffuse.h"
 #include "shader/ShaderVariables.h"
+#include "shader/SharedComponentShaderMethods.h"
+#include <shader/ComponentShaderBase.h>
 #include "MatrixStack.h"
 #include "RenderOptions.h"
-#include "shader/SharedComponentShaderMethods.h"
 
-ShaderComponentDiffuse::ShaderComponentDiffuse(Shader * _shader) :
-	ShaderComponent(_shader)
+ShaderComponentDiffuse::ShaderComponentDiffuse(ComponentShaderBase * _shader, bool _doubleSided) :
+	ShaderComponent(_shader),
+	doubleSided(_doubleSided)
 {
 }
 
@@ -40,21 +42,21 @@ std::string ShaderComponentDiffuse::getFragmentBodyString(){
 		"float attenuation = 1.0" + SEMI_ENDL +
 		"vec3 surfaceToLight = vec3(0)" + SEMI_ENDL +
 
-		"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_LIGHTS + "; i++){" + ENDL +
+		"for(int i = 0; i < " + GL_UNIFORM_ID_NUM_LIGHTS + "; ++i){" + ENDL +
 			
 			SHADER_LIGHT_DISTANCE_AND_ATTENUATION +
 
-			"vec3 ambient = vec3(" + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].ambientCoefficient) * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
+			"vec3 ambient = vec3(" + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].ambientCoefficient) * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 			"//diffuse" + ENDL +
-			"float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))" + SEMI_ENDL +
+			(doubleSided ? "float diffuseCoefficient = abs(dot(normal, surfaceToLight))" : "float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight))") + SEMI_ENDL +
 			"vec3 diffuse = diffuseCoefficient * modFrag.rgb * " + GL_UNIFORM_ID_LIGHTS_NO_ARRAY + "[i].intensities" + SEMI_ENDL +
 
 			
 			"//linear color (color before gamma correction)" + ENDL +
-			"vec3 linearColor = ambient + attenuation * (diffuse)" + SEMI_ENDL +
+			"vec3 linearColor = ambient + (attenuation * (diffuse))" + SEMI_ENDL +
     
 			"//final color (after gamma correction)" + ENDL +
-			"vec3 gamma = vec3(1.0/2.2, 1.0/2.2, 1.0/2.2)" + SEMI_ENDL +
+			"vec3 gamma = vec3(0.4545454)" + SEMI_ENDL + // 1.0/2.2 = 0.45454545454545454545454545454545
 			"vec3 gammaColor = pow(linearColor, gamma)" + SEMI_ENDL +
 			"outDiffuse += gammaColor" + SEMI_ENDL +
 
@@ -78,10 +80,10 @@ std::string ShaderComponentDiffuse::getOutColorMod(){
 		END_IF + ENDL;
 }
 
-void ShaderComponentDiffuse::clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentDiffuse::clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	configureUniforms(_matrixStack, _renderOption, _nodeRenderable);
 }
 
-void ShaderComponentDiffuse::configureUniforms(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
+void ShaderComponentDiffuse::configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable){
 	SharedComponentShaderMethods::configureLights(_matrixStack, _renderOption, _nodeRenderable);
 }

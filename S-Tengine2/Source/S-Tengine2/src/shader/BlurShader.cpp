@@ -1,8 +1,8 @@
 #include "shader/BlurShader.h"
 
-BlurShader::BlurShader(bool _autoRelease)
-	:Shader(getVertString(), getFragString(), _autoRelease)
+BlurShader::BlurShader(bool _autoRelease) : Shader( _autoRelease)
 {
+	init(getVertString(), getFragString());
 }
 
 std::string BlurShader::getVertString(){

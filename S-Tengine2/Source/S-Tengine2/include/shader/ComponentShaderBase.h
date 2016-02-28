@@ -9,7 +9,7 @@ class GeometryComponent;
 
 class ComponentShaderBase : public Shader{
 public:	
-	GLint modelUniformLocation, viewUniformLocation, projectionUniformLocation, mvpUniformLocation;
+	bool lightingDirty;
 
 	ComponentShaderBase(bool _autoRelease);
 	explicit ComponentShaderBase(std::vector<ShaderComponent *> _components, bool _autoRelease);
@@ -22,8 +22,8 @@ public:
 	void addComponent(ShaderComponent * _component);
 	ShaderComponent * getComponentAt(int idx);
 
-	virtual void configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable) override;
-	virtual void clean(vox::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
+	virtual void configureUniforms(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption,  NodeRenderable* _nodeRenderable) override;
+	virtual void clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 	
 	virtual void load() override;
 	virtual void unload() override;

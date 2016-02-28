@@ -1,9 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include <glm\glm.hpp>
-#include <GLFW/glfw3.h>
 #include <map>
+
+#include <glm/glm.hpp>
 
 /*******************************************************
 *
@@ -15,48 +15,51 @@
 
 class Mouse{
 public:
+	// whether the mouse will update its position
+	// if you're accessing this, you should probably think twice about what you're doing
+	bool active;
 
 	/**
 	* Returns true if the left mouse button was pressed down since the mouse's last call to update
 	*
 	* @return Whether the left mouse button was pressed since the last mouse update
 	*/
-	bool leftJustPressed();
+	bool leftJustPressed() const;
 
 	/**
 	* Returns true if the left mouse button was released since the mouse's last call to update
 	*
 	* @return Whether the left mouse button was released since the last mouse update
 	*/
-	bool leftJustReleased();
+	bool leftJustReleased() const;
 
 	/**
 	* Returns true if the left mouse button is currently pressed down
 	*
 	* @return Whether the left mouse button is currently pressed down or not
 	*/
-	bool leftDown();
+	bool leftDown() const;
 
 	/**
 	* Returns true if the right mouse button was pressed down since the mouse's last call to update
 	*
 	* @return Whether the right mouse button was pressed since the last mouse update
 	*/
-	bool rightJustPressed();
+	bool rightJustPressed() const;
 
 	/**
 	* Returns true if the right mouse button was released since the mouse's last call to update
 	*
 	* @return Whether the right mouse button was released since the last mouse update
 	*/
-	bool rightJustReleased();
+	bool rightJustReleased() const;
 
 	/**
 	* Returns true if the right mouse button is currently pressed down
 	*
 	* @return Whether the right mouse button is currently pressed or not
 	*/
-	bool rightDown();
+	bool rightDown() const;
 
 	/**
 	* Returns the mouse's current X coordinate. If _clamped, the value will always be within the screen coordinates
@@ -64,7 +67,7 @@ public:
 	*
 	* @return The mouse's X coordinate
 	*/
-	double mouseX(bool _clamped = true);
+	double mouseX(bool _clamped = true) const;
 
 	/**
 	* Returns the mouse's current Y coordinate. If _clamped, the value will always be within the screen coordinates
@@ -72,7 +75,12 @@ public:
 	*
 	* @return The mouse's Y coordinate
 	*/
-	double mouseY(bool _clamped = true);
+	double mouseY(bool _clamped = true) const;
+	
+	/*
+	* @return The change in mousewheel since the last update
+	*/
+	double getMouseWheelDelta() const;
 	
 	/**
 	* Moves the mouse by _v
@@ -98,7 +106,7 @@ public:
 	* @param _glfwMouseCode The GLFW Mouse Code. eg. GLFW_MOUSE_BUTTON_LEFT
 	*/
 	void mouseUpListener(int _glfwMouseCode);
-
+	
 	/**
 	* Sets the current mouse coordinates to _x and _y, where (0, 0) is the bottom-left corner
 	*
@@ -106,6 +114,13 @@ public:
 	* @param _y The Y coordinate for the mouse
 	*/
 	void mousePositionListener(double _x, double _y);
+	
+	/**
+	* Saves _delta in a member variable until the next update
+	*
+	* @param _delta The change in the mousewheel
+	*/
+	void mouseWheelListener(double _delta);
 
 	/**
 	* @return A reference to the mouse singleton
@@ -131,6 +146,9 @@ private:
 	double x;
 	/** The mouse's current Y coordinate, relative to the bottom border */
 	double y;
+
+	// The mousewheel's change since the last update
+	double mouseWheelDelta;
 	
 	// The mouse's current X coordinate, relative to the left border and clamped by the screen coordinates
 	double clampedX;

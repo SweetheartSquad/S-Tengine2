@@ -3,7 +3,6 @@
 #include "OrthographicCamera.h"
 #include "Mouse.h"
 #include "Keyboard.h"
-#include "System.h"
 #include "Transform.h"
 
 OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom, float _top, float _near, float _far) :
@@ -12,28 +11,31 @@ OrthographicCamera::OrthographicCamera(float _left, float _right, float _bottom,
 	bottom(_bottom),
 	right(_right)
 {
-	forwardVectorRotated = glm::vec3(0.f, 0.f, 1.f);
+	yaw = -90;
 
 	nearClip = _near;
 	farClip = _far;
+
+	// update immediately in order to set the orientations and stuff
+	update(nullptr);
 }
 
-OrthographicCamera::~OrthographicCamera(){
-}
-
-
-void OrthographicCamera::update(Step * _step){
-	Camera::update(_step);
-}
-
-glm::mat4 OrthographicCamera::getViewMatrix(){
-	return glm::lookAt(
-		parents.at(0)->getTranslationVector(),							// Camera is here
-		parents.at(0)->getTranslationVector() + forwardVectorRotated,	// and looks here : at the same position, plus "direction"
-		upVectorRotated												// Head is up (set to 0,-1,0 to look upside-down)
-	);
-}
-
-glm::mat4 OrthographicCamera::getProjectionMatrix(){
+glm::mat4 OrthographicCamera::getProjectionMatrix(glm::vec2 _screenSize) const{
 	return glm::ortho<float>(-left, -right, bottom, top, nearClip, farClip);
+}
+
+
+void OrthographicCamera::resize(float _left, float _right, float _bottom, float _top){
+	left = _left;
+	right = _right;
+	bottom = _bottom;
+	top = _top;
+}
+
+float OrthographicCamera::getWidth() const{
+	return right - left;
+}
+
+float OrthographicCamera::getHeight() const{
+	return top - bottom;
 }

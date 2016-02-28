@@ -5,8 +5,8 @@
 class HorizontalLinearLayout : public LinearLayout{
 public:
 
-	HorizontalLinearLayout(BulletWorld * _bulletWorld, Scene * _scene);
+	HorizontalLinearLayout(BulletWorld * _bulletWorld);
 
-	virtual void update(Step * _step) override;
+	virtual void layoutChildren() override;
 	virtual float getContentsWidth() override;
 };

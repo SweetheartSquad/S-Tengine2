@@ -5,74 +5,33 @@
 #include "Box2DWorld.h"
 #include "shader/Shader.h"
 #include "Scene.h"
-#include "LayeredScene.h"
-#include "BitmapFont.h"
 #include <node/NodeResource.h>
 #include "Texture.h"
 #include <TextureSampler.h>
 
-int16 Box2DSuperSprite::gGroupIndex = 0;
-
 Box2DSuperSprite::Box2DSuperSprite(Box2DWorld * _world, int16 _categoryBits, int16 _maskBits, int16 _groupIndex) :
-	MeshEntity(nullptr),
 	world(_world),
-	componentScale(0.0025f),
+	componentScale(1.f),
 	groupIndex(_groupIndex),
 	categoryBits(_categoryBits),
 	maskBits(_maskBits),
 	rootComponent(nullptr),
-	scene(nullptr),
 	sceneLayer(-1)
 {
 }
 
 Box2DSuperSprite::~Box2DSuperSprite(){
-	while(components.size() > 0){
-		delete *components.back();
-		/*try{
-			delete components.back();
-		}catch(std::exception){
-		}*/
-		components.pop_back();
-	}
 	components.clear();
 }
 
-void Box2DSuperSprite::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){	
-    for (Box2DSprite ** c : components){
-        if (*c != nullptr){
-            (*c)->render(_matrixStack, _renderOptions);
-        }
-    }
-	MeshEntity::render(_matrixStack, _renderOptions);
-}
-
-void Box2DSuperSprite::update(Step * _step){
-    MeshEntity::update(_step);
-    for (Box2DSprite ** c : components){
-        if (*c != nullptr){
-            (*c)->update(_step);
-        }
-    }
-}
-
-
 void Box2DSuperSprite::setShader(Shader * _shader, bool _configureDefaultVertexAttributes){
-	MeshEntity::setShader(_shader, _configureDefaultVertexAttributes);
+	shader = _shader;
 	for(Box2DSprite ** c : components){
 		if(*c != nullptr){
-			(*c)->setShader(_shader, _configureDefaultVertexAttributes);
+			(*c)->setShader(shader, _configureDefaultVertexAttributes);
 		}
 	}
-}
-
-void Box2DSuperSprite::addToScene(Scene * _scene){
-	scene = _scene;
-	sceneLayer = -1;
-}
-void Box2DSuperSprite::addToLayeredScene(LayeredScene * _scene, unsigned long int _layer){
-	scene = _scene;
-	sceneLayer = _layer;
+	++shader->referenceCount;
 }
 
 void Box2DSuperSprite::translateComponents(float _x, float _y, float _z){
@@ -81,7 +40,7 @@ void Box2DSuperSprite::translateComponents(float _x, float _y, float _z){
 void Box2DSuperSprite::translateComponents(glm::vec3 _translateVector){
 	for(Box2DSprite ** c : components){
 		if(*c != nullptr){
-			(*c)->setTranslationPhysical(_translateVector, true);
+			(*c)->translatePhysical(_translateVector, true);
 		}
 	}
 }
@@ -96,10 +55,15 @@ void Box2DSuperSprite::setGroupIndex(int16 _groupIndex){
 	for(Box2DSprite ** c : components){
 		(*c)->setGroupIndex(_groupIndex);
 	}
+	groupIndex = _groupIndex;
 }
 
-void Box2DSuperSprite::addComponent(Box2DSprite * _component){
-	components.push_back(&_component);
+void Box2DSuperSprite::addComponent(Box2DSprite ** _component){
+	components.push_back(_component);
+	childTransform->addChild(*_component);
+	if((*_component)->shader == nullptr && shader != nullptr) {
+		(*_component)->setShader(shader);
+	}
 }
 
 void Box2DSuperSprite::snapComponents(Box2DSprite * _sprite){
@@ -107,17 +71,4 @@ void Box2DSuperSprite::snapComponents(Box2DSprite * _sprite){
 	glm::vec3 snapPos = glm::vec3(_sprite->body->GetPosition().x, _sprite->body->GetPosition().y, 0);
 	
 	translateComponents(glm::vec3(snapPos.x - currentPos.x, snapPos.y - currentPos.y, 0));
-}
-
-void Box2DSuperSprite::load(){
-	MeshEntity::load();
-	for(Box2DSprite ** c : components){
-		(*c)->load();
-	}
-}
-void Box2DSuperSprite::unload(){
-	MeshEntity::unload();
-	for(Box2DSprite ** c : components){
-		(*c)->unload();
-	}
 }

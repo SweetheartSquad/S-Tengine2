@@ -2,12 +2,13 @@
 
 #include <BulletDebugDrawer.h>
 
-#include <glew\glew.h>
+#include <GL\glew.h>
 
 #include <MatrixStack.h>
 #include <RenderOptions.h>
 #include <shader\Shader.h>
 #include <shader\ComponentShaderBase.h>
+#include <shader\ShaderComponentMVP.h>
 #include <shader\ShaderComponentTexture.h>
 
 BulletDebugDrawer::BulletDebugDrawer(btCollisionWorld * _world) :
@@ -15,6 +16,7 @@ BulletDebugDrawer::BulletDebugDrawer(btCollisionWorld * _world) :
 	world(_world),
 	shader(new ComponentShaderBase(false))
 {
+	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->compileShader();
 	shader->load();
@@ -113,7 +115,12 @@ void BulletDebugDrawer::drawContactPoint(const btVector3& pointOnB, const btVect
 }
 
 
-void BulletDebugDrawer::render(vox::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+void BulletDebugDrawer::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
+	// don't bother doing any work if we aren't rendering anyway
+	if(!isVisible()){
+		return;
+	}
+
 	// save previous line width state and change
 	GLfloat oldWidth;
 	glGetFloatv(GL_LINE_WIDTH, &oldWidth);

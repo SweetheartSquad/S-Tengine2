@@ -1,7 +1,8 @@
-#pragma once
+﻿#pragma once
 
 #include <node\NodeChild.h>
 #include <Transform.h>
+#include <Log.h>
 
 NodeChild::NodeChild() :
 	worldPos(0),
@@ -23,6 +24,7 @@ bool NodeChild::hasAncestor(Transform * _parent){
 		if(p == _parent) {
 			return true;
 		}
+#pragma warning(suppress: 6011) // children should never have nullptr in their parent list
 		if(p->hasAncestor(_parent)){
 			return true;
 		}
@@ -38,7 +40,7 @@ glm::vec3 NodeChild::getWorldPos(unsigned long int _parent){
 	
 	Transform * p = parents.at(_parent);
 	// if the cumulative model matrix is out-of-date, then so is the stored world position
-	if(cumulativeModelMatrixDirty){
+	//if(cumulativeModelMatrixDirty){
 		// find the first non-zero ancestor translation vector
 		glm::vec3 res(0);
 		do{
@@ -55,8 +57,8 @@ glm::vec3 NodeChild::getWorldPos(unsigned long int _parent){
 		}
 
 		worldPos = res;
-		cumulativeModelMatrixDirty = false;
-	}
+		//cumulativeModelMatrixDirty = false;
+	//}
 	return worldPos;
 }
 
@@ -71,6 +73,15 @@ void NodeChild::removeParent(Transform * _parent){
 			parents.erase(parents.begin() + i);
 			return;
 		}
+	}
+}
+
+Transform* NodeChild::firstParent() {
+	if(parents.size() > 0) {
+		return(parents.at(0));
+	}else {
+		ST_LOG_WARN("The list of parents was empty - Return nullptr");
+		return nullptr;
 	}
 }
 
@@ -97,15 +108,26 @@ void NodeChild::removeParent(Transform * _parent){
 	return glm::inverse(modelMatrix);
 }*/
 
-void NodeChild::printHierarchy(unsigned long int _startDepth){
+void NodeChild::printHierarchy(unsigned long int _startDepth, bool _last, std::vector<unsigned long int> & _p){
 	for(unsigned long int j = 1; j <= _startDepth; ++j){
 		if(j == _startDepth){
-			std::cout << char(192) << char(196);
+			std::cout << (_last ? char(0xC0) : char(0xC3)) << char(0xC4);
 		}else{
-			std::cout << "  ";
+			bool p = false;
+			for(unsigned long int i : _p){
+				if(j == i){
+					p = true;
+					break;
+				}
+			}
+			if(p){
+				std::cout << char(0xB3) << " ";
+			}else{
+				std::cout << "  ";
+			}
 		}
 	}
-	std::cout << this << std::endl;
+	std::cout << typeid(*this).name() << " " << this << std::endl;
 }
 
 unsigned long int NodeChild::calculateDepth(unsigned long int _parent){

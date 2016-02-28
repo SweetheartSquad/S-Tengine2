@@ -6,6 +6,7 @@
 #include "node\NodeLoadable.h"
 #include "node\NodeResource.h"
 #include <MeshInterface.h>
+#include <node\NodeShadable.h>
 
 class Shader;
 
@@ -15,15 +16,13 @@ class Shader;
 * likely be used to render a frame buffer
 *
 ******************************************************/
-class RenderSurface : public MeshInterface{
+class RenderSurface : public virtual MeshInterface, public virtual NodeShadable{
 public:
 	/**
 	* @param The shader to be used when rendering the surface
 	*/
-	explicit RenderSurface(Shader * _shader);
+	explicit RenderSurface(Shader * _shader, bool _configureDefaultVertexAttributes = true);
 	~RenderSurface();
-	/**Shader to use when rendering the 2D surface*/
-	Shader * shader;
 
 	/**
 	* Intializes the render surface quad along with the vertex array object
@@ -38,11 +37,10 @@ public:
 	void unload() override;
 
 	/**
-	* Renders a frame buffers texture buffer to this surface using the
-	* specified frame buffer ID. The default is 0 which is the main openGL frame buffer
+	* Renders a texture buffer to this surface (typically the texture will be an FBO)
 	* 
-	* @param _textureId The openGL ID of the texture to render
-	* @param _renderTo The ID of the framebuffer to render to
+	* @param _textureId The OpenGL ID of the texture to render
+	* @param _disableBlending Whether or not to disable glBlend
 	*/
-	void render(GLuint _textureId, GLint _renderTo = 0);
+	void render(GLuint _textureId, bool _disableBlending = true);
 };

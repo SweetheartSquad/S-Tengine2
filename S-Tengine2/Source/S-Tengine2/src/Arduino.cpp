@@ -1,6 +1,9 @@
+#pragma once
+
 #include "Arduino.h"
 
 #include <iostream>
+#include <Log.h>
 
 /***************************************************************
 *
@@ -8,61 +11,10 @@
 *
 ****************************************************************/
 
-Arduino::Arduino(std::string portName){
-    //We're not yet connected
-    this->connected = false;
-
-    //Try to connect to the given port throuh CreateFile
-	std::wstring portName_t;
-	for(unsigned long int i = 0; i < portName.length(); ++i){
-	  portName_t += wchar_t(portName[i]);
+Arduino::Arduino(std::string _portName){
+	if(_portName != "") {
+		connect(_portName);
 	}
-
-    this->hSerial = CreateFile(portName_t.c_str(),
-            GENERIC_READ | GENERIC_WRITE,
-            0,
-            NULL,
-            OPEN_EXISTING,
-            FILE_ATTRIBUTE_NORMAL,
-            NULL);
-
-    //Check if the connection was successfull
-    if(this->hSerial==INVALID_HANDLE_VALUE){
-        //If not success full display an Error
-        if(GetLastError()==ERROR_FILE_NOT_FOUND){
-            //Print Error if neccessary
-            printf("ERROR: Handle was not attached. Reason: %s not available.\n", portName.c_str());
-        }
-        else{
-            printf("ERROR!!!");
-        }
-    }else{
-        //If connected we try to set the comm parameters
-        DCB dcbSerialParams = {0};
-
-        //Try to get the current
-        if (!GetCommState(this->hSerial, &dcbSerialParams)){
-            //If impossible, show an error
-            printf("failed to get current serial parameters!");
-        }else{
-            //Define serial connection parameters for the arduino board
-            dcbSerialParams.BaudRate=CBR_115200;
-            dcbSerialParams.ByteSize=8;
-            dcbSerialParams.StopBits=ONESTOPBIT;
-            dcbSerialParams.Parity=NOPARITY;
-
-             //Set the parameters and check for their proper application
-             if(!SetCommState(hSerial, &dcbSerialParams)){
-                printf("ALERT: Could not set Serial Port parameters");
-             }else{
-                 //If everything went fine we're connected
-                 this->connected = true;
-                 //We wait 2s as the arduino board will be reseting
-                 Sleep(ARDUINO_WAIT_TIME);
-             }
-        }
-    }
-
 }
 
 Arduino::~Arduino(){
@@ -120,11 +72,11 @@ std::string Arduino::ReadDataUntil(char _until, bool * _forced){
 	return ret;
 }
 
-bool Arduino::WriteData(char *buffer, unsigned int nbChar){
+bool Arduino::WriteData(const char * buffer, unsigned int nbChar){
     DWORD bytesSend;
 
     //Try to write the buffer on the Serial port
-    if(!WriteFile(this->hSerial, static_cast<void *>(buffer), nbChar, &bytesSend, 0)){
+    if(!WriteFile(this->hSerial, static_cast<const void *>(buffer), nbChar, &bytesSend, 0)){
         //In case it don't work get comm error and return false
         ClearCommError(this->hSerial, &this->errors, &this->status);
         return false;
@@ -135,6 +87,61 @@ bool Arduino::WriteData(char *buffer, unsigned int nbChar){
 bool Arduino::IsConnected(){
     //Simply return the connection status
     return this->connected;
+}
+
+void Arduino::connect(std::string _portName) {
+	 //We're not yet connected
+    this->connected = false;
+
+    //Try to connect to the given port throuh CreateFile
+	std::wstring portName_t;
+	for(unsigned long int i = 0; i < _portName.length(); ++i){
+	  portName_t += wchar_t(_portName[i]);
+	}
+
+    this->hSerial = CreateFile(portName_t.c_str(),
+            GENERIC_READ | GENERIC_WRITE,
+            0,
+            NULL,
+            OPEN_EXISTING,
+            FILE_ATTRIBUTE_NORMAL,
+            NULL);
+
+    //Check if the connection was successfull
+    if(this->hSerial==INVALID_HANDLE_VALUE){
+        //If not success full display an Error
+        if(GetLastError()==ERROR_FILE_NOT_FOUND){
+            //Print Error if neccessary
+			ST_LOG_WARN("Handle was not attached. Reason: "+_portName+" not available");
+        }else{
+			ST_LOG_WARN("Handle was not attached. Reason: unknown");
+        }
+    }else{
+        //If connected we try to set the comm parameters
+        DCB dcbSerialParams = {0};
+
+        //Try to get the current
+        if (!GetCommState(this->hSerial, &dcbSerialParams)){
+            //If impossible, show an error
+			ST_LOG_WARN("Failed to get current serial parameters");
+        }else{
+            //Define serial connection parameters for the arduino board
+            dcbSerialParams.BaudRate=CBR_115200;
+            dcbSerialParams.ByteSize=8;
+            dcbSerialParams.StopBits=ONESTOPBIT;
+            dcbSerialParams.Parity=NOPARITY;
+
+             //Set the parameters and check for their proper application
+             if(!SetCommState(hSerial, &dcbSerialParams)){
+				Log::warn("Could not set Serial Port parameters");
+             }else{
+                 //If everything went fine we're connected
+                 this->connected = true;
+                 //We wait 2s as the arduino board will be reseting
+                // Sleep(ARDUINO_WAIT_TIME);
+             }
+        }
+    }
 }
 
 void Arduino::update(Step* _step){

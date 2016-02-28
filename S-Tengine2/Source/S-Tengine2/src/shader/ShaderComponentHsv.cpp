@@ -1,12 +1,12 @@
 #pragma once
 
-#include <shader\ShaderComponentHsv.h>
-#include <shader\ShaderVariables.h>
+#include <shader/ShaderComponentHsv.h>
+#include <shader/ShaderVariables.h>
+#include <shader/ComponentShaderBase.h>
 #include <GLUtils.h>
 #include <RenderOptions.h>
-#include <shader\Shader.h>
 
-ShaderComponentHsv::ShaderComponentHsv(Shader * _shader, float _hue, float _saturation, float _value):
+ShaderComponentHsv::ShaderComponentHsv(ComponentShaderBase * _shader, float _hue, float _saturation, float _value):
 	ShaderComponent(_shader),
 	hue(_hue),
 	saturation(_saturation),
@@ -75,7 +75,7 @@ void ShaderComponentHsv::load(){
 	ShaderComponent::load();
 }
 
-void ShaderComponentHsv::configureUniforms(vox::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
+void ShaderComponentHsv::configureUniforms(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption, NodeRenderable * _nodeRenderable){
 	while(hue > 1.f){
 		hue -= 1.f;
 	}

@@ -5,8 +5,8 @@
 class VerticalLinearLayout : public LinearLayout{
 public:
 
-	VerticalLinearLayout(BulletWorld * _bulletWorld, Scene * _scene);
+	VerticalLinearLayout(BulletWorld * _bulletWorld);
 
-	virtual void update(Step * _step) override;
+	virtual void layoutChildren() override;
 	virtual float getContentsHeight() override;
 };

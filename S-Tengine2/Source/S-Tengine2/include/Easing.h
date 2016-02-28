@@ -9,7 +9,7 @@
 class Easing{
 public:
 	enum Type{
-		kNONE,
+		kLINEAR,
 		kEASE_IN_QUAD,
 		kEASE_OUT_QUAD,
 		kEASE_IN_OUT_QUAD,
@@ -41,6 +41,7 @@ public:
 		kEASE_OUT_BACK,
 		kEASE_IN_OUT_BACK,
 	};
+	
 	/**
 	 * @param	t	Current time
 	 * @param	b	Start value
@@ -50,7 +51,7 @@ public:
 	 */
 	static float call(Type type, float t, float b, float c, float d){
 		switch(type) {
-			case kNONE: return none(t,b,c,d);
+			case kLINEAR:				return linear(t,b,c,d);
 			case kEASE_IN_QUAD:			return easeInQuad(t,b,c,d);
 			case kEASE_OUT_QUAD:		return easeOutQuad(t,b,c,d);
 			case kEASE_IN_OUT_QUAD:		return easeInOutQuad(t,b,c,d);
@@ -84,6 +85,53 @@ public:
 		}
 		return 0;
 	}
+
+
+	/**
+	 * @param	t	Current time
+	 * @param	b	Start value
+	 * @param	c	Change in value (target - start value)
+	 * @param	d	Duration
+	 * @return	Eased value
+	 */
+	static float call(std::string type, float t, float b, float c, float d){
+		return call(getTypeByName(type), t, b, c, d);
+	}
+
+	static Easing::Type getTypeByName(std::string name){
+		if(name == "LINEAR") return kLINEAR;
+		if(name == "EASE_IN_QUAD")			return kEASE_IN_QUAD;
+		if(name == "EASE_OUT_QUAD")			return kEASE_OUT_QUAD;
+		if(name == "EASE_IN_OUT_QUAD")		return kEASE_IN_OUT_QUAD;
+		if(name == "EASE_IN_CUBIC")			return kEASE_IN_CUBIC;
+		if(name == "EASE_OUT_CUBIC")		return kEASE_OUT_CUBIC;
+		if(name == "EASE_IN_OUT_CUBIC")		return kEASE_IN_OUT_CUBIC;
+		if(name == "EASE_IN_QUART")			return kEASE_IN_QUART;
+		if(name == "EASE_OUT_QUART")		return kEASE_OUT_QUART;
+		if(name == "EASE_IN_OUT_QUART")		return kEASE_IN_OUT_QUART;
+		if(name == "EASE_IN_QUINT")			return kEASE_IN_QUINT;
+		if(name == "EASE_OUT_QUINT")		return kEASE_OUT_QUINT;
+		if(name == "EASE_IN_OUT_QUINT")		return kEASE_IN_OUT_QUINT;
+		if(name == "EASE_IN_SINE")			return kEASE_IN_SINE;
+		if(name == "EASE_OUT_SINE")			return kEASE_OUT_SINE;
+		if(name == "EASE_IN_OUT_SINE")		return kEASE_IN_OUT_SINE;
+		if(name == "EASE_IN_EXPO")			return kEASE_IN_EXPO;
+		if(name == "EASE_OUT_EXPO")			return kEASE_OUT_EXPO;
+		if(name == "EASE_IN_OUT_EXPO")		return kEASE_IN_OUT_EXPO;
+		if(name == "EASE_IN_CIRC")			return kEASE_IN_CIRC;
+		if(name == "EASE_OUT_CIRC")			return kEASE_OUT_CIRC;
+		if(name == "EASE_IN_OUT_CIRC")		return kEASE_IN_OUT_CIRC;
+		if(name == "EASE_IN_ELASTIC")		return kEASE_IN_ELASTIC;
+		if(name == "EASE_OUT_ELASTIC")		return kEASE_OUT_ELASTIC;
+		if(name == "EASE_IN_OUT_ELASTIC")	return kEASE_IN_OUT_ELASTIC;
+		if(name == "EASE_IN_BOUNCE")		return kEASE_IN_BOUNCE;
+		if(name == "EASE_OUT_BOUNCE")		return kEASE_OUT_BOUNCE;
+		if(name == "EASE_IN_OUT_BOUNCE")	return kEASE_IN_OUT_BOUNCE;
+		if(name == "EASE_IN_BACK")			return kEASE_IN_BACK;
+		if(name == "EASE_OUT_BACK")			return kEASE_OUT_BACK;
+		if(name == "EASE_IN_OUT_BACK")		return kEASE_IN_OUT_BACK;
+		return kLINEAR;
+	}
 	
 	/**
 	 * @param	t	Current time
@@ -92,7 +140,7 @@ public:
 	 * @param	d	Duration
 	 * @return	Eased value
 	 */
-	static float none(float t, float b, float c, float d){
+	static float linear(float t, float b, float c, float d){
 		return c * t / d + b;
 	}
 	
