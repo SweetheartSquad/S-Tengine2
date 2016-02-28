@@ -17,11 +17,12 @@
 
 // for screenshots
 #include <DateUtils.h>
-#include <stb/stb_image_write.h>
+#include <ProgrammaticTexture.h>
 
 #include <AntTweakBar.h>
 
 #include <GLFW/glfw3.h>
+
 
 Game::Game(std::string _firstSceneKey, Scene * _firstScene, bool _isRunning) :
 	accumulator(0.0),
@@ -256,17 +257,14 @@ void Game::toggleFullScreen(){
 void Game::takeScreenshot(){
 	std::stringstream filepath;
 		
-	filepath << "data/screenshots/" << sweet::DateUtils::getDatetime() << ".tga";
-	GLubyte * data = (GLubyte *)malloc(sizeof(GLubyte) * viewPortWidth * viewPortHeight * 4);
-	glReadPixels(0, 0, viewPortWidth, viewPortHeight, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	filepath << "../screenshots/" << sweet::DateUtils::getDatetime() << ".tga";
+	ProgrammaticTexture * tex = new ProgrammaticTexture();
+	tex->allocate(viewPortWidth, viewPortHeight, 4);
+	glReadPixels(0, 0, viewPortWidth, viewPortHeight, GL_RGBA, GL_UNSIGNED_BYTE, tex->data);
+	tex->saveImageData(filepath.str());
+	delete tex;
 
-	if(stbi_write_tga(filepath.str().c_str(), viewPortWidth, viewPortHeight, 4, data, 1)){
-		Log::info("Screenshot \""+filepath.str()+"\" saved");
-	}else{
-		Log::error("Screenshot \""+filepath.str()+"\" not saved");
-	}
-	
-	free(data);
+	Log::info("Screenshot \""+filepath.str()+"\" saved");
 }
 
 void Game::exit(){
