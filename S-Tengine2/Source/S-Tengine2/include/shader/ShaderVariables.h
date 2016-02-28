@@ -11,7 +11,7 @@
 *
 **********************************************************************/
 
-#define MAX_LIGHTS    5
+#define MAX_LIGHTS    32
 #define MAX_TEXTURES  5
 #define MAX_MATERIALS 5
 

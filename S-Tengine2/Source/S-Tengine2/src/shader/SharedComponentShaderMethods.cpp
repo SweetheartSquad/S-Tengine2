@@ -50,7 +50,10 @@ void SharedComponentShaderMethods::configureLights(sweet::MatrixStack* _matrixSt
 			glUniform1i(_renderOption->shader->numLightsUniformLocation, numLights);
 			checkForGlError(false);
 			// Pass the paramaters for each light to the _shader
-			for(unsigned long int i = 0; i < numLights; ++i){
+			if(numLights > MAX_LIGHTS) {
+				ST_LOG_WARN("Number of lights surpasses the max allowed number of lights")
+			}
+			for(unsigned long int i = 0; i < numLights && i <= MAX_LIGHTS; ++i){
 				Light * l = _renderOption->lights->at(i);
 
 				if(l->lightDirty){
