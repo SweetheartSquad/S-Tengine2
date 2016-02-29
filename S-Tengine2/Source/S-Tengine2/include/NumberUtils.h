@@ -66,6 +66,18 @@ namespace sweet{
 			++shuffles;
 		};
 
+		// returns a whole shuffled iteration
+		std::vector<T> getShuffledItems(){
+			std::vector<T> items;
+			if(size() > 0){
+				shuffle();
+				while(unused.size() > 0){
+					items.push_back(pop());
+				}
+			}
+			return items;
+		}
+
 		// pops items until every currently available item is used
 		// useful for when you want to "reset" the vector, letting it pick randomly from the entire list again
 		void clearAvailable(){
