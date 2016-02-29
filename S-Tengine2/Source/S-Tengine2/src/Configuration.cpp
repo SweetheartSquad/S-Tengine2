@@ -4,6 +4,8 @@
 #include <FileUtils.h>
 #include <Log.h>
 #include <GLFW\glfw3.h>
+#include <ctime>
+
 Configuration::Configuration() :
 	fullscreen(false),
 	resolution(0),
@@ -17,6 +19,7 @@ void Configuration::load(const std::string & _filename){
 	bool fullscreenDefault = false;
 	glm::uvec2 resolutionDefault = glm::uvec2(vidmode->width*0.9, vidmode->height*0.9);
 	double fpsDefault = 60.0;
+	signed long int rngSeedDefault = 0;
 
 
 	Json::Reader reader;
@@ -43,6 +46,12 @@ void Configuration::load(const std::string & _filename){
 		fullscreen = json.get("fullscreen", fullscreenDefault).asBool();
 		resolution = glm::uvec2(json["resolution"].get("x", resolutionDefault.x).asInt(), json["resolution"].get("y", resolutionDefault.y).asInt());
 		fps = json.get("fps", fpsDefault).asDouble();
+		rngSeed = json.get("rngSeed", rngSeedDefault).asInt();
+
+		// if the rng seed is negative, it means we want to use the time as a seed
+		if(rngSeed < 0){
+			rngSeed = time(nullptr);
+		}
 	}
 }
 
@@ -52,6 +61,7 @@ void Configuration::save(const std::string & _filename){
 	json["resolution"]["x"] = resolution.x;
 	json["resolution"]["y"] = resolution.y;
 	json["fps"] = fps;
+	json["rngSeed"] = rngSeed;
 		
 	std::ofstream log(_filename, std::ios_base::out);
 	log << json;

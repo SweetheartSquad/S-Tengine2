@@ -245,7 +245,7 @@ void sweet::initialize(std::string _title){
 	config.load("data/config.json");
 
 	// seed RNG
-	sweet::NumberUtils::seed(0);
+	sweet::NumberUtils::seed(config.rngSeed);
 	
 	sweet::currentContext = sweet::initWindow();
 	glfwMakeContextCurrent(sweet::currentContext);

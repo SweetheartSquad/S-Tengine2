@@ -8,6 +8,7 @@ public:
 	bool fullscreen;
 	glm::uvec2 resolution;
 	double fps;
+	signed long int rngSeed;
 
 
 	Configuration();
