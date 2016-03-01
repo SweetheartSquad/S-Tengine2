@@ -46,7 +46,7 @@ public:
 	// if false, font meshes use GL_NEAREST
 	bool antiAliased;
 
-	explicit Font(std::string _fontSrc, int size, bool _autoRelease);
+	explicit Font(std::string _fontSrc, float size, bool _autoRelease);
 	~Font();
 	
 	void load() override;

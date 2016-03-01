@@ -107,7 +107,7 @@ void Glyph::unload(){
 }
 
 
-Font::Font(std::string _fontSrc, int _size, bool _autoRelease) :
+Font::Font(std::string _fontSrc, float _size, bool _autoRelease) :
 	NodeResource(_autoRelease),
 	face(nullptr),
 	antiAliased(false)
@@ -115,7 +115,7 @@ Font::Font(std::string _fontSrc, int _size, bool _autoRelease) :
 	if(FT_New_Face(sweet::freeTypeLibrary, _fontSrc.c_str(), 0, &face) != 0) {
 		Log::error("Couldn't load font: " + _fontSrc);
 	}
-	size = _size * (sweet::getDpi() / 75.f);
+	size = _size * sweet::getDpi();
 	lineGapRatio = 1.2f;
 }
 

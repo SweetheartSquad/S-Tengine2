@@ -158,7 +158,7 @@ AssetFont::AssetFont(Json::Value _json, Scenario * const _scenario) :
 	}else{
 		src = "assets/fonts/" + src;
 	}
-	int size = _json.get("size", 24).asInt();
+	float size = _json.get("size", 0.1f).asFloat();
 	font = new Font(src, size, false);
 	font->antiAliased = _json.get("antiAliased", false).asBool();
 }

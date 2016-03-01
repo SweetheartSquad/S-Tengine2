@@ -72,6 +72,10 @@ void TextLabel::setText(std::string _text){
 	setText(std::wstring(_text.begin(), _text.end()));
 }
 
+std::wstring TextLabel::getText(bool _clipped){
+	return _clipped ? textDisplayed : textAll;
+}
+
 void TextLabel::updateText(){
 	// find out where the first overflow in the text would occur
 	unsigned long int idx = wordWrap();

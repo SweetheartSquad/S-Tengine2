@@ -41,6 +41,9 @@ public:
 	void setText(std::wstring _text);
 	// converts _text to an std::wstring and calls setText(std::wstring)
 	void setText(std::string _text);
+	std::wstring getText(bool _clipped);
+	// if _clipped, returns textDisplayed
+	// otherwise, returns textAll
 	void updateText();
 	
 	virtual float getContentsHeight() override;

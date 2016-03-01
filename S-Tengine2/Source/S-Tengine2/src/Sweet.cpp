@@ -369,6 +369,6 @@ float sweet::getDpi(GLFWmonitor * _monitor){
 	}
 	int widthMM, heightMM;
 	glfwGetMonitorPhysicalSize(_monitor, &widthMM, &heightMM);
-	
-	return glfwGetVideoMode(_monitor)->width / (widthMM / 25.4);
+	float res = (float) glfwGetVideoMode(_monitor)->width / (widthMM / 25.4f);
+	return res;
 }
