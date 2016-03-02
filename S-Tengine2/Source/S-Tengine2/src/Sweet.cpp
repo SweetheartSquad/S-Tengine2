@@ -186,8 +186,10 @@ GLFWwindow * sweet::initWindow(){
 	
 	// if we're running in windowed mode, center the window in the current monitor
 	if(!fullscreen){
-		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-		glfwSetWindowPos(window, (mode->width - target.x)/2, (mode->height - target.y)/2);
+		int xPos = 0, yPos = 0;
+		glfwGetMonitorPos(currentMonitor, &xPos, &yPos);
+		const GLFWvidmode* mode = glfwGetVideoMode(currentMonitor);
+		glfwSetWindowPos(window, xPos + (mode->width - target.x)/2, yPos + (mode->height - target.y)/2);
 	}
 
 	// TODO: make this based on config too
