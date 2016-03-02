@@ -70,6 +70,9 @@ namespace sweet{
 	*/
 	extern GLFWwindow * currentContext;
 
+	// A refernce to the monitor which the application treats as primary
+	extern GLFWmonitor * currentMonitor;
+
 	/**
 	* Stores a reference to the global freetype instance
 	*/
@@ -167,7 +170,7 @@ namespace sweet{
 
 	/*
 	* @returns the DPI of the monitor
-	* if _monitor is nullptr, uses the primary monitor
+	* if _monitor is nullptr, uses the current monitor
 	*/
 	float getDpi(GLFWmonitor * _monitor = nullptr);
 }

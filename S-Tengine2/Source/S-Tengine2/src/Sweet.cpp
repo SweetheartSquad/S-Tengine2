@@ -36,6 +36,7 @@ bool sweet::drawAntTweakBar = false;
 
 FT_Library sweet::freeTypeLibrary = nullptr;
 GLFWwindow * sweet::currentContext = nullptr;
+GLFWmonitor * sweet::currentMonitor = nullptr;
 
 
 // Nvidia optiums fix to force discrete graphics
@@ -149,7 +150,6 @@ void sweet::error_callback(int _error, const char * _description){
 GLFWwindow * sweet::initWindow(){
 	glm::uvec2 target(config.resolution.x, config.resolution.y);
 	bool fullscreen = config.fullscreen;
-	GLFWmonitor * monitor = glfwGetPrimaryMonitor();
 	
 	// if we're rendering to an oculus, match the resolution target to the HMD output size
 	// also prevent fullscreen windows
@@ -163,7 +163,7 @@ GLFWwindow * sweet::initWindow(){
 	// find the best match between the target resolution and the available video modes
 	if(fullscreen){
 		int numVideoModes = 0;
-		const GLFWvidmode * videoModes = glfwGetVideoModes(monitor, &numVideoModes);
+		const GLFWvidmode * videoModes = glfwGetVideoModes(currentMonitor, &numVideoModes);
 		int diff = INT_MAX;
 		int bestMatch = 0;
 		for(unsigned long int i = 0; i < numVideoModes; ++i){
@@ -177,7 +177,7 @@ GLFWwindow * sweet::initWindow(){
 		target.y = videoModes[bestMatch].height;
 	}
 
-	GLFWwindow * window = glfwCreateWindow(target.x, target.y, title.c_str(), fullscreen ? monitor : nullptr, nullptr);
+	GLFWwindow * window = glfwCreateWindow(target.x, target.y, title.c_str(), fullscreen ? currentMonitor : nullptr, nullptr);
 
 	if (!window){
 		glfwTerminate();
@@ -247,6 +247,18 @@ void sweet::initialize(std::string _title){
 	// seed RNG
 	sweet::NumberUtils::seed(config.rngSeed);
 	
+	// get the monitor
+	int numMonitors = 0;
+	GLFWmonitor ** monitors = glfwGetMonitors(&numMonitors);
+	if(numMonitors == 0 || monitors == nullptr){
+		throw "monitor error";
+	}
+	if(numMonitors < config.monitor){
+		config.monitor = numMonitors;
+	}
+	currentMonitor = monitors[config.monitor];
+
+	// create the application window
 	sweet::currentContext = sweet::initWindow();
 	glfwMakeContextCurrent(sweet::currentContext);
 
@@ -365,7 +377,7 @@ glm::uvec2 sweet::getWindowDimensions(GLFWwindow * _window){
 
 float sweet::getDpi(GLFWmonitor * _monitor){
 	if(_monitor == nullptr){
-		_monitor = glfwGetPrimaryMonitor();
+		_monitor = currentMonitor;
 	}
 	int widthMM, heightMM;
 	glfwGetMonitorPhysicalSize(_monitor, &widthMM, &heightMM);
