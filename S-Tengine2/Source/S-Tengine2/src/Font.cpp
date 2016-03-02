@@ -110,12 +110,12 @@ void Glyph::unload(){
 Font::Font(std::string _fontSrc, float _size, bool _autoRelease) :
 	NodeResource(_autoRelease),
 	face(nullptr),
-	antiAliased(false)
+	antiAliased(false),
+	size(_size)
 {
 	if(FT_New_Face(sweet::freeTypeLibrary, _fontSrc.c_str(), 0, &face) != 0) {
 		Log::error("Couldn't load font: " + _fontSrc);
 	}
-	size = _size * sweet::getDpi();
 	lineGapRatio = 1.2f;
 }
 
@@ -178,7 +178,14 @@ glm::vec2 Font::getGlyphXY(wchar_t _char){
 }
 
 void Font::loadGlyph(wchar_t _char){
-	FT_Set_Pixel_Sizes(face, 0, size);
+	float dpi = sweet::getDpi();
+	FT_Set_Char_Size(
+          face,    /* handle to face object           */
+          0,       /* char_width in 1/64th of points -- 0 = same as height */
+          size * 64,   /* char_height in 1/64th of points */
+          dpi,     /* horizontal device resolution    */
+		  dpi);   /* vertical device resolution      */
+
 	FT_Load_Char(face, _char, FT_LOAD_RENDER);
 }
 
