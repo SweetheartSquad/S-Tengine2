@@ -81,6 +81,7 @@ Scene_SlideShow::Scene_SlideShow(Game * _game, Easing::Type _easeType) :
 
 Scene_SlideShow::~Scene_SlideShow(){
 	delete uiLayer;
+	delete transition;
 	while(forwards.size() > 0){
 		delete forwards.back();
 		forwards.pop_back();
