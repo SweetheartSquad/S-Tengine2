@@ -121,6 +121,9 @@ BulletFirstPersonController::~BulletFirstPersonController(){
 	if(landSound != nullptr){
 		landSound->decrementAndDelete();
 	}
+
+	delete headBobble;
+	delete headZoom;
 }
 
 void BulletFirstPersonController::update(Step * _step){
