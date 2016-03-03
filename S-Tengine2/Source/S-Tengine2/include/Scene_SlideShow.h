@@ -8,7 +8,7 @@
 #include <shader/ShaderComponentAlpha.h>
 #include <Easing.h>
 
-class Slide {
+class Slide : public Node{
 public:
 	Texture * tex;
 	OpenAL_Sound * sound;
