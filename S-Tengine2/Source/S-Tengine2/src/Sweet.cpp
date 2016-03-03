@@ -258,8 +258,8 @@ void sweet::initialize(std::string _title){
 	if(numMonitors == 0 || monitors == nullptr){
 		throw "monitor error";
 	}
-	if(numMonitors < config.monitor){
-		config.monitor = numMonitors;
+	if(numMonitors-1 < config.monitor){
+		config.monitor = numMonitors-1;
 	}
 	currentMonitor = monitors[config.monitor];
 
