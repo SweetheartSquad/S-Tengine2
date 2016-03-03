@@ -126,7 +126,7 @@ public:
 	std::string category;
 
 	OpenAL_Sound(OpenAL_Source * _source, bool _autoRelease, std::string _category);
-	~OpenAL_Sound();
+	virtual ~OpenAL_Sound();
 	OpenAL_Source * source;
 	
 	virtual void update(Step * _step) override;

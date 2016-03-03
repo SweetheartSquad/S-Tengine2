@@ -289,7 +289,7 @@ float OpenAL_Sound::getAmplitude(){
 
 
 OpenAL_SoundSimple::OpenAL_SoundSimple(const char * _filename, bool _positional, bool _autoRelease, std::string _category) :
-	OpenAL_Sound(new OpenAL_Source(new OpenAL_Buffer(_filename, _autoRelease), _positional, _autoRelease), _autoRelease, _category),
+	OpenAL_Sound(new OpenAL_Source(new OpenAL_Buffer(_filename, true), _positional, true), _autoRelease, _category),
 	NodeResource(_autoRelease)
 {
 }
@@ -303,7 +303,7 @@ void OpenAL_SoundSimple::update(Step * _step){
 OpenAL_SoundStream::OpenAL_SoundStream(const char * _filename, bool _positional, bool _autoRelease, std::string _category, unsigned long int _bufferLength, unsigned long int _numBufs) :
 	NodeResource(_autoRelease),
 	isStreaming(false),
-	OpenAL_Sound(new OpenAL_Source(nullptr, _positional, _autoRelease), _autoRelease, _category),
+	OpenAL_Sound(new OpenAL_Source(nullptr, _positional, true), _autoRelease, _category),
 	bufferOffset(0),
 	maxBufferOffset(0),
 	numBuffers(_numBufs),
@@ -311,7 +311,7 @@ OpenAL_SoundStream::OpenAL_SoundStream(const char * _filename, bool _positional,
 {
 	buffers = (ALuint *)calloc(numBuffers, sizeof(ALuint));
 	alGenBuffers(numBuffers, buffers);
-	source->buffer = new OpenAL_Buffer(_filename, _autoRelease);
+	source->buffer = new OpenAL_Buffer(_filename, true);
 	++source->buffer->referenceCount;
 
 	maxBufferOffset = source->buffer->numSamples / bufferLength;

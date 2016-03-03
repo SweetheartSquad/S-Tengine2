@@ -15,6 +15,8 @@ Asset::Asset(Json::Value _json, Scenario * const _scenario) :
 
 }
 
+Asset::~Asset() {}
+
 AssetTexture::AssetTexture(Json::Value _json, Scenario * const _scenario) :
 	Asset(_json, _scenario),
 	texture(nullptr)
@@ -82,8 +84,8 @@ AssetTextureSampler::AssetTextureSampler(Json::Value _json, Scenario * const _sc
 		float h		  = defJson.get("h", 256).asFloat();
 		std::string t = defJson.get("t", defTex).asString();
 		std::string defPath = src.substr(0, src.find_last_of("\\/"));
-		Texture * texture = new Texture(defPath + "/" + t, true, false);
-		textureSampler = new TextureSampler(texture, w, h, u, v);
+		Texture * texture = new Texture(defPath + "/" + t, true, true);
+		textureSampler = new TextureSampler(texture, w, h, u, v, false);
 		textureSampler->load();
 	}
 }

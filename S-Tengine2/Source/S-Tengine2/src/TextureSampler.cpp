@@ -7,7 +7,7 @@
 
 #include <json\json.h>
 
-TextureSampler::TextureSampler(Texture * _texture, float _width, float _height, float _u, float _v) :
+TextureSampler::TextureSampler(Texture * _texture, float _width, float _height, float _u, float _v, bool _autoRelease) :
 	NodeResource(true),
 	texture(_texture),
 	width(_width),
@@ -18,7 +18,7 @@ TextureSampler::TextureSampler(Texture * _texture, float _width, float _height, 
 {
 	++texture->referenceCount;
 }
-TextureSampler::TextureSampler(std::string _definitionDir, std::string _definitionName, bool _releaseTexture) :
+TextureSampler::TextureSampler(std::string _definitionDir, std::string _definitionName, bool _releaseTexture, bool _autoRelease) :
 	NodeResource(true),
 	texture(nullptr),
 	width(0),

@@ -20,6 +20,7 @@ public:
 	std::string type;
 
 	Asset(Json::Value _json, Scenario * const _scenario);
+	virtual ~Asset() = 0;
 
 	// checks _json for a type member
 	// type is used to query the creationRegistry in order to dynamically instantiate an asset

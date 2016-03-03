@@ -39,4 +39,6 @@ void ResourceManager::destruct(){
 		delete resources.back();
 		resources.pop_back();
 	}
+
+	Scenario::destruct();
 }
