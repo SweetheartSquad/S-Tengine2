@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <Font.h>
 #include <Sweet.h>
@@ -116,7 +116,7 @@ Font::Font(std::string _fontSrc, float _size, bool _autoRelease) :
 	if(FT_New_Face(sweet::freeTypeLibrary, _fontSrc.c_str(), 0, &face) != 0) {
 		Log::error("Couldn't load font: " + _fontSrc);
 	}
-	lineGapRatio = 1.2f;
+	lineGapRatio = 1.75f;
 }
 
 Font::~Font(){
@@ -190,5 +190,5 @@ void Font::loadGlyph(wchar_t _char){
 }
 
 float Font::getLineHeight(){
-	return lineGapRatio * size;//((face->size->metrics.ascender + face->size->metrics.descender)/64);
+	return lineGapRatio * ((face->size->metrics.ascender + face->size->metrics.descender)/64);
 }
