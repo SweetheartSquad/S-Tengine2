@@ -17,6 +17,8 @@ public:
 	GlyphMesh * glyphMesh;
 
 	UIGlyph(BulletWorld * _world, Glyph * _mesh, Shader * _shader, wchar_t _character);
+	~UIGlyph();
+
 	void setGlyph(Glyph * _mesh);
 	
 	virtual void render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
@@ -32,6 +34,7 @@ public:
 	std::vector<UIGlyph *> unusedGlyphs;
 
 	TextLabel(BulletWorld* _world, Font * _font, Shader * _textShader);
+	~TextLabel();
 	
 	virtual void render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 	virtual void update(Step * _step) override;

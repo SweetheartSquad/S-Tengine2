@@ -13,6 +13,14 @@ TextArea::TextArea(BulletWorld * _bulletWorld, Font * _font, Shader * _textShade
 	setAutoresizeWidth();
 	setWrapMode(kCHARACTER);
 }
+
+TextArea::~TextArea(){
+	while(unusedLines.size() > 0){
+		delete unusedLines.back();
+		unusedLines.pop_back();
+	}
+}
+
 void TextArea::update(Step * _step){
 	if(updateRequired){
 		updateText();

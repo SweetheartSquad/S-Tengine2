@@ -21,6 +21,13 @@ TextLabel::TextLabel(BulletWorld* _world, Font* _font, Shader* _textShader):
 	setAutoresizeWidth();
 }
 
+TextLabel::~TextLabel(){
+	while(unusedGlyphs.size() > 0){
+		delete unusedGlyphs.back();
+		unusedGlyphs.pop_back();
+	}
+}
+
 void TextLabel::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
 	HorizontalLinearLayout::render(_matrixStack, _renderOptions);
 }
@@ -199,6 +206,9 @@ UIGlyph::UIGlyph(BulletWorld * _world, Glyph * _mesh, Shader * _shader, wchar_t 
 	setGlyph(_mesh);
 	boxSizing = kCONTENT_BOX;
 	mouseEnabled = false;
+}
+
+UIGlyph::~UIGlyph(){
 }
 
 void UIGlyph::setGlyph(Glyph * _newGlyph){
