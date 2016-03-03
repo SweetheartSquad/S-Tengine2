@@ -6,8 +6,7 @@
 #include <Log.h>
 
 Condition * Condition::getCondition(Json::Value _json, Scenario * const _scenario){
-	Condition * res = nullptr;
-	res = new Condition(_json, _scenario);
+	Condition * res = new Condition(_json, _scenario);
 	return res;
 }
 
@@ -15,6 +14,10 @@ Condition::Condition(Json::Value _json, Scenario * _scenario) :
 	event(new sweet::Event(_json)), 
 	scenario(_scenario) {
 	event->setStringData("scenario", _scenario->id);
+}
+
+Condition::~Condition(){
+	delete event;
 }
 
 bool Condition::evaluate() {

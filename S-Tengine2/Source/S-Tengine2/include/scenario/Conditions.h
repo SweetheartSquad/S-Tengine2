@@ -16,6 +16,7 @@ public:
 	sweet::Event * event; 
 
 	explicit Condition(Json::Value _json, Scenario * _scenario);
+	~Condition();
 
 	// returns true if the condition's criteria are met
 	virtual bool evaluate();
