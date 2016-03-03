@@ -15,7 +15,6 @@ Option::Option(Json::Value _json, Scenario * const _scenario) :
 }
 
 Option::~Option(){
-
 } 
 
 
@@ -42,6 +41,9 @@ Conversation::~Conversation(){
 	while(dialogueObjects.size() > 0){
 		delete dialogueObjects.back();
 		dialogueObjects.pop_back();
+	}while(options.size() > 0){
+		delete options.back();
+		options.pop_back();
 	}
 }
 
