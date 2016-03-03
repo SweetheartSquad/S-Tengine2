@@ -36,7 +36,7 @@ public:
 
 	static std::vector<Asset *> defaultAssets;
 	// events triggered by this scenario's dialogue will be handled by this manager
-	sweet::EventManager eventManager;
+	sweet::EventManager * const eventManager;
 
 	// the scenario filename
 	std::string id;

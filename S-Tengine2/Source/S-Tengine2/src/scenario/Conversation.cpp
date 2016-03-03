@@ -158,7 +158,7 @@ bool ConversationIterator::sayNext(){
 	// move conversation forward
 	bool stuffLeftToSay = currentConversation->sayNextDialogue();
 	// allow any events triggered during conversation to be handled
-	currentConversation->scenario->eventManager.update(nullptr);
+	currentConversation->scenario->eventManager->update(nullptr);
 	
 	if(!stuffLeftToSay){
 		// if there's nothing left to say, check for options

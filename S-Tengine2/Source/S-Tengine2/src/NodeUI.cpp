@@ -50,7 +50,8 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	textureCam(nullptr),
 	__layoutDirty(true),
 	__renderFrameDirty(_renderMode == kTEXTURE),
-	nodeUIParent(nullptr)
+	nodeUIParent(nullptr),
+	eventManager(new sweet::EventManager())
 {
 	if(bgShader == nullptr){
 		bgShader = new ComponentShaderBase(false);
@@ -86,6 +87,7 @@ NodeUI::~NodeUI() {
 		delete frameBuffer;
 		delete texturedPlane;
 	}
+	delete eventManager;
 }
 
 void NodeUI::setVisible(bool _visible){
@@ -120,7 +122,7 @@ void NodeUI::down(){
 	isHovered = true;
 	isDown = true;
 	
-	eventManager.triggerEvent("mousedown");
+	eventManager->triggerEvent("mousedown");
 }
 void NodeUI::up(){
 	if(isHovered && isDown){
@@ -128,20 +130,20 @@ void NodeUI::up(){
 	}
 	isDown = false;
 	
-	eventManager.triggerEvent("mouseup");
+	eventManager->triggerEvent("mouseup");
 }
 void NodeUI::click(){
-	eventManager.triggerEvent("click");
+	eventManager->triggerEvent("click");
 }
 void NodeUI::in(){
 	isHovered = true;
 	
-	eventManager.triggerEvent("mousein");
+	eventManager->triggerEvent("mousein");
 }
 void NodeUI::out(){
 	isHovered = false;
 	
-	eventManager.triggerEvent("mouseout");
+	eventManager->triggerEvent("mouseout");
 }
 
 
@@ -333,7 +335,7 @@ void NodeUI::__renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions
 }
 
 void NodeUI::__updateForEntities(Step * _step) {
-	eventManager.update(_step);
+	eventManager->update(_step);
 	if(isLayoutDirty()){
 		autoResize();
 		__layoutDirty = false;
@@ -346,7 +348,7 @@ void NodeUI::__updateForEntities(Step * _step) {
 			if(abs(d) > FLT_EPSILON){
 				sweet::Event * e = new sweet::Event("mousewheel");
 				e->setFloatData("delta", d);
-				eventManager.triggerEvent(e);
+				eventManager->triggerEvent(e);
 			}
 
 			if(!isHovered){

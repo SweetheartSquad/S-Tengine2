@@ -38,7 +38,8 @@ Scenario::Scenario(std::string _jsonSrc) :
 	conditionImplementations(nullptr),
 	variables(new sweet::Event("__VARIABLES__")),
 	id(_jsonSrc),
-	currentConversation(nullptr)
+	currentConversation(nullptr),
+	eventManager(new sweet::EventManager())
 {
 	Json::Reader reader;
 	Json::Value defJson;
@@ -139,6 +140,7 @@ Scenario::~Scenario(){
 		a.second.clear();
 	}assets.clear();
 	delete variables;
+	delete eventManager;
 }
 
 Asset * Scenario::getAsset(std::string _type, std::string _id){

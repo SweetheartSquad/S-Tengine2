@@ -144,7 +144,7 @@ void Slider::updateValue(){
 
 	sweet::Event * e = new sweet::Event(std::string("change"));
 	e->setFloatData("delta", delta);
-	eventManager.triggerEvent(e);
+	eventManager->triggerEvent(e);
 }
 
 void Slider::setStepped(float _valueStep){

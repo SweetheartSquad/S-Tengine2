@@ -63,7 +63,7 @@ bool Dialogue::evaluateConditions(){
 
 void Dialogue::trigger(){
 	for(sweet::Event * e : triggers){
-		scenario->eventManager.triggerEvent(new sweet::Event(*e));
+		scenario->eventManager->triggerEvent(new sweet::Event(*e));
 	}
 }
 
