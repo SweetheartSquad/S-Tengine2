@@ -9,6 +9,7 @@ public:
 	glm::uvec2 resolution;
 	double fps;
 	signed long int rngSeed;
+	signed long int monitor;
 
 
 	Configuration();

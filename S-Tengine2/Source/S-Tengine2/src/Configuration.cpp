@@ -9,7 +9,9 @@
 Configuration::Configuration() :
 	fullscreen(false),
 	resolution(0),
-	fps(0)
+	fps(0),
+	monitor(0),
+	rngSeed(0)
 {
 }
 
@@ -20,6 +22,7 @@ void Configuration::load(const std::string & _filename){
 	glm::uvec2 resolutionDefault = glm::uvec2(vidmode->width*0.9, vidmode->height*0.9);
 	double fpsDefault = 60.0;
 	signed long int rngSeedDefault = 0;
+	signed long int monitorDefault = 0;
 
 
 	Json::Reader reader;
@@ -47,6 +50,7 @@ void Configuration::load(const std::string & _filename){
 		resolution = glm::uvec2(json["resolution"].get("x", resolutionDefault.x).asInt(), json["resolution"].get("y", resolutionDefault.y).asInt());
 		fps = json.get("fps", fpsDefault).asDouble();
 		rngSeed = json.get("rngSeed", rngSeedDefault).asInt();
+		monitor = json.get("monitor", monitorDefault).asInt();
 
 		// if the rng seed is negative, it means we want to use the time as a seed
 		if(rngSeed < 0){
@@ -62,6 +66,7 @@ void Configuration::save(const std::string & _filename){
 	json["resolution"]["y"] = resolution.y;
 	json["fps"] = fps;
 	json["rngSeed"] = rngSeed;
+	json["monitor"] = monitor;
 		
 	std::ofstream log(_filename, std::ios_base::out);
 	log << json;
