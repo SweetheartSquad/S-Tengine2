@@ -101,7 +101,7 @@ public:
 	BoxSizing boxSizing;
 
 	NodeUI(BulletWorld * _world, RenderMode _renderMode = kENTITIES, bool _mouseEnabled = false);
-	~NodeUI();
+	virtual ~NodeUI();
 	
 	virtual void update(Step * _step) override;
 	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
