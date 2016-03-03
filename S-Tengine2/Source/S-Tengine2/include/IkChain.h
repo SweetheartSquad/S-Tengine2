@@ -5,14 +5,17 @@
 
 class IkJoint_CCD_World : public Entity{
 public:
-	IkJoint_CCD_World(AnimationJoint * _copy);
-
 	 // position in world space
 	glm::vec2 pos;
 	 // cosing of angle in world space
 	float angleCos;
 	 // sing of angle in world space
 	float angleSin;
+
+
+	IkJoint_CCD_World(AnimationJoint * _copy);
+	virtual ~IkJoint_CCD_World();
+
 
 	// sets the angle and stores the sin and cos for later use
 	void setAngle(float _angle);
@@ -36,6 +39,7 @@ public:
 	
 	
 	explicit IkChain_CCD(glm::vec2 _pos);
+	virtual ~IkChain_CCD();
 
 	// adds _j as a child of the last joint in this IK chain
 	// adds _j to the IK joint list of this chain

@@ -18,6 +18,8 @@ public:
 	std::vector<AnimationJoint *> outJoints;
 
 	explicit AnimationJoint(glm::vec2 _pos);
+	virtual ~AnimationJoint();
+
 	// finds the corresponding angle within the range [-180, 180] and clamps it to within the joint's specified limits (if enabled)
 	void setAngle(float _angle);
 	float getAngle();

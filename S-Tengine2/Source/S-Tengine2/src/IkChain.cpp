@@ -13,7 +13,9 @@ IkJoint_CCD_World::IkJoint_CCD_World(AnimationJoint * _copy) :
 	angleSin(sin(angle)),
 	angleCos(cos(angle))
 {
+}
 
+IkJoint_CCD_World::~IkJoint_CCD_World(){
 }
 
 void IkJoint_CCD_World::setAngle(float _angle){	
@@ -38,6 +40,12 @@ IkChain_CCD::IkChain_CCD(glm::vec2 _pos) :
 	pointVis->mesh->pushVert(Vertex(0,0,0));
 	lineVis->mesh->pushVert(Vertex(0,0,0));
 	lineVis->mesh->pushVert(Vertex(0,0,0));
+}
+IkChain_CCD::~IkChain_CCD(){
+	while(jointsWorld.size() > 0){
+		delete jointsWorld.back();
+		jointsWorld.pop_back();
+	}
 }
 
 void IkChain_CCD::update(Step * _step){

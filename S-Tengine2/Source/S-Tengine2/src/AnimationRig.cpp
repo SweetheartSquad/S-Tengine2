@@ -84,6 +84,8 @@ AnimationJoint::AnimationJoint(glm::vec2 _pos) :
 	pointVis->setVisible(false);
 	lineVis->setVisible(false);
 }
+AnimationJoint::~AnimationJoint(){
+}
 
 void AnimationJoint::update(Step * _step){
 	// update transform
