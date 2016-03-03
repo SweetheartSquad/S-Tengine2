@@ -172,6 +172,7 @@ void sweet::EventManager::removeParentManager(sweet::EventManager * _parentManag
 	for(signed long int i = parentManagers.size()-1; i >= 0; --i){
 		if(parentManagers.at(i) == _parentManager){
 			parentManagers.erase(parentManagers.begin() + i);
+			_parentManager->removeChildManager(this);
 			return;
 		}
 	}

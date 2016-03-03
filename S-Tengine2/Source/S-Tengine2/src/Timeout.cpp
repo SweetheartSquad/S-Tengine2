@@ -14,6 +14,10 @@ Timeout::Timeout(double _targetSeconds, std::function<void (sweet::Event * )> _o
 	eventManager->addEventListener("complete", _onComplete);
 }
 
+Timeout::~Timeout(){
+	delete eventManager;
+}
+
 void Timeout::start(){
 	if(!active){
 		eventManager->triggerEvent("start");

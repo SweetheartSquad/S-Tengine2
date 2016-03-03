@@ -16,6 +16,7 @@ public:
 	sweet::EventManager * eventManager;
 
 	Timeout(double _targetSeconds, std::function<void (sweet::Event * )> _onComplete);
+	~Timeout();
 
 	// calls stop and then calls start
 	void restart();

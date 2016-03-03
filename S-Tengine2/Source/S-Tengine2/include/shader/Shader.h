@@ -66,7 +66,7 @@ public:
 	Shader(std::string _vertexShaderFile, std::string _fragmentShaderFile, bool _autoRelease);
 	/**Creates shader using "vertexShaderFile", "_fragmentShaderFile" and "_geometryShaderFile" */
 	Shader(std::string _vertexShaderFile, std::string _fragmentShaderFile, std::string _geometryShaderFile, bool _autoRelease);
-	virtual ~Shader(void);
+	virtual ~Shader();
 	GLuint compileShader(GLenum _shaderType, const char* _source, int _length);
 	
 	void loadFromFile(std::string _vertexShaderFile, std::string _fragmentShaderFile);

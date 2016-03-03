@@ -65,7 +65,7 @@ Shader::Shader(std::string _vertexShaderSource, std::string _fragmentShaderSourc
 	allShaders.push_back(this);
 }
 
-Shader::~Shader(void){
+Shader::~Shader(){
 	// TODO: try to optimize this so that it doesn't require a large search
 	for(unsigned long int i = 0; i < allShaders.size(); ++i){
 		if(this == allShaders.at(i)){

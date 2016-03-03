@@ -89,6 +89,7 @@ Scene_SlideShow::~Scene_SlideShow(){
 		delete backwards.back();
 		backwards.pop_back();
 	}
+	delete eventManager;
 }
 
 void Scene_SlideShow::update(Step * _step){
