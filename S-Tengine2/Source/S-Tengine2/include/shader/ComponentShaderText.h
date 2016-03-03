@@ -10,5 +10,6 @@ public:
 
 	ComponentShaderText(bool _autoRelease);
 
-	void setColor(float _r, float _g, float _b);
+	void setColor(float _r, float _g, float _b, float _a = 1.0f);
+	glm::vec4 getColor();
 };

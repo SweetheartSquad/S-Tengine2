@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ShaderComponent.h"
-#include <glm/detail/type_vec3.hpp>
+#include <glm/detail/type_vec4.hpp>
 
 class ShaderComponentText : public ShaderComponent{
 private:
@@ -10,7 +10,7 @@ private:
 
 public:
 
-	glm::vec3 color;
+	glm::vec4 color;
 	
 	ShaderComponentText(ComponentShaderBase * _shader);
 	~ShaderComponentText() override;
@@ -24,6 +24,6 @@ public:
 	void configureUniforms(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 	virtual void clean(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOption, NodeRenderable* _nodeRenderable) override;
 	
-	glm::vec3 getColor();
-	void setColor(glm::vec3 _color);
+	glm::vec4 getColor() const;
+	void setColor(glm::vec4 _color);
 };

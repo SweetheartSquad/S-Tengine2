@@ -13,11 +13,11 @@
 
 ShaderComponentText::ShaderComponentText(ComponentShaderBase * _shader) :
 	ShaderComponent(_shader),
-	color(0, 0, 0),
 	texNumLoc(-1),
 	texColLoc(-1),
 	texSamLoc(-1),
-	numTextures(0)
+	numTextures(0),
+	color(0, 0, 0, 1)
 {
 }
 
@@ -35,7 +35,7 @@ std::string ShaderComponentText::getFragmentVariablesString(){
 		"uniform sampler2D " + GL_UNIFORM_ID_TEXTURE_SAMPLER + "[" + std::to_string(MAX_TEXTURES) + "]" + SEMI_ENDL + 
 		"uniform int " + GL_UNIFORM_ID_NUM_TEXTURES + SEMI_ENDL + 
 		END_IF + ENDL +
-		"uniform vec3 " + GL_UNIFORM_ID_TEXT_COLOR + SEMI_ENDL;
+		"uniform vec4 " + GL_UNIFORM_ID_TEXT_COLOR + SEMI_ENDL;
 }
 
 std::string ShaderComponentText::getVertexBodyString(){
@@ -46,7 +46,7 @@ std::string ShaderComponentText::getFragmentBodyString(){
     std::stringstream res;
 	res << "vec4 textModFrag = vec4(0, 0, 0, 0)" << SEMI_ENDL;
     res << "if(" << GL_UNIFORM_ID_NUM_TEXTURES << " > 0){" << ENDL;
-		res << "textModFrag = vec4(" << GL_UNIFORM_ID_TEXT_COLOR << ".rgb, texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << 0 << "], " << GL_IN_OUT_FRAG_UV << ").r)" << SEMI_ENDL;
+		res << "textModFrag = vec4(" << GL_UNIFORM_ID_TEXT_COLOR << ".rgb, texture(" << GL_UNIFORM_ID_TEXTURE_SAMPLER << "[" << 0 << "], " << GL_IN_OUT_FRAG_UV << ").r * " << GL_UNIFORM_ID_TEXT_COLOR << ".a)" << SEMI_ENDL;
     res << "}" << ENDL;
     return res.str();
 }
@@ -55,11 +55,11 @@ std::string ShaderComponentText::getOutColorMod(){
 	return GL_OUT_OUT_COLOR + " *= textModFrag" + SEMI_ENDL;
 }
 
-glm::vec3 ShaderComponentText::getColor(){
+glm::vec4 ShaderComponentText::getColor() const{
 	return color;
 }
 
-void ShaderComponentText::setColor(glm::vec3 _color){
+void ShaderComponentText::setColor(glm::vec4 _color){
 	color = _color;
 	makeDirty();
 }
@@ -111,5 +111,5 @@ void ShaderComponentText::configureUniforms(sweet::MatrixStack* _matrixStack, Re
 	}else{
 		glUniform1i(texNumLoc, numTextures);
 	}
-	glUniform3f(texColLoc, color.x, color.y, color.z);
+	glUniform4f(texColLoc, color.x, color.y, color.z, color.w);
 }

@@ -15,7 +15,11 @@ ComponentShaderText::ComponentShaderText(bool _autoRelease) :
 	load();
 }
 
-void ComponentShaderText::setColor(float _r, float _g, float _b) {
-	textComponent->setColor(glm::vec3(_r, _g, _b));
+glm::vec4 ComponentShaderText::getColor(){
+	return textComponent->getColor();
+}
+
+void ComponentShaderText::setColor(float _r, float _g, float _b, float _a) {
+	textComponent->setColor(glm::vec4(_r, _g, _b, _a));
 	makeDirty();
 }
