@@ -296,6 +296,8 @@ void sweet::destruct(){
 	Scenario::destruct();
 	delete NodeUI::bgShader;
 	delete NodeUI::colliderMesh;
+	delete Transform::transformShader;
+	delete Transform::transformIndicator;
 
 	// get rid of window and OpenGL context
 	destructWindow(currentContext);

@@ -3,7 +3,10 @@
 #include <Entity.h>
 #include <MeshEntity.h>
 
+class ComponentShaderBase;
 class AnimationJoint : public Entity{
+private:
+	ComponentShaderBase * shaderVis;
 public:
 	// position (relative to parent joint)
 	glm::vec2 pos; 

@@ -11,6 +11,8 @@ public:
 	bool autoRelease;
 
 	explicit NodeResource(bool _autoRelease);
+	virtual ~NodeResource();
+
 	/** Will cause this to delete itself if references is empty */
 	/** Returns true if this was deleted and false if it wasn't */
 	bool safeDelete();

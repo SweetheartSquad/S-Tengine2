@@ -66,8 +66,6 @@ void Game::init(){
 		Scene_Splash * lastSplash = dynamic_cast<Scene_Splash *>(scenes[ss.str()]);
 		lastSplash->nextScene = currentSceneKey;
 		currentSceneKey = "SCENE_SPLASH1";
-	}else{
-		currentSceneKey = currentSceneKey;
 	}
 	currentScene = scenes[currentSceneKey];
 }

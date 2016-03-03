@@ -24,13 +24,12 @@ UILayer::UILayer(float _left, float _right, float _bottom, float _top) :
 	mouseIndicator(nullptr),
 	cam(new OrthographicCamera(_left, _right, _bottom, _top, -1000.f, 1000.f)),
 	bulletDebugDrawer(new BulletDebugDrawer(world->world)),
-	shader(new ComponentShaderBase(true)),
+	shader(new ComponentShaderBase(false)),
 	complexHitTest(false)
 {
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->compileShader();
-	++shader->referenceCount;
 
 	Transform * t = new Transform();
 	t->addChild(cam, false);
@@ -45,7 +44,7 @@ UILayer::UILayer(float _left, float _right, float _bottom, float _top) :
 UILayer::~UILayer(){
 	delete cam->firstParent();
 	deleteChildTransform();
-	shader->decrementAndDelete();
+	delete shader;
 	delete world;
 	world = nullptr;
 }

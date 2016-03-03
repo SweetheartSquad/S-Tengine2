@@ -7,7 +7,7 @@
 
 CubeMap::CubeMap(std::string _srcPrefix, std::string _srcSuffix) :
 	cubemapTexture(new CubeMapTexture(_srcPrefix, _srcSuffix, true, true, false)),
-	cubemapShader(new ComponentShaderBase(true)),
+	cubemapShader(new ComponentShaderBase(false)),
 	MeshEntity(MeshFactory::getCubeMesh(1.f), nullptr)
 {
 	cubemapShader->addComponent(new ShaderComponentCubeMap(cubemapShader));
@@ -22,6 +22,9 @@ CubeMap::CubeMap(std::string _srcPrefix, std::string _srcSuffix) :
 	mesh->uvEdgeMode = GL_CLAMP_TO_EDGE;
 }
 
+CubeMap::~CubeMap(){
+	delete cubemapShader;
+}
 
 void CubeMap::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption){
 	cubemapShader->makeDirty(); // always dirty because we need to update the view matrix

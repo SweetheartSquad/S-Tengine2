@@ -17,7 +17,7 @@ Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * 
 	Scene(_game),
 	clearColour(_clearColour),
 	splash(nullptr),
-	shader(new ComponentShaderBase(true)),
+	shader(new ComponentShaderBase(false)),
 	alphaComponent(new ShaderComponentAlpha(shader, 0)),
 	nextScene(""),
 	aspectRatio(1.f),
@@ -27,7 +27,6 @@ Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * 
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->addComponent(alphaComponent);
 	shader->compileShader();
-	++shader->referenceCount;
 
 	// add orthographic camera
 	orthoCam = new OrthographicCamera(0, 0, 0, 0, -1000, 1000);
@@ -67,7 +66,7 @@ Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * 
 }
 
 Scene_Splash::~Scene_Splash(){
-	shader->decrementAndDelete();
+	delete shader;
 	delete timer;
 }
 
