@@ -15,6 +15,9 @@
 #include <Mouse.h>
 
 #include <OpenALSound.h>
+#include "scenario/Scenario.h"
+#include "NodeUI.h"
+#include "shader/ComponentShaderBase.h"
 
 #include <FileUtils.h>
 #include <NumberUtils.h>
@@ -289,14 +292,20 @@ void sweet::initialize(std::string _title){
 }
 
 void sweet::destruct(){
+	// get rid of static assets
+	Scenario::destruct();
+	delete NodeUI::bgShader;
+	delete NodeUI::colliderMesh;
 
+	// get rid of window and OpenGL context
 	destructWindow(currentContext);
 	glfwTerminate();
+
+	// uninitialize libraries
 	destructOVR();
-
 	FT_Done_FreeType(freeTypeLibrary);
-
 	NodeOpenAL::destruct();
+
 	Log::info("*** Sweet Destruction ***");
 }
 

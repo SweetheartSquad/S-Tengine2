@@ -53,7 +53,7 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	nodeUIParent(nullptr)
 {
 	if(bgShader == nullptr){
-		bgShader = new ComponentShaderBase(true);
+		bgShader = new ComponentShaderBase(false);
 		bgShader->addComponent(new ShaderComponentMVP(bgShader));
 		bgShader->addComponent(new ShaderComponentTexture(bgShader));
 		bgShader->addComponent(new ShaderComponentTint(bgShader));

@@ -21,7 +21,7 @@ public:
 	/**
 	* @param The shader to be used when rendering the surface
 	*/
-	explicit RenderSurface(Shader * _shader, bool _configureDefaultVertexAttributes = true);
+	explicit RenderSurface(Shader * _shader, bool _autoRelease, bool _configureDefaultVertexAttributes = true);
 	~RenderSurface();
 
 	/**

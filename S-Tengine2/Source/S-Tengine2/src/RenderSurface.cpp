@@ -5,9 +5,9 @@
 
 #include "shader/Shader.h"
 
-RenderSurface::RenderSurface(Shader * _shader, bool _configureDefaultVertexAttributes) :
+RenderSurface::RenderSurface(Shader * _shader, bool _autoRelease, bool _configureDefaultVertexAttributes) :
 	MeshInterface(GL_QUADS, GL_STATIC_DRAW),
-	NodeResource(true),
+	NodeResource(_autoRelease),
 	NodeShadable(_shader)
 {
 	pushVert(Vertex(
@@ -35,17 +35,23 @@ RenderSurface::RenderSurface(Shader * _shader, bool _configureDefaultVertexAttri
 		0, 0
 	));
 
-	if(shader != nullptr && _configureDefaultVertexAttributes) {
-		load();
-		if(!shader->loaded || shader->isDirty()) {
-			shader->load();
+	if(shader != nullptr){
+		++shader->referenceCount;
+		if(_configureDefaultVertexAttributes) {
+			load();
+			if(!shader->loaded || shader->isDirty()) {
+				shader->load();
+			}
+			configureDefaultVertexAttributes(_shader);
 		}
-		configureDefaultVertexAttributes(_shader);
 	}
 }
 
 RenderSurface::~RenderSurface(){
 	unload();
+	if(shader != nullptr){
+		shader->decrementAndDelete();
+	}
 }
 
 void RenderSurface::load(){
