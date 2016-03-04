@@ -122,6 +122,13 @@ void Game::update(Step * _step){
 }
 
 void Game::draw(Scene * _scene){
+	int width, height;
+	glfwGetFramebufferSize(sweet::currentContext, &width, &height);
+	glViewport(0, 0, width, height);
+	if(width <= 0 || height <= 0) {
+		ST_LOG_WARN("Window size 0 -- Draw skipped");
+		return;
+	}
 	if(_scene == nullptr){
 		_scene = currentScene;
 	}
