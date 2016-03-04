@@ -65,16 +65,14 @@ AnimationJoint::AnimationJoint(glm::vec2 _pos) :
 	angleLimitLower(0),
 	limitsEnabled(false)
 {
-	shaderVis = new ComponentShaderBase(false);
+	shaderVis = new ComponentShaderBase(true);
 	shaderVis->addComponent(new ShaderComponentMVP(shaderVis));
 	shaderVis->addComponent(new ShaderComponentTexture(shaderVis));
 	shaderVis->compileShader();
 	shaderVis->load();
 	
-	lineVis = new MeshEntity(new MeshInterface(GL_LINES, GL_STATIC_DRAW));
-	pointVis = new MeshEntity(new MeshInterface(GL_POINTS, GL_STATIC_DRAW));
-	lineVis->setShader(shaderVis, true);
-	pointVis->setShader(shaderVis, true);
+	lineVis = new MeshEntity(new MeshInterface(GL_LINES, GL_STATIC_DRAW), shaderVis);
+	pointVis = new MeshEntity(new MeshInterface(GL_POINTS, GL_STATIC_DRAW), shaderVis);
 	
 	childTransform->addChild(lineVis);
 	childTransform->addChild(pointVis);
@@ -85,7 +83,6 @@ AnimationJoint::AnimationJoint(glm::vec2 _pos) :
 	lineVis->setVisible(false);
 }
 AnimationJoint::~AnimationJoint(){
-	delete shaderVis;
 }
 
 void AnimationJoint::update(Step * _step){
