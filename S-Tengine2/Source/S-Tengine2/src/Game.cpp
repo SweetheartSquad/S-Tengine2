@@ -128,6 +128,7 @@ void Game::draw(Scene * _scene){
 	setViewport(0, 0, width, height);
 	if(width <= 0 || height <= 0) {
 		ST_LOG_WARN("Window size 0 -- Draw skipped");
+		glfwSwapBuffers(sweet::currentContext);
 		return;
 	}
 	if(_scene == nullptr){
