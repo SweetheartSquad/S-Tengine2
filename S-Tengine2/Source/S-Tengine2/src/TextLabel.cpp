@@ -14,7 +14,7 @@ TextLabel::TextLabel(BulletWorld* _world, Font* _font, Shader* _textShader):
 	textShader(_textShader),
 	updateRequired(false),
 	lineWidth(0.f),
-	wrapMode(kCHARACTER)
+	wrapMode(kNONE)
 {
 	// set the default width and height to be auto and the font's height, respectively
 	setPixelHeight(font->getLineHeight());
@@ -137,6 +137,16 @@ unsigned long int TextLabel::wordWrap(){
 			}else if(!canFit(font->getGlyphWidthHeight(textAll.at(idx)).x)){
 				// width overflow
 				break;
+			}else{
+				insertChar(textAll.at(idx));
+			}
+		}
+	}else if(wrapMode == kNONE){
+		for(idx = 0; idx < textAll.size(); ++idx){
+			if(textAll.at(idx) == '\n'){
+				++idx;
+				textDisplayed += '\n';
+				// newline character
 			}else{
 				insertChar(textAll.at(idx));
 			}

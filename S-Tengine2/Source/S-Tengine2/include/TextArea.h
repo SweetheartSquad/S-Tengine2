@@ -2,7 +2,6 @@
 
 #include <VerticalLinearLayout.h>
 #include <TextLabel.h>
-#include <WrapMode.h>
 
 class TextArea : public VerticalLinearLayout{
 public:

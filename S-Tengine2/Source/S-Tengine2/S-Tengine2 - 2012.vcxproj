@@ -353,7 +353,6 @@
     <ClInclude Include="include\CameraController.h" />
     <ClInclude Include="include\AutoMusic.h" />
     <ClInclude Include="include/sweet/UI.h" />
-    <ClInclude Include="include/WrapMode.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B6AFC105-EAF0-41B3-BD41-75D4570CD35A}</ProjectGuid>
