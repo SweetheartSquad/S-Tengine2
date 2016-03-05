@@ -33,6 +33,7 @@ Configuration sweet::config;
 
 double sweet::lastTimestamp = 0;
 double sweet::deltaTimeCorrection = 1;
+bool sweet::focused = true;
 
 bool sweet::antTweakBarInititialized = false;
 bool sweet::drawAntTweakBar = false;
@@ -110,6 +111,7 @@ void sweet::attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _
 	// this prevents mouse events which took place on the window border from re-capturing the mouse
 	if(x >= 0 && x <= w
 		&& y >= 0 && y <= h){
+		sweet::focused = true;
 		if(antTweakBarInititialized) {
 			if(drawAntTweakBar) {
 				glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -137,6 +139,7 @@ void sweet::windowFocusCallback(GLFWwindow * _window, int _focused){
 		glfwSetMouseButtonCallback(_window, attemptToActuallyRegainFocus);
 	}else{
 		// lost focus
+		sweet::focused = false;
 		glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		glfwSetKeyCallback(_window, nullptr);
 		glfwSetMouseButtonCallback(_window, nullptr);

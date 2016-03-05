@@ -73,6 +73,9 @@ namespace sweet{
 	// A refernce to the monitor which the application treats as primary
 	extern GLFWmonitor * currentMonitor;
 
+	// whether the application window is currently focused
+	extern bool focused;
+
 	/**
 	* Stores a reference to the global freetype instance
 	*/

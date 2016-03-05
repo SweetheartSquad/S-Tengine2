@@ -115,9 +115,10 @@ void Game::update(Step * _step){
 	if(printFPS){
 		printFps();
 	}
-	
-	if(currentScene != nullptr/* && sweet::step.deltaTimeCorrection < 5*/){
-		currentScene->update(_step);
+	if(sweet::focused){
+		if(currentScene != nullptr/* && sweet::step.deltaTimeCorrection < 5*/){
+			currentScene->update(_step);
+		}
 	}
 }
 
