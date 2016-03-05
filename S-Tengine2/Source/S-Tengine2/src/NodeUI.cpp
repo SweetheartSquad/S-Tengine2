@@ -233,6 +233,12 @@ void NodeUI::update(Step * _step){
 Texture * NodeUI::renderToTexture(){
 	float h = getHeight(true, true);
 	float w = getWidth(true, true);
+	
+	// if the texture is too small, just return the previously rendered one
+	if(h < 1 || w < 1){
+		return renderedTexture;
+	}
+
 	if(textureCam == nullptr){
 		textureCam = new OrthographicCamera(0, w, 0, h, -1000,1000);
 	}
