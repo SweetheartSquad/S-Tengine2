@@ -45,7 +45,7 @@ public:
 
 // this is really messy and hacked together b/c of how our UI system is setup, but visually it does exactly what it's supposed to
 class NodeUI_NineSliced : public NodeUI{
-private:
+protected:
 	// patches
 	NodeUI * tl, * t, * tr, * l, * c, * r, * bl, * b, * br;
 public:
