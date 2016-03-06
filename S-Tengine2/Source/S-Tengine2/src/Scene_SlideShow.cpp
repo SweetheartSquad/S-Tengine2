@@ -77,6 +77,9 @@ Scene_SlideShow::Scene_SlideShow(Game * _game, Easing::Type _easeType) :
 		}		
 	});
 	
+	// Get the layout calculated so that we have size dimensions to work with before switching to the first slide
+	glm::uvec2 sd = sweet::getWindowDimensions();
+	uiLayer->resize(0,sd.x,0,sd.y);
 }
 
 Scene_SlideShow::~Scene_SlideShow(){
