@@ -137,10 +137,8 @@ void NodeBulletBody::applyForceToCenter(glm::vec3 _force){
 }
 
 glm::vec3 NodeBulletBody::getPhysicsBodyCenter(){
-	if(body != nullptr){
-		btVector3 v = body->getWorldTransform().getOrigin();
-		return glm::vec3(v.x(), v.y(), v.z());
-	}
+	btVector3 v = body->getWorldTransform().getOrigin();
+	return glm::vec3(v.x(), v.y(), v.z());
 }
 
 void NodeBulletBody::rotatePhysical(float _angle, float _x, float _y, float _z, bool _relative){

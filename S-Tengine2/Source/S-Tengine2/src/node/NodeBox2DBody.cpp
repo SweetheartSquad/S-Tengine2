@@ -66,28 +66,20 @@ void NodeBox2DBody::translatePhysical(glm::vec3 _translation, bool _relative){
 }
 
 void NodeBox2DBody::applyLinearImpulse(glm::vec3 _impulse, glm::vec3 _point){
-	if(body != nullptr){
-		body->ApplyLinearImpulse(b2Vec2(_impulse.x, _impulse.y), b2Vec2(_point.x, _point.y), true);
-	}
+	body->ApplyLinearImpulse(b2Vec2(_impulse.x, _impulse.y), b2Vec2(_point.x, _point.y), true);
 }
 
 void NodeBox2DBody::applyForce(glm::vec3 _force, glm::vec3 _point){
-	if(body != nullptr){
-		body->ApplyForce(b2Vec2(_force.x, _force.y), b2Vec2(_point.x, _point.y), true);
-	}
+	body->ApplyForce(b2Vec2(_force.x, _force.y), b2Vec2(_point.x, _point.y), true);
 }
 
 glm::vec3 NodeBox2DBody::getPhysicsBodyCenter(){
-	if(body != nullptr){
-		b2Vec2 v = body->GetWorldCenter();
-		return glm::vec3(v.x, v.y, 0);
-	}
+	b2Vec2 v = body->GetWorldCenter();
+	return glm::vec3(v.x, v.y, 0);
 }
 
 void NodeBox2DBody::applyAngularImpulse(float _angle){
-	if(body != nullptr){
-		body->ApplyAngularImpulse(_angle, true);
-	}
+	body->ApplyAngularImpulse(_angle, true);
 }
 
 bool NodeBox2DBody::movingVertically(float _threshold){
