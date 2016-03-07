@@ -223,9 +223,11 @@ UIGlyph::~UIGlyph(){
 
 void UIGlyph::setGlyph(Glyph * _newGlyph){
 	if(glyphMesh != nullptr){
+		--glyphMesh->referenceCount;
 		uiElements->removeChild(glyphMesh);
 	}
 	glyphMesh = _newGlyph->mesh;
+	++glyphMesh->referenceCount;
 
 	uiElements->addChild(glyphMesh, false);
 	setPixelWidth(_newGlyph->advance.x/64);

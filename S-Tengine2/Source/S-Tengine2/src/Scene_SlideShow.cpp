@@ -83,6 +83,12 @@ Scene_SlideShow::Scene_SlideShow(Game * _game, Easing::Type _easeType) :
 }
 
 Scene_SlideShow::~Scene_SlideShow(){
+	uiLayer->removeChild(slideOld);
+	uiLayer->removeChild(slideNew);
+	
+	delete slideOld;
+	delete slideNew;
+
 	delete uiLayer;
 	delete transition;
 	while(forwards.size() > 0){
@@ -92,8 +98,8 @@ Scene_SlideShow::~Scene_SlideShow(){
 		delete backwards.back();
 		backwards.pop_back();
 	}
-	delete eventManager;
 	delete currSlide;
+	delete eventManager;
 }
 
 void Scene_SlideShow::update(Step * _step){
