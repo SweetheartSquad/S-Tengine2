@@ -60,7 +60,7 @@ std::string PhraseGenerator::replaceWords(std::string phrase) {
 		replacer = terms[word].pop();
 		std::regex rg(replacee);
 
-		phrase = std::regex_replace(constPhrase, rg, replacer);
+		phrase = std::regex_replace(constPhrase, rg, replacer, std::regex_constants::format_first_only);
 	}
 
 	return phrase;
