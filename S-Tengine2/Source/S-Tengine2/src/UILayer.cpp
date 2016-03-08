@@ -189,6 +189,10 @@ Sprite * UILayer::addMouseIndicator(){
 	return mouseIndicator;
 }
 void UILayer::removeMouseIndicator(){
+	if(mouseIndicator == nullptr){
+		Log::warn("Mouse indicator not removed because it doesn't exist.");
+		return;
+	}
 	childTransform->removeChild(mouseIndicator->firstParent());
 	delete mouseIndicator->firstParent();
 	mouseIndicator = nullptr;
