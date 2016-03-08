@@ -11,7 +11,8 @@
 
 Slide::Slide(Texture * _tex, float _length, OpenAL_Sound * _sound) :
 	tex(_tex),
-	sound(_sound)
+	sound(_sound),
+	length(_length)
 {
 	++tex->referenceCount;
 	if(sound != nullptr){
@@ -190,6 +191,8 @@ void Scene_SlideShow::setNewSlide(bool _isForwards){
 			Log::error("No slide could be found");
 			isTransitioning = false;
 		}
+
+		transition->targetSeconds = currSlide->length;
 		/*
 		slideNew->setBackgroundColour(1.f, 0, 0);
 		slideOld->setBackgroundColour(0, 1.f, 0);
