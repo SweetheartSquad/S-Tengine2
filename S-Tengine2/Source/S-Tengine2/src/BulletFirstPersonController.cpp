@@ -47,7 +47,7 @@ BulletFirstPersonController::BulletFirstPersonController(BulletWorld * _bulletWo
 	jumpTime(0.0),
 	camOffset(0),
 	// speed
-	playerSpeed(0.3f),
+	playerSpeed(0.5f),
 	sprintSpeed(2.f),
 	jumpSpeed(5.f),
 	// collider
@@ -251,6 +251,8 @@ void BulletFirstPersonController::handleInputs(Step * _step, glm::vec3 _inputs){
 		}
 		
 	}
+
+	body->setDamping(0.5f,0.f);
 
 	// If the player isnt moving vertically
 	if(glm::abs(curVelocity.y) <= 0.01f){
