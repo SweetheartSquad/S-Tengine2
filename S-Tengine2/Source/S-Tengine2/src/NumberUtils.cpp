@@ -7,7 +7,7 @@
 
 
 
-
+unsigned long int sweet::NumberUtils::numRandCalls = 0;
 
 
 
@@ -29,13 +29,14 @@ float sweet::NumberUtils::randomFloat(float _min, float _max){
 	return 0;
 }
 float sweet::NumberUtils::randomFloat(){
-	return (float)ran_arr_cycle()/(INT_MAX/2);
+	return (float)randomInt()/(INT_MAX/2);
 }
 
 int sweet::NumberUtils::randomInt(int _min, int _max){
-	return _min + ran_arr_cycle() % (_max - _min +1);
+	return _min + randomInt() % (_max - _min +1);
 }
 int sweet::NumberUtils::randomInt(){
+	++numRandCalls;
 	return ran_arr_cycle();
 }
 bool sweet::NumberUtils::randomBool(){
@@ -51,6 +52,7 @@ glm::vec3 sweet::NumberUtils::randomVec3(glm::vec3 _min, glm::vec3 _max){
 long int sweet::NumberUtils::p[512];
 
 void sweet::NumberUtils::seed(unsigned long int _seed){
+	numRandCalls = 0;
 	Log::info("Seeded RNG with: " + std::to_string(_seed));
 	ran_start(_seed);
 

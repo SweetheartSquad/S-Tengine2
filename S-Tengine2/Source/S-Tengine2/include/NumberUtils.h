@@ -97,6 +97,9 @@ namespace sweet{
 
 	class NumberUtils{
 	public:
+		// number of calls to randomInt() since the last call to seed()
+		static unsigned long int numRandCalls;
+
 		static float pingPong(float _val, float _min, float _max);
 
 		// returns a random number in the range _min < res < _max
