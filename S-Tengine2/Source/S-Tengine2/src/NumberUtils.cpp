@@ -2,6 +2,7 @@
 
 #include <rng.h>
 #include <NumberUtils.h>
+#include <Log.h>
 #include <algorithm>
 
 
@@ -50,6 +51,7 @@ glm::vec3 sweet::NumberUtils::randomVec3(glm::vec3 _min, glm::vec3 _max){
 long int sweet::NumberUtils::p[512];
 
 void sweet::NumberUtils::seed(unsigned long int _seed){
+	Log::info("Seeded RNG with: " + std::to_string(_seed));
 	ran_start(_seed);
 
 	// stuff for perlin noise permutation array
