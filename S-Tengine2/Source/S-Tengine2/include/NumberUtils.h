@@ -114,6 +114,12 @@ namespace sweet{
 		// returns a random vec3 where each dimension is in the range _min <= _max
 		static glm::vec3 randomVec3(glm::vec3 _min, glm::vec3 _max);
 
+		// returns a random item in _items
+		// done by generating a random int between 0 and _items.size()-1 and returning _items.at(i)
+		template<class T>
+		static T randomItem(std::vector<T> _items){
+			return _items.at(randomInt(0, _items.size()-1));
+		}
 
 		// seeds the random number generator
 		static void seed(unsigned long int _seed);
