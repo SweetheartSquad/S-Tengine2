@@ -142,10 +142,10 @@ void sweet::EventManager::handle(sweet::Event * _event){
 void sweet::EventManager::update(Step * _step){
 	while(events.size() > 0){
 		sweet::Event * e = events.front();
+		events.pop();
 		handle(e);
 
 		delete e;
-		events.pop();
 	}
 }
 
