@@ -89,11 +89,6 @@ void Game::performGameLoop(){
 		sweet::calculateDeltaTimeCorrection();
 		glfwPollEvents();
 		update(&sweet::step);
-		draw();
-
-		//glfwSwapBuffers(sweet::currentContext);
-		manageInput();
-		isRunning = !glfwWindowShouldClose(sweet::currentContext);
 
 		if(switchingScene){
 			if(deleteOldScene){
@@ -104,7 +99,11 @@ void Game::performGameLoop(){
 			currentScene = scenes.at(currentSceneKey);
 			switchingScene = false;
 			newSceneKey = "";
-		}	
+		}else{
+			draw();
+			manageInput();
+			isRunning = !glfwWindowShouldClose(sweet::currentContext);
+		}
 #ifdef VOX_LIMIT_FRAMERATE
 	}
 #endif
