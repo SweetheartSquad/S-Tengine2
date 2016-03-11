@@ -38,12 +38,12 @@ private:
 
 	bool isTransitioning;
 	bool isTransitioningForwards;
-
+	bool transitionFirstSlide;
 	void next();
 	void prev();
 	void setNewSlide(bool _isForwards);
 public:
-	Scene_SlideShow(Game * _game, Easing::Type _easeType = Easing::kEASE_IN_OUT_CUBIC);
+	Scene_SlideShow(Game * _game, bool _transitionFirstSlide = false, Easing::Type _easeType = Easing::kEASE_IN_OUT_CUBIC);
 	~Scene_SlideShow();
 	
 	virtual void update(Step * _step) override;

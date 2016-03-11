@@ -27,12 +27,13 @@ Slide::~Slide(){
 	}
 }
 
-Scene_SlideShow::Scene_SlideShow(Game * _game, Easing::Type _easeType) :
+Scene_SlideShow::Scene_SlideShow(Game * _game, bool _transitionFirstSlide, Easing::Type _easeType) :
 	Scene(_game),
 	currSlide(nullptr),
+	slide(nullptr),
 	isTransitioning(false),
 	isTransitioningForwards(true),
-	slide(nullptr)
+	transitionFirstSlide(_transitionFirstSlide)
 {
 	uiLayer = new UILayer(0,0,0,0);
 	eventManager = new sweet::EventManager();
@@ -171,6 +172,7 @@ void Scene_SlideShow::setNewSlide(bool _isForwards){
 			slideNew = slideOld;
 			slideOld = slide;
 		}
+
 		// get next slide
 		if(isTransitioningForwards){
 			next();
@@ -193,6 +195,12 @@ void Scene_SlideShow::setNewSlide(bool _isForwards){
 		}
 
 		transition->targetSeconds = currSlide->length;
+
+		if(!transitionFirstSlide) {
+			transitionFirstSlide = true;
+			transition->targetSeconds = 0.f;
+		}
+		
 		/*
 		slideNew->setBackgroundColour(1.f, 0, 0);
 		slideOld->setBackgroundColour(0, 1.f, 0);
