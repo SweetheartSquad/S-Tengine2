@@ -102,6 +102,8 @@ namespace sweet{
 
 		static float pingPong(float _val, float _min, float _max);
 
+		static float map(float _val, float _oldMin, float _oldMax, float _newMin, float _newMax);
+
 		// returns a random number in the range _min < res < _max
 		static float randomFloat(float _min, float _max);
 		// returns a random number in the range 0 < res < 1
