@@ -178,7 +178,7 @@ glm::vec2 Font::getGlyphXY(wchar_t _char){
 }
 
 void Font::loadGlyph(wchar_t _char){
-	float dpi = sweet::getDpi();
+	float dpi = 72;//sweet::getDpi();
 	FT_Set_Char_Size(
           face,    /* handle to face object           */
           0,       /* char_width in 1/64th of points -- 0 = same as height */
