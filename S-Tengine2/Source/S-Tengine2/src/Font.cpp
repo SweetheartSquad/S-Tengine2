@@ -107,11 +107,12 @@ void Glyph::unload(){
 }
 
 
-Font::Font(std::string _fontSrc, float _size, bool _autoRelease) :
+Font::Font(std::string _fontSrc, float _size, bool _autoRelease, FontScaleMode _scaleMode) :
 	NodeResource(_autoRelease),
 	face(nullptr),
 	antiAliased(false),
-	size(_size)
+	size(_size),
+	scaleMode(_scaleMode)
 {
 	if(FT_New_Face(sweet::freeTypeLibrary, _fontSrc.c_str(), 0, &face) != 0) {
 		Log::error("Couldn't load font: " + _fontSrc);
@@ -177,18 +178,28 @@ glm::vec2 Font::getGlyphXY(wchar_t _char){
 	return glm::vec2(g->bitmap_left, g->bitmap_top);
 }
 
-void Font::loadGlyph(wchar_t _char){
-	float dpi = 72;//sweet::getDpi();
+void Font::loadGlyph(wchar_t _char) const {
+	if(scaleMode == FontScaleMode::kPOINT){
+	float dpi = sweet::getDpi();
 	FT_Set_Char_Size(
           face,    /* handle to face object           */
           0,       /* char_width in 1/64th of points -- 0 = same as height */
           size * 64,   /* char_height in 1/64th of points */
           dpi,     /* horizontal device resolution    */
 		  dpi);   /* vertical device resolution      */
-
+	}else {
+		float sizeCalc = size;
+		if(scaleMode == FontScaleMode::kPERCENT) {
+			sizeCalc = sweet::getWindowHeight() * (size * 0.01f);
+		}
+		FT_Set_Pixel_Sizes(
+			face,
+			0,
+			sizeCalc);
+	}
 	FT_Load_Char(face, _char, FT_LOAD_RENDER);
 }
 
-float Font::getLineHeight(){
+float Font::getLineHeight() const {
 	return lineGapRatio * ((face->size->metrics.ascender + face->size->metrics.descender)/64);
 }

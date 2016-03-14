@@ -6,6 +6,7 @@
 #include <Resource.h>
 #include <MeshFactory.h>
 #include <NineSlicing.h>
+#include <StringUtils.h>
 
 Asset::Asset(Json::Value _json, Scenario * const _scenario) :
 	id(_json.get("id", "NO_ID").asString()),
@@ -160,8 +161,20 @@ AssetFont::AssetFont(Json::Value _json, Scenario * const _scenario) :
 	}else{
 		src = "assets/fonts/" + src;
 	}
-	float size = _json.get("size", 0.1f).asFloat();
-	font = new Font(src, size, false);
+	std::string size = _json.get("size", "1").asString();
+	std::transform(size.begin(), size.end(), size.begin(), ::tolower);
+	FontScaleMode scaleMode = FontScaleMode::kPOINT;
+	std::string px = "px";
+	std::string pr = "%";
+	if(size.find(px) != std::string::npos) {
+		scaleMode = FontScaleMode::kPIXEL;
+	}else if(size.find(pr) != std::string::npos) {
+		scaleMode = FontScaleMode::kPERCENT;
+	}
+	size = sweet::StringUtils::removeLetters(size);
+	size = sweet::StringUtils::removeSymbols(size, false);
+	float sizeF = std::stof(size);
+	font = new Font(src, sizeF, false, scaleMode);
 	font->antiAliased = _json.get("antiAliased", false).asBool();
 }
 AssetFont * AssetFont::create(Json::Value _json, Scenario * const _scenario){
