@@ -168,11 +168,13 @@ AssetFont::AssetFont(Json::Value _json, Scenario * const _scenario) :
 	std::string pr = "%";
 	if(size.find(px) != std::string::npos) {
 		scaleMode = FontScaleMode::kPIXEL;
+		size = size.substr(0, size.size() - 2);
 	}else if(size.find(pr) != std::string::npos) {
 		scaleMode = FontScaleMode::kPERCENT;
+		size = size.substr(0, size.size() - 1);
+	}else{
+		size = size.substr(0, size.size() - 2);
 	}
-	size = sweet::StringUtils::removeLetters(size);
-	size = sweet::StringUtils::removeSymbols(size, false);
 	float sizeF = std::stof(size);
 	font = new Font(src, sizeF, false, scaleMode);
 	font->antiAliased = _json.get("antiAliased", false).asBool();
