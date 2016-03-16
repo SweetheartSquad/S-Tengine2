@@ -1,5 +1,5 @@
 #pragma once
- 
+
 #include <TextArea.h>
 #include <Font.h>
 
@@ -47,7 +47,6 @@ void TextArea::invalidateAllLines(){
 	// Do this to make sure all labels have the right wrap mode
 	setWrapMode(wrapMode);
 }
-
 
 void TextArea::setWrapMode(WrapMode _wrapMode){
 	for(auto label : usedLines) {

@@ -63,8 +63,8 @@ void TextLabel::load(){
 
 void TextLabel::setText(std::wstring _text){
 	/*if(textAll == _text){
-		// same text, return early
-		return;
+	// same text, return early
+	return;
 	}*/
 	invalidate();
 
@@ -136,6 +136,24 @@ unsigned long int TextLabel::wordWrap(){
 				break;
 			}else if(!canFit(font->getGlyphWidthHeight(textAll.at(idx)).x)){
 				// width overflow
+				break;
+			}else{
+				insertChar(textAll.at(idx));
+			}
+		}
+	}else if(wrapMode == kTRUNCATE){
+		float periodLength = font->getGlyphWidthHeight('.').x * 3.0f;
+		for(idx = 0; idx < textAll.size(); ++idx){
+			if(textAll.at(idx) == '\n'){
+				++idx;
+				textDisplayed += '\n';
+				// newline character
+				break;
+			}else if(!canFit(font->getGlyphWidthHeight(textAll.at(idx)).x + periodLength)){
+				// width overflow
+				insertChar('.');
+				insertChar('.');
+				insertChar('.');
 				break;
 			}else{
 				insertChar(textAll.at(idx));
@@ -232,7 +250,7 @@ void UIGlyph::setGlyph(Glyph * _newGlyph){
 	uiElements->addChild(glyphMesh, false);
 	setPixelWidth(_newGlyph->advance.x/64);
 	setPixelHeight(_newGlyph->advance.y/64);
-	
+
 	glyphMesh->configureDefaultVertexAttributes(shader);
 }
 

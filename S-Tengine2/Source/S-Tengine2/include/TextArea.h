@@ -7,7 +7,7 @@ class TextArea : public VerticalLinearLayout{
 public:
 	Font * font;
 	Shader * textShader;
-	
+
 	std::vector<TextLabel *> usedLines;
 	std::vector<TextLabel *> unusedLines;
 
@@ -15,7 +15,7 @@ public:
 	~TextArea();
 
 	virtual void update(Step * _step) override;
-	
+
 	void invalidateAllLines();
 	void setText(std::wstring _text);
 	std::wstring getText();
@@ -28,7 +28,7 @@ public:
 	// if unusedLines is empty, creates a new TextLabel and returns that instead
 	// the returned line will be added to the contents list automatically
 	virtual TextLabel * getNewLine();
-	
+
 	virtual void load() override;
 	virtual void unload() override;
 private:
