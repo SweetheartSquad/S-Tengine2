@@ -290,6 +290,7 @@ glm::vec3 BulletFirstPersonController::getLinearVelocity() const{
 void BulletFirstPersonController::enable(){
 	playerCameraController->movementEnabled = true;
 	playerCameraController->rotationEnabled = true;
+	playerCameraController->alignMouse();
 	BulletController::enable();
 }
 
