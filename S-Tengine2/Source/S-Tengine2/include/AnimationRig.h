@@ -6,7 +6,7 @@
 class ComponentShaderBase;
 class AnimationJoint : public Entity{
 private:
-	ComponentShaderBase * shaderVis;
+	static ComponentShaderBase * shaderVis;
 public:
 	// position (relative to parent joint)
 	glm::vec2 pos; 

@@ -7,6 +7,7 @@
 #include <MeshFactory.h>
 #include <MeshInterface.h>
 
+ComponentShaderBase * AnimationJoint::shaderVis = nullptr;
 
 void AnimationJoint::setAngle(float _angle){
 	// keep angle within the range [-180, 180]
@@ -65,11 +66,13 @@ AnimationJoint::AnimationJoint(glm::vec2 _pos) :
 	angleLimitLower(0),
 	limitsEnabled(false)
 {
-	shaderVis = new ComponentShaderBase(true);
-	shaderVis->addComponent(new ShaderComponentMVP(shaderVis));
-	shaderVis->addComponent(new ShaderComponentTexture(shaderVis));
-	shaderVis->compileShader();
-	shaderVis->load();
+	if(shaderVis == nullptr){
+		shaderVis = new ComponentShaderBase(true);
+		shaderVis->addComponent(new ShaderComponentMVP(shaderVis));
+		shaderVis->addComponent(new ShaderComponentTexture(shaderVis));
+		shaderVis->compileShader();
+		shaderVis->load();
+	}
 	
 	lineVis = new MeshEntity(new MeshInterface(GL_LINES, GL_STATIC_DRAW), shaderVis);
 	pointVis = new MeshEntity(new MeshInterface(GL_POINTS, GL_STATIC_DRAW), shaderVis);
