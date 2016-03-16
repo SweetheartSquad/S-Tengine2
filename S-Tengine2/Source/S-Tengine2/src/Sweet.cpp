@@ -18,6 +18,7 @@
 #include "scenario/Scenario.h"
 #include "NodeUI.h"
 #include "shader/ComponentShaderBase.h"
+#include "AnimationRig.h"
 
 #include <FileUtils.h>
 #include <NumberUtils.h>
@@ -301,6 +302,7 @@ void sweet::destruct(){
 	delete NodeUI::colliderMesh;
 	delete Transform::transformShader;
 	delete Transform::transformIndicator;
+	delete AnimationJoint::shaderVis;
 
 	// get rid of window and OpenGL context
 	destructWindow(currentContext);
