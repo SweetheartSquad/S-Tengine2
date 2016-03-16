@@ -17,7 +17,9 @@ ProgrammaticTexture::~ProgrammaticTexture() {
 }
 
 void ProgrammaticTexture::load() {
-	genTextures();
+	if(!loaded){
+		genTextures();
+	}
 	NodeLoadable::load();
 }
 
