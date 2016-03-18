@@ -161,7 +161,7 @@ AssetFont::AssetFont(Json::Value _json, Scenario * const _scenario) :
 	}else{
 		src = "assets/fonts/" + src;
 	}
-	std::string size = _json.get("size", "1").asString();
+	std::string size = _json.get("size", "5%").asString();
 	std::transform(size.begin(), size.end(), size.begin(), ::tolower);
 	FontScaleMode scaleMode = FontScaleMode::kPOINT;
 	std::string px = "px";

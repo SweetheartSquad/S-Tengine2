@@ -117,7 +117,7 @@ Font::Font(std::string _fontSrc, float _size, bool _autoRelease, FontScaleMode _
 	if(FT_New_Face(sweet::freeTypeLibrary, _fontSrc.c_str(), 0, &face) != 0) {
 		Log::error("Couldn't load font: " + _fontSrc);
 	}
-	lineGapRatio = 1.75f;
+	lineGapRatio = 1.f;
 }
 
 Font::~Font(){
@@ -201,5 +201,5 @@ void Font::loadGlyph(wchar_t _char) const {
 }
 
 float Font::getLineHeight() const {
-	return lineGapRatio * ((face->size->metrics.ascender + face->size->metrics.descender)/64);
+	return lineGapRatio * face->size->metrics.height/64.f;
 }
