@@ -155,7 +155,7 @@ void sweet::error_callback(int _error, const char * _description){
 }
 
 GLFWwindow * sweet::initWindow(){
-	glm::uvec2 target(config.resolution.x, config.resolution.y);
+	glm::ivec2 target(config.resolution.x, config.resolution.y);
 	bool fullscreen = config.fullscreen;
 	
 	// if we're rendering to an oculus, match the resolution target to the HMD output size
