@@ -201,5 +201,6 @@ void Font::loadGlyph(wchar_t _char) const {
 }
 
 float Font::getLineHeight() const {
+	loadGlyph(L'X');
 	return lineGapRatio * face->size->metrics.height/64.f;
 }
