@@ -28,6 +28,7 @@ class UILayer;
 
 class Scene_SlideShow : public Scene{
 private:
+	int idx;
 	Slide * currSlide;
 	std::vector<Slide *> forwards;
 	std::vector<Slide *> backwards;
@@ -46,6 +47,8 @@ public:
 	Scene_SlideShow(Game * _game, bool _transitionFirstSlide = false, Easing::Type _easeType = Easing::kEASE_IN_OUT_CUBIC);
 	~Scene_SlideShow();
 	
+	int getCurrentIndex();
+
 	virtual void update(Step * _step) override;
 	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) override;
 

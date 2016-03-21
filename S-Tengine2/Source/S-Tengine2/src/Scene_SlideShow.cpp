@@ -29,6 +29,7 @@ Slide::~Slide(){
 
 Scene_SlideShow::Scene_SlideShow(Game * _game, bool _transitionFirstSlide, Easing::Type _easeType) :
 	Scene(_game),
+	idx(-1),
 	currSlide(nullptr),
 	slide(nullptr),
 	isTransitioning(false),
@@ -200,10 +201,14 @@ void Scene_SlideShow::setNewSlide(bool _isForwards){
 			transitionFirstSlide = true;
 			transition->targetSeconds = 0.f;
 		}
-		
-		/*
-		slideNew->setBackgroundColour(1.f, 0, 0);
-		slideOld->setBackgroundColour(0, 1.f, 0);
-		*/
+
+		idx = backwards.size();
+		sweet::Event * e = new sweet::Event("changeSlide");
+		e->setIntData("isForwards", _isForwards);
+		eventManager->triggerEvent(e);
 	}
+}
+
+int Scene_SlideShow::getCurrentIndex(){
+	return idx;
 }
