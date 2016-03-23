@@ -42,8 +42,8 @@ UILayer::UILayer(float _left, float _right, float _bottom, float _top) :
 }
 
 UILayer::~UILayer(){
-	delete cam->firstParent();
 	deleteChildTransform();
+	delete cam->firstParent();
 	delete shader;
 	delete world;
 	world = nullptr;

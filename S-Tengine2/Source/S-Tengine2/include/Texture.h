@@ -12,7 +12,7 @@ class Texture : public virtual NodeResource{
 public:
 	
 	explicit Texture(std::string _src, bool _storeData, bool _autoRelease, bool _useMipmaps = true);
-	~Texture();
+	virtual ~Texture();
 
 	/**Source file location */
 	std::string src;

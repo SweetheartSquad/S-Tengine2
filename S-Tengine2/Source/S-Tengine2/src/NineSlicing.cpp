@@ -187,6 +187,10 @@ NodeUI_NineSliced::NodeUI_NineSliced(BulletWorld * _world, Texture_NineSliced * 
 	setBorder(0.33f);
 }
 
+NodeUI_NineSliced::~NodeUI_NineSliced(){
+
+}
+
 void NodeUI_NineSliced::setBorder(float _all){
 	setBorder(_all, _all, _all, _all);
 }

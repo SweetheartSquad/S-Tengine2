@@ -111,6 +111,8 @@ sweet::EventManager::~EventManager(){
 	while(parentManagers.size() > 0){
 		removeParentManager(parentManagers.back());
 	}
+
+	listeners.clear();
 }
 
 void sweet::EventManager::triggerEvent(std::string _tag){

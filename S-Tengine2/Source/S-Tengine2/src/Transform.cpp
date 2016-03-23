@@ -50,15 +50,15 @@ Transform::Transform():
 }
 
 Transform::~Transform(){
-	while(children.size() > 0){
-		NodeResource * nr = dynamic_cast<NodeResource *>(children.back());
-		if(nr != nullptr){
+	while(!children.empty()){
+		if(NodeResource * nr = dynamic_cast<NodeResource *>(children.back())){
 			nr->decrementAndDelete();
 		}else{
 			delete children.back();
 		}
 		children.pop_back();
 	}
+	children.clear();
 }
 
 void Transform::makeCumulativeModelMatrixDirty(){
@@ -92,17 +92,17 @@ void Transform::addParent(Transform * _parent){
 }
 
 
-Transform * Transform::scale(float _scaleX, float _scaleY, float _scaleZ, bool _relative){
+Transform * const Transform::scale(float _scaleX, float _scaleY, float _scaleZ, bool _relative){
 	scale(glm::vec3(_scaleX, _scaleY, _scaleZ), _relative);
 	return this;
 }
 
-Transform * Transform::scale(float _scale, bool _relative){
+Transform * const Transform::scale(float _scale, bool _relative){
 	scale(glm::vec3(_scale, _scale, _scale), _relative);
 	return this;
 }
 
-Transform * Transform::scale(glm::vec3 _scale, bool relative){
+Transform * const Transform::scale(glm::vec3 _scale, bool relative){
 	if(relative){
 		scaleVector *= _scale;
 	}else{
@@ -116,12 +116,12 @@ Transform * Transform::scale(glm::vec3 _scale, bool relative){
 	return this;
 }
 
-Transform * Transform::translate(float _translateX, float _translateY, float _translateZ, bool _relative){
+Transform * const Transform::translate(float _translateX, float _translateY, float _translateZ, bool _relative){
 	translate(glm::vec3(_translateX, _translateY, _translateZ), _relative);
 	return this;
 }
 
-Transform * Transform::translate(glm::vec3 _translate, bool _relative){
+Transform * const Transform::translate(glm::vec3 _translate, bool _relative){
 	if(_relative){
 		translationVector += _translate;
 	}else{
@@ -134,7 +134,7 @@ Transform * Transform::translate(glm::vec3 _translate, bool _relative){
 	return this;
 }
 
-Transform * Transform::rotate(glm::quat _rotation, CoordinateSpace _space){
+Transform * const Transform::rotate(glm::quat _rotation, CoordinateSpace _space){
 	switch(_space){
 	case kWORLD:
 		setOrientation(_rotation * orientation);
@@ -146,11 +146,11 @@ Transform * Transform::rotate(glm::quat _rotation, CoordinateSpace _space){
 	return this;
 }
 
-Transform * Transform::rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space){
+Transform * const Transform::rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space){
 	rotate(glm::quat(glm::angleAxis(_angle, glm::vec3(_x, _y, _z))), _space);
 	return this;
 }
-Transform * Transform::setOrientation(glm::quat _orientation){
+Transform * const Transform::setOrientation(glm::quat _orientation){
 	orientation = _orientation;
 	oDirty = true;
 	osDirty = true;
@@ -299,7 +299,7 @@ void Transform::load(){
 	NodeLoadable::load();
 }
 
-Transform * Transform::addChild(NodeChild * _child, bool _underNewTransform){
+Transform * const Transform::addChild(NodeChild * const _child, bool _underNewTransform){
 	// Check to see if the child is one of the ancestors of this node
 	// (Cannot parent a node to one of its descendants)
 	if(hasAncestor(dynamic_cast<Transform *>(_child))) {
@@ -307,46 +307,45 @@ Transform * Transform::addChild(NodeChild * _child, bool _underNewTransform){
 		assert(false);
 	}
 
-	Transform * t = nullptr;
 	if(_underNewTransform){
-		t = new Transform();
+		Transform * t = new Transform();
 		t->addChild(_child, false);
-		_child = t;
-	}else{
-		removeChild(_child);
+		children.push_back(t);
+		t->addParent(this);
+		return t;
 	}
 
-	// Add the child to the list of children and set it's parent to this
+	removeChild(_child);
 	children.push_back(_child);
 	_child->addParent(this);
-	return t;
+	return nullptr;
 }
 
-Transform * Transform::addChildAtIndex(NodeChild * _child, int _index, bool _underNewTransform){
+Transform * const Transform::addChildAtIndex(NodeChild * const _child, int _index, bool _underNewTransform){
 	// Check to see if the child is one of the ancestors of this node
 	// (Cannot parent a node to one of its descendants)
 	if(hasAncestor(dynamic_cast<Transform *>(_child))) {
 		ST_LOG_ERROR_V("Cannot parent a node to one of it's ancestors");
 		assert(false);
 	}
-
-	Transform * t = nullptr;
-	if(_underNewTransform){
-		t = new Transform();
-		t->addChild(_child, false);
-		_child = t;
-	}else{
-		removeChild(_child);
-	}
-
+	
 	// if negative, count from the end
 	if(_index < 0){
 		_index = children.size() + _index;
 	}
 
+	if(_underNewTransform){
+		Transform * t = new Transform();
+		t->addChild(_child, false);
+		children.insert(children.begin() + _index, t);
+		t->addParent(this);
+		return t;
+	}
+
+	removeChild(_child);
 	children.insert(children.begin() + _index, _child);
 	_child->addParent(this);
-	return t;
+	return nullptr;
 }
 
 void Transform::removeChildAtIndex(int _index){
@@ -354,7 +353,7 @@ void Transform::removeChildAtIndex(int _index){
 	children.at(_index)->removeParent(this);
 }
 
-unsigned long int Transform::removeChild(NodeChild * _child){
+unsigned long int Transform::removeChild(NodeChild * const _child){
 	for(signed long int i = children.size()-1; i >= 0; --i){
 		if(_child == children.at(i)){
 			children.erase(children.begin() + i);
@@ -365,7 +364,7 @@ unsigned long int Transform::removeChild(NodeChild * _child){
 	return -1;
 }
 
-bool Transform::hasChild(NodeChild * _child){
+bool Transform::hasChild(const NodeChild * const _child) const{
 	if(_child == nullptr){
 		return false;
 	}
@@ -377,7 +376,7 @@ bool Transform::hasChild(NodeChild * _child){
 	return false;
 }
 
-bool Transform::hasDescendant(NodeChild *_child) {
+bool Transform::hasDescendant(const NodeChild * const _child) const{
 	if(_child == nullptr){
 		return false;
 	}
@@ -408,7 +407,7 @@ void Transform::doRecursively(std::function<void(Node *, void * args[])> _toDo, 
 	}
 }
 
-void Transform::deleteRecursively(Transform * _node){
+void Transform::deleteRecursively(Transform * const _node){
 	while (_node->children.size() > 0){
 		Transform * t = dynamic_cast<Transform *>(_node->children.back());
 		if(t != nullptr){
@@ -417,7 +416,6 @@ void Transform::deleteRecursively(Transform * _node){
 		_node->children.pop_back();
 	}
 	delete _node;
-	_node = nullptr;
 }
 
 void Transform::printHierarchy(unsigned long int _startDepth, bool _last, std::vector<unsigned long int> & _p){

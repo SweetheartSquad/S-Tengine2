@@ -17,6 +17,7 @@ protected:
 
 public:
 	NodePhysicsBody();
+	virtual ~NodePhysicsBody();
 
 	virtual void update(Step * _step);
 

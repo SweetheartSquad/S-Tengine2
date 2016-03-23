@@ -23,7 +23,7 @@ public:
 	btVector3 maxVelocity;
 
 	NodeBulletBody(BulletWorld * _world);
-	~NodeBulletBody();
+	virtual ~NodeBulletBody();
 
 	void setColliderAsStaticPlane(float _normalX = 0.f, float _normalY = 1.f, float _normalZ = 0.f, float _distanceFromOrigin = 0.f);
 	void setColliderAsBox(float _halfX = 0.5f, float _halfY = 0.5f, float _halfZ = 0.5f);

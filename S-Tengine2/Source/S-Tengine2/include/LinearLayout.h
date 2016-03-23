@@ -18,6 +18,7 @@ public:
 	VerticalAlignment verticalAlignment;
 
 	LinearLayout(BulletWorld * _world);
+	virtual ~LinearLayout();
 
 	glm::vec3 getRootPos();
 };

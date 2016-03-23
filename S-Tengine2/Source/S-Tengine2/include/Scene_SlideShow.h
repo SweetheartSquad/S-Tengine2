@@ -15,7 +15,7 @@ public:
 	float length;
 
 	Slide(Texture * _tex, float _length = 1.f, OpenAL_Sound * _sound = nullptr);
-	~Slide();
+	virtual ~Slide();
 };
 
 namespace sweet{

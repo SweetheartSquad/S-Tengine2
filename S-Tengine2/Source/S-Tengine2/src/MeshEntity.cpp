@@ -11,10 +11,10 @@
 
 #include <algorithm>
 
-MeshEntity::MeshEntity(MeshInterface * _mesh, Shader * _shader, bool _configureDefaultVertexAttributes) :
+MeshEntity::MeshEntity(MeshInterface * const _mesh, Shader * _shader, bool _configureDefaultVertexAttributes) :
 	NodeShadable(_shader),
 	mesh(_mesh),
-	meshTransform(childTransform->addChild(mesh))
+	meshTransform(childTransform->addChild(mesh, true))
 {
 	if(shader != nullptr && _configureDefaultVertexAttributes) {
 		if(!mesh->loaded || mesh->dirty) {

@@ -40,7 +40,7 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	renderedTexture(nullptr),
 	texturedPlane(nullptr),
 	renderMode(_renderMode),
-	background(new Plane(glm::vec3(-0.5f, -0.5f, 0.f))),
+	background(new Plane(glm::vec3(-0.5f, -0.5f, 0.f), 1.f, bgShader)),
 	margin(new Transform()),
 	padding(new Transform()),
 	uiElements(new Transform()),
@@ -61,8 +61,8 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 		bgShader->addComponent(new ShaderComponentAlpha(bgShader));
 		bgShader->addComponent(new ShaderComponentDepthOffset(bgShader));
 		bgShader->compileShader();
+		background->setShader(bgShader, true);
 	}
-	background->setShader(bgShader, true);
 	
 	childTransform->addChild(margin, false);
 	margin->addChild(background, true);

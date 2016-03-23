@@ -9,17 +9,18 @@ class Transform;
 class NodeChild abstract : public virtual Node{
 public:
 	/** Reference to this node's parents */
-	std::vector<Transform *> parents;
+	std::vector<Transform * const> parents;
 
 	explicit NodeChild();
+	virtual ~NodeChild();
 
 	// Returns whether or not _parent is an ancestor of this node (i.e. is its parent, is its parent's parent, etc.)
 	// If _parent = nullptr, returns false
-	virtual bool hasAncestor(Transform * _parent);
+	virtual bool hasAncestor(const Transform * const _parent) const;
 	
-	virtual void addParent(Transform * _parent);
+	virtual void addParent(Transform * const _parent);
 	// Loops through the vector of parents and removes the first instance of _parent
-	virtual void removeParent(Transform * _parent);
+	virtual void removeParent(Transform * const _parent);
 	
 	// Returns the first parent in the list of parents
 	// If there are no parents then returns nullptr

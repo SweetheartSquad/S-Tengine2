@@ -89,7 +89,7 @@ public:
 	// sets mouseEnabled and creates/deletes the node's collider
 	void setMouseEnabled(bool _mouseEnabled);
 
-	Plane * background;
+	Plane * const background;
 
 	OrthographicCamera * textureCam;
 	StandardFrameBuffer * frameBuffer;

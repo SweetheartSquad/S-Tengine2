@@ -92,8 +92,8 @@ void Game::performGameLoop(){
 
 		if(switchingScene){
 			if(deleteOldScene){
-				scenes.erase(currentSceneKey);
 				delete currentScene;
+				scenes.erase(currentSceneKey);
 			}
 			currentSceneKey = newSceneKey;
 			currentScene = scenes.at(currentSceneKey);

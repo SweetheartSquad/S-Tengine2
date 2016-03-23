@@ -81,7 +81,7 @@ public:
 	void makeCumulativeModelMatrixDirty() override;
 	glm::mat4 getCumulativeModelMatrix();
 
-	void addParent(Transform * _parent) override;
+	void addParent(Transform * const _parent) override;
 	
 	Transform();
 	virtual ~Transform();
@@ -90,37 +90,37 @@ public:
 	* Multiplies the x, y, and z component of the scale vector by _scaleX, _scaleY, and _scaleZ, respectively 
 	  If relative = false, sets the scale to the provided values
 	*/
-	Transform * scale(float _scaleX, float _scaleY, float _scaleZ, bool relative = true);
+	Transform * const scale(float _scaleX, float _scaleY, float _scaleZ, bool relative = true);
 	
 	/** 
 	* Multiplies each dimension of the scale vector by _scale 
 	  If relative = false, sets the scale to the provided value
 	*/
-	Transform * scale(float _scale, bool relative = true);
+	Transform * const scale(float _scale, bool relative = true);
 
 	/** 
 	* Multiplies the scale vector by _scale 
 	  If relative = false, sets the scale to the provided values
 	*/
-	Transform * scale(glm::vec3 _scale, bool relative = true);
+	Transform * const scale(glm::vec3 _scale, bool relative = true);
 
 	/**
 	* Adds _translateX, _translateY, and _translateZ to the x, y, and z component of the translation vector, respectively 
 	  If relative = false, sets the translation to the provided values
 	*/
-	Transform * translate(float _translateX, float _translateY, float _translateZ, bool relative = true);
+	Transform * const translate(float _translateX, float _translateY, float _translateZ, bool relative = true);
 	
 	/** 
 	* Adds _translate to the translation vector 
 	  If relative = false, sets the translation to the provided values
 	*/
-	Transform * translate(glm::vec3 _translate, bool relative = true);
+	Transform * const translate(glm::vec3 _translate, bool relative = true);
 
 	/** 
 	OBJECT:	Rotates the orientation quaternion by _rotation in object-space (i.e. orientation = _rotation * orientation) 
 	WORLD:	Rotates the orientation quaternion by _rotation in world-space (i.e. orientation = orientation * _rotation) 
 	*/
-	Transform * rotate(glm::quat _rotation, CoordinateSpace _space);
+	Transform * const rotate(glm::quat _rotation, CoordinateSpace _space);
 	
 	/**
 	Rotates the orientation quaternion by the quaternion defined by _angle, _x, _y, and _z (i.e. orientation = quat(axisAngle(_angle, vec3(_x, _y, _z))) * orientation)
@@ -128,9 +128,9 @@ public:
 	OBJECT:	Rotates the orientation quaternion by _rotation in object-space (i.e. orientation = _rotation * orientation) 
 	WORLD:	Rotates the orientation quaternion by _rotation in world-space (i.e. orientation = orientation * _rotation)
 	*/
-	Transform * rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space);
+	Transform * const rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space);
 	
-	Transform * setOrientation(glm::quat _orientation);
+	Transform * const setOrientation(glm::quat _orientation);
 	
 	/**
 	* Resets the translation, orientation, and scale to their defaults
@@ -191,7 +191,7 @@ public:
 	// adds this node as a parent of _child
 	// Note: asserts that this node is not a descendant of _child
 	// Returns the transform node if created, nullptr otherwise
-	virtual Transform * addChild(NodeChild * _child, bool _underNewTransform = true);
+	virtual Transform * const addChild(NodeChild * const _child, bool _underNewTransform = true);
 	
 	// Removes the first instance of _child if it is already in the child list
 	// Inserts _child into this node's list of children at _index
@@ -199,7 +199,7 @@ public:
 	// Note: if _index is negative, adds child at children.size() + _index; e.g. addChildAtIndex(-1) would put it at the end of the list
 	// Note: asserts that this node is not a descendant of _child
 	// Returns the transform node if created, nullptr otherwise
-	virtual Transform * addChildAtIndex(NodeChild * _child, int _index, bool _underNewTransform = true);
+	virtual Transform * const addChildAtIndex(NodeChild * const _child, int _index, bool _underNewTransform = true);
 
 	// Erases the node at _index from the list of children
 	virtual void removeChildAtIndex(int _index);
@@ -207,24 +207,24 @@ public:
 	// Loops through the node's children and removes the first instance of _child and returns the index
 	// This node is removed from the node's parent list
 	// Returns (unsigned long int)(-1) if _child is not a child of this node
-	virtual unsigned long int removeChild(NodeChild * _child);
+	virtual unsigned long int removeChild(NodeChild * const _child);
 	
 	// Returns whether _child is a direct child of this node (use hasDescendant to check hierarchy)
 	// If _child = nullptr, returns false
-	virtual bool hasChild(NodeChild * _child);
+	virtual bool hasChild(const NodeChild * const _child) const;
 	// Returns whether _child is a descendant of this node (i.e. a child, a child of its children, etc)
 	// If _child = nullptr, returns false
-	virtual bool hasDescendant(NodeChild * _child);
+	virtual bool hasDescendant(const NodeChild * const _child) const;
 
 	/** List of references to child entities */
-	std::vector<NodeChild *> children;
+	std::vector<NodeChild * const> children;
 
 	void doRecursively(std::function<void(Node *, void * args[])> _toDo, void * _args[]);
 
 	
 
 	// Calls deleteRecursively on all of _node's children, and then deletes _node
-	static void deleteRecursively(Transform * _node);
+	static void deleteRecursively(Transform * const _node);
 
 
 	// prints the hierarchy to the console in ASCII

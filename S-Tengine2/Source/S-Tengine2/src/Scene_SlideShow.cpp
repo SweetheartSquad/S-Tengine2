@@ -34,16 +34,15 @@ Scene_SlideShow::Scene_SlideShow(Game * _game, bool _transitionFirstSlide, Easin
 	slide(nullptr),
 	isTransitioning(false),
 	isTransitioningForwards(true),
-	transitionFirstSlide(_transitionFirstSlide)
+	transitionFirstSlide(_transitionFirstSlide),
+	uiLayer(new UILayer(0,0,0,0)),
+	eventManager(new sweet::EventManager())
 {
-	uiLayer = new UILayer(0,0,0,0);
-	eventManager = new sweet::EventManager();
-
 	slideOld = new NodeUI(uiLayer->world);
 	slideOld->setRationalWidth(1.f, uiLayer);
 	slideOld->setRationalHeight(1.f, uiLayer);
 
-	slideNew= new NodeUI(uiLayer->world);
+	slideNew = new NodeUI(uiLayer->world);
 	slideNew->setRationalWidth(1.f, uiLayer);
 	slideNew->setRationalHeight(1.f, uiLayer);
 
@@ -86,13 +85,6 @@ Scene_SlideShow::Scene_SlideShow(Game * _game, bool _transitionFirstSlide, Easin
 }
 
 Scene_SlideShow::~Scene_SlideShow(){
-	uiLayer->removeChild(slideOld);
-	uiLayer->removeChild(slideNew);
-	
-	delete slideOld;
-	delete slideNew;
-
-	delete uiLayer;
 	delete transition;
 	while(forwards.size() > 0){
 		delete forwards.back();
@@ -103,6 +95,7 @@ Scene_SlideShow::~Scene_SlideShow(){
 	}
 	delete currSlide;
 	delete eventManager;
+	delete uiLayer;
 }
 
 void Scene_SlideShow::update(Step * _step){
@@ -131,6 +124,8 @@ void Scene_SlideShow::next(){
 	
 		currSlide = forwards.front();
 		forwards.erase(forwards.begin());
+	}else{
+		currSlide = nullptr;
 	}
 }
 
@@ -142,6 +137,8 @@ void Scene_SlideShow::prev(){
 	
 		currSlide = backwards.back();
 		backwards.pop_back();
+	}else{
+		currSlide = nullptr;
 	}
 }
 

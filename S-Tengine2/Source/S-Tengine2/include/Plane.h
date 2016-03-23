@@ -9,7 +9,7 @@
 *
 ******************************/
 
-class Plane : public MeshEntity{
+class Plane : public virtual MeshEntity{
 public:
 	virtual char * getTypename(){
 		return "Plane";
@@ -21,8 +21,8 @@ public:
 	* @param _center The plane's center position in world space
 	* @param _size The plane's scale
 	*/
-	Plane(glm::vec3 _center = glm::vec3(0.f, 0.f, 0.f), float _scale = 1.f);
-	~Plane(void);
+	Plane(glm::vec3 _center = glm::vec3(0.f, 0.f, 0.f), float _scale = 1.f, Shader * _shader = nullptr);
+	virtual ~Plane(void);
 
 	/**
 	* Sets the color for the entire plane.

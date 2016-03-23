@@ -7,6 +7,9 @@ VerticalLinearLayout::VerticalLinearLayout(BulletWorld* _bulletWorld) :
 {
 }
 
+VerticalLinearLayout::~VerticalLinearLayout(){
+}
+
 void VerticalLinearLayout::layoutChildren(){
 	glm::vec3 rootPos = getRootPos();
 	float x = rootPos.x;

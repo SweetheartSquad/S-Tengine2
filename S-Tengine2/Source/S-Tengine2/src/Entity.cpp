@@ -49,12 +49,12 @@ void Entity::load(){
 	NodeLoadable::load();
 }
 
-void Entity::addParent(Transform * _parent){
+void Entity::addParent(Transform * const _parent){
 	NodeChild::addParent(_parent);
 	childTransform->addParent(_parent);
 }
 
-void Entity::removeParent(Transform * _parent){
+void Entity::removeParent(Transform * const _parent){
 	NodeChild::removeParent(_parent);
 	childTransform->removeParent(_parent);
 }

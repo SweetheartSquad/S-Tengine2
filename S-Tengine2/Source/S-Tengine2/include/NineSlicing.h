@@ -36,7 +36,7 @@ public:
 	// nine-sliced patches (in the order top-left, top, top-right, left, center, right, bottom-left, bottom, bottom-right)
 	Patch * patches[9];
 	explicit Texture_NineSliced(std::string _src, bool _autoRelease, bool _useMipmaps = true);
-	~Texture_NineSliced();
+	virtual ~Texture_NineSliced();
 
 	virtual void load() override;
 	virtual void unload() override;
@@ -50,6 +50,7 @@ protected:
 	NodeUI * tl, * t, * tr, * l, * c, * r, * bl, * b, * br;
 public:
 	NodeUI_NineSliced(BulletWorld * _world, Texture_NineSliced * _texture);
+	virtual ~NodeUI_NineSliced();
 
 	// set the size of the 8 border patches
 	void setBorder(float _all);

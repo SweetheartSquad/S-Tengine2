@@ -4,8 +4,8 @@
 #include "MeshInterface.h"
 #include "MeshFactory.h"
 
-Plane::Plane(glm::vec3 _center, float _size) :
-	MeshEntity(MeshFactory::getPlaneMesh(_size*0.5f, _size*0.5f))
+Plane::Plane(glm::vec3 _center, float _size, Shader * _shader) :
+	MeshEntity(MeshFactory::getPlaneMesh(_size*0.5f, _size*0.5f), _shader)
 {
 	for(unsigned long int i = 0; i < mesh->vertices.size(); ++i){
 		mesh->vertices.at(i).x -= _center.x;

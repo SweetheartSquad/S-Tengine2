@@ -7,6 +7,9 @@ NodePhysicsBody::NodePhysicsBody() :
 {
 }
 
+NodePhysicsBody::~NodePhysicsBody(){
+}
+
 void NodePhysicsBody::translatePhysical(glm::vec3 _translation, bool _relative){
 	directAdjustment = true;
 }

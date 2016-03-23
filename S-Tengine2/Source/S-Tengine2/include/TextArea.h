@@ -12,7 +12,7 @@ public:
 	std::vector<TextLabel *> unusedLines;
 
 	TextArea(BulletWorld * _bulletWorld, Font * _font, Shader * _textShader);
-	~TextArea();
+	virtual ~TextArea();
 
 	virtual void update(Step * _step) override;
 

@@ -6,6 +6,8 @@ HorizontalLinearLayout::HorizontalLinearLayout(BulletWorld* _bulletWorld) :
 	LinearLayout(_bulletWorld)
 {
 }
+HorizontalLinearLayout::~HorizontalLinearLayout(){
+}
 
 void HorizontalLinearLayout::layoutChildren(){
 	glm::vec3 rootPos = getRootPos();

@@ -10,13 +10,17 @@ NodeChild::NodeChild() :
 {
 }
 
+NodeChild::~NodeChild(){
+	parents.clear();
+}
+
 void NodeChild::makeCumulativeModelMatrixDirty(){
 	// do nothing
 	cumulativeModelMatrixDirty = true;
 }
 
 
-bool NodeChild::hasAncestor(Transform * _parent){
+bool NodeChild::hasAncestor(const Transform * const _parent) const{
 	if(_parent == nullptr){
 		return false;
 	}
@@ -62,12 +66,12 @@ glm::vec3 NodeChild::getWorldPos(unsigned long int _parent){
 	return worldPos;
 }
 
-void NodeChild::addParent(Transform * _parent){
+void NodeChild::addParent(Transform * const _parent){
 	parents.push_back(_parent);
 	makeCumulativeModelMatrixDirty();
 }
 
-void NodeChild::removeParent(Transform * _parent){
+void NodeChild::removeParent(Transform * const _parent){
 	for(signed long int i = parents.size()-1; i >= 0; --i){
 		if(parents.at(i) == _parent){
 			parents.erase(parents.begin() + i);
@@ -132,7 +136,7 @@ void NodeChild::printHierarchy(unsigned long int _startDepth, bool _last, std::v
 
 unsigned long int NodeChild::calculateDepth(unsigned long int _parent){
 	unsigned long int depth = 0;
-	std::vector<Transform *> * p = &parents;
+	std::vector<Transform * const> * p = &parents;
 	if(p->size() > _parent){
 		p = &p->at(_parent)->parents;
 		depth += 1;

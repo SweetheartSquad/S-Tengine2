@@ -15,12 +15,12 @@ public:
 	/** Reference to this entity's mesh */
 	MeshInterface * mesh;
 	// Reference to the transform which is a child of this entity's childTransform and the parent of its mesh
-	Transform * meshTransform;
+	Transform * const meshTransform;
 
 	// returns a box which covers the verts of the mesh and all of its children
 	//sweet::Box calcOverallBoundingBox();
 
-	explicit MeshEntity(MeshInterface * _mesh, Shader * _shader = nullptr, bool _configureDefaultVertexAttributes = true);
+	explicit MeshEntity(MeshInterface * const _mesh, Shader * _shader = nullptr, bool _configureDefaultVertexAttributes = true);
 	virtual ~MeshEntity(void);
 
 	/**

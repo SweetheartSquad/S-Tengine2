@@ -13,6 +13,9 @@ LinearLayout::LinearLayout(BulletWorld* _world):
 	setAutoresizeHeight();
 }
 
+LinearLayout::~LinearLayout(){
+}
+
 glm::vec3 LinearLayout::getRootPos(){
 	glm::vec3 res(0);
 	
