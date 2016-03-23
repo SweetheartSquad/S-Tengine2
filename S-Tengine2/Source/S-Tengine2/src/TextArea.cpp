@@ -116,6 +116,29 @@ TextLabel * TextArea::getCurrentLine(){
 	}
 }
 
+void TextArea::setShader(Shader * _shader, bool _configureDefaultAttributes){
+	for(auto line : usedLines){
+		line->setShader(_shader, _configureDefaultAttributes);
+	}
+	for(auto line : unusedLines){
+		line->setShader(_shader, _configureDefaultAttributes);
+	}
+}
+
+void TextArea::setFont(Font * _font, bool _updateText){
+	for(auto line : usedLines){
+		line->setFont(_font, false);
+	}
+	for(auto line : unusedLines){
+		line->setFont(_font, false);
+	}
+
+	if(_updateText){
+		setText(text);
+		invalidateLayout();
+	}
+}
+
 void TextArea::load(){
 	if(!loaded){
 		for(unsigned long int i = 0; i < unusedLines.size(); ++i){

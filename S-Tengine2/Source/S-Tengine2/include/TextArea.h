@@ -23,6 +23,8 @@ public:
 	void setText(std::string _text);
 	void updateText();
 	void setWrapMode(WrapMode _wrapMode);
+	void setShader(Shader * _shader, bool _configureDefaultAttributes);
+	void setFont(Font * _font, bool _updateText);
 
 	// returns the last TextLabel inserted into unusedLines
 	// if unusedLines is empty, creates a new TextLabel and returns that instead

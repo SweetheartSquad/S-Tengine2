@@ -24,6 +24,7 @@ public:
 	virtual ~UIGlyph();
 
 	void setGlyph(Glyph * _mesh);
+	void setShader(Shader * _shader, bool _configureDefaultAttributes);
 
 	virtual void render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 };
@@ -52,6 +53,8 @@ public:
 	// if _clipped, returns textDisplayed
 	// otherwise, returns textAll
 	void updateText();
+	void setShader(Shader * _shader, bool _configureDefaultAttributes);
+	void setFont(Font * _font, bool _updateText = true);
 
 	virtual float getContentsHeight() override;
 	virtual float getContentsWidth() override;

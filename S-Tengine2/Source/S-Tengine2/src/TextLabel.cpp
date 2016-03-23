@@ -173,6 +173,27 @@ unsigned long int TextLabel::wordWrap(){
 	return idx;
 }
 
+void TextLabel::setShader(Shader * _shader, bool _configureDefaultAttributes){
+	for(auto glyph : usedGlyphs){
+		glyph->setShader(_shader, _configureDefaultAttributes);
+	}
+	for(auto glyph : unusedGlyphs){
+		glyph->setShader(_shader, _configureDefaultAttributes);
+	}
+}
+
+void TextLabel::setFont(Font * _font, bool _updateText){
+	font = _font;
+	setPixelHeight(font->getLineHeight());
+	setAutoresizeWidth();
+	if(loaded){
+		font->load();
+	}
+	if(_updateText){
+		setText(textAll);
+	}
+}
+
 float TextLabel::getContentsHeight(){
 	return font->getLineHeight();
 }
@@ -252,6 +273,32 @@ void UIGlyph::setGlyph(Glyph * _newGlyph){
 	setPixelHeight(_newGlyph->advance.y/64);
 
 	glyphMesh->configureDefaultVertexAttributes(shader);
+}
+
+void UIGlyph::setShader(Shader * _shader, bool _configureDefaultAttributes){
+	if(shader != nullptr) {
+		--shader->referenceCount;
+	}
+	if(_shader != nullptr){
+		if(_shader->isCompiled){
+			if(shader != _shader){
+				if(shader != nullptr){
+					shader->decrementAndDelete();
+				}
+				shader = _shader;
+				++shader->referenceCount;
+			}
+			if(_configureDefaultAttributes){
+				if(glyphMesh != nullptr){
+					load();
+				}
+			}
+		}else{
+			throw "shader not compiled; cannot setShader";
+		}
+	}else{
+		shader = nullptr;
+	}
 }
 
 void UIGlyph::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
