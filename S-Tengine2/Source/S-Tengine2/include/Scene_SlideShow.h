@@ -27,7 +27,7 @@ class NodeUI;
 class UILayer;
 
 class Scene_SlideShow : public Scene{
-private:
+protected:
 	int idx;
 	Slide * currSlide;
 	std::vector<Slide *> forwards;
