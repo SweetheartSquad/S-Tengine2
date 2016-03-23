@@ -45,7 +45,7 @@ private:
 	void setNewSlide(bool _isForwards);
 public:
 	Scene_SlideShow(Game * _game, bool _transitionFirstSlide = false, Easing::Type _easeType = Easing::kEASE_IN_OUT_CUBIC);
-	~Scene_SlideShow();
+	virtual ~Scene_SlideShow();
 	
 	int getCurrentIndex();
 
