@@ -37,5 +37,5 @@ public:
 	_clearColour: clear colour of the scene (alpha is used to fade, so it will fade to and from this colour)
 	*/
 	Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * _splashSound, float _length = 3.f, glm::vec3 _clearColour = glm::vec3(0.f));
-	~Scene_Splash();
+	virtual ~Scene_Splash();
 };
