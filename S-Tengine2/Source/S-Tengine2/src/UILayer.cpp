@@ -177,7 +177,7 @@ Sprite * UILayer::addMouseIndicator(){
 	Texture * tex = new Texture("assets/engine basics/cursor.png", true, true);
 	tex->load();
 	mouseIndicator->mesh->pushTexture2D(tex);
-	mouseIndicator->firstParent()->scale(32,32,1);
+	mouseIndicator->firstParent()->scale(sweet::getDpi() * 0.25f, sweet::getDpi() * 0.25f, 1);
 	mouseIndicator->mesh->scaleModeMag = mouseIndicator->mesh->scaleModeMin = GL_NEAREST;
 
 	for(unsigned long int i = 0; i < mouseIndicator->mesh->vertices.size(); ++i){
