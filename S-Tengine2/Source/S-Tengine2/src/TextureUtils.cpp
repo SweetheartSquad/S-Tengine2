@@ -29,7 +29,7 @@ std::vector<glm::vec2> sweet::TextureUtils::getMarchingSquaresContour(Texture * 
 	edgeTable[0x2].push_back(0); edgeTable[0x2].push_back(1);
 	edgeTable[0x3].push_back(1); edgeTable[0x3].push_back(3);
 	edgeTable[0x4].push_back(1); edgeTable[0x4].push_back(2);
-	edgeTable[0x5].push_back(0); edgeTable[0x5].push_back(1); edgeTable[0x5].push_back(2); edgeTable[0x5].push_back(3);
+	edgeTable[0x5].push_back(1); edgeTable[0x5].push_back(0); edgeTable[0x5].push_back(3); edgeTable[0x5].push_back(2);
 	edgeTable[0x6].push_back(0); edgeTable[0x6].push_back(2);
 	edgeTable[0x7].push_back(2); edgeTable[0x7].push_back(3);
 	edgeTable[0x8].push_back(2); edgeTable[0x8].push_back(3);
