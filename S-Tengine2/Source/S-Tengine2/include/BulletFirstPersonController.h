@@ -64,6 +64,9 @@ public:
 	float maxSpeedWalking;
 	float maxSpeedSprinting;
 
+	// how much the head bobble actually affects the camera
+	float bobbleMultiplier;
+
 	BulletFirstPersonController(BulletWorld * bulletWorld, float _radius, float _height, float _mass);
 	~BulletFirstPersonController();
 

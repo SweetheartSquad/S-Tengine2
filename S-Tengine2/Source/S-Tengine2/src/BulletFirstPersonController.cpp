@@ -59,7 +59,8 @@ BulletFirstPersonController::BulletFirstPersonController(BulletWorld * _bulletWo
 	landSound(nullptr),
 	isSprinting(false),
 	maxPitch(80),
-	minPitch(-80)
+	minPitch(-80),
+	bobbleMultiplier(1)
 {
 
 	// player set-up
@@ -274,7 +275,7 @@ void BulletFirstPersonController::handleInputs(Step * _step, glm::vec3 _inputs){
 		isGrounded = false;
 		jumpTime += _step->time - jumpTime;
 	}
-	playerCamera->firstParent()->translate(glm::vec3(b.x(), playerHeight*0.75f+bobbleVal*bobbleInterpolation+b.y(), b.z()) + camOffset, false);
+	playerCamera->firstParent()->translate(glm::vec3(b.x(), (playerHeight*0.75f+bobbleVal*bobbleInterpolation) * bobbleMultiplier + b.y(), b.z()) + camOffset, false);
 }
 
 
