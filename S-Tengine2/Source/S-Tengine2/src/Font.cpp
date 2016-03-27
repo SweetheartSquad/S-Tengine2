@@ -169,8 +169,8 @@ GlyphMesh * Font::getMeshInterfaceForChar(wchar_t _char){
 }
 
 glm::vec2 Font::getGlyphWidthHeight(wchar_t _char){
-	GlyphTexture * t = getGlyphForChar(_char)->texture;
-	return glm::vec2(t->width, t->height);
+	Glyph * glyph = getGlyphForChar(_char);
+	return glm::vec2(glyph->advance.x/64.f, glyph->advance.y/64.f);
 }
 
 glm::vec2 Font::getGlyphXY(wchar_t _char){
