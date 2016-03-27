@@ -62,7 +62,10 @@ public:
 	Glyph * getGlyphForChar(wchar_t _character);
 	GlyphTexture * getTextureForChar(wchar_t _character);
 	GlyphMesh * getMeshInterfaceForChar(wchar_t _character);
-	glm::vec2 getGlyphWidthHeight(wchar_t _character);
+	// dimensions of the glyph mesh
+	glm::vec2 getGlyphWidthHeight(wchar_t _char);
+	// dimensions of the glyph + spacing
+	glm::vec2 getGlyphAdvance(wchar_t _character);
 	glm::vec2 getGlyphXY(wchar_t _character);
 	void loadGlyph(wchar_t _character) const;
 	float getLineHeight() const;

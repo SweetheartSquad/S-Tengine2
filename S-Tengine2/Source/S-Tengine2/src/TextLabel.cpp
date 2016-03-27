@@ -106,9 +106,9 @@ unsigned long int TextLabel::wordWrap(){
 			std::wstring word = words.at(i);
 			float width = 0.f;
 			for(auto c : word) {
-				width += font->getGlyphWidthHeight(c).x;
+				width += font->getGlyphAdvance(c).x;
 			}
-			if(canFit(width + font->getGlyphWidthHeight(' ').x)) {
+			if(canFit(width + font->getGlyphAdvance(' ').x)) {
 				for(auto c : word) {
 					if(c == '\n') {
 						++idx;
@@ -134,7 +134,7 @@ unsigned long int TextLabel::wordWrap(){
 				textDisplayed += '\n';
 				// newline character
 				break;
-			}else if(!canFit(font->getGlyphWidthHeight(textAll.at(idx)).x)){
+			}else if(!canFit(font->getGlyphAdvance(textAll.at(idx)).x)){
 				// width overflow
 				break;
 			}else{
@@ -142,14 +142,14 @@ unsigned long int TextLabel::wordWrap(){
 			}
 		}
 	}else if(wrapMode == kTRUNCATE){
-		float periodLength = font->getGlyphWidthHeight('.').x * 3.0f;
+		float periodLength = font->getGlyphAdvance('.').x * 3.0f;
 		for(idx = 0; idx < textAll.size(); ++idx){
 			if(textAll.at(idx) == '\n'){
 				++idx;
 				textDisplayed += '\n';
 				// newline character
 				break;
-			}else if(!canFit(font->getGlyphWidthHeight(textAll.at(idx)).x + periodLength)){
+			}else if(!canFit(font->getGlyphAdvance(textAll.at(idx)).x + periodLength)){
 				// width overflow
 				insertChar('.');
 				insertChar('.');
