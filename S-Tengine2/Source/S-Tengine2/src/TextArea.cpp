@@ -123,6 +123,7 @@ void TextArea::setShader(Shader * _shader, bool _configureDefaultAttributes){
 	for(auto line : unusedLines){
 		line->setShader(_shader, _configureDefaultAttributes);
 	}
+	textShader = _shader;
 }
 
 void TextArea::setFont(Font * _font, bool _updateText){

@@ -180,6 +180,7 @@ void TextLabel::setShader(Shader * _shader, bool _configureDefaultAttributes){
 	for(auto glyph : unusedGlyphs){
 		glyph->setShader(_shader, _configureDefaultAttributes);
 	}
+	textShader = _shader;
 }
 
 void TextLabel::setFont(Font * _font, bool _updateText){
