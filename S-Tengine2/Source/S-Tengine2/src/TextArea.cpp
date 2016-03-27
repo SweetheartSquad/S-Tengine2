@@ -134,9 +134,10 @@ void TextArea::setFont(Font * _font, bool _updateText){
 		line->setFont(_font, false);
 	}
 
+	font = _font;
+
 	if(_updateText){
 		setText(text);
-		invalidateLayout();
 	}
 }
 

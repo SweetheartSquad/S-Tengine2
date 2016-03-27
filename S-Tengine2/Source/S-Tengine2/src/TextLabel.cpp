@@ -185,11 +185,11 @@ void TextLabel::setShader(Shader * _shader, bool _configureDefaultAttributes){
 
 void TextLabel::setFont(Font * _font, bool _updateText){
 	font = _font;
-	setPixelHeight(font->getLineHeight());
-	setAutoresizeWidth();
 	if(loaded){
 		font->load();
 	}
+	setPixelHeight(font->getLineHeight());
+
 	if(_updateText){
 		setText(textAll);
 	}
