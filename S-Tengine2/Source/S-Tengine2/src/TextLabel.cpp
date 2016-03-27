@@ -108,7 +108,7 @@ unsigned long int TextLabel::wordWrap(){
 			for(auto c : word) {
 				width += font->getGlyphWidthHeight(c).x;
 			}
-			if(canFit(width) + font->getGlyphWidthHeight(' ').x) {
+			if(canFit(width + font->getGlyphWidthHeight(' ').x)) {
 				for(auto c : word) {
 					if(c == '\n') {
 						++idx;
