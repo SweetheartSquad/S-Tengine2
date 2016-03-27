@@ -10,8 +10,11 @@ public:
 	float getHue();
 	float getSaturation();
 	float getValue();
+	// 0 = unchanged, 1 = 360 degree change
 	void setHue(float _hue);
+	// 0 = greyscale, 1 = unchanged
 	void setSaturation(float _sat);
+	// 0 = black, 1 = unchanged
 	void setValue(float _val);
 
 	// all values are given as 0 - 1, h += hue, s *= sat, v *= val
