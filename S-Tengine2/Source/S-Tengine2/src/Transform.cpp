@@ -77,7 +77,7 @@ glm::mat4 Transform::getCumulativeModelMatrix(){
 		return getModelMatrix();
 	}
 	if(cumulativeModelMatrixDirty){
-		cumulativeModelMatrix = parents.at(0)->getCumulativeModelMatrix() * getModelMatrix();
+		cumulativeModelMatrix = firstParent()->getCumulativeModelMatrix() * getModelMatrix();
 		cumulativeModelMatrixDirty = false;
 	}
 	return cumulativeModelMatrix;

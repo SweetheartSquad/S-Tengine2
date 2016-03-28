@@ -7,8 +7,8 @@
 Cube::Cube(glm::vec3 _center, float _scale) :
 	MeshEntity(MeshFactory::getCubeMesh())
 {
-	parents.at(0)->scale(_scale, _scale, _scale);
-	parents.at(0)->translate(_center);
+	firstParent()->scale(_scale, _scale, _scale);
+	firstParent()->translate(_center);
 }
 
 Cube::~Cube(void){

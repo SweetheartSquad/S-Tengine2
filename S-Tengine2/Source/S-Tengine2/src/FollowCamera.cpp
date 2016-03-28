@@ -122,7 +122,7 @@ void FollowCamera::update(Step * _step){
 	float dist = zoom / (tan(glm::radians(fieldOfView) * 0.5f) * 2.f);
 
 
-	parents.at(0)->translate(lookAtSpot.x, lookAtSpot.y, dist, false);
+	firstParent()->translate(lookAtSpot.x, lookAtSpot.y, dist, false);
 }
 
 void FollowCamera::addTarget(NodeChild * _target, float _weight){

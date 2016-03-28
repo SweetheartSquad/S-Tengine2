@@ -35,8 +35,8 @@ void ParticleSystem::update(Step * _step){
 	for (signed long int i = components.size() - 1; i >= 0; --i){
 		Particle * p = static_cast<Particle *>(*components.at(i));
 		if (!p->alive){
-			childTransform->removeChild(p->parents.at(0));
-			delete p->parents.at(0);
+			childTransform->removeChild(p->firstParent());
+			delete p->firstParent();
 			delete components.at(i);
 			components.erase(components.begin() + i);
 		}

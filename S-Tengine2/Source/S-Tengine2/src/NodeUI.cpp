@@ -158,7 +158,7 @@ Transform * NodeUI::addChild(NodeUI* _uiElement, bool _invalidateLayout){
 signed long int NodeUI::removeChild(NodeUI* _uiElement, bool _invalidateLayout){
 	unsigned long int res = -1;
 	if(_uiElement->parents.size() > 0){
-		Transform * t = _uiElement->parents.at(0);
+		Transform * t = _uiElement->firstParent();
 		res = uiElements->removeChild(t);
 
 		// if the element is a child, remove it

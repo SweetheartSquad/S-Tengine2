@@ -10,67 +10,67 @@
 BulletRagdoll::BulletRagdoll(BulletWorld * _world, float gs){
 	upperbody = new BulletMeshEntity(_world, MeshFactory::getCubeMesh(1));
 	childTransform->addChild(upperbody);
-	upperbody->parents.at(0)->scale(3*gs, 3*gs, 1*gs);
+	upperbody->firstParent()->scale(3*gs, 3*gs, 1*gs);
 	upperbody->setColliderAsBox(3*gs, 3*gs, 1*gs);
 	upperbody->createRigidBody(1);
 
 	lowerbody = new BulletMeshEntity(_world, MeshFactory::getCubeMesh(1));
 	childTransform->addChild(lowerbody);
-	lowerbody->parents.at(0)->scale(3*gs, 2*gs, 1*gs);
+	lowerbody->firstParent()->scale(3*gs, 2*gs, 1*gs);
 	lowerbody->setColliderAsBox(3*gs, 2*gs, 1*gs);
 	lowerbody->createRigidBody(1);
 
 	head = new BulletMeshEntity(_world, MeshFactory::getCubeMesh(1));
 	childTransform->addChild(head);
-	head->parents.at(0)->scale(2*gs, 2*gs, 2*gs);
+	head->firstParent()->scale(2*gs, 2*gs, 2*gs);
 	head->setColliderAsBox(2*gs, 2*gs, 2*gs);
 	head->createRigidBody(1);
 
 	upperlegLeft = new BulletMeshEntity(_world, MeshFactory::getCubeMesh(1));
 	childTransform->addChild(upperlegLeft);
-	upperlegLeft->parents.at(0)->scale(1*gs, 3*gs, 1*gs);
+	upperlegLeft->firstParent()->scale(1*gs, 3*gs, 1*gs);
 	upperlegLeft->setColliderAsBox(1*gs, 3*gs, 1*gs);
 	upperlegLeft->createRigidBody(1);
 
 	upperlegRight = new BulletMeshEntity(_world, MeshFactory::getCubeMesh(1));
 	childTransform->addChild(upperlegRight);
-	upperlegRight->parents.at(0)->scale(1*gs, 3*gs, 1*gs);
+	upperlegRight->firstParent()->scale(1*gs, 3*gs, 1*gs);
 	upperlegRight->setColliderAsBox(1*gs, 3*gs, 1*gs);
 	upperlegRight->createRigidBody(1);
 
 	lowerlegLeft = new BulletMeshEntity(_world, MeshFactory::getCubeMesh(1));
 	childTransform->addChild(lowerlegLeft);
-	lowerlegLeft->parents.at(0)->scale(1*gs, 3*gs, 1*gs);
+	lowerlegLeft->firstParent()->scale(1*gs, 3*gs, 1*gs);
 	lowerlegLeft->setColliderAsBox(1*gs, 3*gs, 1*gs);
 	lowerlegLeft->createRigidBody(1);
 
 	lowerlegRight = new BulletMeshEntity(_world, MeshFactory::getCubeMesh(1));
 	childTransform->addChild(lowerlegRight);
-	lowerlegRight->parents.at(0)->scale(1*gs, 3*gs, 1*gs);
+	lowerlegRight->firstParent()->scale(1*gs, 3*gs, 1*gs);
 	lowerlegRight->setColliderAsBox(1*gs, 3*gs, 1*gs);
 	lowerlegRight->createRigidBody(1);
 
 	upperarmLeft = new BulletMeshEntity(_world, MeshFactory::getCubeMesh(1));
 	childTransform->addChild(upperarmLeft);
-	upperarmLeft->parents.at(0)->scale(1*gs, 3*gs, 1*gs);
+	upperarmLeft->firstParent()->scale(1*gs, 3*gs, 1*gs);
 	upperarmLeft->setColliderAsBox(1*gs, 3*gs, 1*gs);
 	upperarmLeft->createRigidBody(1);
 
 	upperarmRight = new BulletMeshEntity(_world, MeshFactory::getCubeMesh(1));
 	childTransform->addChild(upperarmRight);
-	upperarmRight->parents.at(0)->scale(1*gs, 3*gs, 1*gs);
+	upperarmRight->firstParent()->scale(1*gs, 3*gs, 1*gs);
 	upperarmRight->setColliderAsBox(1*gs, 3*gs, 1*gs);
 	upperarmRight->createRigidBody(1);
 
 	lowerarmLeft = new BulletMeshEntity(_world, MeshFactory::getCubeMesh(1));
 	childTransform->addChild(lowerarmLeft);
-	lowerarmLeft->parents.at(0)->scale(1*gs, 3*gs, 1*gs);
+	lowerarmLeft->firstParent()->scale(1*gs, 3*gs, 1*gs);
 	lowerarmLeft->setColliderAsBox(1*gs, 3*gs, 1*gs);
 	lowerarmLeft->createRigidBody(1);
 
 	lowerarmRight = new BulletMeshEntity(_world, MeshFactory::getCubeMesh(1));
 	childTransform->addChild(lowerarmRight);
-	lowerarmRight->parents.at(0)->scale(1*gs, 3*gs, 1*gs);
+	lowerarmRight->firstParent()->scale(1*gs, 3*gs, 1*gs);
 	lowerarmRight->setColliderAsBox(1*gs, 3*gs, 1*gs);
 	lowerarmRight->createRigidBody(1);
 	

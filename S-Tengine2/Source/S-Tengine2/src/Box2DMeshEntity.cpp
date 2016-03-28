@@ -19,9 +19,9 @@ b2Fixture * Box2DMeshEntity::createFixture(bool _circle){
 	sweet::Box bb = mesh->calcBoundingBox();
 	
 	float scaleX = 1, scaleY = 1;
-	if(parents.size() > 0){
-		scaleX = parents.at(0)->getScaleVector().x;
-		scaleY = parents.at(0)->getScaleVector().y;
+	if(parents->size() > 0){
+		scaleX = firstParent()->getScaleVector().x;
+		scaleY = firstParent()->getScaleVector().y;
 	}
 	
 	b2FixtureDef d;
