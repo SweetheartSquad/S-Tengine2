@@ -15,6 +15,7 @@ protected:
 	glm::vec3 clearColour;
 	MeshEntity * splash;
 	OpenAL_Sound * splashSound;
+	Texture * splashImage;
 	ComponentShaderBase * shader;
 	ShaderComponentAlpha * alphaComponent;
 	OrthographicCamera * orthoCam;

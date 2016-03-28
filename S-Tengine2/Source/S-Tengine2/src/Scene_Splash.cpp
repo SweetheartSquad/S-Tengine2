@@ -17,11 +17,12 @@ Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * 
 	Scene(_game),
 	clearColour(_clearColour),
 	splash(nullptr),
-	shader(new ComponentShaderBase(false)),
+	shader(new ComponentShaderBase(true)),
 	alphaComponent(new ShaderComponentAlpha(shader, 0)),
 	nextScene(""),
 	aspectRatio(1.f),
-	splashSound(_splashSound)
+	splashSound(_splashSound),
+	splashImage(_splashImage)
 {
 	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->addComponent(new ShaderComponentTexture(shader));
@@ -56,23 +57,29 @@ Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * 
 	});
 
 	// when the timer starts, load the image and play the sound (if provided)
-	timer->eventManager->addEventListener("start", [this, _splashImage](sweet::Event * _event){
-		_splashImage->load();
-		aspectRatio = (float)_splashImage->width/_splashImage->height;
+	timer->eventManager->addEventListener("start", [this](sweet::Event * _event){
+		splashImage->load();
+		aspectRatio = (float)splashImage->width/splashImage->height;
 		if(splashSound != nullptr){
 			splashSound->play();
 		}
 	});
+	timer->start();
+
+	childTransform->addChild(timer, false);
+
+	++splashSound->referenceCount;
+	++splashImage->referenceCount;
+	++shader->referenceCount;
 }
 
 Scene_Splash::~Scene_Splash(){
-	delete shader;
-	delete timer;
+	splashSound->decrementAndDelete();
+	splashImage->decrementAndDelete();
+	shader->decrementAndDelete();
 }
 
 void Scene_Splash::update(Step * _step){
-	timer->start();
-	timer->update(_step);
 	glm::uvec2 sd = sweet::getWindowDimensions();
 
 	orthoCam->resize(0, sd.x, 0, sd.y);
