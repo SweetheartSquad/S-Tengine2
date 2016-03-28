@@ -12,20 +12,11 @@
 #include <algorithm>
 
 MeshEntity::MeshEntity(MeshInterface * const _mesh, Shader * _shader, bool _configureDefaultVertexAttributes) :
-	NodeShadable(_shader),
+	NodeShadable(nullptr),
 	mesh(_mesh),
 	meshTransform(childTransform->addChild(mesh, true))
 {
-	if(shader != nullptr && _configureDefaultVertexAttributes) {
-		if(!mesh->loaded || mesh->dirty) {
-			mesh->load();
-		}
-		if(!shader->loaded || shader->isDirty()) {
-			shader->load();
-		}
-		mesh->configureDefaultVertexAttributes(_shader);
-		++shader->referenceCount;
-	}
+	setShader(_shader, _configureDefaultVertexAttributes);
 	++mesh->referenceCount;
 }
 
@@ -50,14 +41,11 @@ void MeshEntity::render(sweet::MatrixStack * _matrixStack, RenderOptions * _rend
 
 void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
 	if(shader != nullptr) {
-		--shader->referenceCount;
+		shader->decrementAndDelete();
 	}
 	if(_shader != nullptr){
 		if(_shader->isCompiled){
 			if(shader != _shader){
-				if(shader != nullptr){
-					shader->decrementAndDelete();
-				}
 				shader = _shader;
 				++shader->referenceCount;
 			}
