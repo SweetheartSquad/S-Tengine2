@@ -7,7 +7,7 @@
 
 CubeMap::CubeMap(std::string _srcPrefix, std::string _srcSuffix) :
 	cubemapTexture(new CubeMapTexture(_srcPrefix, _srcSuffix, true, true, false)),
-	cubemapShader(new ComponentShaderBase(false)),
+	cubemapShader(new ComponentShaderBase(true)),
 	MeshEntity(MeshFactory::getCubeMesh(1.f), nullptr)
 {
 	cubemapShader->addComponent(new ShaderComponentCubeMap(cubemapShader));
@@ -20,10 +20,11 @@ CubeMap::CubeMap(std::string _srcPrefix, std::string _srcSuffix) :
 
 	mesh->setScaleMode(GL_LINEAR);
 	mesh->uvEdgeMode = GL_CLAMP_TO_EDGE;
+	++cubemapShader->referenceCount;
 }
 
 CubeMap::~CubeMap(){
-	delete cubemapShader;
+	cubemapShader->decrementAndDelete();
 }
 
 void CubeMap::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption){

@@ -33,7 +33,7 @@ Transform::Transform():
 {
 	if(staticInit){
 		staticInit = false;
-		transformShader = new ComponentShaderBase(false);
+		transformShader = new ComponentShaderBase(true);
 		transformShader->addComponent(new ShaderComponentMVP(transformShader));
 		transformShader->addComponent(new ShaderComponentTexture(transformShader));
 		transformShader->compileShader();
@@ -46,6 +46,7 @@ Transform::Transform():
 		transformIndicator->pushVert(Vertex(0,0,0, 0,0,1,1));
 		transformIndicator->pushVert(Vertex(0,0,1, 0,0,1,1));
 		transformIndicator->configureDefaultVertexAttributes(transformShader);
+		++transformShader->referenceCount;
 	}
 }
 

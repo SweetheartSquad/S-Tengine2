@@ -15,9 +15,11 @@ ShaderComponentToon::ShaderComponentToon(ComponentShaderBase * _shader, Texture 
 	numTexturesLoc(0), 
 	textureLoc(0) 
 {
+	++texture->referenceCount;
 }
 
 ShaderComponentToon::~ShaderComponentToon() {
+	texture->decrementAndDelete();
 }
 
 std::string ShaderComponentToon::getVertexVariablesString() {
