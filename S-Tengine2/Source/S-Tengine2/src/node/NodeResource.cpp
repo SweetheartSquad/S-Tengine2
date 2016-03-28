@@ -22,6 +22,10 @@ bool NodeResource::decrementAndDelete(){
 	return safeDelete();
 }
 
+unsigned long int NodeResource::incrementReferenceCount(){
+	return ++referenceCount;
+}
+
 bool NodeResource::isAutoReleasing(){
 	return autoRelease;
 }

@@ -36,7 +36,7 @@ RenderSurface::RenderSurface(Shader * _shader, bool _autoRelease, bool _configur
 	));
 
 	if(shader != nullptr){
-		++shader->referenceCount;
+		shader->incrementReferenceCount();
 		if(_configureDefaultVertexAttributes) {
 			load();
 			if(!shader->loaded || shader->isDirty()) {

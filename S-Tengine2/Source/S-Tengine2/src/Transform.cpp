@@ -38,6 +38,8 @@ Transform::Transform():
 		transformShader->addComponent(new ShaderComponentTexture(transformShader));
 		transformShader->compileShader();
 		transformShader->load();
+		transformShader->incrementReferenceCount();
+
 		transformIndicator = new MeshInterface(GL_LINES, GL_STATIC_DRAW);
 		transformIndicator->pushVert(Vertex(0,0,0, 1,0,0,1));
 		transformIndicator->pushVert(Vertex(1,0,0, 1,0,0,1));
@@ -46,7 +48,7 @@ Transform::Transform():
 		transformIndicator->pushVert(Vertex(0,0,0, 0,0,1,1));
 		transformIndicator->pushVert(Vertex(0,0,1, 0,0,1,1));
 		transformIndicator->configureDefaultVertexAttributes(transformShader);
-		++transformShader->referenceCount;
+		transformIndicator->incrementReferenceCount();
 	}
 }
 

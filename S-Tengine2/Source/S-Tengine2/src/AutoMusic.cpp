@@ -130,7 +130,7 @@ AutoRiff::AutoRiff(OpenAL_Sound * _instrument, Mode _mode) :
 	generationMin(-8)
 {
 	if(instrument != nullptr){
-		++instrument->referenceCount;
+		instrument->incrementReferenceCount();
 	}
 }
 

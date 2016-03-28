@@ -263,11 +263,11 @@ UIGlyph::~UIGlyph(){
 
 void UIGlyph::setGlyph(Glyph * _newGlyph){
 	if(glyphMesh != nullptr){
-		--glyphMesh->referenceCount;
 		uiElements->removeChild(glyphMesh);
+		glyphMesh->decrementAndDelete();
 	}
 	glyphMesh = _newGlyph->mesh;
-	++glyphMesh->referenceCount;
+	glyphMesh->incrementReferenceCount();
 
 	uiElements->addChild(glyphMesh, false);
 	setPixelWidth(_newGlyph->advance.x/64);
@@ -278,16 +278,13 @@ void UIGlyph::setGlyph(Glyph * _newGlyph){
 
 void UIGlyph::setShader(Shader * _shader, bool _configureDefaultAttributes){
 	if(shader != nullptr) {
-		--shader->referenceCount;
+		shader->decrementAndDelete();
 	}
 	if(_shader != nullptr){
 		if(_shader->isCompiled){
 			if(shader != _shader){
-				if(shader != nullptr){
-					shader->decrementAndDelete();
-				}
 				shader = _shader;
-				++shader->referenceCount;
+				shader->incrementReferenceCount();
 			}
 			if(_configureDefaultAttributes){
 				if(glyphMesh != nullptr){

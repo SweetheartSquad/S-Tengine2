@@ -62,7 +62,7 @@ void Sprite::setPrimaryTexture(Texture * _texture) {
 		mesh->pushTexture2D(_texture);
 	}else {
 		mesh->textures[0] = _texture;
-		++_texture->referenceCount;
+		_texture->incrementReferenceCount();
 	}
 	
 	float mag = std::max(mesh->getTexture(0)->width, mesh->getTexture(0)->height);
@@ -93,7 +93,7 @@ void Sprite::setPrimaryTexture(TextureSampler * _textureSampler) {
 		mesh->pushTexture2D(_textureSampler->texture);
 	}else {
 		mesh->textures[0] = _textureSampler->texture;
-		++_textureSampler->texture->referenceCount;
+		_textureSampler->texture->incrementReferenceCount();
 	}
 
 	float mag = std::max(mesh->getTexture(0)->width, mesh->getTexture(0)->height);

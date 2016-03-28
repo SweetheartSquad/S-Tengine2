@@ -40,7 +40,7 @@ UILayer::UILayer(float _left, float _right, float _bottom, float _top) :
 	
 	setBackgroundColour(0.f, 0.f, 0.f, 0.f);
 
-	++shader->referenceCount;
+	shader->incrementReferenceCount();
 }
 
 UILayer::~UILayer(){

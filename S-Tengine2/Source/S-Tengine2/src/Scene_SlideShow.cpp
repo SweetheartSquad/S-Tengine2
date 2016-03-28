@@ -14,9 +14,9 @@ Slide::Slide(Texture * _tex, float _length, OpenAL_Sound * _sound) :
 	sound(_sound),
 	length(_length)
 {
-	++tex->referenceCount;
+	tex->incrementReferenceCount();
 	if(sound != nullptr){
-		++sound->referenceCount;
+		sound->incrementReferenceCount();
 	}
 }
 

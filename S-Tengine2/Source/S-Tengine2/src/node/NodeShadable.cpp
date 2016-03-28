@@ -9,7 +9,7 @@ NodeShadable::NodeShadable(Shader * _shader) :
 	shader(_shader)
 {
 	if(shader != nullptr){
-		++shader->referenceCount;
+		shader->incrementReferenceCount();
 	}
 }
 

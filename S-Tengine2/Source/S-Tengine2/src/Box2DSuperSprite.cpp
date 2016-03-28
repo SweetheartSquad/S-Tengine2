@@ -31,7 +31,7 @@ void Box2DSuperSprite::setShader(Shader * _shader, bool _configureDefaultVertexA
 			(*c)->setShader(shader, _configureDefaultVertexAttributes);
 		}
 	}
-	++shader->referenceCount;
+	shader->incrementReferenceCount();
 }
 
 void Box2DSuperSprite::translateComponents(float _x, float _y, float _z){

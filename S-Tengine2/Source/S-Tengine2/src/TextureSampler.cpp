@@ -14,9 +14,9 @@ TextureSampler::TextureSampler(Texture * _texture, float _width, float _height, 
 	height(_height),
 	u(_u),
 	v(_v),
-	releaseTexture(_texture->autoRelease)
+	releaseTexture(_texture->isAutoReleasing())
 {
-	++texture->referenceCount;
+	texture->incrementReferenceCount();
 }
 TextureSampler::TextureSampler(std::string _definitionDir, std::string _definitionName, bool _releaseTexture, bool _autoRelease) :
 	NodeResource(true),
@@ -43,7 +43,7 @@ TextureSampler::TextureSampler(std::string _definitionDir, std::string _definiti
 		std::string tex = _definitionDir;
 		tex.append(root.get("t", "NO_TEXTURE").asString());
 		texture = new Texture(tex, true, _releaseTexture);
-		++texture->referenceCount;
+		texture->incrementReferenceCount();
 	}
 }
 

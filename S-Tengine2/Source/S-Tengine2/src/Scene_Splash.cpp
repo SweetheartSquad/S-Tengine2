@@ -68,9 +68,9 @@ Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * 
 
 	childTransform->addChild(timer, false);
 
-	++splashSound->referenceCount;
-	++splashImage->referenceCount;
-	++shader->referenceCount;
+	splashSound->incrementReferenceCount();
+	splashImage->incrementReferenceCount();
+	shader->incrementReferenceCount();
 }
 
 Scene_Splash::~Scene_Splash(){
