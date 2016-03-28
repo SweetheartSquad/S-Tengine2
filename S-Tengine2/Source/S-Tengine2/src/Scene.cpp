@@ -62,15 +62,6 @@ Scene::~Scene(){
 		//delete lights.back(); don't need to delete because they're children of the scene
 		lights.pop_back();
 	}
-	
-
-	/*depthBuffer->decrementAndDelete();
-	normalBuffer->decrementAndDelete();
-	shadowBuffer->decrementAndDelete();
-	depthShader->decrementAndDelete();
-	shadowShader->decrementAndDelete();
-	normalsShader->decrementAndDelete();
-	shadowSurface->decrementAndDelete();*/
 }
 
 void Scene::update(Step * _step){
@@ -104,8 +95,7 @@ void Scene::unload(){
 	Entity::unload();
 }
 
-
-void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){	
+void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	// don't bother doing any work if we aren't rendering anyway
 	if(!isVisible()){
 		return;
@@ -133,7 +123,6 @@ void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 	//glEnable (GL_CULL_FACE); // cull face
 	//glCullFace (GL_BACK); // cull back face
 	//glFrontFace (GL_CW); // GL_CCW for counter clock-wise, GL_CW for clock-wise
-
 
 	// matrix stack
 	_matrixStack->pushMatrix();
@@ -175,121 +164,120 @@ void Scene::removeCamera(Camera * _camera){
 }
 
 /*void Scene::renderDepth(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
-	// Store a reference to the current override shader so we can restore it 
-	Shader * backupOverride = _renderOptions->overrideShader;
-	
-	// Resize and bind the depth buffer
-	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
-	depthBuffer->bindFrameBuffer();
+// Store a reference to the current override shader so we can restore it
+Shader * backupOverride = _renderOptions->overrideShader;
 
-	// Make sure the depth buffer is actually loaded so this will work
-	if(!depthBuffer->loaded) {
-		depthBuffer->load();
-	}
+// Resize and bind the depth buffer
+depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
+depthBuffer->bindFrameBuffer();
 
-	// Same for the depth shader
-	if(!depthShader->loaded) {
-		depthShader->load();
-	}
-	
-	// Make the depth shader dirty so it updates it uniforms
-	depthShader->makeDirty();
+// Make sure the depth buffer is actually loaded so this will work
+if(!depthBuffer->loaded) {
+depthBuffer->load();
+}
 
-	// Set the override shader to the depth shader so we can render the depth
-	_renderOptions->overrideShader = depthShader;
-	
-	// Render the scene using this shader 
-	Scene::render(_matrixStack, _renderOptions);
+// Same for the depth shader
+if(!depthShader->loaded) {
+depthShader->load();
+}
 
-	// Restore the previous override shader 
-	_renderOptions->overrideShader = backupOverride;
+// Make the depth shader dirty so it updates it uniforms
+depthShader->makeDirty();
 
-	// Binf the main OpenGL buffer
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+// Set the override shader to the depth shader so we can render the depth
+_renderOptions->overrideShader = depthShader;
+
+// Render the scene using this shader
+Scene::render(_matrixStack, _renderOptions);
+
+// Restore the previous override shader
+_renderOptions->overrideShader = backupOverride;
+
+// Binf the main OpenGL buffer
+glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }*/
 
 /*void Scene::renderDepthBufferToSurface(RenderSurface* _renderSurface) {
-	// resize and bind the depth buffer
-	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
-	depthBuffer->bindFrameBuffer();
+// resize and bind the depth buffer
+depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
+depthBuffer->bindFrameBuffer();
 
-	// Make sure the depth buffer is actually loaded so this will work
-	if(!depthBuffer->loaded) {
-		depthBuffer->load();
-	}
-	
-	// Render it to the surface 
-	_renderSurface->render(depthBuffer->getTextureId());
+// Make sure the depth buffer is actually loaded so this will work
+if(!depthBuffer->loaded) {
+depthBuffer->load();
+}
 
-	// Re-bind the main OpenGL buffer
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+// Render it to the surface
+_renderSurface->render(depthBuffer->getTextureId());
+
+// Re-bind the main OpenGL buffer
+glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }*/
 
 /*void Scene::renderNormals(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) {
-	// Store a reference to the current override shader so we can restore it 
-	Shader * backupOverride = _renderOptions->overrideShader;
-	
-	// Resize and bind the normal buffer
-	normalBuffer->resize(game->viewPortWidth, game->viewPortHeight);
-	normalBuffer->bindFrameBuffer();
+// Store a reference to the current override shader so we can restore it
+Shader * backupOverride = _renderOptions->overrideShader;
 
-	// Make sure the normal buffer is actually loaded so this will work
-	if(!normalBuffer->loaded) {
-		normalBuffer->load();
-	}
+// Resize and bind the normal buffer
+normalBuffer->resize(game->viewPortWidth, game->viewPortHeight);
+normalBuffer->bindFrameBuffer();
 
-	// Same for the normal shader
-	if(!normalsShader->loaded) {
-		normalsShader->load();
-	}
-	
-	// Make the normal shader dirty so it updates it uniforms
-	normalsShader->makeDirty();
+// Make sure the normal buffer is actually loaded so this will work
+if(!normalBuffer->loaded) {
+normalBuffer->load();
+}
 
-	// Set the override shader to the normal shader so we can render the normal
-	_renderOptions->overrideShader = normalsShader;
-	
-	// Render the scene using this shader 
-	Scene::render(_matrixStack, _renderOptions);
+// Same for the normal shader
+if(!normalsShader->loaded) {
+normalsShader->load();
+}
 
-	// Restore the previous override shader 
-	_renderOptions->overrideShader = backupOverride;
+// Make the normal shader dirty so it updates it uniforms
+normalsShader->makeDirty();
 
-	// Binf the main OpenGL buffer
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+// Set the override shader to the normal shader so we can render the normal
+_renderOptions->overrideShader = normalsShader;
+
+// Render the scene using this shader
+Scene::render(_matrixStack, _renderOptions);
+
+// Restore the previous override shader
+_renderOptions->overrideShader = backupOverride;
+
+// Binf the main OpenGL buffer
+glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }*/
 
 /*void Scene::renderNormalBufferToSurface(RenderSurface* _renderSurface) {
-	// resize and bind the normal buffer
-	normalBuffer->resize(game->viewPortWidth, game->viewPortHeight);
-	normalBuffer->bindFrameBuffer();
+// resize and bind the normal buffer
+normalBuffer->resize(game->viewPortWidth, game->viewPortHeight);
+normalBuffer->bindFrameBuffer();
 
-	// Make sure the normal buffer is actually loaded so this will work
-	if(!normalBuffer->loaded) {
-		normalBuffer->load();
-	}
-	
-	// Render it to the surface 
-	_renderSurface->render(normalBuffer->getTextureId());
+// Make sure the normal buffer is actually loaded so this will work
+if(!normalBuffer->loaded) {
+normalBuffer->load();
+}
 
-	// Re-bind the main OpenGL buffer
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+// Render it to the surface
+_renderSurface->render(normalBuffer->getTextureId());
+
+// Re-bind the main OpenGL buffer
+glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }*/
 
-
 /*void Scene::renderShadows(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
-	Shader * backupOverride = _renderOptions->overrideShader;
-	depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
-	depthBuffer->bindFrameBuffer();
-	_renderOptions->overrideShader = depthShader;
-	Scene::render(_matrixStack, _renderOptions);
+Shader * backupOverride = _renderOptions->overrideShader;
+depthBuffer->resize(game->viewPortWidth, game->viewPortHeight);
+depthBuffer->bindFrameBuffer();
+_renderOptions->overrideShader = depthShader;
+Scene::render(_matrixStack, _renderOptions);
 
-	shadowBuffer->resize(game->viewPortWidth, game->viewPortHeight);
-	shadowBuffer->bindFrameBuffer();
-	shadowSurface->render(depthBuffer->getTextureId(), shadowBuffer->frameBufferId);
-	static_cast<VoxRenderOptions *>(_renderOptions)->shadowMapTextureId = shadowBuffer->getTextureId();
-	_renderOptions->overrideShader = backupOverride;
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+shadowBuffer->resize(game->viewPortWidth, game->viewPortHeight);
+shadowBuffer->bindFrameBuffer();
+shadowSurface->render(depthBuffer->getTextureId(), shadowBuffer->frameBufferId);
+static_cast<VoxRenderOptions *>(_renderOptions)->shadowMapTextureId = shadowBuffer->getTextureId();
+_renderOptions->overrideShader = backupOverride;
+glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }*/
 
 Camera * Scene::cycleCamera(){

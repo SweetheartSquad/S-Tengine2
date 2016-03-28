@@ -43,11 +43,10 @@ FT_Library sweet::freeTypeLibrary = nullptr;
 GLFWwindow * sweet::currentContext = nullptr;
 GLFWmonitor * sweet::currentMonitor = nullptr;
 
-
 // Nvidia optiums fix to force discrete graphics
- extern "C" {  
-      _declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;  
- }  
+extern "C" {
+	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+}
 
 void sweet::setGlfwWindowHints(){
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -88,18 +87,17 @@ void sweet::mouseButtonCallback(GLFWwindow * _window, int _button, int _action, 
 }
 void sweet::mousePositionCallback(GLFWwindow *_window, double _x, double _y){
 	if(!sweet::antTweakBarInititialized || !TwEventMousePosGLFW(_x, _y) ) {
-      	Mouse * mouse = &Mouse::getInstance();
+		Mouse * mouse = &Mouse::getInstance();
 		glm::uvec2 sd = getWindowDimensions();
 		mouse->mousePositionListener(_x, sd.y - _y);
-    }
+	}
 }
 void sweet::mouseScrollCallback(GLFWwindow *_window, double _x, double _y){
 	if(!sweet::antTweakBarInititialized || !TwEventMouseWheelGLFW(_y) ) {
-      	Mouse * mouse = &Mouse::getInstance();
+		Mouse * mouse = &Mouse::getInstance();
 		mouse->mouseWheelListener(_y);
-    }
+	}
 }
-
 
 void sweet::attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _action, int _mods){
 	// grab the mouse coordinates and the screen size
@@ -112,22 +110,22 @@ void sweet::attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _
 	// this prevents mouse events which took place on the window border from re-capturing the mouse
 	if(x >= 0 && x <= w
 		&& y >= 0 && y <= h){
-		sweet::focused = true;
-		if(antTweakBarInititialized) {
-			if(drawAntTweakBar) {
-				glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-			}else{
+			sweet::focused = true;
+			if(antTweakBarInititialized) {
+				if(drawAntTweakBar) {
+					glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+				}else{
+					glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+				}
+			}else {
 				glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 			}
-		}else {
-			glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-		}
 
-		glfwSetKeyCallback(_window, keyCallback);
-		glfwSetMouseButtonCallback(_window, mouseButtonCallback);
-		glfwSetCursorPosCallback(_window, mousePositionCallback);
-		glfwSetScrollCallback(_window, mouseScrollCallback);
-		Mouse::getInstance().active = true;
+			glfwSetKeyCallback(_window, keyCallback);
+			glfwSetMouseButtonCallback(_window, mouseButtonCallback);
+			glfwSetCursorPosCallback(_window, mousePositionCallback);
+			glfwSetScrollCallback(_window, mouseScrollCallback);
+			Mouse::getInstance().active = true;
 	}
 }
 
@@ -154,10 +152,23 @@ void sweet::error_callback(int _error, const char * _description){
 	fputs(_description, stderr);
 }
 
+void sweet::printNodes() {
+#ifdef _DEBUG
+	if(Node::nodeCounting){
+		std::cout << "Final node count: " << Node::nodes.size() << std::endl;
+
+		for(auto n : Node::nodes){
+			std::cout << typeid(*n).name() << " " << n << " -- Name: " << n->name << std::endl;
+		}
+	}
+
+#endif
+}
+
 GLFWwindow * sweet::initWindow(){
 	glm::ivec2 target(config.resolution.x, config.resolution.y);
 	bool fullscreen = config.fullscreen;
-	
+
 	// if we're rendering to an oculus, match the resolution target to the HMD output size
 	// also prevent fullscreen windows
 	if(sweet::ovrInitialized){
@@ -190,7 +201,7 @@ GLFWwindow * sweet::initWindow(){
 		glfwTerminate();
 		throw "some sort of window error?";
 	}
-	
+
 	// if we're running in windowed mode, center the window in the current monitor
 	if(!fullscreen){
 		int xPos = 0, yPos = 0;
@@ -239,23 +250,20 @@ void sweet::initialize(std::string _title){
 
 	sweet::setGlfwWindowHints();
 
-
 	initOVR();
-
-
 
 	// initialize glfw
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit()){
 		exit(EXIT_FAILURE);
 	}
-	
+
 	// load configuration file
 	config.load("data/config.json");
 
 	// seed RNG
 	sweet::NumberUtils::seed(config.rngSeed);
-	
+
 	// get the monitor
 	int numMonitors = 0;
 	GLFWmonitor ** monitors = glfwGetMonitors(&numMonitors);
@@ -285,12 +293,10 @@ void sweet::initialize(std::string _title){
 		throw;
 	}
 
-
 	// move mouse to the middle of the window
 	int screenHeight, screenWidth;
 	glfwGetWindowSize(sweet::currentContext, &screenWidth, &screenHeight);
 	glfwSetCursorPos(sweet::currentContext, screenWidth/2, screenHeight/2);
-
 
 	Log::info("*** Sweet Initialization ***");
 }
@@ -372,7 +378,6 @@ unsigned long int sweet::getWindowWidth(GLFWwindow * _window){
 	}
 	return getWindowDimensions().x;
 }
-
 
 unsigned long int sweet::getWindowHeight(GLFWwindow * _window){
 	if(_window == nullptr){
