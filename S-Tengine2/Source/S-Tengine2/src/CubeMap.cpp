@@ -20,7 +20,7 @@ CubeMap::CubeMap(std::string _srcPrefix, std::string _srcSuffix) :
 
 	mesh->setScaleMode(GL_LINEAR);
 	mesh->uvEdgeMode = GL_CLAMP_TO_EDGE;
-	++cubemapShader->referenceCount;
+	cubemapShader->incrementReferenceCount();
 }
 
 CubeMap::~CubeMap(){

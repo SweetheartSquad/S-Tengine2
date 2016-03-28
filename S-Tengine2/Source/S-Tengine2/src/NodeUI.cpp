@@ -54,7 +54,8 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	eventManager(new sweet::EventManager())
 {
 	if(bgShader == nullptr){
-		bgShader = new ComponentShaderBase(false);
+		bgShader = new ComponentShaderBase(true);
+		bgShader->incrementReferenceCount();
 		bgShader->addComponent(new ShaderComponentMVP(bgShader));
 		bgShader->addComponent(new ShaderComponentTexture(bgShader));
 		bgShader->addComponent(new ShaderComponentTint(bgShader));
@@ -724,10 +725,11 @@ void NodeUI::updateCollider(){
 	};
 
 	if(colliderMesh == nullptr){
-		colliderMesh = new TriMesh(false);
+		colliderMesh = new TriMesh(true);
 		for(unsigned long int i = 0; i < 6; ++i){
 			colliderMesh->pushVert(Vertex(verts[i].x, verts[i].y, verts[i].z));
 		}
+		colliderMesh->incrementReferenceCount();
 	}else{
 		for(unsigned long int i = 0; i < 6; ++i){
 			colliderMesh->vertices.at(i).x = verts[i].x;

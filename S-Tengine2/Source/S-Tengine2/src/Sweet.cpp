@@ -298,11 +298,13 @@ void sweet::initialize(std::string _title){
 void sweet::destruct(){
 	// get rid of static assets
 	Scenario::destruct();
-	delete NodeUI::bgShader;
-	delete NodeUI::colliderMesh;
-	delete Transform::transformShader;
-	delete Transform::transformIndicator;
-	delete AnimationJoint::shaderVis;
+	NodeUI::bgShader->decrementAndDelete();
+	NodeUI::colliderMesh->decrementAndDelete();
+	Transform::transformShader->decrementAndDelete();
+	Transform::transformIndicator->decrementAndDelete();
+	if(AnimationJoint::shaderVis != nullptr){
+		AnimationJoint::shaderVis->decrementAndDelete();
+	}
 
 	// get rid of window and OpenGL context
 	destructWindow(currentContext);

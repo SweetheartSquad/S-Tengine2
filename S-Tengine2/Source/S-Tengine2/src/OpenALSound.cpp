@@ -160,7 +160,7 @@ OpenAL_Source::OpenAL_Source(OpenAL_Buffer * _buffer, bool _positional, bool _au
 	if(_buffer != nullptr){
 		// attach the buffer to the source
 		checkForAlError(alSourcei(sourceId, AL_BUFFER, buffer->bufferId));
-		++_buffer->referenceCount;
+		_buffer->incrementReferenceCount();
 	}
 }
 
@@ -312,7 +312,7 @@ OpenAL_SoundStream::OpenAL_SoundStream(const char * _filename, bool _positional,
 	buffers = (ALuint *)calloc(numBuffers, sizeof(ALuint));
 	alGenBuffers(numBuffers, buffers);
 	source->buffer = new OpenAL_Buffer(_filename, true);
-	++source->buffer->referenceCount;
+	source->buffer->incrementReferenceCount();
 
 	maxBufferOffset = source->buffer->numSamples / bufferLength;
 }

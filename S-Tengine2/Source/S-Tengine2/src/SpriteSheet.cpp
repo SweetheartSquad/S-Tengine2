@@ -7,7 +7,7 @@
 
 SpriteSheet::SpriteSheet(Texture* _texture){
 	texture = _texture;
-	++texture->referenceCount;
+	texture->incrementReferenceCount();
 }
 
 SpriteSheet::~SpriteSheet(){

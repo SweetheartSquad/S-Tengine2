@@ -14,7 +14,7 @@ ParticleSystem::ParticleSystem(Texture * _texture, Box2DWorld * _world, int16 _c
 	emissionTimer(0),
 	defaultTex(_texture)
 {
-	++defaultTex->referenceCount;
+	defaultTex->incrementReferenceCount();
 }
 
 ParticleSystem::~ParticleSystem(){

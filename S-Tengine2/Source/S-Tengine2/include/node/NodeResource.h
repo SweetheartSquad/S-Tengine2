@@ -6,9 +6,12 @@
 #include <ostream>
 
 class NodeResource abstract : public virtual NodeLoadable{
-public:
+private:
+	/** Number of references to this */
+	unsigned long int referenceCount;
 	/** Whether safeDelete can be called or not */
 	bool autoRelease;
+public:
 
 	explicit NodeResource(bool _autoRelease);
 	virtual ~NodeResource();
@@ -20,8 +23,9 @@ public:
 	/** Returns true if this was deleted and false if it wasn't */
 	bool decrementAndDelete();
 
-	/** Number of references to this */
-	unsigned long int referenceCount;
+	// increments the reference count and returns the current total
+	unsigned long int incrementReferenceCount();
+
 	bool isAutoReleasing();
 
 

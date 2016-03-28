@@ -9,7 +9,7 @@ BulletHeightFieldShape::BulletHeightFieldShape(Texture * _heightMap, glm::vec3 _
 	heightMap(_heightMap),
 	btHeightfieldTerrainShape(_heightMap->width, _heightMap->height, _heightMap->data, (_upAxis == 0 ? _scale.x : (_upAxis == 1 ? _scale.y : _scale.z)), sweet::TextureUtils::getMin(_heightMap), sweet::TextureUtils::getMax(_heightMap), _upAxis, PHY_ScalarType::PHY_UCHAR, false)
 {
-	++heightMap->referenceCount;
+	heightMap->incrementReferenceCount();
 	setLocalScaling(btVector3(_upAxis == 0 ? 1 : _scale.x, _upAxis == 1 ? 1 : _scale.y, _upAxis == 2 ? 1 : _scale.z));
 }
 
@@ -69,7 +69,7 @@ BulletHeightField::BulletHeightField(BulletWorld * _world, Texture * _heightMap,
 	heightMap(_heightMap),
 	tileUvs(_tileUvs)
 {
-	++heightMap->referenceCount;
+	heightMap->incrementReferenceCount();
 
 	setColliderAsHeightMap(_heightMap, _scale, _upAxis);
 	updateMesh();

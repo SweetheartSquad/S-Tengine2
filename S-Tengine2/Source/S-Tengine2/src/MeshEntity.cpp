@@ -17,7 +17,7 @@ MeshEntity::MeshEntity(MeshInterface * const _mesh, Shader * _shader, bool _conf
 	meshTransform(childTransform->addChild(mesh, true))
 {
 	setShader(_shader, _configureDefaultVertexAttributes);
-	++mesh->referenceCount;
+	mesh->incrementReferenceCount();
 }
 
 MeshEntity::~MeshEntity(void){
@@ -47,7 +47,7 @@ void MeshEntity::setShader(Shader * _shader, bool _configureDefaultAttributes){
 		if(_shader->isCompiled){
 			if(shader != _shader){
 				shader = _shader;
-				++shader->referenceCount;
+				shader->incrementReferenceCount();
 			}
 			if(_configureDefaultAttributes){
 				if(mesh != nullptr){

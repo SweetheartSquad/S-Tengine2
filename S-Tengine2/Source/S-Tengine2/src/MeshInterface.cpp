@@ -244,7 +244,7 @@ void MeshInterface::removeTextureAt(int _idx){
 }
 
 void MeshInterface::pushTexture2D(Texture* _texture){
-	++_texture->referenceCount;
+	_texture->incrementReferenceCount();
 	textures.push_back(_texture);
 }
 
@@ -257,7 +257,7 @@ Texture * MeshInterface::getTexture(int _idx) const{
 }
 
 void MeshInterface::pushMaterial(Material * _material){
-	++_material->referenceCount;
+	_material->incrementReferenceCount();
 	materials.push_back(_material);
 }
 

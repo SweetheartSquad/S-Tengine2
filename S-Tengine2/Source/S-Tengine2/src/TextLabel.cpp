@@ -267,7 +267,7 @@ void UIGlyph::setGlyph(Glyph * _newGlyph){
 		glyphMesh->decrementAndDelete();
 	}
 	glyphMesh = _newGlyph->mesh;
-	++glyphMesh->referenceCount;
+	glyphMesh->incrementReferenceCount();
 
 	uiElements->addChild(glyphMesh, false);
 	setPixelWidth(_newGlyph->advance.x/64);
@@ -284,7 +284,7 @@ void UIGlyph::setShader(Shader * _shader, bool _configureDefaultAttributes){
 		if(_shader->isCompiled){
 			if(shader != _shader){
 				shader = _shader;
-				++shader->referenceCount;
+				shader->incrementReferenceCount();
 			}
 			if(_configureDefaultAttributes){
 				if(glyphMesh != nullptr){
