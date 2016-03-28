@@ -70,6 +70,7 @@ Scene_SlideShow::Scene_SlideShow(Game * _game, bool _transitionFirstSlide, Easin
 			slideNew->childTransform->translate(-slideNew->getWidth() * (1 - p), 0, 0, false);
 		}
 	});
+	childTransform->addChild(transition, false);
 
 	eventManager->addEventListener("transitionComplete", [this](sweet::Event * _event){
 		isTransitioning = false;
@@ -85,7 +86,6 @@ Scene_SlideShow::Scene_SlideShow(Game * _game, bool _transitionFirstSlide, Easin
 }
 
 Scene_SlideShow::~Scene_SlideShow(){
-	delete transition;
 	while(forwards.size() > 0){
 		delete forwards.back();
 		forwards.pop_back();
@@ -102,7 +102,6 @@ void Scene_SlideShow::update(Step * _step){
 	glm::vec2 sd = sweet::getWindowDimensions();
 	uiLayer->resize(0, sd.x, 0, sd.y);
 	eventManager->update(_step);
-	transition->update(_step);
 	Scene::update(_step);
 	uiLayer->update(_step);
 }
