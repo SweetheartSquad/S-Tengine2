@@ -27,8 +27,8 @@
 Game::Game(std::string _firstSceneKey, Scene * _firstScene, bool _isRunning) :
 	accumulator(0.0),
 	lastTimestep(0.0),
-	mouse(&Mouse::getInstance()),
-	keyboard(&Keyboard::getInstance()),
+	mouse(Mouse::getInstance()),
+	keyboard(Keyboard::getInstance()),
 	isRunning(_isRunning),
 	printFPS(true),
 	currentScene(nullptr),
@@ -160,8 +160,8 @@ void Game::draw(Scene * _scene){
 }
 
 void Game::manageInput(){
-	keyboard->update();
-	mouse->update();
+	keyboard.update();
+	mouse.update();
 }
 
 void Game::printFps(){

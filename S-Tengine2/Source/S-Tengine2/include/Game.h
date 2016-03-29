@@ -48,17 +48,16 @@ private:
 	
 public:
 	// must be called in the main before the game loop is started
+	// sets up the splash screens
 	void init();
-
-	bool splashScreen;
 
 	explicit Game(std::string _firstSceneKey, Scene * _firstScene, bool _running = true);
 	virtual ~Game(void);
 
 	/** Reference to mouse singleton */
-	Mouse * mouse;
+	Mouse & mouse;
 	/** Reference to keyboard singleton */
-	Keyboard * keyboard;
+	Keyboard & keyboard;
 
 	/** True if the game is currently running */
 	bool isRunning;
