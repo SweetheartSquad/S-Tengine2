@@ -31,6 +31,7 @@ Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * 
 
 	// add orthographic camera
 	orthoCam = new OrthographicCamera(0, 0, 0, 0, -1000, 1000);
+	childTransform->addChild(orthoCam);
 	cameras.push_back(orthoCam);
 	activeCamera = orthoCam;
 	orthoCam->name = "Splash Scene ortho cam";
