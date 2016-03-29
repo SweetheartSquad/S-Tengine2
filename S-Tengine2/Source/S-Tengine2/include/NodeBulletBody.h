@@ -33,7 +33,7 @@ public:
 	// upAxis = 0, 1, or 2 = x, y, or z axis
 	void setColliderAsHeightMap(Texture * _heightMap, glm::vec3 _scale, unsigned long int _upAxis = 1);
 	// a mass of zero makes it static
-	virtual void createRigidBody(float _mass, unsigned short int _collisionGroup = -1, unsigned short int _collisionMask = -1);
+	virtual void createRigidBody(float _mass, unsigned short int _collisionGroup = btBroadphaseProxy::DefaultFilter, unsigned short int _collisionMask = btBroadphaseProxy::AllFilter);
 
 	// directly adjusts the rigid body's transform and then updates the childTransform to match
 	// a flag is set for the childTransform to be updated later

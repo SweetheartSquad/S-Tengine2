@@ -52,6 +52,10 @@ NodeBulletBody * BulletWorld::raycast(Camera * _camera, float _range, btCollisio
 	btVector3 dir(_camera->forwardVectorRotated.x, _camera->forwardVectorRotated.y, _camera->forwardVectorRotated.z);
 	btVector3 end = start + dir*_range;
 	btCollisionWorld::ClosestRayResultCallback rayCallback(start, end);
+	if(_rayCallback != nullptr){
+		rayCallback.m_collisionFilterGroup = _rayCallback->m_collisionFilterGroup;
+		rayCallback.m_collisionFilterMask = _rayCallback->m_collisionFilterMask;
+	}
 	world->rayTest(start, end, rayCallback);
 	
 	// store the result in the user's ray callback pointer

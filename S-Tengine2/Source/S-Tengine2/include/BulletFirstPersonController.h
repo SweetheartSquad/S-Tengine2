@@ -67,7 +67,7 @@ public:
 	// how much the head bobble actually affects the camera
 	float bobbleMultiplier;
 
-	BulletFirstPersonController(BulletWorld * bulletWorld, float _radius, float _height, float _mass);
+	BulletFirstPersonController(BulletWorld * bulletWorld, float _radius, float _height, float _mass, unsigned short int _collisionGroup = btBroadphaseProxy::DefaultFilter, unsigned short int _collisionMask = btBroadphaseProxy::AllFilter);
 	~BulletFirstPersonController();
 
 	glm::vec3 getLinearVelocity() const;

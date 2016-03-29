@@ -42,7 +42,7 @@
 #include <NumberUtils.h>
 #include <Timeout.h>
 
-BulletFirstPersonController::BulletFirstPersonController(BulletWorld * _bulletWorld, float _radius, float _height, float _mass) : 
+BulletFirstPersonController::BulletFirstPersonController(BulletWorld * _bulletWorld, float _radius, float _height, float _mass, unsigned short int _collisionGroup, unsigned short int _collisionMask) : 
 	NodeBulletBody(_bulletWorld),
 	jumpTime(0.0),
 	camOffset(0),
@@ -65,7 +65,7 @@ BulletFirstPersonController::BulletFirstPersonController(BulletWorld * _bulletWo
 
 	// player set-up
 	setColliderAsCapsule(playerRad, playerHeight);
-	createRigidBody(_mass);
+	createRigidBody(_mass, _collisionGroup, _collisionMask);
 	body->setFriction(1);
 	body->setAngularFactor(btVector3(0,0,0));
 	body->setLinearFactor(btVector3(1,0.9,1));
