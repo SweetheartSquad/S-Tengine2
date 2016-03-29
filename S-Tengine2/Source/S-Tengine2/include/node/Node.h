@@ -9,9 +9,9 @@ public:
 #ifdef _DEBUG
 	static bool nodeCounting;
 	static std::vector<Node *> nodes;
+#endif
 
 	std::string name;
-#endif
 
 	Node();
 	virtual ~Node();
