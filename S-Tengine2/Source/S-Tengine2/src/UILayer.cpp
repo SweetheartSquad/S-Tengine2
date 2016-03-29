@@ -30,9 +30,11 @@ UILayer::UILayer(float _left, float _right, float _bottom, float _top) :
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->compileShader();
+	shader->name = "UILayer Shader";
 
 	Transform * t = new Transform();
 	t->addChild(cam, false);
+	cam->name = "UILayer Camera";
 
 	bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
 	world->world->setDebugDrawer(bulletDebugDrawer);

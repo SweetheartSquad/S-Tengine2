@@ -39,6 +39,7 @@ Transform::Transform():
 		transformShader->compileShader();
 		transformShader->load();
 		transformShader->incrementReferenceCount();
+		transformShader->name = "Transform Indicator Shader";
 
 		transformIndicator = new MeshInterface(GL_LINES, GL_STATIC_DRAW);
 		transformIndicator->pushVert(Vertex(0,0,0, 1,0,0,1));
@@ -49,6 +50,7 @@ Transform::Transform():
 		transformIndicator->pushVert(Vertex(0,0,1, 0,0,1,1));
 		transformIndicator->configureDefaultVertexAttributes(transformShader);
 		transformIndicator->incrementReferenceCount();
+		transformIndicator->name = "Transform Indicator";
 	}
 }
 

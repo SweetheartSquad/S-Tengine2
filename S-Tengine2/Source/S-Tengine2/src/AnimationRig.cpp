@@ -73,6 +73,7 @@ AnimationJoint::AnimationJoint(glm::vec2 _pos) :
 		shaderVis->compileShader();
 		shaderVis->load();
 		shaderVis->incrementReferenceCount();
+		shaderVis->name = "AnimationJoint vis Shader";
 	}
 	
 	lineVis = new MeshEntity(new MeshInterface(GL_LINES, GL_STATIC_DRAW), shaderVis);
