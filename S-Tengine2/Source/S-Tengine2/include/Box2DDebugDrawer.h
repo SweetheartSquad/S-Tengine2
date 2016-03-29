@@ -11,7 +11,7 @@
 class Scene;
 class Box2DWorld;
 
-class Box2DDebugDrawer : public b2Draw, public virtual Entity, public virtual NodeShadable{
+class Box2DDebugDrawer : public b2Draw, public virtual Entity{
 public:
 	bool drawing;
 
@@ -35,4 +35,6 @@ private:
 
 	sweet::MatrixStack * matrixStack;
 	RenderOptions * renderOptions;
+
+	ComponentShaderBase * shader;
 };

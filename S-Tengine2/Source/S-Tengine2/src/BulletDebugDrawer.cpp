@@ -14,16 +14,18 @@
 BulletDebugDrawer::BulletDebugDrawer(btCollisionWorld * _world) :
 	m_debugMode(0),
 	world(_world),
-	shader(new ComponentShaderBase(false))
+	shader(new ComponentShaderBase(true))
 {
 	shader->addComponent(new ShaderComponentMVP(shader));
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->compileShader();
 	shader->load();
+	shader->incrementReferenceCount();
+	shader->name = "Bullet Debug Drawer shader";
 }
 
 BulletDebugDrawer::~BulletDebugDrawer(){
-	delete shader;
+	shader->decrementAndDelete();
 }
 
 void BulletDebugDrawer::drawLine(const btVector3& from,const btVector3& to,const btVector3& fromColor, const btVector3& toColor){

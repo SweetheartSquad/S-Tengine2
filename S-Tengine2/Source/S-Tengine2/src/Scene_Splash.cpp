@@ -28,6 +28,7 @@ Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * 
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->addComponent(alphaComponent);
 	shader->compileShader();
+	shader->name = "Splash Scene base shader";
 
 	// add orthographic camera
 	orthoCam = new OrthographicCamera(0, 0, 0, 0, -1000, 1000);

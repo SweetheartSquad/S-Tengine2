@@ -12,6 +12,8 @@ CubeMap::CubeMap(std::string _srcPrefix, std::string _srcSuffix) :
 {
 	cubemapShader->addComponent(new ShaderComponentCubeMap(cubemapShader));
 	cubemapShader->compileShader();
+	cubemapShader->incrementReferenceCount();
+	cubemapShader->name = "cubemap shader";
 	
 	cubemapTexture->load();
 
@@ -20,7 +22,6 @@ CubeMap::CubeMap(std::string _srcPrefix, std::string _srcSuffix) :
 
 	mesh->setScaleMode(GL_LINEAR);
 	mesh->uvEdgeMode = GL_CLAMP_TO_EDGE;
-	cubemapShader->incrementReferenceCount();
 }
 
 CubeMap::~CubeMap(){
