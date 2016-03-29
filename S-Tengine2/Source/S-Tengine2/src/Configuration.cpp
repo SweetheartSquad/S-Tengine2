@@ -51,6 +51,10 @@ void Configuration::load(const std::string & _filename){
 		fps = json.get("fps", fpsDefault).asDouble();
 		rngSeed = json.get("rngSeed", rngSeedDefault).asInt();
 		monitor = json.get("monitor", monitorDefault).asInt();
+		Json::Value jsonGain = json["gain"];
+		for(auto g : jsonGain.getMemberNames()){
+			gain[g] = jsonGain.get(g, 1.f).asFloat();
+		}
 
 		// if the rng seed is negative, it means we want to use the time as a seed
 		if(rngSeed < 0){
@@ -67,7 +71,11 @@ void Configuration::save(const std::string & _filename){
 	json["fps"] = fps;
 	json["rngSeed"] = rngSeed;
 	json["monitor"] = monitor;
-		
+	json["gain"] = Json::Value();
+	for(auto g : gain){
+		json["gain"][g.first] = g.second;
+	}
+
 	std::ofstream log(_filename, std::ios_base::out);
 	log << json;
 	log.close();

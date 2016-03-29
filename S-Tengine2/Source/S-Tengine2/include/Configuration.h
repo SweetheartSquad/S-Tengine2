@@ -11,6 +11,7 @@ public:
 	signed long int rngSeed;
 	signed long int monitor;
 
+	std::map<std::string, float> gain;
 
 	Configuration();
 

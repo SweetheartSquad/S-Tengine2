@@ -264,6 +264,15 @@ void sweet::initialize(std::string _title){
 	// seed RNG
 	sweet::NumberUtils::seed(config.rngSeed);
 
+	// set the audio gain
+	for(auto g : config.gain){
+		if(g.first == "master"){
+			OpenAL_Sound::masterGain = g.second;
+		}else{
+			OpenAL_Sound::categoricalGain[g.first] = g.second;
+		}
+	}
+
 	// get the monitor
 	int numMonitors = 0;
 	GLFWmonitor ** monitors = glfwGetMonitors(&numMonitors);

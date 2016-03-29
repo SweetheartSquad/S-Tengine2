@@ -150,6 +150,8 @@ namespace sweet{
 	void attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _action, int _mods);
 	void windowFocusCallback(GLFWwindow * _window, int _focused);
 	void error_callback(int _error, const char * _description);
+
+	// if in debug mode and node counting is turned on, prints every currently existing node in the format: TYPE ADDRESS NAME
 	void printNodes();
 
 	/**
