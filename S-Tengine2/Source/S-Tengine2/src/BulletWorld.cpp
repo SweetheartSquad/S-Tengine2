@@ -63,7 +63,7 @@ NodeBulletBody * BulletWorld::raycast(Camera * _camera, float _range, btCollisio
 		*_rayCallback = rayCallback;
 	}
 
-	// if we're not looking at anything, cancel the current hover target
+	// if we're not looking at anything, return nullptr
 	if(rayCallback.hasHit()){
 		return static_cast<NodeBulletBody *>(rayCallback.m_collisionObject->getUserPointer());
 	}else{

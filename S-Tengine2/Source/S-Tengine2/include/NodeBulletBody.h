@@ -21,6 +21,10 @@ public:
 	btCollisionShape * shape;
 	//Max velocity. Should always be set as positive. -1 means no limit
 	btVector3 maxVelocity;
+	
+	// collision group and mask used on rigid body
+	// note that these are set during createRigidBody, and cannot be edited directly
+	unsigned short int collisionGroup, collisionMask;
 
 	NodeBulletBody(BulletWorld * _world);
 	virtual ~NodeBulletBody();

@@ -157,6 +157,9 @@ void NodeBulletBody::rotatePhysical(float _angle, float _x, float _y, float _z, 
 }
 
 void NodeBulletBody::createRigidBody(float _mass, unsigned short int _collisionGroup, unsigned short int _collisionMask){
+	collisionGroup = _collisionGroup;
+	collisionMask = _collisionMask;
+
 	assert(shape != nullptr && body == nullptr);
 	btTransform t(btQuaternion(0, 0, 0), internalPos);
 	btMotionState * motion = new btDefaultMotionState(t);
@@ -166,6 +169,8 @@ void NodeBulletBody::createRigidBody(float _mass, unsigned short int _collisionG
 	}
 	btRigidBody::btRigidBodyConstructionInfo info(_mass, motion, shape, inertia);
 	body = new btRigidBody(info);
-	world->world->addRigidBody(body, _collisionGroup, _collisionMask);
+	world->world->addRigidBody(body, collisionGroup, collisionMask);
 	body->setUserPointer(this);
+
+
 }
