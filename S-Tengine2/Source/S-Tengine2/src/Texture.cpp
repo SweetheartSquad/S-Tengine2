@@ -20,6 +20,7 @@ Texture::Texture(std::string _src, bool _storeData, bool _autoRelease, bool _use
 	data(nullptr),
 	useMipmaps(_useMipmaps)
 {
+	name = "Texture " + src;
 }
 
 Texture::~Texture(){
