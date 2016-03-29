@@ -33,7 +33,7 @@ public:
 	UIUnit marginRight;
 	UIUnit marginBottom;
 	UIUnit marginTop;
-	
+
 	UIUnit paddingLeft;
 	UIUnit paddingRight;
 	UIUnit paddingBottom;
@@ -46,19 +46,18 @@ public:
 	bool isDown;
 	// Whether the button is active (only affects RADIO and TOGGLE buttons)
 	bool isActive;
-	
-    // The function to be called when you press the button down
+
+	// The function to be called when you press the button down
 	virtual void down();
-    // The function to be called when you release the button
+	// The function to be called when you release the button
 	virtual void up();
-    // The function to be called when you release the button while still hovered over it
+	// The function to be called when you release the button while still hovered over it
 	virtual void click();
-    // The function to be called when you mouseover
+	// The function to be called when you mouseover
 	virtual void in();
-    // The function to be called when you mouseout
+	// The function to be called when you mouseout
 	virtual void out();
 
-	
 	static TriMesh * colliderMesh;
 	// destroys the current rigid body and creates a new one which is sized to match the bounding box of the element
 	void updateCollider();
@@ -68,7 +67,7 @@ public:
 	virtual void autoResize();
 
 	Transform * uiElements;
-	
+
 	UIUnit width;
 	UIUnit height;
 
@@ -96,13 +95,12 @@ public:
 	FBOTexture * renderedTexture;
 	MeshEntity * texturedPlane;
 
-
 	// how padding and margin affect width and height
 	BoxSizing boxSizing;
 
 	NodeUI(BulletWorld * _world, RenderMode _renderMode = kENTITIES, bool _mouseEnabled = false);
 	virtual ~NodeUI();
-	
+
 	virtual void update(Step * _step) override;
 	virtual void render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOption) override;
 	virtual void load() override;
@@ -124,6 +122,9 @@ public:
 	void setPadding(float _leftAndRight, float _bottomAndTop);
 	void setPadding(float _left, float _right, float _bottom, float _top);
 
+	// Only implmented for render mode of kTEXTURE
+	void setAlpha(float _alpha);
+
 	// sets the width
 	// value < 0: the dimension will be auto-resized
 	// 0 <= value <= 1: the dimension will be sized as a ratio of its parent's size
@@ -141,21 +142,21 @@ public:
 	// enables rational height
 	// the dimension will be sized as a ratio of its parent's size
 	void setRationalHeight(float _rationalHeight, NodeUI * _parent);
-	
+
 	// enables pixel width
 	// the dimension will be sized in pixels
 	void setPixelWidth(float _pixelWidth);
 	// enables pixel height
 	// the dimension will be sized in pixels
 	void setPixelHeight(float _pixelHeight);
-	
+
 	// enables autoresizing width
 	// the dimension will be sized as a ratio of its parent's size
 	void setAutoresizeWidth();
 	// enables autoresizing height
 	// the dimension will be sized as a ratio of its parent's size
 	void setAutoresizeHeight();
-	
+
 	// the dimension will be sized as a ratio of its opposing unit
 	// if _parent is nullptr, only sets the member variable and doesn't change the current size
 	void setSquareWidth(float _rationalWidth);
@@ -185,7 +186,7 @@ public:
 
 	virtual Texture * renderToTexture();
 	virtual MeshEntity * getTexturedPlane();
-	
+
 	// If kPIXEL, returns the pixelWidth
 	// otherwise, returns measuredWidth
 	virtual float getWidth();
@@ -203,7 +204,7 @@ public:
 	// indicates to the node that it needs to resize or layout its children because of changes
 	// also calls invalidateRenderFrame()
 	void invalidateLayout();
-	
+
 	// Adds _uiElement in the UI hierarchy for this element
 	// i.e. it is placed under a new transform, and then the new transform is placed under this->uiElements, and the new transform is returned
 	//
@@ -223,15 +224,14 @@ public:
 	virtual void translatePhysical(glm::vec3 _translation, bool _relative = true) override;
 
 	virtual void doRecursivelyOnUIChildren(std::function<void(NodeUI * _childOrThis)> _todo, bool _includeSelf = true);
-	
+
 	bool isFirstParentNodeUI();
-	
+
 	bool updateState;
 	// sets updateState to _newState
 	// typically _newState will be the result of a raycast which
 	// indicates whether the mouse is currently over this node
 	void setUpdateState(bool _newState);
-
 
 	void setRenderMode(RenderMode _newRenderMode);
 private:
@@ -250,7 +250,6 @@ private:
 	void __renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions);
 	void __updateForEntities(Step * _step);
 	void __updateForTexture(Step * _step);
-	
 
 	// Used for renderMode = kTEXTURE
 	// indicates whether the texture representation needs to be updated

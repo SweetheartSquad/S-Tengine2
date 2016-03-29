@@ -65,12 +65,12 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 		bgShader->name = "NodeUI background shader";
 		background->setShader(bgShader, true);
 	}
-	
+
 	childTransform->addChild(margin, false);
 	margin->addChild(background, true);
 	margin->addChild(padding, false);
 	padding->addChild(uiElements, false);
-	
+
 	paddingLeft.setPixelSize(0);
 	paddingRight.setPixelSize(0);
 	paddingTop.setPixelSize(0);
@@ -108,7 +108,7 @@ void NodeUI::load(){
 void NodeUI::unload(){
 	if(loaded){
 		bgShader->unload();
-		
+
 		if(textureCam != nullptr){
 			delete textureCam;
 			delete frameBuffer;
@@ -123,7 +123,7 @@ void NodeUI::unload(){
 void NodeUI::down(){
 	isHovered = true;
 	isDown = true;
-	
+
 	eventManager->triggerEvent("mousedown");
 }
 void NodeUI::up(){
@@ -131,7 +131,7 @@ void NodeUI::up(){
 		click();
 	}
 	isDown = false;
-	
+
 	eventManager->triggerEvent("mouseup");
 }
 void NodeUI::click(){
@@ -139,15 +139,14 @@ void NodeUI::click(){
 }
 void NodeUI::in(){
 	isHovered = true;
-	
+
 	eventManager->triggerEvent("mousein");
 }
 void NodeUI::out(){
 	isHovered = false;
-	
+
 	eventManager->triggerEvent("mouseout");
 }
-
 
 Transform * NodeUI::addChild(NodeUI* _uiElement, bool _invalidateLayout){
 	_uiElement->nodeUIParent = this;
@@ -235,7 +234,9 @@ void NodeUI::update(Step * _step){
 Texture * NodeUI::renderToTexture(){
 	float h = getHeight(true, true);
 	float w = getWidth(true, true);
-	
+
+	auto d = sweet::getWindowDimensions();
+
 	// if the texture is too small, just return the previously rendered one
 	if(h < 1 || w < 1){
 		return renderedTexture;
@@ -245,12 +246,15 @@ Texture * NodeUI::renderToTexture(){
 		textureCam = new OrthographicCamera(0, w, 0, h, -1000,1000);
 		textureCam->name = "NodeUI texture cam";
 	}
+
 	if(frameBuffer == nullptr){
 		frameBuffer = new StandardFrameBuffer(false);
 		frameBuffer->load();
 		frameBuffer->name = "NodeUI texture framebuffer";
 	}
-	
+
+	glViewport(0, 0, w, h);
+
 	texturedPlane->childTransform->translate(w * 0.5f, h * 0.5f, 0.f, false);
 	texturedPlane->childTransform->scale(w, -h, 1.f, false);
 
@@ -268,7 +272,6 @@ Texture * NodeUI::renderToTexture(){
 		glDisable(GL_DEPTH_TEST);
 	}
 
-	
 	RenderOptions renderOptions(nullptr, nullptr);
 	sweet::MatrixStack matrixStack;
 	matrixStack.setCamera(textureCam);
@@ -281,12 +284,13 @@ Texture * NodeUI::renderToTexture(){
 	if(depth == GL_TRUE){
 		glEnable(GL_DEPTH_TEST);
 	}
-	
+
 	FrameBufferInterface::popFbo();
-	
+
 	if(renderedTexture == nullptr) {
-		renderedTexture = new FBOTexture(frameBuffer, true, 0, true, false);	
+		renderedTexture = new FBOTexture(frameBuffer, true, 0, true, false);
 		renderedTexture->load();
+		renderedTexture->refresh();
 		texturedPlane->mesh->pushTexture2D(renderedTexture);
 	}else{
 		renderedTexture->width  = w;
@@ -297,6 +301,8 @@ Texture * NodeUI::renderToTexture(){
 		renderedTexture->data = frameBuffer->getPixelData(0);
 		renderedTexture->bufferData();
 	}
+
+	glViewport(0, 0, d.x, d.y);
 	//renderedTexture->saveImageData("test.tga");
 	return renderedTexture;
 }
@@ -336,7 +342,7 @@ void NodeUI::__renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions
 	if(isRenderFrameDirty()) {
 		renderToTexture();
 	}
-	
+
 	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(0, 0, 0);
 	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(1);
 
@@ -352,7 +358,7 @@ void NodeUI::__updateForEntities(Step * _step) {
 	}
 	if(mouseEnabled){
 		updateCollider();
-		
+
 		if(updateState){
 			float d = mouse->getMouseWheelDelta();
 			if(abs(d) > FLT_EPSILON){
@@ -406,7 +412,6 @@ bool NodeUI::__evaluateChildRenderFrames(){
 void NodeUI::__updateForTexture(Step * _step) {
 	if(texturedPlane != nullptr){
 		texturedPlane->update(_step);
-			
 	}
 
 	__evaluateChildRenderFrames();
@@ -475,7 +480,7 @@ void NodeUI::setPaddingLeft(float _padding){
 	}
 	paddingLeft.setSize(_padding, &root->width);
 }
-	 
+
 void NodeUI::setPaddingRight(float _padding){
 	NodeUI * root = nodeUIParent;
 	while(root->width.sizeMode == kAUTO && root->nodeUIParent != nullptr){
@@ -513,6 +518,19 @@ void NodeUI::setPadding(float _left, float _right, float _bottom, float _top){
 	setPaddingRight(_right);
 	setPaddingBottom(_bottom);
 	setPaddingTop(_top);
+}
+
+void NodeUI::setAlpha(float _alpha) {
+	if(renderMode == kTEXTURE) {
+		if(texturedPlane != nullptr){
+			for(auto v : texturedPlane->mesh->vertices) {
+				v.alpha = _alpha;
+			}
+			texturedPlane->mesh->clean();
+		}
+	}else {
+		ST_LOG_WARN("SetAlpha is not implemented for renderMode kENTITIES");
+	}
 }
 
 void NodeUI::setWidth(float _width){
@@ -622,7 +640,7 @@ void NodeUI::setMeasuredWidths(){
 	}if(marginRight.sizeMode == kRATIO){
 		marginRight.measuredSize = marginRight.rationalTarget->getSize() * marginRight.rationalSize;
 	}
-	
+
 	if(width.sizeMode == kRATIO){
 		width.measuredSize = width.rationalTarget->getSize() * width.rationalSize;
 		if(boxSizing == kBORDER_BOX){
@@ -645,7 +663,7 @@ void NodeUI::setMeasuredHeights(){
 	}if(marginTop.sizeMode == kRATIO){
 		marginTop.measuredSize = marginTop.rationalTarget->getSize() * marginTop.rationalSize;
 	}
-	
+
 	if(height.sizeMode == kRATIO){
 		height.measuredSize = height.rationalTarget->getSize() * height.rationalSize;
 		if(boxSizing == kBORDER_BOX){
@@ -717,7 +735,7 @@ float NodeUI::getHeight(bool _includePadding, bool _includeMargin){
 TriMesh * NodeUI::colliderMesh = nullptr;
 void NodeUI::updateCollider(){
 	glm::mat4 mat = background->meshTransform->getCumulativeModelMatrix();
-	
+
 	glm::vec4 verts[6] = {
 		mat * glm::vec4(0,	1,0,1),
 		mat * glm::vec4(1,	1,0,1),
@@ -748,7 +766,6 @@ void NodeUI::updateCollider(){
 	}
 	setColliderAsMesh(colliderMesh, true);
 
-	
 	if(body != nullptr){
 		world->world->removeRigidBody(body);
 		body->setCollisionShape(shape);
@@ -760,10 +777,10 @@ void NodeUI::updateCollider(){
 
 void NodeUI::autoResize(){
 	/*if(width.sizeMode == kAUTO){
-		width.measuredSize = getContentsWidth();
+	width.measuredSize = getContentsWidth();
 	}
 	if(height.sizeMode == kAUTO){
-		height.measuredSize = getContentsHeight();
+	height.measuredSize = getContentsHeight();
 	}*/
 	setMeasuredWidths();
 	setMeasuredHeights();
@@ -814,8 +831,6 @@ void NodeUI::setRenderMode(RenderMode _newRenderMode){
 	renderMode = _newRenderMode;
 	invalidateRenderFrame();
 }
-
-
 
 bool NodeUI::isRenderFrameDirty(){
 	return renderMode == kTEXTURE && __renderFrameDirty;
