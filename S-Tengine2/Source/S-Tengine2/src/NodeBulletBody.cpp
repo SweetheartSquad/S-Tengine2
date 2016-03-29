@@ -142,14 +142,19 @@ glm::vec3 NodeBulletBody::getPhysicsBodyCenter(){
 }
 
 void NodeBulletBody::rotatePhysical(float _angle, float _x, float _y, float _z, bool _relative){
+	rotatePhysical(glm::angleAxis(_angle, glm::vec3(_x, _y, _z)), _relative);
+}
+
+void NodeBulletBody::rotatePhysical(glm::quat _rotation, bool _relative){
 	btQuaternion q = body->getWorldTransform().getRotation();
-	btVector3 axis(_x, _y, _z);
-	btScalar angle(glm::radians(_angle));
 	if(_relative){
-		btQuaternion q2(axis, angle);
+		btQuaternion q2(_rotation.x, _rotation.y, _rotation.z, _rotation.w);
 		q = q2 * q;
 	}else{
-		q.setRotation(axis, angle);
+		q.setX(_rotation.x);
+		q.setY(_rotation.y);
+		q.setZ(_rotation.z);
+		q.setW(_rotation.w);
 	}
 	// getRotation didn't return a reference to the quaternion, so we have to set rotation explicitly after modifying it
 	body->getWorldTransform().setRotation(q);

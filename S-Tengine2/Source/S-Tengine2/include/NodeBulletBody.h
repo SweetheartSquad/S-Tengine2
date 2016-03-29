@@ -43,6 +43,7 @@ public:
 	// a flag is set for the childTransform to be updated later
 	// note: rotates _angle degrees around the axis (_x, _y, _z)
 	virtual void rotatePhysical(float _angle, float _x, float _y, float _z, bool _relative = true);
+	virtual void rotatePhysical(glm::quat _rotation, bool _relative = true);
 
 	virtual void update(Step * _step) override;
 	
