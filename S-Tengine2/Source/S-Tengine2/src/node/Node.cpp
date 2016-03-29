@@ -20,7 +20,7 @@ Node::~Node(){
 }
 Node::Node(){
 #ifdef _DEBUG
-	name = "UNAMED";
+	name = "UNNAMED";
 	if(nodeCounting){
 		nodes.push_back(this);
 	}
