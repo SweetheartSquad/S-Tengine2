@@ -184,7 +184,7 @@ public:
 	float getPaddingTop();
 	float getPaddingBottom();
 
-	virtual Texture * renderToTexture();
+	virtual Texture * renderToTexture(RenderOptions * _ro);
 	virtual MeshEntity * getTexturedPlane();
 
 	// If kPIXEL, returns the pixelWidth
@@ -238,6 +238,9 @@ private:
 
 	Transform * margin;
 	Transform * padding;
+
+	// Alpha value for texturedPlane for render mode kTEXTURE
+	float textureModeAlpha;
 
 	virtual float getContentsWidth();
 	virtual float getContentsHeight();

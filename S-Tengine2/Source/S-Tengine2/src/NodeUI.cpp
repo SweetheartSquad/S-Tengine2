@@ -31,27 +31,28 @@ ComponentShaderBase * NodeUI::bgShader = nullptr;
 
 NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled) :
 	NodeBulletBody(_world),
+	eventManager(new sweet::EventManager()),
+	mouseEnabled(!_mouseEnabled),
 	mouse(&Mouse::getInstance()),
-	updateState(false),
 	isHovered(false),
 	isDown(false),
 	isActive(false),
+	uiElements(new Transform()),
+	bgColour(0.f, 0.f, 0.f, 1.f),
+	nodeUIParent(nullptr),
+	background(new Plane(glm::vec3(-0.5f, -0.5f, 0.f), 1.f, bgShader)),
+	textureCam(nullptr),
 	frameBuffer(nullptr),
 	renderedTexture(nullptr),
 	texturedPlane(nullptr),
-	renderMode(_renderMode),
-	background(new Plane(glm::vec3(-0.5f, -0.5f, 0.f), 1.f, bgShader)),
+	boxSizing(kBORDER_BOX), // we initialize the variable to the opposite so that setMouseEnabled gets called properly at the end of the constructor
+	updateState(false),
 	margin(new Transform()),
 	padding(new Transform()),
-	uiElements(new Transform()),
-	boxSizing(kBORDER_BOX),
-	mouseEnabled(!_mouseEnabled), // we initialize the variable to the opposite so that setMouseEnabled gets called properly at the end of the constructor
-	bgColour(0.f, 0.f, 0.f, 1.f),
-	textureCam(nullptr),
-	__layoutDirty(true),
+	textureModeAlpha(1.f),
 	__renderFrameDirty(_renderMode == kTEXTURE),
-	nodeUIParent(nullptr),
-	eventManager(new sweet::EventManager())
+	__layoutDirty(true),
+	renderMode(_renderMode)
 {
 	if(bgShader == nullptr){
 		bgShader = new ComponentShaderBase(true);
@@ -231,11 +232,9 @@ void NodeUI::update(Step * _step){
 	}
 }
 
-Texture * NodeUI::renderToTexture(){
+Texture * NodeUI::renderToTexture(RenderOptions * _ro){
 	float h = getHeight(true, true);
 	float w = getWidth(true, true);
-
-	auto d = sweet::getWindowDimensions();
 
 	// if the texture is too small, just return the previously rendered one
 	if(h < 1 || w < 1){
@@ -253,7 +252,8 @@ Texture * NodeUI::renderToTexture(){
 		frameBuffer->name = "NodeUI texture framebuffer";
 	}
 
-	glViewport(0, 0, w, h);
+	auto vd = _ro->viewPortDimensions;
+	_ro->setViewPort(0, 0, w, h);
 
 	texturedPlane->childTransform->translate(w * 0.5f, h * 0.5f, 0.f, false);
 	texturedPlane->childTransform->scale(w, -h, 1.f, false);
@@ -302,7 +302,7 @@ Texture * NodeUI::renderToTexture(){
 		renderedTexture->bufferData();
 	}
 
-	glViewport(0, 0, d.x, d.y);
+	_ro->setViewPort(vd.x, vd.y, vd.width, vd.height);
 	//renderedTexture->saveImageData("test.tga");
 	return renderedTexture;
 }
@@ -340,11 +340,11 @@ void NodeUI::__renderForEntities(sweet::MatrixStack * _matrixStack, RenderOption
 void NodeUI::__renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) {
 	getTexturedPlane();
 	if(isRenderFrameDirty()) {
-		renderToTexture();
+		renderToTexture(_renderOptions);
 	}
 
 	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(0, 0, 0);
-	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(1);
+	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(textureModeAlpha);
 
 	texturedPlane->render(_matrixStack, _renderOptions);
 	__renderFrameDirty = false;
@@ -522,12 +522,7 @@ void NodeUI::setPadding(float _left, float _right, float _bottom, float _top){
 
 void NodeUI::setAlpha(float _alpha) {
 	if(renderMode == kTEXTURE) {
-		if(texturedPlane != nullptr){
-			for(auto v : texturedPlane->mesh->vertices) {
-				v.alpha = _alpha;
-			}
-			texturedPlane->mesh->clean();
-		}
+		textureModeAlpha = _alpha;
 	}else {
 		ST_LOG_WARN("SetAlpha is not implemented for renderMode kENTITIES");
 	}

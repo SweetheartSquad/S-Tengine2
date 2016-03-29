@@ -36,7 +36,7 @@ private:
 	* is running to the console
 	*/
 	void printFps();
-	
+
 	double accumulator;
 	double lastTimestep;
 
@@ -44,8 +44,7 @@ private:
 	int nbFrames;
 
 	unsigned long int numSplashScenes;
-	
-	
+
 public:
 	// must be called in the main before the game loop is started
 	// sets up the splash screens
@@ -77,14 +76,14 @@ public:
 	/**Performs a full game loop, i.e. calculate delta time stuff, poll input events, update, draw*/
 	void performGameLoop();
 
-	/** 
-	* Updates the deltaTime correction, prints FPS, checks for ESC, and calls update on the current scene 
+	/**
+	* Updates the deltaTime correction, prints FPS, checks for ESC, and calls update on the current scene
 	*/
 	virtual void update(Step * _step) override;
-	
-	/** 
+
+	/**
 	* Draws _scene
-	* If _scene is nullptr, draws current scene 
+	* If _scene is nullptr, draws current scene
 	*/
 	virtual void draw(Scene * _scene = nullptr);
 
@@ -93,9 +92,8 @@ public:
 	bool deleteOldScene;
 	void switchScene(std::string _newSceneKey, bool _deleteOldScene);
 
-
-	/** 
-	* Calls update on the mouse and keyboard 
+	/**
+	* Calls update on the mouse and keyboard
 	*/
 	void manageInput(void);
 
@@ -108,8 +106,8 @@ public:
 	virtual void load() override;
 	virtual void unload() override;
 
-
 	// saves the current viewport with the format "../screenshots/YYYY-MM-DD_TTTTTTTTTT.tga"
+	void takeScreenshot(int _x, int _y, int _width, int _height);
 	void takeScreenshot();
 
 	// flags the current glfw context as "should close" so that the game will quit
@@ -117,9 +115,4 @@ public:
 
 	// whether the game will call resize on draw and fullscreen calls
 	bool autoResize;
-	// sets the viewport to match the current window size
-	void resize();
-
-	virtual void setViewport(int _x, int _y, int _width, int _height);
-	int viewPortX, viewPortY, viewPortWidth, viewPortHeight;
 };

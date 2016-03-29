@@ -23,7 +23,6 @@
 
 #include <GLFW/glfw3.h>
 
-
 Game::Game(std::string _firstSceneKey, Scene * _firstScene, bool _isRunning) :
 	accumulator(0.0),
 	lastTimestep(0.0),
@@ -41,13 +40,9 @@ Game::Game(std::string _firstSceneKey, Scene * _firstScene, bool _isRunning) :
 {
 	int width, height;
 	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
-	viewPortWidth = width;
-	viewPortHeight = height;
-	viewPortX = 0;
-	viewPortY = 0;
 	lastTime = glfwGetTime();
 	nbFrames = 0;
-	
+
 	scenes.insert(std::pair<std::string, Scene *>(_firstSceneKey, _firstScene));
 	currentScene = _firstScene;
 	currentSceneKey = _firstSceneKey;
@@ -110,7 +105,6 @@ void Game::performGameLoop(){
 }
 
 void Game::update(Step * _step){
-
 	if(printFPS){
 		printFps();
 	}
@@ -124,7 +118,6 @@ void Game::update(Step * _step){
 void Game::draw(Scene * _scene){
 	int width, height;
 	glfwGetFramebufferSize(sweet::currentContext, &width, &height);
-	setViewport(0, 0, width, height);
 	if(width <= 0 || height <= 0) {
 		ST_LOG_WARN("Window size 0 -- Draw skipped");
 		return;
@@ -132,11 +125,11 @@ void Game::draw(Scene * _scene){
 	if(_scene == nullptr){
 		_scene = currentScene;
 	}
-	if(autoResize){
-		resize();
-	}
 	sweet::MatrixStack ms;
 	RenderOptions ro(nullptr, nullptr, nullptr);
+	if(autoResize){
+		ro.setViewPort(0, 0, width, height);
+	}
 	if(_scene != nullptr){
 		ro.lights = &_scene->lights;
 		for(auto s : Shader::allShaders){
@@ -154,7 +147,7 @@ void Game::draw(Scene * _scene){
 		_scene->render(&ms, &ro);
 	}
 	if(sweet::drawAntTweakBar && sweet::antTweakBarInititialized) {
-		TwDraw(); 
+		TwDraw();
 	}
 	glfwSwapBuffers(sweet::currentContext);
 }
@@ -204,19 +197,18 @@ void Game::addSplash(Scene_Splash * _splashScene){
 	if(numSplashScenes > 1){
 		dynamic_cast<Scene_Splash *>(scenes[ss1.str()])->nextScene = ss2.str();
 	}
-	
+
 	auto res = scenes.insert(std::pair<std::string, Scene * >(ss2.str(), _splashScene));
 	if(!res.second){
 		Log::error("Scene with name\"" + ss2.str() + "\" already exists, splash scene could not be inserted.");
 	}
 }
 
-
 void Game::load(){
 	Transform::transformShader->load();
 	Transform::transformIndicator->load();
 	Transform::transformIndicator->configureDefaultVertexAttributes(Transform::transformShader);
-	
+
 	for(std::pair<std::string, Scene *> s : scenes){
 		s.second->load();
 	}
@@ -248,24 +240,25 @@ void Game::toggleFullScreen(){
 	// create new window and make assign it to the current context
 	sweet::currentContext = sweet::initWindow();
 	glfwMakeContextCurrent(sweet::currentContext);
-	
-	if(autoResize){
-		resize();
-	}
-	
+
 	// reload everything
 	load();
 	checkForGlError(false);
 }
 
+void Game::takeScreenshot() {
+	int width, height;
+	glfwGetFramebufferSize(sweet::currentContext, &width, &height);
+	takeScreenshot(0, 0, width, height);
+}
 
-void Game::takeScreenshot(){
+void Game::takeScreenshot(int _x, int _y, int _width, int _height){
 	std::stringstream filepath;
-		
+
 	filepath << "../screenshots/" << sweet::DateUtils::getDatetime() << ".tga";
 	ProgrammaticTexture * tex = new ProgrammaticTexture();
-	tex->allocate(viewPortWidth, viewPortHeight, 4);
-	glReadPixels(0, 0, viewPortWidth, viewPortHeight, GL_RGBA, GL_UNSIGNED_BYTE, tex->data);
+	tex->allocate(_width, _height, 4);
+	glReadPixels(_x, _y, _width, _height, GL_RGBA, GL_UNSIGNED_BYTE, tex->data);
 	tex->saveImageData(filepath.str());
 	delete tex;
 
@@ -274,19 +267,4 @@ void Game::takeScreenshot(){
 
 void Game::exit(){
 	glfwSetWindowShouldClose(sweet::currentContext, true);
-}
-
-void Game::resize(){
-	glm::uvec2 screenDimensions = sweet::getWindowDimensions();
-	setViewport(0, 0, screenDimensions.x, screenDimensions.y);
-}
-
-void Game::setViewport(int _x, int _y, int _w, int _h){
-	viewPortX = _x;
-	viewPortY = _y;
-	viewPortWidth = _w;
-	viewPortHeight = _h;
-
-	glViewport(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
-	glScissor(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
 }
