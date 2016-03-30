@@ -165,6 +165,15 @@ Transform * const Transform::setOrientation(glm::quat _orientation){
 	return this;
 }
 
+Transform * const Transform::lookAt(glm::vec3 _pos, glm::vec3 _up, float _interpolation){
+	Transform t;
+	t.parents.push_back(this);
+	glm::mat4 m = glm::lookAt(_pos, t.getWorldPos(), _up);
+	glm::quat q(glm::transpose(m));
+	setOrientation(glm::slerp(getOrientationQuat(), q, _interpolation));
+	return this;
+}
+
 const glm::mat4 & Transform::getTranslationMatrix(){
 	if(tDirty){
 		tMatrix = glm::translate(translationVector);

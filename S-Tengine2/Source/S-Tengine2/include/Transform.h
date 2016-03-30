@@ -131,6 +131,9 @@ public:
 	Transform * const rotate(float _angle, float _x, float _y, float _z, CoordinateSpace _space);
 	
 	Transform * const setOrientation(glm::quat _orientation);
+
+	// rotates such that the Z axis of this transform points from its current location towards _pos, constrained by _up
+	Transform * const lookAt(glm::vec3 _pos, glm::vec3 _up = glm::vec3(0,1,0), float _interpolation = 1.f);
 	
 	/**
 	* Resets the translation, orientation, and scale to their defaults
