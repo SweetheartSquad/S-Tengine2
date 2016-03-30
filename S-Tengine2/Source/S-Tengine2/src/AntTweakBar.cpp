@@ -1,8 +1,17 @@
+#pragma once
+
 // If the engine is being compiled for release,
 // all of the AntTweakBar functions will be redefined
 // such that they don't actually do anything
-#ifndef _DEBUG
-#pragma once
+//
+
+#if _MSC_VER == 1700
+	#ifndef _DEBUG
+		#define _USE_THIS_THING
+	#endif
+#endif
+
+#ifdef _USE_THIS_THING
 
 #include <AntTweakBar.h>
 
