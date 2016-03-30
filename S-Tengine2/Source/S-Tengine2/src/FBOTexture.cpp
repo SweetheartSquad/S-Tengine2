@@ -15,7 +15,7 @@ FBOTexture::FBOTexture(FrameBufferInterface * _frameBuffer, bool _storeData, int
 void FBOTexture::refresh(){
 	// if there is already data in the texture, free it
 	if(data != nullptr){
-		free(data);
+		unloadImageData();
 	}
 
 	// resize in case the FBO has different dimensions
