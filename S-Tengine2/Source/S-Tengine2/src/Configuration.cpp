@@ -52,6 +52,10 @@ void Configuration::load(const std::string & _filename){
 		rngSeed = json.get("rngSeed", rngSeedDefault).asInt();
 		monitor = json.get("monitor", monitorDefault).asInt();
 		Json::Value jsonGain = json["gain"];
+
+		// gain defaults
+		gain["master"] = gain["voice"] = gain["music"] = gain["sfx"] = gain["other"] = 1;
+
 		for(auto g : jsonGain.getMemberNames()){
 			gain[g] = jsonGain.get(g, 1.f).asFloat();
 		}

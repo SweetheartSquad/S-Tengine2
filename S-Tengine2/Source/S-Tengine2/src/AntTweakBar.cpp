@@ -9,6 +9,8 @@
 	#ifndef _DEBUG
 		#define _USE_THIS_THING
 	#endif
+#else
+	#define _USE_THIS_THING
 #endif
 
 #ifdef _USE_THIS_THING
