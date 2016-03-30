@@ -21,5 +21,5 @@ void FBOTexture::refresh(){
 	// resize in case the FBO has different dimensions
 	resize(fbo->width, fbo->height, fbo->frameBufferChannels.at(fboChannelIndex).numChannels);
 	// get the new data
-	data = fbo->getPixelData(fboChannelIndex);
+	setTextureData(fbo->getPixelData(fboChannelIndex));
 }
