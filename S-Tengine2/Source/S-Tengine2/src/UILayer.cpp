@@ -18,11 +18,11 @@ RayTestInfo::RayTestInfo() :
 {
 }
 
-UILayer::UILayer(float _left, float _right, float _bottom, float _top) : 
+UILayer::UILayer(float _left, float _right, float _bottom, float _top) :
 	NodeUI(new BulletWorld(), kENTITIES, true),
 	mouse(&Mouse::getInstance()),
 	mouseIndicator(nullptr),
-	cam(new OrthographicCamera(_left, _right, _bottom, _top, -1000.f, 1000.f)),
+	cam(new OrthographicCamera(_left, _right, _bottom, _top, -1.f, 1.f)),
 	bulletDebugDrawer(new BulletDebugDrawer(world->world)),
 	shader(new ComponentShaderBase(true)),
 	complexHitTest(false)
@@ -39,7 +39,7 @@ UILayer::UILayer(float _left, float _right, float _bottom, float _top) :
 	bulletDebugDrawer->setDebugMode(btIDebugDraw::DBG_NoDebug);
 	world->world->setDebugDrawer(bulletDebugDrawer);
 	childTransform->addChild(bulletDebugDrawer, false);
-	
+
 	setBackgroundColour(0.f, 0.f, 0.f, 0.f);
 
 	shader->incrementReferenceCount();
@@ -60,7 +60,7 @@ void UILayer::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderO
 	}
 
 	GLboolean depth = glIsEnabled(GL_DEPTH_TEST);
-	
+
 	if(depth == GL_TRUE){
 		glDisable(GL_DEPTH_TEST);
 	}
@@ -92,7 +92,7 @@ void UILayer::resize(float _left, float _right, float _bottom, float _top){
 	cam->right = _right;
 	cam->bottom = _bottom;
 	cam->top = _top;
-	
+
 	float w = _right - _left;
 	float h = _top - _bottom;
 	setPixelWidth(w);
@@ -118,11 +118,11 @@ void UILayer::update(Step * _step){
 		//btVector3 raystart(campos.x, campos.y, campos.z);
 		//btVector3 raydir(camdir.x, camdir.y, camdir.z);
 		//btVector3 rayend = raystart + raydir*raylength;
-	
+
 		rayInfo.raystart = btVector3(mouse->mouseX(), mouse->mouseY(), -raylength);
 		rayInfo.raydir = btVector3(0, 0, 1);
 		rayInfo.rayend = btVector3(mouse->mouseX(), mouse->mouseY(), raylength);
-	
+
 		rayInfo.rayfrom.setIdentity(); rayInfo.rayfrom.setOrigin(rayInfo.raystart);
 		rayInfo.rayto.setIdentity(); rayInfo.rayto.setOrigin(rayInfo.rayend);
 		rayInfo.raycb = btCollisionWorld::AllHitsRayResultCallback(rayInfo.raystart, rayInfo.rayend);

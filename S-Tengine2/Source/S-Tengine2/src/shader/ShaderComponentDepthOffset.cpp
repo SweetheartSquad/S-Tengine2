@@ -21,9 +21,9 @@ std::string ShaderComponentDepthOffset::getVertexVariablesString() {
 }
 
 std::string ShaderComponentDepthOffset::getFragmentVariablesString() {
-	return 
-			DEFINE + SHADER_COMPONENT_DEPTH_OFFSET + ENDL +
-			"uniform float " + GL_UNIFORM_ID_DEPTH_OFFSET + SEMI_ENDL;
+	return
+		DEFINE + SHADER_COMPONENT_DEPTH_OFFSET + ENDL +
+		"uniform float " + GL_UNIFORM_ID_DEPTH_OFFSET + SEMI_ENDL;
 }
 
 std::string ShaderComponentDepthOffset::getVertexBodyString() {

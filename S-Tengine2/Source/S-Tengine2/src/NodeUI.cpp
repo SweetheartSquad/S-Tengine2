@@ -242,7 +242,7 @@ Texture * NodeUI::renderToTexture(RenderOptions * _ro){
 	}
 
 	if(textureCam == nullptr){
-		textureCam = new OrthographicCamera(0, w, 0, h, -1000,1000);
+		textureCam = new OrthographicCamera(0, w, 0, h, -1,1);
 		textureCam->name = "NodeUI texture cam";
 	}
 

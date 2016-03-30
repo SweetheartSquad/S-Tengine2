@@ -12,7 +12,7 @@ public:
 
 	ShaderComponentDepthOffset(ComponentShaderBase * _shader);
 	~ShaderComponentDepthOffset();
-	
+
 	std::string getVertexVariablesString() override;
 	std::string getFragmentVariablesString() override;
 	std::string getVertexBodyString() override;
