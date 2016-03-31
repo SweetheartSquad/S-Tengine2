@@ -7,6 +7,7 @@ NodeLoadable::NodeLoadable():
 	loaded(false)
 {
 	nodeType |= NodeType::kNODE_LOADABLE;
+	ptrNodeLoadable = this;
 }
 
 NodeLoadable::~NodeLoadable(){

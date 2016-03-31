@@ -6,6 +6,7 @@ NodeRenderable::NodeRenderable() :
 	visible(true)
 {
 	nodeType |= NodeType::kNODE_RENDERABLE;
+	ptrNodeRenderable = this;
 }
 
 void NodeRenderable::setVisible(bool _visible){

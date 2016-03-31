@@ -2,4 +2,5 @@
 
 NodeUpdatable::NodeUpdatable() {
 	nodeType |= NodeType::kNODE_UPDATABLE;
+	ptrNodeUpdatable = this;
 }

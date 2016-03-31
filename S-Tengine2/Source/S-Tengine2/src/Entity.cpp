@@ -11,7 +11,8 @@
 
 Entity::Entity() :
 	childTransform(new Transform()),
-	childTransformExists(true)
+	childTransformExists(true),
+	active(true)
 {
 }
 
@@ -36,7 +37,9 @@ void Entity::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOp
 }
 
 void Entity::update(Step * _step){
-	childTransform->update(_step);
+	if(active){
+		childTransform->update(_step);
+	}
 }
 
 void Entity::unload(){

@@ -244,9 +244,8 @@ glm::quat Transform::getOrientationQuat() const {
 
 void Transform::update(Step * _step){
 	for(unsigned long int i = 0; i < children.size(); ++i){
-		if(children.at(i)->isNodeType(NodeType::kNODE_UPDATABLE)){
-			NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(children.at(i));
-			nu->update(_step);
+		if(children.at(i)->asNodeUpdatable() != nullptr){
+			children.at(i)->asNodeUpdatable()->update(_step);
 		}
 	}
 }
@@ -266,9 +265,8 @@ void Transform::render(sweet::MatrixStack * _matrixStack, RenderOptions * _rende
 
 	// render all of the transform's children
 	for(unsigned long int i = 0; i < children.size(); i++){
-		NodeRenderable * nr = dynamic_cast<NodeRenderable *>(children.at(i));
-		if(nr != nullptr /*&& nr->isVisible()*/){
-			nr->render(_matrixStack, _renderOptions);
+		if(children.at(i)->asNodeRenderable() != nullptr){
+			children.at(i)->asNodeRenderable()->render(_matrixStack, _renderOptions);
 		}
 	}
 	if(drawTransforms){

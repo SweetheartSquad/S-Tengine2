@@ -9,6 +9,7 @@ NodeChild::NodeChild() :
 	cumulativeModelMatrixDirty(true)
 {
 	nodeType |= NodeType::kNODE_CHILD;
+	ptrNodeChild = this;
 }
 
 NodeChild::~NodeChild(){

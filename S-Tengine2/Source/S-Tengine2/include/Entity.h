@@ -11,6 +11,9 @@
 /** A basic entity node. Stores references to a mesh, transform, shader, parent, and list of references to children */
 class Entity : public virtual NodeUpdatable, public virtual NodeRenderable, public virtual NodeLoadable, public virtual NodeChild{
 public:
+
+	bool active;
+
 	explicit Entity();
 	virtual ~Entity(void);
 	void makeCumulativeModelMatrixDirty() override;

@@ -2,7 +2,7 @@
 
 #include <NodePhysicsBody.h>
 
-NodePhysicsBody::NodePhysicsBody() :	
+NodePhysicsBody::NodePhysicsBody() :
 	directAdjustment(true)
 {
 }

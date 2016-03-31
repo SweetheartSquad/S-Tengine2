@@ -55,6 +55,7 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	renderMode(_renderMode)
 {
 	nodeType |= NodeType::kNODE_UI;
+	ptrNodeUI = this;
 
 	if(bgShader == nullptr){
 		bgShader = new ComponentShaderBase(true);
@@ -186,7 +187,7 @@ void NodeUI::doRecursivelyOnUIChildren(std::function<void(NodeUI * _childOrThis)
 	for(NodeChild * c : uiElements->children) {
 		Transform * t = dynamic_cast<Transform*>(c);
 		if(t != nullptr){
-			NodeUI * nodeUI = dynamic_cast<NodeUI*>(t->children.at(0));
+			NodeUI * nodeUI = t->children.at(0)->asNodeUI();
 			if(nodeUI != nullptr) {
 				nodeUI->doRecursivelyOnUIChildren(_todo, true);
 			}
@@ -198,7 +199,7 @@ void NodeUI::doRecursivelyOnUIChildren(std::function<void(NodeUI * _childOrThis)
 }
 
 bool NodeUI::isFirstParentNodeUI() {
-	return firstParent() != nullptr && dynamic_cast<NodeUI *>(firstParent()) != nullptr;
+	return firstParent() != nullptr && static_cast<Node *>(firstParent())->asNodeUI() != nullptr;
 }
 
 bool NodeUI::isMouseEnabled(){
@@ -399,7 +400,7 @@ bool NodeUI::__evaluateChildRenderFrames(){
 		for(NodeChild * c : uiElements->children) {
 			Transform * t = dynamic_cast<Transform*>(c);
 			if(t != nullptr){
-				NodeUI * nodeUI = dynamic_cast<NodeUI*>(t->children.at(0));
+				NodeUI * nodeUI = t->children.at(0)->asNodeUI();
 				if(nodeUI != nullptr) {
 					if(nodeUI->__evaluateChildRenderFrames()){
 						invalidateRenderFrame();
@@ -605,9 +606,9 @@ void NodeUI::resizeChildrenWidth(){
 		Transform * trans = dynamic_cast<Transform *>(c);
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
-				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
-				if(nui != nullptr){
-					nui->setMeasuredWidths();
+				auto nui = trans->children.at(0);
+				if(trans->children.at(0)->asNodeUI() != nullptr){
+					nui->asNodeUI()->setMeasuredWidths();
 				}
 			}
 		}
@@ -619,9 +620,9 @@ void NodeUI::resizeChildrenHeight(){
 		Transform * trans = dynamic_cast<Transform *>(c);
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
-				NodeUI * nui = dynamic_cast<NodeUI *>(trans->children.at(0));
-				if(nui != nullptr){
-					nui->setMeasuredHeights();
+				auto nui = trans->children.at(0);
+				if(trans->children.at(0)->asNodeUI() != nullptr){
+					nui->asNodeUI()->setMeasuredHeights();
 				}
 			}
 		}
@@ -794,8 +795,7 @@ float NodeUI::getContentsWidth(){
 		Transform * trans = dynamic_cast<Transform *>(uiElements->children.at(i));
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
-				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
-				w = std::max(w, node->getWidth(true, true));
+				w = std::max(w, trans->children.at(0)->asNodeUI()->getWidth(true, true));
 			}
 		}
 	}
@@ -808,8 +808,7 @@ float NodeUI::getContentsHeight(){
 		Transform * trans = dynamic_cast<Transform *>(uiElements->children.at(i));
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
-				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
-				h = std::max(h, node->getHeight(true, true));
+				h = std::max(h, trans->children.at(0)->asNodeUI()->getHeight(true, true));
 			}
 		}
 	}
