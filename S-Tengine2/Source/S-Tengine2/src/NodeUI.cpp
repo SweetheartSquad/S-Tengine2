@@ -27,7 +27,9 @@
 #include <Layout.h>
 #include <shader/ShaderComponentDepthOffset.h>
 
-ComponentShaderBase * NodeUI::bgShader = nullptr;
+ComponentShaderBase  * NodeUI::bgShader = nullptr;
+ShaderComponentTint  * NodeUI::bgTintComponent = nullptr;
+ShaderComponentAlpha * NodeUI::bgAlphaComponent = nullptr;
 
 NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled) :
 	NodeBulletBody(_world),
@@ -60,10 +62,12 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	if(bgShader == nullptr){
 		bgShader = new ComponentShaderBase(true);
 		bgShader->incrementReferenceCount();
+		bgTintComponent = new ShaderComponentTint(bgShader);
+		bgAlphaComponent = new ShaderComponentAlpha(bgShader);
 		bgShader->addComponent(new ShaderComponentMVP(bgShader));
 		bgShader->addComponent(new ShaderComponentTexture(bgShader));
-		bgShader->addComponent(new ShaderComponentTint(bgShader));
-		bgShader->addComponent(new ShaderComponentAlpha(bgShader));
+		bgShader->addComponent(bgTintComponent);
+		bgShader->addComponent(bgAlphaComponent);
 		bgShader->addComponent(new ShaderComponentDepthOffset(bgShader));
 		bgShader->compileShader();
 		bgShader->name = "NodeUI background shader";
@@ -335,8 +339,8 @@ void NodeUI::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOp
 }
 
 void NodeUI::__renderForEntities(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) {
-	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(bgColour.r, bgColour.g, bgColour.b);
-	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(bgColour.a);
+	bgTintComponent->setRGB(bgColour.r, bgColour.g, bgColour.b);
+	bgAlphaComponent->setAlpha(bgColour.a);
 	Entity::render(_matrixStack, _renderOptions);
 	__renderFrameDirty = false;
 }
@@ -347,8 +351,8 @@ void NodeUI::__renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions
 		renderToTexture(_renderOptions);
 	}
 
-	dynamic_cast<ShaderComponentTint *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(2))->setRGB(0, 0, 0);
-	dynamic_cast<ShaderComponentAlpha *>(dynamic_cast<ComponentShaderBase *>(background->shader)->getComponentAt(3))->setAlpha(textureModeAlpha);
+	bgTintComponent->setRGB(0, 0, 0);
+	bgAlphaComponent->setAlpha(textureModeAlpha);
 
 	texturedPlane->render(_matrixStack, _renderOptions);
 	__renderFrameDirty = false;

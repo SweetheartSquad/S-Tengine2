@@ -13,6 +13,8 @@ class Texture;
 class FBOTexture;
 class StandardFrameBuffer;
 class OrthographicCamera;
+class ShaderComponentTint;
+class ShaderComponentAlpha;
 
 enum BoxSizing{
 	kCONTENT_BOX, // padding and margin are exterior to width and height
@@ -71,7 +73,10 @@ public:
 	UIUnit width;
 	UIUnit height;
 
-	static ComponentShaderBase * bgShader;
+	static ComponentShaderBase  * bgShader;
+	static ShaderComponentTint  * bgTintComponent;
+	static ShaderComponentAlpha * bgAlphaComponent;
+
 	glm::vec4 bgColour;
 
 	// changes the visiblity and also sets renderFrame to true
