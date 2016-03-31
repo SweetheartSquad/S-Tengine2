@@ -4,6 +4,7 @@ NodeResource::NodeResource(bool _autoRelease) :
 	autoRelease(_autoRelease),
 	referenceCount(0)
 {
+	nodeType |= kNODE_RESOURCE;
 }
 
 NodeResource::~NodeResource(){

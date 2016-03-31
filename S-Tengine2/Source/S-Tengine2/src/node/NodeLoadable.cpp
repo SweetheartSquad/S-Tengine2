@@ -6,6 +6,7 @@ NodeLoadable::NodeLoadable():
 	Node(),
 	loaded(false)
 {
+	nodeType |= NodeType::kNODE_LOADABLE;
 }
 
 NodeLoadable::~NodeLoadable(){

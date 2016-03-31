@@ -54,6 +54,8 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 	__layoutDirty(true),
 	renderMode(_renderMode)
 {
+	nodeType |= NodeType::kNODE_UI;
+
 	if(bgShader == nullptr){
 		bgShader = new ComponentShaderBase(true);
 		bgShader->incrementReferenceCount();
@@ -325,6 +327,7 @@ void NodeUI::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOp
 	if(renderMode == kENTITIES){
 		__renderForEntities(_matrixStack, _renderOptions);
 	}
+
 	if(renderMode == kTEXTURE){
 		__renderForTexture(_matrixStack, _renderOptions);
 	}

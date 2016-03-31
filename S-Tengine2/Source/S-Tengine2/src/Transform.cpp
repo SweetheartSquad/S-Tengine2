@@ -75,7 +75,6 @@ void Transform::makeCumulativeModelMatrixDirty(){
 	}
 }
 
-
 glm::mat4 Transform::getCumulativeModelMatrix(){
 	// if the transform has no parent, return the identity matrix
 	if(parents.size() == 0){
@@ -95,7 +94,6 @@ void Transform::addParent(Transform * _parent){
 	}
 	NodeChild::addParent(_parent);
 }
-
 
 Transform * const Transform::scale(float _scaleX, float _scaleY, float _scaleZ, bool _relative){
 	scale(glm::vec3(_scaleX, _scaleY, _scaleZ), _relative);
@@ -246,20 +244,18 @@ glm::quat Transform::getOrientationQuat() const {
 
 void Transform::update(Step * _step){
 	for(unsigned long int i = 0; i < children.size(); ++i){
-		NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(children.at(i));
-		if(nu != nullptr){
-			nu->update(_step);	
+		if(children.at(i)->isNodeType(NodeType::kNODE_UPDATABLE)){
+			NodeUpdatable * nu = dynamic_cast<NodeUpdatable *>(children.at(i));
+			nu->update(_step);
 		}
 	}
 }
-
 
 void Transform::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions){
 	// don't bother doing any work if we aren't rendering anyway
 	if(!isVisible()){
 		return;
 	}
-
 
 	// save previous matrix state
 	_matrixStack->pushMatrix();
@@ -298,7 +294,7 @@ void Transform::unload(){
 			nl->unload();
 		}
 	}
-	
+
 	NodeLoadable::unload();
 }
 
@@ -306,10 +302,10 @@ void Transform::load(){
 	for(NodeChild * child : children){
 		NodeLoadable * nl = dynamic_cast<NodeLoadable *>(child);
 		if(nl != nullptr){
-			nl->load();	
+			nl->load();
 		}
 	}
-	
+
 	NodeLoadable::load();
 }
 
@@ -342,7 +338,7 @@ Transform * const Transform::addChildAtIndex(NodeChild * const _child, int _inde
 		ST_LOG_ERROR_V("Cannot parent a node to one of it's ancestors");
 		assert(false);
 	}
-	
+
 	// if negative, count from the end
 	if(_index < 0){
 		_index = children.size() + _index;

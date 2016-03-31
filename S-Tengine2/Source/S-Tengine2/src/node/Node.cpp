@@ -18,7 +18,15 @@ Node::~Node(){
 	}
 #endif
 }
-Node::Node(){
+
+bool Node::isNodeType(NodeType _type) const {
+	return (nodeType & _type) != 0;
+}
+
+Node::Node() :
+	nodeType(0)
+{
+	nodeType |= kNODE;
 #ifdef _DEBUG
 	name = "UNNAMED";
 	if(nodeCounting){

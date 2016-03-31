@@ -8,6 +8,8 @@
 NodeShadable::NodeShadable(Shader * _shader) :
 	shader(_shader)
 {
+	nodeType |= NodeType::kNODE_SHADABLE;
+
 	if(shader != nullptr){
 		shader->incrementReferenceCount();
 	}
@@ -15,7 +17,7 @@ NodeShadable::NodeShadable(Shader * _shader) :
 
 NodeShadable::~NodeShadable(){
 	if(shader != nullptr){
-		shader->decrementAndDelete();		
+		shader->decrementAndDelete();
 		shader = nullptr;
 	}
 }

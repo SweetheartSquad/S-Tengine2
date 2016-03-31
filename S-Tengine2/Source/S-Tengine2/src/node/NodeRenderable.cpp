@@ -5,6 +5,7 @@
 NodeRenderable::NodeRenderable() :
 	visible(true)
 {
+	nodeType |= NodeType::kNODE_RENDERABLE;
 }
 
 void NodeRenderable::setVisible(bool _visible){

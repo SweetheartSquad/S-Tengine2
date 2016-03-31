@@ -92,6 +92,7 @@
     <ClCompile Include="src/MeshDeformation.cpp" />
     <ClCompile Include="src/NineSlicing.cpp" />
     <ClCompile Include="src/NodePhysicsBody.cpp" />
+    <ClCompile Include="src/node/NodeUpdatable.cpp" />
     <ClCompile Include="src/PhraseGenerator.cpp" />
     <ClCompile Include="src/ProgrammaticTexture.cpp" />
     <ClCompile Include="src/RampTexture.cpp" />

@@ -8,6 +8,7 @@ NodeChild::NodeChild() :
 	worldPos(0),
 	cumulativeModelMatrixDirty(true)
 {
+	nodeType |= NodeType::kNODE_CHILD;
 }
 
 NodeChild::~NodeChild(){
@@ -18,7 +19,6 @@ void NodeChild::makeCumulativeModelMatrixDirty(){
 	// do nothing
 	cumulativeModelMatrixDirty = true;
 }
-
 
 bool NodeChild::hasAncestor(const Transform * const _parent) const{
 	if(_parent == nullptr){
@@ -41,27 +41,27 @@ glm::vec3 NodeChild::getWorldPos(unsigned long int _parent){
 	if(parents.size() <= _parent){
 		return glm::vec3(0);
 	}
-	
+
 	Transform * p = parents.at(_parent);
 	// if the cumulative model matrix is out-of-date, then so is the stored world position
 	//if(cumulativeModelMatrixDirty){
-		// find the first non-zero ancestor translation vector
-		glm::vec3 res(0);
-		do{
-			res = p->getTranslationVector();
-			if(p->parents.size() == 0){
-				break;
-			}
-			p = p->parents.at(0);
-		}while(res == glm::vec3(0));
-
-		// apply the cumulative matrix of its parent to the vector
-		if(p->parents.size() > 0){
-			res = glm::vec3(p->parents.at(0)->getCumulativeModelMatrix() * glm::vec4(res, 1));
+	// find the first non-zero ancestor translation vector
+	glm::vec3 res(0);
+	do{
+		res = p->getTranslationVector();
+		if(p->parents.size() == 0){
+			break;
 		}
+		p = p->parents.at(0);
+	}while(res == glm::vec3(0));
 
-		worldPos = res;
-		//cumulativeModelMatrixDirty = false;
+	// apply the cumulative matrix of its parent to the vector
+	if(p->parents.size() > 0){
+		res = glm::vec3(p->parents.at(0)->getCumulativeModelMatrix() * glm::vec4(res, 1));
+	}
+
+	worldPos = res;
+	//cumulativeModelMatrixDirty = false;
 	//}
 	return worldPos;
 }
@@ -90,26 +90,26 @@ Transform* NodeChild::firstParent() {
 }
 
 /*void NodeChild::setPos(glm::vec3 _pos, bool _convertToRelative){
-	glm::vec4 newPos(_pos, 1);
-	if(_convertToRelative){
-		newPos = getInverseModelMatrixHierarchical() * newPos;
-	}
-	parent->translate(glm::vec3(newPos.x, newPos.y, newPos.z), false);
+glm::vec4 newPos(_pos, 1);
+if(_convertToRelative){
+newPos = getInverseModelMatrixHierarchical() * newPos;
+}
+parent->translate(glm::vec3(newPos.x, newPos.y, newPos.z), false);
 }*/
 
 /*glm::mat4 NodeChild::getInverseModelMatrixHierarchical(){
-	Transform * p = parent;
-	std::vector<glm::mat4> modelMatrixStack;
-	while(p != nullptr){
-		modelMatrixStack.push_back(p->getModelMatrix());
-		p = p->parent;
-	}
+Transform * p = parent;
+std::vector<glm::mat4> modelMatrixStack;
+while(p != nullptr){
+modelMatrixStack.push_back(p->getModelMatrix());
+p = p->parent;
+}
 
-	glm::mat4 modelMatrix(1);
-	for(signed long int i = modelMatrixStack.size()-1; i > 0; --i){
-		modelMatrix = modelMatrix * modelMatrixStack.at(i);
-	}
-	return glm::inverse(modelMatrix);
+glm::mat4 modelMatrix(1);
+for(signed long int i = modelMatrixStack.size()-1; i > 0; --i){
+modelMatrix = modelMatrix * modelMatrixStack.at(i);
+}
+return glm::inverse(modelMatrix);
 }*/
 
 void NodeChild::printHierarchy(unsigned long int _startDepth, bool _last, std::vector<unsigned long int> & _p){
