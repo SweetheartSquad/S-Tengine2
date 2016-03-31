@@ -124,7 +124,8 @@ NodeUI_NineSliced::NodeUI_NineSliced(BulletWorld * _world, Texture_NineSliced * 
 	r(new NodeUI(world)),
 	bl(new NodeUI(world)),
 	b(new NodeUI(world)),
-	br(new NodeUI(world))
+	br(new NodeUI(world)),
+	container(new NodeUI(world))
 {
 	background->setVisible(false);
 	
@@ -182,6 +183,11 @@ NodeUI_NineSliced::NodeUI_NineSliced(BulletWorld * _world, Texture_NineSliced * 
 	r->background->childTransform->scale(-1,1,1,false);
 	r->background->meshTransform->scale(-1,1,1,false);
 	r->background->meshTransform->translate(1,0,0,false);
+	
+	addChild(container);
+	container->setRationalWidth(1.f, this);
+	container->setRationalHeight(1.f, this);
+	container->background->setVisible(false);
 
 	// set an initial border
 	setBorder(0.33f);
@@ -197,6 +203,10 @@ void NodeUI_NineSliced::setBorder(float _all){
 
 void NodeUI_NineSliced::setBorder(float _leftAndRight, float _bottomAndTop){
 	setBorder(_leftAndRight, _leftAndRight, _bottomAndTop, _bottomAndTop);
+}
+
+Transform * NodeUI_NineSliced::addChild(NodeUI * _uiElement, bool _invalidateLayout){
+	return container->addChild(_uiElement, _invalidateLayout);
 }
 
 void NodeUI_NineSliced::setBorder(float _left, float _right, float _bottom, float _top){
@@ -250,6 +260,34 @@ void NodeUI_NineSliced::setBackgroundColour(float _r, float _g, float _b, float 
 	b->setBackgroundColour(_r, _g, _b, _a);
 	br->setBackgroundColour(_r, _g, _b, _a);
 }
+
+float NodeUI_NineSliced::getContentsWidth(){
+	float w = 0.0f;
+	// take the maximum of the width of the contents
+	for(unsigned long int i = 0; i < container->uiElements->children.size(); ++i) {
+		Transform * trans = container->uiElements->children.at(i)->asTransform();
+		if(trans != nullptr) {
+			if(trans->children.size() > 0) {
+				w = std::max(w, trans->children.at(0)->asNodeUI()->getWidth(true, true));
+			}
+		}
+	}
+	return w;
+}
+float NodeUI_NineSliced::getContentsHeight(){
+	float h = 0.0f;
+	// take the maximum of the height of the contents66
+	for(unsigned long int i = 0; i < container->uiElements->children.size(); ++i) {
+		Transform * trans = container->uiElements->children.at(i)->asTransform();
+		if(trans != nullptr) {
+			if(trans->children.size() > 0) {
+				h = std::max(h, trans->children.at(0)->asNodeUI()->getHeight(true, true));
+			}
+		}
+	}
+	return h;
+}
+
 
 void NodeUI_NineSliced::setScaleMode(GLenum _scalemode){
 	background->mesh->setScaleMode(_scalemode);

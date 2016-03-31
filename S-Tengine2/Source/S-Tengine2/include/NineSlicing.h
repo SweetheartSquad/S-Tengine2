@@ -48,6 +48,8 @@ class NodeUI_NineSliced : public NodeUI{
 protected:
 	// patches
 	NodeUI * tl, * t, * tr, * l, * c, * r, * bl, * b, * br;
+	// content
+	NodeUI * container;
 public:
 	NodeUI_NineSliced(BulletWorld * _world, Texture_NineSliced * _texture);
 	virtual ~NodeUI_NineSliced();
@@ -59,10 +61,14 @@ public:
 	// set the size of the 8 border patches
 	void setBorder(float _left, float _right, float _bottom, float _top);
 
+	virtual Transform * addChild(NodeUI * _uiElement, bool _invalidateLayout = true);
 
 	// since the background of a NineSliced node is hidden and replaced by the 
 	// patches, this changes the patches' background colours instead
 	virtual void setBackgroundColour(float _r, float _g, float _b, float _a = 1.f) override;
+
+	virtual float getContentsWidth() override;
+	virtual float getContentsHeight() override;
 
 	// sets the scale mode on this node, along with all of the patches
 	// only valid args are GL_NEAREST and GL_LINEAR
