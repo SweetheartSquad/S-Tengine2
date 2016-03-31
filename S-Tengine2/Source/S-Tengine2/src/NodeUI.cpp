@@ -185,7 +185,7 @@ void NodeUI::translatePhysical(glm::vec3 _translation, bool _relative){
 
 void NodeUI::doRecursivelyOnUIChildren(std::function<void(NodeUI * _childOrThis)> _todo, bool _includeSelf) {
 	for(NodeChild * c : uiElements->children) {
-		Transform * t = dynamic_cast<Transform*>(c);
+		Transform * t = c->asTransform();
 		if(t != nullptr){
 			NodeUI * nodeUI = t->children.at(0)->asNodeUI();
 			if(nodeUI != nullptr) {
@@ -398,7 +398,7 @@ bool NodeUI::__evaluateChildRenderFrames(){
 	}
 	if(isVisible()){
 		for(NodeChild * c : uiElements->children) {
-			Transform * t = dynamic_cast<Transform*>(c);
+			Transform * t = c->asTransform();
 			if(t != nullptr){
 				NodeUI * nodeUI = t->children.at(0)->asNodeUI();
 				if(nodeUI != nullptr) {
@@ -603,7 +603,7 @@ void NodeUI::setSquareHeight(float _rationalHeight){
 
 void NodeUI::resizeChildrenWidth(){
 	for(auto c : uiElements->children) {
-		Transform * trans = dynamic_cast<Transform *>(c);
+		Transform * trans = c->asTransform();
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				auto nui = trans->children.at(0);
@@ -617,7 +617,7 @@ void NodeUI::resizeChildrenWidth(){
 
 void NodeUI::resizeChildrenHeight(){
 	for(auto c : uiElements->children) {
-		Transform * trans = dynamic_cast<Transform *>(c);
+		Transform * trans = c->asTransform();
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				auto nui = trans->children.at(0);
@@ -792,7 +792,7 @@ float NodeUI::getContentsWidth(){
 	float w = 0.0f;
 	// take the maximum of the width of the contents
 	for(unsigned long int i = 0; i < uiElements->children.size(); ++i) {
-		Transform * trans = dynamic_cast<Transform *>(uiElements->children.at(i));
+		Transform * trans = uiElements->children.at(i)->asTransform();
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				w = std::max(w, trans->children.at(0)->asNodeUI()->getWidth(true, true));
@@ -805,7 +805,7 @@ float NodeUI::getContentsHeight(){
 	float h = 0.0f;
 	// take the maximum of the height of the contents66
 	for(unsigned long int i = 0; i < uiElements->children.size(); ++i) {
-		Transform * trans = dynamic_cast<Transform *>(uiElements->children.at(i));
+		Transform * trans = uiElements->children.at(i)->asTransform();
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				h = std::max(h, trans->children.at(0)->asNodeUI()->getHeight(true, true));

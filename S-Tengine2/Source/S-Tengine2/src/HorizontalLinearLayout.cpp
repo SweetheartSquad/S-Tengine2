@@ -27,18 +27,18 @@ void HorizontalLinearLayout::layoutChildren(){
 	}
 
 	for(auto c : uiElements->children){
-		Transform * trans = dynamic_cast<Transform *>(c);
-		NodeUI * ui = dynamic_cast<NodeUI * >(trans->children.at(0));
+		Transform * trans = c->asTransform();
+		NodeUI * ui = trans->children.at(0)->asNodeUI();
 		switch (verticalAlignment){
-			default:
-			case kBOTTOM:
-				break;
-			case kMIDDLE:
-				y = rootPos.y - ui->getHeight(true, true)*0.5f;
-				break;
-			case kTOP:
-				y = rootPos.y - ui->getHeight(true, true);
-				break;
+		default:
+		case kBOTTOM:
+			break;
+		case kMIDDLE:
+			y = rootPos.y - ui->getHeight(true, true)*0.5f;
+			break;
+		case kTOP:
+			y = rootPos.y - ui->getHeight(true, true);
+			break;
 		}
 
 		trans->translate(x, y, 0.f, false);
@@ -49,10 +49,10 @@ void HorizontalLinearLayout::layoutChildren(){
 float HorizontalLinearLayout::getContentsWidth(){
 	float w = 0.0f;
 	for(auto c : uiElements->children) {
-		Transform * trans = dynamic_cast<Transform *>(c);
+		Transform * trans = c->asTransform();
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
-				NodeUI * node = dynamic_cast<NodeUI *>(trans->children.at(0));
+				NodeUI * node = trans->children.at(0)->asNodeUI();
 				w += node->getWidth(true, true);
 			}
 		}

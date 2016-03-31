@@ -47,6 +47,10 @@ NodeShadable * Node::asNodeShadable() const {
 	return ptrNodeShadable;
 }
 
+Transform * Node::asTransform() const {
+	return ptrTransform;
+}
+
 bool Node::isNodeType(NodeType _type) const {
 	return (nodeType & _type) != 0;
 }
@@ -59,7 +63,8 @@ Node::Node() :
 	ptrNodeResource(nullptr),
 	ptrNodeLoadable(nullptr),
 	ptrNodeUI(nullptr),
-	ptrNodeShadable(nullptr)
+	ptrNodeShadable(nullptr),
+	ptrTransform(nullptr)
 {
 	nodeType |= kNODE;
 #ifdef _DEBUG

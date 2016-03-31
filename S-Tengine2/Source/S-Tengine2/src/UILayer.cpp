@@ -135,7 +135,7 @@ void UILayer::update(Step * _step){
 }
 
 void UILayer::hitTest(NodeChild * _c){
-	NodeUI * ui = dynamic_cast<NodeUI *>(_c);
+	NodeUI * ui = _c->asNodeUI();
 	if(ui != nullptr){
 		// run hittest on the child NodeUI
 		if(ui->isMouseEnabled() && ui->shape != nullptr){
@@ -147,7 +147,7 @@ void UILayer::hitTest(NodeChild * _c){
 		if(!complexHitTest){
 			// run hittest on this child NodeUI's children
 			for(NodeChild * c : ui->uiElements->children){
-				Transform * t = dynamic_cast<Transform *>(c);
+				Transform * t = c->asTransform();
 				if(t != nullptr){
 					hitTest(t->children.at(0));
 				}
@@ -161,7 +161,7 @@ void UILayer::hitTest(NodeChild * _c){
 			hitTest(e->childTransform);
 			return;
 		}
-		Transform * t = dynamic_cast<Transform *>(_c);
+		Transform * t = _c->asTransform();
 		if(t != nullptr){
 			for(NodeChild * c : t->children){
 				hitTest(c);

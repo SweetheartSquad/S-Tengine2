@@ -11,6 +11,7 @@ class NodeResource;
 class NodeChild;
 class NodeUpdatable;
 class NodeRenderable;
+class Transform;
 
 typedef enum {
 	kNODE				= (1 << 0),
@@ -51,6 +52,7 @@ public:
 	NodeLoadable    * asNodeLoadable() const;
 	NodeUI			* asNodeUI() const;
 	NodeShadable    * asNodeShadable() const;
+	Transform		* asTransform() const;
 
 protected:
 	NodeRenderable  * ptrNodeRenderable;
@@ -60,4 +62,5 @@ protected:
 	NodeLoadable    * ptrNodeLoadable;
 	NodeUI			* ptrNodeUI;
 	NodeShadable    * ptrNodeShadable;
+	Transform		* ptrTransform;
 };

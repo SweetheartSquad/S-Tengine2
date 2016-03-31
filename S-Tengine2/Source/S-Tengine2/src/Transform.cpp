@@ -31,6 +31,8 @@ Transform::Transform():
 	isIdentity(true),
 	cumulativeModelMatrix(1)
 {
+	ptrTransform = this;
+
 	if(staticInit){
 		staticInit = false;
 		transformShader = new ComponentShaderBase(true);
@@ -56,7 +58,7 @@ Transform::Transform():
 
 Transform::~Transform(){
 	while(!children.empty()){
-		if(NodeResource * nr = dynamic_cast<NodeResource *>(children.back())){
+		if(NodeResource * nr = children.back()->asNodeResource()){
 			nr->decrementAndDelete();
 		}else{
 			delete children.back();
@@ -287,7 +289,7 @@ void Transform::render(sweet::MatrixStack * _matrixStack, RenderOptions * _rende
 
 void Transform::unload(){
 	for(NodeChild * child : children){
-		NodeLoadable * nl = dynamic_cast<NodeLoadable *>(child);
+		NodeLoadable * nl = child->asNodeLoadable();
 		if(nl != nullptr){
 			nl->unload();
 		}
@@ -298,7 +300,7 @@ void Transform::unload(){
 
 void Transform::load(){
 	for(NodeChild * child : children){
-		NodeLoadable * nl = dynamic_cast<NodeLoadable *>(child);
+		NodeLoadable * nl = child->asNodeLoadable();
 		if(nl != nullptr){
 			nl->load();
 		}
@@ -310,7 +312,7 @@ void Transform::load(){
 Transform * const Transform::addChild(NodeChild * const _child, bool _underNewTransform){
 	// Check to see if the child is one of the ancestors of this node
 	// (Cannot parent a node to one of its descendants)
-	if(hasAncestor(dynamic_cast<Transform *>(_child))) {
+	if(hasAncestor(_child->asTransform())) {
 		ST_LOG_ERROR_V("Cannot parent a node to one of it's ancestors");
 		assert(false);
 	}
@@ -332,7 +334,7 @@ Transform * const Transform::addChild(NodeChild * const _child, bool _underNewTr
 Transform * const Transform::addChildAtIndex(NodeChild * const _child, int _index, bool _underNewTransform){
 	// Check to see if the child is one of the ancestors of this node
 	// (Cannot parent a node to one of its descendants)
-	if(hasAncestor(dynamic_cast<Transform *>(_child))) {
+	if(hasAncestor(_child->asTransform())) {
 		ST_LOG_ERROR_V("Cannot parent a node to one of it's ancestors");
 		assert(false);
 	}
@@ -392,7 +394,7 @@ bool Transform::hasDescendant(const NodeChild * const _child) const{
 		if (_child == children.at(i)){
 			return true;
 		}else{
-			Transform * t = dynamic_cast<Transform *>(children.at(i));
+			Transform * t = children.at(i)->asTransform();
 			if(t != nullptr){
 				if(t->hasDescendant(_child)){
 					return true;
@@ -406,7 +408,7 @@ bool Transform::hasDescendant(const NodeChild * const _child) const{
 void Transform::doRecursively(std::function<void(Node *, void * args[])> _toDo, void * _args[]){
 	_toDo(this, _args);
 	for(unsigned long int i = 0; i < children.size(); i++){
-		Transform * t = dynamic_cast<Transform *>(children.at(i));
+		Transform * t = children.at(i)->asTransform();
 		if(t != nullptr){
 			t->doRecursively(_toDo, _args);
 		}else{
@@ -417,7 +419,7 @@ void Transform::doRecursively(std::function<void(Node *, void * args[])> _toDo, 
 
 void Transform::deleteRecursively(Transform * const _node){
 	while (_node->children.size() > 0){
-		Transform * t = dynamic_cast<Transform *>(_node->children.back());
+		Transform * t = _node->children.back()->asTransform();
 		if(t != nullptr){
 			deleteRecursively(t);
 		}
