@@ -125,7 +125,7 @@ NodeUI_NineSliced::NodeUI_NineSliced(BulletWorld * _world, Texture_NineSliced * 
 	bl(new NodeUI(world)),
 	b(new NodeUI(world)),
 	br(new NodeUI(world)),
-	container(new NodeUI(world))
+	_container(new NodeUI(world))
 {
 	background->setVisible(false);
 	
@@ -184,10 +184,10 @@ NodeUI_NineSliced::NodeUI_NineSliced(BulletWorld * _world, Texture_NineSliced * 
 	r->background->meshTransform->scale(-1,1,1,false);
 	r->background->meshTransform->translate(1,0,0,false);
 	
-	NodeUI::addChild(container);
-	container->setRationalWidth(1.f, this);
-	container->setRationalHeight(1.f, this);
-	container->background->setVisible(false);
+	NodeUI::addChild(_container);
+	_container->setRationalWidth(1.f, this);
+	_container->setRationalHeight(1.f, this);
+	_container->background->setVisible(false);
 
 	// set an initial border
 	setBorder(0.33f);
@@ -198,7 +198,7 @@ NodeUI_NineSliced::~NodeUI_NineSliced(){
 }
 
 Transform * NodeUI_NineSliced::addChild(NodeUI * _uiElement, bool _invalidateLayout){
-	return container->addChild(_uiElement, _invalidateLayout);
+	return _container->addChild(_uiElement, _invalidateLayout);
 }
 
 void NodeUI_NineSliced::setBorder(float _all){
@@ -262,77 +262,77 @@ void NodeUI_NineSliced::setBackgroundColour(float _r, float _g, float _b, float 
 }
 
 void NodeUI_NineSliced::setPaddingLeft(float _padding){
-	container->setPaddingLeft(_padding);
+	_container->setPaddingLeft(_padding);
 }
 
 void NodeUI_NineSliced::setPaddingRight(float _padding){
-	container->setPaddingRight(_padding);
+	_container->setPaddingRight(_padding);
 }
 
 void NodeUI_NineSliced::setPaddingTop(float _padding){
-	container->setPaddingTop(_padding);
+	_container->setPaddingTop(_padding);
 }
 
 void NodeUI_NineSliced::setPaddingBottom(float _padding){
-	container->setPaddingBottom(_padding);
+	_container->setPaddingBottom(_padding);
 }
 
 void NodeUI_NineSliced::setPadding(float _all){
-	container->setPadding(_all, _all, _all, _all);
+	_container->setPadding(_all, _all, _all, _all);
 }
 
 void NodeUI_NineSliced::setPadding(float _leftAndRight, float _bottomAndTop){
-	container->setPadding(_leftAndRight, _leftAndRight, _bottomAndTop, _bottomAndTop);
+	_container->setPadding(_leftAndRight, _leftAndRight, _bottomAndTop, _bottomAndTop);
 }
 
 void NodeUI_NineSliced::setPadding(float _left, float _right, float _bottom, float _top){
-	container->setPadding(_left, _right, _bottom, _top);
+	_container->setPadding(_left, _right, _bottom, _top);
 }
 
 void NodeUI_NineSliced::setAutoresizeWidth(){
-	container->setAutoresizeWidth();
+	_container->setAutoresizeWidth();
 	NodeUI::setAutoresizeWidth();
 }
 void NodeUI_NineSliced::setAutoresizeHeight(){
-	container->setAutoresizeHeight();
+	_container->setAutoresizeHeight();
 	NodeUI::setAutoresizeHeight();
 }
 
 void NodeUI_NineSliced::setRationalWidth(float _rationalWidth, NodeUI * _root){
-	container->setRationalWidth(1.f, this);
+	_container->setRationalWidth(1.f, this);
 	NodeUI::setRationalWidth(_rationalWidth, _root);
 }
 
 void NodeUI_NineSliced::setRationalHeight(float _rationalHeight, NodeUI * _root){
-	container->setRationalHeight(1.f, this);
+	_container->setRationalHeight(1.f, this);
 	NodeUI::setRationalHeight(_rationalHeight, _root);
 }
 
 void NodeUI_NineSliced::setPixelWidth(float _pixelWidth){
-	container->setRationalWidth(1.f, this);
+	_container->setRationalWidth(1.f, this);
 	NodeUI::setPixelWidth(_pixelWidth);
 }
 
 void NodeUI_NineSliced::setPixelHeight(float _pixelHeight){
-	container->setRationalHeight(1.f, this);
+	_container->setRationalHeight(1.f, this);
 	NodeUI::setPixelHeight(_pixelHeight);
 }
 
 void NodeUI_NineSliced::setSquareWidth(float _rationalWidth){
-	container->setRationalWidth(1.f, this);
+	_container->setRationalWidth(1.f, this);
 	NodeUI::setSquareWidth(_rationalWidth);
 }
 
 void NodeUI_NineSliced::setSquareHeight(float _rationalHeight){
-	container->setRationalHeight(1.f, this);
+	_container->setRationalHeight(1.f, this);
 	NodeUI::setSquareHeight(_rationalHeight);
 }
 
 float NodeUI_NineSliced::getContentsWidth(){
 	float w = 0.0f;
 	// take the maximum of the width of the contents
-	for(unsigned long int i = 0; i < container->uiElements->children.size(); ++i) {
-		Transform * trans = container->uiElements->children.at(i)->asTransform();
+	for(unsigned long int i = 0; i < _container->uiElements->children.size(); ++i) {
+		Transform * trans = _container->uiElements->children.at(i)->asTransform();
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				w = std::max(w, trans->children.at(0)->asNodeUI()->getWidth(true, true));
@@ -344,8 +344,8 @@ float NodeUI_NineSliced::getContentsWidth(){
 float NodeUI_NineSliced::getContentsHeight(){
 	float h = 0.0f;
 	// take the maximum of the height of the contents66
-	for(unsigned long int i = 0; i < container->uiElements->children.size(); ++i) {
-		Transform * trans = container->uiElements->children.at(i)->asTransform();
+	for(unsigned long int i = 0; i < _container->uiElements->children.size(); ++i) {
+		Transform * trans = _container->uiElements->children.at(i)->asTransform();
 		if(trans != nullptr) {
 			if(trans->children.size() > 0) {
 				h = std::max(h, trans->children.at(0)->asNodeUI()->getHeight(true, true));

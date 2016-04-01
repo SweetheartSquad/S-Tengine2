@@ -49,7 +49,7 @@ protected:
 	// patches
 	NodeUI * tl, * t, * tr, * l, * c, * r, * bl, * b, * br;
 	// content
-	NodeUI * container;
+	NodeUI * _container;
 public:
 	NodeUI_NineSliced(BulletWorld * _world, Texture_NineSliced * _texture);
 	virtual ~NodeUI_NineSliced();
