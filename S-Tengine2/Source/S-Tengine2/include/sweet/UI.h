@@ -19,3 +19,4 @@ This file just includes various others in order to make including different "pac
 #include <Slider.h>
 #include <NineSlicing.h>
 #include <shader/ComponentShaderText.h>
+#include <TextLabelControlled.h>
