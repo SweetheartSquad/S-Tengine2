@@ -39,6 +39,8 @@ bool sweet::focused = true;
 bool sweet::antTweakBarInititialized = false;
 bool sweet::drawAntTweakBar = false;
 
+int sweet::cursorMode = GLFW_CURSOR_DISABLED;
+
 FT_Library sweet::freeTypeLibrary = nullptr;
 GLFWwindow * sweet::currentContext = nullptr;
 GLFWmonitor * sweet::currentMonitor = nullptr;
@@ -115,10 +117,10 @@ void sweet::attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _
 				if(drawAntTweakBar) {
 					glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 				}else{
-					glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+					glfwSetInputMode(_window, GLFW_CURSOR, cursorMode);
 				}
 			}else {
-				glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+				glfwSetInputMode(_window, GLFW_CURSOR, cursorMode);
 			}
 
 			glfwSetKeyCallback(_window, keyCallback);
@@ -211,7 +213,7 @@ GLFWwindow * sweet::initWindow(){
 	}
 
 	// TODO: make this based on config too
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(window, GLFW_CURSOR, cursorMode);
 
 #ifdef _DEBUG
 	ST_LOG_INFO("Initializing AntTweakBar");
@@ -350,7 +352,7 @@ void sweet::toggleAntTweakBar() {
 		if(drawAntTweakBar) {
 			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}else {
-			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, cursorMode);
 		}
 	}
 }
@@ -417,4 +419,9 @@ float sweet::getDpi(GLFWmonitor * _monitor){
 	glfwGetMonitorPhysicalSize(_monitor, &widthMM, &heightMM);
 	float res = (float) glfwGetVideoMode(_monitor)->width / (widthMM / 25.4f);
 	return res;
+}
+
+void sweet::setCursorMode(int _mode) {
+	glfwSetInputMode(glfwGetCurrentContext(), GLFW_CURSOR, _mode);
+	cursorMode = _mode;
 }

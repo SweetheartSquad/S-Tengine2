@@ -56,6 +56,9 @@ namespace sweet{
 	extern Step step;
 	extern std::string title;
 
+	/** Handling for the cursor - Defaults to disabled*/
+	extern int cursorMode;
+
 	/** Equal to glfwGetTime() the last time the delta time correction was calculated */
 	extern double lastTimestamp;
 
@@ -177,4 +180,12 @@ namespace sweet{
 	* if _monitor is nullptr, uses the current monitor
 	*/
 	float getDpi(GLFWmonitor * _monitor = nullptr);
+
+	/* Set the current cursor mode
+	*  One of...
+	* GLFW_CURSOR_DISABLED
+	* GLFW_CURSOR_HIDDEN
+	* GLFW_CURSOR_NORMAL
+	*/
+	void setCursorMode(int _mode);
 }
