@@ -67,6 +67,23 @@ public:
 	// patches, this changes the patches' background colours instead
 	virtual void setBackgroundColour(float _r, float _g, float _b, float _a = 1.f) override;
 
+	virtual void setPaddingLeft(float _padding) override;
+	virtual void setPaddingRight(float _padding) override;
+	virtual void setPaddingTop(float _padding) override;
+	virtual void setPaddingBottom(float _padding) override;
+	virtual void setPadding(float _all) override;
+	virtual void setPadding(float _leftAndRight, float _bottomAndTop) override;
+	virtual void setPadding(float _left, float _right, float _bottom, float _top) override;
+
+	virtual void setRationalWidth(float _rationalWidth, NodeUI * _parent) override;
+	virtual void setRationalHeight(float _rationalHeight, NodeUI * _parent) override;
+	virtual void setPixelWidth(float _pixelWidth) override;
+	virtual void setPixelHeight(float _pixelHeight) override;
+	virtual void setAutoresizeWidth() override;
+	virtual void setAutoresizeHeight() override;
+	virtual void setSquareWidth(float _rationalWidth) override;
+	virtual void setSquareHeight(float _rationalHeight) override;
+
 	virtual float getContentsWidth() override;
 	virtual float getContentsHeight() override;
 

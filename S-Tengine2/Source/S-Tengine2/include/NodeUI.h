@@ -119,13 +119,13 @@ public:
 	void setMargin(float _leftAndRight, float _bottomAndTop);
 	void setMargin(float _left, float _right, float _bottom, float _top);
 
-	void setPaddingLeft(float _padding);
-	void setPaddingRight(float _padding);
-	void setPaddingTop(float _padding);
-	void setPaddingBottom(float _padding);
-	void setPadding(float _all);
-	void setPadding(float _leftAndRight, float _bottomAndTop);
-	void setPadding(float _left, float _right, float _bottom, float _top);
+	virtual void setPaddingLeft(float _padding);
+	virtual void setPaddingRight(float _padding);
+	virtual void setPaddingTop(float _padding);
+	virtual void setPaddingBottom(float _padding);
+	virtual void setPadding(float _all);
+	virtual void setPadding(float _leftAndRight, float _bottomAndTop);
+	virtual void setPadding(float _left, float _right, float _bottom, float _top);
 
 	// Only implmented for render mode of kTEXTURE
 	void setAlpha(float _alpha);
@@ -143,31 +143,31 @@ public:
 
 	// enables rational width
 	// the dimension will be sized as a ratio of its parent's size
-	void setRationalWidth(float _rationalWidth, NodeUI * _parent);
+	virtual void setRationalWidth(float _rationalWidth, NodeUI * _parent);
 	// enables rational height
 	// the dimension will be sized as a ratio of its parent's size
-	void setRationalHeight(float _rationalHeight, NodeUI * _parent);
+	virtual void setRationalHeight(float _rationalHeight, NodeUI * _parent);
 
 	// enables pixel width
 	// the dimension will be sized in pixels
-	void setPixelWidth(float _pixelWidth);
+	virtual void setPixelWidth(float _pixelWidth);
 	// enables pixel height
 	// the dimension will be sized in pixels
-	void setPixelHeight(float _pixelHeight);
+	virtual void setPixelHeight(float _pixelHeight);
 
 	// enables autoresizing width
 	// the dimension will be sized as a ratio of its parent's size
-	void setAutoresizeWidth();
+	virtual void setAutoresizeWidth();
 	// enables autoresizing height
 	// the dimension will be sized as a ratio of its parent's size
-	void setAutoresizeHeight();
+	virtual void setAutoresizeHeight();
 
 	// the dimension will be sized as a ratio of its opposing unit
 	// if _parent is nullptr, only sets the member variable and doesn't change the current size
-	void setSquareWidth(float _rationalWidth);
+	virtual void setSquareWidth(float _rationalWidth);
 	// the dimension will be sized as a ratio of its opposing unit
 	// if _parent is nullptr, only sets the member variable and doesn't change the current size
-	void setSquareHeight(float _rationalHeight);
+	virtual void setSquareHeight(float _rationalHeight);
 
 	// recalculates measuredWidth
 	virtual void setMeasuredWidths();
