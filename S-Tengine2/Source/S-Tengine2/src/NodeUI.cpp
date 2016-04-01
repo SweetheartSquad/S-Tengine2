@@ -347,7 +347,7 @@ void NodeUI::__renderForEntities(sweet::MatrixStack * _matrixStack, RenderOption
 
 void NodeUI::__renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOptions) {
 	getTexturedPlane();
-	if(isRenderFrameDirty()) {
+	if(isRenderFrameDirty() && active) {
 		renderToTexture(_renderOptions);
 	}
 
@@ -359,41 +359,43 @@ void NodeUI::__renderForTexture(sweet::MatrixStack * _matrixStack, RenderOptions
 }
 
 void NodeUI::__updateForEntities(Step * _step) {
-	eventManager->update(_step);
-	if(isLayoutDirty()){
-		autoResize();
-		__layoutDirty = false;
-	}
-	if(mouseEnabled){
-		updateCollider();
-
-		if(updateState){
-			float d = mouse->getMouseWheelDelta();
-			if(abs(d) > FLT_EPSILON){
-				sweet::Event * e = new sweet::Event("mousewheel");
-				e->setFloatData("delta", d);
-				eventManager->triggerEvent(e);
-			}
-
-			if(!isHovered){
-				in();
-			}if(mouse->leftJustPressed()){
-				down();
-			}else if(mouse->leftJustReleased()){
-				up();
-			}
-			updateState = false;
-		}else{
-			if(isHovered){
-				out();
-			}
-			if(isDown && mouse->leftJustReleased()){
-				isDown = false;
-			}
+	if(active){
+		eventManager->update(_step);
+		if(isLayoutDirty()){
+			autoResize();
+			__layoutDirty = false;
 		}
-		NodeBulletBody::update(_step);
+		if(mouseEnabled){
+			updateCollider();
+
+			if(updateState){
+				float d = mouse->getMouseWheelDelta();
+				if(abs(d) > FLT_EPSILON){
+					sweet::Event * e = new sweet::Event("mousewheel");
+					e->setFloatData("delta", d);
+					eventManager->triggerEvent(e);
+				}
+
+				if(!isHovered){
+					in();
+				}if(mouse->leftJustPressed()){
+					down();
+				}else if(mouse->leftJustReleased()){
+					up();
+				}
+				updateState = false;
+			}else{
+				if(isHovered){
+					out();
+				}
+				if(isDown && mouse->leftJustReleased()){
+					isDown = false;
+				}
+			}
+			NodeBulletBody::update(_step);
+		}
+		Entity::update(_step);
 	}
-	Entity::update(_step);
 }
 
 bool NodeUI::__evaluateChildRenderFrames(){
@@ -418,14 +420,16 @@ bool NodeUI::__evaluateChildRenderFrames(){
 }
 
 void NodeUI::__updateForTexture(Step * _step) {
-	if(texturedPlane != nullptr){
-		texturedPlane->update(_step);
-	}
+	if(active){
+		if(texturedPlane != nullptr){
+			texturedPlane->update(_step);
+		}
 
-	__evaluateChildRenderFrames();
+		__evaluateChildRenderFrames();
 
-	if(isRenderFrameDirty()) {
-		autoResize();
+		if(isRenderFrameDirty()) {
+			autoResize();
+		}
 	}
 }
 
@@ -534,6 +538,10 @@ void NodeUI::setAlpha(float _alpha) {
 	}else {
 		ST_LOG_WARN("SetAlpha is not implemented for renderMode kENTITIES");
 	}
+}
+
+float NodeUI::getTextureModeAlpha() const {
+	return textureModeAlpha;
 }
 
 void NodeUI::setWidth(float _width){

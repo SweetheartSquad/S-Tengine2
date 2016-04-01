@@ -37,9 +37,10 @@ void Entity::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOp
 }
 
 void Entity::update(Step * _step){
-	if(active){
-		childTransform->update(_step);
+	if(!active){
+		return;
 	}
+	childTransform->update(_step);
 }
 
 void Entity::unload(){
