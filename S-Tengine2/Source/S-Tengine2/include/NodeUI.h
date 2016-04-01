@@ -129,6 +129,7 @@ public:
 
 	// Only implmented for render mode of kTEXTURE
 	void setAlpha(float _alpha);
+	float getTextureModeAlpha() const;
 
 	// sets the width
 	// value < 0: the dimension will be auto-resized

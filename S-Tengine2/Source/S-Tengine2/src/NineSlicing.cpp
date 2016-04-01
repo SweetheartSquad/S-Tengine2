@@ -13,7 +13,6 @@ Patch::Patch(Texture_NineSliced * _root) :
 	y1(0),
 	y2(0)
 {
-
 }
 
 void Patch::loadImageData(){
@@ -113,7 +112,6 @@ void Texture_NineSliced::unload(){
 	Texture::unload();
 }
 
-
 NodeUI_NineSliced::NodeUI_NineSliced(BulletWorld * _world, Texture_NineSliced * _texture) :
 	NodeUI(_world),
 	tl(new NodeUI(world)),
@@ -128,7 +126,7 @@ NodeUI_NineSliced::NodeUI_NineSliced(BulletWorld * _world, Texture_NineSliced * 
 	_container(new NodeUI(world))
 {
 	background->setVisible(false);
-	
+
 	// set up all the constants for the patches
 	NodeUI * patches[9] = {tl, t, tr, l, c, r, bl, b, br};
 	for(unsigned long int i = 0; i < 9; ++i){
@@ -194,7 +192,6 @@ NodeUI_NineSliced::NodeUI_NineSliced(BulletWorld * _world, Texture_NineSliced * 
 }
 
 NodeUI_NineSliced::~NodeUI_NineSliced(){
-
 }
 
 Transform * NodeUI_NineSliced::addChild(NodeUI * _uiElement, bool _invalidateLayout){
@@ -216,7 +213,7 @@ void NodeUI_NineSliced::setBorder(float _left, float _right, float _bottom, floa
 
 	b->setHeight(_bottom);
 	b->setMargin(_left, _right, 0, 0);
-	
+
 	br->setHeight(_bottom);
 	br->setPaddingLeft(_right);
 
@@ -230,17 +227,16 @@ void NodeUI_NineSliced::setBorder(float _left, float _right, float _bottom, floa
 	t->setPaddingRight(_right+_left);
 	t->paddingRight.pixelSize *= -1.f;
 	t->paddingRight.rationalSize *= -1.f;
-	
+
 	tr->setPaddingLeft(_right);
 	tr->setPaddingBottom(_top);
-
 
 	// middle
 	l->setWidth(_left);
 	l->setMargin(0, 0, _bottom, _top);
 
 	c->setMargin(_left, _right, _bottom, _top);
-	
+
 	r->setMarginTop(_top);
 	r->setMarginBottom(_bottom);
 	r->setPaddingLeft(_right);
@@ -354,7 +350,6 @@ float NodeUI_NineSliced::getContentsHeight(){
 	}
 	return h;
 }
-
 
 void NodeUI_NineSliced::setScaleMode(GLenum _scalemode){
 	background->mesh->setScaleMode(_scalemode);
