@@ -61,7 +61,7 @@ public:
 	// set the size of the 8 border patches
 	void setBorder(float _left, float _right, float _bottom, float _top);
 
-	virtual Transform * addChild(NodeUI * _uiElement, bool _invalidateLayout = true);
+	virtual Transform * addChild(NodeUI * _uiElement, bool _invalidateLayout = true) override;
 
 	// since the background of a NineSliced node is hidden and replaced by the 
 	// patches, this changes the patches' background colours instead
