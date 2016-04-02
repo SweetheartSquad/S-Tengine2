@@ -48,7 +48,7 @@ public:
 	void setProjectionMatrix(const glm::mat4 * _projectionMatrix);
 
 	// sets the view and projection matrix from _camera
-	void setCamera(const Camera * _camera);
+	void setCamera(const Camera * _camera, const glm::vec2 _screen);
 
 	/** Pushes the current model matrix onto the stack */
 	void pushMatrix();

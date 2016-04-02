@@ -70,7 +70,7 @@ void UILayer::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderO
 	const glm::mat4 * v = _matrixStack->getViewMatrix();
 
 	_matrixStack->pushMatrix();
-	_matrixStack->setCamera(cam);
+	_matrixStack->setCamera(cam, glm::vec2(getWidth(), getHeight()));
 	NodeUI::render(_matrixStack, _renderOptions);
 	_matrixStack->setViewMatrix(v);
 	_matrixStack->setProjectionMatrix(p);

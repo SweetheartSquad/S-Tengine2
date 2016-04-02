@@ -281,7 +281,7 @@ Texture * NodeUI::renderToTexture(RenderOptions * _ro){
 
 	RenderOptions renderOptions(nullptr, nullptr);
 	sweet::MatrixStack matrixStack;
-	matrixStack.setCamera(textureCam);
+	matrixStack.setCamera(textureCam, glm::vec2(w, h));
 
 	renderOptions.clearColour[3] = 0; // clear to alpha, not black
 	renderOptions.clear();

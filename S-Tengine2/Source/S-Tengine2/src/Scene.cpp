@@ -130,7 +130,7 @@ void Scene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _renderOpt
 	if(activeCamera == nullptr){
 		Log::warn("No active camera; scene cannot be rendered.");
 	}else{
-		_matrixStack->setCamera(activeCamera);
+		_matrixStack->setCamera(activeCamera, glm::vec2(_renderOptions->viewPortDimensions.width, _renderOptions->viewPortDimensions.height));
 	}
 	// render
 	Entity::render(_matrixStack, _renderOptions);

@@ -56,7 +56,7 @@ void LayeredScene::render(sweet::MatrixStack * _matrixStack, RenderOptions * _re
 	// matrix stack
 	_matrixStack->pushMatrix();
 	_matrixStack->resetCurrentMatrix();
-	_matrixStack->setCamera(activeCamera);
+	_matrixStack->setCamera(activeCamera, glm::vec2(_renderOptions->viewPortDimensions.width, _renderOptions->viewPortDimensions.height));
 
 	// render
 	for(unsigned long int i = 0; i < layers.size(); ++i){
