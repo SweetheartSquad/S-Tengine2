@@ -266,6 +266,13 @@ void OpenAL_Sound::setGain(float _gain){
 	gain = _gain;
 	checkForAlError(alSourcef(source->sourceId, AL_GAIN, gain * masterGain * categoricalGain[category]));
 }
+float OpenAL_Sound::getGain(bool _premultiply){
+	float res = gain;
+	if(_premultiply){
+		res *= masterGain * categoricalGain[category];
+	}
+	return res;
+}
 
 void OpenAL_Sound::setPositionalAttributes(float _referenceDistance, float _rolloff, float _maxDistance){
 	checkForAlError(alSourcef(source->sourceId, AL_REFERENCE_DISTANCE, _referenceDistance));
