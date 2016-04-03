@@ -11,7 +11,10 @@ Configuration::Configuration() :
 	resolution(0),
 	fps(0),
 	monitor(0),
-	rngSeed(0)
+	rngSeed(0),
+	title("Untitled"),
+	useLibOVR(false),
+	nodeCounting(false)
 {
 }
 
@@ -19,10 +22,11 @@ void Configuration::load(const std::string & _filename){
 	// get the current video mode so that we can set the resolution defaults
 	const GLFWvidmode * vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	bool fullscreenDefault = false;
-	glm::uvec2 resolutionDefault = glm::uvec2(vidmode->width*0.9, vidmode->height*0.9);
+	glm::uvec2 resolutionDefault(0);
 	double fpsDefault = 60.0;
 	signed long int rngSeedDefault = 0;
 	signed long int monitorDefault = 0;
+
 
 
 	Json::Reader reader;
@@ -51,6 +55,9 @@ void Configuration::load(const std::string & _filename){
 		fps = json.get("fps", fpsDefault).asDouble();
 		rngSeed = json.get("rngSeed", rngSeedDefault).asInt();
 		monitor = json.get("monitor", monitorDefault).asInt();
+		useLibOVR = json.get("useLibOVR", false).asBool();
+		nodeCounting = json.get("nodeCounting", false).asBool();
+		title = json.get("title", "Untitled").asString();
 		Json::Value jsonGain = json["gain"];
 
 		// gain defaults
@@ -75,6 +82,9 @@ void Configuration::save(const std::string & _filename){
 	json["fps"] = fps;
 	json["rngSeed"] = rngSeed;
 	json["monitor"] = monitor;
+	json["useLibOVR"] = useLibOVR;
+	json["nodeCounting"] = nodeCounting;
+	json["title"] = title;
 	json["gain"] = Json::Value();
 	for(auto g : gain){
 		json["gain"][g.first] = g.second;

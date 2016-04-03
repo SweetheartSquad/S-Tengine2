@@ -108,9 +108,10 @@ namespace sweet{
 	void destructWindow(GLFWwindow * _window);
 
 	/**
-	* Initializes everyting need to get the engine up and running
+	* Initializes everything need to get the engine up and running
+	* Should be the first S-Tengine2 call made
 	*/
-	void initialize(std::string _title);
+	void initialize();
 
 	/**
 	* Calculates the delta time and delta time correction and sets them in step

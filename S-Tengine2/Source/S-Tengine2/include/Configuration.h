@@ -10,6 +10,9 @@ public:
 	double fps;
 	signed long int rngSeed;
 	signed long int monitor;
+	std::string title;
+	bool useLibOVR;
+	bool nodeCounting;
 
 	std::map<std::string, float> gain;
 
