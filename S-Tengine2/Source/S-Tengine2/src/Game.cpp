@@ -255,6 +255,7 @@ void Game::takeScreenshot(int _x, int _y, int _width, int _height){
 
 	filepath << "../screenshots/" << sweet::DateUtils::getDatetime() << ".tga";
 	ProgrammaticTexture * tex = new ProgrammaticTexture();
+	tex->name = "Screenshot";
 	tex->allocate(_width, _height, 4);
 	glReadPixels(_x, _y, _width, _height, GL_RGBA, GL_UNSIGNED_BYTE, tex->data);
 	tex->saveImageData(filepath.str());
