@@ -38,8 +38,6 @@ Game::Game(std::string _firstSceneKey, Scene * _firstScene, bool _isRunning) :
 	autoResize(true),
 	numSplashScenes(0)
 {
-	int width, height;
-	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
 	lastTime = glfwGetTime();
 	nbFrames = 0;
 
