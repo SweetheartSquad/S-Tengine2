@@ -172,6 +172,9 @@ public:
 	 * The provided _gain is pre-multiplied by the master volume and the categorical volume
 	 */
 	void setGain(float _gain);
+	// returns the gain for this sound
+	// if _premultiply is true, the value is pre-multiplied by the master volume and the categorical volume
+	float getGain(bool _premultiply);
 
 	// Sets the properties which determine how sound is attenuated over distance
 	// _referenceDistance is the distance at which the sound is at full volume

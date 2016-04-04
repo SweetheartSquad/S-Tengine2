@@ -239,7 +239,7 @@ void sweet::destructWindow(GLFWwindow * _window){
 	}
 }
 
-void sweet::initialize(std::string _title){
+void sweet::initialize(){
 	// you shouldn't be calling initialize if we've already got a window
 	assert(sweet::currentContext == nullptr);
 
@@ -248,20 +248,33 @@ void sweet::initialize(std::string _title){
 	FileUtils::createDirectoryIfNotExists("data/screenshots");
 	FileUtils::createDirectoryIfNotExists("data/images");
 
-	title = _title;
+	// load configuration file
+	config.load("data/config.json");
 
-	sweet::setGlfwWindowHints();
+	title = config.title;
+#ifdef _DEBUG
+	title += " - DEBUG BUILD";
+	Node::nodeCounting = config.nodeCounting;
+#endif
 
-	initOVR();
+	
+	// if we want to use OVR, we need to do it before GLFW
+	if(config.useLibOVR){
+		initOVR();
+	}
 
 	// initialize glfw
+	sweet::setGlfwWindowHints();
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit()){
 		exit(EXIT_FAILURE);
 	}
 
-	// load configuration file
-	config.load("data/config.json");
+	// if the resolution wasn't set, set it based on the monitor size here
+	if(config.resolution == glm::uvec2(0)){
+		const GLFWvidmode * vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		config.resolution = glm::uvec2(vidmode->width*0.9, vidmode->height*0.9);
+	}
 
 	// seed RNG
 	sweet::NumberUtils::seed(config.rngSeed);

@@ -55,15 +55,18 @@ double Mouse::getMouseWheelDelta() const{
 	return mouseWheelDelta;
 }
 
-void Mouse::translate(glm::vec2 _v){
+void Mouse::translate(glm::vec2 _v, bool _relative){
 	if(active){
-		glm::uvec2 sd = sweet::getWindowDimensions();
-		glfwSetCursorPos(sweet::currentContext, x+_v.x, sd.y - (y+_v.y));
-		mousePositionListener(x+_v.x, y+_v.y);
+		glm::vec2 targetPos = _v;
+		if(_relative){
+			targetPos += glm::vec2(x, y);
+		}
+		glfwSetCursorPos(sweet::currentContext, targetPos.x, sweet::getWindowHeight() - targetPos.y);
+		mousePositionListener(targetPos.x, targetPos.y);
 	}
 }
 
-void Mouse::update(){
+void Mouse::update(Step * _step){
 	justPressedButtons.clear();
 	justReleasedButtons.clear();
 	mouseWheelDelta = 0;
@@ -89,11 +92,20 @@ void Mouse::mouseUpListener(int _glfwMouseCode){
 void Mouse::mousePositionListener(double _x, double _y){
 	if(active){
 		glm::uvec2 sd = sweet::getWindowDimensions();
-		clampedX = max(0., min(clampedX + _x - x, (double)sd.x));
-		clampedY = max(0., min(clampedY + _y - y, (double)sd.y));
+
+		if(sweet::cursorMode == GLFW_CURSOR_DISABLED){
+			clampedX = max(0., min(clampedX + _x - x, (double)sd.x));
+			clampedY = max(0., min(clampedY + _y - y, (double)sd.y));
+		}
 
 		x = _x;
 		y = _y;
+
+		
+		if(sweet::cursorMode != GLFW_CURSOR_DISABLED){
+			clampedX = max(0., min(x, (double)sd.x));
+			clampedY = max(0., min(y, (double)sd.y));
+		}
 	}
 }
 

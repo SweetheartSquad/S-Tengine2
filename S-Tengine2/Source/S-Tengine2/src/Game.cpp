@@ -38,8 +38,6 @@ Game::Game(std::string _firstSceneKey, Scene * _firstScene, bool _isRunning) :
 	autoResize(true),
 	numSplashScenes(0)
 {
-	int width, height;
-	glfwGetFramebufferSize(glfwGetCurrentContext(), &width, &height);
 	lastTime = glfwGetTime();
 	nbFrames = 0;
 
@@ -153,8 +151,8 @@ void Game::draw(Scene * _scene){
 }
 
 void Game::manageInput(){
-	keyboard.update();
-	mouse.update();
+	keyboard.update(nullptr);
+	mouse.update(nullptr);
 }
 
 void Game::printFps(){
@@ -257,6 +255,7 @@ void Game::takeScreenshot(int _x, int _y, int _width, int _height){
 
 	filepath << "../screenshots/" << sweet::DateUtils::getDatetime() << ".tga";
 	ProgrammaticTexture * tex = new ProgrammaticTexture();
+	tex->name = "Screenshot";
 	tex->allocate(_width, _height, 4);
 	glReadPixels(_x, _y, _width, _height, GL_RGBA, GL_UNSIGNED_BYTE, tex->data);
 	tex->saveImageData(filepath.str());

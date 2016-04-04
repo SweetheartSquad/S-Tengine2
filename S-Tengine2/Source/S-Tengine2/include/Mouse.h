@@ -4,6 +4,7 @@
 #include <map>
 
 #include <glm/glm.hpp>
+#include <node/NodeUpdatable.h>
 
 /*******************************************************
 *
@@ -13,7 +14,7 @@
 *
 ********************************************************/
 
-class Mouse{
+class Mouse : public NodeUpdatable{
 public:
 	// whether the mouse will update its position
 	// if you're accessing this, you should probably think twice about what you're doing
@@ -83,15 +84,16 @@ public:
 	double getMouseWheelDelta() const;
 	
 	/**
-	* Moves the mouse by _v
+	* If _relative is true, moves the mouse by _v
+	* If _relative is false, moves the mouse to _v
 	* Sets the glfw cursor position and triggers the position listener
 	*/
-	void translate(glm::vec2 _v);
+	void translate(glm::vec2 _v, bool _relative = true);
 
 	/**
 	* Clears the maps of justPressed and justReleased buttons
 	*/
-	void update();
+	virtual void update(Step * _step) override;
 
 	/**
 	* Inserts _glfwMouseCode into the maps of justPressed and pressed buttons

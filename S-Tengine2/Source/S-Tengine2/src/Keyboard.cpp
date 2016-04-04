@@ -42,7 +42,7 @@ void Keyboard::keyUpListener(int _glfwKeyCode){
 	}
 }
 
-void Keyboard::update(){
+void Keyboard::update(Step * _step){
 	justPressedKeys.clear();
 	justReleasedKeys.clear();
 }

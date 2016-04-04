@@ -114,7 +114,7 @@ void Scene_Splash::update(Step * _step){
 		splash->childTransform->translate(sd.x/2.f,sd.y/2.f,0,false);
 	}
 
-	if(Keyboard::getInstance().keyJustUp(GLFW_KEY_ENTER)){
+	if(Keyboard::getInstance().keyJustUp(GLFW_KEY_ENTER) || Mouse::getInstance().leftJustReleased()){
 		splashSound->stop();
 		timer->eventManager->triggerEvent("complete");
 	}

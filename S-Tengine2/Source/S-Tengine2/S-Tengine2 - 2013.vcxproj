@@ -112,6 +112,7 @@
     <ClCompile Include="src/shader/ShaderComponentShadow.cpp" />
     <ClCompile Include="src/shader/SharedComponentShaderMethods.cpp" />
     <ClCompile Include="src/shader/ShaderComponentTexture.cpp" />
+    <ClCompile Include="src/shader/ShaderComponentUvOffset.cpp" />
     <ClCompile Include="src/shader/ShaderComponentVoxel.cpp" />
     <ClCompile Include="src/SoundManager.cpp" />
     <ClCompile Include="src/Sprite.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="include/shader/ShaderComponentMask.h" />
     <ClCompile Include="src/AutoMusic.cpp" />
     <ClInclude Include="include/shader/ShaderComponentToon.h" />
+    <ClInclude Include="include/shader/ShaderComponentUvOffset.h" />
     <ClInclude Include="include/shader/ShaderComponentWorldSpaceUVs.h" />
     <ClInclude Include="include/StereoCamera.h" />
     <ClInclude Include="include/sweet/Input.h" />
