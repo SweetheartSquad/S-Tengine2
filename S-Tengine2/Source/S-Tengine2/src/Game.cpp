@@ -151,8 +151,8 @@ void Game::draw(Scene * _scene){
 }
 
 void Game::manageInput(){
-	keyboard.update();
-	mouse.update();
+	keyboard.update(nullptr);
+	mouse.update(nullptr);
 }
 
 void Game::printFps(){

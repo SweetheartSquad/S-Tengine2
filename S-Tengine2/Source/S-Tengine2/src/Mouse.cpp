@@ -66,7 +66,7 @@ void Mouse::translate(glm::vec2 _v, bool _relative){
 	}
 }
 
-void Mouse::update(){
+void Mouse::update(Step * _step){
 	justPressedButtons.clear();
 	justReleasedButtons.clear();
 	mouseWheelDelta = 0;

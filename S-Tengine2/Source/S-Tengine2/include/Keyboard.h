@@ -3,6 +3,8 @@
 #include <iostream>
 #include <map>
 
+#include <node/NodeUpdatable.h>
+
 /************************************************************
 *
 * Singleton encapsulating keyboard events and properties
@@ -11,7 +13,7 @@
 *
 *************************************************************/
 
-class Keyboard{
+class Keyboard : public NodeUpdatable{
 public:
 
 	/**
@@ -41,7 +43,7 @@ public:
 	/**
 	* Clears the maps of justPressed and justReleased keys
 	*/
-	void update();
+	virtual void update(Step * _step) override;
 
 	/**
 	* Inserts _glfwKeyCode into the maps of justPressed and pressed keys

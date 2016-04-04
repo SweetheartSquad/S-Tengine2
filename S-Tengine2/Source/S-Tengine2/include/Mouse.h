@@ -4,6 +4,7 @@
 #include <map>
 
 #include <glm/glm.hpp>
+#include <node/NodeUpdatable.h>
 
 /*******************************************************
 *
@@ -13,7 +14,7 @@
 *
 ********************************************************/
 
-class Mouse{
+class Mouse : public NodeUpdatable{
 public:
 	// whether the mouse will update its position
 	// if you're accessing this, you should probably think twice about what you're doing
@@ -92,7 +93,7 @@ public:
 	/**
 	* Clears the maps of justPressed and justReleased buttons
 	*/
-	void update();
+	virtual void update(Step * _step) override;
 
 	/**
 	* Inserts _glfwMouseCode into the maps of justPressed and pressed buttons
