@@ -38,8 +38,10 @@ float sweet::Rectangle::getPerimeter(){
 }
 
 bool sweet::Rectangle::intersects(sweet::Rectangle _rect){
-	return (getTopLeft().x > _rect.getTopRight().x && 
-		    getTopRight().x < _rect.getTopLeft().x &&
-			getTopLeft().y >_rect.getBottomRight().y && 
-			getBottomRight().y < _rect.getTopLeft().y);
+	bool aLeftOfB  = getTopRight().x < _rect.getTopLeft().x;
+	bool aRightOfB = getTopLeft().x > _rect.getTopRight().x;
+	bool aAboveB = getBottomLeft().y > _rect.getTopLeft().y;
+	bool aBelowB = getTopLeft().y < _rect.getBottomLeft().y;
+
+	return !( aLeftOfB || aRightOfB || aAboveB || aBelowB );
 }
