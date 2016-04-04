@@ -83,10 +83,11 @@ public:
 	double getMouseWheelDelta() const;
 	
 	/**
-	* Moves the mouse by _v
+	* If _relative is true, moves the mouse by _v
+	* If _relative is false, moves the mouse to _v
 	* Sets the glfw cursor position and triggers the position listener
 	*/
-	void translate(glm::vec2 _v);
+	void translate(glm::vec2 _v, bool _relative = true);
 
 	/**
 	* Clears the maps of justPressed and justReleased buttons

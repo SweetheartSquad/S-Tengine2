@@ -55,11 +55,15 @@ double Mouse::getMouseWheelDelta() const{
 	return mouseWheelDelta;
 }
 
-void Mouse::translate(glm::vec2 _v){
+void Mouse::translate(glm::vec2 _v, bool _relative){
 	if(active){
 		glm::uvec2 sd = sweet::getWindowDimensions();
-		glfwSetCursorPos(sweet::currentContext, x+_v.x, sd.y - (y+_v.y));
-		mousePositionListener(x+_v.x, y+_v.y);
+		glm::vec2 targetPos = _v;
+		if(_relative){
+			targetPos += glm::vec2(x, y);
+		}
+		glfwSetCursorPos(sweet::currentContext, targetPos.x, sd.y - targetPos.y);
+		mousePositionListener(targetPos.x, targetPos.y);
 	}
 }
 
