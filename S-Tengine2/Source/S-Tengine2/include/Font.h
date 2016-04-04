@@ -16,12 +16,16 @@ enum class FontScaleMode {
 class GlyphMesh : public QuadMesh{
 public:
 	GlyphMesh(FT_GlyphSlot _glyph, bool _antiAliased);
+
+	void set(FT_GlyphSlot _glyph, bool _antiAliased);
 };
 
 class GlyphTexture : public Texture{
 public:
 	GlyphTexture(FT_Bitmap _glyph);
 	virtual void load() override;
+
+	void set(FT_Bitmap _glyph);
 };
 
 class Glyph : public NodeResource{
@@ -39,6 +43,8 @@ public:
 	
 	virtual void load() override;
 	virtual void unload() override;
+
+	void setGlyph(FT_GlyphSlot _glyph, wchar_t _character, bool _antiAliased);
 };
 
 class Font : public NodeResource{
@@ -70,6 +76,9 @@ public:
 	void loadGlyph(wchar_t _character) const;
 	float getLineHeight() const;
 
+
+	// updates the existing glyphs map to match _size
+	void resize(float _size);
 private:
 	int size;
 };

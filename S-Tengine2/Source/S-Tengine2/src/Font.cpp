@@ -12,7 +12,11 @@ GlyphMesh::GlyphMesh(FT_GlyphSlot _glyph, bool _antiAliased) :
 	MeshInterface * m = MeshFactory::getPlaneMesh(0.5f, false);
 	insertVertices(*m);
 	delete m;
+	set(_glyph, _antiAliased);
+	uvEdgeMode = GL_CLAMP;
+}
 
+void GlyphMesh::set(FT_GlyphSlot _glyph, bool _antiAliased){
 	// get the glyph dimensions
 	float vx = _glyph->bitmap_left;
 	float vy = _glyph->bitmap_top;
@@ -31,6 +35,7 @@ GlyphMesh::GlyphMesh(FT_GlyphSlot _glyph, bool _antiAliased) :
 	
 	vertices.at(3).x = vx;
 	vertices.at(3).y = vy - h;
+	dirty = true;
 
 	// set the scale mode
 	if(!_antiAliased){
@@ -38,7 +43,6 @@ GlyphMesh::GlyphMesh(FT_GlyphSlot _glyph, bool _antiAliased) :
 	}else{
 		setScaleMode(GL_LINEAR);
 	}
-	uvEdgeMode = GL_CLAMP;
 }
 
 
@@ -47,12 +51,20 @@ GlyphTexture::GlyphTexture(FT_Bitmap _glyph) :
 	Texture("", true, false),
 	NodeResource(false)
 {
+	set(_glyph);
+}
+
+void GlyphTexture::set(FT_Bitmap _glyph){
+	unload();
+
 	width = _glyph.width;
 	height = _glyph.rows;
 	data = new unsigned char[_glyph.rows*_glyph.width];
 	memcpy(data, _glyph.buffer, _glyph.rows*_glyph.width);
 	//data = _glyph.buffer;
 	channels = 2;
+
+	load();
 }
 
 void GlyphTexture::load(){
@@ -76,14 +88,10 @@ void GlyphTexture::load(){
 Glyph::Glyph(FT_GlyphSlot _glyph, wchar_t _character, bool _antialiased) :
 	NodeResource(false),
 	character(_character),
-	texture(new GlyphTexture(_glyph->bitmap)),
-	mesh(new GlyphMesh(_glyph, _antialiased)),
-	advance(_glyph->advance),
-	metrics(_glyph->metrics),
-	bitmap_left(_glyph->bitmap_left),
-	bitmap_top(_glyph->bitmap_top)
+	texture(nullptr),
+	mesh(nullptr)
 {
-	mesh->pushTexture2D(texture);
+	setGlyph(_glyph, _character, _antialiased);
 }
 
 Glyph::~Glyph(){
@@ -103,6 +111,24 @@ void Glyph::unload(){
 		texture->unload();
 		mesh->unload();
 		NodeResource::unload();
+	}
+}
+void Glyph::setGlyph(FT_GlyphSlot _glyph, wchar_t _character, bool _antiAliased){
+	advance = _glyph->advance;
+	metrics = _glyph->metrics;
+	bitmap_left = _glyph->bitmap_left;
+	bitmap_top = _glyph->bitmap_top;
+
+	if(texture == nullptr){
+		texture = new GlyphTexture(_glyph->bitmap);
+	}else{
+		texture->set(_glyph->bitmap);
+	}
+	if(mesh == nullptr){
+		mesh = new GlyphMesh(_glyph, _antiAliased);
+		mesh->pushTexture2D(texture);
+	}else{
+		mesh->set(_glyph, _antiAliased);
 	}
 }
 
@@ -185,13 +211,13 @@ glm::vec2 Font::getGlyphXY(wchar_t _char){
 
 void Font::loadGlyph(wchar_t _char) const {
 	if(scaleMode == FontScaleMode::kPOINT){
-	float dpi = sweet::getDpi();
-	FT_Set_Char_Size(
-          face,    /* handle to face object           */
-          0,       /* char_width in 1/64th of points -- 0 = same as height */
-          size * 64,   /* char_height in 1/64th of points */
-          dpi,     /* horizontal device resolution    */
-		  dpi);   /* vertical device resolution      */
+		float dpi = sweet::getDpi();
+		FT_Set_Char_Size(
+			  face,    /* handle to face object           */
+			  0,       /* char_width in 1/64th of points -- 0 = same as height */
+			  size * 64,   /* char_height in 1/64th of points */
+			  dpi,     /* horizontal device resolution    */
+			  dpi);   /* vertical device resolution      */
 	}else {
 		float sizeCalc = size;
 		if(scaleMode == FontScaleMode::kPERCENT) {
@@ -208,4 +234,13 @@ void Font::loadGlyph(wchar_t _char) const {
 float Font::getLineHeight() const {
 	loadGlyph(L'X');
 	return lineGapRatio * face->size->metrics.height/64.f;
+}
+
+
+void Font::resize(float _size){
+	size = _size;
+	for(auto g : glyphs){
+		loadGlyph(g.first);
+		g.second->setGlyph(face->glyph, g.first, antiAliased);
+	}
 }
