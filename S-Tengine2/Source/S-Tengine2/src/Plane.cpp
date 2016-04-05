@@ -25,6 +25,7 @@ void Plane::setColour(float _red, float _green, float _blue, float _alpha){
 		mesh->vertices.at(i).blue  = _blue;
 		mesh->vertices.at(i).alpha = _alpha;
 	}
+	mesh->dirty = true;
 }
 
 void Plane::setVertexColour(int _index, float _red, float _green, float _blue, float _alpha){
@@ -32,4 +33,5 @@ void Plane::setVertexColour(int _index, float _red, float _green, float _blue, f
 	mesh->vertices.at(_index).green = _green;
 	mesh->vertices.at(_index).blue  = _blue;
 	mesh->vertices.at(_index).alpha = _alpha;
+	mesh->dirty = true;
 }
