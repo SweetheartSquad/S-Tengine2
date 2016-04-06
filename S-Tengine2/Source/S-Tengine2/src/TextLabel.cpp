@@ -19,6 +19,8 @@ TextLabel::TextLabel(BulletWorld* _world, Font* _font, Shader* _textShader):
 	// set the default width and height to be auto and the font's height, respectively
 	setPixelHeight(font->getLineHeight());
 	setAutoresizeWidth();
+
+	textShader->incrementReferenceCount();
 }
 
 TextLabel::~TextLabel(){
@@ -26,6 +28,8 @@ TextLabel::~TextLabel(){
 		delete unusedGlyphs.back();
 		unusedGlyphs.pop_back();
 	}
+
+	textShader->decrementAndDelete();
 }
 
 void TextLabel::render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions){
@@ -173,14 +177,17 @@ unsigned long int TextLabel::wordWrap(){
 	return idx;
 }
 
-void TextLabel::setShader(Shader * _shader, bool _configureDefaultAttributes){
-	for(auto glyph : usedGlyphs){
-		glyph->setShader(_shader, _configureDefaultAttributes);
+void TextLabel::setShader(Shader * _shader){
+	if(textShader != _shader){
+		textShader->decrementAndDelete();
+		textShader = _shader;
+		textShader->incrementReferenceCount();
+		for(auto glyph : usedGlyphs){
+			glyph->setShader(textShader);
+		}for(auto glyph : unusedGlyphs){
+			glyph->setShader(textShader);
+		}
 	}
-	for(auto glyph : unusedGlyphs){
-		glyph->setShader(_shader, _configureDefaultAttributes);
-	}
-	textShader = _shader;
 }
 
 void TextLabel::setFont(Font * _font, bool _updateText){
@@ -276,26 +283,11 @@ void UIGlyph::setGlyph(Glyph * _newGlyph){
 	glyphMesh->configureDefaultVertexAttributes(shader);
 }
 
-void UIGlyph::setShader(Shader * _shader, bool _configureDefaultAttributes){
-	if(shader != nullptr) {
+void UIGlyph::setShader(Shader * _shader){
+	if(shader != _shader){
 		shader->decrementAndDelete();
-	}
-	if(_shader != nullptr){
-		if(_shader->isCompiled){
-			if(shader != _shader){
-				shader = _shader;
-				shader->incrementReferenceCount();
-			}
-			if(_configureDefaultAttributes){
-				if(glyphMesh != nullptr){
-					load();
-				}
-			}
-		}else{
-			throw "shader not compiled; cannot setShader";
-		}
-	}else{
-		shader = nullptr;
+		shader = _shader;
+		shader->incrementReferenceCount();
 	}
 }
 

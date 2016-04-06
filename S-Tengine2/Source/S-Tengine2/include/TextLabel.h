@@ -24,7 +24,7 @@ public:
 	virtual ~UIGlyph();
 
 	void setGlyph(Glyph * _mesh);
-	void setShader(Shader * _shader, bool _configureDefaultAttributes);
+	void setShader(Shader * _shader);
 
 	virtual void render(sweet::MatrixStack* _matrixStack, RenderOptions* _renderOptions) override;
 };
@@ -49,11 +49,11 @@ public:
 	void setText(std::wstring _text);
 	// converts _text to an std::wstring and calls setText(std::wstring)
 	void setText(std::string _text);
-	std::wstring getText(bool _clipped);
 	// if _clipped, returns textDisplayed
 	// otherwise, returns textAll
+	std::wstring getText(bool _clipped);
 	void updateText();
-	void setShader(Shader * _shader, bool _configureDefaultAttributes);
+	void setShader(Shader * _shader);
 	void setFont(Font * _font, bool _updateText = true);
 
 	virtual float getContentsHeight() override;

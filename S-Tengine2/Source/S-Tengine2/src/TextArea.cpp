@@ -12,6 +12,8 @@ TextArea::TextArea(BulletWorld * _bulletWorld, Font * _font, Shader * _textShade
 	setPixelHeight(_font->getLineHeight()*3);
 	setAutoresizeWidth();
 	setWrapMode(kCHARACTER);
+
+	textShader->incrementReferenceCount();
 }
 
 TextArea::~TextArea(){
@@ -19,6 +21,7 @@ TextArea::~TextArea(){
 		delete unusedLines.back();
 		unusedLines.pop_back();
 	}
+	textShader->decrementAndDelete();
 }
 
 void TextArea::update(Step * _step){
@@ -116,14 +119,17 @@ TextLabel * TextArea::getCurrentLine(){
 	}
 }
 
-void TextArea::setShader(Shader * _shader, bool _configureDefaultAttributes){
-	for(auto line : usedLines){
-		line->setShader(_shader, _configureDefaultAttributes);
+void TextArea::setShader(Shader * _shader){
+	if(textShader != _shader){
+		textShader->decrementAndDelete();
+		textShader = _shader;
+		textShader->incrementReferenceCount();
+		for(auto line : usedLines){
+			line->setShader(textShader);
+		}for(auto line : unusedLines){
+			line->setShader(textShader);
+		}
 	}
-	for(auto line : unusedLines){
-		line->setShader(_shader, _configureDefaultAttributes);
-	}
-	textShader = _shader;
 }
 
 void TextArea::setFont(Font * _font, bool _updateText){
