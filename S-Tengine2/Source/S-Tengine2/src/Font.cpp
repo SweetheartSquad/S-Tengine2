@@ -244,3 +244,7 @@ void Font::resize(float _size){
 		g.second->setGlyph(face->glyph, g.first, antiAliased);
 	}
 }
+
+float Font::getSize(){
+	return size;
+}

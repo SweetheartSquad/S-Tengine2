@@ -79,6 +79,7 @@ public:
 
 	// updates the existing glyphs map to match _size
 	void resize(float _size);
+	float getSize();
 private:
 	float size;
 };
