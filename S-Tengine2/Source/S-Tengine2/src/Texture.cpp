@@ -76,13 +76,33 @@ void Texture::unloadImageData(){
 	data = nullptr;
 }
 
-void Texture::saveImageData(const std::string & _filename, bool _reverse){
+void Texture::saveImageData(const std::string & _filename, bool _reverse, bool _png){
 	std::stringstream ss;
 	ss << "data/images/" << _filename;
-	if(stbi_write_tga(ss.str().c_str(), width, height, channels, data, _reverse ? 1 : -1)){
-		Log::info("Texture \"data/images/"+_filename+"\" saved");
+
+	if(_reverse){
+		auto tempData = data;
+		data = static_cast<unsigned char *>(malloc(sizeof(unsigned char) * numBytes));
+		memcpy(data, tempData, numBytes);
+		// flip the texture
+		for(signed long int y = 0; y < width; ++y){
+			memcpy(&tempData[y*width*channels], &data[(height-y-1)*width*channels], width*channels);
+		}
+		data = tempData;
+	}
+
+	if(_png){
+		if(stbi_write_png(ss.str().c_str(), width, height, channels, data, channels * width)){
+			Log::info("Texture \"data/images/"+_filename+"\" saved");
+		}else{
+			Log::error("Texture \"data/images/"+_filename+"\" not saved");
+		}
 	}else{
-		Log::error("Texture \"data/images/"+_filename+"\" not saved");
+		if(stbi_write_tga(ss.str().c_str(), width, height, channels, data)){
+			Log::info("Texture \"data/images/"+_filename+"\" saved");
+		}else{
+			Log::error("Texture \"data/images/"+_filename+"\" not saved");
+		}
 	}
 }
 

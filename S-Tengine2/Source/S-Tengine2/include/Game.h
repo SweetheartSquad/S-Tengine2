@@ -107,8 +107,12 @@ public:
 	virtual void unload() override;
 
 	// saves the current viewport with the format "../screenshots/YYYY-MM-DD_TTTTTTTTTT.tga"
-	void takeScreenshot(int _x, int _y, int _width, int _height);
-	void takeScreenshot();
+	void takeScreenshot(int _x, int _y, int _width, int _height, bool _png);
+	void takeScreenshot(bool _png = true);
+
+	// creates and returns a texture containing the viewport at the provided coordinates
+	// NOTE: you have to delete this texture yourself
+	Texture * getScreenshot(int _x, int _y, int _width, int _height);
 
 	// flags the current glfw context as "should close" so that the game will quit
 	void exit();

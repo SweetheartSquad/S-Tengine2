@@ -60,7 +60,7 @@ public:
 	// saves the texture data to _filename
 	// assumes TGA output regardless of _filename
 	// file path is relative to "data/images"
-	virtual void saveImageData(const std::string & _filename, bool _reverse = true);
+	virtual void saveImageData(const std::string & _filename, bool _reverse = true, bool _png = true);
 
 	friend std::ostream& operator<<(std::ostream& os, const Texture& obj){
 		return os

@@ -133,8 +133,8 @@ void sweet::attemptToActuallyRegainFocus(GLFWwindow *_window, int _button, int _
 
 void sweet::windowFocusCallback(GLFWwindow * _window, int _focused){
 	std::stringstream ss;
-	ss << _window << " focused: " << _focused;
-	Log::info(ss.str());
+	//ss << _window << " focused: " << _focused;
+	//Log::info(ss.str());
 	if(_focused == GL_TRUE){
 		// gained focus
 		glfwSetMouseButtonCallback(_window, attemptToActuallyRegainFocus);

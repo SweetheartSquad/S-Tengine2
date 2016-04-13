@@ -244,24 +244,35 @@ void Game::toggleFullScreen(){
 	checkForGlError(false);
 }
 
-void Game::takeScreenshot() {
+void Game::takeScreenshot(bool _png) {
 	int width, height;
 	glfwGetFramebufferSize(sweet::currentContext, &width, &height);
-	takeScreenshot(0, 0, width, height);
+	takeScreenshot(0, 0, width, height, _png);
 }
 
-void Game::takeScreenshot(int _x, int _y, int _width, int _height){
+void Game::takeScreenshot(int _x, int _y, int _width, int _height, bool _png){
 	std::stringstream filepath;
 
-	filepath << "../screenshots/" << sweet::DateUtils::getDatetime() << ".tga";
+	filepath << "../screenshots/" << sweet::DateUtils::getDatetime() << "_" << glm::round(sweet::lastTimestamp*1000) << (_png ? ".png" : ".tga");
+	
+	// if the screenshot already exists, abort
+	if(sweet::FileUtils::fileExists(filepath.str())){
+		return;
+	}
+
+	Texture * tex = getScreenshot(_x, _y, _width, _height);
+	tex->saveImageData(filepath.str(), _png);
+	delete tex;
+
+	Log::info("Screenshot \""+filepath.str()+"\" saved");
+}
+
+Texture * Game::getScreenshot(int _x, int _y, int _width, int _height){
 	ProgrammaticTexture * tex = new ProgrammaticTexture();
 	tex->name = "Screenshot";
 	tex->allocate(_width, _height, 4);
 	glReadPixels(_x, _y, _width, _height, GL_RGBA, GL_UNSIGNED_BYTE, tex->data);
-	tex->saveImageData(filepath.str());
-	delete tex;
-
-	Log::info("Screenshot \""+filepath.str()+"\" saved");
+	return tex;
 }
 
 void Game::exit(){
