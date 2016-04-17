@@ -289,7 +289,7 @@ float OpenAL_Sound::getAmplitude(){
 	if(t < 0){
 		return 0;
 	}
-	return (float)source->buffer->samples[t]/INT16_MAX;
+	return (float)source->buffer->samples[t]/(source->buffer->format == AL_FORMAT_MONO16 ? INT16_MAX : INT8_MAX);
 }
 
 
@@ -435,7 +435,7 @@ ALint OpenAL_SoundStream::getCurrentSample(){
 	}else{
 		t += samplesPlayed;
 	}
-	return std::min(t, source->buffer->numSamples-1);
+	return t % (source->buffer->numSamples);
 }
 
 unsigned long int OpenAL_SoundStream::fillBuffer(ALuint _bufferId){
@@ -471,6 +471,7 @@ OpenAL_SoundStreamGenerative::OpenAL_SoundStreamGenerative(bool _positional, boo
 	generativeFunction(nullptr)
 {
 	maxBufferOffset = -1;
+	source->buffer->numSamples = bufferLength;
 	source->buffer->samples = (ALshort *)calloc(bufferLength, sizeof(ALshort));
 	source->buffer->sampleRate = 44100;
 	source->buffer->format = AL_FORMAT_MONO16;
