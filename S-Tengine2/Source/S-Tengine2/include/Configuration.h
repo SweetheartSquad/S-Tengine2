@@ -14,6 +14,10 @@ public:
 	bool useLibOVR;
 	bool nodeCounting;
 
+	// the default value for whether textures generate mipmaps by default
+	bool generateMipmapsDefault;
+	unsigned int scaleModeMagDefault, scaleModeMinDefault;
+
 	std::map<std::string, float> gain;
 
 	Configuration();

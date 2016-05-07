@@ -30,9 +30,9 @@ AssetTexture::AssetTexture(Json::Value _json, Scenario * const _scenario) :
 		src = "assets/textures/" + src;
 	}
 	if(!_json.get("nineSliced", false).asBool()){
-		texture = new Texture(src, true, false, _json.get("generateMipmaps", true).asBool());
+		texture = new Texture(src, true, false, _json.get("generateMipmaps", sweet::config.generateMipmapsDefault).asBool());
 	}else{
-		texture = new Texture_NineSliced(src, false, _json.get("generateMipmaps", true).asBool());
+		texture = new Texture_NineSliced(src, false, _json.get("generateMipmaps", sweet::config.generateMipmapsDefault).asBool());
 	}
 	//texture->load();
 }
@@ -85,7 +85,7 @@ AssetTextureSampler::AssetTextureSampler(Json::Value _json, Scenario * const _sc
 		float h		  = defJson.get("h", 256).asFloat();
 		std::string t = defJson.get("t", defTex).asString();
 		std::string defPath = src.substr(0, src.find_last_of("\\/"));
-		Texture * texture = new Texture(defPath + "/" + t, true, true);
+		Texture * texture = new Texture(defPath + "/" + t, true, _json.get("generateMipmaps", sweet::config.generateMipmapsDefault).asBool());
 		textureSampler = new TextureSampler(texture, w, h, u, v, false);
 		textureSampler->load();
 	}

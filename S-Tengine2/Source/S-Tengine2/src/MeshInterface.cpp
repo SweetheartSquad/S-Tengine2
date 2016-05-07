@@ -17,8 +17,8 @@ MeshInterface::MeshInterface(GLenum polygonalDrawMode, GLenum drawMode) :
 	drawMode(drawMode),
 	polygonalDrawMode(polygonalDrawMode),
 	uvEdgeMode(GL_REPEAT),
-	scaleModeMag(GL_LINEAR),
-	scaleModeMin(GL_LINEAR_MIPMAP_LINEAR)
+	scaleModeMag(sweet::config.scaleModeMagDefault),
+	scaleModeMin(sweet::config.scaleModeMinDefault)
 {
 	load();
 	clean();

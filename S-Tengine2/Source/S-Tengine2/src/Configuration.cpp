@@ -6,6 +6,24 @@
 #include <GLFW\glfw3.h>
 #include <ctime>
 
+unsigned int getScaleMode(std::string _scaleMode){
+	if(_scaleMode == "GL_NEAREST"){
+		return GL_NEAREST;
+	}else if(_scaleMode == "GL_LINEAR"){
+		return GL_LINEAR;
+	}else if(_scaleMode == "GL_NEAREST_MIPMAP_NEAREST"){
+		return GL_NEAREST_MIPMAP_NEAREST;
+	}else if(_scaleMode == "GL_LINEAR_MIPMAP_NEAREST"){
+		return GL_LINEAR_MIPMAP_NEAREST;
+	}else if(_scaleMode == "GL_NEAREST_MIPMAP_LINEAR"){
+		return GL_NEAREST_MIPMAP_LINEAR;
+	}else if(_scaleMode == "GL_LINEAR_MIPMAP_LINEAR"){
+		return GL_LINEAR_MIPMAP_LINEAR;
+	}else{
+		throw "invalid scale mode";
+	}
+}
+
 Configuration::Configuration() :
 	fullscreen(false),
 	resolution(0),
@@ -57,6 +75,11 @@ void Configuration::load(const std::string & _filename){
 		monitor = json.get("monitor", monitorDefault).asInt();
 		useLibOVR = json.get("useLibOVR", false).asBool();
 		nodeCounting = json.get("nodeCounting", false).asBool();
+		
+		generateMipmapsDefault = json.get("generateMipmapsDefault", true).asBool();
+		scaleModeMagDefault = getScaleMode(json.get("scaleModeMagDefault", "GL_LINEAR").asString());
+		scaleModeMinDefault = getScaleMode(json.get("scaleModeMinDefault", "GL_LINEAR_MIPMAP_LINEAR").asString());
+
 		title = json.get("title", "Untitled").asString();
 		Json::Value jsonGain = json["gain"];
 
