@@ -7,42 +7,24 @@
 #include "Rectangle.h"
 #include "Texture.h"
 
-SpriteSheetAnimation::SpriteSheetAnimation(float _secondsPerFrame) :
-	frameIndices(Animation<unsigned long int>(&currentFrame)),
-	currentFrame(0),
+SpriteSheetAnimationDefinition::SpriteSheetAnimationDefinition(float _secondsPerFrame) :
 	secondsPerFrame(_secondsPerFrame)
 {
-	frameIndices.hasStart = true;
 }
 
-SpriteSheetAnimation::~SpriteSheetAnimation(){
+SpriteSheetAnimationDefinition::~SpriteSheetAnimationDefinition(){
 }
 
-SpriteSheetAnimation * SpriteSheetAnimation::copy() {
-	SpriteSheetAnimation * newAnim = new SpriteSheetAnimation(secondsPerFrame);
-	newAnim->frameIndices.tweens = frameIndices.tweens;
-	newAnim->frames = frames;
-	return newAnim;
-}
-
-void SpriteSheetAnimation::update(Step* _step){
-	if(secondsPerFrame != 0){
-		frameIndices.update(_step);
-		currentFrame = frameIndices.currentTween;
-	}
-}
-
-void SpriteSheetAnimation::pushFrame(unsigned long int _column, unsigned long int _row, float _width, float _height, float _textureWidth, float _textureHeight){
+void SpriteSheetAnimationDefinition::pushFrame(unsigned long int _column, unsigned long int _row, float _width, float _height, float _textureWidth, float _textureHeight){
 	float u, v, rW, rH;
 	rW = /*1.f - (*/_width / _textureWidth/*)*/;
 	rH = -_height / _textureHeight;
 	u = rW * _column;
 	v = 1.f + (rH * _row);
 	frames.push_back(sweet::Rectangle(u, v, rW, rH));
-	frameIndices.tweens.push_back(new Tween<unsigned long int>(secondsPerFrame, 1, Easing::kLINEAR));
 }
 
-void SpriteSheetAnimation::pushMultipleFrames(std::vector<unsigned long int> _frames, float _width, float _height, float _textureWidth, float _textureHeight){
+void SpriteSheetAnimationDefinition::pushMultipleFrames(std::vector<unsigned long int> _frames, float _width, float _height, float _textureWidth, float _textureHeight){
 	int curCol = 0;
 	int curRow = 0;
 	int colOffset = 0;
@@ -60,7 +42,7 @@ void SpriteSheetAnimation::pushMultipleFrames(std::vector<unsigned long int> _fr
 	}
 }
 
-void SpriteSheetAnimation::pushFramesInRange(unsigned long int _min, unsigned long int _max, float _width, float _height, float _textureWidth, float _textureHeight){
+void SpriteSheetAnimationDefinition::pushFramesInRange(unsigned long int _min, unsigned long int _max, float _width, float _height, float _textureWidth, float _textureHeight){
 	unsigned long int curRow = 0;
 	unsigned long int curCol = _min;
 	
@@ -92,4 +74,27 @@ void SpriteSheetAnimation::pushFramesInRange(unsigned long int _min, unsigned lo
 		++curRow; // go to the next row
 		curCol -= _textureWidth/_width;
 	}while(frames < range);
+}
+
+SpriteSheetAnimationInstance::SpriteSheetAnimationInstance(const SpriteSheetAnimationDefinition * const _definition) :
+	definition(_definition),
+	currentFrame(0),
+	frameIndices(new Animation<unsigned long int>(&currentFrame))
+{
+	frameIndices->hasStart = true;
+
+	for(auto f : definition->frames){
+		frameIndices->tweens.push_back(new Tween<unsigned long int>(definition->secondsPerFrame, 1, Easing::kLINEAR));
+	}
+}
+
+SpriteSheetAnimationInstance::~SpriteSheetAnimationInstance(){
+	delete frameIndices;
+}
+
+void SpriteSheetAnimationInstance::update(Step* _step){
+	if(definition->secondsPerFrame != 0){
+		frameIndices->update(_step);
+		currentFrame = frameIndices->currentTween;
+	}
 }

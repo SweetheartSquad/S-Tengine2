@@ -16,7 +16,7 @@ class SpriteSheet;
 class Sprite : public MeshEntity{
 public:
 	SpriteSheet * spriteSheet;
-	SpriteSheetAnimation * currentAnimation;
+	SpriteSheetAnimationInstance * currentAnimation;
 	bool playAnimation;
 
 	explicit Sprite(Shader * _shader = nullptr);

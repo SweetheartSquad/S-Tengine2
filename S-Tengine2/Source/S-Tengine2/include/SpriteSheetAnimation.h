@@ -7,22 +7,32 @@
 
 class Texture;
 class SpriteSheet;
+class SpriteSheetAnimationInstance;
 
-class SpriteSheetAnimation : public NodeUpdatable{
+class SpriteSheetAnimationDefinition : public Node{
 public:
-	Animation<unsigned long int> frameIndices;
 	std::vector<sweet::Rectangle> frames;
-	unsigned long int currentFrame;
 	float secondsPerFrame;
 
-	explicit SpriteSheetAnimation(float _secondsPerFrame);
-	~SpriteSheetAnimation();
+	explicit SpriteSheetAnimationDefinition(float _secondsPerFrame);
+	~SpriteSheetAnimationDefinition();
 
-	SpriteSheetAnimation * copy();
-
-	void update(Step* _step) override;
 	void pushFrame(unsigned long int _column, unsigned long int _row, float _width, float _height, float _textureWidth, float _textureHeight);
 	
 	void pushMultipleFrames(std::vector<unsigned long int> _frames, float _width, float _height, float _textureWidth, float _textureHeight);
 	void pushFramesInRange(unsigned long int _min, unsigned long int _max, float _width, float _height, float _textureWidth, float _textureHeight);
+};
+
+class SpriteSheetAnimationInstance : public NodeUpdatable{
+public:
+	// reference to the animation definition which created this instance
+	const SpriteSheetAnimationDefinition * const definition;
+
+	unsigned long int currentFrame;
+	Animation<unsigned long int> * frameIndices;
+
+	explicit SpriteSheetAnimationInstance(const SpriteSheetAnimationDefinition * const _definition);
+	~SpriteSheetAnimationInstance();
+
+	void update(Step* _step) override;
 };

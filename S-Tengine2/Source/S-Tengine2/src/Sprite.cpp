@@ -41,6 +41,11 @@ Sprite::Sprite(TextureSampler * _textureSampler, Shader * _shader) :
 
 Sprite::~Sprite(){
 	// TODO: memory management of spritesheet?
+	
+	// delete the current animation (this animation should be a copy of one from a spritesheet and not the original, which means we have to delete it here or it will be leaked)
+	if(currentAnimation != nullptr){
+		delete currentAnimation;
+	}
 }
 
 void Sprite::update(Step* _step){
@@ -48,7 +53,7 @@ void Sprite::update(Step* _step){
 	if(currentAnimation != nullptr && playAnimation){
 		mesh->dirty = true;
 		currentAnimation->update(_step);
-		setUvs(currentAnimation->frames.at(currentAnimation->currentFrame));
+		setUvs(currentAnimation->definition->frames.at(currentAnimation->currentFrame));
 		while(mesh->textures.size() > 0){
 			mesh->textures.back()->decrementAndDelete();
 			mesh->textures.pop_back();
@@ -130,13 +135,26 @@ void Sprite::setSpriteSheet(SpriteSheet * _spriteSheet, std::string _currentAnim
 
 
 void Sprite::setCurrentAnimation(std::string _name){
-	delete currentAnimation;
+	// find the animation with the given _name
 	auto anim = spriteSheet->animations.find(_name);
-	if(anim != spriteSheet->animations.end()){
-		currentAnimation = anim->second->copy();
-	}else{
+	if(anim == spriteSheet->animations.end()){
 		Log::error("Animation with name \""+_name+"\" does not exist.");
 	}
+
+	
+		
+	if(currentAnimation != nullptr){
+		// if it's the same animation we're already using, ignore it
+		if(anim->second == currentAnimation->definition){
+			return;
+		}
+
+		// delete the current animation
+		delete currentAnimation;
+	}
+
+	// copy the new animation and set it
+	currentAnimation = new SpriteSheetAnimationInstance(anim->second);
 }
 
 Vertex * Sprite::getTopLeft(){

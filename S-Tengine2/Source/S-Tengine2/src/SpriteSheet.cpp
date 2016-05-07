@@ -28,15 +28,15 @@ void SpriteSheet::unload(){
 	NodeLoadable::unload();
 }
 
-void SpriteSheet::addAnimation(std::string _name, SpriteSheetAnimation * _animation){
-	auto res = animations.insert(std::pair<std::string, SpriteSheetAnimation * >(_name, _animation));
+void SpriteSheet::addAnimation(std::string _name, SpriteSheetAnimationDefinition * _animation){
+	auto res = animations.insert(std::pair<std::string, SpriteSheetAnimationDefinition * >(_name, _animation));
 	if(!res.second){
 		Log::error("Animation with name \""+_name+"\" already exists; not added.");
 	}
 }
 
 void SpriteSheet::addAnimation(std::string _name, unsigned long int _start, unsigned long int _end, float _width, float _height, float _secondsPerFrame){
-	SpriteSheetAnimation * ssa = new SpriteSheetAnimation(_secondsPerFrame);
+	SpriteSheetAnimationDefinition * ssa = new SpriteSheetAnimationDefinition(_secondsPerFrame);
 	ssa->pushFramesInRange(_start, _end, _width, _height, texture->width, texture->height);
 	addAnimation(_name, ssa);
 }
