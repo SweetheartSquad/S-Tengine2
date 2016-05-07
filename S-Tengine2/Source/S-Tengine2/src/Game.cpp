@@ -269,7 +269,7 @@ void Game::takeScreenshot(int _x, int _y, int _width, int _height, bool _png){
 
 Texture * Game::getScreenshot(int _x, int _y, int _width, int _height){
 	ProgrammaticTexture * tex = new ProgrammaticTexture();
-	tex->name = "Screenshot";
+	tex->nodeName = "Screenshot";
 	tex->allocate(_width, _height, 4);
 	glReadPixels(_x, _y, _width, _height, GL_RGBA, GL_UNSIGNED_BYTE, tex->data);
 	return tex;

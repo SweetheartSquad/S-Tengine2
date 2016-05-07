@@ -70,7 +70,7 @@ NodeUI::NodeUI(BulletWorld * _world, RenderMode _renderMode, bool _mouseEnabled)
 		bgShader->addComponent(bgAlphaComponent);
 		bgShader->addComponent(new ShaderComponentDepthOffset(bgShader));
 		bgShader->compileShader();
-		bgShader->name = "NodeUI background shader";
+		bgShader->nodeName = "NodeUI background shader";
 		background->setShader(bgShader, true);
 	}
 
@@ -250,13 +250,13 @@ Texture * NodeUI::renderToTexture(RenderOptions * _ro){
 
 	if(textureCam == nullptr){
 		textureCam = new OrthographicCamera(0, w, 0, h, -1,1);
-		textureCam->name = "NodeUI texture cam";
+		textureCam->nodeName = "NodeUI texture cam";
 	}
 
 	if(frameBuffer == nullptr){
 		frameBuffer = new StandardFrameBuffer(false);
 		frameBuffer->load();
-		frameBuffer->name = "NodeUI texture framebuffer";
+		frameBuffer->nodeName = "NodeUI texture framebuffer";
 	}
 
 	auto vd = _ro->viewPortDimensions;
@@ -762,7 +762,7 @@ void NodeUI::updateCollider(){
 			colliderMesh->pushVert(Vertex(verts[i].x, verts[i].y, verts[i].z));
 		}
 		colliderMesh->incrementReferenceCount();
-		colliderMesh->name = "NodeUI collider mesh";
+		colliderMesh->nodeName = "NodeUI collider mesh";
 	}else{
 		for(unsigned long int i = 0; i < 6; ++i){
 			colliderMesh->vertices.at(i).x = verts[i].x;

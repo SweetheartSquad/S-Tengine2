@@ -13,7 +13,7 @@ CubeMap::CubeMap(std::string _srcPrefix, std::string _srcSuffix) :
 	cubemapShader->addComponent(new ShaderComponentCubeMap(cubemapShader));
 	cubemapShader->compileShader();
 	cubemapShader->incrementReferenceCount();
-	cubemapShader->name = "cubemap shader";
+	cubemapShader->nodeName = "cubemap shader";
 	
 	cubemapTexture->load();
 

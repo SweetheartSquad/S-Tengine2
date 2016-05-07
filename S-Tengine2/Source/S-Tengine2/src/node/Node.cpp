@@ -64,11 +64,11 @@ Node::Node() :
 	ptrNodeLoadable(nullptr),
 	ptrNodeUI(nullptr),
 	ptrNodeShadable(nullptr),
-	ptrTransform(nullptr)
+	ptrTransform(nullptr),
+	nodeName("UNNAMED")
 {
 	nodeType |= kNODE;
 #ifdef _DEBUG
-	name = "UNNAMED";
 	if(nodeCounting){
 		nodes.push_back(this);
 	}

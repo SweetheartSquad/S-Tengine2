@@ -28,14 +28,14 @@ Scene_Splash::Scene_Splash(Game * _game, Texture * _splashImage, OpenAL_Sound * 
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->addComponent(alphaComponent);
 	shader->compileShader();
-	shader->name = "Splash Scene base shader";
+	shader->nodeName = "Splash Scene base shader";
 
 	// add orthographic camera
 	orthoCam = new OrthographicCamera(0, 0, 0, 0, -1000, 1000);
 	childTransform->addChild(orthoCam);
 	cameras.push_back(orthoCam);
 	activeCamera = orthoCam;
-	orthoCam->name = "Splash Scene ortho cam";
+	orthoCam->nodeName = "Splash Scene ortho cam";
 	
 	// add splash image MeshEntity
 	splash = new MeshEntity(MeshFactory::getPlaneMesh(), shader);

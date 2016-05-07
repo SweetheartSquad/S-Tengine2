@@ -21,7 +21,7 @@ BulletDebugDrawer::BulletDebugDrawer(btCollisionWorld * _world) :
 	shader->compileShader();
 	shader->load();
 	shader->incrementReferenceCount();
-	shader->name = "Bullet Debug Drawer shader";
+	shader->nodeName = "Bullet Debug Drawer shader";
 }
 
 BulletDebugDrawer::~BulletDebugDrawer(){

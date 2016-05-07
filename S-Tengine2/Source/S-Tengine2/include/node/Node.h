@@ -34,7 +34,9 @@ public:
 
 	unsigned int nodeType;
 
-	std::string name;
+	// an identification string used for debugging purposes
+	// when sweet::printNodes is called, the nodeNames are used in the result
+	std::string nodeName;
 
 	Node();
 	virtual ~Node();

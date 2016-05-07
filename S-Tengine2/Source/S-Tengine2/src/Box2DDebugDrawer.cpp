@@ -29,7 +29,7 @@ Box2DDebugDrawer::Box2DDebugDrawer(Box2DWorld * _world) :
 	shader->addComponent(new ShaderComponentTexture(shader));
 	shader->compileShader();
 	shader->incrementReferenceCount();
-	shader->name = "Box2D Debug Drawer shader";
+	shader->nodeName = "Box2D Debug Drawer shader";
 	
 	spriteSegment->mesh->vertices.clear();
 	spriteSegment->mesh->indices.clear();

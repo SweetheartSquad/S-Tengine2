@@ -160,7 +160,7 @@ void sweet::printNodes() {
 		std::cout << "Final node count: " << Node::nodes.size() << std::endl;
 
 		for(auto n : Node::nodes){
-			std::cout << typeid(*n).name() << " " << n << " -- Name: " << n->name << std::endl;
+			std::cout << typeid(*n).name() << " " << n << " -- Name: " << n->nodeName << std::endl;
 		}
 	}
 
