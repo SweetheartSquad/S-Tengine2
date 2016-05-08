@@ -17,7 +17,7 @@ SpriteSheetAnimationDefinition::~SpriteSheetAnimationDefinition(){
 
 void SpriteSheetAnimationDefinition::pushFrame(unsigned long int _column, unsigned long int _row, float _width, float _height, float _textureWidth, float _textureHeight){
 	float u, v, rW, rH;
-	rW = /*1.f - (*/_width / _textureWidth/*)*/;
+	rW = _width / _textureWidth;
 	rH = -_height / _textureHeight;
 	u = rW * _column;
 	v = 1.f + (rH * _row);
