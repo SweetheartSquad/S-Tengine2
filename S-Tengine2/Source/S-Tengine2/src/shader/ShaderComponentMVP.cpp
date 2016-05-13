@@ -36,7 +36,7 @@ std::string ShaderComponentMVP::getFragmentVariablesString() {
 }
 
 std::string ShaderComponentMVP::getVertexBodyString() {
-	return TAB + "gl_Position = " + GL_UNIFORM_ID_MODEL_VIEW_PROJECTION + " * vec4(aVertexPosition, 1.0)" + SEMI_ENDL;
+	return TAB + "gl_Position = " + GL_UNIFORM_ID_MODEL_VIEW_PROJECTION + " * vec4(" + GL_ATTRIBUTE_ID_VERTEX_POSITION + ", 1.0)" + SEMI_ENDL;
 }
 
 std::string ShaderComponentMVP::getFragmentBodyString() {
