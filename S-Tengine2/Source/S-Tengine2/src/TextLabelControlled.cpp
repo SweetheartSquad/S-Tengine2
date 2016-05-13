@@ -11,8 +11,8 @@ TextLabelControlled::TextLabelControlled(float * const _target, float _valueMin,
 	valueMax(_valueMax),
 	prevValue(*_target + 1),
 	value(*_target + 1),
-	prefix(""),
-	suffix(""),
+	prefix(L""),
+	suffix(L""),
 	decimals(0)
 {
 }
@@ -25,10 +25,13 @@ void TextLabelControlled::update(Step * _step){
 		value = valueMax;
 	}
 	if(glm::abs(value - prevValue) > FLT_EPSILON){
-		std::stringstream ss;
+		std::wstringstream ss;
 		ss.precision(decimals);
 		ss << prefix << std::setprecision(decimals) << std::fixed << value << suffix;
-		setText(ss.str());
+		// because of the decimals, we might not actually need to update the text
+		if(getText(false) != ss.str()){
+			setText(ss.str());
+		}
 		prevValue = value;
 	}
 	TextLabel::update(_step);

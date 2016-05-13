@@ -10,7 +10,7 @@ public:
 	float * target;
 
 	// the prefix and suffix are prepended and appended to the target value, respectively
-	std::string prefix, suffix;
+	std::wstring prefix, suffix;
 
 	// how many numbers past the decimal point in the target value are shown in the text
 	unsigned long int decimals;
