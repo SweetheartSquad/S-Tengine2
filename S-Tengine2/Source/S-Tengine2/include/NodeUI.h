@@ -59,6 +59,9 @@ public:
 	virtual void in();
 	// The function to be called when you mouseout
 	virtual void out();
+	// triggers an event with _tag
+	// this event will also have an int data "target" which is the address of this node
+	void triggerEvent(std::string _tag);
 
 	static TriMesh * colliderMesh;
 	// destroys the current rigid body and creates a new one which is sized to match the bounding box of the element

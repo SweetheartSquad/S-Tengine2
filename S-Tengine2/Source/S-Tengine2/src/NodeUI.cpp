@@ -132,7 +132,7 @@ void NodeUI::down(){
 	isHovered = true;
 	isDown = true;
 
-	eventManager->triggerEvent("mousedown");
+	triggerEvent("mousedown");
 }
 void NodeUI::up(){
 	if(isHovered && isDown){
@@ -140,20 +140,25 @@ void NodeUI::up(){
 	}
 	isDown = false;
 
-	eventManager->triggerEvent("mouseup");
+	triggerEvent("mouseup");
 }
 void NodeUI::click(){
-	eventManager->triggerEvent("click");
+	triggerEvent("click");
 }
 void NodeUI::in(){
 	isHovered = true;
 
-	eventManager->triggerEvent("mousein");
+	triggerEvent("mousein");
 }
 void NodeUI::out(){
 	isHovered = false;
 
-	eventManager->triggerEvent("mouseout");
+	triggerEvent("mouseout");
+}
+void NodeUI::triggerEvent(std::string _tag){
+	sweet::Event * e = new sweet::Event(_tag);
+	e->setIntData("target", (int)this);
+	eventManager->triggerEvent(e);
 }
 
 Transform * NodeUI::addChild(NodeUI* _uiElement, bool _invalidateLayout){
