@@ -14,6 +14,9 @@ public:
 	bool useLibOVR;
 	bool nodeCounting;
 
+	bool windowDecorated;
+	bool windowResizable;
+
 	// the default value for whether textures generate mipmaps by default
 	bool generateMipmapsDefault;
 	unsigned int scaleModeMagDefault, scaleModeMinDefault;

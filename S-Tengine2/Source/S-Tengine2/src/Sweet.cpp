@@ -52,8 +52,10 @@ extern "C" {
 
 void sweet::setGlfwWindowHints(){
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint( GLFW_RESIZABLE, config.windowResizable );
+	glfwWindowHint( GLFW_DECORATED, config.windowDecorated);
 }
 
 void sweet::keyCallback(GLFWwindow * _window, int _key, int _scancode, int _action, int _mods){
@@ -264,11 +266,11 @@ void sweet::initialize(){
 	}
 
 	// initialize glfw
-	sweet::setGlfwWindowHints();
 	glfwSetErrorCallback(error_callback);
 	if (!glfwInit()){
 		exit(EXIT_FAILURE);
 	}
+	sweet::setGlfwWindowHints();
 
 	// if the resolution wasn't set, set it based on the monitor size here
 	if(config.resolution == glm::uvec2(0)){

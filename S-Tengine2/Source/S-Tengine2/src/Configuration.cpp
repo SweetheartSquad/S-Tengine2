@@ -32,7 +32,9 @@ Configuration::Configuration() :
 	rngSeed(0),
 	title("Untitled"),
 	useLibOVR(false),
-	nodeCounting(false)
+	nodeCounting(false),
+	windowDecorated(true),
+	windowResizable(true)
 {
 }
 
@@ -79,6 +81,9 @@ void Configuration::load(const std::string & _filename){
 		generateMipmapsDefault = json.get("generateMipmapsDefault", true).asBool();
 		scaleModeMagDefault = getScaleMode(json.get("scaleModeMagDefault", "GL_LINEAR").asString());
 		scaleModeMinDefault = getScaleMode(json.get("scaleModeMinDefault", "GL_LINEAR_MIPMAP_LINEAR").asString());
+		
+		windowDecorated = json.get("windowDecorated", true).asBool();
+		windowResizable = json.get("windowResizable", true).asBool();
 
 		title = json.get("title", "Untitled").asString();
 		Json::Value jsonGain = json["gain"];
